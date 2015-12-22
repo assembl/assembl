@@ -1,0 +1,6603 @@
+[
+  [
+    "af",
+    "en",
+    "Afrikaans"
+  ],
+  [
+    "af",
+    "fr",
+    "afrikaans"
+  ],
+  [
+    "af",
+    "de",
+    "Afrikaans"
+  ],
+  [
+    "af",
+    "af",
+    "Afrikaans"
+  ],
+  [
+    "af_NA",
+    "en",
+    "Afrikaans (Namibia)"
+  ],
+  [
+    "af_NA",
+    "fr",
+    "afrikaans (Namibie)"
+  ],
+  [
+    "af_NA",
+    "de",
+    "Afrikaans (Namibia)"
+  ],
+  [
+    "af_ZA",
+    "en",
+    "Afrikaans (South Africa)"
+  ],
+  [
+    "af_ZA",
+    "fr",
+    "afrikaans (Afrique du Sud)"
+  ],
+  [
+    "af_ZA",
+    "de",
+    "Afrikaans (Sudafrika!Südafrika)"
+  ],
+  [
+    "ak",
+    "en",
+    "Akan"
+  ],
+  [
+    "ak",
+    "fr",
+    "akan"
+  ],
+  [
+    "ak",
+    "de",
+    "Akan-Sprache"
+  ],
+  [
+    "ak",
+    "ak",
+    "Akan"
+  ],
+  [
+    "ak_GH",
+    "en",
+    "Akan (Ghana)"
+  ],
+  [
+    "ak_GH",
+    "fr",
+    "akan (Ghana)"
+  ],
+  [
+    "ak_GH",
+    "de",
+    "Akan-Sprache (Ghana)"
+  ],
+  [
+    "am",
+    "en",
+    "Amharic"
+  ],
+  [
+    "am",
+    "fr",
+    "amharique"
+  ],
+  [
+    "am",
+    "de",
+    "Amharisch"
+  ],
+  [
+    "am",
+    "am",
+    "አማርኛ"
+  ],
+  [
+    "am_ET",
+    "en",
+    "Amharic (Ethiopia)"
+  ],
+  [
+    "am_ET",
+    "fr",
+    "amharique (Éthiopie)"
+  ],
+  [
+    "am_ET",
+    "de",
+    "Amharisch (Athiopien!Äthiopien)"
+  ],
+  [
+    "ar",
+    "en",
+    "Arabic"
+  ],
+  [
+    "ar",
+    "fr",
+    "arabe"
+  ],
+  [
+    "ar",
+    "de",
+    "Arabisch"
+  ],
+  [
+    "ar",
+    "ar",
+    "العربية"
+  ],
+  [
+    "ar_AE",
+    "en",
+    "Arabic (United Arab Emirates)"
+  ],
+  [
+    "ar_AE",
+    "fr",
+    "arabe (Émirats arabes unis)"
+  ],
+  [
+    "ar_AE",
+    "de",
+    "Arabisch (Vereinigte Arabische Emirate)"
+  ],
+  [
+    "ar_BH",
+    "en",
+    "Arabic (Bahrain)"
+  ],
+  [
+    "ar_BH",
+    "fr",
+    "arabe (Bahreïn)"
+  ],
+  [
+    "ar_BH",
+    "de",
+    "Arabisch (Bahrain)"
+  ],
+  [
+    "ar_DZ",
+    "en",
+    "Arabic (Algeria)"
+  ],
+  [
+    "ar_DZ",
+    "fr",
+    "arabe (Algérie)"
+  ],
+  [
+    "ar_DZ",
+    "de",
+    "Arabisch (Algerien)"
+  ],
+  [
+    "ar_EG",
+    "en",
+    "Arabic (Egypt)"
+  ],
+  [
+    "ar_EG",
+    "fr",
+    "arabe (Égypte)"
+  ],
+  [
+    "ar_EG",
+    "de",
+    "Arabisch (Agypten!Ägypten)"
+  ],
+  [
+    "ar_IQ",
+    "en",
+    "Arabic (Iraq)"
+  ],
+  [
+    "ar_IQ",
+    "fr",
+    "arabe (Irak)"
+  ],
+  [
+    "ar_IQ",
+    "de",
+    "Arabisch (Irak)"
+  ],
+  [
+    "ar_JO",
+    "en",
+    "Arabic (Jordan)"
+  ],
+  [
+    "ar_JO",
+    "fr",
+    "arabe (Jordanie)"
+  ],
+  [
+    "ar_JO",
+    "de",
+    "Arabisch (Jordanien)"
+  ],
+  [
+    "ar_KW",
+    "en",
+    "Arabic (Kuwait)"
+  ],
+  [
+    "ar_KW",
+    "fr",
+    "arabe (Koweït)"
+  ],
+  [
+    "ar_KW",
+    "de",
+    "Arabisch (Kuwait)"
+  ],
+  [
+    "ar_LB",
+    "en",
+    "Arabic (Lebanon)"
+  ],
+  [
+    "ar_LB",
+    "fr",
+    "arabe (Liban)"
+  ],
+  [
+    "ar_LB",
+    "de",
+    "Arabisch (Libanon)"
+  ],
+  [
+    "ar_LY",
+    "en",
+    "Arabic (Libya)"
+  ],
+  [
+    "ar_LY",
+    "fr",
+    "arabe (Libye)"
+  ],
+  [
+    "ar_LY",
+    "de",
+    "Arabisch (Libyen)"
+  ],
+  [
+    "ar_MA",
+    "en",
+    "Arabic (Morocco)"
+  ],
+  [
+    "ar_MA",
+    "fr",
+    "arabe (Maroc)"
+  ],
+  [
+    "ar_MA",
+    "de",
+    "Arabisch (Marokko)"
+  ],
+  [
+    "ar_OM",
+    "en",
+    "Arabic (Oman)"
+  ],
+  [
+    "ar_OM",
+    "fr",
+    "arabe (Oman)"
+  ],
+  [
+    "ar_OM",
+    "de",
+    "Arabisch (Oman)"
+  ],
+  [
+    "ar_QA",
+    "en",
+    "Arabic (Qatar)"
+  ],
+  [
+    "ar_QA",
+    "fr",
+    "arabe (Qatar)"
+  ],
+  [
+    "ar_QA",
+    "de",
+    "Arabisch (Katar)"
+  ],
+  [
+    "ar_SA",
+    "en",
+    "Arabic (Saudi Arabia)"
+  ],
+  [
+    "ar_SA",
+    "fr",
+    "arabe (Arabie saoudite)"
+  ],
+  [
+    "ar_SA",
+    "de",
+    "Arabisch (Saudi-Arabien)"
+  ],
+  [
+    "ar_SD",
+    "en",
+    "Arabic (Sudan)"
+  ],
+  [
+    "ar_SD",
+    "fr",
+    "arabe (Soudan)"
+  ],
+  [
+    "ar_SD",
+    "de",
+    "Arabisch (Sudan)"
+  ],
+  [
+    "ar_SY",
+    "en",
+    "Arabic (Syria)"
+  ],
+  [
+    "ar_SY",
+    "fr",
+    "arabe (Syrie)"
+  ],
+  [
+    "ar_SY",
+    "de",
+    "Arabisch (Syrien, Arabische Republik)"
+  ],
+  [
+    "ar_TN",
+    "en",
+    "Arabic (Tunisia)"
+  ],
+  [
+    "ar_TN",
+    "fr",
+    "arabe (Tunisie)"
+  ],
+  [
+    "ar_TN",
+    "de",
+    "Arabisch (Tunesien)"
+  ],
+  [
+    "ar_YE",
+    "en",
+    "Arabic (Yemen)"
+  ],
+  [
+    "ar_YE",
+    "fr",
+    "arabe (Yémen)"
+  ],
+  [
+    "ar_YE",
+    "de",
+    "Arabisch (Jemen)"
+  ],
+  [
+    "as",
+    "en",
+    "Assamese"
+  ],
+  [
+    "as",
+    "fr",
+    "assamais"
+  ],
+  [
+    "as",
+    "de",
+    "Assamesisch"
+  ],
+  [
+    "as",
+    "as",
+    "অসমীয়া"
+  ],
+  [
+    "as_IN",
+    "en",
+    "Assamese (India)"
+  ],
+  [
+    "as_IN",
+    "fr",
+    "assamais (Inde)"
+  ],
+  [
+    "as_IN",
+    "de",
+    "Assamesisch (Indien)"
+  ],
+  [
+    "asa",
+    "en",
+    "Asu"
+  ],
+  [
+    "asa_TZ",
+    "en",
+    "Asu (Tanzania)"
+  ],
+  [
+    "az",
+    "en",
+    "Azerbaijani"
+  ],
+  [
+    "az",
+    "fr",
+    "azéri"
+  ],
+  [
+    "az",
+    "de",
+    "Aserbeidschanisch"
+  ],
+  [
+    "az",
+    "az",
+    "azərbaycan dili"
+  ],
+  [
+    "az_Cyrl",
+    "en",
+    "Azerbaijani (Cyrillic)"
+  ],
+  [
+    "az_Cyrl",
+    "fr",
+    "azéri (cyrillique)"
+  ],
+  [
+    "az_Cyrl",
+    "de",
+    "Aserbeidschanisch (Kyrillische-Schrift)"
+  ],
+  [
+    "az_Cyrl_AZ",
+    "en",
+    "Azerbaijani (Cyrillic, Azerbaijan)"
+  ],
+  [
+    "az_Cyrl_AZ",
+    "fr",
+    "azéri (cyrillique, Azerbaïdjan)"
+  ],
+  [
+    "az_Cyrl_AZ",
+    "de",
+    "Aserbeidschanisch (Kyrillische-Schrift, Aserbaidschan)"
+  ],
+  [
+    "az_Latn",
+    "en",
+    "Azerbaijani (Latin)"
+  ],
+  [
+    "az_Latn",
+    "fr",
+    "azéri (latin)"
+  ],
+  [
+    "az_Latn",
+    "de",
+    "Aserbeidschanisch (Lateinische-Schrift)"
+  ],
+  [
+    "az_Latn_AZ",
+    "en",
+    "Azerbaijani (Latin, Azerbaijan)"
+  ],
+  [
+    "az_Latn_AZ",
+    "fr",
+    "azéri (latin, Azerbaïdjan)"
+  ],
+  [
+    "az_Latn_AZ",
+    "de",
+    "Aserbeidschanisch (Lateinische-Schrift, Aserbaidschan)"
+  ],
+  [
+    "be",
+    "en",
+    "Belarusian"
+  ],
+  [
+    "be",
+    "fr",
+    "biélorusse"
+  ],
+  [
+    "be",
+    "de",
+    "Weißrussisch"
+  ],
+  [
+    "be",
+    "be",
+    "беларуская мова"
+  ],
+  [
+    "be_BY",
+    "en",
+    "Belarusian (Belarus)"
+  ],
+  [
+    "be_BY",
+    "fr",
+    "biélorusse (Biélorussie)"
+  ],
+  [
+    "be_BY",
+    "de",
+    "Weißrussisch (Belarus (Weißrussland))"
+  ],
+  [
+    "bem",
+    "en",
+    "Bemba"
+  ],
+  [
+    "bem",
+    "fr",
+    "bemba"
+  ],
+  [
+    "bem",
+    "de",
+    "Bemba-Sprache"
+  ],
+  [
+    "bem_ZM",
+    "en",
+    "Bemba (Zambia)"
+  ],
+  [
+    "bem_ZM",
+    "fr",
+    "bemba (Zambie)"
+  ],
+  [
+    "bem_ZM",
+    "de",
+    "Bemba-Sprache (Sambia)"
+  ],
+  [
+    "bez",
+    "en",
+    "Bena"
+  ],
+  [
+    "bez_TZ",
+    "en",
+    "Bena (Tanzania)"
+  ],
+  [
+    "bg",
+    "en",
+    "Bulgarian"
+  ],
+  [
+    "bg",
+    "fr",
+    "bulgare"
+  ],
+  [
+    "bg",
+    "de",
+    "Bulgarisch"
+  ],
+  [
+    "bg",
+    "bg",
+    "български език"
+  ],
+  [
+    "bg_BG",
+    "en",
+    "Bulgarian (Bulgaria)"
+  ],
+  [
+    "bg_BG",
+    "fr",
+    "bulgare (Bulgarie)"
+  ],
+  [
+    "bg_BG",
+    "de",
+    "Bulgarisch (Bulgarien)"
+  ],
+  [
+    "bm",
+    "en",
+    "Bambara"
+  ],
+  [
+    "bm",
+    "fr",
+    "bambara"
+  ],
+  [
+    "bm",
+    "de",
+    "Bambara-Sprache"
+  ],
+  [
+    "bm",
+    "bm",
+    "bamanankan"
+  ],
+  [
+    "bm_ML",
+    "en",
+    "Bambara (Mali)"
+  ],
+  [
+    "bm_ML",
+    "fr",
+    "bambara (Mali)"
+  ],
+  [
+    "bm_ML",
+    "de",
+    "Bambara-Sprache (Mali)"
+  ],
+  [
+    "bn",
+    "en",
+    "Bengali"
+  ],
+  [
+    "bn",
+    "fr",
+    "bengali"
+  ],
+  [
+    "bn",
+    "de",
+    "Bengali"
+  ],
+  [
+    "bn",
+    "bn",
+    "বাংলা"
+  ],
+  [
+    "bn_BD",
+    "en",
+    "Bengali (Bangladesh)"
+  ],
+  [
+    "bn_BD",
+    "fr",
+    "bengali (Bangladesh)"
+  ],
+  [
+    "bn_BD",
+    "de",
+    "Bengali (Bangladesch)"
+  ],
+  [
+    "bn_IN",
+    "en",
+    "Bengali (India)"
+  ],
+  [
+    "bn_IN",
+    "fr",
+    "bengali (Inde)"
+  ],
+  [
+    "bn_IN",
+    "de",
+    "Bengali (Indien)"
+  ],
+  [
+    "bo",
+    "en",
+    "Tibetan"
+  ],
+  [
+    "bo",
+    "fr",
+    "tibétain"
+  ],
+  [
+    "bo",
+    "de",
+    "Tibetisch"
+  ],
+  [
+    "bo",
+    "bo",
+    "བོད་ཡིག"
+  ],
+  [
+    "bo_CN",
+    "en",
+    "Tibetan (China)"
+  ],
+  [
+    "bo_CN",
+    "fr",
+    "tibétain (Chine)"
+  ],
+  [
+    "bo_CN",
+    "de",
+    "Tibetisch (China, Volksrepublik)"
+  ],
+  [
+    "bo_IN",
+    "en",
+    "Tibetan (India)"
+  ],
+  [
+    "bo_IN",
+    "fr",
+    "tibétain (Inde)"
+  ],
+  [
+    "bo_IN",
+    "de",
+    "Tibetisch (Indien)"
+  ],
+  [
+    "bs",
+    "en",
+    "Bosnian"
+  ],
+  [
+    "bs",
+    "fr",
+    "bosniaque"
+  ],
+  [
+    "bs",
+    "de",
+    "Bosnisch"
+  ],
+  [
+    "bs",
+    "bs",
+    "bosanski jezik"
+  ],
+  [
+    "bs_BA",
+    "en",
+    "Bosnian (Bosnia and Herzegovina)"
+  ],
+  [
+    "bs_BA",
+    "fr",
+    "bosniaque (Bosnie-Herzégovine)"
+  ],
+  [
+    "bs_BA",
+    "de",
+    "Bosnisch (Bosnien und Herzegowina)"
+  ],
+  [
+    "ca",
+    "en",
+    "Catalan"
+  ],
+  [
+    "ca",
+    "fr",
+    "catalan; valencien"
+  ],
+  [
+    "ca",
+    "de",
+    "Katalanisch"
+  ],
+  [
+    "ca",
+    "ca",
+    "català"
+  ],
+  [
+    "ca_ES",
+    "en",
+    "Catalan (Spain)"
+  ],
+  [
+    "ca_ES",
+    "fr",
+    "catalan; valencien (Espagne)"
+  ],
+  [
+    "ca_ES",
+    "de",
+    "Katalanisch (Spanien)"
+  ],
+  [
+    "cgg",
+    "en",
+    "Chiga"
+  ],
+  [
+    "cgg_UG",
+    "en",
+    "Chiga (Uganda)"
+  ],
+  [
+    "chr",
+    "en",
+    "Cherokee"
+  ],
+  [
+    "chr",
+    "fr",
+    "cherokee"
+  ],
+  [
+    "chr",
+    "de",
+    "Cherokee-Sprache"
+  ],
+  [
+    "chr_US",
+    "en",
+    "Cherokee (United States)"
+  ],
+  [
+    "chr_US",
+    "fr",
+    "cherokee (États-Unis)"
+  ],
+  [
+    "chr_US",
+    "de",
+    "Cherokee-Sprache (Vereinigte Staaten von Amerika)"
+  ],
+  [
+    "cs",
+    "en",
+    "Czech"
+  ],
+  [
+    "cs",
+    "fr",
+    "tchèque"
+  ],
+  [
+    "cs",
+    "de",
+    "Tschechisch"
+  ],
+  [
+    "cs",
+    "cs",
+    "čeština, český jazyk"
+  ],
+  [
+    "cs_CZ",
+    "en",
+    "Czech (Czech Republic)"
+  ],
+  [
+    "cs_CZ",
+    "fr",
+    "tchèque (République tchèque)"
+  ],
+  [
+    "cs_CZ",
+    "de",
+    "Tschechisch (Tschechische Republik)"
+  ],
+  [
+    "cy",
+    "en",
+    "Welsh"
+  ],
+  [
+    "cy",
+    "fr",
+    "gallois"
+  ],
+  [
+    "cy",
+    "de",
+    "Kymrisch"
+  ],
+  [
+    "cy",
+    "cy",
+    "Cymraeg"
+  ],
+  [
+    "cy_GB",
+    "en",
+    "Welsh (United Kingdom)"
+  ],
+  [
+    "cy_GB",
+    "fr",
+    "gallois (Royaume-Uni)"
+  ],
+  [
+    "da",
+    "en",
+    "Danish"
+  ],
+  [
+    "da",
+    "fr",
+    "danois"
+  ],
+  [
+    "da",
+    "de",
+    "Dänisch"
+  ],
+  [
+    "da",
+    "da",
+    "dansk"
+  ],
+  [
+    "da_DK",
+    "en",
+    "Danish (Denmark)"
+  ],
+  [
+    "da_DK",
+    "fr",
+    "danois (Danemark)"
+  ],
+  [
+    "da_DK",
+    "de",
+    "Dänisch (Danemark!Dänemark)"
+  ],
+  [
+    "dav",
+    "en",
+    "Taita"
+  ],
+  [
+    "dav_KE",
+    "en",
+    "Taita (Kenya)"
+  ],
+  [
+    "de",
+    "en",
+    "German"
+  ],
+  [
+    "de",
+    "fr",
+    "allemand"
+  ],
+  [
+    "de",
+    "de",
+    "Deutsch"
+  ],
+  [
+    "de",
+    "de",
+    "Deutsch"
+  ],
+  [
+    "de_AT",
+    "en",
+    "German (Austria)"
+  ],
+  [
+    "de_AT",
+    "fr",
+    "allemand (Autriche)"
+  ],
+  [
+    "de_AT",
+    "de",
+    "Deutsch (Osterreich!Österreich)"
+  ],
+  [
+    "de_AT",
+    "de",
+    "Deutsch (Osterreich!Österreich)"
+  ],
+  [
+    "de_BE",
+    "en",
+    "German (Belgium)"
+  ],
+  [
+    "de_BE",
+    "fr",
+    "allemand (Belgique)"
+  ],
+  [
+    "de_BE",
+    "de",
+    "Deutsch (Belgien)"
+  ],
+  [
+    "de_BE",
+    "de",
+    "Deutsch (Belgien)"
+  ],
+  [
+    "de_CH",
+    "en",
+    "German (Switzerland)"
+  ],
+  [
+    "de_CH",
+    "fr",
+    "allemand (Suisse)"
+  ],
+  [
+    "de_CH",
+    "de",
+    "Deutsch (Schweiz (Confoederatio Helvetica))"
+  ],
+  [
+    "de_CH",
+    "de",
+    "Deutsch (Schweiz (Confoederatio Helvetica))"
+  ],
+  [
+    "de_DE",
+    "en",
+    "German (Germany)"
+  ],
+  [
+    "de_DE",
+    "fr",
+    "allemand (Allemagne)"
+  ],
+  [
+    "de_DE",
+    "de",
+    "Deutsch (Deutschland)"
+  ],
+  [
+    "de_DE",
+    "de",
+    "Deutsch (Deutschland)"
+  ],
+  [
+    "de_LI",
+    "en",
+    "German (Liechtenstein)"
+  ],
+  [
+    "de_LI",
+    "fr",
+    "allemand (Liechtenstein)"
+  ],
+  [
+    "de_LI",
+    "de",
+    "Deutsch (Liechtenstein)"
+  ],
+  [
+    "de_LI",
+    "de",
+    "Deutsch (Liechtenstein)"
+  ],
+  [
+    "de_LU",
+    "en",
+    "German (Luxembourg)"
+  ],
+  [
+    "de_LU",
+    "fr",
+    "allemand (Luxembourg (pays))"
+  ],
+  [
+    "de_LU",
+    "de",
+    "Deutsch (Luxemburg)"
+  ],
+  [
+    "de_LU",
+    "de",
+    "Deutsch (Luxemburg)"
+  ],
+  [
+    "ebu",
+    "en",
+    "Embu"
+  ],
+  [
+    "ebu_KE",
+    "en",
+    "Embu (Kenya)"
+  ],
+  [
+    "ee",
+    "en",
+    "Ewe"
+  ],
+  [
+    "ee",
+    "fr",
+    "éwé"
+  ],
+  [
+    "ee",
+    "de",
+    "Ewe-Sprache"
+  ],
+  [
+    "ee",
+    "ee",
+    "Eʋegbe"
+  ],
+  [
+    "ee_GH",
+    "en",
+    "Ewe (Ghana)"
+  ],
+  [
+    "ee_GH",
+    "fr",
+    "éwé (Ghana)"
+  ],
+  [
+    "ee_GH",
+    "de",
+    "Ewe-Sprache (Ghana)"
+  ],
+  [
+    "ee_TG",
+    "en",
+    "Ewe (Togo)"
+  ],
+  [
+    "ee_TG",
+    "fr",
+    "éwé (Togo)"
+  ],
+  [
+    "ee_TG",
+    "de",
+    "Ewe-Sprache (Togo)"
+  ],
+  [
+    "el",
+    "en",
+    "Greek"
+  ],
+  [
+    "el",
+    "fr",
+    "grec moderne (après 1453)"
+  ],
+  [
+    "el",
+    "de",
+    "Neugriechisch"
+  ],
+  [
+    "el",
+    "el",
+    "ελληνικά"
+  ],
+  [
+    "el_CY",
+    "en",
+    "Greek (Cyprus)"
+  ],
+  [
+    "el_CY",
+    "fr",
+    "grec moderne (après 1453) (Chypre (pays))"
+  ],
+  [
+    "el_CY",
+    "de",
+    "Neugriechisch (Zypern)"
+  ],
+  [
+    "el_GR",
+    "en",
+    "Greek (Greece)"
+  ],
+  [
+    "el_GR",
+    "fr",
+    "grec moderne (après 1453) (Grèce)"
+  ],
+  [
+    "el_GR",
+    "de",
+    "Neugriechisch (Griechenland)"
+  ],
+  [
+    "en",
+    "en",
+    "English"
+  ],
+  [
+    "en",
+    "fr",
+    "anglais"
+  ],
+  [
+    "en",
+    "de",
+    "Englisch"
+  ],
+  [
+    "en",
+    "en",
+    "English"
+  ],
+  [
+    "en_AS",
+    "en",
+    "English (American Samoa)"
+  ],
+  [
+    "en_AS",
+    "fr",
+    "anglais (Samoa américaines)"
+  ],
+  [
+    "en_AS",
+    "de",
+    "Englisch (Amerikanisch-Samoa)"
+  ],
+  [
+    "en_AU",
+    "en",
+    "English (Australia)"
+  ],
+  [
+    "en_AU",
+    "fr",
+    "anglais (Australie)"
+  ],
+  [
+    "en_AU",
+    "de",
+    "Englisch (Australien)"
+  ],
+  [
+    "en_BE",
+    "en",
+    "English (Belgium)"
+  ],
+  [
+    "en_BE",
+    "fr",
+    "anglais (Belgique)"
+  ],
+  [
+    "en_BE",
+    "de",
+    "Englisch (Belgien)"
+  ],
+  [
+    "en_BW",
+    "en",
+    "English (Botswana)"
+  ],
+  [
+    "en_BW",
+    "fr",
+    "anglais (Botswana)"
+  ],
+  [
+    "en_BW",
+    "de",
+    "Englisch (Botswana)"
+  ],
+  [
+    "en_BZ",
+    "en",
+    "English (Belize)"
+  ],
+  [
+    "en_BZ",
+    "fr",
+    "anglais (Belize)"
+  ],
+  [
+    "en_BZ",
+    "de",
+    "Englisch (Belize)"
+  ],
+  [
+    "en_CA",
+    "en",
+    "English (Canada)"
+  ],
+  [
+    "en_CA",
+    "fr",
+    "anglais (Canada)"
+  ],
+  [
+    "en_CA",
+    "de",
+    "Englisch (Kanada)"
+  ],
+  [
+    "en_GB",
+    "en",
+    "English (United Kingdom)"
+  ],
+  [
+    "en_GB",
+    "fr",
+    "anglais (Royaume-Uni)"
+  ],
+  [
+    "en_GU",
+    "en",
+    "English (Guam)"
+  ],
+  [
+    "en_GU",
+    "fr",
+    "anglais (Guam)"
+  ],
+  [
+    "en_GU",
+    "de",
+    "Englisch (Guam)"
+  ],
+  [
+    "en_HK",
+    "en",
+    "English (Hong Kong SAR China)"
+  ],
+  [
+    "en_HK",
+    "fr",
+    "anglais (Hong Kong)"
+  ],
+  [
+    "en_HK",
+    "de",
+    "Englisch (Hongkong)"
+  ],
+  [
+    "en_IE",
+    "en",
+    "English (Ireland)"
+  ],
+  [
+    "en_IE",
+    "fr",
+    "anglais (Irlande (pays))"
+  ],
+  [
+    "en_IE",
+    "de",
+    "Englisch (Irland)"
+  ],
+  [
+    "en_IN",
+    "en",
+    "English (India)"
+  ],
+  [
+    "en_IN",
+    "fr",
+    "anglais (Inde)"
+  ],
+  [
+    "en_IN",
+    "de",
+    "Englisch (Indien)"
+  ],
+  [
+    "en_JM",
+    "en",
+    "English (Jamaica)"
+  ],
+  [
+    "en_JM",
+    "fr",
+    "anglais (Jamaïque)"
+  ],
+  [
+    "en_JM",
+    "de",
+    "Englisch (Jamaika)"
+  ],
+  [
+    "en_MH",
+    "en",
+    "English (Marshall Islands)"
+  ],
+  [
+    "en_MH",
+    "fr",
+    "anglais (Marshall (pays))"
+  ],
+  [
+    "en_MH",
+    "de",
+    "Englisch (Marshallinseln)"
+  ],
+  [
+    "en_MP",
+    "en",
+    "English (Northern Mariana Islands)"
+  ],
+  [
+    "en_MP",
+    "fr",
+    "anglais (Îles Mariannes du Nord)"
+  ],
+  [
+    "en_MP",
+    "de",
+    "Englisch (Nordliche Marianen!Nördliche Marianen)"
+  ],
+  [
+    "en_MT",
+    "en",
+    "English (Malta)"
+  ],
+  [
+    "en_MT",
+    "fr",
+    "anglais (Malte)"
+  ],
+  [
+    "en_MT",
+    "de",
+    "Englisch (Malta)"
+  ],
+  [
+    "en_MU",
+    "en",
+    "English (Mauritius)"
+  ],
+  [
+    "en_MU",
+    "fr",
+    "anglais (Maurice (pays))"
+  ],
+  [
+    "en_MU",
+    "de",
+    "Englisch (Mauritius)"
+  ],
+  [
+    "en_NA",
+    "en",
+    "English (Namibia)"
+  ],
+  [
+    "en_NA",
+    "fr",
+    "anglais (Namibie)"
+  ],
+  [
+    "en_NA",
+    "de",
+    "Englisch (Namibia)"
+  ],
+  [
+    "en_NZ",
+    "en",
+    "English (New Zealand)"
+  ],
+  [
+    "en_NZ",
+    "fr",
+    "anglais (Nouvelle-Zélande)"
+  ],
+  [
+    "en_NZ",
+    "de",
+    "Englisch (Neuseeland)"
+  ],
+  [
+    "en_PH",
+    "en",
+    "English (Philippines)"
+  ],
+  [
+    "en_PH",
+    "fr",
+    "anglais (Philippines)"
+  ],
+  [
+    "en_PH",
+    "de",
+    "Englisch (Philippinen)"
+  ],
+  [
+    "en_PK",
+    "en",
+    "English (Pakistan)"
+  ],
+  [
+    "en_PK",
+    "fr",
+    "anglais (Pakistan)"
+  ],
+  [
+    "en_PK",
+    "de",
+    "Englisch (Pakistan)"
+  ],
+  [
+    "en_SG",
+    "en",
+    "English (Singapore)"
+  ],
+  [
+    "en_SG",
+    "fr",
+    "anglais (Singapour)"
+  ],
+  [
+    "en_SG",
+    "de",
+    "Englisch (Singapur)"
+  ],
+  [
+    "en_TT",
+    "en",
+    "English (Trinidad and Tobago)"
+  ],
+  [
+    "en_TT",
+    "fr",
+    "anglais (Trinité-et-Tobago)"
+  ],
+  [
+    "en_TT",
+    "de",
+    "Englisch (Trinidad und Tobago)"
+  ],
+  [
+    "en_UM",
+    "en",
+    "English (U.S. Minor Outlying Islands)"
+  ],
+  [
+    "en_UM",
+    "fr",
+    "anglais (Îles mineures éloignées des États-Unis)"
+  ],
+  [
+    "en_UM",
+    "de",
+    "Englisch (United States Minor Outlying Islands)"
+  ],
+  [
+    "en_US",
+    "en",
+    "English (United States)"
+  ],
+  [
+    "en_US",
+    "fr",
+    "anglais (États-Unis)"
+  ],
+  [
+    "en_US",
+    "de",
+    "Englisch (Vereinigte Staaten von Amerika)"
+  ],
+  [
+    "en_US_POSIX",
+    "en",
+    "English (United States, Computer)"
+  ],
+  [
+    "en_VI",
+    "en",
+    "English (U.S. Virgin Islands)"
+  ],
+  [
+    "en_VI",
+    "fr",
+    "anglais (Îles Vierges des États-Unis)"
+  ],
+  [
+    "en_VI",
+    "de",
+    "Englisch (Amerikanische Jungferninseln)"
+  ],
+  [
+    "en_ZA",
+    "en",
+    "English (South Africa)"
+  ],
+  [
+    "en_ZA",
+    "fr",
+    "anglais (Afrique du Sud)"
+  ],
+  [
+    "en_ZA",
+    "de",
+    "Englisch (Sudafrika!Südafrika)"
+  ],
+  [
+    "en_ZW",
+    "en",
+    "English (Zimbabwe)"
+  ],
+  [
+    "en_ZW",
+    "fr",
+    "anglais (Zimbabwe)"
+  ],
+  [
+    "en_ZW",
+    "de",
+    "Englisch (Simbabwe)"
+  ],
+  [
+    "eo",
+    "en",
+    "Esperanto"
+  ],
+  [
+    "eo",
+    "fr",
+    "espéranto"
+  ],
+  [
+    "eo",
+    "de",
+    "Esperanto"
+  ],
+  [
+    "eo",
+    "eo",
+    "Esperanto"
+  ],
+  [
+    "es",
+    "en",
+    "Spanish"
+  ],
+  [
+    "es",
+    "fr",
+    "espagnol; castillan"
+  ],
+  [
+    "es",
+    "de",
+    "Spanisch"
+  ],
+  [
+    "es",
+    "es",
+    "español"
+  ],
+  [
+    "es_419",
+    "en",
+    "Spanish (Latin America)"
+  ],
+  [
+    "es_AR",
+    "en",
+    "Spanish (Argentina)"
+  ],
+  [
+    "es_AR",
+    "fr",
+    "espagnol; castillan (Argentine)"
+  ],
+  [
+    "es_AR",
+    "de",
+    "Spanisch (Argentinien)"
+  ],
+  [
+    "es_BO",
+    "en",
+    "Spanish (Bolivia)"
+  ],
+  [
+    "es_BO",
+    "fr",
+    "espagnol; castillan (Bolivie)"
+  ],
+  [
+    "es_BO",
+    "de",
+    "Spanisch (Bolivien)"
+  ],
+  [
+    "es_CL",
+    "en",
+    "Spanish (Chile)"
+  ],
+  [
+    "es_CL",
+    "fr",
+    "espagnol; castillan (Chili)"
+  ],
+  [
+    "es_CL",
+    "de",
+    "Spanisch (Chile)"
+  ],
+  [
+    "es_CO",
+    "en",
+    "Spanish (Colombia)"
+  ],
+  [
+    "es_CO",
+    "fr",
+    "espagnol; castillan (Colombie)"
+  ],
+  [
+    "es_CO",
+    "de",
+    "Spanisch (Kolumbien)"
+  ],
+  [
+    "es_CR",
+    "en",
+    "Spanish (Costa Rica)"
+  ],
+  [
+    "es_CR",
+    "fr",
+    "espagnol; castillan (Costa Rica)"
+  ],
+  [
+    "es_CR",
+    "de",
+    "Spanisch (Costa Rica)"
+  ],
+  [
+    "es_DO",
+    "en",
+    "Spanish (Dominican Republic)"
+  ],
+  [
+    "es_DO",
+    "fr",
+    "espagnol; castillan (République dominicaine)"
+  ],
+  [
+    "es_DO",
+    "de",
+    "Spanisch (Dominikanische Republik)"
+  ],
+  [
+    "es_EC",
+    "en",
+    "Spanish (Ecuador)"
+  ],
+  [
+    "es_EC",
+    "fr",
+    "espagnol; castillan (Équateur)"
+  ],
+  [
+    "es_EC",
+    "de",
+    "Spanisch (Ecuador)"
+  ],
+  [
+    "es_ES",
+    "en",
+    "Spanish (Spain)"
+  ],
+  [
+    "es_ES",
+    "fr",
+    "espagnol; castillan (Espagne)"
+  ],
+  [
+    "es_ES",
+    "de",
+    "Spanisch (Spanien)"
+  ],
+  [
+    "es_GQ",
+    "en",
+    "Spanish (Equatorial Guinea)"
+  ],
+  [
+    "es_GQ",
+    "fr",
+    "espagnol; castillan (Guinée équatoriale)"
+  ],
+  [
+    "es_GQ",
+    "de",
+    "Spanisch (Äquatorialguinea)"
+  ],
+  [
+    "es_GT",
+    "en",
+    "Spanish (Guatemala)"
+  ],
+  [
+    "es_GT",
+    "fr",
+    "espagnol; castillan (Guatemala)"
+  ],
+  [
+    "es_GT",
+    "de",
+    "Spanisch (Guatemala)"
+  ],
+  [
+    "es_HN",
+    "en",
+    "Spanish (Honduras)"
+  ],
+  [
+    "es_HN",
+    "fr",
+    "espagnol; castillan (Honduras)"
+  ],
+  [
+    "es_HN",
+    "de",
+    "Spanisch (Honduras)"
+  ],
+  [
+    "es_MX",
+    "en",
+    "Spanish (Mexico)"
+  ],
+  [
+    "es_MX",
+    "fr",
+    "espagnol; castillan (Mexique)"
+  ],
+  [
+    "es_MX",
+    "de",
+    "Spanisch (Mexiko)"
+  ],
+  [
+    "es_NI",
+    "en",
+    "Spanish (Nicaragua)"
+  ],
+  [
+    "es_NI",
+    "fr",
+    "espagnol; castillan (Nicaragua)"
+  ],
+  [
+    "es_NI",
+    "de",
+    "Spanisch (Nicaragua)"
+  ],
+  [
+    "es_PA",
+    "en",
+    "Spanish (Panama)"
+  ],
+  [
+    "es_PA",
+    "fr",
+    "espagnol; castillan (Panama)"
+  ],
+  [
+    "es_PA",
+    "de",
+    "Spanisch (Panama)"
+  ],
+  [
+    "es_PE",
+    "en",
+    "Spanish (Peru)"
+  ],
+  [
+    "es_PE",
+    "fr",
+    "espagnol; castillan (Pérou)"
+  ],
+  [
+    "es_PE",
+    "de",
+    "Spanisch (Peru)"
+  ],
+  [
+    "es_PR",
+    "en",
+    "Spanish (Puerto Rico)"
+  ],
+  [
+    "es_PR",
+    "fr",
+    "espagnol; castillan (Porto Rico)"
+  ],
+  [
+    "es_PR",
+    "de",
+    "Spanisch (Puerto Rico)"
+  ],
+  [
+    "es_PY",
+    "en",
+    "Spanish (Paraguay)"
+  ],
+  [
+    "es_PY",
+    "fr",
+    "espagnol; castillan (Paraguay)"
+  ],
+  [
+    "es_PY",
+    "de",
+    "Spanisch (Paraguay)"
+  ],
+  [
+    "es_SV",
+    "en",
+    "Spanish (El Salvador)"
+  ],
+  [
+    "es_SV",
+    "fr",
+    "espagnol; castillan (Salvador)"
+  ],
+  [
+    "es_SV",
+    "de",
+    "Spanisch (El Salvador)"
+  ],
+  [
+    "es_US",
+    "en",
+    "Spanish (United States)"
+  ],
+  [
+    "es_US",
+    "fr",
+    "espagnol; castillan (États-Unis)"
+  ],
+  [
+    "es_US",
+    "de",
+    "Spanisch (Vereinigte Staaten von Amerika)"
+  ],
+  [
+    "es_UY",
+    "en",
+    "Spanish (Uruguay)"
+  ],
+  [
+    "es_UY",
+    "fr",
+    "espagnol; castillan (Uruguay)"
+  ],
+  [
+    "es_UY",
+    "de",
+    "Spanisch (Uruguay)"
+  ],
+  [
+    "es_VE",
+    "en",
+    "Spanish (Venezuela)"
+  ],
+  [
+    "es_VE",
+    "fr",
+    "espagnol; castillan (Venezuela)"
+  ],
+  [
+    "es_VE",
+    "de",
+    "Spanisch (Venezuela)"
+  ],
+  [
+    "et",
+    "en",
+    "Estonian"
+  ],
+  [
+    "et",
+    "fr",
+    "estonien"
+  ],
+  [
+    "et",
+    "de",
+    "Estnisch"
+  ],
+  [
+    "et",
+    "et",
+    "eesti, eesti keel"
+  ],
+  [
+    "et_EE",
+    "en",
+    "Estonian (Estonia)"
+  ],
+  [
+    "et_EE",
+    "fr",
+    "estonien (Estonie)"
+  ],
+  [
+    "et_EE",
+    "de",
+    "Estnisch (Estland)"
+  ],
+  [
+    "eu",
+    "en",
+    "Basque"
+  ],
+  [
+    "eu",
+    "fr",
+    "basque"
+  ],
+  [
+    "eu",
+    "de",
+    "Baskisch"
+  ],
+  [
+    "eu",
+    "eu",
+    "euskara, euskera"
+  ],
+  [
+    "eu_ES",
+    "en",
+    "Basque (Spain)"
+  ],
+  [
+    "eu_ES",
+    "fr",
+    "basque (Espagne)"
+  ],
+  [
+    "eu_ES",
+    "de",
+    "Baskisch (Spanien)"
+  ],
+  [
+    "fa",
+    "en",
+    "Persian"
+  ],
+  [
+    "fa",
+    "fr",
+    "persan"
+  ],
+  [
+    "fa",
+    "de",
+    "Persisch"
+  ],
+  [
+    "fa",
+    "fa",
+    "فارسی"
+  ],
+  [
+    "fa_AF",
+    "en",
+    "Persian (Afghanistan)"
+  ],
+  [
+    "fa_AF",
+    "fr",
+    "persan (Afghanistan)"
+  ],
+  [
+    "fa_AF",
+    "de",
+    "Persisch (Afghanistan)"
+  ],
+  [
+    "fa_IR",
+    "en",
+    "Persian (Iran)"
+  ],
+  [
+    "fa_IR",
+    "fr",
+    "persan (Iran)"
+  ],
+  [
+    "fa_IR",
+    "de",
+    "Persisch (Iran, Islamische Republik)"
+  ],
+  [
+    "ff",
+    "en",
+    "Fulah"
+  ],
+  [
+    "ff",
+    "fr",
+    "peul"
+  ],
+  [
+    "ff",
+    "de",
+    "Ful"
+  ],
+  [
+    "ff",
+    "ff",
+    "Fulfulde, Pulaar, Pular"
+  ],
+  [
+    "ff_SN",
+    "en",
+    "Fulah (Senegal)"
+  ],
+  [
+    "ff_SN",
+    "fr",
+    "peul (Sénégal)"
+  ],
+  [
+    "ff_SN",
+    "de",
+    "Ful (Senegal)"
+  ],
+  [
+    "fi",
+    "en",
+    "Finnish"
+  ],
+  [
+    "fi",
+    "fr",
+    "finnois"
+  ],
+  [
+    "fi",
+    "de",
+    "Finnisch"
+  ],
+  [
+    "fi",
+    "fi",
+    "suomi, suomen kieli"
+  ],
+  [
+    "fi_FI",
+    "en",
+    "Finnish (Finland)"
+  ],
+  [
+    "fi_FI",
+    "fr",
+    "finnois (Finlande)"
+  ],
+  [
+    "fil",
+    "en",
+    "Filipino"
+  ],
+  [
+    "fil",
+    "fr",
+    "filipino; pilipino"
+  ],
+  [
+    "fil",
+    "de",
+    "Pilipino"
+  ],
+  [
+    "fil_PH",
+    "en",
+    "Filipino (Philippines)"
+  ],
+  [
+    "fil_PH",
+    "fr",
+    "filipino; pilipino (Philippines)"
+  ],
+  [
+    "fil_PH",
+    "de",
+    "Pilipino (Philippinen)"
+  ],
+  [
+    "fo",
+    "en",
+    "Faroese"
+  ],
+  [
+    "fo",
+    "fr",
+    "féroïen"
+  ],
+  [
+    "fo",
+    "de",
+    "Färöisch"
+  ],
+  [
+    "fo",
+    "fo",
+    "føroyskt"
+  ],
+  [
+    "fo_FO",
+    "en",
+    "Faroese (Faroe Islands)"
+  ],
+  [
+    "fo_FO",
+    "fr",
+    "féroïen (Îles Féroé)"
+  ],
+  [
+    "fo_FO",
+    "de",
+    "Färöisch (Faroer!Färöer)"
+  ],
+  [
+    "fr",
+    "en",
+    "French"
+  ],
+  [
+    "fr",
+    "fr",
+    "français, langue française"
+  ],
+  [
+    "fr",
+    "de",
+    "Französisch"
+  ],
+  [
+    "fr",
+    "fr",
+    "français, langue française"
+  ],
+  [
+    "fr_BE",
+    "en",
+    "French (Belgium)"
+  ],
+  [
+    "fr_BE",
+    "fr",
+    "français, langue française (Belgique)"
+  ],
+  [
+    "fr_BE",
+    "de",
+    "Französisch (Belgien)"
+  ],
+  [
+    "fr_BE",
+    "fr",
+    "français, langue française (Belgique)"
+  ],
+  [
+    "fr_BF",
+    "en",
+    "French (Burkina Faso)"
+  ],
+  [
+    "fr_BF",
+    "fr",
+    "français, langue française (Burkina Faso)"
+  ],
+  [
+    "fr_BF",
+    "de",
+    "Französisch (Burkina Faso)"
+  ],
+  [
+    "fr_BF",
+    "fr",
+    "français, langue française (Burkina Faso)"
+  ],
+  [
+    "fr_BI",
+    "en",
+    "French (Burundi)"
+  ],
+  [
+    "fr_BI",
+    "fr",
+    "français, langue française (Burundi)"
+  ],
+  [
+    "fr_BI",
+    "de",
+    "Französisch (Burundi)"
+  ],
+  [
+    "fr_BI",
+    "fr",
+    "français, langue française (Burundi)"
+  ],
+  [
+    "fr_BJ",
+    "en",
+    "French (Benin)"
+  ],
+  [
+    "fr_BJ",
+    "fr",
+    "français, langue française (Bénin)"
+  ],
+  [
+    "fr_BJ",
+    "de",
+    "Französisch (Benin)"
+  ],
+  [
+    "fr_BJ",
+    "fr",
+    "français, langue française (Bénin)"
+  ],
+  [
+    "fr_BL",
+    "en",
+    "French (Saint Barthélemy)"
+  ],
+  [
+    "fr_BL",
+    "fr",
+    "français, langue française (Saint-Barthélemy)"
+  ],
+  [
+    "fr_BL",
+    "de",
+    "Französisch (Saint-Barthélemy)"
+  ],
+  [
+    "fr_BL",
+    "fr",
+    "français, langue française (Saint-Barthélemy)"
+  ],
+  [
+    "fr_CA",
+    "en",
+    "French (Canada)"
+  ],
+  [
+    "fr_CA",
+    "fr",
+    "français, langue française (Canada)"
+  ],
+  [
+    "fr_CA",
+    "de",
+    "Französisch (Kanada)"
+  ],
+  [
+    "fr_CA",
+    "fr",
+    "français, langue française (Canada)"
+  ],
+  [
+    "fr_CD",
+    "en",
+    "French (Congo - Kinshasa)"
+  ],
+  [
+    "fr_CD",
+    "fr",
+    "français, langue française (République démocratique du Congo / (République démocratique du Congo))"
+  ],
+  [
+    "fr_CD",
+    "de",
+    "Französisch (Kongo, Demokratische Republik (ehem. Zaire))"
+  ],
+  [
+    "fr_CD",
+    "fr",
+    "français, langue française (République démocratique du Congo / (République démocratique du Congo))"
+  ],
+  [
+    "fr_CF",
+    "en",
+    "French (Central African Republic)"
+  ],
+  [
+    "fr_CF",
+    "fr",
+    "français, langue française (République centrafricaine)"
+  ],
+  [
+    "fr_CF",
+    "de",
+    "Französisch (Zentralafrikanische Republik)"
+  ],
+  [
+    "fr_CF",
+    "fr",
+    "français, langue française (République centrafricaine)"
+  ],
+  [
+    "fr_CG",
+    "en",
+    "French (Congo - Brazzaville)"
+  ],
+  [
+    "fr_CG",
+    "fr",
+    "français, langue française (République du Congo / (Congo))"
+  ],
+  [
+    "fr_CG",
+    "de",
+    "Französisch (Republik Kongo)"
+  ],
+  [
+    "fr_CG",
+    "fr",
+    "français, langue française (République du Congo / (Congo))"
+  ],
+  [
+    "fr_CH",
+    "en",
+    "French (Switzerland)"
+  ],
+  [
+    "fr_CH",
+    "fr",
+    "français, langue française (Suisse)"
+  ],
+  [
+    "fr_CH",
+    "de",
+    "Französisch (Schweiz (Confoederatio Helvetica))"
+  ],
+  [
+    "fr_CH",
+    "fr",
+    "français, langue française (Suisse)"
+  ],
+  [
+    "fr_CI",
+    "en",
+    "French (Côte d’Ivoire)"
+  ],
+  [
+    "fr_CI",
+    "fr",
+    "français, langue française (Côte d’Ivoire)"
+  ],
+  [
+    "fr_CI",
+    "de",
+    "Französisch (Cote d’Ivoire!Côte d’Ivoire (Elfenbeinküste))"
+  ],
+  [
+    "fr_CI",
+    "fr",
+    "français, langue française (Côte d’Ivoire)"
+  ],
+  [
+    "fr_CM",
+    "en",
+    "French (Cameroon)"
+  ],
+  [
+    "fr_CM",
+    "fr",
+    "français, langue française (Cameroun)"
+  ],
+  [
+    "fr_CM",
+    "de",
+    "Französisch (Kamerun)"
+  ],
+  [
+    "fr_CM",
+    "fr",
+    "français, langue française (Cameroun)"
+  ],
+  [
+    "fr_DJ",
+    "en",
+    "French (Djibouti)"
+  ],
+  [
+    "fr_DJ",
+    "fr",
+    "français, langue française (Djibouti)"
+  ],
+  [
+    "fr_DJ",
+    "de",
+    "Französisch (Dschibuti)"
+  ],
+  [
+    "fr_DJ",
+    "fr",
+    "français, langue française (Djibouti)"
+  ],
+  [
+    "fr_FR",
+    "en",
+    "French (France)"
+  ],
+  [
+    "fr_FR",
+    "fr",
+    "français, langue française (France)"
+  ],
+  [
+    "fr_FR",
+    "de",
+    "Französisch (Frankreich)"
+  ],
+  [
+    "fr_FR",
+    "fr",
+    "français, langue française (France)"
+  ],
+  [
+    "fr_GA",
+    "en",
+    "French (Gabon)"
+  ],
+  [
+    "fr_GA",
+    "fr",
+    "français, langue française (Gabon)"
+  ],
+  [
+    "fr_GA",
+    "de",
+    "Französisch (Gabun)"
+  ],
+  [
+    "fr_GA",
+    "fr",
+    "français, langue française (Gabon)"
+  ],
+  [
+    "fr_GN",
+    "en",
+    "French (Guinea)"
+  ],
+  [
+    "fr_GN",
+    "fr",
+    "français, langue française (Guinée)"
+  ],
+  [
+    "fr_GN",
+    "de",
+    "Französisch (Guinea)"
+  ],
+  [
+    "fr_GN",
+    "fr",
+    "français, langue française (Guinée)"
+  ],
+  [
+    "fr_GP",
+    "en",
+    "French (Guadeloupe)"
+  ],
+  [
+    "fr_GP",
+    "fr",
+    "français, langue française (Guadeloupe)"
+  ],
+  [
+    "fr_GP",
+    "de",
+    "Französisch (Guadeloupe)"
+  ],
+  [
+    "fr_GP",
+    "fr",
+    "français, langue française (Guadeloupe)"
+  ],
+  [
+    "fr_GQ",
+    "en",
+    "French (Equatorial Guinea)"
+  ],
+  [
+    "fr_GQ",
+    "fr",
+    "français, langue française (Guinée équatoriale)"
+  ],
+  [
+    "fr_GQ",
+    "de",
+    "Französisch (Äquatorialguinea)"
+  ],
+  [
+    "fr_GQ",
+    "fr",
+    "français, langue française (Guinée équatoriale)"
+  ],
+  [
+    "fr_KM",
+    "en",
+    "French (Comoros)"
+  ],
+  [
+    "fr_KM",
+    "fr",
+    "français, langue française (Comores)"
+  ],
+  [
+    "fr_KM",
+    "de",
+    "Französisch (Komoren)"
+  ],
+  [
+    "fr_KM",
+    "fr",
+    "français, langue française (Comores)"
+  ],
+  [
+    "fr_LU",
+    "en",
+    "French (Luxembourg)"
+  ],
+  [
+    "fr_LU",
+    "fr",
+    "français, langue française (Luxembourg (pays))"
+  ],
+  [
+    "fr_LU",
+    "de",
+    "Französisch (Luxemburg)"
+  ],
+  [
+    "fr_LU",
+    "fr",
+    "français, langue française (Luxembourg (pays))"
+  ],
+  [
+    "fr_MC",
+    "en",
+    "French (Monaco)"
+  ],
+  [
+    "fr_MC",
+    "fr",
+    "français, langue française (Monaco)"
+  ],
+  [
+    "fr_MC",
+    "de",
+    "Französisch (Monaco)"
+  ],
+  [
+    "fr_MC",
+    "fr",
+    "français, langue française (Monaco)"
+  ],
+  [
+    "fr_MF",
+    "en",
+    "French (Saint Martin)"
+  ],
+  [
+    "fr_MF",
+    "fr",
+    "français, langue française (Saint-Martin (Antilles françaises))"
+  ],
+  [
+    "fr_MF",
+    "de",
+    "Französisch (Saint-Martin (franz. Teil))"
+  ],
+  [
+    "fr_MF",
+    "fr",
+    "français, langue française (Saint-Martin (Antilles françaises))"
+  ],
+  [
+    "fr_MG",
+    "en",
+    "French (Madagascar)"
+  ],
+  [
+    "fr_MG",
+    "fr",
+    "français, langue française (Madagascar)"
+  ],
+  [
+    "fr_MG",
+    "de",
+    "Französisch (Madagaskar)"
+  ],
+  [
+    "fr_MG",
+    "fr",
+    "français, langue française (Madagascar)"
+  ],
+  [
+    "fr_ML",
+    "en",
+    "French (Mali)"
+  ],
+  [
+    "fr_ML",
+    "fr",
+    "français, langue française (Mali)"
+  ],
+  [
+    "fr_ML",
+    "de",
+    "Französisch (Mali)"
+  ],
+  [
+    "fr_ML",
+    "fr",
+    "français, langue française (Mali)"
+  ],
+  [
+    "fr_MQ",
+    "en",
+    "French (Martinique)"
+  ],
+  [
+    "fr_MQ",
+    "fr",
+    "français, langue française (Martinique)"
+  ],
+  [
+    "fr_MQ",
+    "de",
+    "Französisch (Martinique)"
+  ],
+  [
+    "fr_MQ",
+    "fr",
+    "français, langue française (Martinique)"
+  ],
+  [
+    "fr_NE",
+    "en",
+    "French (Niger)"
+  ],
+  [
+    "fr_NE",
+    "fr",
+    "français, langue française (Niger)"
+  ],
+  [
+    "fr_NE",
+    "de",
+    "Französisch (Niger)"
+  ],
+  [
+    "fr_NE",
+    "fr",
+    "français, langue française (Niger)"
+  ],
+  [
+    "fr_RE",
+    "en",
+    "French (Réunion)"
+  ],
+  [
+    "fr_RE",
+    "fr",
+    "français, langue française (La Réunion)"
+  ],
+  [
+    "fr_RE",
+    "de",
+    "Französisch (Reunion!Réunion)"
+  ],
+  [
+    "fr_RE",
+    "fr",
+    "français, langue française (La Réunion)"
+  ],
+  [
+    "fr_RW",
+    "en",
+    "French (Rwanda)"
+  ],
+  [
+    "fr_RW",
+    "fr",
+    "français, langue française (Rwanda)"
+  ],
+  [
+    "fr_RW",
+    "de",
+    "Französisch (Ruanda)"
+  ],
+  [
+    "fr_RW",
+    "fr",
+    "français, langue française (Rwanda)"
+  ],
+  [
+    "fr_SN",
+    "en",
+    "French (Senegal)"
+  ],
+  [
+    "fr_SN",
+    "fr",
+    "français, langue française (Sénégal)"
+  ],
+  [
+    "fr_SN",
+    "de",
+    "Französisch (Senegal)"
+  ],
+  [
+    "fr_SN",
+    "fr",
+    "français, langue française (Sénégal)"
+  ],
+  [
+    "fr_TD",
+    "en",
+    "French (Chad)"
+  ],
+  [
+    "fr_TD",
+    "fr",
+    "français, langue française (Tchad)"
+  ],
+  [
+    "fr_TD",
+    "de",
+    "Französisch (Tschad)"
+  ],
+  [
+    "fr_TD",
+    "fr",
+    "français, langue française (Tchad)"
+  ],
+  [
+    "fr_TG",
+    "en",
+    "French (Togo)"
+  ],
+  [
+    "fr_TG",
+    "fr",
+    "français, langue française (Togo)"
+  ],
+  [
+    "fr_TG",
+    "de",
+    "Französisch (Togo)"
+  ],
+  [
+    "fr_TG",
+    "fr",
+    "français, langue française (Togo)"
+  ],
+  [
+    "ga",
+    "en",
+    "Irish"
+  ],
+  [
+    "ga",
+    "fr",
+    "irlandais"
+  ],
+  [
+    "ga",
+    "de",
+    "Irisch"
+  ],
+  [
+    "ga",
+    "ga",
+    "Gaeilge"
+  ],
+  [
+    "ga_IE",
+    "en",
+    "Irish (Ireland)"
+  ],
+  [
+    "ga_IE",
+    "fr",
+    "irlandais (Irlande (pays))"
+  ],
+  [
+    "ga_IE",
+    "de",
+    "Irisch (Irland)"
+  ],
+  [
+    "gl",
+    "en",
+    "Galician"
+  ],
+  [
+    "gl",
+    "fr",
+    "galicien"
+  ],
+  [
+    "gl",
+    "de",
+    "Galicisch"
+  ],
+  [
+    "gl",
+    "gl",
+    "galego"
+  ],
+  [
+    "gl_ES",
+    "en",
+    "Galician (Spain)"
+  ],
+  [
+    "gl_ES",
+    "fr",
+    "galicien (Espagne)"
+  ],
+  [
+    "gl_ES",
+    "de",
+    "Galicisch (Spanien)"
+  ],
+  [
+    "gsw",
+    "en",
+    "Swiss German"
+  ],
+  [
+    "gsw",
+    "fr",
+    "suisse alémanique; alémanique; alsacien"
+  ],
+  [
+    "gsw",
+    "de",
+    "Schweizerdeutsch"
+  ],
+  [
+    "gsw_CH",
+    "en",
+    "Swiss German (Switzerland)"
+  ],
+  [
+    "gsw_CH",
+    "fr",
+    "suisse alémanique; alémanique; alsacien (Suisse)"
+  ],
+  [
+    "gsw_CH",
+    "de",
+    "Schweizerdeutsch (Schweiz (Confoederatio Helvetica))"
+  ],
+  [
+    "gu",
+    "en",
+    "Gujarati"
+  ],
+  [
+    "gu",
+    "fr",
+    "goudjrati"
+  ],
+  [
+    "gu",
+    "de",
+    "Gujarati-Sprache"
+  ],
+  [
+    "gu",
+    "gu",
+    "ગુજરાતી"
+  ],
+  [
+    "gu_IN",
+    "en",
+    "Gujarati (India)"
+  ],
+  [
+    "gu_IN",
+    "fr",
+    "goudjrati (Inde)"
+  ],
+  [
+    "gu_IN",
+    "de",
+    "Gujarati-Sprache (Indien)"
+  ],
+  [
+    "guz",
+    "en",
+    "Gusii"
+  ],
+  [
+    "guz_KE",
+    "en",
+    "Gusii (Kenya)"
+  ],
+  [
+    "gv",
+    "en",
+    "Manx"
+  ],
+  [
+    "gv",
+    "fr",
+    "manx; mannois"
+  ],
+  [
+    "gv",
+    "de",
+    "Manx"
+  ],
+  [
+    "gv",
+    "gv",
+    "Gaelg, Gailck"
+  ],
+  [
+    "gv_GB",
+    "en",
+    "Manx (United Kingdom)"
+  ],
+  [
+    "gv_GB",
+    "fr",
+    "manx; mannois (Royaume-Uni)"
+  ],
+  [
+    "ha",
+    "en",
+    "Hausa"
+  ],
+  [
+    "ha",
+    "fr",
+    "haoussa"
+  ],
+  [
+    "ha",
+    "de",
+    "Haussa-Sprache"
+  ],
+  [
+    "ha",
+    "ha",
+    "(Hausa) هَوُسَ"
+  ],
+  [
+    "ha_Latn",
+    "en",
+    "Hausa (Latin)"
+  ],
+  [
+    "ha_Latn",
+    "fr",
+    "haoussa (latin)"
+  ],
+  [
+    "ha_Latn",
+    "de",
+    "Haussa-Sprache (Lateinische-Schrift)"
+  ],
+  [
+    "ha_Latn_GH",
+    "en",
+    "Hausa (Latin, Ghana)"
+  ],
+  [
+    "ha_Latn_GH",
+    "fr",
+    "haoussa (latin, Ghana)"
+  ],
+  [
+    "ha_Latn_GH",
+    "de",
+    "Haussa-Sprache (Lateinische-Schrift, Ghana)"
+  ],
+  [
+    "ha_Latn_NE",
+    "en",
+    "Hausa (Latin, Niger)"
+  ],
+  [
+    "ha_Latn_NE",
+    "fr",
+    "haoussa (latin, Niger)"
+  ],
+  [
+    "ha_Latn_NE",
+    "de",
+    "Haussa-Sprache (Lateinische-Schrift, Niger)"
+  ],
+  [
+    "ha_Latn_NG",
+    "en",
+    "Hausa (Latin, Nigeria)"
+  ],
+  [
+    "ha_Latn_NG",
+    "fr",
+    "haoussa (latin, Nigeria)"
+  ],
+  [
+    "ha_Latn_NG",
+    "de",
+    "Haussa-Sprache (Lateinische-Schrift, Nigeria)"
+  ],
+  [
+    "haw",
+    "en",
+    "Hawaiian"
+  ],
+  [
+    "haw",
+    "fr",
+    "hawaïen"
+  ],
+  [
+    "haw",
+    "de",
+    "Hawaiisch"
+  ],
+  [
+    "haw_US",
+    "en",
+    "Hawaiian (United States)"
+  ],
+  [
+    "haw_US",
+    "fr",
+    "hawaïen (États-Unis)"
+  ],
+  [
+    "haw_US",
+    "de",
+    "Hawaiisch (Vereinigte Staaten von Amerika)"
+  ],
+  [
+    "he",
+    "en",
+    "Hebrew"
+  ],
+  [
+    "he",
+    "fr",
+    "hébreu"
+  ],
+  [
+    "he",
+    "de",
+    "Hebräisch"
+  ],
+  [
+    "he",
+    "he",
+    "עברית"
+  ],
+  [
+    "he_IL",
+    "en",
+    "Hebrew (Israel)"
+  ],
+  [
+    "he_IL",
+    "fr",
+    "hébreu (Israël)"
+  ],
+  [
+    "he_IL",
+    "de",
+    "Hebräisch (Israel)"
+  ],
+  [
+    "hi",
+    "en",
+    "Hindi"
+  ],
+  [
+    "hi",
+    "fr",
+    "hindi"
+  ],
+  [
+    "hi",
+    "de",
+    "Hindi"
+  ],
+  [
+    "hi",
+    "hi",
+    "हिन्दी, हिंदी"
+  ],
+  [
+    "hi_IN",
+    "en",
+    "Hindi (India)"
+  ],
+  [
+    "hi_IN",
+    "fr",
+    "hindi (Inde)"
+  ],
+  [
+    "hi_IN",
+    "de",
+    "Hindi (Indien)"
+  ],
+  [
+    "hr",
+    "en",
+    "Croatian"
+  ],
+  [
+    "hr",
+    "fr",
+    "croate"
+  ],
+  [
+    "hr",
+    "de",
+    "Kroatisch "
+  ],
+  [
+    "hr",
+    "hr",
+    "hrvatski jezik"
+  ],
+  [
+    "hr_HR",
+    "en",
+    "Croatian (Croatia)"
+  ],
+  [
+    "hr_HR",
+    "fr",
+    "croate (Croatie)"
+  ],
+  [
+    "hr_HR",
+    "de",
+    "Kroatisch  (Kroatien)"
+  ],
+  [
+    "hu",
+    "en",
+    "Hungarian"
+  ],
+  [
+    "hu",
+    "fr",
+    "hongrois"
+  ],
+  [
+    "hu",
+    "de",
+    "Ungarisch"
+  ],
+  [
+    "hu",
+    "hu",
+    "magyar"
+  ],
+  [
+    "hu_HU",
+    "en",
+    "Hungarian (Hungary)"
+  ],
+  [
+    "hu_HU",
+    "fr",
+    "hongrois (Hongrie)"
+  ],
+  [
+    "hu_HU",
+    "de",
+    "Ungarisch (Ungarn)"
+  ],
+  [
+    "hy",
+    "en",
+    "Armenian"
+  ],
+  [
+    "hy",
+    "fr",
+    "arménien"
+  ],
+  [
+    "hy",
+    "de",
+    "Armenisch"
+  ],
+  [
+    "hy",
+    "hy",
+    "Հայերեն"
+  ],
+  [
+    "hy_AM",
+    "en",
+    "Armenian (Armenia)"
+  ],
+  [
+    "hy_AM",
+    "fr",
+    "arménien (Arménie)"
+  ],
+  [
+    "hy_AM",
+    "de",
+    "Armenisch (Armenien)"
+  ],
+  [
+    "id",
+    "en",
+    "Indonesian"
+  ],
+  [
+    "id",
+    "fr",
+    "indonésien"
+  ],
+  [
+    "id",
+    "de",
+    "Bahasa Indonesia"
+  ],
+  [
+    "id",
+    "id",
+    "Bahasa Indonesia"
+  ],
+  [
+    "id_ID",
+    "en",
+    "Indonesian (Indonesia)"
+  ],
+  [
+    "id_ID",
+    "fr",
+    "indonésien (Indonésie)"
+  ],
+  [
+    "id_ID",
+    "de",
+    "Bahasa Indonesia (Indonesien)"
+  ],
+  [
+    "ig",
+    "en",
+    "Igbo"
+  ],
+  [
+    "ig",
+    "fr",
+    "igbo"
+  ],
+  [
+    "ig",
+    "de",
+    "Ibo-Sprache"
+  ],
+  [
+    "ig",
+    "ig",
+    "Asụsụ Igbo"
+  ],
+  [
+    "ig_NG",
+    "en",
+    "Igbo (Nigeria)"
+  ],
+  [
+    "ig_NG",
+    "fr",
+    "igbo (Nigeria)"
+  ],
+  [
+    "ig_NG",
+    "de",
+    "Ibo-Sprache (Nigeria)"
+  ],
+  [
+    "ii",
+    "en",
+    "Sichuan Yi"
+  ],
+  [
+    "ii",
+    "fr",
+    "yi de Sichuan"
+  ],
+  [
+    "ii",
+    "de",
+    "Lalo-Sprache"
+  ],
+  [
+    "ii",
+    "ii",
+    "ꆈꌠ꒿ Nuosuhxop"
+  ],
+  [
+    "ii_CN",
+    "en",
+    "Sichuan Yi (China)"
+  ],
+  [
+    "ii_CN",
+    "fr",
+    "yi de Sichuan (Chine)"
+  ],
+  [
+    "ii_CN",
+    "de",
+    "Lalo-Sprache (China, Volksrepublik)"
+  ],
+  [
+    "is",
+    "en",
+    "Icelandic"
+  ],
+  [
+    "is",
+    "fr",
+    "islandais"
+  ],
+  [
+    "is",
+    "de",
+    "Isländisch"
+  ],
+  [
+    "is",
+    "is",
+    "Íslenska"
+  ],
+  [
+    "is_IS",
+    "en",
+    "Icelandic (Iceland)"
+  ],
+  [
+    "is_IS",
+    "fr",
+    "islandais (Islande)"
+  ],
+  [
+    "is_IS",
+    "de",
+    "Isländisch (Island)"
+  ],
+  [
+    "it",
+    "en",
+    "Italian"
+  ],
+  [
+    "it",
+    "fr",
+    "italien"
+  ],
+  [
+    "it",
+    "de",
+    "Italienisch"
+  ],
+  [
+    "it",
+    "it",
+    "italiano"
+  ],
+  [
+    "it_CH",
+    "en",
+    "Italian (Switzerland)"
+  ],
+  [
+    "it_CH",
+    "fr",
+    "italien (Suisse)"
+  ],
+  [
+    "it_CH",
+    "de",
+    "Italienisch (Schweiz (Confoederatio Helvetica))"
+  ],
+  [
+    "it_IT",
+    "en",
+    "Italian (Italy)"
+  ],
+  [
+    "it_IT",
+    "fr",
+    "italien (Italie)"
+  ],
+  [
+    "it_IT",
+    "de",
+    "Italienisch (Italien)"
+  ],
+  [
+    "ja",
+    "en",
+    "Japanese"
+  ],
+  [
+    "ja",
+    "fr",
+    "japonais"
+  ],
+  [
+    "ja",
+    "de",
+    "Japanisch"
+  ],
+  [
+    "ja",
+    "ja",
+    "日本語 (にほんご)"
+  ],
+  [
+    "ja_JP",
+    "en",
+    "Japanese (Japan)"
+  ],
+  [
+    "ja_JP",
+    "fr",
+    "japonais (Japon)"
+  ],
+  [
+    "ja_JP",
+    "de",
+    "Japanisch (Japan)"
+  ],
+  [
+    "jmc",
+    "en",
+    "Machame"
+  ],
+  [
+    "jmc_TZ",
+    "en",
+    "Machame (Tanzania)"
+  ],
+  [
+    "ka",
+    "en",
+    "Georgian"
+  ],
+  [
+    "ka",
+    "fr",
+    "géorgien"
+  ],
+  [
+    "ka",
+    "de",
+    "Georgisch"
+  ],
+  [
+    "ka",
+    "ka",
+    "ქართული"
+  ],
+  [
+    "ka_GE",
+    "en",
+    "Georgian (Georgia)"
+  ],
+  [
+    "ka_GE",
+    "fr",
+    "géorgien (Géorgie (pays))"
+  ],
+  [
+    "ka_GE",
+    "de",
+    "Georgisch (Georgien)"
+  ],
+  [
+    "kab",
+    "en",
+    "Kabyle"
+  ],
+  [
+    "kab",
+    "fr",
+    "kabyle"
+  ],
+  [
+    "kab",
+    "de",
+    "Kabylisch"
+  ],
+  [
+    "kab_DZ",
+    "en",
+    "Kabyle (Algeria)"
+  ],
+  [
+    "kab_DZ",
+    "fr",
+    "kabyle (Algérie)"
+  ],
+  [
+    "kab_DZ",
+    "de",
+    "Kabylisch (Algerien)"
+  ],
+  [
+    "kam",
+    "en",
+    "Kamba"
+  ],
+  [
+    "kam",
+    "fr",
+    "kamba"
+  ],
+  [
+    "kam",
+    "de",
+    "Kamba-Sprache"
+  ],
+  [
+    "kam_KE",
+    "en",
+    "Kamba (Kenya)"
+  ],
+  [
+    "kam_KE",
+    "fr",
+    "kamba (Kenya)"
+  ],
+  [
+    "kam_KE",
+    "de",
+    "Kamba-Sprache (Kenia)"
+  ],
+  [
+    "kde",
+    "en",
+    "Makonde"
+  ],
+  [
+    "kde_TZ",
+    "en",
+    "Makonde (Tanzania)"
+  ],
+  [
+    "kea",
+    "en",
+    "Kabuverdianu"
+  ],
+  [
+    "kea_CV",
+    "en",
+    "Kabuverdianu (Cape Verde)"
+  ],
+  [
+    "khq",
+    "en",
+    "Koyra Chiini"
+  ],
+  [
+    "khq_ML",
+    "en",
+    "Koyra Chiini (Mali)"
+  ],
+  [
+    "ki",
+    "en",
+    "Kikuyu"
+  ],
+  [
+    "ki",
+    "fr",
+    "kikuyu"
+  ],
+  [
+    "ki",
+    "de",
+    "Kikuyu-Sprache"
+  ],
+  [
+    "ki",
+    "ki",
+    "Gĩkũyũ"
+  ],
+  [
+    "ki_KE",
+    "en",
+    "Kikuyu (Kenya)"
+  ],
+  [
+    "ki_KE",
+    "fr",
+    "kikuyu (Kenya)"
+  ],
+  [
+    "ki_KE",
+    "de",
+    "Kikuyu-Sprache (Kenia)"
+  ],
+  [
+    "kk",
+    "en",
+    "Kazakh"
+  ],
+  [
+    "kk",
+    "fr",
+    "kazakh"
+  ],
+  [
+    "kk",
+    "de",
+    "Kasachisch"
+  ],
+  [
+    "kk",
+    "kk",
+    "қазақ тілі"
+  ],
+  [
+    "kk_Cyrl",
+    "en",
+    "Kazakh (Cyrillic)"
+  ],
+  [
+    "kk_Cyrl",
+    "fr",
+    "kazakh (cyrillique)"
+  ],
+  [
+    "kk_Cyrl",
+    "de",
+    "Kasachisch (Kyrillische-Schrift)"
+  ],
+  [
+    "kk_Cyrl_KZ",
+    "en",
+    "Kazakh (Cyrillic, Kazakhstan)"
+  ],
+  [
+    "kk_Cyrl_KZ",
+    "fr",
+    "kazakh (cyrillique, Kazakhstan)"
+  ],
+  [
+    "kk_Cyrl_KZ",
+    "de",
+    "Kasachisch (Kyrillische-Schrift, Kasachstan)"
+  ],
+  [
+    "kl",
+    "en",
+    "Kalaallisut"
+  ],
+  [
+    "kl",
+    "fr",
+    "groenlandais"
+  ],
+  [
+    "kl",
+    "de",
+    "Grönländisch"
+  ],
+  [
+    "kl",
+    "kl",
+    "kalaallisut, kalaallit oqaasii"
+  ],
+  [
+    "kl_GL",
+    "en",
+    "Kalaallisut (Greenland)"
+  ],
+  [
+    "kl_GL",
+    "fr",
+    "groenlandais (Groenland)"
+  ],
+  [
+    "kl_GL",
+    "de",
+    "Grönländisch (Grönland)"
+  ],
+  [
+    "kln",
+    "en",
+    "Kalenjin"
+  ],
+  [
+    "kln_KE",
+    "en",
+    "Kalenjin (Kenya)"
+  ],
+  [
+    "km",
+    "en",
+    "Khmer"
+  ],
+  [
+    "km",
+    "fr",
+    "khmer central"
+  ],
+  [
+    "km",
+    "de",
+    "Kambodschanisch"
+  ],
+  [
+    "km",
+    "km",
+    "ខ្មែរ, ខេមរភាសា, ភាសាខ្មែរ"
+  ],
+  [
+    "km_KH",
+    "en",
+    "Khmer (Cambodia)"
+  ],
+  [
+    "km_KH",
+    "fr",
+    "khmer central (Cambodge)"
+  ],
+  [
+    "km_KH",
+    "de",
+    "Kambodschanisch (Kambodscha)"
+  ],
+  [
+    "kn",
+    "en",
+    "Kannada"
+  ],
+  [
+    "kn",
+    "fr",
+    "kannada"
+  ],
+  [
+    "kn",
+    "de",
+    "Kannada"
+  ],
+  [
+    "kn",
+    "kn",
+    "ಕನ್ನಡ"
+  ],
+  [
+    "kn_IN",
+    "en",
+    "Kannada (India)"
+  ],
+  [
+    "kn_IN",
+    "fr",
+    "kannada (Inde)"
+  ],
+  [
+    "kn_IN",
+    "de",
+    "Kannada (Indien)"
+  ],
+  [
+    "ko",
+    "en",
+    "Korean"
+  ],
+  [
+    "ko",
+    "fr",
+    "coréen"
+  ],
+  [
+    "ko",
+    "de",
+    "Koreanisch"
+  ],
+  [
+    "ko",
+    "ko",
+    "한국어, 조선어"
+  ],
+  [
+    "ko_KR",
+    "en",
+    "Korean (South Korea)"
+  ],
+  [
+    "ko_KR",
+    "fr",
+    "coréen (Corée du Sud)"
+  ],
+  [
+    "ko_KR",
+    "de",
+    "Koreanisch (Korea, Republik (Südkorea))"
+  ],
+  [
+    "kok",
+    "en",
+    "Konkani"
+  ],
+  [
+    "kok",
+    "fr",
+    "konkani"
+  ],
+  [
+    "kok",
+    "de",
+    "Konkani"
+  ],
+  [
+    "kok_IN",
+    "en",
+    "Konkani (India)"
+  ],
+  [
+    "kok_IN",
+    "fr",
+    "konkani (Inde)"
+  ],
+  [
+    "kok_IN",
+    "de",
+    "Konkani (Indien)"
+  ],
+  [
+    "kw",
+    "en",
+    "Cornish"
+  ],
+  [
+    "kw",
+    "fr",
+    "cornique"
+  ],
+  [
+    "kw",
+    "de",
+    "Kornisch"
+  ],
+  [
+    "kw",
+    "kw",
+    "Kernewek"
+  ],
+  [
+    "kw_GB",
+    "en",
+    "Cornish (United Kingdom)"
+  ],
+  [
+    "kw_GB",
+    "fr",
+    "cornique (Royaume-Uni)"
+  ],
+  [
+    "lag",
+    "en",
+    "Langi"
+  ],
+  [
+    "lag_TZ",
+    "en",
+    "Langi (Tanzania)"
+  ],
+  [
+    "lg",
+    "en",
+    "Ganda"
+  ],
+  [
+    "lg",
+    "fr",
+    "ganda"
+  ],
+  [
+    "lg",
+    "de",
+    "Ganda-Sprache"
+  ],
+  [
+    "lg",
+    "lg",
+    "Luganda"
+  ],
+  [
+    "lg_UG",
+    "en",
+    "Ganda (Uganda)"
+  ],
+  [
+    "lg_UG",
+    "fr",
+    "ganda (Ouganda)"
+  ],
+  [
+    "lg_UG",
+    "de",
+    "Ganda-Sprache (Uganda)"
+  ],
+  [
+    "lt",
+    "en",
+    "Lithuanian"
+  ],
+  [
+    "lt",
+    "fr",
+    "lituanien"
+  ],
+  [
+    "lt",
+    "de",
+    "Litauisch"
+  ],
+  [
+    "lt",
+    "lt",
+    "lietuvių kalba"
+  ],
+  [
+    "lt_LT",
+    "en",
+    "Lithuanian (Lithuania)"
+  ],
+  [
+    "lt_LT",
+    "fr",
+    "lituanien (Lituanie)"
+  ],
+  [
+    "lt_LT",
+    "de",
+    "Litauisch (Litauen)"
+  ],
+  [
+    "luo",
+    "en",
+    "Luo"
+  ],
+  [
+    "luo",
+    "fr",
+    "luo (Kenya et Tanzanie)"
+  ],
+  [
+    "luo",
+    "de",
+    "Luo-Sprache"
+  ],
+  [
+    "luo_KE",
+    "en",
+    "Luo (Kenya)"
+  ],
+  [
+    "luo_KE",
+    "fr",
+    "luo (Kenya et Tanzanie) (Kenya)"
+  ],
+  [
+    "luo_KE",
+    "de",
+    "Luo-Sprache (Kenia)"
+  ],
+  [
+    "luy",
+    "en",
+    "Luyia"
+  ],
+  [
+    "luy_KE",
+    "en",
+    "Luyia (Kenya)"
+  ],
+  [
+    "lv",
+    "en",
+    "Latvian"
+  ],
+  [
+    "lv",
+    "fr",
+    "letton"
+  ],
+  [
+    "lv",
+    "de",
+    "Lettisch"
+  ],
+  [
+    "lv",
+    "lv",
+    "latviešu valoda"
+  ],
+  [
+    "lv_LV",
+    "en",
+    "Latvian (Latvia)"
+  ],
+  [
+    "lv_LV",
+    "fr",
+    "letton (Lettonie)"
+  ],
+  [
+    "lv_LV",
+    "de",
+    "Lettisch (Lettland)"
+  ],
+  [
+    "mas",
+    "en",
+    "Masai"
+  ],
+  [
+    "mas",
+    "fr",
+    "massaï"
+  ],
+  [
+    "mas",
+    "de",
+    "Massai-Sprache"
+  ],
+  [
+    "mas_KE",
+    "en",
+    "Masai (Kenya)"
+  ],
+  [
+    "mas_KE",
+    "fr",
+    "massaï (Kenya)"
+  ],
+  [
+    "mas_KE",
+    "de",
+    "Massai-Sprache (Kenia)"
+  ],
+  [
+    "mas_TZ",
+    "en",
+    "Masai (Tanzania)"
+  ],
+  [
+    "mas_TZ",
+    "fr",
+    "massaï (Tanzanie)"
+  ],
+  [
+    "mas_TZ",
+    "de",
+    "Massai-Sprache (Tansania, Vereinigte Republik)"
+  ],
+  [
+    "mer",
+    "en",
+    "Meru"
+  ],
+  [
+    "mer_KE",
+    "en",
+    "Meru (Kenya)"
+  ],
+  [
+    "mfe",
+    "en",
+    "Morisyen"
+  ],
+  [
+    "mfe_MU",
+    "en",
+    "Morisyen (Mauritius)"
+  ],
+  [
+    "mg",
+    "en",
+    "Malagasy"
+  ],
+  [
+    "mg",
+    "fr",
+    "malgache"
+  ],
+  [
+    "mg",
+    "de",
+    "Malagassi-Sprache"
+  ],
+  [
+    "mg",
+    "mg",
+    "fiteny malagasy"
+  ],
+  [
+    "mg_MG",
+    "en",
+    "Malagasy (Madagascar)"
+  ],
+  [
+    "mg_MG",
+    "fr",
+    "malgache (Madagascar)"
+  ],
+  [
+    "mg_MG",
+    "de",
+    "Malagassi-Sprache (Madagaskar)"
+  ],
+  [
+    "mk",
+    "en",
+    "Macedonian"
+  ],
+  [
+    "mk",
+    "fr",
+    "macédonien"
+  ],
+  [
+    "mk",
+    "de",
+    "Makedonisch"
+  ],
+  [
+    "mk",
+    "mk",
+    "македонски јазик"
+  ],
+  [
+    "mk_MK",
+    "en",
+    "Macedonian (Macedonia)"
+  ],
+  [
+    "mk_MK",
+    "fr",
+    "macédonien (Macédoine (pays))"
+  ],
+  [
+    "mk_MK",
+    "de",
+    "Makedonisch (Mazedonien)"
+  ],
+  [
+    "ml",
+    "en",
+    "Malayalam"
+  ],
+  [
+    "ml",
+    "fr",
+    "malayalam"
+  ],
+  [
+    "ml",
+    "de",
+    "Malayalam"
+  ],
+  [
+    "ml",
+    "ml",
+    "മലയാളം"
+  ],
+  [
+    "ml_IN",
+    "en",
+    "Malayalam (India)"
+  ],
+  [
+    "ml_IN",
+    "fr",
+    "malayalam (Inde)"
+  ],
+  [
+    "ml_IN",
+    "de",
+    "Malayalam (Indien)"
+  ],
+  [
+    "mr",
+    "en",
+    "Marathi"
+  ],
+  [
+    "mr",
+    "fr",
+    "marathe"
+  ],
+  [
+    "mr",
+    "de",
+    "Marathi"
+  ],
+  [
+    "mr",
+    "mr",
+    "मराठी"
+  ],
+  [
+    "mr_IN",
+    "en",
+    "Marathi (India)"
+  ],
+  [
+    "mr_IN",
+    "fr",
+    "marathe (Inde)"
+  ],
+  [
+    "mr_IN",
+    "de",
+    "Marathi (Indien)"
+  ],
+  [
+    "ms",
+    "en",
+    "Malay"
+  ],
+  [
+    "ms",
+    "fr",
+    "malais"
+  ],
+  [
+    "ms",
+    "de",
+    "Malaiisch"
+  ],
+  [
+    "ms",
+    "ms",
+    "bahasa Melayu, بهاس ملايو‎"
+  ],
+  [
+    "ms_BN",
+    "en",
+    "Malay (Brunei)"
+  ],
+  [
+    "ms_BN",
+    "fr",
+    "malais (Brunei)"
+  ],
+  [
+    "ms_BN",
+    "de",
+    "Malaiisch (Brunei Darussalam)"
+  ],
+  [
+    "ms_MY",
+    "en",
+    "Malay (Malaysia)"
+  ],
+  [
+    "ms_MY",
+    "fr",
+    "malais (Malaisie)"
+  ],
+  [
+    "ms_MY",
+    "de",
+    "Malaiisch (Malaysia)"
+  ],
+  [
+    "mt",
+    "en",
+    "Maltese"
+  ],
+  [
+    "mt",
+    "fr",
+    "maltais"
+  ],
+  [
+    "mt",
+    "de",
+    "Maltesisch"
+  ],
+  [
+    "mt",
+    "mt",
+    "Malti"
+  ],
+  [
+    "mt_MT",
+    "en",
+    "Maltese (Malta)"
+  ],
+  [
+    "mt_MT",
+    "fr",
+    "maltais (Malte)"
+  ],
+  [
+    "mt_MT",
+    "de",
+    "Maltesisch (Malta)"
+  ],
+  [
+    "my",
+    "en",
+    "Burmese"
+  ],
+  [
+    "my",
+    "fr",
+    "birman"
+  ],
+  [
+    "my",
+    "de",
+    "Birmanisch"
+  ],
+  [
+    "my",
+    "my",
+    "ဗမာစာ"
+  ],
+  [
+    "my_MM",
+    "en",
+    "Burmese (Myanmar [Burma])"
+  ],
+  [
+    "my_MM",
+    "fr",
+    "birman (Birmanie)"
+  ],
+  [
+    "my_MM",
+    "de",
+    "Birmanisch (Myanmar (Burma))"
+  ],
+  [
+    "naq",
+    "en",
+    "Nama"
+  ],
+  [
+    "naq_NA",
+    "en",
+    "Nama (Namibia)"
+  ],
+  [
+    "nb",
+    "en",
+    "Norwegian Bokmål"
+  ],
+  [
+    "nb",
+    "fr",
+    "norvégien bokmål"
+  ],
+  [
+    "nb",
+    "de",
+    "Bokmål"
+  ],
+  [
+    "nb",
+    "nb",
+    "Norsk bokmål"
+  ],
+  [
+    "nb_NO",
+    "en",
+    "Norwegian Bokmål (Norway)"
+  ],
+  [
+    "nb_NO",
+    "fr",
+    "norvégien bokmål (Norvège)"
+  ],
+  [
+    "nb_NO",
+    "de",
+    "Bokmål (Norwegen)"
+  ],
+  [
+    "nd",
+    "en",
+    "North Ndebele"
+  ],
+  [
+    "nd",
+    "fr",
+    "ndébélé du Nord"
+  ],
+  [
+    "nd",
+    "de",
+    "Ndebele-Sprache (Simbabwe)"
+  ],
+  [
+    "nd",
+    "nd",
+    "isiNdebele"
+  ],
+  [
+    "nd_ZW",
+    "en",
+    "North Ndebele (Zimbabwe)"
+  ],
+  [
+    "nd_ZW",
+    "fr",
+    "ndébélé du Nord (Zimbabwe)"
+  ],
+  [
+    "nd_ZW",
+    "de",
+    "Ndebele-Sprache (Simbabwe) (Simbabwe)"
+  ],
+  [
+    "ne",
+    "en",
+    "Nepali"
+  ],
+  [
+    "ne",
+    "fr",
+    "népalais"
+  ],
+  [
+    "ne",
+    "de",
+    "Nepali"
+  ],
+  [
+    "ne",
+    "ne",
+    "नेपाली"
+  ],
+  [
+    "ne_IN",
+    "en",
+    "Nepali (India)"
+  ],
+  [
+    "ne_IN",
+    "fr",
+    "népalais (Inde)"
+  ],
+  [
+    "ne_IN",
+    "de",
+    "Nepali (Indien)"
+  ],
+  [
+    "ne_NP",
+    "en",
+    "Nepali (Nepal)"
+  ],
+  [
+    "ne_NP",
+    "fr",
+    "népalais (Népal)"
+  ],
+  [
+    "ne_NP",
+    "de",
+    "Nepali (Nepal)"
+  ],
+  [
+    "nl",
+    "en",
+    "Dutch"
+  ],
+  [
+    "nl",
+    "fr",
+    "néerlandais; flamand"
+  ],
+  [
+    "nl",
+    "de",
+    "Niederländisch"
+  ],
+  [
+    "nl",
+    "nl",
+    "Nederlands, Vlaams"
+  ],
+  [
+    "nl_BE",
+    "en",
+    "Dutch (Belgium)"
+  ],
+  [
+    "nl_BE",
+    "fr",
+    "néerlandais; flamand (Belgique)"
+  ],
+  [
+    "nl_BE",
+    "de",
+    "Niederländisch (Belgien)"
+  ],
+  [
+    "nl_NL",
+    "en",
+    "Dutch (Netherlands)"
+  ],
+  [
+    "nl_NL",
+    "fr",
+    "néerlandais; flamand (Pays-Bas)"
+  ],
+  [
+    "nl_NL",
+    "de",
+    "Niederländisch (Niederlande)"
+  ],
+  [
+    "nn",
+    "en",
+    "Norwegian Nynorsk"
+  ],
+  [
+    "nn",
+    "fr",
+    "norvégien nynorsk"
+  ],
+  [
+    "nn",
+    "de",
+    "Nynorsk"
+  ],
+  [
+    "nn",
+    "nn",
+    "Norsk nynorsk"
+  ],
+  [
+    "nn_NO",
+    "en",
+    "Norwegian Nynorsk (Norway)"
+  ],
+  [
+    "nn_NO",
+    "fr",
+    "norvégien nynorsk (Norvège)"
+  ],
+  [
+    "nn_NO",
+    "de",
+    "Nynorsk (Norwegen)"
+  ],
+  [
+    "nyn",
+    "en",
+    "Nyankole"
+  ],
+  [
+    "nyn",
+    "fr",
+    "nyankolé"
+  ],
+  [
+    "nyn",
+    "de",
+    "Nkole-Sprache"
+  ],
+  [
+    "nyn_UG",
+    "en",
+    "Nyankole (Uganda)"
+  ],
+  [
+    "nyn_UG",
+    "fr",
+    "nyankolé (Ouganda)"
+  ],
+  [
+    "nyn_UG",
+    "de",
+    "Nkole-Sprache (Uganda)"
+  ],
+  [
+    "om",
+    "en",
+    "Oromo"
+  ],
+  [
+    "om",
+    "fr",
+    "galla"
+  ],
+  [
+    "om",
+    "de",
+    "Galla-Sprache"
+  ],
+  [
+    "om",
+    "om",
+    "Afaan Oromoo"
+  ],
+  [
+    "om_ET",
+    "en",
+    "Oromo (Ethiopia)"
+  ],
+  [
+    "om_ET",
+    "fr",
+    "galla (Éthiopie)"
+  ],
+  [
+    "om_ET",
+    "de",
+    "Galla-Sprache (Athiopien!Äthiopien)"
+  ],
+  [
+    "om_KE",
+    "en",
+    "Oromo (Kenya)"
+  ],
+  [
+    "om_KE",
+    "fr",
+    "galla (Kenya)"
+  ],
+  [
+    "om_KE",
+    "de",
+    "Galla-Sprache (Kenia)"
+  ],
+  [
+    "or",
+    "en",
+    "Oriya"
+  ],
+  [
+    "or",
+    "fr",
+    "oriya"
+  ],
+  [
+    "or",
+    "de",
+    "Oriya-Sprache"
+  ],
+  [
+    "or",
+    "or",
+    "ଓଡ଼ିଆ"
+  ],
+  [
+    "or_IN",
+    "en",
+    "Oriya (India)"
+  ],
+  [
+    "or_IN",
+    "fr",
+    "oriya (Inde)"
+  ],
+  [
+    "or_IN",
+    "de",
+    "Oriya-Sprache (Indien)"
+  ],
+  [
+    "pa",
+    "en",
+    "Punjabi"
+  ],
+  [
+    "pa",
+    "fr",
+    "pendjabi"
+  ],
+  [
+    "pa",
+    "de",
+    "Pandschabi-Sprache"
+  ],
+  [
+    "pa",
+    "pa",
+    "ਪੰਜਾਬੀ, پنجابی‎"
+  ],
+  [
+    "pa_Arab",
+    "en",
+    "Punjabi (Arabic)"
+  ],
+  [
+    "pa_Arab",
+    "fr",
+    "pendjabi (arabe)"
+  ],
+  [
+    "pa_Arab",
+    "de",
+    "Pandschabi-Sprache (Arabische-Schrift)"
+  ],
+  [
+    "pa_Arab_PK",
+    "en",
+    "Punjabi (Arabic, Pakistan)"
+  ],
+  [
+    "pa_Arab_PK",
+    "fr",
+    "pendjabi (arabe, Pakistan)"
+  ],
+  [
+    "pa_Arab_PK",
+    "de",
+    "Pandschabi-Sprache (Arabische-Schrift, Pakistan)"
+  ],
+  [
+    "pa_Guru",
+    "en",
+    "Punjabi (Gurmukhi)"
+  ],
+  [
+    "pa_Guru",
+    "fr",
+    "pendjabi (gourmoukhî)"
+  ],
+  [
+    "pa_Guru",
+    "de",
+    "Pandschabi-Sprache (Gurmukhi-Schrift)"
+  ],
+  [
+    "pa_Guru_IN",
+    "en",
+    "Punjabi (Gurmukhi, India)"
+  ],
+  [
+    "pa_Guru_IN",
+    "fr",
+    "pendjabi (gourmoukhî, Inde)"
+  ],
+  [
+    "pa_Guru_IN",
+    "de",
+    "Pandschabi-Sprache (Gurmukhi-Schrift, Indien)"
+  ],
+  [
+    "pl",
+    "en",
+    "Polish"
+  ],
+  [
+    "pl",
+    "fr",
+    "polonais"
+  ],
+  [
+    "pl",
+    "de",
+    "Polnisch"
+  ],
+  [
+    "pl",
+    "pl",
+    "język polski, polszczyzna"
+  ],
+  [
+    "pl_PL",
+    "en",
+    "Polish (Poland)"
+  ],
+  [
+    "pl_PL",
+    "fr",
+    "polonais (Pologne)"
+  ],
+  [
+    "pl_PL",
+    "de",
+    "Polnisch (Polen)"
+  ],
+  [
+    "ps",
+    "en",
+    "Pashto"
+  ],
+  [
+    "ps",
+    "fr",
+    "pachto"
+  ],
+  [
+    "ps",
+    "de",
+    "Paschtu"
+  ],
+  [
+    "ps",
+    "ps",
+    "پښتو"
+  ],
+  [
+    "ps_AF",
+    "en",
+    "Pashto (Afghanistan)"
+  ],
+  [
+    "ps_AF",
+    "fr",
+    "pachto (Afghanistan)"
+  ],
+  [
+    "ps_AF",
+    "de",
+    "Paschtu (Afghanistan)"
+  ],
+  [
+    "pt",
+    "en",
+    "Portuguese"
+  ],
+  [
+    "pt",
+    "fr",
+    "portugais"
+  ],
+  [
+    "pt",
+    "de",
+    "Portugiesisch"
+  ],
+  [
+    "pt",
+    "pt",
+    "português"
+  ],
+  [
+    "pt_BR",
+    "en",
+    "Portuguese (Brazil)"
+  ],
+  [
+    "pt_BR",
+    "fr",
+    "portugais (Brésil)"
+  ],
+  [
+    "pt_BR",
+    "de",
+    "Portugiesisch (Brasilien)"
+  ],
+  [
+    "pt_GW",
+    "en",
+    "Portuguese (Guinea-Bissau)"
+  ],
+  [
+    "pt_GW",
+    "fr",
+    "portugais (Guinée-Bissau)"
+  ],
+  [
+    "pt_GW",
+    "de",
+    "Portugiesisch (Guinea-Bissau)"
+  ],
+  [
+    "pt_MZ",
+    "en",
+    "Portuguese (Mozambique)"
+  ],
+  [
+    "pt_MZ",
+    "fr",
+    "portugais (Mozambique)"
+  ],
+  [
+    "pt_MZ",
+    "de",
+    "Portugiesisch (Mosambik)"
+  ],
+  [
+    "pt_PT",
+    "en",
+    "Portuguese (Portugal)"
+  ],
+  [
+    "pt_PT",
+    "fr",
+    "portugais (Portugal)"
+  ],
+  [
+    "pt_PT",
+    "de",
+    "Portugiesisch (Portugal)"
+  ],
+  [
+    "rm",
+    "en",
+    "Romansh"
+  ],
+  [
+    "rm",
+    "fr",
+    "romanche"
+  ],
+  [
+    "rm",
+    "de",
+    "Rätoromanisch"
+  ],
+  [
+    "rm",
+    "rm",
+    "rumantsch grischun"
+  ],
+  [
+    "rm_CH",
+    "en",
+    "Romansh (Switzerland)"
+  ],
+  [
+    "rm_CH",
+    "fr",
+    "romanche (Suisse)"
+  ],
+  [
+    "rm_CH",
+    "de",
+    "Rätoromanisch (Schweiz (Confoederatio Helvetica))"
+  ],
+  [
+    "ro",
+    "en",
+    "Romanian"
+  ],
+  [
+    "ro",
+    "fr",
+    "roumain; moldave"
+  ],
+  [
+    "ro",
+    "de",
+    "Rumänisch"
+  ],
+  [
+    "ro",
+    "ro",
+    "limba română"
+  ],
+  [
+    "ro_MD",
+    "en",
+    "Romanian (Moldova)"
+  ],
+  [
+    "ro_MD",
+    "fr",
+    "roumain; moldave (Moldavie)"
+  ],
+  [
+    "ro_MD",
+    "de",
+    "Rumänisch (Moldawien (Republik Moldau))"
+  ],
+  [
+    "ro_RO",
+    "en",
+    "Romanian (Romania)"
+  ],
+  [
+    "ro_RO",
+    "fr",
+    "roumain; moldave (Roumanie)"
+  ],
+  [
+    "ro_RO",
+    "de",
+    "Rumänisch (Rumanien!Rumänien)"
+  ],
+  [
+    "rof",
+    "en",
+    "Rombo"
+  ],
+  [
+    "rof_TZ",
+    "en",
+    "Rombo (Tanzania)"
+  ],
+  [
+    "ru",
+    "en",
+    "Russian"
+  ],
+  [
+    "ru",
+    "fr",
+    "russe"
+  ],
+  [
+    "ru",
+    "de",
+    "Russisch"
+  ],
+  [
+    "ru",
+    "ru",
+    "Русский"
+  ],
+  [
+    "ru_MD",
+    "en",
+    "Russian (Moldova)"
+  ],
+  [
+    "ru_MD",
+    "fr",
+    "russe (Moldavie)"
+  ],
+  [
+    "ru_MD",
+    "de",
+    "Russisch (Moldawien (Republik Moldau))"
+  ],
+  [
+    "ru_RU",
+    "en",
+    "Russian (Russia)"
+  ],
+  [
+    "ru_RU",
+    "fr",
+    "russe (Russie)"
+  ],
+  [
+    "ru_RU",
+    "de",
+    "Russisch (Russische Föderation)"
+  ],
+  [
+    "ru_UA",
+    "en",
+    "Russian (Ukraine)"
+  ],
+  [
+    "ru_UA",
+    "fr",
+    "russe (Ukraine)"
+  ],
+  [
+    "ru_UA",
+    "de",
+    "Russisch (Ukraine)"
+  ],
+  [
+    "rw",
+    "en",
+    "Kinyarwanda"
+  ],
+  [
+    "rw",
+    "fr",
+    "rwanda"
+  ],
+  [
+    "rw",
+    "de",
+    "Rwanda-Sprache"
+  ],
+  [
+    "rw",
+    "rw",
+    "Ikinyarwanda"
+  ],
+  [
+    "rw_RW",
+    "en",
+    "Kinyarwanda (Rwanda)"
+  ],
+  [
+    "rw_RW",
+    "fr",
+    "rwanda (Rwanda)"
+  ],
+  [
+    "rw_RW",
+    "de",
+    "Rwanda-Sprache (Ruanda)"
+  ],
+  [
+    "rwk",
+    "en",
+    "Rwa"
+  ],
+  [
+    "rwk_TZ",
+    "en",
+    "Rwa (Tanzania)"
+  ],
+  [
+    "saq",
+    "en",
+    "Samburu"
+  ],
+  [
+    "saq_KE",
+    "en",
+    "Samburu (Kenya)"
+  ],
+  [
+    "seh",
+    "en",
+    "Sena"
+  ],
+  [
+    "seh_MZ",
+    "en",
+    "Sena (Mozambique)"
+  ],
+  [
+    "ses",
+    "en",
+    "Koyraboro Senni"
+  ],
+  [
+    "ses_ML",
+    "en",
+    "Koyraboro Senni (Mali)"
+  ],
+  [
+    "sg",
+    "en",
+    "Sango"
+  ],
+  [
+    "sg",
+    "fr",
+    "sango"
+  ],
+  [
+    "sg",
+    "de",
+    "Sango-Sprache"
+  ],
+  [
+    "sg",
+    "sg",
+    "yângâ tî sängö"
+  ],
+  [
+    "sg_CF",
+    "en",
+    "Sango (Central African Republic)"
+  ],
+  [
+    "sg_CF",
+    "fr",
+    "sango (République centrafricaine)"
+  ],
+  [
+    "sg_CF",
+    "de",
+    "Sango-Sprache (Zentralafrikanische Republik)"
+  ],
+  [
+    "shi",
+    "en",
+    "Tachelhit"
+  ],
+  [
+    "shi_Latn",
+    "en",
+    "Tachelhit (Latin)"
+  ],
+  [
+    "shi_Latn_MA",
+    "en",
+    "Tachelhit (Latin, Morocco)"
+  ],
+  [
+    "shi_Tfng",
+    "en",
+    "Tachelhit (Tifinagh)"
+  ],
+  [
+    "shi_Tfng_MA",
+    "en",
+    "Tachelhit (Tifinagh, Morocco)"
+  ],
+  [
+    "si",
+    "en",
+    "Sinhala"
+  ],
+  [
+    "si",
+    "fr",
+    "singhalais"
+  ],
+  [
+    "si",
+    "de",
+    "Singhalesisch"
+  ],
+  [
+    "si",
+    "si",
+    "සිංහල"
+  ],
+  [
+    "si_LK",
+    "en",
+    "Sinhala (Sri Lanka)"
+  ],
+  [
+    "si_LK",
+    "fr",
+    "singhalais (Sri Lanka)"
+  ],
+  [
+    "si_LK",
+    "de",
+    "Singhalesisch (Sri Lanka)"
+  ],
+  [
+    "sk",
+    "en",
+    "Slovak"
+  ],
+  [
+    "sk",
+    "fr",
+    "slovaque"
+  ],
+  [
+    "sk",
+    "de",
+    "Slowakisch"
+  ],
+  [
+    "sk",
+    "sk",
+    "slovenčina, slovenský jazyk"
+  ],
+  [
+    "sk_SK",
+    "en",
+    "Slovak (Slovakia)"
+  ],
+  [
+    "sk_SK",
+    "fr",
+    "slovaque (Slovaquie)"
+  ],
+  [
+    "sk_SK",
+    "de",
+    "Slowakisch (Slowakei)"
+  ],
+  [
+    "sl",
+    "en",
+    "Slovenian"
+  ],
+  [
+    "sl",
+    "fr",
+    "slovène"
+  ],
+  [
+    "sl",
+    "de",
+    "Slowenisch"
+  ],
+  [
+    "sl",
+    "sl",
+    "slovenski jezik, slovenščina"
+  ],
+  [
+    "sl_SI",
+    "en",
+    "Slovenian (Slovenia)"
+  ],
+  [
+    "sl_SI",
+    "fr",
+    "slovène (Slovénie)"
+  ],
+  [
+    "sl_SI",
+    "de",
+    "Slowenisch (Slowenien)"
+  ],
+  [
+    "sn",
+    "en",
+    "Shona"
+  ],
+  [
+    "sn",
+    "fr",
+    "shona"
+  ],
+  [
+    "sn",
+    "de",
+    "Schona-Sprache"
+  ],
+  [
+    "sn",
+    "sn",
+    "chiShona"
+  ],
+  [
+    "sn_ZW",
+    "en",
+    "Shona (Zimbabwe)"
+  ],
+  [
+    "sn_ZW",
+    "fr",
+    "shona (Zimbabwe)"
+  ],
+  [
+    "sn_ZW",
+    "de",
+    "Schona-Sprache (Simbabwe)"
+  ],
+  [
+    "so",
+    "en",
+    "Somali"
+  ],
+  [
+    "so",
+    "fr",
+    "somali"
+  ],
+  [
+    "so",
+    "de",
+    "Somali"
+  ],
+  [
+    "so",
+    "so",
+    "Soomaaliga, af Soomaali"
+  ],
+  [
+    "so_DJ",
+    "en",
+    "Somali (Djibouti)"
+  ],
+  [
+    "so_DJ",
+    "fr",
+    "somali (Djibouti)"
+  ],
+  [
+    "so_DJ",
+    "de",
+    "Somali (Dschibuti)"
+  ],
+  [
+    "so_ET",
+    "en",
+    "Somali (Ethiopia)"
+  ],
+  [
+    "so_ET",
+    "fr",
+    "somali (Éthiopie)"
+  ],
+  [
+    "so_ET",
+    "de",
+    "Somali (Athiopien!Äthiopien)"
+  ],
+  [
+    "so_KE",
+    "en",
+    "Somali (Kenya)"
+  ],
+  [
+    "so_KE",
+    "fr",
+    "somali (Kenya)"
+  ],
+  [
+    "so_KE",
+    "de",
+    "Somali (Kenia)"
+  ],
+  [
+    "so_SO",
+    "en",
+    "Somali (Somalia)"
+  ],
+  [
+    "so_SO",
+    "fr",
+    "somali (Somalie)"
+  ],
+  [
+    "so_SO",
+    "de",
+    "Somali (Somalia)"
+  ],
+  [
+    "sq",
+    "en",
+    "Albanian"
+  ],
+  [
+    "sq",
+    "fr",
+    "albanais"
+  ],
+  [
+    "sq",
+    "de",
+    "Albanisch"
+  ],
+  [
+    "sq",
+    "sq",
+    "Shqip"
+  ],
+  [
+    "sq_AL",
+    "en",
+    "Albanian (Albania)"
+  ],
+  [
+    "sq_AL",
+    "fr",
+    "albanais (Albanie)"
+  ],
+  [
+    "sq_AL",
+    "de",
+    "Albanisch (Albanien)"
+  ],
+  [
+    "sr",
+    "en",
+    "Serbian"
+  ],
+  [
+    "sr",
+    "fr",
+    "serbe"
+  ],
+  [
+    "sr",
+    "de",
+    "Serbisch "
+  ],
+  [
+    "sr",
+    "sr",
+    "српски језик"
+  ],
+  [
+    "sr_Cyrl",
+    "en",
+    "Serbian (Cyrillic)"
+  ],
+  [
+    "sr_Cyrl",
+    "fr",
+    "serbe (cyrillique)"
+  ],
+  [
+    "sr_Cyrl",
+    "de",
+    "Serbisch  (Kyrillische-Schrift)"
+  ],
+  [
+    "sr_Cyrl_BA",
+    "en",
+    "Serbian (Cyrillic, Bosnia and Herzegovina)"
+  ],
+  [
+    "sr_Cyrl_BA",
+    "fr",
+    "serbe (cyrillique, Bosnie-Herzégovine)"
+  ],
+  [
+    "sr_Cyrl_BA",
+    "de",
+    "Serbisch  (Kyrillische-Schrift, Bosnien und Herzegowina)"
+  ],
+  [
+    "sr_Cyrl_ME",
+    "en",
+    "Serbian (Cyrillic, Montenegro)"
+  ],
+  [
+    "sr_Cyrl_ME",
+    "fr",
+    "serbe (cyrillique, Monténégro)"
+  ],
+  [
+    "sr_Cyrl_ME",
+    "de",
+    "Serbisch  (Kyrillische-Schrift, Montenegro)"
+  ],
+  [
+    "sr_Cyrl_RS",
+    "en",
+    "Serbian (Cyrillic, Serbia)"
+  ],
+  [
+    "sr_Cyrl_RS",
+    "fr",
+    "serbe (cyrillique, Serbie)"
+  ],
+  [
+    "sr_Cyrl_RS",
+    "de",
+    "Serbisch  (Kyrillische-Schrift, Serbien)"
+  ],
+  [
+    "sr_Latn",
+    "en",
+    "Serbian (Latin)"
+  ],
+  [
+    "sr_Latn",
+    "fr",
+    "serbe (latin)"
+  ],
+  [
+    "sr_Latn",
+    "de",
+    "Serbisch  (Lateinische-Schrift)"
+  ],
+  [
+    "sr_Latn_BA",
+    "en",
+    "Serbian (Latin, Bosnia and Herzegovina)"
+  ],
+  [
+    "sr_Latn_BA",
+    "fr",
+    "serbe (latin, Bosnie-Herzégovine)"
+  ],
+  [
+    "sr_Latn_BA",
+    "de",
+    "Serbisch  (Lateinische-Schrift, Bosnien und Herzegowina)"
+  ],
+  [
+    "sr_Latn_ME",
+    "en",
+    "Serbian (Latin, Montenegro)"
+  ],
+  [
+    "sr_Latn_ME",
+    "fr",
+    "serbe (latin, Monténégro)"
+  ],
+  [
+    "sr_Latn_ME",
+    "de",
+    "Serbisch  (Lateinische-Schrift, Montenegro)"
+  ],
+  [
+    "sr_Latn_RS",
+    "en",
+    "Serbian (Latin, Serbia)"
+  ],
+  [
+    "sr_Latn_RS",
+    "fr",
+    "serbe (latin, Serbie)"
+  ],
+  [
+    "sr_Latn_RS",
+    "de",
+    "Serbisch  (Lateinische-Schrift, Serbien)"
+  ],
+  [
+    "sv",
+    "en",
+    "Swedish"
+  ],
+  [
+    "sv",
+    "fr",
+    "suédois"
+  ],
+  [
+    "sv",
+    "de",
+    "Schwedisch"
+  ],
+  [
+    "sv",
+    "sv",
+    "svenska"
+  ],
+  [
+    "sv_FI",
+    "en",
+    "Swedish (Finland)"
+  ],
+  [
+    "sv_FI",
+    "fr",
+    "suédois (Finlande)"
+  ],
+  [
+    "sv_SE",
+    "en",
+    "Swedish (Sweden)"
+  ],
+  [
+    "sv_SE",
+    "fr",
+    "suédois (Suède)"
+  ],
+  [
+    "sv_SE",
+    "de",
+    "Schwedisch (Schweden)"
+  ],
+  [
+    "sw",
+    "en",
+    "Swahili"
+  ],
+  [
+    "sw",
+    "fr",
+    "swahili"
+  ],
+  [
+    "sw",
+    "de",
+    "Swahili"
+  ],
+  [
+    "sw",
+    "sw",
+    "Kiswahili"
+  ],
+  [
+    "sw_KE",
+    "en",
+    "Swahili (Kenya)"
+  ],
+  [
+    "sw_KE",
+    "fr",
+    "swahili (Kenya)"
+  ],
+  [
+    "sw_KE",
+    "de",
+    "Swahili (Kenia)"
+  ],
+  [
+    "sw_TZ",
+    "en",
+    "Swahili (Tanzania)"
+  ],
+  [
+    "sw_TZ",
+    "fr",
+    "swahili (Tanzanie)"
+  ],
+  [
+    "sw_TZ",
+    "de",
+    "Swahili (Tansania, Vereinigte Republik)"
+  ],
+  [
+    "ta",
+    "en",
+    "Tamil"
+  ],
+  [
+    "ta",
+    "fr",
+    "tamoul"
+  ],
+  [
+    "ta",
+    "de",
+    "Tamil"
+  ],
+  [
+    "ta",
+    "ta",
+    "தமிழ்"
+  ],
+  [
+    "ta_IN",
+    "en",
+    "Tamil (India)"
+  ],
+  [
+    "ta_IN",
+    "fr",
+    "tamoul (Inde)"
+  ],
+  [
+    "ta_IN",
+    "de",
+    "Tamil (Indien)"
+  ],
+  [
+    "ta_LK",
+    "en",
+    "Tamil (Sri Lanka)"
+  ],
+  [
+    "ta_LK",
+    "fr",
+    "tamoul (Sri Lanka)"
+  ],
+  [
+    "ta_LK",
+    "de",
+    "Tamil (Sri Lanka)"
+  ],
+  [
+    "te",
+    "en",
+    "Telugu"
+  ],
+  [
+    "te",
+    "fr",
+    "télougou"
+  ],
+  [
+    "te",
+    "de",
+    "Telugu-Sprache"
+  ],
+  [
+    "te",
+    "te",
+    "తెలుగు"
+  ],
+  [
+    "te_IN",
+    "en",
+    "Telugu (India)"
+  ],
+  [
+    "te_IN",
+    "fr",
+    "télougou (Inde)"
+  ],
+  [
+    "te_IN",
+    "de",
+    "Telugu-Sprache (Indien)"
+  ],
+  [
+    "teo",
+    "en",
+    "Teso"
+  ],
+  [
+    "teo_KE",
+    "en",
+    "Teso (Kenya)"
+  ],
+  [
+    "teo_UG",
+    "en",
+    "Teso (Uganda)"
+  ],
+  [
+    "th",
+    "en",
+    "Thai"
+  ],
+  [
+    "th",
+    "fr",
+    "thaï"
+  ],
+  [
+    "th",
+    "de",
+    "Thailändisch"
+  ],
+  [
+    "th",
+    "th",
+    "ไทย"
+  ],
+  [
+    "th_TH",
+    "en",
+    "Thai (Thailand)"
+  ],
+  [
+    "th_TH",
+    "fr",
+    "thaï (Thaïlande)"
+  ],
+  [
+    "th_TH",
+    "de",
+    "Thailändisch (Thailand)"
+  ],
+  [
+    "ti",
+    "en",
+    "Tigrinya"
+  ],
+  [
+    "ti",
+    "fr",
+    "tigrigna"
+  ],
+  [
+    "ti",
+    "de",
+    "Tigrinja-Sprache"
+  ],
+  [
+    "ti",
+    "ti",
+    "ትግርኛ"
+  ],
+  [
+    "ti_ER",
+    "en",
+    "Tigrinya (Eritrea)"
+  ],
+  [
+    "ti_ER",
+    "fr",
+    "tigrigna (Érythrée)"
+  ],
+  [
+    "ti_ER",
+    "de",
+    "Tigrinja-Sprache (Eritrea)"
+  ],
+  [
+    "ti_ET",
+    "en",
+    "Tigrinya (Ethiopia)"
+  ],
+  [
+    "ti_ET",
+    "fr",
+    "tigrigna (Éthiopie)"
+  ],
+  [
+    "ti_ET",
+    "de",
+    "Tigrinja-Sprache (Athiopien!Äthiopien)"
+  ],
+  [
+    "to",
+    "en",
+    "Tonga"
+  ],
+  [
+    "to",
+    "fr",
+    "tongan (Îles Tonga)"
+  ],
+  [
+    "to",
+    "de",
+    "Tongaisch"
+  ],
+  [
+    "to",
+    "to",
+    "faka Tonga"
+  ],
+  [
+    "to_TO",
+    "en",
+    "Tonga (Tonga)"
+  ],
+  [
+    "to_TO",
+    "fr",
+    "tongan (Îles Tonga) (Tonga)"
+  ],
+  [
+    "to_TO",
+    "de",
+    "Tongaisch (Tonga)"
+  ],
+  [
+    "tr",
+    "en",
+    "Turkish"
+  ],
+  [
+    "tr",
+    "fr",
+    "turc"
+  ],
+  [
+    "tr",
+    "de",
+    "Türkisch"
+  ],
+  [
+    "tr",
+    "tr",
+    "Türkçe"
+  ],
+  [
+    "tr_TR",
+    "en",
+    "Turkish (Turkey)"
+  ],
+  [
+    "tr_TR",
+    "fr",
+    "turc (Turquie)"
+  ],
+  [
+    "tr_TR",
+    "de",
+    "Türkisch (Turkei!Türkei)"
+  ],
+  [
+    "tzm",
+    "en",
+    "Central Morocco Tamazight"
+  ],
+  [
+    "tzm_Latn",
+    "en",
+    "Central Morocco Tamazight (Latin)"
+  ],
+  [
+    "tzm_Latn_MA",
+    "en",
+    "Central Morocco Tamazight (Latin, Morocco)"
+  ],
+  [
+    "uk",
+    "en",
+    "Ukrainian"
+  ],
+  [
+    "uk",
+    "fr",
+    "ukrainien"
+  ],
+  [
+    "uk",
+    "de",
+    "Ukrainisch"
+  ],
+  [
+    "uk",
+    "uk",
+    "українська мова"
+  ],
+  [
+    "uk_UA",
+    "en",
+    "Ukrainian (Ukraine)"
+  ],
+  [
+    "uk_UA",
+    "fr",
+    "ukrainien (Ukraine)"
+  ],
+  [
+    "uk_UA",
+    "de",
+    "Ukrainisch (Ukraine)"
+  ],
+  [
+    "ur",
+    "en",
+    "Urdu"
+  ],
+  [
+    "ur",
+    "fr",
+    "ourdou"
+  ],
+  [
+    "ur",
+    "de",
+    "Urdu"
+  ],
+  [
+    "ur",
+    "ur",
+    "اردو"
+  ],
+  [
+    "ur_IN",
+    "en",
+    "Urdu (India)"
+  ],
+  [
+    "ur_IN",
+    "fr",
+    "ourdou (Inde)"
+  ],
+  [
+    "ur_IN",
+    "de",
+    "Urdu (Indien)"
+  ],
+  [
+    "ur_PK",
+    "en",
+    "Urdu (Pakistan)"
+  ],
+  [
+    "ur_PK",
+    "fr",
+    "ourdou (Pakistan)"
+  ],
+  [
+    "ur_PK",
+    "de",
+    "Urdu (Pakistan)"
+  ],
+  [
+    "uz",
+    "en",
+    "Uzbek"
+  ],
+  [
+    "uz",
+    "fr",
+    "ouszbek"
+  ],
+  [
+    "uz",
+    "de",
+    "Usbekisch"
+  ],
+  [
+    "uz",
+    "uz",
+    "Oʻzbek, Ўзбек, أۇزبېك‎"
+  ],
+  [
+    "uz_Arab",
+    "en",
+    "Uzbek (Arabic)"
+  ],
+  [
+    "uz_Arab",
+    "fr",
+    "ouszbek (arabe)"
+  ],
+  [
+    "uz_Arab",
+    "de",
+    "Usbekisch (Arabische-Schrift)"
+  ],
+  [
+    "uz_Arab_AF",
+    "en",
+    "Uzbek (Arabic, Afghanistan)"
+  ],
+  [
+    "uz_Arab_AF",
+    "fr",
+    "ouszbek (arabe, Afghanistan)"
+  ],
+  [
+    "uz_Arab_AF",
+    "de",
+    "Usbekisch (Arabische-Schrift, Afghanistan)"
+  ],
+  [
+    "uz_Cyrl",
+    "en",
+    "Uzbek (Cyrillic)"
+  ],
+  [
+    "uz_Cyrl",
+    "fr",
+    "ouszbek (cyrillique)"
+  ],
+  [
+    "uz_Cyrl",
+    "de",
+    "Usbekisch (Kyrillische-Schrift)"
+  ],
+  [
+    "uz_Cyrl_UZ",
+    "en",
+    "Uzbek (Cyrillic, Uzbekistan)"
+  ],
+  [
+    "uz_Cyrl_UZ",
+    "fr",
+    "ouszbek (cyrillique, Ouzbékistan)"
+  ],
+  [
+    "uz_Cyrl_UZ",
+    "de",
+    "Usbekisch (Kyrillische-Schrift, Usbekistan)"
+  ],
+  [
+    "uz_Latn",
+    "en",
+    "Uzbek (Latin)"
+  ],
+  [
+    "uz_Latn",
+    "fr",
+    "ouszbek (latin)"
+  ],
+  [
+    "uz_Latn",
+    "de",
+    "Usbekisch (Lateinische-Schrift)"
+  ],
+  [
+    "uz_Latn_UZ",
+    "en",
+    "Uzbek (Latin, Uzbekistan)"
+  ],
+  [
+    "uz_Latn_UZ",
+    "fr",
+    "ouszbek (latin, Ouzbékistan)"
+  ],
+  [
+    "uz_Latn_UZ",
+    "de",
+    "Usbekisch (Lateinische-Schrift, Usbekistan)"
+  ],
+  [
+    "vi",
+    "en",
+    "Vietnamese"
+  ],
+  [
+    "vi",
+    "fr",
+    "vietnamien"
+  ],
+  [
+    "vi",
+    "de",
+    "Vietnamesisch"
+  ],
+  [
+    "vi",
+    "vi",
+    "Tiếng Việt"
+  ],
+  [
+    "vi_VN",
+    "en",
+    "Vietnamese (Vietnam)"
+  ],
+  [
+    "vi_VN",
+    "fr",
+    "vietnamien (Viêt Nam)"
+  ],
+  [
+    "vi_VN",
+    "de",
+    "Vietnamesisch (Vietnam)"
+  ],
+  [
+    "vun",
+    "en",
+    "Vunjo"
+  ],
+  [
+    "vun_TZ",
+    "en",
+    "Vunjo (Tanzania)"
+  ],
+  [
+    "xog",
+    "en",
+    "Soga"
+  ],
+  [
+    "xog_UG",
+    "en",
+    "Soga (Uganda)"
+  ],
+  [
+    "yo",
+    "en",
+    "Yoruba"
+  ],
+  [
+    "yo",
+    "fr",
+    "yoruba"
+  ],
+  [
+    "yo",
+    "de",
+    "Yoruba-Sprache"
+  ],
+  [
+    "yo",
+    "yo",
+    "Yorùbá"
+  ],
+  [
+    "yo_NG",
+    "en",
+    "Yoruba (Nigeria)"
+  ],
+  [
+    "yo_NG",
+    "fr",
+    "yoruba (Nigeria)"
+  ],
+  [
+    "yo_NG",
+    "de",
+    "Yoruba-Sprache (Nigeria)"
+  ],
+  [
+    "zh",
+    "en",
+    "Chinese"
+  ],
+  [
+    "zh",
+    "fr",
+    "chinois"
+  ],
+  [
+    "zh",
+    "de",
+    "Chinesisch"
+  ],
+  [
+    "zh",
+    "zh",
+    "中文 (Zhōngwén), 汉语, 漢語"
+  ],
+  [
+    "zh_Hans",
+    "en",
+    "Chinese (Simplified Han)"
+  ],
+  [
+    "zh_Hans",
+    "fr",
+    "chinois (idéogrammes han (variante simplifiée))"
+  ],
+  [
+    "zh_Hans",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Kurzzeichen))"
+  ],
+  [
+    "zh_Hans_CN",
+    "en",
+    "Chinese (Simplified Han, China)"
+  ],
+  [
+    "zh_Hans_CN",
+    "fr",
+    "chinois (idéogrammes han (variante simplifiée), Chine)"
+  ],
+  [
+    "zh_Hans_CN",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Kurzzeichen), China, Volksrepublik)"
+  ],
+  [
+    "zh_Hans_HK",
+    "en",
+    "Chinese (Simplified Han, Hong Kong SAR China)"
+  ],
+  [
+    "zh_Hans_HK",
+    "fr",
+    "chinois (idéogrammes han (variante simplifiée), Hong Kong)"
+  ],
+  [
+    "zh_Hans_HK",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Kurzzeichen), Hongkong)"
+  ],
+  [
+    "zh_Hans_MO",
+    "en",
+    "Chinese (Simplified Han, Macau SAR China)"
+  ],
+  [
+    "zh_Hans_MO",
+    "fr",
+    "chinois (idéogrammes han (variante simplifiée), Macao)"
+  ],
+  [
+    "zh_Hans_MO",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Kurzzeichen), Macau)"
+  ],
+  [
+    "zh_Hans_SG",
+    "en",
+    "Chinese (Simplified Han, Singapore)"
+  ],
+  [
+    "zh_Hans_SG",
+    "fr",
+    "chinois (idéogrammes han (variante simplifiée), Singapour)"
+  ],
+  [
+    "zh_Hans_SG",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Kurzzeichen), Singapur)"
+  ],
+  [
+    "zh_Hant",
+    "en",
+    "Chinese (Traditional Han)"
+  ],
+  [
+    "zh_Hant",
+    "fr",
+    "chinois (idéogrammes han (variante traditionnelle))"
+  ],
+  [
+    "zh_Hant",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Langzeichen))"
+  ],
+  [
+    "zh_Hant_HK",
+    "en",
+    "Chinese (Traditional Han, Hong Kong SAR China)"
+  ],
+  [
+    "zh_Hant_HK",
+    "fr",
+    "chinois (idéogrammes han (variante traditionnelle), Hong Kong)"
+  ],
+  [
+    "zh_Hant_HK",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Langzeichen), Hongkong)"
+  ],
+  [
+    "zh_Hant_MO",
+    "en",
+    "Chinese (Traditional Han, Macau SAR China)"
+  ],
+  [
+    "zh_Hant_MO",
+    "fr",
+    "chinois (idéogrammes han (variante traditionnelle), Macao)"
+  ],
+  [
+    "zh_Hant_MO",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Langzeichen), Macau)"
+  ],
+  [
+    "zh_Hant_TW",
+    "en",
+    "Chinese (Traditional Han, Taiwan)"
+  ],
+  [
+    "zh_Hant_TW",
+    "fr",
+    "chinois (idéogrammes han (variante traditionnelle), Taïwan / (République de Chine (Taïwan)))"
+  ],
+  [
+    "zh_Hant_TW",
+    "de",
+    "Chinesisch (Chinesische-Schrift (Langzeichen), Republik China (Taiwan))"
+  ],
+  [
+    "zu",
+    "en",
+    "Zulu"
+  ],
+  [
+    "zu",
+    "fr",
+    "zoulou"
+  ],
+  [
+    "zu",
+    "de",
+    "Zulu-Sprache"
+  ],
+  [
+    "zu",
+    "zu",
+    "isiZulu"
+  ],
+  [
+    "zu_ZA",
+    "en",
+    "Zulu (South Africa)"
+  ],
+  [
+    "zu_ZA",
+    "fr",
+    "zoulou (Afrique du Sud)"
+  ],
+  [
+    "zu_ZA",
+    "de",
+    "Zulu-Sprache (Sudafrika!Südafrika)"
+  ],
+  ["und", "en", "Undetermined"],
+  ["und", "fr", "indéterminée"],
+  ["und", "de", "Nicht zu entscheiden"],
+  ["zxx", "en", "Not applicable"],
+  ["zxx", "fr", "pas de contenu linguistique; non applicable"],
+  ["zxx", "de", "Kein linguistischer Inhalt"]
+]

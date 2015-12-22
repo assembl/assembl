@@ -27,6 +27,7 @@ class Locale(Base):
     __tablename__ = "locale"
     id = Column(Integer, primary_key=True)
     locale = Column(String(20), unique=True)
+    rtl = Column(Boolean, server_default="0")
     _locale_collection = None
     _locale_collection_subsets = None
 
@@ -84,7 +85,7 @@ class Locale(Base):
 
 @event.listens_for(Locale, 'after_insert', propagate=True)
 @event.listens_for(Locale, 'after_delete', propagate=True)
-def locale_collection_changed(target, value, oldvalue, initiator):
+def locale_collection_changed(target, value, oldvalue):
     # Reset the collections
     Locale._locale_collection_subsets = None
     Locale._locale_collection = None
@@ -97,15 +98,16 @@ class LocaleName(Base):
         Integer, ForeignKey(
             Locale.id, ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
-    locale = relationship(Locale, foreign_keys=(
-        "locale_name.locale_id",))
     target_locale_id = Column(
         Integer, ForeignKey(
             Locale.id, ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
-    target_locale = relationship(Locale, foreign_keys=(
-        "locale_name.target_locale_id",))
     name = Column(CoerceUnicode)
+
+LocaleName.locale = relationship(Locale, foreign_keys=(
+        LocaleName.locale_id,))
+LocaleName.target_locale = relationship(Locale, foreign_keys=(
+        LocaleName.target_locale_id,))
 
 
 class LangString(Base):
