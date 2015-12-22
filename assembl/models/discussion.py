@@ -487,6 +487,8 @@ class Discussion(DiscussionBoundBase):
             self.db.query(AgentProfile.id).join(
                 Extract, Extract.creator_id==AgentProfile.id).filter(
             Extract.discussion_id == self.id))
+        query = query.union(self.db.query(AgentProfile.id).join(UserRole,
+                UserRole.user_id==AgentProfile.id))
         if include_readers:
             query = query.union(
                 self.db.query(ViewPost.actor_id).join(
