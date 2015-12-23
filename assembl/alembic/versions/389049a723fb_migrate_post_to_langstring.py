@@ -18,10 +18,6 @@ from sqlalchemy.sql.expression import text
 from assembl.lib import config
 
 
-langstring_idsequence = "%s.%s.langstring_idsequence" % (
-        config.get("db_schema"), config.get("db_user"))
-
-
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column(
@@ -31,6 +27,8 @@ def upgrade(pyramid_env):
             "content", sa.Column(
                 "body_id", sa.Integer, sa.ForeignKey("langstring.id")))
 
+    langstring_idsequence = "%s.%s.langstring_idsequence" % (
+        config.get("db_schema"), config.get("db_user"))
     # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
@@ -63,6 +61,8 @@ def upgrade(pyramid_env):
 
 
 def downgrade(pyramid_env):
+    langstring_idsequence = "%s.%s.langstring_idsequence" % (
+        config.get("db_schema"), config.get("db_user"))
     with context.begin_transaction():
         op.execute("delete from langstring_entry")
         op.execute("delete from langstring")

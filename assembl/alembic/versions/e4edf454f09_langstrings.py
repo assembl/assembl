@@ -1,14 +1,14 @@
 """langstrings
 
 Revision ID: e4edf454f09
-Revises: 3738207829e0
+Revises: 1c09e0b1ff2a
 Create Date: 2015-12-18 18:41:43.800065
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'e4edf454f09'
-down_revision = '3738207829e0'
+down_revision = '1c09e0b1ff2a'
 
 from alembic import context, op
 import sqlalchemy as sa
