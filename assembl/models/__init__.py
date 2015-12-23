@@ -82,6 +82,12 @@ from .auth import (
     UserTemplate,
     Username,
 )
+from .langstrings import (
+    Locale,
+    LocaleName,
+    LangString,
+    LangStringEntry,
+)
 from .discussion import Discussion
 from .user_key_values import (
     # AbstractNamespacedKeyValue,

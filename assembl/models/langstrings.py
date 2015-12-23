@@ -13,6 +13,7 @@ from sqlalchemy.ext.hybrid import hybrid_method
 from virtuoso.alchemy import CoerceUnicode
 
 from . import Base, TombstonableMixin, User
+from ..lib import config
 
 
 class classproperty(object):
@@ -122,6 +123,16 @@ class LangString(Base):
     def joinedload_option(cls, reln):
         return joinedload(reln, cls.entries_as_dict)
 
+    @classproperty
+    def id_sequence_name(cls):
+        return "%s.%s.langstring_idsequence" % (
+            config.get("db_schema"), config.get("db_user"))
+
+    def _before_insert(self):
+        (id,) = next(iter(self.db.execute(
+            "select sequence_next('%s')" % self.id_sequence_name)))
+        self.id = id
+
     entries_as_dict = relationship(
         "LangStringEntry",
         collection_class=attribute_mapped_collection("locale_id"))
@@ -211,6 +222,11 @@ class LangString(Base):
                  else_=current_score)
         q = Query(LangStringEntry).order_by(c).limit(1).subquery()
         return aliased(LangStringEntry, q)
+
+
+@event.listens_for(LangString, 'before_insert', propagate=True)
+def receive_before_insert(mapper, connection, target):
+    target._before_insert()
 
 
 class LangStringEntry(Base, TombstonableMixin):

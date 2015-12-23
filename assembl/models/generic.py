@@ -23,6 +23,7 @@ from bs4 import BeautifulSoup
 from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher, Base)
 from ..lib.utils import get_global_base_url
 from . import DiscussionBoundBase
+from .langstrings import LangString
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST)
@@ -272,6 +273,9 @@ class Content(DiscussionBoundBase):
             cascade="all, delete-orphan"),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
     )
+
+    subject_id = Column(Integer, ForeignKey(LangString.id))
+    body_id = Column(Integer, ForeignKey(LangString.id))
 
     subject = Column(CoerceUnicode(), server_default="",
         info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
