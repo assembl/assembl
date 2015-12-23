@@ -109,7 +109,7 @@ def supervisor_process_stop(process_name):
     print(cyan('Asking supervisor to stop %s' % process_name))
     supervisor_pid_regex = re.compile('^\d+')
     status_regex = re.compile('^%s\s*(\S*)' % process_name)
-    with hide('running', 'stdout'):
+    with settings(warn_only=True), hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl pid")
     match = supervisor_pid_regex.match(supervisord_cmd_result)
     if not match:
@@ -1020,7 +1020,6 @@ def flushmemcache():
         print(cyan('Resetting all data in memcached :'))
         wait_str = "" if env.mac else "-q 2"
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
-
 
 def ensure_virtuoso_not_running():
     # We do not want to start supervisord if not already running
