@@ -186,5 +186,5 @@ var AnnounceEditableCollectionView = Marionette.CollectionView.extend({
 module.exports = module.exports = {
     AnnounceEditableView: AnnounceEditableView,
     AnnounceMessageView: AnnounceMessageView,
-    AnnounceEditableCollectionView, AnnounceEditableCollectionView
+    AnnounceEditableCollectionView: AnnounceEditableCollectionView
   };

@@ -122,10 +122,11 @@ gulp.task('build:test', function() {
         .pipe(source('init.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(gulp.dest(path.js+'/build/tests/tmp')) // output an intermediate copy of init.js
         .pipe(uglify({
             compress: false,
             mangle: false
-        }))
+        }).on('error', gutil.log))
         .pipe(rename('specs.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/tests'))
