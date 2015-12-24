@@ -14,7 +14,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
 )
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, aliased
 from virtuoso.alchemy import CoerceUnicode
 from virtuoso.vmapping import PatternIriClass
 # from virtuoso.textindex import TextIndex, TableWithTextIndex
@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher, Base)
 from ..lib.utils import get_global_base_url
 from . import DiscussionBoundBase
-from .langstrings import LangString
+from .langstrings import (LangString, LangStringEntry)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST)
@@ -276,12 +276,49 @@ class Content(DiscussionBoundBase):
 
     subject_id = Column(Integer, ForeignKey(LangString.id))
     body_id = Column(Integer, ForeignKey(LangString.id))
+    subject = relationship(
+        LangString,
+        primaryjoin=subject_id == LangString.id)
+    body = relationship(
+        LangString,
+        primaryjoin=body_id == LangString.id)
 
-    subject = Column(CoerceUnicode(), server_default="",
-        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+    @classmethod
+    def subqueryload_options(cls):
+        # Options for subquery loading. Use when there are many languages in the discussion.
+        return (
+            LangString.subqueryload_option(cls.subject),
+            LangString.subqueryload_option(cls.body))
+
+    @classmethod
+    def joinedload_options(cls):
+        # Options for joined loading. Use when there are few languages in the discussion.
+        return (
+            LangString.joinedload_option(cls.subject),
+            LangString.joinedload_option(cls.body))
+
+    @classmethod
+    def best_locale_query(cls, locales):
+        "BUGGY. Return a query that will load the post, best subject and best body for the given locales"
+        # this fails because virtuoso, but the SQL is correct.
+        # Note that it fails with just body, and succeeds with subject.
+        # Go figure. Fortunately not needed yet.
+        subject_ls = aliased(LangString)
+        body_ls = aliased(LangString)
+        best_subject_sq = LangString.best_lang(locales)
+        best_body_sq = LangString.best_lang(locales)
+
+        return cls.default_db.query(
+            cls, best_subject_sq, best_body_sq).join(
+            subject_ls, cls.subject_id == subject_ls.id).join(
+            best_subject_sq).join(
+            body_ls, cls.body_id == body_ls.id).join(best_body_sq)
+
+    # old_subject = Column("subject", CoerceUnicode(), server_default="",
+    #     info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
     # TODO: check HTML or text? SIOC.content should be text.
     # Do not give it for now, privacy reasons
-    body = Column(UnicodeText, server_default="")
+    # old_body = Column("body", UnicodeText, server_default="")
     #    info={'rdf': QuadMapPatternS(None, SIOC.content)})
 
     hidden = Column(Boolean, server_default='0')

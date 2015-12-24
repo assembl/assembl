@@ -14,6 +14,7 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 from sqlalchemy.sql.expression import text
+from assembl.lib.sqla import mark_changed
 
 from assembl.lib import config
 
@@ -57,6 +58,7 @@ def upgrade(pyramid_env):
                         value=content))
                 db.execute("UPDATE content set %s_id = %d WHERE id=%d" % (
                     target, langstring_id, post_id))
+        mark_changed()
     # Note: Delay dropping content.subject, content.body until later
 
 
@@ -67,5 +69,6 @@ def downgrade(pyramid_env):
         op.execute("delete from langstring_entry")
         op.execute("delete from langstring")
         op.execute("sequence_set('%s', 1, 0)" % langstring_idsequence)
+        mark_changed()
         op.drop_column("content", "body_id")
         op.drop_column("content", "subject_id")

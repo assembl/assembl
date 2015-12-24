@@ -30,6 +30,7 @@ class Locale(Base):
     locale = Column(String(20), unique=True)
     rtl = Column(Boolean, server_default="0")
     _locale_collection = None
+    _locale_collection_byid = None
     _locale_collection_subsets = None
 
     @staticmethod
@@ -65,11 +66,18 @@ class Locale(Base):
     @classproperty
     def locale_collection(cls):
         "A collection of all known locales, as a dictionary of strings->id"
-        # TODO: Clear both collections when locale is created or destroyed
         if cls._locale_collection is None:
             cls._locale_collection = dict(
                 cls.default_db.query(cls.locale, cls.id))
         return cls._locale_collection
+
+    @classproperty
+    def locale_collection_byid(cls):
+        "A collection of all known locales, as a dictionary of id->string"
+        if cls._locale_collection_byid is None:
+            cls._locale_collection_byid = {
+                id: name for (name, id) in cls.locale_collection.iteritems()}
+        return cls._locale_collection_byid
 
     @classproperty
     def locale_collection_subsets(cls):
@@ -90,6 +98,7 @@ def locale_collection_changed(target, value, oldvalue):
     # Reset the collections
     Locale._locale_collection_subsets = None
     Locale._locale_collection = None
+    Locale._locale_collection_byid = None
 
 
 class LocaleName(Base):
@@ -268,6 +277,12 @@ class LangStringEntry(Base, TombstonableMixin):
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
     value = Column(UnicodeText)  # not searchable inv virtuoso
 
+    @property
+    def locale_name(self):
+        return Locale.locale_collection_byid[self.locale_id]
+        # Equivalent to the following, which may trigger a DB load
+        # return self.locale.locale
+
     def change_value(self, new_value):
         self.tombstone = datetime.utcnow()
         new_version = self.__class__(
@@ -287,66 +302,3 @@ class LangStringEntry(Base, TombstonableMixin):
 #     translator = Column(Integer, ForeignKey(User.id))
 #     created = Column(DateTime, server_default="now()")
 
-
-class PostTest(Base):
-    __tablename__ = "post_test"
-    id = Column(Integer, primary_key=True)
-    title_id = Column(Integer, ForeignKey(LangString.id))
-    body_id = Column(Integer, ForeignKey(LangString.id))
-    title = relationship(
-        LangString,
-        primaryjoin=title_id == LangString.id)
-    body = relationship(
-        LangString,
-        primaryjoin=body_id == LangString.id)
-
-    @classmethod
-    def subqueryload_options(cls):
-        # Options for subquery loading. Use when there are many languages in the discussion.
-        return (
-            LangString.subqueryload_option(cls.title),
-            LangString.subqueryload_option(cls.body))
-
-    @classmethod
-    def joinedload_options(cls):
-        # Options for joined loading. Use when there are few languages in the discussion.
-        return (
-            LangString.joinedload_option(cls.title),
-            LangString.joinedload_option(cls.body))
-
-    @classmethod
-    def best_locale_query(cls, locales):
-        "BUGGY. Return a query that will load the post, best title and best body for the given locales"
-        # this fails because virtuoso, but the SQL is correct.
-        # Note that it fails with just body, and succeeds with title.
-        # Go figure. Fortunately not needed yet.
-        title_ls = aliased(LangString)
-        body_ls = aliased(LangString)
-        best_title_sq = LangString.best_lang(locales)
-        best_body_sq = LangString.best_lang(locales)
-
-        return cls.default_db.query(
-            cls, best_title_sq, best_body_sq).join(
-            title_ls, PostTest.title_id == title_ls.id).join(
-            best_title_sq).join(
-            body_ls, PostTest.body_id == body_ls.id).join(best_body_sq)
-
-
-if __name__ == '__main__':
-    # Test fixtures
-    db = None
-    fr_l = Locale(locale='fr')
-    en_l = Locale(locale='en')
-    de_l = Locale(locale='de')
-    ls1 = LangString(id=1)
-    ls2 = LangString(id=2)
-    db.add_all((fr_l, en_l, de_l, ls1, ls2))
-    db.commit()
-    db.add(LangStringEntry(langstring=ls1, locale=fr_l, value="Bonjour"))
-    db.add(LangStringEntry(langstring=ls1, locale=en_l, value="Hello"))
-    db.add(LangStringEntry(langstring=ls1, locale=de_l, value="Guten Tag"))
-    db.add(LangStringEntry(langstring=ls2, locale=fr_l, value="Monde"))
-    db.add(LangStringEntry(langstring=ls2, locale=en_l, value="World"))
-    db.add(LangStringEntry(langstring=ls2, locale=de_l, value="Welt"))
-    db.add(PostTest(title=ls1, body=ls2))
-    # ps=db.query(PostTest).options(*PostTest.subqueryload_options()).all()

@@ -62,13 +62,6 @@ def upgrade(pyramid_env):
             sa.Column("value", sa.UnicodeText),
             sa.schema.UniqueConstraint(
                 "langstring_id", "locale_id", "tombstone_date"))
-        op.create_table(
-            "post_test",
-            sa.Column("id", sa.Integer, primary_key=True),
-            sa.Column("title_id", sa.Integer,
-                      sa.ForeignKey("langstring.id")),
-            sa.Column("body_id", sa.Integer,
-                      sa.ForeignKey("langstring.id")))
 
     # Do stuff with the app's models here.
     from assembl import models as m
@@ -89,7 +82,6 @@ def upgrade(pyramid_env):
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_table("post_test")
         op.drop_table("langstring_entry")
         op.drop_table("langstring")
         op.drop_table("locale_name")
