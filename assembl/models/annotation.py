@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, ForeignKey, DateTime
 
 from .generic import Content
 from virtuoso.alchemy import CoerceUnicode
+from .langstrings import LangString, LangStringEntry, Locale
 
 
 class Webpage(Content):
@@ -20,10 +21,14 @@ class Webpage(Content):
     }
 
     def get_body(self):
-        return ""
+        return LangString.EMPTY
 
     def get_title(self):
-        return self.url
+        ls = LangString()
+        _ = LangStringEntry(
+            ls, value=self.url,
+            locale_id=Locale.get_id_of(Locale.NON_LINGUISTIC))
+        return ls
 
     @classmethod
     def get_instance(cls, uri):

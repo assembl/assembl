@@ -12,6 +12,7 @@ var Backbone = require('../shims/backbone.js'),
     i18n = require('../utils/i18n.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     autosize = require('jquery-autosize'),
+    LangString = require('../models/langstring.js'),
     Messages = require('../models/message.js'),
     Agents = require('../models/agents.js'),
     Documents = require('../models/documents.js'),
@@ -262,8 +263,18 @@ var messageSend = Marionette.LayoutView.extend({
     message_subject_field.value = "";
 
     this.model.set({
-      subject: message_subject,
-      message: message_body,
+      subject: new LangString.Model({
+        entries: new LangString.EntryCollection([
+            new LangString.EntryModel({
+                value: message_subject
+                // @language: make educated guess from discussion and user languages
+            })])}),
+      message: new LangString.Model({
+        entries: new LangString.EntryCollection([
+            new LangString.EntryModel({
+                value: message_body
+                // @language: make educated guess from discussion and user languages
+            })])}),
       reply_id: reply_message_id,
       idea_id: reply_idea_id
     });

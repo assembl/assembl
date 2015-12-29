@@ -6,8 +6,8 @@
     <% _.each(contributions, function(item){ %>
 
         <div class="bx bx-default mbm">
-            <h2><%= item.subject %></h2>
-            <%= item.body %>
+            <h2><%= item.subject.bestValue() %></h2>
+            <%= item.body.bestValue() %>
         </div>
 
     <% }) %>

@@ -10,6 +10,17 @@
     "Permission": {
         "name": true
     },
+    "Locale": {
+        "locale": true,
+        "rtl": true
+    },
+    "LangString": {
+        "entries": true
+    },
+    "LangStringEntry": {
+        "@language": "locale_name",
+        "value": true
+    },
     "AgentProfile": {
         "description": true,
         "avatar_url_base": "&external_avatar_url",
@@ -135,8 +146,8 @@
         "discussion": true,
         "import_date": false,
         "like_count": true,
-        "subject": "&get_title",
-        "body": "&get_body",
+        "subject": ":",
+        "body": ":",
         "widget_ideas": "&widget_ideas"
     },
     "Post": {

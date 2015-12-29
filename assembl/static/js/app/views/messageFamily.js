@@ -190,7 +190,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
 
     var filters =  [{filterDef: availableFilters.POST_IS_DESCENDENT_OR_ANCESTOR_OF_POST, value: this.model.id}],
         ModalGroup = require('./groups/modalGroup.js'),
-        modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""), this.model.get('subject')),
+        modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""), this.model.get('subject').bestValue()),
         modalFactory = ModalGroup.filteredMessagePanelFactory(modal_title, filters),
         modal = modalFactory.modal,
         messageList = modalFactory.messageList;

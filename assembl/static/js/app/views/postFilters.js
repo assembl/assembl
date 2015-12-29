@@ -261,10 +261,10 @@ _.extend(FilterPostIsDescendentOfPost.prototype, {
         }
 
         if (post.get('@type') === "SynthesisPost") {
-          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject'));
+          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject').bestValue());
         }
         else {
-          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject'));
+          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject').bestValue());
         }
       })
     },
@@ -300,10 +300,10 @@ _.extend(FilterPostIsDescendentOrAncestorOfPost.prototype, {
         }
 
         if (post.get('@type') === "SynthesisPost") {
-          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject'));
+          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject').bestValue());
         }
         else {
-          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject'));
+          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject').bestValue());
         }
       })
     },

@@ -19,6 +19,17 @@
         "is_first_visit": false,
         "preferred_email": false
     },
+    "Locale": {
+        "locale": true,
+        "rtl": true
+    },
+    "LangString": {
+        "entries": true
+    },
+    "LangStringEntry": {
+        "@language": "locale_name",
+        "value": true
+    },
     "User": {
         "@extends": "AgentProfile",
         "login_failures": false,

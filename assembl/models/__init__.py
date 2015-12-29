@@ -240,3 +240,7 @@ from .attachment import (
 from .announcement import (
     IdeaAnnouncement
 )
+
+
+def includeme(config):
+    config.include('.langstrings')

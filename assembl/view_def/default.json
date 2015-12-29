@@ -204,8 +204,8 @@
         "import_date": false,
         "like_count": true,
         "indirect_idea_content_links": ["&indirect_idea_content_links:"],
-        "subject": ":default",
-        "body": ":default",
+        "subject": ":",
+        "body": ":",
         "widget_ideas": "&widget_ideas"
     },
     "Post": {

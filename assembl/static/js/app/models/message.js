@@ -6,6 +6,7 @@ var _ = require('../shims/underscore.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Base = require('./base.js'),
+    LangString = require('./langstring.js'),
     Types = require('../utils/types.js'),
     Attachment = require('./attachments.js');
 
@@ -59,6 +60,12 @@ var MessageModel = Base.Model.extend({
           objectAttachedToModel: this}
           );
     }
+    if (rawModel.subject !== undefined) {
+        rawModel.subject = new LangString.Model(rawModel.subject, {parse: true});
+    }
+    if (rawModel.body !== undefined) {
+        rawModel.body = new LangString.Model(rawModel.body, {parse: true});
+    }
     //console.log("Message Model parse() called, returning:", rawModel.attachments);
     return rawModel;
   },
@@ -67,7 +74,7 @@ var MessageModel = Base.Model.extend({
    * @return {String} the subject, with any re: stripped
    */
   getSubjectNoRe: function() {
-      var subject = this.get('subject');
+      var subject = this.get('subject').bestValue();
       if (subject) {
         return subject.replace(/( *)?(RE) *(:|$) */igm, "");
       }

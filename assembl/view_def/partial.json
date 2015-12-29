@@ -10,6 +10,17 @@
     "Permission": {
         "name": true
     },
+    "Locale": {
+        "locale": true,
+        "rtl": true
+    },
+    "LangString": {
+        "entries": true
+    },
+    "LangStringEntry": {
+        "@language": "locale_name",
+        "value": true
+    },
     "AgentProfile": {
         "description": false,
         "preferred_email": false,
@@ -74,7 +85,7 @@
         "ancestry": false,
         "parentId": "parent",
         "idCreator": "creator",
-        "subject": "&get_title",
+        "subject": ":",
         "body": "&get_body_preview"
     },
     "AssemblPost": {

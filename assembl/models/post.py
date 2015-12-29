@@ -22,7 +22,6 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref, deferred
 
 from ..lib.sqla import UPDATE_OP
-from ..lib.sqla_types import EmailUnicode
 from ..lib.decl_enums import DeclEnum
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from virtuoso.alchemy import CoerceUnicode
@@ -30,6 +29,7 @@ from .generic import Content, ContentSource
 from .auth import AgentProfile
 from ..semantic.namespaces import SIOC, ASSEMBL, QUADNAMES
 from ..lib import config
+from .langstrings import LangString
 
 
 log = logging.getLogger('assembl')
@@ -167,28 +167,52 @@ class Post(Content):
         frontendUrls = FrontendUrls(self.discussion)
         return frontendUrls.get_post_url(self)
 
+    @staticmethod
+    def shorten_text(text, target_len=120):
+        if len(text) > target_len:
+            text = text[:target_len].rsplit(' ', 1)[0].rstrip() + ' '
+        return text
+
+    @staticmethod
+    def shorten_html_text(text, target_len=120):
+        shortened = False
+        html_len = 2 * target_len
+        while True:
+            pure_text = BeautifulSoup(text[:html_len]).get_text().strip()
+            if html_len >= len(text) or len(pure_text) > target_len:
+                shortened = html_len < len(text)
+                text = pure_text
+                break
+            html_len += target_len
+        text = Post.shorten_text(text)
+        if shortened and text[-1] != ' ':
+            text += ' '
+        return text
+
     def get_body_preview(self):
         if self.publication_state in moderated_publication_states:
-            return self.moderation_text
+            # TODO: Handle multilingual moderation
+            return LangString.create(
+                self.moderation_text, self.discussion.main_locale)
         elif self.publication_state in deleted_publication_states:
             return None
-        body = self.get_body().strip()
-        target_len = 120
+        body = self.get_body()
+        is_html = self.get_body_mime_type() == 'text/html'
+        ls = LangString()
         shortened = False
-        if self.get_body_mime_type() == 'text/html':
-            html_len = 2 * target_len
-            while True:
-                text = BeautifulSoup(body[:html_len]).get_text().strip()
-                if html_len >= len(body) or len(text) > target_len:
-                    shortened = html_len < len(body)
-                    body = text
-                    break
-                html_len += target_len
-        if len(body) > target_len:
-            body = body[:target_len].rsplit(' ', 1)[0].rstrip() + ' '
-        elif shortened:
-            body += ' '
-        return body
+        for entry in body.entries:
+            if is_html:
+                short = self.shorten_html_text(entry.value)
+            else:
+                short = self.shorten_text(entry.value)
+            if short != entry.value:
+                shortened = True
+            _ = LangStringEntry(
+                value=short, locale_id=entry.locale_id, langstring=ls)
+        if shortened or is_html:
+            return ls
+        else:
+            return body
 
     def _set_ancestry(self, new_ancestry):
         self.ancestry = new_ancestry

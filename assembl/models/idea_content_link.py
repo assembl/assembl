@@ -341,6 +341,7 @@ class Extract(IdeaContentPositiveLink):
             self.get_post().id)
 
     def _infer_text_fragment_inner(self, title, body, post_id):
+        # dead code? If not needs to be refactored with langstrings
         body = IMAPMailbox.sanitize_html(body, [])
         quote = self.body.replace("\r", "")
         try:

@@ -10,6 +10,17 @@
     "Permission": {
         "name": true
     },
+    "Locale": {
+        "locale": true,
+        "rtl": true
+    },
+    "LangString": {
+        "entries": true
+    },
+    "LangStringEntry": {
+        "@language": "locale_name",
+        "value": true
+    },
     "AgentProfile": {
         "description": true,
         "@private": "self",

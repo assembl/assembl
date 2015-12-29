@@ -231,7 +231,7 @@ var MessageView = Marionette.LayoutView.extend({
     }
     else {
       //Get rid of all tags, to avoid any layout problem
-      body = Ctx.stripHtml(this.model.get('body'));
+      body = this.model.get('body').applyFunction(Ctx.stripHtml);
     }
     return body;
   },
@@ -246,7 +246,7 @@ var MessageView = Marionette.LayoutView.extend({
       if (bodyFormat === "text/html") {
         //Strip HTML from preview
         bodyFormat = "text/plain";
-        body = this.generateBodyPreview(this.model.get('body'));
+        body = this.model.get('body').applyFunction(this.generateBodyPreview);
       }
     }
 
@@ -279,7 +279,7 @@ var MessageView = Marionette.LayoutView.extend({
         share_link_url = Ctx.appendExtraURLParams("/static/widget/share/index.html",
           [
             {'u': Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)},
-            {'t': this.model.get('subject')},
+            {'t': this.model.get('subject').bestValue()},
             {'s': Ctx.getPreferences().social_sharing }
           ]
         );

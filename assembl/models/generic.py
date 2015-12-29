@@ -333,8 +333,6 @@ class Content(DiscussionBoundBase):
     }
 
     def get_body(self):
-        if self.body:
-            return self.body.strip()
         return self.body
 
     def get_title(self):
@@ -349,19 +347,38 @@ class Content(DiscussionBoundBase):
         return "text/plain"
 
     def get_body_as_html(self):
-        if self.get_body_mime_type() == 'text/html':
-            return self.body
+        mimetype = self.get_body_mime_type()
+        body = self.body
+        if not body:
+            return None
+        if mimetype == 'text/html':
+            return body
+        elif mimetype == "text/plain":
+            ls = LangString()
+            for e in body.entries:
+                _ = LangStringEntry(
+                    value='<span style="white-space: pre-wrap">%s</div>' % (
+                        e.value,),
+                    langstring=ls, locale_id=e.locale_id)
+            return ls
         else:
-            return '<span style="white-space: pre-wrap">%s</div>' % (
-                self.get_body_as_text(),)
+            log.error("What is this mimetype?" + mimetype)
+            return body
 
     def get_body_as_text(self):
         mimetype = self.get_body_mime_type()
-        body = self.body or ""
+        body = self.body
+        if not body:
+            return None
         if mimetype == 'text/plain':
-            return body.strip()
+            return body
         elif mimetype == 'text/html':
-            return BeautifulSoup(body).get_text().strip()
+            ls = LangString()
+            for e in body.entries:
+                _ = LangStringEntry(
+                    value=BeautifulSoup(e.value).get_text().strip(),
+                    langstring=ls, locale_id=e.locale_id)
+            return ls
         else:
             log.error("What is this mimetype?" + mimetype)
             return body

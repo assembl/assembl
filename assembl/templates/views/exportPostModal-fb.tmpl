@@ -44,7 +44,7 @@
     {{ textarea_text("fb-export-modal-message-header", gettext("Message Header:"), 'js_fb_message_header',
       data="suggestedHeader" ) }}
     <div style="width: 50%; display: inline-block;">
-      <p><%= exportedMessage.get('body') %></p>
+      <p><%= exportedMessage.get('body').bestValue() %></p>
       <hr>
       {{ textarea_text("fb-export-modal-message-extra", gettext("Extra Message:"), 'js_fb_message_extra') }}
       <p> <%= messageFooter %></p>

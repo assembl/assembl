@@ -6612,6 +6612,9 @@
   ["und", "en", "Undetermined"],
   ["und", "fr", "indéterminée"],
   ["und", "de", "Nicht zu entscheiden"],
+  ["mul", "en", "Multiple languages"],
+  ["mul", "fr", "multilingue"],
+  ["mul", "de", "Mehrere Sprachen"],
   ["zxx", "en", "Not applicable"],
   ["zxx", "fr", "pas de contenu linguistique; non applicable"],
   ["zxx", "de", "Kein linguistischer Inhalt"]

@@ -32,6 +32,9 @@ class Locale(Base):
     _locale_collection = None
     _locale_collection_byid = None
     _locale_collection_subsets = None
+    UNDEFINED = "und"
+    NON_LINGUISTIC = "zxx"
+    MULTILINGUAL = "mul"
 
     @staticmethod
     def locale_is_machine_translated(locale):
@@ -71,6 +74,10 @@ class Locale(Base):
                 cls.default_db.query(cls.locale, cls.id))
         return cls._locale_collection
 
+    @classmethod
+    def get_id_of(cls, locale):
+        return cls.locale_collection.get(locale, None)
+
     @classproperty
     def locale_collection_byid(cls):
         "A collection of all known locales, as a dictionary of id->string"
@@ -90,6 +97,14 @@ class Locale(Base):
                 collection_subsets[cls.extract_base_locale(locale)].add(locale)
             cls._locale_collection_subsets = collection_subsets
         return cls._locale_collection_subsets
+
+    @classproperty
+    def UNDEFINED_LOCALEID(cls):
+        return cls._locale_collection[cls.UNDEFINED]
+
+    @classproperty
+    def NON_LINGUISTIC_LOCALEID(cls):
+        return cls._locale_collection[cls.NON_LINGUISTIC]
 
 
 @event.listens_for(Locale, 'after_insert', propagate=True)
@@ -142,15 +157,39 @@ class LangString(Base):
             "select sequence_next('%s')" % self.id_sequence_name)))
         self.id = id
 
+    @classmethod
+    def create(cls, value, locale=Locale.UNDEFINED):
+        ls = cls()
+        lse = LangStringEntry(
+            langstring=ls, value=value, locale_id=Locale.get_id_of(locale))
+        return ls
+
     entries_as_dict = relationship(
         "LangStringEntry",
         collection_class=attribute_mapped_collection("locale_id"))
+
+    @hybrid_method
+    def non_mt_entries(self):
+        by_locale_id = Locale.locale_collection_byid
+        return [e for e in self.entries
+                if not Locale.locale_is_machine_translated(
+                    by_locale_id[e.locale_id])]
+
+    @non_mt_entries.expression
+    def non_mt_entries(self):
+        return self.db.query(LangStringEntry).join(Locale).filter(
+            Locale.locale.notlike("%-x-mtfrom-%")).subquery()
 
     @hybrid_method
     def best_lang(self, locales):
         locale_collection = Locale.locale_collection
         locale_collection_subsets = Locale.locale_collection_subsets
         available = self.entries_as_dict
+        if len(available) == 0:
+            return LangStringEntry.EMPTY
+        if len(available) == 1:
+            # optimize for common case
+            return available[0]
         for locale in locales:
             # is the locale there?
             locale_id = locale_collection.get(locale, None)
@@ -302,3 +341,10 @@ class LangStringEntry(Base, TombstonableMixin):
 #     translator = Column(Integer, ForeignKey(User.id))
 #     created = Column(DateTime, server_default="now()")
 
+
+def includeme(config):
+    LangString.EMPTY = LangString()
+    LangStringEntry.EMPTY = LangStringEntry(
+        value="", locale_id=0, langstring=LangString.EMPTY)
+    # need to find a way to delay the following until connection established:
+    # LangStringEntry.EMPTY.locale_id = Locale.NON_LINGUISTIC_LOCALEID

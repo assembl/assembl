@@ -6,6 +6,9 @@
         "_default": false
     },
     "Permission": {},
+    "Locale": {},
+    "LangString": {},
+    "LangStringEntry": {},
     "AgentProfile": {},
     "User": {},
     "EmailAccount": {},

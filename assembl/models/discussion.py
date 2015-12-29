@@ -650,6 +650,10 @@ class Discussion(DiscussionBoundBase):
         # TODO: Guard.
         self.preferred_locales = ' '.join(locale_list)
 
+    @property
+    def main_locale(self):
+        return self.discussion_locales[0]
+
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
     """

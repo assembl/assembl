@@ -23,7 +23,7 @@ var SynthesisItem = Marionette.ItemView.extend({
   serializeData: function() {
       return {
         id: this.model.get('published_in_post'),
-        subject: this.model.get('subject'),
+        subject: this.model.get('subject').bestValue(),
         date: Ctx.formatDate(this.model.get('creation_date'))
       };
     },
