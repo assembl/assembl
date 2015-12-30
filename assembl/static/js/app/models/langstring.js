@@ -16,7 +16,7 @@ var LangStringEntry = Base.Model.extend({
    * Defaults
    */
   defaults: {
-    id: '',
+    "@type": Types.LANGSTRING_ENTRY,
     "@language": "und",
     "value": ""
   },
@@ -48,7 +48,7 @@ var LangString = Base.Model.extend({
    * Defaults
    */
   defaults: {
-    id: '',
+    "@type": Types.LANGSTRING,
     entries: []
   },
   original: function() {

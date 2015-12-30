@@ -269,7 +269,7 @@ var messageSend = Marionette.LayoutView.extend({
                 value: message_subject
                 // @language: make educated guess from discussion and user languages
             })])}),
-      message: new LangString.Model({
+      body: new LangString.Model({
         entries: new LangString.EntryCollection([
             new LangString.EntryModel({
                 value: message_body

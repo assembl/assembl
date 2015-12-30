@@ -1,5 +1,5 @@
 from math import ceil
-import uuid
+import logging
 
 import simplejson as json
 from cornice import Service
@@ -26,9 +26,11 @@ from assembl.auth.util import get_permissions
 from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, Content, Idea, ViewPost, User,
-    IdeaRelatedPostLink, AgentProfile, LikedPost)
-from assembl.lib import config
+    IdeaRelatedPostLink, AgentProfile, LikedPost, LangString,
+    DummyContext)
 
+
+log = logging.getLogger('assembl')
 
 posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 description="Post API following SIOC vocabulary as much as possible",
@@ -401,14 +403,14 @@ def create_post(request):
 
     user = Post.default_db.query(User).filter_by(id=user_id).one()
 
-    message = request_body.get('message', None)
-    html = request_body.get('html', None)
+    body = request_body.get('body', None)
+    html = request_body.get('html', None)  # BG: Is this used now? I cannot see it.
     reply_id = request_body.get('reply_id', None)
     idea_id = request_body.get('idea_id', None)
     subject = request_body.get('subject', None)
     publishes_synthesis_id = request_body.get('publishes_synthesis_id', None)
 
-    if not message:
+    if not body:
         raise HTTPBadRequest(localizer.translate(
                 _("Your message is empty")))
 
@@ -416,7 +418,7 @@ def create_post(request):
         in_reply_to_post = Post.get_instance(reply_id)
     else:
         in_reply_to_post = None
-    
+
     if idea_id:
         in_reply_to_idea = Idea.get_instance(idea_id)
     else:
@@ -430,8 +432,18 @@ def create_post(request):
             localizer.translate(_("No discussion found with id=%s" % discussion_id))
         )
 
+    ctx = DummyContext({Discussion: discussion})
+    if html:
+        log.warning("Still using html")
+        # how to guess locale in this case?
+        body = LangString.create(html)
+    else:
+        body = LangString.create_from_json(
+            body, context=ctx, user_id=user_id)
+
     if subject:
-        subject = subject
+        subject = LangString.create_from_json(
+            subject, context=ctx, user_id=user_id)
     else:
         #print(in_reply_to_post.subject, discussion.topic)
         if in_reply_to_post:
@@ -443,12 +455,14 @@ def create_post(request):
             subject = discussion.topic if discussion.topic else ''
         #print subject
         subject = "Re: " + restrip_pat.sub('', subject)
+        # how to guess locale in this case?
+        subject = LangString.create(subject)
 
     post_constructor_args = {
         'discussion': discussion,
         'creator_id': user_id,
         'subject': subject,
-        'body': html if html else message
+        'body': body
         }
 
     if publishes_synthesis_id:

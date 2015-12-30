@@ -101,8 +101,11 @@ def get_target_class(column):
 
 
 class DummyContext(object):
+    def __init__(self, presets=None):
+        self.presets = presets or {}
+
     def get_instance_of_class(self, cls):
-        return None
+        return self.presets.get(cls, None)
 
 
 class ChainingContext(object):
@@ -751,7 +754,8 @@ class BaseOps(object):
 
     def _create_subobject_from_json(
             self, json, target_cls, parse_def, aliases,
-            context, user_id, accessor_name, jsonld=None):
+            context, permissions, user_id, accessor_name,
+            jsonld=None):
         instance = None
         target_type = json.get('@type', None)
         if target_type:
@@ -781,7 +785,8 @@ class BaseOps(object):
                 user_id, False, jsonld)
         else:
             instance = target_cls._do_create_from_json(
-                json, parse_def, aliases, context, user_id, False, jsonld)
+                json, parse_def, aliases, context, permissions,
+                user_id, False, jsonld)
             if instance is None:
                 raise HTTPBadRequest(
                     "Could not find or create object %s" % (
@@ -1056,7 +1061,8 @@ class BaseOps(object):
                     if instance is None and target_id in jsonld:
                         instance = _create_subobject_from_json(
                             jsonld[target_id], target_cls, parse_def,
-                            aliases, c_context, user_id, accessor, jsonld)
+                            aliases, c_context, permissions, user_id,
+                            accessor, jsonld)
                         aliases[target_id] = instance
                     if instance is None:
                         raise HTTPBadRequest("Could not find object "+value)
@@ -1067,7 +1073,8 @@ class BaseOps(object):
                 assert not must_be_list
                 instance = self._create_subobject_from_json(
                     value, target_cls, parse_def, aliases,
-                    c_context, user_id, accessor_name, jsonld)
+                    c_context, permissions, user_id, accessor_name,
+                    jsonld)
                 if instance is None:
                     if isinstance(accessor, property):
                         # It may not be an object after all
@@ -1087,7 +1094,8 @@ class BaseOps(object):
                         if instance is None and subval in jsonld:
                             instance = _create_subobject_from_json(
                                 jsonld[subval], target_cls, parse_def,
-                                aliases, c_context, user_id, accessor, jsonld)
+                                aliases, c_context, permissions, user_id,
+                                accessor, jsonld)
                             aliases[subval] = instance
                         if instance is None:
                             raise HTTPBadRequest(
@@ -1097,7 +1105,8 @@ class BaseOps(object):
                     elif isinstance(subval, dict):
                         instance = self._create_subobject_from_json(
                             subval, target_cls, parse_def, aliases,
-                            c_context, user_id, accessor_name, jsonld)
+                            c_context, permissions, user_id, accessor_name,
+                            jsonld)
                         if instance is None:
                             raise HTTPBadRequest("No @class in "+dumps(subval))
                     else:

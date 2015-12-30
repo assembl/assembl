@@ -2,7 +2,7 @@ from collections import defaultdict
 from datetime import datetime
 
 from sqlalchemy import (
-    Column, ForeignKey, Integer, Boolean, String, DateTime,
+    Column, ForeignKey, Integer, Boolean, String,
     UnicodeText, UniqueConstraint, event)
 from sqlalchemy.sql.expression import case
 from sqlalchemy.orm import (
@@ -12,8 +12,9 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.hybrid import hybrid_method
 from virtuoso.alchemy import CoerceUnicode
 
-from . import Base, TombstonableMixin, User
+from . import Base, TombstonableMixin
 from ..lib import config
+from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC, P_SYSADMIN
 
 
 class classproperty(object):
@@ -106,6 +107,8 @@ class Locale(Base):
     def NON_LINGUISTIC_LOCALEID(cls):
         return cls._locale_collection[cls.NON_LINGUISTIC]
 
+    crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
+
 
 @event.listens_for(Locale, 'after_insert', propagate=True)
 @event.listens_for(Locale, 'after_delete', propagate=True)
@@ -128,6 +131,9 @@ class LocaleName(Base):
             Locale.id, ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
     name = Column(CoerceUnicode)
+
+    crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
+
 
 LocaleName.locale = relationship(Locale, foreign_keys=(
         LocaleName.locale_id,))
@@ -271,6 +277,9 @@ class LangString(Base):
         q = Query(LangStringEntry).order_by(c).limit(1).subquery()
         return aliased(LangStringEntry, q)
 
+    # TODO: the permissions should really be those of the owning object. Yikes.
+    crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
+
 
 @event.listens_for(LangString, 'before_insert', propagate=True)
 def receive_before_insert(mapper, connection, target):
@@ -288,9 +297,7 @@ class LangStringEntry(Base, TombstonableMixin):
             kwargs["langstring"] = LangString()
         if "locale_id" not in kwargs and "locale" not in kwargs:
             # Create locale on demand.
-            locale_code = kwargs.get("locale_code", None)
-            # Should we allow locale-less LangStringEntry? (for unknown...)
-            assert locale_code, "You need to specify a locale"
+            locale_code = kwargs.get("@language", "und")
             locale_id = Locale.locale_collection.get(locale_code, None)
             if locale_id is None:
                 kwargs["locale"] = Locale(locale=locale_code)
@@ -322,6 +329,14 @@ class LangStringEntry(Base, TombstonableMixin):
         # Equivalent to the following, which may trigger a DB load
         # return self.locale.locale
 
+    @locale_name.setter
+    def locale_name(self, locale_name):
+        locale_id = Locale.locale_collection.get(locale_name, None)
+        if locale_id:
+            self.locale_id = Locale.locale_collection[locale_name]
+        else:
+            self.locale = Locale(locale=locale_name)
+
     def change_value(self, new_value):
         self.tombstone = datetime.utcnow()
         new_version = self.__class__(
@@ -330,6 +345,8 @@ class LangStringEntry(Base, TombstonableMixin):
             value=new_value)
         self.db.add(new_version)
         return new_version
+
+    crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
 
 
 # class TranslationStamp(Base):
@@ -340,6 +357,9 @@ class LangStringEntry(Base, TombstonableMixin):
 #     dest = Column(Integer, ForeignKey(LangStringEntry.id))
 #     translator = Column(Integer, ForeignKey(User.id))
 #     created = Column(DateTime, server_default="now()")
+#     crud_permissions = CrudPermissions(
+#          P_TRANSLATE, P_READ, P_SYSADMIN, P_SYSADMIN,
+#          P_TRANSLATE, P_TRANSLATE)
 
 
 def includeme(config):

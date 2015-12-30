@@ -35,6 +35,9 @@ var Types = {
   FACEBOOK_PAGE_POSTS_SOURCE: 'FacebookPagePostsSource',
   FACEBOOK_PAGE_FEED_SOURCE: 'FacebookPageFeedSource',
   FACEBOOK_SINGLE_POST_SOURCE: 'FacebookSinglePostSource',
+  LOCALE: "Locale",
+  LANGSTRING: "LangString",
+  LANGSTRING_ENTRY: "LangStringEntry",
 
 
 
