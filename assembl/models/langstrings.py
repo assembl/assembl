@@ -147,11 +147,11 @@ class LangString(Base):
 
     @classmethod
     def subqueryload_option(cls, reln):
-        return subqueryload(reln, cls.entries_as_dict)
+        return subqueryload(reln).joinedload(cls.entries)
 
     @classmethod
     def joinedload_option(cls, reln):
-        return joinedload(reln, cls.entries_as_dict)
+        return joinedload(reln).joinedload(cls.entries)
 
     @classproperty
     def id_sequence_name(cls):
