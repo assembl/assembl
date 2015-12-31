@@ -14,15 +14,8 @@ from virtuoso.alchemy import CoerceUnicode
 
 from . import Base, TombstonableMixin
 from ..lib import config
+from ..lib.abc import classproperty
 from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC, P_SYSADMIN
-
-
-class classproperty(object):
-    def __init__(self, f):
-        self.f = f
-
-    def __get__(self, obj, owner):
-        return self.f(owner)
 
 
 class Locale(Base):

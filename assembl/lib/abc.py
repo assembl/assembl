@@ -41,3 +41,11 @@ class abstractclassmethod(newclassmethod):
     def __init__(self, func):
         func = abc.abstractmethod(func)
         super(abstractclassmethod, self).__init__(func)
+
+
+class classproperty(object):
+    def __init__(self, f):
+        self.f = f
+
+    def __get__(self, obj, owner):
+        return self.f(owner)
