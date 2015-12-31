@@ -30,6 +30,19 @@ class Locale(Base):
     NON_LINGUISTIC = "zxx"
     MULTILINGUAL = "mul"
 
+    def __repr__(self):
+        return "<Locale %s (%d)>" % (self.locale, self.id or -1)
+
+    def sublocale_of(self, locale_name):
+        if isinstance(locale_name, self.__class__):
+            locale_name = locale_name.locale
+        my_parts = self.locale.split("_")
+        parts = locale_name.split("_")
+        if len(my_parts) > len(parts):
+            return False
+        my_parts = my_parts[:len(parts)]
+        return my_parts == parts
+
     @staticmethod
     def locale_is_machine_translated(locale):
         return '-x-mtfrom-' in locale
@@ -69,8 +82,16 @@ class Locale(Base):
         return cls._locale_collection
 
     @classmethod
-    def get_id_of(cls, locale):
-        return cls.locale_collection.get(locale, None)
+    def get_id_of(cls, locale_name):
+        return cls.locale_collection.get(locale_name, None)
+
+    @classmethod
+    def get_or_create(cls, locale_name):
+        locale_id = cls.get_id_of(locale_name)
+        if locale_id:
+            return Locale.get(locale_id)
+        else:
+            return Locale(locale=locale_name)
 
     @classproperty
     def locale_collection_byid(cls):
@@ -94,11 +115,11 @@ class Locale(Base):
 
     @classproperty
     def UNDEFINED_LOCALEID(cls):
-        return cls._locale_collection[cls.UNDEFINED]
+        return cls.locale_collection[cls.UNDEFINED]
 
     @classproperty
     def NON_LINGUISTIC_LOCALEID(cls):
-        return cls._locale_collection[cls.NON_LINGUISTIC]
+        return cls.locale_collection[cls.NON_LINGUISTIC]
 
     crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
 
@@ -155,6 +176,10 @@ class LangString(Base):
         (id,) = next(iter(self.db.execute(
             "select sequence_next('%s')" % self.id_sequence_name)))
         self.id = id
+
+    def __repr__(self):
+        return 'LangString (%d): %s\n' % (
+            self.id or -1, "\n".join((repr(x) for x in self.entries)))
 
     @classmethod
     def create(cls, value, locale=Locale.UNDEFINED):
@@ -316,9 +341,13 @@ class LangStringEntry(Base, TombstonableMixin):
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
     value = Column(UnicodeText)  # not searchable inv virtuoso
 
+    def __repr__(self):
+        return '%d: [%s] "%s"' % (
+            self.id or -1, self.locale.locale, self.value)
+
     @property
     def locale_name(self):
-        return Locale.locale_collection_byid[self.locale_id]
+        return Locale.locale_collection_byid.get(self.locale_id, None)
         # Equivalent to the following, which may trigger a DB load
         # return self.locale.locale
 
@@ -326,7 +355,7 @@ class LangStringEntry(Base, TombstonableMixin):
     def locale_name(self, locale_name):
         locale_id = Locale.locale_collection.get(locale_name, None)
         if locale_id:
-            self.locale_id = Locale.locale_collection[locale_name]
+            self.locale_id = locale_id
         else:
             self.locale = Locale(locale=locale_name)
 
