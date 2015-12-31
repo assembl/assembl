@@ -172,6 +172,9 @@ class Preferences(Base, MutableMapping):
         "default_allow_access_to_moderated_text": True,
         # Default moderation text template
         "moderation_template": None,
+        # full class name of translation service to use, if any
+        # e.g. assembl.nlp.translate.GoogleTranslationService
+        "translation_service": None,
         # TODO: preference to allow moderation a priori.
         # Properties which a user cannot override
         # TODO: Invert that list.
