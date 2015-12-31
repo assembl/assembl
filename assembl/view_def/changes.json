@@ -13,13 +13,6 @@
         "locale": true,
         "rtl": true
     },
-    "LangString": {
-        "entries": [":default"]
-    },
-    "LangStringEntry": {
-        "@language": "locale_name",
-        "value": true
-    },
     "AgentProfile": {
         "description": true,
         "name": true,
@@ -98,8 +91,8 @@
         "hidden": true,
         "discussion": true,
         "import_date": false,
-        "subject": ":",
-        "body": ":",
+        "subject": ":default",
+        "body": ":default",
         "like_count": true,
         "extracts": [":id_only"]
     },
