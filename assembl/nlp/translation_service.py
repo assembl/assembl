@@ -105,9 +105,9 @@ class DummyGoogleTranslationService(TranslationService):
         if base == "zh":
             p1 = parts[1]
             if p1 == "Hans":
-                return "zh-CN"
+                return "zh-CN"  # zh_Hans_CN
             elif p1 == "Hant":
-                return "zh-TW"
+                return "zh-TW"  # zh_Hant_TW
             elif p1 in ("CN", "TW"):
                 return "_".join(parts[:1])
 

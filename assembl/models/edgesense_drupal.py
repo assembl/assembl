@@ -15,6 +15,7 @@ from sqlalchemy import (
 import requests
 import simplejson as json
 
+from .langstrings import LangString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
@@ -219,7 +220,7 @@ class EdgeSenseNode(EdgeSenseSpecificPost):
                    body_mime_type=body_mime_type,
                    source_post_id=node_id, creator=agent,
                    creation_date=created, imported_blob=blob,
-                   discussion=discussion, body=body)
+                   discussion=discussion, body=LangString.create(body))
 
 
 class EdgeSenseComment(EdgeSenseSpecificPost):
@@ -247,7 +248,7 @@ class EdgeSenseComment(EdgeSenseSpecificPost):
                    source=source, creator=agent,
                    creation_date=created, discussion=discussion,
                    body_mime_type=body_mime_type, imported_blob=blob,
-                   body=body)
+                   body=LangString.create(body))
 
 
 class EdgeSenseFetcher(object):

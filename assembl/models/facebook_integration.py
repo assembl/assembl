@@ -33,6 +33,7 @@ from ..lib.sqla import Base
 from ..lib.sqla_types import URLString
 from ..lib.parsedatetime import parse_datetime
 from ..tasks.source_reader import PullSourceReader, ReaderStatus
+from .langstrings import LangString
 from .generic import PostSource, ContentSourceIDs
 from .post import ImportedPost
 from .attachment import Document, PostAttachment
@@ -1343,6 +1344,7 @@ class FacebookPost(ImportedPost):
         blob = json.dumps(post)
         body = post.get('message')
         subject = post.get('story', None)
+        # TODO AY: Can we get the post language from facebook?
 
         return cls(
             # attachment=attachment,
@@ -1356,8 +1358,8 @@ class FacebookPost(ImportedPost):
             creator=creator_agent,
             # post_type=post_type,
             imported_blob=blob,
-            subject=subject,
-            body=body
+            subject=LangString.create(subject),
+            body=LangString.create(body)
         )
 
     def update_from_imported_json(self):

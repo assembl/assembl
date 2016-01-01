@@ -32,6 +32,7 @@ from sqlalchemy import (
     Boolean,
 )
 
+from .langstrings import LangString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import EmailAccount
@@ -448,24 +449,25 @@ class AbstractMailbox(PostSource):
                 raise ValueError("The existing object isn't the same as the one found by message id")
             email_object.recipients = recipients
             email_object.sender = sender
-            email_object.subject = subject
             email_object.creation_date = creation_date
             email_object.source_post_id = new_message_id
             email_object.in_reply_to = new_in_reply_to
-            email_object.body = body
             email_object.body_mime_type = mimeType
             email_object.imported_blob = message_string
+            # TODO MAP: Make this nilpotent.
+            email_object.subject = LangString.create(subject)
+            email_object.body = LangString.create(body)
         except NoResultFound:
             email_object = Email(
                 discussion=self.discussion,
                 source=self,
                 recipients=recipients,
                 sender=sender,
-                subject=subject,
+                subject=LangString.create(subject),
                 creation_date=creation_date,
                 source_post_id=new_message_id,
                 in_reply_to=new_in_reply_to,
-                body=body,
+                body=LangString.create(body),
                 body_mime_type = mimeType,
                 imported_blob=message_string
             )

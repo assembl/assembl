@@ -15,6 +15,7 @@ import requests
 from urlparse import urlparse
 
 from ..lib.sqla_types import URLString
+from .langstrings import LangString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
@@ -424,6 +425,7 @@ class FeedSourceReader(PullSourceReader):
         imported_date = datetime.utcnow()
 
         user = account.profile
+        # TODO AY: Can we get the locale?
 
         return source.post_type(
             creation_date=self._get_creation_date(entry),
@@ -433,8 +435,8 @@ class FeedSourceReader(PullSourceReader):
             discussion=source.discussion,
             body_mime_type=body_mime_type,
             creator=user,
-            subject=subject,
-            body=body)
+            subject=LangString.create(subject),
+            body=LangString.create(body))
 
 
 class LoomioSourceReader(FeedSourceReader):
