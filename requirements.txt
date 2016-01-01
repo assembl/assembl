@@ -52,6 +52,7 @@ isodate==0.5.4
 Jinja2==2.8
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.33
+langdetect==1.0.5
 lingua==4.6
 lxml==3.5.0
 Mako==1.0.3
