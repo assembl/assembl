@@ -20,9 +20,9 @@ var LangStringEntry = Base.Model.extend({
     "@language": "und",
     "value": ""
   },
-  isTranslation: function() {
-    return ;
-  }
+  isMachineTranslation: function() {
+    return this.get("@language").indexOf("-x-mtfrom-") > 0;
+  },
 });
 
 /**
@@ -52,7 +52,7 @@ var LangString = Base.Model.extend({
     entries: []
   },
   original: function() {
-    var originals = this.get("entries").filter(function(e) {return !e.isTranslation();});
+    var originals = this.get("entries").filter(function(e) {return !e.isMachineTranslation();});
     if (originals.length > 1) {
       return this.bestOf(originals);
     }
