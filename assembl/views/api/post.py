@@ -272,6 +272,8 @@ def get_posts(request):
         posts = posts.order_by(Content.creation_date.desc())
     elif order == 'score':
         posts = posts.order_by(Content.body_text_index.score_name.desc())
+    else:
+        posts = posts.order_by(Content.id)
     print str(posts)
 
     no_of_posts = 0
