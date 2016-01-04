@@ -30,6 +30,13 @@ var IdeaView = Backbone.View.extend({
   dragOverCounter: 0,
 
   /**
+   * Shortcut to this.parentPanel.getTableOfIdeasCollapsedState()
+   * Stores (in UserCustomData per-discussion key/value store) the collapsed state of each idea. Model is in the following form: {42: true, 623: false} where each key is the numeric id of an idea 
+   * @type {UserCustomData.Model}
+   */
+  tableOfIdeasCollapsedState: null,
+
+  /**
    * @init
    * @param {IdeaModel} obj the model
    * @param {dict} view_data: data from the render visitor
@@ -55,10 +62,19 @@ var IdeaView = Backbone.View.extend({
     this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {
           that.onIsSelectedChange(currentIdea);
         });
+
     // TODO: Detect a change in current synthesis
     Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
         that.listenTo(synthesis.getIdeasCollection(), 'add remove reset', that.render);
     });
+
+    this.tableOfIdeasCollapsedState = that.parentPanel ? that.parentPanel.getTableOfIdeasCollapsedState() : null;
+    if ( this.tableOfIdeasCollapsedState && that.model ){
+      var id = that.model.getNumericId();
+      if ( id ){
+        this.listenTo(this.tableOfIdeasCollapsedState, "change:"+id, that.onIdeaCollaspedStateChange);
+      }
+    }
   },
 
   /**
@@ -101,19 +117,7 @@ var IdeaView = Backbone.View.extend({
 
     this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
 
-    var collapsedState = that.parentPanel ? that.parentPanel.getTableOfIdeasCollapsedState() : null;
-    if ( collapsedState && that.model ){
-      var id = that.model.getNumericId();
-      if ( id && collapsedState.get(id) ){
-        data.isOpen = (collapsedState.get(id) == "true" || collapsedState.get(id) === true) ? false : true;
-      }
-    }
-
-    if (data.isOpen === true) {
-      this.$el.addClass('is-open');
-    } else {
-      this.$el.removeClass('is-open');
-    }
+    this.applyCustomCollapsedState();
 
     if (data.longTitle) {
       data.longTitle = ' - ' + data.longTitle.substr(0, 50);
@@ -142,7 +146,6 @@ var IdeaView = Backbone.View.extend({
    * Show the childen
    */
   open: function() {
-    this.model.set('isOpen', true);
     this.$el.addClass('is-open');
   },
 
@@ -150,12 +153,11 @@ var IdeaView = Backbone.View.extend({
    * Hide the childen
    */
   close: function() {
-    this.model.set('isOpen', false);
     this.$el.removeClass('is-open');
   },
 
-  saveCollapsedState: function() {
-    this.parentPanel.saveIdeaCollapsedState(this.model);
+  saveCollapsedState: function(isCollapsed) {
+    this.parentPanel.saveIdeaCollapsedState(this.model, isCollapsed);
   },
 
   /**
@@ -320,7 +322,9 @@ var IdeaView = Backbone.View.extend({
     }
 
     if (this.dragOverCounter > 30) {
-      this.model.set('isOpen', true);
+      this.open();
+      var isCollapsed = false;
+      this.saveCollapsedState(isCollapsed);
     }
 
     ev.dataTransfer.dropEffect = 'move';
@@ -458,19 +462,53 @@ var IdeaView = Backbone.View.extend({
    * @param  {Event} ev
    */
   toggle: function(ev) {
+    console.log("ideaInIdeaList::toggle()");
     if (ev) {
       ev.preventDefault();
       ev.stopPropagation();
     }
+
     var analytics = Analytics.getInstance();
-    if (this.$el.hasClass('is-open')) {
-      analytics.trackEvent(analytics.events.NAVIGATION_TOGGLE_ROOT_IDEA_CLOSE);
-      this.close();
-    } else {
+    var isCollapsed = !(this.$el.hasClass('is-open'));
+    if (isCollapsed) {
       analytics.trackEvent(analytics.events.NAVIGATION_TOGGLE_ROOT_IDEA_OPEN);
       this.open();
+    } else {
+      analytics.trackEvent(analytics.events.NAVIGATION_TOGGLE_ROOT_IDEA_CLOSE);
+      this.close();
     }
-    this.saveCollapsedState();
+    isCollapsed = !isCollapsed; // we have just changed the collapsed state by calling open() or close()
+    this.saveCollapsedState(isCollapsed);
+  },
+
+  onIdeaCollaspedStateChange: function(ev) {
+    console.log("ideaInIdeaList::onIdeaCollaspedStateChange() ev: ", ev, " this:", this);
+    this.applyCustomCollapsedState();
+  },
+
+  getCustomCollapsedState: function() {
+    var isCollapsed = undefined;
+    if ( this.tableOfIdeasCollapsedState && this.model ){
+      var id = this.model.getNumericId();
+      if ( id ){
+        var state = this.tableOfIdeasCollapsedState.get(id);
+        isCollapsed = (state == "true" || state === true);
+      }
+    }
+    return isCollapsed;
+  },
+
+  applyCustomCollapsedState: function() {
+    var isCollapsed = this.getCustomCollapsedState();
+    if ( isCollapsed === undefined ){
+      isCollapsed = this.model.get('isOpen') === false ? true : false; // TODO: add a feature enabling an admin to set this per-idea isOpen state, which acts as default when the user has not saved a custom state for this idea yet
+    }
+    if ( isCollapsed ){
+      this.close();
+    }
+    else {
+      this.open();
+    }
   }
 
 });

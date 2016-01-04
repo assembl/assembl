@@ -49,6 +49,11 @@ var IdeaList = AssemblPanel.extend({
   scrollLastSpeed: null,
   tableOfIdeasRowHeight: 36, // must match $tableOfIdeasRowHeight in _variables.scss
   tableOfIdeasFontSizeDecreasingWithDepth: true, // must match the presence of .idealist-children { font-size: 98.5%; } in _variables.scss
+  
+  /**
+   * Stores (in UserCustomData per-discussion key/value store) the collapsed state of each idea. Model is in the following form: {42: true, 623: false} where each key is the numeric id of an idea 
+   * @type {UserCustomData.Model}
+   */
   tableOfIdeasCollapsedState: null,
 
   /**
@@ -90,10 +95,10 @@ var IdeaList = AssemblPanel.extend({
     });
     var tableOfIdeasCollapsedStateFetchPromise = Ctx.isUserConnected() ? this.tableOfIdeasCollapsedState.fetch() : Promise.resolve(true);
 
+    // Should we show the table of ideas even when we have not yet received the tableOfIdeasCollapsedStateFetchPromise and then re-render once we have received it ? Or accept to wait potentially a bit more before displaying the table of ideas? => comment/uncomment that.render(); in the following block of code to toggle.
     Promise.join(
       collectionManager.getAllIdeasCollectionPromise(),
       collectionManager.getAllIdeaLinksCollectionPromise(),
-      tableOfIdeasCollapsedStateFetchPromise,
       function(allIdeasCollection, allIdeaLinksCollection, collapsedState) {
         if(!that.isViewDestroyed()) {
           var events = ['reset', 'change:parentId', 'change:@id', 'change:hidden', 'remove', 'add', 'destroy'];
@@ -105,6 +110,17 @@ var IdeaList = AssemblPanel.extend({
           that.allIdeaLinksCollection = allIdeaLinksCollection;
 
           that.template = '#tmpl-ideaList';
+          //that.render();
+        }
+      }
+    );
+
+    Promise.join(
+      collectionManager.getAllIdeasCollectionPromise(),
+      collectionManager.getAllIdeaLinksCollectionPromise(),
+      tableOfIdeasCollapsedStateFetchPromise, // now that we have the collapsed state of each idea, we can (re)render the table of ideas
+      function(allIdeasCollection, allIdeaLinksCollection, collapsedState) {
+        if(!that.isViewDestroyed()) {
           that.render();
         }
       }
@@ -713,12 +729,12 @@ var IdeaList = AssemblPanel.extend({
   },
 
   // called by ideaInIdeaList::saveCollapsedState()
-  saveIdeaCollapsedState: function(ideaModel){
+  saveIdeaCollapsedState: function(ideaModel, isCollapsed){
     if ( !Ctx.isUserConnected() || !this.tableOfIdeasCollapsedState ){
       return;
     }
     var idea_numeric_id = ideaModel.getNumericId();
-    var value = ideaModel.get('isOpen') ? "false" : "true";
+    var value = (isCollapsed === true || isCollapsed == "true") ? "true" : "false";
     var o = {};
     o[idea_numeric_id] = value;
     this.tableOfIdeasCollapsedState.save(o, {patch: true});
