@@ -177,29 +177,27 @@ voteApp.controller('indexCtl',
         $("body").css("min-height", $scope.settings.minHeight + "px");
       }
 
-      if ( multiple_targets ){
-        $scope.drawMultipleTargetsUI();
+
+      // display the UI in a table of classic way depending on the settings
+      if ($scope.settings.displayStyle && $scope.settings.displayStyle == "table"){
+        $scope.drawUIWithTable();
       }
       else {
-        // display the UI in a table of classic way depending on the settings
-        if ($scope.settings.displayStyle && $scope.settings.displayStyle == "table")
-        {
-          $scope.drawUIWithTable();
-        }
-        else
-        {
+        if ( multiple_targets ){
+          $scope.drawMultipleTargetsUI();
+        } else {
           $scope.drawUIWithoutTable();
         }
       }
 
       if ( !multiple_targets ){
         $translate('voteSubmit').then(function(translation) {
-          $("body").append($('<button id="vote_submit" ng-click="submitVote()" class="btn btn-primary btn-sm">' + translation + '</button>'));
-          $("body").append($('<div id="vote_submit_result_holder"></div>'));
+          $("body").append($('<button id="vote-submit" ng-click="submitVote()" class="btn btn-primary btn-sm">' + translation + '</button>'));
+          $("body").append($('<div id="vote-submit-result-holder"></div>'));
         });
       }
       else {
-        $("body").append($('<div id="vote_submit_result_holder"></div>'));
+        $("body").append($('<div id="vote-submit-result-holder"></div>'));
       }
       
 
@@ -352,9 +350,10 @@ voteApp.controller('indexCtl',
       console.log("submitVote(): ", votes_container, result_holder);
       var votes_to_submit = $scope.computeMyVotes(votes_container);
       console.log("votes_to_submit:", votes_to_submit);
+      console.log("result_holder:", result_holder);
       $scope.myVotes = votes_to_submit;
 
-      var vote_result_holder = result_holder || $("#vote_submit_result_holder");
+      var vote_result_holder = result_holder || $("#vote-submit-result-holder");
       vote_result_holder.empty();
       $translate('voteSubmitLoading').then(function(translation) {
         vote_result_holder.append($("<p class='loading'>" + translation + "</p>"));
@@ -372,6 +371,7 @@ voteApp.controller('indexCtl',
       var submitVotePromises = [];
 
       var successForAllCriteriaOfQuestion = function(){
+        console.log("successForAllCriteriaOfQuestion()");
         $translate('voteSubmitSuccessForAllCriteriaOfQuestion').then(function(translation) {
           vote_result_holder.empty();
           vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
@@ -476,11 +476,30 @@ voteApp.controller('indexCtl',
       var dom_id = "vote-question-item-" + item_id;
       var question = $("#"+dom_id);
       if ( question ){
-        var result_holder = question.children(".vote-question-submit-button-container").children(".vote-question-result"); // or .find()
+        var result_holder = question.find(".vote-question-submit-button-container .vote-question-result");
         if ( !result_holder ){
           result_holder = question.find(".vote-question-result");
         }
         $scope.submitVote(question, result_holder);
+      }
+    };
+
+    /**
+     * Submit votes for all criteria of one votable (target) idea
+     */
+    $scope.submitVotesForVotableIdea = function(votable_id){
+      console.log("submitVotesForVotableIdea(): ", votable_id);
+
+      var dom_id = "table-vote-votable-idea-" + AssemblToolsService.getCssClassFromId(votable_id);
+      var votes_container = $("#"+dom_id);
+      var result_holder = null;
+      if ( votes_container ){
+        result_holder = votes_container.find(".vote-votable-idea-submit-button-container .vote-votable-idea-result");
+        if ( !result_holder ){
+          result_holder = votes_container.find(".vote-votable-idea-result");
+        }
+        console.log("result_holder:: ", result_holder);
+        $scope.submitVote(votes_container, result_holder);
       }
     };
 
@@ -729,13 +748,13 @@ voteApp.controller('indexCtl',
           .offset([-10, 0])
           .html(function(d) {
             var str = "<span class='text'>";
-            if ( criterion.description ){
+            if ( "description" in criterion ){
               str += criterion.description;
             }
-            if ( criterion.descriptionMin ){
+            if ( "descriptionMin" in criterion ){
               str += "<br/>Min: " + criterion.descriptionMin;
             }
-            if ( criterion.descriptionMax ){
+            if ( "descriptionMax" in criterion ){
               str += "<br/>Max: " + criterion.descriptionMax;
             }
             str += "</span>";
@@ -1252,6 +1271,16 @@ voteApp.controller('indexCtl',
       if ( criterionValue === null && "valueDefault" in criterion ){
         criterionValue = criterion.valueDefault;
       }
+
+      var width = "width" in item_data ? item_data.width : null;
+      if ( !width )
+        width = "width" in config ? config.witdth : 300;
+      var height = "height" in item_data ? item_data.height : null;
+      if ( !height )
+        height = "height" in config ? config.height : 300;
+      var padding = "padding" in item_data ? item_data.padding : null;
+      if ( !padding )
+        padding = "padding" in padding ? config.padding : 60;
       
       var div = $('<div>');
       div.attr({
@@ -1261,6 +1290,13 @@ voteApp.controller('indexCtl',
         'data-criterion-value': null,
         'data-target-id': target_id
       });
+      div.css('width',width);
+      div.css('height',height);
+      div.css('padding',padding);
+      // required so that padding does not increase element width and height
+      div.css('box-sizing','border-box');
+      div.css('-moz-box-sizing','border-box');
+      div.css('-webkit-box-sizing','border-box');
 
       // adapt data format from BinaryIdeaVote which has labelYes and labelNo, to PluralityIdeaVote which has possibleValues
       // criterion.possibleValues is like so: [ { label: 'Choice 1', value: 0 }, { label: 'Choice 2', value: 1} ]
@@ -1360,70 +1396,96 @@ voteApp.controller('indexCtl',
       var config = $scope.settings;
       var holder_svg = null; //d3.select("#d3_container");
       var holder_jquery = null; //$("#d3_container");
-
       var table = $("<table/>");
-      table.attr("id", "table_vote");
+      table.attr("id", "table-vote");
       $("#d3_container").append(table);
+      
+
+      // first row: name of fields (votable target title, and the title of each criterion)
+
       var tr = $("<tr/>");
-      var tr2 = $("<tr/>");
-      table.append(tr);
-      table.append(tr2);
+      var td = $("<th/>");
+      $translate('voteTableTopLeftContent').then(function(translation) {
+        td.text(translation);
+      });
+      tr.append(td);
 
-      // first column: description of which idea the user will vote on
-      if (config.presentationText)
-      {
-        var td = $("<th/>");
-        $translate('ideaDescription').then(function(translation) {
-          td.text(translation);
-        });
-        tr.append(td);
-        var td2 = $("<td/>");
-        td2.text(config.presentationText);
-        tr2.append(td2);
-      }
-
-      for (var i = 0; i < config.items.length; ++i)
-      {
-        var item = config.items[i];
-
-        var td = $("<th/>");
-        if (item.vote_specifications && item.vote_specifications.length > 0)
-        {
-          if (item.vote_specifications.length == 1 && item.vote_specifications[0].name)
-            td.text(item.vote_specifications[0].name);
-          else
+      if ( "items" in config && config.items.length ){
+        config.items.forEach(function(item){
+          var td = $("<th/>");
+          if (item.vote_specifications && item.vote_specifications.length > 0)
           {
-            var a = [];
-            for (var j = 0; j < item.vote_specifications.length; ++j)
+            if (item.vote_specifications.length == 1 && item.vote_specifications[0].name)
+              td.text(item.vote_specifications[0].name);
+            else
             {
-              if (item.vote_specifications[j].name)
-                a.push (item.vote_specifications[j].name);
+              var a = [];
+              for (var j = 0; j < item.vote_specifications.length; ++j)
+              {
+                if (item.vote_specifications[j].name)
+                  a.push (item.vote_specifications[j].name);
+              }
+
+              td.text(a.join(" / "));
             }
-
-            td.text(a.join(" / "));
           }
-        }
-        
-        tr.append(td);
+          
+          tr.append(td);
+        });
+      }
+      table.append(tr);
 
-        var td2 = $("<td/>");
-        td2.attr("id", "table_vote_item_" + i);
-        tr2.append(td2);
-        holder_svg = d3.select("#table_vote_item_" + i);
-        holder_jquery = $("#table_vote_item_" + i);
 
-        if (item.type == "vertical_gauge")
-        {
-          $scope.drawVerticalGauge(holder_svg, item);
-        }
-        else if (item.type == "2_axes")
-        {
-          $scope.draw2AxesVote(holder_svg, item);
-        }
-        else if (item.type == "radio")
-        {
-          $scope.drawRadioVote(holder_jquery, item);
-        }
+      // next rows: each row is for a different target. row contains title of the votable target, and votable item for each criterion
+
+      if ( $scope.targets_ids && $scope.targets_ids.length ){
+        $scope.targets_ids.forEach(function(target_id){
+          var tr2 = $("<tr/>");
+          tr2.attr("id", "table-vote-votable-idea-" + AssemblToolsService.getCssClassFromId(target_id));
+
+          // first column: description of which idea the user will vote on
+
+          var td2 = $("<td/>");
+          // title of the idea
+          var target_title_holder = $("<div class='inline-vote-for-a-target--title' />");
+          td2.append(target_title_holder);
+          $scope.displayTargetTitleInContainer(target_id, target_title_holder);
+          // vote button for the idea
+          // after each item, display a "Vote" button which sends the votes of this question
+          var translationReceived = function(target_id){
+            return function(translation){
+              var votable_idea_holder = tr2.find("td").first();
+              var vote_button_holder = $("<div class='vote-votable-idea-submit-button-container'>");
+              votable_idea_holder.append(vote_button_holder);
+              var button = $('<button class="btn btn-primary btn-sm">' + translation + '</button>');
+              vote_button_holder.append(button);
+              vote_button_holder.append($("<div class='vote-votable-idea-result'>"));
+              var onButtonClick = function(){
+                $scope.submitVotesForVotableIdea(target_id);
+              };
+              button.click(onButtonClick);
+            };
+          }
+          $translate('voteSubmitForTargetIdea').then(translationReceived(target_id));
+          
+          tr2.append(td2);
+
+
+          // next columns: votable item for each criterion
+
+          for (var i = 0; i < config.items.length; ++i)
+          {
+            var item = config.items[i];
+            var td2 = $("<td/>");
+            td2.attr("id", "table-vote-item-" + i);
+            //holder_svg = d3.select("#table-vote-item-" + i);
+            //holder_jquery = $("#table-vote-item-" + i);
+            holder_jquery = td2;
+            $scope.drawVoteItem(holder_jquery, item, target_id);
+            tr2.append(td2);
+          }
+          table.append(tr2);
+        });
       }
 
     };
@@ -1431,30 +1493,92 @@ voteApp.controller('indexCtl',
     $scope.drawUIWithoutTable = function() {
       console.log("drawUIWithoutTable()");
       var config = $scope.settings;
-      var holder_svg = d3.select("#d3_container");
+      //var holder_svg = d3.select("#d3_container");
       var holder_jquery = $("#d3_container");
 
       if ("items" in config) {
-        for (var i = 0; i < config.items.length; ++i)
-        {
+        for (var i = 0; i < config.items.length; ++i) {
           var item = config.items[i];
-
-          if (item.type == "vertical_gauge")
-          {
-            $scope.drawVerticalGauge(holder_svg, item);
-            // here we could add specific vote button for this criterion
-          }
-          else if (item.type == "2_axes")
-          {
-            $scope.draw2AxesVote(holder_svg, item);
-          }
-          else if (item.type == "radio")
-          {
-            $scope.drawRadioVote(holder_jquery, item);
-          }
+          $scope.drawVoteItem(holder_jquery, item);
         }
       }
+    };
 
+    /**
+     * Displays votable target title in a given container.
+    */
+    $scope.displayTargetTitleInContainer = function(target_id, container) {
+      container.text(target_id);
+      container.attr("data-target-id", target_id);
+      if ( target_id in $scope.targets_promises ){
+        $.when($scope.targets_promises[target_id]).done(function(data){
+          if ( "shortTitle" in data ){
+            container.text(data.shortTitle);
+            if ( "definition" in data && data.definition.length ){
+              var icon = $("<i>");
+              icon.addClass("question-mark-icon");
+              icon.attr("title", AssemblToolsService.stripHtml(data.definition)); // idea's definition field contains HTML
+              container.append(icon);
+            }
+          } else {
+            console.log("error: idea ", target_id, "has no shortTitle property");
+          }
+        });
+      }
+    };
+
+    /**
+     * @param item_holder: jQuery selector
+     * @param item: one of widget.settings.items
+     * @param target_id: not mandatory
+     */
+    $scope.drawVoteItem = function(item_holder, item, target_id) {
+      var item_holder_d3 = d3.select(item_holder.get(0));
+      if ( !item_holder_d3 ){
+        console.log("error: could not deduce item_holder_d3 from item_holder: ", item_holder);
+        return;
+      }
+      var item_type = "type" in item ? item.type : null;
+      if ( !item_type ){
+        console.log("Error: item has no type. item was: ", item );
+        return;
+      }
+
+      var fctGetUserPreviousVote = function(criterion_id, target_id){
+        var widget = configService;
+        var vote_specifications = "vote_specifications" in widget ? widget.vote_specifications : null;
+        if ( vote_specifications && vote_specifications.length ){
+          var vote_spec = _.findWhere(vote_specifications, {"@id": criterion_id});
+          if ( vote_spec ){
+            var my_votes = "my_votes" in vote_spec ? vote_spec.my_votes : null;
+            if ( my_votes && my_votes.length ){
+              var vote = _.findWhere(my_votes, {"idea": target_id});
+              if ( vote ){
+                if ( "value" in vote ){
+                  return vote.value;
+                }
+                else {
+                  return vote;
+                }
+              }
+            }
+          }
+        }
+        return null;
+      };
+
+      if (item_type == "vertical_gauge")
+      {
+        $scope.drawVerticalGauge(item_holder_d3, item, target_id, fctGetUserPreviousVote);
+      }
+      else if (item_type == "2_axes")
+      {
+        $scope.draw2AxesVote(item_holder_d3, item, target_id, fctGetUserPreviousVote);
+      }
+      else if (item_type == "radio")
+      {
+        $scope.drawRadioVote(item_holder, item, target_id, fctGetUserPreviousVote);
+      }
     };
 
     $scope.drawMultipleTargetsUI = function() {
@@ -1516,29 +1640,6 @@ voteApp.controller('indexCtl',
             }
           }
 
-          var fctGetUserPreviousVote = function(criterion_id, target_id){
-            var widget = configService;
-            var vote_specifications = "vote_specifications" in widget ? widget.vote_specifications : null;
-            if ( vote_specifications && vote_specifications.length ){
-              var vote_spec = _.findWhere(vote_specifications, {"@id": criterion_id});
-              if ( vote_spec ){
-                var my_votes = "my_votes" in vote_spec ? vote_spec.my_votes : null;
-                if ( my_votes && my_votes.length ){
-                  var vote = _.findWhere(my_votes, {"idea": target_id});
-                  if ( vote ){
-                    if ( "value" in vote ){
-                      return vote.value;
-                    }
-                    else {
-                      return vote;
-                    }
-                  }
-                }
-              }
-            }
-            return null;
-          };
-
           if ( $scope.targets_ids && $scope.targets_ids.length ){
             $scope.targets_ids.forEach(function(target_id){
               //console.log("target currently being displayed: ", target_id);
@@ -1547,39 +1648,10 @@ voteApp.controller('indexCtl',
               
               var target_title_holder = $("<div class='inline-vote-for-a-target--title' />");
               inline_vote_holder.append(target_title_holder);
-              target_title_holder.text(target_id);
-              target_title_holder.attr("data-target-id", target_id);
-              if ( target_id in $scope.targets_promises ){
-                $.when($scope.targets_promises[target_id]).done(function(data){
-                  if ( "shortTitle" in data ){
-                    target_title_holder.text(data.shortTitle);
-                    if ( "definition" in data && data.definition.length ){
-                      var icon = $("<i>");
-                      icon.addClass("question-mark-icon");
-                      icon.attr("title", AssemblToolsService.stripHtml(data.definition)); // idea's definition field contains HTML
-                      target_title_holder.append(icon);
-                    }
-                  } else {
-                    console.log("error: idea ", target_id, "has no shortTitle property");
-                  }
-                });
-              }
+              $scope.displayTargetTitleInContainer(target_id, target_title_holder);
               var item_holder = $("<div class='inline-vote-for-a-target--item' />");
               inline_vote_holder.append(item_holder);
-              var item_holder_d3 = d3.select(item_holder.get(0));
-              if (item_type == "vertical_gauge")
-              {
-                $scope.drawVerticalGauge(item_holder_d3, item, target_id, fctGetUserPreviousVote);
-              }
-              else if (item_type == "2_axes")
-              {
-                $scope.draw2AxesVote(item_holder_d3, item, target_id, fctGetUserPreviousVote);
-              }
-              else if (item_type == "radio")
-              {
-                $scope.drawRadioVote(item_holder, item, target_id, fctGetUserPreviousVote);
-              }
-              
+              $scope.drawVoteItem(item_holder, item, target_id);
             });
           }
 

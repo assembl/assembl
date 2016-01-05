@@ -107,23 +107,27 @@ body {
   stroke: none;
 }
 
-#table_vote th {
+#table-vote th:first-child {
+    min-width: 100px;
+}
+
+#table-vote th {
     text-align: center;
     border: 1px solid #000;
 }
-#table_vote td {
+#table-vote td {
     border: 1px solid #000;
 }
 
-#vote_submit_result_holder {
+#vote-submit-result-holder {
   margin-top: 10px;
 }
 
-#vote_submit_result_holder p.success, .vote-question-result p.success {
+#vote-submit-result-holder p.success, .vote-question-result p.success, .vote-votable-idea-result p.success {
   color: #00A012;
 }
 
-#vote_submit_result_holder p.failure, .vote-question-result p.failure {
+#vote-submit-result-holder p.failure, .vote-question-result p.failure, .vote-votable-idea-result p.failure {
   color: #9E0000;
 }
 

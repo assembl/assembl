@@ -2,36 +2,3 @@ body {
     margin: 10px;
     font: 10px sans-serif;
 }
-
-.axis path,
-.axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
-}
-
-.axis.gradient path {
-    fill: none;
-    stroke: none;
-}
-
-#table_vote th {
-    text-align: center;
-    border: 1px solid #000;
-}
-
-#table_vote td {
-    border: 1px solid #000;
-}
-
-#vote_submit_result_holder {
-    margin-top: 10px;
-}
-
-#vote_submit_result_holder p.success {
-    color: #00A012;
-}
-
-#vote_submit_result_holder p.failure {
-    color: #9E0000;
-}

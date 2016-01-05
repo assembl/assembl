@@ -14,6 +14,19 @@ voteServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', fu
     return str;
   };
 
+  /**
+   * @param id: string, for example "local:Idea/351"
+   */
+  this.getCssClassFromId = function(id) {
+    var re = /^(\w+):(\w+)\/(\d+)$/;
+    if (re.test(id)) {
+      return id.replace(re, "$1-$2-$3");
+    }
+    else {
+      return id;
+    }
+  },
+
   /** (this function is copied from Assembl's context.js) This removes (rather than escape) all html tags
    * @param  {String} html
    * @return {String} The new string without html tags
