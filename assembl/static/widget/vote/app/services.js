@@ -129,6 +129,19 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
         "text": "text",
         "icon": "icon"
       }
+    },
+    {
+      "key": "showVotableIdeaDescription",
+      "label": "Show votable idea description",
+      "type": "select",
+      "description": "Different ways of displaying the description associated to each votable idea",
+      "default":"text",
+      "options": {
+        "false": "false",
+        "tooltip": "tooltip",
+        "text": "text",
+        "icon": "icon"
+      }
     }
   ];
 

@@ -178,7 +178,7 @@ voteApp.controller('indexCtl',
       }
 
 
-      // display the UI in a table of classic way depending on the settings
+      // display the UI in a table or in classic way (sections) depending on the value of the "displayStyle" setting
       if ($scope.settings.displayStyle && $scope.settings.displayStyle == "table"){
         $scope.drawUIWithTable();
       }
@@ -1508,6 +1508,7 @@ voteApp.controller('indexCtl',
      * Displays votable target title in a given container.
     */
     $scope.displayTargetTitleInContainer = function(target_id, container) {
+      var config = $scope.settings;
       container.text(target_id);
       container.attr("data-target-id", target_id);
       if ( target_id in $scope.targets_promises ){
@@ -1515,10 +1516,22 @@ voteApp.controller('indexCtl',
           if ( "shortTitle" in data ){
             container.text(data.shortTitle);
             if ( "definition" in data && data.definition.length ){
-              var icon = $("<i>");
-              icon.addClass("question-mark-icon");
-              icon.attr("title", AssemblToolsService.stripHtml(data.definition)); // idea's definition field contains HTML
-              container.append(icon);
+              var ideaDescriptionText = AssemblToolsService.stripHtml(data.definition); // idea's definition field contains HTML
+              var showVotableIdeaDescription = "showVotableIdeaDescription" in config ? config.showVotableIdeaDescription : "text";
+              if ( showVotableIdeaDescription == "text" ){
+                var el = $("<p>");
+                el.addClass("votable-idea-description");
+                el.text(ideaDescriptionText);
+                container.append(el);
+              } else if ( showVotableIdeaDescription == "icon" ){
+                var icon = $("<i>");
+                icon.addClass("question-mark-icon");
+                icon.attr("title", ideaDescriptionText);
+                container.append(icon);
+              } else if ( showVotableIdeaDescription == "tooltip" ){
+                container.attr("title", ideaDescriptionText);
+                container.css("cursor", "help");
+              }
             }
           } else {
             console.log("error: idea ", target_id, "has no shortTitle property");

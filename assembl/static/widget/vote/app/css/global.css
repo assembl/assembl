@@ -147,12 +147,17 @@ section.vote-question-item {
   margin-left: 50px; /* needed for 2_axes y tooltip to show completely :/ */
 }
 
-.inline-vote-for-a-target--title {
+.inline-vote-for-a-target--title, .votable-idea-description {
   font-style: italic;
   font-weight: bold;
   text-align: center;
   margin-bottom: 5px;
   max-width: 300px;
+}
+
+.votable-idea-description {
+  font-style: initial;
+  font-weight: initial;
 }
 
 .inline-vote-for-a-target--item {
