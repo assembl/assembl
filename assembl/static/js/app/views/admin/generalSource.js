@@ -74,7 +74,7 @@ var ReadSource = Marionette.ItemView.extend({
             }
             Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Reprocess has begun! It can take up to 15 minutes to complete.'));
         }).catch(function(e) {
-            Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext('Reimport failed'));
+            Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext('Reprocess failed'));
         });
     },
 
