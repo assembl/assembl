@@ -179,16 +179,25 @@ voteApp.controller('indexCtl',
 
 
       // display the UI in a table or in classic way (sections) depending on the value of the "displayStyle" setting
-      if ($scope.settings.displayStyle && $scope.settings.displayStyle == "table"){
+      var displayStyle = "votableIdeaThenCriterionQuestion";
+      if ( "displayStyle" in $scope.settings ){
+        displayStyle = $scope.settings.displayStyle;
+      }
+
+      if ( displayStyle == "table" ){
         $scope.drawUIWithTable();
       }
-      else {
+      else if ( displayStyle == "criterionQuestionThenVotableIdea") {
         if ( multiple_targets ){
           $scope.drawMultipleTargetsUI();
         } else {
           $scope.drawUIWithoutTable();
         }
       }
+      else { // displayStyle == "votableIdeaThenCriterionQuestion" or deprecated displayStyle == "classic"
+        $scope.drawUIAsVotableIdeaThenCriterionQuestion();
+      }
+      
 
       if ( !multiple_targets ){
         $translate('voteSubmit').then(function(translation) {
@@ -364,6 +373,7 @@ voteApp.controller('indexCtl',
       var voting_urls = "voting_urls" in widget ? widget.voting_urls : null;
       if ( !(votes_to_submit && votes_to_submit.length) ){
         $translate('errorNoVoteToSubmit').then(function(translation) {
+          vote_result_holder.empty();
           vote_result_holder.append($("<p class='failure'>" + translation + "</p>"));
         });
         return;
@@ -487,11 +497,8 @@ voteApp.controller('indexCtl',
     /**
      * Submit votes for all criteria of one votable (target) idea
      */
-    $scope.submitVotesForVotableIdea = function(votable_id){
-      console.log("submitVotesForVotableIdea(): ", votable_id);
-
-      var dom_id = "table-vote-votable-idea-" + AssemblToolsService.getCssClassFromId(votable_id);
-      var votes_container = $("#"+dom_id);
+    $scope.submitVotesForVotableIdea = function(votes_container){
+      console.log("submitVotesForVotableIdea(): ", votes_container);
       var result_holder = null;
       if ( votes_container ){
         result_holder = votes_container.find(".vote-votable-idea-submit-button-container .vote-votable-idea-result");
@@ -1451,7 +1458,7 @@ voteApp.controller('indexCtl',
           td2.append(target_title_holder);
           $scope.displayTargetTitleInContainer(target_id, target_title_holder);
           // vote button for the idea
-          // after each item, display a "Vote" button which sends the votes of this question
+          // at the bottom of each votable idea (target), display a "Vote" button which submits votes on all criteria of this votable idea
           var translationReceived = function(target_id){
             return function(translation){
               var votable_idea_holder = tr2.find("td").first();
@@ -1461,7 +1468,7 @@ voteApp.controller('indexCtl',
               vote_button_holder.append(button);
               vote_button_holder.append($("<div class='vote-votable-idea-result'>"));
               var onButtonClick = function(){
-                $scope.submitVotesForVotableIdea(target_id);
+                $scope.submitVotesForVotableIdea(tr2);
               };
               button.click(onButtonClick);
             };
@@ -1505,21 +1512,24 @@ voteApp.controller('indexCtl',
     };
 
     /**
-     * Displays votable target title in a given container.
+     * Displays target (votable idea) title in a given container.
     */
     $scope.displayTargetTitleInContainer = function(target_id, container) {
       var config = $scope.settings;
-      container.text(target_id);
       container.attr("data-target-id", target_id);
+      var el_title = $("<div>");
+      container.append(el_title);
+      el_title.addClass("votable-idea-title");
+      el_title.text(target_id);
       if ( target_id in $scope.targets_promises ){
         $.when($scope.targets_promises[target_id]).done(function(data){
           if ( "shortTitle" in data ){
-            container.text(data.shortTitle);
+            el_title.text(data.shortTitle);
             if ( "definition" in data && data.definition.length ){
               var ideaDescriptionText = AssemblToolsService.stripHtml(data.definition); // idea's definition field contains HTML
               var showVotableIdeaDescription = "showVotableIdeaDescription" in config ? config.showVotableIdeaDescription : "text";
               if ( showVotableIdeaDescription == "text" ){
-                var el = $("<p>");
+                var el = $("<div>");
                 el.addClass("votable-idea-description");
                 el.text(ideaDescriptionText);
                 container.append(el);
@@ -1594,6 +1604,103 @@ voteApp.controller('indexCtl',
       }
     };
 
+    // show question title and description
+    $scope.showQuestionTitleAndDescription = function(item, container) {
+      var container_d3 = d3.select(container.get(0));
+      var question_title = "question_title" in item ? item.question_title : null;
+      var question_description = "question_description" in item ? item.question_description : null;
+      if ( !question_title ){
+        if ( item_type == "2_axes"){
+          // TODO: display both questions and descriptions? Or nothing as each question is displayed along an axis? Or associate  question and description properties to an item instead of a criterion?
+        } else {
+          var vote_specifications = "vote_specifications" in item ? item.vote_specifications : null;
+          if ( vote_specifications && vote_specifications.length ){
+            var vote_spec = vote_specifications[0];
+            question_title = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
+            question_description = ("settings" in vote_spec && "description" in vote_spec.settings) ? vote_spec.settings.description : null;
+          }
+        }
+      }
+      if ( question_title ){
+        container_d3.append("div").classed({"question-title": true}).text(question_title);
+        if ( question_description ){
+          container_d3.append("div").classed({"question-description": true}).text(question_description);
+        }
+      }
+    };
+
+    $scope.drawUIAsVotableIdeaThenCriterionQuestion = function() {
+      console.log("drawUIAsVotableIdeaThenCriterionQuestion()");
+      var settings = $scope.settings;
+      var holder_svg = d3.select("#d3_container");
+      var holder_jquery = $("#d3_container");
+
+      // check that there are at least 1 item and at least 1 target
+      
+      if ( !("items" in settings && settings.items && settings.items.length > 0) ){
+        holder_jquery.append($("<p>Error: There is no voting item to display.</p>"));
+        return;
+      }
+      if ( !($scope.targets_ids && $scope.targets_ids.length > 0) ){
+        holder_jquery.append($("<p>Error: There is no target to vote on.</p>"));
+        return;
+      }
+
+      if ( $scope.targets_ids && $scope.targets_ids.length ){
+        $scope.targets_ids.forEach(function(target_id){
+          var votable_idea_section_holder = $("<section class='vote-votable-idea' />");
+          holder_jquery.append(votable_idea_section_holder);
+          
+          var target_title_holder = $("<div class='vote-votable-idea--title' />");
+          votable_idea_section_holder.append(target_title_holder);
+          $scope.displayTargetTitleInContainer(target_id, target_title_holder);
+
+          
+
+          if ("items" in settings) {
+            for (var i = 0; i < settings.items.length; ++i)
+            {
+              var item = settings.items[i];
+              var item_type = "type" in item ? item.type : null;
+              if ( !item_type ){
+                console.log("Error: item has no type. item was: ", item );
+                continue;
+              }
+
+              var criterion_question_holder = $("<div class='vote-criterion-question' />");
+              votable_idea_section_holder.append(criterion_question_holder);
+              $scope.showQuestionTitleAndDescription(item, criterion_question_holder);
+
+              var item_holder = $("<div class='vote-criterion-question--item' />");
+              criterion_question_holder.append(item_holder);
+              $scope.drawVoteItem(item_holder, item, target_id);
+              
+            }
+          }
+
+          // vote button for the idea
+          // at the bottom of each votable idea (target), display a "Vote" button which submits votes on all criteria of this votable idea
+          var translationReceived = function(target_id){
+            return function(translation){
+              var votable_idea_holder = votable_idea_section_holder;
+              var vote_button_holder = $("<div class='vote-votable-idea-submit-button-container'>");
+              votable_idea_holder.append(vote_button_holder);
+              var button = $('<button class="btn btn-primary btn-sm">' + translation + '</button>');
+              vote_button_holder.append(button);
+              vote_button_holder.append($("<div class='vote-votable-idea-result'>"));
+              var onButtonClick = function(){
+                $scope.submitVotesForVotableIdea(votable_idea_holder, target_id);
+              };
+              button.click(onButtonClick);
+            };
+          }
+          $translate('voteSubmitForTargetIdea').then(translationReceived(target_id));
+        });
+      }
+
+
+    };
+
     $scope.drawMultipleTargetsUI = function() {
       console.log("drawMultipleTargetsUI()");
       var settings = $scope.settings;
@@ -1627,31 +1734,7 @@ voteApp.controller('indexCtl',
           }
           question_holder.attr("id", "vote-question-item-"+i);
           holder_jquery.append(question_holder);
-          var question_holder_d3 = d3.select(question_holder.get(0));
-
-
-          // show question title and description
-
-          var question_title = "question_title" in item ? item.question_title : null;
-          var question_description = "question_description" in item ? item.question_description : null;
-          if ( !question_title ){
-            if ( item_type == "2_axes"){
-              // TODO: display both questions and descriptions? Or nothing as each question is displayed along an axis? Or associate  question and description properties to an item instead of a criterion?
-            } else {
-              var vote_specifications = "vote_specifications" in item ? item.vote_specifications : null;
-              if ( vote_specifications && vote_specifications.length ){
-                var vote_spec = vote_specifications[0];
-                question_title = ("settings" in vote_spec && "name" in vote_spec.settings) ? vote_spec.settings.name : null;
-                question_description = ("settings" in vote_spec && "description" in vote_spec.settings) ? vote_spec.settings.description : null;
-              }
-            }
-          }
-          if ( question_title ){
-            question_holder_d3.append("h2").classed({"question-title": true}).text(question_title);
-            if ( question_description ){
-              question_holder_d3.append("div").classed({"question-description": true}).text(question_description);
-            }
-          }
+          $scope.showQuestionTitleAndDescription(item, question_holder);
 
           if ( $scope.targets_ids && $scope.targets_ids.length ){
             $scope.targets_ids.forEach(function(target_id){

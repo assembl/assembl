@@ -92,11 +92,12 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "key": "displayStyle",
       "type": "select",
       "label": "Display style",
-      "default": "classic",
-      "description": "How voting items will be displayed ('classic' or 'table')",
+      "default": "votableIdeaThenCriterionQuestion",
+      "description": "Describes how the voting form will be displayed",
       "options": {
-        "classic": "classic",
-        "table": "table"
+        "votableIdeaThenCriterionQuestion": "Sections containing a votable idea, then all criterion questions",
+        "criterionQuestionThenVotableIdea": "Sections containing a criterion question, then all votable ideas",
+        "table": "Table (votable ideas as rows and criterion questions as columns)"
       }
     },
     {
