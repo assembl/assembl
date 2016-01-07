@@ -49,7 +49,7 @@ body {
   line-height: 1;
   /*font-weight: bold;*/
   padding: 12px;
-  background: #F6F6F6; /* was rgba(0, 0, 0, 0.8) */
+  background: rgba(235,235,235,0.85); /* #F1F1F1; /* was rgba(0, 0, 0, 0.8) */
   color: #fff;
   border-radius: 2px;
   max-width: 175px; /* cannot be too wide otherwise 2_axes y tooltip does not show completely :/ */
@@ -62,7 +62,7 @@ body {
   width: 100%;
   line-height: 1;
   
-  color: #F6F6F6; /* was rgba(0, 0, 0, 0.8) */
+  color: rgba(235,235,235,0.85); /* #F1F1F1; /* was rgba(0, 0, 0, 0.8) */
   content: "\25BC";
   position: absolute;
   text-align: center;
@@ -160,9 +160,16 @@ section.vote-question-item {
   font-weight: initial;
 }
 
+section.vote-votable-idea {
+  margin-top: 10px;
+}
+
+section.vote-votable-idea .vote-votable-idea-submit-button-container {
+  margin-bottom: 45px;
+}
+
 section.vote-votable-idea .vote-votable-idea--title {
-  margin-top: 30px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 section.vote-votable-idea .vote-votable-idea--title .votable-idea-title {
@@ -173,16 +180,18 @@ section.vote-votable-idea .vote-votable-idea--title .votable-idea-title {
 
 section.vote-votable-idea .vote-votable-idea--title .votable-idea-description {
   text-align: left;
+  max-width: 600px;
 }
 
-section.vote-votable-idea .question-title {
+section.vote-votable-idea .vote-criterion-question .question-title {
   font-size: 12px;
   font-weight: bold;
   text-align: left;
   max-width: 300px;
 }
 
-section.vote-votable-idea .question-description {
+section.vote-votable-idea .vote-criterion-question .question-description {
+  text-align: left;
   margin-top: 3px;
   max-width: 300px;
 }
@@ -190,7 +199,16 @@ section.vote-votable-idea .question-description {
 section.vote-votable-idea .vote-criterion-question {
   display: inline-block;
   vertical-align: top;
-  margin-right: 30px;
+  margin-right: 40px;
+}
+
+section.vote-votable-idea .vote-criterion-question .vote-criterion-question--item {
+  margin: 0 auto;
+}
+
+/* We have decided to align the items of type radio to the left, and to center horizontally the other ones */
+section.vote-votable-idea .vote-criterion-question .vote-criterion-question--item.item-type-radio > div {
+  padding-left: 0 !important;
 }
 
 

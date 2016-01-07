@@ -755,16 +755,17 @@ voteApp.controller('indexCtl',
           .offset([-10, 0])
           .html(function(d) {
             var str = "<span class='text'>";
+            var a = [];
             if ( "description" in criterion ){
-              str += criterion.description;
+              a.push(criterion.description);
             }
             if ( "descriptionMin" in criterion ){
-              str += "<br/>Min: " + criterion.descriptionMin;
+              a.push("Min: " + criterion.descriptionMin);
             }
             if ( "descriptionMax" in criterion ){
-              str += "<br/>Max: " + criterion.descriptionMax;
+              a.push("Max: " + criterion.descriptionMax);
             }
-            str += "</span>";
+            str += a.join("<br/>") + "</span>";
             return str;
           });
 
@@ -1590,6 +1591,7 @@ voteApp.controller('indexCtl',
         return null;
       };
 
+      var show_item_type = true;
       if (item_type == "vertical_gauge")
       {
         $scope.drawVerticalGauge(item_holder_d3, item, target_id, fctGetUserPreviousVote);
@@ -1601,6 +1603,12 @@ voteApp.controller('indexCtl',
       else if (item_type == "radio")
       {
         $scope.drawRadioVote(item_holder, item, target_id, fctGetUserPreviousVote);
+      } else {
+        show_item_type = false;
+      }
+
+      if ( show_item_type ){
+        item_holder.addClass("item-type-"+item_type);
       }
     };
 
@@ -1674,6 +1682,20 @@ voteApp.controller('indexCtl',
               var item_holder = $("<div class='vote-criterion-question--item' />");
               criterion_question_holder.append(item_holder);
               $scope.drawVoteItem(item_holder, item, target_id);
+
+              // We have decided to align the items of type radio to the left, and to center horizontally the other ones
+              var centerItem = function(item){
+                var svg = item.find("svg").first();
+                console.log("svg: ", svg);
+                if ( svg ){
+                  svg.css("position", "relative");
+                  console.log("item.width(): ", item.width());
+                  console.log("svg.width(): ", svg.width());
+                  var left = item.width()/2 - svg.width()/2;
+                  svg.css("left", left + "px");
+                }
+              };
+              centerItem(item_holder);
               
             }
           }

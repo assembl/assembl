@@ -22,7 +22,7 @@
     "voteSubmit":"Validez votre vote",
     "voteSubmitLoading": "Votre vote est en train d'être envoyé...",
     "voteSubmitForQuestion":"Validez votre vote pour cette question",
-    "voteSubmitForTargetIdea":"Validez vos votes à propos de cette idée",
+    "voteSubmitForTargetIdea":"Validez vos votes sur cette idée",
     "voteSubmitSuccessForCriterion":"Votre vote sur le critère \"{{criterion}}\" a été correctement pris en compte !",
     "voteSubmitSuccessForAllCriteriaOfQuestion": "Votre vote à cette question a été correctement pris en compte !",
     "voteSubmitFailureForCriterion":"Il y a eu une erreur lors de la soumission de votre vote pour le critère \"{{criterion}}\"! Il n'a pas été comptabilisé, veuillez réessayer.",
