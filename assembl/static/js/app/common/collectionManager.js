@@ -116,7 +116,7 @@ var CollectionManager = Marionette.Object.extend({
   /**
    * Collection with idea announces for the messageList.
    */
-  _allAnnounceCollectionPromise: undefined,
+  _allAnnounceCollection: undefined,
   _allAnnounceCollectionPromise: undefined,
 
   /**
