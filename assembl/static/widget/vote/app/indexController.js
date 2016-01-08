@@ -879,21 +879,30 @@ voteApp.controller('indexCtl',
         hasVoted = false;
         criterionYValue = criterionYValueDefault;
       }
-      xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
-      target_id = target_id || null;
-      var colorCursor = "colorCursor" in criteria[0] ? criteria[0].colorCursor : "#9013FE";
-      var colorCursorNoVoteYet = "#ccc";
-      var showCriterionDescription = "showCriterionDescription" in config ? config.showCriterionDescription : "icon";
 
       var padding = "padding" in item_data ? item_data.padding : null;
       if ( !padding )
         padding = "padding" in padding ? config.padding : 60;
 
+      var width = "width" in item_data ? item_data.width : null;
+      if ( !width )
+        width = "width" in config ? config.witdth : 300;
+      var height = "height" in item_data ? item_data.height : null;
+      if ( !height )
+        height = "height" in config ? config.height : 300;
+
+      xPosCenter = xPosCenter ? xPosCenter : width / 2;
+      target_id = target_id || null;
+      var colorCursor = "colorCursor" in criteria[0] ? criteria[0].colorCursor : "#9013FE";
+      var colorCursorNoVoteYet = "#ccc";
+      var showCriterionDescription = "showCriterionDescription" in config ? config.showCriterionDescription : "icon";
+      
+
       // create the graph, as a SVG in the d3 container div
       var svg = destination
         .append("svg")
-        .attr("width", item_data.width)    
-        .attr("height", item_data.height);
+        .attr("width", width)    
+        .attr("height", height);
 
       svg.append("g")
         .attr("class", "criterion")
@@ -922,12 +931,12 @@ voteApp.controller('indexCtl',
       // create X and Y scales
       var xScale = d3.scale.linear()
         .domain([criterionXValueMin, criterionXValueMax])
-        .range([padding, item_data.width - padding])
+        .range([padding, width - padding])
         .clamp(true);
 
       var yScale = d3.scale.linear()
         .domain([criterionYValueMin, criterionYValueMax])
-        .range([item_data.height - padding, padding])
+        .range([height - padding, padding])
         .clamp(true);
 
       // create X and Y axes using their scales
@@ -1019,7 +1028,7 @@ voteApp.controller('indexCtl',
       // show X axis
       g.append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(0," + (item_data.height - padding) + ")")
+        .attr("transform", "translate(0," + (height - padding) + ")")
         .call(xAxis);
 
       // show Y axis
@@ -1031,9 +1040,9 @@ voteApp.controller('indexCtl',
       // show X axis label
       var xAxisLabel = g.append("text")
         //.attr("transform", "translate(" + (width / 2) + " ," + (height + margin.bottom) + ")")
-        .attr("y", (item_data.height - padding * 0.45))
-        .attr("x", (item_data.width / 2))
-        .attr("dy", "1em")
+        .attr("y", (height))
+        .attr("x", (width / 2))
+        .attr("dy", "-1em")
         .attr("class", "axis-label")
         .text(criteria[0].name);
 
@@ -1041,8 +1050,8 @@ voteApp.controller('indexCtl',
       var yAxisLabel = g.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", (0))
-        .attr("x", (0 - item_data.height / 2))
-        .attr("dy", padding / 3 + "px")
+        .attr("x", (0 - height / 2))
+        .attr("dy", "1em")
         .attr("class", "axis-label")
         .text(criteria[1].name);
 
@@ -1080,19 +1089,19 @@ voteApp.controller('indexCtl',
             var text = document.createTextNode(criteria[i].description);
             var node = document.createElement("span");
             node.appendChild(text);
-            var descriptionWidth = item_data.width;
+            var descriptionWidth = width;
             if (i == 1)
-              descriptionWidth = item_data.height;
+              descriptionWidth = height;
 
             $(node).css("position", "absolute");
             $(node).css("width", descriptionWidth + "px");
-            $(node).css("top", (elOrigin.offset().top + (item_data.height - padding * 0.25)) + "px");
+            $(node).css("top", (elOrigin.offset().top + (height - padding * 0.25)) + "px");
             $(node).css("left", (elOrigin.offset().left + xPosCenter - descriptionWidth / 2) + "px");
             $(node).css("text-align", "center");
 
             if (i == 1)
             {
-              $(node).css("top", (elOrigin.offset().top + (item_data.height / 2)) + "px");
+              $(node).css("top", (elOrigin.offset().top + (height / 2)) + "px");
               $(node).css("left", (elOrigin.offset().left - descriptionWidth / 2) + "px");
               $(node).css("transform", "rotate(-90deg)");
             }
@@ -1148,8 +1157,8 @@ voteApp.controller('indexCtl',
                 .attr("x", (item_data.width * 0.8 - icon_size/2));
               */
               // these measures put the icon to the right of the horizontal axis, vertically centered with its line
-              icon.attr("y", (item_data.height - padding - icon_size/2))
-                .attr("x", (item_data.width - padding + 15));
+              icon.attr("y", (height - padding - icon_size/2))
+                .attr("x", (width - padding + 15));
             } else if ( i == 1 ) // criterion on y axis
             {
               /*
@@ -1171,8 +1180,8 @@ voteApp.controller('indexCtl',
         if (criteria[0].descriptionMin && criteria[0].descriptionMin.length > 0)
         {
           g.append("text")
-            .attr("y", (item_data.height - config.padding * 0.6))
-            .attr("x", (item_data.width * 0.2))
+            .attr("y", (height - padding * 0.6))
+            .attr("x", (width * 0.2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .text(criteria[0].descriptionMin);
@@ -1181,8 +1190,8 @@ voteApp.controller('indexCtl',
         if (criteria[0].descriptionMax && criteria[0].descriptionMax.length > 0)
         {
           g.append("text")
-            .attr("y", (item_data.height - config.padding * 0.6))
-            .attr("x", (item_data.width * 0.8))
+            .attr("y", (height - padding * 0.6))
+            .attr("x", (width * 0.8))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .text(criteria[0].descriptionMax);
@@ -1194,8 +1203,8 @@ voteApp.controller('indexCtl',
           g.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", (0))
-            .attr("x", (0 - item_data.height * 0.8))
-            .attr("dy", (config.padding * 0.5) + "px")
+            .attr("x", (0 - height * 0.8))
+            .attr("dy", (padding * 0.5) + "px")
             .style("text-anchor", "middle")
             .text(criteria[1].descriptionMin);
         }
@@ -1205,8 +1214,8 @@ voteApp.controller('indexCtl',
           g.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", (0))
-            .attr("x", (0 - item_data.height * 0.2))
-            .attr("dy", (config.padding * 0.5) + "px")
+            .attr("x", (0 - height * 0.2))
+            .attr("dy", (padding * 0.5) + "px")
             .style("text-anchor", "middle")
             .text(criteria[1].descriptionMax);
         }
@@ -1676,6 +1685,11 @@ voteApp.controller('indexCtl',
               }
 
               var criterion_question_holder = $("<div class='vote-criterion-question' />");
+              var item_width = "width" in item ? item.width : null;
+              if ( !item_width ){
+                item_width = "width" in settings ? settings.width : 300;
+              }
+              criterion_question_holder.css("max-width", item_width);
               votable_idea_section_holder.append(criterion_question_holder);
               $scope.showQuestionTitleAndDescription(item, criterion_question_holder);
 

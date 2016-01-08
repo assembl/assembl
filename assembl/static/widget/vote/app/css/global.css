@@ -187,13 +187,13 @@ section.vote-votable-idea .vote-criterion-question .question-title {
   font-size: 12px;
   font-weight: bold;
   text-align: left;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 section.vote-votable-idea .vote-criterion-question .question-description {
   text-align: left;
   margin-top: 3px;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 section.vote-votable-idea .vote-criterion-question {
