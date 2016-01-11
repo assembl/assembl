@@ -1,7 +1,9 @@
 Backups
 =======
 
-This is for Ubuntu, but Borg is cross-platform
+Scripts are included to user Borg Backup (en encrypting, deduplicating archiver)
+
+These instructions are for Ubuntu, but Borg is cross-platform
 
 Installing Borg Backup
 ----------------------
@@ -31,19 +33,31 @@ The script takes two environment variables:
 ``ASSEMBL_PATH``: the path to the assembl installation to backup
 ``REPOSITORY``: the address of the borg backup repository to backup to
 
+Create a script such as:
+/home/backups/backup_all_assembl.sh
+
+::
+    #!/bin/bash
+
+    export ASSEMBL_PATH=/home/www/assembl_discussions_bluenove_com
+    export REPOSITORY=www-data@coeus.ca:/media/backup/assembl_backups_bluenove_discussions.borg
+    bash ${ASSEMBL_PATH}/doc/borg_backup_script/assembl_borg_backup.sh > $ASSEMBL_PATH/var/log/assembl_backup.log 2>&1
+    
+
+
 You can the automate with cron. For example:
 
 ::
 
     sudo su - www-data
     crontab -e
-    0 3 * * * ASSEMBL_PATH=/home/www/assembl_discussions_bluenove_com REPOSITORY=www-data@coeus.ca:/media/backup/assembl_backups_bluenove.borg doc/borg_backup_script/assembl_borg_backup.sh > $ASSEMBL_PATH/var/log/assembl_backup.log
+    0 3 * * * /home/backups/backup_all_assembl.sh
 
 All backups are encrypted. Make SURE you backup the keys (normally in
 ``~/.borg/keys/``) somewhere safe, otherwise your backups will be
-uselese
+useless!
 
-To secure the user, use an extemely restricted permission in
+To secure the user, use an extemely restricted permission in ~/.ssh/authorized_keys
 
 ::
 
