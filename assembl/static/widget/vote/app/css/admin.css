@@ -20,3 +20,7 @@
 #admin li {
 	margin-bottom: 5px;
 }
+
+input.wide {
+	width: 500px;
+}

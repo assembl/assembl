@@ -61,8 +61,8 @@
                 <div ng-repeat="field in mandatory_item_fields">
                     <div ng-switch on="field.type">
                         <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
-                        <select ng-switch-when="select" ng-model="item[field.key]" ng-options="v.key as v.label for v in field.options"></select>
-                        <input ng-switch-default type="text" ng-model="item[field.key]" value="{{ field.default }}" />
+                        <select ng-switch-when="select" ng-model="item[field.key]" ng-options="v.key as v.label for v in field.options" ng-attr-class="{{ field.adminCSSClasses }}"></select>
+                        <input ng-switch-default type="text" ng-model="item[field.key]" value="{{ field.default }}" ng-attr-class="{{ field.adminCSSClasses }}" />
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@
                     <div ng-repeat="field in optional_item_fields">
                         <div ng-if="item.hasOwnProperty(field.key)">
                             <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
-                            <input type="text" ng-model="item[field.key]" />
+                            <input type="text" ng-model="item[field.key]" ng-attr-class="{{ field.adminCSSClasses }}" />
                             <button ng-click="deleteItemField(item_index, field.key);">{{'adminConfigureInstanceSetAppearanceDeleteField' | translate}}</button>
                         </div>
                     </div>

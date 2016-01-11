@@ -11,6 +11,39 @@ voteApp.controller('indexCtl',
 
       console.log("configService:");
       console.log(configService);
+
+      // check that vote has started and is not over yet
+      var now = new Date();
+      if ( "end_date" in configService ){
+        var end_date = configService.end_date;
+        if ( typeof end_date == "string" ){
+          var end_date_as_date = new Date(end_date);
+          if ( !isNaN(end_date_as_date) && end_date_as_date < now ){
+            // vote is over, redirect to the results page
+            location.href = "#/results";
+            return;
+          }
+        }
+      }
+      if ( "start_date" in configService ){
+        var start_date = configService.start_date;
+        if ( typeof start_date == "string" ){
+          var start_date_as_date = new Date(start_date);
+          if ( start_date_as_date > now ){
+            // tell the user that the vote has not started yet, and abort rendering of the vote form
+            var s = "This vote has not started yet. Please come back on " + start_date_as_date.toLocaleString();
+            /* first solution: alert
+            $("body").html(""); // hide "{{ bla }}"" things (when Angular is not finished analysing the page)
+            alert(s);
+            */
+            /* second solution: content */
+            $("body").html(s);
+            return;
+          }
+        }
+      }
+
+
       $scope.settings = configService.settings;
       console.log("settings 0:");
       console.log($scope.settings);

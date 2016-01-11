@@ -194,7 +194,8 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
     {
       "key": "question_title",
       "type": "text",
-      "label": "Question title"
+      "label": "Question title",
+      "adminCSSClasses": "wide"
     }
   ];
 
@@ -221,7 +222,8 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "key": "question_description",
       "type": "text",
       "label": "Question description",
-      "default": ""
+      "default": "",
+      "adminCSSClasses": "wide"
     },
     {
       "key": "padding",
