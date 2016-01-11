@@ -141,6 +141,7 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
         "false": "false",
         "tooltip": "tooltip",
         "text": "text",
+        "html": "html",
         "icon": "icon"
       }
     }

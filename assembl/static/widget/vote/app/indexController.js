@@ -1569,9 +1569,16 @@ voteApp.controller('indexCtl',
           if ( "shortTitle" in data ){
             el_title.text(data.shortTitle);
             if ( "definition" in data && data.definition.length ){
+              var ideaDescriptionHTML = data.definition;
               var ideaDescriptionText = AssemblToolsService.stripHtml(data.definition); // idea's definition field contains HTML
               var showVotableIdeaDescription = "showVotableIdeaDescription" in config ? config.showVotableIdeaDescription : "text";
-              if ( showVotableIdeaDescription == "text" ){
+              if ( showVotableIdeaDescription == "html" ){
+                var el = $("<div>");
+                el.addClass("votable-idea-description");
+                el.html(ideaDescriptionHTML);
+                container.append(el);
+              }
+              else if ( showVotableIdeaDescription == "text" ){
                 var el = $("<div>");
                 el.addClass("votable-idea-description");
                 el.text(ideaDescriptionText);
