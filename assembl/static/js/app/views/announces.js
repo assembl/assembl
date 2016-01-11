@@ -95,7 +95,7 @@ var AnnounceMessageView = AbstractAnnounceView.extend({
   renderCreator: function() {
     var agentAvatarView = new AgentViews.AgentAvatarView({
       model: this.creator,
-      avatarSize: 25
+      avatarSize: 50
     });
     this.authorAvatarRegion.show(agentAvatarView);
     var agentNameView = new AgentViews.AgentNameView({
