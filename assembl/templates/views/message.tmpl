@@ -106,8 +106,8 @@
   </div>
   <div class="centerSection">
     <div class="message-abstract js_messageTitle">
-      <span class="message-subject"><%= message.get('subject').bestValue() %></span>
-      <span class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body.bestValue() %></span>
+      <span class="message-subject"><%= subject.value() %></span>
+      <span class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body.value() %></span>
       <div class="messageAttachments js_regionMessageAttachments hidden"></div>
       <div class="js_regionMessageModerationOptions hidden"></div>
     </div>
@@ -135,17 +135,17 @@
       Note:  bodyFormatClass can currently have values body_format_text_plain or  body_format_text_html
   #}
   <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
-    <h4 class="message-subject js_messageTitle h4"><%= message.get('subject').bestValue() %></h4>
+    <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     <div class="message-body ellipsis <%= bodyFormatClass %> js_readMore" id="<%= messageBodyId %>">
-      <p class=""><%= body.bestValue() %></p>{# Do NOT introduce whitespace within this div #}
+      <p class=""><%= body.value() %></p>{# Do NOT introduce whitespace within this div #}
       <div class="messageAttachments js_regionMessageAttachments hidden"></div>
       <div class="js_regionMessageModerationOptions hidden"></div>
       <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}"><i class="icon-arrowdown"></i> {{ gettext('Read more') }}</a>
     </div>
   <% } else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
-    <h4 class="message-subject js_messageTitle h4"><%= message.get('subject').bestValue() %></h4>
+    <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
-    <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body.bestValue() %></div>
+    <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body.value() %></div>
     <div class="messageAttachments js_regionMessageAttachments"></div>
     <div class="js_regionMessageModerationOptions"></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>

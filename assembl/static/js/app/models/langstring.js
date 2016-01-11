@@ -23,6 +23,12 @@ var LangStringEntry = Base.Model.extend({
   isMachineTranslation: function() {
     return this.get("@language").indexOf("-x-mtfrom-") > 0;
   },
+  langstring: function() {
+    return this.collection.langstring;
+  },
+  value: function() {
+    return this.get("value");
+  }
 });
 
 /**
@@ -31,7 +37,10 @@ var LangStringEntry = Base.Model.extend({
 var LangStringEntryCollection = Base.Collection.extend({
   // Should I use the subordinate api point? I'd need the langstring url
   urlRoot: Ctx.getApiV2DiscussionUrl("LangStringEntry"),
-  model: LangStringEntry
+  model: LangStringEntry,
+  initialize: function(models, options) {
+    this.langstring = options ? options.langstring : null;
+  }
 });
 
 
@@ -43,7 +52,12 @@ var LangString = Base.Model.extend({
     rawModel.entries = new LangStringEntryCollection(rawModel.entries, {parse: true});
     return rawModel;
   },
-  
+  initialize: function(attributes, options) {
+    if (attributes && attributes.entries !== undefined) {
+      attributes.entries.langstring = this;
+    }
+  },
+
   /**
    * Defaults
    */
@@ -110,14 +124,18 @@ var LangString = Base.Model.extend({
       });
     });
     return new LangString({
-      entries: new LangStringCollection(newEntries)
+      "@id": this.id,
+      entries: new LangStringEntryCollection(newEntries)
     });
   }
 });
 
 var LangStringCollection = Base.Collection.extend({
   parse: function(rawModel, options) {
-    rawModel.entries = new LangStringEntryCollection(rawModel.entries, {parse: true});
+    rawModel.entries = new LangStringEntryCollection(rawModel.entries, {
+        parse: true,
+        langstring: this
+    });
     return rawModel;
   },
   model: LangString,
