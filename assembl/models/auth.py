@@ -1619,7 +1619,12 @@ class UserLanguagePreference(Base):
 
     # Sort the preference, from lowest to highest
     # Descending order preference, 1 - is the highest
-    preferred_order = Column(Integer, nullable=False)
+    preferred_order = Column(Integer, nullable=False)  # Source origin order
+    source_of_evidence = Column(Integer, nullable=False)
+    # explicitly defined becomes value 0, shift all numbers by 1
+    # source_of_evidence column <- shift preffered_oder to source_of_evidence column
+    # preferred_order -> the actual order of languages (explicitly defined)
+    #   sorting of languages whose source_of_evidence column is of value 0
     explicitly_defined = Column(Boolean, nullable=False, default=False,
                                 server_default='0')
 
