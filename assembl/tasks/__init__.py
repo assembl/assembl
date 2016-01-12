@@ -30,24 +30,28 @@ def configure(registry, task_name):
 _celery_queues = None
 _celery_routes = None
 
+ASSEMBL_CELERY_APPS = {
+    'imap': 'imap_celery_app',
+    'notification_dispatch': 'notif_dispatch_celery_app',
+    'notify': 'notify_celery_app',
+    'translate': 'translation_celery_app'
+}
+
 
 def get_celery_queues():
     global _celery_queues
     if not _celery_queues:
         _celery_queues = [
             Queue(q, Exchange(q), routing_key=q)
-            for q in ('notify', 'imap', 'notification_dispatch')]
+            for q in ASSEMBL_CELERY_APPS]
     return _celery_queues
 
 
 def get_celery_routes():
     global _celery_routes
-    apps = (('imap', 'imap_celery_app'),
-            ('notification_dispatch', 'notif_dispatch_celery_app'),
-            ('notify', 'notify_celery_app'))
     if not _celery_routes:
         _celery_routes = {}
-        for module, app in apps:
+        for module, app in ASSEMBL_CELERY_APPS.iteritems():
             full_module_name = "assembl.tasks."+module
             mod = __import__(full_module_name, fromlist=[app])
             app = getattr(mod, app)
@@ -121,9 +125,11 @@ def first_init():
     from .imap import imap_celery_app
     from .notification_dispatch import notif_dispatch_celery_app
     from .notify import notify_celery_app
+    from .translate import translation_celery_app
     config_celery_app(imap_celery_app)
     config_celery_app(notify_celery_app)
     config_celery_app(notif_dispatch_celery_app)
+    config_celery_app(translation_celery_app)
 
 
 # This allows us to use celery CLI monitoring
@@ -136,4 +142,5 @@ def includeme(config):
     config.include('.imap')
     config.include('.notification_dispatch')
     config.include('.notify')
+    config.include('.translate')
     config.include('.source_reader')

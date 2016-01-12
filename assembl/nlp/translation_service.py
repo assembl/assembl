@@ -3,6 +3,7 @@ import urllib2
 
 import simplejson as json
 from langdetect import detect_langs
+from langdetect.detector import LangDetectException
 
 from assembl.lib.abc import abstractclassmethod
 from assembl.models import Locale, LangStringEntry
@@ -19,8 +20,13 @@ class TranslationService(object):
         return locale_name
 
     def identify(self, text):
-        language_data = detect_langs(text.value)
-        return language_data[0].lang, {x.lang: x.prob for x in language_data}
+        try:
+            language_data = detect_langs(text.value)
+            return language_data[0].lang, {
+                x.lang: x.prob for x in language_data}
+        except LangDetectException:
+            return Locale.UNDEFINED, {
+                Locale.UNDEFINED: 0.2, Locale.NON_LINGUISTIC: 0.1}
 
     def confirm_locale(self, langstring_entry):
         lang, data = self.identify(langstring_entry)

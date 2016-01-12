@@ -101,6 +101,8 @@ def main():
             'supervisor', 'autostart_celery_notify'),
         'autostart_celery_notify_beat': config.get(
             'supervisor', 'autostart_celery_notify_beat'),
+        'autostart_celery_translate': config.get(
+            'supervisor', 'autostart_celery_translate') or 'false',
         'autostart_source_reader': config.get(
             'supervisor', 'autostart_source_reader'),
         'autostart_changes_router': config.get(

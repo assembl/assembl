@@ -343,7 +343,7 @@ class LangStringEntry(Base, TombstonableMixin):
 
     def __repr__(self):
         return '%d: [%s] "%s"' % (
-            self.id or -1, self.locale.locale, self.value)
+            self.id or -1, self.locale.locale, self.value.encode('utf-8'))
 
     @property
     def locale_name(self):

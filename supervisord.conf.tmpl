@@ -91,6 +91,18 @@ stopwaitsecs = 60
 #ever reap them, so kill them all
 killasgroup = true
 
+[program:celery_translate]
+directory = %(here)s
+command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.tasks.translate -n translate -c 2 -b %(NOTIFY_CELERY_BROKER)s -Q translate
+autostart = %(autostart_celery_translate)s
+autorestart = true
+startsecs = 2
+stopasgroup = false
+stopwaitsecs = 60
+#If the process didn't kill it's children after 60 seconds, it's unlikely to 
+#ever reap them, so kill them all
+killasgroup = true
+
 [program:changes_router]
 directory = %(here)s
 command = python assembl/tasks/changes_router.py %(CONFIG_FILE)s

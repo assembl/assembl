@@ -29,7 +29,7 @@ from .generic import Content, ContentSource
 from .auth import AgentProfile
 from ..semantic.namespaces import SIOC, ASSEMBL, QUADNAMES
 from ..lib import config
-from .langstrings import LangString
+from .langstrings import LangString, LangStringEntry
 
 
 log = logging.getLogger('assembl')
@@ -344,6 +344,9 @@ def orm_insert_listener(mapper, connection, target):
             discussion_id=target.discussion_id).count() <= 1:
         creator = target.creator or AgentProfile.get(target.creator_id)
         creator.send_to_changes(connection, UPDATE_OP, target.discussion_id)
+    # Eagerly translate the post
+    from ..tasks.translate import translate_content_task
+    translate_content_task.delay(target.id)
 
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
 

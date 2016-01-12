@@ -3,7 +3,6 @@ from celery import Celery
 from pyramid.path import DottedNameResolver
 
 from . import init_task_config, config_celery_app
-from ..models import Locale
 
 # broker specified
 translation_celery_app = Celery('celery_tasks.translate')
@@ -14,6 +13,7 @@ services = {}
 
 
 def translate_content(content, extra_languages=None):
+    from ..models import Locale
     global services
     discussion = content.discussion
     service = discussion.preferences["translation_service"]
@@ -34,9 +34,9 @@ def translate_content(content, extra_languages=None):
             entries = ls.entries_as_dict
             if undefined_id in entries:
                 service.confirm_locale(entries[undefined_id])
-            # reload entries
-            ls.db.expire(ls, ("entries_as_dict",))
-            entries = ls.entries_as_dict
+                # reload entries
+                ls.db.expire(ls, ("entries_as_dict",))
+                entries = ls.entries_as_dict
             known = {service.asKnownLocale(
                         Locale.extract_source_locale(
                             Locale.locale_collection_byid[loc_id]))
@@ -56,9 +56,11 @@ def translate_content(content, extra_languages=None):
 
 
 @translation_celery_app.task(ignore_result=True)
-def translate_content_task(content, extra_languages=None):
+def translate_content_task(content_id, extra_languages=None):
     global services
     init_task_config(translation_celery_app)
+    from ..models import Content
+    content = Content.get(content_id)
     translate_content(content, extra_languages)
 
 
