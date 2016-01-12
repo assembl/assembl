@@ -9,24 +9,31 @@ translation_celery_app = Celery('celery_tasks.translate')
 
 resolver = DottedNameResolver(__package__)
 
-services = {}
+_services = {}
+
+
+def get_service_of_discussion(discussion):
+    global _services
+    service = discussion.preferences["translation_service"]
+    if not service:
+        return
+    if service not in _services:
+        cls = resolver.resolve(service)
+        _services[service] = cls()
+    return _services[service]
 
 
 def translate_content(content, extra_languages=None):
     from ..models import Locale
     global services
     discussion = content.discussion
-    service = discussion.preferences["translation_service"]
+    service = get_service_of_discussion(discussion)
     if not service:
         return
-    if service not in services:
-        cls = resolver.resolve(service)
-        services[service] = cls()
-    service = services[service]
     languages = discussion.discussion_locales
     languages.extend(extra_languages or ())
     languages = [Locale.get_or_create(locname) for locname in languages]
-    languages = [service.asKnownLocale(loc.locale) for loc in languages]
+    base_languages = {loc: service.asKnownLocale(loc.locale) for loc in languages}
     undefined_id = Locale.UNDEFINED_LOCALEID
     changed = False
     previous_locale_id = None
@@ -52,7 +59,8 @@ def translate_content(content, extra_languages=None):
             originals = ls.non_mt_entries()
             # pick randomly. TODO: Recency order?
             original = next(iter(originals))
-            for base in languages:
+            for lang in languages:
+                base = base_languages[lang]
                 if base not in known:
                     service.translate_lse(original, lang)
                     changed = True
@@ -70,6 +78,30 @@ def translate_content_task(content_id, extra_languages=None):
     from ..models import Content
     content = Content.get(content_id)
     translate_content(content, extra_languages)
+
+
+@translation_celery_app.task(ignore_result=True)
+def translate_discussion(discussion_id, extra_languages=None):
+    extra_languages = extra_languages or []
+    from ..models import Discussion
+    discussion = Discussion.get(discussion_id)
+    service = get_service_of_discussion(discussion)
+    if not service:
+        return
+    languages = discussion.discussion_locales
+    languages.extend(extra_languages or ())
+    languages = {service.asKnownLocale(loc) for loc in languages}
+    for post in discussion.posts:
+        missing = False
+        for prop in ("body", "subject"):
+            ls = getattr(post, prop)
+            post_langs = {service.asKnownLocale(loc)
+                          for loc in ls.entries_as_dict}
+            if languages - post_langs:
+                missing = True
+                break
+        if missing:
+            translate_content(post, extra_languages)
 
 
 def includeme(config):
