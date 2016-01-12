@@ -19,17 +19,23 @@ class TranslationService(object):
     def asKnownLocale(cls, locale_name):
         return locale_name
 
-    def identify(self, text):
+    def identify(self, text, expected_locales=None):
         try:
+            expected_locales = expected_locales or {}
             language_data = detect_langs(text.value)
+            data = [(x.prob * (5 if x.lang in expected_locales else 1), x.lang)
+                    for x in language_data]
+            data.sort(reverse=True)
             return language_data[0].lang, {
-                x.lang: x.prob for x in language_data}
+                lang: prob for (prob, lang) in language_data}
         except LangDetectException:
+            if expected_locales:
+                return expected_locales[0], {l: 0.5 for l in expected_locales}
             return Locale.UNDEFINED, {
                 Locale.UNDEFINED: 0.2, Locale.NON_LINGUISTIC: 0.1}
 
-    def confirm_locale(self, langstring_entry):
-        lang, data = self.identify(langstring_entry)
+    def confirm_locale(self, langstring_entry, expected_locales=None):
+        lang, data = self.identify(langstring_entry, expected_locales)
         data["_service"] = self.__class__.__name__
         hypothesis = langstring_entry.locale
         if (hypothesis.sublocale_of(lang)

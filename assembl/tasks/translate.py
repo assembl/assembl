@@ -26,6 +26,7 @@ def translate_content(content, extra_languages=None):
     languages = discussion.discussion_locales
     languages.extend(extra_languages or ())
     languages = [Locale.get_or_create(locname) for locname in languages]
+    languages = [service.asKnownLocale(loc.locale) for loc in languages]
     undefined_id = Locale.UNDEFINED_LOCALEID
     changed = False
     for prop in ("subject", "body"):
@@ -33,7 +34,7 @@ def translate_content(content, extra_languages=None):
         if ls:
             entries = ls.entries_as_dict
             if undefined_id in entries:
-                service.confirm_locale(entries[undefined_id])
+                service.confirm_locale(entries[undefined_id], languages)
                 # reload entries
                 ls.db.expire(ls, ("entries_as_dict",))
                 entries = ls.entries_as_dict
@@ -42,10 +43,9 @@ def translate_content(content, extra_languages=None):
                             Locale.locale_collection_byid[loc_id]))
                      for loc_id in entries}
             originals = ls.non_mt_entries()
-            # pick randomly
+            # pick randomly. TODO: Recency order?
             original = next(iter(originals))
-            for lang in languages:
-                base = service.asKnownLocale(lang.locale)
+            for base in languages:
                 if base not in known:
                     service.translate_lse(original, lang)
                     changed = True

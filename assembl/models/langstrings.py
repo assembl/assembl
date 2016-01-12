@@ -9,7 +9,7 @@ from sqlalchemy.orm import (
     relationship, backref, subqueryload, joinedload, aliased)
 from sqlalchemy.orm.query import Query
 from sqlalchemy.orm.collections import attribute_mapped_collection
-from sqlalchemy.ext.hybrid import hybrid_method
+from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from virtuoso.alchemy import CoerceUnicode
 
 from . import Base, TombstonableMixin
@@ -47,9 +47,13 @@ class Locale(Base):
     def locale_is_machine_translated(locale):
         return '-x-mtfrom-' in locale
 
-    @property
+    @hybrid_property
     def is_machine_translated(self):
         return self.locale_is_machine_translated(self.locale)
+
+    @is_machine_translated.expression
+    def is_machine_translated(cls):
+        return cls.locale.like("%-x-mtfrom-%")
 
     @property
     def machine_translated_from(self):
