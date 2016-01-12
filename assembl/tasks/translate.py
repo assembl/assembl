@@ -29,15 +29,22 @@ def translate_content(content, extra_languages=None):
     languages = [service.asKnownLocale(loc.locale) for loc in languages]
     undefined_id = Locale.UNDEFINED_LOCALEID
     changed = False
-    for prop in ("subject", "body"):
+    previous_locale_id = None
+    for prop in ("body", "subject"):
         ls = getattr(content, prop)
         if ls:
             entries = ls.entries_as_dict
             if undefined_id in entries:
-                service.confirm_locale(entries[undefined_id], languages)
-                # reload entries
-                ls.db.expire(ls, ("entries_as_dict",))
-                entries = ls.entries_as_dict
+                entry = entries[undefined_id]
+                if entry.value and service.can_guess_locale(entry.value or ''):
+                    service.confirm_locale(entry, languages)
+                    # reload entries
+                    ls.db.expire(ls, ("entries_as_dict",))
+                    entries = ls.entries_as_dict
+                elif entry.value and prop == 'subject':
+                    # assume same locale as body's original
+                    # (Usually only one of those...)
+                    entry.locale_id = previous_locale_id
             known = {service.asKnownLocale(
                         Locale.extract_source_locale(
                             Locale.locale_collection_byid[loc_id]))
@@ -50,6 +57,7 @@ def translate_content(content, extra_languages=None):
                     service.translate_lse(original, lang)
                     changed = True
             ls.db.expire(ls, ["entries"])
+            previous_locale_id = original.locale_id
     if changed:
         content.send_to_changes()
         ls.db.commit()

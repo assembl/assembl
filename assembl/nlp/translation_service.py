@@ -19,15 +19,21 @@ class TranslationService(object):
     def asKnownLocale(cls, locale_name):
         return locale_name
 
+    @classmethod
+    def can_guess_locale(cls, text):
+        # empirical
+        return len(text) >= 15
+
     def identify(self, text, expected_locales=None):
+        if not text.value:
+            return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
         try:
             expected_locales = expected_locales or {}
             language_data = detect_langs(text.value)
             data = [(x.prob * (5 if x.lang in expected_locales else 1), x.lang)
                     for x in language_data]
             data.sort(reverse=True)
-            return language_data[0].lang, {
-                lang: prob for (prob, lang) in language_data}
+            return data[0][1], {lang: prob for (prob, lang) in data}
         except LangDetectException:
             if expected_locales:
                 return expected_locales[0], {l: 0.5 for l in expected_locales}

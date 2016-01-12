@@ -346,8 +346,11 @@ class LangStringEntry(Base, TombstonableMixin):
     value = Column(UnicodeText)  # not searchable inv virtuoso
 
     def __repr__(self):
+        value = self.value or ''
+        if len(value) > 50:
+            value = value[:50]+'...'
         return '%d: [%s] "%s"' % (
-            self.id or -1, self.locale.locale, self.value.encode('utf-8'))
+            self.id or -1, self.locale.locale, value.encode('utf-8'))
 
     @property
     def locale_name(self):
