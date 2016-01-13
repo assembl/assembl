@@ -1666,7 +1666,7 @@ class UserLanguagePreference(Base):
 
     @property
     def locale_code(self):
-        return self.locale
+        return self.locale.locale
 
     @locale_code.setter
     def locale_code(self, code):
@@ -1680,7 +1680,8 @@ class UserLanguagePreference(Base):
 
     @property
     def translate_to_code(self):
-        return self.translate_to_locale
+        if self.translate_to:
+            return self.translate_to_locale.locale
 
     @translate_to_code.setter
     def translate_to_code(self, code):
