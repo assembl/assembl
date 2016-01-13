@@ -42,6 +42,12 @@ body {
     white-space: nowrap;
 }
 
+button.btn[disabled], input.btn[disabled] {
+  background: #CBC8CD;
+  color: #717171;
+  cursor: not-allowed;
+}
+
 
 /* d3-tip: D3 tooltip plugin */
 
@@ -162,14 +168,22 @@ section.vote-question-item {
 
 section.vote-votable-idea {
   margin-top: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 section.vote-votable-idea .vote-votable-idea-submit-button-container {
-  margin-bottom: 45px;
+  margin-bottom: 22px;
 }
 
 section.vote-votable-idea .vote-votable-idea--title {
   margin-bottom: 30px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f2ecf8;
 }
 
 section.vote-votable-idea .vote-votable-idea--title .votable-idea-title {
