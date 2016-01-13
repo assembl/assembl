@@ -18,9 +18,11 @@ def get_localizer(request=None):
     if request:
         localizer = request.localizer
     else:
-        locale_name = get_config().get('available_languages', 'fr_CA en_CA').split()[0]
+        locale_name = get_config().get('available_languages', 'fr_CA en_CA').\
+            split()[0]
         localizer = Localizer(locale_name)
     return localizer
+
 
 def use_underscore(locale):
     # Normalize fr-ca to fr_ca
@@ -28,7 +30,8 @@ def use_underscore(locale):
         return '_'.join(locale.split('-'))
     return locale
 
-def to_posix_format(lang_code):
+
+def to_posix_string(lang_code):
     # Normalize fra-ca to fr_CA
     lang_code = use_underscore(lang_code)
     if not lang_code:
@@ -47,7 +50,8 @@ def to_posix_format(lang_code):
         if is_valid639_2(full_name):
             posix_lang = to_iso639_1(full_name)
         else:
-            return
+            raise ValueError("""The inpurt %s in not a valid code to convert
+                             to posix format % (full_name,)""")
     if country:
         return '_'.join([posix_lang.lower(), country.upper()])
     else:
@@ -56,6 +60,7 @@ def to_posix_format(lang_code):
 
 def get_language(locale):
     return (use_underscore(locale)+'_').split('_')[0]
+
 
 def get_country(locale):
     locale = use_underscore(locale)
@@ -83,12 +88,28 @@ def ensure_locale_has_country(locale):
     return locale
 
 
+def create_locale_from_posix_string(session, posix_code, commit=False):
+    # Gets or create a locale from a posix language code
+    from ..models import Locale
+    # This method be done in a transaction manager due to a flush operation
+    # instead of a commit
+    locale = session.query(Locale).filter_by(locale=posix_code).first()
+    if not locale:
+        locale = Locale(locale=posix_code)
+        session.db.add(locale)
+        if commit:
+            session.db.commit()
+        else:
+            session.db.flush()
+    return locale
+
+
 def get_preferred_languages(session, user_id):
     from ..models import UserLanguagePreference
     prefs = (session.query(UserLanguagePreference)
              .filter_by(user_id=user_id)
              .order_by(UserLanguagePreference.preferred_order))
-    return [p.lang_code for p in prefs]
+    return [p.locale.locale for p in prefs]
 
 
 def locale_negotiator(request):
@@ -126,13 +147,13 @@ def locale_negotiator(request):
                 else:
                     locale = None
     if not locale:
-        locale = to_posix_format(default_locale_negotiator(request))
+        locale = to_posix_string(default_locale_negotiator(request))
     if locale and locale not in available:
         locale_with_country = ensure_locale_has_country(locale)
         if locale_with_country:
             locale = locale_with_country
     if not locale:
-        locale = to_posix_format(request.accept_language.best_match(
+        locale = to_posix_string(request.accept_language.best_match(
             available, settings.get('pyramid.default_locale_name', 'en')))
     request._LOCALE_ = locale
     return locale

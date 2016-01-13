@@ -38,12 +38,17 @@ import transaction
 
 from ..lib import config
 from ..lib.utils import get_global_base_url
+from ..lib.locale import (
+    create_locale_from_posix_string,
+    to_posix_string
+)
 from ..lib.sqla import (
     UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord)
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
+from .langstrings import Locale
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
 from ..semantic.virtuoso_mapping import (
@@ -1598,6 +1603,7 @@ class PartnerOrganization(DiscussionBoundBase):
 
 
 class LanguagePreferenceOrder(IntEnum):
+    Explicit = 0
     Cookie = 1
     Parameter = 2
     OS_Default = 3
@@ -1606,7 +1612,7 @@ class LanguagePreferenceOrder(IntEnum):
 
 class UserLanguagePreference(Base):
     __tablename__= 'user_language_preference'
-    __table_args__ = (UniqueConstraint('user_id', 'lang_code'), )
+    __table_args__ = (UniqueConstraint('user_id', 'locale_id'), )
 
     id = Column(Integer, primary_key=True)
 
@@ -1615,38 +1621,69 @@ class UserLanguagePreference(Base):
             User.id, ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
 
-    lang_code = Column(String(), nullable=False)
+    locale_id = Column(Integer, ForeignKey('locale.id',
+                       ondelete='CASCADE', onupdate='CASCADE'),
+                       nullable=False)
+
+    locale = relationship(Locale, foreign_keys=[locale_id])
+
+    translate_to = Column(Integer, ForeignKey('locale.id',
+                          onupdate='CASCADE', ondelete='CASCADE'))
+
+    translate_to_locale = relationship(Locale, foreign_keys=[translate_to])
 
     # Sort the preference, from lowest to highest
-    # Descending order preference, 1 - is the highest
-    preferred_order = Column(Integer, nullable=False)  # Source origin order
-    source_of_evidence = Column(Integer, nullable=False)
-    # explicitly defined becomes value 0, shift all numbers by 1
-    # source_of_evidence column <- shift preffered_oder to source_of_evidence column
+    # Descending order preference, 0 - is the highest
     # preferred_order -> the actual order of languages (explicitly defined)
     #   sorting of languages whose source_of_evidence column is of value 0
-    explicitly_defined = Column(Boolean, nullable=False, default=False,
-                                server_default='0')
+    preferred_order = Column(Integer, nullable=False)  # Source origin order
+
+    # This is the actual evidence source, whose contract is defined in
+    # LanguagePreferenceOrder
+    source_of_evidence = Column(Integer, nullable=False)
 
     user = relationship('User', backref=backref(
                         'language_preference',
                         cascade='all, delete-orphan',
                         order_by=desc(preferred_order)))
 
-    def __cmp__(self,other):
+    def __cmp__(self, other):
         if not isinstance(other, UserLanguagePreference):
             raise AttributeError("Incorrect UserLanguagePreference compared")
         if self.preferred_order < other.preferred_order: return -1
         if self.preferred_order == other.preferred_order: return 0
         if self.preferred_order > other.preferred_order: return 1
 
-    @property
-    def language_code(self):
-        return self.lang_code
+    def set_priority_order(self, code):
+        # code can be ignored. This value should be updated for each user
+        # as each preferred language is committed
+        current_languages = self.db.query(UserLanguagePreference).\
+                            filter_by(user=self.user).\
+                            order_by(self.preferred_order).all()
 
-    @language_code.setter
-    def language_code(self, code):
-        posix_code = to_posix_format(code)
-        if not posix_code:
-            raise ValueError("The input %s is not a valid input" % code)
-        self.lang_code = posix_code
+        if self.source_of_evidence == 0:
+            pass
+
+    @property
+    def locale_code(self):
+        return self.locale
+
+    @locale_code.setter
+    def locale_code(self, code):
+        from assembl.lib.locale import (
+            create_locale_from_posix_string,
+            to_posix_string
+        )
+        posix = to_posix_string(code)
+        locale = create_locale_from_posix_string(self.db, posix)
+        self.locale = locale
+
+    @property
+    def translate_to_code(self):
+        return self.translate_to_locale
+
+    @translate_to_code.setter
+    def translate_to_code(self, code):
+        posix = to_posix_string(code)
+        locale = create_locale_from_posix_string(self.db, posix)
+        self.translate_to_locale = locale
