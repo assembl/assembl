@@ -208,6 +208,13 @@ class LangString(Base):
         return self.db.query(LangStringEntry).join(Locale).filter(
             Locale.locale.notlike("%-x-mtfrom-%")).subquery()
 
+    @property
+    def undefined_entry(self):
+        und_id = Locale.UNDEFINED_LOCALEID
+        for x in self.entries:
+            if x.locale_id == und_id:
+                return x
+
     @hybrid_method
     def best_lang(self, locales):
         locale_collection = Locale.locale_collection
@@ -363,6 +370,7 @@ class LangStringEntry(Base, TombstonableMixin):
         locale_id = Locale.locale_collection.get(locale_name, None)
         if locale_id:
             self.locale_id = locale_id
+            self.db.expire(self, ["locale"])
         else:
             self.locale = Locale(locale=locale_name)
 

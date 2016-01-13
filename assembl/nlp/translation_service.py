@@ -25,11 +25,11 @@ class TranslationService(object):
         return len(text) >= 15
 
     def identify(self, text, expected_locales=None):
-        if not text.value:
+        if not text:
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
         try:
             expected_locales = expected_locales or {}
-            language_data = detect_langs(text.value)
+            language_data = detect_langs(text)
             data = [(x.prob * (5 if x.lang in expected_locales else 1), x.lang)
                     for x in language_data]
             data.sort(reverse=True)
@@ -41,7 +41,7 @@ class TranslationService(object):
                 Locale.UNDEFINED: 0.2, Locale.NON_LINGUISTIC: 0.1}
 
     def confirm_locale(self, langstring_entry, expected_locales=None):
-        lang, data = self.identify(langstring_entry, expected_locales)
+        lang, data = self.identify(langstring_entry.value, expected_locales)
         data["_service"] = self.__class__.__name__
         hypothesis = langstring_entry.locale
         if (hypothesis.sublocale_of(lang)
