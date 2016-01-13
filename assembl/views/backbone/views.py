@@ -13,7 +13,11 @@ from assembl.models import Discussion
 from assembl.models.post import Post
 from assembl.models.idea import Idea
 from assembl.auth import P_READ, P_ADD_EXTRACT
-from assembl.lib.locale import to_posix_format, ensure_locale_has_country
+from assembl.lib.locale import (
+    to_posix_string,
+    create_locale_from_posix_string,
+    ensure_locale_has_country
+)
 from assembl.lib.utils import is_url_from_same_server, path_qs
 from ...models.auth import (
     UserLanguagePreference,
@@ -58,32 +62,36 @@ def get_styleguide_components():
     return views
 
 
-def process_locale(posix_locale, user_id, current_prefs, session, order):
+def process_locale(locale_code, user_id, current_prefs, session, order):
     # Current is the current locale for the given order (ex. 'en' for
     # cookie order)
     current = [x for x in current_prefs if x.preferred_order == order]
-    user = session.query(User).filter_by(id = user_id).first()
+    user = session.query(User).filter_by(id=user_id).first()
+
+    posix_string = to_posix_string(locale_code)
+    posix_string = ensure_locale_has_country(posix_string)
+    # Updated: Now Locale is a model. Converting posix_stirng into its
+    # equivalent model. Creates it if it does not exist
+    locale = create_locale_from_posix_string(session, posix_string)
 
     # Fresh slate for user, create a lang_pref
     if not current_prefs:
-        lang = UserLanguagePreference(lang_code=posix_locale,
-                                      preferred_order=order,
-                                      user=user,
-                                      explicitly_defined=False)
+        lang = UserLanguagePreference(user=user, source_of_evidence=order,
+                                      preferred_order=order, locale=locale)
         session.add(lang)
         session.flush()
 
-    elif posix_locale in {x.lang_code for x in current_prefs}:
+    elif locale in {x.locale for x in current_prefs}:
 
         if not current:
             # current priority does not exist, but locale does
             updated_pref = session.query(UserLanguagePreference).\
-                filter_by(user_id=user_id, lang_code=posix_locale).\
+                filter_by(user_id=user_id, locale=locale).\
                 first()
             updated_pref.preferred_order = order
             session.flush()
 
-        elif current[0].lang_code != posix_locale:
+        elif current[0].locale != locale:
             # Current priority exists, but is not the desired locale
             # Update current to desired local, remove current.
             pref_to_remove = session.query(UserLanguagePreference).\
@@ -94,10 +102,11 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
 
             updated_pref = \
                 session.query(UserLanguagePreference).\
-                filter_by(user_id=user_id, lang_code=posix_locale).\
+                filter_by(user_id=user_id, locale=locale).\
                 first()
 
             updated_pref.preferred_order = order
+            # updated_pref.source_of_evidence = order
             session.flush()
 
         else:
@@ -105,10 +114,10 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
 
     # non-empty list of current preferences, and current locale does not exist
     elif current_prefs and not current:
-        lang = UserLanguagePreference(lang_code=posix_locale,
+        lang = UserLanguagePreference(locale=locale,
                                       preferred_order=order,
-                                      user=user,
-                                      explicitly_defined=False)
+                                      source_of_evidence=order,
+                                      user=user)
         session.add(lang)
         session.flush()
 
@@ -117,7 +126,7 @@ def process_locale(posix_locale, user_id, current_prefs, session, order):
     else:
         pref = session.query(UserLanguagePreference).\
             filter_by(user_id=user_id, preferred_order=order).first()
-        pref.lang_code = posix_locale
+        pref.locale = locale
         session.add(pref)
         session.flush()
 
@@ -199,35 +208,30 @@ def home_view(request):
         user.is_visiting_discussion(discussion.id)
         session = Discussion.default_db
         current_prefs = session.query(UserLanguagePreference).\
-            filter_by(user_id = user_id).all()
-        user = session.query(User).filter_by(id = user_id).first()
-
-        def validate_locale(l):
-            return ensure_locale_has_country(to_posix_format(locale))
+            filter_by(user_id=user_id).all()
+        # user = session.query(User).filter_by(id=user_id).first()
 
         if '_LOCALE_' in request.cookies:
             locale = request.cookies['_LOCALE_']
-            posix_locale = validate_locale(locale)
-            process_locale(posix_locale, user_id,
+            process_locale(locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.Cookie)
 
         elif '_LOCALE_' in request.params:
             locale = request.params['_LOCALE_']
-            posix_locale = validate_locale(locale)
-            process_locale(posix_locale, user_id,
+            process_locale(locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.Parameter)
         else:
             locale = locale_negotiator(request)
-            posix_locale = validate_locale(locale)
-            process_locale(posix_locale, user_id,
+            process_locale(locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.OS_Default)
 
     context['preferences_json'] = json.dumps(dict(preferences))
 
-    response = render_to_response('../../templates/index.jinja2', context, request=request)
+    response = render_to_response('../../templates/index.jinja2', context,
+                                  request=request)
     # Prevent caching the home, especially for proper login/logout
     response.cache_control.max_age = 0
     response.cache_control.prevent_auto = True
