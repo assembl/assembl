@@ -26,6 +26,7 @@
     "voteSubmitSuccessForCriterion":"Votre vote sur le critère \"{{criterion}}\" a été correctement pris en compte !",
     "voteSubmitSuccessForAllCriteriaOfQuestion": "Votre vote à cette question a été correctement pris en compte !",
     "voteSubmitFailureForCriterion":"Il y a eu une erreur lors de la soumission de votre vote pour le critère \"{{criterion}}\"! Il n'a pas été comptabilisé, veuillez réessayer.",
+    "voteCannotSubmitBecauseMissingInput": "Veuillez renseigner les questions demandées pour pouvoir valider votre vote. Si vous avez déjà voté et ne changez pas votre vote sur ces questions, il n'y a pas besoin de valider ces votes à nouveau.",
     "voteAsUser":"Vous votez en tant que \"{{username}}\".",
     "adminConfigureInstanceDelete": "Supprimer cette instance de widget",
     "adminConfigureInstanceTitle":"Configurer une instance de widget de vote",

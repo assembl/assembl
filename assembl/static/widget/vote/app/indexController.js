@@ -270,6 +270,8 @@ voteApp.controller('indexCtl',
         var valueMin = parseFloat($(this).attr("data-criterion-value-min"));
         var valueMax = parseFloat($(this).attr("data-criterion-value-max"));
         var value = parseFloat($(this).attr("data-criterion-value"));
+        var valueHasChanged = $(this).attr("data-criterion-value-has-changed");
+        var hasAlreadyVoted = $(this).attr("data-voted");
         var criterion_id = $(this).attr("data-criterion-id");
         var target_id = $(this).attr("data-target-id");
         if ( target_id && !(target_id in $scope.myVotes) ){
@@ -281,7 +283,9 @@ voteApp.controller('indexCtl',
 
         var vote = {
           "criterion_id": criterion_id,
-          "value": valueToPost
+          "value": valueToPost,
+          "valueHasChanged": valueHasChanged,
+          "hasAlreadyVoted": hasAlreadyVoted
         };
         if ( target_id ){
           vote["target_id"] = target_id;
@@ -293,6 +297,8 @@ voteApp.controller('indexCtl',
         var criterion_id = $(this).attr("data-criterion-id");
         var target_id = $(this).attr("data-target-id");
         var value = parseInt($(this).attr("data-criterion-value"));
+        var valueHasChanged = $(this).attr("data-criterion-value-has-changed");
+        var hasAlreadyVoted = $(this).attr("data-voted");
         console.log("criterion " + criterion_id + " has value " + value);
         if (isNaN(value))
         {
@@ -305,7 +311,9 @@ voteApp.controller('indexCtl',
         var valueToPost = value; // or maybe !!value
         var vote = {
           "criterion_id": criterion_id,
-          "value": valueToPost
+          "value": valueToPost,
+          "valueHasChanged": valueHasChanged,
+          "hasAlreadyVoted": hasAlreadyVoted
         };
         if ( target_id ){
           vote["target_id"] = target_id;
@@ -550,6 +558,80 @@ voteApp.controller('indexCtl',
       console.log(criterion_value);
     };
 
+    /*
+     * Enable vote button if user has given an input on every item, or if user had already voted for these items and changes their input on at least one item
+     * @param container: DOM container which contains all vote items that have to be considered, as well as the vote button
+     * @param disable_otherwise: Optional. If true is given, and previous condition is not met, disable the vote button
+     */
+    $scope.enableVoteButtonIfUserHasVotedOnEveryItem = function(container, disable_otherwise) {
+      console.log("enableVoteButtonIfUserHasVotedOnEveryItem()");
+      if ( disable_otherwise === undefined ){
+        disable_otherwise = true;
+      }
+      var votes = $scope.computeMyVotes(container);
+      var voteButtonShouldBeActive = true;
+      if ( votes && votes.length ){
+        for ( var i = 0; i < votes.length; ++i ){
+          var vote = votes[i];
+          var valueHasChanged = "valueHasChanged" in vote ? vote.valueHasChanged : null;
+          var hasAlreadyVoted = "hasAlreadyVoted" in vote ? vote.hasAlreadyVoted : null;
+          if ( valueHasChanged == "false" ){
+            valueHasChanged = false;
+          } else if ( valueHasChanged == "true" ){
+            valueHasChanged = true;
+          }
+          if ( hasAlreadyVoted == "false" ){
+            hasAlreadyVoted = false;
+          } else if ( hasAlreadyVoted == "true" ){
+            hasAlreadyVoted = true;
+          }
+
+          vote.valueHasChanged = valueHasChanged;
+          vote.hasAlreadyVoted = hasAlreadyVoted;
+        }
+      }
+
+      var numberOfChanged = _.where(votes, {"valueHasChanged": true}).length;
+      console.log("numberOfChanged: ", numberOfChanged);
+      if ( numberOfChanged == 0 ){
+        voteButtonShouldBeActive = false;
+      } else {
+        var numberOfChangedOrVoted = _.filter(votes, function(el){
+          return ("hasAlreadyVoted" in el && el.hasAlreadyVoted === true) || ("valueHasChanged" in el && el.valueHasChanged === true);
+        });
+        console.log("numberOfChangedOrVoted: ", numberOfChangedOrVoted);
+        if ( numberOfChangedOrVoted.length < $scope.settings.items.length ){
+          voteButtonShouldBeActive = false;
+        }
+      }
+      console.log("voteButtonShouldBeActive: ", voteButtonShouldBeActive);
+
+
+      var buttonContainer = container.find(".vote-votable-idea-submit-button-container");
+      var buttonEl = null;
+      if ( !buttonContainer.length ){
+        buttonContainer = container.find(".vote-question-submit-button-container");
+      }
+      if ( buttonContainer.length ){
+        buttonEl = buttonContainer.find("button");
+      }
+
+      if ( buttonEl && buttonEl.length ){
+        if ( voteButtonShouldBeActive ){
+          buttonEl.removeAttr("disabled");
+          buttonEl.removeAttr("title");
+        }
+        else if ( disable_otherwise ) {
+          buttonEl.attr("disabled", "disabled");
+          $translate('voteCannotSubmitBecauseMissingInput').then(function(translation) {
+            buttonEl.attr("title", translation);
+          });
+        }
+      } else {
+        console.log("error: could not find vote button");
+      }
+    };
+
     // @param destination
     // The d3 container (div)
     // @param item_data
@@ -559,8 +641,8 @@ voteApp.controller('indexCtl',
     // @param getUserPreviousVoteFunction
     // function(criterion_id [, target_id]) which returns the user's previous vote for this criterion and this (or current) target
     // @param xPosCenter
-    // Position on the X coordinates of the center of the gauge, in the created SVG
-    $scope.drawVerticalGauge = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
+    // Optional. Position on the X coordinates of the center of the gauge, in the created SVG
+    $scope.drawVerticalGauge = function(destination, item_data, target_id, getUserPreviousVoteFunction, refreshVoteButtonFunction, xPosCenter) {
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
         var str = "error: this item has no 'vote_specifications' field";
@@ -604,6 +686,10 @@ voteApp.controller('indexCtl',
       var colorCursor = "colorCursor" in criterion ? criterion.colorCursor : "#9013FE";
       var colorCursorNoVoteYet = "#ccc";
       var showCriterionDescription = "showCriterionDescription" in config ? config.showCriterionDescription : "icon";
+
+      if ( !$.isFunction(refreshVoteButtonFunction) ){
+        refreshVoteButtonFunction = function(){};
+      }
       
       // create the graph, as a SVG in the d3 container div
       var svg = destination
@@ -611,15 +697,16 @@ voteApp.controller('indexCtl',
         .attr("width", width)    
         .attr("height", height);
 
-      svg.append("g")
+      var criterion_el = svg.append("g")
         .attr("class", "criterion")
         .attr("data-criterion-name", criterion.name)
         .attr("data-criterion-id", criterion_id)
         .attr("data-criterion-value", criterionValue)
+        .attr("data-criterion-value-has-changed", false)
         .attr("data-criterion-value-min", valueMin)
         .attr("data-criterion-value-max", valueMax)
         .attr("data-target-id", target_id)
-        .attr("data-voted", hasVoted)
+        .attr("data-voted", hasVoted);
       ;
 
       // create vertical scale
@@ -640,7 +727,11 @@ voteApp.controller('indexCtl',
       {
         var v = scale.invert(y);
 
-        svg.select("g.criterion").attr("data-criterion-value", v).attr("data-voted", true);
+        svg.select("g.criterion")
+          .attr("data-criterion-value", v)
+          .attr("data-criterion-value-has-changed", true)
+          .attr("data-voted", true);
+        refreshVoteButtonFunction();
 
         svg.select("circle").attr("cy", scale(v));
       }
@@ -859,7 +950,10 @@ voteApp.controller('indexCtl',
     // function(criterion_id [, target_id]) which returns the user's previous vote for this criterion and this (or current) target
     // @param xPosCenter
     // Position on the X coordinates of the center of the gauge, in the created SVG
-    $scope.draw2AxesVote = function(destination, item_data, target_id, getUserPreviousVoteFunction, xPosCenter) {
+    $scope.draw2AxesVote = function(destination, item_data, target_id, getUserPreviousVoteFunction, refreshVoteButtonFunction, xPosCenter) {
+      if ( !$.isFunction(refreshVoteButtonFunction) ){
+        refreshVoteButtonFunction = function(){};
+      }
       var showError = function(str){
         console.log(str);
         destination.append("div").text(str);
@@ -942,6 +1036,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-name", criteria[0].name)
         .attr("data-criterion-id", criterionXId)
         .attr("data-criterion-value", criterionXValue)
+        .attr("data-criterion-value-has-changed", false)
         .attr("data-criterion-value-min", criterionXValueMin)
         .attr("data-criterion-value-max", criterionXValueMax)
         .attr("data-criterion-type", "x")
@@ -954,6 +1049,7 @@ voteApp.controller('indexCtl',
         .attr("data-criterion-name", criteria[1].name)
         .attr("data-criterion-id", criterionYId)
         .attr("data-criterion-value", criterionYValue)
+        .attr("data-criterion-value-has-changed", false)
         .attr("data-criterion-value-min", criterionYValueMin)
         .attr("data-criterion-value-max", criterionYValueMax)
         .attr("data-criterion-type", "y")
@@ -998,8 +1094,10 @@ voteApp.controller('indexCtl',
         {
           svg.select("g.criterion[data-criterion-type='x']")
             .attr("data-criterion-value", xValue)
+            .attr("data-criterion-value-has-changed", true)
             .attr("data-voted", true);
           svg.select("g.criterion[data-criterion-type='y']")
+            .attr("data-criterion-value-has-changed", true)
             .attr("data-criterion-value", yValue)
             .attr("data-voted", true);
         }
@@ -1007,6 +1105,8 @@ voteApp.controller('indexCtl',
         var circle = svg.selectAll("circle");
         circle.attr("cx", xScale(xValue));
         circle.attr("cy", yScale(yValue));
+
+        refreshVoteButtonFunction();
       }
 
       function dragmove(d) {
@@ -1287,7 +1387,11 @@ voteApp.controller('indexCtl',
     // Id of the target votable (for example: "local:Idea/228")
     // @param getUserPreviousVoteFunction
     // function(criterion_id [, target_id]) which returns the user's previous vote for this criterion and this (or current) target
-    $scope.drawRadioVote = function(destination, item_data, target_id, getUserPreviousVoteFunction) {
+    $scope.drawRadioVote = function(destination, item_data, target_id, getUserPreviousVoteFunction, refreshVoteButtonFunction) {
+      if ( !$.isFunction(refreshVoteButtonFunction) ){
+        refreshVoteButtonFunction = function(){};
+      }
+
       var config = $scope.settings;
       if (!("vote_specifications" in item_data && item_data.vote_specifications.length > 0)) {
         var str = "error: item has no 'vote_specifications' field";
@@ -1307,6 +1411,7 @@ voteApp.controller('indexCtl',
       target_id = target_id || null;
 
       var criterionValue = null;
+      var hasVoted = true;
       if ( getUserPreviousVoteFunction ){
         var user_previous_vote = getUserPreviousVoteFunction(criterion_id, target_id);
         
@@ -1318,8 +1423,11 @@ voteApp.controller('indexCtl',
 
         criterionValue = user_previous_vote;
       }
-      if ( criterionValue === null && "valueDefault" in criterion ){
-        criterionValue = criterion.valueDefault;
+      if ( criterionValue === null ){
+        hasVoted = false;
+        if ( "valueDefault" in criterion ){
+          criterionValue = criterion.valueDefault;
+        }
       }
 
       var width = "width" in item_data ? item_data.width : null;
@@ -1336,8 +1444,10 @@ voteApp.controller('indexCtl',
       div.attr({
         'class': 'criterion',
         'data-criterion-id': criterion_id,
-        'data-criterion-name': criterion.name,
+        'data-criterion-name': "name" in criterion ? criterion.name : "",
         'data-criterion-value': null,
+        'data-criterion-value-has-changed': false,
+        'data-voted': hasVoted,
         'data-target-id': target_id
       });
       div.css('width',width);
@@ -1388,6 +1498,12 @@ voteApp.controller('indexCtl',
         }
       };
 
+      var onChange = function(){
+        updateSelectedValue();
+        div.attr('data-criterion-value-has-changed', true);
+        refreshVoteButtonFunction();
+      };
+
       if ('possibleValues' in criterion)
       {
         if (!target_id && 'name' in criterion)
@@ -1425,7 +1541,7 @@ voteApp.controller('indexCtl',
             });
             if (criterionValue === item.value)
               input.prop("checked", true);
-            input.on('change', updateSelectedValue);
+            input.on('change', onChange);
             var label = $('<label>');
             label.attr('for', radio_id);
             label.text(item.label);
@@ -1531,7 +1647,7 @@ voteApp.controller('indexCtl',
             //holder_svg = d3.select("#table-vote-item-" + i);
             //holder_jquery = $("#table-vote-item-" + i);
             holder_jquery = td2;
-            $scope.drawVoteItem(holder_jquery, item, target_id);
+            $scope.drawVoteItem(holder_jquery, item, target_id, tr2);
             tr2.append(td2);
           }
           table.append(tr2);
@@ -1540,6 +1656,7 @@ voteApp.controller('indexCtl',
 
     };
 
+    // FIXME: is the vote button created?
     $scope.drawUIWithoutTable = function() {
       console.log("drawUIWithoutTable()");
       var config = $scope.settings;
@@ -1603,9 +1720,10 @@ voteApp.controller('indexCtl',
     /**
      * @param item_holder: jQuery selector
      * @param item: one of widget.settings.items
-     * @param target_id: not mandatory
+     * @param target_id: optional
+     * @param section_holder: optional. One of the parents of item_holder, which contains all items of the current "section" of items and a "vote" button. If given, this "vote" button will be found and disabled at the beginning, and re-enabled once the user has set a value on all items, or has changed the current value on any item (if they already had all a value)
      */
-    $scope.drawVoteItem = function(item_holder, item, target_id) {
+    $scope.drawVoteItem = function(item_holder, item, target_id, section_holder, refreshVoteButtonFunction) {
       var item_holder_d3 = d3.select(item_holder.get(0));
       if ( !item_holder_d3 ){
         console.log("error: could not deduce item_holder_d3 from item_holder: ", item_holder);
@@ -1641,17 +1759,27 @@ voteApp.controller('indexCtl',
       };
 
       var show_item_type = true;
+
+      var maybeEnableVoteButton = $.isFunction(refreshVoteButtonFunction) ? refreshVoteButtonFunction : function(){
+        if ( section_holder ){
+          $scope.enableVoteButtonIfUserHasVotedOnEveryItem(section_holder);
+        }
+        else {
+          return;
+        }
+      };
+
       if (item_type == "vertical_gauge")
       {
-        $scope.drawVerticalGauge(item_holder_d3, item, target_id, fctGetUserPreviousVote);
+        $scope.drawVerticalGauge(item_holder_d3, item, target_id, fctGetUserPreviousVote, maybeEnableVoteButton);
       }
       else if (item_type == "2_axes")
       {
-        $scope.draw2AxesVote(item_holder_d3, item, target_id, fctGetUserPreviousVote);
+        $scope.draw2AxesVote(item_holder_d3, item, target_id, fctGetUserPreviousVote, maybeEnableVoteButton);
       }
       else if (item_type == "radio")
       {
-        $scope.drawRadioVote(item_holder, item, target_id, fctGetUserPreviousVote);
+        $scope.drawRadioVote(item_holder, item, target_id, fctGetUserPreviousVote, maybeEnableVoteButton);
       } else {
         show_item_type = false;
       }
@@ -1712,6 +1840,10 @@ voteApp.controller('indexCtl',
           votable_idea_section_holder.append(target_title_holder);
           $scope.displayTargetTitleInContainer(target_id, target_title_holder);
 
+
+          var refreshVoteButton = function(){
+            $scope.enableVoteButtonIfUserHasVotedOnEveryItem(votable_idea_section_holder);
+          };
           
 
           if ("items" in settings) {
@@ -1735,7 +1867,7 @@ voteApp.controller('indexCtl',
 
               var item_holder = $("<div class='vote-criterion-question--item' />");
               criterion_question_holder.append(item_holder);
-              $scope.drawVoteItem(item_holder, item, target_id);
+              $scope.drawVoteItem(item_holder, item, target_id, votable_idea_section_holder, refreshVoteButton);
 
               // We have decided to align the items of type radio to the left, and to center horizontally the other ones
               var centerItem = function(item){
@@ -1768,6 +1900,7 @@ voteApp.controller('indexCtl',
                 $scope.submitVotesForVotableIdea(votable_idea_holder, target_id);
               };
               button.click(onButtonClick);
+              refreshVoteButton();
             };
           }
           $translate('voteSubmitForTargetIdea').then(translationReceived(target_id));
@@ -1823,7 +1956,7 @@ voteApp.controller('indexCtl',
               $scope.displayTargetTitleInContainer(target_id, target_title_holder);
               var item_holder = $("<div class='inline-vote-for-a-target--item' />");
               inline_vote_holder.append(item_holder);
-              $scope.drawVoteItem(item_holder, item, target_id);
+              $scope.drawVoteItem(item_holder, item, target_id, question_holder);
             });
           }
 
