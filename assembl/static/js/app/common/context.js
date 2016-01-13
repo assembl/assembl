@@ -1391,13 +1391,28 @@ Context.prototype = {
 
   initLocale: function() {
 
-    switch (this.getLocale()){
-      case 'en':
+    switch (assembl_locale){
+      case 'en_CA':
         require('moment/locale/en-ca.js');
         break;
-      default:
+      case 'en_GB':
+        require('moment/locale/en-gb.js');
+      case 'de_AT':
+        require('moment/locale/de-at.js');
+        break;
+      case 'de':
+        require('moment/locale/de.js');
+        break;
+      case 'fr_CA':
+        require('moment/locale/fr-ca.js');
+        break;
+      case 'fr_CH':
+        require('moment/locale/fr-ch.js');
+        break;
+      case 'fr':
         require('moment/locale/fr.js');
         break;
+      // otherwise english default
     }
 
     Moment.locale(this.getLocale());
