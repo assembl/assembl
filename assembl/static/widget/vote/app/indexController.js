@@ -254,8 +254,12 @@ voteApp.controller('indexCtl',
 
     // @param container: DOM container where to find votes. For example the DOM element of one question, or of the whole page.
     // @returns An object in the form of {"target_id": "local:Idea/228", "criterion_id": "local:AbstractVoteSpecification/20", "value": 10} . The "target_id" field is optional (when there is only one pre-identified vote target).
-    $scope.computeMyVotes = function(container) {
+    $scope.computeMyVotes = function(container, alert_if_a_criterion_has_no_value) {
       // do not use .data("criterion-value") because jQuery does not seem to read the value set by d3
+
+      if ( alert_if_a_criterion_has_no_value === undefined ){
+        alert_if_a_criterion_has_no_value = true;
+      }
 
       container = container || $("#d3_container");
 
@@ -302,9 +306,11 @@ voteApp.controller('indexCtl',
         console.log("criterion " + criterion_id + " has value " + value);
         if (isNaN(value))
         {
-          $translate('errorNoValueForCriterion', {'criterion': criterion_id}).then(function(translation) {
-            alert(translation);
-          });
+          if ( alert_if_a_criterion_has_no_value ){
+            $translate('errorNoValueForCriterion', {'criterion': criterion_id}).then(function(translation) {
+              alert(translation);
+            });
+          }
           return;
         }
 
@@ -568,7 +574,7 @@ voteApp.controller('indexCtl',
       if ( disable_otherwise === undefined ){
         disable_otherwise = true;
       }
-      var votes = $scope.computeMyVotes(container);
+      var votes = $scope.computeMyVotes(container, false);
       var voteButtonShouldBeActive = true;
       if ( votes && votes.length ){
         for ( var i = 0; i < votes.length; ++i ){
