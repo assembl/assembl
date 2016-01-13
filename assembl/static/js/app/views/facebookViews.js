@@ -1162,6 +1162,7 @@ var basefbView = Marionette.LayoutView.extend({
               break;
             default:
               console.error("unknown type " + that.model.get('@type'));
+              // FIXME: need better i18n (using %s)
               var err = i18n.gettext("There was an error with creating a source of type" + that.model.get('@type'))
               $('.js_export_error_message').text(er);
           }
