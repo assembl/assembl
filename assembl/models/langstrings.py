@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     Column, ForeignKey, Integer, Boolean, String,
-    UnicodeText, UniqueConstraint, event)
+    UnicodeText, UniqueConstraint, event, inspect)
 from sqlalchemy.sql.expression import case
 from sqlalchemy.orm import (
     relationship, backref, subqueryload, joinedload, aliased)
@@ -11,6 +11,7 @@ from sqlalchemy.orm.query import Query
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from virtuoso.alchemy import CoerceUnicode
+import simplejson as json
 
 from . import Base, TombstonableMixin
 from ..lib import config
@@ -306,6 +307,15 @@ class LangString(Base):
         q = Query(LangStringEntry).order_by(c).limit(1).subquery()
         return aliased(LangStringEntry, q)
 
+    def remove_translations(self):
+        for entry in self.entries:
+            if entry.locale.is_machine_translated:
+                entry.delete()
+            else:
+                entry.forget_identification()
+        if inspect(self).persistent:
+            self.db.expire(self, ["entries", "entries_as_dict"])
+
     # TODO: the permissions should really be those of the owning object. Yikes.
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
 
@@ -327,11 +337,13 @@ class LangStringEntry(Base, TombstonableMixin):
         if "locale_id" not in kwargs and "locale" not in kwargs:
             # Create locale on demand.
             locale_code = kwargs.get("@language", "und")
+            del kwargs["@language"]
             locale_id = Locale.locale_collection.get(locale_code, None)
             if locale_id is None:
                 kwargs["locale"] = Locale(locale=locale_code)
             else:
                 kwargs["locale_id"] = locale_id
+                kwargs["locale"] = Locale.get(locale_id)
         super(LangStringEntry, self).__init__(*args, **kwargs)
 
     id = Column(Integer, primary_key=True)
@@ -370,9 +382,20 @@ class LangStringEntry(Base, TombstonableMixin):
         locale_id = Locale.locale_collection.get(locale_name, None)
         if locale_id:
             self.locale_id = locale_id
-            self.db.expire(self, ["locale"])
+            if inspect(self).persistent:
+                self.db.expire(self, ["locale"])
+            else:
+                self.locale = Locale.get(locale_id)
         else:
             self.locale = Locale(locale=locale_name)
+
+    @property
+    def locale_identification_data_json(self):
+        return json.loads(self.locale_identification_data or "{}")
+
+    @locale_identification_data_json.setter
+    def locale_identification_data_json(self, data):
+        self.locale_identification_data = json.dumps(data) if data else None
 
     def change_value(self, new_value):
         self.tombstone = datetime.utcnow()
@@ -382,6 +405,52 @@ class LangStringEntry(Base, TombstonableMixin):
             value=new_value)
         self.db.add(new_version)
         return new_version
+
+    def identify_locale(self, locale_name, data, certainty=False):
+        # A translation service proposes a data identification.
+        # the information is deemed confirmed if it fits the initial
+        # hypothesis given at LSE creation.
+        changed = False
+        if self.locale.is_machine_translated:
+            raise RuntimeError("Why identify a machine-translated locale?")
+        data = data or {}
+        original = self.locale_identification_data_json.get("original", None)
+        if original and locale_name == original:
+            if locale_name != self.locale_name:
+                self.locale_name = locale_name
+                changed = True
+            self.locale_identification_data_json = data
+            self.locale_confirmed = True
+        elif locale_name != self.locale_name:
+            if self.locale_confirmed:
+                if certainty:
+                    raise RuntimeError("Conflict of certainty")
+                # keep the old confirming data
+                return False
+            # compare data? replacing with new for now.
+            if not original and self.locale_identification_data:
+                original = Locale.UNDEFINED
+            original = original or self.locale_name
+            if original != locale_name:
+                data["original"] = original
+            self.locale_name = locale_name
+            changed = True
+            self.locale_identification_data_json = data
+            self.locale_confirmed = certainty
+        else:
+            if original and original != locale_name:
+                data['original'] = original
+            self.locale_identification_data_json = data
+            self.locale_confirmed = certainty or locale_name == original
+        return changed
+
+    def forget_identification(self):
+        if not self.locale_confirmed:
+            data = self.locale_identification_data_json
+            orig = data.get("original", None)
+            if orig and orig != self.locale_name:
+                self.locale_name = orig
+        self.locale_identification_data = None
 
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
 

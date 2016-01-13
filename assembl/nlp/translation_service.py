@@ -43,20 +43,11 @@ class TranslationService(object):
     def confirm_locale(self, langstring_entry, expected_locales=None):
         lang, data = self.identify(langstring_entry.value, expected_locales)
         data["_service"] = self.__class__.__name__
-        hypothesis = langstring_entry.locale
-        if (hypothesis.sublocale_of(lang)
-                or hypothesis.locale == Locale.UNDEFINED):
-            if hypothesis.locale == Locale.UNDEFINED:
-                langstring_entry.locale_name = lang
-                langstring_entry.db.expire(langstring_entry, ["locale"])
-            langstring_entry.locale_confirmed = True
-            locale_identification_data = json.dumps(data)
-        elif langstring_entry.locale_confirmed:
-            # confirmed by a previous service with different result?
-            # Todo: Compare thresholds of both services... if comparable.
-            pass
-        else:
-            locale_identification_data = json.dumps(data)
+        changed = langstring_entry.identify_locale(lang, data)
+        if changed:
+            langstring_entry.db.expire(langstring_entry, ["locale"])
+            langstring_entry.db.expire(langstring_entry.langstring, [
+                "entries", "entries_as_dict"])
 
     @abstractmethod
     def translate(self, text, target, source=None):
