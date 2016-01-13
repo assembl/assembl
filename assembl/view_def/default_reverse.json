@@ -30,6 +30,15 @@
         "@language": "locale_name",
         "value": true
     },
+    "UserLanguagePreference": {
+        "user_id": true,
+        "locale_id": true,
+        "locale": "locale_code",
+        "preferred_order": "&set_priority_order",
+        "source_of_evidence": true,
+        "translated_to": true,
+        "translated_to_locale": "translate_to_code"    
+    },
     "User": {
         "@extends": "AgentProfile",
         "login_failures": false,
