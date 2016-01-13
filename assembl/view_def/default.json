@@ -22,11 +22,13 @@
         "value": true
     },
     "UserLanguagePreference": {
-        "user_id": true,
-        "locale_id": true,
+        "user": true,
+        "locale": true,
+        "locale_name": "locale_code",
         "preferred_order": false,
         "source_of_evidence": true,
-        "translate_to": true
+        "translate_to": true,
+        "translate_to_name": "translate_to_code"
     },
     "AgentProfile": {
         "description": true,
