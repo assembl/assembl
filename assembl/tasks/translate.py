@@ -23,17 +23,17 @@ def get_service_of_discussion(discussion):
     return _services[service]
 
 
-def translate_content(content, extra_languages=None):
+def translate_content(content, languages=None, service=None):
     from ..models import Locale
     global services
     discussion = content.discussion
-    service = get_service_of_discussion(discussion)
+    service = service or get_service_of_discussion(discussion)
     if not service:
         return
-    languages = discussion.discussion_locales
-    languages.extend(extra_languages or ())
+    languages = languages or discussion.discussion_locales
     languages = [Locale.get_or_create(locname) for locname in languages]
-    base_languages = {loc: service.asKnownLocale(loc.locale) for loc in languages}
+    base_languages = {loc: service.asKnownLocale(loc.locale)
+                      for loc in languages}
     undefined_id = Locale.UNDEFINED_LOCALEID
     changed = False
     previous_locale_id = None
@@ -72,24 +72,23 @@ def translate_content(content, extra_languages=None):
 
 
 @translation_celery_app.task(ignore_result=True)
-def translate_content_task(content_id, extra_languages=None):
+def translate_content_task(content_id, languages=None):
     global services
     init_task_config(translation_celery_app)
     from ..models import Content
     content = Content.get(content_id)
-    translate_content(content, extra_languages)
+    translate_content(content, languages)
 
 
 @translation_celery_app.task(ignore_result=True)
-def translate_discussion(discussion_id, extra_languages=None):
-    extra_languages = extra_languages or []
+def translate_discussion(discussion_id, languages=None):
     from ..models import Discussion
     discussion = Discussion.get(discussion_id)
+    languages = languages or discussion.discussion_locales
     service = get_service_of_discussion(discussion)
     if not service:
         return
     languages = discussion.discussion_locales
-    languages.extend(extra_languages or ())
     languages = {service.asKnownLocale(loc) for loc in languages}
     for post in discussion.posts:
         missing = False
@@ -101,7 +100,7 @@ def translate_discussion(discussion_id, extra_languages=None):
                 missing = True
                 break
         if missing:
-            translate_content(post, extra_languages)
+            translate_content(post, languages, service)
 
 
 def includeme(config):
