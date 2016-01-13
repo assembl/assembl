@@ -38,6 +38,7 @@ var Types = {
   LOCALE: "Locale",
   LANGSTRING: "LangString",
   LANGSTRING_ENTRY: "LangStringEntry",
+  LANGUAGE_PREFERENCE: "UserLanguagePreference",
 
 
 

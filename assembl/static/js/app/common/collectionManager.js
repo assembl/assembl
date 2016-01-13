@@ -25,7 +25,8 @@ var Marionette = require('../shims/marionette.js'),
     Social = require('../models/social.js'),
     Account = require('../models/accounts.js'),
     Socket = require('../utils/socket.js'),
-    DiscussionSources = require('../models/sources.js');
+    DiscussionSources = require('../models/sources.js'),
+    LanguagePreference = require('../models/languagePreference.js');
 
 /**
  * @class CollectionManager A singleton to manage lazy loading of server
@@ -178,6 +179,13 @@ var CollectionManager = Marionette.Object.extend({
    */
   _allWidgets: undefined,
   _allWidgetsPromise: undefined,
+
+  /**
+   * Collection of all language preferences of the user
+   * @type {[UserLanguagePreference]}
+   */
+  _allUserLanguagePreferences: undefined,
+  _allUserLanguagePreferencesPromise: undefined,
 
   /**
    * Connected socket promise
@@ -818,6 +826,21 @@ var CollectionManager = Marionette.Object.extend({
           });
       return this._allUserAccountsPromise;
     },
+
+  getUserLanguagePreferencesPromise: function(){
+    if (this._allUserLanguagePreferencesPromise) {
+      return this._allUserLanguagePreferencesPromise;
+    }
+
+    this._allUserLanguagePreferences = new LanguagePreference.Collection();
+    this._allUserLanguagePreferences.collectionManager = this;
+    this._allUserLanguagePreferencesPromise = Promise.resolve(this._allUserLanguagePreferences.fetch())
+      .thenReturn(this._allUserLanguagePreferences)
+      .catch(function(e){
+        Raven.captureException(e);
+      });
+    return this._allUserLanguagePreferencesPromise;
+  },
 
   getAllWidgetsPromise: function() {
       if (this._allWidgetsPromise) {

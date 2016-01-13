@@ -108,6 +108,7 @@
     <div class="message-abstract js_messageTitle">
       <span class="message-subject"><%= subject.value() %></span>
       <span class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>" xml:lang="<%= body.get('@language') %>"><%= body.value() %></span>
+      <div class="messageTranslation js_regionMessageTranslation"></div>
       <div class="messageAttachments js_regionMessageAttachments hidden"></div>
       <div class="js_regionMessageModerationOptions hidden"></div>
     </div>
