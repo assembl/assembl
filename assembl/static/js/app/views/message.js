@@ -19,6 +19,7 @@ var Marionette = require('../shims/marionette.js'),
     Types = require('../utils/types.js'),
     AttachmentViews = require('./attachments.js'),
     MessageModerationOptionsView = require('./messageModerationOptions.js'),
+    MessageTranslationView = require('./messageTranslation.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -77,6 +78,12 @@ var MessageView = Marionette.LayoutView.extend({
    * @type {Marionette view}
    */
   messageModerationOptionsView: null,
+
+  /**
+   * State maintained for the translation view
+   * @type {Object}
+   */
+  messageTranslationState: null,
 
   /**
    * @init
@@ -150,6 +157,7 @@ var MessageView = Marionette.LayoutView.extend({
       likeCounter: ".js_likeCount",
       avatar: ".js_avatarContainer",
       name: ".js_nameContainer",
+      translation: ".js_regionMessageTranslation",
       attachments: ".js_regionMessageAttachments",
       moderationOptions: ".js_regionMessageModerationOptions"
     },
@@ -157,6 +165,7 @@ var MessageView = Marionette.LayoutView.extend({
     regions: {
       avatar: "@ui.avatar",
       name: "@ui.name",
+      translationRegion: "@ui.translation",
       attachmentsRegion: "@ui.attachments",
       moderationOptionsRegion: "@ui.moderationOptions",
       messageReplyBoxRegion: "@ui.messageReplyBox"
@@ -458,6 +467,17 @@ var MessageView = Marionette.LayoutView.extend({
       } else {
         this.ui.likeCounter.hide();
       }
+
+      if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
+          this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+        //if (this.model.isMachineTranslated()){
+        //   var translationView = new translationView({messageModel: this.model});
+        //   this.regions.translationRegion.show(translationView);
+        // }
+        var translationView = new MessageTranslationView({messageModel: this.model});
+        this.regions.translationRegion.show(translationView);
+      }
+      
 
       if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
         //Only the full body view uses annotator

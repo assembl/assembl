@@ -1,12 +1,10 @@
 'use strict';
 
 var _ = require('../shims/underscore.js'),
-    Promise = require('bluebird'),
     Base = require('./base.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
-    Types = require('../utils/types.js'),
-    Permissions = require('../utils/permissions.js');
+    Types = require('../utils/types.js');
 
 /**
  * @class LangStringEntry
