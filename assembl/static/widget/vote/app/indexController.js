@@ -606,8 +606,11 @@ voteApp.controller('indexCtl',
           return ("hasAlreadyVoted" in el && el.hasAlreadyVoted === true) || ("valueHasChanged" in el && el.valueHasChanged === true);
         });
         console.log("numberOfChangedOrVoted: ", numberOfChangedOrVoted);
-        if ( numberOfChangedOrVoted.length < $scope.settings.items.length ){
-          voteButtonShouldBeActive = false;
+        var widget = configService;
+        if ( "vote_specifications" in widget && Array.isArray(widget.vote_specifications) ){
+          if ( numberOfChangedOrVoted.length < widget.vote_specifications.length ){
+            voteButtonShouldBeActive = false;
+          }
         }
       }
       console.log("voteButtonShouldBeActive: ", voteButtonShouldBeActive);
