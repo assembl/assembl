@@ -250,6 +250,7 @@ var MessageView = Marionette.LayoutView.extend({
 
   serializeData: function() {
     var bodyFormatClass,
+        that = this,
         body,
         metadata_json = this.model.get('metadata_json'), // this property needs to exist to display the inspiration source of a message (creativity widget)
         bodyFormat = this.model.get('bodyMimeType');
