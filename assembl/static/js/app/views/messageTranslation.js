@@ -32,11 +32,16 @@ var TranslationView = Marionette.LayoutView.extend({
     initialize: function(options){
         this.message = options.messageModel;
         this.showOriginalView = Marionette.ItemView.extend({
-            template: $(this.ui.showOriginal).html()
+            // @AY: Your approach did not, and I think cannot work. Let's review together. MAP.
+            template: //$(this.ui.showOriginal).html()
+            "<div class='js_translation_show_original'>" +
+            "<span class='js_trans_show_origin'>{{ gettext('View the original message') }} </span>" +
+            "<span>{{ gettext('Translated by Google Translate') }} </span></div>"
         });
 
         this.setLangPrefView = Marionette.ItemView.extend({
-            template: $(this.ui.setLangPref).html()
+            template: //$(this.ui.setLangPref).html()
+            "<div class='js_translation_question'><span>{{ gettext('Translate all message from ') }} </span><span><select><% _.each(supportedLanguages, function(lang){ %><option><%= lang %></option><% }) %></select></span><span class='js_language_of_choice_confirm'>{{ gettext('Yes') }}</span><span class='js_language_of_choice_deny'>{{ gettext('Do not translate') }} </span></div>"
         });
 
         var that = this;
@@ -66,11 +71,11 @@ var TranslationView = Marionette.LayoutView.extend({
         //Whenever a TranslationView is rendered, the message was translated.
         
         //Always show the see original
-        this.regions.original.show(this.showOriginalView);
+        this.getRegion("original").show(new this.showOriginalView());
 
         //Show the question if the user does not yet have an explicit language preference?
         //THIS IS INCOMPLETE
-        this.regions.setLangPref.show(this.setLangPrefView);
+        this.getRegion("setLangPref").show(new this.setLangPrefView());
     }
 
 });

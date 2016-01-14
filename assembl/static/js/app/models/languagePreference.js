@@ -27,7 +27,7 @@ var LanguagePreferenceModel = Base.Model.extend({
  * Language Preferences of the user; there is a privacy setting which will only show an array of user preferences that are bound to the user
  */
 var LanguagePreferenceCollection = Base.Collection.extend({
-    url: Ctx.getApiV2Url(Types.LANGUAGE_PREFERENCE),
+    url: Ctx.getApiV2DiscussionUrl("/all_users/current/language_preference"),
     model: LanguagePreferenceModel,
     
     //Comparator sorts in ascending order

@@ -475,7 +475,7 @@ var MessageView = Marionette.LayoutView.extend({
         //   this.regions.translationRegion.show(translationView);
         // }
         var translationView = new MessageTranslationView({messageModel: this.model});
-        this.regions.translationRegion.show(translationView);
+        this.getRegion("translationRegion").show(translationView);
       }
       
 

@@ -139,6 +139,7 @@
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     <div class="message-body ellipsis <%= bodyFormatClass %> js_readMore" id="<%= messageBodyId %>">
       <p class="" xml:lang="<%= body.get('@language') %>"><%= body.value() %></p>{# Do NOT introduce whitespace within this div #}
+      <div class="messageTranslation js_regionMessageTranslation"></div>
       <div class="messageAttachments js_regionMessageAttachments hidden"></div>
       <div class="js_regionMessageModerationOptions hidden"></div>
       <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}"><i class="icon-arrowdown"></i> {{ gettext('Read more') }}</a>
@@ -147,6 +148,7 @@
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
     <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>" xml:lang="<%= body.get('@language') %>"><%= body.value() %></div>
+    <div class="messageTranslation js_regionMessageTranslation"></div>
     <div class="messageAttachments js_regionMessageAttachments"></div>
     <div class="js_regionMessageModerationOptions"></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
