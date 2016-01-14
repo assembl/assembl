@@ -166,6 +166,29 @@ class LocaleName(Base):
         nullable=False)
     name = Column(CoerceUnicode)
 
+    @classmethod
+    def names_in_locale(cls, locale):
+        loc_ids = [loc.id for loc in locale.ancestry()]
+        locale_names = locale.db.query(cls).filter(
+            cls.target_locale_id.in_(loc_ids)).all()
+        by_target = defaultdict(list)
+        for ln in locale_names:
+            by_target[ln.target_locale_id].append(ln)
+        result = dict()
+        loc_ids.reverse()
+        for loc_id in loc_ids:
+            result.update({
+                Locale.locale_collection_byid[lname.locale_id]: lname.name
+                for lname in by_target[loc_id]})
+        return result
+
+    @classmethod
+    def names_in_self(cls):
+        return {
+            Locale.locale_collection_byid[lname.locale_id]: lname.name
+            for lname in cls.default_db.query(cls).filter(
+                cls.target_locale_id == cls.locale_id)}
+
     crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
 
 

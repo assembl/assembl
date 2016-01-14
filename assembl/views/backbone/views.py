@@ -12,6 +12,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
 from assembl.models.post import Post
 from assembl.models.idea import Idea
+from assembl.models.langstrings import Locale, LocaleName
 from assembl.auth import P_READ, P_ADD_EXTRACT
 from assembl.lib.locale import (
     to_posix_string,
@@ -70,7 +71,7 @@ def process_locale(locale_code, user_id, current_prefs, session, order):
 
     posix_string = to_posix_string(locale_code)
     posix_string = ensure_locale_has_country(posix_string)
-    # Updated: Now Locale is a model. Converting posix_stirng into its
+    # Updated: Now Locale is a model. Converting posix_string into its
     # equivalent model. Creates it if it does not exist
     locale = create_locale_from_posix_string(session, posix_string)
 
@@ -227,6 +228,11 @@ def home_view(request):
             process_locale(locale, user_id,
                            current_prefs, session,
                            LanguagePreferenceOrder.OS_Default)
+    else:
+        locale = request.localizer.locale_name
+
+    context['locale_names_json'] = json.dumps(
+        LocaleName.names_in_locale(Locale.get_or_create(locale)))
 
     context['preferences_json'] = json.dumps(dict(preferences))
 

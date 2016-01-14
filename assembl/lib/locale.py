@@ -50,7 +50,7 @@ def to_posix_string(lang_code):
         if is_valid639_2(full_name):
             posix_lang = to_iso639_1(full_name)
         else:
-            raise ValueError("""The inpurt %s in not a valid code to convert
+            raise ValueError("""The input %s in not a valid code to convert
                              to posix format % (full_name,)""")
     if country:
         return '_'.join([posix_lang.lower(), country.upper()])
