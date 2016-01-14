@@ -34,7 +34,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
    *   are the last child of their respective parents.
    */
   initialize: function(options) {
-
+    var that = this;
     if (_.isUndefined(options.last_sibling_chain)) {
       this.last_sibling_chain = [];
     }
@@ -55,6 +55,9 @@ var MessageFamilyView = Marionette.ItemView.extend({
     if (!_.isUndefined(this.level)) {
       this.currentLevel = this.level;
     }
+    this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
+        that.translationData = ulp.getTranslationData();
+    });
   },
 
   serializeData: function() {
@@ -190,7 +193,8 @@ var MessageFamilyView = Marionette.ItemView.extend({
 
     var filters =  [{filterDef: availableFilters.POST_IS_DESCENDENT_OR_ANCESTOR_OF_POST, value: this.model.id}],
         ModalGroup = require('./groups/modalGroup.js'),
-        modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""), this.model.get('subject').bestValue()),
+        modal_title = i18n.sprintf(i18n.gettext("Zooming on the conversation around \"%s\""),
+                                   this.model.get('subject').bestValue(this.translationData)),
         modalFactory = ModalGroup.filteredMessagePanelFactory(modal_title, filters),
         modal = modalFactory.modal,
         messageList = modalFactory.messageList;

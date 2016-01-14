@@ -15,7 +15,11 @@ var Marionette = require('../../shims/marionette.js'),
 var SynthesisItem = Marionette.ItemView.extend({
   template: '#tmpl-synthesisItemInNavigation',
   initialize: function(options) {
+    var that = this;
     this.panel = options.panel;
+    this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
+        that.translationData = ulp.getTranslationData();
+    });
   },
   events:{
     'click .js_synthesisList': 'onSelectedSynthesis'
@@ -23,7 +27,7 @@ var SynthesisItem = Marionette.ItemView.extend({
   serializeData: function() {
       return {
         id: this.model.get('published_in_post'),
-        subject: this.model.get('subject').best(),
+        subject: this.model.get('subject').best(this.translationData),
         date: Ctx.formatDate(this.model.get('creation_date'))
       };
     },

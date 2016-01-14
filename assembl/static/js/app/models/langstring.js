@@ -70,7 +70,7 @@ var LangString = Base.Model.extend({
     }
     return originals[0];
   },
-  bestOf: function(available) {
+  bestOf: function(available, langPrefs) {
     // Get the best langStringEntry among those available using user prefs.
     var that = this,
         // TODO: Replace by a method giving multiple preferences.
@@ -105,11 +105,11 @@ var LangString = Base.Model.extend({
     }
     return available[0];
   },
-  best: function() {
-    return this.bestOf(this.get("entries").models);
+  best: function(langPrefs) {
+    return this.bestOf(this.get("entries").models, langPrefs);
   },
-  bestValue: function() {
-    return this.best().get("value");
+  bestValue: function(langPrefs) {
+    return this.best(langPrefs).get("value");
   },
   originalValue: function() {
     return this.original().get("value");

@@ -31,13 +31,18 @@ var LanguagePreferenceCollection = Base.Collection.extend({
     model: LanguagePreferenceModel,
     
     //Comparator sorts in ascending order
-    comparator: 'preferred_order',
+    comparator: function(lp) {
+      return lp.get("source_of_evidence") + (lp.get("preferred_order") / 100.0);
+    },
 
     getExplicitLanguages: function(){
         return this.filter(function(entry){
             //Hackish. Should use the source_of_evidence instead
             entry.get('translate_to') !== null;
         });
+    },
+    getTranslationData: function() {
+      return this;
     }
 });
 

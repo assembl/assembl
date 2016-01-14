@@ -255,18 +255,21 @@ _.extend(FilterPostIsDescendentOfPost.prototype, {
       return i18n.gettext('Only include messages that are in the specified post reply thread.');
     },
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
-      return collectionManager.getMessageFullModelPromise(individualFilterValue).then(function(post) {
+      return Promise.join(
+            collectionManager.getMessageFullModelPromise(individualFilterValue),
+            collectionManager.getUserLanguagePreferencesPromise(),
+            function(post, ulp) {
         if (!post) {
           throw new Error('Post ' + individualFilterValue + ' not found');
         }
 
         if (post.get('@type') === "SynthesisPost") {
-          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject').bestValue());
+          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject').bestValue(ulp.getTranslationData()));
         }
         else {
-          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject').bestValue());
+          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject').bestValue(ulp.getTranslationData()));
         }
-      })
+      });
     },
     getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
@@ -294,18 +297,21 @@ _.extend(FilterPostIsDescendentOrAncestorOfPost.prototype, {
       return i18n.gettext('Only include messages that are in the specified post reply thread or ancestry.');
     },
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
-      return collectionManager.getMessageFullModelPromise(individualFilterValue).then(function(post) {
+      return Promise.join(
+            collectionManager.getMessageFullModelPromise(individualFilterValue),
+            collectionManager.getUserLanguagePreferencesPromise(),
+            function(post, ulp) {
         if (!post) {
           throw new Error('Post ' + individualFilterValue + ' not found');
         }
 
         if (post.get('@type') === "SynthesisPost") {
-          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject').bestValue());
+          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject').bestValue(ulp.getTranslationData()));
         }
         else {
-          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject').bestValue());
+          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject').bestValue(ulp.getTranslationData()));
         }
-      })
+      });
     },
     getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {

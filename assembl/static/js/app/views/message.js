@@ -132,6 +132,9 @@ var MessageView = Marionette.LayoutView.extend({
         that.render();
       }
     });
+    this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
+        that.translationData = ulp.getTranslationData();
+    });
   },
   modelEvents: {
       'replacedBy':'onReplaced',
@@ -267,8 +270,8 @@ var MessageView = Marionette.LayoutView.extend({
       body = this.moderationTemplate({
         ctx: Ctx,
         viewStyle: this.viewStyle,
-        subject: this.model.get("subject").best(),
-        body: body.best(),
+        subject: this.model.get("subject").best(that.translationData),
+        body: body.best(that.translationData),
         publication_state: this.model.get("publication_state"),
         moderation_text: this.model.get("moderation_text"),
         moderator: this.model.get("moderator"),
@@ -289,7 +292,7 @@ var MessageView = Marionette.LayoutView.extend({
         share_link_url = Ctx.appendExtraURLParams("/static/widget/share/index.html",
           [
             {'u': Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)},
-            {'t': this.model.get('subject').bestValue()},
+            {'t': this.model.get('subject').bestValue(that.translationData)},
             {'s': Ctx.getPreferences().social_sharing }
           ]
         );
@@ -306,8 +309,8 @@ var MessageView = Marionette.LayoutView.extend({
       metadata_json: metadata_json,
       creator: this.creator,
       parentId: this.model.get('parentId'),
-      subject: this.model.get("subject").best(),
-      body: body.best(),
+      subject: this.model.get("subject").best(that.translationData),
+      body: body.best(that.translationData),
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
       isHoisted: this.isHoisted,

@@ -777,12 +777,15 @@ var exportPostForm = Marionette.LayoutView.extend({
       that.render();
       that.vent.trigger('clearError');
     });
+    cm.getUserLanguagePreferencesPromise().then(function(ulp) {
+        that.translationData = ulp.getTranslationData();
+    });
   },
 
   serializeData: function() {
     return {
       exportedMessage: this.exportedMessage,
-      exportedMessageBody: this.exportedMessage.get("body").best(),
+      exportedMessageBody: this.exportedMessage.get("body").best(this.getTranslationData),
       suggestedName: this.topic,
       suggestedCaption: window.location.href,
       suggestedDescription: this.desc,

@@ -74,7 +74,7 @@ var MessageModel = Base.Model.extend({
    * @return {String} the subject, with any re: stripped
    */
   getSubjectNoRe: function() {
-      var subject = this.get('subject').bestValue();
+      var subject = this.get('subject').originalValue();
       if (subject) {
         return subject.replace(/( *)?(RE) *(:|$) */igm, "");
       }
