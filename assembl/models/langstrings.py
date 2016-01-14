@@ -44,6 +44,21 @@ class Locale(Base):
         my_parts = my_parts[:len(parts)]
         return my_parts == parts
 
+    def ancestry(self):
+        while self:
+            yield self
+            ancestor = "_".join(self.locale.split("_")[:-1])
+            if not ancestor:
+                break
+            self = self.get_or_create(ancestor)
+
+    @staticmethod
+    def common_parts(locname1, locname2):
+        loc1 = locname1.split("_")
+        loc2 = locname2.split("_")
+        return "_".join((x for (n, x) in enumerate(loc1)
+            if len(loc2) > n and loc2[n] == x))
+
     @staticmethod
     def locale_is_machine_translated(locale):
         return '-x-mtfrom-' in locale
@@ -306,6 +321,27 @@ class LangString(Base):
                  else_=current_score)
         q = Query(LangStringEntry).order_by(c).limit(1).subquery()
         return aliased(LangStringEntry, q)
+
+    def best_lang_trans(self, locale_trans_table, default_trans):
+        targets = set()
+        for entry in self.non_mt_entries():
+            for locale in entry.locale.ancestry():
+                if locale.locale in locale_trans_table:
+                    target = locale_trans_table[locale.locale]
+                    if target is None:
+                        return [entry]
+                    targets.add(target)
+                else:
+                    targets.add(default_trans)
+        candidates = []
+        for entry in self.entries:
+            for target in targets:
+                common = Locale.common_parts(target, entry.locale.base_locale)
+                if common:
+                    candidates.append((len(common), entry))
+        if candidates:
+            candidates.sort(reverse=True)
+            return [candidates[0][1]]
 
     def remove_translations(self):
         for entry in self.entries:
