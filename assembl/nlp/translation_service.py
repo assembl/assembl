@@ -7,7 +7,7 @@ from langdetect.detector import LangDetectException
 
 from assembl.lib.abc import abstractclassmethod
 from assembl.lib import config
-from assembl.models import Locale, LangStringEntry
+from assembl.models.langstrings import Locale, LangStringEntry
 
 
 class TranslationService(object):
@@ -162,7 +162,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
             cls.known_locales = [x[u'language'] for x in r[u'languages']]
 
     def identify(self, text, expected_locales=None):
-        r = self.client.translations().list(q=text).execute()
+        r = self.client.detections().list(q=text).execute()
         r = r[u"detections"][0]
         r.sort(lambda x: x[u"confidence"], reverse=True)
         return r[0][u"language"], {x[u'language']: x[u'confidence'] for x in r}
@@ -170,4 +170,4 @@ class GoogleTranslationService(DummyGoogleTranslationService):
     def translate(self, text, target, source=None):
         r = self.client.translations().list(
             q=text, target=target, source=source).execute()
-        return r[0][u'translatedText']
+        return r[u"translations"][0][u'translatedText']
