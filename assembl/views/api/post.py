@@ -23,6 +23,9 @@ from assembl.lib.parsedatetime import parse_datetime
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.util import get_permissions
+from assembl.tasks.translate import (
+    translate_content, get_service_of_discussion,
+    user_pref_as_translation_table)
 from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, Content, Idea, ViewPost, User,
@@ -215,6 +218,7 @@ def get_posts(request):
         posts = posts.filter(parent_alias.creator_id == post_replies_to)
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
+    translations = None
     if user_id != Everyone:
         # This is horrible, but the join creates complex subqueries that
         # virtuoso cannot decode properly.
@@ -238,6 +242,10 @@ def get_posts(request):
                 posts = posts.filter(ViewPost.id == None)
             elif is_unread == "false":
                 posts = posts.filter(ViewPost.id != None)
+        user = AgentProfile.get(user_id)
+        service = get_service_of_discussion(discussion)
+        if service:
+            translations = user_pref_as_translation_table(user, service)
     else:
         #If there is no user_id, all posts are always unread
         if is_unread == "false":
@@ -287,6 +295,9 @@ def get_posts(request):
         if user_id != Everyone:
             viewpost = post.id in read_posts
             likedpost = liked_posts.get(post.id, None)
+            if view_def != "id_only":
+                translate_content(
+                    post, translation_table=translations, service=service)
         no_of_posts += 1
         serializable_post = post.generic_json(
             view_def, user_id, permissions) or {}
