@@ -6,6 +6,7 @@ from langdetect import detect_langs
 from langdetect.detector import LangDetectException
 
 from assembl.lib.abc import abstractclassmethod
+from assembl.lib import config
 from assembl.models import Locale, LangStringEntry
 
 
@@ -144,10 +145,29 @@ class DummyGoogleTranslationService(TranslationService):
 
 
 class GoogleTranslationService(DummyGoogleTranslationService):
+    known_locales = None
+
     def __init__(self, apikey=None):
-        # Look it up in config
-        self.apikey = apikey
+        import apiclient.discovery
+        # Look it up in config. TODO: Admin property of discussion
+        apikey = config.get("google.server_api_key")
+        self.client = apiclient.discovery.build(
+            'translate', 'v2', developerKey=apikey)
+        self.init_known_locales(self.client)
+
+    @classmethod
+    def init_known_locales(cls, client):
+        if not cls.known_locales:
+            r = client.languages().list().execute()
+            cls.known_locales = [x[u'language'] for x in r[u'languages']]
+
+    def identify(self, text, expected_locales=None):
+        r = self.client.translations().list(q=text).execute()
+        r = r[u"detections"][0]
+        r.sort(lambda x: x[u"confidence"], reverse=True)
+        return r[0][u"language"], {x[u'language']: x[u'confidence'] for x in r}
 
     def translate(self, text, target, source=None):
-        # TODO
-        pass
+        r = self.client.translations().list(
+            q=text, target=target, source=source).execute()
+        return r[0][u'translatedText']
