@@ -2169,7 +2169,7 @@ msgstr "Beispiel: http://beispiel.org/logo.jpg"
 #: assembl/templates/views/adminPartnerEditForm.tmpl:56
 #: assembl/templates/views/adminPartnerForm.tmpl:55
 msgid "Is instigator of the discussion"
-msgstr "Ist der Initiator der Diskussion"
+msgstr "Ist Initiator der Diskussion"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:66
 msgid "Confirm"
@@ -2368,7 +2368,7 @@ msgstr "Ein Navigationsfeld auswählen:"
 
 #: assembl/templates/views/create-group.tmpl:18
 msgid "simpleView"
-msgstr "einfache Ansicht"
+msgstr "Einfache Ansicht"
 
 #: assembl/templates/views/create-group.tmpl:30
 msgid "Create a synthesis"
