@@ -1,13 +1,17 @@
 <div class='js_translation_show_original'>
-    <span class='js_trans_show_origin'>{{ gettext("View the original message") }} </span>
-    <span>{{ gettext("Translated by Google Translate") }} </span>
+    <span class='js_trans_show_origin'>{{gettext("View the original message")}} </span>
+    <span>{{gettext("Translated by Google Translate") }}</span>
 </div>
-<div class='js_translation_question'>
-    <span>{{ gettext("Translate all messages from ") }} </span>
+<div class='hidden js_translation_question'>
+    <span>Question is asked here...</span>
     <span>
         <select>
-            <% _.each(supportedLanguages, function(lang){ %>
-                <option><%= lang %></option>
+            <% _.each(supportedLanguages, function(lang, locale){ %>
+                <% if (locale === currentLanguage.locale) { %>
+                    <option value="<% locale %>" selected="selected"><%= lang %></option>
+                <% } else { %>
+                    <option value="<%= locale %>"><%= lang %></option>
+                <% }%>
             <% }) %>
         </select>
     </span>
@@ -16,5 +20,6 @@
 </div>
 <div class='hidden js_translate_all_confirm_msg'>
     <span>{{ gettext("Your preferences are saved. They can always be changed under ") }}</span>>
+
     <span class='js_load_profile_settings'>{{ gettext("your profile") }}</span>
 </div>

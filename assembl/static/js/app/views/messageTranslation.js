@@ -6,7 +6,13 @@ var Marionette = require('../shims/marionette.js'),
     _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js');
 
-var TranslationView = Marionette.LayoutView.extend({
+/**
+ * Date: Jan 14, 2016
+ * Assumption: Currently, we are NOT showing the translation view if the SUBJECT of a message and only
+ * the subject of the message is translated. Rather 'gung ho', but this is the reality. 
+ */
+
+var TranslationView = Marionette.ItemView.extend({
     template: '#tmpl-message_translation',
 
     ui: {
@@ -18,11 +24,6 @@ var TranslationView = Marionette.LayoutView.extend({
         gotoSettings: '.js_load_profile_settings',
     },
 
-    regions: {
-        original: '@ui.showOriginal',
-        setLangPref: '@ui.setLangPref'
-    },
-
     events: {
         'click @ui.showOriginal': 'showOriginal',
         'click @ui.confirmLangPref': 'updateLanguagePreference',
@@ -31,18 +32,6 @@ var TranslationView = Marionette.LayoutView.extend({
 
     initialize: function(options){
         this.message = options.messageModel;
-        this.showOriginalView = Marionette.ItemView.extend({
-            // @AY: Your approach did not, and I think cannot work. Let's review together. MAP.
-            template: //$(this.ui.showOriginal).html()
-            "<div class='js_translation_show_original'>" +
-            "<span class='js_trans_show_origin'>{{ gettext('View the original message') }} </span>" +
-            "<span>{{ gettext('Translated by Google Translate') }} </span></div>"
-        });
-
-        this.setLangPrefView = Marionette.ItemView.extend({
-            template: //$(this.ui.setLangPref).html()
-            "<div class='js_translation_question'><span>{{ gettext('Translate all message from ') }} </span><span><select><% _.each(supportedLanguages, function(lang){ %><option><%= lang %></option><% }) %></select></span><span class='js_language_of_choice_confirm'>{{ gettext('Yes') }}</span><span class='js_language_of_choice_deny'>{{ gettext('Do not translate') }} </span></div>"
-        });
 
         var that = this;
         var cm = new CollectionManager();
@@ -50,6 +39,20 @@ var TranslationView = Marionette.LayoutView.extend({
             .then(function(preferences){
                 that.languagePreferences = preferences; //Should be sorted already
             });
+
+        var localeToLangNameCache = Ctx.getJsonFromScriptTag('locale-names'),
+            origialEntryLang = this.message.get('body').original(),
+            languageName; 
+
+        originalLangName = localeToLangNameCache[origialEntryLang.getLocaleValue()];
+        if ( !(languageName) ){
+            throw new Error("The language " + originalLangName + " is not a part of the locale cache!");
+        }
+        else {
+            this.languageName = {locale: origialEntryLang.getLocaleValue(), name: originalLangName};
+            this.langCache = localeToLangNameCache;
+        }
+        console.log("Translation view initialize is called");
     },
 
     showOriginal: function(e){
@@ -57,25 +60,34 @@ var TranslationView = Marionette.LayoutView.extend({
     },
 
     updateLanguagePreference: function(e){
-        console.log('Updating the language preference of the user')
+        console.log('Updating the language preference of the user');
     },
 
     serializeData: function(){
+        console.log("Transation view serialzeData is called");
         //Currently debugging mode, this must be the list of languages available for google translate
-        return {
-            supportedLanguages: ['English', 'French', 'German', 'Farsi', 'Turkish']
+        if (this.languageName) {
+            return {
+                //translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to "), this.languageName.name),
+                supportedLanguages: this.langCache,
+                currentLanguage: this.languageName
+            } 
         }
+        else return {
+            //translationQuestion: "",
+            supportedLanguages: []
+        };
     },
 
     onRender: function(){
         //Whenever a TranslationView is rendered, the message was translated.
+        console.log("Translation view onRender is called");
+        var language = this.message.get('body').original(),
+            preferredLanguages = this.languagePreferences.getExplicitLanguages();
         
-        //Always show the see original
-        this.getRegion("original").show(new this.showOriginalView());
-
-        //Show the question if the user does not yet have an explicit language preference?
-        //THIS IS INCOMPLETE
-        this.getRegion("setLangPref").show(new this.setLangPrefView());
+        if ( ! (preferredLanguages.find( function(pl) {return pl.isLocale(language.getLocaleValue()); } ) ) ) {
+            this.$(this.ui.setLangPref).hide()
+        }
     }
 
 });

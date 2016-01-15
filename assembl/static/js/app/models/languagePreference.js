@@ -9,6 +9,7 @@ var _ = require('../shims/underscore.js'),
 var LanguagePreferenceModel = Base.Model.extend({
     urlRoot: Ctx.getApiV2Url(Types.LANGUAGE_PREFERENCE),
     //The server should also send the string of the locales.
+    //locale_name, translate_to_name
     defaults: {
         user: null,
         locale: null,
@@ -20,6 +21,10 @@ var LanguagePreferenceModel = Base.Model.extend({
     setExplicitPromise: function(language){
         this.set({"translate_to": language});
         return Promise.resolve(this.save({}));
+    },
+
+    isLocale: function(locale){
+        return this.get('locale_name') === locale ? true : false;
     }
 });
 
