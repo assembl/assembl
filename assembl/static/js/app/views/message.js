@@ -133,7 +133,8 @@ var MessageView = Marionette.LayoutView.extend({
       }
     });
     this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
-        that.translationData = ulp.getTranslationData();
+        // that.translationData = ulp.getTranslationData();
+        that.translationData = ulp;
     });
   },
   modelEvents: {
@@ -472,14 +473,16 @@ var MessageView = Marionette.LayoutView.extend({
         this.ui.likeCounter.hide();
       }
 
+      //Translation view should only be shown when the message is in full view or in preview mode. Otherwise,
+      //do not show it
+      //Also, only the body translation triggers the translation view
       if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
-        //if (this.model.isMachineTranslated()){
-        //   var translationView = new translationView({messageModel: this.model});
-        //   this.regions.translationRegion.show(translationView);
-        // }
-        var translationView = new MessageTranslationView({messageModel: this.model});
-        this.getRegion("translationRegion").show(translationView);
+        //Only show the translation view *iff* the message was translated by the backend 
+        if (this.model.get('body').best(this.translationData).isMachineTranslation()){
+          var translationView = new MessageTranslationView({messageModel: this.model});
+          this.getRegion("translationRegion").show(translationView);
+        }
       }
       
 

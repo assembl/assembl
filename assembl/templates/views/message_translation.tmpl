@@ -2,12 +2,12 @@
     <span class='js_trans_show_origin'>{{gettext("View the original message")}} </span>
     <span>{{gettext("Translated by Google Translate") }}</span>
 </div>
-<div class='hidden js_translation_question'>
-    <span>Question is asked here...</span>
+<div class='js_translation_question'>
+    <span><%= translationQuestion %></span>
     <span>
-        <select>
+        <select class='js_translate_to_language'>
             <% _.each(supportedLanguages, function(lang, locale){ %>
-                <% if (locale === currentLanguage.locale) { %>
+                <% if (locale === possibleTargetLanguage.locale) { %>
                     <option value="<% locale %>" selected="selected"><%= lang %></option>
                 <% } else { %>
                     <option value="<%= locale %>"><%= lang %></option>
