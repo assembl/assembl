@@ -7,11 +7,9 @@
     <span>
         <select class='js_translate_to_language'>
             <% _.each(supportedLanguages, function(lang, locale){ %>
-                <% if (locale === possibleTargetLanguage.locale) { %>
-                    <option value="<% locale %>" selected="selected"><%= lang %></option>
-                <% } else { %>
-                    <option value="<%= locale %>"><%= lang %></option>
-                <% }%>
+                <option value="<% locale %>"
+                <% if (locale === translatedTo.locale) { %> selected="selected" <% } %>
+                ><%= lang %></option>
             <% }) %>
         </select>
     </span>
