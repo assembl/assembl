@@ -46,10 +46,11 @@ var TranslationView = Marionette.ItemView.extend({
             .then(function(preferences){
                 var localeToLangNameCache = Ctx.getJsonFromScriptTag('locale-names'),
                     originalEntryLang = that.message.get('body').original(),
-                    bestSuggestedTranslation = that.message.get('body').best(preferences),
-                    bestSuggestedLocale = bestSuggestedLocale.getLocaleValue(),
-                    bestSuggestedName = localeToLangNameCache[bestSuggestedLocale],
-                    languageName; 
+                    bestSuggestedTranslation = that.message.get('body').best(preferences);
+
+                var bestSuggestedLocale = bestSuggestedLocale.getLocaleValue();
+                var bestSuggestedName = localeToLangNameCache[bestSuggestedLocale];
+                var languageName; 
 
                 originalLangName = localeToLangNameCache[originalEntryLang.getLocaleValue()];
                 if ( !(originalLangName) ){

@@ -29,7 +29,8 @@ var LangStringEntry = Base.Model.extend({
   },
   getLocaleValue: function(){
     return this.get('@language');
-  }
+  },
+  
 });
 
 /**
