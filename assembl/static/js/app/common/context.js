@@ -1487,7 +1487,7 @@ Context.prototype = {
         json;
 
     if (!script) {
-      console.login(this.format("Script tag #{0} doesn't exist", id));
+      console.error(this.format("Script tag #{0} doesn't exist", id));
       return {};
     }
 
@@ -1509,7 +1509,7 @@ Context.prototype = {
     var script = document.getElementById(id);
 
     if (!script) { // TODO: maybe we could create it?
-      console.login(this.format("Script tag #{0} doesn't exist", id));
+      console.error(this.format("Script tag #{0} doesn't exist", id));
       return;
     }
 
