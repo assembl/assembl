@@ -73,39 +73,83 @@ var LangString = Base.Model.extend({
     }
     return originals[0];
   },
-  bestOf: function(available, langPrefs) {
-    // Get the best langStringEntry among those available using user prefs.
-    var that = this,
-        // TODO: Replace by a method giving multiple preferences.
-        expected = [Ctx.getLocale()],
-        alternatives = [];
-    for (var i=0; i < expected.length; i++) {
-      var expectedLocale = expected[i];
-      // find locale, or wider locale.
-      var locale_parts = expectedLocale.split("_");
-      while (locale_parts.length > 0) {
-        var sublocale = locale_parts.join("_");
-        if (sublocale in expected) {
-          // We'll get at it in due time
-          continue;
-        }
-        for (var j = 0; j < available.length; j++) {
-          var existing = available[j],
-              ex_locale = existing.get("@language");
-          if (ex_locale == sublocale) {
-            return existing;
-          }
-          if (ex_locale.length > sublocale.length &&
-              ex_locale.substring(0, sublocale.length) == sublocale) {
-            alternatives.push(existing);
-          }
-        }
-        locale_parts.pop();
+  localeCommonLength: function(locale1, locale2) {
+    // how many common components?
+    // shortcut
+    if (locale1.substr(0, 2) != locale2.substr(0, 2)) {
+      return false;
+    }
+    var l1 = locale1.split("-x-mtfrom-")[0].split("_"),
+        l2 = locale2.split("-x-mtfrom-")[0].split("_"),
+        max = Math.min(l1.length, l2.length);
+    for (var i = 0; i < max; i++) {
+      if (l1[i] != l2[i]) {
+        break;
       }
     }
-    if (alternatives.length) {
-      return alternatives[0];
+    return i;
+  },
+  bestOf: function(available, langPrefs) {
+    // Get the best langStringEntry among those available using user prefs.
+    // 1. Look at available original languages: get corresponding pref.
+    // 2. Sort prefs (same order as original list.)
+    // 3. take first applicable w/o trans or whose translation is available.
+    // 4. if none, look at available translations and repeat.
+    // Logic is painful, but most of the time (single original) will be trivial in practice.
+
+    var i, entry, commonLenF, that = this;
+    
+    if (langPrefs !== undefined) {
+      for (var useTranslationsC = 0; useTranslationsC < 2; useTranslationsC++) {
+        var useTranslations = (useTranslationsC==1),
+            prefCandidates = [],
+            entryByPrefLocale = {};
+        for (var i = 0; i < available.length; i++) {
+          entry = available[i];
+          var entry_locale = entry.get("@language");
+          if (entry.isMachineTranslation() != useTranslations)
+            continue;
+          // Take pref with longest common locale string
+          commonLenF = function(pref) {
+            return that.localeCommonLength(entry_locale, pref.get("locale_name")) > 0;
+          };
+          var pref = langPrefs.max(commonLenF);
+          if (commonLenF(pref) > 0) {
+            entryByPrefLocale[pref.get("locale_name")] = entry;
+            prefCandidates.push(pref);
+          }
+        }
+        if (prefCandidates.length) {
+          prefCandidates.sort(langPrefs.comparator);
+          for (i = 0; i < prefCandidates.length; i++) {
+            var pref = prefCandidates[i];
+            var translate_to = pref.get("translate_to");
+            if (translate_to === undefined) {
+              return entryByPrefLocale[pref.get("locale_name")];
+            } else {
+              // take available with longest common locale string to translation target
+              commonLenF = function(entry) {
+                return that.localeCommonLength(entry.get("@language"), pref.get("locale_name")) > 0;
+              };
+              entry = _.max(available, commonLenF);
+              if (commonLenF(entry) > 0) {
+                return entry;
+              }
+            }
+          }
+        }
+      }
+    } else {
+      console.error("No langPref");
     }
+    // give up and give first original
+    for (i = 0; i < available.length; i++) {
+      entry = available[i];
+      if (!entry.isMachineTranslation()) {
+        return entry;
+      }
+    }
+    // or first entry
     return available[0];
   },
   best: function(langPrefs) {
