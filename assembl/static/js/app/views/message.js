@@ -125,17 +125,17 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
     this.creator = undefined;
-    this.model.getCreatorPromise().then(function(creator) {
-      if(!that.isViewDestroyed()) {
-        that.creator = creator;
-        that.template = '#tmpl-message';
-        that.render();
-      }
-    });
-    this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
-        // that.translationData = ulp.getTranslationData();
-        that.translationData = ulp;
-    });
+    Promise.join(
+        this.model.getCreatorPromise(),
+        this.model.collection.collectionManager.getUserLanguagePreferencesPromise(),
+        function(creator, ulp) {
+          if(!that.isViewDestroyed()) {
+            that.translationData = ulp.getTranslationData();
+            that.creator = creator;
+            that.template = '#tmpl-message';
+            that.render();
+          }
+      });
   },
   modelEvents: {
       'replacedBy':'onReplaced',
@@ -250,6 +250,9 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   serializeData: function() {
+    if (this.template == "#tmpl-loader") {
+        return {};
+    }
     var bodyFormatClass,
         that = this,
         body,

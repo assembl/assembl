@@ -767,22 +767,26 @@ var exportPostForm = Marionette.LayoutView.extend({
 
     var that = this;
     var cm = new CollectionManager();
-    this.exportedMessage.getCreatorPromise().then(function(creator){
-      that.messageCreator = creator;
-      return cm.getDiscussionModelPromise();
-    }).then(function(d){
-      that.topic = d.get('topic');
-      that.desc = i18n.gettext('Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation.');
-      that.template = '#tmpl-exportPostModal-fb';
-      that.render();
-      that.vent.trigger('clearError');
-    });
-    cm.getUserLanguagePreferencesPromise().then(function(ulp) {
+    Promise.join(
+      this.exportedMessage.getCreatorPromise(),
+      cm.getUserLanguagePreferencesPromise(),
+      function(creator, ulp) {
         that.translationData = ulp.getTranslationData();
-    });
+        that.messageCreator = creator;
+        return cm.getDiscussionModelPromise();
+      }).then(function(d){
+        that.topic = d.get('topic');
+        that.desc = i18n.gettext('Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation.');
+        that.template = '#tmpl-exportPostModal-fb';
+        that.render();
+        that.vent.trigger('clearError');
+      });
   },
 
   serializeData: function() {
+    if (this.template == "#tmpl-loader") {
+        return {};
+    }
     return {
       exportedMessage: this.exportedMessage,
       exportedMessageBody: this.exportedMessage.get("body").best(this.getTranslationData),

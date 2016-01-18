@@ -15,7 +15,7 @@ var Marionette = require('../shims/marionette.js'),
  * @class views.MessageFamilyView
  */
 var MessageFamilyView = Marionette.ItemView.extend({
-  template: '#tmpl-messageFamily',
+  template: '#tmpl-loader',
   /**
    * @type {String}
    */
@@ -57,6 +57,8 @@ var MessageFamilyView = Marionette.ItemView.extend({
     }
     this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
         that.translationData = ulp.getTranslationData();
+        that.template = '#tmpl-messageFamily';
+        that.render();
     });
   },
 
@@ -115,6 +117,9 @@ var MessageFamilyView = Marionette.ItemView.extend({
    * @return {MessageView}
    */
   onRender: function() {
+    if (this.template == "#tmpl-loader") {
+        return {};
+    }
     var messageView;
 
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
@@ -207,6 +212,9 @@ var MessageFamilyView = Marionette.ItemView.extend({
    * @event
    */
   onCollapsedChange: function() {
+    if (this.template == "#tmpl-loader") {
+        return;
+    }
     var collapsed = this.collapsed,
         target = this.$el,
         children = target.find(">.messagelist-children").last();

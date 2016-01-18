@@ -13,24 +13,29 @@ var Marionette = require('../../shims/marionette.js'),
     Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var SynthesisItem = Marionette.ItemView.extend({
-  template: '#tmpl-synthesisItemInNavigation',
+  template: '#tmpl-loader',
   initialize: function(options) {
     var that = this;
     this.panel = options.panel;
     this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
         that.translationData = ulp.getTranslationData();
+        that.template = '#tmpl-synthesisItemInNavigation';
+        that.render();
     });
   },
-  events:{
+  events: {
     'click .js_synthesisList': 'onSelectedSynthesis'
   },
   serializeData: function() {
-      return {
-        id: this.model.get('published_in_post'),
-        subject: this.model.get('subject').best(this.translationData),
-        date: Ctx.formatDate(this.model.get('creation_date'))
-      };
-    },
+    if (this.template == "#tmpl-loader") {
+        return {};
+    }
+    return {
+      id: this.model.get('published_in_post'),
+      subject: this.model.get('subject').best(this.translationData),
+      date: Ctx.formatDate(this.model.get('creation_date'))
+    };
+  },
 
   onSelectedSynthesis: function(e) {
     var messageId =  $(e.currentTarget).attr('data-message-id');
