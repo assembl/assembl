@@ -7,7 +7,7 @@
     <span>
         <select class='js_translate_to_language'>
             <% _.each(supportedLanguages, function(pair){ %>
-                <option value="<% pair[0] %>"
+                <option value="<%= pair[0] %>"
                 <% if (pair[0] === translatedTo.locale) { %> selected="selected" <% } %>
                 ><%= pair[1] %></option>
             <% }) %>
