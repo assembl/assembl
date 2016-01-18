@@ -32,7 +32,7 @@ var SynthesisItem = Marionette.ItemView.extend({
     }
     return {
       id: this.model.get('published_in_post'),
-      subject: this.model.get('subject').best(this.translationData),
+      subject: this.model.get('subject'),
       date: Ctx.formatDate(this.model.get('creation_date'))
     };
   },
