@@ -278,9 +278,11 @@ voteApp.controller('indexCtl',
         var hasAlreadyVoted = $(this).attr("data-voted");
         var criterion_id = $(this).attr("data-criterion-id");
         var target_id = $(this).attr("data-target-id");
+        /* TODO: what is this already?
         if ( target_id && !(target_id in $scope.myVotes) ){
           $scope.myVotes[target_id] = {};
         }
+        */
 
         //var valueToPost = (value - valueMin) / (valueMax - valueMin); // the posted value has to be a float in [0;1]
         var valueToPost = value;
@@ -288,8 +290,8 @@ voteApp.controller('indexCtl',
         var vote = {
           "criterion_id": criterion_id,
           "value": valueToPost,
-          "valueHasChanged": valueHasChanged,
-          "hasAlreadyVoted": hasAlreadyVoted
+          "valueHasChanged": valueHasChanged === true || valueHasChanged == "true",
+          "hasAlreadyVoted": hasAlreadyVoted === true || hasAlreadyVoted == "true"
         };
         if ( target_id ){
           vote["target_id"] = target_id;
@@ -318,8 +320,8 @@ voteApp.controller('indexCtl',
         var vote = {
           "criterion_id": criterion_id,
           "value": valueToPost,
-          "valueHasChanged": valueHasChanged,
-          "hasAlreadyVoted": hasAlreadyVoted
+          "valueHasChanged": valueHasChanged === true || valueHasChanged == "true",
+          "hasAlreadyVoted": hasAlreadyVoted === true || hasAlreadyVoted == "true"
         };
         if ( target_id ){
           vote["target_id"] = target_id;
@@ -402,6 +404,49 @@ voteApp.controller('indexCtl',
       return null;
     };
 
+    /**
+     * @param force_to_value: optional. if true, will ask on close. if false, will not ask on close. if parameter is not given (undefined), we will compute votes and see if one of them has been changed.
+     */
+    $scope.askConfirmationOnWindowCloseIfNecessary = function(force_to_value){
+      var shouldAsk = false;
+
+      if ( force_to_value === undefined ){
+        var myVotes = $scope.computeMyVotes($("body"), false);
+        console.log("myVotes: ", myVotes);
+        if ( myVotes && myVotes.length ){
+          var someHaveChanged = _.where(myVotes, {"valueHasChanged": true});
+          console.log("someHaveChanged: ", someHaveChanged);
+          shouldAsk = (someHaveChanged.length > 0);
+        }
+        else {
+          shouldAsk = false;
+        }
+      } else {
+        shouldAsk = force_to_value;
+      }
+
+      console.log("shouldAsk: ", shouldAsk);
+
+      if ( shouldAsk ){
+        $translate('messageOnCloseWithoutSubmit').then(function(translation) {
+          if (window.parent && window.parent.askConfirmationForModalClose){
+            window.parent.askConfirmationForModalClose(translation);
+          }
+          else {
+            window.onbeforeunload = function(){
+              return translation;
+            };
+          }
+        });
+      }
+      else {
+        window.onbeforeunload = null;
+        if (window.parent && window.parent.allowModalClose){
+          window.parent.allowModalClose();
+        }
+      }
+    };
+
     $scope.submitVote = function(votes_container, result_holder) {
       console.log("submitVote(): ", votes_container, result_holder);
       var votes_to_submit = $scope.computeMyVotes(votes_container);
@@ -433,6 +478,11 @@ voteApp.controller('indexCtl',
           vote_result_holder.empty();
           vote_result_holder.append($("<p class='success'>" + translation + "</p>"));
           // $scope.resizeIframe(); // the code of the window.parent.resizeIframe function is not good enough yet
+
+          // Set changed flag of all vote items in this container to false, so that if the user closes the window and still has some set to true, we can tell him that there are some votes that he has not submitted.
+          var els = votes_container.find("g[data-criterion-value-has-changed='true'], div[data-criterion-value-has-changed='true']");
+          els.attr("data-criterion-value-has-changed", "false");
+          $scope.askConfirmationOnWindowCloseIfNecessary();
         });
       };
 
@@ -555,13 +605,6 @@ voteApp.controller('indexCtl',
         console.log("result_holder:: ", result_holder);
         $scope.submitVote(votes_container, result_holder);
       }
-    };
-
-    $scope.submitSingleVote = function(endpoint, type, criterion_id) {
-      console.log("submitSingleVote() parameters:" + endpoint + " " + type + " " + criterion_id);
-      var criterion_value = $("#d3_container g.criterion[data-criterion-id=\"" + criterion_id + "\"]").attr("data-criterion-value");
-      console.log("criterion value:");
-      console.log(criterion_value);
     };
 
     /*
@@ -741,6 +784,8 @@ voteApp.controller('indexCtl',
           .attr("data-criterion-value-has-changed", true)
           .attr("data-voted", true);
         refreshVoteButtonFunction();
+
+        $scope.askConfirmationOnWindowCloseIfNecessary(true);
 
         svg.select("circle").attr("cy", scale(v));
       }
@@ -1116,6 +1161,7 @@ voteApp.controller('indexCtl',
         circle.attr("cy", yScale(yValue));
 
         refreshVoteButtonFunction();
+        $scope.askConfirmationOnWindowCloseIfNecessary(true);
       }
 
       function dragmove(d) {
@@ -1510,7 +1556,8 @@ voteApp.controller('indexCtl',
       var onChange = function(){
         updateSelectedValue();
         div.attr('data-criterion-value-has-changed', true);
-        refreshVoteButtonFunction();
+        $scope.askConfirmationOnWindowCloseIfNecessary(true);
+        refreshVoteButtonFunction();     
       };
 
       if ('possibleValues' in criterion)
@@ -1850,9 +1897,9 @@ voteApp.controller('indexCtl',
           $scope.displayTargetTitleInContainer(target_id, target_title_holder);
 
 
-          var refreshVoteButton = function(){
+          var refreshVoteButton = _.debounce(function(){
             $scope.enableVoteButtonIfUserHasVotedOnEveryItem(votable_idea_section_holder);
-          };
+          }, 200);
           
 
           if ("items" in settings) {

@@ -516,6 +516,19 @@ Context.prototype = {
     window.modal_instance = new Modal();
     if (onDestroyCallback)
         window.modal_instance.onDestroy = onDestroyCallback;
+
+    window.askConfirmationForModalClose = function(confirmation_message){
+      window.modal_instance.beforeCancel = function(){
+        return confirm(confirmation_message);
+      }
+    };
+
+    window.allowModalClose = function(){
+      window.modal_instance.beforeCancel = function(){
+        return true;
+      }
+    };
+
     window.exitModal = function() {
       window.modal_instance.destroy();
     };
