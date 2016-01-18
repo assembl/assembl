@@ -139,7 +139,7 @@ var LangString = Base.Model.extend({
             } else {
               // take available with longest common locale string to translation target
               commonLenF = function(entry) {
-                return that.localeCommonLength(entry.get("@language"), pref.get("locale_name")) > 0;
+                return that.localeCommonLength(entry.get("@language"), pref.get("translate_to_name")) > 0;
               };
               entry = _.max(available, commonLenF);
               if (commonLenF(entry) > 0) {

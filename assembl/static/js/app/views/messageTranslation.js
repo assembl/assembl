@@ -62,7 +62,7 @@ var TranslationView = Marionette.ItemView.extend({
                     translatedFromLocaleName = translatedFromLocale;
                 }
                 that.translatedTo = {locale: translatedTo, name: translatedToName};
-                that.translatedFromLocale = {locale: translatedFromLocale, name: translatedFromLocaleName};
+                that.translatedFrom = {locale: translatedFromLocale, name: translatedFromLocaleName};
                 that.langCache = localeToLangNameCache;
                 that.languagePreferences = preferences; //Should be sorted already
                 that.template = '#tmpl-message_translation';
@@ -93,6 +93,36 @@ var TranslationView = Marionette.ItemView.extend({
             langPrefLocale = $(this.ui.langTo).val(),
 
             createModel = function(locale, translateTo, preferenceColllection){
+
+                commitChanges = {
+                    success: function(model, resp, options) {
+                        //Ensure that this is in the right order
+                        that.languagePreferences.add(model, {merge: true});
+                        //this.triggerMethod("translation:defined", 'full_message_list');
+                        var cm = that.languagePreferences.collectionManager.getAllMessageStructureCollectionPromise()
+                            .then(function(messageStructures){
+                                return Promise.resolve(messageStructures.fetch());
+                            })
+                            .then(function(messages){
+                                that.messageView.messageListView.render();
+                            });
+                    },
+                    error: function(model, resp, options) {
+                        console.error("Failed to save user language preference of " + model + " to the database", resp);
+                    }
+                }
+
+                var user_id = Ctx.getCurrentUser().id,
+                    existingModel = preferenceColllection.filter(function(model){
+                        return (model.get('user_id') === user_id) && (model.get('locale_name') === locale) && (model.get('source_of_evidence') === 0)
+                    });
+                if (!(_.isEmpty(existingModel)) ) {
+                    var model = existingModel[0];
+                    model.save({
+                        locale_name: locale,
+                        translate_to_name: translateTo,
+                    }, commitChanges)
+                }
                 var hash = {
                     locale_name: locale,
                     source_of_evidence: 0,
@@ -103,31 +133,15 @@ var TranslationView = Marionette.ItemView.extend({
                     hash.translate_to_name = translateTo;
                 }
                 var langPref = new LanguagePreference.Model(hash, {collection: that.languagePreferences});
-                langPref.save(null, {
-                    success: function(model, resp, options){
-                        //Ensure that this is in the right order
-                        that.languagePreferences.add(model);
-                        //this.triggerMethod("translation:defined", 'full_message_list');
-                        var cm = that.languagePreferences.collectionManager.getAllMessageStructureCollectionPromise()
-                            .then(function(messageStructures){
-                                return Promise.resolve(messageStructures.fetch());
-                            })
-                            .then(function(messages){
-                                that.messageView.messageListView.render();
-                            });
-                    },
-                    error: function(model, resp, options){
-                        console.error("Failed to save user language preference of " + model + " to the database", resp);        
-                    }
-                });
+                langPref.save(null, commitChanges)
             };
 
         if (state === userTranslationStates.CONFIRM) {
-            createModel(this.translatedTo.locale, langPrefLocale, this.languagePreferences);
+            createModel(this.translatedFrom.locale, langPrefLocale, this.languagePreferences);
         }
 
         if (state === userTranslationStates.DENY) {
-            createModel(this.translatedTo.locale, null, this.languagePreferences);
+            createModel(this.translatedFrom.locale, null, this.languagePreferences);
         }
     },
 
@@ -142,10 +156,10 @@ var TranslationView = Marionette.ItemView.extend({
     serializeData: function(){
         if (this.template !== "#tmpl-loader") {
             return {
-                translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to "), this.translatedFromLocale.name),
+                translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to "), this.translatedFrom.name),
                 supportedLanguages: this.localesAsSortedList(),
                 translatedTo: this.translatedTo,
-                translatedFromLocale: this.translatedFromLocale
+                translatedFromLocale: this.translatedFrom
             };
         }
     },
