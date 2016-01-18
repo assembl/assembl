@@ -6,10 +6,10 @@
     <span><%= translationQuestion %></span>
     <span>
         <select class='js_translate_to_language'>
-            <% _.each(supportedLanguages, function(lang, locale){ %>
-                <option value="<% locale %>"
-                <% if (locale === translatedTo.locale) { %> selected="selected" <% } %>
-                ><%= lang %></option>
+            <% _.each(supportedLanguages, function(pair){ %>
+                <option value="<% pair[0] %>"
+                <% if (pair[0] === translatedTo.locale) { %> selected="selected" <% } %>
+                ><%= pair[1] %></option>
             <% }) %>
         </select>
     </span>

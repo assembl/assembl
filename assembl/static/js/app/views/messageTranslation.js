@@ -68,6 +68,19 @@ var TranslationView = Marionette.ItemView.extend({
             });
     },
 
+    _localesAsSortedList: null,
+    localesAsSortedList: function() {
+        if (this._localesAsSortedList === null) {
+            var localeToLangName = Ctx.getJsonFromScriptTag('translation-locale-names'),
+                localeList = _.map(localeToLangName, function(name, loc) {
+                    return [loc, name];
+                });
+            localeList = _.sortBy(localeList, function(x) {return x[1];});
+            Object.getPrototypeOf(this)._localesAsSortedList = localeList;
+        }
+        return this._localesAsSortedList;
+    },
+
     showOriginal: function(e){
         console.log('Showing the original');
     },
@@ -133,10 +146,10 @@ var TranslationView = Marionette.ItemView.extend({
         if (this.template !== "#tmpl-loader") {
             return {
                 translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to "), this.translatedFromLocale.name),
-                supportedLanguages: this.langCache,
+                supportedLanguages: this.localesAsSortedList(),
                 translatedTo: this.translatedTo,
                 translatedFromLocale: this.translatedFromLocale
-            } 
+            };
         }
     },
 
