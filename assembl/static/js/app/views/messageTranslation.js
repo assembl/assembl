@@ -5,6 +5,7 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
     _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
+    Types = require('../utils/types.js'),
     LanguagePreference = require('../models/languagePreference.js');
 
 /**
@@ -33,13 +34,14 @@ var TranslationView = Marionette.ItemView.extend({
 
     events: {
         'click @ui.showOriginal': 'showOriginal',
-        'click @ui.confirmLangPref': 'updateLanguagePreferenceConfirm',
-        'click @ui.langChoiceCancel': 'updateLangaugePreferenceDeny',
+        'click @ui.langChoiceConfirm': 'updateLanguagePreferenceConfirm',
+        'click @ui.langChoiceCancel': 'updateLanguagePreferenceDeny',
         'click @ui.gotoSettings': 'loadProfile'
     },
 
     initialize: function(options){
         this.message = options.messageModel;
+        this.messageView = options.messageView;
         var that = this;
         var cm = new CollectionManager();
         cm.getUserLanguagePreferencesPromise()
@@ -83,63 +85,58 @@ var TranslationView = Marionette.ItemView.extend({
 
     showOriginal: function(e){
         console.log('Showing the original');
+        //this.triggerMethod("translation:defined", 'just_self');
     },
 
-    updateLanguagePreference: function(object){
-        var s = object.state,
-            that = this,
+    updateLanguagePreference: function(state){
+        var that = this,
             langPrefLocale = $(this.ui.langTo).val(),
-            saveModel = function(prefCollection, model, messageView) {
-                prefCollection.add(model);
-                //Refresh the entire messageList to only include messages not translated from
-                //original language to target language
-                messageView.messageListView.render();
-            },
-            errorOnSaveModel = function(model){
-                console.error("Failed to save user language preference of " + model + " to the database", resp);
+
+            createModel = function(locale, translateTo, preferenceColllection){
+                var hash = {
+                    locale_name: locale,
+                    source_of_evidence: 0,
+                    user: Ctx.getCurrentUser().id,
+                    "@type": Types.LANGUAGE_PREFERENCE
+                }
+                if (translateTo){
+                    hash.translate_to_name = translateTo;
+                }
+                var langPref = new LanguagePreference.Model(hash, {collection: that.languagePreferences});
+                langPref.save(null, {
+                    success: function(model, resp, options){
+                        //Ensure that this is in the right order
+                        that.languagePreferences.add(model);
+                        //this.triggerMethod("translation:defined", 'full_message_list');
+                        var cm = that.languagePreferences.collectionManager.getAllMessageStructureCollectionPromise()
+                            .then(function(messageStructures){
+                                return Promise.resolve(messageStructures.fetch());
+                            })
+                            .then(function(messages){
+                                that.messageView.messageListView.render();
+                            });
+                    },
+                    error: function(model, resp, options){
+                        console.error("Failed to save user language preference of " + model + " to the database", resp);        
+                    }
+                });
             };
 
-        if (s === userTranslationStates.CONFIRM) {
-            var langPref = new LanguagePreference.Model({
-                locale: this.translatedTo.locale,
-                translate_to: langPrefLocale,
-                source_of_evidence: 0,
-                user: Ctx.getCurrentUser().id
-            });
-            langPref.save(null, {
-                success: function(model, resp, options){
-                    saveModel(that.languagePreferences, model, that);
-                },
-                error: function(model, resp, options) {
-                    errorOnSaveModel(model);
-                }
-            });
+        if (state === userTranslationStates.CONFIRM) {
+            createModel(this.translatedTo.locale, langPrefLocale, this.languagePreferences);
         }
 
-        if (s === userTranslationStates.DENY) {
-            //The user already understands this language
-            var langPref = new LanguagePreference.Model({
-                locale: this.translatedTo.locale,
-                source_of_evidence: 0,
-                user: Ctx.getCurrentUser().id
-            });
-            langPref.save(null, {
-                success: function(model, resp, options){
-                    saveModel(that.languagePreferences, model, that);
-                },
-                error: function(model, resp, options) {
-                    errorOnSaveModel(model);
-                }
-            });
+        if (state === userTranslationStates.DENY) {
+            createModel(this.translatedTo.locale, null, this.languagePreferences);
         }
     },
 
     updateLanguagePreferenceConfirm: function(e){
-        console.log('Updating the language preference of the user');
+        this.updateLanguagePreference(userTranslationStates.CONFIRM);
     },
 
     updateLanguagePreferenceDeny: function(e) {
-        console.log('Deny choice. Updating language preference of the user');
+        this.updateLanguagePreference(userTranslationStates.DENY);
     },
 
     serializeData: function(){

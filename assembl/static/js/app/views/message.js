@@ -483,7 +483,7 @@ var MessageView = Marionette.LayoutView.extend({
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
         //Only show the translation view *iff* the message was translated by the backend 
         if (this.model.get('body').best(this.translationData).isMachineTranslation()){
-          var translationView = new MessageTranslationView({messageModel: this.model});
+          var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
           this.getRegion("translationRegion").show(translationView);
         }
       }
@@ -1439,7 +1439,11 @@ var MessageView = Marionette.LayoutView.extend({
         messageView: this
       });
       $('#slider').html(modal.render().el);
-    }
+    },
+
+  onTranslationDefined: function(view, state){
+    console.log("The state of the passed variable is: ", state);
+  }
 
 });
 
