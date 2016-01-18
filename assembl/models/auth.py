@@ -1609,7 +1609,8 @@ class LanguagePreferenceOrder(IntEnum):
 
 class UserLanguagePreference(Base):
     __tablename__= 'user_language_preference'
-    __table_args__ = (UniqueConstraint('user_id', 'locale_id'), )
+    __table_args__ = (UniqueConstraint(
+        'user_id', 'locale_id', 'source_of_evidence'), )
 
     id = Column(Integer, primary_key=True)
 
