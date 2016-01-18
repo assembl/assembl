@@ -12,11 +12,10 @@ from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
 from assembl.models.post import Post
 from assembl.models.idea import Idea
-from assembl.models.langstrings import Locale, LocaleName
+from assembl.models.langstrings import Locale
 from assembl.auth import P_READ, P_ADD_EXTRACT
 from assembl.lib.locale import (
     to_posix_string,
-    create_locale_from_posix_string,
     ensure_locale_has_country
 )
 from assembl.lib.utils import is_url_from_same_server, path_qs
@@ -73,7 +72,7 @@ def process_locale(locale_code, user_id, current_prefs, session, order):
     posix_string = ensure_locale_has_country(posix_string)
     # Updated: Now Locale is a model. Converting posix_string into its
     # equivalent model. Creates it if it does not exist
-    locale = create_locale_from_posix_string(session, posix_string)
+    locale = Locale.get_or_create(posix_string)
 
     # Fresh slate for user, create a lang_pref
     if not current_prefs:

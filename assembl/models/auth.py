@@ -38,10 +38,7 @@ import transaction
 
 from ..lib import config
 from ..lib.utils import get_global_base_url
-from ..lib.locale import (
-    create_locale_from_posix_string,
-    to_posix_string
-)
+from ..lib.locale import to_posix_string
 from ..lib.sqla import (
     UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
 from ..lib.sqla_types import (
@@ -1670,12 +1667,9 @@ class UserLanguagePreference(Base):
 
     @locale_code.setter
     def locale_code(self, code):
-        from assembl.lib.locale import (
-            create_locale_from_posix_string,
-            to_posix_string
-        )
+        assert(code)
         posix = to_posix_string(code)
-        locale = create_locale_from_posix_string(self.db, posix)
+        locale = Locale.get_or_create(posix)
         self.locale = locale
 
     @property
@@ -1685,6 +1679,9 @@ class UserLanguagePreference(Base):
 
     @translate_to_code.setter
     def translate_to_code(self, code):
-        posix = to_posix_string(code)
-        locale = create_locale_from_posix_string(self.db, posix)
-        self.translate_to_locale = locale
+        if code:
+            posix = to_posix_string(code)
+            locale = Locale.get_or_create(posix)
+            self.translate_to_locale = locale
+        else:
+            self.translate_to_locale = None

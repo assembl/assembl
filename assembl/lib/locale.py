@@ -88,22 +88,6 @@ def ensure_locale_has_country(locale):
     return locale
 
 
-def create_locale_from_posix_string(session, posix_code, commit=False):
-    # Gets or create a locale from a posix language code
-    from ..models import Locale
-    # This method be done in a transaction manager due to a flush operation
-    # instead of a commit
-    locale = session.query(Locale).filter_by(locale=posix_code).first()
-    if not locale:
-        locale = Locale(locale=posix_code)
-        session.db.add(locale)
-        if commit:
-            session.db.commit()
-        else:
-            session.db.flush()
-    return locale
-
-
 def get_preferred_languages(session, user_id):
     from ..models import UserLanguagePreference
     prefs = (session.query(UserLanguagePreference)
