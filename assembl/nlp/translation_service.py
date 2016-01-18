@@ -104,6 +104,10 @@ class DummyTranslationService(TranslationService):
         return u"Pseudo-translation from %s to %s of: %s" % (
             source.locale, target.locale, text)
 
+    @classmethod
+    def target_locale_names(cls, target_locale):
+        return LocaleName.names_in_locale(target_locale)
+
 
 class DummyGoogleTranslationService(TranslationService):
     # Uses public Google API. For testing purposes. Do NOT use in production.

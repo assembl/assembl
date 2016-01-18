@@ -231,8 +231,11 @@ def home_view(request):
     else:
         locale = request.localizer.locale_name
 
-    context['locale_names_json'] = json.dumps(
-        LocaleName.names_in_locale(Locale.get_or_create(locale)))
+    from assembl.tasks.translate import get_service_of_discussion
+    service = get_service_of_discussion(discussion)
+    context['translation_locale_names_json'] = json.dumps(
+        get_service_of_discussion(discussion).target_locale_names(
+            Locale.get_or_create(locale)) if service else {})
 
     context['preferences_json'] = json.dumps(dict(preferences))
 
