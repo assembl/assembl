@@ -835,6 +835,26 @@
     "Katalanisch (Spanien)"
   ],
   [
+    "ceb",
+    "en",
+    "Cebuano"
+  ],
+  [
+    "ceb",
+    "fr",
+    "cébouano"
+  ],
+  [
+    "ceb",
+    "de",
+    "Cebuano"
+  ],
+  [
+    "ceb",
+    "ceb",
+    "Sinugboanon"
+  ],
+  [
     "cgg",
     "en",
     "Chiga"
@@ -1000,11 +1020,6 @@
     "Deutsch"
   ],
   [
-    "de",
-    "de",
-    "Deutsch"
-  ],
-  [
     "de_AT",
     "en",
     "German (Austria)"
@@ -1013,11 +1028,6 @@
     "de_AT",
     "fr",
     "allemand (Autriche)"
-  ],
-  [
-    "de_AT",
-    "de",
-    "Deutsch (Osterreich!Österreich)"
   ],
   [
     "de_AT",
@@ -1040,11 +1050,6 @@
     "Deutsch (Belgien)"
   ],
   [
-    "de_BE",
-    "de",
-    "Deutsch (Belgien)"
-  ],
-  [
     "de_CH",
     "en",
     "German (Switzerland)"
@@ -1053,11 +1058,6 @@
     "de_CH",
     "fr",
     "allemand (Suisse)"
-  ],
-  [
-    "de_CH",
-    "de",
-    "Deutsch (Schweiz (Confoederatio Helvetica))"
   ],
   [
     "de_CH",
@@ -1080,11 +1080,6 @@
     "Deutsch (Deutschland)"
   ],
   [
-    "de_DE",
-    "de",
-    "Deutsch (Deutschland)"
-  ],
-  [
     "de_LI",
     "en",
     "German (Liechtenstein)"
@@ -1100,11 +1095,6 @@
     "Deutsch (Liechtenstein)"
   ],
   [
-    "de_LI",
-    "de",
-    "Deutsch (Liechtenstein)"
-  ],
-  [
     "de_LU",
     "en",
     "German (Luxembourg)"
@@ -1113,11 +1103,6 @@
     "de_LU",
     "fr",
     "allemand (Luxembourg (pays))"
-  ],
-  [
-    "de_LU",
-    "de",
-    "Deutsch (Luxemburg)"
   ],
   [
     "de_LU",
@@ -1248,11 +1233,6 @@
     "en",
     "de",
     "Englisch"
-  ],
-  [
-    "en",
-    "en",
-    "English"
   ],
   [
     "en_AS",
@@ -2277,17 +2257,12 @@
   [
     "fr",
     "fr",
-    "français, langue française"
+    "français"
   ],
   [
     "fr",
     "de",
     "Französisch"
-  ],
-  [
-    "fr",
-    "fr",
-    "français, langue française"
   ],
   [
     "fr_BE",
@@ -2297,7 +2272,7 @@
   [
     "fr_BE",
     "fr",
-    "français, langue française (Belgique)"
+    "français (Belgique)"
   ],
   [
     "fr_BE",
@@ -2305,19 +2280,9 @@
     "Französisch (Belgien)"
   ],
   [
-    "fr_BE",
-    "fr",
-    "français, langue française (Belgique)"
-  ],
-  [
     "fr_BF",
     "en",
     "French (Burkina Faso)"
-  ],
-  [
-    "fr_BF",
-    "fr",
-    "français, langue française (Burkina Faso)"
   ],
   [
     "fr_BF",
@@ -2327,7 +2292,7 @@
   [
     "fr_BF",
     "fr",
-    "français, langue française (Burkina Faso)"
+    "français (Burkina Faso)"
   ],
   [
     "fr_BI",
@@ -2337,17 +2302,12 @@
   [
     "fr_BI",
     "fr",
-    "français, langue française (Burundi)"
+    "français (Burundi)"
   ],
   [
     "fr_BI",
     "de",
     "Französisch (Burundi)"
-  ],
-  [
-    "fr_BI",
-    "fr",
-    "français, langue française (Burundi)"
   ],
   [
     "fr_BJ",
@@ -2357,17 +2317,12 @@
   [
     "fr_BJ",
     "fr",
-    "français, langue française (Bénin)"
+    "français (Bénin)"
   ],
   [
     "fr_BJ",
     "de",
     "Französisch (Benin)"
-  ],
-  [
-    "fr_BJ",
-    "fr",
-    "français, langue française (Bénin)"
   ],
   [
     "fr_BL",
@@ -2377,17 +2332,12 @@
   [
     "fr_BL",
     "fr",
-    "français, langue française (Saint-Barthélemy)"
+    "français (Saint-Barthélemy)"
   ],
   [
     "fr_BL",
     "de",
     "Französisch (Saint-Barthélemy)"
-  ],
-  [
-    "fr_BL",
-    "fr",
-    "français, langue française (Saint-Barthélemy)"
   ],
   [
     "fr_CA",
@@ -2397,17 +2347,12 @@
   [
     "fr_CA",
     "fr",
-    "français, langue française (Canada)"
+    "français (Canada)"
   ],
   [
     "fr_CA",
     "de",
     "Französisch (Kanada)"
-  ],
-  [
-    "fr_CA",
-    "fr",
-    "français, langue française (Canada)"
   ],
   [
     "fr_CD",
@@ -2417,17 +2362,12 @@
   [
     "fr_CD",
     "fr",
-    "français, langue française (République démocratique du Congo / (République démocratique du Congo))"
+    "français (République démocratique du Congo / (République démocratique du Congo))"
   ],
   [
     "fr_CD",
     "de",
     "Französisch (Kongo, Demokratische Republik (ehem. Zaire))"
-  ],
-  [
-    "fr_CD",
-    "fr",
-    "français, langue française (République démocratique du Congo / (République démocratique du Congo))"
   ],
   [
     "fr_CF",
@@ -2437,17 +2377,12 @@
   [
     "fr_CF",
     "fr",
-    "français, langue française (République centrafricaine)"
+    "français (République centrafricaine)"
   ],
   [
     "fr_CF",
     "de",
     "Französisch (Zentralafrikanische Republik)"
-  ],
-  [
-    "fr_CF",
-    "fr",
-    "français, langue française (République centrafricaine)"
   ],
   [
     "fr_CG",
@@ -2457,17 +2392,12 @@
   [
     "fr_CG",
     "fr",
-    "français, langue française (République du Congo / (Congo))"
+    "français (République du Congo / (Congo))"
   ],
   [
     "fr_CG",
     "de",
     "Französisch (Republik Kongo)"
-  ],
-  [
-    "fr_CG",
-    "fr",
-    "français, langue française (République du Congo / (Congo))"
   ],
   [
     "fr_CH",
@@ -2477,17 +2407,12 @@
   [
     "fr_CH",
     "fr",
-    "français, langue française (Suisse)"
+    "français (Suisse)"
   ],
   [
     "fr_CH",
     "de",
     "Französisch (Schweiz (Confoederatio Helvetica))"
-  ],
-  [
-    "fr_CH",
-    "fr",
-    "français, langue française (Suisse)"
   ],
   [
     "fr_CI",
@@ -2497,17 +2422,12 @@
   [
     "fr_CI",
     "fr",
-    "français, langue française (Côte d’Ivoire)"
+    "français (Côte d’Ivoire)"
   ],
   [
     "fr_CI",
     "de",
     "Französisch (Cote d’Ivoire!Côte d’Ivoire (Elfenbeinküste))"
-  ],
-  [
-    "fr_CI",
-    "fr",
-    "français, langue française (Côte d’Ivoire)"
   ],
   [
     "fr_CM",
@@ -2517,17 +2437,12 @@
   [
     "fr_CM",
     "fr",
-    "français, langue française (Cameroun)"
+    "français (Cameroun)"
   ],
   [
     "fr_CM",
     "de",
     "Französisch (Kamerun)"
-  ],
-  [
-    "fr_CM",
-    "fr",
-    "français, langue française (Cameroun)"
   ],
   [
     "fr_DJ",
@@ -2537,17 +2452,12 @@
   [
     "fr_DJ",
     "fr",
-    "français, langue française (Djibouti)"
+    "français (Djibouti)"
   ],
   [
     "fr_DJ",
     "de",
     "Französisch (Dschibuti)"
-  ],
-  [
-    "fr_DJ",
-    "fr",
-    "français, langue française (Djibouti)"
   ],
   [
     "fr_FR",
@@ -2557,17 +2467,12 @@
   [
     "fr_FR",
     "fr",
-    "français, langue française (France)"
+    "français (France)"
   ],
   [
     "fr_FR",
     "de",
     "Französisch (Frankreich)"
-  ],
-  [
-    "fr_FR",
-    "fr",
-    "français, langue française (France)"
   ],
   [
     "fr_GA",
@@ -2577,17 +2482,12 @@
   [
     "fr_GA",
     "fr",
-    "français, langue française (Gabon)"
+    "français (Gabon)"
   ],
   [
     "fr_GA",
     "de",
     "Französisch (Gabun)"
-  ],
-  [
-    "fr_GA",
-    "fr",
-    "français, langue française (Gabon)"
   ],
   [
     "fr_GN",
@@ -2597,17 +2497,12 @@
   [
     "fr_GN",
     "fr",
-    "français, langue française (Guinée)"
+    "français (Guinée)"
   ],
   [
     "fr_GN",
     "de",
     "Französisch (Guinea)"
-  ],
-  [
-    "fr_GN",
-    "fr",
-    "français, langue française (Guinée)"
   ],
   [
     "fr_GP",
@@ -2617,17 +2512,12 @@
   [
     "fr_GP",
     "fr",
-    "français, langue française (Guadeloupe)"
+    "français (Guadeloupe)"
   ],
   [
     "fr_GP",
     "de",
     "Französisch (Guadeloupe)"
-  ],
-  [
-    "fr_GP",
-    "fr",
-    "français, langue française (Guadeloupe)"
   ],
   [
     "fr_GQ",
@@ -2637,17 +2527,12 @@
   [
     "fr_GQ",
     "fr",
-    "français, langue française (Guinée équatoriale)"
+    "français (Guinée équatoriale)"
   ],
   [
     "fr_GQ",
     "de",
     "Französisch (Äquatorialguinea)"
-  ],
-  [
-    "fr_GQ",
-    "fr",
-    "français, langue française (Guinée équatoriale)"
   ],
   [
     "fr_KM",
@@ -2657,17 +2542,12 @@
   [
     "fr_KM",
     "fr",
-    "français, langue française (Comores)"
+    "français (Comores)"
   ],
   [
     "fr_KM",
     "de",
     "Französisch (Komoren)"
-  ],
-  [
-    "fr_KM",
-    "fr",
-    "français, langue française (Comores)"
   ],
   [
     "fr_LU",
@@ -2677,17 +2557,12 @@
   [
     "fr_LU",
     "fr",
-    "français, langue française (Luxembourg (pays))"
+    "français (Luxembourg (pays))"
   ],
   [
     "fr_LU",
     "de",
     "Französisch (Luxemburg)"
-  ],
-  [
-    "fr_LU",
-    "fr",
-    "français, langue française (Luxembourg (pays))"
   ],
   [
     "fr_MC",
@@ -2697,17 +2572,12 @@
   [
     "fr_MC",
     "fr",
-    "français, langue française (Monaco)"
+    "français (Monaco)"
   ],
   [
     "fr_MC",
     "de",
     "Französisch (Monaco)"
-  ],
-  [
-    "fr_MC",
-    "fr",
-    "français, langue française (Monaco)"
   ],
   [
     "fr_MF",
@@ -2717,17 +2587,12 @@
   [
     "fr_MF",
     "fr",
-    "français, langue française (Saint-Martin (Antilles françaises))"
+    "français (Saint-Martin (Antilles françaises))"
   ],
   [
     "fr_MF",
     "de",
     "Französisch (Saint-Martin (franz. Teil))"
-  ],
-  [
-    "fr_MF",
-    "fr",
-    "français, langue française (Saint-Martin (Antilles françaises))"
   ],
   [
     "fr_MG",
@@ -2737,17 +2602,12 @@
   [
     "fr_MG",
     "fr",
-    "français, langue française (Madagascar)"
+    "français (Madagascar)"
   ],
   [
     "fr_MG",
     "de",
     "Französisch (Madagaskar)"
-  ],
-  [
-    "fr_MG",
-    "fr",
-    "français, langue française (Madagascar)"
   ],
   [
     "fr_ML",
@@ -2757,17 +2617,12 @@
   [
     "fr_ML",
     "fr",
-    "français, langue française (Mali)"
+    "français (Mali)"
   ],
   [
     "fr_ML",
     "de",
     "Französisch (Mali)"
-  ],
-  [
-    "fr_ML",
-    "fr",
-    "français, langue française (Mali)"
   ],
   [
     "fr_MQ",
@@ -2777,17 +2632,12 @@
   [
     "fr_MQ",
     "fr",
-    "français, langue française (Martinique)"
+    "français (Martinique)"
   ],
   [
     "fr_MQ",
     "de",
     "Französisch (Martinique)"
-  ],
-  [
-    "fr_MQ",
-    "fr",
-    "français, langue française (Martinique)"
   ],
   [
     "fr_NE",
@@ -2797,17 +2647,12 @@
   [
     "fr_NE",
     "fr",
-    "français, langue française (Niger)"
+    "français (Niger)"
   ],
   [
     "fr_NE",
     "de",
     "Französisch (Niger)"
-  ],
-  [
-    "fr_NE",
-    "fr",
-    "français, langue française (Niger)"
   ],
   [
     "fr_RE",
@@ -2817,17 +2662,12 @@
   [
     "fr_RE",
     "fr",
-    "français, langue française (La Réunion)"
+    "français (La Réunion)"
   ],
   [
     "fr_RE",
     "de",
     "Französisch (Reunion!Réunion)"
-  ],
-  [
-    "fr_RE",
-    "fr",
-    "français, langue française (La Réunion)"
   ],
   [
     "fr_RW",
@@ -2837,17 +2677,12 @@
   [
     "fr_RW",
     "fr",
-    "français, langue française (Rwanda)"
+    "français (Rwanda)"
   ],
   [
     "fr_RW",
     "de",
     "Französisch (Ruanda)"
-  ],
-  [
-    "fr_RW",
-    "fr",
-    "français, langue française (Rwanda)"
   ],
   [
     "fr_SN",
@@ -2857,17 +2692,12 @@
   [
     "fr_SN",
     "fr",
-    "français, langue française (Sénégal)"
+    "français (Sénégal)"
   ],
   [
     "fr_SN",
     "de",
     "Französisch (Senegal)"
-  ],
-  [
-    "fr_SN",
-    "fr",
-    "français, langue française (Sénégal)"
   ],
   [
     "fr_TD",
@@ -2877,17 +2707,12 @@
   [
     "fr_TD",
     "fr",
-    "français, langue française (Tchad)"
+    "français (Tchad)"
   ],
   [
     "fr_TD",
     "de",
     "Französisch (Tschad)"
-  ],
-  [
-    "fr_TD",
-    "fr",
-    "français, langue française (Tchad)"
   ],
   [
     "fr_TG",
@@ -2897,17 +2722,12 @@
   [
     "fr_TG",
     "fr",
-    "français, langue française (Togo)"
+    "français (Togo)"
   ],
   [
     "fr_TG",
     "de",
     "Französisch (Togo)"
-  ],
-  [
-    "fr_TG",
-    "fr",
-    "français, langue française (Togo)"
   ],
   [
     "ga",
@@ -3265,6 +3085,26 @@
     "Hindi (Indien)"
   ],
   [
+    "hmn",
+    "en",
+    "Hmong"
+  ],
+  [
+    "hmn",
+    "fr",
+    "hmong"
+  ],
+  [
+    "hmn",
+    "de",
+    "Miao-Sprachen"
+  ],
+  [
+    "hmn",
+    "hmn",
+    "Hmoob"
+  ],
+  [
     "hr",
     "en",
     "Croatian"
@@ -3298,6 +3138,26 @@
     "hr_HR",
     "de",
     "Kroatisch  (Kroatien)"
+  ],
+  [
+    "ht",
+    "en",
+    "Haitian"
+  ],
+  [
+    "ht",
+    "fr",
+    "créole haïtien"
+  ],
+  [
+    "ht",
+    "de",
+    "Frankokreolisch"
+  ],
+  [
+    "ht",
+    "ht",
+    "Kreyòl ayisyen"
   ],
   [
     "hu",
@@ -3603,6 +3463,26 @@
     "jmc_TZ",
     "en",
     "Machame (Tanzania)"
+  ],
+  [
+    "jv",
+    "en",
+    "Javanese"
+  ],
+  [
+    "jv",
+    "fr",
+    "javanais"
+  ],
+  [
+    "jv",
+    "de",
+    "Javanisch"
+  ],
+  [
+    "jv",
+    "jv",
+    "Basa Jawa"
   ],
   [
     "ka",
@@ -4025,6 +3905,26 @@
     "cornique (Royaume-Uni)"
   ],
   [
+    "la",
+    "en",
+    "Latin"
+  ],
+  [
+    "la",
+    "fr",
+    "latin"
+  ],
+  [
+    "la",
+    "de",
+    "Latein"
+  ],
+  [
+    "la",
+    "la",
+    "lingua Latina"
+  ],
+  [
     "lag",
     "en",
     "Langi"
@@ -4068,6 +3968,26 @@
     "lg_UG",
     "de",
     "Ganda-Sprache (Uganda)"
+  ],
+  [
+    "lo",
+    "en",
+    "Lao"
+  ],
+  [
+    "lo",
+    "fr",
+    "Lao"
+  ],
+  [
+    "lo",
+    "de",
+    "Laotisch"
+  ],
+  [
+    "lo",
+    "lo",
+    "ພາສາລາວ"
   ],
   [
     "lt",
@@ -4280,6 +4200,26 @@
     "Malagassi-Sprache (Madagaskar)"
   ],
   [
+    "mi",
+    "en",
+    "Māori"
+  ],
+  [
+    "mi",
+    "fr",
+    "maori de Nouvelle-Zélande"
+  ],
+  [
+    "mi",
+    "de",
+    "Maori-Sprache"
+  ],
+  [
+    "mi",
+    "mi",
+    "Te reo Māori"
+  ],
+  [
     "mk",
     "en",
     "Macedonian"
@@ -4348,6 +4288,31 @@
     "ml_IN",
     "de",
     "Malayalam (Indien)"
+  ],
+  [
+    "mn",
+    "en",
+    "Mongolian"
+  ],
+  [
+    "mn",
+    "fr",
+    "mongol"
+  ],
+  [
+    "mn",
+    "de",
+    "Mongolisch"
+  ],
+  [
+    "mn",
+    "mn_Cyrl",
+    "Монгол"
+  ],
+  [
+    "mn_Cyrl",
+    "mn_Cyrl",
+    "Монгол"
   ],
   [
     "mr",
@@ -4718,6 +4683,46 @@
     "nn_NO",
     "de",
     "Nynorsk (Norwegen)"
+  ],
+  [
+    "no",
+    "en",
+    "Norwegian"
+  ],
+  [
+    "no",
+    "fr",
+    "norvégien"
+  ],
+  [
+    "no",
+    "de",
+    "Norwegisch"
+  ],
+  [
+    "no",
+    "no",
+    "Norsk"
+  ],
+  [
+    "ny",
+    "en",
+    "Chichewa"
+  ],
+  [
+    "ny",
+    "fr",
+    "chichewa"
+  ],
+  [
+    "ny",
+    "de",
+    "Nyanja-Sprache"
+  ],
+  [
+    "ny",
+    "ny",
+    "ChiCheŵa"
   ],
   [
     "nyn",
@@ -5760,6 +5765,46 @@
     "Serbisch  (Lateinische-Schrift, Serbien)"
   ],
   [
+    "st",
+    "en",
+    "Sotho"
+  ],
+  [
+    "st",
+    "fr",
+    "sotho du Sud"
+  ],
+  [
+    "st",
+    "de",
+    "Süd-Sotho-Sprache"
+  ],
+  [
+    "st",
+    "st",
+    "seSotho"
+  ],
+  [
+    "su",
+    "en",
+    "Sundanese"
+  ],
+  [
+    "su",
+    "fr",
+    "Soundanais"
+  ],
+  [
+    "su",
+    "st",
+    "Sundanesisch"
+  ],
+  [
+    "su",
+    "su",
+    "Basa Sunda"
+  ],
+  [
     "sv",
     "en",
     "Swedish"
@@ -5955,6 +6000,51 @@
     "Teso (Uganda)"
   ],
   [
+    "tg",
+    "en",
+    "Tajik"
+  ],
+  [
+    "tg",
+    "fr",
+    "Tadjik"
+  ],
+  [
+    "tg",
+    "de",
+    "Tadschikisch"
+  ],
+  [
+    "tg",
+    "tg_Arab",
+    "‫تاجیکی"
+  ],
+  [
+    "tg",
+    "tg_Cyrl",
+    "тоҷикӣ"
+  ],
+  [
+    "tg_Cyrl",
+    "en",
+    "Tajik in Cyrillic script"
+  ],
+  [
+    "tg_Cyrl",
+    "tg_Cyrl",
+    "тоҷикӣ"
+  ],
+  [
+    "tg_Arab",
+    "en",
+    "Tajik in Arabic script"
+  ],
+  [
+    "tg_Arab",
+    "tg_Arab",
+    "‫تاجیکی"
+  ],
+  [
     "th",
     "en",
     "Thai"
@@ -6038,6 +6128,26 @@
     "ti_ET",
     "de",
     "Tigrinja-Sprache (Athiopien!Äthiopien)"
+  ],
+  [
+    "tl",
+    "en",
+    "Tagalog"
+  ],
+  [
+    "tl",
+    "fr",
+    "tagalog"
+  ],
+  [
+    "tl",
+    "de",
+    "tagalog"
+  ],
+  [
+    "tl",
+    "tl",
+    "Tagalog"
   ],
   [
     "to",
@@ -6383,6 +6493,26 @@
     "xog_UG",
     "en",
     "Soga (Uganda)"
+  ],
+  [
+    "yi",
+    "en",
+    "Yiddish"
+  ],
+  [
+    "yi",
+    "fr",
+    "Yiddish"
+  ],
+  [
+    "yi",
+    "de",
+    "Jiddisch"
+  ],
+  [
+    "yi",
+    "yi",
+    "‫ייִדיש"
   ],
   [
     "yo",

@@ -7,7 +7,7 @@ from langdetect.detector import LangDetectException
 
 from assembl.lib.abc import abstractclassmethod
 from assembl.lib import config
-from assembl.models.langstrings import Locale, LangStringEntry
+from assembl.models.langstrings import Locale, LangStringEntry, LocaleName
 
 
 class TranslationService(object):
@@ -21,9 +21,22 @@ class TranslationService(object):
         return locale_name
 
     @classmethod
+    def asPosixLocale(cls, locale_name):
+        return locale_name
+
+    @classmethod
     def can_guess_locale(cls, text):
         # empirical
         return len(text) >= 15
+
+    @classmethod
+    def target_locales(cls):
+        return ()
+
+    @classmethod
+    def target_locale_names(cls, target_locale):
+        return LocaleName.names_of_locales_in_locale(
+            cls.target_locales(), target_locale)
 
     def identify(self, text, expected_locales=None):
         if not text:
@@ -101,10 +114,21 @@ class DummyGoogleTranslationService(TranslationService):
         "iw", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw",
         "kn", "kk", "km", "ko", "lo", "la", "lv", "lt", "mk", "mg", "ms",
         "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "fa", "pl", "pt",
-        "ma", "ro", "ru", "sr", "st", "si", "sk", "sl", "so", "es", "su",
+        "pa", "ro", "ru", "sr", "st", "si", "sk", "sl", "so", "es", "su",
         "sw", "sv", "tg", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi",
         "cy", "yi", "yo", "zu"}
+    idiosyncrasies = {
+        "zh-TW": "zh_Hant_TW",
+        "zh-CN": "zh_Hans_CN",
+        "jw": "jv",
+        "iw": "he"
+    }
+    idiosyncrasies_reverse = {v: k for (k, v) in idiosyncrasies.items()}
     agents = {'User-Agent':"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"}
+
+    @classmethod
+    def target_locales(cls):
+        return (cls.asPosixLocale(loc) for loc in cls.known_locales)
 
     @classmethod
     def asKnownLocale(cls, locale_name):
@@ -112,6 +136,8 @@ class DummyGoogleTranslationService(TranslationService):
         base = parts[0]
         if base in cls.known_locales:
             return base
+        if base in cls.idiosyncrasies_reverse:
+            return cls.idiosyncrasies_reverse[base]
         if base == "zh":
             p1 = parts[1]
             if p1 == "Hans":
@@ -120,6 +146,10 @@ class DummyGoogleTranslationService(TranslationService):
                 return "zh-TW"  # zh_Hant_TW
             elif p1 in ("CN", "TW"):
                 return "_".join(parts[:1])
+
+    @classmethod
+    def asPosixLocale(cls, locale_name):
+        return cls.idiosyncrasies.get(locale_name, locale_name)
 
     def get_mt_name(cls, source_name, target_name):
         return super(DummyGoogleTranslationService, cls).get_mt_name(

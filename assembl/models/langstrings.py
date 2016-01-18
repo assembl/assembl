@@ -113,6 +113,12 @@ class Locale(Base):
         else:
             return Locale(locale=locale_name)
 
+    @classmethod
+    def reset_cache(cls):
+        cls._locale_collection = None
+        cls._locale_collection_byid = None
+        cls._locale_collection_subsets = None
+
     @classproperty
     def locale_collection_byid(cls):
         "A collection of all known locales, as a dictionary of id->string"
@@ -155,6 +161,7 @@ def locale_collection_changed(target, value, oldvalue):
 
 class LocaleName(Base):
     __tablename__ = "locale_name"
+    __table_args__ = (UniqueConstraint('locale_id', 'target_locale_id'), )
     id = Column(Integer, primary_key=True)
     locale_id = Column(
         Integer, ForeignKey(
@@ -183,11 +190,51 @@ class LocaleName(Base):
         return result
 
     @classmethod
+    def names_of_locales_in_locale(cls, loc_codes, target_locale):
+        locale_ids = [Locale.locale_collection[loc_code] for loc_code in loc_codes]
+        target_loc_ids = [loc.id for loc in target_locale.ancestry()]
+        locale_names = target_locale.db.query(cls).filter(
+            cls.target_locale_id.in_(target_loc_ids),
+            cls.locale_id.in_(locale_ids)).all()
+        by_target = defaultdict(list)
+        for ln in locale_names:
+            by_target[ln.target_locale_id].append(ln)
+        result = dict()
+        target_loc_ids.reverse()
+        for loc_id in target_loc_ids:
+            result.update({
+                Locale.locale_collection_byid[lname.locale_id]: lname.name
+                for lname in by_target[loc_id]})
+        return result
+
+    @classmethod
     def names_in_self(cls):
         return {
             Locale.locale_collection_byid[lname.locale_id]: lname.name
             for lname in cls.default_db.query(cls).filter(
                 cls.target_locale_id == cls.locale_id)}
+
+    @classmethod
+    def load_names(cls):
+        from os.path import dirname, join
+        db = cls.default_db
+        fname = join(dirname(dirname(__file__)),
+                     'nlp/data/language-names.json')
+        with open(fname) as f:
+            names = json.load(f)
+        locales = {x[0] for x in names}
+        for l in locales:
+            db.add(Locale.get_or_create(l))
+        db.flush()
+        Locale.reset_cache()
+        existing = set(db.query(cls.locale_id, cls.target_locale_id).all())
+        c = Locale.locale_collection
+        for (lcode, tcode, name) in names:
+            l, t = c[lcode], c[tcode]
+            if (l, t) not in existing:
+                cls.default_db.add(cls(
+                    locale_id=l, target_locale_id=t, name=name))
+        db.flush()
 
     crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
 
