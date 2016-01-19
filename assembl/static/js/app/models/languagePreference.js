@@ -6,6 +6,19 @@ var _ = require('../shims/underscore.js'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js');
 
+var clean = function(input){
+    if (!input){
+        return input;
+    }
+    var tmp;
+    if (input.indexOf("_") > -1 ){
+        tmp = input.split("_")[0]    
+    } else {
+        tmp = input;
+    }
+    return tmp;
+};
+
 var LanguagePreferenceModel = Base.Model.extend({
     //The server should also send the string of the locales.
     //locale_name, translate_to_name
@@ -23,7 +36,15 @@ var LanguagePreferenceModel = Base.Model.extend({
     },
 
     isLocale: function(locale){
-        return this.get('locale_name') === locale ? true : false;
+        var cl = clean(locale),
+            clln = clean(this.get('locale_name'));
+        return clln === cl;
+    },
+
+    isTranslateTo: function(locale){
+        var cl = clean(locale),
+            clln = clean(this.get('translate_to_name'));
+        return clln === cl;
     }
 });
 
@@ -41,10 +62,30 @@ var LanguagePreferenceCollection = Base.Collection.extend({
 
     getExplicitLanguages: function(){
         return this.filter(function(entry){
-            //Hackish. Should use the source_of_evidence instead
-            entry.get('translate_to') !== null;
+            return entry.get("source_of_evidence") === 0;
         });
     },
+
+    /**
+     * @param  String locale
+     */
+    getPreferenceForLocale: function(locale){
+        var l = this.find(function(ulp){
+            ulp.isLocale(locale);
+        });
+        return l;
+    },
+
+    /**
+     * @param  String locale
+     */
+    getTranslateToForLocale: function(locale){
+        var l = this.find(function(ulp){
+            ulp.isTranslateTo(locale);
+        });
+        return l;
+    },
+
     getTranslationData: function() {
       return this;
     }
