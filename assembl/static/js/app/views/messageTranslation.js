@@ -25,6 +25,8 @@ var TranslationView = Marionette.ItemView.extend({
     ui: {
         showOriginal: '.js_translation_show_original', //Show original region
         setLangPref: '.js_translation_question', //Question region
+        showOriginalString: '.js_trans_show_origin',
+        showTranslatedString: '.js_trans_show_translated',
         langChoiceConfirm: '.js_language_of_choice_confirm',
         langChoiceCancel: '.js_language_of_choice_deny',
         confirmLangPref: '.js_translate_all_confirm_msg',
@@ -33,7 +35,8 @@ var TranslationView = Marionette.ItemView.extend({
     },
 
     events: {
-        'click @ui.showOriginal': 'showOriginal',
+        'click @ui.showOriginalString': 'showOriginal',
+        'click @ui.showTranslatedString': 'showTranslated',
         'click @ui.langChoiceConfirm': 'updateLanguagePreferenceConfirm',
         'click @ui.langChoiceCancel': 'updateLanguagePreferenceDeny',
         'click @ui.gotoSettings': 'loadProfile'
@@ -85,7 +88,13 @@ var TranslationView = Marionette.ItemView.extend({
 
     showOriginal: function(e){
         console.log('Showing the original');
-        //this.triggerMethod("translation:defined", 'just_self');
+        this.messageView.contentOriginalView = true;
+        this.messageView.render();
+    },
+
+    showTranslated: function(e){
+        this.messageView.contentOriginalView = false;
+        this.messageView.render();
     },
 
     updateLanguagePreference: function(state){
@@ -167,11 +176,27 @@ var TranslationView = Marionette.ItemView.extend({
     onRender: function(){
         //Whenever a TranslationView is rendered, the message was translated.
         if (this.template !== '#tmpl-loader') {
-            var language = this.message.get('body').original(),
-                preferredLanguages = this.languagePreferences.getExplicitLanguages();
-        
-            if ( !(preferredLanguages) && ! (preferredLanguages.find( function(pl) {return pl.isLocale(language.getLocaleValue()); } ) ) ) {
-                this.$(this.ui.setLangPref).hide();
+            var original = this.message.get('body').original(),
+                current = this.message.get('body').best(this.languagePreferences);
+
+            //Showing the correct statement
+            if (this.messageView.contentOriginalView) {
+                this.$(this.ui.showOriginalString).addClass('hidden');
+                this.$(this.ui.showTranslatedString).removeClass('hidden');
+            }
+            else {
+                this.$(this.ui.showTranslatedString).addClass('hidden');
+                this.$(this.ui.showOriginalString).removeClass('hidden');
+            }
+
+            if (current.isMachineTranslation()){
+                var doit = this.languagePreferences.filter(function(ulp){
+                    return ulp.isTranslateTo(current.getBaseLocale());
+                });
+                if (doit) {
+                    //This could be slow and cause the user to first see the question
+                    this.$(this.ui.setLangPref).addClass('hidden');
+                }
             }
         }
     }
