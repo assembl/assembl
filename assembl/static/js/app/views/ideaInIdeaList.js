@@ -56,7 +56,7 @@ var IdeaView = Backbone.View.extend({
     else {
       throw new Error("groupContent must be passed in constructor options");
     }
-
+    this.listenTo(this.model, 'change', this.render);
     this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
     this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {
