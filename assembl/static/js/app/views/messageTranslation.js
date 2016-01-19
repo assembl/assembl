@@ -88,12 +88,12 @@ var TranslationView = Marionette.ItemView.extend({
 
     showOriginal: function(e){
         console.log('Showing the original');
-        this.messageView.contentOriginalView = true;
+        this.messageView.useOriginalContent = true;
         this.messageView.render();
     },
 
     showTranslated: function(e){
-        this.messageView.contentOriginalView = false;
+        this.messageView.useOriginalContent = false;
         this.messageView.render();
     },
 
@@ -180,7 +180,7 @@ var TranslationView = Marionette.ItemView.extend({
                 current = this.message.get('body').best(this.languagePreferences);
 
             //Showing the correct statement
-            if (this.messageView.contentOriginalView) {
+            if (this.messageView.useOriginalContent) {
                 this.$(this.ui.showOriginalString).addClass('hidden');
                 this.$(this.ui.showTranslatedString).removeClass('hidden');
             }

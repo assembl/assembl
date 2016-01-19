@@ -26,60 +26,6 @@ var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10;
 
 /**
- * Object that derives the best possible translation of body/subject
- * @param  LangString body    
- * @param  LangString subject
- */
-var TranslatedContent = function(body, subject){
-  this._body = body;
-  this._subject = subject;
-};
-
-TranslatedContent.prototype = {
-  getSubject: function(options){
-    if (options.original) {
-      if (this._oSubject) {return this._oSubject;}
-      else {
-        this._oSubject = this._subject.original() 
-        return this._oSubject;
-      }
-    }
-    else {
-      if (options.force){
-        this._bestSubject = this._subject.best(options.translationData);
-        return this._bestSubject;
-      }
-      else if (this._bestSubect) {return this._bestSubject;}
-      else {
-        this._bestSubject = this._subject.best(options.translationData);
-        return this._bestSubject;
-      }
-    }
-  },
-  getBody: function(options){
-    if (options.original) {
-      if (this._oBody) {return this._oBody;}
-      else {
-        this._oBody = this._body.original() 
-        return this._oBody;
-      }
-    }
-    else {
-      if (options.force) {
-        this._bestBody = this._body.best(options.translationData);
-        return this._bestBody;
-      }
-      else if (this._bestBody) {return this._bestBody;}
-      else {
-        this._bestBody = this._body.best(options.translationData);
-        return this._bestBody;
-      }
-    }
-  }
-};
-
-
-/**
  * @class views.MessageView
  */
 var MessageView = Marionette.LayoutView.extend({
@@ -186,8 +132,7 @@ var MessageView = Marionette.LayoutView.extend({
         function(creator, ulp) {
           if(!that.isViewDestroyed()) {
             that.translationData = ulp.getTranslationData();
-            that.bestTranslation = new TranslatedContent(that.model.get('body'), that.model.get('subject'));
-            that.contentOriginalView = false;
+            that.useOriginalContent = false;
             that.creator = creator;
             that.template = '#tmpl-message';
             that.render();
@@ -307,6 +252,8 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   serializeData: function() {
+    var subject = this.model.get("subject"),
+        body = this.model.get("body");
     if (this.template == "#tmpl-loader") {
         return {};
     }
@@ -332,8 +279,8 @@ var MessageView = Marionette.LayoutView.extend({
       body = this.moderationTemplate({
         ctx: Ctx,
         viewStyle: this.viewStyle,
-        subject: this.bestTranslation.getSubject({original: this.contentOriginalView, translationData: this.translationData}),
-        body: this.bestTranslation.getBody({original: this.contentOriginalView, translationData: this.translationData}),
+        subject: this.useOriginalContent ? subject.original() : subject.best(this.translationData),
+        body: this.useOriginalContent ? body.original() : body.best(this.translationData),
         publication_state: this.model.get("publication_state"),
         moderation_text: this.model.get("moderation_text"),
         moderator: this.model.get("moderator"),
@@ -371,8 +318,8 @@ var MessageView = Marionette.LayoutView.extend({
       metadata_json: metadata_json,
       creator: this.creator,
       parentId: this.model.get('parentId'),
-      subject: this.bestTranslation.getSubject({original: this.contentOriginalView, translationData: this.translationData}),
-      body: this.bestTranslation.getBody({original: this.contentOriginalView, translationData: this.translationData}),
+      subject: this.useOriginalContent ? subject.original() : subject.best(this.translationData),
+      body: this.useOriginalContent ? body.original() : body.best(this.translationData),
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
       isHoisted: this.isHoisted,
@@ -539,7 +486,7 @@ var MessageView = Marionette.LayoutView.extend({
       if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
-        if ( this.bestTranslation.getBody({original: false}).isMachineTranslation() ) {
+        if ( this.model.get("body").best(this.translationData).isMachineTranslation() ) {
           //Only show the translation view *iff* the message was translated by the backend 
           var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
           this.getRegion("translationRegion").show(translationView);
