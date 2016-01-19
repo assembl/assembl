@@ -24,7 +24,7 @@ from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.util import get_permissions
 from assembl.tasks.translate import (
-    translate_content, get_service_of_discussion,
+    translate_content,
     user_pref_as_translation_table)
 from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
@@ -243,7 +243,7 @@ def get_posts(request):
             elif is_unread == "false":
                 posts = posts.filter(ViewPost.id != None)
         user = AgentProfile.get(user_id)
-        service = get_service_of_discussion(discussion)
+        service = discussion.translation_service()
         if service:
             translations = user_pref_as_translation_table(user, service)
     else:

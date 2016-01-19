@@ -2,27 +2,14 @@ from collections import defaultdict
 
 from celery import Celery
 
-from pyramid.path import DottedNameResolver
-
 from . import init_task_config, config_celery_app
 
 # broker specified
 translation_celery_app = Celery('celery_tasks.translate')
 
-resolver = DottedNameResolver(__package__)
-
 _services = {}
 
 
-def get_service_of_discussion(discussion):
-    global _services
-    service = discussion.preferences["translation_service"]
-    if not service:
-        return
-    if service not in _services:
-        cls = resolver.resolve(service)
-        _services[service] = cls()
-    return _services[service]
 
 
 def lang_list_as_translation_table(service, language_list):
@@ -58,7 +45,7 @@ def translate_content(
         send_to_changes=False):
     from ..models import Locale
     discussion = content.discussion
-    service = service or get_service_of_discussion(discussion)
+    service = service or discussion.translation_service()
     if not service:
         return
     translation_table, languages = complete_lang_and_trans_table(
@@ -129,7 +116,7 @@ def translate_discussion(
         send_to_changes=False):
     from ..models import Discussion
     discussion = Discussion.get(discussion_id)
-    service = get_service_of_discussion(discussion)
+    service = discussion.translation_service()
     if not service:
         return
     translation_table, languages = complete_lang_and_trans_table(

@@ -6,6 +6,7 @@ from collections import defaultdict
 import simplejson as json
 from pyramid.security import Allow, ALL_PERMISSIONS
 from pyramid.settings import asbool
+from pyramid.path import DottedNameResolver
 from sqlalchemy import (
     Column,
     Integer,
@@ -35,6 +36,9 @@ from .auth import (
     UserTemplate)
 from .preferences import Preferences
 from ..semantic.namespaces import (CATALYST, ASSEMBL, DCTERMS)
+
+
+resolver = DottedNameResolver(__package__)
 
 
 class Discussion(DiscussionBoundBase):
@@ -649,6 +653,17 @@ class Discussion(DiscussionBoundBase):
     def discussion_locales(self, locale_list):
         # TODO: Guard.
         self.preferred_locales = ' '.join(locale_list)
+
+    # class cache, indexed by discussion id
+    _discussion_services = {}
+
+    def translation_service(self):
+        if self.id not in self._discussion_services:
+            service = self.preferences["translation_service"]
+            if service:
+                service = resolver.resolve(service)()
+            self._discussion_services[self.id] = service
+        return self._discussion_services[self.id]
 
     @property
     def main_locale(self):
