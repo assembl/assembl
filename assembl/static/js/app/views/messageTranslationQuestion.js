@@ -17,16 +17,13 @@ var Marionette = require('../shims/marionette.js'),
 var userTranslationStates = {
     CONFIRM: 'confirm',
     DENY: 'deny'
-}
+};
 
 var TranslationView = Marionette.ItemView.extend({
     template: '#tmpl-loader',
 
     ui: {
-        showOriginal: '.js_translation_show_original', //Show original region
         setLangPref: '.js_translation_question', //Question region
-        showOriginalString: '.js_trans_show_origin',
-        showTranslatedString: '.js_trans_show_translated',
         langChoiceConfirm: '.js_language_of_choice_confirm',
         langChoiceCancel: '.js_language_of_choice_deny',
         confirmLangPref: '.js_translate_all_confirm_msg',
@@ -35,8 +32,6 @@ var TranslationView = Marionette.ItemView.extend({
     },
 
     events: {
-        'click @ui.showOriginalString': 'showOriginal',
-        'click @ui.showTranslatedString': 'showTranslated',
         'click @ui.langChoiceConfirm': 'updateLanguagePreferenceConfirm',
         'click @ui.langChoiceCancel': 'updateLanguagePreferenceDeny',
         'click @ui.gotoSettings': 'loadProfile'
@@ -61,14 +56,14 @@ var TranslationView = Marionette.ItemView.extend({
                     translatedToName = translatedTo;
                 }
                 if ( !(translatedFromLocaleName) ){
-                    console.error("The language " + translatedFromLocale + " is not a part of the locale cache!");
-                    translatedFromLocaleName = translatedFromLocale;
+                    // may not be a translation, pretend coming from itself
+                    translatedFromLocaleName = translatedToName;
                 }
                 that.translatedTo = {locale: translatedTo, name: translatedToName};
                 that.translatedFrom = {locale: translatedFromLocale, name: translatedFromLocaleName};
                 that.langCache = localeToLangNameCache;
                 that.languagePreferences = preferences; //Should be sorted already
-                that.template = '#tmpl-message_translation';
+                that.template = '#tmpl-message_translation_question';
                 that.render();
             });
     },
@@ -86,22 +81,11 @@ var TranslationView = Marionette.ItemView.extend({
         return this._localesAsSortedList;
     },
 
-    showOriginal: function(e){
-        console.log('Showing the original');
-        this.messageView.useOriginalContent = true;
-        this.messageView.render();
-    },
-
-    showTranslated: function(e){
-        this.messageView.useOriginalContent = false;
-        this.messageView.render();
-    },
-
     updateLanguagePreference: function(state){
         var that = this,
             langPrefLocale = $(this.ui.langTo).val(),
 
-            createModel = function(locale, translateTo, preferenceColllection){
+            createModel = function(locale, translateTo, preferenceCollection){
 
                 commitChanges = {
                     success: function(model, resp, options) {
@@ -113,6 +97,8 @@ var TranslationView = Marionette.ItemView.extend({
                                 return Promise.resolve(messageStructures.fetch());
                             })
                             .then(function(messages){
+                                that.messageView.unknownPreference = false;
+                                that.messageView.forceTranslationQuestion = false;
                                 that.messageView.messageListView.render();
                             });
                     },
@@ -122,7 +108,7 @@ var TranslationView = Marionette.ItemView.extend({
                 }
 
                 var user_id = Ctx.getCurrentUser().id,
-                    existingModel = preferenceColllection.filter(function(model){
+                    existingModel = preferenceCollection.filter(function(model){
                         return (model.get('user_id') === user_id) && (model.get('locale_name') === locale) && (model.get('source_of_evidence') === 0)
                     });
                 if (!(_.isEmpty(existingModel)) ) {
@@ -171,36 +157,7 @@ var TranslationView = Marionette.ItemView.extend({
                 translatedFromLocale: this.translatedFrom
             };
         }
-    },
-
-    onRender: function(){
-        //Whenever a TranslationView is rendered, the message was translated.
-        if (this.template !== '#tmpl-loader') {
-            var original = this.message.get('body').original(),
-                current = this.message.get('body').best(this.languagePreferences);
-
-            //Showing the correct statement
-            if (this.messageView.useOriginalContent) {
-                this.$(this.ui.showOriginalString).addClass('hidden');
-                this.$(this.ui.showTranslatedString).removeClass('hidden');
-            }
-            else {
-                this.$(this.ui.showTranslatedString).addClass('hidden');
-                this.$(this.ui.showOriginalString).removeClass('hidden');
-            }
-
-            if (current.isMachineTranslation()){
-                var doit = this.languagePreferences.filter(function(ulp){
-                    return ulp.isTranslateTo(current.getBaseLocale());
-                });
-                if (doit) {
-                    //This could be slow and cause the user to first see the question
-                    this.$(this.ui.setLangPref).addClass('hidden');
-                }
-            }
-        }
     }
-
 });
 
 module.exports = TranslationView;

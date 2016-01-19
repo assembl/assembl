@@ -6,6 +6,23 @@ var _ = require('../shims/underscore.js'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js');
 
+function localeCommonLength(locale1, locale2) {
+    // how many common components?
+    // shortcut
+    if (locale1.substr(0, 2) != locale2.substr(0, 2)) {
+      return false;
+    }
+    var l1 = locale1.split("-x-mtfrom-")[0].split("_"),
+        l2 = locale2.split("-x-mtfrom-")[0].split("_"),
+        max = Math.min(l1.length, l2.length);
+    for (var i = 0; i < max; i++) {
+      if (l1[i] != l2[i]) {
+        break;
+      }
+    }
+    return i;
+}
+
 /**
  * @class LangStringEntry
  */
@@ -83,22 +100,7 @@ var LangString = Base.Model.extend({
     }
     return originals[0];
   },
-  localeCommonLength: function(locale1, locale2) {
-    // how many common components?
-    // shortcut
-    if (locale1.substr(0, 2) != locale2.substr(0, 2)) {
-      return false;
-    }
-    var l1 = locale1.split("-x-mtfrom-")[0].split("_"),
-        l2 = locale2.split("-x-mtfrom-")[0].split("_"),
-        max = Math.min(l1.length, l2.length);
-    for (var i = 0; i < max; i++) {
-      if (l1[i] != l2[i]) {
-        break;
-      }
-    }
-    return i;
-  },
+
   bestOf: function(available, langPrefs) {
     // Get the best langStringEntry among those available using user prefs.
     // 1. Look at available original languages: get corresponding pref.
@@ -121,7 +123,7 @@ var LangString = Base.Model.extend({
             continue;
           // Take pref with longest common locale string
           commonLenF = function(pref) {
-            return that.localeCommonLength(entry_locale, pref.get("locale_name")) > 0;
+            return localeCommonLength(entry_locale, pref.get("locale_name")) > 0;
           };
           var pref = langPrefs.max(commonLenF);
           if (commonLenF(pref) > 0) {
@@ -139,7 +141,7 @@ var LangString = Base.Model.extend({
             } else {
               // take available with longest common locale string to translation target
               commonLenF = function(entry) {
-                return that.localeCommonLength(entry.get("@language"), pref.get("translate_to_name")) > 0;
+                return localeCommonLength(entry.get("@language"), pref.get("translate_to_name")) > 0;
               };
               entry = _.max(available, commonLenF);
               if (commonLenF(entry) > 0) {
@@ -201,5 +203,6 @@ module.exports = {
   Model: LangString,
   Collection: LangStringCollection,
   EntryModel: LangStringEntry,
-  EntryCollection: LangStringEntryCollection
+  EntryCollection: LangStringEntryCollection,
+  localeCommonLength: localeCommonLength
 };

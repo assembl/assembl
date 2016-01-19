@@ -19,7 +19,7 @@ var Marionette = require('../shims/marionette.js'),
     Types = require('../utils/types.js'),
     AttachmentViews = require('./attachments.js'),
     MessageModerationOptionsView = require('./messageModerationOptions.js'),
-    MessageTranslationView = require('./messageTranslation.js'),
+    MessageTranslationView = require('./messageTranslationQuestion.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -126,13 +126,19 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
     this.creator = undefined;
+    this.useOriginalContent = false;
+    this.forceTranslationQuestion = false;
+    this.unknownPreference = false;
     Promise.join(
         this.model.getCreatorPromise(),
         this.model.collection.collectionManager.getUserLanguagePreferencesPromise(),
         function(creator, ulp) {
+          var translationData = ulp.getTranslationData(),
+              body = that.model.get("body"),
+              preference = ulp.getPreferenceForLocale(body.best(translationData).getBaseLocale());
           if(!that.isViewDestroyed()) {
             that.translationData = ulp.getTranslationData();
-            that.useOriginalContent = false;
+            that.unknownPreference = preference === undefined;
             that.creator = creator;
             that.template = '#tmpl-message';
             that.render();
@@ -163,9 +169,15 @@ var MessageView = Marionette.LayoutView.extend({
       likeCounter: ".js_likeCount",
       avatar: ".js_avatarContainer",
       name: ".js_nameContainer",
-      translation: ".js_regionMessageTranslation",
+      translation: ".js_regionMessageTranslationQuestions",
       attachments: ".js_regionMessageAttachments",
-      moderationOptions: ".js_regionMessageModerationOptions"
+      moderationOptions: ".js_regionMessageModerationOptions",
+      showTranslationPref: ".js_show-translation-preferences",
+
+      showOriginal: '.js_translation_show_original', //Show original region
+      showOriginalString: '.js_trans_show_origin',
+      showTranslatedString: '.js_trans_show_translated'
+
     },
 
     regions: {
@@ -174,7 +186,8 @@ var MessageView = Marionette.LayoutView.extend({
       translationRegion: "@ui.translation",
       attachmentsRegion: "@ui.attachments",
       moderationOptionsRegion: "@ui.moderationOptions",
-      messageReplyBoxRegion: "@ui.messageReplyBox"
+      messageReplyBoxRegion: "@ui.messageReplyBox",
+      showOriginalRegion: "@ui.showOriginal"
     },
 
   /**
@@ -196,10 +209,14 @@ var MessageView = Marionette.LayoutView.extend({
     'click .js_showModeratedMessage': 'onShowModeratedMessageClick',
     'click @ui.toggleExtracts' : 'onToggleExtractsClick',
     'click @ui.moderationOptionsButton' : 'onModerationOptionsClick',
+    "click @ui.showTranslationPref" : "onShowTranslationClick",
 
     //
     'click .js_messageReplyBtn': 'onMessageReplyBtnClick',
     'click .messageSend-cancelbtn': 'onReplyBoxCancelBtnClick',
+
+    'click @ui.showOriginalString': 'onShowOriginalClick',
+    'click @ui.showTranslatedString': 'onShowTranslatedClick',
 
     //These two are from messageSend.js, do NOT use @ui
     'focus .js_messageSend-body': 'onReplyBoxFocus',
@@ -284,7 +301,9 @@ var MessageView = Marionette.LayoutView.extend({
         publication_state: this.model.get("publication_state"),
         moderation_text: this.model.get("moderation_text"),
         moderator: this.model.get("moderator"),
-        message_id: this.model.id.split('/')[1]
+        message_id: this.model.id.split('/')[1],
+        unknownPreference: this.unknownPreference,
+        useOriginalContent: this.useOriginalContent
       });
     }
 
@@ -486,10 +505,28 @@ var MessageView = Marionette.LayoutView.extend({
       if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
-        if ( this.model.get("body").best(this.translationData).isMachineTranslation() ) {
+        if ( this.forceTranslationQuestion || this.unknownPreference ) {
           //Only show the translation view *iff* the message was translated by the backend 
           var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
-          this.getRegion("translationRegion").show(translationView);
+          this.translationRegion.show(translationView);
+          this.translationRegion.$el.removeClass("hidden");
+        } else {
+          this.translationRegion.$el.addClass("hidden");
+        }
+
+        if (this.model.get("body").best(this.translationData).isMachineTranslation()) {
+          //Showing the correct statement
+          if (this.useOriginalContent) {
+              this.$(this.ui.showOriginalString).addClass("hidden");
+              this.$(this.ui.showTranslatedString).removeClass("hidden");
+          }
+          else {
+              this.$(this.ui.showTranslatedString).addClass("hidden");
+              this.$(this.ui.showOriginalString).removeClass("hidden");
+          }
+        } else {
+          this.$(this.ui.showTranslatedString).addClass("hidden");
+          this.$(this.ui.showOriginalString).addClass("hidden");
         }
       }
       
@@ -1012,7 +1049,21 @@ var MessageView = Marionette.LayoutView.extend({
   onReplyBoxCancelBtnClick: function(e) {
       this.replyBoxShown = false;
       this.render();
-    },
+  },
+
+  onShowOriginalClick: function(e){
+      console.log('Showing the original');
+      this.useOriginalContent = true;
+      this.forceTranslationQuestion = false;
+      this.render();
+  },
+
+  onShowTranslatedClick: function(e){
+      console.log('Showing the translation');
+      this.useOriginalContent = false;
+      this.forceTranslationQuestion = false;
+      this.render();
+  },
 
   onMessageHoistClick: function(ev) {
     // we will hoist the post, or un-hoist it if it is already hoisted
@@ -1061,6 +1112,11 @@ var MessageView = Marionette.LayoutView.extend({
     this.getRegion("moderationOptionsRegion").show(this.messageModerationOptionsView);
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsSaveAndClose', this.onModerationOptionsSaveAndClose);
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsClose', this.onModerationOptionsClose);
+  },
+
+  onShowTranslationClick: function(ev){
+    this.forceTranslationQuestion = true;
+    this.render();
   },
 
   destroyMessageModerationOptionsView: function(){

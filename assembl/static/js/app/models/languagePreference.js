@@ -4,6 +4,7 @@ var _ = require('../shims/underscore.js'),
     Base = require('./base.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
+    LangString = require("./langstring.js"),
     Types = require('../utils/types.js');
 
 var clean = function(input){
@@ -70,10 +71,15 @@ var LanguagePreferenceCollection = Base.Collection.extend({
      * @param  String locale
      */
     getPreferenceForLocale: function(locale){
-        var l = this.find(function(ulp){
-            ulp.isLocale(locale);
-        });
-        return l;
+      // Take pref with longest common locale string
+      var that = this,
+      commonLenF = function(pref) {
+        return LangString.localeCommonLength(locale, pref.get("locale_name")) > 0;
+      };
+      var pref = this.max(commonLenF);
+      if (commonLenF(pref) > 0) {
+        return pref;
+      }
     },
 
     /**
