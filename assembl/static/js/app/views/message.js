@@ -135,7 +135,7 @@ var MessageView = Marionette.LayoutView.extend({
         function(creator, ulp) {
           var translationData = ulp.getTranslationData(),
               body = that.model.get("body"),
-              preference = ulp.getPreferenceForLocale(body.best(translationData).getBaseLocale());
+              preference = ulp.getPreferenceForLocale(body.original().getBaseLocale());
           if(!that.isViewDestroyed()) {
             that.translationData = ulp.getTranslationData();
             that.unknownPreference = preference === undefined;
@@ -187,7 +187,6 @@ var MessageView = Marionette.LayoutView.extend({
       attachmentsRegion: "@ui.attachments",
       moderationOptionsRegion: "@ui.moderationOptions",
       messageReplyBoxRegion: "@ui.messageReplyBox",
-      showOriginalRegion: "@ui.showOriginal"
     },
 
   /**
@@ -301,9 +300,7 @@ var MessageView = Marionette.LayoutView.extend({
         publication_state: this.model.get("publication_state"),
         moderation_text: this.model.get("moderation_text"),
         moderator: this.model.get("moderator"),
-        message_id: this.model.id.split('/')[1],
-        unknownPreference: this.unknownPreference,
-        useOriginalContent: this.useOriginalContent
+        message_id: this.model.id.split('/')[1]
       });
     }
 
@@ -352,7 +349,9 @@ var MessageView = Marionette.LayoutView.extend({
       direct_link_relative_url: direct_link_relative_url,
       share_link_url: share_link_url,
       html_export_url: html_export_url,
-      user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST)
+      user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST),
+      unknownPreference: this.unknownPreference,
+      useOriginalContent: this.useOriginalContent
     };
   },
 
@@ -512,21 +511,6 @@ var MessageView = Marionette.LayoutView.extend({
           this.translationRegion.$el.removeClass("hidden");
         } else {
           this.translationRegion.$el.addClass("hidden");
-        }
-
-        if (this.model.get("body").best(this.translationData).isMachineTranslation()) {
-          //Showing the correct statement
-          if (this.useOriginalContent) {
-              this.$(this.ui.showOriginalString).addClass("hidden");
-              this.$(this.ui.showTranslatedString).removeClass("hidden");
-          }
-          else {
-              this.$(this.ui.showTranslatedString).addClass("hidden");
-              this.$(this.ui.showOriginalString).removeClass("hidden");
-          }
-        } else {
-          this.$(this.ui.showTranslatedString).addClass("hidden");
-          this.$(this.ui.showOriginalString).addClass("hidden");
         }
       }
       
@@ -1051,14 +1035,14 @@ var MessageView = Marionette.LayoutView.extend({
       this.render();
   },
 
-  onShowOriginalClick: function(e){
+  onShowOriginalClick: function(e) {
       console.log('Showing the original');
       this.useOriginalContent = true;
       this.forceTranslationQuestion = false;
       this.render();
   },
 
-  onShowTranslatedClick: function(e){
+  onShowTranslatedClick: function(e) {
       console.log('Showing the translation');
       this.useOriginalContent = false;
       this.forceTranslationQuestion = false;
