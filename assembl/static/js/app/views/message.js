@@ -1103,6 +1103,11 @@ var MessageView = Marionette.LayoutView.extend({
     this.render();
   },
 
+  onHideQuestionClick: function(e) {
+    this.forceTranslationQuestion = false;
+    this.render();
+  },
+
   destroyMessageModerationOptionsView: function(){
     console.log("message::destroyMessageModerationOptionsView()");
     if ( this.messageModerationOptionsView ){

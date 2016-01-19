@@ -29,11 +29,13 @@ var TranslationView = Marionette.ItemView.extend({
         confirmLangPref: '.js_translate_all_confirm_msg',
         langTo: '.js_translate_to_language',
         gotoSettings: '.js_load_profile_settings',
+        hideQuestion: '.js_hide_translation_question',
     },
 
     events: {
         'click @ui.langChoiceConfirm': 'updateLanguagePreferenceConfirm',
         'click @ui.langChoiceCancel': 'updateLanguagePreferenceDeny',
+        'click @ui.hideQuestion': 'onHideQuestionClick',
         'click @ui.gotoSettings': 'loadProfile'
     },
 
@@ -148,12 +150,17 @@ var TranslationView = Marionette.ItemView.extend({
         this.updateLanguagePreference(userTranslationStates.DENY);
     },
 
+    onHideQuestionClick: function(e) {
+        this.messageView.onHideQuestionClick(e);
+    },
+
     serializeData: function(){
         if (this.template !== "#tmpl-loader") {
             return {
                 translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to "), this.translatedFrom.name),
                 supportedLanguages: this.localesAsSortedList(),
                 translatedTo: this.translatedTo,
+                forceTranslationQuestion: this.messageView.forceTranslationQuestion,
                 translatedFromLocale: this.translatedFrom
             };
         }

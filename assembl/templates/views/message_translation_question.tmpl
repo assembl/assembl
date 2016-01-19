@@ -11,6 +11,9 @@
     </span>
     <span class='js_language_of_choice_confirm'>{{ gettext("Yes") }}</span>
     <span class='js_language_of_choice_deny'>{{ gettext("Do not translate") }} </span>
+    <% if (forceTranslationQuestion) { %>
+    <span class='js_hide_translation_question'>{{ gettext("Cancel") }} </span>
+    <% } %>
 </div>
 {#
 <div class='hidden js_translate_all_confirm_msg'>
