@@ -156,6 +156,10 @@ var IdeaView = Backbone.View.extend({
     this.$el.removeClass('is-open');
   },
 
+  getIsCollapsedState: function() {
+    return !(this.$el.hasClass('is-open'));
+  },
+
   saveCollapsedState: function(isCollapsed) {
     this.parentPanel.saveIdeaCollapsedState(this.model, isCollapsed);
   },
@@ -220,43 +224,58 @@ var IdeaView = Backbone.View.extend({
    *                      null: don't filter
    */
   doIdeaChange: function(is_unread) {
-      var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-      
-      var analytics = Analytics.getInstance();
-      console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
-      if(!is_unread) {
-        analytics.trackEvent(analytics.events.OPEN_IDEA_IN_TABLE_OF_IDEAS);
-      }
-      else {
-        analytics.trackEvent(analytics.events.OPEN_IDEA_NEW_MESSAGES_IN_TABLE_OF_IDEAS);
-      }
-      analytics.trackEvent(analytics.events.NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS);
-      this._groupContent.setCurrentIdea(this.model);
-      if (messageListView) {
-        //Syncing with current idea below isn't sufficient, as we need to set/unset the unread filter
-        messageListView.triggerMethod('messageList:clearAllFilters');
-        messageListView.trigger('messageList:addFilterIsRelatedToIdea', this.model, is_unread);
-      }
+    var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
 
-      // Why is this call here?  benoitg - 2015-06-09
-      this._groupContent.NavigationResetDebateState(false);
-    },
+    var analytics = Analytics.getInstance();
+    console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
+    if(!is_unread) {
+      analytics.trackEvent(analytics.events.OPEN_IDEA_IN_TABLE_OF_IDEAS);
+    }
+    else {
+      analytics.trackEvent(analytics.events.OPEN_IDEA_NEW_MESSAGES_IN_TABLE_OF_IDEAS);
+    }
+    analytics.trackEvent(analytics.events.NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS);
+    this._groupContent.setCurrentIdea(this.model);
+    if (messageListView) {
+      //Syncing with current idea below isn't sufficient, as we need to set/unset the unread filter
+      messageListView.triggerMethod('messageList:clearAllFilters');
+      messageListView.trigger('messageList:addFilterIsRelatedToIdea', this.model, is_unread);
+    }
+
+    // Why is this call here?  benoitg - 2015-06-09
+    this._groupContent.NavigationResetDebateState(false);
+  },
+
+  /**
+   * @event
+   * Select this idea as the current idea
+   */
+  _onTitleClick: function(e, is_unread) {
+    e.stopPropagation();
+    this.doIdeaChange(is_unread);
+
+    if (Ctx.getCurrentUserId()) {
+      // tell the backend that the idea was read
+      $.ajax("/data/Discussion/" + Ctx.getDiscussionId() + "/ideas/" + this.model.getNumericId() + "/actions", {
+        method: "POST",
+        contentType: "application/json",
+        data: '{"@type":"ViewIdea"}'
+      });
+    }
+
+    if (this.getIsCollapsedState()) {
+      this.open();
+      // we have just changed the collapsed state by calling open() or close()
+      this.saveCollapsedState(this.getIsCollapsedState());
+    }
+  },
 
   /**
    * @event
    * Select this idea as the current idea
    */
   onTitleClick: function(e) {
-      e.stopPropagation();
-      this.doIdeaChange(null);
-      if (Ctx.getCurrentUserId()) {
-        // tell the backend that the idea was read
-        $.ajax("/data/Discussion/" + Ctx.getDiscussionId() + "/ideas/" + this.model.getNumericId() + "/actions", {
-          method: "POST",
-          contentType: "application/json",
-          data: '{"@type":"ViewIdea"}'
-        });
-      }
+      this._onTitleClick(e, null);
     },
 
   /**
@@ -264,8 +283,7 @@ var IdeaView = Backbone.View.extend({
    * Select this idea as the current idea, and show only unread messages of this idea
    */
   onUnreadCountClick: function(e) {
-    e.stopPropagation();
-    this.doIdeaChange(true);
+    this._onTitleClick(e, true);
   },
 
   /**
@@ -323,8 +341,8 @@ var IdeaView = Backbone.View.extend({
 
     if (this.dragOverCounter > 30) {
       this.open();
-      var isCollapsed = false;
-      this.saveCollapsedState(isCollapsed);
+      //I don't think we should save the state in this case, it's not really user initiated.  benoitg - 2016-01-19
+      //this.saveCollapsedState(this.getIsCollapsedState());
     }
 
     ev.dataTransfer.dropEffect = 'move';
@@ -469,16 +487,15 @@ var IdeaView = Backbone.View.extend({
     }
 
     var analytics = Analytics.getInstance();
-    var isCollapsed = !(this.$el.hasClass('is-open'));
-    if (isCollapsed) {
+    if (this.getIsCollapsedState()) {
       analytics.trackEvent(analytics.events.NAVIGATION_TOGGLE_ROOT_IDEA_OPEN);
       this.open();
     } else {
       analytics.trackEvent(analytics.events.NAVIGATION_TOGGLE_ROOT_IDEA_CLOSE);
       this.close();
     }
-    isCollapsed = !isCollapsed; // we have just changed the collapsed state by calling open() or close()
-    this.saveCollapsedState(isCollapsed);
+    // we have just changed the collapsed state by calling open() or close()
+    this.saveCollapsedState(this.getIsCollapsedState());
   },
 
   onIdeaCollaspedStateChange: function(ev) {
