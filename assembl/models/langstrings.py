@@ -455,11 +455,13 @@ class LangString(Base):
     def best_entry_in_request(self):
         from pyramid.threadlocal import get_current_request
         from pyramid.security import Everyone
+        # Very very hackish, but the user_prefs_as_dict call
+        # is costly and frequent. Let's cache it in the request.
         req = get_current_request()
         assert req
-        if getattr(req, "lang_prefs", None) is None:
+        if getattr(req, "lang_prefs", 0) is 0:
             user_id = req.authenticated_userid
-            if user_id != Everyone:
+            if user_id and user_id != Everyone:
                 from .auth import User, UserLanguagePreference
                 user = User.get(user_id)
                 req.lang_prefs = UserLanguagePreference.user_prefs_as_dict(
