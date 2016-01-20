@@ -110,6 +110,9 @@ var LangString = Base.Model.extend({
     // Logic is painful, but most of the time (single original) will be trivial in practice.
 
     var i, entry, commonLenF, that = this;
+    if (available.length == 1) {
+        return available[0];
+    }
     
     if (langPrefs !== undefined) {
       for (var useTranslationsC = 0; useTranslationsC < 2; useTranslationsC++) {

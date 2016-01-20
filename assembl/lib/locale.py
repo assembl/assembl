@@ -44,7 +44,8 @@ def to_posix_string(lang_code):
     if is_valid639_1(lang):
         posix_lang = lang
     elif is_valid639_2(lang):
-        posix_lang = to_iso639_1(lang)
+        temp = to_iso639_1(lang)
+        posix_lang = temp if temp else lang
     else:
         full_name = lang.lower().capitalize()
         if is_valid639_2(full_name):
