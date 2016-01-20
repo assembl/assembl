@@ -85,7 +85,7 @@ var TranslationView = Marionette.ItemView.extend({
 
     updateLanguagePreference: function(state){
         var that = this,
-            langPrefLocale = $(this.ui.langTo).val(),
+            preferredLanguageTo = $(this.ui.langTo).val(),
 
             createModel = function(locale, translateTo, preferenceCollection){
 
@@ -107,34 +107,47 @@ var TranslationView = Marionette.ItemView.extend({
                     error: function(model, resp, options) {
                         console.error("Failed to save user language preference of " + model + " to the database", resp);
                     }
-                }
+                };
 
                 var user_id = Ctx.getCurrentUser().id,
-                    existingModel = preferenceCollection.filter(function(model){
-                        return (model.get('user_id') === user_id) && (model.get('locale_name') === locale) && (model.get('source_of_evidence') === 0)
+                    existingModel = preferenceCollection.find(function(model){
+                        //Uniqueness constraint from the back-end ensures only 1 model with such parameters
+                        return (
+                            (model.get('user') === user_id) && 
+                            (model.get('locale_name') === locale) && 
+                            (model.get('source_of_evidence') === 0)                        )
                     });
-                if (!(_.isEmpty(existingModel)) ) {
-                    var model = existingModel[0];
+                if (existingModel) {
+                    var model = existingModel;
+                    commitChanges.wait = true;
                     model.save({
                         locale_name: locale,
                         translate_to_name: translateTo,
-                    }, commitChanges)
+                    }, commitChanges);
                 }
-                var hash = {
-                    locale_name: locale,
-                    source_of_evidence: 0,
-                    user: Ctx.getCurrentUser().id,
-                    "@type": Types.LANGUAGE_PREFERENCE
+                else {
+                    var hash = {
+                        locale_name: locale,
+                        source_of_evidence: 0,
+                        user: Ctx.getCurrentUser().id,
+                        "@type": Types.LANGUAGE_PREFERENCE
+                    };
+                    if (translateTo){
+                        hash.translate_to_name = translateTo;
+                    }
+                    var langPref = new LanguagePreference.Model(hash, {collection: that.languagePreferences});
+                    commitChanges.wait = false;
+                    langPref.save(null, commitChanges);
                 }
-                if (translateTo){
-                    hash.translate_to_name = translateTo;
-                }
-                var langPref = new LanguagePreference.Model(hash, {collection: that.languagePreferences});
-                langPref.save(null, commitChanges)
+                
             };
 
+        if (!preferredLanguageTo) {
+            return; // If there is a template error
+        }
+
         if (state === userTranslationStates.CONFIRM) {
-            createModel(this.translatedFrom.locale, langPrefLocale, this.languagePreferences);
+            createModel(this.translatedFrom.locale, preferredLanguageTo, this.languagePreferences);
         }
 
         if (state === userTranslationStates.DENY) {

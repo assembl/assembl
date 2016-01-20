@@ -1652,15 +1652,15 @@ class UserLanguagePreference(Base):
         if self.preferred_order == other.preferred_order: return 0
         if self.preferred_order > other.preferred_order: return 1
 
-    def set_priority_order(self, code):
-        # code can be ignored. This value should be updated for each user
-        # as each preferred language is committed
-        current_languages = self.db.query(UserLanguagePreference).\
-                            filter_by(user=self.user).\
-                            order_by(self.preferred_order).all()
+    # def set_priority_order(self, code):
+    #     # code can be ignored. This value should be updated for each user
+    #     # as each preferred language is committed
+    #     current_languages = self.db.query(UserLanguagePreference).\
+    #                         filter_by(user=self.user).\
+    #                         order_by(self.preferred_order).all()
 
-        if self.source_of_evidence == 0:
-            pass
+    #     if self.source_of_evidence == 0:
+    #         pass
 
     @property
     def locale_code(self):
@@ -1686,3 +1686,14 @@ class UserLanguagePreference(Base):
             self.translate_to_locale = locale
         else:
             self.translate_to_locale = None
+
+    def __repr__(self):
+        return \
+            """{user_id: %d, locale_id: %s, translated_to: %s source_of_evidence: %d, preferred_order: %d}""" % (
+                self.user_id,
+                Locale.locale_collection_byid[self.locale_id],
+                Locale.locale_collection_byid[self.translate_to]
+                if self.translate_to else None,
+                self.source_of_evidence,
+                self.preferred_order
+            )

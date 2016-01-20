@@ -33,8 +33,9 @@
     "UserLanguagePreference": {
         "user_id": true,
         "locale_name": "locale_code",
-        "preferred_order": "&set_priority_order",
+        "preferred_order": true,
         "source_of_evidence": true,
+        "translate_to": false,
         "translate_to_name": "translate_to_code"
     },
     "User": {

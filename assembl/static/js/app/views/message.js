@@ -126,9 +126,12 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
     this.creator = undefined;
+
+    //Flags used to identify message translation states
     this.useOriginalContent = false;
     this.forceTranslationQuestion = false;
     this.unknownPreference = false;
+
     Promise.join(
         this.model.getCreatorPromise(),
         this.model.collection.collectionManager.getUserLanguagePreferencesPromise(),
