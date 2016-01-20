@@ -512,7 +512,7 @@ var MessageView = Marionette.LayoutView.extend({
           var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
           this.translationRegion.show(translationView);
           this.translationRegion.$el.removeClass("hidden");
-        } else {
+        } else if (this.translationRegion.$el) {
           this.translationRegion.$el.addClass("hidden");
         }
       }
