@@ -64,11 +64,11 @@ def translate_content(
         if und_subject:
             und_subject.locale_name = language
             content.db.expire(und_subject, ("locale",))
-            content.db.expire(content.subject, ("entries_as_dict",))
+            content.db.expire(content.subject, ("entries",))
         if und_body:
             und_body.locale_name = language
             content.db.expire(und_body, ("locale",))
-            content.db.expire(content.body, ("entries_as_dict",))
+            content.db.expire(content.body, ("entries",))
 
     for prop in ("body", "subject"):
         ls = getattr(content, prop)
@@ -80,7 +80,7 @@ def translate_content(
                     # assume can_guess_locale = true
                     service.confirm_locale(entry, languages)
                     # reload entries
-                    ls.db.expire(ls, ("entries_as_dict",))
+                    ls.db.expire(ls, ("entries",))
                     entries = ls.entries_as_dict
             known = {service.asKnownLocale(
                         Locale.extract_source_locale(
@@ -94,7 +94,7 @@ def translate_content(
                     if dest not in known:
                         service.translate_lse(
                             original, Locale.get_or_create(dest))
-                        ls.db.expire(ls, ["entries", "entries_as_dict"])
+                        ls.db.expire(ls, ["entries"])
                         known.add(dest)
                         changed = True
     if changed and send_to_changes:

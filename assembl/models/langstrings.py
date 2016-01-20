@@ -284,9 +284,9 @@ class LangString(Base):
             langstring=ls, value=value, locale_id=Locale.get_id_of(locale))
         return ls
 
-    entries_as_dict = relationship(
-        "LangStringEntry",
-        collection_class=attribute_mapped_collection("locale_id"))
+    @property
+    def entries_as_dict(self):
+        return {e.locale_id: e for e in self.entries}
 
     @hybrid_method
     def non_mt_entries(self):
@@ -484,7 +484,7 @@ class LangString(Base):
             else:
                 entry.forget_identification()
         if inspect(self).persistent:
-            self.db.expire(self, ["entries", "entries_as_dict"])
+            self.db.expire(self, ["entries"])
 
     # TODO: the permissions should really be those of the owning object. Yikes.
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)

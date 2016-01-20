@@ -60,8 +60,8 @@ class TranslationService(object):
         changed = langstring_entry.identify_locale(lang, data)
         if changed:
             langstring_entry.db.expire(langstring_entry, ["locale"])
-            langstring_entry.db.expire(langstring_entry.langstring, [
-                "entries", "entries_as_dict"])
+            langstring_entry.db.expire(
+                langstring_entry.langstring, ["entries"])
 
     @abstractmethod
     def translate(self, text, target, source=None):
