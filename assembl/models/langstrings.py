@@ -53,6 +53,12 @@ class Locale(Base):
             self = self.get_or_create(ancestor)
 
     @staticmethod
+    def decompose_locale(locale):
+        parts = locale.split('_')
+        for l in range(len(parts), 0, -1):
+            yield "_".join(parts[:l])
+
+    @staticmethod
     def common_parts(locname1, locname2):
         loc1 = locname1.split("_")
         loc2 = locname2.split("_")
@@ -302,7 +308,8 @@ class LangString(Base):
                 return x
 
     @hybrid_method
-    def best_lang(self, locales):
+    def best_lang_old(self, locales):
+        # based on a simple ordered list of locales
         locale_collection = Locale.locale_collection
         locale_collection_subsets = Locale.locale_collection_subsets
         available = self.entries_as_dict
@@ -343,8 +350,8 @@ class LangString(Base):
         # TODO: Look at other languages in the country?
         # Give up and give nothing, or give first?
 
-    @best_lang.expression
-    def best_lang(self, locales):
+    @best_lang_old.expression
+    def best_lang_old(self, locales):
         # Construct an expression that will find the best locale according to list.
         scores = {}
         current_score = 1
@@ -392,26 +399,58 @@ class LangString(Base):
         q = Query(LangStringEntry).order_by(c).limit(1).subquery()
         return aliased(LangStringEntry, q)
 
-    def best_lang_trans(self, locale_trans_table, default_trans):
-        targets = set()
-        for entry in self.non_mt_entries():
-            for locale in entry.locale.ancestry():
-                if locale.locale in locale_trans_table:
-                    target = locale_trans_table[locale.locale]
-                    if target is None:
-                        return [entry]
-                    targets.add(target)
-                else:
-                    targets.add(default_trans)
-        candidates = []
-        for entry in self.entries:
-            for target in targets:
-                common = Locale.common_parts(target, entry.locale.base_locale)
-                if common:
-                    candidates.append((len(common), entry))
-        if candidates:
-            candidates.sort(reverse=True)
-            return [candidates[0][1]]
+    def best_lang(self, user_prefs=None):
+        # Get the best langStringEntry among those available using user prefs.
+        # 1. Look at available original languages: get corresponding pref.
+        # 2. Sort prefs (same order as original list.)
+        # 3. take first applicable w/o trans or whose translation is available.
+        # 4. if none, look at available translations and repeat.
+        # Logic is painful, but most of the time (single original)
+        # will be trivial in practice.
+        if len(self.entries) == 1:
+            return self.entries[0]
+        if user_prefs:
+            from .auth import UserLanguagePreference
+            if not isinstance(user_prefs, dict):
+                # Often worth doing upstream
+                user_prefs = UserLanguagePreference.user_prefs_as_dict(
+                    user_prefs)
+            for use_originals in (True, False):
+                entries = filter(
+                    lambda e: e.is_machine_translated() != use_originals,
+                    self.entries)
+                if not entries:
+                    continue
+                candidates = []
+                entriesByLocale = {}
+                for entry in entries:
+                    pref = user_prefs.find_locale(
+                        Locale.extract_base_locale(entry.locale_name))
+                    if pref:
+                        candidates.append(pref)
+                        entriesByLocale[pref.locale_code] = entry
+                if candidates:
+                    candidates.sort()
+                    for pref in candidates:
+                        if pref.translate_to:
+                            target_locale = pref.translate_to_code
+                            entries.sort(key=lambda e: Locale.common_parts(
+                                target_locale,
+                                Locale.extract_base_locale(entry.locale_name)),
+                                reverse=True)
+                            e = entries[0]
+                            if Locale.common_parts(
+                                    target_locale,
+                                    Locale.extract_base_locale(e.locale_name)):
+                                return e
+                        else:
+                            return entriesByLocale[pref.locale_code]
+        # give up and give first original
+        entries = self.non_mt_entries()
+        if entries:
+            return entries[0]
+        # or first entry
+        return self.entries[0]
 
     def remove_translations(self):
         for entry in self.entries:
@@ -502,6 +541,10 @@ class LangStringEntry(Base, TombstonableMixin):
     @locale_identification_data_json.setter
     def locale_identification_data_json(self, data):
         self.locale_identification_data = json.dumps(data) if data else None
+
+    def is_machine_translated(self):
+        return Locale.locale_is_machine_translated(
+            Locale.locale_collection_byid[self.locale_id])
 
     def change_value(self, new_value):
         self.tombstone = datetime.utcnow()

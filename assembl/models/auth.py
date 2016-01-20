@@ -1646,11 +1646,15 @@ class UserLanguagePreference(Base):
                         order_by=desc(preferred_order)))
 
     def __cmp__(self, other):
-        if not isinstance(other, UserLanguagePreference):
-            raise AttributeError("Incorrect UserLanguagePreference compared")
-        if self.preferred_order < other.preferred_order: return -1
-        if self.preferred_order == other.preferred_order: return 0
-        if self.preferred_order > other.preferred_order: return 1
+        if not isinstance(other, self.__class__):
+            return -1
+        s = self.source_of_evidence - other.source_of_evidence
+        if s:
+            return s
+        s = s.preferred_order - other.preferred_order
+        if s:
+            return s
+        return super(UserLanguagePreference, self).__cmp__(other)
 
     # def set_priority_order(self, code):
     #     # code can be ignored. This value should be updated for each user
@@ -1662,9 +1666,31 @@ class UserLanguagePreference(Base):
     #     if self.source_of_evidence == 0:
     #         pass
 
+    @staticmethod
+    def user_prefs_as_dict(user_prefs):
+
+        class LanguageCollectionPreferenceDict(dict):
+            def find_locale(self, locale):
+                for locale in Locale.decompose_locale(locale):
+                    if locale in self:
+                        return self[locale]
+
+        user_prefs = {
+            user_pref.locale_code: user_pref
+            for user_pref in user_prefs
+        }
+        for (loc, pref) in user_prefs.items():
+            for n, l in enumerate(Locale.decompose_locale(loc)):
+                if n == 0:
+                    continue
+                if l in user_prefs:
+                    break
+                user_prefs[l] = pref
+        return LanguageCollectionPreferenceDict(user_prefs)
+
     @property
     def locale_code(self):
-        return self.locale.locale
+        return Locale.locale_collection_byid[self.locale_id]
 
     @locale_code.setter
     def locale_code(self, code):
@@ -1676,7 +1702,7 @@ class UserLanguagePreference(Base):
     @property
     def translate_to_code(self):
         if self.translate_to:
-            return self.translate_to_locale.locale
+            return Locale.locale_collection_byid[self.translate_to]
 
     @translate_to_code.setter
     def translate_to_code(self, code):

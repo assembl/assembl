@@ -305,8 +305,8 @@ class Content(DiscussionBoundBase):
         # Go figure. Fortunately not needed yet.
         subject_ls = aliased(LangString)
         body_ls = aliased(LangString)
-        best_subject_sq = LangString.best_lang(locales)
-        best_body_sq = LangString.best_lang(locales)
+        best_subject_sq = LangString.best_lang_old(locales)
+        best_body_sq = LangString.best_lang_old(locales)
 
         return cls.default_db.query(
             cls, best_subject_sq, best_body_sq).join(
