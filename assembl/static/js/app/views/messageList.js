@@ -1645,7 +1645,7 @@ var MessageList = AssemblPanel.extend({
               //view.hasChildren = (subviews.length > 0);
               list.push(view.render().el);
 
-              view.$('.messagelist-children').append(subviews);
+              //view.$('.messagelist-children').append(subviews);  moved to messageFamily
 
               /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
                * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */

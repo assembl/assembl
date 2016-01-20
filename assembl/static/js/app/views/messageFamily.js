@@ -46,6 +46,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
     this.collapsed = options.collapsed;
     this.currentLevel = options.currentLevel;
     this.hasChildren = (_.size(options.hasChildren) > 0);
+    this.childViews = options.hasChildren;
 
     //this.model.on('change:collapsed', this.onCollapsedChange, this);
     //this.listenTo(this.model, 'change:collapsed', this.onCollapsedChange);
@@ -162,6 +163,10 @@ var MessageFamilyView = Marionette.ItemView.extend({
     //this.$el.html(this.template(data));
     Ctx.initTooltips(this.$el);
     this.$el.find('>.message-family-arrow>.message').replaceWith(messageView.el);
+
+    var child_el = this.$('.messagelist-children');
+    if (child_el.children().length === 0 && this.childViews.length > 0)
+        child_el.append(this.childViews);
 
     this.onCollapsedChange();
 

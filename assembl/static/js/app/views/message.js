@@ -81,12 +81,6 @@ var MessageView = Marionette.LayoutView.extend({
   messageModerationOptionsView: null,
 
   /**
-   * State maintained for the translation view
-   * @type {Object}
-   */
-  messageTranslationState: null,
-
-  /**
    * @init
    * @param {MessageModel} obj the model
    */
@@ -136,11 +130,11 @@ var MessageView = Marionette.LayoutView.extend({
         this.model.getCreatorPromise(),
         this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
         function(creator, ulp) {
-          var translationData = ulp.getTranslationData(),
-              body = that.model.get("body"),
-              preference = ulp.getPreferenceForLocale(body.original().getBaseLocale());
           if(!that.isViewDestroyed()) {
-            that.translationData = ulp.getTranslationData();
+            var translationData = ulp.getTranslationData(),
+                body = that.model.get("body"),
+                preference = ulp.getPreferenceForLocale(body.original().getBaseLocale());
+            that.translationData = translationData;
             that.unknownPreference = preference === undefined;
             that.creator = creator;
             that.template = '#tmpl-message';
@@ -508,7 +502,7 @@ var MessageView = Marionette.LayoutView.extend({
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
         if ( this.forceTranslationQuestion || this.unknownPreference ) {
-          //Only show the translation view *iff* the message was translated by the backend 
+          //Only show the translation view *iff* the message was translated by the backend
           var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
           this.translationRegion.show(translationView);
           this.translationRegion.$el.removeClass("hidden");
@@ -516,7 +510,6 @@ var MessageView = Marionette.LayoutView.extend({
           this.translationRegion.$el.addClass("hidden");
         }
       }
-      
 
       if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
         //Only the full body view uses annotator
@@ -1492,10 +1485,6 @@ var MessageView = Marionette.LayoutView.extend({
         messageView: this
       });
       $('#slider').html(modal.render().el);
-    },
-
-  onTranslationDefined: function(view, state){
-    console.log("The state of the passed variable is: ", state);
   }
 
 });
