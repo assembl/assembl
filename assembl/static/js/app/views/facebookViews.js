@@ -769,7 +769,7 @@ var exportPostForm = Marionette.LayoutView.extend({
     var cm = new CollectionManager();
     Promise.join(
       this.exportedMessage.getCreatorPromise(),
-      cm.getUserLanguagePreferencesPromise(),
+      cm.getUserLanguagePreferencesPromise(Ctx),
       function(creator, ulp) {
         that.translationData = ulp.getTranslationData();
         that.messageCreator = creator;

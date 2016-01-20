@@ -124,12 +124,8 @@ var LangString = Base.Model.extend({
           var entry_locale = entry.get("@language");
           if (entry.isMachineTranslation() != useTranslations)
             continue;
-          // Take pref with longest common locale string
-          commonLenF = function(pref) {
-            return localeCommonLength(entry_locale, pref.get("locale_name")) > 0;
-          };
-          var pref = langPrefs.max(commonLenF);
-          if (commonLenF(pref) > 0) {
+          var pref = langPrefs.getPreferenceForLocale(entry_locale);
+          if (pref !== undefined) {
             entryByPrefLocale[pref.get("locale_name")] = entry;
             prefCandidates.push(pref);
           }

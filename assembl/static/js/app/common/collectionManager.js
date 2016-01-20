@@ -827,18 +827,23 @@ var CollectionManager = Marionette.Object.extend({
       return this._allUserAccountsPromise;
     },
 
-  getUserLanguagePreferencesPromise: function(){
+  getUserLanguagePreferencesPromise: function(Ctx){
     if (this._allUserLanguagePreferencesPromise) {
       return this._allUserLanguagePreferencesPromise;
     }
 
-    this._allUserLanguagePreferences = new LanguagePreference.Collection();
-    this._allUserLanguagePreferences.collectionManager = this;
-    this._allUserLanguagePreferencesPromise = Promise.resolve(this._allUserLanguagePreferences.fetch())
-      .thenReturn(this._allUserLanguagePreferences)
-      .catch(function(e){
-        Raven.captureException(e);
-      });
+    if (Ctx.isUserConnected()) {
+      this._allUserLanguagePreferences = new LanguagePreference.Collection();
+      this._allUserLanguagePreferences.collectionManager = this;
+      this._allUserLanguagePreferencesPromise = Promise.resolve(this._allUserLanguagePreferences.fetch())
+        .thenReturn(this._allUserLanguagePreferences)
+        .catch(function(e){
+          Raven.captureException(e);
+        });
+    } else {
+      this._allUserLanguagePreferences = new LanguagePreference.DisconnectedUserCollection();
+      this._allUserLanguagePreferencesPromise = Promise.resolve(this._allUserLanguagePreferences);
+    }
     return this._allUserLanguagePreferencesPromise;
   },
 

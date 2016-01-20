@@ -17,7 +17,7 @@ var SynthesisItem = Marionette.ItemView.extend({
   initialize: function(options) {
     var that = this;
     this.panel = options.panel;
-    this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
+    this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx).then(function(ulp) {
         that.translationData = ulp.getTranslationData();
         that.template = '#tmpl-synthesisItemInNavigation';
         that.render();

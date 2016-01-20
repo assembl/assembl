@@ -98,8 +98,28 @@ var LanguagePreferenceCollection = Base.Collection.extend({
 });
 
 
+var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.extend({
+
+    getExplicitLanguages: function(){
+        return [];
+    },
+
+    getPreferenceForLocale: function(locale){
+        return new LanguagePreferenceModel({
+          locale_name: locale,
+          source_of_evidence: 0
+        });
+    },
+
+    getTranslateToForLocale: function(locale){
+        return null;
+    },
+});
+
+
 
 module.exports = {
     Model: LanguagePreferenceModel,
-    Collection: LanguagePreferenceCollection
+    Collection: LanguagePreferenceCollection,
+    DisconnectedUserCollection: DisconnectedUserLanguagePreferenceCollection
 }

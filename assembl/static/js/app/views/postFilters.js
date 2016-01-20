@@ -257,7 +257,7 @@ _.extend(FilterPostIsDescendentOfPost.prototype, {
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
       return Promise.join(
             collectionManager.getMessageFullModelPromise(individualFilterValue),
-            collectionManager.getUserLanguagePreferencesPromise(),
+            collectionManager.getUserLanguagePreferencesPromise(Ctx),
             function(post, ulp) {
         if (!post) {
           throw new Error('Post ' + individualFilterValue + ' not found');
@@ -299,7 +299,7 @@ _.extend(FilterPostIsDescendentOrAncestorOfPost.prototype, {
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
       return Promise.join(
             collectionManager.getMessageFullModelPromise(individualFilterValue),
-            collectionManager.getUserLanguagePreferencesPromise(),
+            collectionManager.getUserLanguagePreferencesPromise(Ctx),
             function(post, ulp) {
         if (!post) {
           throw new Error('Post ' + individualFilterValue + ' not found');

@@ -55,7 +55,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
     if (!_.isUndefined(this.level)) {
       this.currentLevel = this.level;
     }
-    this.model.collection.collectionManager.getUserLanguagePreferencesPromise().then(function(ulp) {
+    this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx).then(function(ulp) {
         that.translationData = ulp.getTranslationData();
         that.template = '#tmpl-messageFamily';
         that.render();

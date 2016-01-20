@@ -134,7 +134,7 @@ var MessageView = Marionette.LayoutView.extend({
 
     Promise.join(
         this.model.getCreatorPromise(),
-        this.model.collection.collectionManager.getUserLanguagePreferencesPromise(),
+        this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
         function(creator, ulp) {
           var translationData = ulp.getTranslationData(),
               body = that.model.get("body"),

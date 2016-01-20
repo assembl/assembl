@@ -1682,6 +1682,7 @@ class UserLanguagePreference(Base):
     def translate_to_code(self, code):
         if code:
             posix = to_posix_string(code)
+            assert posix
             locale = Locale.get_or_create(posix)
             self.translate_to_locale = locale
         else:

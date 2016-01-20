@@ -44,7 +44,7 @@ var TranslationView = Marionette.ItemView.extend({
         this.messageView = options.messageView;
         var that = this;
         var cm = new CollectionManager();
-        cm.getUserLanguagePreferencesPromise()
+        cm.getUserLanguagePreferencesPromise(Ctx)
             .then(function(preferences){
                 var localeToLangNameCache = Ctx.getJsonFromScriptTag('translation-locale-names'),
                     bestSuggestedTranslation = that.message.get('body').best(preferences);
@@ -120,10 +120,12 @@ var TranslationView = Marionette.ItemView.extend({
                 if (existingModel) {
                     var model = existingModel;
                     commitChanges.wait = true;
-                    model.save({
-                        locale_name: locale,
-                        translate_to_name: translateTo,
-                    }, commitChanges);
+                    if (Ctx.isUserConnected()) {
+                        model.save({
+                            locale_name: locale,
+                            translate_to_name: translateTo,
+                        }, commitChanges);
+                    }
                 }
                 else {
                     var hash = {
@@ -137,7 +139,9 @@ var TranslationView = Marionette.ItemView.extend({
                     }
                     var langPref = new LanguagePreference.Model(hash, {collection: that.languagePreferences});
                     commitChanges.wait = false;
-                    langPref.save(null, commitChanges);
+                    if (Ctx.isUserConnected()) {
+                        langPref.save(null, commitChanges);
+                    }
                 }
                 
             };
