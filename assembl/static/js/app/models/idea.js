@@ -289,38 +289,38 @@ var IdeaModel = Base.Model.extend({
         );
   },
 
-  /** Return a promise for the announce to be displayed in the message-list, 
+  /** Return a promise for the announcement to be displayed in the message-list, 
    * if any
    * @return {Promise}
    */
    
-  getApplicableAnnouncePromise: function() {
+  getApplicableAnnouncementPromise: function() {
     var that = this;
-    return this.collection.collectionManager.getAllAnnounceCollectionPromise()
-            .then(function(allAnnounceCollection) {
-              var announce = undefined,
+    return this.collection.collectionManager.getAllAnnouncementCollectionPromise()
+            .then(function(allAnnouncementCollection) {
+              var announcement = undefined,
                   counter = 0,
                   parent = that,
                   condition;
               do {
                 if( counter === 0 ) {
-                  announce = allAnnounceCollection.findWhere(
+                  announcement = allAnnouncementCollection.findWhere(
                       {idObjectAttachedTo: parent.id}
                       );
                 }
                 else {
-                  announce = allAnnounceCollection.findWhere(
+                  announcement = allAnnouncementCollection.findWhere(
                       {idObjectAttachedTo: parent.id,
                        should_propagate_down: true}
                       );
                 }
-                //console.log(counter, announce);
-                if (announce)
+                //console.log(counter, announcement);
+                if (announcement)
                   break;
                 parent = parent.get('parentId') !== null ? parent.getParent() : null;
                 counter += 1;
               } while (parent !== null);
-              return Promise.resolve(announce);
+              return Promise.resolve(announcement);
             }
         );
   },

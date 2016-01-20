@@ -12,7 +12,7 @@ var Marionette = require('../shims/marionette.js'),
     Segment = require('../models/segment.js'),
     Synthesis = require('../models/synthesis.js'),
     Partners = require('../models/partners.js'),
-    Announce = require('../models/announce.js'),
+    Announcement = require('../models/announcement.js'),
     Agents = require('../models/agents.js'),
     NotificationSubscription = require('../models/notificationSubscription.js'),
     Storage = require('../objects/storage.js'),
@@ -114,10 +114,10 @@ var CollectionManager = Marionette.Object.extend({
   _allPartnerOrganizationCollectionPromise: undefined,
 
   /**
-   * Collection with idea announces for the messageList.
+   * Collection with idea announcments for the messageList.
    */
-  _allAnnounceCollection: undefined,
-  _allAnnounceCollectionPromise: undefined,
+  _allAnnouncementCollection: undefined,
+  _allAnnouncementCollectionPromise: undefined,
 
   /**
    * Collection from discussion notifications.
@@ -582,20 +582,20 @@ var CollectionManager = Marionette.Object.extend({
     return this._allPartnerOrganizationCollectionPromise;
   },
 
-  getAllAnnounceCollectionPromise: function() {
-    if (this._allAnnounceCollectionPromise) {
-      return this._allAnnounceCollectionPromise;
+  getAllAnnouncementCollectionPromise: function() {
+    if (this._allAnnouncementCollectionPromise) {
+      return this._allAnnouncementCollectionPromise;
     }
 
-    this._allAnnounceCollection = new Announce.Collection();
-    this._allAnnounceCollection.collectionManager = this;
-    this._allAnnounceCollectionPromise = Promise.resolve(this._allAnnounceCollection.fetch())
-        .thenReturn(this._allAnnounceCollection)
+    this._allAnnouncementCollection = new Announcement.Collection();
+    this._allAnnouncementCollection.collectionManager = this;
+    this._allAnnouncementCollectionPromise = Promise.resolve(this._allAnnouncementCollection.fetch())
+        .thenReturn(this._allAnnouncementCollection)
             .catch(function(e) {
               Raven.captureException(e);
             });
 
-    return this._allAnnounceCollectionPromise;
+    return this._allAnnouncementCollectionPromise;
   },
 
   getNotificationsDiscussionCollectionPromise: function() {

@@ -374,7 +374,7 @@
         "@extends": "Attachment",
         "idObjectAttachedTo": "idea"
     },
-    "Announce": {
+    "Announcement": {
         "creation_date": true,
         "modification_date": true,
         "creator": true,
@@ -382,8 +382,8 @@
         "title": true,
         "body": true
     },
-    "IdeaAnnounce": {
-        "@extends": "Announce",
+    "IdeaAnnouncement": {
+        "@extends": "Announcement",
         "idObjectAttachedTo": "idea",
         "should_propagate_down": true
     }

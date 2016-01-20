@@ -10,7 +10,7 @@ var Assembl = require('../app.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     SegmentList = require('./segmentList.js'),
-    Announces = require('./announces.js'),
+    Announcements = require('./announcements.js'),
     Widget = require('../models/widget.js'),
     AgentViews = require('./agent.js'),
     WidgetLinks = require('./widgetLinks.js'),
@@ -36,7 +36,7 @@ var IdeaPanel = AssemblPanel.extend({
     widgetsInteraction: ".ideaPanel-section-access-widgets",
     widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets",
     widgetsCreationInteraction: ".ideaPanel-section-create-widgets",
-    announceRegion: "@ui.announce"
+    announcementRegion: "@ui.announcement"
   },
   initialize: function(options) {
     Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
@@ -82,7 +82,7 @@ var IdeaPanel = AssemblPanel.extend({
     'clearIdea': '.js_ideaPanel-clearBtn',
     'closeExtract': '.js_closeExtract',
     'contributorsSection': '.ideaPanel-section-contributors',
-    'announce': '.ideaPanel-announce-region'
+    'announcement': '.ideaPanel-announcement-region'
   },
   modelEvents: {
     //Do NOT listen to change here
@@ -249,7 +249,7 @@ var IdeaPanel = AssemblPanel.extend({
 
       this.renderShortTitle();
 
-      this.renderAnnounce();
+      this.renderAnnouncement();
 
       if (this.editingDefinition) {
         this.renderCKEditorDescription();
@@ -801,39 +801,39 @@ var IdeaPanel = AssemblPanel.extend({
     }
   },
 
-  renderAnnounce:  function() {
+  renderAnnouncement:  function() {
     var that = this,
     collectionManager = new CollectionManager();
 
     if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
-      this.ui.announce.removeClass('hidden');
-      collectionManager.getAllAnnounceCollectionPromise().then(
-          function(allAnnounceCollection) {
+      this.ui.announcement.removeClass('hidden');
+      collectionManager.getAllAnnouncementCollectionPromise().then(
+          function(allAnnouncementCollection) {
             // Filters on only this idea's announce (should be only one...)
-            var AnnounceIdeaSubset = Backbone.Subset.extend({
+            var AnnouncementIdeaSubset = Backbone.Subset.extend({
               beforeInitialize: function(models, options) {
                 this.idea = options.idea;
                 if (!this.idea) {
-                  throw new Error("AnnounceIdeaSubset mush have an idea")
+                  throw new Error("AnnouncementIdeaSubset mush have an idea")
                 }
               },
-              sieve: function(announce) {
-                return announce.get('idObjectAttachedTo') == this.idea.id;
+              sieve: function(announcement) {
+                return announcement.get('idObjectAttachedTo') == this.idea.id;
               }
             });
 
-            var announceIdeaSubsetCollection = new AnnounceIdeaSubset(
+            var announcementIdeaSubsetCollection = new AnnouncementIdeaSubset(
               [],
               {
                 idea: that.model,
-                parent: allAnnounceCollection
+                parent: allAnnouncementCollection
               }
             )
-            var editableAnnounceView = new Announces.AnnounceEditableCollectionView({
-              collection: announceIdeaSubsetCollection,
+            var editableAnnouncementView = new Announcements.AnnouncementEditableCollectionView({
+              collection: announcementIdeaSubsetCollection,
               objectAttachedTo: that.model
             });
-            that.getRegion('announceRegion').show(editableAnnounceView);
+            that.getRegion('announcementRegion').show(editableAnnouncementView);
           });
     }
   },

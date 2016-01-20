@@ -19,7 +19,7 @@ $previewNumLines: 4;
 
 
 
-.message, .announceMessage {
+.message, .announcementMessage {
   position: relative;
   display: table;
   width: 100%;
@@ -32,20 +32,20 @@ $previewNumLines: 4;
   //border-top: solid 1px $gray3;
   @include transition(background-color 0.4s);
 
-  &.announceMessage {
-    //.announceMessage Defined here instead of announce.scss so constants can be reused and look kept in sync with message
+  &.announcementMessage {
+    //.announceMessage Defined here instead of announcement.scss so constants can be reused and look kept in sync with message
     background-color: $white;
     border: none;
-    box-shadow: 0px 0px 2px 2px $theme_announce_box_border_color;
+    box-shadow: 0px 0px 2px 2px $theme_announcement_box_border_color;
     padding: 15px $messagePaddingLR+3*$mesageSpacing 15px $messagePaddingLR+3*$mesageSpacing; //To align with messages left and right, despite not being part of a messageFamily
     & >* {
       max-width: $messageBodyMaxWidth;
     }
-    .announce_title {
+    .announcement_title {
       font-size: 18px;
       margin-bottom: $mesageSpacing;
     }
-    .announce_body {
+    .announcement_body {
       margin-bottom: 2*$mesageSpacing;
     }
     .creator_info {

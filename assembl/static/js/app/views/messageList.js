@@ -14,7 +14,7 @@ var Backbone = require('../shims/backbone.js'),
     i18n = require('../utils/i18n.js'),
     PostQuery = require('./messageListPostQuery.js'),
     Permissions = require('../utils/permissions.js'),
-    Announces = require('./announces.js'),
+    Announcements = require('./announcements.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
@@ -833,13 +833,13 @@ var MessageList = AssemblPanel.extend({
     this._offsetEnd = returnedOffsets.offsetEnd;
 
     var currentIdea = this.getGroupState().get('currentIdea'),
-        announcePromise = null,
-        announceMessageView;
+        announcementPromise = null,
+        announcementMessageView;
     if (currentIdea && this.currentQuery.isFilterInQuery(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, currentIdea.getId())) {
-      announcePromise = currentIdea.getApplicableAnnouncePromise();
+      announcementPromise = currentIdea.getApplicableAnnouncementPromise();
     }
 
-    return Promise.join(views_promise, announcePromise, function(views, announce) {
+    return Promise.join(views_promise, announcementPromise, function(views, announcement) {
       if (that.debugPaging) {
         console.log("showMessages() showing requestedOffsets:", requestedOffsets, "returnedOffsets:", returnedOffsets, "messageIdsToShow", messageIdsToShow, "out of numMessages", numMessages, "root views", views);
       }
@@ -849,13 +849,13 @@ var MessageList = AssemblPanel.extend({
         that.ui.messageList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
       } 
 
-      if (announce && that._offsetStart <= 0) { //Only display the announce on the first page
-        that.ui.messageList.append('<div class="js_announce_region"></div>');
-        var announceRegion = new Marionette.Region({
-          el: that.$(".js_announce_region")
+      if (announcement && that._offsetStart <= 0) { //Only display the announcement on the first page
+        that.ui.messageList.append('<div class="js_announcement_region"></div>');
+        var announcementRegion = new Marionette.Region({
+          el: that.$(".js_announcement_region")
         }); 
-        announceMessageView = new Announces.AnnounceMessageView({model: announce});
-        announceRegion.show(announceMessageView);
+        announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement});
+        announcementRegion.show(announcementMessageView);
       }
 
       if (views.length > 0) {

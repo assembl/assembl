@@ -7,17 +7,17 @@ var $ = require('../shims/jquery.js'),
     Types = require('../utils/types.js');
 
 /**
- * @class AnnounceModel
- * Represents an announce, a mutable message-like object, with an author and a 
- * date
+ * @class AnnouncementModel
+ * Represents an announcement, a mutable message-like object, with an author and
+ * a date
  */
-var AnnounceModel = Base.Model.extend({
+var AnnouncementModel = Base.Model.extend({
   /**
    * Defaults
    * @type {Object}
    */
   defaults: {
-    //'@type': Types.ANNOUNCE,
+    //'@type': Types.ANNOUNCEMENT,
     //"creation_date": undefined,
     //"modification_date": undefined,
     "creator": undefined,
@@ -25,7 +25,7 @@ var AnnounceModel = Base.Model.extend({
     "title": undefined,
     "body": undefined,
     "idObjectAttachedTo": undefined,
-    //Only for idea announces
+    //Only for idea announcements
     "should_propagate_down": undefined
   },
 
@@ -70,20 +70,20 @@ var AnnounceModel = Base.Model.extend({
 /**
  * @class PartnerOrganizationCollection
  */
-var AnnounceCollection = Base.Collection.extend({
+var AnnouncementCollection = Base.Collection.extend({
   /**
    * @type {String}
    */
-  url: Ctx.getApiV2DiscussionUrl('announces'),
+  url: Ctx.getApiV2DiscussionUrl('announcements'),
   
   /**
    * The model
    * @type {PartnerOrganizationModel}
    */
-  model: AnnounceModel
+  model: AnnouncementModel
 });
 
 module.exports = {
-  Model: AnnounceModel,
-  Collection: AnnounceCollection
+  Model: AnnouncementModel,
+  Collection: AnnouncementCollection
 };

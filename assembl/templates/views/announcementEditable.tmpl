@@ -1,0 +1,10 @@
+<div class="js_announcement_title_region announcement_title" data-toggle="tooltip" title="{{gettext("The title of this announcement")}}">
+  <%= title %>
+</div>
+<div class="js_announcement_body_region announcement_body" data-toggle="tooltip" title="{{gettext("The text of this this announcement.  Will be displayed on top of the message list for this idea.")}}">
+  <%= body %>
+</div>
+<div class="announcement_propagate" data-toggle="tooltip" title="{{gettext("If checked, this announcement will also be shown for any sub-idea that doesn't have it's own announcement.")}}">
+  {{gettext("Propagate this announcement to sub-ideas:")}} <div class="js_announcement_shouldPropagateDown_region"></div>
+</div>
+<p><a class="js_announcement_delete btn btn-secondary btn-sm">{{gettext('Delete this announcement')}}</a></p>

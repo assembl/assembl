@@ -7,7 +7,7 @@ var Marionette = require('../shims/marionette.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Types = require('../utils/types.js'),
-    Announce = require('../models/announce.js'),
+    Announcement = require('../models/announcement.js'),
     AgentViews = require('./agent.js'),
     EditableField = require('./reusableDataFields/editableField.js'),
     CKEditorField = require('./reusableDataFields/ckeditorField.js'),
@@ -15,7 +15,7 @@ var Marionette = require('../shims/marionette.js'),
 
 /** 
  */
-var AbstractAnnounceView = Marionette.LayoutView.extend({
+var AbstractAnnouncementView = Marionette.LayoutView.extend({
 
   initialize: function(options) {
   },
@@ -30,9 +30,9 @@ var AbstractAnnounceView = Marionette.LayoutView.extend({
   },
 
   regions: {
-    region_title: ".js_announce_title_region",
-    region_body: ".js_announce_body_region",
-    region_shouldPropagateDown: ".js_announce_shouldPropagateDown_region"
+    region_title: ".js_announcement_title_region",
+    region_body: ".js_announcement_body_region",
+    region_shouldPropagateDown: ".js_announcement_shouldPropagateDown_region"
   },
 
   modelEvents: {
@@ -41,18 +41,18 @@ var AbstractAnnounceView = Marionette.LayoutView.extend({
 });
 
 
-var AnnounceView = AbstractAnnounceView.extend({
-  template: '#tmpl-announce',
+var AnnouncementView = AbstractAnnouncementView.extend({
+  template: '#tmpl-announcement',
 
   className: 'attachment'
 });
 
-var AnnounceMessageView = AbstractAnnounceView.extend({
+var AnnouncementMessageView = AbstractAnnouncementView.extend({
   template: '#tmpl-loader',
 
 
   attributes: {
-    "class": "announceMessage bx"
+    "class": "announcementMessage bx"
   },
 
   regions: {
@@ -78,16 +78,16 @@ var AnnounceMessageView = AbstractAnnounceView.extend({
     this.model.getCreatorPromise().then(function(creator) {
       if(!that.isViewDestroyed()) {
         that.creator = creator;
-        that.template = '#tmpl-announceMessage';
+        that.template = '#tmpl-announcementMessage';
         that.render();
       }
     });
   },
 
   onRender: function() {
-    AbstractAnnounceView.prototype.onRender.call(this);
+    AbstractAnnouncementView.prototype.onRender.call(this);
 
-    if (this.template === '#tmpl-announceMessage') {
+    if (this.template === '#tmpl-announcementMessage') {
       this.renderCreator();
     }
   },
@@ -105,17 +105,17 @@ var AnnounceMessageView = AbstractAnnounceView.extend({
   },
 });
 
-var AnnounceEditableView = AbstractAnnounceView.extend({
-  template: '#tmpl-announceEditable',
+var AnnouncementEditableView = AbstractAnnouncementView.extend({
+  template: '#tmpl-announcementEditable',
 
-  className: 'announceEditable',
+  className: 'announcementEditable',
   
-  events:_.extend({}, AbstractAnnounceView.prototype.events, {
-    'click .js_announce_delete': 'onDeleteButtonClick' //Dynamically rendered, do NOT use @ui
+  events:_.extend({}, AbstractAnnouncementView.prototype.events, {
+    'click .js_announcement_delete': 'onDeleteButtonClick' //Dynamically rendered, do NOT use @ui
   }),
   
   onRender: function() {
-    AbstractAnnounceView.prototype.onRender.call(this);
+    AbstractAnnouncementView.prototype.onRender.call(this);
 
     var titleView = new EditableField({
       'model': this.model,
@@ -142,39 +142,39 @@ var AnnounceEditableView = AbstractAnnounceView.extend({
   },
 });
 
-var AnnounceListEmptyEditableView = Marionette.ItemView.extend({
-  template: "#tmpl-announceListEmptyEditable",
+var AnnouncementListEmptyEditableView = Marionette.ItemView.extend({
+  template: "#tmpl-announcementListEmptyEditable",
   ui: {
-    'addAnnounceButton': '.js_announceAddButton'
+    'addAnnouncementButton': '.js_announcementAddButton'
   },
   events: {
-    'click @ui.addAnnounceButton': 'onAddAnnounceButtonClick',
+    'click @ui.addAnnouncementButton': 'onAddAnnouncementButtonClick',
   },
   initialize: function(options) {
     console.log(options);
     this.objectAttachedTo = options.objectAttachedTo;
     this.collection = options.collection;
   },
-  onAddAnnounceButtonClick: function(ev) {
-    var announce = new Announce.Model({
-      '@type': Types.IDEA_ANNOUNCE,
+  onAddAnnouncementButtonClick: function(ev) {
+    var announcement = new Announcement.Model({
+      '@type': Types.IDEA_ANNOUNCEMENT,
       creator: Ctx.getCurrentUser().id,
       last_updated_by: Ctx.getCurrentUser().id,
       idObjectAttachedTo: this.objectAttachedTo.id,
       should_propagate_down: true
       }
     );
-    this.collection.add(announce);
-    announce.save();
+    this.collection.add(announcement);
+    announcement.save();
   },
 });
 
-var AnnounceEditableCollectionView = Marionette.CollectionView.extend({
+var AnnouncementEditableCollectionView = Marionette.CollectionView.extend({
   initialize: function(options) {
     this.objectAttachedTo = options.objectAttachedTo;
   },
-  childView: AnnounceEditableView,
-  emptyView: AnnounceListEmptyEditableView,
+  childView: AnnouncementEditableView,
+  emptyView: AnnouncementListEmptyEditableView,
   childViewOptions:  function(model, index) {
     return {
       objectAttachedTo: this.objectAttachedTo,
@@ -184,7 +184,7 @@ var AnnounceEditableCollectionView = Marionette.CollectionView.extend({
 });
 
 module.exports = module.exports = {
-    AnnounceEditableView: AnnounceEditableView,
-    AnnounceMessageView: AnnounceMessageView,
-    AnnounceEditableCollectionView: AnnounceEditableCollectionView
+    AnnouncementEditableView: AnnouncementEditableView,
+    AnnouncementMessageView: AnnouncementMessageView,
+    AnnouncementEditableCollectionView: AnnouncementEditableCollectionView
   };

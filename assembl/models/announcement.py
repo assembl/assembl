@@ -26,9 +26,9 @@ from .auth import (
     AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
     P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA)
 
-class Announce(DiscussionBoundBase):
+class Announcement(DiscussionBoundBase):
     """
-    Represents an announce.  Similar to a message, but editable, meant to be displayed on top of the messagelist for an idea.
+    Represents an announcement.  Similar to a message, but editable, meant to be displayed on top of the messagelist for an idea.
     """
     __tablename__ = "announce"
     id = Column(
@@ -47,7 +47,7 @@ class Announce(DiscussionBoundBase):
     discussion = relationship(
         "Discussion",
         backref=backref(
-            'announces',
+            'announcements',
             cascade="all, delete-orphan"),
     )
 
@@ -86,7 +86,7 @@ class Announce(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
 
-class IdeaAnnounce(Announce):
+class IdeaAnnouncement(Announcement):
     __tablename__ = "idea_announce"
     id = Column(Integer, ForeignKey(
         'announce.id',
@@ -105,13 +105,13 @@ class IdeaAnnounce(Announce):
     idea = relationship(
         Idea,
         backref=backref(
-            'announce',
+            'announcement',
             #One-to-one relationship
             uselist=False,
             cascade="all, delete-orphan"),
     )
 
-    #Should this announce propagate down to it's descendant ideas in the messageList?
+    #Should this announcement propagate down to it's descendant ideas in the messageList?
     should_propagate_down = Column(Boolean, nullable=False, server_default='0')
 
     __mapper_args__ = {
@@ -125,7 +125,7 @@ class IdeaAnnounce(Announce):
         P_ADMIN_DISC)
 
 
-@event.listens_for(IdeaAnnounce.idea, 'set',
+@event.listens_for(IdeaAnnouncement.idea, 'set',
                    propagate=True, active_history=True)
 def attachment_object_attached_to_set_listener(target, value,
                                                oldvalue, initiator):

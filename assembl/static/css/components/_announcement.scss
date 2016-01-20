@@ -1,0 +1,11 @@
+
+//For announcementMessage, 
+//Style is actually defined in message.scss, so constants can be easily reused.
+.announcementEditable {
+  .js_announcement_shouldPropagateDown_region {
+    display: inline;
+  }
+  .announcement_title {
+    font-size: 18px; //To patch announcementMessage
+  }
+}

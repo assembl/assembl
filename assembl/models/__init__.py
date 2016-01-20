@@ -231,6 +231,6 @@ from .attachment import (
     Attachment
 )
 
-from .announce import (
-    IdeaAnnounce
+from .announcement import (
+    IdeaAnnouncement
 )
