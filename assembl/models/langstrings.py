@@ -417,7 +417,7 @@ class LangString(Base):
                     user_prefs)
             for use_originals in (True, False):
                 entries = filter(
-                    lambda e: e.is_machine_translated() != use_originals,
+                    lambda e: e.is_machine_translated != use_originals,
                     self.entries)
                 if not entries:
                     continue
@@ -451,6 +451,31 @@ class LangString(Base):
             return entries[0]
         # or first entry
         return self.entries[0]
+
+    def best_entry_in_request(self):
+        from pyramid.threadlocal import get_current_request
+        from pyramid.security import Everyone
+        req = get_current_request()
+        assert req
+        if getattr(req, "lang_prefs", None) is None:
+            user_id = req.authenticated_userid
+            if user_id != Everyone:
+                from .auth import User, UserLanguagePreference
+                user = User.get(user_id)
+                req.lang_prefs = UserLanguagePreference.user_prefs_as_dict(
+                    user.language_preference)
+            else:
+                req.lang_prefs = None
+        return self.best_lang(req.lang_prefs)
+
+    def best_entries_in_request_with_originals(self):
+        lang = self.best_entry_in_request()
+        if lang.is_machine_translated:
+            entries = self.non_mt_entries()
+            entries.append(lang)
+            return entries
+        else:
+            return [lang]
 
     def remove_translations(self):
         for entry in self.entries:
@@ -542,6 +567,7 @@ class LangStringEntry(Base, TombstonableMixin):
     def locale_identification_data_json(self, data):
         self.locale_identification_data = json.dumps(data) if data else None
 
+    @property
     def is_machine_translated(self):
         return Locale.locale_is_machine_translated(
             Locale.locale_collection_byid[self.locale_id])

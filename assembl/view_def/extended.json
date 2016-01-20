@@ -15,7 +15,7 @@
         "rtl": true
     },
     "LangString": {
-        "entries": true
+        "entries": [":"]
     },
     "LangStringEntry": {
         "@language": "locale_name",

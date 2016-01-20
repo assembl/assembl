@@ -15,7 +15,7 @@
         "rtl": true
     },
     "LangString": {
-        "entries": [":default"]
+        "entries": ["&best_entries_in_request_with_originals:default"]
     },
     "LangStringEntry": {
         "@language": "locale_name",
