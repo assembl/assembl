@@ -2366,15 +2366,10 @@ msgid "Number of unread posts in the entire discussion"
 msgstr "Anzahl von ungelesenen Beiträgen in der gesamten Diskussion"
 
 #: assembl/templates/views/announcementEditable.tmpl:1
-#, fuzzy
-#| msgid "The title of this announce"
 msgid "The title of this announcement"
 msgstr "Der Titel dieser Ankündigung"
 
 #: assembl/templates/views/announcementEditable.tmpl:4
-#, fuzzy
-#| msgid "" "The text of this this announce.  Will be displayed on top of the
-#| message " "list for this idea."
 msgid ""
 "The text of this this announcement.  Will be displayed on top of the "
 "message list for this idea."
@@ -2383,9 +2378,6 @@ msgstr ""
 "Idee angezeigt."
 
 #: assembl/templates/views/announcementEditable.tmpl:7
-#, fuzzy
-#| msgid "" "If checked, this announce will also be shown for any sub-idea that
-#| " "doesn't have it's own announce."
 msgid ""
 "If checked, this announcement will also be shown for any sub-idea that "
 "doesn't have it's own announcement."
@@ -2394,20 +2386,14 @@ msgstr ""
 " die keine eigene Ankündigung haben."
 
 #: assembl/templates/views/announcementEditable.tmpl:8
-#, fuzzy
-#| msgid "Propagate this announce to sub-ideas:"
 msgid "Propagate this announcement to sub-ideas:"
 msgstr "Diese Ankündigung an Unterideen verbreiten:"
 
 #: assembl/templates/views/announcementEditable.tmpl:10
-#, fuzzy
-#| msgid "Delete this announce"
 msgid "Delete this announcement"
 msgstr "Diese Ankündigung löschen"
 
 #: assembl/templates/views/announcementListEmptyEditable.tmpl:1
-#, fuzzy
-#| msgid "Add a new announce to this idea"
 msgid "Add a new announcement to this idea"
 msgstr "Eine neue Ankündigung zu dieser Idee hinzufügen"
 
@@ -2855,8 +2841,6 @@ msgid "See less"
 msgstr "Weniger anzeigen"
 
 #: assembl/templates/views/ideaPanel.tmpl:54
-#, fuzzy
-#| msgid "Announce for this idea"
 msgid "Announcement for this idea"
 msgstr "Ankündigung für diese Idee"
 

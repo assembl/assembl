@@ -540,8 +540,6 @@ msgstr ""
 "Vous pouvez choisir ici vos options de notification (fréquence, etc.)."
 
 #: assembl/static/js/app/views/agent.js:72
-#, fuzzy, python-format
-#| msgid "All message by %s"
 msgid "All messages by %s"
 msgstr "Tous les messages de %s"
 
@@ -1463,10 +1461,8 @@ msgstr ""
 "minutes."
 
 #: assembl/static/js/app/views/admin/generalSource.js:77
-#, fuzzy
-#| msgid "Reimport failed"
 msgid "Reprocess failed"
-msgstr "La réimportation a échoué"
+msgstr "Le retraitement a échoué"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:130
 msgid "Unlock panel"
@@ -2290,8 +2286,6 @@ msgid "Confirm"
 msgstr "Confirmer"
 
 #: assembl/templates/views/adminPartnerForm.tmpl:2
-#, fuzzy
-#| msgid "add a new partner"
 msgid "Add a new partner"
 msgstr "Ajouter un nouveau partenaire"
 
@@ -2464,8 +2458,6 @@ msgid "Find new viewpoints and arguments"
 msgstr "Trouver des nouveaux points de vue et arguments"
 
 #: assembl/templates/views/bookmarket.tmpl:19
-#, fuzzy
-#| msgid "Add in inspiring quote"
 msgid "Add an inspiring quote"
 msgstr "Ajouter une citation inspirante"
 
@@ -2838,10 +2830,8 @@ msgid "See less"
 msgstr "Voir moins"
 
 #: assembl/templates/views/ideaPanel.tmpl:54
-#, fuzzy
-#| msgid "Comment on this idea here..."
 msgid "Announcement for this idea"
-msgstr "Commentez cette idée ici..."
+msgstr "Annonce pour cette idée"
 
 #: assembl/templates/views/ideaPanel.tmpl:68
 msgid "Contributors"
