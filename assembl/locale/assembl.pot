@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-13 11:00+0100\n"
+"POT-Creation-Date: 2016-01-21 17:45-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,11 +88,11 @@ msgstr ""
 msgid "Complete messages"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:729
+#: assembl/static/js/app/common/context.js:742
 msgid "Extract"
 msgstr ""
 
-#: assembl/static/js/app/common/context.js:1040
+#: assembl/static/js/app/common/context.js:1053
 msgid "ajax error message:"
 msgstr ""
 
@@ -819,6 +819,7 @@ msgstr ""
 #: assembl/templates/views/adminPartnerEditForm.tmpl:71
 #: assembl/templates/views/adminPartnerForm.tmpl:63
 #: assembl/templates/views/adminPartnerForm.tmpl:69
+#: assembl/templates/views/base-modal.tmpl:12
 #: assembl/templates/views/ckeditorField.tmpl:10
 #: assembl/templates/views/create-group.tmpl:128
 #: assembl/templates/views/messageModerationOptions.tmpl:32
@@ -2165,35 +2166,35 @@ msgstr ""
 msgid "Number of unread posts in the entire discussion"
 msgstr ""
 
-#: assembl/templates/views/announceEditable.tmpl:1
-msgid "The title of this announce"
+#: assembl/templates/views/announcementEditable.tmpl:1
+msgid "The title of this announcement"
 msgstr ""
 
-#: assembl/templates/views/announceEditable.tmpl:4
+#: assembl/templates/views/announcementEditable.tmpl:4
 msgid ""
-"The text of this this announce.  Will be displayed on top of the message list"
-" for this idea."
+"The text of this this announcement.  Will be displayed on top of the message "
+"list for this idea."
 msgstr ""
 
-#: assembl/templates/views/announceEditable.tmpl:7
+#: assembl/templates/views/announcementEditable.tmpl:7
 msgid ""
-"If checked, this announce will also be shown for any sub-idea that doesn't "
-"have it's own announce."
+"If checked, this announcement will also be shown for any sub-idea that "
+"doesn't have it's own announcement."
 msgstr ""
 
-#: assembl/templates/views/announceEditable.tmpl:8
-msgid "Propagate this announce to sub-ideas:"
+#: assembl/templates/views/announcementEditable.tmpl:8
+msgid "Propagate this announcement to sub-ideas:"
 msgstr ""
 
-#: assembl/templates/views/announceEditable.tmpl:10
-msgid "Delete this announce"
+#: assembl/templates/views/announcementEditable.tmpl:10
+msgid "Delete this announcement"
 msgstr ""
 
-#: assembl/templates/views/announceListEmptyEditable.tmpl:1
-msgid "Add a new announce to this idea"
+#: assembl/templates/views/announcementListEmptyEditable.tmpl:1
+msgid "Add a new announcement to this idea"
 msgstr ""
 
-#: assembl/templates/views/announceMessage.tmpl:9
+#: assembl/templates/views/announcementMessage.tmpl:9
 #: assembl/templates/views/message.tmpl:104
 #: assembl/templates/views/message.tmpl:123
 #, python-format
@@ -2587,7 +2588,7 @@ msgid "See less"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:54
-msgid "Announce for this idea"
+msgid "Announcement for this idea"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:68
@@ -2751,6 +2752,14 @@ msgstr ""
 #: assembl/templates/views/messageList.tmpl:40
 #: assembl/templates/views/messageSend.tmpl:4
 msgid "Start a new discussion thread"
+msgstr ""
+
+#: assembl/templates/views/messageListHeader.tmpl:33
+msgid "Format message in a view useful for copy-pasting of printing"
+msgstr ""
+
+#: assembl/templates/views/messageListHeader.tmpl:33
+msgid "Print"
 msgstr ""
 
 #: assembl/templates/views/messageListItem.tmpl:4
