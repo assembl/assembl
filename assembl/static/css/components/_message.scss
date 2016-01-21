@@ -623,6 +623,10 @@ $previewNumLines: 4;
   // a:hover {
   //   color: $gray;
   // }
+  
+  .translation-message-confirm {
+    color: $green;
+  }
 }
 
 // This is so annotator doesn't display a form for user's who aren't allowed

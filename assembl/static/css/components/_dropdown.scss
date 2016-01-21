@@ -155,6 +155,21 @@ $grid-float-breakpoint: 768px !default;
   }
 }
 
+// Open state for the dropdown / Scrollable
+.open-scrollable {
+  // Show the menu
+  > .dropdown-menu {
+    display: block;
+    overflow-y: scroll;
+    height: 200px;
+  }
+
+  // Remove the outline when :focus is triggered
+  > a {
+    outline: 0;
+  }
+}
+
 // Menu positioning
 //
 // Add extra class to `.dropdown-menu` to flip the alignment of the dropdown

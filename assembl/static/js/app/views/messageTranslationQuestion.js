@@ -23,20 +23,22 @@ var TranslationView = Marionette.ItemView.extend({
     template: '#tmpl-loader',
 
     ui: {
-        setLangPref: '.js_translation_question', //Question region
-        langChoiceConfirm: '.js_language_of_choice_confirm',
-        langChoiceCancel: '.js_language_of_choice_deny',
-        confirmLangPref: '.js_translate_all_confirm_msg',
-        langTo: '.js_translate_to_language',
-        gotoSettings: '.js_load_profile_settings',
-        hideQuestion: '.js_hide_translation_question',
+        setLangPref: '.js_translation-question', //Question region
+        langChoiceConfirm: '.js_language-of-choice-confirm',
+        langChoiceCancel: '.js_language-of-choice-deny',
+        confirmLangPref: '.js_translate-all-confirm-msg',
+        langTo: '.js_translate-to-language',
+        langSelection: '.js_translate-to-language-selected',
+        gotoSettings: '.js_load-profile-settings',
+        hideQuestion: '.js_hide-translation-question',
     },
 
     events: {
         'click @ui.langChoiceConfirm': 'updateLanguagePreferenceConfirm',
         'click @ui.langChoiceCancel': 'updateLanguagePreferenceDeny',
         'click @ui.hideQuestion': 'onHideQuestionClick',
-        'click @ui.gotoSettings': 'loadProfile'
+        'click @ui.gotoSettings': 'loadProfile',
+        'click @ui.langTo': 'onLanguageSelected'
     },
 
     initialize: function(options){
@@ -83,9 +85,16 @@ var TranslationView = Marionette.ItemView.extend({
         return this._localesAsSortedList;
     },
 
+    dummyUpdateLanguage: function(state){
+        console.log("About to show the confirm message.");
+        this.showConfirmMessage(function(){
+            console.log("Fade animation is complete!");
+        });
+    },
+
     updateLanguagePreference: function(state){
         var that = this,
-            preferredLanguageTo = $(this.ui.langTo).val(),
+            preferredLanguageTo = $(this.ui.langSelection).attr("value"),
 
             createModel = function(locale, translateTo, preferenceCollection){
 
@@ -99,9 +108,16 @@ var TranslationView = Marionette.ItemView.extend({
                                 return Promise.resolve(messageStructures.fetch());
                             })
                             .then(function(messages){
-                                that.messageView.unknownPreference = false;
-                                that.messageView.forceTranslationQuestion = false;
-                                that.messageView.messageListView.render();
+                                //do a bit of jquery and THEN refresh the page?
+                                console.log("About to show the confirm message.");
+                                that.showConfirmMessage(function(){
+                                    console.log("Fade animation is complete!");
+                                });
+                                // setTimeout(function(){
+                                //     that.messageView.unknownPreference = false;
+                                //     that.messageView.forceTranslationQuestion = false;
+                                //     that.messageView.messageListView.render();
+                                // }, 4000);
                             });
                     },
                     error: function(model, resp, options) {
@@ -160,15 +176,34 @@ var TranslationView = Marionette.ItemView.extend({
     },
 
     updateLanguagePreferenceConfirm: function(e){
-        this.updateLanguagePreference(userTranslationStates.CONFIRM);
+        // this.updateLanguagePreference(userTranslationStates.CONFIRM);
+        this.dummyUpdateLanguage();
     },
 
     updateLanguagePreferenceDeny: function(e) {
-        this.updateLanguagePreference(userTranslationStates.DENY);
+        // this.updateLanguagePreference(userTranslationStates.DENY);
+        this.dummyUpdateLanguage();
     },
 
     onHideQuestionClick: function(e) {
         this.messageView.onHideQuestionClick(e);
+    },
+
+    onLanguageSelected: function(e){
+        var current = this.$(e.currentTarget),
+            val = current.attr("value");
+        this.$(this.ui.langSelection).attr("value", val);
+        this.$(this.ui.langSelection).text(current.text());
+    },
+
+    showConfirmMessage: function(onComplete){
+        var elem = this.$(this.ui.confirmLangPref),
+            question = this.$(this.ui.setLangPref); 
+        //elem.removeClass("hidden");
+        //question.addClass("hidden");
+        question.addClass('fade-out');
+        elem.addClass('fade-in');
+        elem.removeClass('hidden');
     },
 
     serializeData: function(){

@@ -1,4 +1,4 @@
-<div class='js_translation_question'>
+<div class='js_translation-question'>
     <span class="content"><%= translationQuestion %></span>
 <!--     <span>
         <select class='js_translate_to_language'>
@@ -11,28 +11,23 @@
     </span> -->
     <span>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" value= "<%= translatedTo.locale %>" aria-expanded="true"><%= translatedTo.name %>
+            <a href="#" class="dropdown-toggle js_translate-to-language-selected" data-toggle="dropdown" value= "<%= translatedTo.locale %>" aria-expanded="true"><%= translatedTo.name %>
             <span class="icon-arrowdown"></span>
             </a>
             <ul class="dropdown-menu">
                 <% _.each(supportedLanguages, function(pair){ %>
                     <li>
-                        <a href="#" class="dropdown-listitem" value="<%=pair[0]%>"><%= pair[1] %></a>
+                        <a href="#" class="dropdown-listitem js_translate-to-language" value="<%=pair[0]%>"><%= pair[1] %></a>
                     </li>
                 <% }); %>
             </ul>
         </li>
     </span class="translation-decision">
-    <span class='js_language_of_choice_confirm'><a class="action" href="#">{{ gettext("Yes") }}</a></span>
-    <span class='js_language_of_choice_deny'><a class="action" href="#">{{ gettext("Do not translate") }}</a></span>
+    <span class='js_language-of-choice-confirm'><a class="action" href="#">{{ gettext("Yes") }}</a></span>
+    <span class='js_language-of-choice-deny'><a class="action" href="#">{{ gettext("Do not translate") }}</a></span>
     <% if (forceTranslationQuestion) { %>
-    <span class='js_hide_translation_question'><a class="action" href="#">{{ gettext("Cancel") }}</a></span>
+    <span class='js_hide-translation-question'><a class="action" href="#">{{ gettext("Cancel") }}</a></span>
     <% } %>
 </div>
-{#
-<div class='hidden js_translate_all_confirm_msg'>
-    <span>{{ gettext("Your preferences are saved. They can always be changed under ") }}</span>>
-
-    <span class='js_load_profile_settings'>{{ gettext("your profile") }}</span>
+<div class='hidden translation-message-confirm js_translate-all-confirm-msg'>{{ gettext("Your preferences are saved! You can always access your preference on a translated message by clicking on 'More Options' above.") }}
 </div>
-#}

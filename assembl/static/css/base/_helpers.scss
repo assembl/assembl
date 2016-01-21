@@ -407,6 +407,19 @@
   opacity: 0;
 }
 
+.fade-in {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 2s linear
+}
+
+.fade-out {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 1.5s, opacity 2s linear;
+}
+
 // Block Disposition
 .dispb {
   display: block;
