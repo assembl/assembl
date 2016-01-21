@@ -28,7 +28,7 @@
     "voteSubmitFailureForCriterion":"Il y a eu une erreur lors de la soumission de votre vote pour le critère \"{{criterion}}\"! Il n'a pas été comptabilisé, veuillez réessayer.",
     "voteCannotSubmitBecauseMissingInput": "Veuillez renseigner les questions demandées pour pouvoir valider votre vote. Si vous avez déjà voté et ne changez pas votre vote sur ces questions, il n'y a pas besoin de valider ces votes à nouveau.",
     "voteAsUser":"Vous votez en tant que \"{{username}}\".",
-    "messageOnCloseWithoutSubmit": "Êtes-vous sûr de vouloir quitter cette page ? Il semble que vous avez entré des valeurs dans certaines questions, mais vous n'avez pas encore validé ces votes.",
+    "messageOnCloseWithoutSubmit": "Certains de vos votes n'ont pas encore été validés. Cliquez sur OK pour fermer cette page malgré tout. Sinon cliquez sur Annuler pour revenir en arrière et valider vos votes.",
     "adminConfigureInstanceDelete": "Supprimer cette instance de widget",
     "adminConfigureInstanceTitle":"Configurer une instance de widget de vote",
     "adminConfigureInstanceCurrent": "Le widget actuellement sélectionné est",
