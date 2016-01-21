@@ -156,10 +156,10 @@
         "conclusion": true
     },
     "IdeaContentLink": {
-        "idea": true,
-        "content": true,
-        "creation_date": true,
-        "creator": true
+        "idIdea": "idea",
+        "idPost": "content",
+        "created": "creation_date",
+        "idCreator": "creator"
     },
     "IdeaContentPositiveLink": {
         "@extends": "IdeaContentLink"
@@ -174,10 +174,7 @@
         "@extends": "IdeaContentNegativeLink"
     },
     "Extract": {
-        "idIdea": "idea",
-        "idPost": "content",
-        "created": "creation_date",
-        "idCreator": "creator",
+        "@extends": "IdeaContentPositiveLink",
         "important": true,
         "owner": true,
         "quote": "body",

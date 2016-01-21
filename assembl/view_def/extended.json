@@ -201,10 +201,10 @@
         "ideas": [":id_only"]
     },
     "IdeaContentLink": {
-        "idea": true,
-        "content": true,
-        "creation_date": true,
-        "creator": true
+        "idIdea": "idea",
+        "idPost": "content",
+        "created": "creation_date",
+        "idCreator": "creator"
     },
     "IdeaContentPositiveLink": {
         "@extends": "IdeaContentLink"
@@ -219,11 +219,8 @@
         "@extends": "IdeaContentNegativeLink"
     },
     "Extract": {
-        "idIdea": "idea",
-        "idPost": "content",
+        "@extends": "IdeaContentPositiveLink",
         "target": true,
-        "created": "creation_date",
-        "idCreator": "creator",
         "important": true,
         "annotator_schema_version": "'\"v1.0\"",
         "owner": true,

@@ -261,10 +261,10 @@
         "ideas": [":id_only"]
     },
     "IdeaContentLink": {
-        "idea": true,
-        "content": true,
-        "creation_date": true,
-        "creator": true
+        "idIdea": "idea",
+        "idPost": "content",
+        "created": "creation_date",
+        "idCreator": "creator"
     },
     "IdeaContentPositiveLink": {
         "@extends": "IdeaContentLink"
@@ -279,6 +279,7 @@
         "@extends": "IdeaContentNegativeLink"
     },
     "Extract": {
+        "@extends": "IdeaContentPositiveLink",
         "idIdea": "idea",
         "idPost": "content",
         "target": true,

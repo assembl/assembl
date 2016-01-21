@@ -245,12 +245,26 @@
     "Synthesis": {
         "@extends": "ExplicitSubGraphView"
     },
-    "Extract": {
+    "IdeaContentLink": {
         "idIdea": "idea",
         "idPost": "content",
         "created": "creation_date",
-        "idCreator": "creator",
-        "annotator_schema_version": "'\"v1.0\"",
+        "idCreator": "creator"
+    },
+    "IdeaContentPositiveLink": {
+        "@extends": "IdeaContentLink"
+    },
+    "IdeaRelatedPostLink": {
+        "@extends": "IdeaContentPositiveLink"
+    },
+    "IdeaContentNegativeLink": {
+        "@extends": "IdeaContentLink"
+    },
+    "IdeaThreadContextBreakLink": {
+        "@extends": "IdeaContentNegativeLink"
+    },
+    "Extract": {
+        "@extends": "IdeaContentPositiveLink",
         "quote": "body",
         "discussion": false,
         "ranges": ["text_fragment_identifiers"],

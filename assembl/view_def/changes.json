@@ -209,24 +209,6 @@
         "ideas": [":partial"],
         "idea_links": [":partial"]
     },
-    "IdeaContentLink": {
-        "idea": true,
-        "content": true,
-        "creation_date": true,
-        "creator": true
-    },
-    "IdeaContentPositiveLink": {
-        "@extends": "IdeaContentLink"
-    },
-    "IdeaRelatedPostLink": {
-        "@extends": "IdeaContentPositiveLink"
-    },
-    "IdeaContentNegativeLink": {
-        "@extends": "IdeaContentLink"
-    },
-    "IdeaThreadContextBreakLink": {
-        "@extends": "IdeaContentNegativeLink"
-    },
     "Extract": {
         "idIdea": "idea",
         "idPost": "content",
