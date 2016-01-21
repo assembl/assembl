@@ -782,8 +782,6 @@ msgstr[1] "%d weitere Nachrichten sind im vollständigen Kontext dieser Nachrich
 msgid "Messages available in this message's full context are from %d more author."
 msgid_plural ""
 "Messages available in this message's full context are from %d more "
-"Messages available in this message's full context are from %d more "
-"authors."
 "authors."
 msgstr[0] "Nachrichten, die im vollständigen Kontext dieser Nachricht verfügbar sind, sind von %d weiteren Autor."
 msgstr[1] "Nachrichten, die im vollständigen Kontext dieser Nachricht verfügbar sind, sind von %d weiteren Autoren."
