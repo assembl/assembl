@@ -56,11 +56,11 @@ msgstr "Unbekannter Benutzer ${uid}"
 
 #: assembl/models/notification.py:573
 msgid "A synthesis is posted"
-msgstr "Eine Synthese wird gepostet"
+msgstr "eine Synthese gepostet wird"
 
 #: assembl/models/notification.py:601
 msgid "Any message is posted to the discussion"
-msgstr "Sämtliche Nachrichten werden in der Diskussion gepostet"
+msgstr "Nachrichten in der Diskussion gepostet werden"
 
 #: assembl/models/notification.py:629
 msgid "Someone directly responds to one of your messages"
@@ -105,7 +105,7 @@ msgstr "benötigt keine zusätzlichen Berechtigungen"
 #: assembl/static/js/app/models/agents.js:137
 #, python-format
 msgid "you must first <a href='%s'>Sign in</a>"
-msgstr "Sie müssen sich zuerst <a href='%s'>registrieren</a>"
+msgstr "Sie müssen sich zuerst <a href='%s'>einloggen</a>"
 
 #: assembl/static/js/app/models/agents.js:143
 msgid "you must first join this discussion"
@@ -616,7 +616,7 @@ msgstr "Sie müssen ein Konto erstellen. Warnung: Dadurch wird die Seite aktuali
 
 #: assembl/static/js/app/views/facebookViews.js:549
 msgid "Sign in using your Facebook account"
-msgstr "Mit Ihrem Facebook-Konto registrieren"
+msgstr "Mit Ihrem Facebook-Konto einloggen"
 
 #: assembl/static/js/app/views/facebookViews.js:775
 msgid ""
@@ -916,7 +916,7 @@ msgstr "Es wurde noch keine Abfrage durchgeführt"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:487
 msgid "There is no message to display with those filters:"
-msgstr "Es gibt keine Nachricht mit diesen Filtern:"
+msgstr "Es gibt keine Nachricht, die:"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:490
 msgid "There are no messages in the discussion."
@@ -934,8 +934,8 @@ msgstr "(alle ungelesenen)"
 #, python-format
 msgid " (%d unread)"
 msgid_plural " (%d unread)"
-msgstr[0] "(%d ungelesene)"
-msgstr[1] "(%d ungelesene)"
+msgstr[0] " (%d ungelesene)"
+msgstr[1] " (%d ungelesenen)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:510
 #, python-format
@@ -1096,7 +1096,7 @@ msgstr "\"%s\""
 #: assembl/static/js/app/views/postFilters.js:347
 #, python-format
 msgid "Are posted by: %s"
-msgstr "Gepostet von: %s"
+msgstr "von %s gepostet wurden"
 
 #: assembl/static/js/app/views/postFilters.js:365
 msgid "Messages I posted"
@@ -1108,7 +1108,7 @@ msgstr "Nur Nachrichten einschließen, die ich gepostet habe."
 
 #: assembl/static/js/app/views/postFilters.js:385
 msgid "Replies to"
-msgstr "Antworten auf"
+msgstr "antworten auf"
 
 #: assembl/static/js/app/views/postFilters.js:388
 msgid "Only include messages that reply to a specific user."
@@ -1132,7 +1132,7 @@ msgstr "Nur Nachrichten einschließen, die auf eine von mir gepostete Nachricht 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
 msgid "Messages not yet associated with an idea"
-msgstr "Nachrichten, die noch mit keiner Idee assoziiert wurden"
+msgstr "noch mit keiner Idee assoziiert wurden"
 
 #: assembl/static/js/app/views/postFilters.js:446
 msgid "Only include messages that are not found in any idea."
@@ -1207,7 +1207,7 @@ msgstr ""
 #: assembl/static/js/app/views/postFilters.js:689
 #, python-format
 msgid "Messages posted since the last synthesis (%s)"
-msgstr "Beiträge, die seit der letzten Synthese (%s) veröffentlicht wurden"
+msgstr "seit der letzten Synthese (%s) veröffentlicht wurden"
 
 #: assembl/static/js/app/views/postFilters.js:693
 msgid "Only include posts created after the last synthesis."
@@ -1382,11 +1382,11 @@ msgstr "Reimport fehlgeschlagen."
 
 #: assembl/static/js/app/views/admin/generalSource.js:72
 msgid "There was a reprocess error!"
-msgstr "Bei der Weiterverarbeitung ist ein Fehler aufgetreten!"
+msgstr "Bei der Neuberechnung ist ein Fehler aufgetreten!"
 
 #: assembl/static/js/app/views/admin/generalSource.js:75
 msgid "Reprocess has begun! It can take up to 15 minutes to complete."
-msgstr "Die Weiterverarbeitung hat begonnen! Sie kann bis zu 15 Minuten in Anspruch nehmen."
+msgstr "Die Neuberechnung hat begonnen! Sie kann bis zu 15 Minuten in Anspruch nehmen."
 
 #: assembl/static/js/app/views/admin/generalSource.js:77
 #| msgid "Reimport failed"
@@ -1490,7 +1490,7 @@ msgstr "Berechtigungen"
 #: assembl/templates/discussion_list.jinja2:29
 #: assembl/templates/views/navBarRight.tmpl:48
 msgid "Sign in"
-msgstr "Registrieren"
+msgstr "Einloggen"
 
 #: assembl/templates/discussion_list.jinja2:23
 msgid " to see all available discussions."
@@ -2328,7 +2328,7 @@ msgid ""
 "Find extracts that will add value to the current discussion. For example,"
 " you could find extracts for:"
 msgstr ""
-"Finden Sie Auszüge, die einen wertvollen Beitrag zur aktuellen Diskussion darstellen würden. Beispielsweise könnten Sie Auszüge finden für:"
+"Finden Sie Auszüge, die einen wertvollen Beitrag zur aktuellen Diskussion darstellen würden. Zum Beispiel:"
 
 #: assembl/templates/views/bookmarket.tmpl:16
 msgid "Dig deeper in an existing idea"
@@ -2395,11 +2395,11 @@ msgstr "Benutzer bei ihrer Registrierung automatisch für Standardbenachrichtigu
 
 #: assembl/templates/views/emailSource.tmpl:78
 msgid "Reimport"
-msgstr "Reimport"
+msgstr "Neu importieren"
 
 #: assembl/templates/views/emailSource.tmpl:79
 msgid "Reprocess"
-msgstr "Weiterverarbeitung"
+msgstr "Neu berechnen"
 
 #: assembl/templates/views/exportPostModal-fb-group.tmpl:2
 msgid "Select Group"
@@ -2983,7 +2983,7 @@ msgstr "Über"
 
 #: assembl/templates/views/notificationByEmails.tmpl:4
 msgid "Receive notifications on"
-msgstr "Benachrichtigungen erhalten zu"
+msgstr "Benachrichtigungen schicken an"
 
 #: assembl/templates/views/otherInIdeaList.tmpl:2
 msgid "Other messages"
@@ -3267,7 +3267,7 @@ msgid ""
 " inbox in a few minutes. Please follow the confirmation link in order to "
 "confirm your email"
 msgstr ""
-"Es wurde eine Bestätigungs-E-Mail an Ihr Konto verschickt, die in wenigen Minuten in Ihrem Posteingang eintreffen müsste. Bitte klicken Sie auf den Bestätigungslink, um Ihre E-Mail-Adresse zu bestätigen"
+"Es wurde eine Bestätigungs-E-Mail an Ihr Konto verschickt, die in wenigen Minuten in Ihrem Posteingang eintreffen müsste. Bitte klicken Sie auf den Bestätigungslink, um Ihre E-Mail-Adresse zu bestätigen."
 
 #: assembl/views/auth/views.py:812
 msgid "Wrong email token."
@@ -3411,7 +3411,7 @@ msgstr ""
 
 #: assembl/views/auth/views.py:1127
 msgid "Please confirm your ${confirm_what} with ${assembl}"
-msgstr "Bitte bestätigen Sie Ihr/e ${confirm_what} bei ${assembl}"
+msgstr "Bitte bestätigen Sie Ihr ${confirm_what} bei ${assembl}"
 
 #: assembl/views/auth/views.py:1153
 msgid "Request for password change"
