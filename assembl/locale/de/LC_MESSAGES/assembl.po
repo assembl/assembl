@@ -922,11 +922,11 @@ msgstr "Es gibt keine Nachrichten in der Diskussion."
 
 #: assembl/static/js/app/views/messageListPostQuery.js:498
 msgid " (unread)"
-msgstr "(ungelesene)"
+msgstr " (ungelesene)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:500
 msgid " (all unread)"
-msgstr "(alle ungelesenen)"
+msgstr " (alle ungelesenen)"
 
 #: assembl/static/js/app/views/messageListPostQuery.js:504
 #, python-format
