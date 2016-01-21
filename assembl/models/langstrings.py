@@ -117,7 +117,11 @@ class Locale(Base):
         if locale_id:
             return Locale.get(locale_id)
         else:
-            return Locale(locale=locale_name)
+            l = Locale(locale=locale_name)
+            cls.default_db.add(l)
+            cls.defautl_db.flush()
+            cls.reset_cache()
+            return l
 
     @classmethod
     def reset_cache(cls):
