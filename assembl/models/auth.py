@@ -1651,10 +1651,10 @@ class UserLanguagePreference(Base):
         s = self.source_of_evidence - other.source_of_evidence
         if s:
             return s
-        s = s.preferred_order - other.preferred_order
+        s = self.preferred_order - other.preferred_order
         if s:
             return s
-        return super(UserLanguagePreference, self).__cmp__(other)
+        return id(self) - id(other)
 
     # def set_priority_order(self, code):
     #     # code can be ignored. This value should be updated for each user
