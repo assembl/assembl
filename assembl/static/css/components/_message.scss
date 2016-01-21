@@ -601,6 +601,30 @@ $previewNumLines: 4;
   }
 }
 
+.message-translation {
+  color: $txtGray2;
+
+  .content {
+    color: $txtGray1;
+  }
+
+  .action:link, .action:visited {
+    color: $gray2;
+  }
+
+  .action:hover {
+    color: $gray;
+  }
+
+  // a:link, a:visited {
+  //   color: $gray2;
+  // }
+
+  // a:hover {
+  //   color: $gray;
+  // }
+}
+
 // This is so annotator doesn't display a form for user's who aren't allowed
 body.js_annotatorUserCannotAddExtract > .textbubble {
   display: none !important;

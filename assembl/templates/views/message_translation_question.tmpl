@@ -1,6 +1,6 @@
 <div class='js_translation_question'>
-    <span><%= translationQuestion %></span>
-    <span>
+    <span class="content"><%= translationQuestion %></span>
+<!--     <span>
         <select class='js_translate_to_language'>
             <% _.each(supportedLanguages, function(pair){ %>
                 <option value="<%= pair[0] %>"
@@ -8,11 +8,25 @@
                 ><%= pair[1] %></option>
             <% }) %>
         </select>
-    </span>
-    <span class='js_language_of_choice_confirm'>{{ gettext("Yes") }}</span>
-    <span class='js_language_of_choice_deny'>{{ gettext("Do not translate") }} </span>
+    </span> -->
+    <span>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" value= "<%= translatedTo.locale %>" aria-expanded="true"><%= translatedTo.name %>
+            <span class="icon-arrowdown"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <% _.each(supportedLanguages, function(pair){ %>
+                    <li>
+                        <a href="#" class="dropdown-listitem" value="<%=pair[0]%>"><%= pair[1] %></a>
+                    </li>
+                <% }); %>
+            </ul>
+        </li>
+    </span class="translation-decision">
+    <span class='js_language_of_choice_confirm'><a class="action" href="#">{{ gettext("Yes") }}</a></span>
+    <span class='js_language_of_choice_deny'><a class="action" href="#">{{ gettext("Do not translate") }}</a></span>
     <% if (forceTranslationQuestion) { %>
-    <span class='js_hide_translation_question'>{{ gettext("Cancel") }} </span>
+    <span class='js_hide_translation_question'><a class="action" href="#">{{ gettext("Cancel") }}</a></span>
     <% } %>
 </div>
 {#
