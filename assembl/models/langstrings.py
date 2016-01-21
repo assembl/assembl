@@ -119,7 +119,7 @@ class Locale(Base):
         else:
             l = Locale(locale=locale_name)
             cls.default_db.add(l)
-            cls.defautl_db.flush()
+            cls.default_db.flush()
             cls.reset_cache()
             return l
 
