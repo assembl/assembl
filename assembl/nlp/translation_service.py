@@ -39,6 +39,7 @@ class TranslationService(object):
             cls.target_locales(), target_locale)
 
     def identify(self, text, expected_locales=None):
+        "Try to identify locale of text. Boost if one of the expected locales."
         if not text:
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
         try:

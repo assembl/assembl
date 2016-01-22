@@ -20,10 +20,14 @@ from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC, P_SYSADMIN
 
 
 class Locale(Base):
+    """The name of locales. Follows Posix locale conventions: lang(_Script)(_COUNTRY),
+    (eg zh_Hant_HK, but script can be elided (eg fr_CA) if only one script for language,
+    as per xxx instructions.
+    """
     __tablename__ = "locale"
     id = Column(Integer, primary_key=True)
     locale = Column(String(20), unique=True)
-    rtl = Column(Boolean, server_default="0")
+    rtl = Column(Boolean, server_default="0", doc="right-to-left")
     _locale_collection = None
     _locale_collection_byid = None
     _locale_collection_subsets = None
@@ -170,6 +174,7 @@ def locale_collection_changed(target, value, oldvalue):
 
 
 class LocaleName(Base):
+    "Allows to obtain the name of locales (in any target locale, incl. itself)"
     __tablename__ = "locale_name"
     __table_args__ = (UniqueConstraint('locale_id', 'target_locale_id'), )
     id = Column(Integer, primary_key=True)
@@ -249,6 +254,7 @@ class LocaleName(Base):
     crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
 
 
+# TODO : Move in class
 LocaleName.locale = relationship(Locale, foreign_keys=(
         LocaleName.locale_id,))
 LocaleName.target_locale = relationship(Locale, foreign_keys=(
@@ -461,6 +467,7 @@ class LangString(Base):
         from pyramid.security import Everyone
         # Very very hackish, but the user_prefs_as_dict call
         # is costly and frequent. Let's cache it in the request.
+        # Useful for view_def use.
         req = get_current_request()
         assert req
         if getattr(req, "lang_prefs", 0) is 0:
@@ -475,6 +482,7 @@ class LangString(Base):
         return self.best_lang(req.lang_prefs)
 
     def best_entries_in_request_with_originals(self):
+        "Give both best and original (for view_def); avoids a roundtrip"
         lang = self.best_entry_in_request()
         if lang.is_machine_translated:
             entries = self.non_mt_entries()
@@ -508,6 +516,7 @@ class LangStringEntry(Base, TombstonableMixin):
     )
 
     def __init__(self, *args, **kwargs):
+        "TODO: explain @language params"
         if "langstring_id" not in kwargs and "langstring" not in kwargs:
             kwargs["langstring"] = LangString()
         if "locale_id" not in kwargs and "locale" not in kwargs:

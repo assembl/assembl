@@ -81,18 +81,8 @@ var LanguagePreferenceCollection = Base.Collection.extend({
         return pref;
       }
     },
-
-    /**
-     * @param  String locale
-     */
-    getTranslateToForLocale: function(locale){
-        var l = this.find(function(ulp){
-            ulp.isTranslateTo(locale);
-        });
-        return l;
-    },
-
     getTranslationData: function() {
+      // If we want to create an optimized collection someday...
       return this;
     }
 });
@@ -109,10 +99,6 @@ var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.
           locale_name: locale,
           source_of_evidence: 0
         });
-    },
-
-    getTranslateToForLocale: function(locale){
-        return null;
     },
 });
 
