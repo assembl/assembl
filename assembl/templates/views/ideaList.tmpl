@@ -1,42 +1,37 @@
 <div class="panel-body">
-	<div class="mtxs"></div>
-	<div class="allMessagesView"></div>
+  <div class="mtxs"></div>
+  <div class="allMessagesView"></div>
 
-	<hr />
+  <hr />
 
-	<div id="tour_step_idealist" class="idealist-header pvxs">
-		<span class="idealist-header-title pls ">{{ gettext('Table of ideas') }}</span>
-		<div class="idealist-actions">
-			<% if (canAdd) { %>
-				<a href="#" class="js_ideaList-addbutton" class="btn btn-default btn-sm">
-						<i class="icon-add-2"></i> {{ gettext('Add idea') }}
-				</a> &nbsp;&nbsp;
-			<% } %>
-			<div class="dropdown">
-	            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="icon-options"></i></a>
-	            <ul class="dropdown-menu">
-	                <li><a href="#" class="js_decreaseRowHeight">{{ gettext('Decrease row height') }}</a></li>
-	                <li><a href="#" class="js_increaseRowHeight">{{ gettext('Increase row height') }}</a></li>
-	                <li><a href="#" class="js_toggleDecreasingFontSizeWithDepth">{{ gettext('Toggle decreasing font size with depth') }}</a></li>
-	            </ul>
-	        </div>
-			
-		</div>
-	</div>
-	<div id="idealist-list" class="idealist">
-		<div class="ideaView"></div>
-	</div>
+  <div class="otherView"></div>
+  <div class="synthesisView"></div>
+  <div class="orphanView"></div>
 
-	<hr />
+  <hr />
 
-	<div class="otherView"></div>
-	<div class="synthesisView"></div>
-	<div class="orphanView"></div>
-	
-	<div id="idealist-graph" style="display: none;">
-			<div id="infovis" width="100%" height="100%"></div>
-			<div id="inner-details"></div>
-	</div>
+  <div id="tour_step_idealist" class="idealist-header pvxs">
+    <span class="idealist-header-title pls ">{{ gettext('Table of ideas') }}</span>
+    <div class="idealist-actions">
+      <% if (canAdd) { %>
+        <a href="#" class="js_ideaList-addbutton" class="btn btn-default btn-sm">
+            <i class="icon-add-2"></i> {{ gettext('Add idea') }}
+        </a> &nbsp;&nbsp;
+      <% } %>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="icon-options"></i></a>
+        <ul class="dropdown-menu">
+          <li><a href="#" class="js_decreaseRowHeight">{{ gettext('Decrease row height') }}</a></li>
+          <li><a href="#" class="js_increaseRowHeight">{{ gettext('Increase row height') }}</a></li>
+          <li><a href="#" class="js_toggleDecreasingFontSizeWithDepth">{{ gettext('Toggle decreasing font size with depth') }}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="idealist-list" class="idealist">
+    <div class="ideaView"></div>
+  </div>
+
 </div>
 
 

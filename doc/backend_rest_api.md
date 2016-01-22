@@ -33,3 +33,7 @@ GET localhost:6543/api/v1/discussion/2/permissions/add_extract/u/
 Frontend notes:
 Specific messages are adressed with urls such as 
 http://localhost:6543/jacklayton/posts/local%3AContent%2F16
+
+Metrics and statistics (work in progress, api under flux):
+Ex:  
+http://localhost:6543/data/Discussion/11/time_series_analytics?interval=P1M&start=2014-01-01

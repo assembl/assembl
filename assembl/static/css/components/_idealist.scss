@@ -339,23 +339,6 @@
   background: url(#{$img-dir}/idealist/idealist-link-last.png) center center no-repeat;
 }
 
-// the graph
-// ---------
-
-#idealist-graph {
-  height: 100%;
-  width: 100%;
-  display: none;
-  #infovis {
-    height: 100%;
-    width: 100%;
-  }
-  #inner-details {
-    height: auto;
-    width: 100%;
-  }
-}
-
 // The child list
 // --------------
 .idealist-children {

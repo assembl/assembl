@@ -1,3 +1,5 @@
+# German translations for assembl.
+# Copyright (C) 2016 ORGANIZATION
 # This file is distributed under the same license as the assembl project.
 #
 # Translators:
@@ -6,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-21 17:45-0500\n"
-"PO-Revision-Date: 2015-12-03 14:14+0000\n"
-"Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
+"POT-Creation-Date: 2016-01-22 18:34-0500\n"
+"PO-Revision-Date: 2016-01-21 22:55+0000\n"
+"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language: de\n"
 "Language-Team: German "
 "(http://www.transifex.com/assembl/assembl/language/de/)\n"
@@ -730,7 +732,7 @@ msgstr "Erkundung der Idee \"%s\""
 
 #: assembl/static/js/app/views/ideaList.js:235
 #: assembl/templates/views/create-group.tmpl:42
-#: assembl/templates/views/ideaList.tmpl:8
+#: assembl/templates/views/ideaList.tmpl:14
 msgid "Table of ideas"
 msgstr "Ideentabelle"
 
@@ -897,7 +899,6 @@ msgstr "In die Zwischenablage"
 #: assembl/templates/views/adminPartnerEditForm.tmpl:71
 #: assembl/templates/views/adminPartnerForm.tmpl:63
 #: assembl/templates/views/adminPartnerForm.tmpl:69
-#: assembl/templates/views/base-modal.tmpl:12
 #: assembl/templates/views/ckeditorField.tmpl:10
 #: assembl/templates/views/create-group.tmpl:128
 #: assembl/templates/views/messageModerationOptions.tmpl:32
@@ -1187,8 +1188,6 @@ msgstr ""
 
 #: assembl/static/js/app/views/postFilters.js:443
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
 msgid "Messages not yet associated with an idea"
 msgstr "noch mit keiner Idee assoziiert wurden"
 
@@ -2780,19 +2779,19 @@ msgstr "Konversation zu dieser Idee anzeigen"
 msgid "View Idea in popup"
 msgstr "Idee in Popup anzeigen"
 
-#: assembl/templates/views/ideaList.tmpl:12
+#: assembl/templates/views/ideaList.tmpl:18
 msgid "Add idea"
 msgstr "Idee hinzufügen"
 
-#: assembl/templates/views/ideaList.tmpl:18
+#: assembl/templates/views/ideaList.tmpl:24
 msgid "Decrease row height"
 msgstr "Zeilenhöhe verringern"
 
-#: assembl/templates/views/ideaList.tmpl:19
+#: assembl/templates/views/ideaList.tmpl:25
 msgid "Increase row height"
 msgstr "Zeilenhöhe vergrößern"
 
-#: assembl/templates/views/ideaList.tmpl:20
+#: assembl/templates/views/ideaList.tmpl:26
 msgid "Toggle decreasing font size with depth"
 msgstr "Zwischen abnehmender Fontgröße und Tiefe wechseln"
 
@@ -3155,9 +3154,21 @@ msgstr "Über"
 msgid "Receive notifications on"
 msgstr "Benachrichtigungen schicken an"
 
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
+msgid ""
+"Messages top-posted and whose thread has not yet been harvested into an "
+"idea"
+msgstr ""
+
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
+msgid "Messages yet to be organised"
+msgstr ""
+
 #: assembl/templates/views/otherInIdeaList.tmpl:2
-msgid "Other messages"
-msgstr "Sonstige Nachrichten"
+#, fuzzy
+#| msgid "The name of this idea in the table of ideas"
+msgid "Messages not in the table of ideas"
+msgstr "Der Name dieser Idee in der Ideentabelle"
 
 #: assembl/templates/views/panelWrapper.tmpl:11
 msgid "Fullsize"
@@ -3292,9 +3303,19 @@ msgid "Read the synthesis"
 msgstr "Die Synthese lesen"
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:4
-#: assembl/templates/views/synthesisInIdeaList.tmpl:8
-#: assembl/templates/views/synthesisInIdeaList.tmpl:9
 msgid "All syntheses"
+msgstr "Alle Synthesen"
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:8
+#, fuzzy
+#| msgid "No synthesis of the discussion has been published yet"
+msgid "Syntheses are summaries of the discussion published on a regular basis"
+msgstr "Es wurde noch keine Synthese der Diskussion veröffentlicht"
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:9
+#, fuzzy
+#| msgid "All syntheses"
+msgid "Syntheses"
 msgstr "Alle Synthesen"
 
 #: assembl/templates/views/synthesisPanel.tmpl:15
@@ -3658,21 +3679,6 @@ msgstr ""
 msgid "No discussion found for slug=%s"
 msgstr "Keine Diskussionen gefunden für Slug=%s"
 
-#~ msgid "Your settings fail to update."
-#~ msgstr ""
-
-#~ msgid "Your settings fail to update"
-#~ msgstr ""
-
-#~ msgid "Comment on this idea here..."
-#~ msgstr "Diese Idee hier kommentieren ..."
-
-#~ msgid "Send your comment"
-#~ msgstr "Kommentar absenden"
-
-#~ msgid "Deactivate"
-#~ msgstr "Deaktivieren"
-
-#~ msgid "Activate"
-#~ msgstr "Aktivieren"
+#~ msgid "Other messages"
+#~ msgstr "Sonstige Nachrichten"
 

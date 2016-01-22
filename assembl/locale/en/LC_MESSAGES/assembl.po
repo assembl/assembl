@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-21 17:45-0500\n"
+"POT-Creation-Date: 2016-01-22 18:34-0500\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: en\n"
@@ -672,7 +672,7 @@ msgstr ""
 
 #: assembl/static/js/app/views/ideaList.js:235
 #: assembl/templates/views/create-group.tmpl:42
-#: assembl/templates/views/ideaList.tmpl:8
+#: assembl/templates/views/ideaList.tmpl:14
 msgid "Table of ideas"
 msgstr ""
 
@@ -827,7 +827,6 @@ msgstr ""
 #: assembl/templates/views/adminPartnerEditForm.tmpl:71
 #: assembl/templates/views/adminPartnerForm.tmpl:63
 #: assembl/templates/views/adminPartnerForm.tmpl:69
-#: assembl/templates/views/base-modal.tmpl:12
 #: assembl/templates/views/ckeditorField.tmpl:10
 #: assembl/templates/views/create-group.tmpl:128
 #: assembl/templates/views/messageModerationOptions.tmpl:32
@@ -1098,8 +1097,6 @@ msgstr ""
 
 #: assembl/static/js/app/views/postFilters.js:443
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
-#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
 msgid "Messages not yet associated with an idea"
 msgstr ""
 
@@ -2545,19 +2542,19 @@ msgstr ""
 msgid "View Idea in popup"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:12
+#: assembl/templates/views/ideaList.tmpl:18
 msgid "Add idea"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:18
+#: assembl/templates/views/ideaList.tmpl:24
 msgid "Decrease row height"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:19
+#: assembl/templates/views/ideaList.tmpl:25
 msgid "Increase row height"
 msgstr ""
 
-#: assembl/templates/views/ideaList.tmpl:20
+#: assembl/templates/views/ideaList.tmpl:26
 msgid "Toggle decreasing font size with depth"
 msgstr ""
 
@@ -2902,8 +2899,18 @@ msgstr ""
 msgid "Receive notifications on"
 msgstr ""
 
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
+msgid ""
+"Messages top-posted and whose thread has not yet been harvested into an "
+"idea"
+msgstr ""
+
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
+msgid "Messages yet to be organised"
+msgstr ""
+
 #: assembl/templates/views/otherInIdeaList.tmpl:2
-msgid "Other messages"
+msgid "Messages not in the table of ideas"
 msgstr ""
 
 #: assembl/templates/views/panelWrapper.tmpl:11
@@ -3033,9 +3040,15 @@ msgid "Read the synthesis"
 msgstr ""
 
 #: assembl/templates/views/synthesisInIdeaList.tmpl:4
-#: assembl/templates/views/synthesisInIdeaList.tmpl:8
-#: assembl/templates/views/synthesisInIdeaList.tmpl:9
 msgid "All syntheses"
+msgstr ""
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:8
+msgid "Syntheses are summaries of the discussion published on a regular basis"
+msgstr ""
+
+#: assembl/templates/views/synthesisInIdeaList.tmpl:9
+msgid "Syntheses"
 msgstr ""
 
 #: assembl/templates/views/synthesisPanel.tmpl:15
@@ -4323,5 +4336,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Activate"
+#~ msgstr ""
+
+#~ msgid "Other messages"
 #~ msgstr ""
 
