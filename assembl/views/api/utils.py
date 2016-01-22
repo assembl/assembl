@@ -13,7 +13,13 @@ def mime_type(request):
     parsed = urlparse(url)
     if not parsed or parsed.scheme not in ('http', 'https'):
         raise HTTPBadRequest("Wrong scheme")
-    result = requests.head(url)
+    try:
+        result = requests.head(url)
+    except requests.ConnectionError:
+        return Response(
+        status=503,
+        location=url)
+    
     return Response(
         content_type=result.headers['Content-Type'],
         status=result.status_code,
