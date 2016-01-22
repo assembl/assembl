@@ -1,12 +1,12 @@
-pip==7.1.2
-setuptools==18.8.1
-Babel==2.1.1
+pip==8.0.2
+setuptools==19.4
+Babel==2.2.0
 Beaker>=1.6.5
 Chameleon==2.24
 ColanderAlchemy==0.3.3
 DateTime==4.0.1
 Fabric==1.10.2
-IMAPClient==1.0.0
+IMAPClient==1.0.1
 Jinja2==2.8
 Mako==1.0.3
 MarkupSafe==0.23
@@ -14,40 +14,40 @@ PasteDeploy==1.5.2
 PyJWT==1.4.0
 PyLD==0.6.8
 PyStemmer==1.3.0
-Pygments==2.0.2
-SPARQLWrapper==1.7.5
-SQLAlchemy==1.0.10
-Sphinx==1.3.3
-Unidecode==0.04.18
+Pygments==2.1
+SPARQLWrapper==1.7.6
+Sphinx==1.3.4
+SQLAlchemy==1.0.11
+Unidecode==0.04.19
 WebOb==1.5.1
 WebTest==2.0.20
-Werkzeug==0.11.2
-alabaster==0.7.6
+Werkzeug==0.11.3
+alabaster==0.7.7
 -e git+https://github.com/imaginationforpeople/alembic.git@virtuoso#egg=alembic
-amqp==1.4.8
+amqp==1.4.9
 anyjson==0.3.3
 anykeystore==0.2
 # Do not specify argparse, jenkins chokes on system version.
 # argparse==1.2.2
-backports.ssl-match-hostname==3.4.0.2
+backports.ssl-match-hostname==3.5.0.1
 beautifulsoup4==4.4.1
 billiard==3.3.0.22
-boto==2.38.0
+boto==2.39.0
 bz2file==0.98
 celery==3.1.19
 chroma==0.2.0
-cffi==1.3.1
-colander==1.0
-cornice==1.1.0
+cffi==1.4.2
+colander==1.2
+cornice==1.2.0
 cov-core==1.15.0
 coverage==4.0.3
-cryptography==1.1.2
+cryptography==1.2.1
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 docutils==0.12
 dogpile.cache==0.5.7
 dogpile.core==0.4.1
 ecdsa==0.13
-enum34==1.1.1
+enum34==1.1.2
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
 flaky==2.2.0
@@ -57,69 +57,70 @@ greenlet==0.4.9
 html5lib==0.9999999
 idna==2.0
 imaplib2==2.45.0
-ipaddress==1.0.15
+ipaddress==1.0.16
 isodate==0.5.4
 iso639==0.1.1
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
-kombu==3.0.30
-lingua==4.5.1
+kombu==3.0.33
+lingua==4.6
 lxml==3.5.0
 meld3==1.0.2
 mock==1.3.0
 ndg_httpsclient==0.4.0
-numpy==1.10.2
+numpy==1.10.4
 oauthlib==1.0.3
 paramiko==1.16.0
 pinocchio==0.4.2
 polib==1.0.7
-premailer==2.9.6
+premailer==2.9.7
 py==1.4.31
 pyOpenSSL==0.15.1
 pyasn1==0.1.9
 pycparser==2.14
 pycrypto==2.6.1
+pygraphviz==1.3.1
 pyIsEmail==v1.3.1
 dnspython==1.12.0   # must come after pyisemail?
 pylibmc==1.5.0
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
-pyparsing==2.0.6
-pygraphviz==1.3.1
-pyramid==1.5.7
+pyparsing==2.0.7
+pyramid==1.6
 pyramid-autodoc==0.0.7
 pyramid-beaker==0.8
 pyramid-debugtoolbar==2.4.2
 pyramid_debugtoolbar_ajax==0.0.4
 pyramid_dogpile_cache==0.0.4
-pyramid-jinja2==2.5
+pyramid_ipython==0.1
+pyramid-jinja2==2.6.1
 pyramid-mailer==0.14.1
 pyramid-mako==1.0.2
 pyramid-tm==0.12.1
 pytest==2.8.5
 pytest-cov==2.2.0
-pytest-localserver==0.3.4
+pytest-localserver==0.3.5
 pytest-mock==0.9.0
 pytest-splinter==1.7.0
 python-dateutil==2.4.2
 python-openid==2.2.5
 pytz==2015.7
-pyzmq==15.1.0
-raven==5.9.0
+pyzmq==15.2.0
+raven==5.10.1
 rdflib==4.2.1
 rdflib-jsonld==0.3
 redis==2.10.5
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1  # rq.filter: <4.2
-requests==2.8.1
+requests==2.8.1   # smart_open holding it back
 requests-oauthlib==0.6.0
 scikit-learn==0.17
 scipy==0.16.1
-selenium==2.48.0
+selenium==2.49.2
 simplejson==3.8.1
 six==1.10.0
-snowballstemmer==1.2.0
-smart_open==1.3.0
+smart_open==1.3.2
+snowballstemmer==1.2.1
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 sphinx-bootstrap-theme==0.4.8
 sphinxcontrib-httpdomain==1.4.0
