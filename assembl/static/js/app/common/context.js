@@ -1008,25 +1008,40 @@ Context.prototype = {
   onDropdownClick: function(e) {
     if (!e || !(e.target))
         return;
-    var dropdown = $(e.target);
-    if (!dropdown.hasClass("dropdown-label"))
-        dropdown = dropdown.parents(".dropdown-label").first();
-    if (!dropdown)
-        return;
+    var targetElement = $(e.target),
+        toggle = undefined, 
+        parent = undefined;
+    
+    if (targetElement.hasClass("dropdown-toggle")) {
+      toggle = targetElement;
+    }
+    else {
+      toggle = targetElement.parents(".dropdown-toggle").first();
+    }
 
-    var parent = dropdown.parent();
+    if (!toggle) {
+      console.warn("toggle element not found");
+      return;
+    }
 
+    var dropdown = toggle.parent();
+
+    if (!dropdown) {
+      console.warn("dropdown element not found");
+      return;
+    }
+    
     var onMouseLeave = function(e) {
-      parent.removeClass('is-open');
-      e.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
+      dropdown.removeClass('is-open');
+      //e.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
     };
 
-    if (parent.hasClass('is-open')) {
+    if (dropdown.hasClass('is-open')) {
       onMouseLeave();
       return;
     }
 
-    parent.addClass('is-open');
+    dropdown.addClass('is-open');
     $(document.body).one('click', onMouseLeave);
   },
 
@@ -1448,7 +1463,7 @@ Context.prototype = {
 
     //this.initTooltips($("body"));
 
-    $(document).on('click', '.dropdown-label', this.onDropdownClick);
+    $(document).on('click', '.dropdown-toggle', this.onDropdownClick);
     $(document).on('ajaxError', this.onAjaxError);
   },
 

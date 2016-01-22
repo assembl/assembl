@@ -192,8 +192,8 @@ var TranslationView = Marionette.ItemView.extend({
     onLanguageSelected: function(e){
         var current = this.$(e.currentTarget),
             val = current.attr("value");
-        this.$(this.ui.langSelection).attr("value", val);
-        this.$(this.ui.langSelection).text(current.text());
+        this.$(this.ui.langSelection).attr("value", val); //This is storing data in the dom, not a very good idea.  benoitg-2015-01-21
+        this.$(this.ui.langSelection).find(".dropdown-label").text(current.text());
     },
 
     showConfirmMessage: function(onComplete){
