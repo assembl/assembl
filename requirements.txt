@@ -34,7 +34,7 @@ enum34==1.1.2
 Fabric==1.10.2
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
-flaky==2.2.0
+flaky==3.0.3
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 gensim==0.12.3
 greenlet==0.4.9

@@ -188,6 +188,9 @@ def discussion2(request, test_session):
         test_session.delete(d.table_of_contents)
         test_session.delete(d.root_idea)
         test_session.delete(d.next_synthesis)
+        preferences = d.preferences
+        d.preferences = None
+        test_session.delete(preferences)
         test_session.delete(d)
         test_session.flush()
     request.addfinalizer(fin)
