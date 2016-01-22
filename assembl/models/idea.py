@@ -345,11 +345,13 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
 
     @staticmethod
     def _get_orphan_posts_statement_no_select(select):
-        """ Requires discussion_id bind parameters """
+        """ Requires discussion_id bind parameters 
+        Excludes synthesis posts """
         return select + """
            FROM post
            JOIN content ON ( content.id = post.id
-                            AND content.discussion_id = :discussion_id )
+                            AND content.discussion_id = :discussion_id
+                            AND content.type <> 'synthesis_post')
            EXCEPT corresponding BY (post_id) (
              SELECT DISTINCT post.id AS post_id FROM post
               JOIN post AS root_posts ON ( (post.ancestry <> ''
