@@ -20,7 +20,8 @@ var Marionette = require('../shims/marionette.js'),
     AttachmentViews = require('./attachments.js'),
     MessageModerationOptionsView = require('./messageModerationOptions.js'),
     MessageTranslationView = require('./messageTranslationQuestion.js'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js'),
+    Genie = require('../utils/genieEffect.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10;
@@ -170,7 +171,7 @@ var MessageView = Marionette.LayoutView.extend({
       attachments: ".js_regionMessageAttachments",
       moderationOptions: ".js_regionMessageModerationOptions",
       showTranslationPref: ".js_show-translation-preferences",
-
+      showMoreDropDown: ".dropdown-toggle", //Used for show/hiding translation view
       showOriginal: '.js_translation_show_original', //Show original region
       showOriginalString: '.js_trans_show_origin',
       showTranslatedString: '.js_trans_show_translated'
@@ -1490,6 +1491,14 @@ var MessageView = Marionette.LayoutView.extend({
   onHideTranslationViewClick: function(){
     //Genie effect goes in here
     console.log("Genie effect in full force!!");
+    var regionToEmpty = this.getRegion("translationRegion").currentView.getRegion("selectLanguage"),
+        $source = this.$(regionToEmpty.el),
+        $target = this.ui.showMoreDropDown;
+    Genie.geniefy($source, $target, 0.25, 3000)
+      .then(function(){
+        console.log("3<s> has passed since genie effect occured");
+        regionToEmpty.empty();
+    });
   }
 
 });

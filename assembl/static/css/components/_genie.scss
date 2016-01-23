@@ -1,0 +1,31 @@
+.genie-effect {
+  //position: fixed;
+  // border: 1px solid grey; 
+  // display: block;
+  // width: 300px;
+  
+  -ms-transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  -moz-transition: all 0.25s;
+  transition: all 0.25s;
+  
+  $skewY: 0;
+  $skewX: 45deg;
+  
+  &.hide-genie {
+    transform: scale(0) perspective(370px) rotateX(45deg);
+  }
+  
+  > div {
+    padding: 10px;
+  }
+  
+  // .container-header {
+  //   background: grey; 
+  //   color: #fff;
+  // }
+}
+
+.toggle-genie {
+  transform: scale(0) perspective(370px) rotateX(45deg);
+}

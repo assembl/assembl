@@ -249,7 +249,8 @@ var TranslationView = Marionette.LayoutView.extend({
         Currently, that is the "Show More" dropdown
      */
     onHideQuestionClick: function(e) {
-        this.messageView.onHideTranslationViewClick(e);
+        var that = this;
+        this.messageView.onHideTranslationViewClick();
     },
 
     serializeData: function(){
