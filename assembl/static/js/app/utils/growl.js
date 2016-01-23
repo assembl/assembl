@@ -9,14 +9,14 @@ var $ = require('../shims/jquery.js'),
  */
 var GrowlReason = {
     SUCCESS: 'success',
-    ERROR: 'error'
+    ERROR: 'danger'
 };
 
 var defaultGrowlSettings = {
     ele: 'body',
     // type: either 'success' or 'error' 
     offset: {from: 'bottom', amount:20},
-    align: 'left',
+    align: 'right',
     delay: 4000,
     allow_dismiss: true,
     stackup_spacing: 10
