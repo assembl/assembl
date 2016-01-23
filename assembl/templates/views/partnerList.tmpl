@@ -1,17 +1,17 @@
 <div class="gr mvxl">
   <div class="gu gu-1of1">
     <div class="block-content">
-    	<% if(nbOrganisations === 0){ %>
-    		<% if(userCanEditDiscussion){ %>
-    		 <h2 class="dispib mrl">{{ gettext('Partners') }}</h2> <a href="<%= urlEdit %>"> {{ gettext('edit partners') }} </a>
-    		<% } %>
-			<% } else { %>
-			  <% if(userCanEditDiscussion){ %>
-				 <h2 class="dispib mrl">{{ gettext('Partners') }}</h2> <a href="<%= urlEdit %>"> {{ gettext('edit partners') }} </a>
-				<% } else { %>
-				 <h2>{{ gettext('Partners') }}</h2>
-				<% } %>
-			<% } %>
+      <% if(nbOrganisations === 0){ %>
+        <% if(userCanEditDiscussion){ %>
+         <h2 class="dispib mrl">{{ gettext('Partners') }}</h2> <a href="<%= urlEdit %>"> {{ gettext('edit partners') }} </a>
+        <% } %>
+      <% } else { %>
+        <% if(userCanEditDiscussion){ %>
+         <h2 class="dispib mrl">{{ gettext('Partners') }}</h2> <a href="<%= urlEdit %>"> {{ gettext('edit partners') }} </a>
+        <% } else { %>
+         <h2>{{ gettext('Partners') }}</h2>
+        <% } %>
+      <% } %>
       <div class="partnersList gr"></div>
     </div>
   </div>

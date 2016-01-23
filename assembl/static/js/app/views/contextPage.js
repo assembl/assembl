@@ -42,11 +42,6 @@ var PartnerList = Marionette.CompositeView.extend({
   childViewContainer: '.partnersList',
   initialize: function(options) {
     this.nbOrganisations = options.nbOrganisations;
-
-    this.collection.models = _.reject(this.collection.models, function(model) {
-      return model.get('is_initiator');
-    });
-
   },
   serializeData: function() {
     return {
@@ -397,9 +392,19 @@ var ContextPage = Marionette.LayoutView.extend({
                 });
                 that.getRegion('synthesis').show(synthesis);
 
+                var NonInstigatorSubset = Backbone.Subset.extend({
+                  sieve: function(partner) {
+                    return partner !== partnerInstigator;
+                  }
+                });
+
+                var nonInstigatorSubset = new NonInstigatorSubset([], {
+                  parent: AllPartner
+                });
+                
                 var partners = new PartnerList({
-                  nbOrganisations: _.size(AllPartner),
-                  collection: AllPartner
+                  nbOrganisations: nonInstigatorSubset.length,
+                  collection: nonInstigatorSubset
                 });
                 that.getRegion('organizations').show(partners);
 
