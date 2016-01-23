@@ -84,6 +84,65 @@ var LanguagePreferenceCollection = Base.Collection.extend({
     getTranslationData: function() {
       // If we want to create an optimized collection someday...
       return this;
+    },
+
+    /**
+     * Creates a new languagePreference from a given local and does actions based on the succes/error callbacks
+     * @param User      currentUser     The Backbone model of the current user
+     * @param String    locale          The particular string of the locale to save
+     * @param String    translateTo     The string of the locale that @param {locale} translates into 
+     * @param Object    options         success and error callbacks
+     */
+    setPreference: function(currentUser, locale, translateTo, saveOptions){
+        //If user is not connected, then do nothing
+        if (currentUser){
+            var user_id = currentUser.id,
+                that = this,
+                saveOptions = saveOptions || {},
+                existingModel = this.find(function(model){
+                //Uniqueness constraint from the back-end ensures only 1 model with such parameters
+                return (
+                    (model.get('user') === user_id) && 
+                    (model.get('locale_name') === locale) && 
+                    (model.get('source_of_evidence') === 0))
+                }),
+                ops = {
+                    success: function(model, resp, options){
+                        that.add(model);
+                        if (_.has(saveOptions, "success")){
+                            saveOptions.success(model, resp, options);
+                        }
+                    },
+                    error: function(model, resp, options){
+                        console.error("Failed to save user language preference of " + model + " to the database", resp);
+                        if (_.has(saveOptions, "error")){
+                            saveOptions.error(model, resp, options);
+                        }
+                    }
+                };
+            if (existingModel) {
+                var model = existingModel;
+                ops.wait = true;
+                model.save({
+                    locale_name: locale,
+                    translate_to_name: translateTo,
+                }, ops);
+            }
+            else {
+                var hash = {
+                    locale_name: locale,
+                    source_of_evidence: 0,
+                    user: user_id,
+                    "@type": Types.LANGUAGE_PREFERENCE
+                };
+                if (translateTo){
+                    hash.translate_to_name = translateTo;
+                }
+                var langPref = new LanguagePreference.Model(hash, {collection: this});
+                ops.wait = false;
+                langPref.save(null, ops);
+            }
+        }
     }
 });
 

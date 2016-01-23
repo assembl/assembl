@@ -1,34 +1,14 @@
 <div class='js_translation-question'>
-    <span class="content"><%= translationQuestion %></span>
-<!--     <span>
-        <select class='js_translate_to_language'>
-            <% _.each(supportedLanguages, function(pair){ %>
-                <option value="<%= pair[0] %>"
-                <% if (pair[0] === translatedTo.locale) { %> selected="selected" <% } %>
-                ><%= pair[1] %></option>
-            <% }) %>
-        </select>
-    </span> -->
-    <span>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle js_translate-to-language-selected" data-toggle="dropdown" value= "<%= translatedTo.locale %>" aria-expanded="true">
-              <span class="dropdown-label"><%= translatedTo.name %></span>
-              <span class="icon-arrowdown"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <% _.each(supportedLanguages, function(pair){ %>
-                    <li>
-                        <a href="#" class="dropdown-listitem js_translate-to-language" value="<%=pair[0]%>"><%= pair[1] %></a>
-                    </li>
-                <% }); %>
-            </ul>
-        </li>
-    </span class="translation-decision">
-    <span class='js_language-of-choice-confirm'><a class="action" href="#">{{ gettext("Yes") }}</a></span>
-    <span class='js_language-of-choice-deny'><a class="action" href="#">{{ gettext("Do not translate") }}</a></span>
-    <% if (forceTranslationQuestion) { %>
-    <span class='js_hide-translation-question'><a class="action" href="#">{{ gettext("Cancel") }}</a></span>
-    <% } %>
-</div>
-<div class='hidden translation-message-confirm js_translate-all-confirm-msg'>{{ gettext("Your preferences are saved! You can always access your preference on a translated message by clicking on 'More Options' above.") }}
+    <div class="content"><%= translationQuestion %></div>
+    <div>
+        <span class="translation-decision">
+            <span class='js_language-of-choice-confirm'><a class="action" href="#">{{ gettext("Yes") }}</a></span>
+            <span class='js_language-of-choice-deny'><a class="action" href="#">{{ gettext("Do not translate") }}</a></span>
+            <span class="js_language-of-choice-more"><a class="action" href="#">{{ gettext("Translate to another language") }}</a></span>
+            <% if (forceTranslationQuestion) { %>
+            <span class='js_hide-translation-question'><a class="action" href="#">{{ gettext("Cancel") }}</a></span>
+            <% } %>
+        </span>
+    </div>
+    <div class="js_translation-reveal-more"></div>
 </div>

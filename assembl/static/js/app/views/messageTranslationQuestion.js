@@ -6,6 +6,7 @@ var Marionette = require('../shims/marionette.js'),
     _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
     Types = require('../utils/types.js'),
+    Growl = require('../utils/growl.js'),
     LanguagePreference = require('../models/languagePreference.js');
 
 /**
@@ -16,204 +17,248 @@ var Marionette = require('../shims/marionette.js'),
 
 var userTranslationStates = {
     CONFIRM: 'confirm',
-    DENY: 'deny'
+    DENY: 'deny',
+    CANCEL: 'cancel'
 };
 
-var TranslationView = Marionette.ItemView.extend({
-    template: '#tmpl-loader',
+/*
+    Callback function upon successfully setting a language preference;
+    Used in both Views in this file.
+ */
+var processConfirmLanguagePreferences = function(messageView){
+    var cm = new CollectionManager();    
+    cm.getAllMessageStructureCollectionPromise()
+        .then(function(messageStructures){
+            return Promise.resolve(messageStructures.fetch());
+        })
+        .then(function(messages){
+            if (!messageView.isViewDestroyed()){
+                messageView.unknownPreference = false;
+                messageView.forceTranslationQuestion = false;
+                messageView.messageListView.render();
+            }
+        });
+};
+
+var LanguageSelectionView = Marionette.ItemView.extend({
+    template: '#tmpl-message_translation_question_selection',
 
     ui: {
-        setLangPref: '.js_translation-question', //Question region
-        langChoiceConfirm: '.js_language-of-choice-confirm',
-        langChoiceCancel: '.js_language-of-choice-deny',
-        confirmLangPref: '.js_translate-all-confirm-msg',
-        langTo: '.js_translate-to-language',
-        langSelection: '.js_translate-to-language-selected',
-        gotoSettings: '.js_load-profile-settings',
-        hideQuestion: '.js_hide-translation-question',
+        selectedLanguage: ".js_translate-to-language",
+        confirm: ".js_translation-confirm",
+        cancel: ".js_translation-cancel"
     },
 
     events: {
-        'click @ui.langChoiceConfirm': 'updateLanguagePreferenceConfirm',
-        'click @ui.langChoiceCancel': 'updateLanguagePreferenceDeny',
-        'click @ui.hideQuestion': 'onHideQuestionClick',
-        'click @ui.gotoSettings': 'loadProfile',
-        'click @ui.langTo': 'onLanguageSelected'
+        "click @ui.confirm": "onConfirmClick",
+        "click @ui.cancel": "onCancelClick"
     },
 
     initialize: function(options){
-        this.message = options.messageModel;
-        this.messageView = options.messageView;
-        var that = this;
-        var cm = new CollectionManager();
-        cm.getUserLanguagePreferencesPromise(Ctx)
-            .then(function(preferences){
-                var localeToLangNameCache = Ctx.getJsonFromScriptTag('translation-locale-names'),
-                    bestSuggestedTranslation = that.message.get('body').best(preferences);
-
-                var translatedFromLocale = bestSuggestedTranslation.getTranslatedFromLocale(),
-                    translatedFromLocaleName = localeToLangNameCache[translatedFromLocale],
-                    translatedTo = bestSuggestedTranslation.getBaseLocale(),
-                    translatedToName = localeToLangNameCache[translatedTo];
-                if ( !(translatedToName) ){
-                    console.error("The language " + translatedToName + " is not a part of the locale cache!");
-                    translatedToName = translatedTo;
-                }
-                if ( !(translatedFromLocaleName) ){
-                    // may not be a translation, pretend coming from itself
-                    translatedFromLocaleName = translatedToName;
-                }
-                that.translatedTo = {locale: translatedTo, name: translatedToName};
-                that.translatedFrom = {locale: translatedFromLocale, name: translatedFromLocaleName};
-                that.langCache = localeToLangNameCache;
-                that.languagePreferences = preferences; //Should be sorted already
-                that.template = '#tmpl-message_translation_question';
-                that.render();
-            });
+        this.parentView = options.questionView,
+        this.messageView = this.parentView.messageView;
+        this.languagePreferences = this.parentView.languagePreferences;
+        this.translatedTo = this.parentView.translatedTo;
+        this.translatedFrom = this.parentView.translatedFrom;
+        this.langCache = this.parentView.langCache;
     },
 
     _localesAsSortedList: null,
     localesAsSortedList: function() {
         if (this._localesAsSortedList === null) {
-            var localeToLangName = Ctx.getJsonFromScriptTag('translation-locale-names'),
-                localeList = _.map(localeToLangName, function(name, loc) {
-                    return [loc, name];
-                });
+            var localeList = _.map(this.langCache, function(name, loc) {
+                return [loc, name];
+            });
             localeList = _.sortBy(localeList, function(x) {return x[1];});
             Object.getPrototypeOf(this)._localesAsSortedList = localeList;
         }
         return this._localesAsSortedList;
     },
 
-    dummyUpdateLanguage: function(state){
-        console.log("About to show the confirm message.");
-        this.showConfirmMessage(function(){
-            console.log("Fade animation is complete!");
-        });
+    onConfirmClick: function(e){
+        var that = this,
+            user = Ctx.getCurrentUser(),
+            preferredLanguageTo = $(this.ui.selectedLanguage).val(); //Will return Array
+
+        if (!preferredLanguageTo) {
+            Growl.showBottomGrowl(
+                Growl.GrowlReason.ERROR,
+                i18n.gettext("Please select a language.")
+            ); 
+            return; 
+        }
+
+        else if (preferredLanguageTo.length > 1) {
+            Growl.showBottomGrowl(
+                Growl.GrowlReason.ERROR,
+                i18n.gettext("You cannot select more than one language")
+            );
+            return;
+        }
+
+        else {
+            this.languagePreferences.setPreference(
+                user,
+                this.translatedTo.locale,
+                preferredLanguageTo[0],
+                {
+                    success: function(model, resp, options){
+                        return processConfirmLanguagePreferences(that.messageView);   
+                    }
+                }
+            )
+        }
+
+
+    },
+
+    onCancelClick: function(ev){
+        this.parentView.onLanguageSelectedCancelClick();
+    },
+
+    serializeData: function(){
+        if ( this.template === "#tmpl-message_translation_question_selection" ){
+            return {
+                supportedLanguages: this.localesAsSortedList(),
+                translatedTo: this.translatedTo,
+                question: i18n.sprintf(i18n.gettext("Select the language you wish to translate %s to:"), this.translatedFrom.name),
+                translatedTo: this.translatedTo,
+                translatedFrom: this.translatedFrom
+            };
+        }
+        else return {};
+    }
+});
+
+var TranslationView = Marionette.LayoutView.extend({
+    template: '#tmpl-loader',
+
+    ui: {
+        langChoiceConfirm: '.js_language-of-choice-confirm',
+        langChoiceDeny: '.js_language-of-choice-deny',
+        hideQuestion: '.js_hide-translation-question',
+        
+        revealLanguages: '.js_language-of-choice-more',
+        // revealLanguagesRegion: '.js_translation-reveal-more'
+    },
+
+    events: {
+        'click @ui.langChoiceConfirm': 'updateLanguagePreferenceConfirm',
+        'click @ui.langChoiceDeny': 'updateLanguagePreferenceDeny',
+        'click @ui.hideQuestion': 'onHideQuestionClick',
+
+        'click @ui.revealLanguages': "onLanguageRevealClick"
+    },
+
+    regions: {
+        selectLanguage: ".js_translation-reveal-more"
+    },
+
+    initialize: function(options){
+        this.message = options.messageModel;
+        this.messageView = options.messageView;
+
+        var cm = new CollectionManager(),
+            that = this;
+
+        cm.getUserLanguagePreferencesPromise(Ctx)
+            .then(function(preferences){
+                if (!that.isViewDestroyed()){
+                    var localeToLangNameCache = Ctx.getJsonFromScriptTag('translation-locale-names'),
+                        bestSuggestedTranslation = that.message.get('body').best(preferences);
+
+                    var translatedFromLocale = bestSuggestedTranslation.getTranslatedFromLocale(),
+                        translatedFromLocaleName = localeToLangNameCache[translatedFromLocale],
+                        translatedTo = bestSuggestedTranslation.getBaseLocale(),
+                        translatedToName = localeToLangNameCache[translatedTo];
+                    if ( !(translatedToName) ){
+                        console.error("The language " + translatedToName + " is not a part of the locale cache!");
+                        translatedToName = translatedTo;
+                    }
+                    if ( !(translatedFromLocaleName) ){
+                        // may not be a translation, pretend coming from itself
+                        translatedFromLocaleName = translatedToName;
+                    }
+                    that.translatedTo = {locale: translatedTo, name: translatedToName};
+                    that.translatedFrom = {locale: translatedFromLocale, name: translatedFromLocaleName};
+                    that.langCache = localeToLangNameCache;
+                    that.languagePreferences = preferences; //Should be sorted already
+                    that.template = '#tmpl-message_translation_question';
+                    that.render();
+                }
+            });
     },
 
     updateLanguagePreference: function(state){
-        var that = this,
-            preferredLanguageTo = $(this.ui.langSelection).attr("value"),
-
-            createModel = function(locale, translateTo, preferenceCollection){
-
-                commitChanges = {
-                    success: function(model, resp, options) {
-                        //Ensure that this is in the right order
-                        that.languagePreferences.add(model, {merge: true});
-                        //this.triggerMethod("translation:defined", 'full_message_list');
-                        var cm = that.languagePreferences.collectionManager.getAllMessageStructureCollectionPromise()
-                            .then(function(messageStructures){
-                                return Promise.resolve(messageStructures.fetch());
-                            })
-                            .then(function(messages){
-                                //do a bit of jquery and THEN refresh the page?
-                                console.log("About to show the confirm message.");
-                                that.showConfirmMessage(function(){
-                                    console.log("Fade animation is complete!");
-                                });
-                                // setTimeout(function(){
-                                //     that.messageView.unknownPreference = false;
-                                //     that.messageView.forceTranslationQuestion = false;
-                                //     that.messageView.messageListView.render();
-                                // }, 4000);
-                            });
-                    },
-                    error: function(model, resp, options) {
-                        console.error("Failed to save user language preference of " + model + " to the database", resp);
-                    }
-                };
-
-                var user_id = Ctx.getCurrentUser().id,
-                    existingModel = preferenceCollection.find(function(model){
-                        //Uniqueness constraint from the back-end ensures only 1 model with such parameters
-                        return (
-                            (model.get('user') === user_id) && 
-                            (model.get('locale_name') === locale) && 
-                            (model.get('source_of_evidence') === 0)                        )
-                    });
-                if (existingModel) {
-                    var model = existingModel;
-                    commitChanges.wait = true;
-                    if (Ctx.isUserConnected()) {
-                        model.save({
-                            locale_name: locale,
-                            translate_to_name: translateTo,
-                        }, commitChanges);
-                    }
-                }
-                else {
-                    var hash = {
-                        locale_name: locale,
-                        source_of_evidence: 0,
-                        user: Ctx.getCurrentUser().id,
-                        "@type": Types.LANGUAGE_PREFERENCE
-                    };
-                    if (translateTo){
-                        hash.translate_to_name = translateTo;
-                    }
-                    var langPref = new LanguagePreference.Model(hash, {collection: that.languagePreferences});
-                    commitChanges.wait = false;
-                    if (Ctx.isUserConnected()) {
-                        langPref.save(null, commitChanges);
-                    }
-                }
-                
-            };
-
-        if (!preferredLanguageTo) {
-            return; // If there is a template error
-        }
-
+        var user = Ctx.getCurrentUser(),
+            that = this;
         if (state === userTranslationStates.CONFIRM) {
-            createModel(this.translatedFrom.locale, preferredLanguageTo, this.languagePreferences);
+            this.languagePreferences.setPreference(
+                user,
+                this.translatedFrom.locale,
+                this.translatedTo.locale,
+                {
+                    success: function(model, resp, options){
+                        return processConfirmLanguagePreferences(that.messageView);   
+                    }
+                }
+            );
         }
 
         if (state === userTranslationStates.DENY) {
-            createModel(this.translatedFrom.locale, null, this.languagePreferences);
+            this.languagePreferences.setPreference(
+                user,
+                this.translatedFrom.locale,
+                null,
+                {
+                    success: function(model, resp, options){
+                        processConfirmLanguagePreferences(that.messageView);
+                    }
+                }
+            );
         }
     },
 
     updateLanguagePreferenceConfirm: function(e){
-        // this.updateLanguagePreference(userTranslationStates.CONFIRM);
-        this.dummyUpdateLanguage();
+        this.updateLanguagePreference(userTranslationStates.CONFIRM);
     },
 
     updateLanguagePreferenceDeny: function(e) {
-        // this.updateLanguagePreference(userTranslationStates.DENY);
-        this.dummyUpdateLanguage();
+        this.updateLanguagePreference(userTranslationStates.DENY);
     },
 
+    onLanguageRevealClick: function(ev){
+        this.getRegion('selectLanguage').show(new LanguageSelectionView({
+            messageModel: this.message,
+            questionView: this
+        }));
+    },
+
+    /*
+        Called by child class to destroy itself
+        Since parent has to be passed through to child view,
+        fuck using events to trigger this. Child explicitly calls this.
+     */
+    onLanguageSelectedCancelClick: function(){
+        //this could be trouble
+        this.getRegion('selectLanguage').empty();
+    },
+
+    /*
+        Hides the translation view into another element of the message
+        Currently, that is the "Show More" dropdown
+     */
     onHideQuestionClick: function(e) {
-        this.messageView.onHideQuestionClick(e);
-    },
-
-    onLanguageSelected: function(e){
-        var current = this.$(e.currentTarget),
-            val = current.attr("value");
-        this.$(this.ui.langSelection).attr("value", val); //This is storing data in the dom, not a very good idea.  benoitg-2015-01-21
-        this.$(this.ui.langSelection).find(".dropdown-label").text(current.text());
-    },
-
-    showConfirmMessage: function(onComplete){
-        var elem = this.$(this.ui.confirmLangPref),
-            question = this.$(this.ui.setLangPref); 
-        //elem.removeClass("hidden");
-        //question.addClass("hidden");
-        question.addClass('fade-out');
-        elem.addClass('fade-in');
-        elem.removeClass('hidden');
+        this.messageView.onHideTranslationViewClick(e);
     },
 
     serializeData: function(){
         if (this.template !== "#tmpl-loader") {
             return {
-                translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to "), this.translatedFrom.name),
-                supportedLanguages: this.localesAsSortedList(),
+                translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to %s?"), this.translatedFrom.name, this.translatedTo.name),
+                translatedFromLocale: this.translatedFrom,
                 translatedTo: this.translatedTo,
-                forceTranslationQuestion: this.messageView.forceTranslationQuestion,
-                translatedFromLocale: this.translatedFrom
+                forceTranslationQuestion: this.messageView.forceTranslationQuestion
             };
         }
     }

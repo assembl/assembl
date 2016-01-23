@@ -1,0 +1,14 @@
+<div class="content"><%= question %></div>
+<div>
+    <select class="js_translate-to-language" name="languages" multiple size=10>
+        <% _.each(supportedLanguages, function(pair){ %>
+            <option value="<%= pair[0] %>"
+            <% if (pair[0] === translatedTo.locale) { %> selected="selected" <% } %>
+            ><%= pair[1] %></option>
+        <% }) %>
+    </select>
+</div>
+<div>
+    <span><a href="#" class="action js_translation-confirm">{{ gettext("Validate")}}</a></span>
+    <span><a href="#" class="action js_translation-cancel">{{ gettext("Cancel")}}</a></span>
+</div>

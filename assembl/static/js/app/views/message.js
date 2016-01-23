@@ -1485,6 +1485,11 @@ var MessageView = Marionette.LayoutView.extend({
         messageView: this
       });
       $('#slider').html(modal.render().el);
+  },
+
+  onHideTranslationViewClick: function(){
+    //Genie effect goes in here
+    console.log("Genie effect in full force!!");
   }
 
 });
