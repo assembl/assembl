@@ -1924,12 +1924,6 @@ var MessageList = AssemblPanel.extend({
     return Ctx.openTargetInModal(evt);
   },
 
-  onSetViewStyle: function(viewStyle) {
-      //console.log("messageList::onSetViewStyle()");
-      this.setViewStyle(viewStyle);
-      this.render();
-    },
-
   /**
    * @event
    * Set the view to the selected viewStyle, if allowable by the current user

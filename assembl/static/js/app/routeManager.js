@@ -231,6 +231,12 @@ var routeManager = Marionette.Object.extend({
             throw new Error("WRITEME:  There was no group with a messagelist available");
           }
         }
+        if(!messageList.isViewStyleThreadedType(messageList.currentViewStyle)) {
+          //We need context for the message
+          //Set the view style to default (supposed to be a threaded type)
+          //but do not store it
+          messageList.setViewStyle(null, true); 
+        }
 
         Assembl.vent.trigger('messageList:showMessageById', id);
 
