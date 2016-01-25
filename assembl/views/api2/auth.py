@@ -6,19 +6,20 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
-    HTTPOk, HTTPNoContent, HTTPForbidden)
+    HTTPOk, HTTPNoContent, HTTPForbidden, HTTPNotImplemented)
 
 from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
     R_PARTICIPANT, P_READ, CrudPermissions)
 from assembl.models import (
-    User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile)
+    User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
+    UserLanguagePreference)
 from assembl.auth.util import get_permissions
 from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from .. import JSONError
 from . import (
     FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
-    collection_add_json, instance_view)
+    collection_add_json, instance_view, check_permissions)
 
 
 @view_config(
@@ -327,3 +328,73 @@ def interesting_ideas(request):
     result = loads(result)['responses'][0]['data'][0]['suggestions']
     result = {x['targetID']: x['arguments']['score'] for x in result}
     return result
+
+
+def ensure_translate_to_in_preferences(user_pref):
+    if user_pref.translate_to:
+        db = user_pref.db
+        other = db.query(UserLanguagePreference).filter_by(
+            user_id=user_pref.user_id,
+            locale_id=user_pref.translate_to).first()
+        if not other:
+            other = UserLanguagePreference(
+                user_id=user_pref.user_id,
+                locale_id=user_pref.translate_to,
+                preferred_order=0,
+                source_of_evidence=user_pref.source_of_evidence)
+            db.add(other)
+            db.flush()
+
+
+@view_config(context=CollectionContext, request_method='POST', renderer="json",
+             header=JSON_HEADER, ctx_collection_class=UserLanguagePreference)
+def add_user_language_preference(request):
+    ctx = request.context
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
+    typename = ctx.collection_class.external_typename()
+    json = request.json_body
+    try:
+        instances = ctx.create_object(typename, json, user_id)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        first = instances[0]
+        db = first.db
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        ensure_translate_to_in_preferences(instance)
+        view = request.GET.get('view', None) or 'default'
+        return Response(
+            dumps(first.generic_json(view, user_id, permissions)),
+            location=first.uri_generic(first.id),
+            status_code=201)
+
+
+@view_config(context=InstanceContext, request_method='PUT', renderer="json",
+             header=JSON_HEADER, ctx_instance_class=UserLanguagePreference)
+@view_config(context=InstanceContext, request_method='PATCH', renderer="json",
+             header=JSON_HEADER, ctx_instance_class=UserLanguagePreference)
+def modify_user_language_preference(request):
+    json_data = request.json_body
+    ctx = request.context
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    instance = ctx._instance
+    if not instance.user_can(user_id, CrudPermissions.UPDATE, permissions):
+        return HTTPUnauthorized()
+    try:
+        updated = instance.update_from_json(json_data, user_id, ctx)
+        ensure_translate_to_in_preferences(updated)
+        view = request.GET.get('view', None) or 'default'
+        if view == 'id_only':
+            return [updated.uri()]
+        else:
+            return updated.generic_json(view, user_id, permissions)
+
+    except NotImplemented:
+        raise HTTPNotImplemented()
