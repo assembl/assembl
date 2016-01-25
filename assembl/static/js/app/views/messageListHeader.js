@@ -6,7 +6,6 @@ var Backbone = require('../shims/backbone.js'),
     $ = require('../shims/jquery.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
-    Message = require('../models/message.js'),
     FlipSwitchButtonModel = require('../models/flipSwitchButton.js'),
     FlipSwitchButtonView = require('./flipSwitchButton.js'),
     i18n = require('../utils/i18n.js'),
@@ -54,10 +53,6 @@ var MessageListHeader = Marionette.ItemView.extend({
     expertViewToggleButton: '.show-expert-mode-toggle-button',
     viewStyleDropdown: ".js_messageListViewStyle-dropdown",
     defaultMessageViewDropdown: ".js_defaultMessageView-dropdown",
-    userThreadedViewButton: '.messageListViewStyleUserThreaded', // FIXME: this seems to be not used => remove?
-    userRecentlyActiveThreadsViewButton: '.js_messageListViewStyleUserRecentlyActiveThreads', 
-    userActivityFeedViewButton: '.js_messageListViewStyleUserActivityFeed',
-    userHighlightNewViewButton: '.messageListViewStyleUserHighlightNew',
     filtersDropdown: '.js_filters-dropdown'
   },
 
@@ -236,7 +231,9 @@ var MessageListHeader = Marionette.ItemView.extend({
       return cls.indexOf(MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX) === 0;
     });
     var messageListViewStyleSelected = this.getMessageListViewStyleDefByCssClass(messageListViewStyleClass);
-    this.messageList.triggerMethod("setViewStyle", messageListViewStyleSelected);
+
+    this.messageList.setViewStyle(messageListViewStyleSelected);
+    this.messageList.render();
   },
 
   /**
@@ -316,45 +313,27 @@ var MessageListHeader = Marionette.ItemView.extend({
    * Renders the search result information
    */
   renderUserViewButtons: function() {
-    var resultNumTotal,
+    var that = this,
+        resultNumTotal,
         resultNumUnread;
 
-    if (this.currentViewStyle == this.ViewStyles.THREADED) {
-      this.ui.userHighlightNewViewButton.removeClass('selected');
-      this.ui.userActivityFeedViewButton.removeClass('selected');
-      this.ui.userThreadedViewButton.addClass('selected');
-      this.ui.userRecentlyActiveThreadsViewButton.removeClass('selected');
-    }
-    else if (this.currentViewStyle == this.ViewStyles.NEW_MESSAGES) {
-      this.ui.userHighlightNewViewButton.addClass('selected');
-      this.ui.userActivityFeedViewButton.removeClass('selected');
-      this.ui.userThreadedViewButton.removeClass('selected');
-      this.ui.userRecentlyActiveThreadsViewButton.removeClass('selected');
-    }
-    else if (this.currentViewStyle == this.ViewStyles.REVERSE_CHRONOLOGICAL) {
-      this.ui.userHighlightNewViewButton.removeClass('selected');
-      this.ui.userActivityFeedViewButton.addClass('selected');
-      this.ui.userThreadedViewButton.removeClass('selected');
-      this.ui.userRecentlyActiveThreadsViewButton.removeClass('selected');
-    }
-    else if (this.currentViewStyle == this.ViewStyles.RECENTLY_ACTIVE_THREADS) {
-      this.ui.userHighlightNewViewButton.removeClass('selected');
-      this.ui.userActivityFeedViewButton.removeClass('selected');
-      this.ui.userThreadedViewButton.removeClass('selected');
-      this.ui.userRecentlyActiveThreadsViewButton.addClass('selected');
-    }
-    else {
-      console.log("This viewstyle is unknown in user mode:", this.currentViewStyle);
-    }
+    _.each(this.ViewStyles, function(viewStyle) {
+      if (that.currentViewStyle === viewStyle) {
+        that.$("."+viewStyle.css_class).addClass('selected');
+      }
+      else {
+        that.$("."+viewStyle.css_class).removeClass('selected');
+      }
+    });
 
     //this.currentQuery.getResultNumTotal() === undefined ? resultNumTotal = '' : resultNumTotal = i18n.sprintf("%d", this.currentQuery.getResultNumTotal());
-    this.ui.userThreadedViewButton.html(this.ViewStyles.THREADED.label);
+    this.$("."+this.ViewStyles.THREADED.css_class).html(this.ViewStyles.THREADED.label);
 
-    this.ui.userRecentlyActiveThreadsViewButton.html(this.ViewStyles.RECENTLY_ACTIVE_THREADS.label);
+    this.$("."+this.ViewStyles.RECENTLY_ACTIVE_THREADS.css_class).html(this.ViewStyles.RECENTLY_ACTIVE_THREADS.label);
     //this.currentQuery.getResultNumUnread() === undefined ? resultNumUnread = '' : resultNumUnread = i18n.sprintf("%d", this.currentQuery.getResultNumUnread());
 
-    this.ui.userHighlightNewViewButton.html(this.ViewStyles.NEW_MESSAGES.label);
-    this.ui.userActivityFeedViewButton.html(this.ViewStyles.REVERSE_CHRONOLOGICAL.label);
+    this.$("."+this.ViewStyles.NEW_MESSAGES.css_class).html(this.ViewStyles.NEW_MESSAGES.label);
+    this.$("."+this.ViewStyles.REVERSE_CHRONOLOGICAL.css_class).html(this.ViewStyles.REVERSE_CHRONOLOGICAL.label);
   },
 
   /**

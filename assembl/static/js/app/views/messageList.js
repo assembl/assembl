@@ -245,7 +245,7 @@ var MessageList = AssemblPanel.extend({
     },
     RECENT_THREAD_STARTERS: {
       id: "recent_thread_starters",
-      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "recent_active_threads",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "recent_threads_starters",
       label: i18n.gettext('Recently started threads')
     },
     THREADED: {

@@ -12,13 +12,13 @@
       <div class="options-filter-items">
           {# Until automatically marking messages read is complete, the NEW_MESSAGES view is never a good default.
           <% if (Ctx.getCurrentUser().isUnknownUser()) { %>
-            <div class="messageListViewStyleUserThreaded <%= availableViewStyles.THREADED.css_class %> option tac pas"></div>
+            <div class="<%= availableViewStyles.THREADED.css_class %> option tac pas"></div>
           <% } else { %>
-            <div class="messageListViewStyleUserHighlightNew <%= availableViewStyles.NEW_MESSAGES.css_class %> option tac pas"></div>
+            <div class="<%= availableViewStyles.NEW_MESSAGES.css_class %> option tac pas"></div>
           <% } %>
           #}
-        <div class="js_messageListViewStyleUserRecentlyActiveThreads <%= availableViewStyles.RECENTLY_ACTIVE_THREADS.css_class %> option tac pas"></div>
-        <div class="js_messageListViewStyleUserActivityFeed <%= availableViewStyles.REVERSE_CHRONOLOGICAL.css_class %> option tac pas"></div>
+        <div class="<%= availableViewStyles.RECENTLY_ACTIVE_THREADS.css_class %> option tac pas"></div>
+        <div class="<%= availableViewStyles.REVERSE_CHRONOLOGICAL.css_class %> option tac pas"></div>
       </div>
       {{ expert_view_toggle_button() }}
     </div>
