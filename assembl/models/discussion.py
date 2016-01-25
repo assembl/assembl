@@ -657,9 +657,13 @@ class Discussion(DiscussionBoundBase):
     # class cache, indexed by discussion id
     _discussion_services = {}
 
+    @property
+    def translation_service_class(self):
+        return self.preferences["translation_service"]
+
     def translation_service(self):
         if self.id not in self._discussion_services:
-            service = self.preferences["translation_service"]
+            service = self.translation_service_class
             if service:
                 service = resolver.resolve(service)()
             self._discussion_services[self.id] = service

@@ -24,6 +24,7 @@ var discussionModel = Base.Model.extend({
     'web_analytics_piwik_id_site': null,
     'help_url': null,
     'homepage': null,
+    'translation_service_class': null,
     'show_help_in_debate_section': true,
     posts: []
   },
