@@ -103,7 +103,7 @@ var LanguageSelectionView = Marionette.ItemView.extend({
         else {
             this.languagePreferences.setPreference(
                 user,
-                this.translatedTo.locale,
+                this.translatedFrom.locale,
                 preferredLanguageTo[0],
                 {
                     success: function(model, resp, options){
