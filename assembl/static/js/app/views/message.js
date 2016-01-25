@@ -508,13 +508,15 @@ var MessageView = Marionette.LayoutView.extend({
       if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
-        if ( (this.forceTranslationQuestion || this.unknownPreference) && this.hasTranslatorService ) {
-          //Only show the translation view *iff* the message was translated by the backend
-          var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
-          this.translationRegion.show(translationView);
-          this.translationRegion.$el.removeClass("hidden");
-        } else if (this.translationRegion.$el) {
-          this.translationRegion.$el.addClass("hidden");
+        if (this.hasTranslatorService) {
+          if (this.forceTranslationQuestion || this.unknownPreference) {
+            //Only show the translation view *iff* the message was translated by the backend
+            var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
+            this.translationRegion.show(translationView);
+            this.translationRegion.$el.removeClass("hidden");
+          } else if (this.translationRegion.$el) {
+            this.translationRegion.$el.addClass("hidden");
+          }
         }
       }
 
