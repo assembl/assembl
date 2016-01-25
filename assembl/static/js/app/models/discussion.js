@@ -34,6 +34,10 @@ var discussionModel = Base.Model.extend({
      * */
   },
 
+  hasTranslationService: function(){
+    return this.get('translation_service_class') ? true : false;
+  },
+
   getRolesForPermission: function(permission) {
       var roles = undefined;
       if (_.contains(Permissions, permission)) {

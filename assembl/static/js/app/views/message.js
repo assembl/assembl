@@ -130,7 +130,8 @@ var MessageView = Marionette.LayoutView.extend({
     Promise.join(
         this.model.getCreatorPromise(),
         this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
-        function(creator, ulp) {
+        this.model.collection.collectionManager.getDiscussionModelPromise(),
+        function(creator, ulp, discussion) {
           if(!that.isViewDestroyed()) {
             var translationData = ulp.getTranslationData(),
                 body = that.model.get("body"),
@@ -138,6 +139,7 @@ var MessageView = Marionette.LayoutView.extend({
             that.translationData = translationData;
             that.unknownPreference = preference === undefined;
             that.creator = creator;
+            that.hasTranslatorService = discussion.hasTranslationService();
             that.template = '#tmpl-message';
             that.render();
           }
@@ -287,14 +289,17 @@ var MessageView = Marionette.LayoutView.extend({
 
     body = (body) ? body : this.generateSafeBody();
 
+    var subject = this.hasTranslationService ? (this.useOriginalContent ? subject.original() : subject.best(this.translationData) ) : subject.original();
+    var body = this.hasTranslationService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
+
     if (this.model.get("publication_state") != "PUBLISHED") {
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
       body = this.moderationTemplate({
         ctx: Ctx,
         viewStyle: this.viewStyle,
-        subject: this.useOriginalContent ? subject.original() : subject.best(this.translationData),
-        body: this.useOriginalContent ? body.original() : body.best(this.translationData),
+        subject: subject,
+        body: body,
         publication_state: this.model.get("publication_state"),
         moderation_text: this.model.get("moderation_text"),
         moderator: this.model.get("moderator"),
@@ -332,8 +337,8 @@ var MessageView = Marionette.LayoutView.extend({
       metadata_json: metadata_json,
       creator: this.creator,
       parentId: this.model.get('parentId'),
-      subject: this.useOriginalContent ? subject.original() : subject.best(this.translationData),
-      body: this.useOriginalContent ? body.original() : body.best(this.translationData),
+      subject: subject,
+      body: body,
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
       isHoisted: this.isHoisted,
@@ -349,7 +354,8 @@ var MessageView = Marionette.LayoutView.extend({
       html_export_url: html_export_url,
       user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST),
       unknownPreference: this.unknownPreference,
-      useOriginalContent: this.useOriginalContent
+      useOriginalContent: this.useOriginalContent,
+      hasTranslationService: this.hasTranslationService
     };
   },
 
@@ -502,7 +508,7 @@ var MessageView = Marionette.LayoutView.extend({
       if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
-        if ( this.forceTranslationQuestion || this.unknownPreference ) {
+        if ( (this.forceTranslationQuestion || this.unknownPreference) && this.hasTranslationService ) {
           //Only show the translation view *iff* the message was translated by the backend
           var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
           this.translationRegion.show(translationView);

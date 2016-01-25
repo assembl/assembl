@@ -101,17 +101,19 @@
 {%- endmacro %}
 
 {% macro showTranslation() -%}
-  <div class="message-translation">
-    <div class='mtm js_translation_show_original'>
-      <% if (body.isMachineTranslation()) { %>
-        <span class='js_trans_show_origin'><a class="content">{{gettext("View the original message")}}</a></span>
-        <span class="prxs"><a class="content" href="http://translate.google.com">({{gettext("Translated by Google Translate")}})</a></span>
-      <% } else if (useOriginalContent) { %>
-        <span class='js_trans_show_translated'><a class="content">{{gettext("View to translated message")}}</a></span>
-      <% } %>
+  {% if discussion.translation_service() %}
+    <div class="message-translation">
+      <div class='mtm js_translation_show_original'>
+        <% if (body.isMachineTranslation()) { %>
+          <span class='js_trans_show_origin'><a class="content">{{gettext("View the original message")}}</a></span>
+          <span class="prxs"><a class="content" href="http://translate.google.com">({{gettext("Translated by Google Translate")}})</a></span>
+        <% } else if (useOriginalContent) { %>
+          <span class='js_trans_show_translated'><a class="content">{{gettext("View to translated message")}}</a></span>
+        <% } %>
+      </div>
+      <div class="mts js_regionMessageTranslationQuestions"></div>
     </div>
-    <div class="mts js_regionMessageTranslationQuestions"></div>
-  </div>
+  {% endif %}
 {%- endmacro %}
 
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
