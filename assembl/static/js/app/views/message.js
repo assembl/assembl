@@ -1488,17 +1488,17 @@ var MessageView = Marionette.LayoutView.extend({
       $('#slider').html(modal.render().el);
   },
 
-  onHideTranslationViewClick: function(){
-    //Genie effect goes in here
-    console.log("Genie effect in full force!!");
-    var regionToEmpty = this.getRegion("translationRegion").currentView.getRegion("selectLanguage"),
-        $source = this.$(regionToEmpty.el),
-        $target = this.ui.showMoreDropDown;
-    Genie.geniefy($source, $target, 0.25, 3000)
+  closeTranslationView: function(cb){
+    var $source = this.$(this.ui.translation),
+        $target = this.$(this.ui.showMoreDropDown),
+        that = this;
+    Genie.geniefy($source, $target, 3000)
       .then(function(){
-        console.log("3<s> has passed since genie effect occured");
-        regionToEmpty.empty();
-    });
+        that.getRegion("translationRegion").empty();
+        if (cb){
+          cb();
+        }
+    });    
   }
 
 });

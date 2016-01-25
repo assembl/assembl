@@ -33,9 +33,13 @@ var processConfirmLanguagePreferences = function(messageView){
         })
         .then(function(messages){
             if (!messageView.isViewDestroyed()){
-                messageView.unknownPreference = false;
-                messageView.forceTranslationQuestion = false;
-                messageView.messageListView.render();
+                messageView.closeTranslationView(function(){
+                    //Changing these values are useless, as messageView rendering will re-create
+                    //the message views with initalized values.
+                    messageView.unknownPreference = false;
+                    messageView.forceTranslationQuestion = false;
+                    messageView.messageListView.render();
+                });
             }
         });
 };
@@ -240,7 +244,6 @@ var TranslationView = Marionette.LayoutView.extend({
         fuck using events to trigger this. Child explicitly calls this.
      */
     onLanguageSelectedCancelClick: function(){
-        //this could be trouble
         this.getRegion('selectLanguage').empty();
     },
 
@@ -250,7 +253,7 @@ var TranslationView = Marionette.LayoutView.extend({
      */
     onHideQuestionClick: function(e) {
         var that = this;
-        this.messageView.onHideTranslationViewClick();
+        this.messageView.closeTranslationView();
     },
 
     serializeData: function(){

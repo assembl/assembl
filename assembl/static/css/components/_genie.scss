@@ -27,5 +27,8 @@
 }
 
 .toggle-genie {
+  -ms-transform: scale(0) perspective(370px) rotateX(45deg);
+  -webkit-transform: scale(0) perspective(370px) rotateX(45deg);
+  -moz-transform: scale(0) perspective(370px) rotateX(45deg);
   transform: scale(0) perspective(370px) rotateX(45deg);
 }
