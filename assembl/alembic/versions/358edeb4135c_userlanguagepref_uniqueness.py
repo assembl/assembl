@@ -25,18 +25,20 @@ def upgrade(pyramid_env):
                 config.get('db_schema'), config.get('db_user')),
             "user_language_preference")
         op.create_unique_constraint(
-            "%s_%s_user_language_preference_UNQC_locale_id_target_locale_id_source_of_evidence" % (
+            "%s_%s_user_language_preference_UNQC_user_id_locale_id_source_of_evidence" % (
                 config.get('db_schema'), config.get('db_user')),
             "user_language_preference", ["user_id", "locale_id", "source_of_evidence"])
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
+        op.execute("delete from user_language_preference where source_of_evidence > 0")
+    with context.begin_transaction():
         op.drop_constraint(
-            "%s_%s_user_language_preference_UNQC_locale_id_target_locale_id_source_of_evidence" % (
+            "%s_%s_user_language_preference_UNQC_user_id_locale_id_source_of_evidence" % (
                 config.get('db_schema'), config.get('db_user')),
             "user_language_preference")
         op.create_unique_constraint(
-            "%s_%s_user_language_preference_UNQC_locale_id_target_locale_id" % (
+            "%s_%s_user_language_preference_UNQC_user_id_locale_id" % (
                 config.get('db_schema'), config.get('db_user')),
             "user_language_preference", ["user_id", "locale_id"])
