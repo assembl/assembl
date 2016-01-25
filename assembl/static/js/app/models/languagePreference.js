@@ -132,13 +132,11 @@ var LanguagePreferenceCollection = Base.Collection.extend({
                 var hash = {
                     locale_name: locale,
                     source_of_evidence: 0,
+                    translate_to_name: translateTo,
                     user: user_id,
                     "@type": Types.LANGUAGE_PREFERENCE
                 };
-                if (translateTo){
-                    hash.translate_to_name = translateTo;
-                }
-                var langPref = new LanguagePreference.Model(hash, {collection: this});
+                var langPref = new LanguagePreferenceModel(hash, {collection: this});
                 ops.wait = false;
                 langPref.save(null, ops);
             }
