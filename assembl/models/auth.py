@@ -1698,6 +1698,7 @@ class UserLanguagePreference(Base):
         posix = to_posix_string(code)
         locale = Locale.get_or_create(posix)
         self.locale = locale
+        self.locale_id = locale.id
 
     @property
     def translate_to_code(self):
@@ -1711,8 +1712,10 @@ class UserLanguagePreference(Base):
             assert posix
             locale = Locale.get_or_create(posix)
             self.translate_to_locale = locale
+            self.translate_to = locale.id
         else:
             self.translate_to_locale = None
+            self.translate_to = None
 
     def __repr__(self):
         return \
