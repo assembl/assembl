@@ -81,10 +81,10 @@ voteApp.controller('resultsCtl',
       // build link which switches display style
       var displayStyle = window.getUrlVariableValue("display_style");
       var otherDisplayStyle = null;
-      if ( !displayStyle || displayStyle == "criterionQuestionThenVotableIdea" ){
+      if ( displayStyle == "criterionQuestionThenVotableIdea" ){
         otherDisplayStyle = "votableIdeaThenCriterionQuestion";
       }
-      else {
+      else { // this handles also the case of absence of parameter in URL
         otherDisplayStyle = "criterionQuestionThenVotableIdea";
       }
       var targetParam = "";
