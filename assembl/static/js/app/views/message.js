@@ -289,8 +289,8 @@ var MessageView = Marionette.LayoutView.extend({
 
     body = (body) ? body : this.generateSafeBody();
 
-    var subject = this.hasTranslationService ? (this.useOriginalContent ? subject.original() : subject.best(this.translationData) ) : subject.original();
-    var body = this.hasTranslationService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
+    var subject = this.hasTranslatorService ? (this.useOriginalContent ? subject.original() : subject.best(this.translationData) ) : subject.original();
+    var body = this.hasTranslatorService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
 
     if (this.model.get("publication_state") != "PUBLISHED") {
     //if (this.model.get("moderation_text")) {
@@ -355,7 +355,7 @@ var MessageView = Marionette.LayoutView.extend({
       user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST),
       unknownPreference: this.unknownPreference,
       useOriginalContent: this.useOriginalContent,
-      hasTranslationService: this.hasTranslationService
+      hasTranslatorService: this.hasTranslatorService
     };
   },
 
@@ -508,7 +508,7 @@ var MessageView = Marionette.LayoutView.extend({
       if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
-        if ( (this.forceTranslationQuestion || this.unknownPreference) && this.hasTranslationService ) {
+        if ( (this.forceTranslationQuestion || this.unknownPreference) && this.hasTranslatorService ) {
           //Only show the translation view *iff* the message was translated by the backend
           var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
           this.translationRegion.show(translationView);
