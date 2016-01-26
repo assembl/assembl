@@ -448,7 +448,7 @@ voteApp.controller('resultsCtl',
     // @param draw_title: optional. bool
     $scope.drawResultsForAllTargetsOfTwoCombinedVoteSpecifications = function(destination, x_vote_spec_uri, y_vote_spec_uri, vote_specs_result_data, filter_by_targets, draw_title){
 
-      var drawTargetTitleAndItem = function(destination, first_vote_spec_uri, second_vote_spec_uri, vote_spec_result_data, target_id, draw_title){
+      var drawTargetTitleAndItem = function(destination, first_vote_spec_uri, second_vote_spec_uri, vote_spec_result_data, target_id, draw_title, vote_specs_result_data){
         var inline_vote_holder = destination.append("div");
         inline_vote_holder.classed({"inline-vote-result-for-a-target": true});
         
@@ -457,7 +457,7 @@ voteApp.controller('resultsCtl',
         }
         var item_holder = inline_vote_holder.append("div");
         item_holder.classed({"inline-vote-result-for-a-target--item": true});
-        $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications(item_holder, first_vote_spec_uri, second_vote_spec_uri, vote_spec_result_data, target_id);
+        $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications(item_holder, first_vote_spec_uri, second_vote_spec_uri, vote_spec_result_data, target_id, vote_specs_result_data);
       };
 
       var displayTextNoResultForQuestion = function(destination, vote_spec_uri){
@@ -511,7 +511,7 @@ voteApp.controller('resultsCtl',
             var second_vote_spec_uri = best_key.split(",")[1];
             for ( var target in data ){
               if ( !filter_by_targets || (filter_by_targets.indexOf(target) != -1) ){
-                drawTargetTitleAndItem(destination, first_vote_spec_uri, second_vote_spec_uri, data[target], target, draw_title);
+                drawTargetTitleAndItem(destination, first_vote_spec_uri, second_vote_spec_uri, data[target], target, draw_title, vote_specs_result_data);
                 has_drawn_something = true;
               }
             }
@@ -526,7 +526,7 @@ voteApp.controller('resultsCtl',
     /*
      * Heatmap is based on http://bl.ocks.org/mbostock/3202354
      */
-    $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications = function(destination, x_vote_spec_uri, y_vote_spec_uri, vote_spec_result_data_for_target, target){
+    $scope.drawResultAsHeatmapForSingleTargetOfTwoVoteSpecifications = function(destination, x_vote_spec_uri, y_vote_spec_uri, vote_spec_result_data_for_target, target_id, vote_spec_result_data){
 
       var x_vote_spec = $scope.getVoteSpecByURI(x_vote_spec_uri);
       var y_vote_spec = $scope.getVoteSpecByURI(y_vote_spec_uri);
@@ -607,18 +607,117 @@ voteApp.controller('resultsCtl',
 
       data = result_heatmap_data;
 
+      
+      var x_vote_spec_result_average = null;
+      var x_vote_spec_result_standard_deviation = null;
+      if ( (vote_spec_result_data !== null && typeof vote_spec_result_data === 'object')
+        && x_vote_spec_uri in vote_spec_result_data
+        && target_id in vote_spec_result_data[x_vote_spec_uri]
+      ){
+        if ( "avg" in vote_spec_result_data[x_vote_spec_uri][target_id] ){
+          x_vote_spec_result_average = vote_spec_result_data[x_vote_spec_uri][target_id].avg;
+        }
+        if ( "std_dev" in vote_spec_result_data[x_vote_spec_uri][target_id] ){
+          x_vote_spec_result_standard_deviation = vote_spec_result_data[x_vote_spec_uri][target_id].std_dev;
+        }
+      }
+
+      var y_vote_spec_result_average = null;
+      var y_vote_spec_result_standard_deviation = null;
+      if ( (vote_spec_result_data !== null && typeof vote_spec_result_data === 'object')
+        && y_vote_spec_uri in vote_spec_result_data
+        && target_id in vote_spec_result_data[y_vote_spec_uri]
+      ){
+        if ( "avg" in vote_spec_result_data[y_vote_spec_uri][target_id] ){
+          y_vote_spec_result_average = vote_spec_result_data[y_vote_spec_uri][target_id].avg;
+        }
+        if ( "std_dev" in vote_spec_result_data[y_vote_spec_uri][target_id] ){
+          y_vote_spec_result_standard_deviation = vote_spec_result_data[y_vote_spec_uri][target_id].std_dev;
+        }
+      }
+
+
       var destination_for_this_result = destination; //destination.append("div");
       //destination_for_this_result.classed({"inline-vote-result-for-a-target": true});
 
 
+      var number_of_voters_holder = destination_for_this_result.append("p");
       $translate('voteResultsForTwoCriteria', {"first_hover": x_vote_spec_uri, "first_label": x_vote_spec_label, "second_hover": y_vote_spec_uri, "second_label": y_vote_spec_label, "number_of_votes": result_number_of_voters}).then(function(translation) {
-        destination_for_this_result.append("p").html(translation);
+        number_of_voters_holder.html(translation);
       });
 
+
+      var strItemContentAverage = "Average:";
+      var strItemContentAverageHelp = "";
+      var strItemContentStandardDeviation = "Standard deviation:";
+      var strItemContentStandardDeviationHelp = "";
+
+      var result_info = destination.append("div");
+      result_info.classed("result-info", true);
 
       var chart_holder = destination_for_this_result.append("div");
       chart_holder.classed({"heatmap": true});
 
+
+      var populateResultInfo = function(){
+        result_info.html("");
+
+        var showAverageAndStandardDeviation = function(container, avg, std_dev){
+          // add number of votes, average and standard deviation
+          if ( avg !== null && avg !== undefined ){
+            var text_average = strItemContentAverage + " " + avg.toFixed(1);
+            var el_average = container.append("div");
+            el_average.append("span").text(text_average);
+            if ( strItemContentAverageHelp ){
+              el_average.append("i").classed("question-mark-icon", true).attr("title", strItemContentAverageHelp);
+            }
+          }
+
+          if ( std_dev !== null && std_dev !== undefined ){
+            var text_standard_deviation = strItemContentStandardDeviation + " " + std_dev.toFixed(1);
+            var el_standard_deviation = container.append("div");
+            el_standard_deviation.append("span").text(text_standard_deviation);
+            if ( strItemContentStandardDeviationHelp ){
+              el_standard_deviation.append("i").classed("question-mark-icon", true).attr("title", strItemContentStandardDeviationHelp);
+            }
+          }
+        };
+
+        if ( (x_vote_spec_result_average !== null && x_vote_spec_result_average !== undefined) || (x_vote_spec_result_standard_deviation !== null && x_vote_spec_result_standard_deviation !== undefined) ){
+          var c = result_info.append("div").classed("result-info-for-vote-spec", true);
+          var el = c.append("div");
+          el.classed("vote-spec-label", true);
+          el.text(x_vote_spec_label);
+          showAverageAndStandardDeviation(c, x_vote_spec_result_average, x_vote_spec_result_standard_deviation);
+        }
+        if ( (y_vote_spec_result_average !== null && y_vote_spec_result_average !== undefined) || (y_vote_spec_result_standard_deviation !== null && y_vote_spec_result_standard_deviation !== undefined) ){
+          var c = result_info.append("div").classed("result-info-for-vote-spec", true);
+          var el = c.append("div");
+          el.classed("vote-spec-label", true);
+          el.text(y_vote_spec_label);
+          showAverageAndStandardDeviation(c, y_vote_spec_result_average, y_vote_spec_result_standard_deviation);
+        }
+      };    
+
+      populateResultInfo();
+
+      // this is very boring
+      $translate('voteResultsAverage').then(function(translation) {
+        strItemContentAverage = translation;
+        populateResultInfo();
+      });
+      $translate('voteResultsAverageHelp').then(function(translation) {
+        strItemContentAverageHelp = translation;
+        populateResultInfo();
+      });
+      $translate('voteResultsStandardDeviation').then(function(translation) {
+        strItemContentStandardDeviation = translation;
+        populateResultInfo();
+      });
+      $translate('voteResultsStandardDeviationHelp').then(function(translation) {
+        strItemContentStandardDeviationHelp = translation;
+        populateResultInfo();
+      });
 
 
 

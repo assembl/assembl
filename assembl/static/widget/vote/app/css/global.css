@@ -273,3 +273,11 @@ section.vote-votable-idea .vote-criterion-question .vote-criterion-question--ite
   margin-left: 5px;
 }
 
+.result-info .result-info-for-vote-spec {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.result-info .result-info-for-vote-spec .vote-spec-label {
+  font-weight: bold;
+}
