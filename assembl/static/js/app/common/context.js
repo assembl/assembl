@@ -1032,8 +1032,12 @@ Context.prototype = {
 
   /**
    * @event
+   *
+   * Note: If you wish to defer this calculation completely, add the parameter 'handled' to the jqxhr object, set to true
+   * eg. Notable example is in admin/adminDiscussion.js
    */
   onAjaxError: function(ev, jqxhr, settings, exception) {
+
     if (jqxhr.handled)
         return;
 
