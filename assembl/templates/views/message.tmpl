@@ -101,7 +101,7 @@
 {%- endmacro %}
 
 {% macro showTranslation() -%}
-  {% if discussion.translation_service() %}
+  {% if discussion.translation_service_class %}
     <div class="message-translation">
       <div class='mtm js_translation_show_original'>
         <% if (body.isMachineTranslation()) { %>
