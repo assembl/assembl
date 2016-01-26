@@ -516,7 +516,7 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
         for mail in emails:
             email_for_threading = jwzthreading.make_message(email.message_from_string(mail.imported_blob))
             #Store our emailsubject, jwzthreading does not decode subject itself
-            email_for_threading.subject = mail.subject
+            email_for_threading.subject = mail.subject.first_original().value
             #Store our email object pointer instead of the raw message text
             email_for_threading.message = mail
             emails_for_threading.append(email_for_threading)
@@ -535,7 +535,7 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
             for container in threaded_emails:
                 if debug:
                     #jwzthreading.print_container(container)
-                    print("\nProcessing:  " + repr(container.message.subject) + " " + repr(container.message.message_id)+ " " + repr(container.message.message.id))
+                    print("\nProcessing:  " + repr(container.message.subject.first_original().value) + " " + repr(container.message.message_id)+ " " + repr(container.message.message.id))
                     print "container: " + (repr(container))
                     print "parent: " + repr(container.parent)
                     print "children: " + repr(container.children)

@@ -1696,7 +1696,7 @@ class UserLanguagePreference(Base):
     def locale_code(self, code):
         assert(code)
         posix = to_posix_string(code)
-        locale = Locale.get_or_create(posix)
+        locale = Locale.get_or_create(posix, self.db)
         self.locale = locale
         self.locale_id = locale.id
 
@@ -1710,7 +1710,7 @@ class UserLanguagePreference(Base):
         if code:
             posix = to_posix_string(code)
             assert posix
-            locale = Locale.get_or_create(posix)
+            locale = Locale.get_or_create(posix, self.db)
             self.translate_to_locale = locale
             self.translate_to = locale.id
         else:

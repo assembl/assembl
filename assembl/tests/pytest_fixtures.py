@@ -7,8 +7,9 @@ import pytest
 from pytest_localserver.http import WSGIServer
 from pyramid import testing
 from pyramid.paster import get_appsettings
+from pyramid.threadlocal import manager
 import transaction
-from webtest import TestApp
+from webtest import TestApp, TestRequest
 from pkg_resources import get_distribution
 import simplejson as json
 from splinter import Browser
@@ -88,14 +89,43 @@ def base_registry(request):
     return registry
 
 
+class PyramidWebTestRequest(TestRequest):
+    def __init__(self, *args, **kwargs):
+        super(PyramidWebTestRequest, self).__init__(*args, **kwargs)
+        manager.push({'request': self})
+
+    def get_response(self, app, catch_exc_info=True):
+        try:
+            super(PyramidWebTestRequest, app).get_response(
+                catch_exc_info=catch_exc_info)
+        finally:
+            manager.pop()
+
+    # TODO: Find a way to change user here
+    authenticated_userid = None
+
+
 @pytest.fixture(scope="module")
-def test_app_no_perm(request, base_registry):
+def test_app_no_perm(request, base_registry, db_tables):
     global_config = {
         '__file__': request.config.getoption('test_settings_file'),
         'here': get_distribution('assembl').location
     }
-    return TestApp(assembl.main(
+    app = TestApp(assembl.main(
         global_config, nosecurity=True, **get_config()))
+    app.PyramidWebTestRequest = PyramidWebTestRequest
+    return app
+
+
+@pytest.fixture(scope="module")
+def test_webrequest(request, base_registry, test_app_no_perm):
+    req = PyramidWebTestRequest.blank('/', method="GET")
+
+    def fin():
+        # The request was not called
+        manager.pop()
+    request.addfinalizer(fin)
+    return req
 
 
 @pytest.fixture(scope="module")
@@ -109,6 +139,9 @@ def db_default_data(request, db_tables, base_registry):
         session = db_tables()
         clear_rows(get_config(), session)
         transaction.commit()
+        from assembl.models import Locale, LangStringEntry
+        Locale.reset_cache()
+        LangStringEntry._EMPTY = None
     request.addfinalizer(fin)
     return db_tables  # session_factory
 
@@ -339,10 +372,11 @@ def root_post_1(request, participant1_user, discussion, test_session):
     """
     From participant1_user
     """
-    from assembl.models import Post
+    from assembl.models import Post, LangString
     p = Post(
         discussion=discussion, creator=participant1_user,
-        subject=u"a root post", body=u"post body", moderator=None,
+        subject=LangString.create(u"a root post"),
+        body=LangString.create(u"post body"), moderator=None,
         creation_date=datetime(year=2000, month=1, day=1),
         type="post", message_id="msg1@example.com")
     test_session.add(p)
@@ -361,10 +395,11 @@ def discussion2_root_post_1(request, participant1_user, discussion2, test_sessio
     """
     From participant1_user
     """
-    from assembl.models import Post
+    from assembl.models import Post, LangString
     p = Post(
         discussion=discussion2, creator=participant1_user,
-        subject=u"a root post", body=u"post body",
+        subject=LangString.create(u"a root post"),
+        body=LangString.create(u"post body"),
         creation_date=datetime(year=2000, month=1, day=2),
         type="post", message_id="msg1@example2.com")
     test_session.add(p)
@@ -380,10 +415,11 @@ def discussion2_root_post_1(request, participant1_user, discussion2, test_sessio
 
 @pytest.fixture(scope="function")
 def synthesis_post_1(request, participant1_user, discussion, test_session, synthesis_1):
-    from assembl.models import SynthesisPost
+    from assembl.models import SynthesisPost, LangString
     p = SynthesisPost(
         discussion=discussion, creator=participant1_user,
-        subject=u"a synthesis post", body=u"post body (unused, it's a synthesis...)",
+        subject=LangString.create(u"a synthesis post"),
+        body=LangString.create(u"post body (unused, it's a synthesis...)"),
         message_id="msg1s@example.com",
         creation_date=datetime(year=2000, month=1, day=3),
         publishes_synthesis = synthesis_1)
@@ -404,10 +440,11 @@ def reply_post_1(request, participant2_user, discussion,
     """
     From participant2_user, in reply to root_post_1
     """
-    from assembl.models import Post
+    from assembl.models import Post, LangString
     p = Post(
         discussion=discussion, creator=participant2_user,
-        subject=u"re1: root post", body=u"post body",
+        subject=LangString.create(u"re1: root post"),
+        body=LangString.create(u"post body"),
         creation_date=datetime(year=2000, month=1, day=4),
         type="post", message_id="msg2@example.com")
     test_session.add(p)
@@ -429,10 +466,11 @@ def reply_post_2(request, participant1_user, discussion,
     """
     From participant1_user, in reply to reply_post_1
     """
-    from assembl.models import Post
+    from assembl.models import Post, LangString
     p = Post(
         discussion=discussion, creator=participant1_user,
-        subject=u"re2: root post", body=u"post body",
+        subject=LangString.create(u"re2: root post"),
+        body=LangString.create(u"post body"),
         creation_date=datetime(year=2000, month=1, day=5),
         type="post", message_id="msg3@example.com")
     test_session.add(p)
@@ -454,10 +492,11 @@ def reply_post_3(request, participant2_user, discussion,
     """
     From participant2_user, in reply to reply_post_2
     """
-    from assembl.models import Post
+    from assembl.models import Post, LangString
     p = Post(
         discussion=discussion, creator=participant2_user,
-        subject=u"re2: root post", body=u"post body",
+        subject=LangString.create(u"re2: root post"),
+        body=LangString.create(u"post body"),
         type="post", message_id="msg4@example.com")
     test_session.add(p)
     test_session.flush()
@@ -683,7 +722,7 @@ def creativity_session_widget_new_idea(
         request, test_session, discussion, subidea_1,
         creativity_session_widget, participant1_user):
     from assembl.models import (Idea, IdeaLink, GeneratedIdeaWidgetLink,
-                                IdeaProposalPost)
+                                IdeaProposalPost, LangString)
     i = Idea(
         discussion=discussion,
         short_title="generated idea")
@@ -695,7 +734,9 @@ def creativity_session_widget_new_idea(
         idea=i)
     ipp = IdeaProposalPost(
         proposes_idea=i, creator=participant1_user, discussion=discussion,
-        message_id='proposal@example.com', subject=u"propose idea", body="")
+        message_id='proposal@example.com',
+        subject=LangString.create(u"propose idea"),
+        body=LangString.EMPTY)
     test_session.add(ipp)
     def fin():
         print "finalizer creativity_session_widget_new_idea"
@@ -713,10 +754,11 @@ def creativity_session_widget_new_idea(
 def creativity_session_widget_post(
         request, test_session, discussion, participant1_user,
         creativity_session_widget, creativity_session_widget_new_idea):
-    from assembl.models import (Post, IdeaContentWidgetLink)
+    from assembl.models import (Post, IdeaContentWidgetLink, LangString)
     p = Post(
         discussion=discussion, creator=participant1_user,
-        subject=u"re: generated idea", body=u"post body",
+        subject=LangString.create(u"re: generated idea"),
+        body=LangString.create(u"post body"),
         type="post", message_id="comment_generated@example.com")
     test_session.add(p)
     test_session.flush()

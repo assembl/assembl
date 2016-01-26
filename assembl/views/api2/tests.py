@@ -308,7 +308,10 @@ def test_creativity_session_widget(
     # Create a new post attached to the sub-idea
     new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
         "@type": "Post", "message_id": 0,
-        "body": "body", "idCreator": participant1_user.uri()})
+        "body": {"@type": "LangString", "entries": [{
+            "@type": "LangStringEntry", "value": "body",
+            "@language": "en"
+        }]}, "idCreator": participant1_user.uri()})
     assert new_post_create.status_code == 201
     # Get the new post from the db
     discussion.db.flush()
@@ -380,7 +383,10 @@ def test_creativity_session_widget(
     # Create a second post.
     new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
         "@type": "Post", "message_id": 0,
-        "body": "body", "idCreator": participant1_user.uri()})
+        "body": {"@type": "LangString", "entries": [{
+            "@type": "LangStringEntry", "value": "body",
+            "@language": "en"
+        }]}, "idCreator": participant1_user.uri()})
     assert new_post_create.status_code == 201
     discussion.db.flush()
     new_post2_id = new_post_create.location
@@ -481,7 +487,10 @@ def test_inspiration_widget(
     r = test_app.post('/data/Discussion/%d/widgets/%d/base_idea_descendants/%d/linkedposts' % (
         discussion.id, widget_id, subidea_1_1.id), {
             "type": "WidgetPost", "message_id": 0,
-            "body": "body", "creator_id": participant1_user.id,
+            "body": {"@type": "LangString", "entries": [{
+                "@type": "LangStringEntry", "value": "body",
+                "@language": "en"
+            }]}, "creator_id": participant1_user.id,
             "metadata_raw": '{"inspiration_url": "https://www.youtube.com/watch?v=7E2FUSYO374"}'})
     assert r.ok
     post_location = r.location

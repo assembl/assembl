@@ -96,9 +96,11 @@ class WordCountVisitor(IdeaVisitor):
                             bindparam('discussion_id', idea.discussion_id)]
                 ).columns(column('post_id')).alias('related')
             titles = set()
-            for title, body in idea.db.query(
-                    Content.subject, Content.body).join(
+            # TODO maparent: Reoptimize
+            for content in idea.db.query(
+                    Content).join(
                     related, related.c.post_id == Content.id):
+                body = content.body.first_original().value
                 self.counter.add_text(self.cleantext(body), 0.5)
                 title = self.cleantext(title)
                 if title not in titles:

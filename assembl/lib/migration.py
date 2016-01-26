@@ -49,6 +49,8 @@ def bootstrap_db(config_uri=None, with_migration=True):
 
 def bootstrap_db_data(db):
     # import after session to delay loading of BaseOps
+    from assembl.models.langstrings import populate_default_locales
+    populate_default_locales(db())
     from assembl.models.auth import (
         populate_default_permissions, populate_default_roles)
     populate_default_permissions(db())

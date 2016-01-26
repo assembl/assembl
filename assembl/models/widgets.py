@@ -544,6 +544,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
+                from .langstrings import LangString
                 super(BaseIdeaCollection, self).decorate_instance(
                     instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
@@ -553,8 +554,10 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             proposes_idea=inst, creator_id=user_id,
                             discussion_id=inst.discussion_id,
                             hidden=self.hide_proposed_ideas,
-                            subject=inst.short_title,
-                            body=instance.definition or '',  # repeated
+                            subject=LangString.create(inst.short_title),
+                            body=(LangString.create(instance.definition)
+                                  if instance.definition
+                                  else LangString.EMPTY),  # repeated
                             **self.filter_kwargs(
                                 IdeaProposalPost, kwargs))
                         assocs.append(post)
@@ -597,6 +600,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
+                from .langstrings import LangString
                 super(BaseIdeaDescendantsCollectionC, self).decorate_instance(
                     instance, parent_instance, assocs, user_id, ctx, kwargs)
                 for inst in assocs[:]:
@@ -606,7 +610,8 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             proposes_idea=inst, creator_id=user_id,
                             discussion_id=inst.discussion_id,
                             hidden=self.hide_proposed_ideas,
-                            body="", subject=inst.short_title,
+                            body=LangString.EMPTY,
+                            subject=LangString.create(inst.short_title),
                             **self.filter_kwargs(
                                 IdeaProposalPost, kwargs))
                         assocs.append(post)

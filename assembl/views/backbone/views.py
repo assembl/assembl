@@ -72,7 +72,7 @@ def process_locale(locale_code, user_id, current_prefs, session, order):
     posix_string = ensure_locale_has_country(posix_string)
     # Updated: Now Locale is a model. Converting posix_string into its
     # equivalent model. Creates it if it does not exist
-    locale = Locale.get_or_create(posix_string)
+    locale = Locale.get_or_create(posix_string, session)
 
     # Fresh slate for user, create a lang_pref
     if not current_prefs:
@@ -233,7 +233,7 @@ def home_view(request):
     service = discussion.translation_service()
     context['translation_locale_names_json'] = json.dumps(
         service.target_locale_names(
-            Locale.get_or_create(locale)) if service else {})
+            Locale.get_or_create(locale, discussion.db)) if service else {})
 
     context['preferences_json'] = json.dumps(dict(preferences))
 

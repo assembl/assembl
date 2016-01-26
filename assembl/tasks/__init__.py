@@ -25,7 +25,15 @@ def configure(registry, task_name):
     configure_zmq(settings['changes.socket'], False)
     # temporary solution
     configure_model_watcher(registry, task_name)
-
+    # configure them all...
+    from .notify import notify_celery_app
+    config_celery_app(notify_celery_app, settings)
+    from .notification_dispatch import notif_dispatch_celery_app
+    config_celery_app(notif_dispatch_celery_app, settings)
+    from .translate import translation_celery_app
+    config_celery_app(translation_celery_app, settings)
+    from .imap import imap_celery_app
+    config_celery_app(imap_celery_app, settings)
 
 _celery_queues = None
 _celery_routes = None
@@ -105,19 +113,11 @@ def init_task_config(celery_app):
     set_config(settings)
     configure_engine(settings, False)
     configure(registry, celery_app.main)
-    config_celery_app(celery_app, settings)
     from threaded_model_watcher import ThreadDispatcher
     threaded_watcher_class_name = settings.get(
         '%s.threadedmodelwatcher' % (celery_app.main,),
         "assembl.lib.model_watcher.ModelEventWatcherPrinter")
     ThreadDispatcher.mw_class = resolver.resolve(threaded_watcher_class_name)
-    # Global celery apps
-    from notify import notify_celery_app
-    if notify_celery_app.main != celery_app.main:
-        config_celery_app(notify_celery_app, settings)
-    from notification_dispatch import notif_dispatch_celery_app
-    if notif_dispatch_celery_app.main != celery_app.main:
-        config_celery_app(notif_dispatch_celery_app, settings)
     _inited = True
 
 

@@ -65,10 +65,10 @@ class TranslationService(object):
                 langstring_entry.langstring, ["entries"])
 
     @abstractmethod
-    def translate(self, text, target, source=None):
+    def translate(self, text, target, source=None, db=None):
         if not source or source == Locale.UNDEFINED:
             lang, data = self.identify(text)
-            source = Locale.get_or_create(source_name)
+            source = Locale.get_or_create(source_name, db)
         return text
 
     def get_mt_name(cls, source_name, target_name):
@@ -85,10 +85,11 @@ class TranslationService(object):
             return langstring_entry.langstring.entries_as_dict[mt_target_name]
         if not self.canTranslate(source, target):
             return existing
-        trans = self.translate(langstring_entry.value, target, source)
+        trans = self.translate(
+            langstring_entry.value, target, source, langstring_entry.db)
         lse = LangStringEntry(
             value=trans,
-            locale=Locale.get_or_create(mt_target_name),
+            locale=Locale.get_or_create(mt_target_name, langstring_entry.db),
             locale_identification_data=json.dumps(dict(
                 translator=self.__class__.__name__)),
             langstring_id=langstring_entry.langstring_id)
@@ -101,7 +102,7 @@ class DummyTranslationService(TranslationService):
     def canTranslate(cls, source, target):
         return True
 
-    def translate(self, text, target, source=None):
+    def translate(self, text, target, source=None, db=None):
         return u"Pseudo-translation from %s to %s of: %s" % (
             source.locale, target.locale, text)
 
@@ -165,7 +166,7 @@ class DummyGoogleTranslationService(TranslationService):
         return (cls.asKnownLocale(source.locale) and
                 cls.asKnownLocale(target.locale))
 
-    def translate(self, text, target, source=None):
+    def translate(self, text, target, source=None, db=None):
         # Initial implementation from https://github.com/mouuff/Google-Translate-API
         link = "http://translate.google.com/m?hl=%s&sl=%s&q=%s" % (
             self.asKnownLocale(target.locale),
@@ -202,7 +203,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         r.sort(lambda x: x[u"confidence"], reverse=True)
         return r[0][u"language"], {x[u'language']: x[u'confidence'] for x in r}
 
-    def translate(self, text, target, source=None):
+    def translate(self, text, target, source=None, db=None):
         r = self.client.translations().list(
             q=text, target=target, source=source).execute()
         return r[u"translations"][0][u'translatedText']

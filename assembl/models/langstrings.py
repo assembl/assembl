@@ -132,14 +132,15 @@ class Locale(Base):
         return cls.locale_collection.get(locale_name, None)
 
     @classmethod
-    def get_or_create(cls, locale_name):
+    def get_or_create(cls, locale_name, db=None):
         locale_id = cls.get_id_of(locale_name)
         if locale_id:
             return Locale.get(locale_id)
         else:
+            db = db or cls.default_db
             l = Locale(locale=locale_name)
-            cls.default_db.add(l)
-            cls.default_db.flush()
+            db.add(l)
+            db.flush()
             cls.reset_cache()
             return l
 
@@ -325,6 +326,13 @@ class LangString(Base):
     def non_mt_entries(self):
         return self.db.query(LangStringEntry).join(Locale).filter(
             Locale.locale.notlike("%-x-mtfrom-%")).subquery()
+
+    def first_original(self):
+        return next(iter(self.non_mt_entries()))
+
+    @classproperty
+    def EMPTY(cls):
+        return LangStringEntry.EMPTY.langstring
 
     @property
     def undefined_entry(self):
@@ -535,7 +543,8 @@ class LangStringEntry(Base, TombstonableMixin):
         "TODO: explain @language params"
         if "langstring_id" not in kwargs and "langstring" not in kwargs:
             kwargs["langstring"] = LangString()
-        if "locale_id" not in kwargs and "locale" not in kwargs:
+        if ("locale_id" not in kwargs and "locale" not in kwargs
+                and '@language' in kwargs):
             # Create locale on demand.
             locale_code = kwargs.get("@language", "und")
             del kwargs["@language"]
@@ -571,6 +580,20 @@ class LangStringEntry(Base, TombstonableMixin):
             value = value[:50]+'...'
         return '%d: [%s] "%s"' % (
             self.id or -1, self.locale.locale, value.encode('utf-8'))
+
+    _EMPTY = None
+
+    @classproperty
+    def EMPTY(cls):
+        if cls._EMPTY is None:
+            from sqlalchemy.sql.expression import func
+            cls._EMPTY = cls.default_db.query(cls).filter(
+                func.length(cls.value) == 0).order_by(cls.id).first()
+        if cls._EMPTY is None:
+            ls = LangString()
+            cls._EMPTY = cls(value="", locale_id=Locale.UNDEFINED_LOCALEID,
+                             langstring=ls)
+        return cls._EMPTY
 
     @property
     def locale_name(self):
@@ -674,9 +697,12 @@ class LangStringEntry(Base, TombstonableMixin):
 #          P_TRANSLATE, P_TRANSLATE)
 
 
+def populate_default_locales(db):
+    for loc_code in (
+            Locale.UNDEFINED, Locale.MULTILINGUAL, Locale.NON_LINGUISTIC):
+        Locale.get_or_create(loc_code, db=db)
+    LangStringEntry.EMPTY
+
+
 def includeme(config):
-    LangString.EMPTY = LangString()
-    LangStringEntry.EMPTY = LangStringEntry(
-        value="", locale_id=0, langstring=LangString.EMPTY)
-    # need to find a way to delay the following until connection established:
-    # LangStringEntry.EMPTY.locale_id = Locale.NON_LINGUISTIC_LOCALEID
+    pass

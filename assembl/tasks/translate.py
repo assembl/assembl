@@ -93,7 +93,7 @@ def translate_content(
                 for dest in translation_table.get(source_loc, languages):
                     if dest not in known:
                         service.translate_lse(
-                            original, Locale.get_or_create(dest))
+                            original, Locale.get_or_create(dest, content.db))
                         ls.db.expire(ls, ["entries"])
                         known.add(dest)
                         changed = True
