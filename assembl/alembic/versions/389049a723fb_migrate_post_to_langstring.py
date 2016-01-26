@@ -66,9 +66,9 @@ def downgrade(pyramid_env):
     langstring_idsequence = "%s.%s.langstring_idsequence" % (
         config.get("db_schema"), config.get("db_user"))
     with context.begin_transaction():
+        op.drop_column("content", "body_id")
+        op.drop_column("content", "subject_id")
         op.execute("delete from langstring_entry")
         op.execute("delete from langstring")
         op.execute("sequence_set('%s', 1, 0)" % langstring_idsequence)
         mark_changed()
-        op.drop_column("content", "body_id")
-        op.drop_column("content", "subject_id")
