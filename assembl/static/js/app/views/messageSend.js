@@ -164,32 +164,35 @@ var messageSend = Marionette.LayoutView.extend({
   },
 
   onRender: function() {
-      Ctx.removeCurrentlyDisplayedTooltips(this.$el);
-      Ctx.initTooltips(this.$el);
-      if (!Ctx.getCurrentUser().can(Permissions.ADD_POST)) {
-        var that = this, collectionManager = new CollectionManager();
-        collectionManager.getDiscussionModelPromise().then(function(discussion) {
-          var routeUrl = null;
-          if (that.reply_message_model) {
-            routeUrl = that.reply_message_model.getRouterUrl({relative: true});
-          }
-          var rolesMissingMessageForPermission = Ctx.getCurrentUser().getRolesMissingMessageForPermission(Permissions.ADD_POST, discussion, routeUrl),
-          messageString,
-          warningMessage;
-          if ('reply_message_id' in that.options) {
-            messageString = i18n.gettext("Before you can reply to this message %s")
-          }
-          else {
-            messageString = i18n.gettext("Before you can post a message %s")
-          }
+    if (Ctx.debugRender) {
+      console.log("messageSend:render() is firing");
+    }
+    Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+    Ctx.initTooltips(this.$el);
+    if (!Ctx.getCurrentUser().can(Permissions.ADD_POST)) {
+      var that = this, collectionManager = new CollectionManager();
+      collectionManager.getDiscussionModelPromise().then(function(discussion) {
+        var routeUrl = null;
+        if (that.reply_message_model) {
+          routeUrl = that.reply_message_model.getRouterUrl({relative: true});
+        }
+        var rolesMissingMessageForPermission = Ctx.getCurrentUser().getRolesMissingMessageForPermission(Permissions.ADD_POST, discussion, routeUrl),
+        messageString,
+        warningMessage;
+        if ('reply_message_id' in that.options) {
+          messageString = i18n.gettext("Before you can reply to this message %s")
+        }
+        else {
+          messageString = i18n.gettext("Before you can post a message %s")
+        }
 
-          warningMessage = i18n.sprintf(messageString, rolesMissingMessageForPermission);
-          that.ui.permissionDeniedWarningMessage.html(warningMessage);
-        });
-      }
-      //In case there was a message in progess just restored
-      this.processHyperlinks();
-    },
+        warningMessage = i18n.sprintf(messageString, rolesMissingMessageForPermission);
+        that.ui.permissionDeniedWarningMessage.html(warningMessage);
+      });
+    }
+    //In case there was a message in progess just restored
+    this.processHyperlinks();
+  },
 
   onShow: function() {
     //console.log("messageSend onShow() this.documentsView:", this.documentsView);
@@ -383,11 +386,11 @@ var messageSend = Marionette.LayoutView.extend({
     this.clearPartialMessage();
   },
 
-  onBlurMessage: function() {
+  onBlurMessage: function(ev) {
     var analytics = Analytics.getInstance(),
         messageWasSaved = this.savePartialMessage();
 
-    //console.log("onBlurMessage()");
+    //console.log("onBlurMessage()", ev);
 
     /* Quentin: turned off, because the "when I'm writing a message, I don't want the interface to reload" fix will be done using filtering on message collection add event
     var panelWrapper = this.options.messageList._panelWrapper;

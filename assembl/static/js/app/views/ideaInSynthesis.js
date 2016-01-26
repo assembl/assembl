@@ -224,6 +224,9 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
 
       var that = this;
       window.setTimeout(function() {
+        if (Ctx.debugRender) {
+          console.log("ideaInSynthesis:focusReplyBox() stealing browser focus");
+        }
         that.$('.js_messageSend-body').focus();
       }, 100);
     },

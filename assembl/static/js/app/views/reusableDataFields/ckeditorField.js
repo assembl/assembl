@@ -107,6 +107,9 @@ var cKEditorField = Marionette.ItemView.extend({
     this.ckInstance = CKEDITOR.inline(editingArea, config);
 
     setTimeout(function() {
+      if (Ctx.debugRender) {
+        console.log("cKEditorField:startEditing() stealing browser focus");
+      }
       editingArea.focus();
     }, 100);
 

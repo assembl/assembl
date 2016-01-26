@@ -225,7 +225,7 @@ var MessageList = AssemblPanel.extend({
 
         'click .js_openTargetInModal': 'openTargetInModal',
 
-        'click .js_scrollToMsgBox': 'scrollToMsgBox',
+        'click .js_scrollToTopPostBox': 'scrollToTopPostBox',
 
         'click .js_loadPendingMessages': 'loadPendingMessages',
         'click @ui.printButton': 'togglePrintableClass'
@@ -2481,8 +2481,11 @@ var MessageList = AssemblPanel.extend({
     this.render();
   },
 
-  scrollToMsgBox: function() {
+  scrollToTopPostBox: function() {
     this.scrollToElement(this.$('.messagelist-replybox'));
+    if (Ctx.debugRender) {
+      console.log("MessageList:scrollToTopPostBox() stealing browser focus");
+    }
     this.$('.messageSend-subject').focus();
   },
 

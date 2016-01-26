@@ -443,6 +443,7 @@ var MessageView = Marionette.LayoutView.extend({
         this.ui.messageReplyBox.removeClass('hidden');
         this.messageReplyBoxRegion.show(this.replyView);
         if (this.replyBoxHasFocus) {
+          //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
           this.focusReplyBox();
         }
       }
@@ -900,9 +901,11 @@ var MessageView = Marionette.LayoutView.extend({
     analytics.trackEvent(analytics.events.MESSAGE_REPLY_BTN_CLICKED);
 
     if (!this.isMessageOpened()) {
+      //console.log("Message was not opened, opening after clicking on reply box");
       this.doOpenMessage();
     }
     else {
+      //console.log("Message already open, focusing on reply box");
       this.focusReplyBox();
     }
   },
@@ -911,33 +914,63 @@ var MessageView = Marionette.LayoutView.extend({
    *  Focus on the reply box, and open the message if closed
    **/
   focusReplyBox: function() {
-      if (!this.isMessageOpened()) {
-        console.error("Tried to focus on the reply box of a closed message, this should not happen!");
+    var that = this;
+
+    if (!this.isMessageOpened()) {
+      console.error("Tried to focus on the reply box of a closed message, this should not happen!");
+    }
+
+    if (!this.replyBoxHasFocus) {
+      console.error("Tried to focus on the reply box of a message that isn't supposed to have focus, this should not happen!");
+    }
+
+    var el = this.replyView.ui.messageBody;
+    if (el instanceof jQuery && el.length) {
+      if (!el.is(':visible')) {
+        console.error("Element not yet visible...");
       }
 
-      if (!this.replyBoxHasFocus) {
-        console.error("Tried to focus on the reply box of a message that isn't supposed to have focus, this should not happen!");
-      }
+      setTimeout(function() {
+        if(!that.isViewDestroyed()) {
+          if (Ctx.debugRender) {
+            console.log("Message:focusReplyBox() stealing browser focus");
+          }
+          /* Attempt to figure out what steals the focus..
+            $( document ).bind( "focusin", function( event ) {
+            console.log("Global focusin", event);
+            });*/
+          var retval = el.focus();
+          //console.log("jqery called focus, returned:", retval, "has focus: ", retval.is(":focus"), $( document.activeElement ));
+          var maintainFocus = function(ev) {
+            if(!that.isViewDestroyed() && !el.is(":focus")) {
+              if (Ctx.debugRender) {
+                console.warn("focus was quickly lost.  Focusing again to work around the problem.");
+              }
+              setTimeout(function() {
+                el.focus();
+              }, 500); //Yes, magic constant, but we are already in a workaround.  If we don'T wait, something steals the focus again
 
-      var el = this.replyView.ui.messageBody;
-      if (el instanceof jQuery && el.length) {
-        if (!el.is(':visible')) {
-          console.error("Element not yet visible...");
+            }
+          };
+          el.on( "focusout", maintainFocus);
+          setTimeout(function() {
+            el.off( "focusout", maintainFocus);
+          }, 1500);
+
         }
+      }, 1);//This settimeout is necessary, at least for chrome, to focus properly.
+      //Now this no longer works on either chrome and firefox.  Focus is stolen for some reason I cannot pinpoint.  Annotator?  Browser bug?
 
-        setTimeout(function() {
-          el.focus();
-        }, 1);//This settimeout is necessary, at least for chrome, to focus properly
-      }
-      else if (this.ui.messageReplyBox.length) {
-        // if the .js_messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
-        //console.log("Scrooling to reply box instead");
-        this.messageListView.scrollToElement(this.ui.messageReplyBox);
-      }
-      else {
-        console.error("Tried to focus on the reply box of a message, but reply box isn't onscreen.  This should not happen!");
-      }
-    },
+    }
+    else if (this.ui.messageReplyBox.length) {
+      // if the .js_messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
+      //console.log("Scrooling to reply box instead");
+      this.messageListView.scrollToElement(this.ui.messageReplyBox);
+    }
+    else {
+      console.error("Tried to focus on the reply box of a message, but reply box isn't onscreen.  This should not happen!");
+    }
+  },
 
   onReplyBoxCancelBtnClick: function(e) {
       this.replyBoxShown = false;

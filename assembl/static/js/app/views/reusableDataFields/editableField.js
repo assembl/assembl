@@ -35,6 +35,9 @@ var EditableField = Marionette.ItemView.extend({
 
       this.$el.addClass('canEdit panel-editablearea');
       if (this.focus) {
+        if (Ctx.debugRender) {
+          console.log("EditableField:onRender() stealing browser focus");
+        }
         this.$el.focus();
       }
     }
