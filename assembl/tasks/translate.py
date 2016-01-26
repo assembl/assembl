@@ -62,11 +62,11 @@ def translate_content(
             und_body.value or next(iter(content.body.non_mt_entries())).value))
         language, _ = service.identify(combined, languages)
         if und_subject:
-            und_subject.locale_name = language
+            und_subject.locale_code = language
             content.db.expire(und_subject, ("locale",))
             content.db.expire(content.subject, ("entries",))
         if und_body:
-            und_body.locale_name = language
+            und_body.locale_code = language
             content.db.expire(und_body, ("locale",))
             content.db.expire(content.body, ("entries",))
 
@@ -89,7 +89,7 @@ def translate_content(
             originals = ls.non_mt_entries()
             # pick randomly. TODO: Recency order?
             for original in originals:
-                source_loc = service.asKnownLocale(original.locale_name)
+                source_loc = service.asKnownLocale(original.locale_code)
                 for dest in translation_table.get(source_loc, languages):
                     if dest not in known:
                         service.translate_lse(

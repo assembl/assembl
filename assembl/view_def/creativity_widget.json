@@ -18,7 +18,7 @@
         "entries": [":default"]
     },
     "LangStringEntry": {
-        "@language": "locale_name",
+        "@language": "locale_code",
         "value": true
     },
     "AgentProfile": {

@@ -17,12 +17,12 @@ class TranslationService(object):
         return False
 
     @classmethod
-    def asKnownLocale(cls, locale_name):
-        return locale_name
+    def asKnownLocale(cls, locale_code):
+        return locale_code
 
     @classmethod
-    def asPosixLocale(cls, locale_name):
-        return locale_name
+    def asPosixLocale(cls, locale_code):
+        return locale_code
 
     @classmethod
     def can_guess_locale(cls, text):
@@ -75,7 +75,7 @@ class TranslationService(object):
         return "-".join((target_name, "x-mtfrom", source_name))
 
     def translate_lse(self, langstring_entry, target, retranslate=False):
-        if langstring_entry.locale_name == Locale.UNDEFINED:
+        if langstring_entry.locale_code == Locale.UNDEFINED:
             self.confirm_locale(langstring_entry)
         source = langstring_entry.locale
         mt_target_name = self.get_mt_name(source.locale, target.locale)
@@ -137,8 +137,8 @@ class DummyGoogleTranslationService(TranslationService):
         return (cls.asPosixLocale(loc) for loc in cls.known_locales)
 
     @classmethod
-    def asKnownLocale(cls, locale_name):
-        parts = locale_name.split("_")
+    def asKnownLocale(cls, locale_code):
+        parts = locale_code.split("_")
         base = parts[0]
         if base in cls.known_locales:
             return base
@@ -154,8 +154,8 @@ class DummyGoogleTranslationService(TranslationService):
                 return "_".join(parts[:1])
 
     @classmethod
-    def asPosixLocale(cls, locale_name):
-        return cls.idiosyncrasies.get(locale_name, locale_name)
+    def asPosixLocale(cls, locale_code):
+        return cls.idiosyncrasies.get(locale_code, locale_code)
 
     def get_mt_name(cls, source_name, target_name):
         return super(DummyGoogleTranslationService, cls).get_mt_name(

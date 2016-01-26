@@ -126,7 +126,7 @@ var LangString = Base.Model.extend({
             continue;
           var pref = langPrefs.getPreferenceForLocale(entry_locale);
           if (pref !== undefined) {
-            entryByPrefLocale[pref.get("locale_name")] = entry;
+            entryByPrefLocale[pref.get("locale_code")] = entry;
             prefCandidates.push(pref);
           }
         }
@@ -136,7 +136,7 @@ var LangString = Base.Model.extend({
             var pref = prefCandidates[i];
             var translate_to = pref.get("translate_to");
             if (translate_to === undefined) {
-              return entryByPrefLocale[pref.get("locale_name")];
+              return entryByPrefLocale[pref.get("locale_code")];
             } else {
               // take available with longest common locale string to translation target
               commonLenF = function(entry) {

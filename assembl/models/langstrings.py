@@ -38,11 +38,11 @@ class Locale(Base):
     def __repr__(self):
         return "<Locale %s (%d)>" % (self.locale, self.id or -1)
 
-    def sublocale_of(self, locale_name):
-        if isinstance(locale_name, self.__class__):
-            locale_name = locale_name.locale
+    def sublocale_of(self, locale_code):
+        if isinstance(locale_code, self.__class__):
+            locale_code = locale_code.locale
         my_parts = self.locale.split("_")
-        parts = locale_name.split("_")
+        parts = locale_code.split("_")
         if len(my_parts) > len(parts):
             return False
         my_parts = my_parts[:len(parts)]
@@ -128,17 +128,17 @@ class Locale(Base):
         return cls._locale_collection
 
     @classmethod
-    def get_id_of(cls, locale_name):
-        return cls.locale_collection.get(locale_name, None)
+    def get_id_of(cls, locale_code):
+        return cls.locale_collection.get(locale_code, None)
 
     @classmethod
-    def get_or_create(cls, locale_name, db=None):
-        locale_id = cls.get_id_of(locale_name)
+    def get_or_create(cls, locale_code, db=None):
+        locale_id = cls.get_id_of(locale_code)
         if locale_id:
             return Locale.get(locale_id)
         else:
             db = db or cls.default_db
-            l = Locale(locale=locale_name)
+            l = Locale(locale=locale_code)
             db.add(l)
             db.flush()
             cls.reset_cache()
@@ -485,7 +485,7 @@ class LangString(Base):
                 entriesByLocale = {}
                 for entry in entries:
                     pref = user_prefs.find_locale(
-                        Locale.extract_base_locale(entry.locale_name))
+                        Locale.extract_base_locale(entry.locale_code))
                     if pref:
                         candidates.append(pref)
                         entriesByLocale[pref.locale_code] = entry
@@ -497,11 +497,11 @@ class LangString(Base):
                             target_locale = pref.translate_to_code
                             entries.sort(key=lambda e: -Locale.len_common_parts(
                                 target_locale,
-                                Locale.extract_base_locale(e.locale_name)))
+                                Locale.extract_base_locale(e.locale_code)))
                             e = entries[0]
                             if Locale.len_common_parts(
                                     target_locale,
-                                    Locale.extract_base_locale(e.locale_name)):
+                                    Locale.extract_base_locale(e.locale_code)):
                                 return e
                         else:
                             return entriesByLocale[pref.locale_code]
@@ -608,14 +608,14 @@ class LangStringEntry(Base, TombstonableMixin):
             self.id or -1, self.locale.locale, value.encode('utf-8'))
 
     @property
-    def locale_name(self):
+    def locale_code(self):
         return Locale.locale_collection_byid.get(self.locale_id, None)
         # Equivalent to the following, which may trigger a DB load
         # return self.locale.locale
 
-    @locale_name.setter
-    def locale_name(self, locale_name):
-        locale_id = Locale.locale_collection.get(locale_name, None)
+    @locale_code.setter
+    def locale_code(self, locale_code):
+        locale_id = Locale.locale_collection.get(locale_code, None)
         if locale_id:
             self.locale_id = locale_id
             if inspect(self).persistent:
@@ -623,7 +623,7 @@ class LangStringEntry(Base, TombstonableMixin):
             else:
                 self.locale = Locale.get(locale_id)
         else:
-            self.locale = Locale(locale=locale_name)
+            self.locale = Locale(locale=locale_code)
 
     @property
     def locale_identification_data_json(self):
@@ -647,7 +647,7 @@ class LangStringEntry(Base, TombstonableMixin):
         self.db.add(new_version)
         return new_version
 
-    def identify_locale(self, locale_name, data, certainty=False):
+    def identify_locale(self, locale_code, data, certainty=False):
         # A translation service proposes a data identification.
         # the information is deemed confirmed if it fits the initial
         # hypothesis given at LSE creation.
@@ -656,13 +656,13 @@ class LangStringEntry(Base, TombstonableMixin):
             raise RuntimeError("Why identify a machine-translated locale?")
         data = data or {}
         original = self.locale_identification_data_json.get("original", None)
-        if original and locale_name == original:
-            if locale_name != self.locale_name:
-                self.locale_name = locale_name
+        if original and locale_code == original:
+            if locale_code != self.locale_code:
+                self.locale_code = locale_code
                 changed = True
             self.locale_identification_data_json = data
             self.locale_confirmed = True
-        elif locale_name != self.locale_name:
+        elif locale_code != self.locale_code:
             if self.locale_confirmed:
                 if certainty:
                     raise RuntimeError("Conflict of certainty")
@@ -671,26 +671,26 @@ class LangStringEntry(Base, TombstonableMixin):
             # compare data? replacing with new for now.
             if not original and self.locale_identification_data:
                 original = Locale.UNDEFINED
-            original = original or self.locale_name
-            if original != locale_name:
+            original = original or self.locale_code
+            if original != locale_code:
                 data["original"] = original
-            self.locale_name = locale_name
+            self.locale_code = locale_code
             changed = True
             self.locale_identification_data_json = data
             self.locale_confirmed = certainty
         else:
-            if original and original != locale_name:
+            if original and original != locale_code:
                 data['original'] = original
             self.locale_identification_data_json = data
-            self.locale_confirmed = certainty or locale_name == original
+            self.locale_confirmed = certainty or locale_code == original
         return changed
 
     def forget_identification(self):
         if not self.locale_confirmed:
             data = self.locale_identification_data_json
             orig = data.get("original", None)
-            if orig and orig != self.locale_name:
-                self.locale_name = orig
+            if orig and orig != self.locale_code:
+                self.locale_code = orig
         self.locale_identification_data = None
 
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)

@@ -18,9 +18,9 @@ def get_localizer(request=None):
     if request:
         localizer = request.localizer
     else:
-        locale_name = get_config().get('available_languages', 'fr_CA en_CA').\
+        locale_code = get_config().get('available_languages', 'fr_CA en_CA').\
             split()[0]
-        localizer = Localizer(locale_name)
+        localizer = Localizer(locale_code)
     return localizer
 
 
@@ -139,6 +139,6 @@ def locale_negotiator(request):
             locale = locale_with_country
     if not locale:
         locale = to_posix_string(request.accept_language.best_match(
-            available, settings.get('pyramid.default_locale_name', 'en')))
+            available, settings.get('pyramid.default_locale_code', 'en')))
     request._LOCALE_ = locale
     return locale

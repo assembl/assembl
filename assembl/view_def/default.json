@@ -18,13 +18,13 @@
         "entries": ["&best_entries_in_request_with_originals:default"]
     },
     "LangStringEntry": {
-        "@language": "locale_name",
+        "@language": "locale_code",
         "value": true
     },
     "UserLanguagePreference": {
         "user": true,
         "locale": true,
-        "locale_name": "locale_code",
+        "locale_code": true,
         "preferred_order": false,
         "source_of_evidence": true,
         "translate_to": true,

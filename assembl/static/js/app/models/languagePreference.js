@@ -22,10 +22,10 @@ var clean = function(input){
 
 var LanguagePreferenceModel = Base.Model.extend({
     //The server should also send the string of the locales.
-    //locale_name, translate_to_name
+    //locale_code, translate_to_name
     defaults: {
         user: null,
-        locale_name: null,
+        locale_code: null,
         preferred_order: 0,
         source_of_evidence: null,
         translate_to_name: null
@@ -38,7 +38,7 @@ var LanguagePreferenceModel = Base.Model.extend({
 
     isLocale: function(locale){
         var cl = clean(locale),
-            clln = clean(this.get('locale_name'));
+            clln = clean(this.get('locale_code'));
         return clln === cl;
     },
 
@@ -74,7 +74,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
       // Take pref with longest common locale string
       var that = this,
       commonLenF = function(pref) {
-        return LangString.localeCommonLength(locale, pref.get("locale_name")) > 0;
+        return LangString.localeCommonLength(locale, pref.get("locale_code")) > 0;
       };
       var pref = this.max(commonLenF);
       if (commonLenF(pref) > 0) {
@@ -103,7 +103,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
                 //Uniqueness constraint from the back-end ensures only 1 model with such parameters
                 return (
                     (model.get('user') === user_id) && 
-                    (model.get('locale_name') === locale) && 
+                    (model.get('locale_code') === locale) &&
                     (model.get('source_of_evidence') === 0))
                 }),
                 ops = {
@@ -124,13 +124,13 @@ var LanguagePreferenceCollection = Base.Collection.extend({
                 var model = existingModel;
                 ops.wait = true;
                 model.save({
-                    locale_name: locale,
+                    locale_code: locale,
                     translate_to_name: translateTo,
                 }, ops);
             }
             else {
                 var hash = {
-                    locale_name: locale,
+                    locale_code: locale,
                     source_of_evidence: 0,
                     translate_to_name: translateTo,
                     user: user_id,
@@ -153,7 +153,7 @@ var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.
 
     getPreferenceForLocale: function(locale){
         return new LanguagePreferenceModel({
-          locale_name: locale,
+          locale_code: locale,
           source_of_evidence: 0
         });
     },

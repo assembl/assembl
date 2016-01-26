@@ -27,12 +27,12 @@
         "entries": true
     },
     "LangStringEntry": {
-        "@language": "locale_name",
+        "@language": "locale_code",
         "value": true
     },
     "UserLanguagePreference": {
         "user_id": true,
-        "locale_name": "locale_code",
+        "locale_code": true,
         "preferred_order": true,
         "source_of_evidence": true,
         "translate_to": false,
