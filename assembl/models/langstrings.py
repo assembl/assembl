@@ -190,39 +190,39 @@ def locale_collection_changed(target, value, oldvalue):
     Locale._locale_collection_byid = None
 
 
-class LocaleName(Base):
+class LocaleLabel(Base):
     "Allows to obtain the name of locales (in any target locale, incl. itself)"
-    __tablename__ = "locale_name"
-    __table_args__ = (UniqueConstraint('locale_id', 'target_locale_id'), )
+    __tablename__ = "locale_label"
+    __table_args__ = (UniqueConstraint('named_locale_id', 'locale_id_of_label'), )
     id = Column(Integer, primary_key=True)
-    locale_id = Column(
+    named_locale_id = Column(
         Integer, ForeignKey(
             Locale.id, ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
-    target_locale_id = Column(
+    locale_id_of_label = Column(
         Integer, ForeignKey(
             Locale.id, ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
     name = Column(CoerceUnicode)
 
-    locale = relationship(Locale, foreign_keys=(
-            locale_id,))
-    target_locale = relationship(Locale, foreign_keys=(
-            target_locale_id,))
+    named_locale = relationship(Locale, foreign_keys=(
+            named_locale_id,))
+    locale_of_label = relationship(Locale, foreign_keys=(
+            locale_id_of_label,))
 
     @classmethod
     def names_in_locale(cls, locale):
         loc_ids = [loc.id for loc in locale.ancestry()]
-        locale_names = locale.db.query(cls).filter(
-            cls.target_locale_id.in_(loc_ids)).all()
+        locale_labels = locale.db.query(cls).filter(
+            cls.locale_id_of_label.in_(loc_ids)).all()
         by_target = defaultdict(list)
-        for ln in locale_names:
-            by_target[ln.target_locale_id].append(ln)
+        for ln in locale_labels:
+            by_target[ln.locale_id_of_label].append(ln)
         result = dict()
         loc_ids.reverse()
         for loc_id in loc_ids:
             result.update({
-                Locale.locale_collection_byid[lname.locale_id]: lname.name
+                Locale.locale_collection_byid[lname.named_locale_id]: lname.name
                 for lname in by_target[loc_id]})
         return result
 
@@ -230,26 +230,26 @@ class LocaleName(Base):
     def names_of_locales_in_locale(cls, loc_codes, target_locale):
         locale_ids = [Locale.locale_collection[loc_code] for loc_code in loc_codes]
         target_loc_ids = [loc.id for loc in target_locale.ancestry()]
-        locale_names = target_locale.db.query(cls).filter(
-            cls.target_locale_id.in_(target_loc_ids),
-            cls.locale_id.in_(locale_ids)).all()
+        locale_labels = target_locale.db.query(cls).filter(
+            cls.locale_id_of_label.in_(target_loc_ids),
+            cls.named_locale_id.in_(locale_ids)).all()
         by_target = defaultdict(list)
-        for ln in locale_names:
-            by_target[ln.target_locale_id].append(ln)
+        for ln in locale_labels:
+            by_target[ln.locale_id_of_label].append(ln)
         result = dict()
         target_loc_ids.reverse()
         for loc_id in target_loc_ids:
             result.update({
-                Locale.locale_collection_byid[lname.locale_id]: lname.name
+                Locale.locale_collection_byid[lname.named_locale_id]: lname.name
                 for lname in by_target[loc_id]})
         return result
 
     @classmethod
     def names_in_self(cls):
         return {
-            Locale.locale_collection_byid[lname.locale_id]: lname.name
+            Locale.locale_collection_byid[lname.named_locale_id]: lname.name
             for lname in cls.default_db.query(cls).filter(
-                cls.target_locale_id == cls.locale_id)}
+                cls.locale_id_of_label == cls.named_locale_id)}
 
     @classmethod
     def load_names(cls):
@@ -264,13 +264,13 @@ class LocaleName(Base):
             db.add(Locale.get_or_create(l))
         db.flush()
         Locale.reset_cache()
-        existing = set(db.query(cls.locale_id, cls.target_locale_id).all())
+        existing = set(db.query(cls.named_locale_id, cls.locale_id_of_label).all())
         c = Locale.locale_collection
         for (lcode, tcode, name) in names:
             l, t = c[lcode], c[tcode]
             if (l, t) not in existing:
                 cls.default_db.add(cls(
-                    locale_id=l, target_locale_id=t, name=name))
+                    named_locale_id=l, locale_id_of_label=t, name=name))
         db.flush()
 
     crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)

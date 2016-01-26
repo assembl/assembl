@@ -85,7 +85,7 @@ from .auth import (
 )
 from .langstrings import (
     Locale,
-    LocaleName,
+    LocaleLabel,
     LangString,
     LangStringEntry,
 )

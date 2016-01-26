@@ -232,7 +232,7 @@ def home_view(request):
 
     service = discussion.translation_service()
     context['translation_locale_names_json'] = json.dumps(
-        service.target_locale_names(
+        service.target_locale_labels(
             Locale.get_or_create(locale, discussion.db)) if service else {})
 
     context['preferences_json'] = json.dumps(dict(preferences))

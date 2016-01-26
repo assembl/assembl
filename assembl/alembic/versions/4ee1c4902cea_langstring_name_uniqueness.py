@@ -18,19 +18,19 @@ import transaction
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        op.execute("delete from locale_name")
+        op.execute("delete from locale_label")
         op.create_unique_constraint(
-            "%s_%s_locale_name_UNQC_locale_id_target_locale_id" % (
+            "%s_%s_locale_label_UNQC_named_locale_id_locale_id_of_label" % (
                 config.get('db_schema'), config.get('db_user')),
-            "locale_name", ["locale_id", "target_locale_id"])
+            "locale_label", ["named_locale_id", "locale_id_of_label"])
     with transaction.manager:
         from assembl import models as m
-        m.LocaleName.load_names()
+        m.LocaleLabel.load_names()
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_constraint(
-            "%s_%s_locale_name_UNQC_locale_id_target_locale_id" % (
+            "%s_%s_locale_label_UNQC_named_locale_id_locale_id_of_label" % (
                 config.get('db_schema'), config.get('db_user')),
-            "locale_name")
+            "locale_label")

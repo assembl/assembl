@@ -32,14 +32,14 @@ def upgrade(pyramid_env):
             sa.Column("locale", sa.String(20), unique=True),
             sa.Column("rtl", sa.Boolean, server_default="0"))
         op.create_table(
-            "locale_name",
+            "locale_label",
             sa.Column("id", sa.Integer, primary_key=True),
             sa.Column(
-                "locale_id", sa.Integer, sa.ForeignKey(
+                "named_locale_id", sa.Integer, sa.ForeignKey(
                     "locale.id", ondelete="CASCADE", onupdate="CASCADE"),
                 nullable=False),
             sa.Column(
-                "target_locale_id", sa.Integer, sa.ForeignKey(
+                "locale_id_of_label", sa.Integer, sa.ForeignKey(
                     "locale.id", ondelete="CASCADE", onupdate="CASCADE"),
                 nullable=False),
             sa.Column("name", sa.Unicode))
@@ -77,12 +77,12 @@ def upgrade(pyramid_env):
     with transaction.manager:
         c = m.Locale.locale_collection
         for (l, t, n) in names:
-            db.add(m.LocaleName(locale_id=c[l], target_locale_id=c[t], name=n))
+            db.add(m.LocaleLabel(named_locale_id=c[l], locale_id_of_label=c[t], name=n))
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table("langstring_entry")
         op.drop_table("langstring")
-        op.drop_table("locale_name")
+        op.drop_table("locale_label")
         op.drop_table("locale")

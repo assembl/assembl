@@ -7,7 +7,7 @@ from langdetect.detector import LangDetectException
 
 from assembl.lib.abc import abstractclassmethod
 from assembl.lib import config
-from assembl.models.langstrings import Locale, LangStringEntry, LocaleName
+from assembl.models.langstrings import Locale, LangStringEntry, LocaleLabel
 
 
 class TranslationService(object):
@@ -34,8 +34,8 @@ class TranslationService(object):
         return ()
 
     @classmethod
-    def target_locale_names(cls, target_locale):
-        return LocaleName.names_of_locales_in_locale(
+    def target_locale_labels(cls, target_locale):
+        return LocaleLabel.names_of_locales_in_locale(
             cls.target_locales(), target_locale)
 
     def identify(self, text, expected_locales=None):
@@ -107,8 +107,8 @@ class DummyTranslationService(TranslationService):
             source.locale, target.locale, text)
 
     @classmethod
-    def target_locale_names(cls, target_locale):
-        return LocaleName.names_in_locale(target_locale)
+    def target_locale_labels(cls, target_locale):
+        return LocaleLabel.names_in_locale(target_locale)
 
 
 class DummyGoogleTranslationService(TranslationService):
