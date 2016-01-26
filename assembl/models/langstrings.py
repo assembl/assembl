@@ -22,7 +22,7 @@ from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC, P_SYSADMIN
 class Locale(Base):
     """The name of locales. Follows Posix locale conventions: lang(_Script)(_COUNTRY),
     (eg zh_Hant_HK, but script can be elided (eg fr_CA) if only one script for language,
-    as per xxx instructions.
+    as per http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
     """
     __tablename__ = "locale"
     id = Column(Integer, primary_key=True)
@@ -205,6 +205,11 @@ class LocaleName(Base):
         nullable=False)
     name = Column(CoerceUnicode)
 
+    locale = relationship(Locale, foreign_keys=(
+            locale_id,))
+    target_locale = relationship(Locale, foreign_keys=(
+            target_locale_id,))
+
     @classmethod
     def names_in_locale(cls, locale):
         loc_ids = [loc.id for loc in locale.ancestry()]
@@ -269,13 +274,6 @@ class LocaleName(Base):
         db.flush()
 
     crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
-
-
-# TODO : Move in class
-LocaleName.locale = relationship(Locale, foreign_keys=(
-        LocaleName.locale_id,))
-LocaleName.target_locale = relationship(Locale, foreign_keys=(
-        LocaleName.target_locale_id,))
 
 
 class LangString(Base):
@@ -566,7 +564,9 @@ class LangStringEntry(Base, TombstonableMixin):
     )
 
     def __init__(self, *args, **kwargs):
-        "TODO: explain @language params"
+        """ in the kwargs, you can specify locale info in many ways:
+        as a Locale numeric id (locale_id), Locale object (locale)
+        or language code (@language)"""
         if "langstring_id" not in kwargs and "langstring" not in kwargs:
             kwargs["langstring"] = LangString()
         if ("locale_id" not in kwargs and "locale" not in kwargs
