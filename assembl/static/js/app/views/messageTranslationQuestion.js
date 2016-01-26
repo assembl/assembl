@@ -26,22 +26,30 @@ var userTranslationStates = {
     Used in both Views in this file.
  */
 var processConfirmLanguagePreferences = function(messageView){
-    var cm = new CollectionManager();    
-    cm.getAllMessageStructureCollectionPromise()
-        .then(function(messageStructures){
-            return Promise.resolve(messageStructures.fetch());
-        })
-        .then(function(messages){
-            if (!messageView.isViewDestroyed()){
-                messageView.closeTranslationView(function(){
-                    //Changing these values are useless, as messageView rendering will re-create
-                    //the message views with initalized values.
-                    messageView.unknownPreference = false;
-                    messageView.forceTranslationQuestion = false;
-                    messageView.messageListView.render();
+    var cm = new CollectionManager();
+
+    //Remove silent, remove messageListView.render()
+    if (!messageView.isViewDestroyed()){
+        messageView.closeTranslationView(function(){
+            cm.getAllMessageStructureCollectionPromise()
+                .then(function(messageStructures){
+                    return Promise.resolve(messageStructures.fetch());
+                })
+                .then(function(messages){
+                    if (!messageView.isViewDestroyed() ){
+                        //Changing these values are useless, as messageView rendering will re-create
+                        //the message views with initalized values.
+                        messageView.unknownPreference = false;
+                        messageView.forceTranslationQuestion = false;
+                        // messageView.messageListView.render();
+                    }
+                    else {
+                        console.log("View already destroyed [messageTransationQuestionView]");
+                    }
+            
                 });
-            }
         });
+    }
 };
 
 var LanguageSelectionView = Marionette.ItemView.extend({
@@ -179,9 +187,12 @@ var TranslationView = Marionette.LayoutView.extend({
                         console.error("The language " + translatedToName + " is not a part of the locale cache!");
                         translatedToName = translatedTo;
                     }
-                    if ( !(translatedFromLocaleName) ){
-                        // may not be a translation, pretend coming from itself
+                    if ( !(translatedFromLocale) ){
+                        // Get the original's locale and name
+                        var original = that.message.get("body").original();
+
                         translatedFromLocaleName = translatedToName;
+                        translatedFromLocale = translatedTo;
                     }
                     that.translatedTo = {locale: translatedTo, name: translatedToName};
                     that.translatedFrom = {locale: translatedFromLocale, name: translatedFromLocaleName};
@@ -253,7 +264,9 @@ var TranslationView = Marionette.LayoutView.extend({
      */
     onHideQuestionClick: function(e) {
         var that = this;
-        this.messageView.closeTranslationView();
+        this.messageView.closeTranslationView(function(){
+            console.log("The message is hidden by now");
+        });
     },
 
     serializeData: function(){

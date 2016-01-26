@@ -1496,17 +1496,22 @@ var MessageView = Marionette.LayoutView.extend({
       $('#slider').html(modal.render().el);
   },
 
+  /**
+   * Method that will close the translation region by using a genie effect
+   * @param  Function  cb  A parameterless callback 
+   */
   closeTranslationView: function(cb){
     var $source = this.$(this.ui.translation),
         $target = this.$(this.ui.showMoreDropDown),
         that = this;
-    Genie.geniefy($source, $target, 3000)
+
+    Genie.geniefy($source, $target, 500)
       .then(function(){
         that.getRegion("translationRegion").empty();
-        if (cb){
+        if (cb) {
           cb();
         }
-    });    
+      });
   }
 
 });

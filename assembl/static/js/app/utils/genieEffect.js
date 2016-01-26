@@ -35,23 +35,41 @@ var effect = function($source, $target, duration, delayTime){
         "-ms-transition": "all " + t + "s", //0.25s
         "-webkit-transition": "all " + t + "s", //0.25s
         "-moz-transition": "all " + t + "s", //0.25s
+        "-o-transition": "all " + t + "s", //0.25s
         "transition": "all " + t + "s", //0.25s
     }
 
-    var genieAnimation = {
-        "-ms-transform": "scale(0) perspective(370px) rotateX(45deg)",
-        "-webkit-transform": "scale(0) perspective(370px) rotateX(45deg)",
-        "-moz-transform": "scale(0) perspective(370px) rotateX(45deg)",
-        "transform": "scale(0) perspective(370px) rotateX(45deg)"
-    };
-
     var targetHeight = $target.height(),
         targetWidth = $target.width(),
+        sourceHeight = $source.height(),
+        sourceWidth = $source.width(),
         targetOffset = $target.offset(),
         sourceOffset = $source.offset(),
         diffX,
         diffY;
-    
+ 
+    var scaleY = targetHeight / sourceHeight,
+        scaleX = targetWidth / sourceWidth;
+
+    // var genieAnimation = {
+    //     "-ms-transform": "scale(" + scaleX + ", " + scaleY + ") perspective(370px) rotateX(45deg)",
+    //     "-webkit-transform": "scale(" + scaleX + ", " + scaleY + ") perspective(370px) rotateX(45deg)",
+    //     "-moz-transform": "scale(" + scaleX + ", " + scaleY + ") perspective(370px) rotateX(45deg)",
+    //     "-o-transform": "scale(" + scaleX + ", " + scaleY + ") perspective(370px) rotateX(45deg)",
+    //     "transform": "scale(" + scaleX + ", " + scaleY + ") perspective(370px) rotateX(45deg)"
+    // };
+
+    var percent = 30,
+        num = percent/100,
+        factor = num + 1;
+
+    var genieAnimation = {
+        "-ms-transform": "perspective(370px) scale(0) rotateX(45deg)",
+        "-webkit-transform": "perspective(370px) scale(0)  srotateX(45deg)",
+        "-moz-transform": "perspective(370px) scale(0)  rotateX(45deg)",
+        "-o-transform": "perspective(370px) scale(0)  rotateX(45deg)",
+        "transform": "perspective(370px) scale(0) rotateX(45deg)"
+    };    
     //Check who is on top
     if ((targetOffset.top - sourceOffset.top) < 0) {
         //Target is above
@@ -83,15 +101,15 @@ var effect = function($source, $target, duration, delayTime){
     }
 
     var origin = diffX + 'px ' + diffY + 'px'; //That space is very important in 'px '
-    
+        
     // console.log("[Genie Effect] origin is: ", origin);
 
     $source.css(genieEffect);
     $source.css({
         transformOrigin: origin
     });
-    $source.toggleClass("toggle-genie");
-    // $source.css(genieAnimation);
+    // $source.toggleClass("toggle-genie");
+    $source.css(genieAnimation);
     return Promise.delay(dt);
 };
 
@@ -111,6 +129,7 @@ var effect2 = function($source, $target, duration, delayTime){
         transformOrigin: origin
     });
     $source.toggleClass("hide-genie");
+    // $source.css(genieAnimation);
     return Promise.delay(delayTime);
 };
 
