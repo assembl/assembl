@@ -330,9 +330,35 @@ class LangString(Base):
     def first_original(self):
         return next(iter(self.non_mt_entries()))
 
+    _EMPTY_ID = None
+
     @classproperty
-    def EMPTY(cls):
-        return LangStringEntry.EMPTY.langstring
+    def EMPTY_ID(cls):
+        if cls._EMPTY_ID is None:
+            from sqlalchemy.sql.expression import func
+            id = LangStringEntry.default_db.query(LangStringEntry.id).filter(
+                func.length(LangStringEntry.value) == 0).order_by(
+                LangStringEntry.langstring_id).first()
+            if id:
+                cls._EMPTY_ID = id[0]
+            else:
+                ls = cls()
+                cls.default_db.add(ls)
+                entry = LangStringEntry(
+                    value="", locale_id=Locale.UNDEFINED_LOCALEID,
+                    langstring=ls)
+                cls.default_db.add(entry)
+                cls.default_db.flush()
+                cls._EMPTY_ID = ls.id
+        return cls._EMPTY_ID
+
+    @classmethod
+    def EMPTY(cls, db):
+        return cls.get(cls.EMPTY_ID)
+
+    @classmethod
+    def reset_cache(cls):
+        cls._EMPTY_ID = None
 
     @property
     def undefined_entry(self):
@@ -581,20 +607,6 @@ class LangStringEntry(Base, TombstonableMixin):
         return '%d: [%s] "%s"' % (
             self.id or -1, self.locale.locale, value.encode('utf-8'))
 
-    _EMPTY = None
-
-    @classproperty
-    def EMPTY(cls):
-        if cls._EMPTY is None:
-            from sqlalchemy.sql.expression import func
-            cls._EMPTY = cls.default_db.query(cls).filter(
-                func.length(cls.value) == 0).order_by(cls.id).first()
-        if cls._EMPTY is None:
-            ls = LangString()
-            cls._EMPTY = cls(value="", locale_id=Locale.UNDEFINED_LOCALEID,
-                             langstring=ls)
-        return cls._EMPTY
-
     @property
     def locale_name(self):
         return Locale.locale_collection_byid.get(self.locale_id, None)
@@ -701,7 +713,7 @@ def populate_default_locales(db):
     for loc_code in (
             Locale.UNDEFINED, Locale.MULTILINGUAL, Locale.NON_LINGUISTIC):
         Locale.get_or_create(loc_code, db=db)
-    LangStringEntry.EMPTY
+    LangString.EMPTY_ID
 
 
 def includeme(config):

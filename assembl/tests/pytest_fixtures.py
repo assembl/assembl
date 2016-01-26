@@ -139,9 +139,9 @@ def db_default_data(request, db_tables, base_registry):
         session = db_tables()
         clear_rows(get_config(), session)
         transaction.commit()
-        from assembl.models import Locale, LangStringEntry
+        from assembl.models import Locale, LangString
         Locale.reset_cache()
-        LangStringEntry._EMPTY = None
+        LangString.reset_cache()
     request.addfinalizer(fin)
     return db_tables  # session_factory
 
@@ -736,7 +736,7 @@ def creativity_session_widget_new_idea(
         proposes_idea=i, creator=participant1_user, discussion=discussion,
         message_id='proposal@example.com',
         subject=LangString.create(u"propose idea"),
-        body=LangString.EMPTY)
+        body=LangString.EMPTY(test_session))
     test_session.add(ipp)
     def fin():
         print "finalizer creativity_session_widget_new_idea"

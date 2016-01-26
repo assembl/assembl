@@ -557,7 +557,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             subject=LangString.create(inst.short_title),
                             body=(LangString.create(instance.definition)
                                   if instance.definition
-                                  else LangString.EMPTY),  # repeated
+                                  else LangString.EMPTY(instance.db)),  # repeated
                             **self.filter_kwargs(
                                 IdeaProposalPost, kwargs))
                         assocs.append(post)
@@ -610,7 +610,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             proposes_idea=inst, creator_id=user_id,
                             discussion_id=inst.discussion_id,
                             hidden=self.hide_proposed_ideas,
-                            body=LangString.EMPTY,
+                            body=LangString.EMPTY(instance.db),
                             subject=LangString.create(inst.short_title),
                             **self.filter_kwargs(
                                 IdeaProposalPost, kwargs))

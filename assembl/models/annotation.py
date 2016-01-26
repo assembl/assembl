@@ -21,7 +21,7 @@ class Webpage(Content):
     }
 
     def get_body(self):
-        return LangString.EMPTY
+        return LangString.EMPTY(self.db)
 
     def get_title(self):
         ls = LangString()
