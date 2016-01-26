@@ -62,6 +62,7 @@ var adminDiscussion = Marionette.LayoutView.extend({
         objectives = this.$('textarea[name=objectives]').val(),
         web_analytics_piwik_id_site = parseInt(this.$('#web_analytics_piwik_id_site').val()),
         help_url = this.$('#help_url').val(),
+        homepage_url = this.$("#homepage_url").val(),
         show_help_in_debate_section = this.$('#show_help_in_debate_section:checked').length == 1;
 
     this.model.set({
@@ -71,15 +72,17 @@ var adminDiscussion = Marionette.LayoutView.extend({
       objectives: objectives,
       web_analytics_piwik_id_site: web_analytics_piwik_id_site,
       help_url: help_url,
+      homepage: homepage_url,
       show_help_in_debate_section: show_help_in_debate_section
     });
 
     this.model.save(null, {
-      success: function(model, resp) {
+      success: function(model, resp, options) {
         Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext("Your settings were saved!"));
       },
-      error: function(model, resp) {
+      error: function(model, resp, options) {
         Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("Your settings failed to update."));
+        resp.handled = true; //In order to avoid Assembl crashing completely!
       }
     })
   }

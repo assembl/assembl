@@ -23,7 +23,7 @@ var discussionModel = Base.Model.extend({
     'subscribe_to_notifications_on_signup': false,
     'web_analytics_piwik_id_site': null,
     'help_url': null,
-    'homepage_url': null,
+    'homepage': null,
     'show_help_in_debate_section': true,
     posts: []
   },

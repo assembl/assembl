@@ -78,6 +78,25 @@ class Discussion(DiscussionBoundBase):
                 return source
         raise ValueError("No source of type AbstractMailbox found to serve as admin source")
 
+    @property
+    def homepage(self):
+        return self.homepage_url
+
+    @homepage.setter
+    def homepage(self, url):
+        from urlparse import urlparse
+        parsed_url = urlparse(url)
+        from pyramid.httpexceptions import HTTPBadRequest
+        if not parsed_url.scheme:
+            raise HTTPBadRequest(
+                "The homepage url does not have a scheme. Must be either http or https"
+            )
+
+        if parsed_url.scheme not in (u'http', u'https'):
+            raise HTTPBadRequest(
+                "The url has an incorrect scheme. Only http and https are accepted for homepage url"
+            )
+        self.homepage_url = url
 
     def read_post_ids(self, user_id):
         from .post import Post

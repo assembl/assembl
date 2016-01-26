@@ -77,7 +77,7 @@ def discussion_admin(request):
         g = lambda x: request.POST.get(x, None)
 
         (topic, slug, name, host, port,
-            ssl, folder, password, username) = (
+            ssl, folder, password, username, homepage) = (
             g('topic'),
             g('slug'),
             g('mbox_name'),
@@ -87,6 +87,7 @@ def discussion_admin(request):
             g('folder'),
             g('password'),
             g('username'),
+            g('homepage')
             )
 
         discussion = Discussion(
@@ -94,6 +95,8 @@ def discussion_admin(request):
             slug=slug
         )
 
+        # Could raise an exception if there is no/incorrect scheme passed
+        discussion.homepage = homepage
         session.add(discussion)
 
         create_default_permissions(session, discussion)
