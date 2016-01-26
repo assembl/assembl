@@ -83,7 +83,7 @@ def translate_content(
                     ls.db.expire(ls, ("entries",))
                     entries = ls.entries_as_dict
             known = {service.asKnownLocale(
-                        Locale.extract_source_locale(
+                        Locale.extract_base_locale(
                             Locale.locale_collection_byid[loc_id]))
                      for loc_id in entries}
             originals = ls.non_mt_entries()

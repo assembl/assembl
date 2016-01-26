@@ -66,8 +66,24 @@ class Locale(Base):
     def common_parts(locname1, locname2):
         loc1 = locname1.split("_")
         loc2 = locname2.split("_")
-        return "_".join((x for (n, x) in enumerate(loc1)
-            if len(loc2) > n and loc2[n] == x))
+        for i in range(min(len(loc1), len(loc2))):
+            if loc1[i] != loc2[i]:
+                break
+        else:
+            i += 1
+        if i:
+            return "_".join(loc1[:i])
+
+    @staticmethod
+    def len_common_parts(locname1, locname2):
+        loc1 = locname1.split("_")
+        loc2 = locname2.split("_")
+        for i in range(min(len(loc1), len(loc2))):
+            if loc1[i] != loc2[i]:
+                break
+        else:
+            i += 1
+        return i
 
     @staticmethod
     def locale_is_machine_translated(locale):
@@ -87,21 +103,21 @@ class Locale(Base):
         if len(l) == 2:
             return l[1]
 
-    @property
-    def source_locale(self):
-        return self.extract_base_locale(self.locale)
-
-    @staticmethod
-    def extract_source_locale(locale):
-        return locale.split('-x-mtfrom-', 1)[0]
-
     @staticmethod
     def extract_base_locale(locale):
-        return locale.split('-x-mtfrom-', 1)[0].split('_')[0]
+        return locale.split('-x-mtfrom-', 1)[0]
 
     @property
     def base_locale(self):
-        return self.extract_source_locale(self.locale)
+        return self.extract_base_locale(self.locale)
+
+    @staticmethod
+    def extract_root_locale(locale):
+        return locale.split('-x-mtfrom-', 1)[0].split('_')[0]
+
+    @property
+    def root_locale(self):
+        return self.extract_root_locale(self.locale)
 
     @classproperty
     def locale_collection(cls):
@@ -149,7 +165,7 @@ class Locale(Base):
             collections = cls.locale_collection
             collection_subsets = defaultdict(set)
             for locale in collections.iterkeys():
-                collection_subsets[cls.extract_base_locale(locale)].add(locale)
+                collection_subsets[cls.extract_root_locale(locale)].add(locale)
             cls._locale_collection_subsets = collection_subsets
         return cls._locale_collection_subsets
 
@@ -334,17 +350,17 @@ class LangString(Base):
             if locale_id and locale_id in available:
                 return available[locale_id]
             # is the base locale there?
-            base_locale = Locale.extract_base_locale(locale)
-            if base_locale not in locales:
-                locale_id = locale_collection.get(base_locale, None)
+            root_locale = Locale.extract_root_locale(locale)
+            if root_locale not in locales:
+                locale_id = locale_collection.get(root_locale, None)
                 if locale_id and locale_id in available:
                     return available[locale_id]
             # is another variant there?
             mt_variants = list()
-            for sublocale in locale_collection_subsets[base_locale]:
+            for sublocale in locale_collection_subsets[root_locale]:
                 if sublocale in locales:
                     continue
-                if sublocale == base_locale:
+                if sublocale == root_locale:
                     continue
                 if Locale.locale_is_machine_translated(sublocale):
                     mt_variants.append(sublocale)
@@ -374,19 +390,19 @@ class LangString(Base):
                 scores[locale_id] = current_score
                 current_score += 1
             # is the base locale there?
-            base_locale = Locale.extract_base_locale(locale)
-            if base_locale not in locales:
-                locale_id = locale_collection.get(base_locale, None)
+            root_locale = Locale.extract_root_locale(locale)
+            if root_locale not in locales:
+                locale_id = locale_collection.get(root_locale, None)
                 if locale_id:
                     scores[locale_id] = current_score
                     current_score += 1
             # is another variant there?
             mt_variants = list()
             found = False
-            for sublocale in locale_collection_subsets[base_locale]:
+            for sublocale in locale_collection_subsets[root_locale]:
                 if sublocale in locales:
                     continue
-                if sublocale == base_locale:
+                if sublocale == root_locale:
                     continue
                 if Locale.locale_is_machine_translated(sublocale):
                     mt_variants.append(sublocale)
@@ -441,15 +457,15 @@ class LangString(Base):
                         entriesByLocale[pref.locale_code] = entry
                 if candidates:
                     candidates.sort()
+                    entries = list(self.entries)
                     for pref in candidates:
                         if pref.translate_to:
                             target_locale = pref.translate_to_code
-                            entries.sort(key=lambda e: Locale.common_parts(
+                            entries.sort(key=lambda e: -Locale.len_common_parts(
                                 target_locale,
-                                Locale.extract_base_locale(entry.locale_name)),
-                                reverse=True)
+                                Locale.extract_base_locale(e.locale_name)))
                             e = entries[0]
-                            if Locale.common_parts(
+                            if Locale.len_common_parts(
                                     target_locale,
                                     Locale.extract_base_locale(e.locale_name)):
                                 return e
