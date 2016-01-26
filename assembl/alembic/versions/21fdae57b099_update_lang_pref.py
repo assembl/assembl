@@ -51,14 +51,15 @@ def upgrade(pyramid_env):
     with transaction.manager:
         lang_codes = [l for (l,) in
                       db.execute("SELECT DISTINCT lang_code from user_language_preference")]
-        locales = db.execute("SELECT id, locale from locale")
-        locale_dict = {locale:locale_id for locale_id,locale in locales}  # possible because of uniqueness constraint 
+        locales = db.execute("SELECT id, code from locale")
+        locale_dict = {locale_code: locale_id
+                       for locale_id, locale_code in locales}  # possible because of uniqueness constraint
 
         for lang in lang_codes:
             if lang not in locale_dict:
                 log.warn("[Migrating from %s -> %s] Language code %s is not in locale. Creating it now..."
                          % down_revision, revision, lang)
-                locale = m.Locale(locale=lang)
+                locale = m.Locale(code=lang)
                 db.add(locale)
                 log.warn("[Migrating from %s -> %s] Created locale %s with id %d" % lang, locale.id)
         mark_changed()
@@ -82,8 +83,8 @@ def upgrade(pyramid_env):
         op.execute("UPDATE user_language_preference_temp SET source_of_evidence = %d \
                    WHERE explicitly_defined = 1" % (LanguagePreferenceOrder.Explicit,) )
         op.execute("DELETE FROM user_language_preference")
-        locales = db.execute("SELECT id, locale from locale")
-        locale_dict = {locale: locale_id for (locale_id, locale) in locales}
+        locales = db.execute("SELECT id, code from locale")
+        locale_dict = {locale_code: locale_id for (locale_id, locale_code) in locales}
 
         for lang in lang_codes:
             op.execute("UPDATE user_language_preference_temp SET locale_id = %d WHERE lang_code = '%s'" % (
@@ -149,7 +150,7 @@ def downgrade(pyramid_env):
             SELECT id, user_id, locale_id, source_of_evidence
             FROM  user_language_preference""")
         locale_ids = db.execute(
-            """SELECT DISTINCT locale_id, locale.locale
+            """SELECT DISTINCT locale_id, locale.code
             FROM user_language_preference
             JOIN locale ON (locale.id=locale_id)""")
         for locale_id, locale_name in locale_ids:

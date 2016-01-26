@@ -78,7 +78,7 @@ class TranslationService(object):
         if langstring_entry.locale_code == Locale.UNDEFINED:
             self.confirm_locale(langstring_entry)
         source = langstring_entry.locale
-        mt_target_name = self.get_mt_name(source.locale, target.locale)
+        mt_target_name = self.get_mt_name(source.code, target.code)
         existing = langstring_entry.langstring.entries_as_dict.get(
             mt_target_name, None)
         if existing and not retranslate:
@@ -104,7 +104,7 @@ class DummyTranslationService(TranslationService):
 
     def translate(self, text, target, source=None, db=None):
         return u"Pseudo-translation from %s to %s of: %s" % (
-            source.locale, target.locale, text)
+            source.code, target.code, text)
 
     @classmethod
     def target_locale_labels(cls, target_locale):
@@ -163,14 +163,14 @@ class DummyGoogleTranslationService(TranslationService):
 
     @classmethod
     def canTranslate(cls, source, target):
-        return (cls.asKnownLocale(source.locale) and
-                cls.asKnownLocale(target.locale))
+        return (cls.asKnownLocale(source.code) and
+                cls.asKnownLocale(target.code))
 
     def translate(self, text, target, source=None, db=None):
         # Initial implementation from https://github.com/mouuff/Google-Translate-API
         link = "http://translate.google.com/m?hl=%s&sl=%s&q=%s" % (
-            self.asKnownLocale(target.locale),
-            self.asKnownLocale(source.locale) if source else "",
+            self.asKnownLocale(target.code),
+            self.asKnownLocale(source.code) if source else "",
             text.replace(" ", "+"))
         request = urllib2.Request(link, headers=self.agents)
         page = urllib2.urlopen(request).read()

@@ -26,7 +26,7 @@ class Locale(Base):
     """
     __tablename__ = "locale"
     id = Column(Integer, primary_key=True)
-    locale = Column(String(20), unique=True)
+    code = Column(String(20), unique=True)
     rtl = Column(Boolean, server_default="0", doc="right-to-left")
     _locale_collection = None
     _locale_collection_byid = None
@@ -36,12 +36,12 @@ class Locale(Base):
     MULTILINGUAL = "mul"
 
     def __repr__(self):
-        return "<Locale %s (%d)>" % (self.locale, self.id or -1)
+        return "<Locale %s (%d)>" % (self.code, self.id or -1)
 
     def sublocale_of(self, locale_code):
         if isinstance(locale_code, self.__class__):
-            locale_code = locale_code.locale
-        my_parts = self.locale.split("_")
+            locale_code = locale_code.code
+        my_parts = self.code.split("_")
         parts = locale_code.split("_")
         if len(my_parts) > len(parts):
             return False
@@ -51,14 +51,14 @@ class Locale(Base):
     def ancestry(self):
         while self:
             yield self
-            ancestor = "_".join(self.locale.split("_")[:-1])
+            ancestor = "_".join(self.code.split("_")[:-1])
             if not ancestor:
                 break
             self = self.get_or_create(ancestor)
 
     @staticmethod
-    def decompose_locale(locale):
-        parts = locale.split('_')
+    def decompose_locale(locale_code):
+        parts = locale_code.split('_')
         for l in range(len(parts), 0, -1):
             yield "_".join(parts[:l])
 
@@ -86,45 +86,45 @@ class Locale(Base):
         return i
 
     @staticmethod
-    def locale_is_machine_translated(locale):
-        return '-x-mtfrom-' in locale
+    def locale_is_machine_translated(locale_code):
+        return '-x-mtfrom-' in locale_code
 
     @hybrid_property
     def is_machine_translated(self):
-        return self.locale_is_machine_translated(self.locale)
+        return self.locale_is_machine_translated(self.code)
 
     @is_machine_translated.expression
     def is_machine_translated(cls):
-        return cls.locale.like("%-x-mtfrom-%")
+        return cls.code.like("%-x-mtfrom-%")
 
     @property
     def machine_translated_from(self):
-        l = self.locale.split('-x-mtfrom-', 1)
+        l = self.code.split('-x-mtfrom-', 1)
         if len(l) == 2:
             return l[1]
 
     @staticmethod
-    def extract_base_locale(locale):
-        return locale.split('-x-mtfrom-', 1)[0]
+    def extract_base_locale(locale_code):
+        return locale_code.split('-x-mtfrom-', 1)[0]
 
     @property
     def base_locale(self):
-        return self.extract_base_locale(self.locale)
+        return self.extract_base_locale(self.code)
 
     @staticmethod
-    def extract_root_locale(locale):
-        return locale.split('-x-mtfrom-', 1)[0].split('_')[0]
+    def extract_root_locale(locale_code):
+        return locale_code.split('-x-mtfrom-', 1)[0].split('_')[0]
 
     @property
     def root_locale(self):
-        return self.extract_root_locale(self.locale)
+        return self.extract_root_locale(self.code)
 
     @classproperty
     def locale_collection(cls):
         "A collection of all known locales, as a dictionary of strings->id"
         if cls._locale_collection is None:
             cls._locale_collection = dict(
-                cls.default_db.query(cls.locale, cls.id))
+                cls.default_db.query(cls.code, cls.id))
         return cls._locale_collection
 
     @classmethod
@@ -138,7 +138,7 @@ class Locale(Base):
             return Locale.get(locale_id)
         else:
             db = db or cls.default_db
-            l = Locale(locale=locale_code)
+            l = Locale(code=locale_code)
             db.add(l)
             db.flush()
             cls.reset_cache()
@@ -165,8 +165,8 @@ class Locale(Base):
             # This is used often enough to be worth caching
             collections = cls.locale_collection
             collection_subsets = defaultdict(set)
-            for locale in collections.iterkeys():
-                collection_subsets[cls.extract_root_locale(locale)].add(locale)
+            for locale_code in collections.iterkeys():
+                collection_subsets[cls.extract_root_locale(locale_code)].add(locale_code)
             cls._locale_collection_subsets = collection_subsets
         return cls._locale_collection_subsets
 
@@ -303,10 +303,10 @@ class LangString(Base):
             self.id or -1, "\n".join((repr(x) for x in self.entries)))
 
     @classmethod
-    def create(cls, value, locale=Locale.UNDEFINED):
+    def create(cls, value, locale_code=Locale.UNDEFINED):
         ls = cls()
         lse = LangStringEntry(
-            langstring=ls, value=value, locale_id=Locale.get_id_of(locale))
+            langstring=ls, value=value, locale_id=Locale.get_id_of(locale_code))
         return ls
 
     @property
@@ -323,7 +323,7 @@ class LangString(Base):
     @non_mt_entries.expression
     def non_mt_entries(self):
         return self.db.query(LangStringEntry).join(Locale).filter(
-            Locale.locale.notlike("%-x-mtfrom-%")).subquery()
+            Locale.code.notlike("%-x-mtfrom-%")).subquery()
 
     def first_original(self):
         return next(iter(self.non_mt_entries()))
@@ -366,8 +366,8 @@ class LangString(Base):
                 return x
 
     @hybrid_method
-    def best_lang_old(self, locales):
-        # based on a simple ordered list of locales
+    def best_lang_old(self, locale_codes):
+        # based on a simple ordered list of locale_codes
         locale_collection = Locale.locale_collection
         locale_collection_subsets = Locale.locale_collection_subsets
         available = self.entries_as_dict
@@ -376,21 +376,21 @@ class LangString(Base):
         if len(available) == 1:
             # optimize for common case
             return available[0]
-        for locale in locales:
+        for locale_code in locale_codes:
             # is the locale there?
-            locale_id = locale_collection.get(locale, None)
+            locale_id = locale_collection.get(locale_code, None)
             if locale_id and locale_id in available:
                 return available[locale_id]
             # is the base locale there?
-            root_locale = Locale.extract_root_locale(locale)
-            if root_locale not in locales:
+            root_locale = Locale.extract_root_locale(locale_code)
+            if root_locale not in locale_codes:
                 locale_id = locale_collection.get(root_locale, None)
                 if locale_id and locale_id in available:
                     return available[locale_id]
             # is another variant there?
             mt_variants = list()
             for sublocale in locale_collection_subsets[root_locale]:
-                if sublocale in locales:
+                if sublocale in locale_codes:
                     continue
                 if sublocale == root_locale:
                     continue
@@ -409,21 +409,21 @@ class LangString(Base):
         # Give up and give nothing, or give first?
 
     @best_lang_old.expression
-    def best_lang_old(self, locales):
+    def best_lang_old(self, locale_codes):
         # Construct an expression that will find the best locale according to list.
         scores = {}
         current_score = 1
         locale_collection = Locale.locale_collection
         locale_collection_subsets = Locale.locale_collection_subsets
-        for locale in locales:
+        for locale_code in locale_codes:
             # is the locale there?
-            locale_id = locale_collection.get(locale, None)
+            locale_id = locale_collection.get(locale_code, None)
             if locale_id:
                 scores[locale_id] = current_score
                 current_score += 1
             # is the base locale there?
-            root_locale = Locale.extract_root_locale(locale)
-            if root_locale not in locales:
+            root_locale = Locale.extract_root_locale(locale_code)
+            if root_locale not in locale_codes:
                 locale_id = locale_collection.get(root_locale, None)
                 if locale_id:
                     scores[locale_id] = current_score
@@ -432,7 +432,7 @@ class LangString(Base):
             mt_variants = list()
             found = False
             for sublocale in locale_collection_subsets[root_locale]:
-                if sublocale in locales:
+                if sublocale in locale_codes:
                     continue
                 if sublocale == root_locale:
                     continue
@@ -541,7 +541,7 @@ class LangString(Base):
 
     def remove_translations(self):
         for entry in self.entries:
-            if entry.locale.is_machine_translated:
+            if entry.code.is_machine_translated:
                 entry.delete()
             else:
                 entry.forget_identification()
@@ -576,7 +576,7 @@ class LangStringEntry(Base, TombstonableMixin):
             del kwargs["@language"]
             locale_id = Locale.locale_collection.get(locale_code, None)
             if locale_id is None:
-                kwargs["locale"] = Locale(locale=locale_code)
+                kwargs["locale"] = Locale(code=locale_code)
             else:
                 kwargs["locale_id"] = locale_id
                 kwargs["locale"] = Locale.get(locale_id)
@@ -605,13 +605,13 @@ class LangStringEntry(Base, TombstonableMixin):
         if len(value) > 50:
             value = value[:50]+'...'
         return '%d: [%s] "%s"' % (
-            self.id or -1, self.locale.locale, value.encode('utf-8'))
+            self.id or -1, self.locale.code, value.encode('utf-8'))
 
     @property
     def locale_code(self):
         return Locale.locale_collection_byid.get(self.locale_id, None)
         # Equivalent to the following, which may trigger a DB load
-        # return self.locale.locale
+        # return self.locale.code
 
     @locale_code.setter
     def locale_code(self, locale_code):
@@ -623,7 +623,7 @@ class LangStringEntry(Base, TombstonableMixin):
             else:
                 self.locale = Locale.get(locale_id)
         else:
-            self.locale = Locale(locale=locale_code)
+            self.locale = Locale(code=locale_code)
 
     @property
     def locale_identification_data_json(self):

@@ -29,7 +29,7 @@ def upgrade(pyramid_env):
         op.create_table(
             "locale",
             sa.Column("id", sa.Integer, primary_key=True),
-            sa.Column("locale", sa.String(20), unique=True),
+            sa.Column("code", sa.String(20), unique=True),
             sa.Column("rtl", sa.Boolean, server_default="0"))
         op.create_table(
             "locale_label",
@@ -73,7 +73,7 @@ def upgrade(pyramid_env):
         for l in locales:
             parts = l.split("_")
             rtl = parts[0] in rtl_locales or "_".join(parts[:2]) in rtl_locales
-            db.add(m.Locale(locale=l, rtl=rtl))
+            db.add(m.Locale(code=l, rtl=rtl))
     with transaction.manager:
         c = m.Locale.locale_collection
         for (l, t, n) in names:

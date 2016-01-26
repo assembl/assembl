@@ -21,8 +21,8 @@ def user_pref_as_translation_table(user, service):
     table = defaultdict(set)
     for pref in user.language_preference:
         if pref.translate_to:
-            table[service.asKnownLocale(pref.locale.locale)].add(
-                service.asKnownLocale(pref.translate_to_locale.locale))
+            table[service.asKnownLocale(pref.locale.code)].add(
+                service.asKnownLocale(pref.translate_to_locale.code))
     return table
 
 

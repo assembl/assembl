@@ -39,7 +39,7 @@ def upgrade(pyramid_env):
         discussion_locales = {
             id: (locs or 'und').split(' ')[0]
             for (id, locs) in discussion_locales}
-        locales = dict(list(db.execute("select locale, id from locale")))
+        locales = dict(list(db.execute("select code, id from locale")))
         locale_id_for_discussion = {
             id: locales[loc] for (id, loc) in discussion_locales.iteritems()}
         for target in ("subject", "body"):
