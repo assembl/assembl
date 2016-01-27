@@ -174,6 +174,7 @@ appCards.controller('cardsCtl',
 
           var message = {
             "@type": "WidgetPost",
+            "message_id": 0,
             "subject": {
                 "@type": "LangString", "entries": [{
                     "@type": "LangStringEntry", "value": messageSubject,

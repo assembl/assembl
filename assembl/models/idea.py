@@ -102,6 +102,7 @@ class WordCountVisitor(IdeaVisitor):
                     related, related.c.post_id == Content.id):
                 body = content.body.first_original().value
                 self.counter.add_text(self.cleantext(body), 0.5)
+                title = content.subject.first_original().value
                 title = self.cleantext(title)
                 if title not in titles:
                     self.counter.add_text(title)
