@@ -1,14 +1,17 @@
 <div class='js_translation-question'>
-    <div class="content"><%= translationQuestion %></div>
+    <div class="content-question"><%= translationQuestion %></div>
     <div>
-        <span class="translation-decision">
-            <span class='js_language-of-choice-confirm'><a class="action" href="#">{{ gettext("Yes") }}</a></span>
-            <span class='js_language-of-choice-deny'><a class="action" href="#">{{ gettext("Do not translate") }}</a></span>
+        <div class="translation-decision">
+            {# <div class='js_language-of-choice-confirm'><a class="action" href="#"><%= yes %></a></div> #}
+            <span class='js_language-of-choice-confirm'><a class="action" href="#">{{ gettext("Yes, Thanks!") }}</a></span>
+            {# <div class='js_language-of-choice-deny'><a class="action" href="#"><%= no %></a></div> #}
+            <span class='js_language-of-choice-deny'><a class="action" href="#">{{ gettext("Do not translate") }}</a>,</span>
+            {# <div class="js_language-of-choice-more"><a class="action" href="#"><%= toAnother %></a></div>#}
             <span class="js_language-of-choice-more"><a class="action" href="#">{{ gettext("Translate to another language") }}</a></span>
             <% if (forceTranslationQuestion) { %>
             <span class='js_hide-translation-question'><a class="action" href="#">{{ gettext("Cancel") }}</a></span>
             <% } %>
-        </span>
+        </div>
     </div>
     <div class="js_translation-reveal-more"></div>
 </div>

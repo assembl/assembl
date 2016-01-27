@@ -273,6 +273,9 @@ var TranslationView = Marionette.LayoutView.extend({
         if (this.template !== "#tmpl-loader") {
             return {
                 translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to %s?"), this.translatedFrom.name, this.translatedTo.name),
+                yes: i18n.sprintf("Yes, translate all messages to %s", this.translatedTo.name),
+                no: i18n.sprintf("No, do not translate all messages to %s", this.translatedTo.name),
+                toAnother: i18n.sprintf("Translate all %s messages to another language", this.translatedFrom.name),
                 translatedFromLocale: this.translatedFrom,
                 translatedTo: this.translatedTo,
                 forceTranslationQuestion: this.messageView.forceTranslationQuestion

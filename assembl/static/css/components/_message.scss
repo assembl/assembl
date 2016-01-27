@@ -608,24 +608,16 @@ $previewNumLines: 4;
     color: $txtGray1;
   }
 
+  .content-question {
+    color: $txtGray2;
+  }
+
   .action:link, .action:visited {
-    color: $gray2;
+    color: $purple1;
   }
 
   .action:hover {
-    color: $gray;
-  }
-
-  // a:link, a:visited {
-  //   color: $gray2;
-  // }
-
-  // a:hover {
-  //   color: $gray;
-  // }
-  
-  .translation-message-confirm {
-    color: $green;
+    color: $purple1;
   }
 }
 

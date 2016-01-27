@@ -99,7 +99,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.messageListView = options.messageListView;
     this.messageFamilyView = options.messageFamilyView;
     this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
-    this.showAnnotations = Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT); // TODO: this could be set from a user account preference, or from a toggle in the Messages panel
+    this.showAnnotations = this.canShowAnnotations();
 
     if(!this.isViewDestroyed()) {
       //Yes, it IS possible the view is already destroyed in initialize, so we check
@@ -126,6 +126,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.useOriginalContent = false;
     this.forceTranslationQuestion = false;
     this.unknownPreference = false;
+    this.hasTranslatorService = false;
 
     Promise.join(
         this.model.getCreatorPromise(),
@@ -1512,6 +1513,40 @@ var MessageView = Marionette.LayoutView.extend({
           cb();
         }
       });
+  },
+
+  /*
+    A single place to calculate the logic of toggling annotation permission
+    @return boolean
+   */
+  canShowAnnotations: function(){
+    return Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT); // TODO: this could be set from a user account preference, or from a toggle in the Messages panel
+  },
+
+  /*
+    Utility method to initialize the state of translation for proper view rendering for translations
+    @param Object  preference   The UserLanguagePreference Collection 
+   */
+  initiateTranslationState: function(preferences){
+    var translationData = preferences.getTranslationData(),
+        body = this.model.get("body"),
+        preference = preferences.getPreferenceForLocale(body.original().getBaseLocale());
+    this.translationData = translationData;
+    this.unknownPreference = preference === undefined;
+    this.creator = creator;
+    this.hasTranslatorService = discussion.hasTranslationService();
+    if ( this.hasTranslatorService ) {
+      this.showAnnotations = false;
+    }
+  },
+
+  /*
+    Utility method to reset the state variables required by the translation view logic
+   */
+  resetTranslationState: function(){
+    this.unknownPreference = false;
+    this.forceTranslationQuestion = false;
+    this.showAnnotations = this.canShowAnnotations();
   }
 
 });

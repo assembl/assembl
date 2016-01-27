@@ -103,7 +103,8 @@
 {% macro showTranslation() -%}
   {% if discussion.translation_service_class %}
     <div class="message-translation">
-      <div class='mtm js_translation_show_original'>
+      <div class="mtm js_regionMessageTranslationQuestions"></div>
+      <div class='mts js_translation_show_original'>
         <% if (body.isMachineTranslation()) { %>
           <span class='js_trans_show_origin'><a class="content">{{gettext("View the original message")}}</a></span>
           <span class="prxs"><a class="content" href="http://translate.google.com">({{gettext("Translated by Google Translate")}})</a></span>
@@ -111,7 +112,6 @@
           <span class='js_trans_show_translated'><a class="content">{{gettext("View to translated message")}}</a></span>
         <% } %>
       </div>
-      <div class="mts js_regionMessageTranslationQuestions"></div>
     </div>
   {% endif %}
 {%- endmacro %}
@@ -157,9 +157,9 @@
   #}
   <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
-    <div class="message-body ellipsis <%= bodyFormatClass %> js_readMore" id="<%= messageBodyId %>">
+    {{ showTranslation() }}
+    <div class="mtm message-body ellipsis <%= bodyFormatClass %> js_readMore" id="<%= messageBodyId %>">
       <p class="" lang="<%= body.get('@language') %>"><%= body.value() %></p>{# Do NOT introduce whitespace within this div #}
-      {{ showTranslation() }}
       <div class="messageAttachments js_regionMessageAttachments hidden"></div>
       <div class="js_regionMessageModerationOptions hidden"></div>
       <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}"><i class="icon-arrowdown"></i> {{ gettext('Read more') }}</a>
@@ -167,8 +167,8 @@
   <% } else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
-    <div class="message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.get('@language') %>"><%= body.value() %></div>
     {{ showTranslation() }}
+    <div class="mtm message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.get('@language') %>"><%= body.value() %></div>
     <div class="messageAttachments js_regionMessageAttachments"></div>
     <div class="js_regionMessageModerationOptions"></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
