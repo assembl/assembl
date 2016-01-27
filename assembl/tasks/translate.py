@@ -18,11 +18,14 @@ def lang_list_as_translation_table(service, language_list):
 
 
 def user_pref_as_translation_table(user, service):
+    from assembl.models import Locale
     table = defaultdict(set)
     for pref in user.language_preference:
         if pref.translate_to:
-            table[service.asKnownLocale(pref.locale.code)].add(
-                service.asKnownLocale(pref.translate_to_locale.code))
+            table[service.asKnownLocale(
+                Locale.locale_collection_byid[pref.locale_id])].add(
+                service.asKnownLocale(
+                    Locale.locale_collection_byid[pref.translate_to]))
     return table
 
 

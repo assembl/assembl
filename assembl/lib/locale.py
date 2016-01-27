@@ -90,11 +90,11 @@ def ensure_locale_has_country(locale):
 
 
 def get_preferred_languages(session, user_id):
-    from ..models import UserLanguagePreference
+    from ..models import UserLanguagePreference, Locale
     prefs = (session.query(UserLanguagePreference)
              .filter_by(user_id=user_id)
              .order_by(UserLanguagePreference.preferred_order))
-    return [p.locale.code for p in prefs]
+    return [Locale.locale_collection_byid[p.locale_id] for p in prefs]
 
 
 def locale_negotiator(request):
