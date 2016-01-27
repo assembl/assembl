@@ -413,7 +413,8 @@ class WidgetPost(AssemblPost):
         "widget.id",
         ondelete='SET NULL',
         onupdate='CASCADE'
-    ), nullable=True)
+        ), nullable=True,
+        info={"pseudo_nullable": False})
 
     widget = relationship("Widget", backref="posts")
 

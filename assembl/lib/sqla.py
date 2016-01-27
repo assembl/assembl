@@ -1197,19 +1197,24 @@ class BaseOps(object):
             if all((col in treated_foreign_keys
                     for col in reln.local_columns)):
                 continue
+            # Only non-nullable relationships. Otherwise I get conflicts
+            if all((col.nullable and col.info.get("pseudo_nullable", True)
+                    for col in reln.local_columns)):
+                continue
             if reln.direction != MANYTOONE:
                 # only direct relations
                 continue
             if getattr(self, reln.key, None) is None:
+                from assembl.models.auth import AgentProfile, User
                 target_class = reln.mapper.class_
                 # Hack: if it's a user relationship, assume owner.
                 # TODO: Make ownership reln explicit, we had an issue
                 # with moderator.
                 # TODO: Subclasses of user.
-                if target_class.__name__ == 'User' and user_id != Everyone:
-                    from assembl.models.auth import User
+                if user_id != Everyone and issubclass(
+                        target_class, AgentProfile):
                     if any([
-                            issubclass(User, r.mapper.class_)
+                            issubclass(AgentProfile, r.mapper.class_)
                             for r in treated_relns]):
                             # User is already treated
                         continue
