@@ -194,6 +194,7 @@
         "like_count": true,
         "subject": "&get_title",
         "body": "&get_body",
+        "indirect_idea_content_links": ["&indirect_idea_content_links:"],
         "widget_ideas": "&widget_ideas"
     },
     "Post": {
