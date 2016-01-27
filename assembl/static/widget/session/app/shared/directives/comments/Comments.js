@@ -71,6 +71,15 @@ SessionApp.directive('comments', [
             });
           }
 
+          $scope.findUntranslated = function(langstring) {
+            for (var i in langstring.entries) {
+                var entry = langstring.entries[i];
+                if (entry["@language"].indexOf("-x-mtfrom-") < 0) {
+                    return entry.value;
+                }
+            }
+          };
+
           /**
            * get all comments from a sub idea
            */
@@ -127,7 +136,10 @@ SessionApp.directive('comments', [
             var data = {
               "@type": 'Post',
               "subject": '',
-              "body": $scope.formData.comment,
+              "body": {
+                "@type": "LangString", "entries": [{
+                    "@type": "LangStringEntry", "value": $scope.formData.comment,
+                    "@language": "und"}]},
               "idCreator": user_id
             }
 
@@ -137,8 +149,6 @@ SessionApp.directive('comments', [
                 method:'POST',
                 url: rootUrl,
                 data: JSON.stringify(data),
-
-                //headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 headers: {'Content-Type': 'application/json'}
               }).success(function() {
 

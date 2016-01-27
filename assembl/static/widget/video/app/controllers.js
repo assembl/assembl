@@ -508,10 +508,15 @@ videosApp.controller('videosCtl',
                   definition: messageContent
               };*/
               var message = {
-                "type": "WidgetPost",
-                "message_id": 0,
-                "subject": messageSubject,
-                "body": messageContent,
+                "@type": "WidgetPost",
+                "subject": {
+                    "@type": "LangString", "entries": [{
+                        "@type": "LangStringEntry", "value": messageSubject,
+                        "@language": "und"}]},
+                "body": {
+                    "@type": "LangString", "entries": [{
+                        "@type": "LangStringEntry", "value": messageContent,
+                        "@language": "und"}]},
                 "metadata_raw": '{"inspiration_url": "' + videoUrl + '"}'
               };
                 
@@ -530,8 +535,8 @@ videosApp.controller('videosCtl',
               $http({
                 method: 'POST',
                 url: url,
-                data: $.param(message),
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                data: JSON.stringify(message),
+                headers: {'Content-Type': 'application/json'}
               }).success(function(data, status, headers, config) {
                 console.log("Success: ", data, status, headers, config);
                 /* commented out because we don't post an idea anymore, now we post a message
