@@ -86,7 +86,7 @@ class TranslationService(object):
         if not self.canTranslate(source, target):
             return existing
         trans = self.translate(
-            langstring_entry.value, target, source, langstring_entry.db)
+            langstring_entry.value, target.code, source.code, langstring_entry.db)
         lse = LangStringEntry(
             value=trans,
             locale=Locale.get_or_create(mt_target_name, langstring_entry.db),
