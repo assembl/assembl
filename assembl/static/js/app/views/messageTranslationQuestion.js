@@ -169,6 +169,9 @@ var TranslationView = Marionette.LayoutView.extend({
         this.message = options.messageModel;
         this.messageView = options.messageView;
 
+        //Toggle flag for more languages view (nice to have)
+        this.moreLanguagesViewShown = false;
+
         var cm = new CollectionManager(),
             that = this;
 
@@ -241,10 +244,16 @@ var TranslationView = Marionette.LayoutView.extend({
     },
 
     onLanguageRevealClick: function(ev){
-        this.getRegion('selectLanguage').show(new LanguageSelectionView({
-            messageModel: this.message,
-            questionView: this
-        }));
+        if (!this.moreLanguagesViewShown) {
+            this.getRegion('selectLanguage').show(new LanguageSelectionView({
+                messageModel: this.message,
+                questionView: this
+            }));
+            this.moreLanguagesViewShown = true;
+        }
+        else {
+            this.onLanguageSelectedCancelClick();
+        }
     },
 
     /*
@@ -254,6 +263,7 @@ var TranslationView = Marionette.LayoutView.extend({
      */
     onLanguageSelectedCancelClick: function(){
         this.getRegion('selectLanguage').empty();
+        this.moreLanguagesViewShown = false;
     },
 
     /*

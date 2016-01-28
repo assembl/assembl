@@ -103,8 +103,8 @@
 {% macro showTranslation() -%}
   {% if discussion.translation_service_class %}
     <div class="message-translation">
-      <div class="mtm js_regionMessageTranslationQuestions"></div>
-      <div class='mts js_translation_show_original'>
+      <div class="mts js_regionMessageTranslationQuestions"></div>
+      <div class='mtm js_translation_show_original'>
         <% if (body.isMachineTranslation()) { %>
           <span class='js_trans_show_origin'><a class="content">{{gettext("View the original message")}}</a></span>
           <span class="prxs"><a class="content" href="http://translate.google.com">({{gettext("Translated by Google Translate")}})</a></span>

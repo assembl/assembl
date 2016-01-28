@@ -619,12 +619,18 @@ $previewNumLines: 4;
   .action:hover {
     color: $purple1;
   }
+
+  .action-seperated {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
   
   .dot-seperator {
+    vertical-align: 1px; //Fudge number, for alignment
     font-size: 8px;
     color: $txtGray1;
-    margin-left: 3px;
-    margin-right: 3px; 
+    padding-left: 6px;
+    padding-right: 6px; 
   }
 }
 
