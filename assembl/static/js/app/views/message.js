@@ -134,13 +134,8 @@ var MessageView = Marionette.LayoutView.extend({
         this.model.collection.collectionManager.getDiscussionModelPromise(),
         function(creator, ulp, discussion) {
           if(!that.isViewDestroyed()) {
-            var translationData = ulp.getTranslationData(),
-                body = that.model.get("body"),
-                preference = ulp.getPreferenceForLocale(body.original().getBaseLocale());
-            that.translationData = translationData;
-            that.unknownPreference = preference === undefined;
             that.creator = creator;
-            that.hasTranslatorService = discussion.hasTranslationService();
+            that.initiateTranslationState(ulp, discussion);
             that.template = '#tmpl-message';
             that.render();
           }
@@ -1527,13 +1522,12 @@ var MessageView = Marionette.LayoutView.extend({
     Utility method to initialize the state of translation for proper view rendering for translations
     @param Object  preference   The UserLanguagePreference Collection 
    */
-  initiateTranslationState: function(preferences){
+  initiateTranslationState: function(preferences, discussion){
     var translationData = preferences.getTranslationData(),
         body = this.model.get("body"),
         preference = preferences.getPreferenceForLocale(body.original().getBaseLocale());
     this.translationData = translationData;
     this.unknownPreference = preference === undefined;
-    this.creator = creator;
     this.hasTranslatorService = discussion.hasTranslationService();
     if ( this.hasTranslatorService ) {
       this.showAnnotations = false;
@@ -1546,6 +1540,7 @@ var MessageView = Marionette.LayoutView.extend({
   resetTranslationState: function(){
     this.unknownPreference = false;
     this.forceTranslationQuestion = false;
+    this.useOriginalContent = false;
     this.showAnnotations = this.canShowAnnotations();
   }
 

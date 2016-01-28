@@ -39,8 +39,7 @@ var processConfirmLanguagePreferences = function(messageView){
                     if (!messageView.isViewDestroyed() ){
                         //Changing these values are useless, as messageView rendering will re-create
                         //the message views with initalized values.
-                        messageView.unknownPreference = false;
-                        messageView.forceTranslationQuestion = false;
+                        messageView.resetTranslationState();
                         // messageView.messageListView.render();
                     }
                     else {

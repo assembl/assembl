@@ -619,7 +619,15 @@ $previewNumLines: 4;
   .action:hover {
     color: $purple1;
   }
+  
+  .dot-seperator {
+    font-size: 8px;
+    color: $txtGray1;
+    margin-left: 3px;
+    margin-right: 3px; 
+  }
 }
+
 
 // This is so annotator doesn't display a form for user's who aren't allowed
 body.js_annotatorUserCannotAddExtract > .textbubble {
