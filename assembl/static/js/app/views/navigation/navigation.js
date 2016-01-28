@@ -128,7 +128,9 @@ var NavigationView = AssemblPanel.extend({
     // Redirect to the discusison's homepage URL.
     // The 'home' itemName will only be triggered if there is a discussion homepage URL.
     if (itemName === 'home') {
-      window.location.href = this.discussion.get('homepage');
+      //This doesn't seem to work on Mac OS X; perhaps due to the call being deeply nested
+      // window.location.href = this.discussion.get('homepage');
+      window.location.replace(this.discussion.get('homepage'));
     }
     else {
       this._toggleMenuByName(itemName);
