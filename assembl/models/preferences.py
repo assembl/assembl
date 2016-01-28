@@ -11,12 +11,15 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from virtuoso.alchemy import CoerceUnicode
+from pyramid.httpexceptions import HTTPUnauthorized
 
 from . import Base, DeclarativeAbstractMeta
-from ..auth import P_READ, Everyone
+from ..auth import P_READ, Everyone, P_ADMIN_DISC, P_SYSADMIN
+from ..lib.abc import classproperty
+from ..lib.locale import _
 
 
-class Preferences(Base, MutableMapping):
+class Preferences(MutableMapping, Base):
     """
     Cascading preferences
     """
@@ -59,13 +62,11 @@ class Preferences(Base, MutableMapping):
         return values
 
     def _get_local(self, key):
-        if key not in self.property_defaults:
-            raise RuntimeError("Unknown property: " + key)
+        if key not in self.preference_data:
+            raise RuntimeError("Unknown preference: " + key)
         values = self.local_values_json
         if key in values:
             value = values[key]
-            if key in self.property_output_fn:
-                value = self.property_output_fn[key](value)
             return True, value
         return False, None
 
@@ -85,17 +86,19 @@ class Preferences(Base, MutableMapping):
             return value
         elif self.cascade_id:
             return self.cascade_preferences[key]
-        return self.property_defaults.get(key, None)
+        if key == "preference_data":
+            return self.preference_data
+        return self.preference_data.get(key, {}).get("default", None)
 
     def __len__(self):
-        return len(self.property_defaults) + 2
+        return len(self.preference_data) + 2
 
     def __iter__(self):
-        return chain(self.property_defaults.iterkeys(), (
+        return chain(self.preference_data.iterkeys(), (
             'name', '@extends'))
 
     def __contains__(self, key):
-        return key in self.property_defaults
+        return key in self.preference_data
 
     def __delitem__(self, key):
         values = self.local_values_json
@@ -117,15 +120,88 @@ class Preferences(Base, MutableMapping):
                 raise KeyError("Does not exist:" + value)
             self.cascade_preferences = new_pref
             return old_value
-        if key not in self.property_defaults:
-            raise KeyError("Unknown property: " + key)
+        if key not in self.preference_data:
+            raise KeyError("Unknown preference: " + key)
         values = self.local_values_json
         old_value = values.get(key, None)
-        if key in self.property_output_fn:
-            value = self.property_output_fn[key](value)
+        self.validate(key, value)
         values[key] = value
         self.local_values_json = values
         return old_value
+
+    def can_edit(self, key, permissions=(P_READ,), pref_data=None):
+        if key in ('name', '@extends', 'preference_data'):
+            if P_SYSADMIN not in permissions:
+                return False
+        if key not in self.preference_data:
+            raise KeyError("Unknown preference: " + key)
+        if pref_data is None:
+            pref_data = self['preference_data'].get(key, {})
+        pref_data = self['preference_data'].get(key, {})
+        req_permission = pref_data.get(
+            'modification_permission', P_ADMIN_DISC)
+        if req_permission not in permissions:
+            return False
+        return True
+
+    def safe_del(self, key, permissions=(P_READ,)):
+        if not self.can_edit(key, permissions):
+            raise HTTPUnauthorized("Cannot delete "+key)
+        del self[key]
+
+    def safe_set(self, key, value, permissions=(P_READ,)):
+        if not self.can_edit(key, permissions):
+            raise HTTPUnauthorized("Cannot edit "+key)
+        self[key] = value
+
+    def validate(self, key, value, pref_data=None):
+        if pref_data is None:
+            pref_data = self['preference_data'].get(key, {})
+        validator = pref_data.get('backend_validator_function', None)
+        if validator:
+            # This has many points of failure, but all failures are meaningful.
+            module, function = validator.rsplit(".", 1)
+            from importlib import import_module
+            mod = import_module(module)
+            if not getattr(mod, function)(value):
+                raise ValueError("%s refused %s" (validator, value))
+        data_type = pref_data.get("value_type", "json")
+        if data_type.startswith("list_of_"):
+            assert isinstance(value, (list, tuple)), "Not a list"
+            for val in value:
+                self.validate_single_value(key, val, pref_data, data_type[8:])
+        else:
+            self.validate_single_value(key, value, pref_data, data_type)
+
+    def validate_single_value(self, key, value, pref_data, data_type):
+        # TODO: Validation for the datatypes.
+        # Types: (bool|json|int|(list_of_)?(string|scalar|url|email|domain))
+        if data_type == "bool":
+            assert isinstance(value, bool), "Not a boolean"
+        elif data_type == "int":
+            assert isinstance(value, int), "Not an integer"
+        elif data_type == "json":
+            pass  # no check
+        else:
+            assert isinstance(value, (str, unicode)), "Not a string"
+            if data_type == "string":
+                pass
+            elif data_type == "scalar":
+                assert value in pref_data.get("scalar_values", ()), (
+                    "value not allowed: " + value)
+            elif data_type == "url":
+                from urlparse import parse
+                assert parse(value).scheme in (
+                    'http', 'https'), "Not a HTTP URL"
+            elif data_type == "email":
+                from pyisemail import is_email
+                assert is_email(value), "Not an email"
+            elif data_type == "domain":
+                from pyisemail.validators.dns_validator import DNSValidator
+                v = DNSValidator()
+                assert v.is_valid(value), "Not a valid domain"
+            else:
+                raise RuntimeError("Invalid data_type: " + data_type)
 
     def generic_json(
             self, view_def_name='default', user_id=Everyone,
@@ -152,44 +228,178 @@ class Preferences(Base, MutableMapping):
     def __hash__(self):
         return Base.__hash__(self)
 
+    @classproperty
+    def property_defaults(cls):
+        return {k: v.get("default", None)
+                for (k, v) in cls.preference_data.iteritems()}
+
     # This defines the allowed property names and their default values
-    property_defaults = {
-        # The node types and node type rules (json)
-        "node_type_rules": {},
+    preference_data = {
         # List of visualizations
-        "visualizations": {},
+        "visualizations": {
+            "value_type": "json",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "A JSON description of available Catalyst visualizations"),
+            "allow_user_override": False,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": {}
+        },
         # Extra navigation sections (refers to visualizations)
-        "navigation_sections": {},
+        "navigation_sections": {
+            "value_type": "json",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "A JSON specification of Catalyst visualizations to show "
+                "in the navigation section"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": {}
+        },
         # Translations for the navigation sections
-        "translations": {},
+        "translations": {
+            "value_type": "json",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Translations applicable to Catalyst visualizations, "
+                "in Jed (JSON) format"),
+            "allow_user_override": P_READ,
+            # "view_permission": P_READ,  # by default
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": {}
+        },
         # Simple view panel order, eg NIM or NMI
-        "simple_view_panel_order": "NMI",
+        "simple_view_panel_order": {
+            "value_type": "scalar",
+            "scalar_values": {
+                "NMI": _("Navigation, Idea, Messages"),
+                "NIM": _("Navigation, Messages, Idea")},
+            "description": _("Order of panels"),
+            "allow_user_override": P_READ,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": "NMI"
+        },
         # Registration requires being a member of this email domain.
-        "require_email_domain": [],
+        "require_email_domain": {
+            "value_type": "string",  # "list_of_email" eventually
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "List of domain names of user email address required for "
+                "self-registration"),
+            "help_text": _(
+                "Only accounts with at least an email from those "
+                "domains can self-register to this discussion. Anyone can "
+                "self-register if this is empty. Please use a comma to "
+                "separate domain names. Example: mycompany.com,test.com"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": ""
+        },
         # Allow social sharing
-        "social_sharing": True,
-        # Are moderated posts simply hidden or made inaccessible by default? (bool)
-        "default_allow_access_to_moderated_text": True,
+        "social_sharing": {
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "List of domain names of user email address required for "
+                "self-registration"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": True
+        },
+        # Are moderated posts simply hidden or made inaccessible by default?
+        "default_allow_access_to_moderated_text": {
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Are moderated posts simply hidden or made inaccessible "
+                "by default?"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": True
+        },
         # Default moderation text template
-        "moderation_template": None,
+        # TODO: preference to allow moderation a priori.
+        "moderation_template": {
+            "value_type": "string",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Text template for default moderation text"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": ""
+        },
         # full class name of translation service to use, if any
         # e.g. assembl.nlp.translate.GoogleTranslationService
-        "translation_service": None,
-        # TODO: preference to allow moderation a priori.
-        # Properties which a user cannot override
-        # TODO: Invert that list.
-        "forbid_user_edit": [
-            "require_email_domain", "social_sharing", "require_email_domain"],
+        "translation_service": {
+            "value_type": "scalar",
+            "scalar_values": {
+                "": _("No translation"),
+                "assembl.nlp.translation_service.DummyTranslationService":
+                    _("Dummy tranlation service (for testing)"),
+                "assembl.nlp.translation_service.GoogleTranslationService":
+                    _("Google Translate")},
+            "description": _(
+                "Translation service"),
+            "allow_user_override": None,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": ""
+        },
         # Show the CI Dashboard in the panel group window
-        "show_ci_dashboard": False,
+        "show_ci_dashboard": {
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Show the CI Dashboard in the panel group window"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": False
+        },
         # Configuration of the visualizations shown in the CI Dashboard
-        "ci_dashboard_url": "//cidashboard.net/ui/visualisations/index.php?width=1000&height=1000&vis=11,23,p22,13,p7,7,12,p2,p15,p9,p8,p1,p10,p14,5,6,16,p16,p17,18,p20,p4&lang=<%= lang %>&title=&url=<%= url %>&userurl=<%= user_url %>&langurl=&timeout=60",
-    }
-
-    # filter some incoming values through a conversion/validation function
-    property_input_fn = {
-    }
-
-    # filter some outgoing values through a conversion/validation function
-    property_output_fn = {
+        "ci_dashboard_url": {
+            "value_type": "url",
+            "description": _(
+                "Configuration of the visualizations shown in the "
+                "CI Dashboard"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default":
+                "//cidashboard.net/ui/visualisations/index.php?"
+                "width=1000&height=1000&vis=11,23,p22,13,p7,7,12,p2,p15,p9,"
+                "p8,p1,p10,p14,5,6,16,p16,p17,18,p20,p4&lang=<%= lang %>"
+                "&title=&url=<%= url %>&userurl=<%= user_url %>"
+                "&langurl=&timeout=60"
+        },
+        "preference_data": {
+            "value_type": "json",
+            "show_in_preferences": False,
+            "description": _(
+                "The preference configuration; override only with care"),
+            "allow_user_override": None,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": None  # this should be recursive...
+        }
     }

@@ -18,13 +18,16 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import (relationship)
 from sqlalchemy.ext.declarative import declared_attr
+from pyramid.httpexceptions import HTTPUnauthorized
 
 from ..lib.abc import abstractclassmethod
 from . import DiscussionBoundBase
 from assembl.lib import config
 from auth import User
+from ..auth.util import user_has_permission
 from discussion import Discussion
 from .preferences import Preferences
+
 
 class AbstractNamespacedKeyValue(object):
     # No table name, these are simply common columns
@@ -230,7 +233,8 @@ class NamespacedUserKVCollection(MutableMapping):
 
 class UserPreferenceCollection(NamespacedUserKVCollection):
     PREFERENCE_NAMESPACE = "preferences"
-    FORBID_USER_EDIT = "forbid_user_edit"
+    PREFERENCE_DATA = "preference_data"
+    ALLOW_OVERRIDE = "allow_user_override"
 
     def __init__(self, user_id, discussion=None):
         if discussion is None:
@@ -244,11 +248,26 @@ class UserPreferenceCollection(NamespacedUserKVCollection):
         return len(self.dprefs.property_defaults)
 
     def __setitem__(self, key, value):
-        if key not in self.dprefs.property_defaults:
+        if key not in Preferences.preference_data:
             raise KeyError("Unknown property")
-        if key in self.dprefs[self.FORBID_USER_EDIT]:
-            raise KeyError("Cannot edit")
+        pref_data = self.dprefs.get(
+            self.PREFERENCE_DATA, Preferences.preference_data)
+        req_permission = pref_data.get(key, {}).get(
+            self.ALLOW_OVERRIDE, False)
+        if (not req_permission) or not user_has_permission(
+                self.target.id if self.target else None,
+                self.user_id, req_permission):
+            raise HTTPUnauthorized("Cannot edit")
+        self.dprefs.validate(key, value)
         super(UserPreferenceCollection, self).__setitem__(key, value)
+
+    def safe_del(self, key, permissions=None):
+        # always safe to go back to default
+        del self[key]
+
+    def safe_set(self, key, value, permissions=None):
+        # safety built into __setitem__
+        self[key] = value
 
     def __iter__(self):
         return self.dprefs.property_defaults.__iter__()

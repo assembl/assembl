@@ -3,6 +3,7 @@ from simplejson import dumps, loads
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPCreated, HTTPNotFound, HTTPBadRequest)
+from pyramid.security import authenticated_userid
 
 from assembl.auth import (
     P_READ, IF_OWNED, Everyone, CrudPermissions)
@@ -29,11 +30,21 @@ def patch_dict(request):
     preferences = request.context.preferences
     if not isinstance(request.json, dict):
         raise HTTPBadRequest()
-    for k, v in request.json.iteritems():
-        if v is None:
-            del preferences[k]
-        else:
-            preferences[k] = v
+    ctx = request.context
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+
+    try:
+        for k, v in request.json.iteritems():
+            if v is None:
+                preferences.safe_del(k, permissions)
+            else:
+                preferences.safe_set(k, v, permissions)
+    except KeyError:
+        raise HTTPNotFound()
+    except (AssertionError, ValueError) as e:
+        raise HTTPBadRequest(e)
     return dict(preferences)
 
 
@@ -44,7 +55,7 @@ def get_value(request):
     preferences = ctx.collection
     try:
         return preferences[ctx.key]
-    except IndexError:
+    except KeyError:
         raise HTTPNotFound()
 
 
@@ -54,7 +65,15 @@ def put_value(request):
     ctx = request.context
     value = request.json
     preferences = ctx.collection
-    preferences[ctx.key] = value
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    try:
+        preferences.safe_set(ctx.key, value, permissions)
+    except KeyError:
+        raise HTTPNotFound()
+    except (AssertionError, ValueError) as e:
+        raise HTTPBadRequest(e)
     return HTTPCreated()
 
 
@@ -63,5 +82,13 @@ def put_value(request):
 def del_value(request):
     ctx = request.context
     preferences = ctx.collection
-    del preferences[ctx.key]
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    try:
+        preferences.safe_del(ctx.key, permissions)
+    except KeyError:
+        raise HTTPNotFound()
+    except (AssertionError, ValueError) as e:
+        raise HTTPBadRequest(e)
     return {}

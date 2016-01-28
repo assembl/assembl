@@ -37,11 +37,16 @@ def patch_dict(request):
     user_ns_b_kvdict = request.context.collection
     if not isinstance(request.json, dict):
         raise HTTPBadRequest()
-    for k, v in request.json.iteritems():
-        if v is None:
-            del user_ns_b_kvdict[k]
-        else:
-            user_ns_b_kvdict[k] = v
+    try:
+        for k, v in request.json.iteritems():
+            if v is None:
+                del user_ns_b_kvdict[k]
+            else:
+                user_ns_b_kvdict[k] = v
+    except KeyError:
+        raise HTTPNotFound()
+    except (AssertionError, ValueError) as e:
+        raise HTTPBadRequest(e)
     return dict(user_ns_b_kvdict)
 
 
@@ -51,14 +56,19 @@ def put_dict(request):
     user_ns_b_kvdict = request.context.collection
     if not isinstance(request.json, dict):
         raise HTTPBadRequest()
-    for k, v in request.json.iteritems():
-        if v is None:
-            del user_ns_b_kvdict[k]
-        else:
-            user_ns_b_kvdict[k] = v
-    for k in user_ns_b_kvdict:
-        if k not in request.json:
-            del user_ns_b_kvdict[k]
+    try:
+        for k, v in request.json.iteritems():
+            if v is None:
+                del user_ns_b_kvdict[k]
+            else:
+                user_ns_b_kvdict[k] = v
+        for k in user_ns_b_kvdict:
+            if k not in request.json:
+                del user_ns_b_kvdict[k]
+    except KeyError:
+        raise HTTPNotFound()
+    except (AssertionError, ValueError) as e:
+        raise HTTPBadRequest(e)
     return dict(user_ns_b_kvdict)
 
 
@@ -68,7 +78,12 @@ def clear_namespace(request):
     ctx = request.context
     user_ns_b_kvdict = ctx.collection
     user_b_nskvdict = ctx.__parent__.as_collection()
-    del user_b_nskvdict[user_ns_b_kvdict.namespace]
+    try:
+        del user_b_nskvdict[user_ns_b_kvdict.namespace]
+    except KeyError:
+        raise HTTPNotFound()
+    except (AssertionError, ValueError) as e:
+        raise HTTPBadRequest(e)
     return {}
 
 
@@ -79,7 +94,7 @@ def get_value(request):
     user_ns_b_kvdict = ctx.collection
     try:
         return user_ns_b_kvdict[ctx.key]
-    except IndexError:
+    except KeyError:
         raise HTTPNotFound()
 
 
@@ -89,7 +104,12 @@ def put_value(request):
     ctx = request.context
     value = request.json
     user_ns_b_kvdict = ctx.collection
-    user_ns_b_kvdict[ctx.key] = value
+    try:
+        user_ns_b_kvdict[ctx.key] = value
+    except KeyError:
+        raise HTTPNotFound()
+    except (AssertionError, ValueError) as e:
+        raise HTTPBadRequest(e)
     return HTTPCreated()
 
 
@@ -98,5 +118,10 @@ def put_value(request):
 def del_value(request):
     ctx = request.context
     user_ns_b_kvdict = ctx.collection
-    del user_ns_b_kvdict[ctx.key]
+    try:
+        del user_ns_b_kvdict[ctx.key]
+    except KeyError:
+        raise HTTPNotFound()
+    except (AssertionError, ValueError) as e:
+        raise HTTPBadRequest(e)
     return {}
