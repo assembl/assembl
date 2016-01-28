@@ -43,6 +43,6 @@ def downgrade(pyramid_env):
                 where locale.code not like '%-x-mtfrom-%'""".format(target))
             for id, text in r:
                 if len(text):
-                    db.execute("UPDATE content set %s_id = :txt WHERE id= :id" % (
+                    db.execute("UPDATE content set %s = :txt WHERE id= :id" % (
                         (target,)), dict(txt=text, id=id))
         mark_changed()
