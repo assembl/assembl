@@ -29,6 +29,18 @@
               </div>
 
               <div class="control-group">
+                <label for="admin_discussion_preferences_translation_service" class="control-label fl"><%= i18n.gettext(pref_data.translation_service.description) %></abbr></label>
+                <div class="controls fl">
+                    <select id="admin_discussion_preferences_translation_service">
+                    <% for (var val in pref_data.translation_service.scalar_values) {
+                        var name = pref_data.translation_service.scalar_values[val]; %>
+                        <option value="<%= val %>"><%= i18n.gettext(name) %></option>
+                    <% } %>
+                    </select>
+                </div>
+              </div>
+
+              <div class="control-group">
                 <label for="admin_discussion_preferences_default_allow_access_to_moderated_text" class="control-label fl">{{ gettext('Allow users to see the original content of moderated messages by default') }}</label>
                 <div class="controls fl">
                     <input id="admin_discussion_preferences_default_allow_access_to_moderated_text" type="checkbox" />

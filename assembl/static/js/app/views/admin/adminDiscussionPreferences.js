@@ -6,10 +6,11 @@ var Marionette = require('../../shims/marionette.js'),
     AdminNavigationMenu = require('./adminNavigationMenu.js'),
     Promise = require('bluebird'),
     Ctx = require('../../common/context.js'),
+    i18n = require('../../utils/i18n.js'),
     Growl = require('../../utils/growl.js');
 
 var adminDiscussionPreferences = Marionette.LayoutView.extend({
-  template: '#tmpl-adminDiscussionPreferences',
+  template: '#tmpl-top_loader',
   className: 'admin-profile',
   ui: {
     close: '.bx-alert-success .bx-close',
@@ -19,10 +20,18 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
   regions: {
     navigationMenuHolder: '.navigation-menu-holder'
   },
-  preferencesKeys: ["simple_view_panel_order", "require_email_domain", "default_allow_access_to_moderated_text"],
+  preferencesKeys: ["simple_view_panel_order", "require_email_domain", "default_allow_access_to_moderated_text", "translation_service"],
   preferencesValues: {},
 
   initialize: function() {
+    var that = this;
+    this.getReadUserPreferencePromise("preference_data").then(function(res){
+          that.preferenceData = res;
+          that.template = '#tmpl-adminDiscussionPreferences';
+          that.render();
+        }).catch(function(e) {
+            console.error(e);
+        });
   },
 
   events: {
@@ -32,7 +41,8 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
 
   serializeData: function() {
     return {
-      //order_of_panels: 'NIM'
+      i18n: i18n,
+      pref_data: this.preferenceData
     };
   },
 
