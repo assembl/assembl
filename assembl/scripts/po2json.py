@@ -6,16 +6,23 @@ import subprocess
 
 from babel.messages.pofile import read_po, write_po
 
+extra_files = {
+    "assembl/models/preferences.py",
+    "assembl/models/notification.py"
+}
+
+
 def is_js(msg):
     for (filename, lineno) in msg.locations:
         if filename.endswith('.js'):
             return True
         # Also send notification data
-        if filename == "assembl/models/notification.py":
+        if filename in extra_files:
             return True
 
 po2json_script = join(dirname(dirname(dirname(__file__))),
                       'node_modules', '.bin', 'po2json')
+
 
 def po2json(fname):
     with open(fname) as f:
