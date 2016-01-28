@@ -47,6 +47,8 @@ def translate_content(
         content, translation_table=None, service=None, languages=None,
         send_to_changes=False):
     from ..models import Locale
+    from assembl.lib.raven_client import get_raven_client
+    raven_client = get_raven_client()
     discussion = content.discussion
     service = service or discussion.translation_service()
     if not service:
@@ -66,7 +68,8 @@ def translate_content(
         try:
             language, _ = service.identify(combined, languages)
         except:
-            raven_client.captureException()
+            if raven_client:
+                raven_client.captureException()
             return changed
         if und_subject:
             und_subject.locale_code = language
@@ -88,7 +91,8 @@ def translate_content(
                     try:
                         service.confirm_locale(entry, languages)
                     except:
-                        raven_client.captureException()
+                        if raven_client:
+                            raven_client.captureException()
                         return changed
                     # reload entries
                     ls.db.expire(ls, ("entries",))
@@ -107,7 +111,8 @@ def translate_content(
                             service.translate_lse(
                                 original, Locale.get_or_create(dest, content.db))
                         except:
-                            raven_client.captureException()
+                            if raven_client:
+                                raven_client.captureException()
                             return changed
                         ls.db.expire(ls, ["entries"])
                         known.add(dest)
