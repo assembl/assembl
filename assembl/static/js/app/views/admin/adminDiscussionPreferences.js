@@ -94,7 +94,7 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
 
   getUserInputPreferenceValue: function(preferenceName){
     var selector = this.getUserInputPreferenceSelector(preferenceName);
-    if ( preferenceName == "require_email_domain" ){ // preferences of type Array
+    if ( this.preferenceData[preferenceName].value_type == "list_of_domain" ){ // preferences of type Array
       var inputVal = this.$(selector).val();
       var res = inputVal.split(",");
       res.forEach(function(el,index){
@@ -102,7 +102,7 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
       });
       return res;
     }
-    else if ( preferenceName == "default_allow_access_to_moderated_text" ){ // preferences of type Boolean, which show as checkboxes
+    else if ( this.preferenceData[preferenceName].value_type == "bool" ){ // preferences of type Boolean, which show as checkboxes
       var val = this.$(selector).prop("checked");
       val = val ? true : false;
       return val;
@@ -114,14 +114,14 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
 
   setUserInputPreferenceValue: function(preferenceName, preferenceValue){
     var selector = this.getUserInputPreferenceSelector(preferenceName);
-    if ( preferenceName == "require_email_domain" ){ // preferences of type Array
+    if ( this.preferenceData[preferenceName].value_type == "list_of_domain" ){ // preferences of type Array
       var val = "";
       if ( preferenceValue instanceof Array ){
         val = preferenceValue.join(", ");
       }
       this.$(selector).val(val);
     }
-    else if ( preferenceName == "default_allow_access_to_moderated_text") { // preferences of type Boolean, which show as checkboxes
+    else if ( this.preferenceData[preferenceName].value_type == "bool") { // preferences of type Boolean, which show as checkboxes
       console.log("preferenceValue: ", preferenceValue);
       var val = preferenceValue ? true : false;
       this.$(selector).prop("checked", preferenceValue);
