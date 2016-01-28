@@ -1526,9 +1526,16 @@ var MessageView = Marionette.LayoutView.extend({
     var translationData = preferences.getTranslationData(),
         body = this.model.get("body"),
         preference = preferences.getPreferenceForLocale(body.original().getBaseLocale());
+    this.langCache = Ctx.getLocaleToLanguageNameCache();
     this.translationData = translationData;
     this.unknownPreference = preference === undefined;
-    this.hasTranslatorService = discussion.hasTranslationService();
+    if (_.isEmpty(this.langCache) ){
+      this.hasTranslatorService = false;
+    }
+    else {
+      this.hasTranslatorService = discussion.hasTranslationService();
+    }
+    
     if ( this.hasTranslatorService ) {
       this.showAnnotations = false;
     }

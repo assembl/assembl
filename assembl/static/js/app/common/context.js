@@ -1598,9 +1598,19 @@ Context.prototype = {
           return e + 'Z'; //Z: ISO 8601 UTC Timezone
       }
   },
+
+  /*
+    Utility method used to identify to Ctx the View object that is the modal
+    Useful for closing the model in any part of the code instead of the
+    context of where the Modal was instantiated.
+   */
   setCurrentModalView: function(view){
     this.currentModalView = view;
   },
+
+  /*
+    Utility method to close the modal view properly
+   */
   clearModal: function(){
     if (this.currentModalView){
       //Using a backbone modal
@@ -1609,6 +1619,30 @@ Context.prototype = {
       this.currentModalView = null; 
     }
   },
+
+  /*
+    Cache of the locale to locale-name
+    The language names will be sent from the back-end in the language
+    of the interface.
+
+    eg. Interface language: EN
+    eg. {"fr": "French"}
+
+    eg. Interface language FR
+    eg. {"fr": "Francais"}
+
+    @return Object  Language cache
+   */
+  getLocaleToLanguageNameCache: function(){
+    //The cache is only read once for efficiency
+    if ( this.localeToLangNameCache ) {
+      return this.localeToLangNameCache;
+    }
+    
+    this.localeToLangNameCache = Ctx.getJsonFromScriptTag('translation-locale-names');
+    return this.localeToLangNameCache;
+  },
+
   /**
    * Executor of lazy code
    * ex :

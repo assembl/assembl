@@ -175,13 +175,13 @@ var TranslationView = Marionette.LayoutView.extend({
         cm.getUserLanguagePreferencesPromise(Ctx)
             .then(function(preferences){
                 if (!that.isViewDestroyed()){
-                    var localeToLangNameCache = Ctx.getJsonFromScriptTag('translation-locale-names'),
-                        bestSuggestedTranslation = that.message.get('body').best(preferences);
+                    that.langCache = that.messageView.langCache; //For reference
+                    var bestSuggestedTranslation = that.message.get('body').best(preferences);
 
                     var translatedFromLocale = bestSuggestedTranslation.getTranslatedFromLocale(),
-                        translatedFromLocaleName = localeToLangNameCache[translatedFromLocale],
+                        translatedFromLocaleName = that.langCache[translatedFromLocale],
                         translatedTo = bestSuggestedTranslation.getBaseLocale(),
-                        translatedToName = localeToLangNameCache[translatedTo];
+                        translatedToName = that.langCache[translatedTo];
                     if ( !(translatedToName) ){
                         console.error("The language " + translatedToName + " is not a part of the locale cache!");
                         translatedToName = translatedTo;
@@ -195,7 +195,6 @@ var TranslationView = Marionette.LayoutView.extend({
                     }
                     that.translatedTo = {locale: translatedTo, name: translatedToName};
                     that.translatedFrom = {locale: translatedFromLocale, name: translatedFromLocaleName};
-                    that.langCache = localeToLangNameCache;
                     that.languagePreferences = preferences; //Should be sorted already
                     that.template = '#tmpl-message_translation_question';
                     that.render();
