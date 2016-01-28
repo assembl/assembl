@@ -66,6 +66,7 @@ def translate_content(
         try:
             language, _ = service.identify(combined, languages)
         except:
+            raven_client.captureException()
             return changed
         if und_subject:
             und_subject.locale_code = language
@@ -87,6 +88,7 @@ def translate_content(
                     try:
                         service.confirm_locale(entry, languages)
                     except:
+                        raven_client.captureException()
                         return changed
                     # reload entries
                     ls.db.expire(ls, ("entries",))
@@ -105,6 +107,7 @@ def translate_content(
                             service.translate_lse(
                                 original, Locale.get_or_create(dest, content.db))
                         except:
+                            raven_client.captureException()
                             return changed
                         ls.db.expire(ls, ["entries"])
                         known.add(dest)
