@@ -63,7 +63,10 @@ def translate_content(
         combined = " ".join((
             und_subject.value or next(iter(content.subject.non_mt_entries())).value,
             und_body.value or next(iter(content.body.non_mt_entries())).value))
-        language, _ = service.identify(combined, languages)
+        try:
+            language, _ = service.identify(combined, languages)
+        except:
+            return changed
         if und_subject:
             und_subject.locale_code = language
             content.db.expire(und_subject, ("locale",))
@@ -81,7 +84,10 @@ def translate_content(
                 entry = entries[undefined_id]
                 if entry.value:
                     # assume can_guess_locale = true
-                    service.confirm_locale(entry, languages)
+                    try:
+                        service.confirm_locale(entry, languages)
+                    except:
+                        return changed
                     # reload entries
                     ls.db.expire(ls, ("entries",))
                     entries = ls.entries_as_dict
@@ -95,8 +101,11 @@ def translate_content(
                 source_loc = service.asKnownLocale(original.locale_code)
                 for dest in translation_table.get(source_loc, languages):
                     if dest not in known:
-                        service.translate_lse(
-                            original, Locale.get_or_create(dest, content.db))
+                        try:
+                            service.translate_lse(
+                                original, Locale.get_or_create(dest, content.db))
+                        except:
+                            return changed
                         ls.db.expire(ls, ["entries"])
                         known.add(dest)
                         changed = True
