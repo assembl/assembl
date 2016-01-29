@@ -220,5 +220,11 @@
 
   </div>
 
+  <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW){ %>
+  <div class="message-menu message-menu-actions">
+    <a href="#" class="js_seeIdeasWhereMessageIsVisible">{{ gettext("Show ideas where this message is visible") }}</a>
+  </div>
+  <% } %>
+
 <% } %>
 <div class="message-replybox js_messageReplyBoxRegion hidden"></div>

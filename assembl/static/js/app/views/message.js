@@ -21,7 +21,8 @@ var Marionette = require('../shims/marionette.js'),
     MessageModerationOptionsView = require('./messageModerationOptions.js'),
     MessageTranslationView = require('./messageTranslationQuestion.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
-    Genie = require('../utils/genieEffect.js');
+    Genie = require('../utils/genieEffect.js'),
+    IdeasShowingMessage = require('./ideasShowingMessage.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10;
@@ -231,7 +232,9 @@ var MessageView = Marionette.LayoutView.extend({
 
     'click .js_message-export-facebook': 'exportToFacebook',
 
-    'click .js_openTargetInPopOver': 'openTargetInPopOver'
+    'click .js_openTargetInPopOver': 'openTargetInPopOver',
+
+    'click .js_seeIdeasWhereMessageIsVisible': 'seeIdeasWhereMessageIsVisible'
   },
 
   /**
@@ -1568,6 +1571,11 @@ var MessageView = Marionette.LayoutView.extend({
     this.forceTranslationQuestion = false;
     this.useOriginalContent = false;
     this.showAnnotations = this.canShowAnnotations();
+  },
+
+  seeIdeasWhereMessageIsVisible: function(){
+    var modalView = new IdeasShowingMessage();
+    Assembl.slider.show(modalView);
   }
 
 });
