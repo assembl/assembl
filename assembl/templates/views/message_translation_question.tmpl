@@ -11,7 +11,8 @@
             {# <div class="js_language-of-choice-more"><a class="action" href="#"><%= toAnother %></a></div>#}
             <span class="js_language-of-choice-more"><a class="action" href="#">{{ gettext("Translate to another language") }}</a></span>
             <% if (forceTranslationQuestion) { %>
-            <span class='js_hide-translation-question'><a class="action" href="#">{{ gettext("Cancel") }}</a></span>
+            <i class="dot-seperator">&#x25CF;</i>
+            <span class='js_hide-translation-question'><a class="action" href="#">{{ gettext("Close") }}</a></span>
             <% } %>
         </div>
     </div>
