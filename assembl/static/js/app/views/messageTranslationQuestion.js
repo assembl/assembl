@@ -86,6 +86,15 @@ var LanguageSelectionView = Marionette.ItemView.extend({
         return this._localesAsSortedList;
     },
 
+    nameOfLocale: function(locale) {
+        var name = this.langCache[locale];
+        if (name === undefined) {
+            console.error("The language " + locale + " is not a part of the locale cache!");
+            return locale;
+        }
+        return name;
+    },
+
     onConfirmClick: function(e){
         var that = this,
             user = Ctx.getCurrentUser(),
@@ -110,7 +119,7 @@ var LanguageSelectionView = Marionette.ItemView.extend({
         else {
             this.languagePreferences.setPreference(
                 user,
-                this.translatedFrom.locale,
+                this.translatedFrom,
                 preferredLanguageTo[0],
                 {
                     success: function(model, resp, options){
@@ -132,7 +141,7 @@ var LanguageSelectionView = Marionette.ItemView.extend({
             return {
                 supportedLanguages: this.localesAsSortedList(),
                 translatedTo: this.translatedTo,
-                question: i18n.sprintf(i18n.gettext("Select the language you wish to translate %s to:"), this.translatedFrom.name),
+                question: i18n.sprintf(i18n.gettext("Select the language you wish to translate %s to:"), this.nameOfLocale(this.translatedFrom)),
                 translatedTo: this.translatedTo,
                 translatedFrom: this.translatedFrom
             };
@@ -179,30 +188,36 @@ var TranslationView = Marionette.LayoutView.extend({
             .then(function(preferences){
                 if (!that.isViewDestroyed()){
                     that.langCache = that.messageView.langCache; //For reference
-                    var bestSuggestedTranslation = that.message.get('body').best(preferences);
-
-                    var translatedFromLocale = bestSuggestedTranslation.getTranslatedFromLocale(),
-                        translatedFromLocaleName = that.langCache[translatedFromLocale],
+                    var bestSuggestedTranslation = that.message.get('body').best(preferences),
+                        original = that.message.get("body").original(),
+                        originalLocale = original.getLocaleValue(),
+                        translatedFromLocale = bestSuggestedTranslation.getTranslatedFromLocale(),
                         translatedTo = bestSuggestedTranslation.getBaseLocale(),
-                        translatedToName = that.langCache[translatedTo];
-                    if ( !(translatedToName) ){
-                        console.error("The language " + translatedToName + " is not a part of the locale cache!");
-                        translatedToName = translatedTo;
-                    }
+                        preferredTarget = preferences.getPreferenceForLocale(originalLocale).get("translate_to_name");
                     if ( !(translatedFromLocale) ){
                         // Get the original's locale and name
                         var original = that.message.get("body").original();
 
-                        translatedFromLocaleName = translatedToName;
                         translatedFromLocale = translatedTo;
                     }
-                    that.translatedTo = {locale: translatedTo, name: translatedToName};
-                    that.translatedFrom = {locale: translatedFromLocale, name: translatedFromLocaleName};
+                    that.originalLocale = originalLocale;
+                    that.translatedTo = translatedTo;
+                    that.translatedFrom = translatedFromLocale;
+                    that.preferredTarget = preferredTarget;
                     that.languagePreferences = preferences; //Should be sorted already
                     that.template = '#tmpl-message_translation_question';
                     that.render();
                 }
             });
+    },
+
+    nameOfLocale: function(locale) {
+        var name = this.langCache[locale];
+        if (name === undefined) {
+            console.error("The language " + locale + " is not a part of the locale cache!");
+            return locale;
+        }
+        return name;
     },
 
     updateLanguagePreference: function(state){
@@ -211,8 +226,8 @@ var TranslationView = Marionette.LayoutView.extend({
         if (state === userTranslationStates.CONFIRM) {
             this.languagePreferences.setPreference(
                 user,
-                this.translatedFrom.locale,
-                this.translatedTo.locale,
+                this.translatedFrom,
+                this.translatedTo,
                 {
                     success: function(model, resp, options){
                         return processConfirmLanguagePreferences(that.messageView);   
@@ -224,7 +239,7 @@ var TranslationView = Marionette.LayoutView.extend({
         if (state === userTranslationStates.DENY) {
             this.languagePreferences.setPreference(
                 user,
-                this.translatedFrom.locale,
+                this.translatedFrom,
                 null,
                 {
                     success: function(model, resp, options){
@@ -279,11 +294,24 @@ var TranslationView = Marionette.LayoutView.extend({
 
     serializeData: function(){
         if (this.template !== "#tmpl-loader") {
+            var translationQuestion;
+            if (this.preferredTarget) {
+                translationQuestion = i18n.sprintf(
+                    i18n.gettext("Translate all messages from %s to %s?"),
+                    this.nameOfLocale(this.originalLocale),
+                    this.nameOfLocale(this.preferredTarget));
+            } else {
+                translationQuestion = i18n.sprintf(
+                    i18n.gettext("Keep %s messages untranslated?"),
+                    this.nameOfLocale(this.originalLocale));
+            }
             return {
-                translationQuestion: i18n.sprintf(i18n.gettext("Translate all messages from %s to %s?"), this.translatedFrom.name, this.translatedTo.name),
-                yes: i18n.sprintf("Yes, translate all messages to %s", this.translatedTo.name),
-                no: i18n.sprintf("No, do not translate all messages to %s", this.translatedTo.name),
-                toAnother: i18n.sprintf("Translate all %s messages to another language", this.translatedFrom.name),
+                translationQuestion: translationQuestion,
+                yes: i18n.sprintf("Yes, translate all messages to %s", this.nameOfLocale(this.preferredTarget)),
+                no: i18n.sprintf("No, do not translate all messages to %s", this.nameOfLocale(this.preferredTarget)),
+                toAnother: i18n.sprintf("Translate all %s messages to another language", this.nameOfLocale(this.originalLocale)),
+                preferredTarget: this.preferredTarget,
+                originalLocale: this.originalLocale,
                 translatedFromLocale: this.translatedFrom,
                 translatedTo: this.translatedTo,
                 forceTranslationQuestion: this.messageView.forceTranslationQuestion
