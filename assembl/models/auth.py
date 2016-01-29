@@ -1690,7 +1690,7 @@ class UserLanguagePreference(Base):
 
     @property
     def locale_code(self):
-        return Locale.locale_collection_byid[self.locale_id]
+        return Locale.code_for_id(self.locale_id)
 
     @locale_code.setter
     def locale_code(self, code):
@@ -1703,7 +1703,7 @@ class UserLanguagePreference(Base):
     @property
     def translate_to_code(self):
         if self.translate_to:
-            return Locale.locale_collection_byid[self.translate_to]
+            return Locale.code_for_id(self.translate_to)
 
     @translate_to_code.setter
     def translate_to_code(self, code):
@@ -1721,8 +1721,8 @@ class UserLanguagePreference(Base):
         return \
             """{user_id: %d, locale_id: %s, translated_to: %s source_of_evidence: %d, preferred_order: %d}""" % (
                 self.user_id,
-                Locale.locale_collection_byid[self.locale_id],
-                Locale.locale_collection_byid[self.translate_to]
+                Locale.code_for_id(self.locale_id),
+                Locale.code_for_id(self.translate_to)
                 if self.translate_to else None,
                 self.source_of_evidence,
                 self.preferred_order

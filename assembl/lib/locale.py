@@ -94,7 +94,7 @@ def get_preferred_languages(session, user_id):
     prefs = (session.query(UserLanguagePreference)
              .filter_by(user_id=user_id)
              .order_by(UserLanguagePreference.preferred_order))
-    return [Locale.locale_collection_byid[p.locale_id] for p in prefs]
+    return [Locale.code_for_id(p.locale_id) for p in prefs]
 
 
 def locale_negotiator(request):

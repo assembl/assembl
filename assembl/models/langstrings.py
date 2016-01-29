@@ -120,53 +120,55 @@ class Locale(Base):
     def root_locale(self):
         return self.extract_root_locale(self.code)
 
+    @classmethod
+    def reset_cache(cls):
+        cls._locale_collection_byid = None
+        cls._locale_collection = None
+        cls._locale_collection_subsets = None
+
     @classproperty
-    def locale_collection(cls):
-        "A collection of all known locales, as a dictionary of strings->id"
-        if cls._locale_collection is None:
-            cls._locale_collection = dict(
-                cls.default_db.query(cls.code, cls.id))
+    def locale_collection_byid(cls):
+        "A collection of all known locales, as a dictionary of id->strings"
+        if cls._locale_collection_byid is None:
+            cls._locale_collection_byid = dict(
+                cls.default_db.query(cls.id, cls.code))
             # Add locales that were created, flushed but not yet committed,
             # And will not show up in the query
             uncommitted = [
                 l for l in cls._locale_uncommitted if not inspect(l).expired]
             cls._locale_uncommitted = uncommitted
             if uncommitted:
-                cls._locale_collection.update(
-                    {l.code: l.id for l in uncommitted})
+                cls._locale_collection_byid.update(
+                    {l.id: l.code for l in uncommitted})
+        return cls._locale_collection_byid
+
+    @classmethod
+    def code_for_id(cls, id):
+        if (cls._locale_collection_byid is not None
+                and id not in cls._locale_collection_byid):
+            # may have been created in another process
+            cls.reset_cache()
+        return cls.locale_collection_byid[id]    
+
+    @classproperty
+    def locale_collection(cls):
+        "A collection of all known locales, as a dictionary of string->id"
+        if cls._locale_collection is None:
+            cls._locale_collection = {
+                name: id for (id, name)
+                in cls.locale_collection_byid.iteritems()}
         return cls._locale_collection
 
     @classmethod
-    def get_id_of(cls, locale_code):
-        return cls.locale_collection.get(locale_code, None)
-
-    @classmethod
-    def get_or_create(cls, locale_code, db=None):
-        locale_id = cls.get_id_of(locale_code)
-        if locale_id:
-            return Locale.get(locale_id)
-        else:
-            db = db or cls.default_db
-            l = Locale(code=locale_code)
-            db.add(l)
-            db.flush()
-            cls._locale_uncommitted.append(l)
-            cls.reset_cache()
-            return l
-
-    @classmethod
-    def reset_cache(cls):
-        cls._locale_collection = None
-        cls._locale_collection_byid = None
-        cls._locale_collection_subsets = None
-
-    @classproperty
-    def locale_collection_byid(cls):
-        "A collection of all known locales, as a dictionary of id->string"
-        if cls._locale_collection_byid is None:
-            cls._locale_collection_byid = {
-                id: name for (name, id) in cls.locale_collection.iteritems()}
-        return cls._locale_collection_byid
+    def get_id_of(cls, code, create=True):
+        if (cls._locale_collection is not None
+                and code not in cls._locale_collection):
+            # may have been created in another process
+            if create:
+                return cls.get_or_create(code).id
+            else:
+                cls.reset_cache()
+        return cls.locale_collection.get(code, None)
 
     @classproperty
     def locale_collection_subsets(cls):
@@ -179,6 +181,25 @@ class Locale(Base):
                 collection_subsets[cls.extract_root_locale(locale_code)].add(locale_code)
             cls._locale_collection_subsets = collection_subsets
         return cls._locale_collection_subsets
+
+    @classmethod
+    def get_or_create(cls, locale_code, db=None):
+        locale_id = cls.locale_collection.get(locale_code, None)
+        if locale_id:
+            return Locale.get(locale_id)
+        db = db or cls.default_db
+        # Maybe exists despite not in cache
+        locale = db.query(cls).filter_by(code=locale_code).first()
+        if locale:
+            cls.reset_cache()
+            return locale
+        # create it.
+        l = Locale(code=locale_code)
+        db.add(l)
+        db.flush()
+        cls._locale_uncommitted.append(l)
+        cls.reset_cache()
+        return l
 
     @classproperty
     def UNDEFINED_LOCALEID(cls):
@@ -232,7 +253,7 @@ class LocaleLabel(Base):
         loc_ids.reverse()
         for loc_id in loc_ids:
             result.update({
-                Locale.locale_collection_byid[lname.named_locale_id]: lname.name
+                Locale.code_for_id(lname.named_locale_id): lname.name
                 for lname in by_target[loc_id]})
         return result
 
@@ -250,14 +271,14 @@ class LocaleLabel(Base):
         target_loc_ids.reverse()
         for loc_id in target_loc_ids:
             result.update({
-                Locale.locale_collection_byid[lname.named_locale_id]: lname.name
+                Locale.code_for_id(lname.named_locale_id): lname.name
                 for lname in by_target[loc_id]})
         return result
 
     @classmethod
     def names_in_self(cls):
         return {
-            Locale.locale_collection_byid[lname.named_locale_id]: lname.name
+            Locale.code_for_id(lname.named_locale_id): lname.name
             for lname in cls.default_db.query(cls).filter(
                 cls.locale_id_of_label == cls.named_locale_id)}
 
@@ -316,7 +337,8 @@ class LangString(Base):
     def create(cls, value, locale_code=Locale.UNDEFINED):
         ls = cls()
         lse = LangStringEntry(
-            langstring=ls, value=value, locale_id=Locale.get_id_of(locale_code))
+            langstring=ls, value=value,
+            locale_id=Locale.get_id_of(locale_code))
         return ls
 
     @property
@@ -325,10 +347,9 @@ class LangString(Base):
 
     @hybrid_method
     def non_mt_entries(self):
-        by_locale_id = Locale.locale_collection_byid
         return [e for e in self.entries
                 if not Locale.locale_is_machine_translated(
-                    by_locale_id[e.locale_id])]
+                    Locale.code_for_id(e.locale_id))]
 
     @non_mt_entries.expression
     def non_mt_entries(self):
@@ -614,7 +635,7 @@ class LangStringEntry(Base, TombstonableMixin):
 
     @property
     def locale_code(self):
-        return Locale.locale_collection_byid.get(self.locale_id, None)
+        return Locale.code_for_id(self.locale_id)
         # Equivalent to the following, which may trigger a DB load
         # return self.locale.code
 
@@ -643,7 +664,7 @@ class LangStringEntry(Base, TombstonableMixin):
     @property
     def is_machine_translated(self):
         return Locale.locale_is_machine_translated(
-            Locale.locale_collection_byid[self.locale_id])
+            Locale.code_for_id(self.locale_id))
 
     def change_value(self, new_value):
         self.tombstone = datetime.utcnow()

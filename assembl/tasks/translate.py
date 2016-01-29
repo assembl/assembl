@@ -23,9 +23,8 @@ def user_pref_as_translation_table(user, service):
     for pref in user.language_preference:
         if pref.translate_to:
             table[service.asKnownLocale(
-                Locale.locale_collection_byid[pref.locale_id])].add(
-                service.asKnownLocale(
-                    Locale.locale_collection_byid[pref.translate_to]))
+                Locale.code_for_id(pref.locale_id))].add(
+                service.asKnownLocale(Locale.code_for_id(pref.translate_to)))
     return table
 
 
@@ -99,7 +98,7 @@ def translate_content(
                     entries = ls.entries_as_dict
             known = {service.asKnownLocale(
                         Locale.extract_base_locale(
-                            Locale.locale_collection_byid[loc_id]))
+                            Locale.code_for_id(loc_id)))
                      for loc_id in entries}
             originals = ls.non_mt_entries()
             # pick randomly. TODO: Recency order?
