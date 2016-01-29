@@ -133,14 +133,14 @@ var LangString = Base.Model.extend({
         if (prefCandidates.length) {
           prefCandidates.sort(langPrefs.comparator);
           for (i = 0; i < prefCandidates.length; i++) {
-            var pref = prefCandidates[i];
-            var translate_to = pref.get("translate_to");
-            if (translate_to === undefined) {
+            var pref = prefCandidates[i],
+                translate_to = pref.get("translate_to_name");
+            if (!translate_to) {
               return entryByPrefLocale[pref.get("locale_code")];
             } else {
               // take available with longest common locale string to translation target
               commonLenF = function(entry) {
-                return localeCommonLength(entry.get("@language"), pref.get("translate_to_name")) > 0;
+                return localeCommonLength(entry.get("@language"), translate_to) > 0;
               };
               entry = _.max(available, commonLenF);
               if (commonLenF(entry) > 0) {
