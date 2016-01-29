@@ -574,12 +574,7 @@ class LangStringEntry(Base, TombstonableMixin):
             # Create locale on demand.
             locale_code = kwargs.get("@language", "und")
             del kwargs["@language"]
-            locale_id = Locale.locale_collection.get(locale_code, None)
-            if locale_id is None:
-                kwargs["locale"] = Locale(code=locale_code)
-            else:
-                kwargs["locale_id"] = locale_id
-                kwargs["locale"] = Locale.get(locale_id)
+            kwargs["locale"] = Locale.get_or_create(locale_code)
         super(LangStringEntry, self).__init__(*args, **kwargs)
 
     id = Column(Integer, primary_key=True)
@@ -617,13 +612,15 @@ class LangStringEntry(Base, TombstonableMixin):
     def locale_code(self, locale_code):
         locale_id = Locale.locale_collection.get(locale_code, None)
         if locale_id:
+            if locale_id == self.locale_id:
+                return
             self.locale_id = locale_id
             if inspect(self).persistent:
                 self.db.expire(self, ["locale"])
             else:
                 self.locale = Locale.get(locale_id)
         else:
-            self.locale = Locale(code=locale_code)
+            self.locale = Locale.get_or_create(locale_code)
 
     @property
     def locale_identification_data_json(self):
