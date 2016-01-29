@@ -17,9 +17,9 @@ bz2file==0.98
 celery==3.1.19
 cffi==1.5.0
 Chameleon==2.24
-Chroma==0.2.0
 colander==1.2
 ColanderAlchemy==0.3.3
+colors.py==0.2.2
 cornice==1.2.0
 cov-core==1.15.0
 coverage==4.0.3

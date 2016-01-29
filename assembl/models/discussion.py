@@ -586,7 +586,7 @@ class Discussion(DiscussionBoundBase):
 
     def as_mind_map(self):
         import pygraphviz
-        from chroma import Color
+        from colors import hsv
         from datetime import datetime
         from assembl.models import Idea, IdeaLink, RootIdea
         ideas = self.db.query(Idea).filter_by(
@@ -622,12 +622,12 @@ class Discussion(DiscussionBoundBase):
                 print idea.id, start_time, idea.last_modified, end_time
                 print (end_time - idea.last_modified).total_seconds(), (end_time - start_time).total_seconds()
                 #empirical
-                color = Color((180-(135.0 * age), 0.15, 0.85), 'HSV')
+                color = hsv(180-(135.0 * age), 0.15, 0.85)
                 G.add_node(idea.id,
                     label=idea.short_title or "",
                     fontsize = 18 - (1.5 * level),
                     height=(20-(1.5*level))/72.0,
-                    fillcolor=color.hex)
+                    fillcolor="#%s" % color.hex)
         for link in links:
             if link.source_id == root_id:
                 G.add_edge(link.source_id, link.target_id, style="invis")
