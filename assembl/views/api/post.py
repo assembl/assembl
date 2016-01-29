@@ -447,8 +447,8 @@ def create_post(request):
     discussion = Discussion.get_instance(discussion_id)
 
     if not discussion:
-        raise HTTPNotFound(
-            localizer.translate(_("No discussion found with id=%s" % discussion_id))
+        raise HTTPNotFound(localizer.translate(_(
+            "No discussion found with id=%s")) % (discussion_id,)
         )
 
     ctx = DummyContext({Discussion: discussion})
