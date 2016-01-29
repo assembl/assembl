@@ -228,7 +228,7 @@ var TranslationView = Marionette.LayoutView.extend({
                 null,
                 {
                     success: function(model, resp, options){
-                        processConfirmLanguagePreferences(that.messageView);
+                        return processConfirmLanguagePreferences(that.messageView);
                     }
                 }
             );
