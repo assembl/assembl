@@ -43,7 +43,7 @@ var IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaView = Marionette.ItemV
 
 var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
   childViewContainer: '.items',
-  template: '#tmpl-IdeaShowingMessageCollection',
+  template: '#tmpl-ideaShowingMessageCollection',
   getChildView: function(item){
     console.log("IdeaShowingMessageCollectionView::getChildView() item: ", item);
 
