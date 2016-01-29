@@ -19,6 +19,19 @@ from ..lib.abc import classproperty
 from ..lib.locale import _
 
 
+def merge_json(base, patch):
+    # simplistic recursive dictionary merge
+    if not (isinstance(base, dict) and isinstance(patch, dict)):
+        return patch
+    base = dict(base)
+    for k, v in patch.iteritems():
+        if k in base:
+            base[k] = merge_json(base[k], v)
+        else:
+            base[k] = v
+    return base
+
+
 class Preferences(MutableMapping, Base):
     """
     Cascading preferences
@@ -87,8 +100,8 @@ class Preferences(MutableMapping, Base):
         elif self.cascade_id:
             return self.cascade_preferences[key]
         if key == "preference_data":
-            return self.preference_data
-        return self.preference_data.get(key, {}).get("default", None)
+            return self.get_preference_data()
+        return self.get_preference_data()[key].get("default", None)
 
     def __len__(self):
         return len(self.preference_data) + 2
@@ -131,13 +144,13 @@ class Preferences(MutableMapping, Base):
 
     def can_edit(self, key, permissions=(P_READ,), pref_data=None):
         if key in ('name', '@extends', 'preference_data'):
+            # TODO: Delegate permissions.
             if P_SYSADMIN not in permissions:
                 return False
         if key not in self.preference_data:
             raise KeyError("Unknown preference: " + key)
         if pref_data is None:
-            pref_data = self['preference_data'].get(key, {})
-        pref_data = self['preference_data'].get(key, {})
+            pref_data = self.get_preference_data()[key]
         req_permission = pref_data.get(
             'modification_permission', P_ADMIN_DISC)
         if req_permission not in permissions:
@@ -156,7 +169,7 @@ class Preferences(MutableMapping, Base):
 
     def validate(self, key, value, pref_data=None):
         if pref_data is None:
-            pref_data = self['preference_data'].get(key, {})
+            pref_data = self.get_preference_data()[key]
         validator = pref_data.get('backend_validator_function', None)
         if validator:
             # This has many points of failure, but all failures are meaningful.
@@ -232,6 +245,17 @@ class Preferences(MutableMapping, Base):
     def property_defaults(cls):
         return {k: v.get("default", None)
                 for (k, v) in cls.preference_data.iteritems()}
+
+    def get_preference_data(self):
+        if self.cascade_id:
+            base = self.cascade_preferences.get_preference_data()
+        else:
+            base = self.preference_data
+        exists, patch = self._get_local("preference_data")
+        if exists:
+            return merge_json(base, patch)
+        else:
+            return base
 
     # This defines the allowed property names and their default values
     preference_data = {
