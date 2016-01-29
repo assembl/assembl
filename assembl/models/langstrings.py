@@ -31,6 +31,7 @@ class Locale(Base):
     _locale_collection = None
     _locale_collection_byid = None
     _locale_collection_subsets = None
+    _locale_uncommitted = []
     UNDEFINED = "und"
     NON_LINGUISTIC = "zxx"
     MULTILINGUAL = "mul"
@@ -125,6 +126,14 @@ class Locale(Base):
         if cls._locale_collection is None:
             cls._locale_collection = dict(
                 cls.default_db.query(cls.code, cls.id))
+            # Add locales that were created, flushed but not yet committed,
+            # And will not show up in the query
+            uncommitted = [
+                l for l in cls._locale_uncommitted if not inspect(l).expired]
+            cls._locale_uncommitted = uncommitted
+            if uncommitted:
+                cls._locale_collection.update(
+                    {l.code: l.id for l in uncommitted})
         return cls._locale_collection
 
     @classmethod
@@ -141,6 +150,7 @@ class Locale(Base):
             l = Locale(code=locale_code)
             db.add(l)
             db.flush()
+            cls._locale_uncommitted.append(l)
             cls.reset_cache()
             return l
 
