@@ -1,0 +1,15 @@
+.breadcrumb {
+  display: inline-block;
+}
+
+.breadcrumb:after {
+  content: ">";
+  font-weight: bold;
+  color: $txtGray;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.breadcrumb:last-child:after {
+    content: "";
+}

@@ -1,0 +1,18 @@
+.ideas-showing-message {
+  .ideas-reasons-collection {
+    .idea {
+      border-left: 4px solid #efefef;
+      padding-left: 6px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .breadcrumb {
+      color: $gray4;
+    }
+
+    .breadcrumb:last-child {
+      color: $theme_activelink_color;
+    }
+  }
+}

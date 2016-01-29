@@ -5,11 +5,24 @@ var Marionette = require('../shims/marionette.js'),
   _ = require('../shims/underscore.js'),
   Assembl = require('../app.js'),
   Ctx = require('../common/context.js'),
+  CollectionManager = require('../common/collectionManager.js'),
+  IdeaBreadcrumbFromIdView = require('./ideaBreadcrumb.js'),
   i18n = require('../utils/i18n.js');
 
 // root class
 var IdeaShowingMessageModel = Backbone.Model.extend({
-  idea: null // for now, type is string, but should evolve to Idea
+  ideaId: null // string. for example "local:Idea/19"
+});
+
+// root class, only sub-classes should be instanciated. Sub-classes have in common to render the breadcrumb of an idea associated to the message
+var IdeaShowingMessageView = Marionette.ItemView.extend({
+  template: false,
+  onRender: function(){
+    var ideaView = new IdeaBreadcrumbFromIdView({
+      ideaId: this.model.get('ideaId')
+    });
+    this.$(".idea").html(ideaView.render().el);
+  }
 });
 
 var IdeaShowingMessageCollection = Backbone.Collection.extend({
@@ -20,7 +33,7 @@ var IdeaShowingMessageBecauseMessagePostedInIdeaModel = IdeaShowingMessageModel.
   author: null // for now, type is string, but should evolve to User something
 });
 
-var IdeaShowingMessageBecauseMessagePostedInIdeaView = Marionette.ItemView.extend({
+var IdeaShowingMessageBecauseMessagePostedInIdeaView = IdeaShowingMessageView.extend({
   template: '#tmpl-ideaShowingMessageBecauseMessagePostedInIdea'
 });
 
@@ -29,7 +42,7 @@ var IdeaShowingMessageBecauseMessageHarvestedInIdeaModel = IdeaShowingMessageMod
   extractText: null // type is string, could evolve to Extract something
 });
 
-var IdeaShowingMessageBecauseMessageHarvestedInIdeaView = Marionette.ItemView.extend({
+var IdeaShowingMessageBecauseMessageHarvestedInIdeaView = IdeaShowingMessageView.extend({
   template: '#tmpl-ideaShowingMessageBecauseMessageHarvestedInIdea'
 });
 
@@ -37,7 +50,7 @@ var IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel = IdeaShowingMess
   threadTitle: null // type is string, could evolve to Post something
 });
 
-var IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaView = Marionette.ItemView.extend({
+var IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaView = IdeaShowingMessageView.extend({
   template: '#tmpl-ideaShowingMessageBecauseMessageAncestorRelatedToIdea'
 });
 
@@ -45,8 +58,6 @@ var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
   childViewContainer: '.items',
   template: '#tmpl-ideaShowingMessageCollection',
   getChildView: function(item){
-    console.log("IdeaShowingMessageCollectionView::getChildView() item: ", item);
-
     if ( item instanceof IdeaShowingMessageBecauseMessagePostedInIdeaModel ){
       return IdeaShowingMessageBecauseMessagePostedInIdeaView;
     }
@@ -75,35 +86,42 @@ var IdeasShowingMessageModal = Backbone.Modal.extend({
     };
   },
   onRender: function(){
+    var that = this;
+    var ideasCollectionPromise = new CollectionManager().getAllIdeasCollectionPromise();
+    Promise.resolve(ideasCollectionPromise).then(function(ideas){
+      var ideaId = "local:Idea/19";
+      var idea = ideas.get(ideaId);
+      if ( idea ){
+        var d0 = new IdeaShowingMessageBecauseMessagePostedInIdeaModel({
+          author: "Testy Tester",
+          ideaId: ideaId //idea
+        });
 
-    var d0 = new IdeaShowingMessageBecauseMessagePostedInIdeaModel({
-      author: "Testy Tester",
-      idea: "local:Idea/5"
+        var d1 = new IdeaShowingMessageBecauseMessageHarvestedInIdeaModel({
+          harvester: "Testy Harvester",
+          ideaId: ideaId,
+          extractText: "Coucou"
+        });
+
+        var d2 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+          threadTitle: "Great thread!!",
+          ideaId: ideaId
+        });
+
+        var data = [d0, d1, d2];
+
+        var myIdeaReasons = new IdeaShowingMessageCollection(data);
+
+        var ideasColl = new IdeaShowingMessageCollectionView({
+          collection: myIdeaReasons
+        });
+
+        that.$(".ideas-reasons-collection").html(ideasColl.render().el);
+      }
+      else {
+        console.log("error: idea not found: ", ideaId);
+      }
     });
-
-    var d1 = new IdeaShowingMessageBecauseMessageHarvestedInIdeaModel({
-      harvester: "Testy Harvester",
-      idea: "local:Idea/5",
-      extractText: "Coucou"
-    });
-
-    var d2 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
-      threadTitle: "Great thread!!",
-      idea: "local:Idea/5"
-    });
-
-    var data = [d0, d1, d2];
-
-    var myIdeaReasons = new IdeaShowingMessageCollection(data);
-
-    var ideasColl = new IdeaShowingMessageCollectionView({
-      collection: myIdeaReasons
-    });
-
-    console.log("ideasColl: ", ideasColl);
-    console.log("ideasColl.render().el: ", ideasColl.render().el);
-
-    this.$(".ideas-reasons-collection").html(ideasColl.render().el);
   }
 });
 

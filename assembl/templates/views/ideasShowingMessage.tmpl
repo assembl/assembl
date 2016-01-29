@@ -4,6 +4,8 @@
   <h3 class="h3">{{ gettext('Links between this message and ideas') }}</h3>
 </div>
 <div class="popin-body">
-  {{ gettext('This message is visible in the %(number_of_ideas)s following ideas because:')|format(number_of_ideas=number_of_ideas)|safe }}
-  <div class="ideas-reasons-collection"></div>
+  <div class="ideas-showing-message">
+    {{ gettext('This message is visible in the %(number_of_ideas)s following ideas because:')|format(number_of_ideas=number_of_ideas)|safe }}
+    <div class="ideas-reasons-collection"></div>
+  </div>
 </div>
