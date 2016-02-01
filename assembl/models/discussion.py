@@ -663,10 +663,13 @@ class Discussion(DiscussionBoundBase):
 
     def translation_service(self):
         if self.id not in self._discussion_services:
-            service = self.translation_service_class
-            if service:
-                service = resolver.resolve(service)()
-            self._discussion_services[self.id] = service
+            try:
+                service = self.translation_service_class
+                if service:
+                    service = resolver.resolve(service)()
+                self._discussion_services[self.id] = service
+            except:
+                pass
         return self._discussion_services[self.id]
 
     @property
