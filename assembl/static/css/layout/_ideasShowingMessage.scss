@@ -1,3 +1,12 @@
+.modal-ideas-showing-message .bbm-modal.bbm-modal--open {
+  max-width: 800px;
+
+  .popin-body {
+    max-height: calc(80vh - 45px - 15px);
+    overflow: scroll;
+  }
+}
+
 .ideas-showing-message {
   .ideas-showing-message-introduction {
     font-weight: bold;
@@ -7,6 +16,21 @@
       border-bottom: 1px solid #e6e6e6;
       padding-bottom: 15px;
       padding-top: 15px;
+    }
+
+    .items > div:last-child {
+      border: none; 
+    }
+
+    .left-column {
+      display: inline-block;
+      width: calc(100% - 250px);
+    }
+
+    .right-column {
+      float: right;
+      margin-top: 10px;
+      max-width: 245px;
     }
 
     .author, .harvester {
@@ -39,7 +63,7 @@
 
     .thread-title {
       display: inline-block;
-      color: $gray4;
+      font-style: italic;
     }
 
     .extract:before, .thread-title:before {

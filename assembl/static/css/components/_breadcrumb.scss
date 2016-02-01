@@ -1,5 +1,5 @@
 .breadcrumb {
-  display: inline-block;
+  display: inline; /* or "inline-block" if we want no line break in the same element (separated by ">") */
 }
 
 .breadcrumb:after {

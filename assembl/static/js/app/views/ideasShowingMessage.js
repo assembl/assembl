@@ -7,7 +7,8 @@ var Marionette = require('../shims/marionette.js'),
   Ctx = require('../common/context.js'),
   CollectionManager = require('../common/collectionManager.js'),
   IdeaBreadcrumbFromIdView = require('./ideaBreadcrumb.js'),
-  i18n = require('../utils/i18n.js');
+  i18n = require('../utils/i18n.js'),
+  IdeaModel = require('../models/idea.js');
 
 // root class
 var IdeaShowingMessageModel = Backbone.Model.extend({
@@ -17,6 +18,9 @@ var IdeaShowingMessageModel = Backbone.Model.extend({
 // root class, ~ abstract: only sub-classes should be instanciated. Sub-classes have in common to render the breadcrumb of an idea associated to the message
 var IdeaShowingMessageView = Marionette.ItemView.extend({
   template: false,
+  events: {
+    'click .js_seeIdea': 'onSeeIdeaClick'
+  },
   onRender: function(){
     var ideaView = new IdeaBreadcrumbFromIdView({
       ideaId: this.model.get('ideaId')
@@ -27,6 +31,19 @@ var IdeaShowingMessageView = Marionette.ItemView.extend({
     return {
       i18n: i18n
     };
+  },
+  onSeeIdeaClick: function(){
+    var that = this;
+    new CollectionManager().getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
+      var ideaId = that.model.get('ideaId');
+      if ( "modal_instance" in window && "_groupContent" in window.modal_instance ){
+        window.modal_instance.destroy();
+        window.modal_instance._groupContent.setCurrentIdea(
+          allIdeasCollection.get(ideaId),
+          "from_ideasShowingMessage"
+        );
+      }
+    });
   }
 });
 
@@ -80,10 +97,11 @@ var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
 
 var IdeasShowingMessageModal = Backbone.Modal.extend({
   template: _.template($('#tmpl-ideasShowingMessage').html()),
-  className: 'partner-modal popin-wrapper',
+  className: 'modal-ideas-showing-message popin-wrapper',
   cancelEl: '.close, .js_close',
-  initialize: function() {
-    this.$('.bbm-modal').addClass('popin');
+  initialize: function(options) {
+    this._groupContent = ("groupContent" in options) ? options.groupContent : null;
+    window.modal_instance = this;
   },
   serializeData: function() {
     return {
@@ -95,7 +113,7 @@ var IdeasShowingMessageModal = Backbone.Modal.extend({
     var that = this;
     var ideasCollectionPromise = new CollectionManager().getAllIdeasCollectionPromise();
     Promise.resolve(ideasCollectionPromise).then(function(ideas){
-      var ideaId = "local:Idea/19";
+      var ideaId = "local:Idea/189";
       var idea = ideas.get(ideaId);
       if ( idea ){
         var d0 = new IdeaShowingMessageBecauseMessagePostedInIdeaModel({
@@ -106,7 +124,7 @@ var IdeasShowingMessageModal = Backbone.Modal.extend({
         var d1 = new IdeaShowingMessageBecauseMessageHarvestedInIdeaModel({
           harvester: "Testy Harvester",
           ideaId: ideaId,
-          extractText: "Coucou"
+          extractText: "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"
         });
 
         var d2 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
@@ -114,7 +132,27 @@ var IdeasShowingMessageModal = Backbone.Modal.extend({
           ideaId: ideaId
         });
 
-        var data = [d0, d1, d2];
+        var d3 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+          threadTitle: "Great thread!!",
+          ideaId: ideaId
+        });
+
+        var d4 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+          threadTitle: "Great thread!!",
+          ideaId: ideaId
+        });
+
+        var d5 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+          threadTitle: "Great thread!!",
+          ideaId: ideaId
+        });
+
+        var d6 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+          threadTitle: "Great thread!!",
+          ideaId: ideaId
+        });
+
+        var data = [d0, d1, d2, d3, d4, d5, d6];
 
         var myIdeaReasons = new IdeaShowingMessageCollection(data);
 

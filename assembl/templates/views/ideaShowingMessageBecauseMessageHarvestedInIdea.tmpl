@@ -1,10 +1,15 @@
-<div class="idea-reason-introduction">
-  <% print(i18n.sprintf(i18n.gettext("<div class='harvester'>%s</div> has considered that this message is linked to idea:"), harvester)); %>
-</div>
-<div class="idea"></div>
-<div class="idea-reason-content">
-  <%= i18n.gettext("Because of this extract:") %>
-  <div class="extract">
-    <%= extractText %>
+<div class="left-column">
+  <div class="idea-reason-introduction">
+    <% print(i18n.sprintf(i18n.gettext("<div class='harvester'>%s</div> has considered that this message is linked to idea:"), harvester)); %>
   </div>
+  <div class="idea"></div>
+  <div class="idea-reason-content">
+    <%= i18n.gettext("Because of this extract:") %>
+    <div class="extract">
+      <%= extractText %>
+    </div>
+  </div>
+</div>
+<div class="right-column">
+  <a class="btn-sm btn-secondary js_seeIdea"><%= i18n.gettext("See this idea and close this window") %></a>
 </div>

@@ -1574,7 +1574,10 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   seeIdeasWhereMessageIsVisible: function(){
-    var modalView = new IdeasShowingMessage();
+    var that = this;
+    var modalView = new IdeasShowingMessage({
+      groupContent: that.messageListView.getContainingGroup()
+    });
     Assembl.slider.show(modalView);
   }
 
