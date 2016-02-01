@@ -14,7 +14,7 @@ var IdeaShowingMessageModel = Backbone.Model.extend({
   ideaId: null // string. for example "local:Idea/19"
 });
 
-// root class, only sub-classes should be instanciated. Sub-classes have in common to render the breadcrumb of an idea associated to the message
+// root class, ~ abstract: only sub-classes should be instanciated. Sub-classes have in common to render the breadcrumb of an idea associated to the message
 var IdeaShowingMessageView = Marionette.ItemView.extend({
   template: false,
   onRender: function(){
@@ -22,6 +22,11 @@ var IdeaShowingMessageView = Marionette.ItemView.extend({
       ideaId: this.model.get('ideaId')
     });
     this.$(".idea").html(ideaView.render().el);
+  },
+  templateHelpers: function(){
+    return {
+      i18n: i18n
+    };
   }
 });
 
@@ -82,6 +87,7 @@ var IdeasShowingMessageModal = Backbone.Modal.extend({
   },
   serializeData: function() {
     return {
+      i18n: i18n,
       number_of_ideas: 6
     };
   },

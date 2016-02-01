@@ -1,9 +1,23 @@
 .ideas-showing-message {
+  .ideas-showing-message-introduction {
+    font-weight: bold;
+  }
   .ideas-reasons-collection {
-    .idea {
+    .items > div {
+      border-bottom: 1px solid #e6e6e6;
+      padding-bottom: 15px;
+      padding-top: 15px;
+    }
+
+    .author, .harvester {
+      display: inline-block;
+      color: $theme_activelink_color;
+    }
+
+    .idea, .extract {
       border-left: 4px solid #efefef;
       padding-left: 6px;
-      margin-top: 5px;
+      margin-top: 10px;
       margin-bottom: 5px;
     }
 
@@ -13,6 +27,31 @@
 
     .breadcrumb:last-child {
       color: $theme_activelink_color;
+    }
+
+    .idea-reason-content {
+      margin-top: 5px;
+    }
+
+    .extract {
+      color: $gray4;
+    }
+
+    .thread-title {
+      display: inline-block;
+      color: $gray4;
+    }
+
+    .extract:before, .thread-title:before {
+      content: "<<";
+      font-size: smaller;
+      padding-right: 2px;
+    }
+
+    .extract:after, .thread-title:after {
+      content: ">>";
+      font-size: smaller;
+      padding-left: 2px;
     }
   }
 }
