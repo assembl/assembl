@@ -94,6 +94,26 @@ def is_migration_script():
     return 'alembic' in sys.argv[0] or 'assembl-db-manage' in sys.argv[0]
 
 
+def delete_boolean_constraint(db, table, column):
+    # Virtuoso is annoying with schema migration.
+    # Dropping the column does not delete the constraint. WHY????
+    # Also, CHECK constraints are generally unnamed.
+    from assembl.lib import config
+    username = config.get('db_user')
+    schema = config.get('db_schema')
+    constraints = list(db.execute("select c_text, c_mode from db.dba.sys_constraints where c_table = '%s.%s.%s'" % (
+        schema, username, table)))
+    treated = set()
+    for constraint_name, constraint_code in constraints:
+        if constraint_name in treated:
+            continue
+        # column name substring would be annoying...
+        if column in constraint_code:
+            db.execute('alter table "%s"."%s"."%s" drop constraint "%s"' % (
+                schema, username, table, constraint_name))
+            treated.add(constraint_name)
+
+
 def includeme(config):
     """Initialize Alembic-related stuff at app start-up time."""
     skip_migration = config.registry.settings.get('app.skip_migration')
