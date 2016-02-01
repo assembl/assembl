@@ -324,6 +324,46 @@ class Post(Content):
             return None
         return super(Post, self).get_body_as_text()
 
+    def indirect_idea_content_links(self):
+        "Return all ideaContentLinks related to this post or its ancestors"
+        from .idea_content_link import IdeaContentLink
+        ancestors = filter(None, self.ancestry.split(","))
+        ancestors = [int(x) for x in ancestors]
+        ancestors.append(self.id)
+        return self.db.query(IdeaContentLink).filter(
+            IdeaContentLink.content_id.in_(ancestors)).all()
+
+    @classmethod
+    def extra_collections(cls):
+        from .idea_content_link import IdeaContentLink
+
+        class IdeaContentLinkCollection(AbstractCollectionDefinition):
+            def __init__(self, cls):
+                super(IdeaContentLinkCollection, self
+                      ).__init__(cls, IdeaContentLink)
+
+            def decorate_query(
+                    self, query, owner_alias, last_alias, parent_instance,
+                    ctx):
+                parent = owner_alias
+                children = last_alias
+                ancestors = filter(None, parent_instance.ancestry.split(","))
+                ancestors = [int(x) for x in ancestors]
+                ancestors.append(parent_instance.id)
+                return query.join(
+                    parent, children.content_id.in_(ancestors))
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
+                pass
+
+            def contains(self, parent_instance, instance):
+                return instance.content_id == parent_instance.id or (
+                    str(instance.content_id) in
+                    parent_instance.ancestry.split(","))
+
+        return {'indirect_idea_content_links': IdeaContentLinkCollection(cls)}
     @classmethod
     def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
