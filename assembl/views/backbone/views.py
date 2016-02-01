@@ -230,8 +230,8 @@ def home_view(request):
     else:
         locale = request.localizer.locale_name
 
-    service = discussion.translation_service()
     try:
+        service = discussion.translation_service()
         locale_labels = json.dumps(
             service.target_locale_labels(
                 Locale.get_or_create(locale, discussion.db))
