@@ -231,9 +231,14 @@ def home_view(request):
         locale = request.localizer.locale_name
 
     service = discussion.translation_service()
-    context['translation_locale_names_json'] = json.dumps(
-        service.target_locale_labels(
-            Locale.get_or_create(locale, discussion.db)) if service else {})
+    try:
+        locale_labels = json.dumps(
+            service.target_locale_labels(
+                Locale.get_or_create(locale, discussion.db))
+            if service else {})
+    except:
+        locale_labels = '{}'
+    context['translation_locale_names_json'] = locale_labels
 
     context['preferences_json'] = json.dumps(dict(preferences))
 
