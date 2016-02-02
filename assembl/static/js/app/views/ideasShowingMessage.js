@@ -7,8 +7,7 @@ var Marionette = require('../shims/marionette.js'),
   Ctx = require('../common/context.js'),
   CollectionManager = require('../common/collectionManager.js'),
   IdeaBreadcrumbFromIdView = require('./ideaBreadcrumb.js'),
-  i18n = require('../utils/i18n.js'),
-  IdeaModel = require('../models/idea.js');
+  i18n = require('../utils/i18n.js');
 
 // root class
 var IdeaShowingMessageModel = Backbone.Model.extend({
@@ -51,6 +50,7 @@ var IdeaShowingMessageCollection = Backbone.Collection.extend({
   model: IdeaShowingMessageModel
 });
 
+// this is the case where the author of the message has top-posted directly in this idea
 var IdeaShowingMessageBecauseMessagePostedInIdeaModel = IdeaShowingMessageModel.extend({
   author: null // for now, type is string, but should evolve to User something
 });
@@ -59,6 +59,7 @@ var IdeaShowingMessageBecauseMessagePostedInIdeaView = IdeaShowingMessageView.ex
   template: '#tmpl-ideaShowingMessageBecauseMessagePostedInIdea'
 });
 
+// this is the case where a harvester harvested an extract of this message and put it into this idea
 var IdeaShowingMessageBecauseMessageHarvestedInIdeaModel = IdeaShowingMessageModel.extend({
   harvester: null, // for now, type is string, but should evolve to User something
   extractText: null // type is string, could evolve to Extract something
@@ -68,12 +69,25 @@ var IdeaShowingMessageBecauseMessageHarvestedInIdeaView = IdeaShowingMessageView
   template: '#tmpl-ideaShowingMessageBecauseMessageHarvestedInIdea'
 });
 
-var IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel = IdeaShowingMessageModel.extend({
+// this is the case where the message is an answer in a discussion thread, and the first message of the thread was posted into this idea
+var IdeaShowingMessageBecauseMessageAncestorPostedInIdeaModel = IdeaShowingMessageModel.extend({
   threadTitle: null // type is string, could evolve to Post something
 });
 
-var IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaView = IdeaShowingMessageView.extend({
-  template: '#tmpl-ideaShowingMessageBecauseMessageAncestorRelatedToIdea'
+var IdeaShowingMessageBecauseMessageAncestorPostedInIdeaView = IdeaShowingMessageView.extend({
+  template: '#tmpl-ideaShowingMessageBecauseMessageAncestorPostedInIdea'
+});
+
+// this is the case where the message is an answer in a discussion thread, and one of its ancestors has been harvested into this idea
+// maybe we could also provide a link to the harvested message? or show its author?
+var IdeaShowingMessageBecauseMessageAncestorHarvestedInIdeaModel = IdeaShowingMessageModel.extend({
+  threadTitle: null, // type is string, could evolve to Post something
+  harvester: null, // for now, type is string, but should evolve to User something
+  extractText: null // type is string, could evolve to Extract something
+});
+
+var IdeaShowingMessageBecauseMessageAncestorHarvestedInIdeaView = IdeaShowingMessageView.extend({
+  template: '#tmpl-ideaShowingMessageBecauseMessageAncestorHarvestedInIdea'
 });
 
 var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
@@ -86,8 +100,11 @@ var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
     if ( item instanceof IdeaShowingMessageBecauseMessageHarvestedInIdeaModel ){
       return IdeaShowingMessageBecauseMessageHarvestedInIdeaView;
     }
-    if ( item instanceof IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel ){
-      return IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaView;
+    if ( item instanceof IdeaShowingMessageBecauseMessageAncestorPostedInIdeaModel ){
+      return IdeaShowingMessageBecauseMessageAncestorPostedInIdeaView;
+    }
+    if ( item instanceof IdeaShowingMessageBecauseMessageAncestorHarvestedInIdeaModel ){
+      return IdeaShowingMessageBecauseMessageAncestorHarvestedInIdeaView;
     }
 
     console.log("!!!! error fallback");
@@ -127,27 +144,29 @@ var IdeasShowingMessageModal = Backbone.Modal.extend({
           extractText: "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"
         });
 
-        var d2 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+        var d2 = new IdeaShowingMessageBecauseMessageAncestorPostedInIdeaModel({
           threadTitle: "Great thread!!",
           ideaId: ideaId
         });
 
-        var d3 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+        var d3 = new IdeaShowingMessageBecauseMessageAncestorHarvestedInIdeaModel({
+          threadTitle: "Great thread!!",
+          harvester: "Testy Harvester",
+          extractText: "En général, ce serait une grande folie d'espérer que ceux qui dans le fait sont les maîtres préfèreront un autre intérêt au leur. - Jean-Jacques Rousseau, Sur l'économie politique (1755)",
+          ideaId: ideaId
+        });
+
+        var d4 = new IdeaShowingMessageBecauseMessageAncestorPostedInIdeaModel({
           threadTitle: "Great thread!!",
           ideaId: ideaId
         });
 
-        var d4 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+        var d5 = new IdeaShowingMessageBecauseMessageAncestorPostedInIdeaModel({
           threadTitle: "Great thread!!",
           ideaId: ideaId
         });
 
-        var d5 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
-          threadTitle: "Great thread!!",
-          ideaId: ideaId
-        });
-
-        var d6 = new IdeaShowingMessageBecauseMessageAncestorRelatedToIdeaModel({
+        var d6 = new IdeaShowingMessageBecauseMessageAncestorPostedInIdeaModel({
           threadTitle: "Great thread!!",
           ideaId: ideaId
         });
