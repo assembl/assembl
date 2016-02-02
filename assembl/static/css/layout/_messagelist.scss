@@ -49,38 +49,18 @@
   }
 
   .view-config {
-    @include flexbox((
-      display: box,
-      box-orient: vertical
-    ), $version: 1);
-    @include flexbox((
-      display: flexbox,
-      flex-direction: row
-    ), $version: 2);
-    @include flexbox((
-      display: flex,
-      flex-direction: row
-    ));
+    @include display(flex);
+    @include flex-direction(row);
     justify-content: space-between;
     -ms-flex-pack: space-between; // IE 10 way of saying "justify-content: space-between;"
     .config {
-      @include flexbox((flex: 1));
+        @include flex(1);
     }
   }
 
   .show-expert-mode {
-    @include flexbox((
-      display: box,
-      box-orient: vertical
-    ), $version: 1);
-    @include flexbox((
-      display: flexbox,
-      flex-direction: row
-    ), $version: 2);
-    @include flexbox((
-      display: flex,
-      flex-direction: row
-    ));
+    @include display(flex);
+    @include flex-direction(row);
 
     .show-expert-mode-label {
       line-height: 24px; // the height of the toggle button
@@ -99,35 +79,13 @@
 
   .options-filter {
     max-height: 60px;
-    @include flexbox((
-      display: box,
-      box-orient: vertical
-    ), $version: 1);
-    @include flexbox((
-      display: flexbox,
-      flex-direction: row
-    ), $version: 2);
-    @include flexbox((
-      display: flex,
-      flex-direction: row
-    ));
+    @include display(flex);
+    @include flex-direction(row);
 
     .options-filter-items {
-      @include flexbox((
-        display: box,
-        box-orient: vertical,
-        flex: 1
-      ), $version: 1);
-      @include flexbox((
-        display: flexbox,
-        flex-direction: row,
-        flex: 1
-      ), $version: 2);
-      @include flexbox((
-        display: flex,
-        flex-direction: row,
-        flex: 1
-      ));
+        @include display(flex);
+        @include flex-direction(row);
+        @include flex(1);
     }
 
     .option {

@@ -188,7 +188,7 @@
     -moz-hyphens: auto;
     hyphens: auto;
     &:hover{
-      @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
       border: 1px solid #cccccc;
     }
   }

@@ -72,7 +72,7 @@
       color: $white;
       font-size: 14px;
       text-decoration: none;
-      @include border-top-right-radius($borderRadiusM);
+      border-top-right-radius: $borderRadiusM;
 
       span {
         display: inline-block;

@@ -1,16 +1,16 @@
 .cke {
-    @include box-shadow( none !important );
+    box-shadow: none !important;
 }
 
 .cke_top {
     background: 0 !important;
-    @include box-shadow( none !important );
+    box-shadow: none !important ;
     border: 0 !important;
 }
 
 .cke_chrome {
     border: 0 !important;
-    @include box-shadow( none !important );
+    box-shadow: none !important ;
 }
 
 

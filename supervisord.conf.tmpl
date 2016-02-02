@@ -115,7 +115,7 @@ stopwaitsecs = 60
 killasgroup = true
 
 [group:dev]
-programs = pserve, compass, gulp
+programs = pserve, nodesass, gulp
 
 [group:prod]
 programs = uwsgi
@@ -126,10 +126,10 @@ command = %(VIRTUAL_ENV)s/bin/pserve --reload %(CONFIG_FILE)s
 autostart = %(autostart_pserve)s
 autorestart = false
 
-[program:compass]
+[program:nodesass]
 directory = %(here)s
-command = bundle exec compass watch
-autostart = %(autostart_compass)s
+command = ./node_modules/.bin/node-sass -w -r --include-path node_modules/bourbon/app/assets/stylesheets -o assembl/static/css assembl/static/css
+autostart = %(autostart_nodesass)s
 autorestart = true
 
 [program:gulp]

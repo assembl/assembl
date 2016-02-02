@@ -340,7 +340,7 @@ def compile_stylesheets():
     """
     execute(update_compass)
     with cd(env.projectpath):
-        run('bundle exec compass compile --force', shell=True)
+        run('./node_modules/node-sass/bin/node-sass --include-path node_modules/bourbon/app/assets/stylesheets assembl/static/css/themes/default/theme.scss assembl/static/css/themes/default/theme.css', shell=True)
         with cd('assembl/static/widget/card/app'):
             run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 

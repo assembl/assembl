@@ -12,13 +12,10 @@
     "author": "hellsingblack@gmail.com",
     "license": "MIT",
     "dependencies": {
-        "gulp": "~3.6.2",
-        "gulp-sass": "~0.7.1",
-        "gulp-watch": "~0.6.3",
-        "gulp-clean": "~0.2.4"
     },
     "devDependencies": {
-        "karma-jasmine": "~0.1.5",
-        "karma-chrome-launcher": "~0.1.4"
+        "karma-jasmine": "~0.3.7",
+        "jasmine-core": "2.4.1",
+        "karma-chrome-launcher": "~0.2.2"
     }
 }

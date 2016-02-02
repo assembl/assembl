@@ -2,18 +2,8 @@
 // Adds a gray dot before the word
 // ========
 #onlinedot {
-    @include flexbox((
-      display: box,
-      box-orient: vertical
-    ), $version: 1);
-    @include flexbox((
-      display: flexbox,
-      flex-direction: row
-    ), $version: 2);
-    @include flexbox((
-      display: flex,
-      flex-direction: row
-    ));
+    @include display(flex);
+    @include flex-direction(row);
   
     width: 290px;
 

@@ -166,7 +166,7 @@ $editablearea_hover_border_size: 1px;
   &.canEdit {
     border: $editablearea_hover_border_size solid transparent;
     &:hover {
-      @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
       border: $editablearea_hover_border_size solid #cccccc;
     }
   }
