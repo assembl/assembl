@@ -213,7 +213,7 @@
         "discussion": true,
         "import_date": false,
         "like_count": true,
-        "indirect_idea_content_links": ["&indirect_idea_content_links:"],
+        "indirect_idea_content_links": ["&indirect_idea_content_links:min_idea_content_link"],
         "subject": ":",
         "body": ":",
         "widget_ideas": "&widget_ideas"

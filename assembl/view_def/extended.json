@@ -95,6 +95,7 @@
         "like_count": true,
         "discussion": true,
         "import_date": false,
+        "indirect_idea_content_links": ["&indirect_idea_content_links:min_idea_content_link"],
         "widget_ideas": "&widget_ideas"
     },
     "Post": {
