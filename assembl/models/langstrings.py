@@ -515,7 +515,7 @@ class LangString(Base):
                     lambda e: e.is_machine_translated != use_originals,
                     self.entries)
                 if not allow_errors:
-                    entries = filter(lambda e: not e.error_count, entries)
+                    entries = filter(lambda e: not e.error_code, entries)
                 if not entries:
                     continue
                 candidates = []
@@ -530,7 +530,7 @@ class LangString(Base):
                     candidates.sort()
                     entries = list(self.entries)
                     if not allow_errors:
-                        entries = filter(lambda e: not e.error_count, entries)
+                        entries = filter(lambda e: not e.error_code, entries)
                     for pref in candidates:
                         if pref.translate_to:
                             target_locale = pref.translate_to_code
@@ -582,7 +582,7 @@ class LangString(Base):
         lang = self.best_lang(prefs)
         entries = [lang]
         # Punt this.
-        # if lang.error_count:
+        # if lang.error_code:
         #     # Wasteful to call twice, but should be rare.
         #     entries.append(self.best_lang(prefs, False))
         if all((e.is_machine_translated for e in entries)):

@@ -34,6 +34,7 @@ var LangStringEntry = Base.Model.extend({
     "@type": Types.LANGSTRING_ENTRY,
     "@language": "und",
     "error_count": 0,
+    "error_code": undefined,
     "value": ""
   },
   isMachineTranslation: function() {
@@ -102,7 +103,7 @@ var LangString = Base.Model.extend({
     return originals[0];
   },
 
-  bestOf: function(available, langPrefs) {
+  bestOf: function(available, langPrefs, filter_errors) {
     // Get the best langStringEntry among those available using user prefs.
     // 1. Look at available original languages: get corresponding pref.
     // 2. Sort prefs (same order as original list.)
@@ -114,7 +115,6 @@ var LangString = Base.Model.extend({
     if (available.length == 1) {
         return available[0];
     }
-    
     if (langPrefs !== undefined) {
       for (var useTranslationsC = 0; useTranslationsC < 2; useTranslationsC++) {
         var useTranslations = (useTranslationsC==1),
@@ -124,6 +124,8 @@ var LangString = Base.Model.extend({
           entry = available[i];
           var entry_locale = entry.get("@language");
           if (entry.isMachineTranslation() != useTranslations)
+            continue;
+          if (filter_errors && entry.get("error_code"))
             continue;
           var pref = langPrefs.getPreferenceForLocale(entry_locale);
           if (pref !== undefined) {
