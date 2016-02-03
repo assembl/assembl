@@ -128,6 +128,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.unknownPreference = false;
     this.hasTranslatorService = false;
     this.bodyTranslationError = false;
+    this.missingTranslationPreference = false;
 
     Promise.join(
         this.model.getCreatorPromise(),
@@ -296,6 +297,12 @@ var MessageView = Marionette.LayoutView.extend({
         body = body.langstring().original();
         this.useOriginalContent = false;
     }
+    if (!body.isMachineTranslation() && !this.bodyTranslationError) {
+        this.missingTranslationPreference = this.translationData.getPreferenceForLocale(
+            body.get("@language")) === undefined;
+    } else {
+        this.missingTranslationPreference = false;
+    }
 
     if (this.model.get("publication_state") != "PUBLISHED") {
     //if (this.model.get("moderation_text")) {
@@ -345,6 +352,7 @@ var MessageView = Marionette.LayoutView.extend({
       subject: subject,
       body: body,
       bodyTranslationError: this.bodyTranslationError,
+      missingTranslationPreference: this.missingTranslationPreference,
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
       isHoisted: this.isHoisted,
@@ -516,7 +524,7 @@ var MessageView = Marionette.LayoutView.extend({
 
         if (this.hasTranslatorService) {
           if (!this.bodyTranslationError &&
-                (this.forceTranslationQuestion || this.unknownPreference)) {
+                (this.forceTranslationQuestion || this.unknownPreference || this.missingTranslationPreference)) {
             //Only show the translation view *iff* the message was translated by the backend
             var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
             this.translationRegion.show(translationView);

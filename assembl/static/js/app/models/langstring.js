@@ -131,6 +131,9 @@ var LangString = Base.Model.extend({
           if (pref !== undefined) {
             entryByPrefLocale[pref.get("locale_code")] = entry;
             prefCandidates.push(pref);
+          } else if (useTranslations) {
+            // No pref for original, just return the original entry
+            return entry;
           }
         }
         if (prefCandidates.length) {
