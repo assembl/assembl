@@ -92,17 +92,23 @@ class Locale(Base):
 
     @hybrid_property
     def is_machine_translated(self):
+        # Fails. May need a special comparator.
+        # https://groups.google.com/forum/#!topic/sqlalchemy/g74TnQosp4k
         return self.locale_is_machine_translated(self.code)
 
     @is_machine_translated.expression
     def is_machine_translated(cls):
         return cls.code.like("%-x-mtfrom-%")
 
-    @property
-    def machine_translated_from(self):
-        l = self.code.split('-x-mtfrom-', 1)
+    @staticmethod
+    def extract_translated_from_locale(locale_code):
+        l = locale_code.split('-x-mtfrom-', 1)
         if len(l) == 2:
             return l[1]
+
+    @property
+    def machine_translated_from(self):
+        return self.extract_translated_from_locale(self.code)
 
     @staticmethod
     def extract_base_locale(locale_code):
@@ -488,7 +494,7 @@ class LangString(Base):
         q = Query(LangStringEntry).order_by(c).limit(1).subquery()
         return aliased(LangStringEntry, q)
 
-    def best_lang(self, user_prefs=None):
+    def best_lang(self, user_prefs=None, allow_errors=True):
         # Get the best langStringEntry among those available using user prefs.
         # 1. Look at available original languages: get corresponding pref.
         # 2. Sort prefs (same order as original list.)
@@ -508,6 +514,8 @@ class LangString(Base):
                 entries = filter(
                     lambda e: e.is_machine_translated != use_originals,
                     self.entries)
+                if not allow_errors:
+                    entries = filter(lambda e: not e.error_count, entries)
                 if not entries:
                     continue
                 candidates = []
@@ -521,17 +529,20 @@ class LangString(Base):
                 if candidates:
                     candidates.sort()
                     entries = list(self.entries)
+                    if not allow_errors:
+                        entries = filter(lambda e: not e.error_count, entries)
                     for pref in candidates:
                         if pref.translate_to:
                             target_locale = pref.translate_to_code
-                            entries.sort(key=lambda e: -Locale.len_common_parts(
-                                target_locale,
-                                Locale.extract_base_locale(e.locale_code)))
-                            e = entries[0]
-                            if Locale.len_common_parts(
+
+                            def common_len(e):
+                                return Locale.len_common_parts(
                                     target_locale,
-                                    Locale.extract_base_locale(e.locale_code)):
-                                return e
+                                    Locale.extract_base_locale(e.locale_code))
+                            common_entries = filter(common_len, entries).sort(
+                                common_len, reverse=True)
+                            if common_entries:
+                                return common_entries[0]
                         else:
                             return entriesByLocale[pref.locale_code]
         # give up and give first original
@@ -541,7 +552,7 @@ class LangString(Base):
         # or first entry
         return self.entries[0]
 
-    def best_entry_in_request(self):
+    def _get_lang_prefs(self):
         from pyramid.threadlocal import get_current_request
         from pyramid.security import Everyone
         # Very very hackish, but the user_prefs_as_dict call
@@ -558,24 +569,32 @@ class LangString(Base):
                     user.language_preference)
             else:
                 req.lang_prefs = None
-        return self.best_lang(req.lang_prefs)
+        return req.lang_prefs
+
+    def best_entry_in_request(self):
+        # Use only when a request is in context, eg view_def
+        return self.best_lang(self._get_lang_prefs(), False)
 
     def best_entries_in_request_with_originals(self):
         "Give both best and original (for view_def); avoids a roundtrip"
-        lang = self.best_entry_in_request()
-        if lang.is_machine_translated:
-            entries = self.non_mt_entries()
-            entries.append(lang)
-            return entries
-        else:
-            return [lang]
+        # Use only when a request is in context, eg view_def
+        prefs = self._get_lang_prefs()
+        lang = self.best_lang(prefs)
+        entries = [lang]
+        # Punt this.
+        # if lang.error_count:
+        #     # Wasteful to call twice, but should be rare.
+        #     entries.append(self.best_lang(prefs, False))
+        if all((e.is_machine_translated for e in entries)):
+            entries.extend(self.non_mt_entries())
+        return entries
 
     def remove_translations(self):
         for entry in self.entries:
-            if entry.code.is_machine_translated:
+            if Locale.locale_is_machine_translated(entry.locale_code):
                 entry.delete()
             else:
-                entry.forget_identification()
+                entry.forget_identification(True)
         if inspect(self).persistent:
             self.db.expire(self, ["entries"])
 
@@ -628,7 +647,7 @@ class LangStringEntry(Base, TombstonableMixin):
         Integer, default=0,
         doc="Errors from the translation server")
     error_code = Column(
-        SmallInteger, default=0,
+        SmallInteger, default=None,
         doc="Type of error from the translation server")
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
     value = Column(UnicodeText)  # not searchable inv virtuoso
@@ -662,16 +681,22 @@ class LangStringEntry(Base, TombstonableMixin):
 
     @property
     def locale_identification_data_json(self):
-        return json.loads(self.locale_identification_data or "{}")
+        return json.loads(self.locale_identification_data)\
+            if self.locale_identification_data else {}
 
     @locale_identification_data_json.setter
     def locale_identification_data_json(self, data):
         self.locale_identification_data = json.dumps(data) if data else None
 
-    @property
+    @hybrid_property
     def is_machine_translated(self):
         return Locale.locale_is_machine_translated(
             Locale.code_for_id(self.locale_id))
+
+    @is_machine_translated.expression
+    def is_machine_translated(cls):
+        # Only works if the Locale is part of the join
+        return Locale.is_machine_translated
 
     def change_value(self, new_value):
         self.tombstone = datetime.utcnow()
@@ -691,7 +716,14 @@ class LangStringEntry(Base, TombstonableMixin):
             raise RuntimeError("Why identify a machine-translated locale?")
         data = data or {}
         original = self.locale_identification_data_json.get("original", None)
-        if original and locale_code == original:
+        if not locale_code:
+            if not self.locale_code:
+                # replace id data with new one.
+                if original:
+                    data['original'] = original
+                self.locale_identification_data_json = data
+            return False
+        elif original and locale_code == original:
             if locale_code != self.locale_code:
                 self.locale_code = locale_code
                 changed = True
@@ -720,8 +752,11 @@ class LangStringEntry(Base, TombstonableMixin):
             self.locale_confirmed = certainty or locale_code == original
         return changed
 
-    def forget_identification(self):
-        if not self.locale_confirmed:
+    def forget_identification(self, force=False):
+        if force:
+            self.locale_code = Locale.UNDEFINED
+            self.locale_confirmed = False
+        elif not self.locale_confirmed:
             data = self.locale_identification_data_json
             orig = data.get("original", None)
             if orig and orig != self.locale_code:

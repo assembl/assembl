@@ -59,8 +59,9 @@ def translate_content(
     # Special case: Short strings.
     und_subject = content.subject.undefined_entry
     und_body = content.body.undefined_entry
-    if ((und_subject and not service.can_guess_locale(und_subject.value)) or
-            (und_body and not service.can_guess_locale(und_body.value))):
+    if service.distinct_identify_step and (
+            (und_subject and not service.can_guess_locale(und_subject.value))
+            or (und_body and not service.can_guess_locale(und_body.value))):
         combined = " ".join((
             und_subject.value or next(iter(content.subject.non_mt_entries())).value,
             und_body.value or next(iter(content.body.non_mt_entries())).value))
@@ -83,7 +84,7 @@ def translate_content(
         ls = getattr(content, prop)
         if ls:
             entries = ls.entries_as_dict
-            if undefined_id in entries:
+            if service.distinct_identify_step and undefined_id in entries:
                 entry = entries[undefined_id]
                 if entry.value:
                     # assume can_guess_locale = true

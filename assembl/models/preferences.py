@@ -374,8 +374,14 @@ class Preferences(MutableMapping, Base):
             "value_type": "scalar",
             "scalar_values": {
                 "": _("No translation"),
-                "assembl.nlp.translation_service.DummyTranslationService":
-                    _("Dummy tranlation service (for testing)"),
+                "assembl.nlp.translation_service.DummyTranslationServiceTwoSteps":
+                    _("Dummy translation service (two steps)"),
+                "assembl.nlp.translation_service.DummyTranslationServiceOneStep":
+                    _("Dummy translation service (one step)"),
+                "assembl.nlp.translation_service.DummyTranslationServiceTwoStepsWithErrors":
+                    _("Dummy translation service (two steps) with errors"),
+                "assembl.nlp.translation_service.DummyTranslationServiceOneStepWithErrors":
+                    _("Dummy translation service (one step) with errors"),
                 "assembl.nlp.translation_service.GoogleTranslationService":
                     _("Google Translate")},
             "description": _(

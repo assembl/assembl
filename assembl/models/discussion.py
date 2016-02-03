@@ -666,11 +666,16 @@ class Discussion(DiscussionBoundBase):
             try:
                 service = self.translation_service_class
                 if service:
-                    service = resolver.resolve(service)()
+                    service = resolver.resolve(service)(self)
                 self._discussion_services[self.id] = service
             except:
                 pass
-        return self._discussion_services[self.id]
+        return self._discussion_services.get(self.id, None)
+
+    def remove_translations(self):
+        # For testing purposes
+        for post in self.posts:
+            post.remove_translations()
 
     @property
     def main_locale(self):

@@ -338,6 +338,11 @@ class Content(DiscussionBoundBase):
     def get_title(self):
         return self.subject
 
+    def remove_translations(self):
+        if self.subject:
+            self.subject.remove_translations()
+        self.body.remove_translations()
+
     def get_body_mime_type(self):
         """ Return the format of the body, so the frontend will know how to
         display it.  Currently, only:
