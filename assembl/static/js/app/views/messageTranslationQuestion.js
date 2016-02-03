@@ -193,7 +193,8 @@ var TranslationView = Marionette.LayoutView.extend({
                         originalLocale = original.getLocaleValue(),
                         translatedFromLocale = bestSuggestedTranslation.getTranslatedFromLocale(),
                         translatedTo = bestSuggestedTranslation.getBaseLocale(),
-                        preferredTarget = preferences.getPreferenceForLocale(originalLocale).get("translate_to_name");
+                        prefsForLocale = preferences.getPreferenceForLocale(originalLocale),
+                        preferredTarget = prefsForLocale ? prefsForLocale.get("translate_to_name") : Ctx.getLocale();
                     if ( !(translatedFromLocale) ){
                         // Get the original's locale and name
                         var original = that.message.get("body").original();

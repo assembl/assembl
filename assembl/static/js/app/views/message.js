@@ -127,6 +127,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.forceTranslationQuestion = false;
     this.unknownPreference = false;
     this.hasTranslatorService = false;
+    this.bodyTranslationError = false;
 
     Promise.join(
         this.model.getCreatorPromise(),
@@ -285,8 +286,16 @@ var MessageView = Marionette.LayoutView.extend({
 
     body = (body) ? body : this.generateSafeBody();
 
-    var subject = this.hasTranslatorService ? (this.useOriginalContent ? subject.original() : subject.best(this.translationData) ) : subject.original();
-    var body = this.hasTranslatorService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
+    var subject = this.hasTranslatorService ? (this.useOriginalContent ? subject.original() : subject.best(this.translationData) ) : subject.original(),
+        body = this.hasTranslatorService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
+    this.bodyTranslationError = body.get("error_code");
+    if (subject.get("error_code")) {
+        subject = subject.langstring().original();
+    }
+    if (this.bodyTranslationError) {
+        body = body.langstring().original();
+        this.useOriginalContent = false;
+    }
 
     if (this.model.get("publication_state") != "PUBLISHED") {
     //if (this.model.get("moderation_text")) {
@@ -335,6 +344,7 @@ var MessageView = Marionette.LayoutView.extend({
       parentId: this.model.get('parentId'),
       subject: subject,
       body: body,
+      bodyTranslationError: this.bodyTranslationError,
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
       isHoisted: this.isHoisted,
@@ -505,7 +515,8 @@ var MessageView = Marionette.LayoutView.extend({
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
         if (this.hasTranslatorService) {
-          if (this.forceTranslationQuestion || this.unknownPreference) {
+          if (!this.bodyTranslationError &&
+                (this.forceTranslationQuestion || this.unknownPreference)) {
             //Only show the translation view *iff* the message was translated by the backend
             var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
             this.translationRegion.show(translationView);
