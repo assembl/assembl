@@ -1,0 +1,24 @@
+<% if (count > 0) { %>
+    <span>{{gettext("This message is visible in the following ideas:")}}</span>
+    <span>
+        <% if (count === 1) { %>
+            <span class="js_idea-classification-idea"><%= first[0] %></span>
+        <% }%>
+
+        <%if (count === 2) { %>
+            <span class="js_idea-classification-idea"><%= first[0] %></span>
+            <span><%= i18n.gettext("and") %></span>
+            <span class="js_idea-classification-idea"><%= first[1] %></span>
+        <% }%>
+
+        <% else { %>
+            <% _.each(first, function(n){ %>
+                <span class="js_idea-classification-idea"><%= n %></span>
+            <% })%>
+            <% if (rest) { %>
+                <span class="js_others"> <%= i18n.sprintf(i18n.gettext("and %s others"), rest.length) %> </span>
+            <% } %>
+        <% } %>
+    </span>
+
+<% } %>

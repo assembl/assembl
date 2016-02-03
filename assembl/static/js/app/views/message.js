@@ -22,10 +22,93 @@ var Marionette = require('../shims/marionette.js'),
     MessageTranslationView = require('./messageTranslationQuestion.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
     Genie = require('../utils/genieEffect.js'),
-    IdeasShowingMessage = require('./ideasShowingMessage.js');
+    IdeasShowingMessage = require('./ideasShowingMessage.js'),
+    IdeaContentLink = require('../models/ideaContentLink.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10;
+
+
+/**
+ * Classification view that is shown in the underneath each message
+ */
+var IdeaClassificationView = Marionette.ItemView.extend({
+  template: '#tmpl-loader',
+
+  ui: {
+    'others': '.js_others',
+    'idea': '.js_idea-classification-idea'
+  },
+
+  events: {
+    "click @ui.idea": "onIdeaClick"
+  },
+
+
+  initialize: function(options){
+    var cm = new CollectionManager(),
+        that = this,
+        ideaContentLinks = cm.getIdeaContentLinkCollection(this.model);
+
+    this.parentView = options.parentView;
+    this.ideaContentLinks = ideaContentLinks;
+
+    if (_.isEmpty(ideaContentLinks)) {
+      parentView.removeIdeaClassificationView();
+    }
+
+    else {
+      this.ideaContentLinks.getIdeaNamesPromise()
+        .then(function(ideaNames){
+          that.ideaNames = ideaNames;
+          that.template = "#tmpl-ideaClassificationInMessage"
+          that.render();
+        });
+    }
+
+  },
+
+  serializeData: function(){
+    if (this.template === 'tmpl-loader'){
+      return {};
+    }
+
+    var count = this.ideaNames.length,
+        first = null,
+        rest = null;
+
+    if (count <= 3 ){
+      first = this.ideaNames;
+      rest = [];
+    }
+
+    if (count > 3) {
+      first = _.filter(this.ideaNames, 2);
+      rest = _.filter(this.ideaNames, 3);
+    }
+
+    return {
+      names: this.ideaNames,
+      count: count,
+      first: first,
+      rest: rest,
+      i18n: i18n
+    }
+  },
+
+  onIdeaClick: function(e){
+    var that = this;
+    var modalView = new IdeasShowingMessage({
+      groupContent: that.messageListView.getContainingGroup(),
+      messageModel: this.model,
+      ideaContentLinks: this.ideaContentLinks
+    });
+
+    Ctx.setCurrentModalView(modalView);
+    Assembl.slider.show(modalView);
+  }
+});
+
 
 /**
  * @class views.MessageView
@@ -175,7 +258,8 @@ var MessageView = Marionette.LayoutView.extend({
       showMoreDropDown: ".dropdown-toggle", //Used for show/hiding translation view
       showOriginal: '.js_translation_show_original', //Show original region
       showOriginalString: '.js_trans_show_origin',
-      showTranslatedString: '.js_trans_show_translated'
+      showTranslatedString: '.js_trans_show_translated',
+      ideaClassificationRegion: '.js_idea-classification-region'
 
     },
 
@@ -186,6 +270,7 @@ var MessageView = Marionette.LayoutView.extend({
       attachmentsRegion: "@ui.attachments",
       moderationOptionsRegion: "@ui.moderationOptions",
       messageReplyBoxRegion: "@ui.messageReplyBox",
+      ideaClassification: "@ui.ideaClassificationRegion"
     },
 
   /**
@@ -232,9 +317,7 @@ var MessageView = Marionette.LayoutView.extend({
 
     'click .js_message-export-facebook': 'exportToFacebook',
 
-    'click .js_openTargetInPopOver': 'openTargetInPopOver',
-
-    'click .js_seeIdeasWhereMessageIsVisible': 'seeIdeasWhereMessageIsVisible'
+    'click .js_openTargetInPopOver': 'openTargetInPopOver'
   },
 
   /**
@@ -550,7 +633,7 @@ var MessageView = Marionette.LayoutView.extend({
           collection: this.model.get('attachments')
         });
         
-
+        this.renderIdeaClassification();
         this.attachmentsRegion.show(this.attachmentsCollectionView);
       }
 
@@ -889,6 +972,16 @@ var MessageView = Marionette.LayoutView.extend({
         });
       });
     }
+  },
+
+  renderIdeaClassification: function(){
+    console.log('rendering the idea classificatoin view');
+    var view = new IdeaClassificationView({model: this.model, parentView: this});
+    this.getRegion('ideaClassification').show(view);
+  },
+
+  removeIdeaClassificationView: function(){
+    this.getRegion('ideaClassification').empty();
   },
 
   /**
@@ -1571,14 +1664,6 @@ var MessageView = Marionette.LayoutView.extend({
     this.forceTranslationQuestion = false;
     this.useOriginalContent = false;
     this.showAnnotations = this.canShowAnnotations();
-  },
-
-  seeIdeasWhereMessageIsVisible: function(){
-    var that = this;
-    var modalView = new IdeasShowingMessage({
-      groupContent: that.messageListView.getContainingGroup()
-    });
-    Assembl.slider.show(modalView);
   }
 
 });

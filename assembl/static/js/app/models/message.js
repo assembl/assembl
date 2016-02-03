@@ -134,6 +134,46 @@ var MessageModel = Base.Model.extend({
       }
     },
 
+  //Do you wnat self or no??
+  getAncestry: function(){
+    function rec(post){
+      var messages = [];
+      var parent = post.getParent();
+      if (!parent){
+        return this;
+      }
+
+      messages.push(rec(parent));
+      return messages;
+    }
+
+    return rec(this);
+  },
+
+  // /*
+  //   Assumes the ancestry is sorted
+  //  */
+  // getAncestryUntilParent: function(postId){
+  //   var messages = this.getAncestry(),
+  //       results = [];
+
+  //   var go = true;
+  //   _.each(messages, function(message){
+  //     if (go) {
+  //       results.push(message);
+  //       if (message.id === postId) {
+  //         go = false;
+  //       }
+  //     }
+  //   });
+
+  //   return results;
+  // },
+
+  getParent: function(){
+    return this.collection.where({parentId: this.get('parentId')});
+  },
+
   /**
    * Returns a promise to all segments in the annotator format
    * @return {Object[]}

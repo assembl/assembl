@@ -26,7 +26,8 @@ var Marionette = require('../shims/marionette.js'),
     Account = require('../models/accounts.js'),
     Socket = require('../utils/socket.js'),
     DiscussionSources = require('../models/sources.js'),
-    LanguagePreference = require('../models/languagePreference.js');
+    LanguagePreference = require('../models/languagePreference.js'),
+    IdeaContentLink = require('../models/ideaContentLink.js');
 
 /**
  * @class CollectionManager A singleton to manage lazy loading of server
@@ -186,6 +187,13 @@ var CollectionManager = Marionette.Object.extend({
    */
   _allUserLanguagePreferences: undefined,
   _allUserLanguagePreferencesPromise: undefined,
+
+
+  /**
+   * Dictionary of Collections of each message's idea content link
+   * This collection does not hit the network (2016-02-02)
+   */
+  _allMessageIdeaContentLinkCollectionDict: undefined,
 
   /**
    * Connected socket promise
@@ -845,6 +853,33 @@ var CollectionManager = Marionette.Object.extend({
       this._allUserLanguagePreferencesPromise = Promise.resolve(this._allUserLanguagePreferences);
     }
     return this._allUserLanguagePreferencesPromise;
+  },
+
+  /**
+   * Creates a collection of IdeaClassification
+   * @param  Object  messageModel       The Backbone model of the message
+   * @return Array                      The collection of ideaContentLinks
+   */
+  getIdeaContentLinkCollection: function(messageModel){
+    var id = messageModel.id,
+        ideaContentLinks = messageModel.get('indirect_idea_content_links');
+
+    if (!this._allMessageIdeaContentLinkCollectionDict) {
+      this._allMessageIdeaContentLinkCollectionDict = {};
+    }
+
+    if (this._allMessageIdeaContentLinkCollectionDict[id]) {
+      return this._allMessageIdeaContentLinkCollectionDict[id];
+    }
+
+    if (_.isEmpty(ideaContentLinks)){
+      return [];
+    }
+
+    this._allMessageIdeaContentLinkCollection[id] = 
+      new IdeaContentLink.Collection(ideaContentLinks, {model: messageModel});
+    this._allMessageIdeaContentLinkCollection[id].collectionManager = this;
+    return this._allMessageIdeaContentLinkCollection[id];
   },
 
   getAllWidgetsPromise: function() {

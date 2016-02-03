@@ -228,7 +228,7 @@ var IdeaModel = Base.Model.extend({
 
   /**
    * Return the parent idea
-   * @return {Idea}
+   * @return {Idea} or undefined
    */
   getParent: function() {
     return this.collection.findWhere({ '@id': this.get('parentId') });
@@ -247,6 +247,23 @@ var IdeaModel = Base.Model.extend({
     }
 
     return parentId === null ? false : this.getParent().isDescendantOf(idea);
+  },
+
+
+  getAncestry: function(){
+    var ideas = [];
+    function rec(idea){
+      var parent = this.getParent();
+      ideas.push(idea);
+      if (!parent) {
+        return ideas;
+      }
+      else {
+        return rec(parent);
+      }
+    }
+
+    return rec(this);
   },
 
   /**
