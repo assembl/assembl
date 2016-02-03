@@ -22,6 +22,7 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
   },
   preferencesKeys: ["simple_view_panel_order", "require_email_domain", "default_allow_access_to_moderated_text", "translation_service"],
   preferencesValues: {},
+  preferenceData: {},
 
   initialize: function() {
     var that = this;
@@ -46,7 +47,7 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
     };
   },
 
-  onShow: function() {
+  onRender: function() {
     var menu = new AdminNavigationMenu({selectedSection: "discussion_preferences"});
     this.getRegion('navigationMenuHolder').show(menu);
 
@@ -94,41 +95,42 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
 
   getUserInputPreferenceValue: function(preferenceName){
     var selector = this.getUserInputPreferenceSelector(preferenceName);
-    if ( this.preferenceData[preferenceName].value_type == "list_of_domain" ){ // preferences of type Array
-      var inputVal = this.$(selector).val();
-      var res = inputVal.split(",");
-      res.forEach(function(el,index){
-        res[index] = el.trim();
-      });
-      return res;
+    if ( this.preferenceData && preferenceName in this.preferenceData ){
+      if ( this.preferenceData[preferenceName].value_type == "list_of_domain" ){ // preferences of type Array
+        var inputVal = this.$(selector).val();
+        var res = inputVal.split(",");
+        res.forEach(function(el,index){
+          res[index] = el.trim();
+        });
+        return res;
+      }
+      else if ( this.preferenceData[preferenceName].value_type == "bool" ){ // preferences of type Boolean, which show as checkboxes
+        var val = this.$(selector).prop("checked");
+        val = val ? true : false;
+        return val;
+      }
     }
-    else if ( this.preferenceData[preferenceName].value_type == "bool" ){ // preferences of type Boolean, which show as checkboxes
-      var val = this.$(selector).prop("checked");
-      val = val ? true : false;
-      return val;
-    }
-    else {
-      return this.$(selector).val();
-    }
+    return this.$(selector).val();
   },
 
   setUserInputPreferenceValue: function(preferenceName, preferenceValue){
     var selector = this.getUserInputPreferenceSelector(preferenceName);
-    if ( this.preferenceData[preferenceName].value_type == "list_of_domain" ){ // preferences of type Array
-      var val = "";
-      if ( preferenceValue instanceof Array ){
-        val = preferenceValue.join(", ");
+    if ( this.preferenceData && preferenceName in this.preferenceData ){
+      if ( this.preferenceData[preferenceName].value_type == "list_of_domain" ){ // preferences of type Array
+        var val = "";
+        if ( preferenceValue instanceof Array ){
+          val = preferenceValue.join(", ");
+        }
+        this.$(selector).val(val);
+        return;
       }
-      this.$(selector).val(val);
+      else if ( this.preferenceData[preferenceName].value_type == "bool") { // preferences of type Boolean, which show as checkboxes
+        var val = preferenceValue ? true : false;
+        this.$(selector).prop("checked", preferenceValue);
+        return;
+      }
     }
-    else if ( this.preferenceData[preferenceName].value_type == "bool") { // preferences of type Boolean, which show as checkboxes
-      console.log("preferenceValue: ", preferenceValue);
-      var val = preferenceValue ? true : false;
-      this.$(selector).prop("checked", preferenceValue);
-    }
-    else {
-      this.$(selector).val(preferenceValue);
-    }
+    this.$(selector).val(preferenceValue);
   },
 
   getUserPreferenceURL: function(preferenceName){
