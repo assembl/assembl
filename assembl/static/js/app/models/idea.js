@@ -250,20 +250,26 @@ var IdeaModel = Base.Model.extend({
   },
 
 
+  /**
+   * Return an array of Idea models in order of ancestry
+   * From current idea -> parent idea, including the
+   * current idea itself
+   */
   getAncestry: function(){
     var ideas = [];
     function rec(idea){
-      var parent = this.getParent();
-      ideas.push(idea);
-      if (!parent) {
-        return ideas;
+      if (idea) {
+        if (! idea.isRootIdea() ) {
+          ideas.push(idea);
+        }
+        if ( idea.getParent() ) {
+          rec(idea.getParent() )
+        }
       }
-      else {
-        return rec(parent);
-      }
-    }
+    };
 
-    return rec(this);
+    rec(this);
+    return ideas.reverse();
   },
 
   /**

@@ -864,7 +864,7 @@ var CollectionManager = Marionette.Object.extend({
     var id = messageModel.id,
         ideaContentLinks = messageModel.get('indirect_idea_content_links');
 
-    if (!this._allMessageIdeaContentLinkCollectionDict) {
+    if (_.isEmpty(this._allMessageIdeaContentLinkCollectionDict)) {
       this._allMessageIdeaContentLinkCollectionDict = {};
     }
 
@@ -876,10 +876,9 @@ var CollectionManager = Marionette.Object.extend({
       return [];
     }
 
-    this._allMessageIdeaContentLinkCollection[id] = 
-      new IdeaContentLink.Collection(ideaContentLinks, {model: messageModel});
-    this._allMessageIdeaContentLinkCollection[id].collectionManager = this;
-    return this._allMessageIdeaContentLinkCollection[id];
+    this._allMessageIdeaContentLinkCollectionDict[id] = new IdeaContentLink.Collection(ideaContentLinks, {message: messageModel});
+    this._allMessageIdeaContentLinkCollectionDict[id].collectionManager = this;
+    return this._allMessageIdeaContentLinkCollectionDict[id];
   },
 
   getAllWidgetsPromise: function() {

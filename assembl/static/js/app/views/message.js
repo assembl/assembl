@@ -26,17 +26,17 @@ var Marionette = require('../shims/marionette.js'),
     IdeaContentLink = require('../models/ideaContentLink.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
-    TOOLTIP_TEXT_LENGTH = 10;
+    TOOLTIP_TEXT_LENGTH = 10,
+    IDEA_CLASSIFICATION_LENGTH = 3;
 
 
 /**
  * Classification view that is shown in the underneath each message
  */
-var IdeaClassificationView = Marionette.ItemView.extend({
+var IdeaClassificationNameListView = Marionette.ItemView.extend({
   template: '#tmpl-loader',
 
   ui: {
-    'others': '.js_others',
     'idea': '.js_idea-classification-idea'
   },
 
@@ -61,30 +61,36 @@ var IdeaClassificationView = Marionette.ItemView.extend({
       this.ideaContentLinks.getIdeaNamesPromise()
         .then(function(ideaNames){
           that.ideaNames = ideaNames;
-          that.template = "#tmpl-ideaClassificationInMessage"
-          that.render();
+
+          if (_.isEmpty(ideaNames)) {
+            that.parentView.removeIdeaClassificationView();
+          }
+          else {
+            that.template = "#tmpl-ideaClassificationInMessage"
+            that.render();
+          }
         });
     }
 
   },
 
   serializeData: function(){
-    if (this.template === 'tmpl-loader'){
+    if (this.template === '#tmpl-loader'){
       return {};
     }
 
-    var count = this.ideaNames.length,
+    var count = this.ideaNames? this.ideaNames.length: 0,
         first = null,
         rest = null;
 
-    if (count <= 3 ){
+    if (count <= IDEA_CLASSIFICATION_LENGTH ){
       first = this.ideaNames;
       rest = [];
     }
 
-    if (count > 3) {
-      first = _.filter(this.ideaNames, 2);
-      rest = _.filter(this.ideaNames, 3);
+    if (count > IDEA_CLASSIFICATION_LENGTH) {
+      first = _.first(this.ideaNames, IDEA_CLASSIFICATION_LENGTH);
+      rest = _.rest(this.ideaNames, IDEA_CLASSIFICATION_LENGTH);
     }
 
     return {
@@ -99,7 +105,7 @@ var IdeaClassificationView = Marionette.ItemView.extend({
   onIdeaClick: function(e){
     var that = this;
     var modalView = new IdeasShowingMessage({
-      groupContent: that.messageListView.getContainingGroup(),
+      groupContent: this.parentView.messageListView.getContainingGroup(),
       messageModel: this.model,
       ideaContentLinks: this.ideaContentLinks
     });
@@ -975,8 +981,10 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   renderIdeaClassification: function(){
-    console.log('rendering the idea classificatoin view');
-    var view = new IdeaClassificationView({model: this.model, parentView: this});
+    var view = new IdeaClassificationNameListView({
+      model: this.model,
+      parentView: this
+    });
     this.getRegion('ideaClassification').show(view);
   },
 

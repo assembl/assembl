@@ -1,8 +1,8 @@
 <div class="left-column">
   <div class="idea-reason-introduction">
-    <% print(i18n.sprintf(i18n.gettext("<div class='harvester'>%s</div> has considered that this message is linked to idea:"), harvester)); %>
+    <% print(i18n.sprintf(i18n.gettext("This message is part of a discussion thread named <div class='thread-title'>%s</div> and one of its previous answers has been considered by <div class='harvester'>%s</div> as being linked to idea:"), threadTitle, harvester)); %>
   </div>
-  <div class="idea"></div>
+  <div class="idea js_breadcrumb"></div>
   <div class="idea-reason-content">
     <%= i18n.gettext("Because of this extract:") %>
     <div class="extract">

@@ -9,14 +9,13 @@
             <span class="js_idea-classification-idea"><%= first[0] %></span>
             <span><%= i18n.gettext("and") %></span>
             <span class="js_idea-classification-idea"><%= first[1] %></span>
-        <% }%>
+        <% } else { %>
 
-        <% else { %>
             <% _.each(first, function(n){ %>
                 <span class="js_idea-classification-idea"><%= n %></span>
             <% })%>
             <% if (rest) { %>
-                <span class="js_others"> <%= i18n.sprintf(i18n.gettext("and %s others"), rest.length) %> </span>
+                <span class="js_idea-classification-idea"> <%= i18n.sprintf(i18n.gettext("and %s others"), rest.length) %> </span>
             <% } %>
         <% } %>
     </span>

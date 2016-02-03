@@ -133,7 +133,7 @@ var Collection = Base.Collection.extend({
                 d2 = Moment(one.get('creation_date'));
 
             if (d1.isBefore(d2)) {return -1;}
-            if (d2.idBefore(d1)) {return 1;}
+            if (d2.isBefore(d1)) {return 1;}
             else {return 0;}                
         };
 
@@ -163,11 +163,11 @@ var Collection = Base.Collection.extend({
 
     getIdeaNamesPromise: function(){
         var that = this;
-        return this.collectionmanager.getAllIdeasCollectionPromise()
+        return this.collectionManager.getAllIdeasCollectionPromise()
             .then(function(ideas){
-                var m = that.map(function(idea){
+                var m = that.map(function(ideaContentLink){
                     var ideaModel = ideas.find(function(im){
-                        return im.id === idea.id;
+                        return im.id === ideaContentLink.get('idIdea');
                     });
                     return ideaModel.getShortTitleDisplayText();
                 });
