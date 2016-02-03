@@ -526,6 +526,9 @@ class LangString(Base):
                     if pref:
                         candidates.append(pref)
                         entriesByLocale[pref.locale_code] = entry
+                    elif use_originals:
+                        # No pref for original, just return the original entry
+                        return entry
                 if candidates:
                     candidates.sort()
                     entries = list(self.entries)

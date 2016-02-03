@@ -170,6 +170,7 @@ class TranslationService(object):
                     else None,
                     source_lse.db)
                 lang = self.asPosixLocale(lang)
+                # What if detected language is not a discussion language?
                 if source_locale == Locale.UNDEFINED:
                     source_lse.identify_locale(lang, dict(
                         service=self.__class__.__name__))
