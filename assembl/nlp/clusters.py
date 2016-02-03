@@ -5,7 +5,7 @@ from itertools import chain, groupby
 from random import Random
 
 from sqlalchemy import (text, column, bindparam)
-from sqlalchemy.orm import defer
+from sqlalchemy.orm import defer, with_polymorphic
 from gensim import corpora, models as gmodels, similarities
 from gensim.utils import tokenize as gtokenize
 import numpy as np
@@ -18,7 +18,8 @@ from sklearn import metrics
 from .optics import Optics
 
 from assembl.lib.config import get_config
-from assembl.models import Content, Idea, Discussion, RootIdea, Post, IdeaLink
+from assembl.models import (
+    Content, Idea, Discussion, RootIdea, Post, IdeaLink, LangStringEntry, Locale)
 from .indexedcorpus import IdMmCorpus
 from . import (
     get_stop_words, get_stemmer, DummyStemmer, ReversibleStemmer)
@@ -51,13 +52,12 @@ class Tokenizer(object):
             if word not in self.stop_words]
 
     def tokenize_post(self, post):
-        subject = post.subject or ""
+        subject = post.subject.first_original().value or ""
         if subject.lower().split() in ('re:', 'comment'):
             subject = ''
         else:
             subject += ' '
-        text = subject + (post.get_body_as_text() or '')
-        return self.tokenize(text)
+        return self.tokenize(subject + ' ' + post.get_original_body_as_text())
 
     def save(self):
         if not isinstance(self.stemmer, DummyStemmer):
@@ -257,8 +257,17 @@ class SemanticAnalysisData(object):
     @property
     def post_texts(self):
         if self._post_texts is None:
+            content_alias = with_polymorphic(Content, Content)
+            # TODO: Optimize the hell out of this.
             self._post_texts = dict(
-                self.db.query(Content.id, Content.body))
+                self.db.query(
+                    content_alias.id, LangStringEntry.value
+                ).join(
+                    LangStringEntry,
+                    content_alias.body_id == LangStringEntry.langstring_id
+                ).join(
+                    Locale, LangStringEntry.locale_id == Locale.id
+                ).filter(~Locale.is_machine_translated))
         return self._post_texts
 
     @property
@@ -268,10 +277,11 @@ class SemanticAnalysisData(object):
                 ancestry = [int(i) for i in ancestry.split(',') if i]
                 ancestry.append(post_id)
                 return ancestry
+            post_alias = with_polymorphic(Post, Post)
 
             self._post_ancestry = {
                 id: as_chain(id, a) for (id, a)
-                in self.db.query(Post.id, Post.ancestry)}
+                in self.db.query(post_alias.id, post_alias.ancestry)}
         return self._post_ancestry
 
     # def get_direct_ideas_of_post(self, post_id):
@@ -662,8 +672,8 @@ class SemanticAnalysisData(object):
         posts = {post.id: post for post in posts}
         results = [(posts[post_id], score) for (post_id, score) in similar]
         return [
-            dict(id=post.uri(), score=score, subject=post.subject,
-                 content=(post.get_body_as_text() or ''))
+            dict(id=post.uri(), score=score, subject=post.subject.first_original().value,
+                 content=(post.get_original_body_as_text() or ''))
             for post, score in results]
 
 
@@ -1255,7 +1265,7 @@ def show_clusters(clusters):
     for n, cluster in enumerate(clusters):
         print "*"*100, "Cluster", n+1
         for post_id in cluster:
-            print (posts[post_id].get_body_as_text() or '')
+            print (posts[post_id].get_original_body_as_text() or '')
 
 
 class OpticsSemanticsAnalysisWithSuggestions(OpticsSemanticsAnalysis):

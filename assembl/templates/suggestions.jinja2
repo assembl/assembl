@@ -41,7 +41,7 @@ second score, if any, indicates how well this idea's children can be distinguish
     {% for post in analyzer.get_posts_in_cluster(post_ids, parent) recursive %}
     <li>
     <dl><dt>{{caller(post)}}</dt>
-    <dd>{{post.get_body_as_text()}}</dd>
+    <dd>{{post.get_original_body_as_text()}}</dd>
     </dl>
     {%- if analyzer.get_posts_in_cluster(post_ids, post) -%}
         <ul>{{ loop(analyzer.get_posts_in_cluster(post_ids, post)) }}</ul>

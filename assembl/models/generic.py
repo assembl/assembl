@@ -370,6 +370,20 @@ class Content(DiscussionBoundBase):
             log.error("What is this mimetype?" + mimetype)
             return body
 
+    def get_original_body_as_text(self):
+        mimetype = self.get_body_mime_type()
+        body = self.body
+        if not body:
+            return ''
+        body = body.first_original().value or ''
+        if mimetype == 'text/plain':
+            return body
+        elif mimetype == 'text/html':
+            return BeautifulSoup(body).get_text().strip()
+        else:
+            log.error("What is this mimetype?" + mimetype)
+            return body
+
     def get_body_as_text(self):
         mimetype = self.get_body_mime_type()
         body = self.body
