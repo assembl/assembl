@@ -151,7 +151,7 @@ var AnnouncementListEmptyEditableView = Marionette.ItemView.extend({
     'click @ui.addAnnouncementButton': 'onAddAnnouncementButtonClick',
   },
   initialize: function(options) {
-    console.log(options);
+    //console.log(options);
     this.objectAttachedTo = options.objectAttachedTo;
     this.collection = options.collection;
   },
