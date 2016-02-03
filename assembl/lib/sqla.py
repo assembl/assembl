@@ -342,14 +342,16 @@ class BaseOps(object):
         return []
 
     @classmethod
-    def get_instance(cls, identifier):
+    def get_instance(cls, identifier, session=None):
         try:
             # temporary hack
             num = int(identifier)
         except ValueError:
             num = cls.get_database_id(identifier)
         if num:
-            return cls.get(num)
+            # reimplement get, because can be subclassed
+            session = session or cls.default_db
+            return session.query(cls).get(num)
 
     @classmethod
     def get_database_id(cls, uri):
