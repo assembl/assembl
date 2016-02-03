@@ -33,6 +33,7 @@ var LangStringEntry = Base.Model.extend({
   defaults: {
     "@type": Types.LANGSTRING_ENTRY,
     "@language": "und",
+    "error_count": 0,
     "value": ""
   },
   isMachineTranslation: function() {

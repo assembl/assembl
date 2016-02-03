@@ -621,8 +621,12 @@ class LangStringEntry(Base, TombstonableMixin):
         nullable=False)
     locale = relationship(Locale)
     locale_identification_data = Column(String)
-    locale_confirmed = Column(Boolean, server_default="0",
+    locale_confirmed = Column(
+        Boolean, server_default="0",
         doc="Locale inferred from discussion agrees with identification_data")
+    error_count = Column(
+        Integer, default=0,
+        doc="Errors from the translation server")
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
     value = Column(UnicodeText)  # not searchable inv virtuoso
 
