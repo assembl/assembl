@@ -2,7 +2,7 @@ from collections import defaultdict
 from datetime import datetime
 
 from sqlalchemy import (
-    Column, ForeignKey, Integer, Boolean, String,
+    Column, ForeignKey, Integer, Boolean, String, SmallInteger,
     UnicodeText, UniqueConstraint, event, inspect)
 from sqlalchemy.sql.expression import case
 from sqlalchemy.orm import (
@@ -627,6 +627,9 @@ class LangStringEntry(Base, TombstonableMixin):
     error_count = Column(
         Integer, default=0,
         doc="Errors from the translation server")
+    error_code = Column(
+        SmallInteger, default=0,
+        doc="Type of error from the translation server")
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
     value = Column(UnicodeText)  # not searchable inv virtuoso
 

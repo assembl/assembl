@@ -19,7 +19,7 @@
     },
     "LangStringEntry": {
         "@language": "locale_code",
-        "error_count": true,
+        "error_code": true,
         "value": true
     },
     "AgentProfile": {
