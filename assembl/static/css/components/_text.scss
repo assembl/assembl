@@ -88,6 +88,7 @@ a {
   color: $theme_activelink_color;
   text-decoration: none;
   cursor: pointer;
+  word-wrap: break-word;
 
   &:hover, &:focus {
     text-decoration: underline;

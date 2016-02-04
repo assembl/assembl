@@ -302,7 +302,7 @@ var BaseCollection = Backbone.Collection.extend({
         console.log("Adding from socket:", item['@type'], item['@id'], item)
       }
       var addResult = this.add(item, {parse: true});
-      console.log(addResult);
+      //console.log(addResult);
     }
     else {
       // yeah, it exists
