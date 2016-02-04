@@ -161,11 +161,25 @@ var Collection = Base.Collection.extend({
         }
     },
 
+    /*
+        @return Array   The string of short names of the ideas that a message is associated to
+                        Note: It does not contain those that the user clipboarded
+     */
     getIdeaNamesPromise: function(){
         var that = this;
         return this.collectionManager.getAllIdeasCollectionPromise()
             .then(function(ideas){
-                var m = that.map(function(ideaContentLink){
+
+                var usableIdeaContentLinks = that.filter(function(icl) {
+                    if (icl){
+                        return icl.get('idIdea') !== null;
+                    }
+                    else {
+                        return false;
+                    }
+                });
+
+                var m = _.map(usableIdeaContentLinks, function(ideaContentLink) {
                     var idIdea = ideaContentLink.get('idIdea');
                     var ideaModel = ideas.get(idIdea);
                     if (!ideaModel){

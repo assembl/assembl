@@ -865,9 +865,14 @@ var CollectionManager = Marionette.Object.extend({
       @TODO: Add efficient Collection management and caching
      */
     var id = messageModel.id,
-        ideaContentLinks = messageModel.get('indirect_idea_content_links');
+        ideaContentLinks = messageModel.getIdeaContentLinks();
 
-    var tmp = new IdeaContentLink.Collection(ideaContentLinks, {message: messageModel});
+    var validIcls = _.filter(ideaContentLinks, function(icl){
+      return ( (icl) && (_.has(icl, 'idIdea')) && (icl['idIdea'] !== null) );
+    });
+
+    //Could be an empty collection
+    var tmp = new IdeaContentLink.Collection(validIcls, {message: messageModel});
     tmp.collectionManager = this;
     return tmp;
   },

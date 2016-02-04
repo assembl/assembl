@@ -54,12 +54,12 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
     this.ideaContentLinks = ideaContentLinks;
 
     if (_.isEmpty(ideaContentLinks)) {
-      this.parentView.removeIdeaClassificationView();
+      this.messageView.removeIdeaClassificationView();
     }
 
     //Check if it is a Post type.
     if (! Types.isInstance(this.model.get('@type'), Types.POST) ) {
-      this.parentView.removeIdeaClassificationView();
+      this.messageView.removeIdeaClassificationView();
     }
 
     else {
@@ -68,7 +68,7 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
           that.ideaNames = ideaNames;
 
           if (_.isEmpty(ideaNames)) {
-            that.parentView.removeIdeaClassificationView();
+            that.messageView.removeIdeaClassificationView();
           }
           else {
             that.template = "#tmpl-ideaClassificationInMessage"
@@ -991,12 +991,20 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   renderIdeaClassification: function(){
-    var view = new IdeaClassificationNameListView({
-      messageView: this,
-      model: this.model
-    });
+    if (!this.model.hasIdeaContentLinks() ){
+      console.log('message ' + this.model.id + " does not have idea content links");
+      return;
+    }
+    
+    else {
+      var view = new IdeaClassificationNameListView({
+        messageView: this,
+        model: this.model
+      });
 
-    this.getRegion('ideaClassification').show(view);
+      this.getRegion('ideaClassification').show(view);  
+    }
+    
   },
 
   removeIdeaClassificationView: function(){

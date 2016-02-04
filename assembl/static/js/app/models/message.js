@@ -84,6 +84,23 @@ var MessageModel = Base.Model.extend({
     },
 
   /**
+   * @return Array  Json objects representing idea_content_links
+   */
+  getIdeaContentLinks: function(){
+    var idl = this.get('indirect_idea_content_links');
+    if (!idl) {
+      return [];
+    }
+
+    return idl;
+  },
+
+  hasIdeaContentLinks: function(){
+    var idls = this.getIdeaContentLinks();
+    return idls.length > 0;
+  },
+
+  /**
    * @return {Number} the quantity of all descendants
    */
   getDescendantsCount: function() {
@@ -149,26 +166,6 @@ var MessageModel = Base.Model.extend({
 
     return rec(this);
   },
-
-  // /*
-  //   Assumes the ancestry is sorted
-  //  */
-  // getAncestryUntilParent: function(postId){
-  //   var messages = this.getAncestry(),
-  //       results = [];
-
-  //   var go = true;
-  //   _.each(messages, function(message){
-  //     if (go) {
-  //       results.push(message);
-  //       if (message.id === postId) {
-  //         go = false;
-  //       }
-  //     }
-  //   });
-
-  //   return results;
-  // },
 
   getParent: function(){
     return this.collection.where({parentId: this.get('parentId')});
