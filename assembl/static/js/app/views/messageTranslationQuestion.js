@@ -295,22 +295,37 @@ var TranslationView = Marionette.LayoutView.extend({
 
     serializeData: function(){
         if (this.template !== "#tmpl-loader") {
-            var translationQuestion;
+            var translationQuestion, noAnswer, yesAnswer, toAnother;
+            /*
             if (this.preferredTarget) {
                 translationQuestion = i18n.sprintf(
                     i18n.gettext("Translate all messages from %s to %s?"),
                     this.nameOfLocale(this.originalLocale),
                     this.nameOfLocale(this.preferredTarget));
+                yesAnswer = i18n.sprintf(
+                    i18n.gettext("Yes, translate all messages to %s"),
+                    this.nameOfLocale(this.preferredTarget));
+                noAnswer = i18n.sprintf(
+                    i18n.gettext("No, do not translate all messages to %s"),
+                    this.nameOfLocale(this.preferredTarget));
             } else {
                 translationQuestion = i18n.sprintf(
                     i18n.gettext("Keep %s messages untranslated?"),
                     this.nameOfLocale(this.originalLocale));
+                noAnswer = i18n.sprintf(
+                    i18n.gettext("Yes, keep them untranslated"));
+                yesAnswer = "";
             }
+            */
+            yesAnswer = i18n.gettext("Yes, Thanks!");
+            noAnswer = i18n.gettext("Do not translate");
+            toAnother = i18n.gettext("Translate to another language");
+
             return {
                 translationQuestion: translationQuestion,
-                yes: i18n.sprintf("Yes, translate all messages to %s", this.nameOfLocale(this.preferredTarget)),
-                no: i18n.sprintf("No, do not translate all messages to %s", this.nameOfLocale(this.preferredTarget)),
-                toAnother: i18n.sprintf("Translate all %s messages to another language", this.nameOfLocale(this.originalLocale)),
+                yes: yesAnswer,
+                no: noAnswer,
+                toAnother: toAnother,
                 preferredTarget: this.preferredTarget,
                 originalLocale: this.originalLocale,
                 translatedFromLocale: this.translatedFrom,
