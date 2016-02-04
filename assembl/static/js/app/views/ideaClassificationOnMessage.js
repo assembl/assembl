@@ -132,7 +132,7 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
   templateHelpers: function(){
     return {
       i18n: i18n,
-      viewIdea: i18n.gettext("View the idea")
+      viewIdea: i18n.gettext("Go to this idea")
     };
   },
 
@@ -200,7 +200,8 @@ var IndirectMessageView = IdeaClassificationView.extend({
     }
 
     return {
-      threadTitle: this.idea.getShortTitleDisplayText()
+      threadTitle: this.idea.getShortTitleDisplayText(),
+      author: this.user.get('name')
     }
   }
 });

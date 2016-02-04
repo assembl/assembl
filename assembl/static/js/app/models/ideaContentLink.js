@@ -108,6 +108,11 @@ var Model = Base.Model.extend({
     //Helper function for the comparator, might not work
     isDirect: function(){
         return this.get('idPost') === this.collection.messageModel.id;
+    },
+
+    //Backend sends a created field instead of a creation_date
+    getCreationDate: function(){
+        return this.get('creation_date') ? this.get('creation_date') : this.get('created');
     }
 });
 
@@ -129,8 +134,8 @@ var Collection = Base.Collection.extend({
      */
     comparator: function(one, two){
         function sortByDate(one, two){
-            var d1 = Moment(one.get('creation_date')),
-                d2 = Moment(one.get('creation_date'));
+            var d1 = Moment(one.getCreationDate()),
+                d2 = Moment(one.getCreationDate());
 
             if (d1.isBefore(d2)) {return -1;}
             if (d2.isBefore(d1)) {return 1;}
@@ -188,6 +193,11 @@ var Collection = Base.Collection.extend({
                     }
                     return ideaModel.getShortTitleDisplayText();
                 });
+
+                //Sometimes there are duplicate names?
+                // console.log("In getIdeaNamesPromise:");
+                // console.log("Idea Content Link Collection used: ", that);
+                // console.log("The names being passed: ", m);
 
                 return Promise.resolve(m);
             })
