@@ -20,7 +20,7 @@ from sqlalchemy import (
     func
 )
 from sqlalchemy.orm import (
-    relationship, backref, deferred, column_property)
+    relationship, backref, deferred, column_property, with_polymorphic)
 
 from ..lib.sqla import UPDATE_OP
 from ..lib.decl_enums import DeclEnum
@@ -129,6 +129,10 @@ class Post(Content):
         foreign_keys=[moderator_id],
         backref=backref('posts_moderated'),
     )
+
+    idea_content_links_above_post = column_property(
+        func.idea_content_links_above_post(id),
+        deferred=False, expire_on_flush=False)
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
@@ -327,6 +331,14 @@ class Post(Content):
         return super(Post, self).get_body_as_text()
 
     def indirect_idea_content_links(self):
+        from pyramid.threadlocal import get_current_request
+        request = get_current_request()
+        if request:
+            return self.indirect_idea_content_links_with_cache()
+        else:
+            return self.indirect_idea_content_links_without_cache()
+
+    def indirect_idea_content_links_without_cache(self):
         "Return all ideaContentLinks related to this post or its ancestors"
         from .idea_content_link import IdeaContentLink
         ancestors = filter(None, self.ancestry.split(","))
@@ -334,6 +346,45 @@ class Post(Content):
         ancestors.append(self.id)
         return self.db.query(IdeaContentLink).filter(
             IdeaContentLink.content_id.in_(ancestors)).all()
+
+    def indirect_idea_content_links_with_cache(self):
+        "Return all ideaContentLinks related to this post or its ancestors"
+        # WIP: idea_content_links_above_post is still loaded separately
+        # despite not being deferred. Deferring it hits a sqlalchemy bug.
+        # Still appreciable performance gain using it instead of the orm,
+        # and the ICL cache below.
+        if not self.idea_content_links_above_post:
+            return []
+        from pyramid.threadlocal import get_current_request
+        from .idea_content_link import IdeaContentLink
+        from .idea import Idea
+        request = get_current_request()
+        if getattr(request, "_idea_content_link_cache2", None) is None:
+            if getattr(request, "_idea_content_link_cache1", None) is None:
+                icl = with_polymorphic(IdeaContentLink, IdeaContentLink)
+                co = with_polymorphic(Content, Content)
+                request._idea_content_link_cache1 = {x[0]: x for x in self.db.query(
+                    icl.id, icl.idea_id, icl.content_id, icl.creator_id, icl.type,
+                    icl.creation_date).join(co).filter(
+                    co.discussion_id == self.discussion_id)}
+            request._idea_content_link_cache2 = {}
+
+        def icl_representation(id):
+            if id not in request._idea_content_link_cache2:
+                data = request._idea_content_link_cache1.get(id, None)
+                if data is None:
+                    return None
+                request._idea_content_link_cache2[id] = {
+                    "@id": IdeaContentLink.uri_generic(data[0]),
+                    "idIdea": Idea.uri_generic(data[1]),
+                    "idPost": Content.uri_generic(data[2]),
+                    "idCreator": AgentProfile.uri_generic(data[3]),
+                    "@type": data[4],
+                    "created": data[5].isoformat() + "Z"
+                }
+            return request._idea_content_link_cache2[id]
+        return [icl_representation(int(id)) for id in
+                self.idea_content_links_above_post[:-1].split(',')]
 
     @classmethod
     def extra_collections(cls):
@@ -391,11 +442,6 @@ def orm_insert_listener(mapper, connection, target):
     translate_content_task.delay(target.id)
 
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
-
-_pt = Post.__table__
-Post.idea_content_links_above_post = column_property(
-    func.idea_content_links_above_post(_pt.c.id),
-    deferred=True)
 
 
 class AssemblPost(Post):

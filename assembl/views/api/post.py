@@ -11,7 +11,8 @@ from pyramid.security import authenticated_userid, Everyone
 
 from sqlalchemy import String, text
 
-from sqlalchemy.orm import joinedload_all, aliased, subqueryload_all
+from sqlalchemy.orm import (
+    joinedload_all, aliased, subqueryload_all, undefer)
 from sqlalchemy.sql.expression import bindparam, and_
 from sqlalchemy.sql import cast, column
 
@@ -264,6 +265,7 @@ def get_posts(request):
         pass  # posts = posts.options(defer(Post.body))
     else:
         posts = posts.options(
+            undefer(Post.idea_content_links_above_post),
             joinedload_all(Post.creator),
             joinedload_all(Post.extracts),
             joinedload_all(Post.widget_idea_links),
