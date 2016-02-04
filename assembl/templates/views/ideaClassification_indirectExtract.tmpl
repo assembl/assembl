@@ -3,13 +3,15 @@
     <% print(i18n.sprintf(i18n.gettext("This message is part of a discussion thread named <div class='thread-title'>%s</div> and one of its previous answers has been considered by <div class='harvester'>%s</div> as being linked to idea:"), threadTitle, harvester)); %>
   </div>
   <div class="idea js_breadcrumb"></div>
-  <div class="idea-reason-content">
+  <div class="mts idea-reason-content">
     <%= i18n.gettext("Because of this extract:") %>
     <div class="extract">
-      <%= extractText %>
+      <i class="icon">&#8220;</i>
+      <span class="extract-text"><%= extractText %></span>
+      <i class="icon">&#8221;</i>
     </div>
   </div>
 </div>
 <div class="right-column">
-  <a class="btn-sm btn-secondary js_seeIdea"><%= i18n.gettext("See this idea and close this window") %></a>
+  <a class="btn-sm btn-secondary js_seeIdea"><%= viewIdea %></a>
 </div>
