@@ -68,7 +68,7 @@ var Partners = Marionette.ItemView.extend({
 
           self.model.save(null, {
             success: function(model, resp) {
-              that.triggerSubmit();
+              that.triggerSubmit(e);
             },
             error: function(model, resp) {
               console.log(resp)
