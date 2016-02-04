@@ -66,16 +66,13 @@
       font-style: italic;
     }
 
-    .extract:before, .thread-title:before {
-      content: "<<";
-      font-size: smaller;
-      padding-right: 2px;
-    }
+    .icon, .thread-title {
+      font-style: italic;
 
-    .extract:after, .thread-title:after {
-      content: ">>";
-      font-size: smaller;
-      padding-left: 2px;
+      > .extract-text {
+        font-size: 16px;
+        margin-right: 5px;
+      }
     }
   }
 }

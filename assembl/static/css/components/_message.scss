@@ -249,8 +249,40 @@ $previewNumLines: 4;
       > div {
 
       }
-
     }
+
+    .idea-classification {
+      font-size: 12px;
+      font-style: italic;
+      color: $txtGray1;
+
+      .idea-name {
+        text-decoration: underline;
+        color: $txtPurple;
+        
+        &:hover {
+          color: $txtPurple1;
+          cursor: pointer;
+        }
+      }
+
+      .idea-name:after {
+        content: ",";
+        color:$txtGray1;
+        font-style: normal;
+        text-decoration: none;
+        margin-right: 2px; 
+      }
+
+      .idea-name:last-child:after {
+        content: "";
+      }
+
+      .idea-name:nth-last-child(2):after {
+        content: "";
+      }
+    }
+
     &.Email .message-body.body_format_text_html {
       > div {
         white-space: pre-line;
