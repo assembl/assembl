@@ -15,7 +15,8 @@ var Marionette = require('../shims/marionette.js'),
     viewsFactory = require('../objects/viewsFactory'),
     groupSpec = require('../models/groupSpec'),
     Promise = require('bluebird'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js'),
+    openIdeaInModal = require('./modals/ideaInModal.js');
 
 var IdeaInSynthesisView = Marionette.ItemView.extend({
   synthesis: null,
@@ -281,44 +282,8 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
           analytics = Analytics.getInstance();
 
       analytics.trackEvent(analytics.events.NAVIGATE_TO_IDEA_IN_SYNTHESIS);
-      if (panel.isPrimaryNavigationPanel()) {
-        panel.getContainingGroup().setCurrentIdea(this.original_idea);
-      }
-      
-      // If the panel isn't the primary navigation panel, OR if we explicitly
-      // ask for a popup, we need to create a modal group to see the idea
-      if (!panel.isPrimaryNavigationPanel() || forcePopup) {
-        //navigateToIdea called, and we are not the primary navigation panel
-        //Let's open in a modal Group
-        var ModalGroup = require('./groups/modalGroup.js');
-        var defaults = {
-          panels: new panelSpec.Collection([
-                  {type: PanelSpecTypes.IDEA_PANEL.id, minimized: false},
-                  {type: PanelSpecTypes.MESSAGE_LIST.id, minimized: false}
-              ],
-              {'viewsFactory': viewsFactory })
-        };
-        var groupSpecModel = new groupSpec.Model(defaults);
-        var setResult = groupSpecModel.get('states').at(0).set({currentIdea: this.original_idea}, {validate: true});
-        if (!setResult) {
-          throw new Error("Unable to set currentIdea on modal Group");
-        }
-
-        var idea_title = Ctx.stripHtml(this.model.getShortTitleDisplayText());
-
-        //console.log("idea_title: ", idea_title);
-        var modal_title_template = i18n.gettext("Exploring idea \"%s\"");
-
-        //console.log("modal_title_template:", modal_title_template);
-        var modal_title = null;
-        if (modal_title_template && idea_title)
-          modal_title = i18n.sprintf(i18n.gettext("Exploring idea \"%s\""), idea_title);
-
-        //console.log("modal_title:", modal_title);
-        var modal = new ModalGroup.View({"model": groupSpecModel, "title": modal_title});
-        Assembl.slider.show(modal);
-      }
-    },
+      openIdeaInModal(panel, this.original_idea, forcePopup);
+  },
 
   makeEditable: function() {
       if (this.canEdit()) {
