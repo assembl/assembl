@@ -265,7 +265,7 @@ def get_posts(request):
         pass  # posts = posts.options(defer(Post.body))
     else:
         posts = posts.options(
-            undefer(Post.idea_content_links_above_post),
+            # undefer(Post.idea_content_links_above_post),
             joinedload_all(Post.creator),
             joinedload_all(Post.extracts),
             joinedload_all(Post.widget_idea_links),

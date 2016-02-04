@@ -132,7 +132,7 @@ class Post(Content):
 
     idea_content_links_above_post = column_property(
         func.idea_content_links_above_post(id),
-        deferred=False, expire_on_flush=False)
+        deferred=True, expire_on_flush=False)
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
