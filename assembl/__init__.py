@@ -16,6 +16,7 @@ import sqltap.wsgi
 from .lib.sqla import configure_engine, session_maker_is_initialized
 from .lib.locale import locale_negotiator as my_locale_negotiator
 from .lib.config import set_config
+from .lib.database_functions import ensure_functions
 
 # Do not import models here, it will break tests.
 
@@ -74,6 +75,7 @@ def main(global_config, **settings):
         session = get_session_maker()
         populate_default_roles(session)
         populate_default_permissions(session)
+        ensure_functions(session)
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('widget', 'widget', cache_max_age=3600)

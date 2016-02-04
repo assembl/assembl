@@ -19,7 +19,8 @@ from sqlalchemy import (
     event,
     func
 )
-from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import (
+    relationship, backref, deferred, column_property)
 
 from ..lib.sqla import UPDATE_OP
 from ..lib.decl_enums import DeclEnum
@@ -389,6 +390,11 @@ def orm_insert_listener(mapper, connection, target):
     translate_content_task.delay(target.id)
 
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
+
+_pt = Post.__table__
+Post.idea_content_links_above_post = column_property(
+    func.idea_content_links_above_post(_pt.c.id),
+    deferred=True)
 
 
 class AssemblPost(Post):
