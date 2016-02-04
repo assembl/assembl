@@ -543,7 +543,7 @@ class LangString(Base):
                                     target_locale,
                                     Locale.extract_base_locale(e.locale_code))
                             common_entries = filter(common_len, entries).sort(
-                                common_len, reverse=True)
+                                key=common_len, reverse=True)
                             if common_entries:
                                 return common_entries[0]
                         else:
