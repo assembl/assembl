@@ -137,6 +137,20 @@ var moduleName = 'Analytics_Abstract',
        */
       NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS: {action: 'FINDING', category: 'TABLE_OF_IDEAS', eventName: 'NAVIGATE_TO_IDEA'},
 
+
+      /**
+       * Event fired anytime an idea is clicked in an idea classification modal of a message 
+       * assembl/static/js/app/views/ideaClassificationOnMessage.js
+       */
+      NAVIGATE_TO_IDEA_IN_IDEA_CLASSIFICATION: {action: 'FINDING', category: 'MESSAGE', eventName: 'NAVIGATE_TO_IDEA_IN_IDEA_CLASSIFICATION'},
+
+
+      /**
+       * Event fired anytime an idea classification modal is opened on a message  
+       * assembl/static/js/app/views/message.js
+       */
+      NAVIGATE_TO_CLASSIFICATION_ON_MESSAGE: {action: 'FINDING', category: 'MESSAGE', eventName: 'NAVIGATE_TO_CLASSIFICATION_ON_MESSAGE'},
+
       /**
        * Event fired anytime the arrow beside an idea is clicked open in the table of ideas 
        * assembl/static/js/app/views/ideaInIdeaList.js
