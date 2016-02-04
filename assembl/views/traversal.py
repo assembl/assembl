@@ -5,6 +5,7 @@ from sqlalchemy.orm import aliased
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.sql.expression import and_
 from sqlalchemy.inspection import inspect as sqlainspect
+from sqlalchemy.exc import InvalidRequestError
 from pyramid.security import Allow, Everyone, ALL_PERMISSIONS, DENY_ALL
 from pyramid.settings import asbool
 from pyramid.httpexceptions import HTTPNotFound
@@ -609,7 +610,12 @@ class CollectionDefinition(AbstractCollectionDefinition):
                 getattr(coll_alias, inv.key))
         else:
             # hope for the best
-            query = query.join(owner_alias)
+            try:
+                query = query.join(owner_alias)
+            except InvalidRequestError:
+                print "Could not join %s to %s" % (owner_alias, query)
+                # This is very likely to fail downstream
+                return query
         if inv and not uses_list(inv):
             query = query.filter(getattr(coll_alias, inv.key) == parent_instance)
         else:

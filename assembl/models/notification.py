@@ -972,7 +972,8 @@ class Notification(Base):
 
 User.notifications = relationship(
     Notification, viewonly=True,
-    secondary=NotificationSubscription.__mapper__.mapped_table)
+    secondary=NotificationSubscription.__mapper__.mapped_table,
+    backref="owner")
 
 class NotificationOnPost(Notification):
 
