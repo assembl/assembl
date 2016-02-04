@@ -18,6 +18,7 @@
   right: 6px;
 }
 
+/*
 .ideaList .idealist-actions {
   display: none;
 }
@@ -25,6 +26,16 @@
 .ideaList:hover .idealist-actions {
   display: inline-block;
 }
+*/
+
+.ideaList .idealist-actions {
+  display: inline-block;
+
+  .dropdown .icon-options {
+    color: $txtGray1;
+  }
+}
+
 
 .idealist-actions .dropdown-menu {
   left: auto;

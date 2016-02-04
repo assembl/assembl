@@ -14,7 +14,7 @@ from virtuoso.alchemy import CoerceUnicode
 from pyramid.httpexceptions import HTTPUnauthorized
 
 from . import Base, DeclarativeAbstractMeta
-from ..auth import P_READ, Everyone, P_ADMIN_DISC, P_SYSADMIN
+from ..auth import P_READ, Everyone, P_ADMIN_DISC, P_SYSADMIN, P_ADD_IDEA
 from ..lib.abc import classproperty
 from ..lib.locale import _
 
@@ -297,6 +297,23 @@ class Preferences(MutableMapping, Base):
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
             "default": {}
+        },
+        # Default expanded/collapsed state of each idea in the table of ideas.
+        # A user can override it by opening/closing an idea.
+        # This is a hash where keys are ideas ids.
+        "default_table_of_ideas_collapsed_state": {
+            "value_type": "json",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Default expanded/collapsed state of each idea in the table "
+                "of ideas. A user can override it by opening/closing an idea"),
+            "allow_user_override": None,
+            # "view_permission": P_READ,  # by default
+            "modification_permission": P_ADD_IDEA,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": {},
+            "show_in_preferences": False
         },
         # Simple view panel order, eg NIM or NMI
         "simple_view_panel_order": {

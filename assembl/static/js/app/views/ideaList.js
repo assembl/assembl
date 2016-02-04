@@ -20,7 +20,8 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     OtherInIdeaListView = require('./otherInIdeaList.js'),
     $ = require('../shims/jquery.js'),
     Promise = require('bluebird'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js');
+    Analytics = require('../internal_modules/analytics/dispatcher.js'),
+    DiscussionPreference = require('../models/discussionPreference.js');
 
 var FEATURED = 'featured',
     IN_SYNTHESIS = 'inNextSynthesis';
@@ -51,10 +52,16 @@ var IdeaList = AssemblPanel.extend({
   tableOfIdeasFontSizeDecreasingWithDepth: true, // must match the presence of .idealist-children { font-size: 98.5%; } in _variables.scss
   
   /**
-   * Stores (in UserCustomData per-discussion key/value store) the collapsed state of each idea. Model is in the following form: {42: true, 623: false} where each key is the numeric id of an idea 
+   * Stores (in UserCustomData per-discussion key/value store) the collapsed state of each idea, as saved by user when he expands or collapses an idea. Model is in the following form: {42: true, 623: false} where each key is the numeric id of an idea 
    * @type {UserCustomData.Model}
    */
   tableOfIdeasCollapsedState: null,
+
+  /**
+   * Stores (in DiscussionPreference per-discussion key/value store) the default collapsed state of each idea, as saved by harvesters. Model is in the following form: {42: true, 623: false} where each key is the numeric id of an idea 
+   * @type {DiscussionPreference.Model}
+   */
+  defaultTableOfIdeasCollapsedState: null,
 
   /**
    * Are we showing the graph or the list?
@@ -69,9 +76,9 @@ var IdeaList = AssemblPanel.extend({
    * @return true or false
    */
   isPrimaryNavigationPanel: function() {
-      //TODO:  This overrides parent class, but will not always be true
-      return true;
-    },
+    //TODO:  This overrides parent class, but will not always be true
+    return true;
+  },
 
   initialize: function(options) {
     Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
@@ -87,6 +94,10 @@ var IdeaList = AssemblPanel.extend({
       }, 1);
     };
 
+    this.defaultTableOfIdeasCollapsedState = new DiscussionPreference.Model({
+      id: "default_table_of_ideas_collapsed_state"
+    });
+    var defaultTableOfIdeasCollapsedStateFetchPromise = this.defaultTableOfIdeasCollapsedState.fetch();
 
     var groupContent = this.getContainingGroup();
     var tableOfIdeasCollapsedStateKey = groupContent.getGroupStoragePrefix() + "_table_of_ideas_collapsed_state";
@@ -118,8 +129,9 @@ var IdeaList = AssemblPanel.extend({
     Promise.join(
       collectionManager.getAllIdeasCollectionPromise(),
       collectionManager.getAllIdeaLinksCollectionPromise(),
-      tableOfIdeasCollapsedStateFetchPromise, // now that we have the collapsed state of each idea, we can (re)render the table of ideas
-      function(allIdeasCollection, allIdeaLinksCollection, collapsedState) {
+      tableOfIdeasCollapsedStateFetchPromise,
+      defaultTableOfIdeasCollapsedStateFetchPromise, // now that we have the collapsed state of each idea, we can (re)render the table of ideas
+      function(allIdeasCollection, allIdeaLinksCollection, collapsedState, defaultCollapsedState) {
         if(!that.isViewDestroyed()) {
           that.render();
         }
@@ -222,7 +234,11 @@ var IdeaList = AssemblPanel.extend({
 
     'click .js_decreaseRowHeight': 'decreaseRowHeight',
     'click .js_increaseRowHeight': 'increaseRowHeight',
-    'click .js_toggleDecreasingFontSizeWithDepth': 'toggleDecreasingFontSizeWithDepth'
+    'click .js_toggleDecreasingFontSizeWithDepth': 'toggleDecreasingFontSizeWithDepth',
+    'click .js_saveIdeasStateAsDefault': 'saveIdeasStateAsDefault',
+    'click .js_restoreIdeasState': 'restoreIdeasState',
+    'click .js_expandAllIdeas': 'expandAllIdeas',
+    'click .js_collapseAllIdeas': 'collapseAllIdeas'
   },
 
   serializeData: function() {
@@ -237,6 +253,10 @@ var IdeaList = AssemblPanel.extend({
 
   getTableOfIdeasCollapsedState: function(){
     return this.tableOfIdeasCollapsedState;
+  },
+
+  getDefaultTableOfIdeasCollapsedState: function(){
+    return this.defaultTableOfIdeasCollapsedState;
   },
 
   onRender: function() {
@@ -738,6 +758,73 @@ var IdeaList = AssemblPanel.extend({
     var o = {};
     o[idea_numeric_id] = value;
     this.tableOfIdeasCollapsedState.save(o, {patch: true});
+  },
+
+  saveIdeasStateAsDefault: function(){
+    // check first on the front-end that the user has the permission to do this (in order to avoid future failure during API calls)
+    if ( !Ctx.isUserConnected() || !Ctx.getCurrentUser().can(Permissions.ADD_IDEA) || !this.defaultTableOfIdeasCollapsedState ){
+      alert(i18n.gettext('You don\'t have the permission to do this.'));
+      return;
+    }
+
+    var attributes = _.clone(this.tableOfIdeasCollapsedState.attributes);
+    delete attributes['id'];
+    this.defaultTableOfIdeasCollapsedState.set(attributes);
+    this.defaultTableOfIdeasCollapsedState.save(
+      null,
+      {
+        success: function(model, resp) {
+          // maybe we could display a small success
+        },
+        error: function(model, resp) {
+          // I don't know why, but Backbone considers it's an error if the server does not reply by a 200 code, even if it's a 201.
+          if ( "status" in resp && resp.status == 201 ){
+            console.log("this is OK");
+            resp.handled = true; // In order to avoid displaying the Assembl error pop-in
+          }
+        }
+      }
+    );
+  },
+
+  restoreIdeasState: function(){
+    var id = this.tableOfIdeasCollapsedState.get('id');
+    this.tableOfIdeasCollapsedState.clear();
+    this.tableOfIdeasCollapsedState.set('id', id);
+    if ( Ctx.isUserConnected() ){
+      this.tableOfIdeasCollapsedState.save(null, {
+        success: function(model, resp) {},
+        error: function(model, resp) {
+          console.error('ERROR: could not save ideaList::tableOfIdeasCollapsedState', resp);
+        }
+      });
+    }
+    this.render();
+    // FIXME: for now, event does not seem to be triggered when I make changes, so I have to call explicitly a render() of the table of ideas 
+  },
+
+  expandAllIdeas: function(){
+    this.expandOrCollapseAllIdeas(false);
+  },
+
+  collapseAllIdeas: function(){
+    this.expandOrCollapseAllIdeas(true);
+  },
+
+  /**
+   * @param collapse: bool. set to true if you want to collapse all ideas, false otherwise
+   */
+  expandOrCollapseAllIdeas: function(collapse){
+    var that = this;
+    new CollectionManager().getAllIdeasCollectionPromise().done(function(ideas){
+      ideas.each(function(idea) {
+        var id = idea.getNumericId();
+        if ( id ){
+          that.tableOfIdeasCollapsedState.set(id, collapse);
+        }
+      });
+      that.render();
+    });
   }
 
 });

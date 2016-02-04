@@ -19,11 +19,17 @@
         </a> &nbsp;&nbsp;
       <% } %>
       <div class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="icon-options"></i></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="{{ gettext('Options') }}"><i class="icon-options"></i></a>
         <ul class="dropdown-menu">
           <li><a href="#" class="js_decreaseRowHeight">{{ gettext('Decrease row height') }}</a></li>
           <li><a href="#" class="js_increaseRowHeight">{{ gettext('Increase row height') }}</a></li>
           <li><a href="#" class="js_toggleDecreasingFontSizeWithDepth">{{ gettext('Toggle decreasing font size with depth') }}</a></li>
+          <li><a href="#" class="js_expandAllIdeas">{{ gettext('Expand all ideas') }}</a></li>
+          <li><a href="#" class="js_collapseAllIdeas">{{ gettext('Collapse all ideas') }}</a></li>
+          <% if (canAdd) { %>
+            <li><a href="#" class="js_saveIdeasStateAsDefault">{{ gettext('Save the current expanded/collapsed state as default for users') }}</a></li>
+          <% } %>
+          <li><a href="#" class="js_restoreIdeasState">{{ gettext('Restore default expanded/collapsed state') }}</a></li>
         </ul>
       </div>
     </div>

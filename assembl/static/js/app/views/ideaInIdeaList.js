@@ -37,6 +37,13 @@ var IdeaView = Backbone.View.extend({
   tableOfIdeasCollapsedState: null,
 
   /**
+   * Shortcut to this.parentPanel.getDefaultTableOfIdeasCollapsedState()
+   * Stores (in DiscussionPreference per-discussion key/value store) the collapsed state of each idea. Model is in the following form: {42: true, 623: false} where each key is the numeric id of an idea 
+   * @type {DiscussionPreference.Model}
+   */
+  defaultTableOfIdeasCollapsedState: null,
+
+  /**
    * @init
    * @param {IdeaModel} obj the model
    * @param {dict} view_data: data from the render visitor
@@ -69,10 +76,13 @@ var IdeaView = Backbone.View.extend({
     });
 
     this.tableOfIdeasCollapsedState = that.parentPanel ? that.parentPanel.getTableOfIdeasCollapsedState() : null;
-    if ( this.tableOfIdeasCollapsedState && that.model ){
+    this.defaultTableOfIdeasCollapsedState = that.parentPanel ? that.parentPanel.getDefaultTableOfIdeasCollapsedState() : null;
+    if ( this.tableOfIdeasCollapsedState && this.defaultTableOfIdeasCollapsedState && that.model ){
       var id = that.model.getNumericId();
       if ( id ){
         this.listenTo(this.tableOfIdeasCollapsedState, "change:"+id, that.onIdeaCollaspedStateChange);
+        this.listenTo(this.defaultTableOfIdeasCollapsedState, "change:"+id, that.onIdeaCollaspedStateChange);
+        // FIXME: for now, event does not seem to be triggered when I make changes, so I have to call explicitly a render() of the table of ideas 
       }
     }
   },
@@ -505,20 +515,32 @@ var IdeaView = Backbone.View.extend({
 
   getCustomCollapsedState: function() {
     var isCollapsed = undefined;
-    if ( this.tableOfIdeasCollapsedState && this.model ){
+    if ( this.model ){
       var id = this.model.getNumericId();
       if ( id ){
-        var state = this.tableOfIdeasCollapsedState.get(id);
-        isCollapsed = (state == "true" || state === true);
+        if ( this.defaultTableOfIdeasCollapsedState ){
+          var state = this.defaultTableOfIdeasCollapsedState.get(id);
+          if ( state == "true" || state === true || state == "false" || state === false ){
+            isCollapsed = (state == "true" || state === true);
+          }
+        }
+        if ( this.tableOfIdeasCollapsedState ){
+          var state = this.tableOfIdeasCollapsedState.get(id);
+          if ( state == "true" || state === true || state == "false" || state === false ){
+            isCollapsed = (state == "true" || state === true);
+          }
+        }
       }
     }
+
     return isCollapsed;
   },
 
   applyCustomCollapsedState: function() {
     var isCollapsed = this.getCustomCollapsedState();
+    // console.log("ideaInIdeaList::applyCustomCollapsedState() idea: ", this.model.getNumericId(), " isCollapsed: ", isCollapsed);
     if ( isCollapsed === undefined ){
-      isCollapsed = this.model.get('isOpen') === false ? true : false; // TODO: add a feature enabling an admin to set this per-idea isOpen state, which acts as default when the user has not saved a custom state for this idea yet
+      isCollapsed = false; // if not set by admin nor user, assume idea is open
     }
     if ( isCollapsed ){
       this.close();
