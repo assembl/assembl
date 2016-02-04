@@ -1,6 +1,6 @@
 <div class="left-column">
   <div class="idea-reason-introduction">
-    <% print(i18n.sprintf(i18n.gettext("This message is part of a discussion thread named \"%s\" which was initiated in idea:"), threadTitle)); %>
+    <%= i18n.sprintf(i18n.gettext("This message is part of the thread  \"%s\", started by <div class='author'>%s</div> on the idea:"), threadTitle, author) %>
   </div>
   <div class="idea js_breadcrumb"></div>
 </div>

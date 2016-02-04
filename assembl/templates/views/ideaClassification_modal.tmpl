@@ -1,11 +1,11 @@
 <div class="popin-header">
   <a href="#" class="close"><i class="icon-delete"></i></a>
-  <h3 class="h3">{{ gettext('Links between this message and ideas') }}</h3>
+  <h3 class="h3"><%= i18n.gettext('Links between this message and ideas') %></h3>
 </div>
 <div class="popin-body">
   <div class="ideas-showing-message">
     <div class="ideas-showing-message-introduction">
-      <% print(i18n.sprintf(i18n.gettext("This message is visible in the %s following ideas because:"), number_of_ideas)); %>
+      <%= i18n.ngettext("This message is visible in the following idea because: ", "This message is visible in the following %s ideas because: ", number_of_ideas)  %>
     </div>
     <div class="ideas-reasons-collection"></div>
   </div>
