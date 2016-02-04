@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from abc import abstractmethod
 
 from .config import get
+from .sqla import mark_changed
 
 virtuoso_functions = {
     "idea_content_links_above_post": """
@@ -43,6 +44,7 @@ class FunctionManager(object):
         for fname, fdef in self.functionList().iteritems():
             if not self.testFunctionExists(fname):
                 self.session.execute(fdef)
+                mark_changed()
 
 
 class VirtuosoFunctionManager(FunctionManager):
