@@ -21,6 +21,7 @@ from sqlalchemy import (
     inspect,
 )
 from sqlalchemy.orm import relationship, join, subqueryload_all
+from sqlalchemy.exc import InvalidRequestError
 
 from assembl.lib import config
 from assembl.lib.utils import slugify, get_global_base_url
@@ -388,9 +389,12 @@ class Discussion(DiscussionBoundBase):
                 super(AllUsersCollection, self).__init__(cls, User)
 
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
-                # No real outerjoin in sqlalchemy. Use a dummy condition.
-                return query.outerjoin(
-                    owner_alias, owner_alias.id != None)
+                try:
+                    return query.join(owner_alias)
+                except InvalidRequestError:
+                    # No real outerjoin in sqlalchemy. Use a dummy condition.
+                    return query.outerjoin(
+                        owner_alias, owner_alias.id != None)
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
