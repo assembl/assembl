@@ -166,9 +166,12 @@ var Collection = Base.Collection.extend({
         return this.collectionManager.getAllIdeasCollectionPromise()
             .then(function(ideas){
                 var m = that.map(function(ideaContentLink){
-                    var ideaModel = ideas.find(function(im){
-                        return im.id === ideaContentLink.get('idIdea');
-                    });
+                    var idIdea = ideaContentLink.get('idIdea');
+                    var ideaModel = ideas.get(idIdea);
+                    if (!ideaModel){
+                        throw new Error("Idea " + idIdea + " on " + ideaContentLink.id + 
+                                        " is NOT part of the ideas collection!");
+                    }
                     return ideaModel.getShortTitleDisplayText();
                 });
 

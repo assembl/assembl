@@ -856,29 +856,20 @@ var CollectionManager = Marionette.Object.extend({
   },
 
   /**
-   * Creates a collection of IdeaClassification
+   * Creates a collection of IdeaContentLink Collection for a message
    * @param  Object  messageModel       The Backbone model of the message
    * @return Array                      The collection of ideaContentLinks
    */
-  getIdeaContentLinkCollection: function(messageModel){
+  getIdeaContentLinkCollectionOnMessage: function(messageModel){
+    /*
+      @TODO: Add efficient Collection management and caching
+     */
     var id = messageModel.id,
         ideaContentLinks = messageModel.get('indirect_idea_content_links');
 
-    if (_.isEmpty(this._allMessageIdeaContentLinkCollectionDict)) {
-      this._allMessageIdeaContentLinkCollectionDict = {};
-    }
-
-    if (this._allMessageIdeaContentLinkCollectionDict[id]) {
-      return this._allMessageIdeaContentLinkCollectionDict[id];
-    }
-
-    if (_.isEmpty(ideaContentLinks)){
-      return [];
-    }
-
-    this._allMessageIdeaContentLinkCollectionDict[id] = new IdeaContentLink.Collection(ideaContentLinks, {message: messageModel});
-    this._allMessageIdeaContentLinkCollectionDict[id].collectionManager = this;
-    return this._allMessageIdeaContentLinkCollectionDict[id];
+    var tmp = new IdeaContentLink.Collection(ideaContentLinks, {message: messageModel});
+    tmp.collectionManager = this;
+    return tmp;
   },
 
   getAllWidgetsPromise: function() {

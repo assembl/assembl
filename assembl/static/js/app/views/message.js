@@ -22,7 +22,7 @@ var Marionette = require('../shims/marionette.js'),
     MessageTranslationView = require('./messageTranslationQuestion.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
     Genie = require('../utils/genieEffect.js'),
-    IdeasShowingMessage = require('./ideasShowingMessage.js'),
+    IdeaClassificationOnMessageView = require('./ideaClassificationOnMessage.js'),
     IdeaContentLink = require('../models/ideaContentLink.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -48,13 +48,18 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
   initialize: function(options){
     var cm = new CollectionManager(),
         that = this,
-        ideaContentLinks = cm.getIdeaContentLinkCollection(this.model);
+        ideaContentLinks = cm.getIdeaContentLinkCollectionOnMessage(this.model);
 
-    this.parentView = options.parentView;
+    this.messageView = options.messageView;
     this.ideaContentLinks = ideaContentLinks;
 
     if (_.isEmpty(ideaContentLinks)) {
-      parentView.removeIdeaClassificationView();
+      this.parentView.removeIdeaClassificationView();
+    }
+
+    //Check if it is a Post type.
+    if (! Types.isInstance(this.model.get('@type'), Types.POST) ) {
+      this.parentView.removeIdeaClassificationView();
     }
 
     else {
@@ -103,10 +108,15 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
   },
 
   onIdeaClick: function(e){
-    var that = this;
-    var modalView = new IdeasShowingMessage({
-      groupContent: this.parentView.messageListView.getContainingGroup(),
+    var that = this,
+        analytics = Analytics.getInstance();
+
+    analytics.trackEvent(analytics.events.NAVIGATE_TO_CLASSIFICATION_ON_MESSAGE);
+
+    var modalView = new IdeaClassificationOnMessageView({
+      groupContent: this.messageView.messageListView.getContainingGroup(),
       messageModel: this.model,
+      messageView: this.messageView,
       ideaContentLinks: this.ideaContentLinks
     });
 
@@ -982,9 +992,10 @@ var MessageView = Marionette.LayoutView.extend({
 
   renderIdeaClassification: function(){
     var view = new IdeaClassificationNameListView({
-      model: this.model,
-      parentView: this
+      messageView: this,
+      model: this.model
     });
+
     this.getRegion('ideaClassification').show(view);
   },
 
