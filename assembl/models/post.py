@@ -31,6 +31,7 @@ from .auth import AgentProfile
 from ..semantic.namespaces import SIOC, ASSEMBL, QUADNAMES
 from ..lib import config
 from .langstrings import LangString, LangStringEntry
+from assembl.views.traversal import AbstractCollectionDefinition
 
 
 log = logging.getLogger('assembl')
