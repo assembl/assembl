@@ -7,7 +7,7 @@ from langdetect import detect_langs
 from langdetect.detector import LangDetectException
 from sqlalchemy import inspect
 
-from assembl.lib.abc import abstractclassmethod
+from assembl.lib.abc import (abstractclassmethod, classproperty)
 from assembl.lib import config
 from assembl.lib.enum import OrderedEnum
 from assembl.models.langstrings import Locale, LangStringEntry, LocaleLabel
@@ -38,15 +38,12 @@ class TranslationService(object):
                 self.discussion_id)
         return self._discussion
 
-    @abstractclassmethod
-    def canTranslate(cls, source, target):
+    def canTranslate(self, source, target):
         return False
 
-    @classmethod
     def asKnownLocale(cls, locale_code):
         return locale_code
 
-    @classmethod
     def asPosixLocale(cls, locale_code):
         return locale_code
 
@@ -55,14 +52,12 @@ class TranslationService(object):
         # empirical
         return len(text) >= 15
 
-    @classmethod
-    def target_locales(cls):
+    def target_locales(self):
         return ()
 
-    @classmethod
-    def target_locale_labels(cls, target_locale):
+    def target_locale_labels(self, target_locale):
         return LocaleLabel.names_of_locales_in_locale(
-            cls.target_locales(), target_locale)
+            self.target_locales(), target_locale)
 
     @staticmethod
     def set_error(lse, error_code, error_description):
@@ -124,7 +119,7 @@ class TranslationService(object):
             source = Locale.get_or_create(source, db)
         return text, lang
 
-    def get_mt_name(cls, source_name, target_name):
+    def get_mt_name(self, source_name, target_name):
         return "%s-x-mtfrom-%s" % (target_name, source_name)
 
     def has_fatal_error(self, lse):
@@ -211,7 +206,6 @@ class TranslationService(object):
 
 
 class DummyTranslationServiceTwoSteps(TranslationService):
-    @classmethod
     def canTranslate(cls, source, target):
         return True
 
@@ -219,8 +213,7 @@ class DummyTranslationServiceTwoSteps(TranslationService):
         return u"Pseudo-translation from %s to %s of: %s" % (
             source or Locale.UNDEFINED, target, text), source
 
-    @classmethod
-    def target_locale_labels(cls, target_locale):
+    def target_locale_labels(self, target_locale):
         return LocaleLabel.names_in_locale(target_locale)
 
 
@@ -258,7 +251,7 @@ class DummyTranslationServiceOneStepWithErrors(DummyTranslationServiceOneStep):
 
 class DummyGoogleTranslationService(TranslationService):
     # Uses public Google API. For testing purposes. Do NOT use in production.
-    known_locales = {
+    _known_locales = {
         "af", "sq", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca",
         "ceb", "ny", "zh-CN", "zh-TW", "hr", "cs", "da", "nl", "en", "eo",
         "et", "tl", "fi", "fr", "gl", "ka", "de", "el", "gu", "ht", "ha",
@@ -277,18 +270,16 @@ class DummyGoogleTranslationService(TranslationService):
     idiosyncrasies_reverse = {v: k for (k, v) in idiosyncrasies.items()}
     agents = {'User-Agent':"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"}
 
-    @classmethod
-    def target_locales(cls):
-        return (cls.asPosixLocale(loc) for loc in cls.known_locales)
+    def target_locales(self):
+        return (self.asPosixLocale(loc) for loc in self.known_locales)
 
-    @classmethod
-    def asKnownLocale(cls, locale_code):
+    def asKnownLocale(self, locale_code):
         parts = locale_code.split("_")
         base = parts[0]
-        if base in cls.known_locales:
+        if base in self.known_locales:
             return base
-        if base in cls.idiosyncrasies_reverse:
-            return cls.idiosyncrasies_reverse[base]
+        if base in self.idiosyncrasies_reverse:
+            return self.idiosyncrasies_reverse[base]
         if base == "zh":
             p1 = parts[1]
             if p1 == "Hans":
@@ -298,19 +289,17 @@ class DummyGoogleTranslationService(TranslationService):
             elif p1 in ("CN", "TW"):
                 return "_".join(parts[:1])
 
-    @classmethod
     def asPosixLocale(cls, locale_code):
         return cls.idiosyncrasies.get(locale_code, locale_code)
 
-    def get_mt_name(cls, source_name, target_name):
-        return super(DummyGoogleTranslationService, cls).get_mt_name(
-            cls.asKnownLocale(source_name), cls.asKnownLocale(target_name))
+    def get_mt_name(self, source_name, target_name):
+        return super(DummyGoogleTranslationService, self).get_mt_name(
+            self.asKnownLocale(source_name), self.asKnownLocale(target_name))
 
-    @classmethod
-    def canTranslate(cls, source, target):
+    def canTranslate(self, source, target):
         return ((source == Locale.UNDEFINED or
-                 cls.asKnownLocale(source)) and
-                cls.asKnownLocale(target))
+                 self.asKnownLocale(source)) and
+                self.asKnownLocale(target))
 
     def translate(self, text, target, source=None, db=None):
         # Initial implementation from
@@ -328,7 +317,7 @@ class DummyGoogleTranslationService(TranslationService):
 
 
 class GoogleTranslationService(DummyGoogleTranslationService):
-    known_locales = None
+    _known_locales = None
     distinct_identify_step = False
 
     def __init__(self, discussion, apikey=None):
@@ -338,13 +327,14 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         apikey = config.get("google.server_api_key")
         self.client = apiclient.discovery.build(
             'translate', 'v2', developerKey=apikey)
-        self.init_known_locales(self.client)
 
-    @classmethod
-    def init_known_locales(cls, client):
-        if not cls.known_locales:
-            r = client.languages().list().execute()
-            cls.known_locales = [x[u'language'] for x in r[u'languages']]
+    @property
+    def known_locales(self):
+        if self._known_locales is None:
+            r = self.client.languages().list().execute()
+            if r[u'languages']:
+                self._known_locales = [x[u'language'] for x in r[u'languages']]
+        return self._known_locales
 
     def identify(self, text, expected_locales=None):
         r = self.client.detections().list(q=text).execute()
