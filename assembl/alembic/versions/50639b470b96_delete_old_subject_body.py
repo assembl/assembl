@@ -21,6 +21,11 @@ from assembl.lib.sqla import mark_changed
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
+        # Virtuoso will corrupt the database if the body is
+        # not nulled before dropping. Setting it to '' is not enough.
+        # (Does not matter for subject column, for some reason. LONG NVARCHAR?)
+        op.execute("update content set subject=null, body=null")
+    with context.begin_transaction():
         op.drop_column("content", "body")
         op.drop_column("content", "subject")
 
