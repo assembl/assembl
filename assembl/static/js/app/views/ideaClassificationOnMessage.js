@@ -229,7 +229,13 @@ var IndirectExtractView = IdeaClassificationView.extend({
 
 
 var ErrorView = Marionette.ItemView.extend({
-  template: _.template("<div><%= i18n.gettext(\"Something went wrong. We're sending our monkeys to look into it.\") %></div>")
+  template: _.template("<div><%= i18n.gettext(\"Something went wrong. We're sending our monkeys to look into it.\") %></div>"),
+
+  serializeData: function(){
+    return {
+      i18n: i18n
+    }
+  }
 });
 
 var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
