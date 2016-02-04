@@ -283,7 +283,7 @@ var IdeaModel = Base.Model.extend({
           break;
       parent = parent.get('parentId') !== null ? parent.getParent() : null;
       counter += 1;
-    } while (parent !== null);
+    } while (parent);
 
     return counter;
   },
@@ -342,7 +342,7 @@ var IdeaModel = Base.Model.extend({
                   break;
                 parent = parent.get('parentId') !== null ? parent.getParent() : null;
                 counter += 1;
-              } while (parent !== null);
+              } while (parent);
               return Promise.resolve(announcement);
             }
         );

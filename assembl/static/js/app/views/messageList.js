@@ -891,6 +891,8 @@ var MessageList = AssemblPanel.extend({
     }).catch(function(e) {
       Raven.captureException(e);
       that.ui.messageList.html("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
+      //For debugging, uncomment the following to get stack traces
+      //throw e;
     });
 
   },
