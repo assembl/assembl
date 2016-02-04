@@ -788,3 +788,10 @@ def test_results(request):
         body=json.dumps(request.POST.dict_of_lists()))
     mailer.send(message)
     return Response(body="Thank you!", content_type="text/text")
+
+
+@view_config(context=InstanceContext, name="test_sentry",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_READ)
+def test_sentry(request):
+    raise RuntimeError("Let's test sentry")
