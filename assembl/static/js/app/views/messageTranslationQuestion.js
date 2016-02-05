@@ -70,7 +70,7 @@ var LanguageSelectionView = Marionette.ItemView.extend({
         this.messageView = this.parentView.messageView;
         this.languagePreferences = this.parentView.languagePreferences;
         this.translatedTo = this.parentView.translatedTo;
-        this.translatedFrom = this.parentView.translatedFrom;
+        this.originalLocale = this.parentView.originalLocale;
         this.langCache = this.parentView.langCache;
     },
 
@@ -117,19 +117,9 @@ var LanguageSelectionView = Marionette.ItemView.extend({
         }
 
         else {
-            this.languagePreferences.setPreference(
-                user,
-                this.translatedFrom,
-                preferredLanguageTo[0],
-                {
-                    success: function(model, resp, options){
-                        return processConfirmLanguagePreferences(that.messageView);   
-                    }
-                }
-            )
+            this.parentView.preferredTarget = preferredLanguageTo[0];
+            this.parentView.render();
         }
-
-
     },
 
     onCancelClick: function(ev){
@@ -227,8 +217,8 @@ var TranslationView = Marionette.LayoutView.extend({
         if (state === userTranslationStates.CONFIRM) {
             this.languagePreferences.setPreference(
                 user,
-                this.translatedFrom,
-                this.translatedTo,
+                this.originalLocale,
+                this.preferredTarget,
                 {
                     success: function(model, resp, options){
                         return processConfirmLanguagePreferences(that.messageView);   
@@ -240,7 +230,7 @@ var TranslationView = Marionette.LayoutView.extend({
         if (state === userTranslationStates.DENY) {
             this.languagePreferences.setPreference(
                 user,
-                this.translatedFrom,
+                this.originalLocale,
                 null,
                 {
                     success: function(model, resp, options){
