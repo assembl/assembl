@@ -459,23 +459,28 @@ def create_post(request):
         log.warning("Still using html")
         # how to guess locale in this case?
         body = LangString.create(html)
-    else:
+    elif body:
         body = LangString.create_from_json(
             body, context=ctx, user_id=user_id)
+    else:
+        body = LangString.EMPTY
 
     if subject:
         subject = LangString.create_from_json(
             subject, context=ctx, user_id=user_id)
     else:
-        #print(in_reply_to_post.subject, discussion.topic)
+        # print(in_reply_to_post.subject, discussion.topic)
         if in_reply_to_post:
-            subject = in_reply_to_post.get_title() if in_reply_to_post.get_title() else ''
+            subject = (in_reply_to_post.get_title().first_original().value
+                       if in_reply_to_post.get_title() else '')
         elif in_reply_to_idea:
-            #TODO:  THis should use a cascade like the frontend   
-            subject = in_reply_to_idea.short_title if in_reply_to_idea.short_title else ''
+            # TODO:  THis should use a cascade like the frontend
+            subject = (in_reply_to_idea.short_title
+                       if in_reply_to_idea.short_title else '')
         else:
             subject = discussion.topic if discussion.topic else ''
-        #print subject
+        # print subject
+        # TODO: Could we reuse original subject langstring with translations?
         subject = "Re: " + restrip_pat.sub('', subject)
         # how to guess locale in this case?
         subject = LangString.create(subject)

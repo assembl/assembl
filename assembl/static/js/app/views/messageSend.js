@@ -261,20 +261,22 @@ var messageSend = Marionette.LayoutView.extend({
 
     // This is not too good, but it allows the next render to come.
     message_subject_field.value = "";
-
-    this.model.set({
-      subject: new LangString.Model({
+    var subject_ls = message_subject ? (new LangString.Model({
         entries: new LangString.EntryCollection([
             new LangString.EntryModel({
                 value: message_subject
                 // @language: make educated guess from discussion and user languages
-            })])}),
-      body: new LangString.Model({
+            })])})) : null,
+        body_ls = message_body ? (new LangString.Model({
         entries: new LangString.EntryCollection([
             new LangString.EntryModel({
                 value: message_body
                 // @language: make educated guess from discussion and user languages
-            })])}),
+            })])})) : null;
+
+    this.model.set({
+      subject: message_ls,
+      body: body_ls,
       reply_id: reply_message_id,
       idea_id: reply_idea_id
     });
