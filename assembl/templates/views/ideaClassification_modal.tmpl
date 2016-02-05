@@ -5,7 +5,7 @@
 <div class="popin-body">
   <div class="ideas-showing-message">
     <div class="ideas-showing-message-introduction">
-      <%= i18n.ngettext("This message is visible in the following idea because: ", "This message is visible in the following %s ideas because: ", number_of_ideas)  %>
+      <%= i18n.sprintf( i18n.ngettext("This message is visible in the following idea because: ", "This message is visible in the following %s ideas because: ", number_of_ideas), number_of_ideas)  %>
     </div>
     <div class="ideas-reasons-collection"></div>
   </div>

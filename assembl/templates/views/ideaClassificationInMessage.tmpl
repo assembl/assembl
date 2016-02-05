@@ -1,22 +1,11 @@
 <% if (count > 0) { %>
     <span><%= i18n.ngettext("This message is linked to the following idea: ", "This message is linked to the following ideas: ", count) %></span>
     <span>
-        <% if (count === 1) { %>
-            <span class=" idea-name js_idea-classification-idea"><%= first[0] %></span>
-        <% }%>
-
-        <%if (count === 2) { %>
-            <span class="idea-name js_idea-classification-idea"><%= first[0] %></span>
-            <span><%= i18n.gettext("and") %></span>
-            <span class="idea-name js_idea-classification-idea"><%= first[1] %></span>
-        <% } else { %>
-
-            <% _.each(first, function(n){ %>
-                <span class="idea-name js_idea-classification-idea"><%= n %></span>
-            <% })%>
-            <% if (rest.length > 0 ) { %>
-                <%= i18n.sprintf(i18n.gettext("and <span class=\"idea-name js_idea-classification-idea\">%s others</span>"), rest.length)%>
-            <% } %>
+        <% _.each(first, function(n){ %>
+            <span class="idea-name js_idea-classification-idea"><%= n %></span>
+        <% })%>
+        <% if (rest.length > 0 ) { %>
+            <%= i18n.sprintf( i18n.ngettext("and <span class=\"idea-name js_idea-classification-idea\">%d other idea</span>", "and <span class=\"idea-name js_idea-classification-idea\">%d other ideas</span>", rest.length), rest.length) %>
         <% } %>
     </span>
 
