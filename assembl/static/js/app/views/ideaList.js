@@ -769,6 +769,9 @@ var IdeaList = AssemblPanel.extend({
       return;
     }
 
+    // /!\ This algorithm clones the user custom state into the default state.
+    // But the user custom state does not define a state on untouched ideas (which are considered open by default).
+    // So if one day we change the default state to collapsed, a side effect will be that users will see a different state than the ones which were saved (default and user).
     var attributes = _.clone(this.tableOfIdeasCollapsedState.attributes);
     delete attributes['id'];
     this.defaultTableOfIdeasCollapsedState.set(attributes);
