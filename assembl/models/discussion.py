@@ -24,7 +24,7 @@ from sqlalchemy.orm import relationship, join, subqueryload_all
 from sqlalchemy.exc import InvalidRequestError
 
 from assembl.lib import config
-from assembl.lib.utils import slugify, get_global_base_url
+from assembl.lib.utils import slugify, get_global_base_url, full_class_name
 from ..lib.sqla_types import URLString
 from . import DiscussionBoundBase
 from virtuoso.alchemy import CoerceUnicode
@@ -669,11 +669,22 @@ class Discussion(DiscussionBoundBase):
         return self.preferences["translation_service"]
 
     def translation_service(self):
+        service_class = self.translation_service_class
+        service = self._discussion_services.get(self.id, None)
+        if service and not service_class:
+            del self._discussion_services[self.id]
+            return None
+        if (service_class and service
+                and full_class_name(service) != service_class):
+            del self._discussion_services[self.id]
+            service = None
+        elif (service_class and not service
+                and self.id in self._discussion_services):
+            del self._discussion_services[self.id]
         if self.id not in self._discussion_services:
             try:
-                service = self.translation_service_class
-                if service:
-                    service = resolver.resolve(service)(self)
+                if service_class:
+                    service = resolver.resolve(service_class)(self)
                 self._discussion_services[self.id] = service
             except:
                 pass

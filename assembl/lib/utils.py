@@ -90,3 +90,9 @@ def path_qs(url):
     """
     p = urlparse(url)
     return p.path + "?" + p.params
+
+
+def full_class_name(cls):
+    if not isinstance(cls, type):
+        cls = cls.__class__
+    return ".".join((cls.__module__, cls.__name__))
