@@ -347,13 +347,15 @@ class Post(Content):
         return self.db.query(IdeaContentLink).filter(
             IdeaContentLink.content_id.in_(ancestors)).all()
 
-    def indirect_idea_content_links_with_cache(self):
+    def indirect_idea_content_links_with_cache(self, links_above_post=None):
         "Return all ideaContentLinks related to this post or its ancestors"
         # WIP: idea_content_links_above_post is still loaded separately
         # despite not being deferred. Deferring it hits a sqlalchemy bug.
         # Still appreciable performance gain using it instead of the orm,
         # and the ICL cache below.
-        if not self.idea_content_links_above_post:
+        links_above_post = (self.idea_content_links_above_post
+                            if links_above_post is None else links_above_post)
+        if not links_above_post:
             return []
         from pyramid.threadlocal import get_current_request
         from .idea_content_link import IdeaContentLink
@@ -385,7 +387,7 @@ class Post(Content):
                 }
             return request._idea_content_link_cache2[id]
         return [icl_representation(int(id)) for id in
-                self.idea_content_links_above_post[:-1].split(',')]
+                links_above_post[:-1].split(',')]
 
     @classmethod
     def extra_collections(cls):

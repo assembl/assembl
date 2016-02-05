@@ -109,7 +109,6 @@ def get_posts(request):
     if root_idea_id:
         root_idea_id = get_database_id("Idea", root_idea_id[0])
 
-    
     ids = request.GET.getall('ids[]')
     if ids:
         ids = [get_database_id("Post", id) for id in ids]
@@ -132,6 +131,8 @@ def get_posts(request):
     posted_before_date = request.GET.get('posted_before_date')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
+    ideaContentLinkQuery = discussion.db.query(
+        PostClass.id, PostClass.idea_content_links_above_post)
     if order == 'score':
         posts = discussion.db.query(PostClass, Content.body_text_index.score_name)
     else:
@@ -140,6 +141,8 @@ def get_posts(request):
     posts = posts.filter(
         PostClass.discussion_id == discussion_id,
     )
+    ideaContentLinkQuery = ideaContentLinkQuery.filter(
+        PostClass.discussion_id == discussion_id)
     ##no_of_posts_to_discussion = posts.count()
 
     post_data = []
@@ -153,6 +156,8 @@ def get_posts(request):
                         bindparams=[bindparam('discussion_id', discussion_id)]
                         ).columns(column('post_id')).alias('orphans')
         posts = posts.join(orphans, PostClass.id==orphans.c.post_id)
+        ideaContentLinkQuery = ideaContentLinkQuery.join(
+            orphans, PostClass.id==orphans.c.post_id)
     elif only_orphan == "false":
         raise HTTPBadRequest(localizer.translate(
             _("Getting non-orphan posts isn't supported.")))
@@ -161,6 +166,8 @@ def get_posts(request):
     hidden = request.GET.get('hidden_messages', "false")
     if hidden != 'any':
         posts = posts.filter(PostClass.hidden==asbool(hidden))
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(
+            PostClass.hidden==asbool(hidden))
 
     if root_idea_id:
         related = text(Idea._get_related_posts_statement(),
@@ -170,9 +177,11 @@ def get_posts(request):
         #Virtuoso bug: This should work...
         #posts = posts.join(related, PostClass.id==related.c.post_id)
         posts = posts.join(related, PostClass.id == related.c.post_id)
+        ideaContentLinkQuery = ideaContentLinkQuery.join(
+            related, PostClass.id == related.c.post_id)
     if root_post_id:
         root_post = Post.get(root_post_id)
-                
+
         posts = posts.filter(
             (Post.ancestry.like(
             root_post.ancestry + cast(root_post.id, String) + ',%'
@@ -192,31 +201,51 @@ def get_posts(request):
             |
             (PostClass.id.in_(ancestor_ids))
             )
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(
+            (Post.ancestry.like(
+            root_post.ancestry + cast(root_post.id, String) + ',%'
+            ))
+            |
+            (PostClass.id==root_post.id)
+            |
+            (PostClass.id.in_(ancestor_ids))
+            )
     else:
         root_post = None
 
     if ids:
         posts = posts.filter(Post.id.in_(ids))
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(Post.id.in_(ids))
 
     if posted_after_date:
         posted_after_date = parse_datetime(posted_after_date)
         if posted_after_date:
             posts = posts.filter(PostClass.creation_date >= posted_after_date)
+            ideaContentLinkQuery = ideaContentLinkQuery.filter(
+                PostClass.creation_date >= posted_after_date)
         #Maybe we should do something if the date is invalid.  benoitg
 
     if posted_before_date:
         posted_before_date = parse_datetime(posted_before_date)
         if posted_before_date:
             posts = posts.filter(PostClass.creation_date <= posted_before_date)
+            ideaContentLinkQuery = posts.filter(
+                ideaContentLinkQuery.creation_date <= posted_before_date)
         #Maybe we should do something if the date is invalid.  benoitg
-    
+
     if post_author_id:
         posts = posts.filter(PostClass.creator_id == post_author_id)
-    
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(
+            PostClass.creator_id == post_author_id)
+
     if post_replies_to:
         parent_alias = aliased(PostClass)
         posts = posts.join(parent_alias, PostClass.parent)
         posts = posts.filter(parent_alias.creator_id == post_replies_to)
+        ideaContentLinkQuery = ideaContentLinkQuery.join(
+            parent_alias, PostClass.parent)
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(
+            parent_alias.creator_id == post_replies_to)
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
     translations = None
@@ -258,8 +287,11 @@ def get_posts(request):
         offband = () if (order == 'score') else None
         posts = posts.filter(Post.body_text_index.contains(
             text_search.encode('utf-8'), offband=offband))
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(
+            Post.body_text_index.contains(
+                text_search.encode('utf-8'), offband=offband))
 
-    #posts = posts.options(contains_eager(Post.source))
+    # posts = posts.options(contains_eager(Post.source))
     # Horrible hack... But useful for structure load
     if view_def == 'id_only':
         pass  # posts = posts.options(defer(Post.body))
@@ -275,6 +307,7 @@ def get_posts(request):
             posts = posts.options(*Content.subqueryload_options())
         else:
             posts = posts.options(*Content.joinedload_options())
+        ideaContentLinkCache = dict(ideaContentLinkQuery.all())
 
     if order == 'chronological':
         posts = posts.order_by(Content.creation_date)
@@ -321,8 +354,13 @@ def get_posts(request):
         else:
             serializable_post['read'] = False
         # serializable_post['liked'] = likedpost.uri() if likedpost else False
-        serializable_post['liked'] = LikedPost.uri_generic(likedpost) if likedpost else False
-        serializable_post['indirect_idea_content_links'] = post.indirect_idea_content_links_with_cache()
+        serializable_post['liked'] = (
+            LikedPost.uri_generic(likedpost) if likedpost else False)
+        if view_def != "id_only":
+            serializable_post['indirect_idea_content_links'] = (
+                post.indirect_idea_content_links_with_cache(
+                    ideaContentLinkCache[post.id]))
+            }
 
         post_data.append(serializable_post)
 
