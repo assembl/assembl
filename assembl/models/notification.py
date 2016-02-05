@@ -1021,7 +1021,7 @@ class NotificationOnPostCreated(NotificationOnPost):
             subject += loc.translate(_("SYNTHESIS: ")) \
                 + (self.post.publishes_synthesis.subject or "")
         else:
-            subject += (self.post.subject or "")
+            subject += (self.post.subject.first_original().value or "")
         return subject
 
     def render_to_email_html_part(self):
