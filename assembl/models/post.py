@@ -320,10 +320,10 @@ class Post(Content):
         if self.body:
             return super(Post, self).get_body()
 
-    def get_body_as_html(self):
+    def get_original_body_as_html(self):
         if self.publication_state in blocking_publication_states:
             return None
-        return super(Post, self).get_body_as_html()
+        return super(Post, self).get_original_body_as_html()
 
     def get_body_as_text(self):
         if self.publication_state in blocking_publication_states:

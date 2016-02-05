@@ -370,6 +370,20 @@ class Content(DiscussionBoundBase):
             log.error("What is this mimetype?" + mimetype)
             return body
 
+    def get_original_body_as_html(self):
+        mimetype = self.get_body_mime_type()
+        body = self.body
+        if not body:
+            return None
+        if mimetype == 'text/html':
+            return body.first_original().value
+        elif mimetype == "text/plain":
+            return '<span style="white-space: pre-wrap">%s</div>' % (
+                        body.first_original().value,)
+        else:
+            log.error("What is this mimetype?" + mimetype)
+            return body
+
     def get_original_body_as_text(self):
         mimetype = self.get_body_mime_type()
         body = self.body

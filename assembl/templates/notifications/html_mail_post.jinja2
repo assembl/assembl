@@ -24,7 +24,7 @@ ink_css
               <em>{{ notification.event_source_object().creator.name }}</em>
               <hr style="clear: both">
               {%- block post_body %}
-                {{ notification.event_source_object().get_body_as_html() }}
+                {{ notification.event_source_object().get_original_body_as_html() }}
               {% endblock post_body %}
             </td>
             <td class="expander"></td>
