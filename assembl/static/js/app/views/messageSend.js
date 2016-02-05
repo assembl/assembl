@@ -275,7 +275,7 @@ var messageSend = Marionette.LayoutView.extend({
             })])})) : null;
 
     this.model.set({
-      subject: message_ls,
+      subject: subject_ls,
       body: body_ls,
       reply_id: reply_message_id,
       idea_id: reply_idea_id
