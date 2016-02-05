@@ -359,8 +359,7 @@ def get_posts(request):
         if view_def != "id_only":
             serializable_post['indirect_idea_content_links'] = (
                 post.indirect_idea_content_links_with_cache(
-                    ideaContentLinkCache[post.id]))
-            }
+                    ideaContentLinkCache.get(post.id, None)))
 
         post_data.append(serializable_post)
 
