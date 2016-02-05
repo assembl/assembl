@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-28 11:58-0500\n"
+"POT-Creation-Date: 2016-02-05 18:20-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,8 +64,107 @@ msgstr ""
 msgid "Someone directly responds to one of your messages"
 msgstr ""
 
-#: assembl/models/notification.py:1020
+#: assembl/models/notification.py:1021
 msgid "SYNTHESIS: "
+msgstr ""
+
+#: assembl/models/preferences.py:266
+msgid "A JSON description of available Catalyst visualizations"
+msgstr ""
+
+#: assembl/models/preferences.py:278
+msgid ""
+"A JSON specification of Catalyst visualizations to show in the navigation "
+"section"
+msgstr ""
+
+#: assembl/models/preferences.py:291
+msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
+msgstr ""
+
+#: assembl/models/preferences.py:307
+msgid ""
+"Default expanded/collapsed state of each idea in the table of ideas. A user "
+"can override it by opening/closing an idea"
+msgstr ""
+
+#: assembl/models/preferences.py:322
+#: assembl/templates/views/adminDiscussionPreferences.tmpl:18
+#: assembl/templates/views/userDiscussionPreferences.tmpl:18
+msgid "Navigation, Idea, Messages"
+msgstr ""
+
+#: assembl/models/preferences.py:323
+#: assembl/templates/views/adminDiscussionPreferences.tmpl:19
+#: assembl/templates/views/userDiscussionPreferences.tmpl:19
+msgid "Navigation, Messages, Idea"
+msgstr ""
+
+#: assembl/models/preferences.py:324
+#: assembl/templates/views/adminDiscussionPreferences.tmpl:15
+#: assembl/templates/views/userDiscussionPreferences.tmpl:15
+msgid "Order of panels"
+msgstr ""
+
+#: assembl/models/preferences.py:335 assembl/models/preferences.py:353
+#: assembl/templates/views/adminDiscussionPreferences.tmpl:25
+msgid "List of domain names of user email address required for self-registration"
+msgstr ""
+
+#: assembl/models/preferences.py:338
+#: assembl/templates/views/adminDiscussionPreferences.tmpl:25
+msgid ""
+"Only accounts with at least an email from those domains can self-register to "
+"this discussion. Anyone can self-register if this is empty. Please use a "
+"comma to separate domain names. Example: mycompany.com,test.com"
+msgstr ""
+
+#: assembl/models/preferences.py:366
+msgid "Are moderated posts simply hidden or made inaccessible by default?"
+msgstr ""
+
+#: assembl/models/preferences.py:380
+msgid "Text template for default moderation text"
+msgstr ""
+
+#: assembl/models/preferences.py:393
+msgid "No translation"
+msgstr ""
+
+#: assembl/models/preferences.py:395
+msgid "Dummy translation service (two steps)"
+msgstr ""
+
+#: assembl/models/preferences.py:397
+msgid "Dummy translation service (one step)"
+msgstr ""
+
+#: assembl/models/preferences.py:399
+msgid "Dummy translation service (two steps) with errors"
+msgstr ""
+
+#: assembl/models/preferences.py:401
+msgid "Dummy translation service (one step) with errors"
+msgstr ""
+
+#: assembl/models/preferences.py:403
+msgid "Google Translate"
+msgstr ""
+
+#: assembl/models/preferences.py:404
+msgid "Translation service"
+msgstr ""
+
+#: assembl/models/preferences.py:416
+msgid "Show the CI Dashboard in the panel group window"
+msgstr ""
+
+#: assembl/models/preferences.py:427
+msgid "Configuration of the visualizations shown in the CI Dashboard"
+msgstr ""
+
+#: assembl/models/preferences.py:444
+msgid "The preference configuration; override only with care"
 msgstr ""
 
 #: assembl/static/js/app/routeManager.js:434
@@ -386,6 +485,7 @@ msgstr ""
 
 #: assembl/static/js/app/utils/tourManager.js:21
 #: assembl/templates/views/exportPostModal.tmpl:32
+#: assembl/templates/views/message_translation_question.tmpl:14
 msgid "Close"
 msgstr ""
 
@@ -638,38 +738,53 @@ msgstr ""
 msgid "Please complete facebook login"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:128
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:135
+msgid "Go to this idea"
+msgstr ""
+
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:311
+#, python-format
+msgid "This message is linked to the following idea because: "
+msgid_plural "This message is linked to the %d following ideas because: "
+msgstr[0] ""
+msgstr[1] ""
+
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:316
+msgid "Link between this message and the idea"
+msgid_plural "Links between this message and ideas"
+msgstr[0] ""
+msgstr[1] ""
+
+#: assembl/static/js/app/views/ideaInSynthesis.js:149
 #, python-format
 msgid "%d message is available under this idea"
 msgid_plural "%d messages are available under this idea"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:203
-#: assembl/static/js/app/views/message.js:470
+#: assembl/static/js/app/views/ideaInSynthesis.js:227
+#: assembl/static/js/app/views/message.js:597
 msgid "Type your response here..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:205
-#: assembl/static/js/app/views/message.js:472
+#: assembl/static/js/app/views/ideaInSynthesis.js:229
+#: assembl/static/js/app/views/message.js:599
 msgid "Send your reply"
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:208
-#: assembl/static/js/app/views/message.js:474
+#: assembl/static/js/app/views/ideaInSynthesis.js:232
+#: assembl/static/js/app/views/message.js:601
 msgid "You did not type a response yet..."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:310
-#: assembl/static/js/app/views/ideaInSynthesis.js:315
-#, python-format
-msgid "Exploring idea \"%s\""
-msgstr ""
-
-#: assembl/static/js/app/views/ideaList.js:235
+#: assembl/static/js/app/views/ideaList.js:251
 #: assembl/templates/views/create-group.tmpl:42
 #: assembl/templates/views/ideaList.tmpl:14
 msgid "Table of ideas"
+msgstr ""
+
+#: assembl/static/js/app/views/ideaList.js:768
+msgid "You don't have the permission to do this."
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:121
@@ -737,6 +852,19 @@ msgstr ""
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 
+#: assembl/static/js/app/views/message.js:107
+msgid "This message is linked to the following idea: "
+msgid_plural "This message is linked to the following ideas: "
+msgstr[0] ""
+msgstr[1] ""
+
+#: assembl/static/js/app/views/message.js:111
+#, python-format
+msgid "and <a class=\"idea-name js_idea-classification-idea\">%d other idea</a>"
+msgid_plural "and <a class=\"idea-name js_idea-classification-idea\">%d other ideas</a>"
+msgstr[0] ""
+msgstr[1] ""
+
 #: assembl/static/js/app/views/messageFamily.js:106
 #, python-format
 msgid "%d more message is available in this message's full context."
@@ -784,34 +912,34 @@ msgstr ""
 msgid "No messages"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1221
+#: assembl/static/js/app/views/messageList.js:1223
 #: assembl/static/js/app/views/messageSend.js:155
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/request_password_change.jinja2:26
 msgid "Send"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1222
+#: assembl/static/js/app/views/messageList.js:1224
 msgid "Subject"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1223
+#: assembl/static/js/app/views/messageList.js:1225
 msgid "Add a subject above and start a new topic here"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1224
+#: assembl/static/js/app/views/messageList.js:1226
 msgid "You need to type a comment first..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1225
+#: assembl/static/js/app/views/messageList.js:1227
 msgid "You need to set a subject to add a new topic..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1725
+#: assembl/static/js/app/views/messageList.js:1727
 msgid "Send to clipboard"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1727
+#: assembl/static/js/app/views/messageList.js:1729
 #: assembl/static/js/app/views/messageSend.js:154
 #: assembl/templates/styleguide/components/Dialogs.jinja2:119
 #: assembl/templates/styleguide/components/Dialogs.jinja2:146
@@ -823,32 +951,31 @@ msgstr ""
 #: assembl/templates/views/ckeditorField.tmpl:10
 #: assembl/templates/views/create-group.tmpl:128
 #: assembl/templates/views/messageModerationOptions.tmpl:32
-#: assembl/templates/views/message_translation_question.tmpl:14
-#: assembl/templates/views/message_translation_question_selection.tmpl:13
+#: assembl/templates/views/message_translation_question_selection.tmpl:14
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 msgid "Cancel"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1731
+#: assembl/static/js/app/views/messageList.js:1733
 msgid "You can drag the segment below directly to the table of ideas"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1732
+#: assembl/static/js/app/views/messageList.js:1734
 msgid "You can also copy-paste from the text in the zone below"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1773
+#: assembl/static/js/app/views/messageList.js:1775
 #, python-format
 msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the "
 "debate"
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:1776
+#: assembl/static/js/app/views/messageList.js:1778
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
 msgstr ""
 
-#: assembl/static/js/app/views/messageList.js:2540
+#: assembl/static/js/app/views/messageList.js:2542
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
@@ -947,26 +1074,43 @@ msgstr ""
 msgid "Sending..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:287
+#: assembl/static/js/app/views/messageSend.js:289
 msgid "Message posted!"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:97
+#: assembl/static/js/app/views/messageTranslationQuestion.js:106
 msgid "Please select a language."
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:105
+#: assembl/static/js/app/views/messageTranslationQuestion.js:114
 msgid "You cannot select more than one language"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:135
+#: assembl/static/js/app/views/messageTranslationQuestion.js:134
 #, python-format
 msgid "Select the language you wish to translate %s to:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:274
+#: assembl/static/js/app/views/messageTranslationQuestion.js:291
 #, python-format
 msgid "Translate all messages from %s to %s?"
+msgstr ""
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:302
+#, python-format
+msgid "Keep %s messages untranslated?"
+msgstr ""
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:307
+msgid "Yes, Thanks!"
+msgstr ""
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:308
+msgid "Do not translate"
+msgstr ""
+
+#: assembl/static/js/app/views/messageTranslationQuestion.js:309
+msgid "Translate to another language"
 msgstr ""
 
 #: assembl/static/js/app/views/postFilters.js:116
@@ -1205,7 +1349,7 @@ msgstr ""
 
 #: assembl/static/js/app/views/sourceEditView.js:41
 #: assembl/static/js/app/views/admin/adminDiscussion.js:81
-#: assembl/static/js/app/views/admin/adminDiscussionPreferences.js:75
+#: assembl/static/js/app/views/admin/adminDiscussionPreferences.js:86
 #: assembl/static/js/app/views/user/account.js:116
 #: assembl/static/js/app/views/user/discussionPreferences.js:66
 #: assembl/static/js/app/views/user/profile.js:58
@@ -1313,32 +1457,32 @@ msgstr ""
 msgid "Contributors inactive recently"
 msgstr ""
 
-#: assembl/static/js/app/views/synthesisPanel.js:104
+#: assembl/static/js/app/views/synthesisPanel.js:102
 #: assembl/templates/views/navigation.tmpl:3
 #: assembl/templates/views/synthesisContext.tmpl:6
 msgid "Synthesis"
 msgstr ""
 
-#: assembl/static/js/app/views/synthesisPanel.js:222
+#: assembl/static/js/app/views/synthesisPanel.js:220
 msgid "You can add an introduction to your synthesis here..."
 msgstr ""
 
-#: assembl/static/js/app/views/synthesisPanel.js:232
+#: assembl/static/js/app/views/synthesisPanel.js:230
 msgid "You can add a conclusion to your synthesis here..."
 msgstr ""
 
-#: assembl/static/js/app/views/synthesisPanel.js:301
+#: assembl/static/js/app/views/synthesisPanel.js:299
 msgid ""
 "Are you sure you want to publish the synthesis? You will not be able to "
 "delete it afterwards, and participants who subscribed to notifications "
 "related to the synthesis will receive a notification by email."
 msgstr ""
 
-#: assembl/static/js/app/views/synthesisPanel.js:324
+#: assembl/static/js/app/views/synthesisPanel.js:322
 msgid "Synthesis has been successfully published!"
 msgstr ""
 
-#: assembl/static/js/app/views/synthesisPanel.js:331
+#: assembl/static/js/app/views/synthesisPanel.js:329
 msgid "Failed publishing synthesis!"
 msgstr ""
 
@@ -1410,6 +1554,12 @@ msgstr ""
 #: assembl/templates/views/navigation.tmpl:14
 #: assembl/templates/views/panelWrapper.tmpl:20
 msgid "Minimize panel"
+msgstr ""
+
+#: assembl/static/js/app/views/modals/ideaInModal.js:40
+#: assembl/static/js/app/views/modals/ideaInModal.js:45
+#, python-format
+msgid "Exploring idea \"%s\""
 msgstr ""
 
 #: assembl/static/js/app/views/user/account.js:179
@@ -1932,7 +2082,7 @@ msgid "Homepage Url (optional)"
 msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:79
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:39
+#: assembl/templates/views/adminDiscussionPreferences.tmpl:51
 #: assembl/templates/views/emailSource.tmpl:85
 #: assembl/templates/views/userAccountForm.tmpl:36
 #: assembl/templates/views/userDiscussionPreferences.tmpl:25
@@ -1947,37 +2097,11 @@ msgstr ""
 msgid "Discussion preferences"
 msgstr ""
 
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:15
-#: assembl/templates/views/userDiscussionPreferences.tmpl:15
-msgid "Order of panels"
-msgstr ""
-
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:18
-#: assembl/templates/views/userDiscussionPreferences.tmpl:18
-msgid "Navigation, Idea, Messages"
-msgstr ""
-
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:19
-#: assembl/templates/views/userDiscussionPreferences.tmpl:19
-msgid "Navigation, Messages, Idea"
-msgstr ""
-
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:25
-msgid ""
-"Only accounts with at least an email from those domains can self-register to "
-"this discussion. Anyone can self-register if this is empty. Please use a "
-"comma to separate domain names. Example: mycompany.com,test.com"
-msgstr ""
-
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:25
-msgid "List of domain names of user email address required for self-registration"
-msgstr ""
-
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:32
+#: assembl/templates/views/adminDiscussionPreferences.tmpl:44
 msgid "Allow users to see the original content of moderated messages by default"
 msgstr ""
 
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:40
+#: assembl/templates/views/adminDiscussionPreferences.tmpl:52
 #: assembl/templates/views/userAccountForm.tmpl:37
 #: assembl/templates/views/userDiscussionPreferences.tmpl:26
 #: assembl/templates/views/userProfile.tmpl:78
@@ -2218,8 +2342,8 @@ msgid "Add a new announcement to this idea"
 msgstr ""
 
 #: assembl/templates/views/announcementMessage.tmpl:9
-#: assembl/templates/views/message.tmpl:125
-#: assembl/templates/views/message.tmpl:144
+#: assembl/templates/views/message.tmpl:135
+#: assembl/templates/views/message.tmpl:154
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 msgstr ""
@@ -2230,6 +2354,11 @@ msgstr ""
 
 #: assembl/templates/views/associateAccounts.tmpl:3
 msgid "Associated accounts"
+msgstr ""
+
+#: assembl/templates/views/attachmentEditable.tmpl:1
+#, python-format
+msgid "For URL %s in the text above:"
 msgstr ""
 
 #: assembl/templates/views/bookmarket.tmpl:3
@@ -2515,6 +2644,39 @@ msgstr ""
 msgid "This is a safe and respectful space. All ideas are welcome!"
 msgstr ""
 
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:3
+#, python-format
+msgid ""
+"<span class=\"harvester\">%s</span> has considered this message relevant to "
+"the idea:"
+msgstr ""
+
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:7
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
+msgid "Considering this extract:"
+msgstr ""
+
+#: assembl/templates/views/ideaClassification_directMessage.tmpl:3
+#, python-format
+msgid ""
+"<span class=\"author\">%s</span> started this new discussion thread directly "
+"on the idea:"
+msgstr ""
+
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
+#, python-format
+msgid ""
+"This message is part of a thread, which <span class=\"harvester\">%s</span> "
+"considered relevant to the idea:"
+msgstr ""
+
+#: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
+#, python-format
+msgid ""
+"This message is part of a thread, started by <span class=\"author\">%s</span>"
+" on the idea:"
+msgstr ""
+
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
 msgid "Remove from next synthesis"
 msgstr ""
@@ -2557,6 +2719,10 @@ msgstr ""
 msgid "Add idea"
 msgstr ""
 
+#: assembl/templates/views/ideaList.tmpl:22
+msgid "Options"
+msgstr ""
+
 #: assembl/templates/views/ideaList.tmpl:24
 msgid "Decrease row height"
 msgstr ""
@@ -2567,6 +2733,22 @@ msgstr ""
 
 #: assembl/templates/views/ideaList.tmpl:26
 msgid "Toggle decreasing font size with depth"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:27
+msgid "Expand all ideas"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:28
+msgid "Collapse all ideas"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:30
+msgid "Save the current expanded/collapsed state as default for users"
+msgstr ""
+
+#: assembl/templates/views/ideaList.tmpl:32
+msgid "Restore default expanded/collapsed state"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:2 assembl/templates/views/message.tmpl:25
@@ -2749,26 +2931,34 @@ msgid "Export Post in HTML"
 msgstr ""
 
 #: assembl/templates/views/message.tmpl:109
+msgid "Sorry, we could not translate this message."
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:111
+msgid "Please try again later."
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:118
 msgid "View the original message"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:110
+#: assembl/templates/views/message.tmpl:119
 msgid "Translated by Google Translate"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:112
-msgid "View to translated message"
+#: assembl/templates/views/message.tmpl:121
+msgid "Return to the translated message"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:165
+#: assembl/templates/views/message.tmpl:175
 msgid "Read more"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:174
+#: assembl/templates/views/message.tmpl:184
 msgid "Read less"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:186
+#: assembl/templates/views/message.tmpl:196
 msgid "Reply"
 msgstr ""
 
@@ -2861,18 +3051,6 @@ msgstr ""
 
 #: assembl/templates/views/messageSend.tmpl:34
 msgid "Your message will be posted in the general conversation."
-msgstr ""
-
-#: assembl/templates/views/message_translation_question.tmpl:6
-msgid "Yes, Thanks!"
-msgstr ""
-
-#: assembl/templates/views/message_translation_question.tmpl:9
-msgid "Do not translate"
-msgstr ""
-
-#: assembl/templates/views/message_translation_question.tmpl:12
-msgid "Translate to another language"
 msgstr ""
 
 #: assembl/templates/views/moderatedBody.tmpl:3
@@ -3143,24 +3321,24 @@ msgstr ""
 msgid "No file given."
 msgstr ""
 
-#: assembl/views/api/post.py:67 assembl/views/api/post.py:451
+#: assembl/views/api/post.py:68 assembl/views/api/post.py:490
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr ""
 
-#: assembl/views/api/post.py:150
+#: assembl/views/api/post.py:154
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:157
+#: assembl/views/api/post.py:163
 msgid "Getting non-orphan posts isn't supported."
 msgstr ""
 
-#: assembl/views/api/post.py:253
+#: assembl/views/api/post.py:283
 msgid "You must be logged in to view which posts are read"
 msgstr ""
 
-#: assembl/views/api/post.py:434
+#: assembl/views/api/post.py:474
 msgid "Your message is empty"
 msgstr ""
 
