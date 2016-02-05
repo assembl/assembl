@@ -8,9 +8,12 @@
 }
 
 .ideas-showing-message {
+  line-height: 1.7;
+  font-size: 13px; 
+
   .ideas-showing-message-introduction {
     font-weight: 600;
-    line-height: 1.7;
+    font-size: 14px;
   }
   .ideas-reasons-collection {
     .items > div {
@@ -48,10 +51,12 @@
     .breadcrumb {
       color: $gray4;
       font-weight: 300;
+      font-style: italic;
     }
 
     .breadcrumb:last-child {
       color: $theme_activelink_color;
+      font-weight: 600;
     }
 
     .idea-reason-content {
@@ -60,6 +65,8 @@
 
     .extract {
       color: $gray4;
+      font-style: italic;
+      font-weight: 300;
     }
 
     .thread-title {
