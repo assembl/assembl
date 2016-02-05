@@ -229,12 +229,16 @@ var IndirectExtractView = IdeaClassificationView.extend({
 
 
 var ErrorView = Marionette.ItemView.extend({
-  template: _.template("<div><%= i18n.gettext(\"Something went wrong. We're sending our monkeys to look into it.\") %></div>"),
+  template: _.template("<div><%= i18n.gettext(\"Something went wrong in getting the contents of this idea. We are looking into it. Thank you for your patience.\") %></div>"),
+
+  initialize: function(options){
+    console.error("[IdeaClassificationModal] An error view was created on the idea content link", this.model.id);
+  },
 
   serializeData: function(){
     return {
       i18n: i18n
-    }
+    };
   }
 });
 
