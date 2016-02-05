@@ -225,7 +225,6 @@
         "moderated_on": true,
         "message_id": false,
         "ancestry": false,
-        "indirect_idea_content_links": ["&indirect_idea_content_links:min_idea_content_link"],
         "parentId": "parent",
         "idCreator": "creator",
         "bodyMimeType": "&get_body_mime_type",

@@ -322,6 +322,7 @@ def get_posts(request):
             serializable_post['read'] = False
         # serializable_post['liked'] = likedpost.uri() if likedpost else False
         serializable_post['liked'] = LikedPost.uri_generic(likedpost) if likedpost else False
+        serializable_post['indirect_idea_content_links'] = post.indirect_idea_content_links_with_cache()
 
         post_data.append(serializable_post)
 
