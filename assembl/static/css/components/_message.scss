@@ -256,15 +256,15 @@ $previewNumLines: 4;
       font-style: italic;
       color: $txtGray1;
 
-      .idea-name {
-        text-decoration: underline;
-        color: $txtPurple;
+      // .idea-name {
+      //   text-decoration: underline;
+      //   color: $txtPurple;
         
-        &:hover {
-          color: $txtPurple1;
-          cursor: pointer;
-        }
-      }
+      //   &:hover {
+      //     color: $txtPurple1;
+      //     cursor: pointer;
+      //   }
+      // }
 
       .idea-name:after {
         content: ",";

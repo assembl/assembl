@@ -9,7 +9,8 @@
 
 .ideas-showing-message {
   .ideas-showing-message-introduction {
-    font-weight: bold;
+    font-weight: 600;
+    line-height: 1.7;
   }
   .ideas-reasons-collection {
     .items > div {
@@ -19,7 +20,7 @@
     }
 
     .items > div:last-child {
-      border: none; 
+      border: none;
     }
 
     .left-column {
@@ -35,7 +36,6 @@
 
     .author, .harvester {
       display: inline-block;
-      color: $theme_activelink_color;
     }
 
     .idea, .extract {
@@ -47,6 +47,7 @@
 
     .breadcrumb {
       color: $gray4;
+      font-weight: 300;
     }
 
     .breadcrumb:last-child {

@@ -2,10 +2,10 @@
     <span><%= i18n.ngettext("This message is linked to the following idea: ", "This message is linked to the following ideas: ", count) %></span>
     <span>
         <% _.each(first, function(n){ %>
-            <a class="js_idea-classification-idea"><%= n %></a>
+            <a class="idea-name js_idea-classification-idea"><%= n %></a>
         <% })%>
         <% if (rest.length > 0 ) { %>
-            <%= i18n.sprintf( i18n.ngettext("and <a class=\"js_idea-classification-idea\">%d other idea</a>", "and <a class=\"js_idea-classification-idea\">%d other ideas</a>", rest.length), rest.length) %>
+            <%= i18n.sprintf( i18n.ngettext("and <a class=\"idea-name js_idea-classification-idea\">%d other idea</a>", "and <a class=\"idea-name js_idea-classification-idea\">%d other ideas</a>", rest.length), rest.length) %>
         <% } %>
     </span>
 
