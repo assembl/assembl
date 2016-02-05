@@ -305,9 +305,17 @@ var IdeasShowingMessageModal = Backbone.Modal.extend({
   },
 
   serializeData: function() {
+    var number_of_ideas = this.ideaContentLinks.length;
     return {
-      i18n: i18n,
-      number_of_ideas: this.ideaContentLinks.length
+      visible_because_msg: i18n.sprintf(
+        i18n.ngettext(
+            "This message is linked to the following idea because: ",
+            "This message is linked to the %d following ideas because: ",
+            number_of_ideas),
+        number_of_ideas),
+      title_msg: i18n.ngettext(
+        "Link between this message and the idea",
+        "Links between this message and ideas", number_of_ideas)
     };
   },
 

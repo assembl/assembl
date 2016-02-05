@@ -103,8 +103,17 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
       count: count,
       first: first,
       rest: rest,
-      i18n: i18n
-    }
+      i18n: i18n,
+      linked_to_msg: i18n.ngettext(
+        "This message is linked to the following idea: ",
+        "This message is linked to the following ideas: ", count),
+      other_ideas_msg: i18n.sprintf(
+        i18n.ngettext(
+            "and <a class=\"idea-name js_idea-classification-idea\">%d other idea</a>",
+            "and <a class=\"idea-name js_idea-classification-idea\">%d other ideas</a>",
+            rest.length),
+        rest.length)
+    };
   },
 
   onIdeaClick: function(e){

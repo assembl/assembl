@@ -1,10 +1,10 @@
 <div class="left-column">
   <div class="idea-reason-introduction">
-    <%= i18n.sprintf(i18n.gettext("This message is part of the thread \"%s\", which <div class='harvester'>%s</div> considered relevant to the idea: "), threadTitle, harvester) %>
+    <%= i18n.sprintf('{{gettext("This message is part of a thread, which <span class=\"harvester\">%s</span> considered relevant to the idea:")|safe}}', harvester) %>
   </div>
   <div class="idea js_breadcrumb"></div>
   <div class="mts idea-reason-content">
-    <%= i18n.gettext("Considering this extract:") %>
+    {{gettext("Considering this extract:")}}
     <div class="extract">
       <i class="icon">&#8220;</i>
       <span class="extract-text"><%= extractText %></span>
