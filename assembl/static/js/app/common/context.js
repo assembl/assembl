@@ -1117,7 +1117,26 @@ Context.prototype = {
    * */
   setInterfaceType: function(interface_id) {
     document.cookie = "interface=" + interface_id + "; path=/";
+    this._interfaceTypeCache = undefined;
     location.reload(true);
+  },
+
+
+  getCurrentInterfaceType: function() {
+    if(this._interfaceTypeCache === undefined) {
+      this._interfaceTypeCache = this.getCookieItem('interface');
+    }
+    var interfaceType = this._interfaceTypeCache;
+    if (!this.canUseExpertInterface()) {
+      interfaceType = this.InterfaceTypes.SIMPLE
+    }
+    else {
+      if (interfaceType === null) {
+        interfaceType = this.InterfaceTypes.EXPERT
+      }
+    }
+
+    return interfaceType;
   },
 
   getCookieItem: function(sKey) {
@@ -1181,20 +1200,6 @@ Context.prototype = {
         }
       }
     },
-
-  getCurrentInterfaceType: function() {
-    var interfaceType = this.getCookieItem('interface');
-    if (!this.canUseExpertInterface()) {
-      interfaceType = this.InterfaceTypes.SIMPLE
-    }
-    else {
-      if (interfaceType === null) {
-        interfaceType = this.InterfaceTypes.EXPERT
-      }
-    }
-
-    return interfaceType;
-  },
 
   convertUrlsToLinks: function(el) {
     $(el).linkify();
