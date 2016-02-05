@@ -34,7 +34,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       this.messageListView = options.messageListView;
       this.editing = false;
       this.authors = [];
-      this.original_idea = this.model;
+      this.original_idea = undefined;
 
       this.parentPanel = options.parentPanel;
       if (this.parentPanel === undefined) {
@@ -61,32 +61,45 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
         that.template = '#tmpl-ideaInSynthesis';
         that.render();
       }
-
-      if (this.synthesis.get('is_next_synthesis')) {
+      // idea is either a tombstone or from a different collection; get the original
+      Promise.resolve(collectionManager.getAllIdeasCollectionPromise()).then(function(allIdeasCollection) {
+        var idea = that.model,
+        original_idea = undefined;
+        if (that.synthesis.get('is_next_synthesis')) {
+          original_idea = allIdeasCollection.get(that.model.id);
+        } 
+        else {
+          original_idea = allIdeasCollection.get(that.model.get('original_uri'));
+        }
+        if (original_idea) {
+          // original may be null if idea deleted.
+          that.original_idea = original_idea;
+          idea = original_idea;
+        }
         Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
             collectionManager.getAllUsersCollectionPromise(),
-            this.model.getExtractsPromise(),
+            idea.getExtractsPromise(),
             render_with_info);
-      } else {
-        // idea is a tombstone; get the original
-        Promise.resolve(collectionManager.getAllIdeasCollectionPromise()).then(
-          function(ideas) {
-            var original_idea = ideas.get(that.model.get('original_uri'));
-            if (original_idea) {
-              // original may be null if idea deleted.
-              that.original_idea = original_idea;
-            }
-
-            Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
-                collectionManager.getAllUsersCollectionPromise(),
-                that.original_idea.getExtractsPromise(),
-                render_with_info);
-          });
-      }
+        
+        //console.log("About to connect idea change event to idea:", idea, "for synthesis: ", that.synthesis);
+        that.listenTo(idea, "change:shortTitle change:longTitle change:segments':'render'", function() {
+          /*if (Ctx.debugRender) {
+            console.log("idesInSynthesis:change event on original_idea, firing render");
+          }*/
+          //
+          console.log("Re-assigning model:", that.model);
+        //This is evil and a stop-gap measure. - benoitg
+          that.model = idea;
+          that.render();
+        });
+        
+      });
 
       this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {
         that.onIsSelectedChange(currentIdea);
       });
+
+
     },
 
   /**
@@ -102,6 +115,7 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     },
 
   modelEvents: {
+    //THIS WILL NOT ACTUALLY RUN UNTILL CODE IS REFACTORED SO MODEL IS THE REAL IDEA OR THE TOOMBSTONE.  See initialize - benoitg
       'change:shortTitle change:longTitle change:segments':'render'
     },
 
@@ -113,11 +127,14 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       //As all ideas in a previously posted synthesis are tombstoned, the original idea is 
       //gathered from the original_uri attribute and view is re-rendered. Therefore, the 
       //original idea is expected to be the one that contants the num_posts field.
-      var numMessages = this.original_idea.get('num_posts');
+      var numMessages;
+      if(this.original_idea) {
+        numMessages = this.original_idea.get('num_posts');
+      }
       if (!numMessages) {
         numMessages = 0;
       }
-
+      
       return {
         id: this.model.getId(),
         editing: this.editing,
@@ -140,7 +157,9 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
    * @return {IdeaInSynthesisView}
    */
   onRender: function() {
-
+    /*if (Ctx.debugRender) {
+      console.log("idesInSynthesis:onRender() is firing");
+    }*/
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
     if (this.canEdit()) {
@@ -155,7 +174,8 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       this.renderCKEditorIdea();
     }
 
-    this.renderReplyView();
+    //Currently disabled, but will be revived at some point
+    //this.renderReplyView();
   },
 
   /**

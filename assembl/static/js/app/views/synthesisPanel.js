@@ -68,19 +68,14 @@ var SynthesisPanel = AssemblPanel.extend({
                 that.synthesisIdeas = that.model.getIdeasCollection();
                 that.synthesisIdeas.collectionManager = collectionManager;
 
-                that.listenTo(that.synthesisIdeas, 'add remove reset', that.render);
                 that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', that.render);
                 that.template = that.realTemplate;
 
-                // Should we just send a render event instead?
                 that.render();
-
-                //modelEvents should handler this
-                //that.listenTo(that.model, 'reset change', that.render);
               }
             });
 
-    Assembl.commands.setHandler('synthesisPanel:render', this.render);
+    //Assembl.commands.setHandler('synthesisPanel:render', this.render);
 
     this.propagateVisibility(true);
   },
