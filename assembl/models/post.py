@@ -358,6 +358,7 @@ class Post(Content):
         from pyramid.threadlocal import get_current_request
         from .idea_content_link import IdeaContentLink
         from .idea import Idea
+        icl_polymap = IdeaContentLink.__mapper__.polymorphic_map
         request = get_current_request()
         if getattr(request, "_idea_content_link_cache2", None) is None:
             if getattr(request, "_idea_content_link_cache1", None) is None:
@@ -379,7 +380,7 @@ class Post(Content):
                     "idIdea": Idea.uri_generic(data[1]),
                     "idPost": Content.uri_generic(data[2]),
                     "idCreator": AgentProfile.uri_generic(data[3]),
-                    "@type": data[4],
+                    "@type": icl_polymap[data[4]].class_.external_typename(),
                     "created": data[5].isoformat() + "Z"
                 }
             return request._idea_content_link_cache2[id]
