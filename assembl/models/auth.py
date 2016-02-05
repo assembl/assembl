@@ -334,13 +334,15 @@ class AgentProfile(Base):
         # Want a 2-letter locale string
         # Currently expecting only a scalar value, not a list. Might change
         # In the near future.
-        prefs = [pref.language_code for pref in self.language_preference]
+        prefs = self.language_preference
+        prefs.sort()  # natural order defined on class
         if prefs is None or len(prefs) is 0:
             # Correct way is to get the default from the app global config
             prefs = config.get_config().\
                 get('available_languages', 'fr_CA en_CA').split()[0]
-        assert prefs[0]
-        return prefs[0]
+            assert prefs[0]
+            return prefs[0]
+        return Locale.locale_collection_byid[prefs[0].locale_id]
 
 
 class AbstractAgentAccount(Base):
@@ -1643,7 +1645,7 @@ class UserLanguagePreference(Base):
     user = relationship('User', backref=backref(
                         'language_preference',
                         cascade='all, delete-orphan',
-                        order_by=desc(preferred_order)))
+                        order_by=source_of_evidence))
 
     def __cmp__(self, other):
         if not isinstance(other, self.__class__):
