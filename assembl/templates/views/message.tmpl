@@ -102,9 +102,9 @@
 
 {% macro showTranslation() -%}
   {% if discussion.translation_service_class %}
-    <% if (bodyTranslationError) { %>
     <div class="message-translation">
       <div class="mts js_regionMessageTranslationQuestions"></div>
+    <% if (bodyTranslationError) { %>
       <div class="warning-box-for-message-post">
         <p>{{gettext("Sorry, we could not translate this message.")}}
         <% if (bodyTranslationError < 10) { %>
@@ -112,10 +112,7 @@
         <% } %>
         </p>
       </div>
-    </div>
     <% } else { %>
-    <div class="message-translation">
-      <div class="mts js_regionMessageTranslationQuestions"></div>
       <div class='mtm js_translation_show_original'>
         <% if (body.isMachineTranslation()) { %>
           <span class='js_trans_show_origin'><a class="content">{{gettext("View the original message")}}</a></span>
@@ -124,8 +121,8 @@
           <span class='js_trans_show_translated'><a class="content">{{gettext("Return to the translated message")}}</a></span>
         <% } %>
       </div>
-    </div>
     <% } %>
+    </div>
   {% endif %}
 {%- endmacro %}
 

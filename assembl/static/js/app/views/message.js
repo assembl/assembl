@@ -228,7 +228,6 @@ var MessageView = Marionette.LayoutView.extend({
     this.unknownPreference = false;
     this.hasTranslatorService = false;
     this.bodyTranslationError = false;
-    this.missingTranslationPreference = false;
 
     Promise.join(
         this.model.getCreatorPromise(),
@@ -400,10 +399,10 @@ var MessageView = Marionette.LayoutView.extend({
         this.useOriginalContent = false;
     }
     if (!body.isMachineTranslation() && !this.bodyTranslationError) {
-        this.missingTranslationPreference = this.translationData.getPreferenceForLocale(
+        this.unknownPreference = this.translationData.getPreferenceForLocale(
             body.get("@language")) === undefined;
     } else {
-        this.missingTranslationPreference = false;
+        this.unknownPreference = false;
     }
 
     if (this.model.get("publication_state") != "PUBLISHED") {
@@ -454,7 +453,6 @@ var MessageView = Marionette.LayoutView.extend({
       subject: subject,
       body: body,
       bodyTranslationError: this.bodyTranslationError,
-      missingTranslationPreference: this.missingTranslationPreference,
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
       isHoisted: this.isHoisted,
@@ -625,8 +623,8 @@ var MessageView = Marionette.LayoutView.extend({
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
         if (this.hasTranslatorService) {
-          if (!this.bodyTranslationError &&
-                (this.forceTranslationQuestion || this.unknownPreference || this.missingTranslationPreference)) {
+          if (this.forceTranslationQuestion || (
+                this.unknownPreference && !this.bodyTranslationError)) {
             //Only show the translation view *iff* the message was translated by the backend
             var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
             this.translationRegion.show(translationView);
@@ -1691,6 +1689,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.forceTranslationQuestion = false;
     this.useOriginalContent = false;
     this.showAnnotations = this.canShowAnnotations();
+    this.bodyTranslationError = false;
   }
 
 });
