@@ -778,8 +778,23 @@ def creativity_session_widget_post(
 
 
 @pytest.fixture(scope="module")
-def browser(request):
+def virtualdisplay(request):
+    from pyvirtualdisplay import Display
+    display = Display(visible=0, size=(1024, 768))
+    display.start()
+
+    def fin():
+        print "finalizer virtualdisplay"
+        display.stop()
+    request.addfinalizer(fin)
+
+    return display
+
+
+@pytest.fixture(scope="module")
+def browser(request, virtualdisplay):
     browser = Browser()
+
     def fin():
         print "finalizer browser"
         browser.quit()

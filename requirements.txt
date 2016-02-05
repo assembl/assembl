@@ -29,6 +29,7 @@ DateTime==4.0.1
 docutils==0.12
 dogpile.cache==0.5.7
 dogpile.core==0.4.1
+EasyProcess==0.2.1
 ecdsa==0.13
 enum34==1.1.2
 Fabric==1.10.2
@@ -106,6 +107,7 @@ pytest==2.8.7
 python-dateutil==2.4.2
 python-openid==2.2.5
 pytz==2015.7
+pyvirtualdisplay==0.1.5
 pyzmq==15.2.0
 raven==5.10.2
 rdflib-jsonld==0.3
