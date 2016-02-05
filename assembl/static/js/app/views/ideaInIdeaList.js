@@ -215,14 +215,18 @@ var IdeaView = Backbone.View.extend({
    * @event
    */
   onCheckboxChange: function(ev) {
-    var model = this.model;
+    var that = this,
+    checked = ev.currentTarget.checked;
+
     ev.stopPropagation();
     Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
-      var ideaCollection = synthesis.getIdeasCollection();
-      if (ev.currentTarget.checked) {
-        ideaCollection.add(model);
-      } else {
-        ideaCollection.remove(model);
+      if(that.model) {//once marionettized, replace with: if (!that.isViewDestroyed()) {
+        var ideaCollection = synthesis.getIdeasCollection();
+        if (checked) {
+          ideaCollection.add(that.model);
+        } else {
+          ideaCollection.remove(that.model);
+        }
       }
     });
   },

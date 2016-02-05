@@ -46,53 +46,56 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       // Calculate the contributors of the idea: authors of important segments (nuggets)
       // Should match Idea.get_synthesis_contributors in the backend
       function render_with_info(allMessageStructureCollection, allUsersCollection, ideaExtracts) {
-        ideaExtracts.filter(function(segment){
+        if (!that.isViewDestroyed()) {
+          ideaExtracts.filter(function(segment){
             return segment.get("important");
-        }).forEach(function(segment) {
-          var post = allMessageStructureCollection.get(segment.get('idPost'));
-          if (post) {
-            var creator = allUsersCollection.get(post.get('idCreator'));
-            if (creator) {
-              that.authors.push(creator);
+          }).forEach(function(segment) {
+            var post = allMessageStructureCollection.get(segment.get('idPost'));
+            if (post) {
+              var creator = allUsersCollection.get(post.get('idCreator'));
+              if (creator) {
+                that.authors.push(creator);
+              }
             }
-          }
-        });
+          });
 
-        that.template = '#tmpl-ideaInSynthesis';
-        that.render();
+          that.template = '#tmpl-ideaInSynthesis';
+          that.render();
+        }
       }
       // idea is either a tombstone or from a different collection; get the original
       Promise.resolve(collectionManager.getAllIdeasCollectionPromise()).then(function(allIdeasCollection) {
-        var idea = that.model,
-        original_idea = undefined;
-        if (that.synthesis.get('is_next_synthesis')) {
-          original_idea = allIdeasCollection.get(that.model.id);
-        } 
-        else {
-          original_idea = allIdeasCollection.get(that.model.get('original_uri'));
-        }
-        if (original_idea) {
-          // original may be null if idea deleted.
-          that.original_idea = original_idea;
-          idea = original_idea;
-        }
-        Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
-            collectionManager.getAllUsersCollectionPromise(),
-            idea.getExtractsPromise(),
-            render_with_info);
-        
-        //console.log("About to connect idea change event to idea:", idea, "for synthesis: ", that.synthesis);
-        that.listenTo(idea, "change:shortTitle change:longTitle change:segments':'render'", function() {
-          /*if (Ctx.debugRender) {
+        if (!that.isViewDestroyed()) {
+          var idea = that.model,
+          original_idea = undefined;
+          if (that.synthesis.get('is_next_synthesis')) {
+            original_idea = allIdeasCollection.get(that.model.id);
+          } 
+          else {
+            original_idea = allIdeasCollection.get(that.model.get('original_uri'));
+          }
+          if (original_idea) {
+            // original may be null if idea deleted.
+            that.original_idea = original_idea;
+            idea = original_idea;
+          }
+          Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+              collectionManager.getAllUsersCollectionPromise(),
+              idea.getExtractsPromise(),
+              render_with_info);
+
+          //console.log("About to connect idea change event to idea:", idea, "for synthesis: ", that.synthesis);
+          that.listenTo(idea, "change:shortTitle change:longTitle change:segments':'render'", function() {
+            /*if (Ctx.debugRender) {
             console.log("idesInSynthesis:change event on original_idea, firing render");
           }*/
-          //
-          console.log("Re-assigning model:", that.model);
-        //This is evil and a stop-gap measure. - benoitg
-          that.model = idea;
-          that.render();
-        });
-        
+            //
+            console.log("Re-assigning model:", that.model);
+            //This is evil and a stop-gap measure. - benoitg
+            that.model = idea;
+            that.render();
+          });
+        }
       });
 
       this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {

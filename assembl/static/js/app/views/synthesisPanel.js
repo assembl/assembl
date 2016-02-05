@@ -68,7 +68,10 @@ var SynthesisPanel = AssemblPanel.extend({
                 that.synthesisIdeas = that.model.getIdeasCollection();
                 that.synthesisIdeas.collectionManager = collectionManager;
 
-                that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', that.render);
+                that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', function() {
+                  //console.log("RE_RENDER FROM CHANGE ON allIdeaLinksCollection");
+                  that.render()
+                });
                 that.template = that.realTemplate;
 
                 that.render();
@@ -278,7 +281,7 @@ var SynthesisPanel = AssemblPanel.extend({
         var groupContainerView = this.getPanelWrapper().groupContent.groupContainer;
         var groups = groupContainerView.findGroupsWithPanelInstance(this.panelType);
         if ( !groups || ( groups &&  groups.length < 2) ){
-          console.log("this is the last group which was containing a Synthesis creation panel, so we can remove the CSS class");
+          //console.log("this is the last group which was containing a Synthesis creation panel, so we can remove the CSS class");
           el.removeClass("hasSynthesisPanel");
         }
       }

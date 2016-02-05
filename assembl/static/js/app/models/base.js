@@ -349,8 +349,9 @@ var RelationsCollection = BaseCollection.extend({
   // Remove a model, or a list of models from the set.
   remove: function(models, options) {
     models = Backbone.Collection.prototype.remove.apply(this, arguments);
+    //console.log(models);
     // use previousModels to detect whether called from reset
-    if (options === undefined || options.previousModels === undefined) {
+    if (models !== undefined && (options === undefined || options.previousModels === undefined)) {
       var that = this, singular = !_.isArray(models),
           modelsArray = singular ? [models] : models;
       _.forEach(modelsArray, function(model) {

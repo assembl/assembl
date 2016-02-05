@@ -478,7 +478,9 @@ var IdeaList = AssemblPanel.extend({
   },
 
   onScrollToIdea: function(ideaModel, retry) {
-    //console.log("ideaList::onScrollToIdea()");
+    if (Ctx.debugRender) {
+      console.log("ideaList::onScrollToIdea()");
+    }
     var that = this;
     if (ideaModel) {
       if (ideaModel.id) {
