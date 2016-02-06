@@ -48,7 +48,11 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
     this.canRender = false;
     var that = this;
 
-    this.model.getUserModelPromise()
+    this.model.getPostCreatorModelPromise()
+      .then(function(postCreator){
+        that.postCreator = postCreator;
+        return that.model.getLinkCreatorModelPromise()
+      })
       .then(function(user){
         that.user = user;
         return that.model.getIdeaModelPromise();
@@ -71,6 +75,12 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
         that.canRender = true;
         that.onEndInitialization();
       })
+      .error(function(e){
+        console.error(e.statusText);
+        //Render yourself in an ErrorView.
+        //THIS IS HACKY
+        that.model.failedToLoad = true;
+      });
   },
 
   /*
@@ -181,7 +191,8 @@ var DirectExtractView = IdeaClassificationView.extend({
 
     return {
       harvester: this.user.get('name'),
-      extractText: this.extract.getQuote()
+      extractText: this.extract.getQuote(),
+      postAuthor: this.postCreator.get('name')
     }
   }
 });
@@ -200,7 +211,6 @@ var IndirectMessageView = IdeaClassificationView.extend({
     }
 
     return {
-      threadTitle: this.idea.getShortTitleDisplayText(),
       author: this.user.get('name')
     }
   }
@@ -220,9 +230,9 @@ var IndirectExtractView = IdeaClassificationView.extend({
     }
 
     return {
-      threadTitle: this.idea.getShortTitleDisplayText(),
       harvester: this.user.get('name'),
-      extractText: this.extract.getQuote()
+      extractText: this.extract.getQuote(),
+      postAuthor: this.postCreator.get('name')
     }
   }
 });
@@ -261,6 +271,12 @@ var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
   },
 
   getChildView: function(item){
+
+    //In the scenario that the View failed to initialize the models necessary
+    //to parse this. An Error view should be made.
+    if (_.has(item, 'failedToLoad') && item.failedToLoad === true) {
+      return ErrorView;
+    }
 
     if (item.isDirect()){
       if (item.get('@type') === Types.IDEA_RELATED_POST_LINK) {

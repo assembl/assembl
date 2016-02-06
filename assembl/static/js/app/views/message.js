@@ -63,7 +63,40 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
     }
 
     else {
-      this.ideaContentLinks.getIdeaNamesPromise()
+
+      //Current implementation of IdeaContentLink Collection is the creation of the
+      //collection each time for a message for IdeaContentLinks associated with the
+      //message. During the App lifetime, IdeaContentLinks can be created, destroyed,
+      //Ideas created, renamed, destroyed. This collection is stale; it does not know
+      //of any of these changes. As a result, on each init, clear the collection
+      //of any IdeaContentLinks that are out of date.
+
+
+      //First, let's remove the extracts that no longer exist.
+      //Then let's update with the ideas that no longer exist.
+
+      cm.getAllExtractsCollectionPromise()
+        .then(function(extracts){
+          var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
+            var exists = extracts.get(icl.id);
+            return exists ? false: true;
+          });
+
+          //Remove the stale data from the collection
+          that.ideaContentLinks.remove(staleIdeaContentLinks);
+          return cm.getAllIdeasCollectionPromise();
+        })
+        .then(function(ideas){
+
+          var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
+            var exists = ideas.get(icl.get('idIdea'));
+            return exists ? false : true;
+          });
+
+          //Now remove the stale links to ideas that no longer exist
+          that.ideaContentLinks.remove(staleIdeaContentLinks);
+          return that.ideaContentLinks.getIdeaNamesPromise();
+        })
         .then(function(ideaNames){
           that.ideaNames = ideaNames;
 
@@ -74,6 +107,9 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
             that.template = "#tmpl-ideaClassificationInMessage"
             that.render();
           }
+        })
+        .error(function(e){
+          console.error(e.statusText);
         });
     }
 
@@ -109,8 +145,8 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
         "This message is linked to the following ideas: ", count),
       other_ideas_msg: i18n.sprintf(
         i18n.ngettext(
-            "and <a class=\"idea-name js_idea-classification-idea\">%d other idea</a>",
-            "and <a class=\"idea-name js_idea-classification-idea\">%d other ideas</a>",
+            "and %d other idea</a>",
+            "and %d other ideas</a>",
             rest.length),
         rest.length)
     };

@@ -151,22 +151,6 @@ var MessageModel = Base.Model.extend({
       }
     },
 
-  //Do you wnat self or no??
-  getAncestry: function(){
-    function rec(post){
-      var messages = [];
-      var parent = post.getParent();
-      if (!parent){
-        return this;
-      }
-
-      messages.push(rec(parent));
-      return messages;
-    }
-
-    return rec(this);
-  },
-
   getParent: function(){
     return this.collection.where({parentId: this.get('parentId')});
   },

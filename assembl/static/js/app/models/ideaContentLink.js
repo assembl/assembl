@@ -4,6 +4,7 @@ var Marionette = require('../shims/marionette.js'),
     Backbone = require('../shims/backbone.js'),
     _ = require('../shims/underscore.js'),
     $ = require('../shims/jquery.js'),
+    Promise = require('bluebird'),
     Moment = require('moment'),
     Types = require('../utils/types.js'),
     Base = require('./base.js'),
@@ -33,7 +34,7 @@ IdeaContentLinkTypeRank.prototype = {
             return null;
         }
     }
-}
+};
 
 
 var Model = Base.Model.extend({
@@ -48,13 +49,29 @@ var Model = Base.Model.extend({
         created: null
     },
 
-    getUserModelPromise: function(){
+    getPostCreatorModelPromise: function(){
+        var that = this,
+            messageId = this.get('idPost');
+
+        return this.collection.collectionManager.getMessageFullModelPromise(messageId)
+            .then(function(messageModel){
+                var postCreatorId = messageModel.get('idCreator');
+                return Promise.join(postCreatorId, that.collection.collectionManager.getAllUsersCollectionPromise(),
+                    function(postCreatorId, users) {
+                        var u = users.get(postCreatorId);
+                        if (!u){
+                            throw new Error("[ideaContentLink] user with id " + that.get('idCreator') + " was not found");
+                        }
+                        return Promise.resolve(u);
+                    }); 
+            });
+    },
+
+    getLinkCreatorModelPromise: function(){
         var that = this;
         return this.collection.collectionManager.getAllUsersCollectionPromise()
             .then(function(users){
-                var u = users.find(function(user){
-                    return user.id === that.get('idCreator');
-                });
+                var u = users.get(that.get('idCreator'));
 
                 if (!u) {
                     throw new Error("[ideaContentLink] user with id " + that.get('idCreator') + " was not found");
