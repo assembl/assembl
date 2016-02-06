@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-05 18:20-0500\n"
+"POT-Creation-Date: 2016-02-06 06:27-0500\n"
 "PO-Revision-Date: 2016-01-28 17:02+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language: de\n"
@@ -809,19 +809,19 @@ msgstr "Bitte wählen Sie ein Ziel für den Export, bevor Sie fortfahren"
 msgid "Please complete facebook login"
 msgstr "Bitte schließen Sie den Login über Facebook ab"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:135
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:145
 #, fuzzy
 msgid "Go to this idea"
 msgstr "Ankündigung für diese Idee"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:311
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:327
 #, fuzzy, python-format
 msgid "This message is linked to the following idea because: "
 msgid_plural "This message is linked to the %d following ideas because: "
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:316
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:332
 #, fuzzy
 msgid "Link between this message and the idea"
 msgid_plural "Links between this message and ideas"
@@ -836,17 +836,17 @@ msgstr[0] "%d Nachricht ist zu dieser Idee verfügbar"
 msgstr[1] "%d Nachrichten sind zu dieser Idee verfügbar"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:227
-#: assembl/static/js/app/views/message.js:597
+#: assembl/static/js/app/views/message.js:633
 msgid "Type your response here..."
 msgstr "Antwort hier eingeben ..."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:229
-#: assembl/static/js/app/views/message.js:599
+#: assembl/static/js/app/views/message.js:635
 msgid "Send your reply"
 msgstr "Antwort absenden"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:232
-#: assembl/static/js/app/views/message.js:601
+#: assembl/static/js/app/views/message.js:637
 msgid "You did not type a response yet..."
 msgstr "Sie haben noch keine Antwort eingegeben ..."
 
@@ -931,16 +931,16 @@ msgstr ""
 "Bestätigen Sie, dass Sie alle Auszüge zurück in die Zwischenablage senden"
 " möchten."
 
-#: assembl/static/js/app/views/message.js:107
+#: assembl/static/js/app/views/message.js:143
 msgid "This message is linked to the following idea: "
 msgid_plural "This message is linked to the following ideas: "
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/message.js:111
+#: assembl/static/js/app/views/message.js:147
 #, python-format
-msgid "and <a class=\"idea-name js_idea-classification-idea\">%d other idea</a>"
-msgid_plural "and <a class=\"idea-name js_idea-classification-idea\">%d other ideas</a>"
+msgid "and %d other idea</a>"
+msgid_plural "and %d other ideas</a>"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -2529,9 +2529,12 @@ msgstr ""
 "Idee angezeigt."
 
 #: assembl/templates/views/announcementEditable.tmpl:7
+#, fuzzy
+#| msgid "" "If checked, this announcement will also be shown for any sub-idea
+#| that " "doesn't have it's own announcement."
 msgid ""
 "If checked, this announcement will also be shown for any sub-idea that "
-"doesn't have it's own announcement."
+"doesn't have its own announcement."
 msgstr ""
 "Im aktivierten Status wird diese Ankündigung auch für Unterideen gezeigt,"
 " die keine eigene Ankündigung haben."
@@ -2901,6 +2904,12 @@ msgstr ""
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:7
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
 msgid "Considering this extract:"
+msgstr ""
+
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:12
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
+#, python-format
+msgid "by %s"
 msgstr ""
 
 #: assembl/templates/views/ideaClassification_directMessage.tmpl:3
@@ -3919,25 +3928,11 @@ msgstr "Keine Diskussionen gefunden für Slug=%s"
 #~ msgstr ""
 
 #~ msgid ""
-#~ "<span class='harvester'>%s</span> has considered "
-#~ "this message relevant to the idea:"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<span class='author'>%s</span> started this "
-#~ "new discussion thread directly on the"
-#~ " idea:"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This message is part of a thread,"
-#~ " which <span class='harvester'>%s</span> "
-#~ "considered relevant to the idea:"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This message is part of a thread,"
-#~ " started by <span class='author'>%s</span> "
-#~ "on the idea:"
-#~ msgstr ""
+#~ "and <a class=\"idea-name js_idea-"
+#~ "classification-idea\">%d other idea</a>"
+#~ msgid_plural ""
+#~ "and <a class=\"idea-name js_idea-"
+#~ "classification-idea\">%d other ideas</a>"
+#~ msgstr[0] ""
+#~ msgstr[1] ""
 

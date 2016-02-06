@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-05 18:20-0500\n"
+"POT-Creation-Date: 2016-02-06 06:27-0500\n"
 "PO-Revision-Date: 2016-02-04 21:37+0000\n"
 "Last-Translator: François Burra <francoisburra@imaginationforpeople.org>\n"
 "Language: fr\n"
@@ -824,18 +824,18 @@ msgstr "Veuillez choisir où exporter avant de poursuivre"
 msgid "Please complete facebook login"
 msgstr "Veuillez compléter la connexion à Facebook"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:135
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:145
 msgid "Go to this idea"
 msgstr "Aller vers cette idée"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:311
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:327
 #, python-format
 msgid "This message is linked to the following idea because: "
 msgid_plural "This message is linked to the %d following ideas because: "
 msgstr[0] "Ce message est en lien avec l’idée suivantes car : "
 msgstr[1] "Ce message est en lien avec les %d idées suivantes car : "
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:316
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:332
 msgid "Link between this message and the idea"
 msgid_plural "Links between this message and ideas"
 msgstr[0] "Lien entre ce message et cette idée"
@@ -849,17 +849,17 @@ msgstr[0] "%d message est disponible sous cette idée"
 msgstr[1] "%d messages sont disponibles sous cette idée"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:227
-#: assembl/static/js/app/views/message.js:597
+#: assembl/static/js/app/views/message.js:633
 msgid "Type your response here..."
 msgstr "Écrivez votre réponse ici..."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:229
-#: assembl/static/js/app/views/message.js:599
+#: assembl/static/js/app/views/message.js:635
 msgid "Send your reply"
 msgstr "Envoyez votre réponse"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:232
-#: assembl/static/js/app/views/message.js:601
+#: assembl/static/js/app/views/message.js:637
 msgid "You did not type a response yet..."
 msgstr "Vous n’avez pas encore écrit de réponse"
 
@@ -944,18 +944,18 @@ msgstr "Confirmez que vous souhaitez supprimer cette idée."
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr "Confirmez que vous souhaitez renvoyer tous les extraits au presse-papier."
 
-#: assembl/static/js/app/views/message.js:107
+#: assembl/static/js/app/views/message.js:143
 msgid "This message is linked to the following idea: "
 msgid_plural "This message is linked to the following ideas: "
 msgstr[0] "Ce message est en lien avec l’idée :"
 msgstr[1] "Ce message est en lien avec les idées :"
 
-#: assembl/static/js/app/views/message.js:111
+#: assembl/static/js/app/views/message.js:147
 #, python-format
-msgid "and <a class=\"idea-name js_idea-classification-idea\">%d other idea</a>"
-msgid_plural "and <a class=\"idea-name js_idea-classification-idea\">%d other ideas</a>"
-msgstr[0] "et <a class=\"idea-name js_idea-classification-idea\">%d autre idée</a>"
-msgstr[1] "et <a class=\"idea-name js_idea-classification-idea\">%d autres idées</a>"
+msgid "and %d other idea</a>"
+msgid_plural "and %d other ideas</a>"
+msgstr[0] "et %d autre idée"
+msgstr[1] "et %d autres idées"
 
 #: assembl/static/js/app/views/messageFamily.js:106
 #, python-format
@@ -2533,9 +2533,8 @@ msgstr ""
 "messages de cette idée."
 
 #: assembl/templates/views/announcementEditable.tmpl:7
-msgid ""
 "If checked, this announcement will also be shown for any sub-idea that "
-"doesn't have it's own announcement."
+"doesn't have its own announcement."
 msgstr ""
 "Si coché, cette annonce sera aussi affichée pour toute sous-idée n’ayant "
 "pas une annonce propre."
@@ -2896,19 +2895,27 @@ msgstr ""
 "contributions sont les bienvenues !"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:3
+#, python-format
 msgid ""
 "<span class=\"harvester\">%s</span> has considered this message relevant "
 "to the idea:"
 msgstr ""
-"<span class=\"harvester\">%s</span> a considéré ce message pertinent pour "
-"l’idée :"
+"<span class=\"harvester\">%s</span> a considéré ce message pertinent pour"
+" l’idée :"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:7
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
 msgid "Considering this extract:"
 msgstr "Par rapport à ce passage :"
 
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:12
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
+#, python-format
+msgid "by %s"
+msgstr "par %s"
+
 #: assembl/templates/views/ideaClassification_directMessage.tmpl:3
+#, python-format
 msgid ""
 "<span class=\"author\">%s</span> started this new discussion thread "
 "directly on the idea:"
@@ -2917,6 +2924,7 @@ msgstr ""
 "directement sur l’idée : "
 
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
+#, python-format
 msgid ""
 "This message is part of a thread, which <span "
 "class=\"harvester\">%s</span> considered relevant to the idea:"
@@ -2925,6 +2933,7 @@ msgstr ""
 "<span class=\"harvester\">%s</span> pour l’idée :"
 
 #: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
+#, python-format
 msgid ""
 "This message is part of a thread, started by <span "
 "class=\"author\">%s</span> on the idea:"
@@ -3909,4 +3918,15 @@ msgstr "Nous n’avons pas de discussion sous le code=%s"
 
 #~ msgid "Links between this message and ideas"
 #~ msgstr "Liens entre ce message et ces idées"
+
+#~ msgid ""
+#~ "and <a class=\"idea-name js_idea-"
+#~ "classification-idea\">%d other idea</a>"
+#~ msgid_plural ""
+#~ "and <a class=\"idea-name js_idea-"
+#~ "classification-idea\">%d other ideas</a>"
+#~ msgstr[0] "et <a class=\"idea-name js_idea-classification-idea\">%d autre idée</a>"
+#~ msgstr[1] ""
+#~ "et <a class=\"idea-name js_idea-"
+#~ "classification-idea\">%d autres idées</a>"
 
