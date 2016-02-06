@@ -1,11 +1,11 @@
 <% if (count > 0) { %>
     <span><%= linked_to_msg %></span>
-    <span>
+    <a class="js_idea-classification-idea">
         <% _.each(first, function(n){ %>
-            <a class="idea-name js_idea-classification-idea"><%= n %></a>
+            <span class="idea-name"><%= n %></span>
         <% })%>
         <% if (rest.length > 0 ) { %>
-            <%= other_ideas_msg %>
+            <span class="idea-name"><%= other_ideas_msg %></span>
         <% } %>
-    </span>
+    </a>
 <% } %>

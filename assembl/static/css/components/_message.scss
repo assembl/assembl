@@ -256,22 +256,8 @@ $previewNumLines: 4;
       font-style: italic;
       color: $txtGray1;
 
-      // .idea-name {
-      //   text-decoration: underline;
-      //   color: $txtPurple;
-        
-      //   &:hover {
-      //     color: $txtPurple1;
-      //     cursor: pointer;
-      //   }
-      // }
-
       .idea-name:after {
-        content: ",";
-        color:$txtGray1;
-        font-style: normal;
-        text-decoration: none;
-        margin-right: 2px; 
+        content: ", ";
       }
 
       .idea-name:last-child:after {
