@@ -453,16 +453,18 @@ var MessageView = Marionette.LayoutView.extend({
     if (this.model.get("publication_state") != "PUBLISHED") {
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
-      body = this.moderationTemplate({
-        ctx: Ctx,
-        viewStyle: this.viewStyle,
-        subject: subject,
-        body: body,
-        publication_state: this.model.get("publication_state"),
-        moderation_text: this.model.get("moderation_text"),
-        moderator: this.model.get("moderator"),
-        message_id: this.model.id.split('/')[1]
-      });
+      body = new LangStringEntry({
+        // '@language': ??? not sure on template language, needs work.
+        value: this.moderationTemplate({
+          ctx: Ctx,
+          viewStyle: this.viewStyle,
+          subject: subject,
+          body: body,
+          publication_state: this.model.get("publication_state"),
+          moderation_text: this.model.get("moderation_text"),
+          moderator: this.model.get("moderator"),
+          message_id: this.model.id.split('/')[1]
+      })});
     }
 
     if (bodyFormat !== null) {
