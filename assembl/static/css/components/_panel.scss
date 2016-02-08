@@ -238,7 +238,7 @@ _:-ms-input-placeholder, :root .groupBody .groupPanel header ~ .panelContents {
 /* CSS hack to target specificly IE >= 10 (see browserhacks.com). IE uses wrong 100% value in previous rule */
 /* Value of the first part of the calc() content must match the one defined in .popin-body > .groupsContainer rule in _groupContainer.scss */
 _:-ms-input-placeholder, :root .popin-body .groupBody .groupPanel header ~ .panelContents {
-  @include calc(height, "70vh - #{$theme_header_height} - #{$group_header_height} - 45px");
+  @include calc(height, "70vh - #{$theme_header_height} - #{$group_header_height}");
 }
 
 .groupBody.editable .groupPanel header ~ .panelContents {
@@ -254,7 +254,7 @@ _:-ms-input-placeholder, :root .groupBody.editable .groupPanel header ~ .panelCo
 /* CSS hack to target specificly IE >= 10 (see browserhacks.com). IE uses wrong 100% value in previous rule */
 /* Value of the first part of the calc() content must match the one defined in .popin-body > .groupsContainer rule in _groupContainer.scss */
 _:-ms-input-placeholder, :root .popin-body .groupBody.editable .groupPanel header ~ .panelContents {
-  @include calc(height, "70vh - #{$theme_header_height} - #{$group_editable_header_height} - 45px");
+  @include calc(height, "70vh - #{$theme_header_height} - #{$group_editable_header_height}");
 }
 
 .panelContents > div {
