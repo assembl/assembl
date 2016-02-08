@@ -23,6 +23,7 @@ var Marionette = require('../shims/marionette.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
     Genie = require('../utils/genieEffect.js'),
     IdeaClassificationOnMessageView = require('./ideaClassificationOnMessage.js'),
+    LangString = require('../models/langstring.js'),
     IdeaContentLink = require('../models/ideaContentLink.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
@@ -453,7 +454,7 @@ var MessageView = Marionette.LayoutView.extend({
     if (this.model.get("publication_state") != "PUBLISHED") {
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
-      body = new LangStringEntry({
+      body = new LangString.EntryModel({
         // '@language': ??? not sure on template language, needs work.
         value: this.moderationTemplate({
           ctx: Ctx,
