@@ -28,7 +28,7 @@
 }
 
 .popin-body > .groupsContainer {
-  height: 70vh;
+  height: 70vh; /* value must match first part of calc() in _panel.scss for rules like "something .popin-body something .panelContents" */
   .groupContent {
     /* this is a fix for the size of the popin content in IE (content was cut at the bottom even with a scrollbar). This solution for the fix has the advantage of not creating 2 scrollbars */
     overflow-y: auto;
@@ -283,6 +283,10 @@
 }
 
 .panelGroups-modal {
+  .groupBody.editable {
+    height: calc(100% - #{$group_header_height}); /* retain the height of .groupHeader */
+  }
+
   .popin, .bbm-modal {
     min-height: 90%;
     .popin-body {
