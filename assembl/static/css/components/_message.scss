@@ -233,6 +233,11 @@ $previewNumLines: 4;
 
   &.viewStyleFullBody {
     /* FullBody specific styles */
+
+    .message-body a {
+      word-break: break-all;
+    }
+
     .message-body.body_format_text_plain {
       word-wrap: break-word;// avoid overlap content
       white-space: pre-line;
@@ -555,6 +560,13 @@ $previewNumLines: 4;
       text-align: left;
       .embeddedFile {
         margin-top: 1em;
+        a {
+          word-break: break-all;
+        }
+      }
+
+      .attachmentEditable p {
+        word-break: break-all; /* because text contains an URL */
       }
     }
   }
