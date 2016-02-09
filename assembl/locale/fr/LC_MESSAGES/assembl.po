@@ -2533,6 +2533,7 @@ msgstr ""
 "messages de cette idée."
 
 #: assembl/templates/views/announcementEditable.tmpl:7
+msgid ""
 "If checked, this announcement will also be shown for any sub-idea that "
 "doesn't have its own announcement."
 msgstr ""
