@@ -466,7 +466,7 @@ Context.prototype = {
           target_url = $(evt.currentTarget).attr("data-href");
       else if ($(evt.currentTarget).attr("href") && $(evt.currentTarget).attr("href") != "#")
           target_url = $(evt.currentTarget).attr("href");
-    } else if ("target_url" in options){
+    } else if (_.isObject(options) && "target_url" in options){
         target_url = options.target_url;
     }
 
@@ -476,21 +476,21 @@ Context.prototype = {
     var modal_title = "";
     if (evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-title"))
         modal_title = $(evt.currentTarget).attr("data-modal-title");
-    else if ( "modal_title" in options ){
+    else if ( _.isObject(options) && "modal_title" in options ){
         modal_title = options.modal_title;
     }
 
     var resizeIframeOnLoad = false;
     if (evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-resize-on-load"))
         resizeIframeOnLoad = $(evt.currentTarget).attr("data-modal-resize-on-load") != false && $(evt.currentTarget).attr("data-modal-resize-on-load") != "false";
-    else if ( "modal_resize_on_load" in options ){
+    else if ( _.isObject(options) && "modal_resize_on_load" in options ){
         resizeIframeOnLoad = options.modal_resize_on_load;
     }
 
     var resizable = false;
     if (evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-resizable"))
         resizable = $(evt.currentTarget).attr("data-modal-resizable") != false && $(evt.currentTarget).attr("data-modal-resizable") != "false";
-    else if ( "modal_resizable" in options ){
+    else if ( _.isObject(options) && "modal_resizable" in options ){
         resizable = options.modal_resizable;
     }
 
@@ -500,7 +500,7 @@ Context.prototype = {
     model.set("resizeIframeOnLoad", resizeIframeOnLoad);
 
     var className = 'group-modal popin-wrapper iframe-popin';
-    if (options && options.footer === false)
+    if ( _.isObject(options) && "footer" in options && options.footer === false)
         className += " popin-without-footer";
     if (!resizable)
         className += " popin-fixed-size";
