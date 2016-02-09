@@ -1522,7 +1522,12 @@ Context.prototype = {
   },
 
   getPreferences: function() {
+    // TODO: Add caching.
     return this.getJsonFromScriptTag('preferences');
+  },
+
+  hasTranslationService: function(){
+    return !!this.getPreferences()["translation_service"];
   },
 
   writeJsonToScriptTag: function(json, id) {
