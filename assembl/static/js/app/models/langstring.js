@@ -178,6 +178,23 @@ var LangString = Base.Model.extend({
   originalValue: function() {
     return this.original().get("value");
   },
+  bestWithErrors: function(langPrefs, filter_errors) {
+    if (!langPrefs) {
+      return {
+        entry: self.original(),
+        error: None
+      };
+    }
+    var entry = this.bestOf(this.get("entries").models, langPrefs, filter_errors),
+        error_code = entry.get("error_code");
+    if (error_code) {
+      entry = entry.langstring().original();
+    }
+    return {
+      entry: entry,
+      error: error_code
+    };
+  },
   applyFunction: function(func) {
     var newEntries = this.get("entries").map(function(lse) {
       return new LangStringEntry({
