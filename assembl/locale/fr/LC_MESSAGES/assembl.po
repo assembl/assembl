@@ -832,7 +832,7 @@ msgstr "Aller vers cette idée"
 #, python-format
 msgid "This message is linked to the following idea because: "
 msgid_plural "This message is linked to the %d following ideas because: "
-msgstr[0] "Ce message est en lien avec l’idée suivantes car : "
+msgstr[0] "Ce message est en lien avec l’idée suivante car : "
 msgstr[1] "Ce message est en lien avec les %d idées suivantes car : "
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:332

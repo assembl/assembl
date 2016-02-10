@@ -510,7 +510,9 @@ class SynthesisPost(AssemblPost):
         return "text/html"
 
     def get_title(self):
-        return self.publishes_synthesis.subject
+        return LangString.create(
+            self.publishes_synthesis.subject,
+            self.discussion.main_locale)
 
     def as_html(self, jinja_env):
         return self.publishes_synthesis.as_html(jinja_env)

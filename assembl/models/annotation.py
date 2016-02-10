@@ -24,11 +24,7 @@ class Webpage(Content):
         return LangString.EMPTY(self.db)
 
     def get_title(self):
-        ls = LangString()
-        _ = LangStringEntry(
-            ls, value=self.url,
-            locale_id=Locale.get_id_of(Locale.NON_LINGUISTIC))
-        return ls
+        return LangString.create(value=self.url, Locale.NON_LINGUISTIC)
 
     @classmethod
     def get_instance(cls, uri):
