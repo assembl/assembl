@@ -326,9 +326,9 @@ var IdeasShowingMessageModal = Backbone.Modal.extend({
       visible_because_msg: i18n.sprintf(
         i18n.ngettext(
             "This message is linked to the following idea because: ",
-            "This message is linked to the %(num)d following ideas because: ",
+            "This message is linked to the %1$d following ideas because: ",
             number_of_ideas),
-        num=number_of_ideas),
+        number_of_ideas),
       title_msg: i18n.ngettext(
         "Link between this message and the idea",
         "Links between this message and ideas", number_of_ideas)

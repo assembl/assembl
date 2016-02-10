@@ -831,9 +831,9 @@ msgstr "Aller vers cette idée"
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:327
 #, python-format
 msgid "This message is linked to the following idea because: "
-msgid_plural "This message is linked to the %d following ideas because: "
+msgid_plural "This message is linked to the %1$d following ideas because: "
 msgstr[0] "Ce message est en lien avec l’idée suivante car : "
-msgstr[1] "Ce message est en lien avec les %d idées suivantes car : "
+msgstr[1] "Ce message est en lien avec les %1$d idées suivantes car : "
 
 #: assembl/static/js/app/views/ideaClassificationOnMessage.js:332
 msgid "Link between this message and the idea"
