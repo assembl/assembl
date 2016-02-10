@@ -3403,7 +3403,7 @@ msgstr "Messages à organiser"
 
 #: assembl/templates/views/otherInIdeaList.tmpl:2
 msgid "Messages not in the table of ideas"
-msgstr "Messages absent de la table des idées"
+msgstr "Messages absents de la table des idées"
 
 #: assembl/templates/views/panelWrapper.tmpl:11
 msgid "Fullsize"
