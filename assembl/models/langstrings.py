@@ -398,6 +398,15 @@ class LangString(Base):
     def reset_cache(cls):
         cls._EMPTY_ID = None
 
+    def generic_json(
+            self, view_def_name='default', user_id=None,
+            permissions=(P_READ, ), base_uri='local:'):
+        if self.id == self.EMPTY_ID:
+            return None
+        return super(LangString, self).generic_json(
+            view_def_name=view_def_name, user_id=user_id,
+            permissions=permissions, base_uri=base_uri)
+
     @property
     def undefined_entry(self):
         und_id = Locale.UNDEFINED_LOCALEID
