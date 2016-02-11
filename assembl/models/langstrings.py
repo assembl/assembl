@@ -371,7 +371,9 @@ class LangString(Base):
     def EMPTY_ID(cls):
         if cls._EMPTY_ID is None:
             from sqlalchemy.sql.expression import func
-            id = LangStringEntry.default_db.query(LangStringEntry.langstring_id).filter(
+            id = LangStringEntry.default_db.query(
+                LangStringEntry.langstring_id).join(
+                LangStringEntry.locale).filter(
                 func.length(LangStringEntry.value) == 0,
                 ~LangStringEntry.is_machine_translated).order_by(
                 LangStringEntry.langstring_id).first()
