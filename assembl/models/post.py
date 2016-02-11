@@ -220,6 +220,26 @@ class Post(Content):
         else:
             return body
 
+    def get_original_body_preview(self):
+        if self.publication_state in moderated_publication_states:
+            # TODO: Handle multilingual moderation
+            return self.moderation_text
+        elif self.publication_state in deleted_publication_states:
+            return None
+        body = self.get_body().first_original().value
+        is_html = self.get_body_mime_type() == 'text/html'
+        shortened = False
+        if is_html:
+            short = self.shorten_html_text(body)
+        else:
+            short = self.shorten_text(body)
+        if short != body:
+            shortened = True
+        if shortened or is_html:
+            return short
+        else:
+            return body
+
     def _set_ancestry(self, new_ancestry):
         self.ancestry = new_ancestry
 

@@ -4,14 +4,14 @@
 
 {% block meta_tags %}
     {% if request.matched_route.name == "purl_posts" and post %}
-        <meta name="description" content="{{ post.get_body_preview() }}">
+        <meta name="description" content="{{ post.get_original_body_preview() }}">
         <meta name="author" content="{{ post.creator.display_name() }}">
         <meta property="og:title" content="{{ post.subject }}" />
         <meta property="og:type" content="article" />
         {#<meta property="og:site_name" content="Assembl" />#}
         {#<meta property="og:locale" content="fr_FR" />#}
         {# Message can contain HTML and quotes, so it has to be filtered and shortened #}
-        <meta property="og:description" content="{{ post.get_body_preview() }}" />
+        <meta property="og:description" content="{{ post.get_original_body_preview() }}" />
         <meta property="article:published_time" content="{{ post.creation_date }}" />
         {# TODO: have unique URL for a user <meta property="article:author" content="http://examples.opengraphprotocol.us/profile.html"> #}
         <meta property="og:url" content="{{ post.get_url() }}" />
