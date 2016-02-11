@@ -143,7 +143,8 @@ var AgentModel = Base.Model.extend({
             return i18n.sprintf(i18n.gettext('you must first join this discussion'));
           }
           else {
-            //TODO:  Handle the case of self_register_req
+            // TODO:  Handle the case of self_register_req
+            // TODO: linguistic version of roles.
             return i18n.sprintf(i18n.ngettext('you must ask a discussion administrator for the following role: %s', 'you must ask a discussion administrator for one of the following roles: %s', _.size(rolesGrantingPermission)), rolesGrantingPermission.join(', '));
           }
         }
