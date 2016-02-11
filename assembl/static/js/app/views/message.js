@@ -396,7 +396,7 @@ var MessageView = Marionette.LayoutView.extend({
     },
 
   /**
-   * @return string
+   * @return langstring
    */
   generateSafeBody: function() {
     var body;
@@ -408,6 +408,17 @@ var MessageView = Marionette.LayoutView.extend({
     else {
       //Get rid of all tags, to avoid any layout problem
       body = this.model.get('body').applyFunction(Ctx.stripHtml);
+    }
+    return body;
+  },
+
+  /**
+   * @return langstring
+   */
+  generateSafeOriginalBody: function() {
+    var body = this.model.get('body').originalValue();
+    if(this.model.get('bodyMimeType') !== "text/html") {
+        body = Ctx.stripHtml(body);
     }
     return body;
   },
@@ -1280,7 +1291,7 @@ var MessageView = Marionette.LayoutView.extend({
       message_publication_status: this.model.get("publication_state"),
       message_moderated_version: this.model.get("moderation_text"),
       message_moderation_remarks: this.model.get("moderator_comment"),
-      message_original_body_safe: this.generateSafeBody()
+      message_original_body_safe: this.generateSafeOriginalBody()
     });
     this.getRegion("moderationOptionsRegion").show(this.messageModerationOptionsView);
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsSaveAndClose', this.onModerationOptionsSaveAndClose);
