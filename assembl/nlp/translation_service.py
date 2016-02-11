@@ -10,7 +10,8 @@ from sqlalchemy import inspect
 from assembl.lib.abc import (abstractclassmethod, classproperty)
 from assembl.lib import config
 from assembl.lib.enum import OrderedEnum
-from assembl.models.langstrings import Locale, LangStringEntry, LocaleLabel
+from assembl.models.langstrings import (
+    Locale, LangString, LangStringEntry, LocaleLabel)
 
 
 class LangStringStatus(OrderedEnum):
@@ -131,6 +132,9 @@ class TranslationService(object):
         return LangStringStatus.UNKNOWN_ERROR, str(e)
 
     def translate_lse(self, source_lse, target, retranslate=False):
+        if source_lse.langstring_id == LangString.EMPTY_ID:
+            # don't translate the empty string
+            return source_lse
         source_locale = source_lse.locale_code
         if (source_locale == Locale.UNDEFINED
                 and self.distinct_identify_step):
