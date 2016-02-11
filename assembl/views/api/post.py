@@ -469,7 +469,8 @@ def create_post(request):
     subject = request_body.get('subject', None)
     publishes_synthesis_id = request_body.get('publishes_synthesis_id', None)
 
-    if not body:
+    if not body and not publishes_synthesis_id:
+        # Should we allow empty messages otherwise?
         raise HTTPBadRequest(localizer.translate(
                 _("Your message is empty")))
 
@@ -500,7 +501,7 @@ def create_post(request):
         body = LangString.create_from_json(
             body, context=ctx, user_id=user_id)
     else:
-        body = LangString.EMPTY
+        body = LangString.EMPTY(discussion.db)
 
     if subject:
         subject = LangString.create_from_json(
@@ -517,10 +518,17 @@ def create_post(request):
         else:
             subject = discussion.topic if discussion.topic else ''
         # print subject
-        # TODO: Could we reuse original subject langstring with translations?
-        subject = "Re: " + restrip_pat.sub('', subject)
-        # how to guess locale in this case?
-        subject = LangString.create(subject)
+        if len(subject):
+            new_subject = "Re: " + restrip_pat.sub('', subject)
+            if (in_reply_to_post and new_subject == subject and
+                    in_reply_to_post.get_title()):
+                # reuse subject and translations
+                subject = in_reply_to_post.get_title()
+            else:
+                # how to guess locale in this case?
+                subject = LangString.create(new_subject)
+        else:
+            subject = LangString.EMPTY(discussion.db)
 
     post_constructor_args = {
         'discussion': discussion,

@@ -313,8 +313,8 @@ var SynthesisPanel = AssemblPanel.extend({
 
     var synthesisMessage = new MessageModel.Model({
       publishes_synthesis_id: publishes_synthesis_id,
-      subject: "Not used",
-      message: "Not used"
+      subject: null,
+      body: null
     });
 
     synthesisMessage.save(null, {
