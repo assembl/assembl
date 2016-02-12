@@ -32,7 +32,7 @@ from assembl.models import (
     Synthesis, Discussion, Content, Idea, ViewPost, User,
     IdeaRelatedPostLink, AgentProfile, LikedPost, LangString,
     DummyContext)
-
+from assembl.lib.raven_client import get_raven_client
 
 log = logging.getLogger('assembl')
 
@@ -518,7 +518,7 @@ def create_post(request):
         else:
             subject = discussion.topic if discussion.topic else ''
         # print subject
-        if len(subject):
+        if subject is not None and len(subject):
             new_subject = "Re: " + restrip_pat.sub('', subject)
             if (in_reply_to_post and new_subject == subject and
                     in_reply_to_post.get_title()):
@@ -528,6 +528,9 @@ def create_post(request):
                 # how to guess locale in this case?
                 subject = LangString.create(new_subject)
         else:
+            raven_client = get_raven_client()
+            if raven_client:
+                raven_client.captureException("A message is about to be written to the daatabase with an empty subject.  This is not supposed to happen.")
             subject = LangString.EMPTY(discussion.db)
 
     post_constructor_args = {

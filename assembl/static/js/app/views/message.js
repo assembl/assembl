@@ -1053,7 +1053,7 @@ var MessageView = Marionette.LayoutView.extend({
 
   renderIdeaClassification: function(){
     if (!this.model.hasIdeaContentLinks() ){
-      console.log('message ' + this.model.id + " does not have idea content links");
+      //console.log('message ' + this.model.id + " does not have idea content links");
       return;
     }
     
