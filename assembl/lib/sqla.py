@@ -197,7 +197,7 @@ class BaseOps(object):
         return set(cls.__table__.primary_key.columns.keys())
 
     @property
-    def is_new(self):
+    def is_new_instance(self):
         """Return True if the instance wasn't fetched from the database."""
         return not has_identity(self)
 
@@ -251,7 +251,7 @@ class BaseOps(object):
                 setattr(self, name, value)
 
     def save(self, flush=False):
-        if self.is_new:
+        if self.is_new_instance:
             _session_maker.add(self)
         if flush:
             _session_maker.flush()

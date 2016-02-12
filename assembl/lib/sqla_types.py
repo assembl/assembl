@@ -1,9 +1,11 @@
-from sqlalchemy.types import TypeDecorator, String
+from sqlalchemy.types import (
+    TypeDecorator, String, PickleType, Text)
 from sqlalchemy.ext.hybrid import Comparator
 from sqlalchemy.sql import func
 from werkzeug.urls import iri_to_uri
 from pyisemail import is_email
 from virtuoso.alchemy import CoerceUnicode
+import simplejson as json
 
 
 class URLString(TypeDecorator):
@@ -90,3 +92,12 @@ class CaseInsensitiveWord(Comparator):
 
     key = 'word'
     "Label to apply to Query tuple results"
+
+
+# JSON type field
+class JSONType(PickleType):
+    impl = Text
+
+    def __init__(self, *args, **kwargs):
+        kwargs['pickler'] = json
+        super(JSONType, self).__init__(*args, **kwargs)

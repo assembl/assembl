@@ -498,11 +498,22 @@ class IdentityProvider(Base):
     rdf_sections = (PRIVATE_USER_SECTION,)
 
     id = Column(Integer, primary_key=True)
-    provider_type = Column(String(20), nullable=False)
+    provider_type = Column(String(32), nullable=False)
     name = Column(String(60), nullable=False,
         info={'rdf': QuadMapPatternS(None, SIOC.name)})
     # TODO: More complicated model, where trust also depends on realm.
     trust_emails = Column(Boolean, default=False)
+
+    @classmethod
+    def get_by_name(cls, name, create=True):
+        db = cls.default_db()
+        provider = db.query(cls).filter_by(
+            provider_type=name).first()
+        if create and not provider:
+            provider = cls(provider_type=name, name=name)
+            db.add(provider)
+            db.flush()
+        return provider
 
 
 class IdentityProviderAccount(AbstractAgentAccount):
@@ -1197,7 +1208,7 @@ class Role(Base):
 
     @classmethod
     def get_role(cls, name, session=None):
-        session = session or cls.default_db
+        session = session or cls.default_db()
         return session.query(cls).filter_by(name=name).first()
 
 

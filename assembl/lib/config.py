@@ -23,6 +23,6 @@ def get_config():
     return _settings or get_current_registry().settings
 
 
-def get(name):
+def get(name, default=None):
     """ Return a specific setting. """
-    return get_config().get(name)
+    return get_config().get(name, default)
