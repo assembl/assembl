@@ -47,6 +47,7 @@ var navBarLeft = Marionette.LayoutView.extend({
       Promise.join(collectionManager.getAllIdeasCollectionPromise(),
           collectionManager.getAllWidgetsPromise(),
         function(allIdeasCollection, widgets) {
+        if(!that.isViewDestroyed()) {
           var rootIdea = allIdeasCollection.getRootIdea();
           if (rootIdea) {
             var confWidgets = new Widget.WidgetSubset([], {
@@ -67,6 +68,7 @@ var navBarLeft = Marionette.LayoutView.extend({
             console.log("rootIdea problem: ", rootIdea);
             this.$el.find(".discussion-title-dropdown").addClass("hidden");
           }
+        }
       });
     } else {
       this.$el.find(".discussion-title-dropdown").addClass("hidden");
@@ -79,7 +81,7 @@ var navBarLeft = Marionette.LayoutView.extend({
   }
 });
 
-var navBarRight = Marionette.ItemView.extend({
+var navBarRight = Marionette.LayoutView.extend({
   template: '#tmpl-loader',
   className: 'navbar-right',
   initialize: function(options) {
@@ -93,7 +95,9 @@ var navBarRight = Marionette.ItemView.extend({
         that.localRoles = localRoles;
         that.isUserSubscribedToDiscussion = localRoles.isUserSubscribedToDiscussion();
         that.template = realTemplate;
+
         that.render();
+        that.onBeforeShow();
 
         if (localRoles) {
           that.listenTo(localRoles, 'remove add', function(model) {
@@ -113,22 +117,31 @@ var navBarRight = Marionette.ItemView.extend({
     currentLocal: '.js_setLocale',
     joinDiscussion: '.js_joinDiscussion',
     needJoinDiscussion: '.js_needJoinDiscussion',
-    userAvatarContainer: '.user-avatar-container'
+
   },
   events: {
     'click @ui.currentLocal': 'setLocale',
     'click @ui.joinDiscussion': 'joinPopin',
     'click @ui.needJoinDiscussion': 'needJoinDiscussion'
   },
-  onBeforeShow: function() {
-    if ( this.ui.userAvatarContainer ){
-      var userAvatarView = new AgentViews.AgentAvatarView({
-        model: Ctx.getCurrentUser(),
-        avatarSize: 25
-      });
-      this.ui.userAvatarContainer.html(userAvatarView.render().el);
-    }
+
+  regions: {
+    userAvatarRegion: '.user-avatar-container'
   },
+
+  onBeforeShow: function() {
+    if(this.template === '#tmpl-loader') {
+      return {};
+    }
+
+    var userAvatarView = new AgentViews.AgentAvatarView({
+      model: Ctx.getCurrentUser(),
+      avatarSize: 25
+    });
+
+    this.userAvatarRegion.show(userAvatarView);
+  },
+
   serializeData: function() {
     if(this.template === '#tmpl-loader') {
       return {};

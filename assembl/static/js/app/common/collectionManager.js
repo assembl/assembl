@@ -705,7 +705,7 @@ var CollectionManager = Marionette.Object.extend({
             var PanelSpecTypes = require('../utils/panelSpecTypes.js');
             var groupState = require('../models/groupState.js');
             var preferences = Ctx.getPreferences();
-            console.log(preferences);
+            //console.log(preferences);
             var defaultPanels;
             if(preferences.simple_view_panel_order === "NIM") {
               defaultPanels = [{type: PanelSpecTypes.NAV_SIDEBAR.id },
