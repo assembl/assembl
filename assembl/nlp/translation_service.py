@@ -335,9 +335,12 @@ class GoogleTranslationService(DummyGoogleTranslationService):
     @property
     def known_locales(self):
         if self._known_locales is None:
-            r = self.client.languages().list().execute()
-            if r[u'languages']:
-                self._known_locales = [x[u'language'] for x in r[u'languages']]
+            try:
+                r = self.client.languages().list().execute()
+                if r[u'languages']:
+                    self._known_locales = [x[u'language'] for x in r[u'languages']]
+            except:
+                return super(GoogleTranslationService, self)._known_locales
         return self._known_locales
 
     def identify(self, text, expected_locales=None):
