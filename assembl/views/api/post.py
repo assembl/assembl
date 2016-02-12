@@ -530,7 +530,7 @@ def create_post(request):
         else:
             raven_client = get_raven_client()
             if raven_client:
-                raven_client.captureException("A message is about to be written to the daatabase with an empty subject.  This is not supposed to happen.")
+                raven_client.captureMessage("A message is about to be written to the daatabase with an empty subject.  This is not supposed to happen.")
             subject = LangString.EMPTY(discussion.db)
 
     post_constructor_args = {
