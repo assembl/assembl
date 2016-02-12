@@ -67,9 +67,23 @@
                       </div>
 
                       <div class="control-group fr">
-                        <label for="homepage_url" class="control-label fl">{{ gettext("Homepage Url (optional)") }}</label>
+                        <label for="homepage_url" class="control-label fl">{{ gettext("Homepage URL (optional)") }}</label>
                           <div class="controls fl">
                           <input type="text" id="homepage_url" name="homepage_url" class="input-xxlarge" value="<%= discussion.get('homepage') %>" />
+                        </div>
+                      </div>
+
+                      <div class="control-group fr">
+                        <label for="logo_url" class="control-label fl">{{ gettext("Logo URL (optional)") }}</label>
+                        <div class="controls fl">
+                          <input type="url" pattern="https?://.+" id="logo_url" name="logo_url" class="input-xxlarge" value="<%= discussion.get('logo') %>" />
+                        </div>
+                      </div>
+
+                      <div class="control-group fr">
+                        <label class="control-label fl"></label>
+                        <div class="controls fl">
+                          <div id="logo_thumbnail" class="input-xxlarge"></div>
                         </div>
                       </div>
 

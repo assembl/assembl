@@ -66,6 +66,7 @@ class Discussion(DiscussionBoundBase):
     subscribe_to_notifications_on_signup = Column(Boolean, default=True)
     web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
     help_url = Column(URLString, nullable=True, default=None)
+    logo_url = Column(URLString, nullable=True, default=None)
     homepage_url = Column(URLString, nullable=True, default=None)
     preferred_locales = Column(String)
     show_help_in_debate_section = Column(Boolean, default=True)
@@ -83,12 +84,8 @@ class Discussion(DiscussionBoundBase):
                 return source
         raise ValueError("No source of type AbstractMailbox found to serve as admin source")
 
-    @property
-    def homepage(self):
-        return self.homepage_url
 
-    @homepage.setter
-    def homepage(self, url):
+    def check_url_or_none(self, url):
         if url == '':
             url = None
         if url is not None:
@@ -104,7 +101,25 @@ class Discussion(DiscussionBoundBase):
                 raise HTTPBadRequest(
                     "The url has an incorrect scheme. Only http and https are accepted for homepage url"
                 )
+        return url
+
+    @property
+    def homepage(self):
+        return self.homepage_url
+
+    @homepage.setter
+    def homepage(self, url):
+        url = self.check_url_or_none(url)
         self.homepage_url = url
+
+    @property
+    def logo(self):
+        return self.logo_url
+
+    @logo.setter
+    def logo(self, url):
+        url = self.check_url_or_none(url)
+        self.logo_url = url
 
     def read_post_ids(self, user_id):
         from .post import Post

@@ -291,6 +291,7 @@
         "preferred_locales": true,
         "web_analytics_piwik_id_site": true,
         "help_url": true,
+        "logo": true,
         "homepage": true,
         "translation_service_class": true,
         "show_help_in_debate_section": true

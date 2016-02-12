@@ -16,10 +16,16 @@ var adminDiscussion = Marionette.LayoutView.extend({
   template: '#tmpl-adminDiscussion',
   className: 'admin-notifications',
   ui: {
-      discussion: '.js_saveDiscussion'
-    },
+    discussion: '.js_saveDiscussion',
+    logo: '#logo_url',
+    logo_thumbnail: '#logo_thumbnail'
+  },
   regions: {
     'navigationMenuHolder': '.navigation-menu-holder'
+  },
+  events: {
+    'click @ui.discussion': 'saveDiscussion',
+    'blur @ui.logo': 'renderLogoThumbnail'
   },
   initialize: function() {
     var that = this,
@@ -41,10 +47,8 @@ var adminDiscussion = Marionette.LayoutView.extend({
     this.getRegion('navigationMenuHolder').show(menu);
 
     this.$('#introduction').autosize();
+    this.renderLogoThumbnail();
   },
-  events: {
-      'click @ui.discussion': 'saveDiscussion'
-    },
 
   serializeData: function() {
     return {
@@ -63,6 +67,7 @@ var adminDiscussion = Marionette.LayoutView.extend({
         web_analytics_piwik_id_site = parseInt(this.$('#web_analytics_piwik_id_site').val()),
         help_url = this.$('#help_url').val(),
         homepage_url = this.$("#homepage_url").val(),
+        logo_url = this.ui.logo.val(),
         show_help_in_debate_section = this.$('#show_help_in_debate_section:checked').length == 1;
 
     this.model.set({
@@ -72,6 +77,7 @@ var adminDiscussion = Marionette.LayoutView.extend({
       objectives: objectives,
       web_analytics_piwik_id_site: web_analytics_piwik_id_site,
       help_url: help_url,
+      logo: logo_url,
       homepage: homepage_url,
       show_help_in_debate_section: show_help_in_debate_section
     });
@@ -85,6 +91,27 @@ var adminDiscussion = Marionette.LayoutView.extend({
         resp.handled = true; //In order to avoid Assembl crashing completely!
       }
     })
+  },
+
+  renderLogoThumbnail: function(){
+    console.log("renderLogoThumbnail()");
+    this.ui.logo_thumbnail.empty();
+    var logo_url = this.ui.logo ? this.ui.logo.val() : null;
+    console.log("logo_url: ", logo_url);
+    if ( logo_url ){
+      var img = $("<img>");
+      img.attr("src", this.ui.logo.val());
+      //img.css("max-width", "115px");
+      img.css("max-height", "40px");
+      
+      var thumbnail_description = i18n.gettext("The logo will show like this:");
+      var text_el = $("<span>");
+      text_el.addClass('mrl');
+      text_el.text(thumbnail_description);
+      this.ui.logo_thumbnail.append(text_el);
+      this.ui.logo_thumbnail.append(img);
+    }
+    
   }
 
 });

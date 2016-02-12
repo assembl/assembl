@@ -4,6 +4,12 @@
   background-size: contain;
   display: block;
   height: 100%;
+  width: 115px;
+}
+
+.assembl-custom-logo img {
+  max-width: 215px; /* MUST be the lower or equal to max-width property of .logo-container in _nav-bar.scss */
+  max-height: 40px; /* MUST be the lower or equal to height property of .navbar .navbar-left ul .sub in _nav-bar.scss */
 }
 
 .white-mark {
