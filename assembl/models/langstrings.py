@@ -666,7 +666,7 @@ class LangStringEntry(Base, TombstonableMixin):
         SmallInteger, default=None,
         doc="Type of error from the translation server")
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
-    value = Column(UnicodeText)  # not searchable inv virtuoso
+    value = Column(UnicodeText, default="")  # not searchable in virtuoso
 
     def __repr__(self):
         value = self.value or ''
