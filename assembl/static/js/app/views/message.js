@@ -291,12 +291,16 @@ var MessageView = Marionette.LayoutView.extend({
   modelEvents: {
       'replacedBy':'onReplaced',
       'change:like_count':'renderLikeCount',
-      'change':'render',
+      'change':'guardedRender',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
     },
-  instrumentedRender: function(){
-    console.log("MessageView modelEvents change fired from", this.model);
-    this.render();
+  guardedRender: function(){
+    if (Ctx.debugRender) {
+      console.log("MessageView modelEvents change fired from", this.model);
+    }
+    if(!this.isViewDestroyed()) {
+      this.render();
+    }
   },
     
   ui: {
