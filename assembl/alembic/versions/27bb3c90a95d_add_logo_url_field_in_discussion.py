@@ -1,14 +1,14 @@
 """add logo_url field in discussion
 
 Revision ID: 27bb3c90a95d
-Revises: 53b64260ffb8
+Revises: 2f0fc6545b35
 Create Date: 2016-02-11 14:42:56.819972
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '27bb3c90a95d'
-down_revision = '53b64260ffb8'
+down_revision = '2f0fc6545b35'
 
 from alembic import context, op
 import sqlalchemy as sa
