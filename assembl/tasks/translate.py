@@ -60,11 +60,15 @@ def translate_content(
     und_subject = content.subject.undefined_entry
     und_body = content.body.undefined_entry
     if service.distinct_identify_step and (
-            (und_subject and not service.can_guess_locale(und_subject.value))
-            or (und_body and not service.can_guess_locale(und_body.value))):
-        combined = " ".join((
-            und_subject.value or next(iter(content.subject.non_mt_entries())).value,
-            und_body.value or next(iter(content.body.non_mt_entries())).value))
+            (und_subject and not service.can_guess_locale(und_subject.value)) or
+            (und_body and not service.can_guess_locale(und_body.value))):
+        combined = ""
+        if und_subject:
+            combined = und_subject.value or next(
+                iter(content.subject.non_mt_entries())).value
+        if und_body:
+            combined += " " + und_subject.value or next(
+                iter(content.subject.non_mt_entries())).value
         try:
             language, _ = service.identify(combined, languages)
         except:
