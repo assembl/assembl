@@ -40,10 +40,12 @@ class WordPressServerOAuth2(BaseOAuth2):
         #  'ID': '1',
         #  'email': 'maparent@acm.org',
         #  'refresh_token': '....'}
-        fullname = self.get_user_names(unquote(response['user_nicename']))
+        # display_name could be anything, but is often the full name.
+        # No guarantee of having first/last name.
+        display_name = self.get_user_names(unquote(response['display_name']))
         return {'username': unquote(response['user_login']),
                 'email': unquote(response['user_email']),
-                'fullname': unquote(response['user_nicename'])}
+                'fullname': display_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
