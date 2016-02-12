@@ -8,7 +8,7 @@
     {% endif %}
     
     {% if user %}
-    <% if(!role && canSubscribeToDiscussion ){ %>
+    <% if(!isUserSubscribedToDiscussion && canSubscribeToDiscussion ){ %>
     <li class="sub fl mrs">
         <a href="#" class="btn btn-primary btn-sm js_joinDiscussion joinDiscussion">{{ gettext('Join this discussion') }}</a>
     </li>
@@ -32,12 +32,14 @@
             <a href="#" class="dropdown-toggle username" data-toggle="dropdown" aria-expanded="false">{{ user.display_name() }}</a>
             <ul class="dropdown-menu">
                 {% if user_profile_edit_url %}
-                <li><a href="<%= userProfile() %>"><i class="icon-user"></i>{{ gettext('Profile') }}</a></li>
+                  <li><a href="<%= userProfile() %>"><i class="icon-user"></i>{{ gettext('Profile') }}</a></li>
                 {% endif %}
-                <li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
+                <% if(isUserSubscribedToDiscussion || canSubscribeToDiscussion){ %>
+                  <li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
+                <% } %>
                 <% if(isAdminDiscussion){ %>
-                <li><a href="<%= discussionSettings() %>"><i class="icon-options"></i>{{ gettext('Discussion settings') }}</a></li>
-                <li><a href="<%= discussionPermissions() %>"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>
+                  <li><a href="<%= discussionSettings() %>"><i class="icon-options"></i>{{ gettext('Discussion settings') }}</a></li>
+                  <li><a href="<%= discussionPermissions() %>"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>
                 <% } %>
                 <li class="divider"></li>
                 <li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>

@@ -14,7 +14,7 @@ var Marionette = require('../../shims/marionette.js'),
 
 var adminDiscussion = Marionette.LayoutView.extend({
   template: '#tmpl-adminDiscussion',
-  className: 'admin-notifications',
+  className: 'admin-discussion',
   ui: {
     discussion: '.js_saveDiscussion',
     logo: '#logo_url',

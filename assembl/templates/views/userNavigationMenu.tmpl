@@ -5,13 +5,15 @@
   <li <% if (selectedSection == 'account'){ %>class="active"<% } %>>
     <a href="#user/account" class="menu">{{ gettext('Account settings') }}</a>
   </li>
-  <li <% if (selectedSection == 'notifications'){ %>class="active"<% } %>>
-    <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
-  </li>
+  <% if (currentUser.can(Permissions.SELF_REGISTER) || localRoles.hasRole(Roles.PARTICIPANT)) { %>
+    <li <% if (selectedSection == 'notifications'){ %>class="active"<% } %>>
+      <a href="#user/notifications" class="menu">{{ gettext('Notifications') }}</a>
+    </li>
+  <% } %>
   <li <% if (selectedSection == 'discussion_preferences'){ %>class="active"<% } %>>
     <a href="#user/discussion_preferences" class="menu">{{ gettext('Discussion preferences') }}</a>
   </li>
   <li class="mtxl">
-    <a href="{{ discussion.get_url() }}">{{ gettext('Back to discussion') }}</a>
+    <a href="{{ discussion.get_url() }}">{{ gettext('Return to the discussion') }}</a>
   </li>
 </ul>

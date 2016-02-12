@@ -32,11 +32,23 @@ var roleCollection = Base.Collection.extend({
   model: roleModel,
   
 
+  /** This method needs to change once subscription has it's own table 
+   * 
+   */
   isUserSubscribedToDiscussion: function() {
-    var role =  this.find(function(local_role) {
-      return local_role.get('role') === Roles.PARTICIPANT;
+    //console.log("isUserSubscribedToDiscussion returning", this.hasRole(Roles.PARTICIPANT))
+    return this.hasRole(Roles.PARTICIPANT);
+  },
+
+  /**
+   * @param  {Role}  The role
+   * @return {Boolean} True if the user has the given role
+   */
+  hasRole: function(role) {
+    var roleFound =  this.find(function(local_role) {
+      return local_role.get('role') === role;
     });
-    return role !== undefined;
+    return roleFound !== undefined;
   },
 
   UnsubscribeUserFromDiscussion: function() {

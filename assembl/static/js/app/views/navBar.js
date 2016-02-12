@@ -80,17 +80,34 @@ var navBarLeft = Marionette.LayoutView.extend({
 });
 
 var navBarRight = Marionette.ItemView.extend({
-  template: '#tmpl-navBarRight',
+  template: '#tmpl-loader',
   className: 'navbar-right',
   initialize: function(options) {
-    this.roles = options.roles;
-    this.role = options.role;
-    if (this.roles) {
-      this.listenTo(this.roles, 'remove add', function(model) {
-            this.role = (_.size(this.roles)) ? model : undefined;
-            this.render();
+    var that = this,
+        collectionManager = new CollectionManager(),
+        realTemplate = '#tmpl-navBarRight';
+
+    if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+      collectionManager.getLocalRoleCollectionPromise()
+      .then(function(localRoles) {
+        that.localRoles = localRoles;
+        that.isUserSubscribedToDiscussion = localRoles.isUserSubscribedToDiscussion();
+        that.template = realTemplate;
+        that.render();
+
+        if (localRoles) {
+          that.listenTo(localRoles, 'remove add', function(model) {
+            that.isUserSubscribedToDiscussion = localRoles.isUserSubscribedToDiscussion();
+            that.render();
           });
+        }
+      });
     }
+    else {
+      this.isUserSubscribedToDiscussion = false;
+      this.template = realTemplate;
+    }
+
   },
   ui: {
     currentLocal: '.js_setLocale',
@@ -113,9 +130,13 @@ var navBarRight = Marionette.ItemView.extend({
     }
   },
   serializeData: function() {
+    if(this.template === '#tmpl-loader') {
+      return {};
+    }
+    var retval = {}
     return {
       Ctx: Ctx,
-      role: this.role,
+      isUserSubscribedToDiscussion: this.isUserSubscribedToDiscussion,
       canSubscribeToDiscussion: Ctx.getCurrentUser().can(Permissions.SELF_REGISTER),
       isAdminDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
     }
@@ -191,33 +212,9 @@ var navBar = Marionette.LayoutView.extend({
   },
 
   onBeforeShow: function() {
-    var that = this,
-        collectionManager = new CollectionManager();
-
-    if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-      collectionManager.getLocalRoleCollectionPromise()
-                .then(function(allRole) {
-
-                  var role = allRole.find(function(local_role) {
-                    return local_role.get('role') === Roles.PARTICIPANT;
-                  });
-
-                  var navRight = new navBarRight({
-                    role: role,
-                    roles: allRole
-                  });
-
-                  that.getRegion('navBarRight').show(navRight);
-
-                  that.getRegion('navBarLeft').show(new navBarLeft());
-                });
-    } else {
-      var navRight = new navBarRight({
-        role: undefined
-      });
-      this.getRegion('navBarRight').show(navRight);
-      this.getRegion('navBarLeft').show(new navBarLeft());
-    }
+    var navRight = new navBarRight();
+    this.getRegion('navBarRight').show(navRight);
+    this.getRegion('navBarLeft').show(new navBarLeft());
   },
 
   switchToExpertInterface: function(e) {
