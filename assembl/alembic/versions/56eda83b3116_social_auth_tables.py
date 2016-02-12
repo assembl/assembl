@@ -1,14 +1,14 @@
 """social_auth tables
 
 Revision ID: 56eda83b3116
-Revises: 27bb3c90a95d
+Revises: 4f43341f787e
 Create Date: 2016-02-12 08:15:21.194178
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '56eda83b3116'
-down_revision = '27bb3c90a95d'
+down_revision = '4f43341f787e'
 
 from alembic import context, op
 import sqlalchemy as sa
