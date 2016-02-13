@@ -34,16 +34,17 @@ def upgrade(pyramid_env):
                 m.LangStringEntry.langstring_id).all()
         langstring_ids = [str(id) for (id,) in langstring_ids]
 
-        first = langstring_ids.pop(0)
-        assert first == str(m.LangString.EMPTY_ID)
-        while len(langstring_ids):
-            subs = ", ".join(langstring_ids[:100])
-            db.execute("UPDATE content SET subject_id = %s WHERE subject_id IN (%s)" % (first, subs))
-            db.execute("UPDATE content SET body_id = %s WHERE body_id IN (%s)" % (first, subs))
-            db.execute("DELETE FROM langstring_entry WHERE langstring_id IN (%s)" % (subs,))
-            db.execute("DELETE FROM langstring WHERE id IN (%s)" % (subs,))
-            langstring_ids = langstring_ids[100:]
-        mark_changed()
+        if langstring_ids:
+            first = langstring_ids.pop(0)
+            assert first == str(m.LangString.EMPTY_ID)
+            while len(langstring_ids):
+                subs = ", ".join(langstring_ids[:100])
+                db.execute("UPDATE content SET subject_id = %s WHERE subject_id IN (%s)" % (first, subs))
+                db.execute("UPDATE content SET body_id = %s WHERE body_id IN (%s)" % (first, subs))
+                db.execute("DELETE FROM langstring_entry WHERE langstring_id IN (%s)" % (subs,))
+                db.execute("DELETE FROM langstring WHERE id IN (%s)" % (subs,))
+                langstring_ids = langstring_ids[100:]
+            mark_changed()
 
 
 
