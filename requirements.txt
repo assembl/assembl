@@ -1,5 +1,5 @@
 pip==8.0.2
-setuptools==20.0
+setuptools==20.1.1
 alabaster==0.7.7
 -e git+https://github.com/imaginationforpeople/alembic.git@virtuoso#egg=alembic
 amqp==1.4.9
@@ -15,7 +15,7 @@ billiard==3.3.0.22
 boto==2.39.0
 bz2file==0.98
 celery==3.1.20
-cffi==1.5.0
+cffi==1.5.2
 Chameleon==2.24
 colander==1.2
 ColanderAlchemy==0.3.3
@@ -35,7 +35,8 @@ enum34==1.1.2
 Fabric==1.10.2
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
-flaky==3.0.3
+flaky==3.1.0
+future==0.15.2
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 gensim==0.12.3
 google-api-python-client==1.4.2
@@ -82,12 +83,12 @@ pygraphviz==1.3.1
 pyIsEmail==v1.3.1
 dnspython==1.12.0   # must come after pyisemail?
 PyJWT==1.4.0
-PyLD==0.6.8
+PyLD==0.7.0
 pylibmc==1.5.0
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 pyOpenSSL==0.15.1
 pyparsing==2.1.0
-pyramid-autodoc==0.0.7
+pyramid-autodoc==0.0.8
 pyramid-beaker==0.8
 pyramid-debugtoolbar-ajax==0.0.4
 pyramid-debugtoolbar==2.4.2
@@ -122,7 +123,7 @@ requests==2.8.1   # smart_open holding it back
 rsa==3.3
 scikit-learn==0.17
 scipy==0.17.0
-selenium==2.51.1
+selenium==2.52.0
 simplejson==3.8.1
 six==1.10.0
 smart-open==1.3.2
@@ -141,7 +142,6 @@ tornado==4.3
 transaction==1.4.4
 translationstring==1.3
 Unidecode==0.4.19
-uricore==0.1.2
 uritemplate==0.6
 uwsgitop==0.9
 -e git+https://github.com/imaginationforpeople/velruse.git#egg=velruse
