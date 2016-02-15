@@ -35,8 +35,10 @@ def add_social(event):
     event['social'] = backends(request, request.user)
 
 
-def user_details(strategy, details, user=None, *args, **kwargs):
-    pass
+def user_details(
+        strategy, details, user=None, social=None, response=None,
+        *args, **kwargs):
+    social.set_extra_data(response)
 
 
 class AssemblStrategy(PyramidStrategy):
