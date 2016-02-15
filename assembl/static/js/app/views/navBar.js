@@ -138,8 +138,9 @@ var navBarRight = Marionette.LayoutView.extend({
       model: Ctx.getCurrentUser(),
       avatarSize: 25
     });
-
-    this.userAvatarRegion.show(userAvatarView);
+    if (!Ctx.getCurrentUser().isUnknownUser()) {
+        this.userAvatarRegion.show(userAvatarView);
+    }
   },
 
   serializeData: function() {
