@@ -12,24 +12,18 @@
   font-size: 11px;
 }
 
-.idealist-actions {
+.ideaList .idealist-actions {
   display: inline-block;
   position: absolute;
   right: 6px;
-}
 
-/*
-.ideaList .idealist-actions {
-  display: none;
-}
-
-.ideaList:hover .idealist-actions {
-  display: inline-block;
-}
-*/
-
-.ideaList .idealist-actions {
-  display: inline-block;
+  .dropdown.is-open .dropdown-menu {
+    max-width: 50vw;
+    li a {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
 
   .dropdown .icon-options {
     color: $txtGray1;
