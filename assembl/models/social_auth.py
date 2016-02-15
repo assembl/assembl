@@ -184,17 +184,12 @@ class SocialAuthAccount(
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
         """
-        print kwargs
         query = cls.user_query()
-        username = kwargs.pop('username')
+        username = kwargs.pop('username', None)
         if username:
             query = query.join(
-                User.username).filter(Username.username==username)
-        try:
-            return query.filter_by(*args, **kwargs).count() > 0
-        except:
-            import pdb
-            pdb.post_mortem()
+                User.username).filter(Username.username == username)
+        return query.filter_by(*args, **kwargs).count() > 0
 
     @classmethod
     def get_username(cls, user):
@@ -203,10 +198,9 @@ class SocialAuthAccount(
         return user.username_p
 
     @classmethod
-    def create_user(cls, *args, **kwargs):
-        print kwargs
-        kwargs.pop("email")  # stored in SocialAuthAccount
-        username = kwargs.pop('username')
+    def create_user(cls, email=None, username=None, fullname=None, *args, **kwargs):
+        if fullname:
+            kwargs['name'] = fullname
         try:
             user = cls._new_instance(cls.user_model(), *args, **kwargs)
             if username:
@@ -223,9 +217,9 @@ class SocialAuthAccount(
     @classmethod
     def get_users_by_email(cls, email):
         return cls.default_db().query(User).join(
-            User.social_auth_account).filter_by(
+            User.accounts).filter(
                 cls.email == email, cls.verified == True
-            ).distinct()
+            ).all()
 
     @classmethod
     def get_social_auth(cls, provider, uid):

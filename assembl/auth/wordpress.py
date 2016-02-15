@@ -12,12 +12,19 @@ class WordPressServerOAuth2(BaseOAuth2):
     """WordPressServer authentication backend"""
     name = 'wordpress-oauth2'
     ID_KEY = 'ID'
-    # AUTHORIZATION_URL = 'http://localhost/wordpress-thecamp/oauth/authorize'
-    # ACCESS_TOKEN_URL = 'http://localhost/wordpress-thecamp/oauth/token'
-    # USER_DATA_URL = 'http://localhost/wordpress-thecamp/oauth/me'
-    AUTHORIZATION_URL = 'https://thecampfactory.fr/oauth/authorize'
-    ACCESS_TOKEN_URL = 'https://thecampfactory.fr/oauth/token'
-    USER_DATA_URL = 'https://thecampfactory.fr/oauth/me'
+
+    def __init__(self, strategy=None, redirect_uri=None):
+        self.authorization_data = strategy.get_authorization_data()
+        prefix = self.authorization_data['server']
+        self.AUTHORIZATION_URL = prefix + 'authorize'
+        self.ACCESS_TOKEN_URL = prefix + 'token'
+        self.USER_DATA_URL = prefix + 'me'
+        super(WordPressServerOAuth2, self).__init__(
+            strategy=strategy, redirect_uri=redirect_uri)
+
+    def get_key_and_secret(self):
+        return (self.authorization_data['key'],
+                self.authorization_data['secret'])
 
     ACCESS_TOKEN_METHOD = 'POST'
     DEFAULT_SCOPE = ['profile', 'email']  # phone address

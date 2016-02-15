@@ -337,6 +337,7 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": "NMI"
         },
+
         # Allow social sharing
         {
             "id": "social_sharing",
@@ -350,6 +351,68 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": True
         },
+
+        {
+            "id": "authorization_server_backend",
+            "value_type": "scalar",
+            "scalar_values": {
+                "": _("No special authentication"),
+                "assembl.auth.wordpress.WordPressServerOAuth2":
+                    _("WordPress OAuth Server"),
+            },
+            "description": _(
+                "Authorization service type"),
+            "help_text": _(
+                "A python-social-auth backend that will be mandatory to "
+                "authenticate users of this discussion."),
+            "allow_user_override": None,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": ""
+        },
+
+        {
+            "id": "authorization_server",
+            "value_type": "url",
+            "description": _(
+                "Private authorization server"),
+            "description": _(
+                "Authorization server URL endpoint for a private discussion"),
+            "allow_user_override": None,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": None
+        },
+
+        {
+            "id": "authorization_key",
+            "value_type": "string",
+            "description": _("Authorization key"),
+            "help_text": _(
+                "Key for assembl as a client of the authorization server"),
+            "allow_user_override": None,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": None
+        },
+
+        {
+            "id": "authorization_secret",
+            "value_type": "string",
+            "description": _("Authorization secret"),
+            "help_text": _(
+                "Secret for assembl as a client of the authorization server"),
+            "allow_user_override": None,
+            "view_permission": P_SYSADMIN,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": None
+        },
+
         # Are moderated posts simply hidden or made inaccessible by default?
         {
             "id": "default_allow_access_to_moderated_text",
@@ -365,8 +428,6 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": True
         },
-        
-
 
         # Registration requires being a member of this email domain.
         {
@@ -421,6 +482,7 @@ class Preferences(MutableMapping, Base):
                 "&title=&url=<%= url %>&userurl=<%= user_url %>"
                 "&langurl=&timeout=60"
         },
+
         # List of visualizations
         {
             "id": "visualizations",
@@ -435,6 +497,7 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": {}
         },
+
         # Extra navigation sections (refers to visualizations)
         {
             "id": "navigation_sections",
@@ -450,6 +513,7 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": {}
         },
+
         # Translations for the navigation sections
         {
             "id": "translations",
@@ -466,6 +530,7 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": {}
         },
+
         # Default expanded/collapsed state of each idea in the table of ideas.
         # A user can override it by opening/closing an idea.
         # This is a hash where keys are ideas ids.
@@ -485,6 +550,8 @@ class Preferences(MutableMapping, Base):
             "default": {},
             "show_in_preferences": False
         },
+
+        # The specification of the preference data
         {
             "id": "preference_data",
             "name": _("Preference data"),

@@ -84,6 +84,12 @@ from .auth import (
     UserTemplate,
     Username,
 )
+from .social_auth import (
+    Nonce,
+    Association,
+    Code,
+    SocialAuthAccount,
+)
 from .langstrings import (
     Locale,
     LocaleLabel,

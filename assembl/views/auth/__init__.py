@@ -42,8 +42,10 @@ def includeme(config):
         sys.stderr.write('no login providers configured, double check '
                          'your ini file and add a few')
     settings = config.registry.settings
-    settings['SOCIAL_AUTH_AUTHENTICATION_BACKENDS'] = \
-        settings.get('SOCIAL_AUTH_AUTHENTICATION_BACKENDS', '').split("\n")
+    for name in ('SOCIAL_AUTH_AUTHENTICATION_BACKENDS',
+                 'SOCIAL_AUTH_USER_FIELDS',
+                 'SOCIAL_AUTH_PROTECTED_USER_FIELDS'):
+        settings[name] = settings.get(name, '').split("\n")
     config.add_request_method(
         'assembl.auth.social_auth.get_user', 'user', reify=True)
     config.include('social.apps.pyramid_app')
