@@ -35,6 +35,7 @@ class Locale(Base):
     UNDEFINED = "und"
     NON_LINGUISTIC = "zxx"
     MULTILINGUAL = "mul"
+    SPECIAL_LOCALES = (UNDEFINED, NON_LINGUISTIC, MULTILINGUAL)
 
     def __repr__(self):
         return "<Locale %s (%d)>" % (self.code, self.id or -1)

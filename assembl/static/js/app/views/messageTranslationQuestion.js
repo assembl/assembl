@@ -75,10 +75,15 @@ var LanguageSelectionView = Marionette.ItemView.extend({
     },
 
     _localesAsSortedList: null,
+    hiddenTargetLocales: ['und', 'mul', 'zxx'],
     localesAsSortedList: function() {
+        var hiddenTargetLocales = this.hiddenTargetLocales;
         if (this._localesAsSortedList === null) {
             var localeList = _.map(this.langCache, function(name, loc) {
                 return [loc, name];
+            });
+            localeList = _.filter(localeList, function(x) {
+                return hiddenTargetLocales.indexOf(x[0]) < 0;
             });
             localeList = _.sortBy(localeList, function(x) {return x[1];});
             Object.getPrototypeOf(this)._localesAsSortedList = localeList;
