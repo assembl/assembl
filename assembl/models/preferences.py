@@ -203,8 +203,8 @@ class Preferences(MutableMapping, Base):
                 assert value in pref_data.get("scalar_values", ()), (
                     "value not allowed: " + value)
             elif data_type == "url":
-                from urlparse import parse
-                assert parse(value).scheme in (
+                from urlparse import urlparse
+                assert urlparse(value).scheme in (
                     'http', 'https'), "Not a HTTP URL"
             elif data_type == "email":
                 from pyisemail import is_email
