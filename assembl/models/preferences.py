@@ -357,7 +357,7 @@ class Preferences(MutableMapping, Base):
             "value_type": "scalar",
             "scalar_values": {
                 "": _("No special authentication"),
-                "assembl.auth.wordpress.WordPressServerOAuth2":
+                "wordpress-oauth2":
                     _("WordPress OAuth Server"),
             },
             "description": _(

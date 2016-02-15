@@ -117,7 +117,13 @@ def home_view(request):
             referrer = request.url
             next_view = path_qs(referrer)
 
-        if next_view:
+        if discussion.preferences['authorization_server_backend']:
+            login_url = request.route_url(
+                "social.auth.contextual",
+                slug=discussion.slug,
+                backend=discussion.preferences['authorization_server_backend'],
+                _query={"next": next_view})
+        elif next_view:
             login_url = request.route_url("contextual_login",
                                           discussion_slug=discussion.slug,
                                           _query={"next_view": next_view})
