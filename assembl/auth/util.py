@@ -103,6 +103,14 @@ def discussion_from_request(request):
         discussion_id = request.context.get_discussion_id()
         if discussion_id:
             return Discussion.get(discussion_id)
+    if request.session.get("discussion", None):
+        slug = request.session["discussion"]
+        session = get_session_maker()()
+        discussion = session.query(Discussion).filter_by(
+            slug=slug).first()
+        if not discussion:
+            raise HTTPNotFound("No discussion named %s" % (slug,))
+        return discussion
 
 
 def get_current_discussion():
@@ -288,6 +296,19 @@ def get_identity_provider(request, create=True):
             trust_emails=auth_context.provider_name in trusted)
         session.add(provider)
     return provider
+
+
+def maybe_auto_subscribe(user, discussion):
+    if (not discussion or
+            not discussion.subscribe_to_notifications_on_signup or
+            not discussion.check_authorized_email(user)):
+        return False
+    # really auto-subscribe user
+    user.subscribe(discussion)
+    discussion.db.flush()
+    # apply new notifications
+    user.get_notification_subscriptions(discussion.id)
+    return True
 
 
 def add_user(name, email, password, role, force=False, username=None,

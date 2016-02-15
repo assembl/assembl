@@ -33,6 +33,7 @@ def includeme(config):
     contextual_route('request_password_change', '/req_password_change')
     contextual_route('do_password_change', '/do_password_change/{ticket}')
     contextual_route('finish_password_change', '/finish_password_change')
+    config.add_route('contextual_social_auth', '/{slug}/login/{backend}')
 
     # determine which providers we want to configure
     settings = config.get_settings()
@@ -53,13 +54,3 @@ def includeme(config):
     config.include('social.apps.pyramid_app')
     config.scan()
     config.scan('social.apps.pyramid_app')
-    config.add_view(
-        psa_auth_view, route_name='social.auth.contextual',
-        request_method='GET')
-    config.add_view(
-        psa_complete_view, route_name='social.complete.contextual',
-        request_method=('GET', 'POST'))
-    config.add_route(
-        'social.auth.contextual', '/{slug}/login/{backend}')
-    config.add_route(
-        'social.complete.contextual', '/{slug}/complete/{backend}')

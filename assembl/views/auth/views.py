@@ -26,6 +26,8 @@ from pyramid.settings import asbool
 from sqlalchemy import desc
 from velruse import login_url
 from pyisemail import is_email
+from social.actions import do_auth
+from social.apps.pyramid_app.utils import psa
 
 from assembl.models import (
     EmailAccount, IdentityProvider, IdentityProviderAccount,
@@ -38,7 +40,7 @@ from assembl.auth.password import (
     password_token)
 from assembl.auth.util import (
     get_identity_provider, discussion_from_request,
-    roles_with_permissions)
+    roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from .. import get_default_context, JSONError
@@ -487,6 +489,13 @@ def assembl_login_complete_view(request):
     return HTTPFound(location=next_view)
 
 
+@view_config(route_name="contextual_social_auth", request_method='GET')
+@psa('social.complete')
+def auth(request):
+    request.session['discussion'] = request.matchdict['slug']
+    return do_auth(request.backend, redirect_name='next')
+
+
 @view_config(
     context='velruse.AuthenticationComplete'
 )
@@ -780,19 +789,6 @@ def confirm_emailid_sent(request):
         description=localizer.translate(_(
             'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. '
             'Please follow the confirmation link in order to confirm your email')))
-
-
-def maybe_auto_subscribe(user, discussion):
-    if (not discussion
-            or not discussion.subscribe_to_notifications_on_signup
-            or not discussion.check_authorized_email(user)):
-        return False
-    # really auto-subscribe user
-    user.subscribe(discussion)
-    discussion.db.flush()
-    # apply new notifications
-    user.get_notification_subscriptions(discussion.id)
-    return True
 
 
 @view_config(

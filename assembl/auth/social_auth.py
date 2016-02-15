@@ -8,7 +8,8 @@ from social.apps.pyramid_app.utils import backends
 from social.strategies.pyramid_strategy import PyramidStrategy
 
 from assembl.models import User, Preferences
-from .util import discussion_from_request
+from .util import discussion_from_request, maybe_auto_subscribe
+
 
 def login_user(backend, user, user_social_auth):
     remember(backend.strategy.request, user.id)
@@ -39,6 +40,21 @@ def user_details(
         strategy, details, user=None, social=None, response=None,
         *args, **kwargs):
     social.set_extra_data(response)
+
+
+def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
+    from social.pipeline.social_auth import \
+        associate_user as psa_associate_user
+    from pyramid.threadlocal import get_current_request
+    results = psa_associate_user(
+        backend, uid, user, social, *args, **kwargs)
+    if results and isinstance(results, dict):
+        user = results['user']
+    request = get_current_request()
+    discussion = discussion_from_request(request)
+    if discussion:
+        maybe_auto_subscribe(user, discussion)
+    return results
 
 
 class AssemblStrategy(PyramidStrategy):
@@ -88,7 +104,7 @@ class AssemblStrategy(PyramidStrategy):
             'social.pipeline.user.create_user',
 
             # Create the record that associated the social account with this user.
-            'social.pipeline.social_auth.associate_user',
+            'assembl.auth.social_auth.associate_user',
 
             # Populate the extra_data field in the social record with the values
             # specified by settings (and the default ones like access_token, etc).

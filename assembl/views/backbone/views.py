@@ -119,7 +119,7 @@ def home_view(request):
 
         if discussion.preferences['authorization_server_backend']:
             login_url = request.route_url(
-                "social.auth.contextual",
+                "contextual_social_auth",
                 slug=discussion.slug,
                 backend=discussion.preferences['authorization_server_backend'],
                 _query={"next": next_view})
