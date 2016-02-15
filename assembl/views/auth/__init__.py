@@ -1,6 +1,8 @@
 import sys
 
 from pyramid.settings import aslist
+from social.apps.pyramid_app.views import (
+    auth as psa_auth_view, complete as psa_complete_view)
 
 
 def includeme(config):
@@ -51,3 +53,13 @@ def includeme(config):
     config.include('social.apps.pyramid_app')
     config.scan()
     config.scan('social.apps.pyramid_app')
+    config.add_view(
+        psa_auth_view, route_name='social.auth.contextual',
+        request_method='GET')
+    config.add_view(
+        psa_complete_view, route_name='social.complete.contextual',
+        request_method=('GET', 'POST'))
+    config.add_route(
+        'social.auth.contextual', '/{slug}/login/{backend}')
+    config.add_route(
+        'social.complete.contextual', '/{slug}/complete/{backend}')
