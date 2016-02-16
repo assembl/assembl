@@ -19,9 +19,11 @@ server {
         proxy_set_header Connection "upgrade";
     }
 
-    location /static {    
+    location /static {
+        #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
+        #Nor will it help your performance after the first hour...
         autoindex on;    
-        expires modified +1h;
+
         alias /var/www/assembl/assembl/static;    
     }
 
