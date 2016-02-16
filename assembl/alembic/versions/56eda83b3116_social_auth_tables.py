@@ -93,5 +93,5 @@ def downgrade(pyramid_env):
         op.drop_table('social_auth_code')
         op.drop_table('social_auth_association')
         op.drop_table('social_auth_account')
-        op.execute("DELETE FROM abstract_agent_profile"
+        op.execute("DELETE FROM abstract_agent_account"
                    " WHERE type = 'social_auth_account'")
