@@ -243,6 +243,10 @@ class SourceReader(Thread):
         self.reimporting = reimport
         self.extra_args = kwargs
 
+    def handle_new_content(self, content):
+        from .translate import translate_content_task
+        translate_content_task.delay(content.id)
+
     def wake(self):
         print "SourceReader.wake"
         if self.status in (ReaderStatus.PAUSED, ReaderStatus.CLOSED) and (

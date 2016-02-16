@@ -461,8 +461,10 @@ def orm_insert_listener(mapper, connection, target):
         creator = target.creator or AgentProfile.get(target.creator_id)
         creator.send_to_changes(connection, UPDATE_OP, target.discussion_id)
     # Eagerly translate the post
-    from ..tasks.translate import translate_content_task
-    translate_content_task.delay(target.id)
+    # Actually causes DB deadlocks. TODO: Revise this.
+    # Let's only do this on import.
+    # from ..tasks.translate import translate_content_task
+    # translate_content_task.delay(target.id)
 
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
 

@@ -325,6 +325,7 @@ class FeedSourceReader(PullSourceReader):
                     persisted_post = self._convert_to_post(entry, account)
                     sess.add(persisted_post)
                 sess.commit()
+                self.handle_new_content(persisted_post)
             except Exception as e:
                 sess.rollback()
                 raise ReaderError(e)
@@ -357,6 +358,7 @@ class FeedSourceReader(PullSourceReader):
                 if not post.find_duplicate(True, True):
                     self.source.db.add(post)
                 self.source.db.commit()
+                self.handle_new_content(post)
             except Exception as e:
                 self.source.db.rollback()
                 raise ReaderError(e)

@@ -1,6 +1,7 @@
 import re
 import unidecode
 import inspect
+from time import sleep
 from StringIO import StringIO
 
 from pyramid.settings import asbool
@@ -96,3 +97,18 @@ def full_class_name(cls):
     if not isinstance(cls, type):
         cls = cls.__class__
     return ".".join((cls.__module__, cls.__name__))
+
+
+def waiting_get(cls, id, lock=False):
+    # Waiting for an object to be flushed on another thread
+    wait_time = 0.02
+    # This amounts to ~5 seconds total, in 12 increasing steps
+    q = cls.default_db.query(cls).filter_by(id=id)
+    if lock:
+        q = q.with_lockmode('update')
+    while wait_time < 2:
+        objectInstance = q.first()
+        if objectInstance is not None:
+            return objectInstance
+        sleep(wait_time)
+        wait_time *= 1.5

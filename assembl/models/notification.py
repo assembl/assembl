@@ -2,7 +2,6 @@
 from datetime import datetime
 from collections import defaultdict
 from abc import abstractmethod
-from time import sleep
 import transaction
 import os
 from os.path import join, dirname
@@ -11,7 +10,6 @@ from email import (charset as Charset)
 from email.mime.text import MIMEText
 from functools import partial
 import threading
-
 
 from sqlalchemy import (
     Column,
@@ -36,6 +34,7 @@ from jinja2 import Environment, PackageLoader
 from . import Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
+from ..lib.utils import waiting_get
 from .auth import (
     User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate)
 from .discussion import Discussion
@@ -654,18 +653,6 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_OWN_MESSAGES_DIRECT_REPLIES
     }
-
-
-def waiting_get(objectClass, objectId):
-    # Waiting for an object to be flushed on another thread
-    wait_time = 0.02
-    # This amounts to ~5 seconds total, in 12 increasing steps
-    while wait_time < 2:
-        objectInstance = objectClass.get(objectId)
-        if objectInstance is not None:
-            return objectInstance
-        sleep(wait_time)
-        wait_time *= 1.5
 
 
 class ModelEventWatcherNotificationSubscriptionDispatcher(object):

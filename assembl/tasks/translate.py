@@ -3,6 +3,7 @@ from collections import defaultdict
 from celery import Celery
 
 from . import init_task_config, config_celery_app
+from ..lib.utils import waiting_get
 
 # broker specified
 translation_celery_app = Celery('celery_tasks.translate')
@@ -130,7 +131,7 @@ def translate_content(
 def translate_content_task(content_id):
     init_task_config(translation_celery_app)
     from ..models import Content
-    content = Content.get(content_id)
+    content = waiting_get(Content, content_id, True)
     translate_content(content)
 
 

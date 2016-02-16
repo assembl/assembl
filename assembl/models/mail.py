@@ -31,14 +31,15 @@ from sqlalchemy import (
     UnicodeText,
     Boolean,
 )
+from virtuoso.alchemy import CoerceUnicode
 
 from .langstrings import LangString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import EmailAccount
-from assembl.tasks.imap import import_mails
-from assembl.lib.sqla import mark_changed
-from virtuoso.alchemy import CoerceUnicode
+from ..tasks.imap import import_mails
+from ..lib.sqla import mark_changed
+from ..tasks.translate import translate_content_task
 
 
 class AbstractMailbox(PostSource):
@@ -832,6 +833,7 @@ class IMAPMailbox(AbstractMailbox):
                 if error:
                     raise Exception(error)
                 session.add(email_object)
+                translate_content_task.delay(email_object.id)
             else:
                 print "Skipped message with imap id %s (bounce or vacation message)"% (email_id)
             #print "Setting mailbox_obj.last_imported_email_uid to "+email_id

@@ -746,15 +746,20 @@ class FacebookGenericSource(PostSource):
             self._create_fb_user(creator, users_db)
 
     def _create_or_update_post(self, post, creator, posts_db, reimport):
+        from ..tasks.translate import translate_content_task
         post_id = post.get('id')
         assembl_post = posts_db.get(post_id, None)
-        if assembl_post and reimport:
-            assembl_post.update_fields(post, creator)
-            # An update was made
-            return True
+        if assembl_post:
+            if reimport:
+                assembl_post.update_fields(post, creator)
+                # An update was made
         else:
-            result = self._create_post(post, creator, posts_db)
-            return result
+            assembl_post = self._create_post(post, creator, posts_db)
+        # Note: I wish this machinery had been put in the SourceReader,
+        # instead of in the Source... I could then call
+        # SourceReader.handle_new_content() instead of copying it.
+        translate_content_task.delay(assembl_post.id)
+        return assembl_post
 
     def _manage_post(self, post, obj_id, posts_db, users_db,
                      upper, lower, reimport=False):
