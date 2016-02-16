@@ -991,11 +991,12 @@ def password_change_sent(request):
     if not request.params.get('sent', False):
         profile_id = int(request.matchdict.get('profile_id'))
         profile = AgentProfile.get(profile_id)
+        email = request.params.get('email', None)
         if not profile:
             raise HTTPNotFound("No profile "+profile_id)
-        send_change_password_email(
-            request, profile,
-            request.params.get('email', None))
+        else:
+            email = email or profile.get_preferred_email()
+        send_change_password_email(request, profile, email)
     slug = request.matchdict.get('discussion_slug', None)
     slug_prefix = "/" + slug if slug else ""
     return dict(

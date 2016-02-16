@@ -104,26 +104,32 @@ def verify_data_token(token):
 
 
 def verify_email_token(token):
-    id, hash = token.split('f', 1)
-    email = EmailAccount.get(int(id))
-    if email and verify_password(
-        str(email.id) + email.email + config.get(
-            'security.email_token_salt'), hash, HashEncoding.HEX):
-            return email
+    try:
+        id, hash = token.split('f', 1)
+        email = EmailAccount.get(int(id))
+        if email and verify_password(
+            str(email.id) + email.email + config.get(
+                'security.email_token_salt'), hash, HashEncoding.HEX):
+                return email
+    except:
+        return None
 
 
 def verify_password_change_token(token, duration):
-    id, hash = token.split('e', 1)
-    id = int(id)
-    user = User.get(id)
-    if not user:
+    try:
+        id, hash = token.split('e', 1)
+        id = int(id)
+        user = User.get(id)
+        if not user:
+            return False, None
+        age = datetime.utcnow() - user.last_login
+        if age > timedelta(duration/24.0):
+            return False, id
+        check = str(id)+user.last_login.isoformat()[:19]
+        valid = verify_password(
+            check, hash, HashEncoding.HEX)
+        if not valid:
+            return False, id
+        return True, id
+    except:
         return False, None
-    age = datetime.utcnow() - user.last_login
-    if age > timedelta(duration/24.0):
-        return False, id
-    check = str(id)+user.last_login.isoformat()[:19]
-    valid = verify_password(
-        check, hash, HashEncoding.HEX)
-    if not valid:
-        return False, id
-    return True, id
