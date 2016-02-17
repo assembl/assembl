@@ -113,14 +113,21 @@ var LangString = Base.Model.extend({
     return originals[0];
   },
 
-  bestOf: function(available, langPrefs, filter_errors) {
-    // Get the best langStringEntry among those available using user prefs.
-    // 1. Look at available original languages: get corresponding pref.
-    // 2. Sort prefs (same order as original list.)
-    // 3. take first applicable w/o trans or whose translation is available.
-    // 4. if none, look at available translations and repeat.
-    // Logic is painful, but most of the time (single original) will be trivial in practice.
+  /**
+   * Determines the best body string to use according to various settings
+   * Get the best langStringEntry among those available using user prefs.
+     1. Look at available original languages: get corresponding pref.
+     2. Sort prefs (same order as original list.)
+     3. take first applicable w/o trans or whose translation is available.
+     4. if none, look at available translations and repeat.
+     Logic is painful, but most of the time (single original) will be trivial in practice.
 
+   * @param  {LangStringEntry.Collection}       available
+   * @param  {LanguagePreference.Collection}    langPrefs
+   * @param  {Boolean}                          filter_errors   Used to supress errors
+   * @return {LangStringEntry}          
+   */
+  bestOf: function(available, langPrefs, filter_errors) {
     var i, entry, commonLenF, that = this;
     if (available.length == 1) {
         return available[0];
@@ -191,8 +198,8 @@ var LangString = Base.Model.extend({
   bestWithErrors: function(langPrefs, filter_errors) {
     if (!langPrefs) {
       return {
-        entry: self.original(),
-        error: None
+        entry: this.original(),
+        error: null
       };
     }
     var entry = this.bestOf(this.get("entries").models, langPrefs, filter_errors),

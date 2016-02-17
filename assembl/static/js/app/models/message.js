@@ -8,6 +8,7 @@ var _ = require('../shims/underscore.js'),
     Base = require('./base.js'),
     LangString = require('./langstring.js'),
     Types = require('../utils/types.js'),
+    Permissions = require('../utils/permissions.js'),
     Attachment = require('./attachments.js');
 
 /**
@@ -383,13 +384,6 @@ var MessageCollection = Base.Collection.extend({
       console.log("Fallback case, returning undefined");
       return undefined;
     }
-  },
-
-  isMachineTranslated: function(){
-    //This will alert if there is any form of translated content in this message
-    //Would it be useful to determine if only the title is translated or not?
-    console.log("..going to check if this message's bestValue() is machine translated...");
-    return true; //purely debug
   }
 
 });

@@ -1724,6 +1724,13 @@ var MessageList = AssemblPanel.extend({
     // Saving the annotator reference
     this.annotator = this.ui.messageList.annotator(this.annotator_config).data('annotator');
 
+
+    /*
+      The actual initalization of annotator is based on each message's individual
+      event handling of mousedown, mousemove and other's on the div element with class
+      .js_messageBodyAnnotatorSelectionAllowed
+     */
+
     // TODO: Re-render message in messagelist if an annotation was added...
     this.annotator.subscribe('annotationCreated', function(annotation) {
       var collectionManager = new CollectionManager();

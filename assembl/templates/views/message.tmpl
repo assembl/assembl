@@ -178,7 +178,7 @@
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
     {{ showTranslation() }}
-    <div class="mtm message-body js_messageBodyAnnotatorSelectionAllowed <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.get('@language') %>"><%= body.value() %></div>
+    <div class="mtm message-body <%= (isTranslatedMessage ? "" : "js_messageBodyAnnotatorSelectionAllowed") %> <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.get('@language') %>"><%= body.value() %></div>
     <div class="messageAttachments js_regionMessageAttachments"></div>
     <div class="js_regionMessageModerationOptions"></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>

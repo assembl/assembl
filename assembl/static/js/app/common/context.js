@@ -1524,8 +1524,11 @@ Context.prototype = {
   },
 
   getPreferences: function() {
-    // TODO: Add caching.
-    return this.getJsonFromScriptTag('preferences');
+    if (this._discussionPreferences){
+      return this._discussionPreferences;
+    }
+    this._discussionPreferences = this.getJsonFromScriptTag('preferences');
+    return this._discussionPreferences;
   },
 
   hasTranslationService: function(){

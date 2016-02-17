@@ -276,21 +276,52 @@ var MessageView = Marionette.LayoutView.extend({
 
     this.creator = undefined;
 
-    //Flags used to identify message translation states
+    /*
+      Flags used to identify message translation states
+     */
+    
+    /*
+      Flag used during render to determine whether to show original body or 
+      translated.
+      This is TRIGGERED by user interaction with the "show original" link
+     */
     this.useOriginalContent = false;
+
+    /*
+      Flag that is used during render to show the translation question again
+      Triggered by user interaction with the message menu, "show translation question"
+     */
     this.forceTranslationQuestion = false;
+
+    /*
+      Flag used in view init to check wether the current user has any
+      user language preferences
+     */
     this.unknownPreference = false;
+
+    /*
+      Flag that indicates whether the discussion has an active translator service
+      It's kind of defunct now, as Ctx contains this information now
+     */
     this.hasTranslatorService = false;
+
+    /*
+      Flag that indicates whether there was an error with translation of the body
+
+     */
     this.bodyTranslationError = false;
 
     Promise.join(
         this.model.getCreatorPromise(),
         this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
-        this.model.collection.collectionManager.getDiscussionModelPromise(),
-        function(creator, ulp, discussion) {
+        function(creator, ulp) {
           if(!that.isViewDestroyed()) {
             that.creator = creator;
-            that.initiateTranslationState(ulp, discussion);
+
+            //Two initalize functions called to set up translations
+            that.initiateTranslationState(ulp);
+            that.processContent();
+
             that.template = '#tmpl-message';
             that.render();
           }
@@ -332,7 +363,8 @@ var MessageView = Marionette.LayoutView.extend({
       showOriginal: '.js_translation_show_original', //Show original region
       showOriginalString: '.js_trans_show_origin',
       showTranslatedString: '.js_trans_show_translated',
-      ideaClassificationRegion: '.js_idea-classification-region'
+      ideaClassificationRegion: '.js_idea-classification-region',
+      messageBodyAnnotatorAllowed: '.js_messageBodyAnnotatorSelectionAllowed'
 
     },
 
@@ -379,10 +411,10 @@ var MessageView = Marionette.LayoutView.extend({
     'blur .js_messageSend-body': 'onReplyBoxBlur',
 
     //
-    'mousedown .js_messageBodyAnnotatorSelectionAllowed': 'startAnnotatorTextSelection',
-    'mousemove .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
-    'mouseleave .js_messageBodyAnnotatorSelectionAllowed': 'onMouseLeaveMessageBodyAnnotatorSelectionAllowed',
-    'mouseenter .js_messageBodyAnnotatorSelectionAllowed': 'updateAnnotatorTextSelection',
+    'mousedown  @ui.messageBodyAnnotatorAllowed': 'startAnnotatorTextSelection',
+    'mousemove  @ui.messageBodyAnnotatorAllowed': 'updateAnnotatorTextSelection',
+    'mouseleave @ui.messageBodyAnnotatorAllowed': 'onMouseLeaveMessageBodyAnnotatorSelectionAllowed',
+    'mouseenter @ui.messageBodyAnnotatorAllowed': 'updateAnnotatorTextSelection',
         
     // menu
     'click .js_message-markasunread': 'markAsUnread',
@@ -435,6 +467,60 @@ var MessageView = Marionette.LayoutView.extend({
     return body;
   },
 
+  // processSubject: function(){
+  //   var subject = this._subject;
+  //   return this.hasTranslatorService ? (this.useOriginalContent ? subject.original() : subject.best(this.translationData) ) : subject.original();
+  // },
+
+  // processBody: function(){
+  //   var body = this._body;
+  //   body = (body) ? body : this.generateSafeBody();
+  //   return this.hasTranslatorService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
+  // },
+
+  processContent: function(){   
+    var body = this.model.get('body'),
+        bodyOriginal = body.original(),
+        subject = this.model.get('subject'),
+        subjectOriginal = subject.original();
+
+    if (this.hasTranslatorService) {
+
+      if (!this.useOriginalContent){
+        var processedBody = body.bestWithErrors(this.translationData, true),
+            processedSubject = subject.bestWithErrors(this.translationData, true);
+
+        //bestWithError will make this the original value if error
+        if (processedBody.error){
+          this.bodyTranslationError = processedBody.error;
+        }
+        if (!processedBody.entry.isMachineTranslation() && !this.bodyTranslationError ){
+          this.unknownPreference = this.translationData.getPreferenceForLocale(
+            processedBody.entry.get('@language')) === undefined;
+        }
+        else {
+          this.unknownPreference = false;
+        }
+
+        this._body = processedBody.entry;
+        this._subject = processedSubject.entry;
+        this.isMessageTranslated = this._body.isMachineTranslation() ? true : false;
+      }
+
+      else {
+        this._body = bodyOriginal;
+        this._subject = subjectOriginal;
+        this.isMessageTranslated = false;
+      }
+    }
+
+    else {
+      this._body = bodyOriginal;
+      this._subject = subjectOriginal;
+      this.isMessageTranslated = false;
+    }
+  },
+
   serializeData: function() {
     var subject = this.model.get("subject"),
         body = this.model.get("body");
@@ -455,24 +541,8 @@ var MessageView = Marionette.LayoutView.extend({
       }
     }
 
-    body = (body) ? body : this.generateSafeBody();
-
-    var subject = this.hasTranslatorService ? (this.useOriginalContent ? subject.original() : subject.best(this.translationData) ) : subject.original(),
-        body = this.hasTranslatorService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
-    this.bodyTranslationError = body.get("error_code");
-    if (subject.get("error_code")) {
-        subject = subject.langstring().original();
-    }
-    if (this.bodyTranslationError) {
-        body = body.langstring().original();
-        this.useOriginalContent = false;
-    }
-    if (!body.isMachineTranslation() && !this.bodyTranslationError) {
-        this.unknownPreference = this.translationData.getPreferenceForLocale(
-            body.get("@language")) === undefined;
-    } else {
-        this.unknownPreference = false;
-    }
+    body = this._body;
+    subject = this._subject;
 
     if (this.model.get("publication_state") != "PUBLISHED") {
     //if (this.model.get("moderation_text")) {
@@ -540,7 +610,7 @@ var MessageView = Marionette.LayoutView.extend({
       user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST),
       unknownPreference: this.unknownPreference,
       useOriginalContent: this.useOriginalContent,
-      hasTranslatorService: this.hasTranslatorService
+      isTranslatedMessage: body.isMachineTranslation()
     };
   },
 
@@ -604,6 +674,18 @@ var MessageView = Marionette.LayoutView.extend({
     var that = this,
         modelId = this.model.id,
         partialMessage = MessagesInProgress.getMessage(modelId);
+
+    //Determine whether to show the annotations on this message
+    //First calculate what should be shown.
+    //Important flag to display/remove annotations is this.showAnnotations
+    this.processContent();
+    console.log("this.isMessageTranslated", this.isMessageTranslated);
+    this.showAnnotations = this.canShowAnnotations();
+    console.log("this.showAnnotations", this.showAnnotations);
+    console.log("this._body.value()", this._body.value());
+    if (!this.showAnnotations) {
+      this.removeAnnotations();
+    }
 
     // do not render the whole thing if only the like_count changed.
     // it may kill the message being edited.
@@ -920,7 +1002,7 @@ var MessageView = Marionette.LayoutView.extend({
     return annotationsPromise.then(function(annotations) {
       if (that.annotationsToLoad === undefined) {
         // Is this the right permission to see the clipboard?
-        if (!Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
+        if (!that.canShowAnnotations()) {
           filter = function(extract) {
             return extract.idIdea;
           }
@@ -973,6 +1055,31 @@ var MessageView = Marionette.LayoutView.extend({
         }
       });
 
+    }
+  },
+
+  /*
+    Seperating the logic of toggling annotations into seperate functions
+   */
+  removeAnnotations: function(){
+    if (this.showAnnotations) {
+      this.showAnnotations = false;
+      if (this.annotator && this.loadedAnnotations){
+        for (var annotation_id in this.loadedAnnotations){
+          this.annotator.deleteAnnotation(this.loadedAnnotations[annotation_id]);
+        }
+      }
+    }
+  },
+
+  /*
+    Seperating the logic of toggling annotations into seperate functions
+    Horrible name. @TODO: Think of better name. Conflicts with flag showAnnotations
+   */
+  addAnnotations: function(){
+    if (!this.showAnnotations){
+      this.showAnnotations = true;
+      this.loadAnnotations();
     }
   },
 
@@ -1495,7 +1602,7 @@ var MessageView = Marionette.LayoutView.extend({
         console.log("startAnnotatorTextSelection called");
       }
 
-      if (this.messageListView.isInPrintableView() || !Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
+      if (this.messageListView.isInPrintableView() || !this.canShowAnnotations()) {
         return;
       }
 
@@ -1729,34 +1836,47 @@ var MessageView = Marionette.LayoutView.extend({
       });
   },
 
-  /*
-    A single place to calculate the logic of toggling annotation permission
-    @return boolean
-   */
   canShowAnnotations: function(){
-    return Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT); // TODO: this could be set from a user account preference, or from a toggle in the Messages panel
+    var c = Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT);
+
+    if (this.isMachineTranslation){
+      return false;
+    }
+    if (this.useOriginalContent){
+      return c;
+    }
+
+    return c;
   },
 
   /*
     Utility method to initialize the state of translation for proper view rendering for translations
     @param Object  preference   The UserLanguagePreference Collection 
    */
-  initiateTranslationState: function(preferences, discussion){
+  initiateTranslationState: function(preferences){
     var translationData = preferences.getTranslationData(),
         body = this.model.get("body"),
         preference = preferences.getPreferenceForLocale(body.original().getBaseLocale());
+
+    //Dict cache of locale -> full name
     this.langCache = Ctx.getLocaleToLanguageNameCache();
+
+    //User language preferences
     this.translationData = translationData;
+
+    //Flag allowing modification by user
+    this.useOriginalContent = false;
+
+    /*
+      Flag that indicates whether the message body is translated or not
+     */
+    this.isMessageTranslated = false;
     this.unknownPreference = preference === undefined;
     if (_.isEmpty(this.langCache) ){
       this.hasTranslatorService = false;
     }
     else {
-      this.hasTranslatorService = discussion.hasTranslationService();
-    }
-    
-    if ( this.hasTranslatorService ) {
-      this.showAnnotations = false;
+      this.hasTranslatorService = Ctx.hasTranslationService();
     }
   },
 

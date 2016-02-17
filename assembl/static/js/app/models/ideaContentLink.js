@@ -12,7 +12,8 @@ var Marionette = require('../shims/marionette.js'),
 
 /*
     This Collection is NOT created from an API call, like most other
-    models, collections. It will be created from 
+    models, collections. It will be created from an array that
+    will be passed from the message model.
  */
 
 
