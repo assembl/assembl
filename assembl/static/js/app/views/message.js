@@ -679,6 +679,8 @@ var MessageView = Marionette.LayoutView.extend({
     //First calculate what should be shown.
     //Important flag to display/remove annotations is this.showAnnotations
     this.processContent();
+    //Currently, I notice a disparity between the flags isMessageTranslated and showAnnotations
+    //Starting point to resolve the issue.
     console.log("this.isMessageTranslated", this.isMessageTranslated);
     this.showAnnotations = this.canShowAnnotations();
     console.log("this.showAnnotations", this.showAnnotations);
