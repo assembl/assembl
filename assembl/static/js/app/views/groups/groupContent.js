@@ -68,6 +68,11 @@ var groupContent = Marionette.CompositeView.extend({
       var setReturn = this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
       //console.log("Return was:", setReturn, "currentIdea is now: ", this.model.get('states').at(0).get('currentIdea'));
     }
+    else if (idea === null) {
+      //Hack for pseudo-ideas, so changes are seen and panel closes
+      //Simulate a change event on that model's attribute, to be received by listener in ideaPanel
+      this.trigger("change:pseudoIdea", null);
+    }
   },
 
   /**

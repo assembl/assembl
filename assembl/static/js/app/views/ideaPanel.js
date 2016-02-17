@@ -58,9 +58,19 @@ var IdeaPanel = AssemblPanel.extend({
           that.setIdeaModel(currentIdea);
         }
       });
+      
+      this.listenTo(this.getContainingGroup(), "change:pseudoIdea", function(currentIdea) {
+        //console.log("Pseudo-idea listen hack fired on ideaPanel");
+        if (!this.isViewDestroyed()) {
+          that.setIdeaModel(currentIdea);
+        }
+      }
+      );
 
       this.listenTo(Assembl.vent, 'DEPRECATEDideaPanel:showSegment', function(segment) {
-        that.showSegment(segment);
+        if (!this.isViewDestroyed()) {
+          that.showSegment(segment);
+        }
       });
 
       if (this.model) {
@@ -451,7 +461,7 @@ var IdeaPanel = AssemblPanel.extend({
         this.focusShortTitle = false;
       }
 
-      //console.log("setIdeaModel called with", idea.id, reason);
+      //console.log("setIdeaModel called with", idea, reason);
       if (idea !== this.model) {
         if (this.model !== null) {
           this.stopListening(this.model);
@@ -475,12 +485,14 @@ var IdeaPanel = AssemblPanel.extend({
         if (this.model) {
           //this.resetView();
           //console.log("setIdeaModel:  we have a model ")
-          this.template = '#tmpl-loader';
-          if (this.isViewRenderedAndNotYetDestroyed) {
+          if (!this.isViewDestroyed()) {
             this.panelWrapper.unminimizePanel();
+            this.template = '#tmpl-loader';
             if (!this.model.id) {
               //console.log("setIdeaModel:  we have a model, but no id ")
-              this.render();
+              if (this.isViewRenderedAndNotYetDestroyed()) {
+                this.render();
+              }
 
               this.listenTo(this.model, 'acquiredId', function(m) {
                 // model has acquired an ID. Reset everything.
@@ -497,15 +509,19 @@ var IdeaPanel = AssemblPanel.extend({
             }
           }
         } 
-        else {
-          //TODO: More sophisticated behaviour here, depending
-          //on if the panel was opened by selection, or by something else.
-          //If we don't call render here, the panel will not refresh if we delete an idea.
-          if (this.isViewRenderedAndNotYetDestroyed) {
-            this.template = '#tmpl-ideaPanel';
-            this.panelWrapper.minimizePanel();
-            this.render();
-          }
+      }
+
+      if (idea === null) {
+        //console.log("setIdeaModel:  we have NO model ")
+        //TODO: More sophisticated behaviour here, depending
+        //on if the panel was opened by selection, or by something else.
+        //If we don't call render here, the panel will not refresh if we delete an idea.
+        if (!this.isViewDestroyed()) {
+          this.template = '#tmpl-ideaPanel';
+          this.panelWrapper.minimizePanel();
+        }
+        if (this.isViewRenderedAndNotYetDestroyed()) {
+          this.render();
         }
       }
     },
