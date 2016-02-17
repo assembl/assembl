@@ -5,6 +5,9 @@ var Backbone = require('../shims/backbone.js'),
 
 // We do not use Base.Model.extend(), because we want to keep Backbone's default behaviour with model urls
 var DiscussionPreferenceModel = Backbone.Model.extend({
+  constructor: function DiscussionPreferenceModel() {
+    Backbone.Model.apply(this, arguments);
+  },
   urlRoot: Ctx.getApiV2DiscussionUrl('settings')
 });
 

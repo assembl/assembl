@@ -6,6 +6,10 @@ var Base = require('./base.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var roleModel = Base.Model.extend({
+  constructor: function roleModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/local_roles"),
 
   defaults: {
@@ -22,18 +26,21 @@ var roleModel = Base.Model.extend({
     /**
      * check typeof variable
      * */
-     
   }
 
 });
 
 var roleCollection = Base.Collection.extend({
+  constructor: function roleCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   url: Ctx.getApiV2DiscussionUrl("/all_users/current/local_roles"),
   model: roleModel,
-  
+
 
   /** This method needs to change once subscription has it's own table 
-   * 
+   *
    */
   isUserSubscribedToDiscussion: function() {
     //console.log("isUserSubscribedToDiscussion returning", this.hasRole(Roles.PARTICIPANT))

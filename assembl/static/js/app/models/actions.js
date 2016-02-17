@@ -15,6 +15,10 @@ var actionModel = Base.Model.extend({
     '@view': null
   },
 
+  constructor: function actionModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   validate: function(attrs, options) {
     /**
      * check typeof variable
@@ -26,7 +30,10 @@ var actionModel = Base.Model.extend({
 
 var actionCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl("/all_users/current/actions"),
-  model: actionModel
+  model: actionModel,
+  constructor: function actionCollection() {
+    Base.Collection.apply(this, arguments);
+  },
 });
 
 module.exports = {

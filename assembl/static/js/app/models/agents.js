@@ -43,6 +43,10 @@ var AgentModel = Base.Model.extend({
     '@view': null
   },
 
+  constructor: function AgentModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   /**
    * The list with all user's permissions
    * This is usefull only for the logged user.
@@ -176,6 +180,10 @@ var AgentModel = Base.Model.extend({
  * @class UserCollection
  */
 var AgentCollection = Base.Collection.extend({
+  constructor: function AgentCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   /**
    * @type {String}
    */

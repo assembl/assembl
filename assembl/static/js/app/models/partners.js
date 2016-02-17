@@ -9,6 +9,9 @@ var $ = require('../shims/jquery.js'),
  * @class PartnerOrganizationModel
  */
 var PartnerOrganizationModel = Base.Model.extend({
+  constructor: function PartnerOrganizationModel() {
+    Base.Model.apply(this, arguments);
+  },
 
   /**
    * @type {String}
@@ -19,7 +22,7 @@ var PartnerOrganizationModel = Base.Model.extend({
    * Defaults
    * @type {Object}
    */
-   
+
   defaults: {
     name: '',
     description: '',
@@ -40,6 +43,10 @@ var PartnerOrganizationModel = Base.Model.extend({
  * @class PartnerOrganizationCollection
  */
 var PartnerOrganizationCollection = Base.Collection.extend({
+  constructor: function PartnerOrganizationCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   /**
    * @type {String}
    */

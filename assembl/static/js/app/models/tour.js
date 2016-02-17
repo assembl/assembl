@@ -5,6 +5,10 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
 var tourModel = Base.Model.extend({
+  constructor: function tourModel() {
+    Base.Model.apply(this, arguments);
+  },
+
     urlRoot: Ctx.getApiV2DiscussionUrl('user_ns_kv/tour_seen'),
     defaults: {
         on_start: false,

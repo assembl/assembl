@@ -28,6 +28,11 @@ var discussionModel = Base.Model.extend({
     'show_help_in_debate_section': true,
     posts: []
   },
+
+  constructor: function discussionModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   validate: function(attrs, options) {
     /**
      * check typeof variable
@@ -96,7 +101,10 @@ var discussionModel = Base.Model.extend({
 
 var discussionCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl(),
-  model: discussionModel
+  model: discussionModel,
+  constructor: function discussionCollection() {
+    Base.Collection.apply(this, arguments);
+  }
 });
 
 module.exports = {

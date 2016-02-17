@@ -11,6 +11,10 @@ var $ = require('../shims/jquery.js'),
  * Represents a file or document (a remote url or a blob)
  */
 var DocumentModel = Base.Model.extend({
+  constructor: function DocumentModel() {
+    Base.Model.apply(this, arguments);
+  },
+
 
   /**
    * @type {String}
@@ -39,6 +43,9 @@ var DocumentModel = Base.Model.extend({
  * @class PartnerOrganizationCollection
  */
 var DocumentCollection = Base.Collection.extend({
+  constructor: function DocumentCollection() {
+    Base.Collection.apply(this, arguments);
+  },
   /**
    * @type {String}
    */

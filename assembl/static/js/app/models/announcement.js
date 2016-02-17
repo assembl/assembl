@@ -30,6 +30,10 @@ var AnnouncementModel = Base.Model.extend({
     "should_propagate_down": undefined
   },
 
+  constructor: function AnnouncementModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   initialize: function(options) {
     this.on("invalid", function(model, error) {
       console.log(model.id + " " + error);
@@ -72,6 +76,10 @@ var AnnouncementModel = Base.Model.extend({
  * @class PartnerOrganizationCollection
  */
 var AnnouncementCollection = Base.Collection.extend({
+  constructor: function AnnouncementCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   /**
    * @type {String}
    */

@@ -13,6 +13,9 @@ var _ = require('../shims/underscore.js'),
  * @class SegmentModel
  */
 var SegmentModel = Base.Model.extend({
+  constructor: function SegmentModel() {
+    Base.Model.apply(this, arguments);
+  },
 
   /**
    * @init
@@ -221,6 +224,9 @@ var SegmentModel = Base.Model.extend({
  * @class SegmentColleciton
  */
 var SegmentCollection = Base.Collection.extend({
+  constructor: function SegmentCollection() {
+    Base.Collection.apply(this, arguments);
+  },
 
   /**
    * @type {String}

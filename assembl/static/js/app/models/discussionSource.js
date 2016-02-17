@@ -5,6 +5,10 @@ var Base = require('./base.js'),
     $ = require('../shims/jquery.js');
 
 var sourceModel = Base.Model.extend({
+  constructor: function sourceModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   urlRoot: Ctx.getApiV2DiscussionUrl() + 'sources',
   defaults: {
     'name': '',
@@ -36,6 +40,10 @@ var sourceModel = Base.Model.extend({
 });
 
 var sourceCollection = Base.Collection.extend({
+  constructor: function sourceCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   url: Ctx.getApiV2DiscussionUrl() + 'sources',
   model: sourceModel
 });

@@ -4,6 +4,10 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
 var notificationsSubscriptionModel = Base.Model.extend({
+  constructor: function notificationsSubscriptionModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   defaults: {
     '@id': null,
     '@type': null,
@@ -27,6 +31,10 @@ var notificationsSubscriptionModel = Base.Model.extend({
 });
 
 var notificationsSubscriptionCollection = Base.Collection.extend({
+  constructor: function notificationsSubscriptionCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   model: notificationsSubscriptionModel,
 
   /**

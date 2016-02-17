@@ -7,6 +7,10 @@ var Base = require('./base.js'),
 
 
 var SynthesisIdeaCollection = Idea.Collection.extend({
+  constructor: function SynthesisIdeaCollection() {
+    Idea.Collection.apply(this, arguments);
+  },
+
   initialize: function(models, options) {
     var synthesis = options.synthesis,
         id = synthesis.getNumericId();
@@ -21,6 +25,10 @@ var SynthesisIdeaCollection = Idea.Collection.extend({
  * @class SynthesisModel
  */
 var SynthesisModel = Base.Model.extend({
+  constructor: function SynthesisModel() {
+    Base.Model.apply(this, arguments);
+  },
+
 
   /**
    * @init
@@ -76,6 +84,10 @@ var SynthesisModel = Base.Model.extend({
  * @class IdeaColleciton
  */
 var SynthesisCollection = Base.Collection.extend({
+  constructor: function SynthesisCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   /**
    * Url
    * @type {String}

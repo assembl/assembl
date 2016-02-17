@@ -345,6 +345,10 @@ var BaseCollection = Backbone.Collection.extend({
  * So add/remove should not create/delete object, but relation.
  */
 var RelationsCollection = BaseCollection.extend({
+  constructor: function RelationsCollection() {
+    BaseCollection.apply(this, arguments);
+  },
+
   // Add a model, or list of models to the set.
   add: function(models, options) {
     models = Backbone.Collection.prototype.add.apply(this, arguments);

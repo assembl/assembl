@@ -12,6 +12,10 @@ var _ = require('../shims/underscore.js'),
  * @class IdeaModel
  */
 var IdeaModel = Base.Model.extend({
+  constructor: function IdeaModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   /**
    * @init
    */
@@ -442,6 +446,10 @@ var IdeaModel = Base.Model.extend({
  * @class IdeaColleciton
  */
 var IdeaCollection = Base.Collection.extend({
+  constructor: function IdeaCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   /**
    * Url
    * @type {String}

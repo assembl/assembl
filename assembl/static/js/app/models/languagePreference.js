@@ -21,6 +21,9 @@ var clean = function(input){
 };
 
 var LanguagePreferenceModel = Base.Model.extend({
+  constructor: function LanguagePreferenceModel() {
+    Base.Model.apply(this, arguments);
+  },
     //The server should also send the string of the locales.
     //locale_code, translate_to_name
     defaults: {
@@ -53,6 +56,9 @@ var LanguagePreferenceModel = Base.Model.extend({
  * Language Preferences of the user; there is a privacy setting which will only show an array of user preferences that are bound to the user
  */
 var LanguagePreferenceCollection = Base.Collection.extend({
+  constructor: function LanguagePreferenceCollection() {
+    Base.Collection.apply(this, arguments);
+  },
     url: Ctx.getApiV2DiscussionUrl("/all_users/current/language_preference"),
     model: LanguagePreferenceModel,
     
@@ -146,6 +152,10 @@ var LanguagePreferenceCollection = Base.Collection.extend({
 
 
 var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.extend({
+  constructor: function DisconnectedUserLanguagePreferenceCollection() {
+    LanguagePreferenceCollection.apply(this, arguments);
+  },
+
 
     getExplicitLanguages: function(){
         return [];

@@ -8,6 +8,9 @@ var Base = require('./base.js'),
 
 //ContentSource + PostSource
 var Source = Base.Model.extend({
+   constructor: function Source() {
+    Base.Model.apply(this, arguments);
+  },
   urlRoot: Ctx.getApiV2DiscussionUrl('sources'),
   localizedName: i18n.gettext("Abstract content source"),
   defaults: {
@@ -56,6 +59,9 @@ var Source = Base.Model.extend({
 });
 
 var IMAPMailboxSource = Source.extend({
+   constructor: function IMAPMailboxSource() {
+    Source.apply(this, arguments);
+  },
   localizedName: i18n.gettext("IMAP mailbox"),
   defaults: function() {
     return _.extend(Source.prototype.defaults, {
@@ -71,6 +77,9 @@ var IMAPMailboxSource = Source.extend({
 });
 
 var MailingListSource = IMAPMailboxSource.extend({
+   constructor: function MailingListSource() {
+    IMAPMailboxSource.apply(this, arguments);
+  },
   localizedName: i18n.gettext("Mailing list"),
   defaults: function() {
     return _.extend(IMAPMailboxSource.prototype.defaults(), {
@@ -80,6 +89,9 @@ var MailingListSource = IMAPMailboxSource.extend({
 });
 
 var FacebookSource = Source.extend({
+   constructor: function FacebookSource() {
+    Source.apply(this, arguments);
+  },
   //An Abstract Class. Use children only!
   defaults: function() {
     return _.extend(Source.prototype.defaults, {
@@ -93,6 +105,9 @@ var FacebookSource = Source.extend({
 });
 
 var FacebookSinglePostSource = FacebookSource.extend({
+   constructor: function FacebookSinglePostSource() {
+    FacebookSource.apply(this, arguments);
+  },
   localizedName: i18n.gettext("Comments to a given facebook post (by URL)"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
@@ -102,6 +117,9 @@ var FacebookSinglePostSource = FacebookSource.extend({
 });
 
 var FacebookGroupSource = FacebookSource.extend({
+   constructor: function FacebookGroupSource() {
+    FacebookSource.apply(this, arguments);
+  },
   localizedName: i18n.gettext("Posts from a Facebook group (by URL)"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
@@ -111,6 +129,9 @@ var FacebookGroupSource = FacebookSource.extend({
 });
 
 var FacebookGroupSourceFromUser = FacebookSource.extend({
+   constructor: function FacebookGroupSourceFromUser() {
+    FacebookSource.apply(this, arguments);
+  },
   localizedName: i18n.gettext("Posts from a Facebook group to which you're subscribed"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
@@ -120,6 +141,9 @@ var FacebookGroupSourceFromUser = FacebookSource.extend({
 });
 
 var FacebookPagePostsSource = FacebookSource.extend({
+   constructor: function FacebookPagePostsSource() {
+    FacebookSource.apply(this, arguments);
+  },
   localizedName: i18n.gettext("Posts from a Facebook page to which you're subscribed"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
@@ -129,6 +153,9 @@ var FacebookPagePostsSource = FacebookSource.extend({
 });
 
 var FacebookPageFeedSource = FacebookSource.extend({
+   constructor: function FacebookPageFeedSource() {
+    FacebookSource.apply(this, arguments);
+  },
   localizedName: i18n.gettext("Posts from users on a Facebook page to which you're subscribed"),
   defaults: function() {
     return _.extend(FacebookSource.prototype.defaults(), {
@@ -138,6 +165,10 @@ var FacebookPageFeedSource = FacebookSource.extend({
 });
 
 var ContentSourceId = Base.Model.extend({
+  constructor: function ContentSourceId() {
+    Base.Model.apply(this, arguments);
+  },
+
   urlRoot: Ctx.getApiV2Url('ContentSourceIDs'),
   defaults: {
     'source_id': '', //Source.id
@@ -171,6 +202,9 @@ function getSourceClassByType(type) {
   }
 
 var sourceCollection = Base.Collection.extend({
+  constructor: function sourceCollection() {
+    Base.Collection.apply(this, arguments);
+  },
   url: Ctx.getApiV2DiscussionUrl() + 'sources',
 
   model: function(attrs, options) {

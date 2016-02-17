@@ -27,6 +27,10 @@ function localeCommonLength(locale1, locale2) {
  * @class LangStringEntry
  */
 var LangStringEntry = Base.Model.extend({
+  constructor: function LangStringEntry() {
+    Base.Model.apply(this, arguments);
+  },
+
   /**
    * Defaults
    */
@@ -65,6 +69,9 @@ var LangStringEntry = Base.Model.extend({
  * @class LangStringEntry
  */
 var LangStringEntryCollection = Base.Collection.extend({
+  constructor: function LangStringEntryCollection() {
+    Base.Collection.apply(this, arguments);
+  },
   // Should I use the subordinate api point? I'd need the langstring url
   urlRoot: Ctx.getApiV2DiscussionUrl("LangStringEntry"),
   model: LangStringEntry,
@@ -78,6 +85,9 @@ var LangStringEntryCollection = Base.Collection.extend({
  * @class LangString
  */
 var LangString = Base.Model.extend({
+  constructor: function LangString() {
+    Base.Model.apply(this, arguments);
+  },
   parse: function(rawModel, options) {
     rawModel.entries = new LangStringEntryCollection(rawModel.entries, {parse: true});
     return rawModel;
@@ -210,6 +220,9 @@ var LangString = Base.Model.extend({
 });
 
 var LangStringCollection = Base.Collection.extend({
+  constructor: function LangStringCollection() {
+    Base.Collection.apply(this, arguments);
+  },
   parse: function(rawModel, options) {
     rawModel.entries = new LangStringEntryCollection(rawModel.entries, {
         parse: true,

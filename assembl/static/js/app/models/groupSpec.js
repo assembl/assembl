@@ -12,6 +12,9 @@ var Base = require('./base.js'),
  * added, the matching views (groupContainerView) will be instanciated
  */
 var GroupSpecModel = Base.Model.extend({
+  constructor: function GroupSpecModel() {
+    Base.Model.apply(this, arguments);
+  },
 
   defaults: function() {
     return {
@@ -159,6 +162,10 @@ var GroupSpecModel = Base.Model.extend({
 });
 
 var GroupSpecs = Base.Collection.extend({
+  constructor: function GroupSpecs() {
+    Base.Collection.apply(this, arguments);
+  },
+
   model: GroupSpecModel,
 
   validate: function() {

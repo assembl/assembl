@@ -9,6 +9,10 @@ var _ = require('../shims/underscore.js'),
     Ctx = require("../common/context.js");
 
 var WidgetModel = Base.Model.extend({
+  constructor: function WidgetModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   urlRoot: Ctx.getApiV2DiscussionUrl("/widgets"),
 
   defaults: {
@@ -139,6 +143,10 @@ var WidgetModel = Base.Model.extend({
 });
 
 var VotingWidgetModel = WidgetModel.extend({
+  constructor: function VotingWidgetModel() {
+    WidgetModel.apply(this, arguments);
+  },
+
   baseUri: "/static/widget/vote/",
   defaults: {
     '@type': 'MultiCriterionVotingWidget'
@@ -343,6 +351,9 @@ var VotingWidgetModel = WidgetModel.extend({
 });
 
 var CreativitySessionWidgetModel = WidgetModel.extend({
+  constructor: function CreativitySessionWidgetModel() {
+    WidgetModel.apply(this, arguments);
+  },
   baseUri: "/static/widget/session/",
   defaults: {
     "@type": "CreativitySessionWidget",
@@ -484,6 +495,9 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
 });
 
 var InspirationWidgetModel = WidgetModel.extend({
+  constructor: function InspirationWidgetModel() {
+    WidgetModel.apply(this, arguments);
+  },
   baseUri: "/static/widget/creativity/",
   defaults: {
     '@type': 'InspirationWidget'
@@ -569,6 +583,9 @@ var globalWidgetClassCollection = new Base.Collection([
   ]);
 
 var WidgetCollection = Base.Collection.extend({
+  constructor: function WidgetCollection() {
+    Base.Collection.apply(this, arguments);
+  },
   url: Ctx.getApiV2DiscussionUrl("/widgets"),
   model: function(attrs, options) {
     switch (attrs["@type"]) {
@@ -633,6 +650,9 @@ var WidgetCollection = Base.Collection.extend({
 
 
 var ActiveWidgetCollection = WidgetCollection.extend({
+  constructor: function ActiveWidgetCollection() {
+    WidgetCollection.apply(this, arguments);
+  },
   url: Ctx.getApiV2DiscussionUrl("/active_widgets")
 });
 
@@ -643,6 +663,10 @@ var ActiveWidgetCollection = WidgetCollection.extend({
  * A subset of the widgets relevant to a widget context
  */
 var WidgetSubset = Backbone.Subset.extend({
+  constructor: function WidgetSubset() {
+    Backbone.Subset.apply(this, arguments);
+  },
+
   beforeInitialize: function(models, options) {
     this.context = options.context;
     this.idea = options.idea;

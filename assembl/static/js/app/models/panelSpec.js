@@ -10,6 +10,10 @@ var Base = require('./base.js'),
  * the matching view (panelWrapper) will be instanciated
  */
 var PanelSpecModel = Base.Model.extend({
+  constructor: function PanelSpecModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   defaults: {
     type: '',
     hidden: false,
@@ -50,6 +54,10 @@ var PanelSpecModel = Base.Model.extend({
 });
 
 var PanelSpecs = Base.Collection.extend({
+  constructor: function PanelSpecs() {
+    Base.Collection.apply(this, arguments);
+  },
+
   model: PanelSpecModel,
 
   validate: function(attributes, options) {

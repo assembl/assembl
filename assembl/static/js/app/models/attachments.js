@@ -36,6 +36,9 @@ var attachmentPurposeTypes = {
  * or eventually local document attached to it.
  */
 var AttachmentModel = Base.Model.extend({
+  constructor: function AttachmentModel() {
+    Base.Model.apply(this, arguments);
+  },
 
   /**
    * @type {String}
@@ -126,6 +129,10 @@ var AttachmentModel = Base.Model.extend({
  * @class AttachmentCollection
  */
 var AttachmentCollection = Base.Collection.extend({
+  constructor: function AttachmentCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+
   /**
    * @type {String}
    */

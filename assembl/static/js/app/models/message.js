@@ -14,6 +14,9 @@ var _ = require('../shims/underscore.js'),
  * @class MessageModel
  */
 var MessageModel = Base.Model.extend({
+  constructor: function MessageModel() {
+    Base.Model.apply(this, arguments);
+  },
   /**
    * The url
    * @type {String}
@@ -298,6 +301,9 @@ var MessageModel = Base.Model.extend({
 });
 
 var MessageCollection = Base.Collection.extend({
+  constructor: function MessageCollection() {
+    Base.Collection.apply(this, arguments);
+  },
   /**
    * The url
    * @type {String}

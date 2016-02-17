@@ -10,6 +10,10 @@ var Base = require('./base.js'),
  * navigation, minimised states, etc.)
  */
 var GroupStateModel = Base.Model.extend({
+  constructor: function GroupStateModel() {
+    Base.Model.apply(this, arguments);
+  },
+
   defaults: {
     currentIdea: null
   },
@@ -39,6 +43,10 @@ var GroupStateModel = Base.Model.extend({
 });
 
 var GroupStates = Base.Collection.extend({
+  constructor: function GroupStates() {
+    Base.Collection.apply(this, arguments);
+  },
+
   model: GroupStateModel,
 
   validate: function() {

@@ -38,6 +38,9 @@ IdeaContentLinkTypeRank.prototype = {
 
 
 var Model = Base.Model.extend({
+  constructor: function IdeaContentLinkModel() {
+    Base.Model.apply(this, arguments);
+  },
 
     urlRoot: Ctx.getApiV2Url(Types.IDEA_CONTENT_LINK),
 
@@ -135,6 +138,9 @@ var Model = Base.Model.extend({
 
 
 var Collection = Base.Collection.extend({
+  constructor: function IdeaContentLinkCollection() {
+    Base.Collection.apply(this, arguments);
+  },
 
     //This URL currently does not exist. 2016-02-02 
     url: Ctx.getApiV2DiscussionUrl('idea_content_link'),

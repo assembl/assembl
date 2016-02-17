@@ -44,7 +44,11 @@ tokenTimeManager.prototype = {
 };
 
 var FacebookAccessToken = Base.Model.extend({
-    urlRoot: function(){
+   constructor: function FacebookAccessToken() {
+    Base.Model.apply(this, arguments);
+  },
+
+   urlRoot: function(){
         var fbId = Ctx.getCurrentUserFacebookAccountId();
         if (!fbId) {
             throw new Error("There is no Facebook Account for this user");
@@ -96,6 +100,9 @@ var FacebookAccessToken = Base.Model.extend({
 });
 
 var FacebookAccessTokens = Base.Collection.extend({
+   constructor: function FacebookAccessTokens() {
+    Base.Collection.apply(this, arguments);
+  },
   //Things to add: Promise function to get the agent model
   //represented by this model.
   model: FacebookAccessToken,

@@ -24,6 +24,11 @@ var Account = Base.Model.extend({
       'email': null,
       '@id': null
     },
+
+  constructor: function Account() {
+    Base.Model.apply(this, arguments);
+  },
+
   validate: function(attrs, options) {
     /**
      * check typeof variable
@@ -40,6 +45,10 @@ var Account = Base.Model.extend({
 var Accounts = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
   model: Account,
+
+  constructor: function Accounts() {
+    Base.Collection.apply(this, arguments);
+  },
 
   hasFacebookAccount: function() {
       var tmp = this.find(function(model) {
