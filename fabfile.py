@@ -293,6 +293,16 @@ def app_db_update():
     venvcmd('alembic -c %s upgrade head' % (env.ini_file))
 
 
+@task
+def reset_semantic_mappings():
+    """
+    Reset semantic mappings after a database restore
+    """
+    execute(database_start)
+    print(cyan('Resetting semantic mappings'))
+    venvcmd('python -c 'import assembl.semantic ; assembl.semantic.reset_semantic_mapping()')
+
+
 def app_db_install():
     """
     Install db the first time and fake migrations
