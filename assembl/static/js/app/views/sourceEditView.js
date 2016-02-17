@@ -11,6 +11,10 @@ var Marionette = require('../shims/marionette.js'),
  * view.
  */
 module.exports = Marionette.ItemView.extend({
+  constructor: function exports() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
     ui: {
         submit: '.js_saveSource',
     },

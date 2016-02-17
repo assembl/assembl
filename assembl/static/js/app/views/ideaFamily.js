@@ -5,6 +5,10 @@ var Backbone = require('../shims/backbone.js'),
     Ctx = require('../common/context.js');
 
 var IdeaFamilyView = Backbone.View.extend({
+  constructor: function IdeaFamilyView() {
+    Backbone.View.apply(this, arguments);
+  },
+
   /**
    * Tag name
    * @type {String}

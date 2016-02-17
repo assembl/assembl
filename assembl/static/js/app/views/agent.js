@@ -11,6 +11,9 @@ var Marionette = require('../shims/marionette.js'),
     availableFilters = require('./postFilters.js');
 
 var AgentView = Marionette.ItemView.extend({
+  constructor: function AgentView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
   ui: {
     avatar: '.js_agentAvatar',
     name: '.js_agentName'
@@ -42,6 +45,10 @@ var AgentView = Marionette.ItemView.extend({
 });
 
 var AgentAvatarView = AgentView.extend({
+  constructor: function AgentAvatarView() {
+    AgentView.apply(this, arguments);
+  },
+
   template: '#tmpl-agentAvatar',
   className: 'agentAvatar',
   avatarSize: null,
@@ -62,6 +69,10 @@ var AgentAvatarView = AgentView.extend({
 });
 
 var AgentNameView = AgentView.extend({
+  constructor: function AgentNameView() {
+    AgentView.apply(this, arguments);
+  },
+
   template: '#tmpl-agentName',
   className: 'agentName'
 });

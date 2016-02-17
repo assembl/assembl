@@ -23,6 +23,10 @@ var Marionette = require('../shims/marionette.js'),
  * Abstract Class of Idea Classification Views
  */
 var IdeaClassificationView = Marionette.LayoutView.extend({
+  constructor: function IdeaClassificationView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: false,
   
   ui: {
@@ -158,6 +162,10 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
 });
 
 var DirectMessageView = IdeaClassificationView.extend({
+  constructor: function DirectMessageView() {
+    IdeaClassificationView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
 
   onEndInitialization: function(){
@@ -177,6 +185,10 @@ var DirectMessageView = IdeaClassificationView.extend({
 });
 
 var DirectExtractView = IdeaClassificationView.extend({
+  constructor: function DirectExtractView() {
+    IdeaClassificationView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
 
   onEndInitialization: function(){
@@ -198,6 +210,10 @@ var DirectExtractView = IdeaClassificationView.extend({
 });
 
 var IndirectMessageView = IdeaClassificationView.extend({
+  constructor: function IndirectMessageView() {
+    IdeaClassificationView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
 
   onEndInitialization: function(){
@@ -217,6 +233,10 @@ var IndirectMessageView = IdeaClassificationView.extend({
 });
 
 var IndirectExtractView = IdeaClassificationView.extend({
+  constructor: function IndirectExtractView() {
+    IdeaClassificationView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
 
   onEndInitialization: function(){
@@ -239,6 +259,10 @@ var IndirectExtractView = IdeaClassificationView.extend({
 
 
 var ErrorView = Marionette.ItemView.extend({
+  constructor: function ErrorView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: _.template("<div><%= i18n.gettext(\"Something went wrong in getting the contents of this idea. We are looking into it. Thank you for your patience.\") %></div>"),
 
   initialize: function(options){
@@ -253,6 +277,10 @@ var ErrorView = Marionette.ItemView.extend({
 });
 
 var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
+  constructor: function IdeaShowingMessageCollectionView() {
+    Marionette.CompositeView.apply(this, arguments);
+  },
+
   
   childViewContainer: '.items',
   
@@ -308,6 +336,10 @@ var IdeaShowingMessageCollectionView = Marionette.CompositeView.extend({
 
 
 var IdeasShowingMessageModal = Backbone.Modal.extend({
+  constructor: function IdeasShowingMessageModal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
 
   template: '#tmpl-ideaClassification_modal',
   className: 'modal-ideas-showing-message popin-wrapper',

@@ -11,6 +11,10 @@ var Backbone = require('../shims/backbone.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var IdeaView = Backbone.View.extend({
+  constructor: function IdeaView() {
+    Backbone.View.apply(this, arguments);
+  },
+
   /**
    * Tag name
    * @type {String}

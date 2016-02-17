@@ -6,6 +6,10 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js');
 
 var TrueFalseField = Marionette.ItemView.extend({
+  constructor: function TrueFalseField() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-trueFalseField',
   attributes: {
     "class": "TrueFalseField"

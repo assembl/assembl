@@ -19,6 +19,10 @@ var Marionette = require('../shims/marionette.js'),
     openIdeaInModal = require('./modals/ideaInModal.js');
 
 var IdeaInSynthesisView = Marionette.ItemView.extend({
+  constructor: function IdeaInSynthesisView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   synthesis: null,
   /**
    * The template

@@ -35,6 +35,10 @@ var MIN_TEXT_TO_TOOLTIP = 5,
  * Classification view that is shown in the underneath each message
  */
 var IdeaClassificationNameListView = Marionette.ItemView.extend({
+  constructor: function IdeaClassificationNameListView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
 
   ui: {
@@ -176,6 +180,10 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
  * @class views.MessageView
  */
 var MessageView = Marionette.LayoutView.extend({
+  constructor: function MessageView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   availableMessageViewStyles: Ctx.AVAILABLE_MESSAGE_VIEW_STYLES,
   /**
@@ -703,6 +711,10 @@ var MessageView = Marionette.LayoutView.extend({
         this.messageListView.requestAnnotatorRefresh();
 
         var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
+  constructor: function AttachmentEditableCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
           childView: AttachmentViews.AttachmentView
         });
 
@@ -976,6 +988,10 @@ var MessageView = Marionette.LayoutView.extend({
         currentIdea != null && currentIdea.id == annotation.idIdea))
       return;
     var Modal = Backbone.Modal.extend({
+  constructor: function Modal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
       template: _.template($('#tmpl-showSegmentByAnnotation').html()),
       className: 'generic-modal popin-wrapper modal-showSegment',
       cancelEl: '.js_close',

@@ -11,6 +11,10 @@ var Backbone = require('../shims/backbone.js'),
 
 
 var messageModerationOptions = Marionette.LayoutView.extend({
+  constructor: function messageModerationOptions() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-messageModerationOptions',
   className: 'messageModerationOptions',
   initialize: function(options) {

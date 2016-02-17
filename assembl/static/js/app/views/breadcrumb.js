@@ -13,6 +13,10 @@ var Marionette = require('../shims/marionette.js'),
  * @param Function  options.serializerFunc  The serializer function taking the passed model and returning a template string
  */
 var BreadcrumbItemView = Marionette.ItemView.extend({
+  constructor: function BreadcrumbItemView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
 // from http://jsfiddle.net/zaSvT/
   
   initialize: function(options){
@@ -43,6 +47,10 @@ var BreadcrumbItemView = Marionette.ItemView.extend({
 });
 
 var BreadcrumbCollectionView = Marionette.CollectionView.extend({
+  constructor: function BreadcrumbCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   
   initialize: function(options){
     this.serializerFunc = options.serializerFunc || null;

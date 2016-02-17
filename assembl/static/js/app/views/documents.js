@@ -8,6 +8,10 @@ var Marionette = require('../shims/marionette.js'),
     Document = require('../models/documents.js');
 
 var DocumentView = Marionette.ItemView.extend({
+  constructor: function DocumentView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-fileEmbed',
 
   className: 'embeddedFile',

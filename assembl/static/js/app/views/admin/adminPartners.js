@@ -10,6 +10,10 @@ var Marionette = require('../../shims/marionette.js'),
     AdminNavigationMenu = require('./adminNavigationMenu.js');
 
 var Partners = Marionette.ItemView.extend({
+  constructor: function Partners() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-partnersInAdmin',
   className: 'gr',
   ui: {
@@ -41,6 +45,10 @@ var Partners = Marionette.ItemView.extend({
     var self = this;
 
     var Modal = Backbone.Modal.extend({
+  constructor: function Modal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
       template: _.template($('#tmpl-adminPartnerEditForm').html()),
       className: 'partner-modal popin-wrapper',
       cancelEl: '.close, .js_close',
@@ -89,6 +97,10 @@ var Partners = Marionette.ItemView.extend({
 });
 
 var PartnerList = Marionette.CollectionView.extend({
+  constructor: function PartnerList() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: Partners,
   collectionEvents: {
     'add sync':'render'
@@ -96,6 +108,10 @@ var PartnerList = Marionette.CollectionView.extend({
 });
 
 var adminPartners = Marionette.LayoutView.extend({
+  constructor: function adminPartners() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-adminPartners',
   className: 'admin-notifications',
   ui: {
@@ -149,6 +165,10 @@ var adminPartners = Marionette.LayoutView.extend({
     var self = this;
 
     var Modal = Backbone.Modal.extend({
+  constructor: function Modal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
       template: _.template($('#tmpl-adminPartnerForm').html()),
       className: 'partner-modal popin-wrapper',
       cancelEl: '.close, .js_close',

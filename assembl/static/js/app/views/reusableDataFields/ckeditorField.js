@@ -7,6 +7,10 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js');
 
 var cKEditorField = Marionette.ItemView.extend({
+  constructor: function cKEditorField() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-ckeditorField',
   /**
    * Ckeditor default configuration

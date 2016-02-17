@@ -6,6 +6,10 @@ var Assembl = require('../../app.js'),
     Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var AboutNavPanel = AssemblPanel.extend({
+  constructor: function AboutNavPanel() {
+    AssemblPanel.apply(this, arguments);
+  },
+
   template: '#tmpl-about',
   panelType: PanelSpecTypes.NAVIGATION_PANEL_ABOUT_SECTION,
   className: 'aboutNavPanel',

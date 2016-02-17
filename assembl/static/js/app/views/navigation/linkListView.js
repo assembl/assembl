@@ -8,6 +8,10 @@ var _ = require('../../shims/underscore.js'),
     Permissions = require('../../utils/permissions.js');
 
 var SimpleLinkView = Marionette.ItemView.extend({
+  constructor: function SimpleLinkView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-simpleLink',
   initialize: function(options) {
     this.groupContent = options.groupContent;
@@ -26,6 +30,10 @@ var SimpleLinkView = Marionette.ItemView.extend({
   }
 }),
 LinkListView = Marionette.CollectionView.extend({
+  constructor: function LinkListView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: SimpleLinkView,
   initialize: function(options) {
     this.collection = options.collection;

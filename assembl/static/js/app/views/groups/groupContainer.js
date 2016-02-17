@@ -11,6 +11,10 @@ var Marionette = require('../../shims/marionette.js'),
  * Normally referenced with Assembl.groupContainer
  */
 var groupContainer = Marionette.CollectionView.extend({
+  constructor: function groupContainer() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   className: 'groupsContainer',
   childView: GroupContent,
   group_borders_size: 0,

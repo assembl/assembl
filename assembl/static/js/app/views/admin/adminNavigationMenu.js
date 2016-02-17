@@ -6,6 +6,10 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js');
 
 var adminNavigationMenu = Marionette.LayoutView.extend({
+  constructor: function adminNavigationMenu() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-adminNavigationMenu',
   tagName: 'nav',
   className: 'sidebar-nav',

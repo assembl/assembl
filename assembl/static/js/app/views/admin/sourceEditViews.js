@@ -7,6 +7,10 @@ var Marionette = require('../../shims/marionette.js'),
 //This needs to become the emailSourceEditView
 
 var EmailSourceEditView = SourceViewBase.extend({
+  constructor: function EmailSourceEditView() {
+    SourceViewBase.apply(this, arguments);
+  },
+
   template: '#tmpl-emailSource',
 
   fetchValues: function(){

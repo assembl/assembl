@@ -71,6 +71,10 @@ var Backbone = require('../shims/backbone.js'),
  */
 
 var messageSend = Marionette.LayoutView.extend({
+  constructor: function messageSend() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-messageSend',
   className: 'messageSend',
   initialize: function(options) {
@@ -106,6 +110,10 @@ var messageSend = Marionette.LayoutView.extend({
     this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
 
     var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
+  constructor: function AttachmentEditableCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
       childView: AttachmentViews.AttachmentEditableView
     });
 

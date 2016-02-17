@@ -21,6 +21,10 @@ var Marionette = require('../shims/marionette.js'),
     AgentViews = require('./agent.js');
 
 var navBarLeft = Marionette.LayoutView.extend({
+  constructor: function navBarLeft() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-navBarLeft',
   className: 'navbar-left',
   initialize: function(options) {
@@ -82,6 +86,10 @@ var navBarLeft = Marionette.LayoutView.extend({
 });
 
 var navBarRight = Marionette.LayoutView.extend({
+  constructor: function navBarRight() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   className: 'navbar-right',
   initialize: function(options) {
@@ -194,6 +202,10 @@ var navBarRight = Marionette.LayoutView.extend({
 });
 
 var navBar = Marionette.LayoutView.extend({
+  constructor: function navBar() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-navBar',
   tagName: 'nav',
   className: 'navbar navbar-default',
@@ -279,6 +291,10 @@ var navBar = Marionette.LayoutView.extend({
               //if ( model.notificationsToShow && model.notificationsToShow.length ){
 
               var Modal = Backbone.Modal.extend({
+  constructor: function Modal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
                 template: modalTemplate,
                 className: modalClassName,
                 cancelEl: '.close, .js_close',

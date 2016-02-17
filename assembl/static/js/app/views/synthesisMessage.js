@@ -10,6 +10,9 @@ var Ctx = require('../common/context.js'),
  * @class views.MessageView
  */
 var SynthesisMessageView = MessageView.extend({
+  constructor: function SynthesisMessageView() {
+    MessageView.apply(this, arguments);
+  },
 
   /**
    * @init

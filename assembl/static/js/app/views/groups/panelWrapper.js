@@ -18,6 +18,10 @@ var Marionette = require('../../shims/marionette.js'),
  * (someview.panelWrapper
  */
 var PanelWrapper = Marionette.LayoutView.extend({
+  constructor: function PanelWrapper() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: "#tmpl-panelWrapper",
   regions: {
     contents: '.panelContents'

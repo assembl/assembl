@@ -17,6 +17,10 @@ var Marionette = require('../../shims/marionette.js'),
     WidgetLinks = require('../widgetLinks.js');
 
 var DefineGroupModal = Backbone.Modal.extend({
+  constructor: function DefineGroupModal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
     template: _.template($('#tmpl-create-group').html()),
     className: 'generic-modal popin-wrapper',
     cancelEl: '.close, .btn-cancel',

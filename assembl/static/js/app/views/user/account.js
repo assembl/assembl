@@ -10,6 +10,10 @@ var Marionette = require('../../shims/marionette.js'),
     Growl = require('../../utils/growl.js');
 
 var email = Marionette.ItemView.extend({
+  constructor: function email() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template:'#tmpl-associateAccount',
   className:'associate-email mbs',
   ui: {
@@ -45,12 +49,20 @@ var email = Marionette.ItemView.extend({
 });
 
 var emailList = Marionette.CompositeView.extend({
+  constructor: function emailList() {
+    Marionette.CompositeView.apply(this, arguments);
+  },
+
   template: '#tmpl-associateAccounts',
   childView: email,
   childViewContainer:'.controls'
 });
 
 var socialProvidersList = Marionette.ItemView.extend({
+  constructor: function socialProvidersList() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-socialProviders',
   initialize: function(options) {
     this.providers = options.providers;
@@ -123,6 +135,10 @@ var userAccount =  Marionette.ItemView.extend({
 });
 
 var account = Marionette.LayoutView.extend({
+  constructor: function account() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-userAccount',
   className: 'admin-account',
   regions: {

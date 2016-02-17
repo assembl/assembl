@@ -27,6 +27,10 @@ var FEATURED = 'featured',
     IN_SYNTHESIS = 'inNextSynthesis';
 
 var IdeaList = AssemblPanel.extend({
+  constructor: function IdeaList() {
+    AssemblPanel.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   panelType: PanelSpecTypes.TABLE_OF_IDEAS,
   className: 'ideaList',

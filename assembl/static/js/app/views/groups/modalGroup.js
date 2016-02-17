@@ -13,6 +13,10 @@ var Marionette = require('../../shims/marionette.js'),
     GroupContainer = require('../groups/groupContainer');
 
 var ModalGroupView = Backbone.Modal.extend({
+  constructor: function ModalGroupView() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
   template: _.template($('#tmpl-groupModal').html()),
 
   className: 'panelGroups-modal popin-wrapper',

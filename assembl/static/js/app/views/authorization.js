@@ -4,6 +4,10 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js');
 
 var authorization = Marionette.ItemView.extend({
+  constructor: function authorization() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-authorization',
   className: 'authorization',
   initialize: function(options) {

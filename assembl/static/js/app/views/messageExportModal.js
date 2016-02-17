@@ -7,6 +7,10 @@ var Backbone = require('../shims/backbone.js'),
     FacebookViews = require('./facebookViews.js');
 
 var Modal = Backbone.Modal.extend({
+  constructor: function Modal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   className: 'group-modal popin-wrapper',
   cancelEl: '.js_close',

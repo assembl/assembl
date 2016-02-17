@@ -5,6 +5,10 @@ var IdeaView = require('./ideaInIdeaList.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js');
 
 var AllMessagesInIdeaListView = IdeaView.extend({
+  constructor: function AllMessagesInIdeaListView() {
+    IdeaView.apply(this, arguments);
+  },
+
   /**
    * The template
    * @type {[type]}

@@ -6,6 +6,10 @@ var Assembl = require('../app.js'),
     IdeaView = require('./ideaInIdeaList.js');
 
 var OrphanMessagesInIdeaListView = IdeaView.extend({
+  constructor: function OrphanMessagesInIdeaListView() {
+    IdeaView.apply(this, arguments);
+  },
+
   /**
    * The template
    * @type {[type]}

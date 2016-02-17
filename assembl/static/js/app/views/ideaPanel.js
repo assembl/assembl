@@ -23,6 +23,10 @@ var Assembl = require('../app.js'),
     Promise = require('bluebird');
 
 var IdeaPanel = AssemblPanel.extend({
+  constructor: function IdeaPanel() {
+    AssemblPanel.apply(this, arguments);
+  },
+
   template: '#tmpl-ideaPanel',
   panelType: PanelSpecTypes.IDEA_PANEL,
   className: 'ideaPanel',
@@ -336,6 +340,10 @@ var IdeaPanel = AssemblPanel.extend({
       });
       //console.log(contributorsId);
       var ContributorAgentSubset = Backbone.Subset.extend({
+        constructor: function ContributorAgentSubset() {
+          Backbone.Subset.apply(this, arguments);
+        },
+
         name: 'ContributorAgentSubset',
         sieve: function(agent) {
           //console.log(agent.id, _.indexOf(contributorsId, agent.id), contributorsId);
@@ -350,6 +358,10 @@ var IdeaPanel = AssemblPanel.extend({
       
       //console.log(contributors);
       var avatarCollectionView = Marionette.CollectionView.extend({
+  constructor: function avatarCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
         childView: AgentViews.AgentAvatarView
       });
       var avatarsView = new avatarCollectionView({
@@ -827,6 +839,10 @@ var IdeaPanel = AssemblPanel.extend({
           function(allAnnouncementCollection) {
             // Filters on only this idea's announce (should be only one...)
             var AnnouncementIdeaSubset = Backbone.Subset.extend({
+              constructor: function AnnouncementIdeaSubset() {
+                Backbone.Subset.apply(this, arguments);
+              },
+
               beforeInitialize: function(models, options) {
                 this.idea = options.idea;
                 if (!this.idea) {

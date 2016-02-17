@@ -8,6 +8,10 @@ var Marionette = require('../../shims/marionette.js'),
     Roles = require('../../utils/roles.js');
 
 var userNavigationMenu = Marionette.LayoutView.extend({
+  constructor: function userNavigationMenu() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   tagName: 'nav',
   className: 'sidebar-nav',

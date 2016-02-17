@@ -52,6 +52,10 @@ var processConfirmLanguagePreferences = function(messageView){
 };
 
 var LanguageSelectionView = Marionette.ItemView.extend({
+  constructor: function LanguageSelectionView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
     template: '#tmpl-message_translation_question_selection',
 
     ui: {
@@ -146,6 +150,10 @@ var LanguageSelectionView = Marionette.ItemView.extend({
 });
 
 var TranslationView = Marionette.LayoutView.extend({
+  constructor: function TranslationView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
     template: '#tmpl-loader',
 
     ui: {

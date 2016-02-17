@@ -8,6 +8,10 @@ var Marionette = require('../../shims/marionette.js'),
     AdminNavigationMenu = require('./adminNavigationMenu.js');
 
 var AdminDiscussionSettings = Marionette.LayoutView.extend({
+  constructor: function AdminDiscussionSettings() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-adminDiscussionSettings',
   className: 'admin-settings',
   ui: {

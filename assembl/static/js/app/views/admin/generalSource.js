@@ -33,6 +33,10 @@ function getSourceEditView(model_type) {
 
 
 var ReadSource = Marionette.ItemView.extend({
+  constructor: function ReadSource() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
     template: '#tmpl-adminDiscussionSettingsGeneralSourceRead',
     ui: {
         manualStart: '.js_manualStart',
@@ -106,6 +110,10 @@ function getSourceDisplayView(model) {
 
 
 var SourceView = Marionette.LayoutView.extend({
+  constructor: function SourceView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-adminDiscussionSettingsGeneralSource',
   regions: {
     readOnly: '.source-read',
@@ -126,6 +134,10 @@ var SourceView = Marionette.LayoutView.extend({
 
 
 var CreateSource = Marionette.LayoutView.extend({
+  constructor: function CreateSource() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-DiscussionSettingsCreateSource',
   regions: {
     edit_form: ".js_editform"
@@ -179,6 +191,10 @@ var CreateSource = Marionette.LayoutView.extend({
 
 
 var DiscussionSourceList = Marionette.CollectionView.extend({
+  constructor: function DiscussionSourceList() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
     // getChildView: getSourceDisplayView
     childView: SourceView
 });

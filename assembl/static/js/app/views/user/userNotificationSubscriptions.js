@@ -19,6 +19,10 @@ var Marionette = require('../../shims/marionette.js'),
  * User notification
  * */
 var Notification = Marionette.ItemView.extend({
+  constructor: function Notification() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template:'#tmpl-userSubscriptions',
   tagName:'label',
   className:'checkbox dispb',
@@ -66,6 +70,10 @@ var Notification = Marionette.ItemView.extend({
 });
 
 var Notifications = Marionette.CollectionView.extend({
+  constructor: function Notifications() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: Notification,
   initialize: function(options) {
     this.collection = options.notificationsUser;
@@ -83,6 +91,10 @@ var Notifications = Marionette.CollectionView.extend({
  * Notification template
  * */
 var TemplateSubscription = Marionette.ItemView.extend({
+  constructor: function TemplateSubscription() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-templateSubscription',
   tagName:'label',
   className:'checkbox dispb',
@@ -142,6 +154,10 @@ var TemplateSubscription = Marionette.ItemView.extend({
 });
 
 var TemplateSubscriptions = Marionette.CollectionView.extend({
+  constructor: function TemplateSubscriptions() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: TemplateSubscription,
   initialize: function(options) {
     var addableGlobalSubscriptions = new Backbone.Collection();
@@ -179,6 +195,10 @@ var TemplateSubscriptions = Marionette.CollectionView.extend({
  *  Choose an email to notify user
  * */
 var NotificationByEmail = Marionette.ItemView.extend({
+  constructor: function NotificationByEmail() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-notificationByEmail',
   tagName: 'label',
   className: 'radio',
@@ -213,6 +233,10 @@ var NotificationByEmail = Marionette.ItemView.extend({
 });
 
 var NotificationByEmails = Marionette.CompositeView.extend({
+  constructor: function NotificationByEmails() {
+    Marionette.CompositeView.apply(this, arguments);
+  },
+
   template: '#tmpl-notificationByEmails',
   childView: NotificationByEmail,
   childViewContainer:'.controls'
@@ -222,6 +246,10 @@ var NotificationByEmails = Marionette.CompositeView.extend({
  * Subscripbe / Unsubscribe action
  * */
 var Subscriber = Marionette.ItemView.extend({
+  constructor: function Subscriber() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template:'#tmpl-userSubscriber',
   ui: {
     unSubscription: ".js_unSubscription",
@@ -286,6 +314,10 @@ var Subscriber = Marionette.ItemView.extend({
 });
 
 var userNotificationSubscriptions = Marionette.LayoutView.extend({
+  constructor: function userNotificationSubscriptions() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-userNotificationSubscriptions',
   className: 'admin-notifications',
   regions: {

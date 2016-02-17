@@ -6,6 +6,10 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js');
 
 var LoaderView = Marionette.ItemView.extend({
+  constructor: function LoaderView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
     
   onRender: function() {

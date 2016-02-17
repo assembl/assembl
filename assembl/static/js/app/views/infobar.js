@@ -11,6 +11,10 @@ var Marionette = require('../shims/marionette.js'),
 
 
 var InfobarItem = Marionette.LayoutView.extend({
+  constructor: function InfobarItem() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-infobar',
   className: 'content-infobar',
   events: {
@@ -43,6 +47,10 @@ var InfobarItem = Marionette.LayoutView.extend({
 });
 
 var Infobars = Marionette.CollectionView.extend({
+  constructor: function Infobars() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: InfobarItem,
   initialize: function(options) {
     this.childViewOptions = {

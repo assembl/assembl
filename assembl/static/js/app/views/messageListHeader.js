@@ -22,6 +22,10 @@ var DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX = "js_defaultMessageView-",
     MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX = "js_messageList-view-";
 
 var MessageListHeader = Marionette.ItemView.extend({
+  constructor: function MessageListHeader() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-messageListHeader',
   className: 'messageListHeaderItsMe',
   initialize: function(options) {

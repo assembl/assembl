@@ -10,6 +10,10 @@ var Marionette = require('../../shims/marionette.js'),
     AdminNavigationMenu = require('./adminNavigationMenu.js');
 
 var notifications = Marionette.LayoutView.extend({
+  constructor: function notifications() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-adminNotification',
   className: 'controls',
   ui: {
@@ -41,6 +45,10 @@ var notifications = Marionette.LayoutView.extend({
 });
 
 var notificationList = Marionette.CompositeView.extend({
+  constructor: function notificationList() {
+    Marionette.CompositeView.apply(this, arguments);
+  },
+
   template: '#tmpl-adminNotificationList',
   childView: notifications,
   childViewContainer: '.control-group',
@@ -48,6 +56,10 @@ var notificationList = Marionette.CompositeView.extend({
 });
 
 var defaultNotification = Marionette.ItemView.extend({
+  constructor: function defaultNotification() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-defaultNotification',
   ui: {
     autoSubscribeCheckbox: ".js_adminAutoSubscribe"
@@ -73,6 +85,10 @@ var defaultNotification = Marionette.ItemView.extend({
 });
 
 var adminNotificationSubscriptions = Marionette.LayoutView.extend({
+  constructor: function adminNotificationSubscriptions() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-adminNotificationSubscriptions',
   className: 'admin-notifications',
   regions: {

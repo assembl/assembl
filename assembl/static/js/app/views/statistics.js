@@ -12,6 +12,10 @@ var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird');
 
 var Statistics = Marionette.ItemView.extend({
+  constructor: function Statistics() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-statistics',
   initialize: function() {
     // this.computeStatistics(); // moved to onBeforeShow() because it can finish before the DOM is present and attached ( which can make the D3 lib crash while doing work involving transitions)

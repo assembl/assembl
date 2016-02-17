@@ -5,6 +5,10 @@ var Ctx = require('../common/context.js'),
     _ = require('../shims/underscore.js');
 
 var otherInIdeaList = IdeaView.extend({
+  constructor: function otherInIdeaList() {
+    IdeaView.apply(this, arguments);
+  },
+
   template: Ctx.loadTemplate('otherInIdeaList'),
   render: function() {
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);

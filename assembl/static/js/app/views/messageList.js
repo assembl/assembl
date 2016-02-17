@@ -41,6 +41,10 @@ var MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX = "js_messageList-view-",
  * @class views.MessageList
  */
 var MessageList = AssemblPanel.extend({
+  constructor: function MessageList() {
+    AssemblPanel.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   panelType: PanelSpecTypes.MESSAGE_LIST,
   className: 'panel messageList',

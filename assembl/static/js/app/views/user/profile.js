@@ -9,6 +9,10 @@ var Marionette = require('../../shims/marionette.js'),
     Growl = require('../../utils/growl.js');
 
 var profile = Marionette.LayoutView.extend({
+  constructor: function profile() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-userProfile',
   className: 'admin-profile',
   ui: {

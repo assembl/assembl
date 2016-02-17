@@ -15,6 +15,10 @@ var Marionette = require('../shims/marionette.js'),
  * @class views.MessageFamilyView
  */
 var MessageFamilyView = Marionette.ItemView.extend({
+  constructor: function MessageFamilyView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   /**
    * @type {String}

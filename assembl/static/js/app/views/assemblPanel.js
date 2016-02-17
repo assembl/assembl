@@ -8,6 +8,10 @@ var Marionette = require('../shims/marionette.js'),
  * @class AssemblPanel
  */
 var AssemblPanel = Marionette.LayoutView.extend({
+  constructor: function AssemblPanel() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: _.template(""),
   lockable: false,
   minimizeable: false,

@@ -18,6 +18,10 @@ var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird');
 
 var Partner = Marionette.ItemView.extend({
+  constructor: function Partner() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-partnerItem',
   className: 'gu gu-2of7 partnersItem mrl',
   serializeData: function() {
@@ -36,6 +40,10 @@ var Partner = Marionette.ItemView.extend({
 });
 
 var PartnerList = Marionette.CompositeView.extend({
+  constructor: function PartnerList() {
+    Marionette.CompositeView.apply(this, arguments);
+  },
+
   template: '#tmpl-partnerList',
   childView: Partner,
   className:'gr mvxl',
@@ -54,6 +62,10 @@ var PartnerList = Marionette.CompositeView.extend({
 });
 
 var Synthesis = Marionette.ItemView.extend({
+  constructor: function Synthesis() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-synthesisContext',
   initialize: function(options) {
       var that = this;
@@ -98,6 +110,10 @@ var Synthesis = Marionette.ItemView.extend({
 });
 
 var Instigator = Marionette.ItemView.extend({
+  constructor: function Instigator() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-instigator',
   initialize: function() {
     this.editInstigator = false;
@@ -165,6 +181,10 @@ var Instigator = Marionette.ItemView.extend({
 });
 
 var Introduction = Marionette.ItemView.extend({
+  constructor: function Introduction() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-introductions',
   initialize: function() {
     this.editingIntroduction = false;
@@ -241,6 +261,10 @@ var Introduction = Marionette.ItemView.extend({
               }
 
               var Modal = Backbone.Modal.extend({
+  constructor: function Modal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
                 template: _.template($('#tmpl-homeIntroductionDetail').html()),
                 className: 'generic-modal popin-wrapper',
                 model: model,
@@ -324,6 +348,10 @@ var Introduction = Marionette.ItemView.extend({
 });
 
 var ContextPage = Marionette.LayoutView.extend({
+  constructor: function ContextPage() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-contextPage',
   panelType: PanelSpecTypes.DISCUSSION_CONTEXT,
   className: 'contextPanel',
@@ -393,6 +421,10 @@ var ContextPage = Marionette.LayoutView.extend({
                 that.getRegion('synthesis').show(synthesis);
 
                 var NonInstigatorSubset = Backbone.Subset.extend({
+                  constructor: function NonInstigatorSubset() {
+                    Backbone.Subset.apply(this, arguments);
+                  },
+
                   sieve: function(partner) {
                     return partner !== partnerInstigator;
                   }

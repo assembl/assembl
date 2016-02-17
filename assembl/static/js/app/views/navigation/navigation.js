@@ -18,6 +18,10 @@ var Marionette = require('../../shims/marionette.js'),
     Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var NavigationView = AssemblPanel.extend({
+  constructor: function NavigationView() {
+    AssemblPanel.apply(this, arguments);
+  },
+
   template: "#tmpl-navigation",
   panelType: PanelSpecTypes.NAV_SIDEBAR,
   className: "navSidebar",

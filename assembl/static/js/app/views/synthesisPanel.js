@@ -23,6 +23,10 @@ var ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     Promise = require('bluebird');
 
 var SynthesisPanel = AssemblPanel.extend({
+  constructor: function SynthesisPanel() {
+    AssemblPanel.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   realTemplate: '#tmpl-synthesisPanel',
   panelType: PanelSpecTypes.SYNTHESIS_EDITOR,

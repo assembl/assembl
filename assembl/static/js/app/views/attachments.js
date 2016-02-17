@@ -15,6 +15,10 @@ var Marionette = require('../shims/marionette.js'),
  * or eventually local document attached to it.
  */
 var AbstractAttachmentView = Marionette.LayoutView.extend({
+  constructor: function AbstractAttachmentView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
 
   initialize: function(options) {
   },
@@ -58,12 +62,20 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
 
 var AttachmentView = AbstractAttachmentView.extend({
+  constructor: function AttachmentView() {
+    AbstractAttachmentView.apply(this, arguments);
+  },
+
   template: '#tmpl-attachment',
 
   className: 'attachment'
 });
 
 var AttachmentEditableView = AbstractAttachmentView.extend({
+  constructor: function AttachmentEditableView() {
+    AbstractAttachmentView.apply(this, arguments);
+  },
+
   template: '#tmpl-attachmentEditable',
 
   className: 'attachmentEditable',

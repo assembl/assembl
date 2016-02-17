@@ -530,6 +530,10 @@ var checkState = function(renderView) {
 };
 
 var errorView = Marionette.ItemView.extend({
+  constructor: function errorView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-exportPostModal-fb-token-error',
   initialize: function(options) {
     this.vent = options.vent; //Event Aggregator
@@ -579,6 +583,10 @@ var errorView = Marionette.ItemView.extend({
 });
 
 var groupView = Marionette.ItemView.extend({
+  constructor: function groupView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: "#tmpl-loader",
 
   //template: '#tmpl-exportPostModal-fb-group',
@@ -635,6 +643,10 @@ var groupView = Marionette.ItemView.extend({
 });
 
 var pageView = Marionette.ItemView.extend({
+  constructor: function pageView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
 
   //template: '#tmpl-exportPostModal-fb-page',
@@ -734,6 +746,10 @@ var pageView = Marionette.ItemView.extend({
 });
 
 var exportPostForm = Marionette.LayoutView.extend({
+  constructor: function exportPostForm() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
 
   //template: "#tmpl-exportPostModal-fb",
@@ -1001,6 +1017,10 @@ var exportPostForm = Marionette.LayoutView.extend({
 });
 
 var FacebookSourceForm = Marionette.LayoutView.extend({
+  constructor: function FacebookSourceForm() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-facebookSourceForm',
   regions: {
     'sourcePicker': ".source_picker"
@@ -1075,10 +1095,18 @@ var FacebookSourceForm = Marionette.LayoutView.extend({
 });
 
 var publicGroupSourceForm = FacebookSourceForm.extend({
+  constructor: function publicGroupSourceForm() {
+    FacebookSourceForm.apply(this, arguments);
+  },
+
   // TODO (with URL interpretation)
 });
 
 var privateGroupSourceForm = FacebookSourceForm.extend({
+  constructor: function privateGroupSourceForm() {
+    FacebookSourceForm.apply(this, arguments);
+  },
+
   onBeforeShow: function() {
     this.groupView = new groupView({
           token: this.token,
@@ -1099,6 +1127,10 @@ var privateGroupSourceForm = FacebookSourceForm.extend({
 });
 
 var pageSourceForm = FacebookSourceForm.extend({
+  constructor: function pageSourceForm() {
+    FacebookSourceForm.apply(this, arguments);
+  },
+
   onBeforeShow: function() {
     this.pageView = new pageView({
           token: this.token,
@@ -1119,6 +1151,10 @@ var pageSourceForm = FacebookSourceForm.extend({
 });
 
 var basefbView = Marionette.LayoutView.extend({
+  constructor: function basefbView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-sourceFacebook',
   ui: {
     root: '.js_facebook_view'

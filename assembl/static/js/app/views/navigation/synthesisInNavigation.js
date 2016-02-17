@@ -13,6 +13,10 @@ var Marionette = require('../../shims/marionette.js'),
     Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var SynthesisItem = Marionette.ItemView.extend({
+  constructor: function SynthesisItem() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   initialize: function(options) {
     var that = this;
@@ -45,6 +49,10 @@ var SynthesisItem = Marionette.ItemView.extend({
 });
 
 var SynthesisList = Marionette.CollectionView.extend({
+  constructor: function SynthesisList() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: SynthesisItem,
   initialize: function(options) {
 
@@ -65,6 +73,10 @@ var SynthesisList = Marionette.CollectionView.extend({
 });
 
 var SynthesisInNavigationPanel = AssemblPanel.extend({
+  constructor: function SynthesisInNavigationPanel() {
+    AssemblPanel.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
   panelType: PanelSpecTypes.NAVIGATION_PANEL_SYNTHESIS_SECTION,
   className: 'synthesisNavPanel',

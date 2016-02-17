@@ -6,6 +6,10 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js');
 
 var EditableField = Marionette.ItemView.extend({
+  constructor: function EditableField() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: _.template(""),
   initialize: function(options) {
     this.view = this;

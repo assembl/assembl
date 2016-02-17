@@ -19,6 +19,10 @@ var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird');
 
 var SegmentView = Marionette.LayoutView.extend({
+  constructor: function SegmentView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-segment',
   gridSize: AssemblPanel.prototype.CLIPBOARD_GRID_SIZE,
   ui: {
@@ -174,6 +178,10 @@ var SegmentView = Marionette.LayoutView.extend({
 });
 
 var SegmentListView = Marionette.CollectionView.extend({
+  constructor: function SegmentListView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: SegmentView,
   initialize: function(options) {
 
@@ -191,6 +199,10 @@ var SegmentListView = Marionette.CollectionView.extend({
 });
 
 var Clipboard = Backbone.Subset.extend({
+  constructor: function Clipboard() {
+    Backbone.Subset.apply(this, arguments);
+  },
+
   beforeInitialize: function(models, options) {
     this.currentUserId = options.currentUserId;
   },
@@ -212,6 +224,10 @@ var Clipboard = Backbone.Subset.extend({
 });
 
 var IdeaSegmentListSubset = Backbone.Subset.extend({
+  constructor: function IdeaSegmentListSubset() {
+    Backbone.Subset.apply(this, arguments);
+  },
+
   beforeInitialize: function(models, options) {
     this.ideaId = options.ideaId;
   },
@@ -226,6 +242,10 @@ var IdeaSegmentListSubset = Backbone.Subset.extend({
 });
 
 var SegmentListPanel = AssemblPanel.extend({
+  constructor: function SegmentListPanel() {
+    AssemblPanel.apply(this, arguments);
+  },
+
   template: '#tmpl-segmentList',
   panelType: PanelSpecTypes.CLIPBOARD,
   className: 'clipboard',
@@ -552,6 +572,10 @@ var SegmentListPanel = AssemblPanel.extend({
     e.preventDefault();
 
     var Modal = Backbone.Modal.extend({
+  constructor: function Modal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
       template: _.template($('#tmpl-bookmarket').html()),
       className: 'capture generic-modal popin-wrapper',
       cancelEl: '.close, .btn-primary'

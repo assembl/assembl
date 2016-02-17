@@ -6,6 +6,10 @@ var Ctx = require('../common/context.js'),
     IdeaView = require('./ideaInIdeaList.js');
 
 var SynthesisIdeaView = IdeaView.extend({
+  constructor: function SynthesisIdeaView() {
+    IdeaView.apply(this, arguments);
+  },
+
   /**
    * The template
    * @type {[type]}

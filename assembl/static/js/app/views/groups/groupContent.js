@@ -13,6 +13,10 @@ var Marionette = require('../../shims/marionette.js'),
 
 /** Represents the entire content of a single panel group */
 var groupContent = Marionette.CompositeView.extend({
+  constructor: function groupContent() {
+    Marionette.CompositeView.apply(this, arguments);
+  },
+
   template: "#tmpl-groupContent",
   className: "groupContent",
   childViewContainer: ".groupBody",

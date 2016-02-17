@@ -9,6 +9,10 @@ var Backbone = require("../shims/backbone.js"),
 
 
 var WidgetButtonView = Marionette.ItemView.extend({
+  constructor: function WidgetButtonView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: "#tmpl-widgetButton",
   initialize: function(options) {
     this.options = options;
@@ -39,6 +43,10 @@ var WidgetButtonView = Marionette.ItemView.extend({
 });
 
 var WidgetButtonListView = Marionette.CollectionView.extend({
+  constructor: function WidgetButtonListView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: WidgetButtonView,
 
   initialize: function(options) {

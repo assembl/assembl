@@ -7,6 +7,10 @@ var Marionette = require('../shims/marionette.js'),
     AssemblPanel = require('./assemblPanel.js');
 
 var externalVisualizationPanel = Marionette.ItemView.extend({
+  constructor: function externalVisualizationPanel() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-externalViz',
   panelType: PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT,
   className: 'externalViz',
@@ -27,6 +31,10 @@ var externalVisualizationPanel = Marionette.ItemView.extend({
 });
 
 var dashboardVisualizationPanel = externalVisualizationPanel.extend({
+  constructor: function dashboardVisualizationPanel() {
+    externalVisualizationPanel.apply(this, arguments);
+  },
+
   panelType: PanelSpecTypes.CI_DASHBOARD_CONTEXT,
   onRender: function(options) {
     if (!this.urlSetStarted) {

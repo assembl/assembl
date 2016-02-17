@@ -7,6 +7,10 @@ var Backbone = require("../shims/backbone.js"),
 
 
 var WidgetLinkView = Marionette.ItemView.extend({
+  constructor: function WidgetLinkView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: "#tmpl-widgetLink",
   tagName: 'li',
   initialize: function(options) {
@@ -48,6 +52,10 @@ var WidgetLinkView = Marionette.ItemView.extend({
 });
 
 var WidgetLinkListView = Marionette.CollectionView.extend({
+  constructor: function WidgetLinkListView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   childView: WidgetLinkView,
 
   initialize: function(options) {

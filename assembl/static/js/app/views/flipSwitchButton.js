@@ -3,6 +3,10 @@
 var Marionette = require('../shims/marionette.js');
 
 var FlipSwitchButton = Marionette.ItemView.extend({
+  constructor: function FlipSwitchButton() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: '#tmpl-flipSwitchButton',
   className: 'flipSwitchButton',
 

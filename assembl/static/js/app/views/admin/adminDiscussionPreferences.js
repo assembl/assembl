@@ -10,6 +10,10 @@ var Marionette = require('../../shims/marionette.js'),
     Growl = require('../../utils/growl.js');
 
 var adminDiscussionPreferences = Marionette.LayoutView.extend({
+  constructor: function adminDiscussionPreferences() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
   template: '#tmpl-top_loader',
   className: 'admin-profile',
   ui: {

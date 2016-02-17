@@ -16,6 +16,10 @@ var Marionette = require('../shims/marionette.js'),
 /** 
  */
 var AbstractAnnouncementView = Marionette.LayoutView.extend({
+  constructor: function AbstractAnnouncementView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
 
   initialize: function(options) {
   },
@@ -42,12 +46,20 @@ var AbstractAnnouncementView = Marionette.LayoutView.extend({
 
 
 var AnnouncementView = AbstractAnnouncementView.extend({
+  constructor: function AnnouncementView() {
+    AbstractAnnouncementView.apply(this, arguments);
+  },
+
   template: '#tmpl-announcement',
 
   className: 'attachment'
 });
 
 var AnnouncementMessageView = AbstractAnnouncementView.extend({
+  constructor: function AnnouncementMessageView() {
+    AbstractAnnouncementView.apply(this, arguments);
+  },
+
   template: '#tmpl-loader',
 
 
@@ -106,6 +118,10 @@ var AnnouncementMessageView = AbstractAnnouncementView.extend({
 });
 
 var AnnouncementEditableView = AbstractAnnouncementView.extend({
+  constructor: function AnnouncementEditableView() {
+    AbstractAnnouncementView.apply(this, arguments);
+  },
+
   template: '#tmpl-announcementEditable',
 
   className: 'announcementEditable',
@@ -143,6 +159,10 @@ var AnnouncementEditableView = AbstractAnnouncementView.extend({
 });
 
 var AnnouncementListEmptyEditableView = Marionette.ItemView.extend({
+  constructor: function AnnouncementListEmptyEditableView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+
   template: "#tmpl-announcementListEmptyEditable",
   ui: {
     'addAnnouncementButton': '.js_announcementAddButton'
@@ -170,6 +190,10 @@ var AnnouncementListEmptyEditableView = Marionette.ItemView.extend({
 });
 
 var AnnouncementEditableCollectionView = Marionette.CollectionView.extend({
+  constructor: function AnnouncementEditableCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
   initialize: function(options) {
     this.objectAttachedTo = options.objectAttachedTo;
   },
