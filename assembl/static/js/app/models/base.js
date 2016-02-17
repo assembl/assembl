@@ -14,6 +14,13 @@ var Backbone = require('../shims/backbone.js'),
 var BaseModel = Backbone.Model.extend({
 
   /**
+   * Constructor
+   */
+  constructor: function BaseModel() {
+    Backbone.Model.apply(this, arguments);
+  },
+
+  /**
    * Get the numeric id fro the id string
    * ex: finds '30' if given 'local:ModelName/30'
    *
@@ -201,6 +208,12 @@ var BaseModel = Backbone.Model.extend({
  * BaseCollection which should be used by ALL collections
  */
 var BaseCollection = Backbone.Collection.extend({
+  /**
+   * Constructor
+   */
+  constructor: function BaseCollection() {
+    Backbone.Collection.apply(this, arguments);
+  },
 
   /**
    * Get the innerText from the given `id` element
