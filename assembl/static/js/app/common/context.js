@@ -541,8 +541,10 @@ Context.prototype = {
       var modal = $(iframe).parents(".bbm-modal");
       if (!modal)
           return;
-      var maxHeight = document.body.scrollHeight - 135;
-      var maxWidth = document.body.scrollWidth - 135;
+      //var maxHeight = document.body.scrollHeight - 135;
+      var maxHeight = modal.get(0).scrollHeight - 135;
+      //var maxWidth = document.body.scrollWidth - 135;
+      var maxWidth = modal.get(0).scrollWidth - 40;
       var targetHeight = iframe.contentWindow.document.body.scrollHeight; // margins are not included (but paddings are)
       var targetWidth = iframe.contentWindow.document.body.scrollWidth;
       if ( targetHeight > maxHeight ){
