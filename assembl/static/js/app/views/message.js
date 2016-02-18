@@ -522,8 +522,6 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   serializeData: function() {
-    var subject = this.model.get("subject"),
-        body = this.model.get("body");
     if (this.template == "#tmpl-loader") {
         return {};
     }
@@ -537,16 +535,15 @@ var MessageView = Marionette.LayoutView.extend({
       if (bodyFormat === "text/html") {
         //Strip HTML from preview
         bodyFormat = "text/plain";
-        body = this.model.get('body').applyFunction(this.generateBodyPreview);
+        this._body = this._body.applyFunction(this.generateBodyPreview);
       }
     }
 
-    body = this._body;
-    subject = this._subject;
 
     if (this.model.get("publication_state") != "PUBLISHED") {
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
+      //@TODO: should the body be this._body??
       body = new LangString.EntryModel({
         // '@language': ??? not sure on template language, needs work.
         value: this.moderationTemplate({
@@ -574,7 +571,7 @@ var MessageView = Marionette.LayoutView.extend({
         share_link_url = Ctx.appendExtraURLParams("/static/widget/share/index.html",
           [
             {'u': Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url)},
-            {'t': this.model.get('subject').bestValue(that.translationData)},
+            {'t': this._subject.value()},
             {'s': Ctx.getPreferences().social_sharing }
           ]
         );
@@ -591,8 +588,8 @@ var MessageView = Marionette.LayoutView.extend({
       metadata_json: metadata_json,
       creator: this.creator,
       parentId: this.model.get('parentId'),
-      subject: subject,
-      body: body,
+      subject: this._subject,
+      body: this._body,
       bodyTranslationError: this.bodyTranslationError,
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
@@ -610,7 +607,7 @@ var MessageView = Marionette.LayoutView.extend({
       user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST),
       unknownPreference: this.unknownPreference,
       useOriginalContent: this.useOriginalContent,
-      isTranslatedMessage: body.isMachineTranslation()
+      isTranslatedMessage: this.isMessageTranslated
     };
   },
 
@@ -679,12 +676,24 @@ var MessageView = Marionette.LayoutView.extend({
     //First calculate what should be shown.
     //Important flag to display/remove annotations is this.showAnnotations
     this.processContent();
+    this.showAnnotations = this.canShowAnnotations();
+
+    console.log("---- onRender called ----------------");
+    console.log("forceTranslationQuestion: ", this.forceTranslationQuestion);
+    console.log("useOriginalContent: ", this.useOriginalContent);
+    console.log("unknownPreference: ", this.unknownPreference);
+    console.log("showAnnotations: ", this.showAnnotations);
+    console.log("isMessageTranslated: ", this.isMessageTranslated);
+    console.log("Discrepency? ", !(this.isMessageTranslated !== this.showAnnotations));
+    console.log("_body.value: ", this._body.value());
+    console.log("_body.isMachineTranslation(): ", this._body.isMachineTranslation());
+
+
     //Currently, I notice a disparity between the flags isMessageTranslated and showAnnotations
     //Starting point to resolve the issue.
-    console.log("this.isMessageTranslated", this.isMessageTranslated);
-    this.showAnnotations = this.canShowAnnotations();
-    console.log("this.showAnnotations", this.showAnnotations);
-    console.log("this._body.value()", this._body.value());
+    // console.log("this.isMessageTranslated", this.isMessageTranslated);
+    // console.log("this.showAnnotations", this.showAnnotations);
+    // console.log("this._body.value()", this._body.value());
     if (!this.showAnnotations) {
       this.removeAnnotations();
     }
@@ -1841,7 +1850,7 @@ var MessageView = Marionette.LayoutView.extend({
   canShowAnnotations: function(){
     var c = Ctx.getCurrentUser().can(Permissions.ADD_EXTRACT);
 
-    if (this.isMachineTranslation){
+    if (this.isMessageTranslated){
       return false;
     }
     if (this.useOriginalContent){

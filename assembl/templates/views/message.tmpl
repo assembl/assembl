@@ -114,7 +114,7 @@
       </div>
     <% } else { %>
       <div class='mtm js_translation_show_original'>
-        <% if (body.isMachineTranslation()) { %>
+        <% if (isTranslatedMessage) { %>
           <span class='js_trans_show_origin'><a class="content">{{gettext("View the original message")}}</a></span>
           <span class="prxs"><a class="content" target="_blank" href="http://translate.google.com">({{gettext("Translated by Google Translate")}})</a></span>
         <% } else if (useOriginalContent) { %>
