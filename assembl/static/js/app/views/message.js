@@ -341,7 +341,7 @@ var MessageView = Marionette.LayoutView.extend({
       this.render();
     }
   },
-    
+
   ui: {
       jumpToParentButton: ".js_message-jumptoparentbtn",
       jumpToMessageInThreadButton: ".js_message-jump-to-message-in-thread",
@@ -415,7 +415,7 @@ var MessageView = Marionette.LayoutView.extend({
     'mousemove  @ui.messageBodyAnnotatorAllowed': 'updateAnnotatorTextSelection',
     'mouseleave @ui.messageBodyAnnotatorAllowed': 'onMouseLeaveMessageBodyAnnotatorSelectionAllowed',
     'mouseenter @ui.messageBodyAnnotatorAllowed': 'updateAnnotatorTextSelection',
-        
+
     // menu
     'click .js_message-markasunread': 'markAsUnread',
     'click .js_message-markasread': 'markAsRead',
@@ -478,45 +478,34 @@ var MessageView = Marionette.LayoutView.extend({
   //   return this.hasTranslatorService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
   // },
 
-  processContent: function(){   
+  processContent: function() {
+    console.log("---- processContent called ----------------");
     var body = this.model.get('body'),
-        bodyOriginal = body.original(),
-        subject = this.model.get('subject'),
-        subjectOriginal = subject.original();
+        subject = this.model.get('subject');
 
     if (this.hasTranslatorService) {
 
-      if (!this.useOriginalContent){
+      if (!this.useOriginalContent) {
         var processedBody = body.bestWithErrors(this.translationData, true),
             processedSubject = subject.bestWithErrors(this.translationData, true);
 
         //bestWithError will make this the original value if error
-        if (processedBody.error){
-          this.bodyTranslationError = processedBody.error;
-        }
-        if (!processedBody.entry.isMachineTranslation() && !this.bodyTranslationError ){
-          this.unknownPreference = this.translationData.getPreferenceForLocale(
-            processedBody.entry.get('@language')) === undefined;
-        }
-        else {
-          this.unknownPreference = false;
-        }
-
+        this.bodyTranslationError = processedBody.error;
+        this.unknownPreference = this.translationData.getPreferenceForLocale(
+          processedBody.entry.get('@language')) === undefined;
         this._body = processedBody.entry;
         this._subject = processedSubject.entry;
-        this.isMessageTranslated = this._body.isMachineTranslation() ? true : false;
+        this.isMessageTranslated = this._body.isMachineTranslation();
       }
-
       else {
-        this._body = bodyOriginal;
-        this._subject = subjectOriginal;
+        this._body = body.original();
+        this._subject = subject.original();
         this.isMessageTranslated = false;
       }
     }
-
     else {
-      this._body = bodyOriginal;
-      this._subject = subjectOriginal;
+      this._body = body.original();
+      this._subject = subject.original();
       this.isMessageTranslated = false;
     }
   },
@@ -525,6 +514,8 @@ var MessageView = Marionette.LayoutView.extend({
     if (this.template == "#tmpl-loader") {
         return {};
     }
+    console.log("---- serializeData called ----------------");
+    this.processContent();
     var bodyFormatClass,
         that = this,
         body,
@@ -668,6 +659,9 @@ var MessageView = Marionette.LayoutView.extend({
    * @return {MessageView}
    */
   onRender: function() {
+    if (this.template == "#tmpl-loader") {
+        return {};
+    }
     var that = this,
         modelId = this.model.id,
         partialMessage = MessagesInProgress.getMessage(modelId);
@@ -675,7 +669,6 @@ var MessageView = Marionette.LayoutView.extend({
     //Determine whether to show the annotations on this message
     //First calculate what should be shown.
     //Important flag to display/remove annotations is this.showAnnotations
-    this.processContent();
     this.showAnnotations = this.canShowAnnotations();
 
     console.log("---- onRender called ----------------");
