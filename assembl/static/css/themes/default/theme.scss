@@ -4,7 +4,7 @@
   Variables
   Ranked from light -> dark
   
-  NEVER refer to these color variables elsewhere in the CSS files
+  NEVER refer to these color variables elsewhere in the SCSS files
  */
 $th_local_white: #FFFFFF;
 $th_local_black: #000000;
@@ -32,7 +32,7 @@ $th_local_green1: #CCEFDB; // almost white
 $th_local_green: #4ac780;
 
 
-//Global
+//Global to the entire scss infrastructure, mandatory variables for EVERY theme
 $theme_activelink_color: $th_local_purple;
 $theme_inactivelink_color: $th_local_gray3;
 $theme_checkbox_color: $th_local_purple;
@@ -107,3 +107,5 @@ $theme_synthesis_header_bg: $th_local_green;
 /* Import main assembl sass.  This must be after variable definitions, but
    before any custom CSS overrides .*/
 @import "../../assembl_base_styles.scss";
+
+
