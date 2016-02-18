@@ -513,7 +513,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.processContent();
     var bodyFormatClass,
         that = this,
-        body,
+        body = null,
         metadata_json = this.model.get('metadata_json'), // this property needs to exist to display the inspiration source of a message (creativity widget)
         bodyFormat = this.model.get('bodyMimeType');
 
@@ -535,8 +535,8 @@ var MessageView = Marionette.LayoutView.extend({
         value: this.moderationTemplate({
           ctx: Ctx,
           viewStyle: this.viewStyle,
-          subject: subject,
-          body: body,
+          subject: this._subject.value(),
+          body: this._body.value(),
           publication_state: this.model.get("publication_state"),
           moderation_text: this.model.get("moderation_text"),
           moderator: this.model.get("moderator"),
@@ -575,7 +575,7 @@ var MessageView = Marionette.LayoutView.extend({
       creator: this.creator,
       parentId: this.model.get('parentId'),
       subject: this._subject,
-      body: this._body,
+      body: (body) ? body : this._body,
       bodyTranslationError: this.bodyTranslationError,
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
