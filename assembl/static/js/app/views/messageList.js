@@ -65,6 +65,8 @@ var MessageList = AssemblPanel.extend({
     loadNextMessagesButton: '.js_messageList-morebutton',
     loadAllButton: '.js_messageList-loadallbutton',
     messageList: '.messageList-list',
+    messageFamilyList: '.js_messageFamilies_region',
+    announcementRegion: '.js_announcement_region',
     stickyBar: '.sticky-box',
     topPost: '.messagelist-replybox',
     inspireMe: '.js_inspireMe',
@@ -76,7 +78,8 @@ var MessageList = AssemblPanel.extend({
 
   regions: {
       messageListHeader: '.messageListHeader',
-      topPostRegion: '@ui.topPost'
+      topPostRegion: '@ui.topPost',
+      announcementRegion: '@ui.announcementRegion'
     },
 
   initialize: function(options) {
@@ -90,6 +93,7 @@ var MessageList = AssemblPanel.extend({
       this.scrollLoggerPreviousScrolltop = 0;
       this.scrollLoggerPreviousTimestamp = d.getTime() ;
       this.renderedMessageViewsCurrent = {};
+      this._renderedMessageFamilyViews = [];
       this._nbPendingMessage = 0;
       this.aReplyBoxHasFocus = false;
       this.currentQuery = new PostQuery();
@@ -850,26 +854,26 @@ var MessageList = AssemblPanel.extend({
 
       if (views.length === 0) {  
         //TODO:  This is probably where https://app.asana.com/0/15264711598672/20633284646643 occurs
-        that.ui.messageList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
+        that.ui.messageFamilyList.append(Ctx.format("<div class='margin'>{0}</div>", i18n.gettext('No messages')));
       } 
 
       if (announcement && that._offsetStart <= 0) { //Only display the announcement on the first page
-        that.ui.messageList.append('<div class="js_announcement_region"></div>');
-        var announcementRegion = new Marionette.Region({
-          el: that.$(".js_announcement_region")
-        }); 
         announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement});
-        announcementRegion.show(announcementMessageView);
+        that.announcementRegion.show(announcementMessageView);
+        that.ui.announcementRegion.removeClass('hidden');
       }
 
       if (views.length > 0) {
         if (that.getContainingGroup().model.get('navigationState') !== "synthesis") {
           // dynamically add id to the first view of message to enable take tour
-          $(views[0]).attr('id', 'tour_step_message');
+          views[0].$el.attr('id', 'tour_step_message');
           Assembl.vent.trigger("requestTour", "first_message");
         }
 
-        that.ui.messageList.append(views);
+        _.each(views, function(view) {
+          that.ui.messageFamilyList.append(view.el);
+        })
+
       }
 
       that.scrollToPreviousScrollTarget();
@@ -894,9 +898,12 @@ var MessageList = AssemblPanel.extend({
       return true;
     }).catch(function(e) {
       Raven.captureException(e);
-      that.ui.messageList.html("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
-      //For debugging, uncomment the following to get stack traces
-      //throw e;
+      that.ui.messageFamilyList.add("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
+      //For debugging, uncomment the following to get stack traces add true || at the begining of the if
+      if (that.debugPaging || Ctx.debugRender) {
+        throw e;
+      }
+      
     });
 
   },
@@ -1382,7 +1389,8 @@ var MessageList = AssemblPanel.extend({
                   that.destroyAnnotator();
 
                   //Some messages may be present from before
-                  that.ui.messageList.empty();
+                  that.ui.messageFamilyList.empty();
+                  that.clearRenderedMessages();
 
                   // TODO: Destroy the message and messageFamily views, as they keep zombie listeners and DOM
                   // In particular, message.loadAnnotations gets called with different views on the same model,
@@ -1487,8 +1495,23 @@ var MessageList = AssemblPanel.extend({
       this.defaultMessageStyle = defaultMessageStyle;
     },
 
+  clearRenderedMessages: function() {
+    //console.log("clearRenderedMessages called");
+    _.each(this._renderedMessageFamilyViews, function(messageFamily) {
+      //MessageFamily is a Marionette view called from a non-marionette context,
+      //so we call destroy, not remove
+      messageFamily.destroy();
+    });
+    this._renderedMessageFamilyViews = [];
+    this.renderedMessageViewsCurrent = {};
+  },
+
+  onDestroy: function() {
+    this.clearRenderedMessages();
+  },
+
   /**
-   * Return a list with all views.el already rendered for a flat view
+   * Return a list with all views already rendered for a flat view
    * @param {Message.Model[]} messages
    * @param {} requestedOffsets The requested offsets
    * @param {} returnedDataOffsets The actual offsets of data actually returned (may be different
@@ -1504,13 +1527,15 @@ var MessageList = AssemblPanel.extend({
             .then(function(fullMessageModels) {
               var list = [];
               if(!that.isViewDestroyed()) {
+                that.clearRenderedMessages();
                 _.each(fullMessageModels, function(fullMessageModel) {
                   view = new MessageFamilyView({
                     model: fullMessageModel,
                     messageListView: that,
                     hasChildren: []
                   });
-                  list.push(view.render().el);
+                  that._renderedMessageFamilyViews.push(view);
+                  list.push(view.render());
                 });
               }
               //console.log("getRenderedMessagesFlatPromise():  Resolving promise with:",list);
@@ -1519,7 +1544,8 @@ var MessageList = AssemblPanel.extend({
   },
 
   /**
-   * Return a list with all views.el already rendered for threaded views
+   * Return a list with all views already rendered for threaded views
+   * WARNING: This is a recursive function
    * @param {Message.Model[]} list of messages to render at the current level
    * @param {Number} [level=1] The current hierarchy level
    * @param {Object[]} data_by_object render information from ideaRendervisitor
@@ -1566,6 +1592,11 @@ var MessageList = AssemblPanel.extend({
 
     if (_.isUndefined(level)) {
       level = 1;
+    }
+
+    if (level === 1) {
+      //This is the first call
+      this.clearRenderedMessages(); 
     }
 
     //console.log("sibblings",sibblings.length);
@@ -1649,7 +1680,8 @@ var MessageList = AssemblPanel.extend({
               //view.currentLevel = level;
               //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
               //view.hasChildren = (subviews.length > 0);
-              list.push(view.render().el);
+              that._renderedMessageFamilyViews.push(view);
+              list.push(view.render());
 
               //view.$('.messagelist-children').append(subviews);  moved to messageFamily
 

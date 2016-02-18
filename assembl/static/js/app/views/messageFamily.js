@@ -116,6 +116,17 @@ var MessageFamilyView = Marionette.ItemView.extend({
       };
     },
 
+  onDestroy: function() {
+    //Marionette view not used in a region
+    this._messageView.destroy();
+
+    _.each(this.childViews, function(messageFamily) {
+      //MessageFamily is a Marionette view called from a non-marionette context,
+      //so we manually call destroy, not remove
+      messageFamily.destroy();
+    });
+  },
+    
   /**
    * The render
    * @param {Number} [level] The hierarchy level
@@ -125,7 +136,6 @@ var MessageFamilyView = Marionette.ItemView.extend({
     if (this.template == "#tmpl-loader") {
         return {};
     }
-    var messageView;
 
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
@@ -138,14 +148,14 @@ var MessageFamilyView = Marionette.ItemView.extend({
       messageViewClass = SynthesisMessageView;
     }
 
-    messageView = new messageViewClass({
+    this._messageView = new messageViewClass({
       model: this.model,
       messageListView: this.messageListView,
       messageFamilyView: this
     });
 
-    messageView.triggerMethod("render");
-    this.messageListView.renderedMessageViewsCurrent[this.model.id] = messageView;
+    this._messageView.triggerMethod("render");
+    this.messageListView.renderedMessageViewsCurrent[this.model.id] = this._messageView;
 
     //data['id'] = data['@id'];
     //data['level'] = level;
@@ -164,13 +174,13 @@ var MessageFamilyView = Marionette.ItemView.extend({
 
     this.el.setAttribute('data-message-level',  this.level);
 
-    //this.$el.html(this.template(data));
     Ctx.initTooltips(this.$el);
-    this.$el.find('>.message-family-arrow>.message').replaceWith(messageView.el);
+    this.$el.find('>.message-family-arrow>.message').replaceWith(this._messageView.el);
 
     var child_el = this.$('.messagelist-children');
-    if (child_el.children().length === 0 && this.childViews.length > 0)
-        child_el.append(this.childViews);
+    _.each(this.childViews, function(view) {
+      child_el.append(view.el);
+    })
 
     this.onCollapsedChange();
 

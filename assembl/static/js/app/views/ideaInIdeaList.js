@@ -245,7 +245,7 @@ var IdeaView = Backbone.View.extend({
     var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
 
     var analytics = Analytics.getInstance();
-    console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
+    //console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
     if(!is_unread) {
       analytics.trackEvent(analytics.events.OPEN_IDEA_IN_TABLE_OF_IDEAS);
     }

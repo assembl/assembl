@@ -16,7 +16,10 @@
     {% include "views/loader.tmpl" %}
   </div>
   
-  <div class="messageList-list idealist <%= currentViewStyle.id %> pal"></div>
+  <div class="messageList-list idealist <%= currentViewStyle.id %> pal">
+    <div class="js_announcement_region hidden"></div>
+    <div class="js_messageFamilies_region"></div>
+  </div>
 
   <div class="js_messageList-bottomarea messageList-bottomarea tac hidden">
     <a class="js_messageList-morebutton btn btn-sm btn-secondary mbs">{{ gettext('Load more messages') }}</a>
