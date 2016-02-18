@@ -1249,11 +1249,11 @@ var MessageList = AssemblPanel.extend({
         options.reply_idea = currentIdea;
       }
 
-      this.newTopicView = new MessageSendView(options);
-      //FIXME once marionettization is complete
-      this.$('.messagelist-replybox').html(this.newTopicView.render().el);
-      this.newTopicView.onShow();
-      
+      if(Ctx.getCurrentUser().can(Permissions.ADD_POST) && this.template === '#tmpl-messageList') {
+        this.newTopicView = new MessageSendView(options);
+        this.topPostRegion.show(this.newTopicView);
+      }
+
       var collectionManager = new CollectionManager();
       Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
                    this.currentQuery.getResultMessageIdCollectionPromise(),

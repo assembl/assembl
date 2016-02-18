@@ -70,8 +70,8 @@ var Backbone = require('../shims/backbone.js'),
  *  }
  */
 
-var messageSend = Marionette.LayoutView.extend({
-  constructor: function messageSend() {
+var messageSendView = Marionette.LayoutView.extend({
+  constructor: function messageSendView() {
     Marionette.LayoutView.apply(this, arguments);
   },
 
@@ -110,9 +110,9 @@ var messageSend = Marionette.LayoutView.extend({
     this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
 
     var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
-  constructor: function AttachmentEditableCollectionView() {
-    Marionette.CollectionView.apply(this, arguments);
-  },
+      constructor: function AttachmentEditableCollectionView() {
+        Marionette.CollectionView.apply(this, arguments);
+      },
 
       childView: AttachmentViews.AttachmentEditableView
     });
@@ -455,18 +455,24 @@ var messageSend = Marionette.LayoutView.extend({
    * @return true if there was a message to save
    */
   savePartialMessage: function() {
-    var message_body = this.ui.messageBody,
-        message_title = this.ui.messageSubject;
+    if(this.isViewRenderedAndNotYetDestroyed()) {
+      var message_body = this.ui.messageBody,
+      message_title = this.ui.messageSubject;
 
-    if ((message_body.length > 0 && message_body.val().length > 0) || (message_title.length > 0 && message_title.val().length > 0)) {
-      MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
-      return true;
+      if ((message_body.length > 0 && message_body.val().length > 0) || (message_title.length > 0 && message_title.val().length > 0)) {
+        MessagesInProgress.saveMessage(this.msg_in_progress_ctx, message_body.val(), message_title.val());
+        return true;
+      }
+      else {
+        //We may have just emptied the content
+        this.clearPartialMessage();
+        return false;
+      }
     }
-    else {
-      //We may have just emptied the content
-      this.clearPartialMessage();
-      return false;
-    }
+  },
+
+  onBeforeDestroy: function() {
+    this.savePartialMessage();
   },
 
   clearPartialMessage: function() {
@@ -561,4 +567,4 @@ var messageSend = Marionette.LayoutView.extend({
 
 });
 
-module.exports = messageSend;
+module.exports = messageSendView;

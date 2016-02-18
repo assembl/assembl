@@ -730,24 +730,25 @@ var MessageView = Marionette.LayoutView.extend({
         Ctx.makeLinksShowOembedOnHover(this.$el.find(".inspirationSource"));
       }
 
-      this.replyView = new MessageSendView({
-        allow_setting_subject: false,
-        reply_message_id: modelId,
-        reply_message_model: this.model,
-        body_help_message: i18n.gettext('Type your response here...'),
-        cancel_button_label: null,
-        send_button_label: i18n.gettext('Send your reply'),
-        subject_label: null,
-        mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
-        messageList: that.messageListView,
-        msg_in_progress_body: partialMessage.body,
-        msg_in_progress_ctx: modelId,
-        mandatory_subject_missing_msg: null
-      });
-
       this.postRender();
 
       if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && (this.replyBoxShown || partialMessage.body)) {
+
+        this.replyView = new MessageSendView({
+          allow_setting_subject: false,
+          reply_message_id: modelId,
+          reply_message_model: this.model,
+          body_help_message: i18n.gettext('Type your response here...'),
+          cancel_button_label: null,
+          send_button_label: i18n.gettext('Send your reply'),
+          subject_label: null,
+          mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
+          messageList: that.messageListView,
+          msg_in_progress_body: partialMessage.body,
+          msg_in_progress_ctx: modelId,
+          mandatory_subject_missing_msg: null
+        });
+
         this.ui.messageReplyBox.removeClass('hidden');
         this.messageReplyBoxRegion.show(this.replyView);
         if (this.replyBoxHasFocus) {
@@ -788,15 +789,15 @@ var MessageView = Marionette.LayoutView.extend({
         //Only the full body view uses annotator
         this.messageListView.requestAnnotatorRefresh();
 
-        var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
-  constructor: function AttachmentEditableCollectionView() {
-    Marionette.CollectionView.apply(this, arguments);
-  },
+        var MessageAttachmentCollectionView = Marionette.CollectionView.extend({
+          constructor: function MessageAttachmentCollectionView() {
+            Marionette.CollectionView.apply(this, arguments);
+          },
 
           childView: AttachmentViews.AttachmentView
         });
 
-        this.attachmentsCollectionView = new AttachmentEditableCollectionView({
+        this.attachmentsCollectionView = new MessageAttachmentCollectionView({
           collection: this.model.get('attachments')
         });
         
