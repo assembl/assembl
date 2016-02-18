@@ -311,6 +311,14 @@ var MessageView = Marionette.LayoutView.extend({
      */
     this.bodyTranslationError = false;
 
+
+    /*
+      Flag controlled by the method processContent that will determine whether the message
+      is translated or original. This does NOT change with user input. Only changes with
+      user language preferences and/or translation errors.
+     */
+    this.isMessageTranslated = null;
+
     Promise.join(
         this.model.getCreatorPromise(),
         this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
@@ -467,19 +475,7 @@ var MessageView = Marionette.LayoutView.extend({
     return body;
   },
 
-  // processSubject: function(){
-  //   var subject = this._subject;
-  //   return this.hasTranslatorService ? (this.useOriginalContent ? subject.original() : subject.best(this.translationData) ) : subject.original();
-  // },
-
-  // processBody: function(){
-  //   var body = this._body;
-  //   body = (body) ? body : this.generateSafeBody();
-  //   return this.hasTranslatorService ? (this.useOriginalContent ? body.original() : body.best(this.translationData) ) : body.original();
-  // },
-
   processContent: function() {
-    console.log("---- processContent called ----------------");
     var body = this.model.get('body'),
         subject = this.model.get('subject');
 
@@ -514,7 +510,6 @@ var MessageView = Marionette.LayoutView.extend({
     if (this.template == "#tmpl-loader") {
         return {};
     }
-    console.log("---- serializeData called ----------------");
     this.processContent();
     var bodyFormatClass,
         that = this,
@@ -666,27 +661,24 @@ var MessageView = Marionette.LayoutView.extend({
         modelId = this.model.id,
         partialMessage = MessagesInProgress.getMessage(modelId);
 
-    //Determine whether to show the annotations on this message
-    //First calculate what should be shown.
     //Important flag to display/remove annotations is this.showAnnotations
     this.showAnnotations = this.canShowAnnotations();
 
-    console.log("---- onRender called ----------------");
-    console.log("forceTranslationQuestion: ", this.forceTranslationQuestion);
-    console.log("useOriginalContent: ", this.useOriginalContent);
-    console.log("unknownPreference: ", this.unknownPreference);
-    console.log("showAnnotations: ", this.showAnnotations);
-    console.log("isMessageTranslated: ", this.isMessageTranslated);
-    console.log("Discrepency? ", !(this.isMessageTranslated !== this.showAnnotations));
-    console.log("_body.value: ", this._body.value());
-    console.log("_body.isMachineTranslation(): ", this._body.isMachineTranslation());
+    if (Ctx.debugRender){
+      console.log("---- Message onRender called ----------------");
+      console.log("forceTranslationQuestion: ", this.forceTranslationQuestion);
+      console.log("useOriginalContent: ", this.useOriginalContent);
+      console.log("unknownPreference: ", this.unknownPreference);
+      console.log("isMessageTranslated: ", this.isMessageTranslated);
+      console.log("Discrepency? ", !(this.isMessageTranslated !== this.showAnnotations));
+      console.log("_body.value: ", this._body.value());
+      console.log("_body.isMachineTranslation(): ", this._body.isMachineTranslation());
+    }
 
+    if (Ctx.debugAnnotator) {
+      console.log("showAnnotations: ", this.showAnnotations);
+    }
 
-    //Currently, I notice a disparity between the flags isMessageTranslated and showAnnotations
-    //Starting point to resolve the issue.
-    // console.log("this.isMessageTranslated", this.isMessageTranslated);
-    // console.log("this.showAnnotations", this.showAnnotations);
-    // console.log("this._body.value()", this._body.value());
     if (!this.showAnnotations) {
       this.removeAnnotations();
     }
@@ -1367,14 +1359,12 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   onShowOriginalClick: function(e) {
-      console.log('Showing the original');
       this.useOriginalContent = true;
       this.forceTranslationQuestion = false;
       this.render();
   },
 
   onShowTranslatedClick: function(e) {
-      console.log('Showing the translation');
       this.useOriginalContent = false;
       this.forceTranslationQuestion = false;
       this.render();
@@ -1845,9 +1835,6 @@ var MessageView = Marionette.LayoutView.extend({
 
     if (this.isMessageTranslated){
       return false;
-    }
-    if (this.useOriginalContent){
-      return c;
     }
 
     return c;
