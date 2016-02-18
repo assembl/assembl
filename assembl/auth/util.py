@@ -395,7 +395,7 @@ def add_multiple_users_csv(
         request, csv_file, discussion_id, with_role,
         send_password_change=False, message_subject=None,
         text_message=None, html_message=None):
-    r = reader(csv_file)
+    r = reader(csv_file, skipinitialspace=True)
     localizer = request.localizer
     for i, l in enumerate(r):
         if not len(l):
