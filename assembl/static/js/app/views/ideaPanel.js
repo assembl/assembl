@@ -391,7 +391,7 @@ var IdeaPanel = AssemblPanel.extend({
       'canEdit': canEdit,
       'focus': this.focusShortTitle
     });
-    shortTitleField.renderTo(this.$('#ideaPanel-shorttitle'));
+    shortTitleField.renderTo(this.$('.ideaPanel-shorttitle'));
 
   },
 

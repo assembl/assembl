@@ -1,4 +1,20 @@
-#ideaPanel-section-summary {
+// The idea panel specific CSS
+// ===========================
+
+.ideaPanel {
+  .panel-body {
+    padding: 16px 16px
+  }
+}
+
+.ideaPanel-shorttitle {
+  .panel-editablearea {
+    margin: 0px;
+    padding: 8px 6px 8px 8px;
+  }
+}
+
+.ideaPanel-section-summary {
   i.icon-user {
     font-size: 20px;
     margin: 0px 0px 0px -3px;
@@ -105,7 +121,7 @@
     }
 }
 
-.ideaPanel-section-segments-legend {
+.ideaPanel-section-segments section-title {
   i.icon-diamond {
     font-size: 150%;
     font-weight: 600;
