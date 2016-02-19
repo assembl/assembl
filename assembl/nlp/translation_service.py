@@ -58,7 +58,7 @@ class TranslationService(object):
 
     def target_locale_labels(self, target_locale):
         return LocaleLabel.names_of_locales_in_locale(
-            tuple(self.target_locales()) + Locale.SPECIAL_LOCALES,
+            list(self.target_locales()) + Locale.SPECIAL_LOCALES,
             target_locale)
 
     @staticmethod
