@@ -53,7 +53,7 @@ var IdeaPanel = AssemblPanel.extend({
     }
 
     collectionManager.getAllWidgetsPromise();
-    
+
     if(!this.isViewDestroyed()) {
       //Yes, it IS possible the view is already destroyed in initialize, so we check
       this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
@@ -61,7 +61,7 @@ var IdeaPanel = AssemblPanel.extend({
           that.setIdeaModel(currentIdea);
         }
       });
-      
+
       this.listenTo(this.getContainingGroup(), "change:pseudoIdea", function(currentIdea) {
         //console.log("Pseudo-idea listen hack fired on ideaPanel");
         if (!this.isViewDestroyed()) {
@@ -178,7 +178,7 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   renderTemplateGetExtractsLabel: function() {
-    this.$('.ideaPanel-section-segments-legend .legend').html(
+    this.$('.js_extractsSummary').html(
         this.getExtractsLabel());
   },
 
@@ -352,9 +352,9 @@ var IdeaPanel = AssemblPanel.extend({
           return allAgents
         }
       });
-      
+
       var contributors = new ContributorAgentSubset()
-      
+
       //console.log(contributors);
       var avatarCollectionView = Marionette.CollectionView.extend({
   constructor: function avatarCollectionView() {
@@ -366,7 +366,7 @@ var IdeaPanel = AssemblPanel.extend({
       var avatarsView = new avatarCollectionView({
         collection: contributors
       });
-      
+
       that.contributors.show(avatarsView);
       if(contributorsId.length > 0) {
         that.ui.contributorsSection.removeClass('hidden');
@@ -519,7 +519,7 @@ var IdeaPanel = AssemblPanel.extend({
               this.fetchModelAndRender();
             }
           }
-        } 
+        }
       }
 
       if (idea === null) {
@@ -637,7 +637,7 @@ var IdeaPanel = AssemblPanel.extend({
     if ( ev && "dataTransfer" in ev ) {
       if ( "effectAllowed" in ev.dataTransfer
         && (ev.dataTransfer.effectAllowed == "move" || ev.dataTransfer.effectAllowed == "link")
-      ){ 
+      ){
         ev.dataTransfer.dropEffect = ev.dataTransfer.effectAllowed;
       }
       else {

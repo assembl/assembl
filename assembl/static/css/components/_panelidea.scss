@@ -2,6 +2,9 @@
 // ===========================
 
 .ideaPanel {
+  .panel-body {
+    padding: 16px 16px
+  }
   #ideaPanel-section-summary > * {
     //background: url(#{$img-dir}/icon/idea.svg) no-repeat left center;
     //padding-left: 2em;
@@ -24,38 +27,11 @@
 #ideaPanel-definition {
   .panel-editablearea {
     margin: 0px;
-    padding: 3px 0px 3px 4px;
+    padding: 8px 6px 8px 8px;
   }
 }
 
 #ideaPanel-definition .panel-editablearea,
 #ideaPanel-longtitle .panel-editablearea {
   padding: 9px 0px 9px 4px;
-}
-
-#ideaPanel-shorttitle {
-  color: $white;
-  font-size: 20px;
-  font-style: italic;
-
-  .panel-editablearea, div {
-    @extend %icon;
-    &:before, &:after {
-      font-size: 7px;
-      content: '\e805';
-      color: $black;
-    }
-    &:after {
-      @include rotate(180);
-      margin-left: 13px;
-    }
-    &:before {
-      float: left;
-      margin-right: 7px;
-    }
-  }
-}
-
-.ideaPanel-legend {
-  //padding-left: 5px;
 }

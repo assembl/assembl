@@ -3,7 +3,7 @@
 /*
   Variables
   Ranked from light -> dark
-  
+
   NEVER refer to these color variables elsewhere in the SCSS files
  */
 $th_local_white: #FFFFFF;
@@ -15,10 +15,10 @@ $th_local_purple: #B36FE0;
 $th_local_purple6: #9986AA;
 $th_local_purple3: #88698e;
 $th_local_purple5: #9013FE; // saturated purple
-$th_local_purple1: #513850; 
+$th_local_purple1: #513850;
 $th_local_purple4: #432b42;
 
-//Grays <- Why in American English!? 
+//Grays <- Why in American English!?
 $th_local_gray4: #F6F6F6; // white
 $th_local_gray7: #ecf0f1; // almost white (cyan)
 $th_local_gray2: #EEEEEE; // almost white
@@ -28,12 +28,12 @@ $th_local_gray: #7F8C8D; // grey, slightly cyan
 $th_local_gray1: #888888; // like above, less cyan
 $th_local_gray6: #484848;
 
-$th_local_green1: #CCEFDB; // almost white 
+$th_local_green1: #CCEFDB; // almost white
 $th_local_green: #4ac780;
 
 
 //Global to the entire scss infrastructure, mandatory variables for EVERY theme
-$theme_activelink_color: $th_local_purple;
+$theme_activelink_color: $th_local_purple5;
 $theme_inactivelink_color: $th_local_gray3;
 $theme_checkbox_color: $th_local_purple;
 $theme_form_field_active_border_color: $th_local_purple;
@@ -91,6 +91,7 @@ $theme_navigation_or_idea_bg_active: $th_local_gray4;
 //$theme_panel_group_header_bg_color: $th_local_gray1;
 $theme_panel_group_header_bg_color: $th_local_gray7;
 $theme_panel_group_header_close_color: $theme_header_text_color;
+$theme_panel_section_title_icon_color: lighten($th_local_purple5, 20%);
 
 //extract
 $theme_extract_bg: $theme_navigation_bg;

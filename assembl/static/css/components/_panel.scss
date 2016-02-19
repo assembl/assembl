@@ -1,3 +1,6 @@
+$section_separator_color: #EEEEEE;
+
+
 // The panel
 // =========
 .groupPanel {
@@ -9,16 +12,9 @@
   border-right: 1px solid $theme_box_border_color;
   overflow: hidden;
   .panel-section {
-    margin: 0;
     position: relative;
-    padding: 0 10px;
-  }
-  .panel-section:first-child {
-    background-color: $theme_idea_header_bg;
-    padding: 10px;
-    .panel-editablearea {
-      background-color: $theme_idea_header_bg;
-    }
+    padding: 18px 0px;
+    border-bottom: solid 1px $section_separator_color;
   }
 
   .panel-editablebox.is-editing {
@@ -283,6 +279,31 @@ _:-ms-input-placeholder, :root .popin-body .groupBody.editable .groupPanel heade
   }
   .groupPanel.is-dragover & {
     background-color: $yellow;
+  }
+  .panel-content-title {
+  font-size: 19px;
+  //margin: 10px 0px 0px 0px;
+  //padding: 0px 6px 8px 8px;
+  border-bottom: solid 1px $section_separator_color;
+  }
+  .section-title {
+    color: $txtGray2;
+    font-size: 16px;
+    font-weight: 300;
+    margin: 0px 8px 18px 0px;
+    i.icon{
+      color: $theme_panel_section_title_icon_color;
+      }
+    .title-text {
+      margin-left: 6px;
+    }
+  }
+  .sub-section-title {
+    color: $txtGray1;
+    font-size: 11px;
+    text-transform: uppercase;
+    //margin: 6px 8px 6px 0px;
+    //font-weight: 300;
   }
 }
 
