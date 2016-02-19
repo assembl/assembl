@@ -266,7 +266,7 @@ class LocaleLabel(Base):
 
     @classmethod
     def names_of_locales_in_locale(cls, loc_codes, target_locale):
-        locale_ids = [Locale.locale_collection[loc_code] for loc_code in loc_codes]
+        locale_ids = [Locale.get_id_of(loc_code) for loc_code in loc_codes]
         target_loc_ids = [loc.id for loc in target_locale.ancestry()]
         locale_labels = target_locale.db.query(cls).filter(
             cls.locale_id_of_label.in_(target_loc_ids),
