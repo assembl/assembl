@@ -519,7 +519,7 @@ def create_post(request):
             subject = discussion.topic if discussion.topic else ''
         # print subject
         if subject is not None and len(subject):
-            new_subject = "Re: " + restrip_pat.sub('', subject)
+            new_subject = "Re: " + restrip_pat.sub('', subject).strip()
             if (in_reply_to_post and new_subject == subject and
                     in_reply_to_post.get_title()):
                 # reuse subject and translations
@@ -530,7 +530,9 @@ def create_post(request):
         else:
             raven_client = get_raven_client()
             if raven_client:
-                raven_client.captureMessage("A message is about to be written to the daatabase with an empty subject.  This is not supposed to happen.")
+                raven_client.captureMessage(
+                    "A message is about to be written to the database with an "
+                    "empty subject.  This is not supposed to happen.")
             subject = LangString.EMPTY(discussion.db)
 
     post_constructor_args = {

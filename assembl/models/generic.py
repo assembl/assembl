@@ -283,6 +283,15 @@ class Content(DiscussionBoundBase):
         LangString,
         primaryjoin=body_id == LangString.id)
 
+    def __init__(self, *args, **kwargs):
+        if (kwargs.get('subject', None) is None and
+                kwargs.get('subject_id', None) is None):
+            kwargs['subject'] = LangString.EMPTY(self.db)
+        if (kwargs.get('body', None) is None and
+                kwargs.get('body_id', None) is None):
+            kwargs['body'] = LangString.EMPTY(self.db)
+        super(Content, self).__init__(*args, **kwargs)
+
     @classmethod
     def subqueryload_options(cls):
         # Options for subquery loading. Use when there are many languages in the discussion.
