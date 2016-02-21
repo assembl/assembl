@@ -151,7 +151,7 @@
         "like_count": false,
         "bodyMimeType": false,
         "body": true,
-        "title": true,
+        "subject": true,
         "widget_ideas": false
     },
     "Post": {

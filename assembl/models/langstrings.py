@@ -634,8 +634,6 @@ class LangStringEntry(Base, TombstonableMixin):
         """ in the kwargs, you can specify locale info in many ways:
         as a Locale numeric id (locale_id), Locale object (locale)
         or language code (@language)"""
-        if "langstring_id" not in kwargs and "langstring" not in kwargs:
-            kwargs["langstring"] = LangString()
         if ("locale_id" not in kwargs and "locale" not in kwargs
                 and '@language' in kwargs):
             # Create locale on demand.
