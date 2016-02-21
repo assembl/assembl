@@ -6,6 +6,7 @@ import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
 import logging
+from abc import abstractmethod
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from sqlalchemy import (
@@ -36,6 +37,7 @@ from virtuoso.vmapping import PatternIriClass
 from virtuoso.alchemy import CoerceUnicode
 import transaction
 
+from assembl import locale_negotiator
 from ..lib import config
 from ..lib.utils import get_global_base_url
 from ..lib.locale import to_posix_string
@@ -1609,8 +1611,76 @@ class LanguagePreferenceOrder(IntEnum):
     Discussion = 4
 
 
+class LanguagePreferenceCollection(object):
+    @abstractmethod
+    def find_locale(self, locale):
+        pass
+
+    @classmethod
+    def getCurrent(cls):
+        from pyramid.threadlocal import get_current_request
+        from pyramid.security import Everyone
+        # Very very hackish, but this call is costly and frequent.
+        # Let's cache it in the request. Useful for view_def use.
+        req = get_current_request()
+        assert req
+        if getattr(req, "lang_prefs", 0) is 0:
+            user_id = req.authenticated_userid
+            if user_id and user_id != Everyone:
+                req.lang_prefs = UserLanguagePreferenceCollection(user_id)
+            else:
+                locale = locale_negotiator(req)
+                req.lang_prefs = LanguagePreferenceCollectionWithDefault(locale)
+        return req.lang_prefs
+
+
+class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
+    def __init__(self, locale):
+        self.default_locale_id = Locale.get_id_of(locale)
+
+    def find_locale(self, locale):
+        return UserLanguagePreference(
+            locale=Locale.get_or_create(locale),
+            translate_to=self.default_locale_id,
+            source_of_evidence=LanguagePreferenceOrder.Cookie)
+
+
+class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
+    def __init__(self, user_id):
+        user = User.get(user_id)
+        user_prefs = user.language_preference
+        no_translate = [up for up in user_prefs if not up.translate_to]
+        no_translate.sort()
+        default = no_translate[0] if no_translate else None
+        user_prefs = {
+            user_pref.locale_code: user_pref
+            for user_pref in user_prefs
+        }
+        for (loc, pref) in user_prefs.items():
+            for n, l in enumerate(Locale.decompose_locale(loc)):
+                if n == 0:
+                    continue
+                if l in user_prefs:
+                    break
+                user_prefs[l] = pref
+        self.user_prefs = user_prefs
+        self.default_pref = default
+
+    def find_locale(self, locale):
+        for locale in Locale.decompose_locale(locale):
+            if locale in self.user_prefs:
+                return self.user_prefs[locale]
+        if self.default_pref is None:
+            return None
+        return UserLanguagePreference(
+            locale=Locale.get_or_create(locale),
+            translate_to_locale=self.default_pref.locale,
+            source_of_evidence=self.default_pref.source_of_evidence,
+            user=None)  # Do not give the user or this gets added to session
+
+
 class UserLanguagePreference(Base):
-    __tablename__= 'user_language_preference'
+    __tablename__ = 'user_language_preference'
     __table_args__ = (UniqueConstraint(
         'user_id', 'locale_id', 'source_of_evidence'), )
 
@@ -1636,7 +1706,7 @@ class UserLanguagePreference(Base):
     # Descending order preference, 0 - is the highest
     # preferred_order -> the actual order of languages (explicitly defined)
     #   sorting of languages whose source_of_evidence column is of value 0
-    preferred_order = Column(Integer, nullable=False)  # Source origin order
+    preferred_order = Column(Integer, nullable=False, default=0)  # Source origin order
 
     # This is the actual evidence source, whose contract is defined in
     # LanguagePreferenceOrder
@@ -1653,7 +1723,7 @@ class UserLanguagePreference(Base):
         s = self.source_of_evidence - other.source_of_evidence
         if s:
             return s
-        s = self.preferred_order - other.preferred_order
+        s = (self.preferred_order or 0) - (other.preferred_order or 0)
         if s:
             return s
         return id(self) - id(other)
@@ -1668,31 +1738,11 @@ class UserLanguagePreference(Base):
     #     if self.source_of_evidence == 0:
     #         pass
 
-    @staticmethod
-    def user_prefs_as_dict(user_prefs):
-
-        class LanguageCollectionPreferenceDict(dict):
-            def find_locale(self, locale):
-                for locale in Locale.decompose_locale(locale):
-                    if locale in self:
-                        return self[locale]
-
-        user_prefs = {
-            user_pref.locale_code: user_pref
-            for user_pref in user_prefs
-        }
-        for (loc, pref) in user_prefs.items():
-            for n, l in enumerate(Locale.decompose_locale(loc)):
-                if n == 0:
-                    continue
-                if l in user_prefs:
-                    break
-                user_prefs[l] = pref
-        return LanguageCollectionPreferenceDict(user_prefs)
-
     @property
     def locale_code(self):
-        return Locale.code_for_id(self.locale_id)
+        if self.locale_id:
+            return Locale.code_for_id(self.locale_id)
+        return self.locale.code
 
     @locale_code.setter
     def locale_code(self, code):
@@ -1706,6 +1756,8 @@ class UserLanguagePreference(Base):
     def translate_to_code(self):
         if self.translate_to:
             return Locale.code_for_id(self.translate_to)
+        elif self.translate_to_locale:
+            return self.translate_to_locale.code
 
     @translate_to_code.setter
     def translate_to_code(self, code):
@@ -1721,11 +1773,10 @@ class UserLanguagePreference(Base):
 
     def __repr__(self):
         return \
-            """{user_id: %d, locale_id: %s, translated_to: %s source_of_evidence: %d, preferred_order: %d}""" % (
-                self.user_id,
-                Locale.code_for_id(self.locale_id),
-                Locale.code_for_id(self.translate_to)
-                if self.translate_to else None,
-                self.source_of_evidence,
-                self.preferred_order
+            "{user_id: %d, locale_id: %s, translated_to: %s "\
+            "source_of_evidence: %s, preferred_order: %d}" % (
+                self.user_id or -1,
+                self.locale_code, self.translate_to_code,
+                LanguagePreferenceOrder(self.source_of_evidence).name,
+                self.preferred_order or 0
             )

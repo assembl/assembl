@@ -155,7 +155,7 @@ class Locale(Base):
                 and id not in cls._locale_collection_byid):
             # may have been created in another process
             cls.reset_cache()
-        return cls.locale_collection_byid[id]    
+        return cls.locale_collection_byid[id]
 
     @classproperty
     def locale_collection(cls):
@@ -509,6 +509,7 @@ class LangString(Base):
         return aliased(LangStringEntry, q)
 
     def best_lang(self, user_prefs=None, allow_errors=True):
+        from .auth import LanguagePreferenceCollection
         # Get the best langStringEntry among those available using user prefs.
         # 1. Look at available original languages: get corresponding pref.
         # 2. Sort prefs (same order as original list.)
@@ -519,11 +520,9 @@ class LangString(Base):
         if len(self.entries) == 1:
             return self.entries[0]
         if user_prefs:
-            from .auth import UserLanguagePreference
             if not isinstance(user_prefs, dict):
                 # Often worth doing upstream
-                user_prefs = UserLanguagePreference.user_prefs_as_dict(
-                    user_prefs)
+                user_prefs = LanguagePreferenceCollection.getCurrent()
             for use_originals in (True, False):
                 entries = filter(
                     lambda e: e.is_machine_translated != use_originals,
@@ -569,33 +568,17 @@ class LangString(Base):
         # or first entry
         return self.entries[0]
 
-    def _get_lang_prefs(self):
-        from pyramid.threadlocal import get_current_request
-        from pyramid.security import Everyone
-        # Very very hackish, but the user_prefs_as_dict call
-        # is costly and frequent. Let's cache it in the request.
-        # Useful for view_def use.
-        req = get_current_request()
-        assert req
-        if getattr(req, "lang_prefs", 0) is 0:
-            user_id = req.authenticated_userid
-            if user_id and user_id != Everyone:
-                from .auth import User, UserLanguagePreference
-                user = User.get(user_id)
-                req.lang_prefs = UserLanguagePreference.user_prefs_as_dict(
-                    user.language_preference)
-            else:
-                req.lang_prefs = None
-        return req.lang_prefs
-
     def best_entry_in_request(self):
+        from .auth import LanguagePreferenceCollection
         # Use only when a request is in context, eg view_def
-        return self.best_lang(self._get_lang_prefs(), False)
+        return self.best_lang(
+            LanguagePreferenceCollection.getCurrent(), False)
 
     def best_entries_in_request_with_originals(self):
+        from .auth import LanguagePreferenceCollection
         "Give both best and original (for view_def); avoids a roundtrip"
         # Use only when a request is in context, eg view_def
-        prefs = self._get_lang_prefs()
+        prefs = LanguagePreferenceCollection.getCurrent()
         lang = self.best_lang(prefs)
         entries = [lang]
         # Punt this.
