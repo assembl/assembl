@@ -484,7 +484,7 @@ var MessageView = Marionette.LayoutView.extend({
     if (this.hasTranslatorService) {
 
       if (!this.useOriginalContent) {
-        var processedBody = body.bestWithErrors(this.translationData, true),
+        var processedBody = body.bestWithErrors(this.translationData, false),
             processedSubject = subject.bestWithErrors(this.translationData, true);
 
         //bestWithError will make this the original value if error
