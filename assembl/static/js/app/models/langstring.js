@@ -62,6 +62,14 @@ var LangStringEntry = Base.Model.extend({
       var locale = this.get('@language');
       return locale.split("-x-mtfrom-")[1];
     }
+  },
+  getOriginalLocale: function() {
+    if (this.isMachineTranslation()) {
+      var locale = this.get('@language');
+      return locale.split("-x-mtfrom-")[1];
+    } else {
+        return this.getBaseLocale();
+    }
   }
 });
 
