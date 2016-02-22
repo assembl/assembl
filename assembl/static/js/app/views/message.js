@@ -490,7 +490,7 @@ var MessageView = Marionette.LayoutView.extend({
         //bestWithError will make this the original value if error
         this.bodyTranslationError = processedBody.error;
         this.unknownPreference = this.translationData.getPreferenceForLocale(
-          processedBody.entry.getOriginalLocale()) === undefined;
+          processedBody.entry.getOriginalLocale()).get("source_of_evidence") === null;
         this._body = processedBody.entry;
         this._subject = processedSubject.entry;
         this.isMessageTranslated = this._body.isMachineTranslation();

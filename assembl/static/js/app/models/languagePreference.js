@@ -86,6 +86,22 @@ var LanguagePreferenceCollection = Base.Collection.extend({
       if (commonLenF(pref) > 0) {
         return pref;
       }
+      var target_locale, untranslated = this.where({translate_to_name:null});
+      if (untranslated.length) {
+        target_locale = untranslated[0].get("locale_code");
+      } else {
+        target_locale = Ctx.getLocale();
+      }
+      if (LangString.localeCommonLength(target_locale, locale)) {
+        return new LanguagePreferenceModel({
+            locale_code: locale
+        });
+      } else {
+          return new LanguagePreferenceModel({
+            locale_code: locale,
+            translate_to_name: target_locale
+          });
+      }
     },
     getTranslationData: function() {
       // If we want to create an optimized collection someday...
@@ -162,10 +178,18 @@ var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.
     },
 
     getPreferenceForLocale: function(locale){
+      var target_locale = Ctx.getLocale();
+      if (LangString.localeCommonLength(target_locale, locale)) {
         return new LanguagePreferenceModel({
-          locale_code: locale,
-          source_of_evidence: 0
+            locale_code: locale
         });
+      } else {
+          return new LanguagePreferenceModel({
+            locale_code: locale,
+            translate_to_name: target_locale,
+            source_of_evidence: 1
+          });
+      }
     },
 });
 
