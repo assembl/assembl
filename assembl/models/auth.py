@@ -1635,22 +1635,31 @@ class LanguagePreferenceCollection(object):
 
 
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
-    def __init__(self, locale):
-        self.default_locale_id = Locale.get_id_of(locale)
+    def __init__(self, locale_code):
+        self.default_locale = Locale.get_or_create(locale_code)
 
     def find_locale(self, locale):
-        return UserLanguagePreference(
-            locale=Locale.get_or_create(locale),
-            translate_to=self.default_locale_id,
-            source_of_evidence=LanguagePreferenceOrder.Cookie)
+        if Locale.len_common_parts(locale, self.default_locale.code):
+            return UserLanguagePreference(
+                locale=self.default_locale,
+                source_of_evidence=LanguagePreferenceOrder.Cookie)
+        else:
+            return UserLanguagePreference(
+                locale=Locale.get_or_create(locale),
+                translate_to_locale=self.default_locale,
+                source_of_evidence=LanguagePreferenceOrder.Cookie)
 
 
 class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def __init__(self, user_id):
         user = User.get(user_id)
         user_prefs = user.language_preference
+        user_prefs.sort()
+        # using the untranslated locales, if any.
+        # TODO: Look at other translation targets?
         no_translate = [up for up in user_prefs if not up.translate_to]
         no_translate.sort()
+        # TODO: Or use discussion locales otherwise?
         default = no_translate[0] if no_translate else None
         user_prefs = {
             user_pref.locale_code: user_pref
@@ -1671,6 +1680,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             if locale in self.user_prefs:
                 return self.user_prefs[locale]
         if self.default_pref is None:
+            # this should never actually happen
             return None
         return UserLanguagePreference(
             locale=Locale.get_or_create(locale),
