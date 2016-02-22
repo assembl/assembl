@@ -105,12 +105,14 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
         .then(function(ideaNames){
           that.ideaNames = ideaNames;
 
-          if (_.isEmpty(ideaNames)) {
-            that.messageView.removeIdeaClassificationView();
-          }
-          else {
-            that.template = "#tmpl-ideaClassificationInMessage"
-            that.render();
+          if (!that.messageView.isViewDestroyed()) {
+            if (_.isEmpty(ideaNames)) {
+              that.messageView.removeIdeaClassificationView();
+            }
+            else {
+              that.template = "#tmpl-ideaClassificationInMessage"
+              that.render();
+            }
           }
         })
         .error(function(e){
