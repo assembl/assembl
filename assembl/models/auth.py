@@ -1644,9 +1644,11 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
                 locale=self.default_locale,
                 source_of_evidence=LanguagePreferenceOrder.Cookie)
         else:
+            locale = Locale.get_or_create(locale)
             return UserLanguagePreference(
-                locale=Locale.get_or_create(locale),
+                locale=locale, locale_id=locale.id,
                 translate_to_locale=self.default_locale,
+                translate_to=self.default_locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie)
 
 
@@ -1682,9 +1684,11 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
         if self.default_pref is None:
             # this should never actually happen
             return None
+        locale = Locale.get_or_create(locale)
         return UserLanguagePreference(
-            locale=Locale.get_or_create(locale),
+            locale=locale, locale_id=locale.id,
             translate_to_locale=self.default_pref.locale,
+            translate_to=self.default_pref.locale.id,
             source_of_evidence=self.default_pref.source_of_evidence,
             user=None)  # Do not give the user or this gets added to session
 
