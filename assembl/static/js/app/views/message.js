@@ -668,9 +668,11 @@ var MessageView = Marionette.LayoutView.extend({
 
     if (Ctx.debugRender){
       console.log("---- Message onRender called ----------------");
+      console.log("Local states of a message view:");
       console.log("forceTranslationQuestion: ", this.forceTranslationQuestion);
       console.log("useOriginalContent: ", this.useOriginalContent);
       console.log("unknownPreference: ", this.unknownPreference);
+      console.log("bodyTranslationError: ", this.bodyTranslationError);
       console.log("isMessageTranslated: ", this.isMessageTranslated);
       console.log("Discrepency? ", !(this.isMessageTranslated !== this.showAnnotations));
       console.log("_body.value: ", this._body.value());
@@ -1875,6 +1877,7 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   /*
+    ~ Deprecated ~
     Utility method to reset the state variables required by the translation view logic
    */
   resetTranslationState: function(){
@@ -1882,7 +1885,8 @@ var MessageView = Marionette.LayoutView.extend({
     this.forceTranslationQuestion = false;
     this.useOriginalContent = false;
     this.showAnnotations = this.canShowAnnotations();
-    this.bodyTranslationError = false;
+    // this.bodyTranslationError = false;  //This could be wrong. Perhaps, should call processContent
+    this.processContent();
   }
 
 });

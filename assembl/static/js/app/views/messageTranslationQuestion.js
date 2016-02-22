@@ -33,20 +33,10 @@ var processConfirmLanguagePreferences = function(messageView){
         messageView.closeTranslationView(function(){
             cm.getAllMessageStructureCollectionPromise()
                 .then(function(messageStructures){
-                    return Promise.resolve(messageStructures.fetch());
-                })
-                .then(function(messages){
-                    if (!messageView.isViewDestroyed() ){
-                        //Changing these values are useless, as messageView rendering will re-create
-                        //the message views with initalized values.
-                        messageView.resetTranslationState();
-                        messageView.messageListView.render();
-                    }
-                    else {
-                        console.log("View already destroyed [messageTransationQuestionView]");
-                    }
-            
+                    return messageStructures.fetch();
                 });
+                //Do not need to do anything else. The re-fetching of messages will cause the
+                //messagelist to re-render itself.
         });
     }
 };
