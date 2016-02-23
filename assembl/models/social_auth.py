@@ -259,7 +259,8 @@ class SocialAuthAccount(
         if not profile:
             return
         self.populate_picture(profile)
-        email = profile.get('verifiedEmail', self.email)
+        self.username = profile.get('user_login', self.username)
+        email = profile.get('email', self.email)
         if email and email != self.email_ci:
             self.email = email
             self.verified = self.identity_provider.trust_emails
