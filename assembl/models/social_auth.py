@@ -331,14 +331,14 @@ class SocialAuthAccount(
                     break
             return size_name.join(picture_url.split('_normal'))
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(AgentProfile.iri_class().apply(
-                SocialAuthAccount.profile_id),
-            FOAF.img, SocialAuthAccount.picture_url,
-            name=QUADNAMES.foaf_image,
-            conditions=(SocialAuthAccount.picture_url != None),
-            sections=(PRIVATE_USER_SECTION,))]
+    # @classmethod
+    # def special_quad_patterns(cls, alias_maker, discussion_id):
+    #     return [QuadMapPatternS(AgentProfile.iri_class().apply(
+    #             SocialAuthAccount.profile_id),
+    #         FOAF.img, SocialAuthAccount.picture_url,
+    #         name=QUADNAMES.foaf_image,
+    #         conditions=(SocialAuthAccount.picture_url != None),
+    #         sections=(PRIVATE_USER_SECTION,))]
 
     def unique_query(self):
         query, _ = super(SocialAuthAccount, self).unique_query()
