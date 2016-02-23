@@ -115,8 +115,8 @@
   @include border-radius(3px);
   display: inline-block;
   line-height: 1.42857143;
-  margin-bottom: 0;
-  font-weight: 400;
+  margin: 4px 4px 4px 4px;
+  font-weight: 600;
   font-family: $baseFontFamily;
   white-space: nowrap;
   text-align: center;
@@ -158,8 +158,11 @@
 .btn-default, .btn-bright {
   color: $theme_btn_default_text_color;
   background-color: transparent;
-  padding: 0px 0px; //To cancel btn padding
+  padding: 0px; //To cancel btn padding
   margin: 0 6px 0 0;
+  &.btn-sm, &.btn-xs, &.btn-bright, &.btn-purple, &.btn-large{
+    padding: 0px;
+  }
 }
 
 .btn-default:hover, .btn-bright:hover {
