@@ -1,5 +1,7 @@
 $section_separator_color: #EEEEEE;
-
+$section_spacing: 18px;
+$editablearea_hover_border_distance: 4px;
+$editablearea_hover_border_size: 1px;
 
 // The panel
 // =========
@@ -13,7 +15,7 @@ $section_separator_color: #EEEEEE;
   overflow: hidden;
   .panel-section {
     position: relative;
-    padding: 18px 0px;
+    padding: $section_spacing 0px;
     border-bottom: solid 1px $section_separator_color;
   }
 
@@ -145,25 +147,34 @@ $section_separator_color: #EEEEEE;
   }
 }
 
-// An editable area within the .panel-header
+// An editable area within the .panel
 // ----------------
 .panel-editablearea {
+
   @include box-sizing(border-box);
   display: inline-block;
   width: 100%;
-  min-height: 28px; //22px to match EdiableArea + 6px because of sizing border-box
-  margin: 10px 0;
+  min-height: 22px + 2*$editablearea_hover_border_distance; //22px to match EdiableArea + 6px because of sizing border-box
+  padding: $editablearea_hover_border_distance;
+  margin: - $editablearea_hover_border_distance - $editablearea_hover_border_size; //Inverse of padding so content aligns like a normal element
   cursor: text;
   background-color: white;
-  padding: 3px 0 3px 4px;
-}
+  
+  
+  &.canEdit {
+    border: $editablearea_hover_border_size solid transparent;
+    &:hover {
+      @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
+      border: $editablearea_hover_border_size solid #cccccc;
+    }
+  }
 
-// +++++++
-.panel-editablearea.panel-editablearea--small {
-  width: auto;
-  max-width: 240px;
-  white-space: nowrap;
-  margin: auto;
+  &.panel-editablearea--small {
+    width: auto;
+    max-width: 240px;
+    white-space: nowrap;
+    margin: auto;
+  }
 }
 
 // The container for an editablearea
@@ -180,14 +191,6 @@ $section_separator_color: #EEEEEE;
 .panel-editablebox.is-editing > div:first-child,
 .panel-editablebox.is-editing > div:last-child {
   background: #ddd;
-}
-
-.panel-editablearea.canEdit {
-  border: 1px solid transparent;
-  &:hover {
-    @include box-shadow(rgba(0, 0, 0, 0.1) 0px 1px 1px inset);
-    border: 1px solid #cccccc;
-  }
 }
 
 /* CSS hack: targets Firefox >= 25 (source: browserhacks.com) */
@@ -283,7 +286,7 @@ _:-ms-input-placeholder, :root .popin-body .groupBody.editable .groupPanel heade
   .panel-content-title {
   font-size: 19px;
   //margin: 10px 0px 0px 0px;
-  //padding: 0px 6px 8px 8px;
+  padding: ($section_spacing)-16px 0px $section_spacing 0px; //-16px is to nullify panel content padding, currently defined on ideaPanel
   border-bottom: solid 1px $section_separator_color;
   }
   .section-title {
