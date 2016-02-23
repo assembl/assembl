@@ -158,6 +158,8 @@
 .btn-default, .btn-bright {
   color: $theme_btn_default_text_color;
   background-color: transparent;
+  padding: 0px 0px; //To cancel btn padding
+  margin: 0 6px 0 0;
 }
 
 .btn-default:hover, .btn-bright:hover {

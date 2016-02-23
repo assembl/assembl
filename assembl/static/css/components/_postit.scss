@@ -9,6 +9,9 @@ $harvesterAvatarSize: 24px;
 // ====================
 .postitlist {
   .postit {
+    &:first-of-type{
+      margin-top: 0px;
+    }
     overflow: visible;
     min-width: 200px; //Width from the shadow below.
     color: $gray2;
@@ -18,6 +21,7 @@ $harvesterAvatarSize: 24px;
     background-color: $theme_extract_bg;
     margin: 1em 0;
     &:hover {
+      cursor: move;
       a.segment-link {
         visibility: visible !important;
       }

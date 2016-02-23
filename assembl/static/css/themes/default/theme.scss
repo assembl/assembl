@@ -48,7 +48,7 @@ $theme_btn_secondary_bg_color: $th_local_white;
 $theme_btn_secondary_border_color: $th_local_purple;
 
 $theme_btn_cancel_text_color: $th_local_gray;
-$theme_btn_default_text_color: $th_local_purple;
+$theme_btn_default_text_color: $th_local_purple5;
 
 $theme_popin_header_bg: $th_local_purple;
 $theme_popin_header_text_color: $th_local_white;
@@ -108,5 +108,3 @@ $theme_synthesis_header_bg: $th_local_green;
 /* Import main assembl sass.  This must be after variable definitions, but
    before any custom CSS overrides .*/
 @import "../../assembl_base_styles.scss";
-
-

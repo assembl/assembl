@@ -10,6 +10,9 @@
 .ideaPanel-shorttitle {
 }
 
+.ideaPanel-section-actions{
+}
+
 .ideaPanel-section-summary {
   i.icon-user {
     font-size: 20px;
@@ -126,7 +129,6 @@
 
 .ideaPanel {
   .postitlist {
-    margin-bottom: 15px;
     border: 1px dashed transparent;
   }
   &.is-dragover {
