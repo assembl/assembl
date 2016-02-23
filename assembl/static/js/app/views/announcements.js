@@ -135,13 +135,15 @@ var AnnouncementEditableView = AbstractAnnouncementView.extend({
 
     var titleView = new EditableField({
       'model': this.model,
-      'modelProp': 'title'
+      'modelProp': 'title',
+      'placeholder': i18n.gettext('Please give a title of this announcement...')
     });
     this.region_title.show(titleView);
 
     var bodyView = new CKEditorField({
       'model': this.model,
-      'modelProp': 'body'
+      'modelProp': 'body',
+      'placeholder': i18n.gettext('Please write the content of this announcement here...')
     });
     this.region_body.show(bodyView);
 

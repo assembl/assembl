@@ -150,11 +150,9 @@ $editablearea_hover_border_size: 1px;
 // An editable area within the .panel
 // ----------------
 .panel-editablearea {
-
-  @include box-sizing(border-box);
   display: inline-block;
   width: 100%;
-  min-height: 22px + 2*$editablearea_hover_border_distance; //22px to match EdiableArea + 6px because of sizing border-box
+  min-height: 19px; //min-height must match line-height
   padding: $editablearea_hover_border_distance;
   margin: - $editablearea_hover_border_distance - $editablearea_hover_border_size; //Inverse of padding so content aligns like a normal element
   cursor: text;

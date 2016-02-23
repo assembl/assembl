@@ -26,9 +26,9 @@
             <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
               <div class="sub-section-title">{{ gettext('Expression in next synthesis') }}</div>
               <% if( editingTitle ) { %>
-                <div class="ideaPanel-longtitle-editor"></div>
+                <div class="ideaPanel-longtitle-editor panel-editablearea canEdit"></div>
               <% } else { %>
-                <div class="ideaPanel-longtitle js_editLongTitle" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}">
+                <div class="ideaPanel-longtitle js_editLongTitle panel-editablearea canEdit" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}">
                     <%= idea.getLongTitleDisplayText() %>
                 </div>
               <% } %>
@@ -43,17 +43,11 @@
             <div class="ideaPanel-definition-editor"></div>
           <% } else { %>
             <% if (canEdit) { %>
-               <% if(idea.get('definition').length){ %>
-                 <div class="ideaPanel-definition js_editDefinition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
-                     <%= idea.get('definition') %>
-                 </div>
-               <% } else { %>
-                 <div class="add-description js_editDefinition">
-                     <i class="icon icon-add"></i> {{ gettext('Add a description') }}
-                 </div>
-               <% } %>
+              <div class="ideaPanel-definition panel-editablearea canEdit js_editDefinition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
+                <%= idea.get('definition') %>
+              </div>
             <% } else { %>
-              <div class="ideaPanel-definition disconnected" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
+              <div class="ideaPanel-definition panel-editablearea" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
                  <%= idea.get('definition') %>
               </div>
             <% } %>

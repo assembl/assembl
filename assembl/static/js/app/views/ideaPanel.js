@@ -879,7 +879,10 @@ var IdeaPanel = AssemblPanel.extend({
 
     var description = new CKEditorField({
       'model': this.model,
-      'modelProp': 'definition'
+      'modelProp': 'definition',
+      'placeholder': i18n.gettext('You may want to describe this idea for users here...'),
+      'showPlaceholderOnEditIfEmpty': false,
+      'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)
     });
 
     this.listenTo(description, 'save cancel', function() {
@@ -896,12 +899,12 @@ var IdeaPanel = AssemblPanel.extend({
         area = this.$('.ideaPanel-longtitle-editor');
 
     var model = this.model.getLongTitleDisplayText();
-
     if (!model.length) return;
 
     var ckeditor = new CKEditorField({
       'model': this.model,
-      'modelProp': 'longTitle'
+      'modelProp': 'longTitle',
+      'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS)
     });
 
     this.listenTo(ckeditor, 'save cancel', function() {

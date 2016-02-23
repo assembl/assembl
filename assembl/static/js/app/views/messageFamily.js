@@ -118,7 +118,9 @@ var MessageFamilyView = Marionette.ItemView.extend({
 
   onDestroy: function() {
     //Marionette view not used in a region
-    this._messageView.destroy();
+    if(this._messageView) {
+      this._messageView.destroy();
+    }
 
     _.each(this.childViews, function(messageFamily) {
       //MessageFamily is a Marionette view called from a non-marionette context,
