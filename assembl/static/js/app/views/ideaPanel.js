@@ -33,14 +33,7 @@ var IdeaPanel = AssemblPanel.extend({
   closeable: false,
   gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
   minWidth: 295,
-  regions: {
-    segmentList: ".postitlist",
-    contributors: ".contributors",
-    widgetsInteraction: ".ideaPanel-section-access-widgets",
-    widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets",
-    widgetsCreationInteraction: ".ideaPanel-section-create-widgets",
-    announcementRegion: "@ui.announcement"
-  },
+
   initialize: function(options) {
     Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
     var that = this, collectionManager = new CollectionManager();
@@ -95,7 +88,17 @@ var IdeaPanel = AssemblPanel.extend({
     'clearIdea': '.js_ideaPanel-clearBtn',
     'closeExtract': '.js_closeExtract',
     'contributorsSection': '.ideaPanel-section-contributors',
-    'announcement': '.ideaPanel-announcement-region'
+    'announcement': '.ideaPanel-announcement-region',
+    'widgetsSection': '.js_ideaPanel-section-widgets',
+    'adminSection': '.js_ideaPanel-section-admin',
+  },
+  regions: {
+    segmentList: ".postitlist",
+    contributors: ".contributors",
+    widgetsInteractionRegion: ".js_ideaPanel-section-access-widgets-region",
+    widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets",
+    widgetsCreationInteraction: ".ideaPanel-section-create-widgets",
+    announcementRegion: "@ui.announcement"
   },
   modelEvents: {
     //Do NOT listen to change here
@@ -278,11 +281,18 @@ var IdeaPanel = AssemblPanel.extend({
 
       this.renderContributors();
 
+      if( currentUser.can(Permissions.EDIT_IDEA) || currentUser.can(Permissions.EDIT_SYNTHESIS) ) {
+        this.ui.adminSection.removeClass("hidden");
+      }
+
       collectionManager.getWidgetsForContextPromise(
         Widget.Model.prototype.IDEA_PANEL_ACCESS_CTX,
         that.model).then(function(subset) {
-          that.widgetsInteraction.show(
+          that.widgetsInteractionRegion.show(
             new WidgetButtons.WidgetButtonListView({collection: subset}));
+          if(subset.length > 0) {
+            that.ui.widgetsSection.removeClass("hidden");
+          }
         });
       if (currentUser.can(Permissions.ADMIN_DISCUSSION)) {
         collectionManager.getWidgetsForContextPromise(
@@ -291,6 +301,7 @@ var IdeaPanel = AssemblPanel.extend({
             that.widgetsConfigurationInteraction.show(
               new WidgetLinks.WidgetLinkListView({collection: subset}));
           });
+
         that.widgetsCreationInteraction.show(
           new WidgetLinks.WidgetLinkListView({
             context: Widget.Model.prototype.IDEA_PANEL_CREATE_CTX,

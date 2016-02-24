@@ -10,11 +10,11 @@
           <div>{{ showShareButton() }}</div>
       </fieldset>
 
-      <fieldset class="panel-section ideaPanel-section-widgets">
+      <fieldset class="js_ideaPanel-section-widgets panel-section ideaPanel-section-widgets hidden">
           <div class="section-title">
             <i class="icon icon-user"></i><span class="title-text">{{ gettext('Voting session') }}</span>
           </div>
-          <div class="ideaPanel-section-access-widgets"></div>
+          <div class="js_ideaPanel-section-access-widgets-region"></div>
       </fieldset>
 
       <fieldset class="panel-section ideaPanel-section-summary">
@@ -113,7 +113,7 @@
 
       </fieldset>
 
-      <fieldset class="panel-section ideaPanel-section-widgets-admin">
+      <fieldset class="panel-section js_ideaPanel-section-admin ideaPanel-section-admin hidden">
           <ul>
               <% if (canEditExtracts) { %>
                 <li>

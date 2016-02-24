@@ -17,6 +17,10 @@ $editablearea_hover_border_size: 1px;
     position: relative;
     padding: $section_spacing 0px;
     border-bottom: solid 1px $section_separator_color;
+    &>ul {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
   }
 
   .panel-editablebox.is-editing {
