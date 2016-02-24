@@ -164,7 +164,7 @@ var AgentModel = Base.Model.extend({
    * @return {Boolean} true if the user is an unknown user
    */
   isUnknownUser: function() {
-    return this.getId() == UNKNOWN_USER_ID;
+    return this.getId() === UNKNOWN_USER_ID;
   },
 
   validate: function(attrs, options) {

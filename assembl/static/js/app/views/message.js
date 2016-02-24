@@ -595,7 +595,8 @@ var MessageView = Marionette.LayoutView.extend({
       user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST),
       unknownPreference: this.unknownPreference,
       useOriginalContent: this.useOriginalContent,
-      isTranslatedMessage: this.isMessageTranslated
+      isTranslatedMessage: this.isMessageTranslated,
+      canShowTranslation: this.canShowTranslation()
     };
   },
 
@@ -776,7 +777,7 @@ var MessageView = Marionette.LayoutView.extend({
       if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
-        if (this.hasTranslatorService) {
+        if (this.canShowTranslation() ) {
           if (this.forceTranslationQuestion || (
                 this.unknownPreference && !this.bodyTranslationError)) {
             //Only show the translation view *iff* the message was translated by the backend
@@ -1874,6 +1875,13 @@ var MessageView = Marionette.LayoutView.extend({
     else {
       this.hasTranslatorService = Ctx.hasTranslationService();
     }
+  },
+
+  /*
+    Logic check that the translation view should be shown
+   */
+  canShowTranslation: function(){
+    return (Ctx.isUserConnected() && this.hasTranslatorService);
   },
 
   /*

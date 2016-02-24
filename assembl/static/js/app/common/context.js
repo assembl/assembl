@@ -1417,11 +1417,10 @@ Context.prototype = {
   },
 
   isUserConnected: function() {
-    if (this._currentUser.get('@id') !== Roles.EVERYONE) {
-      return true;
-    } else {
-      return false;
+    if (this._currentUser){
+      return !this._currentUser.isUnknownUser();
     }
+    else {return false; }
   },
 
   getLocale: function() {
