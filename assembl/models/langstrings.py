@@ -655,7 +655,9 @@ class LangStringEntry(Base, TombstonableMixin):
         if len(value) > 50:
             value = value[:50]+'...'
         return '%d: [%s] "%s"' % (
-            self.id or -1, self.locale.code, value.encode('utf-8'))
+            self.id or -1,
+            self.locale.code if self.locale else "missing",
+            value.encode('utf-8'))
 
     @property
     def locale_code(self):
