@@ -79,7 +79,6 @@ var LanguagePreferenceCollection = Base.Collection.extend({
     getPreferenceForLocale: function(locale){
       // Take pref with longest common locale string
       var that = this,
-          savedPref,
       commonLenF = function(pref) {
         return LangString.localeCommonLength(locale, pref.get("locale_code")) > 0;
       };
@@ -95,19 +94,15 @@ var LanguagePreferenceCollection = Base.Collection.extend({
         target_locale = Ctx.getLocale();
       }
       if (LangString.localeCommonLength(target_locale, locale)) {
-        savedPref = new LanguagePreferenceModel({
+        return new LanguagePreferenceModel({
             locale_code: locale
         });
-        this.add(savedPref);
-        return savedPref;
 
       } else {
-          savedPref = new LanguagePreferenceModel({
+          return new LanguagePreferenceModel({
             locale_code: locale,
             translate_to_name: target_locale
           });
-          this.add(savedPref);
-          return savedPref;
       }
     },
     getTranslationData: function() {
