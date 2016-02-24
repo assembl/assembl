@@ -122,6 +122,9 @@ def translate_content(
                             if raven_client:
                                 raven_client.captureException()
                             return changed
+                        # recalculate, may have changed
+                        source_loc = (service.asKnownLocale(original.locale_code) or
+                              original.locale_code)
                         ls.db.expire(ls, ["entries"])
                         known.add(dest)
                         changed = True
