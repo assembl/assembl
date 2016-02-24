@@ -109,7 +109,8 @@ def translate_content(
             originals = ls.non_mt_entries()
             # pick randomly. TODO: Recency order?
             for original in originals:
-                source_loc = service.asKnownLocale(original.locale_code) or source_loc
+                source_loc = (service.asKnownLocale(original.locale_code) or
+                              original.locale_code)
                 for dest in translation_table.get(source_loc, languages):
                     if dest not in known:
                         if Locale.len_common_parts(dest, source_loc):
