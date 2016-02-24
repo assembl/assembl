@@ -35,7 +35,7 @@ def complete_lang_and_trans_table(
         languages = languages or discussion.discussion_locales
         base_languages = {service.asKnownLocale(lang) for lang in languages}
         translation_table = {
-            lang: base_languages - set(lang) for lang in base_languages}
+            lang: base_languages - set((lang,)) for lang in base_languages}
     if not languages:
         languages = set()
         for targets in translation_table.itervalues():
