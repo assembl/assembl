@@ -39,7 +39,7 @@ from .post import ImportedPost
 from .auth import EmailAccount
 from ..tasks.imap import import_mails
 from ..lib.sqla import mark_changed
-from ..tasks.translate import translate_content_task
+from ..tasks.translate import translate_content
 
 
 class AbstractMailbox(PostSource):
@@ -833,7 +833,7 @@ class IMAPMailbox(AbstractMailbox):
                 if error:
                     raise Exception(error)
                 session.add(email_object)
-                translate_content_task.delay(email_object.id)
+                translate_content(email_object)  # should delay
             else:
                 print "Skipped message with imap id %s (bounce or vacation message)"% (email_id)
             #print "Setting mailbox_obj.last_imported_email_uid to "+email_id

@@ -244,8 +244,8 @@ class SourceReader(Thread):
         self.extra_args = kwargs
 
     def handle_new_content(self, content):
-        from .translate import translate_content_task
-        translate_content_task.delay(content.id)
+        from .translate import translate_content
+        translate_content(content)  # should delay
 
     def wake(self):
         print "SourceReader.wake"
