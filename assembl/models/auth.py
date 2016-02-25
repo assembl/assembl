@@ -1624,6 +1624,11 @@ class LanguagePreferenceOrder(IntEnum):
     OS_Default = 3
     Discussion = 4
 
+LanguagePreferenceOrder.unique_prefs = (
+    LanguagePreferenceOrder.Cookie,
+    LanguagePreferenceOrder.Parameter,
+    LanguagePreferenceOrder.OS_Default)
+
 
 class LanguagePreferenceCollection(object):
     @abstractmethod

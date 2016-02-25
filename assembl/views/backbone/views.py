@@ -1,6 +1,6 @@
 import json
 import os.path
-import transaction
+from collections import defaultdict
 
 from pyramid.view import view_config
 from pyramid.response import Response
@@ -62,73 +62,36 @@ def get_styleguide_components():
     return views
 
 
-def process_locale(locale_code, user_id, current_prefs, session, order):
-    # Current is the current locale for the given order (ex. 'en' for
-    # cookie order)
-    current = [x for x in current_prefs if x.preferred_order == order]
-    user = session.query(User).filter_by(id=user_id).first()
-
-    posix_string = to_posix_string(locale_code)
-    posix_string = ensure_locale_has_country(posix_string)
+def process_locale(
+        locale_code, user, session, source_of_evidence):
+    locale_code = to_posix_string(locale_code)
     # Updated: Now Locale is a model. Converting posix_string into its
     # equivalent model. Creates it if it does not exist
-    locale = Locale.get_or_create(posix_string, session)
+    locale = Locale.get_or_create(locale_code, session)
 
-    # Fresh slate for user, create a lang_pref
-    if not current_prefs:
-        lang = UserLanguagePreference(user=user, source_of_evidence=order,
-                                      preferred_order=order, locale=locale)
-        session.add(lang)
-        session.flush()
-
-    elif locale in {x.locale for x in current_prefs}:
-
-        if not current:
-            # current priority does not exist, but locale does
-            updated_pref = session.query(UserLanguagePreference).\
-                filter_by(user_id=user_id, locale=locale).\
-                first()
-            updated_pref.preferred_order = order
+    if source_of_evidence in LanguagePreferenceOrder.unique_prefs:
+        lang_pref_signatures = defaultdict(list)
+        for lp in user.language_preference:
+            lang_pref_signatures[lp.source_of_evidence].append(lp)
+        while len(lang_pref_signatures[source_of_evidence]) > 1:
+            # legacy multiple values
+            lang_pref_signatures[source_of_evidence][-1].delete()
+        if len(lang_pref_signatures[source_of_evidence]) == 1:
+            lang_pref_signatures[source_of_evidence][0].locale = locale
             session.flush()
-
-        elif current[0].locale != locale:
-            # Current priority exists, but is not the desired locale
-            # Update current to desired local, remove current.
-            pref_to_remove = session.query(UserLanguagePreference).\
-                filter_by(user_id=user_id, preferred_order=order).first()
-
-            session.delete(pref_to_remove)
-            session.flush()
-
-            updated_pref = \
-                session.query(UserLanguagePreference).\
-                filter_by(user_id=user_id, locale=locale).\
-                first()
-
-            updated_pref.preferred_order = order
-            # updated_pref.source_of_evidence = order
-            session.flush()
-
-        else:
-            print "Current %s locale exists." % order
-
-    # non-empty list of current preferences, and current locale does not exist
-    elif current_prefs and not current:
-        lang = UserLanguagePreference(locale=locale,
-                                      preferred_order=order,
-                                      source_of_evidence=order,
-                                      user=user)
-        session.add(lang)
-        session.flush()
-
-    # Finally, locale not previously set, and there exists a previous
-    # priority locale
+            return
+        # else creation below
     else:
-        pref = session.query(UserLanguagePreference).\
-            filter_by(user_id=user_id, preferred_order=order).first()
-        pref.locale = locale
-        session.add(pref)
-        session.flush()
+        lang_pref_signatures = {
+            (lp.locale_id, lp.source_of_evidence)
+            for lp in user.language_preference
+        }
+        if (locale.id, source_of_evidence) in lang_pref_signatures:
+            return
+    lang = UserLanguagePreference(
+        user=user, source_of_evidence=source_of_evidence, locale=locale)
+    session.add(lang)
+    session.flush()
 
 
 @view_config(route_name='home', request_method='GET', http_cache=60)
@@ -201,31 +164,25 @@ def home_view(request):
     context['canDisplayTabs'] = True
     preferences = discussion.preferences
     if user_id != Everyone:
-        from assembl.models import AgentProfile, UserPreferenceCollection
-        user = AgentProfile.get(user_id)
+        from assembl.models import UserPreferenceCollection
+        user = User.get(user_id)
         preferences = UserPreferenceCollection(user_id, discussion)
         # TODO: user may not exist. Case of session with BD change.
         user.is_visiting_discussion(discussion.id)
         session = Discussion.default_db
-        current_prefs = session.query(UserLanguagePreference).\
-            filter_by(user_id=user_id).all()
-        # user = session.query(User).filter_by(id=user_id).first()
 
         if '_LOCALE_' in request.cookies:
             locale = request.cookies['_LOCALE_']
-            process_locale(locale, user_id,
-                           current_prefs, session,
+            process_locale(locale, user, session,
                            LanguagePreferenceOrder.Cookie)
 
         elif '_LOCALE_' in request.params:
             locale = request.params['_LOCALE_']
-            process_locale(locale, user_id,
-                           current_prefs, session,
+            process_locale(locale, user, session,
                            LanguagePreferenceOrder.Parameter)
         else:
             locale = locale_negotiator(request)
-            process_locale(locale, user_id,
-                           current_prefs, session,
+            process_locale(locale, user, session,
                            LanguagePreferenceOrder.OS_Default)
     else:
         locale = request.localizer.locale_name
