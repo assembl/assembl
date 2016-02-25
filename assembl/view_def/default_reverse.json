@@ -185,11 +185,11 @@
     },
     "WidgetPost": {
         "@extends": "AssemblPost",
-        "metadata_raw": true
+        "metadata_json": true
     },
     "IdeaProposalPost": {
         "@extends": "WidgetPost",
-        "proposes_idea": true
+        "proposes_idea": false
     },
     "Action": {
         "user": "actor",

@@ -491,12 +491,15 @@ def test_inspiration_widget(
                 "@type": "LangStringEntry", "value": "body",
                 "@language": "en"
             }]}, "creator_id": participant1_user.id,
-            "metadata_raw": '{"inspiration_url": "https://www.youtube.com/watch?v=7E2FUSYO374"}'})
+            "metadata_json": {
+                "inspiration_url":
+                    "https://www.youtube.com/watch?v=7E2FUSYO374"}})
     assert r.ok
     post_location = r.location
     post = Post.get_instance(post_location)
     assert post
     assert post.widget
+    assert post.metadata_json['inspiration_url']
 
 
 def test_voting_widget(

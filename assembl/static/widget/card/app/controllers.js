@@ -183,9 +183,9 @@ appCards.controller('cardsCtl',
                 "@type": "LangString", "entries": [{
                     "@type": "LangStringEntry", "value": messageContent,
                     "@language": "und"}]},
-            "metadata_raw": '{"inspiration_url": "' + inspirationSourceUrl + '"}'
+            "metadata_json": {"inspiration_url": inspirationSourceUrl }
           };
-                
+
           console.log("message: ", message);
           var url = $scope.sendMessageEndpointUrl;
           if (!url)

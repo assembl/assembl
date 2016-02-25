@@ -518,9 +518,9 @@ videosApp.controller('videosCtl',
                     "@type": "LangString", "entries": [{
                         "@type": "LangStringEntry", "value": messageContent,
                         "@language": "und"}]},
-                "metadata_raw": '{"inspiration_url": "' + videoUrl + '"}'
+                "metadata_json": {"inspiration_url": videoUrl }
               };
-                
+
               console.log("message: ", message);
               var url = $scope.sendMessageEndpointUrl;
               if (!url)
