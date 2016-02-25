@@ -120,7 +120,7 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
         .then(function(ideaNames){
           that.ideaNames = ideaNames;
 
-          if (!that.messageView.isViewDestroyed()) {
+          if (!that.isViewDestroyed()) {
             if (_.isEmpty(ideaNames)) {
               that.messageView.removeIdeaClassificationView();
             }
