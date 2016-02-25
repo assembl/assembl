@@ -64,6 +64,7 @@ var LanguageSelectionView = Marionette.ItemView.extend({
         this.messageView = this.parentView.messageView;
         this.languagePreferences = this.parentView.languagePreferences;
         this.translatedTo = this.parentView.translatedTo;
+        this.translatedFrom = this.parentView.translatedFrom;
         this.originalLocale = this.parentView.originalLocale;
         this.langCache = this.parentView.langCache;
     },
