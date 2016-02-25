@@ -836,6 +836,20 @@ class User(AgentProfile):
                 role.user = self
             if other_user.username and not self.username:
                 self.username = other_user.username
+            my_lang_pref_signatures = {
+                (lp.locale_id, lp.source_of_evidence)
+                for lp in self.language_preference
+            }
+            for lang_pref in other_user.language_preference:
+                if ((lang_pref.locale_id, lang_pref.source_of_evidence) in
+                        my_lang_pref_signatures):
+                    # First rough implementation: One has priority.
+                    # There is no internal merging that makes sense,
+                    # except maybe reordering (punted)
+                    lang_pref.delete()
+                else:
+                    lang_pref.user_id = self.id
+                    # TODO: Ensure consistent order value.
             old_autoflush = session.autoflush
             session.autoflush = False
             for notification_subscription in \
