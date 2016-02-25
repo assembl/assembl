@@ -151,6 +151,7 @@ var IdeaPanel = AssemblPanel.extend({
       return i18n.sprintf(i18n.ngettext('This idea has %d sub-idea', 'This idea has %d sub-ideas', subIdeas.length), subIdeas.length);
     }
   },
+
   /**
    * This is not inside the template because babel wouldn't extract it in
    * the pot file
@@ -200,7 +201,6 @@ var IdeaPanel = AssemblPanel.extend({
 
     if (this.model) {
       subIdeas = this.model.getChildren();
-      contributors = this.model.get('contributors');
 
       direct_link_relative_url = this.model.getRouterUrl({
         parameters: {
@@ -220,7 +220,6 @@ var IdeaPanel = AssemblPanel.extend({
     return {
       idea: this.model,
       subIdeas: subIdeas,
-      contributors: contributors,
       canEdit: canEdit,
       i18n: i18n,
       getExtractsLabel: this.getExtractsLabel,
@@ -368,9 +367,9 @@ var IdeaPanel = AssemblPanel.extend({
 
       //console.log(contributors);
       var avatarCollectionView = Marionette.CollectionView.extend({
-  constructor: function avatarCollectionView() {
-    Marionette.CollectionView.apply(this, arguments);
-  },
+        constructor: function avatarCollectionView() {
+          Marionette.CollectionView.apply(this, arguments);
+        },
 
         childView: AgentViews.AgentAvatarView
       });
@@ -379,7 +378,10 @@ var IdeaPanel = AssemblPanel.extend({
       });
 
       that.contributors.show(avatarsView);
+      that.ui.contributorsSection.find('.title-text').html(i18n.sprintf(i18n.ngettext('%d contributor', '%d contributors', contributorsId.length), contributorsId.length));
+
       if(contributorsId.length > 0) {
+
         that.ui.contributorsSection.removeClass('hidden');
       }
     });
