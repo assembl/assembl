@@ -520,7 +520,7 @@ class LangString(Base):
         if len(self.entries) == 1:
             return self.entries[0]
         if user_prefs:
-            if not isinstance(user_prefs, dict):
+            if not isinstance(user_prefs, LanguagePreferenceCollection):
                 # Often worth doing upstream
                 user_prefs = LanguagePreferenceCollection.getCurrent()
             for use_originals in (True, False):

@@ -1660,7 +1660,7 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     def find_locale(self, locale):
         if Locale.len_common_parts(locale, self.default_locale.code):
             return UserLanguagePreference(
-                locale=self.default_locale,
+                locale=self.default_locale, locale_id=locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie)
         else:
             locale = Locale.get_or_create(locale)
