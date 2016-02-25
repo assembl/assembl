@@ -115,7 +115,7 @@
   @include border-radius(3px);
   display: inline-block;
   line-height: 1.42857143;
-  margin: 4px 4px 4px 4px;
+  margin: 0px 0px 0px 0px;
   font-weight: 600;
   font-family: $baseFontFamily;
   white-space: nowrap;
@@ -155,12 +155,17 @@
 }
 
 /**********************/
+
+.btn-purple {
+  margin: 4px 4px 4px 4px;
+}
+
 .btn-default, .btn-bright {
   color: $theme_btn_default_text_color;
   background-color: transparent;
   padding: 0px; //To cancel btn padding
   margin: 0 6px 0 0;
-  &.btn-sm, &.btn-xs, &.btn-bright, &.btn-purple, &.btn-large{
+  &.btn-sm, &.btn-xs, &.btn-large{
     padding: 0px;
   }
 }
@@ -207,6 +212,7 @@
   color: $theme_btn_secondary_text_color;
   background-color: $theme_btn_secondary_bg_color;
   border: 1px solid $theme_btn_secondary_border_color;
+  margin: 0 6px 0 0;
 }
 
 .btn-secondary:hover {

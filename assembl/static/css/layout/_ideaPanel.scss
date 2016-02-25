@@ -13,8 +13,15 @@
 .ideaPanel-section-actions{
 }
 
+.ideaPanel-section-widgets{
+  i.icon-voting-day{
+    font-size: 21px;
+    margin: 0px 0px 0px -6px;
+  }
+}
+
 .ideaPanel-section-summary {
-  i.icon-user {
+  i.icon-info {
     font-size: 20px;
     margin: 0px 0px 0px -3px;
   }
@@ -53,17 +60,17 @@
     }
 
     .icon-diamond {
-      color: $gray;
-      margin: 0px 0px 0px -4px;
+      color: lighten($gray, 20%);;
+      margin: 0px 0px 0px 0px;
     }
 
     &:hover .icon-diamond {
-      color: $orange1;
+      color: $th_local_purple5;
     }
 
     &.isSelected {
       .icon-diamond {
-        color: $orange1;
+        color: $th_local_purple5;
       }
     }
   }
@@ -83,10 +90,9 @@
     }
 }
 
-.ideaPanel-section-segments section-title {
+.ideaPanel-section-segments .section-title {
   i.icon-diamond {
-    font-size: 150%;
-    font-weight: 600;
+    font-size: 20px;
   }
 }
 

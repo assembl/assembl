@@ -18,10 +18,10 @@ $harvesterAvatarSize: 24px;
     font-size: 13px; //This should be rem or something - benoitg
     position: relative;
     display: block;
-    background-color: $theme_extract_bg;
+    background-color: $gray6;
     margin: 1em 0;
     &:hover {
-      cursor: move;
+      &[draggable=true]{cursor: move}
       a.segment-link {
         visibility: visible !important;
       }
@@ -33,13 +33,14 @@ $harvesterAvatarSize: 24px;
       @extend %icon;
       margin: 0 0 1em 0;
       font-style: italic;
+      font-size: $baseFontSize;
       @include word-wrap();
 
       &:before, &:after {
         content: '\e805';
         font-size: 9px;
         margin-right: 10px;
-        color: $green;
+        color: $th_local_purple;
       }
       &:after {
         @include rotate(180);

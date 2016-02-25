@@ -35,7 +35,7 @@
     height: 2em;
     font-size: 14px;
     line-height: 2em;
-    color: $theme_box_border_color;
+    color: darken($theme_box_border_color, 30%);
     opacity: 0.4;
   }
 
@@ -96,5 +96,3 @@
     background: transparent;
   }
 }
-
-
