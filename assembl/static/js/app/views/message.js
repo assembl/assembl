@@ -658,6 +658,10 @@ var MessageView = Marionette.LayoutView.extend({
       return;
     }
 
+    this._callPrototypeRender();
+  },
+
+  _callPrototypeRender: function(){
     var base_object = Object.getPrototypeOf(this),
         base_render = base_object.render;
     while (Object.getPrototypeOf(base_object).render === base_render) {
@@ -1382,13 +1386,13 @@ var MessageView = Marionette.LayoutView.extend({
   onShowOriginalClick: function(e) {
       this.useOriginalContent = true;
       this.forceTranslationQuestion = false;
-      this.render();
+      this._callPrototypeRender();
   },
 
   onShowTranslatedClick: function(e) {
       this.useOriginalContent = false;
       this.forceTranslationQuestion = false;
-      this.render();
+      this._callPrototypeRender();
   },
 
   onMessageHoistClick: function(ev) {
