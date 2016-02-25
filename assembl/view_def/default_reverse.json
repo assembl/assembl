@@ -180,6 +180,17 @@
         "full_message": false,
         "in_reply_to": false
     },
+    "AssemblPost": {
+        "@extends": "Post"
+    },
+    "WidgetPost": {
+        "@extends": "AssemblPost",
+        "metadata_raw": true
+    },
+    "IdeaProposalPost": {
+        "@extends": "WidgetPost",
+        "proposes_idea": true
+    },
     "Action": {
         "user": "actor",
         "when": "creation_date",

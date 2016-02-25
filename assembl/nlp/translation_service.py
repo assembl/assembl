@@ -159,7 +159,9 @@ class TranslationService(object):
                     return target_lse
         if target_lse is None:
             target_lse = LangStringEntry(
-                langstring_id=source_lse.langstring_id)
+                langstring_id=source_lse.langstring_id,
+                locale_id = Locale.UNDEFINED_LOCALEID,
+                value='')
             is_new_lse = True
         if self.canTranslate(source_locale, target.code):
             try:

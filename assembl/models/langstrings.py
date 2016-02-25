@@ -717,7 +717,7 @@ class LangStringEntry(Base, TombstonableMixin):
         data = data or {}
         original = self.locale_identification_data_json.get("original", None)
         if not locale_code:
-            if not self.locale_code:
+            if not self.locale_code or self.locale_code == Locale.UNDEFINED:
                 # replace id data with new one.
                 if original:
                     data['original'] = original
@@ -739,7 +739,7 @@ class LangStringEntry(Base, TombstonableMixin):
             if not original and self.locale_identification_data:
                 original = Locale.UNDEFINED
             original = original or self.locale_code
-            if original != locale_code:
+            if original != locale_code and original != Locale.UNDEFINED:
                 data["original"] = original
             self.locale_code = locale_code
             changed = True
