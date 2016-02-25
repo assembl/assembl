@@ -58,12 +58,18 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
     this.messageView = options.messageView;
     this.ideaContentLinks = ideaContentLinks;
 
+    // console.log("------- init of idea classification on message with body: -----------");
+    // console.log(this.messageView._body.value() );
+    // console.log("IdeaContentLinks", this.ideaContentLinks);
+
     if (_.isEmpty(ideaContentLinks)) {
+      console.log("About to remove the ideaClassificationRegion");
       this.messageView.removeIdeaClassificationView();
     }
 
     //Check if it is a Post type.
     if (! Types.isInstance(this.model.get('@type'), Types.POST) ) {
+      console.log("About to remove the ideaClassificationRegion");
       this.messageView.removeIdeaClassificationView();
     }
 
@@ -80,28 +86,37 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
       //First, let's remove the extracts that no longer exist.
       //Then let's update with the ideas that no longer exist.
 
-      cm.getAllExtractsCollectionPromise()
-        .then(function(extracts){
-          var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
-            var exists = extracts.get(icl.id);
-            return exists ? false: true;
-          });
+      // cm.getAllExtractsCollectionPromise()
+      //   .then(function(extracts){
+      //     var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
+      //       var exists = extracts.get(icl.id);
+      //       return exists ? false: true;
+      //     });
 
-          //Remove the stale data from the collection
-          that.ideaContentLinks.remove(staleIdeaContentLinks);
-          return cm.getAllIdeasCollectionPromise();
-        })
-        .then(function(ideas){
+      //     console.log("---- Removing stale extracts -----");
+      //     console.log("From body: ", that.messageView._body.value());
+      //     console.log("staleIdeaContentLinks", staleIdeaContentLinks);
+      //     console.log("All Extracts", extracts);
+      //     //Remove the stale data from the collection
+      //     that.ideaContentLinks.remove(staleIdeaContentLinks);
+      //     return cm.getAllIdeasCollectionPromise();
+      //   })
+      //   .then(function(ideas){
 
-          var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
-            var exists = ideas.get(icl.get('idIdea'));
-            return exists ? false : true;
-          });
+      //     var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
+      //       var exists = ideas.get(icl.get('idIdea'));
+      //       return exists ? false : true;
+      //     });
 
-          //Now remove the stale links to ideas that no longer exist
-          that.ideaContentLinks.remove(staleIdeaContentLinks);
-          return that.ideaContentLinks.getIdeaNamesPromise();
-        })
+      //     console.log("---- Removing stale ideas -----");
+      //     console.log("From body: ", that.messageView._body.value());
+      //     console.log("staleIdeaContentLinks", staleIdeaContentLinks);
+      //     console.log("All Ideas", ideas);
+      //     //Now remove the stale links to ideas that no longer exist
+      //     that.ideaContentLinks.remove(staleIdeaContentLinks);
+      //     return that.ideaContentLinks.getIdeaNamesPromise();
+      //   })
+      this.ideaContentLinks.getIdeaNamesPromise()
         .then(function(ideaNames){
           that.ideaNames = ideaNames;
 

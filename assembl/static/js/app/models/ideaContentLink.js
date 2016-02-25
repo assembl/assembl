@@ -10,12 +10,6 @@ var Marionette = require('../shims/marionette.js'),
     Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
-/*
-    This Collection is NOT created from an API call, like most other
-    models, collections. It will be created from an array that
-    will be passed from the message model.
- */
-
 
 var IdeaContentLinkTypeRank = function() {
     var IDEA_RELATED_POST_LINK = Types.IDEA_RELATED_POST_LINK,
@@ -138,6 +132,11 @@ var Model = Base.Model.extend({
 });
 
 
+/*
+    This Collection is NOT created from an API call, like most other
+    models, collections. It will be created from an array that
+    will be passed from the message model.
+ */
 var Collection = Base.Collection.extend({
   constructor: function IdeaContentLinkCollection() {
     Base.Collection.apply(this, arguments);

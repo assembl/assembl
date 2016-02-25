@@ -1,11 +1,15 @@
 <% if (count > 0) { %>
     <span><%= linked_to_msg %></span>
     <a class="js_idea-classification-idea">
-        <% _.each(first, function(n){ %>
-            <span class="idea-name"><%= n %></span>
+        <% _.each(first, function(n, i, l){ %>
+            <% if ((count > 3) && (i ===2)) { %>
+                <span class="idea-name idea-name-no-comma"><%= n %></span>
+            <% } else { %>
+                <span class="idea-name"><%= n %></span>
+            <% } %>
         <% })%>
         <% if (rest.length > 0 ) { %>
-            <span class="idea-name"><%= other_ideas_msg %></span>
+            <span><%= other_ideas_msg %></span>
         <% } %>
     </a>
 <% } %>
