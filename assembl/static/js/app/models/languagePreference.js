@@ -123,20 +123,19 @@ var LanguagePreferenceCollection = Base.Collection.extend({
         this.cachePrefByLocale = prefByLocale;
       }
       if (this.cacheDefaultTargetLocale === undefined) {
-        var target = _.findWhere(this.models, function(pref) {
+        var pref, i;
+        for (i = 0; i < this.models.length; i++) {
+          pref = this.models[i];
           if (pref.get("translate_to_name") !== null) {
-              return pref;
+            this.cacheDefaultTargetLocale = pref.get("translate_to_name");
+            return;
           }
-        });
+        }
+        pref = this.first();
         if (target === undefined) {
-          target = this.first();
-          if (target === undefined) {
-            this.cacheDefaultTargetLocale = Ctx.getLocale();
-          } else {
-            this.cacheDefaultTargetLocale = target.get("locale_code")
-          }
+          this.cacheDefaultTargetLocale = Ctx.getLocale();
         } else {
-          this.cacheDefaultTargetLocale = target.get("translate_to_name")
+          this.cacheDefaultTargetLocale = target.get("locale_code")
         }
       }
       return this;
