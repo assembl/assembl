@@ -1675,26 +1675,35 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def __init__(self, user_id):
         user = User.get(user_id)
         user_prefs = user.language_preference
-        user_prefs.sort()
-        # using the untranslated locales, if any.
-        # TODO: Look at other translation targets?
-        no_translate = [up for up in user_prefs if not up.translate_to]
-        no_translate.sort()
-        # TODO: Or use discussion locales otherwise?
-        default = no_translate[0] if no_translate else None
-        user_prefs = {
+        user_prefs.sort(reverse=True)
+        prefs_by_locale = {
             user_pref.locale_code: user_pref
             for user_pref in user_prefs
         }
-        for (loc, pref) in user_prefs.items():
+        # First look for translation targets
+        default_pref = None
+        prefs_with_trans = [up for up in user_prefs if up.translate_to]
+        if prefs_with_trans:
+            prefs_with_trans.sort()
+            target_lang_code = prefs_with_trans[0].translate_to_code
+            default_pref = prefs_by_locale.get(target_lang_code, None)
+        if not default_pref:
+            # using the untranslated locales, if any.
+            prefs_without_trans = [
+                up for up in user_prefs if not up.translate_to]
+            prefs_without_trans.sort()
+            # TODO: Or use discussion locales otherwise?
+            default_pref = (
+                prefs_without_trans[0] if prefs_without_trans else None)
+        for (loc, pref) in prefs_by_locale.items():
             for n, l in enumerate(Locale.decompose_locale(loc)):
                 if n == 0:
                     continue
-                if l in user_prefs:
+                if l in prefs_by_locale:
                     break
-                user_prefs[l] = pref
-        self.user_prefs = user_prefs
-        self.default_pref = default
+                prefs_by_locale[l] = pref
+        self.user_prefs = prefs_by_locale
+        self.default_pref = default_pref
 
     def find_locale(self, locale):
         for locale in Locale.decompose_locale(locale):
