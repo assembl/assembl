@@ -132,10 +132,10 @@ var LanguagePreferenceCollection = Base.Collection.extend({
           }
         }
         pref = this.first();
-        if (target === undefined) {
+        if (pref === undefined) {
           this.cacheDefaultTargetLocale = Ctx.getLocale();
         } else {
-          this.cacheDefaultTargetLocale = target.get("locale_code")
+          this.cacheDefaultTargetLocale = pref.get("locale_code")
         }
       }
       return this;
