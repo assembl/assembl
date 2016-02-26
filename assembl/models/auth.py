@@ -1706,6 +1706,8 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
         self.default_pref = default_pref
 
     def find_locale(self, locale):
+        # This code needs to mirror
+        # LanguagePreferenceCollection.getPreferenceForLocale
         for locale in Locale.decompose_locale(locale):
             if locale in self.user_prefs:
                 return self.user_prefs[locale]

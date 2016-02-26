@@ -61,7 +61,9 @@ var LanguagePreferenceCollection = Base.Collection.extend({
   },
     url: Ctx.getApiV2DiscussionUrl("/all_users/current/language_preference"),
     model: LanguagePreferenceModel,
-    
+    cacheDefaultTargetLocale: undefined,
+    cachePrefByLocale: undefined,
+
     //Comparator sorts in ascending order
     comparator: function(lp) {
       return lp.get("source_of_evidence") + (lp.get("preferred_order") / 100.0);
@@ -75,38 +77,68 @@ var LanguagePreferenceCollection = Base.Collection.extend({
 
     /**
      * @param  String locale
+     * This needs to mirror UserLanguagePreferenceCollection.find_locale
      */
     getPreferenceForLocale: function(locale){
-      // Take pref with longest common locale string
-      var that = this,
-      commonLenF = function(pref) {
-        return LangString.localeCommonLength(locale, pref.get("locale_code")) > 0;
-      };
-      var pref = this.max(commonLenF);
-      if (commonLenF(pref) > 0) {
-        return pref;
+      if (this.cachePrefByLocale === undefined) {
+        console.warn("getPreferenceForLocale was called before getTranslationData");
+        this.getTranslationData();
       }
-      var target_locale, untranslated = this.where({translate_to_name:null});
-      if (untranslated.length) {
-        //This could bite you back if the user has a cookie preference + an OS preference
-        target_locale = untranslated[0].get("locale_code");
-      } else {
-        target_locale = Ctx.getLocale();
+      var localeParts = locale.split("_");
+      for (var i = localeParts.length; i > 0; i--) {
+        locale = localeParts.slice(0, i).join("_");
+        var pref = this.cachePrefByLocale[locale];
+        if (pref != undefined) {
+          return pref;
+        }
       }
-      if (LangString.localeCommonLength(target_locale, locale)) {
+      if (LangString.localeCommonLength(this.cacheDefaultTargetLocale, locale)) {
         return new LanguagePreferenceModel({
             locale_code: locale
         });
-
       } else {
           return new LanguagePreferenceModel({
             locale_code: locale,
-            translate_to_name: target_locale
+            translate_to_name: this.cacheDefaultTargetLocale
           });
       }
     },
     getTranslationData: function() {
-      // If we want to create an optimized collection someday...
+      var that = this;
+      // this is when we precalculate the cache
+      // We might make the cache into another object someday.
+      if (this.cachePrefByLocale === undefined) {
+        var prefByLocale = {};
+        // assume sorted
+        this.map(function(pref) {
+          var locale = pref.get("locale_code"),
+              locale_parts = locale.split("_");
+          for (var i = locale_parts.length; i > 0; i--) {
+            locale = locale_parts.slice(0, i).join("_");
+            if (prefByLocale[locale] !== undefined)
+              break;
+            prefByLocale[locale] = pref;
+          }
+        });
+        this.cachePrefByLocale = prefByLocale;
+      }
+      if (this.cacheDefaultTargetLocale === undefined) {
+        var target = this.findWhere(function(pref) {
+          if (pref.get("translate_to_name") !== null) {
+              return pref;
+          }
+        });
+        if (target === undefined) {
+          target = this.first();
+          if (target === undefined) {
+            this.cacheDefaultTargetLocale = Ctx.getLocale();
+          } else {
+            this.cacheDefaultTargetLocale = target.get("locale_code")
+          }
+        } else {
+          this.cacheDefaultTargetLocale = target.get("translate_to_name")
+        }
+      }
       return this;
     },
 
@@ -120,6 +152,9 @@ var LanguagePreferenceCollection = Base.Collection.extend({
     setPreference: function(currentUser, locale, translateTo, saveOptions){
         //If user is not connected, then do nothing
         if (currentUser){
+            // invalidate the cache
+            this.cacheDefaultTargetLocale = undefined;
+            this.cachePrefByLocale = undefined;
             var user_id = currentUser.id,
                 that = this,
                 saveOptions = saveOptions || {},
@@ -168,7 +203,6 @@ var LanguagePreferenceCollection = Base.Collection.extend({
     }
 });
 
-
 var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.extend({
   constructor: function DisconnectedUserLanguagePreferenceCollection() {
     LanguagePreferenceCollection.apply(this, arguments);
@@ -179,7 +213,8 @@ var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.
         return [];
     },
 
-    getPreferenceForLocale: function(locale){
+    getPreferenceForLocale: function(locale) {
+      // TODO: Cache
       var target_locale = Ctx.getLocale();
       if (LangString.localeCommonLength(target_locale, locale)) {
         return new LanguagePreferenceModel({

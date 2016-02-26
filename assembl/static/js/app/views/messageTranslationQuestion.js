@@ -187,13 +187,14 @@ var TranslationView = Marionette.LayoutView.extend({
         cm.getUserLanguagePreferencesPromise(Ctx)
             .then(function(preferences){
                 if (!that.isViewDestroyed()){
+                    var translationData = that.messageView.translationData || preferences.getTranslationData();
                     that.langCache = that.messageView.langCache; //For reference
-                    var bestSuggestedTranslation = that.message.get('body').best(preferences),
+                    var bestSuggestedTranslation = that.message.get('body').best(translationData),
                         original = that.message.get("body").original(),
                         originalLocale = original.getLocaleValue(),
                         translatedFromLocale = bestSuggestedTranslation.getTranslatedFromLocale(),
                         translatedTo = bestSuggestedTranslation.getBaseLocale(),
-                        prefsForLocale = preferences.getPreferenceForLocale(originalLocale),
+                        prefsForLocale = translationData.getPreferenceForLocale(originalLocale),
                         preferredTarget = prefsForLocale ? prefsForLocale.get("translate_to_name") : Ctx.getLocale();
                     if ( !(translatedFromLocale) ){
                         // Get the original's locale and name
