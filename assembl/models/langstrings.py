@@ -555,9 +555,10 @@ class LangString(Base):
                                 return Locale.len_common_parts(
                                     target_locale,
                                     Locale.extract_base_locale(e.locale_code))
-                            common_entries = filter(common_len, entries).sort(
-                                key=common_len, reverse=True)
+                            common_entries = filter(common_len, entries)
                             if common_entries:
+                                common_entries.sort(
+                                    key=common_len, reverse=True)
                                 return common_entries[0]
                         else:
                             return entriesByLocale[pref.locale_code]
