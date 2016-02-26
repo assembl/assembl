@@ -246,6 +246,7 @@ var groupContent = Marionette.CompositeView.extend({
    * If there is, get's it back to the default debate view
    */
   NavigationResetDebateState: function(skip_animation) {
+    if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       if (this.findNavigationSidebarPanelSpec()) {
         this.groupContainer.suspendResize();
         this.model.set('navigationState', 'debate');
@@ -262,66 +263,79 @@ var groupContent = Marionette.CompositeView.extend({
           this.groupContainer.resumeResize(true);
         }
       }
-    },
+    }
+  },
 
   
   NavigationResetContextState: function() {
-    var nav = this.findNavigationSidebarPanelSpec();
-    if (nav) {
-      this.groupContainer.suspendResize();
-      this.model.set('navigationState', 'about');
-      this.ensureOnlyPanelsVisible(PanelSpecTypes.DISCUSSION_CONTEXT);
-      this.groupContainer.resumeResize();
+    if (!this.isViewDestroyed()) {  //Because this is called from outside the view
+      var nav = this.findNavigationSidebarPanelSpec();
+      if (nav) {
+        this.groupContainer.suspendResize();
+        this.model.set('navigationState', 'about');
+        this.ensureOnlyPanelsVisible(PanelSpecTypes.DISCUSSION_CONTEXT);
+        this.groupContainer.resumeResize();
+      }
     }
   },
 
   NavigationResetSynthesisMessagesState: function(synthesisInNavigationPanel) {
-    if (this.findNavigationSidebarPanelSpec()) {
-      this.groupContainer.suspendResize();
-      this.setCurrentIdea(null);
-      this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-      this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST);
-      this.ensurePanelsHidden(PanelSpecTypes.IDEA_PANEL);
-      this.resetMessagePanelWidth();
-      this.groupContainer.resumeResize(true);
+    if (!this.isViewDestroyed()) {  //Because this is called from outside the view
+      if (this.findNavigationSidebarPanelSpec()) {
+        this.groupContainer.suspendResize();
+        this.setCurrentIdea(null);
+        this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+        this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST);
+        this.ensurePanelsHidden(PanelSpecTypes.IDEA_PANEL);
+        this.resetMessagePanelWidth();
+        this.groupContainer.resumeResize(true);
+      }
     }
   },
 
   NavigationResetVisualizationState: function(url) {
-    var nav = this.findNavigationSidebarPanelSpec();
-    if (nav) {
-      this.groupContainer.suspendResize();
-      this.model.set('navigationState', 'visualizations');
-      this.ensureOnlyPanelsVisible(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-      var vizPanel = this.findViewByType(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-      vizPanel.setUrl(url);
-      this.groupContainer.resumeResize();
+    if (!this.isViewDestroyed()) {  //Because this is called from outside the view
+      var nav = this.findNavigationSidebarPanelSpec();
+      if (nav) {
+        this.groupContainer.suspendResize();
+        this.model.set('navigationState', 'visualizations');
+        this.ensureOnlyPanelsVisible(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+        var vizPanel = this.findViewByType(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
+        vizPanel.setUrl(url);
+        this.groupContainer.resumeResize();
+      }
     }
   },
 
   resetMessagePanelWidth: function() {
+    if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       var messagePanel = this.findPanelWrapperByType(PanelSpecTypes.MESSAGE_LIST);
       if (this.groupContainer.isOneNavigationGroup()) {
         var ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
         if (ideaPanel.isPanelMinimized() || ideaPanel.isPanelHidden()) {
           messagePanel.setGridSize(AssemblPanel.prototype.CONTEXT_PANEL_GRID_SIZE); // idea + message
           messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(ideaPanel.minWidth);
-        } else {
+        } 
+        else {
           messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
           messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
         }
-      } else if (messagePanel != null) {
+      }
+      else if (messagePanel != null) {
         messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
         messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
       }
-    },
+    }
+  },
 
   SimpleUIResetMessageAndIdeaPanelState: function() {
-    this.groupContainer.suspendResize();
-    this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
-    var nav = this.findNavigationSidebarPanelSpec(),
-        ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
-    this.resetMessagePanelWidth();
+    if (!this.isViewDestroyed()) {  //Because this is called from outside the view
+      this.groupContainer.suspendResize();
+      this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
+      var nav = this.findNavigationSidebarPanelSpec(),
+      ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
+      this.resetMessagePanelWidth();
+    }
   },
 
   
