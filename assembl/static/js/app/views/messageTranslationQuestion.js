@@ -34,9 +34,15 @@ var processConfirmLanguagePreferences = function(messageView){
             cm.getAllMessageStructureCollectionPromise()
                 .then(function(messageStructures){
                     return messageStructures.fetch();
+                })
+                .then(function(messages){
+                    //Do not need to do anything else. The re-fetching of messages will cause the
+                    //messagelist to re-render itself.
+                    if (!messageView.isViewDestroyed()){
+                        messageView.resetTranslationState();
+                        messageView.render(); // This is questionable.
+                    }
                 });
-                //Do not need to do anything else. The re-fetching of messages will cause the
-                //messagelist to re-render itself.
         });
     }
 };
