@@ -640,9 +640,10 @@ var MessageView = Marionette.LayoutView.extend({
     },
 
   changeIsPartialRender: function() {
-      var changedAttributes = this.model.changedAttributes();
+      var likeFound = false, changedAttributes = this.model.changedAttributes();
       for (var propName in changedAttributes) {
         if (propName === "like_count") {
+          likeFound = true;
           continue;
         }
 
@@ -658,7 +659,7 @@ var MessageView = Marionette.LayoutView.extend({
         return false;
       }
 
-      return true;
+      return likeFound;
     },
 
   render: function() {
