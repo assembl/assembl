@@ -5,7 +5,8 @@ var Marionette = require('../shims/marionette.js'),
     TourModel = require('../models/tour.js'),
     Ctx = require('../common/context.js'),
     _ = require('../shims/underscore.js'),
-    AssemblTours = require('./tours/assemblTours.js');
+    AssemblTours = require('./tours/assemblTours.js'),
+    Raven = require('raven-js');
 
 
 var TourManager = Marionette.Object.extend({
@@ -89,7 +90,7 @@ var TourManager = Marionette.Object.extend({
         try {
           seen = JSON.parse(window.localStorage.getItem('toursSeen') || "{}");
         } catch (err) {
-          console.error("wrong toursSeen in localStorage:" + err);
+          Raven.captureMessage("wrong toursSeen in localStorage", {extra: {"error": err}});
         }
         seen[tourName] = true;
         window.localStorage.setItem('toursSeen', JSON.stringify(seen));
@@ -119,7 +120,7 @@ var TourManager = Marionette.Object.extend({
   requestTour: function(tourName) {
     var tour = this.toursById[tourName];
     if (tour === undefined) {
-      console.error("Unknown tour: " + tourName);
+      Raven.captureMessage("Unknown tour", {extra: {"tour_name": tourName}});
       return;
     }
     if (this.isTourSeen(tourName)) {
@@ -158,7 +159,7 @@ var TourManager = Marionette.Object.extend({
 
   onShow: function() {
     if (this.currentTour === undefined) {
-      console.error("onShow came after tour was cleared");
+      Raven.captureMessage("onShow came after tour was cleared");
       this.currentTour = this.toursById(hopscotch.getCurrTour().id);
     }
     this.checkForLastStep();
@@ -186,7 +187,7 @@ var TourManager = Marionette.Object.extend({
 
   afterLastStep: function() {
     if (this.currentTour === undefined) {
-      console.error("afterLastStep came after tour was cleared");
+      Raven.captureMessage("afterLastStep came after tour was cleared");
       this.currentTour = this.toursById(hopscotch.getCurrTour().id);
     }
     if (this.currentTour.cleanup !== undefined) {
@@ -217,7 +218,7 @@ var TourManager = Marionette.Object.extend({
             tour.numErrors += 1;
           }
           if (tour.numErrors > 1) {
-            console.error("Tour was not seen:", tour.name);
+            Raven.captureMessage("Tour was not seen", {extra: {"tour_name": tour.name}});
             that.currentTour = that.getNextTour(true);
           }
           if (that.currentTour !== undefined) {
