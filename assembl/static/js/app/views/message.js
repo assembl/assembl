@@ -1907,7 +1907,8 @@ var MessageView = Marionette.LayoutView.extend({
     Logic check that the translation view should be shown
    */
   canShowTranslation: function(){
-    return (Ctx.isUserConnected() && this.hasTranslatorService);
+    return (Ctx.isUserConnected() && this.hasTranslatorService
+        && this.model.getBEType() != Types.SYNTHESIS_POST);
   },
 
   /*
