@@ -128,7 +128,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
           pref = this.models[i];
           if (pref.get("translate_to_name") !== null) {
             this.cacheDefaultTargetLocale = pref.get("translate_to_name");
-            return;
+            return this;
           }
         }
         pref = this.first();
