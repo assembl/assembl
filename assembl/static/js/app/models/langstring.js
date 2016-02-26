@@ -70,6 +70,12 @@ var LangStringEntry = Base.Model.extend({
     } else {
         return this.getBaseLocale();
     }
+  },
+  applyFunction: function(func) {
+    return new LangStringEntry({
+      value: func(this.get("value")),
+      "@language": this.get("@language")
+    });
   }
 });
 
@@ -222,10 +228,7 @@ var LangString = Base.Model.extend({
   },
   applyFunction: function(func) {
     var newEntries = this.get("entries").map(function(lse) {
-      return new LangStringEntry({
-        value: func(lse.get("value")),
-        "@language": lse.get("@language")
-      });
+      return lse.applyFunction(func);
     });
     return new LangString({
       "@id": this.id,
