@@ -88,7 +88,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
       for (var i = localeParts.length; i > 0; i--) {
         locale = localeParts.slice(0, i).join("_");
         var pref = this.cachePrefByLocale[locale];
-        if (pref != undefined) {
+        if (pref !== undefined) {
           return pref;
         }
       }
@@ -123,7 +123,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
         this.cachePrefByLocale = prefByLocale;
       }
       if (this.cacheDefaultTargetLocale === undefined) {
-        var target = this.findWhere(function(pref) {
+        var target = _.findWhere(this.models, function(pref) {
           if (pref.get("translate_to_name") !== null) {
               return pref;
           }
