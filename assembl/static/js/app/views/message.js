@@ -311,6 +311,12 @@ var MessageView = Marionette.LayoutView.extend({
     this.forceTranslationQuestion = false;
 
     /*
+      Flag that is used during render to hide the show/hide the translation question from
+      other re-rendering paths than indicated by forceTranslationQuestion
+     */
+    this.hideTranslationQuestion = false;
+
+    /*
       Flag used in view init to check wether the current user has any
       user language preferences
      */
@@ -363,7 +369,9 @@ var MessageView = Marionette.LayoutView.extend({
       console.log("MessageView modelEvents change fired from", this.model);
     }
     if(!this.isViewDestroyed()) {
-      this.render();
+      if (!this.changeIsPartialRender()) {
+        this.render();
+      }
     }
   },
 
@@ -654,14 +662,7 @@ var MessageView = Marionette.LayoutView.extend({
     },
 
   render: function() {
-    if (this.changeIsPartialRender()) {
-      return;
-    }
-
-    this._callPrototypeRender();
-  },
-
-  _callPrototypeRender: function(){
+    //Is this for inheritence??
     var base_object = Object.getPrototypeOf(this),
         base_render = base_object.render;
     while (Object.getPrototypeOf(base_object).render === base_render) {
@@ -797,7 +798,7 @@ var MessageView = Marionette.LayoutView.extend({
           this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
 
         if (this.canShowTranslation() ) {
-          if (this.forceTranslationQuestion || (
+          if ( (this.forceTranslationQuestion && !this.hideTranslationQuestion) || (
                 this.unknownPreference && !this.bodyTranslationError)) {
             //Only show the translation view *iff* the message was translated by the backend
             var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
@@ -1386,13 +1387,15 @@ var MessageView = Marionette.LayoutView.extend({
   onShowOriginalClick: function(e) {
       this.useOriginalContent = true;
       this.forceTranslationQuestion = false;
-      this._callPrototypeRender();
+      this.hideTranslationQuestion = true;
+      this.render();
   },
 
   onShowTranslatedClick: function(e) {
       this.useOriginalContent = false;
       this.forceTranslationQuestion = false;
-      this._callPrototypeRender();
+      this.hideTranslationQuestion = false;
+      this.render();
   },
 
   onMessageHoistClick: function(ev) {
@@ -1446,11 +1449,13 @@ var MessageView = Marionette.LayoutView.extend({
 
   onShowTranslationClick: function(ev){
     this.forceTranslationQuestion = true;
+    this.hideTranslationQuestion = false;
     this.render();
   },
 
   onHideQuestionClick: function(e) {
     this.forceTranslationQuestion = false;
+    this.hideTranslationQuestion = true;
     this.render();
   },
 
@@ -1846,6 +1851,8 @@ var MessageView = Marionette.LayoutView.extend({
         $target = this.$(this.ui.showMoreDropDown),
         that = this;
 
+    this.hideTranslationQuestion = true;
+
     Genie.geniefy($source, $target, 500)
       .then(function(){
         that.getRegion("translationRegion").empty();
@@ -1910,6 +1917,7 @@ var MessageView = Marionette.LayoutView.extend({
   resetTranslationState: function(){
     this.unknownPreference = false;
     this.forceTranslationQuestion = false;
+    this.hideTranslationQuestion = false;
     this.useOriginalContent = false;
     this.showAnnotations = this.canShowAnnotations();
     // this.bodyTranslationError = false;  //This could be wrong. Perhaps, should call processContent
