@@ -40,7 +40,7 @@ $harvesterAvatarSize: 24px;
         content: '\e805';
         font-size: 9px;
         margin-right: 10px;
-        color: $th_local_purple;
+        color: $theme_text_icon_emphasis_color;
       }
       &:after {
         @include rotate(180);

@@ -65,12 +65,12 @@
     }
 
     &:hover .icon-diamond {
-      color: $th_local_purple5;
+      color: $orange1;
     }
 
     &.isSelected {
       .icon-diamond {
-        color: $th_local_purple5;
+        color: $orange1;
       }
     }
   }
