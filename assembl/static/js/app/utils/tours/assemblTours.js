@@ -75,13 +75,13 @@ var AssemblTours = [
     autostart: false,
     tour: {
       steps: [
-        {
+        { // FIXME: this steps has a display problem
           target: "tour_step_segment",
-          placement: "top",
+          placement: "left", // maybe we could use "top" to fix display problem
           title: i18n.gettext("Spot relevant quotes on each idea"),
           content: i18n.gettext("Excerpts from messages are harvested and are organized to help you find relevant contributions on this idea."),
           yOffset: 10,
-          xOffset: "center"
+          xOffset: 0 // maybe we could use "center" to fix display problem
         }]}},
   {
       name: "idea_list",

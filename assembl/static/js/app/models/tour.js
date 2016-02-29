@@ -28,6 +28,11 @@ var tourModel = Base.Model.extend({
             that.set(name, true);
           }});
       }
+    },
+    fetch: function (options) {
+      options = options || {};
+      options.cache = false; // for IE cache (GET -> PUT -> GET) http://stackoverflow.com/questions/6178366/backbone-js-fetch-results-cached/8966486#8966486
+      return Backbone.Collection.prototype.fetch.call(this, options);
     }
 });
 
