@@ -1,7 +1,9 @@
 import logging
 import sys
+from itertools import chain
 
 import transaction
+from sqlalchemy.sql.functions import count
 
 from ..lib.sqla import (configure_engine, get_session_maker,
                         get_metadata, is_zopish, mark_changed)
@@ -36,11 +38,40 @@ def get_all_tables(app_settings, session, reversed=True):
     return ordered
 
 
+def self_referential_columns(table):
+    return [fk.parent for fk in chain(*[
+                c.foreign_keys for c in table.columns])
+            if fk.column.table == table]
+
+
+def clear_rows_with_selfref(session, table, fk_col):
+    target_column = next(iter(fk_col.foreign_keys)).column
+    # Here it should be as simple as session.query(table).count()
+    # BUT virtuoso can get confused in its indexes, so that is
+    # non-zero even when the "select * from table" is empty. SIGH.
+    # So this seems to be an acceptable workaround
+    while max(session.query(
+            count(target_column), count(fk_col)).first()):
+        q1 = session.query(target_column.label('id')).except_(
+             session.query(fk_col.label('id'))).subquery()
+        session.execute(table.delete().where(target_column.in_(q1)))
+        session.commit()
+
+
 def clear_rows(app_settings, session):
     log.info('Clearing database rows.')
-    for row in get_all_tables(app_settings, session):
-        log.debug("Clearing table: %s" % row)
-        session.execute("delete from \"%s\"" % row)
+    tables_by_name = {
+        t.name: t for t in get_metadata().sorted_tables}
+    for table_name in get_all_tables(app_settings, session):
+        log.debug("Clearing table: %s" % table_name)
+        table = tables_by_name.get(table_name, None)
+        if table is not None:
+            col = self_referential_columns(table)
+            if len(col):
+                # assume single selfref column
+                clear_rows_with_selfref(session, table, col[0])
+                continue
+        session.execute("delete from \"%s\"" % table_name)
     session.commit()
     session.transaction.close()
 
