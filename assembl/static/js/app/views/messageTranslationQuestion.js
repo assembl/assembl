@@ -124,7 +124,7 @@ var LanguageSelectionView = Marionette.ItemView.extend({
 
         else {
             this.parentView.preferredTarget = preferredLanguageTo[0];
-            this.parentView.render();
+            this.parentView.updateLanguagePreference(userTranslationStates.CONFIRM);
         }
     },
 
