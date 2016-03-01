@@ -44,20 +44,6 @@ def self_referential_columns(table):
             if fk.column.table == table]
 
 
-def clear_rows_with_selfref(session, table, fk_col):
-    target_column = next(iter(fk_col.foreign_keys)).column
-    # Here it should be as simple as session.query(table).count()
-    # BUT virtuoso can get confused in its indexes, so that is
-    # non-zero even when the "select * from table" is empty. SIGH.
-    # So this seems to be an acceptable workaround
-    while max(session.query(
-            count(target_column), count(fk_col)).first()):
-        q1 = session.query(target_column.label('id')).except_(
-             session.query(fk_col.label('id'))).subquery()
-        session.execute(table.delete().where(target_column.in_(q1)))
-        session.commit()
-
-
 def clear_rows(app_settings, session):
     log.info('Clearing database rows.')
     tables_by_name = {
@@ -66,12 +52,12 @@ def clear_rows(app_settings, session):
         log.debug("Clearing table: %s" % table_name)
         table = tables_by_name.get(table_name, None)
         if table is not None:
-            col = self_referential_columns(table)
-            if len(col):
-                # assume single selfref column
-                clear_rows_with_selfref(session, table, col[0])
-                continue
-        session.execute("delete from \"%s\"" % table_name)
+            cols = self_referential_columns(table)
+            if len(cols):
+                for col in cols:
+                    session.execute("UPDATE %s SET %s=NULL" % (table_name, col.key))
+                session.flush()
+        session.execute("DELETE FROM \"%s\"" % table_name)
     session.commit()
     session.transaction.close()
 
