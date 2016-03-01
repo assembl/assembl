@@ -5,7 +5,8 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     Ctx = require('../../common/context.js'),
     CollectionManager = require('../../common/collectionManager.js'),
-    Roles = require('../../utils/roles.js');
+    Roles = require('../../utils/roles.js'),
+    Permissions = require('../../utils/permissions.js');
 
 var userNavigationMenu = Marionette.LayoutView.extend({
   constructor: function userNavigationMenu() {
