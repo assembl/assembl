@@ -118,8 +118,7 @@ def test_notification_follow_all_messages(test_session,
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count + 2, "A post from another discussion should NOT have been caught"
 
-#Tests in test_auth.py must be fixed first
-@pytest.mark.xfail
+
 def test_users_not_subscribed_to_discussion(test_session, 
         discussion, participant1_user, reply_post_2, test_app, root_post_1, synthesis_post_1, discussion2_root_post_1):
     
@@ -139,7 +138,7 @@ def test_users_not_subscribed_to_discussion(test_session,
 
     #Smoke test that unsubscribing from a discussion does inhibit notifications
     participant1_user.unsubscribe(discussion)
-    test_session.flush()
+    test_session.commit()
     dispatcher.processPostCreated(reply_post_2.id)
     notification_count = test_session.query(Notification).count() 
     assert notification_count == initial_notification_count + 1, "The user should NOT receive notification if not subscribed to the discussion"

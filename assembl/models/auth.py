@@ -920,7 +920,8 @@ class User(AgentProfile):
                 user=self, role=role, discussion=discussion))
 
     def unsubscribe(self, discussion, role=R_PARTICIPANT):
-        for lur in self.has_role_in(discussion, role) or ():
+        lur = self.has_role_in(discussion, role)
+        if lur:
             self.db.delete(lur)
 
     @classmethod
