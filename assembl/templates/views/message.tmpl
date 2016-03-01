@@ -102,10 +102,24 @@
    </div>
 {%- endmacro %}
 
-{% macro showTranslation() -%}
+{% macro show_original_translation() -%}
+  {% if discussion.translation_service_class %}
+    <div class='js_translation_show_original'>
+      <% if (isTranslatedMessage) { %>
+        <span class='js_trans_show_origin'><a class="content">{{gettext("View the original message")}}</a></span>
+        <span class="prxs"><a class="content" target="_blank" href="http://translate.google.com">({{gettext("Translated by Google Translate")}})</a></span>
+      <% } else if (useOriginalContent) { %>
+        <span class='js_trans_show_translated'><a class="content">{{gettext("Return to the translated message")}}</a></span>
+      <% } %>
+    </div>
+  {% endif %}
+{%- endmacro %}
+
+
+{% macro show_translation() -%}
   {% if discussion.translation_service_class %}
     <div class="message-translation">
-      <div class="mts js_regionMessageTranslationQuestions"></div>
+      <div class="js_regionMessageTranslationQuestions"></div>
     <% if (bodyTranslationError) { %>
       <div class="warning-box-for-message-post">
         <p>{{gettext("Sorry, we could not translate this message.")}}
@@ -115,13 +129,8 @@
         </p>
       </div>
     <% } else { %>
-      <div class='mtm js_translation_show_original'>
-        <% if (isTranslatedMessage) { %>
-          <span class='js_trans_show_origin'><a class="content">{{gettext("View the original message")}}</a></span>
-          <span class="prxs"><a class="content" target="_blank" href="http://translate.google.com">({{gettext("Translated by Google Translate")}})</a></span>
-        <% } else if (useOriginalContent) { %>
-          <span class='js_trans_show_translated'><a class="content">{{gettext("Return to the translated message")}}</a></span>
-        <% } %>
+      <div class="mts">
+        {{ show_original_translation() }}
       </div>
     <% } %>
     </div>
@@ -168,8 +177,8 @@
       Note:  bodyFormatClass can currently have values body_format_text_plain or  body_format_text_html
   #}
   <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
+    <div class="mts">{{ show_translation() }}</div>
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
-    {{ showTranslation() }}
     <div class="mtm message-body ellipsis <%= bodyFormatClass %> js_readMore" id="<%= messageBodyId %>">
       <p class="" lang="<%= body.get('@language') %>"><%= body.value() %></p>{# Do NOT introduce whitespace within this div #}
       <div class="messageAttachments js_regionMessageAttachments hidden"></div>
@@ -177,9 +186,9 @@
       <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}"><i class="icon-arrowdown"></i> {{ gettext('Read more') }}</a>
     </div>
   <% } else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
+    <div class="mts">{{ show_translation() }}</div>
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
-    {{ showTranslation() }}
     <div class="mtm message-body <%= (isTranslatedMessage ? "" : "js_messageBodyAnnotatorSelectionAllowed") %> <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.get('@language') %>"><%= body.value() %></div>
     <div class="messageAttachments js_regionMessageAttachments"></div>
     <div class="js_regionMessageModerationOptions"></div>
