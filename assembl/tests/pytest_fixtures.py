@@ -193,7 +193,7 @@ def discussion(request, test_session, default_preferences):
         discussion = d
         if inspect(discussion).detached:
             # How did this happen?
-            test_session.refresh(discussion)
+            discussion = test_session.query(Discussion).get(d.id)
         test_session.delete(discussion.table_of_contents)
         test_session.delete(discussion.root_idea)
         test_session.delete(discussion.next_synthesis)
