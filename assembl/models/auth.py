@@ -47,6 +47,7 @@ from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord)
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
+from assembl.lib.raven_client import get_raven_client
 from .langstrings import Locale
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
@@ -1647,16 +1648,28 @@ class LanguagePreferenceCollection(object):
         if getattr(req, "lang_prefs", 0) is 0:
             user_id = req.authenticated_userid
             if user_id and user_id != Everyone:
-                req.lang_prefs = UserLanguagePreferenceCollection(user_id)
-            else:
-                locale = locale_negotiator(req)
-                req.lang_prefs = LanguagePreferenceCollectionWithDefault(locale)
+                try:
+                    req.lang_prefs = UserLanguagePreferenceCollection(user_id)
+                    return req.lang_prefs
+                except Exception:
+                    raven = get_raven_client()
+                    if raven:
+                        raven.captureException()
+            locale = locale_negotiator(req)
+            req.lang_prefs = LanguagePreferenceCollectionWithDefault(locale)
         return req.lang_prefs
+
+    @abstractmethod
+    def default_locale_code(self):
+        pass
 
 
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     def __init__(self, locale_code):
         self.default_locale = Locale.get_or_create(locale_code)
+
+    def default_locale_code(self):
+        return self.default_locale
 
     def find_locale(self, locale):
         if Locale.len_common_parts(locale, self.default_locale.code):
@@ -1676,6 +1689,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def __init__(self, user_id):
         user = User.get(user_id)
         user_prefs = user.language_preference
+        assert user_prefs
         user_prefs.sort(reverse=True)
         prefs_by_locale = {
             user_pref.locale_code: user_pref
@@ -1705,6 +1719,9 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 prefs_by_locale[l] = pref
         self.user_prefs = prefs_by_locale
         self.default_pref = default_pref
+
+    def default_locale_code(self):
+        return self.default_pref.locale.code
 
     def find_locale(self, locale):
         # This code needs to mirror
