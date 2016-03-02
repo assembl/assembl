@@ -1771,6 +1771,9 @@ class UserLanguagePreference(Base):
         s = (self.preferred_order or 0) - (other.preferred_order or 0)
         if s:
             return s
+        s = (self.id or 0) - (other.id or 0)
+        if s:
+            return s
         return id(self) - id(other)
 
     # def set_priority_order(self, code):
