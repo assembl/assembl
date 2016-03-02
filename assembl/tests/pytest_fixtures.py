@@ -239,11 +239,15 @@ def admin_user(request, test_session, db_default_data):
     ur = UserRole(user=u, role=r)
     test_session.add(ur)
     test_session.flush()
+    uid = u.id
 
     def fin():
         print "finalizer admin_user"
-        test_session.delete(ur)
-        test_session.delete(u)
+        # I often get expired objects here, and I need to figure out why
+        user = test_session.query(User).get(uid)
+        user_role = user.roles[0]
+        test_session.delete(user_role)
+        test_session.delete(user)
         test_session.flush()
     request.addfinalizer(fin)
     return u
