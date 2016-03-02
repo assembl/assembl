@@ -340,15 +340,11 @@ def compile_stylesheets():
     """
     execute(update_compass)
     with cd(env.projectpath):
-        run('./node_modules/node-sass/bin/node-sass --include-path node_modules/bourbon/app/assets/stylesheets assembl/static/css/themes/default/theme.scss assembl/static/css/themes/default/theme.css', shell=True)
-        with cd('assembl/static/widget/card/app'):
-            run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
+        run('./node_modules/.bin/node-sass --include-path node_modules/bourbon/app/assets/stylesheets -r -o assembl/static/css assembl/static/css', shell=True)
+        run('./node_modules/.bin/node-sass -r -o assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
+        run('./node_modules/.bin/node-sass -r -o assembl/static/widget/video/app/css assembl/static/widget/video/app/scss', shell=True)
+        run('./node_modules/.bin/node-sass -r -o assembl/static/widget/session/css assembl/static/widget/session/scss', shell=True)
 
-        with cd('assembl/static/widget/session'):
-            run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
-
-        with cd('assembl/static/widget/video/app'):
-            run('bundle exec compass compile --force --sass-dir scss --css-dir css', shell=True)
 
 @task
 def compile_javascript():
