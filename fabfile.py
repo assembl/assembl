@@ -338,7 +338,6 @@ def compile_stylesheets():
     """
     Generate *.css files from *.scss
     """
-    execute(update_compass)
     with cd(env.projectpath):
         run('./node_modules/.bin/node-sass --include-path node_modules/bourbon/app/assets/stylesheets -r -o assembl/static/css assembl/static/css', shell=True)
         run('./node_modules/.bin/node-sass -r -o assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
@@ -458,7 +457,6 @@ def app_update_dependencies():
     Updates all python and javascript dependencies
     """
     execute(update_requirements, force=False)
-    execute(update_compass)
     execute(update_bower)
     execute(bower_install)
     execute(npm_update)
@@ -677,7 +675,7 @@ def install_builddeps():
         if not exists('/usr/local/bin/gfortran'):
             sudo('brew install gcc isl')
     else:
-        sudo('apt-get install -y build-essential python-dev ruby-builder')
+        sudo('apt-get install -y build-essential python-dev')
         sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
         sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev gawk')
         sudo('apt-get install -y graphviz libgraphviz-dev pkg-config')
@@ -700,106 +698,6 @@ def update_python_package_builddeps():
     else:
         sudo('apt-get install -y libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
 
-
-@task
-def configure_rbenv():
-    execute(install_rbenv)
-    with cd(env.projectpath), settings(warn_only=True):
-        rbenv_local = run('rbenv local %(ruby_version)s' % env)
-    if(rbenv_local.failed):
-        execute(install_ruby_build)
-        # Install Ruby specified in env.ruby_version:
-        run('rbenv install %(ruby_version)s' % env)
-        # Rehash:
-        run('rbenv rehash')
-        run('rbenv local %(ruby_version)s' % env)
-    with settings(warn_only=True):
-        bundle_version = run('bundle --version')
-    if(bundle_version.failed):
-        # install bundler
-        if env.mac:
-            # New bug in El Capitan:
-            # https://github.com/wpscanteam/wpscan/issues/875
-            sudo('gem install -n /usr/local/bin bundler')
-        else:
-            run('gem install bundler')
-        run('rbenv rehash')
-
-
-def install_ruby_build():
-    version_regex = re.compile('^ruby-build\s*(\S*)')
-    install = False
-
-    with settings(warn_only=True):
-        run_output = run('ruby-build --version')
-    if not run_output.failed:
-        match = version_regex.match(run_output)
-        version = LooseVersion(match.group(1))
-        if version < env.ruby_build_min_version:
-            print(red("ruby-build %s is too old (%s is required), reinstalling..." % (version, env.ruby_build_min_version)))
-            install = True
-        else:
-            print(green("ruby-build version %s is recent enough (%s is required)" % (version, env.ruby_build_min_version)))
-    else:
-        print(red("ruby-build is not installed, installing..."))
-        install = True
-
-    if install:
-        # Install ruby-build:
-        run('rm -rf /tmp/ruby-build')
-        with cd('/tmp'):
-            run('git clone https://github.com/sstephenson/ruby-build.git')
-        with cd('/tmp/ruby-build'):
-            sudo('./install.sh')
-
-
-@task
-def install_rbenv():
-    """
-    Install the appropriate ruby environment for compass.
-    """
-    with settings(warn_only=True):
-        rbenv_failed = run('rbenv version').failed
-    if rbenv_failed:
-        with settings(warn_only=True):
-            rbenv_missing = run('ls ~/.rbenv').failed
-        if rbenv_missing:
-            # Install rbenv:
-            run('git clone https://github.com/sstephenson/rbenv.git ~/.rbenv')
-        # Add rbenv to the path:
-        run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .bash_profile')
-        run('echo \'eval "$(rbenv init -)"\' >> .bash_profile')
-        run('source ~/.bash_profile')
-        # The above will work fine on a shell (such as on the server accessed using
-        # ssh for a developement machine running a GUI, you may need to run the
-        # following from a shell (with your local user):
-        #    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile;
-        #    echo 'eval "$(rbenv init -)"' >> ~/.profile;
-        #    source ~/.profile;
-
-        run('echo \'export PATH="$HOME/.rbenv/bin:$PATH"\' >> .profile')
-        run('echo \'eval "$(rbenv init -)"\' >> .profile')
-        run('source ~/.profile')
-
-
-@task
-def install_compass():
-    """
-    (Re)Install compass, deleting current version
-    """
-    with cd(env.projectpath):
-        run('rm -rf vendor/bundle')
-        execute(update_compass)
-
-
-@task
-def update_compass():
-    """
-    Make sure compass version is up to date
-    """
-    execute(configure_rbenv)
-    with cd(env.projectpath):
-        run('bundle install --path=vendor/bundle')
 
 
 @task
@@ -1198,11 +1096,6 @@ def commonenv(projectpath, venvpath=None):
     env.mac = False
 
     #Minimal dependencies versions
-
-    #Note to maintainers:  If you upgrade ruby, make sure you check that the
-    # ruby_build version below supports it...
-    env.ruby_version = "2.0.0-p481"
-    env.ruby_build_min_version = LooseVersion('20130628')
 
 
 @task

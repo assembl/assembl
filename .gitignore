@@ -56,12 +56,6 @@ assembl/static/css/*.css
 /var/dogpile_cache.*
 /.anaconda
 
-# ruby
-vendor/
-.bundle
-.ruby-version
-Gemfile.lock
-
 # node
 node_modules/
 /assembl/static/js/bower/
