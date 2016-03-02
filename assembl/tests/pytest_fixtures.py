@@ -191,9 +191,9 @@ def discussion(request, test_session, default_preferences):
     def fin():
         print "finalizer discussion"
         discussion = d
-        if inspect(d).detached:
+        if inspect(discussion).detached:
             # How did this happen?
-            discussion = test_session.query(Discussion).get(d.id)
+            test_session.refresh(discussion)
         test_session.delete(discussion.table_of_contents)
         test_session.delete(discussion.root_idea)
         test_session.delete(discussion.next_synthesis)
@@ -242,6 +242,7 @@ def admin_user(request, test_session, db_default_data):
 
     def fin():
         print "finalizer admin_user"
+        test_session.delete(ur)
         test_session.delete(u)
         test_session.flush()
     request.addfinalizer(fin)

@@ -53,8 +53,10 @@ def bootstrap_db_data(db):
     populate_default_locales(db())
     from assembl.models.auth import (
         populate_default_permissions, populate_default_roles)
+    from assembl.lib.database_functions import ensure_functions
     populate_default_permissions(db())
     populate_default_roles(db())
+    ensure_functions(db())
     mark_changed(db())
 
 
