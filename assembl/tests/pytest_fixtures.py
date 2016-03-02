@@ -755,6 +755,7 @@ def creativity_session_widget_new_idea(
         subject=LangString.create(u"propose idea"),
         body=LangString.EMPTY(test_session))
     test_session.add(ipp)
+
     def fin():
         print "finalizer creativity_session_widget_new_idea"
         test_session.delete(ipp)
@@ -791,7 +792,7 @@ def creativity_session_widget_post(
         test_session.flush()
     request.addfinalizer(fin)
 
-    return i
+    return p
 
 
 @pytest.fixture(scope="module")
@@ -818,3 +819,30 @@ def browser(request, virtualdisplay):
     request.addfinalizer(fin)
 
     return browser
+
+
+@pytest.fixture(scope="function")
+def user_language_preference_cookie(request, test_session):
+
+    from assembl.models.auth import (
+        UserLanguagePreference,
+        LanguagePreferenceOrder
+    )
+
+    from assembl.models.langstrings import Locale
+
+    locale_from = Locale.get_or_create("en_CA", test_session)
+    ulp = UserLanguagePreference(
+        locale_id=locale_from.id,
+        preferred_order=0,
+        source_of_evidence=LanguagePreferenceOrder.Cookie)
+
+    def fin():
+        print "finalizer user_language_preference_cookie"
+        test_session.delete(ulp)
+        test_session.flush()
+
+    test_session.add(ulp)
+    test_session.flush(ulp)
+    request.addfinalizer(fin)
+    return ulp
