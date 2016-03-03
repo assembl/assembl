@@ -233,7 +233,6 @@ class NamespacedUserKVCollection(MutableMapping):
 
 class UserPreferenceCollection(NamespacedUserKVCollection):
     PREFERENCE_NAMESPACE = "preferences"
-    PREFERENCE_DATA = "preference_data"
     ALLOW_OVERRIDE = "allow_user_override"
 
     def __init__(self, user_id, discussion=None):
@@ -248,10 +247,9 @@ class UserPreferenceCollection(NamespacedUserKVCollection):
         return len(self.dprefs.property_defaults)
 
     def __setitem__(self, key, value):
-        if key not in Preferences.preference_data:
+        if key not in Preferences.preference_data_key_set:
             raise KeyError("Unknown property")
-        pref_data = self.dprefs.get(
-            self.PREFERENCE_DATA, Preferences.preference_data)
+        pref_data = self.dprefs.get_preference_data()
         req_permission = pref_data.get(key, {}).get(
             self.ALLOW_OVERRIDE, False)
         if (not req_permission) or not user_has_permission(

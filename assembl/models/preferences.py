@@ -100,18 +100,18 @@ class Preferences(MutableMapping, Base):
         elif self.cascade_id:
             return self.cascade_preferences[key]
         if key == "preference_data":
-            return self.get_preference_data()
+            return self.get_preference_data_list()
         return self.get_preference_data()[key].get("default", None)
 
     def __len__(self):
-        return len(self.preference_data) + 2
+        return len(self.preference_data_list) + 2
 
     def __iter__(self):
-        return chain(self.preference_data.iterkeys(), (
+        return chain(self.preference_data_key_list, (
             'name', '@extends'))
 
     def __contains__(self, key):
-        return key in self.preference_data
+        return key in self.preference_data_key_set
 
     def __delitem__(self, key):
         values = self.local_values_json
@@ -133,7 +133,7 @@ class Preferences(MutableMapping, Base):
                 raise KeyError("Does not exist:" + value)
             self.cascade_preferences = new_pref
             return old_value
-        if key not in self.preference_data:
+        if key not in self.preference_data_key_set:
             raise KeyError("Unknown preference: " + key)
         values = self.local_values_json
         old_value = values.get(key, None)
@@ -143,11 +143,12 @@ class Preferences(MutableMapping, Base):
         return old_value
 
     def can_edit(self, key, permissions=(P_READ,), pref_data=None):
+        if P_SYSADMIN in permissions:
+            return True
         if key in ('name', '@extends', 'preference_data'):
             # TODO: Delegate permissions.
-            if P_SYSADMIN not in permissions:
-                return False
-        if key not in self.preference_data:
+            return False
+        if key not in self.preference_data_key_set:
             raise KeyError("Unknown preference: " + key)
         if pref_data is None:
             pref_data = self.get_preference_data()[key]
@@ -243,8 +244,8 @@ class Preferences(MutableMapping, Base):
 
     @classproperty
     def property_defaults(cls):
-        return {k: v.get("default", None)
-                for (k, v) in cls.preference_data.iteritems()}
+        return {p['id']: p.get("default", None)
+                for p in cls.preference_data_list}
 
     def get_preference_data(self):
         if self.cascade_id:
@@ -257,10 +258,17 @@ class Preferences(MutableMapping, Base):
         else:
             return base
 
+    def get_preference_data_list(self):
+        data = self.get_preference_data()
+        keys = self.preference_data_key_list
+        return [data[key] for key in keys]
+
     # This defines the allowed property names and their default values
-    preference_data = {
+    preference_data_list = [
         # List of visualizations
-        "visualizations": {
+        {
+            "id": "visualizations",
+            "name": _("Visualizations"),
             "value_type": "json",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -272,7 +280,9 @@ class Preferences(MutableMapping, Base):
             "default": {}
         },
         # Extra navigation sections (refers to visualizations)
-        "navigation_sections": {
+        {
+            "id": "navigation_sections",
+            "name": _("Navigation sections"),
             "value_type": "json",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -285,7 +295,9 @@ class Preferences(MutableMapping, Base):
             "default": {}
         },
         # Translations for the navigation sections
-        "translations": {
+        {
+            "id": "translations",
+            "name": _("Translations"),
             "value_type": "json",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -301,7 +313,9 @@ class Preferences(MutableMapping, Base):
         # Default expanded/collapsed state of each idea in the table of ideas.
         # A user can override it by opening/closing an idea.
         # This is a hash where keys are ideas ids.
-        "default_table_of_ideas_collapsed_state": {
+        {
+            "id": "default_table_of_ideas_collapsed_state",
+            "name": _("Default Table of Ideas Collapsed state"),
             "value_type": "json",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -316,7 +330,9 @@ class Preferences(MutableMapping, Base):
             "show_in_preferences": False
         },
         # Simple view panel order, eg NIM or NMI
-        "simple_view_panel_order": {
+        {
+            "id": "simple_view_panel_order",
+            "name": _("Panel order in simple view"),
             "value_type": "scalar",
             "scalar_values": {
                 "NMI": _("Navigation, Idea, Messages"),
@@ -329,7 +345,9 @@ class Preferences(MutableMapping, Base):
             "default": "NMI"
         },
         # Registration requires being a member of this email domain.
-        "require_email_domain": {
+        {
+            "id": "require_email_domain",
+            "name": _("Require Email Domain"),
             "value_type": "string",  # "list_of_email" eventually
             # "scalar_values": {value: "label"},
             "description": _(
@@ -347,7 +365,9 @@ class Preferences(MutableMapping, Base):
             "default": ""
         },
         # Allow social sharing
-        "social_sharing": {
+        {
+            "id": "social_sharing",
+            "name": _("Social sharing"),
             "value_type": "bool",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -360,7 +380,9 @@ class Preferences(MutableMapping, Base):
             "default": True
         },
         # Are moderated posts simply hidden or made inaccessible by default?
-        "default_allow_access_to_moderated_text": {
+        {
+            "id": "default_allow_access_to_moderated_text",
+            "name": _("Allow access to moderated_text"),
             "value_type": "bool",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -374,7 +396,9 @@ class Preferences(MutableMapping, Base):
         },
         # Default moderation text template
         # TODO: preference to allow moderation a priori.
-        "moderation_template": {
+        {
+            "id": "moderation_template",
+            "name": _("Moderation template"),
             "value_type": "string",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -387,7 +411,9 @@ class Preferences(MutableMapping, Base):
         },
         # full class name of translation service to use, if any
         # e.g. assembl.nlp.translate.GoogleTranslationService
-        "translation_service": {
+        {
+            "id": "translation_service",
+            "name": _("Translation service"),
             "value_type": "scalar",
             "scalar_values": {
                 "": _("No translation"),
@@ -410,7 +436,9 @@ class Preferences(MutableMapping, Base):
             "default": ""
         },
         # Show the CI Dashboard in the panel group window
-        "show_ci_dashboard": {
+        {
+            "id": "show_ci_dashboard",
+            "name": _("Show CI Dashboard"),
             "value_type": "bool",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -422,7 +450,9 @@ class Preferences(MutableMapping, Base):
             "default": False
         },
         # Configuration of the visualizations shown in the CI Dashboard
-        "ci_dashboard_url": {
+        {
+            "id": "ci_dashboard_url",
+            "name": _("URL of CI Dashboard"),
             "value_type": "url",
             "description": _(
                 "Configuration of the visualizations shown in the "
@@ -438,7 +468,9 @@ class Preferences(MutableMapping, Base):
                 "&title=&url=<%= url %>&userurl=<%= user_url %>"
                 "&langurl=&timeout=60"
         },
-        "preference_data": {
+        {
+            "id": "preference_data",
+            "name": _("Preference data"),
             "value_type": "json",
             "show_in_preferences": False,
             "description": _(
@@ -449,4 +481,9 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": None  # this should be recursive...
         }
-    }
+    ]
+
+    # Precompute, this is not mutable.
+    preference_data_key_list = [p["id"] for p in preference_data_list]
+    preference_data_key_set = set(preference_data_key_list)
+    preference_data = {p["id"]: p for p in preference_data_list}
