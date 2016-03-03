@@ -23,6 +23,7 @@
     "cover": "mochify --cover"
   },
   "dependencies": {
+    "autoprefixer": "~6.3.0",
     "bourbon": "~4.2.6",
     "bluebird": "^2.9.26",
     "browserify": "^10.2.1",
@@ -54,6 +55,7 @@
     "node-sass": "~3.3.3",
     "phantomjs": "^1.9.17",
     "po2json": "~0.4.1",
+    "postcss": "~5.0.0",
     "raven-js": " ~1.1.22",
     "uglify-js": "^2.6.1",
     "vinyl-buffer": "^1.0.0",
