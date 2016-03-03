@@ -590,11 +590,11 @@ class LangString(Base):
             entries.extend(self.non_mt_entries())
         return entries
 
-    def remove_translations(self):
+    def remove_translations(self, forget_identification=True):
         for entry in self.entries:
             if Locale.locale_is_machine_translated(entry.locale_code):
                 entry.delete()
-            else:
+            elif forget_identification:
                 entry.forget_identification(True)
         if inspect(self).persistent:
             self.db.expire(self, ["entries"])
@@ -655,16 +655,23 @@ class LangStringEntry(Base, TombstonableMixin):
         value = self.value or ''
         if len(value) > 50:
             value = value[:50]+'...'
+        if self.error_code:
+            return '%d: [%s] ERROR %d' % (
+                self.id or -1,
+                self.locale_code or "missing",
+                self.error_code)
         return '%d: [%s] "%s"' % (
             self.id or -1,
-            self.locale.code if self.locale else "missing",
+            self.locale_code or "missing",
             value.encode('utf-8'))
 
     @property
     def locale_code(self):
-        return Locale.code_for_id(self.locale_id)
-        # Equivalent to the following, which may trigger a DB load
-        # return self.locale.code
+        if self.locale_id:
+            # optimization, avoids db load
+            return Locale.code_for_id(self.locale_id)
+        elif self.locale:
+            return self.locale.code
 
     @locale_code.setter
     def locale_code(self, locale_code):
@@ -751,6 +758,8 @@ class LangStringEntry(Base, TombstonableMixin):
                 data['original'] = original
             self.locale_identification_data_json = data
             self.locale_confirmed = certainty or locale_code == original
+        if changed:
+            self.langstring.remove_translations(False)
         return changed
 
     def forget_identification(self, force=False):
