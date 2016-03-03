@@ -843,6 +843,6 @@ def user_language_preference_cookie(request, test_session):
         test_session.flush()
 
     test_session.add(ulp)
-    test_session.flush(ulp)
+    test_session.flush()
     request.addfinalizer(fin)
     return ulp
