@@ -128,7 +128,7 @@ autorestart = false
 
 [program:nodesass]
 directory = %(here)s
-command = ./node_modules/.bin/node-sass -w -r --include-path node_modules/bourbon/app/assets/stylesheets -o assembl/static/css assembl/static/css
+command = ./node_modules/.bin/node-sass -w -r --source-map --include-path node_modules/bourbon/app/assets/stylesheets -o assembl/static/css assembl/static/css
 autostart = %(autostart_nodesass)s
 autorestart = true
 
