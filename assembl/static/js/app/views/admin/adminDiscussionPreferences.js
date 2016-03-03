@@ -30,8 +30,12 @@ var adminDiscussionPreferences = Marionette.LayoutView.extend({
 
   initialize: function() {
     var that = this;
+    this.preferenceData = {};
     this.getReadUserPreferencePromise("preference_data").then(function(res){
-          that.preferenceData = res;
+          that.preferenceDataList = res;
+          _.map(res, function (pref) {
+            that.preferenceData[pref.id] = pref;
+          });
           that.template = '#tmpl-adminDiscussionPreferences';
           that.render();
         }).catch(function(e) {
