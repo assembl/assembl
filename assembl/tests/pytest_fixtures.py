@@ -822,17 +822,77 @@ def browser(request, virtualdisplay):
 
 
 @pytest.fixture(scope="function")
-def user_language_preference_cookie(request, test_session):
+def en_ca_locale(request, test_session):
+    from assembl.models.langstrings import Locale
+
+    locale = Locale.get_or_create("en_CA", test_session)
+
+    def fin():
+        Locale.reset_cache()
+        test_session.delete(locale)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def en_locale(request, test_session):
+    from assembl.models.langstrings import Locale
+
+    locale = Locale.get_or_create("en", test_session)
+
+    def fin():
+        Locale.reset_cache()
+        test_session.delete(locale)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def fr_locale(request, test_session):
+    from assembl.models.langstrings import Locale
+
+    locale = Locale.get_or_create("fr", test_session)
+
+    def fin():
+        Locale.reset_cache()
+        test_session.delete(locale)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def fr_from_en_locale(request, en_locale, fr_locale):
+    from assembl.models.langstrings import Locale
+
+    locale = Locale.create_mt_locale(en_locale, fr_locale)
+
+    def fin():
+        Locale.reset_cache()
+        test_session.delete(locale)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def user_language_preference_cookie(request, test_session, en_ca_locale,
+                                    participant1_user):
 
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
     )
 
-    from assembl.models.langstrings import Locale
-
-    locale_from = Locale.get_or_create("en_CA", test_session)
+    locale_from = en_ca_locale
     ulp = UserLanguagePreference(
+        user_id=participant1_user.id,
         locale_id=locale_from.id,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Cookie)
@@ -846,3 +906,143 @@ def user_language_preference_cookie(request, test_session):
     test_session.flush()
     request.addfinalizer(fin)
     return ulp
+
+
+@pytest.fixture(scope="function")
+def langstring_entry_values():
+    return {
+        "subject": {
+            "english": "",
+            "french": ""
+        },
+        "body": {
+            "english": "",
+            "french": ""
+        }
+    }
+
+
+@pytest.fixture(scope="function",
+                params=[{"verified": True}, {"verified": False}])
+def en_langstring_entry(request, test_session, en_locale,
+                        langstring_body, langstring_entry_values):
+    from assembl.models.langstrings import LangStringEntry
+
+    entry = LangStringEntry(
+        locale_confirmed=request.params.get('verified'),
+        langstring=langstring_body,
+        locale=en_locale,
+        value=langstring_entry_values.get('body').get('english')
+    )
+
+    def fin():
+        test_session.delete(entry)
+        test_session.flush()
+
+    test_session.add(entry)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return entry
+
+
+@pytest.fixture(scope="function",
+                params=[{"verified": True}, {"verified": False}])
+def fr_langstring_entry(request, test_session, fr_locale,
+                        langstring_body, langstring_entry_values):
+    from assembl.models.langstrings import LangStringEntry
+
+    entry = LangStringEntry(
+        locale_confirmed=request.params.get('verified'),
+        langstring=langstring_body,
+        locale=fr_locale,
+        value=langstring_entry_values.get('body').get('french')
+    )
+
+    def fin():
+        test_session.delete(entry)
+        test_session.flush()
+
+    test_session.add(entry)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return entry
+
+
+@pytest.fixture(scope="function")
+def fr_from_en_langstring_entry(request, test_session, fr_from_en_locale,
+                                langstring_body, fr_langstring_entry):
+    from assembl.models.langstrings import LangStringEntry
+
+    entry = LangStringEntry(
+        locale_confirmed=request.params.get('verified'),
+        langstring=langstring_body,
+        locale=fr_from_en_locale,
+        value=langstring_entry_values.get('body').get('french')
+    )
+
+    def fin():
+        test_session.delete(entry)
+        test_session.flush()
+
+    test_session.add(entry)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return entry
+
+
+@pytest.fixture(scope="function")
+def langstring_body(request, test_session):
+    from assembl.models.langstrings import LangString
+
+    ls = LangString()
+    test_session.add(ls)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(ls)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return ls
+
+
+@pytest.fixture(scope="function")
+def langstring_subject(request, test_session):
+    from assembl.models.langstrings import LangString
+
+    ls = LangString()
+    test_session.add(ls)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(ls)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return ls
+
+
+# @pytest.fixture(scope="function")
+# def en_top_post(request, test_session, participant1_user, langstring,
+#                 discussion,
+#                 en_langstring_entry_unverified, en_langstring_entry_verified):
+#     "An English Assembl Post"
+
+#     from assembl.models.post import AssemblPost
+
+#     subject = langstring_entry_values.get('subject').get('english')
+#     body = langstring_entry_values.get('body').get('english')
+
+#     p = AssemblPost(
+#         discussion=discussion, creator=participant1_user,
+#         subject=subject, body=body, moderator=None,
+#         creation_date=datetime.utcnow(), type="assembl_post")
+
+#     test_session.add(p)
+#     test_session.flush()
+
+#     def fin():
+#         pass
+
+#     request.addfinalizer(fin)
+#     return p
