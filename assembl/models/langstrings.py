@@ -58,6 +58,18 @@ class Locale(Base):
                 break
             self = self.get_or_create(ancestor)
 
+    @classmethod
+    def create_mt_code(self, source_code, target_code):
+        return "%s-x-mtfrom-%s" % (target_code, source_code)
+
+    @classmethod
+    def create_mt_locale(cls, source_locale, target_locale):
+        return cls.get_or_create(
+            cls.create_mt_code(
+                source_locale.code, target_locale.code
+            )
+        )
+
     @staticmethod
     def decompose_locale(locale_code):
         parts = locale_code.split('_')
@@ -363,6 +375,10 @@ class LangString(Base):
         (id,) = next(iter(self.db.execute(
             "select sequence_next('%s')" % self.id_sequence_name)))
         self.id = id
+
+    def add_entry(self, entry):
+        if entry and isinstance(entry, LangStringEntry):
+            self.entries.append(entry)
 
     def __repr__(self):
         return 'LangString (%d): %s\n' % (

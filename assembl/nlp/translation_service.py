@@ -135,7 +135,7 @@ class TranslationService(object):
         return text, lang
 
     def get_mt_name(self, source_name, target_name):
-        return "%s-x-mtfrom-%s" % (target_name, source_name)
+        return Locale.create_mt_code(source_name, target_name)
 
     def has_fatal_error(self, lse):
         return lse.error_code >= LangStringStatus.PERMANENT_TRANSLATION_FAILURE
