@@ -31,9 +31,24 @@ Permission lookups:
 GET localhost:6543/api/v1/discussion/2/permissions/add_extract/u/
 
 Frontend notes:
-Specific messages are adressed with urls such as 
+Specific messages are adressed with urls such as
 http://localhost:6543/jacklayton/posts/local%3AContent%2F16
 
 Metrics and statistics (work in progress, api under flux):
-Ex:  
+Ex:
 http://localhost:6543/data/Discussion/11/time_series_analytics?interval=P1M&start=2014-01-01
+
+Discussion preferences:
+Raw data: (does not include permission cascade, use it to edit)
+/data/Discussion/1/preferences
+
+Cooked data (includes permission cascade)
+/data/Discussion/1/settings(/{key})
+(In frontend: models/discussionPreference.js)
+
+User Namespaced KV store:
+/data/Discussion/1/user_ns_kv/{namespace}(/{key})
+in particular
+/data/Discussion/1/user_ns_kv/preferences(/{key}) which contains the overrides found in user-corrected preference data:
+/data/Discussion/1/all_users/current/preferences(/{key})
+(In frontend: Ctx.getPreferences, which is taken from a tag.)
