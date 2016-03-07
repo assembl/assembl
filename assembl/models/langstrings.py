@@ -63,11 +63,12 @@ class Locale(Base):
         return "%s-x-mtfrom-%s" % (target_code, source_code)
 
     @classmethod
-    def create_mt_locale(cls, source_locale, target_locale):
+    def create_mt_locale(cls, source_locale, target_locale, db=None):
         return cls.get_or_create(
             cls.create_mt_code(
                 source_locale.code, target_locale.code
-            )
+            ),
+            db=db
         )
 
     @staticmethod
