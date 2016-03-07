@@ -599,6 +599,7 @@ def bower_cmd(cmd, relative_path='.'):
             print "Bower not present, installing..."
             execute(install_bower)
         with cd(relative_path):
+            print("Running a bower command in path %s" % relative_path)
             run(' '.join((node_cmd, bower_cmd, cmd)))
 
 def _bower_foreach_do(cmd):
