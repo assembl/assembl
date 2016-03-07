@@ -142,7 +142,8 @@ class Locale(Base):
             # Add locales that were created, flushed but not yet committed,
             # And will not show up in the query
             uncommitted = [
-                l for l in cls._locale_uncommitted if not inspect(l).expired]
+                l for l in cls._locale_uncommitted
+                if not (inspect(l).expired or inspect(l).deleted)]
             cls._locale_uncommitted = uncommitted
             if uncommitted:
                 cls._locale_collection_byid.update(
