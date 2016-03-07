@@ -1,13 +1,36 @@
-from assembl.models.langstrings import Locale
 
 
-def test_cookie_ulp(user_language_preference_cookie):
-    u = user_language_preference_cookie
-    locale = Locale.get(u.locale_id)
+def test_empty_user_language_preference(langstring_body,
+                                        fr_from_en_langstring_entry,
+                                        test_app,
+                                        test_webrequest):
+    """
+    Testing best_lang
+    Body: en, fr-x-mtfrom-en
+    User Language Preferences: None
+    Expect: Whatever type is in the request; if none, original.
+    """
+    body = fr_from_en_langstring_entry
+    user_language_preference = None
 
-    print "---------------------------------"
-    print locale
-    assert 0
+    lang = langstring_body.best_lang(
+        user_prefs=user_language_preference,
+        allow_errors=True)
+    import pdb; pdb.set_trace()
+    auth = test_webrequest.authorization
+
+
+def test_cookie_ulp(user_language_preference_en_cookie,
+                    participant1_user,
+                    en_langstring_entry,
+                    fr_from_en_langstring_entry,
+                    langstring_body):
+
+    lang_prefs = participant1_user.language_preference
+    best = langstring_body.best_lang(lang_prefs)
+    import pdb; pdb.set_trace()
+    print "Best language being picked here. %s" % best
+
 
 # pick interface default
 
