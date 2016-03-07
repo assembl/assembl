@@ -118,7 +118,7 @@ def test_app_no_perm(request, base_registry, db_tables):
 
 
 @pytest.fixture(scope="module")
-def test_webrequest(request, base_registry, test_app_no_perm):
+def test_webrequest(request, test_app_no_perm):
     req = PyramidWebTestRequest.blank('/', method="GET")
 
     def fin():
@@ -251,6 +251,18 @@ def admin_user(request, test_session, db_default_data):
         test_session.flush()
     request.addfinalizer(fin)
     return u
+
+
+@pytest.fixture(scope="module")
+def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
+    req = PyramidWebTestRequest.blank('/', method="GET")
+    req.authenticated_userid = admin_user.id
+
+    def fin():
+        # The request was not called
+        manager.pop()
+    request.addfinalizer(fin)
+    return req
 
 
 @pytest.fixture(scope="function")
