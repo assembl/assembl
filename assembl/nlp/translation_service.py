@@ -51,7 +51,7 @@ class TranslationService(object):
     @classmethod
     def can_guess_locale(cls, text):
         # empirical
-        return len(text) >= 15
+        return text and len(text) >= 15
 
     def target_locales(self):
         return ()
@@ -116,6 +116,8 @@ class TranslationService(object):
 
     @abstractmethod
     def translate(self, text, target, source=None, db=None):
+        if not text:
+            return text, Locale.UNDEFINED
         if not source or source == Locale.UNDEFINED:
             lang, data = self.identify(text)
             source = Locale.get_or_create(source, db)
@@ -133,6 +135,8 @@ class TranslationService(object):
         return LangStringStatus.UNKNOWN_ERROR, str(e)
 
     def translate_lse(self, source_lse, target, retranslate=False):
+        if not text:
+            return text, Locale.UNDEFINED
         if source_lse.langstring_id == LangString.EMPTY_ID:
             # don't translate the empty string
             return source_lse
@@ -187,7 +191,7 @@ class TranslationService(object):
             except Exception as e:
                 print_exc()
                 self.set_error(target_lse, *self.decode_exception(e))
-                target_lse.value = ''
+                target_lse.value = None
         else:
             # Note: when retranslating, we may lose a valid translation.
             if source_locale == Locale.UNDEFINED:
@@ -198,7 +202,7 @@ class TranslationService(object):
             self.set_error(
                 target_lse, LangStringStatus.CANNOT_TRANSLATE,
                 "cannot translate")
-            target_lse.value = ''
+            target_lse.value = None
         if (not target_lse.locale or
                 (source_locale != Locale.UNDEFINED
                  and Locale.extract_base_locale(
@@ -217,6 +221,8 @@ class DummyTranslationServiceTwoSteps(TranslationService):
         return True
 
     def translate(self, text, target, source=None, db=None):
+        if not text:
+            return text, Locale.UNDEFINED
         return u"Pseudo-translation from %s to %s of: %s" % (
             source or Locale.UNDEFINED, target, text), source
 
@@ -238,6 +244,8 @@ class DummyTranslationServiceTwoStepsWithErrors(
             text, constrain_to_discussion_locales=True)
 
     def translate(self, text, target, source=None, db=None):
+        if not text:
+            return text, Locale.UNDEFINED
         from random import random
         if random() > 0.8:
             raise RuntimeError()
@@ -247,6 +255,8 @@ class DummyTranslationServiceTwoStepsWithErrors(
 
 class DummyTranslationServiceOneStepWithErrors(DummyTranslationServiceOneStep):
     def translate(self, text, target, source=None, db=None):
+        if not text:
+            return text, Locale.UNDEFINED
         from random import random
         if random() > 0.8:
             raise RuntimeError()
@@ -309,6 +319,8 @@ class DummyGoogleTranslationService(TranslationService):
                 self.asKnownLocale(target))
 
     def translate(self, text, target, source=None, db=None):
+        if not text:
+            return text, Locale.UNDEFINED
         # Initial implementation from
         # https://github.com/mouuff/Google-Translate-API
         link = "http://translate.google.com/m?hl=%s&sl=%s&q=%s" % (
@@ -347,6 +359,8 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         return self._known_locales
 
     def identify(self, text, expected_locales=None):
+        if not text:
+            return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
         r = self.client.detections().list(q=text).execute()
         r = r[u"detections"][0]
         r.sort(lambda x: x[u"confidence"], reverse=True)
@@ -356,6 +370,8 @@ class GoogleTranslationService(DummyGoogleTranslationService):
             self.asPosixLocale(x[u'language']): x[u'confidence'] for x in r}
 
     def translate(self, text, target, source=None, db=None):
+        if not text:
+            return text, Locale.UNDEFINED
         r = self.client.translations().list(
             q=text, target=target, source=source).execute()
         if source is None:

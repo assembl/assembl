@@ -207,7 +207,9 @@ class Post(Content):
         ls = LangString()
         shortened = False
         for entry in body.entries:
-            if is_html:
+            if not entry.value:
+                short = entry.value
+            elif is_html:
                 short = self.shorten_html_text(entry.value)
             else:
                 short = self.shorten_text(entry.value)
@@ -229,7 +231,9 @@ class Post(Content):
         body = self.get_body().first_original().value
         is_html = self.get_body_mime_type() == 'text/html'
         shortened = False
-        if is_html:
+        if not body:
+            short = body
+        elif is_html:
             short = self.shorten_html_text(body)
         else:
             short = self.shorten_text(body)
