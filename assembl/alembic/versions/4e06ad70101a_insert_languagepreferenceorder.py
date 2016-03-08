@@ -1,14 +1,14 @@
 """Insert LanguagePreferenceOrder
 
 Revision ID: 4e06ad70101a
-Revises: 3492626e1690
+Revises: 4f43341f787e
 Create Date: 2016-03-08 08:46:55.859966
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '4e06ad70101a'
-down_revision = '3492626e1690'
+down_revision = '4f43341f787e'
 
 from alembic import context, op
 
