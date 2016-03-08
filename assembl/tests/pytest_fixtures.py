@@ -254,7 +254,7 @@ def admin_user(request, test_session, db_default_data):
     return u
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
     req = PyramidWebTestRequest.blank('/', method="GET")
     req.authenticated_userid = admin_user.id
@@ -897,7 +897,7 @@ def en_from_fr_locale(request, test_session, en_locale, fr_locale):
 
 @pytest.fixture(scope="function")
 def user_language_preference_en_cookie(request, test_session, en_ca_locale,
-                                       participant1_user):
+                                       admin_user):
 
     from assembl.models.auth import (
         UserLanguagePreference,
@@ -906,8 +906,8 @@ def user_language_preference_en_cookie(request, test_session, en_ca_locale,
 
     locale_from = en_ca_locale
     ulp = UserLanguagePreference(
-        user_id=participant1_user.id,
-        locale_id=locale_from.id,
+        user=admin_user,
+        locale=locale_from,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Cookie)
 
@@ -924,7 +924,7 @@ def user_language_preference_en_cookie(request, test_session, en_ca_locale,
 
 @pytest.fixture(scope="function")
 def user_language_preference_fr_cookie(request, test_session, fr_locale,
-                                       participant1_user):
+                                       admin_user):
 
     from assembl.models.auth import (
         UserLanguagePreference,
@@ -933,8 +933,8 @@ def user_language_preference_fr_cookie(request, test_session, fr_locale,
 
     locale_from = fr_locale
     ulp = UserLanguagePreference(
-        user_id=participant1_user.id,
-        locale_id=locale_from.id,
+        user=admin_user,
+        locale=locale_from,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Cookie)
 
@@ -951,7 +951,7 @@ def user_language_preference_fr_cookie(request, test_session, fr_locale,
 
 @pytest.fixture(scope="function")
 def user_language_preference_en_explicit(request, test_session, en_locale,
-                                         participant1_user):
+                                         admin_user):
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -959,7 +959,7 @@ def user_language_preference_en_explicit(request, test_session, en_locale,
 
     locale_from = en_locale
     ulp = UserLanguagePreference(
-        user=participant1_user,
+        user=admin_user,
         locale=locale_from,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Explicit)
@@ -977,7 +977,7 @@ def user_language_preference_en_explicit(request, test_session, en_locale,
 
 @pytest.fixture(scope="function")
 def user_language_preference_fr_explicit(request, test_session, fr_locale,
-                                         participant1_user):
+                                         admin_user):
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -985,7 +985,7 @@ def user_language_preference_fr_explicit(request, test_session, fr_locale,
 
     locale_from = fr_locale
     ulp = UserLanguagePreference(
-        user=participant1_user,
+        user=admin_user,
         locale=locale_from,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Explicit)
@@ -1004,14 +1004,14 @@ def user_language_preference_fr_explicit(request, test_session, fr_locale,
 @pytest.fixture(scope="function")
 def user_language_preference_fr_mtfrom_en(request, test_session,
                                           en_locale, fr_locale,
-                                          participant1_user):
+                                          admin_user):
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
     )
 
     ulp = UserLanguagePreference(
-        user=participant1_user,
+        user=admin_user,
         locale=en_locale,
         translate_to_locale=fr_locale,
         preferred_order=0,
@@ -1030,14 +1030,14 @@ def user_language_preference_fr_mtfrom_en(request, test_session,
 @pytest.fixture(scope="function")
 def user_language_preference_en_mtfrom_fr(request, test_session,
                                           en_locale, fr_locale,
-                                          participant1_user):
+                                          admin_user):
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
     )
 
     ulp = UserLanguagePreference(
-        user=participant1_user,
+        user=admin_user,
         locale=fr_locale,
         translate_to_locale=en_locale,
         preferred_order=0,
@@ -1061,11 +1061,11 @@ def langstring_entry_values():
             "english":
                 u"Here is an English subject that is very cool and hip.",
             "french":
-                u"Voici un sujet anglais qui" +
+                u"Voici un sujet anglais qui " +
                 u"est très cool et branché."
         },
         "body": {
-            "english": u"Here is an English body that is" +
+            "english": u"Here is an English body that is " +
                        u"very cool and hip. And it is also longer.",
             "french": u"Voici un body anglais qui est très cool et branché. " +
             u"Et il est également plus longue."
@@ -1204,29 +1204,3 @@ def langstring_subject(request, test_session):
 
     request.addfinalizer(fin)
     return ls
-
-
-# @pytest.fixture(scope="function")
-# def en_top_post(request, test_session, participant1_user, langstring,
-#                 discussion,
-#                 en_langstring_entry_unverified, en_langstring_entry_verified):
-#     "An English Assembl Post"
-
-#     from assembl.models.post import AssemblPost
-
-#     subject = langstring_entry_values.get('subject').get('english')
-#     body = langstring_entry_values.get('body').get('english')
-
-#     p = AssemblPost(
-#         discussion=discussion, creator=participant1_user,
-#         subject=subject, body=body, moderator=None,
-#         creation_date=datetime.utcnow(), type="assembl_post")
-
-#     test_session.add(p)
-#     test_session.flush()
-
-#     def fin():
-#         pass
-
-#     request.addfinalizer(fin)
-#     return p
