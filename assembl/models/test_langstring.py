@@ -165,12 +165,16 @@ def test_user_language_preference_en_to_fr_explicit_missing_fr_explicit(
 
     assert best.locale.id == fr_from_en_locale.id
 
-# pick interface default
 
-# Empty user language preferences -> interface default language is best
-# Cookie user language preference -> use the cookie language
-# from_to + to user language preference -> the to language
-# to is missing -> use the to language in the from-to combination
+# def test_user_language_preference_en_to_fr_explicit_and_fr_to_it_explicit(
+#         admin_user, langstring_body, test_adminuser_webrequest,
+#         user_language_preference_fr_mtfrom_en,
+#         user_language_preference_it_mtfrom_fr,
+#         user_language_preference_fr_explicit,
+#         user_language_preference_it_explicit
+#         ):
+#     pass
+
 # a -> b, b -> c -> merge, should expect c
 # exception to translate a language from A -> A (en -> en/ en -> en_CA)
 # 
