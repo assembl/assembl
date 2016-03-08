@@ -267,20 +267,19 @@ class DummyTranslationServiceOneStepWithErrors(DummyTranslationServiceOneStep):
 class DummyGoogleTranslationService(TranslationService):
     # Uses public Google API. For testing purposes. Do NOT use in production.
     _known_locales = {
-        "af", "sq", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca",
-        "ceb", "ny", "zh-CN", "zh-TW", "hr", "cs", "da", "nl", "en", "eo",
-        "et", "tl", "fi", "fr", "gl", "ka", "de", "el", "gu", "ht", "ha",
-        "iw", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw",
-        "kn", "kk", "km", "ko", "lo", "la", "lv", "lt", "mk", "mg", "ms",
-        "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "fa", "pl", "pt",
-        "pa", "ro", "ru", "sr", "st", "si", "sk", "sl", "so", "es", "su",
-        "sw", "sv", "tg", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi",
-        "cy", "yi", "yo", "zu"}
+        'af', 'am', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'ceb', 'co',
+        'cs', 'cy', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa',
+        'fi', 'fr', 'fy', 'ga', 'gd', 'gl', 'gu', 'ha', 'haw', 'he', 'hi',
+        'hmn', 'hr', 'ht', 'hu', 'hy', 'id', 'ig', 'is', 'it', 'ja', 'jv',
+        'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'ky', 'la', 'lb', 'lo', 'lt',
+        'lv', 'mg', 'mi', 'mk', 'ml', 'mn', 'mr', 'ms', 'mt', 'my', 'ne',
+        'nl', 'no', 'ny', 'pa', 'pl', 'ps', 'pt', 'ro', 'ru', 'sd', 'si',
+        'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'st', 'su', 'sv', 'sw',
+        'ta', 'te', 'tg', 'th', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'xh',
+        'yi', 'yo', 'zh', 'zh_Hant_TW', 'zu'}
+    known_locales = _known_locales
     idiosyncrasies = {
-        "zh-TW": "zh_Hant_TW",
-        "zh-CN": "zh_Hans_CN",
-        "jw": "jv",
-        "iw": "he"
+        "zh": "zh_Hans_CN"
     }
     idiosyncrasies_reverse = {v: k for (k, v) in idiosyncrasies.items()}
     agents = {'User-Agent':"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"}
@@ -291,18 +290,18 @@ class DummyGoogleTranslationService(TranslationService):
     def asKnownLocale(self, locale_code):
         parts = locale_code.split("_")
         base = parts[0]
+        if base == "zh" and len(parts) > 1:
+            p1 = parts[1]
+            if p1 in ("Hans", "CN"):
+                return "zh"  # zh_Hans_CN
+            elif p1 in ("Hant", "TW", "HK", "SG", "MO"):
+                return "zh_Hant_TW"
+            else:
+                return base
         if base in self.known_locales:
             return base
         if base in self.idiosyncrasies_reverse:
             return self.idiosyncrasies_reverse[base]
-        if base == "zh":
-            p1 = parts[1]
-            if p1 == "Hans":
-                return "zh-CN"  # zh_Hans_CN
-            elif p1 == "Hant":
-                return "zh-TW"  # zh_Hant_TW
-            elif p1 in ("CN", "TW"):
-                return "_".join(parts[:1])
 
     def asPosixLocale(cls, locale_code):
         return cls.idiosyncrasies.get(locale_code, locale_code)
