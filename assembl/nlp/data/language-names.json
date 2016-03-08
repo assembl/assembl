@@ -2750,6 +2750,26 @@
     "Französisch (Togo)"
   ],
   [
+    "fy",
+    "en",
+    "Western Frisian"
+  ],
+  [
+    "fy",
+    "fr",
+    "frison occidental"
+  ],
+  [
+    "fy",
+    "de",
+    "Friesisch"
+  ],
+  [
+    "fy",
+    "fy",
+    "Frysk"
+  ],
+  [
     "ga",
     "en",
     "Irish"
@@ -2783,6 +2803,26 @@
     "ga_IE",
     "de",
     "Irisch (Irland)"
+  ],
+  [
+    "gd",
+    "en",
+    "Scottish Gaelic"
+  ],
+  [
+    "gd",
+    "fr",
+    "gaélique écossais"
+  ],
+  [
+    "gd",
+    "de",
+    "Gälisch-Schottisch"
+  ],
+  [
+    "gd",
+    "gd",
+    "Gàidhlig"
   ],
   [
     "gl",
@@ -3895,6 +3935,31 @@
     "Konkani (Indien)"
   ],
   [
+    "ku",
+    "en",
+    "Kurdish"
+  ],
+  [
+    "ku",
+    "fr",
+    "kurde"
+  ],
+  [
+    "ku",
+    "de",
+    "Kurdisch"
+  ],
+  [
+    "ku",
+    "ku-Latn",
+    "Kurdî"
+  ],
+  [
+    "ku",
+    "ku-Arab",
+    "كوردی"
+  ],
+  [
     "kw",
     "en",
     "Cornish"
@@ -3925,6 +3990,26 @@
     "cornique (Royaume-Uni)"
   ],
   [
+    "ky",
+    "en",
+    "Kirghiz"
+  ],
+  [
+    "ky",
+    "fr",
+    "kirghiz"
+  ],
+  [
+    "ky",
+    "de",
+    "Kirgisisch"
+  ],
+  [
+    "ky",
+    "ky",
+    "Кыргызча, Кыргыз тили"
+  ],
+  [
     "la",
     "en",
     "Latin"
@@ -3953,6 +4038,26 @@
     "lag_TZ",
     "en",
     "Langi (Tanzania)"
+  ],
+  [
+    "lb",
+    "en",
+    "Luxembourgish"
+  ],
+  [
+    "lb",
+    "fr",
+    "luxembourgeois"
+  ],
+  [
+    "lb",
+    "de",
+    "Luxemburgisch"
+  ],
+  [
+    "lb",
+    "lb",
+    "Lëtzebuergesch"
   ],
   [
     "lg",
@@ -5310,6 +5415,31 @@
     "Samburu (Kenya)"
   ],
   [
+    "sd",
+    "en",
+    "Sindhi"
+  ],
+  [
+    "sd",
+    "fr",
+    "sindhi"
+  ],
+  [
+    "sd",
+    "de",
+    "Sindhi-Sprache"
+  ],
+  [
+    "sd",
+    "sd-Deva",
+    "सिन्धी"
+  ],
+  [
+    "sd",
+    "sd-Arab",
+    "سنڌي، سندھی"
+  ],
+  [
     "seh",
     "en",
     "Sena"
@@ -5493,6 +5623,26 @@
     "sl_SI",
     "de",
     "Slowenisch (Slowenien)"
+  ],
+  [
+    "sm",
+    "en",
+    "Samoan"
+  ],
+  [
+    "sm",
+    "fr",
+    "samoan"
+  ],
+  [
+    "sm",
+    "de",
+    "Samoanisch"
+  ],
+  [
+    "sm",
+    "sm",
+    "gagana fa'a Samoa"
   ],
   [
     "sn",
@@ -6503,6 +6653,26 @@
     "vun_TZ",
     "en",
     "Vunjo (Tanzania)"
+  ],
+  [
+    "xh",
+    "en",
+    "Xhosa"
+  ],
+  [
+    "xh",
+    "fr",
+    "xhosa"
+  ],
+  [
+    "xh",
+    "de",
+    "Xhosa-Sprache"
+  ],
+  [
+    "xh",
+    "xh",
+    "isiXhosa"
   ],
   [
     "xog",
