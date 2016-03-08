@@ -187,7 +187,7 @@ msgstr "Gabarit de texte pour le texte de modération par défaut"
 
 #: assembl/models/preferences.py:416 assembl/models/preferences.py:430
 msgid "Translation service"
-msgstr "Service de tracduction"
+msgstr "Service de traduction"
 
 #: assembl/models/preferences.py:419
 msgid "No translation"
