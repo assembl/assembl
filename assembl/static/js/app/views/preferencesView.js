@@ -1,12 +1,12 @@
 "use strict";
 
-var Marionette = require("../../shims/marionette.js"),
-    Backbone = require("../../shims/backbone.js"),
-    _ = require("../../shims/underscore.js"),
-    i18n = require("../../utils/i18n.js"),
-    Types = require("../../utils/types.js"),
-    Ctx = require("../../common/context.js"),
-    CollectionManager = require("../../common/collectionManager.js");
+var Marionette = require("../shims/marionette.js"),
+    Backbone = require("../shims/backbone.js"),
+    _ = require("../shims/underscore.js"),
+    i18n = require("../utils/i18n.js"),
+    Types = require("../utils/types.js"),
+    Ctx = require("../common/context.js"),
+    CollectionManager = require("../common/collectionManager.js");
 
 function getPreferenceEditView(preferenceModel, subView) {
   var modelType = preferenceModel.value_type,
