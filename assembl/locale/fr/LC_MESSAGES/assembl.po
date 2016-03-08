@@ -167,7 +167,7 @@ msgstr "Google Translate"
 
 #: assembl/models/preferences.py:404
 msgid "Translation service"
-msgstr "Service de tracduction"
+msgstr "Service de traduction"
 
 #: assembl/models/preferences.py:416
 msgid "Show the CI Dashboard in the panel group window"

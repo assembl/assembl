@@ -98,7 +98,7 @@ var IdeaList = AssemblPanel.extend({
       }, 1);
     };
 
-    this.defaultTableOfIdeasCollapsedState = new DiscussionPreference.Model({
+    this.defaultTableOfIdeasCollapsedState = new DiscussionPreference.DictModel({
       id: "default_table_of_ideas_collapsed_state"
     });
     var defaultTableOfIdeasCollapsedStateFetchPromise = this.defaultTableOfIdeasCollapsedState.fetch();

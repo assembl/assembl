@@ -273,7 +273,7 @@ class Preferences(MutableMapping, Base):
             # "scalar_values": {value: "label"},
             "description": _(
                 "A JSON description of available Catalyst visualizations"),
-            "allow_user_override": False,
+            "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
@@ -303,7 +303,7 @@ class Preferences(MutableMapping, Base):
             "description": _(
                 "Translations applicable to Catalyst visualizations, "
                 "in Jed (JSON) format"),
-            "allow_user_override": P_READ,
+            "allow_user_override": None,
             # "view_permission": P_READ,  # by default
             "modification_permission": P_ADMIN_DISC,
             # "frontend_validator_function": func_name...?,
@@ -399,7 +399,7 @@ class Preferences(MutableMapping, Base):
         {
             "id": "moderation_template",
             "name": _("Moderation template"),
-            "value_type": "string",
+            "value_type": "text",
             # "scalar_values": {value: "label"},
             "description": _(
                 "Text template for default moderation text"),

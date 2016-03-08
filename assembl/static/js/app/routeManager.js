@@ -27,6 +27,7 @@ var Marionette = require('./shims/marionette.js'),
     Widget = require('./models/widget.js'),
     AdminDiscussionSettings = require('./views/admin/adminDiscussionSettings.js'),
     AdminDiscussionPreferences = require('./views/admin/adminDiscussionPreferences.js'),
+    PreferencesView = require('./views/preferences/preferencesView.js'),
     FirstIdeaToShowVisitor = require('./views/visitors/firstIdeaToShowVisitor.js'),
     i18n = require('./utils/i18n.js'),
     Analytics = require('./internal_modules/analytics/dispatcher.js');
@@ -177,6 +178,7 @@ var routeManager = Marionette.Object.extend({
   adminDiscussionPreferences: function() {
     Assembl.headerRegions.show(new NavBar());
     if (this.userHaveAccess()) {
+      // var page = new PreferencesView.DiscussionPreferencesView();
       var page = new AdminDiscussionPreferences();
       Assembl.groupContainer.show(page);
     }
@@ -202,6 +204,7 @@ var routeManager = Marionette.Object.extend({
     Assembl.headerRegions.show(new NavBar());
     if (this.userHaveAccess()) {
       var page = new UserDiscussionPreferences();
+      // var page = new PreferencesView.UserPreferencesView();
       Assembl.groupContainer.show(page);
     }
   },

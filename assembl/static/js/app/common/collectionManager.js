@@ -26,6 +26,7 @@ var Marionette = require('../shims/marionette.js'),
     Account = require('../models/accounts.js'),
     Socket = require('../utils/socket.js'),
     DiscussionSources = require('../models/sources.js'),
+    DiscussionPreference = require('../models/discussionPreference.js'),
     LanguagePreference = require('../models/languagePreference.js'),
     IdeaContentLink = require('../models/ideaContentLink.js');
 
@@ -187,6 +188,20 @@ var CollectionManager = Marionette.Object.extend({
    */
   _allUserLanguagePreferences: undefined,
   _allUserLanguagePreferencesPromise: undefined,
+
+  /**
+   * Collection of all preferences of the user
+   * @type {[DiscussionPreference.Model]}
+   */
+  _allUserPreferences: undefined,
+  _allUserPreferencesPromise: undefined,
+
+  /**
+   * Collection of all preferences of the discussion
+   * @type {[DiscussionPreference.Model]}
+   */
+  _allDiscussionPreferences: undefined,
+  _allDiscussionPreferencesPromise: undefined,
 
 
   /**
@@ -916,6 +931,38 @@ var CollectionManager = Marionette.Object.extend({
         function(resolve) {
           socket = new Socket(resolve);
         });
+    },
+
+    getDiscussionPreferencePromise: function() {
+      if (this._allDiscussionPreferencesPromise) {
+        return this._allDiscussionPreferencesPromise;
+      }
+
+      this._allDiscussionPreferences = new DiscussionPreference.DiscussionPreferenceCollection();
+      this._allDiscussionPreferences.collectionManager = this;
+      this._allDiscussionPreferencesPromise = Promise.resolve(this._allDiscussionPreferences.fetch())
+        .thenReturn(this._allDiscussionPreferences)
+        .catch(function(e) {
+          Raven.captureException(e);
+        });
+      return this._allDiscussionPreferencesPromise;
+    },
+
+    getUserPreferencePromise: function() {
+      if (this._allUserPreferencesPromise) {
+        return this._allUserPreferencesPromise;
+      }
+
+      // TODO: initalize from Ctx.getJsonFromScriptTag('preferences')
+      // and replace Ctx.getPreferences by this.
+      this._allUserPreferences = new DiscussionPreference.UserPreferenceCollection();
+      this._allUserPreferences.collectionManager = this;
+      this._allUserPreferencesPromise = Promise.resolve(this._allUserPreferences.fetch())
+        .thenReturn(this._allUserPreferences)
+        .catch(function(e) {
+          Raven.captureException(e);
+        });
+      return this._allUserPreferencesPromise;
     }
 });
 

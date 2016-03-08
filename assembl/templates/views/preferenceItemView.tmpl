@@ -1,0 +1,11 @@
+<div>
+<form>
+<% if (!inList) { %>
+<div>
+<label data-toggle="tooltip" title="<%= i18n.gettext(preferenceData.description) %>"><%= i18n.gettext(preferenceData.name) %></label>
+<% } %>
+<span class="js_prefItemSubview"></span>
+</div>
+<button class="js_reset">{{ gettext('Reset') }}</button>
+</form>
+</div>
