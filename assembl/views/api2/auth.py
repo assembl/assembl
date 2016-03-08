@@ -330,22 +330,6 @@ def interesting_ideas(request):
     return result
 
 
-def ensure_translate_to_in_preferences(user_pref):
-    if user_pref.translate_to:
-        db = user_pref.db
-        other = db.query(UserLanguagePreference).filter_by(
-            user_id=user_pref.user_id,
-            locale_id=user_pref.translate_to).first()
-        if not other:
-            other = UserLanguagePreference(
-                user_id=user_pref.user_id,
-                locale_id=user_pref.translate_to,
-                preferred_order=0,
-                source_of_evidence=user_pref.source_of_evidence)
-            db.add(other)
-            db.flush()
-
-
 @view_config(context=CollectionContext, request_method='POST', renderer="json",
              header=JSON_HEADER, ctx_collection_class=UserLanguagePreference)
 def add_user_language_preference(request):
@@ -366,7 +350,6 @@ def add_user_language_preference(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        ensure_translate_to_in_preferences(instance)
         view = request.GET.get('view', None) or 'default'
         return Response(
             dumps(first.generic_json(view, user_id, permissions)),
@@ -389,7 +372,6 @@ def modify_user_language_preference(request):
         return HTTPUnauthorized()
     try:
         updated = instance.update_from_json(json_data, user_id, ctx)
-        ensure_translate_to_in_preferences(updated)
         view = request.GET.get('view', None) or 'default'
         if view == 'id_only':
             return [updated.uri()]

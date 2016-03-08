@@ -110,14 +110,35 @@ var LanguagePreferenceCollection = Base.Collection.extend({
       if (this.cachePrefByLocale === undefined) {
         var prefByLocale = {};
         // assume sorted
+        // First the pure prefs' locale
+        this.map(function(pref) {
+          prefByLocale[pref.get("locale_code")] = pref;
+        });
+        // then the superlocales
         this.map(function(pref) {
           var locale = pref.get("locale_code"),
               locale_parts = locale.split("_");
-          for (var i = locale_parts.length; i > 0; i--) {
+          for (var i = locale_parts.length - 1; i > 0; i--) {
             locale = locale_parts.slice(0, i).join("_");
             if (prefByLocale[locale] !== undefined)
               break;
             prefByLocale[locale] = pref;
+          }
+        });
+        // check if the translation targets are there
+        this.map(function(pref) {
+          var locale = pref.get("translate_to_name");
+          if (locale != undefined) {
+              var locale_parts = locale.split("_");
+              for (var i = locale_parts.length; i > 0; i--) {
+                locale = locale_parts.slice(0, i).join("_");
+                if (prefByLocale[locale] !== undefined)
+                  break;
+                prefByLocale[locale] = new LanguagePreferenceModel({
+                    locale_code: locale,
+                    source_of_evidence: 3, // LanguagePreferenceOrder.DeducedFromTranslation
+                    preferred_order: pref.get("preferred_order")});
+              }
           }
         });
         this.cachePrefByLocale = prefByLocale;

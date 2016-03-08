@@ -1623,8 +1623,9 @@ class LanguagePreferenceOrder(IntEnum):
     Explicit = 0
     Cookie = 1
     Parameter = 2
-    OS_Default = 3
-    Discussion = 4
+    DeducedFromTranslation = 3
+    OS_Default = 4
+    Discussion = 5
 
 LanguagePreferenceOrder.unique_prefs = (
     LanguagePreferenceOrder.Cookie,
@@ -1717,6 +1718,18 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 if l in prefs_by_locale:
                     break
                 prefs_by_locale[l] = pref
+        for pref in prefs_with_trans:
+            for n, l in enumerate(Locale.decompose_locale(
+                    pref.translate_to_code)):
+                if n == 0:
+                    continue
+                if l in prefs_by_locale:
+                    break
+                locale = Locale.get_or_create(l)
+                prefs_by_locale[l] = UserLanguagePreference(
+                    locale=locale, locale_id=locale.id,
+                    source_of_evidence=LanguagePreferenceOrder.DeducedFromTranslation,
+                    preferred_order=pref.preferred_order)
         self.user_prefs = prefs_by_locale
         self.default_pref = default_pref
 
@@ -1764,14 +1777,12 @@ class UserLanguagePreference(Base):
 
     translate_to_locale = relationship(Locale, foreign_keys=[translate_to])
 
-    # Sort the preference, from lowest to highest
+    # Sort the preferences within a source_of_evidence
     # Descending order preference, 0 - is the highest
-    # preferred_order -> the actual order of languages (explicitly defined)
-    #   sorting of languages whose source_of_evidence column is of value 0
-    preferred_order = Column(Integer, nullable=False, default=0)  # Source origin order
+    preferred_order = Column(Integer, nullable=False, default=0)
 
     # This is the actual evidence source, whose contract is defined in
-    # LanguagePreferenceOrder
+    # LanguagePreferenceOrder. They have priority over preferred_order
     source_of_evidence = Column(Integer, nullable=False)
 
     user = relationship('User', backref=backref(
