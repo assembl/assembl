@@ -373,6 +373,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         elif isinstance(exception, HttpError):
             status = exception.resp.status
             content = json.loads(exception.content)
+            # 403 for quota issues
             if 400 <= status < 500:
                 return (LangStringStatus.CANNOT_IDENTIFY
                         if identify_phase
