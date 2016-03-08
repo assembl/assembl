@@ -278,18 +278,24 @@ class Content(DiscussionBoundBase):
     body_id = Column(Integer, ForeignKey(LangString.id))
     subject = relationship(
         LangString,
-        primaryjoin=subject_id == LangString.id)
+        primaryjoin=subject_id == LangString.id,
+        backref=backref("subject_of_post", uselist=False),
+        single_parent=True,
+        cascade="all, delete-orphan")
     body = relationship(
         LangString,
-        primaryjoin=body_id == LangString.id)
+        primaryjoin=body_id == LangString.id,
+        backref=backref("body_of_post", uselist=False),
+        single_parent=True,
+        cascade="all, delete-orphan")
 
     def __init__(self, *args, **kwargs):
         if (kwargs.get('subject', None) is None and
                 kwargs.get('subject_id', None) is None):
-            kwargs['subject'] = LangString.EMPTY(self.db)
+            kwargs['subject'] = LangString.EMPTY()
         if (kwargs.get('body', None) is None and
                 kwargs.get('body_id', None) is None):
-            kwargs['body'] = LangString.EMPTY(self.db)
+            kwargs['body'] = LangString.EMPTY()
         super(Content, self).__init__(*args, **kwargs)
 
     @classmethod

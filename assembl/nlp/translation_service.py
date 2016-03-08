@@ -135,10 +135,8 @@ class TranslationService(object):
         return LangStringStatus.UNKNOWN_ERROR, str(e)
 
     def translate_lse(self, source_lse, target, retranslate=False):
-        if not text:
-            return text, Locale.UNDEFINED
-        if source_lse.langstring_id == LangString.EMPTY_ID:
-            # don't translate the empty string
+        if not source_lse.value:
+            # don't translate empty strings
             return source_lse
         source_locale = source_lse.locale_code
         if (source_locale == Locale.UNDEFINED

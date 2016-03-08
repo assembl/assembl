@@ -367,38 +367,20 @@ class LangString(Base):
     def first_original(self):
         return next(iter(self.non_mt_entries()))
 
-    _EMPTY_ID = None
-
-    @classproperty
-    def EMPTY_ID(cls):
-        if cls._EMPTY_ID is None:
-            from sqlalchemy.sql.expression import func
-            id = LangStringEntry.default_db.query(
-                LangStringEntry.langstring_id).join(
-                LangStringEntry.locale).filter(
-                func.length(LangStringEntry.value) == 0,
-                ~LangStringEntry.is_machine_translated).order_by(
-                LangStringEntry.langstring_id).first()
-            if id:
-                cls._EMPTY_ID = id[0]
-            else:
-                ls = cls()
-                cls.default_db.add(ls)
-                entry = LangStringEntry(
-                    value="", locale_id=Locale.UNDEFINED_LOCALEID,
-                    langstring=ls)
-                cls.default_db.add(entry)
-                cls.default_db.flush()
-                cls._EMPTY_ID = ls.id
-        return cls._EMPTY_ID
-
     @classmethod
-    def EMPTY(cls, db):
-        return cls.get(cls.EMPTY_ID)
+    def EMPTY(cls, db=None):
+        ls = LangString()
+        e = LangStringEntry(
+            langstring=ls,
+            locale_id=Locale.UNDEFINED_LOCALEID)
+        if db is not None:
+            db.add(e)
+            db.add(ls)
+        return ls
 
     @classmethod
     def reset_cache(cls):
-        cls._EMPTY_ID = None
+        pass
 
     # TODO: Reinstate when the javascript can handle empty body/subject.
     # def generic_json(
@@ -424,7 +406,7 @@ class LangString(Base):
         locale_collection_subsets = Locale.locale_collection_subsets
         available = self.entries_as_dict
         if len(available) == 0:
-            return LangStringEntry.EMPTY
+            return LangStringEntry.EMPTY()
         if len(available) == 1:
             # optimize for common case
             return available[0]
@@ -600,6 +582,14 @@ class LangString(Base):
         if inspect(self).persistent:
             self.db.expire(self, ["entries"])
 
+    def clone(self, db=None):
+        clone = self.__class__()
+        for e in self.entries:
+            e = e.clone(clone, db=db)
+        if db:
+            db.add(clone)
+        return clone
+
     # TODO: the permissions should really be those of the owning object. Yikes.
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
 
@@ -651,6 +641,19 @@ class LangStringEntry(Base, TombstonableMixin):
         doc="Type of error from the translation server")
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
     value = Column(UnicodeText)  # not searchable in virtuoso
+
+    def clone(self, langstring, db=None):
+        clone = self.__class__(
+            langstring=langstring,
+            locale_id=self.locale_id,
+            value=self.value,
+            locale_identification_data=self.locale_identification_data,
+            locale_confirmed = self.locale_confirmed,
+            error_code=self.error_code,
+            error_count=self.error_count)
+        if db:
+            db.add(clone)
+        return clone
 
     def __repr__(self):
         value = self.value or ''
@@ -794,7 +797,6 @@ def populate_default_locales(db):
     for loc_code in (
             Locale.UNDEFINED, Locale.MULTILINGUAL, Locale.NON_LINGUISTIC):
         Locale.get_or_create(loc_code, db=db)
-    LangString.EMPTY_ID
 
 
 def includeme(config):

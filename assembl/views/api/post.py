@@ -524,7 +524,7 @@ def create_post(request):
             if (in_reply_to_post and new_subject == subject and
                     in_reply_to_post.get_title()):
                 # reuse subject and translations
-                subject = in_reply_to_post.get_title()
+                subject = in_reply_to_post.get_title().clone(discussion.db)
             else:
                 # how to guess locale in this case?
                 subject = LangString.create(new_subject)
