@@ -372,7 +372,7 @@ class LangString(Base):
         ls = LangString()
         e = LangStringEntry(
             langstring=ls,
-            locale_id=Locale.UNDEFINED_LOCALEID)
+            locale_id=Locale.NON_LINGUISTIC_LOCALEID)
         if db is not None:
             db.add(e)
             db.add(ls)

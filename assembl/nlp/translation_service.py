@@ -139,6 +139,9 @@ class TranslationService(object):
             # don't translate empty strings
             return source_lse
         source_locale = source_lse.locale_code
+        if source_locale == Locale.NON_LINGUISTIC:
+            return source_lse
+        # TODO: Handle MULTILINGUAL
         if (source_locale == Locale.UNDEFINED
                 and self.distinct_identify_step):
             self.confirm_locale(source_lse)
