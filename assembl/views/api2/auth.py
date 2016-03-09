@@ -20,6 +20,7 @@ from .. import JSONError
 from . import (
     FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
     collection_add_json, instance_view, check_permissions)
+from assembl.lib.sqla import ObjectNotUniqueError
 
 
 @view_config(
@@ -342,6 +343,8 @@ def add_user_language_preference(request):
     json = request.json_body
     try:
         instances = ctx.create_object(typename, json, user_id)
+    except ObjectNotUniqueError as e:
+        raise JSONError(409, str(e))
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:
@@ -380,3 +383,5 @@ def modify_user_language_preference(request):
 
     except NotImplemented:
         raise HTTPNotImplemented()
+    except ObjectNotUniqueError as e:
+        raise JSONError(409, str(e))

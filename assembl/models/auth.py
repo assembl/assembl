@@ -1847,6 +1847,14 @@ class UserLanguagePreference(Base):
             self.translate_to_locale = None
             self.translate_to = None
 
+    def unique_query(self):
+        query, _ = super(UserLanguagePreference, self).unique_query()
+        query.filter_by(
+            user_id=self.user_id,
+            locale_code=self.locale_code,
+            source_of_evidence=self.source_of_evidence)
+        return query, True
+
     def __repr__(self):
         return \
             "{user_id: %d, locale_id: %s, translated_to: %s "\
