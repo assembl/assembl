@@ -1712,8 +1712,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                     break
                 prefs_by_locale[l] = pref
         for pref in prefs_with_trans:
-            for n, l in enumerate(Locale.decompose_locale(
-                    pref.translate_to_code)):
+            for l in Locale.decompose_locale(pref.translate_to_code):
                 if l in prefs_without_trans_by_loc:
                     break
                 locale = Locale.get_or_create(l)

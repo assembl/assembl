@@ -173,7 +173,7 @@ class TranslationService(object):
             # failed to identify a language.
             mt_target_name = self.get_mt_name(source_locale, target.code)
             target_lse = source_lse.langstring.entries_as_dict.get(
-                mt_target_name, None)
+                Locale.get_id_of(mt_target_name), None)
             if target_lse and not retranslate:
                 if self.has_fatal_error(target_lse):
                     return target_lse
@@ -204,6 +204,15 @@ class TranslationService(object):
                             return source_lse
                     source_lse.identify_locale(lang, dict(
                         service=self.__class__.__name__))
+                    # This should never actually happen, because
+                    # it would mean that the language id. was forgotten.
+                    # Still, to be sure that all cases are covered.
+                    mt_target_name = self.get_mt_name(lang, target.code)
+                    other_target_lse = source_lse.langstring.entries_as_dict.get(
+                        Locale.get_id_of(mt_target_name), None)
+                    if other_target_lse:
+                        target_lse = other_target_lse
+                        is_new_lse = False
                 source_locale = source_lse.locale_code
                 if Locale.compatible(source_locale, target.code):
                     return source_lse
