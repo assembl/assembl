@@ -106,31 +106,38 @@ def translate_content(
                     # reload entries
                     ls.db.expire(ls, ("entries",))
                     entries = ls.entries_as_dict
-            known = {service.asKnownLocale(
+            entries = {service.asKnownLocale(
                         Locale.extract_base_locale(
-                            Locale.code_for_id(loc_id)))
-                     for loc_id in entries}
+                            entry.locale_code)): entry
+                       for entry in entries.values()}
             originals = ls.non_mt_entries()
             # pick randomly. TODO: Recency order?
             for original in originals:
                 source_loc = (service.asKnownLocale(original.locale_code) or
                               original.locale_code)
                 for dest in translation_table.languages_for(source_loc):
-                    if dest not in known:
-                        if Locale.compatible(dest, source_loc):
-                            continue
+                    if Locale.compatible(dest, source_loc):
+                        continue
+                    entry = entries.get(dest, None)
+                    if entry is None or (
+                            entry.error_code and
+                            not service.has_fatal_error(entry)):
                         try:
-                            service.translate_lse(
-                                original, Locale.get_or_create(dest, content.db))
+                            result = service.translate_lse(
+                                original,
+                                Locale.get_or_create(dest, content.db))
                         except:
                             if raven_client:
                                 raven_client.captureException()
                             return changed
                         # recalculate, may have changed
-                        source_loc = (service.asKnownLocale(original.locale_code) or
-                              original.locale_code)
+                        source_loc = (
+                            service.asKnownLocale(original.locale_code) or
+                            original.locale_code)
                         ls.db.expire(ls, ["entries"])
-                        known.add(dest)
+                        entries[service.asKnownLocale(
+                            Locale.extract_base_locale(
+                                result.locale_code))] = result
                         changed = True
     if changed and send_to_changes:
         content.send_to_changes()

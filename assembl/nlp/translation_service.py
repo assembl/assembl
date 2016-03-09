@@ -148,7 +148,6 @@ class TranslationService(object):
     def translate_lse(
             self, source_lse, target, retranslate=False,
             constrain_to_discussion_locales=True):
-        print source_lse, target
         if not source_lse.value:
             # don't translate empty strings
             return source_lse
