@@ -6,21 +6,30 @@ var _ = require('../shims/underscore.js'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js');
 
-function localeCommonLength(locale1, locale2) {
-    // how many common components?
+function localeCompatibility(locale1, locale2) {
+    // Are the two locales similar enough to be substituted
+    // one for the other. Mostly same language/script, disregard country.
     // shortcut
     if (locale1.substr(0, 2) != locale2.substr(0, 2)) {
       return false;
     }
+    // Google special case
+    if (locale1 == "zh")
+        locale1 = "zh_Hans";
+    if (locale2 == "zh")
+        locale2 = "zh_Hans";
     var l1 = locale1.split("-x-mtfrom-")[0].split("_"),
         l2 = locale2.split("-x-mtfrom-")[0].split("_"),
         max = Math.min(l1.length, l2.length);
     for (var i = 0; i < max; i++) {
       if (l1[i] != l2[i]) {
-        break;
+        if (i > 0 && l1[i].length == 2) {
+            return i;
+        }
+        return false;
       }
     }
-    return i;
+    return i+1;
 }
 
 /**
@@ -177,7 +186,7 @@ var LangString = Base.Model.extend({
             } else {
               // take available with longest common locale string to translation target
               commonLenF = function(entry) {
-                return localeCommonLength(entry.get("@language"), translate_to) > 0;
+                return localeCompatibility(entry.get("@language"), translate_to) !== false;
               };
               entry = _.max(available, commonLenF);
               if (commonLenF(entry) > 0) {
@@ -257,5 +266,5 @@ module.exports = {
   Collection: LangStringCollection,
   EntryModel: LangStringEntry,
   EntryCollection: LangStringEntryCollection,
-  localeCommonLength: localeCommonLength
+  localeCompatibility: localeCompatibility
 };

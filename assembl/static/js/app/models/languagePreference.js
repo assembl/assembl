@@ -92,7 +92,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
           return pref;
         }
       }
-      if (LangString.localeCommonLength(this.cacheDefaultTargetLocale, locale)) {
+      if (LangString.localeCompatibility(this.cacheDefaultTargetLocale, locale) !== false) {
         return new LanguagePreferenceModel({
             locale_code: locale
         });
@@ -236,7 +236,7 @@ var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.
     getPreferenceForLocale: function(locale) {
       // TODO: Cache
       var target_locale = Ctx.getLocale();
-      if (LangString.localeCommonLength(target_locale, locale)) {
+      if (LangString.localeCompatibility(target_locale, locale) !== false) {
         return new LanguagePreferenceModel({
             locale_code: locale
         });
