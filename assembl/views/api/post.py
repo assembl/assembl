@@ -26,12 +26,12 @@ from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.util import get_permissions
 from assembl.tasks.translate import (
     translate_content,
-    user_pref_as_translation_table)
+    PrefCollectionTranslationTable)
 from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, Content, Idea, ViewPost, User,
     IdeaRelatedPostLink, AgentProfile, LikedPost, LangString,
-    DummyContext)
+    DummyContext, LanguagePreferenceCollection)
 from assembl.lib.raven_client import get_raven_client
 
 log = logging.getLogger('assembl')
@@ -275,7 +275,8 @@ def get_posts(request):
         user = AgentProfile.get(user_id)
         service = discussion.translation_service()
         if service:
-            translations = user_pref_as_translation_table(user, service)
+            translations = PrefCollectionTranslationTable(
+                service, LanguagePreferenceCollection.getCurrent(request))
     else:
         #If there is no user_id, all posts are always unread
         if is_unread == "false":

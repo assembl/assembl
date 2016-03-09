@@ -73,6 +73,7 @@ from .auth import (
     EmailAccount,
     IdentityProvider,
     IdentityProviderAccount,
+    LanguagePreferenceCollection,
     LocalUserRole,
     PartnerOrganization,
     Permission,

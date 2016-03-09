@@ -1639,12 +1639,13 @@ class LanguagePreferenceCollection(object):
         pass
 
     @classmethod
-    def getCurrent(cls):
+    def getCurrent(cls, req=None):
         from pyramid.threadlocal import get_current_request
         from pyramid.security import Everyone
         # Very very hackish, but this call is costly and frequent.
         # Let's cache it in the request. Useful for view_def use.
-        req = get_current_request()
+        if req is None:
+            req = get_current_request()
         assert req
         if getattr(req, "lang_prefs", 0) is 0:
             user_id = req.authenticated_userid

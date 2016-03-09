@@ -1,9 +1,11 @@
 from collections import defaultdict
+from abc import abstractmethod
 
 from celery import Celery
 
 from . import init_task_config, config_celery_app
 from ..lib.utils import waiting_get
+
 
 # broker specified
 translation_celery_app = Celery('celery_tasks.translate')
@@ -11,40 +13,39 @@ translation_celery_app = Celery('celery_tasks.translate')
 _services = {}
 
 
+class TranslationTable(object):
+    @abstractmethod
+    def languages_for(self, locale_code):
+        return ()
 
 
-def lang_list_as_translation_table(service, language_list):
-    base_languages = {service.asKnownLocale(lang) for lang in languages}
-    return {lang: base_languages - set(lang) for lang in base_languages}
+class PrefCollectionTranslationTable(TranslationTable):
+    def __init__(self, service, prefCollection):
+        self.service = service
+        self.prefCollection = prefCollection
 
-
-def user_pref_as_translation_table(user, service):
-    from assembl.models import Locale
-    table = defaultdict(set)
-    for pref in user.language_preference:
+    def languages_for(self, locale_code):
+        pref = self.prefCollection.find_locale(locale_code)
         if pref.translate_to:
-            table[service.asKnownLocale(
-                Locale.code_for_id(pref.locale_id))].add(
-                service.asKnownLocale(Locale.code_for_id(pref.translate_to)))
-    return table
+            return (self.service.asKnownLocale(pref.translate_to_code),)
+        return ()
 
 
-def complete_lang_and_trans_table(
-        service, discussion, translation_table, languages=None):
-    if not translation_table:
-        languages = languages or discussion.discussion_locales
-        base_languages = {service.asKnownLocale(lang) for lang in languages}
-        translation_table = {
-            lang: base_languages - set((lang,)) for lang in base_languages}
-    if not languages:
-        languages = set()
-        for targets in translation_table.itervalues():
-            languages.update(targets)
-    return translation_table, languages
+class DiscussionPreloadTranslationTable(TranslationTable):
+    def __init__(self, service, discussion):
+        self.service = service
+        self.base_languages = {
+            service.asKnownLocale(lang)
+            for lang in discussion.preferred_languages}
+
+    def languages_for(self, locale_code):
+        locale_code = self.service.asKnownLocale(locale_code)
+        return self.base_languages - set(locale_code)
 
 
 def translate_content(
-        content, translation_table=None, service=None, languages=None,
+        content, translation_table=None, service=None,
+        constrain_to_discussion_languages=True,
         send_to_changes=False):
     from ..models import Locale
     from assembl.lib.raven_client import get_raven_client
@@ -53,8 +54,9 @@ def translate_content(
     service = service or discussion.translation_service()
     if not service:
         return
-    translation_table, languages = complete_lang_and_trans_table(
-        service, discussion, translation_table, languages)
+    if translation_table is None:
+        translation_table = DiscussionPreloadTranslationTable(
+            service, discussion)
     undefined_id = Locale.UNDEFINED_LOCALEID
     changed = False
     # Special case: Short strings.
@@ -71,7 +73,8 @@ def translate_content(
             combined += " " + und_subject.value or next(
                 iter(content.subject.non_mt_entries())).value or ''
         try:
-            language, _ = service.identify(combined, languages)
+            language, _ = service.identify(
+                combined, constrain_to_discussion_languages)
         except:
             if raven_client:
                 raven_client.captureException()
@@ -94,7 +97,8 @@ def translate_content(
                 if entry.value:
                     # assume can_guess_locale = true
                     try:
-                        service.confirm_locale(entry, languages)
+                        service.confirm_locale(
+                            entry, constrain_to_discussion_languages)
                     except:
                         if raven_client:
                             raven_client.captureException()
@@ -111,7 +115,7 @@ def translate_content(
             for original in originals:
                 source_loc = (service.asKnownLocale(original.locale_code) or
                               original.locale_code)
-                for dest in translation_table.get(source_loc, languages):
+                for dest in translation_table.languages_for(source_loc):
                     if dest not in known:
                         if Locale.compatible(dest, source_loc):
                             continue
@@ -143,19 +147,22 @@ def translate_content_task(content_id):
 
 @translation_celery_app.task(ignore_result=True)
 def translate_discussion(
-        discussion_id, translation_table=None, languages=None,
+        discussion_id, translation_table=None,
+        constrain_to_discussion_languages=True,
         send_to_changes=False):
     from ..models import Discussion
     discussion = Discussion.get(discussion_id)
     service = discussion.translation_service()
     if not service:
         return
-    translation_table, languages = complete_lang_and_trans_table(
-        service, discussion, translation_table, languages)
+    if translation_table is None:
+        translation_table = DiscussionPreloadTranslationTable(
+            service, discussion)
     changed = False
     for post in discussion.posts:
         changed |= translate_content(
-            post, translation_table, service, languages, send_to_changes)
+            post, translation_table, service,
+            constrain_to_discussion_languages, send_to_changes)
     return changed
 
 
