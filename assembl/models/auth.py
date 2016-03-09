@@ -1673,7 +1673,7 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
         return self.default_locale
 
     def find_locale(self, locale):
-        if Locale.len_common_parts(locale, self.default_locale.code):
+        if Locale.compatible(locale, self.default_locale.code):
             return UserLanguagePreference(
                 locale=self.default_locale, locale_id=self.default_locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie)
@@ -1696,9 +1696,27 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             user_pref.locale_code: user_pref
             for user_pref in user_prefs
         }
-        # First look for translation targets
-        default_pref = None
+        user_prefs.reverse()
         prefs_with_trans = [up for up in user_prefs if up.translate_to]
+        # First look for translation targets
+        for (loc, pref) in prefs_by_locale.items():
+            for n, l in enumerate(Locale.decompose_locale(loc)):
+                if n == 0:
+                    continue
+                if l in prefs_by_locale:
+                    break
+                prefs_by_locale[l] = pref
+        for pref in prefs_with_trans:
+            for n, l in enumerate(Locale.decompose_locale(
+                    pref.translate_to_code)):
+                if l in prefs_by_locale:
+                    break
+                locale = Locale.get_or_create(l)
+                prefs_by_locale[l] = UserLanguagePreference(
+                    locale=locale, locale_id=locale.id,
+                    source_of_evidence=LanguagePreferenceOrder.DeducedFromTranslation,
+                    preferred_order=pref.preferred_order)
+        default_pref = None
         if prefs_with_trans:
             prefs_with_trans.sort()
             target_lang_code = prefs_with_trans[0].translate_to_code
@@ -1711,25 +1729,6 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             # TODO: Or use discussion locales otherwise?
             default_pref = (
                 prefs_without_trans[0] if prefs_without_trans else None)
-        for (loc, pref) in prefs_by_locale.items():
-            for n, l in enumerate(Locale.decompose_locale(loc)):
-                if n == 0:
-                    continue
-                if l in prefs_by_locale:
-                    break
-                prefs_by_locale[l] = pref
-        for pref in prefs_with_trans:
-            for n, l in enumerate(Locale.decompose_locale(
-                    pref.translate_to_code)):
-                if n == 0:
-                    continue
-                if l in prefs_by_locale:
-                    break
-                locale = Locale.get_or_create(l)
-                prefs_by_locale[l] = UserLanguagePreference(
-                    locale=locale, locale_id=locale.id,
-                    source_of_evidence=LanguagePreferenceOrder.DeducedFromTranslation,
-                    preferred_order=pref.preferred_order)
         self.user_prefs = prefs_by_locale
         self.default_pref = default_pref
 

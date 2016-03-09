@@ -113,7 +113,7 @@ def translate_content(
                               original.locale_code)
                 for dest in translation_table.get(source_loc, languages):
                     if dest not in known:
-                        if Locale.len_common_parts(dest, source_loc):
+                        if Locale.compatible(dest, source_loc):
                             continue
                         try:
                             service.translate_lse(

@@ -87,6 +87,33 @@ class Locale(Base):
             i += 1
         return i
 
+    @classmethod
+    def compatible(cls, locname1, locname2):
+        """Are the two locales similar enough to be substituted
+        one for the other. Mostly same language/script, disregard country.
+        """
+        # Google special case... should be done upstream ideally.
+        if locname1 == 'zh':
+            locname1 = 'zh_Hans'
+        if locname2 == 'zh':
+            locname2 = 'zh_Hans'
+        loc1 = locname1.split("_")
+        loc2 = locname2.split("_")
+        for i in range(min(len(loc1), len(loc2))):
+            if loc1[i] != loc2[i]:
+                if i and len(loc1[i]) == 2:
+                    # discount difference in country
+                    return i
+                return False
+        return i + 1
+
+    @classmethod
+    def any_compatible(cls, locname, locnames):
+        for l in locnames:
+            if cls.compatible(l, locname):
+                return True
+        return False
+
     @staticmethod
     def locale_is_machine_translated(locale_code):
         return '-x-mtfrom-' in locale_code
@@ -535,7 +562,7 @@ class LangString(Base):
                             target_locale = pref.translate_to_code
 
                             def common_len(e):
-                                return Locale.len_common_parts(
+                                return Locale.compatible(
                                     target_locale,
                                     Locale.extract_base_locale(e.locale_code))
                             common_entries = filter(common_len, entries)
@@ -660,10 +687,11 @@ class LangStringEntry(Base, TombstonableMixin):
         if len(value) > 50:
             value = value[:50]+'...'
         if self.error_code:
-            return '%d: [%s] ERROR %d' % (
+            return '%d: [%s, ERROR %d] "%s"' % (
                 self.id or -1,
                 self.locale_code or "missing",
-                self.error_code)
+                self.error_code,
+                value.encode('utf-8'))
         return '%d: [%s] "%s"' % (
             self.id or -1,
             self.locale_code or "missing",
@@ -776,6 +804,8 @@ class LangStringEntry(Base, TombstonableMixin):
             if orig and orig != self.locale_code:
                 self.locale_code = orig
         self.locale_identification_data = None
+        self.error_code = None
+        self.error_count = 0
 
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
 

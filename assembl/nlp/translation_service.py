@@ -18,9 +18,13 @@ class LangStringStatus(OrderedEnum):
     SERVICE_DOWN = 1  # Transient, eg connection error
     TRANSLATION_FAILURE = 2  # possibly transient, like service down
     UNKNOWN_ERROR = 3  # unknown... assume transient
+    QUOTA_ERROR = 4 # quota exceeded
     PERMANENT_TRANSLATION_FAILURE = 10  # eg wrong arguments
     CANNOT_IDENTIFY = 11  # the identify failed permanently.
     CANNOT_TRANSLATE = 12   # as given by canTranslate, eg wrong target lang
+    IDENTICAL_TRANSLATION = 13  # the translation is identical to the original?
+    IDENTIFIED_TO_UNKNOWN = 14  # The identified language is not a discussion language
+    TOO_MANY_TRANSIENTS = 15
 
 
 class TranslationService(object):
@@ -66,6 +70,9 @@ class TranslationService(object):
         lid = lse.locale_identification_data_json
         lse.error_code = error_code.value
         lse.error_count = 1 + (lse.error_count or 0)
+        if (lse.error_count > 10 and
+                lse.error_code < LangStringStatus.PERMANENT_TRANSLATION_FAILURE):
+            lse.error_code = TOO_MANY_TRANSIENTS
         if error_description:
             lid = lse.locale_identification_data_json
             lid['error_desc'] = error_description
@@ -82,7 +89,9 @@ class TranslationService(object):
         if constrain_to_discussion_locales:
             data = [(x.prob, x.lang)
                     for x in language_data
-                    if Locale.extract_root_locale(x.lang) in expected_locales]
+                    if Locale.any_compatible(
+                        Locale.extract_root_locale(x.lang),
+                        expected_locales)]
         else:
             # boost with discussion locales.
             data = [
@@ -95,10 +104,12 @@ class TranslationService(object):
                              ) else Locale.UNDEFINED
         return top, {lang: prob for (prob, lang) in data}
 
-    def confirm_locale(self, langstring_entry, expected_locales=None):
+    def confirm_locale(
+            self, langstring_entry, constrain_to_discussion_locales=True):
         try:
             lang, data = self.identify(
-                langstring_entry.value, expected_locales)
+                langstring_entry.value,
+                constrain_to_discussion_locales)
             data["service"] = self.__class__.__name__
             changed = langstring_entry.identify_locale(lang, data)
             if changed:
@@ -134,7 +145,9 @@ class TranslationService(object):
             return LangStringStatus.CANNOT_IDENTIFY, str(e)
         return LangStringStatus.UNKNOWN_ERROR, str(e)
 
-    def translate_lse(self, source_lse, target, retranslate=False):
+    def translate_lse(
+            self, source_lse, target, retranslate=False,
+            constrain_to_discussion_locales=True):
         if not source_lse.value:
             # don't translate empty strings
             return source_lse
@@ -144,9 +157,12 @@ class TranslationService(object):
         # TODO: Handle MULTILINGUAL
         if (source_locale == Locale.UNDEFINED
                 and self.distinct_identify_step):
-            self.confirm_locale(source_lse)
+            self.confirm_locale(source_lse, constrain_to_discussion_locales)
             # TODO: bail if identification failed
             source_locale = source_lse.locale_code
+        # TODO: Handle script differences
+        if (Locale.compatible(source_locale, target.code)):
+            return source_lse
         target_lse = None
         is_new_lse = False
         if (source_locale != Locale.UNDEFINED
@@ -159,8 +175,7 @@ class TranslationService(object):
             target_lse = source_lse.langstring.entries_as_dict.get(
                 mt_target_name, None)
             if target_lse and not retranslate:
-                if (not target_lse.error_count
-                        or self.has_fatal_error(target_lse)):
+                if self.has_fatal_error(target_lse):
                     return target_lse
         if target_lse is None:
             target_lse = LangStringEntry(
@@ -179,16 +194,28 @@ class TranslationService(object):
                 lang = self.asPosixLocale(lang)
                 # What if detected language is not a discussion language?
                 if source_locale == Locale.UNDEFINED:
+                    if constrain_to_discussion_locales:
+                        if not Locale.any_compatible(
+                                lang, self.discussion.discussion_locales):
+                            self.set_error(
+                                source_lse,
+                                LangStringStatus.IDENTIFIED_TO_UNKNOWN,
+                                "Identified to "+lang)
+                            return source_lse
                     source_lse.identify_locale(lang, dict(
                         service=self.__class__.__name__))
                 source_locale = source_lse.locale_code
-                if Locale.len_common_parts(source_locale, target.code):
+                if Locale.compatible(source_locale, target.code):
                     return source_lse
                 target_lse.value = trans
                 target_lse.error_count = 0
                 target_lse.error_code = None
                 target_lse.locale_identification_data_json = dict(
                     service=self.__class__.__name__)
+                if trans.strip() == source_lse.value.strip():
+                    # TODO: Check modulo spaces in the middle
+                    target_lse.error_count = 1
+                    target_lse.error_code = LangStringStatus.IDENTICAL_TRANSLATION
             except Exception as e:
                 print_exc()
                 self.set_error(target_lse, *self.decode_exception(e))
@@ -384,12 +411,11 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         import socket
         if isinstance(exception, socket.error):
             return LangStringStatus.SERVICE_DOWN, str(exception)
-        elif isinstance(exception, LangDetectException):
-            return LangStringStatus.CANNOT_IDENTIFY, str(exception)
         elif isinstance(exception, HttpError):
             status = exception.resp.status
             content = json.loads(exception.content)
-            # 403 for quota issues
+            if status == 403:
+                return (LangStringStatus.QUOTA_ERROR, content)
             if 400 <= status < 500:
                 return (LangStringStatus.CANNOT_IDENTIFY
                         if identify_phase
