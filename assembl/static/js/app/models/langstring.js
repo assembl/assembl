@@ -32,6 +32,13 @@ function localeCompatibility(locale1, locale2) {
     return i+1;
 }
 
+function superLocale(locale) {
+    var pos = locale.lastIndexOf("_");
+    if (pos > 0) {
+        return locale.substr(0, pos);
+    }
+}
+
 /**
  * @class LangStringEntry
  */
@@ -266,5 +273,6 @@ module.exports = {
   Collection: LangStringCollection,
   EntryModel: LangStringEntry,
   EntryCollection: LangStringEntryCollection,
-  localeCompatibility: localeCompatibility
+  localeCompatibility: localeCompatibility,
+  superLocale: superLocale
 };

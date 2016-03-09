@@ -13,7 +13,7 @@ var clean = function(input){
     }
     var tmp;
     if (input.indexOf("_") > -1 ){
-        tmp = input.split("_")[0]    
+        tmp = input.split("_")[0];
     } else {
         tmp = input;
     }
@@ -104,46 +104,38 @@ var LanguagePreferenceCollection = Base.Collection.extend({
       }
     },
     getTranslationData: function() {
-      var that = this;
       // this is when we precalculate the cache
       // We might make the cache into another object someday.
       if (this.cachePrefByLocale === undefined) {
-        var prefByLocale = {};
-        // assume sorted
-        // First the pure prefs' locale
-        this.map(function(pref) {
+        var that = this,
+            prefByLocale = {};
+        // assume this.models is sorted, just reverse
+        _.map(this.models.reverse(), function(pref) {
           prefByLocale[pref.get("locale_code")] = pref;
         });
-        // then the superlocales
+        // then add the superlocales
         this.map(function(pref) {
-          var locale = pref.get("locale_code"),
-              locale_parts = locale.split("_");
-          for (var i = locale_parts.length - 1; i > 0; i--) {
-            locale = locale_parts.slice(0, i).join("_");
-            if (prefByLocale[locale] !== undefined)
-              break;
+          var locale = pref.get("locale_code");
+          locale = LangString.superLocale(locale);
+          while (locale !== undefined && prefByLocale[locale] == undefined) {
             prefByLocale[locale] = pref;
+            locale = LangString.superLocale(locale);
           }
         });
         // check if the translation targets are there
         this.map(function(pref) {
           var locale = pref.get("translate_to_name");
-          if (locale != undefined) {
-              var locale_parts = locale.split("_");
-              for (var i = locale_parts.length; i > 0; i--) {
-                locale = locale_parts.slice(0, i).join("_");
-                if (prefByLocale[locale] !== undefined)
-                  break;
+          while (locale != undefined) {
+            if (prefByLocale[locale] === undefined) {
                 prefByLocale[locale] = new LanguagePreferenceModel({
                     locale_code: locale,
                     source_of_evidence: 3, // LanguagePreferenceOrder.DeducedFromTranslation
                     preferred_order: pref.get("preferred_order")});
-              }
+            }
+            locale = LangString.superLocale(locale);
           }
         });
         this.cachePrefByLocale = prefByLocale;
-      }
-      if (this.cacheDefaultTargetLocale === undefined) {
         var pref, i;
         for (i = 0; i < this.models.length; i++) {
           pref = this.models[i];
