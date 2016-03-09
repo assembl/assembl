@@ -1084,10 +1084,9 @@ def user_language_preference_fr_explicit(request, test_session, fr_locale,
         LanguagePreferenceOrder
     )
 
-    locale_from = fr_locale
     ulp = UserLanguagePreference(
         user=admin_user,
-        locale=locale_from,
+        locale=fr_locale,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Explicit)
 
@@ -1110,10 +1109,9 @@ def user_language_preference_it_explicit(request, test_session, it_locale,
         LanguagePreferenceOrder
     )
 
-    locale_from = it_locale
     ulp = UserLanguagePreference(
         user=admin_user,
-        locale=locale_from,
+        locale=it_locale,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Explicit)
 
@@ -1460,7 +1458,7 @@ def it_from_en_langstring_entry(request, test_session, it_from_en_locale,
 
 @pytest.fixture(scope="function")
 def en_from_it_langstring_entry(request, test_session, en_from_it_locale,
-                                langstring_body, fr_langstring_entry,
+                                langstring_body, it_langstring_entry,
                                 langstring_entry_values):
 
     from assembl.models.langstrings import LangStringEntry
@@ -1486,7 +1484,7 @@ def en_from_it_langstring_entry(request, test_session, en_from_it_locale,
 
 @pytest.fixture(scope="function")
 def it_from_fr_langstring_entry(request, test_session, it_from_fr_locale,
-                                langstring_body, en_langstring_entry,
+                                langstring_body, fr_langstring_entry,
                                 langstring_entry_values):
     print "Creating fr_from_en_langstring_entry"
     from assembl.models.langstrings import LangStringEntry
@@ -1512,7 +1510,7 @@ def it_from_fr_langstring_entry(request, test_session, it_from_fr_locale,
 
 @pytest.fixture(scope="function")
 def fr_from_it_langstring_entry(request, test_session, fr_from_it_locale,
-                                langstring_body, fr_langstring_entry,
+                                langstring_body, it_langstring_entry,
                                 langstring_entry_values):
 
     from assembl.models.langstrings import LangStringEntry
