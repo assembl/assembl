@@ -6,7 +6,7 @@ from os import getenv
 from platform import system
 from time import sleep, strftime
 import pipes
-from ConfigParser import ConfigParser, NoOptionError
+from ConfigParser import ConfigParser, SafeConfigParser, NoOptionError
 from StringIO import StringIO
 # Importing the "safe" os.path commands
 from os.path import join, dirname, split, normpath
@@ -17,7 +17,7 @@ from distutils.version import LooseVersion
 import fabric.operations
 from fabric.operations import put, get
 from fabric.api import *
-from fabric.colors import cyan, red, green
+from fabric.colors import yellow, cyan, red, green
 from fabric.contrib.files import *
 
 
@@ -456,6 +456,7 @@ def app_update_dependencies():
     """
     Updates all python and javascript dependencies
     """
+    execute(update_vendor_themes)
     execute(update_requirements, force=False)
     execute(update_bower)
     execute(bower_install)
@@ -1063,6 +1064,51 @@ def virtuoso_source_install():
         execute(app_setup)
         execute(supervisor_restart)
 
+def get_vendor_config():
+    config = SafeConfigParser()
+    vendor_config_path = normpath(join(
+            env.projectpath, 'vendor_config.ini'))
+    try:
+        fp = open(vendor_config_path)
+    except IOError:
+        print yellow('No vendor ini file present at %s, skipping' % vendor_config_path)
+        return config
+    config.readfp(fp)
+    return config
+
+@task 
+def update_vendor_themes():
+    config = get_vendor_config()
+    config_section_name = 'theme_repositories'
+    if config.has_section(config_section_name):
+        urls = []
+        urls_string = config.get(config_section_name, 'git-urls')
+        if urls_string:
+            urls = urls_string.split(',')
+        vendor_themes_path = normpath(join(
+                env.projectpath, "assembl/static/css/themes/vendor"))
+        print vendor_themes_path
+        for git_url in urls:
+            print green("Updating %s" % git_url)
+            matchobj = re.match(r'.*/(.*)\.git', git_url)
+            git_dir_name = matchobj.group(1)
+            git_dir_path = normpath(join(vendor_themes_path, git_dir_name))
+            if os.path.isdir(git_dir_path) is False:
+                print cyan("Cloning git repository")
+                with cd(vendor_themes_path):
+                    run('git clone %s' % git_url)
+
+            with cd(git_dir_path):
+                run('git fetch --all')
+                current_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
+                print current_branch_name
+                if current_branch_name != env.gitbranch:
+                    if env.gitbranch in ('develop', 'master'):
+                        print yellow("Changing branch to %s" % env.gitbranch)
+                        run('git checkout %s' % env.gitbranch)
+                    else:
+                        print red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (env.gitbranch, current_branch_name))
+                run('git pull --ff-only')
 
 ## Server scenarios
 def commonenv(projectpath, venvpath=None):
