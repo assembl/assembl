@@ -308,17 +308,20 @@ class DummyGoogleTranslationService(TranslationService):
     _known_locales = {
         'af', 'am', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'ceb', 'co',
         'cs', 'cy', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa',
-        'fi', 'fr', 'fy', 'ga', 'gd', 'gl', 'gu', 'ha', 'haw', 'he', 'hi',
-        'hmn', 'hr', 'ht', 'hu', 'hy', 'id', 'ig', 'is', 'it', 'ja', 'jv',
+        'fi', 'fr', 'fy', 'ga', 'gd', 'gl', 'gu', 'ha', 'haw', 'iw', 'hi',
+        'hmn', 'hr', 'ht', 'hu', 'hy', 'id', 'ig', 'is', 'it', 'ja', 'jw',
         'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'ky', 'la', 'lb', 'lo', 'lt',
         'lv', 'mg', 'mi', 'mk', 'ml', 'mn', 'mr', 'ms', 'mt', 'my', 'ne',
         'nl', 'no', 'ny', 'pa', 'pl', 'ps', 'pt', 'ro', 'ru', 'sd', 'si',
         'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'st', 'su', 'sv', 'sw',
         'ta', 'te', 'tg', 'th', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'xh',
-        'yi', 'yo', 'zh', 'zh_Hant_TW', 'zu'}
+        'yi', 'yo', 'zh', 'zh-TW', 'zu'}
     known_locales = _known_locales
     idiosyncrasies = {
-        "zh": "zh_Hans_CN"
+         "zh-TW": "zh_Hant_TW",
+         "zh": "zh_Hans_CN",
+         "jw": "jv",
+         "iw": "he"
     }
     idiosyncrasies_reverse = {v: k for (k, v) in idiosyncrasies.items()}
     agents = {'User-Agent':"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"}
@@ -389,7 +392,12 @@ class GoogleTranslationService(DummyGoogleTranslationService):
             try:
                 r = self.client.languages().list().execute()
                 if r[u'languages']:
-                    self._known_locales = [x[u'language'] for x in r[u'languages']]
+                    self._known_locales = [
+                        x[u'language'] for x in r[u'languages']]
+                    if set(self._known_locales) != set(
+                            DummyGoogleTranslationService._known_locales):
+                        from ..lib.raven_client import capture_message
+                        capture_message("google changed its language set again")
             except:
                 return super(GoogleTranslationService, self)._known_locales
         return self._known_locales
