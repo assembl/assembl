@@ -308,3 +308,41 @@ def test_user_language_preferences_fr_to_it_explicit_en_cookie_fr_entry(
     best = langstring_body.best_lang(user_prefs=lang_prefs, allow_errors=True)
 
     assert best.locale.id == it_from_fr_locale.id
+
+
+def test_user_language_preference_locale_non_linguistic(
+        admin_user, langstring_body, test_adminuser_webrequest,
+        user_language_preference_en_cookie,
+        user_language_preference_fr_mtfrom_en,
+        non_linguistic_langstring_entry,
+        fr_from_en_langstring_entry,
+        non_linguistic_locale):
+    """
+    Body: non-linguistic, fr-x-mtfrom-en
+    User Language Preference: {en: cookie; en-to-fr: explicit}
+    Expect: non-linguistic
+    """
+
+    lang_prefs = admin_user.language_preference
+    best = langstring_body.best_lang(user_prefs=lang_prefs, allow_errors=True)
+
+    assert best.locale.id == non_linguistic_locale.id
+
+
+# Is this true?? @TODO: Check with MAP
+def test_user_language_preference_locale_undefined_fr_from_und(
+        admin_user, langstring_body, test_adminuser_webrequest,
+        user_language_preference_en_cookie,
+        user_language_preference_fr_mtfrom_en,
+        fr_from_und_langstring_entry,
+        fr_from_und_locale):
+    """
+    Body: und, fr-x-mtfrom-und
+    User Language Preference: {en: cookie; en-to-fr: explicit}
+    Expect: fr-x-mtfrom-und
+    """
+
+    lang_prefs = admin_user.language_preference
+    best = langstring_body.best_lang(user_prefs=lang_prefs, allow_errors=True)
+
+    assert best.locale.id == fr_from_und_locale.id
