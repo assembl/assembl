@@ -6,7 +6,9 @@ var Marionette = require("../shims/marionette.js"),
     i18n = require("../utils/i18n.js"),
     Types = require("../utils/types.js"),
     Ctx = require("../common/context.js"),
-    CollectionManager = require("../common/collectionManager.js");
+    CollectionManager = require("../common/collectionManager.js"),
+    AdminNavigationMenu = require('./admin/adminNavigationMenu.js'),
+    UserNavigationMenu = require('./user/userNavigationMenu.js');
 
 function getPreferenceEditView(preferenceModel, subView) {
   var modelType = preferenceModel.value_type,
@@ -282,7 +284,8 @@ var PreferencesView = Marionette.LayoutView.extend({
       "click @ui.saveButton": "save"
   },
   regions: {
-      preferenceCollView: "#js_preferences"
+    preferenceCollView: "#js_preferences",
+    navigationMenuHolder: '.navigation-menu-holder'
   },
   onRender: function() {
     if (this.template === "#tmpl-loader") {
@@ -292,6 +295,7 @@ var PreferencesView = Marionette.LayoutView.extend({
         collection: this.preferences,
         mainPrefWindow: this});
     this.showChildView("preferenceCollView", prefList);
+    this.showChildView("navigationMenuHolder", this.getNavigationMenu());
   },
   storePreferences: function(prefs) {
     var prefDataArray = prefs.get("preference_data").get("value"),
@@ -318,6 +322,9 @@ var DiscussionPreferencesView = PreferencesView.extend({
         that.preferences = new DiscussionPreferenceCollectionSubset([], {parent: prefs});
         that.storePreferences(prefs);
     });
+  },
+  getNavigationMenu: function() {
+    return new AdminNavigationMenu({selectedSection: "discussion_preferences"});
   }
 });
 
@@ -333,6 +340,9 @@ var UserPreferencesView = PreferencesView.extend({
         that.preferences = new UserPreferenceCollectionSubset([], {parent: prefs});
         that.storePreferences(prefs);
     });
+  },
+  getNavigationMenu: function() {
+    return new UserNavigationMenu({selectedSection: "discussion_preferences"});
   }
 });
 

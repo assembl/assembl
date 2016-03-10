@@ -1,4 +1,4 @@
-<select>
+<select id="pref_<%= preferenceData.id %>_value">
 <% for (var val in preferenceData.scalar_values) {
     var name = preferenceData.scalar_values[val]; %>
     <option value="<%= val %>"
