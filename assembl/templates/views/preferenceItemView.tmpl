@@ -1,9 +1,12 @@
-<div>
+<div class="control-group">
   <% if (!inList) { %>
     <label data-toggle="tooltip" class="control-label" title="<%= i18n.gettext(preferenceData.description) %>"><%= i18n.gettext(preferenceData.name) %></label>
     <div class="controls">
       <% } %>
       <span class="js_prefItemSubview"></span>
+      <span class="help-inline">
+        <p id="js_error" class="control-error hidden"></p>
+      </span>
       <% if (!inList) { %>
         <div>
           <button id="js_reset_<%= preferenceData.id %>" class="js_reset btn btn-cancel">{{ gettext('Reset to default') }}</button>

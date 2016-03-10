@@ -58,7 +58,9 @@ var PreferencesItemView = Marionette.LayoutView.extend({
   },
   ui: {
     resetButton: ".js_reset",
-    deleteButton: ".js_delete"
+    deleteButton: ".js_delete",
+    errorMessage: ".control-error",
+    controlGroup: ".control-group"
   },
   events: {
     "click @ui.resetButton": "resetPreference",
@@ -87,6 +89,7 @@ var PreferencesItemView = Marionette.LayoutView.extend({
         model: this.model,
         listKey: this.listKey,
         preferenceData: this.preferenceData,
+        preferenceItemView: this,
         preference: this.model.get("value")
     };
   },
@@ -103,9 +106,19 @@ var PreferencesItemView = Marionette.LayoutView.extend({
       inList: this.listKey !== undefined
     };
   },
-  onRender: function(){
+  onRender: function() {
     var subview = getPreferenceEditView(this.preferenceData, this.listKey !== undefined);
     this.getRegion("subview").show(new subview(this.childViewOptions));
+  },
+  showError: function(error) {
+    this.ui.errorMessage.text(error);
+    this.ui.errorMessage.removeClass("hidden");
+    this.ui.controlGroup.addClass("error");
+  },
+  hideError: function(error) {
+    this.ui.errorMessage.addClass("hidden");
+    this.ui.errorMessage.text();
+    this.ui.controlGroup.removeClass("error");
   }
 });
 
@@ -114,26 +127,46 @@ var BasePreferenceView = Marionette.LayoutView.extend({
   constructor: function BasePreferenceView() {
     Marionette.LayoutView.apply(this, arguments);
   },
+  ui: {
+    prefValue: ".pref_value"
+  },
+  events: {
+    "change @ui.prefValue": "prefChanged"
+  },
   template: "#tmpl-basePreferenceView",
+  tagName: "span",
   initialize: function(options) {
     this.mainPrefWindow = options.mainPrefWindow;
     this.preferences = options.mainPrefWindow.preferences;
     this.key = options.key;
     this.preferenceData = options.mainPrefWindow.preferenceData[this.key];
     this.listKey = options.listKey;
+    this.preferenceItemView = options.preferenceItemView;
   },
-  tagName: "span",
+  prefChanged: function() {
+    var value = this.getValue();
+    try {
+        value = this.processValue(value);
+        this.preferenceItemView.hideError();
+        this.model.set("value", value);
+    } catch (err) {
+        this.preferenceItemView.showError(err);
+    }
+  },
+  getValue: function() {
+    return this.ui.prefValue.val();
+  },
   serializeData: function() {
     var preferenceValue = this.model.get("value");
-    if (this.listKey !== undefined) {
-      preferenceValue = preferenceValue[this.listKey];
-    }
     return {
       i18n: i18n,
       preference: preferenceValue,
       preferenceData: this.preferenceData,
       inList: this.listKey !== undefined
     };
+  },
+  processValue: function(value) {
+    return value;
   }
 });
 
@@ -141,7 +174,10 @@ var BoolPreferenceView = BasePreferenceView.extend({
   constructor: function BoolPreferenceView() {
     BasePreferenceView.apply(this, arguments);
   },
-  template: '#tmpl-boolPreferenceView'
+  template: '#tmpl-boolPreferenceView',
+  getValue: function() {
+    return this.ui.prefValue.filter(":checked").val() !== undefined;
+  }
 });
 
 var TextPreferenceView = BasePreferenceView.extend({
@@ -155,7 +191,14 @@ var JsonPreferenceView = TextPreferenceView.extend({
   constructor: function JsonPreferenceView() {
     TextPreferenceView.apply(this, arguments);
   },
-  template: '#tmpl-jsonPreferenceView'
+  template: '#tmpl-jsonPreferenceView',
+  processValue: function(value) {
+    try {
+        return JSON.parse(value);
+    } catch (err) {
+        throw i18n.gettext("This is not valid JSON: ") + err.message;
+    }
+  }
 });
 
 
@@ -170,6 +213,13 @@ var StringPreferenceView = BasePreferenceView.extend({
 var IntPreferenceView = StringPreferenceView.extend({
   constructor: function IntPreferenceView() {
     StringPreferenceView.apply(this, arguments);
+  },
+  processValue: function(value) {
+    try {
+        return Number.parseInt(value);
+    } catch (err) {
+        throw i18n.gettext("Please enter a number");
+    }
   }
 });
 
@@ -203,6 +253,13 @@ var LocalePreferenceView = ScalarPreferenceView.extend({
 var UrlPreferenceView = StringPreferenceView.extend({
   constructor: function UrlPreferenceView() {
     StringPreferenceView.apply(this, arguments);
+  },
+  regexp: new RegExp("^https?://[^\s/$.?#].[^\s]*$", "i"),
+  processValue: function(value) {
+    if (!this.regexp.test(value)) {
+        throw i18n.gettext("This does not appear to be a URL");
+    }
+    return value;
   }
 });
 
@@ -210,6 +267,13 @@ var UrlPreferenceView = StringPreferenceView.extend({
 var EmailPreferenceView = StringPreferenceView.extend({
   constructor: function EmailPreferenceView() {
     StringPreferenceView.apply(this, arguments);
+  },
+  regexp: new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$"),
+  processValue: function(value) {
+    if (!this.regexp.test(value)) {
+        throw i18n.gettext("This does not appear to be an email");
+    }
+    return value;
   }
 });
 
@@ -217,6 +281,14 @@ var EmailPreferenceView = StringPreferenceView.extend({
 var DomainPreferenceView = StringPreferenceView.extend({
   constructor: function DomainPreferenceView() {
     StringPreferenceView.apply(this, arguments);
+  },
+  // too lenient: accepts single element ("com")
+  regexp: new RegExp("^[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\.([a-zA-Z]{1,6}|[a-zA-Z0-9-]{1,30}\.[a-zA-Z]{2,3})$"),
+  processValue: function(value) {
+    if (!this.regexp.test(value)) {
+        throw i18n.gettext("This does not appear to be a domain");
+    }
+    return value;
   }
 });
 
@@ -251,10 +323,6 @@ var ListSubviewCollectionView = Marionette.CollectionView.extend({
     };
   },
   childView: PreferencesItemView
-  // childView: function(options) {
-  //   var childClass = getPreferenceEditView(options.preferenceData, true);
-  //   return new childClass(options);
-  // }
 });
 
 // A single preference which is a list
