@@ -32,6 +32,8 @@ function getPreferenceEditView(preferenceModel, subView) {
       return StringPreferenceView;
     case "scalar":
       return ScalarPreferenceView;
+    case "locale":
+      return LocalePreferenceView;
     case "url":
       return UrlPreferenceView;
     case "email":
@@ -113,9 +115,25 @@ var ScalarPreferenceView = BasePreferenceView.extend({
   constructor: function ScalarPreferenceView() {
     BasePreferenceView.apply(this, arguments);
   },
-  template: '#tmpl-scalarPreferenceView'
+  template: '#tmpl-scalarPreferenceView',
+  serializeData: function() {
+    var data = Object.getPrototypeOf(Object.getPrototypeOf(this)).serializeData.apply(this, arguments);
+    data.scalarOptions = data.preferenceData.scalar_values;
+    return data;
+  }
 });
 
+
+var LocalePreferenceView = ScalarPreferenceView.extend({
+  constructor: function LocalePreferenceView() {
+    BasePreferenceView.apply(this, arguments);
+  },
+  serializeData: function() {
+    var data = Object.getPrototypeOf(Object.getPrototypeOf(this)).serializeData.apply(this, arguments);
+    data.scalarOptions = Ctx.getLocaleToLanguageNameCache();
+    return data;
+  }
+});
 
 var UrlPreferenceView = StringPreferenceView.extend({
   constructor: function UrlPreferenceView() {

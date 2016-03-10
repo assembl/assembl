@@ -1,6 +1,6 @@
 <select id="pref_<%= preferenceData.id %>_value">
-<% for (var val in preferenceData.scalar_values) {
-    var name = preferenceData.scalar_values[val]; %>
+<% for (var val in scalarOptions) {
+    var name = scalarOptions[val]; %>
     <option value="<%= val %>"
     <% if (val == preference) { %> selected="selected" <% } %>
     ><%= i18n.gettext(name) %></option>
