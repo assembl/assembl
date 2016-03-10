@@ -84,7 +84,7 @@ var MessageList = AssemblPanel.extend({
 
   initialize: function(options) {
       //console.log("messageList::initialize()");
-      Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
+      Object.getPrototypeOf(AssembPanel).initialize.apply(this, arguments);
       var that = this,
           collectionManager = new CollectionManager(),
           d = new Date();

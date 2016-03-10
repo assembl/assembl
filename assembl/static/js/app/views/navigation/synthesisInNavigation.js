@@ -88,7 +88,7 @@ var SynthesisInNavigationPanel = AssemblPanel.extend({
   },
 
   initialize: function(options) {
-      Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
+      Object.getPrototypeOf(AssembPanel).initialize.apply(this, arguments);
     },
 
   selectSynthesisInMenu: function(messageId) {

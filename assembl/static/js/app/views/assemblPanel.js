@@ -29,7 +29,7 @@ var AssemblPanel = Marionette.LayoutView.extend({
   minimized_size: 40,
 
   /** Subclasses need to call this first, with
-   * Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments) */
+   * Object.getPrototypeOf(<superclass>).initialize.apply(this, arguments) */
   initialize:  function(options) {
       this._panelWrapper = options.panelWrapper;
       if (!this._panelWrapper) {

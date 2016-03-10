@@ -264,7 +264,7 @@ var SegmentListPanel = AssemblPanel.extend({
   },
 
   initialize: function(options) {
-    Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
+    Object.getPrototypeOf(AssembPanel).initialize.apply(this, arguments);
     var that = this,
         collectionManager = new CollectionManager();
 

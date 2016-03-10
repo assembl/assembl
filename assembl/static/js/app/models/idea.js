@@ -38,7 +38,7 @@ var IdeaModel = Base.Model.extend({
 
   parse: function(resp, options) {
     this.adjust_num_read_posts(resp);
-    return Object.getPrototypeOf(Object.getPrototypeOf(this)).parse.apply(this, arguments);
+    return Object.getPrototypeOf(Base.Model).parse.apply(this, arguments);
   },
 
   /**

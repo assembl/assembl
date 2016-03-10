@@ -63,7 +63,7 @@ var SynthesisModel = Base.Model.extend({
      
   },
   set: function(key, val, options) {
-    var ob = Object.getPrototypeOf(Object.getPrototypeOf(this)).set.apply(this, arguments);
+    var ob = Object.getPrototypeOf(Base.Model).set.apply(this, arguments);
     if ((key == "ideas" || key.ideas !== undefined) && this.ideasCollection !== undefined) {
         this.ideasCollection.reset(this.get("ideas"), {parse: true});
     }
