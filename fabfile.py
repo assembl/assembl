@@ -300,7 +300,7 @@ def reset_semantic_mappings():
     """
     execute(database_start)
     print(cyan('Resetting semantic mappings'))
-    venvcmd("python -c 'import assembl.semantic ; assembl.semantic.reset_semantic_mapping()'")
+    venvcmd("echo 'import assembl.semantic ; assembl.semantic.reset_semantic_mapping()'|pshell local.ini")
 
 
 def app_db_install():
