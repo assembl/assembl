@@ -1856,9 +1856,9 @@ class UserLanguagePreference(Base):
 
     def unique_query(self):
         query, _ = super(UserLanguagePreference, self).unique_query()
-        query.filter_by(
-            user_id=self.user_id,
-            locale_code=self.locale_code,
+        query = query.filter_by(
+            user_id=self.user_id or self.user.id,
+            locale_id=self.locale_id or self.locale.id,
             source_of_evidence=self.source_of_evidence)
         return query, True
 
