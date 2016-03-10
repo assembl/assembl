@@ -370,9 +370,7 @@ class Preferences(MutableMapping, Base):
             "name": _("Social sharing"),
             "value_type": "bool",
             # "scalar_values": {value: "label"},
-            "description": _(
-                "List of domain names of user email address required for "
-                "self-registration"),
+            "description": _("Show the share button on posts and ideas"),
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             # "frontend_validator_function": func_name...?,
