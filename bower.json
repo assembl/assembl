@@ -21,7 +21,7 @@
     "backbone": "~1.1.2",
     "backbone-modal": "~1.1.5",
     "bootstrap-growl": "~1.1.0",
-    "chai": "~3.2.0",
+    "chai": "~3.5.0",
     "ckeditor": "^4.4.7",
     "hopscotch": "~0.2.4",
     "ink": "~1.0.5",

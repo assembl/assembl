@@ -27,7 +27,7 @@
     "bluebird": "^2.9.26",
     "browserify": "^10.2.1",
     "browserify-shim": "^3.8.7",
-    "chai": "^2.3.0",
+    "chai": "^3.5.0",
     "chai-jquery": "^2.0.0",
     "d3": "^3.5.5",
     "debug": "^2.2.0",
