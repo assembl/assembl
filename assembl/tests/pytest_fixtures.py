@@ -880,6 +880,66 @@ def it_locale(request, test_session):
 
 
 @pytest.fixture(scope="function")
+def de_locale(request, test_session):
+    from assembl.models.langstrings import Locale
+
+    locale = Locale.get_or_create("de", test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def tr_locale(request, test_session):
+    from assembl.models.langstrings import Locale
+
+    locale = Locale.get_or_create("tr", test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def non_linguistic_locale(request, test_session):
+    from assembl.models.langstrings import Locale
+
+    locale = Locale.get_or_create(Locale.NON_LINGUISTIC, test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def undefined_locale(request, test_session):
+    from assembl.models.langstrings import Locale
+
+    locale = Locale.get_or_create(Locale.UNDEFINED, test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
 def fr_from_en_locale(request, test_session, en_locale, fr_locale):
 
     from assembl.models.langstrings import Locale
@@ -970,40 +1030,90 @@ def it_from_fr_locale(request, test_session, fr_locale, it_locale):
 
 
 @pytest.fixture(scope="function")
-def non_linguistic_locale(request, test_session):
-    from assembl.models.langstrings import Locale
-
-    locale = Locale.get_or_create(Locale.NON_LINGUISTIC, test_session)
-
-    def fin():
-        test_session.delete(locale)
-        test_session.flush()
-        Locale.reset_cache()
-
-    request.addfinalizer(fin)
-    return locale
-
-
-@pytest.fixture(scope="function")
-def undefined_locale(request, test_session):
-    from assembl.models.langstring import Locale
-
-    locale = Locale.get_or_create(Locale.UNDEFINED, test_session)
-
-    def fin():
-        test_session.delete(locale)
-        test_session.flush()
-        Locale.reset_cache()
-
-    request.addfinalizer(fin)
-    return locale
-
-
-@pytest.fixture(scope="function")
 def fr_from_und_locale(request, test_session, undefined_locale, fr_locale):
 
     from assembl.models.langstrings import Locale
     locale = Locale.create_mt_locale(undefined_locale, fr_locale,
+                                     db=test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def de_from_en_locale(request, test_session, de_locale, en_locale):
+
+    from assembl.models.langstrings import Locale
+    locale = Locale.create_mt_locale(en_locale, de_locale,
+                                     db=test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def de_from_tr_locale(request, test_session, de_locale, tr_locale):
+
+    from assembl.models.langstrings import Locale
+    locale = Locale.create_mt_locale(tr_locale, de_locale,
+                                     db=test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def en_from_de_locale(request, test_session, de_locale, en_locale):
+
+    from assembl.models.langstrings import Locale
+    locale = Locale.create_mt_locale(de_locale, en_locale,
+                                     db=test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def tr_from_en_locale(request, test_session, tr_locale, en_locale):
+
+    from assembl.models.langstrings import Locale
+    locale = Locale.create_mt_locale(en_locale, tr_locale,
+                                     db=test_session)
+
+    def fin():
+        test_session.delete(locale)
+        test_session.flush()
+        Locale.reset_cache()
+
+    request.addfinalizer(fin)
+    return locale
+
+
+@pytest.fixture(scope="function")
+def en_from_tr_locale(request, test_session, tr_locale, en_locale):
+
+    from assembl.models.langstrings import Locale
+    locale = Locale.create_mt_locale(tr_locale, en_locale,
                                      db=test_session)
 
     def fin():
@@ -1158,6 +1268,56 @@ def user_language_preference_it_explicit(request, test_session, it_locale,
     ulp = UserLanguagePreference(
         user=admin_user,
         locale=it_locale,
+        preferred_order=0,
+        source_of_evidence=LanguagePreferenceOrder.Explicit)
+
+    def fin():
+        print "finalizer user_language_preference_cookie"
+        test_session.delete(ulp)
+        test_session.flush()
+
+    test_session.add(ulp)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return ulp
+
+
+@pytest.fixture(scope="function")
+def user_language_preference_de_explicit(request, test_session, de_locale,
+                                         admin_user):
+    from assembl.models.auth import (
+        UserLanguagePreference,
+        LanguagePreferenceOrder
+    )
+
+    ulp = UserLanguagePreference(
+        user=admin_user,
+        locale=de_locale,
+        preferred_order=0,
+        source_of_evidence=LanguagePreferenceOrder.Explicit)
+
+    def fin():
+        print "finalizer user_language_preference_cookie"
+        test_session.delete(ulp)
+        test_session.flush()
+
+    test_session.add(ulp)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return ulp
+
+
+@pytest.fixture(scope="function")
+def user_language_preference_tr_explicit(request, test_session, tr_locale,
+                                         admin_user):
+    from assembl.models.auth import (
+        UserLanguagePreference,
+        LanguagePreferenceOrder
+    )
+
+    ulp = UserLanguagePreference(
+        user=admin_user,
+        locale=tr_locale,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Explicit)
 
@@ -1329,6 +1489,58 @@ def user_language_preference_fr_mtfrom_it(request, test_session,
 
 
 @pytest.fixture(scope="function")
+def user_language_preference_de_mtfrom_en(request, test_session,
+                                          de_locale, en_locale,
+                                          admin_user):
+    from assembl.models.auth import (
+        UserLanguagePreference,
+        LanguagePreferenceOrder
+    )
+
+    ulp = UserLanguagePreference(
+        user=admin_user,
+        locale=en_locale,
+        translate_to_locale=de_locale,
+        preferred_order=0,
+        source_of_evidence=LanguagePreferenceOrder.Explicit)
+
+    def fin():
+        test_session.delete(ulp)
+        test_session.flush()
+
+    test_session.add(ulp)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return ulp
+
+
+@pytest.fixture(scope="function")
+def user_language_preference_en_mtfrom_de(request, test_session,
+                                          de_locale, en_locale,
+                                          admin_user):
+    from assembl.models.auth import (
+        UserLanguagePreference,
+        LanguagePreferenceOrder
+    )
+
+    ulp = UserLanguagePreference(
+        user=admin_user,
+        locale=de_locale,
+        translate_to_locale=en_locale,
+        preferred_order=0,
+        source_of_evidence=LanguagePreferenceOrder.Explicit)
+
+    def fin():
+        test_session.delete(ulp)
+        test_session.flush()
+
+    test_session.add(ulp)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return ulp
+
+
+@pytest.fixture(scope="function")
 def langstring_entry_values():
     return {
         "subject": {
@@ -1338,7 +1550,10 @@ def langstring_entry_values():
                 u"Voici un sujet anglais qui " +
                 u"est très cool et branché.",
             "italian": u"Ecco un soggetto inglese che " +
-                       u"è molto cool e alla moda."
+                       u"è molto cool e alla moda.",
+            "german": u"Hier ist ein englisches Thema, " +
+                      u"das sehr cool und hip ist.",
+            "turkish": u"Burada çok serin ve kalça bir İngiliz konudur.",
         },
         "body": {
             "english": u"Here is an English body that is " +
@@ -1346,7 +1561,11 @@ def langstring_entry_values():
             "french": u"Voici un body anglais qui est très cool et branché. " +
                       u"Et il est également plus longue.",
             "italian": u"Qui è un organismo inglese che " +
-                       u" è molto cool e alla moda. Ed è anche più."
+                       u" è molto cool e alla moda. Ed è anche più.",
+            "german": u"Hier ist ein englischer Körper, die sehr cool " +
+                      u"und hip ist. Und es ist auch länger.",
+            "turkish": u"Burada çok serin ve kalça bir İngiliz" +
+                       u"organıdır. Ve aynı zamanda daha uzun."
         }
     }
 
@@ -1424,9 +1643,33 @@ def it_langstring_entry(request, test_session, it_locale,
 
 
 @pytest.fixture(scope="function")
+def tr_langstring_entry(request, test_session, tr_locale,
+                        langstring_body, langstring_entry_values):
+    from assembl.models.langstrings import LangStringEntry
+
+    entry = LangStringEntry(
+        locale_confirmed=False,
+        langstring=langstring_body,
+        locale=tr_locale,
+        value=langstring_entry_values.get('body').get('turkish')
+    )
+
+    test_session.expire(langstring_body, ["entries"])
+
+    def fin():
+        test_session.delete(entry)
+        test_session.flush()
+
+    test_session.add(entry)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return entry
+
+
+@pytest.fixture(scope="function")
 def und_langstring_entry(request, test_session, undefined_locale,
                          langstring_body, langstring_entry_values):
-    from assembl.models.LangString import LangStringEntry
+    from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
         locale_confirmed=False,
@@ -1451,7 +1694,7 @@ def und_langstring_entry(request, test_session, undefined_locale,
 def non_linguistic_langstring_entry(request, test_session,
                                     non_linguistic_locale, langstring_body,
                                     langstring_entry_values):
-    from assembl.models.LangString import LangStringEntry
+    from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
         locale_confirmed=False,
@@ -1615,6 +1858,58 @@ def fr_from_it_langstring_entry(request, test_session, fr_from_it_locale,
         langstring=langstring_body,
         locale=fr_from_it_locale,
         value=langstring_entry_values.get('body').get('french')
+    )
+
+    test_session.expire(langstring_body, ["entries"])
+
+    def fin():
+        test_session.delete(entry)
+        test_session.flush()
+
+    test_session.add(entry)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return entry
+
+
+@pytest.fixture(scope="function")
+def en_from_tr_langstring_entry(request, test_session, en_from_tr_locale,
+                                langstring_body, tr_langstring_entry,
+                                langstring_entry_values):
+
+    from assembl.models.langstrings import LangStringEntry
+
+    entry = LangStringEntry(
+        locale_confirmed=False,
+        langstring=langstring_body,
+        locale=en_from_tr_locale,
+        value=langstring_entry_values.get('body').get('english')
+    )
+
+    test_session.expire(langstring_body, ["entries"])
+
+    def fin():
+        test_session.delete(entry)
+        test_session.flush()
+
+    test_session.add(entry)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return entry
+
+
+@pytest.fixture(scope="function")
+def de_from_tr_langstring_entry(request, test_session, de_from_tr_locale,
+                                langstring_body, tr_langstring_entry,
+                                langstring_entry_values):
+
+    from assembl.models.langstrings import LangStringEntry
+
+    entry = LangStringEntry(
+        locale_confirmed=False,
+        langstring=langstring_body,
+        locale=de_from_tr_locale,
+        value=langstring_entry_values.get('body').get('german')
     )
 
     test_session.expire(langstring_body, ["entries"])
