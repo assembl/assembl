@@ -30,7 +30,7 @@ jQuery(document).ready(function($){
     /*******************
      buttons
      ********************/
-    var buttonsWrapper = $('#buttons .cd-box'),
+    var buttonsWrapper = $('#buttons'),
         buttonsHtml = buttonsWrapper.html(),
         containerHtml = $('<div class="cd-box"></div>').insertAfter(buttonsWrapper),
         buttonsHtmlText = buttonsHtml.split('</button>');
@@ -65,6 +65,8 @@ jQuery(document).ready(function($){
     });
 
     function setTypography(element, textElement) {
+        if (textElement === undefined)
+            return;
         var fontSize = Math.round(element.css('font-size').replace('px',''))+'px',
             fontFamily = (element.css('font-family').split(','))[0].replace(/\'/g, '').replace(/\"/g, ''),
             fontWeight = element.css('font-weight');
