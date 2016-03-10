@@ -32,7 +32,7 @@ from assembl.models import (
     Synthesis, Discussion, Content, Idea, ViewPost, User,
     IdeaRelatedPostLink, AgentProfile, LikedPost, LangString,
     DummyContext, LanguagePreferenceCollection)
-from assembl.lib.raven_client import get_raven_client
+from assembl.lib.raven_client import capture_message
 
 log = logging.getLogger('assembl')
 
@@ -530,11 +530,9 @@ def create_post(request):
                 # how to guess locale in this case?
                 subject = LangString.create(new_subject)
         else:
-            raven_client = get_raven_client()
-            if raven_client:
-                raven_client.captureMessage(
-                    "A message is about to be written to the database with an "
-                    "empty subject.  This is not supposed to happen.")
+            capture_message(
+                "A message is about to be written to the database with an "
+                "empty subject.  This is not supposed to happen.")
             subject = LangString.EMPTY(discussion.db)
 
     post_constructor_args = {

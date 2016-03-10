@@ -19,6 +19,7 @@ from ..lib import config
 from ..lib.frontend_urls import FrontendUrls
 from ..lib.locale import get_language, get_country
 from ..lib.utils import get_global_base_url
+from ..lib.raven_client import capture_exception
 from ..auth import R_PARTICIPANT
 
 default_context = {
@@ -245,10 +246,7 @@ def csrf_error_view(exc, request):
 def error_view(exc, request):
     # from traceback import format_exc
     from datetime import datetime
-    from assembl.lib.raven_client import get_raven_client
-    raven_client = get_raven_client()
-    if raven_client:
-        raven_client.captureException(getattr(request, "exc_info", None))
+    capture_exception(getattr(request, "exc_info", None))
     return HTTPInternalServerError(
         explanation="Sorry, Assembl had an internal issue and you have to reload. Please send this to a discussion administrator.",
         detail=datetime.now().isoformat()+"\n"+repr(request.exception))

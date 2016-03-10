@@ -47,7 +47,7 @@ from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord)
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
-from assembl.lib.raven_client import get_raven_client
+from assembl.lib.raven_client import capture_exception
 from .langstrings import Locale
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
@@ -1654,9 +1654,7 @@ class LanguagePreferenceCollection(object):
                     req.lang_prefs = UserLanguagePreferenceCollection(user_id)
                     return req.lang_prefs
                 except Exception:
-                    raven = get_raven_client()
-                    if raven:
-                        raven.captureException()
+                    capture_exception()
             locale = locale_negotiator(req)
             req.lang_prefs = LanguagePreferenceCollectionWithDefault(locale)
         return req.lang_prefs

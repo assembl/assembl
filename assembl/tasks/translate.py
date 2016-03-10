@@ -5,7 +5,7 @@ from celery import Celery
 
 from . import init_task_config, config_celery_app
 from ..lib.utils import waiting_get
-
+from ..lib.raven_client import capture_exception
 
 # broker specified
 translation_celery_app = Celery('celery_tasks.translate')
@@ -48,8 +48,6 @@ def translate_content(
         constrain_to_discussion_languages=True,
         send_to_changes=False):
     from ..models import Locale
-    from assembl.lib.raven_client import get_raven_client
-    raven_client = get_raven_client()
     discussion = content.discussion
     service = service or discussion.translation_service()
     if not service:
@@ -76,8 +74,7 @@ def translate_content(
             language, _ = service.identify(
                 combined, constrain_to_discussion_languages)
         except:
-            if raven_client:
-                raven_client.captureException()
+            capture_exception()
             return changed
         if und_subject:
             und_subject.locale_code = language
@@ -100,8 +97,7 @@ def translate_content(
                         service.confirm_locale(
                             entry, constrain_to_discussion_languages)
                     except:
-                        if raven_client:
-                            raven_client.captureException()
+                        capture_exception()
                         return changed
                     # reload entries
                     ls.db.expire(ls, ("entries",))
@@ -127,8 +123,7 @@ def translate_content(
                                 original,
                                 Locale.get_or_create(dest, content.db))
                         except:
-                            if raven_client:
-                                raven_client.captureException()
+                            capture_exception()
                             return changed
                         # recalculate, may have changed
                         source_loc = (
