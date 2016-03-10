@@ -19,18 +19,20 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
     return _.clone(this.get("value"));
   },
   valueAsCollection: function() {
-    var value = this.get("value");
+    var that = this, value = this.get("value"), collection;
     if (Array.isArray(value)) {
-      return new DiscussionPreferenceSubCollection(value, {parse: true});
+      collection = new DiscussionPreferenceSubCollection(value, {parse: true});
     } else {
-      return new DiscussionPreferenceSubCollection();
+      collection = new DiscussionPreferenceSubCollection();
     }
-  },
-  setValueAsCollection: function(coll) {
-    this.set("value", coll.map(
-      function(model) {
-        return model.get("value");
-      }));
+    this.listenTo(collection, "all", function(event_name, model) {
+        var value = model.collection.map(
+          function(model) {
+            return model.get("value");
+          });
+        this.set("value", value);
+    });
+    return collection;
   }
 });
 
