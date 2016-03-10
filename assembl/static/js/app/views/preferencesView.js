@@ -6,6 +6,7 @@ var Marionette = require("../shims/marionette.js"),
     i18n = require("../utils/i18n.js"),
     Types = require("../utils/types.js"),
     Ctx = require("../common/context.js"),
+    DiscussionPreference = require("../models/discussionPreference.js"),
     CollectionManager = require("../common/collectionManager.js"),
     AdminNavigationMenu = require('./admin/adminNavigationMenu.js'),
     UserNavigationMenu = require('./user/userNavigationMenu.js');
@@ -46,9 +47,72 @@ function getPreferenceEditView(preferenceModel, subView) {
   }
 }
 
-var BasePreferenceView = Marionette.ItemView.extend({
+
+// A single preference item
+var PreferencesItemView = Marionette.LayoutView.extend({
+  constructor: function PreferencesItemView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+  regions: {
+    subview: ".js_prefItemSubview"
+  },
+  ui: {
+    resetButton: ".js_reset",
+    deleteButton: ".js_delete"
+  },
+  events: {
+    "click @ui.resetButton": "resetPreference",
+    "click @ui.deleteButton": "deleteItem"
+  },
+  template: "#tmpl-preferenceItemView",
+  resetPreference: function() {
+    // TODO: We need to delete the value and re-fetch it.
+    return false;
+  },
+  deleteItem: function(event) {
+    this.model.collection.remove(this.model);
+    this.listView.render();
+    return false;
+  },
+  initialize: function(options) {
+    this.mainPrefWindow = options.mainPrefWindow;
+    this.preferences = options.mainPrefWindow.preferences;
+    this.key = options.key || this.model.id;
+    this.listKey = options.listKey;
+    this.preferenceData = options.mainPrefWindow.preferenceData[this.key];
+    this.listView = options.listView;
+    this.childViewOptions = {
+        mainPrefWindow: options.mainPrefWindow,
+        key: this.key,
+        model: this.model,
+        listKey: this.listKey,
+        preferenceData: this.preferenceData,
+        preference: this.model.get("value")
+    };
+  },
+  serializeData: function() {
+    var preferenceValue = this.model.get("value");
+    if (this.listKey !== undefined) {
+      preferenceValue = preferenceValue[this.listKey];
+    }
+    return {
+      i18n: i18n,
+      preference: preferenceValue,
+      preferenceData: this.preferenceData,
+      listKey: this.listKey,
+      inList: this.listKey !== undefined
+    };
+  },
+  onRender: function(){
+    var subview = getPreferenceEditView(this.preferenceData, this.listKey !== undefined);
+    this.getRegion("subview").show(new subview(this.childViewOptions));
+  }
+});
+
+
+var BasePreferenceView = Marionette.LayoutView.extend({
   constructor: function BasePreferenceView() {
-    Marionette.ItemView.apply(this, arguments);
+    Marionette.LayoutView.apply(this, arguments);
   },
   template: "#tmpl-basePreferenceView",
   initialize: function(options) {
@@ -117,7 +181,8 @@ var ScalarPreferenceView = BasePreferenceView.extend({
   },
   template: '#tmpl-scalarPreferenceView',
   serializeData: function() {
-    var data = Object.getPrototypeOf(Object.getPrototypeOf(this)).serializeData.apply(this, arguments);
+    var data = BasePreferenceView.prototype.serializeData.apply(this, arguments);
+    // Note: This is unsorted. Maybe should by value?
     data.scalarOptions = data.preferenceData.scalar_values;
     return data;
   }
@@ -129,7 +194,7 @@ var LocalePreferenceView = ScalarPreferenceView.extend({
     BasePreferenceView.apply(this, arguments);
   },
   serializeData: function() {
-    var data = Object.getPrototypeOf(Object.getPrototypeOf(this)).serializeData.apply(this, arguments);
+    var data = ScalarPreferenceView.prototype.serializeData.apply(this, arguments);
     data.scalarOptions = Ctx.getLocaleToLanguageNameCache();
     return data;
   }
@@ -161,9 +226,35 @@ var ListSubviewCollectionView = Marionette.CollectionView.extend({
   constructor: function ListSubviewCollectionView() {
     Marionette.CollectionView.apply(this, arguments);
   },
-  childView: function() {
-    return getPreferenceEditView(this.preferenceData, true);
-  }
+  initialize: function(options) {
+    this.mainPrefWindow = options.mainPrefWindow;
+    this.preferences = options.preferences;
+    this.key = options.key;
+    this.preferenceData = options.preferenceData;
+  },
+  childViewOptions: function(model, index) {
+    // This is bizarrely called before initialize;
+    // then we have the options in the object
+    var options = this.options;
+    if (options === undefined) {
+      options = this;
+    }
+    return {
+      mainPrefWindow: options.mainPrefWindow,
+      listView: this,
+      preferences: options.preferences,
+      key: options.key,
+      preferenceData: options.preferenceData,
+      isList: true,
+      model: this.collection.models[index],
+      listKey: index
+    };
+  },
+  childView: PreferencesItemView
+  // childView: function(options) {
+  //   var childClass = getPreferenceEditView(options.preferenceData, true);
+  //   return new childClass(options);
+  // }
 });
 
 // A single preference which is a list
@@ -171,62 +262,43 @@ var ListPreferenceView = BasePreferenceView.extend({
   constructor: function ListPreferenceView() {
     BasePreferenceView.apply(this, arguments);
   },
-  template: "#tmpl-listPreferenceView",
-  childViewOptions: function(model, index) {
-    return {
-      key: model.id,
-      model: this.model,
-      mainPrefWindow: this.mainPrefWindow,
-      listKey: index
-    };
-  }
-});
-
-// A single preference item
-var PreferencesItemView = Marionette.LayoutView.extend({
-  constructor: function PreferencesItemView() {
-    Marionette.LayoutView.apply(this, arguments);
-  },
-  regions: {
-    subview: ".js_prefItemSubview"
+  initialize: function(options) {
+    BasePreferenceView.prototype.initialize.apply(this, arguments);
+    this.submodels = this.model.valueAsCollection();
   },
   ui: {
-    resetButton: ".js_reset"
+    addToList: ".js_add_to_listpref"
+  },
+  regions: {
+    listPreference: ".js_listPreference"
   },
   events: {
-    "click @ui.resetButton": "resetPreference"
+    "click @ui.addToList": "addToList"
   },
-  resetPreference: function() {
-    // Do we have the parent value? Probably not.
+  template: "#tmpl-listPreferenceView",
+  onRender: function() {
+    var subview = new ListSubviewCollectionView({
+      collection: this.submodels,
+      mainPrefWindow: this.mainPrefWindow,
+      preferences: this.preferences,
+      key: this.key,
+      preferenceData: this.preferenceData
+    });
+    this.showChildView("listPreference", subview);
   },
-  template: "#tmpl-preferenceItemView",
-  initialize: function(options) {
-    this.mainPrefWindow = options.mainPrefWindow;
-    this.preferences = options.mainPrefWindow.preferences;
-    this.preferenceData = options.mainPrefWindow.preferenceData[this.model.id];
-    this.key = this.model.id;
-    this.childViewOptions = {
-        mainPrefWindow: options.mainPrefWindow,
-        key: this.key,
-        model: this.model
-    };
-    this.listKey = options.listKey;
-  },
-  serializeData: function() {
-    var preferenceValue = this.model.get("value");
-    if (this.listKey !== undefined) {
-      preferenceValue = preferenceValue[this.listKey];
+  addToList: function() {
+    var defaultVal = this.preferenceData.item_default;
+    if (_.isObject(defaultVal)) {
+      // shallow clone, hopefully good enough
+      defaultVal = _.clone(defaultVal);
     }
-    return {
-      i18n: i18n,
-      preference: preferenceValue,
-      preferenceData: this.preferenceData,
-      inList: this.listKey !== undefined
-    };
-  },
-  onRender: function(){
-    var subview = getPreferenceEditView(this.preferenceData);
-    this.getRegion("subview").show(new subview(this.childViewOptions));
+    // Note: Maybe it should not have an ID?
+    var model = new DiscussionPreference.Model({
+      id: null, value: defaultVal
+    }, {parse: true});
+    this.submodels.add([model]);
+    this.render();
+    return false;
   }
 });
 

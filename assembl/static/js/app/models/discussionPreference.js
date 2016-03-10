@@ -18,6 +18,20 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
   toJSON: function(options) {
     return _.clone(this.get("value"));
   },
+  valueAsCollection: function() {
+    var value = this.get("value");
+    if (Array.isArray(value)) {
+      return new DiscussionPreferenceSubCollection(value, {parse: true});
+    } else {
+      return new DiscussionPreferenceSubCollection();
+    }
+  },
+  setValueAsCollection: function(coll) {
+    this.set("value", coll.map(
+      function(model) {
+        return model.get("value");
+      }));
+  }
 });
 
 
@@ -27,6 +41,14 @@ var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
     Backbone.Model.apply(this, arguments);
   },
   url: Ctx.getApiV2DiscussionUrl("settings"),
+});
+
+
+var DiscussionPreferenceSubCollection = Backbone.Collection.extend({
+  constructor: function DiscussionPreferenceSubCollection() {
+    Backbone.Collection.apply(this, arguments);
+  },
+  model: DiscussionIndividualPreferenceModel
 });
 
 
