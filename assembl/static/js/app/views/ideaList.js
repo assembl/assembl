@@ -85,7 +85,7 @@ var IdeaList = AssemblPanel.extend({
   },
 
   initialize: function(options) {
-    Object.getPrototypeOf(AssemblPanel).initialize.apply(this, arguments);
+    AssemblPanel.prototype.initialize.apply(this, arguments);
     var that = this,
         collectionManager = new CollectionManager();
 

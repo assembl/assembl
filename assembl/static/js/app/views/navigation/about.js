@@ -22,7 +22,7 @@ var AboutNavPanel = AssemblPanel.extend({
     'click .js_trackInteractionExample': 'testAnalytics2'
   },
   initialize: function(options) {
-      Object.getPrototypeOf(AssembPanel).initialize.apply(this, arguments);
+      AssemblPanel.prototype.initialize.apply(this, arguments);
     },
   goToDebate: function() {
     Assembl.vent.trigger("DEPRECATEDnavigation:selected", "debate");

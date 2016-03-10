@@ -36,7 +36,7 @@ var SynthesisPanel = AssemblPanel.extend({
    * @init
    */
   initialize: function(obj) {
-    Object.getPrototypeOf(AssembPanel).initialize.apply(this, arguments);
+    AssemblPanel.prototype.initialize.apply(this, arguments);
     var that = this,
         collectionManager = new CollectionManager();
 

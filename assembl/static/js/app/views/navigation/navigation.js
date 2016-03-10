@@ -56,7 +56,7 @@ var NavigationView = AssemblPanel.extend({
     'click @ui.ideaFromIdealist': 'addIdeaFromIdeaList',
   },
   initialize: function(options) {
-    Object.getPrototypeOf(AssembPanel).initialize.apply(this, arguments);
+    AssemblPanel.prototype.initialize.apply(this, arguments);
 
     this._accordionContentHeight = null;
     this._accordionHeightTries = 0;
