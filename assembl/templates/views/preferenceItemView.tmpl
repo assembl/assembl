@@ -8,11 +8,13 @@
         <p id="js_error" class="control-error hidden"></p>
       </span>
       <% if (!inList) { %>
+        <% if (canModify) { %>
         <div>
           <button id="js_reset_<%= preferenceData.id %>" class="js_reset btn btn-cancel">{{ gettext('Reset to default') }}</button>
         </div>
+        <% } %>
     </div>
-  <% } else { %>
+  <% } else if (canModify) { %>
       <button id="js_delete_<%= preferenceData.id %>_<%= listKey %>" class="js_delete btn btn-cancel">{{ gettext('Delete') }}</button>
   <% } %>
 </div>

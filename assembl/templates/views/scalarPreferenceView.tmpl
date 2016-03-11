@@ -1,4 +1,4 @@
-<select id="pref_<%= preferenceData.id %>_value" class="pref_value">
+<select id="pref_<%= preferenceData.id %>_value" class="pref_value" <% if (!canModify) { print('disabled="disabled"')} %>>
 <% for (var val in scalarOptions) {
     var name = scalarOptions[val]; %>
     <option value="<%= val %>"

@@ -1,3 +1,4 @@
 <div>
-<textarea id="pref_<%= preferenceData.id %>_value" class="pref_value input-xxlarge"><%= preference %></textarea>
+<textarea id="pref_<%= preferenceData.id %>_value" class="pref_value input-xxlarge"
+<% if (!canModify) { print('disabled="disabled"')} %>><%= preference %></textarea>
 </div>

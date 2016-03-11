@@ -1,1 +1,1 @@
-<input id="pref_<%= preferenceData.id %>_value" type="text" class="pref_value" value="<%= preference %>"></input>
+<input id="pref_<%= preferenceData.id %>_value" type="text" class="pref_value" value="<%= preference %>" <% if (!canModify) { print('disabled="disabled"')} %>></input>

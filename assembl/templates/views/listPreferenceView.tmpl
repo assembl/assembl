@@ -1,4 +1,6 @@
 <div>
 <div class="js_listPreference"></div>
-<button class="js_add_to_listpref">{{ gettext('Add') }}</button>
+<% if (canModify) { %>
+<button class="js_add_to_listpref" <% if (!canModify) { print('disabled="disabled"')} %>>{{ gettext('Add') }}</button>
+<% } %>
 </div>

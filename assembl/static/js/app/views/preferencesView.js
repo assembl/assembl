@@ -6,6 +6,7 @@ var Marionette = require("../shims/marionette.js"),
     i18n = require("../utils/i18n.js"),
     Types = require("../utils/types.js"),
     Ctx = require("../common/context.js"),
+    Permissions = require("../utils/permissions.js"),
     DiscussionPreference = require("../models/discussionPreference.js"),
     CollectionManager = require("../common/collectionManager.js"),
     AdminNavigationMenu = require('./admin/adminNavigationMenu.js'),
@@ -103,6 +104,7 @@ var PreferencesItemView = Marionette.LayoutView.extend({
       i18n: i18n,
       preference: preferenceValue,
       preferenceData: this.preferenceData,
+      canModify: this.mainPrefWindow.canSavePreference(this.key),
       listKey: this.listKey,
       inList: this.listKey !== undefined
     };
@@ -163,6 +165,7 @@ var BasePreferenceView = Marionette.LayoutView.extend({
       i18n: i18n,
       preference: preferenceValue,
       preferenceData: this.preferenceData,
+      canModify: this.mainPrefWindow.canSavePreference(this.key),
       inList: this.listKey !== undefined
     };
   },
@@ -467,10 +470,6 @@ var PreferencesView = Marionette.LayoutView.extend({
     this.template = "#tmpl-preferenceView";
     this.render();
   },
-  idIsList: function(id) {
-    var prefData = this.preferenceData[id];
-    return (prefData !== undefined && prefData.value_type.substring(0, 8) == "list_of_");
-  },
   save: function() {
     var that = this, errors = [], complete = 0,
         toSave = this.allPreferences.filter(function(model) {
@@ -525,6 +524,11 @@ var DiscussionPreferencesView = PreferencesView.extend({
         that.storePreferences(prefs);
     });
   },
+  canSavePreference: function(id) {
+    var prefData = this.preferenceData[id];
+    var neededPerm = prefData.modification_permission || Permissions.ADMIN_DISCUSSION;
+    return Ctx.getCurrentUser().can(neededPerm);
+  },
   getNavigationMenu: function() {
     return new AdminNavigationMenu({selectedSection: "discussion_preferences"});
   }
@@ -542,6 +546,14 @@ var UserPreferencesView = PreferencesView.extend({
         that.preferences = new UserPreferenceCollectionSubset([], {parent: prefs});
         that.storePreferences(prefs);
     });
+  },
+  canSavePreference: function(id) {
+    var prefData = this.preferenceData[id];
+    var neededPerm = prefData.allow_user_override;
+    if (neededPerm === undefined) {  // vs null
+       neededPerm = Permissions.P_READ;
+    }
+    return Ctx.getCurrentUser().can(neededPerm);
   },
   getNavigationMenu: function() {
     return new UserNavigationMenu({selectedSection: "discussion_preferences"});
