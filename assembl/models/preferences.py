@@ -191,7 +191,7 @@ class Preferences(MutableMapping, Base):
 
     def validate_single_value(self, key, value, pref_data, data_type):
         # TODO: Validation for the datatypes.
-        # Types: (bool|json|int|(list_of_)?(string|text|scalar|url|email|domain))
+        # Types: (bool|json|int|(list_of_)?(string|text|scalar|url|email|domain|locale))
         if data_type == "bool":
             assert isinstance(value, bool), "Not a boolean"
         elif data_type == "int":
@@ -212,6 +212,8 @@ class Preferences(MutableMapping, Base):
             elif data_type == "email":
                 from pyisemail import is_email
                 assert is_email(value), "Not an email"
+            elif data_type == "locale":
+                pass  # TODO
             elif data_type == "domain":
                 from pyisemail.validators.dns_validator import DNSValidator
                 v = DNSValidator()
@@ -265,7 +267,22 @@ class Preferences(MutableMapping, Base):
         keys = self.preference_data_key_list
         return [data[key] for key in keys]
 
-    # This defines the allowed property names and their default values
+    # This defines the allowed properties and their data format
+    # Each preference metadata has the following format:
+    # id (the key for the preference as a dictionary)
+    # name (for interface)
+    # description (for interface, hover help)
+    # value_type: "(list_of_)?(bool|json|int|string|text|scalar|url|email|domain|locale)"
+    #   more types may be added, but need to be added to both frontend and backend
+    # show_in_preferences: Do we always hide this preference?
+    # modification_permission: What permission do you need to change that preference?
+    #   (default: P_DISCUSSION_ADMIN)
+    # allow_user_override: Do we allow users to have their personal value for that permission?
+    #   if so what permission is required? (default False)
+    # scalar_values: "{value: "label"}" a dictionary of permitted options for a scalar value type
+    # default: the default value
+    # item_default: the default value for new items in a list_of_...
+
     preference_data_list = [
         # List of visualizations
         {
