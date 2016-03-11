@@ -60,10 +60,12 @@ class Preferences(MutableMapping, Base):
         values = {}
         if self.pref_json:
             values = json.loads(self.pref_json)
+            assert isinstance(values, dict)
         return values
 
     @local_values_json.setter
     def local_values_json(self, val):
+        assert isinstance(val, dict)
         self.pref_json = json.dumps(val)
 
     @property
