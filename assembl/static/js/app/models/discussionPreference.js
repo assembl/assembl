@@ -24,14 +24,12 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
       if (this._subcollectionCache === undefined) {
         var that = this, collection;
         collection = new DiscussionPreferenceSubCollection(value, {parse: true});
-        this.listenTo(collection, "all", function(event_name, model) {
+        this.listenTo(collection, "reset change add remove", function(model) {
             var value = model.collection.map(
               function(aModel) {
                 return aModel.get("value");
               });
-            this.set("value", value);
-            this.changed = true;
-            console.log("changed: ", event_name);
+            that.set("value", value);
         });
         this._subcollectionCache = collection;
       }

@@ -474,12 +474,7 @@ var PreferencesView = Marionette.LayoutView.extend({
   save: function() {
     var that = this, errors = [], complete = 0,
         toSave = this.allPreferences.filter(function(model) {
-          if (that.idIsList(model.id)) {
-            // this changed is not a real backbone function, hacked in discussionPreference
-            return model.valueAsCollection().changed;
-          } else {
-            return model.hasChanged();
-          }
+          return model.hasChanged();
         });
     function do_complete() {
       complete += 1;
@@ -489,7 +484,7 @@ var PreferencesView = Marionette.LayoutView.extend({
             return that.preferenceData[id].name;
           });
           Growl.showBottomGrowl(Growl.GrowlReason.ERROR,
-            i18n.gettext("The following settings were not saved: ") + ", ".join(names));
+            i18n.gettext("The following settings were not saved: ") + names.join(", "));
         } else {
           Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS,
             i18n.gettext("Your settings were saved!"));
@@ -503,14 +498,12 @@ var PreferencesView = Marionette.LayoutView.extend({
       _.map(toSave, function(model) {
           model.save(null, {
             success: function(model) {
-              if (that.idIsList(model.id)) {
-                model.valueAsCollection().changed = true;
-              }
               do_complete();
             },
-            error: function(model) {
-              errors.append(model.id);
+            error: function(model, resp) {
+              errors.push(model.id);
               do_complete();
+              resp.handled = true;
             }
           });
       });
