@@ -80,7 +80,7 @@ def put_value(request):
 
 
 @view_config(context=PreferenceValueContext, renderer='json',
-             request_method='DELETE', permission=P_READ, header=JSON_HEADER)
+             request_method='DELETE', permission=P_READ)
 def del_value(request):
     ctx = request.context
     preferences = ctx.collection
