@@ -4,6 +4,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPCreated, HTTPNotFound, HTTPBadRequest)
 from pyramid.security import authenticated_userid
+from pyramid.response import Response
 
 from assembl.auth import (
     P_READ, IF_OWNED, Everyone, CrudPermissions)
@@ -74,7 +75,8 @@ def put_value(request):
         raise HTTPNotFound()
     except (AssertionError, ValueError) as e:
         raise HTTPBadRequest(e)
-    return HTTPCreated()
+    return Response(
+        dumps(preferences[ctx.key]), 201, content_type='application/json')
 
 
 @view_config(context=PreferenceValueContext, renderer='json',
