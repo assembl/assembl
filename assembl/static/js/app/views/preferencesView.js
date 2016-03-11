@@ -70,7 +70,31 @@ var PreferencesItemView = Marionette.LayoutView.extend({
   },
   template: "#tmpl-preferenceItemView",
   resetPreference: function() {
-    // TODO: We need to delete the value and re-fetch it.
+    var that = this, model = this.model;
+    model.sync("delete", this.model, {
+      success: function(model1, resp) {
+        model.sync("read", model, {
+          success: function(model2, resp2) {
+            // this should be done by backbone, but isn't because we have a success?
+            model.set("value", model2);
+            // neutralize change
+            model.changed = {};
+            model._subcollectionCache = undefined;
+            Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS,
+              i18n.gettext("Your settings were reset to default"));
+            that.render();
+          }, error: function(model, resp) {
+            Growl.showBottomGrowl(Growl.GrowlReason.ERROR,
+              i18n.gettext("Your settings were not be reset, but could not be read back."));
+            resp.handled = true;
+          }
+        });
+      }, error: function(model, resp) {
+        Growl.showBottomGrowl(Growl.GrowlReason.ERROR,
+          i18n.gettext("Your settings could not be reset."));
+        resp.handled = true;
+      }
+    });
     return false;
   },
   deleteItem: function(event) {

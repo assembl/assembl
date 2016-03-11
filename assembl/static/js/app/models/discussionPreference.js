@@ -11,6 +11,7 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
     Backbone.Model.apply(this, arguments);
   },
   parse: function(resp, options) {
+    this._subcollectionCache = undefined;
     if (resp.value !== undefined && resp.id !== undefined)
       return resp;
     return {value: resp};
