@@ -465,6 +465,13 @@ var PreferencesView = Marionette.LayoutView.extend({
     this.preferenceData = prefData;
     this.template = "#tmpl-preferenceView";
     this.render();
+  },
+  save: function() {
+    this.allPreferences.map(function(model) {
+       if (model.changedAttributes())
+           model.save();
+    });
+    return false;
   }
 });
 
