@@ -19,14 +19,12 @@ var Marionette = require('./shims/marionette.js'),
     AdminPartners = require('./views/admin/adminPartners.js'),
     UserNotificationSubscriptions = require('./views/user/userNotificationSubscriptions.js'),
     Profile = require('./views/user/profile.js'),
-    UserDiscussionPreferences = require('./views/user/discussionPreferences.js'),
     AgentViews = require('./views/agent.js'),
     Authorization = require('./views/authorization.js'),
     Permissions = require('./utils/permissions.js'),
     Account = require('./views/user/account.js'),
     Widget = require('./models/widget.js'),
     AdminDiscussionSettings = require('./views/admin/adminDiscussionSettings.js'),
-    AdminDiscussionPreferences = require('./views/admin/adminDiscussionPreferences.js'),
     PreferencesView = require('./views/preferencesView.js'),
     FirstIdeaToShowVisitor = require('./views/visitors/firstIdeaToShowVisitor.js'),
     i18n = require('./utils/i18n.js'),
@@ -178,8 +176,7 @@ var routeManager = Marionette.Object.extend({
   adminDiscussionPreferences: function() {
     Assembl.headerRegions.show(new NavBar());
     if (this.userHaveAccess()) {
-      // var page = new PreferencesView.DiscussionPreferencesView();
-      var page = new AdminDiscussionPreferences();
+      var page = new PreferencesView.DiscussionPreferencesView();
       Assembl.groupContainer.show(page);
     }
   },
@@ -203,8 +200,7 @@ var routeManager = Marionette.Object.extend({
   userDiscussionPreferences: function() {
     Assembl.headerRegions.show(new NavBar());
     if (this.userHaveAccess()) {
-      var page = new UserDiscussionPreferences();
-      // var page = new PreferencesView.UserPreferencesView();
+      var page = new PreferencesView.UserPreferencesView();
       Assembl.groupContainer.show(page);
     }
   },
