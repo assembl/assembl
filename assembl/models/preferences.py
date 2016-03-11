@@ -189,7 +189,7 @@ class Preferences(MutableMapping, Base):
 
     def validate_single_value(self, key, value, pref_data, data_type):
         # TODO: Validation for the datatypes.
-        # Types: (bool|json|int|(list_of_)?(string|scalar|url|email|domain))
+        # Types: (bool|json|int|(list_of_)?(string|text|scalar|url|email|domain))
         if data_type == "bool":
             assert isinstance(value, bool), "Not a boolean"
         elif data_type == "int":
@@ -198,7 +198,7 @@ class Preferences(MutableMapping, Base):
             pass  # no check
         else:
             assert isinstance(value, (str, unicode)), "Not a string"
-            if data_type == "string":
+            if data_type in ("string", "text"):
                 pass
             elif data_type == "scalar":
                 assert value in pref_data.get("scalar_values", ()), (
@@ -268,7 +268,7 @@ class Preferences(MutableMapping, Base):
         # List of visualizations
         {
             "id": "visualizations",
-            "name": _("Visualizations"),
+            "name": _("Catalyst Visualizations"),
             "value_type": "json",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -380,7 +380,7 @@ class Preferences(MutableMapping, Base):
         # Are moderated posts simply hidden or made inaccessible by default?
         {
             "id": "default_allow_access_to_moderated_text",
-            "name": _("Allow access to moderated_text"),
+            "name": _("Allow access to moderated text"),
             "value_type": "bool",
             # "scalar_values": {value: "label"},
             "description": _(
