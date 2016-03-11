@@ -9,7 +9,8 @@ var Marionette = require("../shims/marionette.js"),
     DiscussionPreference = require("../models/discussionPreference.js"),
     CollectionManager = require("../common/collectionManager.js"),
     AdminNavigationMenu = require('./admin/adminNavigationMenu.js'),
-    UserNavigationMenu = require('./user/userNavigationMenu.js');
+    UserNavigationMenu = require('./user/userNavigationMenu.js'),
+    Growl = require('../utils/growl.js');
 
 function getPreferenceEditView(preferenceModel, subView) {
   var modelType = preferenceModel.value_type,
@@ -466,11 +467,54 @@ var PreferencesView = Marionette.LayoutView.extend({
     this.template = "#tmpl-preferenceView";
     this.render();
   },
+  idIsList: function(id) {
+    var prefData = this.preferenceData[id];
+    return (prefData !== undefined && prefData.value_type.substring(0, 8) == "list_of_");
+  },
   save: function() {
-    this.allPreferences.map(function(model) {
-       if (model.changedAttributes())
-           model.save();
-    });
+    var that = this, errors = [], complete = 0,
+        toSave = this.allPreferences.filter(function(model) {
+          if (that.idIsList(model.id)) {
+            // this changed is not a real backbone function, hacked in discussionPreference
+            return model.valueAsCollection().changed;
+          } else {
+            return model.hasChanged();
+          }
+        });
+    function do_complete() {
+      complete += 1;
+      if (complete == toSave.length) {
+        if (errors.length > 0) {
+          var names = _.map(errors, function(id) {
+            return that.preferenceData[id].name;
+          });
+          Growl.showBottomGrowl(Growl.GrowlReason.ERROR,
+            i18n.gettext("The following settings were not saved: ") + ", ".join(names));
+        } else {
+          Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS,
+            i18n.gettext("Your settings were saved!"));
+        }
+      }
+    }
+    if (toSave.length == 0) {
+      Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS,
+            i18n.gettext("Your settings are up-to-date."));
+    } else {
+      _.map(toSave, function(model) {
+          model.save(null, {
+            success: function(model) {
+              if (that.idIsList(model.id)) {
+                model.valueAsCollection().changed = true;
+              }
+              do_complete();
+            },
+            error: function(model) {
+              errors.append(model.id);
+              do_complete();
+            }
+          });
+      });
+    }
     return false;
   }
 });

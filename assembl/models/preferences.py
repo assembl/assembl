@@ -169,6 +169,8 @@ class Preferences(MutableMapping, Base):
         if not self.can_edit(key, permissions):
             raise HTTPUnauthorized("Cannot edit "+key)
         self[key] = value
+        if not isinstance(self.local_values_json, dict):
+            import pdb; pdb.set_trace()
 
     def validate(self, key, value, pref_data=None):
         if pref_data is None:
@@ -367,21 +369,19 @@ class Preferences(MutableMapping, Base):
         {
             "id": "require_email_domain",
             "name": _("Require Email Domain"),
-            "value_type": "string",  # "list_of_email" eventually
+            "value_type": "list_of_domain",
             # "scalar_values": {value: "label"},
             "description": _(
                 "List of domain names of user email address required for "
-                "self-registration"),
-            "help_text": _(
-                "Only accounts with at least an email from those "
+                "self-registration. Only accounts with at least an email from those "
                 "domains can self-register to this discussion. Anyone can "
-                "self-register if this is empty. Please use a comma to "
-                "separate domain names. Example: mycompany.com,test.com"),
+                "self-register if this is empty."),
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
-            "default": ""
+            "default": [],
+            "item_default": ""
         },
         # Allow social sharing
         {
