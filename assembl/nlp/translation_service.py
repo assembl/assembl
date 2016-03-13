@@ -378,7 +378,7 @@ class DummyGoogleTranslationService(TranslationService):
 
     def get_mt_name(self, source_name, target_name):
         return super(DummyGoogleTranslationService, self).get_mt_name(
-            self.asKnownLocale(source_name), self.asKnownLocale(target_name))
+            self.asPosixLocale(source_name), self.asPosixLocale(target_name))
 
     def canTranslate(self, source, target):
         return ((source == Locale.UNDEFINED or
