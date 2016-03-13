@@ -445,7 +445,9 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         if not text:
             return text, Locale.UNDEFINED
         r = self.client.translations().list(
-            q=text, target=target, source=source).execute()
+            q=text,
+            target=self.asKnownLocale(target),
+            source=self.asKnownLocale(source) if source else None).execute()
         if source is None:
             source = self.asPosixLocale(
                 r[u"translations"][0][u'detectedSourceLanguage'])
