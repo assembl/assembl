@@ -26,7 +26,7 @@ class Locale(Base):
     """
     __tablename__ = "locale"
     id = Column(Integer, primary_key=True)
-    code = Column(String(20), unique=True)
+    code = Column(String(32), unique=True)
     rtl = Column(Boolean, server_default="0", doc="right-to-left")
     _locale_collection = None
     _locale_collection_byid = None
