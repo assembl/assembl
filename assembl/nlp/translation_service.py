@@ -48,8 +48,11 @@ class TranslationService(object):
         return False
 
     @classmethod
-    def asKnownLocale(cls, locale_code):
+    def asKnownLocaleC(cls, locale_code):
         return locale_code
+
+    def asKnownLocale(self, locale_code):
+        return self.asKnownLocaleC(locale_code)
 
     @classmethod
     def asPosixLocale(cls, locale_code):
@@ -325,7 +328,8 @@ class DummyGoogleTranslationService(TranslationService):
         'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'st', 'su', 'sv', 'sw',
         'ta', 'te', 'tg', 'th', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'xh',
         'yi', 'yo', 'zh', 'zh-TW', 'zu'}
-    known_locales = _known_locales
+    known_locales_cls = _known_locales
+    known_locales = known_locales_cls
     idiosyncrasies = {
          "zh-TW": "zh_Hant_TW",
          "zh": "zh_Hans_CN",
@@ -336,19 +340,20 @@ class DummyGoogleTranslationService(TranslationService):
     agents = {'User-Agent':"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"}
 
     @classmethod
-    def target_locales_cls(cls):
-        return (cls.asPosixLocale(loc) for loc in cls.known_locales)
+    def target_localesC(cls, known_locales=known_locales_cls):
+        return (cls.asPosixLocale(loc) for loc in known_locales)
+
+    def target_locales(self):
+        return self.target_localesC(self.known_locales)
 
     @classmethod
     def target_locale_labels_cls(cls, target_locale):
         return cls.target_locale_labels_for_locales(
-            cls.target_locales_cls(), target_locale)
-
-    def target_locales(self):
-        return self.target_locales_cls()
+            cls.target_localesC(), target_locale)
 
     @classmethod
-    def asKnownLocale(cls, locale_code):
+    def asKnownLocaleC(
+            cls, locale_code, known_locales=known_locales_cls):
         parts = locale_code.split("_")
         base = parts[0]
         if base == "zh" and len(parts) > 1:
@@ -359,10 +364,13 @@ class DummyGoogleTranslationService(TranslationService):
                 return "zh_Hant_TW"
             else:
                 return base
-        if base in cls.known_locales:
+        if base in known_locales:
             return base
         if base in cls.idiosyncrasies_reverse:
             return cls.idiosyncrasies_reverse[base]
+
+    def asKnownLocale(self, locale_code):
+        return self.asKnownLocaleC(locale_code, self.known_locales)
 
     @classmethod
     def asPosixLocale(cls, locale_code):
@@ -395,7 +403,6 @@ class DummyGoogleTranslationService(TranslationService):
 
 
 class GoogleTranslationService(DummyGoogleTranslationService):
-    _known_locales = None
     distinct_identify_step = False
 
     def __init__(self, discussion, apikey=None):
@@ -403,6 +410,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         import apiclient.discovery
         # Look it up in config. TODO: Admin property of discussion
         apikey = config.get("google.server_api_key")
+        self._known_locales = None
         self.client = apiclient.discovery.build(
             'translate', 'v2', developerKey=apikey)
 
@@ -419,7 +427,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
                         from ..lib.raven_client import capture_message
                         capture_message("google changed its language set again")
             except:
-                return super(GoogleTranslationService, self)._known_locales
+                return self.known_locales_cls
         return self._known_locales
 
     def identify(self, text, expected_locales=None):
