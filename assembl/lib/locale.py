@@ -89,6 +89,18 @@ def ensure_locale_has_country(locale):
     return locale
 
 
+def strip_country(locale):
+    # assuming a posix locale
+    if locale == "zh":
+        return "zh_Hans"
+    if '_' in locale:
+        locale = locale.split("_")
+        if len(locale[-1]) == 2:
+            locale.pop()
+        return "_".join(locale)
+    return locale
+
+
 def get_preferred_languages(session, user_id):
     from ..models import UserLanguagePreference, Locale
     prefs = (session.query(UserLanguagePreference)

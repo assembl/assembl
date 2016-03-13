@@ -14,10 +14,7 @@ from assembl.models.post import Post
 from assembl.models.idea import Idea
 from assembl.models.langstrings import Locale
 from assembl.auth import P_READ, P_ADD_EXTRACT
-from assembl.lib.locale import (
-    to_posix_string,
-    ensure_locale_has_country
-)
+from assembl.lib.locale import (to_posix_string, strip_country)
 from assembl.lib.utils import is_url_from_same_server, path_qs
 from ...models.auth import (
     UserLanguagePreference,
@@ -28,6 +25,8 @@ from assembl.auth.util import user_has_permission
 from .. import get_default_context as base_default_context
 from assembl.lib.frontend_urls import FrontendUrls
 from assembl import locale_negotiator
+from assembl.nlp.translation_service import DummyGoogleTranslationService
+
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
                        '../../static/js/fixtures/nodes.json')
@@ -187,14 +186,10 @@ def home_view(request):
     else:
         locale = request.localizer.locale_name
 
-    try:
-        service = discussion.translation_service()
-        locale_labels = json.dumps(
-            service.target_locale_labels(
-                Locale.get_or_create(locale, discussion.db))
-            if service else {})
-    except:
-        locale_labels = '{}'
+    target_locale = Locale.get_or_create(
+        strip_country(locale), discussion.db)
+    locale_labels = json.dumps(
+        DummyGoogleTranslationService.target_locale_labels_cls(target_locale))
     context['translation_locale_names_json'] = locale_labels
 
     context['preferences_json'] = json.dumps(dict(preferences))

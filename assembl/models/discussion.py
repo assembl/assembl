@@ -26,6 +26,7 @@ from sqlalchemy.exc import InvalidRequestError
 from assembl.lib import config
 from assembl.lib.utils import slugify, get_global_base_url, full_class_name
 from ..lib.sqla_types import URLString
+from ..lib.locale import strip_country
 from . import DiscussionBoundBase
 from virtuoso.alchemy import CoerceUnicode
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -68,7 +69,6 @@ class Discussion(DiscussionBoundBase):
     help_url = Column(URLString, nullable=True, default=None)
     logo_url = Column(URLString, nullable=True, default=None)
     homepage_url = Column(URLString, nullable=True, default=None)
-    preferred_locales = Column(String)
     show_help_in_debate_section = Column(Boolean, default=True)
     preferences_id = Column(Integer, ForeignKey(Preferences.id))
 
@@ -665,16 +665,17 @@ class Discussion(DiscussionBoundBase):
         # Ordered list, not empty.
         # TODO: Guard. Each locale should be 2-letter or posix.
         # Waiting for utility function.
-        if self.preferred_locales:
-            return self.preferred_locales.split(' ')
+        locales = self.preferences['preferred_locales']
+        if locales:
+            return locales
         # Use installation settings otherwise.
-        return config.get_config().get(
-            'available_languages', 'fr_CA en_CA').split()
+        return [strip_country(l) for l in config.get_config().get(
+            'available_languages', 'fr en').split()]
 
     @discussion_locales.setter
     def discussion_locales(self, locale_list):
         # TODO: Guard.
-        self.preferred_locales = ' '.join(locale_list)
+        self.preferences['preferred_locales'] = locale_list
 
     # class cache, indexed by discussion id
     _discussion_services = {}

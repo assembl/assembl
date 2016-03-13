@@ -349,12 +349,12 @@ class SemanticAnalysisData(object):
         default_locales = get_config().get(
             'available_languages', 'fr_CA en_CA').split()
         my_discussion_lang = None
-        for d_id, locales in db.query(
-                Discussion.id, Discussion.preferred_locales).all():
-            locales = locales.split() if locales else default_locales
+        for discussion in db.query(Discussion).all():
+            # TODO: Actually use langstring locale for multilingual discussion
+            locales = discussion.discussion_locales
             main_lang = locales[0].split('_')[0]
-            by_main_lang[main_lang].append(d_id)
-            if self.discussion.id == d_id:
+            by_main_lang[main_lang].append(discussion.id)
+            if self.discussion == discussion:
                 my_discussion_lang = main_lang
         corpora = {}
         for lang, discussion_ids in by_main_lang.iteritems():

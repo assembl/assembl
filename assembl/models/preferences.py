@@ -16,7 +16,8 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from . import Base, DeclarativeAbstractMeta
 from ..auth import P_READ, Everyone, P_ADMIN_DISC, P_SYSADMIN, P_ADD_IDEA
 from ..lib.abc import classproperty
-from ..lib.locale import _
+from ..lib.locale import _, strip_country
+from ..lib import config
 
 
 def merge_json(base, patch):
@@ -284,6 +285,15 @@ class Preferences(MutableMapping, Base):
     # item_default: the default value for new items in a list_of_...
 
     preference_data_list = [
+        {
+            "id": "preferred_locales",
+            "value_type": "list_of_locale",
+            "name": _("Languages used"),
+            "description": _("All languages expected in the discussion"),
+            "allow_user_override": None,
+            "default": [strip_country(x) for x in config.get_config().get(
+                'available_languages', 'fr en').split()]
+        },
         # List of visualizations
         {
             "id": "visualizations",

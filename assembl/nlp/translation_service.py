@@ -12,6 +12,7 @@ from assembl.lib import config
 from assembl.lib.enum import OrderedEnum
 from assembl.models.langstrings import (
     Locale, LangString, LangStringEntry, LocaleLabel)
+from assembl.lib.locale import strip_country
 
 
 class LangStringStatus(OrderedEnum):
@@ -46,9 +47,11 @@ class TranslationService(object):
     def canTranslate(self, source, target):
         return False
 
+    @classmethod
     def asKnownLocale(cls, locale_code):
         return locale_code
 
+    @classmethod
     def asPosixLocale(cls, locale_code):
         return locale_code
 
@@ -60,10 +63,16 @@ class TranslationService(object):
     def target_locales(self):
         return ()
 
-    def target_locale_labels(self, target_locale):
+    @classmethod
+    def target_locale_labels_for_locales(cls, locales, target_locale):
         return LocaleLabel.names_of_locales_in_locale(
-            list(self.target_locales()) + Locale.SPECIAL_LOCALES,
+            [strip_country(cls.asPosixLocale(loc)) for loc in locales] +
+            Locale.SPECIAL_LOCALES,
             target_locale)
+
+    def target_locale_labels(self, target_locale):
+        return self.target_locale_labels_for_locales(
+            list(self.target_locales()), target_locale)
 
     @staticmethod
     def set_error(lse, error_code, error_description):
@@ -326,10 +335,20 @@ class DummyGoogleTranslationService(TranslationService):
     idiosyncrasies_reverse = {v: k for (k, v) in idiosyncrasies.items()}
     agents = {'User-Agent':"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"}
 
-    def target_locales(self):
-        return (self.asPosixLocale(loc) for loc in self.known_locales)
+    @classmethod
+    def target_locales_cls(cls):
+        return (cls.asPosixLocale(loc) for loc in cls.known_locales)
 
-    def asKnownLocale(self, locale_code):
+    @classmethod
+    def target_locale_labels_cls(cls, target_locale):
+        return cls.target_locale_labels_for_locales(
+            cls.target_locales_cls(), target_locale)
+
+    def target_locales(self):
+        return self.target_locales_cls()
+
+    @classmethod
+    def asKnownLocale(cls, locale_code):
         parts = locale_code.split("_")
         base = parts[0]
         if base == "zh" and len(parts) > 1:
@@ -340,11 +359,12 @@ class DummyGoogleTranslationService(TranslationService):
                 return "zh_Hant_TW"
             else:
                 return base
-        if base in self.known_locales:
+        if base in cls.known_locales:
             return base
-        if base in self.idiosyncrasies_reverse:
-            return self.idiosyncrasies_reverse[base]
+        if base in cls.idiosyncrasies_reverse:
+            return cls.idiosyncrasies_reverse[base]
 
+    @classmethod
     def asPosixLocale(cls, locale_code):
         return cls.idiosyncrasies.get(locale_code, locale_code)
 

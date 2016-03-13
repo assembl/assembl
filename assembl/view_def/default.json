@@ -288,7 +288,6 @@
         "introductionDetails": true,
         "sources": [":partial"],
         "subscribe_to_notifications_on_signup": true,
-        "preferred_locales": true,
         "web_analytics_piwik_id_site": true,
         "help_url": true,
         "logo": true,
