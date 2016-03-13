@@ -31,32 +31,45 @@ def use_underscore(locale):
     return locale
 
 
-def to_posix_string(lang_code):
-    # Normalize fra-ca to fr_CA
-    lang_code = use_underscore(lang_code)
-    if not lang_code:
+def to_posix_string(locale_code):
+    if not locale_code:
         return None
-    if '_' in lang_code:
-        # ISO format, must convert to POSIX format
-        lang, country = lang_code.split('_')[:2]
-    else:
-        lang, country = lang_code, None
+    # Normalize fra-ca to fr_CA
+    locale_code = use_underscore(locale_code)
+    locale_parts = locale_code.split("_")
+    # Normalize first component
+    lang = locale_parts[0]
     if is_valid639_1(lang):
         posix_lang = lang
     elif is_valid639_2(lang):
         temp = to_iso639_1(lang)
         posix_lang = temp if temp else lang
     else:
+        # Aryan, not sure what case is being covered here
         full_name = lang.lower().capitalize()
         if is_valid639_2(full_name):
             posix_lang = to_iso639_1(full_name)
         else:
-            raise ValueError("""The input %s in not a valid code to convert
-                             to posix format % (full_name,)""")
-    if country:
-        return '_'.join([posix_lang.lower(), country.upper()])
-    else:
-        return posix_lang.lower()
+            raise ValueError(
+                "The input %s in not a valid code to convert to posix format" %
+                (locale_code,))
+    locale_parts[0] = posix_lang
+    if len(locale_parts) > 4:
+        raise ValueError("This locale has too many parts: "+locale_code)
+    elif len(locale_parts) == 4:
+        # Drop dialect. Sorry.
+        locale_parts.pop()
+    if len(locale_parts) > 1:
+        # Normalize Country
+        if len(locale_parts[-1]) == 2:
+            locale_parts[-1] = locale_parts[-1].upper()
+        elif len(locale_parts[-1]) != 4:
+            raise ValueError(
+                "The last part is not a script or country: "+locale_code)
+        # Normalize script
+        if len(locale_parts[1]) == 4:
+            locale_parts[1] = locale_parts[1].capitalize()
+    return "_".join(locale_parts)
 
 
 def get_language(locale):
