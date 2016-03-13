@@ -60,13 +60,11 @@ var PreferencesItemView = Marionette.LayoutView.extend({
   },
   ui: {
     resetButton: ".js_reset",
-    deleteButton: ".js_delete",
     errorMessage: ".control-error",
     controlGroup: ".control-group"
   },
   events: {
     "click @ui.resetButton": "resetPreference",
-    "click @ui.deleteButton": "deleteItem"
   },
   template: "#tmpl-preferenceItemView",
   resetPreference: function() {
@@ -95,11 +93,6 @@ var PreferencesItemView = Marionette.LayoutView.extend({
         resp.handled = true;
       }
     });
-    return false;
-  },
-  deleteItem: function(event) {
-    this.model.collection.remove(this.model);
-    this.listView.render();
     return false;
   },
   initialize: function(options) {
@@ -149,6 +142,27 @@ var PreferencesItemView = Marionette.LayoutView.extend({
   }
 });
 
+
+// A single preference item in a ListPreferenceView
+var ListPreferencesItemView = PreferencesItemView.extend({
+  constructor: function ListPreferencesItemView() {
+    PreferencesItemView.apply(this, arguments);
+  },
+  ui: {
+    deleteButton: ".js_delete",
+    errorMessage: ".control-error",
+    controlGroup: ".control-group"
+  },
+  events: {
+    "click @ui.deleteButton": "deleteItem"
+  },
+  template: "#tmpl-listPreferenceItemView",
+  deleteItem: function(event) {
+    this.model.collection.remove(this.model);
+    this.listView.render();
+    return false;
+  }
+});
 
 var BasePreferenceView = Marionette.LayoutView.extend({
   constructor: function BasePreferenceView() {
@@ -350,7 +364,7 @@ var ListSubviewCollectionView = Marionette.CollectionView.extend({
       listKey: index
     };
   },
-  childView: PreferencesItemView
+  childView: ListPreferencesItemView
 });
 
 // A single preference which is a list
