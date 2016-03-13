@@ -361,7 +361,7 @@ class DummyGoogleTranslationService(TranslationService):
             if p1 in ("Hans", "CN"):
                 return "zh"  # zh_Hans_CN
             elif p1 in ("Hant", "TW", "HK", "SG", "MO"):
-                return "zh_Hant_TW"
+                return "zh-TW"
             else:
                 return base
         if base in known_locales:
