@@ -37,21 +37,44 @@ def backbone_include(config):
     config.add_route('test', '/test')
     config.add_route('graph_view', '/graph')
 
+def find_theme(theme_name):
+    """
+    Recursively looks for a theme with the provided name in the theme path folder
+    @returns the theme path fragment relative to the theme base_path, or 
+    None if not found
+    """
+    theme_base_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                              'static', 'css', 'themes')
+
+    walk_results = os.walk(theme_base_path)
+    for (dirpath, dirnames, filenames) in walk_results:
+        if 'theme.scss' in filenames:
+            #print repr(dirpath), repr(dirnames) , repr(filenames)
+            relpath = os.path.relpath(dirpath, theme_base_path)
+            (head, name) = os.path.split(dirpath)
+            print name, relpath
+            if name == theme_name:
+                return relpath
+
+    return None
 
 def get_theme(discussion):
-    theme_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                              'static', 'css', 'themes')
+    """
+    @return (theme_name, theme_relative_path) the relative path is relative to the theme_base_path.  See find_theme.
+    """
     default_theme = config.get('default_theme') or 'default'
-    # default_folder = os.path.realpath(os.path.join(theme_path, default_theme))
+
     if not discussion:
-        return default_theme
-    try:
-        slug_file = os.path.realpath(os.path.join(theme_path, discussion.slug))
-        if os.path.isdir(slug_file):
-            return discussion.slug
-    except NameError:
-        return default_theme
-    return default_theme
+        theme_name = default_theme
+    else:
+        #Legacy code, use discussion slug
+        theme_name = discussion.slug
+    
+    theme_path = find_theme(theme_name)
+    if theme_path is not None:
+        return (theme_name, theme_path)
+    else:
+        return ('default', 'default')
 
 
 def get_default_context(request):
@@ -154,6 +177,7 @@ def get_default_context(request):
             'script': web_analytics_piwik_script
         }
 
+    (theme_name, theme_relative_path)=get_theme(discussion)
     return dict(
         default_context,
         request=request,
@@ -168,7 +192,8 @@ def get_default_context(request):
         fb_locale=fb_locale,
         social_settings=social_settings,
         show_locale_country=show_locale_country,
-        theme=get_theme(discussion),
+        theme_name=theme_name,
+        theme_relative_path=theme_relative_path,
         minified_js=config.get('minified_js') or False,
         web_analytics=analytics_settings,
         help_url=help_url,

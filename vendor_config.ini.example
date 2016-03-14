@@ -1,0 +1,5 @@
+[theme_repositories]
+#Coma separated list of git urls, typically git@github.com:bluenove/assembl-client-themes.git
+git-urls=git@github.com:bluenove/assembl-client-themes.git
+
+#Typically, you will need read-only deploy keys (ex: https://developer.github.com/guides/managing-deploy-keys/#deploy-keys) to painlessly deploy on actual servers.

@@ -1,6 +1,7 @@
 I want to:
 
 Add a new model (frontend and backend)
+======================================
 Steps:
 - Create frontend model
 - Add the new Model type to utils/types.js
@@ -11,6 +12,7 @@ Steps:
 - Add backend model in viwedefs/default.json so you get a response after posting.  It will NOT fallback to default, nor error out if you don't.
 
 Download a copy of a remote database to develop locally
+=======================================================
 
   fab env_name_of_remote_env database_download
   fab env_dev database_restore
@@ -22,3 +24,42 @@ Download a copy of a remote database to develop locally
   # Grab a coffee...
   exit
   supervisorctl restart dev:
+
+  
+Run tests
+=============
+
+Only the first time you run it:
+
+.. code:: sh
+
+    cp testing.ini.example testing.ini
+    assembl-db-manage testing.ini bootstrap
+
+Thereafter:
+
+.. code:: sh
+
+    supervisord
+    #(wait for virtuoso to start)
+    py.test --cov assembl assembl
+
+Typically when developping a specific test:
+
+.. code:: sh
+
+    py.test assembl -s -k name_of_test --pdb
+
+Python shell with database connection
+=====================================
+
+.. code:: sh
+
+    pshell development.ini
+
+Raw sql connection
+==================
+
+.. code:: sh
+
+    isql-vt localhost:5132 dba dba

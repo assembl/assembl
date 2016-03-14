@@ -209,44 +209,6 @@ Create a new one:
 Autogeneration (--autogenerate) isn't supported since we don't have full
 reflextion support in virtuoso's sqlalchemy driver.
 
-Running tests
-=============
-
-Only the first time you run it:
-
-.. code:: sh
-
-    cp testing.ini.example testing.ini
-    assembl-db-manage testing.ini bootstrap
-
-Thereafter:
-
-.. code:: sh
-
-    supervisord
-    #(wait for virtuoso to start)
-    py.test --cov assembl assembl
-
-Typically when developping a specific test:
-
-.. code:: sh
-
-    py.test assembl -s -k name_of_test --pdb
-
-Python shell with database connection
-=====================================
-
-.. code:: sh
-
-    pshell development.ini
-
-Raw sql connection
-==================
-
-.. code:: sh
-
-    isql-vt localhost:5132 dba dba
-
 A note on vagrant
 =================
 
