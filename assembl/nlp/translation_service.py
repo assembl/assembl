@@ -148,7 +148,7 @@ class TranslationService(object):
     @abstractmethod
     def translate(self, text, target, source=None, db=None):
         if not text:
-            return text, Locale.UNDEFINED
+            return text, Locale.NON_LINGUISTIC
         if not source or source == Locale.UNDEFINED:
             lang, data = self.identify(text)
             source = Locale.get_or_create(source, db)
@@ -280,7 +280,9 @@ class DummyTranslationServiceTwoSteps(TranslationService):
 
     def translate(self, text, target, source=None, db=None):
         if not text:
-            return text, Locale.UNDEFINED
+            return text, Locale.NON_LINGUISTIC
+        if not source:
+            source, _ = self.identify(text)
         return u"Pseudo-translation from %s to %s of: %s" % (
             source or Locale.UNDEFINED, target, text), source
 
@@ -303,7 +305,7 @@ class DummyTranslationServiceTwoStepsWithErrors(
 
     def translate(self, text, target, source=None, db=None):
         if not text:
-            return text, Locale.UNDEFINED
+            return text, Locale.NON_LINGUISTIC
         from random import random
         if random() > 0.8:
             raise RuntimeError()
@@ -314,7 +316,7 @@ class DummyTranslationServiceTwoStepsWithErrors(
 class DummyTranslationServiceOneStepWithErrors(DummyTranslationServiceOneStep):
     def translate(self, text, target, source=None, db=None):
         if not text:
-            return text, Locale.UNDEFINED
+            return text, Locale.NON_LINGUISTIC
         from random import random
         if random() > 0.8:
             raise RuntimeError()
@@ -401,7 +403,7 @@ class DummyGoogleTranslationService(TranslationService):
 
     def translate(self, text, target, source=None, db=None):
         if not text:
-            return text, Locale.UNDEFINED
+            return text, Locale.NON_LINGUISTIC
         # Initial implementation from
         # https://github.com/mouuff/Google-Translate-API
         link = "http://translate.google.com/m?hl=%s&sl=%s&q=%s" % (
@@ -457,7 +459,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
 
     def translate(self, text, target, source=None, db=None):
         if not text:
-            return text, Locale.UNDEFINED
+            return text, Locale.NON_LINGUISTIC
         r = self.client.translations().list(
             q=text,
             target=self.asKnownLocale(target),

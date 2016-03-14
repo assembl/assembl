@@ -92,7 +92,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
           return pref;
         }
       }
-      if (LangString.localeCompatibility(this.cacheDefaultTargetLocale, locale) !== false) {
+      if (LangString.LocaleUtils.localeCompatibility(this.cacheDefaultTargetLocale, locale) !== false) {
         return new LanguagePreferenceModel({
             locale_code: locale
         });
@@ -116,10 +116,10 @@ var LanguagePreferenceCollection = Base.Collection.extend({
         // then add the superlocales
         this.map(function(pref) {
           var locale = pref.get("locale_code");
-          locale = LangString.superLocale(locale);
+          locale = LangString.LocaleUtils.superLocale(locale);
           while (locale !== undefined && prefByLocale[locale] == undefined) {
             prefByLocale[locale] = pref;
-            locale = LangString.superLocale(locale);
+            locale = LangString.LocaleUtils.superLocale(locale);
           }
         });
         // check if the translation targets are there
@@ -132,7 +132,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
                     source_of_evidence: 3, // LanguagePreferenceOrder.DeducedFromTranslation
                     preferred_order: pref.get("preferred_order")});
             }
-            locale = LangString.superLocale(locale);
+            locale = LangString.LocaleUtils.superLocale(locale);
           }
         });
         this.cachePrefByLocale = prefByLocale;
@@ -228,7 +228,7 @@ var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.
     getPreferenceForLocale: function(locale) {
       // TODO: Cache
       var target_locale = Ctx.getLocale();
-      if (LangString.localeCompatibility(target_locale, locale) !== false) {
+      if (LangString.LocaleUtils.localeCompatibility(target_locale, locale) !== false) {
         return new LanguagePreferenceModel({
             locale_code: locale
         });

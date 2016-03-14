@@ -6,38 +6,55 @@ var _ = require('../shims/underscore.js'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js');
 
-function localeCompatibility(locale1, locale2) {
-    // Are the two locales similar enough to be substituted
-    // one for the other. Mostly same language/script, disregard country.
-    // shortcut
-    if (locale1.substr(0, 2) != locale2.substr(0, 2)) {
-      return false;
-    }
-    // Google special case
-    if (locale1 == "zh")
-        locale1 = "zh_Hans";
-    if (locale2 == "zh")
-        locale2 = "zh_Hans";
-    var l1 = locale1.split("-x-mtfrom-")[0].split("_"),
-        l2 = locale2.split("-x-mtfrom-")[0].split("_"),
-        max = Math.min(l1.length, l2.length);
-    for (var i = 0; i < max; i++) {
-      if (l1[i] != l2[i]) {
-        if (i > 0 && l1[i].length == 2) {
-            return i;
+var LocaleUtils = {
+    translator_info: Ctx.getJsonFromScriptTag("translation-service-data") || {},
+    localeCompatibility: function(locale1, locale2) {
+        // Are the two locales similar enough to be substituted
+        // one for the other. Mostly same language/script, disregard country.
+        // shortcut
+        if (locale1.substr(0, 2) != locale2.substr(0, 2)) {
+          return false;
         }
-        return false;
-      }
-    }
-    return i+1;
-}
+        // Google special case
+        if (locale1 == "zh")
+            locale1 = "zh_Hans";
+        if (locale2 == "zh")
+            locale2 = "zh_Hans";
+        var l1 = locale1.split("-x-mtfrom-")[0].split("_"),
+            l2 = locale2.split("-x-mtfrom-")[0].split("_"),
+            max = Math.min(l1.length, l2.length);
+        for (var i = 0; i < max; i++) {
+          if (l1[i] != l2[i]) {
+            if (i > 0 && l1[i].length == 2) {
+                return i;
+            }
+            return false;
+          }
+        }
+        return i + 1;
+    },
 
-function superLocale(locale) {
-    var pos = locale.lastIndexOf("_");
-    if (pos > 0) {
-        return locale.substr(0, pos);
+    superLocale: function(locale) {
+        var pos = locale.lastIndexOf("_");
+        if (pos > 0) {
+            return locale.substr(0, pos);
+        }
+    },
+
+    localeAsTranslationService: function(locale) {
+        var parts = locale.split("-x-mtfrom-");
+        if (parts.length > 1) {
+            return [this.localeAsTranslationService(parts[0]),
+                    this.localeAsTranslationService(parts[1])].join("-x-mtfrom-");
+        }
+        var idiosyncrasies = this.translator_info['idiosyncrasies'] || {};
+        if (idiosyncrasies[locale] !== undefined) {
+            return idiosyncrasies[locale];
+        } else {
+            return locale;
+        }
     }
-}
+};
 
 /**
  * @class LangStringEntry
@@ -86,6 +103,9 @@ var LangStringEntry = Base.Model.extend({
     } else {
         return this.getBaseLocale();
     }
+  },
+  localeForService: function() {
+    return LocaleUtils.localeAsTranslationService(this.get("@language"));
   },
   applyFunction: function(func) {
     return new LangStringEntry({
@@ -193,7 +213,7 @@ var LangString = Base.Model.extend({
             } else {
               // take available with longest common locale string to translation target
               commonLenF = function(entry) {
-                return localeCompatibility(entry.get("@language"), translate_to) !== false;
+                return LocaleUtils.localeCompatibility(entry.get("@language"), translate_to) !== false;
               };
               entry = _.max(available, commonLenF);
               if (commonLenF(entry) > 0) {
@@ -273,6 +293,5 @@ module.exports = {
   Collection: LangStringCollection,
   EntryModel: LangStringEntry,
   EntryCollection: LangStringEntryCollection,
-  localeCompatibility: localeCompatibility,
-  superLocale: superLocale
+  LocaleUtils: LocaleUtils
 };

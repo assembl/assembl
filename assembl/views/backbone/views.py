@@ -188,6 +188,16 @@ def home_view(request):
 
     target_locale = Locale.get_or_create(
         strip_country(locale), discussion.db)
+
+    translation_service_data = {}
+    try:
+        service = discussion.translation_service()
+        if service:
+            translation_service_data = service.serviceData()
+    except:
+        pass
+    context['translation_service_data_json'] = json.dumps(
+        translation_service_data)
     locale_labels = json.dumps(
         DummyGoogleTranslationService.target_locale_labels_cls(target_locale))
     context['translation_locale_names_json'] = locale_labels
