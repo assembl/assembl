@@ -363,6 +363,13 @@ def compile_javascript():
             run('../node_modules/gulp/bin/gulp.js build:test')
 
 
+@task
+def compile_javascript_tests():
+    with cd(env.projectpath):
+        with cd('assembl'):
+            run('../node_modules/gulp/bin/gulp.js build:test')
+
+
 def tests():
     """
     Run all tests on remote
