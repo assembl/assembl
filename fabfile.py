@@ -1308,7 +1308,7 @@ def env_bluenove_assembl2():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "master"
-    
+
 @task
 def env_paris_debat():
     """
@@ -1329,3 +1329,24 @@ def env_paris_debat():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "master"
+
+@task
+def env_thecampfactory():
+    """
+    [ENVIRONMENT] Production on https://assembl.thecampfactory.fr/
+    Common environment for Bluenove clients
+    """
+    env.ini_file = 'local.ini'
+    commonenv(normpath("/home/www/assembl_thecampfactory_fr/"))
+    env.is_production_env = True
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "assembl.thecampfactory.fr"
+    env.user = "www-data"
+    env.home = "www-data"
+    require('projectname', provided_by=('commonenv',))
+    env.hosts = ['assembl2.bluenove.com']
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = "socialauth"
