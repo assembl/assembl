@@ -317,13 +317,11 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   onAttach: function() {
-    //if ( !this.model ){
-      if ( !this.isViewDestroyed() ) {
-        if ( !this.ideaPanelOpensAutomatically ){
-          this.panelWrapper.minimizePanel();
-        }
+    if ( !this.isViewDestroyed() ) {
+      if ( !this.ideaPanelOpensAutomatically ){
+        this.panelWrapper.minimizePanel(); // even if there is a this.model
       }
-    //}
+    }
   },
 
   getExtractslist: function() {
