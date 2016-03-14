@@ -365,7 +365,7 @@ class DummyGoogleTranslationService(TranslationService):
     def serviceData(self):
         return {"translation_notice": _("Translated by Google Translate"),
                 "translation_notice_url": "http://translate.google.com",
-                "idiosyncrasies": idiosyncrasies_reverse}
+                "idiosyncrasies": self.idiosyncrasies_reverse}
 
     @classmethod
     def asKnownLocaleC(
