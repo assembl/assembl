@@ -27,7 +27,7 @@
                 <p class="mvxs">{{gettext('Your message will be posted:')}}</p>
                 <label class="mbxs dispib"><input type="radio" class="vat man mrxs" name="messageSend-target-idea" value="<%= reply_idea.getId() %>" checked /><%= i18n.sprintf("{{gettext('Under the idea "%s"')}}", reply_idea.getShortTitleDisplayText()) %></label>
                 <br/>
-                <label class="mbxs dispib"><input type="radio" class="vat man mrxs" name="messageSend-target-idea" value="" /><%= i18n.sprintf('{{gettext("In the general %s conversation (a community manager will organize your contribution in the table of ideas afterwards, possibly by creating a new idea)")}}', '{{ discussion.topic }}' ) %></label>
+                <label class="mbxs dispib"><input type="radio" class="vat man mrxs" name="messageSend-target-idea" value="" /><%= i18n.sprintf('{{gettext("In the general \"%s\" conversation (a community manager will organize your contribution in the table of ideas afterwards, possibly by creating a new idea)")}}', '{{ discussion.topic }}' ) %></label>
               <% } else if ( reply_message_id ) { %>
                 <p>{{gettext('Your message will be posted as a child of the previous message.')}}</p>
               <% } else { %>
