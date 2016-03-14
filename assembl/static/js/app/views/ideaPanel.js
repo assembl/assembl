@@ -33,6 +33,7 @@ var IdeaPanel = AssemblPanel.extend({
   closeable: false,
   gridSize: AssemblPanel.prototype.IDEA_PANEL_GRID_SIZE,
   minWidth: 295,
+  ideaPanelOpensAutomatically: true,
 
   initialize: function(options) {
     AssemblPanel.prototype.initialize.apply(this, arguments);
@@ -46,6 +47,9 @@ var IdeaPanel = AssemblPanel.extend({
     }
 
     collectionManager.getAllWidgetsPromise();
+
+    var pref = Ctx.getPreferences();
+    this.ideaPanelOpensAutomatically = "idea_panel_opens_automatically" in pref ? pref.idea_panel_opens_automatically : true;
 
     if(!this.isViewDestroyed()) {
       //Yes, it IS possible the view is already destroyed in initialize, so we check
@@ -312,6 +316,16 @@ var IdeaPanel = AssemblPanel.extend({
 
   },
 
+  onAttach: function() {
+    if ( !this.model ){
+      if ( !this.isViewDestroyed() ) {
+        if ( !this.ideaPanelOpensAutomatically ){
+          this.panelWrapper.minimizePanel();
+        }
+      }
+    }
+  },
+
   getExtractslist: function() {
     var that = this,
         collectionManager = new CollectionManager();
@@ -510,7 +524,9 @@ var IdeaPanel = AssemblPanel.extend({
           //this.resetView();
           //console.log("setIdeaModel:  we have a model ")
           if (!this.isViewDestroyed()) {
-            this.panelWrapper.unminimizePanel();
+            if ( that.ideaPanelOpensAutomatically ){
+              this.panelWrapper.unminimizePanel();
+            }
             this.template = '#tmpl-loader';
             if (!this.model.id) {
               //console.log("setIdeaModel:  we have a model, but no id ")
@@ -542,7 +558,9 @@ var IdeaPanel = AssemblPanel.extend({
         //If we don't call render here, the panel will not refresh if we delete an idea.
         if (!this.isViewDestroyed()) {
           this.template = '#tmpl-ideaPanel';
-          this.panelWrapper.minimizePanel();
+          if ( that.ideaPanelOpensAutomatically ){
+            this.panelWrapper.minimizePanel();
+          }
         }
         if (this.isViewRenderedAndNotYetDestroyed()) {
           this.render();
