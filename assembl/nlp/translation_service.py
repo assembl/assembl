@@ -6,6 +6,7 @@ import simplejson as json
 from langdetect import detect_langs
 from langdetect.detector import LangDetectException
 from sqlalchemy import inspect
+from pyramid.i18n import TranslationStringFactory
 
 from assembl.lib.abc import (abstractclassmethod, classproperty)
 from assembl.lib import config
@@ -13,6 +14,9 @@ from assembl.lib.enum import OrderedEnum
 from assembl.models.langstrings import (
     Locale, LangString, LangStringEntry, LocaleLabel)
 from assembl.lib.locale import strip_country
+
+
+_ = TranslationStringFactory('assembl')
 
 
 class LangStringStatus(OrderedEnum):
@@ -36,6 +40,10 @@ class TranslationService(object):
 
     # Should we identify before translating?
     distinct_identify_step = True
+
+    def serviceData(self):
+        return {"translation_notice": "",
+                "idiosyncrasies": {}}
 
     @property
     def discussion(self):
@@ -236,7 +244,8 @@ class TranslationService(object):
                 if trans.strip() == source_lse.value.strip():
                     # TODO: Check modulo spaces in the middle
                     target_lse.error_count = 1
-                    target_lse.error_code = LangStringStatus.IDENTICAL_TRANSLATION
+                    target_lse.error_code = \
+                        LangStringStatus.IDENTICAL_TRANSLATION.value
             except Exception as e:
                 print_exc()
                 self.set_error(target_lse, *self.decode_exception(e))
@@ -350,6 +359,10 @@ class DummyGoogleTranslationService(TranslationService):
     def target_locale_labels_cls(cls, target_locale):
         return cls.target_locale_labels_for_locales(
             cls.target_localesC(), target_locale)
+
+    def serviceData(self):
+        return {"translation_notice": _("Translated by Google Translate"),
+                "idiosyncrasies": idiosyncrasies_reverse}
 
     @classmethod
     def asKnownLocaleC(
