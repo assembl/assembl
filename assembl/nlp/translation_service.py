@@ -42,7 +42,7 @@ class TranslationService(object):
     distinct_identify_step = True
 
     def serviceData(self):
-        return {"translation_notice": "",
+        return {"translation_notice": "Machine-translated",
                 "idiosyncrasies": {}}
 
     @property
@@ -215,7 +215,7 @@ class TranslationService(object):
                 # What if detected language is not a discussion language?
                 if source_locale == Locale.UNDEFINED:
                     if constrain_to_discussion_locales:
-                        if not Locale.any_compatible(
+                        if (not lang) or not Locale.any_compatible(
                                 lang, self.discussion.discussion_locales):
                             self.set_error(
                                 source_lse,
@@ -362,6 +362,7 @@ class DummyGoogleTranslationService(TranslationService):
 
     def serviceData(self):
         return {"translation_notice": _("Translated by Google Translate"),
+                "translation_notice_url": "http://translate.google.com",
                 "idiosyncrasies": idiosyncrasies_reverse}
 
     @classmethod
