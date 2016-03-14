@@ -1639,6 +1639,8 @@ Context.prototype = {
     The language names will be sent from the back-end in the language
     of the interface.
 
+    Found from the <script id="translation-locale-names"></script>
+
     eg. Interface language: EN
     eg. {"fr": "French"}
 
@@ -1649,12 +1651,25 @@ Context.prototype = {
    */
   getLocaleToLanguageNameCache: function(){
     //The cache is only read once for efficiency
-    if ( this.localeToLangNameCache ) {
-      return this.localeToLangNameCache;
+    if ( this._localeToLangNameCache ) {
+      return this._localeToLangNameCache;
     }
     
-    this.localeToLangNameCache = Ctx.getJsonFromScriptTag('translation-locale-names');
-    return this.localeToLangNameCache;
+    this._localeToLangNameCache = this.getJsonFromScriptTag('translation-locale-names');
+    return this._localeToLangNameCache;
+  },
+
+  /*
+    Cache of the translation service data stored in the
+    <script id="translation-service-data"></script>
+   */
+  getTranslationServiceData: function(){
+    if (this._translationServiceCache) {
+      return this._translationServiceCache;
+    }
+
+    this._translationServiceCache = this.getJsonFromScriptTag('translation-service-data');
+    return this._translationServiceCache;
   },
 
   /**

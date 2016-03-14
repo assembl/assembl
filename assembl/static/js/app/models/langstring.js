@@ -7,7 +7,7 @@ var _ = require('../shims/underscore.js'),
     Types = require('../utils/types.js');
 
 var LocaleUtils = {
-    translator_info: Ctx.getJsonFromScriptTag("translation-service-data") || {},
+    translatorInfo: Ctx.getTranslationServiceData() || {},
     localeCompatibility: function(locale1, locale2) {
         // Are the two locales similar enough to be substituted
         // one for the other. Mostly same language/script, disregard country.
@@ -47,13 +47,21 @@ var LocaleUtils = {
             return [this.localeAsTranslationService(parts[0]),
                     this.localeAsTranslationService(parts[1])].join("-x-mtfrom-");
         }
-        var idiosyncrasies = this.translator_info['idiosyncrasies'] || {};
+        var idiosyncrasies = this.translatorInfo['idiosyncrasies'] || {};
         if (idiosyncrasies[locale] !== undefined) {
             return idiosyncrasies[locale];
         } else {
             return locale;
         }
-    }
+    },
+
+    getServiceShowOriginalString: function(){
+      return this.translatorInfo["translation_notice"] || "";
+    },
+
+    getServiceShowOriginalUrl: function(){
+      return this.translatorInfo["translation_notice_url"] || "";
+    },
 };
 
 /**

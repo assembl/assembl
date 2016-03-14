@@ -619,7 +619,9 @@ var MessageView = Marionette.LayoutView.extend({
       unknownPreference: this.unknownPreference,
       useOriginalContent: this.useOriginalContent,
       isTranslatedMessage: this.isMessageTranslated,
-      canShowTranslation: this.canShowTranslation()
+      canShowTranslation: this.canShowTranslation(),
+      showOriginalText: LangString.LocaleUtils.getServiceShowOriginalString(),
+      showOriginalUrl: LangString.LocaleUtils.getServiceShowOriginalUrl()
     };
   },
 
