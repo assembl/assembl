@@ -8,7 +8,8 @@ from babel.messages.pofile import read_po, write_po
 
 extra_files = {
     "assembl/models/preferences.py",
-    "assembl/models/notification.py"
+    "assembl/models/notification.py",
+    "assembl/nlp/translation_service.py"
 }
 
 
