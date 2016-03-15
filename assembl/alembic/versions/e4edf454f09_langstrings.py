@@ -69,7 +69,7 @@ def upgrade(pyramid_env):
     import simplejson as json
     names = json.load(open('assembl/nlp/data/language-names.json'))
     with transaction.manager:
-        locales = {x[0] for x in names}
+        locales = {x[0] for x in names}.union({x[1] for x in names})
         for l in locales:
             parts = l.split("_")
             rtl = parts[0] in rtl_locales or "_".join(parts[:2]) in rtl_locales
