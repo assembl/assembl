@@ -57,7 +57,7 @@ $theme_header_panel: $th_local_purple4;
 //Not currently used
 //$theme_header_separator: $th_local_purple2;
 $theme_header_panel_text_color: $th_local_white;
-$theme_header_panel_icon_color: $th_local_green;
+$theme_header_panel_icon_color: $th_local_white;
 
 $theme_announcement_box_border_color: $th_local_purple5;
 $theme_box_border_color: $th_local_gray5;
@@ -79,13 +79,17 @@ $theme_navigation_bg: $th_local_purple2;
 $theme_navigation_menu_bg: $th_local_purple4;
 $theme_navigation_menu_bg_active: $th_local_purple3;
 $theme_navigation_menu_separator: $th_local_purple2;
-$theme_navigation_icon_color: $th_local_green;
-$theme_navigation_icon_color_active: $th_local_green;
+$theme_navigation_icon_color: $th_local_white;
+$theme_navigation_icon_color_active: $th_local_white;
 $theme_navigation_text_color: $th_local_white;
 $theme_navigation_text_color_active: $th_local_white;
 
 //Navigation + Synthesis panel
 $theme_navigation_or_idea_bg_active: $th_local_gray4;
+$theme_idea_selected: lighten($th_local_purple5, 40%);
+
+//Message list
+$theme_messagelist_bg_color: $th_local_gray7;
 
 //Panel groups
 //$theme_panel_group_header_bg_color: $th_local_gray1;
@@ -95,10 +99,11 @@ $theme_text_icon_emphasis_color: lighten($th_local_purple5, 20%);
 
 //extract
 $theme_extract_bg: $theme_navigation_bg;
+$theme_idea_selected: lighten($th_local_purple5, 40%);
 
 //idea panel
 $theme_idea_header_bg: $th_local_purple6;
-$theme_synthesis_header_bg: $th_local_green;
+$theme_synthesis_header_bg: $th_local_purple4;
 
 
 /* Theme standard CSS definitions (mainly logos and images).
