@@ -833,7 +833,7 @@ def database_delete():
                 "in the environment"))
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
-        run('rm -f *.db *.trx *.lck *.trx *.pxa')
+        run('rm -f *.db *.trx *.lck *.trx *.pxa *.log')
 
 
 @task
