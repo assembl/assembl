@@ -18,6 +18,7 @@ var Backbone = require('../shims/backbone.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
+    scrollUtils = require('../utils/scrollUtils.js'),
     AssemblPanel = require('./assemblPanel.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Widget = require('../models/widget.js'),
@@ -577,7 +578,7 @@ var MessageList = AssemblPanel.extend({
           }
 
           // Scrolling to the element
-          this.scrollToElement(message, undefined, previousScrollTarget.innerOffset, false);
+          scrollUtils.scrollToElement(message, undefined, previousScrollTarget.innerOffset, false);
         }
       }
     },
@@ -2179,43 +2180,6 @@ var MessageList = AssemblPanel.extend({
       return messagesOnScreenJquerySelectors;
     },
 
-  /**
-   * scrolls to any dom element in the messageList.
-   * Unlike scrollToMessage, the element must already be onscreen.
-   * This is also called by views/message.js
-   *
-   * @param callback:  will be called once animation is complete
-   * @param margin:  How much to scroll up or down from the top of the
-   * element.  Default is 30px for historical reasons
-   * @param animate:  Should the scroll be smooth
-   */
-  scrollToElement: function(el, callback, margin, animate) {
-      //console.log("messageList::scrollToElement() called with: ", el, callback, margin, animate);
-      //console.log("this.ui.panelBody: ", this.ui.panelBody);
-      if (el && _.isFunction(this.ui.panelBody.size) && this.ui.panelBody.offset() !== undefined) {
-        var panelOffset = this.ui.panelBody.offset().top,
-            panelScrollTop = this.ui.panelBody.scrollTop(),
-            elOffset = el.offset().top,
-            target;
-        margin = margin || 30;
-        if (animate === undefined) {
-          animate = true;
-        }
-
-        target = elOffset - panelOffset + panelScrollTop - margin;
-
-        //console.log(elOffset, panelOffset, panelScrollTop, margin, target);
-        if (animate) {
-          this.ui.panelBody.animate({ scrollTop: target }, { complete: callback });
-        }
-        else {
-          this.ui.panelBody.scrollTop(target);
-          if (_.isFunction(callback)) {
-            callback();
-          }
-        }
-      }
-    },
 
   /**
    * Get a jquery selector for a specific message id
@@ -2308,7 +2272,7 @@ var MessageList = AssemblPanel.extend({
             }
           }
 
-          that.scrollToElement(el, real_callback);
+          scrollUtils.scrollToElement(el, real_callback);
         }
         else {
           // Trigerring openWithFullBodyView above requires the message to
@@ -2527,7 +2491,7 @@ var MessageList = AssemblPanel.extend({
   },
 
   scrollToTopPostBox: function() {
-    this.scrollToElement(this.$('.messagelist-replybox'));
+    scrollUtils.scrollToElement(this.$('.messagelist-replybox'));
     if (Ctx.debugRender) {
       console.log("MessageList:scrollToTopPostBox() stealing browser focus");
     }
