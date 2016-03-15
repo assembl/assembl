@@ -5,12 +5,15 @@ import math
 from collections import defaultdict
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Boolean, String, Float, DateTime, Text, and_)
+    Column, Integer, ForeignKey, Boolean, String, Float, DateTime, Unicode,
+    Text, and_, UniqueConstraint)
+from sqlalchemy.sql import functions
 from sqlalchemy.orm import (relationship, backref, joinedload, aliased)
 from pyramid.settings import asbool
 
 from . import (Base, DiscussionBoundBase, HistoryMixin)
 from ..lib.abc import abstractclassmethod
+from ..lib.sqla_types import URLString
 from .discussion import Discussion
 from .idea import Idea
 from .auth import User
@@ -18,6 +21,7 @@ from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS, QUADNAMES)
 from ..views.traversal import AbstractCollectionDefinition
+from .langstrings import LangString
 
 
 class AbstractVoteSpecification(DiscussionBoundBase):
@@ -217,6 +221,80 @@ def empty_matrix(size, dim):
         # shortcut
         return [0] * size
     return [empty_matrix(size, dim-1) for i in range(size)]
+
+
+class TokenVoteSpecification(AbstractVoteSpecification):
+    __tablename__ = "token_vote_specification"
+    __mapper_args__ = {
+        'polymorphic_identity': 'token_vote_specification'
+    }
+
+    id = Column(
+        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+    exclusive_categories = Column(Boolean, default=False)
+
+    def results_for(self, voting_results, histogram_size=None):
+        return {
+            "n": len(voting_results)
+        }
+
+    def get_vote_class(cls):
+        return TokenIdeaVote
+
+    def is_valid_vote(self, vote):
+        if not issubclass(vote.__class__, self.get_vote_class()):
+            return False
+        return vote.token_category.is_valid_vote(vote)
+
+
+class TokenCategorySpecification(DiscussionBoundBase):
+    "This represents a token type, with its constraints"
+
+    __tablename__ = "token_category_specification"
+    __table_args__ = (UniqueConstraint(
+      'token_vote_specification_id', 'typename'),)
+
+    id = Column(Integer, primary_key=True)
+    total_number = Column(Integer, nullable=False)
+    maximum_per_idea = Column(Integer)
+    name_ls_id = Column(Integer, ForeignKey(LangString.id), nullable=False)
+    typename = Column(String, nullable=False,
+      doc='categories which have the same typename will be comparable (example: "positive"')
+    image = Column(URLString)
+
+    token_vote_specification_id = Column(Integer, ForeignKey(TokenVoteSpecification.id, ondelete='CASCADE',
+        onupdate='CASCADE'), nullable=False)
+    token_vote_specification = relationship(
+        TokenVoteSpecification, foreign_keys=(token_vote_specification_id,),
+        backref=backref("token_categories", cascade="all, delete-orphan"))
+    name = relationship(
+        LangString, foreign_keys=(name_ls_id,),
+        backref=backref("name_of_token_category", uselist=False),
+        single_parent=True,
+        cascade="all, delete-orphan")
+
+    def get_discussion_id(self):
+        tvs = self.token_vote_specification or TokenVoteSpecification.get(self.token_vote_specification_id)
+        return tvs.get_discussion_id()
+
+    def is_valid_vote(self, vote):
+        if not (0 <= vote.vote_value <= self.maximum_per_idea):
+            return False
+        (total,) = db.query(functions.sum(TokenIdeaVote.vote_value)).filter(
+            TokenIdeaVote.token_category_id == self.id,
+            TokenIdeaVote.user_id == vote.user_id
+            ).first()
+        if total > self.total_number:
+            return False
+        return True
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return ((cls.token_vote_specification_id == TokenVoteSpecification.id),
+                (TokenVoteSpecification.discussion_id == discussion_id))
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
 
 
 class LickertVoteSpecification(AbstractVoteSpecification):
@@ -694,3 +772,43 @@ class BinaryIdeaVote(AbstractIdeaVote):
             vote_value=self.vote_value
         )
         return super(BinaryIdeaVote, self).copy(**kwargs)
+
+
+class TokenIdeaVote(AbstractIdeaVote):
+    __tablename__ = "token_idea_vote"
+    __table_args__ = ()
+    __mapper_args__ = {
+        'polymorphic_identity': 'token_idea_vote',
+    }
+
+    id = Column(Integer, ForeignKey(
+        AbstractIdeaVote.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    # the number of tokens the user sets on this idea
+    vote_value = Column(
+        Integer, nullable=False)
+
+    token_category_id = Column(Integer, ForeignKey(TokenCategorySpecification.id, ondelete='CASCADE',
+        onupdate='CASCADE'))
+    token_category = relationship(
+        TokenCategorySpecification, foreign_keys=(token_category_id,),
+        backref=backref("votes", cascade="all, delete-orphan"))
+
+    @abstractproperty
+    def value(self):
+        return self.vote_value
+
+    def copy(self, tombstone=None, **kwargs):
+        kwargs.update(
+            tombstone=tombstone,
+            vote_value=self.vote_value
+        )
+        return super(TokenIdeaVote, self).copy(**kwargs)
+
+    def unique_query(self):
+        query, _ = super(TokenIdeaVote, self).unique_query()
+        return (query.filter_by(
+                    token_category_id=self.token_category_id), True)

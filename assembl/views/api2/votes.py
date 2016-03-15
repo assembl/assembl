@@ -73,12 +73,13 @@ def votes_collection_add_json(request):
         raise HTTPBadRequest(e)
     if instances:
         first = instances[0]
-        if not first.is_valid():
-            raise HTTPBadRequest("Invalid vote")
         db = first.db
         for instance in instances:
             db.add(instance)
         db.flush()
+        # validate after flush so we can check validity with DB constraints
+        if not first.is_valid():
+            raise HTTPBadRequest("Invalid vote")
         view = request.GET.get('view', None) or 'default'
         return Response(
             dumps(first.generic_json(view, user_id, permissions)),
