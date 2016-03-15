@@ -114,8 +114,8 @@
   }
 
   .idealist-item.is-selected > & {
-    background-color: $green1;
-    border-right: 4px solid $green;
+    background-color: $theme_idea_selected;
+    border-right: 4px solid $theme_activelink_color;
     .idealist-counter {
       color: $white;
     }
@@ -234,7 +234,7 @@
 
 .idealist-title-unread-count {
   font-size: 11px;
-  color: $green;
+  color: $theme_activelink_color;
   @include border-radius(10px);
   padding: 2px 6px;
 }

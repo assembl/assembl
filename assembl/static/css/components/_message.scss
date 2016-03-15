@@ -132,7 +132,7 @@ $previewNumLines: 4;
 
   .message-body.ellipsis {
     cursor: pointer;
-    //Must match height: in message.js, so that there is an elipsis before 
+    //Must match height: in message.js, so that there is an elipsis before
     //dotdotdot renders, and so that the height doesn't change.
     max-height: 52px;
   }
@@ -190,7 +190,7 @@ $previewNumLines: 4;
     .readUnreadIndicator {
       display: inline-block;
       /* Undo the avatar spacing when message indicator is there.  This hack is
-         necessary because there will be no indicator of annonymous users, 
+         necessary because there will be no indicator of annonymous users,
          so the margin on message-author must clear the avatar on it's own */
       //margin-right: -$avatarSize - $mesageSpacing;
     }
@@ -358,7 +358,7 @@ $previewNumLines: 4;
     }
     .centerSection {
       display: block; //So sub elements do not wrap
-      max-width: $messageBodyMaxWidth - 100px; //100px is arbitrary to leave space for avatars and name.  Normally what we whould constraint is the sum of (name + body) - avatar - date 
+      max-width: $messageBodyMaxWidth - 100px; //100px is arbitrary to leave space for avatars and name.  Normally what we whould constraint is the sum of (name + body) - avatar - date
       margin: 0px;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -409,7 +409,7 @@ $previewNumLines: 4;
       position: static;
     }
   }
-  
+
   .messageAttachments {
     max-width: $messageBodyMaxWidth;
     position: relative;    //So attachements scale
@@ -461,12 +461,12 @@ $previewNumLines: 4;
     }
 
     .readUnreadIndicator {
-      background-color: $green;
+      background-color: $theme_person_name_color;
       border: 1px solid transparent;
     }
 
     .head {
-      border-bottom: 2px solid $green;
+      border-bottom: 2px solid $theme_person_name_color;
     }
   }
 
@@ -512,7 +512,7 @@ $previewNumLines: 4;
             margin-top: 0px;
           }
           & > p:last-child { /* TODO: Why was it "& > *:last-child"? Maybe it was for span.authors to be displayed right next to the last paragraph, but this breaks the margins of the ul elements. So I (Quentin) replace "*:last-child" by "p:last-child". */
-            display: inline; 
+            display: inline;
           }
         }
         .comment {
@@ -578,7 +578,7 @@ $previewNumLines: 4;
     a {
       color: $gray4;
       i {
-        color: $green;
+        color: $theme_activelink_color;
       }
       &:hover {
         opacity: 1;
@@ -654,13 +654,13 @@ $previewNumLines: 4;
     margin-left: 5px;
     margin-right: 5px;
   }
-  
+
   .dot-seperator {
     vertical-align: 1px; //Fudge number, for alignment
     font-size: 8px;
     color: $txtGray1;
     padding-left: 6px;
-    padding-right: 6px; 
+    padding-right: 6px;
   }
 
   .translation-question {

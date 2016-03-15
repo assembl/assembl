@@ -80,7 +80,7 @@ $filpswitchButtonBorderRadius: 12px;
 	.flipswitch-btn-yes {
 		float: right;
 		//background: $green1;
-		background: $green;
+		background: $theme_activelink_color;
 		.flipswitch-btn-yes-background-text {
 			line-height: $flipswitchHeight - 2px;
 			padding-left: $filpswitchButtonWidth + 7px;

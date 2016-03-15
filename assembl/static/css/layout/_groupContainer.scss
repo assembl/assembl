@@ -222,8 +222,8 @@
             }
           }
           li.selected {
-            background-color: $green1;
-            border-right: 4px solid $green;
+            background-color: $theme_idea_selected;
+            border-right: 4px solid $theme_activelink_color;
           }
         }
       }
@@ -242,7 +242,7 @@
 
 .groupPanel .panel-header a.panel-header-minimize,
 .groupPanel .navSidebar .nav .panel-header-minimize {
-  color: $green;
+  color: $theme_btn_primary_text_color;
   float: right;
   i.icon-arrowleft,
   i.icon-arrowright {
@@ -273,7 +273,7 @@
 .groupPanel.minimized .navSidebar .nav span.panel-header-minimize,
 .groupPanel.minimized .panelContentsWhenMinimized.hasNoHeader a.panel-header-minimize {
   display: block;
-  color: $green;
+  color: $theme_btn_primary_text_color;
 }
 
 .generic-modal {
@@ -459,4 +459,3 @@
     opacity: 1;
   }
 }
-

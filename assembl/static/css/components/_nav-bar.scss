@@ -162,11 +162,11 @@ $textProfile: #515151;
 .content-infobar {
   position: relative;
   height: $infobar_height;
-  background-color: $txtPurple;
+  background-color: $theme_btn_primary_bg_color;
   font-size: 12px;
   text-align: center;
   box-sizing: border-box; /* include border in height */
-  border-top: 1px solid $purple1;
+  border-top: 1px solid $theme_btn_primary_bg_color;
   .close {
     position: absolute;
     right: calc(12px - 0.2em);
