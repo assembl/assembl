@@ -52,7 +52,7 @@
     "mocha": "^2.2.5",
     "mochify": "^2.10.0",
     "moment": "^2.10.3",
-    "node-sass": "~3.3.3",
+    "node-sass": "~3.4.2",
     "phantomjs": "^1.9.17",
     "po2json": "~0.4.1",
     "postcss": "~5.0.0",
@@ -65,8 +65,7 @@
   },
   "devDependencies": {
     "jscs": "~1.13",
-    "node-gyp": "~3",
-    "node-sass": "3.3.3"
+    "node-gyp": "~3"
   },
   "browser": {
     "jit": "./assembl/static/js/bower/jit/jit/jit.js"
