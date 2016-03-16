@@ -1068,11 +1068,12 @@ def get_vendor_config():
     config = SafeConfigParser()
     vendor_config_path = normpath(join(
             env.projectpath, 'vendor_config.ini'))
-    try:
-        fp = open(vendor_config_path)
-    except IOError:
+    fp = StringIO()
+    get_retval = get(vendor_config_path, fp)
+    if get_retval.failed:
         print yellow('No vendor ini file present at %s, skipping' % vendor_config_path)
         return config
+    fp.seek(0) #Yes, this is mandatory
     config.readfp(fp)
     return config
 
