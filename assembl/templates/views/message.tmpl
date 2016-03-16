@@ -122,9 +122,13 @@
       <div class="js_regionMessageTranslationQuestions"></div>
     <% if (bodyTranslationError) { %>
       <div class="warning-box-for-message-post">
-        <p>{{gettext("Sorry, we could not translate this message.")}}
-        <% if (bodyTranslationError < 10) { %>
-          {{gettext("Please try again later.")}}
+        <p><% if (body.isMachineTranslation()) { %>
+            {{gettext("Sorry, we could not translate this message.")}}
+            <% if (bodyTranslationError < 10) { %>
+              {{gettext("Please try again later.")}}
+            <% }
+        } else { %>
+            {{gettext("Sorry, we cannot translate this because we could not identify the source language.")}}
         <% } %>
         </p>
       </div>
