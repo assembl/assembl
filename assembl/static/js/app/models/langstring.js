@@ -290,6 +290,12 @@ var LangString = Base.Model.extend({
   }
 });
 
+LangString.empty = new LangString({
+        entries: new LangStringEntryCollection([
+            new LangStringEntry({
+                "value": "",
+                "@language": "zxx"})])});
+
 var LangStringCollection = Base.Collection.extend({
   constructor: function LangStringCollection() {
     Base.Collection.apply(this, arguments);

@@ -350,10 +350,10 @@ var MessageView = Marionette.LayoutView.extend({
     var that = this;
 
     if (this.template === '#tmpl-message' && this.model.get('@view') ===  'default') {
-      return true
+      return true;
     }
     else {
-      this.template === '#tmpl-loader'
+      this.template = '#tmpl-loader';
       Promise.join(
           this.model.getCreatorPromise(),
           this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
@@ -519,8 +519,8 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   processContent: function() {
-    var body = this.model.get('body'),
-        subject = this.model.get('subject');
+    var body = this.model.get('body') || LangString.Model.empty,
+        subject = this.model.get('subject') || LangString.Model.empty;
 
     if (this.hasTranslatorService) {
 
