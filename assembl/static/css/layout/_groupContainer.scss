@@ -222,8 +222,8 @@
             }
           }
           li.selected {
-            background-color: $theme_idea_selected_color;
-            border-right: 4px solid $theme_activelink_color;
+            background-color: $theme_item_selected_color;
+            border-right: 4px solid $theme_item_selected_secondary_color;
           }
         }
       }
@@ -402,7 +402,7 @@
   }
   .is-selected {
     @include border-radius(3px);
-    background-color: $purple;
+    background-color: $theme_panel_selected_color;
     border: 1px solid transparent;
     cursor: pointer;
     .icon-checkbox {
