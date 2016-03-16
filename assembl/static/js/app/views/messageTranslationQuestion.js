@@ -7,6 +7,7 @@ var Marionette = require('../shims/marionette.js'),
     $ = require('../shims/jquery.js'),
     Types = require('../utils/types.js'),
     Growl = require('../utils/growl.js'),
+    LangString = require('../models/langstring.js'),
     LanguagePreference = require('../models/languagePreference.js');
 
 /**
@@ -137,7 +138,8 @@ var LanguageSelectionView = Marionette.ItemView.extend({
             return {
                 supportedLanguages: this.localesAsSortedList(),
                 translatedTo: this.translatedTo,
-                question: i18n.sprintf(i18n.gettext("Select the language you wish to translate %s to:"), this.nameOfLocale(this.translatedFrom)),
+                question: i18n.sprintf(i18n.gettext("Select the language you wish to translate %s to:"),
+                    this.nameOfLocale(LangString.LocaleUtils.stripCountry(this.translatedFrom))),
                 translatedTo: this.translatedTo,
                 translatedFrom: this.translatedFrom
             };
@@ -300,8 +302,8 @@ var TranslationView = Marionette.LayoutView.extend({
             if (this.preferredTarget) {
                 translationQuestion = i18n.sprintf(
                     i18n.gettext("Translate all messages from %s to %s?"),
-                    this.nameOfLocale(this.originalLocale),
-                    this.nameOfLocale(this.preferredTarget));
+                    this.nameOfLocale(LangString.LocaleUtils.stripCountry(this.originalLocale)),
+                    this.nameOfLocale(LangString.LocaleUtils.stripCountry(this.preferredTarget)));
                 // yesAnswer = i18n.sprintf(
                 //     i18n.gettext("Yes, translate all messages to %s"),
                 //     this.nameOfLocale(this.preferredTarget));
@@ -311,7 +313,7 @@ var TranslationView = Marionette.LayoutView.extend({
             } else {
                 translationQuestion = i18n.sprintf(
                     i18n.gettext("Keep %s messages untranslated?"),
-                    this.nameOfLocale(this.originalLocale));
+                    this.nameOfLocale(LangString.LocaleUtils.stripCountry(this.originalLocale)));
                 // noAnswer = i18n.sprintf(
                 //     i18n.gettext("Yes, keep them untranslated"));
             }

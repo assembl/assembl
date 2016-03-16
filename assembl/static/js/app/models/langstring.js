@@ -34,6 +34,15 @@ var LocaleUtils = {
         return i + 1;
     },
 
+    stripCountry: function(locale) {
+        var locale_parts = locale.split("_");
+        if (locale_parts.length > 1 && locale_parts[locale_parts.length-1].length == 2) {
+            locale_parts.pop();
+            locale = locale_parts.join("_");
+        }
+        return locale;
+    },
+
     superLocale: function(locale) {
         var pos = locale.lastIndexOf("_");
         if (pos > 0) {
