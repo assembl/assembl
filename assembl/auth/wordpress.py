@@ -52,7 +52,7 @@ class WordPressServerOAuth2(BaseOAuth2):
         display_name = self.get_user_names(unquote(response['display_name']))
         return {'username': unquote(response['user_login']),
                 'email': unquote(response['user_email']),
-                'fullname': display_name}
+                'fullname': display_name[0]}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""

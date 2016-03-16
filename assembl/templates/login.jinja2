@@ -56,7 +56,7 @@
             {% if providers %}
             {# <p>{{ gettext("Login with external tools")|safe }}</p> #}
             {% endif %}
-            {{form('google', gettext('Login with Google'), true)}}
+            {{form('google-oauth2', gettext('Login with Google'), true)}}
             {{form('twitter', gettext('Login with Twitter'), true)}}
             {{form('facebook', gettext('Login with Facebook'), true)}}
             {{form('yahoo', gettext('Login with Yahoo'), true, oauth='true', openid_identifier='yahoo.com')}}

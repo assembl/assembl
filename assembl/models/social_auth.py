@@ -200,7 +200,7 @@ class SocialAuthAccount(
     @classmethod
     def create_user(cls, email=None, username=None, fullname=None, *args, **kwargs):
         if fullname:
-            kwargs['name'] = fullname[0]
+            kwargs['name'] = fullname
         try:
             user = cls._new_instance(cls.user_model(), *args, **kwargs)
             if username:
