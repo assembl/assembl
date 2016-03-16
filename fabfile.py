@@ -1069,7 +1069,8 @@ def get_vendor_config():
     vendor_config_path = normpath(join(
             env.projectpath, 'vendor_config.ini'))
     fp = StringIO()
-    get_retval = get(vendor_config_path, fp)
+    with settings(warn_only=True):
+        get_retval = get(vendor_config_path, fp)
     if get_retval.failed:
         print yellow('No vendor ini file present at %s, skipping' % vendor_config_path)
         return config
