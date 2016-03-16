@@ -201,14 +201,10 @@ class SocialAuthAccount(
     def create_user(cls, email=None, username=None, fullname=None, *args, **kwargs):
         if fullname:
             kwargs['name'] = fullname
-        try:
-            user = cls._new_instance(cls.user_model(), *args, **kwargs)
-            if username:
-                cls.default_db.add(Username(user=user, username=username))
-            return user
-        except:
-            import pdb
-            pdb.post_mortem()
+        user = cls._new_instance(cls.user_model(), *args, **kwargs)
+        if username:
+            user.db.add(Username(user=user, username=username))
+        return user
 
     @classmethod
     def get_user(cls, pk):

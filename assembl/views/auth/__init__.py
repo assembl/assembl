@@ -47,7 +47,8 @@ def includeme(config):
     settings = config.registry.settings
     for name in ('SOCIAL_AUTH_AUTHENTICATION_BACKENDS',
                  'SOCIAL_AUTH_USER_FIELDS',
-                 'SOCIAL_AUTH_PROTECTED_USER_FIELDS'):
+                 'SOCIAL_AUTH_PROTECTED_USER_FIELDS',
+                 'SCOPE'):
         settings[name] = settings.get(name, '').split("\n")
     config.add_request_method(
         'assembl.auth.social_auth.get_user', 'user', reify=True)
