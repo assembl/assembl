@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-08 14:05+0100\n"
-"PO-Revision-Date: 2016-02-25 22:44+0000\n"
-"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
+"POT-Creation-Date: 2016-03-16 16:21-0400\n"
+"PO-Revision-Date: 2016-03-08 13:06+0000\n"
+"Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: de\n"
 "Language-Team: German "
 "(http://www.transifex.com/assembl/assembl/language/de/)\n"
@@ -70,83 +70,91 @@ msgstr "Jemand antwortet direkt auf eine Ihrer Nachrichten"
 msgid "SYNTHESIS: "
 msgstr "SYNTHESE:"
 
-#: assembl/models/preferences.py:271
-msgid "Visualizations"
+#: assembl/models/preferences.py:292
+msgid "Languages used"
 msgstr ""
 
-#: assembl/models/preferences.py:274
-msgid "A JSON description of available Catalyst visualizations"
-msgstr ""
-
-#: assembl/models/preferences.py:285
+#: assembl/models/preferences.py:293
 #, fuzzy
-#| msgid "Subscription settings"
-msgid "Navigation sections"
-msgstr "Abonnement-Einstellungen"
+#| msgid "Any message is posted to the discussion"
+msgid "All languages expected in the discussion"
+msgstr "Nachrichten in der Diskussion gepostet werden"
 
-#: assembl/models/preferences.py:288
-msgid ""
-"A JSON specification of Catalyst visualizations to show in the navigation"
-" section"
+#: assembl/models/preferences.py:302 assembl/models/preferences.py:316
+msgid "Translation service"
 msgstr ""
 
-#: assembl/models/preferences.py:300
-msgid "Translations"
+#: assembl/models/preferences.py:305
+msgid "No translation"
 msgstr ""
 
-#: assembl/models/preferences.py:303
-msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
+#: assembl/models/preferences.py:307
+msgid "Dummy translation service (two steps)"
 msgstr ""
 
-#: assembl/models/preferences.py:318
-msgid "Default Table of Ideas Collapsed state"
+#: assembl/models/preferences.py:309
+msgid "Dummy translation service (one step)"
 msgstr ""
 
-#: assembl/models/preferences.py:321
-msgid ""
-"Default expanded/collapsed state of each idea in the table of ideas. A "
-"user can override it by opening/closing an idea"
+#: assembl/models/preferences.py:311
+msgid "Dummy translation service (two steps) with errors"
 msgstr ""
 
-#: assembl/models/preferences.py:335
+#: assembl/models/preferences.py:313
+msgid "Dummy translation service (one step) with errors"
+msgstr ""
+
+#: assembl/models/preferences.py:315
+msgid "Google Translate"
+msgstr ""
+
+#: assembl/models/preferences.py:328
 msgid "Panel order in simple view"
 msgstr ""
 
-#: assembl/models/preferences.py:338
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:18
-#: assembl/templates/views/userDiscussionPreferences.tmpl:18
+#: assembl/models/preferences.py:331
 msgid "Navigation, Idea, Messages"
 msgstr "Navigation, Idee, Nachrichten"
 
-#: assembl/models/preferences.py:339
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:19
-#: assembl/templates/views/userDiscussionPreferences.tmpl:19
+#: assembl/models/preferences.py:332
 msgid "Navigation, Messages, Idea"
 msgstr "Navigation, Nachrichten, Idee"
 
-#: assembl/models/preferences.py:340
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:15
-#: assembl/templates/views/userDiscussionPreferences.tmpl:15
+#: assembl/models/preferences.py:333
 msgid "Order of panels"
 msgstr "Reihenfolge der Felder"
 
-#: assembl/models/preferences.py:350
+#: assembl/models/preferences.py:343
+msgid "Social sharing"
+msgstr ""
+
+#: assembl/models/preferences.py:346
+msgid "Show the share button on posts and ideas"
+msgstr ""
+
+#: assembl/models/preferences.py:356
+msgid "Allow access to moderated text"
+msgstr ""
+
+#: assembl/models/preferences.py:359
+msgid "Are moderated posts simply hidden or made inaccessible by default?"
+msgstr ""
+
+#: assembl/models/preferences.py:374
 msgid "Require Email Domain"
 msgstr ""
 
-#: assembl/models/preferences.py:353 assembl/models/preferences.py:373
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:25
-msgid "List of domain names of user email address required for self-registration"
-msgstr ""
-"Liste der Domainnamen von Benutzer-E-Mail-Adressen, die für die "
-"Selbstregistrierung erforderlich sind"
-
-#: assembl/models/preferences.py:356
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:25
+#: assembl/models/preferences.py:377
+#, fuzzy
+#| msgid "" "Only accounts with at least an email from those domains can
+#| self-register" " to this discussion. Anyone can self-register if this is
+#| empty. Please " "use a comma to separate domain names. Example:
+#| mycompany.com,test.com"
 msgid ""
-"Only accounts with at least an email from those domains can self-register"
-" to this discussion. Anyone can self-register if this is empty. Please "
-"use a comma to separate domain names. Example: mycompany.com,test.com"
+"List of domain names of user email address required for self-"
+"registration. Only accounts with at least an email from those domains can"
+" self-register to this discussion. Anyone can self-register if this is "
+"empty."
 msgstr ""
 "Nur Konten mit mindestens einer E-Mail-Adresse von diesen Domains können "
 "sich selbst für diese Diskussion registrieren. Wenn dies leer ist, kann "
@@ -154,109 +162,93 @@ msgstr ""
 "Domainnamen voneinander zu trennen. Beispiel: meinunternehmen.com, "
 "test.com"
 
-#: assembl/models/preferences.py:370
-msgid "Social sharing"
-msgstr ""
-
-#: assembl/models/preferences.py:385
-msgid "Allow access to moderated_text"
-msgstr ""
-
-#: assembl/models/preferences.py:388
-msgid "Are moderated posts simply hidden or made inaccessible by default?"
-msgstr ""
-
-#: assembl/models/preferences.py:401
-#, fuzzy
-#| msgid "Moderation remarks"
-msgid "Moderation template"
-msgstr "Moderationsanmerkungen"
-
-#: assembl/models/preferences.py:404
-msgid "Text template for default moderation text"
-msgstr ""
-
-#: assembl/models/preferences.py:416 assembl/models/preferences.py:430
-msgid "Translation service"
-msgstr ""
-
-#: assembl/models/preferences.py:419
-msgid "No translation"
-msgstr ""
-
-#: assembl/models/preferences.py:421
-msgid "Dummy translation service (two steps)"
-msgstr ""
-
-#: assembl/models/preferences.py:423
-msgid "Dummy translation service (one step)"
-msgstr ""
-
-#: assembl/models/preferences.py:425
-msgid "Dummy translation service (two steps) with errors"
-msgstr ""
-
-#: assembl/models/preferences.py:427
-msgid "Dummy translation service (one step) with errors"
-msgstr ""
-
-#: assembl/models/preferences.py:429
-msgid "Google Translate"
-msgstr ""
-
-#: assembl/models/preferences.py:441
-#, fuzzy
-#| msgid "CI Dashboard"
+#: assembl/models/preferences.py:393
 msgid "Show CI Dashboard"
-msgstr "CI-Dashboard"
+msgstr ""
 
-#: assembl/models/preferences.py:444
+#: assembl/models/preferences.py:396
 msgid "Show the CI Dashboard in the panel group window"
 msgstr ""
 
-#: assembl/models/preferences.py:455
+#: assembl/models/preferences.py:408
 msgid "URL of CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:457
+#: assembl/models/preferences.py:410
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:473
+#: assembl/models/preferences.py:427
+msgid "Catalyst Visualizations"
+msgstr ""
+
+#: assembl/models/preferences.py:430
+msgid "A JSON description of available Catalyst visualizations"
+msgstr ""
+
+#: assembl/models/preferences.py:441
+msgid "Navigation sections"
+msgstr ""
+
+#: assembl/models/preferences.py:444
+msgid ""
+"A JSON specification of Catalyst visualizations to show in the navigation"
+" section"
+msgstr ""
+
+#: assembl/models/preferences.py:456
+msgid "Catalyst translations"
+msgstr ""
+
+#: assembl/models/preferences.py:459
+msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
+msgstr ""
+
+#: assembl/models/preferences.py:474
+msgid "Default Table of Ideas Collapsed state"
+msgstr ""
+
+#: assembl/models/preferences.py:477
+msgid ""
+"Default expanded/collapsed state of each idea in the table of ideas. A "
+"user can override it by opening/closing an idea"
+msgstr ""
+
+#: assembl/models/preferences.py:490
 msgid "Preference data"
 msgstr ""
 
-#: assembl/models/preferences.py:476
+#: assembl/models/preferences.py:493
 msgid "The preference configuration; override only with care"
 msgstr ""
 
-#: assembl/static/js/app/routeManager.js:437
+#: assembl/static/js/app/routeManager.js:433
 msgid "You must be logged in to access this page."
 msgstr "Sie müssen eingeloggt sein, um auf diese Seite zuzugreifen."
 
-#: assembl/static/js/app/routeManager.js:459
+#: assembl/static/js/app/routeManager.js:455
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
 "Aufgrund Ihrer Berechtigungsebene können Sie den Rest dieser Inhalte "
 "nicht sehen"
 
-#: assembl/static/js/app/common/context.js:129
+#: assembl/static/js/app/common/context.js:135
 msgid "Message titles"
 msgstr "Nachrichtentitel"
 
-#: assembl/static/js/app/common/context.js:133
+#: assembl/static/js/app/common/context.js:139
 msgid "Message previews"
 msgstr "Nachrichtenvorschauen"
 
-#: assembl/static/js/app/common/context.js:137
+#: assembl/static/js/app/common/context.js:143
 msgid "Complete messages"
 msgstr "Vollständige Nachrichten"
 
-#: assembl/static/js/app/common/context.js:744
+#: assembl/static/js/app/common/context.js:750
 msgid "Extract"
 msgstr "Auszug"
 
-#: assembl/static/js/app/common/context.js:1074
+#: assembl/static/js/app/common/context.js:1080
 msgid "ajax error message:"
 msgstr "ajax-Fehlermeldung:"
 
@@ -323,7 +315,7 @@ msgid "All posts"
 msgstr "Alle Beiträge"
 
 #: assembl/static/js/app/models/idea.js:148
-#: assembl/static/js/app/views/ideaPanel.js:403
+#: assembl/static/js/app/views/ideaPanel.js:415
 msgid "New idea"
 msgstr "Neue Idee"
 
@@ -893,17 +885,17 @@ msgstr[0] "%d Nachricht ist zu dieser Idee verfügbar"
 msgstr[1] "%d Nachrichten sind zu dieser Idee verfügbar"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:231
-#: assembl/static/js/app/views/message.js:767
+#: assembl/static/js/app/views/message.js:791
 msgid "Type your response here..."
 msgstr "Antwort hier eingeben ..."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:233
-#: assembl/static/js/app/views/message.js:769
+#: assembl/static/js/app/views/message.js:793
 msgid "Send your reply"
 msgstr "Antwort absenden"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:236
-#: assembl/static/js/app/views/message.js:771
+#: assembl/static/js/app/views/message.js:795
 msgid "You did not type a response yet..."
 msgstr "Sie haben noch keine Antwort eingegeben ..."
 
@@ -917,11 +909,11 @@ msgstr "Ideentabelle"
 msgid "You don't have the permission to do this."
 msgstr ""
 
-#: assembl/static/js/app/views/ideaPanel.js:137
+#: assembl/static/js/app/views/ideaPanel.js:141
 msgid "Idea"
 msgstr "Idee"
 
-#: assembl/static/js/app/views/ideaPanel.js:140
+#: assembl/static/js/app/views/ideaPanel.js:144
 msgid ""
 "Detailled information about the currently selected idea in the Table of "
 "ideas"
@@ -929,73 +921,73 @@ msgstr ""
 "Detaillierte Informationen über die aktuell ausgewählte Idee in der "
 "Ideentabelle"
 
-#: assembl/static/js/app/views/ideaPanel.js:148
+#: assembl/static/js/app/views/ideaPanel.js:152
 msgid "This idea has no sub-ideas"
 msgstr "Diese Idee hat keine Unterideen"
 
-#: assembl/static/js/app/views/ideaPanel.js:151
+#: assembl/static/js/app/views/ideaPanel.js:155
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] "Diese Idee hat %d Unteridee"
 msgstr[1] "Diese Idee hat %d Unterideen"
 
-#: assembl/static/js/app/views/ideaPanel.js:168
+#: assembl/static/js/app/views/ideaPanel.js:172
 msgid "No extract was harvested"
 msgstr "Es wurde kein Auszug erfasst"
 
-#: assembl/static/js/app/views/ideaPanel.js:171
+#: assembl/static/js/app/views/ideaPanel.js:175
 msgid "No important nugget was harvested"
 msgstr "Es wurde kein wichtiger Nugget gesammelt"
 
-#: assembl/static/js/app/views/ideaPanel.js:176
+#: assembl/static/js/app/views/ideaPanel.js:180
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
 msgstr[0] "%d Auszug wurde erfasst"
 msgstr[1] "%d Auszüge wurden erfasst"
 
-#: assembl/static/js/app/views/ideaPanel.js:179
+#: assembl/static/js/app/views/ideaPanel.js:183
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
 msgstr[0] "Es wurde %d wichtiger Nugget gesammelt"
 msgstr[1] "Es wurden %d wichtige Nuggets gesammelt"
 
-#: assembl/static/js/app/views/ideaPanel.js:381
+#: assembl/static/js/app/views/ideaPanel.js:393
 #, python-format
 msgid "%d contributor"
 msgid_plural "%d contributors"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/ideaPanel.js:402
+#: assembl/static/js/app/views/ideaPanel.js:414
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr "Kurzer Ausdruck (nur wenige Wörter) der Idee in der Ideentabelle"
 
-#: assembl/static/js/app/views/ideaPanel.js:588
+#: assembl/static/js/app/views/ideaPanel.js:604
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr "Sie können keine Idee löschen, wenn diese Unterideen hat."
 
-#: assembl/static/js/app/views/ideaPanel.js:595
+#: assembl/static/js/app/views/ideaPanel.js:611
 msgid "You cannot delete an idea associated to extracts."
 msgstr "Sie können keine Idee löschen, die mit Auszügen assoziiert ist."
 
-#: assembl/static/js/app/views/ideaPanel.js:599
+#: assembl/static/js/app/views/ideaPanel.js:615
 msgid "You cannot delete an idea associated to comments."
 msgstr "Sie können keine Idee löschen, die mit Kommentaren assoziiert ist."
 
-#: assembl/static/js/app/views/ideaPanel.js:603
+#: assembl/static/js/app/views/ideaPanel.js:619
 msgid "Confirm that you want to delete this idea."
 msgstr "Bestätigen Sie, dass Sie diese Idee löschen möchten."
 
-#: assembl/static/js/app/views/ideaPanel.js:773
+#: assembl/static/js/app/views/ideaPanel.js:789
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr ""
 "Bestätigen Sie, dass Sie alle Auszüge zurück in die Zwischenablage senden"
 " möchten."
 
-#: assembl/static/js/app/views/ideaPanel.js:896
+#: assembl/static/js/app/views/ideaPanel.js:912
 msgid "You may want to describe this idea for users here..."
 msgstr ""
 
@@ -1041,62 +1033,62 @@ msgstr[1] ""
 msgid "Zooming on the conversation around \"%s\""
 msgstr "Mehr zur Konversation um das Thema \"%s\""
 
-#: assembl/static/js/app/views/messageList.js:245
+#: assembl/static/js/app/views/messageList.js:246
 msgid "Messages"
 msgstr "Nachrichten"
 
-#: assembl/static/js/app/views/messageList.js:252
+#: assembl/static/js/app/views/messageList.js:253
 msgid "Recently active threads"
 msgstr "Kürzlich aktive Fäden"
 
-#: assembl/static/js/app/views/messageList.js:257
+#: assembl/static/js/app/views/messageList.js:258
 msgid "Recently started threads"
 msgstr "Kürzlich begonnene Fäden"
 
-#: assembl/static/js/app/views/messageList.js:262
+#: assembl/static/js/app/views/messageList.js:263
 msgid "Chronological threads"
 msgstr "Chronologische Fäden"
 
-#: assembl/static/js/app/views/messageList.js:267
+#: assembl/static/js/app/views/messageList.js:268
 msgid "Chronological threads + jump to oldest unread message"
 msgstr "Chronologische Fäden + zur ältesten ungelesenen Nachricht springen"
 
-#: assembl/static/js/app/views/messageList.js:272
+#: assembl/static/js/app/views/messageList.js:273
 msgid "Newest messages first"
 msgstr "Neueste Nachrichten zuerst"
 
-#: assembl/static/js/app/views/messageList.js:857
+#: assembl/static/js/app/views/messageList.js:858
 msgid "No messages"
 msgstr "Keine Nachrichten"
 
-#: assembl/static/js/app/views/messageList.js:1234
+#: assembl/static/js/app/views/messageList.js:1235
 #: assembl/static/js/app/views/messageSend.js:163
 #: assembl/templates/do_password_change.jinja2:18
 #: assembl/templates/request_password_change.jinja2:26
 msgid "Send"
 msgstr "Absenden"
 
-#: assembl/static/js/app/views/messageList.js:1235
+#: assembl/static/js/app/views/messageList.js:1236
 msgid "Subject"
 msgstr "Betreff"
 
-#: assembl/static/js/app/views/messageList.js:1236
+#: assembl/static/js/app/views/messageList.js:1237
 msgid "Add a subject above and start a new topic here"
 msgstr "Geben Sie oben einen Betreff ein und starten Sie hier ein neues Thema"
 
-#: assembl/static/js/app/views/messageList.js:1237
+#: assembl/static/js/app/views/messageList.js:1238
 msgid "You need to type a comment first..."
 msgstr "Sie müssen zunächst einen Kommentar eingeben ..."
 
-#: assembl/static/js/app/views/messageList.js:1238
+#: assembl/static/js/app/views/messageList.js:1239
 msgid "You need to set a subject to add a new topic..."
 msgstr "Sie müssen einen Betreff festlegen, um ein neues Thema hinzuzufügen ..."
 
-#: assembl/static/js/app/views/messageList.js:1770
+#: assembl/static/js/app/views/messageList.js:1783
 msgid "Send to clipboard"
 msgstr "In die Zwischenablage"
 
-#: assembl/static/js/app/views/messageList.js:1772
+#: assembl/static/js/app/views/messageList.js:1785
 #: assembl/static/js/app/views/messageSend.js:162
 #: assembl/templates/styleguide/components/Dialogs.jinja2:119
 #: assembl/templates/styleguide/components/Dialogs.jinja2:146
@@ -1112,15 +1104,15 @@ msgstr "In die Zwischenablage"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: assembl/static/js/app/views/messageList.js:1776
+#: assembl/static/js/app/views/messageList.js:1789
 msgid "You can drag the segment below directly to the table of ideas"
 msgstr "Sie können den unteren Abschnitt direkt unter die Ideentabelle ziehen"
 
-#: assembl/static/js/app/views/messageList.js:1777
+#: assembl/static/js/app/views/messageList.js:1790
 msgid "You can also copy-paste from the text in the zone below"
 msgstr "Sie können auch Text aus dem unteren Bereich per Copy & Paste einfügen"
 
-#: assembl/static/js/app/views/messageList.js:1818
+#: assembl/static/js/app/views/messageList.js:1831
 #, python-format
 msgid ""
 "This extract was organized in the idea \" %s \" by the facilitator of the"
@@ -1129,13 +1121,13 @@ msgstr ""
 "Dieser Auszug wurde vom Moderator der Debatte in der Idee \" %s \" "
 "organisiert"
 
-#: assembl/static/js/app/views/messageList.js:1821
+#: assembl/static/js/app/views/messageList.js:1834
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
 msgstr ""
 "Dieser Extrakt befindet sich in der Zwischenablage eines Erfassers und "
 "ist noch nicht sortiert worden."
 
-#: assembl/static/js/app/views/messageList.js:2585
+#: assembl/static/js/app/views/messageList.js:2561
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
@@ -1242,38 +1234,38 @@ msgstr "Wird gesendet ..."
 msgid "Message posted!"
 msgstr "Nachricht gepostet!"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:112
+#: assembl/static/js/app/views/messageTranslationQuestion.js:113
 msgid "Please select a language."
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:120
+#: assembl/static/js/app/views/messageTranslationQuestion.js:121
 msgid "You cannot select more than one language"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:140
+#: assembl/static/js/app/views/messageTranslationQuestion.js:141
 #, python-format
 msgid "Select the language you wish to translate %s to:"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:302
+#: assembl/static/js/app/views/messageTranslationQuestion.js:304
 #, python-format
 msgid "Translate all messages from %s to %s?"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:313
+#: assembl/static/js/app/views/messageTranslationQuestion.js:315
 #, python-format
 msgid "Keep %s messages untranslated?"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:318
+#: assembl/static/js/app/views/messageTranslationQuestion.js:320
 msgid "Yes, Thanks!"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:319
+#: assembl/static/js/app/views/messageTranslationQuestion.js:321
 msgid "Do not translate"
 msgstr ""
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:320
+#: assembl/static/js/app/views/messageTranslationQuestion.js:322
 msgid "Translate to another language"
 msgstr ""
 
@@ -1517,6 +1509,66 @@ msgstr "seit der letzten Synthese (%s) veröffentlicht wurden"
 msgid "Only include posts created after the last synthesis."
 msgstr "Nur Beiträge einschließen, die nach der letzten Synthese erstellt wurden."
 
+#: assembl/static/js/app/views/preferencesView.js:82
+#, fuzzy
+#| msgid "Your settings were saved"
+msgid "Your settings were reset to default"
+msgstr "Ihre Einstellungen wurden gespeichert"
+
+#: assembl/static/js/app/views/preferencesView.js:86
+msgid "Your settings were not be reset, but could not be read back."
+msgstr ""
+
+#: assembl/static/js/app/views/preferencesView.js:92
+#, fuzzy
+#| msgid "Your settings were saved"
+msgid "Your settings could not be reset."
+msgstr "Ihre Einstellungen wurden gespeichert"
+
+#: assembl/static/js/app/views/preferencesView.js:241
+#, fuzzy
+#| msgid "This is not a valid email"
+msgid "This is not valid JSON: "
+msgstr "Dies ist keine gültige E-Mail-Adresse"
+
+#: assembl/static/js/app/views/preferencesView.js:263
+msgid "Please enter a number"
+msgstr ""
+
+#: assembl/static/js/app/views/preferencesView.js:302
+msgid "This does not appear to be a URL"
+msgstr ""
+
+#: assembl/static/js/app/views/preferencesView.js:316
+#, fuzzy
+#| msgid "This is not a valid email"
+msgid "This does not appear to be an email"
+msgstr "Dies ist keine gültige E-Mail-Adresse"
+
+#: assembl/static/js/app/views/preferencesView.js:331
+msgid "This does not appear to be a domain"
+msgstr ""
+
+#: assembl/static/js/app/views/preferencesView.js:524
+#, fuzzy
+#| msgid "Your settings were saved"
+msgid "The following settings were not saved: "
+msgstr "Ihre Einstellungen wurden gespeichert"
+
+#: assembl/static/js/app/views/preferencesView.js:527
+#: assembl/static/js/app/views/sourceEditView.js:45
+#: assembl/static/js/app/views/admin/adminDiscussion.js:91
+#: assembl/static/js/app/views/user/account.js:128
+#: assembl/static/js/app/views/user/profile.js:62
+msgid "Your settings were saved!"
+msgstr "Ihre Einstellungen wurden gespeichert."
+
+#: assembl/static/js/app/views/preferencesView.js:533
+#, fuzzy
+#| msgid "Your settings failed to update."
+msgid "Your settings are up-to-date."
+msgstr "Ihre Einstellungen konnten nicht aktualisiert werden."
+
 #: assembl/static/js/app/views/segmentList.js:310
 #: assembl/static/js/app/views/segmentList.js:356
 #: assembl/static/js/app/views/segmentList.js:359
@@ -1531,15 +1583,6 @@ msgstr "leer"
 #: assembl/static/js/app/views/segmentList.js:549
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr "Möchten Sie wirklich Ihre gesamte Zwischenablage leeren?"
-
-#: assembl/static/js/app/views/sourceEditView.js:45
-#: assembl/static/js/app/views/admin/adminDiscussion.js:91
-#: assembl/static/js/app/views/admin/adminDiscussionPreferences.js:94
-#: assembl/static/js/app/views/user/account.js:128
-#: assembl/static/js/app/views/user/discussionPreferences.js:70
-#: assembl/static/js/app/views/user/profile.js:62
-msgid "Your settings were saved!"
-msgstr "Ihre Einstellungen wurden gespeichert."
 
 #: assembl/static/js/app/views/sourceEditView.js:49
 #: assembl/static/js/app/views/admin/adminDiscussion.js:94
@@ -1781,10 +1824,6 @@ msgstr "Ihre Einstellungen wurden gespeichert"
 msgid "Your settings failed to update"
 msgstr "Ihre Einstellungen konnten nicht aktualisiert werden"
 
-#: assembl/static/js/app/views/user/discussionPreferences.js:73
-msgid "Failed to save your settings."
-msgstr "Ihre Einstellungen konnten nicht gespeichert werden."
-
 #: assembl/templates/cannot_read_discussion.jinja2:4
 msgid "You are not authorized to read this discussion."
 msgstr "Sie sind nicht berechtigt, diese Diskussion zu lesen."
@@ -1991,7 +2030,7 @@ msgstr "E-Mail"
 #: assembl/templates/admin/global_permissions.jinja2:37
 #: assembl/templates/views/ckeditorField.tmpl:9
 #: assembl/templates/views/messageModerationOptions.tmpl:32
-#: assembl/templates/views/preferenceView.tmpl:4
+#: assembl/templates/views/preferenceView.tmpl:13
 #: assembl/templates/views/sourceFacebook.tmpl:3
 #: assembl/templates/views/userAccount.tmpl:48
 msgid "Save"
@@ -2349,39 +2388,16 @@ msgstr ""
 #: assembl/templates/views/adminDiscussion.tmpl:86
 msgid ""
 "The logo image can have a maximum height of 40px, and a maximum width of "
-"215px."
+"215px. Background must be transparent. Margins must be included in the "
+"image."
 msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:94
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:51
 #: assembl/templates/views/emailSource.tmpl:85
 #: assembl/templates/views/userAccountForm.tmpl:36
-#: assembl/templates/views/userDiscussionPreferences.tmpl:25
 #: assembl/templates/views/userProfile.tmpl:77
 msgid "Save changes"
 msgstr "Änderungen speichern"
-
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:7
-#: assembl/templates/views/adminNavigationMenu.tmpl:6
-#: assembl/templates/views/userDiscussionPreferences.tmpl:7
-#: assembl/templates/views/userNavigationMenu.tmpl:14
-msgid "Discussion preferences"
-msgstr "Diskussionseinstellungen"
-
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:44
-msgid "Allow users to see the original content of moderated messages by default"
-msgstr ""
-"Benutzern erlauben, standardmäßig den ursprünglichen Inhalt von "
-"moderierten Nachrichten zu sehen"
-
-#: assembl/templates/views/adminDiscussionPreferences.tmpl:52
-#: assembl/templates/views/adminNavigationMenu.tmpl:18
-#: assembl/templates/views/userAccountForm.tmpl:37
-#: assembl/templates/views/userDiscussionPreferences.tmpl:26
-#: assembl/templates/views/userNavigationMenu.tmpl:17
-#: assembl/templates/views/userProfile.tmpl:78
-msgid "Return to the discussion"
-msgstr "Zurück zur Diskussion"
 
 #: assembl/templates/views/adminDiscussionSettings.tmpl:7
 #: assembl/templates/views/navBarRight.tmpl:41
@@ -2410,6 +2426,11 @@ msgstr "Manueller Start"
 msgid "More options"
 msgstr "Weitere Optionen"
 
+#: assembl/templates/views/adminNavigationMenu.tmpl:6
+#: assembl/templates/views/userNavigationMenu.tmpl:14
+msgid "Discussion preferences"
+msgstr "Diskussionseinstellungen"
+
 #: assembl/templates/views/adminNavigationMenu.tmpl:9
 msgid "Server settings"
 msgstr "Servereinstellungen"
@@ -2422,6 +2443,13 @@ msgstr "Benachrichtigungen bearbeiten"
 #: assembl/templates/views/adminNavigationMenu.tmpl:15
 msgid "Edit partners"
 msgstr "Partner bearbeiten"
+
+#: assembl/templates/views/adminNavigationMenu.tmpl:18
+#: assembl/templates/views/userAccountForm.tmpl:37
+#: assembl/templates/views/userNavigationMenu.tmpl:17
+#: assembl/templates/views/userProfile.tmpl:78
+msgid "Return to the discussion"
+msgstr "Zurück zur Diskussion"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:14
 msgid "Your change has been saved!"
@@ -2627,8 +2655,8 @@ msgid "Add a new announcement to this idea"
 msgstr "Eine neue Ankündigung zu dieser Idee hinzufügen"
 
 #: assembl/templates/views/announcementMessage.tmpl:9
-#: assembl/templates/views/message.tmpl:146
-#: assembl/templates/views/message.tmpl:165
+#: assembl/templates/views/message.tmpl:150
+#: assembl/templates/views/message.tmpl:169
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
@@ -3216,6 +3244,11 @@ msgstr "Sie sollten vielleicht einige Diskussionsziele hinzuzufügen"
 msgid "Keep up with the evolution of the discussion"
 msgstr "Behalten Sie die Entwicklung der Diskussion im Blick"
 
+#: assembl/templates/views/listPreferenceItemView.tmpl:7
+#: assembl/templates/views/partnersInAdmin.tmpl:20
+msgid "Delete"
+msgstr "Löschen"
+
 #: assembl/templates/views/message.tmpl:10
 #: assembl/templates/views/message.tmpl:43
 msgid "Mark as unread"
@@ -3295,31 +3328,33 @@ msgstr "Beitrag in HTML exportieren"
 msgid "View the original message"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:110
-msgid "Translated by Google Translate"
-msgstr ""
-
 #: assembl/templates/views/message.tmpl:112
 msgid "Return to the translated message"
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:125
+#: assembl/templates/views/message.tmpl:126
 msgid "Sorry, we could not translate this message."
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:127
+#: assembl/templates/views/message.tmpl:128
 msgid "Please try again later."
 msgstr ""
 
-#: assembl/templates/views/message.tmpl:186
+#: assembl/templates/views/message.tmpl:131
+msgid ""
+"Sorry, we cannot translate this because we could not identify the source "
+"language."
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:190
 msgid "Read more"
 msgstr "Mehr lesen"
 
-#: assembl/templates/views/message.tmpl:195
+#: assembl/templates/views/message.tmpl:199
 msgid "Read less"
 msgstr "Weniger lesen"
 
-#: assembl/templates/views/message.tmpl:207
+#: assembl/templates/views/message.tmpl:211
 msgid "Reply"
 msgstr "Antworten"
 
@@ -3405,9 +3440,9 @@ msgstr "Unter der Idee \"%s\""
 #: assembl/templates/views/messageSend.tmpl:30
 #, python-format
 msgid ""
-"In the general %s conversation (a community manager will organize your "
-"contribution in the table of ideas afterwards, possibly by creating a new"
-" idea)"
+"In the general \"%s\" conversation (a community manager will organize "
+"your contribution in the table of ideas afterwards, possibly by creating "
+"a new idea)"
 msgstr ""
 
 #: assembl/templates/views/messageSend.tmpl:32
@@ -3521,10 +3556,6 @@ msgstr "Wie lautet ihre Website?"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: assembl/templates/views/partnersInAdmin.tmpl:20
-msgid "Delete"
-msgstr "Löschen"
-
 #: assembl/templates/views/partnersInAdmin.tmpl:25
 msgid "is initiator"
 msgstr "ist Initiator"
@@ -3533,15 +3564,13 @@ msgstr "ist Initiator"
 msgid "What is their logo?"
 msgstr "Was ist ihr Logo?"
 
-#: assembl/templates/views/preferenceItemView.tmpl:9
-msgid "Reset"
+#: assembl/templates/views/preferenceItemView.tmpl:10
+msgid "Reset to default"
 msgstr ""
 
-#: assembl/templates/views/preferenceView.tmpl:2
-#, fuzzy
-#| msgid "Discussion preferences"
+#: assembl/templates/views/preferenceView.tmpl:7
 msgid "Preferences"
-msgstr "Diskussionseinstellungen"
+msgstr ""
 
 #: assembl/templates/views/segment.tmpl:8
 #, python-format
@@ -3712,7 +3741,7 @@ msgstr "abgemeldet"
 msgid "No file given."
 msgstr "Keine Datei angegeben."
 
-#: assembl/views/api/post.py:68 assembl/views/api/post.py:491
+#: assembl/views/api/post.py:68 assembl/views/api/post.py:492
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "Keine Diskussion gefunden mit id=%s"
@@ -3727,11 +3756,11 @@ msgstr ""
 msgid "Getting non-orphan posts isn't supported."
 msgstr "Das Einholen von nicht verwaisten Beiträgen wird nicht unterstützt."
 
-#: assembl/views/api/post.py:283
+#: assembl/views/api/post.py:284
 msgid "You must be logged in to view which posts are read"
 msgstr "Sie müssen eingeloggt sein, um zu sehen, welche Beiträge gelesen wurden"
 
-#: assembl/views/api/post.py:475
+#: assembl/views/api/post.py:476
 msgid "Your message is empty"
 msgstr "Ihre Nachricht ist leer"
 
@@ -4002,11 +4031,62 @@ msgstr ""
 "Mit freundlichen Grüßen\n"
 "Das ${assembl}-Team\n"
 
-#: assembl/views/backbone/views.py:46
+#: assembl/views/backbone/views.py:45
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Keine Diskussionen gefunden für Slug=%s"
 
-#~ msgid "In the general conversation"
-#~ msgstr "In der allgemeinen Konversation"
+#~ msgid "Visualizations"
+#~ msgstr ""
+
+#~ msgid "Translations"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "List of domain names of user email"
+#~ " address required for self-registration"
+#~ msgstr ""
+#~ "Liste der Domainnamen von Benutzer-E-Mail-"
+#~ "Adressen, die für die Selbstregistrierung "
+#~ "erforderlich sind"
+
+#~ msgid "Allow access to moderated_text"
+#~ msgstr ""
+
+#~ msgid "Moderation template"
+#~ msgstr ""
+
+#~ msgid "Text template for default moderation text"
+#~ msgstr ""
+
+#~ msgid "Failed to save your settings."
+#~ msgstr "Ihre Einstellungen konnten nicht gespeichert werden."
+
+#~ msgid ""
+#~ "The logo image can have a maximum"
+#~ " height of 40px, and a maximum "
+#~ "width of 215px."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Allow users to see the original "
+#~ "content of moderated messages by default"
+#~ msgstr ""
+#~ "Benutzern erlauben, standardmäßig den "
+#~ "ursprünglichen Inhalt von moderierten "
+#~ "Nachrichten zu sehen"
+
+#~ msgid "Translated by Google Translate"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "In the general %s conversation (a "
+#~ "community manager will organize your "
+#~ "contribution in the table of ideas "
+#~ "afterwards, possibly by creating a new"
+#~ " idea)"
+#~ msgstr ""
+
+#~ msgid "Reset"
+#~ msgstr ""
 
