@@ -1099,11 +1099,11 @@ def update_vendor_themes():
                     run('git clone %s' % git_url)
 
             with cd(git_dir_path):
-                run('git fetch --all')
                 current_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
-                print current_branch_name
                 if current_branch_name != env.gitbranch:
+                    print yellow("Vendor theme branch %s does not match current assembl environment branch %s" % (current_branch_name, env.gitbranch))
                     if env.gitbranch in ('develop', 'master'):
+                        run('git fetch --all')
                         print yellow("Changing branch to %s" % env.gitbranch)
                         run('git checkout %s' % env.gitbranch)
                     else:

@@ -114,7 +114,7 @@
   }
 
   .idealist-item.is-selected > & {
-    background-color: $theme_idea_selected;
+    background-color: $theme_idea_selected_color;
     border-right: 4px solid $theme_activelink_color;
     .idealist-counter {
       color: $white;

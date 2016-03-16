@@ -86,7 +86,7 @@ $theme_navigation_text_color_active: $th_local_white;
 
 //Navigation + Synthesis panel
 $theme_navigation_or_idea_bg_active: $th_local_gray4;
-$theme_idea_selected: lighten($th_local_purple5, 40%);
+$theme_idea_selected_color: lighten($th_local_purple5, 40%);
 
 //Message list
 $theme_messagelist_bg_color: $th_local_gray7;
@@ -99,7 +99,6 @@ $theme_text_icon_emphasis_color: lighten($th_local_purple5, 20%);
 
 //extract
 $theme_extract_bg: $theme_navigation_bg;
-$theme_idea_selected: lighten($th_local_purple5, 40%);
 
 //idea panel
 $theme_idea_header_bg: $th_local_purple6;
