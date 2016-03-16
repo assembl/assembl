@@ -45,7 +45,9 @@ var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
   constructor: function DiscussionPreferenceDictionaryModel() {
     Backbone.Model.apply(this, arguments);
   },
-  url: Ctx.getApiV2DiscussionUrl("settings"),
+  url: function() {
+    return Ctx.getApiV2DiscussionUrl("settings/"+this.id);
+  },
 });
 
 
