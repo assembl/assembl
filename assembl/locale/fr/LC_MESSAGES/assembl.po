@@ -75,10 +75,8 @@ msgid "Languages used"
 msgstr ""
 
 #: assembl/models/preferences.py:293
-#, fuzzy
-#| msgid "Any message is posted to the discussion"
 msgid "All languages expected in the discussion"
-msgstr "N’importe quel message est envoyé à la discussion"
+msgstr "Tous les messages attendus dans la discussion"
 
 #: assembl/models/preferences.py:302 assembl/models/preferences.py:316
 msgid "Translation service"
@@ -133,10 +131,8 @@ msgid "Show the share button on posts and ideas"
 msgstr ""
 
 #: assembl/models/preferences.py:356
-#, fuzzy
-#| msgid "Allow access to moderated_text"
 msgid "Allow access to moderated text"
-msgstr "Autoriser l'accès à moderated_text"
+msgstr "Autoriser l'accès à un message modéré"
 
 #: assembl/models/preferences.py:359
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
@@ -149,21 +145,14 @@ msgid "Require Email Domain"
 msgstr "Nécessite le domaine d'email"
 
 #: assembl/models/preferences.py:377
-#, fuzzy
-#| msgid "" "Only accounts with at least an email from those domains can
-#| self-register" " to this discussion. Anyone can self-register if this is
-#| empty. Please " "use a comma to separate domain names. Example:
-#| mycompany.com,test.com"
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
 " self-register to this discussion. Anyone can self-register if this is "
 "empty."
 msgstr ""
-"Seuls les comptes dont au moins un courriel vient de ces domaines "
-"pourront s’auto-abonner à cette discussion. N’importe qui pourra "
-"s’enregistrer si cette liste est vide. Veuillez employer une virgule pour"
-" séparer les noms de domaines. Exemple: mycompany.com,test.com"
+"Liste des noms de domaines exigés pour les courriels des participants voulant "
+"s'auto-inscrire. Seuls les comptes ayant au moins un courriel défini sur un de ces domaines peuvent s'auto-inscrire. Si cette liste est vide, n'importe qui peut s'auto-inscrire. "
 
 #: assembl/models/preferences.py:393
 msgid "Show CI Dashboard"
@@ -186,10 +175,8 @@ msgstr ""
 "d’intelligence collective (CI Dashboard)"
 
 #: assembl/models/preferences.py:427
-#, fuzzy
-#| msgid "Visualizations"
 msgid "Catalyst Visualizations"
-msgstr "Visualisations"
+msgstr "Visualisations Catalyst"
 
 #: assembl/models/preferences.py:430
 msgid "A JSON description of available Catalyst visualizations"
@@ -208,10 +195,8 @@ msgstr ""
 "navigateur"
 
 #: assembl/models/preferences.py:456
-#, fuzzy
-#| msgid "No translation"
 msgid "Catalyst translations"
-msgstr "Pas de traduction"
+msgstr "Traduction Catalyst"
 
 #: assembl/models/preferences.py:459
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
@@ -1526,52 +1511,40 @@ msgid "Only include posts created after the last synthesis."
 msgstr "Inclure seulement les messages créés depuis la dernière synthèse."
 
 #: assembl/static/js/app/views/preferencesView.js:82
-#, fuzzy
-#| msgid "Your settings were saved"
 msgid "Your settings were reset to default"
 msgstr "Vos paramètres ont été sauvegardés"
 
 #: assembl/static/js/app/views/preferencesView.js:86
 msgid "Your settings were not be reset, but could not be read back."
-msgstr ""
+msgstr "Vos paramètres ont été remis à zéro, mais nous n'avons pas pu les lire"
 
 #: assembl/static/js/app/views/preferencesView.js:92
-#, fuzzy
-#| msgid "Your settings were saved"
 msgid "Your settings could not be reset."
-msgstr "Vos paramètres ont été sauvegardés"
+msgstr "Vos paramètres n'ont pas pu être remis à zéro."
 
 #: assembl/static/js/app/views/preferencesView.js:241
-#, fuzzy
-#| msgid "This is not a valid email"
 msgid "This is not valid JSON: "
-msgstr "Ce n’est pas une adresse de courriel valide"
+msgstr "Ceci n'est pas du JSON valide: "
 
 #: assembl/static/js/app/views/preferencesView.js:263
-#, fuzzy
-#| msgid "Please select a language."
 msgid "Please enter a number"
-msgstr "Veuillez choisir une langue"
+msgstr "Veuillez choisir un nombre"
 
 #: assembl/static/js/app/views/preferencesView.js:302
 msgid "This does not appear to be a URL"
 msgstr ""
 
 #: assembl/static/js/app/views/preferencesView.js:316
-#, fuzzy
-#| msgid "This is not a valid email"
 msgid "This does not appear to be an email"
-msgstr "Ce n’est pas une adresse de courriel valide"
+msgstr "Ça ne semble pas une adresse de courriel valide"
 
 #: assembl/static/js/app/views/preferencesView.js:331
 msgid "This does not appear to be a domain"
 msgstr ""
 
 #: assembl/static/js/app/views/preferencesView.js:524
-#, fuzzy
-#| msgid "Your settings were saved"
 msgid "The following settings were not saved: "
-msgstr "Vos paramètres ont été sauvegardés"
+msgstr "Les paramètres suivants n'ont pas pu être enregistrés."
 
 #: assembl/static/js/app/views/preferencesView.js:527
 #: assembl/static/js/app/views/sourceEditView.js:45
@@ -1582,10 +1555,8 @@ msgid "Your settings were saved!"
 msgstr "Vos configurations ont été sauvegardées!"
 
 #: assembl/static/js/app/views/preferencesView.js:533
-#, fuzzy
-#| msgid "Your settings failed to update."
 msgid "Your settings are up-to-date."
-msgstr "L’enregistrement de vos configurations a échoué."
+msgstr "Vos préférences sont à jour."
 
 #: assembl/static/js/app/views/segmentList.js:310
 #: assembl/static/js/app/views/segmentList.js:356
@@ -2402,16 +2373,13 @@ msgid "Logo URL (optional)"
 msgstr "URL du logo (optionnel)"
 
 #: assembl/templates/views/adminDiscussion.tmpl:86
-#, fuzzy
-#| msgid "" "The logo image can have a maximum height of 40px, and a maximum
-#| width of " "215px."
 msgid ""
 "The logo image can have a maximum height of 40px, and a maximum width of "
 "215px. Background must be transparent. Margins must be included in the "
 "image."
 msgstr ""
 "L'image du logo doit avoir une hauteur d'au plus 40px, et une largeur "
-"d'au plus 215px."
+"d'au plus 215px. Le fond doit être transparent. Les marges doivent être incluses dans l'image."
 
 #: assembl/templates/views/adminDiscussion.tmpl:94
 #: assembl/templates/views/emailSource.tmpl:85
@@ -3467,16 +3435,12 @@ msgid "Under the idea \"%s\""
 msgstr "Sur l’idée \"%s\""
 
 #: assembl/templates/views/messageSend.tmpl:30
-#, fuzzy, python-format
-#| msgid "" "In the general %s conversation (a community manager will organize
-#| your " "contribution in the table of ideas afterwards, possibly by creating
-#| a new" " idea)"
 msgid ""
 "In the general \"%s\" conversation (a community manager will organize "
 "your contribution in the table of ideas afterwards, possibly by creating "
 "a new idea)"
 msgstr ""
-"Dans la conversation générale %s (un animateur de communauté organisera "
+"Dans la conversation générale \"%s\" (un animateur de communauté organisera "
 "votre contribution dans la table des idées par la suite, éventuellement "
 "en créant une nouvelle idée)"
 
