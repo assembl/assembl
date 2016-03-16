@@ -618,7 +618,7 @@ class LangString(Base):
         return entries
 
     def remove_translations(self, forget_identification=True):
-        for entry in self.entries:
+        for entry in list(self.entries):
             if Locale.locale_is_machine_translated(entry.locale_code):
                 entry.delete()
             elif forget_identification:
