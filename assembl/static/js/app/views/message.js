@@ -712,7 +712,7 @@ var MessageView = Marionette.LayoutView.extend({
     //Important flag to display/remove annotations is this.showAnnotations
     this.showAnnotations = this.canShowAnnotations();
 
-    if (false && Ctx.debugRender){
+    if (Ctx.debugLangstring){
       console.log("---- Message onRender called ----------------");
       console.log("Local states of a message view:");
       console.log("forceTranslationQuestion: ", this.forceTranslationQuestion);

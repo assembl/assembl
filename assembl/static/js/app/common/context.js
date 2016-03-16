@@ -26,6 +26,12 @@ var Context = function() {
   this.debugRender = false;
 
   /**
+   * Send debugging output to console.log to observe Langstring choices
+   * @type {boolean}
+   */
+  this.debugLangstring = false;
+
+  /**
    * Send debugging output to console.log to observe annotator related
    * events
    * @type {boolean}
