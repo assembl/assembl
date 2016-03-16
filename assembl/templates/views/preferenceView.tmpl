@@ -2,15 +2,19 @@
   <div class="gr">
     <div class="gu gu-1of5 navigation-menu-holder"></div>
     <div class="gu gu-3of4 admin-section">
-      <div class="admin-title">
-        <h3 class="h3">{{ gettext('Preferences') }}</h3>
-      </div>
-      <div id="content-container" class="content-container">
-        <form class="core-form form-horizontal">
-          <div id="js_preferences"></div>
-          <button id="js_savePreferences" class="btn btn-primary">{{ gettext('Save') }}</button>
-        </form>
-      </div>
+      <section class="section">
+        <div class="admin-title">
+          <h3 class="h3">{{ gettext('Preferences') }}</h3>
+        </div>
+        <div id="content-container" class="content-container">
+          <form class="core-form form-horizontal">
+            <fieldset class="phl">
+              <div id="js_preferences"></div>
+              <button id="js_savePreferences" class="btn btn-primary">{{ gettext('Save') }}</button>
+            </fieldset>
+          </form>
+        </div>
+      </section>
     </div>
   </div>
 </div>
