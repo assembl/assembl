@@ -285,6 +285,7 @@ class Preferences(MutableMapping, Base):
     # item_default: the default value for new items in a list_of_...
 
     preference_data_list = [
+        # Languages used in the discussion.
         {
             "id": "preferred_locales",
             "value_type": "list_of_locale",
@@ -293,6 +294,132 @@ class Preferences(MutableMapping, Base):
             "allow_user_override": None,
             "default": [strip_country(x) for x in config.get_config().get(
                 'available_languages', 'fr en').split()]
+        },
+        # full class name of translation service to use, if any
+        # e.g. assembl.nlp.translate.GoogleTranslationService
+        {
+            "id": "translation_service",
+            "name": _("Translation service"),
+            "value_type": "scalar",
+            "scalar_values": {
+                "": _("No translation"),
+                "assembl.nlp.translation_service.DummyTranslationServiceTwoSteps":
+                    _("Dummy translation service (two steps)"),
+                "assembl.nlp.translation_service.DummyTranslationServiceOneStep":
+                    _("Dummy translation service (one step)"),
+                "assembl.nlp.translation_service.DummyTranslationServiceTwoStepsWithErrors":
+                    _("Dummy translation service (two steps) with errors"),
+                "assembl.nlp.translation_service.DummyTranslationServiceOneStepWithErrors":
+                    _("Dummy translation service (one step) with errors"),
+                "assembl.nlp.translation_service.GoogleTranslationService":
+                    _("Google Translate")},
+            "description": _(
+                "Translation service"),
+            "allow_user_override": None,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": ""
+        },
+
+        # Simple view panel order, eg NIM or NMI
+        {
+            "id": "simple_view_panel_order",
+            "name": _("Panel order in simple view"),
+            "value_type": "scalar",
+            "scalar_values": {
+                "NMI": _("Navigation, Idea, Messages"),
+                "NIM": _("Navigation, Messages, Idea")},
+            "description": _("Order of panels"),
+            "allow_user_override": P_READ,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": "NMI"
+        },
+        # Allow social sharing
+        {
+            "id": "social_sharing",
+            "name": _("Social sharing"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _("Show the share button on posts and ideas"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": True
+        },
+        # Are moderated posts simply hidden or made inaccessible by default?
+        {
+            "id": "default_allow_access_to_moderated_text",
+            "name": _("Allow access to moderated text"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Are moderated posts simply hidden or made inaccessible "
+                "by default?"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": True
+        },
+        
+
+
+        # Registration requires being a member of this email domain.
+        {
+            "id": "require_email_domain",
+            "name": _("Require Email Domain"),
+            "value_type": "list_of_domain",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "List of domain names of user email address required for "
+                "self-registration. Only accounts with at least an email from those "
+                "domains can self-register to this discussion. Anyone can "
+                "self-register if this is empty."),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": [],
+            "item_default": ""
+        },
+
+        # Show the CI Dashboard in the panel group window
+        {
+            "id": "show_ci_dashboard",
+            "name": _("Show CI Dashboard"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Show the CI Dashboard in the panel group window"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": False
+        },
+
+        # Configuration of the visualizations shown in the CI Dashboard
+        {
+            "id": "ci_dashboard_url",
+            "name": _("URL of CI Dashboard"),
+            "value_type": "url",
+            "description": _(
+                "Configuration of the visualizations shown in the "
+                "CI Dashboard"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default":
+                "//cidashboard.net/ui/visualisations/index.php?"
+                "width=1000&height=1000&vis=11,23,p22,13,p7,7,12,p2,p15,p9,"
+                "p8,p1,p10,p14,5,6,16,p16,p17,18,p20,p4&lang=<%= lang %>"
+                "&title=&url=<%= url %>&userurl=<%= user_url %>"
+                "&langurl=&timeout=60"
         },
         # List of visualizations
         {
@@ -326,7 +453,7 @@ class Preferences(MutableMapping, Base):
         # Translations for the navigation sections
         {
             "id": "translations",
-            "name": _("Translations"),
+            "name": _("Catalyst translations"),
             "value_type": "json",
             # "scalar_values": {value: "label"},
             "description": _(
@@ -357,155 +484,6 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": {},
             "show_in_preferences": False
-        },
-        # Simple view panel order, eg NIM or NMI
-        {
-            "id": "simple_view_panel_order",
-            "name": _("Panel order in simple view"),
-            "value_type": "scalar",
-            "scalar_values": {
-                "NMI": _("Navigation, Idea, Messages"),
-                "NIM": _("Navigation, Messages, Idea")},
-            "description": _("Order of panels"),
-            "allow_user_override": P_READ,
-            "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": "NMI"
-        },
-        # Registration requires being a member of this email domain.
-        {
-            "id": "require_email_domain",
-            "name": _("Require Email Domain"),
-            "value_type": "list_of_domain",
-            # "scalar_values": {value: "label"},
-            "description": _(
-                "List of domain names of user email address required for "
-                "self-registration. Only accounts with at least an email from those "
-                "domains can self-register to this discussion. Anyone can "
-                "self-register if this is empty."),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": [],
-            "item_default": ""
-        },
-        # Allow social sharing
-        {
-            "id": "social_sharing",
-            "name": _("Social sharing"),
-            "value_type": "bool",
-            # "scalar_values": {value: "label"},
-            "description": _("Show the share button on posts and ideas"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": True
-        },
-        # Are moderated posts simply hidden or made inaccessible by default?
-        {
-            "id": "default_allow_access_to_moderated_text",
-            "name": _("Allow access to moderated text"),
-            "value_type": "bool",
-            # "scalar_values": {value: "label"},
-            "description": _(
-                "Are moderated posts simply hidden or made inaccessible "
-                "by default?"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": True
-        },
-        # Does the Idea panel automatically open when an idea is clicked? (and close when a special section is clicked)
-        {
-            "id": "idea_panel_opens_automatically",
-            "name": _("Idea panel opens automatically"),
-            "value_type": "bool",
-            # "scalar_values": {value: "label"},
-            "description": _(
-                "Does the Idea panel automatically open when an idea is clicked ? (and close when a special section is clicked)"),
-            "allow_user_override": P_READ,
-            "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": True
-        },
-        # Default moderation text template
-        # TODO: preference to allow moderation a priori.
-        {
-            "id": "moderation_template",
-            "name": _("Moderation template"),
-            "value_type": "text",
-            # "scalar_values": {value: "label"},
-            "description": _(
-                "Text template for default moderation text"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": ""
-        },
-        # full class name of translation service to use, if any
-        # e.g. assembl.nlp.translate.GoogleTranslationService
-        {
-            "id": "translation_service",
-            "name": _("Translation service"),
-            "value_type": "scalar",
-            "scalar_values": {
-                "": _("No translation"),
-                "assembl.nlp.translation_service.DummyTranslationServiceTwoSteps":
-                    _("Dummy translation service (two steps)"),
-                "assembl.nlp.translation_service.DummyTranslationServiceOneStep":
-                    _("Dummy translation service (one step)"),
-                "assembl.nlp.translation_service.DummyTranslationServiceTwoStepsWithErrors":
-                    _("Dummy translation service (two steps) with errors"),
-                "assembl.nlp.translation_service.DummyTranslationServiceOneStepWithErrors":
-                    _("Dummy translation service (one step) with errors"),
-                "assembl.nlp.translation_service.GoogleTranslationService":
-                    _("Google Translate")},
-            "description": _(
-                "Translation service"),
-            "allow_user_override": None,
-            "modification_permission": P_SYSADMIN,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": ""
-        },
-        # Show the CI Dashboard in the panel group window
-        {
-            "id": "show_ci_dashboard",
-            "name": _("Show CI Dashboard"),
-            "value_type": "bool",
-            # "scalar_values": {value: "label"},
-            "description": _(
-                "Show the CI Dashboard in the panel group window"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": False
-        },
-        # Configuration of the visualizations shown in the CI Dashboard
-        {
-            "id": "ci_dashboard_url",
-            "name": _("URL of CI Dashboard"),
-            "value_type": "url",
-            "description": _(
-                "Configuration of the visualizations shown in the "
-                "CI Dashboard"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default":
-                "//cidashboard.net/ui/visualisations/index.php?"
-                "width=1000&height=1000&vis=11,23,p22,13,p7,7,12,p2,p15,p9,"
-                "p8,p1,p10,p14,5,6,16,p16,p17,18,p20,p4&lang=<%= lang %>"
-                "&title=&url=<%= url %>&userurl=<%= user_url %>"
-                "&langurl=&timeout=60"
         },
         {
             "id": "preference_data",

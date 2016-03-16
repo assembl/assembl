@@ -65,9 +65,11 @@ var DiscussionPreferenceCollection = Backbone.Collection.extend({
   model: DiscussionIndividualPreferenceModel,
   parse: function(resp, options) {
     // does this go through model.parse afterwards? That would be trouble.
-    return _.values(_.mapObject(resp, function(v, k) {
-      return {id: k, value: v};
-    }));
+    var preference_data = resp.preference_data;
+    return _.map(preference_data, function(pref_data) {
+      var id = pref_data.id;
+      return {id: id, value: resp[id]};
+    });
   },
   toJSON: function(options) {
     var prefs = {};
