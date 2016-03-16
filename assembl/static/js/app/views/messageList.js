@@ -1524,19 +1524,32 @@ var MessageList = AssemblPanel.extend({
         view,
         collectionManager = new CollectionManager();
 
-    return collectionManager.getMessageFullModelsPromise(requestedIds)
-            .then(function(fullMessageModels) {
+    return collectionManager.getAllMessageStructureCollectionPromise()
+            .then(function(messageStructureModels) {
               var list = [];
               if(!that.isViewDestroyed()) {
                 that.clearRenderedMessages();
-                _.each(fullMessageModels, function(fullMessageModel) {
+                _.each(requestedIds, function(messageId) {
+                  var messageModel = undefined;
+
+                  Raven.context({
+                    extra: {messageId: messageId}
+                  },
+                  function() {
+                    messageModel = messageStructureModels.get(messageId);
+                    if (!messageModel) {
+                      throw new Error("getRenderedMessagesFlatPromise: Unable to find message structure")
+                    }
+                  }
+                  );
+
                   view = new MessageFamilyView({
-                    model: fullMessageModel,
+                    model: messageModel,
                     messageListView: that,
                     hasChildren: []
                   });
                   that._renderedMessageFamilyViews.push(view);
-                  list.push(view.render());
+                  list.push(view);
                 });
               }
               //console.log("getRenderedMessagesFlatPromise():  Resolving promise with:",list);
@@ -1667,28 +1680,27 @@ var MessageList = AssemblPanel.extend({
       var sibblingsviews_promise = [];
     }
 
-    return Promise.join(subviews_promise, sibblingsviews_promise, collectionManager.getMessageFullModelPromise(messageStructureModel.getId()),
-            function(subviews, sibblingsviews, messageFullModel) {
+    return Promise.join(subviews_promise, sibblingsviews_promise,
+        function(subviews, sibblingsviews) {
+      view = new MessageFamilyView({
+        model: messageStructureModel,
+        messageListView: that,
+        currentLevel: level,
+        hasChildren: subviews,
+        last_sibling_chain: last_sibling_chain});
 
-              view = new MessageFamilyView({
-                  model: messageFullModel,
-                  messageListView: that,
-                  currentLevel: level,
-                  hasChildren: subviews,
-                  last_sibling_chain: last_sibling_chain});
+      // pass logic to the init view
+      //view.currentLevel = level;
+      //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
+      //view.hasChildren = (subviews.length > 0);
+      that._renderedMessageFamilyViews.push(view);
+      list.push(view);
 
-              // pass logic to the init view
-              //view.currentLevel = level;
-              //Note:  benoitg: We could put a setTimeout here, but apparently the promise is enough to unlock the browser
-              //view.hasChildren = (subviews.length > 0);
-              that._renderedMessageFamilyViews.push(view);
-              list.push(view.render());
+      //view.$('.messagelist-children').append(subviews);  moved to messageFamily
 
-              //view.$('.messagelist-children').append(subviews);  moved to messageFamily
-
-              /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
-               * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
-              /*if (!isValid && this.hasDescendantsInFilter(model)) {
+      /* TODO:  benoitg:  We need good handling when we skip a grandparent, but I haven't ported this code yet.
+       * We should also handle the case where 2 messages have the same parent, but the parent isn't in the set */
+      /*if (!isValid && this.hasDescendantsInFilter(model)) {
                //Generate ghost message
                var ghost_element = $('<div class="message message--skip"><div class="skipped-message"></div><div class="messagelist-children"></div></div>');
                console.log("Invalid message was:",model);
@@ -1697,13 +1709,13 @@ var MessageList = AssemblPanel.extend({
                ghost_element.find('.messagelist-children').append( this.getRenderedMessagesThreadedPromise(
                children, level+1, data_by_object) );
                }
-               */
-              if (sibblingsviews.length > 0) {
-                list = list.concat(sibblingsviews);
-              }
+       */
+      if (sibblingsviews.length > 0) {
+        list = list.concat(sibblingsviews);
+      }
 
-              return Promise.resolve(list);
-            });
+      return Promise.resolve(list);
+    });
   },
 
   annotator_config: {

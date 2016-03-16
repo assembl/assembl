@@ -341,23 +341,41 @@ var MessageView = Marionette.LayoutView.extend({
       user language preferences and/or translation errors.
      */
     this.isMessageTranslated = null;
+    this.isCompleteDataLoaded();
 
-    Promise.join(
-        this.model.getCreatorPromise(),
-        this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
-        function(creator, ulp) {
-          if(!that.isViewDestroyed()) {
-            that.creator = creator;
-
-            //Two initalize functions called to set up translations
-            that.initiateTranslationState(ulp);
-            that.processContent();
-
-            that.template = '#tmpl-message';
-            that.render();
-          }
-      });
   },
+
+  /** IMPORTANT NOTE:  If this returns false, if WILL initiate a data fetch */
+  isCompleteDataLoaded: function(){
+    var that = this;
+
+    if (this.template === '#tmpl-message' && this.model.get('@view') ===  'default') {
+      return true
+    }
+    else {
+      this.template === '#tmpl-loader'
+      Promise.join(
+          this.model.getCreatorPromise(),
+          this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
+          this.model.collection.collectionManager.getMessageFullModelPromise(this.model.id),
+          function(creator, ulp, messageFullModel) {
+            //Not doing anything with messageFullModel, this.model is already
+            //the right link, we just want the content of the model updated
+            if(!that.isViewDestroyed()) {
+              that.creator = creator;
+
+              //To initalize functions called to set up translations
+              that.initiateTranslationState(ulp);
+              that.processContent();
+
+              that.template = '#tmpl-message';
+              that.render();
+            }
+        });
+      return false;
+    }
+  },
+
   modelEvents: {
       'replacedBy':'onReplaced',
       'change:like_count':'renderLikeCount',
@@ -675,6 +693,10 @@ var MessageView = Marionette.LayoutView.extend({
     Object.getPrototypeOf(base_object).render.apply(this, arguments);
   },
 
+  onBeforeRender: function(){
+    this.isCompleteDataLoaded();
+  },
+
   /**
    * The render
    * @return {MessageView}
@@ -690,7 +712,7 @@ var MessageView = Marionette.LayoutView.extend({
     //Important flag to display/remove annotations is this.showAnnotations
     this.showAnnotations = this.canShowAnnotations();
 
-    if (Ctx.debugRender){
+    if (false && Ctx.debugRender){
       console.log("---- Message onRender called ----------------");
       console.log("Local states of a message view:");
       console.log("forceTranslationQuestion: ", this.forceTranslationQuestion);
@@ -721,224 +743,223 @@ var MessageView = Marionette.LayoutView.extend({
       console.log("message:render() is firing for message", this.model.id);
     }
 
-    if (this.template === '#tmpl-message') {
-      if (partialMessage.body) {
-        //Somebody started writing a message and didn't finish, make sure they see it.
-        //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
-        this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-      }
-      else {
-        this.setViewStyle(this.viewStyle);
-      }
 
-      this.clearAnnotationsToLoadCache();
-      Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+    if (partialMessage.body) {
+      //Somebody started writing a message and didn't finish, make sure they see it.
+      //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
+      this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+    }
+    else {
+      this.setViewStyle(this.viewStyle);
+    }
 
-      this.renderAuthor();
+    this.clearAnnotationsToLoadCache();
+    Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-      this.$el.attr("id", "message-" + this.model.get('@id'));
-      this.$el.addClass(this.model.get('@type'));
+    this.renderAuthor();
 
-      if (Ctx.getCurrentUser().isUnknownUser()) {
+    this.$el.attr("id", "message-" + this.model.get('@id'));
+    this.$el.addClass(this.model.get('@type'));
+
+    if (Ctx.getCurrentUser().isUnknownUser()) {
+      this.$el.removeClass('unread').addClass('read');
+    }else {
+      if (this.model.get('read')) {
         this.$el.removeClass('unread').addClass('read');
-      }else {
-        if (this.model.get('read')) {
-          this.$el.removeClass('unread').addClass('read');
-        } else {
-          this.$el.removeClass('read').addClass('unread');
-        }
-      }
-
-      Ctx.initTooltips(this.$el);
-      if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
-        Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
-        Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
-      }
-      if (this.model.get('metadata_json')) {
-        Ctx.makeLinksShowOembedOnHover(this.$el.find(".inspirationSource"));
-      }
-
-      this.postRender();
-
-      if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && (this.replyBoxShown || partialMessage.body)) {
-
-        this.replyView = new MessageSendView({
-          allow_setting_subject: false,
-          reply_message_id: modelId,
-          reply_message_model: this.model,
-          body_help_message: i18n.gettext('Type your response here...'),
-          cancel_button_label: null,
-          send_button_label: i18n.gettext('Send your reply'),
-          subject_label: null,
-          mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
-          messageList: that.messageListView,
-          msg_in_progress_body: partialMessage.body,
-          msg_in_progress_ctx: modelId,
-          mandatory_subject_missing_msg: null
-        });
-
-        this.ui.messageReplyBox.removeClass('hidden');
-        this.messageReplyBoxRegion.show(this.replyView);
-        if (this.replyBoxHasFocus) {
-          //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
-          this.focusReplyBox();
-        }
-      }
-      else {
-        this.ui.messageReplyBox.addClass('hidden');
-      }
-
-      if (this.model.get('like_count') > 0) {
-        this.ui.likeCounter.show();
       } else {
-        this.ui.likeCounter.hide();
+        this.$el.removeClass('read').addClass('unread');
       }
+    }
 
-      //Translation view should only be shown when the message is in full view or in preview mode. Otherwise,
-      //do not show it
-      //Also, only the body translation triggers the translation view
-      if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
-          this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+    Ctx.initTooltips(this.$el);
+    if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
+      Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
+      Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
+    }
+    if (this.model.get('metadata_json')) {
+      Ctx.makeLinksShowOembedOnHover(this.$el.find(".inspirationSource"));
+    }
 
-        if (this.canShowTranslation() ) {
-          if ( (this.forceTranslationQuestion && !this.hideTranslationQuestion) || (
-                this.unknownPreference && !this.bodyTranslationError)) {
-            //Only show the translation view *iff* the message was translated by the backend
-            var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
-            this.translationRegion.show(translationView);
-            this.translationRegion.$el.removeClass("hidden");
-          } else if (this.translationRegion.$el) {
-            this.translationRegion.$el.addClass("hidden");
-          }
+    this.postRender();
+
+    if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && (this.replyBoxShown || partialMessage.body)) {
+
+      this.replyView = new MessageSendView({
+        allow_setting_subject: false,
+        reply_message_id: modelId,
+        reply_message_model: this.model,
+        body_help_message: i18n.gettext('Type your response here...'),
+        cancel_button_label: null,
+        send_button_label: i18n.gettext('Send your reply'),
+        subject_label: null,
+        mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
+        messageList: that.messageListView,
+        msg_in_progress_body: partialMessage.body,
+        msg_in_progress_ctx: modelId,
+        mandatory_subject_missing_msg: null
+      });
+
+      this.ui.messageReplyBox.removeClass('hidden');
+      this.messageReplyBoxRegion.show(this.replyView);
+      if (this.replyBoxHasFocus) {
+        //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
+        this.focusReplyBox();
+      }
+    }
+    else {
+      this.ui.messageReplyBox.addClass('hidden');
+    }
+
+    if (this.model.get('like_count') > 0) {
+      this.ui.likeCounter.show();
+    } else {
+      this.ui.likeCounter.hide();
+    }
+
+    //Translation view should only be shown when the message is in full view or in preview mode. Otherwise,
+    //do not show it
+    //Also, only the body translation triggers the translation view
+    if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
+        this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+
+      if (this.canShowTranslation() ) {
+        if ( (this.forceTranslationQuestion && !this.hideTranslationQuestion) || (
+            this.unknownPreference && !this.bodyTranslationError)) {
+          //Only show the translation view *iff* the message was translated by the backend
+          var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
+          this.translationRegion.show(translationView);
+          this.translationRegion.$el.removeClass("hidden");
+        } else if (this.translationRegion.$el) {
+          this.translationRegion.$el.addClass("hidden");
         }
       }
+    }
 
-      if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
-        //Only the full body view uses annotator
-        this.messageListView.requestAnnotatorRefresh();
+    if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
+      //Only the full body view uses annotator
+      this.messageListView.requestAnnotatorRefresh();
 
-        var MessageAttachmentCollectionView = Marionette.CollectionView.extend({
-          constructor: function MessageAttachmentCollectionView() {
-            Marionette.CollectionView.apply(this, arguments);
-          },
+      var MessageAttachmentCollectionView = Marionette.CollectionView.extend({
+        constructor: function MessageAttachmentCollectionView() {
+          Marionette.CollectionView.apply(this, arguments);
+        },
 
-          childView: AttachmentViews.AttachmentView
-        });
+        childView: AttachmentViews.AttachmentView
+      });
 
-        this.attachmentsCollectionView = new MessageAttachmentCollectionView({
-          collection: this.model.get('attachments')
-        });
-        
-        this.renderIdeaClassification();
-        this.attachmentsRegion.show(this.attachmentsCollectionView);
-      }
+      this.attachmentsCollectionView = new MessageAttachmentCollectionView({
+        collection: this.model.get('attachments')
+      });
 
-      if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle !== this.availableMessageViewStyles.FULL_BODY) {
-        this.showReadLess();
-      }
+      this.renderIdeaClassification();
+      this.attachmentsRegion.show(this.attachmentsCollectionView);
+    }
 
-      if (this.messageListView.isCurrentViewStyleThreadedType() && 
-          that.messageFamilyView.currentLevel !== 1) {
-        this.model.getParentPromise().then(function(parentMessageModel) {
-          //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
-          if (parentMessageModel && parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe()) {
-            //console.log("Hiding redundant title")
-            that.$(".message-subject").addClass('hidden');
-          }
-        });
-      }
+    if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle !== this.availableMessageViewStyles.FULL_BODY) {
+      this.showReadLess();
+    }
 
-      if (this.viewStyle === this.availableMessageViewStyles.PREVIEW) {
+    if (this.messageListView.isCurrentViewStyleThreadedType() && 
+        that.messageFamilyView.currentLevel !== 1) {
+      this.model.getParentPromise().then(function(parentMessageModel) {
+        //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
+        if (parentMessageModel && parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe()) {
+          //console.log("Hiding redundant title")
+          that.$(".message-subject").addClass('hidden');
+        }
+      });
+    }
 
-        var applyEllipsis = function() {
-          /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
-           * Read More links for message previews
-           */
-          that.$(".ellipsis").dotdotdot({
-            after: "a.readMore",
-            callback: function(isTruncated, orgContent) {
-              //console.log("dotdotdot initialized on message", that.model.id);
-              //console.log(isTruncated, orgContent);
-              if (isTruncated)
-              {
-                that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
-              }
-              else
-                          {
-                            that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
-                            if (that.model.get('body') && that.model.get('body').length > 610) // approximate string length for text which uses 4 full lines
-                            {
-                              if (Ctx.debugRender) {
-                                console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
-                              }
+    if (this.viewStyle === this.availableMessageViewStyles.PREVIEW) {
 
-                              if (++that.reRendered < 5) // we use this to avoid infinite loop of render() calls
-                              {
-                                if (Ctx.debugRender) {
-                                  console.log("yes, we will re-render => tries: ", that.reRendered);
-                                }
-
-                                setTimeout(function() {
-                                  that.render();
-                                }, 500);
-                              }
-                              else
-                                  {
-                                    if (Ctx.debugRender) {
-                                      console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
-                                    }
-                                  }
-                            }
-                          }
-            },
-            watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
-          });
-        };
-
-        that.messageListView.requestPostRenderSlowCallback(function() {
-
-          setTimeout(function() {
-            //console.log("Initializing ellipsis on message", that.model.id);
-            var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
-
-            //console.log("current_navigation_state:", current_navigation_state);
-            if (current_navigation_state === 'about')
+      var applyEllipsis = function() {
+        /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+         * Read More links for message previews
+         */
+        that.$(".ellipsis").dotdotdot({
+          after: "a.readMore",
+          callback: function(isTruncated, orgContent) {
+            //console.log("dotdotdot initialized on message", that.model.id);
+            //console.log(isTruncated, orgContent);
+            if (isTruncated)
             {
-              that.listenToOnce(Assembl.vent, 'DEPRECATEDnavigation:selected', applyEllipsis);
-              return;
+              that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
             }
+            else
+            {
+              that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
+              if (that.model.get('body') && that.model.get('body').length > 610) // approximate string length for text which uses 4 full lines
+              {
+                if (Ctx.debugRender) {
+                  console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
+                }
 
-            applyEllipsis();
-          }, 100);
+                if (++that.reRendered < 5) // we use this to avoid infinite loop of render() calls
+                {
+                  if (Ctx.debugRender) {
+                    console.log("yes, we will re-render => tries: ", that.reRendered);
+                  }
 
-          /* We no longer need this, but probably now need to
-           * update when the panels change size with the
-           * new system benoitg-2014-09-18
-           *
-           * that.listenTo(that.messageListView, "messageList:render_complete", function () {
+                  setTimeout(function() {
+                    that.render();
+                  }, 500);
+                }
+                else
+                {
+                  if (Ctx.debugRender) {
+                    console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                  }
+                }
+              }
+            }
+          },
+          watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
+        });
+      };
+
+      that.messageListView.requestPostRenderSlowCallback(function() {
+
+        setTimeout(function() {
+          //console.log("Initializing ellipsis on message", that.model.id);
+          var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+
+          //console.log("current_navigation_state:", current_navigation_state);
+          if (current_navigation_state === 'about')
+          {
+            that.listenToOnce(Assembl.vent, 'DEPRECATEDnavigation:selected', applyEllipsis);
+            return;
+          }
+
+          applyEllipsis();
+        }, 100);
+
+        /* We no longer need this, but probably now need to
+         * update when the panels change size with the
+         * new system benoitg-2014-09-18
+         *
+         * that.listenTo(that.messageListView, "messageList:render_complete", function () {
            that.$(".ellipsis").trigger('update.dot');
            });*/
+      });
+
+      var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+
+      //console.log("current_navigation_state:", current_navigation_state);
+      //Why do we need the following block?  benoitg-2015-03-03
+      //console.log('current_navigation_state is:', current_navigation_state);
+      if (current_navigation_state !== undefined) {
+        //console.log('Setting listener on DEPRECATEDnavigation:selected');
+        that.listenTo(Assembl.vent, 'DEPRECATEDnavigation:selected', function(navSection) {
+          //console.log('New navigation has just been selected:', navSection);
+          if (navSection === 'debate') {
+            //console.log('Updating dotdotdot because debate has just been selected');
+            that.messageListView.requestPostRenderSlowCallback(function() {
+              that.$(".ellipsis").trigger('update.dot');
+            });
+          }
         });
-
-        var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
-
-        //console.log("current_navigation_state:", current_navigation_state);
-        //Why do we need the following block?  benoitg-2015-03-03
-        //console.log('current_navigation_state is:', current_navigation_state);
-        if (current_navigation_state !== undefined) {
-          //console.log('Setting listener on DEPRECATEDnavigation:selected');
-          that.listenTo(Assembl.vent, 'DEPRECATEDnavigation:selected', function(navSection) {
-            //console.log('New navigation has just been selected:', navSection);
-            if (navSection === 'debate') {
-              //console.log('Updating dotdotdot because debate has just been selected');
-              that.messageListView.requestPostRenderSlowCallback(function() {
-                that.$(".ellipsis").trigger('update.dot');
-              });
-            }
-          });
-        }
-
       }
+
     }
 
   },

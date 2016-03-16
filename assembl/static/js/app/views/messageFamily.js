@@ -156,7 +156,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
       messageFamilyView: this
     });
 
-    this._messageView.triggerMethod("render");
+    this._messageView.render();
     this.messageListView.renderedMessageViewsCurrent[this.model.id] = this._messageView;
 
     //data['id'] = data['@id'];
