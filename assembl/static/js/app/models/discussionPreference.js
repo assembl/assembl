@@ -89,7 +89,7 @@ var UserPreferenceRawCollection = DiscussionPreferenceCollection.extend({
   constructor: function UserPreferenceRawCollection() {
     DiscussionPreferenceCollection.apply(this, arguments);
   },
-  urlRoot: Ctx.getApiV2DiscussionUrl("all_users/current/preferences"),
+  url: Ctx.getApiV2DiscussionUrl("all_users/current/preferences"),
 });
 
 
