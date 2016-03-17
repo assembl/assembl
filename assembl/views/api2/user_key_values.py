@@ -1,8 +1,8 @@
 from simplejson import dumps, loads
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import (
-    HTTPCreated, HTTPNotFound, HTTPBadRequest)
+from pyramid.httpexceptions import (HTTPNotFound, HTTPBadRequest)
+from pyramid.response import Response
 
 from assembl.auth import (
     P_READ, IF_OWNED, Everyone, CrudPermissions)
@@ -110,7 +110,8 @@ def put_value(request):
         raise HTTPNotFound()
     except (AssertionError, ValueError) as e:
         raise HTTPBadRequest(e)
-    return HTTPCreated()
+    return Response(
+        dumps(value), status_code=201, content_type='application/json')
 
 
 @view_config(context=UserNSKeyBoundDictItemContext, renderer='json',

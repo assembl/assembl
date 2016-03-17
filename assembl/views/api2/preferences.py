@@ -1,8 +1,7 @@
 from simplejson import dumps, loads
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import (
-    HTTPCreated, HTTPNotFound, HTTPBadRequest)
+from pyramid.httpexceptions import (HTTPNotFound, HTTPBadRequest)
 from pyramid.security import authenticated_userid
 from pyramid.response import Response
 
@@ -76,7 +75,8 @@ def put_value(request):
     except (AssertionError, ValueError) as e:
         raise HTTPBadRequest(e)
     return Response(
-        dumps(preferences[ctx.key]), 201, content_type='application/json')
+        dumps(preferences[ctx.key]), status_code=201,
+        content_type='application/json')
 
 
 @view_config(context=PreferenceValueContext, renderer='json',
