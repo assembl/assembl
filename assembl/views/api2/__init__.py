@@ -83,6 +83,16 @@ def check_permissions(
     return allowed
 
 
+class CreationResponse(Response):
+    def __init__(
+            self, ob_created, user_id=Everyone, permissions=(P_READ,),
+            view='default'):
+        super(CreationResponse, self).__init__(
+            dumps(ob_created.generic_json(view, user_id, permissions)),
+            location=ob_created.uri(),
+            status_code=201)
+
+
 @view_config(context=ClassContext, renderer='json',
              request_method='GET', permission=P_READ)
 def class_view(request):
@@ -203,10 +213,7 @@ def collection_add(request, args):
             db.add(instance)
         session.autoflush = old_autoflush
         session.flush()
-        return Response(
-            dumps(first.generic_json('default', user_id, permissions)),
-            location=first.uri_generic(first.id),
-            status_code=201)
+        return CreationResponse(first, user_id, permissions)
     raise HTTPBadRequest()
 
 
@@ -368,10 +375,7 @@ def class_add(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        return Response(
-            dumps(first.generic_json('default', user_id, permissions)),
-            location=first.uri_generic(first.id),
-            status_code=201)
+        return CreationResponse(first, user_id, permissions)
     raise HTTPBadRequest()
 
 
@@ -399,7 +403,4 @@ def collection_add_json(request, json=None):
             db.add(instance)
         db.flush()
         view = request.GET.get('view', None) or 'default'
-        return Response(
-            dumps(first.generic_json(view, user_id, permissions)),
-            location=first.uri_generic(first.id),
-            status_code=201)
+        return CreationResponse(first, user_id, permissions, view)

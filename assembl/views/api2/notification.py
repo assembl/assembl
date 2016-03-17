@@ -14,7 +14,8 @@ from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from ..traversal import CollectionContext, InstanceContext, ClassContext
 from . import (
-    JSON_HEADER, instance_put_json, collection_view, check_permissions)
+    JSON_HEADER, instance_put_json, collection_view, check_permissions,
+    CreationResponse)
 
 @view_config(context=CollectionContext, renderer='json', request_method='GET',
              ctx_collection_class=Notification, permission=P_READ,
@@ -61,10 +62,7 @@ def notif_collection_add_json(request):
         if templates:
             templates.parent_instance.reset_participant_default_subscriptions(False)
         view = request.GET.get('view', None) or 'default'
-        return Response(
-            dumps(first.generic_json(view, user_id, permissions)),
-            location=first.uri_generic(first.id),
-            status_code=201)
+        return CreationResponse(first, user_id, permissions, view)
 
 
 @view_config(context=InstanceContext, request_method='GET',

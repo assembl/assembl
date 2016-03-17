@@ -19,7 +19,7 @@ from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from .. import JSONError
 from . import (
     FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
-    collection_add_json, instance_view, check_permissions)
+    collection_add_json, instance_view, check_permissions, CreationResponse)
 from assembl.lib.sqla import ObjectNotUniqueError
 
 
@@ -96,10 +96,7 @@ def add_local_role(request):
         view = request.GET.get('view', None) or 'default'
         permissions = get_permissions(
             user_id, ctx.get_discussion_id())
-        return Response(
-            dumps(first.generic_json(view, user_id, permissions)),
-            location=first.uri_generic(first.id),
-            status_code=201)
+        return CreationResponse(first, user_id, permissions, view)
 
 
 @view_config(
@@ -354,10 +351,7 @@ def add_user_language_preference(request):
             db.add(instance)
         db.flush()
         view = request.GET.get('view', None) or 'default'
-        return Response(
-            dumps(first.generic_json(view, user_id, permissions)),
-            location=first.uri_generic(first.id),
-            status_code=201)
+        return Response(first, user_id, permissions, view)
 
 
 @view_config(context=InstanceContext, request_method='PUT', renderer="json",

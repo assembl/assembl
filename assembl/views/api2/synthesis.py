@@ -39,6 +39,7 @@ def add_idea_to_synthesis(request):
     graph_view.db.add(link)
     graph_view.db.expire(graph_view, ["idea_assocs"])
     graph_view.send_to_changes()
+    # special location
     return Response(
         json.dumps(idea.generic_json()), 201, content_type='application/json',
         location=request.url + "/" + str(idea.id))
