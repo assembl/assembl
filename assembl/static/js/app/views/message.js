@@ -535,6 +535,11 @@ var MessageView = Marionette.LayoutView.extend({
             this.bodyTranslationError = 0;
             this._body = body.original();
             this.isMessageTranslated = false;
+            if (processedSubject.error) {
+                this._subject = subject.original();
+            } else {
+                this._subject = processedSubject.entry;
+            }
         } else {
             this.bodyTranslationError = processedBody.error;
             this.unknownPreference = this.translationData.getPreferenceForLocale(
