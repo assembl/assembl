@@ -28,6 +28,8 @@ def realpath(path):
 def is_file(path):
     return run("test -f "+path, quiet=True).succeeded
 
+def is_dir(path):
+    return run("test -d "+path, quiet=True).succeeded
 
 def getmtime(path):
     if env.mac:
@@ -903,11 +905,11 @@ def get_virtuoso_root():
 
 
 def get_virtuoso_exec():
-    virtuoso_exec = os.path.join(get_virtuoso_root(), 'bin', 'virtuoso-t')
+    virtuoso_exec = join(get_virtuoso_root(), 'bin', 'virtuoso-t')
     return virtuoso_exec
 
 def get_supervisord_conf():
-    return os.path.join(env.projectpath, "supervisord.conf")
+    return join(env.projectpath, "supervisord.conf")
 
 def get_virtuoso_src():
     config = get_config()
@@ -1095,7 +1097,7 @@ def update_vendor_themes():
             matchobj = re.match(r'.*/(.*)\.git', git_url)
             git_dir_name = matchobj.group(1)
             git_dir_path = normpath(join(vendor_themes_path, git_dir_name))
-            if os.path.isdir(git_dir_path) is False:
+            if is_dir(git_dir_path) is False:
                 print cyan("Cloning git repository")
                 with cd(vendor_themes_path):
                     run('git clone %s' % git_url)
