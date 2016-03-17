@@ -43,7 +43,7 @@ def add_local_role_on_class(request):
     header=JSON_HEADER, renderer='json')
 @view_config(
     context=CollectionContext, request_method="POST",
-    ctx_named_collection="User.local_roles",
+    ctx_named_collection="LocalRoleCollection.local_roles",
     header=JSON_HEADER, renderer='json')
 def add_local_role(request):
     # Do not use check_permissions, this is a special case
@@ -105,7 +105,7 @@ def add_local_role(request):
     header=JSON_HEADER, renderer='json')
 @view_config(
     context=InstanceContext, request_method="PATCH",
-    ctx_named_collection_instance="User.local_roles",
+    ctx_named_collection_instance="LocalRoleCollection.local_roles",
     header=JSON_HEADER, renderer='json')
 @view_config(
     context=InstanceContext, request_method="PUT",
@@ -113,7 +113,7 @@ def add_local_role(request):
     header=JSON_HEADER, renderer='json')
 @view_config(
     context=InstanceContext, request_method="PUT",
-    ctx_named_collection_instance="User.local_roles",
+    ctx_named_collection_instance="LocalRoleCollection.local_roles",
     header=JSON_HEADER, renderer='json')
 def set_local_role(request):
     # Do not use check_permissions, this is a special case
@@ -155,7 +155,7 @@ def set_local_role(request):
     header=FORM_HEADER)
 @view_config(
     context=CollectionContext, request_method="POST",
-    ctx_named_collection="User.local_roles",
+    ctx_named_collection="LocalRoleCollection.local_roles",
     header=FORM_HEADER)
 def use_json_header_for_LocalUserRole_POST(request):
     raise HTTPNotFound()
@@ -167,7 +167,7 @@ def use_json_header_for_LocalUserRole_POST(request):
     header=FORM_HEADER)
 @view_config(
     context=CollectionContext, request_method="PUT",
-    ctx_named_collection="User.local_roles",
+    ctx_named_collection="LocalRoleCollection.local_roles",
     header=FORM_HEADER)
 def use_json_header_for_LocalUserRole_PUT(request):
     raise HTTPNotFound()
