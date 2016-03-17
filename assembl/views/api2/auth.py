@@ -351,7 +351,7 @@ def add_user_language_preference(request):
             db.add(instance)
         db.flush()
         view = request.GET.get('view', None) or 'default'
-        return Response(first, user_id, permissions, view)
+        return CreationResponse(first, user_id, permissions, view)
 
 
 @view_config(context=InstanceContext, request_method='PUT', renderer="json",
