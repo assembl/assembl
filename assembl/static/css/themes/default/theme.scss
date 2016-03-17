@@ -87,10 +87,12 @@ $theme_navigation_text_color_active: $th_local_white;
 //Navigation + Synthesis panel
 $theme_navigation_or_idea_bg_active: $th_local_gray4;
 $theme_item_selected_color: lighten($th_local_purple5, 40%);
+// Used for the vertical bar to give additional emphasis un the table of idea and in the list of syntheses
 $theme_item_selected_secondary_color: $th_local_purple5;
 
 //Message list
 $theme_messagelist_bg_color: $th_local_gray7;
+//The color of the icons of the action buttons on messages
 $theme_message_icon_color: $th_local_purple5;
 
 //Panel groups
