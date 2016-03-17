@@ -146,6 +146,4 @@ _.extend(Backbone.Marionette.View.prototype, {
  },
 });
 
-window.Assembl = App;
-
 module.exports = App;
