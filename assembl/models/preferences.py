@@ -328,8 +328,8 @@ class Preferences(MutableMapping, Base):
             "name": _("Panel order in simple view"),
             "value_type": "scalar",
             "scalar_values": {
-                "NMI": _("Navigation, Idea, Messages"),
-                "NIM": _("Navigation, Messages, Idea")},
+                "NIM": _("Navigation, Idea, Messages"),
+                "NMI": _("Navigation, Messages, Idea")},
             "description": _("Order of panels"),
             "allow_user_override": P_READ,
             "modification_permission": P_ADMIN_DISC,
