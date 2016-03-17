@@ -529,12 +529,20 @@ var MessageView = Marionette.LayoutView.extend({
             processedSubject = subject.bestWithErrors(this.translationData, true);
 
         //bestWithError will make this the original value if error
-        this.bodyTranslationError = processedBody.error;
-        this.unknownPreference = this.translationData.getPreferenceForLocale(
-          processedBody.entry.getOriginalLocale()).get("source_of_evidence") === null;
-        this._body = processedBody.entry;
-        this._subject = processedSubject.entry;
-        this.isMessageTranslated = this._body.isMachineTranslation();
+
+        // specialCase: Hide IDENTICAL_TRANSLATION error
+        if (processedBody.error == 13) {
+            this.bodyTranslationError = 0;
+            this._body = body.original();
+            this.isMessageTranslated = false;
+        } else {
+            this.bodyTranslationError = processedBody.error;
+            this.unknownPreference = this.translationData.getPreferenceForLocale(
+              processedBody.entry.getOriginalLocale()).get("source_of_evidence") === null;
+            this._body = processedBody.entry;
+            this._subject = processedSubject.entry;
+            this.isMessageTranslated = this._body.isMachineTranslation();
+        }
       }
       else {
         this._body = body.original();
