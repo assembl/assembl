@@ -331,7 +331,12 @@ var groupContent = Marionette.CompositeView.extend({
   SimpleUIResetMessageAndIdeaPanelState: function() {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       this.groupContainer.suspendResize();
-      this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
+      var preferences = Ctx.getPreferences();
+      if (preferences.simple_view_panel_order === "NMI") {
+          this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL);
+      } else {
+          this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
+      }
       var nav = this.findNavigationSidebarPanelSpec(),
       ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
       this.resetMessagePanelWidth();
