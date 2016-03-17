@@ -1049,6 +1049,16 @@ class User(AgentProfile):
             return []
         return self.get_notification_subscriptions(discussion.id)
 
+    def get_preferences_for_discussion(self, discussion):
+        from .user_key_values import UserPreferenceCollection
+        return UserPreferenceCollection(self.id, discussion)
+
+    def get_preferences_for_current_discussion(self):
+        from ..auth.util import get_current_discussion
+        discussion = get_current_discussion()
+        if discussion:
+            return self.get_preferences_for_discussion(discussion)
+
     def get_notification_subscriptions(
             self, discussion_id, reset_defaults=False):
         """the notification subscriptions for this user and discussion.
