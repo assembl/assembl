@@ -62,15 +62,15 @@ def get_theme(discussion):
     """
     @return (theme_name, theme_relative_path) the relative path is relative to the theme_base_path.  See find_theme.
     """
-    default_theme = config.get('default_theme') or 'default'
-
-    if not discussion:
-        theme_name = default_theme
-    else:
-        #Legacy code, use discussion slug
+    theme_name = config.get('default_theme') or 'default'
+    theme_path = None
+    if discussion:
+        # Legacy code: Slug override
+        theme_path = find_theme(discussion.slug)
+    if theme_path:
         theme_name = discussion.slug
-    
-    theme_path = find_theme(theme_name)
+    else:
+        theme_path = find_theme(theme_name)
     if theme_path is not None:
         return (theme_name, theme_path)
     else:
