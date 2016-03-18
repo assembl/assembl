@@ -13,6 +13,7 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     UserCustomData = require('../models/userCustomData.js'),
     IdeaView = require('./ideaInIdeaList.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
+    scrollUtils = require('../utils/scrollUtils.js'),
     AssemblPanel = require('./assemblPanel.js'),
     _ = require('../shims/underscore.js'),
     CollectionManager = require('../common/collectionManager.js'),
@@ -489,10 +490,10 @@ var IdeaList = AssemblPanel.extend({
     if (ideaModel) {
       if (ideaModel.id) {
         var el = this.$el.find("." + ideaModel.getCssClassFromId());
-        if (el.length)
-        {
-          Ctx.scrollToElement(el.first(), that.body, null, 10, true);
-        } else {
+        if (el.length) {
+          scrollUtils.scrollToElement(el.first(), null, 10, true);
+        } 
+        else {
           console.log("el not found, will retry later");
           if (retry == undefined)
             retry = 0;

@@ -73,7 +73,7 @@ var trackAnalyticsWithQueryString = function(qs, context){
     switch(value){
       case 'notification':
         if (context === 'post'){
-          console.log('trackEvent enter post via notification');
+          //console.log('trackEvent enter post via notification');
           analytics.trackEvent(analytics.events.ENTER_POST_VIA_NOTIFICATION);
         }
         else {
@@ -83,11 +83,11 @@ var trackAnalyticsWithQueryString = function(qs, context){
         break;
       case 'share':
         if (context === 'post'){
-          console.log('trackEvent enter post via share');
+          //console.log('trackEvent enter post via share');
           analytics.trackEvent(analytics.events.ENTER_POST_VIA_SHARE);
         }
         else if (context === 'idea') {
-          console.log('trackEvent enter idea via share');
+          //console.log('trackEvent enter idea via share');
           analytics.trackEvent(analytics.events.ENTER_IDEA_VIA_SHARE);
         }
         else {

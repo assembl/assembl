@@ -578,7 +578,8 @@ var MessageList = AssemblPanel.extend({
           }
 
           // Scrolling to the element
-          scrollUtils.scrollToElement(message, undefined, previousScrollTarget.innerOffset, false);
+          //console.log("Scrolling to previous scroll target");
+          scrollUtils.scrollToElementAndWatch(message, undefined, previousScrollTarget.innerOffset, false);
         }
       }
     },
@@ -2283,8 +2284,8 @@ var MessageList = AssemblPanel.extend({
               callback();
             }
           }
-
-          scrollUtils.scrollToElement(el, real_callback);
+          //console.log("scrollToMessage(): Scrolling to message", messageModel.id);
+          scrollUtils.scrollToElementAndWatch(el, real_callback);
         }
         else {
           // Trigerring openWithFullBodyView above requires the message to
@@ -2419,6 +2420,7 @@ var MessageList = AssemblPanel.extend({
               Raven.captureMessage("showMessageById():  Unable to complete because a new render is in progress, restarting from scratch", {requested_message_id: id})
               that.showMessageByIdInProgress = false;
               that.showMessageById(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, undefined, undefined);
+              return;
             }
 
             if (messageIsInFilter && !that.isMessageOnscreen(id)) {
@@ -2480,7 +2482,9 @@ var MessageList = AssemblPanel.extend({
               }
             };
 
-            //console.log("showMessageById: DEBUG:  handing off to scrollToMessage");
+            if (debug) {
+              console.log("showMessageById: Handing off to scrollToMessage");
+            }
             that.scrollToMessage(message, shouldHighlightMessageSelected, shouldOpenMessageSelected, real_callback);
             that.showMessageByIdInProgress = false;
           }).error(function() {
@@ -2503,7 +2507,7 @@ var MessageList = AssemblPanel.extend({
   },
 
   scrollToTopPostBox: function() {
-    scrollUtils.scrollToElement(this.$('.messagelist-replybox'));
+    scrollUtils.scrollToElementAndWatch(this.$('.messagelist-replybox'));
     if (Ctx.debugRender) {
       console.log("MessageList:scrollToTopPostBox() stealing browser focus");
     }
@@ -2608,36 +2612,39 @@ var MessageList = AssemblPanel.extend({
    * @param ev The jquery event, with the view as ev.data
    */
   scrollLogger: _.debounce(function(ev) {
-      var that = ev.data,
+    if(!ev.data) {
+      //this isn't our own scroll handler
+      return;
+    }
+    var that = ev.data,
+    //alert("scroll");
+    CURRENT_FONT_SIZE_PX = 13,
 
-      //alert("scroll");
-      CURRENT_FONT_SIZE_PX = 13,
+    //Approximate using messagelist width - 2 * (messageList padding + messageFamily padding, messageFamily margin, message margin.
+    //This is only a good estimation for flat viewss
+    averageMessageWidth = that.ui.messageList.width() - 2 * (20 + 6 + 6 + 10),
 
-      //Approximate using messagelist width - 2 * (messageList padding + messageFamily padding, messageFamily margin, message margin.
-      //This is only a good estimation for flat viewss
-      averageMessageWidth = that.ui.messageList.width() - 2 * (20 + 6 + 6 + 10),
+    //Character per line:  normally between 45 to 75, 66 is considered ideal.
+    //Average character per line = div width / font size in px*0.4
+    CURRENT_CHARACTERS_PER_LINE = averageMessageWidth / (CURRENT_FONT_SIZE_PX * 0.4),
 
-      //Character per line:  normally between 45 to 75, 66 is considered ideal.
-      //Average character per line = div width / font size in px*0.4
-      CURRENT_CHARACTERS_PER_LINE = averageMessageWidth / (CURRENT_FONT_SIZE_PX * 0.4),
+    //(gotcha:  ideally substract non-character size of message, but still count header)
+    ESTIMATED_LINE_HEIGHT = 1.5 * CURRENT_FONT_SIZE_PX,
 
-      //(gotcha:  ideally substract non-character size of message, but still count header)
-      ESTIMATED_LINE_HEIGHT = 1.5 * CURRENT_FONT_SIZE_PX,
+    //Character per word: 5.1 average for english language + 1 space => multipy WPM*5 to get CPM
+    LINE_CARACTERS_PER_WORD = 5.1 + 1,
+    WORDS_PER_LINE = CURRENT_CHARACTERS_PER_LINE / LINE_CARACTERS_PER_WORD,
+    currentScrolltop = that.ui.panelBody.scrollTop(),
+    d = new Date(),
+    currentTimeStamp = d.getTime(),
+    distance = currentScrolltop - that.scrollLoggerPreviousScrolltop,
+    elapsedMilliseconds = currentTimeStamp - that.scrollLoggerPreviousTimestamp,
+    scrollLines = distance / ESTIMATED_LINE_HEIGHT,
+    scrollLinesPerMinute = scrollLines / elapsedMilliseconds * 1000 * 60,
+    scrollWordsPerMinute = scrollLinesPerMinute * WORDS_PER_LINE;
 
-      //Character per word: 5.1 average for english language + 1 space => multipy WPM*5 to get CPM
-      LINE_CARACTERS_PER_WORD = 5.1 + 1,
-      WORDS_PER_LINE = CURRENT_CHARACTERS_PER_LINE / LINE_CARACTERS_PER_WORD,
-      currentScrolltop = that.ui.panelBody.scrollTop(),
-      d = new Date(),
-      currentTimeStamp = d.getTime(),
-      distance = currentScrolltop - that.scrollLoggerPreviousScrolltop,
-      elapsedMilliseconds = currentTimeStamp - that.scrollLoggerPreviousTimestamp,
-      scrollLines = distance / ESTIMATED_LINE_HEIGHT,
-      scrollLinesPerMinute = scrollLines / elapsedMilliseconds * 1000 * 60,
-      scrollWordsPerMinute = scrollLinesPerMinute * WORDS_PER_LINE;
-
-      if (that.debugScrollLogging) {
-        /*console.log("CURRENT_FONT_SIZE_PX", CURRENT_FONT_SIZE_PX);
+    if (that.debugScrollLogging) {
+      /*console.log("CURRENT_FONT_SIZE_PX", CURRENT_FONT_SIZE_PX);
         console.log("averageMessageWidth", averageMessageWidth);
         console.log("CURRENT_CHARACTERS_PER_LINE", CURRENT_CHARACTERS_PER_LINE);
         console.log("ESTIMATED_LINE_HEIGHT", ESTIMATED_LINE_HEIGHT);
@@ -2646,14 +2653,14 @@ var MessageList = AssemblPanel.extend({
         console.log("CURRENT_FONT_SIZE_PX", CURRENT_FONT_SIZE_PX);
         console.log("scrollLines", scrollLines);
         console.log("scrollLinesPerMinute", scrollLinesPerMinute);
-*/
-        console.log("Distance: ", distance, "px, scrollWordsPerMinute: ", scrollWordsPerMinute);
-      }
+       */
+      console.log("Distance: ", distance, "px, scrollWordsPerMinute: ", scrollWordsPerMinute);
+    }
 
-      that.scrollLoggerPreviousScrolltop = currentScrolltop;
-      that.scrollLoggerPreviousTimestamp = currentTimeStamp;
-      that.checkMessagesOnscreen();
-    }, 1000)
+    that.scrollLoggerPreviousScrolltop = currentScrolltop;
+    that.scrollLoggerPreviousTimestamp = currentTimeStamp;
+    that.checkMessagesOnscreen();
+  }, 1000)
 
 });
 

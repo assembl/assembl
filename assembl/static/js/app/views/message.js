@@ -8,6 +8,7 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Permissions = require('../utils/permissions.js'),
+    scrollUtils = require('../utils/scrollUtils.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     CollectionManager = require('../common/collectionManager.js'),
@@ -1409,7 +1410,7 @@ var MessageView = Marionette.LayoutView.extend({
     else if (this.ui.messageReplyBox.length) {
       // if the .js_messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
       //console.log("Scrooling to reply box instead");
-      this.messageListView.scrollToElement(this.ui.messageReplyBox);
+      scrollUtils.scrollToElement(this.ui.messageReplyBox);
     }
     else {
       console.error("Tried to focus on the reply box of a message, but reply box isn't onscreen.  This should not happen!");

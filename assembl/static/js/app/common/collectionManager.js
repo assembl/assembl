@@ -289,7 +289,7 @@ var CollectionManager = Marionette.Object.extend({
         that.listenTo(Assembl.vent, 'socket:open', function() {
           //Yes, I want that in sentry for now
           console.debug("collectionManager: getAllMessageStructureCollectionPromise re-fetching because of socket re-open.");
-          console.log(that._allMessageStructureCollection);
+          //console.log(that._allMessageStructureCollection);
           //WARNING:  This is wastefull.  But even if we had a mecanism to request only if there is new data, some specific models might have changed.
           //So the only way we could fix that is to add a generic mecanism that returns objects modified after a specific date, 
           // recursively taking into account any relationship in the viewdef.  Not likely to happen...
