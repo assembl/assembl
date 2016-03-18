@@ -722,6 +722,7 @@ var CollectionManager = Marionette.Object.extend({
             var preferences = Ctx.getPreferences();
             //console.log(preferences);
             var defaultPanels;
+            // defined here and in groupContent.SimpleUIResetMessageAndIdeaPanelState
             if(preferences.simple_view_panel_order === "NIM") {
               defaultPanels = [{type: PanelSpecTypes.NAV_SIDEBAR.id },
               {type: PanelSpecTypes.IDEA_PANEL.id, minimized: true},

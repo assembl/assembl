@@ -332,6 +332,7 @@ var groupContent = Marionette.CompositeView.extend({
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       this.groupContainer.suspendResize();
       var preferences = Ctx.getPreferences();
+      // defined here and in collectionManager.getGroupSpecsCollectionPromise
       if (preferences.simple_view_panel_order === "NMI") {
           this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL);
       } else {
