@@ -181,7 +181,7 @@ var cKEditorField = Marionette.ItemView.extend({
           success: function(model, resp) {
                     },
           error: function(model, resp) {
-            console.error('ERROR: saveEdition', resp);
+            console.error('ERROR: saveEdition', resp.toJSON());
           }
         });
         this.trigger('save', [this]);
