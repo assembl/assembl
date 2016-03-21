@@ -301,7 +301,8 @@ class InstanceContext(TraversalContext):
                     # This was already set, assume it was set correctly
                     continue
                 if issubclass(self._instance.__class__, reln.mapper.class_):
-                    #print "Setting3 ", inst, reln.key, self._instance
+                    # print "Setting3 ", inst, reln.key, self._instance
+                    # TODO: Check nullability
                     setattr(inst, reln.key, self._instance)
                     break
         super(InstanceContext, self).decorate_instance(
@@ -601,6 +602,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
         if back_properties:
             # TODO: How to chose?
             self.back_property = back_properties.pop()
+            self.owner_class = self.back_property.mapper.class_
 
     def decorate_query(self, query, owner_alias, coll_alias, parent_instance, ctx):
         # This will decorate a query with a join on the relation.
