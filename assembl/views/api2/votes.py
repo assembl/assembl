@@ -13,8 +13,7 @@ from assembl.auth import (
     P_READ, Everyone, CrudPermissions, P_ADMIN_DISC, P_VOTE)
 from assembl.auth.util import get_permissions
 from assembl.models import (
-    AbstractIdeaVote, User, AbstractVoteSpecification,
-    MultiCriterionVotingWidget)
+    AbstractIdeaVote, User, AbstractVoteSpecification, VotingWidget)
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 
@@ -49,7 +48,7 @@ def votes_collection_add_json(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
-    widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
+    widget = ctx.get_instance_of_class(VotingWidget)
     if widget.activity_state != 'active':
         raise HTTPUnauthorized("Not in voting period")
     spec = ctx.get_instance_of_class(AbstractVoteSpecification)
@@ -98,7 +97,7 @@ def votes_collection_add(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
-    widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
+    widget = ctx.get_instance_of_class(VotingWidget)
     if widget.activity_state != 'active':
         raise HTTPUnauthorized("Not in voting period")
     args = request.params

@@ -9,7 +9,7 @@ from assembl.auth import (
     P_READ, P_ADMIN_DISC, P_ADD_POST)
 from assembl.models import (
     Widget, User, Discussion, Idea, IdeaCreatingWidget,
-    MultiCriterionVotingWidget)
+    VotingWidget)
 from assembl.auth.util import get_permissions
 from assembl.auth import CrudPermissions
 from ..traversal import InstanceContext, CollectionContext
@@ -20,7 +20,7 @@ from . import (
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
              ctx_instance_class_with_exceptions=(
-             Widget, (MultiCriterionVotingWidget,)),
+             Widget, (VotingWidget,)),
              permission=P_READ, accept="application/json")
 def widget_view(request):
     # IF_OWNED not applicable for widgets... so far
@@ -204,7 +204,7 @@ def set_confirmed_messages_json(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=MultiCriterionVotingWidget,
+    context=InstanceContext, ctx_instance_class=VotingWidget,
     request_method="GET", permission=P_READ,
     renderer="json", name="criteria")
 def get_idea_sibling_criteria(request):
@@ -227,7 +227,7 @@ def get_all_users_states(request):
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
-             ctx_instance_class=MultiCriterionVotingWidget, permission=P_READ,
+             ctx_instance_class=VotingWidget, permission=P_READ,
              accept="application/json")
 def voting_widget_view(request):
     user_id = authenticated_userid(request) or Everyone
@@ -373,13 +373,13 @@ def add_child_idea_json(request):
 
 
 @view_config(context=InstanceContext, request_method='GET',
-             ctx_instance_class=MultiCriterionVotingWidget,
+             ctx_instance_class=VotingWidget,
              permission=P_READ, accept="application/json",
              name="vote_results", renderer="json")
 def vote_results(request):
     ctx = request.context
     user_id = authenticated_userid(request) or Everyone
-    widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
+    widget = ctx.get_instance_of_class(VotingWidget)
     if not widget:
         raise HTTPNotFound()
     if widget.activity_state != "ended":
