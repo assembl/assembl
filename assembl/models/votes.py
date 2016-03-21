@@ -238,6 +238,7 @@ class TokenVoteSpecification(AbstractVoteSpecification):
             "n": len(voting_results)
         }
 
+    @classmethod
     def get_vote_class(cls):
         return TokenIdeaVote
 
