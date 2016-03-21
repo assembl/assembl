@@ -458,13 +458,19 @@
     "InspirationWidget": {
         "@extends": "IdeaCreatingWidget"
     },
-    "MultiCriterionVotingWidget": {
+    "VotingWidget": {
         "@extends": "Widget",
         "criteria_url": true,
         "votespecs_url": true,
         "votables_url": true,
         "votable_ideas": ":id_only",
         "vote_specifications": ":"
+    },
+    "MultiCriterionVotingWidget": {
+        "@extends": "VotingWidget"
+    },
+    "TokenVotingWidget": {
+        "@extends": "VotingWidget"
     },
     "AbstractIdeaVote": {
         "idea": true,
@@ -483,6 +489,10 @@
     },
     "LickertIdeaVote": {
         "@extends": "AbstractIdeaVote"
+    },
+    "TokenIdeaVote": {
+        "@extends": "AbstractIdeaVote",
+        "token_category": true
     },
     "PartnerOrganization": {
         "name": true,
@@ -583,6 +593,18 @@
     },
     "BinaryVoteSpecification": {
         "@extends": "AbstractVoteSpecification"
+    },
+    "TokenVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "exclusive_categories": true
+    },
+    "TokenCategorySpecification": {
+        "total_number": true,
+        "maximum_per_idea": true,
+        "typename": true,
+        "name": true,
+        "image": true,
+        "token_vote_specification": true
     },
     "Document": {
         "uri": "uri_id",

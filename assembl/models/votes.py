@@ -56,7 +56,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     settings = Column(Text)  # JSON blob
 
     widget = relationship(
-        "MultiCriterionVotingWidget", backref=backref(
+        "VotingWidget", backref=backref(
             "vote_specifications", cascade="all, delete-orphan"))
     criterion_idea = relationship(
         Idea, backref="criterion_for")
@@ -126,14 +126,14 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 from .widgets import (
-                    MultiCriterionVotingWidget, VotableIdeaWidgetLink)
+                    VotingWidget, VotableIdeaWidgetLink)
                 # TODO : Why did this work?
                 # return query.filter(
                 #     last_alias.discussion_id == parent_instance.discussion_id
                 #     ).filter(last_alias.hidden==False)
                 spec_alias = owner_alias
-                widget = ctx.get_instance_of_class(MultiCriterionVotingWidget)
-                widget_alias = aliased(MultiCriterionVotingWidget)
+                widget = ctx.get_instance_of_class(VotingWidget)
+                widget_alias = aliased(VotingWidget)
                 votable_link_alias = aliased(VotableIdeaWidgetLink)
                 idea_alias = last_alias
                 return query.join(
@@ -153,7 +153,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
                     kwargs):
                 for inst in assocs[:]:
                     widgets_coll = ctx.find_collection(
-                        'MultiCriterionVotingWidget.vote_specifications')
+                        'VotingWidget.vote_specifications')
                     if isinstance(inst, AbstractIdeaVote):
                         inst.vote_spec = parent_instance
                         other_votes = instance.db.query(
@@ -207,9 +207,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        from .widgets import MultiCriterionVotingWidget
-        return ((cls.widget_id == MultiCriterionVotingWidget.id),
-                (MultiCriterionVotingWidget.discussion_id == discussion_id))
+        from .widgets import VotingWidget
+        return ((cls.widget_id == VotingWidget.id),
+                (VotingWidget.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
 
@@ -580,12 +580,12 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
                    ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False)
     widget = relationship(
-        "MultiCriterionVotingWidget",
-        primaryjoin="and_(MultiCriterionVotingWidget.id==AbstractIdeaVote.widget_id, "
+        "VotingWidget",
+        primaryjoin="and_(VotingWidget.id==AbstractIdeaVote.widget_id, "
                          "AbstractIdeaVote.tombstone_date == None)",
         backref="votes")
     widget_ts = relationship(
-        "MultiCriterionVotingWidget",
+        "VotingWidget",
         backref=backref("votes_ts", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
