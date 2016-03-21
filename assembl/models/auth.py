@@ -916,7 +916,7 @@ class User(AgentProfile):
 
         _now = datetime.utcnow()
         s = AgentStatusInDiscussion(
-            first_vist=_now,
+            first_visit=_now,
             last_visit=_now, agent_profile=self,
             discussion=discussion)
 
