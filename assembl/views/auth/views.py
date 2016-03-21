@@ -377,9 +377,10 @@ def assembl_register_view(request):
     session.add(email_account)
     discussion = discussion_from_request(request)
     if discussion:
-        now = datetime.utcnow()
+        _now = datetime.utcnow()
         agent_status = AgentStatusInDiscussion(
             agent_profile=user, discussion=discussion,
+            first_visit=_now, last_visit=_now,
             user_created_on_this_discussion=True)
         session.add(agent_status)
     session.flush()
@@ -675,8 +676,10 @@ def velruse_login_complete_view(request):
             session.add(Username(username=username, user=base_profile))
     # Create AgentStatusInDiscussion
     if new_profile and discussion:
+        _now = datetime.utcnow()
         agent_status = AgentStatusInDiscussion(
             agent_profile=base_profile, discussion=discussion,
+            first_visit=_now, last_visit=_now,
             user_created_on_this_discussion=True)
         session.add(agent_status)
     if maybe_auto_subscribe(base_profile, discussion):

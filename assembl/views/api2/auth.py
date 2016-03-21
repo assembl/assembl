@@ -52,6 +52,7 @@ def add_local_role(request):
     if not user_id:
         raise HTTPUnauthorized()
     discussion_id = ctx.get_discussion_id()
+    discussion = Discussion.get(discussion_id)
     user_uri = User.uri_generic(user_id)
     if discussion_id is None:
         raise HTTPBadRequest()
@@ -69,7 +70,6 @@ def add_local_role(request):
             json['requested'] = False
             json['role'] = R_PARTICIPANT
             req_user = User.get_instance(requested_user)
-            discussion = Discussion.get(discussion_id)
             if not discussion.check_authorized_email(req_user):
                 raise HTTPForbidden()
         elif P_SELF_REGISTER_REQUEST in permissions:
@@ -93,6 +93,10 @@ def add_local_role(request):
             # relationship may not be initialized
             user = first.user or User.get(first.user_id)
             user.get_notification_subscriptions(discussion_id, True)
+
+        # Update the user's AgentStatusInDiscussion
+        user.update_agent_status_subscribe(discussion)
+
         view = request.GET.get('view', None) or 'default'
         permissions = get_permissions(
             user_id, ctx.get_discussion_id())
@@ -143,10 +147,49 @@ def set_local_role(request):
             raise HTTPUnauthorized()
     updated = instance.update_from_json(json, user_id, ctx)
     view = request.GET.get('view', None) or 'default'
+
+    # Update the user's AgentStatusInDiscussion
+    user = User.get(user_id)
+    discussion = Discussion.get(discussion_id)
+    user.update_agent_status_subscribe(discussion)
+
     if view == 'id_only':
         return [updated.uri()]
     else:
         return updated.generic_json(view, user_id, permissions)
+
+
+@view_config(
+    context=InstanceContext, request_method='DELETE',
+    ctx_named_collection_instance="Discussion.local_user_roles",
+    renderer='json')
+@view_config(
+    context=InstanceContext, request_method='DELETE',
+    ctx_named_collection_instance="User.local_roles",
+    renderer='json')
+def delete_local_role(request):
+    import pdb; pdb.set_trace()
+    ctx = request.context
+    instance = ctx._instance
+    user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized()
+    discussion_id = ctx.get_discussion_id()
+
+    if discussion_id is None:
+        raise HTTPBadRequest()
+    permissions = get_permissions(user_id, discussion_id)
+    requested_user = instance.user
+    if requested_user.id != user_id and P_ADMIN_DISC not in permissions:
+        raise HTTPUnauthorized()
+
+    user = User.get(user_id)
+    discussion = Discussion.get(discussion_id)
+    instance.db.delete(instance)
+    # Update the user's AgentStatusInDiscussion
+    user.update_agent_status_unsubscribe(discussion)
+    instance.db.flush()  # maybe unnecessary
+    return {}
 
 
 @view_config(

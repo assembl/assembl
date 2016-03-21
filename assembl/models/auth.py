@@ -47,7 +47,7 @@ from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord)
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
-from assembl.lib.raven_client import capture_exception
+from assembl.lib.raven_client import capture_exception, capture_message
 from .langstrings import Locale
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
@@ -279,18 +279,13 @@ class AgentProfile(Base):
             return self.get_status_in_discussion(discussion.id)
 
     def is_visiting_discussion(self, discussion_id):
+        from assembl.models.discussion import Discussion
         agent_status = self.get_status_in_discussion(discussion_id)
-        now = datetime.utcnow()
+        d = Discussion.get(discussion_id)
         if agent_status:
-            agent_status.last_visit = now
-            if agent_status.first_visit is None:
-                agent_status.first_visit = now
+            self.update_agent_status_last_visit(d)
         else:
-            agent_status = AgentStatusInDiscussion(
-                agent_profile=self, discussion_id=discussion_id,
-                first_visit=now, last_visit=now)
-            self.db.add(agent_status)
-        return agent_status
+            self.create_agent_status_in_discussion(d)
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
@@ -914,16 +909,64 @@ class User(AgentProfile):
             Role.name == role,
             LocalUserRole.discussion_id == discussion.id).first()
 
+    def create_agent_status_in_discussion(self, discussion):
+        s = self.get_status_in_discussion(discussion.id)
+        if s:
+            return s
+
+        _now = datetime.utcnow()
+        s = AgentStatusInDiscussion(
+            first_vist=_now,
+            last_visit=_now, agent_profile=self,
+            discussion=discussion)
+
+        self.db.add(s)
+        return s
+
+    def update_agent_status_last_visit(self, discussion):
+        agent_status = self.create_agent_status_in_discussion(discussion)
+        if agent_status:
+            _now = datetime.utcnow()
+            agent_status.last_visit = _now
+
+        else:
+            capture_message("""Found a User with id %d who does not have
+                            an AgentStatusInDiscussion""" % (self.id, ))
+
+    def update_agent_status_subscribe(self, discussion):
+        # Set the AgentStatusInDiscussion
+        agent_status = self.create_agent_status_in_discussion(discussion)
+        if agent_status:
+            if not agent_status.first_subscribed:
+                _now = datetime.utcnow()
+                agent_status.first_subscribed = _now
+        else:
+            capture_message("""Found a User with id %d who does not have
+                            an AgentStatusInDiscussion""" % (self.id, ))
+
+    def update_agent_status_unsubscribe(self, discussion):
+        agent_status = self.create_agent_status_in_discussion(discussion)
+        if agent_status:
+            _now = datetime.utcnow()
+            agent_status.last_unsubscribed = _now
+        else:
+            capture_message("""Found a User with id %d who does not have
+                            an AgentStatusInDiscussion""" % (self.id, ))
+
     def subscribe(self, discussion, role=R_PARTICIPANT):
         if not self.has_role_in(discussion, role):
             role = self.db.query(Role).filter_by(name=role).one()
             self.db.add(LocalUserRole(
                 user=self, role=role, discussion=discussion))
+        # Set the AgentStatusInDiscussion
+        self.update_agent_status_subscribe(discussion)
 
     def unsubscribe(self, discussion, role=R_PARTICIPANT):
         lur = self.has_role_in(discussion, role)
         if lur:
             self.db.delete(lur)
+        # Set the AgentStatusInDiscussion
+        self.update_agent_status_unsubscribe(discussion)
 
     @classmethod
     def extra_collections(cls):

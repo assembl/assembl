@@ -261,6 +261,12 @@ def discussion_permissions(request):
                             user=user,
                             discussion_id=discussion_id)
                         local_roles.append(lur)
+
+                        # TODO revisit this if Roles and Subscription are
+                        # de-coupled
+                        if role == 'r:participant':
+                            user.update_agent_status_subscribe(discussion)
+
                         local_roles_dict[(user.id, role)] = lur
                         local_roles_as_set.add((user.id, role))
                         db.add(lur)
@@ -270,6 +276,13 @@ def discussion_permissions(request):
                         del local_roles_dict[(user.id, role)]
                         local_roles_as_set.remove((user.id, role))
                         local_roles.remove(lur)
+
+                        # TODO revisit this if Roles and Subscription are
+                        # de-coupled
+                        import pdb; pdb.set_trace()
+                        if role == 'r:participant':
+                            user.update_agent_status_unsubscribe(discussion)
+
                         db.delete(lur)
 
         elif 'submit_look_for_user' in request.POST:
