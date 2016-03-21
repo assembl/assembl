@@ -1,4 +1,5 @@
 from traceback import print_exc
+import logging
 
 from sqlalchemy import select
 from sqlalchemy.orm import aliased
@@ -15,6 +16,10 @@ from assembl.auth import P_READ, R_SYSADMIN
 from assembl.auth.util import get_permissions
 from assembl.lib.sqla import *
 from assembl.lib.decl_enums import DeclEnumType
+
+
+log = logging.getLogger('assembl')
+
 
 class DictContext(object):
     def __init__(self, acl, subobjects=None):
@@ -292,6 +297,8 @@ class InstanceContext(TraversalContext):
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         # if one of the objects has a non-list relation to this class, add it
         # Slightly dangerous...
+        nullables = []
+        found = False
         for inst in assocs:
             relations = inst.__class__.__mapper__.relationships
             for reln in relations:
@@ -299,12 +306,22 @@ class InstanceContext(TraversalContext):
                     continue
                 if getattr(inst, reln.key, None) is not None:
                     # This was already set, assume it was set correctly
+                    found = True
+                    continue
+                # Do not decorate nullable columns
+                if all((col.nullable and col.info.get("pseudo_nullable", True)
+                        for col in reln.local_columns)):
+                    nullables.append(reln)
                     continue
                 if issubclass(self._instance.__class__, reln.mapper.class_):
                     # print "Setting3 ", inst, reln.key, self._instance
-                    # TODO: Check nullability
                     setattr(inst, reln.key, self._instance)
+                    found = True
                     break
+        if nullables and not found:
+            reln = nullables[0]
+            log.debug("Setting nullable column" + reln)
+            setattr(inst, reln.key, self._instance)
         super(InstanceContext, self).decorate_instance(
             instance, assocs, user_id, ctx, kwargs)
 
