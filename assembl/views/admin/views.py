@@ -279,7 +279,6 @@ def discussion_permissions(request):
 
                         # TODO revisit this if Roles and Subscription are
                         # de-coupled
-                        import pdb; pdb.set_trace()
                         if role == 'r:participant':
                             user.update_agent_status_unsubscribe(discussion)
 

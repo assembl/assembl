@@ -168,7 +168,6 @@ def set_local_role(request):
     ctx_named_collection_instance="User.local_roles",
     renderer='json')
 def delete_local_role(request):
-    import pdb; pdb.set_trace()
     ctx = request.context
     instance = ctx._instance
     user_id = authenticated_userid(request)
