@@ -4,6 +4,17 @@ var jQuery = require('../shims/jquery.js');
 
 const debugScrollUtils = false;
 
+/** 
+ * How often the position of watched element should be checked.
+ * (Each ScrollWatchInterval milliseconds)
+ */
+const ScrollWatchInterval = 2000;
+
+/**
+ * How long, in milliseconds, can a scroll watch process last untill unconditionally suiciding.
+ */
+const maxWatchProcessDuration = 15000;
+
 /**
  * Taken from
  * https://github.com/slindberg/jquery-scrollparent/blob/master/jquery.scrollparent.js
@@ -56,6 +67,9 @@ var computeScrollTarget = function(el, scrollableViewport, desiredViewportOffset
  *          is 30px for historical reasons
  * @param animate:
  *          Should the scroll be smooth
+ *          
+ * @param watch: Should a watchtdog check that the scrool doesn't move in case 
+ * of progressive loading, etc.
  */
 var scrollToElement = function(el, callback, margin, animate, watch) {
   //console.log("scrollUtils::scrollToElement() called with: ", el, callback, margin, animate);
@@ -64,66 +78,81 @@ var scrollToElement = function(el, callback, margin, animate, watch) {
   if (!scrollableElement) {
     throw new Exception("scrollToElement: Unable to find a scrollable element.");
   }
-
-  if (el && _.isFunction(scrollableElement.size) && scrollableElement.offset() !== undefined) {
-    var scrollTarget,
-    desiredViewportOffset = margin || 30;;
-
-    if (animate === undefined) {
-      animate = true;
+  if (!el) {
+    console.warn("scrollUtils::scrollToElement(): Warning: element to scroll to not found, aborting");
+    return;
     }
-
-    scrollTarget = computeScrollTarget(el, scrollableElement, desiredViewportOffset);
-
+  if(!_.isFunction(scrollableElement.size)) {
+    console.warn("scrollUtils::scrollToElement(): Warning: scrollableElement has no size, aborting");
+    return;
+  } 
+  if(scrollableElement.offset() === undefined) {
+    console.warn("scrollUtils::scrollToElement(): Warning: scrollableElement has no offest (hidden?), aborting");
     if(debugScrollUtils) {
-      console.log("scrollUtils::scrollToElement(): initialized on ",el, "desiredViewportOffset:", desiredViewportOffset, "scrollTarget:", scrollTarget);
+      console.log("scrollUtils::scrollToElement(): el: ", el, "scrollableElement: ", scrollableElement);
     }
+    return;
+  }
+  
+  var scrollTarget,
+  desiredViewportOffset = margin || 30;;
 
-    var processCallback = function() {
-      var finalViewportOffset = getElementViewportOffset(el, scrollableElement),
-          differenceToTargetOffset = finalViewportOffset - desiredViewportOffset;
+  if (animate === undefined) {
+    animate = true;
+  }
+
+  scrollTarget = computeScrollTarget(el, scrollableElement, desiredViewportOffset);
+
+  if(debugScrollUtils) {
+    console.log("scrollUtils::scrollToElement(): initialized on ",el, "desiredViewportOffset:", desiredViewportOffset, "scrollTarget:", scrollTarget);
+  }
+
+  var processCallback = function() {
+    var finalViewportOffset = getElementViewportOffset(el, scrollableElement),
+    differenceToTargetOffset = finalViewportOffset - desiredViewportOffset;
+    if(debugScrollUtils) {
+      console.log("scrollUtils::scrollToElement(): Final viewPort offset: ", finalViewportOffset, ", difference to target offset: ", differenceToTargetOffset);
+    }
+    if (animate && differenceToTargetOffset !== 0) {
       if(debugScrollUtils) {
-        console.log("scrollUtils::scrollToElement(): Final viewPort offset: ", finalViewportOffset, ", difference to target offset: ", differenceToTargetOffset);
+        console.log("scrollUtils::scrollToElement(): differenceToTargetOffset is not 0.  The content above the element may well have changed length during animation, retry scrolling with no animation");
       }
-      if (animate && differenceToTargetOffset !== 0) {
-        if(debugScrollUtils) {
-          console.log("scrollUtils::scrollToElement(): differenceToTargetOffset is not 0.  The content above the element may well have changed length during animation, retry scrolling with no animation");
-        }
-        scrollableElement.scrollTop(computeScrollTarget(el, scrollableElement, desiredViewportOffset));
-        if(debugScrollUtils) {
-          console.log("scrollUtils::scrollToElement(): POST_RETRY Final viewPort offset: ", getElementViewportOffset(el, scrollableElement), ", difference to target offset: ", getElementViewportOffset(el, scrollableElement) - desiredViewportOffset);
-        }
-      }
-      if (_.isFunction(callback)) {
-        callback();
-      }
-      if(watch) {
-        _watchOffset(el, scrollableElement);
+      scrollableElement.scrollTop(computeScrollTarget(el, scrollableElement, desiredViewportOffset));
+      if(debugScrollUtils) {
+        console.log("scrollUtils::scrollToElement(): POST_RETRY Final viewPort offset: ", getElementViewportOffset(el, scrollableElement), ", difference to target offset: ", getElementViewportOffset(el, scrollableElement) - desiredViewportOffset);
       }
     }
-
-    if (animate) {
-      scrollableElement.animate({ scrollTop: scrollTarget }, { complete: processCallback });
+    if (_.isFunction(callback)) {
+      callback();
     }
-    else {
-      scrollableElement.scrollTop(scrollTarget);
-      processCallback();
+    if(watch) {
+      _watchOffset(el, scrollableElement);
     }
   }
+
+  if (animate) {
+    scrollableElement.animate({ scrollTop: scrollTarget }, { complete: processCallback });
+  }
   else {
-    console.warn("scrollUtils::scrollToElement(): Warning: element to scroll to not found, or scrollable element invalid");
+    scrollableElement.scrollTop(scrollTarget);
+    processCallback();
   }
 };
 
-var _watchOffset = function(el, scrollableViewport) {
-  var initialScrollableViewportHeight = scrollableViewport[0].scrollHeight,
-  initialElViewPortOffset = getElementViewportOffset(el, scrollableViewport);
+//TODO:  Detect and cancel any OTHER watch offset on the same scrollable element
+//TODO:  Allow retrying initial scroll for a certain amount of time?
+//TODO:  Clean handling when the scrool would scrool below the bottom of the viewport.
+//TODO:  Handle cleanly the element disapearing from DOM
 
-  //TODO:  Detect and cancel any OTHER watch offset on the same scrollable element
-  //TODO:  Allow retrying initial scroll for a certain amount of time?
-  //TODO:  Hard limit on watch time
-  //TODO:  Clean handling when the scrool would scrool below the bottom of the viewport.
-  //TODO:  Handle cleanly the element disapearing from DOM
+var _watchOffset = function(el, scrollableViewport, initialWatchProcessTimestampParam) {
+  var initialScrollableViewportHeight = scrollableViewport[0].scrollHeight,
+  initialElViewPortOffset = getElementViewportOffset(el, scrollableViewport),
+  initialWatchProcessTimestamp = initialWatchProcessTimestampParam;
+  
+  if (initialWatchProcessTimestamp === undefined) {
+    //console.log("Setting initialWatchProcessTimestamp");
+    initialWatchProcessTimestamp = Date.now(); // unix timestamp in milliseconds;
+  }
 
   if(debugScrollUtils) {
     console.log("scrollUtils::_watchOffset: initialized with initialScrollableViewportHeight:", initialScrollableViewportHeight, ", initialElViewPortOffset: ", initialElViewPortOffset);
@@ -174,17 +203,29 @@ var _watchOffset = function(el, scrollableViewport) {
 
     var newWatchCallback = function () {
       var newElViewPortOffset = getElementViewportOffset(el, scrollableViewport);
+
       if(newElViewPortOffset !== initialElViewPortOffset) {
         if(debugScrollUtils) {
           console.warn("scrollUtils::_watchProcess: I was unable to scroll to initialOffset, this shouldn't normally happen.  Cowardly aborting watch.");
         }
       }
       else {
-        _watchOffset(el, scrollableViewport);
+        _watchOffset(el, scrollableViewport, initialWatchProcessTimestamp);
       }
     }
 
-    if(elViewPortOffsetChange === 0) {
+    var unixTimestamp = Date.now(); // in milliseconds
+
+    if(debugScrollUtils) {
+      console.log("scrollUtils::_watchProcess: unixTimestamp - initialWatchProcessTimestamp: ", unixTimestamp - initialWatchProcessTimestamp);
+    }
+
+    if(unixTimestamp - initialWatchProcessTimestamp > maxWatchProcessDuration) {
+      if(debugScrollUtils) {
+        console.log("scrollUtils::_watchProcess: maxWatchProcessDuration duration exceeded, stopping watch");
+      }
+    }
+    else if(elViewPortOffsetChange === 0) {
       if(debugScrollUtils) {
         console.log("scrollUtils::_watchProcess: Everything is fine, same position in viewport, continuing to watch");
       }
@@ -203,8 +244,7 @@ var _watchOffset = function(el, scrollableViewport) {
       //scrollToElement(el, newWatchCallback, initialElViewPortOffset);
     }
   }
-  watcherId = setTimeout(_watchProcess, 2000);
-
+  watcherId = setTimeout(_watchProcess, ScrollWatchInterval);
 }
 
 var scrollToElementAndWatch = function(el, callback, margin, animate) {
