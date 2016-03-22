@@ -291,8 +291,19 @@ class TokenCategorySpecification(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return ((cls.token_vote_specification_id == TokenVoteSpecification.id),
-                (TokenVoteSpecification.discussion_id == discussion_id))
+        from .widgets import VotingWidget
+        if alias_maker is None:
+            tcs = cls
+            tvs = TokenVoteSpecification
+            widget = VotingWidget
+        else:
+            tcs = alias_maker.alias_from_class(cls)
+            tvs = alias_maker.alias_from_relns(tcs.token_vote_specification)
+            widget = alias_maker.alias_from_relns(
+                tcs.token_vote_specification, tvs.widget)
+        return ((tcs.token_vote_specification_id == tvs.id),
+                (tvs.widget_id == widget.id),
+                (widget.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
 
