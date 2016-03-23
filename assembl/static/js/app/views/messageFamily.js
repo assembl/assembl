@@ -47,6 +47,10 @@ var MessageFamilyView = Marionette.ItemView.extend({
     }
 
     this.messageListView = options.messageListView;
+    if(!options.visitorData) {
+      throw new Error("visitorData missing");
+    }
+    this.visitorData = options.visitorData;
     this.collapsed = options.collapsed;
     this.currentLevel = options.currentLevel;
     this.hasChildren = (_.size(options.hasChildren) > 0);
@@ -72,26 +76,26 @@ var MessageFamilyView = Marionette.ItemView.extend({
           firstMessage = this.model,
           numAncestors = undefined,
           numDescendants = undefined,
-          visitorData = this.messageListView.visitorViewData[this.model.id],
+          visitorViewData = this.visitorData.visitorViewData[this.model.id],
           numAncestorsOutOfContext = 0,
           numDescendantsOutOfContext = 0,
           numAuthorsOutOfContext = 0;
 
-      //console.log(this.model.id, visitorData);
+      //console.log(this.model.id, visitorViewData);
       if (this.messageListView.isCurrentViewStyleThreadedType()) {
-        if ((visitorData.filtered_descendant_count !== visitorData.real_descendant_count) || visitorData.real_ancestor_count !== visitorData.level && firstMessage.get("parentId") && this.level === 1) {
+        if ((visitorViewData.filtered_descendant_count !== visitorViewData.real_descendant_count) || visitorViewData.real_ancestor_count !== visitorViewData.level && firstMessage.get("parentId") && this.level === 1) {
           hasParentsOrChildrenOutOfScope = true;
-          numAncestorsOutOfContext = visitorData.real_ancestor_count - visitorData.level;
-          numDescendantsOutOfContext = visitorData.real_descendant_count - visitorData.filtered_descendant_count;
-          numAuthorsOutOfContext = visitorData.real_descendant_authors_list.length - visitorData.filtered_descendant_authors_list.length + visitorData.real_ancestor_authors_list.length - visitorData.filtered_ancestor_authors_list.length;
+          numAncestorsOutOfContext = visitorViewData.real_ancestor_count - visitorViewData.level;
+          numDescendantsOutOfContext = visitorViewData.real_descendant_count - visitorViewData.filtered_descendant_count;
+          numAuthorsOutOfContext = visitorViewData.real_descendant_authors_list.length - visitorViewData.filtered_descendant_authors_list.length + visitorViewData.real_ancestor_authors_list.length - visitorViewData.filtered_ancestor_authors_list.length;
         }
       }
       else {
-        if (visitorData.real_descendant_count > 0 || visitorData.real_ancestor_count > 0) {
+        if (visitorViewData.real_descendant_count > 0 || visitorViewData.real_ancestor_count > 0) {
           hasParentsOrChildrenOutOfScope = true;
-          numAncestorsOutOfContext = visitorData.real_ancestor_count;
-          numDescendantsOutOfContext = visitorData.real_descendant_count;
-          numAuthorsOutOfContext = _.union(visitorData.real_descendant_authors_list, visitorData.real_ancestor_authors_list, [this.model.get('idCreator')]).length - 1;
+          numAncestorsOutOfContext = visitorViewData.real_ancestor_count;
+          numDescendantsOutOfContext = visitorViewData.real_descendant_count;
+          numAuthorsOutOfContext = _.union(visitorViewData.real_descendant_authors_list, visitorViewData.real_ancestor_authors_list, [this.model.get('idCreator')]).length - 1;
         }
       }
 
