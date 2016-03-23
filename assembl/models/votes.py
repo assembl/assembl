@@ -260,7 +260,7 @@ class TokenCategorySpecification(DiscussionBoundBase):
     maximum_per_idea = Column(Integer)
     name_ls_id = Column(Integer, ForeignKey(LangString.id), nullable=False)
     typename = Column(String, nullable=False,
-      doc='categories which have the same typename will be comparable (example: "positive"')
+      doc='categories which have the same typename will be comparable (example: "positive")')
     image = Column(URLString)
 
     token_vote_specification_id = Column(Integer, ForeignKey(TokenVoteSpecification.id, ondelete='CASCADE',
