@@ -107,7 +107,7 @@ pytest-splinter==1.7.1
 pytest==2.9.0
 python-dateutil==2.5.0
 python-openid==2.2.5
-python-social-auth==0.2.14
+-e git+https://github.com/imaginationforpeople/python-social-auth.git@assembl#egg=python_social_auth
 pytz==2015.7
 pyvirtualdisplay==0.2
 pyzmq==15.2.0

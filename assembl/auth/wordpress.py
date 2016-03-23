@@ -14,17 +14,15 @@ class WordPressServerOAuth2(BaseOAuth2):
     ID_KEY = 'ID'
 
     def __init__(self, strategy=None, redirect_uri=None):
-        self.authorization_data = strategy.get_authorization_data()
-        prefix = self.authorization_data['server']
-        self.AUTHORIZATION_URL = prefix + 'authorize'
-        self.ACCESS_TOKEN_URL = prefix + 'token'
-        self.USER_DATA_URL = prefix + 'me'
+        self.server = strategy.get_setting("WORDPRESS_OAUTH2_SERVER")
+        self.AUTHORIZATION_URL = self.server + 'authorize'
+        self.ACCESS_TOKEN_URL = self.server + 'token'
+        self.USER_DATA_URL = self.server + 'me'
         super(WordPressServerOAuth2, self).__init__(
             strategy=strategy, redirect_uri=redirect_uri)
 
-    def get_key_and_secret(self):
-        return (self.authorization_data['key'],
-                self.authorization_data['secret'])
+    def get_provider_domain(self):
+        return self.server
 
     ACCESS_TOKEN_METHOD = 'POST'
     DEFAULT_SCOPE = ['profile', 'email']  # phone address

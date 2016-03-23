@@ -48,6 +48,7 @@ def includeme(config):
     for name in ('SOCIAL_AUTH_AUTHENTICATION_BACKENDS',
                  'SOCIAL_AUTH_USER_FIELDS',
                  'SOCIAL_AUTH_PROTECTED_USER_FIELDS',
+                 'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION',
                  'SCOPE'):
         settings[name] = settings.get(name, '').split("\n")
     config.add_request_method(

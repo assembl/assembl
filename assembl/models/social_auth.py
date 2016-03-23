@@ -101,7 +101,7 @@ class SocialAuthAccount(
         'polymorphic_identity': 'social_auth_account',
     }
     __table_args__ = (
-        UniqueConstraint('provider_id', 'uid'), )
+        UniqueConstraint('provider_id', 'provider_domain', 'uid'), )
     UID_LENGTH = config.get('UID_LENGTH', 255)
 
     id = Column(Integer, ForeignKey(
@@ -117,7 +117,7 @@ class SocialAuthAccount(
     identity_provider = relationship(IdentityProvider)
     username = Column(String(200))
     #    info={'rdf': QuadMapPatternS(None, SIOC.name)})
-    domain = Column(String(200))
+    provider_domain = Column(String(255))
     uid = Column(String(UID_LENGTH), nullable=False)
     #    info={'rdf': QuadMapPatternS(None, SIOC.id)})
     extra_data = Column(MutableDict.as_mutable(JSONType))
@@ -218,30 +218,33 @@ class SocialAuthAccount(
             ).all()
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
+    def get_social_auth(cls, provider, uid, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
         return cls._query().join(
             cls.identity_provider).filter(
-            IdentityProvider.name == provider, cls.uid == uid).first()
+                IdentityProvider.name == provider, cls.uid == uid,
+                cls.provider_domain == provider_domain).first()
 
     @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
+    def get_social_auth_for_user(
+            cls, user, provider=None, id=None, provider_domain=None):
         qs = cls._query().filter_by(profile_id=user.id)
         if provider:
             qs = qs.join(
                 cls.identity_provider).filter(
-                IdentityProvider.name == provider)
+                    IdentityProvider.name == provider,
+                    cls.provider_domain == provider_domain)
         if id:
             qs = qs.filter(cls.id == id)
         return qs
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_social_auth(cls, user, uid, provider, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
         return cls._new_instance(
-            cls, profile=user, uid=uid,
+            cls, profile=user, uid=uid, provider_domain=provider_domain,
             identity_provider=IdentityProvider.get_by_name(provider))
 
     # Lifted from IdentityProviderAccount
@@ -345,6 +348,7 @@ class SocialAuthAccount(
 
     @classmethod
     def find_accounts(cls, provider, velruse_account):
+        # Probably deprecated
         if 'email' in velruse_account:
             return provider.db.query(cls).filter_by(
                 provider=provider,

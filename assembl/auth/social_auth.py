@@ -1,3 +1,5 @@
+import re
+
 from pyramid.events import subscriber, BeforeRender
 from pyramid.security import (
     remember,
@@ -6,6 +8,7 @@ from pyramid.security import (
 
 from social.apps.pyramid_app.utils import backends
 from social.strategies.pyramid_strategy import PyramidStrategy
+from social.utils import to_setting_name
 
 from assembl.models import User, Preferences
 from .util import discussion_from_request, maybe_auto_subscribe
@@ -58,16 +61,33 @@ def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
 
 
 class AssemblStrategy(PyramidStrategy):
-    def get_authorization_data(self):
+
+    def get_preferences(self):
         discussion = discussion_from_request(self.request)
         if discussion:
-            prefs = discussion.preferences
+            return discussion.preferences
         else:
-            prefs = Preferences.get_default_preferences()
-        return {
-            "server": prefs['authorization_server'],
-            "key": prefs['authorization_key'],
-            "secret": prefs['authorization_secret']}
+            return Preferences.get_default_preferences()
+
+    def get_setting(self, name):
+        """Return value for given setting name. May extract from discussion prefs"""
+        # TODO: Add WHITELISTED_DOMAINS
+        if name.split("_")[-1] in ('KEY', 'SECRET', 'SERVER'):
+            prefs = self.get_preferences()
+            backend = prefs["authorization_server_backend"]
+            if backend:
+                m = re.match((
+                    r"^(?:SOCIAL_AUTH_)?(?:%s_)?(KEY|SECRET|SERVER)$"
+                    % to_setting_name(backend)), name)
+                if m:
+                    val = prefs["authorization_" + m.group(1).lower()]
+                    if val:
+                        return val
+        return super(AssemblStrategy, self).get_setting(name)
+
+    # def partial_from_session(self, session):
+    #     from social.pipeline.utils import partial_from_session
+    #     return partial_from_session(self, session)
 
     def get_pipeline(self):
         return (
