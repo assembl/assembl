@@ -973,16 +973,24 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
 @task
 def virtuoso_reconstruct_db():
     execute(database_dump)
-    virtuoso_reconstruct_save_db(True)
-    virtuoso_reconstruct_restore_db()
+    # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
+    # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
+    # http://docs.fabfile.org/en/1.10/api/core/context_managers.html#fabric.context_managers.settings
+    with settings(command_timeout=120):
+        virtuoso_reconstruct_save_db(True)
+        virtuoso_reconstruct_restore_db()
     execute(app_reload)
 
 
 @task
 def virtuoso_major_reconstruct_db():
     execute(database_dump)
-    virtuoso_reconstruct_save_db(False)
-    virtuoso_reconstruct_restore_db()
+    # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
+    # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
+    # http://docs.fabfile.org/en/1.10/api/core/context_managers.html#fabric.context_managers.settings
+    with settings(command_timeout=120):
+        virtuoso_reconstruct_save_db(False)
+        virtuoso_reconstruct_restore_db()
     execute(app_reload)
 
 
