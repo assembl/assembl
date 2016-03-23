@@ -7,6 +7,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     Binary,
+    LargeBinary,
     Text,
     or_,
     event,
@@ -90,6 +91,16 @@ class Document(DiscussionBoundBase):
         'polymorphic_identity': 'document',
     }
 
+    @property
+    def external_url(self):
+        return self.uri_id
+
+    def generate_unique_id(self):
+        """Method to override in order to create a unique URI of the entity"""
+        import uuid
+        u = uuid.uuid1()
+        return u.urn
+
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
 
@@ -125,6 +136,34 @@ class Document(DiscussionBoundBase):
     crud_permissions = CrudPermissions(
             P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
             P_EDIT_POST, P_ADMIN_DISC)
+
+
+class File(Document):
+    __tablename__ = 'file'
+    __mapper_args__ = {
+        'polymorphic_identity': 'file'
+    }
+
+    def __init__(self, *args, **kwargs):
+        if kwargs.get('uri_id', None) is None:
+            kwargs['uri_id'] = self.generate_unique_id()
+        super(File, self).__init__(*args, **kwargs)
+
+    id = Column(Integer, ForeignKey(
+                'document.id', ondelete='CASCADE',
+                onupdate='CASCADE'), primary_key=True)
+
+    data = Column(LargeBinary, nullable=False)
+
+    @Document.external_url.getter
+    def external_url(self):
+        """
+        A public facing URL of the entity that is in question
+        """
+        if not self.id or not self.discussion:
+            return None
+        return self.discussion.compose_external_uri(
+               'Attachment', self.id, 'file')
 
 
 class Attachment(DiscussionBoundBase):
