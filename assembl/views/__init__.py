@@ -77,6 +77,15 @@ def get_theme(discussion):
         return ('default', 'default')
 
 
+def get_providers_with_names(providers=None):
+    from ..models.auth import IdentityProvider
+    if providers is None:
+        providers = aslist(config.get('login_providers'))
+    provider_names = dict(IdentityProvider.default_db.query(
+        IdentityProvider.provider_type, IdentityProvider.name).all())
+    return {pr: provider_names[pr] for pr in providers}
+
+
 def get_default_context(request):
     from ..auth.util import get_user, get_current_discussion
     if request.scheme == "http"\
@@ -146,7 +155,7 @@ def get_default_context(request):
             get_language(localizer.locale_name), 'LC_MESSAGES',
             'assembl.jed.json')
     assert os.path.exists(jedfilename)
-    providers = aslist(config.get('login_providers'))
+    providers = get_providers_with_names()
 
     from ..models.facebook_integration import language_sdk_existance
     fb_lang_exists, fb_locale = language_sdk_existance(get_language(localizer.locale_name),

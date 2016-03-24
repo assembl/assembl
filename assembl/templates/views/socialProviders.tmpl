@@ -3,9 +3,10 @@
         <p><label for="optionsCheckboxList" class="control-label">{{ gettext('Add a social account') }}</label></p>
         <div class="controls">
         <% for (var i in providers) {
-        var provider = providers[i]; %>
+        var provider = providers[i],
+            provider_name = names[provider]; %>
         <form id="<%= provider %>" class="mts" method="post" action="/login/<%= provider %>">
-         <button type="submit" class="<%= provider %>-bg mbs">Connect with <%= provider %></button>
+         <button type="submit" class="<%= provider %>-bg mbs">Connect with <%= provider_name %></button>
         </form>
         <% } %>
         </div>

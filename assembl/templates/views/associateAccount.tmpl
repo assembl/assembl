@@ -1,4 +1,4 @@
-<% if(email.get('@type') === 'IdentityProviderAccount'){ %>
+<% if(email.get('@type') === 'SocialAuthAccount'){ %>
     <i class="icon-<%= email.get('provider') %> mrs"></i>
     <% if(email.get('email')){
     	print(email.get('email'));

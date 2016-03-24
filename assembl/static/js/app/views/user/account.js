@@ -1,6 +1,7 @@
 'use strict';
 
 var Marionette = require('../../shims/marionette.js'),
+    _ = require('../../shims/underscore.js'),
     $ = require('../../shims/jquery.js'),
     Accounts = require('../../models/accounts.js'),
     Ctx = require('../../common/context.js'),
@@ -68,7 +69,7 @@ var socialProvidersList = Marionette.ItemView.extend({
     this.providers = options.providers;
   },
   serializeData: function() {
-    return {providers: this.providers};
+    return {providers: _.keys(this.providers), names: this.providers};
   }
 });
 

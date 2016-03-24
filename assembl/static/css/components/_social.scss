@@ -78,8 +78,8 @@
 }
 
 /* Google+ */
-.core-form .google-bg,
-.google-bg {
+.core-form .google-oauth2-bg,
+.google-oauth2-bg {
   background-color: #de4c34;
   display: block;
   height: 37px;
@@ -108,11 +108,11 @@
   }
 }
 
-.google-bg:hover {
+.google-oauth2-bg:hover {
   cursor: pointer;
 }
 
-.google-bg:active {
+.google-oauth2-bg:active {
   background: #ce3e26;
 }
 

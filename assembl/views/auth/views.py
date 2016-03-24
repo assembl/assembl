@@ -43,13 +43,14 @@ from assembl.auth.util import (
     roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
-from .. import get_default_context, JSONError
+from .. import get_default_context, JSONError, get_providers_with_names
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger('assembl')
 
 
 public_roles = {Everyone, Authenticated}
+
 
 def get_login_context(request, force_show_providers=False):
     slug = request.matchdict.get('discussion_slug', None)
@@ -59,7 +60,7 @@ def get_login_context(request, force_show_providers=False):
     else:
         p_slug = ""
         request.session.pop('discussion')
-    providers = request.registry.settings['login_providers'][:]
+    providers = get_providers_with_names()
     discussion = discussion_from_request(request)
     hide_registration = (discussion
         and not public_roles.intersection(set(roles_with_permissions(
@@ -73,7 +74,8 @@ def get_login_context(request, force_show_providers=False):
         if isinstance(hide_providers, (str, unicode)):
             hide_providers = (hide_providers, )
         for provider in hide_providers:
-            providers.remove(provider)
+            del providers[provider]
+
     return dict(get_default_context(request),
                 login_url=login_url,
                 slug_prefix=p_slug,
@@ -286,7 +288,7 @@ def assembl_profile(request):
         dict(get_default_context(request),
              error='<br />'.join(errors),
              unverified_emails=unverified_emails,
-             providers=request.registry.settings['login_providers'],
+             providers=get_providers_with_names(),
              google_consumer_key=request.registry.settings.get(
                  'google.consumer_key', ''),
              the_user=profile,
