@@ -730,6 +730,7 @@ var MessageList = AssemblPanel.extend({
   getMessageIdsToShow: function(resultMessageIdCollection, visitorData, requestedOffsets) {
       var messageIdsToShow = [],
           returnedOffsets = this.calculateMessagesOffsets(visitorData, requestedOffsets);
+
       if (this.isCurrentViewStyleThreadedType()) {
         messageIdsToShow = visitorData.visitorOrderLookupTable.slice(returnedOffsets.offsetStart, returnedOffsets.offsetEnd + 1);
       } else {
@@ -1378,13 +1379,15 @@ var MessageList = AssemblPanel.extend({
        */
       visitorRootMessagesToDisplay = [];
 
-      var resultMessageIdCollectionReference = resultMessageIdCollection;
+      var resultMessageIdCollectionReference = resultMessageIdCollection,
+          tempVisitorOrderLookupTable = [],
+          tempVisitorRootMessagesToDisplay = [];
 
       var inFilter = function(message) {
         return resultMessageIdCollectionReference.indexOf(message.getId()) >= 0;
       };
       
-      var visitorObject = new ObjectTreeRenderVisitor(visitorViewData, visitorOrderLookupTable, visitorRootMessagesToDisplay, inFilter);
+      var visitorObject = new ObjectTreeRenderVisitor(visitorViewData, tempVisitorOrderLookupTable, tempVisitorRootMessagesToDisplay, inFilter);
       messageStructureCollection.visitDepthFirst(visitorObject);
 
       var sortFunction = undefined;
@@ -1421,6 +1424,9 @@ var MessageList = AssemblPanel.extend({
           visitorRootMessagesToDisplay,
           sortFunction
       );
+      /*console.log("_generateVisitorData(): visitorViewData: ", visitorViewData,
+        "visitorOrderLookupTable: ", visitorOrderLookupTable,
+        "visitorRootMessagesToDisplay: ", visitorRootMessagesToDisplay);*/
       return {
         visitorViewData: visitorViewData,
         visitorOrderLookupTable: visitorOrderLookupTable,
@@ -1745,7 +1751,7 @@ var MessageList = AssemblPanel.extend({
         currentLevel: level,
         hasChildren: subviews,
         last_sibling_chain: last_sibling_chain,
-        visitorData, visitorData});
+        visitorData: visitorData});
 
       // pass logic to the init view
       //view.currentLevel = level;
@@ -1771,7 +1777,9 @@ var MessageList = AssemblPanel.extend({
       if (sibblingsviews.length > 0) {
         list = list.concat(sibblingsviews);
       }
-
+      if (debug) {
+        console.log("getRenderedMessagesThreadedPromise():  Resolving promise with:",list);
+      }
       return Promise.resolve(list);
     });
   },
@@ -2233,13 +2241,14 @@ var MessageList = AssemblPanel.extend({
   /**
    * @return:  A list of jquery selectors
    */
-  getOnScreenMessagesSelectors: function(visitorData) {
+  getOnScreenMessagesSelectors: function(resultMessageIdCollection, visitorData) {
       if (this._offsetStart === undefined || this._offsetEnd === undefined) {
         throw new Error("The messagelist hasn't displayed any messages yet");
       }
 
       var that = this,
       messagesOnScreenIds = this.getMessageIdsToShow(
+          resultMessageIdCollection,
           visitorData,
           {
             'offsetStart': this._offsetStart,
@@ -2575,9 +2584,9 @@ var MessageList = AssemblPanel.extend({
     this.$('.messageSend-subject').focus();
   },
 
-  checkMessagesOnscreen: function(visitorData) {
+  checkMessagesOnscreen: function(resultMessageIdCollection, visitorData) {
       var that = this,
-          messageDoms = this.getOnScreenMessagesSelectors(visitorData),
+          messageDoms = this.getOnScreenMessagesSelectors(resultMessageIdCollection, visitorData),
           currentScrolltop = this.ui.panelBody.scrollTop(),
           currentViewPortTop = this.ui.panelBody.offset().top,
           currentViewPortBottom = currentViewPortTop + this.ui.panelBody.height() - this.ui.stickyBar.height();
@@ -2720,11 +2729,13 @@ var MessageList = AssemblPanel.extend({
 
     that.scrollLoggerPreviousScrolltop = currentScrolltop;
     that.scrollLoggerPreviousTimestamp = currentTimeStamp;
-    that.getVisitorDataPromise().then(function(visitorData) {
-      if(!that.isViewDestroyed()) {
-        that.checkMessagesOnscreen(visitorData);
-      }
-    });
+    Promise.join(
+        that.currentQuery.getResultMessageIdCollectionPromise(), that.getVisitorDataPromise(),
+        function(resultMessageIdCollection, visitorData) {
+          if(!that.isViewDestroyed()) {
+            that.checkMessagesOnscreen(resultMessageIdCollection, visitorData);
+          }
+        });
   }, 1000)
 
 });

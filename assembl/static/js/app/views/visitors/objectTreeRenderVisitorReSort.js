@@ -71,9 +71,9 @@ ObjectTreeRenderVisitorReSortVisitor.prototype.visit = function(data, ancestry) 
 
 /** Re-sort the data_by_object of an ObjectTreeRenderVisitor, using a sibling sort
 * function, and outputs the new order_lookup_table and the new (sorted) roots.
-* @paramo rder_lookup_table output param, a list containing every object id retained
+* @paramo order_lookup_table output param, a list containing every object id retained
 * indexed by traversal order
-* @param roots: input/output param. The objects that have no parents in the
+* @param roots: output param. The objects that have no parents in the
 * set.  This list will be re-sorted
 * @param sort_comparator_function:  The parse data (data_by_object[object.id] is passed to this callback.  ex:  sort_comparator_function(data)
 */
@@ -82,9 +82,16 @@ function objectTreeRenderVisitorReSort(data_by_object, order_lookup_table, roots
   if (sort_comparator_function === undefined) {
     throw new Error("There is no point in sorting without a comparator function.");
   }
+  if (order_lookup_table.length > 0) {
+    throw new Error("order_lookup_table is an output parameter");
+  }
+  if (roots.length > 0) {
+    throw new Error("roots is an output parameter");
+  }
 
   var visitor = new ObjectTreeRenderVisitorReSortVisitor(order_lookup_table, roots);
   objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function);
+  //console.log("objectTreeRenderVisitorReSort: final order_lookup_table: ", order_lookup_table);
 }
 
 module.exports = objectTreeRenderVisitorReSort;
