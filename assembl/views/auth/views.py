@@ -24,10 +24,14 @@ from pyramid.httpexceptions import (
     HTTPServerError)
 from pyramid.settings import asbool
 from sqlalchemy import desc
-from velruse import login_url
 from pyisemail import is_email
 from social.actions import do_auth
 from social.apps.pyramid_app.utils import psa
+from social.exceptions import (
+    AuthException, AuthFailed, AuthCanceled, AuthUnknownError,
+    AuthMissingParameter, AuthStateMissing,AuthStateForbidden,
+    AuthTokenError)
+
 
 from assembl.models import (
     EmailAccount, IdentityProvider, SocialAuthAccount,
@@ -77,7 +81,6 @@ def get_login_context(request, force_show_providers=False):
             del providers[provider]
 
     return dict(get_default_context(request),
-                login_url=login_url,
                 slug_prefix=p_slug,
                 providers=providers,
                 hide_registration=hide_registration,
@@ -882,7 +885,7 @@ def user_confirm_email(request):
 
 
 @view_config(
-    context='velruse.AuthenticationDenied',
+    context=AuthException,  # maybe more specific?
     renderer='assembl:templates/login.jinja2',
 )
 def login_denied_view(request):

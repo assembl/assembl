@@ -347,21 +347,21 @@ class SocialAuthAccount(
             username=self.username), True
 
     @classmethod
-    def find_accounts(cls, provider, velruse_account):
+    def find_accounts(cls, provider, social_account):
         # Probably deprecated
-        if 'email' in velruse_account:
+        if 'email' in social_account:
             return provider.db.query(cls).filter_by(
                 provider=provider,
-                domain=velruse_account['domain'],
-                email=velruse_account['email']).all()
-        elif 'username' in velruse_account:
+                domain=social_account['domain'],
+                email=social_account['email']).all()
+        elif 'username' in social_account:
             return provider.db.query(cls).filter_by(
                 provider=provider,
-                domain=velruse_account['domain'],
-                uid=velruse_account['username']).all()
+                domain=social_account['domain'],
+                uid=social_account['username']).all()
         else:
             log.error("account needs username or email" +
-                      velruse_account)
+                      social_account)
             raise RuntimeError("account needs username or uid")
 
     # temporary shims

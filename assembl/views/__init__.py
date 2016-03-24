@@ -7,7 +7,7 @@ from collections import defaultdict
 import simplejson as json
 from pyramid.view import view_config
 from pyramid.response import Response
-from velruse.exceptions import CSRFError
+from social.exceptions import AuthMissingParameter
 from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
     HTTPBadRequest, HTTPFound)
@@ -245,13 +245,14 @@ class JSONError(HTTPException):
             return r
 
 
-@view_config(context=CSRFError)
+# TODO social_auth: Test the heck out of this.
+@view_config(context=AuthMissingParameter)
 def csrf_error_view(exc, request):
     if "HTTP_COOKIE" not in request.environ:
         user_agent = request.user_agent
         is_safari = 'Safari' in user_agent and 'Chrome' not in user_agent
         route_name = request.matched_route.name
-        is_login_callback = route_name.startswith('velruse.') and route_name.endswith('-callback')
+        is_login_callback = (route_name == 'social.complete')
         if is_safari and is_login_callback:
             # This is an absolutely horrible hack, but depending on some settings,
             # Safari does not give cookies on a redirect, so we lose session info.
