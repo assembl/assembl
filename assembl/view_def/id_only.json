@@ -12,7 +12,7 @@
     "AgentProfile": {},
     "User": {},
     "EmailAccount": {},
-    "IdentityProviderAccount": {},
+    "SocialAuthAccount": {},
     "IdentityProvider": {},
     "ContentSource": {},
     "PostSource": {},

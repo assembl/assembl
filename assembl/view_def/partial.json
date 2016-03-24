@@ -40,7 +40,7 @@
         "for_role": true
     },
     "EmailAccount": false,
-    "IdentityProviderAccount": false,
+    "SocialAuthAccount": false,
     "IdentityProvider": {
         "name": true,
         "provider_type": true,

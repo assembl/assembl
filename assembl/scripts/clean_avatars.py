@@ -12,10 +12,10 @@ from assembl.lib.config import set_config
 
 
 def clean_avatars(db):
-    from assembl.models import IdentityProviderAccount
+    from assembl.models import SocialAuthAccount
     with transaction.manager:
-        for idp in db.query(IdentityProviderAccount).filter(
-                IdentityProviderAccount.picture_url != None):
+        for idp in db.query(SocialAuthAccount).filter(
+                SocialAuthAccount.picture_url != None):
             url = idp.picture_url
             if not requests.head(url).ok:
                 print "Not ok", idp.id, url

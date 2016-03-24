@@ -63,15 +63,12 @@
         "user_id": true,
         "source_id": true
     },
-    "IdentityProviderAccount": {
+    "SocialAuthAccount": {
         "@extends": "AbstractAgentAccount",
         "provider": false,
         "username": false,
+        "uid": false,
         "picture_url": false
-    },
-    "FacebookAccount": {
-        "@extends": "IdentityProviderAccount",
-        "app_id": false
     },
     "ContentSource": {
         "discussion_id": "discussion",

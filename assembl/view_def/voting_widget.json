@@ -73,8 +73,7 @@
     "WebLinkAccount": false,
     "LoomioAccount": false,
     "SourceSpecificAccount": false,
-    "IdentityProviderAccount": false,
-    "FacebookAccount": false,
+    "SocialAuthAccount": false,
     "IdentityProvider": {
         "name": true,
         "provider_type": true,

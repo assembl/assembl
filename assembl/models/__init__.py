@@ -72,7 +72,6 @@ from .auth import (
     DiscussionPermission,
     EmailAccount,
     IdentityProvider,
-    IdentityProviderAccount,
     LanguagePreferenceCollection,
     LocalUserRole,
     PartnerOrganization,
@@ -235,7 +234,6 @@ from .edgesense_drupal import (
     SourceSpecificPost,
 )
 from .facebook_integration import (
-    FacebookAccount,
     FacebookAccessToken,
     FacebookGenericSource,
     FacebookGroupSource,

@@ -44,7 +44,7 @@
         "for_role": ":"
     },
     "EmailAccount": false,
-    "IdentityProviderAccount": false,
+    "SocialAuthAccount": false,
     "IdentityProvider": {
         "name": true,
         "provider_type": true,

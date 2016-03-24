@@ -12,11 +12,9 @@ var Account = Base.Model.extend({
       profile: 0,
       preferred: false,
 
-      //IdentityProviderAccount specifics
+      //SocialAuthAccount specifics
       provider: null,
       username: null,
-      domain: null,
-      userid: null,
       picture_url: null,
 
       //Standards

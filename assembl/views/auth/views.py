@@ -30,7 +30,7 @@ from social.actions import do_auth
 from social.apps.pyramid_app.utils import psa
 
 from assembl.models import (
-    EmailAccount, IdentityProvider, IdentityProviderAccount,
+    EmailAccount, IdentityProvider, SocialAuthAccount,
     AgentProfile, User, Username, Role, LocalUserRole,
     AbstractAgentAccount, Discussion, AgentStatusInDiscussion)
 from assembl.auth import (
@@ -195,9 +195,10 @@ def get_profile(request):
             raise HTTPNotFound()
         profile = account.profile
     else:
-        account = session.query(IdentityProviderAccount).join(
+        # TODO: CHECK if we're looking at username or uid
+        account = session.query(SocialAuthAccount).join(
             IdentityProvider).filter(
-                IdentityProviderAccount.username == identifier and
+                SocialAuthAccount.username == identifier and
                 IdentityProvider.type == id_type).first()
         if not account:
             raise HTTPNotFound()
@@ -535,11 +536,12 @@ def velruse_login_complete_view(request):
         logged_in = User.get(logged_in)
     base_profile = logged_in
     provider = get_identity_provider(request)
-    idp_class = IdentityProviderAccount
+    idp_class = SocialAuthAccount
+    # Is this still relevant?
     for cls in idp_class.get_subclasses():
         if cls == idp_class:
             continue
-        if cls.account_provider_name == provider.name:
+        if getattr(cls, "account_provider_name", None) == provider.name:
             idp_class = cls
             break
     # find or create IDP_Accounts
@@ -705,7 +707,7 @@ def velruse_login_complete_view(request):
                         account.delete()
                         if account.verified and account.preferred:
                             base_account.preferred = True
-                    elif isinstance(account, IdentityProviderAccount):
+                    elif isinstance(account, SocialAuthAccount):
                         if account.provider_id == base_account.provider_id:
                             log.error("This should have been caught earlier")
                             # TODO Suspicious, prevents Aryan's facebook login

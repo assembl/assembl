@@ -122,7 +122,7 @@ class SocialAuthAccount(
     #    info={'rdf': QuadMapPatternS(None, SIOC.id)})
     extra_data = Column(MutableDict.as_mutable(JSONType))
     picture_url = Column(URLString)
-    user = relationship(AgentProfile, backref='socialauth_accounts')
+    user = relationship(AgentProfile, backref='identity_accounts')
 
     @property
     def provider(self):

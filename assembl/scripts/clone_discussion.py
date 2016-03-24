@@ -79,17 +79,17 @@ def is_special_class(ob):
 
 
 def find_or_create_provider_account(db, account):
-    from assembl.models import IdentityProviderAccount
-    assert isinstance(account, IdentityProviderAccount)
+    from assembl.models import SocialAuthAccount
+    assert isinstance(account, SocialAuthAccount)
     # Note: need a similar one for SourceSpecificAccount
     provider = find_or_create_object(account.provider)
     args = {
         "provider": provider,
-        "userid": account.userid,
+        "uid": account.uid,
         "username": account.username,
-        "domain": account.domain
+        "provider_domain": account.provider_domain
     }
-    to_account = db.query(IdentityProviderAccount).filter_by(**args).first()
+    to_account = db.query(SocialAuthAccount).filter_by(**args).first()
     if to_account is None:
         for k in ['profile_info', 'picture_url']:
             args[k] = getattr(account, k)
@@ -100,12 +100,12 @@ def find_or_create_provider_account(db, account):
 
 def find_or_create_agent_profile(db, profile):
     from assembl.models import (
-        AgentProfile, IdentityProviderAccount, User)
+        AgentProfile, SocialAuthAccount, User)
     assert isinstance(profile, AgentProfile)
     accounts = []
     profiles = set()
     for account in profile.accounts:
-        if isinstance(account, IdentityProviderAccount):
+        if isinstance(account, SocialAuthAccount):
             eq = find_or_create_provider_account(db, account)
         else:
             eq = find_or_create_object(account)

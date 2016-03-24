@@ -34,7 +34,7 @@
     "EmailAccount": false,
     "WebLinkAccount": false,
     "LoomioAccount": false,
-    "IdentityProviderAccount": false,
+    "SocialAuthAccount": false,
     "IdentityProvider": {
         "name": true,
         "provider_type": true,

@@ -24,8 +24,8 @@ from sqlalchemy.orm import (
 from .auth import (
     AgentProfile,
     IdentityProvider,
-    IdentityProviderAccount,
 )
+from .social_auth import SocialAuthAccount
 
 from ..auth import (CrudPermissions, P_EXPORT_EXTERNAL_SOURCE, P_SYSADMIN)
 from ..lib.config import get_config
@@ -506,9 +506,9 @@ class FacebookGenericSource(PostSource):
 
     fb_source_id = Column(String(512), nullable=False)
     url_path = Column(URLString)
-    creator_id = Column(Integer, ForeignKey('facebook_account.id',
+    creator_id = Column(Integer, ForeignKey(SocialAuthAccount.id,
                         onupdate='CASCADE', ondelete='CASCADE'))
-    creator = relationship('FacebookAccount',
+    creator = relationship(SocialAuthAccount,
                            backref=backref('sources',
                                            cascade="all, delete-orphan"))
 
@@ -579,8 +579,8 @@ class FacebookGenericSource(PostSource):
             self.provider = fb
 
     def _get_current_users(self):
-        result = self.db.query(IdentityProviderAccount).\
-            filter_by(domain=DOMAIN).all()
+        result = self.db.query(SocialAuthAccount).\
+            filter_by(provider_domain=DOMAIN).all()
         return {x.userid: x for x in result}
 
     def _get_current_posts(self, load_json=False):
@@ -608,10 +608,14 @@ class FacebookGenericSource(PostSource):
     def _create_fb_user(self, user, db):
         if user['id'] not in db:
             # avatar_url = self.parser.get_user_profile_photo(user)
-            new_user = FacebookAccount.create(
-                user,
-                self.provider,
-                self.parser.get_app_id()
+            userid = user.get('id')
+            new_user = SocialAuthAccount(
+                profile=user,
+                identity_provider=self.provider,
+                full_name=user.get("name"),
+                userid=userid,
+                provider_domain=self.parser.get_app_id(),
+                picture_url='http://graph.facebook.com/%s/picture' % (userid,)
             )
             self.db.add(new_user)
             self.db.flush()
@@ -770,7 +774,7 @@ class FacebookGenericSource(PostSource):
         :param obj_id - The facebook ID of the creator of the content
         :param posts_db - The cache of all posts currently imported from
                             this source
-        :param users_db - The cache of all FacebookAccounts in the database
+        :param users_db - The cache of all SocialAuthAccounts in the database
         :param upper - DateTime object describing up to which datetime
                         new messages are accepted.
         :param lower - DateTime object describing up to which datetime
@@ -1116,89 +1120,14 @@ class FacebookSinglePostSource(FacebookGenericSource):
             self.single_post(reimport=reimport)
 
 
-class FacebookAccount(IdentityProviderAccount):
-    __tablename__ = 'facebook_account'
-    __mapper_args__ = {
-        'polymorphic_identity': 'facebook_account'
-    }
-
-    def __init__(self, *args, **kwargs):
-        if 'app_id' not in kwargs:
-            kwargs['app_id'] = get_config().get('facebook.consumer_key', None)
-        super(FacebookAccount, self).__init__(*args, **kwargs)
-
-    account_provider_name = "facebook"
-    prefer_newest_info_on_merge = False
-
-    id = Column(Integer, ForeignKey(
-        'idprovider_agent_account.id',
-        ondelete='CASCADE',
-        onupdate='CASCADE'), primary_key=True)
-    app_id = Column(String(512))
-    user = relationship(AgentProfile, backref='facebook_accounts')
-
-    def populate_picture(self, profile):
-        self.picture_url = 'http://graph.facebook.com/%s/picture' % self.userid
-
-    def signature(self):
-        if self.email:
-            return ('facebook_account', self.app_id, self.email)
-        else:
-            return ('facebook_account', self.app_id, self.userid)
-
-    def unique_query(self):
-        query, _ = super(FacebookAccessToken, self).unique_query()
-        return query.filter_by(app_id=self.app_id), True
-
-    @classmethod
-    def find_accounts(cls, provider, velruse_account):
-        assert 'userid' in velruse_account
-        return provider.db.query(cls).filter_by(
-                provider=provider,
-                app_id=get_config().get('facebook.consumer_key'),
-                domain=velruse_account['domain'],
-                userid=velruse_account['userid']).all()
-
-    @classmethod
-    def create(cls, user, provider, app_id=None, avatar_url=None):
-        userid = user.get('id')
-        full_name = user.get('name')
-        agent_profile = AgentProfile(name=full_name)
-        avatar = avatar_url or cls.get_avatar_url(userid)
-        app_id = app_id or get_config().get('facebook.consumer_key')
-
-        return cls(
-            provider=provider,
-            domain=DOMAIN,
-            userid=userid,
-            full_name=full_name,
-            profile=agent_profile,
-            app_id=app_id,
-            picture_url=avatar
-        )
-
-    @classmethod
-    def get_avatar_url(cls, user_id):
-        return 'http://graph.facebook.com/%s/picture' % user_id
-
-    def update_fields(self, user):
-        name = user.get('name')
-        user_id = user.get('id')
-        agent_profile = self.profile
-        agent_profile.name = name
-        self.full_name = name
-        self.userid = user_id
-        self.picture_url = self.get_avatar_url(user_id)
-
-
 class FacebookAccessToken(Base):
     __tablename__ = 'facebook_access_token'
 
     id = Column(Integer, primary_key=True)
-    fb_account_id = Column(Integer, ForeignKey('facebook_account.id',
+    fb_account_id = Column(Integer, ForeignKey(SocialAuthAccount.id,
                            onupdate='CASCADE', ondelete='CASCADE'))
 
-    fb_account = relationship('FacebookAccount',
+    fb_account = relationship(SocialAuthAccount,
                               backref=backref('access_tokens',
                                               cascade='all, delete-orphan'))
 
@@ -1313,7 +1242,7 @@ class FacebookAccessToken(Base):
     def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
         return query.join(cls.user).\
-            filter(FacebookAccount.profile_id == user_id)
+            filter(SocialAuthAccount.profile_id == user_id)
 
     crud_permissions = CrudPermissions(P_EXPORT_EXTERNAL_SOURCE, P_SYSADMIN,
                                        read_owned=P_EXPORT_EXTERNAL_SOURCE)

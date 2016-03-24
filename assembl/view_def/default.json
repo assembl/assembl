@@ -115,15 +115,12 @@
         "user_id": true,
         "source_id": true
     },
-    "IdentityProviderAccount": {
+    "SocialAuthAccount": {
         "@extends": "AbstractAgentAccount",
         "provider": "&get_provider_name",
         "username": true,
-        "picture_url": true
-    },
-    "FacebookAccount": {
-        "@extends": "IdentityProviderAccount",
-        "app_id": false,
+        "uid": false,
+        "picture_url": true,
         "access_tokens": [":default"]
     },
     "IdentityProvider": {
