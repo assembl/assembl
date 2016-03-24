@@ -338,7 +338,7 @@ class LocaleLabel(Base):
                      'nlp/data/language-names.json')
         with open(fname) as f:
             names = json.load(f)
-        locales = {x[0] for x in names}
+        locales = {x[0] for x in names}.union({x[1] for x in names})
         for l in locales:
             db.add(Locale.get_or_create(l))
         db.flush()
