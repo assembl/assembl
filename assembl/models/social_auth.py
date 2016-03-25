@@ -214,7 +214,8 @@ class SocialAuthAccount(
     def get_users_by_email(cls, email):
         return cls.default_db().query(User).join(
             User.accounts).filter(
-                cls.email == email, cls.verified == True
+                AbstractAgentAccount.email == email,
+                AbstractAgentAccount.verified == True
             ).all()
 
     @classmethod
@@ -243,9 +244,10 @@ class SocialAuthAccount(
     def create_social_auth(cls, user, uid, provider, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
+        provider = IdentityProvider.get_by_type(provider)
         return cls._new_instance(
             cls, profile=user, uid=uid, provider_domain=provider_domain,
-            identity_provider=IdentityProvider.get_by_type(provider))
+            identity_provider=provider, verified=provider.trust_emails)
 
     # Lifted from IdentityProviderAccount
 

@@ -502,7 +502,7 @@ class IdentityProvider(Base):
     name = Column(String(60), nullable=False,
         info={'rdf': QuadMapPatternS(None, SIOC.name)})
     # TODO: More complicated model, where trust also depends on realm.
-    trust_emails = Column(Boolean, default=False)
+    trust_emails = Column(Boolean, default=True)
 
     @classmethod
     def get_by_type(cls, provider_type, create=True):
