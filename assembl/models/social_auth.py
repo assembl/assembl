@@ -221,7 +221,6 @@ class SocialAuthAccount(
     def get_social_auth(cls, provider, uid, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
-        import pdb; pdb.set_trace()
         return cls._query().join(
             cls.identity_provider).filter(
                 IdentityProvider.provider_type == provider, cls.uid == uid,
