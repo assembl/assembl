@@ -505,12 +505,15 @@ class IdentityProvider(Base):
     trust_emails = Column(Boolean, default=False)
 
     @classmethod
-    def get_by_name(cls, name, create=True):
+    def get_by_type(cls, provider_type, create=True):
         db = cls.default_db()
         provider = db.query(cls).filter_by(
-            provider_type=name).first()
+            provider_type=provider_type).first()
         if create and not provider:
-            provider = cls(provider_type=name, name=name)
+            # TODO: Better heuristic for name
+            name = provider_type.split("-")[0]
+            provider = cls(
+                provider_type=provider_type, name=name)
             db.add(provider)
             db.flush()
         return provider

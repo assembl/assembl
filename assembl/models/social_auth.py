@@ -126,11 +126,11 @@ class SocialAuthAccount(
 
     @property
     def provider(self):
-        return self.identity_provider.name
+        return self.identity_provider.provider_type
 
     @provider.setter
     def provider(self, value):
-        self.identity_provider = IdentityProvider.get_by_name(value)
+        self.identity_provider = IdentityProvider.get_by_type(value)
 
     def __init__(self, **kwargs):
         super(SocialAuthAccount, self).__init__(**kwargs)
@@ -160,7 +160,7 @@ class SocialAuthAccount(
         if association_id is not None:
             qs = cls._query().filter(cls.id != association_id)
         else:
-            qs = cls._query().join(cls.identity_provider).filter(IdentityProvider.name != backend_name)
+            qs = cls._query().join(cls.identity_provider).filter(IdentityProvider.provider_type != backend_name)
         qs = qs.filter(cls.user == user)
 
         if hasattr(user, 'has_usable_password'):  # TODO
@@ -221,9 +221,10 @@ class SocialAuthAccount(
     def get_social_auth(cls, provider, uid, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
+        import pdb; pdb.set_trace()
         return cls._query().join(
             cls.identity_provider).filter(
-                IdentityProvider.name == provider, cls.uid == uid,
+                IdentityProvider.provider_type == provider, cls.uid == uid,
                 cls.provider_domain == provider_domain).first()
 
     @classmethod
@@ -233,7 +234,7 @@ class SocialAuthAccount(
         if provider:
             qs = qs.join(
                 cls.identity_provider).filter(
-                    IdentityProvider.name == provider,
+                    IdentityProvider.provider_type == provider,
                     cls.provider_domain == provider_domain)
         if id:
             qs = qs.filter(cls.id == id)
@@ -245,7 +246,7 @@ class SocialAuthAccount(
             uid = str(uid)
         return cls._new_instance(
             cls, profile=user, uid=uid, provider_domain=provider_domain,
-            identity_provider=IdentityProvider.get_by_name(provider))
+            identity_provider=IdentityProvider.get_by_type(provider))
 
     # Lifted from IdentityProviderAccount
 
