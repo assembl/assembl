@@ -212,11 +212,19 @@ class SocialAuthAccount(
 
     @classmethod
     def get_users_by_email(cls, email):
-        return cls.default_db().query(User).join(
+        # Find users with similar email.
+        # Only use if social provider is trusted to have verified email.
+        users = cls.default_db().query(User).join(
             User.accounts).filter(
                 AbstractAgentAccount.email == email,
-                AbstractAgentAccount.verified == True
             ).all()
+        # choose best known profile for base_account
+        # prefer profiles with verified users, then users, then oldest profiles
+        users.sort(key=lambda p: (
+                isinstance(p, User) and p.verified,
+                isinstance(p, User), -p.id),
+            reversed=True)
+        return users
 
     @classmethod
     def get_social_auth(cls, provider, uid, provider_domain=None):
@@ -244,16 +252,16 @@ class SocialAuthAccount(
     def create_social_auth(cls, user, uid, provider, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
-        provider = IdentityProvider.get_by_type(provider)
+        id_provider = IdentityProvider.get_by_type(provider)
         return cls._new_instance(
             cls, profile=user, uid=uid, provider_domain=provider_domain,
-            identity_provider=provider, verified=provider.trust_emails)
+            identity_provider=provider, verified=id_provider.trust_emails)
 
     # Lifted from IdentityProviderAccount
 
     def signature(self):
         return ('idprovider_agent_account', self.provider_id, self.username,
-                self.domain, self.uid)
+                self.provider_domain, self.uid)
 
     def interpret_profile(self, profile=None):
         profile = profile or self.extra_data
@@ -282,6 +290,9 @@ class SocialAuthAccount(
 
     def get_provider_name(self):
         return self.identity_provider.name
+
+    def get_provider_type(self):
+        return self.identity_provider.provider_type
 
     def real_name(self):
         if not self.full_name:

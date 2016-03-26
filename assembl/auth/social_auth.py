@@ -3,14 +3,17 @@ import re
 from pyramid.events import subscriber, BeforeRender
 from pyramid.security import (
     remember,
+    forget,
     Everyone,
     authenticated_userid)
 
 from social.apps.pyramid_app.utils import backends
 from social.strategies.pyramid_strategy import PyramidStrategy
 from social.utils import to_setting_name
+from social.exceptions import AuthException
 
-from assembl.models import User, Preferences
+from assembl.models import (
+    User, Preferences, AbstractAgentAccount, IdentityProvider)
 from .util import discussion_from_request, maybe_auto_subscribe
 
 
@@ -45,19 +48,83 @@ def user_details(
     social.set_extra_data(response)
 
 
+def associate_by_email(backend, details, provider=None, user=None, *args, **kwargs):
+    """
+    Find other users of the same email. One of them may be appropriate.
+
+    Taken from social.pipeline.social_auth.associate_by_email and rewritten
+    """
+    email = details.get('email')
+    provider = IdentityProvider.get_by_type(backend.name)
+    if email and provider.trust_email:
+        # Try to associate accounts registered with the same email address,
+        # only if it's a single object. AuthException is raised if multiple
+        # objects are returned.
+        users = list(backend.strategy.storage.user.get_users_by_email(email))
+        if user and user not in users:
+            users.insert(0, user)
+        if len(users) == 0:
+            return None
+        user = users.pop(0)
+        if not isinstance(user, User):
+            # Assume it's safe to upgrade to user status already
+            user = user.change_class(User, None, verified=True)
+        return {'user': user, "other_users": users}
+
+
+def maybe_merge(
+        backend, details, user=None, social=None, other_users=None,
+        *args, **kwargs):
+    # If we do not already have a user, see if we're in a situation
+    # where we're adding an account to an existing user, and maybe
+    # even merging
+    request = backend.strategy.request
+    adding_account = request.session.get("add_account")
+    # current discussion and next?
+    logged_in = authenticated_userid(request)
+    if logged_in:
+        logged_in = User.get(logged_in)
+        if adding_account:
+            if user and user != logged_in:
+                # logged_in presumably newer?
+                logged_in.merge(user)
+                social.profile = user = logged_in
+                social.db.flush()
+        else:
+            forget(request)
+            logged_in = None
+    if other_users:
+        # Merge other accounts with same verified email
+        for profile in other_users:
+            user.merge(profile)
+    if user and social.email:
+        # Remove pure-email account if found social.
+        for email_account in user.email_accounts:
+            if email_account.email == social.email:
+                social.email.verified |= email_account.verified
+                email_account.delete()
+                break
+    if user:
+        return {"user": user}
+    return None
+
+
 def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
     from social.pipeline.social_auth import \
         associate_user as psa_associate_user
-    from pyramid.threadlocal import get_current_request
     results = psa_associate_user(
         backend, uid, user, social, *args, **kwargs)
-    if results and isinstance(results, dict):
-        user = results['user']
-    request = get_current_request()
+    return results
+
+
+def auto_subscribe(backend, user=None, *args, **kwargs):
+    if not user:
+        return
+    request = backend.strategy.request
     discussion = discussion_from_request(request)
     if discussion:
         maybe_auto_subscribe(user, discussion)
-    return results
+    return {"discussion": discussion}
 
 
 class AssemblStrategy(PyramidStrategy):
@@ -118,7 +185,12 @@ class AssemblStrategy(PyramidStrategy):
 
             # Associates the current social details with another user account with
             # a similar email address.
-            'social.pipeline.social_auth.associate_by_email',
+            'assembl.auth.social_auth.associate_by_email',
+
+            # If we do not already have a user, see if we're in a situation
+            # where we're adding an account to an existing user, and maybe
+            # even merging
+            'assembl.auth.social_auth.maybe_merge',
 
             # Create a user account if we haven't found one yet.
             'social.pipeline.user.create_user',
@@ -126,10 +198,13 @@ class AssemblStrategy(PyramidStrategy):
             # Create the record that associated the social account with this user.
             'assembl.auth.social_auth.associate_user',
 
+            # Autosubscribe if appropriate
+            'assembl.auth.social_auth.auto_subscribe',
+
             # Populate the extra_data field in the social record with the values
             # specified by settings (and the default ones like access_token, etc).
             'social.pipeline.social_auth.load_extra_data',
 
             # Update the user record with any changed info from the auth service.
-            'assembl.auth.social_auth.user_details'
+            #'assembl.auth.social_auth.user_details' # done in set_extra_data stage
         )

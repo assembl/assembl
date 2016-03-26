@@ -69,7 +69,7 @@ var socialProvidersList = Marionette.ItemView.extend({
     this.providers = options.providers;
   },
   serializeData: function() {
-    return {providers: _.keys(this.providers), names: this.providers};
+    return {i18n: i18n, providers: _.keys(this.providers), names: this.providers};
   }
 });
 

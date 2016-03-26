@@ -499,7 +499,19 @@ def assembl_login_complete_view(request):
 @psa('social.complete')
 def auth(request):
     request.session['discussion'] = request.matchdict['slug']
-    return do_auth(request.backend, redirect_name='next')
+    request.session['add_account'] = False
+    return do_auth(request.backend, redirect_name='next_view')
+
+
+@view_config(route_name="add_social_account", request_method=('GET', 'POST'))
+@view_config(
+    route_name="contextual_add_social_account", request_method=('GET', 'POST'))
+@psa('social.complete')
+def add_social_account(request):
+    request.session['discussion'] = request.matchdict['discussion_slug']
+    request.session['add_account'] = True
+    # TODO: Make False later.
+    return do_auth(request.backend, redirect_name='next_view')
 
 
 @view_config(

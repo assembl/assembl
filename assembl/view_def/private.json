@@ -88,7 +88,7 @@
     },
     "SocialAuthAccount": {
         "@extends": "AbstractAgentAccount",
-        "provider": "&get_provider_name",
+        "provider": "&get_provider_type",
         "username": true,
         "picture_url": true
     },
