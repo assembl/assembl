@@ -56,7 +56,7 @@ def associate_by_email(backend, details, provider=None, user=None, *args, **kwar
     """
     email = details.get('email')
     provider = IdentityProvider.get_by_type(backend.name)
-    if email and provider.trust_email:
+    if email and provider.trust_emails:
         # Try to associate accounts registered with the same email address,
         # only if it's a single object. AuthException is raised if multiple
         # objects are returned.
@@ -73,13 +73,15 @@ def associate_by_email(backend, details, provider=None, user=None, *args, **kwar
 
 
 def maybe_merge(
-        backend, details, user=None, social=None, other_users=None,
+        backend, details, user=None, other_users=None,
         *args, **kwargs):
     # If we do not already have a user, see if we're in a situation
     # where we're adding an account to an existing user, and maybe
     # even merging
     request = backend.strategy.request
-    adding_account = request.session.get("add_account")
+    adding_account = request.session.get("add_account", None)
+    if adding_account is not None:
+        del request.session["add_account"]
     # current discussion and next?
     logged_in = authenticated_userid(request)
     if logged_in:
@@ -88,8 +90,8 @@ def maybe_merge(
             if user and user != logged_in:
                 # logged_in presumably newer?
                 logged_in.merge(user)
-                social.profile = user = logged_in
-                social.db.flush()
+                logged_in.db.flush()
+            user = logged_in
         else:
             forget(request)
             logged_in = None
@@ -97,13 +99,6 @@ def maybe_merge(
         # Merge other accounts with same verified email
         for profile in other_users:
             user.merge(profile)
-    if user and social.email:
-        # Remove pure-email account if found social.
-        for email_account in user.email_accounts:
-            if email_account.email == social.email:
-                social.email.verified |= email_account.verified
-                email_account.delete()
-                break
     if user:
         return {"user": user}
     return None
@@ -117,9 +112,16 @@ def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
     return results
 
 
-def auto_subscribe(backend, user=None, *args, **kwargs):
+def auto_subscribe(backend, social, user, *args, **kwargs):
     if not user:
         return
+    if user and social.email:
+        # Remove pure-email account if found social.
+        for email_account in user.email_accounts:
+            if email_account.email == social.email:
+                social.verified |= email_account.verified
+                email_account.delete()
+                break
     request = backend.strategy.request
     discussion = discussion_from_request(request)
     if discussion:

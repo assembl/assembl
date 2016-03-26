@@ -255,7 +255,7 @@ class SocialAuthAccount(
         id_provider = IdentityProvider.get_by_type(provider)
         return cls._new_instance(
             cls, profile=user, uid=uid, provider_domain=provider_domain,
-            identity_provider=provider, verified=id_provider.trust_emails)
+            identity_provider=id_provider, verified=id_provider.trust_emails)
 
     # Lifted from IdentityProviderAccount
 
@@ -270,7 +270,7 @@ class SocialAuthAccount(
         self.populate_picture(profile)
         self.username = profile.get('user_login', self.username)
         email = profile.get('email', self.email)
-        if email and email != self.email_ci:
+        if email and email != self.email:
             self.email = email
             self.verified = self.identity_provider.trust_emails
         if not self.email:
