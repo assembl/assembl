@@ -45,7 +45,8 @@ def add_social(event):
 def user_details(
         strategy, details, user=None, social=None, response=None,
         *args, **kwargs):
-    social.set_extra_data(response)
+    if not social.username:
+        social.username = details.get("username", None)
 
 
 def associate_by_email(backend, details, provider=None, user=None, *args, **kwargs):
@@ -208,5 +209,5 @@ class AssemblStrategy(PyramidStrategy):
             'social.pipeline.social_auth.load_extra_data',
 
             # Update the user record with any changed info from the auth service.
-            #'assembl.auth.social_auth.user_details' # done in set_extra_data stage
+            'assembl.auth.social_auth.user_details'
         )
