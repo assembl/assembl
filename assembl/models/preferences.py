@@ -360,9 +360,9 @@ class Preferences(MutableMapping, Base):
                 "wordpress-oauth2":
                     _("WordPress OAuth Server"),
             },
-            "description": _(
+            "name": _(
                 "Authorization service type"),
-            "help_text": _(
+            "description": _(
                 "A python-social-auth backend that will be mandatory to "
                 "authenticate users of this discussion."),
             "allow_user_override": None,
