@@ -23,7 +23,7 @@ var authorization = Marionette.ItemView.extend({
   templateHelpers: function() {
     return {
       urlLogIn: function() {
-        return '/login?next_view=/' + Ctx.getDiscussionSlug() + '/';
+        return '/login?next=/' + Ctx.getDiscussionSlug() + '/';
       }
     }
   }

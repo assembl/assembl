@@ -130,7 +130,7 @@ var AgentModel = Base.Model.extend({
           url = Ctx.appendExtraURLParams(
             Ctx.getLoginURL(),
             {
-              'next_view': reroute_relative_url
+              'next': reroute_relative_url
             }
           )
         }

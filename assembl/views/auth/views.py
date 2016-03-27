@@ -86,7 +86,7 @@ def get_login_context(request, force_show_providers=False):
                 hide_registration=hide_registration,
                 google_consumer_key=request.registry.settings.get(
                     'google.consumer_key', ''),
-                next_view=handle_next_view(request))
+                next=handle_next_view(request))
 
 def _get_route_from_path(request, path):
     from pyramid.urldispatch import IRoutesMapper
@@ -102,8 +102,8 @@ def handle_next_view(request, consume=False, default_suffix=''):
     slug = request.matchdict.get('discussion_slug', None)
     default = "/".join((x for x in ('', slug, default_suffix)
                         if x is not None))
-    next_view = request.params.get('next_view', None)\
-        or request.session.get('next_view', None) or default
+    next_view = request.params.get('next', None)\
+        or request.session.get('next', None) or default
     discussion_slug = request.session.get('discussion', None)
     if discussion_slug:
         p_slug = '/' + discussion_slug
@@ -112,11 +112,11 @@ def handle_next_view(request, consume=False, default_suffix=''):
             route, match = _get_route_from_path(request, next_view)
             if 'discussion_slug' not in match:
                 next_view = p_slug + next_view
-    if consume and 'next_view' in request.session:
-        request.session.pop('next_view')
+    if consume and 'next' in request.session:
+        request.session.pop('next')
         request.session.pop('discussion')
-    elif not consume and 'next_view' not in request.session:
-        request.session["next_view"] = next_view
+    elif not consume and 'next' not in request.session:
+        request.session["next"] = next_view
     return next_view
 
 
@@ -402,7 +402,7 @@ def assembl_register_view(request):
         user.last_login = datetime.utcnow()
         request.response.headerlist.extend(headers)
         # TODO: Tell them to expect an email.
-        request.session.pop('next_view')
+        request.session.pop('next')
         return HTTPFound(location=next_view)
     return HTTPFound(location=maybe_contextual_route(
         request, 'confirm_emailid_sent', email_account_id=email_account.id))
@@ -465,7 +465,7 @@ def assembl_login_complete_view(request):
     user, account = from_identifier(identifier)
 
     if not user:
-        request.session['next_view'] = next_view
+        request.session['next'] = next_view
         return dict(get_login_context(request),
                     error=localizer.translate(_("This user cannot be found")))
     if account and not account.verified:
@@ -500,7 +500,7 @@ def assembl_login_complete_view(request):
 def auth(request):
     request.session['discussion'] = request.matchdict['slug']
     request.session['add_account'] = False
-    return do_auth(request.backend, redirect_name='next_view')
+    return do_auth(request.backend, redirect_name='next')
 
 
 @view_config(route_name="add_social_account", request_method=('GET', 'POST'))
@@ -511,7 +511,7 @@ def add_social_account(request):
     request.session['discussion'] = request.matchdict['discussion_slug']
     request.session['add_account'] = True
     # TODO: Make False later.
-    return do_auth(request.backend, redirect_name='next_view')
+    return do_auth(request.backend, redirect_name='next')
 
 
 @view_config(

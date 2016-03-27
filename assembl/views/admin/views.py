@@ -64,7 +64,7 @@ def discussion_admin(request):
     user_id = authenticated_userid(request)
 
     if not user_id:
-        return HTTPFound(location='/login?next_view=/admin/discussions/')
+        return HTTPFound(location='/login?next=/admin/discussions/')
 
     session = User.default_db
 

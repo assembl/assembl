@@ -761,7 +761,7 @@ def show_suggestions_test(request):
     user_id = authenticated_userid(request)
     if not user_id:
         from urllib import quote
-        raise HTTPFound(location="/login?next_view="+quote(request.path))
+        raise HTTPFound(location="/login?next="+quote(request.path))
     discussion = request.context._instance
     output = StringIO()
     from assembl.nlp.clusters import OpticsSemanticsAnalysisWithSuggestions

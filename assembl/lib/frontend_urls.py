@@ -6,7 +6,7 @@ from ..models import Discussion
 
 URL_DISCRIMINANTS = {
     'SOURCE': 'source',
-    'NEXT': 'next_view'
+    'NEXT': 'next'
 }
 
 SOURCE_DISCRIMINANTS = {
