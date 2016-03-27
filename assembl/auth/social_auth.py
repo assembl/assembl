@@ -43,10 +43,8 @@ def add_social(event):
 
 
 def user_details(
-        strategy, details, user=None, social=None, response=None,
-        *args, **kwargs):
-    if not social.username:
-        social.username = details.get("username", None)
+        strategy, details, social=None, *args, **kwargs):
+    social.interpret_social_auth_details(details)
 
 
 def associate_by_email(backend, details, provider=None, user=None, *args, **kwargs):

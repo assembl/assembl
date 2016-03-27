@@ -265,20 +265,15 @@ class SocialAuthAccount(
 
     def interpret_profile(self, profile=None):
         profile = profile or self.extra_data
-        if not profile:
-            return
-        self.populate_picture(profile)
-        self.username = profile.get('user_login', self.username)
-        email = profile.get('email', self.email)
-        if email and email != self.email:
-            self.email = email
-            self.verified = self.identity_provider.trust_emails
-        if not self.email:
-            for email in profile.get('emails', ()):
-                self.verified = False
-                self.email = email.get('value', None)
-                if email.get('primary', False):
-                    break
+        if profile:
+            self.populate_picture(profile)
+
+    def interpret_social_auth_details(self, details):
+        self.email = details.get("email", self.email)
+        self.username = details.get('username', self.username)
+        # TODO: Maybe see if username usable for user?
+        if not self.user.name:
+            self.user.name = details.get("fullname", None)
 
     def display_name(self):
         # TODO: format according to provider, ie @ for twitter.
