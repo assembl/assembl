@@ -24,8 +24,9 @@ def upgrade(pyramid_env):
         op.execute("""INSERT INTO social_auth_account
                 (id, provider_id, username, uid, extra_data, picture_url,
                  provider_domain)
-        SELECT idprovider_agent_account.id, provider_id, username, userid AS uid,
-                profile_info AS extra_data, picture_url, facebook_account.app_id AS provider_domain
+        SELECT idprovider_agent_account.id, provider_id, username,
+                userid AS uid, profile_info AS extra_data, picture_url,
+                facebook_account.app_id AS provider_domain
         FROM idprovider_agent_account
         LEFT JOIN facebook_account
         ON facebook_account.id=idprovider_agent_account.id""")
@@ -33,6 +34,9 @@ def upgrade(pyramid_env):
             """UPDATE identity_provider
             SET provider_type = 'google-oauth2'
             WHERE provider_type = 'google_oauth2'""")
+        op.execute("""UPDATE abstract_agent_account
+            SET type='social_auth_account'
+            WHERE type IN ('idprovider_agent_account','facebook_account')""")
     with context.begin_transaction():
         op.drop_constraint(
             "facebook_access_token_facebook_account_fb_account_id_id",
@@ -122,6 +126,14 @@ def downgrade(pyramid_env):
             SELECT id, provider_domain AS app_id FROM social_auth_account
             WHERE provider_id = %d""" % (facebook_id,))
         mark_changed()
+        op.execute("""UPDATE abstract_agent_account
+            SET type = 'idprovider_agent_account'
+            WHERE type = 'social_auth_account'""")
+        op.execute("""UPDATE abstract_agent_account
+            SET type = 'facebook_account'
+            WHERE id IN
+                (SELECT id FROM social_auth_account WHERE provider_id = %d)""" % (
+            facebook_id,))
 
     with context.begin_transaction():
         op.create_foreign_key(
