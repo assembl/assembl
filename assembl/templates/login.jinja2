@@ -30,7 +30,7 @@
 {% macro form(name, title, image) %}
   {% if name in providers %}
     {% if discussion %}
-      <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/{{discussion.slug}}/login/{{name}}">
+      <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/{{discussion.slug}}/login/{{name}}?next=/{{discussion.slug}}">
     {% else %}
       <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/login/{{name}}">
     {% endif %}
