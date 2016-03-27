@@ -1,4 +1,3 @@
-'use strict';
 
 var jQuery = require('../shims/jquery.js');
 
