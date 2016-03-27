@@ -1,18 +1,19 @@
+'use strict';
 
 var jQuery = require('../shims/jquery.js');
 
-const debugScrollUtils = false;
+var debugScrollUtils = false;
 
 /** 
  * How often the position of watched element should be checked.
  * (Each ScrollWatchInterval milliseconds)
  */
-const ScrollWatchInterval = 2000;
+var ScrollWatchInterval = 2000;
 
 /**
  * How long, in milliseconds, can a scroll watch process last untill unconditionally suiciding.
  */
-const maxWatchProcessDuration = 15000;
+var maxWatchProcessDuration = 15000;
 
 /**
  * Taken from
