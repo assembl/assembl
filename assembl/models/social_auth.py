@@ -1,5 +1,6 @@
 import logging
 import six
+import re
 
 import transaction
 from sqlalchemy import (
@@ -307,6 +308,10 @@ class SocialAuthAccount(
             photos = [x for x in photos if x]
             if photos:
                 self.picture_url = photos[0]
+        elif 'image' in profile:  # google
+            photo = profile['image'].get('url', None)
+            if photo:
+                self.picture_url = photo
         elif self.identity_provider.provider_type.startswith('facebook'):
             accounts = [x.get('uid') for x in profile.get('accounts', ())]
             accounts = [x for x in accounts if x]
@@ -328,7 +333,13 @@ class SocialAuthAccount(
             # Ideally we should check which ones work.
             picture_url = "https://" + picture_url.split("://", 1)[-1]
         if self.identity_provider.provider_type.startswith('google'):
-            return '%s?size=%d' % (picture_url, size)
+            modified = re.sub(
+                r"((\?|&)(size|sz))=(\d+)",
+                r"\1=%d" % (size,), picture_url)
+            if modified == picture_url:
+                separator = "&" if "?" in picture_url else "?"
+                modified = picture_url + separator + 'sz=' + str(size)
+            return modified
         elif self.identity_provider.provider_type.startswith('facebook'):
             for (size_name, name_size) in self.facebook_sizes:
                 if size <= name_size:
