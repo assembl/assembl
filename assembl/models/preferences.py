@@ -375,7 +375,7 @@ class Preferences(MutableMapping, Base):
         {
             "id": "authorization_server",
             "value_type": "url",
-            "description": _(
+            "name": _(
                 "Private authorization server"),
             "description": _(
                 "Authorization server URL endpoint for a private discussion"),
@@ -389,8 +389,8 @@ class Preferences(MutableMapping, Base):
         {
             "id": "authorization_key",
             "value_type": "string",
-            "description": _("Authorization key"),
-            "help_text": _(
+            "name": _("Authorization key"),
+            "description": _(
                 "Key for assembl as a client of the authorization server"),
             "allow_user_override": None,
             "modification_permission": P_SYSADMIN,
@@ -402,8 +402,8 @@ class Preferences(MutableMapping, Base):
         {
             "id": "authorization_secret",
             "value_type": "string",
-            "description": _("Authorization secret"),
-            "help_text": _(
+            "name": _("Authorization secret"),
+            "description": _(
                 "Secret for assembl as a client of the authorization server"),
             "allow_user_override": None,
             "view_permission": P_SYSADMIN,
