@@ -272,8 +272,9 @@ class SocialAuthAccount(
         self.email = details.get("email", self.email)
         self.username = details.get('username', self.username)
         # TODO: Maybe see if username usable for user?
+        self.fullname = details.get("fullname", self.fullname)
         if not self.user.name:
-            self.user.name = details.get("fullname", None)
+            self.user.name = self.fullname
 
     def display_name(self):
         # TODO: format according to provider, ie @ for twitter.
