@@ -223,7 +223,7 @@ class SocialAuthAccount(
         users.sort(key=lambda p: (
                 isinstance(p, User) and p.verified,
                 isinstance(p, User), -p.id),
-            reversed=True)
+            reverse=True)
         return users
 
     @classmethod
