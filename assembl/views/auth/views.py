@@ -495,7 +495,7 @@ def assembl_login_complete_view(request):
     return HTTPFound(location=next_view)
 
 
-@view_config(route_name="contextual_social_auth", request_method='GET')
+@view_config(route_name="contextual_social_auth", request_method=('GET', 'POST'))
 @psa('social.complete')
 def auth(request):
     request.session['discussion'] = request.matchdict['slug']

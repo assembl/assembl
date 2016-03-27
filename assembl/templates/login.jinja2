@@ -15,7 +15,7 @@
   {#<meta property="og:locale" content="fr_FR" />#}
   {# not shown because introduction may not be public and has HTML, so it should be filtered. TODO: filter. <meta property="og:description" content="{{ discussion.introduction }}" />#}
   {% if discussion %}
-    <meta property="og:url" content="{{ request.application_url }}/{{ discussion_slug }}/login" />
+    <meta property="og:url" content="{{ request.application_url }}/{{ discussion.slug }}/login" />
   {% else %}
     <meta property="og:url" content="{{ request.application_url }}/login" />
   {% endif %}
@@ -29,7 +29,12 @@
 
 {% macro form(name, title, image) %}
   {% if name in providers %}
-  <form id="{{name}}" class="mts js_login_{{name}}" method="post" action="/login/{{name}}">
+    {% if discussion %}
+      <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/{{discussion.slug}}/login/{{name}}">
+    {% else %}
+      <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/login/{{name}}">
+    {% endif %}
+
   {% for k,v in kwargs.items() %}
       <input type="hidden" name="{{ k }}" value="{{ v }}" />
   {% endfor %}
