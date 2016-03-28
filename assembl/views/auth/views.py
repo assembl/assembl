@@ -137,16 +137,16 @@ def maybe_contextual_route(request, route_name, **args):
 
 
 @view_config(
-    route_name='logout',
+    route_name='logout', request_method='GET',
     renderer='assembl:templates/login.jinja2',
 )
 @view_config(
-    route_name='contextual_logout',
+    route_name='contextual_logout', request_method='GET',
     renderer='assembl:templates/login.jinja2',
 )
 def logout(request):
     forget(request)
-    next_view = handle_next_view(request)
+    next_view = handle_next_view(request, True)
     return HTTPFound(location=next_view)
 
 
@@ -162,6 +162,11 @@ def logout(request):
 )
 @view_config(
     route_name='login_forceproviders',
+    request_method='GET', http_cache=60,
+    renderer='assembl:templates/login.jinja2',
+)
+@view_config(
+    route_name='contextual_login_forceproviders',
     request_method='GET', http_cache=60,
     renderer='assembl:templates/login.jinja2',
 )
@@ -211,7 +216,7 @@ def get_profile(request):
     return profile
 
 
-@view_config(route_name='profile_user')
+@view_config(route_name='profile_user', request_method=("GET", "POST"))
 def assembl_profile(request):
     session = AgentProfile.default_db
     localizer = request.localizer
@@ -298,7 +303,7 @@ def assembl_profile(request):
              user=session.query(User).get(logged_in)))
 
 
-@view_config(route_name='avatar')
+@view_config(route_name='avatar', request_method="GET")
 def avatar(request):
     profile = get_profile(request)
     size = int(request.matchdict.get('size'))
@@ -312,12 +317,12 @@ def avatar(request):
 
 
 @view_config(
-    route_name='register',
+    route_name='register', request_method=("GET", "POST"),
     permission=NO_PERMISSION_REQUIRED,
     renderer='assembl:templates/register.jinja2'
 )
 @view_config(
-    route_name='contextual_register',
+    route_name='contextual_register', request_method=("GET", "POST"),
     permission=NO_PERMISSION_REQUIRED,
     renderer='assembl:templates/register.jinja2'
 )
@@ -515,12 +520,12 @@ def add_social_account(request):
 
 
 @view_config(
-    route_name='confirm_emailid_sent',
+    route_name='confirm_emailid_sent', request_method="GET",
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
-    route_name='contextual_confirm_emailid_sent',
+    route_name='contextual_confirm_emailid_sent', request_method="GET",
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -558,12 +563,12 @@ def confirm_emailid_sent(request):
 
 
 @view_config(
-    route_name='user_confirm_email',
+    route_name='user_confirm_email', request_method="GET",
     renderer='assembl:templates/email_confirmed.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
-    route_name='contextual_user_confirm_email',
+    route_name='contextual_user_confirm_email', request_method="GET",
     renderer='assembl:templates/email_confirmed.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -656,12 +661,12 @@ def login_denied_view(request):
 
 
 @view_config(
-    route_name='confirm_email_sent',
+    route_name='confirm_email_sent', request_method="GET",
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
-    route_name='contextual_confirm_email_sent',
+    route_name='contextual_confirm_email_sent', request_method="GET",
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -710,12 +715,12 @@ def confirm_email_sent(request):
 
 
 @view_config(
-    route_name='request_password_change',
+    route_name='request_password_change', request_method=("GET", "POST"),
     renderer='assembl:templates/request_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
-    route_name='contextual_request_password_change',
+    route_name='contextual_request_password_change', request_method=("GET", "POST"),
     renderer='assembl:templates/request_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -742,12 +747,13 @@ def request_password_change(request):
 
 
 @view_config(
-    route_name='password_change_sent',
+    route_name='password_change_sent', request_method=("GET", "POST"),
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
     route_name='contextual_password_change_sent',
+    request_method=("GET", "POST"),
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -776,12 +782,12 @@ def password_change_sent(request):
 
 
 @view_config(
-    route_name='do_password_change',
+    route_name='do_password_change', request_method="GET",
     renderer='assembl:templates/do_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
-    route_name='contextual_do_password_change',
+    route_name='contextual_do_password_change', request_method="GET",
     renderer='assembl:templates/do_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -813,12 +819,12 @@ def do_password_change(request):
 
 
 @view_config(
-    route_name='finish_password_change',
+    route_name='finish_password_change', request_method="POST",
     renderer='assembl:templates/do_password_change.jinja2',
     permission=P_READ
 )
 @view_config(
-    route_name='contextual_finish_password_change',
+    route_name='contextual_finish_password_change', request_method="POST",
     renderer='assembl:templates/do_password_change.jinja2',
     permission=P_READ
 )
