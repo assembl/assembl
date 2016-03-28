@@ -291,7 +291,7 @@ def test_server(request, test_app):
 def participant1_user(request, test_session, discussion):
     from assembl.models import User, UserRole, Role, EmailAccount
     u = User(name=u"A. Barking Loon", type="user", password="password", verified=True)
-    email = EmailAccount(email="abloon@example.com", profile=u, verified=True)
+    email = EmailAccount(email="abloon@gmail.com", profile=u, verified=True)
     test_session.add(u)
     r = Role.get_role(R_PARTICIPANT, test_session)
     ur = UserRole(user=u, role=r)
@@ -1980,3 +1980,19 @@ def langstring_subject(request, test_session):
 
     request.addfinalizer(fin)
     return ls
+
+
+@pytest.fixture(scope="function")
+def google_identity_provider(request, test_session):
+    from assembl.models.auth import IdentityProvider
+    idp = IdentityProvider(
+        name="google", provider_type="google-oauth2", trust_emails=True)
+    test_session.add(idp)
+    test_session.flush()
+
+    def fin():
+        test_session.delete(idp)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return idp
