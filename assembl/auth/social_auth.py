@@ -95,14 +95,13 @@ def maybe_merge(
             user = logged_in
         else:
             forget(request)
+            user = None
             logged_in = None
     if other_users:
         # Merge other accounts with same verified email
         for profile in other_users:
             user.merge(profile)
-    if user:
-        return {"user": user}
-    return None
+    return {"user": user}
 
 
 def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
@@ -192,7 +191,7 @@ class AssemblStrategy(PyramidStrategy):
 
             # If we do not already have a user, see if we're in a situation
             # where we're adding an account to an existing user, and maybe
-            # even merging
+            # even merging. We may also forget the logged in user.
             'assembl.auth.social_auth.maybe_merge',
 
             # Create a user account if we haven't found one yet.
