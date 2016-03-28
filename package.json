@@ -53,7 +53,7 @@
     "mochify": "^2.10.0",
     "moment": "^2.10.3",
     "node-sass": "~3.4.2",
-    "phantomjs": "^1.9.17",
+    "phantomjs": "1.9.18",
     "po2json": "~0.4.1",
     "postcss": "~5.0.0",
     "raven-js": " ~1.1.22",
