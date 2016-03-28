@@ -60,10 +60,31 @@ assembl.admin_email = webmaster@assembl.net
 # Users from these providers (if enabled in login_providers) will not need
 # to verify their email
 trusted_login_providers = facebook
- google
+ google-oauth2
  twitter
 
-login_providers =
+SOCIAL_AUTH_LOGIN_URL = /login
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = /
+SOCIAL_AUTH_USER_MODEL = assembl.models.auth.User
+SOCIAL_AUTH_LOGIN_FUNCTION = assembl.auth.social_auth.login_user
+SOCIAL_AUTH_LOGGEDIN_FUNCTION = assembl.auth.social_auth.login_required
+SOCIAL_AUTH_STORAGE = assembl.models.social_auth.AssemblStorage
+SOCIAL_AUTH_STRATEGY = assembl.auth.social_auth.AssemblStrategy
+SOCIAL_AUTH_USER_FIELDS = email
+    fullname
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = fullname
+USE_UNIQUE_USER_ID=True
+SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = next_view
+
+SOCIAL_AUTH_AUTHENTICATION_BACKENDS = assembl.auth.wordpress.WordPressServerOAuth2
+    social.backends.twitter.TwitterOAuth
+    social.backends.google.GoogleOAuth2
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = fake_key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = fake_secret
+
+
+login_providers = google-oauth2
 # facebook
 # twitter
 # github
