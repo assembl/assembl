@@ -23,7 +23,8 @@ from assembl.models.auth import (
 _ = TranslationStringFactory('assembl')
 
 
-@view_config(route_name='test_simultaneous_ajax_calls', permission=P_SYSADMIN)
+@view_config(route_name='test_simultaneous_ajax_calls',
+             permission=P_SYSADMIN, request_method="GET")
 def test_simultaneous_ajax_calls(request):
     g = lambda x: request.GET.get(x, None)
 
@@ -32,9 +33,11 @@ def test_simultaneous_ajax_calls(request):
     discussion_id = g('discussion_id')
     widget_id = g('widget_id')
     if not discussion_id:
-        return HTTPBadRequest(explanation="Please provide a discussion_id parameter", detail="")
+        return HTTPBadRequest(
+            explanation="Please provide a discussion_id parameter")
     if not widget_id:
-        return HTTPBadRequest(explanation="Please provide a widget_id parameter", detail="")
+        return HTTPBadRequest(
+            explanation="Please provide a widget_id parameter")
 
     widget_id = int(widget_id)
     discussion_id = int(discussion_id)
@@ -59,7 +62,8 @@ def test_simultaneous_ajax_calls(request):
         request=request)
 
 
-@view_config(route_name='discussion_admin', permission=P_SYSADMIN)
+@view_config(route_name='discussion_admin', permission=P_SYSADMIN,
+             request_method=("GET", "POST"))
 def discussion_admin(request):
     user_id = authenticated_userid(request)
 
@@ -122,7 +126,8 @@ def discussion_admin(request):
         request=request)
 
 
-@view_config(route_name='discussion_edit', permission=P_ADMIN_DISC)
+@view_config(route_name='discussion_edit', permission=P_ADMIN_DISC,
+             request_method=("GET", "POST"))
 def discussion_edit(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
@@ -170,14 +175,15 @@ def order_by_domain_and_name(user):
     return (domain, user.name)
 
 
-@view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC)
+@view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC,
+             request_method=("GET", "POST"))
 def discussion_permissions(request):
     user_id = authenticated_userid(request)
     assert user_id
     db = Discussion.default_db
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
-    error=''
+    error = ''
 
     if not discussion:
         raise HTTPNotFound("Discussion with id '%d' not found." % (
@@ -340,7 +346,8 @@ def discussion_permissions(request):
         request=request)
 
 
-@view_config(route_name='general_permissions', permission=P_SYSADMIN)
+@view_config(route_name='general_permissions', permission=P_SYSADMIN,
+             request_method=("GET", "POST"))
 def general_permissions(request):
     user_id = authenticated_userid(request)
     assert user_id

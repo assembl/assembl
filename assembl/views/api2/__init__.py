@@ -70,7 +70,7 @@ JSON_HEADER = "Content-Type:application/(.*\+)?json"
 
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
-    config.add_route('csrf_token2', 'Token')
+    pass
 
 
 def check_permissions(

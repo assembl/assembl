@@ -35,7 +35,7 @@ def backbone_include(config):
     FrontendUrls.register_frontend_routes(config)
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
-    config.add_route('graph_view', '/graph')
+
 
 def find_theme(theme_name):
     """
