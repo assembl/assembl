@@ -569,7 +569,7 @@ def install_basetools():
     """
     print(cyan('Installing base tools'))
     if env.mac:
-        run('cd /tmp; curl -O https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py')
+        run('cd /tmp; curl -O https://bootstrap.pypa.io/get-pip.py')
         sudo('python /tmp/get-pip.py')
         sudo('pip install virtualenv')
     else:
