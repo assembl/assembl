@@ -2221,7 +2221,7 @@ var MessageList = AssemblPanel.extend({
    * @param {String} id
    * @return{Boolean} true or false
    */
-  isMessageOnscreen: function(visitorData, id) {
+  isMessageOnscreen: function(resultMessageIdCollection, visitorData, id) {
       //console.log("isMessageOnscreen called for ", id, "Offsets are:", this._offsetStart, this._offsetEnd)
       if (this._offsetStart === undefined || this._offsetEnd === undefined) {
         //console.log("The messagelist hasn't displayed any messages yet");
@@ -2229,6 +2229,7 @@ var MessageList = AssemblPanel.extend({
       }
 
       var messagesOnScreenIds = this.getMessageIdsToShow(
+          resultMessageIdCollection,
           visitorData,
           {
             'offsetStart': this._offsetStart,
@@ -2493,7 +2494,7 @@ var MessageList = AssemblPanel.extend({
               return;
             }
 
-            if (messageIsInFilter && !that.isMessageOnscreen(visitorData, id)) {
+            if (messageIsInFilter && !that.isMessageOnscreen(resultMessageIdCollection, visitorData, id)) {
               if (shouldRecurse) {
                 var success = function() {
                         if (debug) {
