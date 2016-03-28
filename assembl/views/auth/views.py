@@ -29,7 +29,7 @@ from social.actions import do_auth
 from social.apps.pyramid_app.utils import psa
 from social.exceptions import (
     AuthException, AuthFailed, AuthCanceled, AuthUnknownError,
-    AuthMissingParameter, AuthStateMissing,AuthStateForbidden,
+    AuthMissingParameter, AuthStateMissing, AuthStateForbidden,
     AuthTokenError)
 
 
@@ -47,7 +47,8 @@ from assembl.auth.util import (
     roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
-from .. import get_default_context, JSONError, get_providers_with_names
+from .. import (
+    get_default_context, JSONError, get_providers_with_names, HTTPTemporaryRedirect)
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger('assembl')
@@ -102,22 +103,7 @@ def handle_next_view(request, consume=False, default_suffix=''):
     slug = request.matchdict.get('discussion_slug', None)
     default = "/".join((x for x in ('', slug, default_suffix)
                         if x is not None))
-    next_view = request.params.get('next', None)\
-        or request.session.get('next', None) or default
-    discussion_slug = request.session.get('discussion', None)
-    if discussion_slug:
-        p_slug = '/' + discussion_slug
-        if not next_view.startswith(p_slug):
-            # Maybe the route already has a different slug...
-            route, match = _get_route_from_path(request, next_view)
-            if 'discussion_slug' not in match:
-                next_view = p_slug + next_view
-    if consume and 'next' in request.session:
-        request.session.pop('next')
-        request.session.pop('discussion')
-    elif not consume and 'next' not in request.session:
-        request.session["next"] = next_view
-    return next_view
+    return request.params.get('next', None) or default
 
 
 def maybe_contextual_route(request, route_name, **args):
@@ -237,9 +223,8 @@ def assembl_profile(request):
 
     confirm_email = request.params.get('confirm_email', None)
     if confirm_email:
-        return HTTPFound(location=request.route_url(
+        return HTTPTemporaryRedirect(location=request.route_url(
             'confirm_emailid_sent', email_account_id=int(confirm_email)))
-
     errors = []
     if save:
         user_id = profile.id
@@ -407,7 +392,6 @@ def assembl_register_view(request):
         user.last_login = datetime.utcnow()
         request.response.headerlist.extend(headers)
         # TODO: Tell them to expect an email.
-        request.session.pop('next')
         return HTTPFound(location=next_view)
     return HTTPFound(location=maybe_contextual_route(
         request, 'confirm_emailid_sent', email_account_id=email_account.id))
@@ -470,7 +454,6 @@ def assembl_login_complete_view(request):
     user, account = from_identifier(identifier)
 
     if not user:
-        request.session['next'] = next_view
         return dict(get_login_context(request),
                     error=localizer.translate(_("This user cannot be found")))
     if account and not account.verified:
@@ -496,7 +479,6 @@ def assembl_login_complete_view(request):
     discussion = discussion_from_request(request)
     if discussion:
         maybe_auto_subscribe(user, discussion)
-        request.session['discussion'] = discussion.slug
     return HTTPFound(location=next_view)
 
 

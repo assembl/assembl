@@ -6,7 +6,8 @@ from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid, Everyone
-from pyramid.httpexceptions import HTTPNotFound, HTTPSeeOther, HTTPUnauthorized
+from pyramid.httpexceptions import (
+    HTTPNotFound, HTTPSeeOther, HTTPUnauthorized)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 from assembl.models import Discussion
@@ -22,7 +23,7 @@ from ...models.auth import (
     User,
 )
 from assembl.auth.util import user_has_permission
-from .. import get_default_context as base_default_context
+from .. import HTTPTemporaryRedirect, get_default_context as base_default_context
 from assembl.lib.frontend_urls import FrontendUrls
 from assembl import locale_negotiator
 from assembl.nlp.translation_service import DummyGoogleTranslationService
@@ -98,7 +99,6 @@ def home_view(request):
     user_id = authenticated_userid(request) or Everyone
     context = get_default_context(request)
     discussion = context["discussion"]
-    request.session["discussion"] = discussion.slug
     canRead = user_has_permission(discussion.id, user_id, P_READ)
     if not canRead and user_id == Everyone:
         # User isn't logged-in and discussion isn't public:
@@ -130,7 +130,7 @@ def home_view(request):
         else:
             login_url = request.route_url(
                 'contextual_login', discussion_slug=discussion.slug)
-        return HTTPSeeOther(login_url)
+        return HTTPTemporaryRedirect(login_url)
     elif not canRead:
         # User is logged-in but doesn't have access to the discussion
         # Would use render_to_response, except for the 401

@@ -10,7 +10,7 @@ from pyramid.response import Response
 from social.exceptions import AuthMissingParameter
 from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
-    HTTPBadRequest, HTTPFound)
+    HTTPBadRequest, HTTPFound, HTTPTemporaryRedirect as HTTPTemporaryRedirectP)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.settings import asbool, aslist
 
@@ -29,6 +29,13 @@ default_context = {
 
 TEMPLATE_PATH = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), 'templates')
+
+
+class HTTPTemporaryRedirect(HTTPTemporaryRedirectP):
+    def __init__(self, *args, **kwargs):
+        kwargs["cache_control"] = "no-cache"
+        super(HTTPTemporaryRedirect, self).__init__(*args, **kwargs)
+        self.cache_control.prevent_auto = True
 
 
 def backbone_include(config):

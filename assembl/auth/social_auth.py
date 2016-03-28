@@ -27,7 +27,7 @@ def login_required(request):
 
 
 def get_user(request):
-    user_id = request.session.get('user_id')
+    user_id = authenticated_userid(request)
     if user_id:
         user = User.default_db.query(
             User).filter(User.id == user_id).first()
@@ -127,7 +127,7 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
     discussion = discussion_from_request(request)
     if discussion:
         maybe_auto_subscribe(user, discussion)
-    return {"discussion": discussion}
+        return {"discussion": discussion}
 
 
 class AssemblStrategy(PyramidStrategy):
