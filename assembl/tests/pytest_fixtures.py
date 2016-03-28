@@ -130,8 +130,13 @@ def test_webrequest(request, test_app_no_perm):
 
 
 @pytest.fixture(scope="module")
-def db_default_data(request, db_tables, base_registry):
+def db_default_data(
+        request, db_tables, base_registry):
     bootstrap_db_data(db_tables)
+    from assembl.models.auth import IdentityProvider
+    idp = IdentityProvider(
+        name="google", provider_type="google-oauth2", trust_emails=True)
+    db_tables.add(idp)
     #db_tables.commit()
     transaction.commit()
 
@@ -175,6 +180,14 @@ def default_preferences(request, test_session):
         test_session.flush()
     request.addfinalizer(fin)
     return prefs
+
+
+@pytest.fixture(scope="function")
+def google_identity_provider(request, test_session):
+    from assembl.models.auth import IdentityProvider
+    # defined in db_default_data
+    return test_session.query(IdentityProvider).filter_by(
+        provider_type="google-oauth2").first()
 
 
 @pytest.fixture(scope="function")
@@ -1980,19 +1993,3 @@ def langstring_subject(request, test_session):
 
     request.addfinalizer(fin)
     return ls
-
-
-@pytest.fixture(scope="function")
-def google_identity_provider(request, test_session):
-    from assembl.models.auth import IdentityProvider
-    idp = IdentityProvider(
-        name="google", provider_type="google-oauth2", trust_emails=True)
-    test_session.add(idp)
-    test_session.flush()
-
-    def fin():
-        test_session.delete(idp)
-        test_session.flush()
-
-    request.addfinalizer(fin)
-    return idp
