@@ -98,6 +98,8 @@ def maybe_merge(
             user = None
             logged_in = None
     if other_users:
+        if not user:
+            user = other_users.pop(0)
         # Merge other accounts with same verified email
         for profile in other_users:
             user.merge(profile)

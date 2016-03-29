@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 import urlparse
-from urllib import urlencode
 
 import simplejson as json
 from requests import Response
 import mock
-import webtest
 from pyramid.interfaces import ISessionFactory
 from pyramid.request import Request
-from webob.cookies import make_cookie
 
 from assembl.models import SocialAuthAccount
 
@@ -152,4 +149,35 @@ def test_add_social_account(
     assert account
     assert account.uid == p1_uid
     assert account.profile == admin_user
+    account.delete()
+
+def test_merge_social_account(
+        test_session, test_app, discussion, participant1_user,
+        google_identity_provider, base_registry, test_webrequest):
+    res = test_app.get("/login/"+google_identity_provider.provider_type)
+    assert res.status_code == 302  # Found
+    url = urlparse.urlparse(res.location)
+    qs = urlparse.parse_qs(url.query)
+    state = qs['state']
+    code = 'code'
+    session_state = 'session_state'
+
+    with mock.patch('requests.sessions.Session.request') as mock_request:
+        mock_request.side_effect = fake_response_handler
+        res2 = test_app.get(
+            "/complete/"+google_identity_provider.provider_type, {
+                'state': state,
+                'code': code,
+                'authuser': '0',
+                'session_state': session_state,
+                'prompt': 'none'})
+        assert res2.status_code == 302
+        assert mock_request.call_count > 1
+        urls_called = {call[1]['url'] for call in mock_request.call_args_list}
+        assert "https://www.googleapis.com/plus/v1/people/me" in urls_called
+    account = test_session.query(SocialAuthAccount).filter_by(
+        email=p1_email).first()
+    assert account
+    assert account.uid == p1_uid
+    assert account.profile == participant1_user
     account.delete()
