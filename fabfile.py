@@ -1349,4 +1349,4 @@ def env_thecampfactory():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "socialauth"
+    env.gitbranch = "develop"
