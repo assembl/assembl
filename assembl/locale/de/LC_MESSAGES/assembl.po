@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-29 14:17-0400\n"
+"POT-Creation-Date: 2016-03-29 15:12-0400\n"
 "PO-Revision-Date: 2016-03-16 20:21+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language: de\n"
@@ -158,7 +158,6 @@ msgstr ""
 
 #: assembl/models/preferences.py:392
 #, fuzzy
-#| msgid "Default notifications"
 msgid "Authentication key"
 msgstr "Standardbenachrichtigungen"
 
@@ -168,7 +167,6 @@ msgstr ""
 
 #: assembl/models/preferences.py:405
 #, fuzzy
-#| msgid "Default notifications"
 msgid "Authentication secret"
 msgstr "Standardbenachrichtigungen"
 
@@ -2417,7 +2415,7 @@ msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:94
 #: assembl/templates/views/emailSource.tmpl:85
-#: assembl/templates/views/userAccountForm.tmpl:36
+#: assembl/templates/views/userAccountForm.tmpl:42
 #: assembl/templates/views/userProfile.tmpl:77
 msgid "Save changes"
 msgstr "Änderungen speichern"
@@ -2468,7 +2466,7 @@ msgid "Edit partners"
 msgstr "Partner bearbeiten"
 
 #: assembl/templates/views/adminNavigationMenu.tmpl:18
-#: assembl/templates/views/userAccountForm.tmpl:37
+#: assembl/templates/views/userAccountForm.tmpl:43
 #: assembl/templates/views/userNavigationMenu.tmpl:17
 #: assembl/templates/views/userProfile.tmpl:78
 msgid "Return to the discussion"
@@ -3724,6 +3722,13 @@ msgstr "Zugehörige Konten verwalten"
 msgid "Add another email"
 msgstr "Eine weitere E-Mail hinzufügen"
 
+#: assembl/templates/views/userAccount.tmpl:55
+msgid ""
+"Linking your account allows you to connect through social networks, and "
+"to use your profile's picture. Otherwise, you can set your profile "
+"picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
+msgstr ""
+
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
 msgstr "Sie können als alternative Login-Methode einen Benutzernamen einrichten."
@@ -3740,6 +3745,12 @@ msgstr "Kennwort 1 und 2 müssen identisch sein"
 #: assembl/templates/views/userAccountForm.tmpl:25
 msgid "Confirm password"
 msgstr "Kennwort bestätigen"
+
+#: assembl/templates/views/userAccountForm.tmpl:36
+msgid ""
+"You can set your profile picture with the <a "
+"href='http://en.gravatar.com/'>gravatar</a> service."
+msgstr ""
 
 #: assembl/templates/views/userNavigationMenu.tmpl:3
 msgid "Modify your profile"
@@ -4068,9 +4079,6 @@ msgstr "Keine Diskussionen gefunden für Slug=%s"
 #~ msgstr ""
 
 #~ msgid ""
-#~ "A python-social-auth backend that "
-#~ "will be mandatory to authenticate users"
-#~ " of this discussion."
 #~ msgstr ""
 
 #~ msgid "Private authorization server"

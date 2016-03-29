@@ -31,6 +31,12 @@
 						</div>
 					</div>
 
+                    {% if preferences['require_email_domain'] %}
+                        <div class="controls">
+                        <p class="help-block">{{ gettext("You can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service.") |safe }}</p>
+                        </div>
+                    {% endif %}
+
 					</fieldset>
 					<div class="form-actions fr">
 						<button class="btn btn-primary fr js_saveAccount" type="submit">{{ gettext('Save changes') }}</button>

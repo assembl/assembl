@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-29 14:17-0400\n"
+"POT-Creation-Date: 2016-03-29 15:12-0400\n"
 "PO-Revision-Date: 2016-03-16 20:35+0000\n"
 "Last-Translator: François Burra <francoisburra@imaginationforpeople.org>\n"
 "Language: fr\n"
@@ -2431,7 +2431,7 @@ msgstr ""
 
 #: assembl/templates/views/adminDiscussion.tmpl:94
 #: assembl/templates/views/emailSource.tmpl:85
-#: assembl/templates/views/userAccountForm.tmpl:36
+#: assembl/templates/views/userAccountForm.tmpl:42
 #: assembl/templates/views/userProfile.tmpl:77
 msgid "Save changes"
 msgstr "Sauvegarder les modifications"
@@ -2482,7 +2482,7 @@ msgid "Edit partners"
 msgstr "Éditer les partenaires"
 
 #: assembl/templates/views/adminNavigationMenu.tmpl:18
-#: assembl/templates/views/userAccountForm.tmpl:37
+#: assembl/templates/views/userAccountForm.tmpl:43
 #: assembl/templates/views/userNavigationMenu.tmpl:17
 #: assembl/templates/views/userProfile.tmpl:78
 msgid "Return to the discussion"
@@ -3749,6 +3749,16 @@ msgstr "Gérer les comptes associés"
 msgid "Add another email"
 msgstr "Ajouter une adresse de courriel"
 
+#: assembl/templates/views/userAccount.tmpl:55
+msgid ""
+"Linking your account allows you to connect through social networks, and "
+"to use your profile's picture. Otherwise, you can set your profile "
+"picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
+msgstr ""
+"Lier votre compte vous permet de vous connecter avec les réseaux sociaux "
+"et d'importer votre photo de profil. Autrement, vous pouvez définir votre "
+"photo de profil avec le service <a href='http://fr.gravatar.com/'>gravatar</a>."
+
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
 msgstr ""
@@ -3767,6 +3777,13 @@ msgstr "Les mots de passe doivent correspondre"
 #: assembl/templates/views/userAccountForm.tmpl:25
 msgid "Confirm password"
 msgstr "Confirmez votre mot de passe"
+
+#: assembl/templates/views/userAccountForm.tmpl:36
+msgid ""
+"You can set your profile picture with the <a "
+"href='http://en.gravatar.com/'>gravatar</a> service."
+msgstr "Vous pouvez définir votre photo de profil avec le service "
+"<a href='http://fr.gravatar.com/'>gravatar</a>."
 
 #: assembl/templates/views/userNavigationMenu.tmpl:3
 msgid "Modify your profile"
