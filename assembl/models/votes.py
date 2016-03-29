@@ -234,8 +234,20 @@ class TokenVoteSpecification(AbstractVoteSpecification):
     exclusive_categories = Column(Boolean, default=False)
 
     def results_for(self, voting_results, histogram_size=None):
+        sums = defaultdict(int)
+        nums = defaultdict(int)
+        for v in voting_results:
+            sums[v.token_category_id] += v.vote_value
+            nums[v.token_category_id] += 1
+        specs = self.db.query(TokenCategorySpecification).filter(
+            TokenCategorySpecification.id.in_(sums.keys())).all()
+        specs = {spec.id: spec.name for spec in specs}
+        sums = {specs[id]: total for (id, total) in sums.iteritems()}
+        nums = {specs[id]: total for (id, total) in nums.iteritems()}
         return {
-            "n": len(voting_results)
+            "n": len(voting_results),
+            "nums": nums,
+            "sums": sums
         }
 
     @classmethod
@@ -415,7 +427,6 @@ class LickertVoteSpecification(AbstractVoteSpecification):
                 cls.joint_histogram(
                     sub_group_specs, histogram_size, joint_histograms,
                     votes_by_idea_user_spec)
-            
 
     def results_for(self, voting_results, histogram_size=None):
         base = super(LickertVoteSpecification, self).results_for(voting_results)
