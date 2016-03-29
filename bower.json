@@ -20,6 +20,7 @@
     "Backbone.Subset": "https://github.com/ImaginationForPeople/Backbone.Subset.git#~0.1.1",
     "backbone": "~1.1.2",
     "backbone-modal": "~1.1.5",
+    "backbone-model-file-upload": "~1.0.0",
     "bootstrap-growl": "~1.1.0",
     "chai": "~3.5.0",
     "ckeditor": "^4.4.7",
