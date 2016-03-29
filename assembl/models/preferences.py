@@ -353,32 +353,13 @@ class Preferences(MutableMapping, Base):
         },
 
         {
-            "id": "authorization_server_backend",
-            "value_type": "scalar",
-            "scalar_values": {
-                "": _("No special authentication"),
-                "wordpress-oauth2":
-                    _("WordPress OAuth Server"),
-            },
-            "name": _(
-                "Authorization service type"),
-            "description": _(
-                "A python-social-auth backend that will be mandatory to "
-                "authenticate users of this discussion."),
-            "allow_user_override": None,
-            "modification_permission": P_SYSADMIN,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": ""
-        },
-
-        {
             "id": "authorization_server",
             "value_type": "url",
             "name": _(
-                "Private authorization server"),
+                "Private authentication server"),
             "description": _(
-                "Authorization server URL endpoint for a private discussion"),
+                "Endpoint URL of a private authentication that users will "
+                "mandatorily have to authenticate themselves with."),
             "allow_user_override": None,
             "modification_permission": P_SYSADMIN,
             # "frontend_validator_function": func_name...?,
@@ -387,11 +368,30 @@ class Preferences(MutableMapping, Base):
         },
 
         {
+            "id": "authorization_server_backend",
+            "value_type": "scalar",
+            "scalar_values": {
+                "": _("No special authentication"),
+                "wordpress-oauth2":
+                    _("WordPress OAuth Server"),
+            },
+            "name": _(
+                "Authentication service type"),
+            "description": _(
+                "The python-social-auth backend for the private authentication server."),
+            "allow_user_override": None,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": ""
+        },
+
+        {
             "id": "authorization_key",
             "value_type": "string",
-            "name": _("Authorization key"),
+            "name": _("Authentication key"),
             "description": _(
-                "Key for assembl as a client of the authorization server"),
+                "Key for assembl as a client of the authentication server"),
             "allow_user_override": None,
             "modification_permission": P_SYSADMIN,
             # "frontend_validator_function": func_name...?,
@@ -402,9 +402,9 @@ class Preferences(MutableMapping, Base):
         {
             "id": "authorization_secret",
             "value_type": "string",
-            "name": _("Authorization secret"),
+            "name": _("Authentication secret"),
             "description": _(
-                "Secret for assembl as a client of the authorization server"),
+                "Secret for assembl as a client of the authentication server"),
             "allow_user_override": None,
             "view_permission": P_SYSADMIN,
             "modification_permission": P_SYSADMIN,
