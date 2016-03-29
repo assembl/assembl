@@ -83,6 +83,7 @@ gulp.task('libs',['clean:infrastructure'], function() {
       path.js+'/bower/marionette/lib/backbone.marionette.js',
       path.js+'/bower/backbone-modal/backbone.modal.js',
       path.js+'/bower/Backbone.Subset/backbone.subset.js',
+      path.js+'/bower/backbone-model-file-upload/backbone-model-file-upload.js',
       path.js+'/bower/sockjs/sockjs.js',
       //path.js+'/lib/ckeditor/ckeditor.js',// need a proper solution to make CKEDITOR global var
       //path.js+'/bower/ckeditor/ckeditor.js',
@@ -95,7 +96,7 @@ gulp.task('libs',['clean:infrastructure'], function() {
       path.js+'/lib/bootstrap.js',
       path.js+'/lib/dropdown.js',
       path.js+'/lib/annotator/annotator-full.js',
-      path.js+'/lib/ckeditor-sharedcontainer/plugin.js'
+      path.js+'/lib/ckeditor-sharedcontainer/plugin.js',
 
   ], { base: path.js })
     .pipe(sourcemaps.init({loadMaps: true, debug: true}))

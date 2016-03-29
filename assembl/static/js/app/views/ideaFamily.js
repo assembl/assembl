@@ -1,7 +1,7 @@
 'use strict';
 
-var Backbone = require('../shims/backbone.js'),
-    _ = require('../shims/underscore.js'),
+var Backbone = require('backbone'),
+    _ = require('underscore'),
     Ctx = require('../common/context.js');
 
 var IdeaFamilyView = Backbone.View.extend({

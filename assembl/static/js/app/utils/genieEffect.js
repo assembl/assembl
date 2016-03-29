@@ -1,4 +1,4 @@
-var $ = require('../shims/jquery.js'),
+var $ = require('jquery'),
     Promise = require('bluebird');
 
 /**

@@ -1,6 +1,6 @@
 var i18n =  require('../i18n.js'),
     Ctx = require("../../common/context.js"),
-    $ = require('../../shims/jquery.js');
+    $ = require('jquery');
 
 var AssemblTours = [
   {

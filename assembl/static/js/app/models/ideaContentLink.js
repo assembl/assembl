@@ -1,9 +1,9 @@
 'use strict';
 
 var Marionette = require('../shims/marionette.js'),
-    Backbone = require('../shims/backbone.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+    Backbone = require('backbone'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     Promise = require('bluebird'),
     Moment = require('moment'),
     Types = require('../utils/types.js'),

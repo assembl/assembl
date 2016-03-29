@@ -69,7 +69,11 @@
     "jit": "./assembl/static/js/bower/jit/jit/jit.js"
   },
   "browserify-shim": {
-    "jit": "$jit"
+    "jit": "$jit",
+    "jquery": "global:$",
+    "backbone": "global:Backbone",
+    "underscore": "global:_",
+    "backbone.marionette": "global:Marionette"
   },
   "browserify": {
     "transform": [

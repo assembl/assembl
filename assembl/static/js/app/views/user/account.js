@@ -1,8 +1,8 @@
 'use strict';
 
 var Marionette = require('../../shims/marionette.js'),
-    _ = require('../../shims/underscore.js'),
-    $ = require('../../shims/jquery.js'),
+    $ = require('jquery'),
+    _ = require('underscore'),
     Accounts = require('../../models/accounts.js'),
     Ctx = require('../../common/context.js'),
     Agents = require('../../models/agents.js'),

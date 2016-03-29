@@ -1,6 +1,6 @@
 var Marionette = require('../../shims/marionette.js'),
-    $ = require('../../shims/jquery.js'),
-    _ = require('../../shims/underscore.js'),
+    $ = require('jquery'),
+    _ = require('underscore'),
     i18n = require('../../utils/i18n.js'),
     Types = require('../../utils/types.js'),
     Ctx = require('../../common/context.js'),

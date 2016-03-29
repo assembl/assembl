@@ -17,8 +17,8 @@ var Assembl = require('../app.js'),
     CollectionManager = require('../common/collectionManager.js'),
     AssemblPanel = require('./assemblPanel.js'),
     Marionette = require('../shims/marionette.js'),
-    $ = require('../shims/jquery.js'),
-    _ = require('../shims/underscore.js'),
+    $ = require('jquery'),
+    _ = require('underscore'),
     Promise = require('bluebird');
 
 var IdeaPanel = AssemblPanel.extend({

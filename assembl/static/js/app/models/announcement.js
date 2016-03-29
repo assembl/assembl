@@ -1,6 +1,6 @@
 'use strict';
 
-var $ = require('../shims/jquery.js'),
+var $ = require('jquery'),
     Promise = require('bluebird'),
     Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),

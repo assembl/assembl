@@ -2,8 +2,8 @@
 
 var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird'),
-    $ = require('../shims/jquery.js'),
-    _ = require('../shims/underscore.js'),
+    $ = require('jquery'),
+    _ = require('underscore'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     GroupSpec = require('../models/groupSpec.js'),

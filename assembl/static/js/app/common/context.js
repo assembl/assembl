@@ -1,7 +1,7 @@
 'use strict';
 
-var $ = require('../shims/jquery.js'),
-    _ = require('../shims/underscore.js'),
+var $ = require('jquery'),
+    _ = require('underscore'),
     Moment = require('moment'),
     Promise = require('bluebird'),
     Assembl =  require('../app.js'),

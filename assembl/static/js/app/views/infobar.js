@@ -7,7 +7,7 @@ var Marionette = require('../shims/marionette.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Widget = require('../models/widget.js'),
     Ctx = require('../common/context.js'),
-    $ = require('../shims/jquery.js');
+    $ = require('jquery');
 
 
 var InfobarItem = Marionette.LayoutView.extend({

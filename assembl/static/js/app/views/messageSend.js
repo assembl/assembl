@@ -1,10 +1,10 @@
 'use strict';
 
-var Backbone = require('../shims/backbone.js'),
+var Backbone = require('backbone'),
     Marionette = require('../shims/marionette.js'),
     Assembl = require('../app.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Permissions = require('../utils/permissions.js'),

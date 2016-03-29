@@ -1,6 +1,6 @@
 'use strict';
 
-var jQuery = require('../shims/jquery.js');
+var jQuery = require('jquery');
 
 var debugScrollUtils = false;
 

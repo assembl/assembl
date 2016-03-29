@@ -1,5 +1,5 @@
-var $ = require('../shims/jquery.js'),
-    _ = require('../shims/underscore.js');
+var $ = require('jquery'),
+    _ = require('underscore');
 
 /*
     An easy to use growling function for use in Assembl

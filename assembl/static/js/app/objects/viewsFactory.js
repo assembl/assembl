@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('../shims/underscore.js'),
+var _ = require('underscore'),
     AssemblPanel = require('../views/assemblPanel.js'),
     AboutNavPanel = require('../views/navigation/about.js'),
     ContextPanel = require('../views/contextPage.js'),

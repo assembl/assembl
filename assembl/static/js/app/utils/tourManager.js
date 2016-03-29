@@ -4,7 +4,7 @@ var Marionette = require('../shims/marionette.js'),
     i18n =  require('./i18n.js'),
     TourModel = require('../models/tour.js'),
     Ctx = require('../common/context.js'),
-    _ = require('../shims/underscore.js'),
+    _ = require('underscore'),
     AssemblTours = require('./tours/assemblTours.js'),
     Raven = require('raven-js');
 

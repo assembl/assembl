@@ -1,9 +1,9 @@
 'use strict';
 
-var Backbone = require('../shims/backbone.js'),
+var Backbone = require('backbone'),
     Raven = require('raven-js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     FlipSwitchButtonModel = require('../models/flipSwitchButton.js'),

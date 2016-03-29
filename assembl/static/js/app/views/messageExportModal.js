@@ -1,8 +1,8 @@
-var Backbone = require('../shims/backbone.js'),
+var Backbone = require('backbone'),
     Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
-    $ = require('../shims/jquery.js'),
-    _ = require('../shims/underscore.js'),
+    $ = require('jquery'),
+    _ = require('underscore'),
     Source = require('../models/sources.js'),
     FacebookViews = require('./facebookViews.js');
 

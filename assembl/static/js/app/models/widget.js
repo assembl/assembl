@@ -1,7 +1,7 @@
 'use strict';
 
-var _ = require('../shims/underscore.js'),
-    Backbone = require("../shims/backbone.js"),
+var _ = require('underscore'),
+    Backbone = require("backbone"),
     Base = require("./base.js"),
     i18n = require('../utils/i18n.js'),
     Moment = require('moment'),

@@ -1,7 +1,7 @@
 
 var expect = require('chai').expect,
     navBar = require('../views/navBar.js'),
-    $ = require('../shims/jquery.js'),
+    $ = require('jquery'),
     fixtures = require('fixtures');
 
 var view, fixNav;

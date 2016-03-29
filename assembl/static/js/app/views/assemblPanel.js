@@ -1,7 +1,7 @@
 'use strict';
 
 var Marionette = require('../shims/marionette.js'),
-    _ = require('../shims/underscore.js');
+    _ = require('underscore');
 
 /**
  * An abstract class every panel should eventually extend

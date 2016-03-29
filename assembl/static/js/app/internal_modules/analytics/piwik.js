@@ -14,7 +14,7 @@ var moduleName = 'Analytics_Piwik',
     // Node-like environments. Not strict CommonJS but CommonJS-like env.
     // Update arguments here by adding require('dependency') as paramter to factory().
     // eg. module.exports = factory(require('jquery'));
-    module.exports = factory(require('../../shims/underscore.js'), require('./abstract.js'));
+    module.exports = factory(require('underscore'), require('./abstract.js'));
   } else {
     // Browser global
     // Update arguments here by adding root.Dependecy as parameter to factory()

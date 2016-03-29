@@ -1,6 +1,6 @@
 'use strict';
 
-var $ = require('../shims/jquery.js'),
+var $ = require('jquery'),
     Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),
     Ctx = require('../common/context.js'),
