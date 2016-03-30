@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     Column, ForeignKey, Integer, Boolean, String, SmallInteger,
-    UnicodeText, UniqueConstraint, event, inspect)
+    UnicodeText, UniqueConstraint, event, inspect, Sequence)
 from sqlalchemy.sql.expression import case
 from sqlalchemy.orm import (
     relationship, backref, subqueryload, joinedload, aliased)
@@ -369,8 +369,13 @@ class LangString(Base):
 
     @classproperty
     def id_sequence_name(cls):
-        return "%s.%s.langstring_idsequence" % (
-            config.get("db_schema"), config.get("db_user"))
+        if cls.using_virtuoso:
+            return "%s.%s.langstring_idsequence" % (
+                config.get("db_schema"), config.get("db_user"))
+        else:
+            return "langstring_idsequence"
+
+    @classproperty
 
     def _before_insert(self):
         (id,) = next(iter(self.db.execute(

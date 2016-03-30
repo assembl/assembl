@@ -39,6 +39,7 @@ from ..semantic.namespaces import QUADNAMES
 from ..auth import *
 from .decl_enums import EnumSymbol, DeclEnumType
 from .utils import get_global_base_url
+from ..lib.config import get_config
 
 atexit_engines = []
 
@@ -100,6 +101,17 @@ def get_target_class(column):
             return cls
 
 
+_using_virtuoso = None
+
+
+def using_virtuoso():
+    global _using_virtuoso
+    if _using_virtuoso is None:
+        _using_virtuoso = get_config(
+            )["sqlalchemy.url"].startswith('virtuoso:')
+    return _using_virtuoso
+
+
 class DummyContext(object):
     def __init__(self, presets=None):
         self.presets = presets or {}
@@ -145,6 +157,10 @@ class BaseOps(object):
     @property
     def object_session(self):
         return object_session(self)
+
+    @classproperty
+    def using_virtuoso(cls):
+        return using_virtuoso()
 
     def __iter__(self, **kwargs):
         """Return a generator that iterates through model columns."""
