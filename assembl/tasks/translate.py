@@ -110,7 +110,7 @@ def translate_content(
             # pick randomly. TODO: Recency order?
             for original in originals:
                 source_loc = (service.asKnownLocale(original.locale_code) or
-                              original.locale_code) or 'und'
+                              original.locale_code)
                 for dest in translation_table.languages_for(source_loc):
                     if Locale.compatible(dest, source_loc):
                         continue

@@ -1,6 +1,7 @@
 from abc import abstractmethod
 import urllib2
 from traceback import print_exc
+import re
 
 import simplejson as json
 from langdetect import detect_langs
@@ -19,6 +20,11 @@ from assembl.lib.locale import strip_country
 _ = TranslationStringFactory('assembl')
 
 
+# Minimum length (chars) before we trust the language identifications outside
+# discussion languages
+SECURE_IDENTIFICATION_LIMIT = 250
+
+
 class LangStringStatus(OrderedEnum):
     SERVICE_DOWN = 1  # Transient, eg connection error
     TRANSLATION_FAILURE = 2  # possibly transient, like service down
@@ -33,6 +39,9 @@ class LangStringStatus(OrderedEnum):
 
 
 class TranslationService(object):
+    _url_regexp = re.compile(
+        r"\b(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?\b", re.I)
+
 
     def __init__(self, discussion):
         self.discussion_id = discussion.id
@@ -44,6 +53,10 @@ class TranslationService(object):
     def serviceData(self):
         return {"translation_notice": "Machine-translated",
                 "idiosyncrasies": {}}
+
+    def strlen_nourl(self, data):
+        # a fancy strlen that removes urls.
+        return len(self._url_regexp.sub(' ', data))
 
     @property
     def discussion(self):
@@ -98,7 +111,9 @@ class TranslationService(object):
             lid['error_desc'] = error_description
             lse.locale_identification_data_json = lid
 
-    def identify(self, text, constrain_to_discussion_locales=True):
+    def identify(
+            self, text,
+            constrain_to_discussion_locales=SECURE_IDENTIFICATION_LIMIT):
         "Try to identify locale of text. Boost if one of the expected locales."
         if not text:
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
@@ -106,7 +121,8 @@ class TranslationService(object):
             Locale.extract_root_locale(l)
             for l in self.discussion.discussion_locales))
         language_data = detect_langs(text)
-        if constrain_to_discussion_locales:
+        if constrain_to_discussion_locales and \
+                self.strlen_nourl(text) < constrain_to_discussion_locales:
             data = [(x.prob, x.lang)
                     for x in language_data
                     if Locale.any_compatible(
@@ -125,7 +141,8 @@ class TranslationService(object):
         return top, {lang: prob for (prob, lang) in data}
 
     def confirm_locale(
-            self, langstring_entry, constrain_to_discussion_locales=True):
+            self, langstring_entry,
+            constrain_to_discussion_locales=SECURE_IDENTIFICATION_LIMIT):
         try:
             lang, data = self.identify(
                 langstring_entry.value,
@@ -167,7 +184,7 @@ class TranslationService(object):
 
     def translate_lse(
             self, source_lse, target, retranslate=False,
-            constrain_to_discussion_locales=True):
+            constrain_to_discussion_locales=SECURE_IDENTIFICATION_LIMIT):
         if not source_lse.value:
             # don't translate empty strings
             return source_lse
@@ -214,7 +231,8 @@ class TranslationService(object):
                 lang = self.asPosixLocale(lang)
                 # What if detected language is not a discussion language?
                 if source_locale == Locale.UNDEFINED:
-                    if constrain_to_discussion_locales:
+                    if constrain_to_discussion_locales and \
+                            self.strlen_nourl(text) < constrain_to_discussion_locales:
                         if (not lang) or not Locale.any_compatible(
                                 lang, self.discussion.discussion_locales):
                             self.set_error(
@@ -296,12 +314,15 @@ class DummyTranslationServiceOneStep(DummyTranslationServiceTwoSteps):
 
 class DummyTranslationServiceTwoStepsWithErrors(
         DummyTranslationServiceTwoSteps):
-    def identify(self, text, constrain_to_discussion_locales=True):
+    def identify(
+            self, text,
+            constrain_to_discussion_locales=SECURE_IDENTIFICATION_LIMIT):
         from random import random
         if random() > 0.9:
             raise RuntimeError()
         return super(DummyTranslationServiceTwoStepsWithErrors, self).identify(
-            text, constrain_to_discussion_locales=True)
+            text,
+            constrain_to_discussion_locales=constrain_to_discussion_locales)
 
     def translate(self, text, target, source=None, db=None):
         if not text:
