@@ -76,6 +76,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
     },
 
     nonLinguisticPreference: new LanguagePreferenceModel({
+        source_of_evidence: 1,
         locale_code: LangString.LocaleUtils.non_linguistic
     }),
 
