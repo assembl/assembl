@@ -121,8 +121,8 @@ class TranslationService(object):
             Locale.extract_root_locale(l)
             for l in self.discussion.discussion_locales))
         language_data = detect_langs(text)
-        if constrain_to_discussion_locales and \
-                self.strlen_nourl(text) < constrain_to_discussion_locales:
+        if constrain_to_discussion_locales and (
+                self.strlen_nourl(text) < constrain_to_discussion_locales):
             data = [(x.prob, x.lang)
                     for x in language_data
                     if Locale.any_compatible(
@@ -231,8 +231,9 @@ class TranslationService(object):
                 lang = self.asPosixLocale(lang)
                 # What if detected language is not a discussion language?
                 if source_locale == Locale.UNDEFINED:
-                    if constrain_to_discussion_locales and \
-                            self.strlen_nourl(text) < constrain_to_discussion_locales:
+                    if constrain_to_discussion_locales and (
+                            self.strlen_nourl(source_lse.value) <
+                            constrain_to_discussion_locales):
                         if (not lang) or not Locale.any_compatible(
                                 lang, self.discussion.discussion_locales):
                             self.set_error(
