@@ -64,8 +64,8 @@ var AttachmentModel = Base.Model.extend({
     idCreator: undefined,
     title: undefined,
     description: undefined,
-    attachmentPurpose: attachmentPurposeTypes.EMBED_ATTACHMENT.id
-    
+    attachmentPurpose: attachmentPurposeTypes.EMBED_ATTACHMENT.id,
+    external_url: undefined
   },
 
   initialize: function(options) {

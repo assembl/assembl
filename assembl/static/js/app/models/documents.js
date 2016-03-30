@@ -28,7 +28,9 @@ var DocumentModel = Base.Model.extend({
    
   defaults: {
     '@type': Types.DOCUMENT,
-    uri: undefined
+    uri: undefined,
+    external_url: undefined,
+    fileAttribute: 'raw_data'  //A Backbone-model-file-upload attribute
   },
 
   validate: function(attrs, options) {

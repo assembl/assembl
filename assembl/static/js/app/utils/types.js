@@ -21,6 +21,7 @@ var Types = {
   PARTNER_ORGANIZATION: 'PartnerOrganization',
   WEBPAGE: 'Webpage',
   DOCUMENT: 'Document',
+  File: 'File',
   POST_ATTACHMENT: 'PostAttachment',
   IDEA_ATTACHMENT: 'IdeaAttachment',
   ANNOUNCEMENT: 'Announcement',
