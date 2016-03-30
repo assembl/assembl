@@ -75,6 +75,10 @@ var LanguagePreferenceCollection = Base.Collection.extend({
         });
     },
 
+    nonLinguisticPreference: new LanguagePreferenceModel({
+        locale_code: LangString.LocaleUtils.non_linguistic
+    }),
+
     /**
      * @param  String locale
      * This needs to mirror UserLanguagePreferenceCollection.find_locale
@@ -83,6 +87,9 @@ var LanguagePreferenceCollection = Base.Collection.extend({
       if (this.cachePrefByLocale === undefined) {
         console.warn("getPreferenceForLocale was called before getTranslationData");
         this.getTranslationData();
+      }
+      if (locale == LangString.LocaleUtils.non_linguistic) {
+        return this.nonLinguisticPreference;
       }
       var localeParts = locale.split("_");
       for (var i = localeParts.length; i > 0; i--) {

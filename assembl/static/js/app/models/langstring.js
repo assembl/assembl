@@ -34,6 +34,9 @@ var LocaleUtils = {
         return i + 1;
     },
 
+    undefined: "und",
+    non_linguistic: "zxx",
+
     stripCountry: function(locale) {
         var locale_parts = locale.split("_");
         if (locale_parts.length > 1 && locale_parts[locale_parts.length-1].length == 2) {
@@ -86,7 +89,7 @@ var LangStringEntry = Base.Model.extend({
    */
   defaults: {
     "@type": Types.LANGSTRING_ENTRY,
-    "@language": "und",
+    "@language": LocaleUtils.undefined,
     "error_count": 0,
     "error_code": undefined,
     "value": ""
