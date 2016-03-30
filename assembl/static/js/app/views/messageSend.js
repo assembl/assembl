@@ -129,7 +129,8 @@ var messageSendView = Marionette.LayoutView.extend({
     messageSubject: '.messageSend-subject',
     topicSubject: '.topic-subject .formfield',
     permissionDeniedWarningMessage: '.js_warning-message-for-message-post',
-    attachments: '.js_attachments'
+    attachments: '.js_attachments',
+    upload: '.js_upload'
   },
 
   regions: {
@@ -141,7 +142,8 @@ var messageSendView = Marionette.LayoutView.extend({
     'click @ui.cancelButton': 'onCancelMessageButtonClick',
     'blur @ui.messageBody': 'onBlurMessage',
     'focus @ui.messageBody': 'onFocusMessage',
-    'keyup @ui.messageBody': 'onChangeBody'
+    'keyup @ui.messageBody': 'onChangeBody',
+    'change @ui.upload': 'onFileUpload'
   },
 
   serializeData: function() {
@@ -563,6 +565,22 @@ var messageSendView = Marionette.LayoutView.extend({
 
   showPopInFirstPost: function() {
     Assembl.vent.trigger('navBar:subscribeOnFirstPost');
+  },
+
+  onFileUpload: function(e){
+    var fs = e.target.files,
+        that = this;
+    console.log("A file has been uploaded");
+
+    _.each(fs, function(f, i){
+      var document = new Documents.Model({
+        name: f.name,
+        mime_type: f.type,
+        discussion_id: Ctx.getDiscussionId()
+      });
+      document.set('raw_data', f);
+      document.save();
+    });
   }
 
 });

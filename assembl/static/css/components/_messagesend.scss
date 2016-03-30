@@ -41,13 +41,21 @@
       }
     }
     .messageSend-buttons {
-      width: 100%;
+      width: 50%;
       text-align: right;
       margin: 0;
       padding: 0;
       a {
         margin: 0.5em 0 0 0.5em;
       }
+    }
+
+    .messageSend-upload {
+      width: 50%;
+      text-align: left;
+      vertical-align: bottom;
+      margin: 0;
+      padding: 0
     }
 
   }
