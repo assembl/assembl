@@ -375,8 +375,6 @@ class LangString(Base):
         else:
             return "langstring_idsequence"
 
-    @classproperty
-
     def _before_insert(self):
         (id,) = next(iter(self.db.execute(
             "select sequence_next('%s')" % self.id_sequence_name)))
