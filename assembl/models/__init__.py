@@ -248,6 +248,7 @@ from .facebook_integration import (
 
 from .attachment import (
     Document,
+    File,
     Attachment
 )
 

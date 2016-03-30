@@ -66,6 +66,7 @@ API_PREFIX = '/data/'
 
 FORM_HEADER = "Content-Type:(application/x-www-form-urlencoded)|(multipart/form-data)"
 JSON_HEADER = "Content-Type:application/(.*\+)?json"
+MULTIPART_HEADER = "Content-Type:multipart/form-data"
 
 
 def includeme(config):

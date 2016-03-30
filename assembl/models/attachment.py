@@ -163,7 +163,7 @@ class File(Document):
         if not self.id or not self.discussion:
             return None
         return self.discussion.compose_external_uri(
-               'Attachment', self.id, 'file')
+               'documents', self.id, 'data')
 
 
 class Attachment(DiscussionBoundBase):
@@ -230,6 +230,10 @@ class Attachment(DiscussionBoundBase):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
+
+    @property
+    def external_url(self):
+        return self.document.external_url
 
 
 class PostAttachment(Attachment):
