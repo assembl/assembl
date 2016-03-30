@@ -645,11 +645,11 @@ $previewNumLines: 4;
   }
 
   .action:link, .action:visited {
-    color: $purple1;
+    color: $theme_activelink_color;
   }
 
   .action:hover {
-    color: $purple1;
+    color: $theme_activelink_color;
   }
 
   .action-seperated {

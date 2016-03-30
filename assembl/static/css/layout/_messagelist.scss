@@ -108,9 +108,9 @@
       //border-right: 1px solid $gray;
     }
     .option.selected {
-      color: $green;
+      color: $theme_activelink_color;
       font-weight: 600;
-      border-bottom: 3px solid $green;
+      border-bottom: 3px solid $theme_activelink_color;
     }
 
     .show-expert-mode {
