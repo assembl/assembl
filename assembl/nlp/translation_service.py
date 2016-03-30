@@ -117,12 +117,15 @@ class TranslationService(object):
         "Try to identify locale of text. Boost if one of the expected locales."
         if not text:
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
+        len_nourl = self.strlen_nourl(text)
+        if len_nourl < 5:
+            return Locale.NON_LINGUISTIC
         expected_locales = set((
             Locale.extract_root_locale(l)
             for l in self.discussion.discussion_locales))
         language_data = detect_langs(text)
         if constrain_to_discussion_locales and (
-                self.strlen_nourl(text) < constrain_to_discussion_locales):
+                len_nourl < constrain_to_discussion_locales):
             data = [(x.prob, x.lang)
                     for x in language_data
                     if Locale.any_compatible(
@@ -192,6 +195,10 @@ class TranslationService(object):
         if source_locale == Locale.NON_LINGUISTIC:
             return source_lse
         # TODO: Handle MULTILINGUAL
+        if (source_locale == Locale.UNDEFINED and
+                self.strlen_nourl(source_lse.value) < 5):
+            source_lse.identify_locale(Locale.NON_LINGUISTIC, None, True)
+            return source_lse
         if (source_locale == Locale.UNDEFINED
                 and self.distinct_identify_step):
             self.confirm_locale(source_lse, constrain_to_discussion_locales)
