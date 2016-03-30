@@ -430,7 +430,10 @@
         "author_name": true,
         "author_url": true,
         "thumbnail_url": true,
-        "site_name": true
+        "site_name": true,
+        "fileAttribute": false,
+        "raw_data": false,
+        "discussion_id": false
     },
     "Attachment": {
         "idAttachedDocument": "document",
