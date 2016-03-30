@@ -16,9 +16,8 @@
     "url": "git://github.com/ImaginationForPeople/assembl.git"
   },
   "scripts": {
-    "test": "npm run phantom && npm run wd && npm run cover",
+    "test": "npm run wd && npm run cover",
     "start": "mochify --watch",
-    "phantom": "mochify",
     "wd": "mochify --wd",
     "cover": "mochify --cover"
   },
@@ -53,7 +52,6 @@
     "mochify": "^2.10.0",
     "moment": "^2.10.3",
     "node-sass": "~3.4.2",
-    "phantomjs": "1.9.18",
     "po2json": "~0.4.1",
     "postcss": "~5.0.0",
     "raven-js": " ~1.1.22",
