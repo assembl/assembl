@@ -1,13 +1,15 @@
 from datetime import datetime
 
 from sqlalchemy import (
-    Column, DateTime, Integer, UniqueConstraint, event, Table, ForeignKey)
+    Column, DateTime, Integer, UniqueConstraint, event, Table, ForeignKey,
+    Sequence)
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql.expression import join
 from sqlalchemy.orm import relationship
 
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import ASSEMBL
+from . import config
 
 
 class TombstonableMixin(object):
@@ -44,7 +46,22 @@ class HistoryMixin(TombstonableMixin):
 
     @declared_attr
     def id_sequence_name(cls):
-        return cls.__tablename__ + '_idsequence'
+        if cls.using_virtuoso:
+            # BUG: add schema. Needs migration.
+            # return "%s.%s.%s_idsequence" % (
+            #     config.get("db_schema"), config.get("db_user"),
+            #     cls.__tablename__)
+            return cls.__tablename__ + '_idsequence'
+        else:
+            return cls.__tablename__ + '_idsequence'
+
+    @declared_attr
+    def id_sequence(cls):
+        if cls.using_virtuoso:
+            from virtuoso.alchemy import VirtuosoSequence
+            return VirtuosoSequence(cls.id_sequence_name)
+        else:
+            return Sequence(cls.id_sequence_name)
 
     @declared_attr
     def idtable_name(cls):
@@ -60,7 +77,9 @@ class HistoryMixin(TombstonableMixin):
             cls.metadata,
             Column('id', Integer, primary_key=True))
 
-    id = Column(Integer, primary_key=True)
+    @declared_attr
+    def id(cls):
+        return Column(Integer, cls.id_sequence, primary_key=True)
 
     @declared_attr
     def base_id(cls):
@@ -86,12 +105,21 @@ class HistoryMixin(TombstonableMixin):
             uselist=False, viewonly=True, **kwargs)
 
     def _before_insert(self):
-        (id,) = next(iter(self.db.execute(
-            "select sequence_next('%s')" % self.id_sequence_name)))
-        self.id = id
-        if not self.base_id:
-            self.db.execute(self.identity_table.insert().values(id=id))
-            self.base_id = id
+        if self.using_virtuoso:
+            (id,) = self.db.execute(
+                self.id_sequence.next_value().select()).first()
+            self.id = id
+            if not self.base_id:
+                self.db.execute(self.identity_table.insert().values(id=id))
+                self.base_id = id
+        else:
+            if self.base_id:
+                self.id = self.id_sequence.next_value()
+            else:
+                res = self.db.execute(
+                    self.identity_table.insert().values(
+                        id=self.id_sequence.next_value()))
+                self.id = self.base_id = res.inserted_primary_key[0]
 
     @declared_attr
     def _before_insert_set_event(cls):

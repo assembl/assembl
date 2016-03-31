@@ -5,6 +5,7 @@ from sqlalchemy import (
     Column, ForeignKey, Integer, Boolean, String, SmallInteger,
     UnicodeText, UniqueConstraint, event, inspect, Sequence)
 from sqlalchemy.sql.expression import case
+from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import (
     relationship, backref, subqueryload, joinedload, aliased)
 from sqlalchemy.orm.query import Query
@@ -357,7 +358,6 @@ class LocaleLabel(Base):
 
 class LangString(Base):
     __tablename__ = "langstring"
-    id = Column(Integer, primary_key=True)
 
     @classmethod
     def subqueryload_option(cls, reln):
@@ -375,10 +375,21 @@ class LangString(Base):
         else:
             return "langstring_idsequence"
 
+    @classproperty
+    def id_sequence(cls):
+        return Sequence(cls.id_sequence_name)
+
+    @declared_attr
+    def id(cls):
+        return Column(Integer, primary_key=True)
+
     def _before_insert(self):
-        (id,) = next(iter(self.db.execute(
-            "select sequence_next('%s')" % self.id_sequence_name)))
-        self.id = id
+        if self.using_virtuoso:
+            # This is a virtuoso workaround: virtuoso does not like
+            # empty inserts.
+            (id,) = self.db.execute(
+                self.id_sequence.next_value().select()).first()
+            self.id = id
 
     def add_entry(self, entry):
         if entry and isinstance(entry, LangStringEntry):
