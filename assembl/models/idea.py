@@ -29,7 +29,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from virtuoso.vmapping import IriClass, PatternIriClass
-from virtuoso.alchemy import SparqlClause, Timestamp
+from virtuoso.alchemy import SparqlClause
 
 from ..lib.utils import get_global_base_url
 from ..nlp.wordcounter import WordCounter
@@ -45,6 +45,11 @@ from ..semantic.namespaces import (
 from ..lib.sqla import (UPDATE_OP, DELETE_OP, INSERT_OP, get_model_watcher)
 from assembl.views.traversal import (
     AbstractCollectionDefinition, CollectionDefinition)
+
+if DiscussionBoundBase.using_virtuoso:
+    from virtuoso.alchemy import Timestamp
+else:
+    from sqlalchemy.types import TIMESTAMP as Timestamp
 
 
 class defaultdictlist(defaultdict):
@@ -133,6 +138,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
     hidden = Column(Boolean, server_default='0')
     last_modified = Column(Timestamp)
+    # TODO: Make this autoupdate on change. see
+    # http://stackoverflow.com/questions/1035980/update-timestamp-when-row-is-updated-in-postgresql
 
     creation_date = Column(
         DateTime, nullable=False, default=datetime.utcnow,
