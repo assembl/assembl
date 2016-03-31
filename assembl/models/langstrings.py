@@ -367,17 +367,11 @@ class LangString(Base):
     def joinedload_option(cls, reln):
         return joinedload(reln).joinedload(cls.entries)
 
-    @classproperty
-    def id_sequence_name(cls):
-        if cls.using_virtuoso:
-            return "%s.%s.langstring_idsequence" % (
-                config.get("db_schema"), config.get("db_user"))
-        else:
-            return "langstring_idsequence"
+    id_sequence_name = "langstring_idsequence"
 
     @classproperty
     def id_sequence(cls):
-        return Sequence(cls.id_sequence_name)
+        return Sequence(cls.id_sequence_name, schema=cls.metadata.schema)
 
     @declared_attr
     def id(cls):
@@ -652,9 +646,10 @@ class LangString(Base):
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
 
 
-@event.listens_for(LangString, 'before_insert', propagate=True)
-def receive_before_insert(mapper, connection, target):
-    target._before_insert()
+if LangString.using_virtuoso:
+    @event.listens_for(LangString, 'before_insert', propagate=True)
+    def receive_before_insert(mapper, connection, target):
+        target._before_insert()
 
 
 class LangStringEntry(Base, TombstonableMixin):

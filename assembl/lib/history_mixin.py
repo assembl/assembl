@@ -46,22 +46,12 @@ class HistoryMixin(TombstonableMixin):
 
     @declared_attr
     def id_sequence_name(cls):
-        if cls.using_virtuoso:
-            # BUG: add schema. Needs migration.
-            # return "%s.%s.%s_idsequence" % (
-            #     config.get("db_schema"), config.get("db_user"),
-            #     cls.__tablename__)
-            return cls.__tablename__ + '_idsequence'
-        else:
-            return cls.__tablename__ + '_idsequence'
+        return cls.__tablename__ + '_idsequence'
 
     @declared_attr
     def id_sequence(cls):
-        if cls.using_virtuoso:
-            from virtuoso.alchemy import VirtuosoSequence
-            return VirtuosoSequence(cls.id_sequence_name)
-        else:
-            return Sequence(cls.id_sequence_name)
+        return Sequence(
+            cls.id_sequence_name, schema=cls.metadata.schema)
 
     @declared_attr
     def idtable_name(cls):
