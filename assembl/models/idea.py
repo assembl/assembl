@@ -282,7 +282,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 ).select_from(
                     IdeaLink
                 ).where(
-                    IdeaLink.target_id == target_id
+                    (IdeaLink.tombstone_date == None) &
+                    (IdeaLink.target_id == target_id)
                 ).cte(recursive=True)
             target_alias = aliased(link)
             sources_alias = aliased(IdeaLink)
@@ -325,7 +326,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 ).select_from(
                     IdeaLink
                 ).where(
-                    IdeaLink.source_id == source_id
+                    (IdeaLink.tombstone_date == None) &
+                    (IdeaLink.source_id == source_id)
                 ).cte(recursive=True)
             source_alias = aliased(link)
             targets_alias = aliased(IdeaLink)
