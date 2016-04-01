@@ -112,12 +112,12 @@ class IdeaContentLink(DiscussionBoundBase):
 @event.listens_for(IdeaContentLink.idea, 'set', propagate=True, active_history=True)
 def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
     print "idea_content_link_idea_set_listener for target: %s set to %s, was %s" % (target, value, oldvalue)
-    if oldvalue is not None:
+    if oldvalue is not None and oldvalue.id:
         with oldvalue.db.no_autoflush:
             oldvalue.send_to_changes()
             for ancestor in oldvalue.get_all_ancestors():
                 ancestor.send_to_changes()
-    if value is not None:
+    if value is not None and value.id:
         with value.db.no_autoflush:
             value.send_to_changes()
             for ancestor in value.get_all_ancestors():
