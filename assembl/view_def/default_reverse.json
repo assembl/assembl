@@ -357,6 +357,10 @@
     "LickertIdeaVote": {
         "@extends": "AbstractIdeaVote"
     },
+    "TokenIdeaVote": {
+        "@extends": "AbstractIdeaVote",
+        "token_category": true
+    },
     "BinaryIdeaVote": {
         "@extends": "AbstractIdeaVote"
     },

@@ -257,7 +257,10 @@ class TokenVoteSpecification(AbstractVoteSpecification):
     def is_valid_vote(self, vote):
         if not issubclass(vote.__class__, self.get_vote_class()):
             return False
-        return vote.token_category.is_valid_vote(vote)
+        if vote.token_category:
+            return vote.token_category.is_valid_vote(vote)
+        else:
+            return True # TODO: post-validate
 
 
 class TokenCategorySpecification(DiscussionBoundBase):
@@ -820,9 +823,17 @@ class TokenIdeaVote(AbstractIdeaVote):
         TokenCategorySpecification, foreign_keys=(token_category_id,),
         backref=backref("votes", cascade="all, delete-orphan"))
 
-    @abstractproperty
+    @property
     def value(self):
         return self.vote_value
+
+    @value.setter
+    def value(self, val):
+        val = int(val)
+        if self.vote_spec:
+            assert 0 <= val < self.token_category.maximum_per_idea
+        # TODO: make sure that total <= category total_number
+        self.vote_value = val
 
     def copy(self, tombstone=None, **kwargs):
         kwargs.update(
@@ -835,3 +846,7 @@ class TokenIdeaVote(AbstractIdeaVote):
         query, _ = super(TokenIdeaVote, self).unique_query()
         return (query.filter_by(
                     token_category_id=self.token_category_id), True)
+
+    @classmethod
+    def external_typename(cls):
+        return cls.__name__
