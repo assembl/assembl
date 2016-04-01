@@ -13,6 +13,7 @@ from pyramid.settings import asbool
 
 from . import (Base, DiscussionBoundBase, HistoryMixin)
 from ..lib.abc import abstractclassmethod
+from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
 from .discussion import Discussion
 from .idea import Idea
@@ -156,15 +157,6 @@ class AbstractVoteSpecification(DiscussionBoundBase):
                         'VotingWidget.vote_specifications')
                     if isinstance(inst, AbstractIdeaVote):
                         inst.vote_spec = parent_instance
-                        other_vote = instance.find_duplicate(False, True)
-                        if other_vote:
-                            print "revote"
-                            if other_vote == inst:
-                                # probably never happens
-                                continue
-                            other_vote.tombstone_date = (
-                                inst.vote_date or datetime.now())
-                            inst.base_id = other_vote.base_id
                         assocs.append(VotedIdeaWidgetLink(
                             widget=widgets_coll.parent_instance,
                             idea=inst.idea,
@@ -294,7 +286,8 @@ class TokenCategorySpecification(DiscussionBoundBase):
             return False
         (total,) = self.db.query(functions.sum(TokenIdeaVote.vote_value)).filter(
             TokenIdeaVote.token_category_id == self.id,
-            TokenIdeaVote.voter_id == vote.voter_id
+            TokenIdeaVote.voter_id == vote.voter_id,
+            TokenIdeaVote.tombstone_date == None
             ).first()
         if total > self.total_number:
             return False
@@ -500,7 +493,7 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
         return 0 <= vote.vote_value < self.num_choices
 
 
-class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
+class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
     __tablename__ = "idea_vote"
 
     type = Column(String(60), nullable=False)
@@ -646,12 +639,15 @@ class AbstractIdeaVote(DiscussionBoundBase, HistoryMixin):
     def is_valid(self):
         return self.vote_spec.is_valid_vote(self)
 
+    default_duplicate_handling = DuplicateHandling.TOMBSTONE
+
     def unique_query(self):
+        query, valid = super(AbstractIdeaVote, self).unique_query()
         idea_id = self.idea_id or (self.idea.id if self.idea else None)
         widget_id = self.widget_id or (self.widget.id if self.widget else None)
         voter_id = self.voter_id or (self.voter.id if self.voter else None)
-        return (self.db.query(self.__class__).filter_by(
-                    idea_id=idea_id, widget_id=widget_id, voter_id=voter_id), True)
+        return (query.filter_by(
+            idea_id=idea_id, widget_id=widget_id, voter_id=voter_id), True)
 
     crud_permissions = CrudPermissions(
         P_VOTE, P_ADMIN_DISC, P_SYSADMIN, P_SYSADMIN, P_VOTE, P_VOTE, P_READ)

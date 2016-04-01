@@ -1170,7 +1170,7 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
 
     def _do_update_from_json(
             self, json, parse_def, aliases, ctx, permissions,
-            user_id, duplicate_error=True, jsonld=None):
+            user_id, duplicate_handling=None, jsonld=None):
         json_user_id = json.get('user', None)
         if json_user_id is None:
             json_user_id = user_id
@@ -1202,7 +1202,7 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
                 raise HTTPBadRequest()
         return self.handle_duplication(
             json, parse_def, aliases, ctx, permissions, user_id,
-            duplicate_error, jsonld)
+            duplicate_handling, jsonld)
 
     def is_owner(self, user_id):
         return self.user_id == user_id

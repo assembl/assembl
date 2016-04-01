@@ -40,6 +40,13 @@ class TombstonableMixin(object):
         cls = alias or cls
         return cls.tombstone_date == None
 
+    def unique_query(self):
+        # we only care about unicity of non-tombstones
+        query, valid = super(TombstonableMixin, self).unique_query()
+        query = query.filter_by(
+            tombstone_date=None)
+        return query, valid
+
 
 class HistoryMixin(TombstonableMixin):
     # Mixin class for objects with history

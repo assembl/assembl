@@ -652,7 +652,7 @@ if LangString.using_virtuoso:
         target._before_insert()
 
 
-class LangStringEntry(Base, TombstonableMixin):
+class LangStringEntry(TombstonableMixin, Base):
     __tablename__ = "langstring_entry"
     __table_args__ = (
         UniqueConstraint("langstring_id", "locale_id", "tombstone_date"),

@@ -16,6 +16,7 @@ from virtuoso.alchemy import CoerceUnicode
 from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime
+from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import DCTERMS
@@ -96,7 +97,7 @@ class Document(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
-    use_original_on_duplication = True
+    default_duplicate_handling = DuplicateHandling.USE_ORIGINAL
 
     def unique_query(self):
         query, _ = super(Document, self).unique_query()

@@ -52,9 +52,11 @@ class CrudOperation(Enum):
 
 
 class DuplicateHandling(Enum):
-    NO_CHECK = 0   # allow duplicate to exist
-    ERROR = 1
-    UPDATE_OLD = 2
+    # How to handle duplicates. Assumes that the unique_query is valid.
+    NO_CHECK = 1        # Don't look for duplicates
+    ERROR = 2           # raise a ObjectNotUniqueError
+    USE_ORIGINAL = 3    # Update the original value instead of a new one.
+    TOMBSTONE = 4       # Tombstone the original value (assumes TombstonableMixin)
 
 
 class ObjectNotUniqueError(ValueError):
@@ -810,11 +812,11 @@ class BaseOps(object):
         if instance is not None:
             instance._do_update_from_json(
                 json, parse_def, aliases, context,
-                user_id, False, jsonld)
+                user_id, DuplicateHandling.USE_ORIGINAL, jsonld)
         else:
             instance = target_cls._do_create_from_json(
                 json, parse_def, aliases, context, permissions,
-                user_id, False, jsonld)
+                user_id, DuplicateHandling.USE_ORIGINAL, jsonld)
             if instance is None:
                 raise HTTPBadRequest(
                     "Could not find or create object %s" % (
@@ -824,7 +826,7 @@ class BaseOps(object):
         return instance
 
     # If a duplicate is created, do we use the original? (Error otherwise)
-    use_original_on_duplication = False
+    default_duplicate_handling = DuplicateHandling.ERROR
 
     # Cases: Create -> no duplicate. Sub-elements are created or found.
     # Update-> no duplicate. Sub-elements are created or found.
@@ -834,7 +836,7 @@ class BaseOps(object):
     def create_from_json(
             cls, json, user_id=None, context=None,
             aliases=None, jsonld=None, permissions=None,
-            parse_def_name='default_reverse'):
+            parse_def_name='default_reverse', duplicate_handling=None):
         from ..auth.util import get_permissions
         aliases = aliases or {}
         parse_def = get_view_def(parse_def_name)
@@ -844,20 +846,21 @@ class BaseOps(object):
         discussion = context.get_instance_of_class(Discussion)
         permissions = permissions or get_permissions(
             user_id, discussion.id if discussion else None)
-        duplicate_error = not cls.use_original_on_duplication
         with cls.default_db.no_autoflush:
             # We need this to allow db.is_modified to work well
             return cls._do_create_from_json(
                 json, parse_def, aliases, context, permissions,
-                user_id, duplicate_error, jsonld)
+                user_id, duplicate_handling, jsonld)
 
     @classmethod
     def _do_create_from_json(
             cls, json, parse_def, aliases, context, permissions,
-            user_id, duplicate_error=True, jsonld=None):
+            user_id, duplicate_handling=None, jsonld=None):
+        duplicate_handling = \
+            duplicate_handling or cls.default_duplicate_handling
         can_create = cls.user_can_cls(
             user_id, CrudPermissions.CREATE, permissions)
-        if duplicate_error and not can_create:
+        if duplicate_handling == DuplicateHandling.ERROR and not can_create:
             raise HTTPUnauthorized(
                 "User id <%s> cannot create a <%s> object" % (
                     user_id, cls.__name__))
@@ -865,7 +868,7 @@ class BaseOps(object):
         inst = cls()
         result = inst._do_update_from_json(
             json, parse_def, aliases, context, permissions,
-            user_id, duplicate_error, jsonld)
+            user_id, duplicate_handling, jsonld)
         if result is inst and not can_create:
             raise HTTPUnauthorized(
                 "User id <%s> cannot create a <%s> object" % (
@@ -906,13 +909,13 @@ class BaseOps(object):
             # We need this to allow db.is_modified to work well
             return self._do_update_from_json(
                 json, parse_def, {}, context, permissions, user_id,
-                True, jsonld)
+                None, jsonld)
 
     # TODO: Add security by attribute?
     # Some attributes may be settable only on create.
     def _do_update_from_json(
             self, json, parse_def, aliases, context, permissions,
-            user_id, duplicate_error=True, jsonld=None):
+            user_id, duplicate_handling=None, jsonld=None):
         assert isinstance(json, dict)
         jsonld = jsonld or {}
         is_created = self.id is None
@@ -925,7 +928,7 @@ class BaseOps(object):
             recast = self.change_class(new_cls, json)
             return recast._do_update_from_json(
                 json, parse_def, aliases, context, permissions,
-                user_id, duplicate_error, jsonld)
+                user_id, duplicate_handling, jsonld)
         local_view = self.expand_view_def(parse_def)
         # False means it's illegal to get this.
         assert local_view is not False
@@ -1265,11 +1268,15 @@ class BaseOps(object):
                     setattr(self, reln.key, instance)
         return self.handle_duplication(
             json, parse_def, aliases, context, permissions, user_id,
-            duplicate_error, jsonld)
+            duplicate_handling, jsonld)
 
     def handle_duplication(
                 self, json, parse_def, aliases, context, permissions, user_id,
-                duplicate_error, jsonld=None):
+                duplicate_handling, jsonld=None):
+        if duplicate_handling is None:
+            duplicate_handling = self.default_duplicate_handling
+        if duplicate_handling == DuplicateHandling.NO_CHECK:
+            return
         # Issue: unique_query MAY trigger a flush, which will
         # trigger an error if columns are missing, including in a call above.
         # But without the flush, some relations will not be interpreted
@@ -1278,15 +1285,23 @@ class BaseOps(object):
         if usable:
             other = unique_query.first()
             if other and other is not self:
-                if inspect(self).pending:
-                    other.db.expunge(self)
-                if duplicate_error:
-                    raise ObjectNotUniqueError("Duplicate of <%s> created" % (other.uri()))
+                if duplicate_handling == DuplicateHandling.TOMBSTONE:
+                    from .history_mixin import TombstonableMixin
+                    assert isinstance(other, TombstonableMixin)
+                    other.is_tombstone = True
                 else:
-                    # TODO: Check if there's a risk of infinite recursion here?
-                    return other._do_update_from_json(
-                        json, parse_def, aliases, context, permissions,
-                        user_id, duplicate_error, jsonld)
+                    if inspect(self).pending:
+                        other.db.expunge(self)
+                    if duplicate_handling == DuplicateHandling.ERROR:
+                        raise ObjectNotUniqueError(
+                            "Duplicate of <%s> created" % (other.uri()))
+                    elif duplicate_handling == DuplicateHandling.USE_ORIGINAL:
+                        # TODO: Check if there's a risk of infinite recursion here?
+                        return other._do_update_from_json(
+                            json, parse_def, aliases, context, permissions,
+                            user_id, duplicate_handling, jsonld)
+                    else:
+                        raise ValueError, "Invalid value of duplicate_handling"
         return self
 
     def unique_query(self):
