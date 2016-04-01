@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from ..lib.abc import abstractclassmethod
 from ..lib.sqla import (
     Base, TimestampedBase, get_metadata, get_session_maker, PrivateObjectMixin,
-    get_named_object, get_database_id, Tombstone, UPDATE_OP, DELETE_OP,
+    get_named_object, get_database_id, Tombstone, CrudOperation,
     DummyContext)
 from ..lib.history_mixin import TombstonableMixin, HistoryMixin
 
@@ -24,7 +24,7 @@ class DiscussionBoundBase(Base):
         "Get the ID of an associated discussion object, if any."
         return self.discussion_id or self.discussion.id
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE_OP,
                         discussion_id=None, view_def="changes"):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
@@ -55,7 +55,7 @@ class DiscussionBoundTombstone(Tombstone):
         super(DiscussionBoundTombstone, self).__init__(ob, **kwargs)
         self.discussion_id = ob.get_discussion_id()
 
-    def send_to_changes(self, connection, operation=DELETE_OP,
+    def send_to_changes(self, connection, operation=CrudOperation.DELETE_OP,
                         discussion_id=None, view_def="changes"):
         assert connection
         if 'cdict' not in connection.info:

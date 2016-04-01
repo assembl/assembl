@@ -43,7 +43,7 @@ from ..auth import (
     P_ADD_IDEA)
 from ..semantic.namespaces import (
     SIOC, IDEA, ASSEMBL, DCTERMS, QUADNAMES, FOAF, RDF, VirtRDF)
-from ..lib.sqla import (UPDATE_OP, DELETE_OP, INSERT_OP, get_model_watcher)
+from ..lib.sqla import (CrudOperation, get_model_watcher)
 from assembl.views.traversal import (
     AbstractCollectionDefinition, CollectionDefinition)
 
@@ -666,21 +666,21 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
         connection = connection or self.db.connection()
         if self.is_tombstone:
             self.tombstone().send_to_changes(
-                connection, DELETE_OP, discussion_id, view_def)
+                connection, CrudOperation.DELETE, discussion_id, view_def)
         else:
             super(Idea, self).send_to_changes(
                 connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()
-        if operation == UPDATE_OP:
+        if operation == CrudOperation.UPDATE:
             watcher.processIdeaModified(self.id, 0)  # no versions yet.
-        elif operation == DELETE_OP:
+        elif operation == CrudOperation.DELETE:
             watcher.processIdeaDeleted(self.id)
-        elif operation == INSERT_OP:
+        elif operation == CrudOperation.CREATE:
             watcher.processIdeaCreated(self.id)
 
     def __repr__(self):
@@ -1178,12 +1178,12 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
         source = self.source_ts or Idea.get(self.source_id)
         return source.get_discussion_id()
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
         connection = connection or self.db.connection()
         if self.is_tombstone:
             self.tombstone().send_to_changes(
-                connection, DELETE_OP, discussion_id, view_def)
+                connection, CrudOperation.DELETE, discussion_id, view_def)
         else:
             super(IdeaLink, self).send_to_changes(
                 connection, operation, discussion_id, view_def)

@@ -20,7 +20,7 @@ from virtuoso.vmapping import PatternIriClass
 # from virtuoso.textindex import TextIndex, TableWithTextIndex
 from bs4 import BeautifulSoup
 
-from ..lib.sqla import (INSERT_OP, UPDATE_OP, get_model_watcher, Base)
+from ..lib.sqla import (CrudOperation, get_model_watcher, Base)
 from ..lib.utils import get_global_base_url
 from . import DiscussionBoundBase
 from .langstrings import (LangString, LangStringEntry)
@@ -431,12 +431,12 @@ class Content(DiscussionBoundBase):
             log.error("What is this mimetype?" + mimetype)
             return body
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
         super(Content, self).send_to_changes(
             connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()
-        if operation == INSERT_OP:
+        if operation == CrudOperation.CREATE:
             watcher.processPostCreated(self.id)
 
     def get_discussion_id(self):

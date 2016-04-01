@@ -42,7 +42,7 @@ from ..lib import config
 from ..lib.utils import get_global_base_url
 from ..lib.locale import to_posix_string
 from ..lib.sqla import (
-    UPDATE_OP, INSERT_OP, get_model_watcher, ObjectNotUniqueError)
+    CrudOperation, get_model_watcher, ObjectNotUniqueError)
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord)
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
@@ -564,7 +564,7 @@ def send_user_to_socket_for_asid(mapper, connection, target):
     if not target.agent_profile:
         agent_profile = AgentProfile.get(target.agent_profile_id)
     agent_profile.send_to_changes(
-        connection, UPDATE_OP, target.discussion_id)
+        connection, CrudOperation.UPDATE, target.discussion_id)
 
 
 class User(AgentProfile):
@@ -752,14 +752,14 @@ class User(AgentProfile):
             for (d_id,) in self.db.query(Discussion.id)}
         return permissions
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
         super(User, self).send_to_changes(
             connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()
-        if operation == UPDATE_OP:
+        if operation == CrudOperation.UPDATE:
             watcher.processAccountModified(self.id)
-        elif operation == INSERT_OP:
+        elif operation == CrudOperation.CREATE:
             watcher.processAccountCreated(self.id)
 
     def has_role_in(self, discussion, role):
@@ -1112,8 +1112,8 @@ def send_user_to_socket_for_user_role(mapper, connection, target):
     user = target.user
     if not target.user:
         user = User.get(target.user_id)
-    user.send_to_changes(connection, UPDATE_OP, view_def="private")
-    user.send_to_changes(connection, UPDATE_OP)
+    user.send_to_changes(connection, CrudOperation.UPDATE, view_def="private")
+    user.send_to_changes(connection, CrudOperation.UPDATE)
 
 
 
@@ -1254,9 +1254,9 @@ def send_user_to_socket_for_local_user_role(
     user = target.user
     if not target.user:
         user = User.get(target.user_id)
-    user.send_to_changes(connection, UPDATE_OP, target.discussion_id)
+    user.send_to_changes(connection, CrudOperation.UPDATE, target.discussion_id)
     user.send_to_changes(
-        connection, UPDATE_OP, target.discussion_id, "private")
+        connection, CrudOperation.UPDATE, target.discussion_id, "private")
 
 
 class Permission(Base):

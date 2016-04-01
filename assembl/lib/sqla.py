@@ -11,6 +11,7 @@ from collections import Iterable, defaultdict
 import atexit
 from abc import abstractmethod
 
+from enum import Enum
 from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
@@ -43,13 +44,22 @@ from ..lib.config import get_config
 
 atexit_engines = []
 
-DELETE_OP = -1
-UPDATE_OP = 0
-INSERT_OP = 1
+
+class CrudOperation(Enum):
+    DELETE = -1
+    UPDATE = 0
+    CREATE = 1
+
+
+class DuplicateHandling(Enum):
+    NO_CHECK = 0   # allow duplicate to exist
+    ERROR = 1
+    UPDATE_OLD = 2
 
 
 class ObjectNotUniqueError(ValueError):
     pass
+
 
 class CleanupStrategy(strategies.PlainEngineStrategy):
     name = 'atexit_cleanup'
@@ -297,7 +307,7 @@ class BaseOps(object):
     def tombstone(self):
         return Tombstone(self)
 
-    def send_to_changes(self, connection=None, operation=UPDATE_OP,
+    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
@@ -1487,7 +1497,7 @@ class Tombstone(object):
         args.update(self.extra_args)
         return args
 
-    def send_to_changes(self, connection, operation=DELETE_OP,
+    def send_to_changes(self, connection, operation=CrudOperation.DELETE,
                         discussion_id=None, view_def="changes"):
         assert connection
         if 'cdict' not in connection.info:
@@ -1501,13 +1511,13 @@ def orm_update_listener(mapper, connection, target):
         return
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
-        target.send_to_changes(connection, UPDATE_OP)
+        target.send_to_changes(connection, CrudOperation.UPDATE)
 
 
 def orm_insert_listener(mapper, connection, target):
     if getattr(target, '__history_table__', None):
         return
-    target.send_to_changes(connection, INSERT_OP)
+    target.send_to_changes(connection, CrudOperation.CREATE)
 
 
 def orm_delete_listener(mapper, connection, target):
@@ -1515,7 +1525,7 @@ def orm_delete_listener(mapper, connection, target):
         connection.info['cdict'] = {}
     if getattr(target, '__history_table__', None):
         return
-    target.tombstone().send_to_changes(connection, DELETE_OP)
+    target.tombstone().send_to_changes(connection, CrudOperation.DELETE)
 
 
 def before_commit_listener(session):

@@ -22,7 +22,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import (
     relationship, backref, deferred, column_property, with_polymorphic)
 
-from ..lib.sqla import UPDATE_OP
+from ..lib.sqla import CrudOperation
 from ..lib.decl_enums import DeclEnum
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from virtuoso.alchemy import CoerceUnicode
@@ -463,7 +463,7 @@ def orm_insert_listener(mapper, connection, target):
             creator_id=target.creator_id,
             discussion_id=target.discussion_id).count() <= 1:
         creator = target.creator or AgentProfile.get(target.creator_id)
-        creator.send_to_changes(connection, UPDATE_OP, target.discussion_id)
+        creator.send_to_changes(connection, CrudOperation.UPDATE, target.discussion_id)
     # Eagerly translate the post
     # Actually causes DB deadlocks. TODO: Revise this.
     # Let's only do this on import.
