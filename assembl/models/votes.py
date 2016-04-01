@@ -145,7 +145,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
                         & (widget_alias.id == widget.id)
                     ).join(
                         spec_alias,
-                        spec_alias.id == self.instance.id
+                        spec_alias.id == parent_instance.id
                     )
 
             def decorate_instance(
@@ -156,13 +156,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
                         'VotingWidget.vote_specifications')
                     if isinstance(inst, AbstractIdeaVote):
                         inst.vote_spec = parent_instance
-                        other_votes = instance.db.query(
-                            AbstractIdeaVote).filter_by(
-                                voter_id=user_id, idea_id=inst.idea.id,
-                                vote_spec_id=parent_instance.id,
-                                tombstone_date=None).options(
-                            joinedload(AbstractIdeaVote.idea)).all()
-                        for other_vote in other_votes:
+                        other_vote = instance.find_duplicate(False, True)
+                        if other_vote:
+                            print "revote"
                             if other_vote == inst:
                                 # probably never happens
                                 continue
@@ -296,9 +292,9 @@ class TokenCategorySpecification(DiscussionBoundBase):
     def is_valid_vote(self, vote):
         if not (0 <= vote.vote_value <= self.maximum_per_idea):
             return False
-        (total,) = db.query(functions.sum(TokenIdeaVote.vote_value)).filter(
+        (total,) = self.db.query(functions.sum(TokenIdeaVote.vote_value)).filter(
             TokenIdeaVote.token_category_id == self.id,
-            TokenIdeaVote.user_id == vote.user_id
+            TokenIdeaVote.voter_id == vote.voter_id
             ).first()
         if total > self.total_number:
             return False
@@ -844,8 +840,9 @@ class TokenIdeaVote(AbstractIdeaVote):
 
     def unique_query(self):
         query, _ = super(TokenIdeaVote, self).unique_query()
-        return (query.filter_by(
-                    token_category_id=self.token_category_id), True)
+        token_category_id = self.token_category_id or (
+            self.token_category.id if self.token_category else None)
+        return (query.filter_by(token_category_id=token_category_id), True)
 
     @classmethod
     def external_typename(cls):
