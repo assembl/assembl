@@ -24,7 +24,7 @@ class DiscussionBoundBase(Base):
         "Get the ID of an associated discussion object, if any."
         return self.discussion_id or self.discussion.id
 
-    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE_OP,
+    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
