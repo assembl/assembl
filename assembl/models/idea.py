@@ -12,7 +12,8 @@ from sqlalchemy.orm import (
     column_property)
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text, column
-from sqlalchemy.sql.expression import union_all, bindparam
+from sqlalchemy.sql.expression import union_all, bindparam, literal_column
+
 from sqlalchemy import (
     Column,
     Boolean,
@@ -263,32 +264,89 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             discussion=self.discussion)
         return super(Idea, self).copy(**kwargs)
 
-    def get_all_ancestors(self):
-        """ Get all ancestors of this idea by following source links.
-        This is naive and slow, but not used very much for now.
-        TODO:  Rewrite once we migrate to virtuoso"""
-        sql = '''SELECT * FROM idea JOIN (
-                  SELECT source_id FROM (
-                    SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
-                        source_id, target_id FROM idea_idea_link WHERE tombstone_date IS NULL) ia
-                  JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
-                  WHERE dag_idea.discussion_id = :discussion_id
-                  AND ia.target_id=:idea_id) x on (id=source_id)'''
-        ancestors = self.db.query(Idea).from_statement(text(sql).bindparams(
-            discussion_id=self.discussion_id, idea_id=self.id))
+    @classmethod
+    def get_ancestors_query(
+            cls, target_id=bindparam('root_id', type_=Integer),
+            inclusive=True):
+        if cls.using_virtuoso:
+            sql = text(
+                """SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
+                    source_id, target_id FROM idea_idea_link
+                    WHERE tombstone_date IS NULL"""
+                ).columns(column('source_id'), column('target_id')).alias()
+            select_exp = select([sql.c.source_id.label('id')]
+                ).select_from(sql).where(sql.c.target_id==target_id)
+        else:
+            link = select(
+                    [IdeaLink.source_id, IdeaLink.target_id]
+                ).select_from(
+                    IdeaLink
+                ).where(
+                    IdeaLink.target_id == target_id
+                ).cte(recursive=True)
+            target_alias = aliased(link)
+            sources_alias = aliased(IdeaLink)
+            parent_link = sources_alias.target_id == target_alias.c.source_id
+            parents = select(
+                    [sources_alias.source_id, sources_alias.target_id]
+                ).select_from(sources_alias).where(parent_link)
+            with_parents = link.union_all(parents)
+            select_exp = select([with_parents.c.source_id.label('id')]
+                ).select_from(with_parents)
+        if inclusive:
+            if isinstance(target_id, int):
+                target_id = literal_column(str(target_id), Integer)
+            select_exp = select_exp.union(
+                select([target_id.label('id')]))
+        return select_exp.alias()
 
-        return ancestors.all()
+    def get_all_ancestors(self, id_only=False):
+        query = self.get_ancestors_query(self.id)
+        if id_only:
+            return list((id for (id,) in self.db.query(query)))
+        else:
+            return self.db.query(Idea).filter(Idea.id.in_(query)).all()
+
+    @classmethod
+    def get_descendants_query(
+            cls, source_id=bindparam('root_id', type_=Integer),
+            inclusive=True):
+        if cls.using_virtuoso:
+            sql = text(
+                """SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
+                    source_id, target_id FROM idea_idea_link
+                    WHERE tombstone_date IS NULL"""
+                ).columns(column('source_id'), column('target_id')).alias()
+            select_exp = select([sql.c.target_id.label('id')]
+                ).select_from(sql).where(sql.c.source_id==source_id)
+        else:
+            link = select(
+                    [IdeaLink.source_id, IdeaLink.target_id]
+                ).select_from(
+                    IdeaLink
+                ).where(
+                    IdeaLink.source_id == source_id
+                ).cte(recursive=True)
+            source_alias = aliased(link)
+            targets_alias = aliased(IdeaLink)
+            parent_link = targets_alias.source_id == source_alias.c.target_id
+            children = select(
+                    [targets_alias.source_id, targets_alias.target_id]
+                ).select_from(targets_alias).where(parent_link)
+            with_children = link.union_all(children)
+            select_exp = select([with_children.c.target_id.label('id')]
+                ).select_from(with_children)
+        if inclusive:
+            if isinstance(source_id, int):
+                source_id = literal_column(str(source_id), Integer)
+            select_exp = select_exp.union(
+                select([source_id.label('id')]))
+        return select_exp.alias()
 
     def get_all_descendants(self, id_only=False):
-        sql = text("""SELECT target_id as id FROM (
-            SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                source_id, target_id FROM idea_idea_link WHERE tombstone_date IS NULL
-            UNION SELECT id as source_id, id as target_id from idea
-            ) il
-        WHERE il.source_id = :idea_id""").columns(column('idea_id'))
-        query = sql.bindparams(idea_id=self.id)
+        query = self.get_descendants_query(self.id)
         if id_only:
-            return list((id for (id,) in self.db.execute(query)))
+            return list((id for (id,) in self.db.query(query)))
         else:
             return self.db.query(Idea).filter(Idea.id.in_(query)).all()
 

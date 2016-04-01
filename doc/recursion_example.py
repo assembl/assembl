@@ -1,11 +1,12 @@
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy import literal_column, Integer
+from sqlalchemy import literal_column, Integer, select, text, bindparam
 from sqlalchemy.orm import aliased
 from sqlalchemy.sql.functions import func
 from assembl.models import IdeaLink
+from sqlalchemy.sql.expression import literal_column, column
 
 
-def get_descendants(db, source_id):
+def get_descendants_select(source_id):
     """Return a query that includes the descendants of an idea. (not idea itself yet.)
 
     Beware: we use a recursive query via a CTE and the PostgreSQL-specific
@@ -19,20 +20,21 @@ def get_descendants(db, source_id):
 
     All I can say is SQLAlchemy kicks ass, and so does PostgreSQL.
     """
-    # level = literal_column('ARRAY[source_id]', type_=ARRAY(Integer))
-    link = db.query(IdeaLink.source_id, IdeaLink.target_id) \
-                  # .add_columns(level.label('level')) \
-                  .filter(IdeaLink.source_id == source_id) \
-                  .cte(name='thread', recursive=True)
-    source_alias = aliased(link, name='source')
-    replies_alias = aliased(IdeaLink, name='replies')
-    # cumul_level = source_alias.c.level.op('||')(replies_alias.source_id)
-    parent_link = replies_alias.source_id == source_alias.c.target_id
-    children = (db.query(replies_alias.source_id, replies_alias.target_id)
-                        # add_columns(cumul_level).
-                        .filter(parent_link))
-
-    return db.query(link.union_all(children))   # .order_by(link.c.level)
+    link = select(
+            [IdeaLink.source_id, IdeaLink.target_id]
+        ).select_from(
+            IdeaLink
+        ).where(
+            IdeaLink.source_id == source_id
+        ).cte(recursive=True)
+    source_alias = aliased(link)
+    targets_alias = aliased(IdeaLink)
+    parent_link = targets_alias.source_id == source_alias.c.target_id
+    children = select(
+            [targets_alias.source_id, targets_alias.target_id]
+        ).select_from(targets_alias).where(parent_link)
+    with_children = link.union_all(children)
+    return with_children
 
 
 
