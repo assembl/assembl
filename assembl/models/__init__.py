@@ -55,7 +55,7 @@ class DiscussionBoundTombstone(Tombstone):
         super(DiscussionBoundTombstone, self).__init__(ob, **kwargs)
         self.discussion_id = ob.get_discussion_id()
 
-    def send_to_changes(self, connection, operation=CrudOperation.DELETE_OP,
+    def send_to_changes(self, connection, operation=CrudOperation.DELETE,
                         discussion_id=None, view_def="changes"):
         assert connection
         if 'cdict' not in connection.info:
