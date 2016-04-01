@@ -165,7 +165,13 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "label": "Two axes graph: needs 2 criteria (of type Lickert)",
       "number_of_criteria": 2,
       "allowed_criteria_types": ["LickertVoteSpecification"]
-    }
+    },
+    {
+      "key": "token",
+      "label": "Tokens (aka Dotmocracy): needs criteria of type Token",
+      "number_of_criteria": 1,
+      "allowed_criteria_types": ["TokenVoteSpecification"]
+    },
   ];
 
   /*
@@ -238,21 +244,23 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
   this.criterion_types = [
     {
       "key": "LickertVoteSpecification",
-
       // "description": "",
       "label": "Lickert"
     },
     {
       "key": "BinaryVoteSpecification",
-
       // "description": "",
       "label": "Binary"
     },
     {
       "key": "MultipleChoiceVoteSpecification",
-
       // "description": "",
       "label": "Multiple choice"
+    },
+    {
+      "key": "TokenVoteSpecification",
+      // "description": "",
+      "label": "Tokens"
     }
   ];
 
@@ -342,6 +350,20 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
         "default": 3,
         "storage": "attribute"
       }
+    ],
+    "TokenVoteSpecification": [
+     {
+      "key": "exclusive_categories",
+      "label": "Bags of tokens are exclusive",
+      "type": "select",
+      "description": "If they are exclusive, a voter cannot use tokens from several bags of tokens on the same idea.",
+      "default": "true",
+      "options": {
+        "true": "Yes",
+        "false": "No"
+      },
+      "storage": "attribute"
+     }
     ]
   };
 

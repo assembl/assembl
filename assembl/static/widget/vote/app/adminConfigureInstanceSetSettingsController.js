@@ -361,7 +361,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
       $scope.widget.settings.items.forEach(function(item, item_index, item_ar) {
         if ("vote_specifications" in item) {
           item.vote_specifications.forEach(function(el, el_index, el_ar) {
-            var known_properties = ["@type", "minimum", "maximum", "criterion_idea", "widget", "question_id", "num_choices", "settings"]; // TODO: the content of this array should depend on the value of VoteSpec["@type"]
+            var known_properties = ["@type", "minimum", "maximum", "criterion_idea", "widget", "question_id", "num_choices", "settings", "exclusive_categories"]; // TODO: the content of this array should depend on the value of VoteSpec["@type"]
             if (id_field in el) { // if it already exist in the backend, we update it using PUT
               var el2 = _.clone(el);
               el2 = $scope.ensurePropertiesTypes(el2, getCriterionPropertyType);

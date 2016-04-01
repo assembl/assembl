@@ -24,10 +24,18 @@ var WidgetButtonView = Marionette.ItemView.extend({
     "click @ui.button": "onButtonClick"
   },
   onButtonClick: function(evt) {
-    var options = {
-      footer: false
-    };
-    return Ctx.openTargetInModal(evt, null, options);
+    console.log("WidgetButtonView::onButtonClick()");
+    this.model.trigger("buttonClick");
+
+    var openTargetInModalOnButtonClick = this.model.get("openTargetInModalOnButtonClick");
+    console.log("openTargetInModalOnButtonClick: ", openTargetInModalOnButtonClick);
+    if ( openTargetInModalOnButtonClick !== false ) {
+      var options = {
+        footer: false
+      };
+      return Ctx.openTargetInModal(evt, null, options);
+    }
+    return false;
   },
   serializeData: function() {
     var endDate = this.model.get("end_date");

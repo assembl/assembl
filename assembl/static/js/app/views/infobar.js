@@ -17,14 +17,29 @@ var InfobarItem = Marionette.LayoutView.extend({
 
   template: '#tmpl-infobar',
   className: 'content-infobar',
+  ui: {
+    button: ".btn"
+  },
   events: {
+    "click @ui.button": "onButtonClick",
     'click .js_closeInfobar': 'closeInfobar',
     'click .js_openSession': 'openSession',
     'click .js_openTargetInModal': 'openTargetInModal'
   },
 
-  openTargetInModal: function(evt){
-    return Ctx.openTargetInModal(evt);
+  onButtonClick: function(evt) {
+    console.log("InfobarItem::onButtonClick()");
+    this.model.trigger("buttonClick");
+
+    var openTargetInModalOnButtonClick = this.model.get("openTargetInModalOnButtonClick");
+    console.log("openTargetInModalOnButtonClick: ", openTargetInModalOnButtonClick);
+    if ( openTargetInModalOnButtonClick !== false ) {
+      var options = {
+        footer: false
+      };
+      return Ctx.openTargetInModal(evt, null, options);
+    }
+    return false;
   },
 
   serializeModel: function(model) {

@@ -114,7 +114,7 @@
                                         
                                         <select ng-switch-when="criterion" ng-model="criterion[field.key]" ng-options="c['@id'] as c.shortTitle for c in criteria"></select>
                                         
-                                        <select ng-switch-when="select" ng-model="criterion[field.key]" ng-options="v.key as v.label for v in field.options"></select>
+                                        <select ng-switch-when="select" ng-model="criterion[field.key]" ng-options="key as value for ( key, value ) in field.options"></select>
 
                                         <div ng-switch-when="array">
                                             <div ng-repeat="candidate in criterion[field.key] track by $index">

@@ -6,7 +6,9 @@ var _ = require('../shims/underscore.js'),
     i18n = require('../utils/i18n.js'),
     Moment = require('moment'),
     Permissions = require('../utils/permissions.js'),
-    Ctx = require("../common/context.js");
+    Ctx = require("../common/context.js"),
+    Assembl = require('../app.js'),
+    TokenVoteSessionView = require('../views/tokenVoteSession.js');
 
 var WidgetModel = Base.Model.extend({
   constructor: function WidgetModel() {
@@ -35,6 +37,8 @@ var WidgetModel = Base.Model.extend({
      * */
      
   },
+
+  onButtonClick: null, // this is a callback function which if set will replace the link (when the user clicks on the button)
 
   MESSAGE_LIST_INSPIREME_CTX: 1,
   IDEA_PANEL_ACCESS_CTX: 2,
@@ -75,18 +79,22 @@ var WidgetModel = Base.Model.extend({
     return widgetLinks.length > 0;
   },
 
+  /*
   getBaseUriFor: function(widgetType) {
     switch (widgetType) {
       case "CreativitySessionWidget":
         return CreativitySessionWidgetModel.prototype.baseUri;
       case "MultiCriterionVotingWidget":
-        return VotingWidgetModel.prototype.baseUri;
+        return MultiCriterionVotingWidgetModel.prototype.baseUri;
+      case "TokenVotingWidget":
+        return TokenVotingWidgetModel.prototype.baseUri;
       case "InspirationWidget":
         return InspirationWidgetModel.prototype.baseUri;
       default:
         console.error("Widget.getBaseUriFor: wrong type");
     }
   },
+  */
 
   getCreationUrl: function(ideaId, locale) {
     console.error("Widget.getCreationUrl: wrong type");
@@ -272,7 +280,7 @@ var VotingWidgetModel = WidgetModel.extend({
       if (context == this.UNTIL_TEXT) {
         return "";
       }
-      return i18n.gettext("This widget is not fully configured");
+      return i18n.gettext("This vote widget is not fully configured");
     }
     switch (context) {
       case this.INFO_BAR:
@@ -347,6 +355,90 @@ var VotingWidgetModel = WidgetModel.extend({
       default:
         return false;
     }
+  }
+});
+
+var MultiCriterionVotingWidgetModel = VotingWidgetModel.extend({
+  constructor: function MultiCriterionVotingWidgetModel() {
+    VotingWidgetModel.apply(this, arguments);
+  },
+
+  defaults: {
+    '@type': 'MultiCriterionVotingWidget'
+  },
+
+  getLinkText: function(context, idea) {
+    switch (context) {
+      case this.IDEA_PANEL_CREATE_CTX:
+        return i18n.gettext("Create a multi-criterion voting session on this idea");
+      default:
+        return VotingWidgetModel.prototype.getLinkText.apply(this, arguments);
+    }
+  }
+});
+
+var TokenVotingWidgetModel = VotingWidgetModel.extend({
+  constructor: function TokenVotingWidgetModel() {
+    VotingWidgetModel.apply(this, arguments);
+    this.on("buttonClick", this.onButtonClick);
+  },
+
+  defaults: {
+    '@type': 'TokenVotingWidget',
+    'openTargetInModalOnButtonClick': false
+  },
+
+  getLinkText: function(context, idea) {
+    switch (context) {
+      case this.IDEA_PANEL_CREATE_CTX:
+        return i18n.gettext("Create a token voting session on this idea");
+        break;
+      case this.INFO_BAR:
+        if (this.get("configured")) {
+          return i18n.gettext("Vote (tokens)");
+        } else {
+          return i18n.gettext("Configure (tokens)");
+        }
+        break;
+      default:
+        return VotingWidgetModel.prototype.getLinkText.apply(this, arguments);
+    }
+  },
+
+  // FIXME: Having view code in a model is probably not a good idea. How could we do better?
+  onButtonClick: function(){
+    console.log("TokenVotingWidgetModel::onButtonClick()");
+
+    var that = this;
+
+    var modalView = new TokenVoteSessionView({
+      widgetModel: that
+    });
+
+    Ctx.setCurrentModalView(modalView);
+    Assembl.slider.show(modalView);
+  }
+});
+
+var TokenCategorySpecificationModel = Base.Model.extend({
+  constructor: function TokenCategorySpecificationModel() {
+    Base.Model.apply(this, arguments);
+  },
+  defaults: {
+    "name": null, // (LangString) the display/translated name of the token category. Example: "Positive"
+    "typename": null, // (string) identifier name of the token category. Categories with the same name can be compared.
+    "total_number": null, // (integer) number of available tokens in the bag, that the voter can allocate on several candidates
+    "token_vote_specification": null, // (string) the id of a token vote spec this category is associated to
+    "image": null, // (string) URL of an image of a token
+    "maximum_per_idea": null, // (integer) maximum number of tokens a voter has the right to put on an idea
+    "@type": "TokenCategorySpecification",
+    "@view": "voting_widget"
+  }
+});
+
+var TokenCategorySpecificationCollection = Base.Collection.extend({
+  constructor: function TokenCategorySpecificationCollection() {
+    Base.Collection.apply(this, arguments);
   }
 });
 
@@ -575,7 +667,7 @@ var InspirationWidgetModel = WidgetModel.extend({
 
 
 var localWidgetClassCollection = new Base.Collection([
-    new VotingWidgetModel(), new CreativitySessionWidgetModel(), new InspirationWidgetModel()
+    new MultiCriterionVotingWidgetModel(), new TokenVotingWidgetModel(), new CreativitySessionWidgetModel(), new InspirationWidgetModel()
   ]);
 
 var globalWidgetClassCollection = new Base.Collection([
@@ -592,7 +684,9 @@ var WidgetCollection = Base.Collection.extend({
       case "InspirationWidget":
         return new InspirationWidgetModel(attrs, options);
       case "MultiCriterionVotingWidget":
-        return new VotingWidgetModel(attrs, options);
+        return new MultiCriterionVotingWidgetModel(attrs, options);
+      case "TokenVotingWidget":
+        return new TokenVotingWidgetModel(attrs, options);
       case "CreativitySessionWidget":
         return new CreativitySessionWidgetModel(attrs, options);
       default:
@@ -611,12 +705,13 @@ var WidgetCollection = Base.Collection.extend({
     if (locale === undefined) {
       locale = Ctx.getLocale();
     }
-    var base = WidgetModel.getBaseUriFor(cls);
     switch (cls) {
       case "InspirationWidget":
         return InspirationWidgetModel.getCreationUrl();
       case "MultiCriterionVotingWidget":
-        return VotingWidgetModel.getCreationUrl();
+        return MultiCriterionVotingWidgetModel.getCreationUrl();
+      case "TokenVotingWidget":
+        return TokenVotingWidgetModel.getCreationUrl();
       case "CreativitySessionWidget":
         return CreativitySessionWidgetModel.getCreationUrl();
       default:
@@ -632,6 +727,7 @@ var WidgetCollection = Base.Collection.extend({
       return [
         this.getCreationUrlForClass("CreativitySessionWidget"),
         this.getCreationUrlForClass("MultiCriterionVotingWidget"),
+        this.getCreationUrlForClass("TokenVotingWidget"),
         this.getCreationUrlForClass("InspirationWidget")];
     default:
         console.error("WidgetCollection.configurableWidgetsUris: wrong context");
@@ -689,5 +785,7 @@ module.exports = {
   WidgetSubset: WidgetSubset,
   localWidgetClassCollection: localWidgetClassCollection,
   globalWidgetClassCollection: globalWidgetClassCollection,
-  ActiveWidgetCollection: ActiveWidgetCollection
+  ActiveWidgetCollection: ActiveWidgetCollection,
+  TokenCategorySpecificationModel: TokenCategorySpecificationModel,
+  TokenCategorySpecificationCollection: TokenCategorySpecificationCollection
 };

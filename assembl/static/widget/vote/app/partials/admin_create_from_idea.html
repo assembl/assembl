@@ -11,9 +11,19 @@
     </div>
 
     <div id="step_create_widget" ng-show="current_step == 2">
-        <h1>Confirm widget creation</h1>
+        <h1>Create a vote widget</h1>
+
         <p>
-            You are about to create an instance of the Vote widget, associated with the idea <strong>"{{ idea.shortTitle }}"</strong>.
+            Which type of Vote widget would you like to create?
+        </p>
+        <div ng-repeat="available_widget_type in available_vote_widget_types">
+            <label for="widget_create_without_settings_widget_type_{{ $index }}">
+                <input type="radio" ng-model="$parent.widget_type" value="{{ available_widget_type.id }}" name="widget_type" id="widget_create_without_settings_widget_type_{{ $index }}" /> {{ available_widget_type.label }}
+            </label>
+        </div>
+
+        <p>
+            The Vote widget will be associated with the idea <strong>"{{ idea.shortTitle }}"</strong>.
             <button ng-click="expert_mode = !expert_mode" ng-show="expert_mode == 0">Show details</button>
             <button ng-click="expert_mode = !expert_mode" ng-show="expert_mode == 1">Hide details</button>
         </p>
@@ -24,16 +34,13 @@
                 <input type="text" id="widget_create_without_settings_api_endpoint" value="{{ widget_creation_endpoint }}" size="50" />
                 <br/>
                 <label for="widget_create_without_settings_type">widget type:</label>
-                <input type="text" id="widget_create_without_settings_type" value="MultiCriterionVotingWidget" size="50" />
+                <input type="text" id="widget_create_without_settings_type" ng-model="widget_type" size="50" />
                 <br/>
                 <label for="widget_create_without_settings_idea">idea:</label>
                 <input type="text" id="widget_create_without_settings_idea" value="{{ idea['@id'] }}" size="50" />
                 <br/><br/>
             </div>
-            <p>
-                Do you confirm the creation of the widget?
-            </p>
-            <input type="submit" value="Yes, create it" />
+            <input type="submit" value="Create" />
             <span id="widget_create_without_settings_result"></span>
         </form>
     </div>

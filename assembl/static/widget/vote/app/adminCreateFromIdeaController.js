@@ -14,6 +14,17 @@ voteApp.controller('adminCreateFromIdeaCtl',
     $scope.created_widget_uri = null; // "local:Widget/24"
     $scope.created_widget_endpoint = null; // "/data/Widget/24"
 
+    $scope.available_vote_widget_types = [
+      {
+        "label": "Multi-criterion vote",
+        "id": "MultiCriterionVotingWidget"
+      },
+      {
+        "label": "Token vote",
+        "id": "TokenVotingWidget"
+      }
+    ];
+
     $scope.init = function() {
     console.log("adminCreateFromIdeaCtl::init()");
 
@@ -22,6 +33,13 @@ voteApp.controller('adminCreateFromIdeaCtl',
 
     console.log($routeParams.idea);
     $scope.url_parameter_idea = $routeParams.idea;
+
+    $scope.url_parameter_widget_type = "widget_type" in $routeParams ? $routeParams.widget_type : null;
+    $scope.widget_type = $scope.url_parameter_widget_type;
+    if ( !_.findWhere($scope.available_vote_widget_types, { "id": $scope.widget_type}) ){
+      $scope.widget_type = "MultiCriterionVotingWidget";
+    }
+
     $http({
       method: 'GET',
       url: AssemblToolsService.resourceToUrl($scope.url_parameter_idea)

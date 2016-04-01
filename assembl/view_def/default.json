@@ -593,7 +593,8 @@
     },
     "TokenVoteSpecification": {
         "@extends": "AbstractVoteSpecification",
-        "exclusive_categories": true
+        "exclusive_categories": true,
+        "token_categories": ":"
     },
     "TokenCategorySpecification": {
         "total_number": true,
