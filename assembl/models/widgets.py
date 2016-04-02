@@ -412,13 +412,6 @@ class BaseIdeaCollection(CollectionDefinition):
 
 
 class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
-    descendants = text("""SELECT id from (SELECT target_id as id FROM (
-                SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                    target_id, source_id FROM idea_idea_link WHERE tombstone_date IS NULL
-                ) il
-            WHERE il.source_id = :base_idea_id
-            UNION SELECT :base_idea_id as id) recid"""
-    ).columns(column('id'))
 
     def __init__(self):
         super(BaseIdeaDescendantsCollection, self).__init__(
@@ -429,8 +422,8 @@ class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
         descendant = last_alias
         base_idea = aliased(Idea, name="base_idea")
         # using base_idea_id() is cheating, but a proper join fails.
-        descendants_subq = self.descendants.bindparams(
-            base_idea_id=parent_instance.base_idea_id()).alias()
+        descendants_subq = Idea.get_descendants_query(
+            parent_instance.base_idea_id())
         query = query.filter(
             descendant.id.in_(descendants_subq)).join(
             widget, widget.id == parent_instance.id)
@@ -440,8 +433,8 @@ class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
         descendant = aliased(Idea, name="descendant")
         base_idea = aliased(Idea, name="base_idea")
         # using base_idea_id() is cheating, but a proper join fails.
-        descendants_subq = self.descendants.bindparams(
-            base_idea_id=parent_instance.base_idea_id()).alias()
+        descendants_subq = Idea.get_descendants_query(
+            parent_instance.base_idea_id())
         query = instance.db.query(descendant).filter(
             descendant.id.in_(descendants_subq)).join(
             Widget, Widget.id == parent_instance.id)

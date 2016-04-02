@@ -861,12 +861,6 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
 
         class AncestorWidgetsCollectionDefinition(AbstractCollectionDefinition):
             # For widgets which represent general configuration.
-            ancestry = text("""SELECT id from (SELECT source_id as id FROM (
-                        SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                            source_id, target_id FROM idea_idea_link WHERE tombstone_date IS NULL
-                        ) il
-                    WHERE il.target_id = :idea_id
-                    UNION SELECT :idea_id as id) recid""").columns(column('id'))
 
             def __init__(self, cls, widget_subclass=None):
                 super(AncestorWidgetsCollectionDefinition, self).__init__(cls, Widget)
@@ -875,9 +869,8 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 parent = owner_alias
                 widgets = last_alias
-                ancestry = self.ancestry.bindparams(
-                    idea_id=parent_instance.id).alias('ancestry')
-                # ideally, we should be able to bind to parent.id
+                ancestry = parent_instance.get_ancestors_query(
+                    parent_instance.id)
                 ancestors = aliased(Idea)
                 iwlink = aliased(IdeaWidgetLink)
                 query = query.join(iwlink).join(ancestors).filter(
@@ -901,8 +894,8 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
             def contains(self, parent_instance, instance):
                 ancestors = aliased(Idea)
                 iwlink = aliased(IdeaWidgetLink)
-                ancestry = self.ancestry.bindparams(
-                    idea_id=parent_instance.id).alias('ancestry')
+                ancestry = parent_instance.get_ancestors_query(
+                    parent_instance.id)
                 query = instance.db.query(Widget).join(iwlink).join(
                     ancestors).filter(ancestors.id.in_(ancestry)).filter(
                     Widget.id == instance.id)
