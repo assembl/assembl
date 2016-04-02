@@ -594,6 +594,10 @@ class BaseOps(object):
 
             def translate_to_json(v):
                 if isinstance(v, Base):
+                    p = getattr(v, 'user_can', None)
+                    if p and not v.user_can(
+                            user_id, CrudPermissions.READ, permissions):
+                        return None
                     if view_name:
                         return v.generic_json(
                             view_name, user_id, permissions, base_uri)
@@ -634,12 +638,10 @@ class BaseOps(object):
                 assert prop_name in methods,\
                     "in viewdef %s, class %s, name %s, unknown method %s" % (
                         view_def_name, my_typename, name, prop_name)
-                # Function call. PLEASE RETURN JSON or Base object.
+                # Function call. PLEASE RETURN JSON, Base objects,
+                # or list or dicts thereof
                 val = getattr(self, prop_name)()
-                p = getattr(val, 'user_can', None)
-                if not p or val.user_can(
-                        user_id, CrudPermissions.READ, permissions):
-                    result[name] = translate_to_json(val)
+                result[name] = translate_to_json(val)
                 continue
             elif prop_name in cols:
                 assert not view_name,\
@@ -654,10 +656,9 @@ class BaseOps(object):
                 known.add(prop_name)
                 val = getattr(self, prop_name)
                 if val is not None:
-                    p = getattr(val, 'user_can', None)
-                    if not p or val.user_can(
-                            user_id, CrudPermissions.READ, permissions):
-                        result[name] = translate_to_json(val)
+                    val = translate_to_json(val)
+                if val is not None:
+                    result[name] = val
                 continue
             elif prop_name in properties:
                 known.add(prop_name)
@@ -665,10 +666,9 @@ class BaseOps(object):
                         relns[prop_name].direction != MANYTOONE):
                     val = getattr(self, prop_name)
                     if val is not None:
-                        p = getattr(val, 'user_can', None)
-                        if not p or val.user_can(
-                                user_id, CrudPermissions.READ, permissions):
-                            result[name] = translate_to_json(val)
+                        val = translate_to_json(val)
+                    if val is not None:
+                        result[name] = val
                 else:
                     fkeys = list(fkey_of_reln[prop_name])
                     assert(len(fkeys) == 1)
