@@ -62,12 +62,35 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
   initialize: function(options){
     console.log("TokenIdeaAllocationView::initialize()");
-  },
-  onRender: function(){
-    console.log("this.options: ", this.options);
-    var category = this.options.tokenCategory;
-    var maximum_per_idea = category.get("maximum_per_idea");
-    var total_number = category.get("total_number");
+
+    if ( !("voteSpecification" in this.options)){
+      console.error("option voteSpecification is mandatory");
+      return;
+    }
+    if ( !("tokenCategory" in this.options)){
+      console.error("option tokenCategory is mandatory");
+      return;
+    }
+    if ( !("idea" in this.options)){
+      console.error("option idea is mandatory");
+      return;
+    }
+
+    if ( !("currentValue" in this.options)){
+      this.currentValue = 0;
+    }
+    else {
+      this.currentValue = this.options.currentValue;
+    }
+
+    this.voteSpecification = this.options.voteSpecification;
+    console.log("this.voteSpecification: ", this.voteSpecification);
+    this.category = this.options.tokenCategory;
+    this.idea = this.options.idea;
+
+    // validate token category's maximum_per_idea and total_number
+    var maximum_per_idea = this.category.get("maximum_per_idea");
+    var total_number = this.category.get("total_number");
     if ( !_.isNumber(total_number) || total_number <= 0 || total_number > 1000 ){
       total_number = 10;
     }
@@ -79,19 +102,88 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
     }
     console.log("maximum_per_idea: ", maximum_per_idea);
     console.log("total_number: ", total_number);
+    this.maximum_per_idea = maximum_per_idea;
+    this.total_number = total_number;
 
+
+    // compute vote URL and data to post
+    this.voteURL = null;
+    this.postData = {};
+    var voting_urls = "voting_urls" in this.voteSpecification ? this.voteSpecification["voting_urls"] : null;
+    var idea_id = this.options.idea.get("@id");
+    var category_id = this.category.get("@id");
+    if ( voting_urls && _.isObject(voting_urls) && idea_id in voting_urls ){
+      this.voteURL = Ctx.getUrlFromUri(voting_urls[idea_id]);
+      this.postData["@type"] = "TokenIdeaVote";
+      this.postData["token_category"] = category_id;
+      //this.postData["value"] = 2;
+      console.log("this.voteURL: ", this.voteURL);
+      console.log("this.postData: ", this.postData);
+    }
+    else {
+      console.error("could not compte this.voteURL and this.postData");
+    }
+
+  },
+  onRender: function(){
+    var that = this;
+    // Icon of an empty token := By clicking on it, the user sets 0 tokens on this idea
     var zeroToken = $('<a class="btn"><svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="#4691f6" d="M15.62,1.825H4.379v1.021h0.13c-0.076,0.497-0.13,1.005-0.13,1.533c0,3.998,2.246,7.276,5.11,7.629v5.145 H7.445c-0.282,0-0.511,0.229-0.511,0.512s0.229,0.511,0.511,0.511h5.109c0.281,0,0.512-0.229,0.512-0.511s-0.23-0.512-0.512-0.512 h-2.043v-5.145c2.864-0.353,5.109-3.631,5.109-7.629c0-0.528-0.054-1.036-0.129-1.533h0.129V1.825z M10,11.087 c-2.586,0-4.684-3.003-4.684-6.707c0-0.53,0.057-1.039,0.138-1.533h9.092c0.081,0.495,0.139,1.003,0.139,1.533 C14.685,8.084,12.586,11.087,10,11.087z"></path></svg></a>');
+
+    // Icon of a token := There will be maximum_per_idea of them shown per votable idea. By clicking on one of them, the user sets as many tokens on the idea
     var oneToken = $('<a class="btn"><svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="#4691f6" d="M9.917,0.875c-5.086,0-9.208,4.123-9.208,9.208c0,5.086,4.123,9.208,9.208,9.208s9.208-4.122,9.208-9.208 C19.125,4.998,15.003,0.875,9.917,0.875z M9.917,18.141c-4.451,0-8.058-3.607-8.058-8.058s3.607-8.057,8.058-8.057 c4.449,0,8.057,3.607,8.057,8.057S14.366,18.141,9.917,18.141z M13.851,6.794l-5.373,5.372L5.984,9.672 c-0.219-0.219-0.575-0.219-0.795,0c-0.219,0.22-0.219,0.575,0,0.794l2.823,2.823c0.02,0.028,0.031,0.059,0.055,0.083 c0.113,0.113,0.263,0.166,0.411,0.162c0.148,0.004,0.298-0.049,0.411-0.162c0.024-0.024,0.036-0.055,0.055-0.083l5.701-5.7 c0.219-0.219,0.219-0.575,0-0.794C14.425,6.575,14.069,6.575,13.851,6.794z"></path></svg></a>');
+    
 
     var container = this.$el;
-    container.append(zeroToken); // empty token := 0 tokens on this idea
-    for ( var i = 1; i <= maximum_per_idea; ++i ){
-      container.append(oneToken);
+    var renderClickableTokenIcon = function(number_of_tokens_represented_by_this_icon){
+      var el = null;
+      if ( number_of_tokens_represented_by_this_icon == 0 ){
+        el = zeroToken.clone();
+      }
+      else {
+        el = oneToken.clone();
+      }
+
+      var showAsSelected = false;
+      if ( number_of_tokens_represented_by_this_icon == 0 ){
+        if ( that.currentValue == 0 ){
+          showAsSelected = true;
+        }
+      } else if ( number_of_tokens_represented_by_this_icon <= that.currentValue ) {
+        showAsSelected = true;
+      }
+      if ( showAsSelected ){
+        el.find("path").attr("fill", "#00ff00");
+      }
+
+      el.attr("title", "set "+number_of_tokens_represented_by_this_icon+" tokens");
+      el.click(function(){
+        console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
+        that.postData["value"] = number_of_tokens_represented_by_this_icon;
+        $.ajax({
+          type: "POST",
+          url: that.voteURL,
+          data: that.postData,
+          success: function(data){
+            console.log("success! data: ", data);
+            that.currentValue = number_of_tokens_represented_by_this_icon;
+            that.render();
+          },
+          error: function(jqXHR, textStatus, errorThrown){
+            console.log("error! textStatus: ", textStatus, "; errorThrown: ", errorThrown);
+          }
+        });
+      });
+      el.appendTo(container);
+    };
+    for ( var i = 0; i <= this.maximum_per_idea; ++i ){
+      //console.log("i: ", i, "; maximum_per_idea: ", maximum_per_idea);
+      renderClickableTokenIcon(i);
     }
   },
   serializeData: function(){
     return {
-      "maximum_per_idea": this.options.tokenCategory.get("maximum_per_idea")
+      "maximum_per_idea": this.maximum_per_idea
     };
   }
 });
@@ -113,22 +205,19 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
   },
   onRender: function(){
     var that = this;
-    //var container = this.$el.find(".tokens-for-idea");
     console.log("this.parent: ", this.parent);
     var tokenCategories = "tokenCategories" in this.parent.options ? this.parent.options.tokenCategories : null;
+    var voteSpecification = "voteSpecification" in this.parent.options ? this.parent.options.voteSpecification : null;
     console.log("tokenCategories: ", tokenCategories);
     if ( tokenCategories ){
       tokenCategories.each(function(category){
-        /*
-        var maximum_per_idea = category.get("maximum_per_idea");
-        console.log("maximum_per_idea: ", maximum_per_idea);
-        container.append("<span>" + maximum_per_idea + "</span>");
-        */
         var view = new TokenIdeaAllocationView({
-          tokenCategory: category
+          idea: that.model,
+          tokenCategory: category,
+          voteSpecification: voteSpecification,
+          currentValue: 1 // TODO: get the value for all ideas on this vote specification (in 1 API call) and extract here the value for this idea
         });
         that.getRegion('tokensForIdea').show(view);
-        //container.append(new TokenIdeaAllocationView().render().el);
       });
     }
   }
@@ -165,15 +254,13 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     var CollectionManager = require('../common/collectionManager.js'); // FIXME: Why does it not work when we write it only at the top of the file?
     var collectionManager = new CollectionManager();
 
-    var tokenVoteSpecifications = that.widgetModel.get("vote_specifications");
-    console.log("tokenVoteSpecifications: ", tokenVoteSpecifications);
+    var voteSpecifications = that.widgetModel.get("vote_specifications");
+    console.log("voteSpecifications: ", voteSpecifications);
     
     var tokenCategories = null;
-    if (tokenVoteSpecifications && tokenVoteSpecifications.length > 0){
-      var tokenVoteSpecification = tokenVoteSpecifications[0];
-      console.log("tokenVoteSpecification: ", tokenVoteSpecification);
-      var tokenVoteSpecificationType = "@type" in tokenVoteSpecification ? tokenVoteSpecification["@type"] : null;
-      if (tokenVoteSpecificationType == "TokenVoteSpecification"){
+    if (voteSpecifications && voteSpecifications.length > 0){
+      var tokenVoteSpecification = _.findWhere(voteSpecifications, {"@type": "TokenVoteSpecification"});
+      if ( tokenVoteSpecification ){
         if ( "token_categories" in tokenVoteSpecification && _.isArray(tokenVoteSpecification.token_categories) ){
           var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
           console.log("Widget: ", Widget);
@@ -224,6 +311,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
       var collectionView = new TokenVoteCollectionView({
         collection: votableIdeasCollection,
+        voteSpecification: tokenVoteSpecification,
         tokenCategories: tokenCategories,
         viewComparator: function(idea){
           return _.findIndex(permutation, function(idea2){return idea2.id == idea.id;});

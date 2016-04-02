@@ -100,14 +100,13 @@ def votes_collection_add(request):
     widget = ctx.get_instance_of_class(VotingWidget)
     if widget.activity_state != 'active':
         raise HTTPUnauthorized("Not in voting period")
-    args = request.params
+    args = dict(request.params)
     spec = ctx.get_instance_of_class(AbstractVoteSpecification)
     if spec:
         required = spec.get_vote_class()
     else:
         required = ctx.collection_class
     if 'type' in args:
-        args = dict(args)
         typename = args['type']
         del args['type']
         cls = get_named_class(typename)
