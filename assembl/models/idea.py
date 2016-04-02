@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from rdflib import URIRef
 from sqlalchemy.orm import (
     relationship, backref, aliased, contains_eager, joinedload, deferred,
-    column_property)
+    column_property, with_polymorphic)
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text, column
 from sqlalchemy.sql.expression import union_all, bindparam, literal_column
@@ -413,37 +413,44 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
         return Idea._get_related_posts_statement_no_select(
             "SELECT COUNT(DISTINCT family_posts.id) as total_count", False)
 
-    @staticmethod
-    def _get_orphan_posts_statement_no_select(select):
-        """ Requires discussion_id bind parameters 
+    @classmethod
+    def _get_orphan_posts_statement(
+            cls, discussion_id=bindparam('discussion_id', type_=Integer)):
+        """ Requires discussion_id bind parameters
         Excludes synthesis posts """
-        return select + """
-           FROM post
-           JOIN content ON ( content.id = post.id
-                            AND content.discussion_id = :discussion_id
-                            AND content.type <> 'synthesis_post')
-           EXCEPT corresponding BY (post_id) (
-             SELECT DISTINCT post.id AS post_id FROM post
-              JOIN post AS root_posts ON ( (post.ancestry <> ''
-                           AND post.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%' )
-                         OR post.id = root_posts.id)
-              JOIN idea_content_link ON (idea_content_link.content_id = root_posts.id)
-              JOIN idea_content_positive_link ON (idea_content_positive_link.id = idea_content_link.id)
-              JOIN idea ON (idea_content_link.idea_id = idea.id)
-             WHERE idea.discussion_id = :discussion_id
-             AND idea.tombstone_date IS NULL AND idea.hidden = 0)"""
+        from .idea_content_link import IdeaContentPositiveLink
+        from .generic import Content
+        from .post import Post
+        if isinstance(discussion_id, int):
+            discussion_id = literal_column(str(discussion_id), Integer)
+        RootPost = with_polymorphic(
+            Post, [], Post.__table__, aliased=True, flat=True)
+        SubPost = with_polymorphic(
+            Post, [], Post.__table__, aliased=True, flat=True)
+        Post1 = with_polymorphic(
+            Post, [], Post.__table__.join(Content.__table__),
+            aliased=True, flat=True)
+        subq = cls.default_db.query(
+            SubPost.id.distinct().label("post_id")
+            ).join(
+                RootPost,
+                (SubPost.ancestry != '') & SubPost.ancestry.like(
+                    RootPost.ancestry.op('||')(
+                        RootPost.id.cast(String).op("||")(",%"))) |
+                (SubPost.id==RootPost.id)
+            ).join(
+                IdeaContentPositiveLink,
+                IdeaContentPositiveLink.content_id == RootPost.id
+            ).join(cls, IdeaContentPositiveLink.idea_id == cls.id
+            ).filter(cls.discussion_id == discussion_id,
+                cls.tombstone_date == None, cls.hidden == False
+            )
 
-    @staticmethod
-    def _get_count_orphan_posts_statement():
-        """ Requires discussion_id bind parameters """
-        return "SELECT COUNT(post_id) as total_count from (%s) orphans" % (
-            Idea._get_orphan_posts_statement())
-
-    @staticmethod
-    def _get_orphan_posts_statement():
-        """ Requires discussion_id bind parameters """
-        return Idea._get_orphan_posts_statement_no_select(
-            "SELECT post.id as post_id")
+        return cls.default_db.query(
+            Post1.id.label("post_id")
+            ).filter(Post1.discussion_id == discussion_id,
+                     Post1.type != 'synthesis_post',
+                     Post1.hidden == False).except_(subq)
 
     @property
     def num_posts(self):
@@ -1047,10 +1054,7 @@ class RootIdea(Idea):
     @property
     def num_orphan_posts(self):
         "The number of posts unrelated to any idea in the current discussion"
-        result = self.db.execute(text(
-            Idea._get_count_orphan_posts_statement()).params(
-            discussion_id=self.discussion_id))
-        return int(result.first()['total_count'])
+        return Idea._get_orphan_posts_statement(self.discussion_id).count()
 
     @property
     def num_synthesis_posts(self):

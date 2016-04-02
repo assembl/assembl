@@ -152,9 +152,7 @@ def get_posts(request):
         if root_idea_id:
             raise HTTPBadRequest(localizer.translate(
                 _("Getting orphan posts of a specific idea isn't supported.")))
-        orphans = text(Idea._get_orphan_posts_statement(),
-                        bindparams=[bindparam('discussion_id', discussion_id)]
-                        ).columns(column('post_id')).alias('orphans')
+        orphans = Idea._get_orphan_posts_statement(discussion_id).subquery()
         posts = posts.join(orphans, PostClass.id==orphans.c.post_id)
         ideaContentLinkQuery = ideaContentLinkQuery.join(
             orphans, PostClass.id==orphans.c.post_id)
