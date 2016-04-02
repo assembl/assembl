@@ -264,6 +264,10 @@
     "MultipleChoiceIdeaVote": {
         "@extends": "AbstractIdeaVote"
     },
+    "TokenIdeaVote": {
+        "@extends": "AbstractIdeaVote",
+        "token_category": true
+    },
     "PartnerOrganization": {
         "name": true,
         "description": false,
