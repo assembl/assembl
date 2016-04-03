@@ -1,0 +1,63 @@
+.token-vote-session {
+  .question-info {
+    .question-title {
+      @extend .h1;
+    }
+    .question-description {
+      
+    }
+  }
+  .votables-collection {
+    .left-column {
+      .idea-title {
+
+      }
+    }
+    .right-column {
+
+    }
+
+    .tokens-for-idea a.token-icon {
+      padding: 0;
+      margin: 0;
+
+      svg {
+        &.custom.positive.not-selected:not(.hover) {
+          path, rect, circle {
+            fill: none;
+            stroke: green;
+            stroke-width: 3;
+          }
+        }
+
+        &.custom.positive.selected {
+          /* show the SVG with its initial styles */
+        }
+
+        &.custom.zero.not-selected {
+          path, rect, circle {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 3;
+          }
+        }
+
+        &.custom.zero.selected {
+          path, rect, circle {
+            fill: none;
+            stroke: #aaa;
+            stroke-width: 10;
+          }
+        }
+      }
+
+      &:hover svg.custom.zero.not-selected {
+        path, rect, circle {
+          fill: none;
+          stroke: #aaa;
+          stroke-width: 10;
+        }
+      }
+    }
+  }
+}
