@@ -1283,12 +1283,15 @@ class BaseOps(object):
         # correctly. Strive to avoid the flush in most cases.
         unique_query, usable = self.unique_query()
         if usable:
-            other = unique_query.first()
-            if other and other is not self:
+            others = unique_query.all()
+            if self in others:
+                others.remove(self)
+            if others:
                 if duplicate_handling == DuplicateHandling.TOMBSTONE:
                     from .history_mixin import TombstonableMixin
-                    assert isinstance(other, TombstonableMixin)
-                    other.is_tombstone = True
+                    for other in others:
+                        assert isinstance(other, TombstonableMixin)
+                        other.is_tombstone = True
                 else:
                     if inspect(self).pending:
                         other.db.expunge(self)
@@ -1297,6 +1300,7 @@ class BaseOps(object):
                             "Duplicate of <%s> created" % (other.uri()))
                     elif duplicate_handling == DuplicateHandling.USE_ORIGINAL:
                         # TODO: Check if there's a risk of infinite recursion here?
+                        other = others[0]
                         return other._do_update_from_json(
                             json, parse_def, aliases, context, permissions,
                             user_id, duplicate_handling, jsonld)
