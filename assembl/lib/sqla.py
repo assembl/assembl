@@ -1272,7 +1272,7 @@ class BaseOps(object):
 
     def handle_duplication(
                 self, json, parse_def, aliases, context, permissions, user_id,
-                duplicate_handling, jsonld=None):
+                duplicate_handling, jsonld=None, form_data=None):
         if duplicate_handling is None:
             duplicate_handling = self.default_duplicate_handling
         if duplicate_handling == DuplicateHandling.NO_CHECK:
@@ -1301,9 +1301,13 @@ class BaseOps(object):
                     elif duplicate_handling == DuplicateHandling.USE_ORIGINAL:
                         # TODO: Check if there's a risk of infinite recursion here?
                         other = others[0]
-                        return other._do_update_from_json(
-                            json, parse_def, aliases, context, permissions,
-                            user_id, duplicate_handling, jsonld)
+                        if json is None:
+                            # TODO: Use the logic in api2.instance_put_form
+                            raise NotImplementedError()
+                        else:
+                            return other._do_update_from_json(
+                                json, parse_def, aliases, context, permissions,
+                                user_id, duplicate_handling, jsonld)
                     else:
                         raise ValueError, "Invalid value of duplicate_handling"
         return self

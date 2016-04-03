@@ -475,6 +475,11 @@ class CollectionContext(TraversalContext):
                 raise e
             assocs = [inst]
             self.decorate_instance(inst, assocs, user_id, self, kwargs)
+            if json is None:
+                inst = inst.handle_duplication(
+                    None, None, self, permissions, user_id,
+                    None, None, kwargs)
+                assocs[0] = inst
         return assocs
 
     def __repr__(self):
