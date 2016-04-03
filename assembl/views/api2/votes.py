@@ -66,6 +66,10 @@ def votes_collection_add_json(request):
         typename = required.external_typename()
     json = request.json_body
     json['voter'] = User.uri_generic(user_id)
+    if "@type" not in json:
+        json["@type"] = typename
+    else:
+        pass  # TODO: Check subclass
     try:
         instances = ctx.create_object(typename, json, user_id)
     except Exception as e:
