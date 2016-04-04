@@ -333,14 +333,25 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
     console.log("this.parent: ", this.parent);
     var tokenCategories = "tokenCategories" in this.parent.options ? this.parent.options.tokenCategories : null;
     var voteSpecification = "voteSpecification" in this.parent.options ? this.parent.options.voteSpecification : null;
+    var myVotes = "my_votes" in voteSpecification ? voteSpecification.my_votes : null;
+    var idea = that.model;
     console.log("tokenCategories: ", tokenCategories);
     if ( tokenCategories ){
       tokenCategories.each(function(category){
+        // get the number of tokens the user has already set on this idea
+        var myVote = _.findWhere(myVotes, {idea: idea.get("@id"), token_category: category.get("@id")});
+        if ( myVote ){
+          myVote = "value" in myVote ? myVote.value : 0;
+        }
+        else {
+          myVote = 0;
+        }
+
         var view = new TokenIdeaAllocationView({
-          idea: that.model,
+          idea: idea,
           tokenCategory: category,
           voteSpecification: voteSpecification,
-          currentValue: 1 // TODO: get the value for all ideas on this vote specification (in 1 API call) and extract here the value for this idea
+          currentValue: myVote
         });
         that.getRegion('tokensForIdea').show(view);
       });
