@@ -168,12 +168,8 @@ def get_posts(request):
             PostClass.hidden==asbool(hidden))
 
     if root_idea_id:
-        related = text(Idea._get_related_posts_statement(),
-                    bindparams=[bindparam('root_idea_id', root_idea_id),
-                    bindparam('discussion_id', discussion_id)]
-                    ).columns(column('post_id')).alias('related')
-        #Virtuoso bug: This should work...
-        #posts = posts.join(related, PostClass.id==related.c.post_id)
+        related = Idea.get_related_posts_query(
+            discussion_id, root_idea_id).subquery()
         posts = posts.join(related, PostClass.id == related.c.post_id)
         ideaContentLinkQuery = ideaContentLinkQuery.join(
             related, PostClass.id == related.c.post_id)

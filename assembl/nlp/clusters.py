@@ -178,11 +178,8 @@ class SemanticAnalysisData(object):
         # It will depend on discussion shape.
         if idea_id not in self._posts_by_idea:
             discussion = self.discussion
-            related = text(
-                Idea._get_related_posts_statement(),
-                bindparams=[bindparam('root_idea_id', idea_id),
-                            bindparam('discussion_id', discussion.id)]
-                ).columns(column('post_id')).alias('related')
+            related = Idea.get_related_posts_query(
+                discussion.id, idea_id).subquery()
             post_ids = discussion.db.query(Content.id).join(
                 related, Content.id == related.c.post_id)
             post_ids = [x for (x,) in post_ids]

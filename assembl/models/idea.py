@@ -96,11 +96,8 @@ class WordCountVisitor(IdeaVisitor):
             self.counter.add_text(self.cleantext(idea.definition))
         if self.count_posts and level == 0:
             from .generic import Content
-            related = text(
-                Idea._get_related_posts_statement(),
-                bindparams=[bindparam('root_idea_id', idea.id),
-                            bindparam('discussion_id', idea.discussion_id)]
-                ).columns(column('post_id')).alias('related')
+            related = Idea.get_related_posts_query(
+                idea.discussion_id, idea.id).subquery()
             titles = set()
             # TODO maparent: Reoptimize
             for content in idea.db.query(
@@ -310,7 +307,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
     @classmethod
     def get_descendants_query(
-            cls, source_id=bindparam('root_id', type_=Integer),
+            cls, root_idea_id=bindparam('root_idea_id', type_=Integer),
             inclusive=True):
         if cls.using_virtuoso:
             sql = text(
@@ -319,7 +316,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     WHERE tombstone_date IS NULL"""
                 ).columns(column('source_id'), column('target_id')).alias()
             select_exp = select([sql.c.target_id.label('id')]
-                ).select_from(sql).where(sql.c.source_id==source_id)
+                ).select_from(sql).where(sql.c.source_id==root_idea_id)
         else:
             link = select(
                     [IdeaLink.source_id, IdeaLink.target_id]
@@ -327,7 +324,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     IdeaLink
                 ).where(
                     (IdeaLink.tombstone_date == None) &
-                    (IdeaLink.source_id == source_id)
+                    (IdeaLink.source_id == root_idea_id)
                 ).cte(recursive=True)
             source_alias = aliased(link)
             targets_alias = aliased(IdeaLink)
@@ -339,10 +336,10 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             select_exp = select([with_children.c.target_id.label('id')]
                 ).select_from(with_children)
         if inclusive:
-            if isinstance(source_id, int):
-                source_id = literal_column(str(source_id), Integer)
+            if isinstance(root_idea_id, int):
+                root_idea_id = literal_column(str(root_idea_id), Integer)
             select_exp = select_exp.union(
-                select([source_id.label('id')]))
+                select([root_idea_id.label('id')]))
         return select_exp.alias()
 
     def get_all_descendants(self, id_only=False):
@@ -367,51 +364,60 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             self.source_links_ts[0].source_id
         ) if self.source_links_ts else None
 
-    @staticmethod
-    def _get_idea_dag_statement(skip_where=False):
-        """requires root_idea_id and discussion_id parameters"""
-        if skip_where:
-            where_clause = \
-                '''(SELECT root_idea.id FROM root_idea
-                    JOIN idea ON (idea.id = root_idea.id)
-                    WHERE idea.discussion_id=:discussion_id)'''
-        else:
-            where_clause = ':root_idea_id'
-        return """(SELECT source_id, target_id FROM (
-            SELECT transitive t_in (1) t_out (2) t_distinct T_NO_CYCLES
-                        source_id, target_id FROM idea_idea_link WHERE tombstone_date IS NULL
-                UNION SELECT id as source_id, id as target_id FROM idea
-            ) ia
-            JOIN idea AS dag_idea ON (ia.source_id = dag_idea.id)
-            WHERE dag_idea.discussion_id = :discussion_id 
-                AND ia.source_id = %s)
-            AS idea_dag""" % (where_clause,)
+    @classmethod
+    def get_related_posts_query(
+            cls,
+            discussion_id=bindparam('discussion_id', type_=Integer),
+            root_idea_id=bindparam('root_idea_id', type_=Integer)):
+        from .post import Post
+        from .generic import Content
+        from .idea_content_link import IdeaContentLink, IdeaContentPositiveLink
+        if isinstance(discussion_id, int):
+            discussion_id = literal_column(str(discussion_id), Integer)
+        if isinstance(root_idea_id, int):
+            root_idea_id = literal_column(str(root_idea_id), Integer)
+        dq = cls.get_descendants_query(root_idea_id)
 
-    @staticmethod
-    def _get_related_posts_statement_no_select(select, skip_where):
-        return """%s FROM %s
-JOIN idea_content_link ON (idea_content_link.idea_id = idea_dag.target_id)
-JOIN idea_content_positive_link
-    ON (idea_content_positive_link.id = idea_content_link.id)
-JOIN post AS root_posts ON (idea_content_link.content_id = root_posts.id)
-JOIN post AS family_posts ON (
-    (family_posts.ancestry <> ''
-    AND family_posts.ancestry LIKE root_posts.ancestry || cast(root_posts.id as varchar) || ',' || '%%'
-    )
-    OR family_posts.id = root_posts.id
-)
-JOIN content AS family_content ON (family_posts.id = family_content.id AND family_content.hidden = 0)
-""" % (select, Idea._get_idea_dag_statement(skip_where))
+        RootPost = with_polymorphic(
+            Post, [], Post.__table__, aliased=False, flat=True)
+        SubPost = with_polymorphic(
+            Post, [], Post.__table__, aliased=False, flat=True)
+        # This should be a join but creates a subquery
+        SubPostContent = with_polymorphic(
+            Content, [], Content.__table__, aliased=False, flat=True)
+        ICL = with_polymorphic(
+            IdeaContentLink, [], IdeaContentLink.__table__,
+            aliased=False, flat=True)
+        # This should be a join but creates a subquery
+        ICPL = with_polymorphic(
+            IdeaContentPositiveLink, [], IdeaContentPositiveLink.__table__,
+            aliased=False, flat=True)
 
-    @staticmethod
-    def _get_related_posts_statement(skip_where=False):
-        return Idea._get_related_posts_statement_no_select(
-            "SELECT DISTINCT family_posts.id as post_id", skip_where)
-
-    @staticmethod
-    def _get_count_related_posts_statement():
-        return Idea._get_related_posts_statement_no_select(
-            "SELECT COUNT(DISTINCT family_posts.id) as total_count", False)
+        return cls.default_db.query(
+                SubPost.id.distinct().label("post_id")
+            ).select_from(dq
+            ).join(
+                cls,
+                (dq.c.id == cls.id) &
+                (cls.discussion_id == discussion_id) &
+                (cls.tombstone_date == None) &
+                (cls.hidden == False)
+            ).join(ICL, dq.c.id == ICL.idea_id
+            ).join(ICPL, ICL.id == ICPL.id
+            ).join(
+                RootPost, ICL.content_id == RootPost.id
+            ).join(
+                SubPost,
+                (SubPost.ancestry != '') & (SubPost.ancestry.like(
+                    RootPost.ancestry.op('||')(
+                        RootPost.id.cast(String).op("||")(",%"))) |
+                (SubPost.id == RootPost.id))
+            ).join(
+                SubPostContent,
+                (SubPostContent.id == SubPost.id) &
+                (SubPostContent.discussion_id == discussion_id) &
+                (SubPostContent.hidden == False)
+            )
 
     @classmethod
     def _get_orphan_posts_statement(
@@ -456,10 +462,8 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
     def num_posts(self):
         """ This is extremely naive and slow, but as this is all temp code
         until we move to a graph database, it will probably do for now """
-        result = self.db.execute(text(
-            Idea._get_count_related_posts_statement()),
-            {"root_idea_id": self.id, "discussion_id": self.discussion_id})
-        return int(result.first()['total_count'])
+        return self.get_related_posts_query(
+            self.discussion_id, self.id).count()
 
     @property
     def num_read_posts(self):
@@ -480,33 +484,59 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
     def num_read_posts_for(self, user_id):
         if not user_id:
             return 0
-        join = """JOIN action_on_post ON (action_on_post.post_id = family_posts.id)
-                  JOIN action ON (action.id = action_on_post.id)
-                  WHERE action.actor_id = :user_id
-                  AND action.tombstone_date IS NULL
-                  AND action.type = 'version:ReadStatusChange_P'"""
-
-        result = self.db.execute(text(
-            Idea._get_count_related_posts_statement() + join),
-            {"root_idea_id": self.id, "user_id": user_id,
-             "discussion_id": self.discussion_id})
-        return int(result.first()['total_count'])
-
-    def num_total_and_read_posts_for(self, user_id):
+        from .generic import Content
+        from .action import Action, ActionOnPost
+        from sqlalchemy.sql.functions import count
         if not user_id:
             return 0
-        select = """SELECT COUNT(DISTINCT family_posts.id) as total_count,
-                    COUNT(DISTINCT action.id) as read_count """
-        join = """LEFT JOIN action_on_post ON (action_on_post.post_id = family_posts.id)
-                  LEFT JOIN action ON (action.id = action_on_post.id
-                  AND action.actor_id = :user_id
-                  AND action.tombstone_date IS NULL
-                  AND action.type = 'version:ReadStatusChange_P')"""
-        result = self.db.execute(text(
-            Idea._get_related_posts_statement_no_select(select, False) + join),
-            {"root_idea_id": self.id, "user_id": user_id,
-             "discussion_id": self.discussion_id}).first()
-        return (int(result['total_count']), int(result['read_count']))
+        user_id = literal_column(str(user_id), Integer)
+        query = self.get_related_posts_query(self.discussion_id, self.id)
+        SubPostContent = [
+            x.selectable for x in query._join_entities
+            if x.mapper.class_ == Content][0]
+        action_on_post = with_polymorphic(
+            ActionOnPost, [], ActionOnPost.__table__, aliased=False, flat=True)
+        action = with_polymorphic(
+            Action, [], Action.__table__, aliased=False, flat=True)
+        query2 = query.join(
+                action_on_post, action_on_post.post_id == SubPostContent.c.id
+            ).join(
+                action,
+                (action_on_post.id == action.id) &
+                (action.actor_id == user_id) &
+                (action.tombstone_date == None) &
+                (action.type == 'version:ReadStatusChange_P')
+            )
+        return query2.count()
+
+    def num_total_and_read_posts_for(self, user_id):
+        from .generic import Content
+        from .action import Action, ActionOnPost
+        from sqlalchemy.sql.functions import count
+        if not user_id:
+            return 0
+        user_id = literal_column(str(user_id), Integer)
+        query = self.get_related_posts_query(self.discussion_id, self.id)
+        SubPostContent = [
+            x.selectable for x in query._join_entities
+            if x.mapper.class_ == Content][0]
+        action_on_post = with_polymorphic(
+            ActionOnPost, [], ActionOnPost.__table__, aliased=False, flat=True)
+        action = with_polymorphic(
+            Action, [], Action.__table__, aliased=False, flat=True)
+        subq = query.outerjoin(
+                action_on_post, action_on_post.post_id == SubPostContent.c.id
+            ).outerjoin(
+                action,
+                (action_on_post.id == action.id) &
+                (action.actor_id == user_id) &
+                (action.tombstone_date == None) &
+                (action.type == 'version:ReadStatusChange_P')
+            ).add_columns(count(action.id.distinct()).label("read")).subquery()
+        r = dict(self.db.query(
+            subq.c.read, count(subq.c.post_id)).group_by(subq.c.read))
+        # 1 is count of read, 0 is count of unread.
+        return (r.get(1, 0) + r.get(0, 0), r.get(1, 0))
 
     def prefetch_descendants(self):
         # TODO: descendants only. Let's just prefetch all ideas.
@@ -764,32 +794,6 @@ JOIN content AS family_content ON (family_posts.id = family_content.id AND famil
                 SparqlClause(clause % (
                     post_uri.n3(),),
                     quad_storage=discussion_storage.n3()))]
-
-    @classmethod
-    def idea_read_counts_sparql(cls, discussion_id, post_id, user_id):
-        """Given a post and a user, give the total and read count
-         of posts for each affected idea
-        This one is slower than the sql version below."""
-        from .auth import AgentProfile
-        local_uri = AssemblQuadStorageManager.local_uri()
-        discussion_storage = \
-            AssemblQuadStorageManager.discussion_storage_name()
-        idea_ids = cls.get_idea_ids_showing_post(post_id)
-        user_uri = URIRef(AgentProfile.uri_generic(user_id, local_uri)).n3()
-        results = []
-        for idea_id in idea_ids:
-            ((read,),) = list(cls.default_db.execute(SparqlClause(
-            """select count(distinct ?change) where {
-            %s idea:includes* ?ideaP .
-            ?postP assembl:postLinkedToIdea ?ideaP .
-            ?post sioc:reply_of* ?postP .
-            ?change a version:ReadStatusChange;
-                version:who %s ;
-                version:what ?post }""" % (
-                URIRef(Idea.uri_generic(idea_id, local_uri)).n3(),
-                user_uri), quad_storage=discussion_storage.n3())))
-            results.append((idea_id, read))
-        return results
 
     @classmethod
     def idea_read_counts(cls, discussion_id, post_id, user_id):
