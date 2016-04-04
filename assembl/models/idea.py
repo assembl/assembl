@@ -512,7 +512,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     def num_total_and_read_posts_for(self, user_id):
         from .generic import Content
         from .action import Action, ActionOnPost
-        from sqlalchemy.sql.functions import count
+        from sqlalchemy.sql.functions import count, min
         if not user_id:
             return 0
         user_id = literal_column(str(user_id), Integer)
@@ -524,7 +524,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             ActionOnPost, [], ActionOnPost.__table__, aliased=False, flat=True)
         action = with_polymorphic(
             Action, [], Action.__table__, aliased=False, flat=True)
-        subq = query.outerjoin(
+        return query.outerjoin(
                 action_on_post, action_on_post.post_id == SubPostContent.c.id
             ).outerjoin(
                 action,
@@ -532,11 +532,10 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 (action.actor_id == user_id) &
                 (action.tombstone_date == None) &
                 (action.type == 'version:ReadStatusChange_P')
-            ).add_columns(count(action.id.distinct()).label("read")).subquery()
-        r = dict(self.db.query(
-            subq.c.read, count(subq.c.post_id)).group_by(subq.c.read))
-        # 1 is count of read, 0 is count of unread.
-        return (r.get(1, 0) + r.get(0, 0), r.get(1, 0))
+            ).with_entities(
+                count(SubPostContent.c.id.distinct()).label("post_count"),
+                count(action.id.distinct()).label("read_count")
+            ).first()
 
     def prefetch_descendants(self):
         # TODO: descendants only. Let's just prefetch all ideas.
