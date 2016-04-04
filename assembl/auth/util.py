@@ -35,7 +35,7 @@ def get_roles(user_id, discussion_id=None):
             session.query(Role.name).join(
                 LocalUserRole).filter(and_(
                     LocalUserRole.user_id == user_id,
-                    LocalUserRole.requested == 0,
+                    LocalUserRole.requested == False,
                     LocalUserRole.discussion_id == discussion_id)))
     return [x[0] for x in roles.distinct()]
 
@@ -70,7 +70,7 @@ def get_permissions(user_id, discussion_id):
             ).union(session.query(Permission.name).join(
                 DiscussionPermission, Role, LocalUserRole).filter(and_(
                     LocalUserRole.user_id == user_id,
-                    LocalUserRole.requested == 0,
+                    LocalUserRole.requested == False,
                     LocalUserRole.discussion_id == discussion_id,
                     DiscussionPermission.discussion_id == discussion_id))
             ).union(session.query(Permission.name).join(
@@ -174,7 +174,7 @@ def discussions_with_access(userid, permission=P_READ):
                     Role, Permission).join(
                         LocalUserRole, and_(
                             LocalUserRole.discussion_id == DiscussionPermission.discussion_id,
-                            LocalUserRole.requested == 0)
+                            LocalUserRole.requested == False)
                     ).join(User).filter(
                         User.id == userid).filter(
                             Permission.name == permission)
@@ -236,7 +236,7 @@ def user_has_permission(discussion_id, user_id, permission):
                             # So I have to add this one as well.
                             LocalUserRole.discussion_id == discussion_id,
                             LocalUserRole.user_id == user_id,
-                            LocalUserRole.requested == 0,
+                            LocalUserRole.requested == False,
                             Permission.name == permission))
                 ).union(
                     db.query(DiscussionPermission).join(
@@ -255,7 +255,7 @@ def users_with_permission(discussion_id, permission, id_only=True):
     user_ids = db.query(User.id).join(
         LocalUserRole, Role, DiscussionPermission, Permission).filter(and_(
         Permission.name == permission,
-        LocalUserRole.requested == 0,
+        LocalUserRole.requested == False,
         LocalUserRole.discussion_id == discussion_id,
         DiscussionPermission.discussion_id == discussion_id)
         ).union(

@@ -503,7 +503,7 @@ class Discussion(DiscussionBoundBase):
         User, viewonly=True, secondary=LocalUserRole.__table__,
         primaryjoin="LocalUserRole.discussion_id == Discussion.id",
         secondaryjoin=((LocalUserRole.user_id == User.id)
-            & (LocalUserRole.requested == 0)),
+            & (LocalUserRole.requested == False)),
         backref="involved_in_discussion")
 
     #The list of praticipants actually subscribed to the discussion
@@ -513,7 +513,7 @@ class Discussion(DiscussionBoundBase):
             ((LocalUserRole.role_id == Role.id) & (Role.name == R_PARTICIPANT))),
         primaryjoin="LocalUserRole.discussion_id == Discussion.id",
         secondaryjoin=((LocalUserRole.user_id == User.id)
-            & (LocalUserRole.requested == 0)),
+            & (LocalUserRole.requested == False)),
         backref="participant_in_discussion")
 
     def get_participants_query(self, ids_only=False, include_readers=False):

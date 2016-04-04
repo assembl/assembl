@@ -1215,7 +1215,7 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
         cls = alias or cls
-        return (cls.requested == 0,)
+        return (cls.requested == False,)
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
@@ -1224,11 +1224,11 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
             QuadMapPatternS(AgentProfile.agent_as_account_iri.apply(cls.user_id),
                 SIOC.has_function, cls.iri_class().apply(cls.id),
                 name=QUADNAMES.class_LocalUserRole_global,
-                conditions=(cls.requested == 0,),
+                conditions=(cls.requested == False,),
                 sections=(USER_SECTION,)),
             QuadMapPatternS(cls.iri_class().apply(cls.id),
                 SIOC.name, role_alias.name,
-                conditions=(cls.requested == 0,),
+                conditions=(cls.requested == False,),
                 sections=(USER_SECTION,),
                 name=QUADNAMES.class_LocalUserRole_rolename)]
 
