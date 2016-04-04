@@ -1052,15 +1052,16 @@ def ensure_virtuoso_not_running():
 def virtuoso_reconstruct_save_db(try_backup=True):
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
-        if try_backup:
-            backup = run('%s +backup-dump +foreground' % (
-                get_virtuoso_exec(),), quiet=True)
-            if not backup.failed:
-                return
-            print "ERROR: Normal backup failed."
-        # these were created by previous attempt
-        run('rm -f virtuoso-temp.db virtuoso.pxa virtuoso.trx virtuoso.lck')
-        run('%s +crash-dump +foreground' % (get_virtuoso_exec(),))
+        with settings(command_timeout=300):
+            if try_backup:
+                backup = run('%s +backup-dump +foreground' % (
+                    get_virtuoso_exec(),), quiet=True)
+                if not backup.failed:
+                    return
+                print "ERROR: Normal backup failed."
+            # these were created by previous attempt
+            run('rm -f virtuoso-temp.db virtuoso.pxa virtuoso.trx virtuoso.lck')
+            run('%s +crash-dump +foreground' % (get_virtuoso_exec(),))
 
 
 def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
@@ -1069,7 +1070,8 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
         run('mv virtuoso.db virtuoso_backup.db')
     trflag = '+log6' if transition_6_to_7 else ''
     with cd(virtuoso_db_directory()):
-        r = run('%s +restore-crash-dump +foreground %s' % (
+        with settings(command_timeout=300):
+            r = run('%s +restore-crash-dump +foreground %s' % (
                 get_virtuoso_exec(), trflag), timeout=30)
     execute(supervisor_process_start, 'virtuoso')
     with cd(virtuoso_db_directory()):
@@ -1083,7 +1085,7 @@ def virtuoso_reconstruct_db():
     # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
     # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
     # http://docs.fabfile.org/en/1.10/api/core/context_managers.html#fabric.context_managers.settings
-    with settings(command_timeout=120):
+    with settings(command_timeout=300):
         virtuoso_reconstruct_save_db(True)
         virtuoso_reconstruct_restore_db()
     execute(app_reload)
@@ -1096,7 +1098,7 @@ def virtuoso_major_reconstruct_db():
     # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
     # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
     # http://docs.fabfile.org/en/1.10/api/core/context_managers.html#fabric.context_managers.settings
-    with settings(command_timeout=120):
+    with settings(command_timeout=300):
         virtuoso_reconstruct_save_db(False)
         virtuoso_reconstruct_restore_db()
     execute(app_reload)
