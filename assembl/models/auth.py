@@ -1587,14 +1587,14 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
         if Locale.compatible(locale, self.default_locale.code):
             return UserLanguagePreference(
                 locale=self.default_locale, locale_id=self.default_locale.id,
-                source_of_evidence=LanguagePreferenceOrder.Cookie)
+                source_of_evidence=LanguagePreferenceOrder.Cookie.value)
         else:
             locale = Locale.get_or_create(locale)
             return UserLanguagePreference(
                 locale=locale, locale_id=locale.id,
                 translate_to_locale=self.default_locale,
                 translate_to=self.default_locale.id,
-                source_of_evidence=LanguagePreferenceOrder.Cookie)
+                source_of_evidence=LanguagePreferenceOrder.Cookie.value)
 
 
 class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
@@ -1628,7 +1628,8 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 locale = Locale.get_or_create(l)
                 new_pref = UserLanguagePreference(
                     locale=locale, locale_id=locale.id,
-                    source_of_evidence=LanguagePreferenceOrder.DeducedFromTranslation,
+                    source_of_evidence=
+                        LanguagePreferenceOrder.DeducedFromTranslation.value,
                     preferred_order=pref.preferred_order)
                 prefs_without_trans.append(new_pref)
                 prefs_without_trans_by_loc[l] = new_pref

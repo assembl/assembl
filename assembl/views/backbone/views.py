@@ -89,7 +89,7 @@ def process_locale(
         if (locale.id, source_of_evidence) in lang_pref_signatures:
             return
     lang = UserLanguagePreference(
-        user=user, source_of_evidence=source_of_evidence, locale=locale)
+        user=user, source_of_evidence=source_of_evidence.value, locale=locale)
     session.add(lang)
     session.flush()
 
