@@ -1,14 +1,14 @@
 """file_upload
 
 Revision ID: 1e01b5f0e5f9
-Revises: 11d73c586596
+Revises: df59c42297f
 Create Date: 2016-03-23 16:46:15.309571
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '1e01b5f0e5f9'
-down_revision = '11d73c586596'
+down_revision = 'df59c42297f'
 
 from alembic import context, op
 import sqlalchemy as sa
