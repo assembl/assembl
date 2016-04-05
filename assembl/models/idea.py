@@ -618,31 +618,25 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .idea_content_link import Extract
         from .auth import AgentProfile
         from .post import Post
+        from .generic import Content
         from sqlalchemy.sql.functions import count
-        local_uri = AssemblQuadStorageManager.local_uri()
-        discussion_storage = \
-            AssemblQuadStorageManager.discussion_storage_name()
-
-        idea_uri = URIRef(self.uri(local_uri))
-        clause = '''select distinct ?annotation where {
-            %s idea:includes* ?ideaP .
-            ?annotation assembl:resourceExpressesIdea ?ideaP }'''
-        extract_ids = [x for (x,) in self.db.execute(
-            SparqlClause(clause % (
-                idea_uri.n3(),),
-                quad_storage=discussion_storage.n3()))]
-        r = list(self.db.query(AgentProfile.id, count(Extract.id)).join(
-            Post, Post.creator_id==AgentProfile.id).join(Extract).filter(
-            Extract.important == True, Extract.id.in_(extract_ids)))
-        r.sort(key=lambda x: x[1], reverse=True)
+        subquery = self.get_descendants_query(self.id)
+        query = self.db.query(
+            Post.creator_id
+            ).join(Extract
+            ).join(subquery, Extract.idea_id == subquery.c.id
+            ).filter(Extract.important == True
+            ).group_by(Post.creator_id
+            ).order_by(count(Extract.id).desc())
         if id_only:
-            return [AgentProfile.uri_generic(a) for (a, ce) in r]
+            return [AgentProfile.uri_generic(a) for (a,) in query]
         else:
-            ids = [a for (a, ce) in r]
-            order = {id: order for (order, id) in enumerate(ids)}
-            agents = self.db.query(AgentProfile).filter(AgentProfile.id.in_(ids)).all()
-            agents.sort(key=lambda a: order[a.id])
-            return agents
+            ids = [x for (x,) in query]
+            if not ids:
+                return []
+            agents = {a.id: a for a in self.db.query(AgentProfile).filter(
+                AgentProfile.id.in_(ids))}
+            return [agents[id] for id in ids]
 
     def get_contributors(self):
         from .post import Post
