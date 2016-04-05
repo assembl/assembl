@@ -86,6 +86,57 @@ var getSVGElementByURLPromise = function(url){
 };
 
 
+var TokenBagsView = Marionette.ItemView.extend({
+  template: false,
+  initialize: function(options){
+    if ( !("voteSpecification" in this.options)){
+      console.error("option voteSpecification is mandatory");
+      return;
+    }
+
+    if ( !("tokenCategories" in this.options)){
+      console.error("option tokenCategories is mandatory");
+      return;
+    }
+
+    if ( !("myVotesCollection" in this.options)){
+      console.error("option myVotesCollection is mandatory");
+      return;
+    }
+
+    this.voteSpecification = this.options.voteSpecification;
+    this.tokenCategories = this.options.tokenCategories;
+    this.myVotesCollection = this.options.myVotesCollection;
+    this.collection = this.myVotesCollection;
+  },
+  collectionEvents: {
+    "add remove reset change sync": "render"
+  },
+  onRender: function(){
+    console.log("TokenBagsView::onRender()");
+    var that = this;
+    var container = this.$el;
+    container.empty();
+    //var myVotes = "my_votes" in this.voteSpecification ? this.voteSpecification.my_votes : null;
+    this.tokenCategories.each(function(category){
+      console.log("that.myVotesCollection: ", that.myVotesCollection);
+      //var myVotesInThisCategory = _.where(myVotes, {token_category: category.get("@id")});
+      var myVotesInThisCategory = that.myVotesCollection.where({token_category: category.get("@id")});
+      console.log("myVotesInThisCategory: ", myVotesInThisCategory);
+      //var myVotesValues = _.pluck(myVotesInThisCategory, "value");
+      var myVotesValues = _.map(myVotesInThisCategory, function(vote){return vote.get("value");});
+      var myVotesCount = _.reduce(myVotesValues, function(memo, num){ return memo + num; }, 0);
+      var total = category.get("total_number");
+      console.log("myVotesValues: ", myVotesValues);
+      console.log("myVotesCount: ", myVotesCount);
+      console.log("total: ", total);
+      var el = $("<div></div>");
+      el.text("You have used " + myVotesCount + " of your " + total + " \"" + category.get("typename") + "\" tokens.");
+      el.appendTo(container);
+    });
+  }
+});
+
 var TokenIdeaAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
   initialize: function(options){
@@ -103,6 +154,10 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
       console.error("option idea is mandatory");
       return;
     }
+    if ( !("myVotesCollection" in this.options)){
+      console.error("option myVotesCollection is mandatory");
+      return;
+    }
 
     if ( !("currentValue" in this.options)){
       this.currentValue = 0;
@@ -115,6 +170,8 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
     console.log("this.voteSpecification: ", this.voteSpecification);
     this.category = this.options.tokenCategory;
     this.idea = this.options.idea;
+    this.myVotesCollection = this.options.myVotesCollection;
+    this.collection = this.myVotesCollection;
 
     // validate token category's maximum_per_idea and total_number
     var maximum_per_idea = this.category.get("maximum_per_idea");
@@ -155,7 +212,11 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
     this.customTokenImageURL = this.category.get("image");
     this.customTokenImagePromise = getSVGElementByURLPromise(this.customTokenImageURL);
   },
+  collectionEvents: {
+    "add remove reset change sync": "render"
+  },
   onRender: function(){
+    console.log("TokenIdeaAllocationView::onRender()");
     var that = this;
 
     /*
@@ -252,6 +313,8 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
       link.attr("title", "set "+number_of_tokens_represented_by_this_icon+" tokens");
       link.click(function(){
         console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
+        
+        /*
         that.postData["value"] = number_of_tokens_represented_by_this_icon;
         $.ajax({
           type: "POST",
@@ -268,9 +331,28 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
             // TODO: show error in the UI
           }
         });
+        */
+
+        var properties = _.clone(that.postData);
+        delete properties["value"];
+        properties["idea"] = that.idea.get("@id");
+        var previousVote = that.myVotesCollection.findWhere(properties);
+        console.log("previousVote found: ", previousVote);
+        if ( previousVote ){
+          previousVote.set({"value": number_of_tokens_represented_by_this_icon});
+          previousVote.save();
+        }
+        else {
+          properties["value"] = number_of_tokens_represented_by_this_icon;
+          that.myVotesCollection.create(properties);
+        }
+        that.currentValue = number_of_tokens_represented_by_this_icon;
+        el[0].classList.add("selected");
+        //that.render();
       });
       
       link.hover(function handlerIn(){
+        container.addClass("hover");
         el[0].classList.add("hover");
         link.prevAll().children("svg").each(function(){
           if ( !(this.classList.contains("zero")) ){
@@ -281,6 +363,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
           this.classList.remove("hover");
         });
       }, function handlerOut(){
+        container.removeClass("hover");
         el[0].classList.remove("hover");
         link.siblings().children("svg").each(function(){
           this.classList.remove("hover");
@@ -333,15 +416,19 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
     console.log("this.parent: ", this.parent);
     var tokenCategories = "tokenCategories" in this.parent.options ? this.parent.options.tokenCategories : null;
     var voteSpecification = "voteSpecification" in this.parent.options ? this.parent.options.voteSpecification : null;
-    var myVotes = "my_votes" in voteSpecification ? voteSpecification.my_votes : null;
+    //var myVotes = "my_votes" in voteSpecification ? voteSpecification.my_votes : null;
+    var myVotesCollection = "myVotesCollection" in this.parent.options ? this.parent.options.myVotesCollection : null;
     var idea = that.model;
     console.log("tokenCategories: ", tokenCategories);
     if ( tokenCategories ){
       tokenCategories.each(function(category){
         // get the number of tokens the user has already set on this idea
-        var myVote = _.findWhere(myVotes, {idea: idea.get("@id"), token_category: category.get("@id")});
+        //var myVote = _.findWhere(myVotes, {idea: idea.get("@id"), token_category: category.get("@id")});
+        var myVote = myVotesCollection.findWhere({"idea": idea.get("@id"), "token_category": category.get("@id")});
+        console.log("myVote: ", myVote);
         if ( myVote ){
-          myVote = "value" in myVote ? myVote.value : 0;
+          //myVote = "value" in myVote ? myVote.value : 0;
+          myVote = myVote.get("value") || 0;
         }
         else {
           myVote = 0;
@@ -351,6 +438,7 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
           idea: idea,
           tokenCategory: category,
           voteSpecification: voteSpecification,
+          myVotesCollection: myVotesCollection,
           currentValue: myVote
         });
         that.getRegion('tokensForIdea').show(view);
@@ -383,29 +471,44 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   cancelEl: '.close, .js_close',
 
   initialize: function(options) {
-    this.widgetModel = options.widgetModel;
-    console.log("this.widgetModel: ", this.widgetModel);
-
     var that = this;
+
+
+    that.widgetModel = options.widgetModel;
+    console.log("that.widgetModel: ", that.widgetModel);
+
+    
     var CollectionManager = require('../common/collectionManager.js'); // FIXME: Why does it not work when we write it only at the top of the file?
     var collectionManager = new CollectionManager();
 
     var voteSpecifications = that.widgetModel.get("vote_specifications");
     console.log("voteSpecifications: ", voteSpecifications);
+
+    that.tokenVoteSpecification = null;
+    that.tokenCategories = null;
+    that.myVotesCollection = null;
+    that.votableIdeasCollection = null;
     
     var tokenCategories = null;
     if (voteSpecifications && voteSpecifications.length > 0){
-      var tokenVoteSpecification = _.findWhere(voteSpecifications, {"@type": "TokenVoteSpecification"});
-      if ( tokenVoteSpecification ){
-        if ( "token_categories" in tokenVoteSpecification && _.isArray(tokenVoteSpecification.token_categories) ){
+      that.tokenVoteSpecification = _.findWhere(voteSpecifications, {"@type": "TokenVoteSpecification"});
+      if ( that.tokenVoteSpecification ){
+        if ( "token_categories" in that.tokenVoteSpecification && _.isArray(that.tokenVoteSpecification.token_categories) ){
           var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
           console.log("Widget: ", Widget);
-          console.log("tokenVoteSpecification.token_categories: ", tokenVoteSpecification.token_categories);
-          tokenCategories = new Widget.TokenCategorySpecificationCollection(tokenVoteSpecification.token_categories);
+          console.log("tokenVoteSpecification.token_categories: ", that.tokenVoteSpecification.token_categories);
+          that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
           console.log("tokenCategories: ", tokenCategories);
         }
       }
     }
+
+    // build myVotes collection from my_votes and keep it updated
+    var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
+    var myVotes = "my_votes" in that.tokenVoteSpecification ? that.tokenVoteSpecification.my_votes : null;
+    that.myVotesCollection = new Widget.TokenIdeaVoteCollection(myVotes);
+    that.myVotesCollection.url = Ctx.getUrlFromUri(that.tokenVoteSpecification["@id"]) + "/votes"; // http://localhost:6543/data/Discussion/6/widgets/118/vote_specifications/44/votes
+    console.log("that.myVotesCollection: ", that.myVotesCollection);
     
     
     collectionManager.getAllIdeasCollectionPromise().done(function(allIdeasCollection) {
@@ -425,13 +528,13 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         }
       });
 
-      var votableIdeasCollection = new IdeasSubset();
-      console.log("votableIdeasCollection: ", votableIdeasCollection);
+      that.votableIdeasCollection = new IdeasSubset();
+      console.log("that.votableIdeasCollection: ", that.votableIdeasCollection);
 
       // Compute an ordering of votable ideas
       // Each participant should always see the same ordering, but 2 different participants can see a different ordering, and all possible orderings (permutations) should be distributed among participants as equally as possible.
       // When there are much less participants than possible permutations, participants should receive permutations which are different enough (for example: participants should not all see the same idea at the top position).
-      var orderedVotableIdeas = votableIdeasCollection.sortBy(function(idea){return idea.id;}); // /!\ with this, "local:Idea/257" < "local:Idea/36"
+      var orderedVotableIdeas = that.votableIdeasCollection.sortBy(function(idea){return idea.id;}); // /!\ with this, "local:Idea/257" < "local:Idea/36"
       console.log("orderedVotableIdeas: ", orderedVotableIdeas);
       var n = orderedVotableIdeas.length; // if there are n votable ideas, then there are m = n! ("n factorial") possible permutations
       // TODO: What if there are too many votable ideas and so the computation of n! would take too much time?
@@ -445,10 +548,20 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         }
       }
 
+      // Show available (remaining) tokens
+      var tokenBagsView = new TokenBagsView({
+        voteSpecification: that.tokenVoteSpecification,
+        tokenCategories: that.tokenCategories,
+        myVotesCollection: that.myVotesCollection
+      });
+      that.$(".available-tokens").html(tokenBagsView.render().el);
+
+      // Show votable ideas and their tokens
       var collectionView = new TokenVoteCollectionView({
-        collection: votableIdeasCollection,
-        voteSpecification: tokenVoteSpecification,
-        tokenCategories: tokenCategories,
+        collection: that.votableIdeasCollection,
+        voteSpecification: that.tokenVoteSpecification,
+        tokenCategories: that.tokenCategories,
+        myVotesCollection: that.myVotesCollection,
         viewComparator: function(idea){
           return _.findIndex(permutation, function(idea2){return idea2.id == idea.id;});
         }

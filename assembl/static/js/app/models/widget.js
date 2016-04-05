@@ -442,6 +442,37 @@ var TokenCategorySpecificationCollection = Base.Collection.extend({
   }
 });
 
+var IdeaVoteModel = Base.Model.extend({
+  constructor: function IdeaVoteModel(){
+    Base.Model.apply(this, arguments);
+  },
+  defaults: {
+    "token_category": null
+  }
+});
+
+var TokenIdeaVoteModel = IdeaVoteModel.extend({
+  constructor: function TokenIdeaVoteModel(){
+    Base.Model.apply(this, arguments);
+  },
+  defaults: {
+    "idea": null,
+    "criterion": null,
+    "widget": null,
+    "value": null,
+    "original_uri": null,
+    "vote_spec": null,
+    "voter": null
+  }
+});
+
+var TokenIdeaVoteCollection = Base.Collection.extend({
+  constructor: function TokenIdeaVoteCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+  model: TokenIdeaVoteModel
+});
+
 var CreativitySessionWidgetModel = WidgetModel.extend({
   constructor: function CreativitySessionWidgetModel() {
     WidgetModel.apply(this, arguments);
@@ -787,5 +818,7 @@ module.exports = {
   globalWidgetClassCollection: globalWidgetClassCollection,
   ActiveWidgetCollection: ActiveWidgetCollection,
   TokenCategorySpecificationModel: TokenCategorySpecificationModel,
-  TokenCategorySpecificationCollection: TokenCategorySpecificationCollection
+  TokenCategorySpecificationCollection: TokenCategorySpecificationCollection,
+  TokenIdeaVoteModel: TokenIdeaVoteModel,
+  TokenIdeaVoteCollection: TokenIdeaVoteCollection
 };
