@@ -645,25 +645,23 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             return agents
 
     def get_contributors(self):
-        # anyone who contributed to any of the idea's posts
-        local_uri = AssemblQuadStorageManager.local_uri()
-        discussion_storage = \
-            AssemblQuadStorageManager.discussion_storage_name()
+        from .post import Post
+        from sqlalchemy.sql.functions import count
+        query = self.get_related_posts_query(self.discussion_id, self.id)
+        post_entities = {
+            e.selectable for e in query._join_entities
+            if e.mapper.class_ == Post}
+        sub_post = query._entities[0].entity_zero.selectable
+        post_entities.remove(sub_post)
+        pivot_post = post_entities.pop()
+        query2 = query.group_by(
+            sub_post.c.creator_id
+            ).with_entities(sub_post.c.creator_id
+            ).order_by(
+                count(pivot_post.c.id.distinct()).desc(),
+                count(sub_post.c.id.distinct()).desc())
 
-        idea_uri = URIRef(self.uri(local_uri))
-        clause = '''select count(distinct ?postP), count(distinct ?post), ?author where {
-            %s idea:includes* ?ideaP .
-            ?postP assembl:postLinkedToIdea ?ideaP  .
-            ?post sioc:reply_of* ?postP .
-            ?post sioc:has_creator ?author }'''
-        r = self.db.execute(
-            SparqlClause(clause % (
-                idea_uri.n3(),),
-                quad_storage=discussion_storage.n3()))
-        r = [(int(cpp), int(cp), 'local:AgentProfile/' + a.rsplit('/',1)[1]
-              ) for (cpp, cp, a) in r]
-        r.sort(reverse=True)
-        return [a for (cpp, cp, a) in r]
+        return ['local:AgentProfile/' + str(i) for (i,) in query2]
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
@@ -722,77 +720,24 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         raise NotImplemented()
 
     @classmethod
-    def get_idea_ids_showing_post(cls, post_id, direct=False, indirect=True):
+    def get_idea_ids_showing_post(cls, post_id):
         "Given a post, give the ID of the ideas that show this message"
         # This works because of a virtuoso bug...
         # where DISTINCT gives IDs instead of URIs.
         from .generic import Content
-        from .idea_content_link import Extract
-        assert direct or indirect
         discussion_storage = \
             AssemblQuadStorageManager.discussion_storage_name()
 
         post_uri = URIRef(Content.uri_generic(
             post_id, AssemblQuadStorageManager.local_uri()))
-        if indirect and not direct:
-            clause = '''select distinct ?idea where {
-                %s sioc:reply_of* ?post .
-                ?post assembl:postLinkedToIdea ?ideaP .
-                ?idea idea:includes* ?ideaP }'''
-        elif direct and not indirect:
-            clause = '''select distinct ?idea where {
-                %s sioc:reply_of* ?post .
-                ?post assembl:postLinkedToIdea ?idea }'''
-        if direct and indirect:
-            # Not used anymore, to be cleaned.
-            clause = '''select distinct ?postP, ?ideaP, ?idea, ?ex where {
-                %s sioc:reply_of* ?postP .
-                ?postP assembl:postLinkedToIdea ?ideaP  .
-                ?idea idea:includes* ?ideaP .
-                optional { ?ex oa:hasSource ?postP ;
-                    assembl:resourceExpressesIdea ?ideaP . } }'''
-            r = list(cls.default_db.execute(
-                SparqlClause(clause % (
-                    post_uri.n3(),),
-                    quad_storage=discussion_storage.n3())))
-            r = [(int(x), int(y), int(z), int(e) if e else None)
-                 for (x, y, z, e) in r]
-
-            def comp((pp1, ip1, i1, e1), (pp2, ip2, i2, e2)):
-                direct_idea1 = ip1 == i1
-                direct_idea2 = ip2 == i2
-                direct_post1 = pp1 == post_id
-                direct_post2 = pp2 == post_id
-                if direct_idea1 != direct_idea2:
-                    return -1 if direct_idea1 else 1
-                if direct_post1 != direct_post2:
-                    return -1 if direct_post1 else 1
-                if pp1 != pp2:
-                    # assume hry is congruent with post order.
-                    return pp2 - pp1
-                if ip1 != ip2:
-                    # TODO: Real hry order. Should be rare.
-                    return ip2 - ip1
-                if i1 != i2:
-                    # TODO: Real hry order.
-                    return i2 - i1
-                if e1 != e2:
-                    return e2 - e1
-                return 0
-            r.sort(cmp=comp)
-            # can't trust virtuoso's uniqueness.
-            r = [e for e, _ in groupby(r)]
-            return [(
-                Idea.uri_generic(i),
-                Idea.uri_generic(ip),
-                Content.uri_generic(pp),
-                Extract.uri_generic(ex) if ex else None
-            ) for (pp, ip, i, ex) in r]
-        else:
-            return [int(id) for (id,) in cls.default_db.execute(
-                SparqlClause(clause % (
-                    post_uri.n3(),),
-                    quad_storage=discussion_storage.n3()))]
+        clause = '''select distinct ?idea where {
+            %s sioc:reply_of* ?post .
+            ?post assembl:postLinkedToIdea ?ideaP .
+            ?idea idea:includes* ?ideaP }'''
+        return [int(id) for (id,) in cls.default_db.execute(
+            SparqlClause(clause % (
+                post_uri.n3(),),
+                quad_storage=discussion_storage.n3()))]
 
     @classmethod
     def idea_read_counts(cls, discussion_id, post_id, user_id):
