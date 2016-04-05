@@ -266,6 +266,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             cls, target_id=bindparam('root_id', type_=Integer),
             inclusive=True):
         if cls.using_virtuoso:
+            if isinstance(target_id, list):
+                raise NotImplemented()
             sql = text(
                 """SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
                     source_id, target_id FROM idea_idea_link
@@ -274,13 +276,17 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             select_exp = select([sql.c.source_id.label('id')]
                 ).select_from(sql).where(sql.c.target_id==target_id)
         else:
+            if isinstance(target_id, list):
+                root_condition = IdeaLink.target_id.in_(target_id)
+            else:
+                root_condition = (IdeaLink.target_id == target_id)
             link = select(
                     [IdeaLink.source_id, IdeaLink.target_id]
                 ).select_from(
                     IdeaLink
                 ).where(
                     (IdeaLink.tombstone_date == None) &
-                    (IdeaLink.target_id == target_id)
+                    (root_condition)
                 ).cte(recursive=True)
             target_alias = aliased(link)
             sources_alias = aliased(IdeaLink)
@@ -294,8 +300,12 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         if inclusive:
             if isinstance(target_id, int):
                 target_id = literal_column(str(target_id), Integer)
-            select_exp = select_exp.union(
-                select([target_id.label('id')]))
+            elif isinstance(target_id, list):
+                raise NotImplemented()
+                # postgres: select * from unnest(ARRAY[1,6,7]) as id
+            else:
+                select_exp = select_exp.union(
+                    select([target_id.label('id')]))
         return select_exp.alias()
 
     def get_all_ancestors(self, id_only=False):
@@ -718,20 +728,38 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         "Given a post, give the ID of the ideas that show this message"
         # This works because of a virtuoso bug...
         # where DISTINCT gives IDs instead of URIs.
-        from .generic import Content
-        discussion_storage = \
-            AssemblQuadStorageManager.discussion_storage_name()
-
-        post_uri = URIRef(Content.uri_generic(
-            post_id, AssemblQuadStorageManager.local_uri()))
-        clause = '''select distinct ?idea where {
-            %s sioc:reply_of* ?post .
-            ?post assembl:postLinkedToIdea ?ideaP .
-            ?idea idea:includes* ?ideaP }'''
-        return [int(id) for (id,) in cls.default_db.execute(
-            SparqlClause(clause % (
-                post_uri.n3(),),
-                quad_storage=discussion_storage.n3()))]
+        from sqlalchemy.sql.functions import func
+        from .idea_content_link import IdeaContentPositiveLink
+        (idea_link_ids,)  = cls.default_db.query(
+            func.idea_content_links_above_post(post_id)).first()
+        if not idea_link_ids:
+            return []
+        idea_link_ids = [int(id) for id in idea_link_ids.split(',') if id]
+        # This could be combined with previous in postgres.
+        root_ideas = cls.default_db.query(
+                IdeaContentPositiveLink.idea_id.distinct()
+            ).filter(
+                IdeaContentPositiveLink.idea_id != None,
+                IdeaContentPositiveLink.id.in_(idea_link_ids)).all()
+        if not root_ideas:
+            return []
+        root_ideas = [x for (x,) in root_ideas]
+        if cls.using_virtuoso:
+            # wasteful
+            query = cls.get_ancestors_query(inclusive=False)
+            ancestors_lists = [
+                cls.default_db.query(query.params(root_id=id)).all()
+                for id in root_ideas]
+            ancestors = set(root_ideas)
+            for ancestors_list in ancestors_lists:
+                ancestors.update((x for (x,) in ancestors_list))
+            return list(ancestors)
+        else:
+            ancestors = cls.default_db.query(
+                cls.get_ancestors_query(root_ideas, False))
+            ancestors = {x for (x,) in ancestors}
+            ancestors.update(root_ideas)
+            return list(ancestors)
 
     @classmethod
     def idea_read_counts(cls, discussion_id, post_id, user_id):

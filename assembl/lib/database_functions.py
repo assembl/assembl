@@ -27,7 +27,7 @@ CREATE PROCEDURE idea_content_links_above_post (IN root_id INTEGER)
 }
 
 postgres_functions = {
-    "": """
+    "idea_content_links_above_post": """
 CREATE OR REPLACE FUNCTION idea_content_links_above_post(IN root_id integer)
         RETURNS varchar AS $$
 DECLARE
@@ -37,7 +37,10 @@ DECLARE
     agg varchar;
 BEGIN
     SELECT post.ancestry || cast (post.id as VARCHAR) FROM post
-        WHERE post.id = root_id INTO STRICT posts;
+        WHERE post.id = root_id INTO posts;
+    IF posts IS NULL THEN
+        RETURN '';
+    END IF;
     posts_a := string_to_array(posts, ',');
     SELECT idea_content_link.id FROM unnest(posts_a) post_id
         JOIN idea_content_link ON content_id = post_id INTO icl_a;
