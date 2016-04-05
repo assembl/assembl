@@ -1707,6 +1707,10 @@ class UserLanguagePreference(Base):
                         cascade='all, delete-orphan',
                         order_by=source_of_evidence))
 
+    crud_permissions = CrudPermissions(
+            P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
+            P_READ, P_READ, P_READ)
+
     def __cmp__(self, other):
         if not isinstance(other, self.__class__):
             return -1
