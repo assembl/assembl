@@ -41,9 +41,11 @@ BEGIN
     IF posts IS NULL THEN
         RETURN '';
     END IF;
-    posts_a := string_to_array(posts, ',');
-    SELECT idea_content_link.id FROM unnest(posts_a) post_id
-        JOIN idea_content_link ON content_id = post_id INTO icl_a;
+    SELECT string_to_array(posts, ',') INTO posts_a;
+    SELECT array (
+        SELECT idea_content_link.id FROM unnest(posts_a) post_id
+        JOIN idea_content_link ON content_id = cast (post_id AS INTEGER)
+    ) INTO icl_a;
     agg := array_to_string(icl_a, ',');
     RETURN agg;
 END;

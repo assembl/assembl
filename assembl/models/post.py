@@ -411,7 +411,7 @@ class Post(Content):
                 }
             return request._idea_content_link_cache2[id]
         return [icl_representation(int(id)) for id in
-                links_above_post[:-1].split(',')]
+                links_above_post.strip(',').split(',')]
 
     @classmethod
     def extra_collections(cls):
