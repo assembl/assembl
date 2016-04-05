@@ -72,8 +72,18 @@ var AttachmentModel = Base.Model.extend({
   },
 
   parse: function(rawModel) {
-    rawModel.document = new Document.Model(rawModel.document, {parse: true});
-    //console.log("AttachmentModel.parse() returning", rawModel);
+    switch (rawModel.document['@type']){
+      case Types.DOCUMENT:
+        rawModel.document = new Document.DocumentModel(rawModel.document, {parse: true});
+        break;
+      case Types.FILE:
+        rawModel.document = new Document.FileModel(rawModel.document, {parse: true});
+        break;
+      default:
+        return new Error("The document model does not have a @type associated!" + rawModel.document);
+    }
+    
+    //console.log("AttachmentModel.parse() returning", rawModel);  
     return rawModel;
   },
 
@@ -81,6 +91,11 @@ var AttachmentModel = Base.Model.extend({
     var that = this;
 
     if(this.get('attachmentPurpose') !== attachmentPurposeTypes.DO_NOT_USE.id) {
+
+      // File-based attachments uses a multipart/form header, and are POSTed to a different
+      // endpoint than the non-file attachments. This API returns both the attachment + document
+      // model in JSON format
+      
       Promise.resolve(this.get('document').save()).then(function(){
         //console.log("Saving attachments", attrs, options);
         Backbone.Model.prototype.save.call(that, attrs, options);
@@ -123,6 +138,7 @@ var AttachmentModel = Base.Model.extend({
   getDocument: function() {
     return this.get('document');
   }
+
 });
 
 /**

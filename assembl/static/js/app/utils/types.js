@@ -12,6 +12,7 @@ var Types = {
   IDEA_CONTENT_NEGATIVE_LINK: 'IdeaContentNegativeLink',
   IDEA_RELATED_POST_LINK: 'IdeaRelatedPostLink',
   IDEA_THREAD_CONTEXT_BREAK_LINK: 'IdeaThreadContextBreakLink',
+  CONTENT: 'Content',
   POST: 'Post',
   SYNTHESIS_POST: 'SynthesisPost',
   EMAIL: 'Email',
