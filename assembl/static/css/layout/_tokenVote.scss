@@ -26,6 +26,7 @@
       .token-icon { /* can be a or div */
         display: inline-block;
         vertical-align: baseline;
+        border: 1px transparent;
       }
 
       .not-enough-available-tokens {

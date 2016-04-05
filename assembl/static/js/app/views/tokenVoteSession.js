@@ -300,7 +300,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
 
       var tokenBagData = that.myVotesCollection.getTokenBagDataForCategory(that.category);
       var remaining_tokens = tokenBagData["remaining_tokens"];
-      var userCanClickThisToken = (remaining_tokens + that.currentValue - number_of_tokens_represented_by_this_icon > 0);
+      var userCanClickThisToken = (remaining_tokens + that.currentValue - number_of_tokens_represented_by_this_icon >= 0);
       var link = null;
       if ( userCanClickThisToken ){
         link = $('<a class="btn token-icon"></a>');
@@ -345,7 +345,8 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
           }
           that.currentValue = number_of_tokens_represented_by_this_icon;
           el[0].classList.add("selected");
-          //that.render();
+          container.removeClass("hover");
+          that.render(); // show immediately the icon it its correct state, without having to wait for collection update
         });
         
         link.hover(function handlerIn(){
