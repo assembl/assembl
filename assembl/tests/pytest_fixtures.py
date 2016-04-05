@@ -638,21 +638,6 @@ def criterion_3(request, discussion, subidea_1, test_session):
 
 
 @pytest.fixture(scope="function")
-def lickert_range(request, test_session):
-    from assembl.models import LickertRange
-    lr = LickertRange()
-    test_session.add(lr)
-    test_session.flush()
-
-    def fin():
-        print "finalizer lickert_range"
-        test_session.delete(lr)
-        test_session.flush()
-    request.addfinalizer(fin)
-    return lr
-
-
-@pytest.fixture(scope="function")
 def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
     from assembl.models import Idea, IdeaLink
     i = Idea(short_title="idea 1.1.1", discussion=discussion)

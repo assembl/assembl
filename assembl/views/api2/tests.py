@@ -14,7 +14,6 @@ from ...models import (
     Post,
     Widget,
     IdeaContentWidgetLink,
-    LickertRange,
     GeneratedIdeaWidgetLink,
     BaseIdeaWidgetLink,
     AbstractVoteSpecification
@@ -504,7 +503,7 @@ def test_inspiration_widget(
 
 def test_voting_widget(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
-        criterion_3, admin_user, participant1_user, lickert_range,
+        criterion_3, admin_user, participant1_user,
         test_session, request):
     # Post the initial configuration
     db = discussion.db
@@ -606,7 +605,6 @@ def test_voting_widget(
         else:
             assert False, "vote spec %s in voting_urls "\
                 "but not in vote_specifications" % (vote_spec_id)
-        # TODO: Put lickert_range id in voter config. Or create one?
         vote_type = spec['vote_class']
         if vote_type == 'LickertIdeaVote':
             vote_range = spec['maximum'] - spec['minimum']
@@ -682,7 +680,7 @@ def test_voting_widget(
 
 def DISABLEDtest_voting_widget_criteria(
         discussion, test_app, subidea_1_1, criterion_1, criterion_2,
-        criterion_3, admin_user, participant1_user, lickert_range,
+        criterion_3, admin_user, participant1_user,
         test_session):
     # Post the initial configuration
     db = discussion.db

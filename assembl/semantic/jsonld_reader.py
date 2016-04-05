@@ -33,7 +33,7 @@ class_equivalents = {
     "Issue": "Idea",
     "IssueAppliesTo": "IdeaLink",
     "IssueQuestions": "IdeaLink",
-    "LickertRange": "LickertRange",
+    "LickertRange": "LickertVoteSpecification",
     "LickertVote": "LickertVote",
     "Map": "ExplicitSubGraphView",
     "MutualRelevanceStatement": "IdeaLink",

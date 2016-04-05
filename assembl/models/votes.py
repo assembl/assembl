@@ -653,28 +653,6 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         P_VOTE, P_ADMIN_DISC, P_SYSADMIN, P_SYSADMIN, P_VOTE, P_VOTE, P_READ)
 
 
-class LickertRange(Base):
-    __tablename__ = "lickert_range"
-    rdf_class = VOTE.LickertRange
-
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
-
-    minimum = Column(Integer,
-                     info={'rdf': QuadMapPatternS(None, VOTE.min)})
-
-    maximum = Column(Integer,
-                     info={'rdf': QuadMapPatternS(None, VOTE.max)})
-
-    @classmethod
-    def get_range(cls, max=10, min=1):
-        range = cls.default_db.query(cls).filter_by(minimum=min, maximum=max).first()
-        if not range:
-            range = cls(minimum=min, maximum=max)
-            cls.default_db.add(range)
-        return range
-
-
 class LickertIdeaVote(AbstractIdeaVote):
     __tablename__ = "lickert_idea_vote"
     __table_args__ = ()
@@ -687,13 +665,6 @@ class LickertIdeaVote(AbstractIdeaVote):
         ondelete='CASCADE',
         onupdate='CASCADE'
     ), primary_key=True)
-
-    range_id = Column(
-        Integer,
-        ForeignKey(LickertRange.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False,
-        info={'rdf': QuadMapPatternS(None, VOTE.lickert_in_range)}
-    )
 
     vote_value = Column(Float, nullable=False)
     # info={'rdf': QuadMapPatternS(None, VOTE.lickert_value)}) private!

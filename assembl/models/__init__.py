@@ -164,7 +164,6 @@ from .votes import (
     BinaryIdeaVote,
     BinaryVoteSpecification,
     LickertIdeaVote,
-    LickertRange,
     LickertVoteSpecification,
     MultipleChoiceIdeaVote,
     MultipleChoiceVoteSpecification,
