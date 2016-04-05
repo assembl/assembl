@@ -99,22 +99,21 @@ var DocumentView = Marionette.ItemView.extend({
 });
 
 
-var FileView = Marionette.ItemView.extend({
-  constructor: function FileView() {
-    Marionette.ItemView.apply(this, arguments);
+var FileView = DocumentView.extend({
+  constructor: function FileView(){
+    DocumentView.apply(this, arguments);
   },
-  
-  template: "#tmpl-fileUploadEmbed",
 
+  template: "#tmpl-fileUploadEmbed",
   className: "embeddedFile",
 
   serializeData: function(){
     return {
       name: this.model.get('name')
     }
-  }
-
+  }   
 });
+
 
 module.exports = {
   DocumentView: DocumentView,
