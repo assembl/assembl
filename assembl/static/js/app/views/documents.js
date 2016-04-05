@@ -4,8 +4,7 @@ var Marionette = require('../shims/marionette.js'),
     _ = require('underscore'),
     $ = require('jquery'),
     Assembl = require('../app.js'),
-    Ctx = require('../common/context.js'),
-    Document = require('../models/documents.js');
+    Ctx = require('../common/context.js');
 
 var DocumentView = Marionette.ItemView.extend({
   constructor: function DocumentView() {

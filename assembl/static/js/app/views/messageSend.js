@@ -540,7 +540,7 @@ var messageSendView = Marionette.LayoutView.extend({
         console.warn("unknown link type: ", link.type);
         return;
       }
-      var document = new Documents.Model({
+      var document = new Documents.DocumentModel({
                                   uri: link.href}),
           attachment = new Attachments.Model({
             document: document,
@@ -572,15 +572,14 @@ var messageSendView = Marionette.LayoutView.extend({
         that = this;
     console.log("A file has been uploaded");
 
-    _.each(fs, function(f, i){
-      var document = new Documents.Model({
-        name: f.name,
-        mime_type: f.type,
-        discussion_id: Ctx.getDiscussionId()
-      });
-      document.set('raw_data', f);
-      document.save();
+    var f = fs[0];
+    var d = new Documents.FileModel({
+      name: f.name,
+      mime_type: f.type
     });
+
+    d.set('file', f);
+    d.save({});
   }
 
 });
