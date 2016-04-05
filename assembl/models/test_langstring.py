@@ -189,7 +189,7 @@ def test_user_language_preference_en_to_fr_explicit_and_fr_explicit(
         user=admin_user,
         locale=fr_locale,
         preferred_order=0,
-        source_of_evidence=LanguagePreferenceOrder.Explicit)
+        source_of_evidence=LanguagePreferenceOrder.Explicit.value)
 
     test_session.add(ulp)
     test_session.flush()
