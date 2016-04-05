@@ -20,6 +20,8 @@ var DocumentView = Marionette.ItemView.extend({
     if (!this.model) {
       throw new Error('file needs a model');
     }
+    this.uri = this.model.get('external_url') ?
+      this.model.get('external_url'): this.model.get('uri');
   },
 
   ui: {
@@ -36,13 +38,13 @@ var DocumentView = Marionette.ItemView.extend({
 
   serializeData: function() {
     return {
-      url: this.model.get('uri')
+      url: this.uri
     }
   },
 
   doOembed: function() {
-    //console.log (this.model.get('uri'));
-    this.$el.oembed(this.model.get('uri'), {
+    //console.log (this.model.get('external_url'));
+    this.$el.oembed(this.uri, {
       //initiallyVisible: false,
       embedMethod: "fill",
 
@@ -96,4 +98,25 @@ var DocumentView = Marionette.ItemView.extend({
   }
 });
 
-module.exports = DocumentView;
+
+var FileView = Marionette.ItemView.extend({
+  constructor: function FileView() {
+    Marionette.ItemView.apply(this, arguments);
+  },
+  
+  template: "#tmpl-fileUploadEmbed",
+
+  className: "embeddedFile",
+
+  serializeData: function(){
+    return {
+      name: this.model.get('name')
+    }
+  }
+
+});
+
+module.exports = {
+  DocumentView: DocumentView,
+  FileView: FileView
+};
