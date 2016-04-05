@@ -433,7 +433,11 @@
         "site_name": true,
         "fileAttribute": false,
         "raw_data": false,
-        "discussion_id": false
+        "external_url": false
+    },
+    "File": {
+        "@extends": "Document",
+        "data": false
     },
     "Attachment": {
         "idAttachedDocument": "document",
