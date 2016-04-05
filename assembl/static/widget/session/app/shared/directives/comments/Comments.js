@@ -134,7 +134,7 @@ SessionApp.directive('comments', [
                 user_id = $scope.widget.user['@id'];
 
             var data = {
-              "@type": 'Post',
+              "@type": 'WidgetPost',
               "subject": '',
               "body": {
                 "@type": "LangString", "entries": [{
