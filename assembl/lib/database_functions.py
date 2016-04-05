@@ -26,6 +26,27 @@ CREATE PROCEDURE idea_content_links_above_post (IN root_id INTEGER)
 }""",
 }
 
+postgres_functions = {
+    "": """
+CREATE OR REPLACE FUNCTION idea_content_links_above_post(IN root_id integer)
+        RETURNS varchar AS $$
+DECLARE
+    posts varchar;
+    posts_a integer[];
+    icl_a integer[];
+    agg varchar;
+BEGIN
+    SELECT post.ancestry || cast (post.id as VARCHAR) FROM post
+        WHERE post.id = root_id INTO STRICT posts;
+    posts_a := string_to_array(posts, ',');
+    SELECT idea_content_link.id FROM unnest(posts_a) post_id
+        JOIN idea_content_link ON content_id = post_id INTO icl_a;
+    agg := array_to_string(icl_a, ',');
+    RETURN agg;
+END;
+$$ LANGUAGE plpgsql;"""
+}
+
 
 class FunctionManager(object):
 
@@ -49,18 +70,32 @@ class FunctionManager(object):
 
 class VirtuosoFunctionManager(FunctionManager):
     def testFunctionExists(self, fname):
-        ((count,),) = list(self.session.execute(
+        (count,) = self.session.execute(
             "SELECT count(p_name) FROM db.dba.sys_procedures WHERE p_name='%s'" % (
-                '.'.join((get("db_schema"), get("db_user"), fname)),)))
+                '.'.join((get("db_schema"), get("db_user"), fname)),)).first()
         return bool(count)
 
     def functionList(self):
         return virtuoso_functions
 
 
+class PostgresFunctionManager(FunctionManager):
+    def testFunctionExists(self, fname):
+        (exists,) = self.session.execute(
+            "select exists(select * from pg_proc where proname = '%s');" % (
+                fname,)).first()
+        return exists
+
+    def functionList(self):
+        return postgres_functions
+
+
 def ensure_functions(session):
     manager = None
-    if get('sqlalchemy.url').startswith('virtuoso:'):
+    url = get('sqlalchemy.url')
+    if url.startswith('virtuoso:'):
         manager = VirtuosoFunctionManager(session)
+    elif url.startswith('postgresql'):
+        manager = PostgresFunctionManager(session)
     if manager:
         manager.ensureFunctionsExist()
