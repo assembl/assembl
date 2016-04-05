@@ -8,7 +8,7 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js'),
     Attachments = require('../models/attachments.js'),
     Documents = require('../models/documents.js'),
-    DocumentView = require('./documents.js');
+    DocumentViews = require('./documents.js');
 
 /** 
  * Represents the link between an object (ex: Message, Idea) and a remote (url)
@@ -50,7 +50,16 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
     //console.log("AbstractAttachmentView: onRender with this.model:",this.model);
     //console.log(this.model.get('attachmentPurpose'), Attachments.attachmentPurposeTypes.DO_NOT_USE.id);
     if(this.model.get('attachmentPurpose') !== Attachments.attachmentPurposeTypes.DO_NOT_USE.id) {
-      var documentView = new DocumentView({model: this.model.getDocument()});
+      var documentModel = this.model.getDocument(),
+          documentView;
+      
+      if (documentModel.isFileType()) {
+        documentView = new DocumentViews.FileView({model: documentModel});
+      }
+      else {
+        documentView = new DocumentViews.DocumentView({model: documentModel});
+        
+      }
       this.documentEmbeedRegion.show(documentView);
     }
   },
@@ -93,30 +102,49 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   }),
   
   
-  
+  extras: [],
   
   onRender: function() {
     AbstractAttachmentView.prototype.onRender.call(this);
-    this.renderAttachmentPurposeDropdown();
+    this.populateExtas();
+    this.renderAttachmentPurposeDropdown(
+      this._renderAttachmentPurpose(this.extras)
+    );
   },
 
+  populateExtas: function(){
+    /*
+      Override to populate extras array with HTML array which will be appended to the end of the
+      attachment purpose dropdown
+     */
+  },
+
+  _renderAttachmentPurpose: function(extras){
+    var purposesHtml = [];
+    _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
+      purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
+    });
+
+    if (extras) {
+      _.each(extras, function(e){
+        purposesHtml.push(e);
+      });
+    }
+
+    return purposesHtml;
+  },
   /**
    * Renders the messagelist view style dropdown button
    */
-  renderAttachmentPurposeDropdown: function() {
+  renderAttachmentPurposeDropdown: function(purposesList) {
     var that = this,
-        purposesHtml = [];
+        html = "";
 
-    _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
-      purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
-        });
-
-    var html = "";
     html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">';
     html += Attachments.attachmentPurposeTypes[this.model.get('attachmentPurpose')].label;
     html += '<span class="icon-arrowdown"></span></a>';
     html += '<ul class="dropdown-menu">';
-    html += purposesHtml.join('');
+    html += purposesList ? purposesList.join(''): "";
     html += '</ul>';
     this.ui.attachmentPurposeDropdown.html(html);
 
