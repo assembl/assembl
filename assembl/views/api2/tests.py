@@ -307,7 +307,7 @@ def test_creativity_session_widget(
     post_endpoint = post_endpoint[widget_rep["@id"]]
     # Create a new post attached to the sub-idea
     new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
-        "@type": "Post", "message_id": 0,
+        "@type": "AssemblPost",
         "body": {"@type": "LangString", "entries": [{
             "@type": "LangStringEntry", "value": "body",
             "@language": "en"
@@ -382,7 +382,7 @@ def test_creativity_session_widget(
     assert not subidea_1.hidden
     # Create a second post.
     new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
-        "@type": "Post", "message_id": 0,
+        "@type": "AssemblPost",
         "body": {"@type": "LangString", "entries": [{
             "@type": "LangStringEntry", "value": "body",
             "@language": "en"
@@ -486,7 +486,7 @@ def test_inspiration_widget(
     # TODO. ajouter la collection descendant_ideas. Comment déduire cet URL du widget????
     r = test_app.post('/data/Discussion/%d/widgets/%d/base_idea_descendants/%d/linkedposts' % (
         discussion.id, widget_id, subidea_1_1.id), {
-            "type": "WidgetPost", "message_id": 0,
+            "type": "WidgetPost",
             "body": {"@type": "LangString", "entries": [{
                 "@type": "LangStringEntry", "value": "body",
                 "@language": "en"
