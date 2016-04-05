@@ -101,6 +101,9 @@ def delete_boolean_constraint(db, table, column):
     # Dropping the column does not delete the constraint. WHY????
     # Also, CHECK constraints are generally unnamed.
     from assembl.lib import config
+    from assembl.sqla import using_virtuoso
+    if not using_virtuoso():
+        return
     username = config.get('db_user')
     schema = config.get('db_schema')
     constraints = list(db.execute("select c_text, c_mode from db.dba.sys_constraints where c_table = '%s.%s.%s'" % (

@@ -293,10 +293,14 @@ def test_app(request, admin_user, test_app_no_perm):
 
 
 @pytest.fixture(scope="function")
-def test_server(request, test_app):
+def test_server(request, test_app, empty_db):
     server = WSGIServer(application=test_app.app)
     server.start()
-    request.addfinalizer(server.stop)
+
+    def fin():
+        print "finalizer test_server"
+        server.stop()
+    request.addfinalizer(fin)
     return server
 
 
