@@ -299,7 +299,7 @@ class BaseOps(object):
 
     def get_id_as_str(self):
         id = getattr(self, 'id', None)
-        if not id:
+        if id is None:
             if 'id' not in self.__class__.__dict__:
                 raise NotImplementedError("get_id_as_str on " +
                     self.__class__.__name__)
@@ -341,7 +341,7 @@ class BaseOps(object):
 
     @classmethod
     def uri_generic(cls, id, base_uri='local:'):
-        if not id:
+        if id is None:
             return None
         return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
 
