@@ -470,7 +470,20 @@ var TokenIdeaVoteCollection = Base.Collection.extend({
   constructor: function TokenIdeaVoteCollection() {
     Base.Collection.apply(this, arguments);
   },
-  model: TokenIdeaVoteModel
+  model: TokenIdeaVoteModel,
+  getTokenBagDataForCategory: function(tokenCategory){
+    // TODO: cache results until collection content changes
+    var myVotesCollection = this;
+    var myVotesInThisCategory = myVotesCollection.where({token_category: tokenCategory.get("@id")});
+    var myVotesValues = _.map(myVotesInThisCategory, function(vote){return vote.get("value");});
+    var myVotesCount = _.reduce(myVotesValues, function(memo, num){ return memo + num; }, 0);
+    var total = tokenCategory.get("total_number");
+    return {
+      "total_number": total,
+      "my_votes_count": myVotesCount,
+      "remaining_tokens": total - myVotesCount
+    };
+  }
 });
 
 var CreativitySessionWidgetModel = WidgetModel.extend({

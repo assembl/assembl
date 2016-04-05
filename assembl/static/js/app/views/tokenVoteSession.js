@@ -119,19 +119,9 @@ var TokenBagsView = Marionette.ItemView.extend({
     container.empty();
     //var myVotes = "my_votes" in this.voteSpecification ? this.voteSpecification.my_votes : null;
     this.tokenCategories.each(function(category){
-      console.log("that.myVotesCollection: ", that.myVotesCollection);
-      //var myVotesInThisCategory = _.where(myVotes, {token_category: category.get("@id")});
-      var myVotesInThisCategory = that.myVotesCollection.where({token_category: category.get("@id")});
-      console.log("myVotesInThisCategory: ", myVotesInThisCategory);
-      //var myVotesValues = _.pluck(myVotesInThisCategory, "value");
-      var myVotesValues = _.map(myVotesInThisCategory, function(vote){return vote.get("value");});
-      var myVotesCount = _.reduce(myVotesValues, function(memo, num){ return memo + num; }, 0);
-      var total = category.get("total_number");
-      console.log("myVotesValues: ", myVotesValues);
-      console.log("myVotesCount: ", myVotesCount);
-      console.log("total: ", total);
+      var data = that.myVotesCollection.getTokenBagDataForCategory(category);
       var el = $("<div></div>");
-      el.text("You have used " + myVotesCount + " of your " + total + " \"" + category.get("typename") + "\" tokens.");
+      el.text("You have used " + data["my_votes_count"] + " of your " + data["total_number"] + " \"" + category.get("typename") + "\" tokens.");
       el.appendTo(container);
     });
   }
@@ -308,67 +298,81 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
         el[0].classList.add("not-selected");
       }
 
-      var link = $('<a class="btn token-icon"></a>');
-      el.appendTo(link);
-      link.attr("title", "set "+number_of_tokens_represented_by_this_icon+" tokens");
-      link.click(function(){
-        console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
-        
-        /*
-        that.postData["value"] = number_of_tokens_represented_by_this_icon;
-        $.ajax({
-          type: "POST",
-          contentType: 'application/json; charset=UTF-8',
-          url: that.voteURL,
-          data: JSON.stringify(that.postData),
-          success: function(data){
-            console.log("success! data: ", data);
-            that.currentValue = number_of_tokens_represented_by_this_icon;
-            that.render();
-          },
-          error: function(jqXHR, textStatus, errorThrown){
-            console.log("error! textStatus: ", textStatus, "; errorThrown: ", errorThrown);
-            // TODO: show error in the UI
-          }
-        });
-        */
+      var tokenBagData = that.myVotesCollection.getTokenBagDataForCategory(that.category);
+      var remaining_tokens = tokenBagData["remaining_tokens"];
+      var userCanClickThisToken = (remaining_tokens + that.currentValue - number_of_tokens_represented_by_this_icon > 0);
+      var link = null;
+      if ( userCanClickThisToken ){
+        link = $('<a class="btn token-icon"></a>');
+        el.appendTo(link);
 
-        var properties = _.clone(that.postData);
-        delete properties["value"];
-        properties["idea"] = that.idea.get("@id");
-        var previousVote = that.myVotesCollection.findWhere(properties);
-        console.log("previousVote found: ", previousVote);
-        if ( previousVote ){
-          previousVote.set({"value": number_of_tokens_represented_by_this_icon});
-          previousVote.save();
-        }
-        else {
-          properties["value"] = number_of_tokens_represented_by_this_icon;
-          that.myVotesCollection.create(properties);
-        }
-        that.currentValue = number_of_tokens_represented_by_this_icon;
-        el[0].classList.add("selected");
-        //that.render();
-      });
-      
-      link.hover(function handlerIn(){
-        container.addClass("hover");
-        el[0].classList.add("hover");
-        link.prevAll().children("svg").each(function(){
-          if ( !(this.classList.contains("zero")) ){
-            this.classList.add("hover");
+        link.attr("title", "set "+number_of_tokens_represented_by_this_icon+" tokens");
+
+        link.click(function(){
+          console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
+          
+          /*
+          that.postData["value"] = number_of_tokens_represented_by_this_icon;
+          $.ajax({
+            type: "POST",
+            contentType: 'application/json; charset=UTF-8',
+            url: that.voteURL,
+            data: JSON.stringify(that.postData),
+            success: function(data){
+              console.log("success! data: ", data);
+              that.currentValue = number_of_tokens_represented_by_this_icon;
+              that.render();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+              console.log("error! textStatus: ", textStatus, "; errorThrown: ", errorThrown);
+              // TODO: show error in the UI
+            }
+          });
+          */
+
+          var properties = _.clone(that.postData);
+          delete properties["value"];
+          properties["idea"] = that.idea.get("@id");
+          var previousVote = that.myVotesCollection.findWhere(properties);
+          console.log("previousVote found: ", previousVote);
+          if ( previousVote ){
+            previousVote.set({"value": number_of_tokens_represented_by_this_icon});
+            previousVote.save();
           }
+          else {
+            properties["value"] = number_of_tokens_represented_by_this_icon;
+            that.myVotesCollection.create(properties);
+          }
+          that.currentValue = number_of_tokens_represented_by_this_icon;
+          el[0].classList.add("selected");
+          //that.render();
         });
-        link.nextAll().children("svg").each(function(){
-          this.classList.remove("hover");
+        
+        link.hover(function handlerIn(){
+          container.addClass("hover");
+          el[0].classList.add("hover");
+          link.prevAll().children("svg").each(function(){
+            if ( !(this.classList.contains("zero")) ){
+              this.classList.add("hover");
+            }
+          });
+          link.nextAll().children("svg").each(function(){
+            this.classList.remove("hover");
+          });
+        }, function handlerOut(){
+          container.removeClass("hover");
+          el[0].classList.remove("hover");
+          link.siblings().children("svg").each(function(){
+            this.classList.remove("hover");
+          });
         });
-      }, function handlerOut(){
-        container.removeClass("hover");
-        el[0].classList.remove("hover");
-        link.siblings().children("svg").each(function(){
-          this.classList.remove("hover");
-        });
-      });
+      } // if ( userCanClickThisToken )
+      else {
+        link = $('<div class="token-icon"></div>');
+        el.appendTo(link);
+        el[0].classList.add("not-enough-available-tokens");
+        link.attr("title", "You don't have enough tokens remaining.");
+      }
       
       link.appendTo(container);
     };
