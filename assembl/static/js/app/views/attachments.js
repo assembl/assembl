@@ -6,6 +6,7 @@ var Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
+    Types = require('../utils/types.js'),
     Attachments = require('../models/attachments.js'),
     Documents = require('../models/documents.js'),
     DocumentViews = require('./documents.js');
@@ -160,7 +161,57 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
 
 });
 
+
+var AttachmentFileEditableView = AttachmentEditableView.extend({
+  constructor: function AttachmentFileEditableView(){
+    AttachmentEditableView.apply(this, arguments);
+  },
+
+  className: "fileAttachmentEditable",
+
+  ui: _.extend({}, AttachmentEditableView.prototype.ui, {
+    remove: ".js_removeAttachment"
+  }),
+
+  events: _.extend({}, AttachmentEditableView.prototype.events, {
+    'click .js_removeAttachment': 'onRemoveAttachment'
+  }),
+
+  populateExtas: function(){
+    var a = "<li><a class='js_removeAttachment' data-toggle='tooltip' title='' data-placement='left' data-id='CANCEL_UPLOAD' data-original-title='CANCEL_UPLOAD'>" + i18n.gettext("Remove") + "</a></li>"
+    this.extras.push(a);
+  },
+
+  onRemoveAttachment: function(ev){
+    console.log('Attachment was deleted!');
+  },
+
+});
+
+var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
+  constructor: function AttachmentEditableCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
+  childView: function(item){
+
+    var d = item.model.getDocument();
+    switch (d.get('@type') ) {
+      case Types.DOCUMENT:
+        return AttachmentEditableView
+        break;
+      case Types.FILE:
+        return AttachmentFileEditableView;
+        break;
+      default:
+        return new Error("Cannot create a CollectionView with a document of @type: " + d.get('@type'));
+        break;
+    }
+  }
+});
+
 module.exports = module.exports = {
     AttachmentEditableView: AttachmentEditableView,
-    AttachmentView: AttachmentView
+    AttachmentView: AttachmentView,
+    AttachmentEditableCollectionView: AttachmentEditableCollectionView
   };

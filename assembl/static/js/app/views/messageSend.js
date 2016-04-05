@@ -107,20 +107,20 @@ var messageSendView = Marionette.LayoutView.extend({
     }
 
     this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
-    // this.documentsView = new AttachmentViews.AttachmentEditableCollectionView({
-    //   collection: this.attachmentsCollection
-    // });
-    var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
-      constructor: function AttachmentEditableCollectionView() {
-        Marionette.CollectionView.apply(this, arguments);
-      },
-
-      childView: AttachmentViews.AttachmentEditableView
-    });
-
-    this.documentsView = new AttachmentEditableCollectionView({
+    this.documentsView = new AttachmentViews.AttachmentEditableCollectionView({
       collection: this.attachmentsCollection
     });
+    // var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
+    //   constructor: function AttachmentEditableCollectionView() {
+    //     Marionette.CollectionView.apply(this, arguments);
+    //   },
+
+    //   childView: AttachmentViews.AttachmentEditableView
+    // });
+
+    // this.documentsView = new AttachmentEditableCollectionView({
+    //   collection: this.attachmentsCollection
+    // });
   },
 
   ui: {
@@ -580,7 +580,7 @@ var messageSendView = Marionette.LayoutView.extend({
       });
       d.set('file', f);
 
-      attachment = new Attachments.Model({
+      var attachment = new Attachments.Model({
         document: d,
         objectAttachedToModel: that.model,
         idCreator: Ctx.getCurrentUser().id
