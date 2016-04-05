@@ -18,7 +18,6 @@ def get_file(request):
     db = Document.default_db
     document = ctx._instance
     f = db.query(File).filter_by(id=document.id).first()
-    import pdb; pdb.set_trace()
     return Response(body_file=f.data, content_type=f.mime_type)
 
 # Maybe have a permission for uploading content??
