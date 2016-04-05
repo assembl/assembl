@@ -1711,6 +1711,9 @@ class UserLanguagePreference(Base):
             P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
             P_READ, P_READ, P_READ)
 
+    def is_owner(self, user_id):
+        return user_id == self.user_id
+
     def __cmp__(self, other):
         if not isinstance(other, self.__class__):
             return -1
