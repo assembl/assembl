@@ -17,7 +17,6 @@ var Backbone = require('backbone'),
     Agents = require('../models/agents.js'),
     Documents = require('../models/documents.js'),
     Attachments = require('../models/attachments.js'),
-    DocumentView = require('./documents.js'),
     AttachmentViews = require('./attachments.js'),
     Promise = require('bluebird'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
@@ -108,7 +107,9 @@ var messageSendView = Marionette.LayoutView.extend({
     }
 
     this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
-
+    // this.documentsView = new AttachmentViews.AttachmentEditableCollectionView({
+    //   collection: this.attachmentsCollection
+    // });
     var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
       constructor: function AttachmentEditableCollectionView() {
         Marionette.CollectionView.apply(this, arguments);
@@ -572,14 +573,21 @@ var messageSendView = Marionette.LayoutView.extend({
         that = this;
     console.log("A file has been uploaded");
 
-    var f = fs[0];
-    var d = new Documents.FileModel({
-      name: f.name,
-      mime_type: f.type
-    });
+    _.each(fs, function(f){
+      var d = new Documents.FileModel({
+        name: f.name,
+        mime_type: f.type
+      });
+      d.set('file', f);
 
-    d.set('file', f);
-    d.save({});
+      attachment = new Attachments.Model({
+        document: d,
+        objectAttachedToModel: that.model,
+        idCreator: Ctx.getCurrentUser().id
+      });
+
+      that.attachmentsCollection.add(attachment);
+    });
   }
 
 });
