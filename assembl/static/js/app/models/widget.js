@@ -412,7 +412,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
     var activityState = that.get("activity_state");
     //var configured = that.get("configured");
 
-    switch ( activity_state ){
+    switch ( activityState ){
       case "active":
         var modalView = new TokenVoteSessionView({
           widgetModel: that
