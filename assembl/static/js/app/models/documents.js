@@ -48,7 +48,7 @@ var FileModel = DocumentModel.extend({
   },
 
   defaults: _.extend({}, DocumentModel.prototype.defaults, {
-    '@type': Types.File,
+    '@type': Types.FILE,
     fileAttribute: 'file' //A Backbone-model-file-upload attribute
   }),
 

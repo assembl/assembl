@@ -193,9 +193,9 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
     Marionette.CollectionView.apply(this, arguments);
   },
 
-  childView: function(item){
+  getChildView: function(item){
 
-    var d = item.model.getDocument();
+    var d = item.getDocument();
     switch (d.get('@type') ) {
       case Types.DOCUMENT:
         return AttachmentEditableView
