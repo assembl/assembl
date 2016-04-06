@@ -73,6 +73,8 @@
     "adminConfigureInstanceSetAppearanceCriterion": "Critère",
     "adminConfigureInstanceSetAppearanceDeleteCriterion": "Supprimer ce critère",
     "adminConfigureInstanceSetAppearanceAddCriterion": "Ajouter un critère",
+    "adminConfigureInstanceSetAppearanceCategoriesAssociatedToCriterion": "Catégories de jetons :",
+    "adminConfigureInstanceSetAppearanceTokenCategory": "Catégorie",
     "adminConfigureInstanceSetAppearanceAddItem": "Ajouter un item",
     "adminConfigureInstanceSetAppearanceSave": "Sauvegarder la configuration du widget"
 }

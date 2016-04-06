@@ -25,6 +25,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     $scope.optional_criterion_fields = VoteWidgetService.optional_criterion_fields;
     $scope.item_types = VoteWidgetService.item_types;
     $scope.mandatory_typed_criterion_fields = VoteWidgetService.mandatory_typed_criterion_fields;
+    $scope.mandatory_category_fields = VoteWidgetService.mandatory_category_fields;
 
     //$scope.optional_typed_criterion_fields = VoteWidgetService.optional_typed_criterion_fields;
 
@@ -151,6 +152,21 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     }
   };
 
+  $scope.addTokenCategoryInCriterion = function(item_index, criterion_index) {
+    console.log("addTokenCategoryInCriterion()");
+    /*
+    var data = {
+      token_vote_specification: $scope.widget.settings.items[item_index].vote_specifications[criterion_index]["@id"]
+    };
+    $scope.widget.settings.items[item_index].vote_specifications[criterion_index].token_categories.push(data);
+    */
+    var data = {
+      token_vote_specification: $scope.widget.vote_specifications[criterion_index]["@id"]
+    };
+    VoteWidgetService.addDefaultFields(data, $scope.mandatory_category_fields);
+    $scope.widget.vote_specifications[criterion_index].token_categories.push(data);
+  };
+
     $scope.addItemField = function(item_index, field_name) {
     $scope.widget.settings.items[item_index][field_name] = VoteWidgetService.getFieldDefaultValue($scope.optional_item_fields, field_name, true);
   };
@@ -185,6 +201,25 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
 
     $scope.deleteSettingsField = function(field_name) {
     delete $scope.widget.settings[field_name];
+  };
+
+  $scope.deleteTokenCategory = function(item_index, criterion_index, category_index){
+    var id_field = "@id";
+    if ( id_field in $scope.widget.vote_specifications[criterion_index].token_categories[category_index] ){
+      // DELETE the category with an API call
+      $http({
+        method: 'DELETE',
+        url: AssemblToolsService.resourceToUrl($scope.widget.vote_specifications[criterion_index].token_categories[category_index][id_field]),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }).success(function(data, status, headers) {
+        console.log("DELETE success");
+      }).error(function(status, headers) {
+        console.log("DELETE error");
+      });
+    }
+
+    // delete $scope.widget.settings.items[item_index].vote_specifications[criterion_index].token_categories[category_index];
+    $scope.widget.vote_specifications[criterion_index].token_categories.splice(category_index, 1);
   };
 
     $scope.updateOnceWidgetIsReceived = function() {
@@ -318,30 +353,22 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     var getCriterionPropertyType = function(criterion_type, property_name) {
       var el = null;
 
-      el = _.find(VoteWidgetService.mandatory_criterion_fields, function(el) {
-        return "key" in el && el.key == property_name;
-      });
+      el = _.findWhere(VoteWidgetService.mandatory_criterion_fields, { "key": property_name });
       if (el && "type" in el)
         return el.type;
 
       if (criterion_type in VoteWidgetService.mandatory_typed_criterion_fields) {
-        el = _.find(VoteWidgetService.mandatory_typed_criterion_fields[criterion_type], function(el) {
-          return "key" in el && el.key == property_name;
-        });
+        el = _.findWhere(VoteWidgetService.mandatory_typed_criterion_fields[criterion_type], { "key": property_name });
         if (el && "type" in el)
           return el.type;
       }
 
-      el = _.find(VoteWidgetService.optional_criterion_fields, function(el) {
-        return "key" in el && el.key == property_name;
-      });
+      el = _.findWhere(VoteWidgetService.optional_criterion_fields, { "key": property_name });
       if (el && "type" in el)
         return el.type;
 
       if (criterion_type in VoteWidgetService.optional_typed_criterion_fields) {
-        el = _.find(VoteWidgetService.optional_typed_criterion_fields[criterion_type], function(el) {
-          return "key" in el && el.key == property_name;
-        });
+        el = _.findWhere(VoteWidgetService.optional_typed_criterion_fields[criterion_type], { "key": property_name });
         if (el && "type" in el)
           return el.type;
       }
@@ -409,6 +436,71 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
                 saveWidgetSettingsFieldAfterPostVoteSpec();
               });
             }
+
+
+            var getTokenCategoryFieldType = function(container_type, field_key){
+              console.log("getTokenCategoryFieldType ", container_type, field_key);
+              var field = _.findWhere(VoteWidgetService.mandatory_category_fields, { "key": field_key });
+              if (field){
+                if ( "type" in field ){
+                  console.log("field['type']: ", field["type"]);
+                  return field["type"];
+                }
+              }
+              return null;
+            };
+
+            // update (create via POST or update via PUT) the token categories
+            if ( "token_categories" in $scope.widget.vote_specifications[el_index] ){
+              $scope.widget.vote_specifications[el_index].token_categories.forEach(function(category, category_index, category_ar) {
+                if (id_field in category) { // if it already exist in the backend, we update it using PUT
+                  post_data = _.clone(category);
+                  post_data = $scope.ensurePropertiesTypes(post_data, getTokenCategoryFieldType);
+                  post_data["token_vote_specification"] = el[id_field];
+
+                  endpoint = AssemblToolsService.resourceToUrl(category[id_field]);
+
+                  // Instead of using:
+                  // VoteWidgetService.putJson(endpoint, post_data, result_holder);
+                  // we delay each API call a bit more than the previous one, so that the server does not get overwhelmed.
+                  // (by the use of the same question_id parameter for 2 criteria)
+                  var putJson = _.bind(VoteWidgetService.putJson, VoteWidgetService);
+                  _.delay(putJson, (ajaxRequestsSent++) * 500, endpoint, post_data, result_holder, "show_only_error");
+                } else { // if it does not exist in the backend yet, we create it using POST
+                  post_data = _.clone(category);
+                  post_data = $scope.ensurePropertiesTypes(post_data, getTokenCategoryFieldType);
+                  delete post_data["token_vote_specification"];
+
+                  endpoint = AssemblToolsService.resourceToUrl(el[id_field]) + "/token_categories";
+                  var postNewCategoryPromiseGenerator = function(endpoint, post_data, result_holder, display_filter){
+                    return function(){
+                        return VoteWidgetService.postJson(endpoint, post_data, result_holder, display_filter);
+                    }
+                  };
+                  var promise = AssemblToolsService.afterDelayPromiseGenerator((ajaxRequestsSent++) * 500, postNewCategoryPromiseGenerator(endpoint, post_data, result_holder, "show_only_error"));
+
+                  promise.then(function(res) { // /!\ this is not function(data, status, headers), but the single parameter is an object which contains a data field
+                    var data = "data" in res ? res.data : null;
+                    // set @id in current json
+                    console.log("saveCategory success:", res);
+                    if ("@id" in data) {
+                      console.log("there is a '@id' field in data: ", data["@id"]);
+                      $scope.widget.vote_specifications[el_index].token_categories[category_index]["@id"] = data["@id"];
+                    }
+                    else {
+                      alert("error: There is no '@id' field in received data of the newly created token category");
+                    }
+
+                    console.log("settings after:", $scope.widget.settings);
+                    saveWidgetSettingsFieldAfterPostVoteSpec();
+                  });
+                }
+              });
+            }
+
+
+
+
           });
         }
       });

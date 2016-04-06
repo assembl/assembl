@@ -443,6 +443,41 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
     ]
   };
 
+  this.mandatory_category_fields = [
+    {
+      "key": "total_number",
+      "type": "integer",
+      "description": "Total number of tokens the user can allocate among ideas",
+      "label": "Total number of tokens",
+      "default": 10,
+      "storage": "attribute"
+    },
+    {
+      "key": "maximum_per_idea",
+      "type": "integer",
+      "description": "Maximum number of tokens the user can allocate on a single idea (if 0, there is no maximum)",
+      "label": "Maximum per idea",
+      "default": 0,
+      "storage": "attribute"
+    },
+    {
+      "key": "typename",
+      "type": "string",
+      "description": "The semantical name of this category of token. Categories with the same typename can be compared, others can't because they are too different.",
+      "label": "Token typename",
+      "default": "positive",
+      "storage": "attribute"
+    },
+    {
+      "key": "image",
+      "type": "string",
+      "description": "URL (web address) of the SVG image of a token",
+      "label": "token image URL",
+      "default": "https://upload.wikimedia.org/wikipedia/en/4/43/Feed-icon.svg",
+      "storage": "attribute"
+    }
+  ];
+
   this.addDefaultFields = function(obj, default_fields) {
     var sz = default_fields.length;
     for (var i = 0; i < sz; ++i)

@@ -73,6 +73,8 @@
     "adminConfigureInstanceSetAppearanceCriterion": "Criterion",
     "adminConfigureInstanceSetAppearanceDeleteCriterion": "Delete this criterion",
     "adminConfigureInstanceSetAppearanceAddCriterion": "Add a criterion",
+    "adminConfigureInstanceSetAppearanceCategoriesAssociatedToCriterion": "Token categories:",
+    "adminConfigureInstanceSetAppearanceTokenCategory": "Catégorie",
     "adminConfigureInstanceSetAppearanceAddItem": "Add an item",
     "adminConfigureInstanceSetAppearanceSave": "Save widget configuration"
 }

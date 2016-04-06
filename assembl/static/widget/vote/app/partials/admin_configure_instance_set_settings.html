@@ -127,7 +127,7 @@
                                         <input ng-switch-default type="text" ng-model="criterion[field.key]" />
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
                         <!--
                         </fieldset>
                         -->
@@ -154,6 +154,31 @@
                             -->
                             <button ng-click="addCriterionField(item_index, criterion_index, criterion_current_selected_field);">{{'Add' | translate}}</button>
                         </fieldset>
+
+                        <div ng-if="criterion.hasOwnProperty('@type') && criterion['@type'] == 'TokenVoteSpecification'">
+                            <fieldset>
+                                <legend>{{'adminConfigureInstanceSetAppearanceCategoriesAssociatedToCriterion' | translate}}</legend>
+                                <div class="item" ng-repeat="category in widget.vote_specifications[criterion_index].token_categories">
+                                    <div class="item-title" ng-init="category_index = $index">
+                                        <strong>{{'adminConfigureInstanceSetAppearanceTokenCategory' | translate}}</strong>
+                                        <button ng-click="deleteTokenCategory(item_index, criterion_index, category_index);">{{'adminConfigureInstanceSetAppearanceDeleteItem' | translate}}</button>
+                                    </div>
+                                    <div class="item-content">
+                                        <div ng-repeat="field in mandatory_category_fields">
+                                            <div ng-switch on="field.type">
+                                                <span ng-attr-class="{{ field.description && 'with-title' }}" title="{{ field.description }}">{{ field.label || field.key }} ({{ field.type }}):</span>
+                                                <select ng-switch-when="select" ng-model="category[field.key]" ng-options="v.key as v.label for v in field.options" ng-attr-class="{{ field.adminCSSClasses }}"></select>
+                                                <input ng-switch-default type="text" ng-model="category[field.key]" value="{{ field.default }}" ng-attr-class="{{ field.adminCSSClasses }}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button ng-click="addTokenCategoryInCriterion(item_index, criterion_index);">{{'Add a token category' | translate}}</button>
+                            </fieldset>
+
+                            
+                        </div>
                     </div>
                 </div>
 
