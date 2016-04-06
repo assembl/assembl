@@ -29,15 +29,18 @@ var InfobarItem = Marionette.LayoutView.extend({
 
   onButtonClick: function(evt) {
     console.log("InfobarItem::onButtonClick()");
-    this.model.trigger("buttonClick");
 
-    var openTargetInModalOnButtonClick = this.model.get("openTargetInModalOnButtonClick");
+    var context = Widget.Model.prototype.INFO_BAR;
+    var openTargetInModalOnButtonClick = (this.model.getCssClasses(context).indexOf("js_openTargetInModal") != -1);
     console.log("openTargetInModalOnButtonClick: ", openTargetInModalOnButtonClick);
     if ( openTargetInModalOnButtonClick !== false ) {
       var options = {
         footer: false
       };
       return Ctx.openTargetInModal(evt, null, options);
+    }
+    else {
+      this.model.trigger("buttonClick", context);
     }
     return false;
   },

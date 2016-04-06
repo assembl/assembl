@@ -25,15 +25,19 @@ var WidgetButtonView = Marionette.ItemView.extend({
   },
   onButtonClick: function(evt) {
     console.log("WidgetButtonView::onButtonClick()");
-    this.model.trigger("buttonClick");
+    var context = this.options.context;
+    var idea = this.options.idea;
 
-    var openTargetInModalOnButtonClick = this.model.get("openTargetInModalOnButtonClick");
+    var openTargetInModalOnButtonClick = (this.model.getCssClasses(context, idea).indexOf("js_openTargetInModal") != -1);
     console.log("openTargetInModalOnButtonClick: ", openTargetInModalOnButtonClick);
     if ( openTargetInModalOnButtonClick !== false ) {
       var options = {
         footer: false
       };
       return Ctx.openTargetInModal(evt, null, options);
+    }
+    else {
+      this.model.trigger("buttonClick");
     }
     return false;
   },

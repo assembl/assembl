@@ -263,9 +263,9 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_ACCESS_CTX:
         switch (this.get("activity_state")) {
           case "active":
-            return "btn-primary";
+            return "btn-primary js_openTargetInModal";
           case "ended":
-            return "btn-secondary";
+            return "btn-secondary js_openTargetInModal";
         }
     }
     return "";
@@ -384,8 +384,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
   },
 
   defaults: {
-    '@type': 'TokenVotingWidget',
-    'openTargetInModalOnButtonClick': false
+    '@type': 'TokenVotingWidget'
   },
 
   getLinkText: function(context, idea) {
@@ -406,17 +405,54 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
   },
 
   // FIXME: Having view code in a model is probably not a good idea. How could we do better?
-  onButtonClick: function(){
+  onButtonClick: function(context){
     console.log("TokenVotingWidgetModel::onButtonClick()");
 
     var that = this;
+    var activityState = that.get("activity_state");
+    //var configured = that.get("configured");
 
-    var modalView = new TokenVoteSessionView({
-      widgetModel: that
-    });
+    switch ( activity_state ){
+      case "active":
+        var modalView = new TokenVoteSessionView({
+          widgetModel: that
+        });
 
-    Ctx.setCurrentModalView(modalView);
-    Assembl.slider.show(modalView);
+        Ctx.setCurrentModalView(modalView);
+        Assembl.slider.show(modalView);
+      break;
+      case "ended":
+        // TODO: show vote results
+        console.log("show vote results");
+      break;
+    }
+
+    
+  },
+
+  getCssClasses: function(context, idea) {
+    var currentUser = Ctx.getCurrentUser();
+    if ( currentUser.isUnknownUser() ){
+        return "";
+    }
+    switch (context) {
+      case this.INFO_BAR:
+        if (this.get("configured")) {
+          return "";
+        } else {
+          return "js_openTargetInModal";
+        }
+      break;
+      case this.IDEA_PANEL_ACCESS_CTX:
+        switch (this.get("activity_state")) {
+          case "active":
+            return "btn-primary";
+          case "ended":
+            return "btn-secondary";
+        }
+      break;
+    }
+    return "";
   }
 });
 
@@ -561,9 +597,9 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.IDEA_PANEL_ACCESS_CTX:
         switch (this.get("activity_state")) {
           case "active":
-            return "btn-primary";
+            return "btn-primary js_openTargetInModal";
           case "ended":
-            return "btn-secondary";
+            return "btn-secondary js_openTargetInModal";
         }
     }
     return "";
