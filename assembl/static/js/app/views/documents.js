@@ -105,7 +105,6 @@ var FileView = DocumentView.extend({
   },
 
   template: "#tmpl-fileUploadEmbed",
-  className: "embeddedFile",
 
   serializeData: function(){
     return {

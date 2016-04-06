@@ -22,6 +22,8 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
 
   initialize: function(options) {
+    var d = this.model.getDocument();
+    this.uri = d.get('external_url') ? d.get('external_url') : d.get('uri');
   },
 
   ui: {
@@ -42,7 +44,7 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
   serializeData: function() {
     return {
-      url: this.model.getDocument().get("uri"),
+      url: this.uri,
       i18n: i18n
     };
   },
@@ -102,33 +104,58 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     'click .js_attachmentPurposeDropdownListItem': 'purposeDropdownListClick' //Dynamically rendered, do NOT use @ui
   }),
   
-  
-  extras: [],
+  extras: {},
+
+  initialize: function(options){
+    var that = this;
+    this.extasAdded = {};
+    _.each(this.extras, function(v,k){
+      that.extasAdded[k] = false;
+    });
+  },
+
+  serializeData: function(){
+    return {
+      header: i18n.sprintf(i18n.gettext("For URL %s in the text above"), this.uri)
+    }
+  },
   
   onRender: function() {
     AbstractAttachmentView.prototype.onRender.call(this);
     this.populateExtas();
     this.renderAttachmentPurposeDropdown(
-      this._renderAttachmentPurpose(this.extras)
+      this._renderAttachmentPurpose()
     );
+  },
+
+  _updateExtasCompleted: function(){
+    _.each(this.extras, function(v, k){
+      this.extasAdded[k] = true;
+    });
   },
 
   populateExtas: function(){
     /*
       Override to populate extras array with HTML array which will be appended to the end of the
       attachment purpose dropdown
+      Ensure to update the cache of extas completed. Otherwise, each render will introduce 1 more of the
+      extras
      */
+    this._updateExtasCompleted();
   },
 
-  _renderAttachmentPurpose: function(extras){
-    var purposesHtml = [];
+  _renderAttachmentPurpose: function(){
+    var purposesHtml = [],
+        that = this;
     _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
       purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
     });
 
-    if (extras) {
-      _.each(extras, function(e){
-        purposesHtml.push(e);
+    if (this.extras) {
+      _.each(this.extras, function(v,k){
+        if (!that.extasAdded[k]) {
+          purposesHtml.push(v);
+        }
       });
     }
 
@@ -179,12 +206,18 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
 
   populateExtas: function(){
     var a = "<li><a class='js_removeAttachment' data-toggle='tooltip' title='' data-placement='left' data-id='CANCEL_UPLOAD' data-original-title='CANCEL_UPLOAD'>" + i18n.gettext("Remove") + "</a></li>"
-    this.extras.push(a);
+    this.extras["REMOVE"] = a;
   },
 
   onRemoveAttachment: function(ev){
     console.log('Attachment was deleted!');
   },
+
+  serializeData: function(){
+    return {
+      header: i18n.gettext("For the uploaded file")
+    }
+  }
 
 });
 
