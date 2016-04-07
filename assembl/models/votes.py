@@ -3,6 +3,7 @@ from datetime import datetime
 import simplejson as json
 import math
 from collections import defaultdict
+from csv import DictWriter
 
 from sqlalchemy import (
     Column, Integer, ForeignKey, Boolean, String, Float, DateTime, Unicode,
@@ -63,7 +64,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         Idea, backref="criterion_for")
 
     retypeable_as = ("LickertVoteSpecification", "BinaryVoteSpecification",
-                     "MultipleChoiceVoteSpecification")
+                     "MultipleChoiceVoteSpecification", "TokenVoteSpecification")
 
     def get_voting_urls(self):
         return {
@@ -103,6 +104,10 @@ class AbstractVoteSpecification(DiscussionBoundBase):
             self.results_for(voting_results, histogram_size)
             for (votable_id, voting_results) in by_idea.iteritems()
         }
+
+    @abstractmethod
+    def csv_results(self, csv_file):
+        pass
 
     def votes_of_current_user(self):
         "CAN ONLY BE CALLED FROM API V2"
@@ -227,9 +232,7 @@ class TokenVoteSpecification(AbstractVoteSpecification):
         for v in voting_results:
             sums[v.token_category_id] += v.vote_value
             nums[v.token_category_id] += 1
-        specs = self.db.query(TokenCategorySpecification).filter(
-            TokenCategorySpecification.id.in_(sums.keys())).all()
-        specs = {spec.id: spec.name for spec in specs}
+        specs = {spec.id: spec.name.first_original().value for spec in self.token_categories}
         sums = {specs[id]: total for (id, total) in sums.iteritems()}
         nums = {specs[id]: total for (id, total) in nums.iteritems()}
         return {
@@ -237,6 +240,27 @@ class TokenVoteSpecification(AbstractVoteSpecification):
             "nums": nums,
             "sums": sums
         }
+
+    def csv_results(self, csv_file, histogram_size=None):
+        specs = self.token_categories
+        spec_names = [spec.name.first_original().value.encode('utf-8') for spec in specs]
+        spec_names.sort()
+        spec_names.insert(0, "idea")
+        dw = DictWriter(csv_file, spec_names)
+        dw.writeheader()
+        by_idea = self._gather_results()
+        values = {
+            votable_id: self.results_for(voting_results)
+            for (votable_id, voting_results) in by_idea.iteritems()
+        }
+        idea_names = dict(self.db.query(Idea.id, Idea.short_title).filter(
+            Idea.id.in_(by_idea.keys())))
+        idea_names = {
+            id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
+        for idea_id, s in values.iteritems():
+            sums = {k.encode(): v for (k, v) in s['sums'].iteritems()}
+            sums['idea'] = idea_names[idea_id]
+            dw.writerow(sums)
 
     @classmethod
     def get_vote_class(cls):
@@ -439,6 +463,30 @@ class LickertVoteSpecification(AbstractVoteSpecification):
             base['histogram'] = histogram
         return base
 
+    def csv_results(self, csv_file, histogram_size=None):
+        histogram_size = histogram_size or 10
+        bin_size = float(self.maximum - self.minimum) / histogram_size
+        bins = range(histogram_size)
+        bins.insert(0, "idea")
+        bins.extend(["avg", "std_dev"])
+        dw = DictWriter(csv_file, bins)
+        dw.writeheader()
+        by_idea = self._gather_results()
+        values = {
+            votable_id: self.results_for(voting_results, histogram_size)
+            for (votable_id, voting_results) in by_idea.iteritems()
+        }
+        idea_names = dict(self.db.query(Idea.id, Idea.short_title).filter(
+            Idea.id.in_(by_idea.keys())))
+        idea_names = {
+            id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
+        for idea_id, base in values.iteritems():
+            r = dict(enumerate(base['histogram']))
+            r['idea'] = idea_names[idea_id]
+            r['avg'] = base['avg']
+            r['std_dev'] = base['std_dev']
+            dw.writerow(r)
+
     def is_valid_vote(self, vote):
         if not super(LickertVoteSpecification, self).is_valid_vote(vote):
             return False
@@ -457,6 +505,26 @@ class BinaryVoteSpecification(AbstractVoteSpecification):
         base["yes"] = positive
         base["no"] = n - positive
         return base
+
+    def csv_results(self, csv_file, histogram_size=None):
+        dw = DictWriter(csv_file, ["idea", "yes", "no"])
+        dw.writeheader()
+        by_idea = self._gather_results()
+        values = {
+            votable_id: self.results_for(voting_results)
+            for (votable_id, voting_results) in by_idea.iteritems()
+        }
+        idea_names = dict(self.db.query(Idea.id, Idea.short_title).filter(
+            Idea.id.in_(by_idea.keys())))
+        idea_names = {
+            id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
+        for idea_id, base in values.iteritems():
+            r = {
+                'idea': idea_names[idea_id],
+                'yes': base['yes'],
+                'no': base['no']
+            }
+            dw.writerow(r)
 
     @classmethod
     def get_vote_class(cls):
@@ -482,6 +550,27 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
             by_result[r.vote_value] += 1
         base['results'] = dict(by_result)
         return base
+
+    def csv_results(self, csv_file, histogram_size=None):
+        candidates = [
+            c.encode('utf-8') for c in self.settings_json['candidates']]
+        cols = candidates[:]
+        cols.insert(0, "idea")
+        dw = DictWriter(csv_file, cols)
+        dw.writeheader()
+        by_idea = self._gather_results()
+        values = {
+            votable_id: self.results_for(voting_results)
+            for (votable_id, voting_results) in by_idea.iteritems()
+        }
+        idea_names = dict(self.db.query(Idea.id, Idea.short_title).filter(
+            Idea.id.in_(by_idea.keys())))
+        idea_names = {
+            id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
+        for idea_id, base in values.iteritems():
+            r = {candidates[k]: n for (k, n) in base['results'].items()}
+            r['idea'] = idea_names[idea_id]
+            dw.writerow(r)
 
     @classmethod
     def get_vote_class(cls):

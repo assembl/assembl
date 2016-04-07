@@ -1,4 +1,5 @@
 from datetime import datetime
+from cStringIO import StringIO
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
@@ -165,3 +166,30 @@ def vote_results(request):
         if P_ADMIN_DISC not in permissions:
             raise HTTPUnauthorized()
     return ctx._instance.voting_results(histogram)
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=AbstractVoteSpecification,
+             name="vote_results_csv", permission=P_READ)
+def vote_results_csv(request):
+    ctx = request.context
+    user_id = authenticated_userid(request)
+    if not user_id:
+        raise HTTPUnauthorized
+    histogram = request.GET.get('histogram', None)
+    if histogram:
+        try:
+            histogram = int(histogram)
+        except ValueError as e:
+            raise HTTPBadRequest(e)
+        if histogram > 25:
+            raise HTTPBadRequest(
+                "Please select at most 25 bins in the histogram.")
+    widget = ctx._instance.widget
+    if widget.activity_state != "ended":
+        permissions = get_permissions(user_id, ctx.get_discussion_id())
+        if P_ADMIN_DISC not in permissions:
+            raise HTTPUnauthorized()
+    output = StringIO()
+    ctx._instance.csv_results(output, histogram)
+    output.seek(0)
+    return Response(body_file=output, content_type='text/csv')
