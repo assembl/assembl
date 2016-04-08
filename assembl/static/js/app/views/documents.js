@@ -4,43 +4,36 @@ var Marionette = require('../shims/marionette.js'),
     _ = require('underscore'),
     $ = require('jquery'),
     Assembl = require('../app.js'),
+    Promise = require('bluebird'),
     Ctx = require('../common/context.js');
 
-var DocumentView = Marionette.ItemView.extend({
-  constructor: function DocumentView() {
+
+var AbstractDocumentView = Marionette.ItemView.extend({
+  constructor: function AbstractDocumentView(){
     Marionette.ItemView.apply(this, arguments);
   },
 
-  template: '#tmpl-fileEmbed',
-
   className: 'embeddedFile',
 
-  initialize: function(options) {
-
+  initialize: function(options){
     if (!this.model) {
       throw new Error('file needs a model');
     }
-    this.uri = this.model.get('external_url') ?
-      this.model.get('external_url'): this.model.get('uri');
+
+    this.uri = this.model.get('external_url') ? this.model.get('external_url') : this.model.get('uri');
   },
 
-  ui: {
-    mainfield: '.ckeditorField-mainfield',
-    saveButton: '.ckeditorField-savebtn',
-    cancelButton: '.ckeditorField-cancelbtn'
-  },
+  // ui: {
+  //   mainfield: '.ckeditorField-mainfield',
+  //   saveButton: '.ckeditorField-savebtn',
+  //   cancelButton: '.ckeditorField-cancelbtn'
+  // },
 
-  events: {
-    'click @ui.mainfield': 'changeToEditMode',
-    'click @ui.saveButton': 'saveEdition',
-    'click @ui.cancelButton': 'cancelEdition'
-  },
-
-  serializeData: function() {
-    return {
-      url: this.uri
-    }
-  },
+  // events: {
+  //   'click @ui.mainfield': 'changeToEditMode',
+  //   'click @ui.saveButton': 'saveEdition',
+  //   'click @ui.cancelButton': 'cancelEdition'
+  // },
 
   doOembed: function() {
     //console.log (this.model.get('external_url'));
@@ -92,19 +85,38 @@ var DocumentView = Marionette.ItemView.extend({
 
   },
 
-  onAttach: function() {
-    //console.log("DocumentView.onAttach()");
-    //this.doOembed();
+});
+
+
+var DocumentView = AbstractDocumentView.extend({
+  constructor: function DocumentView() {
+    AbstractDocumentView.apply(this, arguments);
+  },
+
+  template: '#tmpl-fileEmbed',
+
+  initialize: function(options){
+    AbstractDocumentView.prototype.initialize.call(this, options);
+  },
+
+  serializeData: function() {
+    return {
+      url: this.uri
+    }
   }
 });
 
 
-var FileView = DocumentView.extend({
+var FileView = AbstractDocumentView.extend({
   constructor: function FileView(){
-    DocumentView.apply(this, arguments);
+    AbstractDocumentView.apply(this, arguments);
   },
 
   template: "#tmpl-fileUploadEmbed",
+
+  initialize: function(options){
+    AbstractDocumentView.prototype.initialize.call(this, options);
+  },
 
   serializeData: function(){
     return {
@@ -114,7 +126,115 @@ var FileView = DocumentView.extend({
 });
 
 
+var AbstractEditView =  AbstractDocumentView.extend({
+  constructor: function AbstractEditView(){
+    AbstractDocumentView.apply(this, arguments);
+  },
+
+  template: "#tmpl-loader",
+
+  modelEvents: {
+    'progress': 'onShowProgress'
+  },
+
+  initialize: function(options){
+    
+    AbstractDocumentView.prototype.initialize.call(this, options);
+    this.showProgress = false;
+    var that = this;
+
+    if (options.showProgress) {
+      this.showProgress = true;
+    }
+
+    // Promise.resolve(this.model.save()).then(function(model){
+    //   initalizeCallback(model);
+    // });
+    setTimeout(function(){
+      if (!that.isViewDestroyed() ){
+        that.initalizeCallback();
+      }
+    }, 10000);
+  },
+
+  initalizeCallback: function(model){
+    /*
+      Override in subclasses to override what the view will initalize after
+      saving its model to the backend.
+     */
+    throw new Error("Cannot instantiate an AbstractDocumentEditView");
+  },
+
+  onShowProgress: function(ev){
+    if (this.showProgress) {
+      console.log("Show the progress of the file upload in view");
+    }
+  }
+});
+
+var DocumentEditView = AbstractEditView.extend({
+  constructor: function DocumentEditView(){
+    AbstractEditView.apply(this, arguments);
+  },
+
+  initialize: function(options){
+    AbstractEditView.prototype.initialize.call(this, options);
+  },
+
+  initalizeCallback: function(model){
+    console.log("Callback made here.");
+    this.template = "#tmpl-fileEmbed";
+    this.render();
+  },
+
+  serializeData: function(){
+    return {
+      url: this.model.get('uri')
+    }
+  }
+
+});
+
+var FileEditView = AbstractEditView.extend({
+  constructor: function FileEditView(){
+    AbstractEditView.apply(this, arguments);
+  },
+
+  initialize: function(options){
+    AbstractEditView.prototype.initialize.call(this, options);
+  },
+
+  initalizeCallback: function(model){
+    this.template = "#tmpl-fileUploadEmbed";
+    this.uploadComplete = false;
+    this.render();
+  },
+
+  onRender: function(){
+    if (this.uploadComplete) {
+      AbstractEditView.prototype.onRender.apply(this, arguments);
+    }
+    else {
+      Marionette.ItemView.prototype.onRender.apply(this, arguments);
+    }
+  },
+
+  serializeData: function(){
+    return {
+      name: this.model.get('name')
+    }
+  },
+
+  onShowProgress: function(ev){
+    console.log("FileEditView progress bar has been made!", ev);
+    this.render();
+  }
+});
+
+
 module.exports = {
   DocumentView: DocumentView,
-  FileView: FileView
+  DocumentEditView: DocumentEditView,
+  FileView: FileView,
+  FileEditView: FileEditView
 };

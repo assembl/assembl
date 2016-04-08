@@ -91,15 +91,23 @@ var AttachmentModel = Base.Model.extend({
     var that = this;
 
     if(this.get('attachmentPurpose') !== attachmentPurposeTypes.DO_NOT_USE.id) {
-
-      // File-based attachments uses a multipart/form header, and are POSTed to a different
-      // endpoint than the non-file attachments. This API returns both the attachment + document
-      // model in JSON format
       
-      Promise.resolve(this.get('document').save()).then(function(){
-        //console.log("Saving attachments", attrs, options);
-        Backbone.Model.prototype.save.call(that, attrs, options);
-      })
+      /**
+       * Update
+       * =======
+       *
+       * The architecture to load attachments + documents has now changed
+       * Documents are eagerly saved to the database upon creation.
+       * The AttachmentView is responsible for the lifecycle of the document model.
+       * As a result, the attachment model save should no longer do a two-step
+       * save process. It is only responsible for saving itself.
+       */      
+
+      // Promise.resolve(this.get('document').save()).then(function(){
+      //   //console.log("Saving attachments", attrs, options);
+      //   Backbone.Model.prototype.save.call(that, attrs, options);
+      // })
+      Backbone.Model.prototype.save.call(that, attrs, options);
     }
   },
   

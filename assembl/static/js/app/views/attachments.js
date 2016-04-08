@@ -49,21 +49,24 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
     };
   },
 
+  renderDocument: function(){
+    var documentModel = this.model.getDocument(),
+        documentView;
+    
+    if (documentModel.isFileType()) {
+      documentView = new DocumentViews.FileView({model: documentModel});
+    }
+    else {
+      documentView = new DocumentViews.DocumentView({model: documentModel});
+      
+    }
+    this.documentEmbeedRegion.show(documentView);
+  },
   onRender: function() {
     //console.log("AbstractAttachmentView: onRender with this.model:",this.model);
     //console.log(this.model.get('attachmentPurpose'), Attachments.attachmentPurposeTypes.DO_NOT_USE.id);
     if(this.model.get('attachmentPurpose') !== Attachments.attachmentPurposeTypes.DO_NOT_USE.id) {
-      var documentModel = this.model.getDocument(),
-          documentView;
-      
-      if (documentModel.isFileType()) {
-        documentView = new DocumentViews.FileView({model: documentModel});
-      }
-      else {
-        documentView = new DocumentViews.DocumentView({model: documentModel});
-        
-      }
-      this.documentEmbeedRegion.show(documentView);
+      this.renderDocument();
     }
   },
 
@@ -120,6 +123,20 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     }
   },
   
+  renderDocument: function(){
+    var documentModel = this.model.getDocument(),
+        documentView;
+    
+    if (documentModel.isFileType()) {
+      documentView = new DocumentViews.FileEditView({model: documentModel});
+    }
+    else {
+      documentView = new DocumentViews.DocumentEditView({model: documentModel});
+      
+    }
+    this.documentEmbeedRegion.show(documentView);
+  },
+
   onRender: function() {
     AbstractAttachmentView.prototype.onRender.call(this);
     this.populateExtas();

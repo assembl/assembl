@@ -521,6 +521,9 @@ var messageSendView = Marionette.LayoutView.extend({
       return found === undefined?true:false;
     });
     //console.log("goneModels: ", goneModels);
+    
+    //This will now have to be updated. The attachment document must first be deleted from
+    //the backend.
     that.attachmentsCollection.remove(goneModels);
 
     missingLinks = _.filter(links, function(link) {
