@@ -15,10 +15,9 @@ from . import MULTIPART_HEADER
              name='data')
 def get_file(request):
     ctx = request.context
-    db = Document.default_db
     document = ctx._instance
-    f = db.query(File).filter_by(id=document.id).first()
-    return Response(body_file=f.data, content_type=f.mime_type)
+    f = File.get(document.id)
+    return Response(body=f.data, content_type=f.mime_type)
 
 # Maybe have a permission for uploading content??
 
