@@ -24,19 +24,18 @@ def upgrade(pyramid_env):
         op.create_table(
             'document',
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column('uri_id', CoerceUnicode(1024), server_default="", unique=False, index=True),
+            sa.Column('uri_id', CoerceUnicode(1024), server_default="",
+                      unique=False, index=True),
             sa.Column('creation_date',
                       sa.DateTime,
                       nullable=False,
-                      default = datetime.utcnow),
+                      default=datetime.utcnow),
             sa.Column('discussion_id',
-                       sa.Integer,
-                       sa.ForeignKey(
-                            'discussion.id',
-                             ondelete="CASCADE",
-                             onupdate="CASCADE"),
-                nullable=False,
-                index=False,),
+                sa.Integer,
+                sa.ForeignKey(
+                  'discussion.id',
+                   ondelete="CASCADE",
+                   onupdate="CASCADE"), nullable=False, index=False,),
             sa.Column('oembed_type', CoerceUnicode(1024), server_default=""),
             sa.Column('mime_type', CoerceUnicode(1024), server_default=""),
             sa.Column('title', CoerceUnicode(1024), server_default=""),
@@ -45,7 +44,7 @@ def upgrade(pyramid_env):
             sa.Column('author_url', sa.UnicodeText),
             sa.Column('thumbnail_url', sa.UnicodeText),
             sa.Column('site_name', sa.UnicodeText),
-                
+
             )
         op.create_table(
             'attachment',

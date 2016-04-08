@@ -37,6 +37,8 @@ class Document(DiscussionBoundBase):
     __tablename__ = "document"
     id = Column(
         Integer, primary_key=True)
+
+    type = Column(String(60), nullable=False)
     """
     The cannonical identifier of this document.  If a URL, it's to be
     interpreted as a purl
@@ -89,6 +91,8 @@ class Document(DiscussionBoundBase):
 
     __mapper_args__ = {
         'polymorphic_identity': 'document',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
     }
 
     @property
