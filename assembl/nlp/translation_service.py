@@ -105,7 +105,7 @@ class TranslationService(object):
         lse.error_count = 1 + (lse.error_count or 0)
         if (lse.error_count > 10 and
                 lse.error_code < LangStringStatus.PERMANENT_TRANSLATION_FAILURE):
-            lse.error_code = TOO_MANY_TRANSIENTS
+            lse.error_code = LangStringStatus.TOO_MANY_TRANSIENTS.value
         if error_description:
             lid = lse.locale_identification_data_json
             lid['error_desc'] = error_description
