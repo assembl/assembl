@@ -526,7 +526,7 @@
         "total_number": true,
         "maximum_per_idea": true,
         "typename": true,
-        "name": true,
+        "name": ":extended",
         "image": true,
         "token_vote_specification": true
     }

@@ -461,6 +461,14 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "storage": "attribute"
     },
     {
+      "key": "name",
+      "type": "string", // actually this is a LangString, but it will be converted
+      "description": "The displayed name of this category of token.",
+      "label": "Token name",
+      "default": "positive",
+      "storage": "attribute"
+    },
+    {
       "key": "typename",
       "type": "string",
       "description": "The semantical name of this category of token. Categories with the same typename can be compared, others can't because they are too different.",

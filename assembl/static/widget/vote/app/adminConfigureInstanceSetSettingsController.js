@@ -264,6 +264,19 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
       });
     }
 
+    // simplify LangStrings to strings
+    if ( "vote_specifications" in $scope.widget && _.isArray($scope.widget.vote_specifications) ){
+      $scope.widget.vote_specifications.forEach(function(vote_spec) {
+        if ( "token_categories" in vote_spec && _.isArray(vote_spec.token_categories) ){
+          vote_spec.token_categories.forEach(function(category){
+            if ( "name" in category && "@type" in category.name && category.name["@type"] == "LangString" ){
+              category.name = $scope.LangStringToString(category.name);
+            }
+          });
+        }
+      });
+    }
+
     $scope.current_step = 2;
   };
 
@@ -330,6 +343,27 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     }
 
     return object;
+  };
+
+  $scope.stringToLangString = function(str){
+    return {
+      "entries": [
+        {
+          "value": str,
+          "@type": "LangStringEntry",
+          "@language": "und",
+          "error_count": 0
+        }
+      ],
+      "@type": "LangString"
+    };
+  };
+
+  $scope.LangStringToString = function(langString){
+    if ( "entries" in langString && _.isArray(langString.entries) && langString.entries.length > 0 && "value" in langString.entries[0] ){
+      return langString.entries[0].value;
+    }
+    return null;
   };
 
   /*
@@ -457,6 +491,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
                   post_data = _.clone(category);
                   post_data = $scope.ensurePropertiesTypes(post_data, getTokenCategoryFieldType);
                   post_data["token_vote_specification"] = el[id_field];
+                  post_data["name"] = $scope.stringToLangString(post_data["name"]);
 
                   endpoint = AssemblToolsService.resourceToUrl(category[id_field]);
 
@@ -470,6 +505,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
                   post_data = _.clone(category);
                   post_data = $scope.ensurePropertiesTypes(post_data, getTokenCategoryFieldType);
                   delete post_data["token_vote_specification"];
+                  post_data["name"] = $scope.stringToLangString(post_data["name"]);
 
                   endpoint = AssemblToolsService.resourceToUrl(el[id_field]) + "/token_categories";
                   var postNewCategoryPromiseGenerator = function(endpoint, post_data, result_holder, display_filter){
