@@ -28,6 +28,8 @@ column_casts = {
     }
 }
 
+history_tables = ["idea", "idea_idea_link", "idea_vote"]
+
 
 def maybe_cast(column):
     cast_to = column_casts.get(column.table.name, {}).get(column.name, None)
@@ -60,6 +62,25 @@ def copy_table(source_session, dest_session, source_table, dest_table):
             values = next_batch
     else:
         dest_session.execute(dest_table.insert(), values)
+    if dest_session.bind.url.startswith('postgresql'):
+        idx_col = dest_table.c.get("id", None)
+        if idx_col is not None and not idx_col.foreign_keys:
+            if dest_table.name in history_tables:
+                if source_session.bind.url.startswith('virtuoso'):
+                    max_id = int(source_session.query(
+                        "sequence_set('%s_idsequence', 0, 1)" % (
+                            source_table.fullname,)).first()[0])
+                else:
+                    max_id = int(source_session.query(
+                        "currval('%s_idsequence')" % (source_table.name,)
+                        ).first()[0])
+                dest_session.execute(
+                    "SELECT setval('{table}_idsequence', {max_id})".format(
+                        table=dest_table.name, max_id=max_id))
+            else:
+                dest_session.execute(
+                    "SELECT setval('{table}_id_seq', (select max(id) from {table}))".format(
+                        table=dest_table.name))
 
 
 def engine_from_settings(config, full_config=False):
