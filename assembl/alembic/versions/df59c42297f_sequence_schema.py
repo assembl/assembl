@@ -14,6 +14,7 @@ from alembic import context, op
 
 
 from assembl.lib import config
+from assembl.lib.sqla import using_virtuoso
 
 
 # history_sequences = [
@@ -29,6 +30,8 @@ history_sequences = [
 
 
 def upgrade(pyramid_env):
+    if not using_virtuoso():
+        return
     full_schema = '.'.join((config.get('db_schema'), config.get('db_user')))
     with context.begin_transaction():
         for seqname in history_sequences:
@@ -38,6 +41,8 @@ def upgrade(pyramid_env):
 
 
 def downgrade(pyramid_env):
+    if not using_virtuoso():
+        return
     full_schema = '.'.join((config.get('db_schema'), config.get('db_user')))
     with context.begin_transaction():
         for seqname in history_sequences:
