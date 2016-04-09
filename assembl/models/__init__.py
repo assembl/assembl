@@ -134,10 +134,14 @@ from .idea import (
 )
 from .action import (
     Action,
+    ActionOnIdea,
     ActionOnPost,
     CollapsePost,
     ExpandPost,
     LikedPost,
+    UniqueActionOnIdea,
+    UniqueActionOnPost,
+    ViewIdea,
     ViewPost,
 )
 from .idea_content_link import (
@@ -248,7 +252,8 @@ from .attachment import (
 )
 
 from .announcement import (
-    IdeaAnnouncement
+    Announcement,
+    IdeaAnnouncement,
 )
 
 
