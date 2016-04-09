@@ -6,13 +6,16 @@ from pyramid.threadlocal import get_current_registry
 _settings = None
 
 
-def set_config(settings):
+def set_config(settings, reconfig=False):
     """ Set the settings object. """
     global _settings
     if _settings:
-        # Re-initializing settings fails. Patch.
-        print "initialized twice:", settings
-        print "keeping:", _settings
+        if reconfig:
+            _settings = settings
+        else:
+            # Re-initializing settings fails. Patch.
+            print "initialized twice:", settings
+            print "keeping:", _settings
     else:
         _settings = settings
 
