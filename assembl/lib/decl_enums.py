@@ -64,8 +64,10 @@ class DeclEnum(object):
     def db_type(cls):
         return DeclEnumType(cls)
 
+
 class DeclEnumType(SchemaType, TypeDecorator):
-    def __init__(self, enum):
+    def __init__(self, enum, **kwargs):
+        super(DeclEnumType, self).__init__(**kwargs)
         self.enum = enum
         self.impl = Enum(
                         *enum.values(), 
@@ -80,8 +82,8 @@ class DeclEnumType(SchemaType, TypeDecorator):
             '_'.join(table.schema.split('.')), table.name, self.impl.name[3:])
         self.impl._set_table(column, table)
 
-    def copy(self):
-        return DeclEnumType(self.enum)
+    def copy(self, **kw):
+        return DeclEnumType(self.enum, **kw)
 
     def process_bind_param(self, value, dialect):
         if value is None:
