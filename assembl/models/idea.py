@@ -12,7 +12,7 @@ from sqlalchemy.orm import (
     column_property, with_polymorphic)
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql import text, column
-from sqlalchemy.sql.expression import union_all, bindparam, literal_column
+from sqlalchemy.sql.expression import union, bindparam, literal_column
 
 from sqlalchemy import (
     Column,
@@ -294,7 +294,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             parents = select(
                     [sources_alias.source_id, sources_alias.target_id]
                 ).select_from(sources_alias).where(parent_link)
-            with_parents = link.union_all(parents)
+            with_parents = link.union(parents)
             select_exp = select([with_parents.c.source_id.label('id')]
                 ).select_from(with_parents)
         if inclusive:
@@ -342,7 +342,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             children = select(
                     [targets_alias.source_id, targets_alias.target_id]
                 ).select_from(targets_alias).where(parent_link)
-            with_children = link.union_all(children)
+            with_children = link.union(children)
             select_exp = select([with_children.c.target_id.label('id')]
                 ).select_from(with_children)
         if inclusive:
