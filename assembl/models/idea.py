@@ -293,7 +293,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             parent_link = sources_alias.target_id == target_alias.c.source_id
             parents = select(
                     [sources_alias.source_id, sources_alias.target_id]
-                ).select_from(sources_alias).where(parent_link)
+                ).select_from(sources_alias).where(parent_link
+                    & (sources_alias.tombstone_date == None))
             with_parents = link.union(parents)
             select_exp = select([with_parents.c.source_id.label('id')]
                 ).select_from(with_parents)
@@ -341,7 +342,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             parent_link = targets_alias.source_id == source_alias.c.target_id
             children = select(
                     [targets_alias.source_id, targets_alias.target_id]
-                ).select_from(targets_alias).where(parent_link)
+                ).select_from(targets_alias).where(parent_link
+                    & (targets_alias.tombstone_date == None))
             with_children = link.union(children)
             select_exp = select([with_children.c.target_id.label('id')]
                 ).select_from(with_children)
