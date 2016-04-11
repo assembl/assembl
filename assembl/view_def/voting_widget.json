@@ -501,6 +501,7 @@
         "question_id": true,
         "settings": "settings_json",
         "voting_urls": "&get_voting_urls",
+        "voting_url": "&get_generic_voting_url",
         "results_url": "&get_vote_results_url",
         "vote_class": "&get_vote_classname",
         "my_votes": "&votes_of_current_user:partial"

@@ -352,6 +352,7 @@
     "AbstractIdeaVote": {
         "original_uri": false,
         "is_tombstone": false,
+        "idea": true,
         "value": true
     },
     "LickertIdeaVote": {

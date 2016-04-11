@@ -75,6 +75,10 @@ class AbstractVoteSpecification(DiscussionBoundBase):
             for votable in self.widget.votable_ideas
         }
 
+    def get_generic_voting_url(self):
+        return 'local:Discussion/%d/widgets/%d/vote_specifications/%d/votes' % (
+                self.get_discussion_id(), self.widget_id, self.id)
+
     def get_vote_results_url(self):
         return 'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_results' % (
             self.widget.discussion_id, self.widget_id, self.id)
@@ -692,7 +696,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         backref=backref("votes_ts", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
-        idea = self.idea_ts or Idea.get(self.idea_id)
+        idea = self.idea or self.idea_ts or Idea.get(self.idea_id)
         return idea.get_discussion_id()
 
     @classmethod
