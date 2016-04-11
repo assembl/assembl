@@ -49,14 +49,18 @@ def votes_collection_add_json(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
-    widget = ctx.get_instance_of_class(VotingWidget)
-    if widget.activity_state != 'active':
-        raise HTTPUnauthorized("Not in voting period")
     spec = ctx.get_instance_of_class(AbstractVoteSpecification)
     if spec:
         required = spec.get_vote_class()
     else:
         required = ctx.collection_class
+    widget = ctx.get_instance_of_class(VotingWidget)
+    if not widget and spec:
+        widget = spec.widget
+    if not widget:
+        raise HTTPBadRequest("Please provide a reference to a widget")
+    if widget.activity_state != 'active':
+        raise HTTPUnauthorized("Not in voting period")
     typename = request.json_body.get('@type', None)
     if typename:
         cls = get_named_class(typename)
