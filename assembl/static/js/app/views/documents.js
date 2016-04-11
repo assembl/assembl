@@ -120,7 +120,8 @@ var FileView = AbstractDocumentView.extend({
 
   serializeData: function(){
     return {
-      name: this.model.get('name')
+      name: this.model.get('name'),
+      url: this.uri
     }
   }   
 });
@@ -154,7 +155,7 @@ var AbstractEditView =  AbstractDocumentView.extend({
       if (!that.isViewDestroyed() ){
         that.initalizeCallback();
       }
-    }, 10000);
+    }, 5000);
   },
 
   initalizeCallback: function(model){
@@ -201,27 +202,38 @@ var FileEditView = AbstractEditView.extend({
   },
 
   initialize: function(options){
+    console.log("FileEditView initialized on model", this.model);
     AbstractEditView.prototype.initialize.call(this, options);
   },
 
   initalizeCallback: function(model){
-    this.template = "#tmpl-fileUploadEmbed";
-    this.uploadComplete = false;
-    this.render();
+    var that = this;
+    setTimeout(function(){
+      that.template = "#tmpl-fileUploadEmbed";
+      that.uploadComplete = true;
+      that.model.set('external_url', "http://www.google.com");
+      that.render();
+
+    }, 3000);
   },
 
   onRender: function(){
-    if (this.uploadComplete) {
-      AbstractEditView.prototype.onRender.apply(this, arguments);
-    }
-    else {
-      Marionette.ItemView.prototype.onRender.apply(this, arguments);
-    }
+    // if (this.uploadComplete) {
+    //   // Must add logic here for deciding to either use the template system,
+    //   // or the oembed logic. 
+    //   AbstractEditView.prototype.onRender.apply(this, arguments);
+    // }
+    // else {
+    //   Marionette.ItemView.prototype.onRender.apply(this, arguments);
+    // }
+    console.log("FileEditView onRender was called");
+
   },
 
   serializeData: function(){
     return {
-      name: this.model.get('name')
+      name: this.model.get('name'),
+      url: this.model.get('external_url')
     }
   },
 

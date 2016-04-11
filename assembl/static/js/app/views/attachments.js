@@ -128,7 +128,10 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
         documentView;
     
     if (documentModel.isFileType()) {
-      documentView = new DocumentViews.FileEditView({model: documentModel});
+      documentView = new DocumentViews.FileEditView({
+        model: documentModel,
+        showProgress: true
+      });
     }
     else {
       documentView = new DocumentViews.DocumentEditView({model: documentModel});
@@ -227,7 +230,7 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
   },
 
   onRemoveAttachment: function(ev){
-    console.log('Attachment was deleted!');
+    this.model.collection.remove(this.model);
   },
 
   serializeData: function(){

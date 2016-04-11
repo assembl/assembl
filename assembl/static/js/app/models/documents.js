@@ -37,7 +37,7 @@ var DocumentModel = Base.Model.extend({
   },
 
   isFileType: function(){
-    return this.get('@type') === Types.File;
+    return this.get('@type') === Types.FILE;
   }
 });
 
