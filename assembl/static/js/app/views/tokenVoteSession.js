@@ -61,7 +61,7 @@ function alternatedIndex(index, size){
 
 /*
 // NOT USED YET
-// Get the linear interpolation between two value
+// Get the linear interpolation between two values
 var lerp = function (value1, value2, amount) {
   amount = amount < 0 ? 0 : amount;
   amount = amount > 1 ? 1 : amount;
@@ -81,11 +81,41 @@ var getSVGElementByURLPromise = function(url){
   }).then(function(data) {
     var svg = $(data).find('svg');
     svg.removeAttr('xmlns:a');
+    svg.attr("aria-hidden", "true");
+    svg.attr("role", "img");
     return svg;
   });
 };
 
+var getTokenSize = function(number_of_tokens, maximum_tokens_per_row, maximum_total_width){
+  var token_size = 35;
+  maximum_total_width = maximum_total_width ? maximum_total_width : 400;
+  var maximum_token_size = 35; // was 60
+  var minimum_token_size = 12;
+  if ( maximum_tokens_per_row != 0 ){
+    //maximum_tokens_per_row = maximum_tokens_per_row > 10 ? 10 : maximum_tokens_per_row;
+    token_size = maximum_total_width / maximum_tokens_per_row;
+  }
+  else {
+    if ( maximum_total_width != 0 && number_of_tokens != 0 ){
+      token_size = maximum_total_width / number_of_tokens;
+    }
+    else {
+      token_size = maximum_token_size;
+    }
+  }
 
+  if ( token_size < minimum_token_size ){
+    token_size = minimum_token_size;
+  }
+  if ( token_size > maximum_token_size ){
+    token_size = maximum_token_size;
+  }
+  return token_size;
+}
+
+
+// This view shows at the top of the popin the bag of remaining tokens the user has
 var TokenBagsView = Marionette.ItemView.extend({
   template: false,
   initialize: function(options){
@@ -117,16 +147,59 @@ var TokenBagsView = Marionette.ItemView.extend({
     var that = this;
     var container = this.$el;
     container.empty();
-    //var myVotes = "my_votes" in this.voteSpecification ? this.voteSpecification.my_votes : null;
+    var help = $("<div></div>");
+    help.addClass("help-text");
+    help.text(i18n.gettext("Répartissez vos jetons sur les idées de vos choix. Par défaut, votre vote est neutre par projet."));
+    help.appendTo(container);
     this.tokenCategories.each(function(category){
+      var customTokenImageURL = category.get("image");
+      var customTokenImagePromise = getSVGElementByURLPromise(customTokenImageURL);
       var data = that.myVotesCollection.getTokenBagDataForCategory(category);
+      var categoryContainer = $("<div></div>");
+      categoryContainer.addClass('token-bag-for-category');
+      categoryContainer.appendTo(container);
       var el = $("<div></div>");
-      el.text("You have used " + data["my_votes_count"] + " of your " + data["total_number"] + " \"" + category.get("typename") + "\" tokens.");
-      el.appendTo(container);
+      el.addClass("description");
+      var s = i18n.sprintf(i18n.gettext("<span class='available-tokens-number'>%d</span> remaining %s tokens"), data["remaining_tokens"], category.get("typename")); // TODO: use "name" field instead (LangString)
+      el.html(s);
+      //el.text("You have used " + data["my_votes_count"] + " of your " + data["total_number"] + " \"" + category.get("typename") + "\" tokens.");
+      el.appendTo(categoryContainer);
+
+      var el2 = $("<div></div>");
+      el2.addClass("available-tokens-icons");
+      
+      el2.appendTo(categoryContainer);
+      $.when(customTokenImagePromise).then(function(svgEl){
+        var token_size = getTokenSize(data["total_number"], 20, 400);
+        for ( var i = 0; i < data["remaining_tokens"]; ++i ){
+          var tokenIcon = svgEl.clone();
+          tokenIcon[0].classList.add("available");
+
+          tokenIcon.css("width", token_size);
+          tokenIcon.attr("width", token_size);
+          tokenIcon.css("height", token_size);
+          tokenIcon.attr("height", token_size);
+
+          el2.append(tokenIcon);
+        }
+        for ( var i = data["remaining_tokens"]; i < data["total_number"]; ++i ){
+          var tokenIcon = svgEl.clone();
+          tokenIcon[0].classList.add("not-available");
+
+          tokenIcon.css("width", token_size);
+          tokenIcon.attr("width", token_size);
+          tokenIcon.css("height", token_size);
+          tokenIcon.attr("height", token_size);
+
+          el2.append(tokenIcon);
+        }
+      });
     });
   }
 });
 
+
+// This view shows (in the block of an idea) the clickable tokens (for each category of tokens) a user can allocate (and has allocated) on this idea
 var TokenIdeaAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
   initialize: function(options){
@@ -233,20 +306,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
     var renderClickableTokenIcon = function(number_of_tokens_represented_by_this_icon){
       var el = null;
 
-      var token_size = 50;
-      if ( that.maximum_per_idea > 0 ){
-        var maximum_total_size = 400;
-        var maximum_token_size = 60;
-        var minimum_token_size = 20;
-        var max_per_row = that.maximum_per_idea > 10 ? 10 : that.maximum_per_idea;
-        token_size = maximum_total_size / max_per_row;
-        if ( token_size < minimum_token_size ){
-          token_size = minimum_token_size;
-        }
-        if ( token_size > maximum_token_size ){
-          token_size = maximum_token_size;
-        }
-      }
+      var token_size = getTokenSize(that.maximum_per_idea ? that.maximum_per_idea + 1 : 0, 10, 400);
 
       if ( number_of_tokens_represented_by_this_icon == 0 ){
         if ( that.customTokenImageURL ){
@@ -272,8 +332,15 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
         }
         el[0].classList.add("positive");
       }
-      el.css("max-width", token_size);
-      el.css("max-height", token_size);
+      /*
+      From https://github.com/blog/2112-delivering-octicons-with-svg
+      "You may have to wrap these SVGs with another div if you want to give them a background color."
+      "Internet Explorer needs defined width and height attributes on the svg element in order for them to be sized correctly."
+      */
+      el.css("width", token_size);
+      el.attr("width", token_size);
+      el.css("height", token_size);
+      el.attr("height", token_size);
 
       var showAsSelected = false;
       if ( number_of_tokens_represented_by_this_icon == 0 ){
@@ -311,7 +378,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
         link.click(function(){
           console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
           
-          /*
+          /* This is the pure AJAX way to save the data to the backend
           that.postData["value"] = number_of_tokens_represented_by_this_icon;
           $.ajax({
             type: "POST",
@@ -330,6 +397,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
           });
           */
 
+          // This is a more Backbone way to save the data to the backend
           var properties = _.clone(that.postData);
           delete properties["value"];
           properties["idea"] = that.idea.get("@id");
@@ -401,6 +469,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
   }
 });
 
+// This view shows an idea in the list of votable ideas (and calls a subview which shows the tokens for this idea)
 //var TokenVoteItemView = Marionette.ItemView.extend({
 var TokenVoteItemView = Marionette.LayoutView.extend({
   template: '#tmpl-tokenVoteItem',
@@ -408,7 +477,7 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
     this.childIndex = options.childIndex;
     this.parent = options.parent;
   },
-  regions: {
+  ui: {
     tokensForIdea: ".tokens-for-idea"
   },
   serializeData: function(){
@@ -421,18 +490,15 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
     console.log("this.parent: ", this.parent);
     var tokenCategories = "tokenCategories" in this.parent.options ? this.parent.options.tokenCategories : null;
     var voteSpecification = "voteSpecification" in this.parent.options ? this.parent.options.voteSpecification : null;
-    //var myVotes = "my_votes" in voteSpecification ? voteSpecification.my_votes : null;
     var myVotesCollection = "myVotesCollection" in this.parent.options ? this.parent.options.myVotesCollection : null;
     var idea = that.model;
     console.log("tokenCategories: ", tokenCategories);
     if ( tokenCategories ){
       tokenCategories.each(function(category){
         // get the number of tokens the user has already set on this idea
-        //var myVote = _.findWhere(myVotes, {idea: idea.get("@id"), token_category: category.get("@id")});
         var myVote = myVotesCollection.findWhere({"idea": idea.get("@id"), "token_category": category.get("@id")});
         console.log("myVote: ", myVote);
         if ( myVote ){
-          //myVote = "value" in myVote ? myVote.value : 0;
           myVote = myVote.get("value") || 0;
         }
         else {
@@ -446,13 +512,13 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
           myVotesCollection: myVotesCollection,
           currentValue: myVote
         });
-        that.getRegion('tokensForIdea').show(view);
+        that.ui.tokensForIdea.append(view.render().el);
       });
     }
   }
 });
 
-
+// This view shows the list of votable ideas and their tokens
 var TokenVoteCollectionView = Marionette.CollectionView.extend({
   childView: TokenVoteItemView,
   template: '#tmpl-tokenVoteCollection',
@@ -465,7 +531,7 @@ var TokenVoteCollectionView = Marionette.CollectionView.extend({
   }
 });
 
-
+// This view shows the whole vote popin and its contents
 var TokenVoteSessionModal = Backbone.Modal.extend({
   constructor: function TokenVoteSessionModal() {
     Backbone.Modal.apply(this, arguments);
@@ -512,7 +578,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
     var myVotes = "my_votes" in that.tokenVoteSpecification ? that.tokenVoteSpecification.my_votes : null;
     that.myVotesCollection = new Widget.TokenIdeaVoteCollection(myVotes);
-    that.myVotesCollection.url = Ctx.getUrlFromUri(that.tokenVoteSpecification["@id"]) + "/votes"; // http://localhost:6543/data/Discussion/6/widgets/118/vote_specifications/44/votes
+    that.myVotesCollection.url = Ctx.getUrlFromUri(that.tokenVoteSpecification["@id"]) + "/votes"; // for example: http://localhost:6543/data/Discussion/6/widgets/118/vote_specifications/44/votes
     console.log("that.myVotesCollection: ", that.myVotesCollection);
     
     
@@ -586,20 +652,6 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       question_title: "question_title" in question_item ? question_item.question_title : "",
       question_description: "question_description" in question_item ? question_item.question_description : ""
     };
-  },
-
-  onRender: function(){
-    /*
-    var IdeaClassificationCollectionView = new IdeaShowingMessageCollectionView({
-      collection: this.ideaContentLinks,
-      messageView: this.messageView,
-      groupContent: this._groupContent
-    });
-
-    this.$(".ideas-reasons-collection").html(IdeaClassificationCollectionView.render().el);
-    */
-
-
   }
 });
 

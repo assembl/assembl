@@ -7,6 +7,44 @@
       
     }
   }
+
+  .available-tokens {
+    .help-text {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .token-bag-for-category {
+      display: table-row;
+    }
+
+    .description, .available-tokens-icons {
+      display: table-cell;
+      vertical-align: middle;
+      line-height: 100%;
+    }
+    .available-tokens-icons {
+      padding-left: 10px;
+    }
+    span.available-tokens-number {
+      font-weight: 500;
+      font-size: 150%;
+    }
+
+    .available {
+      /* show the SVG with its initial styles */
+    }
+
+    .not-available {
+      path, rect, circle {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 3;
+      }
+    }
+  }
+
+
   .votables-collection {
     .left-column {
       .idea-title {
