@@ -422,12 +422,13 @@ def updatemaincode():
 
 
 def app_setup():
-     # do the requirements separately to update the non-static versions.
-     # This broke app_update_noupdate
-     # And was done in the non DRY way
-     # execute(update_requirements)
-     venvcmd('pip install -e ./')
-     venvcmd('assembl-ini-files %s' % (env.ini_file))
+    # do the requirements separately to update the non-static versions.
+    # This broke app_update_noupdate
+    # And was done in the non DRY way
+    # execute(update_requirements)
+    venvcmd('pip install -e ./')
+    execute(setup_var_directory)
+    venvcmd('assembl-ini-files %s' % (env.ini_file))
 
 
 @task
@@ -494,8 +495,8 @@ def app_compile_noupdate():
 @task
 def app_compile_nodbupdate():
     "Separated mostly for tests, which need to run alembic manually"
-    execute(app_setup)
     execute(virtuoso_install_or_upgrade)
+    execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
     execute(compile_javascript)
@@ -892,6 +893,10 @@ def get_config():
     env.config = config
     return config
 
+def setup_var_directory():
+    run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'log')))
+    run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'run')))
+    run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'db')))
 
 def get_virtuoso_root():
     config = get_config()
@@ -1012,7 +1017,12 @@ def virtuoso_source_upgrade():
     #trx files are not compatible between virtuoso versions
     supervisor_process_start('virtuoso')
     execute(virtuoso_source_install)
-    
+    #Makes sure there is no trx file with content
+    supervisor_process_stop('virtuoso')
+    #If we ran this, there is a strong chance we just reconfigured the ini file
+    # Make sure the virtuoso.ini and supervisor.ini reflects the changes
+    execute(app_setup)
+    execute(supervisor_restart)
 
 @task
 def virtuoso_source_install():
@@ -1067,12 +1077,6 @@ def virtuoso_source_install():
             sudo('checkinstall')
         else:
             run('make install')
-        #Makes sure there is no trx file with content
-        supervisor_process_stop('virtuoso')
-        #If we ran this, there is a strong chance we just reconfigured the ini file
-        # Make sure the virtuoso.ini and supervisor.ini reflects the changes
-        execute(app_setup)
-        execute(supervisor_restart)
 
 def get_vendor_config():
     config = SafeConfigParser()

@@ -3,7 +3,7 @@
 import sys
 import os
 from platform import system
-from os import listdir, mkdir
+from os import listdir
 from os.path import exists, join, dirname, abspath
 from ConfigParser import ConfigParser, NoSectionError
 
@@ -130,12 +130,6 @@ def main():
         inifile = open(fname, 'w')
         inifile.write(tmpl % vars)
         inifile.close()
-    if not exists('var'):
-        mkdir('var')
-    if not exists('var/log'):
-        mkdir('var/log')
-    if not exists('var/run'):
-        mkdir('var/run')
 
 if __name__ == '__main__':
     main()
