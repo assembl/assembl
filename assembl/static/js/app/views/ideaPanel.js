@@ -39,8 +39,6 @@ var IdeaPanel = AssemblPanel.extend({
     AssemblPanel.prototype.initialize.apply(this, arguments);
     var that = this, collectionManager = new CollectionManager();
     this.panelWrapper = options.panelWrapper;
-    this.editingDefinition = false;
-    this.editingTitle = false;
 
     if (!this.model) {
       this.model = this.getGroupState().get('currentIdea');
@@ -83,11 +81,8 @@ var IdeaPanel = AssemblPanel.extend({
   },
   ui: {
     'postIt': '.postitlist',
-    'definition': '.js_editDefinition',
-    'longTitle': '.js_editLongTitle',
-    'seeMoreOrLess': '.js_seeMoreOrLess',
-    'seeMore': '.js_seeMore',
-    'seeLess': '.js_seeLess',
+    'definition': '.js_editDefinitionRegion',
+    'longTitle': '.js_editLongTitleRegion',
     'deleteIdea': '.js_ideaPanel-deleteBtn',
     'clearIdea': '.js_ideaPanel-clearBtn',
     'closeExtract': '.js_closeExtract',
@@ -102,7 +97,9 @@ var IdeaPanel = AssemblPanel.extend({
     widgetsInteractionRegion: ".js_ideaPanel-section-access-widgets-region",
     widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets",
     widgetsCreationInteraction: ".ideaPanel-section-create-widgets",
-    announcementRegion: "@ui.announcement"
+    announcementRegion: "@ui.announcement",
+    regionLongTitle: '@ui.longTitle',
+    regionDescription: '@ui.definition'
   },
   modelEvents: {
     //Do NOT listen to change here
@@ -119,10 +116,6 @@ var IdeaPanel = AssemblPanel.extend({
     'click @ui.closeExtract': 'onSegmentCloseButtonClick',
     'click @ui.clearIdea': 'onClearAllClick',
     'click @ui.deleteIdea': 'onDeleteButtonClick',
-    'click @ui.seeMore': 'seeMoreContent',
-    'click @ui.seeLess': 'seeLessContent',
-    'click @ui.definition': 'editDefinition',
-    'click @ui.longTitle': 'editTitle',
     'click .js_openTargetInPopOver': 'openTargetInPopOver'
   },
 
@@ -234,8 +227,6 @@ var IdeaPanel = AssemblPanel.extend({
       canEditMyExtracts: currentUser.can(Permissions.EDIT_MY_EXTRACT),
       canAddExtracts: currentUser.can(Permissions.EDIT_EXTRACT), //TODO: This is a bit too coarse
       Ctx: Ctx,
-      editingDefinition: this.editingDefinition,
-      editingTitle: this.editingTitle,
       direct_link_relative_url: direct_link_relative_url,
       share_link_url: share_link_url
     };
@@ -270,17 +261,11 @@ var IdeaPanel = AssemblPanel.extend({
 
       this.renderAnnouncement();
 
-      if (this.editingDefinition) {
-        this.renderCKEditorDescription();
-      }
+      this.renderCKEditorDescription();
 
-      if (this.editingTitle) {
+      if (currentUser.can(Permissions.EDIT_SYNTHESIS)) {
         this.renderCKEditorLongTitle();
       }
-
-      setTimeout(function() {
-        that.ellipsis('.ideaPanel-definition', that.ui.seeMoreOrLess);
-      }, 0);
 
       this.renderContributors();
 
@@ -504,8 +489,6 @@ var IdeaPanel = AssemblPanel.extend({
         }
 
         this.model = idea;
-        this.editingDefinition = false;
-        this.editingTitle = false;
 
         //console.log("this.extractListSubset before setIdea:", this.extractListSubset);
         if (this.extractListSubset) {
@@ -803,60 +786,6 @@ var IdeaPanel = AssemblPanel.extend({
     this.deleteCurrentIdea();
   },
 
-  ellipsis: function(sectionSelector, seemoreUi) {
-    /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
-     * Read More links for introduction preview
-     */
-     var that = this;
-    $(sectionSelector).dotdotdot({
-      after: seemoreUi,
-      height: 170,
-      callback: function(isTruncated, orgContent) {
-
-        if (isTruncated) {
-          that.ui.seeMore.removeClass('hidden');
-        }
-        else {
-          that.ui.seeMore.addClass('hidden');
-        }
-      },
-      watch: "window"
-    });
-
-  },
-
-  seeMoreContent: function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    $(".ideaPanel-definition").trigger('destroy');
-    this.ui.seeMore.addClass('hidden');
-    this.ui.seeLess.removeClass('hidden');
-  },
-
-  seeLessContent: function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    this.ui.seeLess.addClass('hidden');
-
-    this.ellipsis('.ideaPanel-definition', this.ui.seeMoreOrLess);
-  },
-
-  editDefinition: function() {
-    if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
-      this.editingDefinition = true;
-      this.render();
-    }
-  },
-
-  editTitle: function() {
-    if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
-      this.editingTitle = true;
-      this.render();
-    }
-  },
-
   renderAnnouncement:  function() {
     var that = this,
     collectionManager = new CollectionManager();
@@ -899,8 +828,7 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   renderCKEditorDescription: function() {
-    var that = this,
-        area = this.$('.ideaPanel-definition-editor');
+    var that = this;
 
     var model = this.model.getDefinitionDisplayText();
 
@@ -911,21 +839,15 @@ var IdeaPanel = AssemblPanel.extend({
       'modelProp': 'definition',
       'placeholder': i18n.gettext('You may want to describe this idea for users here...'),
       'showPlaceholderOnEditIfEmpty': false,
-      'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)
+      'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_IDEA),
+      autosave: true
     });
 
-    this.listenTo(description, 'save cancel', function() {
-      that.editingDefinition = false;
-      that.render();
-    });
-
-    description.renderTo(area);
-    description.changeToEditMode();
+    this.regionDescription.show(description);
   },
 
   renderCKEditorLongTitle: function() {
-    var that = this,
-        area = this.$('.ideaPanel-longtitle-editor');
+    var that = this;
 
     var model = this.model.getLongTitleDisplayText();
     if (!model.length) return;
@@ -933,16 +855,11 @@ var IdeaPanel = AssemblPanel.extend({
     var ckeditor = new CKEditorField({
       'model': this.model,
       'modelProp': 'longTitle',
-      'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS)
+      'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS),
+      autosave: true
     });
 
-    this.listenTo(ckeditor, 'save cancel', function() {
-      that.editingTitle = false;
-      that.render();
-    });
-
-    ckeditor.renderTo(area);
-    ckeditor.changeToEditMode();
+    this.regionLongTitle.show(ckeditor);
   },
 
   openTargetInPopOver: function(evt) {

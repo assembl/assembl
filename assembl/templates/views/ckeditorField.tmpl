@@ -14,5 +14,10 @@
 <% } else { %>
     <div class="panel-editablebox">
         <div class="ckeditorField-mainfield panel-editablearea <% if(canEdit){ %>canEdit<% } %> mvn"><%= text ? text : placeholder %></div>
+        <div class="ckeditorField-seeMoreOrLess js_seeMoreOrLess mts">
+            <a href="#" class="seeMore js_seeMore txt-gray">{{ gettext('See more') }}<i class="icon icon-arrowdown"></i></a>
+            <a href="#" class="seeLess js_seeLess txt-gray hidden">{{ gettext('See less') }}<i class="icon icon-arrowup"></i></a>
+        </div>
+
     </div>
 <% } %>

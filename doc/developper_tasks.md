@@ -18,7 +18,7 @@ Download a copy of a remote database to develop locally
   fab env_dev database_restore
   # Make sure the database username and passwords in local.ini match the ones of the database you just downloaded
   fab env_dev app_compile #(To make sure the database schema is up to date and restore.  YOu can also use app_compile_noupdate if you are in a hurry)
-  fab env_dev reset_semantic_mapping
+  fab env_dev reset_semantic_mappings
   # Grab a coffee...
   exit
   supervisorctl restart dev:

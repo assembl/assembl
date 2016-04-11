@@ -21,29 +21,24 @@
       <% if( _.size(context.get('introduction')) || userCanEditDiscussion ){ %>
         <h2>{{ gettext('Context') }}</h2>
         <% if( editingIntroduction ) { %>
-				  <div class="context-introduction-editor"></div>
 			  <% } else if (_.size(context.get('introduction')) === 0) { %>
 			    <div class="context-introduction ctx_edit js_editIntroduction"><i class="icon-add"></i> {{ gettext('You probably want to add a context for this discussion') }}</div>
-        <% } else { %>
-				  <div class="context-introduction ctx_edit js_editIntroduction"><%= context.get('introduction') %></div>
-				  <a href="#" class="js_introductionSeeMore">{{ gettext('See more') }}</a>
-			  <% } %>
+        <% } %>
       <% } %>
+      <div class="context-introduction-editor"></div>
     </div>
   </div>
   <div class="gu gu-last">
    <div class="block-content">
-   <% if( _.size(context.get('objectives')) || userCanEditDiscussion){ %>
-     <h2>{{ gettext('Discussion objectives') }}</h2>
-      <% if( editingObjective ) { %>
-				 <div class="context-objective-editor"></div>
-      <% } else if (_.size(context.get('objectives')) === 0) { %>
-          <div class="context-objective ctx_edit js_editObjective"><i class="icon-add"></i> {{ gettext('You probably want to add some discussion objectives') }}</div>
-			 <% } else { %>
-				<div class="context-objective ctx_edit js_editObjective"><%= context.get('objectives') %></div>
-				<a href="#" class="js_objectivesSeeMore">{{ gettext('See more') }}</a>
-		 <% } %>
-   <% } %>
+     <% if( _.size(context.get('objectives')) || userCanEditDiscussion){ %>
+       <h2>{{ gettext('Discussion objectives') }}</h2>
+         <% if( editingObjective ) { %>
+
+         <% } else if (_.size(context.get('objectives')) === 0) { %>
+           <div class="context-objective ctx_edit js_editObjective"><i class="icon-add"></i> {{ gettext('You probably want to add some discussion objectives') }}</div>
+         <% } %>
+     <% } %>
+     <div class="context-objective-editor"></div>
    </div>
   </div>
 </div>

@@ -95,7 +95,7 @@ a {
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
   font-family: $baseFontFamily;
   font-weight: bold;
-  margin-bottom: (1em * $baseLineHeight / 2.5);
+  margin-bottom: (1em * $baseLineHeightFontMultiplier / 2.5);
   color: lighten($baseFontColor, 10%);
 }
 
@@ -122,12 +122,12 @@ h4, .h4 {
 
 h5, .h5 {
   font-size: 14px;
-  padding-bottom: (1em * $baseLineHeight / 3);
+  padding-bottom: (1em * $baseLineHeightFontMultiplier / 3);
 }
 
 h6, .h6 {
   font-size: 13px;
-  padding-bottom: (1em * $baseLineHeight / 3);
+  padding-bottom: (1em * $baseLineHeightFontMultiplier / 3);
 }
 
 .h-bx {

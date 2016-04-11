@@ -68,6 +68,9 @@
       .idea-title {
 
       }
+      .idea-description {
+        min-height: 2*$baseLineHeightFontMultiplier*$baseFontSize; // Should match the readMoreAfterHeightPx of the description's view
+      }
     }
     .right-column {
 

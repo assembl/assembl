@@ -23,6 +23,17 @@ $editablearea_hover_border_size: 1px;
     }
   }
 
+  /* We probably want to move this to a ckeditorfield.scss */
+  .panel-editablebox.is-editing {
+    .ckeditorField-seeMoreOrLess {
+      .seeMore,
+      .seeLess {
+        cursor: pointer;
+        text-decoration: none;
+        float: right;
+      }
+    }
+  }
   .panel-editablebox.is-editing {
     .panel-editablearea {
       color: $black;

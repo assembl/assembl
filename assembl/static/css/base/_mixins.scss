@@ -220,7 +220,7 @@
 }
 
 // For sass convertion
-@mixin font-shorthand($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeight) {
+@mixin font-shorthand($size: $baseFontSize, $weight: normal, $lineHeight: $baseLineHeightFontMultiplier) {
   font-size: $size;
   font-weight: $weight;
   line-height: $lineHeight;

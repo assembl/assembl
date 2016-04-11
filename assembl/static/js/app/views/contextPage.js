@@ -180,9 +180,9 @@ var Instigator = Marionette.ItemView.extend({
 
 });
 
-var Introduction = Marionette.ItemView.extend({
+var Introduction = Marionette.LayoutView.extend({
   constructor: function Introduction() {
-    Marionette.ItemView.apply(this, arguments);
+    Marionette.LayoutView.apply(this, arguments);
   },
 
   template: '#tmpl-introductions',
@@ -198,6 +198,11 @@ var Introduction = Marionette.ItemView.extend({
     seeMoreObjectives: '.js_objectivesSeeMore',
     introductionEditor: '.context-introduction-editor',
     objectiveEditor: '.context-objective-editor'
+  },
+  
+  regions: {
+    objectiveEditorRegion: "@ui.objectiveEditor",
+    introductionEditorRegion: "@ui.introductionEditor"
   },
 
   events: {
@@ -217,75 +222,19 @@ var Introduction = Marionette.ItemView.extend({
   },
 
   onRender: function() {
-    var that = this;
-
-    if (this.editingIntroduction) {
-      this.renderCKEditorIntroduction();
-    }
-
-    if (this.editingObjective) {
-      this.renderCKEditorObjective();
-    }
-  },
-
-  onShow: function() {
-      var that = this;
-      setTimeout(function() {
-        that.applyEllipsisToSection('.context-introduction', that.ui.seeMoreIntro);
-        that.applyEllipsisToSection('.context-objective', that.ui.seeMoreObjectives);
-      }, 200);
-    },
-
-  seeMore: function(e) {
-    e.stopPropagation();
-
-    var collectionManager = new CollectionManager();
-
-    collectionManager.getDiscussionModelPromise()
-            .then(function(discussion) {
-
-              if ($(e.target).hasClass('js_introductionSeeMore')) {
-                var model = new Backbone.Model({
-                  content: discussion.get('introduction'),
-                  title: i18n.gettext('Context')
-                });
-              }
-              else if ($(e.target).hasClass('js_objectivesSeeMore')) {
-                var model = new Backbone.Model({
-                  content: discussion.get('objectives'),
-                  title: i18n.gettext('Discussion objectives')
-                });
-              }
-              else {
-                throw new Exception("Unknown event source");
-              }
-
-              var Modal = Backbone.Modal.extend({
-  constructor: function Modal() {
-    Backbone.Modal.apply(this, arguments);
-  },
-
-                template: _.template($('#tmpl-homeIntroductionDetail').html()),
-                className: 'generic-modal popin-wrapper',
-                model: model,
-                cancelEl: '.close'
-              });
-
-              Assembl.slider.show(new Modal())
-            });
+    this.renderCKEditorIntroduction();
+    this.renderCKEditorObjective();
   },
 
   editIntroduction: function() {
     if (Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
-      this.editingIntroduction = true;
-      this.render();
+      this._introductionEditor.changeToEditMode();
     }
   },
 
   editObjective: function() {
     if (Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) {
-      this.editingObjective = true;
-      this.render();
+      this._objectiveEditor.changeToEditMode();
     }
   },
 
@@ -295,16 +244,12 @@ var Introduction = Marionette.ItemView.extend({
 
     var introduction = new CKEditorField({
       'model': this.model,
-      'modelProp': 'introduction'
+      'modelProp': 'introduction',
+      canEdit: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
     });
 
-    this.listenTo(introduction, 'save cancel', function() {
-      that.editingIntroduction = false;
-      that.render();
-    });
-
-    introduction.renderTo(area);
-    introduction.changeToEditMode();
+    this.introductionEditorRegion.show(introduction);
+    this._introductionEditor = introduction;
   },
 
   renderCKEditorObjective: function() {
@@ -313,36 +258,12 @@ var Introduction = Marionette.ItemView.extend({
 
     var objective = new CKEditorField({
       'model': this.model,
-      'modelProp': 'objectives'
+      'modelProp': 'objectives',
+      canEdit: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
     });
 
-    this.listenTo(objective, 'save cancel', function() {
-      that.editingObjective = false;
-      that.render();
-    });
-
-    objective.renderTo(area);
-    objective.changeToEditMode();
-  },
-
-  applyEllipsisToSection: function(sectionSelector, seemoreUi) {
-    /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
-     * Read More links for introduction preview
-     */
-    $(sectionSelector).dotdotdot({
-      after: seemoreUi,
-      height: 170,
-      callback: function(isTruncated, orgContent) {
-        if (isTruncated) {
-          seemoreUi.show();
-        }
-        else {
-          seemoreUi.hide();
-        }
-      },
-      watch: "window"
-    });
-
+    this.objectiveEditorRegion.show(objective);
+    this._objectiveEditor = objective;
   }
 
 });

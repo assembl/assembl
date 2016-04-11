@@ -66,7 +66,7 @@ $smallFontSize: $baseFontSize - 1;
 
 //Uses google font service
 $baseFontFamily: "Open Sans", sans-serif !default;
-$baseLineHeight: 1.5 !default;
+$baseLineHeightFontMultiplier: 1.5 !default;
 $baseFontColor: lighten($black, 15%) !default;
 
 //text color

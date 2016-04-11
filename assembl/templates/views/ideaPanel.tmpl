@@ -25,39 +25,17 @@
           <% if (canEditNextSynthesis) { %>
             <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
               <div class="sub-section-title">{{ gettext('Expression in next synthesis') }}</div>
-              <% if( editingTitle ) { %>
-                <div class="ideaPanel-longtitle-editor panel-editablearea canEdit"></div>
-              <% } else { %>
-                <div class="ideaPanel-longtitle js_editLongTitle panel-editablearea canEdit" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}">
-                    <%= idea.getLongTitleDisplayText() %>
-                </div>
-              <% } %>
             <% } %>
           <% } %>
+          <div class="ideaPanel-longtitle panel-editablearea js_editLongTitleRegion" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}">
+          </div>
 
           <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
             <div class="sub-section-title">{{ gettext('Description of this idea') }}</div>
           <% } %>
 
-          <% if( editingDefinition ) { %>
-            <div class="ideaPanel-definition-editor"></div>
-          <% } else { %>
-            <% if (canEdit) { %>
-              <div class="ideaPanel-definition panel-editablearea canEdit js_editDefinition" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
-                <%= idea.get('definition') %>
-              </div>
-            <% } else { %>
-              <div class="ideaPanel-definition panel-editablearea" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
-                 <%= idea.get('definition') %>
-              </div>
-            <% } %>
-            <% if(idea.get('definition').length){ %>
-                <div class="ideaPanel-seeMoreOrLess js_seeMoreOrLess mts">
-                    <a href="#" class="seeMore js_seeMore txt-gray">{{ gettext('See more') }}<i class="icon icon-arrowdown"></i></a>
-                </div>
-                <a href="#" class="seeLess js_seeLess txt-gray hidden">{{ gettext('See less') }}<i class="icon icon-arrowup"></i></a>
-            <% } %>
-          <% } %>
+          <div class="ideaPanel-definition panel-editablearea js_editDefinitionRegion" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
+          </div>
 
           <% if (canEdit) { %>
             <fieldset class="ideaPanel-section-announcement">

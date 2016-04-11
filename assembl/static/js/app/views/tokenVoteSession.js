@@ -8,6 +8,7 @@ var Marionette = require('../shims/marionette.js'),
   CollectionManager = require('../common/collectionManager.js'),
   Types = require('../utils/types.js'),
   BreadCrumbView = require('./breadcrumb.js'),
+  CKEditorField = require('./reusableDataFields/ckeditorField.js'),
   IdeaModel = require('../models/idea.js'),
   i18n = require('../utils/i18n.js'),
   openIdeaInModal = require('./modals/ideaInModal.js');
@@ -472,16 +473,21 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
 });
 
 // This view shows an idea in the list of votable ideas (and calls a subview which shows the tokens for this idea)
-//var TokenVoteItemView = Marionette.ItemView.extend({
 var TokenVoteItemView = Marionette.LayoutView.extend({
   template: '#tmpl-tokenVoteItem',
   initialize: function(options){
     this.childIndex = options.childIndex;
     this.parent = options.parent;
   },
+
   ui: {
     tokensForIdea: ".tokens-for-idea"
   },
+
+  regions: {
+    regionIdeaDescription: ".js_region-idea-description",
+  },
+
   serializeData: function(){
     return {
       "ideaTitle": (this.childIndex+1) + ". " + this.model.get("@id") + " # " + this.model.getShortTitleDisplayText()
@@ -517,7 +523,27 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
         that.ui.tokensForIdea.append(view.render().el);
       });
     }
-  }
+  },
+
+  onShow: function(){
+    this.renderCKEditorDescription();
+  },
+  
+  renderCKEditorDescription: function() {
+    var model = this.model.getDefinitionDisplayText();
+
+    if (!model.length) return;
+
+    var description = new CKEditorField({
+      model: this.model,
+      modelProp: 'definition',
+      showPlaceholderOnEditIfEmpty: false,
+      canEdit: false,
+      readMoreAfterHeightPx: 39 // should match the min-heght of .idea-description .  Currently this is  2*$baseLineHeightFontMultiplier*$baseFontSize (2 lines)
+    });
+
+    this.getRegion('regionIdeaDescription').show(description);
+  },
 });
 
 // This view shows the list of votable ideas and their tokens
@@ -651,7 +677,10 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         }
       });
 
-      that.$(".votables-collection").html(collectionView.render().el);
+      var regionVotablesCollection = new Marionette.Region({
+        el: that.$(".votables-collection")
+      });
+      regionVotablesCollection.show(collectionView);
     });
 
   },

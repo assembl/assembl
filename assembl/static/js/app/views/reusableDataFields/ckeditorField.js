@@ -37,6 +37,7 @@ var cKEditorField = Marionette.ItemView.extend({
     if (this.model === null) {
       throw new Error('EditableField needs a model');
     }
+    //console.log("cKEditorField options: ", options);
 
     this.view = this;
 
@@ -56,21 +57,27 @@ var cKEditorField = Marionette.ItemView.extend({
 
     this.showPlaceholderOnEditIfEmpty = (options.showPlaceholderOnEditIfEmpty) ? options.showPlaceholderOnEditIfEmpty : null;
 
-    this.canEdit = (options.canEdit) ? options.canEdit : true;
+    this.canEdit = (options.canEdit !== undefined) ? options.canEdit : true;
+    
+    this.readMoreAfterHeightPx = (options.readMoreAfterHeightPx !== undefined) ? options.readMoreAfterHeightPx : 170;
 
-    this.listenTo(this.view, 'cKEditorField:render', this.render);
   },
 
   ui: {
     mainfield: '.ckeditorField-mainfield',
     saveButton: '.ckeditorField-savebtn',
-    cancelButton: '.ckeditorField-cancelbtn'
+    cancelButton: '.ckeditorField-cancelbtn',
+    seeMoreOrLess: '.js_seeMoreOrLess',
+    seeMore: '.js_seeMore',
+    seeLess: '.js_seeLess',
   },
 
   events: {
     'click @ui.mainfield': 'changeToEditMode',
     'click @ui.saveButton': 'saveEdition',
-    'click @ui.cancelButton': 'cancelEdition'
+    'click @ui.cancelButton': 'cancelEdition',
+    'click @ui.seeMore': 'seeMoreContent',
+    'click @ui.seeLess': 'seeLessContent',
   },
 
   serializeData: function() {
@@ -93,6 +100,67 @@ var cKEditorField = Marionette.ItemView.extend({
     if (this.editing) {
       this.startEditing();
     }
+    if (this._viewIsAlreadyShown) {
+      this.requestEllipsis();
+    }
+  },
+
+  onShow: function() {
+    this.requestEllipsis();
+    this._viewIsAlreadyShown = true;
+  },
+
+  requestEllipsis: function() {
+    var that = this;
+    setTimeout(function() {
+      that.ellipsis(that.ui.mainfield, that.ui.seeMore);
+    }, 0);
+  },
+
+  ellipsis: function(sectionSelector, seemoreUi) {
+    /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+     * Read More links for introduction preview
+     */
+    var that = this;
+    sectionSelector.dotdotdot({
+      after: seemoreUi,
+      height: that.readMoreAfterHeightPx,
+      callback: function(isTruncated, orgContent) {
+
+        if (isTruncated) {
+          that.ui.seeMore.removeClass('hidden');
+        }
+        else {
+          that.ui.seeMore.addClass('hidden');
+        }
+      },
+      watch: "window"
+    });
+
+  },
+
+  seeMoreContent: function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    this.ui.mainfield.trigger('destroy');
+    this.ui.seeMore.addClass('hidden');
+    this.ui.seeLess.removeClass('hidden');
+  },
+
+  seeLessContent: function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    //This is absurd, but in seeMoreContent will not restore the "after:" 
+    // element to it's original location so we need to re-render here in case 
+    // seeMoreContent was called before
+
+    this.render();
+    
+    this.ui.seeLess.addClass('hidden');
+
+    this.ellipsis(this.ui.mainfield, this.ui.seeMore);
   },
 
   /**
@@ -140,17 +208,6 @@ var cKEditorField = Marionette.ItemView.extend({
   },
 
   /**
-   * Renders inside the given jquery or HTML elemenent given
-   * @param {jQuery|HTMLElement} el
-   * @param {Boolean} editing
-   */
-  renderTo: function(el, editing) {
-    this.editing = editing;
-    $(el).append(this.$el);
-    this.view.trigger('cKEditorField:render');
-  },
-
-  /**
    * Destroy the ckeditor instance
    */
   destroy: function() {
@@ -160,7 +217,7 @@ var cKEditorField = Marionette.ItemView.extend({
   changeToEditMode: function() {
     if (this.canEdit) {
       this.editing = true;
-      this.view.trigger('cKEditorField:render');
+      this.render();
     }
   },
 
@@ -189,7 +246,7 @@ var cKEditorField = Marionette.ItemView.extend({
     }
 
     this.editing = false;
-    this.view.trigger('cKEditorField:render');
+    this.render();
   },
 
   cancelEdition: function(ev) {
@@ -203,7 +260,7 @@ var cKEditorField = Marionette.ItemView.extend({
     }
 
     this.editing = false;
-    this.view.trigger('cKEditorField:render');
+    this.render();
 
     this.trigger('cancel', [this]);
   }
