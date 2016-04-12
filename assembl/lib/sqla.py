@@ -1302,31 +1302,30 @@ class BaseOps(object):
                     for other in others:
                         assert isinstance(other, TombstonableMixin)
                         other.is_tombstone = True
-                else:
+                elif duplicate_handling == DuplicateHandling.TOMBSTONE_AND_COPY:
+                    for other in others:
+                        assert isinstance(other, HistoryMixin)
+                        other.is_tombstone = True
+                    self.base_id = others[0].base_id
+                elif duplicate_handling in (
+                        DuplicateHandling.USE_ORIGINAL,
+                        DuplicateHandling.ERROR):
                     other = others[0]
                     if inspect(self).pending:
                         other.db.expunge(self)
                     if duplicate_handling == DuplicateHandling.ERROR:
                         raise ObjectNotUniqueError(
                             "Duplicate of <%s> created" % (other.uri()))
-                    assert duplicate_handling in (
-                        DuplicateHandling.USE_ORIGINAL,
-                        DuplicateHandling.TOMBSTONE_AND_COPY
-                        ), "Invalid value of duplicate_handling"
                     # TODO: Check if there's a risk of infinite recursion here?
                     if json is None:
                         # TODO: Use the logic in api2.instance_put_form
                         raise NotImplementedError()
                     else:
-                        if duplicate_handling == DuplicateHandling.TOMBSTONE_AND_COPY:
-                            for other in others[1:]:
-                                if isinstance(other, TombstonableMixin):
-                                    other.is_tombstone = True
-                            assert isinstance(other, HistoryMixin)
-                            other.copy(True)
                         return other._do_update_from_json(
                             json, parse_def, aliases, context, permissions,
                             user_id, duplicate_handling, jsonld)
+                else:
+                    raise ValueError("Invalid value of duplicate_handling")
         return self
 
     def unique_query(self):
