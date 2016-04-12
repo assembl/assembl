@@ -37,7 +37,10 @@
           <% } %>
           <span class="mtm">
             <div class="messageSend-upload fl">
-              <input type="file" name="attachmentUpload" multiple="multiple" class="js_upload" />
+              <input type="file" name="attachmentUpload" id="attachmentUpload" multiple="multiple" class="file-upload js_upload" />
+              <label for="attachmentUpload">
+                <i class="icon icon-attach"></i>
+              </label>
             </div>
             <div class="messageSend-buttons fr"> <!-- need again this part for top posting -->
                 <% if ( reply_message_id ) { %>
