@@ -1,3 +1,5 @@
-<div class='file-upload'>
+<% if (percent !== null ) { %>
+    <a href="<%= url %>"><%= name %> (<%=percent%>%)</a>
+<% } else { %>
     <a href="<%= url %>"><%= name %></a>
-</div>
+<% } %>

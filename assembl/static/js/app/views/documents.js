@@ -37,6 +37,7 @@ var AbstractDocumentView = Marionette.ItemView.extend({
 
   doOembed: function() {
     //console.log (this.model.get('external_url'));
+    var that = this;
     this.$el.oembed(this.uri, {
       //initiallyVisible: false,
       embedMethod: "fill",
@@ -50,11 +51,12 @@ var AbstractDocumentView = Marionette.ItemView.extend({
         console.log("onEmbedFailed (assembl)");
         //this.addClass("hidden");
         
-        //The current accepted failure case is to simply present the url as is.
-        var url = $(this).text().trim();
-        if (url){
-          $(this).empty().append("<a href="+url+">"+url+"</a>");
-        }
+        // //The current accepted failure case is to simply present the url as is.
+        // var url = $(this).text().trim();
+        // if (url){
+        //   $(this).empty().append("<a href="+url+">"+url+"</a>");
+        // }
+        that.onRenderOembedFail();
       },
       onError: function(externalUrl, embedProvider, textStatus, jqXHR) {
         if (jqXHR) {
@@ -84,6 +86,13 @@ var AbstractDocumentView = Marionette.ItemView.extend({
     this.doOembed();
 
   },
+
+  /**
+   * Override to alter the Oembed failure condition
+   */
+  onRenderOembedFail: function(){
+    this.$el.html("<a href="+ this.uri + ">"+ this.uri + "</a>");
+  }
 
 });
 
@@ -121,9 +130,14 @@ var FileView = AbstractDocumentView.extend({
   serializeData: function(){
     return {
       name: this.model.get('name'),
-      url: this.uri
+      url: this.uri,
+      percent: null
     }
-  }   
+  },
+
+  onRenderOembedFail: function(){
+    this.$el.html("<a href="+ this.uri + ">"+ this.model.get('name') + "</a>");
+  }
 });
 
 
@@ -142,20 +156,17 @@ var AbstractEditView =  AbstractDocumentView.extend({
     
     AbstractDocumentView.prototype.initialize.call(this, options);
     this.showProgress = false;
+    this.percentComplete = 0; // Float from 0-100
     var that = this;
-
     if (options.showProgress) {
       this.showProgress = true;
     }
 
-    // Promise.resolve(this.model.save()).then(function(model){
-    //   initalizeCallback(model);
-    // });
-    setTimeout(function(){
-      if (!that.isViewDestroyed() ){
+    Promise.resolve(this.model.save()).then(function(){
+      if (!that.isViewDestroyed()){
         that.initalizeCallback();
       }
-    }, 5000);
+    });
   },
 
   initalizeCallback: function(model){
@@ -163,13 +174,28 @@ var AbstractEditView =  AbstractDocumentView.extend({
       Override in subclasses to override what the view will initalize after
       saving its model to the backend.
      */
+    // this.$(window).on("beforeunload", function(ev){this.onBeforeUnload(ev)});
     throw new Error("Cannot instantiate an AbstractDocumentEditView");
   },
 
+  /**
+   * Override in child classes 
+   */
   onShowProgress: function(ev){
     if (this.showProgress) {
-      console.log("Show the progress of the file upload in view");
+      console.log("Show the progress of the file upload in view with event", ev);
     }
+  },
+
+  onBeforeUnload: function(ev){
+    console.log("AbstractEditView onBeforeUnload called with args", arguments);
+    this.$(window).off('beforeunload');
+    this.onBeforeDestroy();
+  },
+
+  onBeforeDestroy: function(){
+    console.log("Destroying the document model");
+    this.model.destroy();
   }
 });
 
@@ -178,14 +204,10 @@ var DocumentEditView = AbstractEditView.extend({
     AbstractEditView.apply(this, arguments);
   },
 
+  template: "tmpl-fileEmbed",
+
   initialize: function(options){
     AbstractEditView.prototype.initialize.call(this, options);
-  },
-
-  initalizeCallback: function(model){
-    console.log("Callback made here.");
-    this.template = "#tmpl-fileEmbed";
-    this.render();
   },
 
   serializeData: function(){
@@ -201,46 +223,99 @@ var FileEditView = AbstractEditView.extend({
     AbstractEditView.apply(this, arguments);
   },
 
-  initialize: function(options){
-    console.log("FileEditView initialized on model", this.model);
-    AbstractEditView.prototype.initialize.call(this, options);
+  template: "#tmpl-fileUploadEmbed",
+
+  initalize: function(options){
+    AbstractEditView.prototype.initalize.call(this, options);
   },
 
-  initalizeCallback: function(model){
-    var that = this;
-    setTimeout(function(){
-      that.template = "#tmpl-fileUploadEmbed";
-      that.uploadComplete = true;
-      that.model.set('external_url', "http://www.google.com");
-      that.render();
-
-    }, 3000);
-  },
-
-  onRender: function(){
-    // if (this.uploadComplete) {
-    //   // Must add logic here for deciding to either use the template system,
-    //   // or the oembed logic. 
-    //   AbstractEditView.prototype.onRender.apply(this, arguments);
-    // }
-    // else {
-    //   Marionette.ItemView.prototype.onRender.apply(this, arguments);
-    // }
-    console.log("FileEditView onRender was called");
-
+  initalizeCallback: function(){
+    this.uploadComplete = true;
+    this.uri = this.model.get('external_url');
   },
 
   serializeData: function(){
     return {
       name: this.model.get('name'),
-      url: this.model.get('external_url')
+      url: this.uploadComplete ? this.uri : "javascript:void(0)",
+      percent: this.percentComplete
     }
   },
 
   onShowProgress: function(ev){
-    console.log("FileEditView progress bar has been made!", ev);
+    // console.log("FileEditView progress bar has been made!", ev);
+    this.percentComplete = ev * 100;
     this.render();
   }
+});
+
+
+var DocumentEditUploadView = Marionette.LayoutView.extend({
+  //This will have a region for the upload button
+  //And a collection view for the collection of entities
+  //
+  //Can add a wrapper class for the models that will be appended to the
+  //collection (ie. attachment models) and the respective views.
+
+  constructor: function DocumentEditUploadView(){
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
+  template: 'tmpl-uploadView',
+
+  ui: {
+    'collectionView': '.js_collection-view',
+    'uploadButton': '.js_upload-button'
+  },
+
+  events: {
+    'change @ui.uploadButton': 'onFileUpload'
+  },
+
+  regions: {
+    'collectionRegion': '@ui.collectionView'
+  },
+
+  initialize: function(options){
+    this.collection = options.collection;
+    this.CollectionViewClass = options.collectionView;
+    this.autoBox = options.autoBoxFunc;
+
+    if (!this.collection || !this.CollectionViewClass) {
+      throw new Error("Cannot instantiate a DocumentEditUploadView without a collection and a CollectionViewClass!");
+    }
+  },
+
+  onShow: function(){
+    var view = new this.CollectionViewClass({collection: this.collection})
+    this.collectionRegion.show(view);
+  },
+
+  onFileUpload: function(e){
+    var fs = e.target.files,
+        that = this;
+    console.log("A file has been uploaded");
+
+    _.each(fs, function(f){
+      var d = new Documents.FileModel({
+        name: f.name,
+        mime_type: f.type
+      });
+      d.set('file', f);
+
+      if ( (that.autoBox) && (_.isFunction(that.autoBox)) ) {
+        try {
+          var boxed = that.autoBox(d);
+          that.collection.add(boxed);
+        }
+        catch (error) {
+          console.error("Autoboxing Document model creation failed. Adding document to collection.");
+          that.collection.add(d);
+        }
+      }
+    });
+  }
+
 });
 
 
