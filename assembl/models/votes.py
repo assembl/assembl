@@ -732,7 +732,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
     def is_valid(self):
         return self.vote_spec.is_valid_vote(self)
 
-    default_duplicate_handling = DuplicateHandling.TOMBSTONE
+    default_duplicate_handling = DuplicateHandling.TOMBSTONE_AND_COPY
 
     def unique_query(self):
         query, valid = super(AbstractIdeaVote, self).unique_query()

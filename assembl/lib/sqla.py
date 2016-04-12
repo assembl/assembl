@@ -56,7 +56,8 @@ class DuplicateHandling(Enum):
     NO_CHECK = 1        # Don't look for duplicates
     ERROR = 2           # raise a ObjectNotUniqueError
     USE_ORIGINAL = 3    # Update the original value instead of a new one.
-    TOMBSTONE = 4       # Tombstone the original value (assumes TombstonableMixin)
+    TOMBSTONE = 4       # Tombstone the original value (assumes TombstonableMixin) and use new one
+    TOMBSTONE_AND_COPY = 5  # Make a tombstone of original value, and reuse it
 
 
 class ObjectNotUniqueError(ValueError):
@@ -1282,6 +1283,7 @@ class BaseOps(object):
     def handle_duplication(
                 self, json, parse_def, aliases, context, permissions, user_id,
                 duplicate_handling, jsonld=None, form_data=None):
+        from .history_mixin import TombstonableMixin, HistoryMixin
         if duplicate_handling is None:
             duplicate_handling = self.default_duplicate_handling
         if duplicate_handling == DuplicateHandling.NO_CHECK:
@@ -1297,28 +1299,34 @@ class BaseOps(object):
                 others.remove(self)
             if others:
                 if duplicate_handling == DuplicateHandling.TOMBSTONE:
-                    from .history_mixin import TombstonableMixin
                     for other in others:
                         assert isinstance(other, TombstonableMixin)
                         other.is_tombstone = True
                 else:
+                    other = others[0]
                     if inspect(self).pending:
                         other.db.expunge(self)
                     if duplicate_handling == DuplicateHandling.ERROR:
                         raise ObjectNotUniqueError(
                             "Duplicate of <%s> created" % (other.uri()))
-                    elif duplicate_handling == DuplicateHandling.USE_ORIGINAL:
-                        # TODO: Check if there's a risk of infinite recursion here?
-                        other = others[0]
-                        if json is None:
-                            # TODO: Use the logic in api2.instance_put_form
-                            raise NotImplementedError()
-                        else:
-                            return other._do_update_from_json(
-                                json, parse_def, aliases, context, permissions,
-                                user_id, duplicate_handling, jsonld)
+                    assert duplicate_handling in (
+                        DuplicateHandling.USE_ORIGINAL,
+                        DuplicateHandling.TOMBSTONE_AND_COPY
+                        ), "Invalid value of duplicate_handling"
+                    # TODO: Check if there's a risk of infinite recursion here?
+                    if json is None:
+                        # TODO: Use the logic in api2.instance_put_form
+                        raise NotImplementedError()
                     else:
-                        raise ValueError, "Invalid value of duplicate_handling"
+                        if duplicate_handling == DuplicateHandling.TOMBSTONE_AND_COPY:
+                            for other in others[1:]:
+                                if isinstance(other, TombstonableMixin):
+                                    other.is_tombstone = True
+                            assert isinstance(other, HistoryMixin)
+                            other.copy(True)
+                        return other._do_update_from_json(
+                            json, parse_def, aliases, context, permissions,
+                            user_id, duplicate_handling, jsonld)
         return self
 
     def unique_query(self):
