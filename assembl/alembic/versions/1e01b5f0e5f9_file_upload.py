@@ -18,9 +18,6 @@ import transaction
 from assembl.lib.sqla_types import URLString
 from assembl.lib.sqla_types import CoerceUnicode
 
-from assembl import models as m
-db = m.get_session_maker()()
-
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
