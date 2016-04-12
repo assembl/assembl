@@ -47,18 +47,21 @@ def database_start():
     """
     Makes sure the database server is running
     """
-    execute(supervisor_process_start, 'virtuoso')
+    if using_virtuoso():
+        execute(supervisor_process_start, 'virtuoso')
 
 
 @task
 def supervisor_restart():
+    "Restart supervisor itself."
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl shutdown")
     #Another supervisor,upstart, etc may be watching it, give it a little while
     #Ideally we should wait, but I didn't have time to code it.
     sleep(30);
     #If supervisor is already started, this will do nothing
-    execute(supervisor_process_start, 'virtuoso')
+    if using_virtuoso():
+        execute(supervisor_process_start, 'virtuoso')
 
 
 def supervisor_process_start(process_name):
@@ -495,7 +498,7 @@ def app_compile_noupdate():
 @task
 def app_compile_nodbupdate():
     "Separated mostly for tests, which need to run alembic manually"
-    execute(virtuoso_install_or_upgrade)
+    execute(install_or_updgrade_virtuoso)
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
@@ -606,6 +609,7 @@ def bower_cmd(cmd, relative_path='.'):
             print("Running a bower command in path %s" % relative_path)
             run(' '.join((node_cmd, bower_cmd, cmd)))
 
+
 def _bower_foreach_do(cmd):
     bower_cmd(cmd)
     bower_cmd(cmd, 'assembl/static/widget/card')
@@ -614,7 +618,8 @@ def _bower_foreach_do(cmd):
     bower_cmd(cmd, 'assembl/static/widget/vote')
     bower_cmd(cmd, 'assembl/static/widget/creativity')
     bower_cmd(cmd, 'assembl/static/widget/share')
-    
+
+
 @task
 def bower_install():
     """ Normally not called manually """
@@ -678,7 +683,7 @@ def install_builddeps():
             if not run('brew link libiodbc', quiet=True):
                 sudo('brew link libiodbc')
         if not exists('/usr/local/bin/gfortran'):
-            sudo('brew install gcc isl')
+            run('brew install gcc isl')
     else:
         sudo('apt-get install -y build-essential python-dev')
         sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
@@ -695,6 +700,7 @@ def install_builddeps():
 
 @task
 def update_python_package_builddeps():
+    "Install/Update python package native binary dependencies"
     print(cyan('Installing/Updating python package native binary dependencies'))
     #For specific python packages in requirements.txt
     if env.mac:
@@ -707,6 +713,7 @@ def update_python_package_builddeps():
 
 @task
 def start_edit_fontello_fonts():
+    "Prepare to edit the fontello fonts in Fontello."
     assert env.hosts == ['localhost'], "Meant to be run locally"
     try:
         import requests
@@ -731,6 +738,7 @@ def start_edit_fontello_fonts():
 
 @task
 def compile_fontello_fonts():
+    "Compile the fontello fonts once you have edited them in Fontello. Run start_edit_fontello_fonts first."
     from zipfile import ZipFile
     from StringIO import StringIO
     assert env.hosts == ['localhost'], "Meant to be run locally"
@@ -759,21 +767,29 @@ def compile_fontello_fonts():
                         ffile.write(fdata.read())
 
 
-def database_create():
-    """
-    """
+def database_create_virtuoso():
     execute(database_start)
+
+
+def database_create_postgres():
+    run_db_command(
+        'createdb -E UNICODE -Ttemplate0 -O%s %s' % (
+            env.db_user, env.db_name))
+
+
+def database_create():
+    "Create the database for this assembl instance"
+    if using_virtuoso():
+        database_create_virtuoso()
+    else:
+        database_create_postgres()
 
 
 def virtuoso_db_directory():
     return join(env.projectpath, 'var/db')
 
 
-@task
-def database_dump():
-    """
-    Dumps the database on remote site
-    """
+def database_dump_virtuoso():
     if not exists(env.dbdumps_dir):
         run('mkdir -m700 %s' % env.dbdumps_dir)
 
@@ -800,6 +816,37 @@ def database_dump():
     # Make symlink to latest
     with cd(env.dbdumps_dir):
         run('ln -sf %s %s' % (absolute_path, remote_db_path()))
+
+
+def database_dump_postgres():
+    if not exists(env.dbdumps_dir):
+        run('mkdir -m700 %s' % env.dbdumps_dir)
+
+    filename = 'db_%s.sql' % strftime('%Y%m%d')
+    compressed_filename = '%s.pgdump' % filename
+    absolute_path = os.path.join(env.dbdumps_dir, compressed_filename)
+
+    # Dump
+    with prefix(venv_prefix()), cd(env.projectpath):
+        run('pg_dump --host=%s -U%s --format=custom -b %s > %s' % (env.db_host, env.db_user,
+                                                 env.db_name,
+                                                 absolute_path)
+            )
+
+    # Make symlink to latest
+    with cd(env.dbdumps_dir):
+        run('ln -sf %s %s' % (absolute_path, remote_db_path()))
+
+
+@task
+def database_dump():
+    """
+    Dumps the database on remote site
+    """
+    if using_virtuoso():
+        database_dump_virtuoso()
+    else:
+        database_dump_postgres()
 
 
 @task
@@ -839,11 +886,7 @@ def database_delete():
         run('rm -f *.db *.trx *.lck *.trx *.pxa *.log')
 
 
-@task
-def database_restore():
-    """
-    Restores the database backed up on the remote server
-    """
+def database_restore_virtuoso():
     if(env.is_production_env is True):
         abort(red("You are not allowed to restore a database to a production " +
                 "environment.  If this is a server restore situation, you " +
@@ -879,6 +922,43 @@ def database_restore():
     execute(supervisor_process_start, 'virtuoso')
 
 
+def database_restore_postgres():
+    assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+    env.debug = True
+
+    if(env.wsginame != 'dev.wsgi'):
+        execute(webservers_stop)
+
+    # Drop db
+    with settings(warn_only=True):
+        run_db_command("dropdb %s" % (env.db_name,))
+
+    # Create db
+    execute(database_create)
+
+    # Restore data
+    with prefix(venv_prefix()), cd(env.projectpath):
+        run('pg_restore --host=%s --dbname=%s -U%s --schema=public %s' % (env.db_host,
+                                                  env.db_name,
+                                                  env.db_user,
+                                                  remote_db_path())
+        )
+
+    if(env.wsginame != 'dev.wsgi'):
+        execute(webservers_start)
+
+
+@task
+def database_restore():
+    """
+    Restores the database backed up on the remote server
+    """
+    if using_virtuoso():
+        database_restore_virtuoso()
+    else:
+        database_restore_postgres()
+
+
 def get_config():
     if env.get('config', None):
         return env.config
@@ -893,10 +973,22 @@ def get_config():
     env.config = config
     return config
 
+
+@task
+def create_database_user():
+    """
+    Create a user and a DB for the project
+    """
+    # FIXME: pg_hba has to be changed by hand (see doc)
+    # FIXME: Password has to be set by hand (see doc)
+    run_db_command('createuser %s -D -R -S' % env.projectname)
+
+
 def setup_var_directory():
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'log')))
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'run')))
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'db')))
+
 
 def get_virtuoso_root():
     config = get_config()
@@ -934,7 +1026,10 @@ def flushmemcache():
         wait_str = "" if env.mac else "-q 2"
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
 
+
 def ensure_virtuoso_not_running():
+    if not using_virtuoso():
+        return
     # We do not want to start supervisord if not already running
     pidfile = join(env.projectpath, 'var/run/supervisord.pid')
     if not exists(pidfile):
@@ -977,6 +1072,7 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
 
 @task
 def virtuoso_reconstruct_db():
+    "Rebuild the virtuoso database from a backup dump."
     execute(database_dump)
     # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
     # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
@@ -989,6 +1085,7 @@ def virtuoso_reconstruct_db():
 
 @task
 def virtuoso_major_reconstruct_db():
+    "Rebuild the virtuoso database from a crash dump. Sometimes worth running twice."
     execute(database_dump)
     # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
     # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
@@ -999,7 +1096,7 @@ def virtuoso_major_reconstruct_db():
     execute(app_reload)
 
 
-def virtuoso_install_or_upgrade():
+def install_or_updgrade_virtuoso():
     with settings(warn_only=True), hide('warnings', 'stdout', 'stderr'):
         ls_cmd = run("ls %s" % get_virtuoso_exec())
         ls_supervisord_conf_cmd = run("ls %s" % get_supervisord_conf())
@@ -1009,11 +1106,34 @@ def virtuoso_install_or_upgrade():
     else:
         execute(virtuoso_source_upgrade)
 
+
+def install_postgres():
+    """
+    Install a postgresql DB
+    """
+    print(cyan('Installing Postgresql'))
+    if env.mac:
+        execute('brew install postgresql')
+    else:
+        sudo('apt-get install -y postgresql')
+
+
+@task
+def install_database():
+    """
+    Install the database server
+    """
+    if using_virtuoso():
+        install_or_updgrade_virtuoso()
+    else:
+        install_postgres()
+
+
 @task
 def virtuoso_source_upgrade():
     "Upgrades the virtuoso server.  Currently doesn't check if we are already using the latest version."
-    #Virtuoso must be running before the process starts, so that we can 
-    #gracefully stop it later to ensure there is no trx file active.  
+    #Virtuoso must be running before the process starts, so that we can
+    #gracefully stop it later to ensure there is no trx file active.
     #trx files are not compatible between virtuoso versions
     supervisor_process_start('virtuoso')
     execute(virtuoso_source_install)
@@ -1092,8 +1212,10 @@ def get_vendor_config():
     config.readfp(fp)
     return config
 
-@task 
+
+@task
 def update_vendor_themes():
+    "Update optional themes in assembl/static/css/themes/vendor"
     config = get_vendor_config()
     config_section_name = 'theme_repositories'
     if config.has_section(config_section_name):
@@ -1157,12 +1279,42 @@ def commonenv(projectpath, venvpath=None):
     #Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
     env.mac = False
+    env.system_db_user = None
+    env.using_virtuoso = None
 
     #Minimal dependencies versions
 
 
+def using_virtuoso():
+    if env.using_virtuoso is None:
+        config = get_config()
+        url = config.get('app:assembl', 'sqlalchemy.url')
+        env.using_virtuoso = url.startswith('virtuoso')
+    return env.using_virtuoso
+
+
+def system_db_user():
+    if env.system_db_user:
+        return env.system_db_user
+    if using_virtuoso():
+        return None
+    if env.mac:
+        # Brew uses user
+        return None
+    return "postgres"  # linux posgres
+
+
+def run_db_command(command):
+    user = system_db_user()
+    if user:
+        sudo(command, user=user)
+    else:
+        run(command)
+
+
 @task
 def build_doc():
+    "Build the Sphinx documentation"
     with cd(env.projectpath):
         run('rm -rf doc/autodoc')
         run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -f -o doc/autodoc assembl')
@@ -1175,6 +1327,7 @@ def build_doc():
 def devenv(projectpath=None):
     "Alias of env_dev for backward compatibility"
     execute(env_dev, projectpath)
+
 
 @task
 def env_dev(projectpath=None):
@@ -1333,6 +1486,7 @@ def env_paris_debat():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = "master"
+
 
 @task
 def env_thecampfactory():
