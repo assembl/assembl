@@ -199,6 +199,7 @@ var TokenBagsView = Marionette.ItemView.extend({
 });
 
 
+
 // This view shows (in the block of an idea) the clickable tokens (for each category of tokens) a user can allocate (and has allocated) on this idea
 var TokenIdeaAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
@@ -307,6 +308,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
       var el = null;
 
       var token_size = getTokenSize(that.maximum_per_idea ? that.maximum_per_idea + 1 : 0, 10, 400);
+
 
       if ( number_of_tokens_represented_by_this_icon == 0 ){
         if ( that.customTokenImageURL ){
@@ -519,14 +521,22 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
 });
 
 // This view shows the list of votable ideas and their tokens
-var TokenVoteCollectionView = Marionette.CollectionView.extend({
+var TokenVoteCollectionView = Marionette.CompositeView.extend({
   childView: TokenVoteItemView,
   template: '#tmpl-tokenVoteCollection',
+  childViewContainer: "tbody",
   childViewOptions: function(model, index){
     var that = this;
     return {
       childIndex: index,
       parent: that
+    };
+  },
+  templateHelpers: function(){
+    var that = this;
+    return {
+      i18n: i18n,
+      numberOfIdeas: that.collection.length
     };
   }
 });
@@ -578,7 +588,10 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
     var myVotes = "my_votes" in that.tokenVoteSpecification ? that.tokenVoteSpecification.my_votes : null;
     that.myVotesCollection = new Widget.TokenIdeaVoteCollection(myVotes);
-    that.myVotesCollection.url = Ctx.getUrlFromUri(that.tokenVoteSpecification["@id"]) + "/votes"; // for example: http://localhost:6543/data/Discussion/6/widgets/118/vote_specifications/44/votes
+
+    // This URL needs the idea id in the JSON payload
+    var genericVotingUrl = "voting_url" in that.tokenVoteSpecification ? that.tokenVoteSpecification.voting_url : null; // for example: http://localhost:6543/data/Discussion/6/widgets/90/vote_specifications/22/votes
+    that.myVotesCollection.url = Ctx.getUrlFromUri(genericVotingUrl); 
     console.log("that.myVotesCollection: ", that.myVotesCollection);
     
     
