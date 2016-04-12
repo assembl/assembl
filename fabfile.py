@@ -772,6 +772,11 @@ def database_create_virtuoso():
 
 
 def database_create_postgres():
+    # From the old README:
+    # - sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl --pwprompt
+    # - createdb --host localhost -U assembl assembl
+    # - venv/bin/assembl-db-manage development.ini bootstrap
+
     run_db_command(
         'createdb -E UNICODE -Ttemplate0 -O%s %s' % (
             env.db_user, env.db_name))
