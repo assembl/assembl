@@ -101,13 +101,17 @@ var AttachmentModel = Base.Model.extend({
        * The AttachmentView is responsible for the lifecycle of the document model.
        * As a result, the attachment model save should no longer do a two-step
        * save process. It is only responsible for saving itself.
-       */      
+       */
 
-      // Promise.resolve(this.get('document').save()).then(function(){
-      //   //console.log("Saving attachments", attrs, options);
-      //   Backbone.Model.prototype.save.call(that, attrs, options);
-      // })
-      Backbone.Model.prototype.save.call(that, attrs, options);
+      if (options.two_step && options.two_step === true) {
+        Promise.resolve(this.get('document').save()).then(function(){
+          //console.log("Saving attachments", attrs, options);
+          return Backbone.Model.prototype.save.call(that, attrs, options);
+        })
+      }
+      else {
+        return Backbone.Model.prototype.save.call(that, attrs, options);
+      }
     }
   },
   

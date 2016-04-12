@@ -62,7 +62,7 @@ var FileModel = DocumentModel.extend({
     if (!options.formData) {
       options.formData = true;
     }
-    DocumentModel.prototype.save.call(this, attrs, options);
+    return DocumentModel.prototype.save.call(this, attrs, options);
   }
 });
 
