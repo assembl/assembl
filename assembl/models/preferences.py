@@ -140,7 +140,7 @@ class Preferences(MutableMapping, Base):
             raise KeyError("Unknown preference: " + key)
         values = self.local_values_json
         old_value = values.get(key, None)
-        self.validate(key, value)
+        value = self.validate(key, value)
         values[key] = value
         self.local_values_json = values
         return old_value
@@ -180,15 +180,21 @@ class Preferences(MutableMapping, Base):
             module, function = validator.rsplit(".", 1)
             from importlib import import_module
             mod = import_module(module)
-            if not getattr(mod, function)(value):
-                raise ValueError("%s refused %s" (validator, value))
+            try:
+                value = getattr(mod, function)(value)
+                if value is None:
+                    raise ValueError("Empty value after validation")
+            except Exception as e:
+                raise ValueError(e.message)
         data_type = pref_data.get("value_type", "json")
         if data_type.startswith("list_of_"):
             assert isinstance(value, (list, tuple)), "Not a list"
-            for val in value:
+            return [
                 self.validate_single_value(key, val, pref_data, data_type[8:])
+                for val in value
+            ]
         else:
-            self.validate_single_value(key, value, pref_data, data_type)
+            return self.validate_single_value(key, value, pref_data, data_type)
 
     def validate_single_value(self, key, value, pref_data, data_type):
         # TODO: Validation for the datatypes.
@@ -219,8 +225,10 @@ class Preferences(MutableMapping, Base):
                 from pyisemail.validators.dns_validator import DNSValidator
                 v = DNSValidator()
                 assert v.is_valid(value), "Not a valid domain"
+                value = value.lower()
             else:
                 raise RuntimeError("Invalid data_type: " + data_type)
+        return value
 
     def generic_json(
             self, view_def_name='default', user_id=Everyone,

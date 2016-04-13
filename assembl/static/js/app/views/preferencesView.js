@@ -330,7 +330,7 @@ var DomainPreferenceView = StringPreferenceView.extend({
     if (!this.regexp.test(value)) {
         throw i18n.gettext("This does not appear to be a domain");
     }
-    return value;
+    return value.toLowerCase();
   }
 });
 

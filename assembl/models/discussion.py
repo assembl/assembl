@@ -332,7 +332,7 @@ class Discussion(DiscussionBoundBase):
             if not email or '@' not in email:
                 continue
             email = email.split('@', 1)[-1]
-            if email in require_email_domain:
+            if email.lower() in require_email_domain:
                 return True
         return False
 
