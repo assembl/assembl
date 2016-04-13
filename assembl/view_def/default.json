@@ -615,6 +615,7 @@
         "author_url": true,
         "thumbnail_url": true,
         "site_name": true,
+        "creation_date": true,
         "external_url": "external_url"
     },
     "File": {
@@ -628,6 +629,7 @@
         "attachmentPurpose": true,
         "title": true,
         "description": true,
+        "creation_date": true,
         "external_url": "external_url"
     },
     "PostAttachment": {

@@ -232,6 +232,9 @@ var FileEditView = AbstractEditView.extend({
   initalizeCallback: function(){
     this.uploadComplete = true;
     this.uri = this.model.get('external_url');
+    if (!this.isViewDestroyed()){
+      this.render();
+    }
   },
 
   serializeData: function(){
@@ -245,7 +248,23 @@ var FileEditView = AbstractEditView.extend({
   onShowProgress: function(ev){
     // console.log("FileEditView progress bar has been made!", ev);
     this.percentComplete = ev * 100;
-    this.render();
+    if (!this.isViewDestroyed()){
+      this.render();
+    }
+  },
+
+  /*
+    This is poorly done. It overrides the current template. Want to be using
+    the template logic here to maintain flexibility and keeping DRY
+   */
+  onRenderOembedFail: function(){
+    var string = "<a href="+ this.uri + ">"+ this.model.get('name') + "</a>";
+    if (this.percentComplete){
+      this.$el.html(string + " (100%)");
+    }
+    else {
+      this.$el.html(string);
+    }
   }
 });
 
