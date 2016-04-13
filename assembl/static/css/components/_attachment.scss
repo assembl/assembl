@@ -1,5 +1,5 @@
 //CSS for making the attachment button presentable
-
+//http://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
 .file-upload {
   width: 0.1px;
   height: 0.1px;
@@ -10,13 +10,14 @@
 }
 
 .file-upload + label {
-  font-size: 20px;
+  font-size: 18px;
   display: inline-block;
   cursor: pointer;
+  opacity: 0.5;
   // outline: 1px dotted #000;
   // outline: -webkit-focus-ring-color auto 5px;
 }
 
-.file-upload:focus + label, .file-upload + label:hover {
-
+.file-upload + label:hover {
+  opacity: 1;
 }
