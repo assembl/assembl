@@ -17,7 +17,7 @@ import transaction
 
 from assembl.lib.sqla_types import URLString
 from assembl.lib.sqla_types import CoerceUnicode
-
+from assembl.lib import config
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
@@ -55,6 +55,9 @@ def upgrade(pyramid_env):
                    oembed_type, mime_type, title, description, author_name,
                    author_url, thumbnail_url, site_name, 'document' from document""")
 
+        op.drop_constraint("attachment", "attachment_document_document_id_id")
+
+    with context.begin_transaction():
         op.execute("DELETE from document")
 
     with context.begin_transaction():
@@ -83,6 +86,11 @@ def upgrade(pyramid_env):
                       ondelete='CASCADE'), primary_key=True),
             sa.Column('data', sa.LargeBinary, nullable=False)
         )
+        op.execute(
+            """ALTER TABLE "{schema}"."{user}"."attachment"
+              ADD CONSTRAINT "attachment_document_document_id_id" FOREIGN KEY ("document_id")
+                REFERENCES "{schema}"."{user}"."document" ("id") ON UPDATE CASCADE ON DELETE CASCADE""" %
+                (config.get('db_schema'), config.get('db_user')))
 
 
 def downgrade(pyramid_env):
