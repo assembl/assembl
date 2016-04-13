@@ -4,7 +4,7 @@ import traceback
 import pdb
 
 from sqlalchemy import (
-    Table, Column, String, insert, select, delete, create_engine)
+    Table, Column, String, insert, select, delete, create_engine, update)
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.types import TIMESTAMP, DATETIME
@@ -18,7 +18,8 @@ from assembl.lib.model_watcher import configure_model_watcher
 
 
 recursive_tables = {
-    "post": ("id", "parent_id")
+    "post": ("id", "parent_id"),
+    "preferences": ("id", "cascade_id")
 }
 
 # TODO: Make it dependent on engine
@@ -62,11 +63,11 @@ def copy_table(source_session, dest_session, source_table, dest_table):
             values = next_batch
     else:
         dest_session.execute(dest_table.insert(), values)
-    if dest_session.bind.url.startswith('postgresql'):
+    if str(dest_session.bind.url).startswith('postgresql'):
         idx_col = dest_table.c.get("id", None)
         if idx_col is not None and not idx_col.foreign_keys:
             if dest_table.name in history_tables:
-                if source_session.bind.url.startswith('virtuoso'):
+                if str(source_session.bind.url).startswith('virtuoso'):
                     max_id = int(source_session.query(
                         "sequence_set('%s_idsequence', 0, 1)" % (
                             source_table.fullname,)).first()[0])
@@ -119,6 +120,9 @@ def copy_database(source_config, dest_config):
     }
 
     for table in reversed(dest_tables):
+        if table.name in recursive_tables:
+            colname = recursive_tables[table.name][1]
+            dest_session.execute(update(table).values(**{colname: None}))
         dest_session.execute(delete(table))
 
     for table in dest_tables:
