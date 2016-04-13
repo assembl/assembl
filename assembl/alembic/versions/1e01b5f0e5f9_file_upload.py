@@ -1,14 +1,14 @@
 """file_upload
 
 Revision ID: 1e01b5f0e5f9
-Revises: df59c42297f
+Revises: 28987a8e5d4f
 Create Date: 2016-03-23 16:46:15.309571
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '1e01b5f0e5f9'
-down_revision = 'df59c42297f'
+down_revision = '28987a8e5d4f'
 
 from datetime import datetime
 from alembic import context, op
@@ -55,7 +55,7 @@ def upgrade(pyramid_env):
                    oembed_type, mime_type, title, description, author_name,
                    author_url, thumbnail_url, site_name, 'document' from document""")
 
-        op.drop_constraint("attachment", "attachment_document_document_id_id")
+        op.drop_constraint("attachment_document_document_id_id", "attachment")
 
     with context.begin_transaction():
         op.execute("DELETE from document")
@@ -88,9 +88,11 @@ def upgrade(pyramid_env):
         )
         op.execute(
             """ALTER TABLE "{schema}"."{user}"."attachment"
-              ADD CONSTRAINT "attachment_document_document_id_id" FOREIGN KEY ("document_id")
-                REFERENCES "{schema}"."{user}"."document" ("id") ON UPDATE CASCADE ON DELETE CASCADE""" %
-                (config.get('db_schema'), config.get('db_user')))
+               ADD CONSTRAINT "attachment_document_document_id_id"
+               FOREIGN KEY ("document_id")
+               REFERENCES "{schema}"."{user}"."document" ("id")
+               ON UPDATE CASCADE ON DELETE CASCADE""".format(
+                  schema=config.get('db_schema'), user=config.get('db_user')))
 
 
 def downgrade(pyramid_env):
