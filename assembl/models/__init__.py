@@ -249,7 +249,9 @@ from .facebook_integration import (
 from .attachment import (
     Document,
     File,
-    Attachment
+    Attachment,
+    PostAttachment,
+    IdeaAttachment
 )
 
 from .announcement import (
