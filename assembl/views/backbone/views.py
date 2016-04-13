@@ -75,7 +75,8 @@ def process_locale(
             lang_pref_signatures[lp.source_of_evidence].append(lp)
         while len(lang_pref_signatures[source_of_evidence]) > 1:
             # legacy multiple values
-            lang_pref_signatures[source_of_evidence][-1].delete()
+            lp = lang_pref_signatures[source_of_evidence].pop()
+            lp.delete()
         if len(lang_pref_signatures[source_of_evidence]) == 1:
             lang_pref_signatures[source_of_evidence][0].locale = locale
             session.flush()
