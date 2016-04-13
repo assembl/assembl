@@ -71,6 +71,9 @@ def copy_table(source_session, dest_session, source_table, dest_table):
                     max_id = int(source_session.query(
                         "sequence_set('%s_idsequence', 0, 1)" % (
                             source_table.fullname,)).first()[0])
+                    (max_id2,) = source_session.query(
+                        "max(id) from "+source_table.name).first()
+                    max_id = max(max_id, max_id2)
                 else:
                     max_id = int(source_session.query(
                         "currval('%s_idsequence')" % (source_table.name,)
