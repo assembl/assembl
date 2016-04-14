@@ -578,6 +578,56 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     child_results.append(r)
         return idea_visitor.end_visit(self, level, result, child_results)
 
+    @classmethod
+    def children_dict(cls, discussion_id):
+        source = aliased(cls, name="source")
+        target = aliased(cls, name="target")
+        parents = dict(cls.default_db.query(
+            IdeaLink.target_id, IdeaLink.source_id
+            ).join(source, source.id == IdeaLink.source_id
+            ).join(target, target.id == IdeaLink.target_id
+            ).filter(
+            source.discussion_id == discussion_id,
+            IdeaLink.tombstone_date == None,
+            source.tombstone_date == None,
+            target.tombstone_date == None,
+            target.discussion_id == discussion_id))
+        children = defaultdict(list)
+        for child, parent in parents.iteritems():
+            children[parent].append(child)
+        root = set(children.keys()) - set(parents.keys())
+        assert len(root) == 1
+        children[None] = [root.pop()]
+        return children
+
+    @classmethod
+    def visit_idea_ids_depth_first(
+            cls, idea_visitor, discussion_id, children_dict=None):
+        # Lightweight descent
+        if children_dict is None:
+            children_dict = cls.children_dict(discussion_id)
+        root_id = children_dict[None][0]
+        return cls._visit_idea_ids_depth_first(
+            root_id, idea_visitor, children_dict, set(), 0, None)
+
+    @classmethod
+    def _visit_idea_ids_depth_first(
+            cls, idea_id, idea_visitor, children_dict, visited,
+            level, prev_result):
+        if idea_id in visited:
+            # not necessary in a tree, but let's start to think graph.
+            return False
+        result = idea_visitor.visit_idea(idea_id, level, prev_result)
+        visited.add(idea_id)
+        child_results = []
+        if result is not IdeaVisitor.CUT_VISIT:
+            for child_id in children_dict[idea_id]:
+                r = cls._visit_idea_ids_depth_first(
+                    child_id, idea_visitor, children_dict, visited, level+1, result)
+                if r:
+                    child_results.append(r)
+        return idea_visitor.end_visit(idea_id, level, result, child_results)
+
     def visit_ideas_breadth_first(self, idea_visitor):
         self.prefetch_descendants()
         result = idea_visitor.visit_idea(self, 0, None)
