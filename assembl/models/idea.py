@@ -420,10 +420,10 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 RootPost, ICL.content_id == RootPost.id
             ).join(
                 SubPost,
-                (SubPost.ancestry != '') & (SubPost.ancestry.like(
+                ((SubPost.ancestry != '') & SubPost.ancestry.like(
                     RootPost.ancestry.op('||')(
-                        RootPost.id.cast(String).op("||")(",%"))) |
-                (SubPost.id == RootPost.id))
+                        RootPost.id.cast(String).op("||")(",%")))) |
+                (SubPost.id == RootPost.id)
             ).join(
                 SubPostContent,
                 (SubPostContent.id == SubPost.id) &
