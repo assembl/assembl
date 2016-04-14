@@ -174,6 +174,15 @@ class BaseOps(object):
     def using_virtuoso(cls):
         return using_virtuoso()
 
+    @classproperty
+    def full_schema(cls):
+        config = get_config()
+        if using_virtuoso():
+            return "_".join([
+                config.get('db_schema'), config.get('db_user')])
+        else:
+            return config.get('db_schema')
+
     def __iter__(self, **kwargs):
         """Return a generator that iterates through model columns."""
         return self.iteritems(**kwargs)

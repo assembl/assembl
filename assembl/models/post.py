@@ -15,6 +15,7 @@ from sqlalchemy import (
     ForeignKey,
     Binary,
     Text,
+    Index,
     or_,
     event,
     func
@@ -96,6 +97,12 @@ class Post(Content):
                         info={'rdf': QuadMapPatternS(None, SIOC.id)})
 
     ancestry = Column(String, default="")
+
+    __table_args__ = (
+         Index(
+            'ix_%s_post_ancestry' % (Content.full_schema,),
+            'ancestry', unique=False,
+            postgresql_ops={'ancestry': 'varchar_pattern_ops'}),)
 
     parent_id = Column(Integer, ForeignKey(
         'post.id',
