@@ -475,7 +475,8 @@ var TokenCategorySpecificationModel = Base.Model.extend({
 var TokenCategorySpecificationCollection = Base.Collection.extend({
   constructor: function TokenCategorySpecificationCollection() {
     Base.Collection.apply(this, arguments);
-  }
+  },
+  model: TokenCategorySpecificationModel
 });
 
 var IdeaVoteModel = Base.Model.extend({

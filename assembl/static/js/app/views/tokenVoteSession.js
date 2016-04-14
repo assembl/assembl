@@ -75,8 +75,12 @@ Adding CSS to an SVG which has been embedded using an <image> tag is not possibl
 Adding CSS to an external SVG which has been embedded using an <object> tag is possible only if the URL is on the same domain (CORS policy).
 So we have to GET the SVG file from its URL with an AJAX call, and add it inline to the DOM.
 */
+var _ajaxCache = {};
 var getSVGElementByURLPromise = function(url){
-  return $.ajax({
+  if ( url in _ajaxCache ){
+    return _ajaxCache[url];
+  }
+  _ajaxCache[url] = $.ajax({
     url: url,
     dataType: 'xml'
   }).then(function(data) {
@@ -86,6 +90,7 @@ var getSVGElementByURLPromise = function(url){
     svg.attr("role", "img");
     return svg;
   });
+  return _ajaxCache[url];
 };
 
 var getTokenSize = function(number_of_tokens, maximum_tokens_per_row, maximum_total_width){
@@ -114,6 +119,42 @@ var getTokenSize = function(number_of_tokens, maximum_tokens_per_row, maximum_to
   }
   return token_size;
 }
+
+// Returns a random integer between min (included) and max (excluded)
+// Using Math.round() will give you a non-uniform distribution!
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+// Copies el and animates it towards el2
+var transitionAnimation = function(el, el2){
+  console.log("transitionAnimation(): ", el, el2);
+  if ( !el.length || !el2.length ){
+    return;
+  }
+  var el3 = el.clone();
+  $("body").append(el3);
+  el3.css("z-index",getRandomInt(1234, 11234));
+  el3.css("position","fixed");
+
+  /* this way creates a jerky movement
+  el3.offset(el.offset());
+  el3.animate(el2.offset(), 5000, function complete(){
+    el3.remove();
+  });
+  */
+
+  var elo = el.offset();
+  var el2o = el2.offset();
+  var top = el2o.top - elo.top;
+  var left = el2o.left - elo.left;
+  el3.offset(elo);
+  el3.css("transition-duration", "1s");
+  el3.css("transform", "translate(" + left + "px, " + top + "px)");
+  setTimeout(function(){
+    el3.remove();
+  }, 1000);
+};
 
 
 // This view shows at the top of the popin the bag of remaining tokens the user has
@@ -158,6 +199,7 @@ var TokenBagsView = Marionette.ItemView.extend({
       var data = that.myVotesCollection.getTokenBagDataForCategory(category);
       var categoryContainer = $("<div></div>");
       categoryContainer.addClass('token-bag-for-category');
+      categoryContainer.addClass(category.getCssClassFromId());
       categoryContainer.appendTo(container);
       var el = $("<div></div>");
       el.addClass("description");
@@ -201,12 +243,10 @@ var TokenBagsView = Marionette.ItemView.extend({
 
 
 
-// This view shows (in the block of an idea) the clickable tokens (for each category of tokens) a user can allocate (and has allocated) on this idea
+// This view shows (in the block of an idea) the clickable tokens (of one given category of tokens) a user can allocate (and has allocated) on this idea
 var TokenIdeaAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
   initialize: function(options){
-    console.log("TokenIdeaAllocationView::initialize()");
-
     if ( !("voteSpecification" in this.options)){
       console.error("option voteSpecification is mandatory");
       return;
@@ -250,8 +290,6 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
     if ( maximum_per_idea == 0 ){
       maximum_per_idea = total_number;
     }
-    console.log("maximum_per_idea: ", maximum_per_idea);
-    console.log("total_number: ", total_number);
     this.maximum_per_idea = maximum_per_idea;
     this.total_number = total_number;
 
@@ -379,7 +417,26 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
         link.attr("title", "set "+number_of_tokens_represented_by_this_icon+" tokens");
 
         link.click(function(){
+          if ( that.currentValue == number_of_tokens_represented_by_this_icon ){
+            return;
+          }
           console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
+
+          // animation: are we adding or removing token to/from this idea?
+          if ( that.currentValue < number_of_tokens_represented_by_this_icon ){ // we are adding tokens to this idea
+            for ( var i = that.currentValue + 1; i <= number_of_tokens_represented_by_this_icon; ++i ){
+              var selector = ".token-vote-session .token-bag-for-category." + that.category.getCssClassFromId() + " .available-tokens-icons .available";
+              console.log("selector: ", selector);
+              var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
+              console.log("theAvailableToken: ", theAvailableToken);
+              transitionAnimation(theAvailableToken, link.parent().children().eq(i));
+            }
+          }
+          else { // we are removing tokens from this idea
+            for ( var i = number_of_tokens_represented_by_this_icon; i <= that.currentValue; ++i ){
+
+            }
+          }
           
           /* This is the pure AJAX way to save the data to the backend
           that.postData["value"] = number_of_tokens_represented_by_this_icon;
@@ -401,23 +458,25 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
           */
 
           // This is a more Backbone way to save the data to the backend
-          var properties = _.clone(that.postData);
-          delete properties["value"];
-          properties["idea"] = that.idea.get("@id");
-          var previousVote = that.myVotesCollection.findWhere(properties);
-          console.log("previousVote found: ", previousVote);
-          if ( previousVote ){
-            previousVote.set({"value": number_of_tokens_represented_by_this_icon});
-            previousVote.save();
-          }
-          else {
-            properties["value"] = number_of_tokens_represented_by_this_icon;
-            that.myVotesCollection.create(properties);
-          }
-          that.currentValue = number_of_tokens_represented_by_this_icon;
-          el[0].classList.add("selected");
-          container.removeClass("hover");
-          that.render(); // show immediately the icon it its correct state, without having to wait for collection update
+          _.defer(function(){
+            var properties = _.clone(that.postData);
+            delete properties["value"];
+            properties["idea"] = that.idea.get("@id");
+            var previousVote = that.myVotesCollection.findWhere(properties);
+            console.log("previousVote found: ", previousVote);
+            if ( previousVote ){
+              previousVote.set({"value": number_of_tokens_represented_by_this_icon});
+              previousVote.save();
+            }
+            else {
+              properties["value"] = number_of_tokens_represented_by_this_icon;
+              that.myVotesCollection.create(properties);
+            }
+            that.currentValue = number_of_tokens_represented_by_this_icon;
+            el[0].classList.add("selected");
+            container.removeClass("hover");
+            that.render(); // show immediately the icon it its correct state, without having to wait for collection update
+          });
         });
         
         link.hover(function handlerIn(){
