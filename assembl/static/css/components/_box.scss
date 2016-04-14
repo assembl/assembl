@@ -27,14 +27,14 @@
   margin-bottom: $spacingL;
 
   .bx-close {
-    float: right;
-    position: relative;
-    left: $spacingL;
-    top: -20px;
-
-    height: 2em;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    padding: 0px;
+    z-index: 1; //Close button should always be on top
+    height: auto;
     font-size: 14px;
-    line-height: 2em;
+    line-height: normal;
     color: darken($theme_box_border_color, 30%);
     opacity: 0.4;
   }
