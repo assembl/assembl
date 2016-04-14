@@ -37,6 +37,24 @@ def maybe_cast(column):
     return column if cast_to is None else cast(column, cast_to)
 
 
+def is_virtuoso(session):
+    return str(session.bind.url).startswith('virtuoso')
+
+
+def set_sequence(session, name, value):
+    session.execute(
+            "SELECT {command}('{name}', {max_id})".format(
+                command="sequence_set" if is_virtuoso(session) else "setval",
+                name=name, value=value))
+
+
+def get_sequence(session, name):
+    if is_virtuoso(session):
+        return session.query("sequence_set('%s', 0, 1)" % (name,)).first()[0]
+    else:
+        return session.query("currval('%s')" % (name,)).first()[0]
+
+
 def copy_table(source_session, dest_session, source_table, dest_table):
     columns = [maybe_cast(c) for c in source_table.c]
     cnames = [c.name for c in source_table.c]
@@ -66,25 +84,14 @@ def copy_table(source_session, dest_session, source_table, dest_table):
     if str(dest_session.bind.url).startswith('postgresql'):
         idx_col = dest_table.c.get("id", None)
         if idx_col is not None and not idx_col.foreign_keys:
+            (max_id,) = source_session.query(
+                "max(id) from "+source_table.name).first()
             if dest_table.name in history_tables:
-                if str(source_session.bind.url).startswith('virtuoso'):
-                    max_id = int(source_session.query(
-                        "sequence_set('%s_idsequence', 0, 1)" % (
-                            source_table.fullname,)).first()[0])
-                    (max_id2,) = source_session.query(
-                        "max(id) from "+source_table.name).first()
-                    max_id = max(max_id, max_id2)
-                else:
-                    max_id = int(source_session.query(
-                        "currval('%s_idsequence')" % (source_table.name,)
-                        ).first()[0])
-                dest_session.execute(
-                    "SELECT setval('{table}_idsequence', {max_id})".format(
-                        table=dest_table.name, max_id=max_id))
-            else:
-                dest_session.execute(
-                    "SELECT setval('{table}_id_seq', (select max(id) from {table}))".format(
-                        table=dest_table.name))
+                max_id = max(max_id, get_sequence(
+                    source_session, source_table.fullname+"_idsequence"))
+                set_sequence(dest_session, dest_table.fullname+"_idsequence", max_id)
+            elif not is_virtuoso(dest_session):
+                set_sequence(dest_session, dest_table.fullname+"_id_seq", max_id)
 
 
 def engine_from_settings(config, full_config=False):
