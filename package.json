@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "autoprefixer": "~6.3.0",
-    "bourbon": "~4.2.6",
+    "node-bourbon": "~4.2.8",
     "bluebird": "^2.9.26",
     "browserify": "^10.2.1",
     "browserify-shim": "^3.8.7",

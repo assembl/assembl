@@ -60,7 +60,7 @@ gulp.task('browserify:prod',['clean:app'] ,function() {
     return b.bundle()
         .on('error', gutil.log)
         .on('error', function(cb) {
-          console.log("Compile failed, deleting output");
+          console.log("Javascript compile failed, deleting output");
           clean_app();
         })
         .pipe(source('index.js'))
@@ -132,29 +132,51 @@ gulp.task('build:test', function() {
         .pipe(gulp.dest(path.js+'/build/tests'))
         .pipe(exit());
 });
-
+var bourbon_includePaths = require("node-bourbon").includePaths;
 /**
  * Compile Sass file
  * not work for now, we need to delete all @include in sass file
  * */
-gulp.task('sass', function() {
+gulp.task('sass', ['clean:generated_css'], function() {
     return gulp.src(path.css+'/**/*.scss')
-        .pipe(sass())
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+          includePaths: bourbon_includePaths
+        }).on('error', sass.logError)
+          .on('error', function(cb) {
+            console.log("SASS compile failed, deleting output");
+            clean_generated_css();
+        }))
+        /*.pipe(sourcemaps.write())
+        .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        //.pipe(minifyCss())
+        //.pipe(minifyCss())*/
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.css));
 });
 
-function clean_app (cb) {
-  del([path.js+'/build/app.js',path.js+'/build/app.js.map'], cb);
-
+function clean_generated_css (cb) {
+  del([path.css+'/themes/**/*.css', path.css+'/themes/**/*.css.map'], cb);
 }
+gulp.task('clean:generated_css', clean_generated_css);
+
+gulp.task('watch_sass', function () {
+  gulp.watch([
+      path.css+'/**/*.scss'
+  ], function () {
+      gulp.start('sass');
+  })
+})
 /**
  * Delete files before rebuild new one
  * */
+function clean_app (cb) {
+  del([path.js+'/build/app.js',path.js+'/build/app.js.map'], cb);
+}
+
 gulp.task('clean:app', clean_app);
 
 gulp.task('clean:infrastructure', function (cb) {
@@ -167,4 +189,4 @@ gulp.task('clean:infrastructure', function (cb) {
 
 gulp.task('build:source', ['libs','browserify:dev']);
 gulp.task('build:prod', ['libs','browserify:prod']);
-gulp.task('default', ['browserify:dev']);
+gulp.task('default', ['watch_sass', 'browserify:dev']);

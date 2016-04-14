@@ -344,7 +344,8 @@ def compile_stylesheets():
     Generate *.css files from *.scss
     """
     with cd(env.projectpath):
-        run('./node_modules/.bin/node-sass --include-path node_modules/bourbon/app/assets/stylesheets -r -o assembl/static/css --source-map assembl/static/css assembl/static/css ', shell=True)
+        with cd('assembl'):
+            run('../node_modules/gulp/bin/gulp.js sass')
         run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
         run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss', shell=True)
         run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/session/css --source-map assembl/static/widget/session/css assembl/static/widget/session/scss', shell=True)
