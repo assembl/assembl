@@ -803,12 +803,12 @@ def do_password_change(request):
 @view_config(
     route_name='finish_password_change', request_method="POST",
     renderer='assembl:templates/do_password_change.jinja2',
-    permission=P_READ
+    permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
     route_name='contextual_finish_password_change', request_method="POST",
     renderer='assembl:templates/do_password_change.jinja2',
-    permission=P_READ
+    permission=NO_PERMISSION_REQUIRED
 )
 def finish_password_change(request):
     logged_in = authenticated_userid(request)
