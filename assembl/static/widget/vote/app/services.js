@@ -481,7 +481,7 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "type": "string",
       "description": "URL (web address) of the SVG image of a token",
       "label": "token image URL",
-      "default": "https://upload.wikimedia.org/wikipedia/en/4/43/Feed-icon.svg",
+      "default": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Approve_icon.svg",
       "storage": "attribute"
     }
   ];

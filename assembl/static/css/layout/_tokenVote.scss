@@ -38,9 +38,9 @@
 
     .not-available {
       path, rect, circle {
-        fill: none;
-        stroke: #ccc;
-        stroke-width: 3;
+        fill: none !important; /* !important is here to override inline style which would have been written in the SVG file which has been downloaded via its URL */
+        stroke: #ccc !important;
+        stroke-width: 3 !important;
       }
     }
   }
@@ -97,25 +97,25 @@
         &.zero {
           &.not-selected {
             path, rect, circle {
-              fill: none;
-              stroke: #ccc;
-              stroke-width: 3;
+              fill: none !important;
+              stroke: #ccc !important;
+              stroke-width: 3 !important;
             }
           }
           &.selected {
             path, rect, circle {
-              fill: none;
-              stroke: #aaa;
-              stroke-width: 10;
+              fill: #ccc !important;
+              stroke: #aaa !important;
+              stroke-width: 3 !important;
             }
           }
         }
         &.positive {
           &.not-selected {
             path, rect, circle {
-              fill: none;
-              stroke: green;
-              stroke-width: 3;
+              fill: none !important;
+              stroke: green !important;
+              stroke-width: 3 !important;
             }
           }
           &.selected {
@@ -129,17 +129,17 @@
           &:not(.hover) {
             /* show as if it was not selected */
             path, rect, circle {
-              fill: none;
-              stroke: #ccc;
-              stroke-width: 3;
+              fill: none !important;
+              stroke: #ccc !important;
+              stroke-width: 3 !important;
             }
           }
           &.hover {
             /* show as if it was selected */
             path, rect, circle {
-              fill: none;
-              stroke: #aaa;
-              stroke-width: 10;
+              fill: #ccc !important;
+              stroke: #aaa !important;
+              stroke-width: 3 !important;
             }
           }
         }
@@ -147,9 +147,9 @@
           &:not(.hover) {
             /* show as if it was not selected */
             path, rect, circle {
-              fill: none;
-              stroke: green;
-              stroke-width: 3;
+              fill: none !important;
+              stroke: green !important;
+              stroke-width: 3 !important;
             }
           }
           &.hover {
