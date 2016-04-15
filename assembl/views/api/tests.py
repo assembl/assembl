@@ -370,66 +370,29 @@ def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
     
         # Verify they are all imported.  one() will throw an exception if any of them didn't import
     db = discussion.db
-    post1 = db.query(Post).filter(
-            Post.message_id == "1606949.IA7dUeR8YG@benoitg-t510"
-        ).one()
-    post2 = db.query(Post).filter(
-            Post.message_id == "1649857.fOz6x3G98J@benoitg-t510"
-        ).one()
-    post3 = db.query(Post).filter(
-            Post.message_id == "3844624.NgDPPPZZnZ@benoitg-t510"
-        ).one()
-    post4 = db.query(Post).filter(
-            Post.message_id == "1930166.Wt7Goto29c@benoitg-t510"
-        ).one()
-    post5 = db.query(Post).filter(
-            Post.message_id == "2249242.d9RG67mvG7@benoitg-t510"
-        ).one()
-    post6 = db.query(Post).filter(
-            Post.message_id == "5376192.Toza0VnpdF@benoitg-t510"
-        ).one()
-    post7 = db.query(Post).filter(
-            Post.message_id == "2046194.jVzdDay1Sb@benoitg-t510"
-        ).one()
-    post8 = db.query(Post).filter(
-            Post.message_id == "2338275.cGRvA7U2KY@benoitg-t510"
-        ).one()
-    post9 = db.query(Post).filter(
-            Post.message_id == "1963559.rNfOy2bq8q@benoitg-t510"
-        ).one()
-    post10 = db.query(Post).filter(
-            Post.message_id == "1908535.hooWnbd4Oz@benoitg-t510"
-        ).one()
-    post11 = db.query(Post).filter(
-            Post.message_id == "2252973.BLQDMMaPU7@benoitg-t510"
-        ).one()
-    post12 = db.query(Post).filter(
-            Post.message_id == "2198317.hep6mv1tM8@benoitg-t510"
-        ).one()
-    post13 = db.query(Post).filter(
-            Post.message_id == "1802537.GgBR6HT3SE@benoitg-t510"
-        ).one()
-    post14 = db.query(Post).filter(
-            Post.message_id == "CAKqvEwBXC5+hHJ7Vqe2uOxhvq0tjiPBFGTgrKgBJWg-8OJvK4g@mail.gmail.com"
-        ).one()
-    post15 = db.query(Post).filter(
-            Post.message_id == "2408793.IU72A2SQDE@benoitg-t510"
-        ).one()
-    post16 = db.query(Post).filter(
-            Post.message_id == "7106333.QhO54ZOExH@benoitg-t510"
-        ).one()
-    post17 = db.query(Post).filter(
-            Post.message_id == "2879230.SgxIZcuISG@benoitg-t510"
-        ).one()
-    post18 = db.query(Post).filter(
-            Post.message_id == "1790712.Gl4igCGcWl@benoitg-t510"
-        ).one()
-    post19 = db.query(Post).filter(
-            Post.message_id == "1720706.VGpvc9NSuf@benoitg-t510"
-        ).one()
-    post20 = db.query(Post).filter(
-            Post.message_id == "2400278.6mpFWar2xg@benoitg-t510"
-        ).one()
+    posts = db.query(Post).order_by(Post.creation_date).all()
+    assert [p.message_id for p in posts] == [
+        "1606949.IA7dUeR8YG@benoitg-t510",
+        "1649857.fOz6x3G98J@benoitg-t510",
+        "3844624.NgDPPPZZnZ@benoitg-t510",
+        "1930166.Wt7Goto29c@benoitg-t510",
+        "2249242.d9RG67mvG7@benoitg-t510",
+        "5376192.Toza0VnpdF@benoitg-t510",
+        "2046194.jVzdDay1Sb@benoitg-t510",
+        "2338275.cGRvA7U2KY@benoitg-t510",
+        "1963559.rNfOy2bq8q@benoitg-t510",
+        "1908535.hooWnbd4Oz@benoitg-t510",
+        "2252973.BLQDMMaPU7@benoitg-t510",
+        "2198317.hep6mv1tM8@benoitg-t510",
+        "1802537.GgBR6HT3SE@benoitg-t510",
+        "CAKqvEwBXC5+hHJ7Vqe2uOxhvq0tjiPBFGTgrKgBJWg-8OJvK4g@mail.gmail.com",
+        "2408793.IU72A2SQDE@benoitg-t510",
+        "7106333.QhO54ZOExH@benoitg-t510",
+        "2879230.SgxIZcuISG@benoitg-t510",
+        "1790712.Gl4igCGcWl@benoitg-t510",
+        "1720706.VGpvc9NSuf@benoitg-t510",
+        "2400278.6mpFWar2xg@benoitg-t510"]
+    posts.insert(0, None)  # We are using 1-offset indices below.
 
     #Verify threading is correct
     """
@@ -473,43 +436,43 @@ def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
               |
     20-       |-Harper says:  [L:Federal environmental programs are ineffective] and a waste of money. <2400278.6mpFWar2xg@benoitg-t510>
     """
-    assert post1.parent == None
-    assert len(post1.children) == 3
-    assert post2.parent == post1
-    assert post3.parent == post1
-    assert len(post3.children) == 1
-    assert post4.parent == post1
-    assert len(post4.children) == 1
-    assert post5.parent == post3
-    assert len(post5.children) == 1
-    assert post6.parent == post5
-    assert len(post6.children) == 1
-    assert post7.parent == post6
-    assert len(post7.children) == 1
-    assert post8.parent == post4
-    assert len(post8.children) == 2
-    assert post9.parent == post8
-    assert len(post9.children) == 2
-    assert post10.parent == post9
-    assert len(post10.children) == 0
-    assert post11.parent == post7
-    assert len(post11.children) == 1
-    assert post12.parent == post11
-    assert len(post12.children) == 1
-    assert post13.parent == post12
-    assert len(post13.children) == 1
-    assert post14.parent == post13, "Forwarded messages did not go to original thread"
-    assert len(post14.children) == 0
-    assert post15.parent == post9
-    assert len(post15.children) == 1
-    assert post16.parent == post15
-    assert len(post16.children) == 0
-    assert post17.parent == post2
-    assert len(post17.children) == 1
-    assert post18.parent == post17
-    assert len(post18.children) == 0
-    assert post19.parent == post8
-    assert len(post19.children) == 1
-    assert post20.parent == post19
-    assert len(post20.children) == 0
-    
+    assert posts[1].parent == None
+    assert len(posts[1].children) == 3
+    assert posts[2].parent == posts[1]
+    assert posts[3].parent == posts[1]
+    assert len(posts[3].children) == 1
+    assert posts[4].parent == posts[1]
+    assert len(posts[4].children) == 1
+    assert posts[5].parent == posts[3]
+    assert len(posts[5].children) == 1
+    assert posts[6].parent == posts[5]
+    assert len(posts[6].children) == 1
+    assert posts[7].parent == posts[6]
+    assert len(posts[7].children) == 1
+    assert posts[8].parent == posts[4]
+    assert len(posts[8].children) == 2
+    assert posts[9].parent == posts[8]
+    assert len(posts[9].children) == 2
+    assert posts[10].parent == posts[9]
+    assert len(posts[10].children) == 0
+    assert posts[11].parent == posts[7]
+    assert len(posts[11].children) == 1
+    assert posts[12].parent == posts[11]
+    assert len(posts[12].children) == 1
+    assert posts[13].parent == posts[12]
+    assert len(posts[13].children) == 1
+    assert posts[14].parent == posts[13], "Forwarded messages did not go to original thread"
+    assert len(posts[14].children) == 0
+    assert posts[15].parent == posts[9]
+    assert len(posts[15].children) == 1
+    assert posts[16].parent == posts[15]
+    assert len(posts[16].children) == 0
+    assert posts[17].parent == posts[2]
+    assert len(posts[17].children) == 1
+    assert posts[18].parent == posts[17]
+    assert len(posts[18].children) == 0
+    assert posts[19].parent == posts[8]
+    assert len(posts[19].children) == 1
+    assert posts[20].parent == posts[19]
+    assert len(posts[20].children) == 0
+
