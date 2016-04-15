@@ -499,7 +499,8 @@ def app_compile_noupdate():
 @task
 def app_compile_nodbupdate():
     "Separated mostly for tests, which need to run alembic manually"
-    execute(install_or_updgrade_virtuoso)
+    if using_virtuoso():
+        execute(install_or_updgrade_virtuoso)
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
@@ -696,6 +697,7 @@ def install_builddeps():
 
         #Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev')
+    execute(install_database)
     execute(update_python_package_builddeps)
 
 
@@ -708,8 +710,7 @@ def update_python_package_builddeps():
         #I presume the runtime packages in install_builddeps come with headers on mac?
         pass
     else:
-        sudo('apt-get install -y libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
-
+        sudo('apt-get install -y postgresql-server-dev-all libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
 
 
 @task
@@ -772,17 +773,49 @@ def database_create_virtuoso():
     execute(database_start)
 
 
+@task
+def check_and_create_database_user():
+    """
+    Create a user and a DB for the project
+    """
+    config = get_config()
+    assert config
+    db_user = config.get('app:assembl', 'db_user')
+    db_password = config.get('app:assembl', 'db_password')
+    with settings(warn_only=True), hide('stdout'):
+        checkUser = run("PGPASSWORD=%s psql --host=%s --username=%s -l" % (db_password, env.db_host, db_user))
+    if checkUser.failed:
+        print(yellow("User does not exist"))
+        run_db_command('psql -c "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \'%s\';"' % (db_user, db_password))
+    else:
+        print(green("User exists and can connect"))
+
+
 def database_create_postgres():
     # From the old README:
     # - sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl --pwprompt
     # - createdb --host localhost -U assembl assembl
     # - venv/bin/assembl-db-manage development.ini bootstrap
+    execute(check_and_create_database_user)
+    config = get_config()
+    assert config
+    db_user = config.get('app:assembl', 'db_user')
+    db_password = config.get('app:assembl', 'db_password')
+    db_database = config.get('app:assembl', 'db_database')
 
-    run_db_command(
-        'createdb -E UNICODE -Ttemplate0 -O%s %s' % (
-            env.db_user, env.db_name))
+    with settings(warn_only=True), hide('stdout'):
+        checkDatabase = run("PGPASSWORD=%s psql --host=%s --username=%s --dbname=%s -l" % (db_password, env.db_host, db_user, db_database))
+    if checkDatabase.failed:
+        print(yellow("Cannot connect to database, trying to create"))
+        run(
+        'PGPASSWORD=%s createdb --username=%s  --host=%s --encoding=UNICODE --template=template0 --owner=%s %s' % (
+            db_password, db_user, env.db_host, db_user, db_database))
+    else:
+        print(green("Database exists and user can connect"))
 
 
+
+@task
 def database_create():
     "Create the database for this assembl instance"
     if using_virtuoso():
@@ -887,6 +920,8 @@ def database_delete():
                 "environment.  If this is a server restore situation, you " +
                 "have to temporarily declare env.is_production_env = False " +
                 "in the environment"))
+    if not using_virtuoso():
+        abort(red("WRITEME (postgres)"))
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
         run('rm -f *.db *.trx *.lck *.trx *.pxa *.log')
@@ -978,16 +1013,6 @@ def get_config():
     config.readfp(config_s)
     env.config = config
     return config
-
-
-@task
-def create_database_user():
-    """
-    Create a user and a DB for the project
-    """
-    # FIXME: pg_hba has to be changed by hand (see doc)
-    # FIXME: Password has to be set by hand (see doc)
-    run_db_command('createuser %s -D -R -S' % env.projectname)
 
 
 def setup_var_directory():
@@ -1312,12 +1337,12 @@ def system_db_user():
     return "postgres"  # linux posgres
 
 
-def run_db_command(command):
+def run_db_command(command, *args, **kwargs):
     user = system_db_user()
     if user:
-        sudo(command, user=user)
+        sudo(command, *args, user=user, **kwargs)
     else:
-        run(command)
+        run(command, *args, **kwargs)
 
 
 @task

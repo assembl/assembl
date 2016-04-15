@@ -145,6 +145,7 @@ uritemplate==0.6
 uwsgitop==0.9
 venusian==1.0
 -e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
+psycopg2==2.6.1
 waitress==0.8.10
 WebOb==1.6.0
 WebTest==2.0.20
