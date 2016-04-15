@@ -444,7 +444,8 @@
         "idCreator": "creator",
         "attachmentPurpose": true,
         "title": true,
-        "description": true
+        "description": true,
+        "creation_date": false
     },
     "PostAttachment": {
         "@extends": "Attachment",

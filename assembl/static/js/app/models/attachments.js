@@ -6,7 +6,8 @@ var $ = require('jquery'),
     Ctx = require('../common/context.js'),
     Promise = require('bluebird'),
     Types = require('../utils/types.js'),
-    Document = require('../models/documents.js');
+    Document = require('../models/documents.js'),
+    Moment = require("moment");
 
 
 var attachmentPurposeTypes = {
@@ -65,7 +66,8 @@ var AttachmentModel = Base.Model.extend({
     title: undefined,
     description: undefined,
     attachmentPurpose: attachmentPurposeTypes.EMBED_ATTACHMENT.id,
-    external_url: undefined
+    external_url: undefined,
+    creation_date: new Moment().utc()
   },
 
   initialize: function(options) {
@@ -149,6 +151,14 @@ var AttachmentModel = Base.Model.extend({
 
   getDocument: function() {
     return this.get('document');
+  },
+
+  getCreationDate: function(){
+    var date = this.get('creation_date');
+    if ( (date) && (typeof date === 'string') ){
+      date = new Moment(date);
+    }
+    return date;
   }
 
 });
@@ -183,6 +193,35 @@ var AttachmentCollection = Base.Collection.extend({
     else {
       this.objectAttachedToModel = options.objectAttachedToModel;
     }
+  },
+
+  comparator: function(one, two){
+    var d1 = one.getDocument(),
+        d2 = two.getDocument();
+
+    var cmp = function (a, b){
+      if ( a.getCreationDate().isBefore(b.getCreationDate()) ){
+        return -1;
+      }
+      if ( b.getCreationDate().isBefore(a.getCreationDate()) ){
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    };
+
+    if ( ((d1.isFileType()) && (d2.isFileType())) || ((!d1.isFileType()) && (!d2.isFileType())) ){
+      return cmp(one, two);
+    }
+    else if ( (d1.isFileType()) && (!d2.isFileType()) ){
+      return -1;
+    }
+
+    else if ( (!d1.isFileType()) && (d2.isFileType()) ){
+      return 1;
+    }
+    else { return 0; }
   }
 });
 

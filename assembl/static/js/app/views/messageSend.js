@@ -503,22 +503,28 @@ var messageSendView = Marionette.LayoutView.extend({
     //console.log("_processHyperlinks called");
     //console.log(links);
     //console.log(this.attachmentsCollection);
-    this.attachmentsCollection.comparator = function (attachmentModel) {
-      var index = _.findIndex(links, function(link) {
-        //console.log(attachmentModel.getDocument().get('uri'), link.href);
-        return attachmentModel.getDocument().get('uri') === link.href;
-      })
-      //console.log("attachmentsCollection comparator returning: ", index);
-      return index;
-    };
+
+    // this.attachmentsCollection.comparator = function (attachmentModel) {
+    //   var index = _.findIndex(links, function(link) {
+    //     //console.log(attachmentModel.getDocument().get('uri'), link.href);
+    //     return attachmentModel.getDocument().get('uri') === link.href;
+    //   })
+    //   //console.log("attachmentsCollection comparator returning: ", index);
+    //   return index;
+    // };
+
     goneModels = that.attachmentsCollection.filter(function(attachment) {
       var document = attachment.getDocument();
+
+      if (document.isFileType()){
+        return false;
+      }
       //console.log("filtering for goneModels checking document:", document);
       var found = _.find(links, function(link) {
         //console.log("filtering for goneModels comparing:", document.get('uri'), link.href);
-        return document.get('uri') === link.href?true:false; 
+        return document.get('uri') === link.href; 
       });
-      return found === undefined?true:false;
+      return found === undefined;
     });
     //console.log("goneModels: ", goneModels);
     
