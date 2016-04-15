@@ -116,8 +116,7 @@ class Document(DiscussionBoundBase):
 
     def unique_query(self):
         query, _ = super(Document, self).unique_query()
-        return query.filter_by(uri_id=self.uri_id,
-                               discussion_id=self.discussion_id), True
+        return query.filter_by(uri_id=self.uri_id), True
 
     def update_fields(self, new_doc):
         """
@@ -169,12 +168,6 @@ class File(Document):
             return None
         return self.discussion.compose_external_uri(
                'documents', self.id, 'data')
-
-    def unique_query(self):
-        query, _ = super(File, self).unique_query()
-        return query.filter_by(discussion_id=self.discussion_id,
-                               title=self.title,
-                               mime_type=self.mime_type), True
 
 
 class Attachment(DiscussionBoundBase):
