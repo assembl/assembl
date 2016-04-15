@@ -110,6 +110,9 @@ run command line tools, thus breaking out of the environment. You need
 to run source venv/bin/activate from the same terminal before running
 the above)
 
+Note 2: If you do not want to ``source activate`` every time, you can hook it in your shell using something like `Autoenv <https://github.com/kennethreitz/autoenv>`. Another option is to use `VirtualenvWrapper <https://bitbucket.org/virtualenvwrapper/virtualenvwrapper>` and its `Helper <https://justin.abrah.ms/python/virtualenv_wrapper_helper.html>`. At least one of us uses `VirtualFish <https://github.com/adambrenecki/virtualfish>` with auto-activation.
+
+
 On subsequent runs, just make sure supervisord is running.
 
 Then, start the development server and compass with this command:
