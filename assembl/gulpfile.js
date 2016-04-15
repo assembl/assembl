@@ -132,6 +132,13 @@ gulp.task('build:test', function() {
         .pipe(gulp.dest(path.js+'/build/tests'))
         .pipe(exit());
 });
+
+var gulpSass_logConsole = function (error) {
+  var message = new gutil.PluginError('sass', error.messageFormatted).toString();
+  process.stdout.write(message + '\n');
+  this.emit('end');
+};
+
 var bourbon_includePaths = require("node-bourbon").includePaths;
 /**
  * Compile Sass file
@@ -142,7 +149,7 @@ gulp.task('sass', ['clean:generated_css'], function() {
         .pipe(sourcemaps.init())
         .pipe(sass({
           includePaths: bourbon_includePaths
-        }).on('error', sass.logError)
+        }).on('error', gulpSass_logConsole)
           .on('error', function(cb) {
             console.log("SASS compile failed, deleting output");
             clean_generated_css();
