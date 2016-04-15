@@ -38,6 +38,10 @@ var DocumentModel = Base.Model.extend({
 
   isFileType: function(){
     return this.get('@type') === Types.FILE;
+  },
+
+  triggerDoNotDelete: function(){
+    this.trigger('doNotDelete');
   }
 });
 

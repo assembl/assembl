@@ -445,7 +445,8 @@
         "attachmentPurpose": true,
         "title": true,
         "description": true,
-        "creation_date": false
+        "creation_date": false,
+        "document": false
     },
     "PostAttachment": {
         "@extends": "Attachment",

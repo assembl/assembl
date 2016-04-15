@@ -45,6 +45,12 @@ var Context = function() {
   this.debugSocket = false;
 
   /**
+   * Send debugging output to console.log to observe oembed failures
+   * @type {boolean}
+   */
+  this.debugOembed = false;
+
+  /**
    * The state that the application can be under
    * @type {string} appState  | production | test
    */

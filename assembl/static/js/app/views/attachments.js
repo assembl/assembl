@@ -110,6 +110,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   extras: {},
 
   initialize: function(options){
+    console.log("AttachmentEditableView initialize called for model", this.model.id);
     var that = this;
     this.extasAdded = {};
     _.each(this.extras, function(v,k){
@@ -141,6 +142,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   },
 
   onRender: function() {
+    console.log("AttachmentEditableView onRender called for model", this.model.id);
     AbstractAttachmentView.prototype.onRender.call(this);
     this.populateExtas();
     this.renderAttachmentPurposeDropdown(

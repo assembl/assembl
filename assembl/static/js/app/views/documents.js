@@ -48,7 +48,9 @@ var AbstractDocumentView = Marionette.ItemView.extend({
       maxHeight: "300px", maxWidth: "100%",
       debug: false,
       onEmbedFailed: function() {
-        console.log("onEmbedFailed (assembl)");
+        if (Ctx.debugOembed){
+          console.log("onEmbedFailed (assembl)");
+        }
         //this.addClass("hidden");
         
         // //The current accepted failure case is to simply present the url as is.
@@ -63,7 +65,9 @@ var AbstractDocumentView = Marionette.ItemView.extend({
           // Do not reload assembl for an embed failure
           jqXHR.handled = true;
         }
-        console.log('err:', externalUrl, embedProvider, textStatus);
+        if (Ctx.debugOembed){
+          console.log('err:', externalUrl, embedProvider, textStatus);
+        }
       },
       afterEmbed: function() {
         //console.log("Embeeding done");
@@ -149,7 +153,8 @@ var AbstractEditView =  AbstractDocumentView.extend({
   template: "#tmpl-loader",
 
   modelEvents: {
-    'progress': 'onShowProgress'
+    'progress': 'onShowProgress',
+    'doNotDelete': 'onDoNotDelete'
   },
 
   initialize: function(options){
@@ -157,6 +162,7 @@ var AbstractEditView =  AbstractDocumentView.extend({
     AbstractDocumentView.prototype.initialize.call(this, options);
     this.showProgress = false;
     this.percentComplete = 0; // Float from 0-100
+    this.rightToDelete = true;
     var that = this;
     if (options.showProgress) {
       this.showProgress = true;
@@ -193,9 +199,20 @@ var AbstractEditView =  AbstractDocumentView.extend({
     this.onBeforeDestroy();
   },
 
+  /*
+    Since lifecycle of the document is bound to the view lifecycle,
+    we use an override to ensure when an attachment is finally saved,
+    the document is no longer deleted
+   */
+  onDoNotDelete: function(){
+    console.log("onDoNotDelete for model", this.model);
+    this.rightToDelete = false;
+  },
+
   onBeforeDestroy: function(){
-    console.log("Destroying the document model");
-    this.model.destroy();
+    if (this.rightToDelete){
+      this.model.destroy();
+    }
   }
 });
 
@@ -210,9 +227,15 @@ var DocumentEditView = AbstractEditView.extend({
     AbstractEditView.prototype.initialize.call(this, options);
   },
 
+  initalizeCallback: function(){
+    if (!this.isViewDestroyed()){
+      this.render();
+    }
+  },
+
   serializeData: function(){
     return {
-      url: this.model.get('uri')
+      url: this.uri
     }
   }
 

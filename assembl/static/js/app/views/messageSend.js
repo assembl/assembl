@@ -294,6 +294,7 @@ var messageSendView = Marionette.LayoutView.extend({
 
     this.model.save(null, {
       success: function(model, resp) {
+        that.attachmentsCollection.invoke('triggerAttachm entSaved');
         var analytics = Analytics.getInstance();
         analytics.trackEvent(analytics.events['MESSAGE_POSTED_ON_'+that.analytics_context])
         that.attachmentsCollection.invoke('save');

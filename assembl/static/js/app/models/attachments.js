@@ -89,6 +89,19 @@ var AttachmentModel = Base.Model.extend({
     return rawModel;
   },
 
+  _saveMe: function(attrs, options){
+    var d = this.getDocument();
+    this.set('idAttachedDocument', d.id);
+
+    //When the attachment is saving, no longer want the document to be removed
+    //when the documentEditView is destroyed.
+    options.success = function(model, response, options){
+      d.trigger('attachmentSaved');
+    };
+    options.wait = true;
+    return Backbone.Model.prototype.save.call(this, attrs, options); 
+  },
+
   save: function(attrs, options) {
     var that = this;
 
@@ -104,15 +117,17 @@ var AttachmentModel = Base.Model.extend({
        * As a result, the attachment model save should no longer do a two-step
        * save process. It is only responsible for saving itself.
        */
-
+      if (options === undefined) {
+        options = {};
+      }
       if ( (options) && (options.two_step) && (options.two_step === true) ) {
         Promise.resolve(this.get('document').save()).then(function(){
           //console.log("Saving attachments", attrs, options);
-          return Backbone.Model.prototype.save.call(that, attrs, options);
+          return that._saveMe(attrs, options);
         })
       }
       else {
-        return Backbone.Model.prototype.save.call(that, attrs, options);
+        return this._saveMe(attrs, options);
       }
     }
   },
@@ -159,6 +174,11 @@ var AttachmentModel = Base.Model.extend({
       date = new Moment(date);
     }
     return date;
+  },
+
+  triggerAttachmentSaved: function(){
+    var d = this.getDocument();
+    d.triggerDoNotDelete();
   }
 
 });
