@@ -105,7 +105,7 @@ var AttachmentModel = Base.Model.extend({
        * save process. It is only responsible for saving itself.
        */
 
-      if (options.two_step && options.two_step === true) {
+      if ( (options) && (options.two_step) && (options.two_step === true) ) {
         Promise.resolve(this.get('document').save()).then(function(){
           //console.log("Saving attachments", attrs, options);
           return Backbone.Model.prototype.save.call(that, attrs, options);

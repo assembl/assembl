@@ -204,7 +204,7 @@ var DocumentEditView = AbstractEditView.extend({
     AbstractEditView.apply(this, arguments);
   },
 
-  template: "tmpl-fileEmbed",
+  template: "#tmpl-fileEmbed",
 
   initialize: function(options){
     AbstractEditView.prototype.initialize.call(this, options);
