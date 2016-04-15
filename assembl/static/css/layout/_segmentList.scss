@@ -24,8 +24,9 @@
   }
   &.is-dragover {
     .postitlist {
-       border: 1px dashed #cccccc;
+      border: 1px dashed #cccccc;
       @include border-radius(3px);
+      min-height: 20px; //So we see the border when the list is empty
     }
   }
 }

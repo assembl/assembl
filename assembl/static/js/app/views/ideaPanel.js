@@ -107,12 +107,13 @@ var IdeaPanel = AssemblPanel.extend({
     'change': 'requestRender'
   },
   events: {
-    'dragstart @ui.postIt': 'onDragStart', // when the user starts dragging one of the extracts listed in the idea
-    'dragenter @ui.postIt': 'onDragEnter', // when the user is dragging something from anywhere and moving the mouse towards this panel
-    'dragend @ui.postIt': 'onDragEnd',
-    'dragover @ui.postIt': 'onDragOver',
-    'dragleave @ui.postIt': 'onDragLeave',
-    'drop @ui.postIt': 'onDrop',
+    'dragstart @ui.postIt': 'onDragStart', //Fired on the element that is the origin of the drag, so when the user starts dragging one of the extracts CURRENTLY listed in the idea
+    'dragend @ui.postIt': 'onDragEnd',  //Fired on the element that is the origin of the drag
+    
+    'dragenter': 'onDragEnter', //Fired on drop targets. So when the user is dragging something from anywhere and moving the mouse towards this panel
+    'dragover': 'onDragOver', //Fired on drop targets.  Formerly these events were limited to  @ui.postIt, but that resulted in terrible UX.  Let's make the entire idea panel a drop zone
+    'dragleave': 'onDragLeave', //Fired on drop targets.  
+    'drop': 'onDrop', //Fired on drop targets.  
     'click @ui.closeExtract': 'onSegmentCloseButtonClick',
     'click @ui.clearIdea': 'onClearAllClick',
     'click @ui.deleteIdea': 'onDeleteButtonClick',
@@ -619,50 +620,6 @@ var IdeaPanel = AssemblPanel.extend({
             });
   },
 
-  // The dragenter event is fired when the mouse enters a drop target while dragging something
-  // We have to define dragenter and dragover event listeners which both call ev.preventDefault() in order to be sure that subsequent drop event will fire => http://stackoverflow.com/questions/21339924/drop-event-not-firing-in-chrome
-  // "Calling the preventDefault method during both a dragenter and dragover event will indicate that a drop is allowed at that location." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations#droptargets
-  onDragEnter: function(ev) {
-    //console.log("ideaPanel::onDragEnter() ev: ", ev);
-    if (ev) {
-      ev.preventDefault();
-    }
-  },
-
-  // The dragover event is fired when an element or text selection is being dragged over a valid drop target (every few hundred milliseconds).
-  // We have to define dragenter and dragover event listeners which both call ev.preventDefault() in order to be sure that subsequent drop event will fire => http://stackoverflow.com/questions/21339924/drop-event-not-firing-in-chrome
-  // "Calling the preventDefault method during both a dragenter and dragover event will indicate that a drop is allowed at that location." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations#droptargets
-  onDragOver: function(ev) {
-    //console.log("ideaPanel::onDragOver() ev: ", ev);
-    if (Ctx.debugAnnotator) {
-      console.log("ideaPanel:onDragOver() fired", Ctx.getDraggedSegment(), Ctx.getDraggedAnnotation());
-    }
-    if (ev) {
-      ev.preventDefault();
-    }
-
-    if (ev.originalEvent) {
-      ev = ev.originalEvent;
-    }
-
-    // /!\ See comment at the top of the onDrop() method
-    if ( ev && "dataTransfer" in ev ) {
-      if ( "effectAllowed" in ev.dataTransfer
-        && (ev.dataTransfer.effectAllowed == "move" || ev.dataTransfer.effectAllowed == "link")
-      ){
-        ev.dataTransfer.dropEffect = ev.dataTransfer.effectAllowed;
-      }
-      else {
-        ev.dataTransfer.dropEffect = 'link';
-        ev.dataTransfer.effectAllowed = 'link';
-      }
-    }
-
-    if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
-      this.$el.addClass("is-dragover");
-    }
-  },
-
   // when the user starts dragging one of the extracts listed in the idea
   // no need for any ev.preventDefault() here
   onDragStart: function(ev) {
@@ -705,11 +662,72 @@ var IdeaPanel = AssemblPanel.extend({
     Ctx.setDraggedSegment(null);
   },
 
+
+  // The dragenter event is fired when the mouse enters a drop target while dragging something
+  // We have to define dragenter and dragover event listeners which both call ev.preventDefault() in order to be sure that subsequent drop event will fire => http://stackoverflow.com/questions/21339924/drop-event-not-firing-in-chrome
+  // "Calling the preventDefault method during both a dragenter and dragover event will indicate that a drop is allowed at that location." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations#droptargets
+  onDragEnter: function(ev) {
+    //console.log("ideaPanel::onDragEnter() ev: ", ev);
+    if (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+    if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
+      this.$el.addClass("is-dragover");
+    }
+    else
+      {
+      console.log("segment or annotation is null");
+      }
+  },
+
+  // The dragover event is fired when an element or text selection is being dragged over a valid drop target (every few hundred milliseconds).
+  // We have to define dragenter and dragover event listeners which both call ev.preventDefault() in order to be sure that subsequent drop event will fire => http://stackoverflow.com/questions/21339924/drop-event-not-firing-in-chrome
+  // "Calling the preventDefault method during both a dragenter and dragover event will indicate that a drop is allowed at that location." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations#droptargets
+  onDragOver: function(ev) {
+    //console.log("ideaPanel::onDragOver() ev: ", ev);
+    if (Ctx.debugAnnotator) {
+      console.log("ideaPanel:onDragOver() fired", Ctx.getDraggedSegment(), Ctx.getDraggedAnnotation());
+    }
+    if (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+
+    if (ev.originalEvent) {
+      ev = ev.originalEvent;
+    }
+
+    // /!\ See comment at the top of the onDrop() method
+    if ( ev && "dataTransfer" in ev ) {
+      if ( "effectAllowed" in ev.dataTransfer
+        && (ev.dataTransfer.effectAllowed == "move" || ev.dataTransfer.effectAllowed == "link")
+      ){
+        ev.dataTransfer.dropEffect = ev.dataTransfer.effectAllowed;
+      }
+      else {
+        ev.dataTransfer.dropEffect = 'link';
+        ev.dataTransfer.effectAllowed = 'link';
+      }
+    }
+
+    if (Ctx.getDraggedSegment() !== null || Ctx.getDraggedAnnotation() !== null) {
+      //Because sometimes spurious dragLeave can be fired
+      if(!this.$el.hasClass("is-dragover")) {
+        console.log("element doesn't have is-dragover class");
+        this.$el.addClass("is-dragover");
+      }
+    }
+  },
+
   // "Finally, the dragleave event will fire at an element when the drag leaves the element. This is the time when you should remove any insertion markers or highlighting. You do not need to cancel this event. [...] The dragleave event will always fire, even if the drag is cancelled, so you can always ensure that any insertion point cleanup can be done during this event." quote https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations
   onDragLeave: function(ev) {
-    console.log("ideaPanel::onDragLeave() ev: ", ev);
-
+    //console.log("ideaPanel::onDragLeave() ev: ", ev);
+    ev.stopPropagation();
+    ev.preventDefault();
+    if(ev.currentTarget == ev.target) {
     this.$el.removeClass('is-dragover');
+    }
   },
 
   // /!\ The browser will not fire the drop event if, at the end of the last call of the dragenter or dragover event listener (right before the user releases the mouse button), one of these conditions is met:
