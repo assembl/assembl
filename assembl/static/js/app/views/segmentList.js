@@ -48,7 +48,8 @@ var SegmentView = Marionette.LayoutView.extend({
     'click .js_closeExtract': 'onCloseButtonClick',
     'click .segment-link': "onSegmentLinkClick",
     'click .js_selectAsNugget': 'selectAsNugget',
-    'dragstart .bx.postit': 'onDragStart' // when the user starts dragging this extract
+    'dragstart .bx.postit': 'onDragStart', // when the user starts dragging this extract
+    'dragend .bx.postit': 'onDragEnd' // when the user starts dragging this extract
   },
 
   serializeData: function() {
@@ -117,6 +118,12 @@ var SegmentView = Marionette.LayoutView.extend({
 
     Ctx.showDragbox(ev, segment.getQuote());
     Ctx.setDraggedSegment(segment);
+  },
+
+  // "The dragend event is fired when a drag operation is being ended (by releasing a mouse button or hitting the escape key)." quote https://developer.mozilla.org/en-US/docs/Web/Events/dragend
+  onDragEnd: function(ev) {
+    //console.log("SegmentView::onDragEnd()", ev);
+    ev.currentTarget.style.opacity = 1;
   },
 
   onSegmentLinkClick: function(ev) {
@@ -442,11 +449,8 @@ var SegmentListPanel = AssemblPanel.extend({
 
   // "The dragend event is fired when a drag operation is being ended (by releasing a mouse button or hitting the escape key)." quote https://developer.mozilla.org/en-US/docs/Web/Events/dragend
   onDragEnd: function(ev) {
-    //console.log("segmentListPanel::onDragEnd()");
+    //console.log("segmentListPanel::onDragEnd()", ev);
 
-    if ( ev && "currentTarget" in ev ){
-      ev.currentTarget.style.opacity = 1;
-    }
     Ctx.setDraggedSegment(null);
     this.$el.removeClass('is-dragover');
   },
