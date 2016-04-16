@@ -972,7 +972,9 @@ def database_restore_postgres():
 
     # Drop db
     with settings(warn_only=True):
-        run_db_command("dropdb %s" % (env.db_name,))
+        dropped = run_db_command("dropdb %s" % (env.db_name,))
+        assert dropped.succeeded or "does not exist" in dropped, \
+            "Could not drop the database"
 
     # Create db
     execute(database_create)
@@ -1340,9 +1342,9 @@ def system_db_user():
 def run_db_command(command, *args, **kwargs):
     user = system_db_user()
     if user:
-        sudo(command, *args, user=user, **kwargs)
+        return sudo(command, *args, user=user, **kwargs)
     else:
-        run(command, *args, **kwargs)
+        return run(command, *args, **kwargs)
 
 
 @task
