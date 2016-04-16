@@ -786,7 +786,7 @@ def check_and_create_database_user():
         checkUser = run("PGPASSWORD=%s psql --host=%s --username=%s -l" % (db_password, env.db_host, db_user))
     if checkUser.failed:
         print(yellow("User does not exist"))
-        run_db_command('psql -c "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \'%s\';"' % (db_user, db_password))
+        run_db_command('psql -d postgres -c "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \'%s\';"' % (db_user, db_password))
     else:
         print(green("User exists and can connect"))
 
