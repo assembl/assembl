@@ -18,16 +18,23 @@ import transaction
 
 from assembl.lib import config
 
-admin_engine = sa.create_engine('virtuoso://dba:dba@VOSU')
-conn = admin_engine.connect()
-admin_context = MigrationContext.configure(conn)
-op = Operations(admin_context)
+
+def get_admin_context():
+    admin_engine = sa.create_engine('virtuoso://dba:dba@VOSU')
+    conn = admin_engine().connect()
+    return MigrationContext.configure(conn)
+
 
 def upgrade(pyramid_env):
+    admin_context = get_admin_context()
+    op = Operations(admin_context)
     with admin_context.begin_transaction():
         op.add_column('WS.WS.SYS_DAV_RES',
-            sa.Column('RES_SIZE', sa.Integer))
+        sa.Column('RES_SIZE', sa.Integer))
+
 
 def downgrade(pyramid_env):
+    admin_context = get_admin_context()
+    op = Operations(admin_context)
     with admin_context.begin_transaction():
         op.drop_column('WS.WS.SYS_DAV_RES', 'RES_SIZE')
