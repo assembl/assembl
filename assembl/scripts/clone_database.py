@@ -43,7 +43,7 @@ def is_virtuoso(session):
 
 def set_sequence(session, name, value):
     session.execute(
-            "SELECT {command}('{name}', {max_id})".format(
+            "SELECT {command}('{name}', {value})".format(
                 command="sequence_set" if is_virtuoso(session) else "setval",
                 name=name, value=value))
 
