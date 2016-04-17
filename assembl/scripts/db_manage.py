@@ -36,12 +36,16 @@ def main():
     set_config(settings)
     configure_zmq(settings['changes.socket'], False)
     engine = configure_engine(settings, True)
-    admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')
+    admin_engine = engine
+    from assembl.lib.sqla import using_virtuoso
+    if using_virtuoso():
+        admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')
+    else:
+        admin_engine = engine
     if args.command == "bootstrap":
-        
         SessionMaker = sessionmaker(admin_engine)
         session = SessionMaker()
-        if not session.execute(
+        if using_virtuoso() and not session.execute(
                 "select count(*) from db..sys_users"
                 " where u_name = '%(db_user)s'" % settings).scalar():
             for i in init_instructions:
