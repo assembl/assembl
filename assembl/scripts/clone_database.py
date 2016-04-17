@@ -85,7 +85,7 @@ def copy_table(source_session, dest_session, source_table, dest_table):
         idx_col = dest_table.c.get("id", None)
         if idx_col is not None and not idx_col.foreign_keys:
             (max_id,) = source_session.query(
-                "max(id) from "+source_table.name).first()
+                'max(id) from "%s"' % (source_table.name,)).first()
             if dest_table.name in history_tables:
                 max_id = max(max_id, get_sequence(
                     source_session, source_table.fullname+"_idsequence"))
