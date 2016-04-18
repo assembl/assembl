@@ -274,7 +274,6 @@ def instance_put_form(request, form_data=None):
              len(r._calculated_foreign_keys) == 1 and iter(
                  r._calculated_foreign_keys).next().table == mapper.local_table
              }
-    import pdb; pdb.set_trace()
     unknown = set(form_data.keys()) - (
         set(cols.keys()).union(set(setables.keys())).union(set(relns.keys())))
     if unknown:
