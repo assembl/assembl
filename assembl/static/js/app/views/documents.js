@@ -19,21 +19,14 @@ var AbstractDocumentView = Marionette.ItemView.extend({
     if (!this.model) {
       throw new Error('file needs a model');
     }
-
+    /*
+      The container view of the document.
+      The document's first parent is an attachment view
+      The parent is the parent of the attachment view.
+     */
+    this.parentView = options.parentView ? options.parentView : null;
     this.uri = this.model.get('external_url') ? this.model.get('external_url') : this.model.get('uri');
   },
-
-  // ui: {
-  //   mainfield: '.ckeditorField-mainfield',
-  //   saveButton: '.ckeditorField-savebtn',
-  //   cancelButton: '.ckeditorField-cancelbtn'
-  // },
-
-  // events: {
-  //   'click @ui.mainfield': 'changeToEditMode',
-  //   'click @ui.saveButton': 'saveEdition',
-  //   'click @ui.cancelButton': 'cancelEdition'
-  // },
 
   doOembed: function() {
     //console.log (this.model.get('external_url'));
@@ -153,8 +146,7 @@ var AbstractEditView =  AbstractDocumentView.extend({
   template: "#tmpl-loader",
 
   modelEvents: {
-    'progress': 'onShowProgress',
-    'doNotDelete': 'onDoNotDelete'
+    'progress': 'onShowProgress'
   },
 
   initialize: function(options){
@@ -162,7 +154,6 @@ var AbstractEditView =  AbstractDocumentView.extend({
     AbstractDocumentView.prototype.initialize.call(this, options);
     this.showProgress = false;
     this.percentComplete = 0; // Float from 0-100
-    this.rightToDelete = true;
     var that = this;
     if (options.showProgress) {
       this.showProgress = true;
@@ -196,23 +187,7 @@ var AbstractEditView =  AbstractDocumentView.extend({
   onBeforeUnload: function(ev){
     console.log("AbstractEditView onBeforeUnload called with args", arguments);
     this.$(window).off('beforeunload');
-    this.onBeforeDestroy();
-  },
-
-  /*
-    Since lifecycle of the document is bound to the view lifecycle,
-    we use an override to ensure when an attachment is finally saved,
-    the document is no longer deleted
-   */
-  onDoNotDelete: function(){
-    console.log("onDoNotDelete for model", this.model);
-    this.rightToDelete = false;
-  },
-
-  onBeforeDestroy: function(){
-    if (this.rightToDelete){
-      this.model.destroy();
-    }
+    this.parentView.model.destroy(); //Eh, doubt this will work?
   }
 });
 

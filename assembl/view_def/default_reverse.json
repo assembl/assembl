@@ -161,7 +161,8 @@
         "message_id": false,
         "ancestry": false,
         "parentId": "parent",
-        "idCreator": "creator"
+        "idCreator": "creator",
+        "attachments": false
     },
     "ImportedPost": {
         "@extends": "Post",

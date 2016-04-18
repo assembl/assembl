@@ -298,6 +298,15 @@ var MessageModel = Base.Model.extend({
     }
     console.log("we are in default case");
     return Backbone.sync(method, model, options);
+  },
+
+  destroy: function(options){
+    var attachments = this.get('attachments'),
+        that = this;
+    return Promise.resolve(attachments.destroyAll(options))
+      .then(function(){
+        return Base.Model.prototype.destroy.call(that, options);
+      });
   }
 });
 

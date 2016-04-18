@@ -1,13 +1,14 @@
 'use strict';
 
 var $ = require('jquery'),
+    _ = require('underscore'),
+    Moment = require("moment"),
     Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),
     Ctx = require('../common/context.js'),
     Promise = require('bluebird'),
     Types = require('../utils/types.js'),
-    Document = require('../models/documents.js'),
-    Moment = require("moment");
+    Document = require('../models/documents.js');
 
 
 var attachmentPurposeTypes = {
@@ -179,6 +180,17 @@ var AttachmentModel = Base.Model.extend({
   triggerAttachmentSaved: function(){
     var d = this.getDocument();
     d.triggerDoNotDelete();
+  },
+
+  destroy: function(options){
+    var d = this.getDocument(),
+        that = this;
+    return d.destroy({
+      success: function(model, response){
+        console.log('in document destroy success callback');
+        return Base.Model.prototype.destroy.call(that);
+      }
+    });
   }
 
 });
@@ -242,6 +254,30 @@ var AttachmentCollection = Base.Collection.extend({
       return 1;
     }
     else { return 0; }
+  },
+
+  /**
+   * Helper method to destroy the models in a collection
+   * @param  {Array|Backbone.Model} models    Model or Array of models  
+   * @param  {Object} options   Options hash to send to every model when destroyed
+   * @return {Promse} if model was persisted, returns jqXhr else false 
+   */
+  destroy: function(models, options){
+    if (!models){
+      return Promise.resolve(false);
+    }
+
+    if (!_.isArray(models)){
+      return Promise.resolve(models.destroy(options));
+    }
+
+    return Promise.each(models, function(model){
+      model.destroy(options);
+    });
+  },
+
+  destroyAll: function(options){
+    return this.destroy(this.models, options);
   }
 });
 

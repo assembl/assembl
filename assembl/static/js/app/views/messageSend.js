@@ -106,9 +106,14 @@ var messageSendView = Marionette.LayoutView.extend({
       this.model = new Messages.Model();
     }
 
-    this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
+    var attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
+    // this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model})
+    this.model.set('attachments', attachmentsCollection);
     this.documentsView = new AttachmentViews.AttachmentEditableCollectionView({
-      collection: this.attachmentsCollection
+      collection: attachmentsCollection,
+      childViewOptions: {
+        parentView: this
+      }
     });
     // var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
     //   constructor: function AttachmentEditableCollectionView() {
@@ -294,10 +299,9 @@ var messageSendView = Marionette.LayoutView.extend({
 
     this.model.save(null, {
       success: function(model, resp) {
-        that.attachmentsCollection.invoke('triggerAttachm entSaved');
         var analytics = Analytics.getInstance();
         analytics.trackEvent(analytics.events['MESSAGE_POSTED_ON_'+that.analytics_context])
-        that.attachmentsCollection.invoke('save');
+        that.model.get('attachments').invoke('save');
         btn.text(i18n.gettext('Message posted!'));
 
         that.ui.messageBody.val('');
@@ -409,6 +413,7 @@ var messageSendView = Marionette.LayoutView.extend({
 
   onCancelMessageButtonClick: function() {
     this.clearPartialMessage();
+    this.model.destroy();
   },
 
   onBlurMessage: function(ev) {
@@ -513,8 +518,8 @@ var messageSendView = Marionette.LayoutView.extend({
     //   //console.log("attachmentsCollection comparator returning: ", index);
     //   return index;
     // };
-
-    goneModels = that.attachmentsCollection.filter(function(attachment) {
+    var attachmentsCollection = this.model.get('attachments');
+    goneModels = attachmentsCollection.filter(function(attachment) {
       var document = attachment.getDocument();
 
       if (document.isFileType()){
@@ -529,14 +534,12 @@ var messageSendView = Marionette.LayoutView.extend({
     });
     //console.log("goneModels: ", goneModels);
     
-    //This will now have to be updated. The attachment document must first be deleted from
-    //the backend.
-    that.attachmentsCollection.remove(goneModels);
+    attachmentsCollection.destroy(goneModels);
 
     missingLinks = _.filter(links, function(link) {
       var retval;
       //console.log("Checking link", link.href)
-      retval = that.attachmentsCollection.filter(function(attachment) {
+      retval = attachmentsCollection.filter(function(attachment) {
         var document = attachment.getDocument();
         //console.log("filtering for missingLinks comparing:", document.get('uri'), link.href, document.get('uri') === link.href);
         return (document.get('uri') === link.href)?true:false;
@@ -559,7 +562,7 @@ var messageSendView = Marionette.LayoutView.extend({
             idCreator: Ctx.getCurrentUser().id
           })
       //console.log("Adding missing url", document);
-      that.attachmentsCollection.add(attachment);
+      attachmentsCollection.add(attachment);
     });
     //console.log("Attachments after _processHyperlinks:", this.attachmentsCollection);
   }, 500),
@@ -580,6 +583,7 @@ var messageSendView = Marionette.LayoutView.extend({
 
   onFileUpload: function(e){
     var fs = e.target.files,
+        attachmentsCollection = this.model.get('attachments'),
         that = this;
     console.log("A file has been uploaded");
 
@@ -596,7 +600,7 @@ var messageSendView = Marionette.LayoutView.extend({
         idCreator: Ctx.getCurrentUser().id
       });
 
-      that.attachmentsCollection.add(attachment);
+      attachmentsCollection.add(attachment);
     });
   }
 

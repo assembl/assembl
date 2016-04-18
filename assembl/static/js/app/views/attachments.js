@@ -23,6 +23,7 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
   initialize: function(options) {
     var d = this.model.getDocument();
+    this.parentView = options.parentView? options.parentView: null;
     this.uri = d.get('external_url') ? d.get('external_url') : d.get('uri');
   },
 
@@ -51,13 +52,18 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
   renderDocument: function(){
     var documentModel = this.model.getDocument(),
+        parentView = this.parentView,
+        hash = {
+          model: documentModel,
+          parentView: parentView
+        },
         documentView;
     
     if (documentModel.isFileType()) {
-      documentView = new DocumentViews.FileView({model: documentModel});
+      documentView = new DocumentViews.FileView(hash);
     }
     else {
-      documentView = new DocumentViews.DocumentView({model: documentModel});
+      documentView = new DocumentViews.DocumentView(hash);
       
     }
     this.documentEmbeedRegion.show(documentView);
@@ -66,12 +72,17 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
     //console.log("AbstractAttachmentView: onRender with this.model:",this.model);
     //console.log(this.model.get('attachmentPurpose'), Attachments.attachmentPurposeTypes.DO_NOT_USE.id);
     if(this.model.get('attachmentPurpose') !== Attachments.attachmentPurposeTypes.DO_NOT_USE.id) {
-      this.renderDocument();
+      this.canShow = true;
+    }
+    else {
+      this.canShow = false;
     }
   },
 
   onShow: function() {
-
+    if (this.canShow){
+      this.renderDocument();
+    }
   }
 });
 
@@ -110,7 +121,8 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   extras: {},
 
   initialize: function(options){
-    console.log("AttachmentEditableView initialize called for model", this.model.id);
+    //A parent view is passed which will be used to dictate the lifecycle of document creation/deletion
+    AbstractAttachmentView.prototype.initialize.call(this, options);
     var that = this;
     this.extasAdded = {};
     _.each(this.extras, function(v,k){
@@ -126,16 +138,21 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   
   renderDocument: function(){
     var documentModel = this.model.getDocument(),
+        parentView = this.parentView,
         documentView;
     
     if (documentModel.isFileType()) {
       documentView = new DocumentViews.FileEditView({
+        parentView: parentView,
         model: documentModel,
         showProgress: true
       });
     }
     else {
-      documentView = new DocumentViews.DocumentEditView({model: documentModel});
+      documentView = new DocumentViews.DocumentEditView({
+        model: documentModel,
+        parentView: parentView
+      });
       
     }
     this.documentEmbeedRegion.show(documentView);
@@ -206,7 +223,15 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
       throw new Error("Invalid attachment purpose: ", ev.currentTarget.dataset.id);
     }
     this.model.set('attachmentPurpose', ev.currentTarget.dataset.id);
-  }
+  },
+
+  onRemoveAttachment: function(ev){
+    //The model is not persisted if it is in an EditableView, so this does not call DELETE
+    //to the backend
+    ev.stopPropagation();
+    console.log('onRemoveAttachment with ev', ev);
+    this.model.destroy();
+  },
 
 });
 
@@ -229,10 +254,6 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
   populateExtas: function(){
     var a = "<li><a class='js_removeAttachment' data-toggle='tooltip' title='' data-placement='left' data-id='CANCEL_UPLOAD' data-original-title='CANCEL_UPLOAD'>" + i18n.gettext("Remove") + "</a></li>"
     this.extras["REMOVE"] = a;
-  },
-
-  onRemoveAttachment: function(ev){
-    this.model.collection.remove(this.model);
   },
 
   serializeData: function(){
