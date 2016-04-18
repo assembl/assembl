@@ -518,6 +518,27 @@ class IdentityProvider(Base):
             db.flush()
         return provider
 
+    @classmethod
+    def populate_db(cls, db=None):
+        db = db or cls.default_db()
+        providers = config.get("login_providers") or []
+        trusted_providers = config.get("trusted_login_providers") or []
+        if not isinstance(providers, list):
+            providers = providers.split()
+        if not isinstance(trusted_providers, list):
+            trusted_providers = trusted_providers.split()
+        db_providers = db.query(cls).all()
+        db_providers_by_type = {
+            p.provider_type: p for p in db_providers}
+        for provider in providers:
+            db_provider = db_providers_by_type.get(provider, None)
+            if db_provider is None:
+                db.add(cls(
+                    name=provider, provider_type=provider,
+                    trust_emails=(provider in trusted_providers)))
+            else:
+                db_provider.trust_emails = (provider in trusted_providers)
+
 
 class AgentStatusInDiscussion(DiscussionBoundBase):
     __tablename__ = 'agent_status_in_discussion'
@@ -1059,11 +1080,12 @@ class Role(Base):
         session = session or cls.default_db()
         return session.query(cls).filter_by(name=name).first()
 
-
-def populate_default_roles(session):
-    roles = {r[0] for r in session.query(Role.name).all()}
-    for role in SYSTEM_ROLES - roles:
-        session.add(Role(name=role))
+    @classmethod
+    def populate_db(cls, db=None):
+        db = db or cls.default_db()
+        roles = {r[0] for r in db.query(Role.name).all()}
+        for role in SYSTEM_ROLES - roles:
+            db.add(Role(name=role))
 
 
 class UserRole(Base, PrivateObjectMixin):
@@ -1265,11 +1287,12 @@ class Permission(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
 
-
-def populate_default_permissions(session):
-    perms = {p[0] for p in session.query(Permission.name).all()}
-    for perm in ASSEMBL_PERMISSIONS - perms:
-        session.add(Permission(name=perm))
+    @classmethod
+    def populate_db(cls, db=None):
+        db = db or cls.default_db()
+        perms = {p[0] for p in db.query(Permission.name).all()}
+        for perm in ASSEMBL_PERMISSIONS - perms:
+            db.add(Permission(name=perm))
 
 
 class DiscussionPermission(DiscussionBoundBase):

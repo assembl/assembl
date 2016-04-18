@@ -49,15 +49,14 @@ def bootstrap_db(config_uri=None, with_migration=True):
 
 def bootstrap_db_data(db):
     # import after session to delay loading of BaseOps
-    from assembl.models.langstrings import populate_default_locales
-    populate_default_locales(db())
-    from assembl.models.auth import (
-        populate_default_permissions, populate_default_roles)
+    from assembl.models import (
+        Permission, Role, IdentityProvider, LangString)
     from assembl.lib.database_functions import ensure_functions
-    populate_default_permissions(db())
-    populate_default_roles(db())
-    ensure_functions(db())
-    mark_changed(db())
+    session = db()
+    for cls in (Permission, Role, IdentityProvider):
+        cls.populate_db(session)
+    ensure_functions(session)
+    mark_changed(session)
 
 
 def ensure_db_version(config_uri, session_maker):

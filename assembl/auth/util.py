@@ -277,27 +277,6 @@ def users_with_permission(discussion_id, permission, id_only=True):
         return db.query(AgentProfile).filter(AgentProfile.id.in_(user_ids)).all()
 
 
-def get_identity_provider(request, create=True):
-    auth_context = request.context
-    trusted = request.registry.settings['trusted_login_providers']
-    provider = None
-    session = get_session_maker()()
-    provider = IdentityProvider.default_db.query(IdentityProvider).filter_by(
-        provider_type=auth_context.provider_type,
-        name=auth_context.provider_name
-    ).first()
-    if provider and not provider.trust_emails and provider.name in trusted:
-        provider.trust_emails = True
-        session.add(provider)
-    elif create and not provider:
-        provider = IdentityProvider(
-            provider_type=auth_context.provider_type,
-            name=auth_context.provider_name,
-            trust_emails=auth_context.provider_name in trusted)
-        session.add(provider)
-    return provider
-
-
 def maybe_auto_subscribe(user, discussion):
     if (not discussion or
             not discussion.subscribe_to_notifications_on_signup or

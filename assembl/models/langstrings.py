@@ -835,6 +835,12 @@ class LangStringEntry(TombstonableMixin, Base):
 
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
 
+    def populate_db(cls, db=None):
+        db = db or cls.default_db()
+        for loc_code in (
+                Locale.UNDEFINED, Locale.MULTILINGUAL, Locale.NON_LINGUISTIC):
+            Locale.get_or_create(loc_code, db=db)
+
 
 # class TranslationStamp(Base):
 #     "For future reference. Not yet created."
@@ -848,11 +854,6 @@ class LangStringEntry(TombstonableMixin, Base):
 #          P_TRANSLATE, P_READ, P_SYSADMIN, P_SYSADMIN,
 #          P_TRANSLATE, P_TRANSLATE)
 
-
-def populate_default_locales(db):
-    for loc_code in (
-            Locale.UNDEFINED, Locale.MULTILINGUAL, Locale.NON_LINGUISTIC):
-        Locale.get_or_create(loc_code, db=db)
 
 
 def includeme(config):

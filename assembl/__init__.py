@@ -69,13 +69,10 @@ def main(global_config, **settings):
         config.set_authorization_policy(ACLAuthorizationPolicy())
     # ensure default roles and permissions at startup
     from models import get_session_maker
-    from .models.auth import (
-        populate_default_roles, populate_default_permissions)
     with transaction.manager:
         session = get_session_maker()
-        populate_default_roles(session)
-        populate_default_permissions(session)
-        ensure_functions(session)
+        from .lib.migration import bootstrap_db_data
+        bootstrap_db_data(session)
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('widget', 'widget', cache_max_age=3600)

@@ -42,8 +42,7 @@ from assembl.auth import (
 from assembl.auth.password import (
     verify_email_token, verify_password_change_token,
     password_token)
-from assembl.auth.util import (
-    get_identity_provider, discussion_from_request,
+from assembl.auth.util import (discussion_from_request,
     roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
