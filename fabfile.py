@@ -1214,7 +1214,11 @@ def virtuoso_source_install():
         #    run('./config.status --recheck')
         #else:
 
-        run('./configure --with-readline --enable-maintainer-mode --prefix '+virtuoso_root)
+        conf_command = './configure --with-readline --enable-maintainer-mode --prefix '+virtuoso_root
+        if env.mac:
+            # this needs to be kept up to date. I'd automate if we were keeping virtuoso
+            conf_command += " --enable-openssl=/usr/local/Cellar/openssl/1.0.2g"
+        run(conf_command)
 
         run("""physicalCpuCount=$([[ $(uname) = 'Darwin' ]] && 
                        sysctl -n hw.physicalcpu_max ||
