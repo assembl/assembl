@@ -4,7 +4,6 @@ from itertools import chain, groupby
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
-import threading
 
 from bs4 import BeautifulSoup
 from rdflib import URIRef
@@ -471,55 +470,30 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                      Post1.type != 'synthesis_post',
                      Post1.hidden == False).except_(subq)
 
-    _threadlocals = threading.local()
-
-    @classmethod
-    def prepare_counters(cls, discussion_id, user_id=None, calc_all=False):
-        from pyramid.threadlocal import get_current_request
-        from .path_utils import PostPathCounter
-        from pyramid.security import authenticated_userid
-        req = get_current_request()
-        if (cls._threadlocals.__dict__.get("counters", None) is None
-                or cls._threadlocals.counters.request != req):
-            if user_id is None:
-                if req:
-                    user_id = authenticated_userid(req)
-            counter = PostPathCounter(
-                Discussion.get(discussion_id),
-                user_id, None if calc_all else ())
-            counter.request = req
-            cls.visit_idea_ids_depth_first(counter, discussion_id)
-            cls._threadlocals.counters = counter
-        return cls._threadlocals.counters
-
     @property
     def num_posts(self):
-        counters = self.prepare_counters(self.discussion_id)
-        return counters.get_counts(self.id)[0]
-        # return self.get_related_posts_query(
-        #     self.discussion_id, self.id).count()
+        """ This is extremely naive and slow, but as this is all temp code
+        until we move to a graph database, it will probably do for now """
+        return self.get_related_posts_query(
+            self.discussion_id, self.id).count()
 
     @property
     def num_read_posts(self):
-        counters = self.prepare_counters(self.discussion_id)
-        return counters.get_counts(self.id)[1]
-        # connection = self.db.connection()
-        # user_id = connection.info.get('userid', None)
-        # return self.num_read_posts_for(user_id)
+        """ Worse than above... but temporary """
+        connection = self.db.connection()
+        user_id = connection.info.get('userid', None)
+        return self.num_read_posts_for(user_id)
 
     @property
     def num_total_and_read_posts(self):
-        counters = self.prepare_counters(self.discussion_id)
-        return counters.get_counts(self.id)
-        # connection = self.db.connection()
-        # user_id = connection.info.get('userid', None)
-        # if user_id:
-        #     return self.num_total_and_read_posts_for(user_id)
-        # else:
-        #     return (self.num_posts, 0)
+        connection = self.db.connection()
+        user_id = connection.info.get('userid', None)
+        if user_id:
+            return self.num_total_and_read_posts_for(user_id)
+        else:
+            return (self.num_posts, 0)
 
     def num_read_posts_for(self, user_id):
-        return self.num_read_posts()
         if not user_id:
             return 0
         from .generic import Content
@@ -606,8 +580,6 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
     @classmethod
     def children_dict(cls, discussion_id):
-        # We do not want a subclass
-        cls = [c for c in cls.mro() if c.__name__=="Idea"][0]
         source = aliased(cls, name="source")
         target = aliased(cls, name="target")
         parents = dict(cls.default_db.query(
@@ -620,10 +592,6 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             source.tombstone_date == None,
             target.tombstone_date == None,
             target.discussion_id == discussion_id))
-        if not parents:
-            (root_id,) = cls.default_db.query(
-                RootIdea.id).filter_by(discussion_id=discussion_id).first()
-            return {None: (root_id,), root_id: ()}
         children = defaultdict(list)
         for child, parent in parents.iteritems():
             children[parent].append(child)

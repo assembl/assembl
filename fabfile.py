@@ -656,11 +656,10 @@ def install_builddeps():
         # may require a sudo
         if not run('brew link libevent', quiet=True):
             sudo('brew link libevent')
-        run('brew install memcached zeromq redis libtool libmemcached gawk postgres')
+        run('brew install memcached zeromq redis libtool libmemcached gawk')
         run('brew tap homebrew/services')
         sudo('brew services start memcached')
         sudo('brew services start redis')
-        sudo('brew services start postgres')
         if not exists('/usr/local/bin/pkg-config'):
             run('brew install pkg-config')
         if not exists('/usr/local/bin/node'):
