@@ -36,7 +36,8 @@ updated with
 
 If the terminal tells you command pip not found, follow the installation instructions of pip on https://pip.pypa.io/en/stable/installing/
 
-If you have Homebrew installed, and you want to use the Homebrew python,
+Go to http://brew.sh and follow the instructions to install Homebrew. (It is required by the command fab devenv install_builddeps which will be run in a following step)
+If you want to use the Homebrew python,
 pip installs with python:
 
 .. code:: sh
