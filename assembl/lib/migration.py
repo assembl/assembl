@@ -50,10 +50,10 @@ def bootstrap_db(config_uri=None, with_migration=True):
 def bootstrap_db_data(db):
     # import after session to delay loading of BaseOps
     from assembl.models import (
-        Permission, Role, IdentityProvider, LangString)
+        Permission, Role, IdentityProvider, Locale)
     from assembl.lib.database_functions import ensure_functions
     session = db()
-    for cls in (Permission, Role, IdentityProvider):
+    for cls in (Permission, Role, IdentityProvider, Locale):
         cls.populate_db(session)
     ensure_functions(session)
     mark_changed(session)

@@ -260,6 +260,13 @@ class Locale(Base):
 
     crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
 
+    @classmethod
+    def populate_db(cls, db=None):
+        db = db or cls.default_db()
+        for loc_code in (
+                cls.UNDEFINED, cls.MULTILINGUAL, cls.NON_LINGUISTIC):
+            cls.get_or_create(loc_code, db=db)
+
 
 @event.listens_for(Locale, 'after_insert', propagate=True)
 @event.listens_for(Locale, 'after_delete', propagate=True)
@@ -834,12 +841,6 @@ class LangStringEntry(TombstonableMixin, Base):
         self.error_count = 0
 
     crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
-
-    def populate_db(cls, db=None):
-        db = db or cls.default_db()
-        for loc_code in (
-                Locale.UNDEFINED, Locale.MULTILINGUAL, Locale.NON_LINGUISTIC):
-            Locale.get_or_create(loc_code, db=db)
 
 
 # class TranslationStamp(Base):
