@@ -1,12 +1,12 @@
 'use strict';
 
-var IdeaView = require('./ideaInIdeaList.js'),
+var ideaInIdeaList = require('./ideaInIdeaList.js'),
     Ctx = require('../common/context.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js');
 
-var AllMessagesInIdeaListView = IdeaView.extend({
+var AllMessagesInIdeaListView = ideaInIdeaList.IdeaView.extend({
   constructor: function AllMessagesInIdeaListView() {
-    IdeaView.apply(this, arguments);
+    ideaInIdeaList.IdeaView.apply(this, arguments);
   },
 
   /**
@@ -18,7 +18,7 @@ var AllMessagesInIdeaListView = IdeaView.extend({
   /**
    * The render
    */
-  render: function() {
+  onRender: function() {
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
     var data = this.model.toJSON();
 

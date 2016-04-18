@@ -1,16 +1,16 @@
 'use strict';
 
 var Ctx = require('../common/context.js'),
-    IdeaView = require('./ideaInIdeaList.js'),
+    ideaInIdeaList = require('./ideaInIdeaList.js'),
     _ = require('../shims/underscore.js');
 
-var otherInIdeaList = IdeaView.extend({
+var otherInIdeaList = ideaInIdeaList.IdeaView.extend({
   constructor: function otherInIdeaList() {
-    IdeaView.apply(this, arguments);
+    ideaInIdeaList.IdeaView.apply(this, arguments);
   },
 
   template: Ctx.loadTemplate('otherInIdeaList'),
-  render: function() {
+  onRender: function() {
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
     var hasOrphanPosts = this.model.get('num_orphan_posts'),
@@ -29,7 +29,6 @@ var otherInIdeaList = IdeaView.extend({
 
     this.$el.html(this.template);
     Ctx.initTooltips(this.$el);
-    return this;
   }
 });
 

@@ -3,11 +3,11 @@
 var Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
-    IdeaView = require('./ideaInIdeaList.js');
+    ideaInIdeaList = require('./ideaInIdeaList.js');
 
-var OrphanMessagesInIdeaListView = IdeaView.extend({
+var OrphanMessagesInIdeaListView = ideaInIdeaList.IdeaView.extend({
   constructor: function OrphanMessagesInIdeaListView() {
-    IdeaView.apply(this, arguments);
+    ideaInIdeaList.IdeaView.apply(this, arguments);
   },
 
   /**
@@ -19,7 +19,7 @@ var OrphanMessagesInIdeaListView = IdeaView.extend({
   /**
    * The render
    */
-  render: function() {
+  onRender: function() {
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
     var data = this.model.toJSON();
 
