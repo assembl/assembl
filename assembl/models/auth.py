@@ -1083,9 +1083,9 @@ class Role(Base):
     @classmethod
     def populate_db(cls, db=None):
         db = db or cls.default_db()
-        roles = {r[0] for r in db.query(Role.name).all()}
+        roles = {r[0] for r in db.query(cls.name).all()}
         for role in SYSTEM_ROLES - roles:
-            db.add(Role(name=role))
+            db.add(cls(name=role))
 
 
 class UserRole(Base, PrivateObjectMixin):
@@ -1290,9 +1290,9 @@ class Permission(Base):
     @classmethod
     def populate_db(cls, db=None):
         db = db or cls.default_db()
-        perms = {p[0] for p in db.query(Permission.name).all()}
+        perms = {p[0] for p in db.query(cls.name).all()}
         for perm in ASSEMBL_PERMISSIONS - perms:
-            db.add(Permission(name=perm))
+            db.add(cls(name=perm))
 
 
 class DiscussionPermission(DiscussionBoundBase):

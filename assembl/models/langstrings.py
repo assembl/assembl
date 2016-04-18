@@ -262,7 +262,6 @@ class Locale(Base):
 
     @classmethod
     def populate_db(cls, db=None):
-        db = db or cls.default_db()
         for loc_code in (
                 cls.UNDEFINED, cls.MULTILINGUAL, cls.NON_LINGUISTIC):
             cls.get_or_create(loc_code, db=db)

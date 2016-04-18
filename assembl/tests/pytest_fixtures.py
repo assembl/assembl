@@ -133,11 +133,6 @@ def test_webrequest(request, test_app_no_perm):
 def db_default_data(
         request, db_tables, base_registry):
     bootstrap_db_data(db_tables)
-    from assembl.models.auth import IdentityProvider
-    idp = IdentityProvider(
-        name="google", provider_type="google-oauth2", trust_emails=True)
-    db_tables.add(idp)
-    #db_tables.commit()
     transaction.commit()
 
     def fin():
