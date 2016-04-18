@@ -588,6 +588,24 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
 
 
 @pytest.fixture(scope="function")
+def subidea_1_2(request, discussion, subidea_1, test_session):
+    from assembl.models import Idea, IdeaLink
+    i = Idea(short_title="idea 1.2", discussion=discussion)
+    test_session.add(i)
+    l_1_12 = IdeaLink(source=subidea_1, target=i)
+    test_session.add(l_1_12)
+    test_session.flush()
+
+    def fin():
+        print "finalizer subidea_1_2"
+        test_session.delete(l_1_12)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return i
+
+
+@pytest.fixture(scope="function")
 def criterion_1(request, discussion, subidea_1, test_session):
     from assembl.models import Idea, IdeaLink
     i = Idea(short_title="cost", discussion=discussion)
