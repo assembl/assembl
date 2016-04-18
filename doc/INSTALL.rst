@@ -77,6 +77,8 @@ or
     fab devenv install_builddeps
     fab devenv bootstrap_from_checkout
 
+Note: If on Mac, command fab devenv install_builddeps outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
+
 Note:  If you get error:
 
 fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)
