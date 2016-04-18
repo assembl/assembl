@@ -307,6 +307,17 @@ var MessageModel = Base.Model.extend({
       .then(function(){
         return Base.Model.prototype.destroy.call(that, options);
       });
+  },
+
+  /*
+    Override toJSON of the message model in order to ensure that
+    backbone does NOT 
+   */
+  toJSON: function(options){
+    var old = Base.Model.prototype.toJSON.call(this, options);
+    //Remove the attachments attribute, as there is a circular dependency
+    delete old['attachments'];
+    return old;
   }
 });
 
