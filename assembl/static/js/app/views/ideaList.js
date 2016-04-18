@@ -3,6 +3,7 @@
 var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     OrphanMessagesInIdeaListView = require('./orphanMessagesInIdeaList.js'),
     SynthesisInIdeaListView = require('./synthesisInIdeaList.js'),
+    LoaderView = require('./loader.js'),
     Permissions = require('../utils/permissions.js'),
     ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     IdeaSiblingChainVisitor = require('./visitors/ideaSiblingChainVisitor'),
@@ -11,7 +12,7 @@ var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     Ctx = require('../common/context.js'),
     Idea = require('../models/idea.js'),
     UserCustomData = require('../models/userCustomData.js'),
-    IdeaView = require('./ideaInIdeaList.js'),
+    ideaInIdeaList = require('./ideaInIdeaList.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     scrollUtils = require('../utils/scrollUtils.js'),
     AssemblPanel = require('./assemblPanel.js'),
@@ -331,19 +332,25 @@ var IdeaList = AssemblPanel.extend({
         this.addLabelToMostRecentIdeas(this.allIdeasCollection, view_data);
 
 
+        that.ideaView.show(new LoaderView());
 
+        Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
+          //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
 
-        //console.log("About to set ideas on ideaList",that.cid, "with panelWrapper",that.getPanelWrapper().cid, "with group",that.getContainingGroup().cid);
-        _.each(roots, function(idea) {
-          var ideaView = new IdeaView({
-            model: idea,
-            parentPanel: that,
-            groupContent: that.getContainingGroup(),
-            parentView: that
-          }, view_data);
-          list.appendChild(ideaView.render().el);
+          var ideaFamilies = new ideaInIdeaList.IdeaFamilyCollectionView ({
+            collection: new Backbone.Collection(roots)
+          });
+          ideaFamilies.childViewOptions = {
+              parentPanel: that,
+              groupContent: that.getContainingGroup(),
+              visitorData: view_data,
+              synthesis: synthesis
+          };
+
+          that.ideaView.show(ideaFamilies);
+
+          Ctx.initTooltips(that.$el);
         });
-        that.$('.ideaView').html(list);
 
         //sub menu other
         var OtherView = new OtherInIdeaListView({
@@ -376,8 +383,6 @@ var IdeaList = AssemblPanel.extend({
           groupContent: that.getContainingGroup()
         });
         that.getRegion('allMessagesView').show(allMessagesInIdeaListView);
-
-        Ctx.initTooltips(that.$el);
 
         that.body = that.$('.panel-body');
         that.body.get(0).scrollTop = y;
