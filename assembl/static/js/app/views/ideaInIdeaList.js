@@ -10,9 +10,9 @@ var Backbone = require('../shims/backbone.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
-var IdeaView = Backbone.View.extend({
-  constructor: function IdeaView() {
-    Backbone.View.apply(this, arguments);
+var IdeaInIdeaListView = Marionette.LayoutView.extend({
+  constructor: function IdeaInIdeaListView() {
+    Marionette.LayoutView.apply(this, arguments);
   },
 
   /**
@@ -25,7 +25,7 @@ var IdeaView = Backbone.View.extend({
    * The template
    * @type {[type]}
    */
-  template: Ctx.loadTemplate('ideaInIdeaList'),
+  template: '#tmpl-ideaInIdeaList',
 
   /**
    * Counter used to open the idea when it is dragover
@@ -47,16 +47,21 @@ var IdeaView = Backbone.View.extend({
    */
   defaultTableOfIdeasCollapsedState: null,
 
+  regions: {
+    regionChildren: '.idealist-children'
+  },
+
   /**
    * @init
-   * @param {IdeaModel} obj the model
-   * @param {dict} view_data: data from the render visitor
+   * @param {dict} options:
+   *   visitorData: data from the render visitor
    *   are the last child of their respective parents.
    */
-  initialize: function(options, view_data) {
+  initialize: function(options) {
     var that = this;
-    this.view_data = view_data;
+    this.visitorData = options.visitorData;
     this.parentPanel = options.parentPanel;
+    this.synthesis = options.synthesis;
     if (this.parentPanel === undefined) {
       throw new Error("parentPanel is mandatory");
     }
@@ -71,12 +76,18 @@ var IdeaView = Backbone.View.extend({
     this.listenTo(this.model, 'replacedBy', this.onReplaced);
 
     this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {
-          that.onIsSelectedChange(currentIdea);
-        });
+      if(!that.isViewDestroyed()) {
+        that.onIsSelectedChange(currentIdea);
+      }
+    });
 
     // TODO: Detect a change in current synthesis
     Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
-        that.listenTo(synthesis.getIdeasCollection(), 'add remove reset', that.render);
+      that.listenTo(synthesis.getIdeasCollection(), 'add remove reset', function() {
+        if(!that.isViewDestroyed()) {
+          that.render();
+        }
+      });
     });
 
     this.tableOfIdeasCollapsedState = that.parentPanel ? that.parentPanel.getTableOfIdeasCollapsedState() : null;
@@ -111,21 +122,35 @@ var IdeaView = Backbone.View.extend({
     'mouseenter > .idealist-body > .idealist-title': 'onMouseEnter',
   },
 
+  serializeData: function() {
+    var data = this.model.toJSON();
+    _.extend(data, render_data);
+    
+    data.shortTitle = this.model.getShortTitleDisplayText();
+    if (data.longTitle) {
+      data.longTitle = ' - ' + data.longTitle.substr(0, 50);
+    }
+
+    data.Ctx = Ctx;
+    data.idea_css_class = this.model.getCssClassFromId();
+    if(this.model.get('@type') === 'Idea') {
+      var visitorData = this.visitorData,
+      render_data = visitorData[this.model.getId()];
+      data.inNextSynthesis = this.synthesis.getIdeasCollection().get(this.model.id) !== undefined;
+      _.extend(data, render_data);
+    }
+    return data;
+  },
+
   /**
    * The render
    * @return {IdeaView}
    */
-  render: function() {
-    var that = this,
-        view_data = this.view_data,
-        render_data = view_data[this.model.getId()];
-    if (render_data === undefined) {
-      return this;
-    }
-
-    var data = this.model.toJSON();
-    _.extend(data, render_data);
-
+  onRender: function() {
+    var that = this;
+    var visitorData = this.visitorData,
+    idea_render_data = visitorData[this.model.getId()];
+    
     this.$el.addClass('idealist-item');
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
@@ -133,27 +158,16 @@ var IdeaView = Backbone.View.extend({
 
     this.applyCustomCollapsedState();
 
-    if (data.longTitle) {
-      data.longTitle = ' - ' + data.longTitle.substr(0, 50);
-    }
-
-    data.Ctx = Ctx;
-    data.idea_css_class = this.model.getCssClassFromId();
-
-    data.shortTitle = this.model.getShortTitleDisplayText();
-    Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
-        data.inNextSynthesis = synthesis.getIdeasCollection().get(that.model.id) !== undefined;
-        that.$el.html(that.template(data));
-        // Ctx.initTooltips(this.$el); // this is already done by ideaList.js and is very CPU intensive
-        var rendered_children = [];
-        _.each(data['children'], function(idea, i) {
-          var ideaView = new IdeaView({model: idea, parentPanel: that.parentPanel, groupContent: that._groupContent}, view_data);
-          rendered_children.push(ideaView.render().el);
-        });
-        that.$('.idealist-children').append(rendered_children);
+    var ideaFamilies = new ideaListIdeaFamilyCollectionView ({
+      collection: new Backbone.Collection(idea_render_data['children'])
     });
-
-    return this;
+    ideaFamilies.childViewOptions = {
+        parentPanel: that.parentPanel,
+        groupContent: that._groupContent,
+        visitorData: visitorData,
+        synthesis: that.synthesis,
+    };
+    that.regionChildren.show(ideaFamilies);
   },
 
   /**
@@ -498,7 +512,7 @@ var IdeaView = Backbone.View.extend({
    * @param  {Event} ev
    */
   toggle: function(ev) {
-    console.log("ideaInIdeaList::toggle()");
+    //console.log("ideaInIdeaList::toggle()");
     if (ev) {
       ev.preventDefault();
       ev.stopPropagation();
@@ -517,8 +531,10 @@ var IdeaView = Backbone.View.extend({
   },
 
   onIdeaCollaspedStateChange: function(ev) {
-    console.log("ideaInIdeaList::onIdeaCollaspedStateChange() ev: ", ev, " this:", this);
-    this.applyCustomCollapsedState();
+    //console.log("ideaInIdeaList::onIdeaCollaspedStateChange() ev: ", ev, " this:", this);
+    if(!this.isViewDestroyed()) {
+      this.applyCustomCollapsedState();
+    }
   },
 
   getCustomCollapsedState: function() {
@@ -559,5 +575,19 @@ var IdeaView = Backbone.View.extend({
   }
 
 });
+var ideaListIdeaFamilyCollectionView = Marionette.CollectionView.extend({
+  constructor: function ideaListIdeaFamilyCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
 
-module.exports = IdeaView;
+  childView: IdeaInIdeaListView
+  /*collectionEvents: {
+    'add sync':'render'
+  }*/
+});
+
+module.exports = {
+    IdeaFamilyCollectionView: ideaListIdeaFamilyCollectionView,
+    IdeaView: IdeaInIdeaListView
+    };
+
