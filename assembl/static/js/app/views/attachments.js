@@ -124,9 +124,9 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     //A parent view is passed which will be used to dictate the lifecycle of document creation/deletion
     AbstractAttachmentView.prototype.initialize.call(this, options);
     var that = this;
-    this.extasAdded = {};
+    this.extrasAdded = {};
     _.each(this.extras, function(v,k){
-      that.extasAdded[k] = false;
+      that.extrasAdded[k] = false;
     });
   },
 
@@ -161,26 +161,27 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   onRender: function() {
     console.log("AttachmentEditableView onRender called for model", this.model.id);
     AbstractAttachmentView.prototype.onRender.call(this);
-    this.populateExtas();
+    this.populateExtras();
     this.renderAttachmentPurposeDropdown(
       this._renderAttachmentPurpose()
     );
   },
 
-  _updateExtasCompleted: function(){
+  _updateExtrasCompleted: function(){
+    var that = this;
     _.each(this.extras, function(v, k){
-      this.extasAdded[k] = true;
+      that.extrasAdded[k] = true;
     });
   },
 
-  populateExtas: function(){
+  populateExtras: function(){
     /*
       Override to populate extras array with HTML array which will be appended to the end of the
       attachment purpose dropdown
-      Ensure to update the cache of extas completed. Otherwise, each render will introduce 1 more of the
+      Ensure to update the cache of extras completed. Otherwise, each render will introduce 1 more of the
       extras
      */
-    this._updateExtasCompleted();
+    this._updateExtrasCompleted();
   },
 
   _renderAttachmentPurpose: function(){
@@ -192,7 +193,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
 
     if (this.extras) {
       _.each(this.extras, function(v,k){
-        if (!that.extasAdded[k]) {
+        if (!that.extrasAdded[k]) {
           purposesHtml.push(v);
         }
       });
@@ -251,9 +252,10 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
     'click .js_removeAttachment': 'onRemoveAttachment'
   }),
 
-  populateExtas: function(){
+  populateExtras: function(){
     var a = "<li><a class='js_removeAttachment' data-toggle='tooltip' title='' data-placement='left' data-id='CANCEL_UPLOAD' data-original-title='CANCEL_UPLOAD'>" + i18n.gettext("Remove") + "</a></li>"
     this.extras["REMOVE"] = a;
+    AttachmentEditableView.prototype.populateExtras.call(this);
   },
 
   serializeData: function(){

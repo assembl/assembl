@@ -93,13 +93,6 @@ var AttachmentModel = Base.Model.extend({
   _saveMe: function(attrs, options){
     var d = this.getDocument();
     this.set('idAttachedDocument', d.id);
-
-    //When the attachment is saving, no longer want the document to be removed
-    //when the documentEditView is destroyed.
-    options.success = function(model, response, options){
-      d.trigger('attachmentSaved');
-    };
-    options.wait = true;
     return Backbone.Model.prototype.save.call(this, attrs, options); 
   },
 
@@ -276,8 +269,26 @@ var AttachmentCollection = Base.Collection.extend({
     });
   },
 
+  save: function(models, options){
+    if (!models){
+      return Promise.resolve(false);
+    }
+
+    if (!_.isArray(models)){
+      return Promise.resolve(models.save(options));
+    }
+
+    return Promise.each(models, function(model){
+      model.save(options);
+    });
+  },
+
   destroyAll: function(options){
     return this.destroy(this.models, options);
+  },
+
+  saveAll: function(options){
+    return this.save(this.models, options);
   }
 });
 
