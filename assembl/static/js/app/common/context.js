@@ -1078,11 +1078,12 @@ Context.prototype = {
     }
 
     var message = i18n.gettext('ajax error message:');
-    message = "url: " + settings.url + "\n" + message + "\n" + exception;
+    message = "url: " + jqxhr.status + " " + settings.url + "\n" + message + "\n" + exception;
 
     var model = new Backbone.Model({
       msg: message,
-      url: settings.url
+      url: settings.url,
+      status: jqxhr.status
     });
 
     var Modal = Backbone.Modal.extend({
@@ -1098,7 +1099,10 @@ Context.prototype = {
       },
 
       onRender: function() {
-        Raven.captureMessage('Reload popup presented to the user', {tags: { url: this.model.get("url") }});
+        Raven.captureMessage('Reload popup presented to the user', {tags: {
+          url: this.model.get("url"),
+          return_code: this.model.get("status")
+          }});
       },
 
       reload: function() {
