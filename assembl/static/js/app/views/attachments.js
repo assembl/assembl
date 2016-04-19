@@ -72,17 +72,11 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
     //console.log("AbstractAttachmentView: onRender with this.model:",this.model);
     //console.log(this.model.get('attachmentPurpose'), Attachments.attachmentPurposeTypes.DO_NOT_USE.id);
     if(this.model.get('attachmentPurpose') !== Attachments.attachmentPurposeTypes.DO_NOT_USE.id) {
-      this.canShow = true;
-    }
-    else {
-      this.canShow = false;
+      this.renderDocument();
     }
   },
 
   onShow: function() {
-    if (this.canShow){
-      this.renderDocument();
-    }
   }
 });
 
@@ -227,10 +221,9 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   },
 
   onRemoveAttachment: function(ev){
+    ev.stopPropagation();
     //The model is not persisted if it is in an EditableView, so this does not call DELETE
     //to the backend
-    ev.stopPropagation();
-    console.log('onRemoveAttachment with ev', ev);
     this.model.destroy();
   },
 
@@ -255,7 +248,7 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
   populateExtras: function(){
     var a = "<li><a class='js_removeAttachment' data-toggle='tooltip' title='' data-placement='left' data-id='CANCEL_UPLOAD' data-original-title='CANCEL_UPLOAD'>" + i18n.gettext("Remove") + "</a></li>"
     this.extras["REMOVE"] = a;
-    AttachmentEditableView.prototype.populateExtras.call(this);
+    // this._updateExtrasCompleted();
   },
 
   serializeData: function(){

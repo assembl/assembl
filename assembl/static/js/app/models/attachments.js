@@ -114,7 +114,9 @@ var AttachmentModel = Base.Model.extend({
       if (options === undefined) {
         options = {};
       }
-      if ( (options) && (options.two_step) && (options.two_step === true) ) {
+      var d = this.getDocument();
+      //If the document was not STILL saved at the time of the attachment being saved
+      if ( d.isNew() ) {
         Promise.resolve(this.get('document').save()).then(function(){
           //console.log("Saving attachments", attrs, options);
           return that._saveMe(attrs, options);
@@ -170,11 +172,6 @@ var AttachmentModel = Base.Model.extend({
     return date;
   },
 
-  triggerAttachmentSaved: function(){
-    var d = this.getDocument();
-    d.triggerDoNotDelete();
-  },
-
   destroy: function(options){
     var d = this.getDocument(),
         that = this;
@@ -184,6 +181,19 @@ var AttachmentModel = Base.Model.extend({
         return Base.Model.prototype.destroy.call(that);
       }
     });
+  },
+
+  /*
+    Override toJSON of the attachment model in order to ensure that
+    backbone does NOT try to parse the an object that causes
+    recursive read, as there is a message object which contains
+    the attachment model.
+   */
+  toJSON: function(options){
+    var old = Base.Model.prototype.toJSON.call(this, options);
+    //Remove the message attribute, as there is a circular dependency
+    delete old['objectAttachedToModel'];
+    return old;
   }
 
 });

@@ -311,7 +311,9 @@ var MessageModel = Base.Model.extend({
 
   /*
     Override toJSON of the message model in order to ensure that
-    backbone does NOT 
+    backbone does NOT try to parse the an object that causes
+    recursive read, as there is an attachment object which contains
+    the message model.
    */
   toJSON: function(options){
     var old = Base.Model.prototype.toJSON.call(this, options);
