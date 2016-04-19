@@ -1,5 +1,11 @@
-var Ctx = require('../common/context.js'),
-    _ = require('../shims/underscore.js'),
+/**
+ * Load Ctx and set the env to test first. Revert back after all tests.
+ */
+
+var Ctx = require('../common/context.js');
+Ctx.setApplicationUnderTest();
+
+var _ = require('../shims/underscore.js'),
     LangString = require("../models/langstring.js"),
     UserLanguagePreference = require('../models/languagePreference.js'),
     userLanguagePreferencesJson = require('./fixtures/languagePreferences.json'),
@@ -22,8 +28,11 @@ var clone = function(other){
 };
 
 describe("Langstring Spec", function(){
-
   var codes = localsJson;
+
+  after(function(){
+    Ctx.setApplicationUnderProduction();
+  });
 
   describe("User Language Preference Spec", function(){
 

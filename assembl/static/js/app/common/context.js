@@ -45,6 +45,12 @@ var Context = function() {
   this.debugSocket = false;
 
   /**
+   * The state that the application can be under
+   * @type {string} appState  | production | test
+   */
+  this.appState = 'production';
+
+  /**
    * Prefix used to generate the id of the element used by annotator to find it's annotation
    * @type {string}
    */
@@ -257,6 +263,22 @@ Context.prototype = {
       this.manageLastCurrentUser();
 
     }
+  },
+
+  setApplicationUnderTest: function(){
+    this.appState = 'test';
+  },
+
+  isApplicationUnderTest: function(){
+    return this.appState === 'test';
+  },
+
+  isApplicationUnderProduction: function(){
+    return this.appState === 'production';
+  },
+
+  setApplicationUnderProduction: function(){
+    this.appState = 'production';
   },
 
   getCsrfToken: function() {
@@ -1639,12 +1661,19 @@ Context.prototype = {
     <script id="translation-service-data"></script>
    */
   getTranslationServiceData: function(){
-    if (this._translationServiceCache) {
-      return this._translationServiceCache;
+
+    if (this.isApplicationUnderTest()){
+      return null;
     }
 
-    this._translationServiceCache = this.getJsonFromScriptTag('translation-service-data');
-    return this._translationServiceCache;
+    else {
+      if (this._translationServiceCache) {
+        return this._translationServiceCache;
+      }
+
+      this._translationServiceCache = this.getJsonFromScriptTag('translation-service-data');
+      return this._translationServiceCache;
+    }
   },
 
   /**
