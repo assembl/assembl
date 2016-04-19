@@ -5,7 +5,7 @@
 var Ctx = require('../common/context.js');
 Ctx.setApplicationUnderTest();
 
-var _ = require('../shims/underscore.js'),
+var _ = require('underscore'),
     LangString = require("../models/langstring.js"),
     UserLanguagePreference = require('../models/languagePreference.js'),
     userLanguagePreferencesJson = require('./fixtures/languagePreferences.json'),
