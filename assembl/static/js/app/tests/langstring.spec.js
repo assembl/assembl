@@ -8,6 +8,15 @@ var Ctx = require('../common/context.js'),
     langstringJson = require('./fixtures/langstring.json'),
     assert = require('chai').assert;
 
+/**
+ * These tests depends on the server to supply several peices of logic to the
+ * DOM via the backend templating system. As a result, these tests will not
+ * run on a discussion that does not have translation service already.
+ * TODO: Make tests run without the #translation_service_data being passed
+ * from backend.
+ */
+
+
 var clone = function(other){
   return JSON.parse(JSON.stringify(other));
 };
