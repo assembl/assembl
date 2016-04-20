@@ -31,8 +31,9 @@ def test_subscribe_notification(test_session,
     test_session.flush()
 
 
-def test_subscribe_notification_unique_checks(test_session, 
-        discussion, participant1_user, participant2_user, reply_post_2, test_app, root_post_1):
+def test_subscribe_notification_unique_checks(
+        test_session, discussion, participant1_user, participant2_user,
+        reply_post_2, test_app, root_post_1, test_webrequest):
     test_session.commit()  # this is voodoo so finalizers do not crash
     test_session.flush()
     subscription = NotificationSubscriptionFollowSyntheses(
@@ -120,7 +121,8 @@ def test_notification_follow_all_messages(test_session,
 
 
 def test_users_not_subscribed_to_discussion(test_session, 
-        discussion, participant1_user, reply_post_2, test_app, root_post_1, synthesis_post_1, discussion2_root_post_1):
+        discussion, participant1_user, reply_post_2, test_app, root_post_1,
+        synthesis_post_1, discussion2_root_post_1, test_webrequest):
     
     test_session.flush()
     subscription = NotificationSubscriptionFollowAllMessages(

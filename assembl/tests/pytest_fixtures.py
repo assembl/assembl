@@ -118,11 +118,12 @@ def test_app_no_perm(request, base_registry, db_tables):
     return app
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_webrequest(request, test_app_no_perm):
     req = PyramidWebTestRequest.blank('/', method="GET")
 
     def fin():
+        print "finalizer test_webrequest"
         # The request was not called
         manager.pop()
     request.addfinalizer(fin)
