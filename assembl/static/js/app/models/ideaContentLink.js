@@ -217,12 +217,26 @@ var Collection = Base.Collection.extend({
                     return ideaModel.getShortTitleDisplayText();
                 });
 
+                //A cache of the name, and sort order of the name of the idea
+                var cache = {};
+                _.each(m, function(name, index, collection){
+                    if (!_.has(cache, name)){
+                        cache[name] = index;
+                    }
+                });
+
+                var sorted = _.chain(cache)
+                              .pairs()
+                              .sortBy(function(val){return val[1]; })
+                              .map(function(val){return val[0]; })
+                              .value();
+
                 //Sometimes there are duplicate names?
                 // console.log("In getIdeaNamesPromise:");
                 // console.log("Idea Content Link Collection used: ", that);
                 // console.log("The names being passed: ", m);
 
-                return Promise.resolve(m);
+                return Promise.resolve(sorted);
             })
             .error(function(e){
                 console.error("[IdeaContentLink] Error in getting idea names: ", e.statusText);
