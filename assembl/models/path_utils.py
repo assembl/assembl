@@ -142,7 +142,7 @@ class PostPathLocalCollection(object):
         point = bisect_right(self.paths, data)
         is_below = False
         if point:
-            previous = self.paths[point]
+            previous = self.paths[point-1]
             is_below = data.post_path.startswith(previous.post_path)
         return point, is_below
 
@@ -154,7 +154,7 @@ class PostPathLocalCollection(object):
         point, is_below = self.find_insertion(subpath)
         if not is_below:
             return False
-        return self.paths[point].positive
+        return self.paths[point-1].positive
 
     def includes_post(self, post_path):
         "Is this post (given as path) included in this collection?"
@@ -437,9 +437,10 @@ class PostPathCounter(PostPathCombiner):
 
 
 class DiscussionGlobalData(object):
-    def __init__(self, db, discussion_id, discussion=None):
+    def __init__(self, db, discussion_id, user_id=None, discussion=None):
         self.discussion_id = discussion_id
         self.db = db
+        self.user_id = user_id
         self._discussion = discussion
         self._parent_dict = None
         self._children_dict = None
@@ -468,6 +469,11 @@ class DiscussionGlobalData(object):
                 target.tombstone_date == None,
                 target.discussion_id == self.discussion_id))
         return self._parent_dict
+
+    def idea_ancestry(self, idea_id):
+        while idea_id:
+            yield idea_id
+            idea_id = self.parent_dict.get(idea_id, None)
 
     @property
     def children_dict(self):

@@ -391,7 +391,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 cls.default_db(), discussion_id, counters.user_id, Content)
 
     @classmethod
-    def prepare_counters(cls, discussion_id, calc_all=False):
+    def get_discussion_data(cls, discussion_id):
         from pyramid.threadlocal import get_current_request
         from .path_utils import DiscussionGlobalData
         from pyramid.security import authenticated_userid
@@ -399,9 +399,15 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         assert req
         if getattr(req, "discussion_data", None) is None:
             req.discussion_data = DiscussionGlobalData(
-                cls.default_db(), discussion_id)
-        return req.discussion_data.post_path_counter(
-            authenticated_userid(req), calc_all)
+                cls.default_db(), discussion_id,
+                authenticated_userid(req))
+        return req.discussion_data
+
+    @classmethod
+    def prepare_counters(cls, discussion_id, calc_all=False):
+        discussion_data = cls.get_discussion_data(discussion_id)
+        return discussion_data.post_path_counter(
+            discussion_data.user_id, calc_all)
 
     def get_related_posts_query(self, partial=False):
         return self.get_related_posts_query_c(
@@ -672,13 +678,14 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     @classmethod
     def get_idea_ids_showing_post(cls, post_id):
         "Given a post, give the ID of the ideas that show this message"
-        # TODO: Rewrite completely using path_utils
-        # This works because of a virtuoso bug...
-        # where DISTINCT gives IDs instead of URIs.
         from sqlalchemy.sql.functions import func
         from .idea_content_link import IdeaContentPositiveLink
-        (idea_link_ids,)  = cls.default_db.query(
-            func.idea_content_links_above_post(post_id)).first()
+        from .post import Post
+        (ancestry, discussion_id, idea_link_ids)  = cls.default_db.query(
+            Post.ancestry, Post.discussion_id,
+            func.idea_content_links_above_post(Post.id)
+            ).filter(Post.id==post_id).first()
+        post_path = "%s%d," % (ancestry, post_id)
         if not idea_link_ids:
             return []
         idea_link_ids = [int(id) for id in idea_link_ids.split(',') if id]
@@ -691,22 +698,16 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         if not root_ideas:
             return []
         root_ideas = [x for (x,) in root_ideas]
-        if cls.using_virtuoso:
-            # wasteful
-            query = cls.get_ancestors_query(inclusive=False)
-            ancestors_lists = [
-                cls.default_db.query(query.params(root_id=id)).all()
-                for id in root_ideas]
-            ancestors = set(root_ideas)
-            for ancestors_list in ancestors_lists:
-                ancestors.update((x for (x,) in ancestors_list))
-            return list(ancestors)
-        else:
-            ancestors = cls.default_db.query(
-                cls.get_ancestors_query(root_ideas, False))
-            ancestors = {x for (x,) in ancestors}
-            ancestors.update(root_ideas)
-            return list(ancestors)
+        discussion_data = cls.get_discussion_data(discussion_id)
+        counter = cls.prepare_counters(discussion_id)
+        idea_contains = {}
+        for root_idea_id in root_ideas:
+            for idea_id in discussion_data.idea_ancestry(root_idea_id):
+                if idea_id in idea_contains:
+                    break
+                idea_contains[idea_id] = counter.paths[idea_id].includes_post(post_path)
+        ideas = [id for (id, incl) in idea_contains.iteritems() if incl]
+        return ideas
 
     @classmethod
     def idea_read_counts(cls, discussion_id, post_id, user_id):
