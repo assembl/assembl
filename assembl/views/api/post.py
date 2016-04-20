@@ -152,7 +152,8 @@ def get_posts(request):
         if root_idea_id:
             raise HTTPBadRequest(localizer.translate(
                 _("Getting orphan posts of a specific idea isn't supported.")))
-        orphans = Idea._get_orphan_posts_statement(discussion_id).subquery()
+        orphans = Idea._get_orphan_posts_statement(
+            discussion_id, True).subquery("orphans")
         posts = posts.join(orphans, PostClass.id==orphans.c.post_id)
         ideaContentLinkQuery = ideaContentLinkQuery.join(
             orphans, PostClass.id==orphans.c.post_id)
@@ -168,8 +169,8 @@ def get_posts(request):
             PostClass.hidden==asbool(hidden))
 
     if root_idea_id:
-        related = Idea.get_related_posts_query(
-            discussion_id, root_idea_id).subquery()
+        related = Idea.get_related_posts_query_c(
+            discussion_id, root_idea_id, True).subquery()
         posts = posts.join(related, PostClass.id == related.c.post_id)
         ideaContentLinkQuery = ideaContentLinkQuery.join(
             related, PostClass.id == related.c.post_id)

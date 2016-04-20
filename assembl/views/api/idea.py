@@ -118,6 +118,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
         undefer(Idea.num_children))
 
     permissions = get_permissions(user_id, discussion.id)
+    Idea.prepare_counters(discussion.id, True)
     retval = [idea.generic_json(view_def, user_id, permissions)
               for idea in ideas]
     retval = [x for x in retval if x is not None]
@@ -128,6 +129,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
             for l in by_idea_widget_links[r['@id']]:
                 r['widget_links'].append(l)
     return retval
+
 
 @ideas.get(permission=P_READ)
 def get_ideas(request):
