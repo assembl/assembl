@@ -17,7 +17,7 @@ def get_file(request):
     ctx = request.context
     document = ctx._instance
     f = File.get(document.id)
-    return Response(body=f.data, content_type=f.mime_type)
+    return Response(body=f.data, content_type=str(f.mime_type))
 
 # Maybe have a permission for uploading content??
 
