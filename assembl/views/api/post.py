@@ -41,7 +41,7 @@ posts = Service(name='posts', path=API_DISCUSSION_PREFIX + '/posts',
                 renderer='json')
 
 post = Service(name='post', path=API_DISCUSSION_PREFIX + '/posts/{id:.+}',
-               description="Manipulate a single post")
+               description="Manipulate a single post", renderer="json")
 
 post_read = Service(name='post_read', path=API_DISCUSSION_PREFIX + '/post_read/{id:.+}',
                description="Signal that a post was read",
