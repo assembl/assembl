@@ -889,7 +889,9 @@ class TokenIdeaVote(AbstractIdeaVote):
     def value(self, val):
         val = int(val)
         if self.vote_spec:
-            assert 0 <= val <= self.token_category.maximum_per_idea
+            assert 0 <= val
+            if self.token_category.maximum_per_idea > 0:
+                assert val <= self.token_category.maximum_per_idea
         # TODO: make sure that total <= category total_number
         self.vote_value = val
 
