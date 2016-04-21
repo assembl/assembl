@@ -126,14 +126,14 @@ var FileView = AbstractDocumentView.extend({
 
   serializeData: function(){
     return {
-      name: this.model.get('name'),
+      name: this.model.get('title'),
       url: this.uri,
       percent: null
     }
   },
 
   onRenderOembedFail: function(){
-    this.$el.html("<a href="+ this.uri + ">"+ this.model.get('name') + "</a>");
+    this.$el.html("<a href="+ this.uri + ">"+ this.model.get('title') + "</a>");
   }
 });
 
@@ -159,11 +159,26 @@ var AbstractEditView =  AbstractDocumentView.extend({
       this.showProgress = true;
     }
 
-    Promise.resolve(this.model.save()).then(function(){
+    /*
+      For lifecycle of a document model, the model must be saved, in order
+      for file types to be servable and renderable via the backend. Therefore,
+      upon view init, save the model.
+
+      However, upon attachment re-render, the view is re-instantiated.
+      Therefore, do not PUT on the model if it is already been saved.
+     */
+    if (this.model.isNew()){
+      Promise.resolve(this.model.save()).then(function(){
+        if (!that.isViewDestroyed()){
+          that.initalizeCallback();
+        }
+      });
+    }
+    else {
       if (!that.isViewDestroyed()){
         that.initalizeCallback();
       }
-    });
+    }
   },
 
   initalizeCallback: function(model){
@@ -223,6 +238,11 @@ var FileEditView = AbstractEditView.extend({
 
   template: "#tmpl-fileUploadEmbed",
 
+
+  events: {
+    'click .js_test_save': 'onTestSave'
+  },
+
   initalize: function(options){
     AbstractEditView.prototype.initalize.call(this, options);
   },
@@ -237,7 +257,7 @@ var FileEditView = AbstractEditView.extend({
 
   serializeData: function(){
     return {
-      name: this.model.get('name'),
+      name: this.model.get('title'),
       url: this.uploadComplete ? this.uri : "javascript:void(0)",
       percent: this.percentComplete
     }
@@ -251,16 +271,23 @@ var FileEditView = AbstractEditView.extend({
     }
   },
 
+  onTestSave: function(){
+    this.model.save();
+  },
+
   /*
     This is poorly done. It overrides the current template. Want to be using
     the template logic here to maintain flexibility and keeping DRY
    */
   onRenderOembedFail: function(){
-    var string = "<a href="+ this.uri + ">"+ this.model.get('name') + "</a>";
+    var string = "<a href="+ this.uri + ">"+ this.model.get('title') + "</a>";
     if (this.percentComplete){
-      this.$el.html(string + " (100%)");
+      string += " (100%)";
+      string += "<div><a href='#' class='js_test_save'>Save the model</a></div>";
+      this.$el.html(string);
     }
     else {
+      string += "<div><a href='#' class='js_test_save'>Save the model</a></div>"; 
       this.$el.html(string);
     }
   }

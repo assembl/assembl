@@ -231,11 +231,6 @@ var Collection = Base.Collection.extend({
                               .map(function(val){return val[0]; })
                               .value();
 
-                //Sometimes there are duplicate names?
-                // console.log("In getIdeaNamesPromise:");
-                // console.log("Idea Content Link Collection used: ", that);
-                // console.log("The names being passed: ", m);
-
                 return Promise.resolve(sorted);
             })
             .error(function(e){
