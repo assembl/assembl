@@ -83,11 +83,13 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
 
     // TODO: Detect a change in current synthesis
     Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
-      that.listenTo(synthesis.getIdeasCollection(), 'add remove reset', function() {
-        if(!that.isViewDestroyed()) {
-          that.render();
-        }
-      });
+      if(!that.isViewDestroyed()) {
+        that.listenTo(synthesis.getIdeasCollection(), 'add remove reset', function() {
+          if(!that.isViewDestroyed()) {
+            that.render();
+          }
+        });
+      }
     });
 
     this.tableOfIdeasCollapsedState = that.parentPanel ? that.parentPanel.getTableOfIdeasCollapsedState() : null;

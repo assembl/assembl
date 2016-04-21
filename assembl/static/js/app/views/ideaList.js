@@ -143,8 +143,6 @@ var IdeaList = AssemblPanel.extend({
         }
       }
     );
-    
-    
 
     collectionManager.getAllExtractsCollectionPromise()
             .then(function(allExtractsCollection) {
@@ -152,16 +150,20 @@ var IdeaList = AssemblPanel.extend({
               // is associated with the idea, the idea itself will receive a change event
               // on the socket (unless it causes problem with local additions?)
               //that.listenTo(allExtractsCollection, 'add change reset', that.render);
-            }); 
+            });
 
     if(!this.isViewDestroyed()) {
       //Yes, it IS possible the view is already destroyed in initialize, so we check
       this.listenTo(Assembl.vent, 'ideaList:removeIdea', function(idea) {
-        that.removeIdea(idea);
+        if(!that.isViewDestroyed()) {
+            that.removeIdea(idea);
+        }
       });
 
       this.listenTo(Assembl.vent, 'ideaList:addChildToSelected', function() {
-        that.addChildToSelected();
+        if(!that.isViewDestroyed()) {
+            that.addChildToSelected();
+        }
       });
 
       this.listenTo(Assembl.vent, 'idea:dragOver', function() {
@@ -186,6 +188,9 @@ var IdeaList = AssemblPanel.extend({
       this.listenTo(Assembl.vent, 'DEPRECATEDideaList:selectIdea', function(ideaId, reason, doScroll) {
         collectionManager.getAllIdeasCollectionPromise()
         .done(function(allIdeasCollection) {
+          if(that.isViewDestroyed()){
+            return;
+          }
           var idea = allIdeasCollection.get(ideaId);
           function success(idea) {
             that.getContainingGroup().setCurrentIdea(idea);
@@ -216,7 +221,7 @@ var IdeaList = AssemblPanel.extend({
 
       this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
         //console.log("ideaList heard a change:currentIdea event");
-        if (currentIdea) {
+        if (currentIdea && !that.isViewDestroyed()) {
           that.onScrollToIdea(currentIdea);
         }
       });
