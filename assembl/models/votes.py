@@ -310,7 +310,9 @@ class TokenCategorySpecification(DiscussionBoundBase):
         return tvs.get_discussion_id()
 
     def is_valid_vote(self, vote):
-        if not (0 <= vote.vote_value <= self.maximum_per_idea):
+        if vote.vote_value < 0:
+            return False
+        if self.maximum_per_idea > 0 and vote.vote_value > self.maximum_per_idea:
             return False
         (total,) = self.db.query(functions.sum(TokenIdeaVote.vote_value)).filter(
             TokenIdeaVote.token_category_id == self.id,
