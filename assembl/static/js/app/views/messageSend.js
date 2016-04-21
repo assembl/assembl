@@ -1,10 +1,10 @@
 'use strict';
 
-var Backbone = require('../shims/backbone.js'),
+var Backbone = require('backbone'),
     Marionette = require('../shims/marionette.js'),
     Assembl = require('../app.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Permissions = require('../utils/permissions.js'),
@@ -17,7 +17,6 @@ var Backbone = require('../shims/backbone.js'),
     Agents = require('../models/agents.js'),
     Documents = require('../models/documents.js'),
     Attachments = require('../models/attachments.js'),
-    DocumentView = require('./documents.js'),
     AttachmentViews = require('./attachments.js'),
     Promise = require('bluebird'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
@@ -108,18 +107,25 @@ var messageSendView = Marionette.LayoutView.extend({
     }
 
     this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
-
-    var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
-      constructor: function AttachmentEditableCollectionView() {
-        Marionette.CollectionView.apply(this, arguments);
-      },
-
-      childView: AttachmentViews.AttachmentEditableView
+    // this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model})
+    this.model.set('attachments', this.attachmentsCollection);
+    this.documentsView = new AttachmentViews.AttachmentEditableCollectionView({
+      collection: this.attachmentsCollection,
+      childViewOptions: {
+        parentView: this
+      }
     });
+    // var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
+    //   constructor: function AttachmentEditableCollectionView() {
+    //     Marionette.CollectionView.apply(this, arguments);
+    //   },
 
-    this.documentsView = new AttachmentEditableCollectionView({
-      collection: this.attachmentsCollection
-    });
+    //   childView: AttachmentViews.AttachmentEditableView
+    // });
+
+    // this.documentsView = new AttachmentEditableCollectionView({
+    //   collection: this.attachmentsCollection
+    // });
   },
 
   ui: {
@@ -129,7 +135,8 @@ var messageSendView = Marionette.LayoutView.extend({
     messageSubject: '.messageSend-subject',
     topicSubject: '.topic-subject .formfield',
     permissionDeniedWarningMessage: '.js_warning-message-for-message-post',
-    attachments: '.js_attachments'
+    attachments: '.js_attachments',
+    upload: '.js_upload'
   },
 
   regions: {
@@ -141,7 +148,8 @@ var messageSendView = Marionette.LayoutView.extend({
     'click @ui.cancelButton': 'onCancelMessageButtonClick',
     'blur @ui.messageBody': 'onBlurMessage',
     'focus @ui.messageBody': 'onFocusMessage',
-    'keyup @ui.messageBody': 'onChangeBody'
+    'keyup @ui.messageBody': 'onChangeBody',
+    'change @ui.upload': 'onFileUpload'
   },
 
   serializeData: function() {
@@ -292,107 +300,111 @@ var messageSendView = Marionette.LayoutView.extend({
     this.model.save(null, {
       success: function(model, resp) {
         var analytics = Analytics.getInstance();
-        analytics.trackEvent(analytics.events['MESSAGE_POSTED_ON_'+that.analytics_context])
-        that.attachmentsCollection.invoke('save');
-        btn.text(i18n.gettext('Message posted!'));
+        analytics.trackEvent(analytics.events['MESSAGE_POSTED_ON_'+that.analytics_context]);
+        
+        Promise.resolve(that.attachmentsCollection.saveAll()).then(function(){
 
-        that.ui.messageBody.val('');
-        that.ui.messageSubject.val('');
-        that.sendInProgress = false;
-        /**
-         * Show a popin asking the user to receive notifications if he is posting his first message in the discussion, and does not already receive all default discussion's notifications.
-         * Note: Currently in Assembl we can receive notifications only if we have a "participant" role (which means that here we have a non-null "roles.get('role')"). This role is only given to a user in discussion's parameters, or when the user "subscribes" to the discussion (subscribing gives the "participant" role to the user and also activates discussion's default notifications for the user).
-         * But, we cannot consider that the user does not already receive notifications by checking that he does not have the participant role. Because some discussions can give automatically the add_post permission to all logged in accounts (system.Authenticated role), instead of only those who have the participant role. So these accounts can post messages but are not subscribed to any notification, so we want to show them the first post pop-in.
-         * */
-        var collectionManager = new CollectionManager();
-        if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+          btn.text(i18n.gettext('Message posted!'));
 
-          Promise.join(collectionManager.getLocalRoleCollectionPromise(),
-              collectionManager.getNotificationsUserCollectionPromise(),
-              collectionManager.getNotificationsDiscussionCollectionPromise(),
-                        function(allRole, notificationsUser, notificationsDiscussion) {
+          that.ui.messageBody.val('');
+          that.ui.messageSubject.val('');
+          that.sendInProgress = false;
+          /**
+           * Show a popin asking the user to receive notifications if he is posting his first message in the discussion, and does not already receive all default discussion's notifications.
+           * Note: Currently in Assembl we can receive notifications only if we have a "participant" role (which means that here we have a non-null "roles.get('role')"). This role is only given to a user in discussion's parameters, or when the user "subscribes" to the discussion (subscribing gives the "participant" role to the user and also activates discussion's default notifications for the user).
+           * But, we cannot consider that the user does not already receive notifications by checking that he does not have the participant role. Because some discussions can give automatically the add_post permission to all logged in accounts (system.Authenticated role), instead of only those who have the participant role. So these accounts can post messages but are not subscribed to any notification, so we want to show them the first post pop-in.
+           * */
+          var collectionManager = new CollectionManager();
+          if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
 
-                          var defaultActiveNotificationsDicussion = _.filter(notificationsDiscussion.models, function(model) {
-                            // keep only the list of notifications which become active when a user follows a discussion
-                            return (model.get('creation_origin') === 'DISCUSSION_DEFAULT') && (model.get('status') === 'ACTIVE');
-                          });
+            Promise.join(collectionManager.getLocalRoleCollectionPromise(),
+                collectionManager.getNotificationsUserCollectionPromise(),
+                collectionManager.getNotificationsDiscussionCollectionPromise(),
+                          function(allRole, notificationsUser, notificationsDiscussion) {
 
-                          var userActiveNotifications = _.filter(notificationsUser.models, function(model) {
-                            return (model.get('status') === 'ACTIVE');
-                          });
+                            var defaultActiveNotificationsDicussion = _.filter(notificationsDiscussion.models, function(model) {
+                              // keep only the list of notifications which become active when a user follows a discussion
+                              return (model.get('creation_origin') === 'DISCUSSION_DEFAULT') && (model.get('status') === 'ACTIVE');
+                            });
 
-                          var agent = new Agents.Model({'@id': Ctx.getCurrentUserId()});
-                          agent.fetch({
-                                success: function(model, resp) {
-                                  var analytics = Analytics.getInstance();
+                            var userActiveNotifications = _.filter(notificationsUser.models, function(model) {
+                              return (model.get('status') === 'ACTIVE');
+                            });
 
-                                  // The <2 condition is because we are in the process of posting, but the agent may, or may not have been updated yet.
-                                  if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) &&
-                                      userActiveNotifications.length < defaultActiveNotificationsDicussion.length) { // we could make a real diff here but this is enough for now
-                                    that.showPopInFirstPost();
-                                    analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
-                                  }
-                                }});
-                        }
+                            var agent = new Agents.Model({'@id': Ctx.getCurrentUserId()});
+                            agent.fetch({
+                                  success: function(model, resp) {
+                                    var analytics = Analytics.getInstance();
 
-                    );
-        }
+                                    // The <2 condition is because we are in the process of posting, but the agent may, or may not have been updated yet.
+                                    if ((agent.get('post_count') === 0 || agent.get('post_count') < 2) &&
+                                        userActiveNotifications.length < defaultActiveNotificationsDicussion.length) { // we could make a real diff here but this is enough for now
+                                      that.showPopInFirstPost();
+                                      analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
+                                    }
+                                  }});
+                          }
 
-        // clear draft on success... so not lost in case of failure.
-        that.clearPartialMessage();
-        if (that.messageList) {
-          that.messageList.loadPendingMessages().then(function() {
-                    if (_.isFunction(that.options.send_callback)) {
-                      that.options.send_callback();
-                    }
+                      );
+          }
 
-                    var el = that.ui.messageBody;
-                    if (el.length > 0)
-                        el[0].text = '';
-                    el = that.ui.messageSubject;
-                    if (el.length > 0)
-                        el[0].text = '';
-
-                    var current_idea = that.messageList.getGroupState().get('currentIdea');
-
-                    // if the user was top-posting into the current idea or answering to someone or top-posting from the general conversation context, scroll to his message
-                    if (reply_idea_id || reply_message_id || (!current_idea && !reply_message_id && !reply_idea_id)) {
-                      that.messageList.showMessageById(model.id);
-                    }
-
-                    // if the user was top-posting into the general conversation from an idea (versus answering to someone or top-posting into the current idea)
-                    else if (current_idea && !reply_idea_id) {
-                      // Solution 1: Show an alert message
-                      /*
-                      alert(i18n.gettext('Your message has been successfully posted in the general conversation. To see it, go to the bottom of the table of ideas and click on "View posts not yet sorted anywhere", or "All messages".'));
-                      */
-
-                      // Solution 2: Redirect user to the "Orphan messages" or "All messages" section of the table of ideas, and highlight his message
-                      // TODO: change browser navigation state once we have proper URLs for things, so that the user can go back to the idea where he was
-                      // Quentin: this code has been adapted from views/orphanMessagesInIdeaList.js and views/allMessagesInIdeaList.js. Where else could we put it so that it could be called from several places?
-                      var groupContent = that.messageList.getContainingGroup();
-                      groupContent.setCurrentIdea(null);
-                      if (that.messageList) {
-                        that.messageList.triggerMethod('messageList:clearAllFilters');
-
-                        //that.messageList.triggerMethod('messageList:addFilterIsOrphanMessage');
-                        groupContent.NavigationResetDebateState();
-
-                        //FIXME:  Remove this magic delay.  Benoitg - 2015-06-09
-                        setTimeout(function() {
-                          that.messageList.showMessageById(model.id);
-                        }, 500);
+          // clear draft on success... so not lost in case of failure.
+          that.clearPartialMessage();
+          if (that.messageList) {
+            that.messageList.loadPendingMessages().then(function() {
+                      if (_.isFunction(that.options.send_callback)) {
+                        that.options.send_callback();
                       }
 
-                      // Solution 3: Show some info with a link to his message in its context (in "All messages" or "Orphan messages"), like "Your message has been successfully posted in the general conversation. Click here to see it in context"
-                    }
-                  });
-        }
+                      var el = that.ui.messageBody;
+                      if (el.length > 0)
+                          el[0].text = '';
+                      el = that.ui.messageSubject;
+                      if (el.length > 0)
+                          el[0].text = '';
 
-        setTimeout(function() {
-          btn.text(btn_original_text);
-          that.ui.cancelButton.trigger('click');
-        }, 5000);
+                      var current_idea = that.messageList.getGroupState().get('currentIdea');
+
+                      // if the user was top-posting into the current idea or answering to someone or top-posting from the general conversation context, scroll to his message
+                      if (reply_idea_id || reply_message_id || (!current_idea && !reply_message_id && !reply_idea_id)) {
+                        that.messageList.showMessageById(model.id);
+                      }
+
+                      // if the user was top-posting into the general conversation from an idea (versus answering to someone or top-posting into the current idea)
+                      else if (current_idea && !reply_idea_id) {
+                        // Solution 1: Show an alert message
+                        /*
+                        alert(i18n.gettext('Your message has been successfully posted in the general conversation. To see it, go to the bottom of the table of ideas and click on "View posts not yet sorted anywhere", or "All messages".'));
+                        */
+
+                        // Solution 2: Redirect user to the "Orphan messages" or "All messages" section of the table of ideas, and highlight his message
+                        // TODO: change browser navigation state once we have proper URLs for things, so that the user can go back to the idea where he was
+                        // Quentin: this code has been adapted from views/orphanMessagesInIdeaList.js and views/allMessagesInIdeaList.js. Where else could we put it so that it could be called from several places?
+                        var groupContent = that.messageList.getContainingGroup();
+                        groupContent.setCurrentIdea(null);
+                        if (that.messageList) {
+                          that.messageList.triggerMethod('messageList:clearAllFilters');
+
+                          //that.messageList.triggerMethod('messageList:addFilterIsOrphanMessage');
+                          groupContent.NavigationResetDebateState();
+
+                          //FIXME:  Remove this magic delay.  Benoitg - 2015-06-09
+                          setTimeout(function() {
+                            that.messageList.showMessageById(model.id);
+                          }, 500);
+                        }
+
+                        // Solution 3: Show some info with a link to his message in its context (in "All messages" or "Orphan messages"), like "Your message has been successfully posted in the general conversation. Click here to see it in context"
+                      }
+                    });
+          }
+
+          setTimeout(function() {
+            btn.text(btn_original_text);
+            that.ui.cancelButton.trigger('click');
+          }, 5000);
+
+        });
       },
 
       error: function(model, resp) {
@@ -405,6 +417,7 @@ var messageSendView = Marionette.LayoutView.extend({
 
   onCancelMessageButtonClick: function() {
     this.clearPartialMessage();
+    this.model.destroy();
   },
 
   onBlurMessage: function(ev) {
@@ -500,25 +513,31 @@ var messageSendView = Marionette.LayoutView.extend({
     //console.log("_processHyperlinks called");
     //console.log(links);
     //console.log(this.attachmentsCollection);
-    this.attachmentsCollection.comparator = function (attachmentModel) {
-      var index = _.findIndex(links, function(link) {
-        //console.log(attachmentModel.getDocument().get('uri'), link.href);
-        return attachmentModel.getDocument().get('uri') === link.href;
-      })
-      //console.log("attachmentsCollection comparator returning: ", index);
-      return index;
-    };
+
+    // this.attachmentsCollection.comparator = function (attachmentModel) {
+    //   var index = _.findIndex(links, function(link) {
+    //     //console.log(attachmentModel.getDocument().get('uri'), link.href);
+    //     return attachmentModel.getDocument().get('uri') === link.href;
+    //   })
+    //   //console.log("attachmentsCollection comparator returning: ", index);
+    //   return index;
+    // };
     goneModels = that.attachmentsCollection.filter(function(attachment) {
       var document = attachment.getDocument();
+
+      if (document.isFileType()){
+        return false;
+      }
       //console.log("filtering for goneModels checking document:", document);
       var found = _.find(links, function(link) {
         //console.log("filtering for goneModels comparing:", document.get('uri'), link.href);
-        return document.get('uri') === link.href?true:false; 
+        return document.get('uri') === link.href; 
       });
-      return found === undefined?true:false;
+      return found === undefined;
     });
     //console.log("goneModels: ", goneModels);
-    that.attachmentsCollection.remove(goneModels);
+    
+    that.attachmentsCollection.destroy(goneModels);
 
     missingLinks = _.filter(links, function(link) {
       var retval;
@@ -538,7 +557,7 @@ var messageSendView = Marionette.LayoutView.extend({
         console.warn("unknown link type: ", link.type);
         return;
       }
-      var document = new Documents.Model({
+      var document = new Documents.DocumentModel({
                                   uri: link.href}),
           attachment = new Attachments.Model({
             document: document,
@@ -563,6 +582,28 @@ var messageSendView = Marionette.LayoutView.extend({
 
   showPopInFirstPost: function() {
     Assembl.vent.trigger('navBar:subscribeOnFirstPost');
+  },
+
+  onFileUpload: function(e){
+    var fs = e.target.files,
+        that = this;
+    console.log("A file has been uploaded");
+
+    _.each(fs, function(f){
+      var d = new Documents.FileModel({
+        name: f.name,
+        mime_type: f.type
+      });
+      d.set('file', f);
+
+      var attachment = new Attachments.Model({
+        document: d,
+        objectAttachedToModel: that.model,
+        idCreator: Ctx.getCurrentUser().id
+      });
+
+      that.attachmentsCollection.add(attachment);
+    });
   }
 
 });

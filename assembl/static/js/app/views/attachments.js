@@ -1,14 +1,15 @@
 'use strict';
 
 var Marionette = require('../shims/marionette.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     i18n = require('../utils/i18n.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
+    Types = require('../utils/types.js'),
     Attachments = require('../models/attachments.js'),
     Documents = require('../models/documents.js'),
-    DocumentView = require('./documents.js');
+    DocumentViews = require('./documents.js');
 
 /** 
  * Represents the link between an object (ex: Message, Idea) and a remote (url)
@@ -21,6 +22,9 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
 
   initialize: function(options) {
+    var d = this.model.getDocument();
+    this.parentView = options.parentView? options.parentView: null;
+    this.uri = d.get('external_url') ? d.get('external_url') : d.get('uri');
   },
 
   ui: {
@@ -41,22 +45,38 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
   serializeData: function() {
     return {
-      url: this.model.getDocument().get("uri"),
+      url: this.uri,
       i18n: i18n
     };
   },
 
+  renderDocument: function(){
+    var documentModel = this.model.getDocument(),
+        parentView = this.parentView,
+        hash = {
+          model: documentModel,
+          parentView: parentView
+        },
+        documentView;
+    
+    if (documentModel.isFileType()) {
+      documentView = new DocumentViews.FileView(hash);
+    }
+    else {
+      documentView = new DocumentViews.DocumentView(hash);
+      
+    }
+    this.documentEmbeedRegion.show(documentView);
+  },
   onRender: function() {
     //console.log("AbstractAttachmentView: onRender with this.model:",this.model);
     //console.log(this.model.get('attachmentPurpose'), Attachments.attachmentPurposeTypes.DO_NOT_USE.id);
     if(this.model.get('attachmentPurpose') !== Attachments.attachmentPurposeTypes.DO_NOT_USE.id) {
-      var documentView = new DocumentView({model: this.model.getDocument()});
-      this.documentEmbeedRegion.show(documentView);
+      this.renderDocument();
     }
   },
 
   onShow: function() {
-
   }
 });
 
@@ -92,31 +112,101 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     'click .js_attachmentPurposeDropdownListItem': 'purposeDropdownListClick' //Dynamically rendered, do NOT use @ui
   }),
   
-  
-  
-  
-  onRender: function() {
-    AbstractAttachmentView.prototype.onRender.call(this);
-    this.renderAttachmentPurposeDropdown();
+  extras: {},
+
+  initialize: function(options){
+    //A parent view is passed which will be used to dictate the lifecycle of document creation/deletion
+    AbstractAttachmentView.prototype.initialize.call(this, options);
+    var that = this;
+    this.extrasAdded = {};
+    _.each(this.extras, function(v,k){
+      that.extrasAdded[k] = false;
+    });
   },
 
+  serializeData: function(){
+    return {
+      header: i18n.sprintf(i18n.gettext("For URL %s in the text above"), this.uri)
+    }
+  },
+  
+  renderDocument: function(){
+    var documentModel = this.model.getDocument(),
+        parentView = this.parentView,
+        documentView;
+    
+    if (documentModel.isFileType()) {
+      documentView = new DocumentViews.FileEditView({
+        parentView: parentView,
+        model: documentModel,
+        showProgress: true
+      });
+    }
+    else {
+      documentView = new DocumentViews.DocumentEditView({
+        model: documentModel,
+        parentView: parentView
+      });
+      
+    }
+    this.documentEmbeedRegion.show(documentView);
+  },
+
+  onRender: function() {
+    console.log("AttachmentEditableView onRender called for model", this.model.id);
+    AbstractAttachmentView.prototype.onRender.call(this);
+    this.populateExtras();
+    this.renderAttachmentPurposeDropdown(
+      this._renderAttachmentPurpose()
+    );
+  },
+
+  _updateExtrasCompleted: function(){
+    var that = this;
+    _.each(this.extras, function(v, k){
+      that.extrasAdded[k] = true;
+    });
+  },
+
+  populateExtras: function(){
+    /*
+      Override to populate extras array with HTML array which will be appended to the end of the
+      attachment purpose dropdown
+      Ensure to update the cache of extras completed. Otherwise, each render will introduce 1 more of the
+      extras
+     */
+    this._updateExtrasCompleted();
+  },
+
+  _renderAttachmentPurpose: function(){
+    var purposesHtml = [],
+        that = this;
+    _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
+      purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
+    });
+
+    if (this.extras) {
+      _.each(this.extras, function(v,k){
+        if (!that.extrasAdded[k]) {
+          purposesHtml.push(v);
+        }
+      });
+    }
+
+    return purposesHtml;
+  },
   /**
    * Renders the messagelist view style dropdown button
    */
-  renderAttachmentPurposeDropdown: function() {
+  renderAttachmentPurposeDropdown: function(purposesList) {
     var that = this,
-        purposesHtml = [];
+        html = "";
 
-    _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
-      purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
-        });
-
-    var html = "";
     html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">';
     html += Attachments.attachmentPurposeTypes[this.model.get('attachmentPurpose')].label;
     html += '<span class="icon-arrowdown"></span></a>';
     html += '<ul class="dropdown-menu">';
-    html += purposesHtml.join('');
+    html += purposesList ? purposesList.join(''): "";
     html += '</ul>';
     this.ui.attachmentPurposeDropdown.html(html);
 
@@ -128,11 +218,71 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
       throw new Error("Invalid attachment purpose: ", ev.currentTarget.dataset.id);
     }
     this.model.set('attachmentPurpose', ev.currentTarget.dataset.id);
+  },
+
+  onRemoveAttachment: function(ev){
+    ev.stopPropagation();
+    //The model is not persisted if it is in an EditableView, so this does not call DELETE
+    //to the backend
+    this.model.destroy();
+  },
+
+});
+
+
+var AttachmentFileEditableView = AttachmentEditableView.extend({
+  constructor: function AttachmentFileEditableView(){
+    AttachmentEditableView.apply(this, arguments);
+  },
+
+  className: "fileAttachmentEditable",
+
+  ui: _.extend({}, AttachmentEditableView.prototype.ui, {
+    remove: ".js_removeAttachment"
+  }),
+
+  events: _.extend({}, AttachmentEditableView.prototype.events, {
+    'click .js_removeAttachment': 'onRemoveAttachment'
+  }),
+
+  populateExtras: function(){
+    var a = "<li><a class='js_removeAttachment' data-toggle='tooltip' title='' data-placement='left' data-id='CANCEL_UPLOAD' data-original-title='CANCEL_UPLOAD'>" + i18n.gettext("Remove") + "</a></li>"
+    this.extras["REMOVE"] = a;
+    // this._updateExtrasCompleted();
+  },
+
+  serializeData: function(){
+    return {
+      header: i18n.gettext("For the uploaded file")
+    }
   }
 
 });
 
+var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
+  constructor: function AttachmentEditableCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
+  getChildView: function(item){
+
+    var d = item.getDocument();
+    switch (d.get('@type') ) {
+      case Types.DOCUMENT:
+        return AttachmentEditableView
+        break;
+      case Types.FILE:
+        return AttachmentFileEditableView;
+        break;
+      default:
+        return new Error("Cannot create a CollectionView with a document of @type: " + d.get('@type'));
+        break;
+    }
+  }
+});
+
 module.exports = module.exports = {
     AttachmentEditableView: AttachmentEditableView,
-    AttachmentView: AttachmentView
+    AttachmentView: AttachmentView,
+    AttachmentEditableCollectionView: AttachmentEditableCollectionView
   };

@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('../shims/underscore.js'),
+var _ = require('underscore'),
     App = require('../app.js'),
     Ctx = require('../common/context.js');
 

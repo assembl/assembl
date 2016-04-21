@@ -1,8 +1,8 @@
 "use strict";
 
-var Backbone = require("../shims/backbone.js"),
+var Backbone = require("backbone"),
     Marionette = require("../shims/marionette.js"),
-    _ = require("../shims/underscore.js"),
+    _ = require("underscore"),
     Widget = require("../models/widget.js");
 
 

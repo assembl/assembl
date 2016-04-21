@@ -1,9 +1,9 @@
 'use strict';
 
 var Marionette = require('../shims/marionette.js'),
-    Backbone = require('../shims/backbone.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+    Backbone = require('backbone'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     Promise = require('bluebird'),
     Moment = require('moment'),
     Types = require('../utils/types.js'),
@@ -217,12 +217,21 @@ var Collection = Base.Collection.extend({
                     return ideaModel.getShortTitleDisplayText();
                 });
 
-                //Sometimes there are duplicate names?
-                // console.log("In getIdeaNamesPromise:");
-                // console.log("Idea Content Link Collection used: ", that);
-                // console.log("The names being passed: ", m);
+                //A cache of the name, and sort order of the name of the idea
+                var cache = {};
+                _.each(m, function(name, index, collection){
+                    if (!_.has(cache, name)){
+                        cache[name] = index;
+                    }
+                });
 
-                return Promise.resolve(m);
+                var sorted = _.chain(cache)
+                              .pairs()
+                              .sortBy(function(val){return val[1]; })
+                              .map(function(val){return val[0]; })
+                              .value();
+
+                return Promise.resolve(sorted);
             })
             .error(function(e){
                 console.error("[IdeaContentLink] Error in getting idea names: ", e.statusText);

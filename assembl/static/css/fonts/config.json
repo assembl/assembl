@@ -669,6 +669,12 @@
       "code": 59433,
       "css": "facebook-rect",
       "uid": "ebbe0cc0600cb69375abc20af545967f"
+    },
+    {
+      "src": "entypo",
+      "code": 59449,
+      "css": "attach",
+      "uid": "44b9e75612c5fad5505edd70d071651f"
     }
   ],
   "ascent": 850,

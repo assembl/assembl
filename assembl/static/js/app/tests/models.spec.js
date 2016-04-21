@@ -1,5 +1,5 @@
 
-var _ = require('../shims/underscore.js'),
+var _ = require('underscore'),
     Agent = require('../models/agents.js'),
     expect = require('chai').expect;
 

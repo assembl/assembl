@@ -2,8 +2,8 @@
 
 var Marionette = require('../../shims/marionette.js'),
     Jed = require('jed'),
-    $ = require('../../shims/jquery.js'),
-    _ = require('../../shims/underscore.js'),
+    $ = require('jquery'),
+    _ = require('underscore'),
     Assembl = require('../../app.js'),
     IdeaList = require('../ideaList.js'),
     Base = require('../../models/base.js'),

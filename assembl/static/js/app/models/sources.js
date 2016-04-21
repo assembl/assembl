@@ -4,7 +4,7 @@ var Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),
     Ctx = require('../common/context.js'),
     Types = require('../utils/types.js'),
-    $ = require('../shims/jquery.js');
+    $ = require('jquery');
 
 //ContentSource + PostSource
 var Source = Base.Model.extend({

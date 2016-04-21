@@ -7,7 +7,7 @@ def test_front_page(browser, test_server, db_default_data):
     assert browser.title == 'Assembl'
 
 
-def test_mocha(browser, test_server, discussion, test_session):
+def test_mocha(browser, test_server, discussion, test_session, test_webrequest):
     """Test using real browser."""
     from jasmine_runner.commands import run_specs_with_browser
     url = "%s/%s/test" % (test_server.url, discussion.slug)
@@ -19,7 +19,7 @@ def test_mocha(browser, test_server, discussion, test_session):
 @flaky(max_runs=3)
 def test_load_messages(
         browser, test_server, test_session, discussion,
-        jack_layton_mailbox):
+        jack_layton_mailbox, test_webrequest):
     """Test using real browser."""
     url = "%s/%s/" % (test_server.url, discussion.slug)
     test_session.commit()

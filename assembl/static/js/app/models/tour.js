@@ -1,7 +1,7 @@
 'use strict';
 
 var Base = require('./base.js'),
-    $ = require('../shims/jquery.js'),
+    $ = require('jquery'),
     Ctx = require('../common/context.js');
 
 var tourModel = Base.Model.extend({

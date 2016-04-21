@@ -26,7 +26,7 @@
         "user": true,
         "locale": true,
         "locale_code": true,
-        "preferred_order": false,
+        "preferred_order": true,
         "source_of_evidence": true,
         "translate_to": true,
         "translate_to_name": "translate_to_code"
@@ -614,15 +614,23 @@
         "author_name": true,
         "author_url": true,
         "thumbnail_url": true,
-        "site_name": true
+        "site_name": true,
+        "creation_date": true,
+        "external_url": "external_url"
+    },
+    "File": {
+        "@extends": "Document",
+        "data": false
     },
     "Attachment": {
-        "document": [":default"],
+        "document": [":"],
         "idAttachedDocument": "document",
         "idCreator": "creator",
         "attachmentPurpose": true,
         "title": true,
-        "description": true
+        "description": true,
+        "creation_date": true,
+        "external_url": "external_url"
     },
     "PostAttachment": {
         "@extends": "Attachment",

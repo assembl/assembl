@@ -1,6 +1,8 @@
 'use strict';
 
-var $ = require('../shims/jquery.js'),
+var $ = require('jquery'),
+    _ = require('underscore'),
+    Moment = require("moment"),
     Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),
     Ctx = require('../common/context.js'),
@@ -64,27 +66,65 @@ var AttachmentModel = Base.Model.extend({
     idCreator: undefined,
     title: undefined,
     description: undefined,
-    attachmentPurpose: attachmentPurposeTypes.EMBED_ATTACHMENT.id
-    
+    attachmentPurpose: attachmentPurposeTypes.EMBED_ATTACHMENT.id,
+    external_url: undefined,
+    creation_date: new Moment().utc()
   },
 
   initialize: function(options) {
   },
 
   parse: function(rawModel) {
-    rawModel.document = new Document.Model(rawModel.document, {parse: true});
-    //console.log("AttachmentModel.parse() returning", rawModel);
+    switch (rawModel.document['@type']){
+      case Types.DOCUMENT:
+        rawModel.document = new Document.DocumentModel(rawModel.document, {parse: true});
+        break;
+      case Types.FILE:
+        rawModel.document = new Document.FileModel(rawModel.document, {parse: true});
+        break;
+      default:
+        return new Error("The document model does not have a @type associated!" + rawModel.document);
+    }
+    
+    //console.log("AttachmentModel.parse() returning", rawModel);  
     return rawModel;
+  },
+
+  _saveMe: function(attrs, options){
+    var d = this.getDocument();
+    this.set('idAttachedDocument', d.id);
+    return Backbone.Model.prototype.save.call(this, attrs, options); 
   },
 
   save: function(attrs, options) {
     var that = this;
 
     if(this.get('attachmentPurpose') !== attachmentPurposeTypes.DO_NOT_USE.id) {
-      Promise.resolve(this.get('document').save()).then(function(){
-        //console.log("Saving attachments", attrs, options);
-        Backbone.Model.prototype.save.call(that, attrs, options);
-      })
+      
+      /**
+       * Update
+       * =======
+       *
+       * The architecture to load attachments + documents has now changed
+       * Documents are eagerly saved to the database upon creation.
+       * The AttachmentView is responsible for the lifecycle of the document model.
+       * As a result, the attachment model save should no longer do a two-step
+       * save process. It is only responsible for saving itself.
+       */
+      if (options === undefined) {
+        options = {};
+      }
+      var d = this.getDocument();
+      //If the document was not STILL saved at the time of the attachment being saved
+      if ( d.isNew() ) {
+        Promise.resolve(this.get('document').save()).then(function(){
+          //console.log("Saving attachments", attrs, options);
+          return that._saveMe(attrs, options);
+        })
+      }
+      else {
+        return this._saveMe(attrs, options);
+      }
     }
   },
   
@@ -122,7 +162,40 @@ var AttachmentModel = Base.Model.extend({
 
   getDocument: function() {
     return this.get('document');
+  },
+
+  getCreationDate: function(){
+    var date = this.get('creation_date');
+    if ( (date) && (typeof date === 'string') ){
+      date = new Moment(date);
+    }
+    return date;
+  },
+
+  destroy: function(options){
+    var d = this.getDocument(),
+        that = this;
+    return d.destroy({
+      success: function(model, response){
+        console.log('in document destroy success callback');
+        return Base.Model.prototype.destroy.call(that);
+      }
+    });
+  },
+
+  /*
+    Override toJSON of the attachment model in order to ensure that
+    backbone does NOT try to parse the an object that causes
+    recursive read, as there is a message object which contains
+    the attachment model.
+   */
+  toJSON: function(options){
+    var old = Base.Model.prototype.toJSON.call(this, options);
+    //Remove the message attribute, as there is a circular dependency
+    delete old['objectAttachedToModel'];
+    return old;
   }
+
 });
 
 /**
@@ -155,6 +228,77 @@ var AttachmentCollection = Base.Collection.extend({
     else {
       this.objectAttachedToModel = options.objectAttachedToModel;
     }
+  },
+
+  comparator: function(one, two){
+    var d1 = one.getDocument(),
+        d2 = two.getDocument();
+
+    var cmp = function (a, b){
+      if ( a.getCreationDate().isBefore(b.getCreationDate()) ){
+        return -1;
+      }
+      if ( b.getCreationDate().isBefore(a.getCreationDate()) ){
+        return 1;
+      }
+      else {
+        return 0;
+      }
+    };
+
+    if ( ((d1.isFileType()) && (d2.isFileType())) || ((!d1.isFileType()) && (!d2.isFileType())) ){
+      return cmp(one, two);
+    }
+    else if ( (d1.isFileType()) && (!d2.isFileType()) ){
+      return -1;
+    }
+
+    else if ( (!d1.isFileType()) && (d2.isFileType()) ){
+      return 1;
+    }
+    else { return 0; }
+  },
+
+  /**
+   * Helper method to destroy the models in a collection
+   * @param  {Array|Backbone.Model} models    Model or Array of models  
+   * @param  {Object} options   Options hash to send to every model when destroyed
+   * @return {Promse} if model was persisted, returns jqXhr else false 
+   */
+  destroy: function(models, options){
+    if (!models){
+      return Promise.resolve(false);
+    }
+
+    if (!_.isArray(models)){
+      return Promise.resolve(models.destroy(options));
+    }
+
+    return Promise.each(models, function(model){
+      model.destroy(options);
+    });
+  },
+
+  save: function(models, options){
+    if (!models){
+      return Promise.resolve(false);
+    }
+
+    if (!_.isArray(models)){
+      return Promise.resolve(models.save(options));
+    }
+
+    return Promise.each(models, function(model){
+      model.save(options);
+    });
+  },
+
+  destroyAll: function(options){
+    return this.destroy(this.models, options);
+  },
+
+  saveAll: function(options){
+    return this.save(this.models, options);
   }
 });
 

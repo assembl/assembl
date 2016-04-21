@@ -50,7 +50,7 @@ class IdeaGraphView(DiscussionBoundBase):
     discussion_id = Column(
         Integer,
         ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False,
+        nullable=False, index=True,
         info={'rdf': QuadMapPatternS(None, SIOC.has_container)}
     )
     discussion = relationship(

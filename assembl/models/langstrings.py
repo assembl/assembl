@@ -284,11 +284,11 @@ class LocaleLabel(Base):
     named_locale_id = Column(
         Integer, ForeignKey(
             Locale.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False)
+        nullable=False, index=True)
     locale_id_of_label = Column(
         Integer, ForeignKey(
             Locale.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False)
+        nullable=False, index=True)
     name = Column(CoerceUnicode)
 
     named_locale = relationship(Locale, foreign_keys=(
@@ -686,7 +686,7 @@ class LangStringEntry(TombstonableMixin, Base):
     locale_id = Column(
         Integer, ForeignKey(
             Locale.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False)
+        nullable=False, index=True)
     locale = relationship(Locale)
     locale_identification_data = Column(String)
     locale_confirmed = Column(

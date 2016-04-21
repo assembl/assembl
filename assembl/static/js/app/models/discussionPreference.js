@@ -1,6 +1,6 @@
 "use strict";
 
-var Backbone = require("../shims/backbone.js"),
+var Backbone = require("backbone"),
     Ctx = require("../common/context.js");
 
 // We do not use Base.Model.extend(), because we want to keep Backbone's default behaviour with model urls

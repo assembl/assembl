@@ -1,9 +1,9 @@
 'use strict';
 
-var Backbone = require('../shims/backbone.js'),
+var Backbone = require('backbone'),
     Promise = require('bluebird'),
     Ctx = require('../common/context.js'),
-    _ = require('../shims/underscore.js'),
+    _ = require('underscore'),
     Types = require('../utils/types.js');
 
 /**

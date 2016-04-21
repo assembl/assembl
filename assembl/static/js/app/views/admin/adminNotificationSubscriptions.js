@@ -5,7 +5,7 @@ var Marionette = require('../../shims/marionette.js'),
     Permissions = require('../../utils/permissions.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
-    $ = require('../../shims/jquery.js'),
+    $ = require('jquery'),
     Promise = require('bluebird'),
     AdminNavigationMenu = require('./adminNavigationMenu.js');
 

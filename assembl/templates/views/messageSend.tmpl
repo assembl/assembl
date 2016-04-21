@@ -35,14 +35,22 @@
               <% } %>
           </div>
           <% } %>
-          <div class="messageSend-buttons fr"> <!-- need again this part for top posting -->
-              <% if ( reply_message_id ) { %>
-                <a class="btn btn-primary btn-sm messageSend-sendbtn"><%= send_button_label %></a>
-              <% } else { %>
-                <a class="btn btn-primary btn-sm messageSend-sendbtn"><%= send_button_label %></a>
-              <% } %>
-              <a class="btn btn-cancel btn-sm messageSend-cancelbtn"><%= cancel_button_label %></a>
-          </div>
+          <span class="mtm">
+            <div class="messageSend-upload fl">
+              <input type="file" name="attachmentUpload" id="attachmentUpload" multiple="multiple" class="file-upload js_upload" />
+              <label for="attachmentUpload">
+                <i class="icon icon-attach"></i>
+              </label>
+            </div>
+            <div class="messageSend-buttons fr"> <!-- need again this part for top posting -->
+                <% if ( reply_message_id ) { %>
+                  <a class="btn btn-primary btn-sm messageSend-sendbtn"><%= send_button_label %></a>
+                <% } else { %>
+                  <a class="btn btn-primary btn-sm messageSend-sendbtn"><%= send_button_label %></a>
+                <% } %>
+                <a class="btn btn-cancel btn-sm messageSend-cancelbtn"><%= cancel_button_label %></a>
+            </div>
+          </span>
         </div>
       </div>
     </div>

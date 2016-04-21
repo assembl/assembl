@@ -1,5 +1,5 @@
 
-var $ = require('../shims/jquery.js'),
+var $ = require('jquery'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     expect = require('chai').expect;
 

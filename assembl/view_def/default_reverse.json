@@ -161,7 +161,8 @@
         "message_id": false,
         "ancestry": false,
         "parentId": "parent",
-        "idCreator": "creator"
+        "idCreator": "creator",
+        "attachments": false
     },
     "ImportedPost": {
         "@extends": "Post",
@@ -430,14 +431,23 @@
         "author_name": true,
         "author_url": true,
         "thumbnail_url": true,
-        "site_name": true
+        "site_name": true,
+        "fileAttribute": false,
+        "raw_data": false,
+        "external_url": false
+    },
+    "File": {
+        "@extends": "Document",
+        "data": false
     },
     "Attachment": {
         "idAttachedDocument": "document",
         "idCreator": "creator",
         "attachmentPurpose": true,
         "title": true,
-        "description": true
+        "description": true,
+        "creation_date": false,
+        "document": false
     },
     "PostAttachment": {
         "@extends": "Attachment",

@@ -1,13 +1,13 @@
 'use strict';
 
-var Backbone = require('../shims/backbone.js'),
+var Backbone = require('backbone'),
     Raven = require('raven-js'),
     ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     objectTreeRenderVisitorReSort = require('./visitors/objectTreeRenderVisitorReSort.js'),
     MessageFamilyView = require('./messageFamily.js'),
     MessageListHeaderView = require('./messageListHeader.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Message = require('../models/message.js'),

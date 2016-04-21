@@ -363,6 +363,13 @@ def compile_javascript():
             run('../node_modules/gulp/bin/gulp.js build:test')
 
 
+@task
+def compile_javascript_tests():
+    with cd(env.projectpath):
+        with cd('assembl'):
+            run('../node_modules/gulp/bin/gulp.js build:test')
+
+
 def tests():
     """
     Run all tests on remote
@@ -865,13 +872,15 @@ def database_dump_postgres():
     filename = 'db_%s.sql' % strftime('%Y%m%d')
     compressed_filename = '%s.pgdump' % filename
     absolute_path = os.path.join(env.dbdumps_dir, compressed_filename)
+    config = get_config()
 
     # Dump
     with prefix(venv_prefix()), cd(env.projectpath):
-        run('pg_dump --host=%s -U%s --format=custom -b %s > %s' % (env.db_host, env.db_user,
-                                                 env.db_name,
-                                                 absolute_path)
-            )
+        run('pg_dump --host=%s -U%s --format=custom -b %s > %s' % (
+            env.db_host,
+            config.get("app:assembl", "db_user"),
+            config.get("app:assembl", "db_database"),
+            absolute_path))
 
     # Make symlink to latest
     with cd(env.dbdumps_dir):
@@ -970,10 +979,12 @@ def database_restore_postgres():
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
+    config = get_config()
 
     # Drop db
     with settings(warn_only=True):
-        dropped = run_db_command("dropdb %s" % (env.db_name,))
+        dropped = run_db_command("dropdb %s" % (
+            config.get("app:assembl", "db_database"),))
         assert dropped.succeeded or "does not exist" in dropped, \
             "Could not drop the database"
 
@@ -983,8 +994,8 @@ def database_restore_postgres():
     # Restore data
     with prefix(venv_prefix()), cd(env.projectpath):
         run('pg_restore --host=%s --dbname=%s -U%s --schema=public %s' % (env.db_host,
-                                                  env.db_name,
-                                                  env.db_user,
+                                                  config.get("app:assembl", "db_database"),
+                                                  config.get("app:assembl", "db_user"),
                                                   remote_db_path())
         )
 
@@ -1304,7 +1315,6 @@ def commonenv(projectpath, venvpath=None):
         env.venvpath = join(projectpath,"venv")
 
     env.db_user = 'assembl'
-    env.db_name = 'assembl'
     #It is recommended you keep localhost even if you have access to
     # unix domain sockets, it's more portable across different pg_hba configurations.
     env.db_host = 'localhost'

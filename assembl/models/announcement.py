@@ -41,7 +41,7 @@ class Announcement(DiscussionBoundBase):
         ondelete='CASCADE',
         onupdate='CASCADE',
         ),
-        nullable=False,)
+        nullable=False, index=True)
 
 
     discussion = relationship(

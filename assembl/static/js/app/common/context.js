@@ -1,7 +1,7 @@
 'use strict';
 
-var $ = require('../shims/jquery.js'),
-    _ = require('../shims/underscore.js'),
+var $ = require('jquery'),
+    _ = require('underscore'),
     Moment = require('moment'),
     Promise = require('bluebird'),
     Assembl =  require('../app.js'),
@@ -43,6 +43,18 @@ var Context = function() {
    * @type {boolean}
    */
   this.debugSocket = false;
+
+  /**
+   * Send debugging output to console.log to observe oembed failures
+   * @type {boolean}
+   */
+  this.debugOembed = false;
+
+  /**
+   * The state that the application can be under
+   * @type {string} appState  | production | test
+   */
+  this.appState = 'production';
 
   /**
    * Prefix used to generate the id of the element used by annotator to find it's annotation
@@ -257,6 +269,22 @@ Context.prototype = {
       this.manageLastCurrentUser();
 
     }
+  },
+
+  setApplicationUnderTest: function(){
+    this.appState = 'test';
+  },
+
+  isApplicationUnderTest: function(){
+    return this.appState === 'test';
+  },
+
+  isApplicationUnderProduction: function(){
+    return this.appState === 'production';
+  },
+
+  setApplicationUnderProduction: function(){
+    this.appState = 'production';
   },
 
   getCsrfToken: function() {
@@ -1078,11 +1106,12 @@ Context.prototype = {
     }
 
     var message = i18n.gettext('ajax error message:');
-    message = "url: " + settings.url + "\n" + message + "\n" + exception;
+    message = "url: " + jqxhr.status + " " + settings.url + "\n" + message + "\n" + exception;
 
     var model = new Backbone.Model({
       msg: message,
-      url: settings.url
+      url: settings.url,
+      status: jqxhr.status
     });
 
     var Modal = Backbone.Modal.extend({
@@ -1098,7 +1127,10 @@ Context.prototype = {
       },
 
       onRender: function() {
-        Raven.captureMessage('Reload popup presented to the user', {tags: { url: this.model.get("url") }});
+        Raven.captureMessage('Reload popup presented to the user', {tags: {
+          url: this.model.get("url"),
+          return_code: this.model.get("status")
+          }});
       },
 
       reload: function() {
@@ -1394,6 +1426,10 @@ Context.prototype = {
       return assembl_locale.split('_')[0];
     },
 
+  _test_set_locale: function(locale){
+    assembl_locale = locale;
+  },
+
   initLocale: function() {
 
     switch (assembl_locale){
@@ -1631,12 +1667,19 @@ Context.prototype = {
     <script id="translation-service-data"></script>
    */
   getTranslationServiceData: function(){
-    if (this._translationServiceCache) {
-      return this._translationServiceCache;
+
+    if (this.isApplicationUnderTest()){
+      return null;
     }
 
-    this._translationServiceCache = this.getJsonFromScriptTag('translation-service-data');
-    return this._translationServiceCache;
+    else {
+      if (this._translationServiceCache) {
+        return this._translationServiceCache;
+      }
+
+      this._translationServiceCache = this.getJsonFromScriptTag('translation-service-data');
+      return this._translationServiceCache;
+    }
   },
 
   /**

@@ -66,6 +66,7 @@ API_PREFIX = '/data/'
 
 FORM_HEADER = "Content-Type:(application/x-www-form-urlencoded)|(multipart/form-data)"
 JSON_HEADER = "Content-Type:application/(.*\+)?json"
+MULTIPART_HEADER = "Content-Type:multipart/form-data"
 
 
 def includeme(config):
@@ -228,10 +229,7 @@ def instance_post(request):
     raise HTTPBadRequest()
 
 
-@view_config(
-    context=InstanceContext, request_method='PATCH', header=JSON_HEADER,
-    renderer='json')
-@view_config(context=InstanceContext, request_method='PUT', header=JSON_HEADER,
+@view_config(context=InstanceContext, request_method=('PATCH', 'PUT'), header=JSON_HEADER,
              renderer='json')
 def instance_put_json(request, json_data=None):
     json_data = json_data or request.json_body
@@ -254,16 +252,7 @@ def instance_put_json(request, json_data=None):
         raise HTTPNotImplemented()
 
 
-@view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER,
-             renderer='json')
-def instance_put_form(request, form_data=None):
-    form_data = form_data or request.params
-    ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
-    permissions = get_permissions(user_id, ctx.get_discussion_id())
-    instance = ctx._instance
-    if not instance.user_can(user_id, CrudPermissions.UPDATE, permissions):
-        return HTTPUnauthorized()
+def update_from_form(instance, form_data=None):
     mapper = inspect(instance.__class__)
     cols = {c.key: c for c in mapper.columns if not c.foreign_keys}
     setables = dict(pyinspect.getmembers(
@@ -312,6 +301,19 @@ def instance_put_form(request, form_data=None):
             setattr(instance, key, value)
     except:
         raise HTTPBadRequest()
+
+
+@view_config(context=InstanceContext, request_method='PUT', header=FORM_HEADER,
+             renderer='json')
+def instance_put_form(request, form_data=None):
+    form_data = form_data or request.params
+    ctx = request.context
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(user_id, ctx.get_discussion_id())
+    instance = ctx._instance
+    if not instance.user_can(user_id, CrudPermissions.UPDATE, permissions):
+        return HTTPUnauthorized()
+    update_from_form(instance, form_data)
     view = request.GET.get('view', None) or 'default'
     if view == 'id_only':
         return [instance.uri()]

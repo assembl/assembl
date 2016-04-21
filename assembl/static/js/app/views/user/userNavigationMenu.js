@@ -1,7 +1,7 @@
 'use strict';
 
 var Marionette = require('../../shims/marionette.js'),
-    $ = require('../../shims/jquery.js'),
+    $ = require('jquery'),
     i18n = require('../../utils/i18n.js'),
     Ctx = require('../../common/context.js'),
     CollectionManager = require('../../common/collectionManager.js'),

@@ -47,7 +47,7 @@ class Action(TombstonableMixin, DiscussionBoundBase):
     actor_id = Column(
         Integer,
         ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False,
+        nullable=False, index=True,
         info={'rdf': QuadMapPatternS(
             None, VERSION.who, AgentProfile.agent_as_account_iri.apply(None))}
     )
@@ -98,7 +98,7 @@ class ActionOnPost(Action):
     post_id = Column(
         Integer,
         ForeignKey('content.id', ondelete="CASCADE", onupdate='CASCADE'),
-        nullable=False,
+        nullable=False, index=True,
         info={'rdf': QuadMapPatternS(None, VERSION.what)}
     )
 
@@ -261,7 +261,7 @@ class ActionOnIdea(Action):
     idea_id = Column(
         Integer,
         ForeignKey(Idea.id, ondelete="CASCADE", onupdate='CASCADE'),
-        nullable=False,
+        nullable=False, index=True,
         info={'rdf': QuadMapPatternS(None, VERSION.what)}
     )
 

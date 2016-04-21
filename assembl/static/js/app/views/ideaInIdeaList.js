@@ -1,8 +1,8 @@
 'use strict';
 
-var Backbone = require('../shims/backbone.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+var Backbone = require('backbone'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
@@ -83,11 +83,13 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
 
     // TODO: Detect a change in current synthesis
     Ctx.getCurrentSynthesisDraftPromise().then(function(synthesis) {
-      that.listenTo(synthesis.getIdeasCollection(), 'add remove reset', function() {
-        if(!that.isViewDestroyed()) {
-          that.render();
-        }
-      });
+      if(!that.isViewDestroyed()) {
+        that.listenTo(synthesis.getIdeasCollection(), 'add remove reset', function() {
+          if(!that.isViewDestroyed()) {
+            that.render();
+          }
+        });
+      }
     });
 
     this.tableOfIdeasCollapsedState = that.parentPanel ? that.parentPanel.getTableOfIdeasCollapsedState() : null;

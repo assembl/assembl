@@ -1,9 +1,9 @@
 'use strict';
 
 var Marionette = require('./shims/marionette.js'),
-    $ = require('./shims/jquery.js'),
+    $ = require('jquery'),
     Raven = require('raven-js'),
-    _ = require('./shims/underscore.js');
+    _ = require('underscore');
 
 var App = new Marionette.Application();
 

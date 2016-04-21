@@ -715,6 +715,24 @@ class Discussion(DiscussionBoundBase):
     def main_locale(self):
         return self.discussion_locales[0]
 
+    def compose_external_uri(self, *args, **kwargs):
+        """
+        :use_api2 - uses API2 URL path
+        pass as many nodes you want in the args
+        """
+        composer = ""
+        base = self.get_base_url()
+        if kwargs.get('use_api2', True):
+            base += "/data/"
+        else:
+            base += "/"
+        uri = self.uri(base_uri=base)
+        composer += uri
+        for arg in args:
+            if arg:
+                composer += "/%s" % arg
+        return composer
+
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
     """

@@ -1,7 +1,7 @@
 'use strict';
 
 var Marionette = require('../../shims/marionette.js'),
-    _ = require('../../shims/underscore.js'),
+    _ = require('underscore'),
     Promise = require('bluebird'),
     AssemblPanel = require('../assemblPanel.js'),
     CollectionManager = require('../../common/collectionManager.js'),

@@ -1,5 +1,5 @@
 var Marionette = require('../shims/marionette.js'),
-    $ = require('../shims/jquery.js'),
+    $ = require('jquery'),
     i18n = require('../utils/i18n.js'),
     Promise = require('bluebird'),
     Growl = require('../utils/growl.js');

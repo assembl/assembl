@@ -2,7 +2,8 @@
 
 var Ctx = require('../common/context.js'),
     ideaInIdeaList = require('./ideaInIdeaList.js'),
-    _ = require('../shims/underscore.js');
+    IdeaView = require('./ideaInIdeaList.js'),
+    _ = require('underscore');
 
 var otherInIdeaList = ideaInIdeaList.IdeaView.extend({
   constructor: function otherInIdeaList() {

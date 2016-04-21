@@ -91,7 +91,7 @@ class AbstractPerUserNamespacedKeyValue(
     # No table name, these are simply common columns
     @declared_attr
     def user_id(self):
-        return Column("user_id", Integer, ForeignKey(User.id))
+        return Column("user_id", Integer, ForeignKey(User.id), index=True)
 
     @declared_attr
     def __table_args__(cls):
@@ -352,7 +352,7 @@ class DiscussionPerUserNamespacedKeyValue(
         DiscussionBoundBase, AbstractPerUserNamespacedKeyValue):
     __tablename__ = 'discussion_peruser_namespaced_key_value'
 
-    discussion_id = Column(Integer, ForeignKey(Discussion.id))
+    discussion_id = Column(Integer, ForeignKey(Discussion.id), index=True)
     target_name = "discussion"
     target_id_name = "discussion_id"
     target_class = Discussion

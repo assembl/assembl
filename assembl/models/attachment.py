@@ -5,8 +5,10 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     String,
+    Unicode,
     ForeignKey,
     Binary,
+    LargeBinary,
     Text,
     or_,
     event,
@@ -36,6 +38,8 @@ class Document(DiscussionBoundBase):
     __tablename__ = "document"
     id = Column(
         Integer, primary_key=True)
+
+    type = Column(String(60), nullable=False)
     """
     The cannonical identifier of this document.  If a URL, it's to be
     interpreted as a purl
@@ -52,7 +56,7 @@ class Document(DiscussionBoundBase):
         ondelete='CASCADE',
         onupdate='CASCADE',
         ),
-        nullable=False,)
+        nullable=False, index=True)
 
     discussion = relationship(
         "Discussion",
@@ -64,7 +68,7 @@ class Document(DiscussionBoundBase):
     oembed_type = Column(String(1024), server_default="")
     mime_type = Column(String(1024), server_default="")
     # From metadata, not the user
-    title = Column(String(1024), server_default="",
+    title = Column(CoerceUnicode(1024), server_default="",
                    info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
     # From metadata, not the user
@@ -88,7 +92,19 @@ class Document(DiscussionBoundBase):
 
     __mapper_args__ = {
         'polymorphic_identity': 'document',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
     }
+
+    @property
+    def external_url(self):
+        return self.uri_id
+
+    def generate_unique_id(self):
+        """Method to override in order to create a unique URI of the entity"""
+        import uuid
+        u = uuid.uuid1()
+        return u.urn
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
@@ -127,6 +143,34 @@ class Document(DiscussionBoundBase):
             P_EDIT_POST, P_ADMIN_DISC)
 
 
+class File(Document):
+    __tablename__ = 'file'
+    __mapper_args__ = {
+        'polymorphic_identity': 'file'
+    }
+
+    def __init__(self, *args, **kwargs):
+        if kwargs.get('uri_id', None) is None:
+            kwargs['uri_id'] = self.generate_unique_id()
+        super(File, self).__init__(*args, **kwargs)
+
+    id = Column(Integer, ForeignKey(
+                'document.id', ondelete='CASCADE',
+                onupdate='CASCADE'), primary_key=True)
+
+    data = Column(LargeBinary, nullable=False)
+
+    @Document.external_url.getter
+    def external_url(self):
+        """
+        A public facing URL of the entity that is in question
+        """
+        if not self.id or not self.discussion:
+            return None
+        return self.discussion.compose_external_uri(
+               'documents', self.id, 'data')
+
+
 class Attachment(DiscussionBoundBase):
     """
     Represents a Document or file, local to the database or (more typically)
@@ -145,7 +189,7 @@ class Attachment(DiscussionBoundBase):
         ondelete='CASCADE',
         onupdate='CASCADE',
         ),
-        nullable=False,)
+        nullable=False, index=True)
 
     discussion = relationship(
         "Discussion",
@@ -191,6 +235,10 @@ class Attachment(DiscussionBoundBase):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
+
+    @property
+    def external_url(self):
+        return self.document.external_url
 
 
 class PostAttachment(Attachment):

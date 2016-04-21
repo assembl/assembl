@@ -1,7 +1,7 @@
 'use strict';
 
-var _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+var _ = require('underscore'),
+    $ = require('jquery'),
     Promise = require('bluebird'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
@@ -298,6 +298,28 @@ var MessageModel = Base.Model.extend({
     }
     console.log("we are in default case");
     return Backbone.sync(method, model, options);
+  },
+
+  destroy: function(options){
+    var attachments = this.get('attachments'),
+        that = this;
+    return Promise.resolve(attachments.destroyAll(options))
+      .then(function(){
+        return Base.Model.prototype.destroy.call(that, options);
+      });
+  },
+
+  /*
+    Override toJSON of the message model in order to ensure that
+    backbone does NOT try to parse the an object that causes
+    recursive read, as there is an attachment object which contains
+    the message model.
+   */
+  toJSON: function(options){
+    var old = Base.Model.prototype.toJSON.call(this, options);
+    //Remove the attachments attribute, as there is a circular dependency
+    delete old['attachments'];
+    return old;
   }
 });
 

@@ -1,6 +1,6 @@
 
 
-var $ = require('../shims/jquery.js'),
+var $ = require('jquery'),
     Ctx = require('../common/context.js'),
     expect = require('chai').expect;
 

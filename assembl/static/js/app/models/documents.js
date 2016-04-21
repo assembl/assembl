@@ -1,20 +1,19 @@
 'use strict';
 
-var $ = require('../shims/jquery.js'),
+var $ = require('jquery'),
     Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),
     Ctx = require('../common/context.js'),
     Types = require('../utils/types.js');
 
 /**
- * @class FileModel
+ * @class DocumentModel
  * Represents a file or document (a remote url or a blob)
  */
 var DocumentModel = Base.Model.extend({
-  constructor: function DocumentModel() {
-    Base.Model.apply(this, arguments);
+  constructor: function DocumentModel(){
+    Base.Model.apply(this, arguments)
   },
-
 
   /**
    * @type {String}
@@ -25,19 +24,52 @@ var DocumentModel = Base.Model.extend({
    * Defaults
    * @type {Object}
    */
-   
   defaults: {
     '@type': Types.DOCUMENT,
-    uri: undefined
+    uri: undefined,
+    external_url: undefined
   },
 
-  validate: function(attrs, options) {
+  validate: function(attrs, options){
     /**
      * check typeof variable
      * */
-     
+  },
+
+  isFileType: function(){
+    return this.get('@type') === Types.FILE;
+  },
+
+  triggerDoNotDelete: function(){
+    this.trigger('doNotDelete');
   }
 });
+
+
+var FileModel = DocumentModel.extend({
+  constructor: function FileDocumentModel() {
+    DocumentModel.apply(this, arguments);
+  },
+
+  defaults: _.extend({}, DocumentModel.prototype.defaults, {
+    '@type': Types.FILE,
+    fileAttribute: 'file' //A Backbone-model-file-upload attribute
+  }),
+
+  save: function(attrs, options){
+    //This model takes a fileAttribute of raw_data, which the backend
+    //will consume using a Multipart form header. In order to make the
+    //push a multi-part form header, must pass the option formData.
+    if (!options) {
+      options = {};
+    }
+    if (!options.formData) {
+      options.formData = true;
+    }
+    return DocumentModel.prototype.save.call(this, attrs, options);
+  }
+});
+
 
 /**
  * @class PartnerOrganizationCollection
@@ -46,19 +78,13 @@ var DocumentCollection = Base.Collection.extend({
   constructor: function DocumentCollection() {
     Base.Collection.apply(this, arguments);
   },
-  /**
-   * @type {String}
-   */
-//  url: Ctx.getApiV2DiscussionUrl('partner_organizations'),
 
-  /**
-   * The model
-   * @type {PartnerOrganizationModel}
-   */
   model: DocumentModel
+
 });
 
 module.exports = {
-  Model: DocumentModel,
+  DocumentModel: DocumentModel,
+  FileModel: FileModel,
   Collection: DocumentCollection
 };

@@ -118,11 +118,12 @@ def test_app_no_perm(request, base_registry, db_tables):
     return app
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_webrequest(request, test_app_no_perm):
     req = PyramidWebTestRequest.blank('/', method="GET")
 
     def fin():
+        print "finalizer test_webrequest"
         # The request was not called
         manager.pop()
     request.addfinalizer(fin)
@@ -576,6 +577,24 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
     def fin():
         print "finalizer subidea_1_1"
         test_session.delete(l_1_11)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return i
+
+
+@pytest.fixture(scope="function")
+def subidea_1_2(request, discussion, subidea_1, test_session):
+    from assembl.models import Idea, IdeaLink
+    i = Idea(short_title="idea 1.2", discussion=discussion)
+    test_session.add(i)
+    l_1_12 = IdeaLink(source=subidea_1, target=i)
+    test_session.add(l_1_12)
+    test_session.flush()
+
+    def fin():
+        print "finalizer subidea_1_2"
+        test_session.delete(l_1_12)
         test_session.delete(i)
         test_session.flush()
     request.addfinalizer(fin)

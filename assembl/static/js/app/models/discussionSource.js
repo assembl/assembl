@@ -2,7 +2,7 @@
 
 var Base = require('./base.js'),
     Ctx = require('../common/context.js'),
-    $ = require('../shims/jquery.js');
+    $ = require('jquery');
 
 var sourceModel = Base.Model.extend({
   constructor: function sourceModel() {

@@ -162,7 +162,8 @@ def process_args(args, cls):
             key = next(reln.local_columns.__iter__()).key
             yield (key, reln.mapper.class_.get_database_id(value))
             continue
-        if isinstance(getattr(cls, key, None), property):
+        attribute = getattr(cls, key, None)
+        if isinstance(attribute, property) and attribute.fset is not None:
             yield (key, value)
             continue
 

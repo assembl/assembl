@@ -32,7 +32,7 @@ class TimelineEvent(DiscussionBoundBase):
         'discussion.id',
         ondelete='CASCADE',
         onupdate='CASCADE'
-    ), nullable=False)
+    ), nullable=False, index=True)
 
     type = Column(String(60), nullable=False)
 

@@ -112,7 +112,7 @@ def test_get_ideas_single(discussion, test_app, test_session, subidea_1):
     assert res_data['@id'] == subidea_1.uri(), "Idea API returned %s but we expected %s" % (res_data['@id'], subidea_1.uri())
 
 
-def test_get_ideas(discussion, test_app, test_session):
+def test_get_ideas(discussion, test_app, test_session, test_webrequest):
     url = get_url(discussion, 'ideas')
     res = test_app.get(url)
     assert res.status_code == 200

@@ -2,8 +2,8 @@
 
 var Marionette = require('../shims/marionette.js'),
     Assembl = require('../app.js'),
-    _ = require('../shims/underscore.js'),
-    $ = require('../shims/jquery.js'),
+    _ = require('underscore'),
+    $ = require('jquery'),
     Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js'),
     i18n = require('../utils/i18n.js'),
