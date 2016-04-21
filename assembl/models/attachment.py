@@ -5,6 +5,7 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     String,
+    Unicode,
     ForeignKey,
     Binary,
     LargeBinary,
@@ -67,7 +68,7 @@ class Document(DiscussionBoundBase):
     oembed_type = Column(String(1024), server_default="")
     mime_type = Column(String(1024), server_default="")
     # From metadata, not the user
-    title = Column(String(1024), server_default="",
+    title = Column(CoerceUnicode(1024), server_default="",
                    info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
     # From metadata, not the user
