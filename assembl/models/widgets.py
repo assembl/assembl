@@ -47,7 +47,7 @@ class Widget(DiscussionBoundBase):
     discussion_id = Column(
         Integer,
         ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False
+        nullable=False, index=True
     )
     discussion = relationship(
         Discussion, backref=backref("widgets", cascade="all, delete-orphan"),
@@ -963,7 +963,7 @@ class WidgetUserConfig(DiscussionBoundBase):
         Integer,
         ForeignKey('widget.id',
                    ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False)
+        nullable=False, index=True)
     widget = relationship(Widget, backref=backref(
         "user_configs", cascade="all, delete-orphan"))
 
@@ -971,7 +971,7 @@ class WidgetUserConfig(DiscussionBoundBase):
         Integer,
         ForeignKey('user.id',
                    ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False)
+        nullable=False, index=True)
     user = relationship(User)
 
     state = Column('settings', Text)  # JSON blob

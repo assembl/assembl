@@ -55,7 +55,7 @@ class ContentSource(DiscussionBoundBase):
         'discussion.id',
         ondelete='CASCADE',
         onupdate='CASCADE'
-    ), nullable=False)
+    ), nullable=False, index=True)
     connection_error = Column(SmallInteger)
     error_description = Column(String)
     error_backoff_until = Column(DateTime)
@@ -227,7 +227,7 @@ class ContentSourceIDs(Base):
     source_id = Column(
         Integer, ForeignKey(
             'content_source.id', onupdate='CASCADE', ondelete='CASCADE'),
-        nullable=False)
+        nullable=False, index=True)
     source = relationship('ContentSource', backref=backref(
                           'pushed_messages',
                           cascade='all, delete-orphan'))
@@ -235,11 +235,11 @@ class ContentSourceIDs(Base):
     post_id = Column(
         Integer, ForeignKey(
             'content.id', onupdate='CASCADE', ondelete='CASCADE'),
-        nullable=False)
+        nullable=False, index=True)
     post = relationship('Content',
                         backref=backref('post_sink_associations',
                                         cascade='all, delete-orphan'))
-    message_id_in_source = Column(String(256), nullable=False)
+    message_id_in_source = Column(String(256), nullable=False, index=True)
 
 
 class Content(DiscussionBoundBase):
@@ -264,7 +264,7 @@ class Content(DiscussionBoundBase):
         ondelete='CASCADE',
         onupdate='CASCADE',
     ),
-        nullable=False,)
+        nullable=False, index=True)
 
     discussion = relationship(
         "Discussion",
@@ -274,8 +274,8 @@ class Content(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
     )
 
-    subject_id = Column(Integer, ForeignKey(LangString.id))
-    body_id = Column(Integer, ForeignKey(LangString.id))
+    subject_id = Column(Integer, ForeignKey(LangString.id), index=True)
+    body_id = Column(Integer, ForeignKey(LangString.id), index=True)
     subject = relationship(
         LangString,
         primaryjoin=subject_id == LangString.id,

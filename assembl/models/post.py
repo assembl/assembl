@@ -107,7 +107,7 @@ class Post(Content):
     parent_id = Column(Integer, ForeignKey(
         'post.id',
         ondelete='CASCADE',
-        onupdate='SET NULL'))
+        onupdate='SET NULL'), index=True)
     children = relationship(
         "Post",
         foreign_keys=[parent_id],
@@ -153,7 +153,8 @@ class Post(Content):
                 conditions=(cls.parent_id != None,)),
         ]
 
-    creator_id = Column(Integer, ForeignKey('agent_profile.id'), nullable=False,
+    creator_id = Column(
+        Integer, ForeignKey('agent_profile.id'), nullable=False, index=True,
         info={'rdf': QuadMapPatternS(
             None, SIOC.has_creator, AgentProfile.agent_as_account_iri.apply(None))})
     creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created")
@@ -525,7 +526,7 @@ class SynthesisPost(AssemblPost):
     publishes_synthesis_id = Column(
         Integer,
         ForeignKey('synthesis.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False
+        nullable=False, index=True
     )
 
     publishes_synthesis = relationship('Synthesis',
@@ -571,7 +572,7 @@ class WidgetPost(AssemblPost):
         "widget.id",
         ondelete='SET NULL',
         onupdate='CASCADE'
-        ), nullable=True,
+        ), nullable=True, index=True,
         info={"pseudo_nullable": False})
 
     widget = relationship("Widget", backref="posts")

@@ -55,7 +55,7 @@ class Document(DiscussionBoundBase):
         ondelete='CASCADE',
         onupdate='CASCADE',
         ),
-        nullable=False,)
+        nullable=False, index=True)
 
     discussion = relationship(
         "Discussion",
@@ -188,7 +188,7 @@ class Attachment(DiscussionBoundBase):
         ondelete='CASCADE',
         onupdate='CASCADE',
         ),
-        nullable=False,)
+        nullable=False, index=True)
 
     discussion = relationship(
         "Discussion",

@@ -43,12 +43,12 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     }
 
     widget_id = Column(Integer, ForeignKey(
-        "widget.id"), nullable=False)
+        "widget.id"), nullable=False, index=True)
     "Used by a voting widget"
 
     criterion_idea_id = Column(Integer, ForeignKey(
         Idea.id),  # ondelete="SET NULL", onupdate="CASCADE"), WIP
-        nullable=True)
+        nullable=True, index=True)
     "Optional: the specification may be tied to an idea"
 
     question_id = Column(Integer, nullable=True)
@@ -289,13 +289,16 @@ class TokenCategorySpecification(DiscussionBoundBase):
     id = Column(Integer, primary_key=True)
     total_number = Column(Integer, nullable=False)
     maximum_per_idea = Column(Integer)
-    name_ls_id = Column(Integer, ForeignKey(LangString.id), nullable=False)
+    name_ls_id = Column(Integer, ForeignKey(LangString.id),
+        nullable=False, index=True)
     typename = Column(String, nullable=False,
       doc='categories which have the same typename will be comparable (example: "positive")')
     image = Column(URLString)
 
-    token_vote_specification_id = Column(Integer, ForeignKey(TokenVoteSpecification.id, ondelete='CASCADE',
-        onupdate='CASCADE'), nullable=False)
+    token_vote_specification_id = Column(
+        Integer, ForeignKey(
+            TokenVoteSpecification.id, ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False, index=True)
     token_vote_specification = relationship(
         TokenVoteSpecification, foreign_keys=(token_vote_specification_id,),
         backref=backref("token_categories", cascade="all, delete-orphan"))
@@ -600,7 +603,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
     idea_id = Column(
         Integer,
         ForeignKey(Idea.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False,
+        nullable=False, index=True,
         info={'rdf': QuadMapPatternS(None, VOTE.subject_node)}
     )
     idea_ts = relationship(
@@ -617,8 +620,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         Integer,
         ForeignKey(AbstractVoteSpecification.id,
                    ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False
-    )
+        nullable=False, index=True)
     vote_spec_ts = relationship(
         AbstractVoteSpecification,
         backref=backref("votes_ts", cascade="all, delete-orphan"))
@@ -631,7 +633,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
     criterion_id = Column(
         Integer,
         ForeignKey(Idea.id),  # ondelete="SET NULL", onupdate="CASCADE"), WIP
-        nullable=True
+        nullable=True, index=True
     )
 
     @classmethod
@@ -661,7 +663,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
     voter_id = Column(
         Integer,
         ForeignKey(User.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False,
+        nullable=False, index=True,
         info={'rdf': QuadMapPatternS(None, VOTE.voter)}
     )
     voter_ts = relationship(
@@ -685,7 +687,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         Integer,
         ForeignKey("widget.id",
                    ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False)
+        nullable=False, index=True)
     widget = relationship(
         "VotingWidget",
         primaryjoin="and_(VotingWidget.id==AbstractIdeaVote.widget_id, "
@@ -873,8 +875,10 @@ class TokenIdeaVote(AbstractIdeaVote):
     vote_value = Column(
         Integer, nullable=False)
 
-    token_category_id = Column(Integer, ForeignKey(TokenCategorySpecification.id, ondelete='CASCADE',
-        onupdate='CASCADE'))
+    token_category_id = Column(
+        Integer, ForeignKey(TokenCategorySpecification.id,
+                            ondelete='CASCADE', onupdate='CASCADE'),
+        index=True)
     token_category = relationship(
         TokenCategorySpecification, foreign_keys=(token_category_id,),
         backref=backref("votes", cascade="all, delete-orphan"))

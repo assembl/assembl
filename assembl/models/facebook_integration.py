@@ -1125,7 +1125,8 @@ class FacebookAccessToken(Base):
 
     id = Column(Integer, primary_key=True)
     fb_account_id = Column(Integer, ForeignKey(SocialAuthAccount.id,
-                           onupdate='CASCADE', ondelete='CASCADE'))
+                           onupdate='CASCADE', ondelete='CASCADE'),
+                           index=True)
 
     fb_account = relationship(SocialAuthAccount,
                               backref=backref('access_tokens',
