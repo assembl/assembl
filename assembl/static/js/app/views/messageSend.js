@@ -400,8 +400,10 @@ var messageSendView = Marionette.LayoutView.extend({
           }
 
           setTimeout(function() {
-            btn.text(btn_original_text);
-            that.ui.cancelButton.trigger('click');
+            if (!that.isDestroyed) {
+                btn.text(btn_original_text);
+                that.ui.cancelButton.trigger('click');
+            }
           }, 5000);
 
         });
