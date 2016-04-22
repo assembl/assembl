@@ -25,13 +25,13 @@ def mime_type(request):
             r'^https?://[\w\.]+(?:\:\d+)?/data/.*/documents/(\d+)/data(?:\?.*)?$',
             url)
         if r:
-            document_id = r.groups(0)
+            document_id = r.groups(0)[0]
             from sqlalchemy.sql.functions import func
             mimetype, create_date, size = File.default_db.query(
                 File.mime_type, File.creation_date, func.length(File.data)
                 ).filter_by(id=int(document_id)).first()
             return Response(
-                body=None, content_type=str(mime_type),
+                body=None, content_type=str(mimetype),
                 content_length=size, last_modified=create_date)
     try:
         result = requests.head(url, timeout=15)
