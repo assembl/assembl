@@ -25,7 +25,6 @@ def mime_type(request):
             r'^https?://[\w\.]+(?:\:\d+)?/data/.*/documents/(\d+)/data(?:\?.*)?$',
             url)
         if r:
-            print "FOUND*****"
             document_id = r.groups(0)
             from sqlalchemy.sql.functions import func
             mimetype, create_date, size = File.default_db.query(
@@ -35,7 +34,7 @@ def mime_type(request):
                 body=None, content_type=str(mime_type),
                 content_length=size, last_modified=create_date)
     try:
-        result = requests.head(url)
+        result = requests.head(url, timeout=15)
     except requests.ConnectionError:
         return Response(
             status=503,
