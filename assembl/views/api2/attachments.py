@@ -11,7 +11,7 @@ from . import MULTIPART_HEADER
 
 
 @view_config(context=InstanceContext, request_method='GET',
-             permission=P_READ, ctx_instance_class=Document,
+             permission=P_READ, ctx_instance_class=File,
              name='data')
 def get_file(request):
     ctx = request.context
