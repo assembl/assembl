@@ -18,6 +18,9 @@ def mime_type(request):
         raise HTTPBadRequest("Wrong scheme")
     if parsed.netloc.split(":")[0] == config.get('public_hostname'):
         # is it one of our own documents?
+        # If so, detect it and shortcut to avoid the pyramid handler calling
+        # another pyramid handler, as this exhausts pyramid threads rapidly
+        # and can deadlock the whole application
         r = re.match(
             r'^https?://[\w\.]+(?:\:\d+)?/data/.*/documents/(\d+)/data(?:\?.*)?$',
             url)
