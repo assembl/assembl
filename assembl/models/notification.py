@@ -1017,14 +1017,21 @@ class NotificationOnPostCreated(NotificationOnPost):
     def render_to_email_html_part(self):
         from ..lib.frontend_urls import FrontendUrls, URL_DISCRIMINANTS, SOURCE_DISCRIMINANTS
         from premailer import Premailer
+        from ..views import get_theme_info, get_theme_base_path
+        discussion = self.first_matching_subscription.discussion
+        (theme_name, theme_relative_path) = get_theme_info(discussion)
+        assembl_css_path = os.path.normpath(os.path.join(get_theme_base_path(), theme_relative_path, 'assembl_notifications.css'))
+        assembl_css = open(assembl_css_path)
+        assert assembl_css
         ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
         ink_css = open(ink_css_path)
         assert ink_css
         jinja_env = self.get_jinja_env()
         template_data={'subscription': self.first_matching_subscription,
                        'notification': self,
-                       'frontendUrls': FrontendUrls(self.first_matching_subscription.discussion),
+                       'frontendUrls': FrontendUrls(discussion),
                        'ink_css': ink_css.read(),
+                       'assembl_notification_css': assembl_css.read().decode('utf_8'),
                        'discriminants': {
                                             'url': URL_DISCRIMINANTS,
                                             'source': SOURCE_DISCRIMINANTS
@@ -1037,4 +1044,4 @@ class NotificationOnPostCreated(NotificationOnPost):
         else:
             template = jinja_env.get_template('notifications/html_mail_post.jinja2')
         html = template.render(**template_data)
-        return Premailer(html).transform()
+        return Premailer(html, disable_leftover_css=True).transform()

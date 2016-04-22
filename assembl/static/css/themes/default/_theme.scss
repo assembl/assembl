@@ -114,6 +114,3 @@ $theme_synthesis_header_bg: $th_local_purple3;
    Maybe we don't need this at all, and could    use variables only */
 //TODO
 
-/* Import main assembl sass.  This must be after variable definitions, but
-   before any custom CSS overrides .*/
-@import "../../assembl_base_styles.scss";

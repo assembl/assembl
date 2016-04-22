@@ -43,6 +43,10 @@ def backbone_include(config):
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
 
+def get_theme_base_path():
+    theme_base_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                              'static', 'css', 'themes')
+    return theme_base_path
 
 def find_theme(theme_name):
     """
@@ -50,12 +54,11 @@ def find_theme(theme_name):
     @returns the theme path fragment relative to the theme base_path, or 
     None if not found
     """
-    theme_base_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                              'static', 'css', 'themes')
+    theme_base_path = get_theme_base_path()
 
     walk_results = os.walk(theme_base_path)
     for (dirpath, dirnames, filenames) in walk_results:
-        if 'theme.scss' in filenames:
+        if '_theme.scss' in filenames:
             #print repr(dirpath), repr(dirnames) , repr(filenames)
             relpath = os.path.relpath(dirpath, theme_base_path)
             (head, name) = os.path.split(dirpath)
@@ -65,7 +68,7 @@ def find_theme(theme_name):
 
     return None
 
-def get_theme(discussion):
+def get_theme_info(discussion):
     """
     @return (theme_name, theme_relative_path) the relative path is relative to the theme_base_path.  See find_theme.
     """
@@ -193,7 +196,7 @@ def get_default_context(request):
             'script': web_analytics_piwik_script
         }
 
-    (theme_name, theme_relative_path)=get_theme(discussion)
+    (theme_name, theme_relative_path)=get_theme_info(discussion)
     return dict(
         default_context,
         request=request,

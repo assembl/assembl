@@ -8,6 +8,7 @@ subscription
 notification
 frontendUrls
 ink_css
+assembl_css
 #}
 
 {% set discussionUrl = frontendUrls.get_discussion_url() %}
@@ -19,91 +20,11 @@ ink_css
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width"/>
-
     <style type="text/css">
       {{ ink_css }}
     </style>
     <style type="text/css">
-
-      /* Your custom styles go here */
-
-      table.assembl-primary-button td {
-        background: #9013FE !important;
-        border: none;
-      }
-
-      table.assembl-primary-button:hover td {
-        background: #8011e2 !important;
-        border: none;
-      }
-
-      /* fix for display bug in firefox: a table following another table shows on its right instead of below */
-      
-      table {
-        clear: both;
-      }
-
-
-      /* Synthesis-specific CSS */
-
-
-      #title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        margin-top: 10px;
-      }
-
-      #introduction, #conclusion {
-        background-color: #4ac780; /* this is $theme_synthesis_header_bg in _synthesis.scss */
-        padding: 10px;
-      }
-
-      #introduction p, #conclusion p {
-        color: white; /* this is $white in _synthesis.scss */
-      }
-    
-      #synthesis ul {
-        padding-left: 14px;
-        margin-top: 5px;
-      }
-
-      #synthesis ul li {
-        padding-left: 5px;
-        padding-top: 10px;
-      }
-
-      #synthesis ul li {
-        list-style-type: disc;
-      }
-
-      #synthesis ul li > div > p { /* in order to limit the vertical distance between an idea and its link */
-        margin-bottom: 3px;
-      }
-
-      #synthesis ul li ul {
-        padding-left: 25px;
-      }
-
-      #synthesis ul li ul li {
-        list-style-type: circle;
-      }
-
-      #synthesis ul li ul li ul li {
-        list-style-type: square;
-      }
-
-      #synthesis ul li ul li ul li ul li {
-        list-style-type: circle;
-      }
-
-
-      #synthesis .link-to-idea {
-        color: #999;
-        text-decoration: none;
-      }
-
-
+      {{ assembl_notification_css }}
     </style>
   </head>
   <body>
