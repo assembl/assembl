@@ -850,6 +850,7 @@ def jack_layton_linked_discussion(
         IdeaContentPositiveLink(idea=subidea_1_1, content=posts[6], creator=admin_user),
         IdeaContentPositiveLink(idea=subidea_1_1_1, content=posts[18], creator=admin_user),
         IdeaContentPositiveLink(idea=subidea_1_1_1_1, content=posts[8], creator=admin_user),
+        IdeaContentNegativeLink(idea=subidea_1_1_1_1, content=posts[16], creator=admin_user),
         IdeaContentPositiveLink(idea=subidea_1_1_1_1_1, content=posts[18], creator=admin_user),
         IdeaContentPositiveLink(idea=subidea_1_1_1_1_1, content=posts[15], creator=admin_user),
         IdeaContentNegativeLink(idea=subidea_1_1_1_1_1, content=posts[16], creator=admin_user),

@@ -120,20 +120,36 @@ class PostPathLocalCollection(object):
             self.paths.extend(other.paths)
 
     def reduce(self):
+        """Reduce overlapping paths.
+        For example, <1,+>,<1,2,+> becomes <1,+>
+        But <1,+>,<1,2,->,<1,2,3,+> remains as-is
+        And <1,+>,<1,2,->,<1,3,4,+> becomes <1,+>,<1,2,->"""
         if not len(self.paths):
             return
         self.paths.sort()
+        last_path = None
         paths = []
-        last_path = self.paths[0]
-        for path in self.paths[1:]:
-            combined = last_path.combine(path)
-            if combined:
-                # print "combined:", last_path, path
-                last_path = combined
-            else:
-                paths.append(last_path)
+        last_path_polarity = {True: None, False: None}
+        for path in self.paths:
+            # Special case: Combine in place
+            if last_path is not None and last_path.combine(path) is path:
+                paths[-1] = path
                 last_path = path
-        paths.append(last_path)
+                continue
+            # Forget if it combines with a previous path of same polarity
+            # BUT do not combine with distant previous path of same polarity
+            # if closest previous path is super-path.
+            last_path_same_pol = last_path_polarity[path.positive]
+            if last_path_same_pol is not None and not (
+                    last_path is not last_path_same_pol and
+                    path.post_path.startswith(last_path.post_path)):
+                combined = last_path_same_pol.combine(path)
+                assert combined is not path, "We should not combine forward"
+                if combined is not None:
+                    continue
+            paths.append(path)
+            last_path = path
+            last_path_polarity[path.positive] = path
         self.paths = paths
         self.reduced = True
 
