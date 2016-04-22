@@ -268,7 +268,9 @@ class PostPathLocalCollection(object):
 
 
 class PostPathGlobalCollection(object):
-    "Collects PostPathLocalCollections for each idea in the discussion"
+    """Collects PostPathLocalCollections for each idea in the discussion
+    Maintains paths, a dictionary of PostPathLocalCollections by idea_id
+    """
     positives = IdeaContentPositiveLink.polymorphic_identities()
     negatives = IdeaContentNegativeLink.polymorphic_identities()
 
@@ -311,8 +313,8 @@ class PostPathGlobalCollection(object):
 class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
     """A traversal that will combine the PostPathLocalCollections
     of an idea with those of the idea's ancestors.
-    The result is that each PostPathLocalCollections's as_clause()
-    is globally complete"""
+    The result is that the as_clause of each PostPathLocalCollections
+    in self.paths is globally complete"""
     def __init__(self, discussion):
         super(PostPathCombiner, self).__init__(discussion)
 
@@ -437,6 +439,7 @@ class PostPathCounter(PostPathCombiner):
 
 
 class DiscussionGlobalData(object):
+    "Cache for global discussion data, lasts as long as the pyramid request object."
     def __init__(self, db, discussion_id, user_id=None, discussion=None):
         self.discussion_id = discussion_id
         self.db = db
