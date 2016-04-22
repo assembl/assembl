@@ -7,7 +7,7 @@ from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import File, Document, Discussion
 from assembl.auth.util import get_permissions
 from assembl.views.traversal import InstanceContext, CollectionContext
-from . import MULTIPART_HEADER
+from . import MULTIPART_HEADER, update_from_form
 
 
 @view_config(context=InstanceContext, request_method='GET',
@@ -60,3 +60,31 @@ def upload_file(request):
 
     view = 'default'
     return blob.generic_json(view, user_id, permissions)
+
+
+@view_config(context=InstanceContext, request_method=('PUT', 'PATCH'),
+             header=MULTIPART_HEADER, permission=P_ADD_POST,
+             ctx_instance_class=Document, renderer='json')
+def update_upload_file(request):
+    ctx = request.context
+    instance = ctx._instance
+    user_id = authenticated_userid(request) or Everyone
+    try:
+        form_data = request.POST
+        # form_data['title'] = form_data['name']
+        # with request.POST['file'].file as f:
+        #     data = f.read()
+        # form_data['data'] = data
+
+        # discussion = discussionssion.get(discussion_id)
+        # form_data['discussion'] = discussion
+
+        new_form = {
+            'title': form_data['name']
+        }
+        # On a PUT operation, remove all of the keys from the form_data, except for
+        # title (the name of the file. That's the only thing that the user can change
+        # in the future)
+        update_from_form(instance, new_form)
+    except:
+        raise HTTPServerError
