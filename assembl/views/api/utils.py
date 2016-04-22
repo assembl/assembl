@@ -29,7 +29,7 @@ def mime_type(request):
             from sqlalchemy.sql.functions import func
             mimetype, create_date, size = File.default_db.query(
                 File.mime_type, File.creation_date, func.length(File.data)
-                ).filter_by(id=document_id).first()
+                ).filter_by(id=int(document_id)).first()
             return Response(
                 body=None, content_type=str(mime_type),
                 content_length=size, last_modified=create_date)
