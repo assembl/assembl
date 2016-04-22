@@ -622,33 +622,15 @@ def subidea_1_1_1_1(request, discussion, subidea_1_1_1, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_1(request, discussion, subidea_1_1_1_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Austerity yields contraction", discussion=discussion)
+    i = Idea(short_title="Job loss", discussion=discussion)
     test_session.add(i)
     l_1111_11111 = IdeaLink(source=subidea_1_1_1_1, target=i)
     test_session.add(l_1111_11111)
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1_1"
-        test_session.delete(l_1111_11111)
-        test_session.delete(i)
-        test_session.flush()
-    request.addfinalizer(fin)
-    return i
-
-
-@pytest.fixture(scope="function")
-def subidea_1_1_1_1_1(request, discussion, subidea_1_1_1_1_1, test_session):
-    from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Job loss", discussion=discussion)
-    test_session.add(i)
-    l_11111_111111 = IdeaLink(source=subidea_1_1_1_1_1, target=i)
-    test_session.add(l_11111_111111)
-    test_session.flush()
-
-    def fin():
         print "finalizer subidea_1_1_1_1_1_1"
-        test_session.delete(l_11111_111111)
+        test_session.delete(l_1111_11111)
         test_session.delete(i)
         test_session.flush()
     request.addfinalizer(fin)
@@ -665,7 +647,7 @@ def subidea_1_1_1_1_2(request, discussion, subidea_1_1_1_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1_1"
+        print "finalizer subidea_1_1_1_1_2"
         test_session.delete(l_1111_11112)
         test_session.delete(i)
         test_session.flush()
@@ -683,7 +665,7 @@ def subidea_1_1_1_1_2_1(request, discussion, subidea_1_1_1_1_2, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1_1"
+        print "finalizer subidea_1_1_1_1_2_1"
         test_session.delete(l_11112_111121)
         test_session.delete(i)
         test_session.flush()
@@ -701,7 +683,7 @@ def subidea_1_1_1_1_2_2(request, discussion, subidea_1_1_1_1_2, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1_1"
+        print "finalizer subidea_1_1_1_1_2_2"
         test_session.delete(l_11112_111122)
         test_session.delete(i)
         test_session.flush()
@@ -732,7 +714,7 @@ def subidea_1_2_1(request, discussion, subidea_1_2, test_session):
     from assembl.models import Idea, IdeaLink
     i = Idea(short_title="Bad for the environment", discussion=discussion)
     test_session.add(i)
-    l_12_121 = IdeaLink(source=subidea_1, target=i)
+    l_12_121 = IdeaLink(source=subidea_1_2, target=i)
     test_session.add(l_12_121)
     test_session.flush()
 
@@ -848,6 +830,47 @@ def extract_post_1_to_subidea_1_1(
         test_session.flush()
     request.addfinalizer(fin)
     return e
+
+
+@pytest.fixture(scope="function")
+def jack_layton_linked_discussion(
+        request, test_session, jack_layton_mailbox, subidea_1, subidea_1_1,
+        subidea_1_1_1, subidea_1_1_1_1, subidea_1_1_1_1_1, subidea_1_1_1_1_2,
+        subidea_1_1_1_1_2_1, subidea_1_1_1_1_2_2, subidea_1_2, subidea_1_2_1,
+        admin_user):
+    jack_layton_mailbox.do_import_content(jack_layton_mailbox, True)
+    from assembl.models import (
+        Post, IdeaContentPositiveLink, IdeaContentNegativeLink)
+    posts = test_session.query(Post).order_by(Post.creation_date).all()
+    posts.insert(0, None)  # We are using 1-offset indices below.
+    links = [
+        IdeaContentPositiveLink(idea=subidea_1, content=posts[1], creator=admin_user),
+        IdeaContentNegativeLink(idea=subidea_1, content=posts[5], creator=admin_user),
+        IdeaContentNegativeLink(idea=subidea_1, content=posts[16], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_1, content=posts[6], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_1_1, content=posts[18], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_1_1_1, content=posts[8], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_1_1_1_1, content=posts[18], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_1_1_1_1, content=posts[15], creator=admin_user),
+        IdeaContentNegativeLink(idea=subidea_1_1_1_1_1, content=posts[16], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_1_1_1_2, content=posts[19], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_1_1_1_2_1, content=posts[19], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_1_1_1_2_2, content=posts[20], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_2, content=posts[4], creator=admin_user),
+        IdeaContentNegativeLink(idea=subidea_1_2, content=posts[16], creator=admin_user),
+        IdeaContentPositiveLink(idea=subidea_1_2_1, content=posts[4], creator=admin_user),
+        IdeaContentNegativeLink(idea=subidea_1_2_1, content=posts[16], creator=admin_user),
+    ]
+    for link in links:
+        test_session.add(link)
+    test_session.flush()
+
+    def fin():
+        for link in links:
+            test_session.delete(link)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return links
 
 
 @pytest.fixture(scope="function")
