@@ -238,11 +238,6 @@ var FileEditView = AbstractEditView.extend({
 
   template: "#tmpl-fileUploadEmbed",
 
-
-  events: {
-    'click .js_test_save': 'onTestSave'
-  },
-
   initalize: function(options){
     AbstractEditView.prototype.initalize.call(this, options);
   },
@@ -271,10 +266,6 @@ var FileEditView = AbstractEditView.extend({
     }
   },
 
-  onTestSave: function(){
-    this.model.save();
-  },
-
   /*
     This is poorly done. It overrides the current template. Want to be using
     the template logic here to maintain flexibility and keeping DRY
@@ -282,12 +273,9 @@ var FileEditView = AbstractEditView.extend({
   onRenderOembedFail: function(){
     var string = "<a href="+ this.uri + ">"+ this.model.get('title') + "</a>";
     if (this.percentComplete){
-      string += " (100%)";
-      string += "<div><a href='#' class='js_test_save'>Save the model</a></div>";
-      this.$el.html(string);
+      this.$el.html(string + " (100%)");
     }
-    else {
-      string += "<div><a href='#' class='js_test_save'>Save the model</a></div>"; 
+    else { 
       this.$el.html(string);
     }
   }
