@@ -1,0 +1,82 @@
+
+/* Your custom styles go here */
+
+table.assembl-primary-button td {
+  color: $theme_btn_primary_text_color;
+  background-color: $theme_btn_primary_bg_color;
+  border: none;
+  padding: 5px 10px;
+  font-size: $smallFontSize;
+}
+
+a {
+color: $theme_activelink_color;
+}
+
+/* fix for display bug in firefox: a table following another table shows on its right instead of below */
+
+table {
+  clear: both;
+}
+
+
+/* Synthesis-specific CSS */
+
+
+#title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+#introduction, #conclusion {
+  background-color: $theme_synthesis_header_bg;
+  padding: 10px;
+}
+
+#introduction p, #conclusion p {
+  background-color: $theme_synthesis_header_bg;
+  color: $white; 
+}
+
+#synthesis ul {
+  padding-left: 14px;
+  margin-top: 5px;
+}
+
+#synthesis ul li {
+  padding-left: 5px;
+  padding-top: 10px;
+}
+
+#synthesis ul li {
+  list-style-type: disc;
+}
+
+#synthesis ul li > div > p { /* in order to limit the vertical distance between an idea and its link */
+  margin-bottom: 3px;
+}
+
+#synthesis ul li ul {
+  padding-left: 25px;
+}
+
+#synthesis ul li ul li {
+  list-style-type: circle;
+}
+
+#synthesis ul li ul li ul li {
+  list-style-type: square;
+}
+
+#synthesis ul li ul li ul li ul li {
+  list-style-type: circle;
+}
+
+
+#synthesis .link-to-idea {
+  color: #999;
+  text-decoration: none;
+}
+
