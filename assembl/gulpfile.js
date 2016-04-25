@@ -38,7 +38,7 @@ function bundle(){
     return b.bundle()
       .on('error', gutil.log)
       .on('error', function(cb) {
-        console.log("Compile failed, deleting output");
+        console.log("Bundle compile failed, deleting output");
         clean_app();
       })
       .pipe(source('index.js'))
@@ -47,6 +47,7 @@ function bundle(){
       .pipe(rename('app.js'))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(path.js+'/build/'))
+      .on('error', process.exit.bind(process, 1))
 }
 
 /***
@@ -69,6 +70,7 @@ gulp.task('browserify:prod',['clean:app'] ,function() {
         .pipe(rename('app.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/'))
+        .on('error', process.exit.bind(process, 1))
         .pipe(exit());
 });
 
@@ -117,7 +119,7 @@ gulp.task('build:test', function() {
     });
     return b.bundle()
         .on('error', function() {
-            console.log("Compile failed, deleting output");
+            console.log("Test bundle compile failed, deleting output");
             clean_app();
         })
         .pipe(source('init.js'))
@@ -131,6 +133,7 @@ gulp.task('build:test', function() {
         .pipe(rename('specs.js'))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.js+'/build/tests'))
+        .on('error', process.exit.bind(process, 1))
         .pipe(exit());
 });
 
@@ -163,7 +166,8 @@ gulp.task('sass', ['clean:generated_css'], function() {
         }))
         //.pipe(minifyCss())*/
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(path.css));
+        .pipe(gulp.dest(path.css))
+        .on('error', process.exit.bind(process, 1));
 });
 
 function clean_generated_css (cb) {
