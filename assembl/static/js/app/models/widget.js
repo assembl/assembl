@@ -147,6 +147,10 @@ var WidgetModel = Base.Model.extend({
       default:
         console.error("Widget.getUrlForUser: wrong context");
     }
+  },
+
+  isIndependentModalType: function(){
+    return true;
   }
 });
 
@@ -453,6 +457,10 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
       break;
     }
     return "";
+  },
+
+  isIndependentModalType: function(){
+    return false;
   }
 });
 

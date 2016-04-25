@@ -275,8 +275,42 @@ var routeManager = Marionette.Object.extend({
     Backbone.history.navigate('/', {replace: true});
   },
 
-  // example: http://localhost:6543/jacklayton/widget/local%3AWidget%2F64
-  widgetInModal: function(id) {
+  /*
+    Utilized for Angular based widgets loaded into Assembl
+    in an iframe wrapped in a Backbone.Modal.
+   */
+  openExternalWidget: function(widget){
+    var options = {
+      "target_url": widget.getUrlForUser(),
+      "modal_title": widget.getLinkText(Widget.Model.prototype.INFO_BAR)
+    };
+    Ctx.openTargetInModal(null, null, options);
+  },
+
+  /*
+    Utilized for Marionette based widgets loaded into
+    Assembl by instantiating the view onto the Assembl
+    modal region
+   */
+  openLocalWidget: function(widget, arg){
+    var View;
+    //Add more conditions to the switch statement
+    //in order to cover different conditions
+    switch (widget.get('@type')){
+      default:
+        console.log("the widget model", widget);
+        console.log('the arg', arg);
+        View = require('./views/tokenVoteSession.js');
+        break;
+    };
+    Ctx.setCurrentModalView(View);
+    Assembl.slider.show(new View({widgetModel: widget}));
+  },
+
+  // example: http://localhost:6543/jacklayton/widget/local%3AWidget%2F64/result
+  widgetInModal: function(id, arg) {
+    console.log("WidgetInModal called with args", arguments);
+    var that = this;
     this.restoreViews().then(function(groups) {
       var collectionManager = CollectionManager();
       var widgetPromise = collectionManager.getAllWidgetsPromise()
@@ -287,11 +321,19 @@ var routeManager = Marionette.Object.extend({
             });
         });
       widgetPromise.then(function(widget){
-        var options = {
-          "target_url": widget.getUrlForUser(),
-          "modal_title": widget.getLinkText(Widget.Model.prototype.INFO_BAR)
-        };
-        Ctx.openTargetInModal(null, null, options);
+        /*
+          Check which type of widget it is. If it is an Angular-based widget,
+          open it in target modal.
+
+          If Marionette-based widget, open modal accordingly, and if extra
+          args are passed, pass the parameter accordingly. 
+         */
+        if (widget.isIndependentModalType()){
+          that.openAngularWidget(widget);
+        }
+        else{
+          that.openLocalWidget(widget, arg);
+        }
       });
       Backbone.history.navigate('/', {replace: true});
     });

@@ -638,6 +638,27 @@ var TokenVoteCollectionView = Marionette.CompositeView.extend({
   }
 });
 
+var ModalView = Marionette.LayoutView.extend({
+  constructor: function ModalView(){
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
+  template: false,
+
+  ui: {
+
+  },
+
+  events: {
+
+  },
+
+  regions: {
+
+  }
+});
+
+
 // This view shows the whole vote popin and its contents
 var TokenVoteSessionModal = Backbone.Modal.extend({
   constructor: function TokenVoteSessionModal() {
@@ -765,6 +786,10 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       question_title: "question_title" in question_item ? question_item.question_title : "",
       question_description: "question_description" in question_item ? question_item.question_description : ""
     };
+  },
+
+  onDestroy: function(){
+    Ctx.clearModal();
   }
 });
 
