@@ -1277,6 +1277,9 @@ def update_vendor_themes():
         vendor_themes_path = normpath(join(
                 env.projectpath, "assembl/static/css/themes/vendor"))
         print vendor_themes_path
+        with cd(env.projectpath):
+            #We do not use env.gitbranch, because in env_deb it may not match the real current branch
+            current_assembl_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
         for git_url in urls:
             print green("Updating %s" % git_url)
             matchobj = re.match(r'.*/(.*)\.git', git_url)
@@ -1288,15 +1291,15 @@ def update_vendor_themes():
                     run('git clone %s' % git_url)
 
             with cd(git_dir_path):
-                current_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
-                if current_branch_name != env.gitbranch:
-                    print yellow("Vendor theme branch %s does not match current assembl environment branch %s" % (current_branch_name, env.gitbranch))
-                    if env.gitbranch in ('develop', 'master'):
+                current_vendor_themes_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
+                if current_vendor_themes_branch_name != current_assembl_branch_name:
+                    print yellow("Vendor theme branch %s does not match current assembl branch %s" % (current_vendor_themes_branch_name, current_assembl_branch_name))
+                    if current_assembl_branch_name in ('develop', 'master'):
                         run('git fetch --all')
-                        print yellow("Changing branch to %s" % env.gitbranch)
-                        run('git checkout %s' % env.gitbranch)
+                        print yellow("Changing branch to %s" % current_assembl_branch_name)
+                        run('git checkout %s' % current_assembl_branch_name)
                     else:
-                        print red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (env.gitbranch, current_branch_name))
+                        print red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (current_assembl_branch_name, current_vendor_themes_branch_name))
                 run('git pull --ff-only')
 
 ## Server scenarios
