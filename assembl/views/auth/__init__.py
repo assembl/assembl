@@ -33,7 +33,7 @@ def includeme(config):
     contextual_route('request_password_change', '/req_password_change')
     contextual_route('do_password_change', '/do_password_change/{ticket}')
     contextual_route('finish_password_change', '/finish_password_change')
-    config.add_route('contextual_social_auth', '/{slug}/login/{backend}')
+    config.add_route('contextual_social_auth', '/{discussion_slug}/login/{backend}')
     contextual_route('add_social_account', '/add_account/{backend}')
 
     # determine which providers we want to configure
