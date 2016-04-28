@@ -44,6 +44,20 @@ def test_jack_layton_linked_discussion(
     # for id, loc_coll in test_webrequest.discussion_data._post_path_counter.paths.iteritems():
     #     print id, ":", " ; ".join((as_post_nums(path) for path in loc_coll.paths))
     # counters.paths[subidea_1.id].as_clause_base(test_session)
+
+    # Resulting paths:
+    # subidea_1 : <1+> ; <1,3,5-> ; <1,3,5,6+> ; <1,2,17,18+> ; <1,4+> ; <1,4,8,9,15,16->
+    # subidea_1_1 : <1,3,5,6+> ; <1,2,17,18+> ; <1,4,8+> ; <1,4,8,9,15,16->
+    # subidea_1_1_1 : <1,2,17,18+> ; <1,4,8+> ; <1,4,8,9,15,16->
+    # subidea_1_1_1_1 : <1,2,17,18+> ; <1,4,8+> ; <1,4,8,9,15,16->
+    # subidea_1_1_1_1_1 : <1,2,17,18+> ; <1,4,8,9,15+> ; <1,4,8,9,15,16->
+    # subidea_1_1_1_1_2 : <1,4,8,19+>
+    # subidea_1_1_1_1_2_1 : <1,4,8,19+>
+    # subidea_1_1_1_1_2_2 : <1,4,8,19,20+>
+    # subidea_1_2 : <1,4+> ; <1,4,8,9,15,16->
+    # subidea_1_2_1 : <1,4+> ; <1,4,8,9,15,16->
+
+
     expected = {
         subidea_1.id: {1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20},
         subidea_1_1.id: {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20},
