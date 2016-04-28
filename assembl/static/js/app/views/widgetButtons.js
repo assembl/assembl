@@ -37,7 +37,8 @@ var WidgetButtonView = Marionette.ItemView.extend({
       return Ctx.openTargetInModal(evt, null, options);
     }
     else {
-      this.model.trigger("buttonClick");
+      //Pass the event in case need to stop the default action of evt.
+      this.model.trigger("buttonClick", evt);
     }
     return false;
   },

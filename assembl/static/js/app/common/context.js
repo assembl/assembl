@@ -1628,10 +1628,15 @@ Context.prototype = {
   /*
     Utility method to close the modal view properly
    */
-  clearModal: function(){
+  clearModal: function(options){
+    if (!options){
+      options = {destroyModal: true};
+    }
     if (this.currentModalView){
       //Using a backbone modal
-      this.currentModalView.destroy();
+      if (options.destroyModal){
+        this.currentModalView.destroy();
+      }
       //hard rendered into an element
       this.currentModalView = null; 
     }

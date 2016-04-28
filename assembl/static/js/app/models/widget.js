@@ -409,8 +409,9 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
   },
 
   // FIXME: Having view code in a model is probably not a good idea. How could we do better?
-  onButtonClick: function(context){
+  onButtonClick: function(evt){
     console.log("TokenVotingWidgetModel::onButtonClick()");
+    evt.preventDefault();
 
     var that = this;
     var activityState = that.get("activity_state");
@@ -462,29 +463,6 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
   isIndependentModalType: function(){
     return false;
   }
-});
-
-var TokenCategorySpecificationModel = Base.Model.extend({
-  constructor: function TokenCategorySpecificationModel() {
-    Base.Model.apply(this, arguments);
-  },
-  defaults: {
-    "name": null, // (LangString) the display/translated name of the token category. Example: "Positive"
-    "typename": null, // (string) identifier name of the token category. Categories with the same name can be compared.
-    "total_number": null, // (integer) number of available tokens in the bag, that the voter can allocate on several candidates
-    "token_vote_specification": null, // (string) the id of a token vote spec this category is associated to
-    "image": null, // (string) URL of an image of a token
-    "maximum_per_idea": null, // (integer) maximum number of tokens a voter has the right to put on an idea
-    "@type": "TokenCategorySpecification",
-    "@view": "voting_widget"
-  }
-});
-
-var TokenCategorySpecificationCollection = Base.Collection.extend({
-  constructor: function TokenCategorySpecificationCollection() {
-    Base.Collection.apply(this, arguments);
-  },
-  model: TokenCategorySpecificationModel
 });
 
 var IdeaVoteModel = Base.Model.extend({
@@ -875,8 +853,6 @@ module.exports = {
   localWidgetClassCollection: localWidgetClassCollection,
   globalWidgetClassCollection: globalWidgetClassCollection,
   ActiveWidgetCollection: ActiveWidgetCollection,
-  TokenCategorySpecificationModel: TokenCategorySpecificationModel,
-  TokenCategorySpecificationCollection: TokenCategorySpecificationCollection,
   TokenIdeaVoteModel: TokenIdeaVoteModel,
   TokenIdeaVoteCollection: TokenIdeaVoteCollection
 };

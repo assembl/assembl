@@ -638,7 +638,7 @@ var TokenVoteCollectionView = Marionette.CompositeView.extend({
   }
 });
 
-var ModalView = Marionette.LayoutView.extend({
+var TokenResultView = Marionette.LayoutView.extend({
   constructor: function ModalView(){
     Marionette.LayoutView.apply(this, arguments);
   },
@@ -655,6 +655,34 @@ var ModalView = Marionette.LayoutView.extend({
 
   regions: {
 
+  },
+
+  initialize: function(options){
+    this.widget = options.model;
+    var cm = new CollectionManager(),
+        that = this;
+    cm.getAllIdeasCollectionPromise()
+      .then(function(ideas){
+        that.ideas = ideas;
+        return cm.getUserLanguagePreferencesPromise()
+      .then(function(preferences){
+        that.languagePreferences = preferences;
+        // then get the vote results for each specification. 
+      }) 
+
+      //Take the list of "votable_ideas" from the widget model,
+      //Take the token categories from the vote_specification ?
+      //  The typename of each token category is the column where the vote
+      //  results go to.
+      //  From vote results, the 'sum' is the value that you want to present,
+      //  not the 'num' which is the number of voters. 
+      //
+      //
+      //Each section list of votable ideas is a vote token specification!
+      //
+      //Can use D3 linear scale (http://bl.ocks.org/kiranml1/6872226) to represent
+      //the data.
+    }); 
   }
 });
 
@@ -694,9 +722,10 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       if ( that.tokenVoteSpecification ){
         if ( "token_categories" in that.tokenVoteSpecification && _.isArray(that.tokenVoteSpecification.token_categories) ){
           var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
+          var Votes = require('../models/votes.js');
           console.log("Widget: ", Widget);
           console.log("tokenVoteSpecification.token_categories: ", that.tokenVoteSpecification.token_categories);
-          that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
+          that.tokenCategories = new Votes.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
           console.log("tokenCategories: ", tokenCategories);
         }
       }
@@ -789,7 +818,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   },
 
   onDestroy: function(){
-    Ctx.clearModal();
+    Ctx.clearModal({destroyModal: false});
   }
 });
 

@@ -66,6 +66,11 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     retypeable_as = ("LickertVoteSpecification", "BinaryVoteSpecification",
                      "MultipleChoiceVoteSpecification", "TokenVoteSpecification")
 
+    ##
+    # TODO (MAP):
+    #   These and several functions that return a hard-encoded 'local' should
+    #   be migrated away from hard-encoding. The Widget APIs are supposed to be
+    #   self contained, and they do not hit the SIF defintion in the process.
     def get_voting_urls(self):
         return {
             Idea.uri_generic(votable.id):
