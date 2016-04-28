@@ -74,6 +74,10 @@ class PostPathData(object):
             return self
         return None
 
+    @property
+    def last_id(self):
+        return int(self.post_path.strip(',').split(",")[-1])
+
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
@@ -218,16 +222,19 @@ class PostPathLocalCollection(object):
             while ancestry:
                 if not path.post_path.startswith(ancestry[-1].post_path):
                     ancestry.pop()
+                else:
+                    break
             if path.positive:
-                while len(includes_by_level) < len(ancestry):
+                while len(includes_by_level) <= len(ancestry):
                     includes_by_level.append([])
                 includes_by_level[len(ancestry)].append(path.post_path)
-                direct_includes.append(int(path.post_path.strip(',').split(",")[-1]))
+                direct_includes.append(path.last_id)
             else:
-                while len(excludes_by_level) < len(ancestry):
+                while len(excludes_by_level) <= len(ancestry):
                     excludes_by_level.append([])
                 excludes_by_level[len(ancestry)].append(path.post_path)
-                direct_excludes.append(int(path.post_path.strip(',').split(",")[-1]))
+                direct_excludes.append(path.last_id)
+            ancestry.append(path)
         condition = (post.id.in_(direct_includes))
         max_level = max(len(includes_by_level), len(excludes_by_level))
         while len(includes_by_level) < max_level:
@@ -240,8 +247,6 @@ class PostPathLocalCollection(object):
                 condition = or_(condition, *[
                     post.ancestry.like(path+"%")
                     for path in includes_by_level[level]])
-                if level == 0:
-                    condition = post.id.in_(direct_includes) | condition
             if level == 0:
                 q = q.filter(condition)
             else:
@@ -271,7 +276,7 @@ class PostPathLocalCollection(object):
         q = db.query(content).filter(
                 (content.discussion_id == discussion_id)
                 & (content.hidden == False)
-                ).join(subq, content.id == subq.c['post_id'])
+                ).join(subq, content.id == subq.c.values()[0])
         if user_id:
             # subquery?
             q = q.outerjoin(
