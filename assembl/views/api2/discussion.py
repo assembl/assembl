@@ -280,7 +280,8 @@ def get_time_series_analytics(request):
         intervals_table = Table('temp_table_intervals_' + str(user_id), metadata,
             Column('interval_id', Integer, primary_key=True),
             Column('interval_start', DateTime, nullable=False),
-            Column('interval_end', DateTime, nullable=False)
+            Column('interval_end', DateTime, nullable=False),
+            prefixes=None if discussion.using_virtuoso else ['TEMPORARY']
         )
         try:
             intervals_table.drop()  # In case there is a leftover from a previous crash
