@@ -114,7 +114,8 @@ var DocumentView = AbstractDocumentView.extend({
   onRender: function(){
     console.log("[doingOembed] uri:", this.uri);
     if (!this.uri){
-      console.error("[DocumentView Failed] uri does not exist for model", this.model);
+      console.error("[DocumentView Failed] uri does not exist for model id " + this.model.id +
+                    " and external_url " + this.model.get('external_url'));
     }
     AbstractDocumentView.prototype.onRender.call(this);
   }
@@ -143,7 +144,8 @@ var FileView = AbstractDocumentView.extend({
   onRender: function(){
     console.log("[doingOembed] uri:", this.uri);
     if (!this.uri){
-      console.error("[FileView Failed] uri does not exist for model", this.model);
+      console.error("[FileView Failed] uri does not exist for model id " + this.model.id +
+                    " and external_url " + this.model.get('external_url'));
     }
     AbstractDocumentView.prototype.onRender.call(this);
   },
