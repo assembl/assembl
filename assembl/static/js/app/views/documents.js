@@ -88,7 +88,7 @@ var AbstractDocumentView = Marionette.ItemView.extend({
    * Override to alter the Oembed failure condition
    */
   onRenderOembedFail: function(){
-    this.$el.html("<a href="+ this.uri + ">"+ this.uri + "</a>");
+    this.$el.html("<a href="+ this.uri + " target='_blank'>"+ this.uri + "</a>");
   }
 
 });
@@ -109,6 +109,14 @@ var DocumentView = AbstractDocumentView.extend({
     return {
       url: this.uri
     }
+  },
+
+  onRender: function(){
+    console.log("[doingOembed] uri:", this.uri);
+    if (!this.uri){
+      console.error("[DocumentView Failed] uri does not exist for model", this.model);
+    }
+    AbstractDocumentView.prototype.onRender.call(this);
   }
 });
 
@@ -132,8 +140,16 @@ var FileView = AbstractDocumentView.extend({
     }
   },
 
+  onRender: function(){
+    console.log("[doingOembed] uri:", this.uri);
+    if (!this.uri){
+      console.error("[FileView Failed] uri does not exist for model", this.model);
+    }
+    AbstractDocumentView.prototype.onRender.call(this);
+  },
+
   onRenderOembedFail: function(){
-    this.$el.html("<a href="+ this.uri + ">"+ this.model.get('title') + "</a>");
+    this.$el.html("<a href="+ this.uri + " target='_blank'>"+ this.model.get('title') + "</a>");
   }
 });
 
@@ -271,7 +287,7 @@ var FileEditView = AbstractEditView.extend({
     the template logic here to maintain flexibility and keeping DRY
    */
   onRenderOembedFail: function(){
-    var string = "<a href="+ this.uri + ">"+ this.model.get('title') + "</a>";
+    var string = "<a href="+ this.uri + " target='_blank'>"+ this.model.get('title') + "</a>";
     if (this.percentComplete){
       this.$el.html(string + " (100%)");
     }

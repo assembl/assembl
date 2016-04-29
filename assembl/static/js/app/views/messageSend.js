@@ -592,6 +592,7 @@ var messageSendView = Marionette.LayoutView.extend({
     console.log("A file has been uploaded");
 
     _.each(fs, function(f){
+      //There will be file duplication because the file is already on the DOM if previously added
       var d = new Documents.FileModel({
         name: f.name,
         mime_type: f.type
