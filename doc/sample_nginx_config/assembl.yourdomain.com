@@ -34,6 +34,10 @@ server {
         uwsgi_pass unix:///var/www/assembl/var/run/uwsgi.sock;
     }
 
+# So files uploaded to the database are not artificailly limited by nginx
+client_max_body_size 500M;
+
+# Save some bandwidth
 gzip on;
 gzip_http_version 1.1;
 gzip_vary on;
