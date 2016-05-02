@@ -356,6 +356,10 @@ var messageSendView = Marionette.LayoutView.extend({
                         that.options.send_callback();
                       }
 
+                      //TODO: Ensure that the view is bound to the DOM, otherwise,
+                      //that.ui.messageBody will not return the jQuery object, but the
+                      //selector definiton instead. Therefore, on a new message posted,
+                      //the messageList will not scrollTo the new message.
                       var el = that.ui.messageBody;
                       if (el.length > 0)
                           el[0].text = '';
