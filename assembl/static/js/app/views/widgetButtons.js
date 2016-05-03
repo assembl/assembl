@@ -18,10 +18,12 @@ var WidgetButtonView = Marionette.ItemView.extend({
     this.options = options;
   },
   ui: {
-    button: ".btn"
+    button: ".btn",
   },
   events: {
-    "click @ui.button": "onButtonClick"
+    // "click @ui.button": "onButtonClick",
+    'click .js_widget-vote': "onButtonClick",
+    'click .js_widget-vote-result': "onResultButtonClick"
   },
   onButtonClick: function(evt) {
     console.log("WidgetButtonView::onButtonClick()");
@@ -41,6 +43,10 @@ var WidgetButtonView = Marionette.ItemView.extend({
       this.model.trigger("buttonClick", evt);
     }
     return false;
+  },
+  onResultButtonClick: function(ev){
+    console.log("triggering 'showResult' event on model", this.model);
+    this.model.trigger('showResult', ev);
   },
   serializeData: function() {
     var endDate = this.model.get("end_date");

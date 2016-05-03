@@ -1,6 +1,9 @@
 <p class="txt-gray2"><%= description %></p>
 <div class="tac">
-    <a class="btn btn-sm <%= classes %>" href="<%= link %>" data-href="<%= link %>" data-modal-title="<%= button_text %>" type="submit" style="margin:0.6ex"><%= button_text %></a>
+    <a class="btn btn-sm <%= classes %> js_widget-vote" href="<%= link %>" data-href="<%= link %>" data-modal-title="<%= button_text %>" type="submit" style="margin:0.6ex"><%= button_text %></a>
+
+    <a class="btn btn-sm <%= classes %> js_widget-vote-result" type="submit" style="margin:0.6ex">See Results</a>
+
 <% if (until_text) { %>
 <p class="txt-gray1""><%= until_text %></p>
 <% } %>
