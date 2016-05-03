@@ -300,7 +300,13 @@ var routeManager = Marionette.Object.extend({
       default:
         console.log("the widget model", widget);
         console.log('the arg', arg);
-        View = require('./views/tokenVoteSession.js');
+        var Views = require('./views/tokenVoteSession.js');
+        if ((arg) && (arg === 'result')){
+          View = Views.TokenVoteSessionResultModel
+        }
+        else {
+          View = Views.TokenVoteSessionModal
+        }
         break;
     };
     Ctx.setCurrentModalView(View);
