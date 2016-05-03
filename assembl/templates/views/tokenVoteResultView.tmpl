@@ -1,0 +1,15 @@
+<div class='question-title'><%= questionTitle %></div>
+<div class='question-description'><%= questionDescription %></div>
+<div><!-- Put a gap here--></div>
+<div class='vote-result-container'>
+    <div class='vote-result-header'>
+        <span>Ideas</span>
+        <% _.each(categories, function(category){ %>
+            <span class='js_vote-result-category'><%= category %></span>
+        <% }); %>
+    </div>
+    <div class='vote-result-body'>
+        <div class='js_vote-result-region'></div>
+    </div>
+    
+</div>

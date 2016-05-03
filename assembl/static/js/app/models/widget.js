@@ -8,6 +8,7 @@ var _ = require('underscore'),
     Permissions = require('../utils/permissions.js'),
     Ctx = require("../common/context.js"),
     Assembl = require('../app.js'),
+    Types = require('../utils/types.js'),
     TokenVoteSessionView = require('../views/tokenVoteSession.js');
 
 var WidgetModel = Base.Model.extend({
@@ -381,10 +382,14 @@ var MultiCriterionVotingWidgetModel = VotingWidgetModel.extend({
   }
 });
 
+
+// Token Voting Widget
+
 var TokenVotingWidgetModel = VotingWidgetModel.extend({
   constructor: function TokenVotingWidgetModel() {
     VotingWidgetModel.apply(this, arguments);
     this.on("buttonClick", this.onButtonClick);
+    this.on('showResult', this.onShowResult);
   },
 
   defaults: {
@@ -419,7 +424,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
 
     switch ( activityState ){
       case "active":
-        var modalView = new TokenVoteSessionView({
+        var modalView = new TokenVoteSessionView.TokenVoteSessionView({
           widgetModel: that
         });
 
@@ -430,9 +435,20 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
         // TODO: show vote results
         console.log("show vote results");
       break;
-    }
+    }    
+  },
 
-    
+  /*
+    For debugging results view purposes
+   */
+  onShowResult: function(evt){
+    console.log('showResult on model was called');
+    var that = this;
+    var modalView = new TokenVoteSessionView.TokenVoteSessionResultModel({
+      widgetModel: this
+    });
+    Ctx.setCurrentModalView(modalView);
+    Assembl.slider.show(modalView);
   },
 
   getCssClasses: function(context, idea) {
@@ -462,6 +478,159 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
 
   isIndependentModalType: function(){
     return false;
+  },
+
+  /**
+   * @returns {Model|null} Returns a new VoteSpec Model (if present) or null
+   */
+  getVoteSpecificationModel: function(){
+    var specs = this.get('vote_specifications');
+    if (specs && specs.length > 0) {
+
+      //Assumes only one tokenVoteSpecification exists in this widget.
+      var tokenSpec = _.findWhere(specs, {'@type': Types.TOKENVOTESPECIFICATION});
+      if (tokenSpec){
+        return new TokenSpecificationModel(tokenSpec, {parse: true}) 
+      }
+      else return null;
+    }
+    else return null;
+  }
+});
+
+
+var TokenSpecificationModel = Base.Model.extend({
+  constructor: function TokenSpecificationModel(){
+    Base.Model.apply(this, arguments);
+  },
+
+  defaults: {
+    "@type": Types.TOKENVOTESPECIFICATION,
+    'token_categories': [],
+    'exclusive_categories': null,
+    'settings': null,
+    'results_url': null
+  },
+
+  getVoteResultUrl: function(){
+    var url = this.get('results_url');
+    if (url){
+      // var trim = /(?:^\w+:Discussion\/\d+)(.+)/.exec(url)[1];
+      return Ctx.getUrlFromUri(url);
+    }
+  },
+
+  parse: function(raw, options){
+    if (_.has(raw, 'token_categories') && _.isArray(raw['token_categories'])){
+      raw.token_categories = new TokenCategorySpecificationCollection(raw.token_categories);
+    }
+    return raw;
+  }
+});
+
+var TokenCategorySpecificationModel = Base.Model.extend({
+  constructor: function TokenCategorySpecificationModel() {
+    Base.Model.apply(this, arguments);
+  },
+  defaults: {
+    "name": null, // (LangString) the display/translated name of the token category. Example: "Positive"
+    "typename": null, // (string) identifier name of the token category. Categories with the same name can be compared.
+    "total_number": null, // (integer) number of available tokens in the bag, that the voter can allocate on several candidates
+    "token_vote_specification": null, // (string) the id of a token vote spec this category is associated to
+    "image": null, // (string) URL of an image of a token
+    "maximum_per_idea": null, // (integer) maximum number of tokens a voter has the right to put on an idea
+    "@type": "TokenCategorySpecification",
+    "@view": "voting_widget"
+  }
+});
+
+var TokenCategorySpecificationCollection = Base.Collection.extend({
+  constructor: function TokenCategorySpecificationCollection() {
+    Base.Collection.apply(this, arguments);
+  },
+  model: TokenCategorySpecificationModel,
+  
+  /*
+    The URL is rarely used to get this collection. It's taken from the Token Specification Model
+   */
+  url: function(){
+    return Ctx.getApiV2DiscussionUrl('widgets/' + this.widgetModel.id + '/vote_specifications');
+  },
+
+  initialize: function(options){
+    this.widgetModel = options.ideaModel;
+  }
+});
+
+
+var VoteResultModel = Base.Model.extend({
+  constructor: function VoteResultModel(){
+    Base.Model.apply(this, arguments);
+  },
+
+  defaults: {
+    'nums': null,
+    'sums': null,
+    'n': null,
+    'idea_id': null,
+    'objectConnectedTo': null,
+    'objectDescription': null,
+  },
+});
+
+var VoteResultCollection = Base.Collection.extend({
+  model: VoteResultModel,
+
+  url: function(){
+    return this.tokenSpecModel.getVoteResultUrl();
+  },
+
+  initialize: function(options){
+    this.widgetModel = options.widgetModel;
+    this.tokenSpecModel = this.widgetModel.getVoteSpecificationModel();
+  },
+
+  /*
+    The returned data from the API is a key-value dict of idea_id: results,
+    must convert to an Array of objects.
+   */
+  parse: function(rawModel){
+    return _.chain(rawModel)
+            .keys(rawModel)
+            .map(function(idea){
+              var newObj = rawModel[idea];
+              newObj.idea_id = idea;
+              return newObj;
+            })
+            .value();
+  },
+
+  /**
+   * Method that associates the idea Model to the appropriate 
+   * @param  {Object} objectCollection  Ideas Collection
+   * @return {undefined}
+   */
+  associateIdeaModelToObject: function(objectCollection){
+    this.each(function(result){
+      var ideaModel = _.findWhere(objectCollection, {'@id': result.idea_id});
+      result.objectConnectedTo = ideaModel;
+    });
+  },
+
+  /**
+   * Associates the Token Specification Category Collection to each result model
+   * @param  {Object} categoryCollection  Collection of Token Specification Category Collection
+   * @return {undefined}
+   */
+  associateCategoryModelToObject: function(categoryCollection){
+    this.each(function(result){
+      result.objectDescription = categoryCollection;
+    });
+  },
+
+  associateTo: function(ideaCollection, specificationModel){
+    this.associateIdeaModelToObject(ideaCollection);
+    this.associateCategoryModelToObject(specificationModel.get('token_categories'));
   }
 });
 
@@ -508,6 +677,9 @@ var TokenIdeaVoteCollection = Base.Collection.extend({
     };
   }
 });
+
+
+//Creativity Session Widget
 
 var CreativitySessionWidgetModel = WidgetModel.extend({
   constructor: function CreativitySessionWidgetModel() {
@@ -854,5 +1026,8 @@ module.exports = {
   globalWidgetClassCollection: globalWidgetClassCollection,
   ActiveWidgetCollection: ActiveWidgetCollection,
   TokenIdeaVoteModel: TokenIdeaVoteModel,
-  TokenIdeaVoteCollection: TokenIdeaVoteCollection
+  TokenIdeaVoteCollection: TokenIdeaVoteCollection,
+  TokenCategorySpecificationModel: TokenCategorySpecificationModel,
+  TokenCategorySpecificationCollection: TokenCategorySpecificationCollection,
+  VoteResultCollection: VoteResultCollection
 };

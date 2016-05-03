@@ -638,29 +638,53 @@ var TokenVoteCollectionView = Marionette.CompositeView.extend({
   }
 });
 
+//The view that shows the list of results
+var TokenVoteResultCollectionView = Marionette.CollectionView.extend({
+  constructor: function TokenVoteResultCollectionView(){
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
+  childView: TokenVoteResultView
+});
+
+//The view of a single vote result
+var TokenVoteResultView = Marionette.ItemView.extend({
+  constructor: function TokenVoteResultView(){
+    Marionette.ItemView.apply(this, arguments);
+  },
+
+  template: '#tmpl-tokenVoteResultSingleView'
+
+  //Most likely the place where D3 will be used!
+});
+
 var TokenResultView = Marionette.LayoutView.extend({
   constructor: function ModalView(){
     Marionette.LayoutView.apply(this, arguments);
   },
 
-  template: false,
+  template: "#tmpl-tokenVoteResultView",
 
   ui: {
-
+    'resultArea': '.js_vote-result-region',
+    'categoryName': '.js_vote-result-category'
   },
 
   events: {
-
+    'click @ui.categoryName': 'onCategoryClickName'
   },
 
   regions: {
-
+    'results': '@ui.resultArea'
   },
 
   initialize: function(options){
-    this.widget = options.model;
-    var cm = new CollectionManager(),
+    this.widgetModel = options.widgetModel;
+    var CollectionManager = require('../common/collectionManager.js'),
+        cm = new CollectionManager(),
+        Widget = require('../models/widget.js'),
         that = this;
+
     cm.getAllIdeasCollectionPromise()
       .then(function(ideas){
         that.ideas = ideas;
@@ -668,7 +692,17 @@ var TokenResultView = Marionette.LayoutView.extend({
       .then(function(preferences){
         that.languagePreferences = preferences;
         // then get the vote results for each specification. 
-      }) 
+      }).then(function(){
+        var voteResults = new Widget.VoteResultCollection({widgetModel: that.widgetModel});
+        return voteResults.fetch();
+      }).then(function(results){
+        that.voteResults = results;
+        var tokenSpecs = this.widgetModel.getVoteSpecificationModel();
+        that.voteResults.associateTo(that.ideas, tokenSpecs);
+        if (!that.isViewDestroyed()){
+          that.render();
+        }
+      });
 
       //Take the list of "votable_ideas" from the widget model,
       //Take the token categories from the vote_specification ?
@@ -683,7 +717,62 @@ var TokenResultView = Marionette.LayoutView.extend({
       //Can use D3 linear scale (http://bl.ocks.org/kiranml1/6872226) to represent
       //the data.
     }); 
+  },
+
+  serializeData: function(){
+    return {
+      questionTitle: "Some Random Title",
+      questionDescription: "Some Random Description",
+      categories: ["random1", "random2"]
+    }
+  },
+
+  onCategoryClickName: function(ev){
+    console.log('Category click name was clicked with event', ev);
+  },
+
+  onShow: function(){
+    console.log('[TokenResultView] onShow was called');
+    var that = this;
+    var tokenResultsView = new TokenVoteResultCollectionView({
+      collection: that.voteResults
+    });
+
+    this.results.show(tokenResultsView);
   }
+});
+
+
+var TokenVoteSessionResultModel = Backbone.Modal.extend({
+  constructor: function TokenVoteSessionResultModel(){
+    Backbone.Modal.apply(this, arguments);
+  },
+
+  template: '#tmpl-modalWithoutIframe',
+  className: 'modal-token-vote-session popin-wrapper',
+  cancelEl: '.close, .js_close',
+
+  ui: {
+    'body': '.js_modal-body'
+  },
+
+  initialize: function(options){
+    this.widgetModel = options.model;
+
+  },
+
+  onRender: function(){
+    var resultView = new TokenResultView({widgetModel: this.widgetModel});
+    this.$(this.ui.body).html(resultView.render().el);
+    // resultView.onShow(); 
+  },
+
+  serializeData: function(){
+    return {
+      modal_title: "Who fucking cares?"
+    }
+  }
+
 });
 
 
@@ -722,10 +811,9 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       if ( that.tokenVoteSpecification ){
         if ( "token_categories" in that.tokenVoteSpecification && _.isArray(that.tokenVoteSpecification.token_categories) ){
           var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
-          var Votes = require('../models/votes.js');
           console.log("Widget: ", Widget);
           console.log("tokenVoteSpecification.token_categories: ", that.tokenVoteSpecification.token_categories);
-          that.tokenCategories = new Votes.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
+          that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
           console.log("tokenCategories: ", tokenCategories);
         }
       }
@@ -822,4 +910,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   }
 });
 
-module.exports = TokenVoteSessionModal;
+module.exports = {
+  TokenVoteSessionModal: TokenVoteSessionModal,
+  TokenVoteSessionResultModel: TokenVoteSessionResultModel
+};
