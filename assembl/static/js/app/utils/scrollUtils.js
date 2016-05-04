@@ -1,6 +1,7 @@
 'use strict';
 
-var jQuery = require('jquery');
+var jQuery = require('jquery'),
+    Raven = require('raven-js');
 
 var debugScrollUtils = false;
 
@@ -42,6 +43,13 @@ var getElementViewportOffset = function(el, scrollableViewport) {
   var scrollableViewportWindowOffset = scrollableViewport.offset().top,
   elWindowOffset = el.offset().top,
   elViewPortOffset = elWindowOffset - scrollableViewportWindowOffset;
+
+  if(debugScrollUtils) {
+    console.log("scrollUtils::getElementViewportOffset(): scrollableViewportWindowOffset: ",scrollableViewportWindowOffset, "elWindowOffset: ", elWindowOffset, el.offset(), el, "elViewPortOffset: ", elViewPortOffset);
+  }
+  if(el.offset().top === 0 && el.offset().left === 0) {
+    throw new Error("el is in an invalid state.  This seems to happen after a failed scrollTop on the parent scrollable, among other conditions");
+  }
   return elViewPortOffset;
 }
 
@@ -53,6 +61,9 @@ var computeScrollTarget = function(el, scrollableViewport, desiredViewportOffset
   var scrollableViewportScrollTop = scrollableViewport.scrollTop(),
   elViewPortOffset = getElementViewportOffset(el, scrollableViewport),
   scrollTarget = elViewPortOffset + scrollableViewportScrollTop - desiredViewportOffset;
+  if(debugScrollUtils) {
+    console.log("scrollUtils::computeScrollTarget(): scrollableViewport info:", " scrollHeight: ", scrollableViewport[0].scrollHeight, ", height: ", scrollableViewport.height()," scrollableViewportScrollTop: ", scrollableViewportScrollTop," el info: ", "elViewPortOffset: ", elViewPortOffset, "computed scrollTarget:",scrollTarget);
+  }
   return scrollTarget;
 }
 
@@ -69,10 +80,12 @@ var computeScrollTarget = function(el, scrollableViewport, desiredViewportOffset
  *          Should the scroll be smooth
  *          
  * @param watch: Should a watchtdog check that the scrool doesn't move in case 
- * of progressive loading, etc.
+ * of progressive loading, etc.  Default is no.
  */
 var scrollToElement = function(el, callback, margin, animate, watch) {
-  //console.log("scrollUtils::scrollToElement() called with: ", el, callback, margin, animate);
+  if(debugScrollUtils) {
+    console.log("scrollUtils::scrollToElement() called with: ", el, callback, margin, animate, watch);
+  }
   var scrollableElement = el.scrollParent();
   //console.log("scrollableElement: ", scrollableElement);
   if (!scrollableElement) {
@@ -87,7 +100,7 @@ var scrollToElement = function(el, callback, margin, animate, watch) {
     return;
   } 
   if(scrollableElement.offset() === undefined) {
-    console.warn("scrollUtils::scrollToElement(): Warning: scrollableElement has no offest (hidden?), aborting");
+    console.warn("scrollUtils::scrollToElement(): Warning: scrollableElement has no offset (hidden?), aborting");
     if(debugScrollUtils) {
       console.log("scrollUtils::scrollToElement(): el: ", el, "scrollableElement: ", scrollableElement);
     }
@@ -95,7 +108,7 @@ var scrollToElement = function(el, callback, margin, animate, watch) {
   }
   
   var scrollTarget,
-  desiredViewportOffset = margin || 30;;
+  desiredViewportOffset = margin || 30;
 
   if (animate === undefined) {
     animate = true;
@@ -106,32 +119,42 @@ var scrollToElement = function(el, callback, margin, animate, watch) {
   if(debugScrollUtils) {
     console.log("scrollUtils::scrollToElement(): initialized on ",el, "desiredViewportOffset:", desiredViewportOffset, "scrollTarget:", scrollTarget);
   }
-
+  var elReference = el;
   var processCallback = function() {
-    var finalViewportOffset = getElementViewportOffset(el, scrollableElement),
-    differenceToTargetOffset = finalViewportOffset - desiredViewportOffset;
-    if(debugScrollUtils) {
-      console.log("scrollUtils::scrollToElement(): Final viewPort offset: ", finalViewportOffset, ", difference to target offset: ", differenceToTargetOffset);
-    }
-    if (animate && differenceToTargetOffset !== 0) {
+    try {
+      var finalViewportOffset = getElementViewportOffset(elReference, scrollableElement),
+      differenceToTargetOffset = finalViewportOffset - desiredViewportOffset;
       if(debugScrollUtils) {
-        console.log("scrollUtils::scrollToElement(): differenceToTargetOffset is not 0.  The content above the element may well have changed length during animation, retry scrolling with no animation");
+        console.log("scrollUtils::scrollToElement(): Final viewPort offset: ", finalViewportOffset, ", difference of: ", differenceToTargetOffset, " with desiredViewportOffset of ", desiredViewportOffset);
       }
-      scrollableElement.scrollTop(computeScrollTarget(el, scrollableElement, desiredViewportOffset));
-      if(debugScrollUtils) {
-        console.log("scrollUtils::scrollToElement(): POST_RETRY Final viewPort offset: ", getElementViewportOffset(el, scrollableElement), ", difference to target offset: ", getElementViewportOffset(el, scrollableElement) - desiredViewportOffset);
+      if (animate && differenceToTargetOffset !== 0) {
+        if(debugScrollUtils) {
+          console.log("scrollUtils::scrollToElement(): differenceToTargetOffset is not 0.  The content above the element may well have changed length during animation, retry scrolling with no animation");
+        }
+
+
+        var scrollTarget = computeScrollTarget(elReference, scrollableElement, desiredViewportOffset);
+        scrollableElement.scrollTop(scrollTarget);
+        if(debugScrollUtils) {
+          console.log("scrollUtils::scrollToElement(): POST_RETRY Final viewPort offset: ", getElementViewportOffset(el, scrollableElement), ", difference to target offset: ", getElementViewportOffset(el, scrollableElement) - desiredViewportOffset, " target scrollTop was ", scrollTarget, "final scrollTop is ", scrollableElement.scrollTop());
+        }
+
+
+      }
+      if (_.isFunction(callback)) {
+        callback();
+      }
+      if(watch) {
+        _watchOffset(el, scrollableElement);
       }
     }
-    if (_.isFunction(callback)) {
-      callback();
-    }
-    if(watch) {
-      _watchOffset(el, scrollableElement);
+    catch (e) {
+      Raven.captureException(e);
     }
   }
 
   if (animate) {
-    scrollableElement.animate({ scrollTop: scrollTarget }, { complete: processCallback });
+    scrollableElement.animate({ scrollTop: scrollTarget }, { always: processCallback });
   }
   else {
     scrollableElement.scrollTop(scrollTarget);
