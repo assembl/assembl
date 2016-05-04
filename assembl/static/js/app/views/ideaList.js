@@ -385,6 +385,7 @@ var IdeaList = AssemblPanel.extend({
         that.getRegion('allMessagesView').show(allMessagesInIdeaListView);
 
         that.body = that.$('.panel-body');
+        //console.log("Restoring scroll position to ", y);
         that.body.get(0).scrollTop = y;
         Assembl.vent.trigger("requestTour", "idea_list");
       }
@@ -496,7 +497,7 @@ var IdeaList = AssemblPanel.extend({
       if (ideaModel.id) {
         var el = this.$el.find("." + ideaModel.getCssClassFromId());
         if (el.length) {
-          scrollUtils.scrollToElement(el.first(), null, 10, true);
+          scrollUtils.scrollToElement(el.first(), null, 10, true, false);
         } 
         else {
           console.log("el not found, will retry later");
@@ -707,6 +708,7 @@ var IdeaList = AssemblPanel.extend({
     if ((speed > 0 && this.scrollLastSpeed >= 0) || (speed < 0 && this.scrollLastSpeed <= 0))
         speed = this.scrollLastSpeed * 0.8 + speed * 0.2;
     this.scrollLastSpeed = speed;
+    //WTF: The parameters of this next line make no sense.
     this.scrollableElement.scrollTop(this.scrollableElement.scrollTop() + (speed * deltaTime));
   },
 
