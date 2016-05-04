@@ -444,9 +444,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
   onShowResult: function(evt){
     console.log('showResult on model was called');
     var that = this;
-    var modalView = new TokenVoteSessionView.TokenVoteSessionResultModel({
-      widgetModel: this
-    });
+    var modalView = new TokenVoteSessionView.TokenVoteSessionResultModel({model: this});
     Ctx.setCurrentModalView(modalView);
     Assembl.slider.show(modalView);
   },

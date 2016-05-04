@@ -638,6 +638,20 @@ var TokenVoteCollectionView = Marionette.CompositeView.extend({
   }
 });
 
+//The view of a single vote result
+var TokenVoteResultView = Marionette.ItemView.extend({
+  constructor: function TokenVoteResultView(){
+    Marionette.ItemView.apply(this, arguments);
+  },
+
+  template: '#tmpl-tokenVoteResultSingleView',
+
+  //Most likely the place where D3 will be used!
+  initialize: function(){
+    console.log("[TokenVoteResultView] Single result view");
+  }
+});
+
 //The view that shows the list of results
 var TokenVoteResultCollectionView = Marionette.CollectionView.extend({
   constructor: function TokenVoteResultCollectionView(){
@@ -645,17 +659,6 @@ var TokenVoteResultCollectionView = Marionette.CollectionView.extend({
   },
 
   childView: TokenVoteResultView
-});
-
-//The view of a single vote result
-var TokenVoteResultView = Marionette.ItemView.extend({
-  constructor: function TokenVoteResultView(){
-    Marionette.ItemView.apply(this, arguments);
-  },
-
-  template: '#tmpl-tokenVoteResultSingleView'
-
-  //Most likely the place where D3 will be used!
 });
 
 var TokenResultView = Marionette.LayoutView.extend({
@@ -679,12 +682,13 @@ var TokenResultView = Marionette.LayoutView.extend({
   },
 
   initialize: function(options){
-    this.widgetModel = options.widgetModel;
+    this.model = options.model;
     var CollectionManager = require('../common/collectionManager.js'),
         cm = new CollectionManager(),
         Widget = require('../models/widget.js'),
         that = this;
 
+    console.log('initializing [TokenResultView]');
     cm.getAllIdeasCollectionPromise()
       .then(function(ideas){
         that.ideas = ideas;
@@ -693,14 +697,19 @@ var TokenResultView = Marionette.LayoutView.extend({
         that.languagePreferences = preferences;
         // then get the vote results for each specification. 
       }).then(function(){
-        var voteResults = new Widget.VoteResultCollection({widgetModel: that.widgetModel});
-        return voteResults.fetch();
+        that.voteResults = new Widget.VoteResultCollection({widgetModel: that.model, parse: true});
+        return that.voteResults.fetch();
       }).then(function(results){
-        that.voteResults = results;
-        var tokenSpecs = this.widgetModel.getVoteSpecificationModel();
+        //Don't care about results, it's been fetched.
+        var tokenSpecs = that.model.getVoteSpecificationModel();
         that.voteResults.associateTo(that.ideas, tokenSpecs);
+        console.log('the vote results models', that.voteResults);
+        that.tokenResultsView = new TokenVoteResultCollectionView({
+          collection: that.voteResults
+        });
+
         if (!that.isViewDestroyed()){
-          that.render();
+          that.results.show(that.tokenResultsView);
         }
       });
 
@@ -734,11 +743,9 @@ var TokenResultView = Marionette.LayoutView.extend({
   onShow: function(){
     console.log('[TokenResultView] onShow was called');
     var that = this;
-    var tokenResultsView = new TokenVoteResultCollectionView({
-      collection: that.voteResults
-    });
-
-    this.results.show(tokenResultsView);
+    if (this.tokenResultsView){
+      this.results.show(this.tokenResultsView);
+    }
   }
 });
 
@@ -756,15 +763,10 @@ var TokenVoteSessionResultModel = Backbone.Modal.extend({
     'body': '.js_modal-body'
   },
 
-  initialize: function(options){
-    this.widgetModel = options.model;
-
-  },
-
   onRender: function(){
-    var resultView = new TokenResultView({widgetModel: this.widgetModel});
+    var resultView = new TokenResultView({model: this.model});
     this.$(this.ui.body).html(resultView.render().el);
-    // resultView.onShow(); 
+    resultView.onShow(); 
   },
 
   serializeData: function(){
