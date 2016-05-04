@@ -49,9 +49,11 @@ def includeme(config):
     for name in ('SOCIAL_AUTH_AUTHENTICATION_BACKENDS',
                  'SOCIAL_AUTH_USER_FIELDS',
                  'SOCIAL_AUTH_PROTECTED_USER_FIELDS',
-                 'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION',
-                 'SCOPE'):
-        settings[name] = settings.get(name, '').split("\n")
+                 'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION'):
+        settings[name] = aslist(settings.get(name, ''))
+    for k in settings.iterkeys():
+        if k.endswith("_SCOPE") and k.startswith("SOCIAL_AUTH_"):
+            settings[k] = aslist(settings.get(k, ''))
     config.add_request_method(
         'assembl.auth.social_auth.get_user', 'user', reify=True)
     config.include('social.apps.pyramid_app')
