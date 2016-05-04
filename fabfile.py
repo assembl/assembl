@@ -345,7 +345,7 @@ def compile_stylesheets():
     """
     with cd(env.projectpath):
         with cd('assembl'):
-            run('../node_modules/gulp/bin/gulp.js sass')
+            run('../node_modules/.bin/gulp sass')
         run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
         run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss', shell=True)
         run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/session/css --source-map assembl/static/widget/session/css assembl/static/widget/session/scss', shell=True)
@@ -358,16 +358,16 @@ def compile_javascript():
     """
     with cd(env.projectpath):
         with cd('assembl'):
-            run('../node_modules/gulp/bin/gulp.js libs')
-            run('../node_modules/gulp/bin/gulp.js browserify:prod')
-            run('../node_modules/gulp/bin/gulp.js build:test')
+            run('../node_modules/.bin/gulp libs')
+            run('../node_modules/.bin/gulp browserify:prod')
+            run('../node_modules/.bin/gulp build:test')
 
 
 @task
 def compile_javascript_tests():
     with cd(env.projectpath):
         with cd('assembl'):
-            run('../node_modules/gulp/bin/gulp.js build:test')
+            run('../node_modules/.bin/gulp build:test')
 
 
 def tests():
@@ -671,7 +671,7 @@ def install_builddeps():
         if not exists('/usr/local/bin/pkg-config'):
             run('brew install pkg-config')
         if not exists('/usr/local/bin/node'):
-            run('brew install nodejs npm')
+            run('brew install homebrew/versions/node5')
         if not exists('/usr/local/bin/autoconf'):
             run('brew install autoconf')
         if not exists('/usr/local/bin/automake'):
