@@ -36,6 +36,7 @@ Fabric==1.11.1
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
 flaky==3.1.1
+funcsigs==1.0.2
 future==0.15.2
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 gensim==0.12.3
@@ -148,7 +149,7 @@ venusian==1.0
 psycopg2==2.6.1
 waitress==0.9.0
 WebOb==1.6.0
-WebTest==2.0.20
+WebTest==2.0.21
 Werkzeug==0.11.9
 zope.component==4.2.2
 zope.deprecation==4.1.2
