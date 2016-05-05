@@ -1,5 +1,5 @@
 pip==8.1.1
-setuptools==20.7.0
+setuptools==21.0.0
 alabaster==0.7.7
 -e git+https://github.com/imaginationforpeople/alembic.git@virtuoso#egg=alembic
 amqp==1.4.9
@@ -7,12 +7,12 @@ anyjson==0.3.3
 anykeystore==0.2
 # Do not specify argparse, jenkins chokes on system version.
 # argparse==1.2.2
-Babel==2.3.2
+Babel==2.3.4
 backports.ssl-match-hostname==3.5.0.1
 Beaker==1.8.0
 beautifulsoup4==4.4.1
 billiard==3.3.0.23
-boto==2.39.0
+boto==2.40.0
 bz2file==0.98
 celery==3.1.23
 cffi==1.5.2
@@ -23,15 +23,15 @@ colors.py==0.2.2
 cornice==1.2.1
 cov-core==1.15.0
 coverage==4.0.3
-cryptography==1.3.1
-DateTime==4.1
+cryptography==1.3.2
+DateTime==4.1.1
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 docutils==0.12
 dogpile.cache==0.5.7
 dogpile.core==0.4.1
 EasyProcess==0.2.2
 ecdsa==0.13
-enum34==1.1.2
+enum34==1.1.4
 Fabric==1.10.2
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
@@ -49,7 +49,7 @@ imaplib2==2.45.0
 ipaddress==1.0.16
 ipykernel==4.3.1
 ipython-genutils==0.1.0
-ipython==4.1.2
+ipython==4.2.0
 iso639==0.1.1
 isodate==0.5.4
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
@@ -66,7 +66,7 @@ mock==1.3.0
 ndg_httpsclient==0.4.0
 numpy==1.11.0
 #oauthlib==1.1.0
-oauth2client==2.0.1
+oauth2client==2.0.2
 paramiko==1.16.0
 PasteDeploy==1.5.2
 PdbSublimeTextSupport==0.2
@@ -87,10 +87,10 @@ pylibmc==1.5.1
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 pyOpenSSL==16.0.0
 pyparsing==2.1.1
-pyramid-autodoc==0.0.8
+pyramid-autodoc==1.0.0
 pyramid-beaker==0.8
 pyramid-debugtoolbar-ajax==0.0.4
-pyramid-debugtoolbar==2.4.2
+pyramid-debugtoolbar==3.0
 pyramid-dogpile-cache==0.0.4
 pyramid-ipython==0.1
 pyramid-jinja2==2.6.2
@@ -104,13 +104,13 @@ pytest-localserver==0.3.5
 pytest-mock==0.11.0
 pytest-splinter==1.7.2
 pytest==2.9.1
-python-dateutil==2.5.2
+python-dateutil==2.5.3
 python-openid==2.2.5
 -e git+https://github.com/imaginationforpeople/python-social-auth.git@assembl#egg=python_social_auth
-pytz==2016.3
+pytz==2016.4
 pyvirtualdisplay==0.2
 pyzmq==15.2.0
-raven==5.12.0
+raven==5.15.0
 rdflib-jsonld==0.3
 rdflib==4.2.1
 redis==2.10.5
@@ -122,7 +122,7 @@ requests==2.8.1   # smart_open holding it back
 rsa==3.4.2
 scikit-learn==0.17.1
 scipy==0.17.0
-selenium==2.53.1
+selenium==2.53.2
 simplejson==3.8.2
 six==1.10.0
 smart-open==1.3.2
@@ -131,7 +131,7 @@ snowballstemmer==1.2.1
 SPARQLWrapper==1.7.6
 sphinx-bootstrap-theme==0.4.9
 sphinxcontrib-httpdomain==1.4.0
-Sphinx==1.4
+Sphinx==1.4.1
 splinter==0.7.3
 SQLAlchemy==1.0.12
 sqlparse==0.1.19
