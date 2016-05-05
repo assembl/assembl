@@ -215,7 +215,7 @@ class PostPathLocalCollection(object):
             else:
                 return db.query(post.id)
         if not self.paths:
-            return base_query(True).filter(False)
+            return base_query(True).filter(False).subquery("posts")
         direct_includes = []
         direct_excludes = []
         includes_by_level = [[]]
