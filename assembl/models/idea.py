@@ -98,7 +98,7 @@ class WordCountVisitor(IdeaVisitor):
         if self.count_posts and level == 0:
             from .generic import Content
             query = idea.db.query(Content)
-            related = idea.get_related_posts_query(True).subquery()
+            related = idea.get_related_posts_query(True)
             query = query.join(related, Content.id == related.c.post_id
                 ).filter(Content.hidden==False).options(
                     Content.subqueryload_options())
@@ -600,7 +600,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .generic import Content
         from .post import Post
         from sqlalchemy.sql.functions import count
-        related = self.get_related_posts_query(True).subquery()
+        related = self.get_related_posts_query(True)
         content = with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)

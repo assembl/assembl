@@ -5,7 +5,7 @@ from bisect import bisect_right
 
 from sqlalchemy import String
 from sqlalchemy.orm import (with_polymorphic, aliased)
-from sqlalchemy.sql.expression import or_
+from sqlalchemy.sql.expression import or_, union, except_
 from sqlalchemy.sql.functions import count
 
 from .idea_content_link import (
@@ -209,10 +209,13 @@ class PostPathLocalCollection(object):
             Post, [], Post.__table__,
             aliased=False, flat=True)
 
-        def base_query():
-            return db.query(post.id.label("post_id"))
+        def base_query(labeled=False):
+            if labeled:
+                return db.query(post.id.label("post_id"))
+            else:
+                return db.query(post.id)
         if not self.paths:
-            return base_query().filter(False)
+            return base_query(True).filter(False)
         direct_includes = []
         direct_excludes = []
         includes_by_level = [[]]
@@ -241,16 +244,17 @@ class PostPathLocalCollection(object):
             includes_by_level.append([])
         while len(excludes_by_level) < max_level:
             excludes_by_level.append([])
-        q = base_query()
+        q = base_query(True)
         for level in range(max_level):
             if len(includes_by_level[level]):
                 condition = or_(condition, *[
                     post.ancestry.like(path+"%")
                     for path in includes_by_level[level]])
-            if level == 0:
-                q = q.filter(condition)
-            else:
-                q = q.union(base_query().filter(condition))
+            if condition is not None:
+                if level == 0:
+                    q = q.filter(condition)
+                elif condition is not None:
+                    q = union(q, base_query().filter(condition), use_labels=True)
             condition = None
             if len(excludes_by_level[level]):
                 condition = or_(*[
@@ -264,11 +268,17 @@ class PostPathLocalCollection(object):
                 else:
                     condition = c2 | condition
             if condition is not None:
-                q = q.except_(base_query().filter(condition))
+                q = except_(q, base_query().filter(condition), use_labels=True)
+        if getattr(q, "c", None) is None:
+            # base query
+            q = q.subquery("posts")
+        else:
+            # compound query, already has columns
+            q = q.alias("posts")
         return q
 
     def as_clause(self, db, discussion_id, user_id=None, content=None):
-        subq = self.as_clause_base(db).subquery("posts")
+        subq = self.as_clause_base(db)
         content = content or with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)
@@ -369,7 +379,7 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
     def orphan_clause(self, user_id=None, content=None):
         root_path = self.paths[self.root_idea_id]
         db = self.discussion.default_db
-        subq = root_path.as_clause_base(db).subquery("rposts")
+        subq = root_path.as_clause_base(db)
         content = content or with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)

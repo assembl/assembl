@@ -170,7 +170,7 @@ def get_posts(request):
 
     if root_idea_id:
         related = Idea.get_related_posts_query_c(
-            discussion_id, root_idea_id, True).subquery()
+            discussion_id, root_idea_id, True)
         posts = posts.join(related, PostClass.id == related.c.post_id)
         ideaContentLinkQuery = ideaContentLinkQuery.join(
             related, PostClass.id == related.c.post_id)
