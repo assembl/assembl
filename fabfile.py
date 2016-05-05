@@ -22,24 +22,24 @@ from fabric.contrib.files import *
 
 
 def realpath(path):
-    return run("python -c 'import os,sys;print os.path.realpath(sys.argv[1])' "+path)
+    return run("python -c 'import os,sys;print os.path.realpath(sys.argv[1])' " + path)
 
 
 def is_file(path):
-    return run("test -f "+path, quiet=True).succeeded
+    return run("test -f " + path, quiet=True).succeeded
 
 def is_dir(path):
-    return run("test -d "+path, quiet=True).succeeded
+    return run("test -d " + path, quiet=True).succeeded
 
 def getmtime(path):
     if env.mac:
-        return int(run("/usr/bin/stat -f '%m' "+path))
+        return int(run("/usr/bin/stat -f '%m' " + path))
     else:
-        return int(run("/usr/bin/stat -c '%Y' "+path))
+        return int(run("/usr/bin/stat -c '%Y' " + path))
 
 
 def listdir(path):
-    return run("ls "+path).split()
+    return run("ls " + path).split()
 
 
 @task
@@ -56,13 +56,20 @@ def supervisor_restart():
     "Restart supervisor itself."
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl shutdown")
-    #Another supervisor,upstart, etc may be watching it, give it a little while
-    #Ideally we should wait, but I didn't have time to code it.
+    # Another supervisor,upstart, etc may be watching it, give it a little while
+    # Ideally we should wait, but I didn't have time to code it.
     sleep(30);
-    #If supervisor is already started, this will do nothing
+    # If supervisor is already started, this will do nothing
     if using_virtuoso():
         execute(supervisor_process_start, 'virtuoso')
 
+def is_supervisor_running():
+    with settings(warn_only=True), hide('running', 'stdout', 'stderr'):
+        supervisord_cmd_result = venvcmd("supervisorctl avail")
+        if supervisord_cmd_result.failed:
+            return False
+        else:
+            return True
 
 def supervisor_process_start(process_name):
     """
@@ -172,7 +179,7 @@ def filter_autostart_processes(processes):
 
     def is_autostart(p):
         try:
-            return as_bool(config.get('supervisor', 'autostart_'+p))
+            return as_bool(config.get('supervisor', 'autostart_' + p))
         except NoOptionError:
             return False
     return [p for p in processes if is_autostart(p)]
@@ -191,14 +198,15 @@ def app_majorupdate():
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
     else:
-        #supervisor config file may have changed
-        venvcmd("supervisorctl reread")
-        venvcmd("supervisorctl update")
-        processes = filter_autostart_processes([
-            "celery_imap", "changes_router", "celery_notification_dispatch",
-            "celery_notify"])
-        venvcmd("supervisorctl restart "+" ".join(processes))
-        maintenance_mode_stop()
+        if is_supervisor_running():
+            # supervisor config file may have changed
+            venvcmd("supervisorctl reread")
+            venvcmd("supervisorctl update")
+            processes = filter_autostart_processes([
+                "celery_imap", "changes_router", "celery_notification_dispatch",
+                "celery_notify"])
+            venvcmd("supervisorctl restart " + " ".join(processes))
+            maintenance_mode_stop()
     execute(webservers_reload)
 
 
@@ -211,16 +219,17 @@ def app_reload():
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
     else:
-        venvcmd("supervisorctl stop dev:")
-        #supervisor config file may have changed
-        venvcmd("supervisorctl reread")
-        venvcmd("supervisorctl update")
-        processes = filter_autostart_processes([
-            "celery_imap", "changes_router", "celery_notification_dispatch",
-            "celery_notify", "celery_notify_beat", "source_reader"])
-        venvcmd("supervisorctl restart "+" ".join(processes))
-        if env.uses_uwsgi:
-            venvcmd("supervisorctl restart prod:uwsgi")
+        if is_supervisor_running():
+            venvcmd("supervisorctl stop dev:")
+            # supervisor config file may have changed
+            venvcmd("supervisorctl reread")
+            venvcmd("supervisorctl update")
+            processes = filter_autostart_processes([
+                "celery_imap", "changes_router", "celery_notification_dispatch",
+                "celery_notify", "celery_notify_beat", "source_reader"])
+            venvcmd("supervisorctl restart " + " ".join(processes))
+            if env.uses_uwsgi:
+                venvcmd("supervisorctl restart prod:uwsgi")
     """ This will log everyone out, hopefully the code is now resilient enough
     that it isn't necessary
     if env.uses_memcache:
@@ -255,7 +264,7 @@ def printenv():
     venvcmd('env')
 
 
-## Virtualenv
+# # Virtualenv
 @task
 def build_virtualenv():
     """
@@ -264,13 +273,13 @@ def build_virtualenv():
     print(cyan('Creating a fresh virtualenv'))
     require('venvpath', provided_by=('commonenv'))
     import sys
-    #This is incorrect, it will check locally instead fo on the remote server
+    # This is incorrect, it will check locally instead fo on the remote server
     if hasattr(sys, 'real_prefix'):
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
     run('virtualenv --no-site-packages --distribute %(venvpath)s' % env)
-    run('rm /tmp/distribute* || echo "ok"') # clean after myself
+    run('rm /tmp/distribute* || echo "ok"')  # clean after myself
 
 
 @task
@@ -575,7 +584,7 @@ def webservers_start():
             sudo('/usr/local/nginx/sbin/nginx')
 
 
-## Server packages
+# # Server packages
 def install_basetools():
     """
     Install required base tools
@@ -588,7 +597,7 @@ def install_basetools():
     else:
         sudo('apt-get install -y python-virtualenv python-pip')
         sudo('apt-get install -y git')
-        #sudo('apt-get install -y gettext')
+        # sudo('apt-get install -y gettext')
 
 
 def install_bower():
@@ -703,7 +712,7 @@ def install_builddeps():
         print "We are still trying to get some requirements right for linux,"\
             "See http://www.scipy.org/scipylib/building/linux.html for details."
 
-        #Runtime requirements (even in develop)
+        # Runtime requirements (even in develop)
         sudo('apt-get install -y redis-server memcached unixodbc-dev')
     execute(install_database)
     execute(update_python_package_builddeps)
@@ -713,9 +722,9 @@ def install_builddeps():
 def update_python_package_builddeps():
     "Install/Update python package native binary dependencies"
     print(cyan('Installing/Updating python package native binary dependencies'))
-    #For specific python packages in requirements.txt
+    # For specific python packages in requirements.txt
     if env.mac:
-        #I presume the runtime packages in install_builddeps come with headers on mac?
+        # I presume the runtime packages in install_builddeps come with headers on mac?
         pass
     else:
         sudo('apt-get install -y postgresql-server-dev-all libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
@@ -734,7 +743,7 @@ def start_edit_fontello_fonts():
         env.projectpath, 'assembl', 'static', 'css', 'fonts')
     config_file = join(font_dir, 'config.json')
     id_file = join(font_dir, 'fontello.id')
-    r=requests.post("http://fontello.com",
+    r = requests.post("http://fontello.com",
                     files={'config': open(config_file)})
     if not r.ok:
         raise RuntimeError("Could not get the ID")
@@ -743,7 +752,7 @@ def start_edit_fontello_fonts():
         f.write(fid)
     if (env.host_string == 'localhost'):
         import webbrowser
-        webbrowser.open('http://fontello.com/'+fid)
+        webbrowser.open('http://fontello.com/' + fid)
 
 
 @task
@@ -786,15 +795,11 @@ def check_and_create_database_user():
     """
     Create a user and a DB for the project
     """
-    config = get_config()
-    assert config
-    db_user = config.get('app:assembl', 'db_user')
-    db_password = config.get('app:assembl', 'db_password')
     with settings(warn_only=True), hide('stdout'):
-        checkUser = run("PGPASSWORD=%s psql --host=%s --username=%s -l" % (db_password, env.db_host, db_user))
+        checkUser = run("PGPASSWORD=%s psql --host=%s --username=%s -l" % (env.db_password, env.db_host, env.db_user), pty=False)
     if checkUser.failed:
         print(yellow("User does not exist"))
-        run_db_command('psql -d postgres -c "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \'%s\';"' % (db_user, db_password))
+        run_db_command('psql -d postgres -c "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \'%s\';"' % (env.db_user, env.db_password))
     else:
         print(green("User exists and can connect"))
 
@@ -805,19 +810,16 @@ def database_create_postgres():
     # - createdb --host localhost -U assembl assembl
     # - venv/bin/assembl-db-manage development.ini bootstrap
     execute(check_and_create_database_user)
-    config = get_config()
-    assert config
-    db_user = config.get('app:assembl', 'db_user')
-    db_password = config.get('app:assembl', 'db_password')
-    db_database = config.get('app:assembl', 'db_database')
 
     with settings(warn_only=True), hide('stdout'):
-        checkDatabase = run("PGPASSWORD=%s psql --host=%s --username=%s --dbname=%s -l" % (db_password, env.db_host, db_user, db_database))
+        checkDatabase = run("PGPASSWORD=%s psql --host=%s --username=%s --dbname=%s -l" % (env.db_password, env.db_host, env.db_user, env.db_name))
     if checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
-        run(
+        createDatabase = run(
         'PGPASSWORD=%s createdb --username=%s  --host=%s --encoding=UNICODE --template=template0 --owner=%s %s' % (
-            db_password, db_user, env.db_host, db_user, db_database))
+            env.db_password, env.db_user, env.db_host, env.db_user, env.db_name))
+        if createDatabase.succeeded:
+            print(green("Database created successfully!"))
     else:
         print(green("Database exists and user can connect"))
 
@@ -853,7 +855,7 @@ def database_dump_virtuoso():
         print(red('Failed virtuoso backup'))
         exit()
     backup_file_path = join(virtuoso_db_directory(), backup_output)
-    #Move to dbdumps_dir
+    # Move to dbdumps_dir
     with settings(warn_only=True):
         move_result = run('mv %s %s' % (backup_file_path, absolute_path))
     if move_result.failed:
@@ -872,14 +874,14 @@ def database_dump_postgres():
     filename = 'db_%s.sql' % strftime('%Y%m%d')
     compressed_filename = '%s.pgdump' % filename
     absolute_path = os.path.join(env.dbdumps_dir, compressed_filename)
-    config = get_config()
 
     # Dump
     with prefix(venv_prefix()), cd(env.projectpath):
-        run('pg_dump --host=%s -U%s --format=custom -b %s > %s' % (
+        run('PGPASSWORD=%s pg_dump --host=%s -U%s --format=custom -b %s > %s' % (
+            env.db_password,
             env.db_host,
-            config.get("app:assembl", "db_user"),
-            config.get("app:assembl", "db_database"),
+            env.db_user,
+            env.db_name,
             absolute_path))
 
     # Make symlink to latest
@@ -903,7 +905,7 @@ def database_download():
     """
     Dumps and downloads the database from the target server
     """
-    destination = join('./',get_db_dump_name())
+    destination = join('./', get_db_dump_name())
     if is_link(destination):
         print('Clearing symlink at %s to make way for downloaded file' % (destination))
         local('rm %s' % (destination))
@@ -926,9 +928,9 @@ def database_delete():
     Restores the database backed up on the remote server
     """
     if(env.is_production_env is True):
-        abort(red("You are not allowed to delete the database of a production " +
-                "environment.  If this is a server restore situation, you " +
-                "have to temporarily declare env.is_production_env = False " +
+        abort(red("You are not allowed to delete the database of a production " + 
+                "environment.  If this is a server restore situation, you " + 
+                "have to temporarily declare env.is_production_env = False " + 
                 "in the environment"))
     if not using_virtuoso():
         abort(red("WRITEME (postgres)"))
@@ -939,13 +941,13 @@ def database_delete():
 
 def database_restore_virtuoso():
     if(env.is_production_env is True):
-        abort(red("You are not allowed to restore a database to a production " +
-                "environment.  If this is a server restore situation, you " +
-                "have to temporarily declare env.is_production_env = False " +
+        abort(red("You are not allowed to restore a database to a production " + 
+                "environment.  If this is a server restore situation, you " + 
+                "have to temporarily declare env.is_production_env = False " + 
                 "in the environment"))
     env.debug = True
 
-    #if(env.wsginame != 'dev.wsgi'):
+    # if(env.wsginame != 'dev.wsgi'):
     #    execute(webservers_stop)
     with prefix(venv_prefix()), cd(virtuoso_db_directory()):
         venvcmd("supervisorctl stop virtuoso")
@@ -954,9 +956,9 @@ def database_restore_virtuoso():
         run('rm -f *.db *.trx')
 
     # Make symlink to latest
-    #this MUST match the code in db_manage or virtuoso will refuse to restore
+    # this MUST match the code in db_manage or virtuoso will refuse to restore
     restore_dump_prefix = "assembl-virtuoso-backup"
-    restore_dump_name = restore_dump_prefix+"1.bp"
+    restore_dump_name = restore_dump_prefix + "1.bp"
     with cd(virtuoso_db_directory()):
         run('cat %s > %s' % (remote_db_path(), join(virtuoso_db_directory(), restore_dump_name)))
     # Restore data
@@ -966,9 +968,9 @@ def database_restore_virtuoso():
             get_virtuoso_exec(), join(virtuoso_db_directory(), 'virtuoso.ini'),
         restore_dump_prefix))
 
-    #clean up
+    # clean up
     with cd(virtuoso_db_directory()):
-        run('rm  %s' % (join(virtuoso_db_directory(),restore_dump_name)))
+        run('rm  %s' % (join(virtuoso_db_directory(), restore_dump_name)))
 
     execute(supervisor_process_start, 'virtuoso')
 
@@ -979,12 +981,15 @@ def database_restore_postgres():
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
-    config = get_config()
 
     # Drop db
     with settings(warn_only=True):
-        dropped = run_db_command("dropdb %s" % (
-            config.get("app:assembl", "db_database"),))
+        dropped = run('PGPASSWORD=%s dropdb --host=%s --username=%s --no-password %s' % (
+            env.db_password,
+            env.db_host,
+            env.db_user,
+            env.db_name))
+
         assert dropped.succeeded or "does not exist" in dropped, \
             "Could not drop the database"
 
@@ -993,9 +998,11 @@ def database_restore_postgres():
 
     # Restore data
     with prefix(venv_prefix()), cd(env.projectpath):
-        run('pg_restore --host=%s --dbname=%s -U%s --schema=public %s' % (env.db_host,
-                                                  config.get("app:assembl", "db_database"),
-                                                  config.get("app:assembl", "db_user"),
+        run('PGPASSWORD=%s pg_restore --host=%s --dbname=%s -U%s --schema=public %s' % (
+                                                  env.db_password,
+                                                  env.db_host,
+                                                  env.db_name,
+                                                  env.db_user,
                                                   remote_db_path())
         )
 
@@ -1036,14 +1043,11 @@ def setup_var_directory():
 
 
 def get_virtuoso_root():
-    config = get_config()
-    assert config
-    vroot = config.get('virtuoso', 'virtuoso_root')
-    if vroot == 'system':
+    if env.vroot == 'system':
         return '/usr/local/virtuoso-opensource' if env.mac else '/usr'
-    if vroot[0] != '/':
-        return normpath(join(env.projectpath, vroot))
-    return vroot
+    if env.vroot[0] != '/':
+        return normpath(join(env.projectpath, env.vroot))
+    return env.vroot
 
 
 def get_virtuoso_exec():
@@ -1054,11 +1058,9 @@ def get_supervisord_conf():
     return join(env.projectpath, "supervisord.conf")
 
 def get_virtuoso_src():
-    config = get_config()
-    vsrc = config.get('virtuoso', 'virtuoso_src')
-    if vsrc[0] != '/':
-        return normpath(join(env.projectpath, vsrc))
-    return vsrc
+    if env.vsrc[0] != '/':
+        return normpath(join(env.projectpath, env.vsrc))
+    return env.vsrc
 
 
 @task
@@ -1079,11 +1081,11 @@ def ensure_virtuoso_not_running():
     pidfile = join(env.projectpath, 'var/run/supervisord.pid')
     if not exists(pidfile):
         return
-    pid = run('cat '+ pidfile)
+    pid = run('cat ' + pidfile)
     # Really running or stale?
-    ps = run('ps '+pid, quiet=True)
+    ps = run('ps ' + pid, quiet=True)
     if ps.failed:
-        run('rm '+pidfile)
+        run('rm ' + pidfile)
         return
     execute(supervisor_process_stop, 'virtuoso')
 
@@ -1179,14 +1181,14 @@ def install_database():
 @task
 def virtuoso_source_upgrade():
     "Upgrades the virtuoso server.  Currently doesn't check if we are already using the latest version."
-    #Virtuoso must be running before the process starts, so that we can
-    #gracefully stop it later to ensure there is no trx file active.
-    #trx files are not compatible between virtuoso versions
+    # Virtuoso must be running before the process starts, so that we can
+    # gracefully stop it later to ensure there is no trx file active.
+    # trx files are not compatible between virtuoso versions
     supervisor_process_start('virtuoso')
     execute(virtuoso_source_install)
-    #Makes sure there is no trx file with content
+    # Makes sure there is no trx file with content
     supervisor_process_stop('virtuoso')
-    #If we ran this, there is a strong chance we just reconfigured the ini file
+    # If we ran this, there is a strong chance we just reconfigured the ini file
     # Make sure the virtuoso.ini and supervisor.ini reflects the changes
     execute(app_setup)
     execute(supervisor_restart)
@@ -1196,7 +1198,7 @@ def virtuoso_source_install():
     "Install the virtuoso server locally, normally not called directly (use virtuoso_source_upgrade instead)"
     virtuoso_root = get_virtuoso_root()
     virtuoso_src = get_virtuoso_src()
-    branch = get_config().get('virtuoso', 'virtuoso_branch')
+    branch = env.vbranch
 
     if exists(virtuoso_src):
         with cd(virtuoso_src):
@@ -1205,28 +1207,28 @@ def virtuoso_source_install():
             if already_built and current_checkout == branch:
                 return
             run('git fetch')
-            run('git checkout '+branch)
+            run('git checkout ' + branch)
             new_checkout = run('git rev-parse HEAD')
             if already_built and new_checkout == current_checkout:
                 return
     else:
         run('mkdir -p ' + dirname(virtuoso_src))
         virtuso_github = 'https://github.com/openlink/virtuoso-opensource.git'
-        run('git clone %s %s' %(virtuso_github, virtuoso_src))
+        run('git clone %s %s' % (virtuso_github, virtuoso_src))
         with cd(virtuoso_src):
-            run('git checkout '+branch)
+            run('git checkout ' + branch)
     with cd(virtuoso_src):
         if not exists(join(virtuoso_src, 'configure')):
             run('./autogen.sh')
         else:
-            #Otherwise, it simply doesn't always work...
+            # Otherwise, it simply doesn't always work...
             run('make distclean')
-        #This does not work if we change the path or anything else in local.ini
-        #if exists(join(virtuoso_src, 'config.status')):
+        # This does not work if we change the path or anything else in local.ini
+        # if exists(join(virtuoso_src, 'config.status')):
         #    run('./config.status --recheck')
-        #else:
+        # else:
 
-        conf_command = './configure --with-readline --enable-maintainer-mode --prefix '+virtuoso_root
+        conf_command = './configure --with-readline --enable-maintainer-mode --prefix ' + virtuoso_root
         if env.mac:
             # this needs to be kept up to date. I'd automate if we were keeping virtuoso
             conf_command += " --enable-openssl=/usr/local/Cellar/openssl/1.0.2g"
@@ -1242,7 +1244,7 @@ def virtuoso_source_install():
                 need_sudo = True
                 sudo('mkdir -p ' + virtuoso_root)
         else:
-            need_sudo = run('touch '+virtuoso_root, quiet=True).failed
+            need_sudo = run('touch ' + virtuoso_root, quiet=True).failed
         execute(ensure_virtuoso_not_running)
         if need_sudo:
             sudo('checkinstall')
@@ -1259,7 +1261,7 @@ def get_vendor_config():
     if get_retval.failed:
         print yellow('No vendor ini file present at %s, skipping' % vendor_config_path)
         return config
-    fp.seek(0) #Yes, this is mandatory
+    fp.seek(0)  # Yes, this is mandatory
     config.readfp(fp)
     return config
 
@@ -1278,7 +1280,7 @@ def update_vendor_themes():
                 env.projectpath, "assembl/static/css/themes/vendor"))
         print vendor_themes_path
         with cd(env.projectpath):
-            #We do not use env.gitbranch, because in env_deb it may not match the real current branch
+            # We do not use env.gitbranch, because in env_deb it may not match the real current branch
             current_assembl_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
         for git_url in urls:
             print green("Updating %s" % git_url)
@@ -1302,7 +1304,7 @@ def update_vendor_themes():
                         print red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (current_assembl_branch_name, current_vendor_themes_branch_name))
                 run('git pull --ff-only')
 
-## Server scenarios
+# # Server scenarios
 def commonenv(projectpath, venvpath=None):
     """
     Base environment
@@ -1310,17 +1312,28 @@ def commonenv(projectpath, venvpath=None):
     env.projectname = "assembl"
     env.projectpath = projectpath
     assert env.ini_file, "Define env.ini_file before calling common_env"
-    #Production env will be protected from accidental database restores
+    # Production env will be protected from accidental database restores
     env.is_production_env = False
     if venvpath:
         env.venvpath = venvpath
     else:
-        env.venvpath = join(projectpath,"venv")
-
-    env.db_user = 'assembl'
-    #It is recommended you keep localhost even if you have access to
+        env.venvpath = join(projectpath, "venv")
+    
+    config = get_config()
+    assert config
+    
+    env.sqlalchemy_url = config.get('app:assembl', 'sqlalchemy.url')
+    env.db_user = config.get('app:assembl', 'db_user')
+    env.db_password = config.get('app:assembl', 'db_password')
+    env.db_name = config.get("app:assembl", "db_database")
+    # It is recommended you keep localhost even if you have access to
     # unix domain sockets, it's more portable across different pg_hba configurations.
     env.db_host = 'localhost'
+    
+    env.vroot = config.get('virtuoso', 'virtuoso_root')
+    env.vsrc = config.get('virtuoso', 'virtuoso_src')
+    env.vbranch = get_config().get('virtuoso', 'virtuoso_branch')
+    
     env.dbdumps_dir = join(projectpath, '%s_dumps' % env.projectname)
     env.gitrepo = "https://github.com/ImaginationForPeople/assembl.git"
     env.gitbranch = "master"
@@ -1329,20 +1342,18 @@ def commonenv(projectpath, venvpath=None):
     env.uses_uwsgi = False
     env.uses_apache = False
     env.uses_ngnix = False
-    #Where do we find the virtuoso binaries
+    # Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
     env.mac = False
     env.system_db_user = None
     env.using_virtuoso = None
 
-    #Minimal dependencies versions
+    # Minimal dependencies versions
 
 
 def using_virtuoso():
     if env.using_virtuoso is None:
-        config = get_config()
-        url = config.get('app:assembl', 'sqlalchemy.url')
-        env.using_virtuoso = url.startswith('virtuoso')
+        env.using_virtuoso = env.sqlalchemy_url.startswith('virtuoso')
     return env.using_virtuoso
 
 
@@ -1397,16 +1408,18 @@ def env_dev(projectpath=None):
     else:
         env.ini_file = 'development.ini'
     env.pop('host_string')
-    commonenv(projectpath, getenv('VIRTUAL_ENV', None))
+
+    env.hosts = ['localhost']
+    execute(commonenv, projectpath, getenv('VIRTUAL_ENV', None))
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
-    #env.user = "webapp"
-    #env.home = "webapp"
+    # env.user = "webapp"
+    # env.home = "webapp"
     require('projectname', provided_by=('commonenv',))
     env.mac = system().startswith('Darwin')
     env.uses_apache = False
     env.uses_ngnix = False
-    env.hosts = ['localhost']
+
     env.gitbranch = "develop"
 
 
@@ -1417,14 +1430,14 @@ def env_coeus_assembl():
     Production environment for Bluenove and Imagination for People projects
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl/"))
+    env.hosts = ['coeus.ca']
+    execute(commonenv, normpath("/var/www/assembl/"))
     env.is_production_env = True
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['coeus.ca']
 
     env.uses_apache = False
     env.uses_ngnix = True
@@ -1439,14 +1452,14 @@ def env_coeus_assembl2():
     Main staging environment
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/var/www/assembl2/"))
+    env.hosts = ['coeus.ca']
+    execute(commonenv, normpath("/var/www/assembl2/"))
     env.is_production_env = False
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl2.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['coeus.ca']
 
     env.uses_apache = False
     env.uses_ngnix = True
@@ -1462,14 +1475,14 @@ def env_inm_agora():
     INM (Institut du nouveau monde) dedicated environment
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/home/www/assembl_inm/"))
+    env.hosts = ['discussions.bluenove.com']
+    execute(commonenv, normpath("/home/www/assembl_inm/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "agora.inm.qc.ca"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['discussions.bluenove.com']
 
     env.uses_apache = False
     env.uses_ngnix = True
@@ -1484,14 +1497,14 @@ def env_bluenove_discussions():
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/home/www/assembl_discussions_bluenove_com/"))
+    env.hosts = ['discussions.bluenove.com']
+    execute(commonenv, normpath("/home/www/assembl_discussions_bluenove_com/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "discussions.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['discussions.bluenove.com']
 
     env.uses_apache = False
     env.uses_ngnix = True
@@ -1505,14 +1518,14 @@ def env_bluenove_assembl2():
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/home/www/assembl2_bluenove_com/"))
+    env.hosts = ['assembl2.bluenove.com']
+    execute(commonenv, normpath("/home/www/assembl2_bluenove_com/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "assembl2.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['assembl2.bluenove.com']
 
     env.uses_apache = False
     env.uses_ngnix = True
@@ -1526,14 +1539,14 @@ def env_paris_debat():
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/home/www/assembl_paris_fr/"))
+    env.hosts = ['discussions.bluenove.com']
+    execute(commonenv, normpath("/home/www/assembl_paris_fr/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "debat.paris.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['discussions.bluenove.com']
 
     env.uses_apache = False
     env.uses_ngnix = True
@@ -1548,14 +1561,14 @@ def env_thecampfactory():
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    commonenv(normpath("/home/www/assembl_thecampfactory_fr/"))
+    env.hosts = ['assembl2.bluenove.com']
+    execute(commonenv, normpath("/home/www/assembl_thecampfactory_fr/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "assembl.thecampfactory.fr"
     env.user = "www-data"
     env.home = "www-data"
     require('projectname', provided_by=('commonenv',))
-    env.hosts = ['assembl2.bluenove.com']
 
     env.uses_apache = False
     env.uses_ngnix = True
