@@ -1,6 +1,8 @@
 #!/usr/bin/python
 import sys
 import signal
+from random import uniform
+from time import sleep
 
 from threading import Thread, Event
 from datetime import datetime, timedelta
@@ -13,6 +15,7 @@ from zope.component import getGlobalSiteManager
 from kombu import BrokerConnection, Exchange, Queue
 from kombu.mixins import ConsumerMixin
 from kombu.utils.debug import setup_logging
+from sqlalchemy.exc import TimeoutError
 
 from assembl.tasks import configure, raven_client
 from assembl.lib.config import set_config
@@ -138,6 +141,7 @@ class SourceReader(Thread):
     def __init__(self, source_id):
         super(SourceReader, self).__init__()
         self.source_id = source_id
+        self.source = None
         self.status = ReaderStatus.CREATED
         self.last_prod = datetime.utcnow()
         self.last_read_started = datetime.fromtimestamp(0)
@@ -395,7 +399,15 @@ class SourceReader(Thread):
 
     def setup(self):
         from assembl.models import ContentSource
-        self.source = ContentSource.get(self.source_id)
+        backoff = 0.5 + uniform(0, 0.5)
+        while self.source is None:
+            try:
+                self.source = ContentSource.get(self.source_id)
+            except TimeoutError:
+                # Ran out of connection pool
+                log.error("TimeoutError for " + self.source_id)
+                sleep(backoff)
+                backoff *= 2
         connection_error = (
             ReaderStatus(self.source.connection_error)
             if self.source.connection_error else None)
