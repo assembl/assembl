@@ -85,6 +85,7 @@ known_transitions = {
         ReaderStatus.WAIT_FOR_PUSH,
     },
     ReaderStatus.SHUTDOWN: {
+        ReaderStatus.SHUTDOWN,
     },
 }
 
@@ -219,7 +220,8 @@ class SourceReader(Thread):
         self.refresh_source()
         self.source.connection_error = status.value
         self.source.error_description = str(reader_error)
-        if status > ReaderStatus.TRANSIENT_ERROR:
+        if (status > ReaderStatus.TRANSIENT_ERROR and
+                self.status != ReaderStatus.SHUTDOWN):
             self.set_status(status)
             self.reimporting = False
         self.error_backoff_until = datetime.utcnow() + error_backoff
