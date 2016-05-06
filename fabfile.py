@@ -482,7 +482,7 @@ def app_update_dependencies():
     execute(update_vendor_themes)
     execute(update_requirements, force=False)
     execute(update_bower)
-    execute(bower_install)
+    execute(bower_update)
     execute(npm_update)
 
 
