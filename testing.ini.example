@@ -33,11 +33,17 @@ debugtoolbar.hosts = 127.0.0.0/8
 debugtoolbar.intercept_exc = false
 
 # This database will be cleared! Be careful.
+# For postgres:
+#sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test
+# For virtuoso:
 sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
 sqlalchemy.echo = True
 db_user = assembl_test
 db_password = assembl_test
-db_schema = assembl_test
+# For postgres:
+db_schema = public
+# For virtuoso:
+#db_schema = assembl_test
 db_database = assembl_test
 
 jinja2.directories = assembl:templates
@@ -247,6 +253,9 @@ transaction = transaction
 # Path to migration scripts
 script_location = assembl/alembic
 # This database will be cleared! Be careful.
+# For postgres:
+#sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test
+# For virtuoso:
 sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
 transaction_per_migration = true
 
@@ -353,6 +362,9 @@ http_port = 8892
 
 [supervisor]
 
+# For postgres:
+#autostart_virtuoso = false
+# For virtuoso:
 autostart_virtuoso = true
 autostart_celery_imap = false
 autostart_celery_notification_dispatch = true

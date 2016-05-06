@@ -137,6 +137,7 @@ class Post(Content):
         backref=backref('posts_moderated'),
     )
 
+    # All the idea contend likns of the ancestors of this post
     idea_content_links_above_post = column_property(
         func.idea_content_links_above_post(id),
         deferred=True, expire_on_flush=False)

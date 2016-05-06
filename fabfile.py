@@ -807,10 +807,6 @@ def check_and_create_database_user():
 
 
 def database_create_postgres():
-    # From the old README:
-    # - sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl --pwprompt
-    # - createdb --host localhost -U assembl assembl
-    # - venv/bin/assembl-db-manage development.ini bootstrap
     execute(check_and_create_database_user)
 
     with settings(warn_only=True), hide('stdout'):

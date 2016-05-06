@@ -230,6 +230,46 @@ def test_api_register(discussion, test_app):
         r = test_app.get("/users/email_confirm/"+token)
         assert r.status_code == 200
 
+def test_api_get_posts_queries(
+        discussion, test_app, test_session, participant1_user, 
+        root_post_1, reply_post_1, reply_post_2):
+    base_post_url = get_url(discussion, 'posts')
+    
+    #Check initial conditions from post api
+    url = base_post_url
+    res = test_app.get(url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['total'] == 3
+    
+    #Test date queries
+    url = base_post_url + "?posted_before_date=2000-01-02T00%3A00%3A00.000Z&view=id_only"
+    res = test_app.get(url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['total'] == 1
+    assert res_data['posts'][0]['@id'] == root_post_1.uri()
+    
+    url = base_post_url + "?posted_after_date=2000-01-02T00%3A00%3A00.000Z&view=id_only"
+    res = test_app.get(url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['total'] == 2
+    
+    #TODO: Other query types, and sorting
+
+@pytest.mark.xfail
+def test_api_weird_failure_on_joinedload(
+        discussion, test_app, test_session, participant1_user, 
+        root_post_1, reply_post_1, reply_post_2):
+    base_post_url = get_url(discussion, 'posts')
+    
+    url = base_post_url + "?posted_before_date=2000-01-02T00%3A00%3A00.000Z"
+    res = test_app.get(url)
+    assert res.status_code == 200
+    res_data = json.loads(res.body)
+    assert res_data['total'] == 1
+    assert res_data['posts'][0]['@id'] == root_post_1.uri()
 
 #@pytest.mark.xfail
 def test_api_get_posts_from_idea(

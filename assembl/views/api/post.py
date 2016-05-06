@@ -225,7 +225,7 @@ def get_posts(request):
         if posted_before_date:
             posts = posts.filter(PostClass.creation_date <= posted_before_date)
             ideaContentLinkQuery = posts.filter(
-                ideaContentLinkQuery.creation_date <= posted_before_date)
+                PostClass.creation_date <= posted_before_date)
         #Maybe we should do something if the date is invalid.  benoitg
 
     if post_author_id:
