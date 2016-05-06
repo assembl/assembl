@@ -390,6 +390,8 @@ def assembl_register_view(request):
         headers = remember(request, user.id)
         user.last_login = datetime.utcnow()
         request.response.headerlist.extend(headers)
+        if discussion:
+            maybe_auto_subscribe(user, discussion)
         # TODO: Tell them to expect an email.
         return HTTPFound(location=next_view)
     return HTTPFound(location=maybe_contextual_route(
