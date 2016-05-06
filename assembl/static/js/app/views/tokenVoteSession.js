@@ -638,7 +638,13 @@ var TokenVoteCollectionView = Marionette.CompositeView.extend({
   }
 });
 
-//The view of a single vote result
+
+// List of views for the result modal.
+
+/*
+  The view of a single vote result, which will be created by
+  the collection view TokenVoteResultCollectionView 
+ */
 var TokenVoteResultView = Marionette.ItemView.extend({
   constructor: function TokenVoteResultView(){
     Marionette.ItemView.apply(this, arguments);
@@ -647,12 +653,27 @@ var TokenVoteResultView = Marionette.ItemView.extend({
   template: '#tmpl-tokenVoteResultSingleView',
 
   //Most likely the place where D3 will be used!
-  initialize: function(){
-    console.log("[TokenVoteResultView] Single result view");
+  initialize: function(options){
+    this.categoryIndex = options.categoryIndex;
+    // console.log("[TokenVoteResultView] Single result view with model", this.model);
+  },
+
+  serializeData: function(){
+    
+    var results = [];
+    var resultsObject = this.model.get('sums');
+
+    return {
+      ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
+      ideaDescription: this.model.get('objectConnectedTo').getLongTitleDisplayText(),
+      categoryResult: []
+    }
   }
 });
 
-//The view that shows the list of results
+/*
+  This is the collection view of each vote result
+ */
 var TokenVoteResultCollectionView = Marionette.CollectionView.extend({
   constructor: function TokenVoteResultCollectionView(){
     Marionette.CollectionView.apply(this, arguments);
@@ -661,6 +682,12 @@ var TokenVoteResultCollectionView = Marionette.CollectionView.extend({
   childView: TokenVoteResultView
 });
 
+
+/*
+  The Token Vote Result View:
+  It contains the question asked, and a collection view of each
+  idea's vote results
+ */
 var TokenResultView = Marionette.LayoutView.extend({
   constructor: function ModalView(){
     Marionette.LayoutView.apply(this, arguments);
@@ -688,10 +715,11 @@ var TokenResultView = Marionette.LayoutView.extend({
         Widget = require('../models/widget.js'),
         that = this;
 
-    console.log('initializing [TokenResultView]');
+
     cm.getAllIdeasCollectionPromise()
       .then(function(ideas){
         that.ideas = ideas;
+        //Add ONLY the subset of votable_ideas!!!
         return cm.getUserLanguagePreferencesPromise()
       .then(function(preferences){
         that.languagePreferences = preferences;
@@ -701,13 +729,20 @@ var TokenResultView = Marionette.LayoutView.extend({
         return that.voteResults.fetch();
       }).then(function(results){
         //Don't care about results, it's been fetched.
-        var tokenSpecs = that.model.getVoteSpecificationModel();
-        that.voteResults.associateTo(that.ideas, tokenSpecs);
-        console.log('the vote results models', that.voteResults);
-        that.tokenResultsView = new TokenVoteResultCollectionView({
-          collection: that.voteResults
+        that.tokenSpecs = that.model.getVoteSpecificationModel();
+        that.voteResults.associateTo(that.ideas, that.tokenSpecs);
+
+        //Determine the sort order of the categories and get their names:
+        var categories = that.tokenSpecs.get('token_categories');
+        var sortOrder = categories.map(function(category, index){
+          var name = category.get('typename');
+          return {name: index}
         });
 
+        that.tokenResultsView = new TokenVoteResultCollectionView({
+          collection: that.voteResults,
+          categoryIndex: sortOrder
+        });
         if (!that.isViewDestroyed()){
           that.results.show(that.tokenResultsView);
         }
@@ -750,6 +785,11 @@ var TokenResultView = Marionette.LayoutView.extend({
 });
 
 
+/*
+  The results modal view
+  It is barely a simple container for the real view: TokenResultView
+ */
+//Rename to Modal **
 var TokenVoteSessionResultModel = Backbone.Modal.extend({
   constructor: function TokenVoteSessionResultModel(){
     Backbone.Modal.apply(this, arguments);
@@ -766,7 +806,7 @@ var TokenVoteSessionResultModel = Backbone.Modal.extend({
   onRender: function(){
     var resultView = new TokenResultView({model: this.model});
     this.$(this.ui.body).html(resultView.render().el);
-    resultView.onShow(); 
+    // resultView.onShow();
   },
 
   serializeData: function(){

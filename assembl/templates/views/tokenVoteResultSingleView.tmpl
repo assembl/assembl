@@ -1,3 +1,6 @@
 <div>
-    <span>Idea</span>
+    <div><%= ideaTitle %></div>
+    <% _.each(categoryResult, function(result){ %>
+        <div><%= result %></div>
+    <% }); %>
 </div>

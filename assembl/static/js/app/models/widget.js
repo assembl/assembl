@@ -424,7 +424,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
 
     switch ( activityState ){
       case "active":
-        var modalView = new TokenVoteSessionView.TokenVoteSessionView({
+        var modalView = new TokenVoteSessionView.TokenVoteSessionModal({
           widgetModel: that
         });
 
@@ -442,8 +442,6 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
     For debugging results view purposes
    */
   onShowResult: function(evt){
-    console.log('showResult on model was called');
-    var that = this;
     var modalView = new TokenVoteSessionView.TokenVoteSessionResultModel({model: this});
     Ctx.setCurrentModalView(modalView);
     Assembl.slider.show(modalView);
@@ -488,7 +486,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
       //Assumes only one tokenVoteSpecification exists in this widget.
       var tokenSpec = _.findWhere(specs, {'@type': Types.TOKENVOTESPECIFICATION});
       if (tokenSpec){
-        return new TokenSpecificationModel(tokenSpec, {parse: true}) 
+        return new TokenSpecificationModel(tokenSpec, {parse: true});
       }
       else return null;
     }
@@ -561,6 +559,12 @@ var TokenCategorySpecificationCollection = Base.Collection.extend({
 });
 
 
+/*
+  This model is not symmetrical to the back-end key-value hash
+  There is no back-end model for the vote results
+  This is for view purposes only (read-only)
+  Do not create the model; create the collection instead!
+ */
 var VoteResultModel = Base.Model.extend({
   constructor: function VoteResultModel(){
     Base.Model.apply(this, arguments);
@@ -609,9 +613,10 @@ var VoteResultCollection = Base.Collection.extend({
    * @return {undefined}
    */
   associateIdeaModelToObject: function(objectCollection){
+    //Add checks to ensure that the idea is not removed!
     this.each(function(result){
-      var ideaModel = _.findWhere(objectCollection, {'@id': result.idea_id});
-      result.objectConnectedTo = ideaModel;
+      var ideaModel = objectCollection.findWhere( {'@id': result.get('idea_id')} );
+      result.set('objectConnectedTo', ideaModel);
     });
   },
 
@@ -621,8 +626,9 @@ var VoteResultCollection = Base.Collection.extend({
    * @return {undefined}
    */
   associateCategoryModelToObject: function(categoryCollection){
+    //Add checks to ensure that the category collection is removed
     this.each(function(result){
-      result.objectDescription = categoryCollection;
+      result.set('objectDescription', categoryCollection);
     });
   },
 
