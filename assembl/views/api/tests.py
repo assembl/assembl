@@ -258,7 +258,7 @@ def test_api_get_posts_queries(
     
     #TODO: Other query types, and sorting
 
-@pytest.mark.xfail
+
 def test_api_weird_failure_on_joinedload(
         discussion, test_app, test_session, participant1_user, 
         root_post_1, reply_post_1, reply_post_2):
@@ -271,7 +271,7 @@ def test_api_weird_failure_on_joinedload(
     assert res_data['total'] == 1
     assert res_data['posts'][0]['@id'] == root_post_1.uri()
 
-#@pytest.mark.xfail
+
 def test_api_get_posts_from_idea(
         discussion, test_app, test_session, participant1_user, 
         root_idea, subidea_1, subidea_1_1, subidea_1_1_1,
