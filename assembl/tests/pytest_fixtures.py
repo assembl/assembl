@@ -549,7 +549,7 @@ def root_idea(request, discussion, test_session):
 @pytest.fixture(scope="function")
 def subidea_1(request, discussion, root_idea, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Favor economic growth", discussion=discussion)
+    i = Idea(short_title=u"Favor economic growth", discussion=discussion)
     test_session.add(i)
     l_r_1 = IdeaLink(source=root_idea, target=i)
     test_session.add(l_r_1)
@@ -567,7 +567,7 @@ def subidea_1(request, discussion, root_idea, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_1(request, discussion, subidea_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Lower taxes", discussion=discussion)
+    i = Idea(short_title=u"Lower taxes", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
@@ -585,7 +585,7 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Lower government revenue", discussion=discussion)
+    i = Idea(short_title=u"Lower government revenue", discussion=discussion)
     test_session.add(i)
     l_11_111 = IdeaLink(source=subidea_1_1, target=i)
     test_session.add(l_11_111)
@@ -603,7 +603,7 @@ def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1(request, discussion, subidea_1_1_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Austerity yields contraction", discussion=discussion)
+    i = Idea(short_title=u"Austerity yields contraction", discussion=discussion)
     test_session.add(i)
     l_111_1111 = IdeaLink(source=subidea_1_1_1, target=i)
     test_session.add(l_111_1111)
@@ -621,7 +621,7 @@ def subidea_1_1_1_1(request, discussion, subidea_1_1_1, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_1(request, discussion, subidea_1_1_1_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Job loss", discussion=discussion)
+    i = Idea(short_title=u"Job loss", discussion=discussion)
     test_session.add(i)
     l_1111_11111 = IdeaLink(source=subidea_1_1_1_1, target=i)
     test_session.add(l_1111_11111)
@@ -639,7 +639,7 @@ def subidea_1_1_1_1_1(request, discussion, subidea_1_1_1_1, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_2(request, discussion, subidea_1_1_1_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Environmental program cutns", discussion=discussion)
+    i = Idea(short_title=u"Environmental program cutns", discussion=discussion)
     test_session.add(i)
     l_1111_11112 = IdeaLink(source=subidea_1_1_1_1, target=i)
     test_session.add(l_1111_11112)
@@ -657,7 +657,7 @@ def subidea_1_1_1_1_2(request, discussion, subidea_1_1_1_1, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_2_1(request, discussion, subidea_1_1_1_1_2, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Bad for the environment", discussion=discussion)
+    i = Idea(short_title=u"Bad for the environment", discussion=discussion)
     test_session.add(i)
     l_11112_111121 = IdeaLink(source=subidea_1_1_1_1_2, target=i)
     test_session.add(l_11112_111121)
@@ -675,7 +675,7 @@ def subidea_1_1_1_1_2_1(request, discussion, subidea_1_1_1_1_2, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_1_1_1_2_2(request, discussion, subidea_1_1_1_1_2, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Federal programs are ineffective", discussion=discussion)
+    i = Idea(short_title=u"Federal programs are ineffective", discussion=discussion)
     test_session.add(i)
     l_11112_111122 = IdeaLink(source=subidea_1_1_1_1_2, target=i)
     test_session.add(l_11112_111122)
@@ -693,7 +693,7 @@ def subidea_1_1_1_1_2_2(request, discussion, subidea_1_1_1_1_2, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_2(request, discussion, subidea_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Increased reseource consumption", discussion=discussion)
+    i = Idea(short_title=u"Increased reseource consumption", discussion=discussion)
     test_session.add(i)
     l_1_12 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_12)
@@ -711,7 +711,7 @@ def subidea_1_2(request, discussion, subidea_1, test_session):
 @pytest.fixture(scope="function")
 def subidea_1_2_1(request, discussion, subidea_1_2, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="Bad for the environment", discussion=discussion)
+    i = Idea(short_title=u"Bad for the environment", discussion=discussion)
     test_session.add(i)
     l_12_121 = IdeaLink(source=subidea_1_2, target=i)
     test_session.add(l_12_121)
@@ -729,7 +729,7 @@ def subidea_1_2_1(request, discussion, subidea_1_2, test_session):
 @pytest.fixture(scope="function")
 def criterion_1(request, discussion, subidea_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="cost", discussion=discussion)
+    i = Idea(short_title=u"cost", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
@@ -747,7 +747,7 @@ def criterion_1(request, discussion, subidea_1, test_session):
 @pytest.fixture(scope="function")
 def criterion_2(request, discussion, subidea_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="quality", discussion=discussion)
+    i = Idea(short_title=u"quality", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
@@ -765,7 +765,7 @@ def criterion_2(request, discussion, subidea_1, test_session):
 @pytest.fixture(scope="function")
 def criterion_3(request, discussion, subidea_1, test_session):
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title="time", discussion=discussion)
+    i = Idea(short_title=u"time", discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
@@ -908,7 +908,7 @@ def creativity_session_widget_new_idea(
                                 IdeaProposalPost, LangString)
     i = Idea(
         discussion=discussion,
-        short_title="generated idea")
+        short_title=u"generated idea")
     test_session.add(i)
     l_1_wi = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_wi)
