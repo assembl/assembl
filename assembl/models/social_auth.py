@@ -313,11 +313,14 @@ class SocialAuthAccount(
             if photo:
                 self.picture_url = photo
         elif self.identity_provider.provider_type.startswith('facebook'):
-            accounts = [x.get('uid') for x in profile.get('accounts', ())]
-            accounts = [x for x in accounts if x]
-            if accounts:
-                self.picture_url = 'http://graph.facebook.com/%s/picture' % (
-                    accounts[0])
+            account = profile.get('id', None)
+            if account is None:
+                accounts = [x.get('uid') for x in profile.get('accounts', ())]
+                accounts = [x for x in accounts if x]
+                if not accounts:
+                    return
+                account = accounts[0]
+            self.picture_url = 'http://graph.facebook.com/%s/picture' % (account)
 
     facebook_sizes = (
         ('square', 50), ('small', 50), ('normal', 100), ('large', 200))
