@@ -189,13 +189,12 @@ def google_identity_provider(request, test_session):
 @pytest.fixture(scope="function")
 def discussion(request, test_session, default_preferences):
     from assembl.models import Discussion
-    d = Discussion(topic=u"Jack Layton", slug="jacklayton2",
-                   subscribe_to_notifications_on_signup=False,
-                   session=test_session)
-    test_session.add(d)
-    test_session.add(d.next_synthesis)
-    test_session.add(d.root_idea)
-    test_session.add(d.table_of_contents)
+    with test_session.no_autoflush:
+        d = Discussion(
+            topic=u"Jack Layton", slug="jacklayton2",
+            subscribe_to_notifications_on_signup=False,
+            session=test_session)
+        test_session.add(d)
     test_session.flush()
 
     def fin():

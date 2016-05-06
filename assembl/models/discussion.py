@@ -150,38 +150,46 @@ class Discussion(DiscussionBoundBase):
 
     def __init__(self, *args, **kwargs):
         session = kwargs.pop('session', self.default_db)
-        super(Discussion, self).__init__(*args, **kwargs)
-        # create unless explicitly set to None
-        if 'root_idea' in kwargs:
-            root_idea = kwargs.get('root_idea')
-            if root_idea:
-                root_idea.discussion = self
-        else:
-            from .idea import RootIdea
-            self.root_idea = RootIdea(discussion=self)
 
-        if 'table_of_contents' in kwargs:
-            table_of_contents = kwargs.get('table_of_contents')
-            if table_of_contents:
-                table_of_contents.discussion = self
+        kwargs['preferences'] = preferences = Preferences(
+            name='discussion_'+kwargs['slug'],
+            cascade_preferences=Preferences.get_default_preferences())
+        session.add(preferences)
+        session.flush()
+
+        root_idea = kwargs.get('root_idea', None)
+        table_of_contents = kwargs.get('table_of_contents', None)
+        next_synthesis = kwargs.get('next_synthesis', None)
+        # create unless explicitly set to None
+
+        if root_idea is None:
+            from .idea import RootIdea
+            kwargs['root_idea'] = RootIdea(discussion=self)
         else:
+            root_idea.discussion = self
+        if table_of_contents is None:
             from .idea_graph_view import TableOfContents
-            self.table_of_contents = TableOfContents(discussion=self)
-        if 'next_synthesis' in kwargs:
-            next_synthesis = kwargs.get('next_synthesis')
-            if next_synthesis:
-                next_synthesis.discussion = self
+            kwargs['table_of_contents'] = TableOfContents(discussion=self)
         else:
+            table_of_contents.discussion = self
+        if next_synthesis is None:
             from .idea_graph_view import Synthesis
-            synthesis = Synthesis(discussion=self)
-            session.add(synthesis)
+            kwargs['next_synthesis'] = Synthesis(discussion=self)
+        else:
+            next_synthesis.discussion = self
+
+        super(Discussion, self).__init__(*args, **kwargs)
+        if root_idea is None:
+            session.add(kwargs['root_idea'])
+        if table_of_contents is None:
+            session.add(kwargs['table_of_contents'])
+        if next_synthesis is None:
+            session.add(kwargs['next_synthesis'])
+
         participant = session.query(Role).filter_by(name=R_PARTICIPANT).one()
         participant_template = UserTemplate(
             discussion=self, for_role=participant)
         session.add(participant_template)
-        self.preferences = Preferences(
-            name='discussion_'+kwargs['slug'],
-            cascade_preferences=Preferences.get_default_preferences())
 
     def unique_query(self):
         # DiscussionBoundBase is misleading here
