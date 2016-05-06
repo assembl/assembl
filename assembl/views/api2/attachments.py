@@ -7,7 +7,29 @@ from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import File, Document, Discussion
 from assembl.auth.util import get_permissions
 from assembl.views.traversal import InstanceContext, CollectionContext
+from assembl.lib.raven_client import capture_message
 from . import MULTIPART_HEADER, update_from_form
+
+
+@view_config(context=InstanceContext, request_method='DELETE',
+             permission=P_READ, ctx_instance_class=Document,
+             renderer='json')
+def delete_file(request):
+    # If there is no attachment, delete it and return positive.
+    # Else, just return blank.
+    # This API endpoint should never fail
+    ctx = request.context
+    db = Document.default_db
+    document = ctx._instance
+    attachments = document.attachments
+    try:
+        if not attachments:
+            db.delete(document)
+            db.flush()
+    except:
+        capture_message("[HTTP DELETE] Failed to delete Document %d" %
+                        document.id)
+    return {}
 
 
 @view_config(context=InstanceContext, request_method='GET',
