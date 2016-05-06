@@ -291,6 +291,8 @@ class SourceReader(Thread):
                 self.do_close()
                 break
             while self.after_login or self.is_connected():
+                if self.status == ReaderStatus.SHUTDOWN:
+                    break
                 self.after_login = False
                 # Read in all cases
                 try:
