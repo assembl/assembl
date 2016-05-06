@@ -227,7 +227,7 @@ class PostPathLocalCollection(object):
                 return post, db.query(post.id)
         if not self.paths:
             post, q = base_query(True)
-            return q.filter(False).subquery("relposts")[1]
+            return q.filter(False).subquery("relposts")
         includes_by_level = [[]]
         excludes_by_level = [[]]
         ancestry = []
