@@ -1,3 +1,4 @@
+import pytest
 from .post import Post
 
 
@@ -36,17 +37,16 @@ def test_jack_layton_linked_discussion(
     # orphans.sort()
     # orphans = [str(id) for id in orphans]
     orphans = set(orphans)
-    orphan_count = counters.get_orphan_counts()
+    # orphan_count = counters.get_orphan_counts()
+    # data = test_webrequest.discussion_data._post_path_counter.paths
     # for (num, idea) in enumerate(ideas):
     #     print "idea", num, idea.short_title, "#", counters.counts[idea.id]
-    #     print "posts:", ",".join(posts_by_idea[idea.id])
-    # print "orphans #", orphan_count, ":", ",".join(orphans)
-    # for id, loc_coll in test_webrequest.discussion_data._post_path_counter.paths.iteritems():
-    #     print id, ":", " ; ".join((as_post_nums(path) for path in loc_coll.paths))
-    # counters.paths[subidea_1.id].as_clause_base(test_session)
+    #     print "posts:", ",".join((str(x) for x in posts_by_idea[idea.id]))
+    #     print " ; ".join((as_post_nums(path) for path in data[idea.id].paths))
+    # print "orphans #", orphan_count, ":", ",".join((str(x) for x in orphans))
 
     # Resulting paths:
-    # subidea_1 : <1+> ; <1,3,5-> ; <1,3,5,6+> ; <1,2,17,18+> ; <1,4+> ; <1,4,8,9,15,16->
+    # subidea_1 : <1+> ; <1,3,5-> ; <1,3,5,6+> ; <1,4,8,9,15,16->
     # subidea_1_1 : <1,3,5,6+> ; <1,2,17,18+> ; <1,4,8+> ; <1,4,8,9,15,16->
     # subidea_1_1_1 : <1,2,17,18+> ; <1,4,8+> ; <1,4,8,9,15,16->
     # subidea_1_1_1_1 : <1,2,17,18+> ; <1,4,8+> ; <1,4,8,9,15,16->
@@ -56,7 +56,6 @@ def test_jack_layton_linked_discussion(
     # subidea_1_1_1_1_2_2 : <1,4,8,19,20+>
     # subidea_1_2 : <1,4+> ; <1,4,8,9,15,16->
     # subidea_1_2_1 : <1,4+> ; <1,4,8,9,15,16->
-
 
     expected = {
         subidea_1.id: {1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20},
@@ -74,3 +73,6 @@ def test_jack_layton_linked_discussion(
     for idea in ideas:
         assert posts_by_idea[idea.id] == expected[idea.id]
     assert orphans == expected[None]
+
+if Post.using_virtuoso:
+    test_jack_layton_linked_discussion = pytest.mark.xfail(test_jack_layton_linked_discussion)

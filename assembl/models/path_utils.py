@@ -93,6 +93,9 @@ class PostPathData(object):
         # We want positives to come first
         return self.positive > other.positive
 
+    def __hash__(self):
+        return hash(self.post_path) + int(self.positive)
+
     def __repr__(self):
         return "<%s%s>" % (
             self.post_path, "+" if self.positive else "-")
@@ -131,29 +134,38 @@ class PostPathLocalCollection(object):
         if not len(self.paths):
             return
         self.paths.sort()
-        last_path = None
         paths = []
-        last_path_polarity = {True: None, False: None}
+        ancestors_by_polarity = {True: [], False: [], None: []}
         for path in self.paths:
+            for ancestors in ancestors_by_polarity.itervalues():
+                while ancestors:
+                    if not path.post_path.startswith(ancestors[-1].post_path):
+                        ancestors.pop()
+                    else:
+                        break
+            ancestors = ancestors_by_polarity[None]
+            pol_ancestors = ancestors_by_polarity[path.positive]
             # Special case: Combine in place
-            if last_path is not None and last_path.combine(path) is path:
-                paths[-1] = path
-                last_path = path
+            if len(ancestors) and ancestors[-1].combine(path) is path:
+                paths[paths.index(ancestors[-1])] = path
+                ancestors[-1] = path
+                pol_ancestors[-1] = path
                 continue
             # Forget if it combines with a previous path of same polarity
             # BUT do not combine with distant previous path of same polarity
             # if closest previous path is super-path.
-            last_path_same_pol = last_path_polarity[path.positive]
-            if last_path_same_pol is not None and not (
-                    last_path is not last_path_same_pol and
+            last_path_pol = pol_ancestors[-1] if len(pol_ancestors) else None
+            last_path = ancestors[-1] if len(ancestors) else None
+            if last_path_pol is not None and not (
+                    last_path is not last_path_pol and
                     path.post_path.startswith(last_path.post_path)):
-                combined = last_path_same_pol.combine(path)
+                combined = last_path_pol.combine(path)
                 assert combined is not path, "We should not combine forward"
                 if combined is not None:
                     continue
             paths.append(path)
-            last_path = path
-            last_path_polarity[path.positive] = path
+            ancestors.append(path)
+            pol_ancestors.append(path)
         self.paths = paths
         self.reduced = True
 
@@ -203,21 +215,18 @@ class PostPathLocalCollection(object):
     def __repr__(self):
         return " ; ".join((`x` for x in self.paths))
 
-    def as_clause_base(self, db):
+    def as_clause_base(self, db, include_breakpoints=False):
         assert self.reduced
-        post = with_polymorphic(
-            Post, [], Post.__table__,
-            aliased=False, flat=True)
-
         def base_query(labeled=False):
+            post = with_polymorphic(
+                Post, [], Post.__table__,
+                aliased=False, flat=True)
             if labeled:
-                return db.query(post.id.label("post_id"))
+                return post, db.query(post.id.label("post_id"))
             else:
-                return db.query(post.id)
+                return post, db.query(post.id)
         if not self.paths:
-            return base_query(True).filter(False).subquery("posts")
-        direct_includes = []
-        direct_excludes = []
+            return base_query(True).filter(False).subquery("relposts")[1]
         includes_by_level = [[]]
         excludes_by_level = [[]]
         ancestry = []
@@ -227,54 +236,64 @@ class PostPathLocalCollection(object):
                     ancestry.pop()
                 else:
                     break
+            level = len(ancestry) // 2
             if path.positive:
-                while len(includes_by_level) <= len(ancestry):
+                while len(includes_by_level) <= level:
                     includes_by_level.append([])
-                includes_by_level[len(ancestry)].append(path.post_path)
-                direct_includes.append(path.last_id)
+                includes_by_level[level].append(path)
             else:
-                while len(excludes_by_level) <= len(ancestry):
+                while len(excludes_by_level) <= level:
                     excludes_by_level.append([])
-                excludes_by_level[len(ancestry)].append(path.post_path)
-                direct_excludes.append(path.last_id)
+                excludes_by_level[level].append(path)
             ancestry.append(path)
-        condition = (post.id.in_(direct_includes))
         max_level = max(len(includes_by_level), len(excludes_by_level))
-        while len(includes_by_level) < max_level:
-            includes_by_level.append([])
-        while len(excludes_by_level) < max_level:
-            excludes_by_level.append([])
-        q = base_query(True)
+        q = None
         for level in range(max_level):
-            if len(includes_by_level[level]):
-                condition = or_(condition, *[
-                    post.ancestry.like(path+"%")
-                    for path in includes_by_level[level]])
-            if condition is not None:
-                if level == 0:
-                    q = q.filter(condition)
-                elif condition is not None:
-                    q = union(q, base_query().filter(condition), use_labels=True)
             condition = None
-            if len(excludes_by_level[level]):
-                condition = or_(*[
-                    post.ancestry.like(path+"%")
-                    for path in excludes_by_level[level]])
-            # add direct excludes at last level
-            if level + 1 == max_level and direct_excludes:
-                c2 = post.id.in_(direct_excludes)
-                if condition is None:
-                    condition = c2
-                else:
-                    condition = c2 | condition
-            if condition is not None:
-                q = except_(q, base_query().filter(condition), use_labels=True)
+            # with use_labels, name of final column determined by first query
+            post, q2 = base_query(level == 0)
+            includes = (includes_by_level[level]
+                if level < len(includes_by_level) else [])
+            excludes = (excludes_by_level[level]
+                if level < len(excludes_by_level) else [])
+            include_ids = [path.last_id for path in includes]
+            exclude_ids = [path.last_id for path in excludes]
+            if include_breakpoints:
+                include_ids.extend(exclude_ids)
+                exclude_ids = None
+            if len(includes):
+                condition = or_(
+                    post.id.in_(include_ids),
+                    *[post.ancestry.like(path.post_path + "%")
+                      for path in includes])
+            if level == 0:
+                q = q2.filter(condition)
+            else:
+                assert condition is not None
+                q2 = q2.filter(condition)
+                # works in postgres, more efficient
+                q = union(q, q2, use_labels=True)
+                # rather than
+                # q = q.union(q2)
+            condition = None
+            post, q2 = base_query()
+            if len(excludes):
+                condition = or_(
+                    *[post.ancestry.like(path.post_path + "%")
+                      for path in excludes])
+                if exclude_ids:
+                    condition = post.id.in_(exclude_ids) | condition
+                q = except_(q, q2.filter(condition), use_labels=True)
+                # q = q.except_(q2.filter(condition))
+            condition = None
         if getattr(q, "c", None) is None:
             # base query
-            q = q.subquery("posts")
+            c = q._entities[0]
+            q = q.with_entities(c.expr.label("post_id"))
+            q = q.subquery("relposts")
         else:
             # compound query, already has columns
-            q = q.alias("posts")
+            q = q.alias("relposts")
         return q
 
     def as_clause(self, db, discussion_id, user_id=None, content=None):
@@ -286,7 +305,7 @@ class PostPathLocalCollection(object):
         q = db.query(content).filter(
                 (content.discussion_id == discussion_id)
                 & (content.hidden == False)
-                ).join(subq, content.id == subq.c.values()[0])
+                ).join(subq, content.id == subq.c.post_id)
         if user_id:
             # subquery?
             q = q.outerjoin(
