@@ -18,25 +18,28 @@
   ],
   "dependencies": {
     "Backbone.Subset": "https://github.com/ImaginationForPeople/Backbone.Subset.git#~0.1.1",
-    "backbone": "~1.1.2",
+    "backbone": "1.3.2",
+    "backbone.babysitter": "1.0.0-pre.1",
     "backbone-modal": "~1.1.5",
     "backbone-model-file-upload": "~1.0.0",
     "bootstrap-growl": "~1.1.0",
     "chai": "~3.5.0",
-    "ckeditor": "^4.4.7",
+    "ckeditor": "4.5.8",
     "hopscotch": "~0.2.4",
     "ink": "~1.0.5",
     "jit": "~2.0.2",
     "jquery": "~2.1.4",
     "jquery-oembed-all": "https://github.com/ImaginationForPeople/jquery-oembed-all.git#bedbdabc03540c3fd52b03d61cd1318e1879be97",
     "jquery.dotdotdot": "https://github.com/ImaginationForPeople/jQuery.dotdotdot.git#fix-paragraph-and-read-more-not-showing",
-    "marionette": "~2.4.1",
+    "marionette": "2.4.5",
     "mocha": "~2.2.5",
     "modernizr": "~2.8.3",
     "sockjs": "~0.3.4",
     "underscore": "~1.8.3"
   },
   "resolutions": {
-    "underscore": "~1.8.3"
+    "underscore": "1.8.3",
+    "backbone": "1.3.2",
+    "backbone.babysitter": "1.0.0-pre.1"
   }
 }

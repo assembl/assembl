@@ -641,11 +641,13 @@ def _bower_foreach_do(cmd):
 @task
 def bower_install():
     """ Normally not called manually """
+    execute(_bower_foreach_do, 'prune')
     execute(_bower_foreach_do, 'install')
 
 @task
 def bower_update():
     """ Normally not called manually """
+    execute(_bower_foreach_do, 'prune')
     execute(_bower_foreach_do, 'update')
 
 def npm_install():

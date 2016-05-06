@@ -29,7 +29,7 @@ var MessageListHeader = Marionette.ItemView.extend({
   template: '#tmpl-messageListHeader',
   className: 'messageListHeaderItsMe',
   initialize: function(options) {
-    //console.log("MessageListHeader::initialize()");
+    //console.log("MessageListHeader::initialize(options)", options);
     var that = this;
 
     this.options = options;
@@ -50,6 +50,8 @@ var MessageListHeader = Marionette.ItemView.extend({
       //console.log("messageListHeader got the change:isOn event");
       that.toggleExpertView();
     });
+    
+    this.delegateEvents(this._generateEvents());
   },
 
   ui: {
@@ -60,10 +62,11 @@ var MessageListHeader = Marionette.ItemView.extend({
     filtersDropdown: '.js_filters-dropdown'
   },
 
-  events: function() {
+  _generateEvents: function() {
     var that = this;
     var data = {
         //'click @ui.expertViewToggleButton': 'toggleExpertView' // handled by change:isOn model event instead
+        'click .js_deleteFilter ': 'onFilterDeleteClick'
     };
 
     _.each(this.ViewStyles, function(messageListViewStyle) {
@@ -264,36 +267,49 @@ var MessageListHeader = Marionette.ItemView.extend({
    * @event
    */
   onAddFilter: function(ev) {
-      var that = this,
-          filterId = ev.currentTarget.getAttribute('data-filterid'),
-          filterDef = this.messageList.currentQuery.getFilterDefById(filterId),
-          filter = new filterDef(),
-          queryChanged = false;
+    var that = this,
+    filterId = ev.currentTarget.getAttribute('data-filterid'),
+    filterDef = this.messageList.currentQuery.getFilterDefById(filterId),
+    filter = new filterDef(),
+    queryChanged = false;
 
-      var execute = function(value){
-        queryChanged = that.messageList.currentQuery.addFilter(filterDef, value);
-        if (queryChanged) {
-          that.messageList.render();
-        }
-      };
-
-      var should_ask_value_from_user = "should_ask_value_from_user" in filterDef ? filterDef.should_ask_value_from_user : false;
-      if ( should_ask_value_from_user && "askForValue" in filter && _.isFunction(filter.askForValue) ){
-        filter.askForValue();
-        filter.getImplicitValuePromise().then(function(implicitValue) {
-          if ( implicitValue ){
-            that.messageList.currentQuery.clearFilter(filterDef);
-            execute(implicitValue);
-          }
-        });
+    var execute = function(value){
+      queryChanged = that.messageList.currentQuery.addFilter(filterDef, value);
+      if (queryChanged) {
+        that.messageList.render();
       }
-      else {
-        filter.getImplicitValuePromise().then(function(implicitValue) {
+    };
+
+    var should_ask_value_from_user = "should_ask_value_from_user" in filterDef ? filterDef.should_ask_value_from_user : false;
+    if ( should_ask_value_from_user && "askForValue" in filter && _.isFunction(filter.askForValue) ){
+      filter.askForValue();
+      filter.getImplicitValuePromise().then(function(implicitValue) {
+        if ( implicitValue ){
+          that.messageList.currentQuery.clearFilter(filterDef);
           execute(implicitValue);
-        });
-      }
+        }
+      });
+    }
+    else {
+      filter.getImplicitValuePromise().then(function(implicitValue) {
+        execute(implicitValue);
+      });
+    }
 
-    },
+  },
+
+
+  /**
+   * @event
+   */
+  onFilterDeleteClick: function(ev) {
+    //console.log("MessageListHeader:onFilterDeleteClick(ev)", ev);
+    var valueIndex = ev.currentTarget.getAttribute('data-value-index');
+    var filterid = ev.currentTarget.getAttribute('data-filterid');
+    var filter = this.currentQuery.getFilterDefById(filterid);
+    this.currentQuery.clearFilter(filter, valueIndex);
+    this.messageList.render();
+  },
 
   /**
    * Renders the default message view style dropdown button
