@@ -116,6 +116,46 @@
   background: #ce3e26;
 }
 
+
+/* Yammer */
+.core-form .yammer-bg,
+.yammer-bg {
+  background-color: #0086e6;
+  display: block;
+  height: 37px;
+  width: 240px;
+  color: $white;
+  font-size: 14px;
+  border: none;
+  padding: 0px;
+  line-height: 37px;
+  text-align: center;
+  @include border-radius(3px);
+  text-decoration: none;
+
+  &:before{
+    @extend %icon;
+    content: '\e83a';
+    color: $white;
+    font-size: 18px;
+    line-height: 37px;
+    width: 40px;
+    height: 37px;
+    background-color: #0072c6;
+    margin: -1px -1px 0 -2px;
+    float: left;
+    @include border-radius(3px 0 0 3px);
+  }
+}
+
+.yammer-bg:hover {
+  cursor: pointer;
+}
+
+.yammer-bg:active {
+  background: #0095ff;
+}
+
 /* OpenID */
 .openid-icon-bg:after {
   @extend %icon;

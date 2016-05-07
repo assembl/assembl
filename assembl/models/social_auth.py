@@ -27,6 +27,7 @@ from social.storage.sqlalchemy_orm import (
     SQLAlchemyMixin, SQLAlchemyUserMixin, SQLAlchemyNonceMixin, UserMixin,
     SQLAlchemyAssociationMixin, SQLAlchemyCodeMixin, BaseSQLAlchemyStorage)
 from sqlalchemy.ext.mutable import MutableDict
+from urllib import quote, unquote
 
 from ..lib import config
 from ..lib.sqla_types import (
@@ -312,6 +313,12 @@ class SocialAuthAccount(
             photo = profile['image'].get('url', None)
             if photo:
                 self.picture_url = photo
+        elif profile.get('user', {}).get('mugshot_url_template', None):  # yammer
+            self.picture_url = profile['user']['mugshot_url_template']
+        elif profile.get('user', {}).get('mugshot_url', None):  # yammer
+            self.picture_url = profile['user']['mugshot_url']
+        elif profile.get('mugshot_url', None):  # yammer
+            self.picture_url = profile['mugshot_url']
         elif self.identity_provider.provider_type.startswith('facebook'):
             account = profile.get('id', None)
             if account is None:
@@ -335,6 +342,9 @@ class SocialAuthAccount(
             # Make the connection https, known services can handle both.
             # Ideally we should check which ones work.
             picture_url = "https://" + picture_url.split("://", 1)[-1]
+        if "{width}" in unquote(picture_url):  # yammer
+            picture_url = unquote(picture_url).format(width=size, height=size)
+            return picture_url
         if self.identity_provider.provider_type.startswith('google'):
             modified = re.sub(
                 r"((\?|&)(size|sz))=(\d+)",

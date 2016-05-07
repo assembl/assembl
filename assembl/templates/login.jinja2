@@ -67,6 +67,7 @@
             {{form('yahoo', gettext('Login with Yahoo'), true, oauth='true', openid_identifier='yahoo.com')}}
             {{form('live', gettext('Login with Windows Live'), false)}}
             {{form('github', gettext('Login with Github'), false)}}
+            {{form('yammer', gettext('Login with Yammer'), false)}}
             {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
             {# Need to be refactored #}
             {# {form('openid', gettext('Login with OpenID'), true)} #}
@@ -135,6 +136,7 @@
           instrument_social_login('js_login_facebook', analytics.events.FACEBOOK_LOGIN);
           instrument_social_login('js_login_twitter', analytics.events.TWITTER_LOGIN);
           instrument_social_login('js_login_google', analytics.events.GOOGLE_LOGIN);
+          instrument_social_login('js_login_yammer', analytics.events.YAMMER_LOGIN);
 
         </script>
     {% endif %}

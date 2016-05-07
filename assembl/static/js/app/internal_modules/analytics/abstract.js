@@ -346,6 +346,7 @@ var moduleName = 'Analytics_Abstract',
       FACEBOOK_LOGIN: {action: 'ONBOARDING', category: 'LOGIN', eventName: 'FACEBOOK_USER_CLICK_LOGIN'},
       TWITTER_LOGIN: {action:'ONBOARDING', category: 'LOGIN', eventName: 'TWITTER_USER_CLICK_LOGIN'},
       GOOGLE_LOGIN: {action: 'ONBOARDING', category: 'LOGIN', eventName: 'GOOGLE_USER_CLICK_LOGIN'},
+      YAMMER_LOGIN: {action: 'ONBOARDING', category: 'LOGIN', eventName: 'YAMMER_USER_CLICK_LOGIN'},
 
       /**
        * Event fired when the 'register' button is pressed, regardless of 
