@@ -11,13 +11,12 @@ Installation for developers
 -  For production on linux using nginx/uwsgi you need the following ppa
    - Necessary for both saucy 13.10, raring 13.04, trusty 14.04
    - Not needed for vivid 15.04 and later
-   
+
+.. code:: sh
+
    apt-add-repository ppa:chris-lea/uwsgi
-   
    apt-get install nginx uwsgi uwsgi-plugin-python
 
--  Ruby does not like libreadline6, which comes on newer Ubuntus. Make
-   sure you have libreadline-gplv2-dev instead of libreadline6-dev.
 
 Setup a development environment:
 --------------------------------
@@ -44,7 +43,7 @@ pip installs with python:
 
     brew install python
 
-Either way, you should use pip to install fabric:
+Either way, you should use pip to install fabric (you would need to sudo for the system python):
 
 .. code:: sh
 
@@ -115,7 +114,7 @@ run command line tools, thus breaking out of the environment. You need
 to run source venv/bin/activate from the same terminal before running
 the above)
 
-Note 2: If you do not want to ``source activate`` every time, you can hook it in your shell using something like `Autoenv <https://github.com/kennethreitz/autoenv>`. Another option is to use `VirtualenvWrapper <https://bitbucket.org/virtualenvwrapper/virtualenvwrapper>` and its `Helper <https://justin.abrah.ms/python/virtualenv_wrapper_helper.html>`. At least one of us uses `VirtualFish <https://github.com/adambrenecki/virtualfish>` with auto-activation.
+Note 2: If you do not want to ``source activate`` every time, you can hook it in your shell using something like `Autoenv <https://github.com/kennethreitz/autoenv>`_. Another option is to use `VirtualenvWrapper <https://bitbucket.org/virtualenvwrapper/virtualenvwrapper>`_ and its `Helper <https://justin.abrah.ms/python/virtualenv_wrapper_helper.html>`_. At least one of us uses `VirtualFish <https://github.com/adambrenecki/virtualfish>`_ with auto-activation.
 
 
 On subsequent runs, just make sure supervisord is running.
