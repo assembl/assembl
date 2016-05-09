@@ -128,7 +128,7 @@ autorestart = false
 
 [program:gulp]
 directory = %(here)s/assembl
-command = %(here)s/node_modules/gulp/bin/gulp.js
+command = %(VIRTUAL_ENV)s/bin/node %(here)s/node_modules/.bin/gulp
 autostart = %(autostart_gulp)s
 autorestart = true
 
