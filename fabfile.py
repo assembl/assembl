@@ -237,11 +237,14 @@ def app_reload():
     """
 
 
-def venvcmd(cmd, shell=True, user=None, pty=False):
+def venvcmd(cmd, shell=True, user=None, pty=False, chdir=True):
     if not user:
         user = env.user
 
-    with cd(env.projectpath):
+    if chdir:
+        with cd(env.projectpath):
+            return run('source %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
+    else:
         return run('source %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
 
 
@@ -354,10 +357,10 @@ def compile_stylesheets():
     """
     with cd(env.projectpath):
         with cd('assembl'):
-            run('../node_modules/.bin/gulp sass')
-        run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
-        run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss', shell=True)
-        run('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/session/css --source-map assembl/static/widget/session/css assembl/static/widget/session/scss', shell=True)
+            venvcmd('../node_modules/.bin/gulp sass', chdir=False)
+        venvcmd('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
+        venvcmd('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss', shell=True)
+        venvcmd('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/session/css --source-map assembl/static/widget/session/css assembl/static/widget/session/scss', shell=True)
 
 
 @task
@@ -367,16 +370,16 @@ def compile_javascript():
     """
     with cd(env.projectpath):
         with cd('assembl'):
-            run('../node_modules/.bin/gulp libs')
-            run('../node_modules/.bin/gulp browserify:prod')
-            run('../node_modules/.bin/gulp build:test')
+            venvcmd('../node_modules/.bin/gulp libs', chdir=False)
+            venvcmd('../node_modules/.bin/gulp browserify:prod', chdir=False)
+            venvcmd('../node_modules/.bin/gulp build:test', chdir=False)
 
 
 @task
 def compile_javascript_tests():
     with cd(env.projectpath):
         with cd('assembl'):
-            run('../node_modules/.bin/gulp build:test')
+            venvcmd('../node_modules/.bin/gulp build:test', chdir=False)
 
 
 def tests():
