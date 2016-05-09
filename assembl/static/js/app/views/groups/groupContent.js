@@ -25,8 +25,9 @@ var groupContent = Marionette.CompositeView.extend({
 
   initialize: function(options) {
     var that = this;
+    this.options = options;
     this.collection = this.model.get('panels');
-    this.groupContainer = options['groupContainer'];
+    this.groupContainer = this.options['groupContainer'];
     setTimeout(function() {
       if (!that.isViewDestroyed()) {
         var navView = that.findViewByType(PanelSpecTypes.NAV_SIDEBAR);
@@ -34,20 +35,91 @@ var groupContent = Marionette.CompositeView.extend({
           navView.setViewByName(that.model.get('navigationState'), null);
         }
       }
+      that.resizePanel();
     }, 200); //FIXME:  Magic delay...
+    $(window).on("resize",function(){
+      that.resizePanel();
+    });
   },
   events: {
     'click .js_closeGroup': 'closeGroup'
   },
-  collectionEvents: {
-    'add remove reset change': 'containerAdjustGridSize'
+  resizePanel:function(){
+    var that = this;
+    console.log(that.groupContainer.collection.models);
+    _.each(that.groupContainer.collection.models,function(group){
+      _.each(group.attributes.panels.models,function(panel){
+        var panelMinWidth = panel.get('minWidth');
+        var isPanelMinimized = panel.get('minimized');
+        var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
+        var panelClass = "." + panel.get('type') + '-panel';
+        $(that.groupContainer.el).find(panelClass).css({'min-width':panelMinWidth});
+        $(that.groupContainer.el).find(panelClass).width(panelWidth);
+      });
+    });
   },
+  getPanelWidth:function(panelMinWidth,isPanelMinimized){
+    var screenSize = window.innerWidth;
+    var criticalSize = 600;
+    var panelWIdth = 0;
+    if(isPanelMinimized){
+      panelWIdth = 40;
+    }else{
+      if(screenSize > criticalSize){
+        var totalWidth = this.getTotalWidth();
+        var panelWidthInPercent = (panelMinWidth * 100) / totalWidth;
+        var totalMinimized = this.getTotalMinimized();
+        var panelWidthInPixel = (panelWidthInPercent * (screenSize-totalMinimized)) / 100;
+        panelWIdth = panelWidthInPixel;        
+      }else{
+        panelWIdth = screenSize;
+      }
+    }
+    return panelWIdth;
+  },
+  getTotalWidth:function(){
+    var totalWidth = 0;
+    _.each(this.groupContainer.collection.models,function(group){
+      _.each(group.attributes.panels.models,function(panel){
+        var isPanelMinimized = panel.get('minimized');
+        if(!isPanelMinimized){
+          totalWidth += panel.get('minWidth');
+        }
+      });
+    });
+    return totalWidth;
+  },
+  getTotalMinimized:function(){
+    var totalMinimized = 0;
+    _.each(this.groupContainer.collection.models,function(group){
+      _.each(group.attributes.panels.models,function(panel){
+        var isPanelMinimized = panel.get('minimized');
+        if(isPanelMinimized){
+          totalMinimized += 40;
+        }
+      });
+    });
+    return totalMinimized;
+  },
+
+
 
   serializeData: function() {
     return {
       "Ctx": ctx
     };
   },
+
+
+
+  resizePanelGroup:function(){
+    
+    //console.log(resizePanelGroup);
+  },
+
+
+
+
 
   /**
    * Set the given Idea as the current one to be edited
@@ -92,11 +164,11 @@ var groupContent = Marionette.CompositeView.extend({
   closeGroup: function() {
     this.applyUserCustomDataChangesOnGroupClose();
     this.model.collection.remove(this.model);
-    this.groupContainer.resizeAllPanels();
+    this.resizePanel();
   },
 
   calculateGridSize: function() {
-    var gridSize = 0;
+    /*var gridSize = 0;
     this.children.each(function(panelWrapper) {
       if (panelWrapper.model.get('hidden'))
           return 0;
@@ -104,11 +176,11 @@ var groupContent = Marionette.CompositeView.extend({
           return 0;
       gridSize += panelWrapper.gridSize;
     });
-    return gridSize;
+    return gridSize;*/
   },
 
   calculateMinWidth: function() {
-    var minWidth = 0;
+    /*var minWidth = 0;
     this.children.each(function(panelWrapper) {
       if (panelWrapper.model.get('hidden'))
           return;
@@ -117,11 +189,11 @@ var groupContent = Marionette.CompositeView.extend({
       else
           minWidth += panelWrapper.minWidth;
     });
-    return minWidth;
+    return minWidth;*/
   },
 
   getExtraPixels: function(include_embedded_idea_panel) {
-    var extraPixels = 0, that = this;
+    /*var extraPixels = 0, that = this;
     this.children.each(function(panelWrapper) {
       if (panelWrapper.model.get('hidden'))
           return;
@@ -134,11 +206,11 @@ var groupContent = Marionette.CompositeView.extend({
 
       extraPixels += that.panel_borders_size + panelWrapper.getExtraPixels();
     });
-    return extraPixels;
+    return extraPixels;*/
   },
 
   useCurrentSize: function() {
-    this.$el.stop();
+    /*this.$el.stop();
     this.children.each(function(panelWrapper) {
       if (panelWrapper.model.get('hidden'))
           return;
@@ -149,11 +221,11 @@ var groupContent = Marionette.CompositeView.extend({
       this.$el.width(this.$el.width());
     }
 
-    this.$el.addClass("animating");
+    this.$el.addClass("animating");*/
   },
 
   animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, total_pixels, skip_animation) {
-    var that = this,
+    /*var that = this,
         group_extra_pixels = this.getExtraPixels(false),
         group_units = this.calculateGridSize(),
         myCorrection = group_extra_pixels - (extra_pixels * group_units / num_units),
@@ -204,13 +276,13 @@ var groupContent = Marionette.CompositeView.extend({
       if (panelWrapper.model.get('hidden'))
           return;
       panelWrapper.animateTowardsPixels(pixels_per_unit, percent_per_unit, group_extra_pixels, num_units, group_units, total_pixels, skipAnimation);
-    });
+    });*/
   },
 
   containerAdjustGridSize: function() {
-      if (this.groupContainer) {
+      /*if (this.groupContainer) {
         this.groupContainer.adjustGridSize();
-      }
+      }*/
     },
 
   /**
@@ -248,7 +320,7 @@ var groupContent = Marionette.CompositeView.extend({
   NavigationResetDebateState: function(skip_animation) {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       if (this.findNavigationSidebarPanelSpec()) {
-        this.groupContainer.suspendResize();
+        //this.groupContainer.suspendResize();
         this.model.set('navigationState', 'debate');
 
         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
@@ -256,12 +328,12 @@ var groupContent = Marionette.CompositeView.extend({
 
         var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
 
-        if (skip_animation === false) {
+        /*if (skip_animation === false) {
           this.groupContainer.resumeResize(false);
         }
         else {
           this.groupContainer.resumeResize(true);
-        }
+        }*/
       }
     }
   },
@@ -271,10 +343,10 @@ var groupContent = Marionette.CompositeView.extend({
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       var nav = this.findNavigationSidebarPanelSpec();
       if (nav) {
-        this.groupContainer.suspendResize();
+        //this.groupContainer.suspendResize();
         this.model.set('navigationState', 'about');
         this.ensureOnlyPanelsVisible(PanelSpecTypes.DISCUSSION_CONTEXT);
-        this.groupContainer.resumeResize();
+        //this.groupContainer.resumeResize();
       }
     }
   },
@@ -282,13 +354,13 @@ var groupContent = Marionette.CompositeView.extend({
   NavigationResetSynthesisMessagesState: function(synthesisInNavigationPanel) {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       if (this.findNavigationSidebarPanelSpec()) {
-        this.groupContainer.suspendResize();
+        //this.groupContainer.suspendResize();
         this.setCurrentIdea(null);
         this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
         this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST);
         this.ensurePanelsHidden(PanelSpecTypes.IDEA_PANEL);
         this.resetMessagePanelWidth();
-        this.groupContainer.resumeResize(true);
+        //this.groupContainer.resumeResize(true);
       }
     }
   },
@@ -297,18 +369,18 @@ var groupContent = Marionette.CompositeView.extend({
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       var nav = this.findNavigationSidebarPanelSpec();
       if (nav) {
-        this.groupContainer.suspendResize();
+        //this.groupContainer.suspendResize();
         this.model.set('navigationState', 'visualizations');
         this.ensureOnlyPanelsVisible(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
         var vizPanel = this.findViewByType(PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
         vizPanel.setUrl(url);
-        this.groupContainer.resumeResize();
+        //this.groupContainer.resumeResize();
       }
     }
   },
 
   resetMessagePanelWidth: function() {
-    if (!this.isViewDestroyed()) {  //Because this is called from outside the view
+    /*if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       var messagePanel = this.findPanelWrapperByType(PanelSpecTypes.MESSAGE_LIST);
       if (this.groupContainer.isOneNavigationGroup()) {
         var ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
@@ -325,12 +397,12 @@ var groupContent = Marionette.CompositeView.extend({
         messagePanel.setGridSize(AssemblPanel.prototype.MESSAGE_PANEL_GRID_SIZE);
         messagePanel.minWidth = messagePanel.contents.currentView.getMinWidthWithOffset(0);
       }
-    }
+    }*/
   },
 
   SimpleUIResetMessageAndIdeaPanelState: function() {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
-      this.groupContainer.suspendResize();
+      //this.groupContainer.suspendResize();
       var preferences = Ctx.getPreferences();
       // defined here and in collectionManager.getGroupSpecsCollectionPromise
       if (preferences.simple_view_panel_order === "NMI") {

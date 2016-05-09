@@ -7,21 +7,10 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     panelSpec = require('../../models/panelSpec.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js');
-
-/**
- * A wrapper for a panel, used anywhere in a groupContent.
- *
- * It's a shim to allow the parent view to have uniform objects to manage
- * (it only has to manager panelWrappers)
- *
- * The actual panels hold a reference to the panelWrapper in their view
- * (someview.panelWrapper
- */
 var PanelWrapper = Marionette.LayoutView.extend({
   constructor: function PanelWrapper() {
     Marionette.LayoutView.apply(this, arguments);
   },
-
   template: "#tmpl-panelWrapper",
   regions: {
     contents: '.panelContents'
@@ -45,28 +34,28 @@ var PanelWrapper = Marionette.LayoutView.extend({
     'click @ui.lockPanel': 'toggleLock',
     'click @ui.minimizePanel': 'toggleMinimize'
   },
-
   _unlockCallbackQueue: {},
   _minimizedStateButton: null,
   panelLockedReason: null,
   panelUnlockedReason: null,
-
   initialize: function(options) {
+    var that = this;
     var contentClass = panelViewByPanelSpec.byPanelSpec(options.contentSpec);
     this.groupContent = options.groupContent;
     if (!this.groupContent) {
       throw new Error("The groupContent wasn't passed in the options");
     }
-
     this.contentsView = new contentClass({
       panelWrapper: this
     });
-    this.gridSize = this.contentsView.gridSize || AssemblPanel.prototype.DEFAULT_GRID_SIZE;
-    this.minWidth = this.contentsView.minWidth || AssemblPanel.prototype.DEFAULT_MIN_SIZE;
     Marionette.bindEntityEvents(this, this.model, this.modelEvents);
+    this.setPanelMinWidth();
+    $(window).on("resize",function(){
+      that.setPanelMinWidth();
+    });
+    this.displayContent();
   },
   serializeData: function() {
-
     return {
       hideHeader: this.contentsView.hideHeader || false,
       title: this.contentsView.getTitle(),
@@ -79,6 +68,76 @@ var PanelWrapper = Marionette.LayoutView.extend({
       icon: this.getIcon()
     }
   },
+  setPanelMinWidth:function(){
+    this.$el.addClass(this.model.attributes.type + '-panel');
+    var screenSize = window.innerWidth;
+    var criticalSize = 600;
+    var isPanelMinimized = this.model.get('minimized');
+    if(isPanelMinimized){
+      this.model.set('minWidth',40);
+    }else{
+      if(screenSize > criticalSize){
+        var panelType = this.model.get('type');
+        switch(panelType) {
+        case 'ideaList':
+            this.model.set('minWidth',350);
+            break;
+        case 'navSidebar':
+            this.model.set('minWidth',350);
+            break;
+        case 'messageList':
+            this.model.set('minWidth',450);
+            break;
+        case 'ideaPanel':
+            this.model.set('minWidth',295);
+            break;
+        case 'clipboard':
+            this.model.set('minWidth',270);
+            break;
+        case 'synthesisPanel':
+            this.model.set('minWidth',200);
+            break;
+        case 'contextPanel':
+            this.model.set('minWidth',200);
+            break;
+        default:
+            this.model.set('minWidth',0);
+            break;
+        }        
+      }else{
+        this.model.set('minWidth',screenSize);
+      }
+    }
+  },
+  toggleMinimize: function() {
+    var isPanelMinimized = this.model.get('minimized');
+    if(isPanelMinimized){
+      this.model.set('minimized',false);
+      this.setPanelMinWidth();
+    }else{
+      this.model.set('minimized',true);
+      this.model.set('minWidth',40);
+    }
+    this.displayContent();
+    this.groupContent.resizePanel();
+  },
+  displayContent:function(){
+    var that = this;
+    var isPanelMinimized = this.model.get('minimized');
+    if(isPanelMinimized){
+      this.$el.addClass('minSizeGroup');
+      this.$('.panel-header-minimize i').addClass('icon-arrowright').removeClass('icon-arrowleft');
+      this.$('.panel-header-minimize').attr('data-original-title', i18n.gettext('Maximize panel'));
+    }else{
+      this.$el.removeClass('minSizeGroup');
+      this.$('.panel-header-minimize i').addClass('icon-arrowleft').removeClass('icon-arrowright');
+      this.$('.panel-header-minimize').attr('data-original-title', i18n.gettext('Minimize panel'));
+    }
+  },
+  
+  
+  
+  
   resetTitle: function(newTitle) {
     this.ui.title.html(newTitle);
   },
@@ -88,7 +147,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
   closePanel: function() {
     Ctx.removeCurrentlyDisplayedTooltips();
     this.model.collection.remove(this.model);
-    this.groupContent.groupContainer.resizeAllPanels();
+    //this.groupContent.groupContainer.resizeAllPanels();
   },
   onRender: function() {
     this.setGridSize(this.gridSize);
@@ -113,11 +172,11 @@ var PanelWrapper = Marionette.LayoutView.extend({
     if (this.model.get('hidden')) {
       this.$el.hide();
     } else {
-      this.$el.css('display', 'table-cell'); /* Set it back to its original value, which is "display: table-cell" in _groupContainer.scss . But why is it so? */
+      //this.$el.css('display', 'table-cell'); /* Set it back to its original value, which is "display: table-cell" in _groupContainer.scss . But why is it so? */
     }
   },
   setGridSize: function(gridSize) {
-    this.gridSize = gridSize;
+    //this.gridSize = gridSize;
 
     //this.groupContent.adjustGridSize();
   },
@@ -258,16 +317,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
     return this.panelUnlockedReason;
   },
 
-  toggleMinimize: function(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-    if (this.isPanelMinimized()) {
-      this.unminimizePanel(evt);
-    } else {
-      this.minimizePanel(evt);
-    }
-  },
-
   isPanelMinimized: function() {
     return this.model.get('minimized');
   },
@@ -277,7 +326,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
   },
 
   unminimizePanel: function(evt) {
-    if (!this.model.get('minimized')) return;
+    /*if (!this.model.get('minimized')) return;
 
     this.model.set('minimized', false);
 
@@ -307,11 +356,11 @@ var PanelWrapper = Marionette.LayoutView.extend({
       }
     }
 
-    this.groupContent.groupContainer.resizeAllPanels();
+    this.groupContent.groupContainer.resizeAllPanels();*/
   },
 
   minimizePanel: function(evt) {
-    if (this.model.get('minimized'))
+    /*if (this.model.get('minimized'))
         return;
 
     this.model.set('minimized', true);
@@ -330,14 +379,14 @@ var PanelWrapper = Marionette.LayoutView.extend({
       return AssemblPanel.prototype.minimized_size;
     }
 
-    return 0;
+    return 0;*/
   },
 
   /**
    * during animation, freeze the percentage width of panels into pixels
    */
   useCurrentSize: function() {
-    this.$el.stop();
+    /*this.$el.stop();
     var width = this.$el[0].style.width;
 
     // console.log("  panel ", this.model.get('type'), "useCurrentSize:", this.$el.width(), width);
@@ -346,11 +395,11 @@ var PanelWrapper = Marionette.LayoutView.extend({
       this.$el.width(this.$el.width());
     }
 
-    this.$el.addClass("animating");
+    this.$el.addClass("animating");*/
   },
 
   animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units, total_pixels, skip_animation) {
-    var that = this;
+    /*var that = this;
     var animationDuration = 1000;
     var panelContents = this.$el.children(".panelContents");
     var initialWidth = "100%";
@@ -476,7 +525,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
         });
       }
 
-    }
+    }*/
   },
 
   /**

@@ -90,3 +90,5 @@ htmlcov/
 
 #tox
 .tox
+
+.env.fish

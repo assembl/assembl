@@ -4,6 +4,11 @@
           <i class="<%= icon %>"></i><%= title %>
         </span>
         <div class="fr">
+            <% if ( hasMinimize ){ %>
+                <a class="js_minimizePanel panel-header-minimize btn btn-sm" data-toggle="tooltip" data-placement="auto top" title="{{gettext('Minimize panel')}}">
+                  <i class="icon-arrowleft"></i>
+                </a>
+            <% } %>
             <% if( userCanChangeUi ){ %>
                 <% if( hasLock ){ %>
                     <a class="js_lockPanel lock-group phs fr"><i class="iconbutton icon-lock-open" data-toggle="tooltip" data-placement="top"  title="{{ gettext('Lock panel') }}"></i></a>
@@ -14,12 +19,6 @@
                     <i class="icon-delete"></i>
                     </a>
                 <% } %>
-            <% } %>
-
-            <% if ( hasMinimize ){ %>
-                <a class="js_minimizePanel panel-header-minimize btn btn-sm" data-toggle="tooltip" data-placement="auto top" title="{{gettext('Minimize panel')}}">
-                  <i class="icon-arrowleft"></i>
-                </a>
             <% } %>
         </div>
     </header>

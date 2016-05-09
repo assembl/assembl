@@ -17,9 +17,10 @@ var PanelSpecModel = Base.Model.extend({
   defaults: {
     type: '',
     hidden: false,
-    locked: false
+    locked: false,
+    minWidth:40
   },
-
+  
   /** This returns undefined if the model is valid */
   validate: function(attributes, options) {
     var viewsFactory = require('../objects/viewsFactory.js');
@@ -59,7 +60,7 @@ var PanelSpecs = Base.Collection.extend({
   },
 
   model: PanelSpecModel,
-
+  
   validate: function(attributes, options) {
     var invalid = [];
     this.each(function(panelSpec) {

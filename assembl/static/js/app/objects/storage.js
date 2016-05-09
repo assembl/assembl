@@ -50,7 +50,6 @@ var storage = Marionette.Object.extend({
     //console.log("saveGroupSpecs:", JSON.stringify(this.groupSpecs));
     this._store.setItem(this.getStoragePrefix() + 'groupItems', JSON.stringify(this.groupSpecs));
     this._store.setItem(this.getStoragePrefix() + 'lastViewSave', Date.now());
-    console.log("saveGroupSpecs, store is now: ", this._store);
   },
 
   getDateOfLastViewSave: function() {

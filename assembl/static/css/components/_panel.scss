@@ -5,6 +5,39 @@ $editablearea_hover_border_size: 1px;
 
 // The panel
 // =========
+.ideaList-panel{
+  min-width:350px;
+}
+.messageList-panel{
+  min-width:450px;
+}
+.ideaPanel-panel{
+  min-width:295px;
+}
+.clipboard-panel{
+  min-width:270px;
+}
+.synthesisPanel-panel{
+  min-width:200px;
+}
+.navSidebar-panel{
+  min-width:350px;
+}
+.contextPanel-panel{
+  min-width:200px;
+}
+.minSizeGroup{
+  .panel-header-title{
+    display:none;
+  }
+  .panelContents{
+    display:none;
+  }
+  .panelContentsWhenMinimized{
+    display:block!important;
+  }
+}
+
 .groupPanel {
   @include box-sizing(border-box);
   position: relative;
@@ -13,6 +46,9 @@ $editablearea_hover_border_size: 1px;
   background-color: #fff;
   border-right: 1px solid $theme_box_border_color;
   overflow: hidden;
+  .panelContents{
+    width:100%;
+  }
   .panel-section {
     position: relative;
     padding: $section_spacing 0px;
@@ -22,7 +58,6 @@ $editablearea_hover_border_size: 1px;
       margin-bottom: 0px;
     }
   }
-
   /* We probably want to move this to a ckeditorfield.scss */
   .panel-editablebox.is-editing {
     .ckeditorField-seeMoreOrLess {
@@ -225,7 +260,6 @@ _:-ms-input-placeholder, :root .groupBody .groupPanel .panelContents {
 
 .groupBody .groupPanel .panelContents {
   position: relative; /* was "position: absolute;" for all browsers but there was a display bug with Firefox 24.8 */
-  width: 100%;
   @include calc(height, "100vh - #{$theme_header_height} - #{$group_header_height}"); /* retain the height of everything on top of it. probably not the best solution because not dynamic */
 }
 

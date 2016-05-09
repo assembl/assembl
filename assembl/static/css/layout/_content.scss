@@ -63,7 +63,6 @@
 #wrapper {
   position: relative;
   height: 100vh;
-  min-width: $small_screen;
   @include transform(translateX(0));
 }
 
