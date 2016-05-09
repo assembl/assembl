@@ -286,15 +286,15 @@ def build_virtualenv():
 
 
 @task
-def update_requirements(force=False):
+def update_pip_requirements(force_reinstall=False):
     """
     update external dependencies on remote host
     """
     print(cyan('Updating requirements using PIP'))
     venvcmd('pip install -U "pip>=6" ')
 
-    if force:
-        cmd = "%(venvpath)s/bin/pip install -I -r %(projectpath)s/requirements.txt" % env
+    if force_reinstall:
+        cmd = "%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env
     else:
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
     run("yes w | %s" % cmd)
@@ -445,10 +445,6 @@ def updatemaincode():
 
 
 def app_setup():
-    # do the requirements separately to update the non-static versions.
-    # This broke app_update_noupdate
-    # And was done in the non DRY way
-    # execute(update_requirements)
     venvcmd('pip install -e ./')
     execute(setup_var_directory)
     venvcmd('assembl-ini-files %s' % (env.ini_file))
@@ -478,17 +474,27 @@ def app_update():
 
 
 @task
-def app_update_dependencies():
+def app_update_dependencies(force_reinstall=False):
     """
-    Updates all python and javascript dependencies
+    Updates all python and javascript dependencies.  Everything that requires a
+    network connection to update
     """
     execute(update_vendor_themes)
-    execute(update_requirements, force=False)
+    execute(update_pip_requirements, force_reinstall=force_reinstall)
+    #Nodeenv is installed by python , so this must be after update_pip_requirements
     execute(update_node)
+    #bower is installed by node, so this must be after update_node
     execute(update_bower)
-    execute(bower_update)
-    execute(npm_update)
+    execute(update_bower_requirements, force_reinstall=force_reinstall)
+    execute(update_npm_requirements, force_reinstall=force_reinstall)
 
+@task
+def app_reinstall_all_dependencies():
+    """
+    Reinstall all python and javascript dependencies.  
+    Usefull after a OS upgrade, node upgrade, etc.
+    """
+    execute(app_update_dependencies, force_reinstall=True)
 
 @task
 def update_node():
@@ -496,6 +502,7 @@ def update_node():
     Install node and npm to a known-good version
     """
     venvcmd("nodeenv --node=6.1.0 --npm=3.8.6 -p")
+    venvcmd("npm install reinstall -g")
 
 
 @task
@@ -645,28 +652,24 @@ def _bower_foreach_do(cmd):
     bower_cmd(cmd, 'assembl/static/widget/creativity')
     bower_cmd(cmd, 'assembl/static/widget/share')
 
-
 @task
-def bower_install():
+def update_bower_requirements(force_reinstall=False):
     """ Normally not called manually """
     execute(_bower_foreach_do, 'prune')
-    execute(_bower_foreach_do, 'install')
+    if force_reinstall:
+        execute(_bower_foreach_do, 'install --force')
+    else:
+        execute(_bower_foreach_do, 'update')
 
 @task
-def bower_update():
-    """ Normally not called manually """
-    execute(_bower_foreach_do, 'prune')
-    execute(_bower_foreach_do, 'update')
-
-def npm_install():
+def update_npm_requirements(force_reinstall=False):
     """ Normally not called manually """
     with cd(env.projectpath):
-        venvcmd('npm install')
-
-def npm_update():
-    """ Normally not called manually """
-    with cd(env.projectpath):
-        venvcmd('npm update')
+        if force_reinstall:
+            venvcmd('npm prune')
+            venvcmd('reinstall')
+        else:
+            venvcmd('npm update')
 
 @task
 def install_builddeps():
