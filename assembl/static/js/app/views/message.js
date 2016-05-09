@@ -342,6 +342,15 @@ var MessageView = Marionette.LayoutView.extend({
       user language preferences and/or translation errors.
      */
     this.isMessageTranslated = null;
+
+    /*
+      Flags for controlling moderation state in the view.
+     */
+    this.moderationOptions = {
+      isModerated: false,
+      purpose: null
+    };
+
     this.isCompleteDataLoaded();
 
   },
@@ -572,7 +581,10 @@ var MessageView = Marionette.LayoutView.extend({
         that = this,
         body = null,
         metadata_json = this.model.get('metadata_json'), // this property needs to exist to display the inspiration source of a message (creativity widget)
-        bodyFormat = this.model.get('bodyMimeType');
+        bodyFormat = this.model.get('bodyMimeType'),
+        isModerated = false,
+        moderationType,
+        moderationLangString;
 
     if (this.viewStyle === this.availableMessageViewStyles.PREVIEW || this.viewStyle === this.availableMessageViewStyles.TITLE_ONLY) {
       if (bodyFormat === "text/html") {
@@ -599,6 +611,11 @@ var MessageView = Marionette.LayoutView.extend({
           moderator: this.model.get("moderator"),
           message_id: this.model.id.split('/')[1]
       })});
+
+      //Set a langstring, in order to ensure that the body has a langstring().
+      moderationLangString = new LangString.Model({
+        entries: [body]
+      }, {parse: true});
     }
 
     if (bodyFormat !== null) {
@@ -633,6 +650,7 @@ var MessageView = Marionette.LayoutView.extend({
       parentId: this.model.get('parentId'),
       subject: this._subject,
       body: (body) ? body : this._body,
+      messageBodyString: this.moderationOptions.isModerated ? body.value() : this._body.value(),
       bodyTranslationError: this.bodyTranslationError,
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
@@ -653,7 +671,8 @@ var MessageView = Marionette.LayoutView.extend({
       isTranslatedMessage: this.isMessageTranslated,
       canShowTranslation: this.canShowTranslation(),
       showOriginalText: LangString.LocaleUtils.getServiceShowOriginalString(),
-      showOriginalUrl: LangString.LocaleUtils.getServiceShowOriginalUrl()
+      showOriginalUrl: LangString.LocaleUtils.getServiceShowOriginalUrl(),
+      isModerated: this.moderationOptions.isModerated
     };
   },
 
@@ -709,6 +728,13 @@ var MessageView = Marionette.LayoutView.extend({
 
   onBeforeRender: function(){
     this.isCompleteDataLoaded();
+    //Check if the message is moderated
+    
+    if (this.model.get('publication_state') !== 'PUBLISHED'){
+      //Naive implemntation. When other publication states are used, update the code here.
+      this.moderationOptions.isModerated = true;
+      this.moderationOptions.purpose = this.model.get('publication_state');
+    }
   },
 
   /**
@@ -852,21 +878,8 @@ var MessageView = Marionette.LayoutView.extend({
     if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
       //Only the full body view uses annotator
       this.messageListView.requestAnnotatorRefresh();
-
-      var MessageAttachmentCollectionView = Marionette.CollectionView.extend({
-        constructor: function MessageAttachmentCollectionView() {
-          Marionette.CollectionView.apply(this, arguments);
-        },
-
-        childView: AttachmentViews.AttachmentView
-      });
-
-      this.attachmentsCollectionView = new MessageAttachmentCollectionView({
-        collection: this.model.get('attachments')
-      });
-
+      this.renderAttachments();
       this.renderIdeaClassification();
-      this.attachmentsRegion.show(this.attachmentsCollectionView);
     }
 
     if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle !== this.availableMessageViewStyles.FULL_BODY) {
@@ -1253,6 +1266,25 @@ var MessageView = Marionette.LayoutView.extend({
 
   removeIdeaClassificationView: function(){
     this.getRegion('ideaClassification').empty();
+  },
+
+  renderAttachments: function(){
+
+    var MessageAttachmentCollectionView = Marionette.CollectionView.extend({
+      constructor: function MessageAttachmentCollectionView() {
+        Marionette.CollectionView.apply(this, arguments);
+      },
+
+      childView: AttachmentViews.AttachmentView
+    });
+
+    this.attachmentsCollectionView = new MessageAttachmentCollectionView({
+      collection: this.model.get('attachments')
+    });
+
+    if (this.canShowAttachments()){
+      this.attachmentsRegion.show(this.attachmentsCollectionView);
+    }
   },
 
   /**
@@ -1961,6 +1993,16 @@ var MessageView = Marionette.LayoutView.extend({
     this.showAnnotations = this.canShowAnnotations();
     // this.bodyTranslationError = false;  //This could be wrong. Perhaps, should call processContent
     this.processContent();
+  },
+
+  canShowAttachments: function(){
+    if (this.moderationOptions.isModerated){
+      if (this.moderationOptions.purpose === 'MODERATED_TEXT_NEVER_AVAILABLE'){
+        return false;
+      }
+      return true;
+    }
+    return true;
   }
 
 });

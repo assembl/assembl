@@ -184,7 +184,7 @@
     <div class="mts">{{ show_translation() }}</div>
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     <div class="mtm message-body ellipsis <%= bodyFormatClass %> js_readMore" id="<%= messageBodyId %>">
-      <p class="" lang="<%= body.localeForService() %>"><%= body.value() %></p>{# Do NOT introduce whitespace within this div #}
+      <p class="" lang="<%= body.localeForService() %>"><% console.log('body', body); if(!isModerated) { %><%= body.value() %><% } else { %><%= body %><% } %></p>{# Do NOT introduce whitespace within this div #}
       <div class="messageAttachments js_regionMessageAttachments hidden"></div>
       <div class="js_regionMessageModerationOptions hidden"></div>
       <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}"><i class="icon-arrowdown"></i> {{ gettext('Read more') }}</a>
@@ -193,7 +193,7 @@
     <div class="mts">{{ show_translation() }}</div>
     <h4 class="message-subject js_messageTitle h4"><%= subject.value() %></h4>
     {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
-    <div class="mtm message-body <%= (isTranslatedMessage ? "" : "js_messageBodyAnnotatorSelectionAllowed") %> <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.localeForService() %>"><%= body.value() %></div>
+    <div class="mtm message-body <%= (isTranslatedMessage ? "" : "js_messageBodyAnnotatorSelectionAllowed") %> <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.localeForService() %>"><%= messageBodyString %></div>
     <div class="messageAttachments js_regionMessageAttachments"></div>
     <div class="js_regionMessageModerationOptions"></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
