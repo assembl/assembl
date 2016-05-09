@@ -481,9 +481,18 @@ def app_update_dependencies():
     """
     execute(update_vendor_themes)
     execute(update_requirements, force=False)
+    execute(update_node)
     execute(update_bower)
     execute(bower_update)
     execute(npm_update)
+
+
+@task
+def update_node():
+    """
+    Install node and npm to a known-good version
+    """
+    venvcmd("nodeenv --node=6.1.0 --npm=3.8.6 -p")
 
 
 @task
@@ -602,30 +611,26 @@ def install_basetools():
 
 def install_bower():
     with cd(env.projectpath):
-        run('npm install bower po2json requirejs')
+        venvcmd('npm install bower po2json requirejs')
 
 
 def update_bower():
     with cd(env.projectpath):
-        run('npm update bower po2json')
+        venvcmd('npm update bower po2json')
 
 
 def bower_cmd(cmd, relative_path='.'):
-    with settings(warn_only=True), hide('warnings', 'running', 'stdout', 'stderr'):
-        node_cmd = run('which nodejs')
-    if node_cmd.failed:
-        node_cmd = run('which node')
     with cd(env.projectpath):
         bower_cmd = normpath(join(
-            env.projectpath, 'node_modules', 'bower', 'bin', 'bower'))
+            env.projectpath, 'node_modules', '.bin', 'bower'))
         po2json_cmd = normpath(join(
-            env.projectpath, 'node_modules', 'po2json', 'bin', 'po2json'))
+            env.projectpath, 'node_modules', '.bin', 'po2json'))
         if not exists(bower_cmd) or not exists(po2json_cmd):
             print "Bower not present, installing..."
             execute(install_bower)
         with cd(relative_path):
             print("Running a bower command in path %s" % relative_path)
-            run(' '.join((node_cmd, bower_cmd, cmd)))
+            venvcmd(' '.join(("node", bower_cmd, cmd)))
 
 
 def _bower_foreach_do(cmd):
@@ -653,12 +658,12 @@ def bower_update():
 def npm_install():
     """ Normally not called manually """
     with cd(env.projectpath):
-        run('npm install')
+        venvcmd('npm install')
 
 def npm_update():
     """ Normally not called manually """
     with cd(env.projectpath):
-        run('npm update')
+        venvcmd('npm update')
 
 @task
 def install_builddeps():
@@ -681,8 +686,6 @@ def install_builddeps():
         sudo('brew services start postgres')
         if not exists('/usr/local/bin/pkg-config'):
             run('brew install pkg-config')
-        if not exists('/usr/local/bin/node'):
-            run('brew install homebrew/versions/node5')
         if not exists('/usr/local/bin/autoconf'):
             run('brew install autoconf')
         if not exists('/usr/local/bin/automake'):
@@ -706,8 +709,7 @@ def install_builddeps():
         if not exists('/usr/local/bin/gfortran'):
             run('brew install gcc isl')
     else:
-        sudo('apt-get install -y build-essential python-dev')
-        sudo('apt-get install -y nodejs nodejs-legacy npm pandoc')
+        sudo('apt-get install -y build-essential python-dev pandoc')
         sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev gawk')
         sudo('apt-get install -y graphviz libgraphviz-dev pkg-config')
         sudo('apt-get install -y liblapack-dev libatlas-dev libblas-dev gfortran')

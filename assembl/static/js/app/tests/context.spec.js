@@ -29,7 +29,7 @@ describe('Modules Specs', function() {
 
     it('getCurrentUserId should return the user id', function() {
       expect(Ctx.getCurrentUserId()).not.to.be.null;
-      expect(Ctx.getCurrentUserId()).to.be.a('string');
+      expect(Ctx.getCurrentUserId()).to.be.a('int');
     });
 
     it('getCurrentUser should not return the user', function() {

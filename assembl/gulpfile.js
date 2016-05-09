@@ -11,7 +11,7 @@ var gutil = require('gulp-util');
 var concat = require('gulp-concat');
 var del = require('del');
 var autoprefixer = require('gulp-autoprefixer');
-var minifyCss = require('gulp-minify-css');
+var cleanCss = require('gulp-clean-css');
 var sourcemaps = require('gulp-sourcemaps');
 var exit = require('gulp-exit');
 var buffer = require('vinyl-buffer');
@@ -163,15 +163,15 @@ gulp.task('sass', ['clean:generated_css'], function() {
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
-        }))
-        //.pipe(minifyCss())*/
+        }))*/
+        //.pipe(cleanCss())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(path.css))
         .on('error', process.exit.bind(process, 1));
 });
 
 function clean_generated_css (cb) {
-  del([path.css+'/themes/**/*.css', path.css+'/themes/**/*.css.map'], cb);
+  return del([path.css+'/themes/**/*.css', path.css+'/themes/**/*.css.map'], cb);
 }
 gulp.task('clean:generated_css', clean_generated_css);
 
@@ -186,13 +186,13 @@ gulp.task('watch_sass', function () {
  * Delete files before rebuild new one
  * */
 function clean_app (cb) {
-  del([path.js+'/build/app.js',path.js+'/build/app.js.map'], cb);
+  return del([path.js+'/build/app.js',path.js+'/build/app.js.map'], cb);
 }
 
 gulp.task('clean:app', clean_app);
 
 gulp.task('clean:infrastructure', function (cb) {
-    del([path.js+'/build/infrastructure.min.js',path.js+'/build/infrastructure.min.js.map'], cb);
+    return del([path.js+'/build/infrastructure.min.js',path.js+'/build/infrastructure.min.js.map'], cb);
 });
 
 /**

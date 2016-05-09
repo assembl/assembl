@@ -1,6 +1,6 @@
 pip==8.1.1
 setuptools==21.0.0
-alabaster==0.7.7
+alabaster==0.7.8
 -e git+https://github.com/imaginationforpeople/alembic.git@virtuoso#egg=alembic
 amqp==1.4.9
 anyjson==0.3.3
@@ -31,7 +31,7 @@ dogpile.cache==0.5.7
 dogpile.core==0.4.1
 EasyProcess==0.2.2
 ecdsa==0.13
-enum34==1.1.4
+enum34==1.1.5
 Fabric==1.11.1
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
@@ -66,6 +66,7 @@ MarkupSafe==0.23
 meld3==1.0.2
 mock==2.0.0
 ndg_httpsclient==0.4.0
+-e git+https://github.com/imaginationforpeople/nodeenv.git@master#egg=nodeenv
 numpy==1.11.0
 #oauthlib==1.1.0
 oauth2client==2.0.2
