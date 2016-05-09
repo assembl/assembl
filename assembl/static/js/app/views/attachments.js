@@ -281,6 +281,72 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
   }
 });
 
+
+/*
+  A view that can be instantiated that will 
+ */
+var AttachmentEditUploadView = Marionette.LayoutView.extend({
+  //This will have a region for the upload button
+  //And a collection view for the collection of entities
+
+  constructor: function AttachmentEditUploadView(){
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
+  template: 'tmpl-uploadView',
+
+  ui: {
+    'collectionView': '.js_collection-view',
+    'uploadButton': '.js_upload'
+  },
+
+  events: {
+    'change @ui.uploadButton': 'onFileUpload'
+  },
+
+  regions: {
+    'collectionRegion': '@ui.collectionView'
+  },
+
+  initialize: function(options){
+    this.collection = options.collection;
+
+    if (!this.collection || !this.CollectionViewClass) {
+      throw new Error("Cannot instantiate a DocumentEditUploadView without a collection and a CollectionViewClass!");
+    }
+
+    this.collectionView = new AttachmentEditableCollectionView({collection: this.collection});
+  },
+
+  onShow: function(){
+    this.collectionRegion.show(this.collectionView);
+  },
+
+  onFileUpload: function(e){
+    var fs = e.target.files,
+        that = this;
+    //console.log("A file has been uploaded");
+
+    _.each(fs, function(f){
+      //There will be file duplication because the file is already on the DOM if previously added
+      var d = new Documents.FileModel({
+        name: f.name,
+        mime_type: f.type
+      });
+      d.set('file', f);
+
+      var attachment = new Attachments.Model({
+        document: d,
+        objectAttachedToModel: that.model,
+        idCreator: Ctx.getCurrentUser().id
+      });
+
+      that.attachmentsCollection.add(attachment);
+    });
+  }
+
+});
+
 module.exports = module.exports = {
     AttachmentEditableView: AttachmentEditableView,
     AttachmentView: AttachmentView,
