@@ -290,11 +290,11 @@ class SourceReader(Thread):
             except ReaderError as e:
                 self.new_error(e)
                 if self.status > ReaderStatus.TRANSIENT_ERROR:
-                    self.do_close()
+                    self.try_close()
                 continue
             except Exception as e:
                 self.new_error(e, ReaderStatus.CLIENT_ERROR, expected=False)
-                self.do_close()
+                self.try_close()
                 break
             while self.after_login or self.is_connected():
                 if self.status == ReaderStatus.SHUTDOWN:
@@ -306,10 +306,10 @@ class SourceReader(Thread):
                 except ReaderError as e:
                     self.new_error(e)
                     if self.status > ReaderStatus.TRANSIENT_ERROR:
-                        self.do_close()
+                        self.try_close()
                 except Exception as e:
                     self.new_error(e, ReaderStatus.CLIENT_ERROR, expected=False)
-                    self.do_close()
+                    self.try_close()
                     break
                 if not self.is_connected():
                     break
@@ -323,13 +323,13 @@ class SourceReader(Thread):
                         except ReaderError as e:
                             self.new_error(e)
                             if self.status > ReaderStatus.TRANSIENT_ERROR:
-                                self.do_close()
+                                self.try_close()
                             else:
                                 self.end_wait_for_push()
                             break
                         except Exception as e:
                             self.new_error(e, ReaderStatus.CLIENT_ERROR, expected=False)
-                            self.do_close()
+                            self.try_close()
                             break
                         if not self.is_connected():
                             break
@@ -392,6 +392,12 @@ class SourceReader(Thread):
         finally:
             self.set_status(ReaderStatus.SHUTDOWN)
             self.source.db.close()
+
+    def try_close(self):
+        try:
+            self.do_close()
+        except ReaderError as e:
+            self.new_error(e, min(e.status, ReaderStatus.CLIENT_ERROR))
 
     @abstractmethod
     def do_close(self):
