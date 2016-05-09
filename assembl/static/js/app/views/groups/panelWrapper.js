@@ -38,6 +38,8 @@ var PanelWrapper = Marionette.LayoutView.extend({
   _minimizedStateButton: null,
   panelLockedReason: null,
   panelUnlockedReason: null,
+  minPanelSize:AssemblPanel.prototype.minimized_size,
+  
   initialize: function(options) {
     var that = this;
     var contentClass = panelViewByPanelSpec.byPanelSpec(options.contentSpec);
@@ -70,11 +72,12 @@ var PanelWrapper = Marionette.LayoutView.extend({
   },
   setPanelMinWidth:function(){
     this.$el.addClass(this.model.attributes.type + '-panel');
+    this.$el.attr('id',this.model.cid);
     var screenSize = window.innerWidth;
     var criticalSize = 600;
     var isPanelMinimized = this.model.get('minimized');
     if(isPanelMinimized){
-      this.model.set('minWidth',40);
+      this.model.set('minWidth',this.minPanelSize);
     }else{
       if(screenSize > criticalSize){
         var panelType = this.model.get('type');
@@ -113,11 +116,10 @@ var PanelWrapper = Marionette.LayoutView.extend({
     var isPanelMinimized = this.model.get('minimized');
     if(isPanelMinimized){
       this.model.set('minimized',false);
-      this.setPanelMinWidth();
     }else{
       this.model.set('minimized',true);
-      this.model.set('minWidth',40);
     }
+    this.setPanelMinWidth();
     this.displayContent();
     this.groupContent.resizePanel();
   },

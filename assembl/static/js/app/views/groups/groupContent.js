@@ -22,6 +22,7 @@ var groupContent = Marionette.CompositeView.extend({
   childViewContainer: ".groupBody",
   childView: PanelWrapper,
   panel_borders_size: 1,
+  minPanelSize:AssemblPanel.prototype.minimized_size,
 
   initialize: function(options) {
     var that = this;
@@ -46,15 +47,14 @@ var groupContent = Marionette.CompositeView.extend({
   },
   resizePanel:function(){
     var that = this;
-    console.log(that.groupContainer.collection.models);
     _.each(that.groupContainer.collection.models,function(group){
       _.each(group.attributes.panels.models,function(panel){
         var panelMinWidth = panel.get('minWidth');
         var isPanelMinimized = panel.get('minimized');
         var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
-        var panelClass = "." + panel.get('type') + '-panel';
-        $(that.groupContainer.el).find(panelClass).css({'min-width':panelMinWidth});
-        $(that.groupContainer.el).find(panelClass).width(panelWidth);
+        var panelId = '#' + panel.cid;
+        $(that.groupContainer.el).find(panelId).css({'min-width':panelMinWidth});
+        $(that.groupContainer.el).find(panelId).width(panelWidth);
       });
     });
   },
@@ -63,7 +63,7 @@ var groupContent = Marionette.CompositeView.extend({
     var criticalSize = 600;
     var panelWIdth = 0;
     if(isPanelMinimized){
-      panelWIdth = 40;
+      panelWIdth = this.minPanelSize;
     }else{
       if(screenSize > criticalSize){
         var totalWidth = this.getTotalWidth();
@@ -90,12 +90,13 @@ var groupContent = Marionette.CompositeView.extend({
     return totalWidth;
   },
   getTotalMinimized:function(){
+    var that = this;
     var totalMinimized = 0;
     _.each(this.groupContainer.collection.models,function(group){
       _.each(group.attributes.panels.models,function(panel){
         var isPanelMinimized = panel.get('minimized');
         if(isPanelMinimized){
-          totalMinimized += 40;
+          totalMinimized += that.minPanelSize;
         }
       });
     });
