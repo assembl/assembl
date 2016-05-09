@@ -1429,12 +1429,12 @@ def env_coeus_assembl():
     """
     env.ini_file = 'local.ini'
     env.hosts = ['coeus.ca']
-    execute(commonenv, normpath("/var/www/assembl/"))
     env.is_production_env = True
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
+    execute(commonenv, normpath("/var/www/assembl/"))
     require('projectname', provided_by=('commonenv',))
 
     env.uses_apache = False
@@ -1451,12 +1451,12 @@ def env_coeus_assembl2():
     """
     env.ini_file = 'local.ini'
     env.hosts = ['coeus.ca']
-    execute(commonenv, normpath("/var/www/assembl2/"))
     env.is_production_env = False
     env.wsginame = "staging.wsgi"
     env.urlhost = "assembl2.coeus.ca"
     env.user = "www-data"
     env.home = "www-data"
+    execute(commonenv, normpath("/var/www/assembl2/"))
     require('projectname', provided_by=('commonenv',))
 
     env.uses_apache = False
@@ -1474,12 +1474,12 @@ def env_inm_agora():
     """
     env.ini_file = 'local.ini'
     env.hosts = ['discussions.bluenove.com']
-    execute(commonenv, normpath("/home/www/assembl_inm/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "agora.inm.qc.ca"
     env.user = "www-data"
     env.home = "www-data"
+    execute(commonenv, normpath("/home/www/assembl_inm/"))
     require('projectname', provided_by=('commonenv',))
 
     env.uses_apache = False
@@ -1496,12 +1496,12 @@ def env_bluenove_discussions():
     """
     env.ini_file = 'local.ini'
     env.hosts = ['discussions.bluenove.com']
-    execute(commonenv, normpath("/home/www/assembl_discussions_bluenove_com/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "discussions.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
+    execute(commonenv, normpath("/home/www/assembl_discussions_bluenove_com/"))
     require('projectname', provided_by=('commonenv',))
 
     env.uses_apache = False
@@ -1517,12 +1517,12 @@ def env_bluenove_assembl2():
     """
     env.ini_file = 'local.ini'
     env.hosts = ['assembl2.bluenove.com']
-    execute(commonenv, normpath("/home/www/assembl2_bluenove_com/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "assembl2.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
+    execute(commonenv, normpath("/home/www/assembl2_bluenove_com/"))
     require('projectname', provided_by=('commonenv',))
 
     env.uses_apache = False
@@ -1538,12 +1538,12 @@ def env_paris_debat():
     """
     env.ini_file = 'local.ini'
     env.hosts = ['discussions.bluenove.com']
-    execute(commonenv, normpath("/home/www/assembl_paris_fr/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "debat.paris.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
+    execute(commonenv, normpath("/home/www/assembl_paris_fr/"))
     require('projectname', provided_by=('commonenv',))
 
     env.uses_apache = False
@@ -1560,12 +1560,12 @@ def env_thecampfactory():
     """
     env.ini_file = 'local.ini'
     env.hosts = ['assembl2.bluenove.com']
-    execute(commonenv, normpath("/home/www/assembl_thecampfactory_fr/"))
     env.is_production_env = True
     env.wsginame = "prod.wsgi"
     env.urlhost = "assembl.thecampfactory.fr"
     env.user = "www-data"
     env.home = "www-data"
+    execute(commonenv, normpath("/home/www/assembl_thecampfactory_fr/"))
     require('projectname', provided_by=('commonenv',))
 
     env.uses_apache = False

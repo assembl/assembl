@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 from abc import ABCMeta, abstractmethod
 import logging
 from logging.config import fileConfig
+from traceback import print_stack
+from threading import currentThread
 
 from pyramid.paster import get_appsettings
 from zope.component import getGlobalSiteManager
@@ -16,6 +18,7 @@ from kombu import BrokerConnection, Exchange, Queue
 from kombu.mixins import ConsumerMixin
 from kombu.utils.debug import setup_logging
 from sqlalchemy.exc import TimeoutError
+from sqlalchemy import event
 
 from assembl.tasks import configure, raven_client
 from assembl.lib.config import set_config
@@ -550,6 +553,8 @@ def includeme(config):
     _producer_connection = BrokerConnection(url)
 
 
+pool_counter = 0
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
@@ -561,7 +566,21 @@ if __name__ == '__main__':
     set_config(settings)
     fileConfig(config_file_name)
     # set the basic session maker without zope or autoflush
-    configure_engine(settings, False, autoflush=False, max_overflow=20)
+    engine = configure_engine(settings, False, autoflush=False, max_overflow=20)
+    @event.listens_for(engine, "checkin")
+    def show_checkin(*args):
+        global pool_counter
+        pool_counter -= 1
+        print "checkin pool:", pool_counter, "in", currentThread()
+        print_stack()
+
+    @event.listens_for(engine, "checkout")
+    def show_checkout(*args):
+        global pool_counter
+        pool_counter += 1
+        print "checkout pool:", pool_counter, "in", currentThread()
+        print_stack()
+
     configure(registry, 'source_reader')
     url = settings.get('celery_tasks.imap.broker')
     with BrokerConnection(url) as conn:
