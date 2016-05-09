@@ -41,9 +41,9 @@ sqlalchemy.echo = True
 db_user = assembl_test
 db_password = assembl_test
 # For postgres:
-db_schema = public
+#db_schema = public
 # For virtuoso:
-#db_schema = assembl_test
+db_schema = assembl_test
 db_database = assembl_test
 
 jinja2.directories = assembl:templates
