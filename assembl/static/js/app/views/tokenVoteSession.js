@@ -570,8 +570,35 @@ var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
 });
 
 
-var TokenCategoryExclusivePairCollectionView = TokenCategoryAllocationCollectionView.extend({
-    template: '#tmpl-tokenCategoryExclusivePairCollection',
+var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
+  template: '#tmpl-tokenCategoryExclusivePairCollection',
+  regions: {
+    negativeTokens: ".negative-tokens",
+    positiveTokens: ".positive-tokens"
+  },
+  initialize: function(options) {
+    this.idea = options.idea;
+    this.myVotesCollection = options.myVotesCollection;
+    this.voteSpecification = options.voteSpecification;
+    this.parent = options.parent;
+  },
+  onRender: function() {
+    // placeholder for better code. We need to choose positive/negative
+    // according to typename.
+    var negativeTokens = this.collection.at(0),
+        positiveTokens = this.collection.at(1),
+        childViewOptions = {
+      idea: this.idea,
+      myVotesCollection: this.myVotesCollection,
+      voteSpecification: this.voteSpecification,
+      collectionView: this,
+      voteItemView: this.parent,
+      model: negativeTokens
+    };
+    this.getRegion("negativeTokens").show(new TokenCategoryAllocationView(childViewOptions));
+    childViewOptions.model = positiveTokens;
+    this.getRegion("positiveTokens").show(new TokenCategoryAllocationView(childViewOptions));
+  },
 });
 
 
