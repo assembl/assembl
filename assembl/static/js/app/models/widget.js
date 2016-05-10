@@ -415,8 +415,10 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
 
   // FIXME: Having view code in a model is probably not a good idea. How could we do better?
   onButtonClick: function(evt){
-    console.log("TokenVotingWidgetModel::onButtonClick()");
-    evt.preventDefault();
+    console.log("TokenVotingWidgetModel::onButtonClick() evt: ", evt);
+    if ( evt && _.isFunction(evt.preventDefault) ){
+      evt.preventDefault();
+    }
 
     var that = this;
     var activityState = that.get("activity_state");

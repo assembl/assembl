@@ -561,7 +561,7 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
 
   serializeData: function(){
     return {
-      "ideaTitle": (this.childIndex+1) + ". " + this.model.get("@id") + " # " + this.model.getShortTitleDisplayText()
+      "ideaTitle": (this.childIndex+1) + ". " + this.model.getShortTitleDisplayText()
     }
   },
   onRender: function(){
