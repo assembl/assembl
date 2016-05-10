@@ -335,12 +335,12 @@ def assembl_register_view(request):
     password = request.params.get('password', '').strip()
     password2 = request.params.get('password2', '').strip()
     email = request.params.get('email', '').strip()
-    email = EmailString.normalize_email_case(email)
     if not is_email(email):
         return dict(get_default_context(request),
                     slug_prefix=p_slug,
                     error=localizer.translate(_(
                         "This is not a valid email")))
+    email = EmailString.normalize_email_case(email)
     # Find agent account to avoid duplicates!
     if session.query(AbstractAgentAccount).filter_by(
             email_ci=email, verified=True).count():
