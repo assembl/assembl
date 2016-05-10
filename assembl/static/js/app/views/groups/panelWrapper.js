@@ -55,7 +55,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
     $(window).on("resize",function(){
       that.setPanelMinWidth();
     });
-    this.displayContent();
+    this.displayContent(true);
   },
   serializeData: function() {
     return {
@@ -123,22 +123,33 @@ var PanelWrapper = Marionette.LayoutView.extend({
     this.displayContent();
     this.groupContent.resizePanel();
   },
-  displayContent:function(){
+  displayContent:function(skipAnimation){
     var that = this;
     var isPanelMinimized = this.model.get('minimized');
     if(isPanelMinimized){
-      this.$el.addClass('minSizeGroup');
       this.$('.panel-header-minimize i').addClass('icon-arrowright').removeClass('icon-arrowleft');
       this.$('.panel-header-minimize').attr('data-original-title', i18n.gettext('Maximize panel'));
+      if(skipAnimation){
+        this.$el.addClass('minSizeGroup');
+      }else{
+        this.$el.find('.panelContentsWhenMinimized > span').delay(1000 * 0.6).fadeIn(1000 * 0.3);
+        this.$el.find('.panelContents').fadeOut(1000 * 0.9);
+        this.$el.find("header span.panel-header-title").fadeOut(1000 * 0.4);
+        this.$el.children(".panelContentsWhenMinimized").delay(1000 * 0.6).fadeIn(1000 * 0.4);
+      }
     }else{
-      this.$el.removeClass('minSizeGroup');
       this.$('.panel-header-minimize i').addClass('icon-arrowleft').removeClass('icon-arrowright');
       this.$('.panel-header-minimize').attr('data-original-title', i18n.gettext('Minimize panel'));
+      if(skipAnimation){
+        this.$el.removeClass('minSizeGroup');
+      }else{
+        this.$el.find('.panelContentsWhenMinimized > span').fadeOut(1000 * 0.3);
+        this.$el.find('.panelContents').delay(1000 * 0.2).fadeIn(1000 * 0.8);
+        this.$el.find("header span.panel-header-title").delay(1000 * 0.5).fadeIn(1000 * 0.5);
+        this.$el.children(".panelContentsWhenMinimized").fadeOut(1000 * 0.3);
+      }
     }
   },
-  
-  
-  
   
   resetTitle: function(newTitle) {
     this.ui.title.html(newTitle);

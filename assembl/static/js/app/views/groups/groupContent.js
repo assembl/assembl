@@ -36,25 +36,38 @@ var groupContent = Marionette.CompositeView.extend({
           navView.setViewByName(that.model.get('navigationState'), null);
         }
       }
-      that.resizePanel();
+      that.resizePanel(true);
     }, 200); //FIXME:  Magic delay...
     $(window).on("resize",function(){
-      that.resizePanel();
+      that.resizePanel(true);
     });
   },
   events: {
     'click .js_closeGroup': 'closeGroup'
   },
-  resizePanel:function(){
+  resizePanel:function(skipAnimation){
     var that = this;
+    var screenSize = window.innerWidth;
     _.each(that.groupContainer.collection.models,function(group){
       _.each(group.attributes.panels.models,function(panel){
         var panelMinWidth = panel.get('minWidth');
         var isPanelMinimized = panel.get('minimized');
         var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
         var panelId = '#' + panel.cid;
-        $(that.groupContainer.el).find(panelId).css({'min-width':panelMinWidth});
-        $(that.groupContainer.el).find(panelId).width(panelWidth);
+        if(skipAnimation){
+          $(that.groupContainer.el).find(panelId).css({'min-width':panelMinWidth});
+          $(that.groupContainer.el).find(panelId).width(panelWidth);
+        }else{
+          var totalWidth = that.getTotalWidth();
+          if(totalWidth < screenSize){
+            $(that.groupContainer.el).find(panelId).css({'min-width':0});
+            $(that.groupContainer.el).find(panelId).animate({'width': panelWidth}, 1000, 'swing',function(){
+              $(that.groupContainer.el).find(panelId).css({'min-width':panelMinWidth});
+            });
+          }else{
+            $(that.groupContainer.el).find(panelId).animate({'min-width': panelMinWidth}, 1000, 'swing');
+          }
+        }
       });
     });
   },
@@ -165,7 +178,7 @@ var groupContent = Marionette.CompositeView.extend({
   closeGroup: function() {
     this.applyUserCustomDataChangesOnGroupClose();
     this.model.collection.remove(this.model);
-    this.resizePanel();
+    this.resizePanel(true);
   },
 
   calculateGridSize: function() {
