@@ -251,17 +251,18 @@ var TokenBagsView = Marionette.ItemView.extend({
 
 
 // This view shows (in the block of an idea) the clickable tokens (of one given category of tokens) a user can allocate (and has allocated) on this idea
-var TokenIdeaAllocationView = Marionette.ItemView.extend({
+var TokenCategoryAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
   initialize: function(options){
+    this.parent = options.parent;
     if ( !("voteSpecification" in this.options)){
       console.error("option voteSpecification is mandatory");
       return;
     }
-    if ( !("tokenCategory" in this.options)){
-      console.error("option tokenCategory is mandatory");
-      return;
-    }
+    // if ( !("tokenCategory" in this.options)){
+    //   console.error("option tokenCategory is mandatory");
+    //   return;
+    // }
     if ( !("idea" in this.options)){
       console.error("option idea is mandatory");
       return;
@@ -271,23 +272,24 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
       return;
     }
 
-    if ( !("currentValue" in this.options)){
-      this.currentValue = 0;
-    }
-    else {
-      this.currentValue = this.options.currentValue;
-    }
-
     this.voteSpecification = this.options.voteSpecification;
     console.log("this.voteSpecification: ", this.voteSpecification);
-    this.category = this.options.tokenCategory;
     this.idea = this.options.idea;
     this.myVotesCollection = this.options.myVotesCollection;
     this.collection = this.myVotesCollection;
 
+    var myVote = this.myVotesCollection.findWhere({"idea": this.idea.get("@id"), "token_category": this.model.get("@id")});
+    console.log("myVote: ", myVote);
+    if ( myVote ){
+      this.currentValue = myVote.get("value") || 0;
+    }
+    else {
+      this.currentValue = 0;
+    }
+
     // validate token category's maximum_per_idea and total_number
-    var maximum_per_idea = this.category.get("maximum_per_idea");
-    var total_number = this.category.get("total_number");
+    var maximum_per_idea = this.model.get("maximum_per_idea");
+    var total_number = this.model.get("total_number");
     if ( !_.isNumber(total_number) || total_number <= 0 || total_number > 1000 ){
       total_number = 10;
     }
@@ -306,7 +308,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
     this.postData = {};
     var voting_urls = "voting_urls" in this.voteSpecification ? this.voteSpecification["voting_urls"] : null;
     var idea_id = this.options.idea.get("@id");
-    var category_id = this.category.get("@id");
+    var category_id = this.model.get("@id");
     if ( voting_urls && _.isObject(voting_urls) && idea_id in voting_urls ){
       this.voteURL = Ctx.getUrlFromUri(voting_urls[idea_id]);
       this.postData["@type"] = "TokenIdeaVote";
@@ -319,14 +321,14 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
       console.error("could not compte this.voteURL and this.postData");
     }
 
-    this.customTokenImageURL = this.category.get("image");
+    this.customTokenImageURL = this.model.get("image");
     this.customTokenImagePromise = getSVGElementByURLPromise(this.customTokenImageURL);
   },
   collectionEvents: {
     "add remove reset change sync": "render"
   },
   onRender: function(){
-    console.log("TokenIdeaAllocationView::onRender()");
+    console.log("TokenCategoryAllocationView::onRender()");
     var that = this;
 
     /*
@@ -351,11 +353,11 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
 
     var container = this.$el;
 
-    // needs: getTokenSize(), that.category, that.customTokenImageURL, customToken, zeroToken, that.currentValue, that.myVotesCollection, transitionAnimation(), that.postData, that.idea, that.render()
+    // needs: getTokenSize(), that.model, that.customTokenImageURL, customToken, zeroToken, that.currentValue, that.myVotesCollection, transitionAnimation(), that.postData, that.idea, that.render()
     var renderClickableTokenIcon = function(number_of_tokens_represented_by_this_icon){
       var el = null;
 
-      var token_size = getTokenSize(that.category.get("total_number"), 20, 400); // we know this computed size will be smaller than getTokenSize(that.maximum_per_idea ? that.maximum_per_idea + 1 : 0, 10, 400); and we need icons in bags and in ideas to be the same size
+      var token_size = getTokenSize(that.model.get("total_number"), 20, 400); // we know this computed size will be smaller than getTokenSize(that.maximum_per_idea ? that.maximum_per_idea + 1 : 0, 10, 400); and we need icons in bags and in ideas to be the same size
 
 
       if ( number_of_tokens_represented_by_this_icon == 0 ){
@@ -415,7 +417,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
         el[0].classList.add("not-selected");
       }
 
-      var tokenBagData = that.myVotesCollection.getTokenBagDataForCategory(that.category);
+      var tokenBagData = that.myVotesCollection.getTokenBagDataForCategory(that.model);
       var remaining_tokens = tokenBagData["remaining_tokens"];
       var userCanClickThisToken = (remaining_tokens + that.currentValue - number_of_tokens_represented_by_this_icon >= 0);
       var link = null;
@@ -434,7 +436,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
           // animation: are we adding or removing token to/from this idea?
           if ( that.currentValue < number_of_tokens_represented_by_this_icon ){ // we are adding tokens to this idea
             for ( var i = that.currentValue + 1; i <= number_of_tokens_represented_by_this_icon; ++i ){
-              var selector = ".token-vote-session .token-bag-for-category." + that.category.getCssClassFromId() + " .available-tokens-icons .available";
+              var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
               console.log("theAvailableToken: ", theAvailableToken);
@@ -444,7 +446,7 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
           else { // we are removing tokens from this idea
             var initial_value = number_of_tokens_represented_by_this_icon;
             for ( var i = that.currentValue; i > number_of_tokens_represented_by_this_icon; --i ){
-              var selector = ".token-vote-session .token-bag-for-category." + that.category.getCssClassFromId() + " .available-tokens-icons .not-available";
+              var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .not-available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq(i-1);
               console.log("theAvailableToken: ", theAvailableToken);
@@ -545,6 +547,32 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
   }
 });
 
+
+var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
+  template: '#tmpl-tokenCategoryAllocationCollection',
+  ui: {
+    tokensForIdea: ".token-categories"
+  },
+  childView: TokenCategoryAllocationView,
+  initialize: function(options) {
+    this.idea = options.idea;
+    this.myVotesCollection = options.myVotesCollection;
+    this.voteSpecification = options.voteSpecification;
+    this.childViewOptions = {
+      idea: options.idea,
+      myVotesCollection: options.myVotesCollection,
+      voteSpecification: options.voteSpecification,
+      parent: this
+    };
+  },
+});
+
+
+var TokenCategoryExclusivePairCollectionView = TokenCategoryAllocationCollectionView.extend({
+    template: '#tmpl-tokenCategoryExclusivePairCollection',
+});
+
+
 // This view shows an idea in the list of votable ideas (and calls a subview which shows the tokens for this idea)
 var TokenVoteItemView = Marionette.LayoutView.extend({
   template: '#tmpl-tokenVoteItem',
@@ -553,12 +581,9 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
     this.parent = options.parent;
   },
 
-  ui: {
-    tokensForIdea: ".tokens-for-idea"
-  },
-
   regions: {
     regionIdeaDescription: ".js_region-idea-description",
+    tokensForIdea: ".tokens-for-idea"
   },
 
   serializeData: function(){
@@ -573,32 +598,27 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
     var voteSpecification = "voteSpecification" in this.parent.options ? this.parent.options.voteSpecification : null;
     var myVotesCollection = "myVotesCollection" in this.parent.options ? this.parent.options.myVotesCollection : null;
     var idea = that.model;
+    var tokenCategoryCollection;
     console.log("tokenCategories: ", tokenCategories);
     if ( tokenCategories ){
       // if there are 2 categories and they are exclusive, we show them on a single row
       if ( tokenCategories.length == 2 && voteSpecification && "exclusive_categories" in voteSpecification && voteSpecification.exclusive_categories ){
-        that.ui.tokensForIdea.addClass("exclusive");
-      }
-      tokenCategories.each(function(category){
-        // get the number of tokens the user has already set on this idea
-        var myVote = myVotesCollection.findWhere({"idea": idea.get("@id"), "token_category": category.get("@id")});
-        console.log("myVote: ", myVote);
-        if ( myVote ){
-          myVote = myVote.get("value") || 0;
-        }
-        else {
-          myVote = 0;
-        }
-
-        var view = new TokenIdeaAllocationView({
+        // that.ui.tokensForIdea.addClass("exclusive");
+        tokenCategoryCollection = new TokenCategoryExclusivePairCollectionView({
           idea: idea,
-          tokenCategory: category,
-          voteSpecification: voteSpecification,
+          collection: tokenCategories,
           myVotesCollection: myVotesCollection,
-          currentValue: myVote
+          voteSpecification: voteSpecification
         });
-        that.ui.tokensForIdea.append(view.render().el);
-      });
+      } else {
+        tokenCategoryCollection = new TokenCategoryAllocationCollectionView({
+          idea: idea,
+          collection: tokenCategories,
+          myVotesCollection: myVotesCollection,
+          voteSpecification: voteSpecification
+        });
+      }
+      this.getRegion('tokensForIdea').show(tokenCategoryCollection);
     }
   },
 
