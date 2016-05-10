@@ -350,6 +350,8 @@ var TokenIdeaAllocationView = Marionette.ItemView.extend({
     
 
     var container = this.$el;
+
+    // needs: getTokenSize(), that.category, that.customTokenImageURL, customToken, zeroToken, that.currentValue, that.myVotesCollection, transitionAnimation(), that.postData, that.idea, that.render()
     var renderClickableTokenIcon = function(number_of_tokens_represented_by_this_icon){
       var el = null;
 
@@ -573,6 +575,10 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
     var idea = that.model;
     console.log("tokenCategories: ", tokenCategories);
     if ( tokenCategories ){
+      // if there are 2 categories and they are exclusive, we show them on a single row
+      if ( tokenCategories.length == 2 && voteSpecification && "exclusive_categories" in voteSpecification && voteSpecification.exclusive_categories ){
+        that.ui.tokensForIdea.addClass("exclusive");
+      }
       tokenCategories.each(function(category){
         // get the number of tokens the user has already set on this idea
         var myVote = myVotesCollection.findWhere({"idea": idea.get("@id"), "token_category": category.get("@id")});
