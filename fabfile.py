@@ -1411,6 +1411,8 @@ def env_dev(projectpath=None):
     env.host_string = 'localhost'
     if exists(join(projectpath, 'local.ini')):
         env.ini_file = 'local.ini'
+    elif exists(join(projectpath, 'testing.ini')):
+        env.ini_file = 'testing.ini'
     else:
         env.ini_file = 'development.ini'
     env.pop('host_string')
