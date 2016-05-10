@@ -39,6 +39,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
   panelLockedReason: null,
   panelUnlockedReason: null,
   minPanelSize:AssemblPanel.prototype.minimized_size,
+  criticalSize:600,
   
   initialize: function(options) {
     var that = this;
@@ -74,12 +75,11 @@ var PanelWrapper = Marionette.LayoutView.extend({
     this.$el.addClass(this.model.attributes.type + '-panel');
     this.$el.attr('id',this.model.cid);
     var screenSize = window.innerWidth;
-    var criticalSize = 600;
     var isPanelMinimized = this.model.get('minimized');
     if(isPanelMinimized){
       this.model.set('minWidth',this.minPanelSize);
     }else{
-      if(screenSize > criticalSize){
+      if(screenSize > this.criticalSize){
         var panelType = this.model.get('type');
         switch(panelType) {
         case 'ideaList':
@@ -101,7 +101,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
             this.model.set('minWidth',200);
             break;
         case 'contextPanel':
-            this.model.set('minWidth',200);
+            this.model.set('minWidth',450);
             break;
         default:
             this.model.set('minWidth',0);
@@ -124,6 +124,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
     this.groupContent.resizePanel();
   },
   displayContent:function(skipAnimation){
+    var animationDuration = 1000;
     var that = this;
     var isPanelMinimized = this.model.get('minimized');
     if(isPanelMinimized){
@@ -132,10 +133,10 @@ var PanelWrapper = Marionette.LayoutView.extend({
       if(skipAnimation){
         this.$el.addClass('minSizeGroup');
       }else{
-        this.$el.find('.panelContentsWhenMinimized > span').delay(1000 * 0.6).fadeIn(1000 * 0.3);
-        this.$el.find('.panelContents').fadeOut(1000 * 0.9);
-        this.$el.find("header span.panel-header-title").fadeOut(1000 * 0.4);
-        this.$el.children(".panelContentsWhenMinimized").delay(1000 * 0.6).fadeIn(1000 * 0.4);
+        this.$el.find('.panelContentsWhenMinimized > span').delay(animationDuration * 0.6).fadeIn(animationDuration * 0.3);
+        this.$el.find('.panelContents').fadeOut(animationDuration * 0.9);
+        this.$el.find("header span.panel-header-title").fadeOut(animationDuration * 0.4);
+        this.$el.children(".panelContentsWhenMinimized").delay(animationDuration * 0.6).fadeIn(animationDuration * 0.4);
       }
     }else{
       this.$('.panel-header-minimize i').addClass('icon-arrowleft').removeClass('icon-arrowright');
@@ -143,10 +144,10 @@ var PanelWrapper = Marionette.LayoutView.extend({
       if(skipAnimation){
         this.$el.removeClass('minSizeGroup');
       }else{
-        this.$el.find('.panelContentsWhenMinimized > span').fadeOut(1000 * 0.3);
-        this.$el.find('.panelContents').delay(1000 * 0.2).fadeIn(1000 * 0.8);
-        this.$el.find("header span.panel-header-title").delay(1000 * 0.5).fadeIn(1000 * 0.5);
-        this.$el.children(".panelContentsWhenMinimized").fadeOut(1000 * 0.3);
+        this.$el.find('.panelContentsWhenMinimized > span').fadeOut(animationDuration * 0.3);
+        this.$el.find('.panelContents').delay(animationDuration * 0.2).fadeIn(animationDuration * 0.8);
+        this.$el.find("header span.panel-header-title").delay(animationDuration * 0.5).fadeIn(animationDuration * 0.5);
+        this.$el.children(".panelContentsWhenMinimized").fadeOut(animationDuration * 0.3);
       }
     }
   },
@@ -182,10 +183,11 @@ var PanelWrapper = Marionette.LayoutView.extend({
         }
   },
   setHidden: function() {
+    this.groupContent.resizePanel(true);
     if (this.model.get('hidden')) {
       this.$el.hide();
     } else {
-      //this.$el.css('display', 'table-cell'); /* Set it back to its original value, which is "display: table-cell" in _groupContainer.scss . But why is it so? */
+      this.$el.css('display', 'table-cell'); /* Set it back to its original value, which is "display: table-cell" in _groupContainer.scss . But why is it so? */
     }
   },
   setGridSize: function(gridSize) {
