@@ -66,7 +66,7 @@ MarkupSafe==0.23
 meld3==1.0.2
 mock==2.0.0
 ndg_httpsclient==0.4.0
--e git+https://github.com/imaginationforpeople/nodeenv.git@master#egg=nodeenv
+-e git+https://github.com/ekalinin/nodeenv.git@master#egg=nodeenv
 numpy==1.11.0
 #oauthlib==1.1.0
 oauth2client==2.0.2
@@ -113,7 +113,7 @@ python-openid==2.2.5
 pytz==2016.4
 pyvirtualdisplay==0.2
 pyzmq==15.2.0
-raven==5.15.0
+raven==5.16.0
 rdflib-jsonld==0.3
 rdflib==4.2.1
 redis==2.10.5
