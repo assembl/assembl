@@ -254,7 +254,8 @@ var TokenBagsView = Marionette.ItemView.extend({
 var TokenCategoryAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
   initialize: function(options){
-    this.parent = options.parent;
+    this.collectionView = options.collectionView;
+    this.voteItemView = options.voteItemView;
     if ( !("voteSpecification" in this.options)){
       console.error("option voteSpecification is mandatory");
       return;
@@ -562,7 +563,8 @@ var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
       idea: options.idea,
       myVotesCollection: options.myVotesCollection,
       voteSpecification: options.voteSpecification,
-      parent: this
+      collectionView: this,
+      voteItemView: options.parent
     };
   },
 });
@@ -615,7 +617,8 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
           idea: idea,
           collection: tokenCategories,
           myVotesCollection: myVotesCollection,
-          voteSpecification: voteSpecification
+          voteSpecification: voteSpecification,
+          parent: this
         });
       }
       this.getRegion('tokensForIdea').show(tokenCategoryCollection);
