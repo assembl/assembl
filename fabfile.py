@@ -1341,8 +1341,8 @@ def commonenv(projectpath, venvpath=None):
     env.vbranch = get_config().get('virtuoso', 'virtuoso_branch')
     
     env.dbdumps_dir = join(projectpath, '%s_dumps' % env.projectname)
-    env.gitrepo = "https://github.com/ImaginationForPeople/assembl.git"
-    env.gitbranch = "master"
+    env.gitrepo = getenv("GITREPO", "https://github.com/ImaginationForPeople/assembl.git")
+    env.gitbranch = getenv("GITBRANCH", "master")
 
     env.uses_memcache = True
     env.uses_uwsgi = False
@@ -1426,7 +1426,7 @@ def env_dev(projectpath=None):
     env.uses_apache = False
     env.uses_ngnix = False
 
-    env.gitbranch = "develop"
+    env.gitbranch = getenv("GITBRANCH", "develop")
 
 
 @task
@@ -1447,8 +1447,7 @@ def env_testing(projectpath=None):
     env.uses_apache = False
     env.uses_ngnix = False
 
-    env.gitbranch = "develop"
-
+    env.gitbranch = getenv("GITBRANCH", "develop")
 
 @task
 def env_coeus_assembl():
@@ -1469,7 +1468,7 @@ def env_coeus_assembl():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "master"
+    env.gitbranch = getenv("GITBRANCH", "master")
 
 
 @task
@@ -1491,7 +1490,7 @@ def env_coeus_assembl2():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "develop"
+    env.gitbranch = getenv("GITBRANCH", "develop")
 
 
 @task
@@ -1514,7 +1513,7 @@ def env_inm_agora():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "master"
+    env.gitbranch = getenv("GITBRANCH", "master")
 
 
 @task
@@ -1536,7 +1535,7 @@ def env_bluenove_discussions():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "master"
+    env.gitbranch = getenv("GITBRANCH", "master")
 
 @task
 def env_bluenove_assembl2():
@@ -1557,7 +1556,7 @@ def env_bluenove_assembl2():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "master"
+    env.gitbranch = getenv("GITBRANCH", "master")
 
 @task
 def env_paris_debat():
@@ -1578,7 +1577,7 @@ def env_paris_debat():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "master"
+    env.gitbranch = getenv("GITBRANCH", "master")
 
 
 @task
@@ -1600,4 +1599,4 @@ def env_thecampfactory():
     env.uses_apache = False
     env.uses_ngnix = True
     env.uses_uwsgi = True
-    env.gitbranch = "master"
+    env.gitbranch = getenv("GITBRANCH", "master")
