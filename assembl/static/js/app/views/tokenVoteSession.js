@@ -186,10 +186,7 @@ var TokenBagsView = Marionette.ItemView.extend({
     this.voteSpecification = this.options.voteSpecification;
     this.tokenCategories = this.options.tokenCategories;
     this.myVotesCollection = this.options.myVotesCollection;
-    this.collection = this.myVotesCollection;
-  },
-  collectionEvents: {
-    "add remove reset change sync": "render"
+    this.listenTo(this.myVotesCollection, "reset change:value", this.render);
   },
   onRender: function(){
     console.log("TokenBagsView::onRender()");
