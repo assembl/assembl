@@ -1411,8 +1411,6 @@ def env_dev(projectpath=None):
     env.host_string = 'localhost'
     if exists(join(projectpath, 'local.ini')):
         env.ini_file = 'local.ini'
-    elif exists(join(projectpath, 'testing.ini')):
-        env.ini_file = 'testing.ini'
     else:
         env.ini_file = 'development.ini'
     env.pop('host_string')
@@ -1425,6 +1423,27 @@ def env_dev(projectpath=None):
     # env.home = "webapp"
     require('projectname', provided_by=('commonenv',))
     env.mac = system().startswith('Darwin')
+    env.uses_apache = False
+    env.uses_ngnix = False
+
+    env.gitbranch = "develop"
+
+
+@task
+def env_testing(projectpath=None):
+    if not projectpath:
+        # Legitimate os.path
+        projectpath = dirname(os.path.realpath(__file__))
+    env.host_string = 'localhost'
+    env.ini_file = 'testing.ini'
+    env.pop('host_string')
+
+    env.hosts = ['localhost']
+    execute(commonenv, projectpath, getenv('VIRTUAL_ENV', None))
+    env.wsginame = "dev.wsgi"
+    env.urlhost = "localhost"
+    require('projectname', provided_by=('commonenv',))
+    env.mac = False
     env.uses_apache = False
     env.uses_ngnix = False
 
