@@ -78,8 +78,7 @@ var AbstractDocumentView = Marionette.ItemView.extend({
         loader = new LoaderView(),
         loaderHtml = loader.render().el;
     
-    //this.$el.html(loaderHtml);
-
+    this.$el.html(loaderHtml); //First, put a loader, then oembed
     this.doOembed();
 
   },
