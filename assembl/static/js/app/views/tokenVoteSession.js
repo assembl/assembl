@@ -134,10 +134,13 @@ function getRandomInt(min, max) {
 }
 
 // Copies el and animates it towards el2
-var transitionAnimation = function(el, el2){
-  console.log("transitionAnimation(): ", el, el2);
+var transitionAnimation = function(el, el2, duration){
+  console.log("transitionAnimation(): ", el, el2, duration);
   if ( !el.length || !el2.length ){
     return;
+  }
+  if ( duration === undefined ){
+    duration = 1000;
   }
   var el3 = el.clone();
   $("body").append(el3);
@@ -156,11 +159,11 @@ var transitionAnimation = function(el, el2){
   var top = el2o.top - elo.top;
   var left = el2o.left - elo.left;
   el3.offset(elo);
-  el3.css("transition-duration", "1s");
+  el3.css("transition-duration", duration+"ms");
   el3.css("transform", "translate(" + left + "px, " + top + "px)");
   setTimeout(function(){
     el3.remove();
-  }, 1000);
+  }, duration);
 };
 
 
@@ -466,6 +469,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
             return;
           }
           console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
+          var animation_duration = 1000;
 
           // animation: are we adding or removing token to/from this idea?
           if ( that.currentValue < number_of_tokens_represented_by_this_icon ){ // we are adding tokens to this idea
@@ -474,7 +478,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
               console.log("theAvailableToken: ", theAvailableToken);
-              transitionAnimation(theAvailableToken, link.parent().children().eq(i));
+              transitionAnimation(theAvailableToken, link.parent().children().eq(i), animation_duration);
             }
           }
           else { // we are removing tokens from this idea
@@ -482,9 +486,9 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
             for ( var i = that.currentValue; i > number_of_tokens_represented_by_this_icon; --i ){
               var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .not-available";
               console.log("selector: ", selector);
-              var theAvailableToken = $(selector).eq(i-1);
+              var theAvailableToken = $(selector).eq(i - number_of_tokens_represented_by_this_icon - 1);
               console.log("theAvailableToken: ", theAvailableToken);
-              transitionAnimation(link.parent().children().eq(i), theAvailableToken);
+              transitionAnimation(link.parent().children().eq(i).find("svg"), theAvailableToken, animation_duration);
             }
           }
           
@@ -508,7 +512,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
           */
 
           // This is a more Backbone way to save the data to the backend
-          _.defer(function(){
+          setTimeout(function(){
             var properties = _.clone(that.postData);
             delete properties["value"];
             properties["idea"] = that.idea.get("@id");
@@ -526,7 +530,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
             el[0].classList.add("selected");
             container.removeClass("hover");
             that.render(); // show immediately the icon it its correct state, without having to wait for collection update
-          });
+          }, animation_duration);
         });
         
         link.hover(function handlerIn(){
