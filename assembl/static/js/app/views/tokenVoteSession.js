@@ -477,7 +477,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
-              console.log("theAvailableToken: ", theAvailableToken);
+              theAvailableToken[0].classList.add("animating-towards-not-available");
               transitionAnimation(theAvailableToken, link.parent().children().eq(i), animation_duration);
             }
           }
@@ -487,7 +487,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .not-available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq(i - number_of_tokens_represented_by_this_icon - 1);
-              console.log("theAvailableToken: ", theAvailableToken);
+              theAvailableToken[0].classList.add("animating-towards-available");
               transitionAnimation(link.parent().children().eq(i).find("svg"), theAvailableToken, animation_duration);
             }
           }

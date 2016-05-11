@@ -32,11 +32,11 @@
       font-size: 150%;
     }
 
-    .available {
+    .available:not(.animating-towards-not-available), .not-available.animating-towards-available {
       /* show the SVG with its initial styles */
     }
 
-    .not-available {
+    .not-available:not(.animating-towards-available), .available.animating-towards-not-available {
       path, rect, circle {
         fill: none !important; /* !important is here to override inline style which would have been written in the SVG file which has been downloaded via its URL */
         stroke: #ccc !important;
