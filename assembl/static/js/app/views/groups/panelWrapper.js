@@ -161,18 +161,14 @@ var PanelWrapper = Marionette.LayoutView.extend({
   closePanel: function() {
     Ctx.removeCurrentlyDisplayedTooltips();
     this.model.collection.remove(this.model);
-    //this.groupContent.groupContainer.resizeAllPanels();
   },
   onRender: function() {
-    this.setGridSize(this.gridSize);
     this.contents.show(this.contentsView);
     this.setHidden();
-    // Ctx.initTooltips(this.$el); // this takes way too much time when the DOM of the panelContents is big, so instead we init tooltips on selected subparts of the template
     Ctx.initTooltips(this.ui.panelHeader);
     Ctx.initTooltips(this.ui.panelContentsWhenMinimized);
     this._minimizedStateButton = this.$('.panel-header-minimize');
     this._minimizedStateIcon = this.$('.panel-header-minimize i');
-
     if (this.model.get('locked'))
     {
       this.lockPanel(true);
@@ -190,12 +186,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
       this.$el.css('display', 'table-cell'); /* Set it back to its original value, which is "display: table-cell" in _groupContainer.scss . But why is it so? */
     }
   },
-  setGridSize: function(gridSize) {
-    //this.gridSize = gridSize;
-
-    //this.groupContent.adjustGridSize();
-  },
-
   /**
    * lock the panel if unlocked
    */
@@ -208,31 +198,26 @@ var PanelWrapper = Marionette.LayoutView.extend({
           .attr('data-original-title', i18n.gettext('Unlock panel'));
     }
   },
-
   /**
    * @param locking: bool. True if we want to lock the panel. False if we want to unlock it
    * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autolocked.
    * @param reason: String. The reason why the panel will be automatically locked. Possible values: undefined, "USER_IS_WRITING_A_MESSAGE", "USER_WAS_WRITING_A_MESSAGE"
    **/
   autoLockOrUnlockPanel: function(locking, informUser, reason) {
-    console.log("autoLockPanel()");
     var that = this;
     informUser = (informUser === undefined) ? true : informUser;
     locking = (locking === undefined) ? true : locking;
     reason = (reason === undefined) ? null : reason;
     var needsToChange = (locking && !this.model.get('locked')) || (!locking && this.model.get('locked'));
-
     if (needsToChange) {
       if (locking)
           this.lockPanel();
       else
           this.unlockPanel();
-
       if (locking)
           that.panelLockedReason = reason;
       else
           that.panelUnlockedReason = reason;
-
       if (informUser) {
         // show a special tooltip
         setTimeout(function() {
@@ -253,7 +238,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
               el.attr("data-original-title", i18n.gettext("We have unlocked the panel for you. Click here to lock it back"));
             }
           }
-
           el.tooltip('destroy');
           el.tooltip({container: Ctx.getTooltipsContainerSelector(), placement: 'left'});
           el.tooltip('show');
@@ -266,7 +250,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
       }
     }
   },
-
   /**
    * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autolocked.
    * @param reason: String. The reason why the panel will be automatically locked. Possible values: undefined, "USER_IS_WRITING_A_MESSAGE"
@@ -274,7 +257,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
   autoLockPanel: function(informUser, reason) {
     this.autoLockOrUnlockPanel(true, informUser, reason);
   },
-
   /**
    * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autounlocked.
    * @param reason: String. The reason why the panel will be automatically unlocked. Possible values: undefined, "USER_WAS_WRITING_A_MESSAGE"
@@ -282,7 +264,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
   autoUnlockPanel: function(informUser, reason) {
     this.autoLockOrUnlockPanel(false, informUser, reason);
   },
-
   /**
    * unlock the panel if locked
    */
@@ -299,9 +280,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
         _.each(this._unlockCallbackQueue, function(callback) {
           callback();
         });
-
         //We presume the callbacks have their own calls to render
-        //this.render();
         this._unlockCallbackQueue = {};
       }
     }
@@ -319,230 +298,21 @@ var PanelWrapper = Marionette.LayoutView.extend({
       this.lockPanel(true);
     }
   },
-
   isPanelLocked: function() {
     return this.model.get('locked');
   },
-
   getPanelLockedReason: function() {
     return this.panelLockedReason;
   },
-
   getPanelUnlockedReason: function() {
     return this.panelUnlockedReason;
   },
-
   isPanelMinimized: function() {
     return this.model.get('minimized');
   },
-
   isPanelHidden: function() {
     return this.model.get('hidden');
   },
-
-  unminimizePanel: function(evt) {
-    /*if (!this.model.get('minimized')) return;
-
-    this.model.set('minimized', false);
-
-    this.$el.addClass("unminimizing");
-
-    if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL)) {
-      this.groupContent.resetMessagePanelWidth();
-      var _store = window.localStorage;
-
-      //_store.removeItem('ideaPanelHelpShown'); // uncomment this to test
-      if (!_store.getItem('ideaPanelHelpShown') || Math.random() < 0.1) {
-        _store.setItem('ideaPanelHelpShown', true);
-        var that = this;
-        setTimeout(function() {
-          var el = that.ui.minimizePanel;
-          var initialTitle = el.attr("data-original-title");
-          el.attr("data-original-title", i18n.gettext('Need more room for messages? Click here to minimize the Idea panel.'));
-          el.tooltip('destroy');
-          el.tooltip({container: 'body', placement: 'left'});
-          el.tooltip('show');
-          setTimeout(function() {
-            el.attr("data-original-title", initialTitle);
-            el.tooltip('destroy');
-            el.tooltip({container: 'body'});
-          }, 7000);
-        }, 2500);
-      }
-    }
-
-    this.groupContent.groupContainer.resizeAllPanels();*/
-  },
-
-  minimizePanel: function(evt) {
-    /*if (this.model.get('minimized'))
-        return;
-
-    this.model.set('minimized', true);
-
-    this.$el.addClass("minimizing");
-
-    if (this.model.isOfType(PanelSpecTypes.IDEA_PANEL)) {
-      this.groupContent.resetMessagePanelWidth();
-    }
-
-    this.groupContent.groupContainer.resizeAllPanels();
-  },
-
-  getExtraPixels: function() {
-    if (this.model.get('minimized')) {
-      return AssemblPanel.prototype.minimized_size;
-    }
-
-    return 0;*/
-  },
-
-  /**
-   * during animation, freeze the percentage width of panels into pixels
-   */
-  useCurrentSize: function() {
-    /*this.$el.stop();
-    var width = this.$el[0].style.width;
-
-    // console.log("  panel ", this.model.get('type'), "useCurrentSize:", this.$el.width(), width);
-    // If %, we already applied this, and the browser may have changed pixels on us.
-    if (width == "" || width.indexOf('%') >= 0) {
-      this.$el.width(this.$el.width());
-    }
-
-    this.$el.addClass("animating");*/
-  },
-
-  animateTowardsPixels: function(pixels_per_unit, percent_per_unit, extra_pixels, num_units, group_units, total_pixels, skip_animation) {
-    /*var that = this;
-    var animationDuration = 1000;
-    var panelContents = this.$el.children(".panelContents");
-    var initialWidth = "100%";
-
-    if (this.model.get('minimized')) { // execute minimization animation
-
-      this._minimizedStateIcon
-          .addClass('icon-arrowright')
-          .removeClass('icon-arrowleft');
-      this._minimizedStateButton
-          .attr('data-original-title', i18n.gettext('Maximize panel'));
-
-      var target = AssemblPanel.prototype.minimized_size;
-      if (skip_animation) {
-        panelContents.css("width", initialWidth);
-        panelContents.hide();
-        this.$el.find("header span.panel-header-title").hide();
-        this.$el.children(".panelContentsWhenMinimized").show();
-
-        that.$el.width(target);
-        that.$el.removeClass("animating");
-        that.$el.addClass("minimized");
-        that.$el.removeClass("minimizing");
-        that.$el.css("min-width", AssemblPanel.prototype.minimized_size);
-      }
-      else {
-        // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
-        panelContents.css("width", panelContents.width());
-
-        panelContents.fadeOut(animationDuration * 0.9, function() {
-          // once the animation is over, set its width back to 100%, so that it remains adaptative
-          panelContents.css("width", initialWidth);
-        });
-
-        this.$el.find("header span.panel-header-title").fadeOut(animationDuration * 0.4); // hide header title rapidly, so we avoid unwanted line feeds for header icons during resize
-        this.$el.children(".panelContentsWhenMinimized").delay(animationDuration * 0.6).fadeIn(animationDuration * 0.4);
-
-        this.$el.animate({'width': target}, animationDuration, 'swing', function() {
-          that.$el.removeClass("animating");
-          that.$el.addClass("minimized");
-          that.$el.removeClass("minimizing");
-          that.$el.css("min-width", AssemblPanel.prototype.minimized_size);
-        });
-      }
-
-    } else { // execute de-minimization animation
-
-      // compute target width (expressed in pixels in "target" variable, and in calc(%+px) in "width" variable)
-
-      var gridSize = this.gridSize;
-
-      //var myCorrection = extra_pixels * gridSize / num_units;
-      var myCorrection = extra_pixels * gridSize / group_units;
-      if (this.groupContent.groupContainer.isOneNavigationGroup()
-          && this.model.isOfType(PanelSpecTypes.MESSAGE_LIST)
-          && this.groupContent.model.getPanelSpecByType(PanelSpecTypes.IDEA_PANEL).get('minimized')) {
-        myCorrection += AssemblPanel.prototype.minimized_size;
-      }
-
-      if (isNaN(myCorrection))
-          console.log("error in myCorrection");
-      var target = Math.max(pixels_per_unit * gridSize, this.minWidth);
-      var width = (100 * gridSize / group_units) + "%";
-
-      // minimize use of calc
-      if (myCorrection > 3) {
-        width = "calc(" + width + " - " + myCorrection + "px)";
-        target -= myCorrection;
-      }
-
-      if (skip_animation) {
-        this._minimizedStateIcon
-            .addClass('icon-arrowleft')
-            .removeClass('icon-arrowright');
-        this._minimizedStateButton
-            .attr('data-original-title', i18n.gettext('Minimize panel'));
-
-        panelContents.css("width", initialWidth);
-
-        this.$el.find("header span.panel-header-title").show();
-        this.$el.children(".panelContentsWhenMinimized").hide();
-
-        this.$el.width(width);
-        that.$el.removeClass("animating");
-        that.$el.removeClass("minimized");
-        that.$el.removeClass("unminimizing");
-        that.$el.css("min-width", that.minWidth);
-      }
-      else {
-        // show, hide, resize and restyle DOM elements using animations
-
-        if (this.$el.hasClass("unminimizing")) {
-          this._minimizedStateIcon
-              .addClass('icon-arrowleft')
-              .removeClass('icon-arrowright');
-          this._minimizedStateButton
-              .attr('data-original-title', i18n.gettext('Minimize panel'));
-
-          // fix the width of the panel content div (.panelContents), so that its animation does not change the positioning of its content (line returns, etc)
-          panelContents.css("width", target);
-
-          //panelContents.delay(animationDuration*0.3).fadeIn(animationDuration*0.7, function(){
-          panelContents.delay(animationDuration * 0.2).fadeIn(animationDuration * 0.8, function() {
-            // once the animation is over, set its width back to 100%, so that it remains adaptative
-            panelContents.css("width", initialWidth);
-          });
-
-          this.$el.find("header span.panel-header-title").delay(animationDuration * 0.5).fadeIn(animationDuration * 0.5);
-          this.$el.children(".panelContentsWhenMinimized").fadeOut(animationDuration * 0.3);
-        }
-
-        // console.log("  panel ", that.model.get('type'), "target width:", width, "=", target, "actual:", that.$el.width());
-        this.$el.animate({'width': target}, animationDuration, 'swing', function() {
-          that.$el.width(width);
-
-          // window.setTimeout(function() {
-          //     console.log("  panel ", that.model.get('type'), "final width:", that.$el.width());
-          // });
-          that.$el.removeClass("animating");
-          that.$el.removeClass("minimized");
-          that.$el.removeClass("unminimizing");
-          that.$el.css("min-width", that.minWidth);
-        });
-      }
-
-    }*/
-  },
-
   /**
    * Process a callback that can be inhibited by panel locking.
    * If the panel is unlocked, the callback will be called immediately.
@@ -570,7 +340,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
       }
     }
   },
-
   getIcon: function() {
     var type = this.contentsView.panelType,
         icon = '';
@@ -585,7 +354,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
         icon = 'icon-comment';
         break;
       case PanelSpecTypes.CLIPBOARD:
-
         // ne need because of resetTitle - segment
         icon = 'icon-clipboard';
         break;
@@ -600,9 +368,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
       default:
         break;
     }
-
     return icon;
   }
 });
-
 module.exports = PanelWrapper;
