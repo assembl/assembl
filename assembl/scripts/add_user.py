@@ -1,7 +1,8 @@
 import argparse
 from getpass import getpass, getuser
-import re
 from json import load
+from pyisemail import is_email
+
 
 from pyramid.paster import get_appsettings, bootstrap
 import transaction
@@ -30,8 +31,6 @@ def validate_dict(d):
 def main():
     global all_roles
     parser = argparse.ArgumentParser()
-    emailre = re.compile(
-        r'^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$')
     parser.add_argument("configuration", help="configuration file")
     parser.add_argument("-f", help="json file with user information.", type=argparse.FileType('r'))
     parser.add_argument("--force", help="Overwrite existing user",
@@ -74,7 +73,7 @@ def main():
         exit()
     while not args.name:
         args.name = raw_input("Full name:")
-    while not args.email or not emailre.match(args.email):
+    while not args.email or not is_email(args.email):
         args.email = raw_input("Email address:")
     if not args.username:
         print "You did not set a username. Enter an empty string"\
