@@ -165,8 +165,11 @@ var transitionAnimation = function(el, el2){
 
 
 // This view shows at the top of the popin the bag of remaining tokens the user has
-var TokenBagsView = Marionette.ItemView.extend({
-  template: false,
+var TokenBagsView = Marionette.LayoutView.extend({
+  template: '#tmpl-tokenBags',
+  regions: {
+    "tokenBags": ".token-bags"
+  },
   initialize: function(options){
     if ( !("voteSpecification" in this.options)){
       console.error("option voteSpecification is mandatory");
@@ -191,58 +194,91 @@ var TokenBagsView = Marionette.ItemView.extend({
   onRender: function(){
     console.log("TokenBagsView::onRender()");
     var that = this;
+
+    var bags = new RemainingTokenCategoriesCollectionView({
+      collection: that.tokenCategories,
+      myVotesCollection: that.myVotesCollection
+    });
+    that.getRegion('tokenBags').show(bags);
+  }
+});
+
+// This view shows the remaining tokens the user has, of a given category
+// This view's model is a token category (an instance of Widget.TokenCategorySpecificationModel)
+var RemainingCategoryTokensView = Marionette.ItemView.extend({
+  template: false,
+  initialize: function(options){
+    if ( !("myVotesCollection" in this.options)){
+      console.error("option myVotesCollection is mandatory");
+      return;
+    }
+
+    this.myVotesCollection = this.options.myVotesCollection;
+  },
+  onRender: function(){
+    console.log("RemainingCategoryTokensView::onRender()");
+    var that = this;
     var container = this.$el;
     container.empty();
-    var help = $("<div></div>");
-    help.addClass("help-text");
-    help.text(i18n.gettext("Répartissez vos jetons sur les idées de vos choix. Par défaut, votre vote est neutre par projet."));
-    help.appendTo(container);
-    this.tokenCategories.each(function(category){
-      var customTokenImageURL = category.get("image");
-      var customTokenImagePromise = getSVGElementByURLPromise(customTokenImageURL);
-      var data = that.myVotesCollection.getTokenBagDataForCategory(category);
-      var categoryContainer = $("<div></div>");
-      categoryContainer.addClass('token-bag-for-category');
-      categoryContainer.addClass(category.getCssClassFromId());
-      categoryContainer.appendTo(container);
-      var el = $("<div></div>");
-      el.addClass("description");
-      var s = i18n.sprintf(i18n.gettext("<span class='available-tokens-number'>%d</span> remaining %s tokens"), data["remaining_tokens"], category.get("typename")); // TODO: use "name" field instead (LangString)
-      el.html(s);
-      //el.text("You have used " + data["my_votes_count"] + " of your " + data["total_number"] + " \"" + category.get("typename") + "\" tokens.");
-      el.appendTo(categoryContainer);
+    
+    var category = this.model;
+    var customTokenImageURL = category.get("image");
+    var customTokenImagePromise = getSVGElementByURLPromise(customTokenImageURL);
+    var data = that.myVotesCollection.getTokenBagDataForCategory(category);
+    var categoryContainer = $("<div></div>");
+    categoryContainer.addClass('token-bag-for-category');
+    categoryContainer.addClass(category.getCssClassFromId());
+    categoryContainer.appendTo(container);
+    var el = $("<div></div>");
+    el.addClass("description");
+    var s = i18n.sprintf(i18n.gettext("<span class='available-tokens-number'>%d</span> remaining %s tokens"), data["remaining_tokens"], category.get("typename")); // TODO: use "name" field instead (LangString)
+    el.html(s);
+    //el.text("You have used " + data["my_votes_count"] + " of your " + data["total_number"] + " \"" + category.get("typename") + "\" tokens.");
+    el.appendTo(categoryContainer);
 
-      var el2 = $("<div></div>");
-      el2.addClass("available-tokens-icons");
-      
-      el2.appendTo(categoryContainer);
-      $.when(customTokenImagePromise).then(function(svgEl){ 
-        var token_size = getTokenSize(data["total_number"], 20, 400);
-        for ( var i = 0; i < data["remaining_tokens"]; ++i ){
-          var tokenIcon = svgEl.clone();
-          tokenIcon[0].classList.add("available");
+    var el2 = $("<div></div>");
+    el2.addClass("available-tokens-icons");
+    
+    el2.appendTo(categoryContainer);
+    $.when(customTokenImagePromise).then(function(svgEl){ 
+      var token_size = getTokenSize(data["total_number"], 20, 400);
+      for ( var i = 0; i < data["remaining_tokens"]; ++i ){
+        var tokenIcon = svgEl.clone();
+        tokenIcon[0].classList.add("available");
 
-          tokenIcon.css("width", token_size);
-          tokenIcon.attr("width", token_size);
-          tokenIcon.css("height", token_size);
-          tokenIcon.attr("height", token_size);
+        tokenIcon.css("width", token_size);
+        tokenIcon.attr("width", token_size);
+        tokenIcon.css("height", token_size);
+        tokenIcon.attr("height", token_size);
 
-          el2.append(tokenIcon);
-        }
-        for ( var i = data["remaining_tokens"]; i < data["total_number"]; ++i ){
-          var tokenIcon = svgEl.clone();
-          tokenIcon[0].classList.add("not-available");
+        el2.append(tokenIcon);
+      }
+      for ( var i = data["remaining_tokens"]; i < data["total_number"]; ++i ){
+        var tokenIcon = svgEl.clone();
+        tokenIcon[0].classList.add("not-available");
 
-          tokenIcon.css("width", token_size);
-          tokenIcon.attr("width", token_size);
-          tokenIcon.css("height", token_size);
-          tokenIcon.attr("height", token_size);
+        tokenIcon.css("width", token_size);
+        tokenIcon.attr("width", token_size);
+        tokenIcon.css("height", token_size);
+        tokenIcon.attr("height", token_size);
 
-          el2.append(tokenIcon);
-        }
-      });
+        el2.append(tokenIcon);
+      }
     });
   }
+});
+
+
+
+var RemainingTokenCategoriesCollectionView = Marionette.CollectionView.extend({
+  template: false,
+  childView: RemainingCategoryTokensView,
+  initialize: function(options) {
+    console.log("RemainingTokenCategoriesCollectionView::initialize()");
+    this.childViewOptions = {
+      myVotesCollection: options.myVotesCollection
+    };
+  },
 });
 
 
@@ -548,9 +584,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
 
 var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
   template: '#tmpl-tokenCategoryAllocationCollection',
-  ui: {
-    tokensForIdea: ".token-categories"
-  },
   childView: TokenCategoryAllocationView,
   initialize: function(options) {
     this.idea = options.idea;
@@ -943,13 +976,11 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       });
 
       that.votableIdeasCollection = new IdeasSubset();
-      console.log("that.votableIdeasCollection: ", that.votableIdeasCollection);
 
       // Compute an ordering of votable ideas
       // Each participant should always see the same ordering, but 2 different participants can see a different ordering, and all possible orderings (permutations) should be distributed among participants as equally as possible.
       // When there are much less participants than possible permutations, participants should receive permutations which are different enough (for example: participants should not all see the same idea at the top position).
       var orderedVotableIdeas = that.votableIdeasCollection.sortBy(function(idea){return idea.id;}); // /!\ with this, "local:Idea/257" < "local:Idea/36"
-      console.log("orderedVotableIdeas: ", orderedVotableIdeas);
       var n = orderedVotableIdeas.length; // if there are n votable ideas, then there are m = n! ("n factorial") possible permutations
       // TODO: What if there are too many votable ideas and so the computation of n! would take too much time?
       if ( n < 100 ){
