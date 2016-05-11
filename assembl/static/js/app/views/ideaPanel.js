@@ -305,7 +305,7 @@ var IdeaPanel = AssemblPanel.extend({
   onAttach: function() {
     if ( !this.isViewDestroyed() ) {
       if ( !this.ideaPanelOpensAutomatically ){
-        this.panelWrapper.minimizePanel(); // even if there is a this.model
+        //this.panelWrapper.minimizePanel(); // even if there is a this.model
       }
     }
   },
@@ -540,7 +540,7 @@ var IdeaPanel = AssemblPanel.extend({
         if (!this.isViewDestroyed()) {
           this.template = '#tmpl-ideaPanel';
           if ( that.ideaPanelOpensAutomatically ){
-            this.panelWrapper.minimizePanel();
+            //this.panelWrapper.minimizePanel();
           }
         }
         if (this.isViewRenderedAndNotYetDestroyed()) {
