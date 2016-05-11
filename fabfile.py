@@ -640,7 +640,7 @@ def bower_cmd(cmd, relative_path='.'):
             execute(install_bower)
         with cd(relative_path):
             print("Running a bower command in path %s" % relative_path)
-            venvcmd(' '.join(("node", bower_cmd, cmd)))
+            venvcmd(' '.join(("node", bower_cmd, '--allow-root', cmd)))
 
 
 def _bower_foreach_do(cmd):

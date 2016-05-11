@@ -1,3 +1,4 @@
 {
-    "directory": "assembl/static/js/bower"
+    "directory": "assembl/static/js/bower",
+    "interactive": false
 }
