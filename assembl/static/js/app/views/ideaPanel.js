@@ -518,7 +518,7 @@ var IdeaPanel = AssemblPanel.extend({
               this.listenTo(this.model, 'acquiredId', function(m) {
                 // model has acquired an ID. Reset everything.
                 if (!this.isViewDestroyed()) {
-                  var model = that.mode
+                  var model = that.model;
                   that.model = null;
                   that.setIdeaModel(model, reason);
                 }
