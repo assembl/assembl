@@ -243,13 +243,13 @@ def venvcmd(cmd, shell=True, user=None, pty=False, chdir=True):
 
     if chdir:
         with cd(env.projectpath):
-            return run('source %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
+            return run('. %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
     else:
-        return run('source %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
+        return run('. %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
 
 
 def venv_prefix():
-    return 'source %(venvpath)s/bin/activate' % env
+    return '. %(venvpath)s/bin/activate' % env
 
 
 def get_db_dump_name():
