@@ -7,24 +7,45 @@ $editablearea_hover_border_size: 1px;
 // =========
 .ideaList-panel{
   min-width:350px;
+  .panelContents{
+    min-width:350px;
+  }
 }
 .messageList-panel{
   min-width:450px;
+  .panelContents{
+    min-width:450px;
+  }
 }
 .ideaPanel-panel{
   min-width:295px;
+  .panelContents{
+    min-width:295px;
+  }
 }
 .clipboard-panel{
   min-width:270px;
+  .panelContents{
+    min-width:270px;
+  }
 }
 .synthesisPanel-panel{
   min-width:200px;
+  .panelContents{
+    min-width:200px;
+  }
 }
 .navSidebar-panel{
   min-width:350px;
+  .panelContents{
+    min-width:350px;
+  }
 }
 .contextPanel-panel{
   min-width:450px;
+  .panelContents{
+    min-width:450px;
+  }
 }
 .minSizeGroup{
   .panel-header-title{

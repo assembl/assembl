@@ -51,28 +51,29 @@ var groupContent = Marionette.CompositeView.extend({
     var screenSize = window.innerWidth;
     var animationDuration = 1000;
     _.each(that.groupContainer.collection.models,function(group){
-      _.each(group.attributes.panels.models,function(panel){
-        var panelMinWidth = panel.get('minWidth');
-        var isPanelMinimized = panel.get('minimized');
+      _.each(group.attributes.panels.models,function(elm){
+        var panelMinWidth = elm.get('minWidth');
+        var isPanelMinimized = elm.get('minimized');
         var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
-        var panelId = '#' + panel.cid;
+        var panelId = '#' + elm.cid;
+        var panel = $(that.groupContainer.el).find(panelId);
         if(skipAnimation){
-          $(that.groupContainer.el).find(panelId).css({'min-width':panelMinWidth});
-          $(that.groupContainer.el).find(panelId).width(panelWidth);
+          panel.css({'min-width':panelMinWidth});
+          panel.width(panelWidth);
         }else{
           var totalWidth = that.getTotalWidth();
           if(totalWidth < screenSize){
-            $(that.groupContainer.el).find(panelId).css({'min-width':0});
-            $(that.groupContainer.el).find(panelId).animate({'width': panelWidth}, animationDuration, 'swing',function(){
-              $(that.groupContainer.el).find(panelId).css({'min-width':panelMinWidth});
+            panel.css({'min-width':0});
+            panel.animate({'width': panelWidth}, animationDuration, 'swing',function(){
+              panel.css({'min-width':panelMinWidth});
             });
           }else{
             if(screenSize <= that.criticalSize){
-              $(that.groupContainer.el).find(panelId).animate({'min-width': panelMinWidth}, animationDuration, 'swing')
+              panel.animate({'min-width': panelMinWidth}, animationDuration, 'swing')
             }else{
-              $(that.groupContainer.el).find(panelId).css({'min-width':0});
-              $(that.groupContainer.el).find(panelId).animate({'width': panelMinWidth}, animationDuration, 'swing',function(){
-                $(that.groupContainer.el).find(panelId).css({'min-width':panelMinWidth});
+              panel.css({'min-width':0});
+              panel.animate({'width': panelMinWidth}, animationDuration, 'swing',function(){
+                panel.css({'min-width':panelMinWidth});
               });
             }
           }
