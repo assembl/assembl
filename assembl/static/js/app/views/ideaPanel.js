@@ -507,7 +507,6 @@ var IdeaPanel = AssemblPanel.extend({
           //console.log("setIdeaModel:  we have a model ")
           if (!this.isViewDestroyed()) {
             if ( that.ideaPanelOpensAutomatically ){
-              this.panelWrapper.unminimizePanel();
             }
             this.template = '#tmpl-loader';
             if (!this.model.id) {
@@ -519,7 +518,7 @@ var IdeaPanel = AssemblPanel.extend({
               this.listenTo(this.model, 'acquiredId', function(m) {
                 // model has acquired an ID. Reset everything.
                 if (!this.isViewDestroyed()) {
-                  var model = that.model;
+                  var model = that.mode
                   that.model = null;
                   that.setIdeaModel(model, reason);
                 }
