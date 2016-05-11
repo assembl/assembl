@@ -14,7 +14,7 @@ var AssemblPanel = Marionette.LayoutView.extend({
 
   template: _.template(""),
   lockable: false,
-  minimizeable: false,
+  minimizeable: true,
   closeable: false,
   DEFAULT_GRID_SIZE: 3, // grid units
   DEFAULT_MIN_SIZE: 200, // pixels

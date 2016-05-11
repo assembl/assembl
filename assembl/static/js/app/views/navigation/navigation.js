@@ -148,7 +148,7 @@ var NavigationView = AssemblPanel.extend({
   },
 
   _toggleMenuByEvent: function(evt) {
-    if ($(evt.target).hasClass("panel-header-minimize"))
+    if ($(evt.target).hasClass("js_minimizePanel"))
         return;
     var elm = $(evt.currentTarget), // use currentTarget instead of target, so that we are sure that it is a .nav element
         view = elm.attr('data-view');
