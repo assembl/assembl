@@ -192,6 +192,11 @@ $textProfile: #515151;
     height: 0; /* so that we can center it vertically without knowing its contents height */
     vertical-align: middle;
     font-weight: normal;
+
+    a:not(.btn) {
+      color: $white;
+      text-decoration: underline;
+    }
   }
 }
 
