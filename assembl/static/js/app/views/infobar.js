@@ -56,7 +56,8 @@ var InfobarItem = Marionette.LayoutView.extend({
       share_link: model.getShareUrl(Widget.Model.prototype.INFO_BAR),
       widget_endpoint: model.getUrl(Widget.Model.prototype.INFO_BAR),
       call_to_action_class: model.getCssClasses(Widget.Model.prototype.INFO_BAR),
-      locale: Ctx.getLocale()
+      locale: Ctx.getLocale(),
+      shows_button: model.showsButton(Widget.Model.prototype.INFO_BAR)
     };
   },
 

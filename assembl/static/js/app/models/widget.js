@@ -152,6 +152,10 @@ var WidgetModel = Base.Model.extend({
 
   isIndependentModalType: function(){
     return true;
+  },
+
+  showsButton: function(context, idea){
+    return true;
   }
 });
 
@@ -274,6 +278,15 @@ var VotingWidgetModel = WidgetModel.extend({
         }
     }
     return "";
+  },
+
+  showsButton: function(context, idea){
+    switch(context){
+      case this.INFO_BAR:
+        var currentUser = Ctx.getCurrentUser();
+        return currentUser.can(Permissions.VOTE);
+    }
+    return true;
   },
 
   getDescriptionText: function(context, idea) {
