@@ -150,8 +150,8 @@ avatar.gravatar_default = mm
 # Beaker settings
 beaker.session.type = ext:memcached
 beaker.session.url = 127.0.0.1:11211
-beaker.session.data_dir = %(here)s/data/sessions/data
-beaker.session.lock_dir = %(here)s/data/sessions/lock
+beaker.session.data_dir = %(here)s/var/sessions/data
+beaker.session.lock_dir = %(here)s/var/sessions/lock
 beaker.session.key = assembl_session
 session.secret = CHANGEME_enter_a_secret
 beaker.session.cookie_expires = false
