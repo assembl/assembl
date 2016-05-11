@@ -22,39 +22,8 @@ def main():
     config_uri = sys.argv.pop(1)
     config = ConfigParser()
     config.read(config_uri)
+    using_virtuoso = 'virtuoso' in config.get('app:assembl', 'sqlalchemy.url')
 
-    vroot = config.get('virtuoso', 'virtuoso_root')
-    if vroot == 'system':
-        # Magic value
-        if system().startswith('Darwin'):
-            vroot = '/usr/local/virtuoso-opensource'
-        else:
-            vroot = '/usr'
-    elif not vroot[0] == '/':
-        # Relative path
-        vroot = join(dirname(dirname(dirname(__file__))), vroot)
-    assert exists(vroot), "virtuoso_root directory does not exist"
-    assert exists(join(vroot, 'bin', 'virtuoso-t')),\
-        "virtuoso_root directory does not contain bin/virtuoso-t"
-    assert exists('var/db/virtuoso.ini.tmpl'),\
-        "Please run this script from the assembl root."
-    vroot_var = join(vroot, 'var')
-    if not exists(vroot_var):
-        vroot_var = '/var'
-    vroot_lib = join(vroot, 'lib')
-    assert exists(vroot_lib)
-    if not exists(join(vroot_lib, 'virtodbcu.so'))\
-            and exists(join(vroot_lib, 'odbc', 'virtodbcu.so')):
-        vroot_lib = join(vroot_lib, 'odbc')
-    vname = 'virtuoso'
-    if not exists(join(vroot, 'share', vname)):
-        names = listdir(join(vroot, 'share'))
-        names = [n for n in names
-                 if exists(join(vroot, 'share', n, 'vad'))]
-        assert len(names) == 1, "Cannot identify the vad directory"
-        vname = names[0]
-    assert exists(join(vroot_var, 'lib', vname, 'vsp')),\
-        "Cannot identify the VSP directory"
     try:
         metrics_code_dir = config.get('metrics', 'metrics_code_dir')
         metrics_cl = config.get('metrics', 'metrics_cl')
@@ -77,13 +46,6 @@ def main():
         edgesense_venv = '/tmp'  # innocuous
         edgesense_code_dir = ''
     vars = {
-        'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
-        'VIRTUOSO_HOSTNAME': config.get(SECTION, 'public_hostname'),
-        'VIRTUOSO_PORT': config.getint('virtuoso', 'port'),
-        'VIRTUOSO_ROOT': vroot,
-        'VIRTUOSO_ROOT_VAR': vroot_var,
-        'VIRTUOSO_ROOT_LIB': vroot_lib,
-        'VIRTUOSO_SUBDIR_NAME': vname,
         'IMAP_CELERY_BROKER': config.get(
             SECTION, 'celery_tasks.imap.broker'),
         'NOTIF_DISPATCH_CELERY_BROKER': config.get(
@@ -92,7 +54,7 @@ def main():
             SECTION, 'celery_tasks.notify.broker'),
         'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_uri,
-        'autostart_virtuoso': config.get('supervisor', 'autostart_virtuoso'),
+        'autostart_virtuoso': using_virtuoso and config.get('supervisor', 'autostart_virtuoso'),
         'autostart_celery_imap': config.get(
             'supervisor', 'autostart_celery_imap'),
         'autostart_celery_notification_dispatch': config.get(
@@ -123,6 +85,60 @@ def main():
         'VIRTUAL_ENV': os.environ['VIRTUAL_ENV'],
         'edgesense_code_dir': edgesense_code_dir,
     }
+    if using_virtuoso:
+        vroot = config.get('virtuoso', 'virtuoso_root')
+        if vroot == 'system':
+            # Magic value
+            if system().startswith('Darwin'):
+                vroot = '/usr/local/virtuoso-opensource'
+            else:
+                vroot = '/usr'
+        elif not vroot[0] == '/':
+            # Relative path
+            vroot = join(dirname(dirname(dirname(__file__))), vroot)
+        assert exists(vroot), "virtuoso_root directory does not exist"
+        assert exists(join(vroot, 'bin', 'virtuoso-t')),\
+            "virtuoso_root directory does not contain bin/virtuoso-t"
+        assert exists('var/db/virtuoso.ini.tmpl'),\
+            "Please run this script from the assembl root."
+        vroot_var = join(vroot, 'var')
+        if not exists(vroot_var):
+            vroot_var = '/var'
+        vroot_lib = join(vroot, 'lib')
+        assert exists(vroot_lib)
+        if not exists(join(vroot_lib, 'virtodbcu.so'))\
+                and exists(join(vroot_lib, 'odbc', 'virtodbcu.so')):
+            vroot_lib = join(vroot_lib, 'odbc')
+        vname = 'virtuoso'
+        if not exists(join(vroot, 'share', vname)):
+            names = listdir(join(vroot, 'share'))
+            names = [n for n in names
+                     if exists(join(vroot, 'share', n, 'vad'))]
+            assert len(names) == 1, "Cannot identify the vad directory"
+            vname = names[0]
+        assert exists(join(vroot_var, 'lib', vname, 'vsp')),\
+            "Cannot identify the VSP directory"
+        vars.update({
+            'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
+            'VIRTUOSO_HOSTNAME': config.get(SECTION, 'public_hostname'),
+            'VIRTUOSO_PORT': config.getint('virtuoso', 'port'),
+            'VIRTUOSO_ROOT': vroot,
+            'VIRTUOSO_ROOT_VAR': vroot_var,
+            'VIRTUOSO_ROOT_LIB': vroot_lib,
+            'VIRTUOSO_SUBDIR_NAME': vname,
+        })
+    else:
+        # dummy values
+        vars.update({
+            'VIRTUOSO_SERVER_PORT': 8890,
+            'VIRTUOSO_HOSTNAME': 'localhost',
+            'VIRTUOSO_PORT': 1111,
+            'VIRTUOSO_ROOT': '/usr',
+            'VIRTUOSO_ROOT_VAR': '/usr/var',
+            'VIRTUOSO_ROOT_LIB': '/usr/var/lib',
+            'VIRTUOSO_SUBDIR_NAME': '/usr/share/virtuoso/vad',
+        })
+
     print vars
     for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
         print fname
