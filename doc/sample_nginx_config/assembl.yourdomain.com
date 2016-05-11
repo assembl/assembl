@@ -1,17 +1,17 @@
 server {
     listen    80;
     #listen    443 ssl;
-    
+
     server_name assembl.yourdomain.com;
-    
+
     #ssl_certificate     /etc/ssl/assembl.yourdomain.com/assembl.yourdomain.com.crt;
     #ssl_certificate_key /etc/ssl/assembl.yourdomain.com/assembl.yourdomain.com.key;
-    
+
     location /something_or_other.html {
         #This is for domain verification
-        alias /var/www/assembl/something_or_other.html;
+        alias /opt/assembl/something_or_other.html;
     }
-    
+
     location /socket {
         proxy_pass http://localhost:8090/socket;
         proxy_http_version 1.1;
@@ -22,16 +22,16 @@ server {
     location /static {
         #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
         #Nor will it help your performance after the first hour...
-        autoindex on;    
+        autoindex on;
 
-        alias /var/www/assembl/assembl/static;    
+        alias /opt/assembl/assembl/static;
     }
 
     location / {
 
         include uwsgi_params;
         uwsgi_read_timeout 5m;
-        uwsgi_pass unix:///var/www/assembl/var/run/uwsgi.sock;
+        uwsgi_pass unix:///opt/assembl/var/run/uwsgi.sock;
     }
 
 # So files uploaded to the database are not artificailly limited by nginx
