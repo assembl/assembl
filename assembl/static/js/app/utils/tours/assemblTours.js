@@ -73,9 +73,12 @@ var AssemblTours = [
   {
     name: "segment",
     autostart: false,
+    condition:function(){
+      return Ctx.isElementIsInViewport($('#tour_step_segment'));
+    },
     tour: {
       steps: [
-        { // FIXME: this steps has a display problem
+        {
           target: "tour_step_segment",
           placement: "top",
           title: i18n.gettext("Spot relevant quotes on each idea"),
@@ -87,8 +90,7 @@ var AssemblTours = [
       name: "idea_list",
       autostart: false,
       condition: function() {
-        // idea is visible
-        return $("#tour_step_idealist").is(":visible");
+        return Ctx.isElementIsInViewport($('#tour_step_idealist'));
       },
       tour: {
         steps: [
