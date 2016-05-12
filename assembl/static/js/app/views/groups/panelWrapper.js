@@ -71,6 +71,9 @@ var PanelWrapper = Marionette.LayoutView.extend({
       icon: this.getIcon()
     }
   },
+  /**
+   * TODO: refactor this function because the min-width is set also in _panel.scss
+   */
   setPanelMinWidth:function(){
     this.$el.addClass(this.model.attributes.type + '-panel');
     this.$el.attr('id',this.model.cid);
@@ -155,9 +158,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
   resetTitle: function(newTitle) {
     this.ui.title.html(newTitle);
   },
-  /**
-   * Closes the panel
-   */
   closePanel: function() {
     Ctx.removeCurrentlyDisplayedTooltips();
     this.model.collection.remove(this.model);

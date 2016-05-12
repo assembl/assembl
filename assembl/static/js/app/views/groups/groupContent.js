@@ -27,21 +27,20 @@ var groupContent = Marionette.CompositeView.extend({
 
   initialize: function(options) {
     var that = this;
-    this.options = options;
     this.collection = this.model.get('panels');
-    this.groupContainer = this.options['groupContainer'];
+    this.groupContainer = options['groupContainer'];
     setTimeout(function() {
       if (!that.isViewDestroyed()) {
         var navView = that.findViewByType(PanelSpecTypes.NAV_SIDEBAR);
         if (navView) {
           navView.setViewByName(that.model.get('navigationState'), null);
         }
+        that.resizePanel(true);
+        $(window).on("resize",function(){
+          that.resizePanel(true);
+        });
       }
-      that.resizePanel(true);
     }, 200); //FIXME:  Magic delay...
-    $(window).on("resize",function(){
-      that.resizePanel(true);
-    });
   },
   events: {
     'click .js_closeGroup': 'closeGroup'
@@ -56,12 +55,12 @@ var groupContent = Marionette.CompositeView.extend({
         var isPanelMinimized = elm.get('minimized');
         var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
         var panelId = '#' + elm.cid;
-        var panel = $(that.groupContainer.el).find(panelId);
+        var panel = that.groupContainer.$el.find(panelId);
         if(skipAnimation){
           panel.css({'min-width':panelMinWidth});
           panel.width(panelWidth);
         }else{
-          var totalWidth = that.getTotalWidth();
+          var totalWidth = that.getTotalWidthUnMinimized();
           if(totalWidth < screenSize){
             panel.css({'min-width':0});
             panel.animate({'width': panelWidth}, animationDuration, 'swing',function(){
@@ -88,9 +87,9 @@ var groupContent = Marionette.CompositeView.extend({
       panelWIdth = this.minPanelSize;
     }else{
       if(screenSize > this.criticalSize){
-        var totalWidth = this.getTotalWidth();
+        var totalWidth = this.getTotalWidthUnMinimized();
         var panelWidthInPercent = (panelMinWidth * 100) / totalWidth;
-        var totalMinimized = this.getTotalMinimized();
+        var totalMinimized = this.getTotalWidthMinimized();
         var panelWidthInPixel = (panelWidthInPercent * (screenSize-totalMinimized)) / 100;
         panelWIdth = panelWidthInPixel;        
       }else{
@@ -99,10 +98,10 @@ var groupContent = Marionette.CompositeView.extend({
     }
     return panelWIdth;
   },
-  getTotalWidth:function(){
-    var totalWidth = 0;
-    _.each(this.groupContainer.collection.models,function(group){
-      _.each(group.attributes.panels.models,function(panel){
+  getTotalWidthUnMinimized:function(){
+    var totalWidth = 0;    
+    this.groupContainer.collection.each(function(group){
+      group.attributes.panels.each(function(panel){
         var isPanelMinimized = panel.get('minimized');
         var isPanelHidden = panel.get('hidden');
         if(!isPanelMinimized && !isPanelHidden){
@@ -115,11 +114,11 @@ var groupContent = Marionette.CompositeView.extend({
     });
     return totalWidth;
   },
-  getTotalMinimized:function(){
+  getTotalWidthMinimized:function(){
     var that = this;
     var totalMinimized = 0;
-    _.each(this.groupContainer.collection.models,function(group){
-      _.each(group.attributes.panels.models,function(panel){
+    this.groupContainer.collection.each(function(group){
+      group.attributes.panels.each(function(panel){
         var isPanelMinimized = panel.get('minimized');
         if(isPanelMinimized){
           totalMinimized += that.minPanelSize;
