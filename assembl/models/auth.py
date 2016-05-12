@@ -23,6 +23,7 @@ from sqlalchemy import (
     desc,
     event,
     Index,
+    func,
     UniqueConstraint
 )
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
@@ -367,12 +368,20 @@ class AbstractAgentAccount(Base):
     verified = Column(Boolean(), default=False, server_default='0')
     # Note some social accounts don't disclose email (eg twitter), so nullable
     # Virtuoso + nullable -> no unique index (sigh)
-    email = Column(EmailString(100), index=True)
+    # Also, unverified emails are allowed to collide.
+    # IMPORTANT: Use email_ci below when appropriate.
+    email = Column(EmailString(100))
 
-    # So much for indexing
+    # Access to email as a case-insensitive object,
+    # for comparison and search purposes.
     @hybrid_property
     def email_ci(self):
         return CaseInsensitiveWord(self.email)
+
+    __table_args__ = (
+        Index("ix_abstract_agent_account_email", email)  # nigh useless
+        if Base.using_virtuoso else
+        Index("ix_public_abstract_agent_account_email_ci", func.lower(email)),)
 
     # info={'rdf': QuadMapPatternS(None, SIOC.email)}
     # Note: we could also have a FOAF.mbox, but we'd have to make
@@ -452,7 +461,7 @@ class EmailAccount(AbstractAgentAccount):
     def other_account(self):
         if not self.verified:
             return self.db.query(self.__class__).filter_by(
-                email_ci=self.email, verified=True).first()
+                email_ci=self.email_ci, verified=True).first()
 
     def avatar_url(self, size=32, default=None):
         return self.avatar_url_for(self.email, size, default)
@@ -460,7 +469,7 @@ class EmailAccount(AbstractAgentAccount):
     def unique_query(self):
         query, _ = super(EmailAccount, self).unique_query()
         return query.filter_by(
-            type=self.type, email_ci=self.email, verified=True), self.verified
+            type=self.type, email_ci=self.email_ci, verified=True), self.verified
 
     @staticmethod
     def avatar_url_for(email, size=32, default=None):

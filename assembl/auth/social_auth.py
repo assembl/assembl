@@ -120,7 +120,7 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
     if user and social.email:
         # Remove pure-email account if found social.
         for email_account in user.email_accounts:
-            if email_account.email == social.email:
+            if email_account.email_ci == social.email:
                 social.verified |= email_account.verified
                 email_account.delete()
                 break

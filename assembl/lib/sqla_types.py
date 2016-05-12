@@ -69,15 +69,15 @@ class EmailUnicode(CoerceUnicode, EmailString):
 
 
 class CaseInsensitiveWord(Comparator):
-    "Hybrid value representing an upper case representation of a word."
+    "Hybrid value representing a lower case representation of a word."
 
     def __init__(self, word):
         if isinstance(word, basestring):
-            self.word = word.upper()
+            self.word = word.lower()
         elif isinstance(word, CaseInsensitiveWord):
             self.word = word.word
         else:
-            self.word = func.upper(word)
+            self.word = func.lower(word)
 
     def operate(self, op, other):
         if not isinstance(other, CaseInsensitiveWord):

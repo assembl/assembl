@@ -184,7 +184,6 @@ def get_profile(request):
         if not profile:
             raise HTTPNotFound()
     elif id_type == 'email':
-        identifier = EmailString.normalize_email_case(identifier)
         account = session.query(AbstractAgentAccount).filter_by(
             email_ci=identifier).order_by(desc(
                 AbstractAgentAccount.verified)).first()
@@ -275,7 +274,7 @@ def assembl_profile(request):
         profile = session.query(User).get(user_id)
     unverified_emails = [
         (ea, session.query(AbstractAgentAccount).filter_by(
-            email_ci=ea.email, verified=True).first())
+            email_ci=ea.email_ci, verified=True).first())
         for ea in profile.email_accounts if not ea.verified]
     return render_to_response(
         'assembl:templates/profile.jinja2',
@@ -585,7 +584,7 @@ def user_confirm_email(request):
     else:
         # maybe another profile already verified that email
         other_email_account = session.query(AbstractAgentAccount).filter_by(
-            email_ci=email.email, verified=True).first()
+            email_ci=email.email_ci, verified=True).first()
         if other_email_account:
             profile = email.profile
             # We have two versions of the email, delete the unverified one

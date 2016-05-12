@@ -218,7 +218,7 @@ class SocialAuthAccount(
         # Only use if social provider is trusted to have verified email.
         users = cls.default_db().query(User).join(
             User.accounts).filter(
-                AbstractAgentAccount.email == email,
+                AbstractAgentAccount.email_ci == email,
             ).all()
         # choose best known profile for base_account
         # prefer profiles with verified users, then users, then oldest profiles
@@ -386,7 +386,7 @@ class SocialAuthAccount(
             return provider.db.query(cls).filter_by(
                 provider=provider,
                 domain=social_account['domain'],
-                email=social_account['email']).all()
+                email_ci=social_account['email']).all()
         elif 'username' in social_account:
             return provider.db.query(cls).filter_by(
                 provider=provider,
