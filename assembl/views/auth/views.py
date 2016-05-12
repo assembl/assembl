@@ -41,7 +41,7 @@ from assembl.auth import (
     P_READ, R_PARTICIPANT, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST)
 from assembl.auth.password import (
     verify_email_token, verify_password_change_token,
-    password_token)
+    password_change_token, Validity)
 from assembl.auth.util import (discussion_from_request,
     roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
@@ -557,11 +557,11 @@ def confirm_emailid_sent(request):
 )
 def user_confirm_email(request):
     token = request.matchdict.get('ticket')
-    email = verify_email_token(token)
+    email, valid = verify_email_token(token)
     session = AbstractAgentAccount.default_db
     # TODO: token expiry
     localizer = request.localizer
-    if not email:
+    if valid != Validity.VALID:
         raise HTTPUnauthorized(localizer.translate(_("Wrong email token.")))
     assert isinstance(email.profile, User)
     user = email.profile
@@ -777,20 +777,18 @@ def password_change_sent(request):
 def do_password_change(request):
     localizer = request.localizer
     token = request.matchdict.get('ticket')
-    (verified, user_id) = verify_password_change_token(token, 24)
+    user, validity = verify_password_change_token(token)
 
-    if not verified:
-        if not user_id:
-            raise HTTPBadRequest(localizer.translate(_(
-                "Wrong password token.")))
-        else:
+    if validity == Validity.EXPIRED:
             return HTTPFound(location=maybe_contextual_route(
                 request, 'password_change_sent', profile_id=user_id, _query=dict(
                     sent=True, error=localizer.translate(_(
                         "This token is expired. "
                         "Do you want us to send another?")))))
-    user = User.get(user_id)
-    headers = remember(request, user_id)
+    elif validity != Validity.VALID:
+        raise HTTPBadRequest(localizer.translate(_(
+            "Wrong password token.")))
+    headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
     user.last_login = datetime.utcnow()
     slug = request.matchdict.get('discussion_slug', None)
@@ -899,7 +897,7 @@ def send_change_password_email(
         assembl="Assembl", name=profile.name,
         confirm_url=maybe_contextual_route(
             request, 'do_password_change',
-            ticket=password_token(profile)))
+            ticket=password_change_token(profile)))
     if discussion:
         data.update(dict(
             discussion_topic=discussion.topic,

@@ -38,7 +38,7 @@ from assembl.lib.config import get_config
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN)
-from assembl.auth.password import verify_data_token, data_token
+from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions
 from assembl.models import (Discussion, Permission)
 from ..traversal import InstanceContext
@@ -99,8 +99,8 @@ def read_user_token(request):
 
     if 'token' in request.GET:
         token = request.GET['token'].encode('ascii')
-        data = verify_data_token(token)
-        if data is None:
+        data, valid = verify_data_token(token)
+        if valid != Validity.VALID:
             raise HTTPBadRequest("Invalid token")
         try:
             data, salt = data.split('.', 1)
