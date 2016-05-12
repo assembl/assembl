@@ -780,6 +780,7 @@ def password_change_sent(request):
 )
 def do_password_change(request):
     localizer = request.localizer
+    discussion = discussion_from_request(request)
     token = request.matchdict.get('ticket')
     user, validity = verify_password_change_token(token)
     if validity == Validity.VALID:
@@ -787,7 +788,6 @@ def do_password_change(request):
         if token_date < user.last_login:
             validity = Validity.EXPIRED
     if validity == Validity.EXPIRED:
-        discussion = discussion_from_request(request)
         logged_in = authenticated_userid(request)
         if logged_in:
             return HTTPFound(location=request.route_url(
@@ -815,11 +815,28 @@ def do_password_change(request):
     user.last_login = datetime.utcnow()
     slug = request.matchdict.get('discussion_slug', None)
     slug_prefix = "/" + slug if slug else ""
+    welcome = user.password is None
+    if welcome:
+        if discussion:
+            discussion_topic = discussion.topic
+            welcome_text = localizer.translate(_(
+                "You will enter the discussion as <b>{name}</b>.")).format(name=user.name)
+        else:
+            discussion_topic = "Assembl"
+            welcome_text = localizer.translate(_(
+                "You will enter Assembl as <b>{name}</b>."))
+        welcome_text += "</p><p>" + localizer.translate(_(
+            "Please choose your password for security reasons."))
+        title = localizer.translate(_('Welcome to {discussion_topic}.')).format(
+            discussion_topic=discussion_topic)
+    else:
+        title = localizer.translate(_('Change your password'))
+        welcome_text = ""
     return dict(
         get_default_context(request),
         slug_prefix=slug_prefix,
-        welcome=user.password is None,
-        title=localizer.translate(_('Change your password')))
+        description=welcome_text,
+        title=title)
 
 
 @view_config(
