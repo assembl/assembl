@@ -13,6 +13,34 @@
     }
   }
 
+  .token-icon-show-like-zero-not-selected {
+    fill: none !important; /* !important is here to override inline style which would have been written in the SVG file which has been downloaded via its URL */
+    stroke: #ccc !important;
+    /*stroke-width: 3 !important;*/
+    stroke-width: 1 !important;
+    vector-effect: non-scaling-stroke !important;
+  }
+
+  .token-icon-show-like-zero-selected {
+    fill: #ccc !important;
+    stroke: #aaa !important;
+    /*stroke-width: 3 !important;*/
+    stroke-width: 1 !important;
+    vector-effect: non-scaling-stroke !important;
+  }
+
+  .token-icon-show-like-positive-not-selected {
+    fill: none !important;
+    stroke: green !important;
+    /*stroke-width: 3 !important;*/
+    stroke-width: 1 !important;
+    vector-effect: non-scaling-stroke !important;
+  }
+
+  .token-icon-show-like-positive-selected {
+    /* show the SVG with its initial styles */
+  }
+
   .available-tokens {
     margin-top: 10px;
     .help-text {
@@ -39,13 +67,14 @@
 
     .available:not(.animating-towards-not-available), .not-available.animating-towards-available {
       /* show the SVG with its initial styles */
+      path, rect, circle {
+        @extend .token-icon-show-like-positive-selected;
+      }
     }
 
     .not-available:not(.animating-towards-available), .available.animating-towards-not-available {
       path, rect, circle {
-        fill: none !important; /* !important is here to override inline style which would have been written in the SVG file which has been downloaded via its URL */
-        stroke: #ccc !important;
-        stroke-width: 3 !important;
+        @extend .token-icon-show-like-zero-not-selected;
       }
     }
   }
@@ -101,53 +130,45 @@
         cursor: not-allowed;
       }
 
-      div:not(.hover) .token-icon svg.custom {
+      .token-category-allocation:not(.hover) .token-icon svg.custom {
         &.zero {
           &.not-selected {
             path, rect, circle {
-              fill: none !important;
-              stroke: #ccc !important;
-              stroke-width: 3 !important;
+              @extend .token-icon-show-like-zero-not-selected;
             }
           }
           &.selected {
             path, rect, circle {
-              fill: #ccc !important;
-              stroke: #aaa !important;
-              stroke-width: 3 !important;
+              @extend .token-icon-show-like-zero-selected;
             }
           }
         }
         &.positive {
           &.not-selected {
             path, rect, circle {
-              fill: none !important;
-              stroke: green !important;
-              stroke-width: 3 !important;
+              @extend .token-icon-show-like-positive-not-selected;
             }
           }
           &.selected {
-            /* show the SVG with its initial styles */
+            path, rect, circle {
+              @extend .token-icon-show-like-positive-selected;
+            }
           }
         }
       }
 
-      div.hover .token-icon svg.custom {
+      .token-category-allocation.hover .token-icon svg.custom {
         &.zero {
           &:not(.hover) {
             /* show as if it was not selected */
             path, rect, circle {
-              fill: none !important;
-              stroke: #ccc !important;
-              stroke-width: 3 !important;
+              @extend .token-icon-show-like-zero-not-selected;
             }
           }
           &.hover {
             /* show as if it was selected */
             path, rect, circle {
-              fill: #ccc !important;
-              stroke: #aaa !important;
-              stroke-width: 3 !important;
+              @extend .token-icon-show-like-zero-selected;
             }
           }
         }
@@ -155,14 +176,14 @@
           &:not(.hover) {
             /* show as if it was not selected */
             path, rect, circle {
-              fill: none !important;
-              stroke: green !important;
-              stroke-width: 3 !important;
+              @extend .token-icon-show-like-positive-not-selected;
             }
           }
           &.hover {
             /* show as if it was selected */
-            /* show the SVG with its initial styles */
+            path, rect, circle {
+              @extend .token-icon-show-like-positive-selected;
+            }
           }
         }
       }

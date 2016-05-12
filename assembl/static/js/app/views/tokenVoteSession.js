@@ -85,6 +85,9 @@ var getSVGElementByURLPromise = function(url){
     svg.removeAttr('xmlns:a');
     svg.attr("aria-hidden", "true");
     svg.attr("role", "img");
+    if (!svg.attr("viewBox")){
+      svg.attr("viewBox","0 0 100 100");
+    }
     return svg;
   };
 
@@ -289,6 +292,7 @@ var RemainingTokenCategoriesCollectionView = Marionette.CollectionView.extend({
 // This view shows (in the block of an idea) the clickable tokens (of one given category of tokens) a user can allocate (and has allocated) on this idea
 var TokenCategoryAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
+  className: "token-category-allocation",
   initialize: function(options){
     this.collectionView = options.collectionView;
     this.voteItemView = options.voteItemView;
