@@ -3,6 +3,7 @@ from binascii import hexlify, unhexlify
 import hashlib
 from datetime import datetime, timedelta
 from base64 import urlsafe_b64encode, urlsafe_b64decode
+from urllib import unquote
 
 from enum import IntEnum
 from assembl.lib import config
@@ -58,6 +59,7 @@ def verify_password(password, hash, encoding=HashEncoding.BINARY,
         salt_len = 2 * salt_size
         salt, hash = unhexlify(hash[:salt_len]), unhexlify(hash[salt_len:])
     elif encoding == HashEncoding.BASE64:
+        hash = str(unquote(hash))
         salt_len = 4 * int((salt_size+2)/3)
         salt, hash = (urlsafe_b64decode(hash[:salt_len]),
                       urlsafe_b64decode(hash[salt_len:]))
