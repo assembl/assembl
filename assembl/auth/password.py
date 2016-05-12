@@ -87,7 +87,7 @@ def email_token_legacy(email):
 
 
 def password_change_token(user):
-    password = user.password.decode('iso-8859-1') if user.password else ''
+    password = user.password.decode('iso-8859-1') if user.password else 'empty'
     return data_token(
         str(user.id), PASSWORD_CHANGE_TOKEN_DURATION, password)
 
@@ -182,7 +182,7 @@ def verify_password_change_token(token):
         user = User.get(data)
         if not user:
             return None, Validity.DATA_NOT_FOUND
-        password = user.password.decode('iso-8859-1') if user.password else ''
+        password = user.password.decode('iso-8859-1') if user.password else 'empty'
         data, valid = verify_data_token(token, password)
         return user, valid
     # Try decoding legacy
