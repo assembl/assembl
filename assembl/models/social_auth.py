@@ -269,6 +269,11 @@ class SocialAuthAccount(
         profile = profile or self.extra_data
         if profile:
             self.populate_picture(profile)
+            if not self.email:
+                # May be missed by social auth. compensate.
+                emails = profile.get('emails', [])
+                if emails:
+                    self.email = emails[0].get('value', '')
 
     def interpret_social_auth_details(self, details):
         self.email = details.get("email", self.email)
