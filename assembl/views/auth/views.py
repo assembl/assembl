@@ -41,13 +41,15 @@ from assembl.auth import (
     P_READ, R_PARTICIPANT, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST)
 from assembl.auth.password import (
     verify_email_token, verify_password_change_token,
-    password_change_token, Validity)
-from assembl.auth.util import (discussion_from_request,
-    roles_with_permissions, maybe_auto_subscribe)
+    password_change_token, Validity, get_data_token_time,
+    PASSWORD_CHANGE_TOKEN_DURATION)
+from assembl.auth.util import (
+    discussion_from_request, roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from .. import (
-    get_default_context, JSONError, get_providers_with_names, HTTPTemporaryRedirect)
+    get_default_context, JSONError, get_providers_with_names,
+    HTTPTemporaryRedirect)
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger('assembl')
@@ -710,8 +712,11 @@ def confirm_email_sent(request):
 def request_password_change(request):
     localizer = request.localizer
     identifier = request.params.get('identifier', '')
+    error = request.params.get('error', '')
     if not identifier:
-        return dict(get_default_context(request),
+        return dict(
+            get_default_context(request),
+            error=error,
             title=localizer.translate(_('I forgot my password')))
     user, account = from_identifier(identifier)
     discussion_slug = request.matchdict.get('discussion_slug', None)
@@ -778,16 +783,34 @@ def do_password_change(request):
     localizer = request.localizer
     token = request.matchdict.get('ticket')
     user, validity = verify_password_change_token(token)
-
+    if validity == Validity.VALID:
+        token_date = get_data_token_time(token, PASSWORD_CHANGE_TOKEN_DURATION)
+        if token_date < user.last_login:
+            validity = Validity.EXPIRED
     if validity == Validity.EXPIRED:
+        discussion = discussion_from_request(request)
+        logged_in = authenticated_userid(request)
+        if logged_in:
+            return HTTPFound(location=request.route_url(
+                'home' if discussion else 'discussion_list',
+                discussion_slug=discussion.slug))
+        else:
             return HTTPFound(location=maybe_contextual_route(
-                request, 'password_change_sent', profile_id=user_id, _query=dict(
-                    sent=True, error=localizer.translate(_(
-                        "This token is expired. "
-                        "Do you want us to send another?")))))
+                request, 'login', email=user.get_preferred_email()))
     elif validity != Validity.VALID:
-        raise HTTPBadRequest(localizer.translate(_(
-            "Wrong password token.")))
+        if user:
+            return HTTPFound(location=maybe_contextual_route(
+                request, 'password_change_sent', profile_id=user.id, _query=dict(
+                    sent=False, error=localizer.translate(_(
+                        "This token is not valid. "
+                        "Do you want us to send another?")))))
+        else:
+            return HTTPFound(location=maybe_contextual_route(
+                request, 'request_password_change', _query=dict(
+                    error=localizer.translate(_(
+                        "This token is not valid. "
+                        "Do you want us to send another?")))))
+
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
     user.last_login = datetime.utcnow()
@@ -796,6 +819,7 @@ def do_password_change(request):
     return dict(
         get_default_context(request),
         slug_prefix=slug_prefix,
+        welcome=user.password is None,
         title=localizer.translate(_('Change your password')))
 
 

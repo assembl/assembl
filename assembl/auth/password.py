@@ -127,6 +127,8 @@ def verify_data_token(token, extra_hash_data=''):
         return data, Validity.VALID
     except ValueError:
         return None, Validity.INVALID_FORMAT
+    except TypeError:
+        return None, Validity.INVALID_FORMAT
 
 
 def get_data_token_time(token, timedelta=None):
