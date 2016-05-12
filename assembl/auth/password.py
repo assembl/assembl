@@ -29,6 +29,7 @@ class Validity(IntEnum):
 PASSWORD_CHANGE_TOKEN_DURATION = timedelta(days=3)
 VALIDATE_EMAIL_TOKEN_DURATION = timedelta(days=500)
 
+
 def hash_password(password, encoding=HashEncoding.BINARY, salt_size=SALT_SIZE):
     """
     Returns a hashed password.
@@ -113,19 +114,32 @@ def verify_data_token(token, extra_hash_data=''):
         pos = 2
         pos += int(token[:pos], 16)
         data = token[2:pos]
-        expiry_str = token[pos:pos+13]
+        expiry_str = token[pos:pos + 13]
         pos += 13
         hash = token[pos:]
         expiry = datetime.strptime(expiry_str, '%Y%j%H%M%S')
-        if datetime.utcnow() > expiry:
-            return data, Validity.EXPIRED
         password = (data + extra_hash_data + expiry_str +
                     config.get('security.email_token_salt'))
         if not verify_password(password, hash, HashEncoding.BASE64, 3):
             return data, Validity.BAD_HASH
+        if datetime.utcnow() > expiry:
+            return data, Validity.EXPIRED
         return data, Validity.VALID
     except ValueError:
         return None, Validity.INVALID_FORMAT
+
+
+def get_data_token_time(token, timedelta=None):
+    try:
+        pos = 2
+        pos += int(token[:pos], 16)
+        expiry = token[pos:pos + 13]
+        expiry = datetime.strptime(expiry, '%Y%j%H%M%S')
+        if timedelta:
+            expiry -= timedelta
+        return expiry
+    except ValueError:
+        return None
 
 
 def verify_email_token(token):
