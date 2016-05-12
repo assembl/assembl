@@ -413,6 +413,27 @@ class Content(DiscussionBoundBase):
             log.error("What is this mimetype?" + mimetype)
             return body
 
+    def has_attachments(self):
+        return self.attachments or False
+
+    def get_attachments_as_html_list(self):
+        img_style = "margin: 15px 0 15px 0; max-width: 500px; max-height: auto;"
+        img_source = "<a href='%s' target='_blank' style='%s'><img src='%s'></img></a>"
+        other_source = "<a href='%s' target='_blank'>%s</a>"
+        attachments = self.attachments
+        attachment_sorted = sorted(attachments, key=lambda a: a.document.type)
+        output = []
+        for attachment in attachment_sorted:
+            document = attachment.document
+            mime_type = document.mime_type
+            if mime_type and 'image' in mime_type:
+                output.append(img_source % (document.external_url, img_style,
+                              document.external_url))
+            else:
+                title = document.title or document.external_url
+                output.append(other_source % (document.external_url, title))
+        return output
+
     def get_body_as_text(self):
         mimetype = self.get_body_mime_type()
         body = self.body

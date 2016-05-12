@@ -29,6 +29,15 @@ ink_css
             </td>
             <td class="expander"></td>
           </tr>
+          {% if notification.event_source_object().has_attachments(): %}
+            {% for attachment_html in notification.event_source_object().get_attachments_as_html_list(): %}
+            <tr>
+              <td>
+                {{ attachment_html }}
+              </td>
+            </tr>
+            {% endfor %}
+          {% endif %}
         </table>
 
       </td>
