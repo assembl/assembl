@@ -51,6 +51,7 @@ def init_key_for_classes(db):
         Permission: partial(find_or_create_object_by_keys, db, ['name']),
         Role: partial(find_or_create_object_by_keys, db, ['name']),
         IdentityProvider: partial(find_or_create_object_by_keys, db, ['provider_type', 'name']),
+        # email_ci?
         EmailAccount: partial(find_or_create_object_by_keys, db, ['email'], columns=['preferred']),
         WebLinkAccount: partial(find_or_create_object_by_keys, db, ['user_link']),
     }
