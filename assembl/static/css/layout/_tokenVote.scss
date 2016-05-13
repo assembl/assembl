@@ -65,14 +65,14 @@
       font-size: 150%;
     }
 
-    .available:not(.animating-towards-not-available), .not-available.animating-towards-available {
+    .available:not(.animating-towards-not-available) {
       /* show the SVG with its initial styles */
       path, rect, circle {
         @extend .token-icon-show-like-positive-selected;
       }
     }
 
-    .not-available:not(.animating-towards-available), .available.animating-towards-not-available {
+    .not-available:not(.animating-towards-available), .available.animating-towards-not-available, .not-available.animating-towards-available {
       path, rect, circle {
         @extend .token-icon-show-like-zero-not-selected;
       }
@@ -131,7 +131,7 @@
       }
 
       .token-category-allocation:not(.hover) .token-icon svg.custom {
-        &.zero {
+        &.zero:not(.animating-towards-not-selected):not(.animating-towards-selected) {
           &.not-selected {
             path, rect, circle {
               @extend .token-icon-show-like-zero-not-selected;
@@ -155,6 +155,36 @@
             }
           }
         }
+
+        &.animating-towards-selected {
+          &.zero {
+            /* show as if it was selected */
+            path, rect, circle {
+              @extend .token-icon-show-like-zero-selected;
+            }
+          }
+          &.positive {
+            /* show as if it was not selected */
+            path, rect, circle {
+              @extend .token-icon-show-like-positive-not-selected;
+            }
+          }
+        }
+
+        &.animating-towards-not-selected {
+          &.zero {
+            /* show as if it was not selected */
+            path, rect, circle {
+              @extend .token-icon-show-like-zero-not-selected;
+            }
+          }
+          &.positive {
+            /* show as if it was not selected */
+            path, rect, circle {
+              @extend .token-icon-show-like-positive-not-selected;
+            }
+          }
+        }
       }
 
       .token-category-allocation.hover .token-icon svg.custom {
@@ -173,10 +203,14 @@
           }
         }
         &.positive {
-          &:not(.hover) {
-            /* show as if it was not selected */
-            path, rect, circle {
-              @extend .token-icon-show-like-positive-not-selected;
+          &:not(.hover) {            
+            &.selected:not(.animating-towards-not-selected) {
+              opacity: 0.3;
+            }
+            &.not-selected, &.selected.animating-towards-not-selected {
+              path, rect, circle {
+                @extend .token-icon-show-like-positive-not-selected;
+              }
             }
           }
           &.hover {

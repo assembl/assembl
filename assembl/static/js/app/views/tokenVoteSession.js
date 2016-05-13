@@ -473,7 +473,23 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
             return;
           }
           console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
-          var animation_duration = 1000;
+          var animation_duration = 800;
+
+          var endAnimationTowardsNotAvailable = function(el){
+            return function(){
+              el.classList.remove("animating-towards-not-available");
+              el.classList.remove("available");
+              el.classList.add("not-available");
+            };
+          };
+
+          var endAnimationTowardsAvailable = function(el){
+            return function(){
+              el.classList.remove("animating-towards-available");
+              el.classList.remove("not-available");
+              el.classList.add("available");
+            };
+          };
 
           // animation: are we adding or removing token to/from this idea?
           if ( that.currentValue < number_of_tokens_represented_by_this_icon ){ // we are adding tokens to this idea
@@ -481,8 +497,11 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
+              var theAllocatedToken = link.parent().children().eq(i)
               theAvailableToken[0].classList.add("animating-towards-not-available");
-              transitionAnimation(theAvailableToken, link.parent().children().eq(i), animation_duration);
+              theAllocatedToken[0].classList.add("animating-towards-selected");
+              setTimeout(endAnimationTowardsNotAvailable(theAvailableToken[0]), animation_duration*0.9);
+              transitionAnimation(theAvailableToken, theAllocatedToken, animation_duration);
             }
           }
           else { // we are removing tokens from this idea
@@ -491,9 +510,21 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .not-available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq(i - number_of_tokens_represented_by_this_icon - 1);
+              var theAllocatedToken = link.parent().children().eq(i).find("svg");
               theAvailableToken[0].classList.add("animating-towards-available");
-              transitionAnimation(link.parent().children().eq(i).find("svg"), theAvailableToken, animation_duration);
+              theAllocatedToken[0].classList.add("animating-towards-not-selected");
+              setTimeout(endAnimationTowardsAvailable(theAvailableToken[0]), animation_duration*0.9);
+              transitionAnimation(theAllocatedToken, theAvailableToken, animation_duration);
             }
+          }
+
+          var zeroToken = link.parent().children().eq(0).find("svg");
+          if ( number_of_tokens_represented_by_this_icon == 0 ){
+            zeroToken[0].classList.add("animating-towards-selected");
+            zeroToken[0].classList.remove("animating-towards-not-selected");
+          } else {
+            zeroToken[0].classList.add("animating-towards-not-selected");
+            zeroToken[0].classList.remove("animating-towards-selected");
           }
           
           /* This is the pure AJAX way to save the data to the backend
@@ -534,7 +565,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
             el[0].classList.add("selected");
             container.removeClass("hover");
             that.render(); // show immediately the icon it its correct state, without having to wait for collection update
-          }, animation_duration);
+          }, animation_duration*0.9);
         });
         
         link.hover(function handlerIn(){
