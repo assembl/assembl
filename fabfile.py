@@ -482,7 +482,7 @@ def app_update_dependencies(force_reinstall=False):
     execute(update_vendor_themes)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     #Nodeenv is installed by python , so this must be after update_pip_requirements
-    execute(update_node)
+    execute(update_node, force_reinstall=force_reinstall)
     #bower is installed by node, so this must be after update_node
     execute(update_bower)
     execute(update_bower_requirements, force_reinstall=force_reinstall)
@@ -497,13 +497,22 @@ def app_reinstall_all_dependencies():
     execute(app_update_dependencies, force_reinstall=True)
 
 @task
-def update_node():
+def update_node(force_reinstall=False):
     """
     Install node and npm to a known-good version
     """
-    venvcmd("nodeenv --node=6.1.0 --npm=3.8.6 -p")
-    venvcmd("npm install reinstall -g")
-
+    node_version_cmd_regex = re.compile('^v6\.1\.0')
+    with settings(warn_only=True), hide('running', 'stdout'):
+        node_version_cmd_result = venvcmd("node --version")
+    match = node_version_cmd_regex.match(node_version_cmd_result)
+    if not match or force_reinstall:
+        print(cyan('Upgrading node'))
+        #Because otherwise node may be busy
+        supervisor_process_stop('dev:gulp')
+        venvcmd("nodeenv --node=6.1.0 --npm=3.8.6 --python-virtualenv")
+        venvcmd("npm install reinstall -g")
+    else:
+        print(green('Node version ok'))
 
 @task
 def app_compile():
