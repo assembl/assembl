@@ -49,12 +49,36 @@ var groupContent = Marionette.CompositeView.extend({
     var that = this;
     var screenSize = window.innerWidth;
     var animationDuration = 1000;
-    _.each(that.groupContainer.collection.models,function(group){
-      _.each(group.attributes.panels.models,function(elm){
-        var panelMinWidth = elm.get('minWidth');
-        var isPanelMinimized = elm.get('minimized');
+    /* J'ai réécrit les boucles plus bas en backbone, code équivalent à ce que tu
+    avais écrit, simplement avec variables renommées pour mieux lire.
+    
+      Ce faisant, je crois qu'on a la mauvaise logique.  
+      
+      Nous voulons probablement itérer sur les vues, pas les modèles.
+    
+    Voir pour la méthode children
+    http://marionettejs.com/docs/v2.4.5/marionette.collectionview.html#collectionviews-children
+    
+    this.groupContainer.children.each(function(groupContentView){
+      groupContentView.children.each(function(panelWrapperView){
+  
+      C'est sur panelWrapperView qu'il y a l'élément que tu manipule plus bas.
+      
+    En écrivant les exemple plus haut, je me rends compte que cette méthode de
+     groupContent affecte en fait TOUS les groupes.  Elle devrait donc se trouver
+     dans groupContainer, pas groupContent.
+     */
+    this.groupContainer.collection.each(function(groupSpecModel){
+      groupSpecModel.get("panels").each(function(panelSpec){
+        //console.log("resizePanel() panel on panelSpec:", panelSpec);
+        var panelMinWidth = panelSpec.get('minWidth');
+        var isPanelMinimized = panelSpec.get('minimized');
         var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
-        var panelId = '#' + elm.cid;
+        var panelId = '#' + panelSpec.cid;
+        // there really is no garantee this has even finished rendering.
+        // But worse, those attributes will be lost if it get's re-rendered.
+        // We should mobe this to a method in panelWrapper that would do the
+        // DOM manipulation and survive a re-render.
         var panel = that.groupContainer.$el.find(panelId);
         if(skipAnimation){
           panel.css({'min-width':panelMinWidth});
