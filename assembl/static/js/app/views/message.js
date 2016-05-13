@@ -579,7 +579,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.processContent();
     var bodyFormatClass,
         that = this,
-        body = null,
+        moderatedBody = null,
         metadata_json = this.model.get('metadata_json'), // this property needs to exist to display the inspiration source of a message (creativity widget)
         bodyFormat = this.model.get('bodyMimeType'),
         isModerated = false,
@@ -599,7 +599,7 @@ var MessageView = Marionette.LayoutView.extend({
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
       //@TODO: should the body be this._body??
-      body = new LangString.EntryModel({
+      moderatedBody = new LangString.EntryModel({
         // '@language': ??? not sure on template language, needs work.
         value: this.moderationTemplate({
           ctx: Ctx,
@@ -614,7 +614,7 @@ var MessageView = Marionette.LayoutView.extend({
 
       //Set a langstring, in order to ensure that the body has a langstring().
       moderationLangString = new LangString.Model({
-        entries: [body]
+        entries: [moderatedBody]
       }, {parse: true});
     }
 
@@ -649,8 +649,7 @@ var MessageView = Marionette.LayoutView.extend({
       creator: this.creator,
       parentId: this.model.get('parentId'),
       subject: this._subject,
-      body: (body) ? body : this._body,
-      messageBodyString: this.moderationOptions.isModerated ? body.value() : this._body.value(),
+      body: this.moderationOptions.isModerated ? moderatedBody : this._body,
       bodyTranslationError: this.bodyTranslationError,
       bodyFormatClass: bodyFormatClass,
       messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
