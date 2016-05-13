@@ -409,6 +409,14 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
     '@type': 'TokenVotingWidget'
   },
 
+  getCreationUrl: function(ideaId, locale) {
+    if (locale === undefined) {
+      locale = Ctx.getLocale();
+    }
+    return this.baseUri + "?admin=1&locale=" + locale + "#/admin/create_from_idea?idea="
+      + encodeURIComponent(ideaId + "?view=creativity_widget") + "&widget_type=TokenVotingWidget";
+  },
+
   getLinkText: function(context, idea) {
     switch (context) {
       case this.IDEA_PANEL_CREATE_CTX:
