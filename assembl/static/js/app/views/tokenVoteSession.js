@@ -749,18 +749,34 @@ var TokenVoteResultView = Marionette.ItemView.extend({
   //Most likely the place where D3 will be used!
   initialize: function(options){
     this.categoryIndex = options.categoryIndex;
-    // console.log("[TokenVoteResultView] Single result view with model", this.model);
+    console.log("[TokenVoteResultView] Single result view with model", this.model);
+    console.log("The category index: ", this.categoryIndex);
   },
 
   serializeData: function(){
     
-    var results = [];
-    var resultsObject = this.model.get('sums');
+    var results = this.model.get('sums'); //A pojo object
+    var sortedResults = _.chain(this.categoryIndex)
+     .clone()
+     .mapObject(function(categoryType, index){
+        if (! (_.has(results, categoryType))){
+          console.error('[TokenResultView][ideaId:' +
+          this.model.get('objectConnectedTo').id + '] ' +
+          'Idea does not have vote results for categoryType ' + categoryType);
+          return false;
+        }
+
+        else {
+          return results[categoryType];
+        }
+     })
+     .values()
+     .value();
 
     return {
       ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
       ideaDescription: this.model.get('objectConnectedTo').getLongTitleDisplayText(),
-      categoryResult: []
+      categoryResult: sortedResults
     }
   }
 });
@@ -773,7 +789,17 @@ var TokenVoteResultCollectionView = Marionette.CollectionView.extend({
     Marionette.CollectionView.apply(this, arguments);
   },
 
-  childView: TokenVoteResultView
+  childView: TokenVoteResultView,
+  
+  initialize: function(options){
+    this.categoryIndex = options.categoryIndex;
+  },
+
+  childViewOptions: function(){
+    return {
+      categoryIndex: this.categoryIndex
+    }
+  }
 });
 
 
@@ -804,6 +830,11 @@ var TokenResultView = Marionette.LayoutView.extend({
 
   initialize: function(options){
     this.model = options.model;
+    
+    //categoryMap will be used by each vote result view to show the results in the correct order,
+    //{index: category}
+    this.categoryMap = {};
+    
     var CollectionManager = require('../common/collectionManager.js'),
         cm = new CollectionManager(),
         Widget = require('../models/widget.js'),
@@ -817,7 +848,6 @@ var TokenResultView = Marionette.LayoutView.extend({
         return cm.getUserLanguagePreferencesPromise()
       .then(function(preferences){
         that.languagePreferences = preferences;
-        // then get the vote results for each specification. 
       }).then(function(){
         that.voteResults = new Widget.VoteResultCollection({widgetModel: that.model, parse: true});
         return that.voteResults.fetch();
@@ -828,40 +858,39 @@ var TokenResultView = Marionette.LayoutView.extend({
 
         //Determine the sort order of the categories and get their names:
         var categories = that.tokenSpecs.get('token_categories');
-        var sortOrder = categories.map(function(category, index){
+        categories.each(function(category, index){
           var name = category.get('typename');
-          return {name: index}
+          that.categoryMap[index] = name;
         });
 
         that.tokenResultsView = new TokenVoteResultCollectionView({
           collection: that.voteResults,
-          categoryIndex: sortOrder
+          categoryIndex: that.categoryMap
         });
         if (!that.isViewDestroyed()){
+          that.render();
           that.results.show(that.tokenResultsView);
         }
       });
 
-      //Take the list of "votable_ideas" from the widget model,
-      //Take the token categories from the vote_specification ?
-      //  The typename of each token category is the column where the vote
-      //  results go to.
-      //  From vote results, the 'sum' is the value that you want to present,
-      //  not the 'num' which is the number of voters. 
-      //
-      //
-      //Each section list of votable ideas is a vote token specification!
-      //
       //Can use D3 linear scale (http://bl.ocks.org/kiranml1/6872226) to represent
       //the data.
     }); 
   },
 
   serializeData: function(){
+
+    var settings = this.model.get("settings") || {},
+        items = "items" in settings ? settings.items : [],
+        questionItem = items.length ? items[0] : null,
+        questionTitle = "question_title" in questionItem ? questionItem.question_title : "",
+        questionDescription = "question_description" in questionItem ? questionItem.question_description : "",
+        categories = _.values(this.categoryMap);
+    
     return {
-      questionTitle: "Some Random Title",
-      questionDescription: "Some Random Description",
-      categories: ["random1", "random2"]
+      questionTitle: questionTitle,
+      questionDescription: questionDescription,
+      categories: categories
     }
   },
 
