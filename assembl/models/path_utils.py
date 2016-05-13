@@ -456,17 +456,17 @@ class PostPathCounter(PostPathCombiner):
                 x.entity_zero.entity for x in q._entities]
             (post_count,) = q.with_entities(
                 count(content_entity.id)).first()
-            return (post_count, None)
+            return (post_count, 0)
 
     def get_counts(self, idea_id):
         if self.counts.get(idea_id, None) is not None:
             return self.counts[idea_id], self.viewed_counts[idea_id]
         path_collection = self.paths[idea_id]
         if not path_collection:
-            (path_collection.count, path_collection.viewed_count) = (0, None)
+            (path_collection.count, path_collection.viewed_count) = (0, 0)
             self.counts[idea_id] = 0
-            self.viewed_counts[idea_id] = None
-            return (0, None)
+            self.viewed_counts[idea_id] = 0
+            return (0, 0)
         q = path_collection.as_clause(
             self.discussion.db, self.discussion.id, user_id=self.user_id)
         (post_count, viewed_count) = self.get_counts_for_query(q)
