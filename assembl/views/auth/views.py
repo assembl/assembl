@@ -754,7 +754,9 @@ def password_change_sent(request):
             raise HTTPNotFound("No profile "+profile_id)
         else:
             email = email or profile.get_preferred_email()
-        send_change_password_email(request, profile, email)
+        discussion = discussion_from_request(request)
+        send_change_password_email(request, profile, email,
+            discussion=discussion)
     slug = request.matchdict.get('discussion_slug', None)
     slug_prefix = "/" + slug if slug else ""
     return dict(
@@ -930,7 +932,8 @@ The ${assembl} Team""")
 
 def send_change_password_email(
         request, profile, email=None, subject=None,
-        text_body=None, html_body=None, discussion=None):
+        text_body=None, html_body=None, discussion=None,
+        sender_name=None):
     mailer = get_mailer(request)
     localizer = request.localizer
     data = dict(
@@ -938,10 +941,21 @@ def send_change_password_email(
         confirm_url=maybe_contextual_route(
             request, 'do_password_change',
             ticket=password_change_token(profile)))
+    sender_email = config.get('assembl.admin_email')
+    import pdb; pdb.set_trace()
     if discussion:
         data.update(dict(
             discussion_topic=discussion.topic,
             discussion_url=discussion.get_url()))
+        admin_source = discussion.admin_source
+        if admin_source and admin_source.admin_sender:
+            sender_email = admin_source.admin_sender
+        if sender_name is None:
+            sender_name = discussion.topic
+    if sender_name:
+        sender = "%s <%s>" % (sender_name, sender_email)
+    else:
+        sender = sender_email
     subject = subject or localizer.translate(
         _("Request for password change"), mapping=data)
     if text_body is None or html_body is not None:
@@ -966,7 +980,7 @@ The ${assembl} Team
     text_body = localizer.translate(text_body, mapping=data)
     message = Message(
         subject=subject,
-        sender=config.get('assembl.admin_email'),
+        sender=sender,
         recipients=["%s <%s>" % (
             profile.name, email or profile.get_preferred_email())],
         body=text_body, html=html_body)
