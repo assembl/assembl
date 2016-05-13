@@ -714,6 +714,7 @@ Context.prototype = {
         that.setCsrfToken(data);
       }
     });
+    return this.csrfToken;
   },
 
   /**

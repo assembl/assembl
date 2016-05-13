@@ -4,6 +4,7 @@ import sys
 from os import makedirs
 from os.path import exists, dirname
 import ConfigParser
+import traceback
 
 import simplejson as json
 import zmq
@@ -70,6 +71,7 @@ class ZMQRouter(SockJSConnection):
 
     def on_open(self, request):
         self.valid = True
+        self.closing = False
 
     def on_recv(self, data):
         try:
@@ -85,9 +87,13 @@ class ZMQRouter(SockJSConnection):
         except Exception:
             if raven_client:
                 raven_client.captureException()
-            raise
+            else:
+                traceback.print_exc()
+            # raise
+            self.do_close()
 
     def do_close(self):
+        self.closing = True
         self.close()
         self.socket = None
         if getattr(self, "loop", None):
@@ -131,15 +137,21 @@ class ZMQRouter(SockJSConnection):
         except Exception:
             if raven_client:
                 raven_client.captureException()
-            raise
+            else:
+                traceback.print_exc()
+            self.do_close()
 
     def on_close(self):
+        if self.closing:
+            return
         try:
             print "closing"
             self.do_close()
         except Exception:
             if raven_client:
                 raven_client.captureException()
+            else:
+                traceback.print_exc()
             raise
 
 
