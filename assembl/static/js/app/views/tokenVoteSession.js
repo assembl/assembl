@@ -746,11 +746,23 @@ var TokenVoteResultView = Marionette.ItemView.extend({
 
   template: '#tmpl-tokenVoteResultSingleView',
 
+  ui: {
+    'descriptionClick': '.js_see-idea-description',
+    'descriptionButton': '.js_description-button',
+    'descriptionRegion': '.js_show-idea-description-region'
+  },
+
+  events: {
+    'click @ui.descriptionClick': 'onSeeDescriptionClick'
+  },
+
   //Most likely the place where D3 will be used!
   initialize: function(options){
     this.categoryIndex = options.categoryIndex;
-    console.log("[TokenVoteResultView] Single result view with model", this.model);
-    console.log("The category index: ", this.categoryIndex);
+    this.shownDescription = false;
+    this.descriptionButton = i18n.gettext("See Description");
+    // console.log("[TokenVoteResultView] Single result view with model", this.model);
+    // console.log("The category index: ", this.categoryIndex);
   },
 
   serializeData: function(){
@@ -776,8 +788,27 @@ var TokenVoteResultView = Marionette.ItemView.extend({
     return {
       ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
       ideaDescription: this.model.get('objectConnectedTo').getLongTitleDisplayText(),
-      categoryResult: sortedResults
+      categoryResult: sortedResults,
+      descriptionButton: this.descriptionButton
     }
+  },
+
+  onSeeDescriptionClick: function(ev){
+    ev.preventDefault();
+
+    if (this.shownDescription === true) {
+      this.shownDescription = false;
+      this.ui.descriptionButton.text(this.descriptionButton);
+      this.ui.descriptionRegion.empty();
+    }
+
+    else {
+      this.shownDescription = true;
+      var descriptionButtonText = i18n.gettext("Hide Description");
+      this.ui.descriptionButton.text(descriptionButtonText);
+      this.ui.descriptionRegion.text(this.model.get('objectConnectedTo').getLongTitleDisplayText());
+    }
+
   }
 });
 

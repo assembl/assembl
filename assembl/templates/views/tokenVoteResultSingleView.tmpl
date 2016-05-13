@@ -1,5 +1,12 @@
 <div>
-    <div><%= ideaTitle %></div>
+    <div>
+        <div><%= ideaTitle %></div>
+        <div class='dropdown js_see-idea-description'>
+            <a href="#" class='dropdown-toggle js_description-button' aria-expanded='false'><%= descriptionButton %></a>
+            <i class='icon-arrowdown'></i>
+        </div>
+        <div class='js_show-idea-description-region'></div>
+    </div>
     <% _.each(categoryResult, function(result){ %>
         <div><%= result %></div>
     <% }); %>
