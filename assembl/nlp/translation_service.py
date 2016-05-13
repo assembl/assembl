@@ -457,10 +457,12 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         apikey = config.get("google.server_api_key")
         self._known_locales = None
         self.client = apiclient.discovery.build(
-            'translate', 'v2', developerKey=apikey)
+            'translate', 'v2', developerKey=apikey) if apikey else None
 
     @property
     def known_locales(self):
+        if not self.client:
+            return self.known_locales_cls
         if self._known_locales is None:
             try:
                 r = self.client.languages().list().execute()
@@ -478,6 +480,8 @@ class GoogleTranslationService(DummyGoogleTranslationService):
     def identify(self, text, expected_locales=None):
         if not text:
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
+        if not self.client:
+            return super(GoogleTranslationService, (self).identify(text, expected_locales=None))
         r = self.client.detections().list(q=text).execute()
         r = r[u"detections"][0]
         r.sort(lambda x: x[u"confidence"], reverse=True)
@@ -489,6 +493,9 @@ class GoogleTranslationService(DummyGoogleTranslationService):
     def translate(self, text, target, source=None, db=None):
         if not text:
             return text, Locale.NON_LINGUISTIC
+        if not self.client:
+            from googleapiclient.http import HttpError
+            raise HttpError(401, '{"error":"Please define server_api_key"}')
         r = self.client.translations().list(
             q=text,
             target=self.asKnownLocale(target),
@@ -504,7 +511,11 @@ class GoogleTranslationService(DummyGoogleTranslationService):
         if isinstance(exception, socket.error):
             return LangStringStatus.SERVICE_DOWN, str(exception)
         elif isinstance(exception, HttpError):
-            status = exception.resp.status
+            status = exception.resp
+            try:
+                status = getattr(status, "status")
+            except:
+                pass
             content = json.loads(exception.content)
             if status == 403:
                 return (LangStringStatus.QUOTA_ERROR, content)
