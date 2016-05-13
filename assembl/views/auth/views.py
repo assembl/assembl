@@ -942,7 +942,6 @@ def send_change_password_email(
             request, 'do_password_change',
             ticket=password_change_token(profile)))
     sender_email = config.get('assembl.admin_email')
-    import pdb; pdb.set_trace()
     if discussion:
         data.update(dict(
             discussion_topic=discussion.topic,
