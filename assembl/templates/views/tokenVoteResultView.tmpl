@@ -5,7 +5,9 @@
     <div class='vote-result-header'>
         <span>{{gettext("Ideas")}}</span>
         <% _.each(categories, function(category){ %>
-            <span class='js_vote-result-category'><%= category %></span>
+            <div class='js_vote-result-category' data-category-name="<%= category %>">
+                <span class=''><%= category %></span>
+            </div>
         <% }); %>
     </div>
     <div class='vote-result-body'>

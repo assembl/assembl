@@ -927,7 +927,8 @@ var TokenResultView = Marionette.LayoutView.extend({
 
         that.tokenResultsView = new TokenVoteResultCollectionView({
           collection: that.voteResults,
-          categoryIndex: that.categoryMap
+          categoryIndex: that.categoryMap,
+          reorderOnSort: true //disable re-rendering child views on sort
         });
         if (!that.isViewDestroyed()){
           that.render();
@@ -958,6 +959,7 @@ var TokenResultView = Marionette.LayoutView.extend({
 
   onCategoryClickName: function(ev){
     console.log('Category click name was clicked with event', ev);
+    //Sort the collection based on the category
   },
 
   onShow: function(){
