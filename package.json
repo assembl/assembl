@@ -55,6 +55,7 @@
     "po2json": "~0.4.1",
     "postcss": "~5.0.0",
     "raven-js": "~3.0.3",
+    "sockjs-client": "~1.1.0",
     "uglify-js": "~2.6.1",
     "vinyl-buffer": "~1.0.0",
     "vinyl-source-stream": "~1.1.0",

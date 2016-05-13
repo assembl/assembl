@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('underscore'),
+    SockJS = require('sockjs-client'),
     App = require('../app.js'),
     Ctx = require('../common/context.js');
 
@@ -22,16 +23,23 @@ var Socket = function(connectCallback) {
 Socket.STATE_CLOSED = 0;
 Socket.STATE_CONNECTING = 1;
 Socket.STATE_OPEN = 2;
-Socket.CONNECTION_TIMEOUT_TIME = 5000;
+Socket.RECONNECTION_WAIT_TIME = 5000;
 
 /**
  * @init
  */
 Socket.prototype.init = function() {
+  if (Ctx.debugSocket) {
+    console.log("Socket::init()");
+  }
   this.socket = new SockJS(Ctx.getSocketUrl());
   this.socket.onopen = this.onOpen.bind(this);
   this.socket.onmessage = this.onMessage.bind(this);
   this.socket.onclose = this.onClose.bind(this);
+  this.socket.onerror = this.onError.bind(this);
+  if (Ctx.debugSocket) {
+    console.log("Socket::init() state is now STATE_CLOSED");
+  }
   this.state = Socket.STATE_CLOSED;
 };
 
@@ -39,10 +47,26 @@ Socket.prototype.init = function() {
  * Triggered when the connection opens
  * @event
  */
-Socket.prototype.onOpen = function() {
+Socket.prototype.onOpen = function(ev) {
+  if (Ctx.debugSocket) {
+    console.log("Socket::onOpen()");
+  }
   this.socket.send("token:" + Ctx.getCsrfToken());
   this.socket.send("discussion:" + Ctx.getDiscussionId());
+  if (Ctx.debugSocket) {
+    console.log("Socket::onOpen() state is now STATE_CONNECTING");
+  }
   this.state = Socket.STATE_CONNECTING;
+};
+
+/**
+ * Triggered when a socket error occurs
+ * @event
+ */
+Socket.prototype.onError = function(ev) {
+  if (true || Ctx.debugSocket) {
+    console.log("Socket::onError() an error occured in the websocket");
+  }
 };
 
 /**
@@ -50,9 +74,15 @@ Socket.prototype.onOpen = function() {
  * @event
  */
 Socket.prototype.onMessage = function(ev) {
+  if (Ctx.debugSocket) {
+    console.log("Socket::onMessage()");
+  }
   if (this.state === Socket.STATE_CONNECTING) {
     this.connectCallback(this);
     App.vent.trigger('socket:open');
+    if (Ctx.debugSocket) {
+      console.log("Socket::onOpen() state is now STATE_OPEN");
+    }
     this.state = Socket.STATE_OPEN;
   }
 
@@ -71,13 +101,23 @@ Socket.prototype.onMessage = function(ev) {
  * Triggered when the connection closes ( or lost the connection )
  * @event
  */
-Socket.prototype.onClose = function() {
+Socket.prototype.onClose = function(ev) {
+  if (Ctx.debugSocket) {
+    console.log("Socket::onClose()");
+  }
+  if (Ctx.debugSocket) {
+    console.log("Socket::onClose() state is now STATE_CLOSED");
+  }
+  this.state = Socket.STATE_CLOSED;
   App.vent.trigger('socket:close');
 
   var that = this;
   window.setTimeout(function() {
+    if (Ctx.debugSocket) {
+      console.log("Socket::onClose() attempting to reconnect");
+    }
     that.init();
-  }, Socket.CONNECTION_TIMEOUT_TIME);
+  }, Socket.RECONNECTION_WAIT_TIME);
 };
 
 /**
