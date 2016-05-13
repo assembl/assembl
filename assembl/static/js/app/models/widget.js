@@ -424,9 +424,9 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
         break;
       case this.INFO_BAR:
         if (this.get("configured")) {
-          return i18n.gettext("Vote (tokens)");
+          return i18n.gettext("Vote");
         } else {
-          return i18n.gettext("Configure (tokens)");
+          return i18n.gettext("Configure");
         }
         break;
       default:
