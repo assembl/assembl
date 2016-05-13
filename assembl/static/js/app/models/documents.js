@@ -38,10 +38,6 @@ var DocumentModel = Base.Model.extend({
 
   isFileType: function(){
     return this.get('@type') === Types.FILE;
-  },
-
-  triggerDoNotDelete: function(){
-    this.trigger('doNotDelete');
   }
 });
 
@@ -67,6 +63,11 @@ var FileModel = DocumentModel.extend({
       options.formData = true;
     }
     return DocumentModel.prototype.save.call(this, attrs, options);
+  },
+
+  isImageType: function(){
+    var mime_type = this.get('mime_type');
+    return /^image\/\w+/i.test(mime_type);
   }
 });
 

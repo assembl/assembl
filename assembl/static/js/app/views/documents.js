@@ -39,18 +39,12 @@ var AbstractDocumentView = Marionette.ItemView.extend({
       //etsy : 'd0jq4lmfi5bjbrxq2etulmjr',
       //},
       maxHeight: "300px", maxWidth: "100%",
-      debug: false,
+      debug: true,
       onEmbedFailed: function() {
         if (Ctx.debugOembed){
           console.log("onEmbedFailed (assembl)");
         }
-        //this.addClass("hidden");
-        
-        // //The current accepted failure case is to simply present the url as is.
-        // var url = $(this).text().trim();
-        // if (url){
-        //   $(this).empty().append("<a href="+url+">"+url+"</a>");
-        // }
+
         that.onRenderOembedFail();
       },
       onError: function(externalUrl, embedProvider, textStatus, jqXHR) {
@@ -61,14 +55,39 @@ var AbstractDocumentView = Marionette.ItemView.extend({
         if (Ctx.debugOembed){
           console.log('err:', externalUrl, embedProvider, textStatus);
         }
+
+        that.onRenderOembedFail();
       },
       afterEmbed: function() {
         //console.log("Embeeding done");
       },
       proxyHeadCall: function(url) {
         return "/api/v1/mime_type?url=" + encodeURIComponent(url);
-      }
+      },
+      timeout: 5000
     });
+  },
+
+  doLocalEmbed: function(){
+    if (this.model.isImageType()){
+      var html = "<a href="+ this.uri +" target=_blank>"
+      html += "<img src=" + this.uri + " class='embedded-image-preview'>"
+      html += "</a>"
+
+      this.$el.html(html);
+    }
+    else {
+      this.onRenderOembedFail();
+    }
+  },
+
+  processEmbedType: function(){
+    if (this.model.isFileType()){
+      this.doLocalEmbed();
+    }
+    else {
+      this.doOembed();
+    }
   },
 
   onRender: function() {
@@ -78,8 +97,14 @@ var AbstractDocumentView = Marionette.ItemView.extend({
         loader = new LoaderView(),
         loaderHtml = loader.render().el;
     
-    this.$el.html(loaderHtml); //First, put a loader, then oembed
-    this.doOembed();
+    // this.$el.html(loaderHtml); //First, put a loader, then oembed
+    
+    // try {
+    //   this.doOembed();
+    // } catch(err) {
+    //   this.onRenderOembedFail();
+    // }
+    this.processEmbedType();
 
   },
 
