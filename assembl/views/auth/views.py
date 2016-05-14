@@ -899,20 +899,34 @@ def do_password_change(request):
     permission=NO_PERMISSION_REQUIRED
 )
 def finish_password_change(request):
+    localizer = request.localizer
     token = request.params.get('token')
     user, validity = verify_password_change_token(token)
     logged_in = authenticated_userid(request)  # if mismatch?
-    if validity != Validity.VALID or (
-            logged_in is not None and logged_in != user.id):
-        # offer to send a new token
+    if user and user.id != logged_in:
+        # token for someone else: forget login.
+        logged_in = None
         forget(request)
+    token_date = get_data_token_time(token, PASSWORD_CHANGE_TOKEN_DURATION)
+    old_token = (
+        user is None or token_date is None or (
+            user.last_login and token_date < user.last_login))
+
+    if (validity != Validity.VALID or old_token) and not logged_in:
+        # V-, V+P+W-B-L-: Invalid or obsolete token (obsolete+logged in treated later.)
+        # Offer to send a new token
+        if validity != Validity.VALID:
+            error = localizer.translate(_(
+                "This token is not valid. Do you want us to send another?"))
+        else:
+            error = localizer.translate(_(
+                "This token has been used. Do you want us to send another?"))
+
         return HTTPFound(location=maybe_contextual_route(
             request, 'request_password_change', _query=dict(
-                user_id=user.id if user else None,
-                error=localizer.translate(_(
-                    "This token is not valid. "
-                    "Do you want us to send another?")))))
-    localizer = request.localizer
+                identifier = user.get_preferred_email() if user else '',
+                error=error)))
+
     discussion_slug = request.matchdict.get('discussion_slug', None)
     error = None
     p1, p2 = (request.params.get('password1', '').strip(),

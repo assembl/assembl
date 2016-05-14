@@ -153,22 +153,22 @@ def verify_email_token(token):
             data = int(data)
         except:
             return None, Validity.INVALID_FORMAT
-        email = AbstractAgentAccount.get(data)
-        if not email:
+        account = AbstractAgentAccount.get(data)
+        if not account:
             return None, Validity.DATA_NOT_FOUND
-        data, valid = verify_data_token(token, email.email)
-        return email, valid
+        data, valid = verify_data_token(token, account.email)
+        return account, valid
     # Try decoding legacy
     try:
         id, hash = token.split('f', 1)
-        email = AbstractAgentAccount.get(int(id))
-        if not email:
+        account = AbstractAgentAccount.get(int(id))
+        if not account:
             return None, Validity.DATA_NOT_FOUND
         if verify_password(
-            str(email.id) + email.email + config.get(
-                'security.email_token_salt'), hash, HashEncoding.HEX):
-                return email, Validity.VALID
-        return email, Validity.BAD_HASH
+            str(account.id) + account.email + config.get(
+                'security.account_token_salt'), hash, HashEncoding.HEX):
+                return account, Validity.VALID
+        return account, Validity.BAD_HASH
     except:
         return None, Validity.INVALID_FORMAT
 
