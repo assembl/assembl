@@ -86,6 +86,7 @@ def get_login_context(request, force_show_providers=False):
                 slug_prefix=p_slug,
                 providers=providers,
                 hide_registration=hide_registration,
+                identifier = request.params.get('identifier', ''),
                 google_consumer_key=request.registry.settings.get(
                     'google.consumer_key', ''),
                 next=handle_next_view(request))
@@ -675,7 +676,8 @@ def confirm_email_sent(request):
             # Send an email to other emails of the duplicate? Sigh!
             pass
         return HTTPFound(location=maybe_contextual_route(
-            request, 'login', email=email, _query=dict(
+            request, 'login', _query=dict(
+                identifer=email,
                 error=localizer.translate(_(
                     "This email is already confirmed.")))))
     else:
@@ -710,24 +712,36 @@ def confirm_email_sent(request):
 )
 def request_password_change(request):
     localizer = request.localizer
-    identifier = request.params.get('identifier', '')
+    identifier = request.params.get('identifier', None)
+    user_id = request.params.get('user_id', None)
     error = request.params.get('error', '')
-    if not identifier:
+    if user_id:
+        try:
+            user = User.get(int(user_id))
+            identifier = user.get_preferred_email()
+        except:
+            user = None
+    elif identifier:
+        user, account = from_identifier(identifier)
+    else:
+        user = None
+        identifier = ''
+    if error or not user:
         return dict(
             get_default_context(request),
             error=error,
+            identifier=identifier,
             title=localizer.translate(_('I forgot my password')))
-    user, account = from_identifier(identifier)
-    discussion_slug = request.matchdict.get('discussion_slug', None)
-    route = 'password_change_sent'
-    if discussion_slug:
-        route = 'contextual_' + route
-
     if not user:
         return dict(get_default_context(request),
                     identifier=identifier,
                     error=localizer.translate(_("This user cannot be found")),
                     title=localizer.translate(_('I forgot my password')))
+
+    discussion_slug = request.matchdict.get('discussion_slug', None)
+    route = 'password_change_sent'
+    if discussion_slug:
+        route = 'contextual_' + route
     return HTTPFound(location=maybe_contextual_route(
         request, 'password_change_sent', profile_id=user.id,
         _query=dict(email=identifier if '@' in identifier else '')))
@@ -771,6 +785,16 @@ def password_change_sent(request):
 
 
 @view_config(
+    route_name='welcome', request_method="GET",
+    renderer='assembl:templates/do_password_change.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+)
+@view_config(
+    route_name='contextual_welcome', request_method="GET",
+    renderer='assembl:templates/do_password_change.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+)
+@view_config(
     route_name='do_password_change', request_method="GET",
     renderer='assembl:templates/do_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
@@ -781,43 +805,65 @@ def password_change_sent(request):
     permission=NO_PERMISSION_REQUIRED
 )
 def do_password_change(request):
+    "Validate the change_password token, and react accordingly."
+    # Codes below refer to those cases:
+    # V. token Valid(+) or invalid(-)? (Possibly expired through internal date)
+    # P. user has(+) a Password or not (-)?
+    # W. Welcome(+) vs change password(-)
+    # B. last login absent, or Before token created (+) vs last login after token created (-)
+    # L. user is already Logged in(+) or not(-)?
+
+    welcome = 'welcome' in request.matched_route.name
     localizer = request.localizer
     discussion = discussion_from_request(request)
     token = request.matchdict.get('ticket')
     user, validity = verify_password_change_token(token)
-    if validity == Validity.VALID:
-        token_date = get_data_token_time(token, PASSWORD_CHANGE_TOKEN_DURATION)
-        if token_date < user.last_login:
-            validity = Validity.EXPIRED
-    if validity == Validity.EXPIRED:
-        logged_in = authenticated_userid(request)
+    logged_in = authenticated_userid(request)
+    if user and user.id != logged_in:
+        # token for someone else: forget login.
+        logged_in = None
+        forget(request)
+    lacking_password = user is not None and user.password is None
+    token_date = get_data_token_time(token, PASSWORD_CHANGE_TOKEN_DURATION)
+    old_token = (
+        user is None or token_date is None or (
+            user.last_login and token_date < user.last_login))
+    print "pwc V%sP%sW%sB%sL%s" % tuple(map(lambda b: "-" if b else "+", (
+        validity != Validity.VALID, lacking_password, not welcome,
+        old_token, logged_in is None)))
+    if welcome and not lacking_password:
+        # W+P+: welcome link sends onwards irrespective of token
         if logged_in:
+            # L+: send onwards to discussion
             return HTTPFound(location=request.route_url(
                 'home' if discussion else 'discussion_list',
                 discussion_slug=discussion.slug))
         else:
+            # L-: offer to login
             return HTTPFound(location=maybe_contextual_route(
-                request, 'login', email=user.get_preferred_email()))
-    elif validity != Validity.VALID:
-        if user:
-            return HTTPFound(location=maybe_contextual_route(
-                request, 'password_change_sent', profile_id=user.id, _query=dict(
-                    sent=False, error=localizer.translate(_(
-                        "This token is not valid. "
-                        "Do you want us to send another?")))))
-        else:
-            return HTTPFound(location=maybe_contextual_route(
-                request, 'request_password_change', _query=dict(
-                    error=localizer.translate(_(
-                        "This token is not valid. "
-                        "Do you want us to send another?")))))
+                request, 'login', _query=dict(
+                identifier=user.get_preferred_email() if user else None)))
 
-    headers = remember(request, user.id)
-    request.response.headerlist.extend(headers)
-    user.last_login = datetime.utcnow()
-    slug = request.matchdict.get('discussion_slug', None)
+    if (validity != Validity.VALID or old_token) and not logged_in:
+        # V-, V+P+W-B-L-: Invalid or obsolete token (obsolete+logged in treated later.)
+        # Offer to send a new token
+        if validity != Validity.VALID:
+            error = localizer.translate(_(
+                "This token is not valid. Do you want us to send another?"))
+        else:
+            error = localizer.translate(_(
+                "This token has been used. Do you want us to send another?"))
+
+        return HTTPFound(location=maybe_contextual_route(
+            request, 'request_password_change', _query=dict(
+                identifier = user.get_preferred_email() if user else '',
+                error=error)))
+
+    # V+: Valid token (encompasses P-B+, W-, B-L+); ALSO V-L+
+    # V+P-B- should not happen, but we'll treat it the same.
+    # go through password change dialog. We'll complete login afterwards.
+    slug = discussion.slug if discussion else ""
     slug_prefix = "/" + slug if slug else ""
-    welcome = user.password is None
     if welcome:
         if discussion:
             discussion_topic = discussion.topic
@@ -838,6 +884,7 @@ def do_password_change(request):
         get_default_context(request),
         slug_prefix=slug_prefix,
         description=welcome_text,
+        token=token,
         title=title)
 
 
@@ -852,10 +899,19 @@ def do_password_change(request):
     permission=NO_PERMISSION_REQUIRED
 )
 def finish_password_change(request):
-    logged_in = authenticated_userid(request)
-    if not logged_in:
-        raise HTTPUnauthorized()
-    user = User.get(logged_in)
+    token = request.params.get('token')
+    user, validity = verify_password_change_token(token)
+    logged_in = authenticated_userid(request)  # if mismatch?
+    if validity != Validity.VALID or (
+            logged_in is not None and logged_in != user.id):
+        # offer to send a new token
+        forget(request)
+        return HTTPFound(location=maybe_contextual_route(
+            request, 'request_password_change', _query=dict(
+                user_id=user.id if user else None,
+                error=localizer.translate(_(
+                    "This token is not valid. "
+                    "Do you want us to send another?")))))
     localizer = request.localizer
     discussion_slug = request.matchdict.get('discussion_slug', None)
     error = None
@@ -865,6 +921,9 @@ def finish_password_change(request):
         error = localizer.translate(_('The passwords are not identical'))
     elif p1:
         user.password_p = p1
+        user.last_login = datetime.utcnow()
+        headers = remember(request, user.id)
+        request.response.headerlist.extend(headers)
         return HTTPFound(location=request.route_url(
             'home' if discussion_slug else 'discussion_list',
             discussion_slug=discussion_slug,
@@ -933,22 +992,20 @@ The ${assembl} Team""")
 def send_change_password_email(
         request, profile, email=None, subject=None,
         text_body=None, html_body=None, discussion=None,
-        sender_name=None):
+        sender_name=None, welcome=False):
     mailer = get_mailer(request)
     localizer = request.localizer
     data = dict(
         assembl="Assembl", name=profile.name,
         confirm_url=maybe_contextual_route(
-            request, 'do_password_change',
+            request,
+            'welcome' if welcome else 'do_password_change',
             ticket=password_change_token(profile)))
     sender_email = config.get('assembl.admin_email')
     if discussion:
         data.update(dict(
             discussion_topic=discussion.topic,
             discussion_url=discussion.get_url()))
-        admin_source = discussion.admin_source
-        if admin_source and admin_source.admin_sender:
-            sender_email = admin_source.admin_sender
         if sender_name is None:
             sender_name = discussion.topic
     if sender_name:

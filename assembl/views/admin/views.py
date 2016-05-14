@@ -310,7 +310,8 @@ def discussion_permissions(request):
                         request.POST.get('send_invite', False),
                         request.POST['email_subject'],
                         request.POST['text_email_message'],
-                        request.POST['html_email_message'])
+                        request.POST['html_email_message'],
+                        request.POST['sender_name'])
                 except Exception as e:
                     error = repr(e)
             else:

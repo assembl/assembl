@@ -92,7 +92,7 @@
 <div class="bx bx-default admin-permissions mhl">
 <form method="POST" action="#" enctype="multipart/form-data" accept-charset="utf-8">
 <h4 class="h4">{% trans %}Add users with a CSV file{% endtrans %}</h4>
-<p>{% trans %}The CSV file must have two or three fields, in this order: full name, email, and password.  If it has a header, it MUST be on the first line. Imported user's email will be considered validated. If no password is given, please use the "Send an invite message" option below.{% endtrans %}</p>
+<p>{% trans %}The CSV file must have two fields, in this order: full name, email.  If it has a header, it MUST be on the first line. Imported user's email will be considered validated. The invite message will not be sent to existing users. If you do not get Assembl to "Send an invite message", send one yourself directing them to the password setting URL: {% endtrans %} </p>
 <p><label>{% trans %}Role{% endtrans %}:</label>
 <select name="add_with_role" id="add_with_role">
     {% for role in roles %}
@@ -114,6 +114,8 @@
 <div id="invite_text_div" style="display:none">
 <label>{% trans %}Note that this email will only be sent to new users. In the message, you can use the following placeholders: ${name}, ${confirm_url}, ${discussion_topic}, ${discussion_url}{% endtrans %}.</label>
 
+<p><label>{% trans %}Sender name:{% endtrans %}</label></p>
+<input type="text" name="sender_name" id="sender_name" style="width:50%">
 <p><label>{% trans %}Subject:{% endtrans %}</label></p>
 <input type="text" name="email_subject" id="email_subject" value="{%trans%}Welcome to ${discussion_topic}.{% endtrans %}" style="width:50%">
 <p><label>{% trans %}Text email message:{% endtrans %}</label></p>

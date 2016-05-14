@@ -127,8 +127,9 @@ class AgentProfile(Base):
                 return accounts[0]
 
     def get_preferred_email(self):
-        if self.get_preferred_email_account() is not None:
-            return self.get_preferred_email_account().email
+        preferred_account = self.get_preferred_email_account()
+        if preferred_account is not None:
+            return preferred_account.email
 
     def real_name(self):
         if not self.name:
@@ -625,7 +626,7 @@ class User(AgentProfile):
             None, DCTERMS.created, sections=(PRIVATE_USER_SECTION,))})
 
     def __init__(self, **kwargs):
-        if kwargs.get('password'):
+        if kwargs.get('password', None) is not None:
             from ..auth.password import hash_password
             kwargs['password'] = hash_password(kwargs['password'])
 

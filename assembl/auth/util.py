@@ -332,8 +332,11 @@ def add_user(name, email, password, role, force=False, username=None,
         user.name = name
         user.verified = True
         created_user = False
-        if password and change_old_password:
-            user.password_p = password
+        if change_old_password:
+            if password is None:
+                user.password = None
+            else:
+                user.password_p = password
         if username:
             if user.username:
                 user.username.username = username
@@ -347,7 +350,8 @@ def add_user(name, email, password, role, force=False, username=None,
                 preferred_email=email,
                 verified=True,
                 creation_date=datetime.utcnow())
-            user.password_p = password
+            if password is not None:
+                user.password_p = password
         else:
             user = User(
                 name=name,
@@ -394,7 +398,7 @@ def add_user(name, email, password, role, force=False, username=None,
 def add_multiple_users_csv(
         request, csv_file, discussion_id, with_role,
         send_password_change=False, message_subject=None,
-        text_message=None, html_message=None):
+        text_message=None, html_message=None, sender_name=None):
     r = reader(csv_file, skipinitialspace=True)
     localizer = request.localizer
     for i, l in enumerate(r):
@@ -402,17 +406,10 @@ def add_multiple_users_csv(
             # tolerate empty lines
             continue
         l = [x.decode('utf-8').strip() for x in l]
-        if send_password_change:
-            if len(l) != 2:
-                raise RuntimeError(localizer.translate(_(
-                    "The CSV file must have two columns")))
-            (name, email) = l
-            password = base64.urlsafe_b64encode(urandom(8))
-        else:
-            if len(l) != 3:
-                raise RuntimeError(localizer.translate(_(
-                    "The CSV file must have three columns")))
-            (name, email, password) = l
+        if len(l) != 2:
+            raise RuntimeError(localizer.translate(_(
+                "The CSV file must have two columns")))
+        (name, email) = l
         if not is_email(email):
             if i == 0:
                 # Header
@@ -422,11 +419,8 @@ def add_multiple_users_csv(
         if len(name) < 5:
             raise RuntimeError(localizer.translate(_(
                 "Name too short: <%s> at line %d")) % (name, i))
-        if len(password) < 4:
-            raise RuntimeError(localizer.translate(_(
-                "Password too short: <%s> at line %d")) % (password, i))
         (user, is_new) = add_user(
-            name, email, password, None, True, localrole=with_role,
+            name, email, None, None, True, localrole=with_role,
             discussion=discussion_id, change_old_password=False)
         if is_new and send_password_change:
             from assembl.views.auth.views import send_change_password_email
@@ -435,5 +429,5 @@ def add_multiple_users_csv(
             send_change_password_email(
                 request, user, email, subject=message_subject,
                 text_body=text_message, html_body=html_message,
-                discussion=discussion)
+                discussion=discussion, sender_name=sender_name, welcome=True)
     return i

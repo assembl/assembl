@@ -73,7 +73,7 @@
             {# Need to be refactored #}
             {# {form('openid', gettext('Login with OpenID'), true)} #}
         </div>
-        
+
         <div class="signinSeparator left">
         {#
             <div class="mask"></div>
@@ -86,8 +86,12 @@
             <div class="error-message">{{error}}</div>
             <form class="form" method="POST">
                 <input type="hidden" name="next" value="{{next}}" />
-                <input type="text" name="identifier" class="form-control mbs" placeholder="{{ gettext('Email or username') }}" autofocus required />
-                <input type="password" name="password" class="form-control mbs" placeholder="{{ gettext('Password') }}" required />
+                <input type="text" name="identifier" class="form-control mbs" placeholder="{{ gettext('Email or username') }}"  required value="{{ identifier }}"
+                {% if not identifier %}autofocus{% endif %}
+                />
+                <input type="password" name="password" class="form-control mbs" placeholder="{{ gettext('Password') }}" required
+                {% if identifier %}autofocus{% endif %}
+                />
 
                 <table class="submitButtons">
                 <tr><td>
