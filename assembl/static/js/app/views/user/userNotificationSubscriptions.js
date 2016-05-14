@@ -128,7 +128,10 @@ var TemplateSubscription = Marionette.ItemView.extend({
         that = this,
         status = elm.is(':checked') ? 'ACTIVE' : 'UNSUBSCRIBED';
 
-    var notificationSubscriptionTemplateModel = this.notificationTemplates.get(elm.attr('id'));
+    // var notificationSubscriptionTemplateModel = this.notificationTemplates.get(elm.attr('id'));
+    var notificationSubscriptionTemplateModel = this.notificationTemplates.find(function(notif){
+      return notif.id === elm.attr('id');
+    });
 
     var notificationSubscriptionModel = new NotificationSubscription.Model({
       creation_origin: "USER_REQUESTED",
