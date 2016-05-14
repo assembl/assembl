@@ -92,7 +92,7 @@
 <div class="bx bx-default admin-permissions mhl">
 <form method="POST" action="#" enctype="multipart/form-data" accept-charset="utf-8">
 <h4 class="h4">{% trans %}Add users with a CSV file{% endtrans %}</h4>
-<p>{% trans %}The CSV file must have two fields, in this order: full name, email.  If it has a header, it MUST be on the first line. Imported user's email will be considered validated. The invite message will not be sent to existing users. If you do not get Assembl to "Send an invite message", send one yourself directing them to the password setting URL: {% endtrans %} </p>
+<p>{% trans %}The CSV file must have two fields, in this order: full name, email.  If it has a header, it MUST be on the first line. Imported user's email will be considered validated. The invite message will not be sent to existing users, even if created on another discussion. If you do not get Assembl to "Send an invite message", send one yourself, explaining how to reset password.{% endtrans %} </p>
 <p><label>{% trans %}Role{% endtrans %}:</label>
 <select name="add_with_role" id="add_with_role">
     {% for role in roles %}
