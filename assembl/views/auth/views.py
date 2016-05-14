@@ -729,14 +729,9 @@ def request_password_change(request):
     if error or not user:
         return dict(
             get_default_context(request),
-            error=error,
+            error=error or localizer.translate(_("This user cannot be found")),
             identifier=identifier,
             title=localizer.translate(_('I forgot my password')))
-    if not user:
-        return dict(get_default_context(request),
-                    identifier=identifier,
-                    error=localizer.translate(_("This user cannot be found")),
-                    title=localizer.translate(_('I forgot my password')))
 
     discussion_slug = request.matchdict.get('discussion_slug', None)
     route = 'password_change_sent'
