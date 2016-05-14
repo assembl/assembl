@@ -121,15 +121,16 @@ def verify_data_token(token, extra_hash_data=''):
         expiry = datetime.strptime(expiry_str, '%Y%j%H%M%S')
         password = (data + extra_hash_data + expiry_str +
                     config.get('security.email_token_salt'))
+    except (ValueError, TypeError) as e:
+        return None, Validity.INVALID_FORMAT
+    try:
         if not verify_password(password, hash, HashEncoding.BASE64, 3):
             return data, Validity.BAD_HASH
-        if datetime.utcnow() > expiry:
-            return data, Validity.EXPIRED
-        return data, Validity.VALID
-    except ValueError:
-        return None, Validity.INVALID_FORMAT
-    except TypeError:
-        return None, Validity.INVALID_FORMAT
+    except (ValueError, TypeError) as e:
+        return data, Validity.BAD_HASH
+    if datetime.utcnow() > expiry:
+        return data, Validity.EXPIRED
+    return data, Validity.VALID
 
 
 def get_data_token_time(token, timedelta=None):
