@@ -16,6 +16,7 @@ import transaction
 
 
 from assembl.lib import config
+from assembl.lib.sqla import mark_changed
 
 
 def upgrade(pyramid_env):
@@ -32,6 +33,7 @@ def upgrade(pyramid_env):
             db.execute(
                 "UPDATE idea_content_link SET creator_id={contributor} WHERE id = {id}".format(
                     id=id, contributor=contributor))
+        mark_changed()
 
 
 def downgrade(pyramid_env):
