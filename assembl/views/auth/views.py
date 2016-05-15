@@ -744,24 +744,27 @@ def confirm_email_sent(request):
 )
 def request_password_change(request):
     localizer = request.localizer
-    identifier = request.params.get('identifier', None)
+    identifier = request.params.get('identifier', '')
     user_id = request.params.get('user_id', None)
     error = request.params.get('error', '')
+    user = None
     if user_id:
         try:
             user = User.get(int(user_id))
             identifier = user.get_preferred_email()
         except:
-            user = None
+            error = error or localizer.translate(_("This user cannot be found"))
     elif identifier:
         user, account = from_identifier(identifier)
-    else:
-        user = None
-        identifier = ''
-    if error or (not user and (identifier or user_id)):
+        if user:
+            user_id = user.id
+        else:
+            error = error or localizer.translate(_("This user cannot be found"))
+    if error or not user:
         return dict(
             get_default_context(request),
-            error=error or localizer.translate(_("This user cannot be found")),
+            error=error,
+            user_id=user_id,
             identifier=identifier,
             title=localizer.translate(_('I forgot my password')))
 
@@ -770,7 +773,7 @@ def request_password_change(request):
     if discussion_slug:
         route = 'contextual_' + route
     return HTTPFound(location=maybe_contextual_route(
-        request, 'password_change_sent', profile_id=user.id,
+        request, 'password_change_sent', profile_id=user_id,
         _query=dict(email=identifier if '@' in identifier else '')))
 
 
@@ -792,7 +795,7 @@ def password_change_sent(request):
         profile = AgentProfile.get(profile_id)
         email = request.params.get('email', None)
         if not profile:
-            raise HTTPNotFound("No profile "+profile_id)
+            raise HTTPNotFound("No profile "+str(profile_id))
         else:
             email = email or profile.get_preferred_email()
         discussion = discussion_from_request(request)
