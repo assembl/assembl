@@ -3,6 +3,7 @@ import simplejson as json
 from urllib import quote
 from smtplib import SMTPRecipientsRefused
 import logging
+import re
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
@@ -23,6 +24,7 @@ from pyramid.httpexceptions import (
     HTTPBadRequest,
     HTTPServerError)
 from pyramid.settings import asbool
+from bs4 import UnicodeDammit
 from sqlalchemy import desc
 from pyisemail import is_email
 from social.actions import do_auth
@@ -987,49 +989,50 @@ def finish_password_change(request):
 def send_confirmation_email(request, email):
     mailer = get_mailer(request)
     localizer = request.localizer
-    confirm_what = _('email')
+    confirm_what = localizer.translate(_('email'))
+    subject = localizer.translate(_("Please confirm your {confirm_what} with {assembl}"))
     if isinstance(email.profile, User) and not email.profile.verified:
-        confirm_what = _('account')
-        text_message = _(u"""Hello, ${name}, and welcome to ${assembl}!
+        confirm_what = localizer.translate(_('account'))
+        text_message = localizer.translate(_(u"""Hello, {name}, and welcome to {assembl}!
 
-Please confirm your email address &lt;${email}&gt; and complete your registration by clicking the link below.
-<${confirm_url}>
+Please confirm your email address &lt;{email}&gt; and complete your registration by clicking the link below.
+<{confirm_url}>
 
 Best regards,
-The ${assembl} Team""")
-        html_message = _(u"""<p>Hello, ${name}, and welcome to ${assembl}!</p>
-<p>Please <a href="${confirm_url}">click here to confirm your email address</a>
-&lt;${email}&gt; and complete your registration.</p>
-<p>Best regards,<br />The ${assembl} Team</p>""")
+The {assembl} Team"""))
+        html_message = localizer.translate(_(u"""<p>Hello, {name}, and welcome to {assembl}!</p>
+<p>Please <a href="{confirm_url}">click here to confirm your email address</a>
+&lt;{email}&gt; and complete your registration.</p>
+<p>Best regards,<br />The {assembl} Team</p>"""))
     else:
-        text_message = _(u"""Hello, ${name}!
+        text_message = localizer.translate(_(u"""Hello, {name}!
 
-Please confirm your new email address <${email}> on your ${assembl} account by clicking the link below.
-<${confirm_url}>
+Please confirm your new email address <{email}> on your {assembl} account by clicking the link below.
+<{confirm_url}>
 
 Best regards,
-The ${assembl} Team""")
-        html_message = _(u"""<p>Hello, ${name}!</p>
-<p>Please <a href="${confirm_url}">click here to confirm your new email address</a>
-&lt;${email}&gt; on your ${assembl} account.</p>
-<p>Best regards,<br />The ${assembl} Team</p>""")
+The {assembl} Team"""))
+        html_message = localizer.translate(_(u"""<p>Hello, {name}!</p>
+<p>Please <a href="{confirm_url}">click here to confirm your new email address</a>
+&lt;{email}&gt; on your {assembl} account.</p>
+<p>Best regards,<br />The {assembl} Team</p>"""))
 
     from assembl.auth.password import email_token
-    data = {
-        'name': email.profile.name,
-        'email': email.email,
-        'assembl': "Assembl",
-        'confirm_what': localizer.translate(confirm_what),
-        'confirm_url': maybe_contextual_route(
+    data = dict(
+        name=email.profile.name,
+        email=email.email,
+        assembl="Assembl",
+        confirm_what=confirm_what,
+        confirm_url=maybe_contextual_route(
             request, 'user_confirm_email',
             ticket=email_token(email))
-    }
+    )
     message = Message(
-        subject=localizer.translate(_("Please confirm your ${confirm_what} with ${assembl}"), mapping=data),
+        subject=subject.format(**data),
         sender=config.get('assembl.admin_email'),
         recipients=["%s <%s>" % (email.profile.name, email.email)],
-        body=localizer.translate(_(text_message), mapping=data),
-        html=localizer.translate(_(html_message), mapping=data))
+        body=text_message.format(**data),
+        html=html_message.format(**data))
     #if deferred:
     #    mailer.send_to_queue(message)
     #else:
@@ -1055,38 +1058,39 @@ def send_change_password_email(
             discussion_url=discussion.get_url()))
         if sender_name is None:
             sender_name = discussion.topic
+    sender_name = UnicodeDammit(sender_name).unicode_markup
+    # sanitize
+    sender_name = re.sub(r'[@<>]', '', sender_name)
     if sender_name:
-        sender = "%s <%s>" % (sender_name, sender_email)
+        sender = u"%s <%s>" % (sender_name, sender_email)
     else:
         sender = sender_email
-    subject = subject or localizer.translate(
-        _("Request for password change"), mapping=data)
+    subject = (subject or localizer.translate(
+        _("Request for password change"))).format(**data)
     if text_body is None or html_body is not None:
         # if text_body and no html_body, html_body remains None.
-        html_body = html_body or _(u"""<p>Hello, ${name}!</p>
-<p>We have received a request to change the password on your ${assembl} account.
-Please <a href="${confirm_url}">click here to confirm your password change</a>.</p>
+        html_body = html_body or localizer.translate(_(u"""<p>Hello, {name}!</p>
+<p>We have received a request to change the password on your {assembl} account.
+Please <a href="{confirm_url}">click here to confirm your password change</a>.</p>
 <p>If you did not ask to reset your password please disregard this email.</p>
-<p>Best regards,<br />The ${assembl} Team</p>
-""")
-        html_body = localizer.translate(html_body, mapping=data)
-    text_body = text_body or _(u"""Hello, ${name}!
-We have received a request to change the password on your ${assembl} account.
+<p>Best regards,<br />The {assembl} Team</p>
+"""))
+    text_body = text_body or localizer.translate(_(u"""Hello, {name}!
+We have received a request to change the password on your {assembl} account.
 To confirm your password change please click on the link below.
-<${confirm_url}>
+<{confirm_url}>
 
 If you did not ask to reset your password please disregard this email.
 
 Best regards,
-The ${assembl} Team
-""")
-    text_body = localizer.translate(text_body, mapping=data)
+The {assembl} Team
+"""))
     message = Message(
         subject=subject,
         sender=sender,
         recipients=["%s <%s>" % (
             profile.name, email or profile.get_preferred_email())],
-        body=text_body, html=html_body)
+        body=text_body.format(**data), html=html_body.format(**data))
     # if deferred:
     #    mailer.send_to_queue(message)
     # else:

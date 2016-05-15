@@ -313,6 +313,7 @@ def discussion_permissions(request):
                         request.POST['html_email_message'],
                         request.POST['sender_name'])
                 except Exception as e:
+                    import pdb; pdb.set_trace()
                     error = repr(e)
             else:
                 error = request.localizer.translate(_('No file given.'))

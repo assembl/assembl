@@ -112,17 +112,17 @@
 <label>{% trans %}Send an invite message{% endtrans %}:</label>
 <input type="checkbox" name="send_invite" id="send_invite" checked="checked" onclick="$('#invite_text_div').toggle()"/>
 <div id="invite_text_div">
-<label>{% trans %}Note that this email will only be sent to new users. In the message, you can use the following placeholders: ${name}, ${confirm_url}, ${discussion_topic}, ${discussion_url}{% endtrans %}.</label>
+<label>{% trans %}Note that this email will only be sent to new users. In the message, you can use the following placeholders: {name}, {confirm_url}, {discussion_topic}, {discussion_url}{% endtrans %}.</label>
 
 <p><label>{% trans %}Sender name:{% endtrans %}</label></p>
-<input type="text" name="sender_name" id="sender_name" style="width:50%">
+<input type="text" name="sender_name" id="sender_name" value="{{discussion.topic}}" style="width:50%">
 <p><label>{% trans %}Subject:{% endtrans %}</label></p>
-<input type="text" name="email_subject" id="email_subject" value="{%trans%}Welcome to ${discussion_topic}.{% endtrans %}" style="width:50%">
+<input type="text" name="email_subject" id="email_subject" value="{%trans%}Welcome to {discussion_topic}.{% endtrans %}" style="width:50%">
 <p><label>{% trans %}Text email message:{% endtrans %}</label></p>
-<textarea style="width:75%;height:8em;" name="text_email_message" id="text_email_message" >{%trans%}Hello, ${name}!
-You have been invited to the Assembl discussion ${discussion_topic}.
+<textarea style="width:75%;height:8em;" name="text_email_message" id="text_email_message" >{%trans%}Hello, {name}!
+You have been invited to the Assembl discussion {discussion_topic}.
 This link will allow you to set you password, after which you can log in.
-<${confirm_url}>
+<{confirm_url}>
 
 If you did not ask to join please disregard this email.
 
@@ -130,9 +130,9 @@ Best regards,
 The Assembl Team
 {%endtrans%}</textarea>
 <p><label>{% trans %}HTML email message:{% endtrans %}</label></p>
-<textarea style="width:75%;height:8em;" name="html_email_message" id="html_email_message" >{%trans%}<p>Hello, ${name}!</p>
-<p>You have been invited to the Assembl discussion <a href="${discussion_url}">${discussion_topic}</a>.
-Please <a href="${confirm_url}">click here</a> to set you password, after which you can log in.</p>
+<textarea style="width:75%;height:8em;" name="html_email_message" id="html_email_message" >{%trans%}<p>Hello, {name}!</p>
+<p>You have been invited to the Assembl discussion <a href="{discussion_url}">{discussion_topic}</a>.
+Please <a href="{confirm_url}">click here</a> to set you password, after which you can log in.</p>
 <p>If you did not ask to join please disregard this email.</p>
 <p>Best regards,<br />The Assembl Team</p>
 {% endtrans %}</textarea>
