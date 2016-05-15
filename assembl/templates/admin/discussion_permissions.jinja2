@@ -110,8 +110,8 @@
 </p>
 <div>
 <label>{% trans %}Send an invite message{% endtrans %}:</label>
-<input type="checkbox" name="send_invite" id="send_invite" onclick="$('#invite_text_div').toggle()"/>
-<div id="invite_text_div" style="display:none">
+<input type="checkbox" name="send_invite" id="send_invite" value="true" onclick="$('#invite_text_div').toggle()"/>
+<div id="invite_text_div">
 <label>{% trans %}Note that this email will only be sent to new users. In the message, you can use the following placeholders: ${name}, ${confirm_url}, ${discussion_topic}, ${discussion_url}{% endtrans %}.</label>
 
 <p><label>{% trans %}Sender name:{% endtrans %}</label></p>
