@@ -758,7 +758,7 @@ def request_password_change(request):
     else:
         user = None
         identifier = ''
-    if error or not user:
+    if error or (not user and (identifier or user_id)):
         return dict(
             get_default_context(request),
             error=error or localizer.translate(_("This user cannot be found")),
