@@ -744,9 +744,9 @@ def confirm_email_sent(request):
 )
 def request_password_change(request):
     localizer = request.localizer
-    identifier = request.params.get('identifier')
-    user_id = request.params.get('user_id', None)
-    error = request.params.get('error', '')
+    identifier = request.params.get('identifier') or ''
+    user_id = request.params.get('user_id') or ''
+    error = request.params.get('error') or ''
     user = None
     if user_id:
         try:
@@ -796,7 +796,7 @@ def password_change_sent(request):
     if not request.params.get('sent', False):
         profile_id = int(request.matchdict.get('profile_id'))
         profile = AgentProfile.get(profile_id)
-        email = request.params.get('email', None)
+        email = request.params.get('email')
         if not profile:
             raise HTTPNotFound("No profile "+str(profile_id))
         else:
