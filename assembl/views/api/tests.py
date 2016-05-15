@@ -2,6 +2,7 @@
 import smtplib
 import re
 import quopri
+from urlparse import urlparse
 
 import json
 import pytest
@@ -228,7 +229,7 @@ def test_api_register(discussion, test_app):
         assert token
         # Confirm token
         r = test_app.get("/users/email_confirm/"+token)
-        assert r.status_code == 200
+        assert r.status_code == 302 and urlparse(r.location).path == '/'
 
 def test_api_get_posts_queries(
         discussion, test_app, test_session, participant1_user, 
