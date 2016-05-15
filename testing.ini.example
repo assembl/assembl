@@ -34,16 +34,16 @@ debugtoolbar.intercept_exc = false
 
 # This database will be cleared! Be careful.
 # For postgres:
-#sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test
+sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test
 # For virtuoso:
-sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
+#sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
 sqlalchemy.echo = True
 db_user = assembl_test
 db_password = assembl_test
 # For postgres:
-#db_schema = public
+db_schema = public
 # For virtuoso:
-db_schema = assembl_test
+#db_schema = assembl_test
 db_database = assembl_test
 
 jinja2.directories = assembl:templates
@@ -254,9 +254,9 @@ transaction = transaction
 script_location = assembl/alembic
 # This database will be cleared! Be careful.
 # For postgres:
-#sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test
+sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test
 # For virtuoso:
-sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
+#sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
 transaction_per_migration = true
 
 # Template used to generate migration files
