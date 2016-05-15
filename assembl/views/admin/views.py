@@ -5,6 +5,7 @@ from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
+import transaction
 
 from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
@@ -313,8 +314,8 @@ def discussion_permissions(request):
                         request.POST['html_email_message'],
                         request.POST['sender_name'])
                 except Exception as e:
-                    import pdb; pdb.set_trace()
                     error = repr(e)
+                    transaction.doom()
             else:
                 error = request.localizer.translate(_('No file given.'))
 

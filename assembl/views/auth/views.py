@@ -1033,9 +1033,6 @@ The {assembl} Team"""))
         recipients=["%s <%s>" % (email.profile.name, email.email)],
         body=text_message.format(**data),
         html=html_message.format(**data))
-    #if deferred:
-    #    mailer.send_to_queue(message)
-    #else:
     mailer.send(message)
 
 
@@ -1091,7 +1088,4 @@ The {assembl} Team
         recipients=["%s <%s>" % (
             profile.name, email or profile.get_preferred_email())],
         body=text_body.format(**data), html=html_body.format(**data))
-    # if deferred:
-    #    mailer.send_to_queue(message)
-    # else:
     mailer.send(message)
