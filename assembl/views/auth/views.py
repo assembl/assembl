@@ -630,7 +630,6 @@ def user_confirm_email(request):
         message = localizer.translate(
             _("Email <%s> already confirmed")) % (account.email,)
     else:
-        import pdb; pdb.set_trace()
         # maybe another profile already verified that email
         other_account = session.query(AbstractAgentAccount).filter_by(
             email_ci=account.email_ci, verified=True).first()
