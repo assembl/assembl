@@ -182,6 +182,8 @@ class AgentProfile(Base):
         for post in other_profile.posts_moderated[:]:
             post.moderator = self
             post.moderator_id = self.id
+        for attachment in other_profile.attachments[:]:
+            attachment.creator = self
         from .action import Action
         for action in session.query(Action).filter_by(
             actor_id=other_profile.id).all():
@@ -720,8 +722,13 @@ class User(AgentProfile):
                 role.user = self
             for role in other_user.local_roles[:]:
                 role.user = self
+            for announcement in other_user.announcements_created[:]:
+                announcement.creator = self
+            for announcement in other_user.announcements_updated[:]:
+                announcement.last_updated_by = self
             if other_user.username and not self.username:
                 self.username = other_user.username
+                other_user.username = None
             my_lang_pref_signatures = {
                 (lp.locale_id, lp.source_of_evidence)
                 for lp in self.language_preference

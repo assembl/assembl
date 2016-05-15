@@ -213,7 +213,7 @@ class Attachment(DiscussionBoundBase):
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
                         nullable=False)
-    creator = relationship(AgentProfile)
+    creator = relationship(AgentProfile, backref="attachments")
     title = Column(CoerceUnicode(1024), server_default="",
                    info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
     description = Column(

@@ -59,14 +59,16 @@ class Announcement(DiscussionBoundBase):
 
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
                         nullable=False)
-    creator = relationship(AgentProfile,
-                           foreign_keys=[creator_id])
+    creator = relationship(
+        AgentProfile,
+        foreign_keys=[creator_id], backref="announcements_created")
 
     last_updated_by_id = Column(Integer, ForeignKey('agent_profile.id'),
                         nullable=False)
-    last_updated_by = relationship(AgentProfile,
-                                   foreign_keys=[last_updated_by_id])
-    
+    last_updated_by = relationship(
+        AgentProfile,
+        foreign_keys=[last_updated_by_id], backref="announcements_updated")
+
     title = Column(CoerceUnicode(1024), server_default="",
         info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
