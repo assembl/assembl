@@ -744,7 +744,7 @@ def confirm_email_sent(request):
 )
 def request_password_change(request):
     localizer = request.localizer
-    identifier = request.GET.get('identifier') or request.POST.get('identifier') or ''
+    identifier = request.params.get('identifier')
     user_id = request.params.get('user_id', None)
     error = request.params.get('error', '')
     user = None
@@ -752,22 +752,23 @@ def request_password_change(request):
         try:
             user = User.get(int(user_id))
             identifier = user.get_preferred_email() or ''
-            error = None
         except:
             error = error or localizer.translate(_("This user cannot be found"))
     elif identifier:
         user, account = from_identifier(identifier)
         if user:
             user_id = user.id
-            error = None
         else:
             error = error or localizer.translate(_("This user cannot be found"))
     if error or not user:
+        slug = request.matchdict.get('discussion_slug', None)
+
         return dict(
             get_default_context(request),
             error=error,
             user_id=user_id,
             identifier=identifier,
+            slug_prefix="/" + slug if slug else "",
             title=localizer.translate(_('I forgot my password')))
 
     discussion_slug = request.matchdict.get('discussion_slug', None)
