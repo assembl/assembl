@@ -582,9 +582,9 @@ def user_confirm_email(request):
         # Question: maybe_auto_subscribe? Doubt it.
         return HTTPFound(location=request.route_url(
             'home' if inferred_discussion else 'discussion_list',
-            discussion_slug=inferred_discussion.slug),
+            discussion_slug=inferred_discussion.slug,
             _query=dict(message=localizer.translate(
-                _("Email <%s> already confirmed")) % (account.email,)))
+                _("Email <%s> already confirmed")) % (account.email,))))
 
     if validity != Validity.VALID or old_token:
         # V-, B-: Invalid or obsolete token
