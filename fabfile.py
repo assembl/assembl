@@ -746,7 +746,7 @@ def update_python_package_builddeps():
         # I presume the runtime packages in install_builddeps come with headers on mac?
         pass
     else:
-        sudo('apt-get install -y postgresql-server-dev-all libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
+        sudo('apt-get install -y postgresql postgresql-server-dev-all libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
 
 
 @task
