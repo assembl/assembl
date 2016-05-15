@@ -973,6 +973,9 @@ def finish_password_change(request):
         user.last_login = datetime.utcnow()
         headers = remember(request, user.id)
         request.response.headerlist.extend(headers)
+        if discussion_slug:
+            discussion = discussion_from_request(request)
+            maybe_auto_subscribe(user, discussion)
         return HTTPFound(location=request.route_url(
             'home' if discussion_slug else 'discussion_list',
             discussion_slug=discussion_slug,
