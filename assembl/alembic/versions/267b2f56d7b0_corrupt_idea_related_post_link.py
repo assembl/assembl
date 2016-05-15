@@ -30,7 +30,7 @@ def upgrade(pyramid_env):
                 AND idea_content_link.creator_id=-1"""))
         for id, contributor in errors:
             db.execute(
-                "UPDATE idea_content_link SET contributor_id={contributor} WHERE id = {id}".format(
+                "UPDATE idea_content_link SET creator_id={contributor} WHERE id = {id}".format(
                     id=id, contributor=contributor))
 
 
