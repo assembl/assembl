@@ -876,10 +876,10 @@ def do_password_change(request):
         # Offer to send a new token
         if validity != Validity.VALID:
             error = localizer.translate(_(
-                "This token is not valid. Do you want us to send another?"))
+                "This link is not valid. Do you want us to send another?"))
         else:
             error = localizer.translate(_(
-                "This token has been used. Do you want us to send another?"))
+                "This link has been used. Do you want us to send another?"))
 
         return HTTPFound(location=maybe_contextual_route(
             request, 'request_password_change', _query=dict(
@@ -944,10 +944,10 @@ def finish_password_change(request):
         # Offer to send a new token
         if validity != Validity.VALID:
             error = localizer.translate(_(
-                "This token is not valid. Do you want us to send another?"))
+                "This link is not valid. Do you want us to send another?"))
         else:
             error = localizer.translate(_(
-                "This token has been used. Do you want us to send another?"))
+                "This link has been used. Do you want us to send another?"))
 
         return HTTPFound(location=maybe_contextual_route(
             request, 'request_password_change', _query=dict(

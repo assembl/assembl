@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-14 15:43-0400\n"
+"POT-Creation-Date: 2016-05-14 23:14-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1869,7 +1869,7 @@ msgstr ""
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:98 assembl/views/auth/views.py:628
+#: assembl/templates/login.jinja2:98
 msgid "Log in"
 msgstr ""
 
@@ -3569,156 +3569,161 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/auth/views.py:239
+#: assembl/views/auth/views.py:238
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:258 assembl/views/auth/views.py:921
+#: assembl/views/auth/views.py:257 assembl/views/auth/views.py:962
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:266 assembl/views/auth/views.py:343
+#: assembl/views/auth/views.py:265 assembl/views/auth/views.py:342
 msgid "This is not a valid email"
 msgstr ""
 
-#: assembl/views/auth/views.py:335
+#: assembl/views/auth/views.py:334
 msgid "Please use a name of at least 3 characters"
 msgstr ""
 
-#: assembl/views/auth/views.py:351
+#: assembl/views/auth/views.py:350
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:356
+#: assembl/views/auth/views.py:355
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:407
+#: assembl/views/auth/views.py:406
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email "
 "that does not exist."
 msgstr ""
 
-#: assembl/views/auth/views.py:461 assembl/views/auth/views.py:738
+#: assembl/views/auth/views.py:460 assembl/views/auth/views.py:764
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:478
+#: assembl/views/auth/views.py:477
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:535
+#: assembl/views/auth/views.py:534
 msgid "This email address is already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:536
+#: assembl/views/auth/views.py:535
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:544 assembl/views/auth/views.py:691
+#: assembl/views/auth/views.py:543 assembl/views/auth/views.py:723
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:545 assembl/views/auth/views.py:692
+#: assembl/views/auth/views.py:544 assembl/views/auth/views.py:724
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your "
 "inbox in a few minutes. Please follow the confirmation link in order to "
 "confirm your email"
 msgstr ""
 
-#: assembl/views/auth/views.py:567
-msgid "Wrong email token."
-msgstr ""
-
-#: assembl/views/auth/views.py:584
+#: assembl/views/auth/views.py:587 assembl/views/auth/views.py:607
+#: assembl/views/auth/views.py:630
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:617
+#: assembl/views/auth/views.py:595
+msgid "This link was not valid. We sent another."
+msgstr ""
+
+#: assembl/views/auth/views.py:598
+msgid "This link has been used. We sent another."
+msgstr ""
+
+#: assembl/views/auth/views.py:611
+msgid "This link is not valid. Please attempt to login to get another one."
+msgstr ""
+
+#: assembl/views/auth/views.py:650
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
 
-#: assembl/views/auth/views.py:622
+#: assembl/views/auth/views.py:655
 #, python-format
-msgid "Your email address %s has been confirmed, you can now log in."
+msgid "Your email address %s has been confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:629
-msgid "Your account is now active!"
-msgstr ""
-
-#: assembl/views/auth/views.py:643
+#: assembl/views/auth/views.py:675
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:681
+#: assembl/views/auth/views.py:713
 msgid "This email is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:699
+#: assembl/views/auth/views.py:731
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:734 assembl/views/auth/views.py:739
+#: assembl/views/auth/views.py:766
 msgid "I forgot my password"
 msgstr ""
 
-#: assembl/views/auth/views.py:781
+#: assembl/views/auth/views.py:808
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:782
+#: assembl/views/auth/views.py:809
 msgid ""
 "We have sent you an email with a temporary connection link. Please use that "
 "link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:851 assembl/views/auth/views.py:912
-msgid "This token is not valid. Do you want us to send another?"
+#: assembl/views/auth/views.py:878 assembl/views/auth/views.py:946
+msgid "This link is not valid. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:854
-msgid "This token has been used. Do you want us to send another?"
+#: assembl/views/auth/views.py:881 assembl/views/auth/views.py:949
+msgid "This link has been used. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/auth/views.py:870
+#: assembl/views/auth/views.py:897
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr ""
 
-#: assembl/views/auth/views.py:874
+#: assembl/views/auth/views.py:901
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr ""
 
-#: assembl/views/auth/views.py:876
+#: assembl/views/auth/views.py:903
 msgid "Please choose your password for security reasons."
 msgstr ""
 
-#: assembl/views/auth/views.py:878
+#: assembl/views/auth/views.py:905
 msgid "Welcome to {discussion_topic}."
 msgstr ""
 
-#: assembl/views/auth/views.py:881
+#: assembl/views/auth/views.py:908
 msgid "Change your password"
 msgstr ""
 
-#: assembl/views/auth/views.py:931
+#: assembl/views/auth/views.py:972
 msgid "Password changed"
 msgstr ""
 
-#: assembl/views/auth/views.py:943
+#: assembl/views/auth/views.py:984
 msgid "email"
 msgstr ""
 
-#: assembl/views/auth/views.py:945
+#: assembl/views/auth/views.py:986
 msgid "account"
 msgstr ""
 
-#: assembl/views/auth/views.py:946
+#: assembl/views/auth/views.py:987
 msgid ""
 "Hello, ${name}, and welcome to ${assembl}!\n"
 "\n"
@@ -3730,7 +3735,7 @@ msgid ""
 "The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:953
+#: assembl/views/auth/views.py:994
 msgid ""
 "<p>Hello, ${name}, and welcome to ${assembl}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your email "
@@ -3739,7 +3744,7 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:958
+#: assembl/views/auth/views.py:999
 msgid ""
 "Hello, ${name}!\n"
 "\n"
@@ -3751,7 +3756,7 @@ msgid ""
 "The ${assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:965
+#: assembl/views/auth/views.py:1006
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>Please <a href=\"${confirm_url}\">click here to confirm your new email "
@@ -3760,15 +3765,15 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:981
+#: assembl/views/auth/views.py:1022
 msgid "Please confirm your ${confirm_what} with ${assembl}"
 msgstr ""
 
-#: assembl/views/auth/views.py:1016
+#: assembl/views/auth/views.py:1057
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:1019
+#: assembl/views/auth/views.py:1060
 msgid ""
 "<p>Hello, ${name}!</p>\n"
 "<p>We have received a request to change the password on your ${assembl} "
@@ -3780,7 +3785,7 @@ msgid ""
 "<p>Best regards,<br />The ${assembl} Team</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:1026
+#: assembl/views/auth/views.py:1067
 msgid ""
 "Hello, ${name}!\n"
 "We have received a request to change the password on your ${assembl} account."
