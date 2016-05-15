@@ -5,6 +5,7 @@ from os import urandom
 from os.path import join, dirname
 from collections import defaultdict
 import random
+from datetime import timedelta
 
 from sqlalchemy import (
     Column,
@@ -99,7 +100,7 @@ def read_user_token(request):
 
     if 'token' in request.GET:
         token = request.GET['token'].encode('ascii')
-        data, valid = verify_data_token(token)
+        data, valid = verify_data_token(token, max_age=timedelta(hours=1))
         if valid != Validity.VALID:
             raise HTTPBadRequest("Invalid token")
         try:

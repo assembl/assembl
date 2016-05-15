@@ -41,8 +41,7 @@ from assembl.auth import (
     P_READ, R_PARTICIPANT, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST)
 from assembl.auth.password import (
     verify_email_token, verify_password_change_token,
-    password_change_token, Validity, get_data_token_time,
-    PASSWORD_CHANGE_TOKEN_DURATION, VALIDATE_EMAIL_TOKEN_DURATION)
+    password_change_token, Validity, get_data_token_time)
 from assembl.auth.util import (
     discussion_from_request, roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
@@ -567,7 +566,7 @@ def user_confirm_email(request):
         # token for someone else: forget login.
         logged_in = None
         forget(request)
-    token_date = get_data_token_time(token, VALIDATE_EMAIL_TOKEN_DURATION)
+    token_date = get_data_token_time(token)
     old_token = (
         account is None or token_date is None or (
             account.profile.last_login and token_date < account.profile.last_login))
@@ -852,7 +851,7 @@ def do_password_change(request):
         logged_in = None
         forget(request)
     lacking_password = user is not None and user.password is None
-    token_date = get_data_token_time(token, PASSWORD_CHANGE_TOKEN_DURATION)
+    token_date = get_data_token_time(token)
     old_token = (
         user is None or token_date is None or (
             user.last_login and token_date < user.last_login))
@@ -935,7 +934,7 @@ def finish_password_change(request):
         # token for someone else: forget login.
         logged_in = None
         forget(request)
-    token_date = get_data_token_time(token, PASSWORD_CHANGE_TOKEN_DURATION)
+    token_date = get_data_token_time(token)
     old_token = (
         user is None or token_date is None or (
             user.last_login and token_date < user.last_login))

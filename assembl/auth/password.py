@@ -26,10 +26,6 @@ class Validity(IntEnum):
     INVALID_FORMAT = 4
 
 
-PASSWORD_CHANGE_TOKEN_DURATION = timedelta(days=3)
-VALIDATE_EMAIL_TOKEN_DURATION = timedelta(days=500)
-
-
 def hash_password(password, encoding=HashEncoding.BINARY, salt_size=SALT_SIZE):
     """
     Returns a hashed password.
@@ -76,8 +72,7 @@ def verify_password(password, hash, encoding=HashEncoding.BINARY,
 
 
 def email_token(email):
-    return data_token(
-        str(email.id), VALIDATE_EMAIL_TOKEN_DURATION, email.email)
+    return data_token(str(email.id), email.email)
 
 
 def email_token_legacy(email):
@@ -88,8 +83,7 @@ def email_token_legacy(email):
 
 def password_change_token(user):
     password = user.password.decode('iso-8859-1') if user.password else 'empty'
-    return data_token(
-        str(user.id), PASSWORD_CHANGE_TOKEN_DURATION, password)
+    return data_token(str(user.id), password)
 
 
 def password_change_token_legacy(user):
@@ -101,16 +95,15 @@ def password_change_token_legacy(user):
     return str(user.id)+'e'+hash_password(token_str, HashEncoding.HEX)
 
 
-def data_token(data, duration=timedelta(hours=1), extra_hash_data=''):
-    expiry = datetime.utcnow() + duration
-    expiry_str = expiry.strftime('%Y%j%H%M%S')
-    password = (data + extra_hash_data + expiry_str +
+def data_token(data, extra_hash_data=''):
+    now_str = datetime.utcnow().strftime('%Y%j%H%M%S')
+    password = (data + extra_hash_data + now_str +
                 config.get('security.email_token_salt'))
     hash = hash_password(password, HashEncoding.BASE64, 3)
-    return "%02x%s%s%s" % (len(data), data, expiry_str, hash)
+    return "%02x%s%s%s" % (len(data), data, now_str, hash)
 
 
-def verify_data_token(token, extra_hash_data=''):
+def verify_data_token(token, extra_hash_data='', max_age=None):
     try:
         pos = 2
         pos += int(token[:pos], 16)
@@ -118,7 +111,7 @@ def verify_data_token(token, extra_hash_data=''):
         expiry_str = token[pos:pos + 13]
         pos += 13
         hash = token[pos:]
-        expiry = datetime.strptime(expiry_str, '%Y%j%H%M%S')
+        creation_date = datetime.strptime(expiry_str, '%Y%j%H%M%S')
         password = (data + extra_hash_data + expiry_str +
                     config.get('security.email_token_salt'))
     except (ValueError, TypeError) as e:
@@ -128,26 +121,24 @@ def verify_data_token(token, extra_hash_data=''):
             return data, Validity.BAD_HASH
     except (ValueError, TypeError) as e:
         return data, Validity.BAD_HASH
-    if datetime.utcnow() > expiry:
+    if max_age is not None and datetime.utcnow() > max_age + creation_date:
         return data, Validity.EXPIRED
     return data, Validity.VALID
 
 
-def get_data_token_time(token, timedelta=None):
+def get_data_token_time(token):
     try:
         pos = 2
         pos += int(token[:pos], 16)
-        expiry = token[pos:pos + 13]
-        expiry = datetime.strptime(expiry, '%Y%j%H%M%S')
-        if timedelta:
-            expiry -= timedelta
-        return expiry
+        create_time = token[pos:pos + 13]
+        create_time = datetime.strptime(create_time, '%Y%j%H%M%S')
+        return create_time
     except ValueError:
         return None
 
 
-def verify_email_token(token):
-    data, valid = verify_data_token(token)
+def verify_email_token(token, max_age=None):
+    data, valid = verify_data_token(token, max_age=max_age)
     if valid == Validity.BAD_HASH:
         try:
             data = int(data)
@@ -156,7 +147,7 @@ def verify_email_token(token):
         account = AbstractAgentAccount.get(data)
         if not account:
             return None, Validity.DATA_NOT_FOUND
-        data, valid = verify_data_token(token, account.email)
+        data, valid = verify_data_token(token, account.email, max_age)
         return account, valid
     # Try decoding legacy
     try:
@@ -173,8 +164,8 @@ def verify_email_token(token):
         return None, Validity.INVALID_FORMAT
 
 
-def verify_password_change_token(token):
-    data, valid = verify_data_token(token)
+def verify_password_change_token(token, max_age=None):
+    data, valid = verify_data_token(token, max_age=max_age)
     if valid == Validity.BAD_HASH:
         try:
             data = int(data)
@@ -184,7 +175,7 @@ def verify_password_change_token(token):
         if not user:
             return None, Validity.DATA_NOT_FOUND
         password = user.password.decode('iso-8859-1') if user.password else 'empty'
-        data, valid = verify_data_token(token, password)
+        data, valid = verify_data_token(token, password, max_age)
         return user, valid
     # Try decoding legacy
     try:
@@ -194,7 +185,7 @@ def verify_password_change_token(token):
         if not user:
             return user, Validity.DATA_NOT_FOUND
         age = datetime.utcnow() - user.last_login
-        if age > PASSWORD_CHANGE_TOKEN_DURATION:
+        if age > timedelta(days=3):
             return user, Validity.EXPIRED
         check = str(id)+user.last_login.isoformat()[:19]
         valid = verify_password(
