@@ -42,7 +42,7 @@ from assembl.auth import (
 from assembl.auth.password import (
     verify_email_token, verify_password_change_token,
     password_change_token, Validity, get_data_token_time,
-    PASSWORD_CHANGE_TOKEN_DURATION)
+    PASSWORD_CHANGE_TOKEN_DURATION, VALIDATE_EMAIL_TOKEN_DURATION)
 from assembl.auth.util import (
     discussion_from_request, roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
@@ -559,78 +559,112 @@ def confirm_emailid_sent(request):
 )
 def user_confirm_email(request):
     token = request.matchdict.get('ticket')
-    email, valid = verify_email_token(token)
+    account, validity = verify_email_token(token)
     session = AbstractAgentAccount.default_db
-    # TODO: token expiry
+    logged_in = authenticated_userid(request)  # if mismatch?
     localizer = request.localizer
-    if valid != Validity.VALID:
-        raise HTTPUnauthorized(localizer.translate(_("Wrong email token.")))
-    assert isinstance(email.profile, User)
-    user = email.profile
-    username = user.username.username if user.username else None
-    userid = user.id
-    slug = request.matchdict.get('discussion_slug', None)
-    if not slug:
+    if account and account.profile_id != logged_in:
+        # token for someone else: forget login.
+        logged_in = None
+        forget(request)
+    token_date = get_data_token_time(token, VALIDATE_EMAIL_TOKEN_DURATION)
+    old_token = (
+        account is None or token_date is None or (
+            account.profile.last_login and token_date < account.profile.last_login))
+    inferred_discussion = discussion = discussion_from_request(request)
+    if account and not discussion:
         # We do not know from which discussion the user started to log in;
         # See if only involved in one discussion
-        discussions = user.involved_in_discussion
+        discussions = account.profile.involved_in_discussion
         if len(discussions) == 1:
-            slug = discussions[0].slug
+            inferred_discussion = discussions[0]
+    if account.verified and logged_in:
+        # no need to revalidate, just send to discussion.
+        # Question: maybe_auto_subscribe? Doubt it.
+        return HTTPFound(location=request.route_url(
+            'home' if inferred_discussion else 'discussion_list',
+            discussion_slug=inferred_discussion.slug),
+            _query=dict(message=localizer.translate(
+                _("Email <%s> already confirmed")) % (account.email,)))
+
+    if validity != Validity.VALID or old_token:
+        # V-, B-: Invalid or obsolete token
+        # Offer to send a new token
+        if account and not account.verified:
+            # bad token, unverified account... offer a new token
+            if validity != Validity.VALID:
+                error = localizer.translate(_(
+                    "This link was not valid. We sent another."))
+            else:
+                error = localizer.translate(_(
+                    "This link has been used. We sent another."))
+            return HTTPFound(location=maybe_contextual_route(
+                request, 'confirm_emailid_sent', email_account_id=account.id,
+                _query=(dict(error=error))))
+        else:
+            if account and account.verified:
+                # bad token, verified account... send them to login
+                error = localizer.translate(
+                    _("Email <%s> already confirmed")) % (account.email,)
+            else:
+                # now what? We do not have the email.
+                # Just send to login for now
+                error = localizer.translate(_(
+                    "This link is not valid. Please attempt to login to get another one."
+                    )) % (account.email,)
+            return HTTPFound(location=maybe_contextual_route(
+                request, 'login', _query=dict(
+                    identifier=account.email if account else None,
+                    message=error)))
+
+    # By now we know we have a good token; make it login-equivalent.
+    user = account.profile
+    assert isinstance(user, User)  # accounts should not get here. OK to fail.
+    headers = remember(request, user.id)
+    request.response.headerlist.extend(headers)
+    user.last_login = datetime.utcnow()
+    username = user.username.username if user.username else None
     next_view = handle_next_view(request, False)
 
-    if email.verified:
-        return HTTPFound(location=maybe_contextual_route(
-            request, 'login', _query=dict(message=localizer.translate(
-                _("Email <%s> already confirmed")) % (email.email,))))
+    if account.verified:
+        message = localizer.translate(
+            _("Email <%s> already confirmed")) % (account.email,)
     else:
+        import pdb; pdb.set_trace()
         # maybe another profile already verified that email
-        other_email_account = session.query(AbstractAgentAccount).filter_by(
-            email_ci=email.email_ci, verified=True).first()
-        if other_email_account:
-            profile = email.profile
+        other_account = session.query(AbstractAgentAccount).filter_by(
+            email_ci=account.email_ci, verified=True).first()
+        if other_account:
             # We have two versions of the email, delete the unverified one
-            session.delete(email)
-            if other_email_account.profile != email.profile:
+            session.delete(account)
+            if other_account.profile != user:
                 # Give priority to the one where the email was verified last.
-                other_profile = other_email_account.profile
-                profile.merge(other_profile)
+                other_profile = other_account.profile
+                user.merge(other_profile)
                 session.delete(other_profile)
-            email = other_email_account
-        email.verified = True
-        email.profile.verified = True
-        user = None
-        username = None
-        userid = None
-        if isinstance(email.profile, User):
-            user = email.profile
-            if user.username:
-                username = user.username.username
-            userid = user.id
-        if user:
-            # if option is active in discussion, auto-subscribe
-            # user to discussion's default notifications
-            discussion = None
-            if slug:
-                discussion = session.query(Discussion).filter_by(
-                    slug=slug).first()
-            if maybe_auto_subscribe(user, discussion):
-                custom_message = localizer.translate(_(
-                    "Your email address %s has been confirmed, "
-                    "and you are now subscribed to discussion's "
-                    "default notifications.")) % (email.email,)
-            else:
-                custom_message = localizer.translate(_(
-                    "Your email address %s has been confirmed,"
-                    " you can now log in.")) % (email.email,)
-            return dict(
-                get_default_context(request),
-                button_url=maybe_contextual_route(request, 'login'),
-                button_label=localizer.translate(_('Log in')),
-                title=localizer.translate(_('Your account is now active!')),
-                description=custom_message)
+                if user.username:
+                    username = user.username.username
+            account = other_account
+        account.verified = True
+        user.verified = True
+        # do not use inferred discussion for auto_subscribe
+        if discussion and maybe_auto_subscribe(user, discussion):
+            message = localizer.translate(_(
+                "Your email address %s has been confirmed, "
+                "and you are now subscribed to discussion's "
+                "default notifications.")) % (account.email,)
         else:
-            # we confirmed a profile without a user? Now what?
-            raise HTTPServerError()
+            message = localizer.translate(_(
+                "Your email address %s has been confirmed."
+                )) % (account.email,)
+
+    if inferred_discussion:
+        return HTTPFound(location=request.route_url(
+            'home', discussion_slug=inferred_discussion.slug,
+            _query=dict(message=message)))
+    else:
+        return HTTPFound(
+            location=request.route_url('discussion_list'))
 
 
 @view_config(
