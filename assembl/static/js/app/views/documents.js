@@ -39,7 +39,7 @@ var AbstractDocumentView = Marionette.ItemView.extend({
       //etsy : 'd0jq4lmfi5bjbrxq2etulmjr',
       //},
       maxHeight: "300px", maxWidth: "100%",
-      debug: true,
+      debug: false,
       onEmbedFailed: function() {
         if (Ctx.debugOembed){
           console.log("onEmbedFailed (assembl)");
