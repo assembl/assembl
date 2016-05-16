@@ -109,66 +109,52 @@ var Synthesis = Marionette.ItemView.extend({
 
 });
 
-var Instigator = Marionette.ItemView.extend({
+var Instigator = Marionette.LayoutView.extend({
   constructor: function Instigator() {
-    Marionette.ItemView.apply(this, arguments);
+    Marionette.LayoutView.apply(this, arguments);
   },
 
   template: '#tmpl-instigator',
   initialize: function() {
-    this.editInstigator = false;
   },
 
   ui: {
-      editDescription: '.js_editDescription'
-    },
+      instigatorDescriptionRegion: '.js_region-instigator-editor'
+  },
+
+  regions: {
+    regionInstigatorDescription: '@ui.instigatorDescriptionRegion'
+  },
 
   events: {
-      'click @ui.editDescription': 'editDescription'
-    },
+  },
 
   serializeData: function() {
     return {
       instigator: this.model,
-      editInstigator: this.editInstigator,
       Ctx: Ctx,
       userCanEditDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
     }
   },
 
   onRender: function() {
-    if (this.editInstigator) {
-      this.renderCKEditorInstigator();
-    }
+    this.renderCKEditorInstigator();
   },
 
   renderCKEditorInstigator: function() {
-    var that = this,
-        area = this.$('.instigator-editor');
 
     var uri = this.model.id.split('/')[1];
     this.model.url = Ctx.getApiV2DiscussionUrl('partner_organizations/') + uri;
 
     var instigator = new CKEditorField({
-      'model': this.model,
-      'modelProp': 'description'
+      model: this.model,
+      modelProp: 'description',
+      canEdit: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
     });
 
-    this.listenTo(instigator, 'save cancel', function() {
-      that.editInstigator = false;
-      that.render();
-    });
+    this.regionInstigatorDescription.show(instigator);
 
-    instigator.renderTo(area);
-    instigator.changeToEditMode();
   },
-
-  editDescription: function() {
-      if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA)) {
-        this.editInstigator = true;
-        this.render();
-      }
-    },
 
   templateHelpers: function() {
     return {

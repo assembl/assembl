@@ -1,32 +1,28 @@
 <div class='synthesis-idea js_synthesisIdea'>
-<% if( editing ) { %> 
-    <div class="synthesis-expression-editor"></div>
-<% } else { %>
-    <div class="js_synthesis-expression synthesis-expression <%= (canEdit) ? 'canEdit' : '' %>"><%= longTitle %></div>
-<% } %>
+  <div class="js_region-synthesis-expression synthesis-expression"></div>
 
-<span class="comment">
+  <span class="comment">
     <% if( authors.length ) { %>
-        {{ gettext('By') }}
+      {{ gettext('By') }}
     <% } %>
     <% _.each(authors, function(author, index, list) { %>
-        <a href="#" class="authors"><%= author.get('name') %></a><% if( index < list.length-1 ) { %>,<% } %>
+      <a href="#" class="authors"><%= author.get('name') %></a><% if( index < list.length-1 ) { %>,<% } %>
     <% }) %>
-</span>
-<% if (!canEdit) { %>
+  </span>
+  <% if (!canEdit) { %>
     <span class="comment-info">
-        <span class="comment-text">{{ gettext("View conversation on this idea") }}</span>
-        <span class="maxs">&#x2022;{# Unicode bullet #}</span>
-        <!-- hidden elements are there when we support users commenting on an idea extract -->
-        <span class="synthesisIdea-replybox-openbtn icon-comment comment-text fr mrs hidden">{#{{ gettext('comment') }}#}</span>
-        <span class="maxs hidden">&#x2022;</span>
-        <span data-toggle="tooltip" title data-original-title="<%= ctxNumMessages %>">
-            <i class="icon icon-comment"><%= numMessages %></i>
-        </span>
+      <span class="comment-text">{{ gettext("View conversation on this idea") }}</span>
+      <span class="maxs">&#x2022;{# Unicode bullet #}</span>
+      <!-- hidden elements are there when we support users commenting on an idea extract -->
+      <span class="synthesisIdea-replybox-openbtn icon-comment comment-text fr mrs hidden">{#{{ gettext('comment') }}#}</span>
+      <span class="maxs hidden">&#x2022;</span>
+      <span data-toggle="tooltip" title data-original-title="<%= ctxNumMessages %>">
+        <i class="icon icon-comment"><%= numMessages %></i>
+      </span>
     </span>
     <span class="synthesisIdea-replybox hidden"></span>
-<% } %>
-<% if( isPrimaryNavigationPanel ) { %>
-    <a href="#" class="js_viewIdeaInModal synthesisIdea-viewIdeaLink">{{ gettext('View Idea in popup') }}</a>
-<% } %>
+  <% } %>
+  <% if( isPrimaryNavigationPanel ) { %>
+      <a href="#" class="js_viewIdeaInModal synthesisIdea-viewIdeaLink">{{ gettext('View Idea in popup') }}</a>
+  <% } %>
 </div>

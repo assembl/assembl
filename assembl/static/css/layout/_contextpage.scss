@@ -35,19 +35,6 @@
     display: none;
   }
 
-  /* override default CKEditor field appearance */
-
-  .panel-editablearea {
-    background-color: inherit;
-    color: inherit;
-    padding: 0;
-  }
-
-  .panel-editablearea .canEdit {
-    /* align vertically with titles and paragraphs (compensate for transparent border) */
-    margin-left: -1px;
-  }
-
   /* CSS associated to the line chart */
 
   .data-line {
@@ -179,19 +166,6 @@
 }
 
 #context-instigator {
-  .instigator{
-    font-weight: 400;
-    border: 1px solid transparent;
-    overflow-y: hidden;
-    word-break: break-word;
-    -webkit-hyphens: auto;
-    -moz-hyphens: auto;
-    hyphens: auto;
-    &:hover{
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
-      border: 1px solid #cccccc;
-    }
-  }
   .instigator-logo{
     max-width: em(300);
     max-height: em(120);

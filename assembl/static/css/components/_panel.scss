@@ -227,12 +227,11 @@ $editablearea_hover_border_size: 1px;
   padding: $editablearea_hover_border_distance;
   margin: - $editablearea_hover_border_distance - $editablearea_hover_border_size; //Inverse of padding so content aligns like a normal element
   cursor: text;
-  background-color: white;
-  
   
   &.canEdit {
     border: $editablearea_hover_border_size solid transparent;
     &:hover {
+      background-color: white;
       box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
       border: $editablearea_hover_border_size solid #cccccc;
     }

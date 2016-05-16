@@ -1,20 +1,14 @@
 <div class="gr mts">
    <div class="gu gu-1of2">
     <div class="block-content">
-		 <% if( _.size(instigator) || userCanEditDiscussion){ %>
-				<% if(userCanEditDiscussion){ %>
-					<h2 class="dispib mrl">{{ gettext('Instigated by') }}</h2> <a href="<%= editInstigatorUrl() %>"> {{ gettext('edit instigator') }} </a>
-				<% } else { %>
-					<h2>{{ gettext('Instigated by') }}</h2>
-				<% } %>
-				<% if( editInstigator ) { %>
-					 <div class="instigator-editor"></div>
-				 <% } else { %>
-				  <% if(_.size(instigator)){ %>
-					<div class="instigator js_editDescription"><%= instigator.get('description') %></div>
-					<% } %>
-			 <% } %>
-		 <% } %>
+      <% if( _.size(instigator) || userCanEditDiscussion){ %>
+        <% if(userCanEditDiscussion){ %>
+          <h2 class="dispib mrl">{{ gettext('Instigated by') }}</h2> <a href="<%= editInstigatorUrl() %>"> {{ gettext('edit instigator') }} </a>
+        <% } else { %>
+          <h2>{{ gettext('Instigated by') }}</h2>
+        <% } %>
+      <% } %>
+      <div class="instigator js_region-instigator-editor"></div>
     </div>
    </div>
    <div class="gu gu-last">

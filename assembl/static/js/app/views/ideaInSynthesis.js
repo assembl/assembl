@@ -18,9 +18,9 @@ var Marionette = require('../shims/marionette.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
     openIdeaInModal = require('./modals/ideaInModal.js');
 
-var IdeaInSynthesisView = Marionette.ItemView.extend({
+var IdeaInSynthesisView = Marionette.LayoutView.extend({
   constructor: function IdeaInSynthesisView() {
-    Marionette.ItemView.apply(this, arguments);
+    Marionette.LayoutView.apply(this, arguments);
   },
 
   synthesis: null,
@@ -29,6 +29,27 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
    * @type {[type]}
    */
   template: '#tmpl-loader',
+
+  /**
+   * The events
+   * @type {Object}
+   */
+  events: {
+      'click .js_synthesis-expression': 'onTitleClick',
+      'click .js_synthesisIdea': 'navigateToIdea',
+      'click .js_viewIdeaInModal': 'showIdeaInModal',
+      'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
+      'click .messageSend-cancelbtn': 'closeReplyBox'
+  },
+
+  modelEvents: {
+    //THIS WILL NOT ACTUALLY RUN UNTILL CODE IS REFACTORED SO MODEL IS THE REAL IDEA OR THE TOOMBSTONE.  See initialize - benoitg
+    'change:shortTitle change:longTitle change:segments':'render'
+  },
+
+  regions: {
+    regionExpression: ".js_region-synthesis-expression"
+  },
 
   /**
    * @init
@@ -105,25 +126,6 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
       this.listenTo(this.parentPanel.getGroupState(), "change:currentIdea", function(state, currentIdea) {
         that.onIsSelectedChange(currentIdea);
       });
-
-
-    },
-
-  /**
-   * The events
-   * @type {Object}
-   */
-  events: {
-      'click .js_synthesis-expression': 'onTitleClick',
-      'click .js_synthesisIdea': 'navigateToIdea',
-      'click .js_viewIdeaInModal': 'showIdeaInModal',
-      'click .synthesisIdea-replybox-openbtn': 'focusReplyBox',
-      'click .messageSend-cancelbtn': 'closeReplyBox'
-    },
-
-  modelEvents: {
-    //THIS WILL NOT ACTUALLY RUN UNTILL CODE IS REFACTORED SO MODEL IS THE REAL IDEA OR THE TOOMBSTONE.  See initialize - benoitg
-      'change:shortTitle change:longTitle change:segments':'render'
     },
 
   canEdit: function() {
@@ -167,50 +169,42 @@ var IdeaInSynthesisView = Marionette.ItemView.extend({
     /*if (Ctx.debugRender) {
       console.log("idesInSynthesis:onRender() is firing");
     }*/
-    Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+    if(this.template != "#tmpl-loader") {
+      Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
-    if (this.canEdit()) {
-      this.$el.addClass('canEdit');
-    }
+      if (this.canEdit()) {
+        this.$el.addClass('canEdit');
+      }
 
-    this.$el.attr('id', 'synthesis-idea-' + this.model.id);
+      this.$el.attr('id', 'synthesis-idea-' + this.model.id);
 
-    this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
-    Ctx.initTooltips(this.$el);
-    if (this.editing && !this.model.get('synthesis_is_published')) {
+      this.onIsSelectedChange(this.parentPanel.getGroupState().get('currentIdea'));
+      Ctx.initTooltips(this.$el);
       this.renderCKEditorIdea();
-    }
 
-    //Currently disabled, but will be revived at some point
-    //this.renderReplyView();
+      //Currently disabled, but will be revived at some point
+      //this.renderReplyView();
+    }
   },
 
   /**
    * renders the ckEditor if there is one editable field
    */
   renderCKEditorIdea: function() {
-      var that = this,
-      area = this.$('.synthesis-expression-editor');
+    var model = this.model.getLongTitleDisplayText();
 
-      var model = this.model.getLongTitleDisplayText();
+    var ideaSynthesis = new CKEditorField({
+      model: this.model,
+      modelProp: 'longTitle',
+      placeholder: model,
+      showPlaceholderOnEditIfEmpty: true,
+      canEdit: this.canEdit(),
+      autosave: true,
+      hideButton: true
+    });
 
-      this.ideaSynthesis = new CKEditorField({
-        'model': this.model,
-        'modelProp': 'longTitle',
-        'placeholder': model,
-        'showPlaceholderOnEditIfEmpty': true,
-        'autosave': true,
-        'hideButton': true
-      });
-
-      this.listenTo(this.ideaSynthesis, 'save cancel', function() {
-        that.editing = false;
-        that.render();
-      });
-
-      this.ideaSynthesis.renderTo(area);
-      this.ideaSynthesis.changeToEditMode();
-    },
+    this.regionExpression.show(ideaSynthesis);
+  },
 
   /**
    * renders the reply interface
