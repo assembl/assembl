@@ -186,7 +186,13 @@ var Context = function() {
 }
 
 Context.prototype = {
-
+  
+  isSmallScreen:function(){
+    var screenSize = window.innerWidth;
+    var criticalSize = 760;
+    return screenSize <= criticalSize;
+  },
+  
   getDiscussionSlug: function() {
     return this.DISCUSSION_SLUG;
   },

@@ -8,6 +8,7 @@ var Backbone = require('backbone'),
     Permissions = require('../utils/permissions.js'),
     UserCustomData = require('../models/userCustomData.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
+    scrollUtils = require('../utils/scrollUtils.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 var IdeaInIdeaListView = Marionette.LayoutView.extend({
@@ -121,7 +122,7 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
     'dragleave .idealist-body': 'onDragLeave',
     'drop .idealist-body': 'onDrop',
     'mouseleave > .idealist-body > .idealist-title': 'onMouseLeave',
-    'mouseenter > .idealist-body > .idealist-title': 'onMouseEnter',
+    'mouseenter > .idealist-body > .idealist-title': 'onMouseEnter'
   },
 
   serializeData: function() {
@@ -170,6 +171,13 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
         synthesis: that.synthesis,
     };
     that.regionChildren.show(ideaFamilies);
+    if(Ctx.isSmallScreen()){
+      var screenSize = window.innerWidth;
+      //TO FIX : impossible to add event marionette on this class: 'idealist-title-unread'
+      $('.idealist-title-unread').off('click').on('click',function(){
+        scrollUtils.scrollToNextPanel(100,screenSize);
+      });
+    }
   },
 
   /**
@@ -302,6 +310,10 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
       // we have just changed the collapsed state by calling open() or close()
       this.saveCollapsedState(this.getIsCollapsedState());
     }
+    if(Ctx.isSmallScreen()){
+      var screenSize = window.innerWIdth;
+      scrollUtils.scrollToNextPanel(1200, screenSize);
+    }
   },
 
   /**
@@ -311,7 +323,7 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
   onTitleClick: function(e) {
       this._onTitleClick(e, null);
     },
-
+    
   /**
    * @event
    * Select this idea as the current idea, and show only unread messages of this idea

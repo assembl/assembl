@@ -37,6 +37,13 @@
                 <% if(isUserSubscribedToDiscussion || canSubscribeToDiscussion){ %>
                   <li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
                 <% } %>
+                <% if(Ctx.canUseExpertInterface()){ %>
+                  <% if( Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT ) { %>
+                    <li class="switchinterface-dropdown"><a class="js_switchToSimpleInterface"><i class="icon-options"></i>{{ gettext('Switch to simple mode') }}</a></li>
+                  <% } else { %>
+                    <li class="switchinterface-dropdown"><a class="js_switchToExpertInterface"><i class="icon-options"></i>{{ gettext('Switch to full-functionality mode') }}</a></li>
+                  <% } %>
+                <% } %>
                 <% if(isAdminDiscussion){ %>
                   <li><a href="<%= discussionSettings() %>"><i class="icon-options"></i>{{ gettext('Discussion settings') }}</a></li>
                   <li><a href="<%= discussionPermissions() %>"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>

@@ -1,0 +1,287 @@
+$tableOfIdeasRowHeightSmallScreen:48px;
+$minimizePanelIconHeight:32px;
+$lockPanelIconHeight:40px;
+$panelHeaderTitleHeight:50px;
+
+#pDebug{
+    display:none!important;
+}
+.switchinterface-dropdown{
+    display:none;
+}
+@media screen and (max-width: 320px) {
+
+// ********************* header *********************
+
+    li.sub.logo-container.fl{
+        display:none;
+    }
+    #tour_step_welcome{
+        .icon-arrowright{
+            display:none;
+        }
+        .debate-icon{
+            margin-left:10px;
+        }
+    }
+
+// ********************* discussion panel *********************    
+    .js_nameContainer{
+        display: block;
+        width: 85px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+}
+
+@media screen and (max-width: 760px) {
+    
+    body{
+        overflow:hidden;
+    }
+    
+// ********************* panel *********************
+
+    .panel-header{
+        height:$tableOfIdeasRowHeightSmallScreen;
+    }
+    .options-filter{
+        height:$tableOfIdeasRowHeightSmallScreen!important;
+    }
+    .js_minimizePanel{
+        line-height:$minimizePanelIconHeight;
+    }
+    .js_lockPanel{
+        line-height:$lockPanelIconHeight;
+    }
+    .panel-header-title{
+        line-height:$panelHeaderTitleHeight!important;
+    }
+    .joinDiscussion{
+        display:none;
+    }
+    
+// ********************* ideaList panel *********************
+
+    .navSidebar-panel .panelContents{
+        min-width:320px;
+    }
+    .idealist-item,.idealist-bar,.idealist-arrow,.idealist-link,.idealist-noarrow,.idealist-link-last{
+        height:$tableOfIdeasRowHeightSmallScreen;
+        background-size:cover;
+    }
+    .idealist-title{
+        line-height:$tableOfIdeasRowHeightSmallScreen - 2;
+    }
+    .groupBody .navSidebar .side-menu > li > a.nav {
+        height:$tableOfIdeasRowHeightSmallScreen;
+    }
+
+// ********************* discussion panel *********************
+
+    .show-expert-mode{
+        display:none!important;
+    }
+    .messageList-panel .panelContents{
+        min-width:320px!important;
+    }
+    .ui-tag{
+        white-space:normal!important;
+    }
+    .pal{
+        padding:0!important;
+    }
+    .messagelist-children, .messageList-list, .message{
+        display:block!important;
+    }
+    .message.viewStyleFullBody .message-body{
+        min-width:initial!important;
+    }
+    .messageSend{
+        a.img-left.avatar.img-rounded{
+            display:none;
+        }
+        .messageSend-form{
+            margin-left:0!important;
+        }
+    }
+    .messageSend .messageSend-form .messageSend-buttons{
+        width:100%!important;
+    }
+    .js_messageListView-print{
+        display:none;
+    }
+    .js_messageBottomMenu.message-menu.message-menu-actions{
+        margin: 20px 0 0 0;
+    }
+    a.js_messageReplyBtn.message-replybox-openbtn {
+        margin: 0 6px 0 0;
+    }
+    .mtm{
+        margin:20px 0 0 0!important;
+    }
+// ********************* synthesis panel *********************
+
+    .synthesisItem{
+        height: 27px;
+        line-height: 27px;
+    }
+    
+//  ********************* dropdown menu *********************
+    
+    .navbar-right .dropdown-menu{
+        right:0!important;
+        left: auto;
+    }
+    .dropdown-menu{
+        li{
+            a{
+                text-overflow: ellipsis;
+                width: 180px;
+                overflow: hidden;
+                padding: 0 20px;
+                line-height:$tableOfIdeasRowHeightSmallScreen;
+                &:hover{
+                    background:none!important;
+                }
+            }
+        }
+        li:not(:last-child){
+            a{
+                border-bottom: 1px solid #e5e5e5;
+            }
+        }
+        .divider{
+            display:none;
+        }
+        .navbar-widget-creation-links{
+            li{
+                width:100%!important;
+            }
+        }
+    }
+    .message .message-menu .dropdown .dropdown-menu{
+        min-width:220px;
+        a{
+            white-space:nowrap!important;
+            min-width:220px;
+            line-height:48px;
+            text-overflow:ellipsis;
+            overflow:hidden;
+        }
+    }
+    .switchinterface-dropdown{
+        display:block;
+    }
+// ********************* header *********************
+    
+    .navbar .navbar-center{
+        display:none;
+    }
+    #tour_step_welcome{
+        span{
+            display:none;
+        }
+    }
+    .help{
+        display:none;
+    }
+    .navbar-left{
+        ul{
+            li:last-child{
+                width:70px;
+            }
+        }
+    }
+    .dot-offline{
+        display:none!important;
+    }
+    .dot-online{
+        display:block!important;
+    }
+    #header{
+        height:$tableOfIdeasRowHeightSmallScreen;
+    }
+    .navbar.navbar-default{
+        height:$tableOfIdeasRowHeightSmallScreen;
+    }
+    #groupContainer > .groupsContainer{
+        top:$tableOfIdeasRowHeightSmallScreen;
+    }
+    .debate-title .debate-icon{
+        line-height:$tableOfIdeasRowHeightSmallScreen;
+        vertical-align:middle!important;
+    }
+    .navbar .navbar-left ul .sub{
+        height:$tableOfIdeasRowHeightSmallScreen;
+    }
+    .navbar .navbar-right ul > li{
+        height:$tableOfIdeasRowHeightSmallScreen;
+        line-height:$tableOfIdeasRowHeightSmallScreen;
+    }
+
+// ********************* modal *********************
+
+    .group-modal.popin-wrapper.iframe-popin.popin-without-footer.popin-fixed-size.bbm-wrapper{
+        padding:0;
+        overflow: hidden;
+    }
+    .panelGroups-modal.popin-wrapper.bbm-wrapper{
+        padding:0;
+        overflow: hidden;
+    }
+    .bbm-modal.bbm-modal--open{
+        min-width: 250px!important;
+        height:calc(100% + 50px)!important;
+        max-width:100%;
+        margin:0;
+        top:-50px;
+        position:absolute;
+        width:100%;
+        .groupsContainer{
+            height:100%
+        }
+        .messageList-panel{
+            .panelContents{
+                height: calc(100% - 80px)!important;
+            }
+        }
+    }
+    .popin-body{
+        position: absolute;
+        height: 88%;
+    }
+    .popin-header{
+        h3{
+            font-size:13px!important;
+        }
+        border-radius:0!important;
+    }
+    
+// ********************* Tours *********************
+
+    div.hopscotch-bubble{
+        display:none!important;
+    }
+    
+// ********************* Login *********************
+
+    .loginbox.sign-in{
+        width: 100%;
+        margin: 0;
+        top: 0;
+        position: absolute;
+        height: 100%;
+    }
+    .loginbox header{
+        border-radius:0;
+    }
+    .loginbox .signinWrapper{
+        width: 98%;
+    }
+    .loginbox .socialPart{
+        width: 98%;
+    }
+}

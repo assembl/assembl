@@ -82,6 +82,17 @@ var computeScrollTarget = function(el, scrollableViewport, desiredViewportOffset
  * @param watch: Should a watchtdog check that the scrool doesn't move in case 
  * of progressive loading, etc.  Default is no.
  */
+ var scrollToNextPanel = function(time){
+  //If it's a small screen detected => scroll to the right
+  var screenSize = window.innerWidth;
+  var isSmallScreen = Ctx.isSmallScreen();
+  if(isSmallScreen){
+    setTimeout(function(){
+      $('.groupsContainer').animate({scrollLeft:screenSize}, 500);
+    },time);
+  }
+};
+
 var scrollToElement = function(el, callback, margin, animate, watch) {
   if(debugScrollUtils) {
     console.log("scrollUtils::scrollToElement() called with: ", el, callback, margin, animate, watch);
@@ -281,5 +292,6 @@ var maintainScroll = function(elementJquerySelector) {
 module.exports = {
     scrollToElementAndWatch: scrollToElementAndWatch,
     maintainScroll: maintainScroll,
-    scrollToElement: scrollToElement
+    scrollToElement: scrollToElement,
+    scrollToNextPanel:scrollToNextPanel
 };

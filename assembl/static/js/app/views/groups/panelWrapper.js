@@ -39,7 +39,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
   panelLockedReason: null,
   panelUnlockedReason: null,
   minPanelSize:AssemblPanel.prototype.minimized_size,
-  criticalSize:600,
   
   initialize: function(options) {
     var that = this;
@@ -82,7 +81,8 @@ var PanelWrapper = Marionette.LayoutView.extend({
     if(isPanelMinimized){
       this.model.set('minWidth',this.minPanelSize);
     }else{
-      if(screenSize > this.criticalSize){
+      var isSmallScreen = Ctx.isSmallScreen();
+      if(!isSmallScreen){
         var panelType = this.model.get('type');
         switch(panelType) {
         case 'ideaList':

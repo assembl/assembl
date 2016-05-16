@@ -1371,11 +1371,9 @@ var MessageView = Marionette.LayoutView.extend({
   onMessageReplyBtnClick: function(e) {
     var analytics = Analytics.getInstance();
     e.preventDefault();
-
     //So it is saved if the view refreshes
     this.replyBoxHasFocus = true;
     analytics.trackEvent(analytics.events.MESSAGE_REPLY_BTN_CLICKED);
-
     if (!this.isMessageOpened()) {
       //console.log("Message was not opened, opening after clicking on reply box");
       this.doOpenMessage();
@@ -1399,7 +1397,7 @@ var MessageView = Marionette.LayoutView.extend({
     if (!this.replyBoxHasFocus) {
       console.error("Tried to focus on the reply box of a message that isn't supposed to have focus, this should not happen!");
     }
-
+    if(this.replyView){
     var el = this.replyView.ui.messageBody;
     if (el instanceof jQuery && el.length) {
       if (!el.is(':visible')) {
@@ -1436,9 +1434,9 @@ var MessageView = Marionette.LayoutView.extend({
         }
       }, 1);//This settimeout is necessary, at least for chrome, to focus properly.
       //Now this no longer works on either chrome and firefox.  Focus is stolen for some reason I cannot pinpoint.  Annotator?  Browser bug?
-
     }
-    else if (this.ui.messageReplyBox.length) {
+    }
+    if (this.ui.messageReplyBox.length) {
       // if the .js_messageSend-body field is not present, this means the user is not logged in, so we scroll to the alert box
       //console.log("Scrooling to reply box instead");
       scrollUtils.scrollToElement(this.ui.messageReplyBox);

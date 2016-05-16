@@ -10,6 +10,7 @@ var Marionette = require('../../shims/marionette.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
+    scrollUtils = require('../../utils/scrollUtils.js'),
     Analytics = require('../../internal_modules/analytics/dispatcher.js');
 
 var SynthesisItem = Marionette.ItemView.extend({
@@ -44,6 +45,10 @@ var SynthesisItem = Marionette.ItemView.extend({
   onSelectedSynthesis: function(e) {
     var messageId =  $(e.currentTarget).attr('data-message-id');
     this.panel.displaySynthesis(messageId);
+    if(Ctx.isSmallScreen()){
+      var screenSize = window.innerWidth;
+      scrollUtils.scrollToNextPanel(100,screenSize);
+    }
   }
 
 });

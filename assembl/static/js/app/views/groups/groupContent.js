@@ -23,7 +23,6 @@ var groupContent = Marionette.CompositeView.extend({
   childView: PanelWrapper,
   panel_borders_size: 1,
   minPanelSize:AssemblPanel.prototype.minimized_size,
-  criticalSize:600,
 
   initialize: function(options) {
     var that = this;
@@ -84,14 +83,15 @@ var groupContent = Marionette.CompositeView.extend({
           panel.css({'min-width':panelMinWidth});
           panel.width(panelWidth);
         }else{
-          var totalWidth = that.getTotalWidthUnMinimized();
-          if(totalWidth < screenSize){
+          var totalMinWidth = that.getTotalMinWidth();
+          if(totalMinWidth < screenSize){
             panel.css({'min-width':0});
             panel.animate({'width': panelWidth}, animationDuration, 'swing',function(){
               panel.css({'min-width':panelMinWidth});
             });
           }else{
-            if(screenSize <= that.criticalSize){
+            var isSmallScreen = Ctx.isSmallScreen();
+            if(isSmallScreen){
               panel.animate({'min-width': panelMinWidth}, animationDuration, 'swing')
             }else{
               panel.css({'min-width':0});
@@ -110,9 +110,10 @@ var groupContent = Marionette.CompositeView.extend({
     if(isPanelMinimized){
       panelWIdth = this.minPanelSize;
     }else{
-      if(screenSize > this.criticalSize){
-        var totalWidth = this.getTotalWidthUnMinimized();
-        var panelWidthInPercent = (panelMinWidth * 100) / totalWidth;
+      var isSmallScreen = ctx.isSmallScreen();
+      if(!isSmallScreen){
+        var totalMinWidth = this.getTotalMinWidth();
+        var panelWidthInPercent = (panelMinWidth * 100) / totalMinWidth;
         var totalMinimized = this.getTotalWidthMinimized();
         var panelWidthInPixel = (panelWidthInPercent * (screenSize-totalMinimized)) / 100;
         panelWIdth = panelWidthInPixel;        
@@ -122,21 +123,21 @@ var groupContent = Marionette.CompositeView.extend({
     }
     return panelWIdth;
   },
-  getTotalWidthUnMinimized:function(){
-    var totalWidth = 0;    
+  getTotalMinWidth:function(){
+    var totalMinWidth = 0;    
     this.groupContainer.collection.each(function(group){
       group.attributes.panels.each(function(panel){
         var isPanelMinimized = panel.get('minimized');
         var isPanelHidden = panel.get('hidden');
         if(!isPanelMinimized && !isPanelHidden){
-          totalWidth += panel.get('minWidth');
+          totalMinWidth += panel.get('minWidth');
         }
         if(isPanelHidden && isPanelMinimized){
-          totalWidth -= panel.get('minWidth');
+          totalMinWidth -= panel.get('minWidth');
         }
       });
     });
-    return totalWidth;
+    return totalMinWidth;
   },
   getTotalWidthMinimized:function(){
     var that = this;

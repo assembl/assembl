@@ -260,7 +260,14 @@ var NavigationView = AssemblPanel.extend({
   // This method needs the DOM elements of the View to be rendered. So it should not be called in onRender(), but rather in onShow() or onDomRefresh()
   initVar: function() {
     // check wether DOM elements are already rendered
-
+    var marginHeightLi = 0;
+    if(Ctx.isSmallScreen()){
+      this.li_height = 48;
+      marginHeightLi = 0;
+    }else{
+      this.li_height = 40;
+      marginHeightLi = 2;
+    }
     var _header = $('#header').height() + $('#infobar').height(),
         _window = $(window).height(),
         _li = this.li_height * this.num_items,
@@ -269,10 +276,10 @@ var NavigationView = AssemblPanel.extend({
         that = this;
 
     if (this.$el && this.$el.parent() && this.$el.parent().height()) {
-      this._accordionContentHeight = _sideBarHeight - _li - 2;
+      this._accordionContentHeight = _sideBarHeight - _li - marginHeightLi;
     }
     else { // fallback: set an initial estimation
-      this._accordionContentHeight = _sideBarHeight - _li - 2;
+      this._accordionContentHeight = _sideBarHeight - _li - marginHeightLi;
 
       if (++this._accordionHeightTries < 10) { // prevent infinite loop
         setTimeout(function() {
