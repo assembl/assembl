@@ -616,7 +616,7 @@ class User(AgentProfile):
         primary_key=True
     )
 
-    preferred_email = Column(EmailUnicode(50))
+    preferred_email = Column(EmailUnicode(100))
     #    info={'rdf': QuadMapPatternS(None, FOAF.mbox)})
     verified = Column(Boolean(), default=False)
     password = deferred(Column(Binary(115)))
