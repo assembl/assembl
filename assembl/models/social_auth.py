@@ -9,6 +9,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     Integer,
+    Unicode,
     UnicodeText,
     DateTime,
     Time,
@@ -117,7 +118,7 @@ class SocialAuthAccount(
         nullable=False,
         info={'rdf': QuadMapPatternS(None, SIOC.member_of)})
     identity_provider = relationship(IdentityProvider)
-    username = Column(String(200))
+    username = Column(Unicode(200))
     #    info={'rdf': QuadMapPatternS(None, SIOC.name)})
     provider_domain = Column(String(255))
     uid = Column(String(UID_LENGTH), nullable=False)
