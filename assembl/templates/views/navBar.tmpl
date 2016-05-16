@@ -1,12 +1,5 @@
 <div class="navbar-center tac">
-<% if( Ctx.canUseExpertInterface() ){ %>
-  <% if( Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT ) { %>
-    <a class="btn btn-secondary btn-sm add-group js_addGroup"><i class="icon-add"></i> {{ gettext('Add a new panel group') }}</a>
-    <a class="btn btn-sm btn-default js_switchToSimpleInterface">{{ gettext('Switch to simple mode') }}</a>
-  <% } else { %>
-    <a class="btn btn-sm btn-default js_switchToExpertInterface">{{ gettext('Switch to full-functionality mode') }}</a>
-  <% } %>
-<% } %>
+
 </div>
 
 <div id="navBarLeft">

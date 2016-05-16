@@ -1397,7 +1397,7 @@ var MessageView = Marionette.LayoutView.extend({
     if (!this.replyBoxHasFocus) {
       console.error("Tried to focus on the reply box of a message that isn't supposed to have focus, this should not happen!");
     }
-    if(this.replyView){
+    if(this.replyView){//FIX ME
     var el = this.replyView.ui.messageBody;
     if (el instanceof jQuery && el.length) {
       if (!el.is(':visible')) {

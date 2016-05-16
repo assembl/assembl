@@ -65,8 +65,13 @@ var computeScrollTarget = function(el, scrollableViewport, desiredViewportOffset
     console.log("scrollUtils::computeScrollTarget(): scrollableViewport info:", " scrollHeight: ", scrollableViewport[0].scrollHeight, ", height: ", scrollableViewport.height()," scrollableViewportScrollTop: ", scrollableViewportScrollTop," el info: ", "elViewPortOffset: ", elViewPortOffset, "computed scrollTarget:",scrollTarget);
   }
   return scrollTarget;
-}
-
+};
+ var scrollToNextPanel = function(elm,delay,xValue){
+  var selector = elm;
+  setTimeout(function(){
+    $(selector).animate({scrollLeft:xValue}, 500);
+  },delay);//Delay because sometimes there is an action before.
+};
 /**
  * scrolls to any dom element in the messageList. Unlike scrollToMessage, the
  * element must already be onscreen. This is also called by views/message.js
@@ -82,13 +87,6 @@ var computeScrollTarget = function(el, scrollableViewport, desiredViewportOffset
  * @param watch: Should a watchtdog check that the scrool doesn't move in case 
  * of progressive loading, etc.  Default is no.
  */
- var scrollToNextPanel = function(delay,xValue){
-  //If it's a small screen detected => scroll to the right
-  setTimeout(function(){
-    $('.groupsContainer').animate({scrollLeft:xValue}, 500);
-  },delay);
-};
-
 var scrollToElement = function(el, callback, margin, animate, watch) {
   if(debugScrollUtils) {
     console.log("scrollUtils::scrollToElement() called with: ", el, callback, margin, animate, watch);

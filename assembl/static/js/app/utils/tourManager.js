@@ -63,16 +63,19 @@ var TourManager = Marionette.Object.extend({
         }
     }
     this.toursById = toursById;
-
-    setTimeout(function() {
-      that.firstTourStarted = true;
-      if (that.nextTours.length > 0) {
-        that.currentTour = that.getNextTour(true);
-        if (that.currentTour !== undefined) {
-          that.startCurrentTour();
+    if(Ctx.isSmallScreen()){
+      this.stopTours();
+    }else{
+      setTimeout(function() {
+        that.firstTourStarted = true;
+        if (that.nextTours.length > 0) {
+          that.currentTour = that.getNextTour(true);
+          if (that.currentTour !== undefined) {
+            that.startCurrentTour();
+          }
         }
-      }
-    }, 4000);
+      }, 4000);
+    }
   },
 
   isTourSeen: function(tourName) {

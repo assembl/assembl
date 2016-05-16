@@ -3,13 +3,8 @@ $minimizePanelIconHeight:32px;
 $lockPanelIconHeight:40px;
 $panelHeaderTitleHeight:50px;
 
-#pDebug{
-    display:none!important;
-}
-.switchinterface-dropdown{
-    display:none;
-}
-@media screen and (max-width: 320px) {
+
+@media screen and (max-width: 360px) {
 
 // ********************* header *********************
 
@@ -20,11 +15,10 @@ $panelHeaderTitleHeight:50px;
         .icon-arrowright{
             display:none;
         }
-        .debate-icon{
-            margin-left:10px;
+        .debate-icon{ 
+            margin-left: 10px;
         }
     }
-
 // ********************* discussion panel *********************    
     .js_nameContainer{
         display: block;
@@ -46,9 +40,6 @@ $panelHeaderTitleHeight:50px;
 
     .panel-header{
         height:$tableOfIdeasRowHeightSmallScreen;
-    }
-    .options-filter{
-        height:$tableOfIdeasRowHeightSmallScreen!important;
     }
     .js_minimizePanel{
         line-height:$minimizePanelIconHeight;
@@ -80,7 +71,8 @@ $panelHeaderTitleHeight:50px;
     }
 
 // ********************* discussion panel *********************
-
+    
+    //Hide the on/off button in the discussion panel header
     .show-expert-mode{
         display:none!important;
     }
@@ -104,11 +96,11 @@ $panelHeaderTitleHeight:50px;
             display:none;
         }
         .messageSend-form{
-            margin-left:0!important;
+            margin-left:0;
         }
     }
     .messageSend .messageSend-form .messageSend-buttons{
-        width:100%!important;
+        width:100%;
     }
     .js_messageListView-print{
         display:none;
@@ -131,8 +123,15 @@ $panelHeaderTitleHeight:50px;
     
 //  ********************* dropdown menu *********************
     
+    .dropdown{
+        .username{
+            span{
+                display:none;
+            }
+        }
+    }
     .navbar-right .dropdown-menu{
-        right:0!important;
+        right:0;
         left: auto;
     }
     .dropdown-menu{
@@ -144,7 +143,7 @@ $panelHeaderTitleHeight:50px;
                 padding: 0 20px;
                 line-height:$tableOfIdeasRowHeightSmallScreen;
                 &:hover{
-                    background:none!important;
+                    background:none;
                 }
             }
         }
@@ -172,19 +171,9 @@ $panelHeaderTitleHeight:50px;
             overflow:hidden;
         }
     }
-    .switchinterface-dropdown{
-        display:block;
-    }
-// ********************* header *********************
     
-    .navbar .navbar-center{
-        display:none;
-    }
-    #tour_step_welcome{
-        span{
-            display:none;
-        }
-    }
+// ********************* header *********************
+
     .help{
         display:none;
     }
@@ -224,46 +213,18 @@ $panelHeaderTitleHeight:50px;
 
 // ********************* modal *********************
 
-    .group-modal.popin-wrapper.iframe-popin.popin-without-footer.popin-fixed-size.bbm-wrapper{
-        padding:0;
-        overflow: hidden;
-    }
-    .panelGroups-modal.popin-wrapper.bbm-wrapper{
-        padding:0;
-        overflow: hidden;
-    }
     .bbm-modal.bbm-modal--open{
         min-width: 250px!important;
-        height:calc(100% + 50px)!important;
-        max-width:100%;
-        margin:0;
-        top:-50px;
-        position:absolute;
-        width:100%;
-        .groupsContainer{
-            height:100%
+        .groupContent{
+            width:100%;
         }
         .messageList-panel{
-            .panelContents{
-                height: calc(100% - 80px)!important;
-            }
+            min-width:150px!important;
+            width:100%!important;
         }
     }
-    .popin-body{
-        position: absolute;
-        height: 88%;
-    }
-    .popin-header{
-        h3{
-            font-size:13px!important;
-        }
-        border-radius:0!important;
-    }
-    
-// ********************* Tours *********************
-
-    div.hopscotch-bubble{
-        display:none!important;
+    .popin-wrapper{
+        padding:0;
     }
     
 // ********************* Login *********************

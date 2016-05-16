@@ -45,9 +45,10 @@ var SynthesisItem = Marionette.ItemView.extend({
   onSelectedSynthesis: function(e) {
     var messageId =  $(e.currentTarget).attr('data-message-id');
     this.panel.displaySynthesis(messageId);
+    //If it's a small screen detected => scroll to the right
     if(Ctx.isSmallScreen()){
       var screenSize = window.innerWidth;
-      scrollUtils.scrollToNextPanel(100,screenSize);
+      scrollUtils.scrollToNextPanel('.groupsContainer',100,screenSize);
     }
   }
 

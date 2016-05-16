@@ -175,7 +175,8 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
       var screenSize = window.innerWidth;
       //TO FIX : impossible to add event marionette on this class: 'idealist-title-unread'
       $('.idealist-title-unread').off('click').on('click',function(){
-        scrollUtils.scrollToNextPanel(100,screenSize);
+        //If it's a small screen detected => scroll to the right
+        scrollUtils.scrollToNextPanel('.groupsContainer',100,screenSize);
       });
     }
   },
@@ -311,8 +312,9 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
       this.saveCollapsedState(this.getIsCollapsedState());
     }
     if(Ctx.isSmallScreen()){
-      var screenSize = window.innerWIdth;
-      scrollUtils.scrollToNextPanel(1200, screenSize);
+      var screenSize = window.innerWidth;
+      //If it's a small screen detected => scroll to the right by clicking on an idea
+      scrollUtils.scrollToNextPanel('.groupsContainer',1500, screenSize);
     }
   },
 

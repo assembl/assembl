@@ -29,7 +29,7 @@
     <li class="sub fl mrs">
         {% if user %}
         <div class="dropdown" id="tour_step_notifications">
-            <a href="#" class="dropdown-toggle username" data-toggle="dropdown" aria-expanded="false">{{ user.display_name() }}</a>
+            <a href="#" class="dropdown-toggle username" data-toggle="dropdown" aria-expanded="false"><span>{{ user.display_name() }}</span></a>
             <ul class="dropdown-menu">
                 {% if user_profile_edit_url %}
                   <li><a href="<%= userProfile() %>"><i class="icon-user"></i>{{ gettext('Profile') }}</a></li>
@@ -38,10 +38,13 @@
                   <li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
                 <% } %>
                 <% if(Ctx.canUseExpertInterface()){ %>
-                  <% if( Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT ) { %>
-                    <li class="switchinterface-dropdown"><a class="js_switchToSimpleInterface"><i class="icon-options"></i>{{ gettext('Switch to simple mode') }}</a></li>
+                  <% if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT) { %>
+                    <% if(!Ctx.isSmallScreen()){ %>
+                    <li><a class="js_addGroup"><i class="icon-add"></i> {{ gettext('Add a new panel group') }}</a></li>
+                    <% } %>
+                    <li><a class="js_switchToSimpleInterface"><i class="icon-options"></i>{{ gettext('Switch to simple mode') }}</a></li>
                   <% } else { %>
-                    <li class="switchinterface-dropdown"><a class="js_switchToExpertInterface"><i class="icon-options"></i>{{ gettext('Switch to full-functionality mode') }}</a></li>
+                    <li><a class="js_switchToExpertInterface"><i class="icon-options"></i>{{ gettext('Switch to full-functionality mode') }}</a></li>
                   <% } %>
                 <% } %>
                 <% if(isAdminDiscussion){ %>
