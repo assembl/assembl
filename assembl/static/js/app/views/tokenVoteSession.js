@@ -317,7 +317,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     console.log("this.voteSpecification: ", this.voteSpecification);
     this.idea = this.options.idea;
     this.myVotesCollection = this.options.myVotesCollection;
-    this.collection = this.myVotesCollection;
+    this.listenTo(this.myVotesCollection, "change:category:"+this.model.getId(), this.render); // force re-render of all other token allocation views of the same token category, so that only the right icons are clickable. We use this way instead of setting this.collection to this.myVotesCollection and adding a collectionEvents hash, because does it not seem to work (probably because the hash executes before initialize())
 
     var myVote = this.myVotesCollection.findWhere({"idea": this.idea.get("@id"), "token_category": this.model.get("@id")});
     console.log("myVote: ", myVote);
@@ -364,9 +364,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
 
     this.customTokenImageURL = this.model.get("image");
     this.customTokenImagePromise = getSVGElementByURLPromise(this.customTokenImageURL);
-  },
-  collectionEvents: {
-    "add remove reset change sync": "render"
   },
   onRender: function(){
     console.log("TokenCategoryAllocationView::onRender()");
@@ -564,6 +561,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
             that.currentValue = number_of_tokens_represented_by_this_icon;
             el[0].classList.add("selected");
             container.removeClass("hover");
+            that.myVotesCollection.trigger("change:category:"+that.model.getId()); // force re-render of all token allocation views of this same token category (so that the right icons are clickable)
             that.render(); // show immediately the icon it its correct state, without having to wait for collection update
           }, animation_duration*0.9);
         });
@@ -620,7 +618,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
   }
 });
 
-
+// The collection parameter has to be a collection of token categories
 var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
   template: '#tmpl-tokenCategoryAllocationCollection',
   childView: TokenCategoryAllocationView,
