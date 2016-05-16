@@ -2565,6 +2565,7 @@ var MessageList = AssemblPanel.extend({
     },
 
   scrollToTopPostBox: function() {
+    //console.log(scrollToTopPostBox());
     scrollUtils.scrollToElementAndWatch(this.$('.messagelist-replybox'));
     if (Ctx.debugRender) {
       console.log("MessageList:scrollToTopPostBox() stealing browser focus");

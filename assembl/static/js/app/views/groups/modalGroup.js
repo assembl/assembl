@@ -72,10 +72,6 @@ var ModalGroupView = Backbone.Modal.extend({
     }
   },
 
-  onShow: function() {
-    this.groupsView.onAttach();
-  },
-
   serializeData: function() {
     return {
       "title": this.title
@@ -111,14 +107,17 @@ var filteredMessagePanelFactory = function(modal_title, filters) {
   var groupSpecModel = new groupSpec.Model(defaults);
   var modal = new ModalGroupView({"model": groupSpecModel, "title": modal_title});
   var group = modal.getGroup();
+
   var messagePanel = group.findViewByType(PanelSpecTypes.MESSAGE_LIST);
   messagePanel.setViewStyle(messagePanel.ViewStyles.THREADED, true)
   _.each(filters, function(filter){
+    messagePanel.currentQuery.initialize();
     //messagePanel.currentQuery.addFilter(this.messageListView.currentQuery.availableFilters.POST_IS_DESCENDENT_OR_ANCESTOR_OF_POST, this.model.id);
     messagePanel.currentQuery.addFilter(filter.filterDef, filter.value);
   });
- 
+
   //console.log("About to manually trigger messagePanel render");
+  //Re-render so the changes above are taken into account
   messagePanel.render();
   return {modal: modal, messageList: messagePanel};
 }
