@@ -18,3 +18,9 @@ Assembl is made with the following technologies :
 Assembl is developed by [Imagination For People](http://imaginationforpeople.org) and [bluenove](http://bluenove.com)
 
 Installation is described in [INSTALL](https://github.com/ImaginationForPeople/assembl/blob/develop/doc/INSTALL.rst)
+
+IMPORTANT
+---------
+Assembl was using the Virtuoso database, but has transitioned back to Postgresql.
+Semantic abilities will be brought back in the near future.
+In the meantime, if you have an existing installation of Assembl using Virtuoso, we recommend you switch to Postgresql as described [here](https://github.com/ImaginationForPeople/assembl/blob/develop/doc/convert_virtuoso_to_postgresql.rst).
