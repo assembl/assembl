@@ -2,7 +2,7 @@ FROM    ubuntu:16.04
 
 ENV     DEBIAN_FRONTEND noninteractive
 ARG	GITREPO=https://github.com/imaginationforpeople/assembl.git
-ARG	GITBRANCH=develop
+ARG	GITBRANCH=master
 
 RUN     apt-get update && apt-get install -y \
             fabric \
