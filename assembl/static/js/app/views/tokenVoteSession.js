@@ -1014,6 +1014,11 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   template: '#tmpl-tokenVoteSessionModal',
   className: 'modal-token-vote-session popin-wrapper',
   cancelEl: '.close, .js_close',
+  events: {
+    'scroll': 'onScroll'
+  },
+
+  availableTokensPositionTop: 1000, // initial value high, will be updated in render()
 
   initialize: function(options) {
     var that = this;
@@ -1101,6 +1106,8 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         myVotesCollection: that.myVotesCollection
       });
       that.$(".available-tokens").html(tokenBagsView.render().el);
+      that.availableTokensPositionTop = that.$(".available-tokens").position().top;
+      that.$(".available-tokens").width(that.$(".popin-body").width());
 
       // Show votable ideas and their tokens
       var collectionView = new TokenVoteCollectionView({
@@ -1119,6 +1126,15 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       regionVotablesCollection.show(collectionView);
     });
 
+  },
+
+  onScroll: function(){
+    if (this.$el.scrollTop() > this.availableTokensPositionTop) {
+      this.$(".available-tokens").addClass("fixed");
+    }
+    else {
+      this.$(".available-tokens").removeClass("fixed");
+    }
   },
 
   serializeData: function() {

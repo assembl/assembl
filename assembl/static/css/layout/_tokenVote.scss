@@ -1,6 +1,7 @@
 .modal-token-vote-session .bbm-modal {
   max-width: 800px;
   margin-top: 0;
+  animation: none; /* required for the "position: fixed;" used on token bags to work properly */
 }
 
 .token-vote-session {
@@ -43,7 +44,15 @@
   }
 
   .available-tokens {
-    margin-top: 10px;
+    padding-top: 10px;
+    
+    &.fixed {
+      position: fixed;
+      z-index: 3682;
+      top: 0;
+      background: white;
+    }
+
     .help-text {
         margin-top: 5px;
         margin-bottom: 5px;
@@ -97,6 +106,9 @@
     tbody > div {
       display: table-row;
       border-bottom: 1px solid #f3f3f3;
+    }
+    tbody > div:last-child {
+      border-bottom: none;
     }
     .left-column, .right-column {
       display: table-cell;
