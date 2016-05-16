@@ -249,8 +249,9 @@
 
 /*********************/
 .btn-third {
-  color: $white;
+  color: $theme_btn_secondary_text_color;
   background-color: $theme_btn_secondary_bg_color;
+  border: 1px solid $theme_btn_secondary_border_color;
 }
 
 .btn-third:hover {
