@@ -697,6 +697,8 @@ def confirm_email_sent(request):
     email = request.matchdict.get('email')
     if not email:
         raise HTTPNotFound()
+    if '@' not in email:
+        raise HTTPBadRequest("Not an email")
     email = EmailString.normalize_email_case(email)
     email_objects = AbstractAgentAccount.default_db.query(
         AbstractAgentAccount).filter_by(email_ci=email)
@@ -810,10 +812,12 @@ def password_change_sent(request):
             discussion=discussion)
     slug = request.matchdict.get('discussion_slug', None)
     slug_prefix = "/" + slug if slug else ""
+    profile_id=int(request.matchdict.get('profile_id'))
     return dict(
         get_default_context(request),
-        profile_id=int(request.matchdict.get('profile_id')),
+        profile_id=profile_id,
         slug_prefix=slug_prefix,
+        action = "%s/password_change_sent/%d" % (slug_prefix, profile_id),
         error=request.params.get('error'),
         title=localizer.translate(_('Password change requested')),
         description=localizer.translate(_(
