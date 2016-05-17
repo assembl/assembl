@@ -2,8 +2,10 @@ from datetime import datetime
 import simplejson as json
 from urllib import quote
 from smtplib import SMTPRecipientsRefused
+from email.header import Header
 import logging
 import re
+
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
@@ -1060,8 +1062,9 @@ def send_change_password_email(
             sender_name = discussion.topic
     sender_name = UnicodeDammit(sender_name).unicode_markup
     # sanitize
-    sender_name = re.sub(r'[@<>]', '', sender_name)
+    sender_name = re.sub(r'[^\w\s]', '', sender_name, 0, re.UNICODE)
     if sender_name:
+        sender_name = Header(sender_name, 'utf-8').encode()
         sender = u"%s <%s>" % (sender_name, sender_email)
     else:
         sender = sender_email
