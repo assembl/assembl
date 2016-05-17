@@ -940,18 +940,39 @@ def database_upload():
 @task
 def database_delete():
     """
-    Restores the database backed up on the remote server
+    Deletes the database instance
     """
     if(env.is_production_env is True):
         abort(red("You are not allowed to delete the database of a production " + 
                 "environment.  If this is a server restore situation, you " + 
                 "have to temporarily declare env.is_production_env = False " + 
                 "in the environment"))
-    if not using_virtuoso():
-        abort(red("WRITEME (postgres)"))
+    if using_virtuoso():
+        database_delete_virtuoso()
+    else:
+        database_delete_postgres()
+
+
+def database_delete_virtuoso():
     execute(ensure_virtuoso_not_running)
     with cd(virtuoso_db_directory()):
         run('rm -f *.db *.trx *.lck *.trx *.pxa *.log')
+
+
+def database_delete_postgres():
+    execute(check_and_create_database_user)
+
+    with settings(warn_only=True), hide('stdout'):
+        checkDatabase = run("PGPASSWORD=%s psql --host=%s --username=%s --dbname=%s -l" % (
+            env.db_password, env.db_host, env.db_user, env.db_name))
+    if not checkDatabase.failed:
+        print(yellow("Cannot connect to database, trying to create"))
+        deleteDatabase = run('PGPASSWORD=%s dropdb --username=%s %s' % (
+            env.db_password, env.db_user, env.db_name))
+        if deleteDatabase.succeeded:
+            print(green("Database deleted successfully!"))
+    else:
+        print(green("Database does not exist"))
 
 
 def database_restore_virtuoso():
