@@ -133,9 +133,15 @@
     }
     .left-column {
       width: 70%;
+
+      & .vote-result {
+        width: 40%;
+      }
+
       .idea-title {
         font-size: 15px;
       }
+
       .idea-description {
         min-height: 2*$baseLineHeightFontMultiplier*$baseFontSize; // Should match the readMoreAfterHeightPx of the description's view
         color: #999;

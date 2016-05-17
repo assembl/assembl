@@ -1,13 +1,13 @@
-<div>
-    <div>
-        <div><%= ideaTitle %></div>
-        <div class='dropdown js_see-idea-description'>
+<div class='.token-result-row'>
+     <div class='left-column vote-result'>
+        <div class='idea-title'><%= ideaTitle %></div>
+        <!-- <div class='dropdown js_see-idea-description'>
             <a href="#" class='dropdown-toggle js_description-button' aria-expanded='false'><%= descriptionButton %></a>
             <i class='icon-arrowdown'></i>
-        </div>
-        <div class='js_show-idea-description-region'></div>
+        </div> -->
+        <div class='mts js_region-idea-description idea-description'></div>
     </div>
     <% _.each(categoryResult, function(result){ %>
-        <div><%= result %></div>
+        <div class='.token-vote-result-category-column'><%= result %></div>
     <% }); %>
 </div>

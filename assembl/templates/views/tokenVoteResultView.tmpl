@@ -1,17 +1,25 @@
-<div class='question-title'><%= questionTitle %></div>
-<div class='question-description'><%= questionDescription %></div>
-<div><!-- Put a gap here--></div>
-<div class='vote-result-container'>
-    <div class='vote-result-header'>
-        <span>{{gettext("Ideas")}}</span>
-        <% _.each(categories, function(category){ %>
-            <div class='js_vote-result-category' data-category-name="<%= category %>">
-                <span class=''><%= category %></span>
-            </div>
-        <% }); %>
+<div class='token-vote-session'>
+    <div class='question-info'>
+        <div class='question-title'><%= questionTitle %></div>
+        <div class='question-description'><%= questionDescription %></div>
     </div>
-    <div class='vote-result-body'>
-        <div class='js_vote-result-region'></div>
+    <div class='mtm votables-collection'>
+        <table>
+            <thead>
+                <tr>
+                    <th>{{gettext("Ideas")}}</th>
+                    <% _.each(categories, function(category){ %>
+                        <th class='js_vote-result-category'>
+                            <span><%= category %></span>
+                            <i class="icon-down"></i>
+                        </th>
+                    <% }); %>                
+                </tr>    
+            </thead>
+            <tbody>
+                <div class='js_vote-result-region'></div>    
+            </tbody>
+        </table>
     </div>
     
 </div>
