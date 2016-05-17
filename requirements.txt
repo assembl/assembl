@@ -1,4 +1,4 @@
-pip==8.1.1
+pip==8.1.2
 setuptools==21.0.0
 alabaster==0.7.8
 -e git+https://github.com/imaginationforpeople/alembic.git@virtuoso#egg=alembic
@@ -31,7 +31,7 @@ dogpile.cache==0.5.7
 dogpile.core==0.4.1
 EasyProcess==0.2.2
 ecdsa==0.13
-enum34==1.1.5
+enum34==1.1.6
 Fabric==1.11.1
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
@@ -84,12 +84,12 @@ pycrypto==2.6.1
 Pygments==2.1.3
 pygraphviz==1.3.1
 pyIsEmail==v1.3.1
-dnspython==1.12.0   # must come after pyisemail?
+dnspython==1.13.0   # must come after pyisemail?
 PyJWT==1.4.0
 pylibmc==1.5.1
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 pyOpenSSL==16.0.0
-pyparsing==2.1.1
+pyparsing==2.1.4
 pyramid-autodoc==1.0.0
 pyramid-beaker==0.8
 pyramid-debugtoolbar-ajax==0.0.4
@@ -113,22 +113,22 @@ python-openid==2.2.5
 pytz==2016.4
 pyvirtualdisplay==0.2
 pyzmq==15.2.0
-raven==5.16.0
-rdflib-jsonld==0.3
+raven==5.17.0
+rdflib-jsonld==0.4.0
 rdflib==4.2.1
 redis==2.10.5
 repoze.lru==0.6
 # Do not use 4.2 thanks to https://github.com/repoze/repoze.sendmail/issues/31
 repoze.sendmail==4.1  # rq.filter: <4.2
 requests-oauthlib==0.6.1
-requests==2.8.1   # smart_open holding it back
+requests==2.10.0
 rsa==3.4.2
 scikit-learn==0.17.1
-scipy==0.17.0
+scipy==0.17.1
 selenium==2.53.2
 simplejson==3.8.2
 six==1.10.0
-smart-open==1.3.2
+smart-open==1.3.3
 snowballstemmer==1.2.1
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
 SPARQLWrapper==1.7.6
@@ -136,10 +136,10 @@ sphinx-bootstrap-theme==0.4.9
 sphinxcontrib-httpdomain==1.4.0
 Sphinx==1.4.1
 splinter==0.7.3
-SQLAlchemy==1.0.12
+SQLAlchemy==1.0.13
 sqlparse==0.1.19
 -e git+https://github.com/imaginationforpeople/sqltap.git#egg=sqltap
-supervisor==3.2.3
+supervisor==3.3.0
 tornado==4.3
 transaction==1.5.0
 translationstring==1.3
