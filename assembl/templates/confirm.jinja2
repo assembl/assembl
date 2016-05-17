@@ -17,7 +17,7 @@ body{
         <div class="error">{{error}}</div>
         {% endif %}
         <p class="login-box-title">{{description}}</p>
-        <form class="form" method="POST" action="{{ slug_prefix }}/password_change_sent/{{ profile_id }}">
+        <form class="form" method="POST" action="{{ action }}">
             <input type="hidden" name="next" value="{{next}}" />
             <input type="hidden" name="email" value="{{email}}" />
             <input type="submit" name="resend" value="{{ gettext('Resend the email') }}" class="btn btn-secondary" />

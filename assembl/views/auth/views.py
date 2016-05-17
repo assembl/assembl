@@ -534,13 +534,15 @@ def confirm_emailid_sent(request):
             get_default_context(request),
             slug_prefix=slug_prefix,
             profile_id=email.profile_id,
-            email_account_id=request.matchdict.get('email_account_id'),
+            action = "%s/confirm_email_sent_id/%d" % (slug_prefix, id),
+            email_account_id=str(id),
             title=localizer.translate(_('This email address is already confirmed')),
             description=localizer.translate(_(
                 'You do not need to confirm this email address, it is already confirmed.')))
     send_confirmation_email(request, email)
     return dict(
         get_default_context(request),
+        action = "%s/confirm_email_sent_id/%d" % (slug_prefix, id),
         slug_prefix=slug_prefix,
         profile_id=email.profile_id,
         email_account_id=request.matchdict.get('email_account_id'),
@@ -723,8 +725,11 @@ def confirm_email_sent(request):
             # Normal case: Send an email. May be spamming
             for email_account in unverified_emails:
                 send_confirmation_email(request, email_account)
+            slug = request.matchdict.get('discussion_slug', None)
+            slug_prefix = "/" + slug if slug else ""
             return dict(
                 get_default_context(request),
+                action = "%s/confirm_email_sent/%s" % (slug_prefix, email),
                 email=email,
                 title=localizer.translate(_('Confirmation requested')),
                 description=localizer.translate(_(
