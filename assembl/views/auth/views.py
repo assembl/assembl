@@ -508,12 +508,12 @@ def add_social_account(request):
 
 
 @view_config(
-    route_name='confirm_emailid_sent', request_method="GET",
+    route_name='confirm_emailid_sent', request_method=("GET", "POST"),
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
-    route_name='contextual_confirm_emailid_sent', request_method="GET",
+    route_name='contextual_confirm_emailid_sent', request_method=("GET", "POST"),
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
@@ -684,12 +684,12 @@ def login_denied_view(request):
 
 
 @view_config(
-    route_name='confirm_email_sent', request_method="GET",
+    route_name='confirm_email_sent', request_method=("GET", "POST"),
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
-    route_name='contextual_confirm_email_sent', request_method="GET",
+    route_name='contextual_confirm_email_sent', request_method=("GET", "POST"),
     renderer='assembl:templates/confirm.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
