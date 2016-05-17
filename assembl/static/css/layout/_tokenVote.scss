@@ -16,21 +16,36 @@
   }
 
   .token-icon-show-like-zero-not-selected {
-    fill: none !important; /* !important is here to override inline style which would have been written in the SVG file which has been downloaded via its URL */
-    stroke: #ccc !important;
-    /*stroke-width: 3 !important;*/
-    stroke-width: 1 !important;
-    vector-effect: non-scaling-stroke !important;
+    vector-effect: non-scaling-stroke;
+    stroke-width: 1;
+
+    path.inner {
+      fill: none;
+      stroke: none;
+    }
+
+    path.outer {
+      fill: none;
+      stroke: #e9e9e9;
+    }
   }
 
   .token-icon-show-like-zero-selected {
-    fill: #ccc !important;
-    stroke: #aaa !important;
-    /*stroke-width: 3 !important;*/
-    stroke-width: 1 !important;
-    vector-effect: non-scaling-stroke !important;
+    vector-effect: non-scaling-stroke;
+    stroke-width: 1;
+
+    path.inner {
+      fill: #ccc;
+      stroke: none;
+    }
+
+    path.outer {
+      fill: none;
+      stroke: #ccc;
+    }
   }
 
+  /* !important is here to override inline style which would have been written in the SVG file which has been downloaded via its URL */
   .token-icon-show-like-positive-not-selected {
     fill: none !important;
     stroke: green !important;
@@ -86,9 +101,7 @@
     }
 
     .not-available:not(.animating-towards-available), .available.animating-towards-not-available, .not-available.animating-towards-available {
-      path, rect, circle {
-        @extend .token-icon-show-like-zero-not-selected;
-      }
+      @extend .token-icon-show-like-zero-not-selected;
     }
   }
 
@@ -151,14 +164,10 @@
       .token-category-allocation:not(.hover) .token-icon svg.custom {
         &.zero:not(.animating-towards-not-selected):not(.animating-towards-selected) {
           &.not-selected {
-            path, rect, circle {
-              @extend .token-icon-show-like-zero-not-selected;
-            }
+            @extend .token-icon-show-like-zero-not-selected;
           }
           &.selected {
-            path, rect, circle {
-              @extend .token-icon-show-like-zero-selected;
-            }
+            @extend .token-icon-show-like-zero-selected;
           }
         }
         &.positive {
@@ -177,9 +186,7 @@
         &.animating-towards-selected {
           &.zero {
             /* show as if it was selected */
-            path, rect, circle {
-              @extend .token-icon-show-like-zero-selected;
-            }
+            @extend .token-icon-show-like-zero-selected;
           }
           &.positive {
             /* show as if it was not selected */
@@ -192,9 +199,7 @@
         &.animating-towards-not-selected {
           &.zero {
             /* show as if it was not selected */
-            path, rect, circle {
-              @extend .token-icon-show-like-zero-not-selected;
-            }
+            @extend .token-icon-show-like-zero-not-selected;
           }
           &.positive {
             /* show as if it was not selected */
@@ -209,32 +214,36 @@
         &.zero {
           &:not(.hover) {
             /* show as if it was not selected */
-            path, rect, circle {
-              @extend .token-icon-show-like-zero-not-selected;
-            }
+            @extend .token-icon-show-like-zero-not-selected;
           }
           &.hover {
             /* show as if it was selected */
-            path, rect, circle {
-              @extend .token-icon-show-like-zero-selected;
-            }
+            @extend .token-icon-show-like-zero-selected;
           }
         }
         &.positive {
           &:not(.hover) {            
             &.selected:not(.animating-towards-not-selected) {
-              opacity: 0.3;
+              opacity: 0.15;
             }
-            &.not-selected, &.selected.animating-towards-not-selected {
+            &.not-selected, &.selected.animating-towards-not-selected, &.animating-towards-selected {
               path, rect, circle {
                 @extend .token-icon-show-like-positive-not-selected;
               }
             }
           }
           &.hover {
-            /* show as if it was selected */
-            path, rect, circle {
-              @extend .token-icon-show-like-positive-selected;
+            &:not(.animating-towards-selected) {
+              /* show as if it was selected */
+              path, rect, circle {
+                @extend .token-icon-show-like-positive-selected;
+              }
+            }
+            &.animating-towards-selected {
+              /* show as if it was not selected */
+              path, rect, circle {
+                @extend .token-icon-show-like-positive-not-selected;
+              }
             }
           }
         }

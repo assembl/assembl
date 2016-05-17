@@ -70,6 +70,14 @@ var lerp = function (value1, value2, amount) {
 }
 */
 
+// Icon of an "zero"/empty token := By clicking on it, the user sets 0 tokens on this idea
+// path.outer is the outer circle, and path.inner is the inner disk. They get stylized differently using CSS depending on the icon's CSS hover state.
+var zeroFullTokenIcon = $('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="width: 20px; height: 20px;" xml:space="preserve" aria-hidden="true" role="img" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" inkscape:version="0.48.4 r9939" sodipodi:docname="token_zero.svg"> <metadata id="metadata22"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> </cc:Work> </rdf:RDF> </metadata> <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1541" inkscape:window-height="876" id="namedview20" showgrid="false" inkscape:zoom="23.6" inkscape:cx="5.5729235" inkscape:cy="10.96989" inkscape:window-x="59" inkscape:window-y="24" inkscape:window-maximized="1" inkscape:current-layer="svg2" /> <path class="outer" sodipodi:type="arc" fill="none" stroke="#000000" stroke-width="1" stroke-miterlimit="4" stroke-opacity="1" stroke-dasharray="none" id="path2999" sodipodi:cx="9.3644066" sodipodi:cy="11.271187" sodipodi:rx="6.2288136" sodipodi:ry="6.3559322" d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z" transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)" /> <path class="inner" sodipodi:type="arc" fill:"#000000" fill-opacity="1" stroke="none" id="path2999-6" sodipodi:cx="9.3644066" sodipodi:cy="11.271187" sodipodi:rx="6.2288136" sodipodi:ry="6.3559322" d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z" transform="matrix(0.80272108,0,0,0.78666666,2.4829934,1.133333)" /></svg>');
+
+// Icon of a token := There will be maximum_per_idea of them shown per votable idea. By clicking on one of them, the user sets as many tokens on the idea
+var oneFullTokenIcon = $('<a class="btn"><svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="#4691f6" d="M9.917,0.875c-5.086,0-9.208,4.123-9.208,9.208c0,5.086,4.123,9.208,9.208,9.208s9.208-4.122,9.208-9.208 C19.125,4.998,15.003,0.875,9.917,0.875z M9.917,18.141c-4.451,0-8.058-3.607-8.058-8.058s3.607-8.057,8.058-8.057 c4.449,0,8.057,3.607,8.057,8.057S14.366,18.141,9.917,18.141z M13.851,6.794l-5.373,5.372L5.984,9.672 c-0.219-0.219-0.575-0.219-0.795,0c-0.219,0.22-0.219,0.575,0,0.794l2.823,2.823c0.02,0.028,0.031,0.059,0.055,0.083 c0.113,0.113,0.263,0.166,0.411,0.162c0.148,0.004,0.298-0.049,0.411-0.162c0.024-0.024,0.036-0.055,0.055-0.083l5.701-5.7 c0.219-0.219,0.219-0.575,0-0.794C14.425,6.575,14.069,6.575,13.851,6.794z"></path></svg></a>');
+
+
 /*
 Adding CSS to an SVG which has been embedded using an <image> tag is not possible, nor with a background CSS property.
 Adding CSS to an external SVG which has been embedded using an <object> tag is possible only if the URL is on the same domain (CORS policy).
@@ -92,8 +100,7 @@ var getSVGElementByURLPromise = function(url){
   };
 
   var failure = function(){
-    var oneToken = $('<a class="btn"><svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="#4691f6" d="M9.917,0.875c-5.086,0-9.208,4.123-9.208,9.208c0,5.086,4.123,9.208,9.208,9.208s9.208-4.122,9.208-9.208 C19.125,4.998,15.003,0.875,9.917,0.875z M9.917,18.141c-4.451,0-8.058-3.607-8.058-8.058s3.607-8.057,8.058-8.057 c4.449,0,8.057,3.607,8.057,8.057S14.366,18.141,9.917,18.141z M13.851,6.794l-5.373,5.372L5.984,9.672 c-0.219-0.219-0.575-0.219-0.795,0c-0.219,0.22-0.219,0.575,0,0.794l2.823,2.823c0.02,0.028,0.031,0.059,0.055,0.083 c0.113,0.113,0.263,0.166,0.411,0.162c0.148,0.004,0.298-0.049,0.411-0.162c0.024-0.024,0.036-0.055,0.055-0.083l5.701-5.7 c0.219-0.219,0.219-0.575,0-0.794C14.425,6.575,14.069,6.575,13.851,6.794z"></path></svg></a>');
-    return success(oneToken);
+    return success(oneFullTokenIcon);
   };
 
   _ajaxCache[url] = $.ajax({
@@ -168,6 +175,8 @@ var transitionAnimation = function(el, el2, duration){
     el3.remove();
   }, duration);
 };
+
+
 
 
 // This view shows at the top of the popin the bag of remaining tokens the user has
@@ -380,18 +389,21 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     }
     */
 
-    // Icon of an empty token := By clicking on it, the user sets 0 tokens on this idea
-    var zeroToken = $('<a class="btn"><svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="#4691f6" d="M15.62,1.825H4.379v1.021h0.13c-0.076,0.497-0.13,1.005-0.13,1.533c0,3.998,2.246,7.276,5.11,7.629v5.145 H7.445c-0.282,0-0.511,0.229-0.511,0.512s0.229,0.511,0.511,0.511h5.109c0.281,0,0.512-0.229,0.512-0.511s-0.23-0.512-0.512-0.512 h-2.043v-5.145c2.864-0.353,5.109-3.631,5.109-7.629c0-0.528-0.054-1.036-0.129-1.533h0.129V1.825z M10,11.087 c-2.586,0-4.684-3.003-4.684-6.707c0-0.53,0.057-1.039,0.138-1.533h9.092c0.081,0.495,0.139,1.003,0.139,1.533 C14.685,8.084,12.586,11.087,10,11.087z"></path></svg></a>');
-
-    // Icon of a token := There will be maximum_per_idea of them shown per votable idea. By clicking on one of them, the user sets as many tokens on the idea
-    var oneToken = $('<a class="btn"><svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="#4691f6" d="M9.917,0.875c-5.086,0-9.208,4.123-9.208,9.208c0,5.086,4.123,9.208,9.208,9.208s9.208-4.122,9.208-9.208 C19.125,4.998,15.003,0.875,9.917,0.875z M9.917,18.141c-4.451,0-8.058-3.607-8.058-8.058s3.607-8.057,8.058-8.057 c4.449,0,8.057,3.607,8.057,8.057S14.366,18.141,9.917,18.141z M13.851,6.794l-5.373,5.372L5.984,9.672 c-0.219-0.219-0.575-0.219-0.795,0c-0.219,0.22-0.219,0.575,0,0.794l2.823,2.823c0.02,0.028,0.031,0.059,0.055,0.083 c0.113,0.113,0.263,0.166,0.411,0.162c0.148,0.004,0.298-0.049,0.411-0.162c0.024-0.024,0.036-0.055,0.055-0.083l5.701-5.7 c0.219-0.219,0.219-0.575,0-0.794C14.425,6.575,14.069,6.575,13.851,6.794z"></path></svg></a>');
-
     var customToken = null;
     
 
     var container = this.$el;
 
-    // needs: getTokenSize(), that.model, that.customTokenImageURL, customToken, zeroToken, that.currentValue, that.myVotesCollection, transitionAnimation(), that.postData, that.idea, that.render()
+    container.hover(function handlerIn(){
+      container.addClass("hover");
+    }, function handlerOut(){
+      container.removeClass("hover");
+      container.find("svg").each(function(){
+        this.classList.remove("hover");
+      });
+    });
+
+    // needs: getTokenSize(), that.model, that.customTokenImageURL, customToken, zeroFullTokenIcon, that.currentValue, that.myVotesCollection, transitionAnimation(), that.postData, that.idea, that.render()
     var renderClickableTokenIcon = function(number_of_tokens_represented_by_this_icon){
       var el = null;
 
@@ -399,15 +411,20 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
 
 
       if ( number_of_tokens_represented_by_this_icon == 0 ){
+        /* We used to create dynamically an icon for the zero token case, by styling the icon of the regular token. This is no longer the case, but we may revert this decision in the future.
         if ( that.customTokenImageURL ){
           el = customToken.clone();
           //contourOnlySVG(el, "#cccccc");
           el[0].classList.add("custom");
         }
         else {
-          el = zeroToken.clone();
+          el = zeroFullTokenIcon.clone();
           el[0].classList.add("default");
         }
+        */
+        el = zeroFullTokenIcon.clone();
+        el[0].classList.add("custom");
+
         el[0].classList.add("zero");
       }
       else {
@@ -417,7 +434,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
           el[0].classList.add("custom");
         }
         else {
-          el = oneToken.clone();
+          el = oneFullTokenIcon.clone();
           el[0].classList.add("default");
         }
         el[0].classList.add("positive");
@@ -494,7 +511,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
-              var theAllocatedToken = link.parent().children().eq(i)
+              var theAllocatedToken = link.parent().children().eq(i).find("svg");
               theAvailableToken[0].classList.add("animating-towards-not-available");
               theAllocatedToken[0].classList.add("animating-towards-selected");
               setTimeout(endAnimationTowardsNotAvailable(theAvailableToken[0]), animation_duration*0.9);
@@ -567,7 +584,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
         });
         
         link.hover(function handlerIn(){
-          container.addClass("hover");
           el[0].classList.add("hover");
           link.prevAll().children("svg").each(function(){
             if ( !(this.classList.contains("zero")) ){
@@ -578,11 +594,9 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
             this.classList.remove("hover");
           });
         }, function handlerOut(){
-          container.removeClass("hover");
-          el[0].classList.remove("hover");
-          link.siblings().children("svg").each(function(){
+          if ( (this.classList.contains("zero")) ){
             this.classList.remove("hover");
-          });
+          }
         });
       } // if ( userCanClickThisToken )
       else {
