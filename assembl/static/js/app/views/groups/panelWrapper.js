@@ -115,17 +115,40 @@ var PanelWrapper = Marionette.LayoutView.extend({
       }
     }
   },
-  toggleMinimize: function() {
-    var isPanelMinimized = this.model.get('minimized');
-    if(isPanelMinimized){
-      this.model.set('minimized',false);
-    }else{
-      this.model.set('minimized',true);
+
+  /** 
+   * Change the panel minimization state.  No-op if the state already matches
+   * @param requestedMiminizedState true or false. Should the panel be minimized
+   */
+  _changeMinimizePanelsState: function(requestedMiminizedState) {
+    if(requestedMiminizedState === this.model.get('minimized')) {
+      return;
     }
-    this.setPanelMinWidth();
-    this.displayContent();
-    this.groupContent.resizePanel();
+    else {
+      this.model.set('minimized',requestedMiminizedState);
+      this.setPanelMinWidth();
+      this.displayContent();
+      this.groupContent.resizePanel();
+    }
   },
+
+  toggleMinimize: function() {
+    if(this.model.get('minimized')) {
+      this._changeMinimizePanelsState(false);
+    }
+    else {
+      this._changeMinimizePanelsState(true);
+    }
+  },
+
+  unminimizePanel: function(evt) {
+    this._changeMinimizePanelsState(false);
+  },
+
+  minimizePanel: function(evt) {
+    this._changeMinimizePanelsState(true);
+  },
+
   displayContent:function(skipAnimation){
     var animationDuration = 1000;
     var that = this;
