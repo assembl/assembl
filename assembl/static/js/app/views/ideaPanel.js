@@ -507,6 +507,7 @@ var IdeaPanel = AssemblPanel.extend({
           //console.log("setIdeaModel:  we have a model ")
           if (!this.isViewDestroyed()) {
             if ( that.ideaPanelOpensAutomatically ){
+              this.panelWrapper.unminimizePanel();
             }
             this.template = '#tmpl-loader';
             if (!this.model.id) {
