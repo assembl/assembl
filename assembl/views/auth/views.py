@@ -755,7 +755,7 @@ def request_password_change(request):
     if user_id:
         try:
             user = User.get(int(user_id))
-            identifier = user.get_preferred_email() or ''
+            identifier = identifier or user.get_preferred_email() or ''
         except:
             error = error or localizer.translate(_("This user cannot be found"))
     elif identifier:
@@ -893,7 +893,7 @@ def do_password_change(request):
 
         return HTTPFound(location=maybe_contextual_route(
             request, 'request_password_change', _query=dict(
-                identifier = user.get_preferred_email() if user else '',
+                user_id=user.id if user else '',
                 error=error)))
 
     # V+: Valid token (encompasses P-B+, W-, B-L+); ALSO V-L+
@@ -938,6 +938,7 @@ def do_password_change(request):
 def finish_password_change(request):
     localizer = request.localizer
     token = request.params.get('token')
+    title = request.params.get('title')
     user, validity = verify_password_change_token(token)
     logged_in = authenticated_userid(request)  # if mismatch?
     if user and user.id != logged_in:
@@ -961,7 +962,7 @@ def finish_password_change(request):
 
         return HTTPFound(location=maybe_contextual_route(
             request, 'request_password_change', _query=dict(
-                identifier = user.get_preferred_email() if user else '',
+                user_id=user.id if user else '',
                 error=error)))
 
     discussion_slug = request.matchdict.get('discussion_slug', None)
@@ -988,7 +989,7 @@ def finish_password_change(request):
     slug_prefix = "/" + discussion_slug if discussion_slug else ""
     return dict(
         get_default_context(request),
-        slug_prefix=slug_prefix, token=token, error=error)
+        title=title, slug_prefix=slug_prefix, token=token, error=error)
 
 
 def send_confirmation_email(request, email):
