@@ -1630,3 +1630,25 @@ def env_thecampfactory():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = getenv("GITBRANCH", "master")
+
+
+@task
+def env_bel_bluenove():
+    """
+    [ENVIRONMENT] Production on https://bel.bluenove.com/
+    Environment for Bel discussion
+    """
+    env.ini_file = 'local.ini'
+    env.hosts = ['bel.bluenove.com']
+    env.is_production_env = True
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "bel.bluenove.com"
+    env.user = "assembl_bel"
+    env.home = "assembl_bel-data"
+    execute(commonenv, normpath("/home/assembl_bel/assembl/"))
+    require('projectname', provided_by=('commonenv',))
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = getenv("GITBRANCH", "master")
