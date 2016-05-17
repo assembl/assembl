@@ -1062,10 +1062,13 @@ def send_change_password_email(
             sender_name = discussion.topic
     sender_name = UnicodeDammit(sender_name).unicode_markup
     # sanitize
-    sender_name = re.sub(r'[^\w\s]', '', sender_name, 0, re.UNICODE)
+    sender_name = re.sub(
+        ur"[^-\w\s'\u2019\u2032\u00b4\.\(\)]", '', sender_name, 0, re.UNICODE)
     if sender_name:
         sender_name = Header(sender_name, 'utf-8').encode()
-        sender = u"%s <%s>" % (sender_name, sender_email)
+        sender = '"%s" <%s>' % (sender_name, sender_email)
+        if len(sender) > 255:
+            sender = sender_email
     else:
         sender = sender_email
     subject = (subject or localizer.translate(
