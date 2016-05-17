@@ -778,23 +778,27 @@ var TokenVoteCollectionView = Marionette.CompositeView.extend({
 
 /*
   The view of a single vote result, which will be created by
-  the collection view TokenVoteResultCollectionView 
+  the collection view TokenVoteResultCollectionView
  */
-var TokenVoteResultView = Marionette.ItemView.extend({
+var TokenVoteResultView = Marionette.LayoutView.extend({
   constructor: function TokenVoteResultView(){
-    Marionette.ItemView.apply(this, arguments);
+    Marionette.LayoutView.apply(this, arguments);
   },
 
   template: '#tmpl-tokenVoteResultSingleView',
 
   ui: {
-    'descriptionClick': '.js_see-idea-description',
-    'descriptionButton': '.js_description-button',
-    'descriptionRegion': '.js_show-idea-description-region'
+    // 'descriptionClick': '.js_see-idea-description',
+    // 'descriptionButton': '.js_description-button',
+    'descriptionRegion': '.js_region-idea-description'
   },
 
   events: {
     'click @ui.descriptionClick': 'onSeeDescriptionClick'
+  },
+
+  regions: {
+    'regionIdeaDescription': '@ui.descriptionRegion'
   },
 
   //Most likely the place where D3 will be used!
@@ -850,7 +854,28 @@ var TokenVoteResultView = Marionette.ItemView.extend({
       this.ui.descriptionRegion.text(this.model.get('objectConnectedTo').getLongTitleDisplayText());
     }
 
+  },
+
+  onShow: function(){
+    this.renderCKEditorDescription();
+  },
+  
+  renderCKEditorDescription: function() {
+    var model = this.model.get('objectConnectedTo').getDefinitionDisplayText();
+
+    if (!model.length) return;
+
+    var description = new CKEditorField({
+      model: this.model.get('objectConnectedTo'),
+      modelProp: 'definition',
+      showPlaceholderOnEditIfEmpty: false,
+      canEdit: false,
+      readMoreAfterHeightPx: 39 // should match the min-heght of .idea-description .  Currently this is  2*$baseLineHeightFontMultiplier*$baseFontSize (2 lines)
+    });
+
+    this.getRegion('regionIdeaDescription').show(description);
   }
+
 });
 
 /*
@@ -986,8 +1011,7 @@ var TokenResultView = Marionette.LayoutView.extend({
   The results modal view
   It is barely a simple container for the real view: TokenResultView
  */
-//Rename to Modal **
-var TokenVoteSessionResultModel = Backbone.Modal.extend({
+var TokenVoteSessionResultModal = Backbone.Modal.extend({
   constructor: function TokenVoteSessionResultModel(){
     Backbone.Modal.apply(this, arguments);
   },
@@ -1165,5 +1189,5 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
 module.exports = {
   TokenVoteSessionModal: TokenVoteSessionModal,
-  TokenVoteSessionResultModel: TokenVoteSessionResultModel
+  TokenVoteSessionResultModal: TokenVoteSessionResultModal
 };
