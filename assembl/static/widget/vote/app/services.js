@@ -483,7 +483,23 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "label": "token image URL",
       "default": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Approve_icon.svg",
       "storage": "attribute"
-    }
+    },
+    {
+      "key": "image_empty",
+      "type": "string",
+      "description": "URL (web address) of the SVG image of a token",
+      "label": "Empty token image URL",
+      "default": "",
+      "storage": "attribute"
+    },
+    {
+      "key": "color",
+      "type": "string",
+      "description": "The color of the the token & its result (optional)",
+      "label": "token color",
+      "default": "green",
+      "storage": "attribute"
+    },
   ];
 
   this.addDefaultFields = function(obj, default_fields) {

@@ -299,6 +299,7 @@ class TokenCategorySpecification(DiscussionBoundBase):
     typename = Column(String, nullable=False,
       doc='categories which have the same typename will be comparable (example: "positive")')
     image = Column(URLString)
+    image_empty = Column(URLString)
 
     token_vote_specification_id = Column(
         Integer, ForeignKey(
@@ -312,6 +313,8 @@ class TokenCategorySpecification(DiscussionBoundBase):
         backref=backref("name_of_token_category", uselist=False),
         single_parent=True,
         cascade="all, delete-orphan")
+
+    color = Column(String(25))
 
     def get_discussion_id(self):
         tvs = self.token_vote_specification or TokenVoteSpecification.get(self.token_vote_specification_id)
