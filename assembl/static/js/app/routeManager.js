@@ -302,7 +302,7 @@ var routeManager = Marionette.Object.extend({
         console.log('the arg', arg);
         var Views = require('./views/tokenVoteSession.js');
         if ((arg) && (arg === 'result')){
-          View = Views.TokenVoteSessionResultModel
+          View = Views.TokenVoteSessionResultModal
         }
         else {
           View = Views.TokenVoteSessionModal

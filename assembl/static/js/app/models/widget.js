@@ -465,7 +465,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
     For debugging results view purposes
    */
   onShowResult: function(evt){
-    var modalView = new TokenVoteSessionView.TokenVoteSessionResultModel({model: this});
+    var modalView = new TokenVoteSessionView.TokenVoteSessionResultModal({model: this});
     Ctx.setCurrentModalView(modalView);
     Assembl.slider.show(modalView);
   },
