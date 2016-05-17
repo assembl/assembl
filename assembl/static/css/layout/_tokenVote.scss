@@ -101,7 +101,9 @@
     }
 
     .not-available:not(.animating-towards-available), .available.animating-towards-not-available, .not-available.animating-towards-available {
-      @extend .token-icon-show-like-zero-not-selected;
+      path, rect, circle {
+        @extend .token-icon-show-like-positive-not-selected;
+      }
     }
   }
 

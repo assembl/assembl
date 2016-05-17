@@ -233,17 +233,15 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
   onRender: function(){
     console.log("RemainingCategoryTokensView::onRender()");
     var that = this;
-    var container = this.$el;
-    container.empty();
+    var categoryContainer = this.$el;
+    categoryContainer.empty();
     
     var category = this.model;
     var customTokenImageURL = category.get("image");
     var customTokenImagePromise = getSVGElementByURLPromise(customTokenImageURL);
     var data = that.myVotesCollection.getTokenBagDataForCategory(category);
-    var categoryContainer = $("<div></div>");
     categoryContainer.addClass('token-bag-for-category');
     categoryContainer.addClass(category.getCssClassFromId());
-    categoryContainer.appendTo(container);
     var el = $("<div></div>");
     el.addClass("description");
     var s = i18n.sprintf(i18n.gettext("<span class='available-tokens-number'>%d</span> remaining %s tokens"), data["remaining_tokens"], category.get("typename")); // TODO: use "name" field instead (LangString)
