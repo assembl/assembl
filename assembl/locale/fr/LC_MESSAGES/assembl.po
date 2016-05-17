@@ -4129,7 +4129,7 @@ msgstr ""
 
 #: assembl/views/auth/views.py:1069
 msgid "Request for password change"
-msgstr "Requête de changement de mot de passe"
+msgstr "Demande de changement de mot de passe"
 
 #: assembl/views/auth/views.py:1072
 msgid ""
