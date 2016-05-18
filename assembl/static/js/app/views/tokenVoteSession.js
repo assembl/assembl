@@ -1074,7 +1074,6 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     that.myVotesCollection = null;
     that.votableIdeasCollection = null;
     
-    var tokenCategories = null;
     if (voteSpecifications && voteSpecifications.length > 0){
       that.tokenVoteSpecification = _.findWhere(voteSpecifications, {"@type": "TokenVoteSpecification"});
       if ( that.tokenVoteSpecification ){
@@ -1083,7 +1082,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
           console.log("Widget: ", Widget);
           console.log("tokenVoteSpecification.token_categories: ", that.tokenVoteSpecification.token_categories);
           that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
-          console.log("tokenCategories: ", tokenCategories);
+          console.log("that.tokenCategories: ", that.tokenCategories);
         }
       }
     }
