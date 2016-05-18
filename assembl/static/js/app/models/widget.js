@@ -940,26 +940,33 @@ var globalWidgetClassCollection = new Base.Collection([
     new InspirationWidgetModel()
   ]);
 
+
+// begin see https://github.com/jashkenas/backbone/commit/d1de6e89117f02adfa0f4ba05b9cf6ba3f2ecfb7
+var WidgetFactory = function(attrs, options) {
+  switch (attrs["@type"]) {
+    case "InspirationWidget":
+      return new InspirationWidgetModel(attrs, options);
+    case "MultiCriterionVotingWidget":
+      return new MultiCriterionVotingWidgetModel(attrs, options);
+    case "TokenVotingWidget":
+      return new TokenVotingWidgetModel(attrs, options);
+    case "CreativitySessionWidget":
+      return new CreativitySessionWidgetModel(attrs, options);
+    default:
+      console.error("Unknown widget type:" + attrs["@type"]);
+      return new WidgetModel(attrs, options);
+  }
+};
+WidgetFactory.prototype.idAttribute = Base.Model.prototype.idAttribute;
+// end see https://github.com/jashkenas/backbone/commit/d1de6e89117f02adfa0f4ba05b9cf6ba3f2ecfb7
+
+
 var WidgetCollection = Base.Collection.extend({
   constructor: function WidgetCollection() {
     Base.Collection.apply(this, arguments);
   },
   url: Ctx.getApiV2DiscussionUrl("/widgets"),
-  model: function(attrs, options) {
-    switch (attrs["@type"]) {
-      case "InspirationWidget":
-        return new InspirationWidgetModel(attrs, options);
-      case "MultiCriterionVotingWidget":
-        return new MultiCriterionVotingWidgetModel(attrs, options);
-      case "TokenVotingWidget":
-        return new TokenVotingWidgetModel(attrs, options);
-      case "CreativitySessionWidget":
-        return new CreativitySessionWidgetModel(attrs, options);
-      default:
-        console.error("Unknown widget type:" + attrs["@type"]);
-        return new WidgetModel(attrs, options);
-    }
-  },
+  model: WidgetFactory,
 
   relevantWidgetsFor: function(idea, context) {
       return this.filter(function(widget) {
