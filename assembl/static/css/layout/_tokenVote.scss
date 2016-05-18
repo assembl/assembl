@@ -58,8 +58,13 @@
     /* show the SVG with its initial styles */
   }
 
+  .available-tokens-info {
+    padding-top: 20px;
+  }
+
   .available-tokens {
-    padding-top: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
     
     &.fixed {
       position: fixed;

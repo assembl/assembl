@@ -1178,7 +1178,8 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     return {
       popin_title: i18n.gettext("Token vote"),
       question_title: "question_title" in question_item ? question_item.question_title : "",
-      question_description: "question_description" in question_item ? question_item.question_description : ""
+      question_description: "question_description" in question_item ? question_item.question_description : "",
+      available_tokens_info: i18n.gettext("Split your tokens among the ideas of your choice. By default, your vote is neutral per project.")
     };
   },
 
