@@ -314,10 +314,12 @@ var ContextPage = Marionette.LayoutView.extend({
                 });
                 that.getRegion('introductions').show(introduction);
 
-                var instigator = new Instigator({
-                  model: partnerInstigator
-                });
-                that.getRegion('instigator').show(instigator);
+                if (partnerInstigator !== undefined) {
+                    var instigator = new Instigator({
+                      model: partnerInstigator
+                    });
+                    that.getRegion('instigator').show(instigator);
+                }
 
                 that.getRegion('statistics').show(new Statistics());
 
