@@ -147,10 +147,8 @@
         color: #999;
         font-size: 12px;
 
-        .ckeditorField-seeMoreOrLess {
-          .seeMore, .seeLess {
-            color: #999;
-          }
+        .seeMore, .seeLess {
+          color: #999;
         }
       }
     }
@@ -161,7 +159,7 @@
     .tokens-for-idea {
       .token-icon {
         padding: 0;
-        margin: 0 5px 0 0;
+        margin: 0 5px 0 0; /* horizontal total margin should match tokenVoteSession.js::getTokenSize()::token_horizontal_margin */
       }
 
       .token-icon { /* can be a or div */

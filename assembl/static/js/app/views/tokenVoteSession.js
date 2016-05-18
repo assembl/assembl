@@ -115,6 +115,7 @@ var getTokenSize = function(number_of_tokens, maximum_tokens_per_row, maximum_to
   maximum_total_width = maximum_total_width ? maximum_total_width : 400;
   var maximum_token_size = 35; // was 60
   var minimum_token_size = 12;
+  var token_horizontal_margin = 5; /* horizontal total margin should match _tokenVote.scss::.tokens-for-idea.token-icon */
   if ( maximum_tokens_per_row != 0 ){
     //maximum_tokens_per_row = maximum_tokens_per_row > 10 ? 10 : maximum_tokens_per_row;
     token_size = maximum_total_width / maximum_tokens_per_row;
@@ -134,7 +135,7 @@ var getTokenSize = function(number_of_tokens, maximum_tokens_per_row, maximum_to
   if ( token_size > maximum_token_size ){
     token_size = maximum_token_size;
   }
-  return token_size;
+  return token_size - token_horizontal_margin;
 }
 
 // Returns a random integer between min (included) and max (excluded)
