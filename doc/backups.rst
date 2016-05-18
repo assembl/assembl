@@ -13,7 +13,7 @@ Installing an up to date Borg Backup
 
 ::
 
-    sudo apt-get install python3-pip libacl1-dev liblz4-dev
+    sudo apt-get install python3-pip libacl1-dev liblz4-dev libssl-dev
     sudo pip3 install --upgrade borgbackup
 
 Using
@@ -27,6 +27,9 @@ It assumes:
  - The user running the script has access over ssh to the
    backup server with key authentication (no passphrase). Typically, this
    will be the ``www-data`` user.
+ - The user running the script has access over ssh to itself 
+   with key authentication (no passphrase).
+   
 
 The script takes two environment variables:
 
