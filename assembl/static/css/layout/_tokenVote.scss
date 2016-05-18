@@ -47,11 +47,12 @@
 
   /* !important is here to override inline style which would have been written in the SVG file which has been downloaded via its URL */
   .token-icon-show-like-positive-not-selected {
+    /*
     fill: none !important;
     stroke: green !important;
-    /*stroke-width: 3 !important;*/
     stroke-width: 1 !important;
     vector-effect: non-scaling-stroke !important;
+    */
   }
 
   .token-icon-show-like-positive-selected {
@@ -89,8 +90,27 @@
     }
     .available-tokens-icons {
       padding-left: 10px;
-      & > svg {
+      .token-icon {
+        display: inline-block;
         margin-right: 5px;
+
+        &.available:not(.animating-towards-not-available) {
+          svg.token-icon-full {
+            display: inline-block;
+          }
+          svg.token-icon-empty {
+            display: none;
+          }
+        }
+
+        &.not-available, &.animating-towards-not-available, &.animating-towards-available {
+          svg.token-icon-full {
+            display: none;
+          }
+          svg.token-icon-empty {
+            display: inline-block;
+          }
+        }
       }
     }
     span.available-tokens-number {
@@ -121,7 +141,7 @@
     }
     th {
       color: #999;
-      padding-bottom: 5px;
+      padding-bottom: 0;
     }
     tbody > div {
       display: table-row;
@@ -133,8 +153,8 @@
     .left-column, .right-column {
       display: table-cell;
       vertical-align: top;
-      padding-top: 10px;
-      padding-bottom: 5px;
+      padding-top: 15px;
+      padding-bottom: 0;
     }
     .left-column {
       width: 70%;
@@ -165,20 +185,69 @@
       .token-icon {
         padding: 0;
         margin: 0 5px 0 0; /* horizontal total margin should match tokenVoteSession.js::getTokenSize()::token_horizontal_margin */
-      }
-
-      .token-icon { /* can be a or div */
         display: inline-block;
         vertical-align: baseline;
         border: 1px transparent;
         line-height: 0; /* avoids having a height of this element bigger than the height of its contents */
+
+
+        &.animating-towards-not-selected svg.token-icon-full {
+          display: none;
+        }
+
+        &.animating-towards-not-selected svg.token-icon-empty {
+          display: inline-block;
+        }
+
+        &.animating-towards-selected svg.token-icon-full {
+          display: none;
+        }
+
+        &.animating-towards-selected svg.token-icon-empty {
+          display: inline-block;
+        }
+
+        &.selected:not(.hover):not(.animating-towards-not-selected) svg.token-icon-full {
+          display: inline-block;
+        }
+
+        &.selected:not(.hover):not(.animating-towards-not-selected) svg.token-icon-empty {
+          display: none;
+        }
+
+        &.not-selected:not(.hover):not(.animating-towards-selected) svg.token-icon-full {
+          display: none;
+        }
+
+        &.not-selected:not(.hover):not(.animating-towards-selected) svg.token-icon-empty {
+          display: inline-block;
+        }
+
+        &.not-selected.hover:not(.not-enough-available-tokens):not(.animating-towards-selected) svg.token-icon-full {
+          display: inline-block;
+        }
+
+        &.not-selected.hover:not(.not-enough-available-tokens):not(.animating-towards-selected) svg.token-icon-empty {
+          display: none;
+        }
+
+        &.selected.hover:not(.animating-towards-not-selected) svg.token-icon-full {
+          display: inline-block;
+        }
+
+        &.selected.hover:not(.animating-towards-not-selected) svg.token-icon-empty {
+          display: none;
+        }
+
+
+        &.not-enough-available-tokens {
+          cursor: not-allowed;
+        }
       }
 
-      .not-enough-available-tokens {
-        cursor: not-allowed;
-      }
+      
 
-      .token-category-allocation:not(.hover) .token-icon svg.custom {
+      .token-category-allocation:not(.hover) .token-icon.custom {
         &.zero:not(.animating-towards-not-selected):not(.animating-towards-selected) {
           &.not-selected {
             @extend .token-icon-show-like-zero-not-selected;
@@ -227,7 +296,7 @@
         }
       }
 
-      .token-category-allocation.hover .token-icon svg.custom {
+      .token-category-allocation.hover .token-icon.custom {
         &.zero {
           &:not(.hover) {
             /* show as if it was not selected */

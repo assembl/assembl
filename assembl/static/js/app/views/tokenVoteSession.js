@@ -77,6 +77,17 @@ var zeroFullTokenIcon = $('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="
 // Icon of a token := There will be maximum_per_idea of them shown per votable idea. By clicking on one of them, the user sets as many tokens on the idea
 var oneFullTokenIcon = $('<a class="btn"><svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="#4691f6" d="M9.917,0.875c-5.086,0-9.208,4.123-9.208,9.208c0,5.086,4.123,9.208,9.208,9.208s9.208-4.122,9.208-9.208 C19.125,4.998,15.003,0.875,9.917,0.875z M9.917,18.141c-4.451,0-8.058-3.607-8.058-8.058s3.607-8.057,8.058-8.057 c4.449,0,8.057,3.607,8.057,8.057S14.366,18.141,9.917,18.141z M13.851,6.794l-5.373,5.372L5.984,9.672 c-0.219-0.219-0.575-0.219-0.795,0c-0.219,0.22-0.219,0.575,0,0.794l2.823,2.823c0.02,0.028,0.031,0.059,0.055,0.083 c0.113,0.113,0.263,0.166,0.411,0.162c0.148,0.004,0.298-0.049,0.411-0.162c0.024-0.024,0.036-0.055,0.055-0.083l5.701-5.7 c0.219-0.219,0.219-0.575,0-0.794C14.425,6.575,14.069,6.575,13.851,6.794z"></path></svg></a>');
 
+var oneEmptyTokenIcon = $('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="width: 20px; height: 20px;" xml:space="preserve" aria-hidden="true" role="img" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="20px" height="20px" viewBox="0 0 20 20" version="1.1" inkscape:version="0.48.4 r9939" sodipodi:docname="token_zero.svg"> <metadata id="metadata22"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> </cc:Work> </rdf:RDF> </metadata> <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1541" inkscape:window-height="876" id="namedview20" showgrid="false" inkscape:zoom="23.6" inkscape:cx="5.5729235" inkscape:cy="10.96989" inkscape:window-x="59" inkscape:window-y="24" inkscape:window-maximized="1" inkscape:current-layer="svg2" /> <path class="outer" sodipodi:type="arc" fill="none" stroke="#000000" stroke-width="1" stroke-miterlimit="4" stroke-opacity="1" stroke-dasharray="none" id="path2999" sodipodi:cx="9.3644066" sodipodi:cy="11.271187" sodipodi:rx="6.2288136" sodipodi:ry="6.3559322" d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z" transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)" /></svg>');
+
+
+var contourOnlySVG = function(el, color){
+  if ( color === undefined ){
+    color = "green";
+  }
+  var selector = "path, rect, circle";
+  el.find(selector).css("fill", "none");
+  el.find(selector).css("stroke", color);
+}
 
 /*
 Adding CSS to an SVG which has been embedded using an <image> tag is not possible, nor with a background CSS property.
@@ -166,7 +177,13 @@ var transitionAnimation = function(el, el2, duration){
   */
 
   var elo = el.offset();
+  if ( el.css('display') == 'none' ){ // DOM elements which have the "display: none" CSS property are excluded from the rendering tree and thus have a position that is undefined.
+    elo = el.siblings().first().offset();
+  }
   var el2o = el2.offset();
+  if ( el2.css('display') == 'none' ){ // DOM elements which have the "display: none" CSS property are excluded from the rendering tree and thus have a position that is undefined.
+    el2o = el2.siblings().first().offset();
+  }
   var top = el2o.top - elo.top;
   var left = el2o.left - elo.left;
   el3.offset(elo);
@@ -256,27 +273,36 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     el2.appendTo(categoryContainer);
     $.when(customTokenImagePromise).then(function(svgEl){ 
       var token_size = getTokenSize(data["total_number"], 20, 400);
-      for ( var i = 0; i < data["remaining_tokens"]; ++i ){
-        var tokenIcon = svgEl.clone();
-        tokenIcon[0].classList.add("available");
 
-        tokenIcon.css("width", token_size);
-        tokenIcon.attr("width", token_size);
-        tokenIcon.css("height", token_size);
-        tokenIcon.attr("height", token_size);
+      for ( var i = 0; i < data["total_number"]; ++i ){
+        var tokenContainer = $("<div class='token-icon'></div>");
+        var tokenIconElement = svgEl.clone();
+        var emptyTokenIconElement = oneEmptyTokenIcon.clone(); // TODO: use model's empty icon instead
 
-        el2.append(tokenIcon);
-      }
-      for ( var i = data["remaining_tokens"]; i < data["total_number"]; ++i ){
-        var tokenIcon = svgEl.clone();
-        tokenIcon[0].classList.add("not-available");
+        tokenIconElement[0].classList.add("token-icon-full");
+        emptyTokenIconElement[0].classList.add("token-icon-empty");
+        contourOnlySVG(emptyTokenIconElement, "green"); // TODO?: use model's color
 
-        tokenIcon.css("width", token_size);
-        tokenIcon.attr("width", token_size);
-        tokenIcon.css("height", token_size);
-        tokenIcon.attr("height", token_size);
+        tokenIconElement.css("width", token_size);
+        tokenIconElement.attr("width", token_size);
+        tokenIconElement.css("height", token_size);
+        tokenIconElement.attr("height", token_size);
 
-        el2.append(tokenIcon);
+        emptyTokenIconElement.css("width", token_size);
+        emptyTokenIconElement.attr("width", token_size);
+        emptyTokenIconElement.css("height", token_size);
+        emptyTokenIconElement.attr("height", token_size);
+
+        if ( i < data["remaining_tokens"] ){
+          tokenContainer[0].classList.add("available");
+        }
+        else {
+          tokenContainer[0].classList.add("not-available");
+        }
+
+        tokenContainer.append(tokenIconElement);
+        tokenContainer.append(emptyTokenIconElement);
+        el2.append(tokenContainer);
       }
     });
   }
@@ -377,17 +403,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     console.log("TokenCategoryAllocationView::onRender()");
     var that = this;
 
-    /*
-    var colorizeSVG = function(el, color){
-      el.find("*").attr("fill", color);
-    }
-
-    var contourOnlySVG = function(el, color){
-      el.find("*").attr("fill", "none");
-      el.find("*").attr("stroke", color);
-    }
-    */
-
     var customToken = null;
     
 
@@ -397,14 +412,16 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       container.addClass("hover");
     }, function handlerOut(){
       container.removeClass("hover");
-      container.find("svg").each(function(){
+      container.find(".token-icon").each(function(){
         this.classList.remove("hover");
       });
     });
 
     // needs: getTokenSize(), that.model, that.customTokenImageURL, customToken, zeroFullTokenIcon, that.currentValue, that.myVotesCollection, transitionAnimation(), that.postData, that.idea, that.render()
     var renderClickableTokenIcon = function(number_of_tokens_represented_by_this_icon){
-      var el = null;
+      var tokenIconElement = null;
+      var emptyTokenIconElement = null;
+      var tokenContainer = $('<a class="btn token-icon"></a>');
 
       var token_size = getTokenSize(that.model.get("total_number"), 20, 400); // we know this computed size will be smaller than getTokenSize(that.maximum_per_idea ? that.maximum_per_idea + 1 : 0, 10, 400); and we need icons in bags and in ideas to be the same size
 
@@ -412,41 +429,52 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       if ( number_of_tokens_represented_by_this_icon == 0 ){
         /* We used to create dynamically an icon for the zero token case, by styling the icon of the regular token. This is no longer the case, but we may revert this decision in the future.
         if ( that.customTokenImageURL ){
-          el = customToken.clone();
-          //contourOnlySVG(el, "#cccccc");
-          el[0].classList.add("custom");
+          tokenIconElement = customToken.clone();
+          tokenIconElement[0].classList.add("custom");
         }
         else {
-          el = zeroFullTokenIcon.clone();
-          el[0].classList.add("default");
+          tokenIconElement = zeroFullTokenIcon.clone();
+          tokenIconElement[0].classList.add("default");
         }
         */
-        el = zeroFullTokenIcon.clone();
-        el[0].classList.add("custom");
+        tokenIconElement = zeroFullTokenIcon.clone();
+        tokenContainer[0].classList.add("custom");
 
-        el[0].classList.add("zero");
+        tokenContainer[0].classList.add("zero");
       }
       else {
         if ( that.customTokenImageURL ){
-          el = customToken.clone();
-          //contourOnlySVG(el, "#0000ff");
-          el[0].classList.add("custom");
+          tokenIconElement = customToken.clone();
+          tokenContainer[0].classList.add("custom");
         }
         else {
-          el = oneFullTokenIcon.clone();
-          el[0].classList.add("default");
+          tokenIconElement = oneFullTokenIcon.clone();
+          tokenContainer[0].classList.add("default");
         }
-        el[0].classList.add("positive");
+
+        
+        tokenContainer[0].classList.add("positive");
+        tokenIconElement[0].classList.add("token-icon-full");
+
+        emptyTokenIconElement = oneEmptyTokenIcon.clone(); // TODO: use model's empty icon instead
+        emptyTokenIconElement[0].classList.add("token-icon-empty");
+        contourOnlySVG(emptyTokenIconElement, "green"); // TODO?: use model's color
       }
       /*
       From https://github.com/blog/2112-delivering-octicons-with-svg
       "You may have to wrap these SVGs with another div if you want to give them a background color."
       "Internet Explorer needs defined width and height attributes on the svg element in order for them to be sized correctly."
       */
-      el.css("width", token_size);
-      el.attr("width", token_size);
-      el.css("height", token_size);
-      el.attr("height", token_size);
+      tokenIconElement.css("width", token_size);
+      tokenIconElement.attr("width", token_size);
+      tokenIconElement.css("height", token_size);
+      tokenIconElement.attr("height", token_size);
+      if ( number_of_tokens_represented_by_this_icon > 0 ){
+        emptyTokenIconElement.css("width", token_size);
+        emptyTokenIconElement.attr("width", token_size);
+        emptyTokenIconElement.css("height", token_size);
+        emptyTokenIconElement.attr("height", token_size);
+      }
 
       var showAsSelected = false;
       if ( number_of_tokens_represented_by_this_icon == 0 ){
@@ -457,31 +485,24 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
         showAsSelected = true;
       }
       if ( showAsSelected ){
-        el[0].classList.add("selected");
-        /*
-        if ( number_of_tokens_represented_by_this_icon == 0 ){
-          colorizeSVG(el, "#cccccc");
-        }
-        else {
-          colorizeSVG(el, "#00ff00");
-        }
-        */
+        tokenContainer[0].classList.add("selected");
       }
       else {
-        el[0].classList.add("not-selected");
+        tokenContainer[0].classList.add("not-selected");
       }
 
       var tokenBagData = that.myVotesCollection.getTokenBagDataForCategory(that.model);
       var remaining_tokens = tokenBagData["remaining_tokens"];
       var userCanClickThisToken = (remaining_tokens + that.currentValue - number_of_tokens_represented_by_this_icon >= 0);
-      var link = null;
       if ( userCanClickThisToken ){
-        link = $('<a class="btn token-icon"></a>');
-        el.appendTo(link);
+        tokenIconElement.appendTo(tokenContainer);
+        if ( number_of_tokens_represented_by_this_icon > 0 ){
+          emptyTokenIconElement.appendTo(tokenContainer);
+        }
 
-        link.attr("title", "set "+number_of_tokens_represented_by_this_icon+" tokens");
+        tokenContainer.attr("title", "set "+number_of_tokens_represented_by_this_icon+" tokens");
 
-        link.click(function(){
+        tokenContainer.click(function(){
           if ( that.currentValue == number_of_tokens_represented_by_this_icon ){
             return;
           }
@@ -510,11 +531,11 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
-              var theAllocatedToken = link.parent().children().eq(i).find("svg");
+              var theAllocatedToken = tokenContainer.parent().children().eq(i);
               theAvailableToken[0].classList.add("animating-towards-not-available");
               theAllocatedToken[0].classList.add("animating-towards-selected");
               setTimeout(endAnimationTowardsNotAvailable(theAvailableToken[0]), animation_duration*0.9);
-              transitionAnimation(theAvailableToken, theAllocatedToken, animation_duration);
+              transitionAnimation(theAvailableToken.find("svg").first(), theAllocatedToken.find("svg").first(), animation_duration);
             }
           }
           else { // we are removing tokens from this idea
@@ -523,15 +544,15 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .not-available";
               console.log("selector: ", selector);
               var theAvailableToken = $(selector).eq(i - number_of_tokens_represented_by_this_icon - 1);
-              var theAllocatedToken = link.parent().children().eq(i).find("svg");
+              var theAllocatedToken = tokenContainer.parent().children().eq(i);
               theAvailableToken[0].classList.add("animating-towards-available");
               theAllocatedToken[0].classList.add("animating-towards-not-selected");
               setTimeout(endAnimationTowardsAvailable(theAvailableToken[0]), animation_duration*0.9);
-              transitionAnimation(theAllocatedToken, theAvailableToken, animation_duration);
+              transitionAnimation(theAllocatedToken.find("svg").first(), theAvailableToken.find("svg").first(), animation_duration);
             }
           }
 
-          var zeroToken = link.parent().children().eq(0).find("svg");
+          var zeroToken = tokenContainer.parent().children().eq(0);
           if ( number_of_tokens_represented_by_this_icon == 0 ){
             zeroToken[0].classList.add("animating-towards-selected");
             zeroToken[0].classList.remove("animating-towards-not-selected");
@@ -575,21 +596,21 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
               that.myVotesCollection.create(properties);
             }
             that.currentValue = number_of_tokens_represented_by_this_icon;
-            el[0].classList.add("selected");
+            tokenIconElement[0].classList.add("selected");
             container.removeClass("hover");
             that.myVotesCollection.trigger("change:category:"+that.model.getId()); // force re-render of all token allocation views of this same token category (so that the right icons are clickable)
             that.render(); // show immediately the icon it its correct state, without having to wait for collection update
           }, animation_duration*0.9);
         });
         
-        link.hover(function handlerIn(){
-          el[0].classList.add("hover");
-          link.prevAll().children("svg").each(function(){
+        tokenContainer.hover(function handlerIn(){
+          tokenContainer[0].classList.add("hover");
+          tokenContainer.prevAll().each(function(){
             if ( !(this.classList.contains("zero")) ){
               this.classList.add("hover");
             }
           });
-          link.nextAll().children("svg").each(function(){
+          tokenContainer.nextAll().each(function(){
             this.classList.remove("hover");
           });
         }, function handlerOut(){
@@ -599,13 +620,14 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
         });
       } // if ( userCanClickThisToken )
       else {
-        link = $('<div class="token-icon"></div>');
-        el.appendTo(link);
-        el[0].classList.add("not-enough-available-tokens");
-        link.attr("title", "You don't have enough tokens remaining.");
+        //tokenIconElement.appendTo(link);
+        emptyTokenIconElement.appendTo(tokenContainer);
+        //tokenIconElement[0].classList.add("not-enough-available-tokens");
+        tokenContainer[0].classList.add("not-enough-available-tokens");
+        tokenContainer.attr("title", "You don't have enough tokens remaining.");
       }
       
-      link.appendTo(container);
+      tokenContainer.appendTo(container);
     };
 
     var renderAllTokenIcons = function(){
