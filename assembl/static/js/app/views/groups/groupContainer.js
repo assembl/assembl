@@ -1,6 +1,7 @@
 'use strict';
 
 var Marionette = require('../../shims/marionette.js'),
+    ctx = require('../../common/context.js'),
     Assembl = require('../../app.js'),
     GroupContent = require('./groupContent.js'),
     AssemblPanel = require('../assemblPanel.js'),
@@ -17,6 +18,100 @@ var groupContainer = Marionette.CollectionView.extend({
   childView: GroupContent,
   group_borders_size: 0,
   resizeSuspended: false,
+  minPanelSize:AssemblPanel.prototype.minimized_size,
+  
+  onRender:function(){
+    var that = this;
+    that.resizeAllPanels(true);
+    $(window).on("resize",function(){
+      that.resizeAllPanels(true);
+    });
+  },
+  resizeAllPanels:function(skipAnimation){
+    var that = this;
+    var screenSize = window.innerWidth;
+    var animationDuration = 1000;
+    this.children.each(function(groupContentView){
+      groupContentView.children.each(function(panelWrapperView){
+        var panelMinWidth = panelWrapperView.model.get('minWidth');
+        var isPanelMinimized = panelWrapperView.model.get('minimized');
+        var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
+        var panel = panelWrapperView.$el;
+        if(skipAnimation){
+          panel.css({'min-width':panelMinWidth});
+          panel.width(panelWidth);
+        }else{
+          var totalMinWidth = that.getTotalMinWidth();
+          if(totalMinWidth < screenSize){
+            panel.css({'min-width':0});
+            panel.animate({'width': panelWidth}, animationDuration, 'swing',function(){
+              panel.css({'min-width':panelMinWidth});
+            });
+          }else{
+            var isSmallScreen = Ctx.isSmallScreen();
+            if(isSmallScreen){
+              panel.animate({'min-width': panelMinWidth}, animationDuration, 'swing')
+            }else{
+              panel.css({'min-width':0});
+              panel.animate({'width': panelMinWidth}, animationDuration, 'swing',function(){
+                panel.css({'min-width':panelMinWidth});
+              });
+            }
+          }
+        }
+      });
+    });
+  },
+  getPanelWidth:function(panelMinWidth,isPanelMinimized){
+    var screenSize = window.innerWidth;
+    var panelWIdth = 0;
+    if(isPanelMinimized){
+      panelWIdth = this.minPanelSize;
+    }else{
+      var isSmallScreen = ctx.isSmallScreen();
+      if(!isSmallScreen){
+        var totalMinWidth = this.getTotalMinWidth();
+        var panelWidthInPercent = (panelMinWidth * 100) / totalMinWidth;
+        var totalMinimized = this.getTotalWidthMinimized();
+        var panelWidthInPixel = (panelWidthInPercent * (screenSize-totalMinimized)) / 100;
+        panelWIdth = panelWidthInPixel;        
+      }else{
+        panelWIdth = screenSize;
+      }
+    }
+    return panelWIdth;
+  },
+  getTotalMinWidth:function(){
+    var totalMinWidth = 0;    
+    this.children.each(function(groupContentView){
+      groupContentView.children.each(function(panelWrapperView){
+        var isPanelMinimized = panelWrapperView.model.get('minimized');
+        var isPanelHidden = panelWrapperView.model.get('hidden');
+        if(!isPanelHidden){
+          if(!isPanelMinimized){
+            totalMinWidth += panelWrapperView.model.get('minWidth');
+          }
+        }
+      });
+    });
+    return totalMinWidth;
+  },
+  getTotalWidthMinimized:function(){
+    var that = this;
+    var totalMinimized = 0;
+    this.children.each(function(groupContentView){
+      groupContentView.children.each(function(panelWrapperView){
+        var isPanelMinimized = panelWrapperView.model.get('minimized');
+        var isPanelHidden = panelWrapperView.model.get('hidden');
+        if(!isPanelHidden){
+          if(isPanelMinimized){
+            totalMinimized += that.minPanelSize;
+          }
+        }
+      });
+    });
+    return totalMinimized;
+  },
   /*
    * @param view A view (such as a messageList) for
    * which we want the matching groupContent to send events or manipulate

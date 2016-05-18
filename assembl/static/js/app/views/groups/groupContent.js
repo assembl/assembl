@@ -22,135 +22,22 @@ var groupContent = Marionette.CompositeView.extend({
   childViewContainer: ".groupBody",
   childView: PanelWrapper,
   panel_borders_size: 1,
-  minPanelSize:AssemblPanel.prototype.minimized_size,
 
-  initialize: function(options) {
-    var that = this;
-    this.collection = this.model.get('panels');
-    this.groupContainer = options['groupContainer'];
-    setTimeout(function() {
-      if (!that.isViewDestroyed()) {
-        var navView = that.findViewByType(PanelSpecTypes.NAV_SIDEBAR);
-        if (navView) {
-          navView.setViewByName(that.model.get('navigationState'), null);
-        }
-        that.resizePanel(true);
-        $(window).on("resize",function(){
-          that.resizePanel(true);
-        });
-      }
-    }, 200); //FIXME:  Magic delay...
-  },
+
   events: {
     'click .js_closeGroup': 'closeGroup'
   },
-  resizePanel:function(skipAnimation){
-    var that = this;
-    var screenSize = window.innerWidth;
-    var animationDuration = 1000;
-    /* J'ai réécrit les boucles plus bas en backbone, code équivalent à ce que tu
-    avais écrit, simplement avec variables renommées pour mieux lire.
-    
-      Ce faisant, je crois qu'on a la mauvaise logique.  
-      
-      Nous voulons probablement itérer sur les vues, pas les modèles.
-    
-    Voir pour la méthode children
-    http://marionettejs.com/docs/v2.4.5/marionette.collectionview.html#collectionviews-children
-    
-    this.groupContainer.children.each(function(groupContentView){
-      groupContentView.children.each(function(panelWrapperView){
-  
-      C'est sur panelWrapperView qu'il y a l'élément que tu manipule plus bas.
-      
-    En écrivant les exemple plus haut, je me rends compte que cette méthode de
-     groupContent affecte en fait TOUS les groupes.  Elle devrait donc se trouver
-     dans groupContainer, pas groupContent.
-     */
-    this.groupContainer.collection.each(function(groupSpecModel){
-      groupSpecModel.get("panels").each(function(panelSpec){
-        //console.log("resizePanel() panel on panelSpec:", panelSpec);
-        var panelMinWidth = panelSpec.get('minWidth');
-        var isPanelMinimized = panelSpec.get('minimized');
-        var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
-        var panelId = '#' + panelSpec.cid;
-        // there really is no garantee this has even finished rendering.
-        // But worse, those attributes will be lost if it get's re-rendered.
-        // We should mobe this to a method in panelWrapper that would do the
-        // DOM manipulation and survive a re-render.
-        var panel = that.groupContainer.$el.find(panelId);
-        if(skipAnimation){
-          panel.css({'min-width':panelMinWidth});
-          panel.width(panelWidth);
-        }else{
-          var totalMinWidth = that.getTotalMinWidth();
-          if(totalMinWidth < screenSize){
-            panel.css({'min-width':0});
-            panel.animate({'width': panelWidth}, animationDuration, 'swing',function(){
-              panel.css({'min-width':panelMinWidth});
-            });
-          }else{
-            var isSmallScreen = Ctx.isSmallScreen();
-            if(isSmallScreen){
-              panel.animate({'min-width': panelMinWidth}, animationDuration, 'swing')
-            }else{
-              panel.css({'min-width':0});
-              panel.animate({'width': panelMinWidth}, animationDuration, 'swing',function(){
-                panel.css({'min-width':panelMinWidth});
-              });
-            }
-          }
-        }
-      });
-    });
+  initialize: function(options) {
+    this.collection = this.model.get('panels');
+    this.groupContainer = options['groupContainer'];
   },
-  getPanelWidth:function(panelMinWidth,isPanelMinimized){
-    var screenSize = window.innerWidth;
-    var panelWIdth = 0;
-    if(isPanelMinimized){
-      panelWIdth = this.minPanelSize;
-    }else{
-      var isSmallScreen = ctx.isSmallScreen();
-      if(!isSmallScreen){
-        var totalMinWidth = this.getTotalMinWidth();
-        var panelWidthInPercent = (panelMinWidth * 100) / totalMinWidth;
-        var totalMinimized = this.getTotalWidthMinimized();
-        var panelWidthInPixel = (panelWidthInPercent * (screenSize-totalMinimized)) / 100;
-        panelWIdth = panelWidthInPixel;        
-      }else{
-        panelWIdth = screenSize;
+  onRender:function(){
+    if (!this.isViewDestroyed()) {
+      var navView = this.findViewByType(PanelSpecTypes.NAV_SIDEBAR);
+      if (navView) {
+        navView.setViewByName(this.model.get('navigationState'), null);
       }
     }
-    return panelWIdth;
-  },
-  getTotalMinWidth:function(){
-    var totalMinWidth = 0;    
-    this.groupContainer.collection.each(function(group){
-      group.attributes.panels.each(function(panel){
-        var isPanelMinimized = panel.get('minimized');
-        var isPanelHidden = panel.get('hidden');
-        if(!isPanelMinimized && !isPanelHidden){
-          totalMinWidth += panel.get('minWidth');
-        }
-        if(isPanelHidden && isPanelMinimized){
-          totalMinWidth -= panel.get('minWidth');
-        }
-      });
-    });
-    return totalMinWidth;
-  },
-  getTotalWidthMinimized:function(){
-    var that = this;
-    var totalMinimized = 0;
-    this.groupContainer.collection.each(function(group){
-      group.attributes.panels.each(function(panel){
-        var isPanelMinimized = panel.get('minimized');
-        if(isPanelMinimized){
-          totalMinimized += that.minPanelSize;
-        }
-      });
-    });
-    return totalMinimized;
   },
   serializeData: function() {
     return {
@@ -190,7 +77,7 @@ var groupContent = Marionette.CompositeView.extend({
   closeGroup: function() {
     this.applyUserCustomDataChangesOnGroupClose();
     this.model.collection.remove(this.model);
-    this.resizePanel(true);
+    this.groupContainer.resizeAllPanels(true);
   },
   /**
    * Tell the panelWrapper which view to put in its contents

@@ -35,7 +35,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
     'click @ui.minimizePanel': 'toggleMinimize'
   },
   _unlockCallbackQueue: {},
-  _minimizedStateButton: null,
   panelLockedReason: null,
   panelUnlockedReason: null,
   minPanelSize:AssemblPanel.prototype.minimized_size,
@@ -55,7 +54,19 @@ var PanelWrapper = Marionette.LayoutView.extend({
     $(window).on("resize",function(){
       that.setPanelMinWidth();
     });
+  },
+  onRender: function() {
+    this.contents.show(this.contentsView);
+    this.setHidden();
     this.displayContent(true);
+    Ctx.initTooltips(this.ui.panelHeader);
+    Ctx.initTooltips(this.ui.panelContentsWhenMinimized);
+    if (this.model.get('locked')){
+      this.lockPanel(true);
+    }
+    else{
+      this.unlockPanel(true);
+    }
   },
   serializeData: function() {
     return {
@@ -75,7 +86,6 @@ var PanelWrapper = Marionette.LayoutView.extend({
    */
   setPanelMinWidth:function(){
     this.$el.addClass(this.model.attributes.type + '-panel');
-    this.$el.attr('id',this.model.cid);
     var screenSize = window.innerWidth;
     var isPanelMinimized = this.model.get('minimized');
     if(isPanelMinimized){
@@ -128,7 +138,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
       this.model.set('minimized',requestedMiminizedState);
       this.setPanelMinWidth();
       this.displayContent();
-      this.groupContent.resizePanel();
+      this.groupContent.groupContainer.resizeAllPanels();
     }
   },
 
@@ -185,29 +195,13 @@ var PanelWrapper = Marionette.LayoutView.extend({
     Ctx.removeCurrentlyDisplayedTooltips();
     this.model.collection.remove(this.model);
   },
-  onRender: function() {
-    this.contents.show(this.contentsView);
-    this.setHidden();
-    Ctx.initTooltips(this.ui.panelHeader);
-    Ctx.initTooltips(this.ui.panelContentsWhenMinimized);
-    this._minimizedStateButton = this.$('.panel-header-minimize');
-    this._minimizedStateIcon = this.$('.panel-header-minimize i');
-    if (this.model.get('locked'))
-    {
-      this.lockPanel(true);
-    }
-    else
-        {
-          this.unlockPanel(true);
-        }
-  },
   setHidden: function() {
-    this.groupContent.resizePanel(true);
     if (this.model.get('hidden')) {
       this.$el.hide();
     } else {
       this.$el.css('display', 'table-cell'); /* Set it back to its original value, which is "display: table-cell" in _groupContainer.scss . But why is it so? */
     }
+    this.groupContent.groupContainer.resizeAllPanels(true);
   },
   /**
    * lock the panel if unlocked
