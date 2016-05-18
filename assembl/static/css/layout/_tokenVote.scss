@@ -146,6 +146,12 @@
         min-height: 2*$baseLineHeightFontMultiplier*$baseFontSize; // Should match the readMoreAfterHeightPx of the description's view
         color: #999;
         font-size: 12px;
+
+        .ckeditorField-seeMoreOrLess {
+          .seeMore, .seeLess {
+            color: #999;
+          }
+        }
       }
     }
     .right-column {
