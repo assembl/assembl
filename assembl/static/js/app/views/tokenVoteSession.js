@@ -1097,7 +1097,8 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   className: 'modal-token-vote-session popin-wrapper',
   cancelEl: '.close, .js_close',
   events: {
-    'scroll': 'onScroll'
+    'scroll': 'onScroll',
+    'click .submit-button-container a': 'onSubmit'
   },
 
   availableTokensPositionTop: 1000, // initial value high, will be updated in render()
@@ -1226,13 +1227,51 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       popin_title: i18n.gettext("Token vote"),
       question_title: "question_title" in question_item ? question_item.question_title : "",
       question_description: "question_description" in question_item ? question_item.question_description : "",
-      available_tokens_info: i18n.gettext("Split your tokens among the ideas of your choice. By default, your vote is neutral per project.")
+      available_tokens_info: i18n.gettext("Split your tokens among the ideas of your choice. By default, your vote is neutral per project."),
+      save_vote: i18n.gettext("Save your vote")
     };
   },
 
   onDestroy: function(){
     Ctx.clearModal({destroyModal: false});
+  },
+
+  onSubmit: function(){
+    console.log("onSubmit()");
+    this.onDestroy();
+    this.remove();
+    var modalView = new TokenVoteSessionSubmittedModal();
+    Ctx.setCurrentModalView(modalView);
+    Assembl.slider.show(modalView);
   }
+});
+
+var TokenVoteSessionSubmittedModal = Backbone.Modal.extend({
+  constructor: function TokenVoteSessionSubmittedModal(){
+    Backbone.Modal.apply(this, arguments);
+  },
+
+  template: '#tmpl-modalWithoutIframe',
+  className: 'modal-token-vote-session-submitted popin-wrapper',
+  cancelEl: '.close, .js_close',
+
+  onShow: function(){
+    var container = this.$el.find(".js_modal-body");
+    container.empty();
+    var text = $("<p></p>");
+    text.text(i18n.gettext("Your vote has been saved successfully."));
+    container.append(text);
+    var btn = $("<a class='btn btn-sm btn-primary js_close'></a>");
+    btn.text(i18n.gettext("OK"));
+    container.append(btn);
+  },
+
+  serializeData: function(){
+    return {
+      modal_title: i18n.gettext("Vote confirmation")
+    }
+  }
+
 });
 
 module.exports = {

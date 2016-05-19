@@ -2,6 +2,22 @@
   max-width: 800px;
   margin-top: 0;
   animation: none; /* required for the "position: fixed;" used on token bags to work properly */
+
+  .submit-button-container {
+    margin-bottom: 10px;
+  }
+}
+
+.modal-token-vote-session-submitted .bbm-modal {
+  max-width: 500px;
+
+  .popin-body {
+    text-align: center;
+    padding-bottom: 0;
+    a {
+      margin-top: 20px;
+    }
+  }
 }
 
 .token-vote-session {

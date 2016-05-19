@@ -73,6 +73,15 @@
       font-size: 14px;
       text-decoration: none;
       border-top-right-radius: $borderRadiusM;
+      opacity: initial; /* necessary to override .close of growl component... */
+
+      &:hover, &:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        filter: alpha(opacity=50);
+        opacity: .5;
+      }
 
       span {
         display: inline-block;
