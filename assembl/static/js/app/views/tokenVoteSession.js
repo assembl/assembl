@@ -855,12 +855,6 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     this._calculate();
   },
 
-  _createDataId: function(){
-    var root = 'js_data-idea-',
-        id = Ctx.extractId(this.model.get('objectConnectedTo').id);
-    this.dataId = root + id; 
-  },
-
   _calculate: function(){
     var that = this;
     var results = this.model.get('sums'); //A pojo object
@@ -877,7 +871,6 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
      .values()
      .value();
     this.results = sortedResults;
-    this._createDataId();
   },
 
   serializeData: function(){
@@ -885,8 +878,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     return {
       ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
       ideaDescription: this.model.get('objectConnectedTo').getLongTitleDisplayText(),
-      categoryResult: this.results,
-      dataId: this.dataId
+      categoryResult: this.results
     };
   },
 
@@ -896,17 +888,18 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
                         .domain([0, this.maxPercent])
                         .range([0, this.maxPixels]);
 
-    d3.select('#' + this.dataId)
-      .selectAll('div')
-        .data(this.results)
-      .enter()
-        .append('div')
-        .classed(['right-column', 'data'])
+    var percent = d3.format('%');
+    var results = d3.select(this.el)
+       .selectAll("div.token-vote-result-category-column")
+        .data(this.results);
+    results.append('div')
+          .style('background-color', 'red')
+          .style('display', 'inline-block')
           .style('width', function(d){
             console.log('d', d);
             var tmp = scale(d) + 'px'; 
-            return tmp; })
-          .text(function(d){ return d;})
+            return tmp; }).append('img');
+    results.append('span').text(function(d){ return percent(d);});
   },
 
   onShow: function(){

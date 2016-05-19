@@ -2,4 +2,6 @@
     <div class='idea-title'><%= ideaTitle %></div>
     <div class='mts js_region-idea-description idea-description'></div>
 </div>
-<div id="<%= dataId %>"></div>
+<% _.each(categoryResult, function(result){ %>
+<div class='token-vote-result-category-column right-column'></div>
+<% }); %>
