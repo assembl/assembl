@@ -844,6 +844,9 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   initialize: function(options){
     this.categoryIndex = options.categoryIndex;
     this.shownDescription = false;
+    this.categoryNumber = _.indexOf(this.categoryIndex, this.model.get('typename'));
+    this.sumTokens = options.sumTokens;
+    this.maxPercent = options.maxPercent;
     this.descriptionButton = i18n.gettext("See Description");
     // console.log("[TokenVoteResultView] Single result view with model", this.model);
     // console.log("The category index: ", this.categoryIndex);
@@ -859,7 +862,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
             return 0;
         }
         else {
-          return results[categoryType];
+          return results[categoryType] / that.sumTokens[index];
         }
      })
      .values()
@@ -870,7 +873,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
       ideaDescription: this.model.get('objectConnectedTo').getLongTitleDisplayText(),
       categoryResult: sortedResults,
       descriptionButton: this.descriptionButton
-    }
+    };
   },
 
   onSeeDescriptionClick: function(ev){
@@ -926,12 +929,16 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
   childViewContainer: 'tbody',
   initialize: function(options){
     this.categoryIndex = options.categoryIndex;
+    this.sumTokens = options.sumTokens;
+    this.maxPercent = options.maxPercent;
   },
 
   childViewOptions: function(){
     return {
-      categoryIndex: this.categoryIndex
-    }
+      categoryIndex: this.categoryIndex,
+      sumTokens: this.sumTokens,
+      maxPercent: this.maxPercent
+    };
   },
 
   serializeData: function(){
@@ -970,11 +977,11 @@ var TokenResultView = Marionette.LayoutView.extend({
 
   initialize: function(options){
     this.model = options.model;
-    
+
     //categoryIndex will be used by each vote result view to show the results in the correct order,
     //{index: category}
     this.categoryIndex = [];
-    
+
     var CollectionManager = require('../common/collectionManager.js'),
         cm = new CollectionManager(),
         Widget = require('../models/widget.js'),
@@ -1004,7 +1011,7 @@ var TokenResultView = Marionette.LayoutView.extend({
         });
         var sums = _.map(that.categoryIndex, function(categName) {
                 return _.map(results, function(result) {
-                    return r.sums[categName] || 0; });}),
+                    return result.sums[categName] || 0; });}),
             maxTokens = _.map(sums, function (s) {
                 return Math.max.apply(null, s);}),
             sumTokens = _.map(sums, function (s) {
