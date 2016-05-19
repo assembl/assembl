@@ -21,6 +21,10 @@
 }
 
 .token-vote-session {
+    &.token-vote-results {
+        overflow-x: scroll;
+    }
+
   .question-info {
     .question-title {
       @extend .h1;
@@ -198,7 +202,9 @@
     }
 
     .token-result-row {
-      
+        .token-vote-result-category-column {
+            min-width: 80px;
+        }
     }
 
     .tokens-for-idea {
