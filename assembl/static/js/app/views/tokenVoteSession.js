@@ -1002,10 +1002,21 @@ var TokenResultView = Marionette.LayoutView.extend({
           var name = category.get('typename');
           that.categoryIndex.push(name);
         });
-
+        var sums = _.map(that.categoryIndex, function(categName) {
+                return _.map(results, function(result) {
+                    return r.sums[categName] || 0; });}),
+            maxTokens = _.map(sums, function (s) {
+                return Math.max.apply(null, s);}),
+            sumTokens = _.map(sums, function (s) {
+                return _.reduce(s, function(a,b) {return a+b;});}),
+            percents = _.map(_.zip(maxTokens, sumTokens), function (x) {
+                return x[0] / x[1];}),
+            maxPercent = Math.max.apply(null, percents);
         that.tokenResultsView = new TokenVoteResultCollectionView({
           collection: that.voteResults,
           categoryIndex: that.categoryIndex,
+          sumTokens: sumTokens,
+          maxPercent: maxPercent,
           reorderOnSort: true //disable re-rendering child views on sort
         });
         if (!that.isViewDestroyed()){
