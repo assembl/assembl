@@ -824,6 +824,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   },
 
   template: '#tmpl-tokenVoteResultSingleView',
+  className: 'token-result-row',
 
   ui: {
     // 'descriptionClick': '.js_see-idea-description',
@@ -849,18 +850,14 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   },
 
   serializeData: function(){
-    
+    var that = this;
     var results = this.model.get('sums'); //A pojo object
     var sortedResults = _.chain(this.categoryIndex)
      .clone()
      .mapObject(function(categoryType, index){
         if (! (_.has(results, categoryType))){
-          console.error('[TokenResultView][ideaId:' +
-          this.model.get('objectConnectedTo').id + '] ' +
-          'Idea does not have vote results for categoryType ' + categoryType);
-          return false;
+            return 0;
         }
-
         else {
           return results[categoryType];
         }
