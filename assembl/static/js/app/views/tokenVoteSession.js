@@ -1137,7 +1137,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
     // build myVotes collection from my_votes and keep it updated
     var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
-    var myVotes = "my_votes" in that.tokenVoteSpecification ? that.tokenVoteSpecification.my_votes : null;
+    var myVotes = "my_votes" in that.tokenVoteSpecification ? that.tokenVoteSpecification.my_votes : null; // TODO: maybe we should dynamically load user's votes on each time the user opens the popin, instead of relying on potentially outdated user vote data
     that.myVotesCollection = new Widget.TokenIdeaVoteCollection(myVotes);
 
     // This URL needs the idea id in the JSON payload
@@ -1233,6 +1233,15 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   },
 
   onDestroy: function(){
+    if ( this.widgetModel ){
+      /*
+      We re-fetch widget data from the server, so that when the user opens the vote popin again,
+      up-to-date information is displayed (because this widget data comes from a model contained
+      in the collection collectionManager::getAllWidgetsPromise()).
+      TODO: This is a bit hacky, maybe we should find a better way, for example when popin opens, re-load user votes (instead of widget) and use these instead of the ones listed in the widget.
+      */
+      this.widgetModel.fetch();
+    }
     Ctx.clearModal({destroyModal: false});
   },
 
