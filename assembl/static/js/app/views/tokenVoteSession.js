@@ -11,7 +11,9 @@ var Marionette = require('../shims/marionette.js'),
   CKEditorField = require('./reusableDataFields/ckeditorField.js'),
   IdeaModel = require('../models/idea.js'),
   i18n = require('../utils/i18n.js'),
-  openIdeaInModal = require('./modals/ideaInModal.js');
+  openIdeaInModal = require('./modals/ideaInModal.js'),
+  Ctx = require('../common/context.js'),
+  d3 = require('d3');
 
 
 // from http://stackoverflow.com/questions/3959211/fast-factorial-function-in-javascript
@@ -829,7 +831,8 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   ui: {
     // 'descriptionClick': '.js_see-idea-description',
     // 'descriptionButton': '.js_description-button',
-    'descriptionRegion': '.js_region-idea-description'
+    'descriptionRegion': '.js_region-idea-description',
+    'allData': '.js_data'
   },
 
   events: {
@@ -848,11 +851,17 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     this.sumTokens = options.sumTokens;
     this.maxPercent = options.maxPercent;
     this.descriptionButton = i18n.gettext("See Description");
-    // console.log("[TokenVoteResultView] Single result view with model", this.model);
-    // console.log("The category index: ", this.categoryIndex);
+    this.maxPixels = 100;
+    this._calculate();
   },
 
-  serializeData: function(){
+  _createDataId: function(){
+    var root = 'js_data-idea-',
+        id = Ctx.extractId(this.model.get('objectConnectedTo').id);
+    this.dataId = root + id; 
+  },
+
+  _calculate: function(){
     var that = this;
     var results = this.model.get('sums'); //A pojo object
     var sortedResults = _.chain(this.categoryIndex)
@@ -867,31 +876,37 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
      })
      .values()
      .value();
+    this.results = sortedResults;
+    this._createDataId();
+  },
+
+  serializeData: function(){
 
     return {
       ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
       ideaDescription: this.model.get('objectConnectedTo').getLongTitleDisplayText(),
-      categoryResult: sortedResults,
-      descriptionButton: this.descriptionButton
+      categoryResult: this.results,
+      dataId: this.dataId
     };
   },
 
-  onSeeDescriptionClick: function(ev){
-    ev.preventDefault();
+  onRender: function(){
+    //Have to define the data-points in an array.
+    var scale = d3.scale.linear()
+                        .domain([0, this.maxPercent])
+                        .range([0, this.maxPixels]);
 
-    if (this.shownDescription === true) {
-      this.shownDescription = false;
-      this.ui.descriptionButton.text(this.descriptionButton);
-      this.ui.descriptionRegion.empty();
-    }
-
-    else {
-      this.shownDescription = true;
-      var descriptionButtonText = i18n.gettext("Hide Description");
-      this.ui.descriptionButton.text(descriptionButtonText);
-      this.ui.descriptionRegion.text(this.model.get('objectConnectedTo').getLongTitleDisplayText());
-    }
-
+    d3.select('#' + this.dataId)
+      .selectAll('div')
+        .data(this.results)
+      .enter()
+        .append('div')
+        .classed(['right-column', 'data'])
+          .style('width', function(d){
+            console.log('d', d);
+            var tmp = scale(d) + 'px'; 
+            return tmp; })
+          .text(function(d){ return d;})
   },
 
   onShow: function(){
