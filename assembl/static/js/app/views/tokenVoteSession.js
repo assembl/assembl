@@ -1009,6 +1009,13 @@ var TokenResultView = Marionette.LayoutView.extend({
           var name = category.get('typename');
           that.categoryIndex.push(name);
         });
+        // Compute the number of tokens spent by category,
+        // and for each category, the maximum percent of tokens
+        // that were spent on any one idea. This maxPercent will
+        // be used for scaling.
+        // Note that we could also have scaled not on tokens spent,
+        // but tokens spendable (given number of voters * max tokens.)
+        // We should code both approaches and compare at some point.
         var sums = _.map(that.categoryIndex, function(categName) {
                 return _.map(results, function(result) {
                     return result.sums[categName] || 0; });}),
