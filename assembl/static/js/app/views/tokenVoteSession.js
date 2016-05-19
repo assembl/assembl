@@ -935,6 +935,13 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
     return {
       categoryIndex: this.categoryIndex
     }
+  },
+
+  serializeData: function(){
+    var categories = _.values(this.categoryIndex);
+    return {
+      categories: categories
+    }
   }
 });
 
@@ -1021,13 +1028,11 @@ var TokenResultView = Marionette.LayoutView.extend({
         items = "items" in settings ? settings.items : [],
         questionItem = items.length ? items[0] : null,
         questionTitle = "question_title" in questionItem ? questionItem.question_title : "",
-        questionDescription = "question_description" in questionItem ? questionItem.question_description : "",
-        categories = _.values(this.categoryMap);
+        questionDescription = "question_description" in questionItem ? questionItem.question_description : "";
     
     return {
       questionTitle: questionTitle,
       questionDescription: questionDescription,
-      categories: categories
     }
   },
 
