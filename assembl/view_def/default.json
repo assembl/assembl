@@ -603,6 +603,8 @@
         "typename": true,
         "name": ":extended",
         "image": true,
+        "image_empty": true,
+        "color": true,
         "token_vote_specification": true
     },
     "Document": {

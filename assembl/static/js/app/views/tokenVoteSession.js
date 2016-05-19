@@ -256,7 +256,10 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     
     var category = this.model;
     var customTokenImageURL = category.get("image");
-    var customTokenImagePromise = getSVGElementByURLPromise(customTokenImageURL);
+    var customTokenImagePromise = customTokenImageURL ? getSVGElementByURLPromise(customTokenImageURL) : $.Deferred().resolve();
+    var customEmptyTokenImageURL = category.get("image_empty");
+    var color = category.get("color");
+    var customEmptyTokenImagePromise = customEmptyTokenImageURL ? getSVGElementByURLPromise(customEmptyTokenImageURL) : $.Deferred().resolve();
     var data = that.myVotesCollection.getTokenBagDataForCategory(category);
     categoryContainer.addClass('token-bag-for-category');
     categoryContainer.addClass(category.getCssClassFromId());
@@ -271,18 +274,27 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     el2.addClass("available-tokens-icons");
     
     el2.appendTo(categoryContainer);
-    $.when(customTokenImagePromise).then(function(svgEl){ 
+    $.when(customTokenImagePromise, customEmptyTokenImagePromise).then(function(fullToken, emptyToken){ 
       var token_size = getTokenSize(data["total_number"], 20, 400);
 
       for ( var i = 0; i < data["total_number"]; ++i ){
         var tokenContainer = $("<div class='token-icon'></div>");
-        var tokenIconElement = svgEl.clone();
-        var emptyTokenIconElement = oneEmptyTokenIcon.clone(); // TODO: use model's empty icon instead
+        var tokenIconElement = fullToken.clone();
 
+        var emptyTokenIconElement = null;
+        if ( customEmptyTokenImageURL ){
+          emptyTokenIconElement = emptyToken.clone();
+        }
+        else {
+          emptyTokenIconElement = oneEmptyTokenIcon.clone();
+        }
+        if ( color ){
+          contourOnlySVG(emptyTokenIconElement, color);
+        }
+        
         tokenIconElement[0].classList.add("token-icon-full");
         emptyTokenIconElement[0].classList.add("token-icon-empty");
-        contourOnlySVG(emptyTokenIconElement, "green"); // TODO?: use model's color
-
+        
         tokenIconElement.css("width", token_size);
         tokenIconElement.attr("width", token_size);
         tokenIconElement.css("height", token_size);
@@ -397,13 +409,19 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     }
 
     this.customTokenImageURL = this.model.get("image");
-    this.customTokenImagePromise = getSVGElementByURLPromise(this.customTokenImageURL);
+    this.customTokenImagePromise = this.customTokenImageURL ? getSVGElementByURLPromise(this.customTokenImageURL) : $.Deferred().resolve();
+
+    this.customEmptyTokenImageURL = this.model.get("image_empty");
+    this.customEmptyTokenImagePromise = this.customEmptyTokenImageURL ? getSVGElementByURLPromise(this.customEmptyTokenImageURL) : $.Deferred().resolve();
+
+    this.customColor = this.model.get("color");
   },
   onRender: function(){
     console.log("TokenCategoryAllocationView::onRender()");
     var that = this;
 
     var customToken = null;
+    var customEmptyToken = null;
     
 
     var container = this.$el;
@@ -456,9 +474,16 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
         tokenContainer[0].classList.add("positive");
         tokenIconElement[0].classList.add("token-icon-full");
 
-        emptyTokenIconElement = oneEmptyTokenIcon.clone(); // TODO: use model's empty icon instead
+        console.log("that.customEmptyTokenImageURL: ", that.customEmptyTokenImageURL);
+        if ( that.customEmptyTokenImageURL ){
+          emptyTokenIconElement = customEmptyToken.clone();
+        } else {
+          emptyTokenIconElement = oneEmptyTokenIcon.clone();
+        }
+        if ( that.customColor ){
+          contourOnlySVG(emptyTokenIconElement, that.customColor);
+        }
         emptyTokenIconElement[0].classList.add("token-icon-empty");
-        contourOnlySVG(emptyTokenIconElement, "green"); // TODO?: use model's color
       }
       /*
       From https://github.com/blog/2112-delivering-octicons-with-svg
@@ -636,15 +661,15 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       }
     };
 
-    if ( that.customTokenImageURL ){
-      $.when(that.customTokenImagePromise).then(function(svgEl){
-        customToken = svgEl;
-        renderAllTokenIcons();
-      });
-    }
-    else {
+    $.when(that.customTokenImagePromise, that.customEmptyTokenImagePromise).then(function(fullIcon, emptyIcon){
+      if ( that.customTokenImageURL ){
+        customToken = fullIcon;
+      }
+      if ( that.customEmptyTokenImageURL ){
+        customEmptyToken = emptyIcon;
+      }
       renderAllTokenIcons();
-    }
+    });
   },
   serializeData: function(){
     return {
