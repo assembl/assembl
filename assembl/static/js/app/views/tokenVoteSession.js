@@ -157,7 +157,6 @@ function getRandomInt(min, max) {
 
 // Copies el and animates it towards el2
 var transitionAnimation = function(el, el2, duration){
-  console.log("transitionAnimation(): ", el, el2, duration);
   if ( !el.length || !el2.length ){
     return;
   }
@@ -225,7 +224,6 @@ var TokenBagsView = Marionette.LayoutView.extend({
     this.listenTo(this.myVotesCollection, "reset change:value", this.render);
   },
   onRender: function(){
-    console.log("TokenBagsView::onRender()");
     var that = this;
 
     var bags = new RemainingTokenCategoriesCollectionView({
@@ -360,13 +358,11 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     }
 
     this.voteSpecification = this.options.voteSpecification;
-    console.log("this.voteSpecification: ", this.voteSpecification);
     this.idea = this.options.idea;
     this.myVotesCollection = this.options.myVotesCollection;
     this.listenTo(this.myVotesCollection, "change:category:"+this.model.getId(), this.render); // force re-render of all other token allocation views of the same token category, so that only the right icons are clickable. We use this way instead of setting this.collection to this.myVotesCollection and adding a collectionEvents hash, because does it not seem to work (probably because the hash executes before initialize())
 
     var myVote = this.myVotesCollection.findWhere({"idea": this.idea.get("@id"), "token_category": this.model.get("@id")});
-    console.log("myVote: ", myVote);
     if ( myVote ){
       this.currentValue = myVote.get("value") || 0;
     }
@@ -401,8 +397,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       this.postData["@type"] = "TokenIdeaVote";
       this.postData["token_category"] = category_id;
       //this.postData["value"] = 2;
-      console.log("this.voteURL: ", this.voteURL);
-      console.log("this.postData: ", this.postData);
     }
     else {
       console.error("could not compte this.voteURL and this.postData");
@@ -417,7 +411,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     this.customColor = this.model.get("color");
   },
   onRender: function(){
-    console.log("TokenCategoryAllocationView::onRender()");
     var that = this;
 
     var customToken = null;
@@ -474,7 +467,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
         tokenContainer[0].classList.add("positive");
         tokenIconElement[0].classList.add("token-icon-full");
 
-        console.log("that.customEmptyTokenImageURL: ", that.customEmptyTokenImageURL);
         if ( that.customEmptyTokenImageURL ){
           emptyTokenIconElement = customEmptyToken.clone();
         } else {
@@ -749,13 +741,11 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
   },
   onRender: function(){
     var that = this;
-    console.log("this.parent: ", this.parent);
     var tokenCategories = "tokenCategories" in this.parent.options ? this.parent.options.tokenCategories : null;
     var voteSpecification = "voteSpecification" in this.parent.options ? this.parent.options.voteSpecification : null;
     var myVotesCollection = "myVotesCollection" in this.parent.options ? this.parent.options.myVotesCollection : null;
     var idea = that.model;
     var tokenCategoryCollection;
-    console.log("tokenCategories: ", tokenCategories);
     if ( tokenCategories ){
       // if there are 2 categories and they are exclusive, we show them on a single row
       if ( tokenCategories.length == 2 && voteSpecification && "exclusive_categories" in voteSpecification && voteSpecification.exclusive_categories ){
@@ -1127,10 +1117,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       if ( that.tokenVoteSpecification ){
         if ( "token_categories" in that.tokenVoteSpecification && _.isArray(that.tokenVoteSpecification.token_categories) ){
           var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
-          console.log("Widget: ", Widget);
-          console.log("tokenVoteSpecification.token_categories: ", that.tokenVoteSpecification.token_categories);
           that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
-          console.log("that.tokenCategories: ", that.tokenCategories);
         }
       }
     }
@@ -1246,7 +1233,6 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   },
 
   onSubmit: function(){
-    console.log("onSubmit()");
     this.onDestroy();
     this.remove();
     var modalView = new TokenVoteSessionSubmittedModal();
