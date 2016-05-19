@@ -613,6 +613,13 @@ var VoteResultCollection = Base.Collection.extend({
   initialize: function(options){
     this.widgetModel = options.widgetModel;
     this.tokenSpecModel = this.widgetModel.getVoteSpecificationModel();
+    this.sortAscending = false;
+    this.sortSpecName =  this.tokenSpecModel.get("token_categories").models[0].get("typename");
+  },
+
+  comparator: function(model) {
+    var sums = model.get("sums") || {};
+    return (this.sortAscending?1:-1) * (sums[this.sortSpecName] || 0);
   },
 
   /*

@@ -925,12 +925,51 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
   },
 
   template: '#tmpl-tokenVoteResultCollectionView',
+
+  ui: {
+    'categoryName': '.js_vote-result-category'
+  },
+
+  events: {
+    'click @ui.categoryName': 'onCategoryClickName'
+  },
+
   childView: TokenVoteResultView,
   childViewContainer: 'tbody',
+  sortOnCategoryNum: 0,
   initialize: function(options){
+    this.firstRender = true;
     this.categoryIndex = options.categoryIndex;
     this.sumTokens = options.sumTokens;
     this.maxPercent = options.maxPercent;
+    this.voteResults = options.voteResults;
+    this.sortAscending = _.map(this.categoryIndex, function() {return false;});
+    this.voteResults.sortSpecName = this.categoryIndex[this.sortOnCategoryNum];
+    this.voteResults.sort();
+  },
+
+  onCategoryClickName: function(ev){
+    // remove old arrow
+    var arrowEl = $(this.ui.categoryName[this.sortOnCategoryNum]).find("i");
+    arrowEl.removeClass("icon-down icon-up");
+    // Set our state
+    var category = ev.currentTarget.cellIndex - 1;
+    if (category == this.sortOnCategoryNum) {
+        this.sortAscending[category] = !this.sortAscending[category];
+    } else {
+        this.sortOnCategoryNum = category;
+        arrowEl = $(ev.currentTarget).find('i');
+    }
+    // set arrow
+    if (this.sortAscending[category]) {
+        arrowEl.addClass("icon-up");
+    } else {
+        arrowEl.addClass("icon-down");
+    }
+    // Sort the collection based on the category
+    this.voteResults.sortSpecName = this.categoryIndex[this.sortOnCategoryNum];
+    this.voteResults.sortAscending = this.sortAscending[category];
+    this.voteResults.sort();
   },
 
   childViewOptions: function(){
@@ -939,6 +978,13 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
       sumTokens: this.sumTokens,
       maxPercent: this.maxPercent
     };
+  },
+
+  onRender: function() {
+    if (this.firstRender) {
+        $(this.ui.categoryName[0]).find("i").addClass("icon-down");
+        this.firstRender = false;
+    }
   },
 
   serializeData: function(){
@@ -963,12 +1009,7 @@ var TokenResultView = Marionette.LayoutView.extend({
   template: "#tmpl-tokenVoteResultView",
 
   ui: {
-    'resultArea': '.js_vote-result-region',
-    'categoryName': '.js_vote-result-category'
-  },
-
-  events: {
-    'click @ui.categoryName': 'onCategoryClickName'
+    'resultArea': '.js_vote-result-region'
   },
 
   regions: {
@@ -1031,6 +1072,7 @@ var TokenResultView = Marionette.LayoutView.extend({
           categoryIndex: that.categoryIndex,
           sumTokens: sumTokens,
           maxPercent: maxPercent,
+          voteResults: that.voteResults,
           reorderOnSort: true //disable re-rendering child views on sort
         });
         if (!that.isViewDestroyed()){
@@ -1041,7 +1083,7 @@ var TokenResultView = Marionette.LayoutView.extend({
 
       //Can use D3 linear scale (http://bl.ocks.org/kiranml1/6872226) to represent
       //the data.
-    }); 
+    });
   },
 
   serializeData: function(){
@@ -1051,16 +1093,11 @@ var TokenResultView = Marionette.LayoutView.extend({
         questionItem = items.length ? items[0] : null,
         questionTitle = "question_title" in questionItem ? questionItem.question_title : "",
         questionDescription = "question_description" in questionItem ? questionItem.question_description : "";
-    
+
     return {
       questionTitle: questionTitle,
       questionDescription: questionDescription,
     }
-  },
-
-  onCategoryClickName: function(ev){
-    console.log('Category click name was clicked with event', ev);
-    //Sort the collection based on the category
   },
 
   onShow: function(){
