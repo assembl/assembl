@@ -517,7 +517,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
           emptyTokenIconElement.appendTo(tokenContainer);
         }
 
-        tokenContainer.attr("title", "set "+number_of_tokens_represented_by_this_icon+" tokens");
+        tokenContainer.attr("title", i18n.sprintf(i18n.gettext("set %d tokens"), number_of_tokens_represented_by_this_icon));
 
         tokenContainer.click(function(){
           if ( that.currentValue == number_of_tokens_represented_by_this_icon ){
@@ -641,7 +641,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
         emptyTokenIconElement.appendTo(tokenContainer);
         //tokenIconElement[0].classList.add("not-enough-available-tokens");
         tokenContainer[0].classList.add("not-enough-available-tokens");
-        tokenContainer.attr("title", "You don't have enough tokens remaining.");
+        tokenContainer.attr("title", i18n.gettext("You don't have enough tokens remaining."));
       }
       
       tokenContainer.appendTo(container);
@@ -1158,6 +1158,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       var orderedVotableIdeas = that.votableIdeasCollection.sortBy(function(idea){return idea.id;}); // /!\ with this, "local:Idea/257" < "local:Idea/36"
       var n = orderedVotableIdeas.length; // if there are n votable ideas, then there are m = n! ("n factorial") possible permutations
       // TODO: What if there are too many votable ideas and so the computation of n! would take too much time?
+      // TODO: This permutation computation algorithm is not perfect: when there are much more possible permutations than voters, the permutations used will be only the top and bottom few ones, so I guess the few first and the few last ideas have more chances to appear at the top of users' screens than those in the middle of the initial list.
       if ( n < 100 ){
         var m = sFact(n);
         var u = parseInt(Ctx.getCurrentUserId());
