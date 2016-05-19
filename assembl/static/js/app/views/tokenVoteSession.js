@@ -919,13 +919,14 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
 /*
   This is the collection view of each vote result
  */
-var TokenVoteResultCollectionView = Marionette.CollectionView.extend({
+var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
   constructor: function TokenVoteResultCollectionView(){
-    Marionette.CollectionView.apply(this, arguments);
+    Marionette.CompositeView.apply(this, arguments);
   },
 
+  template: '#tmpl-tokenVoteResultCollectionView',
   childView: TokenVoteResultView,
-  
+  childViewContainer: 'tbody',
   initialize: function(options){
     this.categoryIndex = options.categoryIndex;
   },
@@ -1036,7 +1037,6 @@ var TokenResultView = Marionette.LayoutView.extend({
   },
 
   onShow: function(){
-    console.log('[TokenResultView] onShow was called');
     var that = this;
     if (this.tokenResultsView){
       this.results.show(this.tokenResultsView);
@@ -1065,12 +1065,11 @@ var TokenVoteSessionResultModal = Backbone.Modal.extend({
   onRender: function(){
     var resultView = new TokenResultView({model: this.model});
     this.$(this.ui.body).html(resultView.render().el);
-    // resultView.onShow();
   },
 
   serializeData: function(){
     return {
-      modal_title: "Who fucking cares?"
+      modal_title: i18n.gettext('Token Vote Results')
     }
   }
 

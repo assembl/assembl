@@ -1,25 +1,7 @@
 <div class='token-vote-session'>
-    <div class='question-info'>
-        <div class='question-title'><%= questionTitle %></div>
-        <div class='question-description'><%= questionDescription %></div>
-    </div>
-    <div class='mtm votables-collection'>
-        <table>
-            <thead>
-                <tr>
-                    <th>{{gettext("Ideas")}}</th>
-                    <% _.each(categories, function(category){ %>
-                        <th class='js_vote-result-category'>
-                            <span><%= category %></span>
-                            <i class="icon-down"></i>
-                        </th>
-                    <% }); %>                
-                </tr>    
-            </thead>
-            <tbody>
-                <div class='js_vote-result-region'></div>    
-            </tbody>
-        </table>
-    </div>
-    
+  <div class='question-info'>
+    <div class='question-title'><%= questionTitle %></div>
+    <div class='question-description'><%= questionDescription %></div>
+  </div>
+  <div class='mtm votables-collection js_vote-result-region'></div>
 </div>
