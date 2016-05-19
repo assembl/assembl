@@ -971,9 +971,9 @@ var TokenResultView = Marionette.LayoutView.extend({
   initialize: function(options){
     this.model = options.model;
     
-    //categoryMap will be used by each vote result view to show the results in the correct order,
+    //categoryIndex will be used by each vote result view to show the results in the correct order,
     //{index: category}
-    this.categoryMap = {};
+    this.categoryIndex = [];
     
     var CollectionManager = require('../common/collectionManager.js'),
         cm = new CollectionManager(),
@@ -1000,12 +1000,12 @@ var TokenResultView = Marionette.LayoutView.extend({
         var categories = that.tokenSpecs.get('token_categories');
         categories.each(function(category, index){
           var name = category.get('typename');
-          that.categoryMap[index] = name;
+          that.categoryIndex.push(name);
         });
 
         that.tokenResultsView = new TokenVoteResultCollectionView({
           collection: that.voteResults,
-          categoryIndex: that.categoryMap,
+          categoryIndex: that.categoryIndex,
           reorderOnSort: true //disable re-rendering child views on sort
         });
         if (!that.isViewDestroyed()){
