@@ -5,7 +5,9 @@ var Marionette = require('../shims/marionette.js'),
     $ = require('jquery'),
     Assembl = require('../app.js'),
     Promise = require('bluebird'),
-    Ctx = require('../common/context.js');
+    Ctx = require('../common/context.js'),
+    i18n = require('../utils/i18n.js'),
+    Raven = require('raven-js');
 
 
 var AbstractDocumentView = Marionette.ItemView.extend({
@@ -25,6 +27,7 @@ var AbstractDocumentView = Marionette.ItemView.extend({
       The parent is the parent of the attachment view.
      */
     this.parentView = options.parentView ? options.parentView : null;
+    this.errorState = false;
     this.uri = this.model.get('external_url') ? this.model.get('external_url') : this.model.get('uri');
   },
 
@@ -90,21 +93,18 @@ var AbstractDocumentView = Marionette.ItemView.extend({
     }
   },
 
-  onRender: function() {
-    var that = this;
+  processErrorView: function(){
+    var errorMessage = i18n.sprintf(i18n.gettext("Sorry, we have failed to upload your file \"%s\". Please try again."), this._getName());
+    this.$el.html("<span class='error-message'>"+ errorMessage +"</span>");
+  },
 
-    var LoaderView = require('../views/loader.js'),
-        loader = new LoaderView(),
-        loaderHtml = loader.render().el;
-    
-    // this.$el.html(loaderHtml); //First, put a loader, then oembed
-    
-    // try {
-    //   this.doOembed();
-    // } catch(err) {
-    //   this.onRenderOembedFail();
-    // }
-    this.processEmbedType();
+  onRender: function() {
+    if (this.errorState){
+      this.processErrorView();
+    }
+    else {
+      this.processEmbedType();
+    }
 
   },
 
@@ -112,7 +112,29 @@ var AbstractDocumentView = Marionette.ItemView.extend({
    * Override to alter the Oembed failure condition
    */
   onRenderOembedFail: function(){
-    this.$el.html("<a href="+ this.uri + " target='_blank'>"+ this.uri + "</a>");
+    this.$el.html("<a href="+ this.uri + " target='_blank'>"+ this._getName() + "</a>");
+  },
+
+  /**
+   * @param {boolean} [sendError] [Send a Raven report or not]
+   */
+  _getName: function(sendError){
+    if (this.model.isFileType()){
+      var fileName = this.model.get('title');
+      if (!fileName){
+        if (sendError) {
+          Raven.captureMessage("[documents.js][onRenderOembedFail] A filename for the document " + 
+                               "model could not be found. The model is defined here: " +
+                               JSON.stringify(this.model));  
+        }
+        fileName = this.model.get('file').name
+      }
+      return fileName;
+    }
+    else {
+      //There isn't a name type for a non-file type
+      return this.uri;
+    }
   }
 
 });
@@ -172,10 +194,6 @@ var FileView = AbstractDocumentView.extend({
                     " and external_url " + this.model.get('external_url'));
     }
     AbstractDocumentView.prototype.onRender.call(this);
-  },
-
-  onRenderOembedFail: function(){
-    this.$el.html("<a href="+ this.uri + " target='_blank'>"+ this.model.get('title') + "</a>");
   }
 });
 
@@ -210,9 +228,28 @@ var AbstractEditView =  AbstractDocumentView.extend({
       Therefore, do not PUT on the model if it is already been saved.
      */
     if (this.model.isNew()){
-      Promise.resolve(this.model.save()).then(function(){
-        if (!that.isViewDestroyed()){
-          that.initalizeCallback();
+      /**
+       * TODO: Re-Promisify the save operation
+       *
+       * For whatever reason, under promisification, handling the jqXhr
+       * fails to follow through. (ie. setting jqXhr.handled = true still crashes Assembl)
+       *
+       * Previously this was: Promise.resolve(this.model.save()).then(function(){
+       *  /*Handle success logic;*\/
+       *  }, function(resp){ /* resp.handled = true; *\/});
+       */
+      this.model.save(null, {
+        success: function(model, resp, options){
+          if (!that.isViewDestroyed()){
+            that.initalizeCallback();
+          }
+        },
+        error: function(model, resp, options){
+          resp.handled = true;
+          if (!that.isViewDestroyed()){
+            that.errorState = true;
+            that.render();
+          }
         }
       });
     }
@@ -302,7 +339,7 @@ var FileEditView = AbstractEditView.extend({
 
   onShowProgress: function(ev){
     // console.log("FileEditView progress bar has been made!", ev);
-    this.percentComplete = ev * 100;
+    this.percentComplete = ~~(ev * 100); //float -> integer
     if (!this.isViewDestroyed()){
       this.render();
     }
@@ -313,7 +350,7 @@ var FileEditView = AbstractEditView.extend({
     the template logic here to maintain flexibility and keeping DRY
    */
   onRenderOembedFail: function(){
-    var string = "<a href="+ this.uri + " target='_blank'>"+ this.model.get('title') + "</a>";
+    var string = "<a href="+ this.uri + " target='_blank'>"+ this._getName() + "</a>";
     if (this.percentComplete){
       this.$el.html(string + " (100%)");
     }
