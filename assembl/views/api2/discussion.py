@@ -567,10 +567,10 @@ def get_visit_count(request):
             readers=discussion.count_post_viewers(start, end),
             first_visitors=discussion.count_new_visitors(start, end))
         if not start:
-            from assembl.models import Post
+            from assembl.models import AgentStatusInDiscussion
             from sqlalchemy import func
             (start,) = discussion.db.query(
-                func.min(Post.creation_date)).filter_by(
+                func.min(AgentStatusInDiscussion.first_visit)).filter_by(
                 discussion_id=discussion.id).first()
         r["start"] = start.isoformat()
         if not end:
