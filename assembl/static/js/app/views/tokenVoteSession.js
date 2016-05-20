@@ -776,9 +776,9 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
   },
   
   renderCKEditorDescription: function() {
-    var model = this.model.getDefinitionDisplayText();
-
-    if (!model.length) return;
+    if (!Ctx.stripHtml(this.model.get('definition')).length){
+      return;
+    }
 
     var description = new CKEditorField({
       model: this.model,
@@ -1247,8 +1247,10 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         myVotesCollection: that.myVotesCollection
       });
       that.$(".available-tokens").html(tokenBagsView.render().el);
+      that.$(".available-tokens .token-bags").append($("<div class='border-effect'></div>"));
       that.availableTokensPositionTop = that.$(".available-tokens").position().top;
       that.$(".available-tokens").width(that.$(".popin-body").width());
+      that.$(".available-tokens-container").css('min-height', that.$(".available-tokens-container").height());
 
       // Show votable ideas and their tokens
       var collectionView = new TokenVoteCollectionView({
@@ -1267,9 +1269,15 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       regionVotablesCollection.show(collectionView);
     });
 
+    that.throttledScroll = _.throttle(that.myOnScroll, 100);
+
   },
 
   onScroll: function(){
+    this.throttledScroll();
+  },
+
+  myOnScroll: function(){
     if (this.$el.scrollTop() > this.availableTokensPositionTop) {
       this.$(".available-tokens").addClass("fixed");
     }

@@ -92,6 +92,15 @@
       z-index: 3682;
       top: 0;
       background: white;
+      padding-bottom: 0;
+
+      .border-effect {
+        border-top: 1px solid rgba(200, 200, 200, 0.4);
+        background: -webkit-gradient(linear, left top, left bottom, from(rgba(200, 200, 200, 0.2)), to(transparent));
+        -webkit-mask-box-image: -webkit-gradient(linear, left top, right top, color-stop(0, transparent), color-stop(0.5, rgba(200, 200, 200, 0.8)), color-stop(1, transparent));
+        height: 5px;
+        margin-top: 4px;
+      }
     }
 
     .help-text {
@@ -173,8 +182,8 @@
     .left-column, .right-column {
       display: table-cell;
       vertical-align: top;
-      padding-top: 15px;
-      padding-bottom: 0;
+      padding-top: 12px;
+      padding-bottom: 6px;
     }
     .left-column {
       width: 70%;
@@ -187,7 +196,7 @@
         font-size: 15px;
       }
 
-      .idea-description {
+      .idea-description .panel-editablebox {
         min-height: 2*$baseLineHeightFontMultiplier*$baseFontSize; // Should match the readMoreAfterHeightPx of the description's view
         color: #999;
         font-size: 12px;
