@@ -171,26 +171,35 @@
 
     table {
       width: 100%;
+      thead tr {
+        display: flex;
+        th:nth-child(1) {
+          flex-grow: 1;
+        }
+        th:nth-child(2) {
+          flex-grow: 1;
+          text-align: right;
+        }
+      }
     }
     th {
       color: #999;
       padding-bottom: 0;
     }
     tbody > div {
-      display: table-row;
+      display: flex;
       border-bottom: 1px solid #f3f3f3;
     }
     tbody > div:last-child {
       border-bottom: none;
     }
     .left-column, .right-column {
-      display: table-cell;
+      flex-grow: 1;
       vertical-align: top;
       padding-top: 12px;
       padding-bottom: 6px;
     }
     .left-column {
-      width: 70%;
 
       &.vote-result {
         width: 40%;
@@ -211,7 +220,8 @@
       }
     }
     .right-column {
-
+      flex-grow: 0;
+      flex-shrink: 0;
     }
 
     .token-result-row {
@@ -229,6 +239,14 @@
     }
 
     .tokens-for-idea {
+      .token-categories.exclusive {
+        .negative-tokens, .positive-tokens {
+          display: inline-block;
+        }
+        .negative-tokens {
+          direction: rtl; /* this way, the list is reversed :^) */
+        }
+      }
       .token-icon {
         padding: 0;
         margin: 0 5px 0 0; /* horizontal total margin should match tokenVoteSession.js::getTokenSize()::token_horizontal_margin */
