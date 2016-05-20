@@ -110,8 +110,10 @@ $previewNumLines: 4;
     display: table;
   }
   .message-author {
-    color: $theme_person_name_color;
-    @extend .header_item_template
+    @extend .header_item_template;
+    a {
+      color: $theme_person_name_color;
+    }
   }
 
   .message-date {
@@ -451,7 +453,9 @@ $previewNumLines: 4;
   &.unread {
     .message-author {
       font-weight: bold;
-      color: $theme_person_name_color;
+      a {
+        color: $theme_person_name_color;
+      }
     }
     .message-subject {
       font-weight: 600;
@@ -463,12 +467,12 @@ $previewNumLines: 4;
     }
 
     .readUnreadIndicator {
-      background-color: $theme_person_name_color;
+      background-color: $theme_read_unread_item;
       border: 1px solid transparent;
     }
 
     .head {
-      border-bottom: 2px solid $theme_person_name_color;
+      border-bottom: 2px solid $theme_read_unread_item;
     }
   }
 

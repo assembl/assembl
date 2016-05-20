@@ -81,8 +81,10 @@ $harvesterAvatarSize: 24px;
         .authorName {
           display: inline-block;
           vertical-align: top;
-          color: $theme_person_name_color;
           font-size: 11px;
+          a {
+            color: $theme_person_name_color;
+          }
         }
       }
       .segment-harvester {

@@ -234,7 +234,7 @@
 
 .idealist-title-unread-count {
   font-size: 11px;
-  color: $theme_activelink_color;
+  color: $theme_read_unread_item;
   @include border-radius(10px);
   padding: 2px 6px;
 }

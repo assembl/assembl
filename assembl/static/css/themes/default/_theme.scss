@@ -54,6 +54,9 @@ $theme_popin_header_bg: $th_local_purple5;
 $theme_popin_header_text_color: $th_local_white;
 
 $theme_header_panel: $th_local_purple4;
+
+$theme_read_unread_item: $th_local_purple5;
+
 //Not currently used
 //$theme_header_separator: $th_local_purple2;
 $theme_header_panel_text_color: $th_local_white;
@@ -68,6 +71,9 @@ $theme_header_height: 40px;
 $theme_header_text_color: $th_local_gray6;
 $theme_header_bg_color: $th_local_white;
 $theme_header_logo: '../default/img/logo.png';
+
+//Info bar
+$theme_infobar_bg_color: $th_local_purple5;
 
 //Context
 $theme_context_bg: '../default/img/crowd2.jpg';
@@ -113,4 +119,3 @@ $theme_synthesis_header_bg: $th_local_purple3;
 /* Theme standard CSS definitions (mainly logos and images).
    Maybe we don't need this at all, and could    use variables only */
 //TODO
-

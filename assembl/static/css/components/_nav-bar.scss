@@ -162,7 +162,7 @@ $textProfile: #515151;
 .content-infobar {
   position: relative;
   height: $infobar_height;
-  background-color: $theme_btn_primary_bg_color;
+  background-color: $theme_infobar_bg_color;
   font-size: 12px;
   text-align: center;
   box-sizing: border-box; /* include border in height */
@@ -203,7 +203,7 @@ $textProfile: #515151;
 .modal-joinDiscussion {
   text-align: center;
   .icon-discuss {
-    color: $green;
+    color: $theme_text_icon_emphasis_color;
     font-size: 400%;
   }
 

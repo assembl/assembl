@@ -47,9 +47,9 @@ $successText: $green;
   font-size: 14px;
   color: $gray2;
 
-  border: 1px solid #cccccc;
+  border: 1px solid #EEEEEE;
 
-  box-shadow: inset 0 0 4px rgba(0,0,0,.25);
+  //box-shadow: inset 0 0 4px rgba(0,0,0,.25);
   //border: $form-border-color; //border: solid 1px #468847;
 
   &:focus {
@@ -300,8 +300,8 @@ $successText: $green;
   }
   input:focus,
   textarea:focus {
-    border-color: $inputBorderFocus;
-    box-shadow: 0 0 5px rgba($inputBorderFocus, (20/100));
+    border-color: $theme_form_field_active_border_color;
+    box-shadow: 0 0 5px rgba($theme_form_field_active_border_color, (20/100));
     outline: 0;
     outline: thin dotted \9; // IE 6-9
   }
@@ -404,7 +404,7 @@ $successText: $green;
 
       &:focus {
         border-color: $purple1;
-        box-shadow: 0 0 5px rgba($inputBorderFocus, (20/100));
+        box-shadow: 0 0 5px rgba($theme_form_field_active_border_color, (20/100));
       }
     }
 
@@ -427,7 +427,7 @@ $successText: $green;
         border-top-color: $purple1;
         @include border-right-color();
         border-bottom-color: $purple1;
-        box-shadow: 0 0 5px rgba($inputBorderFocus, (20/100));
+        box-shadow: 0 0 5px rgba($theme_form_field_active_border_color, (20/100));
       }
     }
   }
@@ -579,7 +579,7 @@ $successText: $green;
       border-top-color: $purple1;
       @include border-right-color();
       border-bottom-color: $purple1;
-      box-shadow: 0 0 5px rgba($inputBorderFocus, (20/100));
+      box-shadow: 0 0 5px rgba($theme_form_field_active_border_color, (20/100));
     }
 
     .uneditable-input {
