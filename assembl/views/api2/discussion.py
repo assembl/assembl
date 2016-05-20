@@ -599,10 +599,13 @@ def get_visit_count(request):
              permission=P_ADMIN_DISC)
 def get_visitors(request):
     discussion = request.context._instance
+    use_first = asbool(request.GET.get("first", False))
+    attribute = "first_visit" if use_first else "last_visit"
     visitors = [
-        (st.last_visit, st.agent_profile.name,
+        (getattr(st, attribute), st.agent_profile.name,
             st.agent_profile.get_preferred_email())
-        for st in discussion.agent_status_in_discussion if st.last_visit]
+        for st in discussion.agent_status_in_discussion
+        if getattr(st, attribute, None)]
     visitors.sort()
     visitors.reverse()
     body = "\n".join(("%s: %s <%s>" % (x[0].isoformat(), x[1], x[2])
