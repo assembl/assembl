@@ -245,6 +245,7 @@ def user_private_view_jsonld(request):
         content_type = "application/ld+json"
     return Response(body=jdata, content_type=content_type)
 
+
 @view_config(context=InstanceContext, name="time_series_analytics",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_ADMIN_DISC)
@@ -299,7 +300,7 @@ def get_time_series_analytics(request):
             #pprint.pprint(intervals)
             discussion.db.execute(intervals_table.insert(), intervals)
         else:
-            raise Exception("WRITEME")
+            raise HTTPBadRequest("Please specify an interval")
 
         from assembl.models import Post, AgentProfile, AgentStatusInDiscussion, ViewPost
 
@@ -412,8 +413,8 @@ def get_time_series_analytics(request):
                                                    (cumulative_posts_subquery.c.count_cumulative_post_authors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_posts_subquery.c.count_cumulative_post_authors, Float)))
                                                    ]).label('fraction_cumulative_authors_who_posted_in_period'),
                                              case([
-                                                   (cumulative_posts_subquery.c.count_cumulative_post_authors == 0, None),
-                                                   (cumulative_posts_subquery.c.count_cumulative_post_authors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors, Float)))
+                                                   (cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors == 0, None),
+                                                   (cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors, Float)))
                                                    ]).label('fraction_cumulative_logged_in_visitors_who_posted_in_period'),
                                              subscribers_subquery,
                                              )
