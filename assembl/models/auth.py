@@ -284,12 +284,8 @@ class AgentProfile(Base):
 
     def is_visiting_discussion(self, discussion_id):
         from assembl.models.discussion import Discussion
-        agent_status = self.get_status_in_discussion(discussion_id)
         d = Discussion.get(discussion_id)
-        if agent_status:
-            self.update_agent_status_last_visit(d)
-        else:
-            self.create_agent_status_in_discussion(d)
+        self.update_agent_status_last_visit(d)
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
@@ -811,44 +807,31 @@ class User(AgentProfile):
         if s:
             return s
 
-        _now = datetime.utcnow()
         s = AgentStatusInDiscussion(
-            first_visit=_now,
-            last_visit=_now, agent_profile=self,
+            agent_profile=self,
             discussion=discussion)
 
         self.db.add(s)
         return s
 
-    def update_agent_status_last_visit(self, discussion):
-        agent_status = self.create_agent_status_in_discussion(discussion)
-        if agent_status:
-            _now = datetime.utcnow()
-            agent_status.last_visit = _now
-
-        else:
-            capture_message("""Found a User with id %d who does not have
-                            an AgentStatusInDiscussion""" % (self.id, ))
+    def update_agent_status_last_visit(self, discussion, status=None):
+        agent_status = status or self.create_agent_status_in_discussion(discussion)
+        _now = datetime.utcnow()
+        agent_status.last_visit = _now
+        if not agent_status.first_visit:
+            agent_status.first_visit = _now
 
     def update_agent_status_subscribe(self, discussion):
         # Set the AgentStatusInDiscussion
         agent_status = self.create_agent_status_in_discussion(discussion)
-        if agent_status:
-            if not agent_status.first_subscribed:
-                _now = datetime.utcnow()
-                agent_status.first_subscribed = _now
-        else:
-            capture_message("""Found a User with id %d who does not have
-                            an AgentStatusInDiscussion""" % (self.id, ))
+        if not agent_status.first_subscribed:
+            _now = datetime.utcnow()
+            agent_status.first_subscribed = _now
 
     def update_agent_status_unsubscribe(self, discussion):
         agent_status = self.create_agent_status_in_discussion(discussion)
-        if agent_status:
-            _now = datetime.utcnow()
-            agent_status.last_unsubscribed = _now
-        else:
-            capture_message("""Found a User with id %d who does not have
-                            an AgentStatusInDiscussion""" % (self.id, ))
+        _now = datetime.utcnow()
+        agent_status.last_unsubscribed = _now
 
     def subscribe(self, discussion, role=R_PARTICIPANT):
         if not self.has_role_in(discussion, role):
