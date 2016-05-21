@@ -168,19 +168,8 @@
 
   .votables-collection {
     margin-top: 10px;
-
     table {
       width: 100%;
-      thead tr {
-        display: flex;
-        th:nth-child(1) {
-          flex-grow: 1;
-        }
-        th:nth-child(2) {
-          flex-grow: 1;
-          text-align: right;
-        }
-      }
     }
     th {
       color: #999;
@@ -193,17 +182,56 @@
     tbody > div:last-child {
       border-bottom: none;
     }
+    &.votable-collection-session {
+      table {
+        thead tr {
+          display: flex;
+          th:nth-child(1) {
+            flex-grow: 1;
+          }
+          th:nth-child(2) {
+            flex-grow: 1;
+            text-align: right;
+          }
+        }
+      }
+      .left-column, .right-column {
+        flex-grow: 1;
+      }
+      .right-column {
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+    }
+    &.js_vote-result-region {
+      width: 100%;
+      .thead {
+        display: table-row;
+        .left-column, .right-column {
+          display: table-cell;
+        }
+      }
+      .token-result-row {
+        display: table-row;
+        .left-column, .right-column {
+          display: table-cell;
+        }
+        .vote-result {
+          min-width: 150px;
+        }
+
+        .right-column {
+          min-width: 80px;
+        }
+      }
+    }
     .left-column, .right-column {
-      flex-grow: 1;
       vertical-align: top;
       padding-top: 12px;
       padding-bottom: 6px;
     }
     .left-column {
 
-      &.vote-result {
-        width: 40%;
-      }
 
       .idea-title {
         font-size: 15px;
@@ -219,16 +247,8 @@
         }
       }
     }
-    .right-column {
-      flex-grow: 0;
-      flex-shrink: 0;
-    }
 
     .token-result-row {
-        .token-vote-result-category-column {
-            min-width: 80px;
-        }
-      
       .data{
         background-color: green;
         text-align: right;
