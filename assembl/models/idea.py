@@ -845,7 +845,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     assocs.append(
                         IdeaRelatedPostLink(
                             content=instance, idea=parent_instance,
-                            creator_id=instance.creator_id,
+                            creator_id=instance.creator_id or instance.creator.id,
                             **self.filter_kwargs(
                                 IdeaRelatedPostLink, kwargs)))
 
