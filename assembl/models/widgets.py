@@ -545,7 +545,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                         inst.hidden = self.hide_proposed_ideas
                         post = IdeaProposalPost(
                             proposes_idea=inst, creator_id=user_id,
-                            discussion_id=inst.discussion_id,
+                            discussion=inst.discussion,
                             hidden=self.hide_proposed_ideas,
                             subject=LangString.create(inst.short_title),
                             body=(LangString.create(instance.definition)
@@ -601,7 +601,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                         inst.hidden = self.hide_proposed_ideas
                         post = IdeaProposalPost(
                             proposes_idea=inst, creator_id=user_id,
-                            discussion_id=inst.discussion_id,
+                            discussion=inst.discussion,
                             hidden=self.hide_proposed_ideas,
                             body=LangString.EMPTY(instance.db),
                             subject=LangString.create(inst.short_title),

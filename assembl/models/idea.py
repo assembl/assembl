@@ -754,6 +754,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .idea_content_link import (
             IdeaRelatedPostLink, IdeaContentWidgetLink)
         from .generic import Content
+        from .post import Post
 
         class ChildIdeaCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
@@ -808,11 +809,11 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
-                if isinstance(instance, Content):
+                if isinstance(instance, Post):
                     assocs.append(
                         IdeaContentWidgetLink(
                             content=instance, widget=parent_instance,
-                            creator_id=instance.creator_id,
+                            creator=instance.creator,
                             **self.filter_kwargs(
                                 IdeaContentWidgetLink, kwargs)))
 
@@ -841,11 +842,11 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     ctx, kwargs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
-                if isinstance(instance, Content):
+                if isinstance(instance, Post):
                     assocs.append(
                         IdeaRelatedPostLink(
                             content=instance, idea=parent_instance,
-                            creator_id=instance.creator_id or instance.creator.id,
+                            creator=instance.creator,
                             **self.filter_kwargs(
                                 IdeaRelatedPostLink, kwargs)))
 
@@ -881,13 +882,13 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     ctx, kwargs):
                 # This is going to spell trouble: Sometimes we'll have creator,
                 # other times creator_id
-                if isinstance(instance, Content):
+                if isinstance(instance, Post):
                     if parent_instance.proposed_in_post:
                         instance.set_parent(parent_instance.proposed_in_post)
                     assocs.append(
                         IdeaContentWidgetLink(
                             content=instance, idea=parent_instance,
-                            creator_id=instance.creator_id,
+                            creator=instance.creator,
                             **self.filter_kwargs(
                                 IdeaContentWidgetLink, kwargs)))
                     instance.hidden = True
