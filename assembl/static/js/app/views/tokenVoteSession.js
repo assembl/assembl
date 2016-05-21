@@ -857,20 +857,14 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
 
   _calculate: function(){
     var that = this;
-    var results = this.model.get('sums'); //A pojo object
-    var sortedResults = _.chain(this.categoryIndex)
-     .clone()
-     .mapObject(function(categoryType, index){
-        if (! (_.has(results, categoryType))){
-            return 0;
-        }
-        else {
-          return results[categoryType] / that.sumTokens[index];
-        }
-     })
-     .values()
-     .value();
-    this.results = sortedResults;
+    this.results = _.map(this.categoryIndex, function(catName, index) {
+        return {
+            sum: that.model.get('sums')[catName] || 0,
+            num: that.model.get('nums')[catName] || 0,
+            n: that.model.get('n'),
+            totalTokens: that.sumTokens[index]
+        };
+    });
   },
 
   serializeData: function(){
@@ -895,17 +889,20 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     results.append('div')
           .style('background-color', 'red')
           .style('display', 'inline-block')
-          .style('width', function(d){
-            console.log('d', d);
-            var tmp = scale(d) + 'px'; 
+          .style('width', function(r) {
+            var d = r.sum / r.totalTokens;
+            var tmp = scale(d) + 'px';
             return tmp; }).append('img');
-    results.append('span').text(function(d){ return percent(d);});
+    results.append('span').text(function(r) {
+        var d = r.sum / r.totalTokens;
+        return percent(d);
+    });
   },
 
   onShow: function(){
     this.renderCKEditorDescription();
   },
-  
+
   renderCKEditorDescription: function() {
     var model = this.model.get('objectConnectedTo').getDefinitionDisplayText();
 
