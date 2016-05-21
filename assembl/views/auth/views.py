@@ -1068,13 +1068,12 @@ def send_change_password_email(
         data.update(dict(
             discussion_topic=discussion.topic,
             discussion_url=discussion.get_url()))
-        if sender_name is None:
-            sender_name = discussion.topic
-    sender_name = UnicodeDammit(sender_name).unicode_markup
-    # sanitize
-    sender_name = re.sub(
-        ur"[^-\w\s'\u2019\u2032\u00b4\.\(\)]", '', sender_name, 0, re.UNICODE)
+        sender_name = sender_name or discussion.topic
     if sender_name:
+        sender_name = UnicodeDammit(sender_name).unicode_markup
+        # sanitize
+        sender_name = re.sub(
+            ur"[^-\w\s'\u2019\u2032\u00b4\.\(\)]", '', sender_name, 0, re.UNICODE)
         sender_name = Header(sender_name, 'utf-8').encode()
         sender = '"%s" <%s>' % (sender_name, sender_email)
         if len(sender) > 255:
