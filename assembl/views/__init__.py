@@ -56,7 +56,7 @@ def find_theme(theme_name):
     """
     theme_base_path = get_theme_base_path()
 
-    walk_results = os.walk(theme_base_path)
+    walk_results = os.walk(theme_base_path, followlinks=True)
     for (dirpath, dirnames, filenames) in walk_results:
         if '_theme.scss' in filenames:
             #print repr(dirpath), repr(dirnames) , repr(filenames)
