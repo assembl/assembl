@@ -172,8 +172,11 @@
       width: 100%;
     }
     th {
-      color: #999;
+      //color: #999;
+      color: $txtGray2;
+      background-color: #fbfafa; //$gray3;
       padding-bottom: 0;
+      padding-left: 5px;
     }
     tbody > div {
       display: flex;
@@ -210,6 +213,9 @@
         .left-column, .right-column {
           display: table-cell;
         }
+      }
+      .left-column {
+        width: 50%;
       }
       .token-result-row {
         display: table-row;
@@ -256,8 +262,23 @@
         margin: 1px;
         color: white;
       }
+
+      .token-vote-result-category-column {
+        margin-left: 7px;
+        margin-right: 3px; 
+      }
     }
 
+    .purple {
+      color: $txtPurple;
+      font-weight: bold;
+    }
+    .vote-category{
+      cursor: pointer;
+      &:hover {
+        background-color: #f2f2f2;
+      }
+    }
     .tokens-for-idea {
       .token-categories.exclusive {
         .negative-tokens, .positive-tokens {
