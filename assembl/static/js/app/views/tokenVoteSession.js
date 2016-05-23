@@ -336,6 +336,7 @@ var RemainingTokenCategoriesCollectionView = Marionette.CollectionView.extend({
 
 
 // This view shows (in the block of an idea) the clickable tokens (of one given category of tokens) a user can allocate (and has allocated) on this idea
+// This view's model is a token category
 var TokenCategoryAllocationView = Marionette.ItemView.extend({
   template: '#tmpl-tokenIdeaAllocation',
   className: "token-category-allocation",
@@ -687,7 +688,7 @@ var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
       collectionView: this,
       voteItemView: options.parent
     };
-  },
+  }
 });
 
 
@@ -719,7 +720,7 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
     this.getRegion("negativeTokens").show(new TokenCategoryAllocationView(childViewOptions));
     childViewOptions.model = positiveTokens;
     this.getRegion("positiveTokens").show(new TokenCategoryAllocationView(childViewOptions));
-  },
+  }
 });
 
 

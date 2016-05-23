@@ -4,6 +4,7 @@
   animation: none; /* required for the "position: fixed;" used on token bags to work properly */
 
   .submit-button-container {
+    margin-top: 20px;
     margin-bottom: 10px;
   }
 }
@@ -24,32 +25,7 @@
 }
 
 .token-vote-session.token-vote-form { /* used only by vote form page (not by vote results page) */
-  table {
-    width: 100%;
-  }
-  th {
-    //color: #999;
-    color: $txtGray2;
-    background-color: #fbfafa; //$gray3;
-    padding-bottom: 0;
-    padding-left: 5px;
-  }
-  tbody > div {
-    display: flex;
-    border-bottom: 1px solid #f3f3f3;
-  }
-  tbody > div:last-child {
-    border-bottom: none;
-  }
   
-  
-  .left-column, .right-column {
-    vertical-align: top;
-    padding-top: 12px;
-    padding-bottom: 6px;
-  }
-
-
   .token-icon-show-like-zero-not-selected {
     vector-effect: non-scaling-stroke;
     stroke-width: 1;
@@ -180,28 +156,38 @@
 
 
   .votables-collection {
+
     table {
-      thead tr {
-        display: flex;
-        th:nth-child(1) {
-          flex-grow: 1;
-        }
-        th:nth-child(2) {
-          flex-grow: 1;
-          text-align: right;
-        }
-      }
+      width: 100%;
+    }
+    th {
+      color: #999;
+      padding-bottom: 0;
+    }
+    tbody > div {
+      display: table-row;
+      border-bottom: 1px solid #f3f3f3;
+    }
+    tbody > div:last-child {
+      border-bottom: none;
     }
     .left-column, .right-column {
-      flex-grow: 1;
+      display: table-cell;
+      vertical-align: top;
+      padding-top: 12px;
+      padding-bottom: 6px;
     }
-    .right-column {
-      flex-grow: 0;
-      flex-shrink: 0;
+    tbody > div:first-child {
+      .left-column, .right-column {
+        padding-top: 6px;
+      }
     }
-
+    .absorbing-column {
+      width: 100%;
+    }
 
     .tokens-for-idea {
+      white-space: nowrap; /* this forces all token icons of the same category to display on the same line (no line return due to spaces in HTML between elements) */
       .token-categories.exclusive {
         .negative-tokens, .positive-tokens {
           display: inline-block;
