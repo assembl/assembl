@@ -23,20 +23,32 @@
   }
 }
 
-.token-vote-session {
-    &.token-vote-results {
-        overflow-x: scroll;
-    }
-
-  .question-info {
-    .question-title {
-      @extend .h1;
-      font-weight: 600;
-    }
-    .question-description {
-      font-size: 13px;
-    }
+.token-vote-session.token-vote-form { /* used only by vote form page (not by vote results page) */
+  table {
+    width: 100%;
   }
+  th {
+    //color: #999;
+    color: $txtGray2;
+    background-color: #fbfafa; //$gray3;
+    padding-bottom: 0;
+    padding-left: 5px;
+  }
+  tbody > div {
+    display: flex;
+    border-bottom: 1px solid #f3f3f3;
+  }
+  tbody > div:last-child {
+    border-bottom: none;
+  }
+  
+  
+  .left-column, .right-column {
+    vertical-align: top;
+    padding-top: 12px;
+    padding-bottom: 6px;
+  }
+
 
   .token-icon-show-like-zero-not-selected {
     vector-effect: non-scaling-stroke;
@@ -166,120 +178,29 @@
   }
 
 
-  .votables-collection {
-    margin-top: 10px;
-    table {
-      width: 100%;
-    }
-    th {
-      //color: #999;
-      color: $txtGray2;
-      background-color: #fbfafa; //$gray3;
-      padding-bottom: 0;
-      padding-left: 5px;
-    }
-    tbody > div {
-      display: flex;
-      border-bottom: 1px solid #f3f3f3;
-    }
-    tbody > div:last-child {
-      border-bottom: none;
-    }
-    &.votable-collection-session {
-      table {
-        thead tr {
-          display: flex;
-          th:nth-child(1) {
-            flex-grow: 1;
-          }
-          th:nth-child(2) {
-            flex-grow: 1;
-            text-align: right;
-          }
-        }
-      }
-      .left-column, .right-column {
-        flex-grow: 1;
-      }
-      .right-column {
-        flex-grow: 0;
-        flex-shrink: 0;
-      }
-    }
-    &.js_vote-result-region {
-      width: 100%;
-      .thead {
-        display: table-row;
-        .left-column, .right-column {
-          display: table-cell;
-        }
-      }
-      .left-column {
-        width: 50%;
-        padding-left: 10px;
-      }
-      .token-result-row {
-        display: table-row;
-        .left-column, .right-column {
-          display: table-cell;
-        }
-        .vote-result {
-          min-width: 150px;
-        }
 
-        .right-column {
-          min-width: 80px;
+  .votables-collection {
+    table {
+      thead tr {
+        display: flex;
+        th:nth-child(1) {
+          flex-grow: 1;
+        }
+        th:nth-child(2) {
+          flex-grow: 1;
+          text-align: right;
         }
       }
     }
     .left-column, .right-column {
-      vertical-align: top;
-      padding-top: 12px;
-      padding-bottom: 6px;
+      flex-grow: 1;
     }
-    .left-column {
-
-
-      .idea-title {
-        font-size: 15px;
-      }
-
-      .idea-description .panel-editablebox {
-        min-height: 2*$baseLineHeightFontMultiplier*$baseFontSize; // Should match the readMoreAfterHeightPx of the description's view
-        color: #999;
-        font-size: 12px;
-
-        .seeMore, .seeLess {
-          color: #999;
-        }
-      }
+    .right-column {
+      flex-grow: 0;
+      flex-shrink: 0;
     }
 
-    .token-result-row {
-      .data{
-        background-color: green;
-        text-align: right;
-        padding: 5px;
-        margin: 1px;
-        color: white;
-      }
 
-      .token-vote-result-category-column {
-        margin-left: 7px;
-        margin-right: 3px; 
-      }
-    }
-
-    .purple {
-      color: $txtPurple;
-      font-weight: bold;
-    }
-    .vote-category{
-      cursor: pointer;
-      &:hover {
-        background-color: #f2f2f2;
-      }
-    }
     .tokens-for-idea {
       .token-categories.exclusive {
         .negative-tokens, .positive-tokens {
@@ -441,11 +362,123 @@
           }
         }
       }
+    }
+  }
+}
 
+.token-vote-session.token-vote-results { /* used only by vote results page (not by vote form page) */
+  overflow-x: scroll;
+
+  table {
+    width: 100%;
+  }
+  th {
+    //color: #999;
+    color: $txtGray2;
+    background-color: #fbfafa; //$gray3;
+    padding-bottom: 0;
+    padding-left: 5px;
+  }
+  tbody > div {
+    display: flex;
+    border-bottom: 1px solid #f3f3f3;
+  }
+  tbody > div:last-child {
+    border-bottom: none;
+  }
+  
+  
+  .left-column, .right-column {
+    vertical-align: top;
+    padding-top: 12px;
+    padding-bottom: 6px;
+  }
+
+  .votables-collection {
+
+    &.js_vote-result-region {
+      width: 100%;
+      .thead {
+        display: table-row;
+        .left-column, .right-column {
+          display: table-cell;
+        }
+      }
+      .left-column {
+        width: 50%;
+        padding-left: 10px;
+      }
+      .token-result-row {
+        display: table-row;
+        .left-column, .right-column {
+          display: table-cell;
+        }
+        .vote-result {
+          min-width: 150px;
+        }
+
+        .right-column {
+          min-width: 80px;
+        }
+      }
     }
 
+    .token-result-row {
+      .data{
+        background-color: green;
+        text-align: right;
+        padding: 5px;
+        margin: 1px;
+        color: white;
+      }
+
+      .token-vote-result-category-column {
+        margin-left: 7px;
+        margin-right: 3px; 
+      }
+    }
+
+    .purple {
+      color: $txtPurple;
+      font-weight: bold;
+    }
+    .vote-category{
+      cursor: pointer;
+      &:hover {
+        background-color: #f2f2f2;
+      }
+    }
+  }
+}
+
+.token-vote-session { /* used both by vote form page and by vote results page */
+  .question-info {
+    .question-title {
+      @extend .h1;
+      font-weight: 600;
+    }
+    .question-description {
+      font-size: 13px;
+    }
+  }
+
+  .votables-collection {
+    margin-top: 10px;
+
+
+    .idea-title {
+      font-size: 15px;
+    }
+
+    .idea-description .panel-editablebox {
+      min-height: 2*$baseLineHeightFontMultiplier*$baseFontSize; // Should match the readMoreAfterHeightPx of the description's view
+      color: #999;
+      font-size: 12px;
+
+      .seeMore, .seeLess {
+        color: #999;
+      }
+    }
     
-
-
   }
 }
