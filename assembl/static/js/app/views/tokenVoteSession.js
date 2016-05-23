@@ -849,9 +849,17 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     this.categoryNumber = _.indexOf(this.categoryIndex, this.model.get('typename'));
     this.sumTokens = options.sumTokens;
     this.maxPercent = options.maxPercent;
-    this.descriptionButton = i18n.gettext("See Description");
+    this.voteSpecification = options.voteSpecification;
     this.maxPixels = 100;
     this._calculate();
+  },
+
+  _calculateColor: function(categoryName){
+    var categories = this.voteSpecification.get('token_categories'),
+        cat = categories.find(function(category){
+          return category.get('typename') === categoryName;
+        });
+    return cat.get('color') || null;
   },
 
   _calculate: function(){
@@ -861,13 +869,13 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
             sum: that.model.get('sums')[catName] || 0,
             num: that.model.get('nums')[catName] || 0,
             n: that.model.get('n'),
-            totalTokens: that.sumTokens[index]
+            totalTokens: that.sumTokens[index],
+            color: that._calculateColor(catName)
         };
     });
   },
 
   serializeData: function(){
-
     return {
       ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
       ideaDescription: this.model.get('objectConnectedTo').getLongTitleDisplayText(),
@@ -878,7 +886,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   onRender: function(){
     //Have to define the data-points in an array.
     Ctx.removeCurrentlyDisplayedTooltips();
-    var color = 'red';
+    var unknownColor = '#515151'; //$gray2
     var displayTooltip = function(num, total){
       return i18n.sprintf(i18n.gettext("%d tokens/%d total tokens"), num, total);
     };
@@ -895,7 +903,9 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
       .attr('data-toggle', 'tooltip')
       .attr('data-position', 'top')
       .attr('title', function(r){ return displayTooltip(r.sum, r.totalTokens)})
-      .style('background-color', color)
+      .style('background-color', function(d){
+        return d.color ? d.color : unknownColor;
+      })
       .style('display', 'inline-block')
       .style('border-radius', '3px')
       .style('width', function(r) {
@@ -995,7 +1005,8 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
     return {
       categoryIndex: this.categoryIndex,
       sumTokens: this.sumTokens,
-      maxPercent: this.maxPercent
+      maxPercent: this.maxPercent,
+      voteSpecification: this.voteSpecification
     };
   },
 
