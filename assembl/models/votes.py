@@ -108,11 +108,17 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     def voting_results(self, histogram_size=None):
         by_idea = self._gather_results()
-        return {
+        results = {
             Idea.uri_generic(votable_id):
             self.results_for(voting_results, histogram_size)
             for (votable_id, voting_results) in by_idea.iteritems()
         }
+        results["n_voters"] = self.db.query(
+            getattr(self.get_vote_class(), "voter_id")).filter_by(
+            vote_spec_id=self.id,
+            tombstone_date=None).distinct().count()
+
+        return results
 
     @abstractmethod
     def csv_results(self, csv_file):
