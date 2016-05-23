@@ -5,7 +5,9 @@ var Backbone = require("backbone"),
     _ = require("underscore"),
     i18n = require('../utils/i18n.js'),
     Moment = require('moment'),
-    Widget = require("../models/widget.js");
+    Widget = require("../models/widget.js"),
+    Ctx = require('../common/context.js'),
+    Permissions = require('../utils/permissions.js');
 
 
 var WidgetButtonView = Marionette.ItemView.extend({
@@ -56,7 +58,8 @@ var WidgetButtonView = Marionette.ItemView.extend({
       button_text: this.model.getLinkText(this.options.context, this.options.idea),
       description: this.model.getDescriptionText(this.options.context, this.options.idea),
       classes: this.model.getCssClasses(this.options.context, this.options.idea),
-      until_text: this.model.getDescriptionText(this.model.UNTIL_TEXT, this.options.idea)
+      until_text: this.model.getDescriptionText(this.model.UNTIL_TEXT, this.options.idea),
+      canSeeResults: Ctx.getCurrentUser().can(Permissions.SYSADMIN)
     };
   }
 });
