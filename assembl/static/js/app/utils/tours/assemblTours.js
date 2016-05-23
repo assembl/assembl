@@ -21,6 +21,9 @@ var AssemblTours = [
   {
     name: "first_message",
     autostart: false,
+    condition:function(){
+      return Ctx.isElementIsInViewport($('#tour_step_message'), 180);
+    },
     // TODO: Pas dans le cas du panneau synthèse
     tour: {
       steps: [
@@ -74,7 +77,7 @@ var AssemblTours = [
     name: "segment",
     autostart: false,
     condition:function(){
-      return Ctx.isElementIsInViewport($('#tour_step_segment'));
+      return Ctx.isElementIsInViewport($('#tour_step_segment'), 180);
     },
     tour: {
       steps: [
@@ -90,7 +93,7 @@ var AssemblTours = [
       name: "idea_list",
       autostart: false,
       condition: function() {
-        return Ctx.isElementIsInViewport($('#tour_step_idealist'));
+        return Ctx.isElementIsInViewport($('#tour_step_idealist'), 230);
       },
       tour: {
         steps: [

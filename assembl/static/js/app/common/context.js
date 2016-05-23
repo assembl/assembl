@@ -1693,14 +1693,14 @@ Context.prototype = {
       return this._translationServiceCache;
     }
   },
-  isElementIsInViewport:function(element){
+  isElementIsInViewport:function(element, bubbleHeight){
       var win = $(window);
       var viewport = {
           top : win.scrollTop(),
           left : win.scrollLeft()
       };
       viewport.right = viewport.left + win.width();
-      viewport.bottom = viewport.top + win.height();
+      viewport.bottom = viewport.top + win.height() - bubbleHeight;
       var bounds = element.offset();
       bounds.right = bounds.left + element.outerWidth();
       bounds.bottom = bounds.top + element.outerHeight();
