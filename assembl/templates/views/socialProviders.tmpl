@@ -1,7 +1,9 @@
 <div class="form-horizontal core-form">
     <div class="control-group">
-        <p><label for="optionsCheckboxList" class="control-label">{{ gettext('Add a social account') }}</label></p>
-        <div class="controls">
+        <div class="col-4-12 no-pad">
+            <label for="optionsCheckboxList" class="control-label">{{ gettext('Add a social account') }}</label>
+        </div>
+        <div class="col-8-12 no-pad controls">
         <% for (var i in providers) {
         var provider = providers[i],
             provider_name = names[provider]; %>

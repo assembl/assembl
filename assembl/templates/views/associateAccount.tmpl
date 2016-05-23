@@ -9,14 +9,20 @@
 		{#<a class="btn btn-cancel btn-sm"><i class="icon-checkbox"></i>&nbsp;&nbsp;{{ gettext('dissociate') }}</a>#}
 	</span>
 <% }else{ %>
-   	<i class="icon-mail mrs"></i><%= email.get('email') %>
+    <div class="col-6-12 mobile-col-1-1 no-pad">
+   	    <i class="icon-mail mrs"></i><%= email.get('email') %>
+    </div>
    	<% if(email.get('verified')){ %>
+        <div class="col-6-12 mobile-col-1-1 no-pad">
 			<span>
 				{#<a class="btn btn-cancel btn-sm"><i class="icon-checkbox"></i>&nbsp;&nbsp;{{ gettext('dissociate') }}</a>#}
 			</span>
+        </div>
 		<% } else { %>
+        <div class="col-6-12 mobile-col-1-1 no-pad">
 			<span>
-				<a class="btn btn-primary btn-sm mhs js_verifyEmail">{{ gettext('Validate this email') }}</a>
+				<a class="btn btn-primary btn-s fr js_verifyEmail">{{ gettext('Validate this email') }}</a>
 			</span>
+        </div>
 		<% } %>
 <% } %>

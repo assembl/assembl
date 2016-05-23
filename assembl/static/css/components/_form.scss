@@ -95,11 +95,9 @@ $successText: $green;
 
 // Make all forms have space below them
 .core-form {
-  margin: 0 0 $inputBaseLineHeight;
-
   fieldset {
     padding: 0;
-    margin: 0;
+    margin: 0 0 10px 0;
     border: 0;
   }
 
@@ -150,7 +148,7 @@ $successText: $green;
   select,
   .uneditable-input {
     display: inline-block;
-    width: 210px;
+    width: 100%;
     height: em(30);
     padding: 4px;
     margin-bottom: 9px;
@@ -683,13 +681,11 @@ $successText: $green;
   // Float the labels left
   .control-label {
     float: left;
-    width: 140px;
     padding-top: 5px;
     text-align: left;
   }
   // Move over all input controls and content
   .controls {
-    margin-left: 160px;
     /* Super jank IE7 fix to ensure the inputs in .input-append and input-prepend don't inherit the margin of the parent, in this case .controls */
     *display: inline-block;
     *margin-left: 0;
@@ -697,8 +693,7 @@ $successText: $green;
   }
   // Remove bottom margin on block level help text since that's accounted for on .control-group
   .help-block {
-    margin-top: ($inputBaseLineHeight / 2);
-    margin-bottom: 0;
+    margin: 0 10px 20px 33px;
   }
   // Move over buttons in .form-actions to align with .controls
   .form-actions {

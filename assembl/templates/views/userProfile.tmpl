@@ -1,86 +1,81 @@
-<div class="gr">
-  <div class="gu gu-1of5 navigation-menu-holder">
-  </div>
-  <div class="gu gu-3of4 admin-section">
-    <section class="section">
-    <div class="admin-title">
-      <h3 class="h3">{{ gettext('Profile') }}</h3>
-    </div>
-    <div id="content-container" class="content-container">
-      <div class="gr mtl">
-        <div class="gu gu-1of1">
-          <form class="core-form form-horizontal" id="profile-form">
-            <fieldset class="prl">
-							<div class="control-group fr">
-								<label for="name" class="control-label fl">{{ gettext('Full name') }}</label>
-								<div class="controls fl">
-										<input class="input-xxlarge" type="text" name="real_name" placeholder="{{ gettext('Real name') }}" value="<%= profile.get('real_name') %>" />
-								</div>
-							</div>
-              {#
-              <div class="control-group fr social-photo">
-								<label class="control-label">{{ gettext('photo') }}</label>
-								<div class="controls fl">
-
-									<label class="radio custom-radio">
-										<input type="radio" checked="checked" name="customRadioButtons1">
-										<span class="custom-radio-element"></span>
-										<div>
-											<span class="fl mrs avatar img-rounded"><img src="/user/id/12/avatar/25" width="25" height="25"></span>
-											<span class="fl sc mrs"><i class="icon-gplus"></i></span>
-											<span class="fl sc-name">Julien</span>
-										</div>
-									</label>
-
-									<label class="radio custom-radio">
-										<input type="radio" checked="checked" name="customRadioButtons1">
-										<span class="custom-radio-element"></span>
-										<div>
-											<span class="fl mrs avatar img-rounded"><img src="/user/id/12/avatar/25" width="25" height="25"></span>
-											<span class="fl sc mrs"><i class="icon-gplus"></i></span>
-											<span class="fl sc-name">Julien</span>
-										</div>
-									</label>
-									<p class="help-block">{{ gettext('Lorem ipsum dolor sit amet, consectetur adipiscing elit') }}</p>
-								</div>
-							</div>
-              #}
-              {#
-              <div class="control-group fr">
-								<label for="description" class="control-label fl">{{ gettext('description') }}</label>
-								<div class="controls fl">
-								  <textarea rows="5" id="textarea" class="input-xxlarge" name="description" placeholder="{{ gettext('description') }}" value=""></textarea>
-								</div>
-							</div>
-              #}
-							{# user language future
-							<div class="control-group fl user-lang">
-								<label for="select01" class="control-label fl">{{ gettext('langues') }}</label>
-								<div class="controls fl">
-									<div>
-										<select id="lang" class="mbs">
-											<option>Français</option>
-											<option>Anglais</option>
-										</select>
-									</div>
-									<div>
-										<select id="lang2">
-											<option>Français</option>
-											<option>Anglais</option>
-										</select>
-									</div>
-								</div>
-							</div>#}
-
-            </fieldset>
-						<div class="form-actions fr">
-							<button class="btn btn-primary fr js_saveProfile" type="submit">{{ gettext('Save changes') }}</button>
-							<a href="<%= urlDiscussion() %>" class="btn btn-cancel btn-sm fr mrxl">{{ gettext('Return to the discussion') }}</a>
+<div class="grid-pad">
+    <div class="col-3-12 navigation-menu-holder"></div>
+    <div class="col-9-12  admin-section">
+        <section class="section">
+            <div class="admin-title">
+                <h3 class="h3">{{ gettext('Profile') }}</h3>
+            </div>
+            <div id="content-container" class="content-container">
+                <form class="core-form form-horizontal" id="profile-form">
+                    <fieldset>
+                        <div class="control-group">
+                            <div class="col-4-12 no-pad">
+                                <label for="name" class="control-label">{{ gettext('Full name') }}</label>
+                            </div>
+                            <div class="col-8-12 no-pad">
+                                <input type="text" name="real_name" placeholder="{{ gettext('Real name') }}" value="<%= profile.get('real_name') %>" />
+                            </div>
 						</div>
-          </form>
-        </div>
-      </div>
+                        {#
+                        <div class="control-group social-photo">
+                            <label class="control-label">{{ gettext('photo') }}</label>
+                            <div class="controls">
+                                <label class="radio custom-radio">
+                                    <input type="radio" checked="checked" name="customRadioButtons1">
+									<span class="custom-radio-element"></span>
+									<div>
+                                        <span class="fl mrs avatar img-rounded"><img src="/user/id/12/avatar/25" width="25" height="25"></span>
+										<span class="fl sc mrs"><i class="icon-gplus"></i></span>
+										<span class="fl sc-name">Julien</span>
+									</div>
+								</label>
+								<label class="radio custom-radio">
+									<input type="radio" checked="checked" name="customRadioButtons1">
+									<span class="custom-radio-element"></span>
+									<div>
+										<span class="fl mrs avatar img-rounded"><img src="/user/id/12/avatar/25" width="25" height="25"></span>
+										<span class="fl sc mrs"><i class="icon-gplus"></i></span>
+										<span class="fl sc-name">Julien</span>
+									</div>
+								</label>
+								<p class="help-block">{{ gettext('Lorem ipsum dolor sit amet, consectetur adipiscing elit') }}</p>
+							</div>
+                        </div>
+                        #}
+                        {#
+                        <div class="control-group">
+                            <label for="description" class="control-label fl">{{ gettext('description') }}</label>
+                            <div class="controls fl">
+                                <textarea rows="5" id="textarea" class="input-xxlarge" name="description" placeholder="{{ gettext('description') }}" value=""></textarea>
+                            </div>
+                        </div>
+                        #}
+                        {# user language future
+                        <div class="control-group user-lang">
+                            <label for="select01" class="control-label fl">{{ gettext('langues') }}</label>
+                            <div class="controls">
+                                <div>
+                                    <select id="lang" class="mbs">
+                                        <option>Français</option>
+                                        <option>Anglais</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select id="lang2">
+                                        <option>Français</option>
+                                        <option>Anglais</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        #}
+                    </fieldset>
+                    <div class="form-actions">
+						<button class="btn btn-primary fr js_saveProfile" type="submit">{{ gettext('Save changes') }}</button>
+						<a href="<%= urlDiscussion() %>" class="btn btn-cancel btn-sm fr mrxl">{{ gettext('Return to the discussion') }}</a>
+					</div>
+                </form>
+            </div>
+        </section>
     </div>
-   </section>
-  </div>
 </div>

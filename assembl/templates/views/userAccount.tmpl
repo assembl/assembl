@@ -1,66 +1,64 @@
-<div class="gr">
-  <div class="gu gu-1of5 navigation-menu-holder">
-  </div>
-  <div class="gu gu-3of4 admin-section">
-    <div class="gr">
-			<div class="gu gu-1of1 mbl">
-				<section class="section">
-				<div class="admin-title">
-					<h3 class="h3">{{ gettext('Assembl account settings') }}</h3>
-				</div>
-				<div id="content-container" class="content-container">
-
-					<div id="userAccountForm"></div>
-
-
-				</div>
-				</section>
-			</div>
-      {% if not preferences['require_email_domain'] %}
-    	<div class="gu gu-1of1">
+<div class="grid-pad">
+    <div class="col-3-12 navigation-menu-holder"></div>
+    <div class="col-9-12">
+        <div class="col-1-1 no-pad admin-section">
+            <section class="section">
+                <div class="admin-title">
+                    <h3 class="h3">{{ gettext('Assembl account settings') }}</h3>
+                </div>
+                <div id="content-container" class="content-container">
+                    <div id="userAccountForm"></div>
+                </div>
+            </section>
+        </div>
+        {% if not preferences['require_email_domain'] %}
+    	<div class="col-1-1 no-pad admin-section">
     		<section class="section">
-			 <div class="admin-title">
-				 <h3 class="h3">{{ gettext('Manage associated accounts') }}</h3>
-			 </div>
-			 <div id="content-container" class="content-container">
-				 <div class="gr mtl">
-					 <div id="account-content" class="gu gu-1of1 phl">
-
-						 <div id="associate_accounts"></div>
-						 {#
-						 <form class="core-form form-horizontal">
-							<div class="control-group">
-								<label for="optionsCheckboxList" class="control-label">{{ gettext('Add external account to login via social networks') }}</label>
-								<div class="controls">
-									<a href="#" class="fb-bg mbs">sign in with facebook</a>
-									 <a href="#" class="twi-bg mbs">sign in with twitter</a>
-									 <a href="#" class="g-bg mbs">sign in with google+</a>
-								</div>
-							</div>
-						</form>
-						 #}
-
-						<form class="core-form form-horizontal">
-							<div class="control-group">
-								<label for="optionsCheckboxList" class="control-label">{{ gettext('Add another email') }}</label>
-								<div class="controls">
-										<input type="text" id="new_email" name="new_email" class="input-xlarge" autocomplete="off">
-										<button class="btn btn-primary js_addEmail">{{ gettext('Save') }}</button>
-								</div>
-							</div>
-						</form>
+                <div class="admin-title">
+                    <h3 class="h3">{{ gettext('Manage associated accounts') }}</h3>
+                </div>
+                <div id="content-container" class="content-container">
+                    <div id="account-content">
+                        <div id="associate_accounts"></div>
+                        {#
+                        <form class="core-form form-horizontal">
+                            <div class="control-group">
+                                <div class="col-4-12 no-pad">
+                                    <label for="optionsCheckboxList" class="control-label">{{ gettext('Add external account to login via social networks') }}</label>
+                                </div>
+							    <div class="col-8-12 no-pad controls">
+                                    <a href="#" class="fb-bg mbs">sign in with facebook</a>
+                                    <a href="#" class="twi-bg mbs">sign in with twitter</a>
+                                    <a href="#" class="g-bg mbs">sign in with google+</a>
+							    </div>
+                            </div>
+                        </form>
+                        #}
+                        <form class="core-form form-horizontal">
+                            <div class="control-group">
+                                <div class="col-4-12 no-pad">
+                                    <label for="optionsCheckboxList" class="control-label">{{ gettext('Add another email') }}</label>
+                                </div>
+							    <div class="col-8-12 no-pad controls">
+                                    <div class="col-6-12 no-pad">
+                                        <input type="text" id="new_email" name="new_email" autocomplete="off">
+                                    </div>
+                                    <div class="col-6-12 no-pad">
+                                        <button class="btn btn-primary btn-s fr js_addEmail">{{ gettext('Save') }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div id="associate_social_accounts"></div>
                         <div class="form-horizontal">
-                        <div class="controls">
-                        <p class="help-block">{{ gettext("Linking your account allows you to connect through social networks, and to use your profile's picture. Otherwise, you can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service.") |safe }}</p>
+                            <div class="controls">
+                                <p class="help-block">{{ gettext("Linking your account allows you to connect through social networks, and to use your profile's picture. Otherwise, you can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service.") |safe }}</p>
+                            </div>
                         </div>
-                        </div>
-					 </div>
-				 </div>
-			 </div>
-			 </section>
-    	</div>
-      {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+        {% endif %}
     </div>
-  </div>
 </div>

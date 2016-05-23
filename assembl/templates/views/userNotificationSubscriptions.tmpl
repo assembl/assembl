@@ -1,35 +1,31 @@
-<div class="gr">
-  <div class="gu gu-1of5 navigation-menu-holder">
-  </div>
-  <div class="gu gu-3of4 admin-section">
-    <section class="section">
-			<div class="admin-title">
-				<h3 class="h3">{{ gettext('Notifications') }}</h3>
-			</div>
-			<div id="content-container" class="content-container">
-				<div class="gr mtl">
-
-					<!-- region button subscriber -->
-					<div id="subscriber"></div>
-
-					<form class="core-form form-horizontal phl">
-						<fieldset>
-							<div class="control-group">
-								<label for="optionsCheckboxList" class="control-label">{{ gettext('Notifiy me when') }}</label>
-								<div class="controls">
-									<div id="empty-field"></div>
-									<div id="userNotifications"></div>
-									<div id="templateSubscriptions"></div>
-								</div>
-							</div>
-						</fieldset>
-					</form>
-
+<div class="grid-pad">
+    <div class="col-3-12 navigation-menu-holder"></div>
+        <div class="col-9-12 admin-section">
+            <section class="section">
+                <div class="admin-title">
+                    <h3 class="h3">{{ gettext('Notifications') }}</h3>
+                </div>
+                <div id="content-container" class="content-container">
+    				<!-- region button subscriber -->
+    				<div id="subscriber"></div>
+					<form class="core-form form-horizontal">
+                        <fieldset>
+                            <div class="control-group">
+                                <div class="col-4-12 mobile-col-1-1 no-pad">
+                                    <label for="optionsCheckboxList" class="control-label">{{ gettext('Notifiy me when') }}</label>
+                                </div>
+                                <div class="col-8-12 mobile-col-1-1 no-pad controls">
+                                    <div id="empty-field"></div>
+                                    <div id="userNotifications"></div>
+                                    <div id="templateSubscriptions"></div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
 					<!-- region receive notifications by email -->
 					<div id="notifByEmail"></div>
-
-				</div>
-			</div>
-    </section>
-  </div>
+                </div>
+            </section>
+        </div>
+    </div>
 </div>

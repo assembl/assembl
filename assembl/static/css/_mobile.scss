@@ -36,6 +36,18 @@ $panelHeaderTitleHeight:50px;
         overflow:hidden;
     }
     
+    #wrapper{
+        overflow:auto;
+    }
+    .grid-pad{
+        padding-top:10px;
+        padding-left:30px;
+        padding-right:10px;
+    }
+    .content-container{
+        padding: 5px 0 5px 0;
+    }
+    
 // ********************* panel *********************
 
     .panel-header{
@@ -244,5 +256,39 @@ $panelHeaderTitleHeight:50px;
     }
     .loginbox .socialPart{
         width: 98%;
+    }
+    
+// ********************* Account/Profil *********************
+
+    .admin-profile, .admin-account, .admin-notifications{
+        .btn-primary{
+            margin: 0 0 10px 0;
+        }
+        #content-container{
+            padding: 10px 0 0 0;
+        }
+        label{
+            padding: 0 0 10px 0;
+        }
+        .btn-cancel{
+            display:none;
+        }
+        .mtxl{
+            margin:0 0 20px 0;
+            a{
+                color:$gray;
+                font-weight:600;
+            }
+        }
+        .help-admin{
+            font-size: 10px;
+            padding: 0 5px 0 0;
+        }
+        .control-group{
+            padding: 0 10px!important;
+        }
+        .core-form fieldset{
+            margin: 0 0 20px 0;
+        }
     }
 }
