@@ -9,6 +9,7 @@ var _ = require('underscore'),
     Ctx = require("../common/context.js"),
     Assembl = require('../app.js'),
     Types = require('../utils/types.js'),
+    LangString = require('../models/langstring.js'),
     TokenVoteSessionView = require('../views/tokenVoteSession.js');
 
 var WidgetModel = Base.Model.extend({
@@ -455,8 +456,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
         Assembl.slider.show(modalView);
       break;
       case "ended":
-        // TODO: show vote results
-        console.log("show vote results");
+        that.onShowResult();
       break;
     }    
   },
@@ -541,7 +541,7 @@ var TokenSpecificationModel = Base.Model.extend({
 
   parse: function(raw, options){
     if (_.has(raw, 'token_categories') && _.isArray(raw['token_categories'])){
-      raw.token_categories = new TokenCategorySpecificationCollection(raw.token_categories);
+      raw.token_categories = new TokenCategorySpecificationCollection(raw.token_categories, {parse: true});
     }
     return raw;
   }
@@ -557,9 +557,16 @@ var TokenCategorySpecificationModel = Base.Model.extend({
     "total_number": null, // (integer) number of available tokens in the bag, that the voter can allocate on several candidates
     "token_vote_specification": null, // (string) the id of a token vote spec this category is associated to
     "image": null, // (string) URL of an image of a token
+    "image_empty": null,
     "maximum_per_idea": null, // (integer) maximum number of tokens a voter has the right to put on an idea
+    "color": null,
     "@type": "TokenCategorySpecification",
     "@view": "voting_widget"
+  },
+
+  parse: function(rawModel, options){
+    rawModel.name = new LangString.Model(rawModel.name, {parse: true});
+    return rawModel;
   }
 });
 

@@ -843,7 +843,6 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     'regionIdeaDescription': '@ui.descriptionRegion'
   },
 
-  //Most likely the place where D3 will be used!
   initialize: function(options){
     this.categoryIndex = options.categoryIndex;
     this.shownDescription = false;
@@ -878,6 +877,12 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
 
   onRender: function(){
     //Have to define the data-points in an array.
+    Ctx.removeCurrentlyDisplayedTooltips();
+    var color = 'red';
+    var displayTooltip = function(num, total){
+      return i18n.sprintf(i18n.gettext("%d tokens/%d total tokens"), num, total);
+    };
+
     var scale = d3.scale.linear()
                         .domain([0, this.maxPercent])
                         .range([0, this.maxPixels]);
@@ -887,16 +892,23 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
        .selectAll("div.token-vote-result-category-column")
         .data(this.results);
     results.append('div')
-          .style('background-color', 'red')
-          .style('display', 'inline-block')
-          .style('width', function(r) {
-            var d = r.sum / r.totalTokens;
-            var tmp = scale(d) + 'px';
-            return tmp; }).append('img');
-    results.append('span').text(function(r) {
+      .attr('data-toggle', 'tooltip')
+      .attr('data-position', 'top')
+      .attr('title', function(r){ return displayTooltip(r.sum, r.totalTokens)})
+      .style('background-color', color)
+      .style('display', 'inline-block')
+      .style('border-radius', '3px')
+      .style('width', function(r) {
+        var d = r.sum / r.totalTokens;
+        var tmp = scale(d) + 'px';
+        return tmp; }).append('img');
+    results.append('span')
+      .style('margin-left', '5px')
+      .text(function(r) {
         var d = r.sum / r.totalTokens;
         return percent(d);
     });
+    Ctx.initTooltips(this.$el);
   },
 
   onShow: function(){
@@ -948,6 +960,8 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
     this.sumTokens = options.sumTokens;
     this.maxPercent = options.maxPercent;
     this.voteResults = options.voteResults;
+    this.voteSpecification = options.voteSpecification;
+    this.languagePreferences = options.languagePreferences;
     this.sortAscending = _.map(this.categoryIndex, function() {return false;});
     this.voteResults.sortSpecName = this.categoryIndex[this.sortOnCategoryNum];
     this.voteResults.sort();
@@ -993,9 +1007,20 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
   },
 
   serializeData: function(){
-    var categories = _.values(this.categoryIndex);
+    var that = this,
+        categories = _.values(this.categoryIndex),
+        categoryList = this.voteSpecification.get('token_categories');
+    categories = _.map(categories, function(cat){
+      var importantCategory = categoryList.find(function(categoryModel){
+        //Has to exist, as the original category list was created from the models
+        return categoryModel.get('typename') === cat;
+      });
+      var categoryLangString = importantCategory.get('name');
+      var best = categoryLangString.bestWithErrors(that.languagePreferences, false);
+      return best.entry.value()
+    });
     return {
-      categories: categories
+      categories: categoryList
     }
   }
 });
@@ -1078,7 +1103,9 @@ var TokenResultView = Marionette.LayoutView.extend({
           sumTokens: sumTokens,
           maxPercent: maxPercent,
           voteResults: that.voteResults,
-          reorderOnSort: true //disable re-rendering child views on sort
+          reorderOnSort: true, //disable re-rendering child views on sort
+          voteSpecification: that.tokenSpecs,
+          languagePreferences: that.languagePreferences
         });
         if (!that.isViewDestroyed()){
           that.render();
