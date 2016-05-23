@@ -1020,7 +1020,7 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
       return best.entry.value()
     });
     return {
-      categories: categoryList
+      categories: categories
     }
   }
 });
