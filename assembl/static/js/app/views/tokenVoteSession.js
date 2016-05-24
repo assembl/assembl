@@ -223,7 +223,7 @@ var TokenBagsView = Marionette.LayoutView.extend({
     this.voteSpecification = this.options.voteSpecification;
     this.tokenCategories = this.options.tokenCategories;
     this.myVotesCollection = this.options.myVotesCollection;
-    this.listenTo(this.myVotesCollection, "reset change:value", this.render);
+    this.listenTo(this.myVotesCollection, "reset change:value", this.render); // TODO: replace this by a category-level refresh, to refresh only the ones which have changed (avoids animation glitches triggered by allocation clicks on exclusive categories icons)
   },
   onRender: function(){
     var that = this;
@@ -363,6 +363,8 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     this.voteSpecification = this.options.voteSpecification;
     this.idea = this.options.idea;
     this.myVotesCollection = this.options.myVotesCollection;
+    this.showZeroIcon = "showZeroIcon" in this.options ? this.options.showZeroIcon : true;
+    this.preventDefaultTokenClickBehaviour = "preventDefaultTokenClickBehaviour" in this.options ? this.options.preventDefaultTokenClickBehaviour : false;
     this.listenTo(this.myVotesCollection, "change:category:"+this.model.getId(), this.render); // force re-render of all other token allocation views of the same token category, so that only the right icons are clickable. We use this way instead of setting this.collection to this.myVotesCollection and adding a collectionEvents hash, because does it not seem to work (probably because the hash executes before initialize())
 
     var myVote = this.myVotesCollection.findWhere({"idea": this.idea.get("@id"), "token_category": this.model.get("@id")});
@@ -455,6 +457,9 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
         tokenContainer[0].classList.add("custom");
 
         tokenContainer[0].classList.add("zero");
+        if ( !that.showZeroIcon ){
+          tokenContainer.hide();
+        }
       }
       else {
         if ( that.customTokenImageURL ){
@@ -522,105 +527,12 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
 
         tokenContainer.attr("title", i18n.sprintf(i18n.gettext("set %d tokens"), number_of_tokens_represented_by_this_icon));
 
+        
         tokenContainer.click(function(){
-          if ( that.currentValue == number_of_tokens_represented_by_this_icon ){
-            return;
+          that.triggerMethod("token:click", number_of_tokens_represented_by_this_icon);
+          if ( !that.preventDefaultTokenClickBehaviour ){
+            that.onTokenIconClick(number_of_tokens_represented_by_this_icon, tokenContainer, tokenIconElement, container);
           }
-          console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
-          var animation_duration = 800;
-
-          var endAnimationTowardsNotAvailable = function(el){
-            return function(){
-              el.classList.remove("animating-towards-not-available");
-              el.classList.remove("available");
-              el.classList.add("not-available");
-            };
-          };
-
-          var endAnimationTowardsAvailable = function(el){
-            return function(){
-              el.classList.remove("animating-towards-available");
-              el.classList.remove("not-available");
-              el.classList.add("available");
-            };
-          };
-
-          // animation: are we adding or removing token to/from this idea?
-          if ( that.currentValue < number_of_tokens_represented_by_this_icon ){ // we are adding tokens to this idea
-            for ( var i = that.currentValue + 1; i <= number_of_tokens_represented_by_this_icon; ++i ){
-              var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .available";
-              console.log("selector: ", selector);
-              var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
-              var theAllocatedToken = tokenContainer.parent().children().eq(i);
-              theAvailableToken[0].classList.add("animating-towards-not-available");
-              theAllocatedToken[0].classList.add("animating-towards-selected");
-              setTimeout(endAnimationTowardsNotAvailable(theAvailableToken[0]), animation_duration*0.9);
-              transitionAnimation(theAvailableToken.find("svg").first(), theAllocatedToken.find("svg").first(), animation_duration);
-            }
-          }
-          else { // we are removing tokens from this idea
-            var initial_value = number_of_tokens_represented_by_this_icon;
-            for ( var i = that.currentValue; i > number_of_tokens_represented_by_this_icon; --i ){
-              var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .not-available";
-              console.log("selector: ", selector);
-              var theAvailableToken = $(selector).eq(i - number_of_tokens_represented_by_this_icon - 1);
-              var theAllocatedToken = tokenContainer.parent().children().eq(i);
-              theAvailableToken[0].classList.add("animating-towards-available");
-              theAllocatedToken[0].classList.add("animating-towards-not-selected");
-              setTimeout(endAnimationTowardsAvailable(theAvailableToken[0]), animation_duration*0.9);
-              transitionAnimation(theAllocatedToken.find("svg").first(), theAvailableToken.find("svg").first(), animation_duration);
-            }
-          }
-
-          var zeroToken = tokenContainer.parent().children().eq(0);
-          if ( number_of_tokens_represented_by_this_icon == 0 ){
-            zeroToken[0].classList.add("animating-towards-selected");
-            zeroToken[0].classList.remove("animating-towards-not-selected");
-          } else {
-            zeroToken[0].classList.add("animating-towards-not-selected");
-            zeroToken[0].classList.remove("animating-towards-selected");
-          }
-          
-          /* This is the pure AJAX way to save the data to the backend
-          that.postData["value"] = number_of_tokens_represented_by_this_icon;
-          $.ajax({
-            type: "POST",
-            contentType: 'application/json; charset=UTF-8',
-            url: that.voteURL,
-            data: JSON.stringify(that.postData),
-            success: function(data){
-              console.log("success! data: ", data);
-              that.currentValue = number_of_tokens_represented_by_this_icon;
-              that.render();
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-              console.log("error! textStatus: ", textStatus, "; errorThrown: ", errorThrown);
-              // TODO: show error in the UI
-            }
-          });
-          */
-
-          // This is a more Backbone way to save the data to the backend
-          setTimeout(function(){
-            var properties = _.clone(that.postData);
-            delete properties["value"];
-            properties["idea"] = that.idea.get("@id");
-            var previousVote = that.myVotesCollection.findWhere(properties);
-            console.log("previousVote found: ", previousVote);
-            if ( previousVote ){
-              previousVote.set({"value": number_of_tokens_represented_by_this_icon});
-              previousVote.save();
-            }
-            else {
-              properties["value"] = number_of_tokens_represented_by_this_icon;
-              that.myVotesCollection.create(properties);
-            }
-            that.currentValue = number_of_tokens_represented_by_this_icon;
-            tokenIconElement[0].classList.add("selected");
-            container.removeClass("hover");
-            that.myVotesCollection.trigger("change:category:"+that.model.getId()); // force re-render of all token allocation views of this same token category (so that the right icons are clickable)
-            that.render(); // show immediately the icon it its correct state, without having to wait for collection update
-          }, animation_duration*0.9);
         });
         
         tokenContainer.hover(function handlerIn(){
@@ -666,10 +578,124 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       renderAllTokenIcons();
     });
   },
+
   serializeData: function(){
     return {
       "maximum_per_idea": this.maximum_per_idea
     };
+  },
+
+  getCurrentValue: function(){
+    return this.currentValue;
+  },
+
+  // this function needs the following variables: number_of_tokens_represented_by_this_icon, that, that.currentValue, that.model, tokenContainer, that.postData, that.idea, that.myVotesCollection, tokenIconElement, container
+  // TODO: refactor
+  onTokenIconClick: function(number_of_tokens_represented_by_this_icon, tokenContainer, tokenIconElement, container){
+    var that = this;
+    if ( that.currentValue == number_of_tokens_represented_by_this_icon ){
+      return;
+    }
+
+    tokenContainer = tokenContainer ? tokenContainer : that.$(".token-icon").eq(number_of_tokens_represented_by_this_icon);
+    tokenIconElement = tokenIconElement ? tokenIconElement : tokenContainer.children().first();
+    container = container ? container : that.$el;
+
+    console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
+    var animation_duration = 800;
+
+    var endAnimationTowardsNotAvailable = function(el){
+      return function(){
+        el.classList.remove("animating-towards-not-available");
+        el.classList.remove("available");
+        el.classList.add("not-available");
+      };
+    };
+
+    var endAnimationTowardsAvailable = function(el){
+      return function(){
+        el.classList.remove("animating-towards-available");
+        el.classList.remove("not-available");
+        el.classList.add("available");
+      };
+    };
+
+    // animation: are we adding or removing token to/from this idea?
+    if ( that.currentValue < number_of_tokens_represented_by_this_icon ){ // we are adding tokens to this idea
+      for ( var i = that.currentValue + 1; i <= number_of_tokens_represented_by_this_icon; ++i ){
+        var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .available";
+        console.log("selector: ", selector);
+        var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
+        var theAllocatedToken = tokenContainer.parent().children().eq(i);
+        theAvailableToken[0].classList.add("animating-towards-not-available");
+        theAllocatedToken[0].classList.add("animating-towards-selected");
+        setTimeout(endAnimationTowardsNotAvailable(theAvailableToken[0]), animation_duration*0.9);
+        transitionAnimation(theAvailableToken.find("svg").first(), theAllocatedToken.find("svg").first(), animation_duration);
+      }
+    }
+    else { // we are removing tokens from this idea
+      var initial_value = number_of_tokens_represented_by_this_icon;
+      for ( var i = that.currentValue; i > number_of_tokens_represented_by_this_icon; --i ){
+        var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .not-available";
+        console.log("selector: ", selector);
+        var theAvailableToken = $(selector).eq(i - number_of_tokens_represented_by_this_icon - 1);
+        var theAllocatedToken = tokenContainer.parent().children().eq(i);
+        theAvailableToken[0].classList.add("animating-towards-available");
+        theAllocatedToken[0].classList.add("animating-towards-not-selected");
+        setTimeout(endAnimationTowardsAvailable(theAvailableToken[0]), animation_duration*0.9);
+        transitionAnimation(theAllocatedToken.find("svg").first(), theAvailableToken.find("svg").first(), animation_duration);
+      }
+    }
+
+    var zeroToken = tokenContainer.parent().children().eq(0);
+    if ( number_of_tokens_represented_by_this_icon == 0 ){
+      zeroToken[0].classList.add("animating-towards-selected");
+      zeroToken[0].classList.remove("animating-towards-not-selected");
+    } else {
+      zeroToken[0].classList.add("animating-towards-not-selected");
+      zeroToken[0].classList.remove("animating-towards-selected");
+    }
+    
+    /* This is the pure AJAX way to save the data to the backend
+    that.postData["value"] = number_of_tokens_represented_by_this_icon;
+    $.ajax({
+      type: "POST",
+      contentType: 'application/json; charset=UTF-8',
+      url: that.voteURL,
+      data: JSON.stringify(that.postData),
+      success: function(data){
+        console.log("success! data: ", data);
+        that.currentValue = number_of_tokens_represented_by_this_icon;
+        that.render();
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+        console.log("error! textStatus: ", textStatus, "; errorThrown: ", errorThrown);
+        // TODO: show error in the UI
+      }
+    });
+    */
+
+    // This is a more Backbone way to save the data to the backend
+    setTimeout(function(){
+      var properties = _.clone(that.postData);
+      delete properties["value"];
+      properties["idea"] = that.idea.get("@id");
+      var previousVote = that.myVotesCollection.findWhere(properties);
+      console.log("previousVote found: ", previousVote);
+      if ( previousVote ){
+        previousVote.set({"value": number_of_tokens_represented_by_this_icon});
+        previousVote.save();
+      }
+      else {
+        properties["value"] = number_of_tokens_represented_by_this_icon;
+        that.myVotesCollection.create(properties);
+      }
+      that.currentValue = number_of_tokens_represented_by_this_icon;
+      tokenIconElement[0].classList.add("selected");
+      container.removeClass("hover");
+      that.myVotesCollection.trigger("change:category:"+that.model.getId()); // force re-render of all token allocation views of this same token category (so that the right icons are clickable)
+      that.render(); // show immediately the icon it its correct state, without having to wait for collection update
+    }, animation_duration*0.9);
   }
 });
 
@@ -717,9 +743,47 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
       voteItemView: this.parent,
       model: negativeTokens
     };
-    this.getRegion("negativeTokens").show(new TokenCategoryAllocationView(childViewOptions));
+    childViewOptions.preventDefaultTokenClickBehaviour = true;
+    var animation_duration = 800;
+
+
+    var negativeTokensView = new TokenCategoryAllocationView(childViewOptions);
+    this.getRegion("negativeTokens").show(negativeTokensView);
+
+
     childViewOptions.model = positiveTokens;
-    this.getRegion("positiveTokens").show(new TokenCategoryAllocationView(childViewOptions));
+    childViewOptions.showZeroIcon = false;
+    var positiveTokensView = new TokenCategoryAllocationView(childViewOptions);
+    this.getRegion("positiveTokens").show(positiveTokensView);
+
+
+    positiveTokensView.on("token:click", function(clicked_value){
+      console.log("positiveTokensView click clicked_value: ", clicked_value);
+      var currentNegativeValue = negativeTokensView.getCurrentValue();
+      var currentPositiveValue = positiveTokensView.getCurrentValue();
+      if ( currentNegativeValue > 0 ){
+        negativeTokensView.onTokenIconClick(0);
+        setTimeout(function(){
+          positiveTokensView.onTokenIconClick(clicked_value);
+        }, animation_duration*0.9);
+      } else {
+        positiveTokensView.onTokenIconClick(clicked_value);
+      }
+    });
+
+    negativeTokensView.on("token:click", function(clicked_value){
+      console.log("negativeTokensView click clicked_value: ", clicked_value);
+      var currentNegativeValue = negativeTokensView.getCurrentValue();
+      var currentPositiveValue = positiveTokensView.getCurrentValue();
+      if ( currentPositiveValue > 0 ){
+        positiveTokensView.onTokenIconClick(0);
+        setTimeout(function(){
+          negativeTokensView.onTokenIconClick(clicked_value);
+        }, animation_duration*0.9);
+      } else {
+        negativeTokensView.onTokenIconClick(clicked_value);
+      }
+    });
   }
 });
 
