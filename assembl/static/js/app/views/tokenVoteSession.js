@@ -1141,7 +1141,7 @@ var TokenResultView = Marionette.LayoutView.extend({
       .then(function(ideas){
         that.ideas = ideas;
         //Add ONLY the subset of votable_ideas!!!
-        return cm.getUserLanguagePreferencesPromise()
+        return cm.getUserLanguagePreferencesPromise(Ctx)
       .then(function(preferences){
         that.languagePreferences = preferences;
       }).then(function(){
