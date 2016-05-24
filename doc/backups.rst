@@ -45,7 +45,6 @@ Create a script such as:
     export ASSEMBL_PATH=/home/www/assembl_discussions_bluenove_com
     export REPOSITORY=www-data@coeus.ca:/media/backup/assembl_backups_bluenove_discussions.borg
     bash ${ASSEMBL_PATH}/doc/borg_backup_script/assembl_borg_backup.sh > $ASSEMBL_PATH/var/log/assembl_backup.log 2>&1
-    
 
 
 You can the automate with cron. For example:
@@ -54,7 +53,7 @@ You can the automate with cron. For example:
 
     sudo su - www-data
     crontab -e
-    0 3 * * * /home/backups/backup_all_assembl.sh
+    0 3 * * * /bin/bash /home/backups/backup_all_assembl.sh
 
 All backups are encrypted. Make SURE you backup the keys (normally in
 ``~/.borg/keys/``) somewhere safe, otherwise your backups will be
