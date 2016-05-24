@@ -815,7 +815,7 @@ def check_and_create_database_user():
     Create a user and a DB for the project
     """
     with settings(warn_only=True), hide('stdout'):
-        checkUser = run("PGPASSWORD=%s psql --host=%s --username=%s -l" % (env.db_password, env.db_host, env.db_user), pty=True)
+        checkUser = run("PGPASSWORD=%s psql --host=%s --username=%s -l" % (env.db_password, env.db_host, env.db_user), pty=True, combine_stderr=False)
     if checkUser.failed:
         print(yellow("User does not exist"))
         run_db_command('psql -d postgres -c "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \'%s\';"' % (env.db_user, env.db_password))
@@ -826,7 +826,7 @@ def check_and_create_database_user():
 def database_create_postgres():
     execute(check_and_create_database_user)
 
-    with settings(warn_only=True), hide('stdout'):
+    with settings(warn_only=True):
         checkDatabase = run("PGPASSWORD=%s psql --host=%s --username=%s --dbname=%s -l" % (env.db_password, env.db_host, env.db_user, env.db_name))
     if checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
@@ -844,9 +844,9 @@ def database_create_postgres():
 def database_create():
     "Create the database for this assembl instance"
     if using_virtuoso():
-        database_create_virtuoso()
+        execute(database_create_virtuoso)
     else:
-        database_create_postgres()
+        execute(database_create_postgres)
 
 
 def virtuoso_db_directory():
