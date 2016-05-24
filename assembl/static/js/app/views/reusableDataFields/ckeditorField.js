@@ -4,6 +4,7 @@ var Marionette = require('../../shims/marionette.js'),
     _ = require('underscore'),
     $ = require('jquery'),
     Assembl = require('../../app.js'),
+    Permissions = require('../../utils/permissions.js'),
     Ctx = require('../../common/context.js');
 
 var cKEditorField = Marionette.ItemView.extend({
@@ -60,6 +61,8 @@ var cKEditorField = Marionette.ItemView.extend({
     this.canEdit = (options.canEdit !== undefined) ? options.canEdit : true;
     
     this.readMoreAfterHeightPx = (options.readMoreAfterHeightPx !== undefined) ? options.readMoreAfterHeightPx : 170;
+    
+    this.hideSeeMoreButton = (options.hideSeeMoreButton) ? options.hideSeeMoreButton : false;
 
   },
 
@@ -69,7 +72,7 @@ var cKEditorField = Marionette.ItemView.extend({
     cancelButton: '.ckeditorField-cancelbtn',
     seeMoreOrLess: '.js_seeMoreOrLess',
     seeMore: '.js_seeMore',
-    seeLess: '.js_seeLess',
+    seeLess: '.js_seeLess'
   },
 
   events: {
@@ -77,7 +80,7 @@ var cKEditorField = Marionette.ItemView.extend({
     'click @ui.saveButton': 'saveEdition',
     'click @ui.cancelButton': 'cancelEdition',
     'click @ui.seeMore': 'seeMoreContent',
-    'click @ui.seeLess': 'seeLessContent',
+    'click @ui.seeLess': 'seeLessContent'
   },
 
   serializeData: function() {
@@ -102,6 +105,9 @@ var cKEditorField = Marionette.ItemView.extend({
     }
     if (this._viewIsAlreadyShown) {
       this.requestEllipsis();
+    }
+    if(this.hideSeeMoreButton){
+      this.$(this.ui.seeMore).hide();
     }
   },
 
@@ -143,9 +149,12 @@ var cKEditorField = Marionette.ItemView.extend({
     e.stopPropagation();
     e.preventDefault();
 
-    this.ui.mainfield.trigger('destroy');
+    /*this.ui.mainfield.trigger('destroy');
     this.ui.seeMore.addClass('hidden');
-    this.ui.seeLess.removeClass('hidden');
+    this.ui.seeLess.removeClass('hidden');*/
+    
+    var modalView = new CkeditorFieldInModal({model:this.model, modelProp:this.modelProp, canEdit:this.canEdit});
+    Assembl.slider.show(modalView);
   },
 
   seeLessContent: function(e) {
@@ -267,4 +276,36 @@ var cKEditorField = Marionette.ItemView.extend({
 
 });
 
+var CkeditorFieldInModal = Backbone.Modal.extend({
+  constructor: function CkeditorFieldInModal(){
+    Backbone.Modal.apply(this, arguments);
+  },
+  keyControl:false,
+  template: '#tmpl-modalWithoutIframe',
+  className: 'modal-ckeditorfield popin-wrapper',
+  cancelEl: '.close, .js_close',
+  ui: {
+    'body': '.js_modal-body'
+  },
+  initialize:function(options){
+    this.model = options.model;
+    this.modelProp = options.modelProp;
+    this.canEdit = options.canEdit;
+  },
+  onRender: function(){
+    var ckeditorField = new cKEditorField({
+      'model': this.model,
+      'modelProp': this.modelProp,
+      'canEdit': this.canEdit,
+      'autosave': true,
+      'hideSeeMoreButton':true
+    });
+    this.$(this.ui.body).html(ckeditorField.render().el);
+  },
+  serializeData: function(){
+    return {
+      modal_title: this.model.get('shortTitle')
+    }
+  }
+});
 module.exports = cKEditorField;
