@@ -948,9 +948,9 @@ def database_delete():
                 "have to temporarily declare env.is_production_env = False " + 
                 "in the environment"))
     if using_virtuoso():
-        database_delete_virtuoso()
+        execute(database_delete_virtuoso)
     else:
-        database_delete_postgres()
+        execute(database_delete_postgres)
 
 
 def database_delete_virtuoso():
