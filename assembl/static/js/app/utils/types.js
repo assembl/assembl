@@ -49,6 +49,7 @@ var Types = {
   LANGUAGE_PREFERENCE: "UserLanguagePreference",
   VOTESPECIFICATIONS: "AbstractVoteSpecification",
   TOKENVOTESPECIFICATION: "TokenVoteSpecification",
+  WIDGET: "Widget",
 
 
 

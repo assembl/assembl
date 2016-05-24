@@ -220,15 +220,14 @@ var CollectionManager = Marionette.Object.extend({
   /**
    * Returns the collection from the giving object's
    * 
-   * @type . Used by the socket to sync the collection.
    * @param {BaseModel}
    *          item
    * @param {String}
    *          [type=item['@type']] The model type
    * @return {BaseCollection}
    */
-  getCollectionPromiseByType: function(item, type) {
-    type = type || Types.getBaseType(item['@type']);
+  getCollectionPromiseByType: function(item) {
+    var type = Types.getBaseType(item['@type']);
 
     switch (type) {
       case Types.EXTRACT:
@@ -251,6 +250,9 @@ var CollectionManager = Marionette.Object.extend({
 
       case Types.PARTNER_ORGANIZATION:
         return this.getAllPartnerOrganizationCollectionPromise();
+
+      case Types.WIDGET:
+        return this.getAllWidgetsPromise();
     }
 
     return null;

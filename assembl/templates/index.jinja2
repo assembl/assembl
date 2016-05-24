@@ -80,7 +80,7 @@
 
     <script type="text/javascript">start_application = true;</script>
     <script type="text/json" id="users-json">{{ discussion.get_all_agents_preload(user) |safe }}</script>
-    <script type="text/json" id="inheritance-json">{{ discussion.get_json_inheritance_for('User', 'Idea', 'IdeaLink', 'Post') |safe }}</script>
+    <script type="text/json" id="inheritance-json">{{ discussion.get_json_inheritance_for('User', 'Idea', 'IdeaLink', 'Post', 'Widget') |safe }}</script>
     <script type="text/json" id="extracts-json">{{ discussion.get_related_extracts_preload(user_id=userId) |safe }}</script>
     <script type="text/json" id="login-providers">{{providers|safe}}</script>
     {% if user %}
