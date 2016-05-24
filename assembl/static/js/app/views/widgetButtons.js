@@ -59,7 +59,7 @@ var WidgetButtonView = Marionette.ItemView.extend({
       description: this.model.getDescriptionText(this.options.context, this.options.idea),
       classes: this.model.getCssClasses(this.options.context, this.options.idea),
       until_text: this.model.getDescriptionText(this.model.UNTIL_TEXT, this.options.idea),
-      canSeeResults: Ctx.getCurrentUser().can(Permissions.SYSADMIN)
+      canSeeResults: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
     };
   }
 });
