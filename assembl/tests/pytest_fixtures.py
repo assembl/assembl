@@ -18,24 +18,21 @@ from sqlalchemy import inspect
 
 import assembl
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
-from assembl.lib.sqla import get_typed_session_maker, set_session_maker_type
+from assembl.lib.sqla import get_session_maker
 from assembl.lib.config import get_config
 from assembl.tasks import configure as configure_tasks
 from .utils import clear_rows, drop_tables
 from assembl.auth import R_SYSADMIN, R_PARTICIPANT
 
 
-def zopish_session_tween_factory(handler, registry):
 
-    def zopish_session_tween(request):
-        get_typed_session_maker(False).commit()
-        set_session_maker_type(True)
-        try:
-            return handler(request)
-        finally:
-            set_session_maker_type(False)
+def committing_session_tween_factory(handler, registry):
+    # This ensures that the app has the latest state
+    def committing_session_tween(request):
+        get_session_maker().commit()
+        return handler(request)
 
-    return zopish_session_tween
+    return committing_session_tween
 
 
 @pytest.fixture(scope="session")
@@ -43,7 +40,7 @@ def session_factory(request):
     # Get the zopeless session maker,
     # while the Webtest server will use the
     # default session maker, which is zopish.
-    session_factory = get_typed_session_maker(False)
+    session_factory = get_session_maker()
 
     def fin():
         print "finalizer session_factory"
@@ -86,7 +83,7 @@ def base_registry(request):
     config.setup_registry(
         settings=get_config(), root_factory=root_factory)
     configure_tasks(registry, 'assembl')
-    config.add_tween('assembl.tests.pytest_fixtures.zopish_session_tween_factory')
+    config.add_tween('assembl.tests.pytest_fixtures.committing_session_tween_factory')
     return registry
 
 

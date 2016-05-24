@@ -83,7 +83,6 @@ def dispose_sqlengines():
 _TABLENAME_RE = re.compile('([A-Z]+)')
 
 _session_maker = None
-_session_makers = {True: None, False: None }
 db_schema = None
 _metadata = None
 Base = TimestampedBase = None
@@ -1479,10 +1478,9 @@ def make_session_maker(zope_tr=True, autoflush=True):
 
 def initialize_session_maker(zope_tr=True, autoflush=True):
     "Initialize the application global sessionmaker object"
-    global _session_maker, _session_makers
-    assert _session_maker is None or _session_maker == _session_makers[not zope_tr]
+    global _session_maker
+    assert _session_maker is None
     session_maker = make_session_maker(zope_tr, autoflush)
-    _session_makers[zope_tr] = session_maker
     if _session_maker is None:
         # The global object is the first one initialized
         _session_maker = session_maker
@@ -1499,19 +1497,6 @@ def get_session_maker():
     global _session_maker
     assert _session_maker is not None
     return _session_maker
-
-
-def get_typed_session_maker(zope_tr, autoflush=True):
-    global _session_makers
-    zope_tr = bool(zope_tr)
-    if _session_makers[zope_tr] is None:
-        _session_makers[zope_tr] = initialize_session_maker(zope_tr, autoflush)
-    return _session_makers[zope_tr]
-
-
-def set_session_maker_type(zope_tr):
-    global _session_maker
-    _session_maker = get_typed_session_maker(zope_tr)
 
 
 class PrivateObjectMixin(object):
