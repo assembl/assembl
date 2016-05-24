@@ -194,8 +194,9 @@ def disabledtest_next_synthesis_idea_management(
     assert len(res_data['ideas']) == 2, 'Idea wasn\'t added to the synthesis'
 
 
-def test_api_register(discussion, test_app):
-    test_app.app.registry.settings['assembl.validate_registration_emails']='true'
+def test_api_register(discussion, test_app_no_perm, discussion_synth_notification):
+    from assembl.models import User, AbstractAgentAccount
+    test_app_no_perm.app.registry.settings['assembl.validate_registration_emails']='true'
     with mock.patch('repoze.sendmail.mailer.SMTPMailer.smtp') as mock_mail:
         mailer = mock_mail.return_value
         mailer.set_debuglevel.return_value = None
@@ -207,16 +208,23 @@ def test_api_register(discussion, test_app):
         mailer.quit.return_value = (221, 'Service closing transmission channel')
 
         # Register
-        r = test_app.post("/register", {
+        email = "jsmith@example.com"
+        password = '1234'
+        r = test_app_no_perm.post("/register", {
             'name': "John Smith",
-            'email': "jsmith@example.com",
-            'password': '1234',
-            'password2': '1234',
+            'email': email,
+            'password': password,
+            'password2': password,
             })
         assert r.status_code == 302
+        discussion.subscribe_to_notifications_on_signup = True
         discussion.db.flush()
+        # How is the user looking?
+        account = discussion.db.query(AbstractAgentAccount).filter_by(email=email).first()
+        assert not account.profile.verified
+        assert len(account.profile.notification_subscriptions) == 0
         # Register step 2
-        r = test_app.get(r.location)
+        r = test_app_no_perm.get(r.location)
         # Sent
         assert r.status_code == 200
         assert mailer.sendmail.call_count == 1
@@ -228,8 +236,18 @@ def test_api_register(discussion, test_app):
         token = token.group(1)
         assert token
         # Confirm token
-        r = test_app.get("/users/email_confirm/"+token)
+        r = test_app_no_perm.get("/users/email_confirm/"+token)
         assert r.status_code == 302 and urlparse(r.location).path == '/'
+        assert account.verified
+        assert account.profile.verified
+        discussion.db.flush()
+        r = test_app_no_perm.post("/"+discussion.slug+"/login", dict(
+            identifier=email, password=password, ))
+        assert r.status_code == 302
+        discussion.db.flush()
+        discussion.db.expire(account.profile, ["notification_subscriptions"])
+        assert len(account.profile.notification_subscriptions) > 0
+
 
 def test_api_get_posts_queries(
         discussion, test_app, test_session, participant1_user, 

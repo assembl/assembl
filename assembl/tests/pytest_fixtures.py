@@ -213,6 +213,24 @@ def discussion(request, test_session, default_preferences):
 
 
 @pytest.fixture(scope="function")
+def discussion_synth_notification(request, test_session, discussion):
+    from assembl.models import (
+        NotificationSubscriptionFollowSyntheses, NotificationCreationOrigin)
+    u = discussion.user_templates[0]
+    sns = NotificationSubscriptionFollowSyntheses(
+        user=u, discussion=discussion,
+        creation_origin=NotificationCreationOrigin.USER_REQUESTED)
+    test_session.expire(u, ['notification_subscriptions'])
+
+    def fin():
+        print "finalizer discussion_synth_notification"
+        test_session.delete(sns)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return sns
+
+
+@pytest.fixture(scope="function")
 def discussion2(request, test_session):
     from assembl.models import Discussion
     d = Discussion(topic=u"Second discussion", slug="testdiscussion2")
