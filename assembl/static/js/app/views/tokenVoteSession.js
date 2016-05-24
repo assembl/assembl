@@ -897,7 +897,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     // 'descriptionClick': '.js_see-idea-description',
     // 'descriptionButton': '.js_description-button',
     'descriptionRegion': '.js_region-idea-description',
-    'allData': '.js_data'
+    'cssTest': '#test-css-color'
   },
 
   events: {
@@ -920,11 +920,46 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   },
 
   _calculateColor: function(categoryName){
+
+    //http://jsfiddle.net/WK_of_Angmar/xgA5C/
+    function validTextColour(stringToTest) {
+      var testSpace = $(this.ui.cssTest);
+      //Alter the following conditions according to your need.
+      if (stringToTest === "") { return false; }
+      if (stringToTest === "inherit") { return false; }
+      if (stringToTest === "transparent") { return false; }
+      
+      var image = $("<img>");
+      testSpace.append(image);
+      image.css('color', "rgb(0, 0, 0)"); 
+      image.css('color', stringToTest);
+      if (image.css('color') !== "rgb(0, 0, 0)") { return true; }
+      image.css('color', "rgb(255, 255, 255)");
+      image.css('color', stringToTest);
+      var result = image.css('color') !== "rgb(255, 255, 255)";
+      testSpace.empty();
+      return result;
+    };
+
     var categories = this.voteSpecification.get('token_categories'),
         cat = categories.find(function(category){
           return category.get('typename') === categoryName;
         });
-    return cat.get('color') || null;
+    var color = cat.get('color') || null;
+    if (color){
+      if (color.indexOf('#') === 0){
+        return color;
+      }
+      else {
+        //Test it against a dummy
+        var tmp = "#" + color;
+        //For now, if the CSS is malformed, it WILL crash
+        //TODO: fix validTextColour function to validate css color
+        // var isGoodCss = validTextColour(tmp);
+        return tmp;
+      }
+    }
+    else { return null; }
   },
 
   _calculate: function(){
