@@ -973,6 +973,8 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
       })
       .style('display', 'inline-block')
       .style('border-radius', '3px')
+      .style('height', '14px')
+      .style('margin-top', '5px')
       .style('width', function(r) {
         var d = r.sum / r.totalTokens;
         var tmp = scale(d) + 'px';
@@ -1145,7 +1147,7 @@ var TokenResultView = Marionette.LayoutView.extend({
       }).then(function(){
         that.voteResults = new Widget.VoteResultCollection({widgetModel: that.model, parse: true});
         return that.voteResults.fetch();
-      }).then(function(results){
+      }).then(function(){
         //Don't care about results, it's been fetched.
         that.tokenSpecs = that.model.getVoteSpecificationModel();
         that.voteResults.associateTo(that.ideas, that.tokenSpecs);
@@ -1156,28 +1158,17 @@ var TokenResultView = Marionette.LayoutView.extend({
           var name = category.get('typename');
           that.categoryIndex.push(name);
         });
-        // Compute the number of tokens spent by category,
-        // and for each category, the maximum percent of tokens
-        // that were spent on any one idea. This maxPercent will
-        // be used for scaling.
-        // Note that we could also have scaled not on tokens spent,
-        // but tokens spendable (given number of voters * max tokens.)
-        // We should code both approaches and compare at some point.
-        var sums = _.map(that.categoryIndex, function(categName) {
-                return _.map(results, function(result) {
-                    return result.sums[categName] || 0; });}),
-            maxTokens = _.map(sums, function (s) {
-                return Math.max.apply(null, s);}),
-            sumTokens = _.map(sums, function (s) {
-                return _.reduce(s, function(a,b) {return a+b;});}),
-            percents = _.map(_.zip(maxTokens, sumTokens), function (x) {
-                return x[0] / x[1];}),
-            maxPercent = Math.max.apply(null, percents);
+        
+        //Get statistics from the collection
+        var stats = that.voteResults.getStatistics();
+        that.numVoters = stats.numVoters;
+        that.totalTokensVoted = stats.categorySummary;
+
         that.tokenResultsView = new TokenVoteResultCollectionView({
           collection: that.voteResults,
           categoryIndex: that.categoryIndex,
-          sumTokens: sumTokens,
-          maxPercent: maxPercent,
+          sumTokens: stats.sumTokens,
+          maxPercent: stats.maxPercent,
           voteResults: that.voteResults,
           reorderOnSort: true, //disable re-rendering child views on sort
           voteSpecification: that.tokenSpecs,
@@ -1188,9 +1179,6 @@ var TokenResultView = Marionette.LayoutView.extend({
           that.results.show(that.tokenResultsView);
         }
       });
-
-      //Can use D3 linear scale (http://bl.ocks.org/kiranml1/6872226) to represent
-      //the data.
     });
   },
 
@@ -1200,11 +1188,17 @@ var TokenResultView = Marionette.LayoutView.extend({
         items = "items" in settings ? settings.items : [],
         questionItem = items.length ? items[0] : null,
         questionTitle = "question_title" in questionItem ? questionItem.question_title : "",
-        questionDescription = "question_description" in questionItem ? questionItem.question_description : "";
+        questionDescription = "question_description" in questionItem ? questionItem.question_description : "",
+        startDate = Ctx.getNiceDateTime(this.model.get('start_date'), true, true, false),
+        endDate = Ctx.getNiceDateTime(this.model.get('end_date'), true, true, false),
+        dateStatement = i18n.sprintf(i18n.gettext("Vote from: %s - %s"), startDate, endDate);
 
     return {
       questionTitle: questionTitle,
       questionDescription: questionDescription,
+      numVoters: this.numVoters,
+      totalVoted: this.totalTokensVoted,
+      dateStatement: dateStatement
     }
   },
 

@@ -151,6 +151,12 @@ var WidgetModel = Base.Model.extend({
     }
   },
 
+  /**
+   * [Describes whether the widget model is internal to Assembl 
+   * (using Marionette)(=false) or Independent (using Angular)(=true);
+   * Override in child classes]
+   * @return {Boolean}
+   */
   isIndependentModalType: function(){
     return true;
   },
@@ -607,7 +613,24 @@ var VoteResultModel = Base.Model.extend({
     'idea_id': null,
     'objectConnectedTo': null,
     'objectDescription': null,
+    'n_voters': null
   },
+
+  getNumberOfVoters: function(){
+    return this.get('n_voters');
+  },
+
+  /**
+   * @param  {string} category      [The category typename]
+   * @return {Number|null}
+   */
+  getTotalVotesForCategory: function(category){
+    var sums = this.get('sums');
+    if (_.has(sums, category)){
+      return sums[category];
+    }
+    else return null;
+  }
 });
 
 var VoteResultCollection = Base.Collection.extend({
@@ -636,12 +659,17 @@ var VoteResultCollection = Base.Collection.extend({
   parse: function(rawModel){
     return _.chain(rawModel)
             .keys(rawModel)
+            .filter(function(key){
+              return key !== 'n_voters';
+            })
             .map(function(idea){
               var newObj = rawModel[idea];
               newObj.idea_id = idea;
+              //Data duplication
+              newObj.n_voters = rawModel['n_voters'];
               return newObj;
             })
-            .value();
+            .value(); 
   },
 
   /**
@@ -672,7 +700,95 @@ var VoteResultCollection = Base.Collection.extend({
   associateTo: function(ideaCollection, specificationModel){
     this.associateIdeaModelToObject(ideaCollection);
     this.associateCategoryModelToObject(specificationModel.get('token_categories'));
+  },
+
+  getNumberOfVoters: function(){
+    return this.at(0).getNumberOfVoters();
+  },
+
+  /**
+   * @param  {string} category  [The category typename]
+   * @return {Number|null}
+   */
+  getTotalVotesForCategory: function(category){
+    return this.reduce(function(memo, model, index){
+      var val = model.getTotalVotesForCategory(category);
+      return val !== null ? memo + val : memo
+    }, 0);
+  },
+
+  /**
+   * Method that returns a key:value object that describes
+   * the total number of votes per category, keyed by category typename
+   * @return {Object}
+   */
+  getTotalVotesByCategories: function(){
+    //First, get the list of categories, which is found in every model (yes, poor design, I know...)
+    var categories = this.at(0).get('objectDescription').map(function(categoryModel){
+      return categoryModel.get('typename');
+    });
+
+    var sums = _.map(categories, function(categName) {
+      return this.map(function(result) {
+        return result.get('sums')[categName] || 0; });}, this);
+
+    var sumTokens = _.map(sums, function (s) {
+      return _.reduce(s, function(a,b) {return a+b;});
+    });
+
+    return _.object(_.zip(categories, sumTokens));
+  },
+
+  /**
+   * [Returns the following statistics regarding the results collection
+   *   {
+   *     sums: {Array<Array>} //Collection of Arrays of tokens voted per category
+   *     sumTokens: {Array<Number>} //Array of tokens voted per category 
+   *     maxTokens: Array<Number> //Array of maximum number of tokens voted per category
+   *     percents: Array<Number> //Array of maximum number of tokens voted per category, as percent
+   *     maxPercent: Number //maximum number of tokens voted, as percent
+   *   }
+   * ]
+   * @return {Object}
+   */
+  getStatistics: function(){
+    //First, get the list of categories, which is found in every model (yes, poor design, I know...)
+    var categories = this.at(0).get('objectDescription').map(function(categoryModel){
+      return categoryModel.get('typename');
+    });
+
+    // Compute the number of tokens spent by category,
+    // and for each category, the maximum percent of tokens
+    // that were spent on any one idea. This maxPercent will
+    // be used for scaling.
+    // Note that we could also have scaled not on tokens spent,
+    // but tokens spendable (given number of voters * max tokens.)
+    // TODO: We should code both approaches and compare at some point.
+
+    var sums = _.map(categories, function(categName) {
+          return this.map(function(result) {
+              return result.get('sums')[categName] || 0; });}, this),
+        maxTokens = _.map(sums, function (s) {
+          return Math.max.apply(null, s);}),
+        sumTokens = _.map(sums, function (s) {
+          return _.reduce(s, function(a,b) {return a+b;});}),
+        percents = _.map(_.zip(maxTokens, sumTokens), function (x) {
+          return x[0] / x[1];}),
+        maxPercent = Math.max.apply(null, percents),
+        catSummary = _.object(_.zip(categories, sumTokens)),
+        numVoters = this.getNumberOfVoters();
+
+    return {
+      sums: sums,
+      maxTokens: maxTokens,
+      sumTokens: sumTokens,
+      percents: percents,
+      maxPercent: maxPercent,
+      categorySummary: catSummary,
+      numVoters: numVoters
+    }
   }
+
 });
 
 var IdeaVoteModel = Base.Model.extend({
