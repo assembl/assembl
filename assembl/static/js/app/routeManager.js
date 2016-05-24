@@ -315,7 +315,6 @@ var routeManager = Marionette.Object.extend({
 
   // example: http://localhost:6543/jacklayton/widget/local%3AWidget%2F64/result
   widgetInModal: function(id, arg) {
-    console.log("WidgetInModal called with args", arguments);
     var that = this;
     this.restoreViews().then(function(groups) {
       var collectionManager = CollectionManager();
