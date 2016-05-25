@@ -148,11 +148,7 @@ var cKEditorField = Marionette.ItemView.extend({
   seeMoreContent: function(e) {
     e.stopPropagation();
     e.preventDefault();
-
-    /*this.ui.mainfield.trigger('destroy');
-    this.ui.seeMore.addClass('hidden');
-    this.ui.seeLess.removeClass('hidden');*/
-    
+    //Open ckeditor in modal when click on seeMore button
     var modalView = new CkeditorFieldInModal({model:this.model, modelProp:this.modelProp, canEdit:this.canEdit});
     Assembl.slider.show(modalView);
   },
