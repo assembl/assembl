@@ -3,6 +3,7 @@ import smtplib
 import re
 import quopri
 from urlparse import urlparse
+from urllib import unquote
 
 import json
 import pytest
@@ -195,7 +196,7 @@ def disabledtest_next_synthesis_idea_management(
 
 
 def test_api_register(discussion, test_app_no_perm, discussion_synth_notification):
-    from assembl.models import User, AbstractAgentAccount
+    from assembl.models import AbstractAgentAccount
     test_app_no_perm.app.registry.settings['assembl.validate_registration_emails']='true'
     with mock.patch('repoze.sendmail.mailer.SMTPMailer.smtp') as mock_mail:
         mailer = mock_mail.return_value
@@ -215,12 +216,13 @@ def test_api_register(discussion, test_app_no_perm, discussion_synth_notificatio
             'email': email,
             'password': password,
             'password2': password,
-            })
+        })
         assert r.status_code == 302
         discussion.subscribe_to_notifications_on_signup = True
         discussion.db.flush()
         # How is the user looking?
-        account = discussion.db.query(AbstractAgentAccount).filter_by(email=email).first()
+        account = discussion.db.query(
+            AbstractAgentAccount).filter_by(email=email).first()
         assert not account.profile.verified
         assert len(account.profile.notification_subscriptions) == 0
         # Register step 2
@@ -236,17 +238,82 @@ def test_api_register(discussion, test_app_no_perm, discussion_synth_notificatio
         token = token.group(1)
         assert token
         # Confirm token
-        r = test_app_no_perm.get("/users/email_confirm/"+token)
+        r = test_app_no_perm.get("/users/email_confirm/" + token)
         assert r.status_code == 302 and urlparse(r.location).path == '/'
         assert account.verified
         assert account.profile.verified
         discussion.db.flush()
-        r = test_app_no_perm.post("/"+discussion.slug+"/login", dict(
+        r = test_app_no_perm.post("/" + discussion.slug + "/login", dict(
             identifier=email, password=password, ))
         assert r.status_code == 302
         discussion.db.flush()
         discussion.db.expire(account.profile, ["notification_subscriptions"])
         assert len(account.profile.notification_subscriptions) > 0
+
+
+def test_csv_subscribe(discussion, test_app_no_perm, test_app, discussion_synth_notification):
+    from assembl.models import User, AbstractAgentAccount
+    test_app_no_perm.app.registry.settings['assembl.validate_registration_emails']='true'
+    with mock.patch('repoze.sendmail.mailer.SMTPMailer.smtp') as mock_mail:
+        mailer = mock_mail.return_value
+        mailer.set_debuglevel.return_value = None
+        mailer.has_extn.return_value = False
+        mailer.connect.return_value = (220, 'Service ready')
+        mailer.ehlo.return_value = (250, 'Completed')
+        mailer.does_esmtp.return_value = False
+        mailer.sendmail.return_value = {}
+        mailer.quit.return_value = (221, 'Service closing transmission channel')
+
+        discussion.subscribe_to_notifications_on_signup = True
+        discussion.db.flush()
+        # Register
+        email = "bsmith@example.com"
+        csv_text = "Bob Smith,%s\n" % (email,)
+        data = dict(
+            add_with_role="r:participant",
+            send_invite="checked",
+            sender_name="",
+            email_subject="test",
+            submit_user_file="select",
+            text_email_message="",
+            html_email_message="")
+        r = test_app.post(
+            "/admin/permissions/discussion/%d" % (discussion.id,), params=data,
+            upload_files=[("user_csvfile", "bob.csv", csv_text)])
+        assert r.status_code == 200
+        discussion.subscribe_to_notifications_on_signup = True
+        discussion.db.flush()
+        # How is the user looking?
+        account = discussion.db.query(AbstractAgentAccount).filter_by(email="bsmith@example.com").first()
+        assert account.profile.verified
+        assert len(account.profile.agent_status_in_discussion) == 0
+        assert len(account.profile.notification_subscriptions) == 0
+        # Register step 2
+        assert mailer.sendmail.call_count == 1
+        # Get token
+        mail_text = mailer.sendmail.call_args[0][2]
+        mail_text = quopri.decodestring(mail_text)
+        link = re.search(r'href="(http:[^"]+)"', mail_text)
+        assert link
+        link = link.group(1)
+        assert link
+        # Logged in with link
+        r = test_app_no_perm.get(link)
+        discussion.db.flush()
+        # assert r.status_code == 200
+        form = r.lxml.xpath('//form')[0]
+        r = test_app_no_perm.post(form.attrib['action'], params=dict(
+            token=unquote(link.split('/')[-1]),
+            password1="abcd",
+            password2="abcd",
+            email=email,
+            change_password="select"))
+        assert r.status_code == 302 and urlparse(r.location).path == (
+            '/' + discussion.slug)
+        discussion.db.expire(account.profile, [
+            "agent_status_in_discussion", "notification_subscriptions"])
+        assert len(account.profile.notification_subscriptions) > 0
+        assert len(account.profile.agent_status_in_discussion) > 0
 
 
 def test_api_get_posts_queries(
