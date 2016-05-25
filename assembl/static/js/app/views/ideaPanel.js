@@ -858,7 +858,8 @@ var IdeaPanel = AssemblPanel.extend({
       'placeholder': i18n.gettext('You may want to describe this idea for users here...'),
       'showPlaceholderOnEditIfEmpty': false,
       'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_IDEA),
-      autosave: true
+      autosave: true,
+      'openInModal': true
     });
 
     this.regionDescription.show(description);
@@ -874,7 +875,8 @@ var IdeaPanel = AssemblPanel.extend({
       'model': this.model,
       'modelProp': 'longTitle',
       'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS),
-      autosave: true
+      autosave: true,
+      'openInModal': true
     });
 
     this.regionLongTitle.show(ckeditor);

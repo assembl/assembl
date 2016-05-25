@@ -46,6 +46,8 @@ var cKEditorField = Marionette.ItemView.extend({
     this.fieldId = _.uniqueId('ckeditorField');
     this.bottomId = _.uniqueId('ckeditorField-bottomid');
 
+    this.openInModal = (options.openInModal) ? options.openInModal : false;
+
     this.autosave = (options.autosave) ? options.autosave : false;
 
     this.hideButton = (options.hideButton) ? options.hideButton : false;
@@ -63,7 +65,8 @@ var cKEditorField = Marionette.ItemView.extend({
     this.readMoreAfterHeightPx = (options.readMoreAfterHeightPx !== undefined) ? options.readMoreAfterHeightPx : 170;
     
     this.hideSeeMoreButton = (options.hideSeeMoreButton) ? options.hideSeeMoreButton : false;
-
+    
+    this.listenTo(this.model, 'add remove change', this.render);
   },
 
   ui: {
@@ -148,9 +151,15 @@ var cKEditorField = Marionette.ItemView.extend({
   seeMoreContent: function(e) {
     e.stopPropagation();
     e.preventDefault();
-    //Open ckeditor in modal when click on seeMore button
-    var modalView = new CkeditorFieldInModal({model:this.model, modelProp:this.modelProp, canEdit:this.canEdit});
-    Assembl.slider.show(modalView);
+    if(!this.openInModal){
+      this.ui.mainfield.trigger('destroy');
+      this.ui.seeMore.addClass('hidden');
+      this.ui.seeLess.removeClass('hidden');
+    }else{
+      //Open ckeditor in modal when click on seeMore button
+      var modalView = new CkeditorFieldInModal({model:this.model, modelProp:this.modelProp, canEdit:this.canEdit});
+      Assembl.slider.show(modalView);
+    }
   },
 
   seeLessContent: function(e) {
@@ -172,6 +181,7 @@ var cKEditorField = Marionette.ItemView.extend({
    * set the templace in editing mode
    */
   startEditing: function() {
+
     var editingArea = this.$('#' + this.fieldId).get(0),
         that = this;
 
@@ -180,7 +190,6 @@ var cKEditorField = Marionette.ItemView.extend({
     });
 
     //CKEDITOR.basePath = window.location.origin +'/static/js/bower/ckeditor/';
-
     this.ckInstance = CKEDITOR.inline(editingArea, config);
 
     setTimeout(function() {
@@ -279,7 +288,7 @@ var CkeditorFieldInModal = Backbone.Modal.extend({
   keyControl:false,
   template: '#tmpl-modalWithoutIframe',
   className: 'modal-ckeditorfield popin-wrapper',
-  cancelEl: '.close, .js_close',
+  cancelEl: '.close',
   ui: {
     'body': '.js_modal-body'
   },
@@ -287,21 +296,22 @@ var CkeditorFieldInModal = Backbone.Modal.extend({
     this.model = options.model;
     this.modelProp = options.modelProp;
     this.canEdit = options.canEdit;
+    this.autosave = options.autosave;
+  },
+  serializeData: function(){
+    return {
+      modal_title: this.model.get('shortTitle')
+    }
   },
   onRender: function(){
     var ckeditorField = new cKEditorField({
       'model': this.model,
       'modelProp': this.modelProp,
       'canEdit': this.canEdit,
-      'autosave': true,
+      'autosave': this.autosave,
       'hideSeeMoreButton':true
     });
     this.$(this.ui.body).html(ckeditorField.render().el);
-  },
-  serializeData: function(){
-    return {
-      modal_title: this.model.get('shortTitle')
-    }
   }
 });
 module.exports = cKEditorField;
