@@ -237,15 +237,17 @@ def app_reload():
     """
 
 
+def as_venvcmd(cmd, chdir=False):
+    cmd = '. %s/bin/activate && %s' % (env.venvpath, cmd)
+    if chdir:
+        cmd = 'cd %s && %s' % (env.projectpath, cmd)
+    return cmd
+
+
 def venvcmd(cmd, shell=True, user=None, pty=False, chdir=True):
     if not user:
         user = env.user
-
-    if chdir:
-        with cd(env.projectpath):
-            return run('. %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
-    else:
-        return run('. %(venvpath)s/bin/activate && ' % env + cmd, shell=shell, pty=pty)
+    return run(as_venvcmd(cmd, chdir), shell=shell, pty=pty)
 
 
 def venv_prefix():
@@ -815,10 +817,18 @@ def check_and_create_database_user():
     Create a user and a DB for the project
     """
     with settings(warn_only=True):
-        checkUser = run("bash -c 'PGPASSWORD=%s psql --host=%s --username=%s -l'" % (env.db_password, env.db_host, env.db_user), pty=False)
+        checkUser = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
+            command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (env.db_user),
+            python=env.venvpath + "/bin/python", password=env.db_password,
+            host=env.db_host, user=env.db_user, projectpath=env.projectpath))
     if checkUser.failed:
         print(yellow("User does not exist"))
-        run_db_command("bash -c 'psql -n -d postgres -c \"CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \\\'%s\\\';\"'" % (env.db_user, env.db_password))
+        run_db_command(as_venvcmd('assembl-pypsql -n {host} "{command}"'.format(
+            command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'" % (env.db_user, env.db_password,),
+            projectpath=env.projectpath,
+            python=env.venvpath + "/bin/python",
+            host=env.db_host)))
+        # run_db_command("bash -c 'psql -n -d postgres -c \"CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \\\'%s\\\';\"'" % (env.db_user, env.db_password))
     else:
         print(green("User exists and can connect"))
 
@@ -827,11 +837,13 @@ def database_create_postgres():
     execute(check_and_create_database_user)
 
     with settings(warn_only=True):
-        checkDatabase = run("bash -c 'PGPASSWORD=%s psql -n --host=%s --username=%s --dbname=%s -l'" % (env.db_password, env.db_host, env.db_user, env.db_name))
+        checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
+            command="SELECT 1 FROM pg_database WHERE datname='{%s}'" % (env.db_name),
+            password=env.db_password, host=env.db_host, user=env.db_user))
     if checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
         createDatabase = run(
-        "bash -c 'PGPASSWORD=%s createdb --username=%s  --host=%s --encoding=UNICODE --template=template0 --owner=%s %s'" % (
+        "PGPASSWORD=%s createdb --username=%s  --host=%s --encoding=UNICODE --template=template0 --owner=%s %s" % (
             env.db_password, env.db_user, env.db_host, env.db_user, env.db_name))
         if createDatabase.succeeded:
             print(green("Database created successfully!"))
@@ -963,8 +975,9 @@ def database_delete_postgres():
     execute(check_and_create_database_user)
 
     with settings(warn_only=True), hide('stdout'):
-        checkDatabase = run("bash -c 'PGPASSWORD=%s psql -n --host=%s --username=%s --dbname=%s -l'" % (
-            env.db_password, env.db_host, env.db_user, env.db_name))
+        checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
+            command="SELECT 1 FROM pg_database WHERE datname='{%s}'" % (env.db_database),
+            password=env.db_password, host=env.db_host, user=env.db_user))
     if not checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
         deleteDatabase = run('PGPASSWORD=%s dropdb --username=%s %s' % (
