@@ -914,8 +914,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   ui: {
     // 'descriptionClick': '.js_see-idea-description',
     // 'descriptionButton': '.js_description-button',
-    'descriptionRegion': '.js_region-idea-description',
-    'cssTest': '#test-css-color'
+    'descriptionRegion': '.js_region-idea-description'
   },
 
   events: {
@@ -941,22 +940,18 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
 
     //http://jsfiddle.net/WK_of_Angmar/xgA5C/
     function validTextColour(stringToTest) {
-      var testSpace = $(this.ui.cssTest);
       //Alter the following conditions according to your need.
       if (stringToTest === "") { return false; }
       if (stringToTest === "inherit") { return false; }
       if (stringToTest === "transparent") { return false; }
       
-      var image = $("<img>");
-      testSpace.append(image);
-      image.css('color', "rgb(0, 0, 0)"); 
-      image.css('color', stringToTest);
-      if (image.css('color') !== "rgb(0, 0, 0)") { return true; }
-      image.css('color', "rgb(255, 255, 255)");
-      image.css('color', stringToTest);
-      var result = image.css('color') !== "rgb(255, 255, 255)";
-      testSpace.empty();
-      return result;
+      var image = document.getElementById('js_test-css-color');
+      image.style.color = "rgb(0, 0, 0)";
+      image.style.color = stringToTest;
+      if (image.style.color !== "rgb(0, 0, 0)") { return true; }
+      image.style.color = "rgb(255, 255, 255)";
+      image.style.color = stringToTest;
+      return image.style.color !== "rgb(255, 255, 255)";
     };
 
     var categories = this.voteSpecification.get('token_categories'),
@@ -965,17 +960,13 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
         });
     var color = cat.get('color') || null;
     if (color){
-      if (color.indexOf('#') === 0){
-        return color;
+      var tmp;
+      color.trim(); //Get rid of whitespace around text
+      if (!(color.indexOf('#') === 0)){
+        tmp = "#" + color;
       }
-      else {
-        //Test it against a dummy
-        var tmp = "#" + color;
-        //For now, if the CSS is malformed, it WILL crash
-        //TODO: fix validTextColour function to validate css color
-        // var isGoodCss = validTextColour(tmp);
-        return tmp;
-      }
+      var isGoodCss = validTextColour(tmp);
+      return isGoodCss ? tmp : null;
     }
     else { return null; }
   },
@@ -988,6 +979,10 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
             num: that.model.get('nums')[catName] || 0,
             n: that.model.get('n'),
             totalTokens: that.sumTokens[index],
+            /*
+              The color attribute is tested against a dummy img tag in a parent view.
+              This validates the css color attribute. Returns null if test fail
+             */
             color: that._calculateColor(catName)
         };
     });
