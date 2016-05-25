@@ -234,6 +234,6 @@ def frontend_test_view(request):
 
 
 @view_config(context=HTTPNotFound, renderer='assembl:templates/includes/404.jinja2')
-def not_found(self, request):
+def not_found(context, request):
     request.response.status = 404
     return {}
