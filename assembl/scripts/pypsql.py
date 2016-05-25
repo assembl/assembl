@@ -8,7 +8,7 @@ import psycopg2
 
 def main():
     parser = argparse.ArgumentParser(description='Call postgresql.')
-    parser.add_argument('--hostname', '-n', default="localhost")
+    parser.add_argument('--host', '-n', default="localhost")
     parser.add_argument('--user', '-u', help='database user')
     parser.add_argument('--password', '-p', help='database user')
     parser.add_argument('--database', '-d', help="database")
@@ -18,7 +18,8 @@ def main():
     args = parser.parse_args()
     user = args.user or getpass.getuser()
     password = args.password or getpass.getpass("password: ")
-    cx = psycopg2.connect(user=user, password=password, database=args.database)
+    database = args.database or "postgres"
+    cx = psycopg2.connect(user=user, password=password, database=database, host=args.host)
     cur = cx.cursor()
     cur.execute(args.commands)
     if args.print_one:
