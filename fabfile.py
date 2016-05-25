@@ -815,7 +815,7 @@ def check_and_create_database_user():
     Create a user and a DB for the project
     """
     with settings(warn_only=True):
-        checkUser = run("PGPASSWORD=%s psql --host=%s --username=%s -l -q -n -o hosts.txt" % (env.db_password, env.db_host, env.db_user), pty=False)
+        checkUser = run("PGPASSWORD=%s psql --host=%s --username=%s -tAc \"SELECT 1 FROM pg_roles WHERE rolname='%s'\"" % (env.db_password, env.db_host, env.db_user, env.db_user), pty=False)
     if checkUser.failed:
         print(yellow("User does not exist"))
         run_db_command('psql -n -d postgres -c "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \'%s\';"' % (env.db_user, env.db_password))
@@ -827,7 +827,7 @@ def database_create_postgres():
     execute(check_and_create_database_user)
 
     with settings(warn_only=True):
-        checkDatabase = run("PGPASSWORD=%s psql -n --host=%s --username=%s --dbname=%s -l" % (env.db_password, env.db_host, env.db_user, env.db_name))
+        checkDatabase = run("PGPASSWORD=%s psql -n --host=%s --username=%s --dbname=%s -tAc \"SELECT 1 FROM pg_roles WHERE rolname='%s'\"" % (env.db_password, env.db_host, env.db_user, env.db_name, env.db_user))
     if checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
         createDatabase = run(
