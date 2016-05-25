@@ -815,7 +815,7 @@ def check_and_create_database_user():
     Create a user and a DB for the project
     """
     with settings(warn_only=True):
-        checkUser = run("yes|PGPASSWORD=%s psql --host=%s --username=%s -tAc \"SELECT 1 FROM pg_roles WHERE rolname='%s'\"" % (env.db_password, env.db_host, env.db_user, env.db_user), pty=False)
+        checkUser = run("(PGPASSWORD=%s psql --host=%s --username=%s -tAc \"SELECT 1 FROM pg_roles WHERE rolname='%s'\")" % (env.db_password, env.db_host, env.db_user, env.db_user), pty=False)
     if checkUser.failed:
         print(yellow("User does not exist"))
         run_db_command('psql -n -d postgres -c "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \'%s\';"' % (env.db_user, env.db_password))
