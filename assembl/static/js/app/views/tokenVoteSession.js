@@ -202,7 +202,7 @@ var transitionAnimation = function(el, el2, duration){
 var TokenBagsView = Marionette.LayoutView.extend({
   template: '#tmpl-tokenBags',
   regions: {
-    "tokenBags": ".token-bags"
+    "tokenBags": ".token-bags-content"
   },
   initialize: function(options){
     if ( !("voteSpecification" in this.options)){
@@ -365,6 +365,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     this.myVotesCollection = this.options.myVotesCollection;
     this.showZeroIcon = "showZeroIcon" in this.options ? this.options.showZeroIcon : true;
     this.preventDefaultTokenClickBehaviour = "preventDefaultTokenClickBehaviour" in this.options ? this.options.preventDefaultTokenClickBehaviour : false;
+    this.forceUnselectZero = "forceUnselectZero" in this.options ? this.options.forceUnselectZero : false;
     this.listenTo(this.myVotesCollection, "change:category:"+this.model.getId(), this.render); // force re-render of all other token allocation views of the same token category, so that only the right icons are clickable. We use this way instead of setting this.collection to this.myVotesCollection and adding a collectionEvents hash, because does it not seem to work (probably because the hash executes before initialize())
 
     var myVote = this.myVotesCollection.findWhere({"idea": this.idea.get("@id"), "token_category": this.model.get("@id")});
@@ -414,6 +415,9 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     this.customEmptyTokenImagePromise = this.customEmptyTokenImageURL ? getSVGElementByURLPromise(this.customEmptyTokenImageURL) : $.Deferred().resolve();
 
     this.customColor = this.model.get("color");
+  },
+  setForceUnselectZero: function(val){
+    this.forceUnselectZero = val;
   },
   onRender: function(){
     var that = this;
@@ -503,7 +507,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
 
       var showAsSelected = false;
       if ( number_of_tokens_represented_by_this_icon == 0 ){
-        if ( that.currentValue == 0 ){
+        if ( that.currentValue == 0 && !that.forceUnselectZero ){
           showAsSelected = true;
         }
       } else if ( number_of_tokens_represented_by_this_icon <= that.currentValue ) {
@@ -589,17 +593,22 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     return this.currentValue;
   },
 
+  getTokenIconForValue: function(number_of_tokens_represented_by_this_icon){
+    return this.$(".token-icon").eq(number_of_tokens_represented_by_this_icon);
+  },
+
   // this function needs the following variables: number_of_tokens_represented_by_this_icon, that, that.currentValue, that.model, tokenContainer, that.postData, that.idea, that.myVotesCollection, tokenIconElement, container
   // TODO: refactor
-  onTokenIconClick: function(number_of_tokens_represented_by_this_icon, tokenContainer, tokenIconElement, container){
+  onTokenIconClick: function(number_of_tokens_represented_by_this_icon){
     var that = this;
-    if ( that.currentValue == number_of_tokens_represented_by_this_icon ){
+
+    var tokenContainer = that.getTokenIconForValue(number_of_tokens_represented_by_this_icon);
+    var tokenIconElement = tokenContainer.children().first();
+    var container = that.$el;
+
+    if ( that.currentValue == number_of_tokens_represented_by_this_icon && ((!that.forceUnselectZero && tokenIconElement.hasClass("selected")) || (that.forceUnselectZero && tokenIconElement.hasClass("not-selected"))) ){
       return;
     }
-
-    tokenContainer = tokenContainer ? tokenContainer : that.$(".token-icon").eq(number_of_tokens_represented_by_this_icon);
-    tokenIconElement = tokenIconElement ? tokenIconElement : tokenContainer.children().first();
-    container = container ? container : that.$el;
 
     console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
     var animation_duration = 800;
@@ -691,7 +700,9 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
         that.myVotesCollection.create(properties);
       }
       that.currentValue = number_of_tokens_represented_by_this_icon;
-      tokenIconElement[0].classList.add("selected");
+      if ( number_of_tokens_represented_by_this_icon > 0 || !that.forceUnselectZero ){
+        tokenIconElement[0].classList.add("selected");
+      }
       container.removeClass("hover");
       that.myVotesCollection.trigger("change:category:"+that.model.getId()); // force re-render of all token allocation views of this same token category (so that the right icons are clickable)
       that.render(); // show immediately the icon it its correct state, without having to wait for collection update
@@ -730,8 +741,8 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
     this.voteSpecification = options.voteSpecification;
     this.parent = options.parent;
   },
-  onRender: function() {
-    // placeholder for better code. We need to choose positive/negative
+  onShow: function() {
+    // placeholder for better code. TODO: We need to choose positive/negative
     // according to typename.
     var negativeTokens = this.collection.at(0),
         positiveTokens = this.collection.at(1),
@@ -748,12 +759,15 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
 
 
     var negativeTokensView = new TokenCategoryAllocationView(childViewOptions);
-    this.getRegion("negativeTokens").show(negativeTokensView);
-
-
     childViewOptions.model = positiveTokens;
     childViewOptions.showZeroIcon = false;
     var positiveTokensView = new TokenCategoryAllocationView(childViewOptions);
+
+    if ( positiveTokensView.getCurrentValue() > 0 ){
+      negativeTokensView.setForceUnselectZero(true);
+    }
+
+    this.getRegion("negativeTokens").show(negativeTokensView);
     this.getRegion("positiveTokens").show(positiveTokensView);
 
 
@@ -761,12 +775,14 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
       console.log("positiveTokensView click clicked_value: ", clicked_value);
       var currentNegativeValue = negativeTokensView.getCurrentValue();
       var currentPositiveValue = positiveTokensView.getCurrentValue();
+      negativeTokensView.setForceUnselectZero(true);
       if ( currentNegativeValue > 0 ){
         negativeTokensView.onTokenIconClick(0);
         setTimeout(function(){
           positiveTokensView.onTokenIconClick(clicked_value);
         }, animation_duration*0.9);
       } else {
+        negativeTokensView.render();
         positiveTokensView.onTokenIconClick(clicked_value);
       }
     });
@@ -775,7 +791,9 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
       console.log("negativeTokensView click clicked_value: ", clicked_value);
       var currentNegativeValue = negativeTokensView.getCurrentValue();
       var currentPositiveValue = positiveTokensView.getCurrentValue();
+      negativeTokensView.setForceUnselectZero(false);
       if ( currentPositiveValue > 0 ){
+        negativeTokensView.render();
         positiveTokensView.onTokenIconClick(0);
         setTimeout(function(){
           negativeTokensView.onTokenIconClick(clicked_value);
@@ -1376,7 +1394,6 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         myVotesCollection: that.myVotesCollection
       });
       that.$(".available-tokens").html(tokenBagsView.render().el);
-      that.$(".available-tokens .token-bags").append($("<div class='border-effect'></div>"));
       that.availableTokensPositionTop = that.$(".available-tokens").position().top;
       that.$(".available-tokens").width(that.$(".popin-body").width());
       that.$(".available-tokens-container").css('min-height', that.$(".available-tokens-container").height());
