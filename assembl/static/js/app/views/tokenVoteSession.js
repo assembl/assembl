@@ -223,7 +223,6 @@ var TokenBagsView = Marionette.LayoutView.extend({
     this.voteSpecification = this.options.voteSpecification;
     this.tokenCategories = this.options.tokenCategories;
     this.myVotesCollection = this.options.myVotesCollection;
-    this.listenTo(this.myVotesCollection, "reset change:value", this.render); // TODO: replace this by a category-level refresh, to refresh only the ones which have changed (avoids animation glitches triggered by allocation clicks on exclusive categories icons)
   },
   onRender: function(){
     var that = this;
@@ -247,6 +246,7 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     }
 
     this.myVotesCollection = this.options.myVotesCollection;
+    this.listenTo(this.myVotesCollection, "change:category:"+this.model.getId(), this.render); // this is a category-level refresh, to refresh only the ones which have changed (avoids animation glitches triggered by allocation clicks on exclusive categories icons)
   },
   onRender: function(){
     console.log("RemainingCategoryTokensView::onRender()");

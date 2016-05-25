@@ -481,7 +481,7 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "type": "string",
       "description": "URL (web address) of the SVG image of a token",
       "label": "token image URL",
-      "default": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Approve_icon.svg",
+      "default": "/static/widget/vote/app/images/green_poker_vote_token.svg",
       "storage": "attribute"
     },
     {
@@ -495,7 +495,7 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
     {
       "key": "color",
       "type": "string",
-      "description": "The color of the the token & its result (optional)",
+      "description": "You can set a CSS color which will be applied on the empty token image (optional)",
       "label": "token color",
       "default": "green",
       "storage": "attribute"
