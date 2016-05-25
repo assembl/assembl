@@ -838,7 +838,7 @@ def database_create_postgres():
 
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
-            command="SELECT 1 FROM pg_database WHERE datname='{%s}'" % (env.db_name),
+            command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_name),
             password=env.db_password, host=env.db_host, user=env.db_user))
     if checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
@@ -976,7 +976,7 @@ def database_delete_postgres():
 
     with settings(warn_only=True), hide('stdout'):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
-            command="SELECT 1 FROM pg_database WHERE datname='{%s}'" % (env.db_database),
+            command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
     if not checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
