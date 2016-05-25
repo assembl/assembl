@@ -42,7 +42,7 @@ var AbstractDocumentView = Marionette.ItemView.extend({
       //etsy : 'd0jq4lmfi5bjbrxq2etulmjr',
       //},
       maxHeight: "300px", maxWidth: "100%",
-      debug: false,
+      debug: Ctx.debugOembed,
       onEmbedFailed: function() {
         if (Ctx.debugOembed){
           console.log("onEmbedFailed (assembl)");
@@ -158,7 +158,7 @@ var DocumentView = AbstractDocumentView.extend({
   },
 
   onRender: function(){
-    console.log("[doingOembed] uri:", this.uri);
+    if (Ctx.debugOembed){ console.log("[doingOembed] uri:", this.uri); }
     if (!this.uri){
       console.error("[DocumentView Failed] uri does not exist for model id " + this.model.id +
                     " and external_url " + this.model.get('external_url'));
@@ -188,7 +188,7 @@ var FileView = AbstractDocumentView.extend({
   },
 
   onRender: function(){
-    console.log("[doingOembed] uri:", this.uri);
+    if (Ctx.debugOembed){ console.log("[doingOembed] uri:", this.uri); }
     if (!this.uri){
       console.error("[FileView Failed] uri does not exist for model id " + this.model.id +
                     " and external_url " + this.model.get('external_url'));
