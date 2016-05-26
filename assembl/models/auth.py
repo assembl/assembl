@@ -591,7 +591,7 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
 def send_user_to_socket_for_asid(mapper, connection, target):
     agent_profile = target.agent_profile
     if not target.agent_profile:
-        agent_profile = AgentProfile.get(target.agent_profile_id)
+        agent_profile = AgentProfile.get(target.profile_id)
     agent_profile.send_to_changes(
         connection, CrudOperation.UPDATE, target.discussion_id)
 
