@@ -42,6 +42,7 @@ Create a script such as:
 ::
     #!/bin/bash
 
+    export PATH=$PATH:/usr/local/bin
     export ASSEMBL_PATH=/home/www/assembl_discussions_bluenove_com
     export REPOSITORY=www-data@coeus.ca:/media/backup/assembl_backups_bluenove_discussions.borg
     bash ${ASSEMBL_PATH}/doc/borg_backup_script/assembl_borg_backup.sh > $ASSEMBL_PATH/var/log/assembl_backup.log 2>&1
