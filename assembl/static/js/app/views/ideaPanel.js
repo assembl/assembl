@@ -97,6 +97,7 @@ var IdeaPanel = AssemblPanel.extend({
     widgetsInteractionRegion: ".js_ideaPanel-section-access-widgets-region",
     widgetsConfigurationInteraction: ".ideaPanel-section-conf-widgets",
     widgetsCreationInteraction: ".ideaPanel-section-create-widgets",
+    widgetsSeeResultsInteraction: ".ideaPanel-section-see-results",
     announcementRegion: "@ui.announcement",
     regionLongTitle: '@ui.longTitle',
     regionDescription: '@ui.definition'
@@ -290,6 +291,8 @@ var IdeaPanel = AssemblPanel.extend({
             that.widgetsConfigurationInteraction.show(
               new WidgetLinks.WidgetLinkListView({collection: subset}));
           });
+
+        //Check that the type of the widgetModel is localType, can see results, then show it.
 
         that.widgetsCreationInteraction.show(
           new WidgetLinks.WidgetLinkListView({
