@@ -988,7 +988,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     return {
       ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
       categoryResult: this.results,
-      showDescriptionButton: !!this.model.get('objectConnectedTo').getLongTitleDisplayText().length,
+      showDescriptionButton: !!this.model.get('objectConnectedTo').get('definition').length,
       descriptionButton: this.descriptionButton
     };
   },
@@ -1056,7 +1056,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
       icon.removeClass('icon-arrowdown');
       icon.addClass('icon-arrowup');
       this.ui.descriptionButton.text(descriptionButtonText);
-      this.ui.descriptionRegion.text(this.model.get('objectConnectedTo').getDefinitionDisplayText());
+      this.ui.descriptionRegion.html(this.model.get('objectConnectedTo').get('definition'));
     }
   },
 
