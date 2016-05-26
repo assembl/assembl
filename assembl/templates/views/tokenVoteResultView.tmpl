@@ -4,11 +4,8 @@
     <div class='question-description'><%= questionDescription %></div>
   </div>
   <div class='mtm question-summary'>
-      <div><%= dateStatement %></div>
-      <div> {{ gettext("Total number of participants: <%= numVoters %>") |safe }}</div>
-      <% _.each(totalVoted, function(votes, category){ %>
-        <div> {{ gettext("For the category <%= category %>, there were <%= votes %> votes") |safe }}</div>
-      <% }); %>
+    <div class='header'>{{gettext("Vote Summary")}}</div>
+    <div><%= statement %></div>
   </div>
   <div class='mtm votables-collection js_vote-result-region'></div>
 </div>

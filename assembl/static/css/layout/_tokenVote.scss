@@ -369,6 +369,7 @@
     background-color: #fbfafa; //$gray3;
     padding-bottom: 0;
     padding-left: 5px;
+    height: 30px;
   }
   tbody > div {
     display: flex;
@@ -383,6 +384,21 @@
     vertical-align: top;
     padding-top: 12px;
     padding-bottom: 6px;
+    padding-left: 5px;
+  }
+
+  .question-summary {
+    .header{
+      font-size: 16px;
+      color: #999;
+      font-style: italic;
+    }
+
+    ul {
+      list-style-position: inside;
+      margin-top: 0px;
+      padding-left: 5px;
+    }
   }
 
   .votables-collection {
@@ -396,8 +412,7 @@
         }
       }
       .left-column {
-        width: 50%;
-        padding-left: 10px;
+        width: 60%;
       }
       .token-result-row {
         display: table-row;
@@ -461,10 +476,13 @@
       font-size: 15px;
     }
 
-    .idea-description .panel-editablebox {
-      min-height: 2*$baseLineHeightFontMultiplier*$baseFontSize; // Should match the readMoreAfterHeightPx of the description's view
+    .idea-description {
       color: #999;
       font-size: 12px;
+
+      .panel-editablebox {
+        min-height: 2*$baseLineHeightFontMultiplier*$baseFontSize; // Should match the readMoreAfterHeightPx of the description's view
+      }
 
       .seeMore, .seeLess {
         color: #999;

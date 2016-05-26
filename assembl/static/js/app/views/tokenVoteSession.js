@@ -13,6 +13,7 @@ var Marionette = require('../shims/marionette.js'),
   i18n = require('../utils/i18n.js'),
   openIdeaInModal = require('./modals/ideaInModal.js'),
   Ctx = require('../common/context.js'),
+  Moment = require('moment'),
   d3 = require('d3');
 
 
@@ -912,13 +913,13 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   className: 'token-result-row',
 
   ui: {
-    // 'descriptionClick': '.js_see-idea-description',
-    // 'descriptionButton': '.js_description-button',
+    'descriptionArea': '.js_see-idea-description',
+    'descriptionButton': '.js_description-button',
     'descriptionRegion': '.js_region-idea-description'
   },
 
   events: {
-    'click @ui.descriptionClick': 'onSeeDescriptionClick'
+    'click @ui.descriptionArea': 'onSeeDescriptionClick'
   },
 
   regions: {
@@ -932,7 +933,10 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     this.sumTokens = options.sumTokens;
     this.maxPercent = options.maxPercent;
     this.voteSpecification = options.voteSpecification;
+    this.languagePreferences = options.languagePreferences;
     this.maxPixels = 100;
+    this.shownDescription = false;
+    this.descriptionButton = i18n.gettext("See Description");
     this._calculate();
   },
 
@@ -971,6 +975,13 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     else { return null; }
   },
 
+  _getCategoryName: function(catName){
+    var categoryModel = this.model.get('objectDescription').find(function(cat){
+      return cat.get('typename') === catName;
+    });
+    return categoryModel.get('name').bestWithErrors(this.languagePreferences, false).entry.value();
+  },
+
   _calculate: function(){
     var that = this;
     this.results = _.map(this.categoryIndex, function(catName, index) {
@@ -983,7 +994,8 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
               The color attribute is tested against a dummy img tag in a parent view.
               This validates the css color attribute. Returns null if test fail
              */
-            color: that._calculateColor(catName)
+            color: that._calculateColor(catName),
+            categoryName: that._getCategoryName(catName)
         };
     });
   },
@@ -991,8 +1003,9 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   serializeData: function(){
     return {
       ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
-      ideaDescription: this.model.get('objectConnectedTo').getLongTitleDisplayText(),
-      categoryResult: this.results
+      categoryResult: this.results,
+      showDescriptionButton: !!this.model.get('objectConnectedTo').getLongTitleDisplayText().length,
+      descriptionButton: this.descriptionButton
     };
   },
 
@@ -1000,8 +1013,10 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     //Have to define the data-points in an array.
     Ctx.removeCurrentlyDisplayedTooltips();
     var unknownColor = '#515151'; //$gray2
-    var displayTooltip = function(num, total){
-      return i18n.sprintf(i18n.gettext("%d tokens/%d total tokens"), num, total);
+    var displayTooltip = function(num, total, category){
+      //Simplify to give more of a human feel.
+      return i18n.sprintf(
+        i18n.gettext("Out of %d total tokens voted on token type \"%s\", %d tokens were voted on this idea"), total, category, num);
     };
 
     var scale = d3.scale.linear()
@@ -1015,7 +1030,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     results.append('div')
       .attr('data-toggle', 'tooltip')
       .attr('data-position', 'top')
-      .attr('title', function(r){ return displayTooltip(r.sum, r.totalTokens)})
+      .attr('title', function(r){ return displayTooltip(r.sum, r.totalTokens, r.categoryName)})
       .style('background-color', function(d){
         return d.color ? d.color : unknownColor;
       })
@@ -1036,8 +1051,29 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     Ctx.initTooltips(this.$el);
   },
 
-  onShow: function(){
-    this.renderCKEditorDescription();
+  // onShow: function(){
+  //   this.renderCKEditorDescription();
+  // },
+
+  onSeeDescriptionClick: function(ev){
+    ev.preventDefault();
+    var icon = this.ui.descriptionArea.find('i');
+    if (this.shownDescription === true) {
+      this.shownDescription = false;
+      this.ui.descriptionButton.text(this.descriptionButton);
+      icon.removeClass('icon-arrowup');
+      icon.addClass('icon-arrowdown');
+      this.ui.descriptionRegion.empty();
+    }
+
+    else {
+      this.shownDescription = true;
+      var descriptionButtonText = i18n.gettext("Hide Description");
+      icon.removeClass('icon-arrowdown');
+      icon.addClass('icon-arrowup');
+      this.ui.descriptionButton.text(descriptionButtonText);
+      this.ui.descriptionRegion.text(this.model.get('objectConnectedTo').getDefinitionDisplayText());
+    }
   },
 
   renderCKEditorDescription: function() {
@@ -1121,7 +1157,8 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
       categoryIndex: this.categoryIndex,
       sumTokens: this.sumTokens,
       maxPercent: this.maxPercent,
-      voteSpecification: this.voteSpecification
+      voteSpecification: this.voteSpecification,
+      languagePreferences: this.languagePreferences
     };
   },
 
@@ -1144,6 +1181,10 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
       var categoryLangString = importantCategory.get('name');
       var best = categoryLangString.bestWithErrors(that.languagePreferences, false);
       return best.entry.value()
+    });
+
+    categories = _.map(categories, function(cat){
+      return i18n.sprintf(i18n.gettext("Token: \"%s\""), cat);
     });
     return {
       categories: categories
@@ -1223,6 +1264,7 @@ var TokenResultView = Marionette.LayoutView.extend({
           languagePreferences: that.languagePreferences
         });
         if (!that.isViewDestroyed()){
+          that.isReady = true;
           that.render();
           that.results.show(that.tokenResultsView);
         }
@@ -1231,22 +1273,61 @@ var TokenResultView = Marionette.LayoutView.extend({
   },
 
   serializeData: function(){
-
     var settings = this.model.get("settings") || {},
         items = "items" in settings ? settings.items : [],
         questionItem = items.length ? items[0] : null,
         questionTitle = "question_title" in questionItem ? questionItem.question_title : "",
         questionDescription = "question_description" in questionItem ? questionItem.question_description : "",
-        startDate = Ctx.getNiceDateTime(this.model.get('start_date'), true, true, false),
-        endDate = Ctx.getNiceDateTime(this.model.get('end_date'), true, true, false),
-        dateStatement = i18n.sprintf(i18n.gettext("Vote from: %s - %s"), startDate, endDate);
+        startDate = Ctx.getNiceDate(this.model.get('start_date'), true, true, false),
+        endDate = Ctx.getNiceDate(this.model.get('end_date'), true, true, false),
+        statement = "",
+        that = this;
 
-    return {
-      questionTitle: questionTitle,
-      questionDescription: questionDescription,
-      numVoters: this.numVoters,
-      totalVoted: this.totalTokensVoted,
-      dateStatement: dateStatement
+    if (!this.isReady) { 
+      return {
+        questionTitle: questionTitle,
+        questionDescription: questionDescription,
+        statement: statement
+      };
+    }
+
+    else {
+      var theEndDate = new Moment(this.model.get('end_date')).utc(),
+          _now = new Moment().utc(),
+          voteOngoing = _now.isAfter(theEndDate) ? 100: 1; //Plurarlism for past/present tense of copy
+      
+      //Need a list of token names and their available number
+      var data = this.tokenSpecs.get('token_categories').map(function(category){
+        return {
+          name: category.get('name').bestWithErrors(that.languagePreferences, false).entry.value(),
+          number: category.get('total_number')
+        }
+      });
+
+      statement += "<div>";
+      statement += i18n.sprintf(
+        i18n.ngettext(
+          "%d participant voted between %s and %s. The number of tokens available for voting:",
+          "%d participants voted between %s and %s. The number of tokens available for voting:", that.numVoters),
+        that.numVoters, startDate, endDate);
+
+      statement += "</div><div><ul>";
+      _.each(data, function(category){
+        statement += "<li>"
+        statement += i18n.sprintf(
+                      i18n.ngettext("<strong>%d</strong> token of type \"%s\"",
+                                    "<strong>%d</strong> tokens of type \"%s\"", category.number),
+                      category.number, category.name);
+        statement += "</li>";
+      });
+      statement += "</ul></div>"
+      return {
+        questionTitle: questionTitle,
+        questionDescription: questionDescription,
+        numVoters: this.numVoters,
+        totalVoted: this.totalTokensVoted,
+        statement: statement
+      }
     }
   },
 
