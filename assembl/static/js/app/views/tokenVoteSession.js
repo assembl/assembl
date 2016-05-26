@@ -124,33 +124,6 @@ var getSVGElementByURLPromise = function(url){
   return _ajaxCache[url];
 };
 
-var getTokenSize = function(number_of_tokens, maximum_tokens_per_row, maximum_total_width){
-  var token_size = 35;
-  maximum_total_width = maximum_total_width ? maximum_total_width : 400;
-  var maximum_token_size = 35; // was 60
-  var minimum_token_size = 12;
-  var token_horizontal_margin = 5; /* horizontal total margin should match _tokenVote.scss::.tokens-for-idea.token-icon */
-  if ( maximum_tokens_per_row != 0 ){
-    //maximum_tokens_per_row = maximum_tokens_per_row > 10 ? 10 : maximum_tokens_per_row;
-    token_size = maximum_total_width / maximum_tokens_per_row;
-  }
-  else {
-    if ( maximum_total_width != 0 && number_of_tokens != 0 ){
-      token_size = maximum_total_width / number_of_tokens;
-    }
-    else {
-      token_size = maximum_token_size;
-    }
-  }
-
-  if ( token_size < minimum_token_size ){
-    token_size = minimum_token_size;
-  }
-  if ( token_size > maximum_token_size ){
-    token_size = maximum_token_size;
-  }
-  return token_size - token_horizontal_margin;
-}
 
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
@@ -224,13 +197,15 @@ var TokenBagsView = Marionette.LayoutView.extend({
     this.voteSpecification = this.options.voteSpecification;
     this.tokenCategories = this.options.tokenCategories;
     this.myVotesCollection = this.options.myVotesCollection;
+    this.tokenSize = this.options.tokenSize;
   },
   onRender: function(){
     var that = this;
 
     var bags = new RemainingTokenCategoriesCollectionView({
       collection: that.tokenCategories,
-      myVotesCollection: that.myVotesCollection
+      myVotesCollection: that.myVotesCollection,
+      tokenSize: that.tokenSize
     });
     that.getRegion('tokenBags').show(bags);
   }
@@ -248,6 +223,7 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
 
     this.myVotesCollection = this.options.myVotesCollection;
     this.listenTo(this.myVotesCollection, "change:category:"+this.model.getId(), this.render); // this is a category-level refresh, to refresh only the ones which have changed (avoids animation glitches triggered by allocation clicks on exclusive categories icons)
+    this.tokenSize = options.tokenSize;
   },
   onRender: function(){
     console.log("RemainingCategoryTokensView::onRender()");
@@ -276,7 +252,7 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     
     el2.appendTo(categoryContainer);
     $.when(customTokenImagePromise, customEmptyTokenImagePromise).then(function(fullToken, emptyToken){ 
-      var token_size = getTokenSize(data["total_number"], 20, 400);
+      var token_size = that.tokenSize; // was getTokenSize(data["total_number"], 20, 400);
 
       for ( var i = 0; i < data["total_number"]; ++i ){
         var tokenContainer = $("<div class='token-icon'></div>");
@@ -329,7 +305,8 @@ var RemainingTokenCategoriesCollectionView = Marionette.CollectionView.extend({
   initialize: function(options) {
     console.log("RemainingTokenCategoriesCollectionView::initialize()");
     this.childViewOptions = {
-      myVotesCollection: options.myVotesCollection
+      myVotesCollection: options.myVotesCollection,
+      tokenSize: options.tokenSize
     };
   },
 });
@@ -367,6 +344,7 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     this.showZeroIcon = "showZeroIcon" in this.options ? this.options.showZeroIcon : true;
     this.preventDefaultTokenClickBehaviour = "preventDefaultTokenClickBehaviour" in this.options ? this.options.preventDefaultTokenClickBehaviour : false;
     this.forceUnselectZero = "forceUnselectZero" in this.options ? this.options.forceUnselectZero : false;
+    this.tokenSize = "tokenSize" in this.options ? this.options.tokenSize : null;
     this.listenTo(this.myVotesCollection, "change:category:"+this.model.getId(), this.render); // force re-render of all other token allocation views of the same token category, so that only the right icons are clickable. We use this way instead of setting this.collection to this.myVotesCollection and adding a collectionEvents hash, because does it not seem to work (probably because the hash executes before initialize())
 
     var myVote = this.myVotesCollection.findWhere({"idea": this.idea.get("@id"), "token_category": this.model.get("@id")});
@@ -438,13 +416,13 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       });
     });
 
-    // needs: getTokenSize(), that.model, that.customTokenImageURL, customToken, zeroFullTokenIcon, that.currentValue, that.myVotesCollection, transitionAnimation(), that.postData, that.idea, that.render()
+    // needs: that.tokenSize (was getTokenSize()), that.model, that.customTokenImageURL, customToken, zeroFullTokenIcon, that.currentValue, that.myVotesCollection, transitionAnimation(), that.postData, that.idea, that.render()
     var renderClickableTokenIcon = function(number_of_tokens_represented_by_this_icon){
       var tokenIconElement = null;
       var emptyTokenIconElement = null;
       var tokenContainer = $('<a class="btn token-icon"></a>');
 
-      var token_size = getTokenSize(that.model.get("total_number"), 20, 400); // we know this computed size will be smaller than getTokenSize(that.maximum_per_idea ? that.maximum_per_idea + 1 : 0, 10, 400); and we need icons in bags and in ideas to be the same size
+      var token_size = that.tokenSize; // was getTokenSize(that.model.get("total_number"), 20, 400); // we know this computed size will be smaller than getTokenSize(that.maximum_per_idea ? that.maximum_per_idea + 1 : 0, 10, 400); and we need icons in bags and in ideas to be the same size
 
 
       if ( number_of_tokens_represented_by_this_icon == 0 ){
@@ -724,7 +702,8 @@ var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
       myVotesCollection: options.myVotesCollection,
       voteSpecification: options.voteSpecification,
       collectionView: this,
-      voteItemView: options.parent
+      voteItemView: options.parent,
+      tokenSize: options.tokenSize
     };
   }
 });
@@ -741,6 +720,7 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
     this.myVotesCollection = options.myVotesCollection;
     this.voteSpecification = options.voteSpecification;
     this.parent = options.parent;
+    this.tokenSize = options.tokenSize;
   },
   onShow: function() {
     // placeholder for better code. TODO: We need to choose positive/negative
@@ -753,7 +733,8 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
       voteSpecification: this.voteSpecification,
       collectionView: this,
       voteItemView: this.parent,
-      model: negativeTokens
+      model: negativeTokens,
+      tokenSize: this.tokenSize
     };
     childViewOptions.preventDefaultTokenClickBehaviour = true;
     var animation_duration = 800;
@@ -830,6 +811,7 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
     var tokenCategories = "tokenCategories" in this.parent.options ? this.parent.options.tokenCategories : null;
     var voteSpecification = "voteSpecification" in this.parent.options ? this.parent.options.voteSpecification : null;
     var myVotesCollection = "myVotesCollection" in this.parent.options ? this.parent.options.myVotesCollection : null;
+    var tokenSize = "tokenSize" in this.parent.options ? this.parent.options.tokenSize : null;
     var idea = that.model;
     var tokenCategoryCollection;
     if ( tokenCategories ){
@@ -840,7 +822,8 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
           idea: idea,
           collection: tokenCategories,
           myVotesCollection: myVotesCollection,
-          voteSpecification: voteSpecification
+          voteSpecification: voteSpecification,
+          tokenSize: tokenSize
         });
       } else {
         tokenCategoryCollection = new TokenCategoryAllocationCollectionView({
@@ -848,7 +831,8 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
           collection: tokenCategories,
           myVotesCollection: myVotesCollection,
           voteSpecification: voteSpecification,
-          parent: this
+          parent: this,
+          tokenSize: tokenSize
         });
       }
       this.getRegion('tokensForIdea').show(tokenCategoryCollection);
@@ -1394,7 +1378,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     that.widgetModel = options.widgetModel;
     console.log("that.widgetModel: ", that.widgetModel);
 
-    
+    var Widget = require('../models/widget.js'); // FIXME: why does it work here but not at the top of the file?
     var CollectionManager = require('../common/collectionManager.js'); // FIXME: Why does it not work when we write it only at the top of the file?
     var collectionManager = new CollectionManager();
 
@@ -1410,14 +1394,13 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       that.tokenVoteSpecification = _.findWhere(voteSpecifications, {"@type": "TokenVoteSpecification"});
       if ( that.tokenVoteSpecification ){
         if ( "token_categories" in that.tokenVoteSpecification && _.isArray(that.tokenVoteSpecification.token_categories) ){
-          var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
           that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
         }
       }
     }
 
     // build myVotes collection from my_votes and keep it updated
-    var Widget = require('../models/widget.js'); // why does it work here but not at the top of the file?
+    
     var myVotes = "my_votes" in that.tokenVoteSpecification ? that.tokenVoteSpecification.my_votes : null; // TODO: maybe we should dynamically load user's votes on each time the user opens the popin, instead of relying on potentially outdated user vote data
     that.myVotesCollection = new Widget.TokenIdeaVoteCollection(myVotes);
 
@@ -1463,11 +1446,19 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         }
       }
 
+      var tokenVoteSpecificationModel = new Widget.TokenVoteSpecificationModel(that.tokenVoteSpecification, {parse: true});
+      console.log("tokenVoteSpecificationModel: ", tokenVoteSpecificationModel);
+      var maximumTokensPerRow = that.computeMaximumTokensPerRow(tokenVoteSpecificationModel);
+      console.log("maximumTokensPerRow: ", maximumTokensPerRow);
+      var tokenSize = that.computeTokenSize(maximumTokensPerRow);
+      console.log("tokenSize: ", tokenSize);
+
       // Show available (remaining) tokens
       var tokenBagsView = new TokenBagsView({
         voteSpecification: that.tokenVoteSpecification,
         tokenCategories: that.tokenCategories,
-        myVotesCollection: that.myVotesCollection
+        myVotesCollection: that.myVotesCollection,
+        tokenSize: tokenSize
       });
       that.$(".available-tokens").html(tokenBagsView.render().el);
       that.availableTokensPositionTop = that.$(".available-tokens").position().top;
@@ -1480,6 +1471,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         voteSpecification: that.tokenVoteSpecification,
         tokenCategories: that.tokenCategories,
         myVotesCollection: that.myVotesCollection,
+        tokenSize: tokenSize,
         viewComparator: function(idea){
           return _.findIndex(permutation, function(idea2){return idea2.id == idea.id;});
         }
@@ -1540,6 +1532,77 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     var modalView = new TokenVoteSessionSubmittedModal();
     Ctx.setCurrentModalView(modalView);
     Assembl.slider.show(modalView);
+  },
+
+  /*
+  @param tokenVoteSpecification: an instance of TokenVoteSpecificationModel
+  Output value is computed as follows:
+  if (categories.length == 2 and categories are exclusive){
+    maximum_tokens_per_row := sum(category.maximum_per_idea foreach category in tokenVoteSpecification.tokenCategories) + 1
+  }
+  else {
+    maximum_tokens_per_row := max(category.maximum_per_idea foreach category in tokenVoteSpecification.tokenCategories) +1
+  }
+  maximum_tokens_per_row := max(maximum_tokens_per_row, max(category.total_number foreach category in tokenVoteSpecification.tokenCategories))
+  */
+  computeMaximumTokensPerRow: function(tokenVoteSpecification){
+    var maximum_tokens_per_row = 0;
+    var maximum_tokens_per_idea_row = 0;
+
+    // compute maximum per idea row
+    var tokenCategories = tokenVoteSpecification.get('token_categories');
+    if ( tokenCategories.length == 2 && tokenVoteSpecification.get('exclusive_categories') == true ){
+      maximum_tokens_per_idea_row = tokenCategories.reduce(function(memo, category){
+        var category_maximum;
+        if ( category.get('maximum_per_idea') > 0 ){
+          category_maximum = category.get('maximum_per_idea');
+        }
+        else {
+          category_maximum = category.get('total_number') || 0;
+        }
+        return memo + category_maximum;
+      }, 0);
+      maximum_tokens_per_idea_row += 1; // add the zero token icon
+    }
+    else {
+      maximum_tokens_per_idea_row = tokenCategories.reduce(function(memo, category){
+        var category_maximum;
+        if ( category.get('maximum_per_idea') > 0 ){
+          category_maximum = category.get('maximum_per_idea');
+        }
+        else {
+          category_maximum = category.get('total_number') || 0;
+        }
+        return Math.max(memo, category_maximum);
+      }, 0);
+      maximum_tokens_per_idea_row += 1; // add the zero token icon
+    }
+
+    // compute maximum per remaining token bags row
+    var maximum_tokens_in_a_bag = tokenCategories.max('total_number').get('total_number') || 0;
+    maximum_tokens_per_row = Math.max(maximum_tokens_per_idea_row, maximum_tokens_in_a_bag) || 0;
+    return maximum_tokens_per_row;
+  },
+
+  computeTokenSize: function(maximum_tokens_per_row){
+    var maximum_total_width = 325; // Could be 0.5 * popin_width
+    var token_horizontal_margin = 5; /* Horizontal total margin should match _tokenVote.scss::.tokens-for-idea.token-icon */
+    var maximum_token_size = 25; // Including token_horizontal_margin. Was 60
+    var minimum_token_size = 12; // Including token_horizontal_margin
+    
+    var token_size = maximum_token_size;
+
+    if ( maximum_tokens_per_row != 0 ){
+      //maximum_tokens_per_row = maximum_tokens_per_row > 10 ? 10 : maximum_tokens_per_row;
+      token_size = maximum_total_width / maximum_tokens_per_row;
+    }
+    if ( token_size < minimum_token_size ){
+      token_size = minimum_token_size;
+    }
+    if ( token_size > maximum_token_size ){
+      token_size = maximum_token_size;
+    }
+    return Math.floor(token_size - token_horizontal_margin);
   }
 });
 

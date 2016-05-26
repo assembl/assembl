@@ -515,7 +515,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
       //Assumes only one tokenVoteSpecification exists in this widget.
       var tokenSpec = _.findWhere(specs, {'@type': Types.TOKENVOTESPECIFICATION});
       if (tokenSpec){
-        return new TokenSpecificationModel(tokenSpec, {parse: true, widgetModel: this});
+        return new TokenVoteSpecificationModel(tokenSpec, {parse: true, widgetModel: this});
       }
       else return null;
     }
@@ -524,8 +524,8 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
 });
 
 
-var TokenSpecificationModel = Base.Model.extend({
-  constructor: function TokenSpecificationModel(){
+var TokenVoteSpecificationModel = Base.Model.extend({
+  constructor: function TokenVoteSpecificationModel(){
     Base.Model.apply(this, arguments);
   },
 
@@ -1189,6 +1189,7 @@ module.exports = {
   localWidgetClassCollection: localWidgetClassCollection,
   globalWidgetClassCollection: globalWidgetClassCollection,
   ActiveWidgetCollection: ActiveWidgetCollection,
+  TokenVoteSpecificationModel: TokenVoteSpecificationModel,
   TokenIdeaVoteModel: TokenIdeaVoteModel,
   TokenIdeaVoteCollection: TokenIdeaVoteCollection,
   TokenCategorySpecificationModel: TokenCategorySpecificationModel,
