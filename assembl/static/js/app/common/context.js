@@ -1702,6 +1702,10 @@ Context.prototype = {
       viewport.right = viewport.left + win.width();
       viewport.bottom = viewport.top + win.height() - bubbleHeight;
       var bounds = element.offset();
+      if (bounds === undefined) {
+        // observed on a jquery element that did not exist
+        return false;
+      }
       bounds.right = bounds.left + element.outerWidth();
       bounds.bottom = bounds.top + element.outerHeight();
       
