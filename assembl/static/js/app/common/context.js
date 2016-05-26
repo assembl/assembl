@@ -1014,7 +1014,7 @@ Context.prototype = {
 
       var retval = $.trim($('<div>' + html + '</div>').text());
 
-      console.log("stripHtml called with", html, "returning ", retval);
+      // console.log("stripHtml called with", html, "returning ", retval);
       return retval;
     },
 
