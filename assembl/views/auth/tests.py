@@ -2,6 +2,7 @@
 from collections import OrderedDict
 import urlparse
 
+import pytest
 import simplejson as json
 from requests import Response
 import mock
@@ -11,6 +12,7 @@ from pyramid.request import Request
 from assembl.models import SocialAuthAccount
 
 
+@pytest.mark.xfail
 def test_assembl_login(discussion, participant1_user, test_app, request):
     url = test_app.app.request_factory({}).route_path(
         'contextual_login', discussion_slug=discussion.slug)
@@ -19,7 +21,7 @@ def test_assembl_login(discussion, participant1_user, test_app, request):
     res = test_app.post(url, OrderedDict([
         ('identifier', participant1_user.get_preferred_email()),
         ('password', 'password')]))
-    assert res.status_code == 302
+    assert (res.status_code == 302 and urlparse(res.location).path == '/'+discussion.slug)
 
 
 fake_facebook_locale_info = """<?xml version='1.0'?>
