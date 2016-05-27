@@ -389,9 +389,11 @@
 
   .question-summary {
     .header{
-      font-size: 16px;
+      font-size: 13px;
       color: #999;
-      font-style: italic;
+    }
+    .content {
+      font-size: 13px;
     }
 
     ul {
