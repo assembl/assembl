@@ -1401,10 +1401,19 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     if (voteSpecifications && voteSpecifications.length > 0){
       that.tokenVoteSpecification = _.findWhere(voteSpecifications, {"@type": "TokenVoteSpecification"});
       if ( that.tokenVoteSpecification ){
-        if ( "token_categories" in that.tokenVoteSpecification && _.isArray(that.tokenVoteSpecification.token_categories) ){
-          that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories, {parse: true});
+        if ( "token_categories" in that.tokenVoteSpecification ){
+          if ( _.isArray(that.tokenVoteSpecification.token_categories) ){
+            console.log("going to parse tokenVoteSpecification.token_categories and convert it into a TokenCategorySpecificationCollection");
+            that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories, {parse: true});
+          } else if ( _.isObject(that.tokenVoteSpecification.token_categories) ){
+            console.log("wtf, tokenVoteSpecification.token_categories was already parsed and converted into a TokenCategorySpecificationCollection");
+            that.tokenCategories = that.tokenVoteSpecification.token_categories;
+          }
         }
       }
+    }
+    if ( !that.tokenCategories ){
+      console.error("that.tokenCategories should not be empty");
     }
 
     // build myVotes collection from my_votes and keep it updated
