@@ -97,6 +97,11 @@ var AttachmentModel = Base.Model.extend({
   },
 
   save: function(attrs, options) {
+    if (this.isFailed()){
+      //Don't know how good that is.
+      return;
+    }
+
     var that = this;
 
     if(this.get('attachmentPurpose') !== attachmentPurposeTypes.DO_NOT_USE.id) {
@@ -129,6 +134,7 @@ var AttachmentModel = Base.Model.extend({
   },
   
   sync: function(method, model, options) {
+    // console.log("attachment sync is called with arguments", arguments);
     switch(method) {
       case 'update':
       case 'create':
@@ -194,6 +200,17 @@ var AttachmentModel = Base.Model.extend({
     //Remove the message attribute, as there is a circular dependency
     delete old['objectAttachedToModel'];
     return old;
+  },
+
+  /*
+    Utility function. Makes the model unsavable.
+   */
+  setFailed: function(){
+    this.setFailed = true;
+  },
+
+  isFailed: function(){
+    return this.setFailed === true;
   }
 
 });
