@@ -1032,12 +1032,18 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
       .style('height', '14px')
       .style('margin-top', '5px')
       .style('width', function(r) {
+        if (r.totalTokens == 0) {
+            return 0;
+        }
         var d = r.sum / r.totalTokens;
         var tmp = scale(d) + 'px';
         return tmp; }).append('img');
     results.append('span')
       .style('margin-left', '5px')
       .text(function(r) {
+        if (r.totalTokens == 0) {
+            return "-";
+        }
         var d = r.sum / r.totalTokens;
         return percent(d);
     });
