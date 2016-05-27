@@ -21,12 +21,6 @@ var AbstractDocumentView = Marionette.ItemView.extend({
     if (!this.model) {
       throw new Error('file needs a model');
     }
-    /*
-      The container view of the document.
-      The document's first parent is an attachment view
-      The parent is the parent of the attachment view.
-     */
-    this.parentView = options.parentView ? options.parentView : null;
     this.errorState = false;
     this.uri = this.model.get('external_url') ? this.model.get('external_url') : this.model.get('uri');
   },
@@ -62,7 +56,9 @@ var AbstractDocumentView = Marionette.ItemView.extend({
         that.onRenderOembedFail();
       },
       afterEmbed: function() {
-        //console.log("Embeeding done");
+        if (Ctx.debugOembed){
+          console.log("Embeeding done");
+        }
       },
       proxyHeadCall: function(url) {
         return "/api/v1/mime_type?url=" + encodeURIComponent(url);
@@ -214,6 +210,7 @@ var AbstractEditView =  AbstractDocumentView.extend({
     AbstractDocumentView.prototype.initialize.call(this, options);
     this.showProgress = false;
     this.percentComplete = 0; // Float from 0-100
+    this.parentView = options.parentView;
     var that = this;
     if (options.showProgress) {
       this.showProgress = true;
@@ -247,8 +244,14 @@ var AbstractEditView =  AbstractDocumentView.extend({
         error: function(model, resp, options){
           resp.handled = true;
           if (!that.isViewDestroyed()){
-            that.errorState = true;
-            that.render();
+            if (that.parentView){
+              var attachmentModel = that.parentView.model;
+              //1st ParentView: AttachmentEditView
+              //2nd ParentView: AttachmentEditableCollectionView
+              //3rd: The container LayoutView
+              var containerView = that.parentView.parentView.parentView;
+              containerView.failModel(attachmentModel);
+            }
           }
         }
       });
@@ -274,14 +277,8 @@ var AbstractEditView =  AbstractDocumentView.extend({
    */
   onShowProgress: function(ev){
     if (this.showProgress) {
-      console.log("Show the progress of the file upload in view with event", ev);
+      // console.log("Show the progress of the file upload in view with event", ev);
     }
-  },
-
-  onBeforeUnload: function(ev){
-    console.log("AbstractEditView onBeforeUnload called with args", arguments);
-    this.$(window).off('beforeunload');
-    this.parentView.model.destroy(); //Eh, doubt this will work?
   }
 });
 
