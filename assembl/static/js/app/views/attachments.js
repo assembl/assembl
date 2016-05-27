@@ -23,7 +23,6 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
   initialize: function(options) {
     var d = this.model.getDocument();
-    this.parentView = options.parentView? options.parentView: null;
     this.uri = d.get('external_url') ? d.get('external_url') : d.get('uri');
   },
 
@@ -52,10 +51,8 @@ var AbstractAttachmentView = Marionette.LayoutView.extend({
 
   renderDocument: function(){
     var documentModel = this.model.getDocument(),
-        parentView = this.parentView,
         hash = {
-          model: documentModel,
-          parentView: parentView
+          model: documentModel
         },
         documentView;
     
@@ -117,6 +114,8 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   initialize: function(options){
     //A parent view is passed which will be used to dictate the lifecycle of document creation/deletion
     AbstractAttachmentView.prototype.initialize.call(this, options);
+    //parentView => the container around AttachmentEditableCollectionView, if passed 
+    this.parentView = options.parent ? options.parent : null;
     var that = this;
     this.extrasAdded = {};
     _.each(this.extras, function(v,k){
@@ -132,20 +131,19 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   
   renderDocument: function(){
     var documentModel = this.model.getDocument(),
-        parentView = this.parentView,
         documentView;
     
     if (documentModel.isFileType()) {
       documentView = new DocumentViews.FileEditView({
-        parentView: parentView,
         model: documentModel,
-        showProgress: true
+        showProgress: true,
+        parentView: this
       });
     }
     else {
       documentView = new DocumentViews.DocumentEditView({
         model: documentModel,
-        parentView: parentView
+        parentView: this
       });
       
     }
@@ -153,7 +151,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   },
 
   onRender: function() {
-    console.log("AttachmentEditableView onRender called for model", this.model.id);
+    //console.log("AttachmentEditableView onRender called for model", this.model.id);
     AbstractAttachmentView.prototype.onRender.call(this);
     this.populateExtras();
     this.renderAttachmentPurposeDropdown(
@@ -259,12 +257,45 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
 
 });
 
+/*
+  Generic view for a file-based attachment that failed to load
+ */
+var AttachmentEditableErrorView = AttachmentView.extend({
+  constructor: function AttachmentEditableErrorView(){
+    AttachmentEditableView.apply(this, arguments);
+  },
+
+  initialize: function(options){
+    AttachmentView.prototype.initialize.call(this, options);
+  },
+
+  onRender: function(){
+    var fileName = this.model.getDocument().get('file').name
+    var text = i18n.sprintf(
+      i18n.gettext("We are sorry, there was an error during the upload of the file \"%s\". Please try again."), fileName
+    );
+    this.$el.html("<div class='error-message'>"+ text +"</div>");
+  }
+}); 
+
+
+/*
+  The collection view that will display all the attachment types that the message can support in an editable state
+ */
 var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
   constructor: function AttachmentEditableCollectionView() {
     Marionette.CollectionView.apply(this, arguments);
   },
 
+  initialize: function(options){
+    this.parentView = options.parentView ? options.parentView : null;
+  },
+
   getChildView: function(item){
+
+    if (item.isFailed()){
+      return AttachmentEditableErrorView;
+    }
 
     var d = item.getDocument();
     switch (d.get('@type') ) {
@@ -278,12 +309,18 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
         return new Error("Cannot create a CollectionView with a document of @type: " + d.get('@type'));
         break;
     }
+  },
+
+  childViewOptions: function(){
+    return {
+      parent: this
+    }
   }
 });
 
 
 /*
-  A view that can be instantiated that will 
+  A contained view that will show attachments
  */
 var AttachmentEditUploadView = Marionette.LayoutView.extend({
   //This will have a region for the upload button
@@ -293,33 +330,98 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
     Marionette.LayoutView.apply(this, arguments);
   },
 
-  template: 'tmpl-uploadView',
+  template: '#tmpl-uploadView',
 
   ui: {
     'collectionView': '.js_collection-view',
-    'uploadButton': '.js_upload'
-  },
-
-  events: {
-    'change @ui.uploadButton': 'onFileUpload'
+    'errorView': '.js_collection-view-failed'
   },
 
   regions: {
-    'collectionRegion': '@ui.collectionView'
+    'collectionRegion': '@ui.collectionView',
+    'collectionFailedRegion': '@ui.errorView'
   },
 
   initialize: function(options){
     this.collection = options.collection;
+    //For internal use only. NEVER save this collection to the server!
+    this.failedCollection = new Attachments.Collection([],{
+      objectAttachedToModel: this.collection.objectAttachedToModel
+    });
 
-    if (!this.collection || !this.CollectionViewClass) {
-      throw new Error("Cannot instantiate a DocumentEditUploadView without a collection and a CollectionViewClass!");
+    if (!this.collection) {
+      throw new Error("Cannot instantiate a DocumentEditUploadView without a collection!");
     }
 
-    this.collectionView = new AttachmentEditableCollectionView({collection: this.collection});
+    this.collectionView = new AttachmentEditableCollectionView({
+      collection: this.collection,
+      parentView: this
+    });
+    this.collectionFailedView = new AttachmentEditableCollectionView({
+      collection: this.failedCollection,
+      parentView: this
+    });
   },
 
   onShow: function(){
     this.collectionRegion.show(this.collectionView);
+    this.collectionFailedRegion.show(this.collectionFailedView);
+  },
+
+  failModels: function(models){
+    _.each(models, function(model){
+      model.setFailed();
+    });
+    this.collection.remove(models);
+    this.failedCollection.add(models);
+  },
+
+  failModel: function(model){
+    return this.failModels([model]);
+  },
+
+  getFailedCollection: function(){
+    return this.failedCollection;
+  }
+
+});
+
+
+var AttachmentUploadButtonView = Marionette.ItemView.extend({
+  constructor: function AttachmentUploadButtonView(){
+    return Marionette.ItemView.apply(this, arguments);
+  },
+
+  template: "#tmpl-attachmentButton",
+
+  ui: {
+    button: '.js_upload'
+  },
+
+  events: {
+    'change @ui.button': 'onButtonClick'
+  },
+
+  initialize: function(options){
+    this.collection = options.collection;
+    this.objectAttachedToModel = options.objectAttachedToModel
+    this.errorCollection = options.errorCollection || null;
+    if (!this.collection || !this.objectAttachedToModel){
+      return new Error("Cannot instantiate an AttachmentUploadButtonView without passing " +
+                       "an attachment collection that it would affect!");
+    }
+  },
+
+  clearErrors: function(){
+    if (this.errorCollection) {
+      this.errorCollection.reset();
+    }
+  },
+
+  onButtonClick: function(e){
+    //Clear out the errorCollection if passed in
+    this.clearErrors();
+    this.onFileUpload(e);
   },
 
   onFileUpload: function(e){
@@ -337,18 +439,19 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
 
       var attachment = new Attachments.Model({
         document: d,
-        objectAttachedToModel: that.model,
+        objectAttachedToModel: that.objectAttachedToModel,
         idCreator: Ctx.getCurrentUser().id
       });
 
-      that.attachmentsCollection.add(attachment);
+      that.collection.add(attachment);
     });
   }
-
 });
 
 module.exports = module.exports = {
     AttachmentEditableView: AttachmentEditableView,
     AttachmentView: AttachmentView,
-    AttachmentEditableCollectionView: AttachmentEditableCollectionView
+    AttachmentEditableCollectionView: AttachmentEditableCollectionView,
+    AttachmentUploadButtonView: AttachmentUploadButtonView,
+    AttachmentEditUploadView: AttachmentEditUploadView
   };
