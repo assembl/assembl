@@ -301,6 +301,11 @@ var MessageModel = Base.Model.extend({
   },
 
   destroy: function(options){
+    var errorCollection = options.errorCollection;
+    if (errorCollection){
+      //These models are never saved to the backend, and should never be deleted either
+      errorCollection.destroyAll(options);
+    }
     var attachments = this.get('attachments'),
         that = this;
     return Promise.resolve(attachments.destroyAll(options))

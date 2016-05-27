@@ -217,10 +217,11 @@ var messageSendView = Marionette.LayoutView.extend({
       collection: this.attachmentsCollection
     });
 
+    this.errorCollection = documentView.getFailedCollection(); 
     var uploadButtonView = new AttachmentViews.AttachmentUploadButtonView({
       objectAttachedToModel: this.model,
       collection: this.attachmentsCollection,
-      errorCollection: documentView.getFailedCollection()
+      errorCollection: this.errorCollection
     });
 
     this.attachments.show(documentView);
@@ -423,7 +424,7 @@ var messageSendView = Marionette.LayoutView.extend({
 
   onCancelMessageButtonClick: function() {
     this.clearPartialMessage();
-    this.model.destroy();
+    this.model.destroy({errorCollection: this.errorCollection});
   },
 
   onBlurMessage: function(ev) {
