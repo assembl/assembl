@@ -53,7 +53,9 @@ def upload_file(request):
     API because all of the content will be passed in using a MULTIPART_HEADER,
     with all of data as well as the file (along with its metadata)
     """
-    # Any permission checking required here??
+
+    # Testing purposes on front-end
+    # raise Exception("Upload file exception occured!")
 
     db = Document.default_db
     ctx = request.context
