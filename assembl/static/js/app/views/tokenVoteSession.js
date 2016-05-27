@@ -1009,7 +1009,8 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     var displayTooltip = function(num, total, category){
       //Simplify to give more of a human feel.
       return i18n.sprintf(
-        i18n.gettext("Out of %d total tokens voted on token type \"%s\", %d tokens were voted on this idea"), total, category, num);
+        i18n.gettext("%d tokens were voted on this idea, out of %d total tokens voted on token type \"%s\"."),
+        num, total, category);
     };
 
     var scale = d3.scale.linear()
@@ -1050,10 +1051,6 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     Ctx.initTooltips(this.$el);
   },
 
-  // onShow: function(){
-  //   this.renderCKEditorDescription();
-  // },
-
   onSeeDescriptionClick: function(ev){
     ev.preventDefault();
     var icon = this.ui.descriptionArea.find('i');
@@ -1073,22 +1070,6 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
       this.ui.descriptionButton.text(descriptionButtonText);
       this.ui.descriptionRegion.html(this.model.get('objectConnectedTo').get('definition'));
     }
-  },
-
-  renderCKEditorDescription: function() {
-    var model = this.model.get('objectConnectedTo').getDefinitionDisplayText();
-
-    if (!model.length) return;
-
-    var description = new CKEditorField({
-      model: this.model.get('objectConnectedTo'),
-      modelProp: 'definition',
-      showPlaceholderOnEditIfEmpty: false,
-      canEdit: false,
-      readMoreAfterHeightPx: 39 // should match the min-heght of .idea-description .  Currently this is  2*$baseLineHeightFontMultiplier*$baseFontSize (2 lines)
-    });
-
-    this.getRegion('regionIdeaDescription').show(description);
   }
 
 });
