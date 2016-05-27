@@ -211,7 +211,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   },
   
   purposeDropdownListClick: function(ev) {
-    console.log('purposeDropdownListClick():', ev.currentTarget.dataset.id);
+    // console.log('purposeDropdownListClick():', ev.currentTarget.dataset.id);
     if(Attachments.attachmentPurposeTypes[ev.currentTarget.dataset.id] === undefined) {
       throw new Error("Invalid attachment purpose: ", ev.currentTarget.dataset.id);
     }
