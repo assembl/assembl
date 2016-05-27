@@ -3,6 +3,7 @@
 var Marionette = require('../shims/marionette.js'),
   $ = require('jquery'),
   _ = require('underscore'),
+  Promise = require('bluebird'),
   Assembl = require('../app.js'),
   Ctx = require('../common/context.js'),
   CollectionManager = require('../common/collectionManager.js'),
@@ -198,6 +199,7 @@ var TokenBagsView = Marionette.LayoutView.extend({
     this.tokenCategories = this.options.tokenCategories;
     this.myVotesCollection = this.options.myVotesCollection;
     this.tokenSize = this.options.tokenSize;
+    this.userLanguagePreferences = this.options.userLanguagePreferences;
   },
   onRender: function(){
     var that = this;
@@ -205,7 +207,8 @@ var TokenBagsView = Marionette.LayoutView.extend({
     var bags = new RemainingTokenCategoriesCollectionView({
       collection: that.tokenCategories,
       myVotesCollection: that.myVotesCollection,
-      tokenSize: that.tokenSize
+      tokenSize: that.tokenSize,
+      userLanguagePreferences: that.userLanguagePreferences
     });
     that.getRegion('tokenBags').show(bags);
   }
@@ -224,6 +227,7 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     this.myVotesCollection = this.options.myVotesCollection;
     this.listenTo(this.myVotesCollection, "change:category:"+this.model.getId(), this.render); // this is a category-level refresh, to refresh only the ones which have changed (avoids animation glitches triggered by allocation clicks on exclusive categories icons)
     this.tokenSize = options.tokenSize;
+    this.userLanguagePreferences = options.userLanguagePreferences;
   },
   onRender: function(){
     console.log("RemainingCategoryTokensView::onRender()");
@@ -242,7 +246,11 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     categoryContainer.addClass(category.getCssClassFromId());
     var el = $("<div></div>");
     el.addClass("description");
-    var s = i18n.sprintf(i18n.gettext("<span class='available-tokens-number'>%d</span> remaining %s tokens"), data["remaining_tokens"], category.get("typename")); // TODO: use "name" field instead (LangString)
+
+    var categoryNameLangString = category.get("name");
+    var categoryNameBestTranslation = categoryNameLangString.bestWithErrors(that.languagePreferences, false).entry.value();
+    // var s = i18n.sprintf(i18n.ngettext("<span class='available-tokens-number'>%d</span> remaining %s token", "<span class='available-tokens-number'>%d</span> remaining %s tokens", data["remaining_tokens"]), data["remaining_tokens"], category.get("typename")); // TODO: use "name" field instead (LangString)
+    var s = i18n.sprintf(i18n.ngettext("<span class='available-tokens-number'>%d</span> remaining %s token", "<span class='available-tokens-number'>%d</span> remaining %s tokens", data["remaining_tokens"]), data["remaining_tokens"], categoryNameBestTranslation);
     el.html(s);
     //el.text("You have used " + data["my_votes_count"] + " of your " + data["total_number"] + " \"" + category.get("typename") + "\" tokens.");
     el.appendTo(categoryContainer);
@@ -306,7 +314,8 @@ var RemainingTokenCategoriesCollectionView = Marionette.CollectionView.extend({
     console.log("RemainingTokenCategoriesCollectionView::initialize()");
     this.childViewOptions = {
       myVotesCollection: options.myVotesCollection,
-      tokenSize: options.tokenSize
+      tokenSize: options.tokenSize,
+      userLanguagePreferences: options.userLanguagePreferences
     };
   },
 });
@@ -1394,7 +1403,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       that.tokenVoteSpecification = _.findWhere(voteSpecifications, {"@type": "TokenVoteSpecification"});
       if ( that.tokenVoteSpecification ){
         if ( "token_categories" in that.tokenVoteSpecification && _.isArray(that.tokenVoteSpecification.token_categories) ){
-          that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories);
+          that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories, {parse: true});
         }
       }
     }
@@ -1410,7 +1419,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     console.log("that.myVotesCollection: ", that.myVotesCollection);
     
     
-    collectionManager.getAllIdeasCollectionPromise().done(function(allIdeasCollection) {
+    Promise.join(collectionManager.getUserLanguagePreferencesPromise(Ctx), collectionManager.getAllIdeasCollectionPromise(), function(userLanguagePreferences, allIdeasCollection) {
       var votableIdeas = that.widgetModel.get("votable_ideas"); // contains their id but not full information (because shown by server using "id_only" view)
       var votableIdeasIds = _.pluck(votableIdeas, "@id");
 
@@ -1458,12 +1467,10 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         voteSpecification: that.tokenVoteSpecification,
         tokenCategories: that.tokenCategories,
         myVotesCollection: that.myVotesCollection,
-        tokenSize: tokenSize
+        tokenSize: tokenSize,
+        userLanguagePreferences: userLanguagePreferences
       });
       that.$(".available-tokens").html(tokenBagsView.render().el);
-      that.availableTokensPositionTop = that.$(".available-tokens").position().top;
-      that.$(".available-tokens").width(that.$(".popin-body").width());
-      that.$(".available-tokens-container").css('min-height', that.$(".available-tokens-container").height());
 
       // Show votable ideas and their tokens
       var collectionView = new TokenVoteCollectionView({
@@ -1476,7 +1483,6 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
           return _.findIndex(permutation, function(idea2){return idea2.id == idea.id;});
         }
       });
-
       var regionVotablesCollection = new Marionette.Region({
         el: that.$(".votables-collection")
       });
@@ -1485,6 +1491,14 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
     that.throttledScroll = _.throttle(that.myOnScroll, 100);
 
+  },
+
+  onShow: function(){
+    var that = this;
+
+    that.availableTokensPositionTop = that.$(".available-tokens").position().top;
+    that.$(".available-tokens").width(that.$(".popin-body").width());
+    that.$(".available-tokens-container").css('min-height', that.$(".available-tokens-container").height());
   },
 
   onScroll: function(){
