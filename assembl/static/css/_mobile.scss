@@ -128,10 +128,21 @@ $panelHeaderTitleHeight:50px;
 // ********************* synthesis accordion *********************
 
     .synthesisItem{
-        height: 27px;
         line-height: 27px;
     }
-    
+
+// ********************* synthesis panel *********************
+
+    .ideafamily-item.has-children > .ideafamily-body > .ideafamily-idea{
+        padding-top: 5px;    
+    }
+    .message.viewStyleFullBody .message-body.body_format_text_html p, .announcementMessage.viewStyleFullBody .message-body.body_format_text_html p{
+        margin-top:0;
+    }
+    .ideafamily-item .ideafamily-body > .ideafamily-idea{
+        padding-top:6px;
+    }
+
 //  ********************* dropdown menu *********************
     
     .dropdown{
@@ -200,6 +211,10 @@ $panelHeaderTitleHeight:50px;
     }
     .dot-online{
         display:block!important;
+        width:130px;
+        span{
+            text-overflow:ellipsis;
+        }
     }
     #header{
         height:$tableOfIdeasRowHeightSmallScreen;

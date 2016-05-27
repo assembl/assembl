@@ -407,6 +407,17 @@
 
 .modal-ckeditorfield{
   .bbm-modal{
-    max-width:50%;
+    max-width: 800px;
+    width: 60%;
+    .panel-editablebox{
+      margin: 6px 0 0 10px;
+      p{
+        font-size:13px;
+        line-height:21px;
+      }
+      p:not(:last-child){
+        margin: 0 0 10px 0;
+      }
+    }
   }
 }
