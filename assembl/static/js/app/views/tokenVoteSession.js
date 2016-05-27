@@ -312,12 +312,18 @@ var RemainingTokenCategoriesCollectionView = Marionette.CollectionView.extend({
   childView: RemainingCategoryTokensView,
   initialize: function(options) {
     console.log("RemainingTokenCategoriesCollectionView::initialize()");
-    this.childViewOptions = {
-      myVotesCollection: options.myVotesCollection,
-      tokenSize: options.tokenSize,
-      userLanguagePreferences: options.userLanguagePreferences
-    };
+    this.myVotesCollection = options.myVotesCollection;
+    this.tokenSize = options.tokenSize;
+    this.userLanguagePreferences = options.userLanguagePreferences;
   },
+  childViewOptions: function(){
+    var that = this;
+    return {
+      myVotesCollection: that.myVotesCollection,
+      tokenSize: that.tokenSize,
+      userLanguagePreferences: that.userLanguagePreferences
+    };
+  }
 });
 
 
@@ -706,13 +712,18 @@ var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
     this.idea = options.idea;
     this.myVotesCollection = options.myVotesCollection;
     this.voteSpecification = options.voteSpecification;
-    this.childViewOptions = {
-      idea: options.idea,
-      myVotesCollection: options.myVotesCollection,
-      voteSpecification: options.voteSpecification,
-      collectionView: this,
-      voteItemView: options.parent,
-      tokenSize: options.tokenSize
+    this.parent = options.parent;
+    this.tokenSize = options.tokenSize;
+  },
+  childViewOptions: function(){
+    var that = this;
+    return {
+      idea: that.idea,
+      myVotesCollection: that.myVotesCollection,
+      voteSpecification: that.voteSpecification,
+      collectionView: that,
+      voteItemView: that.parent,
+      tokenSize: that.tokenSize
     };
   }
 });
