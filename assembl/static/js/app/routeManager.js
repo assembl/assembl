@@ -397,11 +397,14 @@ var routeManager = Marionette.Object.extend({
   restoreViews: function(from_home, url_structure, skip_group_state) {
     var collectionManager = CollectionManager();
     Assembl.headerRegions.show(new NavBar());
-    collectionManager.getWidgetsForContextPromise(
-      Widget.Model.prototype.INFO_BAR, null, ["closeInfobar"]).then(
-      function(coll) {
-        Assembl.infobarRegion.show(new Infobars({collection: coll}));
-      });
+    //If it's a small screen (mobile) don't instantiate the infobar
+    if(!Ctx.isSmallScreen()){
+      collectionManager.getWidgetsForContextPromise(
+        Widget.Model.prototype.INFO_BAR, null, ["closeInfobar"]).then(
+        function(coll) {
+          Assembl.infobarRegion.show(new Infobars({collection: coll}));
+        });
+    }
     Assembl.groupContainer.show(new Loader());
     /**
      * Render the current group of views
