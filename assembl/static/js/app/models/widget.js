@@ -773,7 +773,7 @@ var VoteResultCollection = Base.Collection.extend({
         sumTokens = _.map(sums, function (s) {
           return _.reduce(s, function(a,b) {return a+b;});}),
         percents = _.map(_.zip(maxTokens, sumTokens), function (x) {
-          return x[0] / x[1];}),
+          return x[1]?(x[0] / x[1]):0;}),
         maxPercent = Math.max.apply(null, percents),
         catSummary = _.object(_.zip(categories, sumTokens)),
         numVoters = this.getNumberOfVoters();

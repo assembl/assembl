@@ -1033,7 +1033,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
       .style('margin-top', '5px')
       .style('width', function(r) {
         if (r.totalTokens == 0) {
-            return 0;
+            return "0";
         }
         var d = r.sum / r.totalTokens;
         var tmp = scale(d) + 'px';
