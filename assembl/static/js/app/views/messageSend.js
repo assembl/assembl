@@ -109,12 +109,12 @@ var messageSendView = Marionette.LayoutView.extend({
     this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model});
     // this.attachmentsCollection = new Attachments.Collection([], {objectAttachedToModel: this.model})
     this.model.set('attachments', this.attachmentsCollection);
-    this.documentsView = new AttachmentViews.AttachmentEditableCollectionView({
-      collection: this.attachmentsCollection,
-      childViewOptions: {
-        parentView: this
-      }
-    });
+    // this.documentsView = new AttachmentViews.AttachmentEditableCollectionView({
+    //   collection: this.attachmentsCollection,
+    //   childViewOptions: {
+    //     parentView: this
+    //   }
+    // });
     // var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
     //   constructor: function AttachmentEditableCollectionView() {
     //     Marionette.CollectionView.apply(this, arguments);
@@ -135,11 +135,12 @@ var messageSendView = Marionette.LayoutView.extend({
     messageSubject: '.messageSend-subject',
     topicSubject: '.topic-subject .formfield',
     permissionDeniedWarningMessage: '.js_warning-message-for-message-post',
-    attachments: '.js_attachments',
-    upload: '.js_upload'
+    uploadButton: '.js_upload-button',
+    attachments: '.js_attachment-edit-region'
   },
 
   regions: {
+    uploadButton: '@ui.uploadButton',
     attachments: '@ui.attachments'
   },
 
@@ -148,8 +149,7 @@ var messageSendView = Marionette.LayoutView.extend({
     'click @ui.cancelButton': 'onCancelMessageButtonClick',
     'blur @ui.messageBody': 'onBlurMessage',
     'focus @ui.messageBody': 'onFocusMessage',
-    'keyup @ui.messageBody': 'onChangeBody',
-    'change @ui.upload': 'onFileUpload'
+    'keyup @ui.messageBody': 'onChangeBody'
   },
 
   serializeData: function() {
@@ -213,7 +213,18 @@ var messageSendView = Marionette.LayoutView.extend({
 
   onShow: function() {
     //console.log("messageSend onShow() this.documentsView:", this.documentsView);
-    this.attachments.show(this.documentsView);
+    var documentView = new AttachmentViews.AttachmentEditUploadView({
+      collection: this.attachmentsCollection
+    });
+
+    var uploadButtonView = new AttachmentViews.AttachmentUploadButtonView({
+      objectAttachedToModel: this.model,
+      collection: this.attachmentsCollection,
+      errorCollection: documentView.getFailedCollection()
+    });
+
+    this.attachments.show(documentView);
+    this.uploadButton.show(uploadButtonView);
   },
 
   onAttach: function() {
@@ -577,29 +588,6 @@ var messageSendView = Marionette.LayoutView.extend({
 
   showPopInFirstPost: function() {
     Assembl.vent.trigger('navBar:subscribeOnFirstPost');
-  },
-
-  onFileUpload: function(e){
-    var fs = e.target.files,
-        that = this;
-    console.log("A file has been uploaded");
-
-    _.each(fs, function(f){
-      //There will be file duplication because the file is already on the DOM if previously added
-      var d = new Documents.FileModel({
-        name: f.name,
-        mime_type: f.type
-      });
-      d.set('file', f);
-
-      var attachment = new Attachments.Model({
-        document: d,
-        objectAttachedToModel: that.model,
-        idCreator: Ctx.getCurrentUser().id
-      });
-
-      that.attachmentsCollection.add(attachment);
-    });
   }
 
 });

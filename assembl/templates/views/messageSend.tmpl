@@ -20,7 +20,7 @@
         </div>
         <div>
           <textarea class="formtextarea messageSend-body js_messageSend-body text mbxs" placeholder="<%= body_help_message %>"><%= msg_in_progress_body %></textarea>
-          <div class="attachments js_attachments"></div>
+          <div class ="attachments js_attachment-edit-region"></div>
           <% if(show_target_context_with_choice) { %>
           <div class="messageSend-target txt-gray1">
               <% if(reply_idea) { %>
@@ -34,13 +34,9 @@
                 <p>{{gettext('Your message will be posted in the general conversation.')}}</p>
               <% } %>
           </div>
-          <% } %>
+          <% } %> 
           <span class="mtm">
-            <div class="messageSend-upload fl">
-              <label class='file-upload-label'><i class="icon icon-attach"></i>
-                <input type="file" name="attachmentUpload" multiple="multiple" class="file-upload js_upload" />
-              </label>
-            </div>
+            <div class='js_upload-button'></div>
             <div class="messageSend-buttons fr"> <!-- need again this part for top posting -->
                 <% if ( reply_message_id ) { %>
                   <a class="btn btn-primary btn-sm messageSend-sendbtn"><%= send_button_label %></a>
@@ -57,7 +53,6 @@
     <div class="warning-box-for-message-post">
         <p class="js_warning-message-for-message-post"></p>
     </div>
-    <div class="attachments js_attachments"></div>
 <% } %>
 
 
