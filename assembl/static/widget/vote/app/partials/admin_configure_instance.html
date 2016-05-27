@@ -10,6 +10,14 @@
             {{'adminConfigureInstanceCurrentUse' | translate}} <a href="?config={{ widget_uri }}&target={{ target }}" target="_blank">{{'adminConfigureInstanceCurrentUseHere' | translate}}</a>.
         </span>
     </p>
+
+  <div id="step_get_data" ng-show="current_step == 1">
+    <p>
+      {{'gettingDataFromServerWidgetInstance' | translate}} "<strong>{{ widget_uri }}</strong>"...
+    </p>
+  </div>
+
+  <div ng-show="current_step >= 2">
     <p>
         {{'adminConfigureInstanceAvailableActions' | translate}}
     </p>
@@ -27,16 +35,19 @@
         <li>
             <a href="#/admin/configure_instance_set_settings?widget_uri={{ widget_uri }}&target={{ target }}">{{'adminConfigureInstanceConfigureAppearance' | translate}}</a>
         </li>
-        <li>
+        <li ng-hide="isTokenVoteWidget">
             <a href="?config={{ widget_uri }}&target={{ target }}#/results">{{'adminConfigureInstanceSeeVoteResultsForThisTarget' | translate}}</a>
         </li>
-        <li>
+        <li ng-hide="isTokenVoteWidget">
             <a href="?config={{ widget_uri }}#/results">{{'adminConfigureInstanceSeeVoteResultsForAllTargets' | translate}}</a>
+        </li>
+        <li ng-show="isTokenVoteWidget">
+            <a href="/{{ discussion_slug }}/widget/{{ widget_uri | encodeURIComponent }}/result">{{'adminConfigureInstanceSeeVoteResultsForAllTargets' | translate}}</a>
         </li>
         <li>
             <button ng-click="deleteThisWidget()">{{'adminConfigureInstanceDelete' | translate}}</button>
             <span id="widget_delete_result"></span>
         </li>
     </ul>
-
+  </div>
 </div>

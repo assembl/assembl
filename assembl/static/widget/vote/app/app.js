@@ -235,3 +235,7 @@ angular.element(document).ready(function() {
   $.get(configFile, data, successCallback).fail(errorCallback);
 });
 
+// from http://stackoverflow.com/questions/16630471/how-can-i-invoke-encodeuricomponent-from-angularjs-template
+voteApp.filter('encodeURIComponent', function($window) {
+    return $window.encodeURIComponent;
+});

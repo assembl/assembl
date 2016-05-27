@@ -12,6 +12,7 @@ voteApp.controller('adminConfigureInstanceCtl',
     $scope.widget_uri = null; // "local:Widget/24"
     $scope.widget_endpoint = null; // "/data/Widget/24"
     $scope.target = null;
+    $scope.isTokenVoteWidget = false;
 
     $scope.init = function() {
     console.log("adminConfigureInstanceCtl::init()");
@@ -28,7 +29,48 @@ voteApp.controller('adminConfigureInstanceCtl',
     $scope.target = $routeParams.target;
 
     $scope.widget_endpoint = AssemblToolsService.resourceToUrl($scope.widget_uri);
+
+    // get widget information from its endpoint
+    $http({
+      method: 'GET',
+      url: $scope.widget_endpoint
+    }).success(function(data, status, headers) {
+      console.log(data);
+      $scope.widget = data;
+      $scope.updateOnceWidgetIsReceived();
+    });
   };
+
+    $scope.updateOnceWidgetIsReceived = function(){
+      console.log("$scope.widget: ", $scope.widget);
+      if ( "@type" in $scope.widget && $scope.widget["@type"] == "TokenVotingWidget" ){
+        $scope.isTokenVoteWidget = true;
+      
+        // GET discussion associated to widget, because discussion.slug is required to compute vote results URL
+        $scope.discussion_uri = "discussion" in $scope.widget ? $scope.widget.discussion : null;
+        if ($scope.discussion_uri) {
+          var discussion_endpoint_url = AssemblToolsService.resourceToUrl($scope.discussion_uri);
+          $http({
+            method: 'GET',
+            url: discussion_endpoint_url
+          }).success(function(data, status, headers) {
+            console.log("discussion received: ", data);
+            $scope.discussion = data;
+            if ( "slug" in $scope.discussion ){
+              $scope.discussion_slug = $scope.discussion.slug;
+              $scope.current_step = 2;
+            } else {
+              alert("error: discussion has no slug field, which is required to compute vote results URL")
+            }
+          });
+        } else {
+          alert("error: widget has no discussion field, which is required to compute vote results URL");
+        }
+      }
+      else {
+        $scope.current_step = 2;
+      }
+    };
 
     $scope.deleteThisWidget = function() {
       var approve = confirm("Do you confirm that you want to delete this widget instance?"); // TODO: i18n
