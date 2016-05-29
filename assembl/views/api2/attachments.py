@@ -36,6 +36,10 @@ def delete_file(request):
              permission=P_READ, ctx_instance_class=File,
              name='data')
 def get_file(request):
+    # TODO: Add a route that enables the call to have the filename
+    # appended to the end. This is so that gmail can read the services
+    # Read more here:
+    # http://stackoverflow.com/questions/20903967/gmails-new-image-caching-is-breaking-image-links-in-newsletter
     ctx = request.context
     document = ctx._instance
     f = File.get(document.id)
