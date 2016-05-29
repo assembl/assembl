@@ -138,7 +138,7 @@ Sphinx==1.4.1
 splinter==0.7.3
 SQLAlchemy==1.0.13
 sqlparse==0.1.19
--e git+https://github.com/imaginationforpeople/sqltap.git#egg=sqltap
+-e git+https://github.com/imaginationforpeople/sqltap.git@assembl#egg=sqltap
 supervisor==3.3.0
 tornado==4.3
 transaction==1.6.0
