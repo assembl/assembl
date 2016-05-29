@@ -130,7 +130,7 @@ simplejson==3.8.2
 six==1.10.0
 smart-open==1.3.3
 snowballstemmer==1.2.1
--e git+https://github.com/imaginationforpeople/sockjs-tornado.git@master#egg=sockjs_tornado
+-e git+https://github.com/imaginationforpeople/sockjs-tornado.git@conflicting_localhost#egg=sockjs_tornado
 SPARQLWrapper==1.7.6
 sphinx-bootstrap-theme==0.4.9
 sphinxcontrib-httpdomain==1.4.0
