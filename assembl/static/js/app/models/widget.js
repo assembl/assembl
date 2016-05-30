@@ -520,6 +520,47 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
       else return null;
     }
     else return null;
+  },
+
+  voteStatus: function() {
+    // Should we also consider probably badly configured widgets? For example a widget where the user cannot allocate all his tokens? (this is a widget where a category matches this condition: votable_ideas.length * category.max_per_idea < category.total_number)
+    var voteSpecs = _.where(this.get("vote_specifications"), {"@type": "TokenVoteSpecification"});
+    var status = this.VOTE_STATUS_INCOMPLETE;
+    for ( var i = 0; i < voteSpecs.length; ++i ){
+      var voteSpec = voteSpecs[i];
+      var isExclusive = "exclusive_categories" in voteSpec ? voteSpec.exclusive_categories : false;
+      var myVotes = "my_votes" in voteSpec ? voteSpec.my_votes : null;
+      var categories = "token_categories" in voteSpec ? voteSpec.token_categories : null;
+      if ( !myVotes || !myVotes.length ){
+        return this.VOTE_STATUS_INCOMPLETE;
+      }
+      //if ( isExclusive ){
+        // Should it behave differently? For example, we could say we don't display hellobar if voter has already used all his positive tokens, even if he has not used all his negative tokens.
+      //}
+      //else {
+        var votesPerCategory = _.groupBy(myVotes, 'token_category');
+        var tokensUsedPerCategory = _.mapObject(votesPerCategory, function(val, key){
+          return _.reduce(val, function(memo, num){
+            return memo + ("value" in num ? num.value : 0);
+          }, 0);
+        });
+        var someTokenCategoriesHaveUnusedTokens = _.findKey(tokensUsedPerCategory, function(val, key){
+          var category = _.findWhere(categories, {"@id": key});
+          if ( !category ){
+            return false;
+          }
+          var total = "total_number" in category ? category.total_number : null;
+          if ( !total ){
+            return false;
+          }
+          return val < total;
+        });
+        if ( someTokenCategoriesHaveUnusedTokens ){
+          return this.VOTE_STATUS_INCOMPLETE;
+        }
+      //}
+    }
+    return this.VOTE_STATUS_COMPLETE;
   }
 });
 
