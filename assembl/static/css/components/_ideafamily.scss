@@ -28,7 +28,6 @@ $idea_in_synthesis_comment_hover: $theme_activelink_color;
         > .ideafamily-idea {
           margin-left: $marginLinkbis/2;
           padding-left: $marginLinkbis/3; /* $marginLinkbis/2 = 15px was too far from the node icon, so instead, we use $marginLinkbis/3 = 10px */
-          padding-top: $marginLinkbis*0.4; /* $marginLinkbis/2 = 15px was too down compared to the node icon, so instead, we use $marginLinkbis*0.4 = 12px. Maybe 11px or 10px is even better */
         }
     }
     &.is-last-sibling {

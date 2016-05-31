@@ -4,8 +4,6 @@
 #onlinedot {
     @include display(flex);
     @include flex-direction(row);
-  
-    width: 290px;
 
     .dot-offline {
       display: block;

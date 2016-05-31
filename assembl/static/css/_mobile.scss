@@ -30,6 +30,12 @@ $panelHeaderTitleHeight:50px;
 
 }
 
+@media screen and (max-width: 840px) {
+    #onlinedot {
+        width:260px;
+    }
+}
+
 @media screen and (max-width: 760px) {
     
     body{
@@ -264,6 +270,7 @@ $panelHeaderTitleHeight:50px;
         top: 0;
         position: absolute;
         height: 100%;
+        overflow-y:scroll;
     }
     .loginbox header{
         border-radius:0;
