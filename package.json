@@ -64,7 +64,10 @@
   },
   "devDependencies": {
     "jscs": "~3.0.3",
-    "node-gyp": "~3"
+    "node-gyp": "~3",
+    "eslint": "~2.11.1",
+    "eslint-plugin-import": "~1.8.1",
+    "eslint-config-airbnb-base": "~3.0.1"
   },
   "browser": {
     "jit": "./assembl/static/js/bower/jit/jit/jit.js"
