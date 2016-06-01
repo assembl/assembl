@@ -165,7 +165,7 @@ def set_local_role(request):
     renderer='json')
 @view_config(
     context=InstanceContext, request_method='DELETE',
-    ctx_named_collection_instance="User.local_roles",
+    ctx_named_collection_instance="LocalRoleCollection.local_roles",
     renderer='json')
 def delete_local_role(request):
     ctx = request.context
