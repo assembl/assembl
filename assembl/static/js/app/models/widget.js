@@ -441,6 +441,22 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
     }
   },
 
+  getUrlForUser: function(targetIdeaId, page) {
+    //var uri = this.getId();
+    //var locale = Ctx.getLocale();
+    var currentUser = Ctx.getCurrentUser();
+    var activityState = this.get("activity_state");
+    //var base = this.baseUri + "?config=" + encodeURIComponent(uri) + "&locale=" + locale;
+    var base = this.getShareUrl();
+    if ( currentUser.isUnknownUser() ){
+      return Ctx.getLoginURL() + "?"; // "?" is added in order to handle the hacky adding of "&locale=..." in infobar.tmpl
+    }
+    if (activityState == "ended") {
+      base += "/results";
+    }
+    return base;
+  },
+
   // FIXME: Having view code in a model is probably not a good idea. How could we do better?
   onButtonClick: function(evt){
     console.log("TokenVotingWidgetModel::onButtonClick() evt: ", evt);
