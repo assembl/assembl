@@ -6,15 +6,15 @@
 
     <div id="step_get_data" ng-show="current_step == 1">
         <p>
-            Getting data from server...
+            {{'gettingDataFromServer' | translate}}
         </p>
     </div>
 
     <div id="step_create_widget" ng-show="current_step == 2">
-        <h1>Create a vote widget</h1>
+        <h1>{{'adminCreateFromIdeaTitle' | translate}}</h1>
 
         <p>
-            Which type of Vote widget would you like to create?
+            {{'adminCreateFromIdeaWidgetTypeQuestion' | translate}}
         </p>
         <div ng-repeat="available_widget_type in available_vote_widget_types">
             <label for="widget_create_without_settings_widget_type_{{ $index }}">
@@ -23,20 +23,20 @@
         </div>
 
         <p>
-            The Vote widget will be associated with the idea <strong>"{{ idea.shortTitle }}"</strong>.
+            {{'adminCreateFromIdeaDescriptionWithIdea' | translate}} <strong>"{{ idea.shortTitle }}"</strong>.
             <button ng-click="expert_mode = !expert_mode" ng-show="expert_mode == 0">Show details</button>
             <button ng-click="expert_mode = !expert_mode" ng-show="expert_mode == 1">Hide details</button>
         </p>
 
         <form id="widget_create_without_settings" method="POST">
             <div ng-show="expert_mode == 1">
-                <label for="widget_create_without_settings_api_endpoint">widget creation endpoint:</label>
+                <label for="widget_create_without_settings_api_endpoint">{{'widgetCreationEndpoint' | translate}}</label>
                 <input type="text" id="widget_create_without_settings_api_endpoint" value="{{ widget_creation_endpoint }}" size="50" />
                 <br/>
-                <label for="widget_create_without_settings_type">widget type:</label>
+                <label for="widget_create_without_settings_type">{{'widgetType' | translate}}</label>
                 <input type="text" id="widget_create_without_settings_type" ng-model="widget_type" size="50" />
                 <br/>
-                <label for="widget_create_without_settings_idea">idea:</label>
+                <label for="widget_create_without_settings_idea">{{'associatedIdea' | translate}}</label>
                 <input type="text" id="widget_create_without_settings_idea" value="{{ idea['@id'] }}" size="50" />
                 <br/><br/>
             </div>
@@ -46,15 +46,15 @@
     </div>
 
     <div id="step_select_criteria" ng-show="current_step == 3">
-        <h1>Success</h1>
+        <h1>{{'adminCreateFromIdeaSuccessTitle' | translate}}</h1>
         <p>
-            The widget has been successfully created. Its URI is "<strong>{{ created_widget_uri }}</strong>" and its endpoint is "<strong>{{ created_widget_endpoint }}</strong>".
+            {{'adminCreateFromIdeaSuccessDetails' | translate}} "<strong>{{ created_widget_uri }}</strong>" {{'adminCreateFromIdeaSuccessDetails2' | translate}} "<strong>{{ created_widget_endpoint }}</strong>".
         </p>
         <p>
-            <a href="?admin=1#/admin/configure_instance?widget_uri={{ created_widget_uri }}&target={{ idea['@id'] }}">Configure it</a>
+            <a href="?admin=1&locale={{ current_lang }}#/admin/configure_instance?widget_uri={{ created_widget_uri }}&target={{ idea['@id'] }}">{{'configureIt' | translate}}</a>
         </p>
         <p>
-            The URL for users to vote is 
+            {{'adminConfigureInstanceCurrentUse' | translate}}
             <a href="?config={{ created_widget_uri }}&target={{ idea['@id'] }}" target="_blank">here</a>.
         </p>
     </div>

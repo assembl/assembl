@@ -49,6 +49,7 @@
     "adminConfigureInstanceSeeVoteResults": "See vote results",
     "adminConfigureInstanceSeeVoteResultsForThisTarget": "See vote results for this target",
     "adminConfigureInstanceSeeVoteResultsForAllTargets": "See vote results for all targets",
+    "gettingDataFromServer": "Getting data from server...",
     "gettingDataFromServerWidgetInstance": "Getting data from server about the widget instance",
     "adminConfigureInstanceSelectCriteria": "Select criteria",
     "adminConfigureInstanceLoadingCriteria": "Loading criteria...",
@@ -76,5 +77,16 @@
     "adminConfigureInstanceSetAppearanceCategoriesAssociatedToCriterion": "Token categories:",
     "adminConfigureInstanceSetAppearanceTokenCategory": "Catégorie",
     "adminConfigureInstanceSetAppearanceAddItem": "Add an item",
-    "adminConfigureInstanceSetAppearanceSave": "Save widget configuration"
+    "adminConfigureInstanceSetAppearanceSave": "Save widget configuration",
+    "configureIt": "Configure it",
+    "adminCreateFromIdeaTitle": "Create a vote widget",
+    "adminCreateFromIdeaWidgetTypeQuestion": "Which type of Vote widget would you like to create?",
+    "adminCreateFromIdeaDescriptionWithIdea": "You are about to create an instance of the Creativity widget, and to associate it with the idea",
+    "widgetCreationEndpoint": "widget creation endpoint:",
+    "widgetType": "widget type:",
+    "associatedIdea": "associated idea:",
+    "adminCreateFromIdeaSuccessTitle": "Success",
+    "adminCreateFromIdeaSuccessDetails": "The widget has been successfully created. Its URI is",
+    "adminCreateFromIdeaSuccessDetails2": "and its endpoint is",
+    "adminConfigureInstanceCurrentUse": "The URL for users to vote is"
 }

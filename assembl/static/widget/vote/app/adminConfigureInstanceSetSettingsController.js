@@ -485,7 +485,7 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
             };
 
             // update (create via POST or update via PUT) the token categories
-            if ( "token_categories" in $scope.widget.vote_specifications[el_index] ){
+            if ( el_index in $scope.widget.vote_specifications && "token_categories" in $scope.widget.vote_specifications[el_index] ){
               $scope.widget.vote_specifications[el_index].token_categories.forEach(function(category, category_index, category_ar) {
                 if (id_field in category) { // if it already exist in the backend, we update it using PUT
                   post_data = _.clone(category);

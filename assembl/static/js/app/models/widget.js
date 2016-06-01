@@ -186,7 +186,7 @@ var VotingWidgetModel = WidgetModel.extend({
 
   getConfigurationUrl: function(targetIdeaId) {
     var base = this.baseUri, uri = this.getId(), locale = Ctx.getLocale();
-    base = base + "?admin=1#/admin/configure_instance?widget_uri=" + uri;
+    base = base + "?admin=1&locale=" + locale + "#/admin/configure_instance?widget_uri=" + uri;
     if (targetIdeaId) {
       base += "&target=" + encodeURIComponent(targetIdeaId);
     }

@@ -49,6 +49,7 @@
     "adminConfigureInstanceSeeVoteResults": "Voir les résultats du vote",
     "adminConfigureInstanceSeeVoteResultsForThisTarget": "Voir les résultats du vote pour cette idée",
     "adminConfigureInstanceSeeVoteResultsForAllTargets": "Voir les résultats du vote pour toutes les idées",
+    "gettingDataFromServer": "Récupération des données depuis le serveur...",
     "gettingDataFromServerWidgetInstance": "Récupération des données depuis le serveur à propos de l'instance de widget",
     "adminConfigureInstanceSelectCriteria": "Sélectionnez les critères de vote",
     "adminConfigureInstanceLoadingCriteria": "Chargement des critères...",
@@ -76,5 +77,16 @@
     "adminConfigureInstanceSetAppearanceCategoriesAssociatedToCriterion": "Catégories de jetons :",
     "adminConfigureInstanceSetAppearanceTokenCategory": "Catégorie",
     "adminConfigureInstanceSetAppearanceAddItem": "Ajouter un item",
-    "adminConfigureInstanceSetAppearanceSave": "Sauvegarder la configuration du widget"
+    "adminConfigureInstanceSetAppearanceSave": "Sauvegarder la configuration du widget",
+    "configureIt": "Configurer le widget",
+    "adminCreateFromIdeaTitle": "Créer un widget de vote",
+    "adminCreateFromIdeaWidgetTypeQuestion": "Quel type de widget de vote souhaitez-vous créer ?",
+    "adminCreateFromIdeaDescriptionWithIdea": "Vous êtes sur le point de créer une instance du widget de créativité, et de l'associer à l'idée",
+    "widgetCreationEndpoint": "point d'API de création du widget :",
+    "widgetType": "type du widget :",
+    "associatedIdea": "idée associée :",
+    "adminCreateFromIdeaSuccessTitle": "Succès",
+    "adminCreateFromIdeaSuccessDetails": "Le widget a été créé avec succès. Son URI est",
+    "adminCreateFromIdeaSuccessDetails2": "et son point d'API est",
+    "adminConfigureInstanceCurrentUse": "L'URL pour que les utilisateurs puissent voter est"
 }
