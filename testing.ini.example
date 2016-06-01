@@ -34,7 +34,7 @@ debugtoolbar.intercept_exc = false
 
 # This database will be cleared! Be careful.
 # For postgres:
-sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test
+sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test?sslmode=disable
 # For virtuoso:
 #sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
 sqlalchemy.echo = True
@@ -254,7 +254,7 @@ transaction = transaction
 script_location = assembl/alembic
 # This database will be cleared! Be careful.
 # For postgres:
-sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test
+sqlalchemy.url = postgresql+psycopg2://assembl_test:assembl_test@localhost/assembl_test?sslmode=disable
 # For virtuoso:
 #sqlalchemy.url = virtuoso://assembl_test:assembl_test@VOSU
 transaction_per_migration = true
