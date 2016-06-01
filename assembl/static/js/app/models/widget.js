@@ -508,9 +508,15 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
       case this.IDEA_PANEL_ACCESS_CTX:
         switch (this.get("activity_state")) {
           case "active":
-            return "btn-primary";
+            if ( this.get("configured") ){
+              return "btn-primary";
+            }
+            return "btn-primary js_openTargetInModal";
           case "ended":
-            return "btn-secondary";
+            if ( this.get("configured") ){
+              return "btn-primary";
+            }
+            return "btn-secondary js_openTargetInModal";
         }
       break;
     }
