@@ -1489,6 +1489,16 @@ class UserTemplate(DiscussionBoundBase, User):
         while True:
             my_subscriptions = query.all()
             my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
+            by_class = {cl: [sub for sub in my_subscriptions if sub.__class__ == cl]
+                        for cl in my_subscriptions_classes}
+            for cl, subs in by_class.items():
+                if len(subs) > 1:
+                    subs.sort(key=lambda sub: sub.id)
+                    for sub in subs[1:]:
+                        sub.delete()
+                    changed = True
+                by_class[cl] = subs[0]
+            my_subscriptions = by_class.values()
             missing = set(needed_classes) - my_subscriptions_classes
             if not missing:
                 return my_subscriptions, changed
