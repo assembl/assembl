@@ -4,7 +4,7 @@ $lockPanelIconHeight:40px;
 $panelHeaderTitleHeight:50px;
 
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 375px) {
 
 // ********************* header *********************
 
@@ -202,7 +202,9 @@ $panelHeaderTitleHeight:50px;
     }
     
 // ********************* header *********************
-
+    .navbar .navbar-right ul .sub{
+        line-height:53px;
+    }
     .help{
         display:none;
     }
