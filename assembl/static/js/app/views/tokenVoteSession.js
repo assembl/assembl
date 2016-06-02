@@ -1020,9 +1020,9 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     var displayTooltip = function(num, total, category){
       //Simplify to give more of a human feel.
       return i18n.sprintf(
-        i18n.ngettext("%d token \"%s\" was voted on this idea, out of %d available",
-                      "%d tokens \"%s\" were voted on this idea, out of %d available", num),
-        num, category, total);
+        i18n.ngettext("%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens voted ",
+                      "%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens voted", num),
+        num, category, total, category);
     };
 
     var scale = d3.scale.linear()
