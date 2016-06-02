@@ -396,11 +396,18 @@ def tests():
 
 
 @task
-def bootstrap():
+def bootstrap(projectpath):
     """
     Creates the virtualenv and install the app from env URL
+    
+    takes the same arguments at env_dev, but projectpath is mandatory
     """
+    #env.projectname = "assembl"
+    assert projectpath, "projectpath is mandatory, and corresponds to the directory where assembl will be installed"
+    
+    execute(skeleton_env, projectpath)
     execute(clone_repository)
+    execute(env_dev, projectpath)
     execute(bootstrap_from_checkout)
 
 
@@ -682,13 +689,9 @@ def update_npm_requirements(force_reinstall=False):
         else:
             venvcmd('npm update')
 
-@task
-def install_builddeps():
-    """
-    Will install commonly needed build deps for pip django virtualenvs.
-    """
-    execute(install_basetools)
+def _install_builddeps():
     print(cyan('Installing compilers and required libraries'))
+    print "env.hosts" + repr(env.hosts)
     if env.mac:
         if not exists('/usr/local/bin/brew'):
             sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
@@ -738,6 +741,15 @@ def install_builddeps():
     execute(install_database)
     execute(update_python_package_builddeps)
 
+@task
+def install_builddeps():
+    """
+    Will install commonly needed build deps for pip django virtualenvs.
+    """
+    execute(skeleton_env, None)
+    execute(install_basetools)
+    execute(_install_builddeps)
+ 
 
 @task
 def update_python_package_builddeps():
@@ -1354,12 +1366,35 @@ def update_vendor_themes():
                 run('git pull --ff-only')
 
 # # Server scenarios
+def skeleton_env(projectpath, venvpath=None):
+    """
+    Minimal environement to allow git operations, apt-get and the like
+    Everything not depending on a git checkout
+    """
+    if len(env.hosts) == 0:
+        env.hosts = ['localhost']
+    env.projectpath = projectpath
+    env.gitrepo = getenv("GITREPO", "https://github.com/ImaginationForPeople/assembl.git")
+    env.gitbranch = getenv("GITBRANCH", "master")
+    
+    #Are we on localhost
+    if set(env.hosts) - set(['localhost']) == set():
+        #WARNING:  This code will run locally, NOT on the remote server,
+        # so it's only valid if we are connecting to localhost
+        env.mac = system().startswith('Darwin')
+    else:
+        env.mac = False
+
+    env.using_virtuoso = False
+
+
+# # Server scenarios
 def commonenv(projectpath, venvpath=None):
     """
     Base environment
     """
+    execute(skeleton_env, projectpath, venvpath)
     env.projectname = "assembl"
-    env.projectpath = projectpath
     assert env.ini_file, "Define env.ini_file before calling common_env"
     # Production env will be protected from accidental database restores
     env.is_production_env = False
@@ -1384,8 +1419,7 @@ def commonenv(projectpath, venvpath=None):
     env.vbranch = get_config().get('virtuoso', 'virtuoso_branch')
     
     env.dbdumps_dir = join(projectpath, '%s_dumps' % env.projectname)
-    env.gitrepo = getenv("GITREPO", "https://github.com/ImaginationForPeople/assembl.git")
-    env.gitbranch = getenv("GITBRANCH", "master")
+
 
     env.uses_memcache = True
     env.uses_uwsgi = False
@@ -1393,7 +1427,6 @@ def commonenv(projectpath, venvpath=None):
     env.uses_ngnix = False
     # Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
-    env.mac = False
     env.system_db_user = None
     env.using_virtuoso = None
 
@@ -1465,7 +1498,7 @@ def env_dev(projectpath=None):
     # env.user = "webapp"
     # env.home = "webapp"
     require('projectname', provided_by=('commonenv',))
-    env.mac = system().startswith('Darwin')
+
     env.uses_apache = False
     env.uses_ngnix = False
 
@@ -1486,7 +1519,6 @@ def env_testing(projectpath=None):
     env.wsginame = "dev.wsgi"
     env.urlhost = "localhost"
     require('projectname', provided_by=('commonenv',))
-    env.mac = False
     env.uses_apache = False
     env.uses_ngnix = False
 

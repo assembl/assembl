@@ -64,8 +64,8 @@ And then:
 .. code:: sh
 
     wget https://raw.github.com/ImaginationForPeople/assembl/develop/fabfile.py
-    fab devenv:projectpath=~/assembl install_builddeps
-    fab devenv:projectpath=~/assembl bootstrap
+    fab install_builddeps
+    fab bootstrap:projectpath=~/assembl
     cd ~/assembl
 
 or
@@ -74,8 +74,8 @@ or
 
     git clone https://github.com/ImaginationForPeople/assembl.git
     cd assembl
-    fab devenv install_builddeps
-    fab devenv bootstrap_from_checkout
+    fab env_dev install_builddeps
+    fab env_dev bootstrap_from_checkout
 
 Note: If on Mac, command fab devenv install_builddeps outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
 
