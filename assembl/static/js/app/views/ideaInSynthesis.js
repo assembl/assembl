@@ -44,7 +44,7 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
 
   modelEvents: {
     //THIS WILL NOT ACTUALLY RUN UNTILL CODE IS REFACTORED SO MODEL IS THE REAL IDEA OR THE TOOMBSTONE.  See initialize - benoitg
-    'change:shortTitle change:longTitle change:segments':'render'
+    /*'change:shortTitle change:longTitle change:segments':'render'*/
   },
 
   regions: {
@@ -110,7 +110,7 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
               render_with_info);
 
           //console.log("About to connect idea change event to idea:", idea, "for synthesis: ", that.synthesis);
-          that.listenTo(idea, "change:shortTitle change:longTitle change:segments':'render'", function() {
+          that.listenTo(idea, "change:shortTitle change:longTitle change:segments", function() {
             /*if (Ctx.debugRender) {
             console.log("idesInSynthesis:change event on original_idea, firing render");
           }*/
