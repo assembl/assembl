@@ -1163,7 +1163,7 @@ var WidgetCollection = Base.Collection.extend({
 
   relevantWidgetsFor: function(idea, context) {
       return this.filter(function(widget) {
-        return widget.isRelevantFor(context, null);
+        return widget.isRelevantFor(context, idea);
       });
   },
 
