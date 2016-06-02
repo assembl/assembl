@@ -1500,6 +1500,8 @@ class UserTemplate(DiscussionBoundBase, User):
                         sub.delete()
                     changed = True
                 by_class[cl] = subs[0]
+            if changed:
+                self.db.commit()
             my_subscriptions = by_class.values()
             missing = set(needed_classes) - my_subscriptions_classes
             if not missing:
@@ -1521,6 +1523,7 @@ class UserTemplate(DiscussionBoundBase, User):
                         self.db.add(d)
             except ObjectNotUniqueError as e:
                 transaction.abort()
+                self.db.expunge_all()
                 # Sleep some time to avoid race condition
                 from time import sleep
                 from random import random
