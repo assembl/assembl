@@ -1,5 +1,6 @@
 import atexit
 from itertools import count
+from os.path import exists
 
 import zmq
 import zmq.devices
@@ -54,6 +55,9 @@ def get_pub_socket():
     # It would be better to get the "ready" signal back but this is
     # adequate for now.
     sleep(0.2)
+    if CHANGES_SOCKET.startswith('ipc://'):
+        assert exists(CHANGES_SOCKET[6:]), \
+            CHANGES_SOCKET + " could not be created"
     return socket
 
 
