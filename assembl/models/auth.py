@@ -1359,6 +1359,8 @@ def create_default_permissions(session, discussion):
     add_perm(P_ADMIN_DISC, [R_ADMINISTRATOR])
     add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
     add_perm(P_MODERATE, [R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_VOTE, [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
+    add_perm(P_DISC_STATS, [R_MODERATOR, R_ADMINISTRATOR])
 
 
 class AnonymousUser(DiscussionBoundBase, User):

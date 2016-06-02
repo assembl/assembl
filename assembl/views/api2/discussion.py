@@ -38,7 +38,7 @@ import requests
 from assembl.lib.config import get_config
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.auth import (
-    P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_SYSADMIN)
+    P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN)
 from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions
 from assembl.models import (Discussion, Permission)
@@ -248,7 +248,7 @@ def user_private_view_jsonld(request):
 
 @view_config(context=InstanceContext, name="time_series_analytics",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_ADMIN_DISC)
+             permission=P_DISC_STATS)
 def get_time_series_analytics(request):
     import isodate
     from datetime import datetime
@@ -449,7 +449,7 @@ def get_time_series_analytics(request):
 
 @view_config(context=InstanceContext, name="contribution_count",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_ADMIN_DISC)
+             permission=P_DISC_STATS)
 def get_contribution_count(request):
     import isodate
     from datetime import datetime
@@ -531,7 +531,7 @@ def get_contribution_count(request):
 
 @view_config(context=InstanceContext, name="visit_count",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_ADMIN_DISC)
+             permission=P_DISC_STATS)
 def get_visit_count(request):
     import isodate
     from datetime import datetime
@@ -596,7 +596,7 @@ def get_visit_count(request):
 
 @view_config(context=InstanceContext, name="visitors",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_ADMIN_DISC)
+             permission=P_DISC_STATS)
 def get_visitors(request):
     discussion = request.context._instance
     use_first = asbool(request.GET.get("first", False))
@@ -692,7 +692,7 @@ def get_analytics_alerts(discussion, user_id, types, all_users=False):
 
 @view_config(context=InstanceContext, name="activity_alerts",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_ADMIN_DISC)
+             permission=P_DISC_STATS)
 def get_activity_alerts(request):
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
@@ -705,7 +705,7 @@ def get_activity_alerts(request):
 
 @view_config(context=InstanceContext, name="interest_alerts",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_ADMIN_DISC)
+             permission=P_DISC_STATS)
 def get_interest_alerts(request):
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
@@ -718,7 +718,7 @@ def get_interest_alerts(request):
 
 @view_config(context=InstanceContext, name="clusters",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_ADMIN_DISC)
+             permission=P_DISC_STATS)
 def show_cluster(request):
     discussion = request.context._instance
     output = StringIO()
