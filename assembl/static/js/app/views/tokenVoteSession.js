@@ -1120,6 +1120,12 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
     this.voteResults.sort();
   },
 
+  _colorMeBaby: function(element){
+    if (!element.hasClass('purple')){
+      element.addClass('purple');
+    }
+  },
+
   onCategoryClickName: function(ev){
     // remove old arrow
     var arrowEl = $(this.ui.categoryName[this.sortOnCategoryNum]).find("i");
@@ -1138,6 +1144,18 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
     } else {
         arrowEl.addClass("icon-down");
     }
+    //Remove purple class from each category, save the column selected
+    var that = this;
+    _.each(this.sortAscending, function(value, index){
+      var el = $(that.ui.categoryName[index]);
+      if (index === category) {
+        that._colorMeBaby(el);
+      }
+      else {
+        el.removeClass('purple');
+      }
+    });
+
     // Sort the collection based on the category
     this.voteResults.sortSpecName = this.categoryIndex[this.sortOnCategoryNum];
     this.voteResults.sortAscending = this.sortAscending[category];
@@ -1156,8 +1174,11 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
 
   onRender: function() {
     if (this.firstRender) {
-        $(this.ui.categoryName[0]).find("i").addClass("icon-down");
-        this.firstRender = false;
+      var el = $(this.ui.categoryName[0]),
+          arrowEl = el.find("i");
+      arrowEl.addClass("icon-down");
+      this._colorMeBaby(el);
+      this.firstRender = false;
     }
   },
 
