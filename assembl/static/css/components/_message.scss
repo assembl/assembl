@@ -21,7 +21,7 @@ $previewNumLines: 4;
 
 .message, .announcementMessage {
   position: relative;
-  display: table;
+  display: block;
   width: 100%;
   box-sizing: border-box;
   padding: $messagePaddingLR $messagePaddingLR+3*$mesageSpacing 7px $messagePaddingLR; //To balance the spacing of the message family on the left
@@ -37,10 +37,7 @@ $previewNumLines: 4;
     background-color: $white;
     border: none;
     box-shadow: 0px 0px 2px 2px $theme_announcement_box_border_color;
-    padding: 15px $messagePaddingLR+3*$mesageSpacing 15px $messagePaddingLR+3*$mesageSpacing; //To align with messages left and right, despite not being part of a messageFamily
-    & >* {
-      max-width: $messageBodyMaxWidth;
-    }
+    padding: 15px $messagePaddingLR+3*$mesageSpacing 15px $messagePaddingLR+3*$mesageSpacing;
     .announcement_title {
       font-size: 18px;
       margin-bottom: $mesageSpacing;
@@ -212,7 +209,6 @@ $previewNumLines: 4;
     }
     .message-body {
       line-height: $mesageBodyLineHeight;
-      max-width: $messageBodyMaxWidth;
       min-width: $messageBodyMinWidth;
       margin-top: $mesageSpacing;
       font-size: $messageBodyFontSize;
@@ -245,6 +241,7 @@ $previewNumLines: 4;
     .message-body.body_format_text_plain {
       word-wrap: break-word;// avoid overlap content
       white-space: pre-line;
+      padding-bottom:15px;
       & > {
         white-space: normal;
       }
@@ -415,7 +412,7 @@ $previewNumLines: 4;
   }
 
   .messageAttachments {
-    max-width: $messageBodyMaxWidth;
+    text-align:center;
     position: relative;    //So attachements scale
     .attachment {
       margin: $mesageSpacing 0px $mesageSpacing 0px;
@@ -459,6 +456,7 @@ $previewNumLines: 4;
     }
     .message-subject {
       font-weight: 600;
+      padding-top:10px;
     }
 
     .readUnreadIndicatorClickZone:hover .readUnreadIndicator {
@@ -718,6 +716,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 }
 
 .message-family-arrow.arrow {
+  padding-bottom:15px;
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
 
@@ -781,6 +780,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
   background-color: $white;
+  padding-bottom: 15px;
 
   .message-conversation-block {
     box-sizing: border-box;
@@ -811,7 +811,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
     }
   }
   &.bx {
-    padding-top: 0;
+    padding-top: 15px;
     padding-right: 0;
   }
 
@@ -866,7 +866,7 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 .messagelist-children {
   //height: 0px;
   clear: left;
-  display: table;
+  display: block;
   position: relative;
   width: 100%;
   //@include transition(height 0.4s);

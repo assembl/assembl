@@ -102,7 +102,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
             this.model.set('minWidth',350);
             break;
         case 'messageList':
-            this.model.set('minWidth',450);
+            this.model.set('minWidth',500);
             break;
         case 'ideaPanel':
             this.model.set('minWidth',295);
