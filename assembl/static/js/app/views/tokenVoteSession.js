@@ -1320,8 +1320,8 @@ var TokenResultView = Marionette.LayoutView.extend({
       statement += "<div>";
       statement += i18n.sprintf(
         i18n.ngettext(
-          "%d participant voted between %s and %s. The number of tokens available for voting:",
-          "%d participants voted between %s and %s. The number of tokens available for voting:", that.numVoters),
+          "%d participant voted between %s and %s. The number of tokens available for voting per participant:",
+          "%d participants voted between %s and %s. The number of tokens available for voting per participant:", that.numVoters),
         that.numVoters, startDate, endDate);
 
       statement += "</div><div><ul>";
