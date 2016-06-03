@@ -3,4 +3,5 @@
 git-urls=git@github.com:bluenove/assembl-client-themes.git
 
 #Typically, you will need read-only deploy keys (ex: https://developer.github.com/guides/managing-deploy-keys/#deploy-keys) to painlessly deploy on actual servers.
+#To generate a key, ssh-keygen -t rsa -C "assembl_user@example.com"
 #The themes above can be found in assembl/static/css/themes/vendor/, you can edit them there, and then commit, etc.

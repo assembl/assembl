@@ -234,3 +234,78 @@ update with the following:
 .. code:: sh
 
     git submodule update --init
+    
+Setting up a production dedicated instance
+==========================================
+
+Start as a user with sudo access
+
+.. code:: sh
+    sudo apt-get install fabric git openssh-server
+    sudo apt-get install nginx uwsgi uwsgi-plugin-python
+    sudo adduser assembl_user #assembl_user is the name of a user dedicated to this instance
+    sudo usermod -G www-data assembl_user
+    sudo -u postgres createuser --createdb your_assembl_databaseuser
+    sudo -u assembl_user -i
+    
+    git clone https://github.com/ImaginationForPeople/assembl.git
+    cd assembl
+    #Secure and give nginx access
+    chmod -R o-rwx .
+    chmod -R g-rw .
+    chgrp www-data . assembl var var/run
+    chgrp -R www-data assembl/static
+    chmod -R g+rxs var/run
+    find assembl/static -type d -print|xargs chmod g+rxs
+
+    cp production.ini local.ini
+
+Change the values for:
+#If you use sentry to monitor:
+pipeline
+raven_url 
+dsn
+
+#Put your chosen database username and password in 
+db_database
+db_user
+db_pasasword
+sqlalchemy.url
+#CAREFULL: sqlalchemy.url needs to be edited TWICE in the file
+
+assembl.admin_email
+
+#Just type a random strings in these two
+session.secret
+security.email_token_salt
+
+#Make sure your ssl works, and set
+accept_secure_connection = true
+require_secure_connection = true
+#Otherwise, your are jeopardiszing passwords...
+
+#The following must all be unique to the instance.  If you only have one instance on the server, you can keep the defaults
+changes.socket
+changes.websocket.port 
+celery_tasks.imap.broker
+celery_tasks.notification_dispatch.broker
+celery_tasks.notify.broker
+celery_tasks.translate.broker
+port
+
+#Set it to the user you created above
+uid
+
+(exit to sudoer account)
+.. code:: sh
+    fab devenv bootstrap_from_checkout
+
+ensuite comme d'habitude
+(fichier nginx, domaine dans bluehost et dans ovh, courriels, raven, piwik...)
+
+#Copy the content of doc/sample_nginx_config/assembl.yourdomain.com into nginx config file, and modify
+sudo nano /etc/nginx/sites-available/assembl.yourdomain.com
+ln -s /etc/nginx/sites-available/assembl.yourdomain.com .
+
+
+    
