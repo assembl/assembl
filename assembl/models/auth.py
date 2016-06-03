@@ -1518,19 +1518,21 @@ class UserTemplate(DiscussionBoundBase, User):
                 return my_subscriptions, changed
             changed = True
             try:
-                with transaction.manager:
-                    defaults = [
-                        cls(
-                            discussion_id=discussion_id,
-                            user_id=my_id,
-                            creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                            status=(NotificationSubscriptionStatus.ACTIVE
-                                    if subscribed[cls.__mapper__.polymorphic_identity.name]
-                                    else NotificationSubscriptionStatus.INACTIVE_DFT))
-                        for cls in missing
-                    ]
-                    for d in defaults:
-                        self.db.add(d)
+                defaults = [
+                    cls(
+                        discussion_id=discussion_id,
+                        user_id=my_id,
+                        creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                        status=(NotificationSubscriptionStatus.ACTIVE
+                                if subscribed[cls.__mapper__.polymorphic_identity.name]
+                                else NotificationSubscriptionStatus.INACTIVE_DFT))
+                    for cls in missing
+                ]
+                for d in defaults:
+                    self.db.add(d)
+                self.db.flush()
+                self.db.commit()
+                my_subscriptions.extend(defaults)
             except ObjectNotUniqueError as e:
                 log.error("Notification Subscription just created but not unique")
                 transaction.abort()
@@ -1540,8 +1542,9 @@ class UserTemplate(DiscussionBoundBase, User):
                 sleep(random()/10.0)
             finally:
                 # Ensure next query will be fresh
-                self.db.expunge_all()
-    log.error("Could not create the template's subscriptions")
+                for s in my_subscriptions:
+                    self.db.expunge(s)
+        raise RuntimeError("Could not create the template's subscriptions")
 
 
 Index("user_template", "discussion_id", "role_id")
