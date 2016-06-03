@@ -1280,8 +1280,8 @@ class BaseOps(object):
             duplicate_handling, jsonld)
 
     def handle_duplication(
-                self, json, parse_def, aliases, context, permissions, user_id,
-                duplicate_handling, jsonld=None, form_data=None):
+                self, json={}, parse_def={}, aliases={}, context=None, permissions=[], user_id=None,
+                duplicate_handling=None, jsonld=None, form_data=None):
         from .history_mixin import TombstonableMixin, HistoryMixin
         if duplicate_handling is None:
             duplicate_handling = self.default_duplicate_handling

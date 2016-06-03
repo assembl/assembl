@@ -840,8 +840,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
-                # This is going to spell trouble: Sometimes we'll have creator,
-                # other times creator_id
+                from .post import WidgetPost
+                from .attachment import Document, PostAttachment
                 if isinstance(instance, Post):
                     assocs.append(
                         IdeaRelatedPostLink(
@@ -849,6 +849,23 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                             creator=instance.creator,
                             **self.filter_kwargs(
                                 IdeaRelatedPostLink, kwargs)))
+                if isinstance(instance, WidgetPost):
+                    insp_url = instance.metadata_json.get('inspiration_url', '')
+                    if insp_url.startswith("https://www.youtube.com/"):
+                        # TODO: detect all video/image inspirations.
+                        # Handle duplicates in docs!
+                        doc = Document(
+                            discussion=instance.discussion,
+                            uri_id=insp_url)
+                        doc = doc.handle_duplication()
+                        att = PostAttachment(
+                            discussion=instance.discussion,
+                            creator=instance.creator,
+                            document=doc,
+                            attachmentPurpose='EMBED_ATTACHMENT',
+                            post=instance)
+                        assocs.append(doc)
+                        assocs.append(att)
 
             def contains(self, parent_instance, instance):
                 return instance.db.query(
