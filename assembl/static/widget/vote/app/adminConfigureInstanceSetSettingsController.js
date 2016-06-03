@@ -160,10 +160,17 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
     };
     $scope.widget.settings.items[item_index].vote_specifications[criterion_index].token_categories.push(data);
     */
+    if ( !(criterion_index in $scope.widget.vote_specifications) || !("@id" in $scope.widget.vote_specifications[criterion_index]) ){
+      alert("The vote specification you are trying to add a token category to has not been saved yet. Please save before adding a token category.");
+      return;
+    }
     var data = {
       token_vote_specification: $scope.widget.vote_specifications[criterion_index]["@id"]
     };
     VoteWidgetService.addDefaultFields(data, $scope.mandatory_category_fields);
+    if ( !("token_categories" in $scope.widget.vote_specifications[criterion_index]) ){
+      $scope.widget.vote_specifications[criterion_index].token_categories = [];
+    }
     $scope.widget.vote_specifications[criterion_index].token_categories.push(data);
   };
 
@@ -461,6 +468,10 @@ voteApp.controller('adminConfigureInstanceSetSettingsCtl',
                   console.log("there is a '@id' field in data: ", data["@id"]);
                   //el["@id"] = data["@id"];
                   $scope.widget.settings.items[item_index].vote_specifications[el_index]["@id"] = data["@id"];
+                  if ( !_.findWhere($scope.widget.vote_specifications, {"@id": data["@id"]}) ){
+                    console.log("the vote spec which has just been created was not found in widget.vote_specifications, adding it");
+                    $scope.widget.vote_specifications.push($scope.widget.settings.items[item_index].vote_specifications[el_index]);
+                  }
                 }
                 else {
                   alert("error: There is no '@id' field in received data of the newly created vote specification");
