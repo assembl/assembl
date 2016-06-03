@@ -8,7 +8,7 @@
     "videoTopExplanationRelatedTermsTitle": "Related concepts (via Wikipedia)",
     "videoTopExplanationRelatedTermsDescription": "Choose a keyword in English and Wikipedia will suggest related concepts to stimulate your creativity. Click on keywords that you want to add to the search above.",
     "videoStep2Description": "Search for videos that would inspire you",
-    "videoDoesThisVideoInspireYou": "Does this video inspire you? Write your idea below",
+    "videoDoesThisVideoInspireYou": "Your message will be posted on the idea {{idea}}",
     "videoCommentTitlePlaceholder": "Title of your message",
     "videoCommentContentPlaceholder": "Briefly describe the video before explaining how it inspires you.",
     "videoSendIdeaButton": "Send",
