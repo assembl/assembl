@@ -155,10 +155,16 @@
   #playlist {
     background: #22242a;
     color: #b8babe;
-    font-size: 16px;
+    font-size: 14px;
     overflow-x: hidden;
     width: 640px;
     padding-bottom: 20px;
+  }
+
+  #playlist h3 {
+    font-weight:700;
+    font-size:16px;
+    padding-bottom:5px;
   }
 
   #playlist .card-comment {
