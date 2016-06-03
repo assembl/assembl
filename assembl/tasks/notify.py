@@ -1,11 +1,12 @@
 import sys
-import transaction
-from datetime import timedelta
+from time import sleep
+from datetime import datetime, timedelta
 from traceback import print_exc
+
+import transaction
 from celery import Celery
 
 from ..lib.sqla import mark_changed
-
 from . import (init_task_config, config_celery_app, raven_client)
 
 
@@ -25,6 +26,42 @@ notify_celery_app = Celery('celery_tasks.notify')
 notify_celery_app._preconf = {
     "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE
 }
+
+
+DOMAIN_LAST_SENT = {}
+
+# Minimum delay between emails sent to a domain.
+# For this to work, you need to have a SINGLE celery process for notification.
+DOMAIN_DELAYS = {
+    '': timedelta(0)
+}
+
+
+def email_was_sent(email):
+    domain = email.split("@")[-1].lower().split('.')
+    now = datetime.utcnow()
+    for i in range(len(domain)):
+        dom = '.'.join(domain[i:])
+        DOMAIN_LAST_SENT[dom] = now
+
+
+def wait_if_necessary(email):
+    domain = email.split("@")[-1].lower().split('.')
+    # Look for most specific delay rule
+    for i in range(len(domain)):
+        dom = '.'.join(domain[i:])
+        if dom in DOMAIN_DELAYS:
+            delay = DOMAIN_DELAYS[dom]
+            break
+    else:
+        return
+    # Not looking at superdomains. make delays as generic as needed
+    last_sent = DOMAIN_LAST_SENT.get(dom, None)
+    if last_sent is None:
+        return
+    elapsed = datetime.utcnow() - last_sent
+    if elapsed < delay:
+        sleep((delay - elapsed).total_seconds())
 
 
 def process_notification(notification):
@@ -52,6 +89,8 @@ def process_notification(notification):
         # sys.stderr.write(email_str)
         mail_host = config.get('mail.host')
         assert mail_host
+        recipient = notification.get_to_email_address()
+        wait_if_necessary(recipient)
 
         smtp_connection = smtplib.SMTP(
             mail_host
@@ -59,7 +98,7 @@ def process_notification(notification):
         smtp_connection.set_debuglevel(1)
         smtp_retval = smtp_connection.sendmail(
             notification.get_from_email_address(),
-            notification.get_to_email_address(),
+            recipient,
             email_str
         )
         if smtp_retval:
@@ -70,6 +109,7 @@ def process_notification(notification):
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
         smtp_connection.quit()
+        email_was_sent(recipient)
     except UnverifiedEmailException as e:
         sys.stderr.write("Not sending to unverified email: "+repr(e))
         notification.delivery_state = \
