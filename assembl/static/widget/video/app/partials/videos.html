@@ -10,7 +10,7 @@
             </p>
 
             <div class="card-comment" ng-show="canPost">
-                
+
                 <div ng-hide="message_is_sent">
                     <h3>
                         {{ 'videoTopExplanationStep3' | translate }}
@@ -32,7 +32,7 @@
                         <button type="submit" class="btn btn-primary" ng-click="sendIdea()">{{ 'videoSendIdeaButton' | translate }}</button>
                     </form>
                 </div>
-                
+
                 <div ng-show="message_is_sent">
                     <p>{{ 'messageSuccessfullyPosted' | translate }}</p>
                     <button type="submit" class="btn btn-primary mhl" ng-click="resumeInspiration()">{{ 'resumeInspirationButton' | translate }}</button>
@@ -46,9 +46,9 @@
 
     <div id="results">
         <p>
-            {{ 'videoTopExplanation' | translate }} <span style="color:#9013FE">{{idea.shortTitle}}</span>{{ 'videoTopExplanation2' | translate }} <span style="font-weight:700">{{discussion.topic}}</span>
+            {{ 'videoTopExplanation' | translate }} <span style="font-weight:700;color:#000000">{{idea.shortTitle}}</span>{{ 'videoTopExplanation2' | translate }} <span style="font-weight:700">{{discussion.topic}}</span>
         </p>
-        <h3 style="font-weight:700;font-size:16px;padding-bottom:5px;">
+        <h3 style="font-weight:700;font-size:18px;padding-bottom:0px;">
             {{ 'videoTopExplanationStep1' | translate }}
         </h3>
 
@@ -78,7 +78,7 @@
             </p>
 
             <form id="searchRelatedTerms" data-ng-submit="searchRelatedTerms()">
-                <input ng-model="related_terms_query" id="related_terms_query" 
+                <input ng-model="related_terms_query" id="related_terms_query"
                        placeholder="{{ 'videoSearchPlaceholderText' | translate }}"/>
                 <input type="submit" id="search-button" value="{{ 'videoSearch' | translate }}" class="btn btn-default"/>
             </form>
@@ -89,7 +89,7 @@
             <p ng-show="inspiration_keywords_related_no_results">{{ 'videoNoRelatedTermsSearchResults' | translate: {query: query} }}
         </fieldset>
         <!-- -->
-        <h3 style="font-weight:700;font-size:16px;padding-bottom:5px;">
+        <h3 style="font-weight:700;font-size:18px;padding-bottom:0px;">
             {{ 'videoTopExplanationStep2' | translate }}
         </h3>
 
