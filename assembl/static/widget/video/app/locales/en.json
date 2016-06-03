@@ -1,9 +1,9 @@
 {
     "videoTopExplanation": "You are currently in an inspiration session for idea ",
     "videoTopExplanation2":", which is in discussion ",
-    "videoTopExplanationStep1":"1. Choose search keywords",
-    "videoTopExplanationStep2":"2. Choose your video",
-    "videoTopExplanationStep3":"3. Share your inspiration",
+    "videoTopExplanationStep1":"1- Choose search keywords",
+    "videoTopExplanationStep2":"2- Choose your video",
+    "videoTopExplanationStep3":"3- Share your inspiration",
     "videoStep1Description": "Suggested keywords were found in the discussion.",
     "videoTopExplanationRelatedTermsTitle": "Related concepts (via Wikipedia)",
     "videoTopExplanationRelatedTermsDescription": "Choose a keyword in English and Wikipedia will suggest related concepts to stimulate your creativity. Click on keywords that you want to add to the search above.",
