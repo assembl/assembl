@@ -219,6 +219,7 @@ from .notification import (
     NotificationSubscriptionStatus,
     Notification,
     NotificationCreationOrigin,
+    NotificationDeliveryStateType,
     NotificationOnPost,
     NotificationOnPostCreated,
 )
