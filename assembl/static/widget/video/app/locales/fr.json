@@ -1,7 +1,11 @@
 {
-    "videoTopExplanation": "Utilisez la barre de recherche ci-dessous pour trouver des vidéos qui vous inspirent à propos de l'idée \"{{ idea }}\", dans la discussion \"{{ discussion }}\". Vous pouvez par exemple utiliser certains de ces mots-clés issus de la discussion :",
+    "videoTopExplanation": "Vous êtes en session d'inspiration sur l'idée",
+    "videoTopExplanation2":", dans la discussion",
+    "videoTopExplanationStep1":"1. Choisissez vos mots-clés de recherche",
+    "videoTopExplanationStep2":"2. Choisissez votre vidéo",
+    "videoTopExplanationStep3":"3. Partagez votre inspiration",
     "videoTopExplanationSecondRowKeywords": "Voici également quelques mots-clés qui pourraient s'approcher de ces sujets :",
-    "videoDoesThisVideoInspireYou": "Cette vidéo vous inspire ? Écrivez votre idée ci-dessous",
+    "videoDoesThisVideoInspireYou": "Votre message sera visible sur l'idée {{idea}}",
     "videoCommentTitlePlaceholder": "titre",
     "videoCommentContentPlaceholder": "description",
     "videoSendIdeaButton": "Envoyer",

@@ -1,4 +1,4 @@
-<div id="JukeTube" ng-init="init()">
+<div id="JukeTube" ng-init="init()" style="padding:20px;">
     <div id="player">
         <div id="placeholder"></div>
 
@@ -12,8 +12,11 @@
             <div class="card-comment" ng-show="canPost">
                 
                 <div ng-hide="message_is_sent">
+                    <h3 style="font-weight:700;font-size:16px;padding-bottom:5px;">
+                        {{ 'videoTopExplanationStep3' | translate }}
+                    </h3>
                     <p>
-                        {{ 'videoDoesThisVideoInspireYou' | translate }}
+                        {{ 'videoDoesThisVideoInspireYou' | translate: {idea: idea.shortTitle} }}
                     </p>
 
                     <form role="form">
@@ -43,9 +46,11 @@
 
     <div id="results">
         <p>
-            {{ 'videoTopExplanation' | translate: {idea: idea.shortTitle, discussion: discussion.topic} }}
+            {{ 'videoTopExplanation' | translate }} <span style="color:#9013FE">{{idea.shortTitle}}</span>{{ 'videoTopExplanation2' | translate }} <span style="font-weight:700">{{discussion.topic}}</span>
         </p>
-
+        <h3 style="font-weight:700;font-size:16px;padding-bottom:5px;">
+            {{ 'videoTopExplanationStep1' | translate }}
+        </h3>
         <p ng-show="!canPost && canNotPostReason == 'no_endpoint'">
             {{ 'canNotPostBecauseNoEndpoint' | translate }}
         </p>
@@ -55,7 +60,7 @@
                 ng-show="inspiration_keywords_used[keyword] != true">{{keyword}}
             </li>
         </ul>
-
+        
         <form id="search" data-ng-submit="search()">
             <input ng-model="query" id="query" class="select2-offscreen" type="hidden" value=""
                    placeholder="{{ 'videoSearchPlaceholderText' | translate }}"/>
@@ -81,7 +86,9 @@
             <p ng-show="inspiration_keywords_related_no_results">{{ 'videoNoRelatedTermsSearchResults' | translate: {query: query} }}
         </fieldset>
         <!-- -->
-        
+        <h3 style="font-weight:700;font-size:16px;padding-bottom:5px;">
+            {{ 'videoTopExplanationStep2' | translate }}
+        </h3>
         <p ng-show="hasSearched && !results.length">{{ 'videoNoSearchResults' | translate: {query: query} }}</p>
 
         <div class="video" data-ng-repeat="video in results"
