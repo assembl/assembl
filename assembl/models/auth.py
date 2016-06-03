@@ -1535,7 +1535,7 @@ class UserTemplate(DiscussionBoundBase, User):
                 my_subscriptions.extend(defaults)
             except ObjectNotUniqueError as e:
                 log.error("Notification Subscription just created but not unique")
-                transaction.abort()
+                self.db.rollback()
                 # Sleep some time to avoid race condition
                 from time import sleep
                 from random import random
