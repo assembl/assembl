@@ -1116,6 +1116,7 @@ var InspirationWidgetModel = WidgetModel.extend({
       case this.MESSAGE_LIST_INSPIREME_CTX:
         return (activityState === "active");
       case this.DISCUSSION_MENU_CONFIGURE_CTX:
+      case this.IDEA_PANEL_CONFIGURE_CTX:
         // assume root idea
         return (linkType === "IdeaInspireMeWidgetLink");
       default:

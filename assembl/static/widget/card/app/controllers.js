@@ -201,7 +201,7 @@ appCards.controller('cardsCtl',
           $http({
             method: 'POST',
             url: url,
-            data: JSON.stringify((message),
+            data: JSON.stringify(message),
             headers: {'Content-Type': 'application/json'}
           }).success(function(data, status, headers, config) {
             console.log("Success: ", data, status, headers, config);
