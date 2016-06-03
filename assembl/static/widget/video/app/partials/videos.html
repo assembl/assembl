@@ -51,21 +51,24 @@
         <h3 style="font-weight:700;font-size:16px;padding-bottom:5px;">
             {{ 'videoTopExplanationStep1' | translate }}
         </h3>
+
+        <p>{{ 'videoStep1Description' | translate }}</p>
+
         <p ng-show="!canPost && canNotPostReason == 'no_endpoint'">
             {{ 'canNotPostBecauseNoEndpoint' | translate }}
         </p>
+
+        <form id="search" data-ng-submit="search()">
+            <input ng-model="query" id="query" class="select2-offscreen" type="hidden" value=""
+                   placeholder="{{ 'videoSearchPlaceholderText' | translate }}"/>
+            <input type="submit" id="search-button" value="{{ 'videoSearch' | translate }}" class="btn btn-default"/>
+        </form>
 
         <ul class="keywords">
             <li class="keyword" ng-repeat="keyword in inspiration_keywords" ng-click="keywordClick($event)"
                 ng-show="inspiration_keywords_used[keyword] != true">{{keyword}}
             </li>
         </ul>
-        
-        <form id="search" data-ng-submit="search()">
-            <input ng-model="query" id="query" class="select2-offscreen" type="hidden" value=""
-                   placeholder="{{ 'videoSearchPlaceholderText' | translate }}"/>
-            <input type="submit" id="search-button" value="{{ 'videoSearch' | translate }}" class="btn btn-default"/>
-        </form>
 
         <!-- -->
         <fieldset>
@@ -89,6 +92,8 @@
         <h3 style="font-weight:700;font-size:16px;padding-bottom:5px;">
             {{ 'videoTopExplanationStep2' | translate }}
         </h3>
+
+        <p ng-show="results.length">{{ 'videoStep2Description' | translate }}</p>
         <p ng-show="hasSearched && !results.length">{{ 'videoNoSearchResults' | translate: {query: query} }}</p>
 
         <div class="video" data-ng-repeat="video in results"
