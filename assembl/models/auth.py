@@ -1470,8 +1470,8 @@ class UserTemplate(DiscussionBoundBase, User):
             NotificationCreationOrigin)
         # self.id may not be defined
         self.db.flush()
-        needed_classes = \
-            self.get_applicable_notification_subscriptions_classes()
+        needed_classes = set(
+            self.get_applicable_notification_subscriptions_classes())
         # We need to materialize missing NotificationSubscriptions,
         # But have duplication issues, probably due to calls on multiple
         # threads. So iterate until it works.
@@ -1488,13 +1488,20 @@ class UserTemplate(DiscussionBoundBase, User):
             "FOLLOW_SYNTHESES")
         for role in default_config.split('\n'):
             subscribed[role.strip()] = True
-        while True:
+        for attempt in range(10):
             my_subscriptions = query.all()
+            assert my_subscriptions or (attempt == 0),\
+                "On attempt %d to create subscriptions, some should exist,"\
+                " if only from other process that caused failure." % (attempt)
             my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
-            by_class = {cl: [sub for sub in my_subscriptions if sub.__class__ == cl]
+            by_class = {cl: [sub for sub in my_subscriptions
+                             if sub.__class__ == cl]
                         for cl in my_subscriptions_classes}
+            # We should have at most one subscription of a class, but we've had more.
+            # Delete excess subscriptions
             for cl, subs in by_class.items():
                 if len(subs) > 1:
+                    log.error("There were many subscriptions of class %s" % (cl))
                     subs.sort(key=lambda sub: sub.id)
                     for sub in subs[1:]:
                         sub.delete()
@@ -1503,7 +1510,10 @@ class UserTemplate(DiscussionBoundBase, User):
             if changed:
                 self.db.commit()
             my_subscriptions = by_class.values()
-            missing = set(needed_classes) - my_subscriptions_classes
+            missing = needed_classes - my_subscriptions_classes
+            if my_subscriptions_classes - needed_classes:
+                log.error("Unknown subscription class: " + repr(
+                    my_subscriptions_classes - needed_classes))
             if not missing:
                 return my_subscriptions, changed
             changed = True
@@ -1522,12 +1532,16 @@ class UserTemplate(DiscussionBoundBase, User):
                     for d in defaults:
                         self.db.add(d)
             except ObjectNotUniqueError as e:
+                log.error("Notification Subscription just created but not unique")
                 transaction.abort()
-                self.db.expunge_all()
                 # Sleep some time to avoid race condition
                 from time import sleep
                 from random import random
                 sleep(random()/10.0)
+            finally:
+                # Ensure next query will be fresh
+                self.db.expunge_all()
+    log.error("Could not create the template's subscriptions")
 
 
 Index("user_template", "discussion_id", "role_id")
