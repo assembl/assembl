@@ -652,6 +652,7 @@ def user_confirm_email(request):
         account.verified = True
         user.verified = True
         # do not use inferred discussion for auto_subscribe
+        user.last_login = datetime.utcnow()
         if discussion and maybe_auto_subscribe(user, discussion):
             message = localizer.translate(_(
                 "Your email address %s has been confirmed, "

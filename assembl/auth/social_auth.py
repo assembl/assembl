@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from pyramid.events import subscriber, BeforeRender
 from pyramid.security import (
@@ -127,6 +128,7 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
     request = backend.strategy.request
     discussion = discussion_from_request(request)
     if discussion:
+        user.last_login = datetime.utcnow()
         maybe_auto_subscribe(user, discussion)
         return {"discussion": discussion}
 
