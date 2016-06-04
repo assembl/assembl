@@ -25,7 +25,7 @@ CELERYBEAT_SCHEDULE = {
 }
 
 
-class NotifiyCeleryApp(CeleryWithConfig):
+class NotifyCeleryApp(CeleryWithConfig):
     def on_configure_with_settings(self, settings):
         # setup SETTINGS_SMTP_DELAY
         for name, val in settings.iteritems():
@@ -39,7 +39,7 @@ class NotifiyCeleryApp(CeleryWithConfig):
         log.info("SMTP_DOMAIN_DELAYS: " + repr(SMTP_DOMAIN_DELAYS))
 
 
-notify_celery_app = NotifiyCeleryApp('celery_tasks.notify')
+notify_celery_app = NotifyCeleryApp('celery_tasks.notify')
 notify_celery_app._preconf = {
     "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE
 }
