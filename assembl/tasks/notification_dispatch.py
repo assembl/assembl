@@ -1,12 +1,11 @@
-from celery import Celery
 from zope import interface
 
-from . import init_task_config, config_celery_app
+from . import config_celery_app, CeleryWithConfig
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.sqla import get_model_watcher
 
 # broker specified
-notif_dispatch_celery_app = Celery('celery_tasks.notification_dispatch')
+notif_dispatch_celery_app = CeleryWithConfig('celery_tasks.notification_dispatch')
 
 
 class ModelEventWatcherCeleryReceiver(object):
@@ -21,7 +20,6 @@ class ModelEventWatcherCeleryReceiver(object):
         return cls.singleton
 
     def __init__(self):
-        init_task_config(notif_dispatch_celery_app)
         self.mw = get_model_watcher()
         assert self.mw
 

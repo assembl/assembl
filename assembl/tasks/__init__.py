@@ -1,9 +1,12 @@
+from __future__ import absolute_import
+
 from os.path import join, dirname, realpath, exists
 import ConfigParser
 
 from pyramid.paster import get_appsettings
 from pyramid.path import DottedNameResolver
 from kombu import Exchange, Queue
+from celery import Celery
 
 from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
@@ -11,7 +14,7 @@ from ..lib.config import set_config
 from zope.component import getGlobalSiteManager
 from ..lib.model_watcher import configure_model_watcher
 
-_inited = False
+_settings = None
 
 resolver = DottedNameResolver(__package__)
 raven_client = None
@@ -34,6 +37,7 @@ def configure(registry, task_name):
     config_celery_app(translation_celery_app, settings)
     from .imap import imap_celery_app
     config_celery_app(imap_celery_app, settings)
+
 
 _celery_queues = None
 _celery_routes = None
@@ -81,18 +85,31 @@ def config_celery_app(celery_app, settings=None):
         config['BROKER_URL'] = settings['%s.broker' % (celery_app.main,)]
         celery_app.config_from_object(config, force=True)
     else:
+        print "**** config_celery_app w/o broker. should not happen anymore"
         celery_app.config_from_object(config)
 
 
-def init_task_config(celery_app):
-    global _inited
-    if _inited:
-        return
+class CeleryWithConfig(Celery):
+    "A Celery task that can receive settings"
+    def on_configure_with_settings(self, settings):
+        pass
+
+    def on_configure(self):
+        global _settings
+        if _settings is None:
+            init_from_celery(self)
+        self.on_configure_with_settings(_settings)
+
+
+def init_from_celery(celery_app):
+    # A task is called through celery, so it may not have basic
+    # configuration setup. Go through that setup the first time.
+    global _settings
     rootdir = dirname(dirname(dirname(realpath(__file__))))
     settings_file = join(rootdir, 'local.ini')
     if not exists(settings_file):
         settings_file = join(rootdir, 'development.ini')
-    settings = get_appsettings(settings_file, 'assembl')
+    _settings = settings = get_appsettings(settings_file, 'assembl')
     config = ConfigParser.SafeConfigParser()
     config.read(settings_file)
     try:
@@ -113,30 +130,16 @@ def init_task_config(celery_app):
     set_config(settings)
     configure_engine(settings, False)
     configure(registry, celery_app.main)
-    from threaded_model_watcher import ThreadDispatcher
+    from .threaded_model_watcher import ThreadDispatcher
     threaded_watcher_class_name = settings.get(
         '%s.threadedmodelwatcher' % (celery_app.main,),
         "assembl.lib.model_watcher.ModelEventWatcherPrinter")
     ThreadDispatcher.mw_class = resolver.resolve(threaded_watcher_class_name)
-    _inited = True
-
-
-def first_init():
-    from .imap import imap_celery_app
-    from .notification_dispatch import notif_dispatch_celery_app
-    from .notify import notify_celery_app
-    from .translate import translation_celery_app
-    config_celery_app(imap_celery_app)
-    config_celery_app(notify_celery_app)
-    config_celery_app(notif_dispatch_celery_app)
-    config_celery_app(translation_celery_app)
-
-
-# This allows us to use celery CLI monitoring
-first_init()
 
 
 def includeme(config):
+    global _settings
+    _settings = config.registry.settings
     config.include('.threaded_model_watcher')
     configure(config.registry, 'assembl')
     config.include('.imap')

@@ -1,14 +1,11 @@
-from celery import Celery
-
-from . import init_task_config, config_celery_app
+from . import config_celery_app, CeleryWithConfig
 
 # broker specified
-imap_celery_app = Celery('celery_tasks.imap')
+imap_celery_app = CeleryWithConfig('celery_tasks.imap')
 
 
 @imap_celery_app.task(ignore_result=True)
 def import_mails(mbox_id, only_new=True):
-    init_task_config(imap_celery_app)
     from ..models import IMAPMailbox
     # in case of previous issues
     IMAPMailbox.default_db.rollback()

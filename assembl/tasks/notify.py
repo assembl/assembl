@@ -2,12 +2,15 @@ import sys
 from time import sleep
 from datetime import datetime, timedelta
 from traceback import print_exc
+import logging
 
 import transaction
-from celery import Celery
 
 from ..lib.sqla import mark_changed
-from . import (init_task_config, config_celery_app, raven_client)
+from . import (config_celery_app, raven_client, CeleryWithConfig)
+
+
+log = logging.getLogger('assembl')
 
 
 CELERYBEAT_SCHEDULE = {
@@ -21,8 +24,8 @@ CELERYBEAT_SCHEDULE = {
     },
 }
 
-# broker specified
-notify_celery_app = Celery('celery_tasks.notify')
+
+notify_celery_app = CeleryWithConfig('celery_tasks.notify')
 notify_celery_app._preconf = {
     "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE
 }
@@ -143,7 +146,6 @@ def process_notification(notification):
 def notify(id):
     """ Can be triggered by
     http://localhost:6543/data/Discussion/6/all_users/2/notifications/12/process_now """
-    init_task_config(notify_celery_app)
     from ..models.notification import Notification, waiting_get
     sys.stderr.write("notify called with "+str(id))
     with transaction.manager:
@@ -155,7 +157,6 @@ def notify(id):
 @notify_celery_app.task()
 def process_pending_notifications():
     """ Can be triggered by http://localhost:6543/data/Notification/process_now """
-    init_task_config(notify_celery_app)
     from ..models.notification import (
         Notification, NotificationDeliveryStateType)
     sys.stderr.write("process_pending_notifications called")

@@ -1,14 +1,12 @@
 from collections import defaultdict
 from abc import abstractmethod
 
-from celery import Celery
-
-from . import init_task_config, config_celery_app
+from . import config_celery_app, CeleryWithConfig
 from ..lib.utils import waiting_get
 from ..lib.raven_client import capture_exception
 
 # broker specified
-translation_celery_app = Celery('celery_tasks.translate')
+translation_celery_app = CeleryWithConfig('celery_tasks.translate')
 
 _services = {}
 
@@ -141,7 +139,6 @@ def translate_content(
 
 @translation_celery_app.task(ignore_result=True)
 def translate_content_task(content_id):
-    init_task_config(translation_celery_app)
     from ..models import Content
     content = waiting_get(Content, content_id, True)
     translate_content(content)
