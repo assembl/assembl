@@ -25,25 +25,46 @@ CELERYBEAT_SCHEDULE = {
 }
 
 
-notify_celery_app = CeleryWithConfig('celery_tasks.notify')
+class NotifiyCeleryApp(CeleryWithConfig):
+    def on_configure_with_settings(self, settings):
+        # setup SETTINGS_SMTP_DELAY
+        for name, val in settings.iteritems():
+            if name.startswith(SETTINGS_SMTP_DELAY):
+                try:
+                    val = timedelta(seconds=float(val))
+                except ValueError:
+                    print "Not a valid value for %s: %s" % (name, val)
+                    continue
+                SMTP_DOMAIN_DELAYS[name[len(SETTINGS_SMTP_DELAY):]] = val
+        log.info("SMTP_DOMAIN_DELAYS: " + repr(SMTP_DOMAIN_DELAYS))
+
+
+notify_celery_app = NotifiyCeleryApp('celery_tasks.notify')
 notify_celery_app._preconf = {
     "CELERYBEAT_SCHEDULE": CELERYBEAT_SCHEDULE
 }
 
 
+# When was a mail last sent by notifications to a given domain?
+# Propagates to superdomains.
 DOMAIN_LAST_SENT = {}
 
 # Minimum delay between emails sent to a domain.
 # For this to work, you need to have a SINGLE celery process for notification.
-DOMAIN_DELAYS = {
+SMTP_DOMAIN_DELAYS = {
     '': timedelta(0)
 }
+
+# INI file values with this prefix will be used to populate SMTP_DOMAIN_DELAYS.
+# Anything after the last dot is a domain name (including empty).
+# Use seconds (float) as values.
+SETTINGS_SMTP_DELAY = "celery_tasks.notify.smtp_delay."
 
 
 def email_was_sent(email):
     domain = email.split("@")[-1].lower().split('.')
     now = datetime.utcnow()
-    for i in range(len(domain)):
+    for i in range(len(domain) + 1):
         dom = '.'.join(domain[i:])
         DOMAIN_LAST_SENT[dom] = now
 
@@ -51,10 +72,10 @@ def email_was_sent(email):
 def wait_if_necessary(email):
     domain = email.split("@")[-1].lower().split('.')
     # Look for most specific delay rule
-    for i in range(len(domain)):
+    for i in range(len(domain) + 1):
         dom = '.'.join(domain[i:])
-        if dom in DOMAIN_DELAYS:
-            delay = DOMAIN_DELAYS[dom]
+        if dom in SMTP_DOMAIN_DELAYS:
+            delay = SMTP_DOMAIN_DELAYS[dom]
             break
     else:
         return
