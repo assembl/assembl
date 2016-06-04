@@ -20,7 +20,39 @@ def main():
                          % sys.argv[0])
         sys.exit(1)
     config_uri = sys.argv.pop(1)
-    config = ConfigParser()
+    # The defaults allow to set sensible values and not edit all the local.ini
+    # files. Err towards conservative production values.
+    # If something SHOULD be defined, assert its presence later on.
+    # TODO: Subclass ConfigParser to give a warning whenever a value
+    # is taken from the defaults.
+    config = ConfigParser(defaults={
+        # Define either the first or all others.
+        'celery_tasks.broker': '',
+        'celery_tasks.imap.broker': '',
+        'celery_tasks.notification_dispatch.broker': '',
+        'celery_tasks.notify.broker': '',
+        'celery_tasks.translate.broker': '',
+        # num_workers: These are production values
+        'celery_tasks.imap.num_workers': '1',
+        'celery_tasks.notification_dispatch.num_workers': '1',
+        'celery_tasks.notify.num_workers': '2',
+        'celery_tasks.translate.num_workers': '2',
+        # Sensible defaults
+        'autostart_virtuoso': 'false',
+        'autostart_celery_imap': 'false',
+        'autostart_celery_notification_dispatch': 'true',
+        'autostart_celery_notify': 'true',
+        'autostart_celery_notify_beat': 'true',
+        'autostart_celery_translate': 'false',
+        'autostart_source_reader': 'true',
+        'autostart_changes_router': 'true',
+        'autostart_pserve': 'false',
+        'autostart_nodesass': 'false',
+        'autostart_gulp': 'false',
+        'autostart_uwsgi': 'false',
+        'autostart_metrics_server': 'false',
+        'autostart_edgesense_server': 'false',
+    })
     config.read(config_uri)
     using_virtuoso = 'virtuoso' in config.get('app:assembl', 'sqlalchemy.url')
 
@@ -45,13 +77,33 @@ def main():
         has_edgesense_server = False
         edgesense_venv = '/tmp'  # innocuous
         edgesense_code_dir = ''
+    default_celery_broker = config.get(
+        SECTION, 'celery_tasks.broker')
+    imap_celery_broker = config.get(
+        SECTION, 'celery_tasks.imap.broker') or default_celery_broker
+    notif_dispatch_celery_broker = config.get(
+        SECTION, 'celery_tasks.notification_dispatch.broker'
+        ) or default_celery_broker
+    notify_celery_broker = config.get(
+        SECTION, 'celery_tasks.notify.broker') or default_celery_broker
+    translate_celery_broker = config.get(
+        SECTION, 'celery_tasks.translate.broker') or default_celery_broker
+    assert all((imap_celery_broker, notif_dispatch_celery_broker,
+                notify_celery_broker, translate_celery_broker)
+               ), "Define the celery broker"
     vars = {
-        'IMAP_CELERY_BROKER': config.get(
-            SECTION, 'celery_tasks.imap.broker'),
-        'NOTIF_DISPATCH_CELERY_BROKER': config.get(
-            SECTION, 'celery_tasks.notification_dispatch.broker'),
-        'NOTIFY_CELERY_BROKER': config.get(
-            SECTION, 'celery_tasks.notify.broker'),
+        'IMAP_CELERY_BROKER': imap_celery_broker,
+        'NOTIF_DISPATCH_CELERY_BROKER': notif_dispatch_celery_broker,
+        'NOTIFY_CELERY_BROKER': notify_celery_broker,
+        'TRANSLATE_CELERY_BROKER': translate_celery_broker,
+        'IMAP_CELERY_NUM_WORKERS': config.get(
+            SECTION, 'celery_tasks.imap.num_workers'),
+        'NOTIF_DISPATCH_CELERY_NUM_WORKERS': config.get(
+            SECTION, 'celery_tasks.notification_dispatch.num_workers'),
+        'NOTIFY_CELERY_NUM_WORKERS': config.get(
+            SECTION, 'celery_tasks.notify.num_workers'),
+        'TRANSLATE_CELERY_NUM_WORKERS': config.get(
+            SECTION, 'celery_tasks.translate.num_workers'),
         'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_uri,
         'autostart_virtuoso': using_virtuoso and config.get('supervisor', 'autostart_virtuoso'),
@@ -64,7 +116,7 @@ def main():
         'autostart_celery_notify_beat': config.get(
             'supervisor', 'autostart_celery_notify_beat'),
         'autostart_celery_translate': config.get(
-            'supervisor', 'autostart_celery_translate') or 'false',
+            'supervisor', 'autostart_celery_translate'),
         'autostart_source_reader': config.get(
             'supervisor', 'autostart_source_reader'),
         'autostart_changes_router': config.get(
