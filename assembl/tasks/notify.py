@@ -82,21 +82,21 @@ def process_notification(notification):
     if notification.delivery_state not in \
             NotificationDeliveryStateType.getRetryableDeliveryStates():
         sys.stderr.write(
-            "Refusing to process notification "
-            + str(notification.id)
-            + " because it's delivery state is: "
-            + str(notification.delivery_state))
+            "Refusing to process notification %d because its delivery state is: %s" % (
+                notification.id, notification.delivery_state))
         return
     try:
         email_str = notification.render_to_email()
         # sys.stderr.write(email_str)
         mail_host = config.get('mail.host')
+        mail_port = int(config.get('mail.port') or 25)
         assert mail_host
         recipient = notification.get_to_email_address()
         wait_if_necessary(recipient)
 
         smtp_connection = smtplib.SMTP(
-            mail_host
+            mail_host,
+            mail_port,
         )
         smtp_connection.set_debuglevel(1)
         smtp_retval = smtp_connection.sendmail(
