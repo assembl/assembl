@@ -47,7 +47,7 @@ killasgroup = true
 
 [program:source_reader]
 directory = %(here)s
-command = python assembl/tasks/source_reader.py %(CONFIG_FILE)s
+command = python -m assembl.tasks.source_reader %(CONFIG_FILE)s
 autostart = %(autostart_source_reader)s
 autorestart = true
 startsecs = 2
