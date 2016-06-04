@@ -1615,7 +1615,7 @@ def env_bluenove_discussions():
 @task
 def env_bluenove_assembl2():
     """
-    [ENVIRONMENT] Production on http://agora.bluenove.com/
+    [ENVIRONMENT] Production on http://assembl2.bluenove.com/
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
@@ -1626,6 +1626,27 @@ def env_bluenove_assembl2():
     env.user = "www-data"
     env.home = "www-data"
     execute(commonenv, normpath("/home/www/assembl2_bluenove_com/"))
+    require('projectname', provided_by=('commonenv',))
+
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = getenv("GITBRANCH", "master")
+
+@task
+def env_bluenove_agora2():
+    """
+    [ENVIRONMENT] Production on http://agora2.bluenove.com/
+    Common environment for Bluenove european public debates 
+    """
+    env.ini_file = 'local.ini'
+    env.hosts = ['agora2.bluenove.com']
+    env.is_production_env = True
+    env.wsginame = "prod.wsgi"
+    env.urlhost = "agora2.bluenove.com"
+    env.user = "assembl_agora2"
+    env.home = "assembl_agora2"
+    execute(commonenv, normpath("/home/assembl_agora2/assembl/"))
     require('projectname', provided_by=('commonenv',))
 
     env.uses_apache = False

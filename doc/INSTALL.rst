@@ -257,7 +257,7 @@ Start as a user with sudo access
     chgrp -R www-data assembl/static
     chmod -R g+rxs var/run
     find assembl/static -type d -print|xargs chmod g+rxs
-
+    find assembl/static -type f -print|xargs chmod g+r
     cp production.ini local.ini
 
 Change the values for:
@@ -299,13 +299,22 @@ uid
 (exit to sudoer account)
 .. code:: sh
     fab devenv bootstrap_from_checkout
+    assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
+
+#Copy the content of doc/sample_nginx_config/assembl.yourdomain.com into nginx config file, and modify
+.. code:: sh
+    sudo nano /etc/nginx/sites-available/assembl.yourdomain.com
+    ln -s /etc/nginx/sites-available/assembl.yourdomain.com .
+
+#Copy the content of doc/sample_systemd_script/assembl.service into /etc/systemd/system/assembl.service, and modify
+.. code:: sh
+    systemctl enable assembl
+    service assembl restart
 
 ensuite comme d'habitude
 (fichier nginx, domaine dans bluehost et dans ovh, courriels, raven, piwik...)
 
-#Copy the content of doc/sample_nginx_config/assembl.yourdomain.com into nginx config file, and modify
-sudo nano /etc/nginx/sites-available/assembl.yourdomain.com
-ln -s /etc/nginx/sites-available/assembl.yourdomain.com .
+
 
 
     
