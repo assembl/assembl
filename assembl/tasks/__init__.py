@@ -91,7 +91,10 @@ def config_celery_app(celery_app, settings=None):
 
 class CeleryWithConfig(Celery):
     "A Celery task that can receive settings"
+
     def on_configure_with_settings(self, settings):
+        # Note that this can be called twice:
+        # make sure it is idempotent
         pass
 
     def on_configure(self):
