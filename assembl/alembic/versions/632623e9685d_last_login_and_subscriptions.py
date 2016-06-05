@@ -134,10 +134,12 @@ def upgrade(pyramid_env):
 
     with transaction.manager:
         # There should not be remaining user_actions for loginless users.
-        assert db.query(m.NotificationSubscription.creation_origin
+        creation_origins = db.query(m.NotificationSubscription.creation_origin
             ).join(m.User, m.User.id==m.NotificationSubscription.user_id
             ).filter(m.User.last_login == None, m.User.type != 'user_template'
-            ).distinct().all()==[(m.NotificationCreationOrigin.DISCUSSION_DEFAULT,)]
+            ).distinct().all()
+        assert creation_origins == [] or creation_origins == [
+            (m.NotificationCreationOrigin.DISCUSSION_DEFAULT,)]
 
         # Alas, erase history of notifications sent to those hapless users.
         q7 = db.query(m.Notification.id
