@@ -62,8 +62,9 @@ def main(global_config, **settings):
     config.set_session_factory(session_factory)
     if not settings.get('nosecurity', False):
         # import after session to delay loading of BaseOps
-        from auth.util import authentication_callback
-        auth_policy = SessionAuthenticationPolicy(
+        from auth.util import (
+            authentication_callback, UpgradingSessionAuthenticationPolicy)
+        auth_policy = UpgradingSessionAuthenticationPolicy(
             callback=authentication_callback)
         config.set_authentication_policy(auth_policy)
         config.set_authorization_policy(ACLAuthorizationPolicy())

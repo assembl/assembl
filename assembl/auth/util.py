@@ -8,6 +8,7 @@ from pyramid.security import (
     authenticated_userid, Everyone, Authenticated)
 from pyramid.httpexceptions import HTTPNotFound
 from pyisemail import is_email
+from pyramid.authentication import SessionAuthenticationPolicy
 
 from assembl.lib.locale import _
 from ..lib.sqla import get_session_maker
@@ -127,6 +128,21 @@ def get_current_user_id():
     # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
     assert r
     return authenticated_userid(r)
+
+
+class UpgradingSessionAuthenticationPolicy(SessionAuthenticationPolicy):
+
+    def remember(self, request, user_id, **kwargs):
+        if getattr(request.session, 'elevate_privilege'):
+            request.session.elevate_privilege(True)
+        return super(UpgradingSessionAuthenticationPolicy, self).remember(
+            request, user_id, **kwargs)
+
+    def forget(self, request):
+        if getattr(request.session, 'elevate_privilege'):
+            request.session.elevate_privilege(False)
+        return super(UpgradingSessionAuthenticationPolicy, self).forget(
+            request)
 
 
 def authentication_callback(user_id, request):

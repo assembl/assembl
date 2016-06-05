@@ -9,7 +9,7 @@ anykeystore==0.2
 # argparse==1.2.2
 Babel==2.3.4
 backports.ssl-match-hostname==3.5.0.1
-Beaker==1.8.0
+-e git+https://github.com/ImaginationForPeople/Beaker.git@assembl#egg=Beaker
 beautifulsoup4==4.4.1
 billiard==3.3.0.23
 boto==2.40.0
@@ -91,7 +91,7 @@ pylibmc==1.5.1
 pyOpenSSL==16.0.0
 pyparsing==2.1.4
 pyramid-autodoc==1.0.0
-pyramid-beaker==0.8
+-e git+https://github.com/ImaginationForPeople/pyramid_beaker.git@assembl#egg=pyramid_beaker
 pyramid-debugtoolbar-ajax==0.0.4
 pyramid-debugtoolbar==3.0.1
 pyramid-dogpile-cache==0.0.4
