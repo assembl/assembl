@@ -124,10 +124,10 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     retval = [x for x in retval if x is not None]
     for r in retval:
         if r.get('widget_links', None) is not None:
-            for l in universal_widget_links:
-                r['widget_links'].append(l)
-            for l in by_idea_widget_links[r['@id']]:
-                r['widget_links'].append(l)
+            links = r['widget_links'][:]
+            links.extend(universal_widget_links)
+            links.extend(by_idea_widget_links[r['@id']])
+            r['active_widget_links'] = links
     return retval
 
 

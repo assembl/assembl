@@ -73,7 +73,11 @@ var WidgetModel = Base.Model.extend({
       return this.isRelevantForLink(null, context, null);
     }
     var that = this, id=this.getId(),
-        widgetLinks = idea.get("widget_links", []);
+        widgetLinks = idea.get("active_widget_links") || [],
+        postEndpoints = idea.get("widget_add_post_endpoint") || {};
+    if (postEndpoints[id] !== undefined) {
+        return true;
+    }
     widgetLinks = _.filter(widgetLinks, function(link) {
       return link.widget == id &&
              that.isRelevantForLink(link["@type"], context, idea);
