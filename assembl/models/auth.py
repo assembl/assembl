@@ -1508,7 +1508,7 @@ class UserTemplate(DiscussionBoundBase, User):
                     changed = True
                 by_class[cl] = subs[0]
             if changed:
-                self.db.commit()
+                self.db.flush()
             my_subscriptions = by_class.values()
             missing = needed_classes - my_subscriptions_classes
             if my_subscriptions_classes - needed_classes:
@@ -1531,7 +1531,6 @@ class UserTemplate(DiscussionBoundBase, User):
                 for d in defaults:
                     self.db.add(d)
                 self.db.flush()
-                self.db.commit()
                 my_subscriptions.extend(defaults)
             except ObjectNotUniqueError as e:
                 log.error("Notification Subscription just created but not unique")
