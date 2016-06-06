@@ -2,6 +2,7 @@ from pyramid.paster import get_appsettings
 
 from .lib.sqla import (
     configure_engine, initialize_session_maker)
+from .lib import signals
 from .lib.config import set_config
 from .tests.utils import log
 from .tests.pytest_fixtures import *
@@ -27,6 +28,7 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     global engine
+    signals.listen()
     log.setLevel(config.getoption('logging_level'))
     app_settings_file = config.getoption('test_settings_file')
     app_settings = get_appsettings(app_settings_file, 'assembl')
