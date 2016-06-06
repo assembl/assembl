@@ -1,6 +1,8 @@
 server {
     listen    80;
-    #listen    443 ssl;
+    #listen   [::]:80;
+    #listen   443 ssl;
+    #listen   [::]:443 ssl;
 
     # This is the server name, assuming you're running multiple servers
     server_name assembl.yourdomain.com;
