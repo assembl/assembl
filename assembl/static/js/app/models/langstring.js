@@ -97,6 +97,14 @@ var LangStringEntry = Base.Model.extend({
   isMachineTranslation: function() {
     return this.get("@language").indexOf("-x-mtfrom-") > 0;
   },
+  original: function() {
+    // shortcut for original
+    if (this.collection !== undefined && this.collection.langstring !== undefined) {
+        return this.collection.langstring.original();
+    }
+    // WHY do we get here?
+    return this;
+  },
   langstring: function() {
     return this.collection.langstring;
   },
@@ -275,7 +283,7 @@ var LangString = Base.Model.extend({
     var entry = this.bestOf(this.get("entries").models, langPrefs, filter_errors),
         error_code = entry.get("error_code");
     if (error_code && entry !== undefined) {
-      entry = entry.langstring().original();
+      entry = entry.original();
     }
     return {
       entry: entry,

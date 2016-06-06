@@ -152,8 +152,8 @@
   </div>
   <div class="centerSection">
     <div class="message-abstract js_messageTitle">
-      <span class="message-subject"><%= subject.langstring().original().value() %></span>
-      <span class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.langstring().original().localeForService() %>"><%= body.langstring().original().value() %></span>
+      <span class="message-subject"><%= subject.original().value() %></span>
+      <span class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>" lang="<%= body.original().localeForService() %>"><%= body.original().value() %></span>
       <div class="messageAttachments js_regionMessageAttachments hidden"></div>
       <div class="js_regionMessageModerationOptions hidden"></div>
     </div>
