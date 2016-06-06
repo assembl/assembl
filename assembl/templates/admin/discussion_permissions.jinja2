@@ -136,6 +136,9 @@ Please <a href="{confirm_url}">click here</a> to set your password, after which 
 <p>If you did not ask to join please disregard this email.</p>
 <p>Best regards,<br />The Assembl Team</p>
 {% endtrans %}</textarea>
+<p>
+<label>{% trans %}Re-send to people who did not log in yet (USE SPARINGLY){% endtrans %}:</label>
+<input type="checkbox" name="resend_notloggedin" id="resend_notloggedin"/></p>
 </div>
 </div>
 <p><input type="submit" name="submit_user_file" value="{% trans %}Save{% endtrans %}"></p>

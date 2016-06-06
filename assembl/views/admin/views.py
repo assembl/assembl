@@ -312,7 +312,8 @@ def discussion_permissions(request):
                         request.POST['email_subject'],
                         request.POST['text_email_message'],
                         request.POST['html_email_message'],
-                        request.POST['sender_name'])
+                        request.POST['sender_name'],
+                        request.POST.get('resend_notloggedin', False))
                 except Exception as e:
                     error = repr(e)
                     transaction.doom()

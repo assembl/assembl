@@ -397,6 +397,7 @@ def add_user(name, email, password, role, force=False, username=None,
             ur = db.query(UserRole).filter_by(user=user, role=role).first()
         if not ur:
             db.add(UserRole(user=user, role=role))
+    created_localrole = False
     if localrole:
         localrole = all_roles[localrole]
         lur = None
@@ -404,19 +405,21 @@ def add_user(name, email, password, role, force=False, username=None,
             lur = db.query(LocalUserRole).filter_by(
                 user=user, discussion=discussion, role=localrole).first()
         if not lur:
+            created_localrole = True
             db.add(LocalUserRole(
                 user=user, role=localrole, discussion=discussion))
     # Do this at login
     # if discussion:
     #     user.get_notification_subscriptions(discussion.id)
     db.flush()
-    return (user, created_user)
+    return (user, created_user, created_localrole)
 
 
 def add_multiple_users_csv(
         request, csv_file, discussion_id, with_role,
         send_password_change=False, message_subject=None,
-        text_message=None, html_message=None, sender_name=None):
+        text_message=None, html_message=None, sender_name=None,
+        resend_if_not_logged_in=False):
     r = reader(csv_file, skipinitialspace=True)
     localizer = request.localizer
     for i, l in enumerate(r):
@@ -437,10 +440,17 @@ def add_multiple_users_csv(
         if len(name) < 5:
             raise RuntimeError(localizer.translate(_(
                 "Name too short: <%s> at line %d")) % (name, i))
-        (user, is_new) = add_user(
+        (user, created_user, created_localrole) = add_user(
             name, email, None, None, True, localrole=with_role,
             discussion=discussion_id, change_old_password=False)
-        if is_new and send_password_change:
+        status_in_discussion = None
+        if send_password_change and not (created_user or created_localrole):
+            status_in_discussion = user.get_status_in_discussion(discussion_id)
+        if send_password_change and (
+                created_user or created_localrole or (
+                    resend_if_not_logged_in and (
+                        status_in_discussion is None or
+                        not status_in_discussion.first_visit))):
             from assembl.views.auth.views import send_change_password_email
             from assembl.models import Discussion
             discussion = Discussion.get(discussion_id)
