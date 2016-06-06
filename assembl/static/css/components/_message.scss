@@ -241,7 +241,7 @@ $previewNumLines: 4;
     .message-body.body_format_text_plain {
       word-wrap: break-word;// avoid overlap content
       white-space: pre-line;
-      padding-bottom:15px;
+      padding-bottom: 15px;
       & > {
         white-space: normal;
       }
@@ -456,7 +456,6 @@ $previewNumLines: 4;
     }
     .message-subject {
       font-weight: 600;
-      padding-top:10px;
     }
 
     .readUnreadIndicatorClickZone:hover .readUnreadIndicator {
@@ -606,7 +605,7 @@ $previewNumLines: 4;
 
     .dropdown {
       position: absolute;
-      right: 20px;
+      right: 0;
       top: 0;
       vertical-align: top;
       padding: 0;
@@ -716,7 +715,6 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
 }
 
 .message-family-arrow.arrow {
-  padding-bottom:15px;
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
 
@@ -780,7 +778,6 @@ body.js_annotatorUserCannotAddExtract > .textbubble {
   padding-left: $messageFamilyImageWidth/2;
   margin-left: $messageFamilyImageWidth/2;
   background-color: $white;
-  padding-bottom: 15px;
 
   .message-conversation-block {
     box-sizing: border-box;
