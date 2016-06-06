@@ -21,7 +21,10 @@ raven_client = None
 
 
 def configure(registry, task_name):
+    global _settings
     settings = registry.settings
+    if _settings is None:
+        _settings = settings
     if settings.get('%s_debug_signal' % (task_name,), False):
         from assembl.lib import signals
         signals.listen()
