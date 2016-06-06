@@ -820,9 +820,15 @@ var VoteResultCollection = Base.Collection.extend({
    */
   getStatistics: function(){
     //First, get the list of categories, which is found in every model (yes, poor design, I know...)
-    var categories = this.at(0).get('objectDescription').map(function(categoryModel){
-      return categoryModel.get('typename');
-    });
+    var categories = this.at(0);
+    if (categories){
+      categories = this.at(0).get('objectDescription').map(function(categoryModel){
+        return categoryModel.get('typename');
+      });
+    }
+    else {
+      categories = [];
+    }
 
     // Compute the number of tokens spent by category,
     // and for each category, the maximum percent of tokens
