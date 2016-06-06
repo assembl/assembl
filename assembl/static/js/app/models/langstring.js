@@ -274,7 +274,7 @@ var LangString = Base.Model.extend({
     }
     var entry = this.bestOf(this.get("entries").models, langPrefs, filter_errors),
         error_code = entry.get("error_code");
-    if (error_code) {
+    if (error_code && entry !== undefined) {
       entry = entry.langstring().original();
     }
     return {
