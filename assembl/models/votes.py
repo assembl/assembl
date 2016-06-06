@@ -247,7 +247,7 @@ class TokenVoteSpecification(AbstractVoteSpecification):
         for v in voting_results:
             sums[v.token_category_id] += v.vote_value
             nums[v.token_category_id] += 1
-        specs = {spec.id: spec.name.first_original().value for spec in self.token_categories}
+        specs = {spec.id: spec.typename for spec in self.token_categories}
         sums = {specs[id]: total for (id, total) in sums.iteritems()}
         nums = {specs[id]: total for (id, total) in nums.iteritems()}
         return {
