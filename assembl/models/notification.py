@@ -344,12 +344,15 @@ class NotificationSubscription(DiscussionBoundBase):
     def user_can(self, user_id, operation, permissions):
         # special case: If you can read the discussion, you can read
         # the template's notification.
-        try:
-            user = self.user
-        except DetachedInstanceError:
-            user = User.get(user_id)
+        if user_id == Everyone:
+            user = None
+        else:
+            try:
+                user = self.user
+            except DetachedInstanceError:
+                user = User.get(user_id)
         if (operation == CrudPermissions.READ
-                and isinstance(user, UserTemplate)):
+                and user and isinstance(user, UserTemplate)):
             return self.discussion.user_can(user_id, operation, permissions)
         return super(NotificationSubscription, self).user_can(
             user_id, operation, permissions)
