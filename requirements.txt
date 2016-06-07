@@ -133,7 +133,6 @@ smart-open==1.3.3
 snowballstemmer==1.2.1
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@conflicting_localhost#egg=sockjs_tornado
 SPARQLWrapper==1.7.6
-sphinx-bootstrap-theme==0.4.9
 sphinxcontrib-httpdomain==1.5.0
 Sphinx==1.4.3
 splinter==0.7.3
