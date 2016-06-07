@@ -1,3 +1,4 @@
+"""Natural language processing utilities"""
 from os.path import dirname, join, exists
 import pickle
 

@@ -522,11 +522,9 @@ class FacebookGenericSource(PostSource):
     @abstractmethod
     def fetch_content(self, lower_bound=None, upper_bound=None):
         """ The entry point of creating posts
-            :param lower_bound DateTime Read posts up to this
-                                        back in time
 
-            :param uppder_bound DateTime Read future posts up to
-                                         this time
+        :param DateTime lower_bound: Read posts up to this back in time
+        :param DateTime uppder_bound: Read future posts up to this time
         """
         self._setup_reading()
 

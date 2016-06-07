@@ -1,3 +1,7 @@
+"""package of semantic Web (RDF) modules.
+
+Currently deprecated, as it is based on Virtuoso
+and we gave up on that approach."""
 from os.path import join, dirname
 
 context_url = 'http://purl.org/catalyst/jsonld'

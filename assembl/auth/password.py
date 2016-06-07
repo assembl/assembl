@@ -1,3 +1,5 @@
+"""Utilities to encrypt hashes, tokens, etc."""
+
 from os import urandom
 from binascii import hexlify, unhexlify
 import hashlib

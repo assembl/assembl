@@ -121,10 +121,10 @@ class Document(DiscussionBoundBase):
 
     def update_fields(self, new_doc):
         """
-            :param new_doc - dict object of all of the document types
+        :param dict new_doc: dict object of all of the document types
             with keys:
-                set(['url', 'title', 'description', 'oembed', 'mime_type',
-                    'author_name', 'author_url', 'thumbnail', 'site_name'])
+            set(['url', 'title', 'description', 'oembed', 'mime_type',
+                'author_name', 'author_url', 'thumbnail', 'site_name'])
         """
         self.uri_id = new_doc.get('url')
         self.title = new_doc.get('title')

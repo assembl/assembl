@@ -1,3 +1,8 @@
+"""The classical API for Assembl.
+
+This is a RESTful API based on `cornice <https://cornice.readthedocs.io/en/latest/>`.
+It should remain somewhat stable, and allows optimization of complex queries.
+"""
 import os
 
 FIXTURE_DIR = os.path.join(

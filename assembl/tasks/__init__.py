@@ -1,3 +1,10 @@
+"""Background tasks for running Assembl.
+
+Tasks are kept running by `Supervisord <http://supervisord.org/>`
+Short-lived tasks are written as Celery tasks; long-running tasks are
+mostly ad hoc at this point: the :py:mod:`source_reader`
+and :py:mod:`changes_router`.
+"""
 from __future__ import absolute_import
 
 from os.path import join, dirname, realpath, exists

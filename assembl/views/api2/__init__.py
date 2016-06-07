@@ -1,4 +1,5 @@
 """RESTful API to assembl, with some magic.
+It is guaranteed *NOT* to be stable, as it mirrors the model by introspection.
 The basic URI to access any ressource is
 GET `/data/<Classname>/<instance db id>`
 The `local:` uri prefix is meant to resolve to `<http://servername/data/>`.

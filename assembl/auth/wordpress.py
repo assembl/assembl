@@ -1,6 +1,6 @@
 """
-Mail.ru OAuth2 backend, docs at:
-    http://psa.matiasaguirre.net/docs/backends/mailru.html
+`PythonSocialAuth <http://psa.matiasaguirre.net/>` backend for
+`WP OAuth Server <https://fr.wordpress.org/plugins/oauth2-provider/>`
 """
 from hashlib import md5
 

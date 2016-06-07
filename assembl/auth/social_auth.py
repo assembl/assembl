@@ -1,3 +1,5 @@
+"""The Assembl-specific configuration of `PythonSocialAuth <http://psa.matiasaguirre.net/>`
+"""
 import re
 from datetime import datetime
 

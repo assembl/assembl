@@ -1,3 +1,4 @@
+"""Sundry utility functions having to do with users or permissions"""
 from csv import reader
 from datetime import datetime
 from os import urandom

@@ -1,4 +1,6 @@
-""" Mostly from http://techspot.zzzeek.org/2011/01/14/the-enum-recipe/ """
+"""Enumerations that can be stored in the database.
+
+Mostly from http://techspot.zzzeek.org/2011/01/14/the-enum-recipe/ """
 from sqlalchemy.types import SchemaType, TypeDecorator, Enum
 from sqlalchemy import __version__
 import re

@@ -1,4 +1,17 @@
-""" Pyramid add start-up module. """
+"""Assembl is an application for Collective Intelligence.
+
+This is the startup module, which sets up the various components:
+
+1. A Pyramid_ WSGI app
+2. The SQLAlchemy_ models_
+3. Authentication with Beaker_ sessions
+
+.. _Pyramid: http://www.pylonsproject.org/
+.. _SQLAlchemy: http://www.sqlalchemy.org/
+.. _Beaker: http://beaker.readthedocs.io/en/latest/
+.. _models: py:module:: assembl.models
+
+"""
 
 from os import putenv
 from os.path import dirname, join
@@ -13,7 +26,8 @@ from pyramid.settings import asbool
 from zope.component import getGlobalSiteManager
 import sqltap.wsgi
 
-from .lib.sqla import configure_engine, session_maker_is_initialized
+from .lib.sqla import (
+    configure_engine, session_maker_is_initialized, using_virtuoso)
 from .lib.locale import locale_negotiator as my_locale_negotiator
 from .lib.config import set_config
 from .lib.database_functions import ensure_functions
@@ -48,9 +62,10 @@ def main(global_config, **settings):
     global locale_negotiator
     locale_negotiator = my_locale_negotiator
     config.set_locale_negotiator(my_locale_negotiator)
-    config.add_tween(
-        'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
-        under="pyramid_tm.tm_tween_factory")
+    if using_virtuoso():
+        config.add_tween(
+            'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
+            under="pyramid_tm.tm_tween_factory")
 
     config.include('.models')
     # Tasks first, because it includes ZCA registration (for now)

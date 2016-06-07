@@ -144,12 +144,13 @@ class ChainingContext(object):
 
 
 class BaseOps(object):
-    """Basic database operations are abstracted away in this class.
+    """Base class for SQLAlchemy models in Assembl.
 
-    The idea is to have the API as independent as practically possible from
-    both data storage- and web- specific stuff.
+    Many protocols are defined here.
 
     """
+
+
     # @declared_attr
     # def __tablename__(cls):
     #     """Return a table name made out of the model class name."""
@@ -206,6 +207,7 @@ class BaseOps(object):
         """Return a ColanderAlchemy schema mapper.
 
         Fields targeted by the validator can be specified with include/exclude.
+        Not used at this point.
 
         """
         if include == '__nopk__':
@@ -274,11 +276,13 @@ class BaseOps(object):
 
     @classmethod
     def polymorphic_identities(cls):
+        """Return the list of polymorphic identities defined in subclasses."""
         return [k for (k, v) in cls.__mapper__.polymorphic_map.iteritems()
                 if issubclass(v.class_, cls)]
 
     @classmethod
     def polymorphic_test(cls):
+        """Return a SQLA expression that tests for subclasses of this class"""
         return cls.__mapper__.polymorphic_on.in_(cls.polymorphic_identities())
 
     def update(self, **values):
@@ -288,6 +292,7 @@ class BaseOps(object):
                 setattr(self, name, value)
 
     def save(self, flush=False):
+        """Encapsulate db.add()."""
         if self.is_new_instance:
             _session_maker.add(self)
         if flush:
@@ -295,7 +300,7 @@ class BaseOps(object):
 
     @classmethod
     def inject_api(cls, name, as_object=False):
-        """Inject common methods in an API module."""
+        """Inject common methods in an API module. Unused."""
         class API(object):
             pass
         container = API() if as_object else sys.modules[name]
@@ -307,6 +312,7 @@ class BaseOps(object):
             return container
 
     def get_id_as_str(self):
+        """Return the primary key as a string."""
         id = getattr(self, 'id', None)
         if id is None:
             if 'id' not in self.__class__.__dict__:
@@ -316,10 +322,17 @@ class BaseOps(object):
         return str(id)
 
     def tombstone(self):
+        """Return a :py:class:`Tombstone` object.
+
+        This object will be sent on the websocket
+        and will express that this object has been deleted."""
         return Tombstone(self)
 
     def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
+        """Ask for this object to be sent on the changes websocket.
+
+        See :py:mod:`assembl.tasks.changes_router`."""
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
             # This should be the case in general, no need to add a transaction manager.
@@ -331,6 +344,9 @@ class BaseOps(object):
 
     @classmethod
     def external_typename(cls):
+        """What is the class name that will be sent on the API, as @type.
+
+        Usually the python class name directly."""
         return cls.__name__
 
     def __repr__(self):
@@ -339,7 +355,7 @@ class BaseOps(object):
 
     @classmethod
     def external_typename_with_inheritance(cls):
-        """ Returns the root ancestor class typename """
+        """Returns the :py:meth:`external_typename` of the root class below this one."""
         if cls.__mapper__.polymorphic_identity is not None:
             for nextclass in cls.mro():
                 if getattr(nextclass, '__mapper__', None) is None:
@@ -350,12 +366,21 @@ class BaseOps(object):
 
     @classmethod
     def uri_generic(cls, id, base_uri='local:'):
+        """Return the identity of this object as a URI in the `local:` namespace
+
+        Composed from the root type name and database Id.
+        The local: namespace actually corresponds to the server name,
+        and is intended to become the basis of a LOD architecture."""
         if id is None:
             return None
         return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
 
     @classmethod
     def iri_class(cls):
+        """Return an IRI pattern for instances of this class.
+
+        The :py:meth:`uri_generic` will follow this pattern.
+        Used for Virtuoso RDF-Relational mapping; disabled for now."""
         if getattr(cls, '_iri_class', 0) is 0:
             id_column = getattr(cls, 'id', None)
             if id_column is None:
@@ -371,15 +396,24 @@ class BaseOps(object):
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
+        """Return a list of SQLA expressions that will filter out
+        instances of this class
+
+        Mostly used to exclude archived versions; see :py:mod:`assembl.lib.history_mixin`
+        The exclusion pattern is used by the traversal API, and by the RDF mapping."""
         return None
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
-        # Note: If defined somewhere, override in subclasses to avoid inheritance.
+        """Returns a list of quad map patterns for RDF mapping,
+        beyond those defined by introspection.
+
+        Important: If defined somewhere, override in subclasses to avoid inheritance."""
         return []
 
     @classmethod
     def get_instance(cls, identifier, session=None):
+        """Get an instance of this class using a numeric ID or URI."""
         try:
             # temporary hack
             num = int(identifier)
@@ -392,6 +426,7 @@ class BaseOps(object):
 
     @classmethod
     def get_database_id(cls, uri):
+        """Parse a URI to extract the database ID"""
         if isinstance(uri, types.StringTypes):
             if not uri.startswith('local:') or '/' not in uri:
                 return
@@ -406,10 +441,14 @@ class BaseOps(object):
                     pass
 
     def uri(self, base_uri='local:'):
+        """The URI of this instance.
+
+        It may be a LOD URL if the namespace is resolved."""
         return self.uri_generic(self.get_id_as_str(), base_uri)
 
     @classmethod
     def get_subclasses(cls):
+        """Return the list of subclasses of this class"""
         global class_registry
         from inspect import isclass
         return (c for c in class_registry.itervalues()
@@ -417,6 +456,7 @@ class BaseOps(object):
 
     @classmethod
     def get_inheritance(cls):
+        """Return a dictionary of external class names to their parent classe's name."""
         name = cls.external_typename()
         inheritance = {}
         for subclass in cls.get_subclasses():
@@ -437,6 +477,7 @@ class BaseOps(object):
 
     @staticmethod
     def get_json_inheritance_for(*classnames):
+        """Return :py:meth:`get_inheritance` as a json string"""
         inheritance = {}
         classnames = set(classnames)
         for name in classnames:
@@ -445,6 +486,7 @@ class BaseOps(object):
         return dumps(inheritance)
 
     def change_class(self, newclass, json=None, **kwargs):
+        """Change the class of an instance, deleting and creating table rows as needed."""
         def table_list(cls):
             tables = []
             for cls in cls.mro():
@@ -488,6 +530,9 @@ class BaseOps(object):
 
     @classmethod
     def expand_view_def(cls, view_def):
+        """Return the full view_def specification for this class.
+
+        Follows the @extend links and the _default view."""
         local_view = None
         for cls in cls.mro():
             if cls.__name__ == 'Base':
@@ -527,6 +572,8 @@ class BaseOps(object):
     def generic_json(
             self, view_def_name='default', user_id=None,
             permissions=(P_READ, ), base_uri='local:'):
+        """Return a representation of this object as a JSON object,
+        according to the given view_def and access control."""
         user_id = user_id or Everyone
         if not self.user_can(user_id, CrudPermissions.READ, permissions):
             return None
@@ -846,6 +893,7 @@ class BaseOps(object):
             cls, json, user_id=None, context=None,
             aliases=None, jsonld=None, permissions=None,
             parse_def_name='default_reverse', duplicate_handling=None):
+        """Create an object from its JSON representation."""
         from ..auth.util import get_permissions
         aliases = aliases or {}
         parse_def = get_view_def(parse_def_name)
@@ -899,6 +947,7 @@ class BaseOps(object):
     def update_from_json(
                 self, json, user_id=None, context=None, jsonld=None,
                 parse_def_name='default_reverse'):
+        """Update (patch) an object from its JSON representation."""
         from ..auth.util import get_permissions
         parse_def = get_view_def(parse_def_name)
         context = context or self.dummy_context
@@ -1280,8 +1329,15 @@ class BaseOps(object):
             duplicate_handling, jsonld)
 
     def handle_duplication(
-                self, json={}, parse_def={}, aliases={}, context=None, permissions=[], user_id=None,
-                duplicate_handling=None, jsonld=None, form_data=None):
+                self, json={}, parse_def={}, aliases={}, context=None,
+                permissions=[], user_id=None, duplicate_handling=None,
+                jsonld=None, form_data=None):
+        """Look for duplicates of this object.
+
+        Some uniqueness is handled in the database, but it is difficult to do
+        across tables. Often we will use the classe's unique_query to find an
+        duplicate, and react appropriately here. Appropriateness depends on
+        the classe's `default_duplicate_handling`, which can be overridden."""
         from .history_mixin import TombstonableMixin, HistoryMixin
         if duplicate_handling is None:
             duplicate_handling = self.default_duplicate_handling
@@ -1358,25 +1414,30 @@ class BaseOps(object):
             return other
 
     def get_unique_from_db(self, expunge=True):
-        "Returns the object, or a unique object from the DB"
+        """Returns the object, or a unique object from the DB"""
         return self.find_duplicate(expunge, True) or self
 
     def assert_unique(self):
+        """Assert this object is unique"""
         duplicate = self.find_duplicate()
         if duplicate is not None:
             raise ObjectNotUniqueError("Duplicate of <%s> created" % (duplicate.uri()))
 
     @classmethod
     def extra_collections(cls):
+        """Returns a dictionary of (named) collections of objects related to an instance of this class
+
+        Many collections can be obtained by introspection on
+        SQLAlchemy relationships, but collections here go beyond this."""
         return {}
 
     def is_owner(self, user_id):
-        "The user owns this ressource, and has more permissions."
+        """The user owns this ressource, and has more permissions."""
         return False
 
     @classmethod
     def restrict_to_owners(cls, query, user_id):
-        "filter query according to object owners"
+        """filter query according to object owners"""
         return query
 
     """The permissions to create, read, update, delete an object of this class.
@@ -1385,6 +1446,8 @@ class BaseOps(object):
 
     @classmethod
     def user_can_cls(cls, user_id, operation, permissions):
+        """Whether the user, with the given permissions,
+        can perform the given Crud operation on instances of this class."""
         perm = cls.crud_permissions.can(operation, permissions)
         user_id = user_id or Everyone
         if perm == IF_OWNED and user_id == Everyone:
@@ -1392,6 +1455,8 @@ class BaseOps(object):
         return perm
 
     def user_can(self, user_id, operation, permissions):
+        """Whether the user, with the given permissions,
+        can perform the given Crud operation on this instance."""
         user_id = user_id or Everyone
         perm = self.crud_permissions.can(operation, permissions)
         if perm != IF_OWNED:
@@ -1402,7 +1467,7 @@ class BaseOps(object):
 
 
 class Timestamped(BaseOps):
-    """An automatically timestamped mixin."""
+    """An automatically timestamped mixin. Not used."""
     ins_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     mod_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     _stamps = ['ins_date', 'mod_date']

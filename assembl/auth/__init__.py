@@ -1,12 +1,17 @@
+"""Utility modules for permissions and authentication
+
+This module defines basic roles and permissions."""
+
 from pyramid.security import (
     Everyone, Authenticated, ALL_PERMISSIONS)
 
-# Roles
+
 R_PARTICIPANT = 'r:participant'
 R_CATCHER = 'r:catcher'
 R_MODERATOR = 'r:moderator'
 R_ADMINISTRATOR = 'r:administrator'
 R_SYSADMIN = 'r:sysadmin'
+
 
 SYSTEM_ROLES = set(
     (Everyone, Authenticated, R_PARTICIPANT, R_CATCHER,
@@ -44,7 +49,13 @@ ASSEMBL_PERMISSIONS = set((
 
 
 class CrudPermissions(object):
+    """A set of permissions required to Create, Read, Update or Delete
+    an instance of a given class
 
+    The :py:attr:`crud_permissions` class attribute of a model class
+    should hold an instance of this class.
+    Special permissions can be defined if you *own* this
+    instance, according to :py:meth:`assembl.lib.sqla.BaseOps.is_owned`"""
     __slots__ = ('create', 'read', 'update', 'delete',
                  'read_owned', 'update_owned', 'delete_owned')
 

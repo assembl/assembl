@@ -1,3 +1,5 @@
+"""Functions that we want to see defined in the database layer."""
+
 from __future__ import absolute_import
 
 from abc import abstractmethod

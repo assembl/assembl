@@ -12,7 +12,8 @@ class DeadlockError(DBAPIError, TransientError):
 
 
 def transient_deadlock_tween_factory(handler, registry):
-
+    """This defines a tween that will retry a request if it failed
+    thanks to a deadlock in the virtuoso database."""
     def transient_deadlock_tween(request):
         try:
             return handler(request)

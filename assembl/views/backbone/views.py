@@ -1,3 +1,4 @@
+"""The basic views that host the one-page app"""
 import json
 import os.path
 from collections import defaultdict

@@ -1,3 +1,5 @@
+"""views related to login, registration, etc."""
+
 import sys
 
 from pyramid.settings import aslist

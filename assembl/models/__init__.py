@@ -1,3 +1,12 @@
+"""
+The SQLAlchemy_ models of Assembl.
+
+The base class of all models is Base, derived from :py:class:`assembl.lib.sqla.BaseOps`.
+Here, we also define some other base-level classes, such as :py:class:`DiscussionBoundBase` and :py:class:`DiscussionBoundTombstone`.
+
+.. _SQLAlchemy: http://www.sqlalchemy.org/
+"""
+
 from abc import abstractmethod, ABCMeta
 
 from sqlalchemy import and_
@@ -12,10 +21,18 @@ from ..lib.history_mixin import TombstonableMixin, HistoryMixin
 
 
 class DeclarativeAbstractMeta(DeclarativeMeta, ABCMeta):
+    "Allows to declare abstract SQLAlchemy classes"
     pass
 
 
 class DiscussionBoundBase(Base):
+    """Base class for models that are bound to a specific discussion.
+
+    These models will deleted if the discussion is deleted.
+    They need to have a relationship to the discussion, but this relationship
+    need not be direct. Subclasses need to define :py:meth:`get_discussion_id`
+    and :py:meth:`get_discussion_conditions`.
+    """
     __metaclass__ = DeclarativeAbstractMeta
     __abstract__ = True
 
@@ -37,6 +54,7 @@ class DiscussionBoundBase(Base):
 
     @abstractclassmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        "Returns a list of SQLA expressions that constrain a query on this class to a given discussion."
         return (cls.discussion_id == discussion_id, )
 
     def unique_query(self):
@@ -51,6 +69,7 @@ class DiscussionBoundBase(Base):
 
 
 class DiscussionBoundTombstone(Tombstone):
+    "A :py:class:`assembl.lib.sqla.Tombstone` that is bound to a discussion"
     def __init__(self, ob, **kwargs):
         super(DiscussionBoundTombstone, self).__init__(ob, **kwargs)
         self.discussion_id = ob.get_discussion_id()
