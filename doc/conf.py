@@ -58,7 +58,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Assembl'
-copyright = u'2014, Imagination For People'
+copyright = u"2012-2016, Clouds Collective of skills inc., Bluenove Group inc., Imagination For People, Caravan Web Worker Cooperative inc., Technologies Coeus inc."
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

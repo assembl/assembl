@@ -1,5 +1,5 @@
 Copyright 2013-2014 Clouds Collective of skills inc.
-Copyright 2014-2015 Bluenove Group inc.
+Copyright 2014-2016 Bluenove Group inc.
 Copyright 2014-2015 Imagination for People
 Copyright 2012-2014 Caravan Web Worker Cooperative inc.
 Copyright 2012-2013 Technologies Coeus inc.
