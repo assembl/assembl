@@ -1,8 +1,9 @@
 pip==8.1.2
-setuptools==21.2.0
+setuptools==22.0.5
 alabaster==0.7.8
 alembic==0.8.6
-amqp==1.4.9
+# Until new kombu release
+amqp==1.4.9  # rq.filter: <2
 anyjson==0.3.3
 anykeystore==0.2
 # Do not specify argparse, jenkins chokes on system version.
@@ -23,11 +24,11 @@ colors.py==0.2.2
 cornice==1.2.1
 cov-core==1.15.0
 coverage==4.1
-cryptography==1.3.2
+cryptography==1.4
 DateTime==4.1.1
 # distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 docutils==0.12
-dogpile.cache==0.5.7
+dogpile.cache==0.6.1
 dogpile.core==0.4.1
 EasyProcess==0.2.2
 ecdsa==0.13
@@ -52,7 +53,7 @@ ipaddress==1.0.16
 ipykernel==4.3.1
 ipython-genutils==0.1.0
 ipython==4.2.0
-iso639==0.1.1
+iso639==0.1.1  # failure with 0.1.3
 isodate==0.5.4
 -e git+https://github.com/imaginationforpeople/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 Jinja2==2.8
@@ -65,7 +66,7 @@ Mako==1.0.4
 MarkupSafe==0.23
 meld3==1.0.2
 mock==2.0.0
-ndg_httpsclient==0.4.0
+ndg_httpsclient==0.4.1
 -e git+https://github.com/ekalinin/nodeenv.git@master#egg=nodeenv
 numpy==1.11.0
 #oauthlib==1.1.0
@@ -84,7 +85,7 @@ pycrypto==2.6.1
 Pygments==2.1.3
 pygraphviz==1.3.1
 pyIsEmail==v1.3.1
-dnspython==1.13.0   # must come after pyisemail?
+dnspython==1.14.0   # must come after pyisemail?
 PyJWT==1.4.0
 pylibmc==1.5.1
 -e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
@@ -104,16 +105,16 @@ pyramid==1.7
 PyStemmer==1.3.0
 pytest-cov==2.2.1
 pytest-localserver==0.3.5
-pytest-mock==1.0
+pytest-mock==1.1
 pytest-splinter==1.7.3
-pytest==2.9.1
+pytest==2.9.2
 python-dateutil==2.5.3
 python-openid==2.2.5
 -e git+https://github.com/imaginationforpeople/python-social-auth.git@assembl#egg=python_social_auth
 pytz==2016.4
 pyvirtualdisplay==0.2
 pyzmq==15.2.0
-raven==5.18.0
+raven==5.19.0
 rdflib-jsonld==0.4.0
 rdflib==4.2.1
 redis==2.10.5
@@ -133,7 +134,7 @@ snowballstemmer==1.2.1
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@conflicting_localhost#egg=sockjs_tornado
 SPARQLWrapper==1.7.6
 sphinx-bootstrap-theme==0.4.9
-sphinxcontrib-httpdomain==1.4.0
+sphinxcontrib-httpdomain==1.5.0
 Sphinx==1.4.1
 splinter==0.7.3
 SQLAlchemy==1.0.13
