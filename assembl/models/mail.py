@@ -31,7 +31,7 @@ from sqlalchemy import (
     UnicodeText,
     Boolean,
 )
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 
 from .langstrings import LangString
 from .generic import PostSource

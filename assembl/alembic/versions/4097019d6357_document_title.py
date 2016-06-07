@@ -17,7 +17,6 @@ from bs4 import UnicodeDammit
 
 from assembl.lib import config
 from assembl.lib.sqla import mark_changed
-from virtuoso.alchemy import CoerceUnicode
 
 
 def upgrade(pyramid_env):

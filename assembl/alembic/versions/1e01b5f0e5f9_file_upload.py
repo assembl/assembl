@@ -16,7 +16,6 @@ import sqlalchemy as sa
 import transaction
 
 from assembl.lib.sqla_types import URLString
-from assembl.lib.sqla_types import CoerceUnicode
 from assembl.lib import config
 from assembl.lib.sqla import using_virtuoso
 

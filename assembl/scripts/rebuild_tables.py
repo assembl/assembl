@@ -12,8 +12,6 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.schema import DropTable
 from sqlalchemy.sql.expression import select, alias
 
-from virtuoso.alchemy import AddForeignKey, DropForeignKey
-
 from assembl.lib.sqla import (
     configure_engine, get_metadata, get_session_maker, mark_changed)
 from assembl.lib.zmqlib import configure_zmq
@@ -54,6 +52,7 @@ def fk_as_str(fk):
 
 
 def rebuild_fkey(session, fk, delete_missing=False):
+    from virtuoso.alchemy import AddForeignKey, DropForeignKey
     if not delete_rows_with_missing_fkey(fk, delete_missing):
         print "There are missing keys, will not reset ", fk_as_str(fk)
         return
@@ -212,6 +211,7 @@ def ensure_inheritance_of(cls):
 
 
 def rebuild_table(table, delete_missing=False):
+    from virtuoso.alchemy import AddForeignKey, DropForeignKey
     print "rebuilding", table
     session = get_session_maker()()
     incoming = set(get_incoming_fks(table))

@@ -31,14 +31,12 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from virtuoso.vmapping import IriClass, PatternIriClass
-from virtuoso.alchemy import SparqlClause
 
 from ..lib.utils import get_global_base_url
 from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase, HistoryMixin
 from .discussion import Discussion
-from ..semantic.virtuoso_mapping import (
-    QuadMapPatternS, AssemblQuadStorageManager)
+from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_EDIT_IDEA,
     P_ADD_IDEA)

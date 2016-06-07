@@ -13,13 +13,14 @@ down_revision = '402d9945c62'
 from alembic import context, op
 import sqlalchemy as sa
 import transaction
-from virtuoso.textindex import TextIndex
 
 
 from assembl.lib import config
 
 
 def upgrade(pyramid_env):
+    from virtuoso.textindex import TextIndex
+
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
@@ -27,6 +28,8 @@ def upgrade(pyramid_env):
         ti.drop(db.bind)
 
 def downgrade(pyramid_env):
+    from virtuoso.textindex import TextIndex
+
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:

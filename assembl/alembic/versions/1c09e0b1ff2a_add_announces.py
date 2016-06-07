@@ -12,7 +12,6 @@ down_revision = '3738207829e0'
 
 from alembic import context, op
 import sqlalchemy as sa
-from virtuoso.alchemy import CoerceUnicode
 import transaction
 from datetime import datetime
 
@@ -62,7 +61,7 @@ def upgrade(pyramid_env):
                 nullable=False,
                 index=False,),
 
-            sa.Column('title', CoerceUnicode(1024), server_default=""),
+            sa.Column('title', sa.Unicode(1024), server_default=""),
             sa.Column('body', sa.UnicodeText),
             )
         op.create_table(

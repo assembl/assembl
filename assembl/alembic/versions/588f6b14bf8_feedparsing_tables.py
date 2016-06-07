@@ -13,7 +13,6 @@ down_revision = '435a9acff264'
 from alembic import context, op
 import sqlalchemy as sa
 import transaction
-from virtuoso.alchemy import CoerceUnicode
 
 
 from assembl.lib import config

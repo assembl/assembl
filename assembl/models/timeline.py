@@ -17,7 +17,7 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 from ..semantic.namespaces import TIME, DCTERMS, ASSEMBL
 from .discussion import Discussion
 

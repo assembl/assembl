@@ -14,7 +14,6 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 
-from virtuoso.alchemy import CoerceUnicode
 from assembl.lib import config
 
 
@@ -61,6 +60,6 @@ def downgrade(pyramid_env):
         op.drop_column('facebook_post', 'attachment_blob')
         op.add_column('facebook_post', sa.Column('post_type', sa.String(20)))
         op.add_column('facebook_post', sa.Column('link_name',
-                      CoerceUnicode(1024)))
+                      sa.Unicode(1024)))
         op.add_column('facebook_post', sa.Column('attachment',
                       sa.String(1024)))

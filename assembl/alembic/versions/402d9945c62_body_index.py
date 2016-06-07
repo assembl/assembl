@@ -14,11 +14,11 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 
-from virtuoso.textindex import TextIndex
 from assembl.lib import config
 
 
 def upgrade(pyramid_env):
+    from virtuoso.textindex import TextIndex
     # This looks like a bug in virtuoso, again.
     admin_engine = sa.create_engine('virtuoso://dba:dba@VOSU')
     #admin_session = sa.orm.sessionmaker(admin_engine)
@@ -33,6 +33,7 @@ def upgrade(pyramid_env):
 
 
 def downgrade(pyramid_env):
+    from virtuoso.textindex import TextIndex
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:

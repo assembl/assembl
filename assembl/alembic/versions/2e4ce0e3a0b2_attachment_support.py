@@ -12,7 +12,6 @@ down_revision = '1e1d2b26db86'
 
 from alembic import context, op
 import sqlalchemy as sa
-from virtuoso.alchemy import CoerceUnicode
 import transaction
 from datetime import datetime
 
@@ -24,7 +23,7 @@ def upgrade(pyramid_env):
         op.create_table(
             'document',
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column('uri_id', CoerceUnicode(1024), server_default="",
+            sa.Column('uri_id', sa.Unicode(1024), server_default="",
                       unique=False, index=True),
             sa.Column('creation_date',
                       sa.DateTime,
@@ -36,9 +35,9 @@ def upgrade(pyramid_env):
                   'discussion.id',
                    ondelete="CASCADE",
                    onupdate="CASCADE"), nullable=False, index=False,),
-            sa.Column('oembed_type', CoerceUnicode(1024), server_default=""),
-            sa.Column('mime_type', CoerceUnicode(1024), server_default=""),
-            sa.Column('title', CoerceUnicode(1024), server_default=""),
+            sa.Column('oembed_type', sa.Unicode(1024), server_default=""),
+            sa.Column('mime_type', sa.Unicode(1024), server_default=""),
+            sa.Column('title', sa.Unicode(1024), server_default=""),
             sa.Column('description', sa.UnicodeText),
             sa.Column('author_name', sa.UnicodeText),
             sa.Column('author_url', sa.UnicodeText),
@@ -76,10 +75,10 @@ def upgrade(pyramid_env):
                              onupdate="CASCADE"),
                 nullable=False,
                 index=False,),
-            sa.Column('title', CoerceUnicode(1024), server_default=""),
+            sa.Column('title', sa.Unicode(1024), server_default=""),
             sa.Column('description', sa.UnicodeText),
             sa.Column('attachmentPurpose', 
-                      CoerceUnicode(256), 
+                      sa.Unicode(256), 
                       server_default="",
                       index=True,),
             )

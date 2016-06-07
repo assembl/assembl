@@ -26,7 +26,7 @@ from sqlalchemy.orm import (
 from ..lib.sqla import CrudOperation
 from ..lib.decl_enums import DeclEnum
 from ..semantic.virtuoso_mapping import QuadMapPatternS
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 from .generic import Content, ContentSource
 from .auth import AgentProfile
 from ..semantic.namespaces import SIOC, ASSEMBL, QUADNAMES

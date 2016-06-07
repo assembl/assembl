@@ -11,7 +11,7 @@ from sqlalchemy.orm import (
 from sqlalchemy.orm.query import Query
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 import simplejson as json
 
 from . import Base, TombstonableMixin

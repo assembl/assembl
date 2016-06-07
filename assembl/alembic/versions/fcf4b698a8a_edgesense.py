@@ -11,7 +11,6 @@ revision = 'fcf4b698a8a'
 down_revision = '2e96ee310c2f'
 
 from alembic import context, op
-from virtuoso.alchemy import CoerceUnicode
 import sqlalchemy as sa
 import transaction
 

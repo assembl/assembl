@@ -13,7 +13,6 @@ down_revision = '49432c8ab71b'
 from alembic import context, op
 import sqlalchemy as sa
 import transaction
-from virtuoso.alchemy import CoerceUnicode
 
 
 from assembl.lib import config
@@ -22,7 +21,7 @@ from assembl.lib import config
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column('abstract_agent_account',
-            sa.Column('full_name', CoerceUnicode))
+            sa.Column('full_name', sa.Unicode))
 
     # Do stuff with the app's models here.
     from assembl import models as m

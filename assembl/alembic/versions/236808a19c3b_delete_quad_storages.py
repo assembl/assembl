@@ -11,10 +11,10 @@ revision = '236808a19c3b'
 down_revision = '5a0ce18bf2b2'
 
 from alembic import context
-from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
 
 
 def upgrade(pyramid_env):
+    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
     with context.begin_transaction():
         aqsm = AssemblQuadStorageManager()
         aqsm.drop_all_discussion_storages_but(-1)

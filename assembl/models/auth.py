@@ -35,7 +35,7 @@ from sqlalchemy.sql.functions import count
 from pyramid.security import Everyone, Authenticated
 from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 import transaction
 
 from assembl import locale_negotiator

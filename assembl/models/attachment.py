@@ -14,7 +14,7 @@ from sqlalchemy import (
     event,
     func
 )
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime

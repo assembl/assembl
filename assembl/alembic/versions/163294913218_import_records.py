@@ -13,12 +13,12 @@ down_revision = '368a596ab4b5'
 from datetime import datetime
 from alembic import context, op
 import sqlalchemy as sa
-from virtuoso.alchemy import IRI_ID
 
 from assembl.lib import config
 
 
 def upgrade(pyramid_env):
+    from virtuoso.alchemy import IRI_ID
     with context.begin_transaction():
         op.create_table(
             'import_record',

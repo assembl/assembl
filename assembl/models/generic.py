@@ -15,7 +15,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import relationship, backref, aliased
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 from virtuoso.vmapping import PatternIriClass
 # from virtuoso.textindex import TextIndex, TableWithTextIndex
 from bs4 import BeautifulSoup

@@ -28,7 +28,7 @@ from assembl.lib.utils import slugify, get_global_base_url, full_class_name
 from ..lib.sqla_types import URLString
 from ..lib.locale import strip_country
 from . import DiscussionBoundBase
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     P_READ, R_SYSADMIN, P_ADMIN_DISC, R_PARTICIPANT, P_SYSADMIN,

@@ -13,7 +13,6 @@ down_revision = '2df3bdfbc594'
 from alembic import context, op
 import sqlalchemy as sa
 import transaction
-from virtuoso.alchemy import CoerceUnicode
 
 
 from assembl.lib import config
@@ -46,7 +45,7 @@ def upgrade(pyramid_env):
                       onupdate='CASCADE',
                       ondelete='CASCADE'), primary_key=True),
             sa.Column('attachment', sa.String(1024)),
-            sa.Column('link_name', CoerceUnicode(1024)),
+            sa.Column('link_name', sa.Unicode(1024)),
             sa.Column('post_type', sa.String(20)))
 
         op.create_table('facebook_access_token',

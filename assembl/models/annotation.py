@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime
 
 from .generic import Content
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 from .langstrings import LangString, LangStringEntry, Locale
 
 

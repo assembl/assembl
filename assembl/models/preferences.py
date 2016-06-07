@@ -10,7 +10,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import relationship
-from virtuoso.alchemy import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode
 from pyramid.httpexceptions import HTTPUnauthorized
 
 from . import Base, DeclarativeAbstractMeta

@@ -5,6 +5,7 @@ from sqlalchemy.sql import func
 from werkzeug.urls import iri_to_uri
 from pyisemail import is_email
 from virtuoso.alchemy import CoerceUnicode
+# from sqlalchemy import Unicode as CoerceUnicode
 import simplejson as json
 
 
