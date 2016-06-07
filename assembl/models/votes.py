@@ -261,7 +261,7 @@ class TokenVoteSpecification(AbstractVoteSpecification):
         spec_names = [spec.name.first_original().value.encode('utf-8') for spec in specs]
         spec_names.sort()
         spec_names.insert(0, "idea")
-        dw = DictWriter(csv_file, spec_names)
+        dw = DictWriter(csv_file, spec_names, dialect='excel', delimiter=';')
         dw.writeheader()
         by_idea = self._gather_results()
         values = {
@@ -492,7 +492,7 @@ class LickertVoteSpecification(AbstractVoteSpecification):
         bins = range(histogram_size)
         bins.insert(0, "idea")
         bins.extend(["avg", "std_dev"])
-        dw = DictWriter(csv_file, bins)
+        dw = DictWriter(csv_file, bins, dialect='excel', delimiter=';')
         dw.writeheader()
         by_idea = self._gather_results()
         values = {
@@ -530,7 +530,8 @@ class BinaryVoteSpecification(AbstractVoteSpecification):
         return base
 
     def csv_results(self, csv_file, histogram_size=None):
-        dw = DictWriter(csv_file, ["idea", "yes", "no"])
+        dw = DictWriter(csv_file, ["idea", "yes", "no"],
+                        dialect='excel', delimiter=';')
         dw.writeheader()
         by_idea = self._gather_results()
         values = {
@@ -579,7 +580,7 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
             c.encode('utf-8') for c in self.settings_json['candidates']]
         cols = candidates[:]
         cols.insert(0, "idea")
-        dw = DictWriter(csv_file, cols)
+        dw = DictWriter(csv_file, cols, dialect='excel', delimiter=';')
         dw.writeheader()
         by_idea = self._gather_results()
         values = {

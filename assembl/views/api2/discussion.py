@@ -513,7 +513,7 @@ def get_contribution_count(request):
     count_list = total_count.items()
     count_list.sort(key=lambda (a, c): c, reverse=True)
     output = StringIO()
-    csv = writer(output)
+    csv = writer(output, dialect='excel', delimiter=';')
     csv.writerow(['Start']+[
         x['start'] for x in results] + ['Total'])
     csv.writerow(['End']+[
@@ -586,7 +586,8 @@ def get_visit_count(request):
     from csv import DictWriter
     output = StringIO()
     csv = DictWriter(output, fieldnames=[
-        'start', 'end', 'first_visitors', 'readers'])
+        'start', 'end', 'first_visitors', 'readers'],
+        dialect='excel', delimiter=';')
     csv.writeheader()
     for r in results:
         csv.writerow(r)
