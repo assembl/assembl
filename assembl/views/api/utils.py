@@ -41,6 +41,6 @@ def mime_type(request):
             location=url)
 
     return Response(
-        content_type=result.headers['Content-Type'],
+        content_type=result.headers.get('Content-Type', None),
         status=result.status_code,
         location=result.url)
