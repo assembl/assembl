@@ -6,11 +6,11 @@ var Backbone = require('backbone'),
     _ = require('underscore'),
     Types = require('../utils/types.js');
 
-/**
- * @class BaseModel
- *
- * BaseModel which should be used by ALL models
- */
+/*"""
+.. js:class:: models.BaseModel
+
+BaseModel which should be used by ALL models
+*/
 var BaseModel = Backbone.Model.extend({
 
   /**

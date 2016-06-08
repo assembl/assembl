@@ -42,6 +42,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinxcontrib.httpdomain',
     'pyramid_autodoc',
+    'sphinxcontrib.autoanysrc',
     'alabaster'
 ]
 

@@ -19,6 +19,7 @@ Contents:
    analytics/events
 
    autodoc/modules
+   frontend
    endpoints
 
 Indices and tables
