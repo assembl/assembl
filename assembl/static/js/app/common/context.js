@@ -799,10 +799,16 @@ Context.prototype = {
         ev.dataTransfer.effectAllowed = 'all';
       }
 
-      ev.dataTransfer.setData("text", text); // from http://caniuse.com/#feat=dragndrop << Reportedly, using "text/plain" as the format for event.dataTransfer.setData and event.dataTransfer.getData does not work in IE9-11 and causes a JS error. The format needs to be "text", which seems to work in all the mainstream browsers (Chrome, Safari, Firefox, IE9-11, Edge). >>
-      // IE and Edge do not support setDragImage
-      if ( "setDragImage" in ev.dataTransfer ){
+      /*
+      from http://caniuse.com/#feat=dragndrop
+      << Reportedly, using "text/plain" as the format for event.dataTransfer.setData and event.dataTransfer.getData does not work in IE9-11 and causes a JS error. The format needs to be "text", which seems to work in all the mainstream browsers (Chrome, Safari, Firefox, IE9-11, Edge). >>
+      => If we choose in the future to have a more accurate way of detecting browsers than the current BrowserDetect, maybe we should use "text/plain" instead of "text" for all browsers except IE.
+      */
+      if ( "setDragImage" in ev.dataTransfer ){ // Internet Explorer and Edge are currently the only browsers known to not support dataTransfer.setDragImage(), and to recognize only "text" instead of "text/plain".
         ev.dataTransfer.setDragImage(this.dragbox, 10, 10);
+        ev.dataTransfer.setData("text/plain", text);
+      } else {
+        ev.dataTransfer.setData("text", text);
       }
     }
 
