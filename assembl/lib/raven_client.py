@@ -1,5 +1,6 @@
 from traceback import print_exc
 
+_raven_client = None
 
 def get_raven_client():
     from raven.base import Raven
