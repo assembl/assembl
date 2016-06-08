@@ -299,7 +299,7 @@ def error_view(exc, request):
     capture_exception(getattr(request, "exc_info", None))
     return HTTPInternalServerError(
         explanation="Sorry, Assembl had an internal issue and you have to reload. Please send this to a discussion administrator.",
-        detail=datetime.now().isoformat()+"\n"+repr(request.exception))
+        detail=datetime.utcnow().isoformat()+"\n"+repr(request.exception))
         # format_exc(request.exception))
 
 
