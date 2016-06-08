@@ -17,6 +17,7 @@ from sockjs.tornado import SockJSRouter, SockJSConnection
 from tornado.httpserver import HTTPServer
 
 from assembl.lib.zmqlib import INTERNAL_SOCKET
+from assembl.lib.raven_client import setup_raven, capture_exception
 from assembl.lib.web_token import decode_token, TokenInvalid
 
 # Inspired by socksproxy.
@@ -37,15 +38,7 @@ WEBSERVER_PORT = settings.getint(SECTION, 'changes.websocket.port')
 # NOTE: Not sure those are always what we want.
 SERVER_HOST = settings.get(SECTION, 'public_hostname')
 SERVER_PORT = settings.getint(SECTION, 'public_port')
-raven_client = None
-try:
-    pipeline = settings.get('pipeline:main', 'pipeline').split()
-    if 'raven' in pipeline:
-        raven_dsn = settings.get('filter:raven', 'dsn')
-        from raven import Client
-        raven_client = Client(raven_dsn)
-except ConfigParser.Error:
-    pass
+setup_raven(settings)
 
 context = zmq.Context.instance()
 ioloop.install()
@@ -86,11 +79,7 @@ class ZMQRouter(SockJSConnection):
                 data = json.dumps(jsondata)
             self.send(data)
         except Exception:
-            if raven_client:
-                raven_client.captureException()
-            else:
-                traceback.print_exc()
-            # raise
+            capture_exception()
             self.do_close()
 
     def do_close(self):
@@ -136,10 +125,7 @@ class ZMQRouter(SockJSConnection):
                 print "connected"
                 self.send('[{"@type":"Connection"}]')
         except Exception:
-            if raven_client:
-                raven_client.captureException()
-            else:
-                traceback.print_exc()
+            capture_exception()
             self.do_close()
 
     def on_close(self):
@@ -149,10 +135,7 @@ class ZMQRouter(SockJSConnection):
             print "closing"
             self.do_close()
         except Exception:
-            if raven_client:
-                raven_client.captureException()
-            else:
-                traceback.print_exc()
+            capture_exception()
             raise
 
 
@@ -191,13 +174,12 @@ try:
                 break
             sleep(0.1)
         else:
-            assert exists(sname), sname + " could not be created"
-        assert access(sname, R_OK | W_OK), sname + " cannot be accessed"
+            raise RuntimeError("could not create socket " + sname)
+        if not access(sname, R_OK | W_OK):
+            raise RuntimeError(sname + " cannot be accessed")
     io_loop.start()
-
 except KeyboardInterrupt:
     term()
 except Exception:
-    if raven_client:
-        raven_client.captureException()
+    capture_exception()
     raise

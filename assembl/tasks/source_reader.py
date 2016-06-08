@@ -17,7 +17,8 @@ from kombu.mixins import ConsumerMixin
 from kombu.utils.debug import setup_logging
 from sqlalchemy.exc import TimeoutError
 
-from assembl.tasks import configure, raven_client
+from assembl.tasks import configure
+from assembl.lib.raven_client import capture_exception
 from assembl.lib.config import set_config
 from assembl.lib.enum import OrderedEnum
 from assembl.lib.sqla import configure_engine
@@ -188,8 +189,8 @@ class SourceReader(Thread):
         import traceback
         from assembl.models import ContentSource
         log.error(traceback.format_exc())
-        if raven_client and not expected:
-            raven_client.captureException()
+        if not expected:
+            capture_exception()
         status = status or reader_error.status
         if status != self.last_error_status:
             # Counter-intuitive, but either lighter or more severe errors

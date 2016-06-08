@@ -21,13 +21,13 @@ from celery import Celery
 from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
 from ..lib.config import set_config
+from assembl.lib.raven_client import setup_raven, capture_exception
 from zope.component import getGlobalSiteManager
 from ..lib.model_watcher import configure_model_watcher
 
 _settings = None
 
 resolver = DottedNameResolver(__package__)
-raven_client = None
 
 
 def configure(registry, task_name):
@@ -130,21 +130,9 @@ def init_from_celery(celery_app):
     _settings = settings = get_appsettings(settings_file, 'assembl')
     config = ConfigParser.SafeConfigParser()
     config.read(settings_file)
-    try:
-        pipeline = config.get('pipeline:main', 'pipeline').split()
-        if 'raven' in pipeline:
-            global raven_client
-            raven_dsn = config.get('filter:raven', 'dsn')
-            from raven import Client
-            from raven.contrib.celery import (
-                register_signal, register_logger_signal)
-            raven_client = Client(raven_dsn)
-            register_logger_signal(raven_client)
-            register_signal(raven_client)
-    except ConfigParser.Error:
-        pass
     registry = getGlobalSiteManager()
     registry.settings = settings
+    setup_raven(settings)
     set_config(settings)
     configure_engine(settings, False)
     configure(registry, celery_app.main)

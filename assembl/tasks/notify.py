@@ -7,7 +7,9 @@ import logging
 import transaction
 
 from ..lib.sqla import mark_changed
-from . import (config_celery_app, raven_client, CeleryWithConfig)
+from ..lib.raven_client import capture_exception
+from . import (config_celery_app, CeleryWithConfig)
+
 
 
 log = logging.getLogger('assembl')
@@ -189,10 +191,7 @@ def process_pending_notifications():
             with transaction.manager:
                 process_notification(Notification.get(notification_id))
         except:
-            if raven_client:
-                raven_client.client.captureException()
-            else:
-                print_exc()
+            capture_exception()
 
 
 def includeme(config):

@@ -18,3 +18,22 @@ def capture_exception(*args, **kwargs):
         client.captureException(*args, **kwargs)
     else:
         print_exc()
+
+
+def setup_raven(settings):
+    """Setup raven client.
+
+    Raven is automatically setup in assembl,
+    this is useful for other processes."""
+    global Raven
+    if Raven is not None:
+        print "Calling setup_raven when raven is already set up."
+        return
+    try:
+        pipeline = settings.get('pipeline:main', 'pipeline').split()
+        if 'raven' in pipeline:
+            raven_dsn = settings.get('filter:raven', 'dsn')
+            from raven import Client
+            Raven = Client(raven_dsn)
+    except ConfigParser.Error:
+        pass

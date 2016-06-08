@@ -22,6 +22,7 @@ from assembl.lib.sqla import (
     configure_engine, get_session_maker, make_session_maker)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.model_watcher import configure_model_watcher
+from assembl.lib.raven_client import setup_raven, capture_exception
 
 
 def find_or_create_object_by_keys(db, keys, obj, columns=None):
@@ -511,16 +512,9 @@ if __name__ == '__main__':
     env = bootstrap(args.configuration)
     logging.config.fileConfig(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')
+
     set_config(settings)
-    raven_client = None
-    try:
-        pipeline = settings.get('pipeline:main', 'pipeline').split()
-        if 'raven' in pipeline:
-            raven_dsn = settings.get('filter:raven', 'dsn')
-            from raven import Client
-            raven_client = Client(raven_dsn)
-    except Exception:
-        pass
+    setup_raven(settings)
     try:
         configure_zmq(settings['changes.socket'], False)
         configure_model_watcher(env['registry'], 'assembl')
@@ -569,5 +563,4 @@ if __name__ == '__main__':
         traceback.print_exc()
         if args.debug:
             pdb.post_mortem()
-        elif raven_client:
-            raven_client.captureException()
+        capture_exception()
