@@ -35,7 +35,6 @@ from sqlalchemy.sql.functions import count
 from pyramid.security import Everyone, Authenticated
 from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
-from ..lib.sqla_types import CoerceUnicode
 import transaction
 
 from assembl import locale_negotiator
@@ -45,7 +44,8 @@ from ..lib.locale import to_posix_string
 from ..lib.sqla import (
     CrudOperation, get_model_watcher, ObjectNotUniqueError)
 from ..lib.sqla_types import (
-    URLString, EmailString, EmailUnicode, CaseInsensitiveWord)
+    URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
+from ..lib.raven_client import capture_message
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
 from ..auth import *
 from assembl.lib.raven_client import capture_exception, capture_message
@@ -1490,9 +1490,11 @@ class UserTemplate(DiscussionBoundBase, User):
             subscribed[role.strip()] = True
         for attempt in range(10):
             my_subscriptions = query.all()
-            assert my_subscriptions or (attempt == 0),\
-                "On attempt %d to create subscriptions, some should exist,"\
-                " if only from other process that caused failure." % (attempt)
+            if attempt > 0 and not my_subscriptions:
+                capture_message(
+                    "On subsequent attempts to create subscriptions, some "
+                    "should exist, if only from other process that caused "
+                    "failure.")
             my_subscriptions_classes = {s.__class__ for s in my_subscriptions}
             by_class = {cl: [sub for sub in my_subscriptions
                              if sub.__class__ == cl]
