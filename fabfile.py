@@ -1463,8 +1463,8 @@ def build_doc():
     "Build the Sphinx documentation"
     with cd(env.projectpath):
         run('rm -rf doc/autodoc')
-        run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -f -o doc/autodoc assembl')
-        venvcmd('cd doc; make html')
+        run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
+        venvcmd('python setup.py build_sphinx')
 
 
 # Specific environments
