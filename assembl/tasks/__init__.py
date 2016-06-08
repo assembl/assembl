@@ -132,7 +132,7 @@ def init_from_celery(celery_app):
     config.read(settings_file)
     registry = getGlobalSiteManager()
     registry.settings = settings
-    setup_raven(settings)
+    setup_raven(config)
     set_config(settings)
     configure_engine(settings, False)
     configure(registry, celery_app.main)

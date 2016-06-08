@@ -1,8 +1,8 @@
 from traceback import print_exc
-from raven.base import Raven
 
 
 def get_raven_client():
+    from raven.base import Raven
     return Raven
 
 
