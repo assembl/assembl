@@ -1,10 +1,11 @@
 import signal
 import time
 import sys
-from os import makedirs
+from os import makedirs, access, R_OK, W_OK
 from os.path import exists, dirname
 import ConfigParser
 import traceback
+from time import sleep
 
 import simplejson as json
 import zmq
@@ -183,7 +184,17 @@ signal.signal(signal.SIGTERM, term)
 web_server = HTTPServer(web_app)
 web_server.listen(WEBSERVER_PORT)
 try:
+    if CHANGES_SOCKET.startswith('ipc://'):
+        sname = CHANGES_SOCKET[6:]
+        for i in range(5):
+            if exists(sname):
+                break
+            sleep(0.1)
+        else:
+            assert exists(sname), sname + " could not be created"
+        assert access(sname, R_OK | W_OK), sname + " cannot be accessed"
     io_loop.start()
+
 except KeyboardInterrupt:
     term()
 except Exception:

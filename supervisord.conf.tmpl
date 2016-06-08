@@ -109,10 +109,9 @@ command = python assembl/tasks/changes_router.py %(CONFIG_FILE)s
 autostart = %(autostart_changes_router)s
 autorestart = true
 stopasgroup = false
-stopwaitsecs = 60
-#If the process didn't kill it's children after 60 seconds, it's unlikely to 
-#ever reap them, so kill them all
-killasgroup = true
+stopwaitsecs = 5
+startretries = 3
+startsecs = 5
 
 [group:dev]
 programs = pserve, gulp

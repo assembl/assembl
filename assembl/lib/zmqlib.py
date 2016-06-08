@@ -1,6 +1,5 @@
 import atexit
 from itertools import count
-from os.path import exists
 
 import zmq
 import zmq.devices
@@ -17,6 +16,7 @@ DISPATCHER = None
 _counter = count()
 _active_sockets = []
 
+
 def start_dispatch_thread():
     global INITED, DISPATCHER
     if INITED:
@@ -27,7 +27,7 @@ def start_dispatch_thread():
     DISPATCHER.setsockopt_in(zmq.IDENTITY, 'XSUB')
     DISPATCHER.setsockopt_out(zmq.IDENTITY, 'XPUB')
     DISPATCHER.start()
-    #Fix weird nosetests problems.  TODOfind and fix underlying problem
+    #Fix weird nosetests problems. TODO: find and fix underlying problem
     sleep(0.01)
     INITED = True
 
@@ -50,14 +50,11 @@ def get_pub_socket():
     else:
         socket.connect(CHANGES_SOCKET)
     _active_sockets.append(socket)
-    # Related to "slow joiner" symptom 
+    # Related to "slow joiner" symptom
     # http://zguide.zeromq.org/page:all#Getting-the-Message-Out
     # It would be better to get the "ready" signal back but this is
     # adequate for now.
     sleep(0.2)
-    if CHANGES_SOCKET.startswith('ipc://'):
-        assert exists(CHANGES_SOCKET[6:]), \
-            CHANGES_SOCKET + " could not be created"
     return socket
 
 
