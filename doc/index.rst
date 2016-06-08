@@ -18,9 +18,8 @@ Contents:
    analytics/piwik_reporting_api
    analytics/events
 
-   services
    autodoc/modules
-   routes
+   endpoints
 
 Indices and tables
 ==================

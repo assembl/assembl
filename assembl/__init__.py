@@ -9,7 +9,7 @@ This is the startup module, which sets up the various components:
 .. _Pyramid: http://www.pylonsproject.org/
 .. _SQLAlchemy: http://www.sqlalchemy.org/
 .. _Beaker: http://beaker.readthedocs.io/en/latest/
-.. _models: py:module:: assembl.models
+.. _models: :py:mod:`assembl.models`
 
 """
 

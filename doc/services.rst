@@ -1,5 +1,5 @@
-Cornice RESTful services:
-=========================
+Cornice RESTful services
+------------------------
 
 .. cornice-autodoc::
   :modules: assembl.views.api

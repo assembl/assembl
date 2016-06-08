@@ -198,7 +198,7 @@ Updating an environment to it's specified branch, tag or revision:
     fab devenv app_fullupdate
 
 Schema migrations
-=================
+-----------------
 
 Upgrade to latest manally:
 
@@ -217,7 +217,7 @@ Autogeneration (--autogenerate) isn't supported since we don't have full
 reflextion support in virtuoso's sqlalchemy driver.
 
 A note on vagrant
-=================
+-----------------
 
 If you use vagrant, we have a few processes that expect to use socket
 files in %(here)s. Vagrant does not allow creating sockets in a shared
@@ -226,7 +226,7 @@ locations. There is one is supervisord.conf, and one in an unkonwn
 location.
 
 Ontology Submodule
-==================
+------------------
 
 The ontology module is a git submodule. As a result, after pulling in changes,
 update with the following:
@@ -234,9 +234,9 @@ update with the following:
 .. code:: sh
 
     git submodule update --init
-    
+
 Setting up a production dedicated instance
-==========================================
+------------------------------------------
 
 Start as a user with sudo access
 
