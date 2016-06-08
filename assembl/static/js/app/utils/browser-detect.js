@@ -1,5 +1,6 @@
 /**
  * @see http://www.quirksmode.org/js/detect.html
+ * Warning: The author of this module recommends to avoid using it (see previous link).
  * @type {Object}
  */
 var BrowserDetect = {
