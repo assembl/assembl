@@ -3,7 +3,7 @@ from traceback import print_exc
 
 def get_raven_client():
     from raven.base import Raven
-    return Raven
+    return Raven or _raven_client
 
 
 def capture_message(*args, **kwargs):
@@ -25,8 +25,8 @@ def setup_raven(settings):
 
     Raven is automatically setup in assembl,
     this is useful for other processes."""
-    global Raven
-    if Raven is not None:
+    global _raven_client
+    if _raven_client is not None:
         print "Calling setup_raven when raven is already set up."
         return
     try:
@@ -34,6 +34,6 @@ def setup_raven(settings):
         if 'raven' in pipeline:
             raven_dsn = settings.get('filter:raven', 'dsn')
             from raven import Client
-            Raven = Client(raven_dsn)
+            _raven_client = Client(raven_dsn)
     except ConfigParser.Error:
         pass
