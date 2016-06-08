@@ -1,8 +1,8 @@
 """ App URL routing and renderers are configured in this module. 
 
-Note that Assembl is a
-`hybrid app <http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hybrid.html>`,
-and combines routes and :py:mod:`traversal`.
+Note that Assembl is a `hybrid app`_, and combines routes and :py:mod:`traversal`.
+
+.. _`hybrid app`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hybrid.html
 """
 
 import os.path

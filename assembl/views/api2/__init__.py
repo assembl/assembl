@@ -1,11 +1,11 @@
 """RESTful API to assembl, with some magic.
 It is guaranteed *NOT* to be stable, as it mirrors the model by introspection.
 The basic URI to access any ressource is
-GET `/data/<Classname>/<instance db id>`
-The `local:` uri prefix is meant to resolve to `<http://servername/data/>`.
+GET ``/data/<Classname>/<instance db id>``
+The ``local:`` uri prefix is meant to resolve to ``<http://servername/data/>``.
 
 The other endpoints follow the pattern
-`/data/<classname>/<instance id>(/<collection name>/<instance id>)+`
+``/data/<classname>/<instance id>(/<collection name>/<instance id>)+``
 So we speak of class, instance or collection context, depending where we are in the URL.
 
 It is generally possible to PUT or DEL on any instance context, 
@@ -14,24 +14,24 @@ POST will return a 201 with the link in the body in the Location response header
 
 The set of collections available from an instance type is mostly given by the SQLAlchemy relations (and properties),
 but there is a magic URL to obtain the list:
-`/data/<classname>/<instance id>(/<collection name>/<instance id>)*/@@collections`
+``/data/<classname>/<instance id>(/<collection name>/<instance id>)*/@@collections``
 
 Another special case is when the collection name is actually a singleton.
-In that case, one is allowed to use `-` instead of a database ID which one may not know.
+In that case, one is allowed to use ``-`` instead of a database ID which one may not know.
 
-A final special case is the collection /data/Discussion/<N>/all_users, which has a shortcut to the logged-in user,
-if any: /data/Discussion/<N>/all_users/current
+A final special case is the collection ``/data/Discussion/<N>/all_users``, which has a shortcut to the logged-in user,
+if any: ``/data/Discussion/<N>/all_users/current``
 
 This module defines generic behaviour, but more specific views can be defined
-through new view predicates: Look at `add_view_predicate` in `..traversal`, and there is an example in 
-the widget collection view in `.widget`. 
+through new view predicates: Look for ``add_view_predicate`` at the end of :py:mod:`assembl.views.traversal`, and there is an example in
+the widget collection view in :py:mod:`assembl.views.api2.widget`.
 Note that the view_config must have at least as many specifiers as the one it tries to override!
 
 Permissions for the default views are specified by the crud_permissions class attribute, but more specific
 views may have their own permissions system. 
 For that reason, it will be generally useful to POST/PUT through collections accessed from the discussion, such as
-`/data/Discussion/<number>(/<collection name>/<instance id>)+`
-as opposed to the bare URLs `/data/<Classname>/<instance db id>` which are provided after a POST.
+``/data/Discussion/<number>(/<collection name>/<instance id>)+``
+as opposed to the bare URLs ``/data/<Classname>/<instance db id>`` which are provided after a POST.
 Traversing the discussion allows the user permissions specific to the discussion to be applied to the next operation.
 The structure of those collection URLs will have to be reconstructed (from the POSTed collection, add the ID from the bare URL.)
 """

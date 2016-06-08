@@ -18,16 +18,16 @@ variants:
   - { "name": [true] } will give an array of @id.
   - { "name": {"@id":"relation:viewdef"} } will give the relation as a dict, indexed by @id.
       Same shortcuts apply (ommitting relation or same viewdef. No viewdef makes no sense.)
-  - { "name": "&method_name:viewdef" } will call the method with no arguments. 
+  - { "name": "&method_name:viewdef" } will call the method with no arguments.
       DANGER! PLEASE RETURN JSON or a Base object (in which case viewdef or url applies.)
   - { "name": "'<json literal>"} This allows to specify literal values.
 
-`@id`, `@type` and `@view` will always be defined.
+``@id``, ``@type`` and ``@view`` will always be defined.
 Unspecified relation will be given as URL
 Unspecified literal attribute will be present (unless also given as relation.)
 Unspecified back relation will be ommitted.
 
-IDs will always take the form `local:<classname>/<object_id>`
+IDs will always take the form ``local:<classname>/<object_id>``
 """
 
 import traceback

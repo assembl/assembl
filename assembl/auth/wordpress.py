@@ -1,6 +1,8 @@
 """
-`PythonSocialAuth <http://psa.matiasaguirre.net/>` backend for
-`WP OAuth Server <https://fr.wordpress.org/plugins/oauth2-provider/>`
+PythonSocialAuth_ backend for `WP OAuth Server`_
+
+.. _PythonSocialAuth: http://psa.matiasaguirre.net/
+.. _`WP OAuth Server`: https://wordpress.org/plugins/oauth2-provider/
 """
 from hashlib import md5
 
