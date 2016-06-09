@@ -8,7 +8,8 @@ var Marionette = require('./shims/marionette.js'),
     Storage = require('./objects/storage.js'),
     Loader = require('./views/loader.js'),
     NavBar = require('./views/navBar.js'),
-    Infobars = require('./views/infobar.js'),
+    InfobarsViews = require('./views/infobar.js'),
+    InfobarsModels = require('./models/infobar.js'),
     UrlParser = require('./url/url.js'),
     GroupContainer = require('./views/groups/groupContainer.js'),
     PanelSpecTypes = require('./utils/panelSpecTypes.js'),
@@ -28,7 +29,8 @@ var Marionette = require('./shims/marionette.js'),
     PreferencesView = require('./views/preferencesView.js'),
     FirstIdeaToShowVisitor = require('./views/visitors/firstIdeaToShowVisitor.js'),
     i18n = require('./utils/i18n.js'),
-    Analytics = require('./internal_modules/analytics/dispatcher.js');
+    Analytics = require('./internal_modules/analytics/dispatcher.js')
+    $ = require('jquery');
 
 var QUERY_STRINGS = {
   'source': ['notification', 'share']
@@ -402,7 +404,17 @@ var routeManager = Marionette.Object.extend({
       collectionManager.getWidgetsForContextPromise(
         Widget.Model.prototype.INFO_BAR, null, ["closeInfobar"]).then(
         function(coll) {
-          Assembl.infobarRegion.show(new Infobars({collection: coll}));
+          console.log("collection avant: ", coll);
+          var infobarsCollection = new InfobarsModels.InfobarItemCollection();
+          //if cookie
+          infobarsCollection.add(new InfobarsModels.CookieInfobarItemModel());
+          coll.each(function(widgetModel){
+            var model = new InfobarsModels.WidgetInfobarItemModel(widgetModel.attributes);
+            $.extend(model, widgetModel);
+            infobarsCollection.add(model);
+          });
+          console.log("collection après: ", infobarsCollection);
+          Assembl.infobarRegion.show(new InfobarsViews.InfobarsView({collection: infobarsCollection}));
         });
     }
     Assembl.groupContainer.show(new Loader());

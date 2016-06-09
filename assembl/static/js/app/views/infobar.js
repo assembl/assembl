@@ -6,11 +6,32 @@ var Marionette = require('../shims/marionette.js'),
     Moment = require('moment'),
     CollectionManager = require('../common/collectionManager.js'),
     Widget = require('../models/widget.js'),
+    InfobarsModels = require('../models/infobar.js'),
     Ctx = require('../common/context.js'),
     $ = require('jquery');
 
+var CookieInfobarItemView = Marionette.LayoutView.extend({
+  constructor: function CookiebarItem() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
+  template: '#tmpl-cookieBanner',
+  ui:{
+    acceptCookieBtn:"#acceptCookie-btn",
+    refuseCookieBtn:"#refuseCookie-btn"
+  },
+  events:{
+    "click @ui.acceptCookieBtn":"acceptCookie",
+    "click @ui.refuseCookieBtn":"refuseCookie"
+  },
+  acceptCookie:function(){
+    this.model.destroy();
+  },
+  refuseCookie:function(){
+    
+  }
+});
 
-var InfobarItem = Marionette.LayoutView.extend({
+var WidgetInfobarItemView = Marionette.LayoutView.extend({
   constructor: function InfobarItem() {
     Marionette.LayoutView.apply(this, arguments);
   },
@@ -64,17 +85,21 @@ var InfobarItem = Marionette.LayoutView.extend({
   closeInfobar: function() {
     this.model.set("closeInfobar", true);
     Assembl.vent.trigger('infobar:closeItem');
-    //this.options.parentPanel.adjustInfobarSize();
   }
 });
 
-var Infobars = Marionette.CollectionView.extend({
+var InfobarsView = Marionette.CollectionView.extend({
   constructor: function Infobars() {
     Marionette.CollectionView.apply(this, arguments);
   },
-
-  childView: InfobarItem,
+  getChildView:function(item){
+    if(!item.get('@type')){
+      return CookieInfobarItemView;
+    }
+    return WidgetInfobarItemView;
+  },
   initialize: function(options) {
+    console.log("collectionView : ", this);
     this.childViewOptions = {
       parentPanel: this
     };
@@ -98,4 +123,7 @@ var Infobars = Marionette.CollectionView.extend({
 });
 
 
-module.exports = Infobars;
+
+module.exports = {
+  InfobarsView: InfobarsView
+};

@@ -160,42 +160,52 @@ $textProfile: #515151;
 }
 
 .content-infobar {
-  position: relative;
-  height: $infobar_height;
-  background-color: $theme_infobar_bg_color;
-  font-size: 12px;
-  text-align: center;
-  box-sizing: border-box; /* include border in height */
-  border-top: 1px solid $theme_btn_primary_bg_color;
-  .close {
-    position: absolute;
-    right: calc(12px - 0.2em);
-    @include calc(top, "#{$infobar_height}/2 - 0.5em");
-    color: $white;
-    opacity: initial;
-    cursor: pointer;
-    font-size: 20px;
+  .cookie-banner{
+    position: relative;
+    height: 50px;
+    font-size: 12px;
+    text-align: center;
+    box-sizing: border-box;
+    line-height: 50px;
   }
-  .session {
-    border: none;
-    background-color: $white;
-    color: #AAAAAA;
-    border-radius: 2px;
-    padding: 6px;
-    cursor: pointer;
-  }
-  .content {
-    margin: 0;
-    padding: 0;
-    color: $white;
-    display: inline-block;
-    height: 0; /* so that we can center it vertically without knowing its contents height */
-    vertical-align: middle;
-    font-weight: normal;
-
-    a:not(.btn) {
+  .widget-banner{
+    position: relative;
+    height: $infobar_height;
+    background-color: $theme_infobar_bg_color;
+    font-size: 12px;
+    text-align: center;
+    box-sizing: border-box; /* include border in height */
+    border-top: 1px solid $theme_btn_primary_bg_color;
+    .close {
+      position: absolute;
+      right: calc(12px - 0.2em);
+      @include calc(top, "#{$infobar_height}/2 - 0.5em");
       color: $white;
-      text-decoration: underline;
+      opacity: initial;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    .session {
+      border: none;
+      background-color: $white;
+      color: #AAAAAA;
+      border-radius: 2px;
+      padding: 6px;
+      cursor: pointer;
+    }
+    .content {
+      margin: 0;
+      padding: 0;
+      color: $white;
+      display: inline-block;
+      height: 0; /* so that we can center it vertically without knowing its contents height */
+      vertical-align: middle;
+      font-weight: normal;
+
+      a:not(.btn) {
+        color: $white;
+        text-decoration: underline;
+      }
     }
   }
 }
