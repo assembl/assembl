@@ -26,6 +26,22 @@ def test_assembl_login(discussion, participant1_user, test_app_no_login, request
         IAuthorizationPolicy).remembered == participant1_user.id
 
 
+def test_assembl_login_mixed_case(discussion, participant1_user, test_app_no_login, request):
+    """Check that the login process works with weird case in email"""
+    url = test_app_no_login.app.request_factory({}).route_path(
+        'contextual_login', discussion_slug=discussion.slug)
+    # here we have to know it's "password", as the non-hashed password value
+    # is not stored in the object.
+    res = test_app_no_login.post(url, OrderedDict([
+        ('identifier',
+         participant1_user.get_preferred_email().title()),
+        ('password', 'password')]))
+    assert (res.status_code == 302 and urlparse.urlparse(
+        res.location).path == '/'+discussion.slug+'/')
+    assert test_app_no_login.app.registry.getUtility(
+        IAuthorizationPolicy).remembered == participant1_user.id
+
+
 fake_facebook_locale_info = """<?xml version='1.0'?>
 <locales>
 <locale>
