@@ -1005,7 +1005,7 @@ def virtualdisplay(request):
 
 @pytest.fixture(scope="module")
 def browser(request, virtualdisplay):
-    browser = Browser()
+    browser = Browser('phantomjs')
 
     def fin():
         print "finalizer browser"
