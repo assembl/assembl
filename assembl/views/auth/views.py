@@ -452,8 +452,7 @@ def assembl_login_complete_view(request):
     session = AgentProfile.default_db
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
-    next_view = handle_next_view(
-        request, True, 'register')
+    next_view = handle_next_view(request, True)
     logged_in = authenticated_userid(request)
     localizer = request.localizer
     user = None
