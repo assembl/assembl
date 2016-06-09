@@ -303,6 +303,19 @@ def test_app(request, admin_user, test_app_no_perm):
 
 
 @pytest.fixture(scope="function")
+def test_app_no_login(request, admin_user, test_app_no_perm):
+    config = testing.setUp(
+        registry=test_app_no_perm.app.registry,
+        settings=get_config(),
+    )
+    dummy_policy = config.testing_securitypolicy(
+        userid=None, permissive=False)
+    config.set_authorization_policy(dummy_policy)
+    config.set_authentication_policy(dummy_policy)
+    return test_app_no_perm
+
+
+@pytest.fixture(scope="function")
 def test_server(request, test_app, empty_db):
     server = WSGIServer(application=test_app.app)
     server.start()
