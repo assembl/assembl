@@ -48,7 +48,7 @@ Create a script such as:
     bash ${ASSEMBL_PATH}/doc/borg_backup_script/assembl_borg_backup.sh > $ASSEMBL_PATH/var/log/assembl_backup.log 2>&1
 
 
-You can the automate with cron. For example:
+You can then automate with cron. For example:
 
 ::
 

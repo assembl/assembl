@@ -34,4 +34,4 @@ borg create                             \
 rm $ASSEMBL_PATH/assembl-virtuoso-backup-real.bp
 # Use the `prune` subcommand to maintain 7 daily, 4 weekly
 # and 6 monthly archives.
-borg prune -v $REPOSITORY --keep-daily=7 --keep-weekly=4 --keep-monthly=6
+borg prune --info --list --stats $REPOSITORY --keep-daily=7 --keep-weekly=4 --keep-monthly=6
