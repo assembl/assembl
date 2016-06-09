@@ -1534,6 +1534,7 @@ class UserTemplate(DiscussionBoundBase, User):
                     self.db.add(d)
                 self.db.flush()
                 my_subscriptions.extend(defaults)
+                return my_subscriptions, True
             except ObjectNotUniqueError as e:
                 log.error("Notification Subscription just created but not unique")
                 self.db.rollback()
@@ -1541,10 +1542,6 @@ class UserTemplate(DiscussionBoundBase, User):
                 from time import sleep
                 from random import random
                 sleep(random()/10.0)
-            finally:
-                # Ensure next query will be fresh
-                for s in my_subscriptions:
-                    self.db.expunge(s)
         raise RuntimeError("Could not create the template's subscriptions")
 
 
