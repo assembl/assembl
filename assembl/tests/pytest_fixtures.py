@@ -1005,7 +1005,11 @@ def virtualdisplay(request):
 
 @pytest.fixture(scope="module")
 def browser(request, virtualdisplay):
-    browser = Browser('phantomjs')
+    from os.path import dirname
+    # interference from system phantomjs
+    phantomjs = dirname(dirname(dirname(__file__))
+        ) + "/node_modules/.bin/phantomjs"
+    browser = Browser('phantomjs', executable_path=phantomjs)
 
     def fin():
         print "finalizer browser"
