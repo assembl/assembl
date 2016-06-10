@@ -86,7 +86,7 @@ class IMAPReader(SourceReader):
                     raise ClientError(res)
             if self.mailbox:
                 res = self.mailbox.logout()
-                if not is_ok(res):
+                if res[0] != 'BYE':
                     raise ClientError(res)
         except IMAP4.abort as e:
             raise IrrecoverableError(e)
