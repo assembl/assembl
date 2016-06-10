@@ -2,6 +2,15 @@
     <h2 class="h2 mbxl dispb mtxs"><%= name %></h2>
     <p><%= type %></p>
     <div class="mtxl">
+        <% if (connection_error) { %>
+          <div class="error">
+            <p>{{gettext("Connexion error")}}: <%= connection_error %></p>
+            <p class="txt-gray1"><%= error_desc %></p>
+            <% if (error_backoff !== '') { %>
+            <p>{{gettext("Next connection attempt:")}} <%= error_backoff %></p>
+        <% } %>
+          </div>
+        <% } %>
         <a class="js_manualStart" href="#">{{ gettext('Manual start') }}</a>&nbsp;&nbsp;
         <a class="js_moreOptions" href="#">{{ gettext('More options') }}</a>
         <!-- Must add all of the possible operations here, instead of more options-->

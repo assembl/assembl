@@ -572,14 +572,14 @@ if __name__ == '__main__':
     # set the basic session maker without zope or autoflush
     engine = configure_engine(settings, False, autoflush=False, max_overflow=20)
 
-    # @event.listens_for(engine, "checkin")
+    @event.listens_for(engine, "checkin")
     def show_checkin(*args):
         global pool_counter
         pool_counter -= 1
         print "checkin pool: %d in %s" % (pool_counter, currentThread())
         print_stack()
 
-    # @event.listens_for(engine, "checkout")
+    @event.listens_for(engine, "checkout")
     def show_checkout(*args):
         global pool_counter
         pool_counter += 1

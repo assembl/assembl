@@ -8,6 +8,7 @@ var Marionette = require('../../shims/marionette.js'),
     Source = require('../../models/sources.js'),
     CollectionManager = require('../../common/collectionManager.js'),
     SourceViews = require("./sourceEditViews.js"),
+    Moment = require('moment'),
     FacebookSourceEditView = require("../facebookViews.js");
 
 function getSourceEditView(model_type) {
@@ -42,6 +43,7 @@ var ReadSource = Marionette.ItemView.extend({
         manualStart: '.js_manualStart',
         reimport: '.js_reimport',
         reprocess: '.js_reprocess',
+        showEdit: '.js_moreOptions',
     },
 
     modelEvents: {
@@ -51,7 +53,17 @@ var ReadSource = Marionette.ItemView.extend({
     events: {
         'click @ui.manualStart': 'manualStart',
         'click @ui.reimport': 'reimportSource',
-        'click @ui.reprocess': 'reprocessSource'
+        'click @ui.reprocess': 'reprocessSource',
+        'click @ui.showEdit': 'toggleEditView'
+    },
+
+    initialize: function(options) {
+        this.parent = options.parent;
+        this.model = this.parent.model;
+    },
+
+    toggleEditView: function() {
+        this.parent.toggleEditView();
     },
 
     reimportSource: function(e){
@@ -86,16 +98,22 @@ var ReadSource = Marionette.ItemView.extend({
         var url = this.model.url() + "/fetch_posts";
         $.ajax(url, {
           method: "POST",
-          contentType: "application/x-www-form-urlencoded",
-          data: {}});
+          contentType: "application/json",
+          data: {}}).then(function() {
+            Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Import has begun!'))
+          });
     },
 
-    serializeData: function(){
+    serializeData: function() {
       // TODO: Name for the types
-        return {
-            name: this.model.get('name'),
-            type: this.model.localizedName
-        }
+      var backoff = this.model.get('error_backoff_until');
+      return {
+        name: this.model.get('name'),
+        type: this.model.localizedName,
+        connection_error: this.model.get('connection_error') || '',
+        error_desc: this.model.get('error_description') || '',
+        error_backoff: backoff ? Moment(backoff).fromNow() : '',
+      };
     },
 
     updateView: function(evt){
@@ -114,22 +132,25 @@ var SourceView = Marionette.LayoutView.extend({
     Marionette.LayoutView.apply(this, arguments);
   },
 
+  ui: {
+    edit_container: '.js_source_edit_container'
+  },
   template: '#tmpl-adminDiscussionSettingsGeneralSource',
   regions: {
-    readOnly: '.source-read',
-    form: '.source-edit'
+    readOnly: '.js_source_read',
+    form: '.js_source_edit'
   },
-
+  toggleEditView: function() {
+    this.ui.edit_container.toggleClass('hidden');
+  },
   onShow: function(){
     var display_view = getSourceDisplayView(this.model);
-    this.getRegion('readOnly').show(new display_view({model: this.model}));
+    this.getRegion('readOnly').show(new display_view({parent: this}));
     var editViewClass = getSourceEditView(this.model.get("@type"));
     if (editViewClass !== undefined) {
       this.getRegion('form').show(new editViewClass({model: this.model}));
-    } else {
-      this.getRegion('form').show("");
     }
-  }
+  },
 });
 
 
