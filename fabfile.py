@@ -1340,7 +1340,7 @@ def update_vendor_themes():
         vendor_themes_path = normpath(join(
                 env.projectpath, "assembl/static/css/themes/vendor"))
         print vendor_themes_path
-        with cd(env.projectpath):
+        with settings(warn_only=True), cd(env.projectpath):
             # We do not use env.gitbranch, because in env_deb it may not match the real current branch
             current_assembl_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
         for git_url in urls:
