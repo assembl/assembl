@@ -3,8 +3,8 @@ import sys
 import signal
 from random import uniform
 from time import sleep
-
-from threading import Thread, Event
+from threading import Thread, Event, currentThread
+from traceback import print_stack
 from datetime import datetime, timedelta
 from abc import ABCMeta, abstractmethod
 import logging
@@ -15,6 +15,7 @@ from zope.component import getGlobalSiteManager
 from kombu import BrokerConnection, Exchange, Queue
 from kombu.mixins import ConsumerMixin
 from kombu.utils.debug import setup_logging
+from sqlalchemy import event
 from sqlalchemy.exc import TimeoutError
 
 from assembl.tasks import configure
@@ -24,6 +25,7 @@ from assembl.lib.enum import OrderedEnum
 from assembl.lib.sqla import configure_engine
 
 log = logging.getLogger('assembl')
+pool_counter = 0
 
 
 class ReaderStatus(OrderedEnum):
@@ -562,9 +564,25 @@ if __name__ == '__main__':
     set_config(settings)
     fileConfig(config_file_name)
     # set the basic session maker without zope or autoflush
-    configure_engine(settings, False, autoflush=False, max_overflow=20)
+    engine = configure_engine(settings, False, autoflush=False, max_overflow=20)
+
+    @event.listens_for(engine, "checkin")
+    def show_checkin(*args):
+        global pool_counter
+        pool_counter -= 1
+        print "checkin pool:", pool_counter, "in", currentThread()
+        print_stack()
+
+    @event.listens_for(engine, "checkout")
+    def show_checkout(*args):
+        global pool_counter
+        pool_counter += 1
+        print "checkout pool:", pool_counter, "in", currentThread()
+        print_stack()
+
     configure(registry, 'source_reader')
-    url = settings.get('celery_tasks.imap.broker')
+    url = (settings.get('celery_tasks.broker') or
+           settings.get('celery_tasks.imap.broker'))
     with BrokerConnection(url) as conn:
         sourcedispatcher = SourceDispatcher(conn)
         def shutdown(*args):
