@@ -134,14 +134,12 @@ def get_current_user_id():
 class UpgradingSessionAuthenticationPolicy(SessionAuthenticationPolicy):
 
     def remember(self, request, user_id, **kwargs):
-        if getattr(request.session, 'elevate_privilege', None):
-            request.session.elevate_privilege(True)
+        request.session.elevate_privilege(True)
         return super(UpgradingSessionAuthenticationPolicy, self).remember(
             request, user_id, **kwargs)
 
     def forget(self, request):
-        if getattr(request.session, 'elevate_privilege', None):
-            request.session.elevate_privilege(False)
+        request.session.elevate_privilege(False)
         return super(UpgradingSessionAuthenticationPolicy, self).forget(
             request)
 
