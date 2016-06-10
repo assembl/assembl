@@ -362,6 +362,7 @@ class SourceReader(Thread):
                 else:
                     self.event.wait(self.time_between_reads.total_seconds())
                     self.event.clear()
+        self.source.db.close()
 
     @abstractmethod
     def login(self):
@@ -442,6 +443,10 @@ class SourceReader(Thread):
             self.close()
         self.set_status(ReaderStatus.SHUTDOWN)
         self.event.set()
+
+    def __repr__(self):
+        return "<%s.%d in %s>" % (
+            self.__class__.__name__, self.source_id, self._Thread__name)
 
 
 class PullSourceReader(SourceReader):
@@ -571,14 +576,14 @@ if __name__ == '__main__':
     def show_checkin(*args):
         global pool_counter
         pool_counter -= 1
-        print "checkin pool:", pool_counter, "in", currentThread()
+        print "checkin pool: %d in %s" % (pool_counter, currentThread())
         print_stack()
 
     # @event.listens_for(engine, "checkout")
     def show_checkout(*args):
         global pool_counter
         pool_counter += 1
-        print "checkout pool:", pool_counter, "in", currentThread()
+        print "checkout pool: %d in %s" % (pool_counter, currentThread())
         print_stack()
 
     configure(registry, 'source_reader')
