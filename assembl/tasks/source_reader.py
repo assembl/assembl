@@ -15,7 +15,7 @@ from zope.component import getGlobalSiteManager
 from kombu import BrokerConnection, Exchange, Queue
 from kombu.mixins import ConsumerMixin
 from kombu.utils.debug import setup_logging
-from sqlalchemy import event
+from sqlalchemy import event, inspect
 from sqlalchemy.exc import TimeoutError
 
 from assembl.tasks import configure
@@ -362,7 +362,8 @@ class SourceReader(Thread):
                 else:
                     self.event.wait(self.time_between_reads.total_seconds())
                     self.event.clear()
-        self.source.db.close()
+        if self.source and not inspect(self.source).detached:
+            self.source.db.close()
 
     @abstractmethod
     def login(self):
