@@ -549,7 +549,8 @@ class SourceDispatcher(ConsumerMixin):
 def includeme(config):
     global _producer_connection, _exchange
     setup_logging(loglevel='DEBUG')
-    url = config.registry.settings.get('celery_tasks.imap.broker')
+    url = (config.registry.settings.get('celery_tasks.broker') or
+           config.registry.settings.get('celery_tasks.imap.broker'))
     _producer_connection = BrokerConnection(url)
 
 
@@ -566,14 +567,14 @@ if __name__ == '__main__':
     # set the basic session maker without zope or autoflush
     engine = configure_engine(settings, False, autoflush=False, max_overflow=20)
 
-    @event.listens_for(engine, "checkin")
+    # @event.listens_for(engine, "checkin")
     def show_checkin(*args):
         global pool_counter
         pool_counter -= 1
         print "checkin pool:", pool_counter, "in", currentThread()
         print_stack()
 
-    @event.listens_for(engine, "checkout")
+    # @event.listens_for(engine, "checkout")
     def show_checkout(*args):
         global pool_counter
         pool_counter += 1
