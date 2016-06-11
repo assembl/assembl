@@ -1012,7 +1012,11 @@ def browser(request, virtualdisplay):
     browser = Browser('phantomjs', executable_path=phantomjs)
 
     def fin():
+        import signal
         print "finalizer browser"
+        # Kill process so it does not linger
+        # https://github.com/seleniumhq/selenium/issues/767
+        browser.driver.service.process.send_signal(signal.SIGTERM)
         browser.quit()
     request.addfinalizer(fin)
 
