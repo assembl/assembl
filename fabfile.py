@@ -836,7 +836,7 @@ def check_and_create_database_user():
     if checkUser.failed:
         print(yellow("User does not exist"))
         run_db_command(as_venvcmd('assembl-pypsql -u {db_user} "{command}"'.format(
-            command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'" % (
+            command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
                 env.db_user, env.db_password,),
             db_user=system_db_user())))
         # run_db_command("bash -c 'psql -n -d postgres -c \"CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \\\'%s\\\';\"'" % (env.db_user, env.db_password))
