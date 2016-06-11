@@ -24,6 +24,7 @@ RUN     /etc/init.d/ssh start && \
            cp production.ini local.ini && \
            fab devenv install_builddeps && \
            cp docker/nginx_config_docker/default /etc/nginx/sites-enabled/ && \
+           fab devenv app_update_dependencies &&
            /etc/init.d/ssh stop
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
