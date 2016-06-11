@@ -835,7 +835,7 @@ def check_and_create_database_user():
             host=env.db_host, user=env.db_user, projectpath=env.projectpath))
     if checkUser.failed:
         print(yellow("User does not exist"))
-        run_db_command(as_venvcmd('assembl-pypsql -n {host} "{command}"'.format(
+        run_db_command(as_venvcmd('assembl-pypsql "{command}"'.format(
             command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'" % (env.db_user, env.db_password,),
             projectpath=env.projectpath,
             python=env.venvpath + "/bin/python",
