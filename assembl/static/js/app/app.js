@@ -2,6 +2,7 @@
 
 var Marionette = require('./shims/marionette.js'),
     $ = require('jquery'),
+    classlist = require('classlist-polyfill'),
     Raven = require('raven-js'),
     _ = require('underscore');
 

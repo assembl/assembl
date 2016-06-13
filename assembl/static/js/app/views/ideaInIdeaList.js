@@ -3,6 +3,7 @@
 var Backbone = require('backbone'),
     _ = require('underscore'),
     $ = require('jquery'),
+    classlist = require('classlist-polyfill'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
