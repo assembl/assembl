@@ -1004,6 +1004,11 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     });
   },
 
+  _getDefaultColor: function(){
+    var elem = $('#js_vote-result-default-color');
+    return elem.css('background-color');
+  },
+
   serializeData: function(){
     return {
       ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
@@ -1016,7 +1021,8 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   onRender: function(){
     //Have to define the data-points in an array.
     Ctx.removeCurrentlyDisplayedTooltips();
-    var unknownColor = '#515151'; //$gray2
+    // var unknownColor = '#515151'; //$gray2
+    var unknownColor = this._getDefaultColor();
     var displayTooltip = function(num, total, category){
       //Simplify to give more of a human feel.
       return i18n.sprintf(

@@ -458,6 +458,14 @@
   }
 }
 
+/*
+  This is used to transfer the default theme color to the javascript components
+  that will be created on the fly using D3.
+ */
+#js_vote-result-default-color{
+  background-color: $theme_activelink_color;
+}
+
 .token-vote-session { /* used both by vote form page and by vote results page */
   .question-info {
     .question-title {
