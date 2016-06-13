@@ -1632,7 +1632,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   },
 
   computeTokenSize: function(maximum_tokens_per_row){
-    var maximum_total_width = 325; // Could be 0.5 * popin_width
+    var maximum_total_width = 480; // Could be 0.5 * popin_width
     var token_horizontal_margin = 5; /* Horizontal total margin should match _tokenVote.scss::.tokens-for-idea.token-icon */
     var maximum_token_size = 20 + token_horizontal_margin; // Including token_horizontal_margin. Was 60
     var minimum_token_size = 14 + token_horizontal_margin; // Including token_horizontal_margin
