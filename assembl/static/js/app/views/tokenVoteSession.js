@@ -1529,7 +1529,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     that.$(".available-tokens").width(that.$(".popin-body").width());
     var popinHeaderTotalHeight = that.$(".popin-header").outerHeight();
     that.$(".available-tokens").css("top", popinHeaderTotalHeight + (popinHeaderTotalHeight > 0 ? "px" : ""));
-    that.$(".available-tokens-container").css('min-height', that.$(".available-tokens-container").height());
+    that.$(".available-tokens-container").css('min-height', "36px");
 
     that.$(".popin-body").on('scroll', _.bind(that.onScroll, that)); // scroll event does not bubble up, and scrollable element is now .popin-body instead of this.$el
   },
@@ -1634,8 +1634,8 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   computeTokenSize: function(maximum_tokens_per_row){
     var maximum_total_width = 325; // Could be 0.5 * popin_width
     var token_horizontal_margin = 5; /* Horizontal total margin should match _tokenVote.scss::.tokens-for-idea.token-icon */
-    var maximum_token_size = 25; // Including token_horizontal_margin. Was 60
-    var minimum_token_size = 12; // Including token_horizontal_margin
+    var maximum_token_size = 20 + token_horizontal_margin; // Including token_horizontal_margin. Was 60
+    var minimum_token_size = 14 + token_horizontal_margin; // Including token_horizontal_margin
     
     var token_size = maximum_token_size;
 
