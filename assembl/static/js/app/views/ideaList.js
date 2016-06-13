@@ -277,15 +277,21 @@ var IdeaList = AssemblPanel.extend({
   render: function() {
     //Overriding render because getting the scrollTop position of the ideaList body container
     //is lost upon re-rendering. BeforeRender and onRender are too late.
-    console.log("Render is called");
+    if (Ctx.debugRender) {
+        console.log("Render is called");
+    }
     this.body = this.$('.panel-body');
     if (this.body.get(0)) {
       var scrollTop = this.body.get(0).scrollTop;
       if (scrollTop !==0){
-        console.log("ScrollTop is non-zero. Setting it.");
+        if (Ctx.debugRender) {
+            console.log("ScrollTop is non-zero. Setting it.");
+        }
         this.bodyTopPosition = scrollTop;
       }
-      console.log("before scrollTop:"+this.bodyTopPosition);
+      if (Ctx.debugRender) {
+        console.log("before scrollTop:"+this.bodyTopPosition);
+      }
     }
     Object.getPrototypeOf(Object.getPrototypeOf(this)).render.apply(this, arguments);
   },
