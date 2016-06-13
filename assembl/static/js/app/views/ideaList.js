@@ -91,6 +91,10 @@ var IdeaList = AssemblPanel.extend({
     var that = this,
         collectionManager = new CollectionManager();
 
+    //Variable used to check the position of the ideaList upon re-renders
+    this.NUM_RENDERS = 3; //Update this if adding more promises/delays
+    this.bodyTopPosition = 0;
+
     var requestRender = function() {
       setTimeout(function(){
         if(!that.isViewDestroyed()) {
@@ -270,7 +274,24 @@ var IdeaList = AssemblPanel.extend({
     return this.defaultTableOfIdeasCollapsedState;
   },
 
+  render: function() {
+    //Overriding render because getting the scrollTop position of the ideaList body container
+    //is lost upon re-rendering. BeforeRender and onRender are too late.
+    console.log("Render is called");
+    this.body = this.$('.panel-body');
+    if (this.body.get(0)) {
+      var scrollTop = this.body.get(0).scrollTop;
+      if (scrollTop !==0){
+        console.log("ScrollTop is non-zero. Setting it.");
+        this.bodyTopPosition = scrollTop;
+      }
+      console.log("before scrollTop:"+this.bodyTopPosition);
+    }
+    Object.getPrototypeOf(Object.getPrototypeOf(this)).render.apply(this, arguments);
+  },
+
   onRender: function() {
+      console.log("OnRender is called");
       if (Ctx.debugRender) {
         console.log("ideaList:render() is firing");
       }
@@ -278,7 +299,6 @@ var IdeaList = AssemblPanel.extend({
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
       this.body = this.$('.panel-body');
       var that = this,
-          y = 0,
           rootIdea = null,
           rootIdeaDirectChildrenModels = [],
           filter = {},
@@ -289,10 +309,6 @@ var IdeaList = AssemblPanel.extend({
 
       function excludeRoot(idea) {
         return idea != rootIdea && !idea.hidden;
-      }
-
-      if (this.body.get(0)) {
-        y = this.body.get(0).scrollTop;
       }
 
       if (this.template != '#tmpl-loader') {
@@ -389,9 +405,20 @@ var IdeaList = AssemblPanel.extend({
         });
         that.getRegion('allMessagesView').show(allMessagesInIdeaListView);
 
+        //Adding a 1 second throttle in updating the scroll position per render.
+        //This will be cumbersome if many people are updating the scroll position at the same time.
+        // var _throttleUpdateBody = _.throttle(function(){
+        //   console.log("[Throttled] Restoring scroll position to ", this.bodyTopPosition);
+        //   that.body = that.$('.panel-body');
+        //   if (this.bodyTopPosition !== 0){
+        //     that.body.get(0).scrollTop = this.bodyTopPosition;
+        //   }
+        //   this.bodyTopPosition = 0;
+        // }, 400);
+
+        console.log("Restoring scroll position to ", that.bodyTopPosition);
         that.body = that.$('.panel-body');
-        //console.log("Restoring scroll position to ", y);
-        that.body.get(0).scrollTop = y;
+        that.body.get(0).scrollTop = that.bodyTopPosition;
         Assembl.vent.trigger("requestTour", "idea_list");
       }
     },
