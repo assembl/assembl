@@ -1,7 +1,13 @@
-.modal-token-vote-session .bbm-modal {
+.modal-token-vote-session .bbm-modal.bbm-modal--open {
   max-width: 800px;
   margin-top: 0;
   animation: none; /* required for the "position: fixed;" used on token bags to work properly */
+
+  .popin-body {
+    max-height: calc(90vh - 45px);
+    overflow-y: auto;
+    position: relative;
+  }
 
   .submit-button-container {
     margin-top: 20px;

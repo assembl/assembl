@@ -1394,7 +1394,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   className: 'modal-token-vote-session popin-wrapper',
   cancelEl: '.close, .js_close',
   events: {
-    'scroll': 'onScroll',
+    //'scroll .popin-body': 'onScroll', // scroll event does not bubble up, and scrollable element is now .popin-body instead of this.$el
     'click .submit-button-container a': 'onSubmit'
   },
 
@@ -1527,7 +1527,11 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
     that.availableTokensPositionTop = that.$(".available-tokens").position().top;
     that.$(".available-tokens").width(that.$(".popin-body").width());
+    var popinHeaderTotalHeight = that.$(".popin-header").outerHeight();
+    that.$(".available-tokens").css("top", popinHeaderTotalHeight + (popinHeaderTotalHeight > 0 ? "px" : ""));
     that.$(".available-tokens-container").css('min-height', that.$(".available-tokens-container").height());
+
+    that.$(".popin-body").on('scroll', _.bind(that.onScroll, that)); // scroll event does not bubble up, and scrollable element is now .popin-body instead of this.$el
   },
 
   onScroll: function(){
@@ -1535,7 +1539,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   },
 
   myOnScroll: function(){
-    if (this.$el.scrollTop() > this.availableTokensPositionTop) {
+    if (this.$(".popin-body").scrollTop() > this.availableTokensPositionTop) {
       this.$(".available-tokens").addClass("fixed");
     }
     else {
