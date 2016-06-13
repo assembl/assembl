@@ -313,7 +313,7 @@ var VotingWidgetModel = WidgetModel.extend({
     }
     switch (context) {
       case this.INFO_BAR:
-        var message = i18n.gettext("A vote session is ongoing.");
+        var message = i18n.gettext("A voting session has started.");
         if (endDate) {
           message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea);
         }

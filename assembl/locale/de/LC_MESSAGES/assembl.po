@@ -453,7 +453,7 @@ msgid "This vote widget is not fully configured"
 msgstr ""
 
 #: assembl/static/js/app/models/widget.js:316
-msgid "A vote session is ongoing."
+msgid "A voting session has started."
 msgstr "Es findet gerade eine Abstimmungsrunde statt."
 
 #: assembl/static/js/app/models/widget.js:322
