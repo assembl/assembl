@@ -29,6 +29,7 @@
     "browserify-shim": "~3.8.7",
     "chai": "~3.5.0",
     "chai-jquery": "~2.0.0",
+    "classlist-polyfill": "~1.0.3",
     "d3": "~3.5.5",
     "debug": "~2.2.0",
     "del": "~2.2.0",
