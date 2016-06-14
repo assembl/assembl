@@ -454,6 +454,7 @@ class Content(DiscussionBoundBase):
 
     def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
+        """invoke the modelWatcher on creation"""
         super(Content, self).send_to_changes(
             connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()

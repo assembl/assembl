@@ -1,3 +1,4 @@
+"""Announcements are similar to messages, but editable."""
 from sqlalchemy import (
     Column,
     UniqueConstraint,
@@ -88,7 +89,9 @@ class Announcement(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
 
+
 class IdeaAnnouncement(Announcement):
+    """An announcement attached to an idea"""
     __tablename__ = "idea_announce"
     id = Column(Integer, ForeignKey(
         'announce.id',

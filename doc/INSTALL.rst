@@ -241,6 +241,7 @@ Setting up a production dedicated instance
 Start as a user with sudo access
 
 .. code:: sh
+
     sudo apt-get install fabric git openssh-server
     sudo apt-get install nginx uwsgi uwsgi-plugin-python
     sudo adduser assembl_user #assembl_user is the name of a user dedicated to this instance
@@ -261,60 +262,66 @@ Start as a user with sudo access
     cp production.ini local.ini
 
 Change the values for:
-#If you use sentry to monitor:
-pipeline
-raven_url 
-dsn
 
-#Put your chosen database username and password in 
-db_database
-db_user
-db_pasasword
-sqlalchemy.url
-#CAREFULL: sqlalchemy.url needs to be edited TWICE in the file
+If you use sentry to monitor:
 
-assembl.admin_email
+* ``pipeline``
+* ``raven_url``
+* ``dsn``
 
-#Just type a random strings in these two
-session.secret
-security.email_token_salt
+Put your chosen database username and password in
 
-#Make sure your ssl works, and set
-accept_secure_connection = true
-require_secure_connection = true
-#Otherwise, your are jeopardiszing passwords...
+* ``db_database``
+* ``db_user``
+* ``db_pasasword``
+* ``sqlalchemy.url``  # CAREFUL: sqlalchemy.url needs to be edited TWICE in the file
+* ``assembl.admin_email``
 
-#The following must all be unique to the instance.  If you only have one instance on the server, you can keep the defaults
-changes.socket
-changes.websocket.port 
-celery_tasks.imap.broker
-celery_tasks.notification_dispatch.broker
-celery_tasks.notify.broker
-celery_tasks.translate.broker
-port
+Just type a random strings in these two:
+``session.secret``, ``security.email_token_salt``
 
-#Set it to the user you created above
-uid
+Make sure your ssl works, and set
+
+.. code:: ini
+
+    accept_secure_connection = true
+    require_secure_connection = true
+
+Otherwise, your are jeopardiszing passwords...
+
+The following must all be unique to the instance.  If you only have one instance on the server, you can keep the defaults
+
+* ``changes.socket``
+* ``changes.websocket.port``
+* ``celery_tasks.imap.broker``
+* ``celery_tasks.notification_dispatch.broker``
+* ``celery_tasks.notify.broker``
+* ``celery_tasks.translate.broker``
+* ``port``
+
+Set it to the user you created above
+``uid``
 
 (exit to sudoer account)
+
 .. code:: sh
+
     fab devenv bootstrap_from_checkout
     assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
 
-#Copy the content of doc/sample_nginx_config/assembl.yourdomain.com into nginx config file, and modify
+Copy the content of ``doc/sample_nginx_config/assembl.yourdomain.com`` into nginx config file, and modify
+
 .. code:: sh
+
     sudo nano /etc/nginx/sites-available/assembl.yourdomain.com
     ln -s /etc/nginx/sites-available/assembl.yourdomain.com .
 
-#Copy the content of doc/sample_systemd_script/assembl.service into /etc/systemd/system/assembl.service, and modify
+Copy the content of ``doc/sample_systemd_script/assembl.service`` into ``/etc/systemd/system/assembl.service``, and modify
+
 .. code:: sh
+
     systemctl enable assembl
     service assembl restart
 
 ensuite comme d'habitude
 (fichier nginx, domaine dans bluehost et dans ovh, courriels, raven, piwik...)
-
-
-
-
-    

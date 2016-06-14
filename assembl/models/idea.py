@@ -649,6 +649,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
     def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
+        """invoke the modelWatcher on creation"""
         connection = connection or self.db.connection()
         if self.is_tombstone:
             self.tombstone().send_to_changes(

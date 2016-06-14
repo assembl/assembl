@@ -1,3 +1,7 @@
+"""Records of actions taken by the platform users.
+
+"""
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -27,9 +31,13 @@ from .discussion import Discussion
 from .idea import Idea
 from ..auth import P_READ, P_SYSADMIN, CrudPermissions
 
+
 class Action(TombstonableMixin, DiscussionBoundBase):
     """
-    An action that can be taken by an actor.
+    An action that can be taken by an actor (a :py:class:`.auth.User`).
+
+    Most actions are expressed in terms of actor-verb-target-time,
+    with verbs including but not restricted to CRUD operations.
     """
     __tablename__ = 'action'
 
@@ -86,7 +94,7 @@ class Action(TombstonableMixin, DiscussionBoundBase):
 
 class ActionOnPost(Action):
     """
-    An action that is taken on a post. (Mixin)
+    An action whose target is a post. (Mixin)
     """
     __tablename__ = 'action_on_post'
     id = Column(

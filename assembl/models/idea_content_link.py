@@ -374,6 +374,7 @@ class Extract(IdeaContentPositiveLink):
 
     def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
+        """invoke the modelWatcher on creation"""
         super(Extract, self).send_to_changes(
             connection, operation, discussion_id, view_def)
         watcher = get_model_watcher()

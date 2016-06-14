@@ -1,3 +1,7 @@
+"""Infrastructure to route CRUD events through Celery_.
+
+.. _Celery: http://www.celeryproject.org/
+"""
 from zope import interface
 
 from . import config_celery_app, CeleryWithConfig
@@ -9,6 +13,8 @@ notif_dispatch_celery_app = CeleryWithConfig('celery_tasks.notification_dispatch
 
 
 class ModelEventWatcherCeleryReceiver(object):
+    """A IModelEventWatcher that will receive CRUD events through celery
+    and dispatch them to another :py:class:`..lib.model_watcherIModelEventWatcher`"""
     interface.implements(IModelEventWatcher)
 
     singleton = None
@@ -97,6 +103,7 @@ def processAccountModifiedTask(id):
 
 
 class ModelEventWatcherCelerySender(object):
+    """A IModelEventWatcher that will receive CRUD events and send them through celery_"""
     interface.implements(IModelEventWatcher)
 
     def processPostCreated(self, id):

@@ -65,6 +65,7 @@ class SafeMIMEText(MIMEText):
         else:
             MIMEText.__init__(self, text, subtype, charset)
 
+
 class NotificationSubscriptionClasses(DeclEnum):
     #System notifications (can't unsubscribe)
     EMAIL_BOUNCED = "EMAIL_BOUNCED", "Mandatory"
@@ -108,15 +109,17 @@ class NotificationCreationOrigin(DeclEnum):
     DISCUSSION_DEFAULT = "DISCUSSION_DEFAULT", "The notification subscription was created by the default discussion configuration"
     PARENT_NOTIFICATION = "PARENT_NOTIFICATION", "The notification subscription was created by another subscription (such as following all message threads a user participated in"
 
+
 class NotificationSubscriptionStatus(DeclEnum):
     ACTIVE = "ACTIVE", "Normal status, subscription will create notifications"
     UNSUBSCRIBED = "UNSUBSCRIBED", "The user explicitely unsubscribed from this notification"
     INACTIVE_DFT = "INACTIVE_DFT", "This subscription is defined in the template, but not subscribed by default."
 
+
 class NotificationSubscription(DiscussionBoundBase):
-    """
-    a subscription to a specific type of notification. Subclasses will implement the actual code
-    """
+    """A subscription to a specific type of notification.
+
+    Subclasses will implement the actual code."""
     __tablename__ = "notification_subscription"
     id = Column(
         Integer,
@@ -234,6 +237,7 @@ class NotificationSubscription(DiscussionBoundBase):
 
     @abstractmethod
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
+        """Process a CRUD event on a model, creating :py:class:`Notification` as appropriate"""
         pass
 
     def get_human_readable_description(self):
@@ -667,6 +671,10 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
 
 
 class ModelEventWatcherNotificationSubscriptionDispatcher(object):
+    """Calls :py:meth:`NotificationSubscription.process` on the appropriate
+    :py:class:`NotificationSubscription` subclass when a certain CRUD event
+    is detected through the :py:class:`assembl.lib.model_watcher.IModelEventWatcher`
+    protocol"""
     interface.implements(IModelEventWatcher)
 
     def processEvent(self, verb, objectClass, objectId):
@@ -675,7 +683,7 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
         objectInstance = waiting_get(objectClass, objectId)
         assert objectInstance
         assert objectInstance.id
-        #We need the discussion id
+        # We need the discussion id
         assert isinstance(objectInstance, DiscussionBoundBase)
         applicableInstancesByUser = defaultdict(list)
         subscriptionClasses = get_concrete_subclasses_recursive(NotificationSubscription)
@@ -787,7 +795,7 @@ class MissingEmailException(Exception):
 
 class Notification(Base):
     """
-    A notification
+    A notification to a user about some situation.
     """
     __tablename__ = "notification"
     __mapper_args__ = {

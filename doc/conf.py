@@ -41,6 +41,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinxcontrib.httpdomain',
+    'sphinxcontrib.zopeext',
     'pyramid_autodoc',
     'sphinxcontrib.autoanysrc',
     'alabaster'

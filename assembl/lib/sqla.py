@@ -1169,7 +1169,8 @@ class BaseOps(object):
                         # It may not be an object after all
                         setattr(self, key, value)
                         continue
-                    raise 
+                    raise RuntimeError(
+                        "Could not create a sub-object from "+str(dict))
             elif isinstance(value, list):
                 assert can_be_list
                 for subval in value:
@@ -1692,6 +1693,11 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
 
 
 def get_model_watcher():
+    """Get the global implementation of py:class:`assembl.lib.model_watcherIModelEventWatcher`
+    for this process.
+
+    Often set in :py:func:`assembl.lib.model_watcher.configure_model_watcher`.
+    """
     from .model_watcher import IModelEventWatcher
     return getGlobalSiteManager().queryUtility(IModelEventWatcher)
 

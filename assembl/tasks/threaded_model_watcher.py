@@ -1,3 +1,9 @@
+"""Dispatch model events to another thread, instead of through Celery.
+
+Note that the ModelEventWatcher are Mapper-level flush events, so they cannot
+create objects. This pushes the logic on another thread, so we're already
+using another thread-specific session."""
+
 from threading import Thread
 from Queue import Queue
 
@@ -5,14 +11,11 @@ from zope import interface
 
 from ..lib.model_watcher import IModelEventWatcher
 
-"""The ModelEventWatcher are Mapper-level flush events, so they cannot create objects.
-This pushes the logic on another thread, as a simpler alternative to celery,
-so we're already using another per-thread session."""
-
-
 class ThreadDispatcher(Thread):
+    """A thread that will receive CRUD events and hand them to another model watcher."""
     singleton = None
     daemon = True
+    "The class of the model watcher"
     mw_class = None
 
     @classmethod
@@ -43,6 +46,8 @@ class ThreadDispatcher(Thread):
 
 
 class ThreadedModelEventWatcher(object):
+    """A IModelEventWatcher that will dispatch events to its
+    :py:class:`ThreadDispatcher`"""
     interface.implements(IModelEventWatcher)
 
     def __init__(self):
