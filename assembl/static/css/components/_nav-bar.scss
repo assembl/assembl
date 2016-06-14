@@ -2,6 +2,12 @@
 
 $textProfile: #515151;
 
+.cookie-banner{
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+
 .navbar {
   @include no-selection;
   @include box-sizing(border-box);

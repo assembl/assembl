@@ -13,6 +13,7 @@ var Marionette = require('./shims/marionette.js'),
     UrlParser = require('./url/url.js'),
     GroupContainer = require('./views/groups/groupContainer.js'),
     PanelSpecTypes = require('./utils/panelSpecTypes.js'),
+    CookiesManager = require("./utils/CookiesManager.js"),
     CollectionManager = require('./common/collectionManager.js'),
     ViewsFactory = require('./objects/viewsFactory.js'),
     AdminDiscussion = require('./views/admin/adminDiscussion.js'),
@@ -399,21 +400,20 @@ var routeManager = Marionette.Object.extend({
   restoreViews: function(from_home, url_structure, skip_group_state) {
     var collectionManager = CollectionManager();
     Assembl.headerRegions.show(new NavBar());
-    //If it's a small screen (mobile) don't instantiate the infobar
+    //On small screen (mobile) don't instantiate the infobar
     if(!Ctx.isSmallScreen()){
       collectionManager.getWidgetsForContextPromise(
         Widget.Model.prototype.INFO_BAR, null, ["closeInfobar"]).then(
         function(coll) {
-          console.log("collection avant: ", coll);
           var infobarsCollection = new InfobarsModels.InfobarItemCollection();
-          //if cookie
-          infobarsCollection.add(new InfobarsModels.CookieInfobarItemModel());
+          var isCookiesUserChoiceSet = CookiesManager.getCookiesPolicyUserChoice();
+          if(!isCookiesUserChoiceSet){
+            infobarsCollection.add(new InfobarsModels.CookieInfobarItemModel());
+          }
           coll.each(function(widgetModel){
             var model = new InfobarsModels.WidgetInfobarItemModel(widgetModel.attributes);
-            $.extend(model, widgetModel);
-            infobarsCollection.add(model);
+            infobarsCollection.add(widgetModel);
           });
-          console.log("collection après: ", infobarsCollection);
           Assembl.infobarRegion.show(new InfobarsViews.InfobarsView({collection: infobarsCollection}));
         });
     }

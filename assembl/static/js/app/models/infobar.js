@@ -5,7 +5,7 @@ var Base = require("./base.js");
 var InfobarItemCollection = Base.Collection.extend({
   constructor: function InfobarCollection() {
     Base.Collection.apply(this, arguments);
-  } //, model: InfobarItemModel
+  }
 });
 
 

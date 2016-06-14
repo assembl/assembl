@@ -1,20 +1,17 @@
 'use strict';
 
-var $ = require('jquery');
-
-var getCookiesAuthorisation = function() {
-  //var name = 'cookiePolicyDecided';
-  //document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+var getCookiesPolicyUserChoice = function() {
   var cookies = document.cookie;
-  if(cookies.indexOf('cookiePolicyDecided') <= -1){
-    return true;
-  }
+  console.log(cookies);
+  return cookies.indexOf('cookiesPolicyUserChoice') > -1;
 };
-var setCookiesAuthorisation = function() {
+var setCookiesPolicyUserChoice = function(accept) {
   var date = new Date();
-  document.cookie = 'cookiePolicyDecided=' + date;
+  //Cookie policy: in France the user choice is available for 13 months
+  date.setMonth(date.getMonth() + 13);
+  document.cookie = 'cookiesPolicyUserChoice=' + accept + ';expires=' + date + ';';
 };
 module.exports = {
-    getCookiesAuthorisation: getCookiesAuthorisation,
-    setCookiesAuthorisation:setCookiesAuthorisation
+    getCookiesPolicyUserChoice: getCookiesPolicyUserChoice,
+    setCookiesPolicyUserChoice:setCookiesPolicyUserChoice
 };
