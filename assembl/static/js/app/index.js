@@ -10,7 +10,7 @@ var App = require('./app.js'),
 /**
  * Init current language
  * */
-Ctx.initLocale();
+Ctx.initMomentJsLocale();
 
 if (raven_url.length) {
   Raven.config(

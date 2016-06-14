@@ -1443,18 +1443,26 @@ Context.prototype = {
     assembl_locale = locale;
   },
 
-  initLocale: function() {
-
+  initMomentJsLocale: function() {
+    //Moment.j only has specific locales, for example, it has 
+    //fr-ca, but no fr-fr
+    //If you add new language support, you need to add it here.  Supported 
+    //locales for moment.js can be found in /node_modules/moment/locale/
     switch (assembl_locale){
       case 'en_CA':
         require('moment/locale/en-ca.js');
         break;
       case 'en_GB':
         require('moment/locale/en-gb.js');
+      case 'en_AU':
+        require('moment/locale/en-au.js');
+      case 'en_IE':
+        require('moment/locale/en-ie.js');
       case 'de_AT':
         require('moment/locale/de-at.js');
         break;
       case 'de':
+      case 'de_DE':
         require('moment/locale/de.js');
         break;
       case 'fr_CA':
@@ -1464,12 +1472,14 @@ Context.prototype = {
         require('moment/locale/fr-ch.js');
         break;
       case 'fr':
+      case 'fr_FR':
         require('moment/locale/fr.js');
         break;
       // otherwise english default
     }
 
     Moment.locale(this.getLocale());
+    return Moment; 
   },
 
   /**
@@ -1477,9 +1487,6 @@ Context.prototype = {
    * inits ALL app components
    */
   init: function() {
-
-    //Moment.locale(this.getLocale());
-
     $(document.body).removeClass('preload');
     this.__createAnnotatorSelectionTooltipDiv();
 
