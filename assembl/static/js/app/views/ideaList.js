@@ -92,7 +92,6 @@ var IdeaList = AssemblPanel.extend({
         collectionManager = new CollectionManager();
 
     //Variable used to check the position of the ideaList upon re-renders
-    this.NUM_RENDERS = 3; //Update this if adding more promises/delays
     this.bodyTopPosition = 0;
 
     var requestRender = function() {
@@ -297,7 +296,6 @@ var IdeaList = AssemblPanel.extend({
   },
 
   onRender: function() {
-      console.log("OnRender is called");
       if (Ctx.debugRender) {
         console.log("ideaList:render() is firing");
       }
@@ -377,6 +375,11 @@ var IdeaList = AssemblPanel.extend({
           that.ideaView.show(ideaFamilies);
 
           Ctx.initTooltips(that.$el);
+          if (Ctx.debugRender) {
+            console.log("Restoring scroll position to ", that.bodyTopPosition);
+          }
+          that.body = that.$('.panel-body');
+          that.body.scrollTop(that.bodyTopPosition);
         });
 
         //sub menu other
@@ -410,21 +413,6 @@ var IdeaList = AssemblPanel.extend({
           groupContent: that.getContainingGroup()
         });
         that.getRegion('allMessagesView').show(allMessagesInIdeaListView);
-
-        //Adding a 1 second throttle in updating the scroll position per render.
-        //This will be cumbersome if many people are updating the scroll position at the same time.
-        // var _throttleUpdateBody = _.throttle(function(){
-        //   console.log("[Throttled] Restoring scroll position to ", this.bodyTopPosition);
-        //   that.body = that.$('.panel-body');
-        //   if (this.bodyTopPosition !== 0){
-        //     that.body.get(0).scrollTop = this.bodyTopPosition;
-        //   }
-        //   this.bodyTopPosition = 0;
-        // }, 400);
-
-        console.log("Restoring scroll position to ", that.bodyTopPosition);
-        that.body = that.$('.panel-body');
-        that.body.get(0).scrollTop = that.bodyTopPosition;
         Assembl.vent.trigger("requestTour", "idea_list");
       }
     },
