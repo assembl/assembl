@@ -310,7 +310,7 @@ var routeManager = Marionette.Object.extend({
         break;
     };
     Ctx.setCurrentModalView(View);
-    Assembl.slider.show(new View({widgetModel: widget}));
+    Assembl.slider.show(new View({model: widget}));
   },
 
   // example: http://localhost:6543/jacklayton/widget/local%3AWidget%2F64/result
