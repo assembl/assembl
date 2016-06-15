@@ -31,7 +31,7 @@ def view_notification_subscription_collection(request):
     ctx = request.context
     templates = ctx.find_collection('Discussion.user_templates')
     if templates:
-        templates.parent_instance.reset_participant_default_subscriptions(False)
+        templates.parent_instance.reset_notification_subscriptions_from_defaults(False)
     return collection_view(request, 'default')
 
 
@@ -60,7 +60,7 @@ def notif_collection_add_json(request):
         db.flush()
         templates = ctx.find_collection('Discussion.user_templates')
         if templates:
-            templates.parent_instance.reset_participant_default_subscriptions(False)
+            templates.parent_instance.reset_notification_subscriptions_from_defaults(False)
         view = request.GET.get('view', None) or 'default'
         return CreationResponse(first, user_id, permissions, view)
 
@@ -121,7 +121,7 @@ def put_notification_request(request):
     templates = request.context.find_collection(
         'Discussion.user_templates')
     if templates:
-        templates.parent_instance.reset_participant_default_subscriptions()
+        templates.parent_instance.reset_notification_subscriptions_from_defaults()
     return result
 
 
@@ -129,5 +129,5 @@ def put_notification_request(request):
              ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
              name="reset_default_subscriptions")
 def reset_default_subscriptions(request):
-    request.context._instance.reset_participant_default_subscriptions()
+    request.context._instance.reset_notification_subscriptions_from_defaults()
     return HTTPOk()

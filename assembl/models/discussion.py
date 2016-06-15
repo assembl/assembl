@@ -391,13 +391,75 @@ class Discussion(DiscussionBoundBase):
         from ..auth import R_PARTICIPANT
         return self.get_user_template(R_PARTICIPANT, True)
 
-    def reset_participant_default_subscriptions(self, force=True):
+    def reset_notification_subscriptions_from_defaults(self, force=True):
+        """Reset all notification subscriptions for this discussion"""
+        from .notification import (
+            NotificationSubscription, NotificationSubscriptionStatus, NotificationCreationOrigin)
         template, changed = self.get_participant_template()
-        # TODO maparent: This is too slow. I need to preload subscriptions.
-        # Consider improving NotificationSubscription.reset_defaults
-        if changed or force:
-            for participant in self.all_participants:
-                participant.get_notification_subscriptions(self.id, True)
+        roles_subscribed = defaultdict(list)
+        for template in self.user_templates:
+            template_subscriptions, changed2 = template.get_notification_subscriptions_and_changed()
+            changed |= changed2
+            for subscription in template_subscriptions:
+                if subscription.status == NotificationSubscriptionStatus.ACTIVE:
+                    roles_subscribed[subscription.__class__].append(template.role_id)
+        if force or changed:
+            needed_classes = UserTemplate.get_applicable_notification_subscriptions_classes()
+            for notif_cls in needed_classes:
+                self.reset_notification_subscriptions_for(notif_cls, roles_subscribed[notif_cls])
+
+    def reset_notification_subscriptions_for(self, notif_cls, roles_subscribed):
+        from .notification import (
+            NotificationSubscription, NotificationSubscriptionStatus, NotificationCreationOrigin)
+        # Make most subscriptions inactive (simpler than deciding which ones should be)
+        deactivated = self.db.query(notif_cls.id
+            ).join(User, notif_cls.user_id == User.id
+            ).join(LocalUserRole, LocalUserRole.user_id == User.id
+            ).filter(
+                LocalUserRole.discussion_id == self.id,
+                notif_cls.discussion_id == self.id,
+                notif_cls.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                notif_cls.status == NotificationSubscriptionStatus.ACTIVE)
+        # Should we send them to the socket? We do not at this point.
+        # Some commented code below would allow this.
+        # deactivated = {x for (x,) in deactivated}
+        self.db.query(notif_cls).filter(notif_cls.id.in_(deactivated.subquery())).update(
+            {"status": NotificationSubscriptionStatus.INACTIVE_DFT}, synchronize_session=False)
+        if roles_subscribed:
+            # Make some subscriptions active (back)
+            activated = self.db.query(notif_cls.id
+                ).join(User, notif_cls.user_id == User.id
+                ).join(LocalUserRole, LocalUserRole.user_id == User.id
+                ).filter(
+                    LocalUserRole.discussion_id == self.id,
+                    LocalUserRole.role_id.in_(roles_subscribed),
+                    notif_cls.discussion_id == self.id,
+                    notif_cls.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                    notif_cls.status == NotificationSubscriptionStatus.INACTIVE_DFT)
+            # activated = {x for (x,) in activated}
+            self.db.query(notif_cls).filter(notif_cls.id.in_(activated.subquery())).update(
+                {"status": NotificationSubscriptionStatus.ACTIVE}, synchronize_session=False)
+            # Materialize missing subscriptions
+            missing_subscriptions = self.db.query(User.id
+                ).join(LocalUserRole, LocalUserRole.user_id == User.id
+                ).outerjoin(notif_cls, (notif_cls.user_id == User.id) & (
+                                        notif_cls.discussion_id == self.id)
+                ).filter(LocalUserRole.discussion_id == self.id,
+                         LocalUserRole.role_id.in_(roles_subscribed),
+                         notif_cls.id == None).all()
+            for (user_id,) in missing_subscriptions:
+                self.db.add(notif_cls(
+                    discussion_id=self.id,
+                    user_id=user_id,
+                    creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                    status=NotificationSubscriptionStatus.ACTIVE))
+        # else:
+        #     activated = {}
+        # changed = deactivated.symmetric_difference(activated)
+        # changed = self.db.query(NotificationSubscription).filter(
+        #     NotificationSubscription.id.in_(changed))
+        # for ns in changed:
+        #     ns.send_to_changes(discussion_id=self.id)
 
     @classmethod
     def extra_collections(cls):
