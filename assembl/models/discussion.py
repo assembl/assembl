@@ -420,11 +420,7 @@ class Discussion(DiscussionBoundBase):
                 notif_cls.discussion_id == self.id,
                 notif_cls.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT,
                 notif_cls.status == NotificationSubscriptionStatus.ACTIVE)
-        # Should we send them to the socket? We do not at this point.
-        # Some commented code below would allow this.
-        # deactivated = {x for (x,) in deactivated}
-        self.db.query(notif_cls).filter(notif_cls.id.in_(deactivated.subquery())).update(
-            {"status": NotificationSubscriptionStatus.INACTIVE_DFT}, synchronize_session=False)
+        deactivated_ids = {x for (x,) in deactivated}
         if roles_subscribed:
             # Make some subscriptions active (back)
             activated = self.db.query(notif_cls.id
@@ -436,9 +432,13 @@ class Discussion(DiscussionBoundBase):
                     notif_cls.discussion_id == self.id,
                     notif_cls.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT,
                     notif_cls.status == NotificationSubscriptionStatus.INACTIVE_DFT)
-            # activated = {x for (x,) in activated}
-            self.db.query(notif_cls).filter(notif_cls.id.in_(activated.subquery())).update(
-                {"status": NotificationSubscriptionStatus.ACTIVE}, synchronize_session=False)
+            activated_ids = {x for (x,) in activated}
+            self.db.query(notif_cls
+                ).filter(notif_cls.id.in_(activated.subquery())
+                ).update(
+                    {"status": NotificationSubscriptionStatus.ACTIVE,
+                     "last_status_change_date": datetime.utcnow()},
+                    synchronize_session=False)
             # Materialize missing subscriptions
             missing_subscriptions = self.db.query(User.id
                 ).join(LocalUserRole, LocalUserRole.user_id == User.id
@@ -453,9 +453,18 @@ class Discussion(DiscussionBoundBase):
                     user_id=user_id,
                     creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
                     status=NotificationSubscriptionStatus.ACTIVE))
-        # else:
-        #     activated = {}
-        # changed = deactivated.symmetric_difference(activated)
+        else:
+            activated_ids = set()
+        deactivated_ids -= activated_ids
+        self.db.query(notif_cls
+            ).filter(notif_cls.id.in_(deactivated_ids)
+            ).update(
+                {"status": NotificationSubscriptionStatus.INACTIVE_DFT,
+                 "last_status_change_date": datetime.utcnow()},
+                synchronize_session=False)
+
+        # Should we send them to the socket? We do not at this point.
+        # changed = deactivated_ids + activated_ids
         # changed = self.db.query(NotificationSubscription).filter(
         #     NotificationSubscription.id.in_(changed))
         # for ns in changed:
