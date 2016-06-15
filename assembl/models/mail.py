@@ -31,7 +31,7 @@ from sqlalchemy import (
     UnicodeText,
     Boolean,
 )
-from ..lib.sqla_types import CoerceUnicode
+from ..lib.sqla_types import (CoerceUnicode, EmailString)
 
 from .langstrings import LangString
 from .generic import PostSource
@@ -57,7 +57,7 @@ class AbstractMailbox(PostSource):
 
     folder = Column(UnicodeText, default=u"INBOX", nullable=False)
 
-    admin_sender = Column(String)
+    admin_sender = Column(EmailString)
 
     last_imported_email_uid = Column(UnicodeText)
     subject_mangling_regex = Column(UnicodeText, nullable=True)
