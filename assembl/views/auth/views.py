@@ -1074,8 +1074,8 @@ def send_change_password_email(
         # sanitize
         sender_name = re.sub(
             ur"[^-\w\s'\u2019\u2032\u00b4\.\(\)]", '', sender_name, 0, re.UNICODE)
-        sender_name = Header(sender_name, 'utf-8').encode()
         sender = '"%s" <%s>' % (sender_name, sender_email)
+        sender_name = Header(sender_name, 'utf-8').encode()
         if len(sender) > 255:
             sender = sender_email
     else:
