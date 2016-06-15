@@ -2,35 +2,33 @@
 
 var Base = require("./base.js");
 
-var InfobarItemCollection = Base.Collection.extend({
-  constructor: function InfobarCollection() {
+var InfobarsCollection = Base.Collection.extend({
+  constructor: function InfobarsCollection() {
     Base.Collection.apply(this, arguments);
   }
 });
 
-
-var InfobarItemModel = Base.Model.extend({
-    constructor:function InfobarItemModel(){
+var InfobarModel = Base.Model.extend({
+    constructor:function InfobarModel(){
         Base.Model.apply(this, arguments);
     }
 });
 
-
-var WidgetInfobarItemModel = InfobarItemModel.extend({
-    constructor:function WidgetInfobarItemModel(){
+var WidgetInfobarModel = InfobarModel.extend({
+    constructor:function WidgetInfobarModel(){
         Base.Model.apply(this, arguments);
     }
 });
 
-var CookieInfobarItemModel = InfobarItemModel.extend({
-    constructor:function CookieInfobarItemModel(){
+var CookieInfobarModel = InfobarModel.extend({
+    constructor:function CookieInfobarModel(){
         Base.Model.apply(this, arguments);
     }
 });
 
 module.exports = {
-    InfobarItemCollection:InfobarItemCollection,
-    InfobarItemModel:InfobarItemModel,
-    WidgetInfobarItemModel:WidgetInfobarItemModel,
-    CookieInfobarItemModel:CookieInfobarItemModel,
+    InfobarsCollection:InfobarsCollection,
+    InfobarModel:InfobarModel,
+    WidgetInfobarModel:WidgetInfobarModel,
+    CookieInfobarModel:CookieInfobarModel,
 };

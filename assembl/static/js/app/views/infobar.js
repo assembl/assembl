@@ -2,12 +2,8 @@
 
 var Marionette = require('../shims/marionette.js'),
     Assembl = require('../app.js'),
-    i18n = require("../utils/i18n.js"),
     CookiesManager = require("../utils/cookiesManager.js"),
-    Moment = require('moment'),
-    CollectionManager = require('../common/collectionManager.js'),
     Widget = require('../models/widget.js'),
-    InfobarsModels = require('../models/infobar.js'),
     Ctx = require('../common/context.js'),
     $ = require('jquery');
 
@@ -17,20 +13,16 @@ var CookieInfobarItemView = Marionette.LayoutView.extend({
   },
   template: '#tmpl-cookieBanner',
   ui:{
-    acceptCookieBtn:"#acceptCookie-btn",
-    refuseCookieBtn:"#refuseCookie-btn"
+    cookiesBtn:"#js_cookie-btn"
   },
   events:{
-    "click @ui.acceptCookieBtn":"acceptCookie",
-    "click @ui.refuseCookieBtn":"refuseCookie"
+    "click @ui.cookiesBtn":"openCookiesSettings"
   },
-  acceptCookie:function(){
-    CookiesManager.setCookiesPolicyUserChoice(true);
+  openCookiesSettings:function(){
+    var piwikIframe = new PiwikIframeModal();
+    Assembl.slider.show(piwikIframe); 
+    CookiesManager.setCookiesAuthorization();
     this.closeInfobar();
-  },
-  refuseCookie:function(){
-    CookiesManager.setCookiesPolicyUserChoice(false);
-    this.closeInfobar();    
   },
   closeInfobar: function() {
     this.destroy();
@@ -39,11 +31,20 @@ var CookieInfobarItemView = Marionette.LayoutView.extend({
   }
 });
 
+var PiwikIframeModal = Backbone.Modal.extend({
+  constructor: function PiwikIframeModal(){
+    Backbone.Modal.apply(this, arguments);
+  },
+  template: '#tmpl-piwikIframeModal',
+  className: 'modal-ckeditorfield popin-wrapper',
+  keyControl:false,
+  cancelEl: '.close'
+});
+
 var WidgetInfobarItemView = Marionette.LayoutView.extend({
   constructor: function InfobarItem() {
     Marionette.LayoutView.apply(this, arguments);
   },
-
   template: '#tmpl-infobar',
   className: 'content-infobar',
   ui: {
@@ -55,7 +56,6 @@ var WidgetInfobarItemView = Marionette.LayoutView.extend({
     'click .js_openSession': 'openSession',
     'click .js_openTargetInModal': 'openTargetInModal'
   },
-
   onButtonClick: function(evt) {
     if ( evt && _.isFunction(evt.preventDefault) ){
       evt.preventDefault();
@@ -112,6 +112,7 @@ var InfobarsView = Marionette.CollectionView.extend({
   collectionEvents: {
     "add remove reset change": "adjustInfobarSize"
   },
+  //TO DO: refactor because should not be necessary to set the top of 'groupContainer' in js file
   adjustInfobarSize: function(evt) {
     var el = Assembl.groupContainer.$el;
     var n = this.collection.length;

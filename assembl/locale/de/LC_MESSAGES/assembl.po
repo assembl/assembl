@@ -3690,6 +3690,18 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
+#: assembl/templates/views/piwikIframeModal.tmpl:3
+msgid "Set cookies"
+msgstr ""
+
+#: assembl/templates/views/cookieBanner.tmpl:2
+msgid "By using our site, you consent to cookies being used for improvement of our service?"
+msgstr ""
+
+#: assembl/templates/views/cookieBanner.tmpl:3
+msgid "Make my choice"
+msgstr ""
+
 #: assembl/templates/views/segment.tmpl:8
 #, python-format
 msgid "Harvested by %(name)s %(date)s"

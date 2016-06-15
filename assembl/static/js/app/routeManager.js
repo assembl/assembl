@@ -404,14 +404,14 @@ var routeManager = Marionette.Object.extend({
     if(!Ctx.isSmallScreen()){
       collectionManager.getWidgetsForContextPromise(
         Widget.Model.prototype.INFO_BAR, null, ["closeInfobar"]).then(
-        function(coll) {
-          var infobarsCollection = new InfobarsModels.InfobarItemCollection();
-          var isCookiesUserChoiceSet = CookiesManager.getCookiesPolicyUserChoice();
+        function(widgetCollection) {
+          var infobarsCollection = new InfobarsModels.InfobarsCollection();
+          var isCookiesUserChoiceSet = CookiesManager.getCookiesAuthorization();
           if(!isCookiesUserChoiceSet){
-            infobarsCollection.add(new InfobarsModels.CookieInfobarItemModel());
+            infobarsCollection.add(new InfobarsModels.CookieInfobarModel());
           }
-          coll.each(function(widgetModel){
-            var model = new InfobarsModels.WidgetInfobarItemModel(widgetModel.attributes);
+          widgetCollection.each(function(widgetModel){
+            var model = new InfobarsModels.WidgetInfobarModel(widgetModel.attributes);
             infobarsCollection.add(widgetModel);
           });
           Assembl.infobarRegion.show(new InfobarsViews.InfobarsView({collection: infobarsCollection}));
