@@ -21,7 +21,7 @@ var CookieInfobarItemView = Marionette.LayoutView.extend({
   openCookiesSettings:function(){
     var piwikIframe = new PiwikIframeModal();
     Assembl.slider.show(piwikIframe); 
-    CookiesManager.setCookiesAuthorization();
+    CookiesManager.setUserCookiesAuthorization();
     this.closeInfobar();
   },
   closeInfobar: function() {

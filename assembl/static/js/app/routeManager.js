@@ -406,8 +406,8 @@ var routeManager = Marionette.Object.extend({
         Widget.Model.prototype.INFO_BAR, null, ["closeInfobar"]).then(
         function(widgetCollection) {
           var infobarsCollection = new InfobarsModels.InfobarsCollection();
-          var isCookiesUserChoiceSet = CookiesManager.getCookiesAuthorization();
-          if(!isCookiesUserChoiceSet){
+          var isCookieUserChoice = CookiesManager.getUserCookiesAuthorization();
+          if(!isCookieUserChoice){
             infobarsCollection.add(new InfobarsModels.CookieInfobarModel());
           }
           widgetCollection.each(function(widgetModel){
