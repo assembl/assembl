@@ -1,4 +1,4 @@
-<div id="JukeTube" ng-init="init()" style="padding:20px;">
+<div id="JukeTube" ng-init="init()">
     <div id="player">
         <div id="placeholder"></div>
 
@@ -46,9 +46,9 @@
 
     <div id="results">
         <p>
-            {{ 'videoTopExplanation' | translate }} <span style="font-weight:700;color:#000000">{{idea.shortTitle}}</span>{{ 'videoTopExplanation2' | translate }} <span style="font-weight:700">{{discussion.topic}}</span>
+            {{ 'videoTopExplanation' | translate }} <span class="strong">{{idea.shortTitle}}</span>{{ 'videoTopExplanation2' | translate }} <span class="strong">{{discussion.topic}}</span>
         </p>
-        <h3 style="font-weight:700;font-size:18px;padding-bottom:0px;">
+        <h3>
             {{ 'videoTopExplanationStep1' | translate }}
         </h3>
 
@@ -89,7 +89,7 @@
             <p ng-show="inspiration_keywords_related_no_results">{{ 'videoNoRelatedTermsSearchResults' | translate: {query: query} }}
         </fieldset>
         <!-- -->
-        <h3 style="font-weight:700;font-size:18px;padding-bottom:0px;">
+        <h3>
             {{ 'videoTopExplanationStep2' | translate }}
         </h3>
 

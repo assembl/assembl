@@ -5,6 +5,7 @@
 
 #JukeTube {
   width: 100%;
+  padding: 20px;
   input[type="submit"] {
     vertical-align: top;
   }
@@ -83,6 +84,16 @@
     padding-right: 6px;
     overflow: hidden;
     min-width: 372px;
+
+    .strong {
+      font-weight: 700;
+    }
+
+    h3 {
+      font-weight: 700;
+      font-size: 18px;
+      padding-bottom: 0px;
+    }
 
     fieldset {
       background: #f5f5f5;
