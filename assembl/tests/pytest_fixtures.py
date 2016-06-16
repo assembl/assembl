@@ -990,21 +990,7 @@ def creativity_session_widget_post(
 
 
 @pytest.fixture(scope="module")
-def virtualdisplay(request):
-    from pyvirtualdisplay import Display
-    display = Display(visible=0, size=(1024, 768))
-    display.start()
-
-    def fin():
-        print "finalizer virtualdisplay"
-        display.stop()
-    request.addfinalizer(fin)
-
-    return display
-
-
-@pytest.fixture(scope="module")
-def browser(request, virtualdisplay):
+def browser(request):
     from os.path import dirname
     # interference from system phantomjs
     phantomjs = dirname(dirname(dirname(__file__))

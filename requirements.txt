@@ -30,7 +30,6 @@ DateTime==4.1.1
 docutils==0.12
 dogpile.cache==0.6.1
 dogpile.core==0.4.1
-EasyProcess==0.2.2
 ecdsa==0.13
 enum34==1.1.6
 Fabric==1.11.1
@@ -112,7 +111,6 @@ python-dateutil==2.5.3
 python-openid==2.2.5
 -e git+https://github.com/imaginationforpeople/python-social-auth.git@assembl#egg=python_social_auth
 pytz==2016.4
-pyvirtualdisplay==0.2
 pyzmq==15.2.0
 raven==5.20.0
 rdflib-jsonld==0.4.0
