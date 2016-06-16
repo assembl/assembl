@@ -5,7 +5,21 @@ from .lib.sqla import (
 from .lib import signals
 from .lib.config import set_config
 from .tests.utils import log
-from .tests.pytest_fixtures import *
+
+# Load all of the fixtures to be used by Assembl
+from .tests.fixtures.base import *
+from .tests.fixtures.auth import *
+from .tests.fixtures.discussion import *
+from .tests.fixtures.creativity_session import *
+from .tests.fixtures.idea_content_links import *
+from .tests.fixtures.ideas import *
+from .tests.fixtures.langstring import *
+from .tests.fixtures.locale import *
+from .tests.fixtures.mailbox import *
+from .tests.fixtures.posts import *
+from .tests.fixtures.preferences import *
+from .tests.fixtures.user import *
+from .tests.fixtures.user_language_preference import *
 
 
 engine = None
@@ -28,6 +42,7 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     global engine
+    # Listen to kill process command for debug purposes
     signals.listen()
     log.setLevel(config.getoption('logging_level'))
     app_settings_file = config.getoption('test_settings_file')
