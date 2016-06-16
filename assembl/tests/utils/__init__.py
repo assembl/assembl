@@ -1,16 +1,55 @@
+"""
+All utility methods, classes and functions needed for testing applications
+"""
+
 import logging
 import sys
 from itertools import chain
 
 import transaction
 from sqlalchemy.sql.functions import count
+from webtest import TestRequest
+from pyramid.threadlocal import manager
 
-from ..lib.sqla import (
+from assembl.lib.sqla import (
     configure_engine, get_session_maker, using_virtuoso,
     get_metadata, is_zopish, mark_changed)
 
 
 log = logging.getLogger('pytest.assembl')
+
+
+class PyramidWebTestRequest(TestRequest):
+    """
+    A mock Pyramid web request this pushes itself onto the threadlocal stack
+    that also contains the Assembl user_id according to authentication
+    model
+    This is very useful because throughout the model logic, a request is often
+    required to determine the current_user, but outside of a Pyramid view. The
+    way a request is injected is via the current_thread from threadlocal.
+    """
+    def __init__(self, *args, **kwargs):
+        super(PyramidWebTestRequest, self).__init__(*args, **kwargs)
+        manager.push({'request': self})
+
+    def get_response(self, app, catch_exc_info=True):
+        try:
+            super(PyramidWebTestRequest, app).get_response(
+                catch_exc_info=catch_exc_info)
+        finally:
+            manager.pop()
+
+    # TODO: Find a way to change user here
+    authenticated_userid = None
+
+
+def committing_session_tween_factory(handler, registry):
+    # This ensures that the app has the latest state
+    def committing_session_tween(request):
+        get_session_maker().commit()
+        return handler(request)
+
+    return committing_session_tween
 
 
 def as_boolean(s):

@@ -16,6 +16,7 @@ def debug(sig, frame):
 
 
 def dumpstacks(signal, frame):
+    """Returns the traceback on all threads running Assembl"""
     id2name = dict([(th.ident, th.name) for th in threading.enumerate()])
     code = []
     for threadId, stack in sys._current_frames().items():
@@ -29,6 +30,8 @@ def dumpstacks(signal, frame):
 
 def listen():
     # Register handlers
+    # Use SIGUSR1 signal in the process to dump the stack trace
+    # this prods the process with: signal -usr1 ASSEMBL_PROCESS
     signal.signal(signal.SIGUSR1, dumpstacks)
     # This is useless within supervisor. Uncomment if needed.
     # signal.signal(signal.SIGUSR2, debug)
