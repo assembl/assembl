@@ -412,7 +412,7 @@ $previewNumLines: 4;
   }
 
   .messageAttachments {
-    text-align:center;
+    text-align:left;
     position: relative;    //So attachements scale
     .attachment {
       margin: $mesageSpacing 0px $mesageSpacing 0px;
