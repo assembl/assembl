@@ -218,8 +218,15 @@ var CollectionManager = Marionette.Object.extend({
   _connectedSocketPromise: undefined,
 
   /**
-   * Returns the collection from the giving object's
+   * Returns the owning collection for the raw json of an object that 
+   * doesn't have a model yet.  Primarily used when receiving an object on
+   * the websocket
    * 
+   * Ex: A harvester changes the title of an idea.  The updated idea will be put
+   * on the websocket by the backend.  All frontends (all connected users) will
+   * recieve this json.  It is fed in this function so that the corresponding
+   * model in the collection can be updated (this update does NOT happen in this
+   * method)
    * @param {BaseModel}
    *          item
    * @param {String}
@@ -261,6 +268,8 @@ var CollectionManager = Marionette.Object.extend({
   initialize: function(options){
   },
 
+  /** An exception, the collection is instanciated from json sent in the HTML
+   * of the frontend, not through an ajax request */
   getAllUsersCollectionPromise: function() {
     if (this._allUsersCollectionPromise) {
       return this._allUsersCollectionPromise;
@@ -295,6 +304,11 @@ var CollectionManager = Marionette.Object.extend({
           //WARNING:  This is wastefull.  But even if we had a mecanism to request only if there is new data, some specific models might have changed.
           //So the only way we could fix that is to add a generic mecanism that returns objects modified after a specific date, 
           // recursively taking into account any relationship in the viewdef.  Not likely to happen...
+          
+          /* Another aspect is that ALL messages onscreen will re-fetch and re-render
+          This is wastefull (CPU usage and loaders and flashing for the user), 
+          as in the specific case of messages it is relatively easy to get a
+          reliable modification date */
           that._allMessageStructureCollection.fetch();
         });
         return that._allMessageStructureCollection;
@@ -310,6 +324,14 @@ var CollectionManager = Marionette.Object.extend({
 
   _messageFullModelRequests: {},
 
+  /**
+   * This class is essentially a subprocess that receives requests for 
+   * specific models and a specific viewdef and:
+   * - Combines them together to avoid swarming the server
+   * - Splits them to respect limits on http get url length
+   * - Dispaches the individual promises for each request even if they were
+   *   actually processed together.
+  */
   getMessageFullModelRequestWorker: function(collectionManager) {
       this.collectionManager = collectionManager,
       this.requests = this.collectionManager._messageFullModelRequests,
@@ -348,7 +370,9 @@ var CollectionManager = Marionette.Object.extend({
           console.log("Added request for id:" + id + ", now ", this.requests[id]['count'], " requests for this id, queue size is now:" + _.size(this.requests));
         }
 
-        // Each id can take up to ~40 characters.  To not exceed
+        // This part manages GET url lenght
+        // The problem is that each of our object id can take up to ~40 
+        // characters.  To not exceed
         // the 2048 characters unofficial limit for GET URLs,
         // (IE and others), we only request up to do up to:
         // 2000/40 ~= 50 id's at a time
@@ -361,7 +385,7 @@ var CollectionManager = Marionette.Object.extend({
 
           //TODO:  This is suboptimal, as the server can still be hammered
           //with concurrent requests for the same data, causing
-          //database contention.  Like a bit below, we should remember
+          //database contention.  Like the bit below, we should remember
           //how many requests are in transit, and not have more than 3
 
           //Alternatively, we could POST on a fake URL, with the url path
@@ -442,7 +466,7 @@ var CollectionManager = Marionette.Object.extend({
       var that = this;
       this.executeTimeout = setTimeout(function() {
         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
-          console.log("Executing unserviced request immediately (timeaout reached)");
+          console.log("Executing unserviced request immediately (timeout reached)");
         }
 
         that.executeRequest();
@@ -450,7 +474,12 @@ var CollectionManager = Marionette.Object.extend({
     },
 
   /**
-   * Need to be refactor with bluebird
+   * This returns a promise to a SINGLE model.
+   * In practice, this model is a member of the proper collection, 
+   * and requests to the server are optimised and batched together.
+   * 
+   * Primarily used by messages to get the actual body and other information
+   * we do not want to eagerly preload.
    */
   getMessageFullModelPromise: function(id) {
     var that = this,

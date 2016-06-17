@@ -2,6 +2,8 @@
  * @see http://www.quirksmode.org/js/detect.html
  * Warning: The author of this module recommends to avoid using it (see previous link).
  * Warning: When run on Internet Explorer 11, window.BrowserDetect.browser returns "Mozilla"
+ * 
+ * This is now ONLY used to show the "Your browser is too old" banner
  * @type {Object}
  */
 var BrowserDetect = {

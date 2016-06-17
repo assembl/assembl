@@ -1,5 +1,9 @@
 'use strict';
 
+/** 
+ * This is the mapping between the actual string values of the backend object
+ * types, received in the @type pattribute of the JSON
+ */
 var Types = {
   DISCUSSION: 'Discussion',
   EXTRACT: 'Extract',
@@ -52,6 +56,9 @@ var Types = {
   WIDGET: "Widget",
 
 
+/*
+Utilities for javascript to access python inheritance relationships
+*/
 
   initInheritance: function(inheritance) {
     // This is small, I think it can be synchronous.

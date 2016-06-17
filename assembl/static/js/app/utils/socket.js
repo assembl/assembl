@@ -45,6 +45,9 @@ Socket.prototype.init = function() {
 
 /**
  * Triggered when the connection opens
+ * 
+ * Note that the actual backbone event App.vent.trigger('socket:open')
+ * is actually sent in Socket.prototype.onMessage
  * @event
  */
 Socket.prototype.onOpen = function(ev) {
