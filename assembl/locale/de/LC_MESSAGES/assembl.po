@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-13 11:25+0200\n"
-"PO-Revision-Date: 2016-06-08 01:53+0000\n"
+"POT-Creation-Date: 2016-06-17 11:38-0400\n"
+"PO-Revision-Date: 2016-06-13 15:05+0000\n"
 "Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
 "Language: de\n"
 "Language-Team: German "
@@ -46,19 +46,19 @@ msgstr "${val} ist kein String: ${err}"
 msgid "Unknown User ${uid}"
 msgstr "Unbekannter Benutzer ${uid}"
 
-#: assembl/models/notification.py:583
+#: assembl/models/notification.py:587
 msgid "A synthesis is posted"
 msgstr "eine Synthese gepostet wird"
 
-#: assembl/models/notification.py:611
+#: assembl/models/notification.py:615
 msgid "Any message is posted to the discussion"
 msgstr "Nachrichten in der Diskussion gepostet werden"
 
-#: assembl/models/notification.py:639
+#: assembl/models/notification.py:643
 msgid "Someone directly responds to one of your messages"
 msgstr "Jemand antwortet direkt auf eine Ihrer Nachrichten"
 
-#: assembl/models/notification.py:1019
+#: assembl/models/notification.py:1027
 msgid "SYNTHESIS: "
 msgstr "SYNTHESE:"
 
@@ -244,11 +244,19 @@ msgstr ""
 msgid "The preference configuration; override only with care"
 msgstr ""
 
-#: assembl/static/js/app/routeManager.js:483
+#: assembl/models/preferences.py:580
+msgid "Cookies banner"
+msgstr ""
+
+#: assembl/models/preferences.py:583
+msgid "Show the banner offering to disable Piwik cookies"
+msgstr ""
+
+#: assembl/static/js/app/routeManager.js:496
 msgid "You must be logged in to access this page."
 msgstr "Sie müssen eingeloggt sein, um auf diese Seite zuzugreifen."
 
-#: assembl/static/js/app/routeManager.js:505
+#: assembl/static/js/app/routeManager.js:518
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
 "Aufgrund Ihrer Berechtigungsebene können Sie den Rest dieser Inhalte "
@@ -454,7 +462,7 @@ msgstr ""
 
 #: assembl/static/js/app/models/widget.js:316
 msgid "A voting session has started."
-msgstr "Es findet gerade eine Abstimmungsrunde statt."
+msgstr ""
 
 #: assembl/static/js/app/models/widget.js:322
 #, python-format
@@ -949,13 +957,13 @@ msgstr "Antwort absenden"
 msgid "You did not type a response yet..."
 msgstr "Sie haben noch keine Antwort eingegeben ..."
 
-#: assembl/static/js/app/views/ideaList.js:262
+#: assembl/static/js/app/views/ideaList.js:265
 #: assembl/templates/views/create-group.tmpl:42
 #: assembl/templates/views/ideaList.tmpl:14
 msgid "Table of ideas"
 msgstr "Ideentabelle"
 
-#: assembl/static/js/app/views/ideaList.js:785
+#: assembl/static/js/app/views/ideaList.js:806
 msgid "You don't have the permission to do this."
 msgstr ""
 
@@ -1146,6 +1154,7 @@ msgstr "In die Zwischenablage"
 #: assembl/templates/views/adminPartnerEditForm.tmpl:71
 #: assembl/templates/views/adminPartnerForm.tmpl:63
 #: assembl/templates/views/adminPartnerForm.tmpl:69
+#: assembl/templates/views/base-modal.tmpl:12
 #: assembl/templates/views/ckeditorField.tmpl:10
 #: assembl/templates/views/create-group.tmpl:128
 #: assembl/templates/views/messageModerationOptions.tmpl:32
@@ -1756,27 +1765,27 @@ msgstr "Die Synthese wurde erfolgreich veröffentlicht."
 msgid "Failed publishing synthesis!"
 msgstr "Die Synthese konnte nicht veröffentlicht werden."
 
-#: assembl/static/js/app/views/tokenVoteSession.js:253
+#: assembl/static/js/app/views/tokenVoteSession.js:254
 #, python-format
 msgid "<span class='available-tokens-number'>%d</span> remaining %s token"
 msgid_plural "<span class='available-tokens-number'>%d</span> remaining %s tokens"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:526
+#: assembl/static/js/app/views/tokenVoteSession.js:527
 #, python-format
 msgid "set %d tokens"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:557
+#: assembl/static/js/app/views/tokenVoteSession.js:558
 msgid "You don't have enough tokens remaining."
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:943
+#: assembl/static/js/app/views/tokenVoteSession.js:944
 msgid "See Description"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1023
+#: assembl/static/js/app/views/tokenVoteSession.js:1030
 #, python-format
 msgid ""
 "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens "
@@ -1787,16 +1796,16 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1079
+#: assembl/static/js/app/views/tokenVoteSession.js:1086
 msgid "Hide Description"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1200
+#: assembl/static/js/app/views/tokenVoteSession.js:1207
 #, python-format
 msgid "Token: \"%s\""
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1322
+#: assembl/static/js/app/views/tokenVoteSession.js:1329
 #, python-format
 msgid ""
 "%d participant voted between %s and %s. The number of tokens available "
@@ -1807,40 +1816,40 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1331
+#: assembl/static/js/app/views/tokenVoteSession.js:1338
 #, python-format
 msgid "<strong>%d</strong> token of type \"%s\""
 msgid_plural "<strong>%d</strong> tokens of type \"%s\""
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1380
+#: assembl/static/js/app/views/tokenVoteSession.js:1387
 msgid "Token Vote Results"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1551
+#: assembl/static/js/app/views/tokenVoteSession.js:1562
 msgid "Collective votes"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1554
+#: assembl/static/js/app/views/tokenVoteSession.js:1565
 msgid ""
 "Split your tokens among the ideas of your choice. By default, your vote "
 "is neutral per project."
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1555
+#: assembl/static/js/app/views/tokenVoteSession.js:1566
 msgid "Save my votes"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1665
+#: assembl/static/js/app/views/tokenVoteSession.js:1676
 msgid "Your vote has been saved successfully."
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1668
+#: assembl/static/js/app/views/tokenVoteSession.js:1679
 msgid "Go back to the discussion"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1674
+#: assembl/static/js/app/views/tokenVoteSession.js:1685
 msgid "Vote confirmation"
 msgstr ""
 
@@ -2870,6 +2879,16 @@ msgstr "Mehr anzeigen"
 msgid "See less"
 msgstr "Weniger anzeigen"
 
+#: assembl/templates/views/cookieBanner.tmpl:2
+msgid ""
+"By using our site, you consent to cookies being used for improvement of "
+"our service?"
+msgstr ""
+
+#: assembl/templates/views/cookieBanner.tmpl:3
+msgid "Make my choice"
+msgstr ""
+
 #: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"
 msgstr "Eine Feldgruppe erstellen"
@@ -3682,24 +3701,16 @@ msgstr "ist Initiator"
 msgid "What is their logo?"
 msgstr "Was ist ihr Logo?"
 
+#: assembl/templates/views/piwikIframeModal.tmpl:3
+msgid "Set cookies"
+msgstr ""
+
 #: assembl/templates/views/preferenceItemView.tmpl:13
 msgid "Reset to default"
 msgstr ""
 
 #: assembl/templates/views/preferenceView.tmpl:7
 msgid "Preferences"
-msgstr ""
-
-#: assembl/templates/views/piwikIframeModal.tmpl:3
-msgid "Set cookies"
-msgstr ""
-
-#: assembl/templates/views/cookieBanner.tmpl:2
-msgid "By using our site, you consent to cookies being used for improvement of our service?"
-msgstr ""
-
-#: assembl/templates/views/cookieBanner.tmpl:3
-msgid "Make my choice"
 msgstr ""
 
 #: assembl/templates/views/segment.tmpl:8
@@ -4141,7 +4152,7 @@ msgstr ""
 msgid "Request for password change"
 msgstr "Antrag auf Änderung des Kennworts"
 
-#: assembl/views/auth/views.py:1087
+#: assembl/views/auth/views.py:1088
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -4153,7 +4164,7 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:1093
+#: assembl/views/auth/views.py:1094
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "

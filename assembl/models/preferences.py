@@ -581,7 +581,7 @@ class Preferences(MutableMapping, Base):
             "value_type": "bool",
             "show_in_preferences": True,
             "description": _(
-                "The cookies banner configuration; show/hide banner in discussion"),
+                "Show the banner offering to disable Piwik cookies"),
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             # "frontend_validator_function": func_name...?,
