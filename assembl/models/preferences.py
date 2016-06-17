@@ -572,6 +572,21 @@ class Preferences(MutableMapping, Base):
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
             "default": None  # this should be recursive...
+        },
+
+        # The specification of the cookies banner
+        {
+            "id": "cookies_banner",
+            "name": _("Cookies banner"),
+            "value_type": "bool",
+            "show_in_preferences": True,
+            "description": _(
+                "The cookies banner configuration; show/hide banner in discussion"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": True  # this should be recursive...
         }
     ]
 

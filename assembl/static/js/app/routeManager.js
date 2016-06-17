@@ -405,9 +405,10 @@ var routeManager = Marionette.Object.extend({
       collectionManager.getWidgetsForContextPromise(
         Widget.Model.prototype.INFO_BAR, null, ["closeInfobar"]).then(
         function(widgetCollection) {
+          var discussionSettings = Ctx.getPreferences();
           var infobarsCollection = new InfobarsModels.InfobarsCollection();
           var isCookieUserChoice = CookiesManager.getUserCookiesAuthorization();
-          if(!isCookieUserChoice){
+          if(!isCookieUserChoice && discussionSettings.cookies_banner){
             infobarsCollection.add(new InfobarsModels.CookieInfobarModel());
           }
           widgetCollection.each(function(widgetModel){
