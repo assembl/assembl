@@ -303,6 +303,7 @@ var MessageList = AssemblPanel.extend({
 
   inspireMeLink: null,
 
+  /* Saves in local storage the unfinished messages that a user has started typing */
   saveMessagesInProgress: function() {
     if (this.newTopicView !== undefined) {
       this.newTopicView.savePartialMessage();
@@ -449,6 +450,10 @@ var MessageList = AssemblPanel.extend({
   currentQuery: null,
 
   /**
+   * This code is used to store the scroll position before the entire message 
+   * list is been re-rendered.  This will be restored later using 
+   * scrollToPreviousScrollTarget
+   *
    * Note:  this.renderedMEssageViewsCurrent must not have been
    * for this function to work.
    */
@@ -1175,6 +1180,10 @@ var MessageList = AssemblPanel.extend({
 
   /**
    * Retrieves the first new message id (if any) for the current user
+   * 
+   * So returns the model of the oldest message in the current query that the
+   * current user hasn't markd yet
+   * 
    * @return Message.Model or undefined
    */
   findFirstUnreadMessageId: function(visitorData, messageCollection, resultMessageIdCollection) {
