@@ -7,19 +7,19 @@ from .lib.config import set_config
 from .tests.utils import log
 
 # Load all of the fixtures to be used by Assembl
-from .tests.fixtures.base import *
-from .tests.fixtures.auth import *
-from .tests.fixtures.discussion import *
-from .tests.fixtures.creativity_session import *
-from .tests.fixtures.idea_content_links import *
-from .tests.fixtures.ideas import *
-from .tests.fixtures.langstring import *
-from .tests.fixtures.locale import *
-from .tests.fixtures.mailbox import *
-from .tests.fixtures.posts import *
-from .tests.fixtures.preferences import *
-from .tests.fixtures.user import *
-from .tests.fixtures.user_language_preference import *
+from assembl.tests.fixtures.base import *
+from assembl.tests.fixtures.auth import *
+from assembl.tests.fixtures.discussion import *
+from assembl.tests.fixtures.creativity_session import *
+from assembl.tests.fixtures.idea_content_links import *
+from assembl.tests.fixtures.ideas import *
+from assembl.tests.fixtures.langstring import *
+from assembl.tests.fixtures.locale import *
+from assembl.tests.fixtures.mailbox import *
+from assembl.tests.fixtures.posts import *
+from assembl.tests.fixtures.preferences import *
+from assembl.tests.fixtures.user import *
+from assembl.tests.fixtures.user_language_preference import *
 
 
 engine = None
