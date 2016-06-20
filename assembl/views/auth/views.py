@@ -1082,7 +1082,7 @@ def send_change_password_email(
         sender = sender_email
     subject = (subject or localizer.translate(
         _("Request for password change"))).format(**data)
-    subject = Header(subject, 'utf-8').encode()
+    #subject = Header(subject, 'utf-8').encode()  # Fails in some cases???
     if text_body is None or html_body is not None:
         # if text_body and no html_body, html_body remains None.
         html_body = html_body or localizer.translate(_(u"""<p>Hello, {name}!</p>
