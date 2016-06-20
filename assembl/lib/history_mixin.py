@@ -132,6 +132,7 @@ class HistoryMixin(TombstonableMixin):
 
     @declared_attr
     def live(cls):
+        "The live version of this object, if any."
         # The base_id and tombstone_date are not initialized yet.
         def delay():
             return ((cls.identity_table.c.id == cls.base_id)
@@ -139,6 +140,15 @@ class HistoryMixin(TombstonableMixin):
         return relationship(
             cls, secondary=cls.identity_table, uselist=False, viewonly=True,
             secondaryjoin=delay)
+
+    @property
+    def latest(self):
+        "The latest object in this series; may not be live."
+        cls = self.__class__
+        return self.db.query(cls
+            ).filter(cls.base_id==self.base_id
+            ).order_by(cls.tombstone_date.desc().nullsfirst()
+            ).first()
 
     def copy(self, tombstone=None, **kwargs):
         """Clone object, optionally as tombstone
