@@ -258,7 +258,10 @@ class TokenVoteSpecification(AbstractVoteSpecification):
 
     def csv_results(self, csv_file, histogram_size=None):
         specs = self.token_categories
-        spec_names = [spec.name.first_original().value.encode('utf-8') for spec in specs]
+        names_from_type = {
+            spec.typename: spec.name.first_original().value.encode('utf-8') for spec in specs
+        }
+        spec_names = names_from_type.values()
         spec_names.sort()
         spec_names.insert(0, "idea")
         dw = DictWriter(csv_file, spec_names, dialect='excel', delimiter=';')
@@ -273,7 +276,7 @@ class TokenVoteSpecification(AbstractVoteSpecification):
         idea_names = {
             id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
         for idea_id, s in values.iteritems():
-            sums = {k.encode(): v for (k, v) in s['sums'].iteritems()}
+            sums = {names_from_type[k]: v for (k, v) in s['sums'].iteritems()}
             sums['idea'] = idea_names[idea_id]
             dw.writerow(sums)
 
