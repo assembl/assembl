@@ -214,8 +214,8 @@ def test_server(request, test_app, empty_db):
 def browser(request):
     from os.path import dirname
     # interference from system phantomjs
-    phantomjs = dirname(dirname(dirname(__file__))
-        ) + "/node_modules/.bin/phantomjs"
+    phantomjs = dirname(dirname(dirname(dirname(__file__)))) +\
+        "/node_modules/.bin/phantomjs"
     browser = Browser('phantomjs', executable_path=phantomjs)
 
     def fin():
