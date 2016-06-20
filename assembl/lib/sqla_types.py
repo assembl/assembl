@@ -7,7 +7,9 @@ from pyisemail import is_email
 # if using virtuoso
 # from virtuoso.alchemy import CoerceUnicode
 from sqlalchemy import Unicode as CoerceUnicode
+from sqlalchemy.databases import postgresql
 import simplejson as json
+import uuid
 
 
 class URLString(TypeDecorator):
@@ -107,3 +109,28 @@ class JSONType(PickleType):
     def __init__(self, *args, **kwargs):
         kwargs['pickler'] = json
         super(JSONType, self).__init__(*args, **kwargs)
+
+
+class UUID(TypeDecorator):
+    """
+    Adapted from:
+    http://stackoverflow.com/questions/183042/how-can-i-use-uuids-in-sqlalchemy
+    """
+    impl = postgresql.UUID
+
+    def process_bind_param(self, value, dialect=None):
+        if value and isinstance(value, uuid.UUID):
+            return value.hex
+        elif value and not isinstance(value, uuid.UUID):
+            raise ValueError, 'value %s is not a valid uuid.UUID' % value
+        else:
+            return None
+
+    def process_result_value(self, value, dialect=None):
+        if value:
+            return uuid.UUID(value.decode('utf8'))
+        else:
+            return None
+
+    def is_mutable(self):
+        return False

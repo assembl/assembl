@@ -1,11 +1,19 @@
-from colanderalchemy import (
-    SQLAlchemySchemaNode,
+"""Schema to use Colander. Not used at the moment."""
+
+from colander import SchemaType, null, Invalid
+from colander.compat import (
+    text_,
+    text_type,
     )
+from colanderalchemy import SQLAlchemySchemaNode
+import translationstring
+
+_ = translationstring.TranslationStringFactory('colander')
 
 
 class CustomFieldsSASchema(SQLAlchemySchemaNode):
 
-    def __init__(self, 
+    def __init__(self,
                  class_,
                  includes=None,
                  excludes=None,
@@ -27,7 +35,6 @@ class CustomFieldsSASchema(SQLAlchemySchemaNode):
                 for key in field_data:
                     if key == 'name':
                         self.field_map[field] = field_data[key]
-                        
                     setattr(
                         node_field,
                         key,
@@ -70,7 +77,7 @@ class CustomFieldsSASchema(SQLAlchemySchemaNode):
 
     def dictify(self, obj):
         """ Return a dictified version of `obj` using schema information.
-        
+
         The schema will be used to choose what attributes will be
         included in the returned dict.
 
@@ -113,7 +120,7 @@ class CustomFieldsSASchema(SQLAlchemySchemaNode):
             dict_[node.name] = value
 
         return dict_
-        
+
 
 class ValidateMeta(type):
     """
@@ -128,10 +135,10 @@ class ValidateMeta(type):
     Then MyModel will have a __ca__ attribute that includes validation
     logic.
     """
-    
+
     # class Node(object):
     #     def __call__(inst):
-            
+
 
     def __new__(mcs, *a, **kw):
         clsinst = type(*a, **kw)
@@ -141,3 +148,48 @@ class ValidateMeta(type):
             field_overrides=field_overrides,
         )
         return clsinst
+
+
+class UUIDSchema(SchemaType):
+    def __init__(self, encoding=None):
+        self.encoding = encoding
+
+    def serialize(self, node, appstruct):
+        if appstruct in (null, None):
+            return null
+
+        try:
+            if isinstance(appstruct, (text_type, bytes)):
+                encoding = self.encoding
+                if encoding:
+                    result = text_(appstruct, encoding).encode(encoding)
+                else:
+                    result = text_type(appstruct)
+            else:
+                result = text_type(appstruct)
+            return result
+        except Exception as e:
+            raise Invalid(node,
+                          _('${val} cannot be serialized: ${err}',
+                            mapping={'val':appstruct, 'err':e})
+                          )
+
+    def deserialize(self, node, cstruct):
+        if not cstruct:
+            return null
+
+        try:
+            result = cstruct
+            if isinstance(result, (text_type, bytes)):
+                if self.encoding:
+                    result = text_(cstruct, self.encoding)
+                else:
+                    result = text_type(cstruct)
+            else:
+                result = text_type(cstruct)
+        except Exception as e:
+            raise Invalid(node,
+                          _('${val} is not a string: ${err}',
+                            mapping={'val':cstruct, 'err':e}))
+
+        return result
