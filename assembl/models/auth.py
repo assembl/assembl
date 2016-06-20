@@ -1,3 +1,4 @@
+"""All classes relative to users and their online identities."""
 from datetime import datetime
 from itertools import chain
 import urllib
@@ -76,10 +77,11 @@ def maxN(a, b):
 
 
 class AgentProfile(Base):
-    """
-    An agent could be a person, group, bot or computer.
-    Profiles describe agents, which have multiple accounts.
-    Some agents might also be users of the platforms.
+    """An agent identified on the platform.
+
+    Agents can be :py:class:`User` or simply the author of an
+    imported message; they could also be a group, bot or computer.
+    Agents have at least one :py:class:`AbstractAgentAccount`.
     """
     __tablename__ = "agent_profile"
     rdf_class = FOAF.Agent
@@ -153,6 +155,12 @@ class AgentProfile(Base):
                 return name
 
     def merge(self, other_profile):
+        """Merge another profile on this profile, because they are the same entity.
+
+        This identity is usually found out after an email account is verified,
+        or a social account is added to another account.
+        All foreign keys that refer to the other agent profile must now refer
+        to this one."""
         log.warn("Merging AgentProfiles: %d <= %d" % (self.id, other_profile.id))
         session = self.db
         assert self.id
@@ -344,7 +352,10 @@ class AgentProfile(Base):
 
 
 class AbstractAgentAccount(Base):
-    """An abstract class for accounts that identify agents"""
+    """An abstract class for online accounts that identify AgentsProfiles
+
+    The main subclasses are :py:class:`EmailAccount` and
+    :py:class:`.social_auth.SocialAuthAccount`."""
     __tablename__ = "abstract_agent_account"
     rdf_class = SIOC.UserAccount
     rdf_sections = (PRIVATE_USER_SECTION,)
@@ -453,6 +464,7 @@ class EmailAccount(AbstractAgentAccount):
                 self.email.lower() if self.email else None)
 
     def merge(self, other):
+        """Merge another EmailAccount on this one, because they are the same email."""
         log.warn("Merging EmailAccounts: %d, %d" % (self.id, other.id))
         if other.verified:
             self.verified = True
@@ -500,7 +512,10 @@ class EmailAccount(AbstractAgentAccount):
 
 
 class IdentityProvider(Base):
-    """An identity provider (or sometimes a category of identity providers.)"""
+    """An identity provider (or sometimes a category of identity providers.)
+
+    This is a service that provides online identities, expressed as
+    :py:class:`.social_auth.SocialAuthAccount`."""
     __tablename__ = "identity_provider"
     rdf_class = SIOC.Usergroup
     rdf_sections = (PRIVATE_USER_SECTION,)
@@ -549,6 +564,9 @@ class IdentityProvider(Base):
 
 
 class AgentStatusInDiscussion(DiscussionBoundBase):
+    """Information about a user's activity in a discussion
+
+    Whether the user has logged in and is subscribed to notifications."""
     __tablename__ = 'agent_status_in_discussion'
     __table_args__ = (
         UniqueConstraint('discussion_id', 'profile_id'), )
@@ -598,7 +616,7 @@ def send_user_to_socket_for_asid(mapper, connection, target):
 
 class User(AgentProfile):
     """
-    A Human user.
+    A user of the platform.
     """
     __tablename__ = "user"
 
@@ -688,6 +706,12 @@ class User(AgentProfile):
         return super(User, self).get_preferred_email()
 
     def merge(self, other_user):
+        """Merge another user on this one, because they are the same entity.
+
+        This identity is usually found out after an email account is verified,
+        or a social account is added to another account.
+        All foreign keys that refer to the other user must now refer
+        to this one."""
         log.warn("Merging Users: %d <= %d" % (self.id, other_user.id))
         super(User, self).merge(other_user)
         if isinstance(other_user, User):
@@ -1051,6 +1075,7 @@ class Username(Base):
     This is in one-one relationships to users.
     Usernames are unique, and in one-one relationships to users.
     It exists because we cannot have a unique index on a nullable property in virtuoso.
+    TODO: Refactor to a column of :py:class:`User` now that we're using postgres.
     """
     __tablename__ = 'username'
     user_id = Column(Integer,
@@ -1550,7 +1575,7 @@ Index("user_template", "discussion_id", "role_id")
 
 
 class PartnerOrganization(DiscussionBoundBase):
-    """A corporate entity"""
+    """A corporate entity that we want to display in the discussion's page"""
     __tablename__ = "partner_organization"
     id = Column(Integer, primary_key=True,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
@@ -1606,6 +1631,9 @@ LanguagePreferenceOrder.unique_prefs = (
 
 
 class LanguagePreferenceCollection(object):
+    """A collection of :py:class:`UserLanguagePreference`,
+    allowing to decide on which languages to display."""
+
     @abstractmethod
     def find_locale(self, locale):
         pass
@@ -1637,6 +1665,7 @@ class LanguagePreferenceCollection(object):
 
 
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
+    """A LanguagePreferenceCollection with a fallback language."""
     def __init__(self, locale_code):
         self.default_locale = Locale.get_or_create(locale_code)
 
@@ -1658,6 +1687,7 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
 
 
 class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
+    """A LanguagePreferenceCollection that represent one user's preferences."""
     def __init__(self, user_id):
         user = User.get(user_id)
         user_prefs = user.language_preference
@@ -1733,6 +1763,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
 
 
 class UserLanguagePreference(Base):
+    """Does this user wants data in this language to be displayed or translated?"""
     __tablename__ = 'user_language_preference'
     __table_args__ = (UniqueConstraint(
         'user_id', 'locale_id', 'source_of_evidence'), )

@@ -98,7 +98,7 @@ class Code(AssemblSocialAuthMixin, SQLAlchemyCodeMixin):
 
 class SocialAuthAccount(
         AbstractAgentAccount, AssemblSocialAuthMixin, UserMixin):
-    """An account with an external identity provider"""
+    """An account with an external :py:class:`.auth.IdentityProvider`"""
     __tablename__ = "social_auth_account"
     __mapper_args__ = {
         'polymorphic_identity': 'social_auth_account',

@@ -293,6 +293,11 @@ def users_with_permission(discussion_id, permission, id_only=True):
 
 
 def maybe_auto_subscribe(user, discussion):
+    """Auto-subscribe user to notifications if discussion requires it
+
+    Idempotent. Currently called at first login, maybe at user invite,
+    but certainly configurable.
+    """
     if (not discussion or
             not discussion.subscribe_to_notifications_on_signup or
             not discussion.check_authorized_email(user)):

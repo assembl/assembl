@@ -13,7 +13,11 @@ from . import config
 
 
 class TombstonableMixin(object):
-    # Mixin class for objects that can be tombstoned
+    """Mixin class for objects that can be tombstoned
+
+    These objects can be killed, leaving a tombstone behind,
+    i.e. an inactive row.
+    TODO: Generate a DB view on live objects."""
 
     # Note on tombstone_date: Virtuoso can test for its being null, but not non-null.
     tombstone_date = Column(DateTime, server_default=None)
@@ -24,6 +28,7 @@ class TombstonableMixin(object):
 
     @is_tombstone.setter
     def is_tombstone(self, value):
+        """Set the tombstone property to True. (Irreversible)"""
         # No necromancy
         if not value:
             assert self.tombstone_date is None
@@ -33,6 +38,7 @@ class TombstonableMixin(object):
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
+        """By default exclude tombstones"""
         return (cls.tombstone_condition(alias),)
 
     @classmethod
@@ -49,7 +55,13 @@ class TombstonableMixin(object):
 
 
 class HistoryMixin(TombstonableMixin):
-    # Mixin class for objects with history
+    """Mixin class for objects with history
+
+    It is possible to take a snapshot of objects of this class
+    to have a record of earlier states. The snapshot is invoked
+    explicitly (through :py:meth:`copy(True)`), not every time
+    the object is changed. Mainly used for synthesis snapshots.
+    """
 
     @declared_attr
     def id_sequence_name(cls):
