@@ -491,7 +491,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             IdeaLink.tombstone_date == None,
             source.tombstone_date == None,
             target.tombstone_date == None,
-            target.discussion_id == discussion_id))
+            target.discussion_id == discussion_id
+            ).order_by(IdeaLink.order))
         if not parents:
             (root_id,) = cls.default_db.query(
                 RootIdea.id).filter_by(discussion_id=discussion_id).first()
