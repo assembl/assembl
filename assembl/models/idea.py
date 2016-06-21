@@ -78,6 +78,16 @@ class IdeaLinkVisitor(object):
         pass
 
 
+class AppendingVisitor(IdeaVisitor):
+
+    def __init__(self):
+        self.ideas = []
+
+    def visit_idea(self, idea, level, prev_result):
+        self.ideas.append(idea)
+        return self.ideas
+
+
 class WordCountVisitor(IdeaVisitor):
     def __init__(self, langs, count_posts=True):
         self.counter = WordCounter(langs)

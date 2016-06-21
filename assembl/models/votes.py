@@ -17,7 +17,7 @@ from ..lib.abc import abstractclassmethod
 from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
 from .discussion import Discussion
-from .idea import Idea
+from .idea import Idea, AppendingVisitor
 from .auth import User
 from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -275,8 +275,12 @@ class TokenVoteSpecification(AbstractVoteSpecification):
             Idea.id.in_(by_idea.keys())))
         idea_names = {
             id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
-        for idea_id, s in values.iteritems():
-            sums = {names_from_type[k]: v for (k, v) in s['sums'].iteritems()}
+        ordered_idea_ids = Idea.visit_idea_ids_depth_first(
+            AppendingVisitor(), self.get_discussion_id())
+        ordered_idea_ids = [id for id in ordered_idea_ids if id in values]
+        for idea_id in ordered_idea_ids:
+            base = values[idea_id]
+            sums = {names_from_type[k]: v for (k, v) in base['sums'].iteritems()}
             sums['idea'] = idea_names[idea_id]
             dw.writerow(sums)
 
@@ -506,7 +510,11 @@ class LickertVoteSpecification(AbstractVoteSpecification):
             Idea.id.in_(by_idea.keys())))
         idea_names = {
             id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
-        for idea_id, base in values.iteritems():
+        ordered_idea_ids = Idea.visit_idea_ids_depth_first(
+            AppendingVisitor(), self.get_discussion_id())
+        ordered_idea_ids = [id for id in ordered_idea_ids if id in values]
+        for idea_id, base in ordered_idea_ids:
+            base = values[idea_id]
             r = dict(enumerate(base['histogram']))
             r['idea'] = idea_names[idea_id]
             r['avg'] = base['avg']
@@ -545,7 +553,11 @@ class BinaryVoteSpecification(AbstractVoteSpecification):
             Idea.id.in_(by_idea.keys())))
         idea_names = {
             id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
-        for idea_id, base in values.iteritems():
+        ordered_idea_ids = Idea.visit_idea_ids_depth_first(
+            AppendingVisitor(), self.get_discussion_id())
+        ordered_idea_ids = [id for id in ordered_idea_ids if id in values]
+        for idea_id, base in ordered_idea_ids:
+            base = values[idea_id]
             r = {
                 'idea': idea_names[idea_id],
                 'yes': base['yes'],
@@ -594,7 +606,11 @@ class MultipleChoiceVoteSpecification(AbstractVoteSpecification):
             Idea.id.in_(by_idea.keys())))
         idea_names = {
             id: name.encode('utf-8') for (id, name) in idea_names.iteritems()}
-        for idea_id, base in values.iteritems():
+        ordered_idea_ids = Idea.visit_idea_ids_depth_first(
+            AppendingVisitor(), self.get_discussion_id())
+        ordered_idea_ids = [id for id in ordered_idea_ids if id in values]
+        for idea_id in ordered_idea_ids:
+            base = values[idea_id]
             r = {candidates[k]: n for (k, n) in base['results'].items()}
             r['idea'] = idea_names[idea_id]
             dw.writerow(r)
