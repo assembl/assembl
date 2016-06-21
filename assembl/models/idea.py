@@ -482,7 +482,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         cls = [c for c in cls.mro() if c.__name__=="Idea"][0]
         source = aliased(cls, name="source")
         target = aliased(cls, name="target")
-        parents = dict(cls.default_db.query(
+        link_info = list(cls.default_db.query(
             IdeaLink.target_id, IdeaLink.source_id
             ).join(source, source.id == IdeaLink.source_id
             ).join(target, target.id == IdeaLink.target_id
@@ -493,17 +493,18 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             target.tombstone_date == None,
             target.discussion_id == discussion_id
             ).order_by(IdeaLink.order))
-        if not parents:
+        if not link_info:
             (root_id,) = cls.default_db.query(
                 RootIdea.id).filter_by(discussion_id=discussion_id).first()
             return {None: (root_id,), root_id: ()}
-        children = defaultdict(list)
-        for child, parent in parents.iteritems():
-            children[parent].append(child)
-        root = set(children.keys()) - set(parents.keys())
+        child_nodes = {child for (child, parent) in link_info}
+        children_of = defaultdict(list)
+        for (child, parent) in link_info:
+            children_of[parent].append(child)
+        root = set(children_of.keys()) - child_nodes
         assert len(root) == 1
-        children[None] = [root.pop()]
-        return children
+        children_of[None] = [root.pop()]
+        return children_of
 
     @classmethod
     def visit_idea_ids_depth_first(
