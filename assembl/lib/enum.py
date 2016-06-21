@@ -6,6 +6,7 @@ from enum import Enum
 # Taken from the enum34 README
 
 class OrderedEnum(Enum):
+    """An enum with comparable values"""
     # As per enum34 recipe
     def __ge__(self, other):
         if self.__class__ is other.__class__:

@@ -1,5 +1,6 @@
 """Schema to use Colander. Not used at the moment."""
 
+from __future__ import absolute_import
 from colander import SchemaType, null, Invalid
 from colander.compat import (
     text_,
