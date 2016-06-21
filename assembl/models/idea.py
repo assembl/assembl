@@ -482,8 +482,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         cls = [c for c in cls.mro() if c.__name__=="Idea"][0]
         source = aliased(cls, name="source")
         target = aliased(cls, name="target")
-        parents = dict(cls.default_db.query(
-            IdeaLink.target_id, IdeaLink.source_id
+        link_info = cls.default_db.query(
+            IdeaLink.target_id, IdeaLink.source_id, IdeaLink.order
             ).join(source, source.id == IdeaLink.source_id
             ).join(target, target.id == IdeaLink.target_id
             ).filter(
@@ -491,18 +491,25 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             IdeaLink.tombstone_date == None,
             source.tombstone_date == None,
             target.tombstone_date == None,
-            target.discussion_id == discussion_id))
-        if not parents:
+            target.discussion_id == discussion_id)
+        if not link_info:
             (root_id,) = cls.default_db.query(
                 RootIdea.id).filter_by(discussion_id=discussion_id).first()
             return {None: (root_id,), root_id: ()}
-        children = defaultdict(list)
-        for child, parent in parents.iteritems():
-            children[parent].append(child)
-        root = set(children.keys()) - set(parents.keys())
+        children_of = defaultdict(list)
+        child_nodes = set()
+        for child, parent, order in link_info:
+            children_of[parent].append((order, child))
+            child_nodes.add(child)
+        for child_list in children_of.itervalues():
+            child_list.sort()
+        children_of.update({
+            parent: [x[1] for x in child_list]
+            for (parent, child_list) in children_of.iteritems()})
+        root = set(children_of.keys()) - child_nodes
         assert len(root) == 1
-        children[None] = [root.pop()]
-        return children
+        children_of[None] = [root.pop()]
+        return children_of
 
     @classmethod
     def visit_idea_ids_depth_first(
