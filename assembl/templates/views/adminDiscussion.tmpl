@@ -1,104 +1,109 @@
-<div class="gr">
-  <div class="gu gu-1of5 navigation-menu-holder">
-  </div>
-  <div class="gu gu-3of4 admin-section">
+<div class="grid-pad">
+  <div class="col-3-12 navigation-menu-holder"></div>
+  <div class="col-9-12 no-pad admin-section">
     <section class="section">
-    <div class="admin-title">
-      <h3 class="h3">{{ gettext('Edit discussion') }}</h3>
-    </div>
-    <div id="content-container" class="content-container">
-      <div class="gr">
-      <% if(discussion){ %>
-        <div class="gu gu-1of1">
-           {% if admin_discussion_permissions_url %}
-               <p class="mbl">
-                 <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
-               </p>
-           {% endif %}
-             <form class="core-form form-horizontal mtl" id="adminDiscussion">
-               <fieldset class="phl">
-                   <div class="control-group fr">
-                       <label for="topic" class="control-label fl">{{ gettext("Discussion topic") }}</label>
-                       <div class="controls fl">
-                           <input type="text" id="topic" name="topic" class="input-xxlarge" value="<%= discussion.get('topic') %>" />
-                       </div>
-                   </div>
-
-                   <div class="control-group fr">
-                       <label for="slug" class="control-label fl">{{ gettext("Discussion slug") }}</label>
-                       <div class="controls fl">
-                           <input type="text" id="slug" name="slug" class="input-xxlarge" value="<%= discussion.get('slug') %>" />
-                       </div>
-                   </div>
-
-                    <div class="control-group fr">
-                         <label for="introduction" class="control-label fl">{{ gettext("Introduction") }}</label>
-                         <div class="controls fl">
-                             <textarea id="introduction" name="introduction" class="input-xxlarge"><%= Ctx.stripHtml(discussion.get('introduction')) %></textarea>
-                         </div>
-                     </div>
-
-                      <div class="control-group fr">
-                        <label for="objectives" class="control-label fl">{{ gettext("Objectives") }}</label>
-                        <div class="controls fl">
-                            <textarea rows="3" id="objectives" name="objectives" class="input-xxlarge"><%= Ctx.stripHtml(discussion.get('objectives')) %></textarea>
-                        </div>
-                      </div>
-
-                      <div class="control-group fr">
-                        <label for="show_help_in_debate_section" class="control-label fl">{{ gettext("Show a small help message when the user arrives in the Discussion section") }}</label>
-                        <div class="controls fl input-xxlarge">
-                        <input type="checkbox" id="show_help_in_debate_section" name="show_help_in_debate_section" <% if(discussion.get('show_help_in_debate_section')){ %>checked<% } %> />
-                        </div> 
-                      </div>
-
-                      <div class="control-group fr">
-                        <label for="web_analytics_piwik_id_site" class="control-label fl">{{ gettext("Web analytics: Piwik id site") }}</label>
-                        <div class="controls fl">
-                          <input type="text" id="web_analytics_piwik_id_site" name="web_analytics_piwik_id_site" class="input-xxlarge" value="<%= discussion.get('web_analytics_piwik_id_site') %>" />
-                        </div>
-                      </div>
-
-                      <div class="control-group fr">
-                        <label for="help_url" class="control-label fl">{{ gettext("URL of the Help page (use \"%s\" for language)") }}</label>
-                        <div class="controls fl">
-                          <input type="text" id="help_url" name="help_url" class="input-xxlarge" value="<%= discussion.get('help_url') %>" />
-                        </div>
-                      </div>
-
-                      <div class="control-group fr">
-                        <label for="homepage_url" class="control-label fl">{{ gettext("Homepage URL (optional)") }}</label>
-                          <div class="controls fl">
-                          <input type="text" id="homepage_url" name="homepage_url" class="input-xxlarge" value="<%= discussion.get('homepage') %>" />
-                        </div>
-                      </div>
-
-                      <div class="control-group fr">
-                        <label for="logo_url" class="control-label fl">{{ gettext("Logo URL (optional)") }}</label>
-                        <div class="controls fl">
-                          <input type="url" pattern="https?://.+" id="logo_url" name="logo_url" class="input-xxlarge" value="<%= discussion.get('logo') %>" />
-                        </div>
-                      </div>
-
-                      <div class="control-group fr">
-                        <label class="control-label fl"></label>
-                        <div class="controls fl">
-                          <div class="input-xxlarge">{{ gettext("The logo image can have a maximum height of 40px, and a maximum width of 215px. Background must be transparent. Margins must be included in the image.") }}</div>
-                          <div id="logo_thumbnail" class="input-xxlarge"></div>
-                        </div>
-                      </div>
-
-
-               </fieldset>
-                <div class="form-actions fr">
-                    <button class="btn btn-primary fr js_saveDiscussion" type="submit">{{ gettext("Save changes") }}</button>
+      <div class="admin-title">
+        <h3 class="h3">{{ gettext('Edit discussion') }}</h3>
+      </div>
+      <div id="content-container" class="content-container">
+        <% if(discussion){ %>
+        <div class="col-1-1 no-pad content-admin-discussion">
+          {% if admin_discussion_permissions_url %}
+          <p class="mbl">
+            <a href='{{ admin_discussion_permissions_url }}'>{{ gettext("Edit discussion permissions") }}</a>
+          </p>
+          {% endif %}
+          <form class="core-form form-horizontal" id="adminDiscussion">
+            <fieldset>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="topic" class="control-label">{{ gettext("Discussion topic") }}</label>
                 </div>
-             </form>
+                <div class="controls col-1-1 no-pad">
+                  <input type="text" id="topic" name="topic" class="input-xxlarge" value="<%= discussion.get('topic') %>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="slug" class="control-label">{{ gettext("Discussion slug") }}</label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <input type="text" id="slug" name="slug" class="input-xxlarge" value="<%= discussion.get('slug') %>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="introduction" class="control-label">{{ gettext("Introduction") }}</label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <textarea id="introduction" name="introduction" class="input-xxlarge"><%= Ctx.stripHtml(discussion.get('introduction')) %></textarea>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="objectives" class="control-label">{{ gettext("Objectives") }}</label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <textarea rows="3" id="objectives" name="objectives" class="input-xxlarge"><%= Ctx.stripHtml(discussion.get('objectives')) %></textarea>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="show_help_in_debate_section" class="control-label">{{ gettext("Show a small help message when the user arrives in the Discussion section") }}</label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <input type="checkbox" id="show_help_in_debate_section" name="show_help_in_debate_section" <% if(discussion.get('show_help_in_debate_section')){ %>checked<% } %> />
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="web_analytics_piwik_id_site" class="control-label">{{ gettext("Web analytics: Piwik id site") }}</label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <input type="text" id="web_analytics_piwik_id_site" name="web_analytics_piwik_id_site" class="input-xxlarge" value="<%= discussion.get('web_analytics_piwik_id_site') %>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="help_url" class="control-label">{{ gettext("URL of the Help page (use \"%s\" for language)") }}</label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <input type="text" id="help_url" name="help_url" class="input-xxlarge" value="<%= discussion.get('help_url') %>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="homepage_url" class="control-label">{{ gettext("Homepage URL (optional)") }}</label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <input type="text" id="homepage_url" name="homepage_url" class="input-xxlarge" value="<%= discussion.get('homepage') %>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label for="logo_url" class="control-label">{{ gettext("Logo URL (optional)") }}</label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <input type="url" pattern="https?://.+" id="logo_url" name="logo_url" class="input-xxlarge" value="<%= discussion.get('logo') %>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="col-1-1 no-pad">
+                  <label class="control-label"></label>
+                </div>
+                <div class="controls col-1-1 no-pad">
+                  <div class="input-xxlarge">{{ gettext("The logo image can have a maximum height of 40px, and a maximum width of 215px. Background must be transparent. Margins must be included in the image.") }}</div>
+                  <div id="logo_thumbnail" class="input-xxlarge"></div>
+                </div>
+              </div>
+            </fieldset>
+            <div class="form-actions">
+              <button class="btn btn-primary fr js_saveDiscussion" type="submit">{{ gettext("Save changes") }}</button>
+            </div>
+          </form>
         </div>
         <% } %>
       </div>
-    </div>
     </section>
   </div>
 </div>
-

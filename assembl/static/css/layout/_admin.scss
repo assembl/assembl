@@ -16,6 +16,17 @@ table {
   }
 }
 
+.admin-discussion, .admin-notifications{
+  .admin-section{
+    background-color:$white;
+    max-width:600px;
+    min-width:560px;
+  }
+  .content-admin-discussion{
+    padding-top: 20px;
+  }
+}
+
 .admin-section {
   .is-loading{
     cursor: wait;
@@ -71,7 +82,6 @@ table {
 
   .admin-section {
     .section {
-      border: 1px solid #dce0e0;
       background-color: $white;
     }
   }
@@ -92,8 +102,7 @@ table {
 
   #adminDiscussion {
     .control-label {
-      width: 90px;
-      padding-top: 2px;
+      padding: 5px 10px 10px 20px;
     }
   }
 
@@ -208,5 +217,14 @@ table {
         max-height: em(200);
       }
     }
+  }
+}
+
+#create-source{
+  p{
+    padding: 0 0 20px 0;
+  }
+  button{
+    margin: 0 0 20px 0;
   }
 }
