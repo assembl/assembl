@@ -49,7 +49,10 @@ def discussion2_root_post_1(request, participant1_user, discussion2, test_sessio
 
 
 @pytest.fixture(scope="function")
-def synthesis_post_1(request, participant1_user, discussion, test_session, synthesis_1):
+def synthesis_post_1(request, participant1_user, discussion, test_session,
+                     synthesis_1):
+    """A Syntehsis Post fixture"""
+
     from assembl.models import SynthesisPost, LangString
     p = SynthesisPost(
         discussion=discussion, creator=participant1_user,

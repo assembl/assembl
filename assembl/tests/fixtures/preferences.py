@@ -3,6 +3,7 @@ import pytest
 
 @pytest.fixture(scope="function")
 def default_preferences(request, test_session):
+    """A Preference fixture with default settings"""
     from assembl.models import Preferences
     prefs = Preferences.get_default_preferences()
     test_session.add(prefs)

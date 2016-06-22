@@ -3,6 +3,8 @@ import pytest
 
 @pytest.fixture(scope="function")
 def criterion_1(request, discussion, subidea_1, test_session):
+    """An Idea fixture with IdeaLink to subidea_1"""
+
     from assembl.models import Idea, IdeaLink
     i = Idea(short_title=u"cost", discussion=discussion)
     test_session.add(i)
@@ -21,6 +23,8 @@ def criterion_1(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def criterion_2(request, discussion, subidea_1, test_session):
+    """An Idea fixture with IdeaLink to subidea_1"""
+
     from assembl.models import Idea, IdeaLink
     i = Idea(short_title=u"quality", discussion=discussion)
     test_session.add(i)
@@ -39,6 +43,8 @@ def criterion_2(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def criterion_3(request, discussion, subidea_1, test_session):
+    """An Idea fixture with IdeaLink to subidea_1"""
+
     from assembl.models import Idea, IdeaLink
     i = Idea(short_title=u"time", discussion=discussion)
     test_session.add(i)
@@ -57,6 +63,8 @@ def criterion_3(request, discussion, subidea_1, test_session):
 
 @pytest.fixture(scope="function")
 def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
+    """A Synthesis fixture"""
+
     from assembl.models import Synthesis, SubGraphIdeaAssociation,\
         SubGraphIdeaLinkAssociation
     s = Synthesis(discussion=discussion)
@@ -87,6 +95,7 @@ def extract_post_1_to_subidea_1_1(
         request, participant2_user, reply_post_1,
         subidea_1_1, discussion, test_session):
     """ Links reply_post_1 to subidea_1_1 """
+
     from assembl.models import Extract
     e = Extract(
         body=u"body",
@@ -112,6 +121,8 @@ def jack_layton_linked_discussion(
         subidea_1_1_1, subidea_1_1_1_1, subidea_1_1_1_1_1, subidea_1_1_1_1_2,
         subidea_1_1_1_1_2_1, subidea_1_1_1_1_2_2, subidea_1_2, subidea_1_2_1,
         admin_user):
+    """A Discussion fixture with ideas and idea links"""
+
     jack_layton_mailbox.do_import_content(jack_layton_mailbox, True)
     from assembl.models import (
         Post, IdeaContentPositiveLink, IdeaContentNegativeLink)

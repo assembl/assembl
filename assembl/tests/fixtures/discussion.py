@@ -4,6 +4,7 @@ from sqlalchemy import inspect
 
 @pytest.fixture(scope="function")
 def discussion(request, test_session, default_preferences):
+    """An empty Discussion fixture with default preferences"""
     from assembl.models import Discussion
     with test_session.no_autoflush:
         d = Discussion(
@@ -33,6 +34,7 @@ def discussion(request, test_session, default_preferences):
 
 @pytest.fixture(scope="function")
 def discussion_synth_notification(request, test_session, discussion):
+    """Notification Subscription on Synthesis fixture"""
     from assembl.models import (
         NotificationSubscriptionFollowSyntheses, NotificationCreationOrigin)
     u = discussion.user_templates[0]
@@ -51,6 +53,7 @@ def discussion_synth_notification(request, test_session, discussion):
 
 @pytest.fixture(scope="function")
 def discussion2(request, test_session):
+    """An non-empty Discussion fixture with default preferences"""
     from assembl.models import Discussion
     d = Discussion(topic=u"Second discussion", slug="testdiscussion2")
     test_session.add(d)

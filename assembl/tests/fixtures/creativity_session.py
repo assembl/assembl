@@ -1,9 +1,13 @@
+import json
 import pytest
+from datetime import datetime, timedelta
 
 
 @pytest.fixture(scope="function")
 def creativity_session_widget(
         request, test_session, discussion, subidea_1):
+    """A Creativity Session Widget fixture bound to subidea_1"""
+
     from assembl.models import CreativitySessionWidget
     test_session.flush()
     c = CreativitySessionWidget(
@@ -32,6 +36,9 @@ def creativity_session_widget(
 def creativity_session_widget_new_idea(
         request, test_session, discussion, subidea_1,
         creativity_session_widget, participant1_user):
+    """An Idea fixture with an bound ideaLink,
+    GeneratedIdeaWidgetLink, and a IdeaProposalPost"""
+
     from assembl.models import (Idea, IdeaLink, GeneratedIdeaWidgetLink,
                                 IdeaProposalPost, LangString)
     i = Idea(
@@ -66,6 +73,9 @@ def creativity_session_widget_new_idea(
 def creativity_session_widget_post(
         request, test_session, discussion, participant1_user,
         creativity_session_widget, creativity_session_widget_new_idea):
+    """A Post fixture with a bound to a creativity widget to a new idea and
+    an idea content link"""
+
     from assembl.models import (Post, IdeaContentWidgetLink, LangString)
     p = Post(
         discussion=discussion, creator=participant1_user,

@@ -5,6 +5,7 @@ import pytest
 
 @pytest.fixture(scope="function")
 def langstring_entry_values():
+    """Dict fixture of content in multiple languages"""
     return {
         "subject": {
             "english":
@@ -36,6 +37,8 @@ def langstring_entry_values():
 @pytest.fixture(scope="function")
 def en_langstring_entry(request, test_session, en_locale,
                         langstring_body, langstring_entry_values):
+    """LangStringEntry fixture with English locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -60,6 +63,8 @@ def en_langstring_entry(request, test_session, en_locale,
 @pytest.fixture(scope="function")
 def fr_langstring_entry(request, test_session, fr_locale,
                         langstring_body, langstring_entry_values):
+    """LangStringEntry fixture with French locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -84,6 +89,8 @@ def fr_langstring_entry(request, test_session, fr_locale,
 @pytest.fixture(scope="function")
 def it_langstring_entry(request, test_session, it_locale,
                         langstring_body, langstring_entry_values):
+    """LangStringEntry fixture with Italian locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -108,6 +115,8 @@ def it_langstring_entry(request, test_session, it_locale,
 @pytest.fixture(scope="function")
 def tr_langstring_entry(request, test_session, tr_locale,
                         langstring_body, langstring_entry_values):
+    """LangStringEntry fixture with Turkish locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -132,6 +141,8 @@ def tr_langstring_entry(request, test_session, tr_locale,
 @pytest.fixture(scope="function")
 def und_langstring_entry(request, test_session, undefined_locale,
                          langstring_body, langstring_entry_values):
+    """LangStringEntry fixture with undefined locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -157,6 +168,8 @@ def und_langstring_entry(request, test_session, undefined_locale,
 def non_linguistic_langstring_entry(request, test_session,
                                     non_linguistic_locale, langstring_body,
                                     langstring_entry_values):
+    """LangStringEntry fixture with non_linguistic locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -182,7 +195,8 @@ def non_linguistic_langstring_entry(request, test_session,
 def fr_from_en_langstring_entry(request, test_session, fr_from_en_locale,
                                 langstring_body, en_langstring_entry,
                                 langstring_entry_values):
-    print "Creating fr_from_en_langstring_entry"
+    """LangStringEntry fixture with EN locale + FR from EN locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -209,6 +223,7 @@ def fr_from_en_langstring_entry(request, test_session, fr_from_en_locale,
 def en_from_fr_langstring_entry(request, test_session, en_from_fr_locale,
                                 langstring_body, fr_langstring_entry,
                                 langstring_entry_values):
+    """LangStringEntry fixture with FR locale + EN from FR locale"""
 
     from assembl.models.langstrings import LangStringEntry
 
@@ -235,7 +250,8 @@ def en_from_fr_langstring_entry(request, test_session, en_from_fr_locale,
 def it_from_en_langstring_entry(request, test_session, it_from_en_locale,
                                 langstring_body, en_langstring_entry,
                                 langstring_entry_values):
-    print "Creating fr_from_en_langstring_entry"
+    """LangStringEntry fixture with EN locale + IT from EN locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -261,6 +277,7 @@ def it_from_en_langstring_entry(request, test_session, it_from_en_locale,
 def en_from_it_langstring_entry(request, test_session, en_from_it_locale,
                                 langstring_body, it_langstring_entry,
                                 langstring_entry_values):
+    """LangStringEntry fixture with IT locale + EN from IT locale"""
 
     from assembl.models.langstrings import LangStringEntry
 
@@ -287,7 +304,8 @@ def en_from_it_langstring_entry(request, test_session, en_from_it_locale,
 def it_from_fr_langstring_entry(request, test_session, it_from_fr_locale,
                                 langstring_body, fr_langstring_entry,
                                 langstring_entry_values):
-    print "Creating fr_from_en_langstring_entry"
+    """LangStringEntry fixture with FR locale + IT from FR locale"""
+
     from assembl.models.langstrings import LangStringEntry
 
     entry = LangStringEntry(
@@ -313,6 +331,7 @@ def it_from_fr_langstring_entry(request, test_session, it_from_fr_locale,
 def fr_from_it_langstring_entry(request, test_session, fr_from_it_locale,
                                 langstring_body, it_langstring_entry,
                                 langstring_entry_values):
+    """LangStringEntry fixture with IT locale + FR from IT locale"""
 
     from assembl.models.langstrings import LangStringEntry
 
@@ -339,6 +358,7 @@ def fr_from_it_langstring_entry(request, test_session, fr_from_it_locale,
 def en_from_tr_langstring_entry(request, test_session, en_from_tr_locale,
                                 langstring_body, tr_langstring_entry,
                                 langstring_entry_values):
+    """LangStringEntry fixture with TR locale + EN from TR locale"""
 
     from assembl.models.langstrings import LangStringEntry
 
@@ -365,6 +385,7 @@ def en_from_tr_langstring_entry(request, test_session, en_from_tr_locale,
 def de_from_tr_langstring_entry(request, test_session, de_from_tr_locale,
                                 langstring_body, tr_langstring_entry,
                                 langstring_entry_values):
+    """LangStringEntry fixture with TR locale + DE from TR locale"""
 
     from assembl.models.langstrings import LangStringEntry
 
@@ -391,6 +412,7 @@ def de_from_tr_langstring_entry(request, test_session, de_from_tr_locale,
 def fr_from_und_langstring_entry(request, test_session, fr_from_und_locale,
                                  langstring_body, und_langstring_entry,
                                  langstring_entry_values):
+    """LangStringEntry fixture with und locale + FR from und locale"""
 
     from assembl.models.langstrings import LangStringEntry
 
@@ -415,6 +437,8 @@ def fr_from_und_langstring_entry(request, test_session, fr_from_und_locale,
 
 @pytest.fixture(scope="function")
 def langstring_body(request, test_session):
+    """An Empty Langstring fixture"""
+
     from assembl.models.langstrings import LangString
 
     ls = LangString()
@@ -431,6 +455,8 @@ def langstring_body(request, test_session):
 
 @pytest.fixture(scope="function")
 def langstring_subject(request, test_session):
+    """An Empty Langstring fixture"""
+
     from assembl.models.langstrings import LangString
 
     ls = LangString()

@@ -3,6 +3,8 @@ import pytest
 
 @pytest.fixture(scope="function")
 def mailbox(request, discussion, test_session):
+    """An AbstractMailbox fixture"""
+
     from assembl.models import AbstractMailbox
     m = AbstractMailbox(
         discussion=discussion, name='mailbox')
@@ -19,12 +21,14 @@ def mailbox(request, discussion, test_session):
 
 @pytest.fixture(scope="function")
 def jack_layton_mailbox(request, discussion, test_session):
-    """ From https://dev.imaginationforpeople.org/redmine/projects/assembl/wiki/SampleDebate
+    """A full mailbox fixture, taken from
+    https://dev.imaginationforpeople.org/redmine/projects/assembl/wiki/SampleDebate
     """
+
     import os
     from assembl.models import MaildirMailbox
     maildir_path = os.path.join(os.path.dirname(__file__),
-                                'jack_layton_mail_fixtures_maildir')
+                                'jack_layton_fixtures_maildir')
     m = MaildirMailbox(discussion=discussion, name='Jack Layton fixture',
                        filesystem_path=maildir_path)
     m.do_import_content(m, only_new=True)
@@ -47,6 +51,8 @@ def jack_layton_mailbox(request, discussion, test_session):
 
 @pytest.fixture(scope="function")
 def abstract_mailbox(request, discussion, test_session):
+    """An AbstractMailbox fixture with type of abstract_mailbox"""
+
     from assembl.models import AbstractMailbox
     ps = AbstractMailbox(
         discussion=discussion, name='a source', type='abstract_mailbox')

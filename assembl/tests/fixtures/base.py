@@ -30,6 +30,8 @@ from ..utils import clear_rows, drop_tables
 
 @pytest.fixture(scope="session")
 def session_factory(request):
+    """An SQLAlchemy Session Maker fixture"""
+
     # Get the zopeless session maker,
     # while the Webtest server will use the
     # default session maker, which is zopish.
@@ -44,6 +46,7 @@ def session_factory(request):
 
 @pytest.fixture(scope="session")
 def empty_db(request, session_factory):
+    """An SQLAlchemy Session Maker fixture with all tables dropped"""
     session = session_factory()
     drop_tables(get_config(), session)
     return session_factory
@@ -51,9 +54,12 @@ def empty_db(request, session_factory):
 
 @pytest.fixture(scope="session")
 def db_tables(request, empty_db):
+    """An SQLAlchemy Session Maker fixture with all tables
+    based on testing.ini"""
+
     app_settings_file = request.config.getoption('test_settings_file')
     assert app_settings_file
-    from ..conftest import engine
+    from assembl.conftest import engine
     bootstrap_db(app_settings_file, engine)
     transaction.commit()
 
@@ -68,6 +74,7 @@ def db_tables(request, empty_db):
 
 @pytest.fixture(scope="session")
 def base_registry(request):
+    """A Zope registry that is configured by with the testing.ini"""
     from assembl.views.traversal import root_factory
     from pyramid.config import Configurator
     from zope.component import getGlobalSiteManager
@@ -82,6 +89,7 @@ def base_registry(request):
 
 @pytest.fixture(scope="module")
 def test_app_no_perm(request, base_registry, db_tables):
+    """A configured Assembl fixture with no permissions"""
     global_config = {
         '__file__': request.config.getoption('test_settings_file'),
         'here': get_distribution('assembl').location
@@ -94,6 +102,7 @@ def test_app_no_perm(request, base_registry, db_tables):
 
 @pytest.fixture(scope="function")
 def test_webrequest(request, test_app_no_perm):
+    """A Pyramid request fixture with no user authorized"""
     req = PyramidWebTestRequest.blank('/', method="GET")
 
     def fin():
@@ -107,6 +116,9 @@ def test_webrequest(request, test_app_no_perm):
 @pytest.fixture(scope="module")
 def db_default_data(
         request, db_tables, base_registry):
+    """An SQLAlchemy Session Maker fixture that is preloaded
+    with all Assembl tables, constraints, relationships, etc."""
+
     bootstrap_db_data(db_tables)
     transaction.commit()
 
@@ -124,6 +136,9 @@ def db_default_data(
 
 @pytest.fixture(scope="function")
 def test_session(request, db_default_data):
+    """An SQLAlchemy Session Maker fixture-
+    Use this session fixture for all fixture purposes"""
+
     session = db_default_data()
 
     def fin():
@@ -139,6 +154,8 @@ def test_session(request, db_default_data):
 
 @pytest.fixture(scope="function")
 def admin_user(request, test_session, db_default_data):
+    """A User fixture with R_SYSADMIN role"""
+
     from assembl.models import User, UserRole, Role
     u = User(name=u"Mr. Administrator", type="user")
     test_session.add(u)
@@ -162,6 +179,7 @@ def admin_user(request, test_session, db_default_data):
 
 @pytest.fixture(scope="function")
 def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
+    """A Pyramid request fixture with an ADMIN user authorized"""
     req = PyramidWebTestRequest.blank('/', method="GET")
     req.authenticated_userid = admin_user.id
 
@@ -174,6 +192,9 @@ def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
 
 @pytest.fixture(scope="function")
 def test_app(request, admin_user, test_app_no_perm):
+    """A configured Assembl fixture with permissions
+    and an admin user logged in"""
+
     config = testing.setUp(
         registry=test_app_no_perm.app.registry,
         settings=get_config(),
@@ -187,6 +208,8 @@ def test_app(request, admin_user, test_app_no_perm):
 
 @pytest.fixture(scope="function")
 def test_app_no_login(request, admin_user, test_app_no_perm):
+    """A configured Assembl fixture with permissions
+    and no user logged in"""
     config = testing.setUp(
         registry=test_app_no_perm.app.registry,
         settings=get_config(),
@@ -200,6 +223,8 @@ def test_app_no_login(request, admin_user, test_app_no_perm):
 
 @pytest.fixture(scope="function")
 def test_server(request, test_app, empty_db):
+    """A uWSGI server fixture with permissions, admin user logged in"""
+
     server = WSGIServer(application=test_app.app)
     server.start()
 
@@ -212,6 +237,9 @@ def test_server(request, test_app, empty_db):
 
 @pytest.fixture(scope="module")
 def browser(request):
+    """A Splinter-based browser fixture - used for integration
+    testing"""
+
     from os.path import dirname
     # interference from system phantomjs
     phantomjs = dirname(dirname(dirname(dirname(__file__)))) +\

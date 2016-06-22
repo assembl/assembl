@@ -4,6 +4,7 @@ import pytest
 @pytest.fixture(scope="function")
 def user_language_preference_en_cookie(request, test_session, en_locale,
                                        admin_user):
+    """User Language Preference fixture with English (en) cookie level"""
 
     from assembl.models.auth import (
         UserLanguagePreference,
@@ -31,6 +32,7 @@ def user_language_preference_en_cookie(request, test_session, en_locale,
 @pytest.fixture(scope="function")
 def user_language_preference_fr_cookie(request, test_session, fr_locale,
                                        admin_user):
+    """User Language Preference fixture with French (fr) cookie level"""
 
     from assembl.models.auth import (
         UserLanguagePreference,
@@ -58,6 +60,7 @@ def user_language_preference_fr_cookie(request, test_session, fr_locale,
 @pytest.fixture(scope="function")
 def user_language_preference_it_cookie(request, test_session, it_locale,
                                        admin_user):
+    """User Language Preference fixture with Italian (it) cookie level"""
 
     from assembl.models.auth import (
         UserLanguagePreference,
@@ -85,6 +88,8 @@ def user_language_preference_it_cookie(request, test_session, it_locale,
 @pytest.fixture(scope="function")
 def user_language_preference_en_explicit(request, test_session, en_locale,
                                          admin_user):
+    """User Language Preference fixture with English (en) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -111,6 +116,8 @@ def user_language_preference_en_explicit(request, test_session, en_locale,
 @pytest.fixture(scope="function")
 def user_language_preference_fr_explicit(request, test_session, fr_locale,
                                          admin_user):
+    """User Language Preference fixture with French (fr) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -136,6 +143,8 @@ def user_language_preference_fr_explicit(request, test_session, fr_locale,
 @pytest.fixture(scope="function")
 def user_language_preference_it_explicit(request, test_session, it_locale,
                                          admin_user):
+    """User Language Preference fixture with Italian (it) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -161,6 +170,8 @@ def user_language_preference_it_explicit(request, test_session, it_locale,
 @pytest.fixture(scope="function")
 def user_language_preference_de_explicit(request, test_session, de_locale,
                                          admin_user):
+    """User Language Preference fixture with German (de) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -186,6 +197,8 @@ def user_language_preference_de_explicit(request, test_session, de_locale,
 @pytest.fixture(scope="function")
 def user_language_preference_tr_explicit(request, test_session, tr_locale,
                                          admin_user):
+    """User Language Preference fixture with Turkish (tr) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -212,6 +225,9 @@ def user_language_preference_tr_explicit(request, test_session, tr_locale,
 def user_language_preference_fr_mtfrom_en(request, test_session,
                                           en_locale, fr_locale,
                                           admin_user):
+    """User Language Preference fixture with French (fr) translated
+    from English (en) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -238,6 +254,9 @@ def user_language_preference_fr_mtfrom_en(request, test_session,
 def user_language_preference_en_mtfrom_fr(request, test_session,
                                           en_locale, fr_locale,
                                           admin_user):
+    """User Language Preference fixture with English (en) translated
+    from French (fr) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -264,6 +283,9 @@ def user_language_preference_en_mtfrom_fr(request, test_session,
 def user_language_preference_it_mtfrom_en(request, test_session,
                                           en_locale, it_locale,
                                           admin_user):
+    """User Language Preference fixture with Italian (it) translated
+    from English (en) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -290,6 +312,9 @@ def user_language_preference_it_mtfrom_en(request, test_session,
 def user_language_preference_en_mtfrom_it(request, test_session,
                                           en_locale, it_locale,
                                           admin_user):
+    """User Language Preference fixture with English (en) translated
+    from Italian (it) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -316,6 +341,9 @@ def user_language_preference_en_mtfrom_it(request, test_session,
 def user_language_preference_it_mtfrom_fr(request, test_session,
                                           fr_locale, it_locale,
                                           admin_user):
+    """User Language Preference fixture with Italian (it) translated
+    from French (fr) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -342,6 +370,9 @@ def user_language_preference_it_mtfrom_fr(request, test_session,
 def user_language_preference_fr_mtfrom_it(request, test_session,
                                           fr_locale, it_locale,
                                           admin_user):
+    """User Language Preference fixture with French (fr) translated
+    from Italian (it) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -368,6 +399,9 @@ def user_language_preference_fr_mtfrom_it(request, test_session,
 def user_language_preference_de_mtfrom_en(request, test_session,
                                           de_locale, en_locale,
                                           admin_user):
+    """User Language Preference fixture with German (de) translated
+    from English (en) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
@@ -394,6 +428,9 @@ def user_language_preference_de_mtfrom_en(request, test_session,
 def user_language_preference_en_mtfrom_de(request, test_session,
                                           de_locale, en_locale,
                                           admin_user):
+    """User Language Preference fixture with English (en) translated
+    from German (de) explicit level"""
+
     from assembl.models.auth import (
         UserLanguagePreference,
         LanguagePreferenceOrder
