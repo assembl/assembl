@@ -1,16 +1,17 @@
 from unittest import TestCase
 from colander import Invalid
-from .colander import ValidateMeta
+from assembl.lib.colander import ValidateMeta
 
 
 class ValidationTest(TestCase):
     def test_validation(self):
         from assembl.lib.sqla import Base as SQLAlchemyBaseModel
         from sqlalchemy import (
-            Column, 
-            Integer, 
-            Unicode, 
+            Column,
+            Integer,
+            Unicode,
         )
+
         class SampleModel(SQLAlchemyBaseModel):
             __metaclass__ = ValidateMeta
             __tablename__ = 'sample'
@@ -41,10 +42,11 @@ class ValidationTest(TestCase):
         )
         from assembl.lib.sqla import Base as SQLAlchemyBaseModel
         from sqlalchemy import (
-            Column, 
-            Integer, 
-            Unicode, 
+            Column,
+            Integer,
+            Unicode,
         )
+
         class SampleModel(SQLAlchemyBaseModel):
             __metaclass__ = ValidateMeta
             __tablename__ = 'sample_2'
@@ -105,4 +107,3 @@ class ValidationTest(TestCase):
 
         # self.assertRaises(
         #     Invalid, SampleModel.__ca__.objectify, data)
-

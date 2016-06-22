@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ..auth import P_SYSADMIN
+from assembl.auth import P_SYSADMIN
 
 
 def _test_load_fixture(test_webrequest, discussion, admin, fixture):

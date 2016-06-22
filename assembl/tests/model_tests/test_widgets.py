@@ -2,6 +2,7 @@
 
 import pytest
 
+
 def test_delete_widget(
         test_session, creativity_session_widget,
         creativity_session_widget_new_idea):

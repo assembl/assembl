@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from .notification import ModelEventWatcherNotificationSubscriptionDispatcher
+from assembl.models.notification import (
+    ModelEventWatcherNotificationSubscriptionDispatcher)
 
 
 def test_subscribe_to_discussion(

@@ -1,5 +1,5 @@
 import pytest
-from .post import Post
+from assembl.model.post import Post
 
 
 def test_jack_layton_linked_discussion(
