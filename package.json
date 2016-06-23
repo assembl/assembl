@@ -30,7 +30,7 @@
     "jquery-autosize": "~1.18.18",
     "moment": "~2.13.0",
     "raven-js": "~3.0.3",
-    "sockjs-client": "~1.1.0",
+    "sockjs-client": "~1.1.1",
     "vinyl-buffer": "~1.0.0",
     "vinyl-source-stream": "~1.1.0",
     "linkifyjs": "~2.0.0"
