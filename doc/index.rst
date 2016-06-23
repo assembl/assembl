@@ -15,6 +15,7 @@ Contents:
    backups
    permissions_and_roles
    localization
+   example_debate
    analytics/piwik_reporting_api
    analytics/events
 
