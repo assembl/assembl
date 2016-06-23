@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
-
 import pytest
+from datetime import datetime, timedelta
 import simplejson as json
 
-from ...models import (
+from assembl.models import (
     AbstractIdeaVote,
     Idea,
     IdeaLink,
@@ -34,7 +33,8 @@ def test_get_ideas(discussion, test_app, synthesis_1,
     all_ideas = test_app.get('/data/Idea')
     assert all_ideas.status_code == 200
     all_ideas = all_ideas.json
-    disc_ideas = test_app.get('/data/Discussion/%d/ideas?view=id_only' % (discussion.id,))
+    disc_ideas = test_app.get('/data/Discussion/%d/ideas?view=id_only' %
+                              (discussion.id,))
     assert disc_ideas.status_code == 200
     disc_ideas = disc_ideas.json
     assert set(all_ideas) == set(disc_ideas)
@@ -101,8 +101,14 @@ def test_add_subidea_in_synthesis(
 def test_widget_settings(
         discussion, test_app, subidea_1, participant1_user, test_session):
     # Post arbitrary json as initial configuration
-    settings = {"ideas":[{"local:Idea/67": 8}, {"local:Idea/66": 2},
-             {"local:Idea/65": 9}, {"local:Idea/64": 1}]}
+    settings = {
+        "ideas": [
+            {"local:Idea/67": 8},
+            {"local:Idea/66": 2},
+            {"local:Idea/65": 9},
+            {"local:Idea/64": 1}
+        ]
+    }
     settings_s = json.dumps(settings)
     new_widget_loc = test_app.post(
         '/data/Discussion/%d/widgets' % (discussion.id,), {
@@ -258,7 +264,7 @@ def test_creativity_session_widget(
     new_idea_create = test_app.post_json(idea_hiding_endpoint, {
         "@type": "Idea", "short_title": "This is a brand new idea",
         "context_url": ctx_url
-        })
+    })
     assert new_idea_create.status_code == 201
     # Get the sub-idea from the db
     discussion.db.flush()
@@ -270,6 +276,7 @@ def test_creativity_session_widget(
     assert new_idea1.hidden
     assert new_idea1.proposed_in_post.hidden
     assert not subidea_1.hidden
+
     # Get the sub-idea from the api
     new_idea1_rep = test_app.get(
         local_to_absolute(new_idea_create.location),
@@ -277,33 +284,39 @@ def test_creativity_session_widget(
     )
     assert new_idea1_rep.status_code == 200
     new_idea1_rep = new_idea1_rep.json
+
     # It should have a link to the root idea
     idea_link = discussion.db.query(IdeaLink).filter_by(
         source_id=subidea_1.id, target_id=new_idea1.id).one()
     assert idea_link
+
     # It should have a link to the widget
     widget_link = discussion.db.query(GeneratedIdeaWidgetLink).filter_by(
         idea_id=new_idea1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
+
     # It should be linked to its creating post.
     content_link = discussion.db.query(IdeaContentWidgetLink).filter_by(
         idea_id=new_idea1.id, content_id=new_idea1.proposed_in_post.id).first()
     assert content_link
+
     # The new idea should now be in the collection api
     test = test_app.get(idea_endpoint)
     assert test.status_code == 200
     test = test.json
     assert new_idea1_id in test or new_idea1_id in [
         x['@id'] for x in test]
+
     # We should find the context in the new idea
     assert ctx_url in test[0].get('creation_ctx_url', [])
     # TODO: The root idea is included in the above, that's a bug.
     # get the new post endpoint from the idea data
     post_endpoint = new_idea1_rep.get('widget_add_post_endpoint', None)
-    assert (post_endpoint and widget_rep["@id"]
-            and post_endpoint[widget_rep["@id"]])
+    assert (post_endpoint and widget_rep["@id"] and
+            post_endpoint[widget_rep["@id"]])
     post_endpoint = post_endpoint[widget_rep["@id"]]
+
     # Create a new post attached to the sub-idea
     new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
         "@type": "AssemblPost",
@@ -312,11 +325,13 @@ def test_creativity_session_widget(
             "@language": "en"
         }]}, "idCreator": participant1_user.uri()})
     assert new_post_create.status_code == 201
+
     # Get the new post from the db
     discussion.db.flush()
     new_post1_id = new_post_create.location
     post = Post.get_instance(new_post1_id)
     assert post.hidden
+
     # It should have a widget link to the idea.
     post_widget_link = discussion.db.query(IdeaContentWidgetLink).filter_by(
         content_id=post.id, idea_id=new_idea1.id).one()
@@ -325,6 +340,7 @@ def test_creativity_session_widget(
     content_link = discussion.db.query(IdeaContentWidgetLink).filter_by(
         idea_id=new_idea1.id, content_id=post.id).first()
     assert content_link
+
     # TODO: get the semantic data in tests.
     # assert subidea_1.id in Idea.get_idea_ids_showing_post(new_post1_id)
     # It should be a child of the proposing post
@@ -335,12 +351,14 @@ def test_creativity_session_widget(
     assert test.status_code == 200
     assert new_post1_id in test.json or new_post1_id in [
         x['@id'] for x in test.json]
+
     # Get the new post from the api
     new_post1_rep = test_app.get(
         local_to_absolute(new_post_create.location),
         headers={"Accept": "application/json"}
     )
     assert new_post1_rep.status_code == 200
+
     # It should mention its idea
     print new_post1_rep.json
     assert new_idea1_id in new_post1_rep.json['widget_ideas']
@@ -364,9 +382,11 @@ def test_creativity_session_widget(
         "ids": [new_idea1_id]})
     assert confirm.status_code == 200
     discussion.db.flush()
+
     # Get it back
     get_back = test_app.get(confirm_idea_url)
     assert get_back.status_code == 200
+
     # The first idea should now be unhidden, but not the second
     assert get_back.json == [new_idea1_id]
     new_idea1 = Idea.get_instance(new_idea1_id)
@@ -374,11 +394,14 @@ def test_creativity_session_widget(
     new_idea2 = Idea.get_instance(new_idea2_id)
     assert new_idea2.hidden
     assert new_idea2.proposed_in_post
+
     # The second idea was not proposed in public
     assert new_idea2.proposed_in_post.hidden
+
     # The root ideas should not be hidden.
     subidea_1 = Idea.get_instance(subidea_1.id)
     assert not subidea_1.hidden
+
     # Create a second post.
     new_post_create = test_app.post_json(local_to_absolute(post_endpoint), {
         "@type": "AssemblPost",
@@ -389,6 +412,7 @@ def test_creativity_session_widget(
     assert new_post_create.status_code == 201
     discussion.db.flush()
     new_post2_id = new_post_create.location
+
     # Approve the first but not the second idea
     confirm_messages_url = local_to_absolute(
         widget_rep['confirm_messages_url'])
@@ -396,14 +420,17 @@ def test_creativity_session_widget(
         "ids": [new_post1_id]})
     assert confirm.status_code == 200
     discussion.db.flush()
+
     # Get it back
     get_back = test_app.get(confirm_messages_url)
     assert get_back.status_code == 200
     assert get_back.json == [new_post1_id]
+
     # The first idea should now be unhidden, but not the second
     new_post1 = Post.get_instance(new_post1_id)
     assert not new_post1.hidden
     new_post2 = Post.get_instance(new_post2_id)
+
     def clear_data():
         print "finalizing test data"
         test_session.delete(new_post1)
@@ -413,17 +440,19 @@ def test_creativity_session_widget(
         test_session.flush()
     request.addfinalizer(clear_data)
     assert new_post2.hidden
+
     # Get the notifications
     notifications = test_app.get(
         '/data/Discussion/%d/notifications' % discussion.id)
     assert notifications.status_code == 200
     notifications = notifications.json
+
     # Only one active session
     assert len(notifications) == 1
     notification = notifications[0]
     print notification
     assert notification['widget_url']
-    assert notification['time_to_end'] > 23*60*60
+    assert notification['time_to_end'] > 23 * 60 * 60
     assert notification['num_participants'] == 2  # participant and admin
     assert notification['num_ideas'] == 2
 
@@ -441,6 +470,7 @@ def test_inspiration_widget(
             })
         })
     assert new_widget_loc.status_code == 201
+
     # Get the widget from the db
     discussion.db.flush()
     widget_uri = new_widget_loc.location
@@ -448,11 +478,13 @@ def test_inspiration_widget(
     assert new_widget
     assert new_widget.base_idea == subidea_1
     widget_id = new_widget.id
+
     # There should be a link
     widget_link = discussion.db.query(BaseIdeaWidgetLink).filter_by(
         idea_id=subidea_1.id, widget_id=widget_id).all()
     assert widget_link
     assert len(widget_link) == 1
+
     # Get the widget from the api
     widget_rep = test_app.get(
         local_to_absolute(widget_uri),
@@ -464,6 +496,7 @@ def test_inspiration_widget(
     assert 'messages_url' in widget_rep
     assert 'ideas_url' in widget_rep
     assert 'user' in widget_rep
+
     # Get the list of new ideas
     # should be empty, despite the idea having a non-widget child
     idea_endpoint = local_to_absolute(widget_rep['ideas_url'])
@@ -475,16 +508,21 @@ def test_inspiration_widget(
     discussion.db.flush()
     assert new_widget.base_idea == subidea_1
     return
-    # WEIRD virtuoso crash in the tests here, dependent on previous tests being run.
+
+    # WEIRD virtuoso crash in the tests here,
+    # dependent on previous tests being run.
     ancestor_widgets = test_app.get(
         '/data/Discussion/%d/ideas/%d/ancestor_inspiration_widgets/' % (
             discussion.id, subidea_1_1.id))
     assert ancestor_widgets.status_code == 200
     ancestor_widgets_rep = ancestor_widgets.json
     assert new_widget_loc.location in ancestor_widgets_rep
-    # TODO. ajouter la collection descendant_ideas. Comment déduire cet URL du widget????
-    r = test_app.post('/data/Discussion/%d/widgets/%d/base_idea_descendants/%d/linkedposts' % (
-        discussion.id, widget_id, subidea_1_1.id), {
+
+    # TODO. ajouter la collection descendant_ideas.
+    # Comment déduire cet URL du widget????
+    r = test_app.post(
+        '/data/Discussion/%d/widgets/%d/base_idea_descendants/%d/linkedposts' %
+        (discussion.id, widget_id, subidea_1_1.id), {
             "type": "WidgetPost",
             "body": {"@type": "LangString", "entries": [{
                 "@type": "LangStringEntry", "value": "body",
@@ -516,6 +554,7 @@ def test_voting_widget(
             })
         })
     assert new_widget_loc.status_code == 201
+
     # Get the widget from the db
     db.flush()
     widget_uri = new_widget_loc.location
@@ -523,6 +562,7 @@ def test_voting_widget(
     assert new_widget
     assert new_widget.base_idea == subidea_1_1
     db.expire(new_widget, ('criteria', 'votable_ideas', 'vote_specifications'))
+
     # Get the widget from the api
     widget_rep = test_app.get(
         local_to_absolute(widget_uri),
@@ -533,6 +573,7 @@ def test_voting_widget(
     votespecs_url = widget_rep.get('votespecs_url', None)
     assert votespecs_url
     votespecs_url = local_to_absolute(votespecs_url)
+
     # Add a first criterion
     vote_spec_1 = {
         '@type': 'LickertVoteSpecification',
@@ -547,6 +588,7 @@ def test_voting_widget(
     new_vote_spec_uri = new_vote_spec_loc.location
     new_vote_spec = AbstractVoteSpecification.get_instance(new_vote_spec_uri)
     assert new_vote_spec
+
     # and another one
     vote_spec_2 = {
         '@type': 'BinaryVoteSpecification',
@@ -573,7 +615,6 @@ def test_voting_widget(
     new_vote_spec_uri = new_vote_spec_loc.location
     new_vote_spec = AbstractVoteSpecification.get_instance(new_vote_spec_uri)
     assert new_vote_spec
-
 
     # Get an updated widget_rep with target
     widget_rep = test_app.get(
@@ -619,6 +660,7 @@ def test_voting_widget(
             "value": value,
         }), headers=JSON_HEADER)
         assert test.status_code == 201
+
     # Get them back
     test = test_app.get(user_votes_url)
     assert test.status_code == 200
@@ -716,6 +758,7 @@ def DISABLEDtest_voting_widget_criteria(
     assert voting_urls
     assert widget_rep['criteria']
     assert widget_rep['criteria_url']
+
     # Note: At this point, we have two copies of the criteria in the rep.
     # One is the full ideas in widget_rep['criteria'], the other is
     # as specified originally in widget_rep['settings']['criteria'].
@@ -728,6 +771,7 @@ def DISABLEDtest_voting_widget_criteria(
     assert len(test.json) == 2
     assert {x['@id'] for x in test.json} == {c.uri() for c in criteria}
     assert test.json == widget_rep['criteria']
+
     # Set a new set of criteria
     criteria = (criterion_2, criterion_3)
     criteria_def = [
@@ -737,9 +781,10 @@ def DISABLEDtest_voting_widget_criteria(
         } for criterion in criteria
     ]
     test_app.put(criteria_url, json.dumps(criteria_def),
-        headers=JSON_HEADER)
+                 headers=JSON_HEADER)
     db.flush()
     db.expire(new_widget, ('criteria', ))
+
     # Get them back
     test = test_app.get(criteria_url)
     assert test.status_code == 200
@@ -750,9 +795,11 @@ def DISABLEDtest_voting_widget_criteria(
 def test_add_user_description(test_app, discussion, participant1_user):
     url = "/data/AgentProfile/%d" % (participant1_user.id,)
     description = 'Lorem ipsum Aliqua est irure eu id.'
+
     # Add the description
     r = test_app.put(url, {'description': description})
     assert r.status_code == 200
+
     # Check it
     r = test_app.get(url)
     assert r.status_code == 200
@@ -769,9 +816,11 @@ def test_add_partner_organization(test_app, discussion):
         'homepage': "http://example.org/",
         'is_initiator': True
     }
+
     # Create the org
     r = test_app.post(url, org)
     assert r.status_code == 201
+
     # Check it
     link = local_to_absolute(r.location)
     r = test_app.get(link)
@@ -789,11 +838,13 @@ def test_add_timeline_event(test_app, discussion):
         'description': "A first exploratory phase",
         'start': "20141231T09:00:00"
     }
+
     # Create the phase
     r = test_app.post(url, phase1)
     assert r.status_code == 201
     uri1 = r.location
     discussion.db.flush()
+
     # Create phase2
     phase2 = {
         'type': "DiscussionPhase",
@@ -801,6 +852,7 @@ def test_add_timeline_event(test_app, discussion):
         'description': "A second divergent phase",
         'previous_event': uri1
     }
+
     # Create the phase
     r = test_app.post(url, phase2)
     assert r.status_code == 201
@@ -812,10 +864,12 @@ def test_add_timeline_event(test_app, discussion):
     r = test_app.get(local_to_absolute(uri2))
     assert r.status_code == 200
     phase2_data = json.loads(r.body)
+
     # Get phase 1
     r = test_app.get(local_to_absolute(uri1))
     assert r.status_code == 200
     phase1_data = json.loads(r.body)
+
     # check that the link was made in both directions
     assert phase1_data['next_event'] == phase2_data['@id']
     assert phase1_data['@type'] == 'DiscussionPhase'

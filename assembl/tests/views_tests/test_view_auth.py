@@ -12,7 +12,8 @@ from pyramid.request import Request
 from assembl.models import SocialAuthAccount
 
 
-def test_assembl_login(discussion, participant1_user, test_app_no_login, request):
+def test_assembl_login(discussion, participant1_user,
+                       test_app_no_login, request):
     url = test_app_no_login.app.request_factory({}).route_path(
         'contextual_login', discussion_slug=discussion.slug)
     # here we have to know it's "password", as the non-hashed password value
@@ -21,12 +22,13 @@ def test_assembl_login(discussion, participant1_user, test_app_no_login, request
         ('identifier', participant1_user.get_preferred_email()),
         ('password', 'password')]))
     assert (res.status_code == 302 and urlparse.urlparse(
-        res.location).path == '/'+discussion.slug+'/')
+        res.location).path == '/' + discussion.slug + '/')
     assert test_app_no_login.app.registry.getUtility(
         IAuthorizationPolicy).remembered == participant1_user.id
 
 
-def test_assembl_login_mixed_case(discussion, participant1_user, test_app_no_login, request):
+def test_assembl_login_mixed_case(discussion, participant1_user,
+                                  test_app_no_login, request):
     """Check that the login process works with weird case in email"""
     url = test_app_no_login.app.request_factory({}).route_path(
         'contextual_login', discussion_slug=discussion.slug)
@@ -37,7 +39,7 @@ def test_assembl_login_mixed_case(discussion, participant1_user, test_app_no_log
          participant1_user.get_preferred_email().title()),
         ('password', 'password')]))
     assert (res.status_code == 302 and urlparse.urlparse(
-        res.location).path == '/'+discussion.slug+'/')
+        res.location).path == '/' + discussion.slug + '/')
     assert test_app_no_login.app.registry.getUtility(
         IAuthorizationPolicy).remembered == participant1_user.id
 
@@ -78,8 +80,10 @@ fake_social_profile = json.dumps({
     'expires_in': 3600,
     'id': p1_uid,
     'id_token': 'some_other_token',
-    'image': {'isDefault': False,
-        'url': 'https://lh4.googleusercontent.com/abcd/photo.jpg?sz=50'},
+    'image': {
+        'isDefault': False,
+        'url': 'https://lh4.googleusercontent.com/abcd/photo.jpg?sz=50'
+    },
     'isPlusUser': True,
     'kind': 'plus#person',
     'language': 'en',
@@ -90,7 +94,8 @@ fake_social_profile = json.dumps({
 fake_responses = {
     "https://accounts.google.com/o/oauth2/token": fake_social_token,
     "https://www.googleapis.com/plus/v1/people/me": fake_social_profile,
-    "https://www.facebook.com/translations/FacebookLocales.xml": fake_facebook_locale_info
+    "https://www.facebook.com/translations/FacebookLocales.xml":
+        fake_facebook_locale_info
 }
 
 
@@ -105,7 +110,7 @@ def fake_response_handler(url=None, **kwargs):
 
 def test_social_login(
         test_session, test_app, discussion, google_identity_provider, request):
-    res = test_app.get("/login/"+google_identity_provider.provider_type)
+    res = test_app.get("/login/" + google_identity_provider.provider_type)
     assert res.status_code == 302  # Found
     url = urlparse.urlparse(res.location)
     qs = urlparse.parse_qs(url.query)
@@ -115,7 +120,7 @@ def test_social_login(
     with mock.patch('requests.sessions.Session.request') as mock_request:
         mock_request.side_effect = fake_response_handler
         res2 = test_app.get(
-            "/complete/"+google_identity_provider.provider_type, {
+            "/complete/" + google_identity_provider.provider_type, {
                 'state': state,
                 'code': code,
                 'authuser': '0',
@@ -138,7 +143,7 @@ def test_add_social_account(
         test_session, test_app, discussion, admin_user,
         google_identity_provider, base_registry, test_webrequest):
     session_factory = base_registry.getUtility(ISessionFactory)
-    res = test_app.get("/login/"+google_identity_provider.provider_type)
+    res = test_app.get("/login/" + google_identity_provider.provider_type)
     assert res.status_code == 302  # Found
     url = urlparse.urlparse(res.location)
     qs = urlparse.parse_qs(url.query)
@@ -154,7 +159,7 @@ def test_add_social_account(
     with mock.patch('requests.sessions.Session.request') as mock_request:
         mock_request.side_effect = fake_response_handler
         res2 = test_app.get(
-            "/complete/"+google_identity_provider.provider_type, {
+            "/complete/" + google_identity_provider.provider_type, {
                 'state': state,
                 'code': code,
                 'authuser': '0',
@@ -171,10 +176,11 @@ def test_add_social_account(
     assert account.profile == admin_user
     account.delete()
 
+
 def test_merge_social_account(
         test_session, test_app, discussion, participant1_user,
         google_identity_provider, base_registry, test_webrequest):
-    res = test_app.get("/login/"+google_identity_provider.provider_type)
+    res = test_app.get("/login/" + google_identity_provider.provider_type)
     assert res.status_code == 302  # Found
     url = urlparse.urlparse(res.location)
     qs = urlparse.parse_qs(url.query)
@@ -185,7 +191,7 @@ def test_merge_social_account(
     with mock.patch('requests.sessions.Session.request') as mock_request:
         mock_request.side_effect = fake_response_handler
         res2 = test_app.get(
-            "/complete/"+google_identity_provider.provider_type, {
+            "/complete/" + google_identity_provider.provider_type, {
                 'state': state,
                 'code': code,
                 'authuser': '0',

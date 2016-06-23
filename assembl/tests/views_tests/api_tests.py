@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
+
+import pytest
 import smtplib
+import json
 import re
 import quopri
+import mock
 from urlparse import urlparse
 from urllib import unquote
-
-import json
-import pytest
 from urllib import urlencode, quote_plus
-import mock
 
 from assembl.models import (
     Idea, Post, Email, User
@@ -22,8 +22,8 @@ def get_url(discussion, suffix):
     )
 
 
-def test_extracts(
-        discussion, participant1_user, reply_post_2, test_app, subidea_1_1, extract_post_1_to_subidea_1_1):
+def test_extracts(discussion, participant1_user, reply_post_2, test_app,
+                  subidea_1_1, extract_post_1_to_subidea_1_1):
     from assembl.models import Extract
     user = participant1_user
     extract_user = {
@@ -86,25 +86,26 @@ def test_extracts(
     extract_json = json.loads(res.body)
     assert extract_json['idIdea'] == subidea_1_1.uri()
 
-    #Delete
+    # Delete
     res = test_app.delete(base_url + "/" + quote_plus(extract_id))
     assert res.status_code == 204
-    #Check collection after delete
+    # Check collection after delete
     res = test_app.get(base_url, json.dumps(extract_data))
     assert res.status_code == 200
     extracts = json.loads(res.body)
     assert len(extracts) == 1
     assert extract_id not in [e['@id'] for e in extracts]
-    
-    #FIXME:  This should actually return 410 gone now
-    res = test_app.get(base_url + "/" + quote_plus(extract_id), expect_errors=True)
-    assert res.status_code == 404
 
+    # FIXME:  This should actually return 410 gone now
+    res = test_app.get(base_url + "/" + quote_plus(extract_id),
+                       expect_errors=True)
+    assert res.status_code == 404
 
 
 def test_homepage_returns_200(test_app):
     res = test_app.get('/')
     assert res.status_code == 200
+
 
 def test_get_ideas_single(discussion, test_app, test_session, subidea_1):
     url = get_url(discussion, 'ideas')
@@ -135,7 +136,7 @@ def test_get_ideas(discussion, test_app, test_session, test_webrequest):
     assert res.status_code == 200
 
     ideas = json.loads(res.body)
-    assert len(ideas) == num_ideas+1
+    assert len(ideas) == num_ideas + 1
 
 
 def disabledtest_next_synthesis_idea_management(
@@ -143,24 +144,25 @@ def disabledtest_next_synthesis_idea_management(
         root_idea, subidea_1, subidea_1_1, subidea_1_1_1):
     # This needs to be rewritten to use the new mechanisms
     base_idea_url = get_url(discussion, 'ideas')
-    next_synthesis_url = get_url(discussion, 'explicit_subgraphs/synthesis/next_synthesis')
+    next_synthesis_url = get_url(discussion,
+                                 'explicit_subgraphs/synthesis/next_synthesis')
     res = test_app.get(next_synthesis_url)
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert len(res_data['ideas']) == 0
-    
+
     subidea_url = base_idea_url + "/" + str(subidea_1.id)
     res = test_app.get(subidea_url)
     assert res.status_code == 200
     subidea_data = json.loads(res.body)
     assert subidea_data['@id'] == subidea_1.uri()
     assert subidea_data['inNextSynthesis'] == False
-    
+
     subidea_data['inNextSynthesis'] = True
-    
+
     res = test_app.put(subidea_url, json.dumps(subidea_data))
     assert res.status_code == 200
-    
+
     res = test_app.get(subidea_url)
     assert res.status_code == 200
     subidea_1_data = json.loads(res.body)
@@ -170,20 +172,20 @@ def disabledtest_next_synthesis_idea_management(
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert len(res_data['ideas']) == 1, 'Idea wasn\'t added to the synthesis'
-    
-    #Add a idea to synthesis that isn't a direct child of it's parent
+
+    # Add a idea to synthesis that isn't a direct child of it's parent
     subidea_url = base_idea_url + "/" + str(subidea_1_1_1.id)
     res = test_app.get(subidea_url)
     assert res.status_code == 200
     subidea_data = json.loads(res.body)
     assert subidea_data['@id'] == subidea_1_1_1.uri()
     assert subidea_data['inNextSynthesis'] == False
-    
+
     subidea_data['inNextSynthesis'] = True
-    
+
     res = test_app.put(subidea_url, json.dumps(subidea_data))
     assert res.status_code == 200
-    
+
     res = test_app.get(subidea_url)
     assert res.status_code == 200
     subidea_1_data = json.loads(res.body)
@@ -195,9 +197,11 @@ def disabledtest_next_synthesis_idea_management(
     assert len(res_data['ideas']) == 2, 'Idea wasn\'t added to the synthesis'
 
 
-def test_api_register(discussion, test_app_no_perm, discussion_synth_notification):
+def test_api_register(discussion, test_app_no_perm,
+                      discussion_synth_notification):
     from assembl.models import AbstractAgentAccount
-    test_app_no_perm.app.registry.settings['assembl.validate_registration_emails']='true'
+    test_app_no_perm.app.registry.\
+        settings['assembl.validate_registration_emails'] = 'true'
     with mock.patch('repoze.sendmail.mailer.SMTPMailer.smtp') as mock_mail:
         mailer = mock_mail.return_value
         mailer.set_debuglevel.return_value = None
@@ -206,7 +210,8 @@ def test_api_register(discussion, test_app_no_perm, discussion_synth_notificatio
         mailer.ehlo.return_value = (250, 'Completed')
         mailer.does_esmtp.return_value = False
         mailer.sendmail.return_value = {}
-        mailer.quit.return_value = (221, 'Service closing transmission channel')
+        mailer.quit.return_value = (221,
+                                    'Service closing transmission channel')
 
         # Register
         email = "jsmith@example.com"
@@ -251,9 +256,11 @@ def test_api_register(discussion, test_app_no_perm, discussion_synth_notificatio
         assert len(account.profile.notification_subscriptions) > 0
 
 
-def test_csv_subscribe(discussion, test_app_no_perm, test_app, discussion_synth_notification):
+def test_csv_subscribe(discussion, test_app_no_perm,
+                       test_app, discussion_synth_notification):
     from assembl.models import User, AbstractAgentAccount
-    test_app_no_perm.app.registry.settings['assembl.validate_registration_emails']='true'
+    test_app_no_perm.app.registry.\
+        settings['assembl.validate_registration_emails'] = 'true'
     with mock.patch('repoze.sendmail.mailer.SMTPMailer.smtp') as mock_mail:
         mailer = mock_mail.return_value
         mailer.set_debuglevel.return_value = None
@@ -262,7 +269,8 @@ def test_csv_subscribe(discussion, test_app_no_perm, test_app, discussion_synth_
         mailer.ehlo.return_value = (250, 'Completed')
         mailer.does_esmtp.return_value = False
         mailer.sendmail.return_value = {}
-        mailer.quit.return_value = (221, 'Service closing transmission channel')
+        mailer.quit.return_value = (221,
+                                    'Service closing transmission channel')
 
         discussion.subscribe_to_notifications_on_signup = True
         discussion.db.flush()
@@ -284,7 +292,8 @@ def test_csv_subscribe(discussion, test_app_no_perm, test_app, discussion_synth_
         discussion.subscribe_to_notifications_on_signup = True
         discussion.db.flush()
         # How is the user looking?
-        account = discussion.db.query(AbstractAgentAccount).filter_by(email="bsmith@example.com").first()
+        account = discussion.db.query(AbstractAgentAccount).\
+            filter_by(email="bsmith@example.com").first()
         assert account.profile.verified
         assert len(account.profile.agent_status_in_discussion) == 0
         assert len(account.profile.notification_subscriptions) == 0
@@ -317,39 +326,41 @@ def test_csv_subscribe(discussion, test_app_no_perm, test_app, discussion_synth_
 
 
 def test_api_get_posts_queries(
-        discussion, test_app, test_session, participant1_user, 
+        discussion, test_app, test_session, participant1_user,
         root_post_1, reply_post_1, reply_post_2):
     base_post_url = get_url(discussion, 'posts')
-    
-    #Check initial conditions from post api
+
+    # Check initial conditions from post api
     url = base_post_url
     res = test_app.get(url)
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert res_data['total'] == 3
-    
-    #Test date queries
-    url = base_post_url + "?posted_before_date=2000-01-02T00%3A00%3A00.000Z&view=id_only"
+
+    # Test date queries
+    url = base_post_url + \
+        "?posted_before_date=2000-01-02T00%3A00%3A00.000Z&view=id_only"
     res = test_app.get(url)
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert res_data['total'] == 1
     assert res_data['posts'][0]['@id'] == root_post_1.uri()
-    
-    url = base_post_url + "?posted_after_date=2000-01-02T00%3A00%3A00.000Z&view=id_only"
+
+    url = base_post_url + \
+        "?posted_after_date=2000-01-02T00%3A00%3A00.000Z&view=id_only"
     res = test_app.get(url)
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert res_data['total'] == 2
-    
-    #TODO: Other query types, and sorting
+
+    # TODO: Other query types, and sorting
 
 
 def test_api_weird_failure_on_joinedload(
-        discussion, test_app, test_session, participant1_user, 
+        discussion, test_app, test_session, participant1_user,
         root_post_1, reply_post_1, reply_post_2):
     base_post_url = get_url(discussion, 'posts')
-    
+
     url = base_post_url + "?posted_before_date=2000-01-02T00%3A00%3A00.000Z"
     res = test_app.get(url)
     assert res.status_code == 200
@@ -359,56 +370,56 @@ def test_api_weird_failure_on_joinedload(
 
 
 def test_api_get_posts_from_idea(
-        discussion, test_app, test_session, participant1_user, 
+        discussion, test_app, test_session, participant1_user,
         root_idea, subidea_1, subidea_1_1, subidea_1_1_1,
         root_post_1, reply_post_1, reply_post_2):
     base_post_url = get_url(discussion, 'posts')
     base_idea_url = get_url(discussion, 'ideas')
     base_extract_url = get_url(discussion, 'extracts')
-    
-    #Check initial conditions from post api
+
+    # Check initial conditions from post api
     url = base_post_url
     res = test_app.get(url)
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert res_data['total'] == 3
-    
-    #Check initial conditions from idea api
+
+    # Check initial conditions from idea api
     res = test_app.get(base_idea_url + "/" + str(root_idea.id))
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert res_data['num_total_and_read_posts'][0] == 3
     assert res_data['num_orphan_posts'] == 3
-    
+
     def check_number_of_posts(idea, expected_num, fail_msg):
-        #Check from idea API
+        # Check from idea API
         discussion.db.flush()
         res = test_app.get(base_idea_url + "/" + str(idea.id))
         assert res.status_code == 200
         res_data = json.loads(res.body)
-        assert res_data['num_total_and_read_posts'][0] == expected_num, "idea API returned %d but %s" % (res_data['num_total_and_read_posts'][0],fail_msg)
+        assert res_data['num_total_and_read_posts'][0] == expected_num, "idea API returned %d but %s" % (res_data['num_total_and_read_posts'][0], fail_msg)
 
         url = base_post_url + "?" + urlencode({"root_idea_id": idea.uri()})
         res = test_app.get(url)
         assert res.status_code == 200
         res_data = json.loads(res.body)
-        #print(repr(res_data))
-        #TODO: BENOITG:  THERE IS A SESSION PROBLEM HERE
+        # print(repr(res_data))
+        # TODO: BENOITG:  THERE IS A SESSION PROBLEM HERE
         assert res_data['total'] == expected_num, "post API returned %d but %s" % (res_data['total'],fail_msg)
 
     def check_total_and_orphans(expected_total, expected_orphans):
-        #Check orphans from idea api
+        # Check orphans from idea api
         res = test_app.get(base_idea_url + "/" + str(root_idea.id))
         assert res.status_code == 200
         res_data = json.loads(res.body)
         assert res_data['num_total_and_read_posts'][0] == expected_total
         # Known to fail. I get 0 on v6, ? on v7.
         assert res_data['num_orphan_posts'] == expected_orphans
-    
+
     check_number_of_posts(subidea_1, 0, "Initially no posts are linked")
     check_number_of_posts(subidea_1_1, 0, "Initially no posts are linked")
     check_number_of_posts(subidea_1_1_1, 0, "Initially no posts are linked")
-    
+
     user = participant1_user
     extract_user = {
         "@id": user.uri(),
@@ -425,7 +436,7 @@ def test_api_get_posts_from_idea(
             "@id": None
         }
     }
-    #Create extract
+    # Create extract
     extract_data = base_extract_data.copy()
     extract_data["idIdea"] = subidea_1_1.uri()
     extract_data["target"]['@id'] = reply_post_1.uri()
@@ -433,16 +444,22 @@ def test_api_get_posts_from_idea(
     assert res.status_code == 200
     res_data = json.loads(res.body)
     extract_post_1_to_subidea_1_1_id = res_data['@id']
-    #test_session.flush()
-    
-    check_number_of_posts(subidea_1_1,  2, "Num posts on idea (directly) should recurse to the two posts")
-    #import transaction
-    #transaction.commit()
-    check_number_of_posts(subidea_1,  2, "Num posts on parent idea should be the same as the child")
-    check_number_of_posts(subidea_1_1_1,  0, "Num posts on child of idea should still be zero")
+    # test_session.flush()
+
+    check_number_of_posts(
+        subidea_1_1, 2,
+        "Num posts on idea (directly) should recurse to the two posts")
+    # import transaction
+    # transaction.commit()
+    check_number_of_posts(
+        subidea_1, 2,
+        "Num posts on parent idea should be the same as the child")
+    check_number_of_posts(
+        subidea_1_1_1, 0,
+        "Num posts on child of idea should still be zero")
     check_total_and_orphans(3, 1)
-    
-    #Create second extract to same post and idea
+
+    # Create second extract to same post and idea
     extract_data = base_extract_data.copy()
     extract_data["idIdea"] = subidea_1_1.uri()
     extract_data["target"]['@id'] = reply_post_1.uri()
@@ -452,11 +469,16 @@ def test_api_get_posts_from_idea(
     res_data = json.loads(res.body)
     extract_post_1_to_subidea_1_1_bis_id = res_data['@id']
 
-    check_number_of_posts(subidea_1_1,  2, "Num posts should not have changed with second identical extract")
-    check_number_of_posts(subidea_1,  2, "Num posts on parent idea  should not have changed with second identical extract")
+    check_number_of_posts(
+        subidea_1_1, 2,
+        "Num posts should not have changed with second identical extract")
+    check_number_of_posts(
+        subidea_1, 2,
+        "Num posts on parent idea should not have changed " +
+        "with second identical extract")
     check_total_and_orphans(3, 1)
 
-    #Create extract from parent idea to leaf message
+    # Create extract from parent idea to leaf message
     extract_data = base_extract_data.copy()
     extract_data["idIdea"] = subidea_1.uri()
     extract_data["target"]['@id'] = reply_post_2.uri()
@@ -466,21 +488,31 @@ def test_api_get_posts_from_idea(
     res_data = json.loads(res.body)
     extract_post_2_to_subidea_1_id = res_data['@id']
     
-    check_number_of_posts(subidea_1_1,  2, "Child idea should still have two posts")
-    check_number_of_posts(subidea_1,  2, "Idea should still have two posts")
-    check_number_of_posts(subidea_1_1_1,  0, "Num posts on leaf idea should still be zero")
+    check_number_of_posts(subidea_1_1, 2,
+                          "Child idea should still have two posts")
+    check_number_of_posts(subidea_1, 2,
+                          "Idea should still have two posts")
+    check_number_of_posts(subidea_1_1_1, 0,
+                          "Num posts on leaf idea should still be zero")
     check_total_and_orphans(3, 1)
-    
-    #Delete original extract and duplicate (check that toombstones have no effect
-    res = test_app.delete(base_extract_url + "/" + quote_plus(extract_post_1_to_subidea_1_1_id))
+
+    # Delete original extract and duplicate
+    # (check that toombstones have no effect)
+    res = test_app.delete(base_extract_url + "/" +
+                          quote_plus(extract_post_1_to_subidea_1_1_id))
     assert res.status_code == 204
-    res = test_app.delete(base_extract_url + "/" + quote_plus(extract_post_1_to_subidea_1_1_bis_id))
+    res = test_app.delete(base_extract_url + "/" +
+                          quote_plus(extract_post_1_to_subidea_1_1_bis_id))
     assert res.status_code == 204
-    
-    check_number_of_posts(subidea_1_1, 0, "Child idea should no longer have any post")
-    check_number_of_posts(subidea_1, 1, "Parent idea should only have one post left")
-    check_number_of_posts(subidea_1_1_1,  0, "Num posts on leaf idea should still be zero")
+
+    check_number_of_posts(subidea_1_1, 0,
+                          "Child idea should no longer have any post")
+    check_number_of_posts(subidea_1, 1,
+                          "Parent idea should only have one post left")
+    check_number_of_posts(subidea_1_1_1, 0,
+                          "Num posts on leaf idea should still be zero")
     check_total_and_orphans(3, 2)
+
 
 def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
     base_url = get_url(discussion, 'posts')
@@ -489,12 +521,13 @@ def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
     assert res.status_code == 200
     res_data = json.loads(res.body)
     assert res_data['total'] == 20
-    
-    #Verify duplicates
+
+    # Verify duplicates
     jack_layton_mailbox.do_import_content(jack_layton_mailbox, True)
     assert res_data['total'] == 20, "No duplicate messages should have been imported, but there are now %d messages" % res_data['total']
-    
-        # Verify they are all imported.  one() will throw an exception if any of them didn't import
+
+    # Verify they are all imported.
+    # one() will throw an exception if any of them didn't import
     db = discussion.db
     posts = db.query(Post).order_by(Post.creation_date).all()
     assert [p.message_id for p in posts] == [
@@ -520,7 +553,7 @@ def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
         "2400278.6mpFWar2xg@benoitg-t510"]
     posts.insert(0, None)  # We are using 1-offset indices below.
 
-    #Verify threading is correct
+    # Verify threading is correct
     """
     1-  Harper says: Let's [A:lower taxes] to [B:favor economic growth]. <1606949.IA7dUeR8YG@benoitg-t510>
         |
@@ -562,6 +595,7 @@ def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
               |
     20-       |-Harper says:  [L:Federal environmental programs are ineffective] and a waste of money. <2400278.6mpFWar2xg@benoitg-t510>
     """
+
     assert posts[1].parent == None
     assert len(posts[1].children) == 3
     assert posts[2].parent == posts[1]
@@ -587,7 +621,8 @@ def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
     assert len(posts[12].children) == 1
     assert posts[13].parent == posts[12]
     assert len(posts[13].children) == 1
-    assert posts[14].parent == posts[13], "Forwarded messages did not go to original thread"
+    assert posts[14].parent == posts[13], \
+        "Forwarded messages did not go to original thread"
     assert len(posts[14].children) == 0
     assert posts[15].parent == posts[9]
     assert len(posts[15].children) == 1
@@ -601,4 +636,3 @@ def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):
     assert len(posts[19].children) == 1
     assert posts[20].parent == posts[19]
     assert len(posts[20].children) == 0
-

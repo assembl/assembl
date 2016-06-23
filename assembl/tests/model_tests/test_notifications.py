@@ -17,7 +17,7 @@ from assembl.models import (
     NotificationSubscriptionStatus
 )
 
-from assembl.notification import (
+from assembl.models.notification import (
     ModelEventWatcherNotificationSubscriptionDispatcher)
 
 
