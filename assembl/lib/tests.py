@@ -1,6 +1,6 @@
 from unittest import TestCase
 from colander import Invalid
-from .models import ValidateMeta
+from .colander import ValidateMeta
 
 
 class ValidationTest(TestCase):
