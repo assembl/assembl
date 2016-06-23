@@ -23,7 +23,7 @@ Flow of messages:
         | |
     5-  | |-Typical Quebecker: Jack Layton was a nice guy, he's dead.
         | | |
-    6-  | | |-Animator: And what did he think of of lowering taxes?
+    6-  | | |-Animator: And what did he think of of [M:lowering taxes]?
         | |   |
     7-  | |   |-Typical Quebecker: He was against it.
         | |     |
@@ -47,7 +47,7 @@ Flow of messages:
             |   |
     16-     |   |-Québec city talk radio says:  Union workers are all lazy bums, good riddance!
             |
-    19-     |-Suzuki says: Maybe, but with the most severe cuts in environmental programs, it's still [K:no good for the environment].
+    19-     |-Suzuki says: Maybe, but with the most severe [N: cuts in environmental programs], it's still [K:no good for the environment].
               |
     20-       |-Harper says:  [L:Federal environmental programs are ineffective] and a waste of money.
 
@@ -95,4 +95,22 @@ What posts would be displayed if a participant clicks "job loss" in the debate m
     15- ... Syndicalist says:  [J:People loose their job]!
             |
     16-     |-Québec city talk radio says:  Union workers are all lazy bums, good ridance!
+
+
+
+Alternative 2:
+This is the version in the fixtures, with thread-breaking links to ideas 5 and 16.
+
+::
+
+    1 Favor economic growth [B, M, -16, -5]
+    1_1 Lower taxes [A]
+    1_1_1 Lower government revenue [H]
+    1_1_1_1 Austerity yields contraction [F, G, -16]
+    1_1_1_1_1 Job loss [I, J, -16]
+    1_1_1_1_2 Environmental program cuts [N]
+    1_1_1_1_2_1 Bad for the environment [K]
+    1_1_1_1_2_2 Federal programs are ineffective [L]
+    1_2 Increased reseource consumption [C, -16]
+    1_2_1 Bad for the environment [D, -16]
 
