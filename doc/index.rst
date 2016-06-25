@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    INSTALL
+   tech_stack
    backups
    permissions_and_roles
    localization

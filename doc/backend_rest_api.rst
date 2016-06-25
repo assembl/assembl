@@ -1,3 +1,5 @@
+.. _magic_api:
+
 Traversal API
 =============
 

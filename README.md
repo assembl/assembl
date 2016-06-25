@@ -11,9 +11,10 @@ Assembl is an Open Source application that enables hundreds or even thousands of
 Assembl is made with the following technologies :
 
 - HTML5, [MarionetteJS](http://marionettejs.com/)
-- [The Pyramid Framework](http://www.pylonsproject.org/)
 - [Nginx](http://nginx.org/)
-- [Virtuoso](http://virtuoso.openlinksw.com/)
+- [The Pyramid Framework](http://www.pylonsproject.org/)
+- [SQLAlchemy](http://www.sqlalchemy.org/)
+- [Postgres](http://postgresql.org)
 
 Assembl is developed by [Imagination For People](http://imaginationforpeople.org) and [bluenove](http://bluenove.com)
 

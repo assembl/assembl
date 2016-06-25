@@ -1,3 +1,5 @@
+.. _classical_api:
+
 Cornice RESTful services
 ------------------------
 
