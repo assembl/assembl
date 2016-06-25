@@ -1,7 +1,8 @@
 Installation for developers
 ===========================
 
-**Prerequisites**
+Prerequisites
+-------------
 
 -  On Mac OS X 10.9.2: The system python is incompatible with the clang
    5.1. You need to remove all occurences of ``-mno-fused-madd`` in
@@ -86,7 +87,8 @@ fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)
 You'll need to reconfigure your ssh server
 
 
-**Running**
+Running
+-------
 
 Note: memcached and redis must be running already.
 
@@ -100,7 +102,6 @@ Only the first time you run it:
 
     source venv/bin/activate
     supervisord
-    #(wait for virtuoso to start)
 
 Creating a user the first time you run assembl (so you have a
 superuser):
@@ -125,7 +126,8 @@ Then, start the development server and compass with this command:
 
     supervisorctl start dev:
 
-**Multiple environments**
+Multiple environments
+~~~~~~~~~~~~~~~~~~~~~
 
 If you want to run multiple environments on your machine, you should
 have different values for various parameters in ``development.ini``. In
@@ -159,7 +161,17 @@ port; in the case of ``changes.socket``, you simply need a different
 filename, and in the case of ``celery_task.*.broker``, the final number
 has to be changed to another low integer.
 
-**Updating an environment**
+A note on vagrant
+~~~~~~~~~~~~~~~~~
+
+If you use vagrant, we have a few processes that expect to use socket
+files in %(here)s. Vagrant does not allow creating sockets in a shared
+folder; so if you insist on using vagrant, make sure to move sockets
+locations. There is one is supervisord.conf, and one in an unkonwn
+location.
+
+Updating an environment
+-----------------------
 
 .. code:: sh
 
@@ -198,7 +210,7 @@ Updating an environment to it's specified branch, tag or revision:
     fab devenv app_fullupdate
 
 Schema migrations
------------------
+~~~~~~~~~~~~~~~~~
 
 Upgrade to latest manally:
 
@@ -214,19 +226,10 @@ Create a new one:
     Make sure to verify the generated code...
 
 Autogeneration (--autogenerate) isn't supported since we don't have full
-reflextion support in virtuoso's sqlalchemy driver.
-
-A note on vagrant
------------------
-
-If you use vagrant, we have a few processes that expect to use socket
-files in %(here)s. Vagrant does not allow creating sockets in a shared
-folder; so if you insist on using vagrant, make sure to move sockets
-locations. There is one is supervisord.conf, and one in an unkonwn
-location.
+reflexion support in virtuoso's sqlalchemy driver.
 
 Ontology Submodule
-------------------
+~~~~~~~~~~~~~~~~~~
 
 The ontology module is a git submodule. As a result, after pulling in changes,
 update with the following:
