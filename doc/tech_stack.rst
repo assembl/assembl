@@ -18,7 +18,7 @@ The frontend stack was originally developed in Backbone_ in 2012, because it all
 Angular for widgets
 -------------------
 
-A set of widgets were developed later as part of the Catalyst project; because they were supposed to be generic to the Catalyst ecosystem and independent of Assembl, they were deliberately developed using a different codebase, namely Angular_.
+A set of widgets were developed later as part of the Catalyst_ project; because they were supposed to be generic to the Catalyst ecosystem and independent of Assembl, they were deliberately developed using a different codebase, namely Angular_.
 
 Asynchronicity in the frontend
 ------------------------------
@@ -108,6 +108,7 @@ Administrative tasks are executed both remotely and locally through Fabric_. The
 .. _Memcached: https://memcached.org/
 .. _uWSGI: https://uwsgi-docs.readthedocs.io/en/latest/
 .. _PyODBC: https://github.com/maparent/pyodbc
+.. _Catalyst: http://catalyst-fp7.eu/
 .. _`Python Social Auth`: http://psa.matiasaguirre.net/
 .. _`Virtuoso-python`: https://github.com/maparent/virtuoso-python
 .. _`Linked Data Views`: http://docs.openlinksw.com/virtuoso/rdfviewsrdbms.html
