@@ -23,6 +23,7 @@ Contents:
    autodoc/modules
    frontend
    endpoints
+   documenting
 
 Indices and tables
 ==================
