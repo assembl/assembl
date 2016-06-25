@@ -74,7 +74,7 @@ Nonetheless, handling complex recursive queries in this first system introduced 
 
 Thanks to SQLAlchemy's abstraction layer, it was possible to port our codebase back to Postgres_ for data storage, and we abstracted the complexity of some of the queries by pushing part of the more complex calculations in the application layer (in :py:mod:`assembl.models.path_utils`.)
 
-This was a setback for our Linked Open Data strategy, and does not solve the issue of deductive capacity, and we are now considering the option of moving towards a `polyglot persistence` model.
+This was a setback for our Linked Open Data strategy, and does not solve the issue of deductive capacity, and we are now considering the option of moving towards a `polyglot persistence`_ model.
 
 
 Operations
