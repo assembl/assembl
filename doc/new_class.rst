@@ -3,7 +3,7 @@ Creating a new model class
 
 All model classes should inherit :py:class:`assembl.lib.sqla.BaseOps` (as ``Base``), and many will also inherit :py:class:`assembl.models.DiscussionBoundBase`, which means that they exist within the context of a discussion. Classes that represent information that can be deleted while leaving a trace of their existence will also inherit :py:class:`assembl.lib.history_mixin.TombstonableMixin`, and classes that can have a snapshot taken before modification will inherit :py:class:`assembl.lib.history_mixin.HistoryMixin`.
 
-We will take :py:class:`assembl.models.Document` as a fairly typical example.
+We will take :py:class:`assembl.models.attachment.Document` as a fairly typical example.
 
 ORM mapping
 -----------
@@ -20,6 +20,7 @@ The first step is to bind the class to a database table (``__tablename__``) and 
 If the class is a base class with subclasses, we declare a ``type`` (or ``sqla_type``) column, using the pattern for `joined table inheritance`_. We must define the identity for the base class in the ``__mapper_args__``.
 
 ::
+
     type = Column(String(60), nullable=False)
     __mapper_args__ = {
         'polymorphic_identity': 'document',
