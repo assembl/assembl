@@ -13,6 +13,7 @@ Contents:
 
    INSTALL
    tech_stack
+   new_class
    backups
    permissions_and_roles
    localization

@@ -1,3 +1,5 @@
+"""This defines Context objects for traversal of the magic api."""
+
 from traceback import print_exc
 import logging
 
@@ -552,6 +554,7 @@ class CollectionContextClassPredicate(object):
 
 
 class AbstractCollectionDefinition(object):
+    """Represents a collection of objects related to an instance."""
     __metaclass__ = ABCMeta
 
     def __init__(self, owner_class, collection_class):
@@ -615,6 +618,7 @@ def uses_list(prop):
 
 
 class CollectionDefinition(AbstractCollectionDefinition):
+    """A collection of objects related to an instance through a relationship."""
     back_property = None
 
     def __init__(self, owner_class, property):

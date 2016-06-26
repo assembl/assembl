@@ -52,7 +52,7 @@ class CrudOperation(Enum):
 
 
 class DuplicateHandling(Enum):
-    # How to handle duplicates. Assumes that the unique_query is valid.
+    """How to handle duplicates. Assumes that the unique_query is valid."""
     NO_CHECK = 1        # Don't look for duplicates
     ERROR = 2           # raise a ObjectNotUniqueError
     USE_ORIGINAL = 3    # Update the original value instead of a new one.
