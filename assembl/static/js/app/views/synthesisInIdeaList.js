@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.synthesisInIdeaList
+ */
 
 var Ctx = require('../common/context.js'),
     Assembl = require('../app.js'),

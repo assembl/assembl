@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.postFilters
+ */
 
 var Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),

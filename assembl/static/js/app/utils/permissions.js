@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.utils.permissions
+ */
 
 var Permissions = {
   READ: "read",

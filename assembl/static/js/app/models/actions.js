@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.actions
+ */
 
 var Base = require('./base.js'),
     Ctx = require('../common/context.js');

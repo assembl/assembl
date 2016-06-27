@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.views.messageTranslationQuestion
+ */
 var Marionette = require('../shims/marionette.js'),
     Backbone = require('backbone'),
     Ctx = require('../common/context.js'),

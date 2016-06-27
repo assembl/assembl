@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.reusableDataFields.editableField
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     _ = require('underscore'),

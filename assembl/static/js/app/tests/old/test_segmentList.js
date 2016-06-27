@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.old.test_segmentList
+ */
 define(['jasmine', 'backbone', 'underscore', 'jquery', 'app', 'views/segmentList'],
 function(jasmine, Backbone, _, $, app, SegmentList) {
 

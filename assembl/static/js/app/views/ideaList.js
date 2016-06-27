@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.ideaList
+ */
 
 var AllMessagesInIdeaListView = require('./allMessagesInIdeaList.js'),
     OrphanMessagesInIdeaListView = require('./orphanMessagesInIdeaList.js'),

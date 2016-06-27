@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.views.messageExportModal
+ */
 var Backbone = require('backbone'),
     Marionette = require('../shims/marionette.js'),
     i18n = require('../utils/i18n.js'),

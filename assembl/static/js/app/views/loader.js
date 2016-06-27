@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.loader
+ */
 
 var Marionette = require('../shims/marionette.js'),
     _ = require('underscore'),

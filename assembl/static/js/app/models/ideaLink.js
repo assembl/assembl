@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.ideaLink
+ */
 
 var _ = require('underscore'),
     Base = require('./base.js'),

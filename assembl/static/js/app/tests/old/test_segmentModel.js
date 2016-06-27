@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.old.test_segmentModel
+ */
 define(['jasmine', 'underscore', 'models/segment'], function(jasmine, _, Segment) {
 
   return describe('Model segment', function() {

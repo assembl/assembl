@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.utils.scrollUtils
+ */
 
 var jQuery = require('jquery'),
     Raven = require('raven-js');

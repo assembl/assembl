@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.views.sourceEditView
+ */
 var Marionette = require('../shims/marionette.js'),
     $ = require('jquery'),
     i18n = require('../utils/i18n.js'),

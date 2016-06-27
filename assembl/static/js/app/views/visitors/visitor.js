@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.visitors.visitor
+ */
 
 var Visitor = function() {};
 

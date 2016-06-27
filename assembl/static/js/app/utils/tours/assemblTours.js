@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.utils.tours.assemblTours
+ */
 var i18n =  require('../i18n.js'),
     Ctx = require("../../common/context.js"),
     $ = require('jquery');

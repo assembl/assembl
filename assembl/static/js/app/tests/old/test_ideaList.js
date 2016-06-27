@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.old.test_ideaList
+ */
 define(['jasmine', 'underscore', 'views/ideaList'], function(jasmine, _, IdeaList) {
 
   function getView() {

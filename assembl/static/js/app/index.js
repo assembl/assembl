@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.index
+ */
 
 var App = require('./app.js'),
     Router = require('./router.js'),

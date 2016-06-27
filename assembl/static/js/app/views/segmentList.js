@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.segmentList
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Backbone = require('backbone'),

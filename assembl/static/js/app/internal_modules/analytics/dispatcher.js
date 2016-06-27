@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.internal_modules.analytics.dispatcher
+ */
 
 // UMD style module defintion. Simplified details below. Read comments to understand dependencies
 var moduleName = 'Analytics_Dispatcher',

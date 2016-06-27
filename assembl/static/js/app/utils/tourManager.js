@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * 
+ * @module app.utils.tourManager
+ */
 
 var Marionette = require('../shims/marionette.js'),
     i18n =  require('./i18n.js'),

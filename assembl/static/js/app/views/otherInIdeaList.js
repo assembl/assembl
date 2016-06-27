@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.otherInIdeaList
+ */
 
 var Ctx = require('../common/context.js'),
     ideaInIdeaList = require('./ideaInIdeaList.js'),

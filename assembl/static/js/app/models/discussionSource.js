@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.discussionSource
+ */
 
 var Base = require('./base.js'),
     Ctx = require('../common/context.js'),

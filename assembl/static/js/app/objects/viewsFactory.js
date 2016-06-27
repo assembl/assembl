@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.objects.viewsFactory
+ */
 
 var _ = require('underscore'),
     AssemblPanel = require('../views/assemblPanel.js'),

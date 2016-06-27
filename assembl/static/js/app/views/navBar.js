@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.navBar
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird'),

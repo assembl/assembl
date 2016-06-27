@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.widget
+ */
 
 var _ = require('underscore'),
     Backbone = require("backbone"),

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.allMessagesInIdeaList
+ */
 
 var ideaInIdeaList = require('./ideaInIdeaList.js'),
     Ctx = require('../common/context.js'),

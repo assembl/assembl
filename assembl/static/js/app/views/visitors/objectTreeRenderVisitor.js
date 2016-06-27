@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.visitors.objectTreeRenderVisitor
+ */
 
 var Visitor = require("./visitor.js");
 

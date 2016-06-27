@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.panelSpec
+ */
 
 var Base = require('./base.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js');

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.idea
+ */
 
 var _ = require('underscore'),
     Promise = require('bluebird'),

@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.context.spec
+ */
 
 
 var $ = require('jquery'),

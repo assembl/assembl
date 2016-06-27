@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.message
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Raven = require('raven-js'),

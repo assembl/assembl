@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.infobar
+ */
 
 var Base = require("./base.js");
 

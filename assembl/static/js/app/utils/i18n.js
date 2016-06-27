@@ -1,4 +1,8 @@
 /**
+ * 
+ * @module app.utils.i18n
+ */
+/**
  * Wrapper for Jed
  *
  * */

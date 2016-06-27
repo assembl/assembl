@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.navigation.linkListView
+ */
 
 var _ = require('underscore'),
     $ = require('jquery'),

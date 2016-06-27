@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.visitors.firstIdeaToShowVisitor
+ */
 
 var Visitor = require("./visitor.js");
 

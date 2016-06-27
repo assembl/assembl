@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.flipSwitchButton
+ */
 
 var Marionette = require('../shims/marionette.js');
 

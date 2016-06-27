@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.reusableDataFields.ckeditorField
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     _ = require('underscore'),

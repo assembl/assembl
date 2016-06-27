@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.old.test_ideaView
+ */
 define(['jasmine', 'underscore', 'app', 'views/idea', 'models/idea'],
 function(jasmine, _, app, IdeaView, Idea) {
 

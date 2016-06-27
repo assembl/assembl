@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.routes.spec
+ */
 
 var Router = require('../router.js'),
     expect = require('chai').expect;

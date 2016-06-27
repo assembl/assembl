@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.app
+ */
 
 var Marionette = require('./shims/marionette.js'),
     $ = require('jquery'),

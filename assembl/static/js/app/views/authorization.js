@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.authorization
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js');

@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * 
+ * @module app.views.widgetButtons
+ */
 
 var Backbone = require("backbone"),
     Marionette = require("../shims/marionette.js"),

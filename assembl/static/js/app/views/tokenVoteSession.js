@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.tokenVoteSession
+ */
 
 var Marionette = require('../shims/marionette.js'),
   $ = require('jquery'),

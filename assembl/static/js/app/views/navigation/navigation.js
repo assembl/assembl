@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.navigation.navigation
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     Jed = require('jed'),

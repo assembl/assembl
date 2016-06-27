@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.utils.socket
+ */
 
 var _ = require('underscore'),
     SockJS = require('sockjs-client'),

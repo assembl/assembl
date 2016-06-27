@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.groupState
+ */
 
 var Base = require('./base.js'),
     Idea = require('./idea.js');

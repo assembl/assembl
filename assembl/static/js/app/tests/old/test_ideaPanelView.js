@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.old.test_ideaPanelView
+ */
 define(['jasmine', 'underscore', 'app', 'views/ideaPanel'],
 function(jasmine, _, app, IdeaPanel) {
 

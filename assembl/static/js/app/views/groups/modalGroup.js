@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.groups.modalGroup
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     _ = require('underscore'),

@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.utils.growl
+ */
 var $ = require('jquery'),
     _ = require('underscore');
 

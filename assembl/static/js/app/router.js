@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.router
+ */
 
 var Marionette = require('./shims/marionette.js'),
     routeManager = require('./routeManager.js'),

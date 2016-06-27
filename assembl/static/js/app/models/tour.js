@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.tour
+ */
 
 var Base = require('./base.js'),
     $ = require('jquery'),

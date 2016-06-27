@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.old.test_ideaModel
+ */
 define(['jasmine', 'underscore', 'models/idea'], function(jasmine, _, Idea) {
 
   function getNewModel() {

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.attachments
+ */
 
 var $ = require('jquery'),
     _ = require('underscore'),

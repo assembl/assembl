@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.languagePreference
+ */
 
 var _ = require('underscore'),
     Base = require('./base.js'),

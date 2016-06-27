@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.utils.genieEffect
+ */
 var $ = require('jquery'),
     Promise = require('bluebird');
 

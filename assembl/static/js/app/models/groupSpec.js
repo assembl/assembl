@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.groupSpec
+ */
 
 var Base = require('./base.js'),
     panelSpec = require('./panelSpec.js'),

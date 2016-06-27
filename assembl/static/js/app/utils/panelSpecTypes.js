@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.utils.panelSpecTypes
+ */
 
 /**
  * @class PanelSpecTypes

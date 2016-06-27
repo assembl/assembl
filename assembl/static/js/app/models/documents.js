@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.documents
+ */
 
 var $ = require('jquery'),
     Base = require('./base.js'),

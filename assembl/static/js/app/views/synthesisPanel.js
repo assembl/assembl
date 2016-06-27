@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.synthesisPanel
+ */
 
 var ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     Raven = require('raven-js'),

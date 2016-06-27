@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.statistics
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Assembl = require('../app.js'),

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.utils.types
+ */
 
 /** 
  * This is the mapping between the actual string values of the backend object

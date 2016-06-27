@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.groups.panelWrapper
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     panelViewByPanelSpec = require('../../objects/viewsFactory.js'),

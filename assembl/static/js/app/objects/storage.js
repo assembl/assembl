@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.objects.storage
+ */
 
 var Marionette = require('../shims/marionette.js'),
     groupSpec = require('../models/groupSpec.js'),

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.discussion
+ */
 
 var Base = require('./base.js'),
     Jed = require('jed'),

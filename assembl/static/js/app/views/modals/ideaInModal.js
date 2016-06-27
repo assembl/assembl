@@ -1,4 +1,8 @@
 'use strict'
+/**
+ * 
+ * @module app.views.modals.ideaInModal
+ */
 
 function navigateToIdea(panel, idea, forcePopup){
 

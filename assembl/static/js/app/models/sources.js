@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.sources
+ */
 
 var Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),

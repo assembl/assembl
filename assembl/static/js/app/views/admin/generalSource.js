@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.views.admin.generalSource
+ */
 var Marionette = require('../../shims/marionette.js'),
     $ = require('jquery'),
     _ = require('underscore'),

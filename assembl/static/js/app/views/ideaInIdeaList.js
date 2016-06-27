@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.ideaInIdeaList
+ */
 
 var Backbone = require('backbone'),
     _ = require('underscore'),

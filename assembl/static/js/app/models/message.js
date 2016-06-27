@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.message
+ */
 
 var _ = require('underscore'),
     $ = require('jquery'),

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.visitors.ideaSiblingChainVisitor
+ */
 
 var Visitor = require("./visitor.js");
 

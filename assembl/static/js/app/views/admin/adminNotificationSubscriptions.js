@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.admin.adminNotificationSubscriptions
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     CollectionManager = require('../../common/collectionManager.js'),

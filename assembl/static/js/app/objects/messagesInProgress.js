@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.objects.messagesInProgress
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js');

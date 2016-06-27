@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.common.collectionManager
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Promise = require('bluebird'),

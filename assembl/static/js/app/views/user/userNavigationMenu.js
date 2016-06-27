@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.user.userNavigationMenu
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     $ = require('jquery'),

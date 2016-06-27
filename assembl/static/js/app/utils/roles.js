@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.utils.roles
+ */
 
 var Roles = {
   /* System roles */

@@ -1,4 +1,8 @@
 /**
+ * 
+ * @module app.tests.langstring.spec
+ */
+/**
  * Load Ctx and set the env to test first. Revert back after all tests.
  */
 

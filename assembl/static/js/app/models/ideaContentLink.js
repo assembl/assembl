@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.ideaContentLink
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Backbone = require('backbone'),

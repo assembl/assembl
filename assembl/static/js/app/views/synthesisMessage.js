@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.synthesisMessage
+ */
 
 var Ctx = require('../common/context.js'),
     MessageView = require('./message.js'),

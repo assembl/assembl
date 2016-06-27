@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.navigation.about
+ */
 
 var Assembl = require('../../app.js'),
     AssemblPanel = require('../assemblPanel.js'),

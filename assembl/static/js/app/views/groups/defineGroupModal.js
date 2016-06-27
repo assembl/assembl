@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.groups.defineGroupModal
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     $ = require('jquery'),

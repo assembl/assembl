@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.models.spec
+ */
 
 var _ = require('underscore'),
     Agent = require('../models/agents.js'),

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.groups.groupContainer
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     ctx = require('../../common/context.js'),

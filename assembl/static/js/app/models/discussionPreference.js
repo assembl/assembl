@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * 
+ * @module app.models.discussionPreference
+ */
 
 var Backbone = require("backbone"),
     Ctx = require("../common/context.js");

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.flipSwitchButton
+ */
 
 var Backbone = require('backbone');
 

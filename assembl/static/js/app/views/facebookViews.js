@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.facebookViews
+ */
 
 var Marionette = require('../shims/marionette.js'),
     Backbone = require('backbone'),

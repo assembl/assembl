@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.base
+ */
 
 /** @module models.base */
 
@@ -10,7 +14,7 @@ var Backbone = require('backbone'),
 
 /**
   * BaseModel which should be used by ALL models
-  * @class models.base.BaseModel
+  * @class app.models.base.BaseModel
   * @extends Backbone.Model
 */
 var BaseModel = Backbone.Model.extend({
@@ -24,7 +28,7 @@ var BaseModel = Backbone.Model.extend({
 
   /**
    * Get the numeric id from the id string
-   * @function models.base.BaseModel.getNumericId
+   * @function app.models.base.BaseModel.getNumericId
    * @example
    * finds '30' if the id is 'local:ModelName/30'
    * @returns {number}

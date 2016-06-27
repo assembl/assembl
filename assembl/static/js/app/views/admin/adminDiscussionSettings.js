@@ -1,4 +1,8 @@
 "use strict";
+/**
+ * 
+ * @module app.views.admin.adminDiscussionSettings
+ */
 
 var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),

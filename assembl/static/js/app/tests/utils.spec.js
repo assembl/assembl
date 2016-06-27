@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.utils.spec
+ */
 
 var $ = require('jquery'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),

@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.messageListHeader
+ */
 
 var Backbone = require('backbone'),
     Raven = require('raven-js'),

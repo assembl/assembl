@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests
+ */
 require('./tests/routes.spec.js');
 require('./tests/context.spec.js');
 require('./tests/models.spec.js');

@@ -1,3 +1,7 @@
+/**
+ * 
+ * @module app.tests.views.spec
+ */
 
 var expect = require('chai').expect,
     navBar = require('../views/navBar.js'),

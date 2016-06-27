@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.common.context
+ */
 
 var $ = require('jquery'),
     _ = require('underscore'),

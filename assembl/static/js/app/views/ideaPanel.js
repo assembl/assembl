@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.views.ideaPanel
+ */
 
 var Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),

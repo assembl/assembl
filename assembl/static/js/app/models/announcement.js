@@ -1,4 +1,8 @@
 'use strict';
+/**
+ * 
+ * @module app.models.announcement
+ */
 
 var $ = require('jquery'),
     Promise = require('bluebird'),
