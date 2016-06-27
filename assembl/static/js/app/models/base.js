@@ -4,7 +4,6 @@
  * @module app.models.base
  */
 
-/** @module models.base */
 
 var Backbone = require('backbone'),
     Promise = require('bluebird'),
