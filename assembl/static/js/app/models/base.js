@@ -7,7 +7,7 @@ var Backbone = require('backbone'),
     Types = require('../utils/types.js');
 
 /*"""
-.. js:class:: models.BaseModel
+.. js:class:: models.base.BaseModel
 
 BaseModel which should be used by ALL models
 */
@@ -20,13 +20,14 @@ var BaseModel = Backbone.Model.extend({
     Backbone.Model.apply(this, arguments);
   },
 
-  /**
-   * Get the numeric id fro the id string
-   * ex: finds '30' if given 'local:ModelName/30'
-   *
-   * @param {Number} id
-   * @return {BaseModel}
-   */
+  /*"""
+.. js:function:: models.base.BaseModel.getNumericId
+Get the numeric id from the id string
+
+ex: finds '30' if the id is 'local:ModelName/30'
+
+:returns: number
+*/
   getNumericId: function() {
     var re = /\d+$/;
     if (re.test(this.id)) {
@@ -85,9 +86,9 @@ var BaseModel = Backbone.Model.extend({
     return base.replace(/([^\/])$/, '$1/') + encodeURIComponent(this.getNumericId());
   },
 
-  /**
-   * Overwritting the idAttribute
-   * @type {String}
+  /*"""
+.. js:attribute:: model.base.BaseModel.idAttribute
+Overwriting the idAttribute
    */
   idAttribute: '@id',
 
