@@ -430,21 +430,48 @@ def get_time_series_analytics(request):
         query = query.order_by(intervals_table.c.interval_id)
         results = query.all()
 
-        #pprint.pprint(results)
+        # pprint.pprint(results)
+        # end of transaction
 
-        if not (request.GET.get('format', None) == 'csv'
-                or request.accept == 'text/csv'):
+    intervals_table.drop()
+    if not (request.GET.get('format', None) == 'csv' or
+            request.accept == 'text/csv'):
             # json default
-            for v in results:
-                # pprint.pprint(v)
-                # v['count'] = {agent.display_name(): count
-                #              for (agent, count) in v['count']}
-                # v['unique_contributors_count'] = len(v['count'])
-                pass
-        transaction.commit()
-        intervals_table.drop()
         from assembl.lib.json import DateJSONEncoder
-        return Response(json.dumps(results, cls=DateJSONEncoder), content_type='application/json')
+        return Response(json.dumps(results, cls=DateJSONEncoder),
+                        content_type='application/json')
+
+    fieldnames = [
+        "interval_id",
+        "interval_start",
+        "interval_end",
+        "count_first_time_logged_in_visitors",
+        "count_cumulative_logged_in_visitors",
+        "fraction_cumulative_logged_in_visitors_who_posted_in_period",
+        "count_post_authors",
+        "count_cumulative_post_authors",
+        "fraction_cumulative_authors_who_posted_in_period",
+        "count_posts",
+        "count_cumulative_posts",
+        "recruitment_count_first_visit_in_period",
+        "UNRELIABLE_recruitment_count_first_subscribed_in_period",
+        "retention_count_last_visit_in_period",
+        "UNRELIABLE_retention_count_first_subscribed_in_period",
+        "UNRELIABLE_count_post_viewers",
+    ]
+    # otherwise assume csv
+    return csv_response(fieldnames, [r._asdict() for r in results])
+
+
+def csv_response(fieldnames, results):
+    from csv import DictWriter
+    output = StringIO()
+    csv = DictWriter(output, fieldnames=fieldnames, dialect='excel', delimiter=';')
+    csv.writeheader()
+    for r in results:
+        csv.writerow(r)
+    output.seek(0)
+    return Response(body_file=output, content_type='text/csv')
 
 
 @view_config(context=InstanceContext, name="contribution_count",
@@ -583,16 +610,8 @@ def get_visit_count(request):
         # json default
         return Response(json.dumps(results), content_type='application/json')
     # otherwise assume csv
-    from csv import DictWriter
-    output = StringIO()
-    csv = DictWriter(output, fieldnames=[
-        'start', 'end', 'first_visitors', 'readers'],
-        dialect='excel', delimiter=';')
-    csv.writeheader()
-    for r in results:
-        csv.writerow(r)
-    output.seek(0)
-    return Response(body_file=output, content_type='text/csv')
+    fieldnames=['start', 'end', 'first_visitors', 'readers']
+    return csv_response(fieldnames, results)
 
 
 @view_config(context=InstanceContext, name="visitors",
