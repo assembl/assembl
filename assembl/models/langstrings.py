@@ -363,6 +363,7 @@ class LocaleLabel(Base):
 
 
 class LangString(Base):
+    """A multilingual string, composed of many :py:class:`LangStringEntry`"""
     __tablename__ = "langstring"
 
     @classmethod
@@ -659,6 +660,7 @@ if LangString.using_virtuoso:
 
 
 class LangStringEntry(TombstonableMixin, Base):
+    """A string bound to a given :py:class:`Locale`. Many of those form a :py:class:`LangString`"""
     __tablename__ = "langstring_entry"
     __table_args__ = (
         UniqueConstraint("langstring_id", "locale_id", "tombstone_date"),
