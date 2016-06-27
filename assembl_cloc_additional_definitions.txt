@@ -1,0 +1,5 @@
+JINJA2
+    filter remove_html_comments
+    filter call_regexp_common HTML
+    extension jinja2
+    3rd_gen_scale 1.90
