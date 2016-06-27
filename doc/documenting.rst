@@ -5,6 +5,18 @@ The documentation of Assembl's backend is written using Sphinx_. Writing python 
 
 The existing Frontend documentation should follows the JSDoc3_ standard, but does so loosely at this point. We are connecting it with Javascript using jsdoc_rst_template_. It should be possible to cross-reference python and javascript using the `Sphinx javascript domain`_. Examples forthcoming.
 
+You can build it with fab env_dev build_doc, and the HTML result can 
+subsequently be found in build/sphinx/html/index.html
+
+
+Cheat sheet
+-----------
+
+Hyperlink to a document in the doc:
+:doc:`name_of_rst_document_without_extension` (relative link)
+
+
+
 .. _Sphinx: http://sphinx-doc.org/
 .. _JSDoc3: http://usejsdoc.org/
 .. _jsdoc_rst_template: https://github.com/gocept/jsdoc-rst-template
