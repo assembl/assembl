@@ -11,7 +11,7 @@ var Ctx = require('../common/context.js'),
     CollectionManager = require('../common/collectionManager.js');
 
 /**
- * @class views.MessageView
+ * @class app.views.synthesisMessage.MessageView
  */
 var SynthesisMessageView = MessageView.extend({
   constructor: function SynthesisMessageView() {

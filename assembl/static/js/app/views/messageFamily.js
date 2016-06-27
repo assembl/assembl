@@ -16,7 +16,7 @@ var Marionette = require('../shims/marionette.js'),
     availableFilters = require('./postFilters.js');
 
 /**
- * @class views.MessageFamilyView
+ * @class app.views.messageFamily.MessageFamilyView
  */
 var MessageFamilyView = Marionette.ItemView.extend({
   constructor: function MessageFamilyView() {

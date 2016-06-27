@@ -14,7 +14,7 @@ var _ = require('underscore'),
     i18n = require('../utils/i18n.js');
 
 /**
- * @class SegmentModel
+ * @class app.models.segment.SegmentModel
  */
 var SegmentModel = Base.Model.extend({
   constructor: function SegmentModel() {
@@ -225,7 +225,7 @@ var SegmentModel = Base.Model.extend({
 });
 
 /**
- * @class SegmentColleciton
+ * @class app.models.segment.SegmentCollection
  */
 var SegmentCollection = Base.Collection.extend({
   constructor: function SegmentCollection() {

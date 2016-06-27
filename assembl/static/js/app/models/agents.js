@@ -16,7 +16,7 @@ var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
 var UNKNOWN_USER_ID = Roles.EVERYONE;
 
 /**
- * @class AgentModel
+ * @class app.models.agents.AgentModel
  */
 var AgentModel = Base.Model.extend({
   /**
@@ -181,7 +181,7 @@ var AgentModel = Base.Model.extend({
 });
 
 /**
- * @class UserCollection
+ * @class app.models.agents.UserCollection
  */
 var AgentCollection = Base.Collection.extend({
   constructor: function AgentCollection() {

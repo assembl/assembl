@@ -81,7 +81,7 @@ var LocaleUtils = {
 };
 
 /**
- * @class LangStringEntry
+ * @class app.models.langstring.LangStringEntry
  */
 var LangStringEntry = Base.Model.extend({
   constructor: function LangStringEntry() {
@@ -148,7 +148,7 @@ var LangStringEntry = Base.Model.extend({
 });
 
 /**
- * @class LangStringEntry
+ * @class app.models.langstring.LangStringEntryCollection
  */
 var LangStringEntryCollection = Base.Collection.extend({
   constructor: function LangStringEntryCollection() {
@@ -164,7 +164,7 @@ var LangStringEntryCollection = Base.Collection.extend({
 
 
 /**
- * @class LangString
+ * @class app.models.langstring.LangString
  */
 var LangString = Base.Model.extend({
   constructor: function LangString() {

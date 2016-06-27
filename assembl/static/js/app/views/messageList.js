@@ -43,7 +43,7 @@ var MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX = "js_messageList-view-",
     SLOW_WORKER_DELAY_VALUE = 20;
 
 /**
- * @class views.MessageList
+ * @class app.views.messageList.MessageList
  */
 var MessageList = AssemblPanel.extend({
   constructor: function MessageList() {

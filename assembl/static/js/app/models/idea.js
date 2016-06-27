@@ -13,7 +13,7 @@ var _ = require('underscore'),
     Permissions = require('../utils/permissions.js');
 
 /**
- * @class IdeaModel
+ * @class app.models.idea.IdeaModel
  */
 var IdeaModel = Base.Model.extend({
   constructor: function IdeaModel() {
@@ -447,7 +447,7 @@ var IdeaModel = Base.Model.extend({
 });
 
 /**
- * @class IdeaColleciton
+ * @class app.models.idea.IdeaColleciton
  */
 var IdeaCollection = Base.Collection.extend({
   constructor: function IdeaCollection() {

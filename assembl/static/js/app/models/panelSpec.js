@@ -8,10 +8,9 @@ var Base = require('./base.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js');
 
 /**
- * @class PanelSpecModel
- *
  * Represents a panel in the interface.  When added to the collection,
  * the matching view (panelWrapper) will be instanciated
+ * @class app.models.panelSpec.PanelSpecModel
  */
 var PanelSpecModel = Base.Model.extend({
   constructor: function PanelSpecModel() {

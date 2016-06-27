@@ -35,8 +35,8 @@ var Marionette = require('../shims/marionette.js'),
     IdeaContentLink = require('../models/ideaContentLink.js');
 
 /**
- * @class CollectionManager A singleton to manage lazy loading of server
- *        collections
+ *  A singleton to manage lazy loading of server collections
+ * @class app.common.collectionManager.CollectionManager
  */
 var CollectionManager = Marionette.Object.extend({
   FETCH_WORKERS_LIFETIME: 30,

@@ -11,7 +11,7 @@ var Ctx = require('../common/context.js'),
     _ = require('underscore');
 
 /**
-* @class PostQuery
+* @class app.views.messageListPostQuery.PostQuery
 *
 * Manages querying, filtering and sorting posts.  Abstracts out client and
 * server side filtering (The client should re-call execute on the query

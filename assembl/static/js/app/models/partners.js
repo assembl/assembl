@@ -10,7 +10,7 @@ var $ = require('jquery'),
     Ctx = require('../common/context.js');
 
 /**
- * @class PartnerOrganizationModel
+ * @class app.models.partners.PartnerOrganizationModel
  */
 var PartnerOrganizationModel = Base.Model.extend({
   constructor: function PartnerOrganizationModel() {
@@ -44,7 +44,7 @@ var PartnerOrganizationModel = Base.Model.extend({
 });
 
 /**
- * @class PartnerOrganizationCollection
+ * @class app.models.partners.PartnerOrganizationCollection
  */
 var PartnerOrganizationCollection = Base.Collection.extend({
   constructor: function PartnerOrganizationCollection() {

@@ -9,7 +9,7 @@ var _ = require('underscore'),
     Ctx = require('../common/context.js');
 
 /**
- * @class IdeaModel
+ * @class app.models.ideaLink.IdeaLinkModel
  */
 var IdeaLinkModel = Base.Model.extend({
 
@@ -56,7 +56,7 @@ var IdeaLinkModel = Base.Model.extend({
 });
 
 /**
- * @class IdeaColleciton
+ * @class app.models.ideaLink.IdeaLinkColleciton
  */
 var IdeaLinkCollection = Base.Collection.extend({
 

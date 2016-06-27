@@ -1235,9 +1235,8 @@ var ActiveWidgetCollection = WidgetCollection.extend({
 
 
 /**
- * @class WidgetSubset
- *
  * A subset of the widgets relevant to a widget context
+ * @class app.models.widget.WidgetSubset
  */
 var WidgetSubset = Backbone.Subset.extend({
   constructor: function WidgetSubset() {

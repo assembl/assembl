@@ -199,7 +199,7 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
 
 
 /**
- * @class views.MessageView
+ * @class app.views.message.MessageView
  */
 var MessageView = Marionette.LayoutView.extend({
   constructor: function MessageView() {

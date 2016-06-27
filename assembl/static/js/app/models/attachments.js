@@ -220,7 +220,7 @@ var AttachmentModel = Base.Model.extend({
 });
 
 /**
- * @class AttachmentCollection
+ * @class app.models.attachments.AttachmentCollection
  */
 var AttachmentCollection = Base.Collection.extend({
   constructor: function AttachmentCollection() {

@@ -10,10 +10,9 @@ var Base = require('./base.js'),
     groupState = require('./groupState.js');
 
 /**
- * @class GroupSpecModel
- *
- * Represents an independent group of panels in the interface.  When 
+ * Represents an independent group of panels in the interface.  When
  * added, the matching views (groupContainerView) will be instanciated
+ * @class app.models.groupSpec.GroupSpecModel
  */
 var GroupSpecModel = Base.Model.extend({
   constructor: function GroupSpecModel() {

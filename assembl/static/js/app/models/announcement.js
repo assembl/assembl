@@ -12,7 +12,7 @@ var $ = require('jquery'),
     Types = require('../utils/types.js');
 
 /**
- * @class AnnouncementModel
+ * @class app.models.announcement.AnnouncementModel
  * Represents an announcement, a mutable message-like object, with an author and
  * a date
  */
@@ -77,7 +77,7 @@ var AnnouncementModel = Base.Model.extend({
 });
 
 /**
- * @class PartnerOrganizationCollection
+ * @class app.models.announcement.PartnerOrganizationCollection
  */
 var AnnouncementCollection = Base.Collection.extend({
   constructor: function AnnouncementCollection() {

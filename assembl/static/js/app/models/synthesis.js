@@ -26,7 +26,7 @@ var SynthesisIdeaCollection = Idea.Collection.extend({
 });
 
 /**
- * @class SynthesisModel
+ * @class app.models.synthesis.SynthesisModel
  */
 var SynthesisModel = Base.Model.extend({
   constructor: function SynthesisModel() {
@@ -85,7 +85,7 @@ var SynthesisModel = Base.Model.extend({
 });
 
 /**
- * @class IdeaColleciton
+ * @class app.models.synthesis.SynthesisColleciton
  */
 var SynthesisCollection = Base.Collection.extend({
   constructor: function SynthesisCollection() {

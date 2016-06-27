@@ -9,7 +9,7 @@ var Marionette = require('../shims/marionette.js'),
 
 /**
  * An abstract class every panel should eventually extend
- * @class AssemblPanel
+ * @class app.views.assemblPanel.AssemblPanel
  */
 var AssemblPanel = Marionette.LayoutView.extend({
   constructor: function AssemblPanel() {

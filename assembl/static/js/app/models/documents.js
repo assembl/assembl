@@ -11,8 +11,8 @@ var $ = require('jquery'),
     Types = require('../utils/types.js');
 
 /**
- * @class DocumentModel
  * Represents a file or document (a remote url or a blob)
+ * @class app.models.documents.DocumentModel
  */
 var DocumentModel = Base.Model.extend({
   constructor: function DocumentModel(){
@@ -77,7 +77,7 @@ var FileModel = DocumentModel.extend({
 
 
 /**
- * @class PartnerOrganizationCollection
+ * @class app.models.documents.PartnerOrganizationCollection
  */
 var DocumentCollection = Base.Collection.extend({
   constructor: function DocumentCollection() {

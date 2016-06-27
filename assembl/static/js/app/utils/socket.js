@@ -10,7 +10,7 @@ var _ = require('underscore'),
     Ctx = require('../common/context.js');
 
 /**
- * @class Socket
+ * @class app.utils.socket.Socket
  *
  * @param {string} url
  */

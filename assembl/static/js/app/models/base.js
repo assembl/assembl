@@ -208,9 +208,8 @@ Overwriting the idAttribute
 });
 
 /**
- * @class BaseCollection
- *
  * BaseCollection which should be used by ALL collections
+ * @class app.models.base.BaseCollection
  */
 var BaseCollection = Backbone.Collection.extend({
   /**
@@ -343,11 +342,10 @@ var BaseCollection = Backbone.Collection.extend({
 
 
 /**
- * @class RelationsCollection
- *
  * Collection of relationships to objects which "exist" in another
  * BaseCollection, but the relationships are not materialized.
  * So add/remove should not create/delete object, but relation.
+ * @class app.models.base.RelationsCollection
  */
 var RelationsCollection = BaseCollection.extend({
   constructor: function RelationsCollection() {

@@ -5,9 +5,8 @@
  */
 
 /**
- * @class PanelSpecTypes
- *
  * A list of PanelSpecTypes
+ * @class app.utils.panelSpecTypes.PanelSpecTypes
  */
 var PanelSpecTypes = {
   //Note:  the id property is there only in case someone compares with ==
