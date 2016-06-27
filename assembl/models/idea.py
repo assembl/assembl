@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Defining the idea and links between ideas."""
 
 from itertools import chain, groupby
 from collections import defaultdict
@@ -53,11 +54,19 @@ else:
 
 
 class defaultdictlist(defaultdict):
+    """A defaultdict of lists."""
     def __init__(self):
         super(defaultdictlist, self).__init__(list)
 
 
 class IdeaVisitor(object):
+    """A Visitor_ for the structure of :py:class:`Idea`
+
+    The visit is started by :py:meth:`Idea.visit_ideas_depth_first`,
+    :py:meth:`Idea.visit_ideas_breadth_first` or
+    :py:meth:`Idea.visit_idea_ids_depth_first`
+    .. _Visitor: https://sourcemaking.com/design_patterns/visitor
+    """
     CUT_VISIT = object()
     __metaclass__ = ABCMeta
 
@@ -70,6 +79,7 @@ class IdeaVisitor(object):
 
 
 class IdeaLinkVisitor(object):
+    """A Visitor for the structure of :py:class:`IdeaLink`"""
     CUT_VISIT = object()
     __metaclass__ = ABCMeta
 
@@ -79,6 +89,7 @@ class IdeaLinkVisitor(object):
 
 
 class AppendingVisitor(IdeaVisitor):
+    """A Visitor that appends visit results to a list"""
 
     def __init__(self):
         self.ideas = []
@@ -89,6 +100,7 @@ class AppendingVisitor(IdeaVisitor):
 
 
 class WordCountVisitor(IdeaVisitor):
+    """A Visitor that counts words related to an idea"""
     def __init__(self, langs, count_posts=True):
         self.counter = WordCounter(langs)
         self.count_posts = True
@@ -127,7 +139,7 @@ class WordCountVisitor(IdeaVisitor):
 
 class Idea(HistoryMixin, DiscussionBoundBase):
     """
-    A core concept taken from the associated discussion
+    An idea (or concept) distilled from the conversation flux.
     """
     __tablename__ = "idea"
     ORPHAN_POSTS_IDEA_ID = 'orphan_posts'
@@ -1023,7 +1035,7 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
     A generic link between two ideas
 
     If a parent-child relation, the parent is the source, the child the target.
-    Beware: it's reversed in the RDF model. We will change things around.
+    Note: it's reversed in the RDF model.
     """
     __tablename__ = 'idea_idea_link'
     rdf_class = IDEA.InclusionRelation

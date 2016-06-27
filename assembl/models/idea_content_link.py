@@ -1,3 +1,4 @@
+"""Links between :py:class:`assembl.models.idea.Idea` and :py:class:`assembl.models.generic.Content`."""
 import re
 import quopri
 from datetime import datetime

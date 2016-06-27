@@ -1,3 +1,4 @@
+"""Subsets of :py:class:`assembl.models.idea.Idea` and :py:class:`assembl.models.idea.IdeaLink`."""
 from collections import defaultdict
 from datetime import datetime
 from abc import abstractmethod

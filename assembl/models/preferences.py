@@ -1,3 +1,6 @@
+"""A set of preferences that apply to a Discussion.
+
+May be defined at the user, Discussion or server level."""
 from itertools import chain
 from collections import MutableMapping
 

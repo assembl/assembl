@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Utilities for traversing the set of content related to an idea and vice-versa."""
+
 from functools import total_ordering
 from collections import defaultdict
 from bisect import bisect_right

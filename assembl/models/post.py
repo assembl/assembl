@@ -1,3 +1,4 @@
+"""Posts are a kind of :py:class:`assembl.models.generic.Content` that has an author, and reply to some other content."""
 from datetime import datetime
 from abc import ABCMeta, abstractmethod
 import uuid

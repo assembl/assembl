@@ -1,3 +1,4 @@
+"""Definition of the discussion class."""
 from itertools import groupby, chain
 import traceback
 from datetime import datetime
@@ -45,7 +46,10 @@ resolver = DottedNameResolver(__package__)
 
 class Discussion(DiscussionBoundBase):
     """
-    A Discussion
+    The context for a specific Assembl discussion.
+
+    Most Assembl entities exist in the scope of a discussion, and inherit from
+    :py:class:`assembl.models.DiscussionBoundBase`.
     """
     __tablename__ = "discussion"
     rdf_class = CATALYST.Conversation

@@ -1,3 +1,8 @@
+"""Models for widgets, a set of bundled functionality.
+
+In theory, arbitrary widgets could be added to Assembl.
+In reality, the set of widget behaviours is constrained here.
+"""
 from itertools import chain
 from datetime import datetime
 

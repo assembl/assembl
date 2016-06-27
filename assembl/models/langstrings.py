@@ -1,3 +1,4 @@
+"""Classes for multilingual strings, using automatic or manual translation"""
 from collections import defaultdict
 from datetime import datetime
 

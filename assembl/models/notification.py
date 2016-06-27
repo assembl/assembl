@@ -1,4 +1,5 @@
 # coding=UTF-8
+"""Allow users to be notified of certain events happening in a discussion. Depends on subscribing to those events."""
 from datetime import datetime
 from collections import defaultdict
 from abc import abstractmethod

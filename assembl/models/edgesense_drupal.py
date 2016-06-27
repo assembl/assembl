@@ -1,3 +1,7 @@
+"""Utilities for extracting posts and comments from Drupal using the output of the `Edgesense Drupal module`_.
+
+.. _`Edgesense Drupal module`: https://github.com/Wikitalia/edgesense/tree/master/php/drupal
+"""
 from datetime import datetime
 from urlparse import urlparse, urljoin
 import uuid

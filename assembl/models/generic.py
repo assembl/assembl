@@ -1,3 +1,4 @@
+"""The basic Content and ContentSource classes."""
 from datetime import datetime
 import logging
 from abc import abstractmethod

@@ -1,3 +1,4 @@
+"""Models for voting on ideas"""
 from abc import abstractproperty, abstractmethod
 from datetime import datetime
 import simplejson as json

@@ -1,3 +1,4 @@
+"""Documents attached to other objects, whether hosted externally or internally"""
 from sqlalchemy import (
     Column,
     UniqueConstraint,

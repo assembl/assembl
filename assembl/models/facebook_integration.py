@@ -1,3 +1,4 @@
+"""Utilities for extracting posts and comments from Facebook, using the facebook API."""
 from abc import abstractmethod
 from collections import defaultdict
 from datetime import datetime, timedelta

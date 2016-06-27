@@ -1,3 +1,5 @@
+"""Models for a timeline of the conversation. Unused as of yet."""
+
 from datetime import datetime
 
 from sqlalchemy.orm import relationship, backref, deferred

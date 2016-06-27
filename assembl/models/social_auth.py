@@ -1,3 +1,7 @@
+"""Models for integration of `Python Social Auth`_.
+
+.. _`Python Social Auth`: http://psa.matiasaguirre.net/
+"""
 import logging
 import six
 import re
