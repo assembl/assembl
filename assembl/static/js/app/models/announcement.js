@@ -16,7 +16,7 @@ var $ = require('jquery'),
  * a date
  * Frontend model for :py:class:`assembl.models.announcement.Announcement`
  * @class app.models.announcement.AnnouncementModel
- * @extends app.models.Base.BaseModel
+ * @extends app.models.base.BaseModel
  */
 var AnnouncementModel = Base.Model.extend({
   /**

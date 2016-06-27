@@ -11,7 +11,7 @@ var Base = require('./base.js'),
  * An action done by a user.
  * Frontend model for :py:class:`assembl.models.action.Action`
  * @class app.models.actions.actionModel
- * @extends app.models.Base.BaseModel
+ * @extends app.models.base.BaseModel
  */
 var actionModel = Base.Model.extend({
   urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/actions"),
