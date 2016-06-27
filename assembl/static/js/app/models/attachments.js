@@ -42,7 +42,7 @@ var attachmentPurposeTypes = {
  * or eventually local document attached to it.
  * Frontend model for :py:class:`assembl.models.attachment.Attachment`
  * @class app.models.attachments.AttachmentModel
- * @extends app.models.Base.Model
+ * @extends app.models.Base.BaseModel
  */
 var AttachmentModel = Base.Model.extend({
   constructor: function AttachmentModel() {

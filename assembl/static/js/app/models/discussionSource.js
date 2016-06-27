@@ -12,7 +12,7 @@ var Base = require('./base.js'),
  * Represents a discussion's message source
  * Frontend model for :py:class:`assembl.models.generic.ContentSource`
  * @class app.models.discussionSource.sourceModel
- * @extends app.models.Base.Model
+ * @extends app.models.Base.BaseModel
  */
 var sourceModel = Base.Model.extend({
   constructor: function sourceModel() {

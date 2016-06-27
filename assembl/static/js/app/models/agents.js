@@ -19,7 +19,7 @@ var UNKNOWN_USER_ID = Roles.EVERYONE;
  * An agent (user or email author)
  * Frontend model for :py:class:`assembl.models.auth.AgentProfile`
  * @class app.models.agents.AgentModel
- * @extends app.models.Base.Model
+ * @extends app.models.Base.BaseModel
  */
 var AgentModel = Base.Model.extend({
   /**

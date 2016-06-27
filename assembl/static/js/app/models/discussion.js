@@ -15,7 +15,7 @@ var Base = require('./base.js'),
  * Represents a discussion
  * Frontend model for :py:class:`assembl.models.discussion.Discussion`
  * @class app.models.discussion.discussionModel
- * @extends app.models.Base.Model
+ * @extends app.models.Base.BaseModel
  */
 var discussionModel = Base.Model.extend({
   url: Ctx.getApiV2DiscussionUrl(),
