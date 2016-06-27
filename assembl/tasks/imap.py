@@ -1,3 +1,4 @@
+"""A celery process that reads messages from an IMAP source."""
 from . import config_celery_app, CeleryWithConfig
 
 # broker specified

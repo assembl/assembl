@@ -1,3 +1,6 @@
+"""This process obtains JSON representations of modified, created or deleted
+database objects through ZeroMQ, and feeds them to browser clients
+through a websocket."""
 import signal
 import time
 import sys

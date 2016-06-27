@@ -1,3 +1,6 @@
+"""Create the Virtuoso `Linked Data Views`_ from the RDF data embedded in the models. Obsolete.
+.. _`Linked Data Views`: http://docs.openlinksw.com/virtuoso/rdfviewsrdbms.html
+"""
 from os import listdir, urandom
 from os.path import join
 from inspect import isabstract

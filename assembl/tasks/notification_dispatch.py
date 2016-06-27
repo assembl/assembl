@@ -1,4 +1,4 @@
-"""Infrastructure to route CRUD events through Celery_.
+"""Infrastructure to route CRUD events through Celery_, and create Notification objects.
 
 .. _Celery: http://www.celeryproject.org/
 """

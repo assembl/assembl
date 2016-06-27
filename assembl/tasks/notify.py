@@ -1,3 +1,4 @@
+"""Celery task for sending :py:class:`assembl.models.notification.Notification` to users."""
 import sys
 from time import sleep
 from datetime import datetime, timedelta

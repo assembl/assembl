@@ -1,3 +1,4 @@
+"""The RDF namespaces used by Assembl"""
 from rdflib import Graph as _Graph
 from rdflib.namespace import (
     Namespace, NamespaceManager as _NamespaceManager,

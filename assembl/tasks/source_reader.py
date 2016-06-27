@@ -1,4 +1,6 @@
 #!/usr/bin/python
+"""A long-running process that receives requests to read data from various ContentSources,
+and reads at reasonable intervals. It can also handle sources that can push changes. """
 import sys
 import signal
 from random import uniform

@@ -1,4 +1,5 @@
 #!/usr/bin/python
+"""Inference library based on FuXi"""
 from os.path import exists
 
 import requests

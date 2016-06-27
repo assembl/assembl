@@ -1,3 +1,4 @@
+"""A celery process that translate messages as soon as they are created. Causes deadlocks, not used"""
 from collections import defaultdict
 from abc import abstractmethod
 
