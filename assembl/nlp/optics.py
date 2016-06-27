@@ -47,6 +47,7 @@ from sklearn.metrics.pairwise import pairwise_distances
 
 
 class Interval(object):
+    """A closed integer interval"""
     __slots__ = ('start', 'end')
 
     def __init__(self, start, end):
@@ -94,6 +95,7 @@ class Interval(object):
 
 
 class Dendrogram(object):
+    """Nested intervals corresponding to clusters"""
     # __slots__ = ("cluster", "subclusters", "parent")
 
     def __init__(self, cluster, parent=None):
@@ -141,6 +143,7 @@ def euclid(i, x):
 
 
 class Optics(object):
+    """A calculation using the optics algorithm."""
     def __init__(self, min_points=4, distMethod='cosine'):
         self.min_points = min_points
         self.distMethod = distMethod

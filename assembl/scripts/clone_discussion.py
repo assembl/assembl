@@ -1,4 +1,5 @@
 #!env python
+"""Clone a discussion, either within or between databases."""
 import itertools
 from collections import defaultdict
 import argparse

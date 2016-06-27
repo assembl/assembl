@@ -1,3 +1,4 @@
+"""Rebuild all tables from scratch, because we have had so many cases of corrupt data."""
 from itertools import chain
 import logging.config
 import argparse

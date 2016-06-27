@@ -1,3 +1,4 @@
+"""Workaround for bugs that introduced extra links between entities."""
 import traceback
 import pdb
 import sys

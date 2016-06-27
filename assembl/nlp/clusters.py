@@ -1,3 +1,7 @@
+"""Compare clusters of messages defined by idea harvesting
+to clusters found by NLP and machine learning.
+Try to infer new ideas or new harvesting from the difference"""
+
 from collections import defaultdict
 from os.path import join, exists
 from os import makedirs, unlink

@@ -1,3 +1,5 @@
+"""Reset obsolete avatar values obtained from social accounts."""
+
 import sys
 import logging.config
 

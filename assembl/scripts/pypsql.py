@@ -1,9 +1,9 @@
 #!/usr/bin/env python
+"Emulate psql in Python, because psql does not like running from within fab."
+
 import argparse
 import getpass
 import psycopg2
-
-"Because psql does not like running from within fab."
 
 
 def main():

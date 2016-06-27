@@ -1,3 +1,4 @@
+"""Abstract and concrete classes for a machine translation service."""
 from abc import abstractmethod
 import urllib2
 from traceback import print_exc

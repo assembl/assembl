@@ -1,3 +1,4 @@
+"""Count number of occurences of stemmed words for the creativity widget."""
 import re
 from collections import defaultdict
 

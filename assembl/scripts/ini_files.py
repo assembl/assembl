@@ -1,4 +1,4 @@
-""" INI file generator """
+""" Generate various secondary INI files from the main INI file. """
 
 import sys
 import os

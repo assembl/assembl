@@ -1,3 +1,4 @@
+"""Clone all data from a database to another. Mostly useful for database migration."""
 import argparse
 import logging.config
 import traceback

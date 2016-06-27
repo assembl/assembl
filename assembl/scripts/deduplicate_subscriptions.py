@@ -1,3 +1,4 @@
+"""Workaround for a bug that created duplicate subscriptions"""
 from itertools import chain, groupby
 
 

@@ -1,3 +1,6 @@
+"""Add a user to the Assembl instance.
+
+Useful to populate the first sysadmin from the command line."""
 import argparse
 from getpass import getpass, getuser
 from json import load
