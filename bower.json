@@ -26,13 +26,10 @@
     "ckeditor": "~4.5.8",
     "hopscotch": "~0.2.4",
     "ink": "~1.0.5",
-    "jit": "~2.0.2",
     "jquery": "~2.1.4",
     "jquery-oembed-all": "https://github.com/ImaginationForPeople/jquery-oembed-all.git#f0fe241934f3bbfe2c27d1fa7054b2518a1b5b53",
     "jquery.dotdotdot": "https://github.com/ImaginationForPeople/jQuery.dotdotdot.git#fix-paragraph-and-read-more-not-showing",
     "marionette": "2.4.5",
-    "mocha": "~2.2.5",
-    "modernizr": "~3.3.1",
     "underscore": "~1.8.3"
   },
   "resolutions": {
