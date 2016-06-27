@@ -22,7 +22,7 @@ Contents:
    analytics/events
 
    autodoc/modules
-   frontend
+   jsdoc/index
    endpoints
    documenting
 

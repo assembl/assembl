@@ -1461,7 +1461,8 @@ def run_db_command(command, *args, **kwargs):
 def build_doc():
     "Build the Sphinx documentation"
     with cd(env.projectpath):
-        run('rm -rf doc/autodoc')
+        run('rm -rf doc/autodoc doc/jsdoc')
+        venvcmd('./node_modules/.bin/jsdoc -t ./node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
         venvcmd('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
         venvcmd('python setup.py build_sphinx')
 

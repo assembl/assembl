@@ -57,6 +57,7 @@
     "gulp-sourcemaps": "~1.6.0",
     "gulp-uglify": "~1.5.4",
     "gulp-util": "~3.0.7",
+    "jsdoc-rst-template": "https://github.com/gocept/jsdoc-rst-template",
     "js-fixtures": "~1.5.3",
     "jscs": "~3.0.3",
     "node-bourbon": "~4.2.8",

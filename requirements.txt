@@ -132,7 +132,6 @@ snowballstemmer==1.2.1
 -e git+https://github.com/imaginationforpeople/sockjs-tornado.git@conflicting_localhost#egg=sockjs_tornado
 SPARQLWrapper==1.7.6
 sphinxcontrib-httpdomain==1.5.0
-sphinxcontrib-autoanysrc==0.0.3.post20141120
 sphinxcontrib-zopeext==0.2.1
 Sphinx==1.4.4
 splinter==0.7.3
