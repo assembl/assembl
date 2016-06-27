@@ -16,7 +16,10 @@ var _ = require('underscore'),
     Attachment = require('./attachments.js');
 
 /**
- * @class MessageModel
+ * A message (whether generated on assembl or imported from a ContentSource)
+ * Frontend model for :py:class:`assembl.models.post.Post`
+ * @class app.models.message.MessageModel
+ * @extends app.models.base.BaseModel
  */
 var MessageModel = Base.Model.extend({
   constructor: function MessageModel() {

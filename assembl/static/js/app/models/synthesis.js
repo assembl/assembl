@@ -10,6 +10,11 @@ var Base = require('./base.js'),
     i18n = require('../utils/i18n.js');
 
 
+/**
+ * The collection of idea snapshots in a synthesis
+ * @class app.models.synthesis.SynthesisIdeaCollection
+ * @extends app.models.idea.IdeaCollection
+ */
 var SynthesisIdeaCollection = Idea.Collection.extend({
   constructor: function SynthesisIdeaCollection() {
     Idea.Collection.apply(this, arguments);
@@ -26,7 +31,10 @@ var SynthesisIdeaCollection = Idea.Collection.extend({
 });
 
 /**
+ * A synthesis.
+ * Frontend model for :py:class:`assembl.models.idea_graph_view.Synthesis`
  * @class app.models.synthesis.SynthesisModel
+ * @extends app.models.base.BaseModel
  */
 var SynthesisModel = Base.Model.extend({
   constructor: function SynthesisModel() {
@@ -64,7 +72,6 @@ var SynthesisModel = Base.Model.extend({
     /**
      * check typeof variable
      * */
-     
   },
   set: function(key, val, options) {
     var ob = Base.Model.prototype.set.apply(this, arguments);

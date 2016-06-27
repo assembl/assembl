@@ -13,7 +13,10 @@ var _ = require('underscore'),
     Permissions = require('../utils/permissions.js');
 
 /**
+ * An idea.
+ * Frontend model for :py:class:`assembl.models.idea.Idea`
  * @class app.models.idea.IdeaModel
+ * @extends app.models.base.BaseModel
  */
 var IdeaModel = Base.Model.extend({
   constructor: function IdeaModel() {

@@ -14,7 +14,10 @@ var _ = require('underscore'),
     i18n = require('../utils/i18n.js');
 
 /**
+ * A segment of text extracted from a message. Can be associated to an idea, otherwise in clipboard.
+ * Frontend model for :py:class:`assembl.models.idea_content_link.Extract`
  * @class app.models.segment.SegmentModel
+ * @extends app.models.base.BaseModel
  */
 var SegmentModel = Base.Model.extend({
   constructor: function SegmentModel() {

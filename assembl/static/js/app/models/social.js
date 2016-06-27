@@ -47,6 +47,12 @@ tokenTimeManager.prototype = {
   }
 };
 
+/**
+ * An access token for facebook access
+ * Frontend model for :py:class:`assembl.models.facebook_integration.FacebookAccessToken`
+ * @class app.models.social.FacebookAccessToken
+ * @extends app.models.base.BaseModel
+ */
 var FacebookAccessToken = Base.Model.extend({
    constructor: function FacebookAccessToken() {
     Base.Model.apply(this, arguments);

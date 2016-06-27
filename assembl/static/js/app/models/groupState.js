@@ -8,10 +8,10 @@ var Base = require('./base.js'),
     Idea = require('./idea.js');
 
 /**
- * @class app.models.groupState.GroupStateModel
- *
  * Represents the state of a panel group (current idea, selected 
  * navigation, minimised states, etc.)
+ * @class app.models.groupState.GroupStateModel
+ * @extends app.models.base.BaseModel
  */
 var GroupStateModel = Base.Model.extend({
   constructor: function GroupStateModel() {

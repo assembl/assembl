@@ -9,8 +9,12 @@ var $ = require('jquery'),
     i18n = require('../utils/i18n.js'),
     Ctx = require('../common/context.js');
 
+
 /**
+ * A partner organization, to be displayed in front page
+ * Frontend model for :py:class:`assembl.models.auth.PartnerOrganization`
  * @class app.models.partners.PartnerOrganizationModel
+ * @extends app.models.base.BaseModel
  */
 var PartnerOrganizationModel = Base.Model.extend({
   constructor: function PartnerOrganizationModel() {

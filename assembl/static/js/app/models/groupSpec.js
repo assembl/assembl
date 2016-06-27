@@ -13,6 +13,7 @@ var Base = require('./base.js'),
  * Represents an independent group of panels in the interface.  When
  * added, the matching views (groupContainerView) will be instanciated
  * @class app.models.groupSpec.GroupSpecModel
+ * @extends app.models.base.BaseModel
  */
 var GroupSpecModel = Base.Model.extend({
   constructor: function GroupSpecModel() {

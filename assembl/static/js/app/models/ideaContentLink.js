@@ -36,7 +36,13 @@ IdeaContentLinkTypeRank.prototype = {
 };
 
 
-var Model = Base.Model.extend({
+/**
+ * The link between an idea and a message.
+ * Frontend model for :py:class:`assembl.models.idea_content_link.IdeaContentLink`
+ * @class app.models.ideaContentLink.IdeaContentLinkModel
+ * @extends app.models.base.BaseModel
+ */
+var IdeaContentLinkModel = Base.Model.extend({
   constructor: function IdeaContentLinkModel() {
     Base.Model.apply(this, arguments);
   },
@@ -149,7 +155,7 @@ var Collection = Base.Collection.extend({
     //This URL currently does not exist. 2016-02-02 
     url: Ctx.getApiV2DiscussionUrl('idea_content_link'),
 
-    model: Model,
+    model: IdeaContentLinkModel,
 
     initialize: function(attrs, options){
         this.messageModel = options.message || {};
@@ -245,6 +251,6 @@ var Collection = Base.Collection.extend({
 });
 
 module.exports = {
-    Model: Model,
+    Model: IdeaContentLinkModel,
     Collection: Collection
 }    

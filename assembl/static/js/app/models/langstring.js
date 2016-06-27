@@ -81,7 +81,10 @@ var LocaleUtils = {
 };
 
 /**
+ * A string in a given language. Many of those form a LangString
+ * Frontend model for :py:class:`assembl.models.langstrings.LangStringEntry`
  * @class app.models.langstring.LangStringEntry
+ * @extends app.models.base.BaseModel
  */
 var LangStringEntry = Base.Model.extend({
   constructor: function LangStringEntry() {
@@ -149,6 +152,7 @@ var LangStringEntry = Base.Model.extend({
 
 /**
  * @class app.models.langstring.LangStringEntryCollection
+ * @extends app.models.base.BaseCollection
  */
 var LangStringEntryCollection = Base.Collection.extend({
   constructor: function LangStringEntryCollection() {
@@ -164,7 +168,10 @@ var LangStringEntryCollection = Base.Collection.extend({
 
 
 /**
+ * A multilingual string, composed of many LangStringEntry
+ * Frontend model for :py:class:`assembl.models.langstrings.LangString`
  * @class app.models.langstring.LangString
+ * @extends app.models.base.BaseModel
  */
 var LangString = Base.Model.extend({
   constructor: function LangString() {

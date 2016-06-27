@@ -9,6 +9,12 @@ var Base = require('./base.js'),
     Roles = require('../utils/roles.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
+/**
+ * A role that the user is granted in this discussion
+ * Frontend model for :py:class:`assembl.models.auth.LocalUserRole`
+ * @class app.models.roles.roleModel
+ * @extends app.models.base.BaseModel
+ */
 var roleModel = Base.Model.extend({
   constructor: function roleModel() {
     Base.Model.apply(this, arguments);

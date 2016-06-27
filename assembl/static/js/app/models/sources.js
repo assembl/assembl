@@ -10,7 +10,12 @@ var Base = require('./base.js'),
     Types = require('../utils/types.js'),
     $ = require('jquery');
 
-//ContentSource + PostSource
+/**
+ * An external source of imported messages
+ * Frontend model for :py:class:`assembl.models.generic.ContentSource` and :py:class:`assembl.models.post.PostSource`
+ * @class app.models.sources.Source
+ * @extends app.models.base.BaseModel
+ */
 var Source = Base.Model.extend({
    constructor: function Source() {
     Base.Model.apply(this, arguments);

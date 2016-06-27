@@ -24,6 +24,12 @@ var clean = function(input){
     return tmp;
 };
 
+/**
+ * A user's preference on how to handle a language: should it be translated, and to what?
+ * Frontend model for :py:class:`assembl.models.auth.UserLanguagePreference`
+ * @class app.models.languagePreference.LanguagePreferenceModel
+ * @extends app.models.base.BaseModel
+ */
 var LanguagePreferenceModel = Base.Model.extend({
   constructor: function LanguagePreferenceModel() {
     Base.Model.apply(this, arguments);
@@ -57,7 +63,9 @@ var LanguagePreferenceModel = Base.Model.extend({
 });
 
 /**
- * Language Preferences of the user; there is a privacy setting which will only show an array of user preferences that are bound to the user
+ * Language Preference set of the user; there is a privacy setting which will only show an array of user preferences that are bound to the user
+ * @class app.models.languagePreference.LanguagePreferenceCollection
+ * @extends app.models.base.BaseCollection
  */
 var LanguagePreferenceCollection = Base.Collection.extend({
   constructor: function LanguagePreferenceCollection() {
@@ -227,6 +235,11 @@ var LanguagePreferenceCollection = Base.Collection.extend({
     }
 });
 
+/**
+ * Language pseudo-preference-set for a disconnected user.
+ * @class app.models.languagePreference.DisconnectedUserLanguagePreferenceCollection
+ * @extends app.models.base.languagePreference.LanguagePreferenceModel
+ */
 var DisconnectedUserLanguagePreferenceCollection = LanguagePreferenceCollection.extend({
   constructor: function DisconnectedUserLanguagePreferenceCollection() {
     LanguagePreferenceCollection.apply(this, arguments);

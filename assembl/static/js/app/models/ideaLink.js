@@ -9,7 +9,10 @@ var _ = require('underscore'),
     Ctx = require('../common/context.js');
 
 /**
+ * The link between two ideas
+ * Frontend model for :py:class:`assembl.models.idea.IdeaLink`
  * @class app.models.ideaLink.IdeaLinkModel
+ * @extends app.models.base.BaseModel
  */
 var IdeaLinkModel = Base.Model.extend({
 
