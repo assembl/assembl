@@ -8,6 +8,12 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js'),
     $ = require('jquery');
 
+/**
+ * Represents a discussion's message source
+ * Frontend model for :py:class:`assembl.models.generic.ContentSource`
+ * @class app.models.discussionSource.sourceModel
+ * @extends app.models.Base.Model
+ */
 var sourceModel = Base.Model.extend({
   constructor: function sourceModel() {
     Base.Model.apply(this, arguments);

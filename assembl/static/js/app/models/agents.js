@@ -16,7 +16,10 @@ var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
 var UNKNOWN_USER_ID = Roles.EVERYONE;
 
 /**
+ * An agent (user or email author)
+ * Frontend model for :py:class:`assembl.models.auth.AgentProfile`
  * @class app.models.agents.AgentModel
+ * @extends app.models.Base.Model
  */
 var AgentModel = Base.Model.extend({
   /**

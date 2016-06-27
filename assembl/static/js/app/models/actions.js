@@ -7,6 +7,12 @@
 var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
+/**
+ * An action done by a user.
+ * Frontend model for :py:class:`assembl.models.action.Action`
+ * @class app.models.actions.actionModel
+ * @extends app.models.Base.Model
+ */
 var actionModel = Base.Model.extend({
   urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/actions"),
 

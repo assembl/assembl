@@ -11,6 +11,12 @@ var Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),
     Roles = require('../utils/roles.js');
 
+/**
+ * Represents a discussion
+ * Frontend model for :py:class:`assembl.models.discussion.Discussion`
+ * @class app.models.discussion.discussionModel
+ * @extends app.models.Base.Model
+ */
 var discussionModel = Base.Model.extend({
   url: Ctx.getApiV2DiscussionUrl(),
   defaults: {

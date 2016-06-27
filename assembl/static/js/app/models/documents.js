@@ -12,8 +12,11 @@ var $ = require('jquery'),
 
 /**
  * Represents a file or document (a remote url or a blob)
+ * Frontend model for :py:class:`assembl.models.attachment.Document`
  * @class app.models.documents.DocumentModel
+ * @extends app.models.Base.Model
  */
+
 var DocumentModel = Base.Model.extend({
   constructor: function DocumentModel(){
     Base.Model.apply(this, arguments)

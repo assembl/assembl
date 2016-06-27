@@ -7,6 +7,12 @@
 var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
+/**
+ * A user's (email or social) account.
+ * Frontend model for :py:class:`assembl.models.auth.AbstractAgentAccount`
+ * @class app.models.accounts.Account
+ * @extends app.models.Base.Model
+ */
 var Account = Base.Model.extend({
   urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
   defaults: {

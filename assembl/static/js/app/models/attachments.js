@@ -37,9 +37,12 @@ var attachmentPurposeTypes = {
    */
 };
 
-/** 
+/**
  * Represents the link between an object (ex: Message, Idea) and a remote (url)
  * or eventually local document attached to it.
+ * Frontend model for :py:class:`assembl.models.attachment.Attachment`
+ * @class app.models.attachments.AttachmentModel
+ * @extends app.models.Base.Model
  */
 var AttachmentModel = Base.Model.extend({
   constructor: function AttachmentModel() {

@@ -12,9 +12,11 @@ var $ = require('jquery'),
     Types = require('../utils/types.js');
 
 /**
- * @class app.models.announcement.AnnouncementModel
  * Represents an announcement, a mutable message-like object, with an author and
  * a date
+ * Frontend model for :py:class:`assembl.models.announcement.Announcement`
+ * @class app.models.announcement.AnnouncementModel
+ * @extends app.models.Base.Model
  */
 var AnnouncementModel = Base.Model.extend({
   /**
