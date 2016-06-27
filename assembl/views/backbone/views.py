@@ -98,6 +98,7 @@ def process_locale(
 
 @view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
+    """The main view on a discussion"""
     user_id = authenticated_userid(request) or Everyone
     context = get_default_context(request)
     discussion = context["discussion"]

@@ -1,3 +1,4 @@
+"""Some specialized SQLAlchemy column types"""
 from sqlalchemy.types import (
     TypeDecorator, String, PickleType, Text)
 from sqlalchemy.ext.hybrid import Comparator

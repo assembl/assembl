@@ -1,5 +1,7 @@
-# Lifted with thanks from
-# https://github.com/okfn/annotator-store/blob/master/annotator/auth.py
+"""Web tokens for annotator interoperability.
+
+Lifted with thanks from
+https://github.com/okfn/annotator-store/blob/master/annotator/auth.py """
 import datetime
 
 import isodate

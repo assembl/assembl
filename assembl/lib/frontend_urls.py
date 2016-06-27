@@ -1,3 +1,4 @@
+"""Defines the existing frontend routes so the Pyramid router can pass them along."""
 from urlparse import urljoin, urlparse
 import urllib
 
@@ -19,13 +20,12 @@ ATTACHMENT_PURPOSES = {
 }
 
 
-class FrontendUrls():
+class FrontendUrls(object):
+    """The set of FrontendUrls."""
     def __init__(self, discussion):
         assert isinstance(discussion, Discussion)
         self.discussion = discussion
 
-    # Note:  This should match with assembl/static/js/app/router.js
-    # Used by home_view, these routes will all give backbone's interface
     frontend_routes = {
         'edition': '/edition',
         'partners': '/partners',
@@ -44,6 +44,13 @@ class FrontendUrls():
         'purl_user': '/profile*remainder',
         'purl_widget': '/widget*remainder'
     }
+    """
+    The list of frontend routes.
+
+    Important:  This should match with :js:class:`app.router.Router`
+    Used by :py:func:`assembl.views.backbone.views.home_view`, these routes
+    will all give the same view and further routing will happen
+    in the frontend."""
 
     @classmethod
     def register_frontend_routes(cls, config):

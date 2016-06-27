@@ -92,7 +92,7 @@ var SynthesisModel = Base.Model.extend({
 });
 
 /**
- * @class app.models.synthesis.SynthesisColleciton
+ * @class app.models.synthesis.SynthesisCollection
  */
 var SynthesisCollection = Base.Collection.extend({
   constructor: function SynthesisCollection() {

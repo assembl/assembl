@@ -7,6 +7,7 @@ from simplejson import dumps, JSONEncoder
 
 
 class DateJSONEncoder(JSONEncoder):
+    """A JSONEncoder that can encode datetime objects using iso8601"""
     def default(self, obj):
         if isinstance(obj, (date, datetime)):
             if isinstance(obj, datetime) and obj.tzinfo:

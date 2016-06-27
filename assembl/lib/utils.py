@@ -1,3 +1,4 @@
+"""Sundry utility functions"""
 import re
 import unidecode
 import inspect

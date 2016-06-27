@@ -2,6 +2,7 @@ import isodate
 
 
 def parse_datetime(value, raise_error=None):
+    """Parse a datetime from a ISO 8601 string"""
     try:
         if 'T' not in value:
             value += "T00:00:00"

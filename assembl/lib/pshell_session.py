@@ -1,3 +1,4 @@
+"""Initial objects for the pshell sessions"""
 import sys
 
 from pyramid.paster import get_appsettings

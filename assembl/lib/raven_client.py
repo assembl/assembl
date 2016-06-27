@@ -1,3 +1,4 @@
+"""Abstract the existence and use of ravenJS"""
 from traceback import print_exc
 
 _raven_client = None

@@ -1,3 +1,5 @@
+"""Utilities for locale conversion, between posix, iso639 1 & 2;
+and for pyramid locale negotiation."""
 from pyramid.i18n import TranslationStringFactory, Localizer
 from pyramid.i18n import default_locale_negotiator
 from iso639 import (is_valid639_2, is_valid639_1, to_iso639_1)

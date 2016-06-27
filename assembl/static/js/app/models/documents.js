@@ -80,7 +80,7 @@ var FileModel = DocumentModel.extend({
 
 
 /**
- * @class app.models.documents.PartnerOrganizationCollection
+ * @class app.models.documents.DocumentCollection
  */
 var DocumentCollection = Base.Collection.extend({
   constructor: function DocumentCollection() {

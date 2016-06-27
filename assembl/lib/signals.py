@@ -1,3 +1,4 @@
+"""Debugging functions triggered by posix signals"""
 import code, traceback, signal
 import threading, sys
 

@@ -450,7 +450,7 @@ var IdeaModel = Base.Model.extend({
 });
 
 /**
- * @class app.models.idea.IdeaColleciton
+ * @class app.models.idea.IdeaCollection
  */
 var IdeaCollection = Base.Collection.extend({
   constructor: function IdeaCollection() {

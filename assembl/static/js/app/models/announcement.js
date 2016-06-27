@@ -79,7 +79,7 @@ var AnnouncementModel = Base.Model.extend({
 });
 
 /**
- * @class app.models.announcement.PartnerOrganizationCollection
+ * @class app.models.announcement.AnnouncementCollection
  */
 var AnnouncementCollection = Base.Collection.extend({
   constructor: function AnnouncementCollection() {

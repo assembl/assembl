@@ -1,3 +1,4 @@
+"""ZMQ setup for the changes socket"""
 import atexit
 from itertools import count
 

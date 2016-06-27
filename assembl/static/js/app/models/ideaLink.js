@@ -59,7 +59,7 @@ var IdeaLinkModel = Base.Model.extend({
 });
 
 /**
- * @class app.models.ideaLink.IdeaLinkColleciton
+ * @class app.models.ideaLink.IdeaLinkCollection
  */
 var IdeaLinkCollection = Base.Collection.extend({
 

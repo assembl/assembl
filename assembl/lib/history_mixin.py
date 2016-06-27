@@ -1,3 +1,4 @@
+"""Mixin classes for keeping old versions of data structures"""
 from datetime import datetime
 
 from sqlalchemy import (

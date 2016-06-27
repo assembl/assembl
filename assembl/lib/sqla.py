@@ -1,4 +1,4 @@
-"""Some utilities for working with SQLAlchemy."""
+"""Some utilities for working with SQLAlchemy, and the definition of BaseOps."""
 
 from __future__ import absolute_import
 

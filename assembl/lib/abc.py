@@ -1,3 +1,4 @@
+"""Extended abstract base class functions"""
 from __future__ import absolute_import
 import abc
 
