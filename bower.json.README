@@ -1,0 +1,4 @@
+Since comments aren't allowed in json...
+
+mocha is in bower.json only so it can get served from static when running tests 
+in templates/tests/index.jinja2 
