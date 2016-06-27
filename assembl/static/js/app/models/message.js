@@ -75,7 +75,7 @@ var MessageModel = Base.Model.extend({
   },
 
   /**
-   * @return {String} the subject, with any re: stripped
+   * @returns {String} the subject, with any re: stripped
    */
   getSubjectNoRe: function() {
       var subject = this.get('subject').originalValue();
@@ -88,7 +88,7 @@ var MessageModel = Base.Model.extend({
     },
 
   /**
-   * @return Array  Json objects representing idea_content_links
+   * @returns Array  Json objects representing idea_content_links
    */
   getIdeaContentLinks: function(){
     var idl = this.get('indirect_idea_content_links');
@@ -105,7 +105,7 @@ var MessageModel = Base.Model.extend({
   },
 
   /**
-   * @return {Number} the quantity of all descendants
+   * @returns {Number} the quantity of all descendants
    */
   getDescendantsCount: function() {
     var children = this.getChildren(),
@@ -125,7 +125,7 @@ var MessageModel = Base.Model.extend({
 
   /**
    * Return all direct children
-   * @return {MessageModel[]}
+   * @returns {MessageModel[]}
    */
   getChildren: function() {
     return this.collection.where({ parentId: this.getId() });
@@ -134,7 +134,7 @@ var MessageModel = Base.Model.extend({
   /**
    * Return a promise to the parent message (if any)
    * Else a promise to null
-   * @return {Promise}
+   * @returns {Promise}
    */
   getParentPromise: function() {
       if (this.get('parentId')) {
@@ -161,7 +161,7 @@ var MessageModel = Base.Model.extend({
 
   /**
    * Returns a promise to all segments in the annotator format
-   * @return {Object[]}
+   * @returns {Object[]}
    */
   getAnnotationsPromise: function() {
     var that = this;
@@ -183,7 +183,7 @@ var MessageModel = Base.Model.extend({
 
   /**
    * Return all segments in the annotator format
-   * @return {Object[]}
+   * @returns {Object[]}
    */
   getExtractsPromise: function() {
     var that = this;
@@ -357,7 +357,7 @@ var MessageCollection = Base.Collection.extend({
   },
 
   /** Get the last synthesis
-   * @return Message.Model or null
+   * @returns Message.Model or null
    */
   getLastSynthesisPost: function() {
       var lastSynthesisPost = null,
@@ -375,7 +375,7 @@ var MessageCollection = Base.Collection.extend({
   /**
    * Traversal function.
    * @param visitor visitor function.  If visitor returns true, traversal continues
-   * @return {Object[]}
+   * @returns {Object[]}
    */
   visitDepthFirst: function(visitor, message, ancestry, includeHidden) {
     var that = this;

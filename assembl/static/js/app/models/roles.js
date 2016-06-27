@@ -49,7 +49,7 @@ var roleCollection = Base.Collection.extend({
 
   /**
    * @param  {Role}  The role
-   * @return {Boolean} True if the user has the given role
+   * @returns {Boolean} True if the user has the given role
    */
   hasRole: function(role) {
     var roleFound =  this.find(function(local_role) {

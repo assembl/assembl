@@ -52,7 +52,7 @@ var Context = function() {
 
   /**
    * The state that the application can be under
-   * @type {string} appState  | production | test
+   * @type {string} appState: production | test
    */
   this.appState = 'production';
 
@@ -304,7 +304,7 @@ Context.prototype = {
   /**
    * Returns a template from an script tag
    * @param {string} id The id of the script tag
-   * @return {function} The Underscore.js _.template return
+   * @returns {function} The Underscore.js _.template return
    */
   loadTemplate: function(id) {
     var template = $('#tmpl-' + id);
@@ -316,8 +316,8 @@ Context.prototype = {
 
   /**
    * get a view style definition by id
-   * @param {messageViewStyle.id}
-   * @return {messageViewStyle or undefined}
+   * @param {messageViewStyle.id} messageViewStyleId
+   * @returns {messageViewStyle?}
    */
   getMessageViewStyleDefById: function(messageViewStyleId) {
     return _.find(this.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
@@ -337,7 +337,7 @@ Context.prototype = {
   /**
    * Formats the url to the current api url
    * @param  {string} url
-   * @return {string} The url formatted
+   * @returns {string} The url formatted
    */
   getApiUrl: function(url) {
     if (url === undefined)
@@ -372,14 +372,14 @@ Context.prototype = {
   /**
    * Formats the given to the generic api url
    * @param {string} id The class name used in the api
-   * @return {string} The url formatted
+   * @returns {string} The url formatted
    *
    * ex: 'local:Extract/1' -> '/api/v1/discussion/1/generic/Extract/1'
    */
 
    
   /**
-   * @return {Object} The Object with mesagelistconfig in the localStorage
+   * @returns {Object} The Object with mesagelistconfig in the localStorage
    */
   DEPRECATEDgetMessageListConfigFromStorage: function() {
     var messageListConfig = JSON.parse(localStorage.getItem('messageListConfig')) || {};
@@ -388,8 +388,8 @@ Context.prototype = {
 
   /**
    * Adds a panel in the localStorage
-   * @param {Object} The Object with mesagelistconfig in the localStorage
-   * @return {Object} The Object with mesagelistconfig in the localStorage
+   * @param {Object} messageListConfig - The Object with mesagelistconfig in the localStorage
+   * @returns {Object} The Object with mesagelistconfig in the localStorage
    */
   DEPRECATEDsetMessageListConfigToStorage: function(messageListConfig) {
     localStorage.setItem('messageListConfig', JSON.stringify(messageListConfig));
@@ -399,7 +399,7 @@ Context.prototype = {
   /**
    * Checks if there is a panel in fullscreen mode
    * ( i.e.: there is only one open )
-   * @return {Boolean}
+   * @returns {Boolean}
    */
   isInFullscreen: function() {
     return this.openedPanels === 1;
@@ -646,7 +646,7 @@ Context.prototype = {
     },
 
   /**
-   * @return {Segment}
+   * @returns {Segment}
    */
   getDraggedSegment: function() {
     var segment = this._draggedSegment;
@@ -661,7 +661,7 @@ Context.prototype = {
   },
 
   /**
-   * @return {Idea}
+   * @returns {Idea}
    */
   popDraggedIdea: function() {
     if (this.ideaList && this.draggedIdea) {
@@ -726,7 +726,7 @@ Context.prototype = {
   /**
    * Return the Post related to the given annotation
    * @param {Annotation} annotation
-   * @return {Message}
+   * @returns {Message}
    */
   getPostIdFromAnnotation: function(annotation) {
     var span = $(annotation.highlights[0]),
@@ -761,8 +761,8 @@ Context.prototype = {
   /**
    * Shows the dragbox when user starts dragging an element
    * This method is designed to be called in a dragstart event listener.
-   * @param  {Event} ev The event object
-   * @param  {String} text The text to be shown in the .dragbox
+   * @param  {Event} ev - The event object
+   * @param  {String} text - The text to be shown in the .dragbox
    */
   showDragbox: function(ev, text, newExtract) {
     var dragbox_max_length = 25,
@@ -821,7 +821,7 @@ Context.prototype = {
 
   /**
    * Return the current time
-   * @return {timestamp}
+   * @returns {timestamp}
    */
   getCurrentTime: function() {
     return (new Date()).getTime();
@@ -830,8 +830,8 @@ Context.prototype = {
   /**
    * Format string function
    * @param {string} string
-   * @param {string} ...
-   * @return {string}
+   * @params {string[]}
+   * @returns {string}
    */
   format: function(str) {
     var args = [].slice.call(arguments, 1);
@@ -844,8 +844,8 @@ Context.prototype = {
   /**
    * Format date
    * @param {Date|timestamp} date
-   * @param {string} [format=app.dateFormat] The format
-   * @return {string}
+   * @param {string} format - app.dateFormat The format
+   * @returns {string}
    */
   formatDate: function(date, format) {
     format = format || this.dateFormat;
@@ -860,7 +860,7 @@ Context.prototype = {
 
   /**
    * Returns a fancy date (ex: a few seconds ago), or a formatted precise date if precise is true
-   * @return {String}
+   * @returns {String}
    */
   getNiceDateTime: function(date, precise, with_time, forbid_future) {
     // set default values
@@ -910,7 +910,7 @@ Context.prototype = {
 
   /**
    * Returns a nicely formatted date, but not an approximative expression (i.e. not "a few seconds ago")
-   * @return {String}
+   * @returns {String}
    */
   getReadableDateTime: function(date) {
     return this.getNiceDateTime(date, true);
@@ -969,7 +969,7 @@ Context.prototype = {
 
   /**
    * @see http://blog.snowfinch.net/post/3254029029/uuid-v4-js
-   * @return {String} an uuid
+   * @returns {String} an uuid
    */
    
   //FIXME: this method never use in app
@@ -992,7 +992,7 @@ Context.prototype = {
   /**
    * Given the string in the format "local:ModelName/{id}" returns the id
    * @param  {String} str
-   * @return {String}
+   * @returns {String}
    */
   extractId: function(str) {
     return str.split('/')[1];
@@ -1001,7 +1001,7 @@ Context.prototype = {
   /**
    * @param  {Number} userID The user's ID
    * @param  {Number} [size=44] The avatar size
-   * @return {String} The avatar's url formatted with the given size
+   * @returns {String} The avatar's url formatted with the given size
    */
   formatAvatarUrl: function(userID, size) {
     size = size || 44;
@@ -1010,7 +1010,7 @@ Context.prototype = {
 
   /** This removes (rather than escape) all html tags
    * @param  {String} html
-   * @return {String} The new string without html tags
+   * @returns {String} The new string without html tags
    */
   stripHtml: function(html) {
       if (!html) {
@@ -1354,9 +1354,9 @@ Context.prototype = {
 
   /**
    * Helper function to add query string to a URL
-   * @param  {[string]} url [The URL to append query string to]
-   * @param  {[array]} params [An array of key-value objects denoting the query string, raw (unencoded)]
-   * @return {[string]}        [The query string updated URL]
+   * @param  {string} url [The URL to append query string to]
+   * @param  {object[]} params [An array of key-value objects denoting the query string, raw (unencoded)]
+   * @returns {string}        [The query string updated URL]
    */
   appendExtraURLParams: function(url, params){
     //console.log('append extra url:', url);
@@ -1607,7 +1607,7 @@ Context.prototype = {
    * This assumes that the there is a 1:1 relationship
    * between the AgentProfile (the user) and FacebookAccount
    * 
-   * @return {[String || undefined]} [Will either return the @id of
+   * @returns {String?} [Will either return the @id of
    * the fbAccount if it exists, else returns undefined]
    */
   getCurrentUserFacebookAccountId: function() {
@@ -1625,7 +1625,7 @@ Context.prototype = {
   /**
    * [A utility function to convert backend DateTime data (ISO 8601 String) into ISO 8601 String with UTC Timezone]
    * TODO: This function was taken from app/js/models/social.js. Refactor to use this Ctx version throughout codebase.
-   * @param {[String]} e [Returns ISO 8601 String with UTC Timezone]
+   * @param {string} e [Returns ISO 8601 String with UTC Timezone]
    */
   addUTCTimezoneToISO8601: function(e){
       if (/[Z]$|([+-]\d{2}:\d{2})$/.test(e) ) {
@@ -1675,7 +1675,7 @@ Context.prototype = {
     eg. Interface language FR
     eg. {"fr": "Francais"}
 
-    @return Object  Language cache
+    @returns Object  Language cache
    */
   getLocaleToLanguageNameCache: function(){
     //The cache is only read once for efficiency

@@ -12,7 +12,7 @@ var OrphanMessagesInIdeaListView = ideaInIdeaList.IdeaView.extend({
 
   /**
    * The template
-   * @type {[type]}
+   * @type {template}
    */
   template: Ctx.loadTemplate('orphanMessagesInIdeaList'),
 

@@ -387,8 +387,8 @@ var SegmentListPanel = AssemblPanel.extend({
   /**
    * Creates a segment with the given text and adds it to the segmentList
    * @param  {string} text
-   * @param  {string} [post=null] The origin post
-   * @return {Segment}
+   * @param  {string} post - The origin post (nullable)
+   * @returns {Segment}
    */
   addTextAsSegment: function(text, post) {
     var idPost = null;

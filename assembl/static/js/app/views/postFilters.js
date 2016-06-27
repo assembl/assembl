@@ -14,7 +14,7 @@ function AbstractFilter() {
 
 AbstractFilter.prototype = {
     /**
-     * @return true if a value was actually added to the filter, false otherwise
+     * @returns true if a value was actually added to the filter, false otherwise
      * (tried to add a duplicate value)
      */
     addValue: function(value) {
@@ -31,7 +31,7 @@ AbstractFilter.prototype = {
     },
     
     /**
-     * @return true if a value was actually deleted from the filter, false otherwise
+     * @returns true if a value was actually deleted from the filter, false otherwise
      * (tried to add a duplicate value)
      */
     deleteValue: function(value) {
@@ -51,7 +51,7 @@ AbstractFilter.prototype = {
     },
     
     /**
-     * @return true if a value was actually deleted from the filter, false otherwise
+     * @returns true if a value was actually deleted from the filter, false otherwise
      * (tried to add a duplicate value)
      */
     deleteValueAtIndex: function(valueIndex) {
@@ -92,13 +92,13 @@ AbstractFilter.prototype = {
     },
     
     /** This is the text used for hover help 
-     * @return The help text, or null if none is available */
+     * @returns The help text, or null if none is available */
     getHelpText: function() {
       return null;
     },
     
     /** Get the name of the GET parameter on the server to put the value in 
-     * @return string */
+     * @returns string */
     getServerParam: function() {
       throw new Error("Need to implement getServerParam");
     },

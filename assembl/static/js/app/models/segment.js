@@ -132,7 +132,7 @@ var SegmentModel = Base.Model.extend({
   },
 
   /** Return a promise for the Post the segments is associated to, if any
-   * @return {$.Defered.Promise}
+   * @returns {$.Defered.Promise}
    */
   getAssociatedIdeaPromise: function() {
       var that = this,
@@ -149,7 +149,7 @@ var SegmentModel = Base.Model.extend({
     },
 
   /** Return a promise for the Post the segments is associated to, if any
-   * @return {$.Defered.Promise}
+   * @returns {$.Defered.Promise}
    */
   getAssociatedPostPromise: function() {
     return this.collection.collectionManager.getMessageFullModelPromise(this.get('idPost'));
@@ -157,7 +157,7 @@ var SegmentModel = Base.Model.extend({
 
   /**
    * Return the html markup to the icon
-   * @return {string}
+   * @returns {string}
    */
   getTypeIcon: function() {
     var cls = 'icon-',
@@ -191,7 +191,7 @@ var SegmentModel = Base.Model.extend({
   /**
    * Returns the extract's creator from a collection provided
    * @param {Collection} The collection to get the user models from
-   * @return {User}
+   * @returns {User}
    */
   getCreatorFromUsersCollection: function(usersCollection) {
     var creatorId = this.get('idCreator'),
@@ -205,7 +205,7 @@ var SegmentModel = Base.Model.extend({
 
   /**
    * Alias for `.get('quote') || .get('text')`
-   * @return {String}
+   * @returns {String}
    */
   getQuote: function() {
     return this.get('quote') || this.get('text');
@@ -248,7 +248,7 @@ var SegmentCollection = Base.Collection.extend({
   /**
    * Returns the segment related to the annotation
    * @param  {annotation} annotation
-   * @return {Segment}
+   * @returns {Segment}
    */
   getByAnnotation: function(annotation) {
     return this.get(annotation['@id']);
@@ -259,7 +259,7 @@ var SegmentCollection = Base.Collection.extend({
    * The segment isn't saved.
    * @param {annotation} annotation
    * @param {Number} [idIdea=null]
-   * @return {Segment}
+   * @returns {Segment}
    */
   addAnnotationAsExtract: function(annotation, idIdea) {
     var that = this,

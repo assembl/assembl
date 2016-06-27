@@ -37,7 +37,7 @@ _.each([
  * Factory to create a view instance from the panelSpec passed as parameter
  *
  * @param <PanelSpecs.Model> panelSpecModel
- * @return <AssemblPanel> AssemblPanel view
+ * @returns <AssemblPanel> AssemblPanel view
  */
 function panelViewByPanelSpec(panelSpecModel) {
   var panelClass,

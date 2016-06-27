@@ -5,7 +5,7 @@ var Visitor = require("./visitor.js");
 /**
 * Traversal function to re-visit the output of an ObjectTreeRenderVisitor.
 * @param visitor visitor function.  If visitor returns true, traversal continues
-* @return {Object[]}
+* @returns {Object[]}
 */
 function objectTreeRenderReVisitDepthFirst(data_by_object, visitor, sort_comparator_function, data, ancestry) {
   var data_sort_comparator_function = function(data) {

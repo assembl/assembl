@@ -190,7 +190,7 @@ var Collection = Base.Collection.extend({
     },
 
     /*
-        @return Array   The string of short names of the ideas that a message is associated to
+        @returns Array   The string of short names of the ideas that a message is associated to
                         Note: It does not contain those that the user clipboarded
      */
     getIdeaNamesPromise: function(){

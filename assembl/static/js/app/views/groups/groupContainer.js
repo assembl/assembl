@@ -113,7 +113,7 @@ var groupContainer = Marionette.CollectionView.extend({
     return totalMinimized;
   },
   /*
-   * @param view A view (such as a messageList) for
+   * @param view: A view (such as a messageList) for
    * which we want the matching groupContent to send events or manipulate
    * state.
    *
@@ -123,10 +123,10 @@ var groupContainer = Marionette.CollectionView.extend({
     console.log("getGroupContent(): WRITEME!")
   },
   /* NOT YET TESTED - benoitg- 2015-06-29
-   * @param viewClass A view (such as a messageList) for
+   * @param viewClass: A view (such as a messageList) for
    * which we want the matching groupContent to send events or manipulate
    * state.
-   * @return Possibly empty array of panels
+   * @returns Possibly empty array of panels
    */
   findGroupsWithPanelInstance: function(panelSpecType) {
     if (!panelSpecType)

@@ -394,8 +394,8 @@ var routeManager = Marionette.Object.extend({
   },
 
   /**
-   * @param from_home:  If true, the function was called from the home view
-   * @return promise to a GroupContainer
+   * @param from_home -  If true, the function was called from the home view
+   * @returns promise to a GroupContainer
    */
   restoreViews: function(from_home, url_structure, skip_group_state) {
     var collectionManager = CollectionManager();

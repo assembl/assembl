@@ -128,7 +128,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
 
   /** 
    * Change the panel minimization state.  No-op if the state already matches
-   * @param requestedMiminizedState true or false. Should the panel be minimized
+   * @param {boolean} requestedMiminizedState: Should the panel be minimized
    */
   _changeMinimizePanelsState: function(requestedMiminizedState) {
     if(requestedMiminizedState === this.model.get('minimized')) {
@@ -216,9 +216,9 @@ var PanelWrapper = Marionette.LayoutView.extend({
     }
   },
   /**
-   * @param locking: bool. True if we want to lock the panel. False if we want to unlock it
-   * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autolocked.
-   * @param reason: String. The reason why the panel will be automatically locked. Possible values: undefined, "USER_IS_WRITING_A_MESSAGE", "USER_WAS_WRITING_A_MESSAGE"
+   * @param {boolean} locking: True if we want to lock the panel. False if we want to unlock it
+   * @param {boolean} informUser: Show a tooltip next to the lock icon, informing the user that the panel has been autolocked.
+   * @param {string} reason: The reason why the panel will be automatically locked. Possible values: undefined, "USER_IS_WRITING_A_MESSAGE", "USER_WAS_WRITING_A_MESSAGE"
    **/
   autoLockOrUnlockPanel: function(locking, informUser, reason) {
     var that = this;
@@ -268,15 +268,15 @@ var PanelWrapper = Marionette.LayoutView.extend({
     }
   },
   /**
-   * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autolocked.
-   * @param reason: String. The reason why the panel will be automatically locked. Possible values: undefined, "USER_IS_WRITING_A_MESSAGE"
+   * @param {boolean} informUser: Show a tooltip next to the lock icon, informing the user that the panel has been autolocked.
+   * @param {string} reason: The reason why the panel will be automatically locked. Possible values: undefined, "USER_IS_WRITING_A_MESSAGE"
    **/
   autoLockPanel: function(informUser, reason) {
     this.autoLockOrUnlockPanel(true, informUser, reason);
   },
   /**
-   * @param informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autounlocked.
-   * @param reason: String. The reason why the panel will be automatically unlocked. Possible values: undefined, "USER_WAS_WRITING_A_MESSAGE"
+   * @param {boolean} informUser: bool. Show a tooltip next to the lock icon, informing the user that the panel has been autounlocked.
+   * @param {string} reason: The reason why the panel will be automatically unlocked. Possible values: undefined, "USER_WAS_WRITING_A_MESSAGE"
    **/
   autoUnlockPanel: function(informUser, reason) {
     this.autoLockOrUnlockPanel(false, informUser, reason);

@@ -66,7 +66,7 @@ var GroupSpecModel = Base.Model.extend({
    * (if any).
    * That is, any panel in the first position that has the capacity to alter
    * the global group state
-   * @return PanelSpecType, or undefined if none
+   * @returns PanelSpecType, or undefined if none
    */
   findNavigationPanelSpec: function() {
     var navigationTypes = PanelSpecTypes.getNavigationPanelTypes(),

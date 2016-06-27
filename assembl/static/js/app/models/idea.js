@@ -74,13 +74,13 @@ var IdeaModel = Base.Model.extend({
    * longTitle editor code isn't common in ideaPanel and synthesisView
    * At least this is mostly DRY
    */
-   
+
   /**
    * Returns the display text for a idea definition.
    * Will return the first non-empty from:
    * definition, longTitle, i18n.gettext('Add a definition for this idea')
-   * @param
-   * @return {Text>}
+   *
+   * @returns {string}
    */
   getDefinitionDisplayText: function() {
     if (this.get('root') === true) {
@@ -105,8 +105,8 @@ var IdeaModel = Base.Model.extend({
    * Returns the display text for a idea synthesis expression.
    * Will return the first non-empty from:
    * longTitle, shortTitle, i18n.gettext('Add and expression for the next synthesis')
-   * @param
-   * @return {Text>}
+   *
+   * @returns {string}
    */
   getLongTitleDisplayText: function() {
       if (this.get('root') === true) {
@@ -128,7 +128,7 @@ var IdeaModel = Base.Model.extend({
     },
 
   /**
-   * @return {String} The short Title to be displayed
+   * @returns {String} The short Title to be displayed
    * HTML Striping if necessary is the responsability of the caller.
    */
   getShortTitleDisplayText: function() {
@@ -150,7 +150,7 @@ var IdeaModel = Base.Model.extend({
   },
 
   /**
-   * @return {Boolean} true if the current idea is the root idea
+   * @returns {Boolean} true if the current idea is the root idea
    */
   isRootIdea: function() {
     return this.get('@type') === Types.ROOT_IDEA;
@@ -224,7 +224,7 @@ var IdeaModel = Base.Model.extend({
 
   /**
    * Return all children
-   * @return {Idea[]}
+   * @returns {Idea[]}
    */
   getChildren: function() {
     return this.collection.where({ parentId: this.getId() });
@@ -232,7 +232,7 @@ var IdeaModel = Base.Model.extend({
 
   /**
    * Return the parent idea
-   * @return {Idea} or undefined
+   * @returns {Idea} or undefined
    */
   getParent: function() {
     return this.collection.findWhere({ '@id': this.get('parentId') });
@@ -241,7 +241,7 @@ var IdeaModel = Base.Model.extend({
   /**
    * Return if the idea is descendant of the given idea
    * @param {Idea} idea
-   * @return {Boolean}
+   * @returns {Boolean}
    */
   isDescendantOf: function(idea) {
     var parentId = this.get('parentId');
@@ -277,7 +277,7 @@ var IdeaModel = Base.Model.extend({
   },
 
   /**
-   * @return {Number} the indentantion level
+   * @returns {Number} the indentantion level
    */
   getLevel: function() {
     var counter = 0,
@@ -293,14 +293,14 @@ var IdeaModel = Base.Model.extend({
   },
 
   /**
-   * @return {Number} The order number for a new child
+   * @returns {Number} The order number for a new child
    */
   getOrderForNewChild: function() {
     return this.getChildren().length + 1;
   },
 
   /** Return a promise for all Extracts models for this idea
-   * @return {Promise}
+   * @returns {Promise}
    */
    
   getExtractsPromise: function() {
@@ -318,7 +318,7 @@ var IdeaModel = Base.Model.extend({
 
   /** Return a promise for the announcement to be displayed in the message-list, 
    * if any
-   * @return {Promise}
+   * @returns {Promise}
    */
    
   getApplicableAnnouncementPromise: function() {
@@ -369,7 +369,7 @@ var IdeaModel = Base.Model.extend({
   /**
    * Adds a segment as a child
    * @param {Segment} segment, possibly unsaved.
-   * @return the newly created idea
+   * @returns the newly created idea
    */
   addSegmentAsChild: function(segment) {
     // Cleaning
@@ -463,7 +463,7 @@ var IdeaCollection = Base.Collection.extend({
   model: IdeaModel,
 
   /**
-   * @return {Idea} The root idea
+   * @returns {Idea} The root idea
    */
   getRootIdea: function() {
     var retval = this.findWhere({ '@type': Types.ROOT_IDEA });
@@ -479,7 +479,7 @@ var IdeaCollection = Base.Collection.extend({
 
   /**
    * Returns the order number for a new root idea
-   * @return {Number}
+   * @returns {Number}
    */
   getOrderForNewRootIdea: function() {
     var lastIdea = this.last();

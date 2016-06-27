@@ -280,7 +280,7 @@ var AttachmentCollection = Base.Collection.extend({
    * Helper method to destroy the models in a collection
    * @param  {Array|Backbone.Model} models    Model or Array of models  
    * @param  {Object} options   Options hash to send to every model when destroyed
-   * @return {Promse} if model was persisted, returns jqXhr else false 
+   * @returns {Promse} if model was persisted, returns jqXhr else false 
    */
   destroy: function(models, options){
     if (!models){

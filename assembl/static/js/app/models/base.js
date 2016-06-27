@@ -1,15 +1,17 @@
 'use strict';
 
+/** @module models.base */
+
 var Backbone = require('backbone'),
     Promise = require('bluebird'),
     Ctx = require('../common/context.js'),
     _ = require('underscore'),
     Types = require('../utils/types.js');
 
-/*"""
-.. js:class:: models.base.BaseModel
-
-BaseModel which should be used by ALL models
+/**
+  * BaseModel which should be used by ALL models
+  * @class models.base.BaseModel
+  * @extends Backbone.Model
 */
 var BaseModel = Backbone.Model.extend({
 
@@ -20,14 +22,13 @@ var BaseModel = Backbone.Model.extend({
     Backbone.Model.apply(this, arguments);
   },
 
-  /*"""
-.. js:function:: models.base.BaseModel.getNumericId
-Get the numeric id from the id string
-
-ex: finds '30' if the id is 'local:ModelName/30'
-
-:returns: number
-*/
+  /**
+   * Get the numeric id from the id string
+   * @function models.base.BaseModel.getNumericId
+   * @example
+   * finds '30' if the id is 'local:ModelName/30'
+   * @returns {number}
+   */
   getNumericId: function() {
     var re = /\d+$/;
     if (re.test(this.id)) {
@@ -94,7 +95,7 @@ Overwriting the idAttribute
 
   /**
    * Alias for `.get('id') || .get('@id') || .cid`
-   * @return {string}
+   * @returns {string}
    */
   getId: function() {
     return this.get('@id') || this.get('id') || this.cid;
@@ -114,7 +115,7 @@ Overwriting the idAttribute
 
   /**
    * Overwritting backbone's parse function
-   * @return {Object} [description]
+   * @returns {Object} [description]
    */
   parse: function(resp, options) {
     var id = resp[this.idAttribute];
@@ -176,7 +177,7 @@ Overwriting the idAttribute
    * @param {Object} options - optionally pass in options 
    * @param {boolean} options.relative - Optional. Default URL is absolute. Can force to be relative by setting passing {'relative' : true}
    * @param {Object} options.parameters - Optional. Can pass in query string as an object. Eg. {'foo': 'bar', 'baz': 'cookie'}
-   * @return {String|null} The fully composed URL of the post/idea
+   * @returns {String|null} The fully composed URL of the post/idea
   */
   getRouterUrl: function(options){
       if (!this.id || this.routerBaseUrl === null) {
@@ -245,7 +246,7 @@ var BaseCollection = Backbone.Collection.extend({
 
   /**
    * Find the model by the given cid
-   * @return {BaseModel}
+   * @returns {BaseModel}
    */
   getByCid: function(cid) {
     var result = null;
@@ -262,7 +263,7 @@ var BaseCollection = Backbone.Collection.extend({
    * ex: finds 'local:ModelName/30' if given '30'
    *
    * @param {Number} id
-   * @return {BaseModel}
+   * @returns {BaseModel}
    */
   getByNumericId: function(id) {
     var re = new RegExp(id + '$'),

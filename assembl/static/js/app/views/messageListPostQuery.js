@@ -71,8 +71,8 @@ var PostQuery = function() {
 
     /**
      * get a filter definition by id
-     * @param {filterDef.id}
-     * @return {filterDef}
+     * @param {filterDef.id} filterDefId
+     * @returns {filterDef}
      */
     this.getFilterDefById = function(filterDefId) {
       for (var filterDefPropName in this.availableFilters) {
@@ -88,12 +88,12 @@ var PostQuery = function() {
 
     /**
      * Is the filter part of the current query?
-     * @param {this.availableFilters} filterDef
-     * @param {String} The value for which to check.  If null
+     * @param {availableFilters} filterDef
+     * @param {string} filterDefId: The value for which to check.  If null
      *  will return true if any filter of that type is present.
-     * @return true if present, false otherwise
+     * @returns true if present, false otherwise
      */
-    this.isFilterInQuery = function(filterDef, value) {
+    this.isFilterInQuery = function(filterDef, filterDefId) {
       var retval = false;
       var filterDef = new filterDef();
 
@@ -117,9 +117,9 @@ var PostQuery = function() {
     /**
      * A filter restriction on the collection.  Setting a filter value to
      * null is equivalent to removing the filter
-     * @param {this.availableFilters} filterDef
+     * @param {availableFilters} filterDef
      * @param {String} value
-     * @return true on success, false on failure
+     * @returns true on success, false on failure
      */
     this.addFilter = function(filterDef, value) {
       //console.log("addFilter called with: ", filterDef.name, value);
@@ -224,7 +224,7 @@ var PostQuery = function() {
      * @param {filterDef} filterDef
      * @param {valueIndex}  The index of the value to clear in the filter.  If null
      *  all values for that filter will be cleared.
-     * @return true if filter(s) were cleared
+     * @returns true if filter(s) were cleared
      */
     this.clearFilter = function(filterDef, valueIndex) {
       var retval = false,
@@ -260,7 +260,7 @@ var PostQuery = function() {
     /**
      * The order the posts are sorted for.
      * @param {viewDef} viewDef from this.availableViews
-     * @return true on success, false on failure
+     * @returns true on success, false on failure
      */
     this.setView = function(view) {
       var retval = false;
@@ -281,7 +281,7 @@ var PostQuery = function() {
 
     /* The viewDef name used by the server to send data
      * @param {string} the name of a viewDef from assemal/view_defs
-     * @return true on success, false on failure
+     * @returns true on success, false on failure
      */
     this.setViewDef = function(viewDef) {
       var retval = false;
@@ -301,8 +301,8 @@ var PostQuery = function() {
     };
     /**
      * Execute the query
-     * @param {function} success callback to call when query is complete
-     * @param {function} success_data_changed callback to call when query is complete only
+     * @param {function} success: callback to call when query is complete
+     * @param {function} success_data_changed: callback to call when query is complete only
      * when the data actually changed.  Will be called before success
      */
     this._execute = function() {
@@ -384,7 +384,7 @@ var PostQuery = function() {
       });
     };
 
-    /** @return undefined if query isn't complete */
+    /** @returns undefined if query isn't complete */
     this.getResultNumUnread = function() {
       if (this._resultsAreValid) {
         return this._queryResultInfo.unread;
@@ -394,7 +394,7 @@ var PostQuery = function() {
       }
     };
 
-    /** @return undefined if query isn't complete */
+    /** @returns undefined if query isn't complete */
     this.getResultNumTotal = function() {
       if (this._resultsAreValid) {
         return this._queryResultInfo.total;

@@ -87,7 +87,7 @@ var AgentModel = Base.Model.extend({
   /**
    * return the avatar's url
    * @param  {Number} [size=44] The avatar size
-   * @return {string}
+   * @returns {string}
    */
   getAvatarUrl: function(size) {
     var id = this.getId();
@@ -103,7 +103,7 @@ var AgentModel = Base.Model.extend({
 
   /**
    * @param  {String}  permission The permission name
-   * @return {Boolean} True if the user has the given permission
+   * @returns {Boolean} True if the user has the given permission
    */
   hasPermission: function(permission) {
     return $.inArray(permission, this.permissions) >= 0;
@@ -118,7 +118,7 @@ var AgentModel = Base.Model.extend({
 
 
   /**
-   * @return A text message designed to replace X in the question "You cannot perform this operation because X"
+   * @returns A text message designed to replace X in the question "You cannot perform this operation because X"
    */
   getRolesMissingMessageForPermission: function(permission, discussion, reroute_relative_url) {
       if (this.hasPermission(permission)) {
@@ -161,7 +161,7 @@ var AgentModel = Base.Model.extend({
     },
 
   /**
-   * @return {Boolean} true if the user is an unknown user
+   * @returns {Boolean} true if the user is an unknown user
    */
   isUnknownUser: function() {
     return this.getId() === UNKNOWN_USER_ID;
@@ -207,7 +207,7 @@ var AgentCollection = Base.Collection.extend({
 
   /**
    * Returns the unknown user
-   * @return {User}
+   * @returns {User}
    */
   getUnknownUser: function() {
     return UNKNOWN_USER;

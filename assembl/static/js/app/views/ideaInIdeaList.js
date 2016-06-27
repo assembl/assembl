@@ -25,7 +25,7 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
 
   /**
    * The template
-   * @type {[type]}
+   * @type {template}
    */
   template: '#tmpl-ideaInIdeaList',
 
@@ -148,7 +148,7 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
 
   /**
    * The render
-   * @return {IdeaView}
+   * @returns {IdeaView}
    */
   onRender: function() {
     var that = this;

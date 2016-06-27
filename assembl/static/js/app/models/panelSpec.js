@@ -43,7 +43,7 @@ var PanelSpecModel = Base.Model.extend({
   },
 
   /**
-   @return an instance of PanelSpecType, or throws an exception
+   @returns an instance of PanelSpecType, or throws an exception
    */
   getPanelSpecType: function(psType) {
       return PanelSpecTypes.getByRawId(this.get('type'));

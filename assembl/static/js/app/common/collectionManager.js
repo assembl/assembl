@@ -169,7 +169,7 @@ var CollectionManager = Marionette.Object.extend({
   /**
    * Collection of all the Accounts associated with the current User
    * 
-   * @type {[Account]}
+   * @type {Account}
    */
   _allUserAccounts: undefined,
   _allUserAccountsPromise: undefined,
@@ -177,28 +177,28 @@ var CollectionManager = Marionette.Object.extend({
   /**
    * Collection of all the Widgets in the discussion
    * 
-   * @type {[Widget]}
+   * @type {Widget}
    */
   _allWidgets: undefined,
   _allWidgetsPromise: undefined,
 
   /**
    * Collection of all language preferences of the user
-   * @type {[UserLanguagePreference]}
+   * @type {UserLanguagePreference}
    */
   _allUserLanguagePreferences: undefined,
   _allUserLanguagePreferencesPromise: undefined,
 
   /**
    * Collection of all preferences of the user
-   * @type {[DiscussionPreference.Model]}
+   * @type {DiscussionPreference.Model}
    */
   _allUserPreferences: undefined,
   _allUserPreferencesPromise: undefined,
 
   /**
    * Collection of all preferences of the discussion
-   * @type {[DiscussionPreference.Model]}
+   * @type {DiscussionPreference.Model}
    */
   _allDiscussionPreferences: undefined,
   _allDiscussionPreferencesPromise: undefined,
@@ -227,11 +227,9 @@ var CollectionManager = Marionette.Object.extend({
    * recieve this json.  It is fed in this function so that the corresponding
    * model in the collection can be updated (this update does NOT happen in this
    * method)
-   * @param {BaseModel}
-   *          item
-   * @param {String}
-   *          [type=item['@type']] The model type
-   * @return {BaseCollection}
+   * @param {BaseModel} item
+   * @param {string} item['@type'] - The model type
+   * @returns {BaseCollection}
    */
   getCollectionPromiseByType: function(item) {
     var type = Types.getBaseType(item['@type']);
@@ -524,10 +522,10 @@ var CollectionManager = Marionette.Object.extend({
 
   /**
    * Retrieve fully populated models for the list of id's given
-   * 
-   * @param ids[]
+   *
+   * @param {string[]} ids
    *          array of message id's
-   * @return Message.Model{}
+   * @returns Message.Model
    */
   getMessageFullModelsPromise: function(ids) {
       var that = this,
@@ -904,8 +902,8 @@ var CollectionManager = Marionette.Object.extend({
 
   /**
    * Creates a collection of IdeaContentLink Collection for a message
-   * @param  Object  messageModel       The Backbone model of the message
-   * @return Array                      The collection of ideaContentLinks
+   * @param  {Object}  messageModel       The Backbone model of the message
+   * @returns Array                      The collection of ideaContentLinks
    */
   getIdeaContentLinkCollectionOnMessage: function(messageModel){
     /*

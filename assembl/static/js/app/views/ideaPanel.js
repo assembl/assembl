@@ -475,7 +475,7 @@ var IdeaPanel = AssemblPanel.extend({
 
   /**
    * Set the given idea as the current one
-   * @param  {Idea} [idea=null]
+   * @param  {Idea|null} idea
    */
   setIdeaModel: function(idea, reason) {
       var that = this;

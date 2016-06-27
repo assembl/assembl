@@ -196,8 +196,8 @@ var MessageListHeader = Marionette.ItemView.extend({
 
   /**
    * get a view style css_class
-   * @param {messageViewStyle}
-   * @return {String}
+   * @param messageViewStyle
+   * @returns {String}
    */
   getMessageViewStyleCssClass: function(messageViewStyle) {
     return DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id;
@@ -205,8 +205,8 @@ var MessageListHeader = Marionette.ItemView.extend({
 
   /**
    * get a view style definition by id
-   * @param {messageViewStyle.id}
-   * @return {messageViewStyle or undefined}
+   * @param {messageViewStyle.id} messageListViewStyleClass
+   * @returns {messageViewStyle | undefined}
    */
   getMessageListViewStyleDefByCssClass: function(messageListViewStyleClass) {
     return _.find(this.ViewStyles, function(viewStyle) {
@@ -216,8 +216,8 @@ var MessageListHeader = Marionette.ItemView.extend({
 
   /**
    * get a view style definition by id
-   * @param {messageViewStyle.id}
-   * @return {messageViewStyle or undefined}
+   * @param {messageViewStyle.id} messageViewStyleClass
+   * @returns {messageViewStyle | undefined}
    */
   getMessageViewStyleDefByCssClass: function(messageViewStyleClass) {
     var that = this;

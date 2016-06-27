@@ -231,7 +231,7 @@ fb_token.prototype = {
     }
     else {
       return true;
-    }    
+    }
   }
 };
 
@@ -240,10 +240,10 @@ window.FB_TOKEN = new fb_token();
 
 /**
  * Encapsulating the state of the user and their facebook account
- * @param  {[type]} r The ready state, true if user has fbAccount && accessToken
- * @param  {[type]} e The error stae, enum{'permissions', 're-login', 'create'}
- * @param  {[type]} t The USER access token that will be used to make API calls
- * @return {[type]}   nill
+ * @param  r: The ready state, true if user has fbAccount && accessToken
+ * @param  e: The error state, enum of 'permissions', 're-login', 'create'
+ * @param  t: The USER access token that will be used to make API calls
+ * @returns   null
  */
 var fbState = function(r, e, t) {
   this.ready = r;
@@ -307,9 +307,9 @@ var fbApi = function(options, success, error) {
 var getAllPaginatedEntities = function(endPoint, options, success) {
   /**
    * Appends the values from set2 into set1
-   * @param  {[Object]} set1 Obj with key of {fb_id: data}
-   * @param  {[Object]} set2 Obj with key of {fb_id: data}
-   * @return {[Object]}      Obj with unique objects of {fb_id: data}
+   * @param  {Object} set1 Obj with key of {fb_id: data}
+   * @param  {Object} set2 Obj with key of {fb_id: data}
+   * @returns {Object}      Obj with unique objects of {fb_id: data}
    */
 
   var getData = function(resp, data) {

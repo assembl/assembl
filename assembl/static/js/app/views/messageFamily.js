@@ -33,8 +33,8 @@ var MessageFamilyView = Marionette.ItemView.extend({
 
   /**
    * @init
-   * @param {MessageModel} obj the model
-   * @param {Array[boolean]} options.last_sibling_chain which of the view's ancestors
+   * @param {MessageModel} obj : the model
+   * @param {boolean[]} options.last_sibling_chain : which of the view's ancestors
    *   are the last child of their respective parents.
    */
   initialize: function(options) {
@@ -136,7 +136,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
   /**
    * The render
    * @param {Number} [level] The hierarchy level
-   * @return {MessageView}
+   * @returns {MessageView}
    */
   onRender: function() {
     if (this.template == "#tmpl-loader") {

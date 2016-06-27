@@ -125,7 +125,7 @@ Socket.prototype.onClose = function(ev) {
 
 /**
  * Processes one item from a data array from the server
- * @param  {Object]} item
+ * @param  {Object} item
  */
 Socket.prototype.processData = function(item) {
   var CollectionManager = require('../common/collectionManager.js'),

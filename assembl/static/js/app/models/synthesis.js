@@ -105,7 +105,7 @@ var SynthesisCollection = Base.Collection.extend({
     },
 
   /** Get the last published synthesis
-   * @return Message.Model or null
+   * @returns Message.Model or null
    */
   getLastPublisedSynthesis: function() {
       var publishedSyntheses = this.getPublishedSyntheses(),

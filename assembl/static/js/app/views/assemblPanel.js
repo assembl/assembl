@@ -40,7 +40,7 @@ var AssemblPanel = Marionette.LayoutView.extend({
   /**
    * Only to instanciate other objects.  You should NEVER hold a reference to this,
    * you should chain method calls.
-   * @return a panelWrapper object
+   * @returns a panelWrapper object
    */
    
   getPanelWrapper: function() {
@@ -49,7 +49,7 @@ var AssemblPanel = Marionette.LayoutView.extend({
 
   /**
    * Is this panel the primary navigation panel for it's group?
-   * @return true or false
+   * @returns true or false
    */
   isPrimaryNavigationPanel: function() {
       var navPanel = this.getContainingGroup().getNavigationPanel();
@@ -61,7 +61,7 @@ var AssemblPanel = Marionette.LayoutView.extend({
   /**
    * Get the current group.  You should NEVER hold a reference to this,
    * you should chain method calls.
-   * @return a groupContent object, or throws an exception.
+   * @returns a groupContent object, or throws an exception.
    */
    
   getContainingGroup: function() {
@@ -75,7 +75,7 @@ var AssemblPanel = Marionette.LayoutView.extend({
 
   /**
    * Get the groupState for this panel.  You CAN hold a reference to this.
-   * @return a groupContent object, or throws an exception.
+   * @returns a groupContent object, or throws an exception.
    */
   getGroupState: function() {
       var state = this.getContainingGroup().model.get('states');

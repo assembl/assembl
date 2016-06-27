@@ -25,48 +25,45 @@ var Backbone = require('backbone'),
 /**
  * @init
  *
- * @param {
- *
- * reply_message_id:  The id of the message model this replies to
+ * @param reply_message_id:  The id of the message model this replies to
  *  (if any)
  *
- * reply_message_model: The model of the message; sometimes not given (ex IdeaInSynthesis)
- * 
- * reply_idea:  The idea object this message comments or
+ * @param reply_message_model: The model of the message; sometimes not given (ex IdeaInSynthesis)
+ *
+ * @param reply_idea:  The idea object this message comments or
  *  replies to (if any)
  *
- * cancel_button_label:  String, the label used for the Cancel button
+ * @param {string} cancel_button_label:  the label used for the Cancel button
  *
- * send_button_label:  String, the label used for the Send button
+ * @param {string} send_button_label:  the label used for the Send button
  *
- * allow_setting_subject:  Boolean, if true, the user is allowed to set
+ * @param {boolean} allow_setting_subject:  if true, the user is allowed to set
  *  his own subject for the message
  *
- * subject_label:  String:  If set, the label of the subject field.
+ * @param {string} subject_label: If set, the label of the subject field.
  *
- * default_subject:  String:  If set, the dfault subject if the user
+ * @param {string} default_subject:  If set, the dfault subject if the user
  *  doesn't change it.  Can be used even if allow_setting_subject is
  *  false.  Is the default value sent to the server.
  *
- * mandatory_subject_missing_msg:  String.  If set, the user must
+ * @param {string} mandatory_subject_missing_msg: If set, the user must
  *  provide a mesasge subject.  If he doesn't, this string is used as
  *  the error message
  *
- * body_help_message:  String:  The text present in the body field to
+ * @param {string} body_help_message: The text present in the body field to
  *  tell the user what to do.  It is NOT used as a default value sent
  *  to the server, the user must replace it.
  *
- * mandatory_body_missing_msg:  String.  Providing a body is always
+ * @param {string} mandatory_body_missing_msg: Providing a body is always
  *  mandatory.  Only sets the error displayed to the user if he doesn't
  *  provide a body
  *
- * messageList: MessageListView that we expect to refresh once the
+ * @param {MessageListView} messageList: MessageListView that we expect to refresh once the
  *  message has been processed
  *
- * send_callback:  Function.  A callback to call once the message has
+ * @param {function} send_callback:  Function.  A callback to call once the message has
  *  been accepted by the server, and the mesasgeList has refreshed.
  *
- *  }
  */
 
 var messageSendView = Marionette.LayoutView.extend({
@@ -472,7 +469,7 @@ var messageSendView = Marionette.LayoutView.extend({
   },
 
   /**
-   * @return true if there was a message to save
+   * @returns true if there was a message to save
    */
   savePartialMessage: function() {
     if(this.isViewRenderedAndNotYetDestroyed()) {

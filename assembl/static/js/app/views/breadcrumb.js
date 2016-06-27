@@ -10,7 +10,7 @@ var Marionette = require('../shims/marionette.js'),
  * Must pass a serializer function in order to correctly show the content
  * If not, the passed model will be displayed
  *
- * @param Function  options.serializerFunc  The serializer function taking the passed model and returning a template string
+ * @param {function} options.serializerFunc  The serializer function taking the passed model and returning a template string
  */
 var BreadcrumbItemView = Marionette.ItemView.extend({
   constructor: function BreadcrumbItemView() {

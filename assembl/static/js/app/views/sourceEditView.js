@@ -31,7 +31,7 @@ module.exports = Marionette.ItemView.extend({
     /**
      * A function to override by sub-class to get the
      * model changed values
-     * @return Object of values for the model to change
+     * @returns Object of values for the model to change
      */
     fetchValues: function(){
         throw new Error("Cannot call fetchValues on an abstract class!");

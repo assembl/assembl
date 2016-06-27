@@ -27,7 +27,7 @@ var IdeaFamilyView = Backbone.View.extend({
 
   /**
    * The template
-   * @type {[type]}
+   * @type {template}
    */
   template: Ctx.loadTemplate('ideaFamily'),
 
@@ -43,7 +43,7 @@ var IdeaFamilyView = Backbone.View.extend({
 
   /**
    * The render
-   * @return {IdeaInSynthesisView}
+   * @returns {IdeaInSynthesisView}
    */
   render: function() {
     var

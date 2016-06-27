@@ -26,7 +26,7 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
   synthesis: null,
   /**
    * The template
-   * @type {[type]}
+   * @type {template}
    */
   template: '#tmpl-loader',
 
@@ -162,8 +162,7 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
 
   /**
    * The render
-   * @param renderParams {}
-   * @return {IdeaInSynthesisView}
+   * @returns {IdeaInSynthesisView}
    */
   onRender: function() {
     /*if (Ctx.debugRender) {

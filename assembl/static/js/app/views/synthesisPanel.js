@@ -156,7 +156,7 @@ var SynthesisPanel = AssemblPanel.extend({
 
   /**
    * The render
-   * @return {SynthesisPanel}
+   * @returns {SynthesisPanel}
    */
   onRender: function() {
       if (Ctx.debugRender) {

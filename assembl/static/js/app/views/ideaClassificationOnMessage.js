@@ -101,7 +101,7 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
 
   /*
     The function used by the template to render itself, given it's model
-    @return Function  The function that will be returned with parameter for model
+    @returns Function  The function that will be returned with parameter for model
    */
   serializerFunc: function(){
     return function(model){

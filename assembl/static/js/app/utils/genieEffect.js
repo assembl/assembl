@@ -8,7 +8,7 @@ var $ = require('jquery'),
  * @param  Number   duration    Duration of animation in milliseconds
  * @param  Number   delayTime   Time delay for promise in milliseconds (optional)
  *                              Defaults to 50% longer than duration
- * @return Promise              Use promise to run a callback
+ * @returns Promise              Use promise to run a callback
  */
 
 var _isNumber = function(obj) { return !isNaN(parseFloat(obj)); };

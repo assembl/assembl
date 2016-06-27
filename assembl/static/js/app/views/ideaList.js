@@ -79,7 +79,7 @@ var IdeaList = AssemblPanel.extend({
 
   /**
    * Is this panel the primary navigation panel for it's group?
-   * @return true or false
+   * @returns true or false
    */
   isPrimaryNavigationPanel: function() {
     //TODO:  This overrides parent class, but will not always be true
@@ -855,7 +855,7 @@ var IdeaList = AssemblPanel.extend({
   },
 
   /**
-   * @param collapse: bool. set to true if you want to collapse all ideas, false otherwise
+   * @param {boolean} collapse: set to true if you want to collapse all ideas, false otherwise
    */
   expandOrCollapseAllIdeas: function(collapse){
     var that = this;

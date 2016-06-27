@@ -121,8 +121,8 @@ var NavigationView = AssemblPanel.extend({
     $(window).off('resize', this.setSideBarHeight);
   },
 
-  /** 
-   * @param origin Analytics context where the event was fired
+  /**
+   * @param origin - Analytics context where the event was fired
    */
   setViewByName: function(itemName, origin) {
     if (origin === undefined) {
@@ -157,7 +157,7 @@ var NavigationView = AssemblPanel.extend({
 
   /**
    * Toggle a navigation accordion item
-   * @param  {jQuery selection of a DOM element} elm
+   * @param  {jQuery} elm
    */
   _toggleMenuByElement: function(elm, options) {
     this.setSideBarHeight();
@@ -182,9 +182,6 @@ var NavigationView = AssemblPanel.extend({
     debouncedFunction();
   },
 
-  /**
-   * @param options: { show_help: boolean }
-   */
   _loadView: function(view, origin) {
       // clear aspects of current state
       switch (this.getContainingGroup().model.get('navigationState')) {

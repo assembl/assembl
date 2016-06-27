@@ -235,7 +235,7 @@ var MessageView = Marionette.LayoutView.extend({
 
   /**
    * how many times the message has been re-rendered
-   * @type {Number}
+   * @type {number}
    */
   reRendered: 0,
 
@@ -243,19 +243,19 @@ var MessageView = Marionette.LayoutView.extend({
 
   /**
    * Show annotations (extracts and gems) in the message
-   * @type {Boolean}
+   * @type {boolean}
    */
   showAnnotations: null,
 
   /**
    * The Marionette view for moderation
-   * @type {Marionette view}
+   * @type {Marionette_view}
    */
   messageModerationOptionsView: null,
 
   /**
    * @init
-   * @param {MessageModel} obj the model
+   * @param {MessageModel} obj: the model
    */
   initialize: function(options) {
     var that = this;
@@ -487,9 +487,9 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   /**
-   * @param htmlOrText Any string, p and br tags are replaced with
+   * @param {string} htmlOrText: p and br tags are replaced with
    * spaces, and all html is stripped
-   * @return string
+   * @returns string
    */
   generateBodyPreview: function(htmlOrText) {
       // The div is just there in case there actually isn't any html
@@ -501,7 +501,7 @@ var MessageView = Marionette.LayoutView.extend({
     },
 
   /**
-   * @return langstring
+   * @returns langstring
    */
   generateSafeBody: function() {
     var body;
@@ -518,7 +518,7 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   /**
-   * @return langstring
+   * @returns langstring
    */
   generateSafeOriginalBody: function() {
     var body = this.model.get('body').originalValue();
@@ -738,7 +738,7 @@ var MessageView = Marionette.LayoutView.extend({
 
   /**
    * The render
-   * @return {MessageView}
+   * @returns {MessageView}
    */
   onRender: function() {
     if (this.template == "#tmpl-loader") {
@@ -1781,7 +1781,7 @@ var MessageView = Marionette.LayoutView.extend({
   /**
    * Return the selected text on the document (DOM Selection, nothing
    * annotator specific)
-   * @return {Selection}
+   * @returns {Selection}
    */
   getSelectedText: function() {
       if (Ctx.debugAnnotator) {
@@ -1898,8 +1898,8 @@ var MessageView = Marionette.LayoutView.extend({
    * [exportToFacebook global function that
    *  uses the facebook javascript sdk to push
    *  to facebook]
-   * @param  {event}
-   * @return {null}
+   * @param event
+   * @returns {null}
    */
   exportToFacebook: function(event) {
       var modal = new messageExport({
@@ -1911,7 +1911,7 @@ var MessageView = Marionette.LayoutView.extend({
 
   /**
    * Method that will close the translation region by using a genie effect
-   * @param  Function  cb  A parameterless callback 
+   * @param  {Function}  cb:  A parameterless callback 
    */
   closeTranslationView: function(cb){
     var $source = this.$(this.ui.translation),
@@ -1941,7 +1941,7 @@ var MessageView = Marionette.LayoutView.extend({
 
   /*
     Utility method to initialize the state of translation for proper view rendering for translations
-    @param Object  preference   The UserLanguagePreference Collection 
+    @param {Object}  preference:   The UserLanguagePreference Collection 
    */
   initiateTranslationState: function(preferences){
     var translationData = preferences.getTranslationData(),

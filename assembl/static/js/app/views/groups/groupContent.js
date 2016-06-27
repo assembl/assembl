@@ -46,7 +46,7 @@ var groupContent = Marionette.CompositeView.extend({
   },
   /**
    * Set the given Idea as the current one to be edited
-   * @param  {Idea} [idea]
+   * @param  {Idea} idea
    */
   setCurrentIdea: function(idea, reason, doScroll) {
     var analytics = Analytics.getInstance();

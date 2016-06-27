@@ -258,7 +258,9 @@ var navBar = Marionette.LayoutView.extend({
     Assembl.slider.show(new DefineGroupModal({groupSpecsP: groupSpecsP}));
   },
 
-  // @param popinType: null, 'first_post', 'first_login_after_auto_subscribe_to_notifications'
+  /**
+    * @param {string|null} popinType: null, 'first_post', 'first_login_after_auto_subscribe_to_notifications'
+    */
   joinDiscussion: function(evt, popinType) {
     var self = this,
         collectionManager = new CollectionManager();

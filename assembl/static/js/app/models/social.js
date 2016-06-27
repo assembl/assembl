@@ -17,8 +17,8 @@ tokenTimeManager.prototype = {
      * ISO 8601 string to a UTC timezone.
      * If string has a timezone, regardless of whether it is UTC
      * or not, it will be returned.
-     * @param  {[String]} e ISO 8601 
-     * @return {[String]}   ISO 8601 with timezone (UTC if possible)
+     * @param  {string} e ISO 8601 
+     * @returns {string}   ISO 8601 with timezone (UTC if possible)
      */ 
     processTimeToUTC: function(e){
         if (/[Z]$|([+-]\d{2}:\d{2})$/.test(e) ) {
@@ -30,8 +30,8 @@ tokenTimeManager.prototype = {
     },
     /**
      * Compares a Moment object to the Python datetime.min time
-     * @param  {[Moment]}  t [Time to compare]
-     * @return {Boolean}   []
+     * @param  {Moment}  t [Time to compare]
+     * @returns {Boolean}   []
      */
     isMinTime: function(t){
         var tmp; 

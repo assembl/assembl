@@ -203,7 +203,7 @@ var LangString = Base.Model.extend({
    * @param  {LangStringEntry.Collection}       available
    * @param  {LanguagePreference.Collection}    langPrefs
    * @param  {Boolean}                          filter_errors   Used to supress errors
-   * @return {LangStringEntry}          
+   * @returns {LangStringEntry}          
    */
   bestOf: function(available, langPrefs, filter_errors) {
     var i, entry, commonLenF, that = this;

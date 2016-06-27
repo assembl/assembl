@@ -159,7 +159,7 @@ var WidgetModel = Base.Model.extend({
    * [Describes whether the widget model is internal to Assembl 
    * (using Marionette)(=false) or Independent (using Angular)(=true);
    * Override in child classes]
-   * @return {Boolean}
+   * @returns {Boolean}
    */
   isIndependentModalType: function(){
     return true;
@@ -689,7 +689,7 @@ var VoteResultModel = Base.Model.extend({
 
   /**
    * @param  {string} category      [The category typename]
-   * @return {Number|null}
+   * @returns {Number|null}
    */
   getTotalVotesForCategory: function(category){
     var sums = this.get('sums');
@@ -742,7 +742,7 @@ var VoteResultCollection = Base.Collection.extend({
   /**
    * Method that associates the idea Model to the appropriate 
    * @param  {Object} objectCollection  Ideas Collection
-   * @return {undefined}
+   * @returns {undefined}
    */
   associateIdeaModelToObject: function(objectCollection){
     //Add checks to ensure that the idea is not removed!
@@ -755,7 +755,7 @@ var VoteResultCollection = Base.Collection.extend({
   /**
    * Associates the Token Specification Category Collection to each result model
    * @param  {Object} categoryCollection  Collection of Token Specification Category Collection
-   * @return {undefined}
+   * @returns {undefined}
    */
   associateCategoryModelToObject: function(categoryCollection){
     //Add checks to ensure that the category collection is removed
@@ -775,7 +775,7 @@ var VoteResultCollection = Base.Collection.extend({
 
   /**
    * @param  {string} category  [The category typename]
-   * @return {Number|null}
+   * @returns {Number|null}
    */
   getTotalVotesForCategory: function(category){
     return this.reduce(function(memo, model, index){
@@ -787,7 +787,7 @@ var VoteResultCollection = Base.Collection.extend({
   /**
    * Method that returns a key:value object that describes
    * the total number of votes per category, keyed by category typename
-   * @return {Object}
+   * @returns {Object}
    */
   getTotalVotesByCategories: function(){
     //First, get the list of categories, which is found in every model (yes, poor design, I know...)
@@ -816,7 +816,7 @@ var VoteResultCollection = Base.Collection.extend({
    *     maxPercent: Number //maximum number of tokens voted, as percent
    *   }
    * ]
-   * @return {Object}
+   * @returns {Object}
    */
   getStatistics: function(){
     //First, get the list of categories, which is found in every model (yes, poor design, I know...)

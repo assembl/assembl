@@ -112,7 +112,7 @@ var AbstractDocumentView = Marionette.ItemView.extend({
   },
 
   /**
-   * @param {boolean} [sendError] [Send a Raven report or not]
+   * @param {boolean} sendError: Send a Raven report or not
    */
   _getName: function(sendError){
     if (this.model.isFileType()){

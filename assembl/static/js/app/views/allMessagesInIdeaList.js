@@ -11,7 +11,7 @@ var AllMessagesInIdeaListView = ideaInIdeaList.IdeaView.extend({
 
   /**
    * The template
-   * @type {[type]}
+   * @type {template}
    */
   template: Ctx.loadTemplate('allMessagesInIdeaList'),
 
