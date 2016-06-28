@@ -73,7 +73,6 @@ oauth2client==2.2.0
 paramiko==1.17.1 # rq.filter: <2
 PasteDeploy==1.5.2
 PdbSublimeTextSupport==0.2
-pinocchio==0.4.2
 polib==1.0.7
 premailer==3.0.0
 py==1.4.31
