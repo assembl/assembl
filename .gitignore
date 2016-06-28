@@ -94,3 +94,5 @@ htmlcov/
 .env.fish
 
 .gtm/
+doc/autodoc
+doc/jsdoc
