@@ -97,7 +97,7 @@ var PostQuery = function() {
      *  will return true if any filter of that type is present.
      * @returns true if present, false otherwise
      */
-    this.isFilterInQuery = function(filterDef, filterDefId) {
+    this.isFilterInQuery = function(filterDef, value) {
       var retval = false;
       var filterDef = new filterDef();
 
