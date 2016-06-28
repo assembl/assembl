@@ -1474,7 +1474,7 @@ def build_doc():
         run('rm -rf doc/autodoc doc/jsdoc')
         venvcmd('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
         venvcmd('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
-        venvcmd('python setup.py build_sphinx')
+        venvcmd('sphinx-build doc assembl/static/techdocs')
 
 
 # Specific environments
