@@ -47,7 +47,7 @@ class FrontendUrls(object):
     """
     The list of frontend routes.
 
-    Important:  This should match with :js:class:`app.router.Router`
+    Important:  This should match with :js:class:`Router`
     Used by :py:func:`assembl.views.backbone.views.home_view`, these routes
     will all give the same view and further routing will happen
     in the frontend."""
