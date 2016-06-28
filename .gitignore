@@ -92,3 +92,5 @@ htmlcov/
 .tox
 
 .env.fish
+
+.gtm/
