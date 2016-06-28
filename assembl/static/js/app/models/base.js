@@ -19,7 +19,7 @@ var Backbone = require('backbone'),
 var BaseModel = Backbone.Model.extend({
 
   /**
-   * Constructor
+   * @constructor
    */
   constructor: function BaseModel() {
     Backbone.Model.apply(this, arguments);
@@ -90,14 +90,15 @@ var BaseModel = Backbone.Model.extend({
     return base.replace(/([^\/])$/, '$1/') + encodeURIComponent(this.getNumericId());
   },
 
-  /*"""
-.. js:attribute:: model.base.BaseModel.idAttribute
-Overwriting the idAttribute
+  /**
+   * Overwriting the idAttribute
+   * @member {uri} app.models.base.BaseModel.idAttribute
    */
   idAttribute: '@id',
 
   /**
    * Alias for `.get('id') || .get('@id') || .cid`
+   * @function app.models.base.BaseModel.getId
    * @returns {string}
    */
   getId: function() {
