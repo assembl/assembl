@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Represents the link between an object (ex: Message, Idea) and a remote (url) or eventually local document attached to it.
  * @module app.models.attachments
  */
 
@@ -13,7 +13,6 @@ var $ = require('jquery'),
     Promise = require('bluebird'),
     Types = require('../utils/types.js'),
     Document = require('../models/documents.js');
-
 
 var attachmentPurposeTypes = {
   /** 
@@ -38,12 +37,12 @@ var attachmentPurposeTypes = {
 };
 
 /**
- * Represents the link between an object (ex: Message, Idea) and a remote (url)
- * or eventually local document attached to it.
+ * Attachement model
  * Frontend model for :py:class:`assembl.models.attachment.Attachment`
  * @class app.models.attachments.AttachmentModel
  * @extends app.models.base.BaseModel
  */
+ 
 var AttachmentModel = Base.Model.extend({
   constructor: function AttachmentModel() {
     Base.Model.apply(this, arguments);
@@ -223,8 +222,12 @@ var AttachmentModel = Base.Model.extend({
 });
 
 /**
+ * Attachements collection
+ * Frontend model for :py:class:`assembl.models.attachment.Attachment`
  * @class app.models.attachments.AttachmentCollection
+ * @extends app.models.base.BaseModel
  */
+ 
 var AttachmentCollection = Base.Collection.extend({
   constructor: function AttachmentCollection() {
     Base.Collection.apply(this, arguments);

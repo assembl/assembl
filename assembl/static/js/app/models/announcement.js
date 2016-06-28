@@ -1,6 +1,7 @@
 'use strict';
+
 /**
- * 
+ * Represents an announcement, a mutable message-like object, with an author and a date
  * @module app.models.announcement
  */
 
@@ -12,12 +13,12 @@ var $ = require('jquery'),
     Types = require('../utils/types.js');
 
 /**
- * Represents an announcement, a mutable message-like object, with an author and
- * a date
+ * Annoucement model
  * Frontend model for :py:class:`assembl.models.announcement.Announcement`
  * @class app.models.announcement.AnnouncementModel
  * @extends app.models.base.BaseModel
  */
+ 
 var AnnouncementModel = Base.Model.extend({
   /**
    * Defaults
@@ -79,8 +80,12 @@ var AnnouncementModel = Base.Model.extend({
 });
 
 /**
+ * Annoucements collection
+ * Frontend model for :py:class:`assembl.models.announcement.Announcement`
  * @class app.models.announcement.AnnouncementCollection
+ * @extends app.models.base.BaseModel
  */
+ 
 var AnnouncementCollection = Base.Collection.extend({
   constructor: function AnnouncementCollection() {
     Base.Collection.apply(this, arguments);

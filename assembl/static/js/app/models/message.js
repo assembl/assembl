@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * A message (whether generated on assembl or imported from a ContentSource)
  * @module app.models.message
  */
 
@@ -16,11 +16,12 @@ var _ = require('underscore'),
     Attachment = require('./attachments.js');
 
 /**
- * A message (whether generated on assembl or imported from a ContentSource)
+ * Message model
  * Frontend model for :py:class:`assembl.models.post.Post`
  * @class app.models.message.MessageModel
  * @extends app.models.base.BaseModel
  */
+
 var MessageModel = Base.Model.extend({
   constructor: function MessageModel() {
     Base.Model.apply(this, arguments);
@@ -335,6 +336,13 @@ var MessageModel = Base.Model.extend({
   }
 });
 
+/**
+ * Messages collection
+ * Frontend model for :py:class:`assembl.models.post.Post`
+ * @class app.models.message.MessageCollection
+ * @extends app.models.base.BaseModel
+ */
+ 
 var MessageCollection = Base.Collection.extend({
   constructor: function MessageCollection() {
     Base.Collection.apply(this, arguments);

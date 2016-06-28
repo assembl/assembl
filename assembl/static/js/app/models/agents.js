@@ -1,6 +1,7 @@
 'use strict';
+
 /**
- * 
+ * User profil and permissions (user or email author)
  * @module app.models.agents
  */
 
@@ -16,11 +17,12 @@ var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
 var UNKNOWN_USER_ID = Roles.EVERYONE;
 
 /**
- * An agent (user or email author)
+ * Agent model
  * Frontend model for :py:class:`assembl.models.auth.AgentProfile`
  * @class app.models.agents.AgentModel
  * @extends app.models.base.BaseModel
  */
+ 
 var AgentModel = Base.Model.extend({
   /**
    * @type {String}
@@ -184,8 +186,12 @@ var AgentModel = Base.Model.extend({
 });
 
 /**
- * @class app.models.agents.UserCollection
+ * Agents collection
+ * Frontend model for :py:class:`assembl.models.auth.AgentProfile`
+ * @class app.models.agents.AgentCollection
+ * @extends app.models.base.BaseModel
  */
+ 
 var AgentCollection = Base.Collection.extend({
   constructor: function AgentCollection() {
     Base.Collection.apply(this, arguments);

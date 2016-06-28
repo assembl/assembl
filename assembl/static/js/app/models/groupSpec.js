@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Represents an independent group of panels in the interface. When added, the matching views (groupContainerView) will be instanciated
  * @module app.models.groupSpec
  */
 
@@ -10,11 +10,11 @@ var Base = require('./base.js'),
     groupState = require('./groupState.js');
 
 /**
- * Represents an independent group of panels in the interface.  When
- * added, the matching views (groupContainerView) will be instanciated
+ * Group specifications model
  * @class app.models.groupSpec.GroupSpecModel
  * @extends app.models.base.BaseModel
  */
+ 
 var GroupSpecModel = Base.Model.extend({
   constructor: function GroupSpecModel() {
     Base.Model.apply(this, arguments);
@@ -165,6 +165,12 @@ var GroupSpecModel = Base.Model.extend({
   }
 });
 
+/**
+ * Group specifications collection
+ * @class app.models.groupSpec.GroupSpecs
+ * @extends app.models.base.BaseModel
+ */
+ 
 var GroupSpecs = Base.Collection.extend({
   constructor: function GroupSpecs() {
     Base.Collection.apply(this, arguments);

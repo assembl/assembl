@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Represents a discussion's messages from an external source.
  * @module app.models.discussionSource
  */
 
@@ -9,11 +9,12 @@ var Base = require('./base.js'),
     $ = require('jquery');
 
 /**
- * Represents a discussion's message source
+ * Source model
  * Frontend model for :py:class:`assembl.models.generic.ContentSource`
  * @class app.models.discussionSource.sourceModel
  * @extends app.models.base.BaseModel
  */
+ 
 var sourceModel = Base.Model.extend({
   constructor: function sourceModel() {
     Base.Model.apply(this, arguments);
@@ -49,6 +50,13 @@ var sourceModel = Base.Model.extend({
 
 });
 
+/**
+ * Sources collection
+ * Frontend model for :py:class:`assembl.models.generic.ContentSource`
+ * @class app.models.discussionSource.sourceCollection
+ * @extends app.models.base.BaseModel
+ */
+ 
 var sourceCollection = Base.Collection.extend({
   constructor: function sourceCollection() {
     Base.Collection.apply(this, arguments);

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Useful global variables and methods.
  * @module app.common.context
  */
 
@@ -17,6 +17,11 @@ var $ = require('jquery'),
 require('linkifyjs');
 require('linkifyjs/jquery')($);
 
+/**
+ * 
+ * @class app.common.context.Context
+ */
+ 
 var Context = function() {
 
   this.DISCUSSION_SLUG = $('#discussion-slug').val();

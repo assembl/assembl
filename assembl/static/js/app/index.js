@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * App instanciation.
  * @module app.index
  */
 

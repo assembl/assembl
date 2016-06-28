@@ -1,6 +1,6 @@
 'use strict';
 /**
- * The application router
+ * The application router.
  * @module app.router
  */
 
@@ -13,7 +13,6 @@ var Marionette = require('./shims/marionette.js'),
 /**
  * The Router will forward existing URLs to various handlers according to those routes
  * Keep in sync with :py:class:`assembl.lib.frontend_urls.FrontendUrls`
- *
  * @class app.router.Router
  * @extends Marionette.AppRouter
  */

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * App initialization.
  * @module app.app
  */
 

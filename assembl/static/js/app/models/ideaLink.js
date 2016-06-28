@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * The link between two ideas
  * @module app.models.ideaLink
  */
 
@@ -9,11 +9,12 @@ var _ = require('underscore'),
     Ctx = require('../common/context.js');
 
 /**
- * The link between two ideas
+ * Idea link model
  * Frontend model for :py:class:`assembl.models.idea.IdeaLink`
  * @class app.models.ideaLink.IdeaLinkModel
  * @extends app.models.base.BaseModel
  */
+
 var IdeaLinkModel = Base.Model.extend({
 
   /**
@@ -59,8 +60,12 @@ var IdeaLinkModel = Base.Model.extend({
 });
 
 /**
+ * Idea link collection
+ * Frontend model for :py:class:`assembl.models.idea.IdeaLink`
  * @class app.models.ideaLink.IdeaLinkCollection
+ * @extends app.models.base.BaseModel
  */
+ 
 var IdeaLinkCollection = Base.Collection.extend({
 
   /**

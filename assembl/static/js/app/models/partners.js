@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * A partner organization, to be displayed in front page
  * @module app.models.partners
  */
 
@@ -11,7 +11,7 @@ var $ = require('jquery'),
 
 
 /**
- * A partner organization, to be displayed in front page
+ * Partner model
  * Frontend model for :py:class:`assembl.models.auth.PartnerOrganization`
  * @class app.models.partners.PartnerOrganizationModel
  * @extends app.models.base.BaseModel

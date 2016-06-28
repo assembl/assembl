@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * A singleton to manage data backend access with Ajax requests and Bluebird promises. Responsible for the data synchronization listening to a websocket and updating collections.
  * @module app.common.collectionManager
  */
 
@@ -35,7 +35,7 @@ var Marionette = require('../shims/marionette.js'),
     IdeaContentLink = require('../models/ideaContentLink.js');
 
 /**
- *  A singleton to manage lazy loading of server collections
+ * A singleton to manage lazy loading of server collections
  * @class app.common.collectionManager.CollectionManager
  */
 var CollectionManager = Marionette.Object.extend({

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Represent an idea
  * @module app.models.idea
  */
 
@@ -13,11 +13,12 @@ var _ = require('underscore'),
     Permissions = require('../utils/permissions.js');
 
 /**
- * An idea.
+ * Idea model
  * Frontend model for :py:class:`assembl.models.idea.Idea`
  * @class app.models.idea.IdeaModel
  * @extends app.models.base.BaseModel
  */
+ 
 var IdeaModel = Base.Model.extend({
   constructor: function IdeaModel() {
     Base.Model.apply(this, arguments);
@@ -450,8 +451,12 @@ var IdeaModel = Base.Model.extend({
 });
 
 /**
+ * Ideas collection
+ * Frontend model for :py:class:`assembl.models.idea.Idea`
  * @class app.models.idea.IdeaCollection
+ * @extends app.models.base.BaseModel
  */
+ 
 var IdeaCollection = Base.Collection.extend({
   constructor: function IdeaCollection() {
     Base.Collection.apply(this, arguments);

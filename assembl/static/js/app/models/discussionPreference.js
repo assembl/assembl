@@ -1,16 +1,21 @@
 "use strict";
 /**
- * 
+ * Discussion preferences
  * @module app.models.discussionPreference
  */
 
 var Backbone = require("backbone"),
     Ctx = require("../common/context.js");
 
+/**
+ * TO DO DOCUMENT
+ * @class app.models.discussionPreference.DiscussionIndividualPreferenceModel
+ */
+ 
+var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
 // We do not use Base.Model.extend(), because we want to keep Backbone's default behaviour with model urls
 // Generic case: preference value can be any json, not necessarily a dict.
 // So put it in "value" attribute of this model.
-var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
   constructor: function DiscussionIndividualPreferenceModel() {
     Backbone.Model.apply(this, arguments);
   },
@@ -43,9 +48,13 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
   }
 });
 
+/**
+ * TO DO DOCUMENT
+ * @class app.models.discussionPreference.DiscussionPreferenceDictionaryModel
+ */
 
-// Subcase: pref is a dictionary, so we can use normal backbone
 var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
+// Subcase: pref is a dictionary, so we can use normal backbone
   constructor: function DiscussionPreferenceDictionaryModel() {
     Backbone.Model.apply(this, arguments);
   },
@@ -54,6 +63,10 @@ var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
   },
 });
 
+/**
+ * TO DO DOCUMENT
+ * @class app.models.discussionPreference.DiscussionPreferenceSubCollection
+ */
 
 var DiscussionPreferenceSubCollection = Backbone.Collection.extend({
   constructor: function DiscussionPreferenceSubCollection() {
@@ -62,7 +75,11 @@ var DiscussionPreferenceSubCollection = Backbone.Collection.extend({
   model: DiscussionIndividualPreferenceModel
 });
 
-
+/**
+ * TO DO DOCUMENT
+ * @class app.models.discussionPreference.DiscussionPreferenceCollection
+ */
+ 
 var DiscussionPreferenceCollection = Backbone.Collection.extend({
   constructor: function DiscussionPreferenceCollection() {
     Backbone.Collection.apply(this, arguments);
@@ -86,10 +103,14 @@ var DiscussionPreferenceCollection = Backbone.Collection.extend({
   },
 });
 
-
-// TODO: Subset of editable? Assume viewable already filtered by backend.
+/**
+ * TO DO DOCUMENT
+ * @class app.models.discussionPreference.UserPreferenceRawCollection
+ * @extends app.models.discussionPreference.DiscussionPreferenceCollection
+ */
 
 var UserPreferenceRawCollection = DiscussionPreferenceCollection.extend({
+// TODO: Subset of editable? Assume viewable already filtered by backend.
   constructor: function UserPreferenceRawCollection() {
     DiscussionPreferenceCollection.apply(this, arguments);
   },

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Represents a discussion
  * @module app.models.discussion
  */
 
@@ -12,11 +12,12 @@ var Base = require('./base.js'),
     Roles = require('../utils/roles.js');
 
 /**
- * Represents a discussion
+ * Discussion model
  * Frontend model for :py:class:`assembl.models.discussion.Discussion`
  * @class app.models.discussion.discussionModel
  * @extends app.models.base.BaseModel
  */
+ 
 var discussionModel = Base.Model.extend({
   url: Ctx.getApiV2DiscussionUrl(),
   defaults: {
@@ -109,6 +110,13 @@ var discussionModel = Base.Model.extend({
 
 });
 
+/**
+ * Discussions collection
+ * Frontend model for :py:class:`assembl.models.discussion.Discussion`
+ * @class app.models.discussion.discussionCollection
+ * @extends app.models.base.BaseModel
+ */
+ 
 var discussionCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl(),
   model: discussionModel,

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Manage views instanciation.
  * @module app.routeManager
  */
 
@@ -41,6 +41,11 @@ var QUERY_STRINGS = {
   'source': ['notification', 'share']
 };
 
+/**
+ * 
+ * @class app.routeManager.TrackAnalyticsWithQueryString
+ */
+ 
 var trackAnalyticsWithQueryString = function(qs, context){
   
   //console.log('tracking with query string ' + qs + ' using context ' + context);
@@ -127,6 +132,11 @@ var trackAnalyticsWithQueryString = function(qs, context){
 
 };
 
+/**
+ * 
+ * @class app.routeManager.RouteManager
+ */
+ 
 var routeManager = Marionette.Object.extend({
 
   initialize: function() {

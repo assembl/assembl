@@ -1,5 +1,5 @@
 /**
- * 
+ * List of the unit tests executed.
  * @module app.tests
  */
 require('./tests/routes.spec.js');

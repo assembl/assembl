@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * A user's subscription to being notified of certain situations
  * @module app.models.notificationSubscription
  */
 
@@ -8,11 +8,12 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
 /**
- * A user's subscription to being notified of certain situations
+ * Notification subscription model
  * Frontend model for :py:class:`assembl.models.notification.NotificationSubscription`
  * @class app.models.notificationSubscription.notificationsSubscriptionModel
  * @extends app.models.base.BaseModel
  */
+ 
 var notificationsSubscriptionModel = Base.Model.extend({
   constructor: function notificationsSubscriptionModel() {
     Base.Model.apply(this, arguments);
@@ -40,6 +41,13 @@ var notificationsSubscriptionModel = Base.Model.extend({
   }
 });
 
+/**
+ * Notifications subscription collection
+ * Frontend model for :py:class:`assembl.models.notification.NotificationSubscription`
+ * @class app.models.notificationSubscription.notificationsSubscriptionCollection
+ * @extends app.models.base.BaseModel
+ */
+ 
 var notificationsSubscriptionCollection = Base.Collection.extend({
   constructor: function notificationsSubscriptionCollection() {
     Base.Collection.apply(this, arguments);

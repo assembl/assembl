@@ -1,6 +1,7 @@
 'use strict';
+
 /**
- * 
+ * An action done by a user.
  * @module app.models.actions
  */
 
@@ -8,11 +9,12 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
 /**
- * An action done by a user.
+ * Action model
  * Frontend model for :py:class:`assembl.models.action.Action`
  * @class app.models.actions.actionModel
  * @extends app.models.base.BaseModel
  */
+ 
 var actionModel = Base.Model.extend({
   urlRoot: Ctx.getApiV2DiscussionUrl("/all_users/current/actions"),
 
@@ -38,6 +40,13 @@ var actionModel = Base.Model.extend({
 
 });
 
+/**
+ * Actions collection
+ * Frontend model for :py:class:`assembl.models.action.Action`
+ * @class app.models.actions.actionCollection
+ * @extends app.models.base.BaseModel
+ */
+ 
 var actionCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl("/all_users/current/actions"),
   model: actionModel,

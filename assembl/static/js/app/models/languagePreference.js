@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * A user's preference language
  * @module app.models.languagePreference
  */
 

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Represents a file or document (a remote url or a blob)
  * @module app.models.documents
  */
 
@@ -11,7 +11,7 @@ var $ = require('jquery'),
     Types = require('../utils/types.js');
 
 /**
- * Represents a file or document (a remote url or a blob)
+ * Document model
  * Frontend model for :py:class:`assembl.models.attachment.Document`
  * @class app.models.documents.DocumentModel
  * @extends app.models.base.BaseModel
@@ -48,6 +48,12 @@ var DocumentModel = Base.Model.extend({
   }
 });
 
+/**
+ * File model
+ * Frontend model for :py:class:`assembl.models.attachment.Document`
+ * @class app.models.documents.FileModel
+ * @extends app.models.documents.DocumentModel
+ */
 
 var FileModel = DocumentModel.extend({
   constructor: function FileDocumentModel() {
@@ -80,8 +86,12 @@ var FileModel = DocumentModel.extend({
 
 
 /**
+ * Documents collection
+ * Frontend model for :py:class:`assembl.models.attachment.Document`
  * @class app.models.documents.DocumentCollection
+ * @extends app.models.base.BaseModel
  */
+ 
 var DocumentCollection = Base.Collection.extend({
   constructor: function DocumentCollection() {
     Base.Collection.apply(this, arguments);

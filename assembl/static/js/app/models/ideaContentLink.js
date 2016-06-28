@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * The link between an idea and a message.
  * @module app.models.ideaContentLink
  */
 
@@ -35,13 +35,13 @@ IdeaContentLinkTypeRank.prototype = {
     }
 };
 
-
 /**
- * The link between an idea and a message.
+ * idea link model
  * Frontend model for :py:class:`assembl.models.idea_content_link.IdeaContentLink`
  * @class app.models.ideaContentLink.IdeaContentLinkModel
  * @extends app.models.base.BaseModel
  */
+
 var IdeaContentLinkModel = Base.Model.extend({
   constructor: function IdeaContentLinkModel() {
     Base.Model.apply(this, arguments);
@@ -141,13 +141,20 @@ var IdeaContentLinkModel = Base.Model.extend({
     }
 });
 
-
+/**
+ * Idea link collection
+ * Frontend model for :py:class:`assembl.models.idea_content_link.IdeaContentLink`
+ * @class app.models.ideaContentLink.Collection
+ * @extends app.models.base.BaseModel
+ */
+ 
+var Collection = Base.Collection.extend({
 /*
     This Collection is NOT created from an API call, like most other
     models, collections. It will be created from an array that
     will be passed from the message model.
  */
-var Collection = Base.Collection.extend({
+ 
   constructor: function IdeaContentLinkCollection() {
     Base.Collection.apply(this, arguments);
   },

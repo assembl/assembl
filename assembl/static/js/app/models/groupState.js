@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Represents the state of a panel group (current idea, selected navigation, minimised states, etc.)
  * @module app.models.groupState
  */
 
@@ -8,11 +8,11 @@ var Base = require('./base.js'),
     Idea = require('./idea.js');
 
 /**
- * Represents the state of a panel group (current idea, selected 
- * navigation, minimised states, etc.)
+ * Group state model
  * @class app.models.groupState.GroupStateModel
  * @extends app.models.base.BaseModel
  */
+
 var GroupStateModel = Base.Model.extend({
   constructor: function GroupStateModel() {
     Base.Model.apply(this, arguments);
@@ -46,6 +46,12 @@ var GroupStateModel = Base.Model.extend({
   }
 });
 
+/**
+ * Group states collection
+ * @class app.models.groupState.GroupStates
+ * @extends app.models.base.BaseModel
+ */
+ 
 var GroupStates = Base.Collection.extend({
   constructor: function GroupStates() {
     Base.Collection.apply(this, arguments);
