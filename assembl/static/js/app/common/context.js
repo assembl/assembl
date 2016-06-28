@@ -1456,7 +1456,7 @@ Context.prototype = {
     //Moment.j only has specific locales, for example, it has 
     //fr-ca, but no fr-fr
     //If you add new language support, you need to add it here.  Supported 
-    //locales for moment.js can be found in /node_modules/moment/locale/
+    //locales for moment.js can be found in /assembl/static/js/node_modules/moment/locale/
     switch (assembl_locale){
       case 'en_CA':
         require('moment/locale/en-ca.js');

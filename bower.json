@@ -23,7 +23,6 @@
     "backbone-modal": "~1.1.5",
     "backbone-model-file-upload": "~1.0.0",
     "bootstrap-growl": "~1.1.0",
-    "ckeditor": "~4.5.8",
     "hopscotch": "~0.2.4",
     "ink": "~1.0.5",
     "jquery": "~2.1.4",

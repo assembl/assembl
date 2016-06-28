@@ -358,11 +358,11 @@ def compile_stylesheets():
     Generate *.css files from *.scss
     """
     with cd(env.projectpath):
-        with cd('assembl'):
-            venvcmd('../node_modules/.bin/gulp sass', chdir=False)
-        venvcmd('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
-        venvcmd('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss', shell=True)
-        venvcmd('./node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/session/css --source-map assembl/static/widget/session/css assembl/static/widget/session/scss', shell=True)
+        with cd('assembl/static/js'):
+            venvcmd('./node_modules/.bin/gulp sass', chdir=False)
+        venvcmd('./assembl/static/js/node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss', shell=True)
+        venvcmd('./assembl/static/js/node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss', shell=True)
+        venvcmd('./assembl/static/js/node_modules/.bin/node-sass --source-map -r -o assembl/static/widget/session/css --source-map assembl/static/widget/session/css assembl/static/widget/session/scss', shell=True)
 
 
 @task
@@ -371,17 +371,17 @@ def compile_javascript():
     Generates and minifies javascript
     """
     with cd(env.projectpath):
-        with cd('assembl'):
-            venvcmd('../node_modules/.bin/gulp libs', chdir=False)
-            venvcmd('../node_modules/.bin/gulp browserify:prod', chdir=False)
-            venvcmd('../node_modules/.bin/gulp build:test', chdir=False)
+        with cd('assembl/static/js'):
+            venvcmd('./node_modules/.bin/gulp libs', chdir=False)
+            venvcmd('./node_modules/.bin/gulp browserify:prod', chdir=False)
+            venvcmd('./node_modules/.bin/gulp build:test', chdir=False)
 
 
 @task
 def compile_javascript_tests():
     with cd(env.projectpath):
-        with cd('assembl'):
-            venvcmd('../node_modules/.bin/gulp build:test', chdir=False)
+        with cd('assembl/static/js'):
+            venvcmd('./node_modules/.bin/gulp build:test', chdir=False)
 
 
 def tests():
@@ -518,8 +518,9 @@ def update_node(force_reinstall=False):
         print(cyan('Upgrading node'))
         #Because otherwise node may be busy
         supervisor_process_stop('dev:gulp')
-        venvcmd("nodeenv --node=6.1.0 --npm=3.8.6 --python-virtualenv")
-        venvcmd("npm install reinstall -g")
+        venvcmd("nodeenv --node=6.1.0 --npm=3.8.6 --python-virtualenv assembl/static/js")
+        with cd(get_node_base_path()):
+            venvcmd("npm install reinstall -g", chdir=False)
     else:
         print(green('Node version ok'))
 
@@ -638,21 +639,30 @@ def install_basetools():
 
 
 def install_bower():
-    with cd(env.projectpath):
-        venvcmd('npm install bower po2json requirejs')
+    with cd(get_node_base_path()):
+        venvcmd('npm install bower po2json requirejs', chdir=False)
 
 
 def update_bower():
-    with cd(env.projectpath):
-        venvcmd('npm update bower po2json')
+    with cd(get_node_base_path()):
+        venvcmd('npm update bower po2json', chdir=False)
 
+def get_node_base_path():
+    return normpath(join(
+            env.projectpath, 'assembl', 'static', 'js'))
+
+def get_node_modules_path():
+    return normpath(join(
+            get_node_base_path(), 'node_modules'))
+
+def get_node_bin_path():
+    return normpath(join(
+            get_node_modules_path(), '.bin'))
 
 def bower_cmd(cmd, relative_path='.'):
     with cd(env.projectpath):
-        bower_cmd = normpath(join(
-            env.projectpath, 'node_modules', '.bin', 'bower'))
-        po2json_cmd = normpath(join(
-            env.projectpath, 'node_modules', '.bin', 'po2json'))
+        bower_cmd = normpath(join(get_node_bin_path(), 'bower'))
+        po2json_cmd = normpath(join(get_node_bin_path(), 'po2json'))
         if not exists(bower_cmd) or not exists(po2json_cmd):
             print "Bower not present, installing..."
             execute(install_bower)
@@ -682,12 +692,12 @@ def update_bower_requirements(force_reinstall=False):
 @task
 def update_npm_requirements(force_reinstall=False):
     """ Normally not called manually """
-    with cd(env.projectpath):
+    with cd(get_node_base_path()):
         if force_reinstall:
-            venvcmd('npm prune')
-            venvcmd('reinstall')
+            venvcmd('npm prune', chdir=False)
+            venvcmd('reinstall', chdir=False)
         else:
-            venvcmd('npm update')
+            venvcmd('npm update', chdir=False)
 
 def _install_builddeps():
     print(cyan('Installing compilers and required libraries'))
@@ -1462,7 +1472,7 @@ def build_doc():
     "Build the Sphinx documentation"
     with cd(env.projectpath):
         run('rm -rf doc/autodoc doc/jsdoc')
-        venvcmd('./node_modules/.bin/jsdoc -t ./node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
+        venvcmd('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
         venvcmd('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
         venvcmd('python setup.py build_sphinx')
 

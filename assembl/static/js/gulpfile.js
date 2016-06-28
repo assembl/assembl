@@ -18,8 +18,8 @@ var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 
 var path = {
-        js: 'static/js',
-        css: 'static/css'
+        js: '.',
+        css: '../css'
     }
 
 var b = watchify(browserify({
@@ -171,7 +171,7 @@ gulp.task('sass', ['clean:generated_css'], function() {
 });
 
 function clean_generated_css (cb) {
-  return del([path.css+'/themes/**/*.css', path.css+'/themes/**/*.css.map'], cb);
+  return del([path.css+'/themes/**/*.css', path.css+'/themes/**/*.css.map'], {force: true}, cb);
 }
 gulp.task('clean:generated_css', clean_generated_css);
 

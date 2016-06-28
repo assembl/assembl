@@ -17,6 +17,7 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 .directory
 .idea
 .log
+.cache
 
 # buildout
 /.installed.cfg
@@ -58,7 +59,7 @@ assembl/static/css/*.css
 /.anaconda
 
 # node
-node_modules/
+/assembl/static/js/node_modules/
 /assembl/static/js/bower/
 /assembl/static/widget/*/bower_components/
 /assembl/static/widget/*/assembl/static/js/bower

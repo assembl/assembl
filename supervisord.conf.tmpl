@@ -126,8 +126,8 @@ autostart = %(autostart_pserve)s
 autorestart = false
 
 [program:gulp]
-directory = %(here)s/assembl
-command = %(VIRTUAL_ENV)s/bin/node %(here)s/node_modules/.bin/gulp
+directory = %(here)s/assembl/static/js
+command = %(VIRTUAL_ENV)s/bin/node %(here)s/assembl/static/js/node_modules/.bin/gulp
 autostart = %(autostart_gulp)s
 autorestart = true
 

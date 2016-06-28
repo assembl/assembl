@@ -2,7 +2,7 @@
   "name": "Assembl",
   "version": "0.0.9",
   "description": "I4P online debate and synthesis platform",
-  "main": "./assembl/static/js/app/index.js",
+  "main": "./app/index.js",
   "author": "Gaby Hourlier <gaby.hourlier@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -24,6 +24,7 @@
   "dependencies": {
     "bluebird": "~2.10.2",
     "classlist-polyfill": "~1.0.3",
+    "ckeditor": "4.5.9",
     "d3": "~3.5.5",
     "debug": "~2.2.0",
     "jed": "~1.1.0",

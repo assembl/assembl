@@ -1,9 +1,9 @@
 Backups
 =======
 
-Scripts are included to user Borg Backup (en encrypting, deduplicating archiver)
+Scripts are included to use Borg Backup (en encrypting, deduplicating archiver)
 
-These instructions are for Ubuntu, but Borg is cross-platform
+These instructions are for Ubuntu Linux, but Borg is cross-platform
 
 Installing Borg Backup
 ----------------------

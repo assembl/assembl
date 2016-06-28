@@ -25,8 +25,8 @@ def is_js(msg):
         if filename in extra_files:
             return True
 
-po2json_script = join(dirname(dirname(dirname(__file__))),
-                      'node_modules', '.bin', 'po2json')
+po2json_script = join(dirname(dirname(__file__)),
+                      'static','js','node_modules', '.bin', 'po2json')
 
 
 def po2json(fname):
