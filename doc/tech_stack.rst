@@ -98,100 +98,79 @@ premailer_
   flatten the CSS of HTML, for sending as email in notifications.
 
 psycopg2_
-  TODO
+  Connect to Postgres_ database
 
 pygraphviz_
-  TODO
+  Create graph images with Graphviz_. Used in :py:func:`assembl.views.api2.discussion.as_mind_map`.
 
 pyIsEmail_
-  TODO
+  Validate whether an input value is a valid email.
 
 PyJWT_
-  TODO
+  JSON web tokens, allows to use Annotator_ from a bookmarklet.
 
-pyramid_
-  TODO
+Pyramid_
+  Our Web framework.
 
 pyramid_dogpile_cache_
-  TODO
+  Use dogpile_ from Pyramid_
 
 pyramid_jinja2_
-  TODO
+  Use Jinja2_ from Pyramid_
 
 pyramid_mailer_
-  TODO
-
-pyramid_mako_
-  TODO
+  Send emails from within a Pyramid transaction. The email will only be sent if the transaction succeeds. Used for invitations and password resets in :py:mod:`assembl.views.auth.views` until we refactor this with notifications.
 
 pyramid_beaker_
-  TODO
+  Use Beaker_ sessions from Pyramid_
 
 PyStemmer_
-  TODO
+  The snowball stemmer will convert words to their stem, erasing flexions. Used in :py:mod:`assembl.nlp`
 
 python_social_auth_
-  TODO
+  Allows us to use social network identities for single-sign-on
 
 pytz_
-  TODO
+  Convert local time to UTC and back.
 
 pyzmq_
-  TODO
+  Use the ZeroMQ_ messaging bus from python. Used for the :py:mod:`assembl.tasks.changes_router`.
 
 raven_py_
-  TODO
+  Send error reports to Sentry_.
 
 rdflib_
-  TODO
+  Library to handle RDF data, used for `Catalyst interoperability`_.
 
 rdflib_jsonld_
-  TODO
+  Formats RDF data as `JSON-LD`_.
 
 requests_
-  TODO
+  Obtain data from a URL
 
 scikit_learn_
-  TODO
-
-setuptools_
-  TODO
+  Machine learning algorithms, used in :py:mod:`assembl.nlp.cluster`
 
 simplejson_
-  TODO
+  Parse JSON data as Python objects and vice-versa
 
 six_
-  TODO
-
-snowballstemmer_
-  TODO
+  Abstract some of the differences between Python2 and Python3
 
 sockjs_tornado_
-  TODO
+  Serve a websocket connection using Tornado_. Used by the :py:mod:`assembl.tasks.changes_router`.
 
 SQLAlchemy_
-  TODO
-
-supervisor_
-  TODO
+  The Object-Relational Mapper; allows us to use Python classes backed by database storage.
 
 tornado_
-  TODO
+  Another Web server, used by the :py:mod:`assembl.tasks.changes_router`.
 
 transaction_
-  TODO
-
-waitress_
-  TODO
-
-WebOb_
-  TODO
-
-Werkzeug_
-  TODO
+  An abstraction for atomic transactions, most Pyramid web requests are wrapped in a transaction.
 
 zope_interface_
-  TODO
+  Allows to define interfaces (aka protocols, i.e. purely abstract classes), and retrieve a concrete class that fulfills this protocol by configuration. Used in the :py:mod:`assembl.lib.model_watcher`.
 
 Testing
 ^^^^^^^
@@ -247,6 +226,9 @@ flower_
 
 PdbSublimeTextSupport_
   TODO
+
+waitress_
+  A simple WSGI_ web server for development use. (The pyramid ``pserve`` command uses this.)
 
 
 Asynchronicity in the backend
@@ -533,14 +515,14 @@ Translation
 
 Assembl uses a gettext style translation pipeline.  It goes through the pyramid 
 machinery to extract the stransatable strings, including the strings from the 
-frontend in fab env_dev make_messages
+frontend in ``fab env_dev make_messages``
 
 Python gettext https://docs.python.org/2/library/gettext.html , 
 
-This is setup in setup.cfg and message-extraction.ini
+This is setup in ``setup.cfg`` and ``message-extraction.ini``
 
 The po files are subsequently converted to JSON usable from Jed_ in the 
-frontend.  This happens in po2json.py called by fab env_dev compile_messages
+frontend.  This happens in ``po2json.py`` called by ``fab env_dev compile_messages``
 
 See :doc:`localization`
 
@@ -609,6 +591,7 @@ We have used multiple processes rather than threads.
 .. _Bower: https://bower.io/
 .. _Caravan: http://caravan.coop/en/
 .. _Catalyst: http://catalyst-fp7.eu/
+.. _`Catalyst interoperability`: http://projects.sigma-orionis.com/catalyst/wp-content/uploads/2014/03/D3.1-Software-Architecture-and-Cross-Platform-Interoperability-Specification.pdf
 .. _Celery: http://www.celeryproject.org/
 .. _CKEditor: http://ckeditor.com/
 .. _colander: http://docs.pylonsproject.org/projects/colander/en/latest/
@@ -623,6 +606,7 @@ We have used multiple processes rather than threads.
 .. _flaky: https://github.com/box/flaky
 .. _gensim: http://pythonhosted.org/gensim/
 .. _google_api_python_client: http://github.com/google/google-api-python-client/
+.. _Graphviz: http://www.graphviz.org/
 .. _Gulp: http://gulpjs.com/
 .. _Hopscotch: http://linkedin.github.io/hopscotch/
 .. _imaplib2: http://github.com/bcoe/imaplib2
@@ -658,8 +642,7 @@ We have used multiple processes rather than threads.
 .. _PyJWT: http://github.com/jpadilla/pyjwt
 .. _PyODBC: https://github.com/maparent/pyodbc
 .. _PyODBC: https://github.com/maparent/pyodbc
-.. _Pyramid: http://www.pylonsproject.org/
-.. _pyramid: https://trypyramid.com/
+.. _Pyramid: https://trypyramid.com/
 .. _pyramid_beaker: http://docs.pylonsproject.org/projects/pyramid_beaker/en/latest/
 .. _pyramid_debugtoolbar: http://docs.pylonsproject.org/projects/pyramid-debugtoolbar/en/latest/
 .. _pyramid_debugtoolbar_ajax: https://github.com/jvanasco/pyramid_debugtoolbar_ajax
@@ -686,7 +669,6 @@ We have used multiple processes rather than threads.
 .. _Setuptools: http://pythonhosted.org/setuptools/
 .. _simplejson: http://github.com/simplejson/simplejson
 .. _six: https://pythonhosted.org/six/
-.. _snowballstemmer: https://github.com/shibukawa/snowball_py
 .. _SockJS: https://github.com/sockjs/sockjs-client
 .. _sockjs_client: https://github.com/sockjs/sockjs-client
 .. _sockjs_tornado: https://github.com/ImaginationForPeople/sockjs-tornado/
@@ -706,5 +688,6 @@ We have used multiple processes rather than threads.
 .. _WebOb: http://webob.readthedocs.org/
 .. _WebTest: https://webtest.readthedocs.org/en/latest/
 .. _Werkzeug: http://werkzeug.pocoo.org/
+.. _WSGI: https://www.python.org/dev/peps/pep-0333/
 .. _ZeroMQ: http://zeromq.org/
 .. _zope_interface: http://docs.zope.org/zope.interface/

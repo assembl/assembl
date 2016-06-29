@@ -653,6 +653,7 @@ pygraphviz_formats = {
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_READ)
 def as_mind_map(request):
+    """Provide a mind-map like representation of the table of ideas"""
     for mimetype in request.GET.getall('mimetype'):
         mimetype = mimetype.encode('utf-8')
         if mimetype in pygraphviz_formats:
