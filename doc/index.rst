@@ -19,6 +19,7 @@ Contents:
    developper_tasks
    documenting
    localization
+   testing
 
    endpoints
    analytics/piwik_reporting_api

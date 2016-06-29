@@ -1,4 +1,7 @@
-They are evolus pencil files
+They are evolus pencil files (http://pencil.evolus.vn/)
+Pencil is a GUI tool used to quickly create and display
+mockups. It is used to show class diagrams, relationships
+or dataflows.
 
 A recent fork can be found here:
 
