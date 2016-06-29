@@ -2,6 +2,16 @@
 Testing
 =======
 
+Overview
+========
+
+Assembl makes use of both backend and front-end testing technologies in order to
+conduct tests. However, historically, the project suffered from the lack of
+adoption of modern testing patterns such as TDD_ or BDD_. As a result, it did
+not become developer culture to create tests for every new business logic added.
+Thankfully, the testing pipeline is fully developed for TDD_ based testing to
+be written by developers.
+
 Front-end
 =========
 
