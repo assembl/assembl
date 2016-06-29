@@ -1,5 +1,5 @@
-Creating a new model class
-==========================
+Development: Creating a new model class tutorial
+================================================
 
 All model classes should inherit :py:class:`assembl.lib.sqla.BaseOps` (as ``Base``), and many will also inherit :py:class:`assembl.models.DiscussionBoundBase`, which means that they exist within the context of a discussion. Classes that represent information that can be deleted while leaving a trace of their existence will also inherit :py:class:`assembl.lib.history_mixin.TombstonableMixin`, and classes that can have a snapshot taken before modification will inherit :py:class:`assembl.lib.history_mixin.HistoryMixin`.
 

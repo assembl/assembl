@@ -87,16 +87,14 @@ gulp.task('libs',['clean:infrastructure'], function() {
       path.js+'/bower/Backbone.Subset/backbone.subset.js',
       path.js+'/bower/backbone-model-file-upload/backbone-model-file-upload.js',
       path.js+'/bower/sockjs/sockjs.js',
-      //path.js+'/lib/ckeditor/ckeditor.js',// need a proper solution to make CKEDITOR global var
-      //path.js+'/bower/ckeditor/ckeditor.js',
       path.js+'/bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js',
       path.js+'/bower/jquery-oembed-all/jquery.oembed.js',
       path.js+'/bower/bootstrap-growl/jquery.bootstrap-growl.js',
       //path.js+'/bower/jQuery-linkify/dist/jquery.linkify.js',
       path.js+'/lib/jquery-highlight/jquery.highlight.js',
       path.js+'/bower/hopscotch/dist/js/hopscotch.js',
-      path.js+'/lib/bootstrap.js',
-      path.js+'/lib/dropdown.js',
+      path.js+'/lib/bootstrap-tooltip.js',                                                                                                                                                
+      path.js+'/lib/bootstrap-dropdown.js',
       path.js+'/lib/annotator/annotator-full.js',
       path.js+'/lib/ckeditor-sharedcontainer/plugin.js',
 

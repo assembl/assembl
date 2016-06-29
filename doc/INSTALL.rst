@@ -1,5 +1,5 @@
-Installation for developers
-===========================
+Installing Assembl
+==================
 
 Prerequisites
 -------------

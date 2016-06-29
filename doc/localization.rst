@@ -1,5 +1,5 @@
-Localization
-============
+Development: Localizing and translating assembl
+===============================================
 
 Transifex
 ---------
@@ -28,6 +28,12 @@ Note that the branch that is translated on git is ALWAYS the "develop"
 branch. Just like database schemas, translations cannot be merged in
 practice.
 
+Contributing translation
+------------------------
+
+Go to https://www.transifex.com/assembl/assembl/dashboard/ and start 
+translating.
+
 Updating translation files
 --------------------------
 
@@ -40,14 +46,14 @@ updating, etc.). It needs to be run before any translation work:
 
 ::
 
-    fab devenv make_messages
+    fab env_dev make_messages
 
 The second generates the runtime files and needs to be run before you
 can see the actual translations in the application:
 
 ::
 
-    fab devenv compile_messages
+    fab env_dev compile_messages
 
 The translation workflow
 ------------------------
@@ -68,7 +74,7 @@ The translation workflow
 
    ::
 
-       fab devenv make_messages
+       fab env_dev make_messages
 
 3. Mandatory: Push the pot file back to transifex:
 

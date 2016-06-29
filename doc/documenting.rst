@@ -1,5 +1,5 @@
-Documenting Assembl
-===================
+Development: Documenting Assembl
+================================
 
 The documentation of Assembl's backend is written using Sphinx_. Writing python documentation requires being familiar with `Restructured Text`_ and the `Sphinx python domain`_.
 
@@ -12,9 +12,11 @@ subsequently be found in build/sphinx/html/index.html
 Cheat sheet
 -----------
 
-Hyperlink to a document in the doc:
-:doc:`name_of_rst_document_without_extension` (relative link)
+Hyperlink to a document in the doc::
+  :doc:`name_of_rst_document_without_extension` (relative link)
 
+Standard hyperlink::
+  `Text of hyperlink <http://url_of_hyperlink>`_
 
 
 .. _Sphinx: http://sphinx-doc.org/

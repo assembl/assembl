@@ -1,5 +1,5 @@
-Analytics Events
-----------------
+Architecture: Analytics Events
+------------------------------
 
 All custom events that will currently be fired by assembl are defined
 in: ``../../assembl/static/js/app/internal\_modules/analytics/abstract.js``

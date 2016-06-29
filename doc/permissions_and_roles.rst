@@ -1,5 +1,5 @@
-Permissions and roles
-=====================
+Architecture: Permissions and roles
+===================================
 
 How the roles & permissions system works in Assembl
 ---------------------------------------------------

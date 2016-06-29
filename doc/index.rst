@@ -12,19 +12,28 @@ Contents:
    :maxdepth: 2
 
    INSTALL
-   tech_stack
-   new_class
    backups
-   permissions_and_roles
+
+   tech_stack
+
+   developper_tasks
+   documenting
    localization
-   example_debate
+
+   endpoints
    analytics/piwik_reporting_api
    analytics/events
+   permissions_and_roles
+   panel_architecture
+
+   new_class
+
+   example_debate
 
    autodoc/modules
    jsdoc/index
-   endpoints
-   documenting
+
+
 
 Indices and tables
 ==================

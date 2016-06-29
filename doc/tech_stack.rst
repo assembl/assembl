@@ -1,5 +1,5 @@
-Assembl technology stack
-========================
+Development: The Assembl technology stack
+=========================================
 
 These are some of the main elements of the stack used by Assembl. Some of these 
 choices are not always the most mainstream, but were meanstream at the start of 
@@ -53,10 +53,12 @@ In particular, application web pages are defined along classical URL routes;
 and we have three APIs for data access.
 
 1. :ref:`classical_api`, which allows a stable, well-optimized API.
+
 2. The :ref:`magic_api`, which allows for an API that is always up-to-date with 
-the data model
+   the data model
+
 3. Linked Open Data (currently deactivated) in `JSON-LD`_ based on the 
-traversal API
+   traversal API
 
 Sessions are handled by Beaker_ with a Memcached_ backing, and authentication 
 with social services by `Python Social Auth`_.
@@ -65,11 +67,11 @@ SQLAlchemy
 ^^^^^^^^^^
 
 The data model is expressed as ORM objects using SQLAlchemy_, which is the most 
-popular ORM in Python. Migrations are done with Alembic_. SQLAlchemy allows for
- very fine control over SQL queries, expressed in Python. The ORM allows many 
- models of mapping class inheritance to database tables; we mostly use the 
- `joined table inheritance`_ pattern. We use introspection extensively to 
- mediate between the JSON representations in the API and the data model.
+popular ORM in Python. Migrations are done with Alembic_. SQLAlchemy allows for 
+very fine control over SQL queries, expressed in Python. The ORM allows many 
+models of mapping class inheritance to database tables; we mostly use the 
+`joined table inheritance`_ pattern. We use introspection extensively to 
+mediate between the JSON representations in the API and the data model.
 
 We also add metadata to the ORM model to map it to a RDF model (using RDFLib_), 
 which was historically done with Virtuoso_'s `Linked Data Views`_, by our 
@@ -141,9 +143,8 @@ Packages and libraries we use directly
 This is a list of every frontend dependency used *directly* in the frontend
 code.  Indirect dependencies are not listed.
 
-Essentially, this comes from :file:`package.json` and :file:`bower.json`
-
-**TODO**:  Include content of js/lib (why ckeditor in bower.json AND in js/lib?)
+Essentially, this comes from :file:`package.json` and :file:`bower.json`, as 
+well as the content of js/app/lib
 
 Underscore_
   The basis of backbone, but also used extensively in assembl code.  
@@ -151,6 +152,16 @@ Underscore_
 
 Backbone_
   An unopinionated Model-Collection-View Javascript framework
+
+Marionette_
+  A thicker framework built on top of backbone.
+
+Annotator_
+  A fundamental dependency of Assembl, included in the git of Assembl in 
+  js/lib.
+  
+  Actually generated from our own fork of annotator available at
+  https://github.com/ImaginationForPeople/annotator
 
 `Backbone Subset`_
   A backbone model to allow manipulating subsets of collections anywhere one 
@@ -168,17 +179,21 @@ Ink_
   A jquery plugin to implement the oembed protocol completely
   client side.  Allow embeedin g or previewing arbitrary URLs without hitting
   the backend.
+  
+  *Note:* As of 2016-06-29, we use our own fork of jquery-oembed-all, with several 
+  new features  
 
 `jquery.dotdotdot`_
   A jquery plugin that allows implementing a "Read More" 
   interface depending on the height of an element.
+  
+  *Note:* As of 2016-06-29, we use our own fork of jquery.dotdotdot, to work
+  around a bug.  It should be possible to go back now that this is almost 
+  totally abstracted out in CKEditorField
 
-`jquery-autosize`_ 
+`jquery-autosize`_
   A jquery plugin that allows textarea to automatically
   expand as the user types.  Used in the message editor.
-
-Marionette_
-  A thicker framework built on top of backbone.
 
 bootstrap-growl_
   Jquery plugin used to implement "Growl-like" notifications
@@ -211,6 +226,16 @@ sockjs-client_
 linkifyjs_
   Used to highlight hyperlinks in text-only content.  Used in the 
   messagelist
+
+`Bootstrap dropdown <http://getbootstrap.com/javascript/#dropdowns>`_
+  Used in the messagelist header and attachment view to implement dropdown.  
+  Included in Assembl source code in js/lib/bootstrap-dropdown.js. Deprecated.
+
+`Bootstrap tooltip <http://getbootstrap.com/javascript/#tooltips>`_
+  Used everywhere to implement tooltips
+
+  Included in Assembl source code in js/lib/bootstrap-tooltip.js.
+
 
 
 Angular for widgets
@@ -245,11 +270,19 @@ They are first compiled by Jinja2_ and subsquently by Underscore_ templates.
 SASS
 ^^^^
 
-**TODO**
+We use SASS for CSS generation, using `Libsass http://sass-lang.com/libsass` 
+and Bourbon_
 
 Bourbon_
+  A mixin library for Sass, to avoid vendor prefixes and the like
 
-Node-sass_
+Grid system: 
+
+**TODO**
+
+Styleguide: 
+
+**TODO**
 
 Build system
 ------------
@@ -268,7 +301,7 @@ Bower_:
 
 Gulp_:
   Used for Javascript and Sass code generation.  Configured in 
-:file:`assembl/gulpfile.js`
+  :file:`assembl/gulpfile.js`
 
 Translation
 -----------
@@ -311,6 +344,7 @@ Sentry_
 Piwik_
 
 `Borg Backup`_
+  See :doc:`backups`
 
 Web server
 ^^^^^^^^^^
@@ -378,3 +412,6 @@ We have used multiple processes rather than threads.
 .. _`Backbone Modal`: http://awkward.github.io/backbone.modal/
 .. _Sentry: https://github.com/getsentry/sentry
 .. _Piwik: https://piwik.org/
+.. _`Borg Backup`: https://borgbackup.readthedocs.io/en/stable/
+.. _Annotator: http://annotatorjs.org/
+.. _Bourbon: http://bourbon.io/

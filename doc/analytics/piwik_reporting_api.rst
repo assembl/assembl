@@ -1,5 +1,5 @@
-Reporting API
-=============
+Architecture: Piwik Reporting API
+=================================
 
 Reference: http://developer.piwik.org/api-reference/reporting-api
 

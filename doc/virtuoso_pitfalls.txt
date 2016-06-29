@@ -1,4 +1,0 @@
-We have a good list of Virtuoso pitfalls. They'll take time to document properly, but here's a few.
-
-1. Sending (python) unicode through a (Py)ODBC bound parameter fails on update if the target column is a NVARCHAR. This does not affect INSERT or LONG NVARCHAR. A workaround was added to the virtuoso driver: Use the type CoerceUnicode instead of Unicode.
-2. Unique index chokes on multiple NULL values.
