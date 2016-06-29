@@ -21,9 +21,9 @@ Packages and libraries we use directly
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is a list of every backend dependency used *directly* in assembl code.
-Indirect dependencies are not listed.
+The packages you would need to know about first are described in subsequent paragraphs.
 
-Essentially, this comes from :file:`requirements.txt`
+This comes from :file:`requirements.txt`, but indirect dependencies are not listed.
 
 alembic_
   Database schema migration
@@ -74,7 +74,7 @@ iso639_
   Translate between ISO-639-1 and ISO-639-2 language codes.
 
 isodate_
-  TODO
+  Parse dates in ISO-8601 format to python datetime objects.
 
 Jinja2_
   Our main templating mechanism.
@@ -175,74 +175,47 @@ zope_interface_
 Testing
 ^^^^^^^
 
+TODO: Document
+
 coverage_
-  TODO
-
 jasmine_splinter_runner_
-  TODO
-
 mock_
-  TODO
-
 pytest_
-  TODO
-
 selenium_
-  TODO
-
 splinter_
-  TODO
-
 flaky_
-  TODO
-
 WebTest_
-  TODO
-
 
 Debugging
 ^^^^^^^^^
 
 ipython_
-  TODO
+  Improved Python shell
 
 pyramid_debugtoolbar_
-  TODO
+  Debug toolbar in the web page
 
 pyramid_debugtoolbar_ajax_
-  TODO
+  Monitor AJAX calls in the debug toolbar
 
 pyramid_ipython_
-  TODO
+  Access Pyramid_ from ipython_
 
 sqltap_
-  TODO
+  Monitor SQLAlchemy_ requests from the web application
 
 uwsgitop_
-  TODO
+  Monitor UWSGI_
 
 flower_
-  TODO
+  Monitor Celery_ tasks
 
 PdbSublimeTextSupport_
-  TODO
+  Shows debug code location in Sublime Text
 
 waitress_
   A simple WSGI_ web server for development use. (The pyramid ``pserve`` command uses this.)
 
-
-Asynchronicity in the backend
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The Websocket mentioned previously is served by an independent process using 
-sockjs_tornado_ (forked) and Tornado_. That server receives changed models as 
-JSON, transmitted through ZeroMQ_. Changes are detected upon database commit by 
-a SQLAlchemy_ event handler.
-
-Some other operations are asynchronous and handled by processes. Those that are 
-operations that run and terminate, such as email notifications, are modeled as 
-Celery_ tasks, using Kombu_ and Redis_ for communication. Long-standing tasks, 
-such as IMAP clients, use Kombu_ directly.
 
 Pyramid
 ^^^^^^^
@@ -280,7 +253,6 @@ mediate between the JSON representations in the API and the data model.
 We also add metadata to the ORM model to map it to a RDF model (using RDFLib_), 
 which was historically done with Virtuoso_'s `Linked Data Views`_, by our 
 `Virtuoso-python`_ module. (Currently deactivated.)
-
 
 Database layer
 ^^^^^^^^^^^^^^
@@ -320,6 +292,18 @@ This was a setback for our Linked Open Data strategy, and does not solve the
 issue of deductive capacity, and we are now considering the option of moving 
 towards a `polyglot persistence`_ model.
 
+Asynchronicity in the backend
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Websocket mentioned previously is served by an independent process using 
+sockjs_tornado_ (forked) and Tornado_. That server receives changed models as 
+JSON, transmitted through ZeroMQ_. Changes are detected upon database commit by 
+a SQLAlchemy_ event handler.
+
+Some other operations are asynchronous and handled by processes. Those that are 
+operations that run and terminate, such as email notifications, are modeled as 
+Celery_ tasks, using Kombu_ and Redis_ for communication. Long-standing tasks, 
+such as IMAP clients, use Kombu_ directly.
 
 
 Frontend
