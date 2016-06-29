@@ -13,6 +13,8 @@ var Marionette = require('../../shims/marionette.js'),
 /**
  * Manages all the groups in the interface, essentially the GroupSpec.Collection
  * Normally referenced with Assembl.groupContainer
+ * 
+ * @class app.views.groups.groupContainer.groupContainer
  */
 var groupContainer = Marionette.CollectionView.extend({
   constructor: function groupContainer() {
@@ -116,7 +118,7 @@ var groupContainer = Marionette.CollectionView.extend({
     });
     return totalMinimized;
   },
-  /*
+  /**
    * @param view: A view (such as a messageList) for
    * which we want the matching groupContent to send events or manipulate
    * state.
@@ -126,7 +128,8 @@ var groupContainer = Marionette.CollectionView.extend({
   getGroupContent: function(view) {
     console.log("getGroupContent(): WRITEME!")
   },
-  /* NOT YET TESTED - benoitg- 2015-06-29
+  /**
+   *  NOT YET TESTED - benoitg- 2015-06-29
    * @param viewClass: A view (such as a messageList) for
    * which we want the matching groupContent to send events or manipulate
    * state.

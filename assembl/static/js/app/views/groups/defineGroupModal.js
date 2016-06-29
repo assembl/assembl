@@ -20,6 +20,10 @@ var Marionette = require('../../shims/marionette.js'),
     Widget = require('../../models/widget.js'),
     WidgetLinks = require('../widgetLinks.js');
 
+/**
+ * 
+ * @class app.views.groups.defineGroupModal.DefineGroupModal
+ */
 var DefineGroupModal = Backbone.Modal.extend({
   constructor: function DefineGroupModal() {
     Backbone.Modal.apply(this, arguments);

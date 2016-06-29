@@ -579,30 +579,6 @@ confirmed]]></p:property><p:property name="textFont"><![CDATA[Helvetica|normal|n
                 </textPath>
             </text>
 
-        </g><g xmlns="http://www.w3.org/2000/svg" p:type="Shape" xmlns:p="http://www.evolus.vn/Namespace/Pencil" p:def="Evolus.Common:arrow" p:sc="Curvy Connector" id="0d850f2b4ca740c9ac7724d973f7a646" transform="matrix(1,0,0,1,310,96)"><p:metadata><p:property name="startPin"><![CDATA[0,0]]></p:property><p:property name="endPin"><![CDATA[100,70]]></p:property><p:property name="withStartArrow"><![CDATA[false]]></p:property><p:property name="withEndArrow"><![CDATA[true]]></p:property><p:property name="mode"><![CDATA[curvy]]></p:property><p:property name="detached"><![CDATA[false]]></p:property><p:property name="strokeColor"><![CDATA[#666666FF]]></p:property><p:property name="strokeStyle"><![CDATA[2|]]></p:property><p:property name="textContent"><![CDATA[Yes]]></p:property><p:property name="textFont"><![CDATA[Helvetica|normal|normal|12px|none]]></p:property><p:property name="textColor"><![CDATA[#000000FF]]></p:property><p:property name="textAlign"><![CDATA[1,1]]></p:property></p:metadata>
-            <defs>
-                <path style="stroke-linejoin: round; fill: none;" p:name="path" id="b8714c25bf7a4ba191bc7532d6d8abaa" d="M 0 0 C 48 36 51 36 100 70 M 96 63 L 100 70 L 92 68"/>
-            </defs>
-            <use xlink:href="#b8714c25bf7a4ba191bc7532d6d8abaa" xmlns:xlink="http://www.w3.org/1999/xlink" stroke-width="10" stroke-opacity="0" stroke="#FF0000"/>
-            <use xlink:href="#b8714c25bf7a4ba191bc7532d6d8abaa" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="eba83102bf164b3b80fa07fec012146c" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
-            <text p:name="text" id="332d699da7f04f5690621920eb8dd05b" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
-                <textPath xlink:href="#b8714c25bf7a4ba191bc7532d6d8abaa" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="e1144c12228b4ec2933e879c38e8bcbf" dx="-16">Yes</tspan>
-                </textPath>
-            </text>
-
-        </g><g xmlns="http://www.w3.org/2000/svg" p:type="Shape" xmlns:p="http://www.evolus.vn/Namespace/Pencil" p:def="Evolus.Common:arrow" p:sc="Curvy Connector" id="502d874a4e144571aacaf9b062c0a812" transform="matrix(1,0,0,1,297,147)"><p:metadata><p:property name="startPin"><![CDATA[0,0]]></p:property><p:property name="endPin"><![CDATA[100,70]]></p:property><p:property name="withStartArrow"><![CDATA[false]]></p:property><p:property name="withEndArrow"><![CDATA[true]]></p:property><p:property name="mode"><![CDATA[curvy]]></p:property><p:property name="detached"><![CDATA[false]]></p:property><p:property name="strokeColor"><![CDATA[#666666FF]]></p:property><p:property name="strokeStyle"><![CDATA[2|]]></p:property><p:property name="textContent"><![CDATA[No]]></p:property><p:property name="textFont"><![CDATA[Helvetica|normal|normal|12px|none]]></p:property><p:property name="textColor"><![CDATA[#000000FF]]></p:property><p:property name="textAlign"><![CDATA[1,1]]></p:property></p:metadata>
-            <defs>
-                <path style="stroke-linejoin: round; fill: none;" p:name="path" id="ccea38d1745741c58d9bf956447c4d39" d="M 0 0 C 48 36 51 36 100 70 M 96 63 L 100 70 L 92 68"/>
-            </defs>
-            <use xlink:href="#ccea38d1745741c58d9bf956447c4d39" xmlns:xlink="http://www.w3.org/1999/xlink" stroke-width="10" stroke-opacity="0" stroke="#FF0000"/>
-            <use xlink:href="#ccea38d1745741c58d9bf956447c4d39" xmlns:xlink="http://www.w3.org/1999/xlink" p:name="outArrow1" id="f000e4e164914cd28ce04a6a3e638d27" style="stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2;"/>
-            <text p:name="text" id="377f89b598ae407e8975df536a54e4cf" style="fill: rgb(0, 0, 0); fill-opacity: 1; font-family: Helvetica; font-size: 12px; font-weight: normal; font-style: normal; text-decoration: none;">
-                <textPath xlink:href="#ccea38d1745741c58d9bf956447c4d39" xmlns:xlink="http://www.w3.org/1999/xlink" startOffset="50%" text-anchor="middle" alignment-baseline="middle">
-                    <tspan dy="-4" p:name="textSpan" id="0a3c47f6edae4ebd99aaa0ccff56c70e" dx="-16">No</tspan>
-                </textPath>
-            </text>
-
         </g><g xmlns="http://www.w3.org/2000/svg" p:type="Shape" xmlns:p="http://www.evolus.vn/Namespace/Pencil" p:def="Evolus.Flowchart:PredefinedProcess" id="7f7087a71be742ffae8792c79c3e8fd7" transform="matrix(1,0,0,1,1274,632)"><p:metadata><p:property name="box"><![CDATA[100,80]]></p:property><p:property name="outputPin1Origin"><![CDATA[50,0]]></p:property><p:property name="outputPin1"><![CDATA[50,0]]></p:property><p:property name="outputPin2Origin"><![CDATA[100,40]]></p:property><p:property name="outputPin2"><![CDATA[100,40]]></p:property><p:property name="outputPin3Origin"><![CDATA[50,80]]></p:property><p:property name="outputPin3"><![CDATA[50,80]]></p:property><p:property name="outputPin4Origin"><![CDATA[0,40]]></p:property><p:property name="outputPin4"><![CDATA[0,40]]></p:property><p:property name="fillColor"><![CDATA[#BDDFFFFF]]></p:property><p:property name="strokeColor"><![CDATA[#666666FF]]></p:property><p:property name="strokeStyle"><![CDATA[2|]]></p:property><p:property name="textContent"><![CDATA[Account create/merge process]]></p:property><p:property name="textFont"><![CDATA[Helvetica|normal|normal|12px|none]]></p:property><p:property name="textColor"><![CDATA[#000000FF]]></p:property><p:property name="textAlign"><![CDATA[1,1]]></p:property></p:metadata>
             <path style="stroke-linejoin: round; stroke: rgb(102, 102, 102); stroke-opacity: 1; stroke-width: 2; fill: rgb(189, 223, 255); fill-opacity: 1;" p:name="path" id="cc1ab50a0b5d46ffa495ae854946b22c" transform="translate(0,0)" d="M 0 0 L 100 0 L 100 80 L 0 80 L 0 0 M 12.5 0 L 12.5 80 M 87.5 0 L 87.5 80"/>
 

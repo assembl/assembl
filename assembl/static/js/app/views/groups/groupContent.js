@@ -15,7 +15,9 @@ var Marionette = require('../../shims/marionette.js'),
     Storage = require('../../objects/storage.js'),
     UserCustomData = require('../../models/userCustomData.js');
 
-/** Represents the entire content of a single panel group */
+/** Represents the entire content of a single panel group
+* @class  app.views.groups.groupContent.groupContent
+*/
 var groupContent = Marionette.CompositeView.extend({
   constructor: function groupContent() {
     Marionette.CompositeView.apply(this, arguments);

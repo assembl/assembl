@@ -16,6 +16,9 @@ var Marionette = require('../../shims/marionette.js'),
     groupSpec = require('../../models/groupSpec'),
     GroupContainer = require('../groups/groupContainer');
 
+/**
+ * @class app.views.groups.modalGroup.ModalGroupView
+ */
 var ModalGroupView = Backbone.Modal.extend({
   constructor: function ModalGroupView() {
     Backbone.Modal.apply(this, arguments);

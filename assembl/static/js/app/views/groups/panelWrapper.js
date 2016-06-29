@@ -11,6 +11,10 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     panelSpec = require('../../models/panelSpec.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js');
+
+/**
+ * @class app.views.groups.panelWrapper.PanelWrapper
+ */
 var PanelWrapper = Marionette.LayoutView.extend({
   constructor: function PanelWrapper() {
     Marionette.LayoutView.apply(this, arguments);
