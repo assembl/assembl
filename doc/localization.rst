@@ -1,5 +1,5 @@
-Development: Localizing and translating assembl
-===============================================
+Contributing to Assembl translations
+====================================
 
 Transifex
 ---------

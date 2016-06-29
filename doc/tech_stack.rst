@@ -1,5 +1,5 @@
-Development: The Assembl technology stack
-=========================================
+The Assembl technology stack
+============================
 
 These are some of the main elements of the stack used by Assembl. Some of these 
 choices are not always the most mainstream, but were meanstream at the start of 

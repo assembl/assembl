@@ -1,3 +1,6 @@
+Building a docker image
+=======================
+
 docker build --tag assembl docker
 docker run -d -p 8080:80 assembl
 firefox http://localhost:8080

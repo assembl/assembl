@@ -1,5 +1,5 @@
-Architecture: Group and panels architecture
-===========================================
+Group and panels architecture
+=============================
 
 The class hierarchy is the following::
 

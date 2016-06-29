@@ -1,0 +1,53 @@
+Data we have:
+
+Scroll position.
+Message size.
+Time spent.
+Height of page
+
+Parameters:
+Message top
+Message botom:
+Message % of height of page
+
+
+Variables: 
+Message covers screen totally (implies internal scroll)
+
+Fudge factor:
+Max speedreading speed
+Max pick speed
+
+Reader words per minute:  average 275 WPM for prose text.  1000 WPM is top 1%
+Character per word: 5 => multipy WPM*5 to get CPM
+
+Character per line:  normally between 45 to 75, 66 is considered ideal.
+
+Average character per line = div width / font size in px*0.4
+Average line height = 1.5 * font size in pixels (gotcha:  ideally substract non-character size of message, but still count header)
+
+The goal of all this is to calculate the scrool speed in WPM
+
+Is scrool scrool wheel vs scrollbar clicking 
+
+
+State Transition	Attention score		User action
+READ			CERTAIN ATTENTION	Link was followed from message, preview was opened, message was marked read manually, message was hoisted
+READ			PROBABLE ATTENTION	Email loaded image, slow scroll within long message
+UNREAD			POSSIBLE ATTENTION	Scrolled over preview with reasonnable speed, Was marked unread manually
+READ			UNLIKELY ATTENTION	Was marked read in bulk with no previous UNREAD, POSSIBLE ATTENTION
+UNREAD			PROBABLE ATTENTION	  
+
+Each should have a counter, or log multiple to have date statistics?
+
+
+Heuristics:
+Messagge bigger than screen and scrolled within => read
+
+Stopping statisticaly each pagefull of messages => all messages on previous page read  Remember to deal with inertia, jerk
+
+
+Logging scrool:  detect start time, end time, distance scrolled for each event.  Then distribute data on messages.
+
+
+LOG (for scrool event):  Date first event, date last event, highest scrool score, number of scrool events.

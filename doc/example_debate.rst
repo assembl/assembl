@@ -1,5 +1,5 @@
-Example debate
---------------
+Example debate fixture
+======================
 
 This example debate was created to serve as an example in UI mookups, specifications, etc. It is designed to show a maximum of corner cases in a debate that is as short as possible. It was created in a role playing game caricaturing well known public figures in Québec.
 

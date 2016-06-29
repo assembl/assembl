@@ -41,7 +41,7 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 
 # app
 /data/*
-/build
+/assembl/static/techdocs
 /pyodbc
 /surf
 /virtuoso

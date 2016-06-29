@@ -1,5 +1,5 @@
-Development: Common developper tasks
-====================================
+How to perform common developper tasks
+======================================
 I want to:
 
 Add a new model (frontend and backend)

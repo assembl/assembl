@@ -6,35 +6,62 @@
 Welcome to Assembl's documentation!
 ===================================
 
-Contents:
-
+Installation and administration
+-------------------------------
 .. toctree::
    :maxdepth: 2
 
    INSTALL
    backups
 
+Stack and architecture
+----------------------
+
+.. toctree::
+   :maxdepth: 2
+
    tech_stack
+   permissions_and_roles
+   panel_architecture
+
+Developping and contributing to Assembl
+---------------------------------------
+
+.. toctree::
+   :maxdepth: 2
 
    developper_tasks
    documenting
    localization
+   docker
    testing
-
-   endpoints
-   analytics/piwik_reporting_api
-   analytics/events
-   permissions_and_roles
-   panel_architecture
-
    new_class
 
    example_debate
 
+APIs
+----
+
+.. toctree::
+   :maxdepth: 2
+
+   endpoints
+   analytics/piwik_reporting_api
+   analytics/events
+
+Backend class reference
+-----------------------
+.. toctree::
+   :maxdepth: 4
+
    autodoc/modules
+
+Frontend class reference
+------------------------
+.. toctree::
+   :maxdepth: 3
+
    jsdoc/index
-
-
 
 Indices and tables
 ==================

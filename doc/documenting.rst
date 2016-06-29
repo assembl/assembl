@@ -1,5 +1,5 @@
-Development: Documenting Assembl
-================================
+Writing documentation for Assembl
+=================================
 
 The documentation of Assembl's backend is written using Sphinx_. Writing python documentation requires being familiar with `Restructured Text`_ and the `Sphinx python domain`_, especially how to make `python cross-references`_ .
 
