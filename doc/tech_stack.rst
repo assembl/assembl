@@ -26,79 +26,76 @@ Indirect dependencies are not listed.
 Essentially, this comes from :file:`requirements.txt`
 
 alembic_
-  TODO
+  Database schema migration
 
 anyjson_
-  TODO
+  JSON parsing
 
 Babel_
-  TODO
+  localization and internationalization: extract strings from source files and compile translated files.
 
 Beaker_
-  TODO
+  Web sessions (uses Memcached_)
 
 beautifulsoup4_
-  TODO
+  HTML parsing
 
 celery_
-  TODO
+  Tasks running in another process
 
 colander_
-  TODO
+  Data validation (not used)
 
 cornice_
-  TODO
+  RESTful APIs in Pyramid_. Used for the :ref:`classical_api`
 
 dogpile_
-  TODO
+  Allows to cache and share the results of a long calculation. Was used for CIF caching.
 
 enum34_
-  TODO
-
-Fabric_
-  TODO
+  Python3 enums backported to Python2
 
 facebook_sdk_
-  TODO
+  Facebook SDK, allows us to query facebook, post messages to it and retrieve comments.
 
 feedparser_
-  TODO
+  Used by :py:class:`assembl.models.feed_parsing.FeedSourceReader` to read Atom feeds.
 
 gensim_
-  TODO
+  Used by :py:mod:`assembl.nlp.cluster` to find clusters of similar posts.
 
 google_api_python_client_
-  TODO
+  Used in :py:class:`assembl.nlp.translation_service.GoogleTranslationService` to communicate with the google translation service and translate messages
 
 imaplib2_
-  TODO
+  Used to retrieve messages from an IMAP server, through the :py:mod:`assembl.tasks.imap` celery process or the :py:class:`assembl.tasks.imaplib2_source_reader.IMAPReader`.
 
 iso639_
-  TODO
+  Translate between ISO-639-1 and ISO-639-2 language codes.
 
 isodate_
   TODO
 
 Jinja2_
-  TODO
+  Our main templating mechanism.
 
 jwzthreading_
-  TODO
+  Used to deduce thread order of imported mail messages
 
 kombu_
-  TODO
+  Inter-process messaging. Uses Redis_. Used by Celery_ and directly by the :py:mod:`assembl.tasks.source_reader`
 
 langdetect_
-  TODO
+  Guess the original language of a message. Used in :py:mod:`assembl.nlp.translation_service`
 
 lxml_
-  TODO
+  Parse XML directly. Also used by beautifulsoup4_.
 
 nodeenv_
-  TODO
+  Standardized NodeJS_ environment, coordinated with Virtualenv_
 
 premailer_
-  TODO
+  flatten the CSS of HTML, for sending as email in notifications.
 
 psycopg2_
   TODO
@@ -648,6 +645,7 @@ We have used multiple processes rather than threads.
 .. _Moment: http://momentjs.com/
 .. _Nginx: http://nginx.org/
 .. _nodeenv: https://github.com/ekalinin/nodeenv
+.. _NodeJS: https://nodejs.org/en/
 .. _npm: https://www.npmjs.com/
 .. _PdbSublimeTextSupport: http://pypi.python.org/pypi/PdbSublimeTextSupport
 .. _Pip: https://pip.pypa.io/en/stable/#
@@ -703,6 +701,7 @@ We have used multiple processes rather than threads.
 .. _uWSGI: https://uwsgi-docs.readthedocs.io/en/latest/
 .. _uwsgitop: http://projects.unbit.it/uwsgi/wiki/StatsServer
 .. _Virtuoso: http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/
+.. _Virtualenv: https://virtualenv.pypa.io/en/stable/
 .. _waitress: https://github.com/Pylons/waitress
 .. _WebOb: http://webob.readthedocs.org/
 .. _WebTest: https://webtest.readthedocs.org/en/latest/
