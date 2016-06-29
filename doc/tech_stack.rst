@@ -172,19 +172,38 @@ transaction_
 zope_interface_
   Allows to define interfaces (aka protocols, i.e. purely abstract classes), and retrieve a concrete class that fulfills this protocol by configuration. Used in the :py:mod:`assembl.lib.model_watcher`.
 
+.. _backend_test_libraries:
+
 Testing
 ^^^^^^^
 
-TODO: Document
+pytest_
+  Our main testing framework. One feature we use a lot is `pytest fixtures`_, in :py:mod:`assembl.tests.fixtures`. Front-end tests are run by the backend, thanks to splinter_.
+
+Mocha_
+  Our frontend testing framework
+
+Chai_
+  BDD and TDD assertions in front-end tests
 
 coverage_
+  Verify the coverage of back-end tests
+
 jasmine_splinter_runner_
+  Run the Mocha_ tests from pytest and collect test results.
+
 mock_
-pytest_
-selenium_
+  Mock objects and monkey-patch python modules.
+
 splinter_
+  Drive the PhantomJS_ web browser through selenium_ for front-end tests.
+
 flaky_
+  Allows to define some tests as flaky, i.e. attempt them a few times before declaring failure.
+
 WebTest_
+  Encapsulate the Pyramid_ WSGI_ server for testing purposes.
+
 
 Debugging
 ^^^^^^^^^
@@ -330,6 +349,7 @@ Packages and libraries we use directly
 
 This is a list of every frontend dependency used *directly* in the frontend
 code.  Indirect dependencies are not listed.
+test libraries are described in the backend :ref:`backend_test_libraries` section.
 
 Essentially, this comes from :file:`package.json` and :file:`bower.json`, as 
 well as the content of js/app/lib
@@ -510,15 +530,6 @@ frontend.  This happens in ``po2json.py`` called by ``fab env_dev compile_messag
 
 See :doc:`localization`
 
-Tests
------
-
-**TODO**
-
-Mocha_
-
-Chai_
-
 
 Operations
 ----------
@@ -619,6 +630,7 @@ We have used multiple processes rather than threads.
 .. _NodeJS: https://nodejs.org/en/
 .. _npm: https://www.npmjs.com/
 .. _PdbSublimeTextSupport: http://pypi.python.org/pypi/PdbSublimeTextSupport
+.. _PhantomJS: http://phantomjs.org/
 .. _Pip: https://pip.pypa.io/en/stable/#
 .. _Piwik: https://piwik.org/
 .. _Postgres: https://postgresql.org
@@ -639,7 +651,8 @@ We have used multiple processes rather than threads.
 .. _pyramid_mailer: http://docs.pylonsproject.org/projects/pyramid-mailer/en/latest/
 .. _pyramid_mako: https://github.com/Pylons/pyramid_mako
 .. _PyStemmer: http://snowball.tartarus.org/
-.. _pytest: https://github.com/pytest-dev/pytest/issues
+.. _pytest: http://pytest.org/latest/contents.html
+.. _`pytest fixtures`: http://pytest.org/latest/fixture.html
 .. _Python: https://python.org/
 .. _python_social_auth: https://github.com/omab/python-social-auth
 .. _pytz: http://pythonhosted.org/pytz
