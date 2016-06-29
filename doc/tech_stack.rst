@@ -25,7 +25,232 @@ Indirect dependencies are not listed.
 
 Essentially, this comes from :file:`requirements.txt`
 
-**TODO**
+alembic_
+  TODO
+
+anyjson_
+  TODO
+
+Babel_
+  TODO
+
+Beaker_
+  TODO
+
+beautifulsoup4_
+  TODO
+
+celery_
+  TODO
+
+colander_
+  TODO
+
+cornice_
+  TODO
+
+dogpile_
+  TODO
+
+enum34_
+  TODO
+
+Fabric_
+  TODO
+
+facebook_sdk_
+  TODO
+
+feedparser_
+  TODO
+
+gensim_
+  TODO
+
+google_api_python_client_
+  TODO
+
+imaplib2_
+  TODO
+
+iso639_
+  TODO
+
+isodate_
+  TODO
+
+Jinja2_
+  TODO
+
+jwzthreading_
+  TODO
+
+kombu_
+  TODO
+
+langdetect_
+  TODO
+
+lxml_
+  TODO
+
+nodeenv_
+  TODO
+
+premailer_
+  TODO
+
+psycopg2_
+  TODO
+
+pygraphviz_
+  TODO
+
+pyIsEmail_
+  TODO
+
+PyJWT_
+  TODO
+
+pyramid_
+  TODO
+
+pyramid_dogpile_cache_
+  TODO
+
+pyramid_jinja2_
+  TODO
+
+pyramid_mailer_
+  TODO
+
+pyramid_mako_
+  TODO
+
+pyramid_beaker_
+  TODO
+
+PyStemmer_
+  TODO
+
+python_social_auth_
+  TODO
+
+pytz_
+  TODO
+
+pyzmq_
+  TODO
+
+raven_py_
+  TODO
+
+rdflib_
+  TODO
+
+rdflib_jsonld_
+  TODO
+
+requests_
+  TODO
+
+scikit_learn_
+  TODO
+
+setuptools_
+  TODO
+
+simplejson_
+  TODO
+
+six_
+  TODO
+
+snowballstemmer_
+  TODO
+
+sockjs_tornado_
+  TODO
+
+SQLAlchemy_
+  TODO
+
+supervisor_
+  TODO
+
+tornado_
+  TODO
+
+transaction_
+  TODO
+
+waitress_
+  TODO
+
+WebOb_
+  TODO
+
+Werkzeug_
+  TODO
+
+zope_interface_
+  TODO
+
+Testing
+^^^^^^^
+
+coverage_
+  TODO
+
+jasmine_splinter_runner_
+  TODO
+
+mock_
+  TODO
+
+pytest_
+  TODO
+
+selenium_
+  TODO
+
+splinter_
+  TODO
+
+flaky_
+  TODO
+
+WebTest_
+  TODO
+
+
+Debugging
+^^^^^^^^^
+
+ipython_
+  TODO
+
+pyramid_debugtoolbar_
+  TODO
+
+pyramid_debugtoolbar_ajax_
+  TODO
+
+pyramid_ipython_
+  TODO
+
+sqltap_
+  TODO
+
+uwsgitop_
+  TODO
+
+flower_
+  TODO
+
+PdbSublimeTextSupport_
+  TODO
+
 
 Asynchronicity in the backend
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -195,7 +420,7 @@ Ink_
   A jquery plugin that allows textarea to automatically
   expand as the user types.  Used in the message editor.
 
-bootstrap-growl_
+bootstrap_growl_
   Jquery plugin used to implement "Growl-like" notifications
 
 CKEditor_
@@ -217,10 +442,10 @@ Jed_
 Moment_
   Date calculation and logalized textual display in javascript
 
-raven-js_
+raven_js_
   Used to send client-side errors to Sentry_ in production
 
-sockjs-client_
+sockjs_client_
   Used for websocket communication on the frontend
 
 linkifyjs_
@@ -293,6 +518,9 @@ type fab list for the assembl virtualenv
 Pip_
   Used for python package management
 
+Setuptools_
+  Used for python package building
+
 npm_:
   User for Javascript package management
 
@@ -354,64 +582,130 @@ assets with automatic compression. Nginx talks to Pyramid through the uWSGI_.
 We have used multiple processes rather than threads.
 
 
-.. _Marionette: http://marionettejs.com/
-.. _Backbone: http://backbonejs.org/
-.. _Nginx: http://nginx.org/
-.. _Pyramid: http://www.pylonsproject.org/
-.. _SQLAlchemy: http://www.sqlalchemy.org/
-.. _Postgres: https://postgresql.org
-.. _RDFLib: http://rdflib.readthedocs.io/en/stable/
-.. _Bluebird: http://bluebirdjs.com/
-.. _Alembic: http://alembic.zzzcomputing.com/en/latest/
-.. _Angular: https://angularjs.org/
-.. _Virtuoso: http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/
-.. _Caravan: http://caravan.coop/en/
-.. _Python: https://python.org/
-.. _SockJS: https://github.com/sockjs/sockjs-client
-.. _sockjs_tornado: https://github.com/ImaginationForPeople/sockjs-tornado/
-.. _Tornado: http://www.tornadoweb.org/en/stable/
-.. _ZeroMQ: http://zeromq.org/
-.. _Celery: http://www.celeryproject.org/
-.. _Kombu: http://kombu.readthedocs.io/en/latest/
-.. _Redis: http://redis.io/
-.. _Fabric: http://www.fabfile.org/
-.. _Supervisord: http://supervisord.org/
-.. _Beaker: http://beaker.readthedocs.io/en/latest/
-.. _Memcached: https://memcached.org/
-.. _uWSGI: https://uwsgi-docs.readthedocs.io/en/latest/
-.. _PyODBC: https://github.com/maparent/pyodbc
-.. _Catalyst: http://catalyst-fp7.eu/
-.. _`Python Social Auth`: http://psa.matiasaguirre.net/
-.. _`Virtuoso-python`: https://github.com/maparent/virtuoso-python
-.. _`Linked Data Views`: http://docs.openlinksw.com/virtuoso/rdfviewsrdbms.html
-.. _`JSON-LD`: http://json-ld.org/
+.. _`Backbone Modal`: http://awkward.github.io/backbone.modal/
+.. _`Backbone Subset`: https://github.com/masylum/Backbone.Subset
+.. _`Borg Backup`: https://borgbackup.readthedocs.io/en/stable/
+.. _`Common Table Expressions`: https://www.postgresql.org/docs/9.5/static/queries-with.html
+.. _`Foundation for Emails 2`: http://foundation.zurb.com/emails.html
 .. _`hybrid app`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hybrid.html
 .. _`joined table inheritance`: http://docs.sqlalchemy.org/en/rel_1_0/orm/inheritance.html#joined-table-inheritance
-.. _`Common Table Expressions`: https://www.postgresql.org/docs/9.5/static/queries-with.html
-.. _`polyglot persistence`: http://martinfowler.com/bliki/PolyglotPersistence.html
-.. _Pip: https://pip.pypa.io/en/stable/#
-.. _npm: https://www.npmjs.com/
-.. _Bower: https://bower.io/
-.. _Gulp: http://gulpjs.com/
-.. _Jed: https://slexaxton.github.io/Jed/
-.. _D3: https://d3js.org/
-.. _Moment: http://momentjs.com/
-.. _raven-js: https://github.com/getsentry/raven-js
-.. _sockjs-client: https://github.com/sockjs/sockjs-client
-.. _linkifyjs: http://soapbox.github.io/linkifyjs/
-.. _Underscore: http://underscorejs.org/
-.. _bootstrap-growl: http://ifightcrime.github.io/bootstrap-growl/
-.. _Ink: http://zurb.com/ink/index.php
-.. _`Foundation for Emails 2`: http://foundation.zurb.com/emails.html
-.. _CKEditor: http://ckeditor.com/
-.. _Hopscotch: http://linkedin.github.io/hopscotch/
 .. _`jquery-autosize`: http://www.jacklmoore.com/autosize/
 .. _`jquery-oembed-all`: https://github.com/nfl/jquery-oembed-all
 .. _`jquery.dotdotdot`: http://dotdotdot.frebsite.nl/
-.. _`Backbone Subset`: https://github.com/masylum/Backbone.Subset
-.. _`Backbone Modal`: http://awkward.github.io/backbone.modal/
-.. _Sentry: https://github.com/getsentry/sentry
-.. _Piwik: https://piwik.org/
-.. _`Borg Backup`: https://borgbackup.readthedocs.io/en/stable/
+.. _`JSON-LD`: http://json-ld.org/
+.. _`Linked Data Views`: http://docs.openlinksw.com/virtuoso/rdfviewsrdbms.html
+.. _`polyglot persistence`: http://martinfowler.com/bliki/PolyglotPersistence.html
+.. _`Python Social Auth`: http://psa.matiasaguirre.net/
+.. _`Virtuoso-python`: https://github.com/maparent/virtuoso-python
+.. _Alembic: http://alembic.zzzcomputing.com/en/latest/
+.. _Angular: https://angularjs.org/
 .. _Annotator: http://annotatorjs.org/
+.. _anyjson: http://bitbucket.org/runeh/anyjson/
+.. _Babel: http://pythonhosted.org/Babel/
+.. _Backbone: http://backbonejs.org/
+.. _Beaker: http://beaker.readthedocs.io/en/latest/
+.. _Beaker: http://beaker.readthedocs.io/en/latest/
+.. _beautifulsoup4: http://www.crummy.com/software/BeautifulSoup/bs4/
+.. _Bluebird: http://bluebirdjs.com/
+.. _bootstrap_growl: http://ifightcrime.github.io/bootstrap-growl/
 .. _Bourbon: http://bourbon.io/
+.. _Bower: https://bower.io/
+.. _Caravan: http://caravan.coop/en/
+.. _Catalyst: http://catalyst-fp7.eu/
+.. _Celery: http://www.celeryproject.org/
+.. _CKEditor: http://ckeditor.com/
+.. _colander: http://docs.pylonsproject.org/projects/colander/en/latest/
+.. _cornice: http://cornice.readthedocs.org/
+.. _coverage: https://coverage.readthedocs.io/
+.. _D3: https://d3js.org/
+.. _dogpile: http://pythonhosted.org/dogpile/
+.. _enum34: https://bitbucket.org/stoneleaf/enum34
+.. _Fabric: http://www.fabfile.org/
+.. _facebook_sdk: https://facebook-sdk.readthedocs.io/en/latest/
+.. _feedparser: http://pythonhosted.org/feedparser/
+.. _flaky: https://github.com/box/flaky
+.. _gensim: http://pythonhosted.org/gensim/
+.. _google_api_python_client: http://github.com/google/google-api-python-client/
+.. _Gulp: http://gulpjs.com/
+.. _Hopscotch: http://linkedin.github.io/hopscotch/
+.. _imaplib2: http://github.com/bcoe/imaplib2
+.. _Ink: http://zurb.com/ink/index.php
+.. _ipython: http://ipython.org/
+.. _iso639: https://github.com/janpipek/iso639-python
+.. _isodate: http://cheeseshop.python.org/pypi/isodate
+.. _jasmine_splinter_runner: https://github.com/cobrateam/jasmine-splinter-runner
+.. _Jed: https://slexaxton.github.io/Jed/
+.. _Jinja2: http://jinja.pocoo.org/
+.. _jwzthreading: http://www.amk.ca/python/code/jwz.html
+.. _Kombu: http://kombu.readthedocs.io/en/latest/
+.. _langdetect: https://github.com/Mimino666/langdetect
+.. _linkifyjs: http://soapbox.github.io/linkifyjs/
+.. _lxml: http://lxml.de/
+.. _Marionette: http://marionettejs.com/
+.. _Memcached: https://memcached.org/
+.. _Memcached: https://memcached.org/
+.. _mock: https://docs.python.org/dev/library/unittest.mock.html
+.. _Moment: http://momentjs.com/
+.. _Nginx: http://nginx.org/
+.. _nodeenv: https://github.com/ekalinin/nodeenv
+.. _npm: https://www.npmjs.com/
+.. _PdbSublimeTextSupport: http://pypi.python.org/pypi/PdbSublimeTextSupport
+.. _Pip: https://pip.pypa.io/en/stable/#
+.. _Piwik: https://piwik.org/
+.. _Postgres: https://postgresql.org
+.. _premailer: http://github.com/peterbe/premailer
+.. _psycopg2: http://initd.org/psycopg/
+.. _pygraphviz: http://pygraphviz.github.io/
+.. _pyIsEmail: https://github.com/michaelherold/pyIsEmail
+.. _PyJWT: http://github.com/jpadilla/pyjwt
+.. _PyODBC: https://github.com/maparent/pyodbc
+.. _PyODBC: https://github.com/maparent/pyodbc
+.. _Pyramid: http://www.pylonsproject.org/
+.. _pyramid: https://trypyramid.com/
+.. _pyramid_beaker: http://docs.pylonsproject.org/projects/pyramid_beaker/en/latest/
+.. _pyramid_debugtoolbar: http://docs.pylonsproject.org/projects/pyramid-debugtoolbar/en/latest/
+.. _pyramid_debugtoolbar_ajax: https://github.com/jvanasco/pyramid_debugtoolbar_ajax
+.. _pyramid_dogpile_cache: https://github.com/moriyoshi/pyramid_dogpile_cache
+.. _pyramid_jinja2: https://github.com/Pylons/pyramid_jinja2
+.. _pyramid_mailer: http://docs.pylonsproject.org/projects/pyramid-mailer/en/latest/
+.. _pyramid_mako: https://github.com/Pylons/pyramid_mako
+.. _PyStemmer: http://snowball.tartarus.org/
+.. _pytest: https://github.com/pytest-dev/pytest/issues
+.. _Python: https://python.org/
+.. _python_social_auth: https://github.com/omab/python-social-auth
+.. _pytz: http://pythonhosted.org/pytz
+.. _pyzmq: https://pyzmq.readthedocs.org/
+.. _raven_js: https://github.com/getsentry/raven-js
+.. _raven_py: https://github.com/getsentry/raven-python
+.. _RDFLib: http://rdflib.readthedocs.io/en/stable/
+.. _rdflib: https://rdflib.readthedocs.io/en/stable/
+.. _rdflib_jsonld: https://github.com/RDFLib/rdflib-jsonld
+.. _Redis: http://redis.io/
+.. _requests: http://python-requests.org/
+.. _scikit_learn: http://scikit-learn.org/
+.. _selenium: http://www.seleniumhq.org/
+.. _Sentry: https://github.com/getsentry/sentry
+.. _Setuptools: http://pythonhosted.org/setuptools/
+.. _simplejson: http://github.com/simplejson/simplejson
+.. _six: https://pythonhosted.org/six/
+.. _snowballstemmer: https://github.com/shibukawa/snowball_py
+.. _SockJS: https://github.com/sockjs/sockjs-client
+.. _sockjs_client: https://github.com/sockjs/sockjs-client
+.. _sockjs_tornado: https://github.com/ImaginationForPeople/sockjs-tornado/
+.. _splinter: https://github.com/cobrateam/splinter
+.. _SQLAlchemy: http://www.sqlalchemy.org/
+.. _sqltap: http://sqltap.inconshreveable.com/
+.. _Supervisord: http://supervisord.org/
+.. _Tornado: http://www.tornadoweb.org/en/stable/
+.. _transaction: http://transaction.readthedocs.org/en/latest
+.. _Underscore: http://underscorejs.org/
+.. _uWSGI: https://uwsgi-docs.readthedocs.io/en/latest/
+.. _uWSGI: https://uwsgi-docs.readthedocs.io/en/latest/
+.. _uwsgitop: http://projects.unbit.it/uwsgi/wiki/StatsServer
+.. _Virtuoso: http://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/
+.. _waitress: https://github.com/Pylons/waitress
+.. _WebOb: http://webob.readthedocs.org/
+.. _WebTest: https://webtest.readthedocs.org/en/latest/
+.. _Werkzeug: http://werkzeug.pocoo.org/
+.. _ZeroMQ: http://zeromq.org/
+.. _zope_interface: http://docs.zope.org/zope.interface/
