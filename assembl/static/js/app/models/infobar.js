@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Infos about widgets and cookie settings
+ * Infobars for cookie and widget settings
  * @module app.models.infobar
  */
 
@@ -45,7 +45,7 @@ var CookieInfobarModel = InfobarModel.extend({
 /**
  * Cookie and widget bars collection
  * @class app.models.infobar.InfobarsCollection
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
 
 var InfobarsCollection = Base.Collection.extend({

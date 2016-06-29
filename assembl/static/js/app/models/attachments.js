@@ -225,7 +225,7 @@ var AttachmentModel = Base.Model.extend({
  * Attachements collection
  * Frontend model for :py:class:`assembl.models.attachment.Attachment`
  * @class app.models.attachments.AttachmentCollection
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var AttachmentCollection = Base.Collection.extend({

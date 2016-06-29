@@ -83,7 +83,7 @@ var AnnouncementModel = Base.Model.extend({
  * Annoucements collection
  * Frontend model for :py:class:`assembl.models.announcement.Announcement`
  * @class app.models.announcement.AnnouncementCollection
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var AnnouncementCollection = Base.Collection.extend({

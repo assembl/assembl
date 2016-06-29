@@ -61,7 +61,7 @@ var PanelSpecModel = Base.Model.extend({
 /**
  * Panel specifications collection
  * @class app.models.panelSpec.PanelSpecs
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var PanelSpecs = Base.Collection.extend({

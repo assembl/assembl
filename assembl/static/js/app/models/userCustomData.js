@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Custom key-value storage bound to a user and a namespace
  * @module app.models.userCustomData
  */
 
@@ -9,7 +9,7 @@ var Backbone = require('backbone'),
 
 // We do not use Base.Model.extend(), because we want to keep Backbone's default behaviour with model urls
 /**
- * Custom key-value storage bound to a user and a namespace
+ * User custom data model
  * Frontend model for :py:class:`assembl.models.user_key_values.DiscussionPerUserNamespacedKeyValue`
  * @class app.models.userCustomData.UserCustomDataModel
  * @extends Backbone.Model

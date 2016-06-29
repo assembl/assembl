@@ -89,7 +89,7 @@ var FileModel = DocumentModel.extend({
  * Documents collection
  * Frontend model for :py:class:`assembl.models.attachment.Document`
  * @class app.models.documents.DocumentCollection
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var DocumentCollection = Base.Collection.extend({

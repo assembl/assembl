@@ -44,7 +44,7 @@ var actionModel = Base.Model.extend({
  * Actions collection
  * Frontend model for :py:class:`assembl.models.action.Action`
  * @class app.models.actions.actionCollection
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var actionCollection = Base.Collection.extend({

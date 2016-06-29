@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * An access token for facebook
  * @module app.models.social
  */
 
@@ -48,11 +48,12 @@ tokenTimeManager.prototype = {
 };
 
 /**
- * An access token for facebook access
+ * Facebook access token model
  * Frontend model for :py:class:`assembl.models.facebook_integration.FacebookAccessToken`
  * @class app.models.social.FacebookAccessToken
  * @extends app.models.base.BaseModel
  */
+ 
 var FacebookAccessToken = Base.Model.extend({
    constructor: function FacebookAccessToken() {
     Base.Model.apply(this, arguments);
@@ -108,6 +109,13 @@ var FacebookAccessToken = Base.Model.extend({
         return this.get('token_type') === 'group';
   }
 });
+
+/**
+ * Facebook access token collection
+ * Frontend model for :py:class:`assembl.models.facebook_integration.FacebookAccessToken`
+ * @class app.models.social.FacebookAccessToken
+ * @extends app.models.base.BaseCollection
+ */
 
 var FacebookAccessTokens = Base.Collection.extend({
    constructor: function FacebookAccessTokens() {

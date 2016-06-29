@@ -54,7 +54,7 @@ var sourceModel = Base.Model.extend({
  * Sources collection
  * Frontend model for :py:class:`assembl.models.generic.ContentSource`
  * @class app.models.discussionSource.sourceCollection
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var sourceCollection = Base.Collection.extend({

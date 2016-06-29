@@ -168,7 +168,7 @@ var GroupSpecModel = Base.Model.extend({
 /**
  * Group specifications collection
  * @class app.models.groupSpec.GroupSpecs
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var GroupSpecs = Base.Collection.extend({

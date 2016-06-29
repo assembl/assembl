@@ -454,7 +454,7 @@ var IdeaModel = Base.Model.extend({
  * Ideas collection
  * Frontend model for :py:class:`assembl.models.idea.Idea`
  * @class app.models.idea.IdeaCollection
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var IdeaCollection = Base.Collection.extend({

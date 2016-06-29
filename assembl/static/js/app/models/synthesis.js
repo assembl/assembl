@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * The collection of idea snapshots in a synthesis
  * @module app.models.synthesis
  */
 
@@ -11,10 +11,11 @@ var Base = require('./base.js'),
 
 
 /**
- * The collection of idea snapshots in a synthesis
+ * Synthesis ideas collection
  * @class app.models.synthesis.SynthesisIdeaCollection
  * @extends app.models.idea.IdeaCollection
  */
+ 
 var SynthesisIdeaCollection = Idea.Collection.extend({
   constructor: function SynthesisIdeaCollection() {
     Idea.Collection.apply(this, arguments);
@@ -31,11 +32,12 @@ var SynthesisIdeaCollection = Idea.Collection.extend({
 });
 
 /**
- * A synthesis.
+ * Synthesis model
  * Frontend model for :py:class:`assembl.models.idea_graph_view.Synthesis`
  * @class app.models.synthesis.SynthesisModel
  * @extends app.models.base.BaseModel
  */
+ 
 var SynthesisModel = Base.Model.extend({
   constructor: function SynthesisModel() {
     Base.Model.apply(this, arguments);
@@ -92,8 +94,12 @@ var SynthesisModel = Base.Model.extend({
 });
 
 /**
+ * Synthesis collection
+ * Frontend model for :py:class:`assembl.models.idea_graph_view.Synthesis`
  * @class app.models.synthesis.SynthesisCollection
+ * @extends app.models.base.BaseCollection
  */
+ 
 var SynthesisCollection = Base.Collection.extend({
   constructor: function SynthesisCollection() {
     Base.Collection.apply(this, arguments);

@@ -49,7 +49,7 @@ var GroupStateModel = Base.Model.extend({
 /**
  * Group states collection
  * @class app.models.groupState.GroupStates
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var GroupStates = Base.Collection.extend({

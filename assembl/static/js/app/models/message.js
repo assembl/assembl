@@ -340,7 +340,7 @@ var MessageModel = Base.Model.extend({
  * Messages collection
  * Frontend model for :py:class:`assembl.models.post.Post`
  * @class app.models.message.MessageCollection
- * @extends app.models.base.BaseModel
+ * @extends app.models.base.BaseCollection
  */
  
 var MessageCollection = Base.Collection.extend({

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * A role that the user is granted in this discussion
  * @module app.models.roles
  */
 
@@ -10,11 +10,12 @@ var Base = require('./base.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js');
 
 /**
- * A role that the user is granted in this discussion
+ * Role model
  * Frontend model for :py:class:`assembl.models.auth.LocalUserRole`
  * @class app.models.roles.roleModel
  * @extends app.models.base.BaseModel
  */
+ 
 var roleModel = Base.Model.extend({
   constructor: function roleModel() {
     Base.Model.apply(this, arguments);
@@ -40,6 +41,13 @@ var roleModel = Base.Model.extend({
 
 });
 
+/**
+ * Roles collection
+ * Frontend model for :py:class:`assembl.models.auth.LocalUserRole`
+ * @class app.models.roles.roleCollection
+ * @extends app.models.base.BaseCollection
+ */
+ 
 var roleCollection = Base.Collection.extend({
   constructor: function roleCollection() {
     Base.Collection.apply(this, arguments);

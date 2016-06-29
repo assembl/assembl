@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * Manage string to translate
  * @module app.models.langstring
  */
 
@@ -81,11 +81,12 @@ var LocaleUtils = {
 };
 
 /**
- * A string in a given language. Many of those form a LangString
+ * Lang string entry Model. A string in a given language. Many of those form a LangString
  * Frontend model for :py:class:`assembl.models.langstrings.LangStringEntry`
  * @class app.models.langstring.LangStringEntry
  * @extends app.models.base.BaseModel
  */
+ 
 var LangStringEntry = Base.Model.extend({
   constructor: function LangStringEntry() {
     Base.Model.apply(this, arguments);
@@ -151,6 +152,7 @@ var LangStringEntry = Base.Model.extend({
 });
 
 /**
+ * Lang string entry collection
  * @class app.models.langstring.LangStringEntryCollection
  * @extends app.models.base.BaseCollection
  */
@@ -166,13 +168,13 @@ var LangStringEntryCollection = Base.Collection.extend({
   }
 });
 
-
 /**
- * A multilingual string, composed of many LangStringEntry
+ * Lang string model. A multilingual string, composed of many LangStringEntry
  * Frontend model for :py:class:`assembl.models.langstrings.LangString`
  * @class app.models.langstring.LangString
  * @extends app.models.base.BaseModel
  */
+ 
 var LangString = Base.Model.extend({
   constructor: function LangString() {
     Base.Model.apply(this, arguments);
@@ -317,6 +319,13 @@ LangString.empty = new LangString({
             new LangStringEntry({
                 "value": "",
                 "@language": "zxx"})])});
+
+/**
+ * Lang string collection
+ * Frontend model for :py:class:`assembl.models.langstrings.LangString`
+ * @class app.models.langstring.LangStringCollection
+ * @extends app.models.base.BaseCollection
+ */
 
 var LangStringCollection = Base.Collection.extend({
   constructor: function LangStringCollection() {

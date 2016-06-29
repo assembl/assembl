@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * An external source of imported messages
  * @module app.models.sources
  */
 
@@ -11,11 +11,12 @@ var Base = require('./base.js'),
     $ = require('jquery');
 
 /**
- * An external source of imported messages
+ * Source model
  * Frontend model for :py:class:`assembl.models.generic.ContentSource` and :py:class:`assembl.models.post.PostSource`
  * @class app.models.sources.Source
  * @extends app.models.base.BaseModel
  */
+ 
 var Source = Base.Model.extend({
    constructor: function Source() {
     Base.Model.apply(this, arguments);

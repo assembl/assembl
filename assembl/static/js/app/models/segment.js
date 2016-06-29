@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ * A segment of text extracted from a message. Can be associated to an idea, otherwise in clipboard.
  * @module app.models.segment
  */
 
@@ -14,11 +14,12 @@ var _ = require('underscore'),
     i18n = require('../utils/i18n.js');
 
 /**
- * A segment of text extracted from a message. Can be associated to an idea, otherwise in clipboard.
+ * Segment model
  * Frontend model for :py:class:`assembl.models.idea_content_link.Extract`
  * @class app.models.segment.SegmentModel
  * @extends app.models.base.BaseModel
  */
+ 
 var SegmentModel = Base.Model.extend({
   constructor: function SegmentModel() {
     Base.Model.apply(this, arguments);
@@ -228,8 +229,12 @@ var SegmentModel = Base.Model.extend({
 });
 
 /**
+ * Segment collection
+ * Frontend model for :py:class:`assembl.models.idea_content_link.Extract`
  * @class app.models.segment.SegmentCollection
+ * @extends app.models.base.BaseCollection
  */
+ 
 var SegmentCollection = Base.Collection.extend({
   constructor: function SegmentCollection() {
     Base.Collection.apply(this, arguments);
