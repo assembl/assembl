@@ -10,6 +10,7 @@ class Webpage(Content):
     """A web page as a content type
 
     This allows web annotation with annotator_.
+
     .. _annotator: http://annotatorjs.org/
     """
     __tablename__ = "webpage"

@@ -1,6 +1,7 @@
 #!python
 """
 Create a JED_ localization file from localized strings used by JS.
+
 .. _JED: https://slexaxton.github.io/Jed/
 """
 

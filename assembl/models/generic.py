@@ -1,4 +1,8 @@
-"""The basic Content and ContentSource classes."""
+"""The basic Content and ContentSource classes.
+
+.. inheritance-diagram:: ContentSource Content PostSource AnnotatorSource assembl.models.post.Post assembl.models.post.AssemblPost assembl.models.post.SynthesisPost assembl.models.post.WidgetPost assembl.models.post.IdeaProposalPost assembl.models.post.ImportedPost assembl.models.mail.AbstractMailbox assembl.models.mail.IMAPMailbox assembl.models.mail.MailingList assembl.models.mail.AbstractFilesystemMailbox assembl.models.mail.MaildirMailbox assembl.models.mail.Email assembl.models.annotation.Webpage
+    :parts: 1
+"""
 from datetime import datetime
 import logging
 from abc import abstractmethod

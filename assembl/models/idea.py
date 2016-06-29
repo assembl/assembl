@@ -65,6 +65,7 @@ class IdeaVisitor(object):
     The visit is started by :py:meth:`Idea.visit_ideas_depth_first`,
     :py:meth:`Idea.visit_ideas_breadth_first` or
     :py:meth:`Idea.visit_idea_ids_depth_first`
+
     .. _Visitor: https://sourcemaking.com/design_patterns/visitor
     """
     CUT_VISIT = object()

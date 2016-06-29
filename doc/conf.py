@@ -41,6 +41,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
+    'sphinx.ext.inheritance_diagram',
     'sphinxcontrib.httpdomain',
     'sphinxcontrib.zopeext',
     'pyramid_autodoc',
@@ -113,6 +114,7 @@ pygments_style = 'sphinx'
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
 
+inheritance_graph_attrs = dict(rankdir="TB")
 
 # -- Options for HTML output ----------------------------------------------
 
