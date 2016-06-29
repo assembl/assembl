@@ -139,7 +139,7 @@ pyzmq_
 raven_py_
   Send error reports to Sentry_.
 
-rdflib_
+RDFLib_
   Library to handle RDF data, used for `Catalyst interoperability`_.
 
 rdflib_jsonld_
@@ -593,6 +593,7 @@ We have used multiple processes rather than threads.
 .. _Catalyst: http://catalyst-fp7.eu/
 .. _`Catalyst interoperability`: http://projects.sigma-orionis.com/catalyst/wp-content/uploads/2014/03/D3.1-Software-Architecture-and-Cross-Platform-Interoperability-Specification.pdf
 .. _Celery: http://www.celeryproject.org/
+.. _Chai: http://chaijs.com/
 .. _CKEditor: http://ckeditor.com/
 .. _colander: http://docs.pylonsproject.org/projects/colander/en/latest/
 .. _cornice: http://cornice.readthedocs.org/
@@ -604,6 +605,7 @@ We have used multiple processes rather than threads.
 .. _facebook_sdk: https://facebook-sdk.readthedocs.io/en/latest/
 .. _feedparser: http://pythonhosted.org/feedparser/
 .. _flaky: https://github.com/box/flaky
+.. _flower: http://flower.readthedocs.io/en/latest/index.html
 .. _gensim: http://pythonhosted.org/gensim/
 .. _google_api_python_client: http://github.com/google/google-api-python-client/
 .. _Graphviz: http://www.graphviz.org/
@@ -625,6 +627,7 @@ We have used multiple processes rather than threads.
 .. _Marionette: http://marionettejs.com/
 .. _Memcached: https://memcached.org/
 .. _Memcached: https://memcached.org/
+.. _Mocha: https://mochajs.org/
 .. _mock: https://docs.python.org/dev/library/unittest.mock.html
 .. _Moment: http://momentjs.com/
 .. _Nginx: http://nginx.org/
@@ -647,6 +650,7 @@ We have used multiple processes rather than threads.
 .. _pyramid_debugtoolbar: http://docs.pylonsproject.org/projects/pyramid-debugtoolbar/en/latest/
 .. _pyramid_debugtoolbar_ajax: https://github.com/jvanasco/pyramid_debugtoolbar_ajax
 .. _pyramid_dogpile_cache: https://github.com/moriyoshi/pyramid_dogpile_cache
+.. _pyramid_ipython: https://github.com/Pylons/pyramid_ipython
 .. _pyramid_jinja2: https://github.com/Pylons/pyramid_jinja2
 .. _pyramid_mailer: http://docs.pylonsproject.org/projects/pyramid-mailer/en/latest/
 .. _pyramid_mako: https://github.com/Pylons/pyramid_mako
@@ -658,8 +662,7 @@ We have used multiple processes rather than threads.
 .. _pyzmq: https://pyzmq.readthedocs.org/
 .. _raven_js: https://github.com/getsentry/raven-js
 .. _raven_py: https://github.com/getsentry/raven-python
-.. _RDFLib: http://rdflib.readthedocs.io/en/stable/
-.. _rdflib: https://rdflib.readthedocs.io/en/stable/
+.. _RDFLib: https://rdflib.readthedocs.io/en/stable/
 .. _rdflib_jsonld: https://github.com/RDFLib/rdflib-jsonld
 .. _Redis: http://redis.io/
 .. _requests: http://python-requests.org/
