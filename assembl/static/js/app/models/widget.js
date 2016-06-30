@@ -169,7 +169,7 @@ var WidgetModel = Base.Model.extend({
    * [Describes whether the widget model is internal to Assembl 
    * (using Marionette)(=false) or Independent (using Angular)(=true);
    * Override in child classes]
-   * @returns {Boolean}
+   * @returns {boolean}
    */
   isIndependentModalType: function(){
     return true;

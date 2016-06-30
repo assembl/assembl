@@ -91,7 +91,7 @@ var AnnouncementCollection = Base.Collection.extend({
   },
 
   /**
-   * @type {String}
+   * @type {string}
    */
   url: Ctx.getApiV2DiscussionUrl('announcements'),
   

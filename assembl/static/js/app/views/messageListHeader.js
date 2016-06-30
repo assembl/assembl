@@ -201,7 +201,7 @@ var MessageListHeader = Marionette.ItemView.extend({
   /**
    * get a view style css_class
    * @param messageViewStyle
-   * @returns {String}
+   * @returns {string}
    */
   getMessageViewStyleCssClass: function(messageViewStyle) {
     return DEFAULT_MESSAGE_VIEW_LI_ID_PREFIX + messageViewStyle.id;

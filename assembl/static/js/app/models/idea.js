@@ -51,7 +51,7 @@ var IdeaModel = Base.Model.extend({
 
   /**
    * Url
-   * @type {String}
+   * @type {string}
    */
   urlRoot: Ctx.getApiUrl("ideas"),
 
@@ -136,7 +136,7 @@ var IdeaModel = Base.Model.extend({
     },
 
   /**
-   * @returns {String} The short Title to be displayed
+   * @returns {string} The short Title to be displayed
    * HTML Striping if necessary is the responsability of the caller.
    */
   getShortTitleDisplayText: function() {
@@ -158,7 +158,7 @@ var IdeaModel = Base.Model.extend({
   },
 
   /**
-   * @returns {Boolean} true if the current idea is the root idea
+   * @returns {boolean} true if the current idea is the root idea
    */
   isRootIdea: function() {
     return this.get('@type') === Types.ROOT_IDEA;
@@ -249,7 +249,7 @@ var IdeaModel = Base.Model.extend({
   /**
    * Return if the idea is descendant of the given idea
    * @param {Idea} idea
-   * @returns {Boolean}
+   * @returns {boolean}
    */
   isDescendantOf: function(idea) {
     var parentId = this.get('parentId');
@@ -285,7 +285,7 @@ var IdeaModel = Base.Model.extend({
   },
 
   /**
-   * @returns {Number} the indentantion level
+   * @returns {number} the indentantion level
    */
   getLevel: function() {
     var counter = 0,
@@ -301,7 +301,7 @@ var IdeaModel = Base.Model.extend({
   },
 
   /**
-   * @returns {Number} The order number for a new child
+   * @returns {number} The order number for a new child
    */
   getOrderForNewChild: function() {
     return this.getChildren().length + 1;
@@ -463,7 +463,7 @@ var IdeaCollection = Base.Collection.extend({
 
   /**
    * Url
-   * @type {String}
+   * @type {string}
    */
   url: Ctx.getApiUrl("ideas"),
 
@@ -490,7 +490,7 @@ var IdeaCollection = Base.Collection.extend({
 
   /**
    * Returns the order number for a new root idea
-   * @returns {Number}
+   * @returns {number}
    */
   getOrderForNewRootIdea: function() {
     var lastIdea = this.last();

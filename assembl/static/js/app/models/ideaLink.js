@@ -75,7 +75,7 @@ var IdeaLinkCollection = Base.Collection.extend({
 
   /**
    * Url
-   * @type {String}
+   * @type {string}
    */
   url: Ctx.getApiV2DiscussionUrl("idea_links"),
 

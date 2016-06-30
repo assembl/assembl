@@ -23,7 +23,7 @@ var DocumentModel = Base.Model.extend({
   },
 
   /**
-   * @type {String}
+   * @type {string}
    */
   urlRoot: Ctx.getApiV2DiscussionUrl('documents'),
 

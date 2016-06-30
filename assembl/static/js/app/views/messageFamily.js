@@ -25,13 +25,13 @@ var MessageFamilyView = Marionette.ItemView.extend({
 
   template: '#tmpl-loader',
   /**
-   * @type {String}
+   * @type {string}
    */
   className: 'message-family-container',
 
   /**
    * Stores the current level
-   * @type {Number}
+   * @type {number}
    */
   currentLevel: null,
 
@@ -139,7 +139,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
     
   /**
    * The render
-   * @param {Number} [level] The hierarchy level
+   * @param {number} [level] The hierarchy level
    * @returns {MessageView}
    */
   onRender: function() {

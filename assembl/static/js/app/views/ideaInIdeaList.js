@@ -23,7 +23,7 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
 
   /**
    * Tag name
-   * @type {String}
+   * @type {string}
    */
   tagName: 'div',
 
@@ -35,7 +35,7 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
 
   /**
    * Counter used to open the idea when it is dragover
-   * @type {Number}
+   * @type {number}
    */
   dragOverCounter: 0,
 

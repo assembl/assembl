@@ -79,19 +79,19 @@ var Context = function() {
 
   /**
    * Csrf token
-   * @type {String}
+   * @type {string}
    */
   this.csrfToken = null;
 
   /**
    * Default ease for all kids of animation
-   * @type {String}
+   * @type {string}
    */
   this.ease = 'ease';
 
   /**
    * The date format
-   * @type {String}
+   * @type {string}
    */
   this.dateFormat = 'DD/MM/YYYY';
 
@@ -115,7 +115,7 @@ var Context = function() {
 
   /**
    * ID of Current synthesis draft
-   * @type {String}
+   * @type {string}
    */
   this.currentSynthesisDraftId = null;
 
@@ -146,7 +146,7 @@ var Context = function() {
 
   /**
    * Qty of opened panels
-   * @type {Number}
+   * @type {number}
    */
   this.openedPanels = 0;
 
@@ -408,7 +408,7 @@ Context.prototype = {
   /**
    * Checks if there is a panel in fullscreen mode
    * ( i.e.: there is only one open )
-   * @returns {Boolean}
+   * @returns {boolean}
    */
   isInFullscreen: function() {
     return this.openedPanels === 1;
@@ -771,7 +771,7 @@ Context.prototype = {
    * Shows the dragbox when user starts dragging an element
    * This method is designed to be called in a dragstart event listener.
    * @param  {Event} ev - The event object
-   * @param  {String} text - The text to be shown in the .dragbox
+   * @param  {string} text - The text to be shown in the .dragbox
    */
   showDragbox: function(ev, text, newExtract) {
     var dragbox_max_length = 25,
@@ -869,7 +869,7 @@ Context.prototype = {
 
   /**
    * Returns a fancy date (ex: a few seconds ago), or a formatted precise date if precise is true
-   * @returns {String}
+   * @returns {string}
    */
   getNiceDateTime: function(date, precise, with_time, forbid_future) {
     // set default values
@@ -919,7 +919,7 @@ Context.prototype = {
 
   /**
    * Returns a nicely formatted date, but not an approximative expression (i.e. not "a few seconds ago")
-   * @returns {String}
+   * @returns {string}
    */
   getReadableDateTime: function(date) {
     return this.getNiceDateTime(date, true);
@@ -978,7 +978,7 @@ Context.prototype = {
 
   /**
    * @see http://blog.snowfinch.net/post/3254029029/uuid-v4-js
-   * @returns {String} an uuid
+   * @returns {string} an uuid
    */
    
   //FIXME: this method never use in app
@@ -1000,17 +1000,17 @@ Context.prototype = {
    
   /**
    * Given the string in the format "local:ModelName/{id}" returns the id
-   * @param  {String} str
-   * @returns {String}
+   * @param  {string} str
+   * @returns {string}
    */
   extractId: function(str) {
     return str.split('/')[1];
   },
 
   /**
-   * @param  {Number} userID The user's ID
-   * @param  {Number} [size=44] The avatar size
-   * @returns {String} The avatar's url formatted with the given size
+   * @param  {number} userID The user's ID
+   * @param  {number} [size=44] The avatar size
+   * @returns {string} The avatar's url formatted with the given size
    */
   formatAvatarUrl: function(userID, size) {
     size = size || 44;
@@ -1018,8 +1018,8 @@ Context.prototype = {
   },
 
   /** This removes (rather than escape) all html tags
-   * @param  {String} html
-   * @returns {String} The new string without html tags
+   * @param  {string} html
+   * @returns {string} The new string without html tags
    */
   stripHtml: function(html) {
       if (!html) {
@@ -1034,7 +1034,7 @@ Context.prototype = {
     },
 
   /** Convert all applicable characters to HTML entities
-   * @param  {String} html
+   * @param  {string} html
    */
   htmlEntities: function(str) {
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

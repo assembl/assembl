@@ -35,7 +35,7 @@ tokenTimeManager.prototype = {
     /**
      * Compares a Moment object to the Python datetime.min time
      * @param  {Moment}  t [Time to compare]
-     * @returns {Boolean}   []
+     * @returns {boolean}   []
      */
     isMinTime: function(t){
         var tmp; 

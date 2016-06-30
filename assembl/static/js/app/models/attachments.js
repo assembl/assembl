@@ -49,7 +49,7 @@ var AttachmentModel = Base.Model.extend({
   },
 
   /**
-   * @type {String}
+   * @type {string}
    */
   urlRoot: function() {
     //console.log("urlRoot called on ", this, this.get('objectAttachedToModel'));
@@ -233,7 +233,7 @@ var AttachmentCollection = Base.Collection.extend({
   },
 
   /**
-   * @type {String}
+   * @type {string}
    */
   url: function() {
     //console("AttachmentCollection::url() about to return:", this.objectAttachedToModel.urlRoot() + '/' + this.objectAttachedToModel.getNumericId() + '/attachments');

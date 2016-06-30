@@ -213,7 +213,7 @@ var SegmentModel = Base.Model.extend({
 
   /**
    * Alias for `.get('quote') || .get('text')`
-   * @returns {String}
+   * @returns {string}
    */
   getQuote: function() {
     return this.get('quote') || this.get('text');
@@ -240,7 +240,7 @@ var SegmentCollection = Base.Collection.extend({
   },
 
   /**
-   * @type {String}
+   * @type {string}
    */
   url: Ctx.getApiUrl("extracts"),
 
@@ -269,7 +269,7 @@ var SegmentCollection = Base.Collection.extend({
    * Transform an annotator annotation as an extract.
    * The segment isn't saved.
    * @param {annotation} annotation
-   * @param {Number} [idIdea=null]
+   * @param {number} [idIdea=null]
    * @returns {Segment}
    */
   addAnnotationAsExtract: function(annotation, idIdea) {

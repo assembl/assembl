@@ -75,7 +75,7 @@ var IdeaList = AssemblPanel.extend({
 
   /**
    * Are we showing the graph or the list?
-   * @type {Boolean}
+   * @type {boolean}
    */
   show_graph: false,
   minWidth: 320,

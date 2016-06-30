@@ -15,7 +15,7 @@ var IdeaFamilyView = Backbone.View.extend({
 
   /**
    * Tag name
-   * @type {String}
+   * @type {string}
    */
   tagName: 'div',
 

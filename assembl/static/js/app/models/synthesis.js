@@ -54,7 +54,7 @@ var SynthesisModel = Base.Model.extend({
 
   /**
    * The urlRoot endpoint
-   * @type {String}
+   * @type {string}
    */
   urlRoot: Ctx.getApiUrl('explicit_subgraphs/synthesis'),
 
@@ -106,7 +106,7 @@ var SynthesisCollection = Base.Collection.extend({
 
   /**
    * Url
-   * @type {String}
+   * @type {string}
    */
   url: Ctx.getApiUrl("explicit_subgraphs/synthesis"),
 

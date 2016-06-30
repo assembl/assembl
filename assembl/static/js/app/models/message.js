@@ -28,7 +28,7 @@ var MessageModel = Base.Model.extend({
   },
   /**
    * The url
-   * @type {String}
+   * @type {string}
    */
   urlRoot: Ctx.getApiUrl('posts'),
 
@@ -83,7 +83,7 @@ var MessageModel = Base.Model.extend({
   },
 
   /**
-   * @returns {String} the subject, with any re: stripped
+   * @returns {string} the subject, with any re: stripped
    */
   getSubjectNoRe: function() {
       var subject = this.get('subject').originalValue();
@@ -113,7 +113,7 @@ var MessageModel = Base.Model.extend({
   },
 
   /**
-   * @returns {Number} the quantity of all descendants
+   * @returns {number} the quantity of all descendants
    */
   getDescendantsCount: function() {
     var children = this.getChildren(),
@@ -251,7 +251,7 @@ var MessageModel = Base.Model.extend({
 
   /**
    * Set the `read` property
-   * @param {Boolean} value
+   * @param {boolean} value
    * @param jquery element
    */
   setRead: function(value, target) {
@@ -348,7 +348,7 @@ var MessageCollection = Base.Collection.extend({
   },
   /**
    * The url
-   * @type {String}
+   * @type {string}
    */
   url: Ctx.getApiUrl("posts?view=id_only"),
 

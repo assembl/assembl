@@ -209,31 +209,31 @@ var MessageView = Marionette.LayoutView.extend({
   template: '#tmpl-loader',
   availableMessageViewStyles: Ctx.AVAILABLE_MESSAGE_VIEW_STYLES,
   /**
-   * @type {String}
+   * @type {string}
    */
   className: 'message',
 
   /**
    * Flags if it is selecting a text or not
-   * @type {Boolean}
+   * @type {boolean}
    */
   isSelecting: true,
 
   /**
    * Flags if the message is hoisted
-   * @type {Boolean}
+   * @type {boolean}
    */
   isHoisted: false,
 
   /**
    * Is the reply box currently visible
-   * @type {Boolean}
+   * @type {boolean}
    */
   replyBoxShown: false,
 
   /**
    * does the reply box currently have the focus
-   * @type {Boolean}
+   * @type {boolean}
    */
   replyBoxHasFocus: false,
 
@@ -1341,8 +1341,8 @@ var MessageView = Marionette.LayoutView.extend({
 
   /**
    * Shows the save options to the selected text once the selection is complete
-   * @param  {Number} x
-   * @param  {Number} y
+   * @param  {number} x
+   * @param  {number} y
    */
   showAnnotatorSelectionSaveOptions: function(x, y) {
     this.hideAnnotatorSelectionTooltip();

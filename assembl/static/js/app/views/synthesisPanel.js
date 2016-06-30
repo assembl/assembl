@@ -136,7 +136,7 @@ var SynthesisPanel = AssemblPanel.extend({
 
   /**
    * Flag
-   * @type {Boolean}
+   * @type {boolean}
    */
   collapsed: false,
 

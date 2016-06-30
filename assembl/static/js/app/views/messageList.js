@@ -424,20 +424,20 @@ var MessageList = AssemblPanel.extend({
 
   /**
    * The collapse/expand flag
-   * @type {Boolean}
+   * @type {boolean}
    */
   collapsed: false,
 
   /**
    * Stores the first offset of messages currently onscreen
    *
-   * @type {Number}
+   * @type {number}
    */
   offsetStart: undefined,
 
   /**
    * Stores the last offset of messages currently onscreen
-   * @type {Number}
+   * @type {number}
    */
   offsetEnd: undefined,
 
@@ -1140,7 +1140,7 @@ var MessageList = AssemblPanel.extend({
   },
 
   /**
-   * @returns {Number} returns the current number of messages displayed
+   * @returns {number} returns the current number of messages displayed
    * in the message list
    */
   getCurrentNumberOfMessagesDisplayed: function() {
@@ -1635,7 +1635,7 @@ var MessageList = AssemblPanel.extend({
    * Return a list with all views already rendered for threaded views
    * WARNING: This is a recursive function
    * @param {Message.Model[]} list of messages to render at the current level
-   * @param {Number} [level=1] The current hierarchy level
+   * @param {number} [level=1] The current hierarchy level
    * @param {Object[]} data_by_object render information from ideaRendervisitor
    * @param {string[]} messageIdsToShow messageIds of the message to show (those in the offset range)
    * @returns {jquery.promise}
@@ -1965,7 +1965,7 @@ var MessageList = AssemblPanel.extend({
 
   /**
    * Shows posts which are descendent of a given post
-   * @param {String} postId
+   * @param {string} postId
    */
   addFilterByPostId: function(postId) {
     this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_DESCENDENT_OF_POST, postId);
@@ -2000,7 +2000,7 @@ var MessageList = AssemblPanel.extend({
 
   /**
    * Load posts that belong to an idea
-   * @param {String} ideaId
+   * @param {string} ideaId
    * @param {bool} show only unread messages (this parameter is optional and is a flag)
    */
   addFilterIsRelatedToIdea: function(idea, only_unread) {
@@ -2034,7 +2034,7 @@ var MessageList = AssemblPanel.extend({
 
   /**
    * Load posts that are synthesis posts
-   * @param {String} ideaId
+   * @param {string} ideaId
    */
   addFilterIsSynthesMessage: function() {
     //Can't filter on an idea at the same time as getting synthesis messages
@@ -2045,7 +2045,7 @@ var MessageList = AssemblPanel.extend({
 
   /**
    * Load posts that are synthesis posts
-   * @param {String} ideaId
+   * @param {string} ideaId
    */
   addFilterIsOrphanMessage: function() {
     //Can't filter on an idea at the same time as getting orphan messages
@@ -2188,7 +2188,7 @@ var MessageList = AssemblPanel.extend({
   },
   /** Return the message offset in the current view, in the set of filtered
    * messages
-   * @param {String} messageId
+   * @param {string} messageId
    * @returns {Integer} callback: The message offest if message is found
    */
   getMessageOffset: function(messageId, visitorData, resultMessageIdCollection) {
@@ -2228,8 +2228,8 @@ var MessageList = AssemblPanel.extend({
    * AND between the offsets onscreen.
    * This does NOT mean it's view has already finished rendering,
    * nor that it's vithin the current scroll viewport
-   * @param {String} id
-   * @return{Boolean} true or false
+   * @param {string} id
+   * @return{boolean} true or false
    */
   isMessageOnscreen: function(resultMessageIdCollection, visitorData, id) {
       //console.log("isMessageOnscreen called for ", id, "Offsets are:", this._offsetStart, this._offsetEnd)
@@ -2426,9 +2426,9 @@ var MessageList = AssemblPanel.extend({
 
   /**
    * Highlights the message by the given id
-   * @param {String} id
+   * @param {string} id
    * @param {Function} [callback] Optional: The callback function to call if message is found
-   * @param {Boolean} shouldHighlightMessageSelected: defaults to true
+   * @param {boolean} shouldHighlightMessageSelected: defaults to true
    */
   showMessageById: function(id, callback, shouldHighlightMessageSelected, shouldOpenMessageSelected, shouldRecurseMaxMoreTimes, originalRenderId) {
       var that = this,

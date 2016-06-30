@@ -97,7 +97,7 @@ var AgentModel = Base.Model.extend({
   /**
    * return the avatar's url
    * @function app.models.agents.AgentModel.getAvatarUrl
-   * @param  {Number} [size=44] The avatar size
+   * @param  {number} [size=44] The avatar size
    * @returns {string}
    */
   getAvatarUrl: function(size) {
@@ -216,7 +216,7 @@ var AgentCollection = Base.Collection.extend({
   /**
    * Returns the user by his/her id, or return the unknown user
    * @function app.models.agents.AgentCollection.getById
-   * @param {Number} id
+   * @param {number} id
    * @returns {User}
    */
   getById: function(id) {

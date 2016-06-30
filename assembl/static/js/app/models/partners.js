@@ -22,7 +22,7 @@ var PartnerOrganizationModel = Base.Model.extend({
   },
 
   /**
-   * @type {String}
+   * @type {string}
    */
   urlRoot: Ctx.getApiV2DiscussionUrl('partner_organizations'),
 
@@ -58,7 +58,7 @@ var PartnerOrganizationCollection = Base.Collection.extend({
   },
 
   /**
-   * @type {String}
+   * @type {string}
    */
   url: Ctx.getApiV2DiscussionUrl('partner_organizations'),
 

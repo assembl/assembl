@@ -122,7 +122,7 @@ var PostQuery = function() {
      * A filter restriction on the collection.  Setting a filter value to
      * null is equivalent to removing the filter
      * @param {availableFilters} filterDef
-     * @param {String} value
+     * @param {string} value
      * @returns true on success, false on failure
      */
     this.addFilter = function(filterDef, value) {

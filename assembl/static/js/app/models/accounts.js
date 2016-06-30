@@ -1,7 +1,6 @@
 'use strict';
 
 /**
- * A user's (email or social) account.
  * @module app.models.accounts
  */
 
@@ -9,7 +8,7 @@ var Base = require('./base.js'),
     Ctx = require('../common/context.js');
 
 /**
- * Account model
+ * A user's (email or social) account.
  * Frontend model for :py:class:`assembl.models.auth.AbstractAgentAccount`
  * @class app.models.accounts.Account
  * @extends app.models.base.BaseModel
@@ -42,7 +41,6 @@ var Account = Base.Model.extend({
     /**
      * check typeof variable
      * */
-     
   },
 
   isFacebookAccount: function() {
@@ -56,7 +54,6 @@ var Account = Base.Model.extend({
  * @class app.models.accounts.Accounts
  * @extends app.models.base.BaseCollection
  */
- 
 var Accounts = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl("/all_users/current/accounts"),
   model: Account,

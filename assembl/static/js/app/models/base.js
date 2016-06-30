@@ -60,7 +60,7 @@ var BaseModel = Backbone.Model.extend({
    * Get the innerText from the given `id` element
    * Parses the json and execute `.reset` method in the Model
    *
-   * @param {String} id The script tag id
+   * @param {string} id The script tag id
    */
   fetchFromScriptTag: function(id) {
     var json = null;
@@ -224,7 +224,7 @@ var BaseCollection = Backbone.Collection.extend({
    * Get the innerText from the given `id` element
    * Parses the json and execute `.reset` method in the collection
    *
-   * @param {String} id The script tag id
+   * @param {string} id The script tag id
    */
   fetchFromScriptTag: function(id) {
       var that = this;
@@ -265,7 +265,7 @@ var BaseCollection = Backbone.Collection.extend({
    * Find the model by numeric id instead of string
    * ex: finds 'local:ModelName/30' if given '30'
    *
-   * @param {Number} id
+   * @param {number} id
    * @returns {BaseModel}
    */
   getByNumericId: function(id) {
