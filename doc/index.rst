@@ -49,6 +49,7 @@ APIs
    endpoints
    analytics/piwik_reporting_api
    analytics/events
+* `The CATALYST Interchange format (CIF) <http://catalyst-fp7.eu/wp-content/uploads/2014/03/D3.1-Software-Architecture-and-Cross-Platform-Interoperability-Specification.pdf>`_ (not currently functionnal since the migration to postgres 2016-06-30)
 
 Backend class reference
 -----------------------
