@@ -234,6 +234,7 @@ var CollectionManager = Marionette.Object.extend({
    * @param {BaseModel} item
    * @param {string} item['@type'] - The model type
    * @returns {BaseCollection}
+   * @function app.common.collectionManager.CollectionManager.getCollectionPromiseByType
    */
   getCollectionPromiseByType: function(item) {
     var type = Types.getBaseType(item['@type']);
