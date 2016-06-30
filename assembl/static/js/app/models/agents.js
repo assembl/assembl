@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * User profil and permissions (user or email author)
+ * User profile and permissions (user or email author)
  * @module app.models.agents
  */
 
@@ -22,10 +22,9 @@ var UNKNOWN_USER_ID = Roles.EVERYONE;
  * @class app.models.agents.AgentModel
  * @extends app.models.base.BaseModel
  */
- 
 var AgentModel = Base.Model.extend({
   /**
-   * @type {String}
+   * @member {string} app.models.agents.AgentModel.urlRoot
    */
   //urlRoot: Ctx.getApiUrl('agents/'),
   urlRoot:  Ctx.getApiV2DiscussionUrl() + 'all_users/',
@@ -59,7 +58,7 @@ var AgentModel = Base.Model.extend({
   /**
    * The list with all user's permissions
    * This is usefull only for the logged user.
-   * @type {String[]}
+   * @member {string[]} app.models.agents.AgentModel.permissions
    */
   permissions: [],
 
@@ -67,7 +66,8 @@ var AgentModel = Base.Model.extend({
    * Load the permissions from script tag
    * and populates `this.permissions`
    *
-   * @param {String} [id='permissions-json'] The script tag id
+   * @function app.models.agents.AgentModel.fetchPermissionsFromScriptTag
+   * @param {string} [id='permissions-json'] The script tag id
    */
   fetchPermissionsFromScriptTag: function(id) {
     id = id || 'permissions-json';
@@ -81,6 +81,7 @@ var AgentModel = Base.Model.extend({
 
   /**
    * Load permissions from database
+   * @function app.models.agents.AgentModel.fetchPermissions
    */
   fetchPermissions: function() {
     //console.log("AgentModel::fetchPermissions()");
@@ -95,6 +96,7 @@ var AgentModel = Base.Model.extend({
 
   /**
    * return the avatar's url
+   * @function app.models.agents.AgentModel.getAvatarUrl
    * @param  {Number} [size=44] The avatar size
    * @returns {string}
    */
@@ -111,14 +113,16 @@ var AgentModel = Base.Model.extend({
   },
 
   /**
-   * @param  {String}  permission The permission name
-   * @returns {Boolean} True if the user has the given permission
+   * @function app.models.agents.AgentModel.hasPermission
+   * @param  {string}  permission The permission name
+   * @returns {boolean} True if the user has the given permission
    */
   hasPermission: function(permission) {
     return $.inArray(permission, this.permissions) >= 0;
   },
 
   /**
+   * @function app.models.agents.AgentModel.can
    * @alias hasPermission
    */
   can: function(permission) {
@@ -127,6 +131,7 @@ var AgentModel = Base.Model.extend({
 
 
   /**
+   * @function app.models.agents.AgentModel.getRolesMissingMessageForPermission
    * @returns A text message designed to replace X in the question "You cannot perform this operation because X"
    */
   getRolesMissingMessageForPermission: function(permission, discussion, reroute_relative_url) {
@@ -170,7 +175,8 @@ var AgentModel = Base.Model.extend({
     },
 
   /**
-   * @returns {Boolean} true if the user is an unknown user
+   * @function app.models.agents.AgentModel.getRolesMissingMessageForPermission
+   * @returns {boolean} true if the user is an unknown user
    */
   isUnknownUser: function() {
     return this.getId() === UNKNOWN_USER_ID;
@@ -197,20 +203,21 @@ var AgentCollection = Base.Collection.extend({
   },
 
   /**
-   * @type {String}
+   * @member {string} app.models.agents.AgentCollection.url
    */
   url: Ctx.getApiUrl('agents/'),
 
   /**
    * The model
-   * @type {UserModel}
+   * @member {AgentModel} app.models.agents.AgentCollection.model
    */
   model: AgentModel,
 
   /**
    * Returns the user by his/her id, or return the unknown user
+   * @function app.models.agents.AgentCollection.getById
    * @param {Number} id
-   * @type {User}
+   * @returns {User}
    */
   getById: function(id) {
     var user = this.get(id);
@@ -218,8 +225,8 @@ var AgentCollection = Base.Collection.extend({
   },
 
   /**
-   * Returns the unknown user
-   * @returns {User}
+   * @function app.models.agents.AgentCollection.getUnknownUser
+   * @returns {User} the unknown user
    */
   getUnknownUser: function() {
     return UNKNOWN_USER;
