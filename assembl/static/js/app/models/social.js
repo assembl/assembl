@@ -112,7 +112,6 @@ var FacebookAccessToken = Base.Model.extend({
 
 /**
  * Facebook access token collection
- * Frontend model for :py:class:`assembl.models.facebook_integration.FacebookAccessToken`
  * @class app.models.social.FacebookAccessToken
  * @extends app.models.base.BaseCollection
  */

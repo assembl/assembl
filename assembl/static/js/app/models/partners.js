@@ -49,7 +49,6 @@ var PartnerOrganizationModel = Base.Model.extend({
 
 /**
  * Partner collection
- * Frontend model for :py:class:`assembl.models.auth.PartnerOrganization`
  * @class app.models.partners.PartnerOrganizationCollection
  * @extends app.models.base.BaseCollection
  */

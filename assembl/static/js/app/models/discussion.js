@@ -112,7 +112,6 @@ var discussionModel = Base.Model.extend({
 
 /**
  * Discussions collection
- * Frontend model for :py:class:`assembl.models.discussion.Discussion`
  * @class app.models.discussion.discussionCollection
  * @extends app.models.base.BaseCollection
  */

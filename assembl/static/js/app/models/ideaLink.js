@@ -61,7 +61,6 @@ var IdeaLinkModel = Base.Model.extend({
 
 /**
  * Idea link collection
- * Frontend model for :py:class:`assembl.models.idea.IdeaLink`
  * @class app.models.ideaLink.IdeaLinkCollection
  * @extends app.models.base.BaseCollection
  */

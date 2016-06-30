@@ -43,7 +43,6 @@ var notificationsSubscriptionModel = Base.Model.extend({
 
 /**
  * Notifications subscription collection
- * Frontend model for :py:class:`assembl.models.notification.NotificationSubscription`
  * @class app.models.notificationSubscription.notificationsSubscriptionCollection
  * @extends app.models.base.BaseCollection
  */

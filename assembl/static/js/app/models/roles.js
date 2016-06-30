@@ -43,7 +43,6 @@ var roleModel = Base.Model.extend({
 
 /**
  * Roles collection
- * Frontend model for :py:class:`assembl.models.auth.LocalUserRole`
  * @class app.models.roles.roleCollection
  * @extends app.models.base.BaseCollection
  */

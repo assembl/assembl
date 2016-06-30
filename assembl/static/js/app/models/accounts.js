@@ -53,7 +53,6 @@ var Account = Base.Model.extend({
 
 /**
  * Accounts collection
- * Frontend model for :py:class:`assembl.models.auth.AbstractAgentAccount`
  * @class app.models.accounts.Accounts
  * @extends app.models.base.BaseCollection
  */

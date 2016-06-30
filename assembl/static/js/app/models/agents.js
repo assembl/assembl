@@ -187,7 +187,6 @@ var AgentModel = Base.Model.extend({
 
 /**
  * Agents collection
- * Frontend model for :py:class:`assembl.models.auth.AgentProfile`
  * @class app.models.agents.AgentCollection
  * @extends app.models.base.BaseCollection
  */

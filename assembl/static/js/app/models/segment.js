@@ -230,7 +230,6 @@ var SegmentModel = Base.Model.extend({
 
 /**
  * Segment collection
- * Frontend model for :py:class:`assembl.models.idea_content_link.Extract`
  * @class app.models.segment.SegmentCollection
  * @extends app.models.base.BaseCollection
  */

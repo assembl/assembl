@@ -322,7 +322,6 @@ LangString.empty = new LangString({
 
 /**
  * Lang string collection
- * Frontend model for :py:class:`assembl.models.langstrings.LangString`
  * @class app.models.langstring.LangStringCollection
  * @extends app.models.base.BaseCollection
  */

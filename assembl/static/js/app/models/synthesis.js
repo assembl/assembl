@@ -95,7 +95,6 @@ var SynthesisModel = Base.Model.extend({
 
 /**
  * Synthesis collection
- * Frontend model for :py:class:`assembl.models.idea_graph_view.Synthesis`
  * @class app.models.synthesis.SynthesisCollection
  * @extends app.models.base.BaseCollection
  */
