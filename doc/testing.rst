@@ -60,7 +60,9 @@ Mocha Example
 -------------
 
 Mocha allows for nested spec descriptions (test suites). An example of a synchronous Mocha test
-is::
+is:
+
+.. code-block:: javascript
 
     describe("Test Spec name followed by callback that defines the suite", function(){
 
@@ -73,7 +75,9 @@ is::
 
 
 As most test cases include a setUp and a tearDown, below is a complete example a single test with
-setUp and tearDown::
+setUp and tearDown:
+
+.. code-block:: javascript
 
     describe("Test Spec name followed by callback that defines the suite", function(){
 
@@ -97,6 +101,7 @@ setUp and tearDown::
         });
     });
 
+
 TODO
 ^^^^
 
@@ -115,7 +120,8 @@ developers (in 2014) was Chai_. Chai allows for different styles of assertions.
 
 They include BDD style assertions, which has been sprinkled throughout the currently written specs
 
-::
+.. code-block:: javascript
+
     var expect = require('chai').expect,
         value = 1;
 
@@ -124,9 +130,10 @@ They include BDD style assertions, which has been sprinkled throughout the curre
 
 Or TDD style assertions, which are closer to the traditional J-unit style assertions.
 
-::
+.. code-block:: javascript
+
     var assert = require('chai').assert,
-    value = 1;
+        value = 1;
 
     assert.isNumber(value, "Value is a number");
     assert.isOK(value, "This should pass");
@@ -156,6 +163,7 @@ process as well.
 
 How to Run
 ----------
+
 Front-end tests can be run for each discussion in the ``/test`` API point. For example, the mocha
 tests can be run on the browser at the location::
 
@@ -168,7 +176,49 @@ to be added.
 Back-end
 ========
 
+Back-end testing is carried out via `py\.test`_ Python library. It acts as both the test runner and
+the fixture generator. Pytest allows for a level of flexibility in writing tests that the regular
+Python unittest_ library simply doesn't have. It allows to write tests similarly to unittest allows,
+with a TestCase class created with multiple `test_method`\s written inside.
 
+Assembl uses py.test's fixture's in order to mock objects for testing.
+
+Fixtures
+--------
+Assembl fixtures are defined in the `/assembl/tests/fixtures/` directory. Fixtures can be divided into
+multiple files for ease of use.
+
+The fixtures are read into the py.test test-runner by the use of the ``conftest.py``. All fixtures
+are loaded into the runner by importing them. Here is an example of loading `langstring` fixtures:
+
+::
+
+    from assembl.tests.fixtures.langstring import *
+
+When creating new fixture files, you **must** include them in the ``conftest.py``, otherwise they
+will not be available to the test runner.
+
+
+How To Write A Fixture
+^^^^^^^^^^^^^^^^^^^^^^
+
+Writing test fixtures in Assembl is extremely simple. Within the fixture folder, in either a new file or an
+existing one, simply create a function with the py.test fixture decorator, like such:
+
+::
+
+    @pytest.fixture(scope='function')
+    def your_new_fixture(dependent_fixture):
+        pass
+
+In the example above, the ``dependent_fixture`` is a previously written fixture. The fixture can exist
+in either the same file or another; it matters not. The fixtures are not run from that particular file.
+They are all loaded into the conftest namespace.
+
+Core Fixtures
+^^^^^^^^^^^^^
+
+Assembl has several core fixtures that are important to note, in order to run them.
 
 Integration
 ===========
@@ -182,5 +232,9 @@ TODO
 .. _Sinon: http://sinonjs.org/
 .. _Bluebird: http://bluebirdjs.com/docs/getting-started.html
 .. _Browserify: http://browserify.org/
+.. _TDD: http://agiledata.org/essays/tdd.html
+.. _BDD: https://en.wikipedia.org/wiki/Behavior-driven_development
+.. _`py\.test`: http://pytest.org/latest/
 .. _`Nyan Cat`: http://www.nyan.cat/ 
 .. _`Chai as Promised`: https://github.com/domenic/chai-as-promised
+.. _unittest: https://docs.python.org/2.7/library/unittest.html
