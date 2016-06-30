@@ -132,7 +132,7 @@ var AgentModel = Base.Model.extend({
 
   /**
    * @function app.models.agents.AgentModel.getRolesMissingMessageForPermission
-   * @returns A text message designed to replace X in the question "You cannot perform this operation because X"
+   * @returns {string} A text message designed to replace X in the question "You cannot perform this operation because X"
    */
   getRolesMissingMessageForPermission: function(permission, discussion, reroute_relative_url) {
       if (this.hasPermission(permission)) {
