@@ -195,37 +195,69 @@ var Context = function() {
 }
 
 Context.prototype = {
-  
+  /**
+   * Checks if user use a small screen
+   * @returns {Boolean}
+   * @function app.common.context.Context.isSmallScreen
+  **/
   isSmallScreen:function(){
     var screenSize = window.innerWidth;
     var criticalSize = 760;
     return screenSize <= criticalSize;
   },
-  
+  /**
+   * Returns the slug of the discussion (name of discussion in the url)
+   * @returns {String}
+   * @function app.common.context.Context.getDiscussionSlug
+  **/
   getDiscussionSlug: function() {
     return this.DISCUSSION_SLUG;
   },
-
+  /**
+   * Returns the URL of the login page
+   * @returns {String}
+   * @function app.common.context.Context.getLoginURL
+  **/
   getLoginURL: function() {
       return '/' + Ctx.getDiscussionSlug() + '/login';
     },
-
+  /**
+   * Returns the URL of the socket
+   * @returns {String}
+   * @function app.common.context.Context.getSocketUrl
+  **/
   getSocketUrl: function() {
     return this.SOCKET_URL;
   },
-
+  /**
+   * Returns the id of the current discussion
+   * @returns {String}
+   * @function app.common.context.Context.getDiscussionId
+  **/
   getDiscussionId: function() {
     return this.DISCUSSION_ID;
   },
-
+  /**
+   * Returns the id of the connected user
+   * @returns {String}
+   * @function app.common.context.Context.getCurrentUserId
+  **/
   getCurrentUserId: function() {
     return this.CURRENT_USER_ID;
   },
-
+  /**
+   * Returns the connected user
+   * @returns {Object}
+   * @function app.common.context.Context.getCurrentUser
+  **/
   getCurrentUser: function() {
     return this._currentUser;
   },
-
+  /**
+   * Set useful informations about the connected user for analytics
+   * @param {objet} user
+   * @function app.common.context.Context.setCurrentUser
+  **/
   setCurrentUser: function(user) {
     var analytics = Analytics.getInstance(),
         days_since_first_visit,
@@ -285,35 +317,53 @@ Context.prototype = {
 
     }
   },
-
+  /**
+   * @function app.common.context.Context.setApplicationUnderTest
+  **/
   setApplicationUnderTest: function(){
     this.appState = 'test';
   },
-
+  /**
+   * @returns {Boolean}
+   * @function app.common.context.Context.isApplicationUnderTest
+  **/
   isApplicationUnderTest: function(){
     return this.appState === 'test';
   },
-
+  /**
+   * @returns {Boolean}
+   * @function app.common.context.Context.isApplicationUnderProduction
+  **/
   isApplicationUnderProduction: function(){
     return this.appState === 'production';
   },
-
+  /**
+   * @function app.common.context.Context.setApplicationUnderProduction
+  **/
   setApplicationUnderProduction: function(){
     this.appState = 'production';
   },
-
+  /**
+   * Returns the CRSF token
+   * @returns {String}
+   * @function app.common.context.Context.getCsrfToken
+  **/
   getCsrfToken: function() {
     return this.csrfToken || this.loadCsrfToken(false);
   },
-
+  /**
+   * Set the CRSF token
+   * @param {string} token
+   * @function app.common.context.Context.setCsrfToken
+  **/
   setCsrfToken: function(token) {
     this.csrfToken = token;
   },
-
   /**
    * Returns a template from an script tag
    * @param {string} id The id of the script tag
    * @returns {function} The Underscore.js _.template return
+   * @function app.common.context.Context.loadTemplate
    */
   loadTemplate: function(id) {
     var template = $('#tmpl-' + id);
@@ -322,31 +372,35 @@ Context.prototype = {
       return _.template(template.html());
     }
   },
-
   /**
    * get a view style definition by id
    * @param {messageViewStyle.id} messageViewStyleId
    * @returns {messageViewStyle?}
+   * @function app.common.context.Context.getMessageViewStyleDefById
    */
   getMessageViewStyleDefById: function(messageViewStyleId) {
     return _.find(this.AVAILABLE_MESSAGE_VIEW_STYLES, function(messageViewStyle) {
       return messageViewStyle.id == messageViewStyleId;
     });
   },
-
+  /**
+   * Returns an formatted url
+   * @param  {string} str
+   * @returns {string}
+   * @function app.common.context.Context.getUrlFromUri
+   */
   getUrlFromUri: function(str) {
     var start = "local:";
     if (str && str.length && str.indexOf(start) == 0) {
       str = "/data/" + str.slice(start.length);
     }
-
     return str;
   },
-
   /**
    * Formats the url to the current api url
    * @param  {string} url
    * @returns {string} The url formatted
+   * @function app.common.context.Context.getApiUrl
    */
   getApiUrl: function(url) {
     if (url === undefined)
@@ -357,7 +411,12 @@ Context.prototype = {
 
     return '/api/v1/discussion/' + this.getDiscussionId() + url;
   },
-
+  /**
+   * Formats the url to the current api v2 url
+   * @param  {string} url
+   * @returns {string} The url formatted
+   * @function app.common.context.Context.getApiV2Url
+   */
   getApiV2Url: function(url) {
     if (url === undefined)
         url = '/';
@@ -367,7 +426,12 @@ Context.prototype = {
 
     return '/data' + url;
   },
-
+  /**
+   * Formats the url to the current api v2  discussion url
+   * @param  {string} url
+   * @returns {string} The url formatted
+   * @function app.common.context.Context.getApiV2DiscussionUrl
+   */
   getApiV2DiscussionUrl: function(url) {
     if (url === undefined)
         url = '/';
@@ -377,44 +441,37 @@ Context.prototype = {
 
     return this.getApiV2Url('Discussion/' + this.getDiscussionId() + url);
   },
-
   /**
-   * Formats the given to the generic api url
-   * @param {string} id The class name used in the api
-   * @returns {string} The url formatted
-   *
-   * ex: 'local:Extract/1' -> '/api/v1/discussion/1/generic/Extract/1'
-   */
-
-   
-  /**
-   * @returns {Object} The Object with mesagelistconfig in the localStorage
+   * Returns the Object with mesagelistconfig in the localStorage
+   * @returns {Object} 
+   * @function app.common.context.Context.DEPRECATEDgetMessageListConfigFromStorage
    */
   DEPRECATEDgetMessageListConfigFromStorage: function() {
     var messageListConfig = JSON.parse(localStorage.getItem('messageListConfig')) || {};
     return messageListConfig;
   },
-
   /**
    * Adds a panel in the localStorage
    * @param {Object} messageListConfig - The Object with mesagelistconfig in the localStorage
    * @returns {Object} The Object with mesagelistconfig in the localStorage
+   * @function app.common.context.Context.DEPRECATEDsetMessageListConfigToStorage
    */
   DEPRECATEDsetMessageListConfigToStorage: function(messageListConfig) {
     localStorage.setItem('messageListConfig', JSON.stringify(messageListConfig));
     return messageListConfig;
   },
-
   /**
-   * Checks if there is a panel in fullscreen mode
-   * ( i.e.: there is only one open )
+   * Checks if there is a panel in fullscreen mode ( i.e.: there is only one open )
    * @returns {boolean}
+   * @function app.common.context.Context.isInFullscreen
    */
   isInFullscreen: function() {
     return this.openedPanels === 1;
   },
-
-  // "this" has to be the popover div: $("#popover-oembed")
+  /**
+   * "this" has to be the popover div: $("#popover-oembed")
+   * @function app.common.context.Context.popoverAfterEmbed
+  **/
   popoverAfterEmbed: function() {
     var screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
     var screenHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -435,7 +492,11 @@ Context.prototype = {
     $(this).css('left', newPositionLeft + 'px');
     $(this).css('top', newPositionTop + 'px');
   },
-
+  /**
+   * Opens the clicked element with data attribute in pop over
+   * @returns {Boolean}
+   * @function app.common.context.Context.openTargetInPopOver
+  **/
   openTargetInPopOver: function(evt) {
     var that = this;
 
@@ -504,11 +565,15 @@ Context.prototype = {
 
     return false;
   },
-
-  // Display options are retrieved from evt.currentTarget attributes or from the "options" parameter (Object used as an associative array).
-  // Modal can be dynamically resized once the iframe is loaded, or on demand. 
-  // TODO: options to set modal size
+  /**
+   * Opens the clicked element with data attribute in modal
+   * Display options are retrieved from evt.currentTarget attributes or from the "options" parameter (Object used as an associative array).
+   * Modal can be dynamically resized once the iframe is loaded, or on demand.
+   * @returns {Boolean}
+   * @function app.common.context.Context.openTargetInModal
+  **/
   openTargetInModal: function(evt, onDestroyCallback, options) {
+    // TODO: options to set modal size
     var target_url = null;
     if (evt && evt.currentTarget) {
       if ($(evt.currentTarget).attr("data-href"))
@@ -636,27 +701,37 @@ Context.prototype = {
 
     return false; // so that we cancel the normal behaviour of the clicked link (aka making browser go to "target" attribute of the "a" tag)
   },
-
+  /**
+   * Returns the dragged annotation
+   * @returns {String}
+   * @function app.common.context.Context.getDraggedAnnotation
+  **/
   getDraggedAnnotation: function() {
     return this._draggedAnnotation;
   },
-
+  /**
+   * Set the current annotation
+   * @param {} annotation
+   * @param {} annotatorEditor
+   * @function app.common.context.Context.setDraggedAnnotation
+  **/
   setDraggedAnnotation: function(annotation, annotatorEditor) {
     this._draggedAnnotation = annotation;
     this._annotatorEditor = annotatorEditor;
   },
-
   /**
-   * @set {Segment}
-   * Sets the current
-   */
+   * Set the current segment
+   * @param {} segment
+   * @function app.common.context.Context.setDraggedSegment
+  **/
   setDraggedSegment: function(segment) {
       this._draggedSegment = segment;
     },
-
   /**
-   * @returns {Segment}
-   */
+   * Returns the current segment
+   * @return {String} segment
+   * @function app.common.context.Context.getDraggedSegment
+  **/
   getDraggedSegment: function() {
     var segment = this._draggedSegment;
 
@@ -668,10 +743,11 @@ Context.prototype = {
 
     return segment;
   },
-
   /**
-   * @returns {Idea}
-   */
+   * Returns the dragged idea
+   * @return {Object} idea
+   * @function app.common.context.Context.popDraggedIdea
+  **/
   popDraggedIdea: function() {
     if (this.ideaList && this.draggedIdea) {
 
@@ -683,7 +759,11 @@ Context.prototype = {
 
     return idea;
   },
-
+  /**
+   * Returns the draft of the current synthesis
+   * @return {Object}
+   * @function app.common.context.Context.getCurrentSynthesisDraftPromise
+  **/
   getCurrentSynthesisDraftPromise: function() {
     // Preliminary code, may not be final architecture.
     if (this.currentSynthesisDraftPromise === null) {
@@ -707,7 +787,10 @@ Context.prototype = {
     }
     return this.currentSynthesisDraftPromise;
   },
-
+  /**
+   * Set the id of the synthesis draft
+   * @function app.common.context.Context.setCurrentSynthesisDraftId
+  **/
   setCurrentSynthesisDraftId: function(id) {
     if (id !== this.currentSynthesisDraftId) {
       // TODO: Couple this with a system that will redraw panels dependent 
@@ -716,9 +799,10 @@ Context.prototype = {
       self.currentSynthesisDraftPromise = null;
     }
   },
-
   /**
    * fallback: synchronously load app.csrfToken
+   * @returns {String} csrfToken
+   * @function app.common.context.Context.loadCsrfToken
    */
   loadCsrfToken: function(async) {
     var that = this;
@@ -731,11 +815,11 @@ Context.prototype = {
     });
     return this.csrfToken;
   },
-
   /**
-   * Return the Post related to the given annotation
+   * Returns the Post related to the given annotation
    * @param {Annotation} annotation
    * @returns {Message}
+   * @function app.common.context.Context.getPostIdFromAnnotation
    */
   getPostIdFromAnnotation: function(annotation) {
     var span = $(annotation.highlights[0]),
@@ -743,9 +827,9 @@ Context.prototype = {
 
     return messageId.substr(this.ANNOTATOR_MESSAGE_BODY_ID_PREFIX.length);
   },
-
   /**
    * Saves the current annotation if there is any
+   * @function app.common.context.Context.saveCurrentAnnotationAsExtract
    */
   saveCurrentAnnotationAsExtract: function() {
     if (this.getCurrentUser().can(Permissions.ADD_EXTRACT)) {
@@ -758,20 +842,20 @@ Context.prototype = {
     //Saving the annotation as an extract is the end of the annotation's lifecycle
     this.setDraggedAnnotation(null);
   },
-
   /**
    * Creates the selection tooltip
+   * @function app.common.context.Context.__createAnnotatorSelectionTooltipDiv
    */
   __createAnnotatorSelectionTooltipDiv: function() {
     this.annotatorSelectionTooltip = $('<div>', { 'class': 'textbubble' });
     $(document.body).append(this.annotatorSelectionTooltip.hide());
   },
-
   /**
    * Shows the dragbox when user starts dragging an element
    * This method is designed to be called in a dragstart event listener.
    * @param  {Event} ev - The event object
    * @param  {string} text - The text to be shown in the .dragbox
+   * @function app.common.context.Context.showDragbox
    */
   showDragbox: function(ev, text, newExtract) {
     var dragbox_max_length = 25,
@@ -827,10 +911,10 @@ Context.prototype = {
       });
     }
   },
-
   /**
    * Return the current time
    * @returns {timestamp}
+   * @function app.common.context.Context.getCurrentTime
    */
   getCurrentTime: function() {
     return (new Date()).getTime();
@@ -841,6 +925,7 @@ Context.prototype = {
    * @param {string} string
    * @params {string[]}
    * @returns {string}
+   * @function app.common.context.Context.format
    */
   format: function(str) {
     var args = [].slice.call(arguments, 1);
@@ -849,12 +934,12 @@ Context.prototype = {
       return typeof args[b] != 'undefined' ? args[b] : a;
     });
   },
-
   /**
    * Format date
    * @param {Date|timestamp} date
    * @param {string} format - app.dateFormat The format
    * @returns {string}
+   * @function app.common.context.Context.formatDate
    */
   formatDate: function(date, format) {
     format = format || this.dateFormat;
@@ -866,10 +951,14 @@ Context.prototype = {
     date = new Moment(date);
     return date.format(format);
   },
-
   /**
    * Returns a fancy date (ex: a few seconds ago), or a formatted precise date if precise is true
+   * @param {Date} date
+   * @param {Boolean} precise
+   * @param {Boolean} with_time
+   * @param {} forbid_future
    * @returns {string}
+   * @function app.common.context.Context.getNiceDateTime
    */
   getNiceDateTime: function(date, precise, with_time, forbid_future) {
     // set default values
@@ -909,22 +998,35 @@ Context.prototype = {
 
     return momentDate; // or date?
   },
-
-  // without time
+  /**
+   * Returns a fancy date (ex: a few seconds ago) without time
+   * @param {Date} date
+   * @param {Boolean} precise
+   * @param {} forbid_future
+   * @returns {string}
+   * @function app.common.context.Context.getNiceDate
+   */
+  // 
   getNiceDate: function(date, precise, forbid_future) {
     if (precise === undefined)
         precise = true;
     return this.getNiceDateTime(date, precise, false, true);
   },
-
   /**
    * Returns a nicely formatted date, but not an approximative expression (i.e. not "a few seconds ago")
+   * @param {Date} date
    * @returns {string}
+   * @function app.common.context.Context.getReadableDateTime
    */
   getReadableDateTime: function(date) {
     return this.getNiceDateTime(date, true);
   },
-
+  /**
+   * Returns an error message when an Ajax request fail
+   * @param {Object} response
+   * @returns {string}
+   * @function app.common.context.Context.getErrorMessageFromAjaxError
+   */
   getErrorMessageFromAjaxError: function(response) {
     var message = response.responseText;
     try {
@@ -952,6 +1054,7 @@ Context.prototype = {
    * Shows the segment source in the better way related to the source
    * e.g.: If it is an email, opens it, if it is a webpage, open in another window ...
    * @param {Segment} segment
+   * @function app.common.context.Context.showTargetBySegment
    */
   showTargetBySegment: function(segment) {
     var target = segment.get('target');
@@ -1002,24 +1105,27 @@ Context.prototype = {
    * Given the string in the format "local:ModelName/{id}" returns the id
    * @param  {string} str
    * @returns {string}
+   * @function app.common.context.Context.extractId
    */
   extractId: function(str) {
     return str.split('/')[1];
   },
-
   /**
+   * Returns the avatar's url formatted with the given size
    * @param  {number} userID The user's ID
    * @param  {number} [size=44] The avatar size
-   * @returns {string} The avatar's url formatted with the given size
+   * @returns {string} 
+   * @function app.common.context.Context.formatAvatarUrl
    */
   formatAvatarUrl: function(userID, size) {
     size = size || 44;
     return this.format("/user/id/{0}/avatar/{1}", userID, size);
   },
-
-  /** This removes (rather than escape) all html tags
+  /**
+   * This removes (rather than escape) all html tags
    * @param  {string} html
    * @returns {string} The new string without html tags
+   * @function app.common.context.Context.stripHtml
    */
   stripHtml: function(html) {
       if (!html) {
@@ -1032,26 +1138,31 @@ Context.prototype = {
       // console.log("stripHtml called with", html, "returning ", retval);
       return retval;
     },
-
-  /** Convert all applicable characters to HTML entities
+  /**
+   * Convert all applicable characters to HTML entities
    * @param  {string} html
+   * returns {String}
+   * @function app.common.context.Context.htmlEntities
    */
   htmlEntities: function(str) {
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   },
-
   /**
-   * Use the browser's built-in functionality to quickly and safely
-   * escape the string
+   * Use the browser's built-in functionality to quickly and safely escape the string
+   * @param {String} str
+   * returns {String}
+   * @function app.common.context.Context.escapeHtml
    */
   escapeHtml: function(str) {
       var div = document.createElement('div');
       div.appendChild(document.createTextNode(str));
       return div.innerHTML;
     },
-
   /**
    * UNSAFE with unsafe strings; only use on previously-escaped ones!
+   * @param {String} escapedStr
+   * @returns {String}
+   * @function app.common.context.Context.unescapeHtml
    */
   unescapeHtml: function(escapedStr) {
       var div = document.createElement('div');
@@ -1059,9 +1170,9 @@ Context.prototype = {
       var child = div.childNodes[0];
       return child ? child.nodeValue : '';
     },
-
   /**
    * @event
+   * @function app.common.context.Context.onDropdownClick
    */
   onDropdownClick: function(e) {
     if (!e || !(e.target))
@@ -1102,12 +1213,11 @@ Context.prototype = {
     dropdown.addClass('is-open');
     $(document.body).one('click', onMouseLeave);
   },
-
   /**
    * @event
-   *
    * Note: If you wish to defer this calculation completely, add the parameter 'handled' to the jqxhr object, set to true
    * eg. Notable example is in admin/adminDiscussion.js
+   * @function app.common.context.Context.onAjaxError
    */
   onAjaxError: function(ev, jqxhr, settings, exception) {
 
@@ -1165,7 +1275,11 @@ Context.prototype = {
 
     $('#slider').html(modal.render().el);
   },
-
+  /**
+   * Set the locale in a cookie and reload page
+   * @param {String} locale key
+   * @function app.common.context.Context.setLocale
+  **/
   setLocale: function(locale) {
     document.cookie = "_LOCALE_=" + locale + "; path=/";
     location.reload(true);
@@ -1175,15 +1289,19 @@ Context.prototype = {
     EXPERT: "EXPERT"
   },
   /** Set the user interface the user wants
-   * @param interface_id, one of SIMPLE, EXPERT
-   * */
+   * @param {String} interface_id, one of SIMPLE, EXPERT
+   * @function app.common.context.Context.setInterfaceType
+  **/
   setInterfaceType: function(interface_id) {
     document.cookie = "interface=" + interface_id + "; path=/";
     this._interfaceTypeCache = undefined;
     location.reload(true);
   },
-
-
+  /**
+   * Returns the user interface the user wants simple or expert
+   * @returns {String} interface_id, one of SIMPLE, EXPERT
+   * @function app.common.context.Context.getCurrentInterfaceType
+  **/
   getCurrentInterfaceType: function() {
     if(this._interfaceTypeCache === undefined) {
       this._interfaceTypeCache = this.getCookieItem('interface');
@@ -1200,11 +1318,17 @@ Context.prototype = {
 
     return interfaceType;
   },
-
+  /**
+   * @function app.common.context.Context.getCookieItem
+  **/
   getCookieItem: function(sKey) {
     return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
   },
-
+  /**
+   * Checks user permissions to use expert interface
+   * @returns {Boolean}
+   * @function app.common.context.Context.canUseExpertInterface
+  **/
   canUseExpertInterface: function() {
     var user = this.getCurrentUser();
     if (user.can(Permissions.ADD_EXTRACT) ||
@@ -1223,11 +1347,15 @@ Context.prototype = {
       return false;
     }
   },
-
+  /**
+   * @function app.common.context.Context.convertUrlsToLinks
+  **/
   convertUrlsToLinks: function(el) {
     $(el).linkify();
   },
-
+  /**
+   * @function app.common.context.Context.makeLinksShowOembedOnHover
+  **/
   makeLinksShowOembedOnHover: function(el) {
     var that = this,
         popover = $("#popover-oembed");
@@ -1313,28 +1441,28 @@ Context.prototype = {
     });
 
   },
-
-
+  /**
+   * @function app.common.context.Context.getTooltipsContainerSelector
+  **/
   getTooltipsContainerSelector: function(){
     return "#tooltips";
   },
-
   /**
-   * @init
-   * TODO: This is very slow when the DOM contained in elm is big. Maybe we should improve this CSS selector (for example using a class selector instead of an attribute selector), but then we would have to edit the HTML of every element which declares a tooltip.
-   */
+   * init tool tips on each element with data-toggle attribute
+   * @param {Selector} elm
+   * @function app.common.context.Context.initTooltips
+  **/
   initTooltips: function(elm) {
+    //TODO: This is very slow when the DOM contained in elm is big. Maybe we should improve this CSS selector (for example using a class selector instead of an attribute selector), but then we would have to edit the HTML of every element which declares a tooltip.
     elm.find('[data-toggle="tooltip"]').tooltip({
       animation: true,
       container: this.getTooltipsContainerSelector(),
       delay: {"show": 500, "hide": 100}
     });
   },
-
   /**
-   * Removes all tooltips from the screen.  Without this, active
-   * tooltips (those currently displayed) will be left dangling
-   * if the trigger element is removed from the dom.
+   * Removes all tooltips from the screen. Without this, active tooltips (those currently displayed) will be left dangling if the trigger element is removed from the dom.
+   * @function app.common.context.Context.removeCurrentlyDisplayedTooltips
    */
   removeCurrentlyDisplayedTooltips: function() {
     //console.log("removeCurrentlyDisplayedTooltips() called");
@@ -1342,31 +1470,46 @@ Context.prototype = {
     //Should be fast, so we have put all tooltips into #tooltips
     $('#tooltips').empty();
   },
-
+  /**
+   * Returns an absolute url from a relative url
+   * @param {String} url
+   * @returns {String}
+   * @function app.common.context.Context.getAbsoluteURLFromRelativeURL
+   */
   getAbsoluteURLFromRelativeURL: function(url) {
     if (url && url[0] == "/")
         url = url.substring(1);
     return this.format('{0}//{1}/{2}', location.protocol, location.host, url);
   },
-
+  /**
+   * Returns an absolute url from a discussion relative url
+   * @param {String} url
+   * @returns {String}
+   * @function app.common.context.Context.getAbsoluteURLFromDiscussionRelativeURL
+   */
   getAbsoluteURLFromDiscussionRelativeURL: function(url) {
     if (url && url[0] == "/")
         url = url.substring(1);
     return this.format('{0}//{1}/{2}/{3}', location.protocol, location.host, this.getDiscussionSlug(), url);
   },
-
+  /**
+   * Returns an relative url from a discussion relative url
+   * @param {String} url
+   * @returns {String}
+   * @function app.common.context.Context.getRelativeURLFromDiscussionRelativeURL
+  **/
   getRelativeURLFromDiscussionRelativeURL: function(url) {
     if (url && url[0] == "/")
         url = url.substring(1);
     return this.format('/{0}/{1}', this.getDiscussionSlug(), url);
   },
-
   /**
    * Helper function to add query string to a URL
    * @param  {string} url [The URL to append query string to]
    * @param  {object[]} params [An array of key-value objects denoting the query string, raw (unencoded)]
    * @returns {string}        [The query string updated URL]
-   */
+   * @function app.common.context.Context.appendExtraURLParams
+  **/
   appendExtraURLParams: function(url, params){
     //console.log('append extra url:', url);
     if (!params || _.isEmpty(params)){
@@ -1411,7 +1554,9 @@ Context.prototype = {
     //console.log('final url', finalUrl);
     return finalUrl;
   },
-
+  /**
+   * @function app.common.context.Context.manageLastCurrentUser
+  **/
   manageLastCurrentUser: function() {
     var lastCurrentUserId = null,
         connectedUserId = null;
@@ -1436,27 +1581,36 @@ Context.prototype = {
       window.localStorage.setItem('lastCurrentUser', this._currentUser.get('@id'));
     }
   },
-
+  /**
+   * Checks if user is connected
+   * @returns {Boolean}
+   * @function app.common.context.Context.isUserConnected
+  **/
   isUserConnected: function() {
     if (this._currentUser){
       return !this._currentUser.isUnknownUser();
     }
     else {return false; }
   },
-
+  /**
+   * Returns the current locale
+   * @returns {String}
+   * @function app.common.context.Context.getLocale
+  **/
   getLocale: function() {
       return assembl_locale.split('_')[0];
     },
-
+  /**
+   * @function app.common.context.Context._test_set_locale
+  **/
   _test_set_locale: function(locale){
     assembl_locale = locale;
   },
-
+  /**
+   * Moment.j only has specific locales, for example, it has fr-ca, but no fr-fr. If you add new language support, you need to add it here.  Supported locales for moment.js can be found in /assembl/static/js/node_modules/moment/locale/
+   * @function app.common.context.Context.initMomentJsLocale
+  **/
   initMomentJsLocale: function() {
-    //Moment.j only has specific locales, for example, it has 
-    //fr-ca, but no fr-fr
-    //If you add new language support, you need to add it here.  Supported 
-    //locales for moment.js can be found in /assembl/static/js/node_modules/moment/locale/
     switch (assembl_locale){
       case 'en_CA':
         require('moment/locale/en-ca.js');
@@ -1490,11 +1644,9 @@ Context.prototype = {
     Moment.locale(this.getLocale());
     return Moment; 
   },
-
   /**
-   * @init
-   * inits ALL app components
-   */
+   * @function app.common.context.Context.init
+  **/
   init: function() {
     $(document.body).removeClass('preload');
     this.__createAnnotatorSelectionTooltipDiv();
@@ -1504,15 +1656,17 @@ Context.prototype = {
     $(document).on('click', '.dropdown-toggle', this.onDropdownClick);
     $(document).on('ajaxError', this.onAjaxError);
   },
-
+  /**
+   * @function app.common.context.Context.debug
+  **/
   debug: function(view, msg) {
     var log = debug(view + ':');
     log(msg);
   },
-
-  /*
+  /**
    * Get from database up-to-date information about current logged-in user.
-   */
+   * @function app.common.context.Context.updateCurrentUser
+  **/
   updateCurrentUser: function() {
     var that = this;
     var user = null;
@@ -1534,7 +1688,12 @@ Context.prototype = {
       */
     }
   },
-
+  /**
+   * Returns embed JSON in the html.
+   * @param {selector} id
+   * @returns {Json}
+   * @function app.common.context.Context.getJsonFromScriptTag
+  **/
   getJsonFromScriptTag: function(id) {
     var script = document.getElementById(id),
         json;
@@ -1553,7 +1712,11 @@ Context.prototype = {
 
     return json;
   },
-
+  /**
+   * Returns discussion preferences.
+   * @returns {Object}
+   * @function app.common.context.Context.getPreferences
+  **/
   getPreferences: function() {
     if (this._discussionPreferences){
       return this._discussionPreferences;
@@ -1561,11 +1724,20 @@ Context.prototype = {
     this._discussionPreferences = this.getJsonFromScriptTag('preferences');
     return this._discussionPreferences;
   },
-
+  /**
+   * Checks if translation service is available
+   * @returns {Boolean}
+   * @function app.common.context.Context.hasTranslationService
+  **/
   hasTranslationService: function(){
     return !!this.getPreferences()["translation_service"];
   },
-
+  /**
+   * Write Json in the html
+   * @param {Json} json
+   * @param {Selector} id
+   * @function app.common.context.Context.writeJsonToScriptTag
+  **/
   writeJsonToScriptTag: function(json, id) {
     var script = document.getElementById(id);
 
@@ -1580,6 +1752,12 @@ Context.prototype = {
       throw new Error("Invalid json. " + e.message);
     }
   },
+  /**
+   * Write Json in the html
+   * @param {Json} json
+   * @param {Selector} id
+   * @function app.common.context.Context.getPermissionTokenPromise
+  **/
   getPermissionTokenPromise: function(permission_sets, user_ids) {
     var permissions = _.map(permission_sets, function(p) {
       return "permissions=" + p.join(",");
@@ -1590,6 +1768,9 @@ Context.prototype = {
     }).join("&");
     return Promise.resolve($.get(url));
   },
+  /**
+   * @function app.common.context.Context.deanonymizationCifInUrl
+  **/  
   deanonymizationCifInUrl: function(url, callback) {
     var urlTemplate = _.template(url),
         serverUrl = document.URL,
@@ -1615,9 +1796,9 @@ Context.prototype = {
   /**
    * This assumes that the there is a 1:1 relationship
    * between the AgentProfile (the user) and FacebookAccount
-   * 
-   * @returns {String?} [Will either return the @id of
    * the fbAccount if it exists, else returns undefined]
+   * @returns {String?} [Will either return the @id of
+   * @function app.common.context.Context.getCurrentUserFacebookAccountId
    */
   getCurrentUserFacebookAccountId: function() {
     var currentUser = this.getCurrentUser();
@@ -1630,11 +1811,12 @@ Context.prototype = {
     }
     else { return undefined; }
   },
-
   /**
    * [A utility function to convert backend DateTime data (ISO 8601 String) into ISO 8601 String with UTC Timezone]
    * TODO: This function was taken from app/js/models/social.js. Refactor to use this Ctx version throughout codebase.
-   * @param {string} e [Returns ISO 8601 String with UTC Timezone]
+   * @param {string}
+   * @return {String} ISO 8601 String with UTC Timezone
+   * @function app.common.context.Context.addUTCTimezoneToISO8601
    */
   addUTCTimezoneToISO8601: function(e){
       if (/[Z]$|([+-]\d{2}:\d{2})$/.test(e) ) {
@@ -1645,18 +1827,18 @@ Context.prototype = {
       }
   },
 
-  /*
-    Utility method used to identify to Ctx the View object that is the modal
-    Useful for closing the model in any part of the code instead of the
-    context of where the Modal was instantiated.
-   */
+  /**
+   * Utility method used to identify to Ctx the View object that is the modal. Useful for closing the model in any part of the code instead of the context of where the Modal was instantiated.
+   * @function app.common.context.Context.setCurrentModalView
+  **/
   setCurrentModalView: function(view){
     this.currentModalView = view;
   },
 
-  /*
-    Utility method to close the modal view properly
-   */
+  /**
+   * Utility method to close the modal view properly
+   * @function app.common.context.Context.clearModal
+  **/
   clearModal: function(options){
     if (!options){
       options = {destroyModal: true};
@@ -1671,20 +1853,15 @@ Context.prototype = {
     }
   },
 
-  /*
-    Cache of the locale to locale-name
-    The language names will be sent from the back-end in the language
-    of the interface.
-
-    Found from the <script id="translation-locale-names"></script>
-
-    eg. Interface language: EN
-    eg. {"fr": "French"}
-
-    eg. Interface language FR
-    eg. {"fr": "Francais"}
-
-    @returns Object  Language cache
+  /**
+   * Cache of the locale to locale-name. The language names will be sent from the back-end in the language of the interface.
+   * Found from the <script id="translation-locale-names"></script>
+   * eg. Interface language: EN
+   * eg. {"fr": "French"}
+   * eg. Interface language FR
+   * eg. {"fr": "Francais"}
+   * @returns Object  Language cache
+   * @function app.common.context.Context.getLocaleToLanguageNameCache
    */
   getLocaleToLanguageNameCache: function(){
     //The cache is only read once for efficiency
@@ -1695,11 +1872,11 @@ Context.prototype = {
     this._localeToLangNameCache = this.getJsonFromScriptTag('translation-locale-names');
     return this._localeToLangNameCache;
   },
-
-  /*
-    Cache of the translation service data stored in the
-    <script id="translation-service-data"></script>
-   */
+  /**
+   * Cache of the translation service data stored in the <script id="translation-service-data"></script>
+   * @returns {Json}
+   * @function app.common.context.Context.getTranslationServiceData
+  **/
   getTranslationServiceData: function(){
 
     if (this.isApplicationUnderTest()){
@@ -1715,14 +1892,19 @@ Context.prototype = {
       return this._translationServiceCache;
     }
   },
-  isElementIsInViewport:function(element, bubbleHeight){
+  /**
+   * Checks if an element is in the viewport
+   * @returns {Boolean}
+   * @function app.common.context.Context.isElementIsInViewport
+  **/  
+  isElementIsInViewport:function(element, elmHeight){
       var win = $(window);
       var viewport = {
           top : win.scrollTop(),
           left : win.scrollLeft()
       };
       viewport.right = viewport.left + win.width();
-      viewport.bottom = viewport.top + win.height() - bubbleHeight;
+      viewport.bottom = viewport.top + win.height() - elmHeight;
       var bounds = element.offset();
       if (bounds === undefined) {
         // observed on a jquery element that did not exist
