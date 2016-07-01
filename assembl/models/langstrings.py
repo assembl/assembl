@@ -175,6 +175,17 @@ class Locale(Base):
         cls._locale_collection = None
         cls._locale_collection_subsets = None
 
+    @classmethod
+    def get_locale_object_cache(cls):
+        """Maintain a per-thread cache of locale objects by name"""
+        from pyramid.threadlocal import get_current_request
+        req = get_current_request()
+        if not req:
+            return {}
+        if getattr(req, "locale_object_cache", None) is None:
+            req.locale_object_cache = {}
+        return req.locale_object_cache
+
     @classproperty
     def locale_collection_byid(cls):
         "A collection of all known locales, as a dictionary of id->strings"
@@ -234,22 +245,29 @@ class Locale(Base):
 
     @classmethod
     def get_or_create(cls, locale_code, db=None):
+        locale_object_cache = cls.get_locale_object_cache()
+        locale = locale_object_cache.get(locale_code, None)
+        if locale:
+            return locale
         locale_id = cls.locale_collection.get(locale_code, None)
         if locale_id:
-            return Locale.get(locale_id)
+            locale_object_cache[locale_code] = locale = Locale.get(locale_id)
+            return locale
         db = db or cls.default_db
         # Maybe exists despite not in cache
         locale = db.query(cls).filter_by(code=locale_code).first()
         if locale:
             cls.reset_cache()
+            locale_object_cache[locale_code] = locale
             return locale
         # create it.
-        l = Locale(code=locale_code)
-        db.add(l)
+        locale = Locale(code=locale_code)
+        db.add(locale)
         db.flush()
-        cls._locale_uncommitted.append(l)
+        cls._locale_uncommitted.append(locale)
         cls.reset_cache()
-        return l
+        locale_object_cache[locale_code] = locale
+        return locale
 
     @classproperty
     def UNDEFINED_LOCALEID(cls):
