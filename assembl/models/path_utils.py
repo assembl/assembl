@@ -511,6 +511,9 @@ class DiscussionGlobalData(object):
 
     @property
     def parent_dict(self):
+        """dictionary child_idea.id -> parent_idea.id.
+
+        TODO: Make it dict(id->id[]) for multiparenting"""
         if self._parent_dict is None:
             source = aliased(Idea, name="source")
             target = aliased(Idea, name="target")
@@ -527,6 +530,7 @@ class DiscussionGlobalData(object):
         return self._parent_dict
 
     def idea_ancestry(self, idea_id):
+        """generator of ids of ancestor ideas"""
         while idea_id:
             yield idea_id
             idea_id = self.parent_dict.get(idea_id, None)
