@@ -248,6 +248,7 @@ class BaseOps(object):
 
     @classmethod
     def create(cls, obj=None, flush=False, **values):
+        """Create an instance. Not used."""
         if obj is None:
             obj = cls(**values)
         else:
@@ -275,8 +276,6 @@ class BaseOps(object):
     def find(cls, **criteria):
         return _session_maker.query(cls).filter_by(**criteria).all()
 
-    retypeable_as = ()
-
     def delete(self):
         _session_maker.delete(self)
 
@@ -287,7 +286,7 @@ class BaseOps(object):
                 if issubclass(v.class_, cls)]
 
     @classmethod
-    def polymorphic_test(cls):
+    def polymorphic_filter(cls):
         """Return a SQLA expression that tests for subclasses of this class"""
         return cls.__mapper__.polymorphic_on.in_(cls.polymorphic_identities())
 
@@ -490,6 +489,11 @@ class BaseOps(object):
             cls = get_named_class(name)
             inheritance.update(cls.get_inheritance())
         return dumps(inheritance)
+
+    retypeable_as = ()
+    """If it is possible to mutate the class of this object after its creation,
+    using :py:meth:BaseOps.change_class,
+    declare here the list of classes it can be retyped into"""
 
     def change_class(self, newclass, json=None, **kwargs):
         """Change the class of an instance, deleting and creating table rows as needed."""

@@ -79,7 +79,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     widget_links = discussion.db.query(IdeaWidgetLink
         ).join(Widget).join(Discussion).filter(
         Widget.test_active(), Discussion.id == discussion.id,
-        IdeaDescendantsShowingWidgetLink.polymorphic_test()
+        IdeaDescendantsShowingWidgetLink.polymorphic_filter()
         ).options(joinedload_all(IdeaWidgetLink.idea)).all()
     for wlink in widget_links:
         if isinstance(wlink.idea, RootIdea):
