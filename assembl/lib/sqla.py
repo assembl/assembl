@@ -158,13 +158,19 @@ class BaseOps(object):
 
     @classproperty
     def default_db(cls):
-        """Return the global SQLAlchemy db session maker object."""
+        """Return the global SQLAlchemy db session maker object.
+
+        We often use this when we have no instance.db available;
+        but it may be a different session and create instances on that other
+        session, leading to obscure bugs in object relationships.
+        Try to pass a session around if you need to rely on relationships.
+        """
         assert _session_maker is not None
         return _session_maker
 
     @property
     def db(self):
-        """Return the SQLAlchemy db session object."""
+        """Return the SQLAlchemy db session object. (per-http-request)"""
         return inspect(self).session or self.default_db()
 
     @property
