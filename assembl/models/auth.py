@@ -1744,7 +1744,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def default_locale_code(self):
         return self.default_pref.locale.code
 
-    def find_locale(self, locale):
+    def find_locale(self, locale, db=None):
         # This code needs to mirror
         # LanguagePreferenceCollection.getPreferenceForLocale
         for locale in Locale.decompose_locale(locale):
@@ -1753,7 +1753,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
         if self.default_pref is None:
             # this should never actually happen
             return None
-        locale = Locale.get_or_create(locale)
+        locale = Locale.get_or_create(locale, db)
         return UserLanguagePreference(
             locale=locale, locale_id=locale.id,
             translate_to_locale=self.default_pref.locale,

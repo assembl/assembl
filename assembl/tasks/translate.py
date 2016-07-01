@@ -14,7 +14,7 @@ _services = {}
 
 class TranslationTable(object):
     @abstractmethod
-    def languages_for(self, locale_code):
+    def languages_for(self, locale_code, db=None):
         return ()
 
 
@@ -23,8 +23,8 @@ class PrefCollectionTranslationTable(TranslationTable):
         self.service = service
         self.prefCollection = prefCollection
 
-    def languages_for(self, locale_code):
-        pref = self.prefCollection.find_locale(locale_code)
+    def languages_for(self, locale_code, db=None):
+        pref = self.prefCollection.find_locale(locale_code, db)
         if pref.translate_to:
             return (self.service.asKnownLocale(pref.translate_to_code),)
         return ()
@@ -37,7 +37,7 @@ class DiscussionPreloadTranslationTable(TranslationTable):
             service.asKnownLocale(lang)
             for lang in discussion.discussion_locales}
 
-    def languages_for(self, locale_code):
+    def languages_for(self, locale_code, db=None):
         locale_code = self.service.asKnownLocale(locale_code)
         return self.base_languages - set(locale_code)
 
@@ -110,7 +110,7 @@ def translate_content(
             for original in originals:
                 source_loc = (service.asKnownLocale(original.locale_code) or
                               original.locale_code) or 'und'
-                for dest in translation_table.languages_for(source_loc):
+                for dest in translation_table.languages_for(source_loc, content.db):
                     if Locale.compatible(dest, source_loc):
                         continue
                     entry = entries.get(dest, None)
