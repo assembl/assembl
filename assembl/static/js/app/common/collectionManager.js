@@ -534,7 +534,7 @@ var CollectionManager = Marionette.Object.extend({
   /**
    * Retrieve fully populated models for the list of id's given
    * @param {string[]} ids array of message id's
-   * @returns Message.Model
+   * @returns {MessageModel}
    * @function app.common.collectionManager.CollectionManager.getMessageFullModelsPromise
    */
   getMessageFullModelsPromise: function(ids) {
