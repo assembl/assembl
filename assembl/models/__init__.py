@@ -4,6 +4,12 @@ The SQLAlchemy_ models of Assembl.
 The base class of all models is Base, derived from :py:class:`assembl.lib.sqla.BaseOps`.
 Here, we also define some other base-level classes, such as :py:class:`DiscussionBoundBase` and :py:class:`DiscussionBoundTombstone`.
 
+.. figure:: ../er_diagram.svg
+    :width: 100%
+    :target: ../er_diagram.svg
+    
+    Entity-relation diagram
+
 .. _SQLAlchemy: http://www.sqlalchemy.org/
 """
 
