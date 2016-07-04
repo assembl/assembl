@@ -18,10 +18,10 @@ require('linkifyjs');
 require('linkifyjs/jquery')($);
 
 /**
- * 
+ *
  * @class app.common.context.Context
  */
- 
+
 var Context = function() {
 
   this.DISCUSSION_SLUG = $('#discussion-slug').val();
@@ -60,8 +60,8 @@ var Context = function() {
   this.debugOembed = false;
 
   /**
-   * The state that the application can be under
-   * @type {string} appState: production | test
+   * The state that the application can be under (production | test)
+   * @type {string}
    */
   this.appState = 'production';
 
@@ -283,7 +283,7 @@ Context.prototype = {
       }
 
       analytics.setCustomVariable(analytics.customVariables.HAS_ELEVATED_RIGHTS, this._currentUser.can(Permissions.EDIT_EXTRACT));
-      
+
       if(this._currentUser.get('post_count') >= 1) {
         analytics.setCustomVariable(analytics.customVariables.HAS_POSTED_BEFORE, true);
       }
@@ -312,7 +312,7 @@ Context.prototype = {
         localRoles.listenTo(localRoles, 'update', logUserSubscriptionStatus);
         logUserSubscriptionStatus(localRoles);
       });
-      
+
       this.manageLastCurrentUser();
 
     }
@@ -361,7 +361,7 @@ Context.prototype = {
   },
   /**
    * Returns a template from an script tag
-   * @param {string} id The id of the script tag
+   * @param {string} id - The id of the script tag
    * @returns {function} The Underscore.js _.template return
    * @function app.common.context.Context.loadTemplate
    */
@@ -374,8 +374,8 @@ Context.prototype = {
   },
   /**
    * get a view style definition by id
-   * @param {messageViewStyle.id} messageViewStyleId
-   * @returns {messageViewStyle?}
+   * @param {string} messageViewStyleId
+   * @returns {messageViewStyle}
    * @function app.common.context.Context.getMessageViewStyleDefById
    */
   getMessageViewStyleDefById: function(messageViewStyleId) {
@@ -443,7 +443,7 @@ Context.prototype = {
   },
   /**
    * Returns the Object with mesagelistconfig in the localStorage
-   * @returns {Object} 
+   * @returns {Object}
    * @function app.common.context.Context.DEPRECATEDgetMessageListConfigFromStorage
    */
   DEPRECATEDgetMessageListConfigFromStorage: function() {
@@ -711,8 +711,8 @@ Context.prototype = {
   },
   /**
    * Set the current annotation
-   * @param {} annotation
-   * @param {} annotatorEditor
+   * @param {?} annotation
+   * @param {?} annotatorEditor
    * @function app.common.context.Context.setDraggedAnnotation
   **/
   setDraggedAnnotation: function(annotation, annotatorEditor) {
@@ -721,7 +721,7 @@ Context.prototype = {
   },
   /**
    * Set the current segment
-   * @param {} segment
+   * @param {?} segment
    * @function app.common.context.Context.setDraggedSegment
   **/
   setDraggedSegment: function(segment) {
@@ -729,7 +729,7 @@ Context.prototype = {
     },
   /**
    * Returns the current segment
-   * @return {String} segment
+   * @returns {String} segment
    * @function app.common.context.Context.getDraggedSegment
   **/
   getDraggedSegment: function() {
@@ -745,7 +745,7 @@ Context.prototype = {
   },
   /**
    * Returns the dragged idea
-   * @return {Object} idea
+   * @returns {Object} idea
    * @function app.common.context.Context.popDraggedIdea
   **/
   popDraggedIdea: function() {
@@ -761,7 +761,7 @@ Context.prototype = {
   },
   /**
    * Returns the draft of the current synthesis
-   * @return {Object}
+   * @returns {Object}
    * @function app.common.context.Context.getCurrentSynthesisDraftPromise
   **/
   getCurrentSynthesisDraftPromise: function() {
@@ -793,7 +793,7 @@ Context.prototype = {
   **/
   setCurrentSynthesisDraftId: function(id) {
     if (id !== this.currentSynthesisDraftId) {
-      // TODO: Couple this with a system that will redraw panels dependent 
+      // TODO: Couple this with a system that will redraw panels dependent
       // on current Synthesis.
       self.currentSynthesisDraftId = id;
       self.currentSynthesisDraftPromise = null;
@@ -923,7 +923,7 @@ Context.prototype = {
   /**
    * Format string function
    * @param {string} string
-   * @params {string[]}
+   * @param {string[]} arguments
    * @returns {string}
    * @function app.common.context.Context.format
    */
@@ -936,7 +936,7 @@ Context.prototype = {
   },
   /**
    * Format date
-   * @param {Date|timestamp} date
+   * @param {(Date|timestamp)} date
    * @param {string} format - app.dateFormat The format
    * @returns {string}
    * @function app.common.context.Context.formatDate
@@ -956,7 +956,7 @@ Context.prototype = {
    * @param {Date} date
    * @param {Boolean} precise
    * @param {Boolean} with_time
-   * @param {} forbid_future
+   * @param {?} forbid_future
    * @returns {string}
    * @function app.common.context.Context.getNiceDateTime
    */
@@ -1002,11 +1002,11 @@ Context.prototype = {
    * Returns a fancy date (ex: a few seconds ago) without time
    * @param {Date} date
    * @param {Boolean} precise
-   * @param {} forbid_future
+   * @param {?} forbid_future
    * @returns {string}
    * @function app.common.context.Context.getNiceDate
    */
-  // 
+  //
   getNiceDate: function(date, precise, forbid_future) {
     if (precise === undefined)
         precise = true;
@@ -1049,7 +1049,7 @@ Context.prototype = {
 
     return null;
   },
-   
+
   /**
    * Shows the segment source in the better way related to the source
    * e.g.: If it is an email, opens it, if it is a webpage, open in another window ...
@@ -1083,7 +1083,7 @@ Context.prototype = {
    * @see http://blog.snowfinch.net/post/3254029029/uuid-v4-js
    * @returns {string} an uuid
    */
-   
+
   //FIXME: this method never use in app
   /*createUUID: function(){
    var uuid = "", i = 0, random;
@@ -1100,7 +1100,7 @@ Context.prototype = {
 
    return uuid;
    },*/
-   
+
   /**
    * Given the string in the format "local:ModelName/{id}" returns the id
    * @param  {string} str
@@ -1112,9 +1112,9 @@ Context.prototype = {
   },
   /**
    * Returns the avatar's url formatted with the given size
-   * @param  {number} userID The user's ID
+   * @param  {number} userID - The user's ID
    * @param  {number} [size=44] The avatar size
-   * @returns {string} 
+   * @returns {string}
    * @function app.common.context.Context.formatAvatarUrl
    */
   formatAvatarUrl: function(userID, size) {
@@ -1171,16 +1171,16 @@ Context.prototype = {
       return child ? child.nodeValue : '';
     },
   /**
-   * @event
+   * @listens dropdown-toggle
    * @function app.common.context.Context.onDropdownClick
    */
   onDropdownClick: function(e) {
     if (!e || !(e.target))
         return;
     var targetElement = $(e.target),
-        toggle = undefined, 
+        toggle = undefined,
         parent = undefined;
-    
+
     if (targetElement.hasClass("dropdown-toggle")) {
       toggle = targetElement;
     }
@@ -1199,7 +1199,7 @@ Context.prototype = {
       console.warn("dropdown element not found");
       return;
     }
-    
+
     var onMouseLeave = function(e) {
       dropdown.removeClass('is-open');
       //e.stopPropagation(); // so that onDropdownClick() is not called again immediately after when we click
@@ -1214,7 +1214,7 @@ Context.prototype = {
     $(document.body).one('click', onMouseLeave);
   },
   /**
-   * @event
+   * @listens ajaxError
    * Note: If you wish to defer this calculation completely, add the parameter 'handled' to the jqxhr object, set to true
    * eg. Notable example is in admin/adminDiscussion.js
    * @function app.common.context.Context.onAjaxError
@@ -1277,7 +1277,7 @@ Context.prototype = {
   },
   /**
    * Set the locale in a cookie and reload page
-   * @param {String} locale key
+   * @param {String} locale - key
    * @function app.common.context.Context.setLocale
   **/
   setLocale: function(locale) {
@@ -1289,7 +1289,7 @@ Context.prototype = {
     EXPERT: "EXPERT"
   },
   /** Set the user interface the user wants
-   * @param {String} interface_id, one of SIMPLE, EXPERT
+   * @param {String} interface_id - one of SIMPLE, EXPERT
    * @function app.common.context.Context.setInterfaceType
   **/
   setInterfaceType: function(interface_id) {
@@ -1375,7 +1375,7 @@ Context.prototype = {
       var LoaderView = require('../views/loader.js'),
       loader = new LoaderView(),
       loaderHtml = loader.render().el;
-      
+
       popover.html(loaderHtml);
       popover.css('position', 'fixed');
       popover.css('top', (evt.pageY + 2) + 'px');
@@ -1505,9 +1505,9 @@ Context.prototype = {
   },
   /**
    * Helper function to add query string to a URL
-   * @param  {string} url [The URL to append query string to]
-   * @param  {object[]} params [An array of key-value objects denoting the query string, raw (unencoded)]
-   * @returns {string}        [The query string updated URL]
+   * @param  {string} url - The URL to append query string to
+   * @param  {object[]} params - An array of key-value objects denoting the query string, raw (unencoded)
+   * @returns {string}        The query string updated URL
    * @function app.common.context.Context.appendExtraURLParams
   **/
   appendExtraURLParams: function(url, params){
@@ -1523,7 +1523,7 @@ Context.prototype = {
 
     var urlHasParams = false,
         paramExists = false;
-    
+
     if (url.indexOf('?') >= 0) {
       urlHasParams = true;
       var i = url.indexOf('?');
@@ -1574,7 +1574,7 @@ Context.prototype = {
       if (connectedUserId != lastCurrentUserId) {
         //Clear the preferences of the previous real user that used the computer
         console.info("Clearing preferences since the logged-in user changed, or there was no previous logged-in user")
-        // Take the opportunity to completely clear localStorage, since it's 
+        // Take the opportunity to completely clear localStorage, since it's
         // unreliable so far...
         window.localStorage.clear();
       }
@@ -1642,7 +1642,7 @@ Context.prototype = {
     }
 
     Moment.locale(this.getLocale());
-    return Moment; 
+    return Moment;
   },
   /**
    * @function app.common.context.Context.init
@@ -1770,7 +1770,7 @@ Context.prototype = {
   },
   /**
    * @function app.common.context.Context.deanonymizationCifInUrl
-  **/  
+  **/
   deanonymizationCifInUrl: function(url, callback) {
     var urlTemplate = _.template(url),
         serverUrl = document.URL,
@@ -1797,7 +1797,7 @@ Context.prototype = {
    * This assumes that the there is a 1:1 relationship
    * between the AgentProfile (the user) and FacebookAccount
    * the fbAccount if it exists, else returns undefined]
-   * @returns {String?} [Will either return the @id of
+   * @returns {String|undefined} the @id of the account if any
    * @function app.common.context.Context.getCurrentUserFacebookAccountId
    */
   getCurrentUserFacebookAccountId: function() {
@@ -1814,8 +1814,8 @@ Context.prototype = {
   /**
    * [A utility function to convert backend DateTime data (ISO 8601 String) into ISO 8601 String with UTC Timezone]
    * TODO: This function was taken from app/js/models/social.js. Refactor to use this Ctx version throughout codebase.
-   * @param {string}
-   * @return {String} ISO 8601 String with UTC Timezone
+   * @param {string} e
+   * @returns {String} ISO 8601 String with UTC Timezone
    * @function app.common.context.Context.addUTCTimezoneToISO8601
    */
   addUTCTimezoneToISO8601: function(e){
@@ -1849,7 +1849,7 @@ Context.prototype = {
         this.currentModalView.destroy();
       }
       //hard rendered into an element
-      this.currentModalView = null; 
+      this.currentModalView = null;
     }
   },
 
@@ -1860,7 +1860,7 @@ Context.prototype = {
    * eg. {"fr": "French"}
    * eg. Interface language FR
    * eg. {"fr": "Francais"}
-   * @returns Object  Language cache
+   * @returns {object}  Language cache
    * @function app.common.context.Context.getLocaleToLanguageNameCache
    */
   getLocaleToLanguageNameCache: function(){
@@ -1868,7 +1868,7 @@ Context.prototype = {
     if ( this._localeToLangNameCache ) {
       return this._localeToLangNameCache;
     }
-    
+
     this._localeToLangNameCache = this.getJsonFromScriptTag('translation-locale-names');
     return this._localeToLangNameCache;
   },
@@ -1896,7 +1896,7 @@ Context.prototype = {
    * Checks if an element is in the viewport
    * @returns {Boolean}
    * @function app.common.context.Context.isElementIsInViewport
-  **/  
+  **/
   isElementIsInViewport:function(element, elmHeight){
       var win = $(window);
       var viewport = {
@@ -1912,7 +1912,7 @@ Context.prototype = {
       }
       bounds.right = bounds.left + element.outerWidth();
       bounds.bottom = bounds.top + element.outerHeight();
-      
+
       return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
   },
 
