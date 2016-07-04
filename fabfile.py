@@ -1474,7 +1474,7 @@ def build_doc():
         run('rm -rf doc/autodoc doc/jsdoc')
         venvcmd('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
         venvcmd('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
-        venvcmd('python assembl/scripts/make_er_diagram.py %s -o assembl/static/techdocs/er_diagram' % (env.ini_file))
+        venvcmd('python assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (env.ini_file))
         venvcmd('sphinx-build doc assembl/static/techdocs')
 
 
