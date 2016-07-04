@@ -6,7 +6,7 @@ Here, we also define some other base-level classes, such as :py:class:`Discussio
 
 .. figure:: ../er_diagram.svg
     :width: 100%
-    :target: ../er_diagram.svg
+    :target: ../_images/er_diagram.svg
     
     Entity-relation diagram
 
