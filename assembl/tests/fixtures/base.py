@@ -256,3 +256,50 @@ def browser(request):
     request.addfinalizer(fin)
 
     return browser
+
+
+def base_fixture_dirname():
+    from os.path import dirname
+    return dirname(dirname(dirname(dirname(__file__)))) +\
+        "/assembl/static/js/app/tests/fixtures/"
+
+
+def api_call_to_fname(api_call, **args):
+    import os
+    import os.path
+    base_fixture_dir = base_fixture_dirname()
+    api_dir, fname = api_call.rsplit("/", 1)
+    api_dir = base_fixture_dir + api_dir
+    if not os.path.isdir(api_dir):
+        os.makedirs(api_dir)
+    args = args.items()
+    args.sort()
+    args = "_".join(["%s_%s" % x for x in args])
+    if args:
+        fname += "_" + args
+    fname += ".json"
+    return os.path.join(api_dir, fname)
+
+
+@pytest.fixture(scope="function")
+def json_representation_of_fixtures(
+        request, discussion, jack_layton_linked_discussion, test_app):
+    api_loc = "/api/v1/discussion/%d/ideas" % discussion.id
+    r = test_app.get(api_loc)
+    assert r.status_code == 200
+    with open(api_call_to_fname(api_loc), "w") as f:
+        f.write(r.body)
+
+    def fin():
+        from shutil import rmtree
+        from os.path import isdir
+        print "finalizer json_representation_of_fixtures"
+        base_fixture_dir = base_fixture_dirname()
+        if isdir(base_fixture_dir + "api"):
+            rmtree(base_fixture_dir + "api")
+        if isdir(base_fixture_dir + "data"):
+            rmtree(base_fixture_dir + "data")
+
+    request.addfinalizer(fin)
+
+    return None
