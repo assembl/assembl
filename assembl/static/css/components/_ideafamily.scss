@@ -96,7 +96,6 @@ $idea_in_synthesis_comment_hover: $theme_activelink_color;
   cursor: pointer;
   &:hover {
     background-color: $theme_navigation_or_idea_bg_active;
-    border-right: 4px solid $theme_navigation_or_idea_bg_active;
     .maxs, .icon {
       color: $idea_in_synthesis_icon_hover;
     }
