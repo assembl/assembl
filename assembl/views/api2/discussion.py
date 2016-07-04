@@ -277,7 +277,7 @@ def get_time_series_analytics(request):
     import pprint
     import transaction
     with transaction.manager:
-        metadata = MetaData(discussion.db.get_bind())
+        metadata = MetaData(discussion.db.get_bind())  # make sure we are using the same connexion
 
         intervals_table = Table('temp_table_intervals_' + str(user_id), metadata,
             Column('interval_id', Integer, primary_key=True),
