@@ -45,7 +45,6 @@ extensions = [
     'sphinxcontrib.httpdomain',
     'sphinxcontrib.zopeext',
     'pyramid_autodoc',
-    'sphinxcontrib.autoanysrc',
     'alabaster'
 ]
 
