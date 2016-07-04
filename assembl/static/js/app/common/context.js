@@ -711,8 +711,8 @@ Context.prototype = {
   },
   /**
    * Set the current annotation
-   * @param {?} annotation
-   * @param {?} annotatorEditor
+   * @param  annotation
+   * @param  annotatorEditor
    * @function app.common.context.Context.setDraggedAnnotation
   **/
   setDraggedAnnotation: function(annotation, annotatorEditor) {
@@ -721,7 +721,7 @@ Context.prototype = {
   },
   /**
    * Set the current segment
-   * @param {?} segment
+   * @param  segment
    * @function app.common.context.Context.setDraggedSegment
   **/
   setDraggedSegment: function(segment) {
@@ -956,7 +956,7 @@ Context.prototype = {
    * @param {Date} date
    * @param {Boolean} precise
    * @param {Boolean} with_time
-   * @param {?} forbid_future
+   * @param  forbid_future
    * @returns {string}
    * @function app.common.context.Context.getNiceDateTime
    */
@@ -1002,7 +1002,7 @@ Context.prototype = {
    * Returns a fancy date (ex: a few seconds ago) without time
    * @param {Date} date
    * @param {Boolean} precise
-   * @param {?} forbid_future
+   * @param  forbid_future
    * @returns {string}
    * @function app.common.context.Context.getNiceDate
    */
