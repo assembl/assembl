@@ -21,11 +21,15 @@ understood that Mocha was chosen solely because it allows for the test reporter 
 be set to `Nyan Cat`_ colors. Mocha is initalized on Assembl start-up in
 `assembl/templates/tests/index.jinja2`.
 
-Firstly, Mocha is loaded in the `tests/index.jinja2` by::
+Firstly, Mocha is loaded in the `tests/index.jinja2` by:
+
+.. code-block:: html
 
     <script src="assembl/static/js/bower/mocha/mocha.js"></script>
 
-And then instantiated and initialized, Mocha is initalized as such::
+And then instantiated and initialized, Mocha is initalized as such:
+
+.. code-block:: html
 
     <script> mocha.setup('bdd') </script>
     <script src="../js/build/tests/specs.js"></script>
@@ -36,7 +40,7 @@ allows for any style of tests to be written. It is up to the developer to decide
 suites they wish to write. Currently, these are the test suites (specs) written are:
 
 - Context
-    * Testing the ``app.common.context`` module
+    * Testing the :js:class:`Context` module
 - Langstring
     * Testing the front-end langstring logic
 - Models
@@ -191,7 +195,7 @@ multiple files for ease of use.
 The fixtures are read into the py.test test-runner by the use of the ``conftest.py``. All fixtures
 are loaded into the runner by importing them. Here is an example of loading `langstring` fixtures:
 
-::
+.. code-block:: python
 
     from assembl.tests.fixtures.langstring import *
 
@@ -205,7 +209,7 @@ How To Write A Fixture
 Writing test fixtures in Assembl is extremely simple. Within the fixture folder, in either a new file or an
 existing one, simply create a function with the py.test fixture decorator, like such:
 
-::
+.. code-block:: python
 
     @pytest.fixture(scope='function')
     def your_new_fixture(dependent_fixture):
