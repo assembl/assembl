@@ -144,7 +144,7 @@ def language_sdk_existance(lang, default_locale_dict):
 
 
 class FacebookAPI(object):
-    # Proxy object to the unofficial facebook sdk
+    """Proxy object to the unofficial facebook sdk"""
     def __init__(self, user_token=None):
         config = get_config()
         self._app_id = config.get('facebook.consumer_key')
@@ -196,9 +196,9 @@ class FacebookAPI(object):
 
 
 class FacebookParser(object):
-    # The main object to interact with to get source endpoints
-    # The API proxy is injected no construction to have flexibility as
-    # to which API sdk to use
+    """The main object to interact with to get source endpoints
+    The API proxy is injected no construction to have flexibility as
+    to which API sdk to use"""
 
     def __init__(self, api):
         self.fb_api = api
