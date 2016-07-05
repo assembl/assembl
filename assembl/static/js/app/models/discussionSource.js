@@ -13,10 +13,20 @@ var Base = require('./base.js'),
  * @extends app.models.base.BaseModel
  */
 var sourceModel = Base.Model.extend({
+  /**
+   * @function app.models.discussionSource.sourceModel.constructor
+   */
   constructor: function sourceModel() {
     Base.Model.apply(this, arguments);
   },
+  /**
+   * @member {string} app.models.discussionSource.sourceModel.urlRoot
+   */
   urlRoot: Ctx.getApiV2DiscussionUrl() + 'sources',
+  /**
+   * Defaults
+   * @type {Object}
+   */
   defaults: {
     'name': '',
     'admin_sender': '',
@@ -29,6 +39,10 @@ var sourceModel = Base.Model.extend({
     'use_ssl': false,
     'port': 0
   },
+  /**
+   * Validate the model attributes
+   * @function app.models.discussionSource.sourceModel.validate
+   */
   validate: function(attrs, options) {
     /**
      * check typeof variable
@@ -57,10 +71,20 @@ var sourceModel = Base.Model.extend({
  * @extends app.models.base.BaseCollection
  */
 var sourceCollection = Base.Collection.extend({
+  /**
+   * @function app.models.discussionSource.sourceCollection.constructor
+   */
   constructor: function sourceCollection() {
     Base.Collection.apply(this, arguments);
   },
+  /**
+   * @member {string} app.models.discussionSource.sourceCollection.urlRoot
+   */
   url: Ctx.getApiV2DiscussionUrl() + 'sources',
+  /**
+   * The model
+   * @type {sourceModel}
+   */
   model: sourceModel
 });
 

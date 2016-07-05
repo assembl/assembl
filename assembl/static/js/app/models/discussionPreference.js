@@ -60,6 +60,9 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
  * @class app.models.discussionPreference.DiscussionPreferenceDictionaryModel
  */
 var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
+  /**
+   * @function app.models.discussionPreference.DiscussionPreferenceDictionaryModel.constructor
+   */
   constructor: function DiscussionPreferenceDictionaryModel() {
     Backbone.Model.apply(this, arguments);
   },
@@ -74,6 +77,9 @@ var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
  * @class app.models.discussionPreference.DiscussionPreferenceSubCollection
  */
 var DiscussionPreferenceSubCollection = Backbone.Collection.extend({
+  /**
+   * @function app.models.discussionPreference.DiscussionPreferenceSubCollection.constructor
+   */
   constructor: function DiscussionPreferenceSubCollection() {
     Backbone.Collection.apply(this, arguments);
   },
@@ -83,6 +89,9 @@ var DiscussionPreferenceSubCollection = Backbone.Collection.extend({
  * @class app.models.discussionPreference.DiscussionPreferenceCollection
  */
 var DiscussionPreferenceCollection = Backbone.Collection.extend({
+  /**
+   * @function app.models.discussionPreference.DiscussionPreferenceCollection.constructor
+   */
   constructor: function DiscussionPreferenceCollection() {
     Backbone.Collection.apply(this, arguments);
   },
@@ -115,7 +124,10 @@ var DiscussionPreferenceCollection = Backbone.Collection.extend({
  * @extends app.models.discussionPreference.DiscussionPreferenceCollection
  */
 var UserPreferenceRawCollection = DiscussionPreferenceCollection.extend({
-// TODO: Subset of editable? Assume viewable already filtered by backend.
+  // TODO: Subset of editable? Assume viewable already filtered by backend.
+  /**
+   * @function app.models.discussionPreference.UserPreferenceRawCollection.constructor
+   */
   constructor: function UserPreferenceRawCollection() {
     DiscussionPreferenceCollection.apply(this, arguments);
   },

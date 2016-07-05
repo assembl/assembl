@@ -15,11 +15,14 @@ var $ = require('jquery'),
  * @extends app.models.base.BaseModel
  */
 var DocumentModel = Base.Model.extend({
+  /**
+   * @function app.models.documents.DocumentModel.constructor
+   */
   constructor: function DocumentModel(){
     Base.Model.apply(this, arguments)
   },
   /**
-   * @type {string}
+   * @member {string} app.models.documents.DocumentModel.urlRoot
    */
   urlRoot: Ctx.getApiV2DiscussionUrl('documents'),
   /**
@@ -31,6 +34,10 @@ var DocumentModel = Base.Model.extend({
     uri: undefined,
     external_url: undefined
   },
+  /**
+   * Validate the model attributes
+   * @function app.models.discussionSource.sourceModel.validate
+   */
   validate: function(attrs, options){
     /**
      * check typeof variable
@@ -52,9 +59,16 @@ var DocumentModel = Base.Model.extend({
  * @extends app.models.documents.DocumentModel
  */
 var FileModel = DocumentModel.extend({
+  /**
+   * @function app.models.documents.FileModel.constructor
+   */
   constructor: function FileDocumentModel() {
     DocumentModel.apply(this, arguments);
   },
+  /**
+   * Defaults
+   * @type {Object}
+   */
   defaults: _.extend({}, DocumentModel.prototype.defaults, {
     '@type': Types.FILE,
     fileAttribute: 'file' //A Backbone-model-file-upload attribute
@@ -91,9 +105,16 @@ var FileModel = DocumentModel.extend({
  * @extends app.models.base.BaseCollection
  */
 var DocumentCollection = Base.Collection.extend({
+  /**
+   * @function app.models.documents.DocumentCollection.constructor
+   */
   constructor: function DocumentCollection() {
     Base.Collection.apply(this, arguments);
   },
+  /**
+   * The model
+   * @type {DocumentModel}
+   */
   model: DocumentModel
 });
 
