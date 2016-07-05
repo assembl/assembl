@@ -42,7 +42,11 @@ var Account = Base.Model.extend({
      * check typeof variable
      * */
   },
-
+  /**
+   * Returns true if the Account type is a Facebook account
+   * @returns {Boolean}
+   * @function app.models.accounts.isFacebookAccount
+   */
   isFacebookAccount: function() {
       return (this.get("@type") === 'FacebookAccount');
     }
@@ -61,7 +65,11 @@ var Accounts = Base.Collection.extend({
   constructor: function Accounts() {
     Base.Collection.apply(this, arguments);
   },
-
+  /**
+   * Returns true if the Account type is a Facebook account
+   * @returns {Boolean}
+   * @function app.models.accounts.hasFacebookAccount
+   */
   hasFacebookAccount: function() {
       var tmp = this.find(function(model) {
         return model.isFacebookAccount();
@@ -69,7 +77,11 @@ var Accounts = Base.Collection.extend({
       if (!tmp) return false;
       else return true;
     }, 
-
+  /**
+   * Returns data of Facebook account
+   * @returns {Object}
+   * @function app.models.accounts.getFacebookAccount
+   */
   getFacebookAccount: function() {
       var tmp = this.find(function(model) {
         return model.isFacebookAccount();

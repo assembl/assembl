@@ -3,21 +3,18 @@
  * Represents a discussion
  * @module app.models.discussion
  */
-
 var Base = require('./base.js'),
     Jed = require('jed'),
     Ctx = require('../common/context.js'),
     Permissions = require('../utils/permissions.js'),
     i18n = require('../utils/i18n.js'),
     Roles = require('../utils/roles.js');
-
 /**
  * Discussion model
  * Frontend model for :py:class:`assembl.models.discussion.Discussion`
  * @class app.models.discussion.discussionModel
  * @extends app.models.base.BaseModel
  */
- 
 var discussionModel = Base.Model.extend({
   url: Ctx.getApiV2DiscussionUrl(),
   defaults: {
@@ -49,11 +46,20 @@ var discussionModel = Base.Model.extend({
      * check typeof variable
      * */
   },
-
+  /**
+   * Checks if translation service is available
+   * @returns {Boolean}
+   * @function app.models.discussion.discussionModel.hasTranslationService
+   */
   hasTranslationService: function(){
     return Ctx.hasTranslationService();
   },
-
+  /**
+   * Returns roles according to permission
+   * @param {Object} permission
+   * @returns {Array}
+   * @function app.models.discussion.discussionModel.getRolesForPermission
+   */
   getRolesForPermission: function(permission) {
       var roles = undefined;
       if (_.contains(Permissions, permission)) {
@@ -69,7 +75,11 @@ var discussionModel = Base.Model.extend({
         throw Error("Permission " + permission + " does not exist");
       }
     },
-
+  /**
+   * Get visualizations
+   * @returns {BaseCollection}
+   * @function app.models.discussion.discussionModel.getVisualizations
+   */
   getVisualizations: function() {
     var jed, settings = Ctx.getPreferences(),
         visualizations = settings.visualizations,
@@ -109,13 +119,11 @@ var discussionModel = Base.Model.extend({
   }
 
 });
-
 /**
  * Discussions collection
  * @class app.models.discussion.discussionCollection
  * @extends app.models.base.BaseCollection
  */
- 
 var discussionCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl(),
   model: discussionModel,

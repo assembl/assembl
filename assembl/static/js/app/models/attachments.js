@@ -3,7 +3,6 @@
  * Represents the link between an object (ex: Message, Idea) and a remote (url) or eventually local document attached to it.
  * @module app.models.attachments
  */
-
 var $ = require('jquery'),
     _ = require('underscore'),
     Moment = require("moment"),
@@ -79,7 +78,11 @@ var AttachmentModel = Base.Model.extend({
 
   initialize: function(options) {
   },
-
+  /**
+   * Returns the model of the attachment according to its type (document or file)
+   * @returns {BaseModel}
+   * @function app.models.attachments.AttachmentModel.parse
+   */
   parse: function(rawModel) {
     switch (rawModel.document['@type']){
       case Types.DOCUMENT:
@@ -95,13 +98,31 @@ var AttachmentModel = Base.Model.extend({
     //console.log("AttachmentModel.parse() returning", rawModel);  
     return rawModel;
   },
-
+  /**
+   * Set the id of the model attachment and save the model into database  
+   * @param {Object} attrs
+   * @param {Object} options
+   * @returns {jqXHR}
+   * @function app.models.attachments.AttachmentModel._saveMe
+   */
   _saveMe: function(attrs, options){
     var d = this.getDocument();
     this.set('idAttachedDocument', d.id);
     return Backbone.Model.prototype.save.call(this, attrs, options); 
   },
-
+  /**
+   * Update
+   * =======
+   *
+   * The architecture to load attachments + documents has now changed
+   * Documents are eagerly saved to the database upon creation.
+   * The AttachmentView is responsible for the lifecycle of the document model.
+   * As a result, the attachment model save should no longer do a two-step
+   * save process. It is only responsible for saving itself.
+   * @param {Object} attrs
+   * @param {Object} options
+   * @function app.models.attachments.AttachmentModel.save
+   */
   save: function(attrs, options) {
     if (this.isFailed()){
       //Don't know how good that is.
@@ -112,16 +133,7 @@ var AttachmentModel = Base.Model.extend({
 
     if(this.get('attachmentPurpose') !== attachmentPurposeTypes.DO_NOT_USE.id) {
       
-      /**
-       * Update
-       * =======
-       *
-       * The architecture to load attachments + documents has now changed
-       * Documents are eagerly saved to the database upon creation.
-       * The AttachmentView is responsible for the lifecycle of the document model.
-       * As a result, the attachment model save should no longer do a two-step
-       * save process. It is only responsible for saving itself.
-       */
+
       if (options === undefined) {
         options = {};
       }
@@ -138,9 +150,17 @@ var AttachmentModel = Base.Model.extend({
       }
     }
   },
-  
+  /**
+   * This method uses a switch according to a CRUD operation
+   * Default: Used to persist the state of the model to the server.
+   * Update: It does nothing
+   * Create: Set the type attribute to the model
+   * @param {String} method - update/create/read/delete methods
+   * @param {BaseModel} model - the model to be save
+   * @param {Object} options - It fires success or error message
+   * @function app.models.attachments.AttachmentModel.sync
+   */
   sync: function(method, model, options) {
-    // console.log("attachment sync is called with arguments", arguments);
     switch(method) {
       case 'update':
       case 'create':
@@ -159,8 +179,12 @@ var AttachmentModel = Base.Model.extend({
         return Backbone.sync(method, model, options);
     }
   },
-  
-  validate: function(attrs, options) {
+  /**
+   * Returns an error message if some attributes like objectAttachedToModel, document, idCreator are missing
+   * @returns {String}
+   * @function app.models.attachments.AttachmentModel.validate
+   */
+  validate: function() {
     if(!this.get('objectAttachedToModel')) {
       return "Object attached to is missing";
     }
@@ -171,11 +195,17 @@ var AttachmentModel = Base.Model.extend({
       return "Creator is missing";
     }
   },
-
+  /**
+   * Returns the document attributes from the model
+   * @returns {Object}
+   * @function app.models.attachments.AttachmentModel.getDocument
+   */
   getDocument: function() {
     return this.get('document');
   },
-
+  /**
+   * @function app.models.attachments.AttachmentModel.getCreationDate
+   */
   getCreationDate: function(){
     var date = this.get('creation_date');
     if ( (date) && (typeof date === 'string') ){
@@ -183,7 +213,10 @@ var AttachmentModel = Base.Model.extend({
     }
     return date;
   },
-
+  /**
+   * Destroys or removes the document from the server by using the Backbone.sync method which delegates the HTTP "delete" request.
+   * @function app.models.attachments.AttachmentModel.destroy
+   */
   destroy: function(options){
     var d = this.getDocument(),
         that = this;
@@ -194,12 +227,14 @@ var AttachmentModel = Base.Model.extend({
       }
     });
   },
-
-  /*
+  /**
     Override toJSON of the attachment model in order to ensure that
     backbone does NOT try to parse the an object that causes
     recursive read, as there is a message object which contains
     the attachment model.
+   * @param {Object} options
+   * @returns {Object} old
+   * @function app.models.attachments.AttachmentModel.toJSON
    */
   toJSON: function(options){
     var old = Base.Model.prototype.toJSON.call(this, options);
@@ -207,26 +242,27 @@ var AttachmentModel = Base.Model.extend({
     delete old['objectAttachedToModel'];
     return old;
   },
-
-  /*
-    Utility function. Makes the model unsavable.
+  /**
+   * Utility function. Makes the model unsavable.
+   * @function app.models.attachments.AttachmentModel.setFailed
    */
   setFailed: function(){
     this.setFailed = true;
   },
-
+  /**
+   * Returns if the model is unsavable.
+   * @returns {Boolean}
+   * @function app.models.attachments.AttachmentModel.isFailed
+   */
   isFailed: function(){
     return this.setFailed === true;
   }
-
 });
-
 /**
  * Attachements collection
  * @class app.models.attachments.AttachmentCollection
  * @extends app.models.base.BaseCollection
  */
- 
 var AttachmentCollection = Base.Collection.extend({
   constructor: function AttachmentCollection() {
     Base.Collection.apply(this, arguments);
@@ -255,7 +291,11 @@ var AttachmentCollection = Base.Collection.extend({
       this.objectAttachedToModel = options.objectAttachedToModel;
     }
   },
-
+  /**
+   * Compares dates between 2 documents
+   * @returns {Number}
+   * @function app.models.attachments.AttachmentCollection.comparator
+   */
   comparator: function(one, two){
     var d1 = one.getDocument(),
         d2 = two.getDocument();
@@ -284,12 +324,12 @@ var AttachmentCollection = Base.Collection.extend({
     }
     else { return 0; }
   },
-
   /**
    * Helper method to destroy the models in a collection
    * @param  {Array|Backbone.Model} models    Model or Array of models  
    * @param  {Object} options   Options hash to send to every model when destroyed
-   * @returns {Promse} if model was persisted, returns jqXhr else false 
+   * @returns {Promse} if model was persisted, returns jqXhr else false
+   * @function app.models.attachments.AttachmentCollection.destroy
    */
   destroy: function(models, options){
     if (!models){
@@ -304,7 +344,13 @@ var AttachmentCollection = Base.Collection.extend({
       model.destroy(options);
     });
   },
-
+  /**
+  * Save the collection into database
+  * @param {Object} models
+  * @param {Object} options
+  * @returns {Promise}
+  * @function app.models.attachments.AttachmentCollection.save
+  */ 
   save: function(models, options){
     if (!models){
       return Promise.resolve(false);
@@ -318,11 +364,21 @@ var AttachmentCollection = Base.Collection.extend({
       model.save(options);
     });
   },
-
+  /**
+  * Destroy the collection
+  * @param {Object} options
+  * @returns {jqXHR}
+  * @function app.models.attachments.AttachmentCollection.destroyAll
+  */ 
   destroyAll: function(options){
     return this.destroy(this.models, options);
   },
-
+  /**
+  * Save the collection into database
+  * @param {Object} options
+  * @returns {jqXHR}
+  * @function app.models.attachments.AttachmentCollection.saveAll
+  */ 
   saveAll: function(options){
     return this.save(this.models, options);
   }
