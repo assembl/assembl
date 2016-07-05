@@ -16,7 +16,14 @@ var Base = require('./base.js'),
  * @extends app.models.base.BaseModel
  */
 var discussionModel = Base.Model.extend({
+  /**
+   * @member {string} app.models.discussion.discussionModel.url
+   */
   url: Ctx.getApiV2DiscussionUrl(),
+  /**
+   * Defaults
+   * @type {Object}
+   */
   defaults: {
     'introduction': '',
     'objectives': '',
@@ -36,11 +43,16 @@ var discussionModel = Base.Model.extend({
     'show_help_in_debate_section': true,
     posts: []
   },
-
+  /**
+   * @function app.models.discussion.discussionModel.constructor
+   */
   constructor: function discussionModel() {
     Base.Model.apply(this, arguments);
   },
-
+  /**
+   * Validate the model attributes
+   * @function app.models.discussion.discussionModel.validate
+   */
   validate: function(attrs, options) {
     /**
      * check typeof variable
@@ -117,7 +129,6 @@ var discussionModel = Base.Model.extend({
     }
     return navigation_item_collections;
   }
-
 });
 /**
  * Discussions collection
@@ -125,8 +136,18 @@ var discussionModel = Base.Model.extend({
  * @extends app.models.base.BaseCollection
  */
 var discussionCollection = Base.Collection.extend({
+  /**
+   * @member {string} app.models.discussion.discussionCollection.url
+   */
   url: Ctx.getApiV2DiscussionUrl(),
+  /**
+   * The model
+   * @type {discussionModel}
+   */
   model: discussionModel,
+  /**
+   * @function app.models.discussion.discussionCollection.constructor
+   */
   constructor: function discussionCollection() {
     Base.Collection.apply(this, arguments);
   }

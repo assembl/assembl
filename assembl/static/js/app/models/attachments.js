@@ -12,13 +12,14 @@ var $ = require('jquery'),
     Promise = require('bluebird'),
     Types = require('../utils/types.js'),
     Document = require('../models/documents.js');
-
+    
 var attachmentPurposeTypes = {
   /** 
-   * Ensure that the front_end and back_end
-   * share the same values!
+   * Ensure that the front_end and back_end share the same values!
    */
-//Currently supported:
+  /**
+   * Currently supported:
+   */
   DO_NOT_USE: {
     id: 'DO_NOT_USE', 
     label: i18n.gettext('Do not show anything special')
@@ -34,32 +35,31 @@ var attachmentPurposeTypes = {
    * 'FORCE_DOWNLOAD_DOCUMENT'
    */
 };
-
 /**
  * Attachement model
  * Frontend model for :py:class:`assembl.models.attachment.Attachment`
  * @class app.models.attachments.AttachmentModel
  * @extends app.models.base.BaseModel
  */
- 
 var AttachmentModel = Base.Model.extend({
+  /**
+   * @function app.models.attachments.AttachmentModel.constructor
+   */
   constructor: function AttachmentModel() {
     Base.Model.apply(this, arguments);
   },
-
   /**
-   * @type {string}
+   * Returns api url dedicated to attachments
+   * @returns {String}
+   * @function app.models.attachments.AttachmentModel.urlRoot
    */
   urlRoot: function() {
-    //console.log("urlRoot called on ", this, this.get('objectAttachedToModel'));
     return this.get('objectAttachedToModel').getApiV2Url() + '/attachments';
   },
-
   /**
    * Defaults
    * @type {Object}
    */
-   
   defaults: {
     id: undefined,
     // Link to the Document model's id
@@ -74,9 +74,6 @@ var AttachmentModel = Base.Model.extend({
     attachmentPurpose: attachmentPurposeTypes.EMBED_ATTACHMENT.id,
     external_url: undefined,
     creation_date: new Moment().utc()
-  },
-
-  initialize: function(options) {
   },
   /**
    * Returns the model of the attachment according to its type (document or file)
@@ -94,8 +91,6 @@ var AttachmentModel = Base.Model.extend({
       default:
         return new Error("The document model does not have a @type associated!" + rawModel.document);
     }
-    
-    //console.log("AttachmentModel.parse() returning", rawModel);  
     return rawModel;
   },
   /**
@@ -114,11 +109,11 @@ var AttachmentModel = Base.Model.extend({
    * Update
    * =======
    *
-   * The architecture to load attachments + documents has now changed
+   * The architecture to load attachments + documents has now changed.
    * Documents are eagerly saved to the database upon creation.
    * The AttachmentView is responsible for the lifecycle of the document model.
-   * As a result, the attachment model save should no longer do a two-step
-   * save process. It is only responsible for saving itself.
+   * As a result, the attachment model save should no longer do a two-step save process.
+   * It is only responsible for saving itself.
    * @param {Object} attrs
    * @param {Object} options
    * @function app.models.attachments.AttachmentModel.save
@@ -128,12 +123,8 @@ var AttachmentModel = Base.Model.extend({
       //Don't know how good that is.
       return;
     }
-
     var that = this;
-
     if(this.get('attachmentPurpose') !== attachmentPurposeTypes.DO_NOT_USE.id) {
-      
-
       if (options === undefined) {
         options = {};
       }
@@ -141,7 +132,6 @@ var AttachmentModel = Base.Model.extend({
       //If the document was not STILL saved at the time of the attachment being saved
       if ( d.isNew() ) {
         Promise.resolve(this.get('document').save()).then(function(){
-          //console.log("Saving attachments", attrs, options);
           return that._saveMe(attrs, options);
         })
       }
@@ -180,7 +170,7 @@ var AttachmentModel = Base.Model.extend({
     }
   },
   /**
-   * Returns an error message if some attributes like objectAttachedToModel, document, idCreator are missing
+   * Returns an error message if one of those attributes (objectAttachedToModel, document, idCreator) is missing
    * @returns {String}
    * @function app.models.attachments.AttachmentModel.validate
    */
@@ -204,6 +194,8 @@ var AttachmentModel = Base.Model.extend({
     return this.get('document');
   },
   /**
+   * Returns the creation date of the attachment
+   * @returns {Moment}
    * @function app.models.attachments.AttachmentModel.getCreationDate
    */
   getCreationDate: function(){
@@ -228,12 +220,9 @@ var AttachmentModel = Base.Model.extend({
     });
   },
   /**
-    Override toJSON of the attachment model in order to ensure that
-    backbone does NOT try to parse the an object that causes
-    recursive read, as there is a message object which contains
-    the attachment model.
+   * Override toJSON of the attachment model in order to ensure that backbone does NOT try to parse the an object that causes recursive read, as there is a message object which contains the attachment model.
    * @param {Object} options
-   * @returns {Object} old
+   * @returns {Object}
    * @function app.models.attachments.AttachmentModel.toJSON
    */
   toJSON: function(options){
@@ -264,27 +253,30 @@ var AttachmentModel = Base.Model.extend({
  * @extends app.models.base.BaseCollection
  */
 var AttachmentCollection = Base.Collection.extend({
+  /**
+   * @function app.models.attachments.AttachmentCollection.constructor
+   */
   constructor: function AttachmentCollection() {
     Base.Collection.apply(this, arguments);
   },
-
   /**
-   * @type {string}
+   * Returns api url dedicated to attachments
+   * @returns {String}
+   * @function app.models.attachments.AttachmentCollection.url
    */
   url: function() {
-    //console("AttachmentCollection::url() about to return:", this.objectAttachedToModel.urlRoot() + '/' + this.objectAttachedToModel.getNumericId() + '/attachments');
     return this.objectAttachedToModel.urlRoot() + '/' + this.objectAttachedToModel.getNumericId() + '/attachments';
   },
-
   /**
    * The model
    * @type {PartnerOrganizationModel}
    */
   model: AttachmentModel,
-
+  /**
+   * @function app.models.attachments.AttachmentCollection.initialize
+   */
   initialize: function(models, options) {
     if (!options.objectAttachedToModel) {
-      console.log(options);
       throw new Error("objectAttachedToModel must be provided to calculate url");
     }
     else {
@@ -299,7 +291,6 @@ var AttachmentCollection = Base.Collection.extend({
   comparator: function(one, two){
     var d1 = one.getDocument(),
         d2 = two.getDocument();
-
     var cmp = function (a, b){
       if ( a.getCreationDate().isBefore(b.getCreationDate()) ){
         return -1;
@@ -311,14 +302,12 @@ var AttachmentCollection = Base.Collection.extend({
         return 0;
       }
     };
-
     if ( ((d1.isFileType()) && (d2.isFileType())) || ((!d1.isFileType()) && (!d2.isFileType())) ){
       return cmp(one, two);
     }
     else if ( (d1.isFileType()) && (!d2.isFileType()) ){
       return -1;
     }
-
     else if ( (!d1.isFileType()) && (d2.isFileType()) ){
       return 1;
     }
@@ -335,17 +324,15 @@ var AttachmentCollection = Base.Collection.extend({
     if (!models){
       return Promise.resolve(false);
     }
-
     if (!_.isArray(models)){
       return Promise.resolve(models.destroy(options));
     }
-
     return Promise.each(models, function(model){
       model.destroy(options);
     });
   },
   /**
-  * Save the collection into database
+  * Save models into database
   * @param {Object} models
   * @param {Object} options
   * @returns {Promise}
@@ -355,11 +342,9 @@ var AttachmentCollection = Base.Collection.extend({
     if (!models){
       return Promise.resolve(false);
     }
-
     if (!_.isArray(models)){
       return Promise.resolve(models.save(options));
     }
-
     return Promise.each(models, function(model){
       model.save(options);
     });
@@ -374,7 +359,7 @@ var AttachmentCollection = Base.Collection.extend({
     return this.destroy(this.models, options);
   },
   /**
-  * Save the collection into database
+  * Save models into database
   * @param {Object} options
   * @returns {jqXHR}
   * @function app.models.attachments.AttachmentCollection.saveAll

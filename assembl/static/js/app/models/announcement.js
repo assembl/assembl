@@ -21,9 +21,6 @@ var AnnouncementModel = Base.Model.extend({
    * @type {Object}
    */
   defaults: {
-    //'@type': Types.ANNOUNCEMENT,
-    //"creation_date": undefined,
-    //"modification_date": undefined,
     "creator": undefined,
     "last_updated_by": undefined, 
     "title": undefined,
@@ -32,14 +29,27 @@ var AnnouncementModel = Base.Model.extend({
     //Only for idea announcements
     "should_propagate_down": undefined
   },
+  /**
+   * @function app.models.announcement.AnnouncementModel.constructor
+   */
   constructor: function AnnouncementModel() {
     Base.Model.apply(this, arguments);
   },
+  /** 
+   * Returns an error message if the model format is invalid with th associated id
+   * @returns {String}
+   * @function app.models.announcement.AnnouncementModel.initialize
+   */
   initialize: function(options) {
     this.on("invalid", function(model, error) {
       console.log(model.id + " " + error);
     });
   },
+  /** 
+   * Returns an error message if one of those attributes (idObjectAttachedTo, last_updated_by, creator) is missing
+   * @returns {String}
+   * @function app.models.announcement.AnnouncementModel.validate
+   */
   validate: function(attrs, options) {
     if(!this.get('idObjectAttachedTo')) {
       return "Object attached to is missing";
@@ -76,6 +86,9 @@ var AnnouncementModel = Base.Model.extend({
  * @extends app.models.base.BaseCollection
  */
 var AnnouncementCollection = Base.Collection.extend({
+  /**
+   * @function app.models.announcement.AnnouncementCollection.constructor
+   */
   constructor: function AnnouncementCollection() {
     Base.Collection.apply(this, arguments);
   },
@@ -85,7 +98,7 @@ var AnnouncementCollection = Base.Collection.extend({
   url: Ctx.getApiV2DiscussionUrl('announcements'),
   /**
    * The model
-   * @type {PartnerOrganizationModel}
+   * @type {AnnouncementModel}
    */
   model: AnnouncementModel
 });

@@ -1,10 +1,8 @@
 'use strict';
-
 /**
  * User profile and permissions (user or email author)
  * @module app.models.agents
  */
-
 var $ = require('jquery'),
     Base = require('./base.js'),
     Ctx = require('../common/context.js'),
@@ -12,10 +10,8 @@ var $ = require('jquery'),
     Promise = require('bluebird'),
     Permissions = require("../utils/permissions.js"),
     Roles = require('../utils/roles.js');
-
 var AVATAR_PLACEHOLDER = '//placehold.it/{0}';
 var UNKNOWN_USER_ID = Roles.EVERYONE;
-
 /**
  * Agent model
  * Frontend model for :py:class:`assembl.models.auth.AgentProfile`
@@ -26,9 +22,7 @@ var AgentModel = Base.Model.extend({
   /**
    * @member {string} app.models.agents.AgentModel.urlRoot
    */
-  //urlRoot: Ctx.getApiUrl('agents/'),
   urlRoot:  Ctx.getApiV2DiscussionUrl() + 'all_users/',
-
   /**
    * Defaults
    * @type {Object}
@@ -50,89 +44,88 @@ var AgentModel = Base.Model.extend({
     '@type': null,
     '@view': null
   },
-
+  /**
+   * @function app.models.agents.AgentModel.constructor
+   */
   constructor: function AgentModel() {
     Base.Model.apply(this, arguments);
   },
-
   /**
    * The list with all user's permissions
    * This is usefull only for the logged user.
    * @member {string[]} app.models.agents.AgentModel.permissions
    */
   permissions: [],
-
   /**
-   * Load the permissions from script tag
-   * and populates `this.permissions`
-   *
-   * @function app.models.agents.AgentModel.fetchPermissionsFromScriptTag
+   * Load the permissions from script tag and populates `this.permissions`
    * @param {string} [id='permissions-json'] The script tag id
+   * @function app.models.agents.AgentModel.fetchPermissionsFromScriptTag
    */
   fetchPermissionsFromScriptTag: function(id) {
     id = id || 'permissions-json';
-
     try {
       this.permissions = Ctx.getJsonFromScriptTag(id);
     } catch (e) {
       throw new Error("Invalid json");
     }
   },
-
   /**
    * Load permissions from database
    * @function app.models.agents.AgentModel.fetchPermissions
    */
   fetchPermissions: function() {
-    //console.log("AgentModel::fetchPermissions()");
     var that = this;
     var promise = Promise.resolve($.get(Ctx.getApiUrl('permissions/u/' + this.getId())));
     promise.then(function(permissions) {
-      console.log("AgentModel::fetchPermissions() promise received");
       that.permissions = permissions;
     });
     return promise;
   },
-
   /**
    * return the avatar's url
-   * @function app.models.agents.AgentModel.getAvatarUrl
    * @param  {number} [size=44] The avatar size
    * @returns {string}
+   * @function app.models.agents.AgentModel.getAvatarUrl
    */
   getAvatarUrl: function(size) {
     var id = this.getId();
-
     return id != UNKNOWN_USER_ID ? Ctx.formatAvatarUrl(Ctx.extractId(id), size) : Ctx.format(AVATAR_PLACEHOLDER, size);
   },
-
+  /**
+   * Returns the avatar's color
+   * @returns {string}
+   * @function app.models.agents.AgentModel.getAvatarColor
+   */
   getAvatarColor: function() {
     var numColors = 10;
     var hue = Math.round(360.0 * (this.getNumericId() % numColors) / numColors);
     return "hsl(" + hue + ", 60%, 65%)";
   },
-
   /**
-   * @function app.models.agents.AgentModel.hasPermission
+   * Checks if user has permission
    * @param  {string}  permission The permission name
    * @returns {boolean} True if the user has the given permission
+   * @function app.models.agents.AgentModel.hasPermission
    */
   hasPermission: function(permission) {
     return $.inArray(permission, this.permissions) >= 0;
   },
-
   /**
-   * @function app.models.agents.AgentModel.can
    * @alias hasPermission
+   * @param {String} permission
+   * @returns {Boolean}
+   * @function app.models.agents.AgentModel.can
    */
   can: function(permission) {
     return this.hasPermission(permission);
   },
-
-
   /**
+   * A text message designed to replace X in the question "You cannot perform this operation because X"
+   * @param {String?} permission
+   * @param {Number?} discussion
+   * @param {String?} reroute_relative_url
+   * @returns {string}
    * @function app.models.agents.AgentModel.getRolesMissingMessageForPermission
-   * @returns {string} A text message designed to replace X in the question "You cannot perform this operation because X"
    */
   getRolesMissingMessageForPermission: function(permission, discussion, reroute_relative_url) {
       if (this.hasPermission(permission)) {
@@ -146,12 +139,11 @@ var AgentModel = Base.Model.extend({
             {
               'next': reroute_relative_url
             }
-          )
+          );
         }
         else {
           url = Ctx.getLoginURL();
         }
-
         return i18n.sprintf(i18n.gettext("you must first <a href='%s'>Sign in</a>"), url);
       }
       else if (discussion !== undefined) {
@@ -173,66 +165,64 @@ var AgentModel = Base.Model.extend({
         return i18n.gettext("you need additional permissions");
       }
     },
-
   /**
-   * @function app.models.agents.AgentModel.getRolesMissingMessageForPermission
-   * @returns {boolean} true if the user is an unknown user
+   * Returns true if the user is an unknown user
+   * @returns {Boolean}
+   * @function app.models.agents.AgentModel.isUnknownUser
    */
   isUnknownUser: function() {
     return this.getId() === UNKNOWN_USER_ID;
   },
-
+  /**
+   * Validate the model attributes
+   * @function app.models.agents.AgentModel.validate
+   */
   validate: function(attrs, options) {
     /**
      * check typeof variable
      * */
-     
   }
-
 });
-
 /**
  * Agents collection
  * @class app.models.agents.AgentCollection
  * @extends app.models.base.BaseCollection
  */
- 
 var AgentCollection = Base.Collection.extend({
+  /**
+   * @function app.models.agents.AgentCollection.constructor
+   */
   constructor: function AgentCollection() {
     Base.Collection.apply(this, arguments);
   },
-
   /**
    * @member {string} app.models.agents.AgentCollection.url
    */
   url: Ctx.getApiUrl('agents/'),
-
   /**
    * The model
    * @member {AgentModel} app.models.agents.AgentCollection.model
    */
   model: AgentModel,
-
   /**
    * Returns the user by his/her id, or return the unknown user
+   * @param {Number} id
+   * @returns {Object}
    * @function app.models.agents.AgentCollection.getById
-   * @param {number} id
-   * @returns {User}
    */
   getById: function(id) {
     var user = this.get(id);
     return user || this.getUnknownUser();
   },
-
   /**
+   * Returns the unknown user object
+   * @returns {Object}
    * @function app.models.agents.AgentCollection.getUnknownUser
-   * @returns {User} the unknown user
    */
   getUnknownUser: function() {
     return UNKNOWN_USER;
   }
 });
-
 /**
  * The unknown User
  * @type {UserModel}

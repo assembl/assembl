@@ -3,37 +3,32 @@
  * Represents the state of a panel group (current idea, selected navigation, minimised states, etc.)
  * @module app.models.groupState
  */
-
 var Base = require('./base.js'),
     Idea = require('./idea.js');
-
 /**
  * Group state model
  * @class app.models.groupState.GroupStateModel
  * @extends app.models.base.BaseModel
  */
-
 var GroupStateModel = Base.Model.extend({
   constructor: function GroupStateModel() {
     Base.Model.apply(this, arguments);
   },
-
   defaults: {
     currentIdea: null
   },
-
+  /**
+   * @function app.models.groupState.GroupStateModel.toJSON
+   */
   toJSON:  function(options) {
     var json = Base.Model.prototype.toJSON.apply(this, arguments);
     if (json.currentIdea !== null && json.currentIdea instanceof Idea.Model) {
       json.currentIdea = json.currentIdea.get("@id");
     }
-
     return json;
   },
-
   /** This returns undefined if the model is valid */
   validate: function(attributes, options) {
-    //console.log("groupState::validate called with", attributes, options);
     if (attributes['currentIdea'] === null) {
       return; //Ok
     }
@@ -45,20 +40,16 @@ var GroupStateModel = Base.Model.extend({
     }
   }
 });
-
 /**
  * Group states collection
  * @class app.models.groupState.GroupStates
  * @extends app.models.base.BaseCollection
  */
- 
 var GroupStates = Base.Collection.extend({
   constructor: function GroupStates() {
     Base.Collection.apply(this, arguments);
   },
-
   model: GroupStateModel,
-
   validate: function() {
     var invalid = [];
     this.each(function(groupState) {
@@ -71,7 +62,6 @@ var GroupStates = Base.Collection.extend({
       this.remove(invalid);
       console.warn("GroupState.Collection: after removal, number of remaining valid groupStates: " + this.length);
     }
-
     return (this.length > 0);
   }
 });
