@@ -89,6 +89,7 @@ class IdeaGraphView(DiscussionBoundBase):
 
 
 class SubGraphIdeaAssociation(DiscussionBoundBase):
+    """Association table saying that an Idea is part of a ExplicitSubGraphView"""
     __tablename__ = 'sub_graph_idea_association'
     id = Column(Integer, primary_key=True)
     sub_graph_id = Column(Integer, ForeignKey(
@@ -153,6 +154,7 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
 
 
 class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
+    """Association table saying that an IdeaLink is part of a ExplicitSubGraphView"""
     __tablename__ = 'sub_graph_idea_link_association'
     id = Column(Integer, primary_key=True)
 

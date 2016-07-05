@@ -116,6 +116,8 @@ ViewDefs
 
 Each class should define how it will be represented by default in the REST interfaces. This is done by creating an entry for that class in ``assembl/view_defs/default.json``, as described in :py:mod:`assembl.view_def`. It is also useful to have an entry for the class in ``assembl/view_defs/changes.json``, which determines how much data will be sent to the Websocket when the object is changed.
 
+IMPORTANT: If you forget to do this, you cannot access instances of that class, but you will not know that through errrors or otherwise.
+
 .. code-block:: javascript
 
     "Document": {
@@ -124,7 +126,7 @@ Each class should define how it will be represented by default in the REST inter
         "discussion": true
     }
 
-Finally, create/update operations on the instance may only allow changing a subset of fields; this is defined in ``assembl/view_defs/default_reverse.json``
+Finally, create/update operations on the instance may only allow changing a subset of fields; this is defined in ``assembl/view_defs/default_reverse.json``. Again, if the class is not defined here, the POST/PUT operations will fail, often silently.
 
 .. code-block:: javascript
 
@@ -135,6 +137,20 @@ Finally, create/update operations on the instance may only allow changing a subs
     }
 
 
+Migration and declaration
+---------
+
+You need to create an Alembic_ migration adding the table of the new class to the database. As an example, ``Document`` class was created in :file:`assembl/alembic/versions/2e4ce0e3a0b2_attachment_support.py`.
+
+Also, you should import the class in :file:`assembl/static/js/app/models/__init__.py` so it is known to the application at startup.
+
+Frontend model
+--------------
+
+You should create a backbone model and a backbone collection for that class, and add the new Model type to :file:`assembl/static/js/app/utils/types.js`. (TODO: details.) Example in :file:`assembl/static/js/app/models/documents.js`
+
+
 .. _`Declarative Mapping`: http://docs.sqlalchemy.org/en/latest/orm/mapping_styles.html#declarative-mapping
 .. _`joined table inheritance`: http://docs.sqlalchemy.org/en/latest/orm/inheritance.html#joined-table-inheritance
 .. _`relationship configuration`: http://docs.sqlalchemy.org/en/latest/orm/relationships.html
+.. _Alembic: http://alembic.zzzcomputing.com/en/latest/

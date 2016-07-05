@@ -25,7 +25,7 @@ The packages you would need to know about first are described in subsequent para
 
 This comes from :file:`requirements.txt`, but indirect dependencies are not listed.
 
-alembic_
+Alembic_
   Database schema migration
 
 anyjson_
