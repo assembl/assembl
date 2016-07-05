@@ -264,7 +264,7 @@ def base_fixture_dirname():
         "/assembl/static/js/app/tests/fixtures/"
 
 
-def api_call_to_fname(api_call, **args):
+def api_call_to_fname(api_call, method="GET", **args):
     import os
     import os.path
     base_fixture_dir = base_fixture_dirname()
@@ -277,18 +277,40 @@ def api_call_to_fname(api_call, **args):
     args = "_".join(["%s_%s" % x for x in args])
     if args:
         fname += "_" + args
+    if method != "GET":
+        fname = method + "_" + fname
     fname += ".json"
     return os.path.join(api_dir, fname)
+
+
+class RecordingApp(object):
+    "Decorator for the test_app"
+    def __init__(self, test_app):
+        self.app = test_app
+
+    def __getattribute__(self, name):
+        if name not in {
+                "get", "post", "post_json", "put", "put_json",
+                "delete", "patch", "patch_json"}:
+            return super(RecordingApp, self).__getattribute__(name)
+
+        def appmethod(url, params=None, headers=None):
+            r = getattr(self.app, name)(url, params, headers)
+            assert 200 <= r.status_code < 300
+            params = params or {}
+            methodname = name.split("_")[0].upper()
+            with open(api_call_to_fname(url, methodname, **params), "w") as f:
+                f.write(r.body)
+            return r
+        return appmethod
 
 
 @pytest.fixture(scope="function")
 def json_representation_of_fixtures(
         request, discussion, jack_layton_linked_discussion, test_app):
-    api_loc = "/api/v1/discussion/%d/ideas" % discussion.id
-    r = test_app.get(api_loc)
-    assert r.status_code == 200
-    with open(api_call_to_fname(api_loc), "w") as f:
-        f.write(r.body)
+    rec_app = RecordingApp(test_app)
+    rec_app.get("/api/v1/discussion/%d/ideas" % discussion.id)
+    rec_app.get("/api/v1/discussion/%d/posts" % discussion.id, {"view": "id_only"})
 
     def fin():
         from shutil import rmtree
