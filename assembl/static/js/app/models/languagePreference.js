@@ -3,7 +3,6 @@
  * A user's preference language
  * @module app.models.languagePreference
  */
-
 var _ = require('underscore'),
     Base = require('./base.js'),
     Ctx = require('../common/context.js'),
@@ -23,7 +22,6 @@ var clean = function(input){
     }
     return tmp;
 };
-
 /**
  * A user's preference on how to handle a language: should it be translated, and to what?
  * Frontend model for :py:class:`assembl.models.auth.UserLanguagePreference`
@@ -31,11 +29,16 @@ var clean = function(input){
  * @extends app.models.base.BaseModel
  */
 var LanguagePreferenceModel = Base.Model.extend({
+  /**
+   * @function app.models.languagePreference.LanguagePreferenceModel.constructor
+   */
   constructor: function LanguagePreferenceModel() {
     Base.Model.apply(this, arguments);
   },
-    //The server should also send the string of the locales.
-    //locale_code, translate_to_name
+  /**
+   * Defaults
+   * @type {Object}
+   */
     defaults: {
         user: null,
         locale_code: null,
@@ -43,44 +46,64 @@ var LanguagePreferenceModel = Base.Model.extend({
         source_of_evidence: null,
         translate_to_name: null
     },
-
+  /**
+   * @function app.models.languagePreference.LanguagePreferenceModel.setExplicitPromise
+   */
     setExplicitPromise: function(language){
         this.set({"translate_to": language});
         return Promise.resolve(this.save({}));
     },
-
+  /**
+   * @function app.models.languagePreference.LanguagePreferenceModel.isLocale
+   */
     isLocale: function(locale){
         var cl = clean(locale),
             clln = clean(this.get('locale_code'));
         return clln === cl;
     },
-
+  /**
+   * @function app.models.languagePreference.LanguagePreferenceModel.isTranslateTo
+   */
     isTranslateTo: function(locale){
         var cl = clean(locale),
             clln = clean(this.get('translate_to_name'));
         return clln === cl;
     }
 });
-
 /**
  * Language Preference set of the user; there is a privacy setting which will only show an array of user preferences that are bound to the user
  * @class app.models.languagePreference.LanguagePreferenceCollection
  * @extends app.models.base.BaseCollection
  */
 var LanguagePreferenceCollection = Base.Collection.extend({
+  /**
+   * @function app.models.languagePreference.LanguagePreferenceCollection.constructor
+   */
   constructor: function LanguagePreferenceCollection() {
     Base.Collection.apply(this, arguments);
   },
+  /**
+   * @member {string} app.models.languagePreference.LanguagePreferenceCollection.url
+   */
     url: Ctx.getApiV2DiscussionUrl("/all_users/current/language_preference"),
+    /**
+   * The model
+   * @type {LanguagePreferenceModel}
+   */
     model: LanguagePreferenceModel,
     cacheDefaultTargetLocale: undefined,
     cachePrefByLocale: undefined,
-
-    //Comparator sorts in ascending order
+  /**
+   * Comparator sorts in ascending order
+   * @function app.models.languagePreference.LanguagePreferenceCollection.comparator
+   */
     comparator: function(lp) {
       return lp.get("source_of_evidence") + (lp.get("preferred_order") / 100.0);
     },
-
+  /**
+   * Comparator sorts in ascending order
+   * @function app.models.languagePreference.LanguagePreferenceCollection.getExplicitLanguages
+   */
     getExplicitLanguages: function(){
         return this.filter(function(entry){
             return entry.get("source_of_evidence") === 0;

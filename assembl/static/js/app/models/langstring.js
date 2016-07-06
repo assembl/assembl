@@ -1,99 +1,114 @@
 'use strict';
 /**
- * Manage string to translate
+ * Manage string translation
  * @module app.models.langstring
  */
-
 var _ = require('underscore'),
     Base = require('./base.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js');
-
+/**
+ * @class app.models.langstring.LocaleUtils
+ */
 var LocaleUtils = {
-    translatorInfo: Ctx.getTranslationServiceData() || {},
-    localeCompatibility: function(locale1, locale2) {
-        // Are the two locales similar enough to be substituted
-        // one for the other. Mostly same language/script, disregard country.
-        // shortcut
-        if (locale1.substr(0, 2) != locale2.substr(0, 2)) {
+  translatorInfo: Ctx.getTranslationServiceData() || {},
+  /**
+   * @function app.models.langstring.LocaleUtils.localeCompatibility
+   */
+  localeCompatibility: function(locale1, locale2) {
+      // Are the two locales similar enough to be substituted
+      // one for the other. Mostly same language/script, disregard country.
+      // shortcut
+      if (locale1.substr(0, 2) != locale2.substr(0, 2)) {
+        return false;
+      }
+      // Google special case
+      if (locale1 == "zh")
+          locale1 = "zh_Hans";
+      if (locale2 == "zh")
+          locale2 = "zh_Hans";
+      var l1 = locale1.split("-x-mtfrom-")[0].split("_"),
+          l2 = locale2.split("-x-mtfrom-")[0].split("_"),
+          max = Math.min(l1.length, l2.length);
+      for (var i = 0; i < max; i++) {
+        if (l1[i] != l2[i]) {
+          if (i > 0 && l1[i].length == 2) {
+              return i;
+          }
           return false;
         }
-        // Google special case
-        if (locale1 == "zh")
-            locale1 = "zh_Hans";
-        if (locale2 == "zh")
-            locale2 = "zh_Hans";
-        var l1 = locale1.split("-x-mtfrom-")[0].split("_"),
-            l2 = locale2.split("-x-mtfrom-")[0].split("_"),
-            max = Math.min(l1.length, l2.length);
-        for (var i = 0; i < max; i++) {
-          if (l1[i] != l2[i]) {
-            if (i > 0 && l1[i].length == 2) {
-                return i;
-            }
-            return false;
-          }
-        }
-        return i + 1;
-    },
+      }
+      return i + 1;
+  },
 
-    undefined: "und",
-    non_linguistic: "zxx",
-
-    stripCountry: function(locale) {
-        var locale_parts = locale.split("_");
-        if (locale_parts.length > 1 && locale_parts[locale_parts.length-1].length == 2) {
-            locale_parts.pop();
-            locale = locale_parts.join("_");
-        }
-        return locale;
-    },
-
-    superLocale: function(locale) {
-        var pos = locale.lastIndexOf("_");
-        if (pos > 0) {
-            return locale.substr(0, pos);
-        }
-    },
-
-    localeAsTranslationService: function(locale) {
-        var parts = locale.split("-x-mtfrom-");
-        if (parts.length > 1) {
-            return [this.localeAsTranslationService(parts[0]),
-                    this.localeAsTranslationService(parts[1])].join("-x-mtfrom-");
-        }
-        var idiosyncrasies = this.translatorInfo['idiosyncrasies'] || {};
-        if (idiosyncrasies[locale] !== undefined) {
-            return idiosyncrasies[locale];
-        } else {
-            return locale;
-        }
-    },
-
-    getServiceShowOriginalString: function(){
-      return this.translatorInfo["translation_notice"] || "";
-    },
-
-    getServiceShowOriginalUrl: function(){
-      return this.translatorInfo["translation_notice_url"] || "";
-    },
+  undefined: "und",
+  non_linguistic: "zxx",
+  /**
+   * @function app.models.langstring.LocaleUtils.stripCountry
+   */
+  stripCountry: function(locale) {
+      var locale_parts = locale.split("_");
+      if (locale_parts.length > 1 && locale_parts[locale_parts.length-1].length == 2) {
+          locale_parts.pop();
+          locale = locale_parts.join("_");
+      }
+      return locale;
+  },
+  /**
+   * @function app.models.langstring.LocaleUtils.superLocale
+   */
+  superLocale: function(locale) {
+      var pos = locale.lastIndexOf("_");
+      if (pos > 0) {
+          return locale.substr(0, pos);
+      }
+  },
+  /**
+   * @function app.models.langstring.LocaleUtils.localeAsTranslationService
+   */
+  localeAsTranslationService: function(locale) {
+      var parts = locale.split("-x-mtfrom-");
+      if (parts.length > 1) {
+          return [this.localeAsTranslationService(parts[0]),
+                  this.localeAsTranslationService(parts[1])].join("-x-mtfrom-");
+      }
+      var idiosyncrasies = this.translatorInfo['idiosyncrasies'] || {};
+      if (idiosyncrasies[locale] !== undefined) {
+          return idiosyncrasies[locale];
+      } else {
+          return locale;
+      }
+  },
+  /**
+   * @function app.models.langstring.LocaleUtils.getServiceShowOriginalString
+   */
+  getServiceShowOriginalString: function(){
+    return this.translatorInfo["translation_notice"] || "";
+  },
+  /**
+   * @function app.models.langstring.LocaleUtils.getServiceShowOriginalUrl
+   */
+  getServiceShowOriginalUrl: function(){
+    return this.translatorInfo["translation_notice_url"] || "";
+  },
 };
-
 /**
  * Lang string entry Model. A string in a given language. Many of those form a LangString
  * Frontend model for :py:class:`assembl.models.langstrings.LangStringEntry`
  * @class app.models.langstring.LangStringEntry
  * @extends app.models.base.BaseModel
  */
- 
 var LangStringEntry = Base.Model.extend({
+  /**
+   * @function app.models.langstrings.LangStringEntry.constructor
+   */
   constructor: function LangStringEntry() {
     Base.Model.apply(this, arguments);
   },
-
   /**
    * Defaults
+   * @type {Object}
    */
   defaults: {
     "@type": Types.LANGSTRING_ENTRY,
@@ -102,9 +117,15 @@ var LangStringEntry = Base.Model.extend({
     "error_code": undefined,
     "value": ""
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.isMachineTranslation
+   */
   isMachineTranslation: function() {
     return this.get("@language").indexOf("-x-mtfrom-") > 0;
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.original
+   */
   original: function() {
     // shortcut for original
     if (this.collection !== undefined && this.collection.langstring !== undefined) {
@@ -113,25 +134,43 @@ var LangStringEntry = Base.Model.extend({
     // WHY do we get here?
     return this;
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.langstring
+   */
   langstring: function() {
     return this.collection.langstring;
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.value
+   */
   value: function() {
     return this.get("value");
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.getLocaleValue
+   */
   getLocaleValue: function() {
     return this.get('@language');
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.getBaseLocale
+   */
   getBaseLocale: function() {
     var locale = this.get('@language');
     return locale.split("-x-mtfrom-")[0];
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.getBaseLocale
+   */
   getTranslatedFromLocale: function() {
     if (this.isMachineTranslation()) {
       var locale = this.get('@language');
       return locale.split("-x-mtfrom-")[1];
     }
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.getOriginalLocale
+   */
   getOriginalLocale: function() {
     if (this.isMachineTranslation()) {
       var locale = this.get('@language');
@@ -140,9 +179,15 @@ var LangStringEntry = Base.Model.extend({
         return this.getBaseLocale();
     }
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.localeForService
+   */
   localeForService: function() {
     return LocaleUtils.localeAsTranslationService(this.get("@language"));
   },
+  /**
+   * @function app.models.langstrings.LangStringEntry.applyFunction
+   */
   applyFunction: function(func) {
     return new LangStringEntry({
       value: func(this.get("value")),
@@ -150,52 +195,73 @@ var LangStringEntry = Base.Model.extend({
     });
   }
 });
-
 /**
  * Lang string entry collection
  * @class app.models.langstring.LangStringEntryCollection
  * @extends app.models.base.BaseCollection
  */
 var LangStringEntryCollection = Base.Collection.extend({
+  /**
+   * @function app.models.langstrings.LangStringEntryCollection.constructor
+   */
   constructor: function LangStringEntryCollection() {
     Base.Collection.apply(this, arguments);
   },
-  // Should I use the subordinate api point? I'd need the langstring url
+  /**
+   * @member {string} app.models.langstrings.LangStringEntryCollection.urlRoot
+   */
   urlRoot: Ctx.getApiV2DiscussionUrl("LangStringEntry"),
+  /**
+   * The model
+   * @type {Account}
+   */
   model: LangStringEntry,
+  /**
+   * @function app.models.langstrings.LangStringEntryCollection.initialize
+   */
   initialize: function(models, options) {
     this.langstring = options ? options.langstring : null;
   }
 });
-
 /**
  * Lang string model. A multilingual string, composed of many LangStringEntry
  * Frontend model for :py:class:`assembl.models.langstrings.LangString`
  * @class app.models.langstring.LangString
  * @extends app.models.base.BaseModel
  */
- 
 var LangString = Base.Model.extend({
+  /**
+   * @function app.models.langstrings.LangString.constructor
+   */
   constructor: function LangString() {
     Base.Model.apply(this, arguments);
   },
+  /**
+   * @function app.models.langstrings.LangString.parse
+   */
   parse: function(rawModel, options) {
     rawModel.entries = new LangStringEntryCollection(rawModel.entries, {parse: true});
     return rawModel;
   },
+  /**
+   * @function app.models.langstrings.LangString.initialize
+   */
   initialize: function(attributes, options) {
     if (attributes && attributes.entries !== undefined) {
       attributes.entries.langstring = this;
     }
   },
-
   /**
    * Defaults
+   * @type {Object}
    */
   defaults: {
     "@type": Types.LANGSTRING,
     entries: []
   },
+  /**
+   * @function app.models.langstrings.LangString.original
+   */
   original: function() {
     var originals = this.get("entries").filter(function(e) {return !e.isMachineTranslation();});
     if (originals.length > 1) {
@@ -203,7 +269,6 @@ var LangString = Base.Model.extend({
     }
     return originals[0];
   },
-
   /**
    * Determines the best body string to use according to various settings
    * Get the best langStringEntry among those available using user prefs.
@@ -212,7 +277,6 @@ var LangString = Base.Model.extend({
      3. take first applicable w/o trans or whose translation is available.
      4. if none, look at available translations and repeat.
      Logic is painful, but most of the time (single original) will be trivial in practice.
-
    * @param  {LangStringEntry.Collection}       available
    * @param  {LanguagePreference.Collection}    langPrefs
    * @param  {boolean}                          filter_errors   Used to supress errors
@@ -277,15 +341,27 @@ var LangString = Base.Model.extend({
     // or first entry
     return available[0];
   },
+  /**
+   * @function app.models.langstrings.LangString.best
+   */
   best: function(langPrefs) {
     return this.bestOf(this.get("entries").models, langPrefs);
   },
+  /**
+   * @function app.models.langstrings.LangString.bestValue
+   */
   bestValue: function(langPrefs) {
     return this.best(langPrefs).get("value");
   },
+  /**
+   * @function app.models.langstrings.LangString.originalValue
+   */
   originalValue: function() {
     return this.original().get("value");
   },
+  /**
+   * @function app.models.langstrings.LangString.bestWithErrors
+   */
   bestWithErrors: function(langPrefs, filter_errors) {
     if (!langPrefs) {
       return {
@@ -303,6 +379,9 @@ var LangString = Base.Model.extend({
       error: error_code
     };
   },
+  /**
+   * @function app.models.langstrings.LangString.applyFunction
+   */
   applyFunction: function(func) {
     var newEntries = this.get("entries").map(function(lse) {
       return lse.applyFunction(func);
@@ -319,17 +398,21 @@ LangString.empty = new LangString({
             new LangStringEntry({
                 "value": "",
                 "@language": "zxx"})])});
-
 /**
  * Lang string collection
  * @class app.models.langstring.LangStringCollection
  * @extends app.models.base.BaseCollection
  */
-
 var LangStringCollection = Base.Collection.extend({
+  /**
+   * @function app.models.langstrings.LangStringCollection.constructor
+   */
   constructor: function LangStringCollection() {
     Base.Collection.apply(this, arguments);
   },
+  /**
+   * @function app.models.langstrings.LangStringCollection.parse
+   */
   parse: function(rawModel, options) {
     rawModel.entries = new LangStringEntryCollection(rawModel.entries, {
         parse: true,
@@ -337,7 +420,14 @@ var LangStringCollection = Base.Collection.extend({
     });
     return rawModel;
   },
+  /**
+   * The model
+   * @type {LangString}
+   */
   model: LangString,
+  /**
+   * @member {string} app.models.langstrings.LangStringCollection.urlRoot
+   */
   urlRoot: Ctx.getApiV2DiscussionUrl("LangString"),
 });
 
