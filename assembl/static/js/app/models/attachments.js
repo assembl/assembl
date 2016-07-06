@@ -220,6 +220,7 @@ var AttachmentModel = Base.Model.extend({
     });
   },
   /**
+   * Return a copy of the model's attributes for JSON stringification.
    * Override toJSON of the attachment model in order to ensure that backbone does NOT try to parse the an object that causes recursive read, as there is a message object which contains the attachment model.
    * @param {Object} options
    * @returns {Object}

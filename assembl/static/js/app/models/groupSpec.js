@@ -13,11 +13,14 @@ var Base = require('./base.js'),
  * @extends app.models.base.BaseModel
  */
 var GroupSpecModel = Base.Model.extend({
+  /**
+   * @function app.models.groupSpec.GroupSpecModel.constructor
+   */
   constructor: function GroupSpecModel() {
     Base.Model.apply(this, arguments);
   },
   /**
-   * Set panelSpec and groupState collections in model attributes
+   * Set panelSpec and groupState in model attributes
    * @returns {Object}
    * @function app.models.groupSpec.GroupSpecModel.defaults
    */
@@ -28,9 +31,8 @@ var GroupSpecModel = Base.Model.extend({
     };
   },
   /**
-   * Returns model with panelSpec and groupState collections in attributes
-   * @param {BaseModel} model
-   * @returns {BaseCollection}
+   * @param {Object} model
+   * @returns {Object}
    * @function app.models.groupSpec.GroupSpecModel.parse
    */
   parse: function(model) {
@@ -58,7 +60,7 @@ var GroupSpecModel = Base.Model.extend({
     });
   },
   /**
-   * PanelSpec of panel to remove
+   * Remove panel specs from model
    * @param {aPanelSpec} aPanelSpec
    * @function app.models.groupSpec.GroupSpecModel.removePanelByModel
    */
@@ -145,6 +147,7 @@ var GroupSpecModel = Base.Model.extend({
     });
   },
   /**
+   * Validate the model attributes
    * @function app.models.groupSpec.GroupSpecModel.validate
    */
   validate: function() {
@@ -164,12 +167,19 @@ var GroupSpecModel = Base.Model.extend({
  * @extends app.models.base.BaseCollection
  */
 var GroupSpecs = Base.Collection.extend({
+  /**
+   * @function app.models.groupSpec.GroupSpecs.constructor
+   */
   constructor: function GroupSpecs() {
     Base.Collection.apply(this, arguments);
   },
-
+  /**
+   * The model
+   * @type {GroupSpecModel}
+   */
   model: GroupSpecModel,
   /**
+   * Validate the model attributes
    * @function app.models.groupSpec.GroupSpecs.validate
    */
   validate: function() {
@@ -184,7 +194,6 @@ var GroupSpecs = Base.Collection.extend({
       this.remove(invalid);
       console.log("GroupSpec.Collection: after removal, number of remaining valid groupSpecs: ", (this.length));
     }
-
     return (this.length > 0);
   }
 });

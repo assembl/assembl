@@ -11,13 +11,21 @@ var Base = require('./base.js'),
  * @extends app.models.base.BaseModel
  */
 var GroupStateModel = Base.Model.extend({
+  /**
+   * @function app.models.groupState.GroupStateModel.constructor
+   */
   constructor: function GroupStateModel() {
     Base.Model.apply(this, arguments);
   },
+  /**
+   * Defaults
+   * @type {Object}
+   */
   defaults: {
     currentIdea: null
   },
   /**
+   * Return a copy of the model's attributes for JSON stringification. 
    * @function app.models.groupState.GroupStateModel.toJSON
    */
   toJSON:  function(options) {
@@ -27,10 +35,13 @@ var GroupStateModel = Base.Model.extend({
     }
     return json;
   },
-  /** This returns undefined if the model is valid */
+  /**
+   * Validate the model attributes and returns an error message if the model is invalid and undefined if the model is valid
+   * @function app.models.groupState.GroupStateModel.validate
+   */
   validate: function(attributes, options) {
     if (attributes['currentIdea'] === null) {
-      return; //Ok
+      return;
     }
     else if (attributes['currentIdea'] === undefined) {
       return "currentIdea can be null, but not undefined";
@@ -46,10 +57,21 @@ var GroupStateModel = Base.Model.extend({
  * @extends app.models.base.BaseCollection
  */
 var GroupStates = Base.Collection.extend({
+  /**
+   * @function app.models.groupState.GroupStates.constructor
+   */
   constructor: function GroupStates() {
     Base.Collection.apply(this, arguments);
   },
+  /**
+   * The model
+   * @type {GroupStateModel}
+   */
   model: GroupStateModel,
+  /**
+   * Validate the model attributes
+   * @function app.models.groupState.GroupStates.validate
+   */
   validate: function() {
     var invalid = [];
     this.each(function(groupState) {
