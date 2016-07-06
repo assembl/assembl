@@ -5,7 +5,14 @@
 
 var _ = require('underscore'),
     Agent = require('../models/agents.js'),
-    expect = require('chai').expect;
+    chai = require('chai'),
+    expect = chai.expect,
+    chaiAsPromised = require("chai-as-promised"),
+    CollectionManager = require('../common/collectionManager.js'),
+    collectionManager = new CollectionManager(),
+    mockServer = require('./mock_server.js');
+
+chai.use(chaiAsPromised);
 
 describe('Models Specs', function() {
 
@@ -65,7 +72,19 @@ describe('Models Specs', function() {
     it('need spec', function() {
       expect(true).to.be.true;
     });
+   });
 
+  describe("Asynchronous tests", function() {
+    beforeEach(mockServer.setupMockAjax);
+    afterEach(mockServer.tearDownMockAjax);
+    it('load_ideas', function(done) {
+        ideasPromise = collectionManager.getAllIdeasCollectionPromise().then(function(ideas) {
+            expect(ideas.length).to.not.equal(0);
+            done();
+        }).catch(function(err) {
+            done(err);
+        });
+    });
   });
 
   describe('IdeaLink model', function() {
