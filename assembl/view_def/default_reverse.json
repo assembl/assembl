@@ -124,6 +124,7 @@
     },
     "AbstractMailbox": {
         "@extends": "PostSource",
+        "folder": true,
         "admin_sender": true
     },
     "IMAPMailbox": {
