@@ -1073,6 +1073,20 @@ var CollectionManager = Marionette.Object.extend({
         Raven.captureException(e);
       });
     return this._allUserPreferencesPromise;
+  },
+  getNotificationsUserCollectionPromise: function() {
+    if (this._allNotificationsUserCollectionPromise) {
+      return this._allNotificationsUserCollectionPromise;
+    }
+      this._allNotificationsUserCollection = new NotificationSubscription.Collection();
+      this._allNotificationsUserCollection.setUrlToUserSubscription();
+      this._allNotificationsUserCollection.collectionManager = this;
+      this._allNotificationsUserCollectionPromise = Promise.resolve(this._allNotificationsUserCollection.fetch())
+        .thenReturn(this._allNotificationsUserCollection)
+        .catch(function(e) {
+          Raven.captureException(e);
+    });
+    return this._allNotificationsUserCollectionPromise;
   }
 });
 
