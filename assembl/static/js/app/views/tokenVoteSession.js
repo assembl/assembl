@@ -1415,7 +1415,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     var that = this;
 
 
-    that.widgetModel = options.widgetModel;
+    this.widgetModel = options.widgetModel || this.model;
     console.log("that.widgetModel: ", that.widgetModel);
 
     var Widget = require('../models/widget.js'); // FIXME: why does it work here but not at the top of the file?

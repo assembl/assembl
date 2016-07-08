@@ -1,4 +1,7 @@
-"""This defines Context objects for traversal of the magic api."""
+"""This defines Context objects for traversal of the magic api.
+
+Pyramid allows to use model objects as Context objects, but in our cases they're surrogates for model objects.
+"""
 
 from traceback import print_exc
 import logging
@@ -24,6 +27,7 @@ log = logging.getLogger('assembl')
 
 
 class DictContext(object):
+    """A Context defined using a simple dictionary"""
     def __init__(self, acl, subobjects=None):
         self.subobjects = subobjects or {}
         for context in self.subobjects.itervalues():
@@ -36,6 +40,7 @@ class DictContext(object):
 
 
 class AppRoot(DictContext):
+    """The root context. Anything not defined by a root comes here."""
     def __init__(self):
         readable = [(Allow, R_SYSADMIN, ALL_PERMISSIONS),
                     (Allow, Everyone, P_READ), DENY_ALL]
@@ -65,6 +70,7 @@ class AppRoot(DictContext):
 
 
 class DiscussionsContext(object):
+    """A context where discussions, named by id, are sub-contexts"""
     def __getitem__(self, key):
         from assembl.models import Discussion
         discussion = Discussion.get(int(key))
@@ -74,7 +80,7 @@ class DiscussionsContext(object):
 
 
 class TraversalContext(object):
-
+    """The base class for the magic API"""
     def __init__(self, parent, acl=None):
         self.__parent__ = parent
         self.__acl__ = acl or parent.__acl__
@@ -104,6 +110,9 @@ class TraversalContext(object):
 
 
 class Api2Context(TraversalContext):
+    """The root class for the magic API (``/data``)
+    
+    Sub-contexts are :py:class:`ClassContext`"""
     _class_cache = {}
 
     def __init__(self, parent, acl=None):
@@ -171,6 +180,9 @@ def process_args(args, cls):
 
 
 class ClassContext(TraversalContext):
+    """A context that represents a given model class (e.g. ``/data/Idea``)
+
+    Sub-contexts are :py:class:`InstanceContext`, given by numeric ID."""
     def __init__(self, parent, cls):
         # permission on class context are quite restrictive. review.
         super(ClassContext, self).__init__(parent)
@@ -236,6 +248,11 @@ class ClassContext(TraversalContext):
 
 
 class ClassContextPredicate(object):
+    """A `view predicate factory`_ that checks that a given traversal context
+    is a :py:class:`ClassContext` and represents the given class.
+
+    .. _`view predicate factory`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hooks.html#view-and-route-predicates
+    """
     def __init__(self, val, config):
         self.val = val
 
@@ -249,6 +266,11 @@ class ClassContextPredicate(object):
 
 
 class InstanceContext(TraversalContext):
+    """A context that represents a given model instance (e.g. ``/data/Idea/12``)
+
+    Sub-contexts are :py:class:`CollectionContext`, given by relationship name
+    or taken from :py:meth:`assembl.lib.sqla.Base.extra_collections`.
+    """
     def __init__(self, parent, instance):
         # Do not call super, because it will set the acl.
         self._instance = instance
@@ -350,6 +372,11 @@ class InstanceContext(TraversalContext):
 
 
 class InstanceContextPredicate(object):
+    """A `view predicate factory`_ that checks that a given traversal context
+    is a :py:class:`InstanceContext`, and that the instance is of the given class.
+
+    .. _`view predicate factory`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hooks.html#view-and-route-predicates
+    """
     def __init__(self, val, config):
         self.val = val
 
@@ -364,6 +391,12 @@ class InstanceContextPredicate(object):
 
 
 class InstanceContextPredicateWithExceptions(object):
+    """A `view predicate factory`_ that checks that a given traversal context
+    is a :py:class:`InstanceContext`, and that the instance is of the given
+    class, but not of one of a given set of subclass exceptions.
+
+    .. _`view predicate factory`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hooks.html#view-and-route-predicates
+    """
     def __init__(self, val, config):
         cls, cls_exceptions = val
         self.val = cls
@@ -382,6 +415,10 @@ class InstanceContextPredicateWithExceptions(object):
 
 
 class CollectionContext(TraversalContext):
+    """A context that represents a collection of model objects related to the model object of the parent :py:class:`InstanceContext`.
+    
+    
+    """
     def __init__(self, parent, collection, instance):
         super(CollectionContext, self).__init__(parent)
         if isinstance(collection, InstrumentedAttribute):
