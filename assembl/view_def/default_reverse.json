@@ -319,6 +319,7 @@
         "activity_state": false,
         "user_states_url": false,
         "user_state_url": false,
+        "hide_notification": true,
         "widget_settings_url": false,
         "widget_state_url": false
     },

@@ -263,6 +263,7 @@
         "end_date": true,
         "configured": true,
         "activity_state": true,
+        "hide_notification": true,
         "ui_endpoint": "&get_ui_endpoint",
         "widget_settings_url": "&get_settings_url",
         "widget_state_url": "&get_state_url"

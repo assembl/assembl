@@ -233,6 +233,7 @@
         "activity_state": true,
         "start_date": true,
         "end_date": true,
+        "hide_notification": true,
         "state": "state_json"
     },
     "BaseIdeaWidget": {

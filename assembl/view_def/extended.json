@@ -317,6 +317,7 @@
         "end_date": true,
         "configured": true,
         "activity_state": true,
+        "hide_notification": true,
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
         "widget_settings_url": "&get_settings_url",

@@ -38,6 +38,7 @@ var WidgetModel = Base.Model.extend({
     "settings": null,
     "ui_endpoint": null,
     "vote_specifications": null,
+    "hide_notification": false,
     "@id": null,
     "@type": null,
     "@view": null
@@ -383,7 +384,7 @@ var VotingWidgetModel = WidgetModel.extend({
     switch (context) {
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
-          && this.get("settings", {}).show_infobar !== false
+          && !this.get("hide_notification")
           && this.voteStatus() != this.VOTE_STATUS_COMPLETE);
       case this.IDEA_PANEL_ACCESS_CTX:
         // assume non-root idea, relevant widget type
@@ -1099,7 +1100,7 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
     switch (context) {
       case this.INFO_BAR:
         return (activityState === "active" && !this.get("closeInfobar")
-          && this.get("settings", {}).show_infobar !== false
+          && !this.get("hide_notification")
           && currentUser.can(Permissions.ADD_POST)
           && this.get("num_posts_by_current_user", 0) === 0);
       case this.IDEA_PANEL_CONFIGURE_CTX:

@@ -7,7 +7,7 @@ from itertools import chain
 from datetime import datetime
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Text, String, DateTime, inspect)
+    Column, Integer, ForeignKey, Text, String, Boolean, DateTime, inspect)
 from sqlalchemy.sql import text, column
 from sqlalchemy.orm import (
     relationship, backref, aliased, join)
@@ -60,6 +60,7 @@ class Widget(DiscussionBoundBase):
 
     start_date = Column(DateTime, server_default=None)
     end_date = Column(DateTime, server_default=None)
+    hide_notification = Column(Boolean, server_default='false', default=False)
 
     def __init__(self, *args, **kwargs):
         super(Widget, self).__init__(*args, **kwargs)

@@ -357,6 +357,7 @@
         "end_date": true,
         "configured": true,
         "activity_state": true,
+        "hide_notification": true,
         "ui_endpoint": "&get_ui_endpoint",
         "user_states_url": "&get_user_states_url",
         "user_state_url": "&get_user_state_url",
