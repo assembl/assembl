@@ -1,14 +1,14 @@
 """widget.hide_notification
 
 Revision ID: 5eb326c815de
-Revises: e41ed8278b7e
+Revises: 06a588c53002
 Create Date: 2016-07-08 13:10:05.164894
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '5eb326c815de'
-down_revision = 'e41ed8278b7e'
+down_revision = '06a588c53002'
 
 from alembic import context, op
 import sqlalchemy as sa
