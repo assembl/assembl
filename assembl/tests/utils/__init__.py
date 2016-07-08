@@ -123,3 +123,53 @@ def drop_tables(app_settings, session):
     except:
         raise Exception('Error dropping tables: %s' % (
             sys.exc_info()[1]))
+
+
+def base_fixture_dirname():
+    from os.path import dirname
+    return dirname(dirname(dirname(dirname(__file__)))) +\
+        "/assembl/static/js/app/tests/fixtures/"
+
+
+def api_call_to_fname(api_call, method="GET", **args):
+    """Translate an API call to a filename containing most of the call information
+
+    Used in :js:func:`ajaxMock`"""    
+    import os
+    import os.path
+    base_fixture_dir = base_fixture_dirname()
+    api_dir, fname = api_call.rsplit("/", 1)
+    api_dir = base_fixture_dir + api_dir
+    if not os.path.isdir(api_dir):
+        os.makedirs(api_dir)
+    args = args.items()
+    args.sort()
+    args = "_".join(["%s_%s" % x for x in args])
+    if args:
+        fname += "_" + args
+    if method != "GET":
+        fname = method + "_" + fname
+    fname += ".json"
+    return os.path.join(api_dir, fname)
+
+
+class RecordingApp(object):
+    "Decorator for the test_app"
+    def __init__(self, test_app):
+        self.app = test_app
+
+    def __getattribute__(self, name):
+        if name not in {
+                "get", "post", "post_json", "put", "put_json",
+                "delete", "patch", "patch_json"}:
+            return super(RecordingApp, self).__getattribute__(name)
+
+        def appmethod(url, params=None, headers=None):
+            r = getattr(self.app, name)(url, params, headers)
+            assert 200 <= r.status_code < 300
+            params = params or {}
+            methodname = name.split("_")[0].upper()
+            with open(api_call_to_fname(url, methodname, **params), "w") as f:
+                f.write(r.body)
+            return r
+        return appmethod

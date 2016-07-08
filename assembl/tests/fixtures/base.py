@@ -136,7 +136,7 @@ def db_default_data(
 
 @pytest.fixture(scope="function")
 def test_session(request, db_default_data):
-    """An SQLAlchemy Session Maker fixture-
+    """An SQLAlchemy Session Maker fixture (A DB connection session)-
     Use this session fixture for all fixture purposes"""
 
     session = db_default_data()
@@ -258,62 +258,15 @@ def browser(request):
     return browser
 
 
-def base_fixture_dirname():
-    from os.path import dirname
-    return dirname(dirname(dirname(dirname(__file__)))) +\
-        "/assembl/static/js/app/tests/fixtures/"
-
-
-def api_call_to_fname(api_call, method="GET", **args):
-    """Translate an API call to a filename containing most of the call information
-
-    Used in :js:func:`ajaxMock`"""
-    import os
-    import os.path
-    base_fixture_dir = base_fixture_dirname()
-    api_dir, fname = api_call.rsplit("/", 1)
-    api_dir = base_fixture_dir + api_dir
-    if not os.path.isdir(api_dir):
-        os.makedirs(api_dir)
-    args = args.items()
-    args.sort()
-    args = "_".join(["%s_%s" % x for x in args])
-    if args:
-        fname += "_" + args
-    if method != "GET":
-        fname = method + "_" + fname
-    fname += ".json"
-    return os.path.join(api_dir, fname)
-
-
-class RecordingApp(object):
-    "Decorator for the test_app"
-    def __init__(self, test_app):
-        self.app = test_app
-
-    def __getattribute__(self, name):
-        if name not in {
-                "get", "post", "post_json", "put", "put_json",
-                "delete", "patch", "patch_json"}:
-            return super(RecordingApp, self).__getattribute__(name)
-
-        def appmethod(url, params=None, headers=None):
-            r = getattr(self.app, name)(url, params, headers)
-            assert 200 <= r.status_code < 300
-            params = params or {}
-            methodname = name.split("_")[0].upper()
-            with open(api_call_to_fname(url, methodname, **params), "w") as f:
-                f.write(r.body)
-            return r
-        return appmethod
-
-
 @pytest.fixture(scope="function")
 def json_representation_of_fixtures(
         request, discussion, jack_layton_linked_discussion, test_app):
+    from assembl.tests.utils import RecordingApp, base_fixture_dirname
+
     rec_app = RecordingApp(test_app)
     rec_app.get("/api/v1/discussion/%d/ideas" % discussion.id)
-    rec_app.get("/api/v1/discussion/%d/posts" % discussion.id, {"view": "id_only"})
+    rec_app.get("/api/v1/discussion/%d/posts" % discussion.id,
+                {"view": "id_only"})
 
     def fin():
         from shutil import rmtree
