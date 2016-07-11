@@ -503,7 +503,7 @@ var TokenVotingWidgetModel = VotingWidgetModel.extend({
     switch ( activityState ){
       case "active":
         var modalView = new TokenVoteSessionView.TokenVoteSessionModal({
-          widgetModel: that
+          model: that
         });
 
         Ctx.setCurrentModalView(modalView);

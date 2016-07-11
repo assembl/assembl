@@ -1396,6 +1396,7 @@ var TokenVoteSessionResultModal = Backbone.Modal.extend({
 
 
 // This view shows the whole vote popin and its contents
+// The model which should be given as parameter of this view is a Widget.Model instance (or a subclass of it)
 var TokenVoteSessionModal = Backbone.Modal.extend({
   constructor: function TokenVoteSessionModal() {
     Backbone.Modal.apply(this, arguments);
@@ -1415,7 +1416,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     var that = this;
 
 
-    this.widgetModel = options.widgetModel || this.model;
+    this.widgetModel = this.model;
     console.log("that.widgetModel: ", that.widgetModel);
 
     var Widget = require('../models/widget.js'); // FIXME: why does it work here but not at the top of the file?
