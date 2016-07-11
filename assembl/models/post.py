@@ -387,6 +387,7 @@ class Post(Content):
         # despite not being deferred. Deferring it hits a sqlalchemy bug.
         # Still appreciable performance gain using it instead of the orm,
         # and the ICL cache below.
+        # TODO: move in path_utils?
         links_above_post = (self.idea_content_links_above_post
                             if links_above_post is None else links_above_post)
         if not links_above_post:

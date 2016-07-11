@@ -28,7 +28,11 @@ import alabaster
 #needs_sphinx = '1.0'
 sys.path.insert(0, os.path.abspath(cornice.__file__))
 from pyramid.paster import bootstrap
-bootstrap('../development.ini')
+
+if os.path.exists('../local.ini'):
+  bootstrap('../local.ini')
+else:
+  bootstrap('../development.ini')
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
