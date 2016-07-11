@@ -353,6 +353,7 @@ Idea.active_showing_widget_links = relationship(
 
 
 class BaseIdeaWidget(Widget):
+    """A widget attached to a :py:class:`assembl.models.idea.Idea`, its ``base_idea``"""
     __mapper_args__ = {
         'polymorphic_identity': 'idea_view_widget',
     }
@@ -402,6 +403,7 @@ BaseIdeaWidget.base_idea = relationship(
 
 
 class BaseIdeaCollection(CollectionDefinition):
+    """The 'collection' of the ``base_idea`` of this :py:class:`BaseIdeaWidget`"""
     def __init__(self):
         super(BaseIdeaCollection, self).__init__(
             BaseIdeaWidget, BaseIdeaWidget.base_idea)
@@ -418,6 +420,7 @@ class BaseIdeaCollection(CollectionDefinition):
 
 
 class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
+    """The collection of the descendants of the ``base_idea`` of this :py:class:`BaseIdeaWidget`"""
 
     def __init__(self):
         super(BaseIdeaDescendantsCollection, self).__init__(
@@ -453,6 +456,7 @@ class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
 
 
 class IdeaCreatingWidget(BaseIdeaWidget):
+    """A widget where new ideas are created"""
     __mapper_args__ = {
         'polymorphic_identity': 'idea_creating_widget',
     }
@@ -524,6 +528,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
     @classmethod
     def extra_collections(cls):
         class BaseIdeaCollectionC(BaseIdeaCollection):
+            """The BaseIdeaCollection for an IdeaCreatingWidget"""
             hide_proposed_ideas = False
 
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
@@ -571,10 +576,13 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                                 GeneratedIdeaWidgetLink, kwargs)))
 
         class BaseIdeaHidingCollection(BaseIdeaCollectionC):
+            """The BaseIdeaCollection for an IdeaCreatingWidget, which will hide
+            created ideas."""
             hide_proposed_ideas = True
 
             def ctx_permissions(self, permissions):
-                # permission loophoole: allow participants to create ideas in this case.
+                """permission loophoole: allow participants (someone with the ADD_POST
+                permission) to create (hidden) ideas in this context."""
                 if P_ADD_POST in permissions and P_ADD_IDEA not in permissions:
                     return [P_ADD_IDEA]
                 return super(BaseIdeaHidingCollection, self).ctx_permissions(permissions)

@@ -87,25 +87,38 @@ class TraversalContext(object):
         self.depth = getattr(parent, "depth", 0) + 1
 
     def find_collection(self, collection_class_name):
+        """Find a collection by name"""
         return None
 
     def get_discussion_id(self):
+        """Get the current discussion_id somehow
+
+        often from a :py:class:`DiscussionBoundBase` instance"""
         return self.__parent__.get_discussion_id()
 
     def get_instance_of_class(self, cls):
+        """Look in the context chain for a model instance of a given class"""
         return self.__parent__.get_instance_of_class(cls)
 
     def decorate_query(self, query, ctx, tombstones=False):
+        """Given a SQLAlchemy query, add joins and filters that correspond
+        to this step in the traversal path."""
         return self.__parent__.decorate_query(query, ctx, tombstones)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
+        """If a model instance was created in this context, add information
+        relevant to this step in the traversal path, often association objects."""
         self.__parent__.decorate_instance(
             instance, assocs, user_id, ctx, kwargs)
 
     def get_target_class(self):
+        """What is the model class we can expect to find at this context?"""
         return None
 
     def ctx_permissions(self, permissions):
+        """Does the context give specific permissions?
+
+        See e.g. in :py:class:`assembl.models.widgets.IdeaCreatingWidget.BaseIdeaHidingCollection`"""
         return self.__parent__.ctx_permissions(permissions)
 
 
@@ -416,8 +429,9 @@ class InstanceContextPredicateWithExceptions(object):
 
 class CollectionContext(TraversalContext):
     """A context that represents a collection of model objects related to the model object of the parent :py:class:`InstanceContext`.
-    
-    
+
+    The collection itself is embodied by a :py:class:`AbstractCollectionDefinition` object, often backed by a SQLA relationship.
+    Sub-contexts are :py:class:`InstanceContext`, indexed by Id.
     """
     def __init__(self, parent, collection, instance):
         super(CollectionContext, self).__init__(parent)
@@ -533,6 +547,12 @@ class CollectionContext(TraversalContext):
 
 
 class NamedCollectionContextPredicate(object):
+    """A `view predicate factory`_ that checks that a given traversal context
+    is a :py:class:`CollectionContext`, whose collection's
+    :py:meth:`AbstractCollectionDefinition.name` is as given.
+
+    .. _`view predicate factory`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hooks.html#view-and-route-predicates
+    """
     def __init__(self, val, config):
         self.val = val
 
@@ -547,6 +567,12 @@ class NamedCollectionContextPredicate(object):
 
 
 class NamedCollectionInstancePredicate(object):
+    """A `view predicate factory`_ that checks that a given traversal context
+    is an :py:class:`InstanceContext` under a :py:class:`CollectionContext`
+    whose collection's :py:meth:`AbstractCollectionDefinition.name` is as given.
+
+    .. _`view predicate factory`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hooks.html#view-and-route-predicates
+    """
     def __init__(self, val, config):
         self.val = val
 
@@ -563,6 +589,10 @@ class NamedCollectionInstancePredicate(object):
 
 
 class SecureConnectionPredicate(object):
+    """A `view predicate factory`_ that checks that the connection is secure (https).
+
+    .. _`view predicate factory`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hooks.html#view-and-route-predicates
+    """
     def __init__(self, val, config):
         self.val = bool(val)
 
@@ -577,6 +607,12 @@ class SecureConnectionPredicate(object):
 
 
 class CollectionContextClassPredicate(object):
+    """A `view predicate factory`_ that checks that a given traversal context
+    is a :py:class:`CollectionContext`, where the class of the targets of the
+    relationship is as given.
+
+    .. _`view predicate factory`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hooks.html#view-and-route-predicates
+    """
     def __init__(self, val, config):
         self.val = val
 
@@ -626,6 +662,9 @@ class AbstractCollectionDefinition(object):
         pass
 
     def name(self):
+        """The name of the collection, used in :py:class:`NamedCollectionContextPredicate`.
+
+        In simple cases, the name of a collection is given by the name of its class."""
         return self.__class__.__name__
 
     def ctx_permissions(self, permissions):
@@ -656,21 +695,21 @@ def uses_list(prop):
 
 class CollectionDefinition(AbstractCollectionDefinition):
     """A collection of objects related to an instance through a relationship."""
-    back_property = None
+    back_relation = None
 
-    def __init__(self, owner_class, property):
+    def __init__(self, owner_class, relationship):
         super(CollectionDefinition, self).__init__(
-            owner_class, property.mapper.class_)
-        self.property = property
-        back_properties = list(getattr(property, '_reverse_property', ()))
+            owner_class, relationship.mapper.class_)
+        self.relationship = relationship
+        back_properties = list(getattr(relationship, '_reverse_property', ()))
         if back_properties:
             # TODO: How to chose?
-            self.back_property = back_properties.pop()
-            self.owner_class = self.back_property.mapper.class_
+            self.back_relation = back_properties.pop()
+            self.owner_class = self.back_relation.mapper.class_
 
     def decorate_query(self, query, owner_alias, coll_alias, parent_instance, ctx):
         # This will decorate a query with a join on the relation.
-        inv = self.back_property
+        inv = self.back_relation
         if inv:
             query = query.join(owner_alias,
                 getattr(coll_alias, inv.key))
@@ -694,36 +733,36 @@ class CollectionDefinition(AbstractCollectionDefinition):
             return
         # if the relation is through a helper class,
         #   create that and add to assocs (TODO)
-        # otherwise set the appropriate property (below.)
+        # otherwise set the appropriate relationship (below.)
         # Prefer non-list properties because we can check if they're set.
-        if not uses_list(self.property):
-            if getattr(parent_instance, self.property.key, None) is None:
-                #print "Setting1 ", parent_instance, self.property.key, instance
-                setattr(parent_instance, self.property.key, instance)
-        elif self.back_property and not uses_list(self.back_property):
-            inv = self.back_property
+        if not uses_list(self.relationship):
+            if getattr(parent_instance, self.relationship.key, None) is None:
+                #print "Setting1 ", parent_instance, self.relationship.key, instance
+                setattr(parent_instance, self.relationship.key, instance)
+        elif self.back_relation and not uses_list(self.back_relation):
+            inv = self.back_relation
             if getattr(instance, inv.key, None) is None:
                 #print "Setting2 ", instance, inv.key, parent_instance
                 setattr(instance, inv.key, parent_instance)
-        elif self.back_property:
-            inv = self.back_property
+        elif self.back_relation:
+            inv = self.back_relation
             #print "Adding1 ", instance, inv.key, parent_instance
             getattr(instance, inv.key).append(parent_instance)
         else:
-            #print "Adding2 ", parent_instance, self.property.key, instance
-            getattr(parent_instance, self.property.key).append(instance)
+            #print "Adding2 ", parent_instance, self.relationship.key, instance
+            getattr(parent_instance, self.relationship.key).append(instance)
 
     def get_attribute(self, instance, property=None):
         # What we have is a property, not an instrumented attribute;
         # but they share the same key.
-        property = property or self.property
+        property = property or self.relationship
         return getattr(instance, property.key)
 
     def contains(self, parent_instance, instance):
-        if uses_list(self.property):
-            if self.back_property and not uses_list(self.back_property):
+        if uses_list(self.relationship):
+            if self.back_relation and not uses_list(self.back_relation):
                 return self.get_attribute(
-                    instance, self.back_property) == parent_instance
+                    instance, self.back_relation) == parent_instance
             return instance in self.get_attribute(parent_instance)
         else:
             return instance == self.get_attribute(parent_instance)
@@ -731,11 +770,11 @@ class CollectionDefinition(AbstractCollectionDefinition):
     def get_instance(self, key, parent_instance):
         instance = None
         if key == '-':
-            if not uses_list(self.property):
-                instance = getattr(parent_instance, self.property.key, None)
+            if not uses_list(self.relationship):
+                instance = getattr(parent_instance, self.relationship.key, None)
             else:
                 # Allow if it happens to be a singleton.
-                instances = getattr(parent_instance, self.property.key)
+                instances = getattr(parent_instance, self.relationship.key)
                 if len(instances) == 1:
                     return instances[0]
                 raise KeyError()
@@ -747,21 +786,25 @@ class CollectionDefinition(AbstractCollectionDefinition):
         return instance
 
     def name(self):
+        """The name of the collection, used in :py:class:`NamedCollectionContextPredicate`.
+
+        In the case of Relationship-based collections,
+        concatenate the model class and relationship key."""
         cls = self.owner_class if (
             self.__class__ == CollectionDefinition) else self.__class__
-        return ".".join((cls.__name__, self.property.key))
+        return ".".join((cls.__name__, self.relationship.key))
 
     def __repr__(self):
         return "<%s %s -(%s/%s)-> %s>" % (
             self.__class__.__name__,
             self.owner_class.__name__,
-            self.property.key,
-            self.back_property.key if self.back_property else '',
+            self.relationship.key,
+            self.back_relation.key if self.back_relation else '',
             self.collection_class.__name__)
 
 
 class UserBoundNamespacedDictContext(TraversalContext):
-    # Represents the set of user-bound namespace-K-V items
+    """Represents the set of user-bound namespace-K-V items"""
     def __init__(self, parent, collection):
         # Do not call super, because it will set the acl.
         self.collection = collection
@@ -786,7 +829,7 @@ class UserBoundNamespacedDictContext(TraversalContext):
 
 
 class UserNSBoundDictContext(TraversalContext):
-    # Represents the set of user-bound, namespace-bound K-V items
+    """Represents the set of user-bound, namespace-bound K-V items"""
     def __init__(self, user_ns_b_kvdict, parent):
         # Do not call super, because it will set the acl.
         self.collection = user_ns_b_kvdict
@@ -806,7 +849,7 @@ class UserNSBoundDictContext(TraversalContext):
 
 
 class UserNSKeyBoundDictItemContext(TraversalContext):
-    # Represents a value which is bound to a user, namespace and key
+    """Represents a value which is bound to a user, namespace and key"""
     def __init__(self, user_ns_b_kvdict, parent, key):
         # Do not call super, because it will set the acl.
         self.collection = user_ns_b_kvdict
@@ -867,7 +910,10 @@ class UserNsDictCollection(AbstractCollectionDefinition):
 
 
 class PreferenceContext(TraversalContext):
-    # Represents the set of preference values (eg for a discussion)
+    """Represents a set of preference values (eg for a discussion)
+
+    Backed by a :py:class:`PreferenceCollection`, sub-contexts are
+    :py:class:`PreferenceValueContext`"""
     def __init__(self, parent_context, collection):
         # Do not call super, because it will set the acl.
         self.collection = collection
@@ -881,7 +927,7 @@ class PreferenceContext(TraversalContext):
         return self.__parent__.__acl__
 
     def __getitem__(self, key):
-        print "PreferenceContext.getitem"
+        """returns the :py:class:`PreferenceValueContext` for that preference"""
         return PreferenceValueContext(self.preferences, self, key)
 
     def get_target_class(self):
@@ -890,7 +936,7 @@ class PreferenceContext(TraversalContext):
 
 
 class PreferenceValueContext(TraversalContext):
-    # Represents a specific preference
+    """Represents a specific discussion preference"""
     def __init__(self, preferences, parent, key):
         # Do not call super, because it will set the acl.
         self.collection = preferences
@@ -910,6 +956,8 @@ class PreferenceValueContext(TraversalContext):
 
 
 class PreferenceCollection(AbstractCollectionDefinition):
+    """Represents the collection of preferences for a given
+    :py:class:`PreferenceContext`."""
     def __init__(self, cls):
         from assembl.models.preferences import Preferences
         super(PreferenceCollection, self).__init__(
@@ -946,6 +994,7 @@ class PreferenceCollection(AbstractCollectionDefinition):
 
 
 def root_factory(request):
+    """The factory function for the root context"""
     # OK, this is the old code... I need to do better, but fix first.
     from ..models import Discussion
     if request.matchdict and 'discussion_id' in request.matchdict:
