@@ -2886,8 +2886,12 @@ msgid ""
 msgstr ""
 
 #: assembl/templates/views/cookieBanner.tmpl:3
-msgid "Make my choice"
-msgstr ""
+msgid "Yes, I accept."
+msgstr "Yes, I accept."
+
+#: assembl/templates/views/cookieBanner.tmpl:3
+msgid "No, Thanks."
+msgstr "No, Thanks."
 
 #: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"

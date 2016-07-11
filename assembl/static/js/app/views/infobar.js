@@ -17,18 +17,20 @@ var CookieInfobarItemView = Marionette.LayoutView.extend({
   },
   template: '#tmpl-cookieBanner',
   ui:{
-    cookiesBtn:"#js_cookie-btn"
+    acceptCookiesBtn:"#js_accept-cookie-btn",
+    refuseCookiesBtn:"#js_refuse-cookie-btn"
   },
   events:{
-    "click @ui.cookiesBtn":"openCookiesSettings"
+    "click @ui.refuseCookiesBtn":"openCookiesSettings",
+    "click @ui.acceptCookiesBtn":"closeInfobar"
   },
   openCookiesSettings:function(){
     var piwikIframe = new PiwikIframeModal();
     Assembl.slider.show(piwikIframe); 
-    CookiesManager.setUserCookiesAuthorization();
     this.closeInfobar();
   },
   closeInfobar: function() {
+    CookiesManager.setUserCookiesAuthorization();
     this.destroy();
     this.model.set("closeInfobar", true);
     Assembl.vent.trigger('infobar:closeItem');

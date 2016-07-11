@@ -2957,11 +2957,15 @@ msgid ""
 "By using our site, you consent to cookies being used for improvement of "
 "our service?"
 msgstr "En utilisant ce site, consentez-vous à ce que des cookies soient"
-" utiliser afin d'améliorer notre service?"
+" utilisés afin d'améliorer notre service ?"
 
 #: assembl/templates/views/cookieBanner.tmpl:3
-msgid "Make my choice"
-msgstr "Choisir"
+msgid "Yes, I accept."
+msgstr "Oui, j'accepte."
+
+#: assembl/templates/views/cookieBanner.tmpl:3
+msgid "No, Thanks."
+msgstr "Non, merci."
 
 #: assembl/templates/views/create-group.tmpl:3
 msgid "Create a panel group"
