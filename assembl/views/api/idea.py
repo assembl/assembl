@@ -146,6 +146,11 @@ def get_ideas(request):
 # Update
 @idea.put(permission=P_EDIT_IDEA)
 def save_idea(request):
+    """Update this idea.
+
+    In case the ``parentId`` is changed, handle all
+    :py:class:`assembl.models.idea.IdeaLink` changes and
+    send relevant ideas on the socket."""
     discussion_id = int(request.matchdict['discussion_id'])
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)

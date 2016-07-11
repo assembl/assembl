@@ -23,6 +23,7 @@ Stack and architecture
    tech_stack
    permissions_and_roles
    panel_architecture
+   synchronization
 * `Target login and authentication flowchart <https://github.com/ImaginationForPeople/assembl/blob/develop/doc/login_flowchart.pdf>`_
 
 Developping and contributing to Assembl

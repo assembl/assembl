@@ -112,6 +112,7 @@ class IdeaContentLink(DiscussionBoundBase):
 
 @event.listens_for(IdeaContentLink.idea, 'set', propagate=True, active_history=True)
 def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
+    """When an extract changes ideas, send the ideas on the socket."""
     print "idea_content_link_idea_set_listener for target: %s set to %s, was %s" % (target, value, oldvalue)
     if oldvalue is not None and oldvalue.id:
         with oldvalue.db.no_autoflush:

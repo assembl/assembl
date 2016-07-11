@@ -2629,6 +2629,12 @@ var MessageList = AssemblPanel.extend({
       });
     },
 
+  /**
+   * Shows the number of pending messages added through the socket
+   * @function app.views.messageList.MessageList.showPendingMessages
+   *
+   * @param      {number}  nbMessage  The number of new messages
+   */
   showPendingMessages: function(nbMessage) {
       this._originalDocumentTitle = document.querySelector('#discussion-topic').value;
       document.title = ' (' + nbMessage + ') ' + this._originalDocumentTitle;

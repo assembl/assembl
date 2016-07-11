@@ -20,6 +20,7 @@ def discussion_notifications(request):
              ctx_named_collection="GViewIdeaCollectionDefinition",
              permission=P_EDIT_SYNTHESIS, accept="application/json")
 def add_idea_to_synthesis(request):
+    """Add an idea to an ExplictSubgraphView"""
     ctx = request.context
     graph_view = ctx.parent_instance
     if isinstance(graph_view, Synthesis) and not graph_view.is_next_synthesis:
@@ -49,6 +50,7 @@ def add_idea_to_synthesis(request):
              ctx_named_collection_instance="GViewIdeaCollectionDefinition",
              permission=P_EDIT_SYNTHESIS, accept="application/json")
 def remove_idea_from_synthesis(request):
+    """Remove an idea from an ExplictSubgraphView"""
     ctx = request.context
     graph_view = ctx.__parent__.parent_instance
     if isinstance(graph_view, Synthesis) and not graph_view.is_next_synthesis:

@@ -1629,6 +1629,10 @@ def orm_delete_listener(mapper, connection, target):
 
 
 def before_commit_listener(session):
+    """Create the Json representation of changed objects which will be
+    sent to the :py:mod:`assembl.tasks.changes_router`
+
+    We have to do this before commit, while objects are still attached."""
     # If there hasn't been a flush yet, make sure any sql error occur BEFORE
     # we send changes to the socket.
     session.flush()
@@ -1648,6 +1652,8 @@ def before_commit_listener(session):
 
 
 def after_commit_listener(session):
+    """After commit, actually send the Json representation of changed objects
+    to the :py:mod:`assembl.tasks.changes_router`, through 0MQ."""
     if not getattr(session, 'zsocket', None):
         session.zsocket = get_pub_socket()
     if getattr(session, 'cdict2', None):
@@ -1657,11 +1663,13 @@ def after_commit_listener(session):
 
 
 def session_rollback_listener(session):
+    """In case of rollback, forget about object changes."""
     if getattr(session, 'cdict2', None):
         del session.cdict2
 
 
 def engine_rollback_listener(connection):
+    """In case of rollback, forget about object changes."""
     info = getattr(connection, 'info', None)
     if info and 'cdict' in info:
         del info['cdict']

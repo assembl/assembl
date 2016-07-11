@@ -406,6 +406,7 @@ def get_post(request):
 
 @post_read.put(permission=P_READ)
 def mark_post_read(request):
+    """Mark this post as un/read. Return the read post count for all affected ideas."""
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
     post_id = request.matchdict['id']
@@ -448,6 +449,8 @@ def mark_post_read(request):
 @posts.post(permission=P_ADD_POST)
 def create_post(request):
     """
+    Create a new post in this discussion.
+
     We use post, not put, because we don't know the id of the post
     """
     localizer = request.localizer
