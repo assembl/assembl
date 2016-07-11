@@ -24,3 +24,7 @@
 input.wide {
 	width: 500px;
 }
+
+label.light {
+	font-weight: initial;
+}

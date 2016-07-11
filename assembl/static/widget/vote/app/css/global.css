@@ -1,4 +1,4 @@
-body {
+body#voteApp {
   margin: 10px;
   font: 12px "Open Sans",sans-serif;
 }

@@ -49,31 +49,34 @@ voteApp.controller('adminConfigureInstanceSetStartAndEndDatesCtl',
       if ( "end_date" in widget ){
         $scope.formData.endDate = widget.end_date;
       }
+      $scope.formData.showInfobar = !(widget.hide_notification);
       $scope.current_step = 2;
     };
 
     $scope.saveWidgetSettings = function() {
 
-      var dates = {"start_date": null,"end_date": null},
+      var dataToSend = {"start_date": null,"end_date": null},
           startDate = $scope.formData.startDate,
-          endDate = $scope.formData.endDate;
+          endDate = $scope.formData.endDate,
+          showInfobar = $scope.formData.showInfobar;
       if (startDate) {
         if (startDate instanceof Date) {
           startDate = startDate.toISOString();
         }
-        dates.start_date = startDate;
+        dataToSend.start_date = startDate;
       }
       if ($scope.formData.endDate) {
         if (endDate instanceof Date) {
           endDate = endDate.toISOString();
         }
-        dates.end_date = endDate;
+        dataToSend.end_date = endDate;
       }
+      dataToSend.hide_notification = !showInfobar;
       
       $http({
         url: AssemblToolsService.resourceToUrl($scope.widget["@id"]),
         method: "PATCH",
-        data: dates,
+        data: dataToSend,
         headers: {
           "Content-Type": "application/json"
         }

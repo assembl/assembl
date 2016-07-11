@@ -46,6 +46,8 @@
     "adminConfigureInstanceSetStartAndEndDatesInfo": "Start date: The widget will not be shown to the users before this date. End date: The users will not be able to vote after this date. If end date is empty, vote remains always open.",
     "startDate": "Start date",
     "endDate": "End date",
+    "infobar": "Notification banner",
+    "showInfobar": "Show a notification banner when the vote is active",
     "adminConfigureInstanceSeeVoteResults": "See vote results",
     "adminConfigureInstanceSeeVoteResultsForThisTarget": "See vote results for this target",
     "adminConfigureInstanceSeeVoteResultsForAllTargets": "See vote results for all targets",

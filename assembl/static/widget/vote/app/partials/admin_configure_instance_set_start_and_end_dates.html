@@ -59,6 +59,16 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="showInfoBar">{{'infobar' | translate}}</label>
+                        <br/>
+                        <div class="form-group col-xs-12">
+                            <input type="checkbox" ng-model="formData.showInfobar" id="showInfoBar"> <label for="showInfoBar" class="light">{{'showInfobar' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+
                 <br/><br/>
                 <input type="submit" ng-click="saveWidgetSettings();" value="{{'adminConfigureInstanceSetAppearanceSave' | translate}}" />
                 <span id="widget_set_start_and_end_dates_result"></span>
