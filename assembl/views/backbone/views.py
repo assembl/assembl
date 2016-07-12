@@ -232,7 +232,15 @@ def styleguide_view(request):
 @view_config(route_name='test', request_method='GET', http_cache=60,
              renderer='assembl:templates/tests/index.jinja2')
 def frontend_test_view(request):
-    return get_default_context(request)
+    context = get_default_context(request)
+    discussion = context["discussion"]
+    target_locale = Locale.get_or_create('en', discussion.db)
+    locale_labels = json.dumps(
+        DummyGoogleTranslationService.target_locale_labels_cls(target_locale))
+    context['translation_locale_names_json'] = locale_labels
+    context['translation_service_data_json'] = '{}'
+    context['preferences_json'] = json.dumps(dict(discussion.preferences))
+    return context
 
 
 @view_config(context=HTTPNotFound, renderer='assembl:templates/includes/404.jinja2')
