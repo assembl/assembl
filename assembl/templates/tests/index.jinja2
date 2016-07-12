@@ -16,8 +16,7 @@
 {% endif %}
 
  <div id="mocha"><p><a href=".">Index</a></p></div>
- <div id="messages"></div>
- <div id="fixtures"></div>
+ <div id="test_view"></div>
 
 {% endblock %}
 
@@ -33,7 +32,7 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% if user %}   
+    {% if user %}
       {% set userId = user.id %}
     {% else %}
       {% set userId = 'system.Everyone' %}

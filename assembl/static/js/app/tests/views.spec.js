@@ -4,39 +4,46 @@
  */
 
 var expect = require('chai').expect,
-    navBar = require('../views/navBar.js'),
+    ViewsFactory = require('../objects/viewsFactory.js'),
+    CollectionManager = require('../common/collectionManager.js'),
+    GroupState = require('../models/groupState.js'),
+    messageList = require('../views/messageList.js'),
+    groupContainer = require('../views/groups/groupContainer.js'),
     $ = require('jquery'),
-    fixtures = require('fixtures');
+    mockServer = require('./mock_server.js');
 
-var view, fixNav;
-
-function getView() {
-  var nav = new navBar();
-
-  fixtures.load('<div id="slider"></div>');
-  fixtures.load('<div id="fix-nav"></div>');
-  fixNav = $('#fix-nav');
-  fixNav.append(nav.render().el);
-  return nav;
-}
+var currentView;
+var collectionManager = new CollectionManager();
 
 describe('Views Specs', function() {
 
-  describe('Navigation barre', function() {
-
-    beforeEach(function() {
-      view = getView();
-    });
-
+  /*
+  describe('Navbar', function() {
     it('Views should exist', function() {
-      //view.ui.joinDiscussion.click()
-      //expect($('#slider')).to.have.html('<div class="generic-modal popin-wrapper modal-joinDiscussion bbm-wrapper"></div>');
+      currentView.ui.joinDiscussion.click()
+      expect($('#slider')).to.have.html('<div class="generic-modal popin-wrapper modal-joinDiscussion bbm-wrapper"></div>');
+    });
+  });
+  */
+
+  describe('Message list', function() {
+    beforeEach(function(done) {
+      mockServer.setupMockAjax();
+      collectionManager.getGroupSpecsCollectionPromise(ViewsFactory).then(function(groupSpecs) {
+        currentView = new groupContainer({collection: undefined});
+        $('#test_view').html(currentView.render().el);
+        done();
+      });
     });
 
     afterEach(function() {
-      fixtures.cleanUp();
+      $('#test_view').html("")
+      mockServer.tearDownMockAjax();
     });
 
+    it('View should exist', function() {
+      console.log(currentView.el);
+      expect(currentView.el).to.be.ok;
+    });
   });
-
-})
+});
