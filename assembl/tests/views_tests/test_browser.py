@@ -12,11 +12,13 @@ def test_front_page(browser, test_server, db_default_data):
 def test_mocha(browser, test_server, discussion, test_session,
                test_webrequest, json_representation_of_fixtures):
     """Test using real browser."""
-    from jasmine_runner.commands import run_specs_with_browser
+    from jasmine_runner.commands import run_extractor_with_browser
     url = "%s/%s/test" % (test_server.url, discussion.slug)
     test_session.commit()
-    num_failures = run_specs_with_browser(url, browser, False)
-    assert not num_failures
+    extractor = run_extractor_with_browser(url, browser, False)
+    # print extractor.get_failures()
+    # print browser.driver.get_log('browser')
+    assert not extractor.failures_number
 
 
 @flaky(max_runs=3)
