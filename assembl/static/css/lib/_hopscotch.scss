@@ -14,6 +14,9 @@ div.hopscotch-bubble h3 {
 div.hopscotch-bubble {
     border: 5px solid #ccc !important;
 }
+div.hopscotch-bubble.invisible {
+    display: none;
+}
 div.hopscotch-bubble .hopscotch-bubble-arrow-container.up .hopscotch-bubble-arrow-border {
     border-bottom: 17px solid #ccc !important;
 }
