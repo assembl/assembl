@@ -29,10 +29,13 @@ describe('Views Specs', function() {
   describe('Message list', function() {
     beforeEach(function(done) {
       mockServer.setupMockAjax();
-      collectionManager.getGroupSpecsCollectionPromise(ViewsFactory).then(function(groupSpecs) {
+      collectionManager.getGroupSpecsCollectionPromise(
+        ViewsFactory, undefined, true).then(function(groupSpecs) {
         currentView = new groupContainer({collection: undefined});
         $('#test_view').html(currentView.render().el);
         done();
+      }).catch(function(err) {
+          done(err);
       });
     });
 
