@@ -99,7 +99,7 @@ What posts would be displayed if a participant clicks "job loss" in the debate m
 
 
 Alternative 2:
-This is the version in the fixtures, with thread-breaking links to ideas 5 and 16.
+This is the version in the fixtures, with thread-breaking links to posts 5 and 16.
 
 ::
 

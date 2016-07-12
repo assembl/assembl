@@ -37,6 +37,7 @@ var MIN_TEXT_TO_TOOLTIP = 5,
 
 
 /**
+ * @class app.views.message.IdeaClassificationNameListView
  * Classification view that is shown in the underneath each message
  */
 var IdeaClassificationNameListView = Marionette.ItemView.extend({
@@ -1134,9 +1135,10 @@ var MessageView = Marionette.LayoutView.extend({
     }
   },
 
-  /*
-    Seperating the logic of toggling annotations into seperate functions
-   */
+  /**
+    * @function app.views.message.MessageView.removeAnnotations
+    * Seperating the logic of toggling annotations into seperate functions
+    */
   removeAnnotations: function(){
     if (this.showAnnotations) {
       this.showAnnotations = false;
@@ -1160,6 +1162,7 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   /**
+   * @function app.views.message.MessageView.showSegmentByAnnotation
    * Shows the related extract from the given annotation
    * @param  {annotation} annotation
    */
@@ -1273,6 +1276,9 @@ var MessageView = Marionette.LayoutView.extend({
 
   renderAttachments: function(){
 
+    /**
+     * @class app.views.message.MessageView.MessageAttachmentCollectionView
+     */
     var MessageAttachmentCollectionView = Marionette.CollectionView.extend({
       constructor: function MessageAttachmentCollectionView() {
         Marionette.CollectionView.apply(this, arguments);

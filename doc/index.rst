@@ -37,9 +37,8 @@ Developping and contributing to Assembl
    localization
    docker
    testing
-   new_class
-
    example_debate
+   new_class
 
 APIs
 ----

@@ -139,7 +139,7 @@ def subidea_1_1_1_1_2(request, discussion, subidea_1_1_1_1, test_session):
                         |-> subidea_1_1_1_2"""
 
     from assembl.models import Idea, IdeaLink
-    i = Idea(short_title=u"Environmental program cutns", discussion=discussion)
+    i = Idea(short_title=u"Environmental program cuts", discussion=discussion)
     test_session.add(i)
     l_1111_11112 = IdeaLink(source=subidea_1_1_1_1, target=i)
     test_session.add(l_1111_11112)
