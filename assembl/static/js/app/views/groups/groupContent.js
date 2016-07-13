@@ -5,7 +5,7 @@
  */
 
 var Marionette = require('../../shims/marionette.js'),
-    ctx = require('../../common/context.js'),
+    Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
     panelSpec = require('../../models/panelSpec.js'),
     AssemblPanel = require('../assemblPanel.js'),
@@ -47,7 +47,7 @@ var groupContent = Marionette.CompositeView.extend({
   },
   serializeData: function() {
     return {
-      "Ctx": ctx
+      "Ctx": Ctx
     };
   },
   /**

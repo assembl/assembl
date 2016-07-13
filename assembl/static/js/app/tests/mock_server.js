@@ -21,11 +21,22 @@ function ajaxMock(url, settings) {
   var pos = url.lastIndexOf('/') + 1,
       dirname = url.substring(0, pos),
       fname = url.substring(pos),
+      pos_args = fname.indexOf('?'),
       method = settings.method || "GET",
       data = settings.data;
 
   if (method !== 'GET') {
     fname = method + '_' + fname;
+  }
+  if (pos_args >= 0) {
+    var args = fname.substring(pos_args+1);
+    fname = fname.substring(0, pos_args);
+    args = args.split('&');
+    data = {}
+    for (var i=0; i < args.length; i++) {
+      var parts = args[i].split('=', 2);
+      data[parts[0]] = parts[1];
+    }
   }
   if (data === undefined) {
     // noop
@@ -43,7 +54,7 @@ function ajaxMock(url, settings) {
         return memo + '_' + p;
       }, '');
       if (pairs !== '') {
-        fname = fname + '_' + pairs;
+        fname = fname + pairs;
       }
       settings.data = undefined;
     } else {

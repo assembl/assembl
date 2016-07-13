@@ -267,6 +267,10 @@ def json_representation_of_fixtures(
     rec_app.get("/api/v1/discussion/%d/ideas" % discussion.id)
     rec_app.get("/api/v1/discussion/%d/posts" % discussion.id,
                 {"view": "id_only"})
+    rec_app.get("/data/Discussion/%d/idea_links" % discussion.id)
+    rec_app.get("/data/Discussion/%d/widgets" % discussion.id)
+    rec_app.get("/data/Discussion/%d/settings/default_table_of_ideas_collapsed_state" % discussion.id)
+    rec_app.get("/data/Discussion/%d/user_ns_kv/expertInterface_group_0_table_of_ideas_collapsed_state" % discussion.id)
 
     def fin():
         from shutil import rmtree

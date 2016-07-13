@@ -31,7 +31,7 @@ describe('Views Specs', function() {
       mockServer.setupMockAjax();
       collectionManager.getGroupSpecsCollectionPromise(
         ViewsFactory, undefined, true).then(function(groupSpecs) {
-        currentView = new groupContainer({collection: undefined});
+        currentView = new groupContainer({collection: groupSpecs});
         $('#test_view').html(currentView.render().el);
         done();
       }).catch(function(err) {
