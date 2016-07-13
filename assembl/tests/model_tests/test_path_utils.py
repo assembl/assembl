@@ -1,5 +1,6 @@
 import pytest
 from assembl.models.post import Post
+from assembl.models.idea_content_link import IdeaContentPositiveLink
 
 
 def test_jack_layton_linked_discussion(
@@ -73,6 +74,21 @@ def test_jack_layton_linked_discussion(
     for idea in ideas:
         assert posts_by_idea[idea.id] == expected[idea.id]
     assert orphans == expected[None]
+
+    # Post 6 is linked to subidea_1 through its direct link, but not its link through post 1
+    post_6 = Post.get(posts_id_by_num[6])
+    icls = post_6.indirect_idea_content_links_with_cache(filter=False)
+    icls_f = post_6.indirect_idea_content_links_with_cache(filter=True)
+    assert len(icls_f) < len(icls)
+    # Post 5 is not linked to subidea_1
+    post_5 = Post.get(posts_id_by_num[5])
+    icls_f = post_5.indirect_idea_content_links_with_cache(filter=True)
+    icpl_polymap = {
+            cls.external_typename()
+            for cls in IdeaContentPositiveLink.get_subclasses()}
+    positive = [icl for icl in icls_f if icl["@type"] in icpl_polymap]
+    assert not positive
+
 
 if Post.using_virtuoso:
     test_jack_layton_linked_discussion = pytest.mark.xfail(test_jack_layton_linked_discussion)

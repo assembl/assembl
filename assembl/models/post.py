@@ -381,7 +381,48 @@ class Post(Content):
         return self.db.query(IdeaContentLink).filter(
             IdeaContentLink.content_id.in_(ancestors)).all()
 
-    def indirect_idea_content_links_with_cache(self, links_above_post=None):
+    def filter_idea_content_links_r(self, idea_content_links):
+        """Exclude positive links if a negative link points from the same idea
+        to the same post or a post below.
+
+        Works on dict representations of IdeaContentLink, a version with instances is TODO."""
+        from .idea_content_link import IdeaContentNegativeLink
+        from collections import defaultdict
+        icnl_polymap = {
+            cls.external_typename()
+            for cls in IdeaContentNegativeLink.get_subclasses()}
+
+        neg_links = [icl for icl in idea_content_links
+                     if icl["@type"] in icnl_polymap]
+        if not neg_links:
+            return idea_content_links
+        pos_links = [icl for icl in idea_content_links
+                     if icl["@type"] not in icnl_polymap]
+        links = []
+        ancestor_ids = self.ancestry.split(",")
+        ancestor_ids = [int(x or 0) for x in ancestor_ids]
+        ancestor_ids[-1] = self.id
+        neg_link_post_ids = defaultdict(list)
+        for icl in neg_links:
+            neg_link_post_ids[icl["idIdea"]].append(
+                self.get_database_id(icl["idPost"]))
+        for link in pos_links:
+            idea_id = link["idIdea"]
+            if idea_id in neg_link_post_ids:
+                pos_post_id = self.get_database_id(link["idPost"])
+                for neg_post_id in neg_link_post_ids[idea_id]:
+                    if (ancestor_ids.index(neg_post_id) >
+                            ancestor_ids.index(pos_post_id)):
+                        break
+                else:
+                    links.append(link)
+            else:
+                links.append(link)
+        links.extend(neg_links)
+        return links
+
+    def indirect_idea_content_links_with_cache(
+            self, links_above_post=None, filter=True):
         "Return all ideaContentLinks related to this post or its ancestors"
         # WIP: idea_content_links_above_post is still loaded separately
         # despite not being deferred. Deferring it hits a sqlalchemy bug.
@@ -421,8 +462,11 @@ class Post(Content):
                     "created": data[5].isoformat() + "Z"
                 }
             return request._idea_content_link_cache2[id]
-        return [icl_representation(int(id)) for id in
+        icls = [icl_representation(int(id)) for id in
                 links_above_post.strip(',').split(',')]
+        if filter:
+            icls = self.filter_idea_content_links_r(icls)
+        return icls
 
     @classmethod
     def extra_collections(cls):
