@@ -369,7 +369,7 @@ Annotator_
   js/lib.
   
   Actually generated from our own fork of annotator available at
-  https://github.com/ImaginationForPeople/annotator
+  https://github.com/assemblers/annotator
 
 `Backbone Subset`_
   A backbone model to allow manipulating subsets of collections anywhere one 
@@ -671,7 +671,7 @@ We have used multiple processes rather than threads.
 .. _six: https://pythonhosted.org/six/
 .. _SockJS: https://github.com/sockjs/sockjs-client
 .. _sockjs_client: https://github.com/sockjs/sockjs-client
-.. _sockjs_tornado: https://github.com/ImaginationForPeople/sockjs-tornado/
+.. _sockjs_tornado: https://github.com/assemblers/sockjs-tornado/
 .. _splinter: https://github.com/cobrateam/splinter
 .. _SQLAlchemy: http://www.sqlalchemy.org/
 .. _sqltap: http://sqltap.inconshreveable.com/

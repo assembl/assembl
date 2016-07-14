@@ -6,14 +6,14 @@
   "author": "Gaby Hourlier <gaby.hourlier@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ImaginationForPeople/assembl/issues"
+    "url": "https://github.com/assemblers/assembl/issues"
   },
   "directories": {
     "doc": "doc"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ImaginationForPeople/assembl.git"
+    "url": "git://github.com/assemblers/assembl.git"
   },
   "scripts": {
     "test": "npm run wd && npm run cover",
@@ -59,7 +59,7 @@
     "gulp-sourcemaps": "~1.6.0",
     "gulp-uglify": "~1.5.4",
     "gulp-util": "~3.0.7",
-    "jsdoc-rst-template": "https://github.com/ImaginationForPeople/jsdoc-rst-template",
+    "jsdoc-rst-template": "https://github.com/assemblers/jsdoc-rst-template",
     "js-fixtures": "~1.5.3",
     "node-bourbon": "~4.2.8",
     "node-gyp": "~3",

@@ -64,7 +64,7 @@ And then:
 
 .. code:: sh
 
-    wget https://raw.github.com/ImaginationForPeople/assembl/develop/fabfile.py
+    wget https://raw.github.com/assemblers/assembl/develop/fabfile.py
     fab install_builddeps
     fab bootstrap:projectpath=~/assembl
     cd ~/assembl
@@ -73,7 +73,7 @@ or
 
 .. code:: sh
 
-    git clone https://github.com/ImaginationForPeople/assembl.git
+    git clone https://github.com/assemblers/assembl.git
     cd assembl
     fab env_dev install_builddeps
     fab env_dev bootstrap_from_checkout
@@ -252,7 +252,7 @@ Start as a user with sudo access
     sudo -u postgres createuser --createdb your_assembl_databaseuser
     sudo -u assembl_user -i
     
-    git clone https://github.com/ImaginationForPeople/assembl.git
+    git clone https://github.com/assemblers/assembl.git
     cd assembl
     #Secure and give nginx access
     chmod -R o-rwx .
