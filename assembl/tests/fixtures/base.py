@@ -263,6 +263,14 @@ def json_representation_of_fixtures(
         request, discussion, jack_layton_linked_discussion, test_app):
     from assembl.tests.utils import RecordingApp, base_fixture_dirname
 
+    from shutil import rmtree
+    from os.path import isdir
+    base_fixture_dir = base_fixture_dirname()
+    if isdir(base_fixture_dir + "api"):
+        rmtree(base_fixture_dir + "api")
+    if isdir(base_fixture_dir + "data"):
+        rmtree(base_fixture_dir + "data")
+
     rec_app = RecordingApp(test_app)
     rec_app.get("/api/v1/discussion/%d/ideas" % discussion.id)
     rec_app.get("/api/v1/discussion/%d/posts" % discussion.id,
@@ -271,17 +279,5 @@ def json_representation_of_fixtures(
     rec_app.get("/data/Discussion/%d/widgets" % discussion.id)
     rec_app.get("/data/Discussion/%d/settings/default_table_of_ideas_collapsed_state" % discussion.id)
     rec_app.get("/data/Discussion/%d/user_ns_kv/expertInterface_group_0_table_of_ideas_collapsed_state" % discussion.id)
-
-    def fin():
-        from shutil import rmtree
-        from os.path import isdir
-        print "finalizer json_representation_of_fixtures"
-        base_fixture_dir = base_fixture_dirname()
-        if isdir(base_fixture_dir + "api"):
-            rmtree(base_fixture_dir + "api")
-        if isdir(base_fixture_dir + "data"):
-            rmtree(base_fixture_dir + "data")
-
-    request.addfinalizer(fin)
 
     return None
