@@ -440,6 +440,21 @@ class Preferences(MutableMapping, Base):
             "default": True
         },
 
+        # Does the Idea panel automatically open when an idea is clicked? (and close when a special section is clicked)
+        {
+            "id": "idea_panel_opens_automatically",
+            "name": _("Idea panel opens automatically"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "Does the Idea panel automatically open when an idea is clicked ? (and close when a special section is clicked)"),
+            "allow_user_override": P_READ,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": True
+        },
+
         # Registration requires being a member of this email domain.
         {
             "id": "require_email_domain",
