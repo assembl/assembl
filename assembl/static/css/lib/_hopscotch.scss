@@ -14,9 +14,11 @@ div.hopscotch-bubble h3 {
 div.hopscotch-bubble {
     border: 5px solid #ccc !important;
 }
+/* This CSS rule was fixing the bug of unwanted vertical scrollbar which appears some seconds before some tour steps (including tour_step_welcome). But this creates another bug: some other tour steps do not show at the correct position. => TODO: find a better solution.
 div.hopscotch-bubble.invisible {
     display: none;
 }
+*/
 div.hopscotch-bubble .hopscotch-bubble-arrow-container.up .hopscotch-bubble-arrow-border {
     border-bottom: 17px solid #ccc !important;
 }
