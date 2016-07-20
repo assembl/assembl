@@ -1,3 +1,4 @@
+"""API for roles and permissions"""
 import json
 import transaction
 

@@ -1,3 +1,4 @@
+"""Cornice API for ideas"""
 from collections import defaultdict
 
 import simplejson as json
@@ -15,7 +16,7 @@ from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
 from assembl.auth.util import get_permissions
 
 ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
-                description="",
+                description="The ideas collection",
                 renderer='json')
 
 idea = Service(name='idea', path=API_DISCUSSION_PREFIX + '/ideas/{id:.+}',
@@ -149,8 +150,7 @@ def save_idea(request):
     """Update this idea.
 
     In case the ``parentId`` is changed, handle all
-    :py:class:`assembl.models.idea.IdeaLink` changes and
-    send relevant ideas on the socket."""
+    ``IdeaLink`` changes and send relevant ideas on the socket."""
     discussion_id = int(request.matchdict['discussion_id'])
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)

@@ -1,3 +1,4 @@
+"""Cornice API for discussions"""
 import json
 
 from pyramid.httpexceptions import HTTPNotFound

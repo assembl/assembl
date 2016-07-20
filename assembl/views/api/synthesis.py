@@ -1,3 +1,4 @@
+"""Cornice API for Synthesis"""
 import json
 
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest

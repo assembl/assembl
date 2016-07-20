@@ -1,3 +1,4 @@
+"""Cornice API for extracts"""
 import json
 import transaction
 

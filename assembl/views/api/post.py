@@ -1,3 +1,4 @@
+"""Cornice API for posts"""
 from math import ceil
 import logging
 

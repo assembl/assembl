@@ -1,3 +1,4 @@
+"""API to get an authentication token, for use by Web annotation"""
 import json
 import transaction
 

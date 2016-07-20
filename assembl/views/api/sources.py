@@ -1,3 +1,4 @@
+"""Cornice API for ContentSources"""
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.security import authenticated_userid, Everyone
 

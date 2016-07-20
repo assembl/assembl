@@ -1,3 +1,4 @@
+"""Cornice API for content"""
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.security import authenticated_userid, Everyone
 from cornice import Service

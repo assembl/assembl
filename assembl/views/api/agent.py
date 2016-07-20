@@ -1,3 +1,4 @@
+"""Cornice API for agents"""
 from pyisemail import is_email
 from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPFound
 from pyramid.security import authenticated_userid
