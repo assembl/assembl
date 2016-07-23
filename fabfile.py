@@ -47,6 +47,7 @@ def database_start():
     """
     Makes sure the database server is running
     """
+    sanitize_env()
     if using_virtuoso():
         execute(supervisor_process_start, 'virtuoso')
 
@@ -54,6 +55,7 @@ def database_start():
 @task
 def supervisor_restart():
     "Restart supervisor itself."
+    sanitize_env()
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl shutdown")
     # Another supervisor,upstart, etc may be watching it, give it a little while
@@ -188,6 +190,7 @@ def filter_autostart_processes(processes):
 @task
 def app_majorupdate():
     "This update is so major that assembl needs to be put in maintenance mode. Only for production."
+    sanitize_env()
     execute(database_dump)
     execute(updatemaincode)
     execute(app_update_dependencies)
@@ -215,6 +218,7 @@ def app_reload():
     """
     Restart all necessary processes after an update
     """
+    sanitize_env()
     if env.uses_global_supervisor:
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
@@ -275,6 +279,7 @@ def build_virtualenv():
     """
     Build the virtualenv
     """
+    sanitize_env()
     print(cyan('Creating a fresh virtualenv'))
     require('venvpath', provided_by=('commonenv'))
     import sys
@@ -292,6 +297,7 @@ def update_pip_requirements(force_reinstall=False):
     """
     update external dependencies on remote host
     """
+    sanitize_env()
     print(cyan('Updating requirements using PIP'))
     venvcmd('pip install -U "pip>=6" ')
 
@@ -307,6 +313,7 @@ def app_db_update():
     """
     Migrates database using south
     """
+    sanitize_env()
     execute(database_start)
     print(cyan('Migrating database'))
     venvcmd('alembic -c %s upgrade head' % (env.ini_file))
@@ -317,6 +324,7 @@ def reset_semantic_mappings():
     """
     Reset semantic mappings after a database restore
     """
+    sanitize_env()
     execute(database_start)
     print(cyan('Resetting semantic mappings'))
     venvcmd("echo 'import assembl.semantic ; assembl.semantic.reset_semantic_mapping()'|pshell %s" % env.ini_file)
@@ -336,6 +344,7 @@ def make_messages():
     """
     Run *.po file generation for translation
     """
+    sanitize_env()
     cmd = "python setup.py extract_messages"
     venvcmd(cmd)
     cmd = "python setup.py update_catalog"
@@ -347,6 +356,7 @@ def compile_messages():
     """
     Run compile *.mo file from *.po
     """
+    sanitize_env()
     cmd = "python setup.py compile_catalog"
     venvcmd(cmd)
     venvcmd("python assembl/scripts/po2json.py")
@@ -357,6 +367,7 @@ def compile_stylesheets():
     """
     Generate *.css files from *.scss
     """
+    sanitize_env()
     with cd(env.projectpath):
         with cd('assembl/static/js'):
             venvcmd('./node_modules/.bin/gulp sass', chdir=False)
@@ -370,6 +381,7 @@ def compile_javascript():
     """
     Generates and minifies javascript
     """
+    sanitize_env()
     with cd(env.projectpath):
         with cd('assembl/static/js'):
             venvcmd('./node_modules/.bin/gulp libs', chdir=False)
@@ -379,6 +391,8 @@ def compile_javascript():
 
 @task
 def compile_javascript_tests():
+    """Generates unified javascript test file"""
+    sanitize_env()
     with cd(env.projectpath):
         with cd('assembl/static/js'):
             venvcmd('./node_modules/.bin/gulp build:test', chdir=False)
@@ -402,6 +416,7 @@ def bootstrap(projectpath):
     
     takes the same arguments at env_dev, but projectpath is mandatory
     """
+    sanitize_env()
     #env.projectname = "assembl"
     assert projectpath, "projectpath is mandatory, and corresponds to the directory where assembl will be installed"
     
@@ -416,6 +431,7 @@ def bootstrap_from_checkout():
     """
     Creates the virtualenv and install the app from git checkout
     """
+    sanitize_env()
     execute(updatemaincode)
     execute(build_virtualenv)
     execute(app_update_dependencies)
@@ -465,6 +481,7 @@ def app_fullupdate():
     Full Update: Update to latest git, update dependencies and compile app.
     You need internet connectivity, and can't run this on a branch.
     """
+    sanitize_env()
     execute(database_dump)
     execute(updatemaincode)
     execute(app_compile)
@@ -477,6 +494,7 @@ def app_update():
     Useful for deploying hotfixes.  You need internet connectivity, and can't
     run this on a branch.
     """
+    sanitize_env()
     execute(database_dump)
     execute(updatemaincode)
     execute(app_compile_noupdate)
@@ -488,6 +506,7 @@ def app_update_dependencies(force_reinstall=False):
     Updates all python and javascript dependencies.  Everything that requires a
     network connection to update
     """
+    sanitize_env()
     execute(update_vendor_themes)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     #Nodeenv is installed by python , so this must be after update_pip_requirements
@@ -503,6 +522,7 @@ def app_reinstall_all_dependencies():
     Reinstall all python and javascript dependencies.  
     Usefull after a OS upgrade, node upgrade, etc.
     """
+    sanitize_env()
     execute(app_update_dependencies, force_reinstall=True)
 
 @task
@@ -510,6 +530,7 @@ def update_node(force_reinstall=False):
     """
     Install node and npm to a known-good version
     """
+    sanitize_env()
     node_version_cmd_regex = re.compile('^v6\.1\.0')
     with settings(warn_only=True), hide('running', 'stdout'):
         node_version_cmd_result = venvcmd("node --version")
@@ -533,6 +554,7 @@ def app_compile():
     You need internet connectivity.  If you are on a plane, use
     app_compile_noupdate instead.
     """
+    sanitize_env()
     execute(app_update_dependencies)
     execute(app_compile_noupdate)
 
@@ -543,6 +565,7 @@ def app_compile_noupdate():
     Fast Update: Doesn't touch git state, don't update requirements, and rebuild
     all generated files. You normally do not need to have internet connectivity.
     """
+    sanitize_env()
     execute(app_compile_nodbupdate)
     execute(app_db_update)
     # tests()
@@ -552,7 +575,8 @@ def app_compile_noupdate():
 
 @task
 def app_compile_nodbupdate():
-    "Separated mostly for tests, which need to run alembic manually"
+    """Separated mostly for tests, which need to run alembic manually"""
+    sanitize_env()
     if using_virtuoso():
         execute(install_or_updgrade_virtuoso)
     execute(app_setup)
@@ -565,6 +589,7 @@ def webservers_reload():
     """
     Reload the webserver stack.
     """
+    sanitize_env()
     if env.uses_apache:
         print(cyan("Reloading apache"))
         # Apache (sudo is part of command line here because we don't have full
@@ -683,6 +708,7 @@ def _bower_foreach_do(cmd):
 @task
 def update_bower_requirements(force_reinstall=False):
     """ Normally not called manually """
+    sanitize_env()
     execute(_bower_foreach_do, 'prune')
     if force_reinstall:
         execute(_bower_foreach_do, 'install --force')
@@ -692,6 +718,7 @@ def update_bower_requirements(force_reinstall=False):
 @task
 def update_npm_requirements(force_reinstall=False):
     """ Normally not called manually """
+    sanitize_env()
     with cd(get_node_base_path()):
         if force_reinstall:
             venvcmd('npm prune', chdir=False)
@@ -756,6 +783,7 @@ def install_builddeps():
     """
     Will install commonly needed build deps for pip django virtualenvs.
     """
+    sanitize_env()
     execute(skeleton_env, None)
     execute(install_basetools)
     execute(_install_builddeps)
@@ -763,7 +791,8 @@ def install_builddeps():
 
 @task
 def update_python_package_builddeps():
-    "Install/Update python package native binary dependencies"
+    """Install/Update python package native binary dependencies"""
+    sanitize_env()
     print(cyan('Installing/Updating python package native binary dependencies'))
     # For specific python packages in requirements.txt
     if env.mac:
@@ -775,7 +804,8 @@ def update_python_package_builddeps():
 
 @task
 def start_edit_fontello_fonts():
-    "Prepare to edit the fontello fonts in Fontello."
+    """Prepare to edit the fontello fonts in Fontello."""
+    sanitize_env()
     assert env.hosts == ['localhost'], "Meant to be run locally"
     try:
         import requests
@@ -800,7 +830,8 @@ def start_edit_fontello_fonts():
 
 @task
 def compile_fontello_fonts():
-    "Compile the fontello fonts once you have edited them in Fontello. Run start_edit_fontello_fonts first."
+    """Compile the fontello fonts once you have edited them in Fontello. Run start_edit_fontello_fonts first."""
+    sanitize_env()
     from zipfile import ZipFile
     from StringIO import StringIO
     assert env.hosts == ['localhost'], "Meant to be run locally"
@@ -838,6 +869,7 @@ def check_and_create_database_user():
     """
     Create a user and a DB for the project
     """
+    sanitize_env()
     with settings(warn_only=True):
         checkUser = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (env.db_user),
@@ -875,7 +907,8 @@ def database_create_postgres():
 
 @task
 def database_create():
-    "Create the database for this assembl instance"
+    """Create the database for this assembl instance"""
+    sanitize_env()
     if using_virtuoso():
         execute(database_create_virtuoso)
     else:
@@ -942,6 +975,7 @@ def database_dump():
     """
     Dumps the database on remote site
     """
+    sanitize_env()
     if using_virtuoso():
         database_dump_virtuoso()
     else:
@@ -953,6 +987,7 @@ def database_download():
     """
     Dumps and downloads the database from the target server
     """
+    sanitize_env()
     destination = join('./', get_db_dump_name())
     if is_link(destination):
         print('Clearing symlink at %s to make way for downloaded file' % (destination))
@@ -966,6 +1001,7 @@ def database_upload():
     """
     Uploads a local database backup to the target environment's server
     """
+    sanitize_env()
     if(env.wsginame != 'dev.wsgi'):
         put(get_db_dump_name(), remote_db_path())
 
@@ -975,6 +1011,7 @@ def database_delete():
     """
     Deletes the database instance
     """
+    sanitize_env()
     if(env.is_production_env is True):
         abort(red("You are not allowed to delete the database of a production " + 
                 "environment.  If this is a server restore situation, you " + 
@@ -1085,6 +1122,7 @@ def database_restore():
     """
     Restores the database backed up on the remote server
     """
+    sanitize_env()
     if using_virtuoso():
         database_restore_virtuoso()
     else:
@@ -1138,6 +1176,7 @@ def flushmemcache():
     """
     Resetting all data in memcached
     """
+    sanitize_env()
     if env.uses_memcache:
         print(cyan('Resetting all data in memcached :'))
         wait_str = "" if env.mac else "-q 2"
@@ -1191,7 +1230,8 @@ def virtuoso_reconstruct_restore_db(transition_6_to_7=False):
 
 @task
 def virtuoso_reconstruct_db():
-    "Rebuild the virtuoso database from a backup dump."
+    """Rebuild the virtuoso database from a backup dump."""
+    sanitize_env()
     execute(database_dump)
     # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
     # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
@@ -1204,7 +1244,8 @@ def virtuoso_reconstruct_db():
 
 @task
 def virtuoso_major_reconstruct_db():
-    "Rebuild the virtuoso database from a crash dump. Sometimes worth running twice."
+    """Rebuild the virtuoso database from a crash dump. Sometimes worth running twice."""
+    sanitize_env()
     execute(database_dump)
     # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
     # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
@@ -1242,6 +1283,7 @@ def install_database():
     """
     Install the database server
     """
+    sanitize_env()
     if using_virtuoso():
         install_or_updgrade_virtuoso()
     else:
@@ -1250,7 +1292,8 @@ def install_database():
 
 @task
 def virtuoso_source_upgrade():
-    "Upgrades the virtuoso server.  Currently doesn't check if we are already using the latest version."
+    """Upgrades the virtuoso server.  Currently doesn't check if we are already using the latest version."""
+    sanitize_env()
     # Virtuoso must be running before the process starts, so that we can
     # gracefully stop it later to ensure there is no trx file active.
     # trx files are not compatible between virtuoso versions
@@ -1265,7 +1308,8 @@ def virtuoso_source_upgrade():
 
 @task
 def virtuoso_source_install():
-    "Install the virtuoso server locally, normally not called directly (use virtuoso_source_upgrade instead)"
+    """Install the virtuoso server locally, normally not called directly (use virtuoso_source_upgrade instead)"""
+    sanitize_env()
     virtuoso_root = get_virtuoso_root()
     virtuoso_src = get_virtuoso_src()
     branch = env.vbranch
@@ -1338,7 +1382,8 @@ def get_vendor_config():
 
 @task
 def update_vendor_themes():
-    "Update optional themes in assembl/static/css/themes/vendor"
+    """Update optional themes in assembl/static/css/themes/vendor"""
+    sanitize_env()
     config = get_vendor_config()
     config_section_name = 'theme_repositories'
     if config.has_section(config_section_name):
@@ -1374,6 +1419,20 @@ def update_vendor_themes():
                         print red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (current_assembl_branch_name, current_vendor_themes_branch_name))
                 run('git pull --ff-only')
 
+
+def sanitize_env():
+    """Ensure boolean and list env variables are such"""
+    assert getattr(env, "ini_file", None),\
+        "You must specify an environment task or a rc file"
+    for name in (
+            "uses_memcache ", "uses_uwsgi", "uses_apache", "uses_ngnix",
+            "uses_global_supervisor", "using_virtuoso", "uses_apache",
+            "uses_ngnix", "mac", "is_production_env"):
+        setattr(env, name, bool(getattr(env, name, False)))
+    if not isinstance(env.hosts, list):
+        env.hosts = getattr(env, "hosts", "").split()
+
+
 # # Server scenarios
 def skeleton_env(projectpath, venvpath=None):
     """
@@ -1383,7 +1442,7 @@ def skeleton_env(projectpath, venvpath=None):
     if len(env.hosts) == 0:
         env.hosts = ['localhost']
     env.projectpath = projectpath
-    env.gitrepo = getenv("GITREPO", "https://github.com/ImaginationForPeople/assembl.git")
+    env.gitrepo = getenv("GITREPO", "https://github.com/assembl/assembl.git")
     env.gitbranch = getenv("GITBRANCH", "master")
     
     #Are we on localhost
@@ -1437,13 +1496,13 @@ def commonenv(projectpath, venvpath=None):
     # Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
     env.system_db_user = None
-    env.using_virtuoso = None
+    env.using_virtuoso = ''
 
     # Minimal dependencies versions
 
 
 def using_virtuoso():
-    if env.using_virtuoso is None:
+    if env.using_virtuoso is '':
         env.using_virtuoso = env.sqlalchemy_url.startswith('virtuoso')
     return env.using_virtuoso
 
@@ -1469,7 +1528,8 @@ def run_db_command(command, *args, **kwargs):
 
 @task
 def build_doc():
-    "Build the Sphinx documentation"
+    """Build the Sphinx documentation"""
+    sanitize_env()
     with cd(env.projectpath):
         run('rm -rf doc/autodoc doc/jsdoc')
         venvcmd('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
@@ -1518,6 +1578,10 @@ def env_dev(projectpath=None):
 
 @task
 def env_testing(projectpath=None):
+    """
+    [ENVIRONMENT] Testing on http://jenkins.coeus.ca/ or locally.
+    Testing environment, uses the testing.ini file.
+    """
     if not projectpath:
         # Legitimate os.path
         projectpath = dirname(os.path.realpath(__file__))
