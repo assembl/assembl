@@ -119,12 +119,8 @@ class ActionOnPost(Action):
         Content,
         primaryjoin="and_(Content.id == ActionOnPost.post_id,"
                          "ActionOnPost.tombstone_date == None)",
-        foreign_keys=(post_id,), backref="actions")
-
-    post = relationship(
-        'Content',
-        backref=backref('actions', cascade="all, delete-orphan"),
-    )
+        foreign_keys=(post_id,),
+        backref=backref('actions', cascade="all, delete-orphan"))
 
     object_type = 'post'
 
