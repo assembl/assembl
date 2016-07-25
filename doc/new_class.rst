@@ -136,9 +136,13 @@ Finally, create/update operations on the instance may only allow changing a subs
         "discussion": false
     }
 
+Initialization
+--------------
+
+In the rare case where your class needs an ``__init__`` method, and that constructor creates related objects as a side effect, make sure to include an explicit ``session=`` named argument in the constructor, so that those objects are created in the right database session. (e.g.: :py:class:`assembl.models.langstrings.LangStringEntry`)
 
 Migration and declaration
----------
+-------------------------
 
 You need to create an Alembic_ migration adding the table of the new class to the database. As an example, ``Document`` class was created in :file:`assembl/alembic/versions/2e4ce0e3a0b2_attachment_support.py`.
 

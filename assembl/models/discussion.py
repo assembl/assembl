@@ -152,12 +152,12 @@ class Discussion(DiscussionBoundBase):
             except:
                 traceback.print_exc()
 
-    def __init__(self, *args, **kwargs):
-        session = kwargs.pop('session', self.default_db)
+    def __init__(self, session=None, *args, **kwargs):
+        session = session or self.default_db
 
         kwargs['preferences'] = preferences = Preferences(
             name='discussion_'+kwargs['slug'],
-            cascade_preferences=Preferences.get_default_preferences())
+            cascade_preferences=Preferences.get_default_preferences(session))
         session.add(preferences)
         session.flush()
 

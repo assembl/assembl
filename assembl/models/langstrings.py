@@ -685,7 +685,7 @@ class LangStringEntry(TombstonableMixin, Base):
         UniqueConstraint("langstring_id", "locale_id", "tombstone_date"),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, session=None, *args, **kwargs):
         """ in the kwargs, you can specify locale info in many ways:
         as a Locale numeric id (locale_id), Locale object (locale)
         or language code (@language)"""
@@ -694,7 +694,7 @@ class LangStringEntry(TombstonableMixin, Base):
             # Create locale on demand.
             locale_code = kwargs.get("@language", "und")
             del kwargs["@language"]
-            kwargs["locale"] = Locale.get_or_create(locale_code)
+            kwargs["locale"] = Locale.get_or_create(locale_code, session)
         super(LangStringEntry, self).__init__(*args, **kwargs)
 
     id = Column(Integer, primary_key=True)

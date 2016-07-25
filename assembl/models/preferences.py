@@ -51,13 +51,14 @@ class Preferences(MutableMapping, Base):
     cascade_preferences = relationship("Preferences", remote_side=[id])
 
     @classmethod
-    def get_by_name(cls, name=None):
+    def get_by_name(cls, name=None, session=None):
         name = name or cls.BASE_PREFS_NAME
-        return cls.default_db.query(cls).filter_by(name=name).first()
+        session = session or cls.default_db
+        return session.query(cls).filter_by(name=name).first()
 
     @classmethod
-    def get_default_preferences(cls):
-        return cls.get_by_name('default') or cls(name='default')
+    def get_default_preferences(cls, session=None):
+        return cls.get_by_name('default', session) or cls(name='default')
 
     @property
     def local_values_json(self):
