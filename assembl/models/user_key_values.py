@@ -365,6 +365,7 @@ class DiscussionPerUserNamespacedKeyValue(
     def get_discussion_id(self):
         return self.discussion_id
 
+    @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id, )
 
