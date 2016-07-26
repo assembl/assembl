@@ -364,7 +364,8 @@ class ExplicitSubGraphView(IdeaGraphView):
 SubGraphIdeaLinkAssociation.discussion = relationship(
         Discussion, viewonly=True, uselist=False,
         secondary=join(
-            ExplicitSubGraphView, IdeaGraphView,
+            ExplicitSubGraphView.__table__,
+            IdeaGraphView.__table__,
             ExplicitSubGraphView.id == IdeaGraphView.id),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 

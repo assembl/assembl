@@ -1,9 +1,13 @@
 #!env python
 """Clone a discussion, either within or between databases."""
+
+# Put something like this in the crontab:
+# 10 3 * * * cd /var/www/assembl ; ./venv/bin/python assembl/scripts/clone_discussion.py -n assembldemosandbox -d -p system.Authenticated+admin_discussion -p system.Authenticated+add_post -p system.Authenticated+add_extract -p system.Authenticated+edit_extract -p system.Authenticated+add_idea -p system.Authenticated+edit_idea -p system.Authenticated+edit_synthesis -p system.Authenticated+vote -p system.Authenticated+read local.ini assembldemo
+
 import itertools
 from collections import defaultdict
 import argparse
-from inspect import isabstract
+from inspect import isabstract, getargspec
 import logging.config
 import traceback
 from functools import partial
@@ -20,18 +24,20 @@ from sqlalchemy.sql.expression import and_
 from assembl.auth import SYSTEM_ROLES, ASSEMBL_PERMISSIONS
 from assembl.lib.config import set_config
 from assembl.lib.sqla import (
-    configure_engine, get_session_maker, make_session_maker)
+    configure_engine, get_session_maker, make_session_maker, get_metadata)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.model_watcher import configure_model_watcher
 from assembl.lib.raven_client import setup_raven, capture_exception
 
 
-def find_or_create_object_by_keys(db, keys, obj, columns=None):
+def find_or_create_object_by_keys(db, keys, obj, columns):
     args = {key: getattr(obj, key) for key in keys}
     eq = db.query(obj.__class__).filter_by(**args).first()
     if eq is None:
         if columns is not None:
             args.update({key: getattr(obj, key) for key in columns})
+        if "session" in getargspec(obj.__class__.__init__).args:
+            args["session"] = db
         eq = obj.__class__(**args)
         db.add(eq)
     return eq
@@ -52,11 +58,13 @@ def init_key_for_classes(db):
         Webpage: partial(find_or_create_object_by_keys, db, ['url']),
         Permission: partial(find_or_create_object_by_keys, db, ['name']),
         Role: partial(find_or_create_object_by_keys, db, ['name']),
+        # SocialAuthAccount: partial(find_or_create_object_by_keys, db, ['provider_id', 'uid']),
         IdentityProvider: partial(find_or_create_object_by_keys, db, ['provider_type', 'name']),
         # email_ci?
         EmailAccount: partial(find_or_create_object_by_keys, db, ['email'], columns=['preferred']),
         WebLinkAccount: partial(find_or_create_object_by_keys, db, ['user_link']),
     }
+    # these are objects that refer to users and should not be copied
     user_refs = {
         Action: 'actor',
         NotificationSubscription: 'user',
@@ -243,18 +251,25 @@ class JoinColumnsVisitor(ClauseVisitor):
                 return True
 
     def treat_column(self, column):
+        from assembl.models import TombstonableMixin
         source_cls = self.classes_by_table[column.table]
         foreign_keys = getattr(column, 'foreign_keys', ())
         for foreign_key in foreign_keys:
             # Do not bother with inheritance here
             dest_cls = self.classes_by_table[foreign_key.column.table]
             if not self.is_known_class(dest_cls):
-                orm_reln = filter(
+                orm_relns = filter(
                     lambda r: column in r.local_columns and r.secondary is None,
                     source_cls.__mapper__.relationships)
-                assert len(orm_reln) == 1, "wrong orm_reln for %s.%s : %s" % (
-                    column.table.name, column.name, str(orm_reln))
-                rattrib = getattr(source_cls, orm_reln[0].key)
+                if len(orm_relns) > 1 and (
+                        issubclass(dest_cls, TombstonableMixin) or
+                        issubclass(source_cls, TombstonableMixin)):
+                    orm_relns = [
+                        r for r in orm_relns
+                        if "tombstone_date" not in str(r.primaryjoin)]
+                assert len(orm_relns) == 1, "wrong orm_relns for %s.%s : %s" % (
+                    column.table.name, column.name, str(orm_relns))
+                rattrib = getattr(source_cls, orm_relns[0].key)
                 self.query = self.query.join(dest_cls, rattrib)
                 self.classes.add(dest_cls)
 
@@ -282,7 +297,8 @@ class JoinColumnsVisitor(ClauseVisitor):
 
 
 def delete_discussion(session, discussion_id):
-    from assembl.models import Discussion, DiscussionBoundBase
+    from assembl.models import (
+        Discussion, DiscussionBoundBase, Preferences)
     # delete anything related first
     classes = DiscussionBoundBase._decl_class_registry.itervalues()
     classes_by_table = {
@@ -293,6 +309,7 @@ def delete_discussion(session, discussion_id):
         issubclass(cls, DiscussionBoundBase) and (not isabstract(cls))
         and isabstract(cls.mro()[1]),
         classes_by_table.values()))
+    concrete_classes.add(Preferences)
     tables = DiscussionBoundBase.metadata.sorted_tables
     tables.reverse()
     for table in tables:
@@ -311,18 +328,18 @@ def delete_discussion(session, discussion_id):
         query = v.final_query().filter(cond)
         if query.count():
             print "*" * 20, "Not all deleted!"
-            session.query(cls).filter(
-                cls.id.in_(query.subquery())).delete(False)
+            ids = query.all()
+            for subcls in cls.mro():
+                if getattr(subcls, '__tablename__', None):
+                    session.query(subcls).filter(
+                        subcls.id.in_(ids)).delete(False)
         session.flush()
-    # Then, delete the discussion.
-    session.delete(Discussion.get(discussion_id))
-    session.flush()
 
 
 def clone_discussion(
         from_session, discussion_id, to_session=None, new_slug=None):
     from assembl.models import (
-        DiscussionBoundBase, Discussion, Post, User, LocalUserRole, Action)
+        DiscussionBoundBase, Discussion, Post, User, Preferences)
     global user_refs
     discussion = from_session.query(Discussion).get(discussion_id)
     assert discussion
@@ -408,13 +425,21 @@ def clone_discussion(
             values['table_of_contents'] = None
             values['root_idea'] = None
             values['next_synthesis'] = None
+            values['preferences'] = None
+        elif isinstance(ob, Preferences):
+            target_discussion = copies_of[discussion]
+            target_discussion.preferences.pref_json = ob.pref_json
+            return target_discussion.preferences
         elif isinstance(ob, tuple(user_refs.keys())):
+            # WHAT was I trying to do here?
             for cls in ob.__class__.mro():
                 if cls in user_refs:
                     user = values.get(user_refs[cls])
                     if not isinstance(user, User):
                         return ob
                     break
+        if "session" in getargspec(ob.__class__.__init__).args:
+            values["session"] = to_session
         copy = ob.__class__(**values)
         to_session.add(copy)
         to_session.flush()
@@ -491,6 +516,85 @@ def clone_discussion(
     return copy
 
 
+def engine_from_settings(config, full_config=False):
+    settings = get_appsettings(config, 'assembl')
+    if settings['sqlalchemy.url'].startswith('virtuoso:'):
+        db_schema = '.'.join((settings['db_schema'], settings['db_user']))
+    else:
+        db_schema = settings['db_schema']
+    set_config(settings, True)
+    session = None
+    if full_config:
+        env = bootstrap(config)
+        configure_zmq(settings['changes.socket'], False)
+        configure_model_watcher(env['registry'], 'assembl')
+        logging.config.fileConfig(config)
+    else:
+        session = make_session_maker(zope_tr=True)
+    import assembl.models
+    from assembl.lib.sqla import class_registry
+    engine = configure_engine(settings, session_maker=session)
+    metadata = get_metadata()
+    metadata.bind = engine
+    session = sessionmaker(engine)()
+    return (metadata, session)
+
+
+def copy_discussion(source_config, dest_config, source_slug, dest_slug,
+                    delete=False, debug=False, permissions=None):
+    dest_metadata, dest_session = engine_from_settings(
+        dest_config, True)
+    dest_tables = dest_metadata.sorted_tables
+    if source_config != dest_config:
+        from assembl.lib.sqla import _session_maker
+        temp = _session_maker
+        assert temp == dest_session
+        source_metadata, source_session = engine_from_settings(
+            source_config, False)
+        source_tables_by_name = {
+            table.name: table.tometadata(source_metadata, source_metadata.schema)
+            for table in dest_tables
+        }
+        _session_maker = dest_session
+    else:
+        source_metadata, source_session = dest_metadata, dest_session
+    try:
+        init_key_for_classes(dest_session)
+        from assembl.models import Discussion
+        discussion = source_session.query(Discussion).filter_by(
+            slug=source_slug).one()
+        assert discussion, "No discussion named " + source_slug
+        permissions = [x.split('+') for x in permissions or ()]
+        for (role, permission) in permissions:
+            assert role in SYSTEM_ROLES
+            assert permission in ASSEMBL_PERMISSIONS
+        existing = dest_session.query(Discussion).filter_by(slug=dest_slug).first()
+        if existing:
+            if delete:
+                print "deleting", dest_slug
+                with transaction.manager:
+                    delete_discussion(dest_session, existing.id)
+            else:
+                print "Discussion", dest_slug,
+                print "already exists! Add -d to delete it."
+                exit(0)
+        with transaction.manager:
+            from assembl.models import Role, Permission, DiscussionPermission
+            copy = clone_discussion(
+                source_session, discussion.id, dest_session, dest_slug)
+            for (role, permission) in permissions:
+                role = dest_session.query(Role).filter_by(name=role).one()
+                permission = dest_session.query(Permission).filter_by(
+                    name=permission).one()
+                # assumption: Not already defined.
+                dest_session.add(DiscussionPermission(
+                    discussion=copy, role=role, permission=permission))
+    except Exception:
+        traceback.print_exc()
+        if debug:
+            pdb.post_mortem()
+        capture_exception()
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -510,58 +614,8 @@ if __name__ == '__main__':
                         help="Add a role+permission pair to the copy "
                         "(eg system.Authenticated+admin_discussion)")
     args = parser.parse_args()
-    env = bootstrap(args.configuration)
-    logging.config.fileConfig(args.configuration)
-    settings = get_appsettings(args.configuration, 'assembl')
-
-    set_config(settings)
-    setup_raven(settings)
-    try:
-        configure_zmq(settings['changes.socket'], False)
-        configure_model_watcher(env['registry'], 'assembl')
-        to_engine = configure_engine(settings, True)
-        to_session = get_session_maker()
-        init_key_for_classes(to_session)
-        new_slug = args.new_name or (args.discussion + "_copy")
-        if args.source_db_configuration:
-            from_session = make_session_maker(zope_tr=True)
-            settings = get_appsettings(args.source_db_configuration, 'assembl')
-            from_engine = configure_engine(settings, session_maker=from_session)
-            from_session = sessionmaker(from_engine)()
-        else:
-            from_engine = to_engine
-            from_session = to_session
-        from assembl.models import Discussion
-        discussion = from_session.query(Discussion).filter_by(
-            slug=args.discussion).one()
-        assert discussion, "No discussion named " + args.discussion
-        permissions = [x.split('+') for x in args.permissions]
-        for (role, permission) in permissions:
-            assert role in SYSTEM_ROLES
-            assert permission in ASSEMBL_PERMISSIONS
-        existing = to_session.query(Discussion).filter_by(slug=new_slug).first()
-        if existing:
-            if args.delete:
-                print "deleting", new_slug
-                with transaction.manager:
-                    delete_discussion(to_session, existing.id)
-            else:
-                print "Discussion", new_slug,
-                print "already exists! Add -d to delete it."
-                exit(0)
-        with transaction.manager:
-            from assembl.models import Role, Permission, DiscussionPermission
-            copy = clone_discussion(
-                from_session, discussion.id, to_session, new_slug)
-            for (role, permission) in permissions:
-                role = to_session.query(Role).filter_by(name=role).one()
-                permission = to_session.query(Permission).filter_by(
-                    name=permission).one()
-                # assumption: Not already defined.
-                to_session.add(DiscussionPermission(
-                    discussion=copy, role=role, permission=permission))
-    except Exception:
-        traceback.print_exc()
-        if args.debug:
-            pdb.post_mortem()
-        capture_exception()
+    copy_discussion(
+        args.source_db_configuration or args.configuration,
+        args.configuration,
+        args.discussion, args.new_name or args.discussion + "_copy",
+        args.delete, args.debug, args.permissions)
