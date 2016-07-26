@@ -1,13 +1,35 @@
 # Save as .codeclimate.yml (note leading .) in project root directory
-languages:
-  Ruby: true
-  JavaScript: true
-  PHP: true
-  Python: true
+engines:
+  csslint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+      - javascript
+      - python
+      - php
+  eslint:
+    enabled: true
+    channel: "eslint-2"
+  fixme:
+    enabled: true
+  radon:
+    enabled: true
+ratings:
+  paths:
+  - "**.css"
+  - "**.inc"
+  - "**.js"
+  - "**.jsx"
+  - "**.module"
+  - "**.php"
+  - "**.py"
+  - "**.rb"
 exclude_paths:
-- "assembl/static/widget/*"
-- "test_*.py"
-- "assembl/static/js/*/tests/*"
-- "assembl/alembic/versions/*"
-- "assembl/static/js/lib/annotator/*"
-
+- assembl/static/widget/*
+- test_*.py
+- assembl/static/js/*/tests/*
+- assembl/alembic/versions/*
+- assembl/static/js/lib/annotator/*
