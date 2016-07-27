@@ -19,13 +19,16 @@ Prerequisites
    apt-get install nginx uwsgi uwsgi-plugin-python
 
 
-Setup a development environment:
---------------------------------
+Setup a development environment
+-------------------------------
 
-You need fabric 1.5.1 and a ssh server installed:
+Install fabric and a SSH server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You need fabric 1.5.1 and a SSH server installed. Here is how to install them on Mac and on Ubuntu.
 
 On Mac
-~~~~~~
+++++++
 
 The system python has an old but serviceable pip version. It can be
 updated with
@@ -52,7 +55,7 @@ Either way, you should use pip to install fabric (you would need to sudo for the
 
 
 On Ubuntu
-~~~~~~~~~
++++++++++
 
 You can get all that you need to bootstrap with:
 
@@ -60,7 +63,10 @@ You can get all that you need to bootstrap with:
 
     apt-get install fabric git openssh-server
 
-And then:
+Check out the code repository, install build dependecies, and bootstrap
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can run either:
 
 .. code:: sh
 
@@ -69,7 +75,7 @@ And then:
     fab bootstrap:projectpath=~/assembl
     cd ~/assembl
 
-or
+or:
 
 .. code:: sh
 
@@ -80,11 +86,7 @@ or
 
 Note: If on Mac, command fab devenv install_builddeps outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
 
-Note:  If you get error:
-
-fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)
-
-You'll need to reconfigure your ssh server
+Note: If you get the following error: ``fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)`` Then you'll need to reconfigure your ssh server
 
 
 Running
