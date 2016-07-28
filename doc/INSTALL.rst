@@ -112,12 +112,12 @@ superuser):
 
     assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword development.ini
 
-(NOTE: Just running $venv/bin/supervisord will NOT work, as celery will
+Note: Just running ``$venv/bin/supervisord`` will NOT work, as celery will
 run command line tools, thus breaking out of the environment. You need
-to run source venv/bin/activate from the same terminal before running
-the above)
+to run ``source venv/bin/activate`` from the same terminal before running
+the above
 
-Note 2: If you do not want to ``source activate`` every time, you can hook it in your shell using something like `Autoenv <https://github.com/kennethreitz/autoenv>`_. Another option is to use `VirtualenvWrapper <https://bitbucket.org/virtualenvwrapper/virtualenvwrapper>`_ and its `Helper <https://justin.abrah.ms/python/virtualenv_wrapper_helper.html>`_. At least one of us uses `VirtualFish <https://github.com/adambrenecki/virtualfish>`_ with auto-activation.
+Note: If you do not want to ``source activate`` every time, you can hook it in your shell using something like `Autoenv <https://github.com/kennethreitz/autoenv>`_. Another option is to use `VirtualenvWrapper <https://bitbucket.org/virtualenvwrapper/virtualenvwrapper>`_ and its `Helper <https://justin.abrah.ms/python/virtualenv_wrapper_helper.html>`_. At least one of us uses `VirtualFish <https://github.com/adambrenecki/virtualfish>`_ with auto-activation.
 
 
 On subsequent runs, just make sure supervisord is running.
@@ -127,6 +127,8 @@ Then, start the development server and compass with this command:
 .. code:: sh
 
     supervisorctl start dev:
+
+You can now type ``http://localhost:6543`` in your browser and log in using the credentials you created.
 
 Multiple environments
 ~~~~~~~~~~~~~~~~~~~~~
