@@ -128,7 +128,7 @@ Then, start the development server and compass with this command:
 
     supervisorctl start dev:
 
-You can now type ``http://localhost:6543`` in your browser and log in using the credentials you created.
+You can now type http://localhost:6543 in your browser and log in using the credentials you created.
 
 Multiple environments
 ~~~~~~~~~~~~~~~~~~~~~
