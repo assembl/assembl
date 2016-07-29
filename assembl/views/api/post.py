@@ -545,6 +545,7 @@ def create_post(request):
         published_synthesis = Synthesis.get_instance(publishes_synthesis_id)
         post_constructor_args['publishes_synthesis'] = published_synthesis
         new_post = SynthesisPost(**post_constructor_args)
+        new_post.finalize_publish()
     else:
         new_post = AssemblPost(**post_constructor_args)
 

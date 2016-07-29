@@ -60,6 +60,13 @@ class Preferences(MutableMapping, Base):
     def get_default_preferences(cls, session=None):
         return cls.get_by_name('default', session) or cls(name='default')
 
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id):
+        # This is not a DiscussionBoundBase, but protocol is otherwise useful
+        from .discussion import Discussion
+        return ((cls.id == Discussion.preferences_id),
+                (Discussion.id == discussion_id))
+
     @property
     def local_values_json(self):
         values = {}

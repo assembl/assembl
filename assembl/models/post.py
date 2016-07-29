@@ -583,8 +583,8 @@ class SynthesisPost(AssemblPost):
         'polymorphic_identity': 'synthesis_post',
     }
 
-    def __init__(self, *args, **kwargs):
-        super(SynthesisPost, self).__init__(*args, **kwargs)
+    def finalize_publish(self):
+        """Replace the synthesis with the published version. Call once after creation."""
         self.publishes_synthesis = self.publishes_synthesis.publish()
 
     def get_body_mime_type(self):

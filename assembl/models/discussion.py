@@ -21,7 +21,8 @@ from sqlalchemy import (
     func,
     inspect,
 )
-from sqlalchemy.orm import relationship, join, subqueryload_all
+from sqlalchemy.orm import (
+    relationship, join, subqueryload_all, backref)
 from sqlalchemy.exc import InvalidRequestError
 
 from assembl.lib import config
@@ -76,7 +77,8 @@ class Discussion(DiscussionBoundBase):
     show_help_in_debate_section = Column(Boolean, default=True)
     preferences_id = Column(Integer, ForeignKey(Preferences.id))
 
-    preferences = relationship(Preferences)
+    preferences = relationship(Preferences, backref=backref(
+        'discussion'), cascade="all, delete-orphan", single_parent=True)
 
     @property
     def admin_source(self):

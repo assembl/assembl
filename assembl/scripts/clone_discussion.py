@@ -12,6 +12,7 @@ import logging.config
 import traceback
 from functools import partial
 import pdb
+from os.path import abspath
 
 from pyramid.paster import get_appsettings, bootstrap
 from sqlalchemy.orm import (
@@ -22,9 +23,10 @@ from sqlalchemy.sql.visitors import ClauseVisitor
 from sqlalchemy.sql.expression import and_
 
 from assembl.auth import SYSTEM_ROLES, ASSEMBL_PERMISSIONS
-from assembl.lib.config import set_config
+from assembl.lib.config import set_config, get_config
 from assembl.lib.sqla import (
-    configure_engine, get_session_maker, make_session_maker, get_metadata)
+    configure_engine, get_session_maker, make_session_maker, get_metadata,
+    session_maker_is_initialized)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.model_watcher import configure_model_watcher
 from assembl.lib.raven_client import setup_raven, capture_exception
@@ -47,17 +49,20 @@ fn_for_classes = None
 
 user_refs = None
 
+
 def init_key_for_classes(db):
     global fn_for_classes, user_refs
     from assembl.models import (
         AgentProfile, User, Permission, Role, Webpage, Action, LocalUserRole,
-        IdentityProvider, EmailAccount, WebLinkAccount, NotificationSubscription)
+        IdentityProvider, EmailAccount, WebLinkAccount, Locale,
+        NotificationSubscription)
     fn_for_classes = {
         AgentProfile: partial(find_or_create_agent_profile, db),
         User: partial(find_or_create_agent_profile, db),
         Webpage: partial(find_or_create_object_by_keys, db, ['url']),
         Permission: partial(find_or_create_object_by_keys, db, ['name']),
         Role: partial(find_or_create_object_by_keys, db, ['name']),
+        Locale: partial(find_or_create_object_by_keys, db, ['code']),
         # SocialAuthAccount: partial(find_or_create_object_by_keys, db, ['provider_id', 'uid']),
         IdentityProvider: partial(find_or_create_object_by_keys, db, ['provider_type', 'name']),
         # email_ci?
@@ -188,9 +193,18 @@ def recursive_fetch(ob, visited=None):
             recursive_fetch(subob, visited)
 
 class_info = {}
+TRAVERSE_ONE_TO_MANY = {
+    "LangString": ("entries",),
+}
+
+TREAT_AS_NON_NULLABLE = {
+    "Content": ("subject", "body"),
+}
 
 
 def get_mapper_info(mapper):
+    from assembl.lib.history_mixin import TombstonableMixin
+    from assembl.models import LangStringEntry
     if mapper not in class_info:
         pk_keys_cols = set([c for c in mapper.primary_key])
         direct_reln = {r for r in mapper.relationships
@@ -201,11 +215,26 @@ def get_mapper_info(mapper):
         copy_col_props = {a for a in mapper.iterate_properties
                           if isinstance(a, ColumnProperty)
                           and not avoid_columns.intersection(set(a.columns))}
-
+        if issubclass(mapper.class_, TombstonableMixin):
+            # It might have been excluded by a relation.
+            copy_col_props.add(mapper._props['tombstone_date'])
         non_nullable_reln = {
             r for r in direct_reln
             if any([not c.nullable for c in r.local_columns])}
+        treat_as_non_nullable = []
+        for cls in mapper.class_.mro():
+            relns = TREAT_AS_NON_NULLABLE.get(cls.__name__, ())
+            if relns:
+                treat_as_non_nullable.extend(relns)
+        if treat_as_non_nullable:
+            for name in treat_as_non_nullable:
+                non_nullable_reln.add(mapper.relationships[name])
         nullable_relns = direct_reln - non_nullable_reln
+        one_to_many_relns = TRAVERSE_ONE_TO_MANY.get(
+            mapper.class_.__name__, ())
+        if one_to_many_relns:
+            nullable_relns.update(
+                {mapper.relationships[n] for n in one_to_many_relns})
         class_info[mapper] = (
             direct_reln, copy_col_props, nullable_relns, non_nullable_reln)
     return class_info[mapper]
@@ -222,7 +251,11 @@ def assign_dict(values, r, subob):
 
 
 def assign_ob(ob, r, subob):
-    assert r.direction.name == 'MANYTOONE'
+    from assembl.models import LangStringEntry
+    if r.mapper != ob.__class__.__mapper__:
+        "DISCARDING", r
+        # Handled by the reverse connection
+        return
     setattr(ob, r.key, subob)
     for col in r.local_columns:
         if col.foreign_keys:
@@ -234,7 +267,9 @@ def assign_ob(ob, r, subob):
 class JoinColumnsVisitor(ClauseVisitor):
     def __init__(self, cls, query, classes_by_table):
         super(JoinColumnsVisitor, self).__init__()
+        self.base_class = cls
         self.classes = {cls}
+        self.column = None
         self.query = query
         self.classes_by_table = classes_by_table
         self.missing = []
@@ -250,37 +285,41 @@ class JoinColumnsVisitor(ClauseVisitor):
                 self.classes.add(cls)
                 return True
 
-    def treat_column(self, column):
-        from assembl.models import TombstonableMixin
+    def process_column(self, column):
+        from assembl.lib.history_mixin import TombstonableMixin
         source_cls = self.classes_by_table[column.table]
-        foreign_keys = getattr(column, 'foreign_keys', ())
-        for foreign_key in foreign_keys:
-            # Do not bother with inheritance here
-            dest_cls = self.classes_by_table[foreign_key.column.table]
-            if not self.is_known_class(dest_cls):
-                orm_relns = filter(
-                    lambda r: column in r.local_columns and r.secondary is None,
-                    source_cls.__mapper__.relationships)
-                if len(orm_relns) > 1 and (
-                        issubclass(dest_cls, TombstonableMixin) or
-                        issubclass(source_cls, TombstonableMixin)):
-                    orm_relns = [
-                        r for r in orm_relns
-                        if "tombstone_date" not in str(r.primaryjoin)]
-                assert len(orm_relns) == 1, "wrong orm_relns for %s.%s : %s" % (
-                    column.table.name, column.name, str(orm_relns))
-                rattrib = getattr(source_cls, orm_relns[0].key)
-                self.query = self.query.join(dest_cls, rattrib)
-                self.classes.add(dest_cls)
+        classes = [self.classes_by_table[foreign_key.column.table]
+                   for foreign_key in getattr(column, 'foreign_keys', ())]
+        if not classes:
+            return self.is_known_class(source_cls)
+        dest_cls = classes[0]
+        classes.append(source_cls)
+        if all((self.is_known_class(c) for c in classes)):
+            return True
+        if all((not self.is_known_class(c) for c in classes)):
+            return False
+        orm_relns = filter(
+            lambda r: column in r.local_columns and r.secondary is None,
+            source_cls.__mapper__.relationships)
+        if len(orm_relns) > 1 and (
+                issubclass(dest_cls, TombstonableMixin) or
+                issubclass(source_cls, TombstonableMixin)):
+            orm_relns = [
+                r for r in orm_relns
+                if "tombstone_date" not in str(r.primaryjoin)]
+        assert len(orm_relns) == 1, "wrong orm_relns for %s.%s : %s" % (
+            column.table.name, column.name, str(orm_relns))
+        rattrib = getattr(source_cls, orm_relns[0].key)
+        self.query = self.query.join(dest_cls, rattrib)
+        self.classes.add(source_cls)
+        self.classes.add(dest_cls)
+        return True
 
     def final_query(self):
         while len(self.missing):
             missing = []
             for column in self.missing:
-                source_cls = self.classes_by_table[column.table]
-                if self.is_known_class(source_cls):
-                    self.treat_column(column)
-                else:
+                if not self.process_column(column):
                     missing.append(column)
             if len(missing) == len(self.missing):
                 break
@@ -289,16 +328,13 @@ class JoinColumnsVisitor(ClauseVisitor):
         return self.query
 
     def visit_column(self, column):
-        source_cls = self.classes_by_table[column.table]
-        if not self.is_known_class(source_cls):
+        if not self.process_column(column):
             self.missing.append(column)
-            return
-        self.treat_column(column)
 
 
 def delete_discussion(session, discussion_id):
     from assembl.models import (
-        Discussion, DiscussionBoundBase, Preferences)
+        Discussion, DiscussionBoundBase, Preferences, LangStringEntry)
     # delete anything related first
     classes = DiscussionBoundBase._decl_class_registry.itervalues()
     classes_by_table = {
@@ -310,7 +346,12 @@ def delete_discussion(session, discussion_id):
         and isabstract(cls.mro()[1]),
         classes_by_table.values()))
     concrete_classes.add(Preferences)
+    concrete_classes.add(LangStringEntry)
     tables = DiscussionBoundBase.metadata.sorted_tables
+    # Special case for preferences
+    discussion = session.query(Discussion).get(discussion_id)
+    session.delete(discussion.preferences)
+    # tables.append(Preferences.__table__)
     tables.reverse()
     for table in tables:
         if table not in classes_by_table:
@@ -320,7 +361,10 @@ def delete_discussion(session, discussion_id):
             continue
         print 'deleting', cls.__name__
         query = session.query(cls.id)
-        conds = cls.get_discussion_conditions(discussion_id)
+        if hasattr(cls, "get_discussion_conditions"):
+            conds = cls.get_discussion_conditions(discussion_id)
+        else:
+            continue
         assert conds
         cond = and_(*conds)
         v = JoinColumnsVisitor(cls, query, classes_by_table)
@@ -339,7 +383,7 @@ def delete_discussion(session, discussion_id):
 def clone_discussion(
         from_session, discussion_id, to_session=None, new_slug=None):
     from assembl.models import (
-        DiscussionBoundBase, Discussion, Post, User, Preferences)
+        DiscussionBoundBase, Discussion, Post, User, Preferences, HistoryMixin)
     global user_refs
     discussion = from_session.query(Discussion).get(discussion_id)
     assert discussion
@@ -351,6 +395,7 @@ def clone_discussion(
     else:
         changes[discussion]['slug'] = new_slug or discussion.slug
     copies_of = {}
+    history_new_base_ids = {}
     copies = set()
     in_process = set()
     promises = defaultdict(list)
@@ -416,7 +461,9 @@ def clone_discussion(
         for r in nullable_relns:
             subob = getattr(ob, r.key, None)
             if subob is not None:
-                if subob in copies_of:
+                if isinstance(subob, list):
+                    local_promises[r] = subob
+                elif subob in copies_of:
                     assign_dict(values, r, copies_of[subob])
                 else:
                     local_promises[r] = subob
@@ -440,7 +487,31 @@ def clone_discussion(
                     break
         if "session" in getargspec(ob.__class__.__init__).args:
             values["session"] = to_session
-        copy = ob.__class__(**values)
+        if isinstance(ob, HistoryMixin):
+            values['base_id'] = history_new_base_ids.get(
+                (ob.__class__, ob.base_id), None)
+            copy = ob.__class__(**values)
+            history_new_base_ids[(ob.__class__, ob.base_id)] = copy.base_id
+        else:
+            copy = ob.__class__(**values)
+        # Remove objects created by constructor side-effects
+        if isinstance(copy, Discussion):
+            # Except preferences which was flushed (check why)
+            to_session.expunge(copy.root_idea)
+            copy.root_idea = None
+            # lingering reln
+            while copy.ideas:
+                copy.ideas.pop()
+            to_session.expunge(copy.next_synthesis)
+            copy.next_synthesis = None
+            # lingering reln
+            while copy.views:
+                copy.views.pop()
+            to_session.expunge(copy.table_of_contents)
+            copy.table_of_contents = None
+            for ut in copy.user_templates:
+                to_session.expunge(ut)
+        # Now add the object
         to_session.add(copy)
         to_session.flush()
         print "<-", ob.__class__, ob.id, copy.id
@@ -449,7 +520,17 @@ def clone_discussion(
         in_process.remove(ob)
         resolve_promises(ob, copy)
         for reln, subob in local_promises.items():
-            if subob in in_process:
+            if isinstance(subob, list):
+                for subobel in subob:
+                    print 'recurse 0', reln.key, subobel.id
+                    result = recursive_clone(subobel, path + [(reln.key, subobel)])
+                    if result is None:  # in process
+                        print "promising", subobel.__class__, subobel.id, reln.key
+                        promises[subobel].append((copy, reln))
+                    else:
+                        print "resolving promise", reln.key, result.__class__, result.id
+                        assign_ob(copy, reln, result)
+            elif subob in in_process:
                 promises[subob].append((copy, reln))
             else:
                 print 'recurse 0', reln.key, subob.id
@@ -529,21 +610,28 @@ def engine_from_settings(config, full_config=False):
         configure_zmq(settings['changes.socket'], False)
         configure_model_watcher(env['registry'], 'assembl')
         logging.config.fileConfig(config)
+        session = get_session_maker()
+        metadata = get_metadata()
     else:
         session = make_session_maker(zope_tr=True)
-    import assembl.models
-    from assembl.lib.sqla import class_registry
-    engine = configure_engine(settings, session_maker=session)
-    metadata = get_metadata()
-    metadata.bind = engine
-    session = sessionmaker(engine)()
+        import assembl.models
+        from assembl.lib.sqla import class_registry
+        engine = configure_engine(settings, session_maker=session)
+        metadata = get_metadata()
+        metadata.bind = engine
+        session = sessionmaker(engine)()
     return (metadata, session)
 
 
 def copy_discussion(source_config, dest_config, source_slug, dest_slug,
                     delete=False, debug=False, permissions=None):
-    dest_metadata, dest_session = engine_from_settings(
-        dest_config, True)
+    if (session_maker_is_initialized() and abspath(source_config) == get_config()["__file__"]):
+        # not running from script
+        dest_session = get_session_maker()()
+        dest_metadata = get_metadata()
+    else:
+        dest_metadata, dest_session = engine_from_settings(
+            dest_config, True)
     dest_tables = dest_metadata.sorted_tables
     if source_config != dest_config:
         from assembl.lib.sqla import _session_maker
@@ -578,8 +666,8 @@ def copy_discussion(source_config, dest_config, source_slug, dest_slug,
                 print "Discussion", dest_slug,
                 print "already exists! Add -d to delete it."
                 exit(0)
-        with transaction.manager:
-            from assembl.models import Role, Permission, DiscussionPermission
+        from assembl.models import Role, Permission, DiscussionPermission
+        with dest_session.no_autoflush:
             copy = clone_discussion(
                 source_session, discussion.id, dest_session, dest_slug)
             for (role, permission) in permissions:
@@ -594,6 +682,7 @@ def copy_discussion(source_config, dest_config, source_slug, dest_slug,
         if debug:
             pdb.post_mortem()
         capture_exception()
+    return dest_session
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -614,8 +703,9 @@ if __name__ == '__main__':
                         help="Add a role+permission pair to the copy "
                         "(eg system.Authenticated+admin_discussion)")
     args = parser.parse_args()
-    copy_discussion(
-        args.source_db_configuration or args.configuration,
-        args.configuration,
-        args.discussion, args.new_name or args.discussion + "_copy",
-        args.delete, args.debug, args.permissions)
+    with transaction.manager:
+        session = copy_discussion(
+            args.source_db_configuration or args.configuration,
+            args.configuration,
+            args.discussion, args.new_name or args.discussion + "_copy",
+            args.delete, args.debug, args.permissions)

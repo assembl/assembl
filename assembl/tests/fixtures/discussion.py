@@ -25,6 +25,7 @@ def discussion(request, test_session, default_preferences):
         test_session.delete(discussion.next_synthesis)
         preferences = discussion.preferences
         discussion.preferences = None
+        discussion.preferences_id = None
         test_session.delete(preferences)
         test_session.delete(discussion)
         test_session.flush()
