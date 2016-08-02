@@ -29,7 +29,9 @@ var Marionette = require('../shims/marionette.js'),
     Genie = require('../utils/genieEffect.js'),
     IdeaClassificationOnMessageView = require('./ideaClassificationOnMessage.js'),
     LangString = require('../models/langstring.js'),
-    IdeaContentLink = require('../models/ideaContentLink.js');
+    IdeaContentLink = require('../models/ideaContentLink.js'),
+    ConfirmModal = require('./confirmModal.js'),
+    Growl = require('../utils/growl.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10,
@@ -1530,11 +1532,20 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   onDeleteMessageClick: function(ev){
-    // TODO: Create a generic Marionette view for alerts (so that users can't check the browser checkbox "don't show alerts again" and have a bad time, and because it looks nicer), and use it here.
     // TODO: Really delete the message and refresh the messageList.
-    if ( confirm(i18n.gettext('Are you sure you want to delete this message?')) ){
-      alert(i18n.gettext('Message has been successfully deleted.'));
-    }
+    var onSubmit = function(ev){
+      Growl.showBottomGrowl(
+        Growl.GrowlReason.SUCCESS,
+        i18n.gettext('Message has been successfully deleted.')
+      );
+    };
+    var confirm = new ConfirmModal({
+      contentText: i18n.gettext('Are you sure you want to delete this message?'),
+      cancelText: i18n.gettext('No'),
+      submitText: i18n.gettext('Yes'),
+      onSubmit: onSubmit,
+    });
+    Assembl.slider.show(confirm);
   },
 
   onShowTranslationClick: function(ev){

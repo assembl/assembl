@@ -1,0 +1,15 @@
+<div class="popin-header pbxs background-grey">
+  <% if(icon) { %><i class="<%= icon %>"></i><% } %>
+</div>
+
+<div class="popin-body ptxs background-grey">
+  <div class="content">
+    <%= contentText %>
+  </div>
+  <div class="clr"></div>
+</div>
+
+<div class="popin-footer background-lightgrey">
+  <a class="btn btn-cancel btn-sm fl js_close"><%= cancelText %></a>
+  <button class="btn btn-primary btn-sm fr js_confirm"><%= submitText %></button>
+</div>
