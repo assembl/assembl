@@ -195,7 +195,7 @@ var MessageList = AssemblPanel.extend({
       this.listenTo(this, 'messageList:addFilterIsSynthesisMessage', function() {
         that.getPanelWrapper().filterThroughPanelLock(
             function() {
-              that.addFilterIsSynthesMessage();
+              that.addFilterIsSynthesisMessage();
             }, 'syncWithCurrentIdea');
       });
 
@@ -641,6 +641,8 @@ var MessageList = AssemblPanel.extend({
       }
       else {
         returnedDataOffsets.offsetStart = 0;
+        returnedDataOffsets.offsetEnd = 0;
+        return returnedDataOffsets;
       }
 
       if (requestedOffsets.offsetEnd > (numMessages - 1)) {
@@ -2036,7 +2038,7 @@ var MessageList = AssemblPanel.extend({
    * Load posts that are synthesis posts
    * @param {string} ideaId
    */
-  addFilterIsSynthesMessage: function() {
+  addFilterIsSynthesisMessage: function() {
     //Can't filter on an idea at the same time as getting synthesis messages
     this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
     this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);

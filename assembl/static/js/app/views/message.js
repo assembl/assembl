@@ -415,6 +415,7 @@ var MessageView = Marionette.LayoutView.extend({
       showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
       toggleExtracts: ".js_message-toggle-extracts",
       moderationOptionsButton: ".js_message-moderation-options",
+      deleteMessageButton: ".js_message-delete",
       messageReplyBox: ".js_messageReplyBoxRegion",
       likeLink: ".js_likeButton",
       shareLink: ".js_shareButton",
@@ -463,6 +464,7 @@ var MessageView = Marionette.LayoutView.extend({
     'click .js_showModeratedMessage': 'onShowModeratedMessageClick',
     'click @ui.toggleExtracts' : 'onToggleExtractsClick',
     'click @ui.moderationOptionsButton' : 'onModerationOptionsClick',
+    'click @ui.deleteMessageButton' : 'onDeleteMessageClick',
     "click @ui.showTranslationPref" : "onShowTranslationClick",
 
     //
@@ -646,6 +648,8 @@ var MessageView = Marionette.LayoutView.extend({
       html_export_url = Ctx.getApiV2DiscussionUrl("posts/" + this.model.getNumericId() + "/html_export");
     }
 
+    var user_can_delete_this_message = ( Ctx.getCurrentUserId() == this.model.get('idCreator') && Ctx.getCurrentUser().can(Permissions.DELETE_MY_POST) ) || Ctx.getCurrentUser().can(Permissions.DELETE_POST);
+
     return {
       message: this.model,
       messageListView: this.messageListView,
@@ -670,6 +674,7 @@ var MessageView = Marionette.LayoutView.extend({
       share_link_url: share_link_url,
       html_export_url: html_export_url,
       user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST),
+      user_can_delete_this_message: user_can_delete_this_message,
       unknownPreference: this.unknownPreference,
       useOriginalContent: this.useOriginalContent,
       isTranslatedMessage: this.isMessageTranslated,
@@ -1522,6 +1527,14 @@ var MessageView = Marionette.LayoutView.extend({
     this.getRegion("moderationOptionsRegion").show(this.messageModerationOptionsView);
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsSaveAndClose', this.onModerationOptionsSaveAndClose);
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsClose', this.onModerationOptionsClose);
+  },
+
+  onDeleteMessageClick: function(ev){
+    // TODO: Create a generic Marionette view for alerts (so that users can't check the browser checkbox "don't show alerts again" and have a bad time, and because it looks nicer), and use it here.
+    // TODO: Really delete the message and refresh the messageList.
+    if ( confirm(i18n.gettext('Are you sure you want to delete this message?')) ){
+      alert(i18n.gettext('Message has been successfully deleted.'));
+    }
   },
 
   onShowTranslationClick: function(ev){

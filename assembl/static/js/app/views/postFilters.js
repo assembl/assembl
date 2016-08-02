@@ -703,6 +703,33 @@ _.extend(FilterPostIsPostedSinceLastSynthesis.prototype, {
       return i18n.gettext('Only include posts created after the last synthesis.');
     }
   });
+
+
+// TODO FIXME: Find why when this filter si activated, delete messages do not show in the messageList, even though the API v1 call returns the correct list of deleted messages.
+function FilterPostIsDeleted() {
+    AbstractFilterBooleanValue.call(this);
+  }
+
+FilterPostIsDeleted.prototype = Object.create(AbstractFilterBooleanValue.prototype);
+_.extend(FilterPostIsDeleted.prototype, {
+    getId: function() {
+      return 'only_deleted_posts';
+    },
+    getImplicitValuePromise: function() {
+      return Promise.resolve(true);
+    },
+    getServerParam: function() {
+      return 'deleted';
+    },
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('Deleted messages'));
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include messages that have been deleted.');
+    }
+  });
+
+
   
 var availableFilters = {
     POST_HAS_ID_IN: FilterPostHasIdIn,
@@ -719,7 +746,8 @@ var availableFilters = {
     POST_IS_FROM: FilterPostIsFromUser,
     POST_IS_FROM_SELF: FilterPostIsOwnPost,
     POST_REPONDS_TO: FilterPostReplyToUser,
-    POST_REPONDS_TO_ME: FilterPostReplyToMe
+    POST_REPONDS_TO_ME: FilterPostReplyToMe,
+    POST_IS_DELETED: FilterPostIsDeleted
   };
 
 module.exports = availableFilters;

@@ -168,6 +168,16 @@ def get_posts(request):
         ideaContentLinkQuery = ideaContentLinkQuery.filter(
             PostClass.hidden==asbool(hidden))
 
+
+    # "true" means deleted only, "false" (default) means non-deleted only. "any" means both.
+    deleted = request.GET.get('deleted', "false")
+    if deleted == 'false':
+        posts = posts.filter(PostClass.tombstone_condition())
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.tombstone_condition())
+    elif deleted == 'true':
+        posts = posts.filter(PostClass.not_tombstone_condition())
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
+
     if root_idea_id:
         related = Idea.get_related_posts_query_c(
             discussion_id, root_idea_id, True)
