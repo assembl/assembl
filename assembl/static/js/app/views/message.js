@@ -650,7 +650,7 @@ var MessageView = Marionette.LayoutView.extend({
       html_export_url = Ctx.getApiV2DiscussionUrl("posts/" + this.model.getNumericId() + "/html_export");
     }
 
-    var user_can_delete_this_message = ( Ctx.getCurrentUserId() == this.model.get('idCreator') && Ctx.getCurrentUser().can(Permissions.DELETE_MY_POST) ) || Ctx.getCurrentUser().can(Permissions.DELETE_POST);
+    var user_can_delete_this_message = ( Ctx.getCurrentUserId() == Ctx.extractId(this.model.get('idCreator')) && Ctx.getCurrentUser().can(Permissions.DELETE_MY_POST) ) || Ctx.getCurrentUser().can(Permissions.DELETE_POST);
 
     return {
       message: this.model,
@@ -1532,12 +1532,31 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   onDeleteMessageClick: function(ev){
-    // TODO: Really delete the message and refresh the messageList.
+    var that = this;
+    
     var onSubmit = function(ev){
-      Growl.showBottomGrowl(
-        Growl.GrowlReason.SUCCESS,
-        i18n.gettext('Message has been successfully deleted.')
-      );
+      var analytics = Analytics.getInstance();
+      analytics.trackEvent(analytics.events.MESSAGE_LIKED);
+      that.model.getApiV2Url()
+      var message_delete_url = that.model.getApiV2Url();
+      Promise.resolve(
+        $.ajax(message_delete_url, {
+          method: "DELETE",
+          contentType: "application/json",
+          dataType: "json"
+        })
+      ).then(function(data) {
+        Growl.showBottomGrowl(
+          Growl.GrowlReason.SUCCESS,
+          i18n.gettext('Message has been successfully deleted.')
+        );
+        // TODO: Refresh the messageList
+      }).catch(function(e) {
+        Growl.showBottomGrowl(
+          Growl.GrowlReason.ERROR,
+          i18n.gettext('Error: Message could not be deleted.')
+        );
+      });
     };
     var confirm = new ConfirmModal({
       contentText: i18n.gettext('Are you sure you want to delete this message?'),
