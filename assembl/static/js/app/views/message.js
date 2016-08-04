@@ -604,7 +604,7 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
 
-    if (this.model.get("publication_state") != "PUBLISHED") {
+    if (this.model.get("publication_state") == "MODERATED_TEXT_ON_DEMAND" || this.model.get("publication_state") == "MODERATED_TEXT_NEVER_AVAILABLE") {
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
       //@TODO: should the body be this._body??
@@ -741,7 +741,7 @@ var MessageView = Marionette.LayoutView.extend({
     this.isCompleteDataLoaded();
     //Check if the message is moderated
     
-    if (this.model.get('publication_state') !== 'PUBLISHED'){
+    if (this.model.get('publication_state') == "MODERATED_TEXT_ON_DEMAND" || this.model.get("publication_state") == "MODERATED_TEXT_NEVER_AVAILABLE"){
       //Naive implemntation. When other publication states are used, update the code here.
       this.moderationOptions.isModerated = true;
       this.moderationOptions.purpose = this.model.get('publication_state');
@@ -1997,9 +1997,14 @@ var MessageView = Marionette.LayoutView.extend({
     @param {Object}  preference:   The UserLanguagePreference Collection 
    */
   initiateTranslationState: function(preferences){
-    var translationData = preferences.getTranslationData(),
-        body = this.model.get("body"),
-        preference = preferences.getPreferenceForLocale(body.original().getBaseLocale());
+    //console.log("vody:", this.model.get("body"));
+    var translationData = preferences.getTranslationData();
+    var body = this.model.get("body");
+    var locale = "und";
+    try {
+      locale = body.original().getBaseLocale();
+    } catch(e) {}
+    var preference = preferences.getPreferenceForLocale(locale);
 
     //Dict cache of locale -> full name
     this.langCache = Ctx.getLocaleToLanguageNameCache();

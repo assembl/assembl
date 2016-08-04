@@ -353,6 +353,9 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
+    def get_subject(self):
+        return self.subject
+
     def get_body(self):
         return self.body
 

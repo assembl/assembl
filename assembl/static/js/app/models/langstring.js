@@ -240,7 +240,23 @@ var LangString = Base.Model.extend({
    * @function app.models.langstrings.LangString.parse
    */
   parse: function(rawModel, options) {
-    rawModel.entries = new LangStringEntryCollection(rawModel.entries, {parse: true});
+    if ( _.isString(rawModel) ){
+      var s = rawModel;
+      rawModel = new LangString({
+        entries: new LangStringEntryCollection([
+          new LangStringEntry({
+            "value": s,
+            "@language": "und"
+          })
+        ])
+      });
+    }
+    else if ( _.isNull(rawModel) || _.isUndefined(rawModel) || _.isEmpty(rawModel) ){
+      rawModel = _.clone(LangString.empty);
+    }
+    else {
+      rawModel.entries = new LangStringEntryCollection(rawModel.entries, {parse: true});
+    }
     return rawModel;
   },
   /**
@@ -266,6 +282,13 @@ var LangString = Base.Model.extend({
     var originals = this.get("entries").filter(function(e) {return !e.isMachineTranslation();});
     if (originals.length > 1) {
       return this.bestOf(originals);
+    }
+    
+    if (originals.length == 0) {
+      return new LangStringEntry({
+        "value": "",
+        "@language": "zxx"
+      });
     }
     return originals[0];
   },

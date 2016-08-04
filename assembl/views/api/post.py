@@ -170,13 +170,28 @@ def get_posts(request):
 
 
     # "true" means deleted only, "false" (default) means non-deleted only. "any" means both.
-    deleted = request.GET.get('deleted', "false")
+
+    # v0
+    deleted = request.GET.get('deleted', 'any')
+
+    # v1: we would like something like that
+    # deleted = request.GET.get('deleted', None)
+    # if deleted is None:
+    #     if view_def == 'id_only':
+    #         deleted = 'any'
+    #     else:
+    #         deleted = 'false'
+
+
     if deleted == 'false':
         posts = posts.filter(PostClass.tombstone_condition())
         ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.tombstone_condition())
     elif deleted == 'true':
         posts = posts.filter(PostClass.not_tombstone_condition())
         ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
+    elif deleted == 'any':
+        # result will contain deleted and non-deleted posts
+        pass
 
     if root_idea_id:
         related = Idea.get_related_posts_query_c(

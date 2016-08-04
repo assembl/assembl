@@ -348,9 +348,17 @@ class Post(Content):
             return self != self.parent.children[-1]
         return False
 
+    def get_subject(self):
+        if self.publication_state in blocking_publication_states:
+            #return None
+            return LangString.EMPTY()
+        if self.subject:
+            return super(Post, self).get_subject()
+
     def get_body(self):
         if self.publication_state in blocking_publication_states:
-            return None
+            #return None
+            return LangString.EMPTY()
         if self.body:
             return super(Post, self).get_body()
 

@@ -72,13 +72,9 @@ var MessageModel = Base.Model.extend({
           objectAttachedToModel: this}
           );
     }
-    if (rawModel.subject !== undefined) {
-        rawModel.subject = new LangString.Model(rawModel.subject, {parse: true});
-    }
-    if (rawModel.body !== undefined) {
-        rawModel.body = new LangString.Model(rawModel.body, {parse: true});
-    }
-    //console.log("Message Model parse() called, returning:", rawModel.attachments);
+    rawModel.subject = new LangString.Model(rawModel.subject, {parse: true});
+    rawModel.body = new LangString.Model(rawModel.body, {parse: true});
+    //console.log("Message Model parse() called, returning:", rawModel);
     return rawModel;
   },
 
