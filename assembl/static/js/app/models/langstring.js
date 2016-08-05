@@ -280,17 +280,21 @@ var LangString = Base.Model.extend({
    */
   original: function() {
     var originals = this.get("entries").filter(function(e) {return !e.isMachineTranslation();});
-    if (originals.length > 1) {
+    if ( originals.length == 1 ){
+      return originals[0];
+    }
+    else if (originals.length > 1) {
       return this.bestOf(originals);
     }
-    
-    if (originals.length == 0) {
+    else { // if ( originals.length == 0 ) {
+      if ( this.get("entries").models.length ){
+        return this.get("entries").models[0];
+      }
       return new LangStringEntry({
         "value": "",
         "@language": "zxx"
       });
     }
-    return originals[0];
   },
   /**
    * Determines the best body string to use according to various settings

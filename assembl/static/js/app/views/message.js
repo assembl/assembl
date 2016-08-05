@@ -1537,7 +1537,7 @@ var MessageView = Marionette.LayoutView.extend({
     var onSubmit = function(ev){
       var analytics = Analytics.getInstance();
       analytics.trackEvent(analytics.events.MESSAGE_LIKED);
-      that.model.getApiV2Url()
+      // we could use that.model.destroy() instead, and add || method == "delete" to models/message.js::sync()
       var message_delete_url = that.model.getApiV2Url();
       Promise.resolve(
         $.ajax(message_delete_url, {

@@ -46,11 +46,11 @@ var MessageModel = Base.Model.extend({
     checked: false,
     read: false,
     parentId: null,
-    subject: null,
+    subject: LangString.Model.empty,
     like_count: 0,
     liked: false,
     hidden: false,
-    body: null,
+    body: LangString.Model.empty,
     idCreator: null,
     avatarUrl: null,
     date: null,
@@ -72,8 +72,12 @@ var MessageModel = Base.Model.extend({
           objectAttachedToModel: this}
           );
     }
-    rawModel.subject = new LangString.Model(rawModel.subject, {parse: true});
-    rawModel.body = new LangString.Model(rawModel.body, {parse: true});
+    if (rawModel.subject !== undefined) {
+      rawModel.subject = new LangString.Model(rawModel.subject, {parse: true});
+    }
+    if (rawModel.body !== undefined) {
+      rawModel.body = new LangString.Model(rawModel.body, {parse: true});
+    }
     //console.log("Message Model parse() called, returning:", rawModel);
     return rawModel;
   },
@@ -300,7 +304,6 @@ var MessageModel = Base.Model.extend({
       options2.url = this.getApiV2Url();
       return Backbone.sync(method, model, options2);
     }
-    console.log("we are in default case");
     return Backbone.sync(method, model, options);
   },
 
