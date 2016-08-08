@@ -15,6 +15,31 @@ var _ = require('underscore'),
     Permissions = require('../utils/permissions.js'),
     Attachment = require('./attachments.js');
 
+
+var PublicationStates = {
+  DRAFT: "DRAFT",
+  SUBMITTED_IN_EDIT_GRACE_PERIOD: "SUBMITTED_IN_EDIT_GRACE_PERIOD",
+  PUBLISHED: "PUBLISHED",
+  MODERATED_TEXT_ON_DEMAND: "MODERATED_TEXT_ON_DEMAND",
+  MODERATED_TEXT_NEVER_AVAILABLE: "MODERATED_TEXT_NEVER_AVAILABLE",
+  DELETED_BY_USER: "DELETED_BY_USER",
+  DELETED_BY_ADMIN: "DELETED_BY_ADMIN"
+};
+
+var BlockingPublicationStates = {};
+BlockingPublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
+BlockingPublicationStates[PublicationStates.DELETED_BY_USER] = PublicationStates.DELETED_BY_USER;
+BlockingPublicationStates[PublicationStates.DELETED_BY_ADMIN] = PublicationStates.DELETED_BY_ADMIN;
+
+var ModeratedPublicationStates = {};
+ModeratedPublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
+ModeratedPublicationStates[PublicationStates.MODERATED_TEXT_ON_DEMAND] = PublicationStates.MODERATED_TEXT_ON_DEMAND;
+
+var DeletedPublicationStates = {};
+DeletedPublicationStates[PublicationStates.DELETED_BY_USER] = PublicationStates.DELETED_BY_USER;
+DeletedPublicationStates[PublicationStates.DELETED_BY_ADMIN] = PublicationStates.DELETED_BY_ADMIN;
+
+
 /**
  * Message model
  * Frontend model for :py:class:`assembl.models.post.Post`
@@ -58,7 +83,7 @@ var MessageModel = Base.Model.extend({
     attachments: undefined,
     publishes_synthesis_id: null,
     metadata_json: null, // this property needs to exist to display the inspiration source of a message (creativity widget)
-    publication_state: "PUBLISHED",
+    publication_state: PublicationStates.PUBLISHED,
     moderator: null,
     moderation_text: null,
     moderated_on: null,
@@ -430,6 +455,10 @@ var MessageCollection = Base.Collection.extend({
 
 module.exports = {
   Model: MessageModel,
-  Collection: MessageCollection
+  Collection: MessageCollection,
+  PublicationStates: PublicationStates,
+  BlockingPublicationStates: BlockingPublicationStates,
+  ModeratedPublicationStates: ModeratedPublicationStates,
+  DeletedPublicationStates: DeletedPublicationStates
 };
 

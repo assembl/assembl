@@ -172,7 +172,7 @@ def get_posts(request):
     # "true" means deleted only, "false" (default) means non-deleted only. "any" means both.
 
     # v0
-    deleted = request.GET.get('deleted', 'any')
+    # deleted = request.GET.get('deleted', 'any')
 
     # v1: we would like something like that
     # deleted = request.GET.get('deleted', None)
@@ -181,6 +181,14 @@ def get_posts(request):
     #         deleted = 'any'
     #     else:
     #         deleted = 'false'
+
+    # v2
+    deleted = request.GET.get('deleted', None)
+    if deleted is None:
+        if not ids:
+            deleted = 'false'
+        else:
+            deleted = 'any'
 
 
     if deleted == 'false':

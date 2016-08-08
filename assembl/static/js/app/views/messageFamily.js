@@ -11,7 +11,10 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js'),
     Types = require('../utils/types.js'),
     MessageView = require('./message.js'),
+    MessageModel = require('../models/message.js'),
     SynthesisMessageView = require('./synthesisMessage.js'),
+    MessageDeletedByUserView = require('./messageDeletedByUser.js'),
+    MessageDeletedByAdminView = require('./messageDeletedByAdmin.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
     availableFilters = require('./postFilters.js');
 
@@ -156,6 +159,16 @@ var MessageFamilyView = Marionette.ItemView.extend({
 
     if (this.model.getBEType() == Types.SYNTHESIS_POST) {
       messageViewClass = SynthesisMessageView;
+    }
+
+    var publication_state = this.model.get('publication_state');
+    if ( publication_state && publication_state in MessageModel.DeletedPublicationStates ){
+      if ( publication_state == MessageModel.PublicationStates.DELETED_BY_USER ){
+        messageViewClass = MessageDeletedByUserView;
+      }
+      else { // else if ( publication_state == MessageModel.PublicationState.DELETED_BY_ADMIN ){
+        messageViewClass = MessageDeletedByAdminView;
+      }
     }
 
     this._messageView = new messageViewClass({
