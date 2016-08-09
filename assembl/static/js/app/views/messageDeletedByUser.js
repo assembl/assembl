@@ -46,7 +46,11 @@ var MessageDeletedByUserView = Marionette.LayoutView.extend({
     Marionette.LayoutView.apply(this, arguments);
   },
 
-  template: _.template(i18n.gettext("This message has been deleted by its author."))
+  template: _.template(i18n.gettext("This message has been deleted by its author.")),
+
+  loadAnnotations: function(){
+    // empty, needed because called by messageList
+  }
 });
 
 module.exports = MessageDeletedByUserView;

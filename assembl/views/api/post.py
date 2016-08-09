@@ -173,6 +173,7 @@ def get_posts(request):
 
     # v0
     # deleted = request.GET.get('deleted', 'any')
+    # end v0
 
     # v1: we would like something like that
     # deleted = request.GET.get('deleted', None)
@@ -181,8 +182,29 @@ def get_posts(request):
     #         deleted = 'any'
     #     else:
     #         deleted = 'false'
+    # end v1
 
     # v2
+    # deleted = request.GET.get('deleted', None)
+    # if deleted is None:
+    #     if not ids:
+    #         deleted = 'false'
+    #     else:
+    #         deleted = 'any'
+    #
+    # if deleted == 'false':
+    #     posts = posts.filter(PostClass.tombstone_condition())
+    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.tombstone_condition())
+    # elif deleted == 'true':
+    #     posts = posts.filter(PostClass.not_tombstone_condition())
+    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
+    # elif deleted == 'any':
+    #     # result will contain deleted and non-deleted posts
+    #     pass
+    # end v2
+
+
+    # v3
     deleted = request.GET.get('deleted', None)
     if deleted is None:
         if not ids:
@@ -190,16 +212,12 @@ def get_posts(request):
         else:
             deleted = 'any'
 
-
-    if deleted == 'false':
-        posts = posts.filter(PostClass.tombstone_condition())
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.tombstone_condition())
-    elif deleted == 'true':
+    if deleted == 'true':
         posts = posts.filter(PostClass.not_tombstone_condition())
         ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
-    elif deleted == 'any':
-        # result will contain deleted and non-deleted posts
-        pass
+    # end v3
+
+
 
     if root_idea_id:
         related = Idea.get_related_posts_query_c(
@@ -346,7 +364,7 @@ def get_posts(request):
         posts = posts.order_by(Content.body_text_index.score_name.desc())
     else:
         posts = posts.order_by(Content.id)
-    print str(posts)
+    # print str(posts)
 
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
@@ -356,6 +374,27 @@ def get_posts(request):
         if not isinstance(query_result, (list, tuple)):
             query_result = [query_result]
         post = query_result[0]
+
+        # the response should not include deleted posts which do not break the structure of threads (these are deleted posts which have not received any direct or indirect non-deleted answer)
+        ignore_this_post = False
+        if deleted == 'false' and post.is_tombstone == True:
+            if len(post.children) == 0:
+                ignore_this_post = True
+            else:
+                all_children_are_deleted_and_have_no_children = True
+                for child in post.children:
+                    if child.is_tombstone == False or len(child.children) > 0:
+                        all_children_are_deleted_and_have_no_children = False
+                        break
+                if all_children_are_deleted_and_have_no_children == True:
+                    ignore_this_post = True
+                else:
+                    # TODO: here we know we have to do recursion and can't avoid it: look for non-deleted (direct or indirect) children, and if there is none, we can set ignore_this_post = True
+                    ignore_this_post = False
+        if ignore_this_post:
+            continue
+
+
         if user_id != Everyone:
             viewpost = post.id in read_posts
             likedpost = liked_posts.get(post.id, None)
