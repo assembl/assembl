@@ -26,10 +26,12 @@ var defaultGrowlSettings = {
     stackup_spacing: 10
 };
 
-var showBottomGrowl = function(growl_reason, msg){
-  $.bootstrapGrowl(msg, _.extend(defaultGrowlSettings, {
+var showBottomGrowl = function(growl_reason, msg, settings){
+  var mergedSettings = _.extend(defaultGrowlSettings, {
     type: growl_reason
-    }));
+  });
+  mergedSettings = _.extend(mergedSettings, settings);
+  $.bootstrapGrowl(msg, mergedSettings);
 };
 
 module.exports = {

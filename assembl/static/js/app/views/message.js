@@ -1547,6 +1547,8 @@ var MessageView = Marionette.LayoutView.extend({
 
   onDeleteMessageClick: function(ev){
     var that = this;
+    // We could try to minimize context switching for the user, by scrolling the viewport to the message the user wants to delete, as soon as the confirmation popin opens, using this line of code:
+    // that.messageListView.scrollToMessage(that.model, false, false);
     
     var onSubmit = function(ev){
       var analytics = Analytics.getInstance();
@@ -1562,15 +1564,21 @@ var MessageView = Marionette.LayoutView.extend({
       ).then(function(data) {
         Growl.showBottomGrowl(
           Growl.GrowlReason.SUCCESS,
-          i18n.gettext('Message has been successfully deleted.')
+          i18n.gettext('Message has been successfully deleted.'),
+          { delay: 12000 }
         );
+
         // Refresh the messageList
         that.messageListView.render();
-        that.messageListView.showMessageById(that.model.id);
+        setTimeout(function(){
+          that.messageListView.showMessageById(that.model.id, null, true, false);
+        }, 500);
+        
       }).catch(function(e) {
         Growl.showBottomGrowl(
           Growl.GrowlReason.ERROR,
-          i18n.gettext('Error: Message could not be deleted.')
+          i18n.gettext('Error: Message could not be deleted.'),
+          { delay: 12000 }
         );
       });
     };

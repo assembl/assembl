@@ -74,13 +74,14 @@ var MessageDeletedByUserView = Marionette.LayoutView.extend({
   },
 
   onRender: function(){
+    this.$el.attr("id", "message-" + this.model.get('@id'));
+    
     if (this.template == "#tmpl-loader") {
       return {};
     }
 
     this.renderAuthor();
 
-    this.$el.attr("id", "message-" + this.model.get('@id'));
     this.$el.addClass(this.model.get('@type'));
 
     this.$el.removeClass('unread').addClass('read');
