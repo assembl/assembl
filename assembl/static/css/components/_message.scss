@@ -634,6 +634,10 @@ $previewNumLines: 4;
   }
 }
 
+.message-deleted > .message-body {
+  color: $txtGray1;
+}
+
 .message-translation {
   color: $txtGray2;
 

@@ -31,7 +31,8 @@ var Marionette = require('../shims/marionette.js'),
     LangString = require('../models/langstring.js'),
     IdeaContentLink = require('../models/ideaContentLink.js'),
     ConfirmModal = require('./confirmModal.js'),
-    Growl = require('../utils/growl.js');
+    Growl = require('../utils/growl.js'),
+    MessageModel = require('../models/message.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10,
@@ -396,7 +397,6 @@ var MessageView = Marionette.LayoutView.extend({
   modelEvents: {
       'replacedBy':'onReplaced',
       'change:like_count':'renderLikeCount',
-      'change:publication_state': 'renderPublicationState',
       'change':'guardedRender',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
   },
@@ -760,22 +760,12 @@ var MessageView = Marionette.LayoutView.extend({
         return {};
     }
 
-    if (this.isMessageDeleted && this.isMessageDeleted.state === true) {
-      var view,
-          MessageDeletedByUserView = require('./messageDeletedByUser.js'),
-          MessageDeletedByAdminView = require('./messageDeletedByAdmin.js');
-      
-      if (this.isMessageDeleted.condition === 'admin'){
-        view = new MessageDeletedByAdminView();
-        this.$el.html(view.render().el);
-      }
-
-      else {
-        view = new MessageDeletedByUserView();
-        this.$el.html(view.render().el);
-      }
+    var publication_state = this.model.get('publication_state');
+    if ( publication_state && publication_state in MessageModel.DeletedPublicationStates ){
+      // This message is deleted, so it should not be displayed using the regular Message view, but using the MessageDeletedByUser or MessageDeletedByAdmin view.
+      // Code runs into this case when the user has just deleted a message, and its messageFamily is going to re-render it using the correct MessageDeletedByUser or MessageDeletedByAdmin view.
+      return;
     }
-
     else {
       
       var that = this,
@@ -1574,7 +1564,9 @@ var MessageView = Marionette.LayoutView.extend({
           Growl.GrowlReason.SUCCESS,
           i18n.gettext('Message has been successfully deleted.')
         );
-        // TODO: Refresh the messageList
+        // Refresh the messageList
+        that.messageListView.render();
+        that.messageListView.showMessageById(that.model.id);
       }).catch(function(e) {
         Growl.showBottomGrowl(
           Growl.GrowlReason.ERROR,
@@ -1589,21 +1581,6 @@ var MessageView = Marionette.LayoutView.extend({
       onSubmit: onSubmit,
     });
     Assembl.slider.show(confirm);
-  },
-
-  /**
-   * Model event method that will re-render only if the message was
-   * set to be deleted.
-   */
-  renderPublicationState: function(ev){
-    if (this.model.get('publication_state') === 'DELETED_BY_USER') {
-      this.isMessageDeleted = {state: true, condition: 'user'};
-      this.guardedRender();
-    }
-    else if (this.model.get('publication_state') === 'DELETED_BY_ADMIN') {
-      this.isMessageDeleted = {state: true, condition: 'admin'}
-      this.guardedRender();
-    }
   },
 
   onShowTranslationClick: function(ev){

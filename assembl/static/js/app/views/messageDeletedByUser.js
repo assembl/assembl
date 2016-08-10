@@ -5,52 +5,112 @@
  */
 
 var Marionette = require('../shims/marionette.js'),
-    Raven = require('raven-js'),
-    Backbone = require('backbone'),
-    _ = require('underscore'),
-    Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Permissions = require('../utils/permissions.js'),
-    scrollUtils = require('../utils/scrollUtils.js'),
-    MessageSendView = require('./messageSend.js'),
-    MessagesInProgress = require('../objects/messagesInProgress.js'),
-    CollectionManager = require('../common/collectionManager.js'),
-    PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     $ = require('jquery'),
-    Promise = require('bluebird'),
-    messageExport = require('./messageExportModal.js'),
-    AgentViews = require('./agent.js'),
-    Types = require('../utils/types.js'),
-    AttachmentViews = require('./attachments.js'),
-    MessageModerationOptionsView = require('./messageModerationOptions.js'),
-    MessageTranslationView = require('./messageTranslationQuestion.js'),
-    Analytics = require('../internal_modules/analytics/dispatcher.js'),
-    Genie = require('../utils/genieEffect.js'),
-    IdeaClassificationOnMessageView = require('./ideaClassificationOnMessage.js'),
-    LangString = require('../models/langstring.js'),
-    IdeaContentLink = require('../models/ideaContentLink.js'),
-    ConfirmModal = require('./confirmModal.js'),
-    Growl = require('../utils/growl.js'),
-    MessageView = require('./message.js');
+    AgentViews = require('./agent.js');
 
 
-
+// TODO: show ideas associated to the deleted message, using IdeaClassificationNameListView (e.g. which idea the message was top posted in, or to the conversation associated to which ideas does it reply to)
 /**
  * @class app.views.message.MessageDeletedByUserView
  */
-//var MessageDeletedByUserView = MessageView.extend({
 var MessageDeletedByUserView = Marionette.LayoutView.extend({
   constructor: function MessageDeletedByUserView() {
-    //MessageView.apply(this, arguments);
     Marionette.LayoutView.apply(this, arguments);
   },
+  className: 'message message-deleted',
 
-  template: _.template(i18n.gettext("This message has been deleted by its author.")),
+  template: "#tmpl-loader",
+
+  ui: {
+    avatar: ".js_avatarContainer",
+    name: ".js_nameContainer"
+  },
+
+  regions: {
+    avatar: "@ui.avatar",
+    name: "@ui.name"
+  },
+
+  subject: "",
+  body: i18n.gettext("This message has been deleted by its author."),
+
+  initialize: function(options) {
+    var that = this;
+
+    if ("subject" in options){
+      this.subject = options.subject;
+    }
+
+    if ("body" in options){
+      this.body = options.body;
+    }
+
+    this.messageListView = options.messageListView;
+    this.messageFamilyView = options.messageFamilyView;
+    this.viewStyle = this.messageListView.getTargetMessageViewStyleFromMessageListConfig(this);
+
+
+    this.model.getCreatorPromise().then(function(creator){
+      if(!that.isViewDestroyed()) {
+        that.creator = creator;
+        that.template = "#tmpl-messageDeletedByUser";
+        that.render();
+      }
+    });
+  },
+
+  renderAuthor: function() {
+    var agentAvatarView = new AgentViews.AgentAvatarView({
+      model: this.creator
+    });
+    this.avatar.show(agentAvatarView);
+    var agentNameView = new AgentViews.AgentNameView({
+      model: this.creator
+    });
+    this.name.show(agentNameView);
+  },
+
+  onRender: function(){
+    if (this.template == "#tmpl-loader") {
+      return {};
+    }
+
+    this.renderAuthor();
+
+    this.$el.attr("id", "message-" + this.model.get('@id'));
+    this.$el.addClass(this.model.get('@type'));
+
+    this.$el.removeClass('unread').addClass('read');
+
+    this.$(".message-subject").addClass('hidden');
+  },
 
   loadAnnotations: function(){
     // empty, needed because called by messageList
-  }
+  },
+
+  serializeData: function() {
+    return {
+      message: this.model,
+      messageListView: this.messageListView,
+      viewStyle: this.viewStyle,
+      creator: this.creator,
+      parentId: this.model.get('parentId'),
+      subject: this.subject,
+      body: this.body,
+      bodyFormatClass: "body_format_text_plain",
+      messageBodyId: Ctx.ANNOTATOR_MESSAGE_BODY_ID_PREFIX + this.model.get('@id'),
+      isHoisted: false,
+      ctx: Ctx,
+      i18n: i18n,
+      user_can_see_email: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
+      user_is_connected: !Ctx.getCurrentUser().isUnknownUser(),
+      read: true // we could use this.model.get('read') but read/unread status is not very important for deleted messages and we don't want to emphasize on this message if it's unread
+    };
+  },
 });
 
 module.exports = MessageDeletedByUserView;

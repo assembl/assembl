@@ -153,6 +153,11 @@ var MessageFamilyView = Marionette.ItemView.extend({
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
     var messageViewClass = MessageView;
+    var messageViewOptions = {
+      model: this.model,
+      messageListView: this.messageListView,
+      messageFamilyView: this
+    };
     if (!this.model.isInstance(Types.POST)) {
       console.error("not a post?");
     }
@@ -171,11 +176,7 @@ var MessageFamilyView = Marionette.ItemView.extend({
       }
     }
 
-    this._messageView = new messageViewClass({
-      model: this.model,
-      messageListView: this.messageListView,
-      messageFamilyView: this
-    });
+    this._messageView = new messageViewClass(messageViewOptions);
 
     this._messageView.render();
     this.messageListView.renderedMessageViewsCurrent[this.model.id] = this._messageView;
