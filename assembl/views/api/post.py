@@ -369,28 +369,30 @@ def get_posts(request):
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
 
+
+    def post_and_its_whole_line_of_descent_are_deleted(post):
+        if not post.is_tombstone:
+            return False
+        children = post.children
+        if len(children) == 0:
+            return True
+        for child in children:
+            if not post_and_its_whole_line_of_descent_are_deleted(child):
+                return False
+        return True
+
     for query_result in posts:
         score, viewpost, likedpost = None, None, None
         if not isinstance(query_result, (list, tuple)):
             query_result = [query_result]
         post = query_result[0]
 
-        # the response should not include deleted posts which do not break the structure of threads (these are deleted posts which have not received any direct or indirect non-deleted answer)
+        # The response should not include deleted posts which do not break the structure of threads (these are deleted posts which have not received any direct or indirect non-deleted answer)
+        # Look for non-deleted (direct or indirect) children, and if there is none, we know that removing it from the results will not break the structure
+        # TODO: use recursion at the SQL query level instead
         ignore_this_post = False
-        if deleted == 'false' and post.is_tombstone == True:
-            if len(post.children) == 0:
-                ignore_this_post = True
-            else:
-                all_children_are_deleted_and_have_no_children = True
-                for child in post.children:
-                    if child.is_tombstone == False or len(child.children) > 0:
-                        all_children_are_deleted_and_have_no_children = False
-                        break
-                if all_children_are_deleted_and_have_no_children == True:
-                    ignore_this_post = True
-                else:
-                    # TODO: here we know we have to do recursion and can't avoid it: look for non-deleted (direct or indirect) children, and if there is none, we can set ignore_this_post = True
-                    ignore_this_post = False
+        if deleted == 'false' and post_and_its_whole_line_of_descent_are_deleted(post):
+            ignore_this_post = True
         if ignore_this_post:
             continue
 
