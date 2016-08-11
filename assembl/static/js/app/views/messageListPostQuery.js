@@ -379,7 +379,8 @@ var PostQuery = function() {
     this.getResultMessageStructureCollectionPromise = function() {
       // The "deleted messages" filter needs a "all message structure collection" which is different from the default one (because the default one may not include all deleted messages)
       // Maybe we should use a Subset of the getAllMessageStructureCollectionPromise instead
-      if ( "only_deleted_posts" in this._query ){
+      // TODO: Have a more generic mecanism than a list of ifs. For example add a usesNonStandardMessageStructure boolean method in AbstractPostFilter
+      if ( ("only_deleted_posts" in this._query) || ("also_deleted_posts" in this._query) ){
         var url = Ctx.getApiUrl('posts');
         var params = {"view": "id_only"};
         _.each(this._query, function(filter) {

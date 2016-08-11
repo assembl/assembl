@@ -705,29 +705,77 @@ _.extend(FilterPostIsPostedSinceLastSynthesis.prototype, {
   });
 
 
-// TODO FIXME: Find why when this filter si activated, delete messages do not show in the messageList, even though the API v1 call returns the correct list of deleted messages.
-function FilterPostIsDeleted() {
-    AbstractFilterBooleanValue.call(this);
-  }
+// TODO: Make it impossible in the UI to have both FilterPostIsDeleted and FilterPostIsDeletedOrNot filters active at the same time.
 
-FilterPostIsDeleted.prototype = Object.create(AbstractFilterBooleanValue.prototype);
+function FilterPostIsDeleted() {
+  AbstractFilterSingleValue.call(this);
+}
+
+FilterPostIsDeleted.prototype = Object.create(AbstractFilterSingleValue.prototype);
 _.extend(FilterPostIsDeleted.prototype, {
-    getId: function() {
-      return 'only_deleted_posts';
-    },
-    getImplicitValuePromise: function() {
-      return Promise.resolve(true);
-    },
-    getServerParam: function() {
-      return 'deleted';
-    },
-    getLabelPromise: function() {
-      return Promise.resolve(i18n.gettext('Deleted messages'));
-    },
-    getHelpText: function() {
-      return i18n.gettext('Only include messages that have been deleted.');
-    }
-  });
+  getId: function() {
+    return 'only_deleted_posts';
+  },
+  getImplicitValuePromise: function() {
+      return Promise.resolve('true');
+  },
+  getServerParam: function() {
+    return 'deleted';
+  },
+  getLabelPromise: function() {
+    return Promise.resolve(i18n.gettext('Deleted messages'));
+  },
+  getHelpText: function() {
+    return i18n.gettext('Only include messages that have been deleted (by their author or by an administrator).');
+  },
+  getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
+    return Promise.resolve("");
+  },
+  getFilterDescriptionStringPromise: function(individualValuesButtonsPromises){
+    var that = this;
+    return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+      return that.getLabelPromise().then(function(label) {
+        return label + individualValuesButtons.join('');
+      });
+    });
+  }
+});
+
+// TODO: Why does the activation of this filter create an infinite loading, crashing the browser?
+
+function FilterPostIsDeletedOrNot() {
+  AbstractFilterSingleValue.call(this);
+}
+
+FilterPostIsDeletedOrNot.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsDeletedOrNot.prototype, {
+  getId: function() {
+    return 'also_deleted_posts';
+  },
+  getImplicitValuePromise: function() {
+      return Promise.resolve('any');
+  },
+  getServerParam: function() {
+    return 'deleted';
+  },
+  getLabelPromise: function() {
+    return Promise.resolve(i18n.gettext('Show also deleted messages'));
+  },
+  getHelpText: function() {
+    return i18n.gettext('Also include messages that have been deleted (by their author or by an administrator).');
+  },
+  getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
+    return Promise.resolve("");
+  },
+  getFilterDescriptionStringPromise: function(individualValuesButtonsPromises){
+    var that = this;
+    return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+      return that.getLabelPromise().then(function(label) {
+        return label + individualValuesButtons.join('');
+      });
+    });
+  }
+});
 
 
   
@@ -747,7 +795,8 @@ var availableFilters = {
     POST_IS_FROM_SELF: FilterPostIsOwnPost,
     POST_REPONDS_TO: FilterPostReplyToUser,
     POST_REPONDS_TO_ME: FilterPostReplyToMe,
-    POST_IS_DELETED: FilterPostIsDeleted
+    POST_IS_DELETED: FilterPostIsDeleted,
+    POST_IS_DELETED_OR_NOT: FilterPostIsDeletedOrNot
   };
 
 module.exports = availableFilters;
