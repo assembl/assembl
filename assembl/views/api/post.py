@@ -205,19 +205,28 @@ def get_posts(request):
 
 
     # v3
+    # deleted = request.GET.get('deleted', None)
+    # if deleted is None:
+    #     if not ids:
+    #         deleted = 'false'
+    #     else:
+    #         deleted = 'any'
+
+    # if deleted == 'true':
+    #     posts = posts.filter(PostClass.not_tombstone_condition())
+    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
+    # end v3
+
+    # v4
     deleted = request.GET.get('deleted', None)
     if deleted is None:
         if not ids:
             deleted = 'false'
         else:
             deleted = 'any'
-
-    if deleted == 'true':
-        posts = posts.filter(PostClass.not_tombstone_condition())
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
-    # end v3
-
-
+    #if deleted != 'false' and deleted != 'true' and deleted != 'any':
+    #    deleted = 'false'
+    # end v4
 
     if root_idea_id:
         related = Idea.get_related_posts_query_c(
@@ -381,6 +390,17 @@ def get_posts(request):
                 return False
         return True
 
+    def post_or_one_of_line_of_descent_is_deleted(post):
+        if post.is_tombstone:
+            return True
+        children = post.children
+        if len(children) == 0:
+            return False
+        for child in children:
+            if post_or_one_of_line_of_descent_is_deleted(child):
+                return True
+        return False
+
     for query_result in posts:
         score, viewpost, likedpost = None, None, None
         if not isinstance(query_result, (list, tuple)):
@@ -391,8 +411,12 @@ def get_posts(request):
         # Look for non-deleted (direct or indirect) children, and if there is none, we know that removing it from the results will not break the structure
         # TODO: use recursion at the SQL query level instead
         ignore_this_post = False
-        if deleted == 'false' and post_and_its_whole_line_of_descent_are_deleted(post):
-            ignore_this_post = True
+        if deleted == 'false':
+            if post_and_its_whole_line_of_descent_are_deleted(post):
+                ignore_this_post = True
+        elif deleted == 'true':
+            if not post_or_one_of_line_of_descent_is_deleted(post):
+                ignore_this_post = True
         if ignore_this_post:
             continue
 

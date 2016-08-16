@@ -375,7 +375,7 @@ var MessageView = Marionette.LayoutView.extend({
       Promise.join(
           this.model.getCreatorPromise(),
           this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
-          this.model.collection.collectionManager.getMessageFullModelPromise(this.model.id),
+          this.model.collection.collectionManager.getMessageFullModelPromise(this.model.id, Promise.resolve(this.model.collection)),
           function(creator, ulp, messageFullModel) {
             //Not doing anything with messageFullModel, this.model is already
             //the right link, we just want the content of the model updated

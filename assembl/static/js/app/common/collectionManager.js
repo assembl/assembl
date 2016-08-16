@@ -344,7 +344,7 @@ var CollectionManager = Marionette.Object.extend({
    * @returns {Promise}
    * @function app.common.collectionManager.CollectionManager.getMessageFullModelRequestWorker
   */
-  getMessageFullModelRequestWorker: function(collectionManager) {
+  getMessageFullModelRequestWorker: function(collectionManager, messagesStructureCollectionPromise) {
       this.collectionManager = collectionManager,
       this.requests = this.collectionManager._messageFullModelRequests,
 
@@ -412,8 +412,10 @@ var CollectionManager = Marionette.Object.extend({
       this.executeRequest = function() {
 
         var that = this,
-            allMessageStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise(),
             ids = [];
+        if ( messagesStructureCollectionPromise === undefined ){
+          messagesStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise();
+        }
         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
           console.log("executeRequest fired, unregistering worker from collection Manager");
         }
@@ -427,7 +429,7 @@ var CollectionManager = Marionette.Object.extend({
             ids.push(id);
           }
         });
-        allMessageStructureCollectionPromise.then(function(allMessageStructureCollection) {
+        messagesStructureCollectionPromise.then(function(allMessageStructureCollection) {
           var PostQuery = require('../views/messageListPostQuery'),
               postQuery = new PostQuery(),
               viewDef = 'default';
@@ -492,9 +494,11 @@ var CollectionManager = Marionette.Object.extend({
    * @returns {Promise}
    * @function app.common.collectionManager.CollectionManager.getMessageFullModelPromise
    */
-  getMessageFullModelPromise: function(id) {
-    var that = this,
-        allMessageStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
+  getMessageFullModelPromise: function(id, messagesStructureCollectionPromise) {
+    var that = this;
+    if ( messagesStructureCollectionPromise === undefined ){
+      messagesStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
+    }
         
     if (!id) {
       var msg = "getMessageFullModelPromise(): Tried to request full message model with a falsy id.";
@@ -502,7 +506,7 @@ var CollectionManager = Marionette.Object.extend({
       return Promise.reject(msg);
     }
 
-    return allMessageStructureCollectionPromise.then(function(allMessageStructureCollection) {
+    return messagesStructureCollectionPromise.then(function(allMessageStructureCollection) {
       var structureModel = allMessageStructureCollection.get(id);
 
       if (structureModel) {
@@ -519,7 +523,7 @@ var CollectionManager = Marionette.Object.extend({
           }
 
           if (that._waitingWorker === undefined) {
-            that._waitingWorker = new that.getMessageFullModelRequestWorker(that);
+            that._waitingWorker = new that.getMessageFullModelRequestWorker(that, messagesStructureCollectionPromise);
           }
 
           return that._waitingWorker.addRequest(id);
