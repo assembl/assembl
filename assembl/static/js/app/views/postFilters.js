@@ -127,6 +127,10 @@ AbstractFilter.prototype = {
      * faster */
     getClientSideImplementation: function() {
       throw new Error("RESERVED FOR FUTURE USE");
+    },
+
+    getIncompatibleFiltersIds: function() {
+      return [];
     }
   }
 
@@ -538,6 +542,9 @@ _.extend(FilterPostIsUnread.prototype, {
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages you haven\'t read yet, or you manually marked unread.');
+    },
+    getIncompatibleFiltersIds: function(){
+      return ["is_read_post"];
     }
   });
 
@@ -558,6 +565,9 @@ _.extend(FilterPostIsRead.prototype, {
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that have previously been marked read.');
+    },
+    getIncompatibleFiltersIds: function(){
+      return ["is_unread_post"];
     }
   });
 
@@ -726,7 +736,7 @@ _.extend(FilterPostIsDeleted.prototype, {
     return Promise.resolve(i18n.gettext('Deleted messages'));
   },
   getHelpText: function() {
-    return i18n.gettext('Only include messages that have been deleted (by their author or by an administrator).');
+    return i18n.gettext('Only include messages that have been deleted (by their author or by an administrator), and their ancestors.');
   },
   getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
     return Promise.resolve("");
@@ -738,6 +748,9 @@ _.extend(FilterPostIsDeleted.prototype, {
         return label + individualValuesButtons.join('');
       });
     });
+  },
+  getIncompatibleFiltersIds: function(){
+    return ["also_deleted_posts"];
   }
 });
 
@@ -774,6 +787,9 @@ _.extend(FilterPostIsDeletedOrNot.prototype, {
         return label + individualValuesButtons.join('');
       });
     });
+  },
+  getIncompatibleFiltersIds: function(){
+    return ["only_deleted_posts"];
   }
 });
 

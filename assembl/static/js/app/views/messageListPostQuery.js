@@ -129,7 +129,8 @@ var PostQuery = function() {
      */
     this.addFilter = function(filterDef, value) {
       //console.log("addFilter called with: ", filterDef.name, value);
-      var retval = true,
+      var that = this,
+          retval = true,
           valueWasReplaced = false,
           filter = null,
           candidate_filter = new filterDef(),
@@ -154,13 +155,25 @@ var PostQuery = function() {
         filter = this._query[filterId];
       }
       else {
+        // if there are filters which are incompatible with the one we are going to add, remove them
+        var incompatibleFilters = candidate_filter.getIncompatibleFiltersIds();
+        if ( _.isArray(incompatibleFilters) && incompatibleFilters.length ){
+          _.each(
+            incompatibleFilters,
+            function(id){
+              delete that._query[id];
+            }
+          );
+          that.invalidateResults();
+        }
+
         // Append the new filter instance
-        filter = candidate_filter
+        filter = candidate_filter;
         this._query[filterId] = filter;
       }
       
       if (filter) {
-        retval = filter.addValue(value)
+        retval = filter.addValue(value);
         if (retval) {
           this.invalidateResults();
         }
