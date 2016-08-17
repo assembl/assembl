@@ -7,7 +7,7 @@ from pyramid.security import authenticated_userid
 
 from assembl.auth import P_READ, P_MODERATE, P_DELETE_POST, P_DELETE_MY_POST
 from assembl.auth.util import get_permissions
-from assembl.models import Content, Post, SynthesisPost, User
+from assembl.models import Content, Post, SynthesisPost, User, Extract
 from assembl.models.post import PublicationStates
 from ..traversal import InstanceContext, CollectionContext
 from . import (
@@ -52,21 +52,29 @@ def delete_post_instance(request):
     instance = ctx._instance
 
     allowed = False
-    
-    if user_id == instance.creator_id and P_DELETE_MY_POST in permissions:
+    if (user_id == instance.creator_id and P_DELETE_MY_POST in permissions) or (P_DELETE_POST in permissions):
         allowed = True
-        instance.publication_state = PublicationStates.DELETED_BY_USER
-        instance.is_tombstone = True
-
-    elif P_DELETE_POST in permissions:
-        allowed = True
-        instance.publication_state = PublicationStates.DELETED_BY_ADMIN
-        instance.is_tombstone = True
-
     if not allowed:
         raise HTTPUnauthorized()
 
-    return {"result":"Post has been successfully deleted."}
+    # Remove extracts associated to this post
+    extracts_to_remove = instance.db.query(Extract).filter(Extract.content_id == instance.id).all()
+    number_of_extracts = len(extracts_to_remove)
+    for extract in extracts_to_remove:
+        extract.delete()
+
+    
+    if user_id == instance.creator_id and P_DELETE_MY_POST in permissions:
+        instance.publication_state = PublicationStates.DELETED_BY_USER
+    elif P_DELETE_POST in permissions:
+        instance.publication_state = PublicationStates.DELETED_BY_ADMIN
+
+    instance.is_tombstone = True
+
+    return {
+        "result": "Post has been successfully deleted.",
+        "removed_extracts": number_of_extracts
+    }
 
 
 @view_config(context=InstanceContext, request_method='GET',
