@@ -21,6 +21,8 @@ var Assembl = require('../app.js'),
     CollectionManager = require('../common/collectionManager.js'),
     AssemblPanel = require('./assemblPanel.js'),
     Marionette = require('../shims/marionette.js'),
+    AttachmentViews = require('./attachments.js'),
+    AttachmentModels = require('../models/attachments.js'),
     $ = require('jquery'),
     _ = require('underscore'),
     Promise = require('bluebird');
@@ -48,6 +50,7 @@ var IdeaPanel = AssemblPanel.extend({
       this.model = this.getGroupState().get('currentIdea');
     }
 
+    this.attachmentCollection = this.model.get('attachments');
     collectionManager.getAllWidgetsPromise();
 
     var pref = Ctx.getPreferences();
@@ -94,6 +97,8 @@ var IdeaPanel = AssemblPanel.extend({
     'announcement': '.ideaPanel-announcement-region',
     'widgetsSection': '.js_ideaPanel-section-widgets',
     'adminSection': '.js_ideaPanel-section-admin',
+    'attachmentButton': '.js_attachment-button',
+    'attachmentImage': '.js_idea-attachment'
   },
   regions: {
     segmentList: ".postitlist",
@@ -104,13 +109,17 @@ var IdeaPanel = AssemblPanel.extend({
     widgetsSeeResultsInteraction: ".ideaPanel-section-see-results",
     announcementRegion: "@ui.announcement",
     regionLongTitle: '@ui.longTitle',
-    regionDescription: '@ui.definition'
+    regionDescription: '@ui.definition',
+    attachmentButton: '@ui.attachmentButton',
+    attachment: '@ui.attachmentImage'
   },
+
   modelEvents: {
     //Do NOT listen to change here
     //'replacedBy': 'onReplaced',
     'change': 'requestRender'
   },
+
   events: {
     'dragstart @ui.postIt': 'onDragStart', //Fired on the element that is the origin of the drag, so when the user starts dragging one of the extracts CURRENTLY listed in the idea
     'dragend @ui.postIt': 'onDragEnd',  //Fired on the element that is the origin of the drag
@@ -189,6 +198,24 @@ var IdeaPanel = AssemblPanel.extend({
         this.getExtractsLabel());
   },
 
+  renderAttachments: function(){
+    var buttonView = new AttachmentViews.AttachmentUploadButtonView({
+      collection: this.attachmentCollection,
+      objectAttachedToModel: this
+    });
+
+    var attachmentView = new AttachmentViews.AttachmentEditUploadView({
+      collection: this.attachmentCollection,
+      target: AttachmentViews.TARGET.IDEA,
+      limits: {
+        count: 1,
+        type: 'image'
+      }
+    })
+    this.attachmentButton.show(buttonView);
+    this.attachment.show(attachmentView);
+  },
+
   serializeData: function() {
     if (Ctx.debugRender) {
       console.log("ideaPanel::serializeData()");
@@ -260,6 +287,8 @@ var IdeaPanel = AssemblPanel.extend({
           return model.get('important');
         });
       }
+
+      this.renderAttachments();
 
       this.getExtractslist();
 
