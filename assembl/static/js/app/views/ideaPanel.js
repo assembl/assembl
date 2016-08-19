@@ -50,7 +50,10 @@ var IdeaPanel = AssemblPanel.extend({
       this.model = this.getGroupState().get('currentIdea');
     }
 
-    this.attachmentCollection = this.model.get('attachments');
+    if (this.model){
+      this.attachmentCollection = this.model.get('attachments');
+    }
+
     collectionManager.getAllWidgetsPromise();
 
     var pref = Ctx.getPreferences();
