@@ -9,6 +9,7 @@ var _ = require('underscore'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js'),
+    Attachment = require('./attachments.js'),
     Permissions = require('../utils/permissions.js');
 /**
  * Idea model
@@ -50,6 +51,12 @@ var IdeaModel = Base.Model.extend({
    */
   parse: function(resp, options) {
     this.adjust_num_read_posts(resp);
+    if (resp.attachments !== undefined){
+      resp.attachments = new Attachment.Collection(resp.attachments, {
+        parse: true,
+        objectAttachedToModel: this
+      })
+    }
     return Base.Model.prototype.parse.apply(this, arguments);
   },
   /**
