@@ -199,21 +199,30 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   renderAttachments: function(){
-    var buttonView = new AttachmentViews.AttachmentUploadButtonView({
-      collection: this.attachmentCollection,
-      objectAttachedToModel: this
-    });
+    var user = Ctx.getCurrentUser();
+    if (user.can(Permissions.ADMIN_DISCUSSION)){
+      var buttonView = new AttachmentViews.AttachmentUploadButtonView({
+        collection: this.attachmentCollection,
+        objectAttachedToModel: this
+      });
 
-    var attachmentView = new AttachmentViews.AttachmentEditUploadView({
-      collection: this.attachmentCollection,
-      target: AttachmentViews.TARGET.IDEA,
-      limits: {
-        count: 1,
-        type: 'image'
-      }
-    })
-    this.attachmentButton.show(buttonView);
-    this.attachment.show(attachmentView);
+      var attachmentView = new AttachmentViews.AttachmentEditUploadView({
+        collection: this.attachmentCollection,
+        target: AttachmentViews.TARGET.IDEA,
+        limits: {
+          count: 1,
+          type: 'image'
+        }
+      })
+      this.attachmentButton.show(buttonView);
+      this.attachment.show(attachmentView);
+    }
+    else {
+      var attachmentView = new AttachmentViews.AttachmentView({
+        collection: this.attachmentCollection
+      });
+      this.attachment.show(attachmentView);
+    }
   },
 
   serializeData: function() {
