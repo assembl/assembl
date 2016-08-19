@@ -130,7 +130,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     this.parentView = options.parent ? options.parent : null;
     var that = this;
     this.extrasAdded = {};
-    _.each(this.extras, function(v,k){
+    _.each(that.extras, function(v,k){
       that.extrasAdded[k] = false;
     });
   },
@@ -173,7 +173,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
 
   _updateExtrasCompleted: function(){
     var that = this;
-    _.each(this.extras, function(v, k){
+    _.each(that.extras, function(v, k){
       that.extrasAdded[k] = true;
     });
   },
@@ -196,7 +196,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     });
 
     if (this.extras) {
-      _.each(this.extras, function(v,k){
+      _.each(that.extras, function(v,k){
         if (!that.extrasAdded[k]) {
           purposesHtml.push(v);
         }
@@ -276,8 +276,27 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
  */
 var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   initialize: function(options){
-    this.parentView = options.parent;
     this.limits = options.limits || {};
+    AttachmentFileEditableView.prototype.initialize.call(this, options);
+  },
+
+  _checkUploadFileLimit: function(fileList){
+    if ((this.limits.count !== null) && (_.isNumber(this.limits.count)) ){
+      if (fileList.length > this.limit.count) {
+        return fileList.slice(0, this.limit.count -1);
+      }
+    }
+    return fileList;
+  },
+
+  _checkUploadTypeLimit: function(file){
+    if ((this.limit.type !== null) && (_.isString(this.limit.type)) ){
+      if (file.type.contains(this.limit.type)){
+        return file;
+      }
+      else throw new Error("Cannot upload file of type ", file.type);
+    }
+    else return file;
   },
 });
 
@@ -513,63 +532,26 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
     this.onFileUpload(e);
   },
 
-  _checkUploadFileLimit: function(fileList){
-    if ((this.limit.count !== null) && (_.isNumber(this.limit.count)) ){
-      if (fileList.length > this.limit.count) {
-        return fileList.slice(0, this.limit.count -1);
-      }
-    }
-    return fileList;
-  },
-
-  _checkUploadTypeLimit: function(file){
-    if ((this.limit.type !== null) && (_.isString(this.limit.type)) ){
-      if (file.type.contains(this.limit.type)){
-        return file;
-      }
-      else throw new Error("Cannot upload file of type ", file.type);
-    }
-    else return file;
-  },
-
   onFileUpload: function(e){
     var fs = e.target.files,
         that = this;
-    //console.log("A file has been uploaded");
-
-    // fs = this._checkUploadFileLimit(fs);
 
     _.each(fs, function(f){
       //There will be file duplication because the file is already on the DOM if previously added
       
-      //Check for MIME type limits, if a limit exists
-      try {
-        // f = this._checkUploadTypeLimit(f);
+      var d = new Documents.FileModel({
+        name: f.name,
+        mime_type: f.type
+      });
+      d.set('file', f);
 
-        var d = new Documents.FileModel({
-          name: f.name,
-          mime_type: f.type
-        });
-        d.set('file', f);
+      var attachment = new Attachments.Model({
+        document: d,
+        objectAttachedToModel: that.objectAttachedToModel,
+        idCreator: Ctx.getCurrentUser().id
+      });
 
-        var attachment = new Attachments.Model({
-          document: d,
-          objectAttachedToModel: that.objectAttachedToModel,
-          idCreator: Ctx.getCurrentUser().id
-        });
-
-        that.collection.add(attachment);
-      }
-
-      catch (error) {
-        //An unsupported MIME-type has been uploaded
-        //For now, only raise a growl. If a different view must be updated to
-        //reflect image upload change only, then an architecture change is needed
-        Growl.showBottomGrowl(
-          Growl.GrowlReason.ERROR,
-          i18n.sprintf(i18n.gettext("Only %s type is supported"), that.limit.type)
-        );
-      }
+      that.collection.add(attachment);
     });
   }
 });

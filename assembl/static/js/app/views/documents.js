@@ -240,6 +240,7 @@ var AbstractEditView =  AbstractDocumentView.extend({
        *  }, function(resp){ /* resp.handled = true; *\/});
        */
       this.model.save(null, {
+        wait: true,
         success: function(model, resp, options){
           if (!that.isViewDestroyed()){
             that.initalizeCallback();
