@@ -13,7 +13,15 @@ var Marionette = require('../shims/marionette.js'),
     Types = require('../utils/types.js'),
     Attachments = require('../models/attachments.js'),
     Documents = require('../models/documents.js'),
-    DocumentViews = require('./documents.js');
+    DocumentViews = require('./documents.js'),
+    Growl = require('../utils/growl.js');
+
+
+
+const TARGET = {
+  IDEA: 'IDEA',
+  MESSAGE: 'MESSAGE'
+};
 
 /** 
  * Represents the link between an object (ex: Message, Idea) and a remote (url)
@@ -261,6 +269,18 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
 
 });
 
+
+/*
+  The view used for attachments in the idea panel when attachment is editable
+  ie. when the user has the permission to upload a file.
+ */
+var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
+  initialize: function(options){
+    this.parentView = options.parent;
+    this.limits = options.limits || {};
+  },
+});
+
 /*
   Generic view for a file-based attachment that failed to load
  */
@@ -293,6 +313,15 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
 
   initialize: function(options){
     this.parentView = options.parentView ? options.parentView : null;
+    this.limits = options.limits || {};
+  },
+
+  /*
+    To change the kind of view generated dynamically, subclass and
+    override this method to define new behaviour.
+   */
+  getFileEditView: function(){
+    return AttachmentFileEditableView;
   },
 
   getChildView: function(item){
@@ -307,7 +336,7 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
         return AttachmentEditableView
         break;
       case Types.FILE:
-        return AttachmentFileEditableView;
+        return this.getFileEditView();
         break;
       default:
         return new Error("Cannot create a CollectionView with a document of @type: " + d.get('@type'));
@@ -317,18 +346,31 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
 
   childViewOptions: function(){
     return {
-      parent: this
+      parent: this,
+      limits: this.limits
     }
   }
 });
 
 
 /*
+  An editable view for attachments in the idea panel
+ */
+var AttachmentEditableCollectionViewIdeaPanel = AttachmentEditableCollectionView.extend({
+  constructor: function AttachmentEditableCollectionViewIdeaPanel(){
+    AttachmentEditableCollectionView.apply(this, arguments);
+  },
+
+  getFileEditView: function(){
+    return AttachmentFileEditableViewIdeaPanel;
+  }
+
+});
+
+/*
   A contained view that will show attachments
  */
 var AttachmentEditUploadView = Marionette.LayoutView.extend({
-  //This will have a region for the upload button
-  //And a collection view for the collection of entities
 
   constructor: function AttachmentEditUploadView(){
     Marionette.LayoutView.apply(this, arguments);
@@ -348,6 +390,8 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
 
   initialize: function(options){
     this.collection = options.collection;
+    this.target = options.target || TARGET.MESSAGE;
+    this.limits = options.limits;
     //For internal use only. NEVER save this collection to the server!
     this.failedCollection = new Attachments.Collection([],{
       objectAttachedToModel: this.collection.objectAttachedToModel
@@ -357,14 +401,23 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
       throw new Error("Cannot instantiate a DocumentEditUploadView without a collection!");
     }
 
-    this.collectionView = new AttachmentEditableCollectionView({
-      collection: this.collection,
-      parentView: this
-    });
-    this.collectionFailedView = new AttachmentEditableCollectionView({
-      collection: this.failedCollection,
-      parentView: this
-    });
+    var that = this;
+    var createAttachmentEditableCollectionView = function(parent, collection){
+      if (that.target === TARGET.IDEA) {
+        return new AttachmentEditableCollectionViewIdeaPanel({
+          collection: collection,
+          limits: that.limits,
+          parentView: parent
+        });
+      }
+      return new AttachmentEditableCollectionView({
+        collection: collection,
+        parentView: parent
+      });
+    }
+    
+    this.collectionView = createAttachmentEditableCollectionView(this, this.collection);
+    this.collectionFailedView = createAttachmentEditableCollectionView(this, this.failedCollection);
   },
 
   onShow: function(){
@@ -390,7 +443,38 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
 
 });
 
+/*
+  Another collection view displaying all attachment types that an IDEA PANEL can support in an EDITABLE state
+ */
+var AttachmentEditUploadViewModal = Backbone.Modal.extend({
+  template: '#tmpl-modalWithoutIframe',
+  className: 'modal-token-vote-session popin-wrapper',
+  cancelEl: '.close, .js_close',
 
+  ui: {
+    'body': '.js_modal-body'
+  },
+
+  initialize: function(options){
+    this.collection = options.collection;
+  },
+
+  onRender: function(){
+    var resultView = new AttachmentEditUploadView({collection: this.collection, target: TARGET.IDEA});
+    this.$(this.ui.body).html(resultView.render().el);
+  },
+
+  serializeData: function(){
+    return {
+      modal_title: i18n.gettext("Upload an Image to the Idea Panel")
+    }
+  },
+});
+
+
+/*
+  The button view that will be the stand-alone view for the attachment button
+ */
 var AttachmentUploadButtonView = Marionette.ItemView.extend({
   constructor: function AttachmentUploadButtonView(){
     return Marionette.ItemView.apply(this, arguments);
@@ -408,7 +492,8 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
 
   initialize: function(options){
     this.collection = options.collection;
-    this.objectAttachedToModel = options.objectAttachedToModel
+    this.objectAttachedToModel = options.objectAttachedToModel;
+    this.limit = options.limit || {count: null, type: null};
     this.errorCollection = options.errorCollection || null;
     if (!this.collection || !this.objectAttachedToModel){
       return new Error("Cannot instantiate an AttachmentUploadButtonView without passing " +
@@ -428,26 +513,63 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
     this.onFileUpload(e);
   },
 
+  _checkUploadFileLimit: function(fileList){
+    if ((this.limit.count !== null) && (_.isNumber(this.limit.count)) ){
+      if (fileList.length > this.limit.count) {
+        return fileList.slice(0, this.limit.count -1);
+      }
+    }
+    return fileList;
+  },
+
+  _checkUploadTypeLimit: function(file){
+    if ((this.limit.type !== null) && (_.isString(this.limit.type)) ){
+      if (file.type.contains(this.limit.type)){
+        return file;
+      }
+      else throw new Error("Cannot upload file of type ", file.type);
+    }
+    else return file;
+  },
+
   onFileUpload: function(e){
     var fs = e.target.files,
         that = this;
     //console.log("A file has been uploaded");
 
+    // fs = this._checkUploadFileLimit(fs);
+
     _.each(fs, function(f){
       //There will be file duplication because the file is already on the DOM if previously added
-      var d = new Documents.FileModel({
-        name: f.name,
-        mime_type: f.type
-      });
-      d.set('file', f);
+      
+      //Check for MIME type limits, if a limit exists
+      try {
+        // f = this._checkUploadTypeLimit(f);
 
-      var attachment = new Attachments.Model({
-        document: d,
-        objectAttachedToModel: that.objectAttachedToModel,
-        idCreator: Ctx.getCurrentUser().id
-      });
+        var d = new Documents.FileModel({
+          name: f.name,
+          mime_type: f.type
+        });
+        d.set('file', f);
 
-      that.collection.add(attachment);
+        var attachment = new Attachments.Model({
+          document: d,
+          objectAttachedToModel: that.objectAttachedToModel,
+          idCreator: Ctx.getCurrentUser().id
+        });
+
+        that.collection.add(attachment);
+      }
+
+      catch (error) {
+        //An unsupported MIME-type has been uploaded
+        //For now, only raise a growl. If a different view must be updated to
+        //reflect image upload change only, then an architecture change is needed
+        Growl.showBottomGrowl(
+          Growl.GrowlReason.ERROR,
+          i18n.sprintf(i18n.gettext("Only %s type is supported"), that.limit.type)
+        );
+      }
     });
   }
 });
@@ -457,5 +579,6 @@ module.exports = module.exports = {
     AttachmentView: AttachmentView,
     AttachmentEditableCollectionView: AttachmentEditableCollectionView,
     AttachmentUploadButtonView: AttachmentUploadButtonView,
-    AttachmentEditUploadView: AttachmentEditUploadView
+    AttachmentEditUploadView: AttachmentEditUploadView,
+    TARGET: TARGET
   };
