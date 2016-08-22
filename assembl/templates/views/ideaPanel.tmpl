@@ -4,14 +4,13 @@
 
 <div class="panel-body">
     <% if( idea ) { %>
-      <div class="js_idea-attachment"></div>
+      
       <div class="ideaPanel-shorttitle panel-content-title" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
-
-      <fieldset class="panel-section ideaPanel-section-actions">
-          <div>{{ showShareButton() }}</div>
-          <div class='js_attachment-button'></div>
-      </fieldset>
-
+      
+      <div class='attachment-panel-idea js_attachment-button'></div>
+      
+      <div class="attachment-img-ideapanel js_idea-attachment"></div>
+      
       <fieldset class="js_ideaPanel-section-widgets panel-section ideaPanel-section-widgets hidden">
           <div class="section-title">
             <i class="icon icon-voting-day"></i><span class="title-text">{{ gettext('Voting session') }}</span>
@@ -51,6 +50,10 @@
           {#<% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
             <div class="ideaPanel-comment"></div>
           <% } %>#}
+      </fieldset>
+
+      <fieldset class="share-button panel-section">
+        <div>{{ showShareButton() }}</div>
       </fieldset>
 
       {# section contributor #}

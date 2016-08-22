@@ -33,3 +33,44 @@
   max-width: 100%;
   max-height: 300px;
 }
+
+.attachment-img-ideapanel{
+  margin: 48px 0 0 0;
+  .fileAttachmentEditable{
+    p{
+      display:none;
+    }
+    .dropdown-toggle{
+      &:hover{
+        text-decoration:none;
+      }
+      color:$txtGray1;
+      .dropdown-label{
+        line-height: 40px;
+      }
+    }
+  }
+  .embedded-image-preview{
+    width:100%;
+  }
+  .attachmentDocumentEmbeed{
+    margin:0!important;
+  }
+  .dropdown{
+    float:right;
+  }
+  .dropdown-menu{
+    right: 0!important;
+    left: inherit!important;
+    top: 38px!important;
+  }
+}
+
+.attachment-panel-idea{
+  right: 10px;
+  position: absolute;
+}
+
+#pDebug{
+  display:none;
+}
