@@ -206,7 +206,7 @@ var IdeaPanel = AssemblPanel.extend({
     if (user.can(Permissions.ADMIN_DISCUSSION)){
       var buttonView = new AttachmentViews.AttachmentUploadButtonView({
         collection: this.attachmentCollection,
-        objectAttachedToModel: this
+        objectAttachedToModel: this.model
       });
 
       var attachmentView = new AttachmentViews.AttachmentEditUploadView({
