@@ -279,27 +279,39 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
 var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   initialize: function(options){
     this.limits = options.limits || {};
+    var doc = this.model.getDocument();
+    this.listenToOnce(doc, 'sync', this.onDocumentSave);
     AttachmentFileEditableView.prototype.initialize.call(this, options);
   },
 
-  _checkUploadFileLimit: function(fileList){
+  isCountLimitCorrect: function(){
     if ((this.limits.count !== null) && (_.isNumber(this.limits.count)) ){
-      if (fileList.length > this.limit.count) {
-        return fileList.slice(0, this.limit.count -1);
+      if (this.parentView.collection.length > this.limits.count) {
+        return false;
       }
     }
-    return fileList;
+    return true;
   },
 
-  _checkUploadTypeLimit: function(file){
-    if ((this.limit.type !== null) && (_.isString(this.limit.type)) ){
-      if (file.type.contains(this.limit.type)){
-        return file;
-      }
-      else throw new Error("Cannot upload file of type ", file.type);
-    }
-    else return file;
+  getCorrectCountedCollection: function(){
+    return this.parentView.collection.slice(0, this.limits.count -1);
   },
+
+
+  isTypeLimitCorrect: function(){
+    if ((this.limits.type !== null) && (_.isString(this.limits.type)) ){
+      if ( !(this.model.get('mime_type').contains(this.limits.type)) ){
+        return false;
+      }
+    }
+    return true;
+  },
+
+  onDocumentSave: function(documentModel, resp, options){
+    //Save the attachment model as well, as in the idea panel, there is no confirmation
+    //to save the attachment
+    this.model.save();
+  }
 });
 
 /*

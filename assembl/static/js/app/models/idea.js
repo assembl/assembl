@@ -59,6 +59,11 @@ var IdeaModel = Base.Model.extend({
     }
     return Base.Model.prototype.parse.apply(this, arguments);
   },
+
+  getApiV2Url: function() {
+    return Ctx.getApiV2DiscussionUrl('/ideas/'+this.getNumericId());
+  },
+
   /**
    * @member {string} app.models.idea.IdeaModel.urlRoot
    */
