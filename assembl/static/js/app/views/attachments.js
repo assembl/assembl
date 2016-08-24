@@ -279,22 +279,16 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
 var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   initialize: function(options){
     this.limits = options.limits || {};
+
+    //Check the Type. If is not type of the limit, delete and remove from collection
+    if (!this.isTypeLimitCorrect()){
+      
+    }
+
+    //Save the attachment as soons as the document is saved
     var doc = this.model.getDocument();
     this.listenToOnce(doc, 'sync', this.onDocumentSave);
     AttachmentFileEditableView.prototype.initialize.call(this, options);
-  },
-
-  isCountLimitCorrect: function(){
-    if ((this.limits.count !== null) && (_.isNumber(this.limits.count)) ){
-      if (this.parentView.collection.length > this.limits.count) {
-        return false;
-      }
-    }
-    return true;
-  },
-
-  getCorrectCountedCollection: function(){
-    return this.parentView.collection.slice(0, this.limits.count -1);
   },
 
 
@@ -526,7 +520,7 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
   initialize: function(options){
     this.collection = options.collection;
     this.objectAttachedToModel = options.objectAttachedToModel;
-    this.limit = options.limit || {count: null, type: null};
+    this.limits = options.limits || {count: null, type: null};
     this.errorCollection = options.errorCollection || null;
     if (!this.collection || !this.objectAttachedToModel){
       return new Error("Cannot instantiate an AttachmentUploadButtonView without passing " +
@@ -546,9 +540,26 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
     this.onFileUpload(e);
   },
 
+  isCountLimitCorrect: function(collection){
+    if ((this.limits.count !== null) && (_.isNumber(this.limits.count)) ){
+      if (collection.length > this.limits.count) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  getCorrectCountedCollection: function(collection){
+    return collection.slice(0, this.limits.count -1);
+  },
+
   onFileUpload: function(e){
     var fs = e.target.files,
         that = this;
+
+    if (!this.isCountLimitCorrect(fs)){
+      fs = this.getCorrectCountedCollection(fs);
+    }
 
     _.each(fs, function(f){
       //There will be file duplication because the file is already on the DOM if previously added

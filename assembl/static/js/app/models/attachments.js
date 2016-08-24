@@ -214,8 +214,12 @@ var AttachmentModel = Base.Model.extend({
         that = this;
     return d.destroy({
       success: function(model, response){
-        console.log('in document destroy success callback');
         return Base.Model.prototype.destroy.call(that);
+      },
+      error: function(model, response){
+        console.warn("Could NOT destroy document model id " + d.id
+                     + "\nContinuing to destroy attachment id " + this.id);
+        return Base.Model.prototype.destroy.call(that); 
       }
     });
   },
