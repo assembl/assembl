@@ -216,7 +216,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     html += '<span class="dropdown-label">';
     html += Attachments.attachmentPurposeTypes[this.model.get('attachmentPurpose')].label;
     html += '</span>';
-    html += '<span class="icon-arrowdown"></span></a>';
+    html += '<span class="icon-delete"></span></a>';
     html += '<ul class="dropdown-menu">';
     html += purposesList ? purposesList.join(''): "";
     html += '</ul>';

@@ -2,15 +2,10 @@
 // ===========================
 
 .ideaPanel {
-  .panel-body {
-    padding: 16px 16px
+  .panel-body::-webkit-scrollbar {
+    overflow: visible;
+    display: none;
   }
-}
-
-.ideaPanel-shorttitle {
-}
-
-.ideaPanel-section-actions{
 }
 
 .ideaPanel-section-widgets{
@@ -128,4 +123,11 @@
       font-size: 16px;
     }
   }
+}
+
+.content-ideapanel{
+  top:250px;
+  padding:16px;
+  position: absolute;
+  background-color: #FFF;
 }

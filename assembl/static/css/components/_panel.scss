@@ -350,15 +350,10 @@ _:-ms-input-placeholder, :root .popin-body .groupBody.editable .groupPanel heade
   .groupPanel.is-dragover & {
     background-color: $yellow;
   }
-  .ideaPanel-shorttitle > div{
-    width:90%;
-  }
   .panel-content-title {
     font-size: 19px;
     padding: ($section_spacing)-16px 0px $section_spacing 0px; //-16px is to nullify panel content padding, currently defined on ideaPanel
     border-bottom: solid 1px $section_separator_color;
-    position:absolute;
-    width:93%;
   }
   .section-title {
     color: $txtGray2;

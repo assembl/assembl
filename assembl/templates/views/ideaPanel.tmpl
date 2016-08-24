@@ -3,125 +3,130 @@
 {%- endmacro %}
 
 <div class="panel-body">
-    <% if( idea ) { %>
+  
+  <% if( idea ) { %>
       
-      <div class="ideaPanel-shorttitle panel-content-title" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
+  <div class="attachment-img-ideapanel js_idea-attachment"></div>
       
-      <div class='attachment-panel-idea js_attachment-button'></div>
-      
-      <div class="attachment-img-ideapanel js_idea-attachment"></div>
-      
-      <fieldset class="js_ideaPanel-section-widgets panel-section ideaPanel-section-widgets hidden">
-          <div class="section-title">
-            <i class="icon icon-voting-day"></i><span class="title-text">{{ gettext('Voting session') }}</span>
-          </div>
-          <div class="js_ideaPanel-section-access-widgets-region"></div>
-      </fieldset>
+  <div class="content-ideapanel">
+    <div class="ideaPanel-shorttitle panel-content-title" data-toggle="tooltip" title="{{gettext('The name of this idea in the table of ideas')}}"></div>
+    
+    <div class='attachment-panel-idea js_attachment-button'></div>
+    
+    <div class="clear"></div>
+    
+    <fieldset class="js_ideaPanel-section-widgets panel-section ideaPanel-section-widgets hidden">
+        <div class="section-title">
+          <i class="icon icon-voting-day"></i><span class="title-text">{{ gettext('Voting session') }}</span>
+        </div>
+        <div class="js_ideaPanel-section-access-widgets-region"></div>
+    </fieldset>
 
-      <fieldset class="panel-section ideaPanel-section-summary">
-          <div class="section-title">
-            <i class="icon icon-info"></i><span class="title-text">{{ gettext('About this idea') }}</span>
-          </div>
+    <fieldset class="panel-section ideaPanel-section-summary">
+        <div class="section-title">
+          <i class="icon icon-info"></i><span class="title-text">{{ gettext('About this idea') }}</span>
+        </div>
 
-          <% if (canEditNextSynthesis) { %>
-            <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
-              <div class="sub-section-title">{{ gettext('Expression in next synthesis') }}</div>
-            <% } %>
-          <% } %>
-          <div class="ideaPanel-longtitle panel-editablearea js_editLongTitleRegion" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}">
-          </div>
-
+        <% if (canEditNextSynthesis) { %>
           <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
-            <div class="sub-section-title">{{ gettext('Description of this idea') }}</div>
+            <div class="sub-section-title">{{ gettext('Expression in next synthesis') }}</div>
           <% } %>
+        <% } %>
+        <div class="ideaPanel-longtitle panel-editablearea js_editLongTitleRegion" class="mbs" data-toggle="tooltip" title="{{gettext('Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here.')}}">
+        </div>
 
-          <div class="ideaPanel-definition panel-editablearea js_editDefinitionRegion" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
+        <% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
+          <div class="sub-section-title">{{ gettext('Description of this idea') }}</div>
+        <% } %>
+
+        <div class="ideaPanel-definition panel-editablearea js_editDefinitionRegion" data-toggle="tooltip" title="{{gettext('A description of this idea')}}">
+        </div>
+
+        <% if (canEdit) { %>
+          <fieldset class="ideaPanel-section-announcement">
+              <div class="sub-section-title">{{ gettext('Announcement for this idea') }}</div>
+              <div class="ideaPanel-announcement-region hidden"></div>
+          </fieldset>
+        <% } %>
+
+        <p class="text-muted">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
+
+        {#<% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
+          <div class="ideaPanel-comment"></div>
+        <% } %>#}
+    </fieldset>
+
+    <fieldset class="share-button panel-section">
+      <div>{{ showShareButton() }}</div>
+    </fieldset>
+
+    {# section contributor #}
+    <fieldset class="ideaPanel-section-contributors panel-section hidden">
+        <div class="section-title" data-toggle="tooltip" title="{{gettext('Number of participants who contributed messages about this idea or it\'s sub-ideas.')}}">
+           <i class="icon icon-user"></i><span class="title-text"></span>
+        </div>
+        <div class="gr mts contributors"></div>
+    </fieldset>
+
+    {#<fieldset class="panel-section ideaPanel-section-subideas">
+        <legend data-toggle="tooltip" title="{{gettext('The children of this idea.')}}">
+            <span><% print(getSubIdeasLabel(subIdeas)) %></span>
+        </legend>
+        <div class="idealist">
+            <% _.each(subIdeas, function(subIdea, i){ %>
+                <div class='subidea'><% print(subIdea.getShortTitleDisplayText()); %></div>
+            <% }); %>
+        </div>
+    </fieldset>#}
+
+    <fieldset class="panel-section ideaPanel-section-segments">
+        <% if(canAddExtracts){ %>
+          <div class="section-title" data-toggle="tooltip" title="{{gettext('Expressions of this idea in messages or on the web')}}">
+               <i class="icon icon-diamond"></i><span class="js_extractsSummary title-text"><% print(getExtractsLabel()) %></span>
           </div>
-
-          <% if (canEdit) { %>
-            <fieldset class="ideaPanel-section-announcement">
-                <div class="sub-section-title">{{ gettext('Announcement for this idea') }}</div>
-                <div class="ideaPanel-announcement-region hidden"></div>
-            </fieldset>
-          <% } %>
-
-          <p class="text-muted">{% set creationDate = "<%= app.formatDate(idea.get('creationDate')) %>" %}</p>
-
-          {#<% if (Ctx.getCurrentInterfaceType() != Ctx.InterfaceTypes.SIMPLE) { %>
-            <div class="ideaPanel-comment"></div>
-          <% } %>#}
-      </fieldset>
-
-      <fieldset class="share-button panel-section">
-        <div>{{ showShareButton() }}</div>
-      </fieldset>
-
-      {# section contributor #}
-      <fieldset class="ideaPanel-section-contributors panel-section hidden">
-          <div class="section-title" data-toggle="tooltip" title="{{gettext('Number of participants who contributed messages about this idea or it\'s sub-ideas.')}}">
-             <i class="icon icon-user"></i><span class="title-text"></span>
+        <% } else { %>
+          <div class="section-title" data-toggle="tooltip" title="">
+              <i class="icon icon-diamond"></i><span class="js_extractsSummary title-text">{{ gettext('Nuggets are important expressions of this idea in messages or on the web') }}</span>
           </div>
-          <div class="gr mts contributors"></div>
-      </fieldset>
+        <% } %>
 
-      {#<fieldset class="panel-section ideaPanel-section-subideas">
-          <legend data-toggle="tooltip" title="{{gettext('The children of this idea.')}}">
-              <span><% print(getSubIdeasLabel(subIdeas)) %></span>
-          </legend>
-          <div class="idealist">
-              <% _.each(subIdeas, function(subIdea, i){ %>
-                  <div class='subidea'><% print(subIdea.getShortTitleDisplayText()); %></div>
-              <% }); %>
-          </div>
-      </fieldset>#}
+        <div class="postitlist"></div>
 
-      <fieldset class="panel-section ideaPanel-section-segments">
-          <% if(canAddExtracts){ %>
-            <div class="section-title" data-toggle="tooltip" title="{{gettext('Expressions of this idea in messages or on the web')}}">
-                 <i class="icon icon-diamond"></i><span class="js_extractsSummary title-text"><% print(getExtractsLabel()) %></span>
-            </div>
-          <% } else { %>
-            <div class="section-title" data-toggle="tooltip" title="">
-                <i class="icon icon-diamond"></i><span class="js_extractsSummary title-text">{{ gettext('Nuggets are important expressions of this idea in messages or on the web') }}</span>
-            </div>
-          <% } %>
+        <% if (canAddExtracts) { %>
+        <div class="mbs">
+            <p>{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
+        </div>
+        <% } %>
 
-          <div class="postitlist"></div>
+    </fieldset>
 
-          <% if (canAddExtracts) { %>
-          <div class="mbs">
-              <p>{{ gettext('Add extracts by dragging them in this panel from the clipboard or messages') }}</p>
-          </div>
-          <% } %>
+    <fieldset class="panel-section js_ideaPanel-section-admin ideaPanel-section-admin hidden">
+        <ul>
+            <% if (canEditExtracts) { %>
+              <li>
+                  <a href="#" class="js_ideaPanel-clearBtn" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
+              </li>
+            <% } %>
+            <% if (canDelete) { %>
+              <li>
+                  <a href="#" class="js_ideaPanel-deleteBtn" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
+              </li>
+            <% } %>
+            <div class="ideaPanel-section-conf-widgets"></div>
+            <div class="ideaPanel-section-see-results"></div>
+            <div class="ideaPanel-section-create-widgets"></div>
+        </ul>
+    </fieldset>
 
-      </fieldset>
-
-      <fieldset class="panel-section js_ideaPanel-section-admin ideaPanel-section-admin hidden">
-          <ul>
-              <% if (canEditExtracts) { %>
-                <li>
-                    <a href="#" class="js_ideaPanel-clearBtn" data-toggle="tooltip" title="{{gettext('Remove all extracts from this idea.  Removed extracts will be available in your clipboard')}}">{{ gettext('Remove all extracts') }}</a>
-                </li>
-              <% } %>
-              <% if (canDelete) { %>
-                <li>
-                    <a href="#" class="js_ideaPanel-deleteBtn" data-toggle="tooltip" title="{{gettext('Delete this idea completely')}}">{{ gettext('Delete idea') }}</a>
-                </li>
-              <% } %>
-              <div class="ideaPanel-section-conf-widgets"></div>
-              <div class="ideaPanel-section-see-results"></div>
-              <div class="ideaPanel-section-create-widgets"></div>
-          </ul>
-      </fieldset>
-
-    <% } else { %>
-      <div class="emptyIdeaPanelContainer phs">
-          <div class="emptyIdeaPanelContent">
-              <p class="tac emptyIdeaIcon"><i class="icon icon-idea"></i></p>
-              <p class="helperIdea tac">{{ gettext('No idea selected') }}</p>
-              <p class="tac mvl">{{ gettext('Choose an idea in the Table of ideas to explore the discussion or close this panel as you will have open')}}</p>
-              <p class="emptyIdeaIcon2 tac mtxl"><i class="icon icon-imported"></i></p>
-          </div>
-      </div>
+  <% } else { %>
+    <div class="emptyIdeaPanelContainer phs">
+        <div class="emptyIdeaPanelContent">
+            <p class="tac emptyIdeaIcon"><i class="icon icon-idea"></i></p>
+            <p class="helperIdea tac">{{ gettext('No idea selected') }}</p>
+            <p class="tac mvl">{{ gettext('Choose an idea in the Table of ideas to explore the discussion or close this panel as you will have open')}}</p>
+            <p class="emptyIdeaIcon2 tac mtxl"><i class="icon icon-imported"></i></p>
+        </div>
+    </div>
     <% } %>
+  </div>
 </div>
