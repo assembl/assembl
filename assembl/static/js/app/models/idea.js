@@ -50,11 +50,12 @@ var IdeaModel = Base.Model.extend({
    * @function app.models.idea.IdeaModel.parse
    */
   parse: function(resp, options) {
+    var that = this;
     this.adjust_num_read_posts(resp);
     if (resp.attachments !== undefined){
       resp.attachments = new Attachment.Collection(resp.attachments, {
         parse: true,
-        objectAttachedToModel: this
+        objectAttachedToModel: that
       })
     }
     return Base.Model.prototype.parse.apply(this, arguments);

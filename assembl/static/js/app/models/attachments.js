@@ -286,7 +286,12 @@ var AttachmentCollection = Base.Collection.extend({
     }
     else {
       this.objectAttachedToModel = options.objectAttachedToModel;
+      _.each(models, function(model){
+        model.objectAttachedToModel = options.objectAttachedToModel; 
+      });
     }
+    
+    this.limits = options.limits || {};
   },
   /**
    * Compares dates between 2 documents
@@ -318,6 +323,7 @@ var AttachmentCollection = Base.Collection.extend({
     }
     else { return 0; }
   },
+  
   /**
    * Helper method to destroy the models in a collection
    * @param  {Array|Backbone.Model} models    Model or Array of models  
@@ -371,7 +377,97 @@ var AttachmentCollection = Base.Collection.extend({
   */ 
   saveAll: function(options){
     return this.save(this.models, options);
-  }
+  },
+
+  /*
+    takes an array of models and makes validation check
+   */
+  addValidation: function(models){
+    if (!this.isTypeLimitCorrect(models)){
+      _.each(models, function(model){
+        model.typeLimitReached = true;
+        model.trigger("limit", "type");
+      });
+      //Remove the naughty models from the collection
+      models = _.filter(models, function(model){
+        return model.typeLimitReached !== true;
+      });
+    }
+    //If there is a count limit, override the old data (remove them first, though)
+    //The removal is done in a FIFO format
+    if (!this.isCountLimitCorrect(models)){
+      var correctedNumberModelsCollection = this.getCorrectCountedCollection(models);
+      if (this.length > models.length){
+        for (var i in correctedNumberModelsCollection.count){
+          var modelToRemove = this.shift();
+          modelToRemove.destroy();
+        }
+      }
+      else {
+        this.each(function(model){
+          model.destroy();
+        });
+      }
+      return correctedNumberModelsCollection.collection;
+    }
+
+    //If it passes both checks, return it
+    return models;
+  },
+
+  /*
+    Override the add operation to set limits, if any exists
+   */
+  add: function(models, options){
+    if (!this.limits){
+      return Base.Collection.prototype.add.apply(this, arguments);
+    }
+
+    if (!(_.isArray(models))){
+      models = [models];
+    }
+    models = this.addValidation(models);
+    return Base.Collection.prototype.add.call(this, models, options);
+  },
+
+  isTypeLimitCorrect: function(model){
+    if ((this.limits.type !== null) && (_.isString(this.limits.type)) ){
+      if ( !(model.get('mime_type').contains(this.limits.type)) ){
+        return false;
+      }
+    }
+    return true;
+  },
+
+  isCountLimitCorrect: function(models){
+    if ((this.limits.count !== null) && (_.isNumber(this.limits.count)) ){
+      if (_.isArray(models)){
+        if (this.length + models.length > this.limits.count){
+          return false;
+        }
+      }
+      //Plus one because models has a count of 1 if it is not an array
+      if (this.length + 1 > this.limits.count) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  getCorrectCountedCollection: function(models){
+    if (_.isArray(models)){
+      if (models.length > this.limits.count){
+        return {
+          collection: models.slice(0, this.limits.count-1),
+          count: this.collection.length  
+        }
+      }
+    }
+    return {
+      collection: [models],
+      count: 1
+    }
+  },
 });
 
 module.exports = {

@@ -280,25 +280,10 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   initialize: function(options){
     this.limits = options.limits || {};
 
-    //Check the Type. If is not type of the limit, delete and remove from collection
-    if (!this.isTypeLimitCorrect()){
-      
-    }
-
     //Save the attachment as soons as the document is saved
     var doc = this.model.getDocument();
     this.listenToOnce(doc, 'sync', this.onDocumentSave);
     AttachmentFileEditableView.prototype.initialize.call(this, options);
-  },
-
-
-  isTypeLimitCorrect: function(){
-    if ((this.limits.type !== null) && (_.isString(this.limits.type)) ){
-      if ( !(this.model.get('mime_type').contains(this.limits.type)) ){
-        return false;
-      }
-    }
-    return true;
   },
 
   onDocumentSave: function(documentModel, resp, options){
@@ -540,26 +525,9 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
     this.onFileUpload(e);
   },
 
-  isCountLimitCorrect: function(collection){
-    if ((this.limits.count !== null) && (_.isNumber(this.limits.count)) ){
-      if (collection.length > this.limits.count) {
-        return false;
-      }
-    }
-    return true;
-  },
-
-  getCorrectCountedCollection: function(collection){
-    return collection.slice(0, this.limits.count -1);
-  },
-
   onFileUpload: function(e){
     var fs = e.target.files,
         that = this;
-
-    if (!this.isCountLimitCorrect(fs)){
-      fs = this.getCorrectCountedCollection(fs);
-    }
 
     _.each(fs, function(f){
       //There will be file duplication because the file is already on the DOM if previously added
