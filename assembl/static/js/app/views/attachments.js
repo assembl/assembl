@@ -191,10 +191,11 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   _renderAttachmentPurpose: function(){
     var purposesHtml = [],
         that = this;
-    _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
-      purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
-    });
-
+    if(this.model.get('@type') !== 'IdeaAttachment'){
+      _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
+        purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
+      });
+    }
     if (this.extras) {
       _.each(that.extras, function(v,k){
         if (!that.extrasAdded[k]) {
@@ -216,7 +217,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     html += '<span class="dropdown-label">';
     html += Attachments.attachmentPurposeTypes[this.model.get('attachmentPurpose')].label;
     html += '</span>';
-    html += '<span class="icon-delete"></span></a>';
+    html += '<span class="icon-arrowdown"></span></a>';
     html += '<ul class="dropdown-menu">';
     html += purposesList ? purposesList.join(''): "";
     html += '</ul>';
@@ -237,6 +238,8 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     //The model is not persisted if it is in an EditableView, so this does not call DELETE
     //to the backend
     this.model.destroy();
+    var domObject = $(".content-ideapanel");
+    domObject.css('top', '0px');
   },
 
 });
@@ -545,6 +548,8 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
       });
 
       that.collection.add(attachment);
+      var domObject = $(".content-ideapanel");
+      domObject.css('top', '250px');
     });
   }
 });

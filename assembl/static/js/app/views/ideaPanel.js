@@ -144,10 +144,10 @@ var IdeaPanel = AssemblPanel.extend({
   checkContentHeight: function(){
     var domObject = this.$(".content-ideapanel");
     if (this.model.get('attachments') && (this.model.get('attachments').length > 0)){
-      domObject.css('top', '0px');
+      domObject.css('top', '250px');
     }
     else {
-      domObject.css('top', '250px');
+      domObject.css('top', '0px');
     }
   },
 
