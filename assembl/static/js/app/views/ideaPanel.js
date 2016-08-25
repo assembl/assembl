@@ -137,6 +137,20 @@ var IdeaPanel = AssemblPanel.extend({
     'click .js_openTargetInPopOver': 'openTargetInPopOver'
   },
 
+  /*
+    Manages the spacing at the top of the ideaPanel, depending on the panel having an
+    attachment or not.
+   */
+  checkContentHeight: function(){
+    var domObject = this.$(".content-ideapanel");
+    if (this.model.get('attachments') && (this.model.get('attachments').length > 0)){
+      domObject.css('top', '0px');
+    }
+    else {
+      domObject.css('top', '250px');
+    }
+  },
+
   requestRender: function() {
     var that = this;
 
@@ -299,6 +313,8 @@ var IdeaPanel = AssemblPanel.extend({
           return model.get('important');
         });
       }
+
+      this.checkContentHeight();
 
       this.renderAttachments();
 
