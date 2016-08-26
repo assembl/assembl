@@ -676,7 +676,7 @@ _.extend(FilterPostIsPostedBeforeDate.prototype, {
 
 
 
-  
+
 function FilterPostIsPostedSinceLastSynthesis() {
     AbstractFilterSingleValue.call(this);
   }
@@ -715,7 +715,7 @@ _.extend(FilterPostIsPostedSinceLastSynthesis.prototype, {
   });
 
 
-// TODO: Make it impossible in the UI to have both FilterPostIsDeleted and FilterPostIsDeletedOrNot filters active at the same time.
+
 
 function FilterPostIsDeleted() {
   AbstractFilterSingleValue.call(this);
@@ -754,7 +754,8 @@ _.extend(FilterPostIsDeleted.prototype, {
   }
 });
 
-// TODO: Why does the activation of this filter create an infinite loading, crashing the browser?
+
+
 
 function FilterPostIsDeletedOrNot() {
   AbstractFilterSingleValue.call(this);
