@@ -11,6 +11,7 @@ Download a copy of a remote database to develop locally
 -------------------------------------------------------
 
 .. code:: sh
+
     fab env_name_of_remote_env database_download
     fab env_dev database_restore
     # Make sure the database username and passwords in local.ini match the ones of the database you just downloaded
