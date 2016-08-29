@@ -84,6 +84,7 @@ $theme_context_title_color: $th_local_white;
 $theme_navigation_bg: $th_local_purple2;
 $theme_navigation_menu_bg: $th_local_purple4;
 $theme_navigation_menu_bg_active: $th_local_purple3;
+$theme_navigation_menu_bg_hover: $theme_navigation_menu_bg_active;
 $theme_navigation_menu_separator: $th_local_purple2;
 $theme_navigation_icon_color: $th_local_white;
 $theme_navigation_icon_color_active: $th_local_white;
@@ -98,6 +99,7 @@ $theme_item_selected_secondary_color: $th_local_purple5;
 
 //Message list
 $theme_messagelist_bg_color: $th_local_gray7;
+$theme_messagesend_bg_color: $th_local_gray4;
 //The color of the icons of the action buttons on messages
 $theme_message_icon_color: $th_local_purple5;
 
