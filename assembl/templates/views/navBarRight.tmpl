@@ -57,7 +57,7 @@
         </div>
         {% else %}
           {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-            <a href="{{discussion.get_url()}}/login" class="btn btn-default btn-sm">{{ gettext('Sign in') }}</a>
+            <a href="{{discussion.get_url()}}/login" class="btn btn-default btn-sm sign-in-link">{{ gettext('Sign in') }}</a>
           {% endif %}
         {% endif %}
     </li>

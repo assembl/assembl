@@ -159,6 +159,13 @@ $textProfile: #515151;
     .joinDiscussion {
 
     }
+
+    .sign-in-link {
+      display: inline;
+      vertical-align: middle;
+      line-height: $theme_header_height;
+      height: 100%;
+    }
   }
 }
 
