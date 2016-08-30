@@ -1,11 +1,14 @@
-/* ASSEMBL THEME */
+/* 
+  ASSEMBL DEFAULT THEME
+  If you want to create a new theme, it is recommended that your theme SCSS file uses @import of this file, so if a default theme variable is not overriden in your theme (for example a variable which would have been added in Assembl code after the creation of your theme), the SCSS will still compile, and the variable will have the default value.
+ */
 
 /*
   Variables
   Ranked from light -> dark
 
   NEVER refer to these color variables elsewhere in the SCSS files
- */
+*/
 $th_local_white: #FFFFFF;
 $th_local_black: #000000;
 
