@@ -292,6 +292,7 @@ var AttachmentCollection = Base.Collection.extend({
     }
     
     this.limits = options.limits || {};
+    this.isFailed = options.failed || false;
   },
   /**
    * Compares dates between 2 documents
@@ -386,6 +387,10 @@ var AttachmentCollection = Base.Collection.extend({
     //If there is a count limit, override the old data (remove them first, though)
     //The removal is done in a FIFO format
     
+    if (!models){
+      return [];
+    }
+
     var correctedNumberModelsCollection = models,
         that = this;
 
@@ -425,7 +430,7 @@ var AttachmentCollection = Base.Collection.extend({
     Override the add operation to set limits, if any exists
    */
   add: function(models, options){
-    if (!this.limits){
+    if (!this.limits || this.isFailed){
       return Base.Collection.prototype.add.apply(this, arguments);
     }
 

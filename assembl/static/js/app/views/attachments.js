@@ -409,7 +409,8 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
     this.limits = options.limits;
     //For internal use only. NEVER save this collection to the server!
     this.failedCollection = new Attachments.Collection([],{
-      objectAttachedToModel: this.collection.objectAttachedToModel
+      objectAttachedToModel: this.collection.objectAttachedToModel,
+      failed: true
     });
 
     if (!this.collection) {
