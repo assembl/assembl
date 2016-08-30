@@ -280,7 +280,7 @@ var LangString = Base.Model.extend({
    */
   original: function() {
     var originals = this.get("entries").filter(function(e) {return !e.isMachineTranslation();});
-    if ( originals.length == 1 ){
+    if ( originals.length === 1 ){
       return originals[0];
     }
     else if (originals.length > 1) {

@@ -76,7 +76,7 @@ var MessageDeletedByUserView = Marionette.LayoutView.extend({
   onRender: function(){
     this.$el.attr("id", "message-" + this.model.get('@id'));
     
-    if (this.template == "#tmpl-loader") {
+    if (this.template === "#tmpl-loader") {
       return {};
     }
 

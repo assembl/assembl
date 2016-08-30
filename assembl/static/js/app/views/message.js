@@ -606,7 +606,8 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
 
-    if (this.model.get("publication_state") == "MODERATED_TEXT_ON_DEMAND" || this.model.get("publication_state") == "MODERATED_TEXT_NEVER_AVAILABLE") {
+    var publication_state = this.model.get('publication_state');
+    if ( publication_state && publication_state in MessageModel.ModeratedPublicationStates ){
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
       //@TODO: should the body be this._body??
@@ -652,7 +653,7 @@ var MessageView = Marionette.LayoutView.extend({
       html_export_url = Ctx.getApiV2DiscussionUrl("posts/" + this.model.getNumericId() + "/html_export");
     }
 
-    var user_can_delete_this_message = ( Ctx.getCurrentUserId() == Ctx.extractId(this.model.get('idCreator')) && Ctx.getCurrentUser().can(Permissions.DELETE_MY_POST) ) || Ctx.getCurrentUser().can(Permissions.DELETE_POST);
+    var user_can_delete_this_message = ( Ctx.getCurrentUserId() === Ctx.extractId(this.model.get('idCreator')) && Ctx.getCurrentUser().can(Permissions.DELETE_MY_POST) ) || Ctx.getCurrentUser().can(Permissions.DELETE_POST);
 
     return {
       message: this.model,
@@ -743,8 +744,8 @@ var MessageView = Marionette.LayoutView.extend({
   onBeforeRender: function(){
     this.isCompleteDataLoaded();
     //Check if the message is moderated
-    
-    if (this.model.get('publication_state') == "MODERATED_TEXT_ON_DEMAND" || this.model.get("publication_state") == "MODERATED_TEXT_NEVER_AVAILABLE"){
+    var publication_state = this.model.get('publication_state');
+    if ( publication_state && publication_state in MessageModel.ModeratedPublicationStates ){
       //Naive implemntation. When other publication states are used, update the code here.
       this.moderationOptions.isModerated = true;
       this.moderationOptions.purpose = this.model.get('publication_state');
@@ -882,8 +883,8 @@ var MessageView = Marionette.LayoutView.extend({
       //Translation view should only be shown when the message is in full view or in preview mode. Otherwise,
       //do not show it
       //Also, only the body translation triggers the translation view
-      if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
-          this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
+      if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY ||
+          this.viewStyle === this.availableMessageViewStyles.PREVIEW) {
 
         if (this.canShowTranslation() ) {
           if ( (this.forceTranslationQuestion && !this.hideTranslationQuestion) || (

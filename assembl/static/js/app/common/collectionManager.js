@@ -413,7 +413,7 @@ var CollectionManager = Marionette.Object.extend({
 
         var that = this,
             ids = [];
-        if ( messagesStructureCollectionPromise === undefined ){
+        if ( typeof messagesStructureCollectionPromise === "undefined" ){
           messagesStructureCollectionPromise = this.collectionManager.getAllMessageStructureCollectionPromise();
         }
         if (CollectionManager.prototype.DEBUG_LAZY_LOADING) {
@@ -496,7 +496,7 @@ var CollectionManager = Marionette.Object.extend({
    */
   getMessageFullModelPromise: function(id, messagesStructureCollectionPromise) {
     var that = this;
-    if ( messagesStructureCollectionPromise === undefined ){
+    if ( typeof messagesStructureCollectionPromise === "undefined" ){
       messagesStructureCollectionPromise = this.getAllMessageStructureCollectionPromise();
     }
         
