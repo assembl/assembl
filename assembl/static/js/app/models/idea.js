@@ -55,7 +55,11 @@ var IdeaModel = Base.Model.extend({
     if (resp.attachments !== undefined){
       resp.attachments = new Attachment.Collection(resp.attachments, {
         parse: true,
-        objectAttachedToModel: that
+        objectAttachedToModel: that,
+        limits: {
+          count: 1,
+          type: 'image'
+        }
       })
     }
     return Base.Model.prototype.parse.apply(this, arguments);

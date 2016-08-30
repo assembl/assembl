@@ -548,6 +548,8 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
       });
 
       that.collection.add(attachment);
+
+      //TODO: Wrong place to put this. Use events!
       var domObject = $(".content-ideapanel");
       domObject.css('top', '250px');
     });

@@ -383,20 +383,14 @@ var AttachmentCollection = Base.Collection.extend({
     takes an array of models and makes validation check
    */
   addValidation: function(models){
-    if (!this.isTypeLimitCorrect(models)){
-      _.each(models, function(model){
-        model.typeLimitReached = true;
-        model.trigger("limit", "type");
-      });
-      //Remove the naughty models from the collection
-      models = _.filter(models, function(model){
-        return model.typeLimitReached !== true;
-      });
-    }
     //If there is a count limit, override the old data (remove them first, though)
     //The removal is done in a FIFO format
+    
+    var correctedNumberModelsCollection = models,
+        that = this;
+
     if (!this.isCountLimitCorrect(models)){
-      var correctedNumberModelsCollection = this.getCorrectCountedCollection(models);
+      correctedNumberModelsCollection= this.getCorrectCountedCollection(models);
       if (this.length > models.length){
         for (var i in correctedNumberModelsCollection.count){
           var modelToRemove = this.shift();
@@ -408,9 +402,21 @@ var AttachmentCollection = Base.Collection.extend({
           model.destroy();
         });
       }
-      return correctedNumberModelsCollection.collection;
+
+      correctedNumberModelsCollection = correctedNumberModelsCollection.collection;
     }
 
+    _.each(correctedNumberModelsCollection, function(model){
+      if (!that.isTypeLimitCorrect(model)){
+        model.typeLimitReached = true;
+        model.trigger("limit", "type");
+      }
+    });
+    
+    //Remove the naughty models from the collection
+    models = _.filter(correctedNumberModelsCollection, function(model){
+      return model.typeLimitReached !== true;
+    });
     //If it passes both checks, return it
     return models;
   },
@@ -427,12 +433,21 @@ var AttachmentCollection = Base.Collection.extend({
       models = [models];
     }
     models = this.addValidation(models);
+
+    if (!(models) && (models.length > 0)) {
+      return;  //This might be the wrong operation
+    }
+
     return Base.Collection.prototype.add.call(this, models, options);
   },
 
   isTypeLimitCorrect: function(model){
+    if (model === undefined || (_.isArray(model) && _.isEmpty(model))){
+      //Not relevant
+      return true;
+    }
     if ((this.limits.type !== null) && (_.isString(this.limits.type)) ){
-      if ( !(model.get('mime_type').contains(this.limits.type)) ){
+      if ( !(model.getDocument().get('mime_type').includes(this.limits.type)) ){
         return false;
       }
     }
@@ -440,7 +455,11 @@ var AttachmentCollection = Base.Collection.extend({
   },
 
   isCountLimitCorrect: function(models){
-    if ((this.limits.count !== null) && (_.isNumber(this.limits.count)) ){
+    if (models === undefined || (_.isArray(models) && _.isEmpty(models))){
+      //Not relevant
+      return true;
+    }
+    if ((this.limits.count) && (_.isNumber(this.limits.count)) ){
       if (_.isArray(models)){
         if (this.length + models.length > this.limits.count){
           return false;
