@@ -13,9 +13,7 @@ var Marionette = require('../shims/marionette.js'),
     Types = require('../utils/types.js'),
     Attachments = require('../models/attachments.js'),
     Documents = require('../models/documents.js'),
-    DocumentViews = require('./documents.js'),
-    Growl = require('../utils/growl.js');
-
+    DocumentViews = require('./documents.js');
 
 
 const TARGET = {
@@ -289,10 +287,22 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
     AttachmentFileEditableView.prototype.initialize.call(this, options);
   },
 
+  modelEvents: {
+    'add': 'onAdd'
+  },
+
   onDocumentSave: function(documentModel, resp, options){
     //Save the attachment model as well, as in the idea panel, there is no confirmation
     //to save the attachment
     this.model.save();
+  },
+
+  /*
+    There is a limit of 1 attachment, so this *should* only be called once
+   */
+  onAdd: function(e){
+    var domObject = $(".content-ideapanel");
+    domObject.css('top', '250px');
   }
 });
 
@@ -552,9 +562,6 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
     });
     
     this.collection.add(fs);
-    //TODO: Wrong place to put this. Use events!
-    var domObject = $(".content-ideapanel");
-    domObject.css('top', '250px');
   }
 });
 

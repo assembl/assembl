@@ -11,7 +11,8 @@ var $ = require('jquery'),
     Ctx = require('../common/context.js'),
     Promise = require('bluebird'),
     Types = require('../utils/types.js'),
-    Document = require('../models/documents.js');
+    Document = require('../models/documents.js'),
+    Growl = require('../utils/growl.js');
     
 var attachmentPurposeTypes = {
   /** 
@@ -414,7 +415,10 @@ var AttachmentCollection = Base.Collection.extend({
     _.each(correctedNumberModelsCollection, function(model){
       if (!that.isTypeLimitCorrect(model)){
         model.typeLimitReached = true;
-        model.trigger("limit", "type");
+        Growl.showBottomGrowl(
+          Growl.GrowlReason.ERROR,
+          i18n.gettext('Sorry, only an image type is supported in this upload. Please try again.')
+        );
       }
     });
     
