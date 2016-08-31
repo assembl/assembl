@@ -410,7 +410,7 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
     //For internal use only. NEVER save this collection to the server!
     this.failedCollection = new Attachments.Collection([],{
       objectAttachedToModel: this.collection.objectAttachedToModel,
-      failed: true
+      failed: true //Add the flag, so that attachment does not try to validate the collection
     });
 
     if (!this.collection) {
@@ -533,7 +533,7 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
     var fs = e.target.files,
         that = this;
 
-    _.each(fs, function(f){
+    fs = _.map(fs, function(f){
       //There will be file duplication because the file is already on the DOM if previously added
       
       var d = new Documents.FileModel({
@@ -548,12 +548,13 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
         idCreator: Ctx.getCurrentUser().id
       });
 
-      that.collection.add(attachment);
-
-      //TODO: Wrong place to put this. Use events!
-      var domObject = $(".content-ideapanel");
-      domObject.css('top', '250px');
+      return attachment;  
     });
+    
+    this.collection.add(fs);
+    //TODO: Wrong place to put this. Use events!
+    var domObject = $(".content-ideapanel");
+    domObject.css('top', '250px');
   }
 });
 

@@ -452,8 +452,17 @@ var AttachmentCollection = Base.Collection.extend({
       return true;
     }
     if ((this.limits.type !== null) && (_.isString(this.limits.type)) ){
-      if ( !(model.getDocument().get('mime_type').includes(this.limits.type)) ){
-        return false;
+      //Fucking horrible javascript hack to determine the ClassType. Bloody hell...
+      if (model.constructor === AttachmentModel){
+        if ( !(model.getDocument().get('mime_type').includes(this.limits.type)) ){
+          return false;
+        }
+      }
+      else {
+        //When loading from DB, model is not yet a parsed model.
+        if ( !(model.document['mime_type'].includes(this.limits.type)) ){
+          return false;
+        }
       }
     }
     return true;
@@ -479,11 +488,13 @@ var AttachmentCollection = Base.Collection.extend({
   },
 
   getCorrectCountedCollection: function(models){
+    var that = this;
     if (_.isArray(models)){
       if (models.length > this.limits.count){
+        var modelsToReturn = models.slice(0, this.limits.count);
         return {
-          collection: models.slice(0, this.limits.count-1),
-          count: this.collection.length  
+          collection: modelsToReturn,
+          count: modelsToReturn.length
         }
       }
     }
