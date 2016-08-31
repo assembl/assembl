@@ -277,8 +277,6 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
  */
 var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   initialize: function(options){
-    this.limits = options.limits || {};
-
     //Save the attachment as soons as the document is saved
     var doc = this.model.getDocument();
     this.listenToOnce(doc, 'sync', this.onDocumentSave);
@@ -523,7 +521,7 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
   initialize: function(options){
     this.collection = options.collection;
     this.objectAttachedToModel = options.objectAttachedToModel;
-    this.limits = options.limits || {count: null, type: null};
+    this.limits = options.limits || null;
     this.errorCollection = options.errorCollection || null;
     if (!this.collection || !this.objectAttachedToModel){
       return new Error("Cannot instantiate an AttachmentUploadButtonView without passing " +
@@ -562,10 +560,11 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
         idCreator: Ctx.getCurrentUser().id
       });
 
-      return attachment;  
+      return attachment;
     });
     
     this.collection.add(fs);
+    //Set to the idea model
   }
 });
 

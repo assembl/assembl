@@ -50,10 +50,6 @@ var IdeaPanel = AssemblPanel.extend({
       this.model = this.getGroupState().get('currentIdea');
     }
 
-    if (this.model){
-      this.attachmentCollection = this.model.get('attachments');
-    }
-
     collectionManager.getAllWidgetsPromise();
 
     var pref = Ctx.getPreferences();
@@ -81,17 +77,11 @@ var IdeaPanel = AssemblPanel.extend({
         }
       });
 
-      // this.listenTo(this.attachmentCollection, 'add', function(e){
-      //   if (!this.isViewDestroyed()){
-      //     that.renderAttachmentButton();
-      //   }
-      // });
-
-      // this.listenTo(this.attachmentCollection, 'destroy', function(e){
-      //   if (!this.isViewDestroyed()){
-      //     that.renderAttachmentButton();
-      //   }
-      // });
+      this.listenTo(this.getAttachmentCollection(), 'sync', function(e){
+        if (!this.isViewDestroyed()){
+          that.renderAttachments();
+        }
+      });
 
       if (this.model) {
         //This is a silly hack to go through setIdeaModel properly - benoitg
@@ -193,6 +183,11 @@ var IdeaPanel = AssemblPanel.extend({
     }
   },
 
+  getAttachmentCollection: function(){
+    //Return an actual empty collection instead?
+    return this.model ? this.model.get('attachments') : [];
+  },
+
   /**
    * This is not inside the template because babel wouldn't extract it in
    * the pot file
@@ -228,27 +223,29 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   renderAttachmentButton: function(){
+    var collection = this.getAttachmentCollection();
     var buttonView = new AttachmentViews.AttachmentUploadButtonView({
-      collection: this.attachmentCollection,
-      objectAttachedToModel: this.model
+      collection: collection,
+      objectAttachedToModel: this.model,
+      limits: {
+        count: 1,
+        type: 'image'
+      }
     });
 
-    if (this.attachmentCollection.length === 0) {
+    if (collection.length === 0) {
       this.attachmentButton.show(buttonView);
     }
   },
 
   renderAttachments: function(){
+    var collection = this.getAttachmentCollection();
     var user = Ctx.getCurrentUser();
     if (user.can(Permissions.EDIT_IDEA)){
       
       var attachmentView = new AttachmentViews.AttachmentEditUploadView({
-        collection: this.attachmentCollection,
-        target: AttachmentViews.TARGET.IDEA,
-        limits: {
-          count: 1,
-          type: 'image'
-        }
+        collection: collection,
+        target: AttachmentViews.TARGET.IDEA
       });
 
       this.attachment.show(attachmentView);
@@ -258,7 +255,7 @@ var IdeaPanel = AssemblPanel.extend({
 
     else {
       var attachmentView = new AttachmentViews.AttachmentView({
-        collection: this.attachmentCollection
+        collection: collection
       });
       this.attachment.show(attachmentView);
     }

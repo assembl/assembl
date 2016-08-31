@@ -292,7 +292,10 @@ var AttachmentCollection = Base.Collection.extend({
       });
     }
     
-    this.limits = options.limits || {};
+    /*
+      For attachment collections that will only be storing failed models - those that did not
+      save to the database
+     */
     this.isFailed = options.failed || false;
   },
   /**
@@ -384,10 +387,12 @@ var AttachmentCollection = Base.Collection.extend({
   /*
     takes an array of models and makes validation check
    */
-  addValidation: function(models){
+  addValidation: function(models, limits){
     //If there is a count limit, override the old data (remove them first, though)
     //The removal is done in a FIFO format
     
+    this.limits = limits; //Short term
+
     if (!models){
       return [];
     }
@@ -434,17 +439,22 @@ var AttachmentCollection = Base.Collection.extend({
     Override the add operation to set limits, if any exists
    */
   add: function(models, options){
-    if (!this.limits || this.isFailed){
+
+    if (this.isFailed){
+      //If this is a failed collection, do not do any validation
       return Base.Collection.prototype.add.apply(this, arguments);
     }
 
-    if (!(_.isArray(models))){
-      models = [models];
-    }
-    models = this.addValidation(models);
+    //If a limit is passed into the addition, do validation
+    if ( (options) && ('limits' in options) && (options.limits !== null)) {
+      if (!(_.isArray(models))){
+        models = [models];
+      }
+      models = this.addValidation(models, options.limits);
 
-    if (!(models) && (models.length > 0)) {
-      return;  //This might be the wrong operation
+      // if (!(models) && (models.length > 0)) {
+      //   return;  //This might be the wrong operation
+      // }
     }
 
     return Base.Collection.prototype.add.call(this, models, options);

@@ -55,11 +55,7 @@ var IdeaModel = Base.Model.extend({
     if (resp.attachments !== undefined){
       resp.attachments = new Attachment.Collection(resp.attachments, {
         parse: true,
-        objectAttachedToModel: that,
-        limits: {
-          count: 1,
-          type: 'image'
-        }
+        objectAttachedToModel: that
       })
     }
     return Base.Model.prototype.parse.apply(this, arguments);
@@ -442,10 +438,14 @@ var IdeaModel = Base.Model.extend({
    * Validate the model attributes
    * @function app.models.idea.IdeaModel.validate
    */
-  validate: function(attrs, options) {
+  validate: function(attributes, options) {
     /**
      * check typeof variable
      * */
+     
+     //Add validation for the attachment collection of ideas
+     
+
   }
 });
 /**
