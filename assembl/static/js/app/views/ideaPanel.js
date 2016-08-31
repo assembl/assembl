@@ -81,6 +81,18 @@ var IdeaPanel = AssemblPanel.extend({
         }
       });
 
+      // this.listenTo(this.attachmentCollection, 'add', function(e){
+      //   if (!this.isViewDestroyed()){
+      //     that.renderAttachmentButton();
+      //   }
+      // });
+
+      // this.listenTo(this.attachmentCollection, 'destroy', function(e){
+      //   if (!this.isViewDestroyed()){
+      //     that.renderAttachmentButton();
+      //   }
+      // });
+
       if (this.model) {
         //This is a silly hack to go through setIdeaModel properly - benoitg
         var model = this.model;
@@ -215,14 +227,21 @@ var IdeaPanel = AssemblPanel.extend({
         this.getExtractsLabel());
   },
 
+  renderAttachmentButton: function(){
+    var buttonView = new AttachmentViews.AttachmentUploadButtonView({
+      collection: this.attachmentCollection,
+      objectAttachedToModel: this.model
+    });
+
+    if (this.attachmentCollection.length === 0) {
+      this.attachmentButton.show(buttonView);
+    }
+  },
+
   renderAttachments: function(){
     var user = Ctx.getCurrentUser();
     if (user.can(Permissions.EDIT_IDEA)){
-      var buttonView = new AttachmentViews.AttachmentUploadButtonView({
-        collection: this.attachmentCollection,
-        objectAttachedToModel: this.model
-      });
-
+      
       var attachmentView = new AttachmentViews.AttachmentEditUploadView({
         collection: this.attachmentCollection,
         target: AttachmentViews.TARGET.IDEA,
@@ -230,10 +249,13 @@ var IdeaPanel = AssemblPanel.extend({
           count: 1,
           type: 'image'
         }
-      })
-      this.attachmentButton.show(buttonView);
+      });
+
       this.attachment.show(attachmentView);
+
+      this.renderAttachmentButton();
     }
+
     else {
       var attachmentView = new AttachmentViews.AttachmentView({
         collection: this.attachmentCollection

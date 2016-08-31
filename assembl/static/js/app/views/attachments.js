@@ -236,8 +236,6 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     //The model is not persisted if it is in an EditableView, so this does not call DELETE
     //to the backend
     this.model.destroy();
-    var domObject = $(".content-ideapanel");
-    domObject.css('top', '0px');
   },
 
 });
@@ -288,7 +286,8 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   },
 
   modelEvents: {
-    'add': 'onAdd'
+    'add': 'onAdd',
+    'destroy': 'onDestroy'
   },
 
   onDocumentSave: function(documentModel, resp, options){
@@ -303,6 +302,11 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   onAdd: function(e){
     var domObject = $(".content-ideapanel");
     domObject.css('top', '250px');
+  },
+
+  onDestroy: function(e){
+    var domObject = $(".content-ideapanel");
+    domObject.css('top', '0px');
   }
 });
 
@@ -565,11 +569,20 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
   }
 });
 
+var AttachmentUploadTextView = AttachmentUploadButtonView.extend({
+  constructor: function AttachmentUploadTextView(){
+    AttachmentUploadButtonView.prototype.apply(this, arguments);
+  },
+
+  template: "#tmpl-attachmentText"
+})
+
 module.exports = module.exports = {
     AttachmentEditableView: AttachmentEditableView,
     AttachmentView: AttachmentView,
     AttachmentEditableCollectionView: AttachmentEditableCollectionView,
     AttachmentUploadButtonView: AttachmentUploadButtonView,
+    AttachmentUploadTextView: AttachmentUploadTextView,
     AttachmentEditUploadView: AttachmentEditUploadView,
     TARGET: TARGET
   };
