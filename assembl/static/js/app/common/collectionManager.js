@@ -341,6 +341,7 @@ var CollectionManager = Marionette.Object.extend({
    * - Splits them to respect limits on http get url length
    * - Dispaches the individual promises for each request even if they were actually processed together.
    * @param {Object} collectionManager
+   * @param {Promise} messagesStructureCollectionPromise (optional) A promise containing a structure of messages (messages ids and how they are related to each other, but not necessarily their content), for which you want to download the message contents. Defaults to the general message structure collection promise (collectionManager.getAllMessageStructureCollectionPromise()), which contains all messages except deleted messages which removal does not break the structure. For example, if you want to show in the messageList the presence of all messages including all deleted messages, you need to set this parameter to a promise which contains the structure of absolutely all messages.
    * @returns {Promise}
    * @function app.common.collectionManager.CollectionManager.getMessageFullModelRequestWorker
   */
@@ -491,6 +492,7 @@ var CollectionManager = Marionette.Object.extend({
    * In practice, this model is a member of the proper collection, and requests to the server are optimised and batched together.
    * Primarily used by messages to get the actual body and other information we do not want to eagerly preload.
    * @param {String} id
+   * @param {Promise} messagesStructureCollectionPromise (optional) A promise containing a structure of messages (messages ids and how they are related to each other, but not necessarily their content), for which you want to download the message contents. Defaults to the general message structure collection promise (this.getAllMessageStructureCollectionPromise()), which contains all messages except deleted messages which removal does not break the structure. For example, if you want to show in the messageList the presence of all messages including all deleted messages, you need to set this parameter to a promise which contains the structure of absolutely all messages.
    * @returns {Promise}
    * @function app.common.collectionManager.CollectionManager.getMessageFullModelPromise
    */
@@ -537,6 +539,7 @@ var CollectionManager = Marionette.Object.extend({
 
   },
   /**
+   * TODO: This method seems to not be used anywhere in the code. Remove it or use it. If we use it, add a second parameter messagesStructureCollectionPromise like in getMessageFullModelPromise().
    * Retrieve fully populated models for the list of id's given
    * @param {string[]} ids array of message id's
    * @returns {MessageModel}
