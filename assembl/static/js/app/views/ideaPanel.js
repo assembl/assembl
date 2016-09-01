@@ -184,8 +184,7 @@ var IdeaPanel = AssemblPanel.extend({
   },
 
   getAttachmentCollection: function(){
-    //Return an actual empty collection instead?
-    return this.model ? this.model.get('attachments') : [];
+    return this.model ? this.model.get('attachments') : null;
   },
 
   /**

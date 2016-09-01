@@ -73,11 +73,16 @@ var AbstractDocumentView = Marionette.ItemView.extend({
 
   doLocalEmbed: function(){
     if (this.model.isImageType()){
-      var html = "<a href="+ this.uri +" target=_blank>"
-      html += "<img src=" + this.uri + " class='embedded-image-preview'>"
-      html += "</a>"
+      //Before the model is saved, this.uri is not updated. So update everytime that there is a render!
+      this.uri = this.model.get('external_url');
 
-      this.$el.html(html);
+      if (this.uri){
+        var html = "<a href="+ this.uri +" target=_blank>"
+        html += "<img src=" + this.uri + " class='embedded-image-preview'>"
+        html += "</a>"
+
+        this.$el.html(html);
+      }
     }
     else {
       this.onRenderOembedFail();
@@ -359,7 +364,23 @@ var FileEditView = AbstractEditView.extend({
     else { 
       this.$el.html(string);
     }
-  }
+  },
+
+  doLocalEmbed: function(){
+    if (this.model.isImageType()){
+      //Before the model is saved, this.uri is not updated. So update everytime that there is a render!
+      this.uri = this.model.get('external_url');
+      if (this.uri){
+        //TODO: Use jQuery to create this DOM element. There is a breach if uri is malformed
+        var html = "<img src=" + this.uri + " class='embedded-image-preview'>";
+        this.$el.html(html);
+      }
+    }
+    else {
+      this.onRenderOembedFail();
+    }
+  },
+
 });
 
 
