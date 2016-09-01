@@ -52,5 +52,23 @@ def upgrade(pyramid_env):
 
 
 def downgrade(pyramid_env):
+    # Remove tombstone_date column from content table
     with context.begin_transaction():
         op.drop_column('content', 'tombstone_date')
+
+
+    # Remove P_DELETE_MY_POST and P_DELETE_POST permissions, as well as their appearances in DiscussionPermission table (their activation on roles)
+    from assembl import models as m
+    from assembl.auth import P_DELETE_MY_POST, P_DELETE_POST
+    db = m.get_session_maker()()
+    with transaction.manager:
+        p_delete_my_post = db.query(m.Permission).filter_by(name=P_DELETE_MY_POST).one()
+        p_delete_post = db.query(m.Permission).filter_by(name=P_DELETE_POST).one()
+
+        db.query(m.DiscussionPermission).filter_by(
+            permission_id=p_delete_post.id).delete()
+        db.query(m.DiscussionPermission).filter_by(
+            permission_id=p_delete_my_post.id).delete()
+
+        p_delete_post.delete()
+        p_delete_my_post.delete()

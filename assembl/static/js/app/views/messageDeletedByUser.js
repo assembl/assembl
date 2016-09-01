@@ -40,13 +40,8 @@ var MessageDeletedByUserView = Marionette.LayoutView.extend({
   initialize: function(options) {
     var that = this;
 
-    if ("subject" in options){
-      this.subject = options.subject;
-    }
-
-    if ("body" in options){
-      this.body = options.body;
-    }
+    this.subject = options.subject || null;
+    this.body = options.body || null;
 
     this.messageListView = options.messageListView;
     this.messageFamilyView = options.messageFamilyView;
