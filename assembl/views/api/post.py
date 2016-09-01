@@ -380,6 +380,13 @@ def get_posts(request):
 
 
     def post_and_its_whole_line_of_descent_are_deleted(post):
+        """
+        :returns: True if post and its whole line of descent (direct and indirect answers) are deleted, False otherwise.
+        :rtype: bool
+        :param post: The post you want to analyse
+        :type post: assembl.models.Post
+
+        """
         if not post.is_tombstone:
             return False
         children = post.children
@@ -391,6 +398,13 @@ def get_posts(request):
         return True
 
     def post_or_one_of_line_of_descent_is_deleted(post):
+        """
+        :returns: True if post or one of its line of descent (direct and indirect answers) is deleted, False otherwise.
+        :rtype: bool
+        :param post: The post you want to analyse
+        :type post: assembl.models.Post
+        
+        """
         if post.is_tombstone:
             return True
         children = post.children
