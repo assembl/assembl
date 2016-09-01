@@ -15,6 +15,31 @@ var _ = require('underscore'),
     Permissions = require('../utils/permissions.js'),
     Attachment = require('./attachments.js');
 
+
+var PublicationStates = {
+  DRAFT: "DRAFT",
+  SUBMITTED_IN_EDIT_GRACE_PERIOD: "SUBMITTED_IN_EDIT_GRACE_PERIOD",
+  PUBLISHED: "PUBLISHED",
+  MODERATED_TEXT_ON_DEMAND: "MODERATED_TEXT_ON_DEMAND",
+  MODERATED_TEXT_NEVER_AVAILABLE: "MODERATED_TEXT_NEVER_AVAILABLE",
+  DELETED_BY_USER: "DELETED_BY_USER",
+  DELETED_BY_ADMIN: "DELETED_BY_ADMIN"
+};
+
+var BlockingPublicationStates = {};
+BlockingPublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
+BlockingPublicationStates[PublicationStates.DELETED_BY_USER] = PublicationStates.DELETED_BY_USER;
+BlockingPublicationStates[PublicationStates.DELETED_BY_ADMIN] = PublicationStates.DELETED_BY_ADMIN;
+
+var ModeratedPublicationStates = {};
+ModeratedPublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
+ModeratedPublicationStates[PublicationStates.MODERATED_TEXT_ON_DEMAND] = PublicationStates.MODERATED_TEXT_ON_DEMAND;
+
+var DeletedPublicationStates = {};
+DeletedPublicationStates[PublicationStates.DELETED_BY_USER] = PublicationStates.DELETED_BY_USER;
+DeletedPublicationStates[PublicationStates.DELETED_BY_ADMIN] = PublicationStates.DELETED_BY_ADMIN;
+
+
 /**
  * Message model
  * Frontend model for :py:class:`assembl.models.post.Post`
@@ -46,11 +71,11 @@ var MessageModel = Base.Model.extend({
     checked: false,
     read: false,
     parentId: null,
-    subject: null,
+    subject: LangString.Model.empty,
     like_count: 0,
     liked: false,
     hidden: false,
-    body: null,
+    body: LangString.Model.empty,
     idCreator: null,
     avatarUrl: null,
     date: null,
@@ -58,7 +83,7 @@ var MessageModel = Base.Model.extend({
     attachments: undefined,
     publishes_synthesis_id: null,
     metadata_json: null, // this property needs to exist to display the inspiration source of a message (creativity widget)
-    publication_state: "PUBLISHED",
+    publication_state: PublicationStates.PUBLISHED,
     moderator: null,
     moderation_text: null,
     moderated_on: null,
@@ -73,12 +98,12 @@ var MessageModel = Base.Model.extend({
           );
     }
     if (rawModel.subject !== undefined) {
-        rawModel.subject = new LangString.Model(rawModel.subject, {parse: true});
+      rawModel.subject = new LangString.Model(rawModel.subject, {parse: true});
     }
     if (rawModel.body !== undefined) {
-        rawModel.body = new LangString.Model(rawModel.body, {parse: true});
+      rawModel.body = new LangString.Model(rawModel.body, {parse: true});
     }
-    //console.log("Message Model parse() called, returning:", rawModel.attachments);
+    //console.log("Message Model parse() called, returning:", rawModel);
     return rawModel;
   },
 
@@ -304,7 +329,6 @@ var MessageModel = Base.Model.extend({
       options2.url = this.getApiV2Url();
       return Backbone.sync(method, model, options2);
     }
-    console.log("we are in default case");
     return Backbone.sync(method, model, options);
   },
 
@@ -431,6 +455,10 @@ var MessageCollection = Base.Collection.extend({
 
 module.exports = {
   Model: MessageModel,
-  Collection: MessageCollection
+  Collection: MessageCollection,
+  PublicationStates: PublicationStates,
+  BlockingPublicationStates: BlockingPublicationStates,
+  ModeratedPublicationStates: ModeratedPublicationStates,
+  DeletedPublicationStates: DeletedPublicationStates
 };
 

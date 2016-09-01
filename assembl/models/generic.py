@@ -36,6 +36,7 @@ from ..semantic.namespaces import (
     SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES, FOAF)
 from .discussion import Discussion
 from assembl.views.traversal import AbstractCollectionDefinition
+from ..lib.history_mixin import TombstonableMixin
 
 
 log = logging.getLogger('assembl')
@@ -247,7 +248,7 @@ class ContentSourceIDs(Base):
     message_id_in_source = Column(String(256), nullable=False, index=True)
 
 
-class Content(DiscussionBoundBase):
+class Content(TombstonableMixin, DiscussionBoundBase):
     """
     Content is a polymorphic class to describe what is imported from a Source.
     The body and subject properly belong to the Post but were moved here to
@@ -351,6 +352,9 @@ class Content(DiscussionBoundBase):
         'polymorphic_on': 'type',
         'with_polymorphic': '*'
     }
+
+    def get_subject(self):
+        return self.subject
 
     def get_body(self):
         return self.body

@@ -240,7 +240,23 @@ var LangString = Base.Model.extend({
    * @function app.models.langstrings.LangString.parse
    */
   parse: function(rawModel, options) {
-    rawModel.entries = new LangStringEntryCollection(rawModel.entries, {parse: true});
+    if ( _.isString(rawModel) ){
+      var s = rawModel;
+      rawModel = new LangString({
+        entries: new LangStringEntryCollection([
+          new LangStringEntry({
+            "value": s,
+            "@language": "und"
+          })
+        ])
+      });
+    }
+    else if ( _.isNull(rawModel) || _.isUndefined(rawModel) || _.isEmpty(rawModel) ){
+      rawModel = _.clone(LangString.empty);
+    }
+    else {
+      rawModel.entries = new LangStringEntryCollection(rawModel.entries, {parse: true});
+    }
     return rawModel;
   },
   /**
@@ -264,10 +280,21 @@ var LangString = Base.Model.extend({
    */
   original: function() {
     var originals = this.get("entries").filter(function(e) {return !e.isMachineTranslation();});
-    if (originals.length > 1) {
+    if ( originals.length === 1 ){
+      return originals[0];
+    }
+    else if (originals.length > 1) {
       return this.bestOf(originals);
     }
-    return originals[0];
+    else { // if ( originals.length == 0 ) {
+      if ( this.get("entries").models.length ){
+        return this.get("entries").models[0];
+      }
+      return new LangStringEntry({
+        "value": "",
+        "@language": "zxx"
+      });
+    }
   },
   /**
    * Determines the best body string to use according to various settings

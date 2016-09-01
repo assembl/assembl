@@ -8,6 +8,8 @@ var Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Promise = require('bluebird'),
+    Message = require('../models/message.js'),
+    Raven = require('raven-js'),
     _ = require('underscore');
 
 /**
@@ -127,7 +129,8 @@ var PostQuery = function() {
      */
     this.addFilter = function(filterDef, value) {
       //console.log("addFilter called with: ", filterDef.name, value);
-      var retval = true,
+      var that = this,
+          retval = true,
           valueWasReplaced = false,
           filter = null,
           candidate_filter = new filterDef(),
@@ -152,13 +155,25 @@ var PostQuery = function() {
         filter = this._query[filterId];
       }
       else {
+        // if there are filters which are incompatible with the one we are going to add, remove them
+        var incompatibleFilters = candidate_filter.getIncompatibleFiltersIds();
+        if ( _.isArray(incompatibleFilters) && incompatibleFilters.length ){
+          _.each(
+            incompatibleFilters,
+            function(id){
+              delete that._query[id];
+            }
+          );
+          that.invalidateResults();
+        }
+
         // Append the new filter instance
-        filter = candidate_filter
+        filter = candidate_filter;
         this._query[filterId] = filter;
       }
       
       if (filter) {
-        retval = filter.addValue(value)
+        retval = filter.addValue(value);
         if (retval) {
           this.invalidateResults();
         }
@@ -372,6 +387,33 @@ var PostQuery = function() {
       return this._execute().then(function(collection) {
         return Promise.resolve(collection);
       });
+    };
+
+    this.getResultMessageStructureCollectionPromise = function() {
+      // The "deleted messages" filter needs a "all message structure collection" which is different from the default one (because the default one may not include all deleted messages)
+      // Maybe we should use a Subset of the getAllMessageStructureCollectionPromise instead
+      // TODO: Have a more generic mecanism than a list of ifs. For example add a usesNonStandardMessageStructure boolean method in AbstractPostFilter
+      if ( ("only_deleted_posts" in this._query) || ("also_deleted_posts" in this._query) ){
+        var url = Ctx.getApiUrl('posts');
+        var params = {"view": "id_only"};
+        _.each(this._query, function(filter) {
+          var values = filter.getValues();
+          for (var i = 0; i < values.length; i++) {
+            params[filter.getServerParam()] = values[i];
+          }
+        });
+        url += "?" + $.param(params);
+        var collection = new Message.Collection();
+        collection.url = url;
+        collection.collectionManager = new CollectionManager();
+        return Promise.resolve(collection.fetch()).thenReturn(collection).catch(function(e) {
+          Raven.captureException(e);
+        });
+      }
+      else {
+        var cm = new CollectionManager();
+        return cm.getAllMessageStructureCollectionPromise();
+      }
     };
 
     /**

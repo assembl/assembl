@@ -22,7 +22,8 @@
         "@extends": "Content",
         "date": "creation_date",
         "parentId": "parent",
-        "idCreator": "creator"
+        "idCreator": "creator",
+        "publication_state": true
     },
     "AssemblPost": {
         "@extends": "Post"

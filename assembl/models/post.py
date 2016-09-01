@@ -138,7 +138,7 @@ class Post(Content):
         backref=backref('posts_moderated'),
     )
 
-    # All the idea contend likns of the ancestors of this post
+    # All the idea content links of the ancestors of this post
     idea_content_links_above_post = column_property(
         func.idea_content_links_above_post(id),
         deferred=True, expire_on_flush=False)
@@ -348,9 +348,17 @@ class Post(Content):
             return self != self.parent.children[-1]
         return False
 
+    def get_subject(self):
+        if self.publication_state in blocking_publication_states:
+            #return None
+            return LangString.EMPTY()
+        if self.subject:
+            return super(Post, self).get_subject()
+
     def get_body(self):
         if self.publication_state in blocking_publication_states:
-            return None
+            #return None
+            return LangString.EMPTY()
         if self.body:
             return super(Post, self).get_body()
 

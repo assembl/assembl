@@ -5,9 +5,9 @@ from pyramid.response import Response
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 from pyramid.security import authenticated_userid
 
-from assembl.auth import P_READ, P_MODERATE
+from assembl.auth import P_READ, P_MODERATE, P_DELETE_POST, P_DELETE_MY_POST
 from assembl.auth.util import get_permissions
-from assembl.models import Content, Post, SynthesisPost, User
+from assembl.models import Content, Post, SynthesisPost, User, Extract
 from assembl.models.post import PublicationStates
 from ..traversal import InstanceContext, CollectionContext
 from . import (
@@ -37,6 +37,44 @@ def show_similar_posts(request):
     for n, (post_id, score) in enumerate(similar):
         results[n]['score'] = float(score)
     return results
+
+
+@view_config(context=InstanceContext, request_method='DELETE',
+    ctx_instance_class=Post, renderer='json')
+def delete_post_instance(request):
+    # Users who are allowed to delete (actually tombstone) a Post instance:
+    # - user who is the author of the Post instance and who has the P_DELETE_MY_POST permission in this discussion
+    # - user who has the P_DELETE_POST permission in this discussion
+    ctx = request.context
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    instance = ctx._instance
+
+    allowed = False
+    if (user_id == instance.creator_id and P_DELETE_MY_POST in permissions) or (P_DELETE_POST in permissions):
+        allowed = True
+    if not allowed:
+        raise HTTPUnauthorized()
+
+    # Remove extracts associated to this post
+    extracts_to_remove = instance.db.query(Extract).filter(Extract.content_id == instance.id).all()
+    number_of_extracts = len(extracts_to_remove)
+    for extract in extracts_to_remove:
+        extract.delete()
+
+    
+    if user_id == instance.creator_id and P_DELETE_MY_POST in permissions:
+        instance.publication_state = PublicationStates.DELETED_BY_USER
+    elif P_DELETE_POST in permissions:
+        instance.publication_state = PublicationStates.DELETED_BY_ADMIN
+
+    instance.is_tombstone = True
+
+    return {
+        "result": "Post has been successfully deleted.",
+        "removed_extracts": number_of_extracts
+    }
 
 
 @view_config(context=InstanceContext, request_method='GET',

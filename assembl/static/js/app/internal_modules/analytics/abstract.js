@@ -317,6 +317,12 @@ var moduleName = 'Analytics_Abstract',
       MESSAGE_LIKED: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'MESSAGE_LIKED'},
       MESSAGE_UNLIKED: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'MESSAGE_UNLIKED'},
 
+      /*
+       * Event fired when the message is deleted
+       * assembl/static/js/app/views/message.js
+       */
+      MESSAGE_DELETED: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'MESSAGE_DELETED'},
+
       /**
        * Event fired when the 'share' icon is clicked on a message
        * assembl/static/js/app/views/message.js

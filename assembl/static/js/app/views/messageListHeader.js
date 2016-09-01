@@ -194,6 +194,7 @@ var MessageListHeader = Marionette.ItemView.extend({
           html += filterButtons.join('');
           html += '</ul>';
           that.ui.filtersDropdown.html(html);
+          Ctx.initTooltips(that.$el);
         })
 
   },

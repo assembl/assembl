@@ -411,6 +411,7 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         q = db.query(content.id.label("post_id")).filter(
                 (content.discussion_id == self.discussion.id)
                 & (content.hidden == False)
+                & (content.tombstone_condition())
                 & (content.type.notin_((synth_post_type, webpage_post_type)))
                 & content.id.notin_(subq))
         if user_id:

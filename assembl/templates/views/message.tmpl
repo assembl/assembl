@@ -96,6 +96,10 @@
               <li><a href="<%= html_export_url %>" target="_blank" class="dropdown-listitem">{{gettext("Export Post in HTML")}}</a></li>
             <% }%>
 
+            <% if(user_can_delete_this_message) { %>
+                <li><a href="#" class="js_message-delete">{{ gettext('Delete this message')}}</a></li>
+            <% } %>
+
         </ul>
         </li>
      </ul>

@@ -210,9 +210,10 @@
         "discussion": true,
         "import_date": false,
         "like_count": true,
-        "subject": ":",
-        "body": ":",
-        "widget_ideas": "&widget_ideas"
+        "subject": "&get_subject:default",
+        "body": "&get_body:default",
+        "widget_ideas": "&widget_ideas",
+        "tombstone_date": true
     },
     "Post": {
         "@extends": "Content",

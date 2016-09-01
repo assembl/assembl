@@ -11,7 +11,10 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js'),
     Types = require('../utils/types.js'),
     MessageView = require('./message.js'),
+    MessageModel = require('../models/message.js'),
     SynthesisMessageView = require('./synthesisMessage.js'),
+    MessageDeletedByUserView = require('./messageDeletedByUser.js'),
+    MessageDeletedByAdminView = require('./messageDeletedByAdmin.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
     availableFilters = require('./postFilters.js');
 
@@ -150,6 +153,11 @@ var MessageFamilyView = Marionette.ItemView.extend({
     Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
     var messageViewClass = MessageView;
+    var messageViewOptions = {
+      model: this.model,
+      messageListView: this.messageListView,
+      messageFamilyView: this
+    };
     if (!this.model.isInstance(Types.POST)) {
       console.error("not a post?");
     }
@@ -158,11 +166,17 @@ var MessageFamilyView = Marionette.ItemView.extend({
       messageViewClass = SynthesisMessageView;
     }
 
-    this._messageView = new messageViewClass({
-      model: this.model,
-      messageListView: this.messageListView,
-      messageFamilyView: this
-    });
+    var publication_state = this.model.get('publication_state');
+    if ( publication_state && publication_state in MessageModel.DeletedPublicationStates ){
+      if ( publication_state === MessageModel.PublicationStates.DELETED_BY_USER ){
+        messageViewClass = MessageDeletedByUserView;
+      }
+      else { // else if ( publication_state == MessageModel.PublicationState.DELETED_BY_ADMIN ){
+        messageViewClass = MessageDeletedByAdminView;
+      }
+    }
+
+    this._messageView = new messageViewClass(messageViewOptions);
 
     this._messageView.render();
     this.messageListView.renderedMessageViewsCurrent[this.model.id] = this._messageView;
