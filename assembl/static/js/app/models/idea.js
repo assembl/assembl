@@ -53,7 +53,7 @@ var IdeaModel = Base.Model.extend({
     var that = this;
     this.adjust_num_read_posts(resp);
     if (resp.attachments !== undefined){
-      resp.attachments = new Attachment.Collection(resp.attachments, {
+      resp.attachments = new Attachment.ValidationAttachmentCollection(resp.attachments, {
         parse: true,
         objectAttachedToModel: that
       })

@@ -292,7 +292,7 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
     //Save the attachment model as well, as in the idea panel, there is no confirmation
     //to save the attachment
     this.model.save();
-  },
+  },  
 
   /*
     There is a limit of 1 attachment, so this *should* only be called once

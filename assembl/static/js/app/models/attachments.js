@@ -433,7 +433,13 @@ var AttachmentCollection = Base.Collection.extend({
     });
     //If it passes both checks, return it
     return models;
-  },
+  }
+});
+
+/*
+  An attachment collection that allows for validation
+ */
+var ValidationAttachmentCollection = AttachmentCollection.extend({
 
   /*
     Override the add operation to set limits, if any exists
@@ -442,7 +448,7 @@ var AttachmentCollection = Base.Collection.extend({
 
     if (this.isFailed){
       //If this is a failed collection, do not do any validation
-      return Base.Collection.prototype.add.apply(this, arguments);
+      return AttachmentCollection.prototype.add.apply(this, arguments);
     }
 
     //If a limit is passed into the addition, do validation
@@ -457,7 +463,7 @@ var AttachmentCollection = Base.Collection.extend({
       // }
     }
 
-    return Base.Collection.prototype.add.call(this, models, options);
+    return AttachmentCollection.prototype.add.call(this, models, options);
   },
 
   isTypeLimitCorrect: function(model){
@@ -517,10 +523,13 @@ var AttachmentCollection = Base.Collection.extend({
       count: 1
     }
   },
+
+
 });
 
 module.exports = {
   attachmentPurposeTypes: attachmentPurposeTypes,
   Model: AttachmentModel,
-  Collection: AttachmentCollection
+  Collection: AttachmentCollection,
+  ValidationAttachmentCollection: ValidationAttachmentCollection
 };
