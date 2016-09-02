@@ -227,7 +227,8 @@ var IdeaPanel = AssemblPanel.extend({
       this.attachmentButton.empty();
     } 
     else {
-      var buttonView = new AttachmentViews.AttachmentUploadButtonView({
+      // var buttonView = new AttachmentViews.AttachmentUploadButtonView({
+      var buttonView = new AttachmentViews.AttachmentUploadTextView({
         collection: collection,
         objectAttachedToModel: this.model
       });

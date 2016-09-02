@@ -568,13 +568,18 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
   }
 });
 
+
+/*
+  An attachment button view that is not based on an icon, but instead is textual
+ */
 var AttachmentUploadTextView = AttachmentUploadButtonView.extend({
   constructor: function AttachmentUploadTextView(){
-    AttachmentUploadButtonView.prototype.apply(this, arguments);
+    return AttachmentUploadButtonView.apply(this, arguments);
   },
 
   template: "#tmpl-attachmentText"
 })
+
 
 module.exports = module.exports = {
     AttachmentEditableView: AttachmentEditableView,
