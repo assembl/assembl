@@ -21,7 +21,7 @@ from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship, backref, column_property
 from virtuoso.vmapping import IriClass
 
-from . import DiscussionBoundBase, DiscussionBoundTombstone, TombstonableMixin
+from . import DiscussionBoundBase, DiscussionBoundTombstone, TombstonableMixin, Post
 from ..semantic.namespaces import (
     ASSEMBL, QUADNAMES, VERSION, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
