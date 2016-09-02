@@ -77,9 +77,9 @@ var IdeaPanel = AssemblPanel.extend({
         }
       });
 
-      this.listenTo(this.getAttachmentCollection(), 'sync', function(e){
+      this.listenTo(this.getAttachmentCollection(), 'sync destroy', function(e){
         if (!this.isViewDestroyed()){
-          that.renderAttachments();
+          that.renderAttachmentButton();
         }
       });
 
@@ -223,16 +223,14 @@ var IdeaPanel = AssemblPanel.extend({
 
   renderAttachmentButton: function(){
     var collection = this.getAttachmentCollection();
-    var buttonView = new AttachmentViews.AttachmentUploadButtonView({
-      collection: collection,
-      objectAttachedToModel: this.model,
-      limits: {
-        count: 1,
-        type: 'image'
-      }
-    });
-
-    if (collection.length === 0) {
+    if (collection.length > 0 ) {
+      this.attachmentButton.empty();
+    } 
+    else {
+      var buttonView = new AttachmentViews.AttachmentUploadButtonView({
+        collection: collection,
+        objectAttachedToModel: this.model
+      });
       this.attachmentButton.show(buttonView);
     }
   },
@@ -248,7 +246,6 @@ var IdeaPanel = AssemblPanel.extend({
       });
 
       this.attachment.show(attachmentView);
-
       this.renderAttachmentButton();
     }
 
