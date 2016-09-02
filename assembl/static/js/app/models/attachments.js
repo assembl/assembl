@@ -382,16 +382,26 @@ var AttachmentCollection = Base.Collection.extend({
   */ 
   saveAll: function(options){
     return this.save(this.models, options);
+  }
+});
+
+/*
+  An attachment collection that allows for validation
+ */
+var ValidationAttachmentCollection = AttachmentCollection.extend({
+
+
+  initialize: function(models, options){
+    this.limits = options.limits || {};
+    AttachmentCollection.prototype.initialize.apply(this, arguments);
   },
 
   /*
     takes an array of models and makes validation check
    */
-  addValidation: function(models, limits){
+  addValidation: function(models){
     //If there is a count limit, override the old data (remove them first, though)
     //The removal is done in a FIFO format
-    
-    this.limits = limits; //Short term
 
     if (!models){
       return [];
@@ -433,37 +443,29 @@ var AttachmentCollection = Base.Collection.extend({
     });
     //If it passes both checks, return it
     return models;
-  }
-});
-
-/*
-  An attachment collection that allows for validation
- */
-var ValidationAttachmentCollection = AttachmentCollection.extend({
+  },
 
   /*
     Override the add operation to set limits, if any exists
    */
-  add: function(models, options){
+  add: function(models){
 
-    if (this.isFailed){
+    if (!this.limits || this.isFailed){
       //If this is a failed collection, do not do any validation
       return AttachmentCollection.prototype.add.apply(this, arguments);
     }
 
-    //If a limit is passed into the addition, do validation
-    if ( (options) && ('limits' in options) && (options.limits !== null)) {
-      if (!(_.isArray(models))){
-        models = [models];
-      }
-      models = this.addValidation(models, options.limits);
+    if (!(_.isArray(models))){
+      models = [models];
+    }
+    //Check validation in all other cases
+    models = this.addValidation(models);
 
-      // if (!(models) && (models.length > 0)) {
-      //   return;  //This might be the wrong operation
-      // }
+    if (!models) {
+      return;  //This might be the wrong operation
     }
 
-    return AttachmentCollection.prototype.add.call(this, models, options);
+    return AttachmentCollection.prototype.add.call(this, models);
   },
 
   isTypeLimitCorrect: function(model){
