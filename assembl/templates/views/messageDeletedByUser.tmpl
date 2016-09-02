@@ -16,6 +16,8 @@
 {%- endmacro %}
 
 {% macro menuAction() -%}
+  <% /* if the "More options" menu will be empty, do not show it */
+  if (user_is_connected || (creator && creator.get('preferred_email') && user_can_see_email)){ %>
    <div class="message-menu">
      <ul class="pan man">
         <li class="dropdown mrxl mts">
@@ -39,6 +41,7 @@
         </li>
      </ul>
    </div>
+  <% } %>
 {%- endmacro %}
 
 <% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
