@@ -284,7 +284,7 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   },
 
   modelEvents: {
-    'add': 'onAdd',
+    'change': 'onChange',
     'destroy': 'onDestroy'
   },
 
@@ -297,7 +297,7 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
   /*
     There is a limit of 1 attachment, so this *should* only be called once
    */
-  onAdd: function(e){
+  onChange: function(e){
     var domObject = $(".content-ideapanel");
     domObject.css('top', '250px');
   },
