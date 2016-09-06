@@ -277,7 +277,15 @@ var AttachmentCollection = Base.Collection.extend({
    * The model
    * @type {PartnerOrganizationModel}
    */
-  model: AttachmentModel,
+  model: function(attrs, options){
+    //Add parse so that the document model is also parsed in an attachment
+    if (!options){
+      options = {};
+    }
+    options.parse = true;
+    return new AttachmentModel(attrs, options);
+  },
+
   /**
    * @function app.models.attachments.AttachmentCollection.initialize
    */
@@ -524,8 +532,7 @@ var ValidationAttachmentCollection = AttachmentCollection.extend({
       collection: [models],
       count: 1
     }
-  },
-
+  }
 
 });
 
