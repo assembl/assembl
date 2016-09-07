@@ -146,8 +146,15 @@ var IdeaPanel = AssemblPanel.extend({
   checkContentHeight: function(){
     var domObject = this.$(".content-ideapanel");
     if (this.model.get('attachments') && (this.model.get('attachments').length > 0)){
-      var imgHeight = $(window).height() / 4;
-      domObject.css('top', imgHeight);
+      this.$el.find(".embedded-image-preview").load(function() {
+        var contentPanelPosition = $(window).height() / 3;
+        var imgHeight = $(this).height();
+        if(imgHeight > contentPanelPosition){
+          domObject.css('top', contentPanelPosition);
+        }else{
+          domObject.css('top', imgHeight);
+        }
+      });
     }
     else {
       domObject.css('top', '0px');
@@ -331,9 +338,9 @@ var IdeaPanel = AssemblPanel.extend({
         });
       }
 
-      this.checkContentHeight();
-
       this.renderAttachments();
+      
+      this.checkContentHeight();
 
       this.getExtractslist();
 

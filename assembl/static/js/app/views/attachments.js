@@ -299,8 +299,15 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
    */
   onChange: function(e){
     var domObject = $(".content-ideapanel");
-    var imgHeight = $(window).height() / 4;
-    domObject.css('top', imgHeight);
+    this.$el.find(".embedded-image-preview").load(function() {
+      var contentPanelPosition = $(window).height() / 3;
+      var imgHeight = $(this).height();
+      if(imgHeight > contentPanelPosition){
+        domObject.css('top', contentPanelPosition);
+      }else{
+        domObject.css('top', imgHeight);
+      }
+    });
     $('[data-id="DO_NOT_USE"]').hide();
     $('[data-id="EMBED_ATTACHMENT"]').hide();
   },
