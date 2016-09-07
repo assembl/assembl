@@ -299,7 +299,10 @@ var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
    */
   onChange: function(e){
     var domObject = $(".content-ideapanel");
-    domObject.css('top', '250px');
+    var imgHeight = $(window).height() / 4;
+    domObject.css('top', imgHeight);
+    $('[data-id="DO_NOT_USE"]').hide();
+    $('[data-id="EMBED_ATTACHMENT"]').hide();
   },
 
   onDestroy: function(e){
