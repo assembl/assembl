@@ -3275,7 +3275,7 @@ msgid "Voting session"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:22
-msgid "About this idea"
+msgid "What you need to know"
 msgstr ""
 
 #: assembl/templates/views/ideaPanel.tmpl:27
