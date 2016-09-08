@@ -986,7 +986,7 @@ class RootIdea(Idea):
     """
     The root idea.  It represents the discussion.
 
-    If has implicit links to all content and posts in the discussion.
+    It has implicit links to all content and posts in the discussion.
     """
     root_for_discussion = relationship(
         Discussion,
@@ -999,11 +999,30 @@ class RootIdea(Idea):
 
     @property
     def num_posts(self):
-        """ In the root idea, this is the count of all mesages in the system """
+        """ In the root idea, num_posts is the count of all non-deleted mesages in the discussion """
         from .post import Post
         result = self.db.query(Post).filter(
             Post.discussion_id == self.discussion_id,
-            Post.hidden==False
+            Post.hidden==False,
+            Post.tombstone_condition()
+        ).count()
+        return int(result)
+
+    @property
+    def num_read_posts(self):
+        """ In the root idea, num_posts is the count of all non-deleted read mesages in the discussion """
+        from .post import Post
+        from .action import ViewPost
+        discussion_data = self.get_discussion_data(self.discussion_id)
+        result = self.db.query(Post).filter(
+            Post.discussion_id == self.discussion_id,
+            Post.hidden==False,
+            Post.tombstone_condition()
+        ).join(
+            ViewPost,
+            (ViewPost.post_id == Post.id)
+            & (ViewPost.tombstone_date == None)
+            & (ViewPost.actor_id == discussion_data.user_id)
         ).count()
         return int(result)
 

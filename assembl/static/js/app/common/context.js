@@ -1895,9 +1895,9 @@ Context.prototype = {
   /**
    * Checks if an element is in the viewport
    * @returns {Boolean}
-   * @function app.common.context.Context.isElementIsInViewport
+   * @function app.common.context.Context.isElementInViewport
   **/
-  isElementIsInViewport:function(element, elmHeight){
+  isElementInViewport:function(element, elmHeight){
       var win = $(window);
       var viewport = {
           top : win.scrollTop(),

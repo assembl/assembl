@@ -127,6 +127,10 @@ AbstractFilter.prototype = {
      * faster */
     getClientSideImplementation: function() {
       throw new Error("RESERVED FOR FUTURE USE");
+    },
+
+    getIncompatibleFiltersIds: function() {
+      return [];
     }
   }
 
@@ -538,6 +542,9 @@ _.extend(FilterPostIsUnread.prototype, {
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages you haven\'t read yet, or you manually marked unread.');
+    },
+    getIncompatibleFiltersIds: function(){
+      return ["is_read_post"];
     }
   });
 
@@ -558,6 +565,9 @@ _.extend(FilterPostIsRead.prototype, {
     },
     getHelpText: function() {
       return i18n.gettext('Only include messages that have previously been marked read.');
+    },
+    getIncompatibleFiltersIds: function(){
+      return ["is_unread_post"];
     }
   });
 
@@ -666,7 +676,7 @@ _.extend(FilterPostIsPostedBeforeDate.prototype, {
 
 
 
-  
+
 function FilterPostIsPostedSinceLastSynthesis() {
     AbstractFilterSingleValue.call(this);
   }
@@ -703,6 +713,88 @@ _.extend(FilterPostIsPostedSinceLastSynthesis.prototype, {
       return i18n.gettext('Only include posts created after the last synthesis.');
     }
   });
+
+
+
+
+function FilterPostIsDeleted() {
+  AbstractFilterSingleValue.call(this);
+}
+
+FilterPostIsDeleted.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsDeleted.prototype, {
+  getId: function() {
+    return 'only_deleted_posts';
+  },
+  getImplicitValuePromise: function() {
+      return Promise.resolve('true');
+  },
+  getServerParam: function() {
+    return 'deleted';
+  },
+  getLabelPromise: function() {
+    return Promise.resolve(i18n.gettext('Deleted messages'));
+  },
+  getHelpText: function() {
+    return i18n.gettext('Only include messages that have been deleted (by their author or by an administrator), and their ancestors.');
+  },
+  getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
+    return Promise.resolve("");
+  },
+  getFilterDescriptionStringPromise: function(individualValuesButtonsPromises){
+    var that = this;
+    return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+      return that.getLabelPromise().then(function(label) {
+        return label + individualValuesButtons.join('');
+      });
+    });
+  },
+  getIncompatibleFiltersIds: function(){
+    return ["also_deleted_posts"];
+  }
+});
+
+
+
+
+function FilterPostIsDeletedOrNot() {
+  AbstractFilterSingleValue.call(this);
+}
+
+FilterPostIsDeletedOrNot.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostIsDeletedOrNot.prototype, {
+  getId: function() {
+    return 'also_deleted_posts';
+  },
+  getImplicitValuePromise: function() {
+      return Promise.resolve('any');
+  },
+  getServerParam: function() {
+    return 'deleted';
+  },
+  getLabelPromise: function() {
+    return Promise.resolve(i18n.gettext('Show also deleted messages'));
+  },
+  getHelpText: function() {
+    return i18n.gettext('Also include messages that have been deleted (by their author or by an administrator).');
+  },
+  getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
+    return Promise.resolve("");
+  },
+  getFilterDescriptionStringPromise: function(individualValuesButtonsPromises){
+    var that = this;
+    return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+      return that.getLabelPromise().then(function(label) {
+        return label + individualValuesButtons.join('');
+      });
+    });
+  },
+  getIncompatibleFiltersIds: function(){
+    return ["only_deleted_posts"];
+  }
+});
+
+
   
 var availableFilters = {
     POST_HAS_ID_IN: FilterPostHasIdIn,
@@ -719,7 +811,9 @@ var availableFilters = {
     POST_IS_FROM: FilterPostIsFromUser,
     POST_IS_FROM_SELF: FilterPostIsOwnPost,
     POST_REPONDS_TO: FilterPostReplyToUser,
-    POST_REPONDS_TO_ME: FilterPostReplyToMe
+    POST_REPONDS_TO_ME: FilterPostReplyToMe,
+    POST_IS_DELETED: FilterPostIsDeleted,
+    POST_IS_DELETED_OR_NOT: FilterPostIsDeletedOrNot
   };
 
 module.exports = availableFilters;

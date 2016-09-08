@@ -52,7 +52,7 @@ var getElementViewportOffset = function(el, scrollableViewport) {
     console.log("scrollUtils::getElementViewportOffset(): scrollableViewportWindowOffset: ",scrollableViewportWindowOffset, "elWindowOffset: ", elWindowOffset, el.offset(), el, "elViewPortOffset: ", elViewPortOffset);
   }
   if(el.offset().top === 0 && el.offset().left === 0) {
-    throw new Error("el is in an invalid state.  This seems to happen after a failed scrollTop on the parent scrollable, among other conditions");
+    throw new Error("el has a good probability to be in an invalid state. This seems to happen after a failed scrollTop on the parent scrollable, among other conditions");
   }
   return elViewPortOffset;
 }
@@ -163,7 +163,7 @@ var scrollToElement = function(el, callback, margin, animate, watch) {
   }
 
   if (animate) {
-    scrollableElement.animate({ scrollTop: scrollTarget }, { always: processCallback });
+    scrollableElement.animate({ scrollTop: scrollTarget }, { always: processCallback, duration: 800 });
   }
   else {
     scrollableElement.scrollTop(scrollTarget);

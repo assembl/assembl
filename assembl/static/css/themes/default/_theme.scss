@@ -1,11 +1,14 @@
-/* ASSEMBL THEME */
+/* 
+  ASSEMBL DEFAULT THEME
+  If you want to create a new theme, it is recommended that your theme SCSS file uses @import of this file, so if a default theme variable is not overriden in your theme (for example a variable which would have been added in Assembl code after the creation of your theme), the SCSS will still compile, and the variable will have the default value.
+ */
 
 /*
   Variables
   Ranked from light -> dark
 
   NEVER refer to these color variables elsewhere in the SCSS files
- */
+*/
 $th_local_white: #FFFFFF;
 $th_local_black: #000000;
 
@@ -84,11 +87,23 @@ $theme_context_title_color: $th_local_white;
 $theme_navigation_bg: $th_local_purple2;
 $theme_navigation_menu_bg: $th_local_purple4;
 $theme_navigation_menu_bg_active: $th_local_purple3;
+$theme_navigation_menu_bg_hover: $theme_navigation_menu_bg_active;
 $theme_navigation_menu_separator: $th_local_purple2;
 $theme_navigation_icon_color: $th_local_white;
 $theme_navigation_icon_color_active: $th_local_white;
 $theme_navigation_text_color: $th_local_white;
 $theme_navigation_text_color_active: $th_local_white;
+$theme_navigation_options: $th_local_gray3;
+$theme_navigation_idea_text_color: $th_local_black;
+$theme_navigation_idea_header_text_color: $th_local_gray3;
+$theme_navigation_idea_total_count: $th_local_gray5;
+$theme_navigation_idea_hover_total_count: $theme_navigation_idea_total_count;
+$theme_navigation_idea_hover_unread_count: $th_local_gray6;
+$theme_navigation_idea_hover_unread_count_background: $th_local_white;
+$theme_navigation_selected_idea_total_count: $theme_navigation_idea_total_count;
+$theme_navigation_selected_idea_unread_count: $th_local_gray6;
+$theme_navigation_selected_idea_unread_count_background: $th_local_white;
+$theme_navigation_idea_unread_count: $theme_read_unread_item;
 
 //Navigation + Synthesis panel
 $theme_navigation_or_idea_bg_active: $th_local_gray4;
@@ -98,6 +113,7 @@ $theme_item_selected_secondary_color: $th_local_purple5;
 
 //Message list
 $theme_messagelist_bg_color: $th_local_gray7;
+$theme_messagesend_bg_color: $th_local_gray4;
 //The color of the icons of the action buttons on messages
 $theme_message_icon_color: $th_local_purple5;
 

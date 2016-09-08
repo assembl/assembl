@@ -195,7 +195,7 @@ var MessageList = AssemblPanel.extend({
       this.listenTo(this, 'messageList:addFilterIsSynthesisMessage', function() {
         that.getPanelWrapper().filterThroughPanelLock(
             function() {
-              that.addFilterIsSynthesMessage();
+              that.addFilterIsSynthesisMessage();
             }, 'syncWithCurrentIdea');
       });
 
@@ -641,6 +641,8 @@ var MessageList = AssemblPanel.extend({
       }
       else {
         returnedDataOffsets.offsetStart = 0;
+        returnedDataOffsets.offsetEnd = 0;
+        return returnedDataOffsets;
       }
 
       if (requestedOffsets.offsetEnd > (numMessages - 1)) {
@@ -1251,7 +1253,7 @@ var MessageList = AssemblPanel.extend({
       }
 
       var collectionManager = new CollectionManager();
-      Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+      Promise.join(this.currentQuery.getResultMessageStructureCollectionPromise(),
                    this.currentQuery.getResultMessageIdCollectionPromise(),
                    this.getVisitorDataPromise(),
           function(allMessageStructureCollection, resultMessageIdCollection, visitorData) {
@@ -1450,7 +1452,7 @@ var MessageList = AssemblPanel.extend({
     var that = this,
         collectionManager = new CollectionManager();
 
-    return Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+    return Promise.join(this.currentQuery.getResultMessageStructureCollectionPromise(),
         this.currentQuery.getResultMessageIdCollectionPromise(),
         function(messageStructureCollection, resultMessageIdCollection) {
       if (!that.isViewDestroyed()) {
@@ -1494,7 +1496,7 @@ var MessageList = AssemblPanel.extend({
     if (this.currentQuery.isQueryValid()) {
       this.blockPanel();
       /* TODO:  Most of this should be a listen to the returned collection */
-      Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+      Promise.join(this.currentQuery.getResultMessageStructureCollectionPromise(),
           this.currentQuery.getResultMessageIdCollectionPromise(),
               function(messageStructureCollection, resultMessageIdCollection) {
                 if (!that.isViewDestroyed()) {
@@ -1596,7 +1598,7 @@ var MessageList = AssemblPanel.extend({
         view,
         collectionManager = new CollectionManager();
 
-    return Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+    return Promise.join(this.currentQuery.getResultMessageStructureCollectionPromise(),
         this.getVisitorDataPromise(),
         function(messageStructureModels, visitorData) {
               var list = [];
@@ -2036,7 +2038,7 @@ var MessageList = AssemblPanel.extend({
    * Load posts that are synthesis posts
    * @param {string} ideaId
    */
-  addFilterIsSynthesMessage: function() {
+  addFilterIsSynthesisMessage: function() {
     //Can't filter on an idea at the same time as getting synthesis messages
     this.currentQuery.clearFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, null);
     this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_SYNTHESIS, true);
@@ -2489,7 +2491,7 @@ var MessageList = AssemblPanel.extend({
         return;
       }
 
-      Promise.join(collectionManager.getAllMessageStructureCollectionPromise(),
+      Promise.join(this.currentQuery.getResultMessageStructureCollectionPromise(),
           this.getVisitorDataPromise(),
           this.currentQuery.getResultMessageIdCollectionPromise(),
           function(allMessageStructureCollection, visitorData, resultMessageIdCollection) {

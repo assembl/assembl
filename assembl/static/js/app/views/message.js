@@ -29,7 +29,10 @@ var Marionette = require('../shims/marionette.js'),
     Genie = require('../utils/genieEffect.js'),
     IdeaClassificationOnMessageView = require('./ideaClassificationOnMessage.js'),
     LangString = require('../models/langstring.js'),
-    IdeaContentLink = require('../models/ideaContentLink.js');
+    IdeaContentLink = require('../models/ideaContentLink.js'),
+    ConfirmModal = require('./confirmModal.js'),
+    Growl = require('../utils/growl.js'),
+    MessageModel = require('../models/message.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10,
@@ -372,7 +375,7 @@ var MessageView = Marionette.LayoutView.extend({
       Promise.join(
           this.model.getCreatorPromise(),
           this.model.collection.collectionManager.getUserLanguagePreferencesPromise(Ctx),
-          this.model.collection.collectionManager.getMessageFullModelPromise(this.model.id),
+          this.model.collection.collectionManager.getMessageFullModelPromise(this.model.id, Promise.resolve(this.model.collection)),
           function(creator, ulp, messageFullModel) {
             //Not doing anything with messageFullModel, this.model is already
             //the right link, we just want the content of the model updated
@@ -396,7 +399,8 @@ var MessageView = Marionette.LayoutView.extend({
       'change:like_count':'renderLikeCount',
       'change':'guardedRender',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
-    },
+  },
+
   guardedRender: function(){
     if (Ctx.debugRender) {
       console.log("MessageView modelEvents change fired from", this.model);
@@ -415,6 +419,7 @@ var MessageView = Marionette.LayoutView.extend({
       showAllMessagesByThisAuthorButton: ".js_message-show-all-by-this-author",
       toggleExtracts: ".js_message-toggle-extracts",
       moderationOptionsButton: ".js_message-moderation-options",
+      deleteMessageButton: ".js_message-delete",
       messageReplyBox: ".js_messageReplyBoxRegion",
       likeLink: ".js_likeButton",
       shareLink: ".js_shareButton",
@@ -463,6 +468,7 @@ var MessageView = Marionette.LayoutView.extend({
     'click .js_showModeratedMessage': 'onShowModeratedMessageClick',
     'click @ui.toggleExtracts' : 'onToggleExtractsClick',
     'click @ui.moderationOptionsButton' : 'onModerationOptionsClick',
+    'click @ui.deleteMessageButton' : 'onDeleteMessageClick',
     "click @ui.showTranslationPref" : "onShowTranslationClick",
 
     //
@@ -600,7 +606,8 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
 
-    if (this.model.get("publication_state") != "PUBLISHED") {
+    var publication_state = this.model.get('publication_state');
+    if ( publication_state && publication_state in MessageModel.ModeratedPublicationStates ){
     //if (this.model.get("moderation_text")) {
       bodyFormat = "text/html";
       //@TODO: should the body be this._body??
@@ -646,6 +653,8 @@ var MessageView = Marionette.LayoutView.extend({
       html_export_url = Ctx.getApiV2DiscussionUrl("posts/" + this.model.getNumericId() + "/html_export");
     }
 
+    var user_can_delete_this_message = ( Ctx.getCurrentUserId() === Ctx.extractId(this.model.get('idCreator')) && Ctx.getCurrentUser().can(Permissions.DELETE_MY_POST) ) || Ctx.getCurrentUser().can(Permissions.DELETE_POST);
+
     return {
       message: this.model,
       messageListView: this.messageListView,
@@ -670,6 +679,7 @@ var MessageView = Marionette.LayoutView.extend({
       share_link_url: share_link_url,
       html_export_url: html_export_url,
       user_can_moderate: Ctx.getCurrentUser().can(Permissions.MODERATE_POST),
+      user_can_delete_this_message: user_can_delete_this_message,
       unknownPreference: this.unknownPreference,
       useOriginalContent: this.useOriginalContent,
       isTranslatedMessage: this.isMessageTranslated,
@@ -720,7 +730,8 @@ var MessageView = Marionette.LayoutView.extend({
     },
 
   render: function() {
-    //Is this for inheritence??
+    //This code was used to get the Marionette Render method.
+    //TODO: Check to see if this is still valid code. AY
     var base_object = Object.getPrototypeOf(this),
         base_render = base_object.render;
     while (Object.getPrototypeOf(base_object).render === base_render) {
@@ -733,8 +744,8 @@ var MessageView = Marionette.LayoutView.extend({
   onBeforeRender: function(){
     this.isCompleteDataLoaded();
     //Check if the message is moderated
-    
-    if (this.model.get('publication_state') !== 'PUBLISHED'){
+    var publication_state = this.model.get('publication_state');
+    if ( publication_state && publication_state in MessageModel.ModeratedPublicationStates ){
       //Naive implemntation. When other publication states are used, update the code here.
       this.moderationOptions.isModerated = true;
       this.moderationOptions.purpose = this.model.get('publication_state');
@@ -749,249 +760,260 @@ var MessageView = Marionette.LayoutView.extend({
     if (this.template == "#tmpl-loader") {
         return {};
     }
-    var that = this,
-        modelId = this.model.id,
-        partialMessage = MessagesInProgress.getMessage(modelId);
 
-    //Important flag to display/remove annotations is this.showAnnotations
-    this.showAnnotations = this.canShowAnnotations();
-
-    if (Ctx.debugLangstring){
-      console.log("---- Message onRender called ----------------");
-      console.log("Local states of a message view:");
-      console.log("forceTranslationQuestion: ", this.forceTranslationQuestion);
-      console.log("useOriginalContent: ", this.useOriginalContent);
-      console.log("unknownPreference: ", this.unknownPreference);
-      console.log("bodyTranslationError: ", this.bodyTranslationError);
-      console.log("isMessageTranslated: ", this.isMessageTranslated);
-      console.log("Discrepency? ", !(this.isMessageTranslated !== this.showAnnotations));
-      console.log("_body.value: ", this._body.value());
-      console.log("_body.isMachineTranslation(): ", this._body.isMachineTranslation());
-    }
-
-    if (Ctx.debugAnnotator) {
-      console.log("showAnnotations: ", this.showAnnotations);
-    }
-
-    if (!this.showAnnotations) {
-      this.removeAnnotations();
-    }
-
-    // do not render the whole thing if only the like_count changed.
-    // it may kill the message being edited.
-    if (this.changeIsPartialRender()) {
+    var publication_state = this.model.get('publication_state');
+    if ( publication_state && publication_state in MessageModel.DeletedPublicationStates ){
+      // This message is deleted, so it should not be displayed using the regular Message view, but using the MessageDeletedByUser or MessageDeletedByAdmin view.
+      // Code runs into this case when the user has just deleted a message, and its messageFamily is going to re-render it using the correct MessageDeletedByUser or MessageDeletedByAdmin view.
       return;
     }
-
-    if (Ctx.debugRender) {
-      console.log("message:render() is firing for message", this.model.id);
-    }
-
-
-    if (partialMessage.body) {
-      //Somebody started writing a message and didn't finish, make sure they see it.
-      //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
-      this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
-    }
     else {
-      this.setViewStyle(this.viewStyle);
-    }
+      
+      var that = this,
+          modelId = this.model.id,
+          partialMessage = MessagesInProgress.getMessage(modelId);
 
-    this.clearAnnotationsToLoadCache();
-    Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+      //Important flag to display/remove annotations is this.showAnnotations
+      this.showAnnotations = this.canShowAnnotations();
 
-    this.renderAuthor();
+      if (Ctx.debugLangstring){
+        console.log("---- Message onRender called ----------------");
+        console.log("Local states of a message view:");
+        console.log("forceTranslationQuestion: ", this.forceTranslationQuestion);
+        console.log("useOriginalContent: ", this.useOriginalContent);
+        console.log("unknownPreference: ", this.unknownPreference);
+        console.log("bodyTranslationError: ", this.bodyTranslationError);
+        console.log("isMessageTranslated: ", this.isMessageTranslated);
+        console.log("Discrepency? ", !(this.isMessageTranslated !== this.showAnnotations));
+        console.log("_body.value: ", this._body.value());
+        console.log("_body.isMachineTranslation(): ", this._body.isMachineTranslation());
+      }
 
-    this.$el.attr("id", "message-" + this.model.get('@id'));
-    this.$el.addClass(this.model.get('@type'));
+      if (Ctx.debugAnnotator) {
+        console.log("showAnnotations: ", this.showAnnotations);
+      }
 
-    if (Ctx.getCurrentUser().isUnknownUser()) {
-      this.$el.removeClass('unread').addClass('read');
-    }else {
-      if (this.model.get('read')) {
+      if (!this.showAnnotations) {
+        this.removeAnnotations();
+      }
+
+      // do not render the whole thing if only the like_count changed.
+      // it may kill the message being edited.
+      if (this.changeIsPartialRender()) {
+        return;
+      }
+
+      if (Ctx.debugRender) {
+        console.log("message:render() is firing for message", this.model.id);
+      }
+
+
+      if (partialMessage.body) {
+        //Somebody started writing a message and didn't finish, make sure they see it.
+        //console.log("Opening in full view because of reply in progress: ", partialMessage['body'])
+        this.setViewStyle(this.availableMessageViewStyles.FULL_BODY);
+      }
+      else {
+        this.setViewStyle(this.viewStyle);
+      }
+
+      this.clearAnnotationsToLoadCache();
+      Ctx.removeCurrentlyDisplayedTooltips(this.$el);
+
+      this.renderAuthor();
+
+      this.$el.attr("id", "message-" + this.model.get('@id'));
+      this.$el.addClass(this.model.get('@type'));
+
+      if (Ctx.getCurrentUser().isUnknownUser()) {
         this.$el.removeClass('unread').addClass('read');
+      }else {
+        if (this.model.get('read')) {
+          this.$el.removeClass('unread').addClass('read');
+        } else {
+          this.$el.removeClass('read').addClass('unread');
+        }
+      }
+
+      Ctx.initTooltips(this.$el);
+      if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
+        Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
+        Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
+      }
+      if (this.model.get('metadata_json')) {
+        Ctx.makeLinksShowOembedOnHover(this.$el.find(".inspirationSource"));
+      }
+
+      this.postRender();
+
+      if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && (this.replyBoxShown || partialMessage.body)) {
+
+        this.replyView = new MessageSendView({
+          allow_setting_subject: false,
+          reply_message_id: modelId,
+          reply_message_model: this.model,
+          body_help_message: i18n.gettext('Type your response here...'),
+          cancel_button_label: null,
+          send_button_label: i18n.gettext('Send your reply'),
+          subject_label: null,
+          mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
+          messageList: that.messageListView,
+          msg_in_progress_body: partialMessage.body,
+          msg_in_progress_ctx: modelId,
+          mandatory_subject_missing_msg: null
+        });
+
+        this.ui.messageReplyBox.removeClass('hidden');
+        this.messageReplyBoxRegion.show(this.replyView);
+        if (this.replyBoxHasFocus) {
+          //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
+          this.focusReplyBox();
+        }
+      }
+      else {
+        this.ui.messageReplyBox.addClass('hidden');
+      }
+
+      if (this.model.get('like_count') > 0) {
+        this.ui.likeCounter.show();
       } else {
-        this.$el.removeClass('read').addClass('unread');
+        this.ui.likeCounter.hide();
       }
-    }
 
-    Ctx.initTooltips(this.$el);
-    if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
-      Ctx.convertUrlsToLinks(this.$el.children('.message-body')); // we target only the body part of the message, not the title
-      Ctx.makeLinksShowOembedOnHover(this.$el.children('.message-body'));
-    }
-    if (this.model.get('metadata_json')) {
-      Ctx.makeLinksShowOembedOnHover(this.$el.find(".inspirationSource"));
-    }
+      //Translation view should only be shown when the message is in full view or in preview mode. Otherwise,
+      //do not show it
+      //Also, only the body translation triggers the translation view
+      if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY ||
+          this.viewStyle === this.availableMessageViewStyles.PREVIEW) {
 
-    this.postRender();
-
-    if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && (this.replyBoxShown || partialMessage.body)) {
-
-      this.replyView = new MessageSendView({
-        allow_setting_subject: false,
-        reply_message_id: modelId,
-        reply_message_model: this.model,
-        body_help_message: i18n.gettext('Type your response here...'),
-        cancel_button_label: null,
-        send_button_label: i18n.gettext('Send your reply'),
-        subject_label: null,
-        mandatory_body_missing_msg: i18n.gettext('You did not type a response yet...'),
-        messageList: that.messageListView,
-        msg_in_progress_body: partialMessage.body,
-        msg_in_progress_ctx: modelId,
-        mandatory_subject_missing_msg: null
-      });
-
-      this.ui.messageReplyBox.removeClass('hidden');
-      this.messageReplyBoxRegion.show(this.replyView);
-      if (this.replyBoxHasFocus) {
-        //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
-        this.focusReplyBox();
-      }
-    }
-    else {
-      this.ui.messageReplyBox.addClass('hidden');
-    }
-
-    if (this.model.get('like_count') > 0) {
-      this.ui.likeCounter.show();
-    } else {
-      this.ui.likeCounter.hide();
-    }
-
-    //Translation view should only be shown when the message is in full view or in preview mode. Otherwise,
-    //do not show it
-    //Also, only the body translation triggers the translation view
-    if (this.viewStyle == this.availableMessageViewStyles.FULL_BODY ||
-        this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
-
-      if (this.canShowTranslation() ) {
-        if ( (this.forceTranslationQuestion && !this.hideTranslationQuestion) || (
-            this.unknownPreference && !this.bodyTranslationError)) {
-          //Only show the translation view *iff* the message was translated by the backend
-          var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
-          this.translationRegion.show(translationView);
-          this.translationRegion.$el.removeClass("hidden");
-        } else if (this.translationRegion.$el) {
-          this.translationRegion.$el.addClass("hidden");
+        if (this.canShowTranslation() ) {
+          if ( (this.forceTranslationQuestion && !this.hideTranslationQuestion) || (
+              this.unknownPreference && !this.bodyTranslationError)) {
+            //Only show the translation view *iff* the message was translated by the backend
+            var translationView = new MessageTranslationView({messageModel: this.model, messageView: this});
+            this.translationRegion.show(translationView);
+            this.translationRegion.$el.removeClass("hidden");
+          } else if (this.translationRegion.$el) {
+            this.translationRegion.$el.addClass("hidden");
+          }
         }
       }
-    }
 
-    if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
-      //Only the full body view uses annotator
-      this.messageListView.requestAnnotatorRefresh();
-      this.renderAttachments();
-      this.renderIdeaClassification();
-    }
+      if (this.viewStyle === this.availableMessageViewStyles.FULL_BODY) {
+        //Only the full body view uses annotator
+        this.messageListView.requestAnnotatorRefresh();
+        this.renderAttachments();
+        this.renderIdeaClassification();
+      }
 
-    if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle !== this.availableMessageViewStyles.FULL_BODY) {
-      this.showReadLess();
-    }
+      if (this.viewStyle === that.availableMessageViewStyles.FULL_BODY && this.messageListView.defaultMessageStyle !== this.availableMessageViewStyles.FULL_BODY) {
+        this.showReadLess();
+      }
 
-    if (this.messageListView.isCurrentViewStyleThreadedType() && 
-        that.messageFamilyView.currentLevel !== 1) {
-      this.model.getParentPromise().then(function(parentMessageModel) {
-        //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
-        if (parentMessageModel && parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe()) {
-          //console.log("Hiding redundant title")
-          that.$(".message-subject").addClass('hidden');
-        }
-      });
-    }
+      if (this.messageListView.isCurrentViewStyleThreadedType() && 
+          that.messageFamilyView.currentLevel !== 1) {
+        this.model.getParentPromise().then(function(parentMessageModel) {
+          //console.log("comparing:", parentMessageModel.getSubjectNoRe(), that.model.getSubjectNoRe());
+          if (parentMessageModel && parentMessageModel.getSubjectNoRe() === that.model.getSubjectNoRe()) {
+            //console.log("Hiding redundant title")
+            that.$(".message-subject").addClass('hidden');
+          }
+        });
+      }
 
-    if (this.viewStyle === this.availableMessageViewStyles.PREVIEW) {
+      if (this.viewStyle === this.availableMessageViewStyles.PREVIEW) {
 
-      var applyEllipsis = function() {
-        /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
-         * Read More links for message previews
-         */
-        that.$(".ellipsis").dotdotdot({
-          after: "a.readMore",
-          callback: function(isTruncated, orgContent) {
-            //console.log("dotdotdot initialized on message", that.model.id);
-            //console.log(isTruncated, orgContent);
-            if (isTruncated)
-            {
-              that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
-            }
-            else
-            {
-              that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
-              if (that.model.get('body') && that.model.get('body').length > 610) // approximate string length for text which uses 4 full lines
+        var applyEllipsis = function() {
+          /* We use https://github.com/MilesOkeefe/jQuery.dotdotdot to show
+           * Read More links for message previews
+           */
+          that.$(".ellipsis").dotdotdot({
+            after: "a.readMore",
+            callback: function(isTruncated, orgContent) {
+              //console.log("dotdotdot initialized on message", that.model.id);
+              //console.log(isTruncated, orgContent);
+              if (isTruncated)
               {
-                if (Ctx.debugRender) {
-                  console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
-                }
-
-                if (++that.reRendered < 5) // we use this to avoid infinite loop of render() calls
+                that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").removeClass('hidden');
+              }
+              else
+              {
+                that.$(".ellipsis > a.readMore, .ellipsis > p > a.readMore").addClass('hidden');
+                if (that.model.get('body') && that.model.get('body').length > 610) // approximate string length for text which uses 4 full lines
                 {
                   if (Ctx.debugRender) {
-                    console.log("yes, we will re-render => tries: ", that.reRendered);
+                    console.log("there may be a problem with the dotdotdot of message ", that.model.id, "so we will maybe re-render it");
                   }
 
-                  setTimeout(function() {
-                    that.render();
-                  }, 500);
-                }
-                else
-                {
-                  if (Ctx.debugRender) {
-                    console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                  if (++that.reRendered < 5) // we use this to avoid infinite loop of render() calls
+                  {
+                    if (Ctx.debugRender) {
+                      console.log("yes, we will re-render => tries: ", that.reRendered);
+                    }
+
+                    setTimeout(function() {
+                      that.render();
+                    }, 500);
+                  }
+                  else
+                  {
+                    if (Ctx.debugRender) {
+                      console.log("no, we won't re-render it because we already tried several times: ", that.reRendered);
+                    }
                   }
                 }
               }
+            },
+            watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
+          });
+        };
+
+        that.messageListView.requestPostRenderSlowCallback(function() {
+
+          setTimeout(function() {
+            //console.log("Initializing ellipsis on message", that.model.id);
+            var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+
+            //console.log("current_navigation_state:", current_navigation_state);
+            if (current_navigation_state === 'about')
+            {
+              that.listenToOnce(Assembl.vent, 'DEPRECATEDnavigation:selected', applyEllipsis);
+              return;
             }
-          },
-          watch: "window" //TODO:  We should trigger updates from the panel algorithm instead
+
+            applyEllipsis();
+          }, 100);
+
+          /* We no longer need this, but probably now need to
+           * update when the panels change size with the
+           * new system benoitg-2014-09-18
+           *
+           * that.listenTo(that.messageListView, "messageList:render_complete", function () {
+             that.$(".ellipsis").trigger('update.dot');
+             });*/
         });
-      };
 
-      that.messageListView.requestPostRenderSlowCallback(function() {
+        var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
 
-        setTimeout(function() {
-          //console.log("Initializing ellipsis on message", that.model.id);
-          var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
+        //console.log("current_navigation_state:", current_navigation_state);
+        //Why do we need the following block?  benoitg-2015-03-03
+        //console.log('current_navigation_state is:', current_navigation_state);
+        if (current_navigation_state !== undefined) {
+          //console.log('Setting listener on DEPRECATEDnavigation:selected');
+          that.listenTo(Assembl.vent, 'DEPRECATEDnavigation:selected', function(navSection) {
+            //console.log('New navigation has just been selected:', navSection);
+            if (navSection === 'debate') {
+              //console.log('Updating dotdotdot because debate has just been selected');
+              that.messageListView.requestPostRenderSlowCallback(function() {
+                that.$(".ellipsis").trigger('update.dot');
+              });
+            }
+          });
+        }
 
-          //console.log("current_navigation_state:", current_navigation_state);
-          if (current_navigation_state === 'about')
-          {
-            that.listenToOnce(Assembl.vent, 'DEPRECATEDnavigation:selected', applyEllipsis);
-            return;
-          }
-
-          applyEllipsis();
-        }, 100);
-
-        /* We no longer need this, but probably now need to
-         * update when the panels change size with the
-         * new system benoitg-2014-09-18
-         *
-         * that.listenTo(that.messageListView, "messageList:render_complete", function () {
-           that.$(".ellipsis").trigger('update.dot');
-           });*/
-      });
-
-      var current_navigation_state = that.messageListView.getContainingGroup().model.get('navigationState');
-
-      //console.log("current_navigation_state:", current_navigation_state);
-      //Why do we need the following block?  benoitg-2015-03-03
-      //console.log('current_navigation_state is:', current_navigation_state);
-      if (current_navigation_state !== undefined) {
-        //console.log('Setting listener on DEPRECATEDnavigation:selected');
-        that.listenTo(Assembl.vent, 'DEPRECATEDnavigation:selected', function(navSection) {
-          //console.log('New navigation has just been selected:', navSection);
-          if (navSection === 'debate') {
-            //console.log('Updating dotdotdot because debate has just been selected');
-            that.messageListView.requestPostRenderSlowCallback(function() {
-              that.$(".ellipsis").trigger('update.dot');
-            });
-          }
-        });
       }
-
     }
+
 
   },
 
@@ -1053,9 +1075,9 @@ var MessageView = Marionette.LayoutView.extend({
     }
 
     return false;
-    },
+  },
 
-    onClickShare: function(e) {
+  onClickShare: function(e) {
       var analytics = Analytics.getInstance();
       analytics.trackEvent(analytics.events.MESSAGE_SHARE_BTN_CLICKED);
     },
@@ -1513,6 +1535,52 @@ var MessageView = Marionette.LayoutView.extend({
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsClose', this.onModerationOptionsClose);
   },
 
+  onDeleteMessageClick: function(ev){
+    var that = this;
+    // We could try to minimize context switching for the user, by scrolling the viewport to the message the user wants to delete, as soon as the confirmation popin opens, using this line of code:
+    // that.messageListView.scrollToMessage(that.model, false, false);
+    
+    var onSubmit = function(ev){
+      var analytics = Analytics.getInstance();
+      analytics.trackEvent(analytics.events.MESSAGE_LIKED);
+      // we could use that.model.destroy() instead, and add || method == "delete" to models/message.js::sync()
+      var message_delete_url = that.model.getApiV2Url();
+      Promise.resolve(
+        $.ajax(message_delete_url, {
+          method: "DELETE",
+          contentType: "application/json",
+          dataType: "json"
+        })
+      ).then(function(data) {
+        Growl.showBottomGrowl(
+          Growl.GrowlReason.SUCCESS,
+          i18n.gettext('Message has been successfully deleted.'),
+          { delay: 12000 }
+        );
+
+        // Refresh the messageList
+        that.messageListView.render();
+        setTimeout(function(){
+          that.messageListView.showMessageById(that.model.id, null, true, false);
+        }, 500);
+        
+      }).catch(function(e) {
+        Growl.showBottomGrowl(
+          Growl.GrowlReason.ERROR,
+          i18n.gettext('Error: Message could not be deleted.'),
+          { delay: 12000 }
+        );
+      });
+    };
+    var confirm = new ConfirmModal({
+      contentText: i18n.gettext('Are you sure you want to delete this message?'),
+      cancelText: i18n.gettext('No'),
+      submitText: i18n.gettext('Yes'),
+      onSubmit: onSubmit,
+    });
+    Assembl.slider.show(confirm);
+  },
+
   onShowTranslationClick: function(ev){
     this.forceTranslationQuestion = true;
     this.hideTranslationQuestion = false;
@@ -1943,9 +2011,14 @@ var MessageView = Marionette.LayoutView.extend({
     @param {Object}  preference:   The UserLanguagePreference Collection 
    */
   initiateTranslationState: function(preferences){
-    var translationData = preferences.getTranslationData(),
-        body = this.model.get("body"),
-        preference = preferences.getPreferenceForLocale(body.original().getBaseLocale());
+    //console.log("vody:", this.model.get("body"));
+    var translationData = preferences.getTranslationData();
+    var body = this.model.get("body");
+    var locale = "und";
+    try {
+      locale = body.original().getBaseLocale();
+    } catch(e) {}
+    var preference = preferences.getPreferenceForLocale(locale);
 
     //Dict cache of locale -> full name
     this.langCache = Ctx.getLocaleToLanguageNameCache();

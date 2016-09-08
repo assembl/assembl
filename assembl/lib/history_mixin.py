@@ -47,6 +47,11 @@ class TombstonableMixin(object):
         cls = alias or cls
         return cls.tombstone_date == None
 
+    @classmethod
+    def not_tombstone_condition(cls, alias=None):
+        cls = alias or cls
+        return cls.tombstone_date != None
+
     def unique_query(self):
         # we only care about unicity of non-tombstones
         query, valid = super(TombstonableMixin, self).unique_query()

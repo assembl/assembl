@@ -7,7 +7,7 @@
 
 .idealist-header-title {
   display: inline-block;
-  color: $txtGray1;
+  color: $theme_navigation_idea_header_text_color;
   text-transform: uppercase;
   font-size: 11px;
 }
@@ -26,7 +26,7 @@
   }
 
   .dropdown .icon-options {
-    color: $txtGray1;
+    color: $theme_navigation_options;
   }
 }
 
@@ -81,12 +81,12 @@
     background-color: $theme_navigation_or_idea_bg_active;
     //border-right: 4px solid $green;
     .idealist-counter {
-      color: $black;
+      color: $theme_navigation_idea_hover_total_count;
     }
     .idealist-title-unread-count {
       //find the best solution for radius hover
-      color: $gray4;
-      background-color: $white;
+      color: $theme_navigation_idea_hover_unread_count;
+      background-color: $theme_navigation_idea_hover_unread_count_background;
       @include border-radius(10px);
       padding: 2px 6px;
     }
@@ -117,11 +117,11 @@
     background-color: $theme_item_selected_color;
     border-right: 4px solid $theme_item_selected_secondary_color;
     .idealist-counter {
-      color: $white;
+      color: $theme_navigation_selected_idea_total_count;
     }
     .idealist-title-unread-count {
-      color: $gray4;
-      background-color: $white;
+      color: $theme_navigation_selected_idea_unread_count;
+      background-color: $theme_navigation_selected_idea_unread_count_background;
       padding: 2px 6px;
       font-size: 11px;
     }
@@ -207,6 +207,7 @@
 }
 
 // Subtitle ( which goes AFTER the title visually )
+// TODO: This seems to be used nowhere except in old styleguide. Remove?
 // ----------------
 .idealist-subtitle {
   float: right;
@@ -224,7 +225,7 @@
   overflow: hidden;
   cursor: pointer;
   //padding-left: 10px;
-  color: $black;
+  color: $theme_navigation_idea_text_color;
   line-height: $tableOfIdeasRowHeight - 2;
 }
 
@@ -234,7 +235,7 @@
 
 .idealist-title-unread-count {
   font-size: 11px;
-  color: $theme_read_unread_item;
+  color: $theme_navigation_idea_unread_count;
   @include border-radius(10px);
   padding: 2px 6px;
 }
@@ -248,10 +249,7 @@
   text-align: right;
   font-size: 11px;
   font-weight: bold;
-  color: #cccccc;
-  .idea-unread-posts {
-    color: #555;
-  }
+  color: $theme_navigation_idea_total_count;
 }
 
 // Remove button

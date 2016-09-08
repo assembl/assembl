@@ -58,6 +58,8 @@ class AbstractMailbox(PostSource):
 
     folder = Column(UnicodeText, default=u"INBOX", nullable=False)
 
+    # The admin sender email is used for notifications, usually with the
+    # name of the original post sender.
     admin_sender = Column(EmailString)
 
     last_imported_email_uid = Column(UnicodeText)
@@ -886,6 +888,7 @@ class MailingList(IMAPMailbox):
         onupdate='CASCADE'
     ), primary_key=True)
 
+    # The address through which messages are sent to the list
     post_email_address = Column(UnicodeText, nullable=True)
 
     __mapper_args__ = {

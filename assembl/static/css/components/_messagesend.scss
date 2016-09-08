@@ -4,7 +4,7 @@
 .messageSend {
   margin: 0.5em 0 0 0;
   display: block;
-  background-color: lighten($gray5, 5%);
+  background-color: $theme_messagesend_bg_color;
   padding: 10px 15px 5px;
   .hidden {
     display: none;

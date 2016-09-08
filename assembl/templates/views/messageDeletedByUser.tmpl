@@ -1,0 +1,108 @@
+<% if(creator){ %>
+    {% set userName = "<%= creator.get('name') %>" %}
+<% } %>
+{% set precise_date = "<%= ctx.getReadableDateTime(message.get('date')) %>" %}
+{% set nice_date = "<%= ctx.getNiceDate(message.get('date'), false, true) %>" %}
+{% macro readUnreadIndicator() -%}
+
+  <% if ( user_is_connected ){
+    if ( read ){ %>{# Strip whitespace ...
+      #}<div class="readUnreadIndicatorClickZone js_message-markasunread" data-toggle="tooltip" title="{{ gettext('Mark as unread') }}" data-placement="left"><span class="readUnreadIndicator indice" ></span></div>{# Strip whitespace ...
+    #}<% } else { %>{# Strip whitespace ...
+        #}<div class="readUnreadIndicatorClickZone js_message-markasread" data-toggle="tooltip" title="{{ gettext('Mark as read') }}" data-placement="left"><span class="readUnreadIndicator indice"></span></div>{# Strip whitespace ...
+    #}<% }
+  } %>
+  </div>
+{%- endmacro %}
+
+{% macro menuAction() -%}
+  <% /* if the "More options" menu will be empty, do not show it */
+  if (user_is_connected || (creator && creator.get('preferred_email') && user_can_see_email)){ %>
+   <div class="message-menu">
+     <ul class="pan man">
+        <li class="dropdown mrxl mts">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            {{ gettext('More options') }}
+            <span class="icon-arrowdown"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <% if (user_is_connected){ %>
+             <% if (read){ %>
+                 <li><a href="#" class="js_message-markasunread dropdown-listitem">{{ gettext('Mark as unread') }}</a></li>
+             <% } else { %>
+                 <li><a href="#" class="js_message-markasread dropdown-listitem">{{ gettext('Mark as read') }}</a></li>
+             <% } %>
+            <% } %>
+
+            <% if(creator && creator.get('preferred_email') && user_can_see_email){ %>
+            <li><a title="<%= creator.get('preferred_email') %>" href="mailto:<%= creator.get('preferred_email') %>">{{ gettext('Send an email to this user')}}</a></li>
+            <% } %>
+        </ul>
+        </li>
+     </ul>
+   </div>
+  <% } %>
+{%- endmacro %}
+
+<% if ( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.TITLE_ONLY ){ %>
+  <div class="leftSection js_messageTitle">
+    <div class="js_avatarContainer avatarContainer"></div>
+    <span class="message-author js_nameContainer"></span>
+  </div>
+  <div class="rightSection">
+    <span class="message-date js_messageHeader">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</span>
+    {# Strip whitespace ...#}{{ readUnreadIndicator() }}{# Strip whitespace ...#}
+  </div>
+  <div class="centerSection">
+    <div class="message-abstract js_messageTitle">
+      <span class="message-subject"><%= subject %></span>
+      <span class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></span>
+      <div class="messageAttachments js_regionMessageAttachments hidden"></div>
+      <div class="js_regionMessageModerationOptions hidden"></div>
+    </div>
+  </div>
+
+<% } else { %>
+  <div class="js_messageHeader rc rcss pbxs mbs head">
+    <% if(creator){ %>
+      <div class="js_avatarContainer"></div>
+    <% } %>
+    <div class="message-headerAndDate">
+      <div class="message-author" data-user-id="<%= creator.get('@id') %>"><span class='js_nameContainer'></span></div>
+      <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</div>
+      {{ readUnreadIndicator() }}
+    </div>
+  </div>
+
+  {# more option now avalaible in both view full body and preview #}
+  {{ menuAction() }}
+
+<% } %>
+
+<% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
+  {#  Body section
+      Note:  bodyFormatClass can currently have values body_format_text_plain or  body_format_text_html
+  #}
+  <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
+    <h4 class="message-subject js_messageTitle h4"><%= subject %></h4>
+    <div class="message-body ellipsis <%= bodyFormatClass %> js_readMore" id="<%= messageBodyId %>">
+      <p class=""><%= body %></p>{# Do NOT introduce whitespace within this div #}
+      <div class="messageAttachments js_regionMessageAttachments hidden"></div>
+      <div class="js_regionMessageModerationOptions hidden"></div>
+      <a class="readMore readMoreOrLess js_readMore hidden" href="#" alt="{{ gettext('Read more') }}"><i class="icon-arrowdown"></i> {{ gettext('Read more') }}</a>
+    </div>
+  <% } else if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
+    <h4 class="message-subject js_messageTitle h4"><%= subject %></h4>
+    {# This is the part that annotator processes.  Do NOT introduce ANY HTML within this div #}
+    <div class="message-body <%= bodyFormatClass %>" id="<%= messageBodyId %>"><%= body %></div>
+    <div class="messageAttachments js_regionMessageAttachments"></div>
+    <div class="js_regionMessageModerationOptions"></div>
+    <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
+  <% } %>
+
+  <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
+    <div class="mtm idea-classification js_idea-classification-region"></div>
+  <% } %>
+
+<% } %>
+<div class="message-replybox js_messageReplyBoxRegion hidden"></div>

@@ -39,7 +39,7 @@ updated with
 
 If the terminal tells you command pip not found, follow the installation instructions of pip on https://pip.pypa.io/en/stable/installing/
 
-Go to http://brew.sh and follow the instructions to install Homebrew. (It is required by the command fab devenv install_builddeps which will be run in a following step)
+Go to http://brew.sh and follow the instructions to install Homebrew. (It is required by the command fab env_dev install_builddeps which will be run in a following step)
 If you want to use the Homebrew python,
 pip installs with python:
 
@@ -84,7 +84,7 @@ or:
     fab env_dev install_builddeps
     fab env_dev bootstrap_from_checkout
 
-Note: If on Mac, command fab devenv install_builddeps outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
+Note: If on Mac, command fab env_dev install_builddeps outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
 
 Note: If you get the following error: ``fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)`` Then you'll need to reconfigure your ssh server
 
@@ -139,7 +139,7 @@ that case, you would copy it to a ``local.ini`` file, and customize the
 values there; substitute ``local.ini`` for ``development.ini`` in the
 rest of the instructions in this file.
 
-Once you create your local.ini, re-run the ``fab devenv app_setup``
+Once you create your local.ini, re-run the ``fab env_dev app_setup``
 step.
 
 The variables that have to be different between instances are the
@@ -152,7 +152,7 @@ the ini file):
     public_port = 6543
     changes.socket = ipc:///tmp/assembl_changes/0
     changes.websocket.port = 8085
-    celery_tasks.imap.broker.broker = redis://localhost:6379/0
+    celery_tasks.broker.broker = redis://localhost:6379/0
     celery_tasks.notification_dispatch.broker = redis://localhost:6379/1
     [server:main]
     port = 6543
@@ -181,7 +181,7 @@ Updating an environment
 
     cd ~/assembl
     #Any git operations (ex:  git pull)
-    fab devenv app_compile
+    fab env_dev app_compile
     $venv/bin/supervisorctl start dev:*
 
 You can monitor any of the processes, for example pserve, with these
@@ -204,14 +204,14 @@ css, all compiled files, update dependencies, database schema, etc.):
 
 .. code:: sh
 
-    fab devenv app_compile
+    fab env_dev app_compile
 
 Updating an environment to it's specified branch, tag or revision:
 
 .. code:: sh
 
     cd ~/assembl
-    fab devenv app_fullupdate
+    fab env_dev app_fullupdate
 
 Schema migrations
 ~~~~~~~~~~~~~~~~~
@@ -306,14 +306,16 @@ The following must all be unique to the instance.  If you only have one instance
 * ``celery_tasks.translate.broker``
 * ``port``
 
-Set it to the user you created above
-``uid``
+Also, set the ``uid`` field of your ini file to the username of the unix user you created above. For example: ``uid = assembl_user``
+If you have not added this user to the www-data group as advised previously (or to a group which is common with the ngnix user), then you also have to set the ``gid`` field to a common group name.
+
 
 (exit to sudoer account)
 
 .. code:: sh
 
-    fab devenv bootstrap_from_checkout
+    fab env_dev install_builddeps
+    fab env_dev bootstrap_from_checkout
     assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
 
 Copy the content of ``doc/sample_nginx_config/assembl.yourdomain.com`` into nginx config file, and modify

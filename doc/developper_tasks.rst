@@ -11,6 +11,7 @@ Download a copy of a remote database to develop locally
 -------------------------------------------------------
 
 .. code:: sh
+
     fab env_name_of_remote_env database_download
     fab env_dev database_restore
     # Make sure the database username and passwords in local.ini match the ones of the database you just downloaded
@@ -27,6 +28,7 @@ Run tests
 Only the first time you run it:
 
 .. code:: sh
+
     sudo -u postgres createuser --createdb --no-createrole --no-superuser assembl_test --pwprompt  #Enter assembl_test as password at the prompt
     PGPASSWORD=assembl_test createdb --host localhost -U assembl_test assembl_test
     cp testing.ini.example testing.ini

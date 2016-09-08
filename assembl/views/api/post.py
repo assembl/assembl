@@ -169,6 +169,66 @@ def get_posts(request):
         ideaContentLinkQuery = ideaContentLinkQuery.filter(
             PostClass.hidden==asbool(hidden))
 
+
+    # "true" means deleted only, "false" (default) means non-deleted only. "any" means both.
+
+    # v0
+    # deleted = request.GET.get('deleted', 'any')
+    # end v0
+
+    # v1: we would like something like that
+    # deleted = request.GET.get('deleted', None)
+    # if deleted is None:
+    #     if view_def == 'id_only':
+    #         deleted = 'any'
+    #     else:
+    #         deleted = 'false'
+    # end v1
+
+    # v2
+    # deleted = request.GET.get('deleted', None)
+    # if deleted is None:
+    #     if not ids:
+    #         deleted = 'false'
+    #     else:
+    #         deleted = 'any'
+    #
+    # if deleted == 'false':
+    #     posts = posts.filter(PostClass.tombstone_condition())
+    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.tombstone_condition())
+    # elif deleted == 'true':
+    #     posts = posts.filter(PostClass.not_tombstone_condition())
+    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
+    # elif deleted == 'any':
+    #     # result will contain deleted and non-deleted posts
+    #     pass
+    # end v2
+
+
+    # v3
+    # deleted = request.GET.get('deleted', None)
+    # if deleted is None:
+    #     if not ids:
+    #         deleted = 'false'
+    #     else:
+    #         deleted = 'any'
+
+    # if deleted == 'true':
+    #     posts = posts.filter(PostClass.not_tombstone_condition())
+    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
+    # end v3
+
+    # v4
+    deleted = request.GET.get('deleted', None)
+    if deleted is None:
+        if not ids:
+            deleted = 'false'
+        else:
+            deleted = 'any'
+    #if deleted != 'false' and deleted != 'true' and deleted != 'any':
+    #    deleted = 'false'
+    # end v4
+
     if root_idea_id:
         related = Idea.get_related_posts_query_c(
             discussion_id, root_idea_id, True)
@@ -314,16 +374,68 @@ def get_posts(request):
         posts = posts.order_by(Content.body_text_index.score_name.desc())
     else:
         posts = posts.order_by(Content.id)
-    print str(posts)
+    # print str(posts)
 
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
+
+
+    def post_and_its_whole_line_of_descent_are_deleted(post):
+        """
+        :returns: True if post and its whole line of descent (direct and indirect answers) are deleted, False otherwise.
+        :rtype: bool
+        :param post: The post you want to analyse
+        :type post: assembl.models.Post
+
+        """
+        if not post.is_tombstone:
+            return False
+        children = post.children
+        if len(children) == 0:
+            return True
+        for child in children:
+            if not post_and_its_whole_line_of_descent_are_deleted(child):
+                return False
+        return True
+
+    def post_or_one_of_line_of_descent_is_deleted(post):
+        """
+        :returns: True if post or one of its line of descent (direct and indirect answers) is deleted, False otherwise.
+        :rtype: bool
+        :param post: The post you want to analyse
+        :type post: assembl.models.Post
+        
+        """
+        if post.is_tombstone:
+            return True
+        children = post.children
+        if len(children) == 0:
+            return False
+        for child in children:
+            if post_or_one_of_line_of_descent_is_deleted(child):
+                return True
+        return False
 
     for query_result in posts:
         score, viewpost, likedpost = None, None, None
         if not isinstance(query_result, (list, tuple)):
             query_result = [query_result]
         post = query_result[0]
+
+        # The response should not include deleted posts which do not break the structure of threads (these are deleted posts which have not received any direct or indirect non-deleted answer)
+        # Look for non-deleted (direct or indirect) children, and if there is none, we know that removing it from the results will not break the structure
+        # TODO: use recursion at the SQL query level instead
+        ignore_this_post = False
+        if deleted == 'false':
+            if post_and_its_whole_line_of_descent_are_deleted(post):
+                ignore_this_post = True
+        elif deleted == 'true':
+            if not post_or_one_of_line_of_descent_is_deleted(post):
+                ignore_this_post = True
+        if ignore_this_post:
+            continue
+
+
         if user_id != Everyone:
             viewpost = post.id in read_posts
             likedpost = liked_posts.get(post.id, None)
