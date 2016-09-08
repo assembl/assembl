@@ -287,7 +287,7 @@ var IdeaPanel = AssemblPanel.extend({
     }
 
     else {
-      var attachmentView = new AttachmentViews.AttachmentView({
+      var attachmentView = new AttachmentViews.AttachmentCollectionView({
         collection: collection
       });
       this.attachment.show(attachmentView);

@@ -588,7 +588,22 @@ var AttachmentUploadTextView = AttachmentUploadButtonView.extend({
   },
 
   template: "#tmpl-attachmentText"
-})
+});
+
+
+/**
+ * @class app.views.attachments.AttachmentCollectionView
+ */
+var AttachmentCollectionView = Marionette.CollectionView.extend({
+  /*
+    A attachment collection view that is NOT editable
+   */
+  constructor: function AttachmentCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
+  childView: AttachmentView
+});
 
 
 module.exports = module.exports = {
@@ -598,5 +613,6 @@ module.exports = module.exports = {
     AttachmentUploadButtonView: AttachmentUploadButtonView,
     AttachmentUploadTextView: AttachmentUploadTextView,
     AttachmentEditUploadView: AttachmentEditUploadView,
+    AttachmentCollectionView: AttachmentCollectionView,
     TARGET: TARGET
   };
