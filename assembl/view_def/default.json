@@ -309,7 +309,8 @@
         "numChildIdea": "num_children",
         "num_total_and_read_posts": true,
         "widget_links": "&widget_link_signatures",
-        "widget_add_post_endpoint": true
+        "widget_add_post_endpoint": true,
+        "attachments": [":default"]
     },
     "RootIdea": {
         "@extends": "Idea",

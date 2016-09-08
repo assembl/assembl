@@ -11,7 +11,8 @@ var $ = require('jquery'),
     Ctx = require('../common/context.js'),
     Promise = require('bluebird'),
     Types = require('../utils/types.js'),
-    Document = require('../models/documents.js');
+    Document = require('../models/documents.js'),
+    Growl = require('../utils/growl.js');
     
 var attachmentPurposeTypes = {
   /** 
@@ -214,8 +215,12 @@ var AttachmentModel = Base.Model.extend({
         that = this;
     return d.destroy({
       success: function(model, response){
-        console.log('in document destroy success callback');
         return Base.Model.prototype.destroy.call(that);
+      },
+      error: function(model, response){
+        console.warn("Could NOT destroy document model id " + d.id
+                     + "\nContinuing to destroy attachment id " + this.id);
+        return Base.Model.prototype.destroy.call(that); 
       }
     });
   },
@@ -272,7 +277,15 @@ var AttachmentCollection = Base.Collection.extend({
    * The model
    * @type {PartnerOrganizationModel}
    */
-  model: AttachmentModel,
+  model: function(attrs, options){
+    //Add parse so that the document model is also parsed in an attachment
+    if (!options){
+      options = {};
+    }
+    options.parse = true;
+    return new AttachmentModel(attrs, options);
+  },
+
   /**
    * @function app.models.attachments.AttachmentCollection.initialize
    */
@@ -282,7 +295,16 @@ var AttachmentCollection = Base.Collection.extend({
     }
     else {
       this.objectAttachedToModel = options.objectAttachedToModel;
+      _.each(models, function(model){
+        model.objectAttachedToModel = options.objectAttachedToModel; 
+      });
     }
+    
+    /*
+      For attachment collections that will only be storing failed models - those that did not
+      save to the database
+     */
+    this.isFailed = options.failed || false;
   },
   /**
    * Compares dates between 2 documents
@@ -314,6 +336,7 @@ var AttachmentCollection = Base.Collection.extend({
     }
     else { return 0; }
   },
+  
   /**
    * Helper method to destroy the models in a collection
    * @param  {Array|Backbone.Model} models    Model or Array of models  
@@ -370,8 +393,152 @@ var AttachmentCollection = Base.Collection.extend({
   }
 });
 
+/*
+  An attachment collection that allows for validation
+ */
+var ValidationAttachmentCollection = AttachmentCollection.extend({
+
+
+  initialize: function(models, options){
+    this.limits = options.limits || {};
+    AttachmentCollection.prototype.initialize.apply(this, arguments);
+  },
+
+  /*
+    takes an array of models and makes validation check
+   */
+  addValidation: function(models){
+    //If there is a count limit, override the old data (remove them first, though)
+    //The removal is done in a FIFO format
+
+    if (!models){
+      return [];
+    }
+
+    var correctedNumberModelsCollection = models,
+        that = this;
+
+    if (!this.isCountLimitCorrect(models)){
+      correctedNumberModelsCollection= this.getCorrectCountedCollection(models);
+      if (this.length > models.length){
+        for (var i in correctedNumberModelsCollection.count){
+          var modelToRemove = this.shift();
+          modelToRemove.destroy();
+        }
+      }
+      else {
+        this.each(function(model){
+          model.destroy();
+        });
+      }
+
+      correctedNumberModelsCollection = correctedNumberModelsCollection.collection;
+    }
+
+    _.each(correctedNumberModelsCollection, function(model){
+      if (!that.isTypeLimitCorrect(model)){
+        model.typeLimitReached = true;
+        Growl.showBottomGrowl(
+          Growl.GrowlReason.ERROR,
+          i18n.gettext('Sorry, only an image type is supported in this upload. Please try again.')
+        );
+      }
+    });
+    
+    //Remove the naughty models from the collection
+    models = _.filter(correctedNumberModelsCollection, function(model){
+      return model.typeLimitReached !== true;
+    });
+    //If it passes both checks, return it
+    return models;
+  },
+
+  /*
+    Override the add operation to set limits, if any exists
+   */
+  add: function(models){
+
+    if (!this.limits || this.isFailed){
+      //If this is a failed collection, do not do any validation
+      return AttachmentCollection.prototype.add.apply(this, arguments);
+    }
+
+    if (!(_.isArray(models))){
+      models = [models];
+    }
+    //Check validation in all other cases
+    models = this.addValidation(models);
+
+    if (!models) {
+      return;  //This might be the wrong operation
+    }
+
+    return AttachmentCollection.prototype.add.call(this, models);
+  },
+
+  isTypeLimitCorrect: function(model){
+    if (model === undefined || (_.isArray(model) && _.isEmpty(model))){
+      //Not relevant
+      return true;
+    }
+    if ((this.limits.type !== null) && (_.isString(this.limits.type)) ){
+      //Fucking horrible javascript hack to determine the ClassType. Bloody hell...
+      if (model.constructor === AttachmentModel){
+        if ( !(model.getDocument().get('mime_type').includes(this.limits.type)) ){
+          return false;
+        }
+      }
+      else {
+        //When loading from DB, model is not yet a parsed model.
+        if ( !(model.document['mime_type'].includes(this.limits.type)) ){
+          return false;
+        }
+      }
+    }
+    return true;
+  },
+
+  isCountLimitCorrect: function(models){
+    if (models === undefined || (_.isArray(models) && _.isEmpty(models))){
+      //Not relevant
+      return true;
+    }
+    if ((this.limits.count) && (_.isNumber(this.limits.count)) ){
+      if (_.isArray(models)){
+        if (this.length + models.length > this.limits.count){
+          return false;
+        }
+      }
+      //Plus one because models has a count of 1 if it is not an array
+      if (this.length + 1 > this.limits.count) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  getCorrectCountedCollection: function(models){
+    var that = this;
+    if (_.isArray(models)){
+      if (models.length > this.limits.count){
+        var modelsToReturn = models.slice(0, this.limits.count);
+        return {
+          collection: modelsToReturn,
+          count: modelsToReturn.length
+        }
+      }
+    }
+    return {
+      collection: [models],
+      count: 1
+    }
+  }
+
+});
+
 module.exports = {
   attachmentPurposeTypes: attachmentPurposeTypes,
   Model: AttachmentModel,
-  Collection: AttachmentCollection
+  Collection: AttachmentCollection,
+  ValidationAttachmentCollection: ValidationAttachmentCollection
 };

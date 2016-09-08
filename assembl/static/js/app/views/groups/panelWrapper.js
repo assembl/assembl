@@ -51,6 +51,12 @@ var PanelWrapper = Marionette.LayoutView.extend({
     var that = this;
     var contentClass = panelViewByPanelSpec.byPanelSpec(options.contentSpec);
     this.groupContent = options.groupContent;
+    
+    //Shit hack to store the duration as a view variable
+    //Some entities will require to know when an animation is completed.
+    //TODO: Make fadeIn/fadeOut animation a Promise.
+    this.animationDuration = 1000; //milliseconds
+
     if (!this.groupContent) {
       throw new Error("The groupContent wasn't passed in the options");
     }
@@ -168,7 +174,8 @@ var PanelWrapper = Marionette.LayoutView.extend({
   },
 
   displayContent:function(skipAnimation){
-    var animationDuration = 1000;
+    //var animationDuration = 1000;
+    var animationDuration = this.animationDuration;
     var that = this;
     var isPanelMinimized = this.model.get('minimized');
     if(isPanelMinimized){

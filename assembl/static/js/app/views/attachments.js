@@ -15,6 +15,12 @@ var Marionette = require('../shims/marionette.js'),
     Documents = require('../models/documents.js'),
     DocumentViews = require('./documents.js');
 
+
+const TARGET = {
+  IDEA: 'IDEA',
+  MESSAGE: 'MESSAGE'
+};
+
 /** 
  * Represents the link between an object (ex: Message, Idea) and a remote (url)
  * or eventually local document attached to it.
@@ -122,7 +128,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
     this.parentView = options.parent ? options.parent : null;
     var that = this;
     this.extrasAdded = {};
-    _.each(this.extras, function(v,k){
+    _.each(that.extras, function(v,k){
       that.extrasAdded[k] = false;
     });
   },
@@ -165,7 +171,7 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
 
   _updateExtrasCompleted: function(){
     var that = this;
-    _.each(this.extras, function(v, k){
+    _.each(that.extras, function(v, k){
       that.extrasAdded[k] = true;
     });
   },
@@ -183,12 +189,13 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
   _renderAttachmentPurpose: function(){
     var purposesHtml = [],
         that = this;
-    _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
-      purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
-    });
-
+    if(this.model.get('@type') !== 'IdeaAttachment'){
+      _.each(Attachments.attachmentPurposeTypes, function(attachmentPurposeDef) {
+        purposesHtml.push('<li><a class="js_attachmentPurposeDropdownListItem" data-id="' + attachmentPurposeDef.id + '" data-toggle="tooltip" title="" data-placement="left" data-original-title="' + attachmentPurposeDef.id + '">' + attachmentPurposeDef.label + '</a></li>');
+      });
+    }
     if (this.extras) {
-      _.each(this.extras, function(v,k){
+      _.each(that.extras, function(v,k){
         if (!that.extrasAdded[k]) {
           purposesHtml.push(v);
         }
@@ -205,7 +212,9 @@ var AttachmentEditableView = AbstractAttachmentView.extend({
         html = "";
 
     html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">';
+    html += '<span class="dropdown-label">';
     html += Attachments.attachmentPurposeTypes[this.model.get('attachmentPurpose')].label;
+    html += '</span>';
     html += '<span class="icon-arrowdown"></span></a>';
     html += '<ul class="dropdown-menu">';
     html += purposesList ? purposesList.join(''): "";
@@ -261,6 +270,54 @@ var AttachmentFileEditableView = AttachmentEditableView.extend({
 
 });
 
+
+/*
+  The view used for attachments in the idea panel when attachment is editable
+  ie. when the user has the permission to upload a file.
+ */
+var AttachmentFileEditableViewIdeaPanel = AttachmentFileEditableView.extend({
+  initialize: function(options){
+    //Save the attachment as soons as the document is saved
+    var doc = this.model.getDocument();
+    this.listenToOnce(doc, 'sync', this.onDocumentSave);
+    AttachmentFileEditableView.prototype.initialize.call(this, options);
+  },
+
+  modelEvents: {
+    'change': 'onChange',
+    'destroy': 'onDestroy'
+  },
+
+  onDocumentSave: function(documentModel, resp, options){
+    //Save the attachment model as well, as in the idea panel, there is no confirmation
+    //to save the attachment
+    this.model.save();
+  },  
+
+  /*
+    There is a limit of 1 attachment, so this *should* only be called once
+   */
+  onChange: function(e){
+    var domObject = $(".content-ideapanel");
+    this.$el.find(".embedded-image-preview").load(function() {
+      var contentPanelPosition = $(window).height() / 3;
+      var imgHeight = $(this).height();
+      if(imgHeight > contentPanelPosition){
+        domObject.css('top', contentPanelPosition);
+      }else{
+        domObject.css('top', imgHeight);
+      }
+    });
+    $('[data-id="DO_NOT_USE"]').hide();
+    $('[data-id="EMBED_ATTACHMENT"]').hide();
+  },
+
+  onDestroy: function(e){
+    var domObject = $(".content-ideapanel");
+    domObject.css('top', '0px');
+  }
+});
+
 /*
   Generic view for a file-based attachment that failed to load
  */
@@ -293,6 +350,15 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
 
   initialize: function(options){
     this.parentView = options.parentView ? options.parentView : null;
+    this.limits = options.limits || {};
+  },
+
+  /*
+    To change the kind of view generated dynamically, subclass and
+    override this method to define new behaviour.
+   */
+  getFileEditView: function(){
+    return AttachmentFileEditableView;
   },
 
   getChildView: function(item){
@@ -307,7 +373,7 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
         return AttachmentEditableView
         break;
       case Types.FILE:
-        return AttachmentFileEditableView;
+        return this.getFileEditView();
         break;
       default:
         return new Error("Cannot create a CollectionView with a document of @type: " + d.get('@type'));
@@ -317,18 +383,31 @@ var AttachmentEditableCollectionView = Marionette.CollectionView.extend({
 
   childViewOptions: function(){
     return {
-      parent: this
+      parent: this,
+      limits: this.limits
     }
   }
 });
 
 
 /*
+  An editable view for attachments in the idea panel
+ */
+var AttachmentEditableCollectionViewIdeaPanel = AttachmentEditableCollectionView.extend({
+  constructor: function AttachmentEditableCollectionViewIdeaPanel(){
+    AttachmentEditableCollectionView.apply(this, arguments);
+  },
+
+  getFileEditView: function(){
+    return AttachmentFileEditableViewIdeaPanel;
+  }
+
+});
+
+/*
   A contained view that will show attachments
  */
 var AttachmentEditUploadView = Marionette.LayoutView.extend({
-  //This will have a region for the upload button
-  //And a collection view for the collection of entities
 
   constructor: function AttachmentEditUploadView(){
     Marionette.LayoutView.apply(this, arguments);
@@ -348,23 +427,35 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
 
   initialize: function(options){
     this.collection = options.collection;
+    this.target = options.target || TARGET.MESSAGE;
+    this.limits = options.limits;
     //For internal use only. NEVER save this collection to the server!
     this.failedCollection = new Attachments.Collection([],{
-      objectAttachedToModel: this.collection.objectAttachedToModel
+      objectAttachedToModel: this.collection.objectAttachedToModel,
+      failed: true //Add the flag, so that attachment does not try to validate the collection
     });
 
     if (!this.collection) {
       throw new Error("Cannot instantiate a DocumentEditUploadView without a collection!");
     }
 
-    this.collectionView = new AttachmentEditableCollectionView({
-      collection: this.collection,
-      parentView: this
-    });
-    this.collectionFailedView = new AttachmentEditableCollectionView({
-      collection: this.failedCollection,
-      parentView: this
-    });
+    var that = this;
+    var createAttachmentEditableCollectionView = function(parent, collection){
+      if (that.target === TARGET.IDEA) {
+        return new AttachmentEditableCollectionViewIdeaPanel({
+          collection: collection,
+          limits: that.limits,
+          parentView: parent
+        });
+      }
+      return new AttachmentEditableCollectionView({
+        collection: collection,
+        parentView: parent
+      });
+    }
+    
+    this.collectionView = createAttachmentEditableCollectionView(this, this.collection);
+    this.collectionFailedView = createAttachmentEditableCollectionView(this, this.failedCollection);
   },
 
   onShow: function(){
@@ -390,7 +481,38 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
 
 });
 
+/*
+  Another collection view displaying all attachment types that an IDEA PANEL can support in an EDITABLE state
+ */
+var AttachmentEditUploadViewModal = Backbone.Modal.extend({
+  template: '#tmpl-modalWithoutIframe',
+  className: 'modal-token-vote-session popin-wrapper',
+  cancelEl: '.close, .js_close',
 
+  ui: {
+    'body': '.js_modal-body'
+  },
+
+  initialize: function(options){
+    this.collection = options.collection;
+  },
+
+  onRender: function(){
+    var resultView = new AttachmentEditUploadView({collection: this.collection, target: TARGET.IDEA});
+    this.$(this.ui.body).html(resultView.render().el);
+  },
+
+  serializeData: function(){
+    return {
+      modal_title: i18n.gettext("Upload an Image to the Idea Panel")
+    }
+  },
+});
+
+
+/*
+  The button view that will be the stand-alone view for the attachment button
+ */
 var AttachmentUploadButtonView = Marionette.ItemView.extend({
   constructor: function AttachmentUploadButtonView(){
     return Marionette.ItemView.apply(this, arguments);
@@ -408,7 +530,8 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
 
   initialize: function(options){
     this.collection = options.collection;
-    this.objectAttachedToModel = options.objectAttachedToModel
+    this.objectAttachedToModel = options.objectAttachedToModel;
+    this.limits = options.limits || null;
     this.errorCollection = options.errorCollection || null;
     if (!this.collection || !this.objectAttachedToModel){
       return new Error("Cannot instantiate an AttachmentUploadButtonView without passing " +
@@ -431,10 +554,10 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
   onFileUpload: function(e){
     var fs = e.target.files,
         that = this;
-    //console.log("A file has been uploaded");
 
-    _.each(fs, function(f){
+    fs = _.map(fs, function(f){
       //There will be file duplication because the file is already on the DOM if previously added
+      
       var d = new Documents.FileModel({
         name: f.name,
         mime_type: f.type
@@ -447,15 +570,49 @@ var AttachmentUploadButtonView = Marionette.ItemView.extend({
         idCreator: Ctx.getCurrentUser().id
       });
 
-      that.collection.add(attachment);
+      return attachment;
     });
+    
+    this.collection.add(fs);
+    //Set to the idea model
   }
 });
+
+
+/*
+  An attachment button view that is not based on an icon, but instead is textual
+ */
+var AttachmentUploadTextView = AttachmentUploadButtonView.extend({
+  constructor: function AttachmentUploadTextView(){
+    return AttachmentUploadButtonView.apply(this, arguments);
+  },
+
+  template: "#tmpl-attachmentText"
+});
+
+
+/**
+ * @class app.views.attachments.AttachmentCollectionView
+ */
+var AttachmentCollectionView = Marionette.CollectionView.extend({
+  /*
+    A attachment collection view that is NOT editable
+   */
+  constructor: function AttachmentCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+
+  childView: AttachmentView
+});
+
 
 module.exports = module.exports = {
     AttachmentEditableView: AttachmentEditableView,
     AttachmentView: AttachmentView,
     AttachmentEditableCollectionView: AttachmentEditableCollectionView,
     AttachmentUploadButtonView: AttachmentUploadButtonView,
-    AttachmentEditUploadView: AttachmentEditUploadView
+    AttachmentUploadTextView: AttachmentUploadTextView,
+    AttachmentEditUploadView: AttachmentEditUploadView,
+    AttachmentCollectionView: AttachmentCollectionView,
+    TARGET: TARGET
   };

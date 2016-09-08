@@ -351,10 +351,9 @@ _:-ms-input-placeholder, :root .popin-body .groupBody.editable .groupPanel heade
     background-color: $yellow;
   }
   .panel-content-title {
-  font-size: 19px;
-  //margin: 10px 0px 0px 0px;
-  padding: ($section_spacing)-16px 0px $section_spacing 0px; //-16px is to nullify panel content padding, currently defined on ideaPanel
-  border-bottom: solid 1px $section_separator_color;
+    font-size: 19px;
+    padding: ($section_spacing)-16px 0px $section_spacing 0px; //-16px is to nullify panel content padding, currently defined on ideaPanel
+    border-bottom: solid 1px $section_separator_color;
   }
   .section-title {
     color: $txtGray2;

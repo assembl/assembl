@@ -29,7 +29,40 @@
   padding: 0
 }
 
+.attachment-img-ideapanel{
+  .fileAttachmentEditable{
+   p{
+    display:none;
+   }
+  }
+  .dropdown-label{
+    display:none;
+  }
+  .embeddedFile{
+    img{
+      width:100%;
+    }
+  }
+  .dropdown{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .dropdown-menu{
+    right: 0;
+    left: auto;
+  }
+  .icon-arrowdown{
+    font-size: 16px;
+  }
+}
+.attachment-panel-idea{
+  position: absolute;
+  right: 16px;
+  top: 18px;
+}
+
 .embedded-image-preview {
   max-width: 100%;
-  max-height: 300px;
 }
+

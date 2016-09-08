@@ -9,6 +9,7 @@ var _ = require('underscore'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js'),
+    Attachment = require('./attachments.js'),
     Permissions = require('../utils/permissions.js');
 /**
  * Idea model
@@ -49,9 +50,25 @@ var IdeaModel = Base.Model.extend({
    * @function app.models.idea.IdeaModel.parse
    */
   parse: function(resp, options) {
+    var that = this;
     this.adjust_num_read_posts(resp);
+    if (resp.attachments !== undefined){
+      resp.attachments = new Attachment.ValidationAttachmentCollection(resp.attachments, {
+        parse: true,
+        objectAttachedToModel: that,
+        limits: {
+          count: 1,
+          type: 'image'
+        }
+      })
+    }
     return Base.Model.prototype.parse.apply(this, arguments);
   },
+
+  getApiV2Url: function() {
+    return Ctx.getApiV2DiscussionUrl('/ideas/'+this.getNumericId());
+  },
+
   /**
    * @member {string} app.models.idea.IdeaModel.urlRoot
    */
@@ -425,10 +442,14 @@ var IdeaModel = Base.Model.extend({
    * Validate the model attributes
    * @function app.models.idea.IdeaModel.validate
    */
-  validate: function(attrs, options) {
+  validate: function(attributes, options) {
     /**
      * check typeof variable
      * */
+     
+     //Add validation for the attachment collection of ideas
+     
+
   }
 });
 /**

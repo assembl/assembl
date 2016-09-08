@@ -1298,18 +1298,7 @@ var MessageView = Marionette.LayoutView.extend({
 
   renderAttachments: function(){
 
-    /**
-     * @class app.views.message.MessageView.MessageAttachmentCollectionView
-     */
-    var MessageAttachmentCollectionView = Marionette.CollectionView.extend({
-      constructor: function MessageAttachmentCollectionView() {
-        Marionette.CollectionView.apply(this, arguments);
-      },
-
-      childView: AttachmentViews.AttachmentView
-    });
-
-    this.attachmentsCollectionView = new MessageAttachmentCollectionView({
+    this.attachmentsCollectionView = new AttachmentViews.AttachmentCollectionView({
       collection: this.model.get('attachments')
     });
 

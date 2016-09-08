@@ -21,6 +21,8 @@ var Assembl = require('../app.js'),
     CollectionManager = require('../common/collectionManager.js'),
     AssemblPanel = require('./assemblPanel.js'),
     Marionette = require('../shims/marionette.js'),
+    AttachmentViews = require('./attachments.js'),
+    AttachmentModels = require('../models/attachments.js'),
     $ = require('jquery'),
     _ = require('underscore'),
     Promise = require('bluebird');
@@ -53,6 +55,11 @@ var IdeaPanel = AssemblPanel.extend({
     var pref = Ctx.getPreferences();
     this.ideaPanelOpensAutomatically = "idea_panel_opens_automatically" in pref ? pref.idea_panel_opens_automatically : true;
 
+    /*
+      Flag used in order to dynamically calculate the height of the image. Undefined if no attachment
+     */
+    this.attachmentLoaded = undefined;
+
     if(!this.isViewDestroyed()) {
       //Yes, it IS possible the view is already destroyed in initialize, so we check
       this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
@@ -75,6 +82,23 @@ var IdeaPanel = AssemblPanel.extend({
         }
       });
 
+      this.listenTo(this.getAttachmentCollection(), 'sync destroy', function(e){
+        if (!this.isViewDestroyed()){
+          that.renderAttachmentButton();
+        }
+      });
+
+      //For attachments on ideas, a loaded cover image is always loaded, however,
+      //a dynamic calculation must be made on how much of the image can be shown
+      this.listenTo(this.panelWrapper.model, 'change:minimized', function(model, value, options){
+        //Must use a setTimeout as the panel animation is not Promisified
+        //The animation duration is available as a view variable
+        var that = this,
+            timeToVisibleImage = this.panelWrapper.animationDuration / 2;
+
+        setTimeout(function(){ that.checkContentHeight(); }, timeToVisibleImage);
+      });
+
       if (this.model) {
         //This is a silly hack to go through setIdeaModel properly - benoitg
         var model = this.model;
@@ -94,6 +118,8 @@ var IdeaPanel = AssemblPanel.extend({
     'announcement': '.ideaPanel-announcement-region',
     'widgetsSection': '.js_ideaPanel-section-widgets',
     'adminSection': '.js_ideaPanel-section-admin',
+    'attachmentButton': '.js_attachment-button',
+    'attachmentImage': '.js_idea-attachment'
   },
   regions: {
     segmentList: ".postitlist",
@@ -104,13 +130,17 @@ var IdeaPanel = AssemblPanel.extend({
     widgetsSeeResultsInteraction: ".ideaPanel-section-see-results",
     announcementRegion: "@ui.announcement",
     regionLongTitle: '@ui.longTitle',
-    regionDescription: '@ui.definition'
+    regionDescription: '@ui.definition',
+    attachmentButton: '@ui.attachmentButton',
+    attachment: '@ui.attachmentImage'
   },
+
   modelEvents: {
     //Do NOT listen to change here
     //'replacedBy': 'onReplaced',
     'change': 'requestRender'
   },
+
   events: {
     'dragstart @ui.postIt': 'onDragStart', //Fired on the element that is the origin of the drag, so when the user starts dragging one of the extracts CURRENTLY listed in the idea
     'dragend @ui.postIt': 'onDragEnd',  //Fired on the element that is the origin of the drag
@@ -123,6 +153,40 @@ var IdeaPanel = AssemblPanel.extend({
     'click @ui.clearIdea': 'onClearAllClick',
     'click @ui.deleteIdea': 'onDeleteButtonClick',
     'click .js_openTargetInPopOver': 'openTargetInPopOver'
+  },
+
+  _calculateContentHeight: function(domObject, imageDomObject){
+    var contentPanelPosition = $(window).height() / 3;
+    var imgHeight = imageDomObject.height();
+    if(imgHeight > contentPanelPosition){
+      domObject.css('top', contentPanelPosition);
+    }
+    else{
+      domObject.css('top', imgHeight);
+    }
+  },
+  /*
+    Manages the spacing at the top of the ideaPanel, depending on the panel having an
+    attachment or not.
+   */
+  checkContentHeight: function(){
+    var domObject = this.$(".content-ideapanel"),
+        that = this;
+    if (this.model.get('attachments') && (this.model.get('attachments').length > 0)){
+      if (this.attachmentLoaded){
+        var imageDomObject = this.$el.find(".embedded-image-preview");
+        this._calculateContentHeight(domObject, imageDomObject);
+      }
+      else {      
+        this.$el.find(".embedded-image-preview").load(function() {
+          that.attachmentLoaded = true;
+          that._calculateContentHeight(domObject, $(this));
+        });
+      }
+    }
+    else {
+      domObject.css('top', '0px');
+    }
   },
 
   requestRender: function() {
@@ -153,6 +217,10 @@ var IdeaPanel = AssemblPanel.extend({
     else {
       return i18n.sprintf(i18n.ngettext('This idea has %d sub-idea', 'This idea has %d sub-ideas', subIdeas.length), subIdeas.length);
     }
+  },
+
+  getAttachmentCollection: function(){
+    return this.model ? this.model.get('attachments') : null;
   },
 
   /**
@@ -187,6 +255,43 @@ var IdeaPanel = AssemblPanel.extend({
   renderTemplateGetExtractsLabel: function() {
     this.$('.js_extractsSummary').html(
         this.getExtractsLabel());
+  },
+
+  renderAttachmentButton: function(){
+    var collection = this.getAttachmentCollection();
+    if (collection.length > 0 ) {
+      this.attachmentButton.empty();
+    } 
+    else {
+      // var buttonView = new AttachmentViews.AttachmentUploadButtonView({
+      var buttonView = new AttachmentViews.AttachmentUploadTextView({
+        collection: collection,
+        objectAttachedToModel: this.model
+      });
+      this.attachmentButton.show(buttonView);
+    }
+  },
+
+  renderAttachments: function(){
+    var collection = this.getAttachmentCollection();
+    var user = Ctx.getCurrentUser();
+    if (user.can(Permissions.EDIT_IDEA)){
+      
+      var attachmentView = new AttachmentViews.AttachmentEditUploadView({
+        collection: collection,
+        target: AttachmentViews.TARGET.IDEA
+      });
+
+      this.attachment.show(attachmentView);
+      this.renderAttachmentButton();
+    }
+
+    else {
+      var attachmentView = new AttachmentViews.AttachmentCollectionView({
+        collection: collection
+      });
+      this.attachment.show(attachmentView);
+    }
   },
 
   serializeData: function() {
@@ -260,6 +365,10 @@ var IdeaPanel = AssemblPanel.extend({
           return model.get('important');
         });
       }
+
+      this.renderAttachments();
+      
+      this.checkContentHeight();
 
       this.getExtractslist();
 
@@ -497,6 +606,9 @@ var IdeaPanel = AssemblPanel.extend({
         }
 
         this.model = idea;
+
+        //Reset the flag for an attachment image loaded. OnRender will recalculate this
+        this.attachmentLoaded = undefined;
 
         //console.log("this.extractListSubset before setIdea:", this.extractListSubset);
         if (this.extractListSubset) {
