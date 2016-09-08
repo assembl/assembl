@@ -84,8 +84,8 @@ $theme_context_page_header_height: 227px;
 $theme_context_title_color: $th_local_white;
 
 //Navigation
-$theme_navigation_bg: $th_local_purple2;
-$theme_navigation_menu_bg: $th_local_purple4;
+$theme_navigation_bg: $th_local_purple2; // background color of the content of the navigation menu (aka the section contained in the currently selected navigation item, which shows below its title, as it's an accordion menu)
+$theme_navigation_menu_bg: $th_local_purple4; // background color of a non-selected item of the navigation menu
 $theme_navigation_menu_bg_active: $th_local_purple3;
 $theme_navigation_menu_bg_hover: $theme_navigation_menu_bg_active;
 $theme_navigation_menu_separator: $th_local_purple2;
@@ -97,19 +97,21 @@ $theme_navigation_options: $th_local_gray3;
 $theme_navigation_idea_text_color: $th_local_black;
 $theme_navigation_idea_header_text_color: $th_local_gray3;
 $theme_navigation_idea_total_count: $th_local_gray5;
+$theme_navigation_idea_hover_text_color: $theme_navigation_idea_text_color;
 $theme_navigation_idea_hover_total_count: $theme_navigation_idea_total_count;
 $theme_navigation_idea_hover_unread_count: $th_local_gray6;
 $theme_navigation_idea_hover_unread_count_background: $th_local_white;
+$theme_navigation_selected_idea_text_color: $theme_navigation_idea_text_color;
 $theme_navigation_selected_idea_total_count: $theme_navigation_idea_total_count;
 $theme_navigation_selected_idea_unread_count: $th_local_gray6;
 $theme_navigation_selected_idea_unread_count_background: $th_local_white;
 $theme_navigation_idea_unread_count: $theme_read_unread_item;
 
 //Navigation + Synthesis panel
-$theme_navigation_or_idea_bg_active: $th_local_gray4;
-$theme_item_selected_color: lighten($th_local_purple5, 40%);
+$theme_navigation_or_idea_bg_active: $th_local_gray4; // in the navigation menu, background color of a hovered idea or a hovered synthesis 
+$theme_item_selected_color: lighten($th_local_purple5, 40%); // in the navigation menu, background color of a selected idea or a selected synthesis 
 // Used for the vertical bar to give additional emphasis un the table of idea and in the list of syntheses
-$theme_item_selected_secondary_color: $th_local_purple5;
+$theme_item_selected_secondary_color: $th_local_purple5; // in the navigation menu, background color of a 4px-thick right border on a selected idea or a selected synthesis 
 
 //Message list
 $theme_messagelist_bg_color: $th_local_gray7;

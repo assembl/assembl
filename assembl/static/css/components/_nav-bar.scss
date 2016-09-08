@@ -1,7 +1,5 @@
 // Navigation bar
 
-$textProfile: #515151;
-
 .cookie-banner{
   height: 50px;
   line-height: 50px;
@@ -92,47 +90,15 @@ $textProfile: #515151;
     }
 
     .username, .user-lang {
-      color: #515151;
+      color: $theme_header_text_color;
       text-decoration: none;
     }
 
     .username:after {
       @extend %icon;
       content: '\e814';
-      color: #515151;
+      color: $theme_header_text_color;
     }
-
-    /*.connexion {
-      margin: 0;
-      padding: 4px 10px 0 10px;
-      li {
-        list-style: none;
-      }
-      .lang {
-        cursor: pointer;
-      }
-      .seperator {
-        border-right: 1px solid #ccc;
-        margin: 0 3px 0 0;
-      }
-      a {
-        text-decoration: none;
-      }
-      .user-profile{
-        height: $theme_header_height;
-        color: $textProfile;
-        .icon-arrowdown {
-          font-size: 110%;
-        }
-        .user-picture {
-            vertical-align: middle;
-            display: inline-block;
-        }
-      }
-      .user-lang{
-        color: $textProfile;
-      }
-    }*/
 
     .nav-notification {
       position: relative;
