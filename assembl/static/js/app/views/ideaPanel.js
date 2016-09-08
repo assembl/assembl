@@ -93,10 +93,10 @@ var IdeaPanel = AssemblPanel.extend({
       this.listenTo(this.panelWrapper.model, 'change:minimized', function(model, value, options){
         //Must use a setTimeout as the panel animation is not Promisified
         //The animation duration is available as a view variable
-        var that = this;
-        setTimeout(function(){
-          that.checkContentHeight();
-        }, this.panelWrapper.animationDuration);
+        var that = this,
+            timeToVisibleImage = this.panelWrapper.animationDuration / 2;
+
+        setTimeout(function(){ that.checkContentHeight(); }, timeToVisibleImage);
       });
 
       if (this.model) {
