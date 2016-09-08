@@ -55,6 +55,11 @@ var IdeaPanel = AssemblPanel.extend({
     var pref = Ctx.getPreferences();
     this.ideaPanelOpensAutomatically = "idea_panel_opens_automatically" in pref ? pref.idea_panel_opens_automatically : true;
 
+    /*
+      Flag used in order to dynamically calculate the height of the image. Undefined if no attachment
+     */
+    this.attachmentLoaded = undefined;
+
     if(!this.isViewDestroyed()) {
       //Yes, it IS possible the view is already destroyed in initialize, so we check
       this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
@@ -81,6 +86,17 @@ var IdeaPanel = AssemblPanel.extend({
         if (!this.isViewDestroyed()){
           that.renderAttachmentButton();
         }
+      });
+
+      //For attachments on ideas, a loaded cover image is always loaded, however,
+      //a dynamic calculation must be made on how much of the image can be shown
+      this.listenTo(this.panelWrapper.model, 'change:minimized', function(model, value, options){
+        //Must use a setTimeout as the panel animation is not Promisified
+        //The animation duration is available as a view variable
+        var that = this;
+        setTimeout(function(){
+          that.checkContentHeight();
+        }, this.panelWrapper.animationDuration);
       });
 
       if (this.model) {
@@ -139,22 +155,34 @@ var IdeaPanel = AssemblPanel.extend({
     'click .js_openTargetInPopOver': 'openTargetInPopOver'
   },
 
+  _calculateContentHeight: function(domObject, imageDomObject){
+    var contentPanelPosition = $(window).height() / 3;
+    var imgHeight = imageDomObject.height();
+    if(imgHeight > contentPanelPosition){
+      domObject.css('top', contentPanelPosition);
+    }
+    else{
+      domObject.css('top', imgHeight);
+    }
+  },
   /*
     Manages the spacing at the top of the ideaPanel, depending on the panel having an
     attachment or not.
    */
   checkContentHeight: function(){
-    var domObject = this.$(".content-ideapanel");
+    var domObject = this.$(".content-ideapanel"),
+        that = this;
     if (this.model.get('attachments') && (this.model.get('attachments').length > 0)){
-      this.$el.find(".embedded-image-preview").load(function() {
-        var contentPanelPosition = $(window).height() / 3;
-        var imgHeight = $(this).height();
-        if(imgHeight > contentPanelPosition){
-          domObject.css('top', contentPanelPosition);
-        }else{
-          domObject.css('top', imgHeight);
-        }
-      });
+      if (this.attachmentLoaded){
+        var imageDomObject = this.$el.find(".embedded-image-preview");
+        this._calculateContentHeight(domObject, imageDomObject);
+      }
+      else {      
+        this.$el.find(".embedded-image-preview").load(function() {
+          that.attachmentLoaded = true;
+          that._calculateContentHeight(domObject, $(this));
+        });
+      }
     }
     else {
       domObject.css('top', '0px');
@@ -578,6 +606,9 @@ var IdeaPanel = AssemblPanel.extend({
         }
 
         this.model = idea;
+
+        //Reset the flag for an attachment image loaded. OnRender will recalculate this
+        this.attachmentLoaded = undefined;
 
         //console.log("this.extractListSubset before setIdea:", this.extractListSubset);
         if (this.extractListSubset) {
