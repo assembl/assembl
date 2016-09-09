@@ -253,7 +253,15 @@ Start as a user with sudo access
     sudo apt-get install nginx uwsgi uwsgi-plugin-python
     sudo adduser assembl_user #assembl_user is the name of a user dedicated to this instance
     sudo usermod -G www-data assembl_user
-    sudo -u postgres createuser --createdb your_assembl_databaseuser
+
+    # By default, postgres will not use passwords from postgres users who connect through the Unix socket domain (versus a network connection).
+    # So if you want to make your database to be safer and ask for password anyway, edit your /etc/postgresql/9.1/main/pg_hba.conf file and replace
+    # local   all             all                                peer
+    # by
+    # local   all             all                                md5
+    # and then run
+    # sudo service postgresql restart
+
     sudo -u assembl_user -i
     
     git clone https://github.com/assembl/assembl.git
@@ -312,6 +320,8 @@ There is also a ``port`` field in ``server:main`` section, which defaults to 654
 Also, set the ``uid`` field of your ini file to the username of the unix user you created above. For example: ``uid = assembl_user``
 If you have not added this user to the www-data group as advised previously (or to a group which is common with the ngnix user), then you also have to set the ``gid`` field to a common group name.
 
+If you do not have an SSL certificate, then you have to set ``accept_secure_connection = false`` and ``require_secure_connection = false`` (because if you set ``accept_secure_connection = true``, then the login page on assembl will try to show using https, which will not work).
+
 
 (exit to sudoer account)
 
@@ -319,16 +329,36 @@ If you have not added this user to the www-data group as advised previously (or 
 
     fab env_dev install_builddeps
     fab env_dev bootstrap_from_checkout
+    source venv/bin/activate
     assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
 
-Copy the content of ``doc/sample_nginx_config/assembl.yourdomain.com`` into nginx config file, and modify
+Copy the content of ``doc/sample_nginx_config/assembl.yourdomain.com`` into a new nginx config file, at ``/etc/nginx/sites-available/{{assembl.yourdomain.com}}`` (and replace its filename by your own domain):
 
 .. code:: sh
 
-    sudo nano /etc/nginx/sites-available/assembl.yourdomain.com
-    ln -s /etc/nginx/sites-available/assembl.yourdomain.com .
+    cp doc/sample_nginx_config/assembl.yourdomain.com /etc/nginx/sites-available/{{assembl.yourdomain.com}}
 
-Copy the content of ``doc/sample_systemd_script/assembl.service`` into ``/etc/systemd/system/assembl.service``, and modify
+Edit this file using your favorite editor to match your domain and architecture (including SSL settings if any).
+Activate this site, using:
+
+.. code:: sh
+
+    cd /etc/nginx/sites-enabled/
+    ln -s /etc/nginx/sites-available/{{assembl.yourdomain.com}} .
+
+Test that your configuration file works, by running:
+
+.. code:: sh
+
+    /usr/sbin/nginx -t
+
+Restart nginx:
+
+.. code:: sh
+
+    /etc/init.d/nginx restart
+
+Copy the content of ``doc/sample_systemd_script/assembl.service`` into ``/etc/systemd/system/assembl.service``, and modify fields ASSEMBL_PATH, User and Description.
 
 .. code:: sh
 
