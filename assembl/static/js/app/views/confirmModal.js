@@ -1,12 +1,12 @@
 'use strict';
 /**
  * 
- * @module app.views.confirmModal
  * A generic modal view for alerts. Cases/reasons when we need to use this view instead of a browser confirm:
  * a) When we want users who have checked the "don't show alerts/confirms again" browser checkbox to not have a bad time regretting their click by mistake on a button which does a non-undoable action. For example the "Publish" button in the synthesis creation panel.
  * b) When we want users who have checked the "don't show alerts/confirms again" browser checkbox to not have a bad time not understanding what happens when they click on buttons which explain what will happen next by showing a confirm
  * c) Because lots of people get frightened when they see a browser alert/confirm and think it appears because there has been a bug in the application.
  * d) Because a custom modal popin looks nicer than a browser alert/confirm.
+ * @module app.views.confirmModal
  */
 
 var _ = require('underscore'),
