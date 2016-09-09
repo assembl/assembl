@@ -304,7 +304,10 @@ The following must all be unique to the instance.  If you only have one instance
 * ``celery_tasks.notification_dispatch.broker``
 * ``celery_tasks.notify.broker``
 * ``celery_tasks.translate.broker``
-* ``port``
+* ``public_port``
+
+The ``public_port`` field (located in ``app:assembl`` section) is the actual port used by the UWSGI server which is rerouted through the reverse proxy served by nginx. For production context, use 80.
+There is also a ``port`` field in ``server:main`` section, which defaults to 6543. If not proxied by nginx or something, ``port`` needs to match ``public_port``.
 
 Also, set the ``uid`` field of your ini file to the username of the unix user you created above. For example: ``uid = assembl_user``
 If you have not added this user to the www-data group as advised previously (or to a group which is common with the ngnix user), then you also have to set the ``gid`` field to a common group name.
