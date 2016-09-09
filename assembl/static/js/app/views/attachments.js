@@ -16,7 +16,7 @@ var Marionette = require('../shims/marionette.js'),
     DocumentViews = require('./documents.js');
 
 
-const TARGET = {
+var TARGET = {
   IDEA: 'IDEA',
   MESSAGE: 'MESSAGE'
 };
