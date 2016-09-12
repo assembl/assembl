@@ -4028,12 +4028,16 @@ msgstr "Confirmation requise"
 
 #: assembl/views/auth/views.py:549 assembl/views/auth/views.py:735
 msgid ""
-"A confirmation e-mail has been sent to your account and should be in your inbox in a "
-"few minutes. Please follow the confirmation link in order to confirm your email"
+"A confirmation e-mail has been sent to your account and should be in your "
+"inbox in a few minutes. It contains a confirmation link, please click on it "
+"in order to confirm your e-mail address. If you did not receive any "
+"confirmation e-mail (check your spams), click here."
 msgstr ""
 "Nous venons de vous envoyer un courriel de confirmation. Il est possible qu’il "
-"n’arrive dans votre boite de réception que dans quelques minutes.\n"
-"Veuillez cliquer sur le lien pour valider votre adresse courriel."
+"n’arrive dans votre boite de réception que dans quelques minutes. "
+"Il contient un lien de confirmation, veuillez cliquer dessus pour valider "
+"votre adresse courriel. Si vous n'avez pas reçu d'email de confirmation "
+"(vérifiez vos spams), cliquez ici."
 
 #: assembl/views/auth/views.py:592 assembl/views/auth/views.py:612
 #: assembl/views/auth/views.py:635

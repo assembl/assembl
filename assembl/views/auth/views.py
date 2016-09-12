@@ -548,7 +548,8 @@ def confirm_emailid_sent(request):
         title=localizer.translate(_('Confirmation requested')),
         description=localizer.translate(_(
             'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. '
-            'Please follow the confirmation link in order to confirm your email')))
+            'It contains a confirmation link, please click on it in order to confirm your e-mail address. '
+            'If you did not receive any confirmation e-mail (check your spams), click here.')))
 
 
 @view_config(
@@ -734,7 +735,8 @@ def confirm_email_sent(request):
                 title=localizer.translate(_('Confirmation requested')),
                 description=localizer.translate(_(
                     'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. '
-                    'Please follow the confirmation link in order to confirm your email')))
+                    'It contains a confirmation link, please click on it in order to confirm your e-mail address. '
+                    'If you did not receive any confirmation e-mail (check your spams), click here.')))
         else:
             # We do not have an email to this name.
             return HTTPFound(location=maybe_contextual_route(

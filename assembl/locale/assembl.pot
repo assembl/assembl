@@ -3828,8 +3828,9 @@ msgstr ""
 #: assembl/views/auth/views.py:549 assembl/views/auth/views.py:735
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your "
-"inbox in a few minutes. Please follow the confirmation link in order to "
-"confirm your email"
+"inbox in a few minutes. It contains a confirmation link, please click on it "
+"in order to confirm your e-mail address. If you did not receive any "
+"confirmation e-mail (check your spams), click here."
 msgstr ""
 
 #: assembl/views/auth/views.py:592 assembl/views/auth/views.py:612
