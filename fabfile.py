@@ -1272,7 +1272,7 @@ def install_postgres():
     """
     print(cyan('Installing Postgresql'))
     if env.mac:
-        execute('brew install postgresql')
+        run('brew install postgresql')
     else:
         sudo('apt-get install -y postgresql')
 
