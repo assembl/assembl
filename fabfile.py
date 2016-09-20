@@ -303,8 +303,8 @@ def update_pip_requirements(force_reinstall=False):
     if force_reinstall:
         cmd = "%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env
     else:
- #       cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
-         run("yes w | %s" % cmd)
+        cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
+        run("yes w | %s" % cmd)
 
 
 @task
