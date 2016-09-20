@@ -20,7 +20,6 @@ from fabric.api import *
 from fabric.colors import yellow, cyan, red, green
 from fabric.contrib.files import *
 
-
 def realpath(path):
     return run("python -c 'import os,sys;print os.path.realpath(sys.argv[1])' " + path)
 
@@ -304,8 +303,8 @@ def update_pip_requirements(force_reinstall=False):
     if force_reinstall:
         cmd = "%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env
     else:
-        cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
-    run("yes w | %s" % cmd)
+ #       cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
+         run("yes w | %s" % cmd)
 
 
 @task
@@ -413,13 +412,13 @@ def tests():
 def bootstrap(projectpath):
     """
     Creates the virtualenv and install the app from env URL
-    
+
     takes the same arguments at env_dev, but projectpath is mandatory
     """
     sanitize_env()
     #env.projectname = "assembl"
     assert projectpath, "projectpath is mandatory, and corresponds to the directory where assembl will be installed"
-    
+
     execute(skeleton_env, projectpath)
     execute(clone_repository)
     execute(env_dev, projectpath)
@@ -519,7 +518,7 @@ def app_update_dependencies(force_reinstall=False):
 @task
 def app_reinstall_all_dependencies():
     """
-    Reinstall all python and javascript dependencies.  
+    Reinstall all python and javascript dependencies.
     Usefull after a OS upgrade, node upgrade, etc.
     """
     sanitize_env()
@@ -754,7 +753,7 @@ def _install_builddeps():
             if not run('brew link graphviz', quiet=True):
                 sudo('brew link graphviz')
         # glibtoolize, bison, flex, gperf are on osx by default.
-        # brew does not know aclocal, autoheader... 
+        # brew does not know aclocal, autoheader...
         # They exist on macports, but do we want to install that?
         if not (exists('/usr/lib/libiodbc.2.dylib') or
                 exists('/usr/local/lib/libiodbc.2.dylib')):
@@ -786,7 +785,7 @@ def install_builddeps():
     execute(skeleton_env, None)
     execute(install_basetools)
     execute(_install_builddeps)
- 
+
 
 @task
 def update_python_package_builddeps():
@@ -1012,9 +1011,9 @@ def database_delete():
     """
     sanitize_env()
     if(env.is_production_env is True):
-        abort(red("You are not allowed to delete the database of a production " + 
-                "environment.  If this is a server restore situation, you " + 
-                "have to temporarily declare env.is_production_env = False " + 
+        abort(red("You are not allowed to delete the database of a production " +
+                "environment.  If this is a server restore situation, you " +
+                "have to temporarily declare env.is_production_env = False " +
                 "in the environment"))
     if using_virtuoso():
         execute(database_delete_virtuoso)
@@ -1047,9 +1046,9 @@ def database_delete_postgres():
 
 def database_restore_virtuoso():
     if(env.is_production_env is True):
-        abort(red("You are not allowed to restore a database to a production " + 
-                "environment.  If this is a server restore situation, you " + 
-                "have to temporarily declare env.is_production_env = False " + 
+        abort(red("You are not allowed to restore a database to a production " +
+                "environment.  If this is a server restore situation, you " +
+                "have to temporarily declare env.is_production_env = False " +
                 "in the environment"))
     env.debug = True
 
@@ -1232,7 +1231,7 @@ def virtuoso_reconstruct_db():
     """Rebuild the virtuoso database from a backup dump."""
     sanitize_env()
     execute(database_dump)
-    # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
+    # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time.
     # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
     # http://docs.fabfile.org/en/1.10/api/core/context_managers.html#fabric.context_managers.settings
     with settings(command_timeout=300):
@@ -1246,7 +1245,7 @@ def virtuoso_major_reconstruct_db():
     """Rebuild the virtuoso database from a crash dump. Sometimes worth running twice."""
     sanitize_env()
     execute(database_dump)
-    # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time. 
+    # Here we set a higher command_timeout env variable than default (which is 30), because the reconstruction of the database can take a long time.
     # http://docs.fabfile.org/en/1.10/usage/env.html#command-timeout
     # http://docs.fabfile.org/en/1.10/api/core/context_managers.html#fabric.context_managers.settings
     with settings(command_timeout=300):
@@ -1264,7 +1263,6 @@ def install_or_updgrade_virtuoso():
         execute(virtuoso_source_install)
     else:
         execute(virtuoso_source_upgrade)
-
 
 def install_postgres():
     """
@@ -1347,7 +1345,7 @@ def virtuoso_source_install():
             conf_command += " --enable-openssl=/usr/local/Cellar/openssl/1.0.2g"
         run(conf_command)
 
-        run("""physicalCpuCount=$([[ $(uname) = 'Darwin' ]] && 
+        run("""physicalCpuCount=$([[ $(uname) = 'Darwin' ]] &&
                        sysctl -n hw.physicalcpu_max ||
                        nproc)
                make -j $(($physicalCpuCount + 1))""")
@@ -1443,7 +1441,7 @@ def skeleton_env(projectpath, venvpath=None):
     env.projectpath = projectpath
     env.gitrepo = getenv("GITREPO", "https://github.com/assembl/assembl.git")
     env.gitbranch = getenv("GITBRANCH", "master")
-    
+
     #Are we on localhost
     if set(env.hosts) - set(['localhost']) == set():
         #WARNING:  This code will run locally, NOT on the remote server,
@@ -1469,10 +1467,10 @@ def commonenv(projectpath, venvpath=None):
         env.venvpath = venvpath
     else:
         env.venvpath = join(projectpath, "venv")
-    
+
     config = get_config()
     assert config
-    
+
     env.sqlalchemy_url = config.get('app:assembl', 'sqlalchemy.url')
     env.db_user = config.get('app:assembl', 'db_user')
     env.db_password = config.get('app:assembl', 'db_password')
@@ -1480,11 +1478,11 @@ def commonenv(projectpath, venvpath=None):
     # It is recommended you keep localhost even if you have access to
     # unix domain sockets, it's more portable across different pg_hba configurations.
     env.db_host = 'localhost'
-    
+
     env.vroot = config.get('virtuoso', 'virtuoso_root')
     env.vsrc = config.get('virtuoso', 'virtuoso_src')
     env.vbranch = get_config().get('virtuoso', 'virtuoso_branch')
-    
+
     env.dbdumps_dir = join(projectpath, '%s_dumps' % env.projectname)
 
 
@@ -1711,7 +1709,7 @@ def env_bluenove_assembl2():
 def env_bluenove_agora2():
     """
     [ENVIRONMENT] Production on http://agora2.bluenove.com/
-    Common environment for Bluenove european public debates 
+    Common environment for Bluenove european public debates
     """
     env.ini_file = 'local.ini'
     env.hosts = ['agora2.bluenove.com']
