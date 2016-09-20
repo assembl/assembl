@@ -36,6 +36,16 @@ var attachmentPurposeTypes = {
    * 'FORCE_DOWNLOAD_DOCUMENT'
    */
 };
+
+//For IE support...sigh
+if (!String.prototype.includes) {
+    String.prototype.includes = function() {
+        'use strict';
+        return String.prototype.indexOf.apply(this, arguments) !== -1;
+    };
+}
+
+
 /**
  * Attachement model
  * Frontend model for :py:class:`assembl.models.attachment.Attachment`
