@@ -649,8 +649,9 @@ class Discussion(DiscussionBoundBase):
         from .post import Post
         from .auth import AgentProfile
         query = self.db.query(
-            func.count(Post.id), Post.creator_id).filter_by(
-                discussion_id=self.id)
+            func.count(Post.id), Post.creator_id).filter(
+                Post.discussion_id==self.id,
+                Post.tombstone_condition())
         if start_date:
             query = query.filter(Post.creation_date >= start_date)
         if end_date:

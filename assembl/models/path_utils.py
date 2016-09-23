@@ -223,10 +223,17 @@ class PostPathLocalCollection(object):
             post = with_polymorphic(
                 Post, [], Post.__table__,
                 aliased=False, flat=True)
+            content = with_polymorphic(
+                Content, [], Content.__table__,
+                aliased=False, flat=True)
             if labeled:
-                return post, db.query(post.id.label("post_id"))
+                query = db.query(post.id.label("post_id"))
             else:
-                return post, db.query(post.id)
+                query = db.query(post.id)
+            query = query.join(
+                content, (content.id == post.id) &
+                         (content.tombstone_date == None))
+            return post, query
         if not self.paths:
             post, q = base_query(True)
             return q.filter(False).subquery("relposts")
@@ -308,6 +315,7 @@ class PostPathLocalCollection(object):
         q = db.query(content).filter(
                 (content.discussion_id == discussion_id)
                 & (content.hidden == False)
+                & (Content.tombstone_condition(content))
                 ).join(subq, content.id == subq.c.post_id)
         if user_id:
             # subquery?
@@ -352,7 +360,8 @@ class PostPathGlobalCollection(object):
             ).filter(
                 ICL.idea_id != None,
                 content.discussion_id==discussion.id,
-                content.hidden==False)
+                content.hidden==False,
+                Content.tombstone_condition(content))
         for (idea_id, typename, path) in q:
             path += ","
             if typename in self.positives:
@@ -411,7 +420,7 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         q = db.query(content.id.label("post_id")).filter(
                 (content.discussion_id == self.discussion.id)
                 & (content.hidden == False)
-                & (content.tombstone_condition())
+                & (Content.tombstone_condition(content))
                 & (content.type.notin_((synth_post_type, webpage_post_type)))
                 & content.id.notin_(subq))
         if user_id:
