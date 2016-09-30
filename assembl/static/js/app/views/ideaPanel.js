@@ -22,6 +22,7 @@ var Assembl = require('../app.js'),
     AssemblPanel = require('./assemblPanel.js'),
     Marionette = require('../shims/marionette.js'),
     AttachmentViews = require('./attachments.js'),
+    ConfirmModal = require('./confirmModal.js'),
     AttachmentModels = require('../models/attachments.js'),
     $ = require('jquery'),
     _ = require('underscore'),
@@ -704,24 +705,35 @@ var IdeaPanel = AssemblPanel.extend({
               that.unblockPanel();
               if (children.length > 0) {
                 that.unblockPanel();
-                alert(i18n.gettext('You cannot delete an idea while it has sub-ideas.'));
+                //alert(i18n.gettext('You cannot delete an idea while it has sub-ideas.'));
+                var confirmModal = new ConfirmModal({
+                  contentText: i18n.gettext('You cannot delete an idea while it has sub-ideas.'),
+                  submitText: i18n.gettext('OK')
+                });
+                Assembl.slider.show(confirmModal);
               }
 
               // Nor has any segments
               else if (ideaExtracts.length > 0) {
                 that.unblockPanel();
-                console.log(ideaExtracts);
-                alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
+                //alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
+                var confirmModal = new ConfirmModal({
+                  contentText: i18n.gettext('You cannot delete an idea associated to extracts.'),
+                  submitText: i18n.gettext('OK')
+                });
+                Assembl.slider.show(confirmModal);
               }
               else if (that.model.get('num_posts') > 0) {
                 that.unblockPanel();
-                alert(i18n.gettext('You cannot delete an idea associated to comments.'));
+                //alert(i18n.gettext('You cannot delete an idea associated to comments.'));
+                var confirmModal = new ConfirmModal({
+                  contentText: i18n.gettext('You cannot delete an idea associated to comments.'),
+                  submitText: i18n.gettext('OK')
+                });
+                Assembl.slider.show(confirmModal);
               }
               else {
-                // That's a bingo
-                var ok = confirm(i18n.gettext('Confirm that you want to delete this idea.'));
-
-                if (ok) {
+                var onSubmit = function(){
                   that.model.destroy({
                     success: function() {
                       that.unblockPanel();
@@ -731,10 +743,14 @@ var IdeaPanel = AssemblPanel.extend({
                       console.error('ERROR: deleteCurrentIdea', resp);
                     }
                   });
-                }
-                else {
-                  that.unblockPanel();
-                }
+                };
+                var confirmModal = new ConfirmModal({
+                  contentText: i18n.gettext('Confirm that you want to delete this idea.'),
+                  cancelText: i18n.gettext('No'),
+                  submitText: i18n.gettext('Yes'),
+                  onSubmit: onSubmit,
+                });
+                Assembl.slider.show(confirmModal);
               }
             });
   },

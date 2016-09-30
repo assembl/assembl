@@ -29,8 +29,8 @@ var ConfirmModal = Backbone.Modal.extend({
     this.icon = "icon" in options ? options.icon : "icon-discuss";
     this.contentText = "contentText" in options ? options.contentText : "";
     this.onSubmit = "onSubmit" in options ? options.onSubmit : null;
-    this.cancelText = "cancelText" in options ? options.cancelText : i18n.gettext('Cancel');
-    this.submitText = "submitText" in options ? options.submitText : i18n.gettext('OK');
+    this.cancelText = "cancelText" in options ? options.cancelText : null;
+    this.submitText = "submitText" in options ? options.submitText : null;
   },
 
   serializeData: function() {
