@@ -1536,7 +1536,7 @@ var MessageView = Marionette.LayoutView.extend({
   },
   fetchIdeasCollection:function(){
     var cm = new CollectionManager();
-    cm.getAllIdeasCollectionPromise().then(function(ideasCollection){
+    return cm.getAllIdeasCollectionPromise().then(function(ideasCollection){
       ideasCollection.each(function(idea){
         idea.fetch();
       });
@@ -1565,13 +1565,11 @@ var MessageView = Marionette.LayoutView.extend({
           i18n.gettext('Message has been successfully deleted.'),
           { delay: 12000 }
         );
-        that.fetchIdeasCollection();
-        // Refresh the messageList
-        that.messageListView.render();
-        setTimeout(function(){
+        that.fetchIdeasCollection().then(function(){
+          // Refresh the messageList
+          that.messageListView.render();
           that.messageListView.showMessageById(that.model.id, null, true, false);
-        }, 500);
-        
+        });
       }).catch(function(e) {
         Growl.showBottomGrowl(
           Growl.GrowlReason.ERROR,
