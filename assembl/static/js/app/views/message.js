@@ -1534,22 +1534,11 @@ var MessageView = Marionette.LayoutView.extend({
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsSaveAndClose', this.onModerationOptionsSaveAndClose);
     this.listenToOnce(this.messageModerationOptionsView, 'moderationOptionsClose', this.onModerationOptionsClose);
   },
-  setNumPostAfterMessageDeletion:function(){
-    var that = this;
-    var currentIdeaId = "";
-    var ideaContentLinks = that.model.get('indirect_idea_content_links');
-    _.each(ideaContentLinks, function(ideaContentLink){
-      console.log(ideaContentLink);
-      currentIdeaId = ideaContentLink.idIdea;
-    });
+  fetchIdeasCollection:function(){
     var cm = new CollectionManager();
     cm.getAllIdeasCollectionPromise().then(function(ideasCollection){
       ideasCollection.each(function(idea){
-        var ideaId = idea.get('@id');
-        if(currentIdeaId === ideaId){
-          var numPosts = idea.get('num_posts') - 1;
-          idea.set('num_posts', numPosts);
-        }
+        idea.fetch();
       });
     });
   },
@@ -1576,7 +1565,7 @@ var MessageView = Marionette.LayoutView.extend({
           i18n.gettext('Message has been successfully deleted.'),
           { delay: 12000 }
         );
-        that.setNumPostAfterMessageDeletion();
+        that.fetchIdeasCollection();
         // Refresh the messageList
         that.messageListView.render();
         setTimeout(function(){
