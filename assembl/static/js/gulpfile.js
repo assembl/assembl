@@ -16,6 +16,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var exit = require('gulp-exit');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
+var debug = require('gulp-debug');
 
 var path = {
         js: '.',
@@ -136,6 +137,8 @@ gulp.task('build:test', function() {
 });
 
 var gulpSass_logConsole = function (error) {
+  console.log("error was: ");
+  console.log(error);
   var message = new gutil.PluginError('sass', error.messageFormatted).toString();
   process.stdout.write(message + '\n');
   this.emit('end');
@@ -147,15 +150,18 @@ var bourbon_includePaths = require("node-bourbon").includePaths;
  * not work for now, we need to delete all @include in sass file
  * */
 gulp.task('sass', ['clean:generated_css'], function() {
+  var sassOptions = {
+    includePaths: bourbon_includePaths,
+    outputStyle: 'expanded'
+  };
     return gulp.src(path.css+'/**/*.scss')
         .pipe(sourcemaps.init())
-        .pipe(sass({
-          includePaths: bourbon_includePaths
-        }).on('error', gulpSass_logConsole)
+        .pipe(sass(sassOptions).on('error', gulpSass_logConsole)
           .on('error', function(cb) {
             console.log("SASS compile failed, deleting output");
             clean_generated_css();
         }))
+        .pipe(debug({title: 'Compiling the following SCSS file (path):'})) /* this call has been added to help finding the true file which causes a compilation error */
         /*.pipe(sourcemaps.write())
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(autoprefixer({
