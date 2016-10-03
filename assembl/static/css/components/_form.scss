@@ -5,7 +5,7 @@ $successText: $green;
 // Default form field
 .formfield {
   width: 100%;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   padding: 4px 10px;
   height: 35px;
   line-height: 35px;
@@ -22,7 +22,7 @@ $successText: $green;
 // Default textarea
 .formtextarea {
   width: 100%;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   resize: vertical;
   padding: 10px;
   border: 1px solid $white;
@@ -64,7 +64,7 @@ $successText: $green;
   @include placeholder {
     color: $gray3;
   }
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   display: block;
   width: 100%;
   height: 35px;
@@ -90,7 +90,7 @@ $successText: $green;
   width: 100%;
   min-height: 28px; // Make inputs at least the height of their button counterpart
   // Makes inputs behave like true block-level elements
-  @include box-sizing(border-box);
+  box-sizing: border-box;
 }
 
 // Make all forms have space below them
@@ -344,7 +344,7 @@ $successText: $green;
   }
 
   .input-fullwidth {
-    @include box-sizing(border-box);
+    box-sizing: border-box;
     width: 100%;
     height: auto;
     *width: 90%; // IE 7 doesn't support box-sizing
@@ -545,7 +545,7 @@ $successText: $green;
       padding-bottom: 4px;
       padding-top: 4px;
       height: $inputBaseLineHeight;
-      @include box-sizing(content-box);
+      box-sizing: content-box;
       *height: auto;
     }
 

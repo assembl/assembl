@@ -11,7 +11,7 @@
   }
 
   float: left;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   margin-left: 2.762430939%;
   width: $width;
 }

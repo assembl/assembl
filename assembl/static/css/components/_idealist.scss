@@ -178,7 +178,7 @@
 // Area where to drop and create a sibling
 // --------------
 .idealist-abovedropzone {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   position: absolute;
   cursor: pointer;
   top: 0px;
@@ -196,7 +196,7 @@
 // Area where to drop and create a child
 // --------------
 .idealist-dropzone {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   position: absolute;
   cursor: pointer;
   right: 0;

@@ -8,7 +8,7 @@
 // ==============
 .button {
   @extend %button;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   @include border-radius(5px);
   padding: {
     right: 6px;

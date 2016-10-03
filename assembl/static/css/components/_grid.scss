@@ -3,7 +3,7 @@
 // The container of the grid
 // =========================
 .container {
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   margin: auto;
   width: 980px;
 

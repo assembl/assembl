@@ -32,7 +32,7 @@
 
   .options-filter,
   .view-config {
-    @include box-sizing(border-box);
+    box-sizing: border-box;
     height: auto;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
     background-color: $white;
@@ -88,7 +88,7 @@
     }
 
     .option {
-      @include box-sizing(border-box);
+      box-sizing: border-box;
       //width: 50%;
       min-height: 36px;
       @include flex-grow(1);
@@ -120,7 +120,7 @@
   .sticky-box {
     height: 40px;
     box-shadow: 0px -3px 1px rgba(0, 0, 0, 0.1);
-    @include box-sizing(border-box);
+    box-sizing: border-box;
     background-color: rgba($white, 0.65);
     position: absolute;
     bottom: 10px; //Leave some space for the horizontal scrollbar

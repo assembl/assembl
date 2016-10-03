@@ -9,7 +9,7 @@
 
 .navbar {
   @include no-selection;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
   display: block;
   position: relative;
   z-index: 100; /* for dropdowns */
