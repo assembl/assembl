@@ -118,6 +118,7 @@ $theme_messagelist_bg_color: $th_local_gray7;
 $theme_messagesend_bg_color: $th_local_gray4;
 //The color of the icons of the action buttons on messages
 $theme_message_icon_color: $th_local_purple5;
+$theme_message_highlight_background: $theme_item_selected_color; // in a message, background color of an extract (extracts are harvested sections of a message, which are highlighted in this color)
 
 //Panel groups
 //$theme_panel_group_header_bg_color: $th_local_gray1;
