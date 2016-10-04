@@ -74,6 +74,15 @@ deleted_publication_states = {
     PublicationStates.DELETED_BY_ADMIN
 }
 
+countable_publication_states = {
+    PublicationStates.SUBMITTED_IN_EDIT_GRACE_PERIOD,
+    PublicationStates.PUBLISHED,
+    PublicationStates.MODERATED_TEXT_ON_DEMAND,
+    PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE,
+    PublicationStates.DELETED_BY_USER,
+    PublicationStates.DELETED_BY_ADMIN,
+}
+
 
 class Post(Content):
     """

@@ -12,7 +12,7 @@ from sqlalchemy.sql.functions import count
 
 from .idea_content_link import (
     IdeaContentLink, IdeaContentPositiveLink, IdeaContentNegativeLink)
-from .post import Post, Content, SynthesisPost
+from .post import Post, Content, SynthesisPost, countable_publication_states
 from .annotation import Webpage
 from .idea import IdeaVisitor, Idea, IdeaLink, RootIdea
 from .discussion import Discussion
@@ -456,16 +456,24 @@ class PostPathCounter(PostPathCombiner):
         self.viewed_counts[idea_id] = parent_result.viewed_count
 
     def get_counts_for_query(self, q):
+        # HACKITY HACK
+        entities = [
+            x.entity_zero.entity for x in q._entities]
+        entities = {e.__mapper__.tables[0].name: e for e in entities}
+        content_entity = entities['content']
+
+        post = with_polymorphic(
+            Post, [], Post.__table__,
+            aliased=False, flat=True)
+        q = q.join(
+            post, (content_entity.id == post.id) &
+                  (post.publication_state.in_(countable_publication_states)))
+
         if self.user_id:
-            # HACKITY HACK
-            (content_entity, action_entity) = [
-                x.entity_zero.entity for x in q._entities]
+            action_entity = entities['action']
             return q.with_entities(
                 count(content_entity.id), count(action_entity.id)).first()
-            return (post_count, viewed_count)
         else:
-            (content_entity,) = [
-                x.entity_zero.entity for x in q._entities]
             (post_count,) = q.with_entities(
                 count(content_entity.id)).first()
             return (post_count, 0)
