@@ -705,7 +705,6 @@ var IdeaPanel = AssemblPanel.extend({
               that.unblockPanel();
               if (children.length > 0) {
                 that.unblockPanel();
-                //alert(i18n.gettext('You cannot delete an idea while it has sub-ideas.'));
                 var confirmModal = new ConfirmModal({
                   contentText: i18n.gettext('You cannot delete an idea while it has sub-ideas.'),
                   submitText: i18n.gettext('OK')
@@ -716,7 +715,6 @@ var IdeaPanel = AssemblPanel.extend({
               // Nor has any segments
               else if (ideaExtracts.length > 0) {
                 that.unblockPanel();
-                //alert(i18n.gettext('You cannot delete an idea associated to extracts.'));
                 var confirmModal = new ConfirmModal({
                   contentText: i18n.gettext('You cannot delete an idea associated to extracts.'),
                   submitText: i18n.gettext('OK')
@@ -725,7 +723,6 @@ var IdeaPanel = AssemblPanel.extend({
               }
               else if (that.model.get('num_posts') > 0) {
                 that.unblockPanel();
-                //alert(i18n.gettext('You cannot delete an idea associated to comments.'));
                 var confirmModal = new ConfirmModal({
                   contentText: i18n.gettext('You cannot delete an idea associated to comments.'),
                   submitText: i18n.gettext('OK')
