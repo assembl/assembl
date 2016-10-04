@@ -5,6 +5,7 @@ import sys
 from pyramid.settings import aslist
 from social.apps.pyramid_app.views import (
     auth as psa_auth_view, complete as psa_complete_view)
+import simplejson as json
 
 
 def includeme(config):
@@ -54,6 +55,13 @@ def includeme(config):
                  'SOCIAL_AUTH_PROTECTED_USER_FIELDS',
                  'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION'):
         settings[name] = aslist(settings.get(name, ''))
+    for name in ('SOCIAL_AUTH_SAML_ORG_INFO',
+                 'SOCIAL_AUTH_SAML_TECHNICAL_CONTACT',
+                 'SOCIAL_AUTH_SAML_SUPPORT_CONTACT',
+                 'SOCIAL_AUTH_SAML_ENABLED_IDPS'):
+        val = settings.get(name, '')
+        if val:
+            settings[name] = json.loads(val)
     for k in settings.iterkeys():
         if k.endswith("_SCOPE") and k.startswith("SOCIAL_AUTH_"):
             settings[k] = aslist(settings.get(k, ''))

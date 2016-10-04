@@ -5,6 +5,8 @@ import transaction
 from cornice import Service
 
 from pyramid.security import Everyone, Authenticated
+from pyramid.response import Response
+from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
@@ -17,6 +19,8 @@ from assembl.auth import (
 from assembl.auth.util import (
     user_has_permission as a_user_has_permission, get_permissions,
     users_with_permission as a_users_with_permission)
+from social.apps.pyramid_app.utils import load_backend, load_strategy
+
 
 cors_policy = dict(
     enabled=True, origins=('*',), credentials=True, max_age=86400,
@@ -307,3 +311,16 @@ def get_user_has_permission(request):
     if not discussion:
         raise HTTPNotFound("Discussion %d does not exist" % (discussion_id,))
     return a_users_with_permission(discussion_id, permission)
+
+
+@view_config(route_name='saml_metadata')
+def saml_metadata_view(request):
+    complete_url = request.route_url('social.complete', backend="saml")
+    saml_backend = load_backend(
+        load_strategy(request),
+        "saml",
+        redirect_uri=complete_url,
+    )
+    metadata, errors = saml_backend.generate_metadata_xml()
+    if not errors:
+        return Response(metadata, content_type='text/xml')

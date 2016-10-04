@@ -139,6 +139,21 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
 
 class AssemblStrategy(PyramidStrategy):
 
+    def request_is_secure(self):
+        return self.request.scheme == 'https'
+
+    def request_path(self):
+        return self.request.path
+
+    def request_port(self):
+        return self.request.host_port
+
+    def request_get(self):
+        return self.request.GET
+
+    def request_post(self):
+        return self.request.POST
+
     def get_preferences(self):
         discussion = discussion_from_request(self.request)
         if discussion:

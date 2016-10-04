@@ -16,3 +16,4 @@ def includeme(config):
 
     config.add_route('csrf_token', 'api/v1/token')
     config.add_route('mime_type', 'api/v1/mime_type')
+    config.add_route('saml_metadata', 'api/v1/saml_metadata')
