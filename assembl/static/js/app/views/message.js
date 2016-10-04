@@ -1537,9 +1537,7 @@ var MessageView = Marionette.LayoutView.extend({
   fetchIdeasCollection:function(){
     var cm = new CollectionManager();
     return cm.getAllIdeasCollectionPromise().then(function(ideasCollection){
-      ideasCollection.each(function(idea){
-        idea.fetch();
-      });
+      ideasCollection.fetch();
     });
   },
   onDeleteMessageClick: function(ev){
