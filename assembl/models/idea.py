@@ -121,7 +121,8 @@ class WordCountVisitor(IdeaVisitor):
             query = idea.db.query(Content)
             related = idea.get_related_posts_query(True)
             query = query.join(related, Content.id == related.c.post_id
-                ).filter(Content.hidden==False).options(
+                ).filter(Content.hidden==False,
+                         Content.tombstone_condition()).options(
                     Content.subqueryload_options())
             titles = set()
             # TODO maparent: Group langstrings by language.

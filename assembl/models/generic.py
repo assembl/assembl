@@ -190,7 +190,8 @@ class PostSource(ContentSource):
     @property
     def number_of_imported_posts(self):
         from .post import ImportedPost
-        return self.db.query(ImportedPost).filter_by(source_id=self.id).count()
+        return self.db.query(ImportedPost).filter_by(
+            source_id=self.id, tombstone_date=None).count()
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
