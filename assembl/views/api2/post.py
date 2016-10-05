@@ -63,13 +63,12 @@ def delete_post_instance(request):
     for extract in extracts_to_remove:
         extract.delete()
 
-    
     if user_id == instance.creator_id and P_DELETE_MY_POST in permissions:
-        instance.publication_state = PublicationStates.DELETED_BY_USER
+        cause = PublicationStates.DELETED_BY_USER
     elif P_DELETE_POST in permissions:
-        instance.publication_state = PublicationStates.DELETED_BY_ADMIN
+        cause = PublicationStates.DELETED_BY_ADMIN
 
-    instance.is_tombstone = True
+    instance.delete_post(cause)
 
     return {
         "result": "Post has been successfully deleted.",

@@ -355,6 +355,36 @@ class Post(Content):
             return self != self.parent.children[-1]
         return False
 
+    @property
+    def has_live_child(self):
+        for child in self.children:
+            if child.publication_state not in deleted_publication_states:
+                return True
+
+    def delete_post(self, cause):
+        self.publication_state = cause
+        # Question: Is the following even necessary?
+        # It makes undeleting posts more difficult,
+        # and offers no real gain.
+        if not self.has_live_child:
+            self.is_tombstone = True
+            # If ancestor is deleted without being tombstone, make it tombstone
+            ancestor = self.parent
+            while (ancestor and
+                   ancestor.publication_state in deleted_publication_states and
+                   not ancestor.is_tombstone and
+                   not ancestor.has_live_child):
+                ancestor.is_tombstone = True
+                ancestor = ancestor.parent
+
+    def undelete_post(self):
+        # Does not work yet, undeleting is still forbidden
+        self.publication_state = PublicationStates.PUBLISHED
+        ancestor = self
+        while ancestor and ancestor.is_tombstone:
+            ancestor.is_tombstone = False
+            ancestor = ancestor.parent
+
     def get_subject(self):
         if self.publication_state in blocking_publication_states:
             #return None
