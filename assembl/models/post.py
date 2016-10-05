@@ -79,8 +79,6 @@ countable_publication_states = {
     PublicationStates.PUBLISHED,
     PublicationStates.MODERATED_TEXT_ON_DEMAND,
     PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE,
-    PublicationStates.DELETED_BY_USER,
-    PublicationStates.DELETED_BY_ADMIN,
 }
 
 
