@@ -210,8 +210,8 @@
         "discussion": true,
         "import_date": false,
         "like_count": true,
-        "subject": "&get_subject:default",
-        "body": "&get_body:default",
+        "subject": "&get_subject",
+        "body": "&get_body",
         "widget_ideas": "&widget_ideas",
         "tombstone_date": true
     },

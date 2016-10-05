@@ -146,8 +146,8 @@
         "discussion": true,
         "import_date": false,
         "like_count": true,
-        "subject": ":",
-        "body": ":",
+        "subject": "&get_subject",
+        "body": "&get_body",
         "widget_ideas": "&widget_ideas"
     },
     "Post": {

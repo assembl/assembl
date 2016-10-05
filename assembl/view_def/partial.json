@@ -76,6 +76,8 @@
         "discussion": true,
         "date": "creation_date",
         "hidden": true,
+        "subject": "&get_subject",
+        "body": "&get_body_preview",
         "import_date": false
     },
     "Post": {
@@ -85,9 +87,7 @@
         "message_id": false,
         "ancestry": false,
         "parentId": "parent",
-        "idCreator": "creator",
-        "subject": ":",
-        "body": "&get_body_preview"
+        "idCreator": "creator"
     },
     "AssemblPost": {
         "@extends": "Post"
