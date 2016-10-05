@@ -52,6 +52,10 @@ def user_details(
     if social:
         social.interpret_social_auth_details(details)
         social.set_extra_data(response)
+        # Hackish, for backends like SAML that have multiple IDPs.
+        idp_name = response.get("idp_name", None)
+        if idp_name and not social.provider_domain:
+            social.provider_domain = idp_name
 
 
 def associate_by_email(backend, details, provider=None, user=None, *args, **kwargs):
