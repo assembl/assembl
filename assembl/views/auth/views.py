@@ -88,6 +88,8 @@ def get_login_context(request, force_show_providers=False):
     return dict(get_default_context(request),
                 slug_prefix=p_slug,
                 providers=providers,
+                saml_providers=request.registry.settings.get(
+                    'SOCIAL_AUTH_SAML_ENABLED_IDPS', {}),
                 hide_registration=hide_registration,
                 identifier = request.params.get('identifier', ''),
                 google_consumer_key=request.registry.settings.get(
