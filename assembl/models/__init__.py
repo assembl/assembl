@@ -141,6 +141,7 @@ from .post import (
     IdeaProposalPost,
     ImportedPost,
     Post,
+    PublicationStates,
     WidgetPost,
     SynthesisPost,
 )

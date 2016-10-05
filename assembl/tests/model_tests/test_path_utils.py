@@ -90,5 +90,23 @@ def test_jack_layton_linked_discussion(
     assert not positive
 
 
+def test_deleted_post_count(
+        test_session, test_webrequest, reply_deleted_post_4,
+        subidea_1_1, reply_to_deleted_post_5, extract_post_1_to_subidea_1_1):
+    # Deleted posts should not be counted in num_posts, but should be retrieved
+    # in get_related_posts
+    assert subidea_1_1.num_posts == 2
+    assert subidea_1_1.get_related_posts_query().count() == 3
+
+
+def test_deleted_orphan_count(
+        test_session, test_webrequest, root_idea, discussion,
+        reply_deleted_post_4, reply_to_deleted_post_5):
+    # Deleted posts should not be counted in num_posts, but should be retrieved
+    # in get_related_posts
+    assert root_idea._get_orphan_posts_statement(discussion.id).count() == 4
+    assert root_idea.num_orphan_posts == 3
+
+
 if Post.using_virtuoso:
     test_jack_layton_linked_discussion = pytest.mark.xfail(test_jack_layton_linked_discussion)

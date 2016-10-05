@@ -1034,7 +1034,8 @@ class RootIdea(Idea):
     @property
     def num_orphan_posts(self):
         "The number of posts unrelated to any idea in the current discussion"
-        return Idea._get_orphan_posts_statement(self.discussion_id).count()
+        counters = self.prepare_counters(self.discussion_id)
+        return counters.get_orphan_counts()[0]
 
     @property
     def num_synthesis_posts(self):

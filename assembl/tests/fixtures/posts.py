@@ -147,3 +147,55 @@ def reply_post_3(request, participant2_user, discussion,
         test_session.flush()
     request.addfinalizer(fin)
     return p
+
+
+@pytest.fixture(scope="function")
+def reply_deleted_post_4(request, participant2_user, discussion,
+                         reply_post_1, test_session):
+    """
+    From participant2_user, in reply to reply_post_1
+    """
+    from assembl.models import Post, LangString, PublicationStates
+    p = Post(
+        discussion=discussion, creator=participant2_user,
+        subject=LangString.create(u"re2: root post"),
+        body=LangString.create(u"post body"),
+        publication_state=PublicationStates.DELETED_BY_ADMIN,
+        type="post", message_id="msg5@example.com")
+    test_session.add(p)
+    test_session.flush()
+    p.set_parent(reply_post_1)
+    test_session.flush()
+
+    def fin():
+        print "finalizer reply_deleted_post_4"
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def reply_to_deleted_post_5(
+        request, participant1_user, discussion,
+        reply_deleted_post_4, test_session):
+    """
+    From participant2_user, in reply to root_post_1
+    """
+    from assembl.models import Post, LangString
+    p = Post(
+        discussion=discussion, creator=participant1_user,
+        subject=LangString.create(u"re3: root post"),
+        body=LangString.create(u"post body"),
+        type="post", message_id="msg6@example.com")
+    test_session.add(p)
+    test_session.flush()
+    p.set_parent(reply_deleted_post_4)
+    test_session.flush()
+
+    def fin():
+        print "finalizer reply_to_deleted_post_5"
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
