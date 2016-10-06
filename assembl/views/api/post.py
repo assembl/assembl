@@ -77,9 +77,9 @@ def get_posts(request):
     DEFAULT_PAGE_SIZE = 25
     page_size = DEFAULT_PAGE_SIZE
 
-    filter_names = [ 
-        filter_name for filter_name \
-        in request.GET.getone('filters').split(',') \
+    filter_names = [
+        filter_name for filter_name
+        in request.GET.getone('filters').split(',')
         if filter_name
     ] if request.GET.get('filters') else []
 
@@ -91,7 +91,7 @@ def get_posts(request):
     text_search = request.GET.get('text_search', None)
 
     order = request.GET.get('order')
-    if order == None:
+    if order is None:
         order = 'chronological'
     assert order in ('chronological', 'reverse_chronological', 'score')
     if order == 'score':
@@ -392,11 +392,47 @@ def get_posts(request):
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
 
+    if deleted is True:
+        # We just got deleted posts, now we want their ancestors for context
+        post_ids = set()
+        ancestor_ids = set()
+
+        def add_ancestors(post):
+            post_ids.add(post.id)
+            ancestor_ids.update(
+                [int(x) for x in post.ancestry.strip(",").split(",") if x])
+        posts = list(posts)
+        for post in posts:
+            add_ancestors(post)
+        ancestor_ids -= post_ids
+        if ancestor_ids:
+            ancestors = discussion.db.query(
+                PostClass).filter(PostClass.id.in_(ancestor_ids))
+            if view_def == 'id_only':
+                pass  # ancestors = ancestors.options(defer(Post.body))
+            else:
+                ancestors = ancestors.options(
+                    # undefer(Post.idea_content_links_above_post),
+                    joinedload_all(Post.creator),
+                    joinedload_all(Post.extracts),
+                    joinedload_all(Post.widget_idea_links),
+                    joinedload_all(SynthesisPost.publishes_synthesis),
+                    subqueryload_all(Post.attachments))
+                if len(discussion.discussion_locales) > 1:
+                    ancestors = ancestors.options(
+                        *Content.subqueryload_options())
+                else:
+                    ancestors = ancestors.options(
+                        *Content.joinedload_options())
+            posts.extend(ancestors.all())
+
     for query_result in posts:
         score, viewpost, likedpost = None, None, None
         if not isinstance(query_result, (list, tuple)):
             query_result = [query_result]
         post = query_result[0]
+        if deleted is True:
+            add_ancestors(post)
 
         if user_id != Everyone:
             viewpost = post.id in read_posts
