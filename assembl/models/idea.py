@@ -402,15 +402,17 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
     @classmethod
     def get_related_posts_query_c(
-            cls, discussion_id, root_idea_id, partial=False):
+            cls, discussion_id, root_idea_id, partial=False,
+            include_deleted=False):
         from .generic import Content
         counters = cls.prepare_counters(discussion_id)
         if partial:
             return counters.paths[root_idea_id].as_clause_base(
-                cls.default_db())
+                cls.default_db(), include_deleted=include_deleted)
         else:
             return counters.paths[root_idea_id].as_clause(
-                cls.default_db(), discussion_id, counters.user_id, Content)
+                cls.default_db(), discussion_id, counters.user_id, Content,
+                include_deleted=include_deleted)
 
     @classmethod
     def get_discussion_data(cls, discussion_id):
@@ -431,19 +433,21 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return discussion_data.post_path_counter(
             discussion_data.user_id, calc_all)
 
-    def get_related_posts_query(self, partial=False):
+    def get_related_posts_query(self, partial=False, include_deleted=False):
         return self.get_related_posts_query_c(
-            self.discussion_id, self.id, partial)
+            self.discussion_id, self.id, partial,
+            include_deleted=include_deleted)
 
     @classmethod
     def _get_orphan_posts_statement(
-            cls, discussion_id, get_read_status=False, content_alias=None):
+            cls, discussion_id, get_read_status=False, content_alias=None,
+            include_deleted=False):
         """ Requires discussion_id bind parameters
         Excludes synthesis posts """
         counters = cls.prepare_counters(discussion_id)
         return counters.orphan_clause(
             counters.user_id if get_read_status else None,
-            content_alias)
+            content_alias, include_deleted=include_deleted)
 
     @property
     def num_posts(self):

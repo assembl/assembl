@@ -57,6 +57,8 @@ class PublicationStates(DeclEnum):
     MODERATED_TEXT_NEVER_AVAILABLE = "MODERATED_TEXT_NEVER_AVAILABLE", ""
     DELETED_BY_USER = "DELETED_BY_USER", ""
     DELETED_BY_ADMIN = "DELETED_BY_ADMIN", ""
+    WIDGET_SCOPED = "WIDGET_SCOPED", ""
+
 
 blocking_publication_states = {
     PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE,

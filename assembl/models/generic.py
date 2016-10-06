@@ -343,6 +343,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     # old_body = Column("body", UnicodeText, server_default="")
     #    info={'rdf': QuadMapPatternS(None, SIOC.content)})
 
+    # TODO: Refactor hidden into PublicationStates.WIDGET_SCOPED
     hidden = Column(Boolean, server_default='0')
 
     # Another bloody virtuoso bug. Insert with large string fails.

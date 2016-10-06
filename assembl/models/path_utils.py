@@ -12,7 +12,9 @@ from sqlalchemy.sql.functions import count
 
 from .idea_content_link import (
     IdeaContentLink, IdeaContentPositiveLink, IdeaContentNegativeLink)
-from .post import Post, Content, SynthesisPost, countable_publication_states
+from .post import (
+    Post, Content, SynthesisPost,
+    countable_publication_states, deleted_publication_states)
 from .annotation import Webpage
 from .idea import IdeaVisitor, Idea, IdeaLink, RootIdea
 from .discussion import Discussion
@@ -217,7 +219,8 @@ class PostPathLocalCollection(object):
     def __repr__(self):
         return " ; ".join((`x` for x in self.paths))
 
-    def as_clause_base(self, db, include_breakpoints=False):
+    def as_clause_base(self, db, include_breakpoints=False,
+                       include_deleted=False):
         assert self.reduced
         def base_query(labeled=False):
             post = with_polymorphic(
@@ -230,9 +233,13 @@ class PostPathLocalCollection(object):
                 query = db.query(post.id.label("post_id"))
             else:
                 query = db.query(post.id)
-            query = query.join(
-                content, (content.id == post.id) &
-                         (content.tombstone_date == None))
+            query = query.join(content, content.id == post.id)
+            if include_deleted is not None:
+                if include_deleted:
+                    query = query.filter(
+                        post.publication_state.in_(deleted_publication_states))
+                else:
+                    query = query.filter(content.tombstone_date == None)
             return post, query
         if not self.paths:
             post, q = base_query(True)
@@ -306,8 +313,9 @@ class PostPathLocalCollection(object):
             q = q.alias("relposts")
         return q
 
-    def as_clause(self, db, discussion_id, user_id=None, content=None):
-        subq = self.as_clause_base(db)
+    def as_clause(self, db, discussion_id, user_id=None, content=None,
+                  include_deleted=False):
+        subq = self.as_clause_base(db, include_deleted=include_deleted)
         content = content or with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)
@@ -315,8 +323,18 @@ class PostPathLocalCollection(object):
         q = db.query(content).filter(
                 (content.discussion_id == discussion_id)
                 & (content.hidden == False)
-                & (Content.tombstone_condition(content))
                 ).join(subq, content.id == subq.c.post_id)
+        if include_deleted is not None:
+            if include_deleted:
+                post = with_polymorphic(
+                    Post, [], Post.__table__,
+                    aliased=False, flat=True)
+                q = q.join(
+                    post, (post.id == content.id) &
+                    post.publication_state.in_(deleted_publication_states))
+            else:
+                q = q.filter(content.tombstone_date == None)
+
         if user_id:
             # subquery?
             q = q.outerjoin(
@@ -407,10 +425,10 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         self.root_idea_id = idea_id
         return result
 
-    def orphan_clause(self, user_id=None, content=None):
+    def orphan_clause(self, user_id=None, content=None, include_deleted=False):
         root_path = self.paths[self.root_idea_id]
         db = self.discussion.default_db
-        subq = root_path.as_clause_base(db)
+        subq = root_path.as_clause_base(db, include_deleted=include_deleted)
         content = content or with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)
@@ -420,9 +438,19 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         q = db.query(content.id.label("post_id")).filter(
                 (content.discussion_id == self.discussion.id)
                 & (content.hidden == False)
-                & (Content.tombstone_condition(content))
                 & (content.type.notin_((synth_post_type, webpage_post_type)))
                 & content.id.notin_(subq))
+        if include_deleted is not None:
+            if include_deleted:
+                post = with_polymorphic(
+                    Post, [], Post.__table__,
+                    aliased=False, flat=True)
+                q = q.join(
+                    post, (post.id == content.id) &
+                    post.publication_state.in_(deleted_publication_states))
+            else:
+                q = q.filter(content.tombstone_date == None)
+
         if user_id:
             # subquery?
             q = q.outerjoin(
@@ -488,7 +516,8 @@ class PostPathCounter(PostPathCombiner):
             self.viewed_counts[idea_id] = 0
             return (0, 0)
         q = path_collection.as_clause(
-            self.discussion.db, self.discussion.id, user_id=self.user_id)
+            self.discussion.db, self.discussion.id, user_id=self.user_id,
+            include_deleted=None)
         (post_count, viewed_count) = self.get_counts_for_query(q)
         (path_collection.count, path_collection.viewed_count) = (
             post_count, viewed_count)
@@ -496,7 +525,7 @@ class PostPathCounter(PostPathCombiner):
         self.viewed_counts[idea_id] = viewed_count
         return (post_count, viewed_count)
 
-    def get_orphan_counts(self):
+    def get_orphan_counts(self, include_deleted=False):
         return self.get_counts_for_query(self.orphan_clause(self.user_id))
 
     def end_visit(self, idea_id, level, result, child_results):

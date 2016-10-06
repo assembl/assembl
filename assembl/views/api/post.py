@@ -33,6 +33,7 @@ from assembl.models import (
     Synthesis, Discussion, Content, Idea, ViewPost, User,
     IdeaRelatedPostLink, AgentProfile, LikedPost, LangString,
     DummyContext, LanguagePreferenceCollection)
+from assembl.models.post import deleted_publication_states
 from assembl.lib.raven_client import capture_message
 
 log = logging.getLogger('assembl')
@@ -148,58 +149,39 @@ def get_posts(request):
 
     post_data = []
 
-    only_orphan = request.GET.get('only_orphan')
-    if only_orphan == "true":
-        if root_idea_id:
-            raise HTTPBadRequest(localizer.translate(
-                _("Getting orphan posts of a specific idea isn't supported.")))
-        orphans = Idea._get_orphan_posts_statement(
-            discussion_id, True).subquery("orphans")
-        posts = posts.join(orphans, PostClass.id==orphans.c.post_id)
-        ideaContentLinkQuery = ideaContentLinkQuery.join(
-            orphans, PostClass.id==orphans.c.post_id)
-    elif only_orphan == "false":
-        raise HTTPBadRequest(localizer.translate(
-            _("Getting non-orphan posts isn't supported.")))
-
-    # "true" means hidden only, "false" (default) means visible only. "any" means both.
-    hidden = request.GET.get('hidden_messages', "false")
-    if hidden != 'any':
-        posts = posts.filter(PostClass.hidden==asbool(hidden))
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(
-            PostClass.hidden==asbool(hidden))
-
-
-    # "true" means deleted only, "false" (default) means non-deleted only. "any" means both.
+    # True means deleted only, False (default) means non-deleted only. None means both.
 
     # v0
-    # deleted = request.GET.get('deleted', 'any')
+    # deleted = request.GET.get('deleted', None)
     # end v0
 
     # v1: we would like something like that
     # deleted = request.GET.get('deleted', None)
     # if deleted is None:
     #     if view_def == 'id_only':
-    #         deleted = 'any'
+    #         deleted = None
     #     else:
-    #         deleted = 'false'
+    #         deleted = False
     # end v1
 
     # v2
     # deleted = request.GET.get('deleted', None)
     # if deleted is None:
     #     if not ids:
-    #         deleted = 'false'
+    #         deleted = False
     #     else:
-    #         deleted = 'any'
+    #         deleted = None
     #
     # if deleted == 'false':
+    #     deleted = False
     #     posts = posts.filter(PostClass.tombstone_condition())
     #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.tombstone_condition())
     # elif deleted == 'true':
+    #     deleted = True
     #     posts = posts.filter(PostClass.not_tombstone_condition())
     #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
     # elif deleted == 'any':
+    #     deleted = None
     #     # result will contain deleted and non-deleted posts
     #     pass
     # end v2
@@ -209,11 +191,12 @@ def get_posts(request):
     # deleted = request.GET.get('deleted', None)
     # if deleted is None:
     #     if not ids:
-    #         deleted = 'false'
+    #         deleted = False
     #     else:
-    #         deleted = 'any'
+    #         deleted = None
 
     # if deleted == 'true':
+    #     deleted = True
     #     posts = posts.filter(PostClass.not_tombstone_condition())
     #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
     # end v3
@@ -222,19 +205,49 @@ def get_posts(request):
     deleted = request.GET.get('deleted', None)
     if deleted is None:
         if not ids:
-            deleted = 'false'
+            deleted = False
         else:
-            deleted = 'any'
-    #if deleted != 'false' and deleted != 'true' and deleted != 'any':
-    #    deleted = 'false'
+            deleted = None
+    elif deleted.lower() == "any":
+        deleted = None
+    else:
+        deleted = asbool(deleted)
+    # if deleted is not in (False, True, None):
+    #    deleted = False
     # end v4
+
+    only_orphan = asbool(request.GET.get('only_orphan', False))
+    if only_orphan:
+        if root_idea_id:
+            raise HTTPBadRequest(localizer.translate(
+                _("Getting orphan posts of a specific idea isn't supported.")))
+        orphans = Idea._get_orphan_posts_statement(
+            discussion_id, True, include_deleted=deleted).subquery("orphans")
+        posts = posts.join(orphans, PostClass.id == orphans.c.post_id)
+        ideaContentLinkQuery = ideaContentLinkQuery.join(
+            orphans, PostClass.id == orphans.c.post_id)
 
     if root_idea_id:
         related = Idea.get_related_posts_query_c(
-            discussion_id, root_idea_id, True)
+            discussion_id, root_idea_id, True, include_deleted=deleted)
         posts = posts.join(related, PostClass.id == related.c.post_id)
         ideaContentLinkQuery = ideaContentLinkQuery.join(
             related, PostClass.id == related.c.post_id)
+    elif not only_orphan:
+        if deleted is not None:
+            if deleted:
+                posts = posts.filter(
+                    PostClass.publication_state.in_(
+                        deleted_publication_states))
+                ideaContentLinkQuery = ideaContentLinkQuery.filter(
+                    PostClass.publication_state.in_(
+                        deleted_publication_states))
+            else:
+                posts = posts.filter(
+                    PostClass.tombstone_date == None)
+                ideaContentLinkQuery = ideaContentLinkQuery.filter(
+                    PostClass.tombstone_date == None)
+
     if root_post_id:
         root_post = Post.get(root_post_id)
 
@@ -379,62 +392,11 @@ def get_posts(request):
     no_of_posts = 0
     no_of_posts_viewed_by_user = 0
 
-
-    def post_and_its_whole_line_of_descent_are_deleted(post):
-        """
-        :returns: True if post and its whole line of descent (direct and indirect answers) are deleted, False otherwise.
-        :rtype: bool
-        :param post: The post you want to analyse
-        :type post: assembl.models.Post
-
-        """
-        if not post.is_tombstone:
-            return False
-        children = post.children
-        if len(children) == 0:
-            return True
-        for child in children:
-            if not post_and_its_whole_line_of_descent_are_deleted(child):
-                return False
-        return True
-
-    def post_or_one_of_line_of_descent_is_deleted(post):
-        """
-        :returns: True if post or one of its line of descent (direct and indirect answers) is deleted, False otherwise.
-        :rtype: bool
-        :param post: The post you want to analyse
-        :type post: assembl.models.Post
-        
-        """
-        if post.is_tombstone:
-            return True
-        children = post.children
-        if len(children) == 0:
-            return False
-        for child in children:
-            if post_or_one_of_line_of_descent_is_deleted(child):
-                return True
-        return False
-
     for query_result in posts:
         score, viewpost, likedpost = None, None, None
         if not isinstance(query_result, (list, tuple)):
             query_result = [query_result]
         post = query_result[0]
-
-        # The response should not include deleted posts which do not break the structure of threads (these are deleted posts which have not received any direct or indirect non-deleted answer)
-        # Look for non-deleted (direct or indirect) children, and if there is none, we know that removing it from the results will not break the structure
-        # TODO: use recursion at the SQL query level instead
-        ignore_this_post = False
-        if deleted == 'false':
-            if post_and_its_whole_line_of_descent_are_deleted(post):
-                ignore_this_post = True
-        elif deleted == 'true':
-            if not post_or_one_of_line_of_descent_is_deleted(post):
-                ignore_this_post = True
-        if ignore_this_post:
-            continue
-
 
         if user_id != Everyone:
             viewpost = post.id in read_posts

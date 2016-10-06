@@ -1,5 +1,5 @@
 import pytest
-from assembl.models.post import Post
+from assembl.models.post import Post, PublicationStates
 from assembl.models.idea_content_link import IdeaContentPositiveLink
 
 
@@ -93,19 +93,51 @@ def test_jack_layton_linked_discussion(
 def test_deleted_post_count(
         test_session, test_webrequest, reply_deleted_post_4,
         subidea_1_1, reply_to_deleted_post_5, extract_post_1_to_subidea_1_1):
-    # Deleted posts should not be counted in num_posts, but should be retrieved
-    # in get_related_posts
+    # Deleted posts with live children should not be counted in num_posts,
+    # but should be retrieved in get_related_posts
     assert subidea_1_1.num_posts == 2
     assert subidea_1_1.get_related_posts_query().count() == 3
+    assert subidea_1_1.get_related_posts_query(
+        include_deleted=True).count() == 1
+
+
+def test_deleted_post_count_bis(
+        test_session, test_webrequest, reply_deleted_post_4,
+        subidea_1_1, extract_post_1_to_subidea_1_1):
+    # Deleted posts without live children should not be counted in num_posts,
+    # and should be not be retrieved in get_related_posts either,
+    # unless requested.
+
+    # But first do a delete post so tombstone status is right.
+    reply_deleted_post_4.delete_post(PublicationStates.DELETED_BY_ADMIN)
+    assert subidea_1_1.num_posts == 1
+    assert subidea_1_1.get_related_posts_query().count() == 1
+    assert subidea_1_1.get_related_posts_query(
+        include_deleted=None).count() == 2
 
 
 def test_deleted_orphan_count(
         test_session, test_webrequest, root_idea, discussion,
         reply_deleted_post_4, reply_to_deleted_post_5):
     # Deleted posts should not be counted in num_posts, but should be retrieved
-    # in get_related_posts
+    # in _get_orphan_posts_statement
     assert root_idea._get_orphan_posts_statement(discussion.id).count() == 4
+    assert root_idea._get_orphan_posts_statement(
+        discussion.id, include_deleted=True).count() == 1
     assert root_idea.num_orphan_posts == 3
+
+
+def test_delete_posts(
+        test_session, test_webrequest, reply_post_1, reply_post_2):
+    # Delete on parent with live child should not set tombstone...
+    reply_post_1.delete_post(PublicationStates.DELETED_BY_ADMIN)
+    assert reply_post_1.publication_state == PublicationStates.DELETED_BY_ADMIN
+    assert not reply_post_1.is_tombstone
+    # ...until child is deleted
+    reply_post_2.delete_post(PublicationStates.DELETED_BY_ADMIN)
+    assert reply_post_2.publication_state == PublicationStates.DELETED_BY_ADMIN
+    assert reply_post_2.is_tombstone
+    assert reply_post_1.is_tombstone
 
 
 if Post.using_virtuoso:
