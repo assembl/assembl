@@ -89,8 +89,8 @@
         "like_count": true,
         "discussion": true,
         "import_date": false,
-        "subject": "&get_subject",
-        "body": "&get_body",
+        "subject": "&get_subject:",
+        "body": "&get_body:",
         "widget_ideas": "&widget_ideas"
     },
     "Post": {

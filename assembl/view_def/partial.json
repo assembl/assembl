@@ -76,7 +76,7 @@
         "discussion": true,
         "date": "creation_date",
         "hidden": true,
-        "subject": "&get_subject",
+        "subject": "&get_subject:",
         "body": "&get_body_preview",
         "import_date": false
     },
