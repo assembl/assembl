@@ -212,10 +212,11 @@
               vertical-align: middle;
               width: 80%;
               display: inline-block;
+              color: $theme_navigation_idea_text_color;
             }
             .date {
               vertical-align: middle;
-              color: $gray1;
+              color: $theme_navigation_idea_total_count;
               display: inline-block;
               width: 20%;
               text-align: center;
