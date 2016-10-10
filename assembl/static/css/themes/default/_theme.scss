@@ -94,9 +94,9 @@ $theme_navigation_icon_color_active: $th_local_white;
 $theme_navigation_text_color: $th_local_white;
 $theme_navigation_text_color_active: $th_local_white;
 $theme_navigation_options: $th_local_gray3;
-$theme_navigation_idea_text_color: $th_local_black;
+$theme_navigation_idea_text_color: $th_local_black; // in the table of ideas, text color of an idea. In the list of syntheses, text color of a synthesis
 $theme_navigation_idea_header_text_color: $th_local_gray3;
-$theme_navigation_idea_total_count: $th_local_gray5;
+$theme_navigation_idea_total_count: $th_local_gray5; // in the table of ideas, text color of the number of messages associated to an idea. In the list of syntheses, text color of the publication date of a synthesis
 $theme_navigation_idea_hover_text_color: $theme_navigation_idea_text_color;
 $theme_navigation_idea_hover_total_count: $theme_navigation_idea_total_count;
 $theme_navigation_idea_hover_unread_count: $th_local_gray6;
@@ -132,7 +132,10 @@ $theme_extract_bg: $theme_navigation_bg;
 
 //idea panel
 $theme_idea_header_bg: $th_local_purple6;
+
+// Synthesis message
 $theme_synthesis_header_bg: $th_local_purple3;
+$theme_synthesis_idea_hover_bg: $th_local_gray4;
 
 
 /* Theme standard CSS definitions (mainly logos and images).
