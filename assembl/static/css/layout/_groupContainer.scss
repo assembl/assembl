@@ -340,6 +340,7 @@
   }
 }
 
+/* This is used in the "Add a panel group" popin */
 .selectedGroup {
   max-width: 500px;
   .itemGroup {
@@ -358,9 +359,16 @@
     .icon-checkbox {
       position: absolute;
       font-size: 16px;
-      top: 5px;
-      left: 5px;
+      top: 1px;
+      left: 1px;
       visibility: hidden;
+    }
+    i:nth-of-type(2) {
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 100%;
+      height: 100%;
     }
     &:hover {
       @include border-radius(3px);
@@ -372,6 +380,10 @@
     }
     .item-title {
       font-size: 12px;
+      position: absolute;
+      left: 0;
+      top: 65%;
+      width: 100%;
     }
 
     a.item {
