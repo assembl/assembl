@@ -237,7 +237,7 @@ var cKEditorField = Marionette.ItemView.extend({
 
     if (this.autosave) {
 
-      this.ckInstance.element.on('blur', function() {
+      this.ckInstance.on('blur', function() {
         /**
         * Firefox triggers the blur event if we paste (ctrl+v)
         * in the ckeditor, so instead of calling the function directly
