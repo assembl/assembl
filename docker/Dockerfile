@@ -23,7 +23,7 @@ RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
            cp production.ini local.ini && \
            sed -i 's/accept_secure_connection = true/accept_secure_connection = false/' local.ini && \
-           fab devenv install_builddeps && \
+           fab devenv install_single_server && \
            cp docker/nginx_config_docker/default /etc/nginx/sites-enabled/ && \
            /etc/init.d/ssh stop
 RUN     /etc/init.d/ssh start && \

@@ -667,33 +667,6 @@ def webservers_start():
             sudo('/usr/local/nginx/sbin/nginx')
 
 
-# # Server packages
-def install_basetools():
-    """
-    Install required base tools
-    """
-    print(cyan('Installing base tools'))
-    if env.mac:
-        # Install Homebrew
-        if not exists('/usr/local/bin/brew'):
-            run('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
-        else:
-            run("brew update")
-            run("brew upgrade")
-        # Standardize on brew python
-        if not exists('/usr/local/bin/python'):
-            run('brew install python')
-        assert exists('/usr/local/bin/pip'), "Brew python should come with pip"
-        path_pip = run('which pip')
-        assert path_pip == '/usr/local/bin/pip',\
-            "Make sure homebrew is in the bash path, got " + path_pip
-        run('pip install virtualenv')
-    else:
-        sudo('apt-get install -y python-virtualenv python-pip')
-        sudo('apt-get install -y git')
-        # sudo('apt-get install -y gettext')
-
-
 def install_bower():
     with cd(get_node_base_path()):
         venvcmd('npm install bower po2json requirejs', chdir=False)
@@ -726,6 +699,7 @@ def bower_cmd(cmd, relative_path='.'):
             print("Running a bower command in path %s" % relative_path)
             venvcmd(' '.join(("node", bower_cmd, '--allow-root', cmd)), chdir=False)
 
+
 def _bower_foreach_do(cmd):
     bower_cmd(cmd)
     bower_cmd(cmd, 'assembl/static/widget/card')
@@ -734,6 +708,7 @@ def _bower_foreach_do(cmd):
     bower_cmd(cmd, 'assembl/static/widget/vote')
     bower_cmd(cmd, 'assembl/static/widget/creativity')
     bower_cmd(cmd, 'assembl/static/widget/share')
+
 
 @task
 def update_bower_requirements(force_reinstall=False):
@@ -744,6 +719,7 @@ def update_bower_requirements(force_reinstall=False):
         execute(_bower_foreach_do, 'install --force')
     else:
         execute(_bower_foreach_do, 'update')
+
 
 @task
 def update_npm_requirements(force_reinstall=False):
@@ -756,7 +732,69 @@ def update_npm_requirements(force_reinstall=False):
         else:
             venvcmd('npm update', chdir=False)
 
-def _install_builddeps():
+
+@task
+def install_single_server():
+    """
+    Will install all assembl components on a single server
+    """
+    sanitize_env()
+    execute(skeleton_env, None)
+    execute(install_database)
+    execute(install_assembl_server_deps)
+
+
+@task
+def install_assembl_server_deps():
+    """
+    Will install most assembl components on a single server, except db
+    """
+    sanitize_env()
+    execute(skeleton_env, None)
+    execute(install_assembl_deps)
+    execute(install_redis)
+    execute(install_memcached)
+
+
+@task
+def install_assembl_deps():
+    """
+    Will install commonly needed build deps for pip django virtualenvs.
+    """
+    sanitize_env()
+    execute(skeleton_env, None)
+    execute(install_basetools)
+    execute(install_builddeps)
+
+
+# # Server packages
+def install_basetools():
+    """
+    Install required base tools
+    """
+    print(cyan('Installing base tools'))
+    if env.mac:
+        # Install Homebrew
+        if not exists('/usr/local/bin/brew'):
+            run('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
+        else:
+            run("brew update")
+            run("brew upgrade")
+        # Standardize on brew python
+        if not exists('/usr/local/bin/python'):
+            run('brew install python')
+        assert exists('/usr/local/bin/pip'), "Brew python should come with pip"
+        path_pip = run('which pip')
+        assert path_pip == '/usr/local/bin/pip',\
+            "Make sure homebrew is in the bash path, got " + path_pip
+        sudo('pip install virtualenv')
+    else:
+        sudo('apt-get install -y python-virtualenv python-pip')
+        sudo('apt-get install -y git')
+        # sudo('apt-get install -y gettext')
+
+
+def install_builddeps():
     print(cyan('Installing compilers and required libraries'))
     print "env.hosts" + repr(env.hosts)
     if env.mac:
@@ -764,11 +802,7 @@ def _install_builddeps():
         # may require a sudo
         if not run('brew link libevent', quiet=True):
             sudo('brew link libevent')
-        run('brew install memcached zeromq redis libtool libmemcached gawk postgres')
-        run('brew tap homebrew/services')
-        run('brew services start memcached')
-        run('brew services start redis')
-        run('brew services start postgres')
+        run('brew install zeromq libtool libmemcached gawk')
         if not exists('/usr/local/bin/pkg-config'):
             run('brew install pkg-config')
         if not exists('/usr/local/bin/autoconf'):
@@ -794,39 +828,66 @@ def _install_builddeps():
             run('brew install gcc isl')
     else:
         sudo('apt-get install -y build-essential python-dev pandoc')
-        sudo('apt-get install -y automake bison flex gperf  libxml2-dev libssl-dev libreadline-dev gawk')
-        sudo('apt-get install -y graphviz libgraphviz-dev pkg-config')
-        sudo('apt-get install -y liblapack-dev libatlas-dev libblas-dev gfortran')
-        print "We are still trying to get some requirements right for linux,"\
-            "See http://www.scipy.org/scipylib/building/linux.html for details."
+        sudo('apt-get install -y automake bison flex gperf gawk')
+        sudo('apt-get install -y graphviz pkg-config phantomjs')
+        sudo('apt-get install -y gfortran')
 
-        # Runtime requirements (even in develop)
-        sudo('apt-get install -y redis-server memcached unixodbc-dev')
-    execute(install_database)
+        # will hopefully die soon
+        sudo('apt-get install -y unixodbc-dev')
     execute(update_python_package_builddeps)
-
-@task
-def install_builddeps():
-    """
-    Will install commonly needed build deps for pip django virtualenvs.
-    """
-    sanitize_env()
-    execute(skeleton_env, None)
-    execute(install_basetools)
-    execute(_install_builddeps)
 
 
 @task
 def update_python_package_builddeps():
     """Install/Update python package native binary dependencies"""
     sanitize_env()
-    print(cyan('Installing/Updating python package native binary dependencies'))
+    print(cyan(
+        'Installing/Updating python package native binary dependencies'))
     # For specific python packages in requirements.txt
     if env.mac:
-        # I presume the runtime packages in install_builddeps come with headers on mac?
+        # Brew packages come with development headers
         pass
+        # TODO: Make sure database, redis and memcached are installed
     else:
-        sudo('apt-get install -y postgresql postgresql-server-dev-all libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev phantomjs')
+        sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
+             'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
+             'libreadline-dev liblapack-dev libatlas-dev libblas-dev '
+             'libgraphviz-dev')
+        print ("We are still trying to get some requirements right for linux, "
+               "See http://www.scipy.org/scipylib/building/linux.html "
+               "for details.")
+
+
+@task
+def install_redis():
+    """
+    Install redis server
+    """
+    print(cyan('Installing redis server'))
+    if env.mac:
+        if not exists('/usr/local/bin/brew'):
+            sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
+        run('brew install redis')
+        run('brew tap homebrew/services')
+        run('brew services start redis')
+    else:
+        sudo('apt-get install -y redis-server')
+
+
+@task
+def install_memcached():
+    """
+    Install memcached server
+    """
+    print(cyan('Installing memcached'))
+    if env.mac:
+        if not exists('/usr/local/bin/brew'):
+            sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
+        run('brew install memcached')
+        run('brew tap homebrew/services')
+        run('brew services start memcached')
+    else:
+        sudo('apt-get install -y memcached')
 
 
 @task
@@ -1293,13 +1354,18 @@ def install_or_updgrade_virtuoso():
     else:
         execute(virtuoso_source_upgrade)
 
+
 def install_postgres():
     """
-    Install a postgresql DB
+    Install a postgresql DB server
     """
     print(cyan('Installing Postgresql'))
     if env.mac:
+        if not exists('/usr/local/bin/brew'):
+            sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         run('brew install postgresql')
+        run('brew tap homebrew/services')
+        run('brew services start postgres')
     else:
         sudo('apt-get install -y postgresql')
 

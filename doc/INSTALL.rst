@@ -60,7 +60,7 @@ You can run either:
 .. code:: sh
 
     wget https://raw.github.com/assembl/assembl/develop/fabfile.py
-    fab install_builddeps
+    fab install_single_server
     fab bootstrap:projectpath=~/assembl
     cd ~/assembl
 
@@ -70,10 +70,10 @@ or:
 
     git clone https://github.com/assembl/assembl.git
     cd assembl
-    fab env_dev install_builddeps
+    fab env_dev install_single_server
     fab env_dev bootstrap_from_checkout
 
-Note: If on Mac, command fab env_dev install_builddeps outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
+Note: If on Mac, command fab env_dev install_single_server outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
 
 Note: If you get the following error: ``fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)`` Then you'll need to reconfigure your ssh server
 
@@ -317,7 +317,7 @@ If you do not have an SSL certificate, then you have to set ``accept_secure_conn
 
     exit # this logs out from the assembl_user user, back to the initial sudoer account
     cd /home/assembl_user/assembl
-    fab env_dev install_builddeps
+    fab env_dev install_single_server
     fab env_dev bootstrap_from_checkout
     source venv/bin/activate
     assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
