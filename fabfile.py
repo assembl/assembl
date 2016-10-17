@@ -3,6 +3,7 @@
 from __future__ import with_statement
 
 from os import getenv
+from getpass import getuser
 from platform import system
 from time import sleep, strftime
 import pipes
@@ -736,9 +737,9 @@ def _install_builddeps():
             sudo('brew link libevent')
         run('brew install memcached zeromq redis libtool libmemcached gawk postgres')
         run('brew tap homebrew/services')
-        sudo('brew services start memcached')
-        sudo('brew services start redis')
-        sudo('brew services start postgres')
+        run('brew services start memcached')
+        run('brew services start redis')
+        run('brew services start postgres')
         if not exists('/usr/local/bin/pkg-config'):
             run('brew install pkg-config')
         if not exists('/usr/local/bin/autoconf'):
@@ -755,8 +756,7 @@ def _install_builddeps():
         # glibtoolize, bison, flex, gperf are on osx by default.
         # brew does not know aclocal, autoheader...
         # They exist on macports, but do we want to install that?
-        if not (exists('/usr/lib/libiodbc.2.dylib') or
-                exists('/usr/local/lib/libiodbc.2.dylib')):
+        if not exists('/usr/local/lib/libiodbc.2.dylib'):
             run('brew install libiodbc')
             # may require a sudo
             if not run('brew link libiodbc', quiet=True):
@@ -1511,7 +1511,7 @@ def system_db_user():
         return None
     if env.mac:
         # Brew uses user
-        return None
+        return getuser()
     return "postgres"  # linux posgres
 
 
