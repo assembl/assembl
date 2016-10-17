@@ -1574,6 +1574,8 @@ def commonenv(projectpath, venvpath=None):
     # It is recommended you keep localhost even if you have access to
     # unix domain sockets, it's more portable across different pg_hba configurations.
     env.db_host = 'localhost'
+    if config.has_option("app:assembl", "db_host"):
+        env.db_host = config.get("app:assembl", "db_host")
 
     env.vroot = config.get('virtuoso', 'virtuoso_root')
     env.vsrc = config.get('virtuoso', 'virtuoso_src')
