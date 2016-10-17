@@ -965,10 +965,10 @@ def check_and_create_database_user():
             host=env.db_host, user=env.db_user, projectpath=env.projectpath))
     if checkUser.failed:
         print(yellow("User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"))
-        run_db_command(as_venvcmd('assembl-pypsql -u {db_user} "{command}"'.format(
+        run_db_command(as_venvcmd('assembl-pypsql -u {db_user} -n {host} "{command}"'.format(
             command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
-                env.db_user, env.db_password,),
-            db_user=system_db_user())))
+                env.db_user, env.db_password),
+            db_user=system_db_user(), host=env.db_host)))
         # run_db_command("bash -c 'psql -n -d postgres -c \"CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \\\'%s\\\';\"'" % (env.db_user, env.db_password))
     else:
         print(green("User exists and can connect"))
