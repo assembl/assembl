@@ -526,7 +526,8 @@ class PostPathCounter(PostPathCombiner):
         return (post_count, viewed_count)
 
     def get_orphan_counts(self, include_deleted=False):
-        return self.get_counts_for_query(self.orphan_clause(self.user_id))
+        return self.get_counts_for_query(
+            self.orphan_clause(self.user_id, include_deleted=include_deleted))
 
     def end_visit(self, idea_id, level, result, child_results):
         if isinstance(idea_id, Idea):

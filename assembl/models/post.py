@@ -360,7 +360,7 @@ class Post(Content):
     @property
     def has_live_child(self):
         for child in self.children:
-            if child.publication_state not in deleted_publication_states:
+            if not child.is_tombstone:
                 return True
 
     def delete_post(self, cause):
