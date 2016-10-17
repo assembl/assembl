@@ -27,12 +27,18 @@ class TombstonableMixin(object):
     def is_tombstone(self):
         return self.tombstone_date is not None
 
+    # Most tombstonable objects cannot be resurrected.
+    can_be_resurrected = False
+
     @is_tombstone.setter
     def is_tombstone(self, value):
-        """Set the tombstone property to True. (Irreversible)"""
-        # No necromancy
+        """Set the tombstone property to True. (normally irreversible)"""
         if not value:
-            assert self.tombstone_date is None
+            if self.tombstone_date is not None:
+                if self.can_be_resurrected:
+                    self.tombstone_date = None
+                else:
+                    raise ValueError("Cannot resurrect " + str(self))
             return
         if self.tombstone_date is None:
             self.tombstone_date = datetime.utcnow()

@@ -221,6 +221,14 @@ class PostPathLocalCollection(object):
 
     def as_clause_base(self, db, include_breakpoints=False,
                        include_deleted=False):
+        """Express collection as a SQLAlchemy query clause.
+
+        :param bool include_breakpoints: Include posts where
+            a threadbreak happens
+        :param include_deleted: Include posts in deleted_publication_states.
+            True means only deleted posts, None means all posts,
+            False means only live posts or deleted posts with live descendants.
+        """
         assert self.reduced
         def base_query(labeled=False):
             post = with_polymorphic(

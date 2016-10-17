@@ -364,10 +364,12 @@ class Post(Content):
                 return True
 
     def delete_post(self, cause):
+        """Set the publication state to a deleted state
+
+        Includes an optimization whereby deleted posts without
+        live descendents are tombstoned.
+        Should be resilient to deletion order."""
         self.publication_state = cause
-        # Question: Is the following even necessary?
-        # It makes undeleting posts more difficult,
-        # and offers no real gain.
         if not self.has_live_child:
             self.is_tombstone = True
             # If ancestor is deleted without being tombstone, make it tombstone
@@ -379,8 +381,11 @@ class Post(Content):
                 ancestor.is_tombstone = True
                 ancestor = ancestor.parent
 
+    # As tombstones are an optimization in this case,
+    # allow necromancy.
+    can_be_resurrected = True
+
     def undelete_post(self):
-        # Does not work yet, undeleting is still forbidden
         self.publication_state = PublicationStates.PUBLISHED
         ancestor = self
         while ancestor and ancestor.is_tombstone:
