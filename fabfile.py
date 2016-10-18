@@ -865,8 +865,6 @@ def install_redis():
     """
     print(cyan('Installing redis server'))
     if env.mac:
-        if not exists('/usr/local/bin/brew'):
-            sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         run('brew install redis')
         run('brew tap homebrew/services')
         run('brew services start redis')
@@ -881,8 +879,6 @@ def install_memcached():
     """
     print(cyan('Installing memcached'))
     if env.mac:
-        if not exists('/usr/local/bin/brew'):
-            sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         run('brew install memcached')
         run('brew tap homebrew/services')
         run('brew services start memcached')
@@ -1361,8 +1357,6 @@ def install_postgres():
     """
     print(cyan('Installing Postgresql'))
     if env.mac:
-        if not exists('/usr/local/bin/brew'):
-            sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         run('brew install postgresql')
         run('brew tap homebrew/services')
         run('brew services start postgres')
