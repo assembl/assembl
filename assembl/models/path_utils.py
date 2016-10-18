@@ -386,8 +386,7 @@ class PostPathGlobalCollection(object):
             ).filter(
                 ICL.idea_id != None,
                 content.discussion_id==discussion.id,
-                content.hidden==False,
-                Content.tombstone_condition(content))
+                content.hidden==False)
         for (idea_id, typename, path) in q:
             path += ","
             if typename in self.positives:

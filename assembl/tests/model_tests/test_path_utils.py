@@ -101,6 +101,22 @@ def test_deleted_post_count(
         include_deleted=True).count() == 1
 
 
+def test_deleted_root_post_count(
+        test_session, test_webrequest, reply_post_1,
+        subidea_1_1, extract_post_1_to_subidea_1_1):
+    # Deleted posts with live children should not be counted in num_posts,
+    # but should be retrieved in get_related_posts
+    # assert subidea_1_1.num_posts == 1
+    # assert subidea_1_1.get_related_posts_query().count() == 1
+    reply_post_1.delete_post(PublicationStates.DELETED_BY_ADMIN)
+    assert subidea_1_1.num_posts == 0
+    assert subidea_1_1.get_related_posts_query().count() == 0
+    assert subidea_1_1.get_related_posts_query(
+        include_deleted=True).count() == 1
+    assert subidea_1_1.get_related_posts_query(
+        include_deleted=None).count() == 1
+
+
 def test_deleted_post_count_bis(
         test_session, test_webrequest, reply_deleted_post_4,
         subidea_1_1, extract_post_1_to_subidea_1_1):
