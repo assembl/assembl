@@ -654,9 +654,20 @@ def install_basetools():
     """
     print(cyan('Installing base tools'))
     if env.mac:
-        run('cd /tmp; curl -O https://bootstrap.pypa.io/get-pip.py')
-        sudo('python /tmp/get-pip.py')
-        sudo('pip install virtualenv')
+        # Install Homebrew
+        if not exists('/usr/local/bin/brew'):
+            run('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
+        else:
+            run("brew update")
+            run("brew upgrade")
+        # Standardize on brew python
+        if not exists('/usr/local/bin/python'):
+            run('brew install python')
+        assert exists('/usr/local/bin/pip'), "Brew python should come with pip"
+        path_pip = run('which pip')
+        assert path_pip == '/usr/local/bin/pip',\
+            "Make sure homebrew is in the bash path, got " + path_pip
+        run('pip install virtualenv')
     else:
         sudo('apt-get install -y python-virtualenv python-pip')
         sudo('apt-get install -y git')
@@ -729,8 +740,6 @@ def _install_builddeps():
     print(cyan('Installing compilers and required libraries'))
     print "env.hosts" + repr(env.hosts)
     if env.mac:
-        if not exists('/usr/local/bin/brew'):
-            sudo('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
         run('brew install libevent')
         # may require a sudo
         if not run('brew link libevent', quiet=True):

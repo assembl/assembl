@@ -30,29 +30,18 @@ You need fabric 1.5.1 and a SSH server installed. Here is how to install them on
 On Mac
 ++++++
 
-The system python has an old but serviceable pip version. It can be
-updated with
+First install Homebrew by following the instructions at http://brew.sh ; or simply paste the following in the terminal:
+
+.. code:: sh
+    ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
+
+Make sure `/usr/local/bin` is in your `$PATH`. Then, install the homebrew python and fabric:
 
 .. code:: sh
 
-    sudo pip install -U pip
+    brew install python fabric
 
-If the terminal tells you command pip not found, follow the installation instructions of pip on https://pip.pypa.io/en/stable/installing/
-
-Go to http://brew.sh and follow the instructions to install Homebrew. (It is required by the command fab env_dev install_builddeps which will be run in a following step)
-If you want to use the Homebrew python,
-pip installs with python:
-
-.. code:: sh
-
-    brew install python
-
-Either way, you should use pip to install fabric (you would need to sudo for the system python):
-
-.. code:: sh
-
-    pip install -U fabric
-
+MacOS has a SSH server installed. To activate it, go to System Preferences in the Apple Menu, then to the Sharing tab. Ensure the "Remote login" checkbox is active.
 
 On Ubuntu
 +++++++++
