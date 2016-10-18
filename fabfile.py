@@ -288,7 +288,27 @@ def build_virtualenv():
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
-    run('virtualenv --no-site-packages --distribute %(venvpath)s' % env)
+    run('virtualenv %(venvpath)s' % env)
+    if env.mac:
+        # Virtualenv does not reuse distutils.cfg from the homebrew python,
+        # and that sometimes precludes building python modules.
+        bcfile = "/usr/local/Frameworks/Python.framework/Versions/2.7/lib/python2.7/distutils/distutils.cfg"
+        vefile = env.venvpath + "/lib/python2.7/distutils/distutils.cfg"
+        sec = "build_ext"
+        if exists(bcfile):
+            brew_config = SafeConfigParser()
+            brew_config.read(bcfile)
+            venv_config = SafeConfigParser()
+            if exists(vefile):
+                venv_config.read(vefile)
+            if (brew_config.has_section(sec) and
+                    not venv_config.has_section(sec)):
+                venv_config.add_section(sec)
+                for option in brew_config.options(sec):
+                    val = brew_config.get(sec, option)
+                    venv_config.set(sec, option, val)
+                with open(vefile, 'w') as f:
+                    venv_config.write(f)
     run('rm /tmp/distribute* || echo "ok"')  # clean after myself
 
 
@@ -1370,6 +1390,7 @@ def virtuoso_source_install():
             sudo('checkinstall')
         else:
             run('make install')
+
 
 def get_vendor_config():
     config = SafeConfigParser()
