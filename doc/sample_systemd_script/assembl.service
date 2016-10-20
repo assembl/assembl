@@ -5,12 +5,12 @@
 # systemctl enable assembl
 
 [Unit]
-Description=assembl.coeus.ca supervisord
+Description=assembl supervisord
 
 [Service]
-# These are the lines you have to modify for your environment
+# These are the lines you have to modify for your environment. This assumes Assembl is running under the ubuntu user.
 Environment=ASSEMBL_PATH=/home/ubuntu/assembl
-User=www-data
+User=ubuntu
 Group=www-data
 
 Type=simple
