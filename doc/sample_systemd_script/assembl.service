@@ -9,7 +9,7 @@ Description=assembl.coeus.ca supervisord
 
 [Service]
 # These are the lines you have to modify for your environment
-Environment=ASSEMBL_PATH=/var/www/assembl
+Environment=ASSEMBL_PATH=/home/ubuntu/assembl
 User=www-data
 Group=www-data
 

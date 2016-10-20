@@ -234,7 +234,10 @@ update with the following:
 Setting up a production dedicated instance
 ------------------------------------------
 
-Start as a user with sudo access (NOT as root!)
+In what follows, we will assume that the nginx web server runs in group `www-data`, and that the assembl server runs under a separate user, called `assembl_user`. In the sample files in `doc`, we use `ubuntu` instead of `assembl_user`, as this is the most convenient for cloud setup.
+Note: It is also possible to use the same user, and to put assembl in `/var/www`. It may be simpler for a single-server setup.
+
+Start as a user with sudo access
 
 .. code:: sh
 

@@ -4,15 +4,15 @@ server {
     #listen   443 ssl;
     #listen   [::]:443 ssl;
 
-    # This is the server name, assuming you're running multiple servers
-    server_name assembl.yourdomain.com;
+    # This is the server name, if you're running multiple servers
+    # server_name assembl.yourdomain.com;
 
     #ssl_certificate     /etc/ssl/assembl.yourdomain.com/assembl.yourdomain.com.crt;
     #ssl_certificate_key /etc/ssl/assembl.yourdomain.com/assembl.yourdomain.com.key;
 
-    location /something_or_other.html {
-        #This is for domain verification
-        alias /var/www/assembl/something_or_other.html;
+    location /.well-known {
+        #This is for domain verification with let's encrypt
+        alias /var/www/html/.well-known;
     }
 
     location /socket {
@@ -27,14 +27,14 @@ server {
         #Nor will it help your performance after the first hour...
         autoindex on;
 
-        alias /var/www/assembl/assembl/static;
+        alias /home/ubuntu/assembl/assembl/static;
     }
 
     location / {
 
         include uwsgi_params;
         uwsgi_read_timeout 5m;
-        uwsgi_pass unix:///var/www/assembl/var/run/uwsgi.sock;
+        uwsgi_pass unix:///home/ubuntu/assembl/var/run/uwsgi.sock;
     }
 
 # So files uploaded to the database are not artificailly limited by nginx
