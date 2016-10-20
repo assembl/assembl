@@ -252,17 +252,10 @@ Start as a user with sudo access (NOT as root!)
     # sudo service postgresql restart
 
     sudo -u assembl_user -i
-    
+
     git clone https://github.com/assembl/assembl.git
     cd assembl
-    #Secure and give nginx access
-    chmod -R o-rwx .
-    chmod -R g-rw .
-    chgrp www-data . assembl var var/run
-    chgrp -R www-data assembl/static
-    chmod -R g+rxs var/run
-    find assembl/static -type d -print|xargs chmod g+rxs
-    find assembl/static -type f -print|xargs chmod g+r
+    fab env_dev set_file_permissions
     cp production.ini local.ini
 
 Change the values for:

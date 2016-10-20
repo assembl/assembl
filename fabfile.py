@@ -887,6 +887,27 @@ def install_memcached():
 
 
 @task
+def set_file_permissions():
+    webgrp = '_www' if env.mac else 'www-data'
+    # This should cover most cases.
+    if webgrp not in run('groups').split():
+        if env.mac:
+            sudo('dseditgroup -o edit -a {user} -t user {webgrp}'.format(
+                webgrp=webgrp, user=env.user))
+        else:
+            sudo('usermod -G {webgrp} {user}'.format(
+                webgrp=webgrp, user=env.user))
+    with cd(env.projectpath):
+        run('chmod -R o-rwx .')
+        run('chmod -R g-rw .')
+        run('chgrp {webgrp} . assembl var var/run'.format(webgrp=webgrp))
+        run('chgrp -R {webgrp} assembl/static'.format(webgrp=webgrp))
+        run('chmod -R g+rxs var/run')
+        run('find assembl/static -type d -print|xargs chmod g+rxs')
+        run('find assembl/static -type f -print|xargs chmod g+r')
+
+
+@task
 def start_edit_fontello_fonts():
     """Prepare to edit the fontello fonts in Fontello."""
     sanitize_env()
