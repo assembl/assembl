@@ -110,8 +110,8 @@ var ReadSource = Marionette.ItemView.extend({
         url,
         {
           method: "POST",
-          contentType: "application/json",
-          data: payload
+          contentType: "application/json; charset=UTF-8",
+          data: JSON.stringify(payload)
         }
       ).then(function() {
         Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Import has begun!'))

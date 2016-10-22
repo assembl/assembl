@@ -22,11 +22,17 @@ from assembl.tasks.source_reader import wake
 def fetch_posts(request):
     ctx = request.context
     csource = ctx._instance
-    force_restart = request.params.get('force_restart', False)
-    reimport = request.params.get('reimport', False)
-    reprocess = request.params.get('reprocess', False)
-    upper_bound = request.params.get('upper_limit', None)
-    lower_bound = request.params.get('lower_limit', None)
+
+    def request_parameter(key, default_value=None):
+        # when client POSTs data as JSON, in Pyramid data does not arrive in request.POST but in request.json_body
+        return request.json_body.get(key, default_value)
+
+    force_restart = request_parameter('force_restart', False)
+    reimport = request_parameter('reimport', False)
+    reprocess = request_parameter('reprocess', False)
+    upper_bound = request_parameter('upper_limit', None)
+    lower_bound = request_parameter('lower_limit', None)
+    
     try:
         if upper_bound:
             _ = parse(upper_bound)
@@ -54,6 +60,9 @@ def fetch_posts(request):
                 requested.append('reprocess')
             raise HTTPUnauthorized("Only discussion administrator\
                                    can "+'and'.join(requested))
+
+    if force_restart:
+        csource.reset_errors()
 
     wake(csource.id, reimport, force_restart, upper_bound=upper_bound,
          lower_bound=lower_bound, reprocess=reprocess)

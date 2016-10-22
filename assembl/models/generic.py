@@ -150,6 +150,11 @@ class ContentSource(DiscussionBoundBase):
     # Cannot be readable to all, because subclasses contain passwords
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_ADMIN_DISC)
 
+    def reset_errors(self):
+        self.connection_error = None
+        self.error_description = None
+        self.error_backoff_until = None
+
 
 class PostSource(ContentSource):
     """
