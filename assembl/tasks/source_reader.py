@@ -529,8 +529,9 @@ class SourceDispatcher(ConsumerMixin):
             source = ContentSource.get(source_id)
             if not source:
                 return False
-            if (source.connection_error == ReaderStatus.IRRECOVERABLE_ERROR
-                    and not force_restart):
+            if force_restart:
+                source.reset_errors()
+            if source.connection_error == ReaderStatus.IRRECOVERABLE_ERROR:
                 return False
             reader = source.make_reader()
             self.readers[source_id] = reader
