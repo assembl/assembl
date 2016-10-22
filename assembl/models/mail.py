@@ -286,7 +286,13 @@ class AbstractMailbox(PostSource):
 
         debug = True;
         from lxml import html, etree
-        doc = html.fromstring(message_body)
+
+        doc = None
+        try:
+            doc = html.fromstring(message_body)
+        except: # We can get "ParserError: Document is empty", which has to be caught, otherwise it blocks the SourceReader
+            return message_body
+
         #Strip GMail quotes
         matches = doc.find_class('gmail_quote')
         if len(matches) > 0:
