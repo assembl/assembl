@@ -185,9 +185,7 @@ class SourceReader(Thread):
         self.error_count = 0
         self.last_error_status = None
         self.error_backoff_until = None
-        self.source.connection_error = None
-        self.source.error_description = None
-        self.source.error_backoff_until = None
+        self.source.reset_errors()
 
     def new_error(self, reader_error, status=None, expected=True):
         import traceback
@@ -524,25 +522,33 @@ class SourceDispatcher(ConsumerMixin):
 
     def read(self, source_id, reimport=False, force_restart=False, **kwargs):
         from assembl.models import ContentSource
-        if not (self.readers.get(source_id, None)
-                and self.readers[source_id].is_connected()):
+
+        reader = self.readers.get(source_id, None)
+
+        if force_restart and reader is not None:
+            reader.shutdown()
+            reader = None
+
+        if not (reader and reader.is_connected()):
             source = ContentSource.get(source_id)
             if not source:
                 return False
+            if source.connection_error == ReaderStatus.IRRECOVERABLE_ERROR and not force_restart:
+                return False
             if force_restart:
                 source.reset_errors()
-            if source.connection_error == ReaderStatus.IRRECOVERABLE_ERROR:
-                return False
             reader = source.make_reader()
             self.readers[source_id] = reader
             if reader is None:
                 return False
+            
             reader.setup_read(reimport, **kwargs)
             reader.start()
             return True
-        reader = self.readers.get(source_id, None)
+
         if reader is None:
             return False
+
         # We know it is connected by now.
         reader.setup_read(reimport, **kwargs)
         reader.wake()
