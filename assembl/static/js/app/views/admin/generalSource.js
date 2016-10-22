@@ -8,6 +8,7 @@ var Marionette = require('../../shims/marionette.js'),
     i18n = require('../../utils/i18n.js'),
     Types = require('../../utils/types.js'),
     Ctx = require('../../common/context.js'),
+    Permissions = require('../../utils/permissions.js'),
     Growl = require('../../utils/growl.js'),
     Source = require('../../models/sources.js'),
     CollectionManager = require('../../common/collectionManager.js'),
@@ -99,13 +100,22 @@ var ReadSource = Marionette.ItemView.extend({
     },
 
     manualStart: function(evt){
-        var url = this.model.url() + "/fetch_posts";
-        $.ajax(url, {
+      var url = this.model.url() + "/fetch_posts";
+      var user = Ctx.getCurrentUser();
+      var payload = {};
+      if (user.can(Permissions.ADMIN_DISCUSSION)){
+        payload.force_restart = true;
+      }
+      $.ajax(
+        url,
+        {
           method: "POST",
           contentType: "application/json",
-          data: {}}).then(function() {
-            Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Import has begun!'))
-          });
+          data: payload
+        }
+      ).then(function() {
+        Growl.showBottomGrowl(Growl.GrowlReason.SUCCESS, i18n.gettext('Import has begun!'))
+      });
     },
 
     serializeData: function() {
