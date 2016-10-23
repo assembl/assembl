@@ -290,8 +290,8 @@ class AbstractMailbox(PostSource):
         doc = None
         try:
             doc = html.fromstring(message_body)
-        except: # We can get "ParserError: Document is empty", which has to be caught, otherwise it blocks the SourceReader
-            return message_body
+        except etree.ParserError: # If the parsed HTML document is empty, we get a "ParserError: Document is empty" exception. So the stripped message we return is an empty string (if we keep the exception it blocks the SourceReader)
+            return ""
 
         #Strip GMail quotes
         matches = doc.find_class('gmail_quote')
