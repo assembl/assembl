@@ -420,12 +420,16 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .path_utils import DiscussionGlobalData
         from pyramid.security import authenticated_userid
         req = get_current_request()
-        assert req
-        if getattr(req, "discussion_data", None) is None:
-            req.discussion_data = DiscussionGlobalData(
+        discussion_data = None
+        if req:
+            discussion_data = getattr(req, "discussion_data", None)
+        if not discussion_data:
+            discussion_data = DiscussionGlobalData(
                 cls.default_db(), discussion_id,
                 authenticated_userid(req))
-        return req.discussion_data
+            if req:
+                req.discussion_data = discussion_data
+        return discussion_data
 
     @classmethod
     def prepare_counters(cls, discussion_id, calc_all=False):
