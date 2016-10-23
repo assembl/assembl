@@ -23,16 +23,15 @@ def fetch_posts(request):
     ctx = request.context
     csource = ctx._instance
 
-    def request_parameter(key, default_value=None):
-        # when client POSTs data as JSON, in Pyramid data does not arrive in request.POST but in request.json_body
-        return request.json_body.get(key, default_value)
+    # when client POSTs data as JSON, in Pyramid data does not arrive in request.POST but in request.json_body
+    json = request.json_body
 
-    force_restart = request_parameter('force_restart', False)
-    reimport = request_parameter('reimport', False)
-    reprocess = request_parameter('reprocess', False)
-    upper_bound = request_parameter('upper_limit', None)
-    lower_bound = request_parameter('lower_limit', None)
-    
+    force_restart = json.get('force_restart', False)
+    reimport = json.get('reimport', False)
+    reprocess = json.get('reprocess', False)
+    upper_bound = json.get('upper_limit', None)
+    lower_bound = json.get('lower_limit', None)
+
     try:
         if upper_bound:
             _ = parse(upper_bound)
