@@ -330,6 +330,14 @@ var routeManager = Marionette.Object.extend({
     Assembl.slider.show(new View({model: widget}));
   },
 
+  openAngularWidget: function(widget){
+    var options = {
+      "target_url": widget.getUrlForUser(),
+      "modal_title": widget.getLinkText(Widget.Model.prototype.INFO_BAR)
+    };
+    Ctx.openTargetInModal(null, null, options);
+  },
+
   // example: http://localhost:6543/jacklayton/widget/local%3AWidget%2F64/result
   widgetInModal: function(id, arg) {
     var that = this;
