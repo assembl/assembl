@@ -410,19 +410,31 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
             self.paths[id] = paths.clone()
         self.discussion = post_path_global_collection.discussion
 
-    def visit_idea(self, idea_id, level, prev_result):
-        if isinstance(idea_id, Idea):
-            idea_id = idea_id.id
+    def visit_idea(self, idea, level, prev_result):
+        if isinstance(idea, Idea):
+            idea_id = idea.id
+        elif isinstance(idea, int):
+            idea_id = idea
+            idea = Idea.get(idea_id)
+        else:
+            assert False, "idea param should be an Idea object or its idea"
         return self.paths[idea_id]
 
     def copy_result(self, idea_id, parent_result, child_result):
         # When the parent has no information, and can get it from a single child
         parent_result.paths = child_result.paths[:]
 
-    def end_visit(self, idea_id, level, result, child_results):
-        if isinstance(idea_id, Idea):
-            idea_id = idea_id.id
-        child_results = filter(None, child_results)
+    def end_visit(self, idea, level, result, child_results):
+        if isinstance(idea, Idea):
+            idea_id = idea.id
+        elif isinstance(idea, int):
+            idea_id = idea
+            idea = Idea.get(idea_id)
+        else:
+            assert False, "idea param should be an Idea object or its idea"
+        child_results = [
+            res for (child, res) in zip(idea.get_children(), child_results)
+            if bool(res) and idea.propagate_message_count()]
         if len(child_results) == 1 and not result:
             # optimisation
             self.copy_result(idea_id, result, child_results[0])
@@ -536,11 +548,16 @@ class PostPathCounter(PostPathCombiner):
         return self.get_counts_for_query(
             self.orphan_clause(self.user_id, include_deleted=include_deleted))
 
-    def end_visit(self, idea_id, level, result, child_results):
-        if isinstance(idea_id, Idea):
-            idea_id = idea_id.id
+    def end_visit(self, idea, level, result, child_results):
+        if isinstance(idea, Idea):
+            idea_id = idea.id
+        elif isinstance(idea, int):
+            idea_id = idea
+            idea = Idea.get(idea_id)
+        else:
+            assert False, "idea param should be an Idea object or its idea"
         result = super(PostPathCounter, self).end_visit(
-            idea_id, level, result, child_results)
+            idea, level, result, child_results)
         if self.calc_subset is None or (idea_id in self.calc_subset):
             self.get_counts(idea_id)
         return result
@@ -621,8 +638,7 @@ class DiscussionGlobalData(object):
             counter = PostPathCounter(
                 self.discussion, user_id, None if calc_all else ())
             counter.init_from(self.post_path_collection_raw)
-            Idea.visit_idea_ids_depth_first(
-                counter, self.discussion_id, self.children_dict)
+            self.discussion.root_idea.visit_ideas_depth_first(counter)
             self._post_path_counter = counter
         return self._post_path_counter
 

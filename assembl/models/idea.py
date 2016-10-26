@@ -400,6 +400,9 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             self.source_links_ts[0].source_id
         ) if self.source_links_ts else None
 
+    def propagate_message_count(self):
+        return True
+
     @classmethod
     def get_related_posts_query_c(
             cls, discussion_id, root_idea_id, partial=False,
