@@ -909,6 +909,105 @@ class UserNsDictCollection(AbstractCollectionDefinition):
         return c[namespace]
 
 
+class NamespacedDictContext(TraversalContext):
+    """Represents the set of namespace-K-V items"""
+    def __init__(self, parent, collection):
+        # Do not call super, because it will set the acl.
+        self.collection = collection
+        self.__parent__ = parent
+        self._instance = parent._instance
+
+    @property
+    def __acl__(self):
+        return self.__parent__.__acl__
+
+    def as_collection(self):
+        return self.collection.as_collection(self._instance)
+
+    def __getitem__(self, namespace):
+        ns_kvdict = self.collection.get_instance(
+            namespace, self._instance)
+        return NSBoundDictContext(ns_kvdict, self)
+
+    def get_target_class(self):
+        from assembl.models.user_key_values import NsDict
+        return NsDict
+
+
+class NSBoundDictContext(TraversalContext):
+    """Represents the set of namespace-bound K-V items"""
+    def __init__(self, ns_kvdict, parent):
+        # Do not call super, because it will set the acl.
+        self.collection = ns_kvdict
+        self.__parent__ = parent
+        self.parent_instance = parent._instance
+
+    @property
+    def __acl__(self):
+        return self.__parent__.__acl__
+
+    def __getitem__(self, key):
+        return NSKeyBoundDictItemContext(self.collection, self, key)
+
+    def get_target_class(self):
+        from assembl.models.user_key_values import NamespacedKVCollection
+        return NamespacedKVCollection
+
+
+class NSKeyBoundDictItemContext(TraversalContext):
+    """Represents a value which is bound to a namespace and key"""
+    def __init__(self, ns_kvdict, parent, key):
+        # Do not call super, because it will set the acl.
+        self.collection = ns_kvdict
+        self.__parent__ = parent
+        self.parent_instance = parent.parent_instance
+        self.key = key
+
+    @property
+    def __acl__(self):
+        return self.__parent__.__acl__
+
+    def __getitem__(self, key):
+        return None
+
+    def get_target_class(self):
+        return None
+
+
+class NsDictCollection(AbstractCollectionDefinition):
+    def __init__(self, cls):
+        from assembl.models.user_key_values import NamespacedKVCollection
+        super(NsDictCollection, self).__init__(
+            cls, NamespacedKVCollection)
+
+    def make_context(self, parent_context):
+        return NamespacedDictContext(parent_context, self)
+
+    def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
+        self.__parent__.decorate_instance(
+            self, instance, assocs, user_id, ctx, kwargs)
+
+    def decorate_query(
+            self, query, owner_alias, last_alias, parent_instance, ctx):
+        # No clue what to do here; KVCollection is not a sqla object
+        return query.outerjoin(
+            owner_alias, owner_alias.id != None)
+
+    def contains(self, parent_instance, namespace):
+        # all namespaces exist
+        return True
+
+    def as_collection(self, parent_instance):
+        from pyramid.threadlocal import get_current_request
+        from pyramid.httpexceptions import HTTPUnauthorized
+        from assembl.models.user_key_values import NsDict
+        return NsDict(parent_instance)
+
+    def get_instance(self, namespace, parent_instance):
+        c = self.as_collection(parent_instance)
+        return c[namespace]
+
+
 class PreferenceContext(TraversalContext):
     """Represents a set of preference values (eg for a discussion)
 

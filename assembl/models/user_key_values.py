@@ -28,6 +28,7 @@ from auth import User
 from ..auth.util import user_has_permission
 from discussion import Discussion
 from .preferences import Preferences
+from .idea import Idea
 
 
 class AbstractNamespacedKeyValue(object):
@@ -51,6 +52,16 @@ class AbstractNamespacedKeyValue(object):
     target_name = None
     target_id_name = None
     target_class = None
+
+    @declared_attr
+    def __table_args__(cls):
+        schema, user = config.get('db_schema'), config.get('db_user')
+        return (UniqueConstraint(
+            getattr(cls, cls.target_id_name),
+            cls.namespace,
+            cls.key,
+            name="%s_%s_%s_unique_constraint" % (
+                schema, user, cls.__tablename__)),)
 
     @classmethod
     def add_nkv(cls, target, namespace, key, value):
@@ -232,6 +243,86 @@ class NamespacedUserKVCollection(MutableMapping):
         return value is not None
 
 
+class NamespacedKVCollection(MutableMapping):
+
+    def __init__(self, target, namespace):
+        self.target = target
+        self.namespace = namespace
+
+    def __len__(self):
+        kv_cls = self.target.namespaced_kv_class
+        return self.target.db.query(
+            kv_cls.key).filter_by(
+                namespace=self.namespace,
+                **{kv_cls.target_name: self.target}).count()
+
+    def __iter__(self):
+        kv_cls = self.target.namespaced_kv_class
+        ns = self.target.db.query(
+            kv_cls.key).filter_by(
+                namespace=self.namespace,
+                **{kv_cls.target_name: self.target})
+        return (x for (x,) in ns)
+
+    iterkeys = __iter__
+
+    def iteritems(self):
+        kv_cls = self.target.namespaced_kv_class
+        kvpairs = self.target.db.query(
+            kv_cls).filter_by(
+                namespace=self.namespace,
+                **{kv_cls.target_name: self.target})
+        return ((kvpair.key, json.loads(kvpair.value)) for kvpair in kvpairs)
+
+    def __getitem__(self, key):
+        kv_cls = self.target.namespaced_kv_class
+        value = self.target.db.query(
+            kv_cls.value).filter_by(
+                namespace=self.namespace,
+                key=key,
+                **{kv_cls.target_name: self.target}).first()
+        if not value:
+            raise IndexError()
+        (value,) = value
+        return json.loads(value)
+
+    def __setitem__(self, key, value):
+        kv_cls = self.target.namespaced_kv_class
+        kvpair = self.target.db.query(
+            kv_cls).filter_by(
+                namespace=self.namespace,
+                key=key,
+                **{kv_cls.target_name: self.target}).first()
+        if kvpair:
+            kvpair.value = json.dumps(value)
+        else:
+            self.target.db.add(kv_cls(
+                namespace=self.namespace,
+                key=key,
+                value=json.dumps(value),
+                **{kv_cls.target_name: self.target}))
+
+    def __delitem__(self, key):
+        kv_cls = self.target.namespaced_kv_class
+        kvpair = self.target.db.query(
+            kv_cls).filter_by(
+                namespace=self.namespace,
+                key=key,
+                **{kv_cls.target_name: self.target}).first()
+        if not kvpair:
+            raise IndexError()
+        kvpair.delete()
+
+    def __contains__(self, key):
+        kv_cls = self.target.namespaced_kv_class
+        value = self.target.db.query(
+            kv_cls.id).filter_by(
+                namespace=self.namespace,
+                key=key,
+                **{kv_cls.target_name: self.target}).first()
+        return value is not None
+
+
 class UserPreferenceCollection(NamespacedUserKVCollection):
     PREFERENCE_NAMESPACE = "preferences"
     ALLOW_OVERRIDE = "allow_user_override"
@@ -349,6 +440,47 @@ class UserNsDict(MutableMapping):
                 **{ukv_cls.target_name: self.target}).delete()
 
 
+class NsDict(MutableMapping):
+    def __init__(self, target):
+        self.target = target
+
+    def __len__(self):
+        kv_cls = self.target.namespaced_kv_class
+        return self.target.db.query(
+            kv_cls.namespace).filter_by(
+                **{kv_cls.target_name: self.target}).distinct().count()
+
+    def __iter__(self):
+        kv_cls = self.target.namespaced_kv_class
+        ns = self.target.db.query(
+            kv_cls.namespace).filter_by(
+                **{kv_cls.target_name: self.target}).distinct()
+        return (x for (x,) in ns)
+
+    iterkeys = __iter__
+
+    def iteritems(self):
+        kv_cls = self.target.namespaced_kv_class
+        ns = self.target.db.query(
+            kv_cls.namespace).filter_by(
+                **{kv_cls.target_name: self.target}).distinct()
+        return {x: NamespacedKVCollection(self.target, x)
+                for (x,) in ns}
+
+    def __getitem__(self, key):
+        return NamespacedKVCollection(self.target, key)
+
+    def __setitem__(self, key, value):
+        raise NotImplementedError()
+
+    def __delitem__(self, key):
+        kv_cls = self.target.namespaced_kv_class
+        self.target.db.query(
+            kv_cls).filter_by(
+                namespace=key,
+                **{kv_cls.target_name: self.target}).delete()
+
+
 class DiscussionPerUserNamespacedKeyValue(
         DiscussionBoundBase, AbstractPerUserNamespacedKeyValue):
     __tablename__ = 'discussion_peruser_namespaced_key_value'
@@ -379,3 +511,39 @@ class DiscussionPerUserNamespacedKeyValue(
         return (query, True)
 
 Discussion.per_user_namespaced_kv_class = DiscussionPerUserNamespacedKeyValue
+
+
+class IdeaNamespacedKeyValue(
+        DiscussionBoundBase, AbstractNamespacedKeyValue):
+    __tablename__ = 'idea_namespaced_key_value'
+
+    idea_id = Column(Integer, ForeignKey(Idea.id), index=True)
+    target_name = "idea"
+    target_id_name = "idea_id"
+    target_class = Idea
+    idea = relationship(
+        Idea, backref="namespaced_key_values")
+
+    def get_discussion_id(self):
+        return self.idea.discussion_id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        if alias_maker is None:
+            idea_nskv = cls
+            idea_cls = Idea
+        else:
+            idea_nskv = alias_maker.alias_from_class(cls)
+            idea_cls = alias_maker.alias_from_relns(idea_nskv.source)
+        return ((idea_nskv.idea_id == idea_cls.id),
+                (idea_cls.discussion_id == discussion_id))
+
+    def unique_query(self):
+        query, _ = super(IdeaNamespacedKeyValue, self
+            ).unique_query()
+        query = query.filter(
+            AbstractNamespacedKeyValue.namespace == self.namespace,
+            AbstractNamespacedKeyValue.key == self.key)
+        return (query, True)
+
+Idea.namespaced_kv_class = IdeaNamespacedKeyValue
