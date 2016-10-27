@@ -24,9 +24,12 @@ def upgrade(pyramid_env):
             "messages_in_parent", sa.Boolean, server_default='true'))
         op.add_column('idea', sa.Column(
             "message_view_override", sa.String(100)))
+        op.add_column('content', sa.Column(
+            "message_classifier", sa.String(100)))
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_column('idea', 'messages_in_parent')
         op.drop_column('idea', 'message_view_override')
+        op.drop_column('content', "message_classifier")

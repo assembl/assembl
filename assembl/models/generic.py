@@ -296,6 +296,10 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         single_parent=True,
         cascade="all, delete-orphan")
 
+    message_classifier = Column(String(100),
+        doc="Classifier for column views")
+
+
     def __init__(self, *args, **kwargs):
         if (kwargs.get('subject', None) is None and
                 kwargs.get('subject_id', None) is None):

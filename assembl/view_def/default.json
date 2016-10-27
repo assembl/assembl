@@ -213,6 +213,7 @@
         "subject": "&get_subject:",
         "body": "&get_body:",
         "widget_ideas": "&widget_ideas",
+        "message_classifier": true,
         "tombstone_date": true
     },
     "Post": {

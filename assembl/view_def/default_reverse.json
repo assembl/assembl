@@ -150,6 +150,7 @@
         "bodyMimeType": false,
         "body": true,
         "subject": true,
+        "message_classifier": true,
         "widget_ideas": false
     },
     "Post": {

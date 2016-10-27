@@ -97,6 +97,7 @@
         "import_date": false,
         "subject": "&get_subject:",
         "body": "&get_body:",
+        "message_classifier": true,
         "widget_ideas": "&widget_ideas"
     },
     "Post": {

@@ -78,6 +78,7 @@
         "hidden": true,
         "subject": "&get_subject:",
         "body": "&get_body_preview",
+        "message_classifier": true,
         "import_date": false
     },
     "Post": {

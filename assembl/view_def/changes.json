@@ -94,6 +94,7 @@
         "subject": "&get_subject:extended",
         "body": "&get_body:extended",
         "like_count": true,
+        "message_classifier": true,
         "extracts": [":id_only"]
     },
     "Post": {
