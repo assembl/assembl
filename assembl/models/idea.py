@@ -163,6 +163,12 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     # TODO: Make this autoupdate on change. see
     # http://stackoverflow.com/questions/1035980/update-timestamp-when-row-is-updated-in-postgresql
 
+    messages_in_parent = Column(Boolean, default=True, server_default='true',
+        doc="are messages in this idea also part of the parent idea?")
+
+    message_view_override = Column(String(100),
+        doc="Use a non-standard view for this idea")
+
     creation_date = Column(
         DateTime, nullable=False, default=datetime.utcnow,
         info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
@@ -401,7 +407,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         ) if self.source_links_ts else None
 
     def propagate_message_count(self):
-        return True
+        return self.messages_in_parent
 
     @classmethod
     def get_related_posts_query_c(

@@ -246,6 +246,8 @@
         "subtype": "rdf_type",
         "order": false,
         "parentId": false,
+        "messages_in_parent": true,
+        "message_view_override": true,
         "parents": false
     },
     "RootIdea": {
