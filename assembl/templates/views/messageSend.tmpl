@@ -20,7 +20,7 @@
         </div>
         <div>
           <textarea class="formtextarea messageSend-body js_messageSend-body text mbxs" placeholder="<%= body_help_message %>"><%= msg_in_progress_body %></textarea>
-          <div class ="attachments js_attachment-edit-region"></div>
+          <div class="attachments js_attachment-edit-region"></div>
           <% if(show_target_context_with_choice) { %>
           <div class="messageSend-target txt-gray1">
               <% if(reply_idea) { %>
@@ -51,7 +51,9 @@
     </div>
 <% } else { %>
     <div class="warning-box-for-message-post">
-        <p class="js_warning-message-for-message-post"></p>
+      <div class="attachments js_attachment-edit-region"></div>
+      <div class='js_upload-button'></div>
+      <p class="js_warning-message-for-message-post"></p>
     </div>
 <% } %>
 

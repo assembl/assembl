@@ -214,19 +214,23 @@ var messageSendView = Marionette.LayoutView.extend({
 
   onShow: function() {
     //console.log("messageSend onShow() this.documentsView:", this.documentsView);
-    var documentView = new AttachmentViews.AttachmentEditUploadView({
-      collection: this.attachmentsCollection
-    });
 
-    this.errorCollection = documentView.getFailedCollection(); 
-    var uploadButtonView = new AttachmentViews.AttachmentUploadButtonView({
-      objectAttachedToModel: this.model,
-      collection: this.attachmentsCollection,
-      errorCollection: this.errorCollection
-    });
+    // TODO: the attachments and uploadButton regions should either always appear in the template (which is now the case) or be in a subview (which would be better, because in one case they are not used at all)
+    var canPost = Ctx.getCurrentUser().can(Permissions.ADD_POST);
+    if ( canPost ){
+      var documentView = new AttachmentViews.AttachmentEditUploadView({
+        collection: this.attachmentsCollection
+      });
 
-    this.attachments.show(documentView);
-    this.uploadButton.show(uploadButtonView);
+      this.errorCollection = documentView.getFailedCollection(); 
+      var uploadButtonView = new AttachmentViews.AttachmentUploadButtonView({
+        objectAttachedToModel: this.model,
+        collection: this.attachmentsCollection,
+        errorCollection: this.errorCollection
+      });
+      this.attachments.show(documentView);
+      this.uploadButton.show(uploadButtonView);
+    }
   },
 
   onAttach: function() {
