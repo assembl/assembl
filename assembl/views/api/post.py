@@ -131,6 +131,7 @@ def get_posts(request):
 
     posted_after_date = request.GET.get('posted_after_date')
     posted_before_date = request.GET.get('posted_before_date')
+    message_classifiers = request.GET.getall('classifier')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
     ideaContentLinkQuery = discussion.db.query(
@@ -306,6 +307,34 @@ def get_posts(request):
         posts = posts.filter(PostClass.creator_id == post_author_id)
         ideaContentLinkQuery = ideaContentLinkQuery.filter(
             PostClass.creator_id == post_author_id)
+
+    if message_classifiers:
+        polarities = [classifier[0] != "!" for classifier in message_classifiers]
+        polarity = all(polarities)
+        if not polarity:
+            message_classifiers = [c.strip("!") for c in message_classifiers]
+        if polarity != any(polarities):
+            raise HTTPBadRequest(_("Do not combine negative and positive classifiers"))
+        # Treat null as no classifier
+        includes_null = 'null' in message_classifiers
+        if includes_null:
+            message_classifiers_nonull = filter(lambda c: c != "null", message_classifiers)
+        if polarity:
+            if len(message_classifiers) == 1:
+                term = PostClass.message_classifier == (None if includes_null else message_classifiers[0])
+            else:
+                term = PostClass.message_classifier.in_(message_classifiers_nonull)
+                if includes_null:
+                    term = term | (PostClass.message_classifier == None)
+        else:
+            if len(message_classifiers) == 1:
+                term = PostClass.message_classifier != (None if includes_null else message_classifiers[0])
+            else:
+                term = PostClass.message_classifier.notin_(message_classifiers_nonull)
+            if not includes_null:
+                term = term | (PostClass.message_classifier == None)
+        posts = posts.filter(term)
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(term)
 
     if post_replies_to:
         parent_alias = aliased(PostClass)
