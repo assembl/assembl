@@ -160,6 +160,27 @@ var groupContent = Marionette.CompositeView.extend({
   },
   SimpleUIResetMessageAndIdeaPanelState: function(idea) {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
+      if (idea != null) {
+        var messageViewOverride = idea.get('message_view_override');
+        if (messageViewOverride !== null) {
+          var panelSpec = PanelSpecTypes.getByRawId(messageViewOverride, true);
+          if (panelSpec === undefined) {
+            console.error("Invalid message_view_override: " + messageViewOverride + " in idea " + idea.id);
+          } else {
+            var user = Ctx.getCurrentUser();
+            // Do not show idea panel if there was an override. TODO: It should be controlled independently.
+            if (panelSpec !== PanelSpecTypes.MESSAGE_LIST) {
+              this.removePanels(PanelSpecTypes.MESSAGE_LIST);
+            }
+            if (user.can(Permissions.ADMIN_DISCUSSION)) {
+              this.ensureOnlyPanelsVisible(panelSpec, PanelSpecTypes.IDEA_PANEL);
+            } else {
+              this.ensureOnlyPanelsVisible(panelSpec);
+            }
+            return;
+          }
+        }
+      }
       var preferences = Ctx.getPreferences();
       // defined here and in collectionManager.getGroupSpecsCollectionPromise
       if (preferences.simple_view_panel_order === "NMI") {

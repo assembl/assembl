@@ -94,6 +94,8 @@ var IdeaModel = Base.Model.extend({
     active: false,
     parentId: null,
     widget_links: [],
+    message_view_override: null,
+    messages_in_parent: true,
     order: 1,
     creationDate: null
   },
