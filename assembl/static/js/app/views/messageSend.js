@@ -396,7 +396,6 @@ var messageSendView = Marionette.LayoutView.extend({
                           that.messageList.triggerMethod('messageList:clearAllFilters');
 
                           //that.messageList.triggerMethod('messageList:addFilterIsOrphanMessage');
-                          groupContent.NavigationResetDebateState();
 
                           //FIXME:  Remove this magic delay.  Benoitg - 2015-06-09
                           setTimeout(function() {

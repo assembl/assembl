@@ -1208,7 +1208,7 @@ var MessageView = Marionette.LayoutView.extend({
         this.$('.bbm-modal').addClass('popin');
       },
       events: {
-              'click .js_redirectIdea':'redirectToIdea'
+              'click .js_redirectIdea': 'redirectToIdea',
             },
       redirectToIdea: function() {
         var self = this;
@@ -1226,7 +1226,7 @@ var MessageView = Marionette.LayoutView.extend({
                       if (segment.get('idIdea')) {
                         if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL)) {
                           //FIXME:  Even this isn't proper behaviour.  Maybe we should just pop a panel systematically in this case.
-                          that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea), "from_annotation", true);
+                          that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea), false, "from_annotation");
                           Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
                         }
                         else {

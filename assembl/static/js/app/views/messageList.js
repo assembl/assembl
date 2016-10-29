@@ -2003,7 +2003,7 @@ var MessageList = AssemblPanel.extend({
   /**
    * Load posts that belong to an idea
    * @param {string} ideaId
-   * @param {bool} show only unread messages (this parameter is optional and is a flag)
+   * @param {boolean} show only unread messages (this parameter is optional and is a flag)
    */
   addFilterIsRelatedToIdea: function(idea, only_unread) {
       var snapshot = this.currentQuery.getFilterConfigSnapshot();

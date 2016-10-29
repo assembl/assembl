@@ -52,6 +52,7 @@ var OrphanMessagesInIdeaListView = ideaInIdeaList.IdeaView.extend({
    */
   onTitleClick: function(e) {
     $('.idealist-item').removeClass('is-selected');
+    this._groupContent.setCurrentIdea(null);
 
     var messageListView = this.getContainingGroup().findViewByType(PanelSpecTypes.MESSAGE_LIST);
 
@@ -60,9 +61,6 @@ var OrphanMessagesInIdeaListView = ideaInIdeaList.IdeaView.extend({
 
       messageListView.triggerMethod('messageList:clearAllFilters');
       messageListView.triggerMethod('messageList:addFilterIsOrphanMessage');
-
-      this._groupContent.setCurrentIdea(null);
-      this._groupContent.NavigationResetDebateState();
 
       this.$el.addClass('is-selected');
     }

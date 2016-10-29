@@ -173,12 +173,12 @@ var IdeaPanel = AssemblPanel.extend({
   checkContentHeight: function(){
     var domObject = this.$(".content-ideapanel"),
         that = this;
-    if (this.model.get('attachments') && (this.model.get('attachments').length > 0)){
+    if (this.model !== null && this.model.get('attachments') && (this.model.get('attachments').length > 0)){
       if (this.attachmentLoaded){
         var imageDomObject = this.$el.find(".embedded-image-preview");
         this._calculateContentHeight(domObject, imageDomObject);
       }
-      else {      
+      else {
         this.$el.find(".embedded-image-preview").load(function() {
           that.attachmentLoaded = true;
           that._calculateContentHeight(domObject, $(this));
@@ -737,6 +737,7 @@ var IdeaPanel = AssemblPanel.extend({
                   that.model.destroy({
                     success: function() {
                       that.unblockPanel();
+                      // UX question: should we go to the parent idea, if any?
                       that.getContainingGroup().setCurrentIdea(null);
                     },
                     error: function(model, resp) {

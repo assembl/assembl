@@ -218,7 +218,8 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
       partialMessage = MessagesInProgress.getMessage(partialCtx),
       send_callback = function() {
         Assembl.vent.trigger('messageList:currentQuery');
-        that.getPanel().getContainingGroup().setCurrentIdea(that.original_idea);
+        // If we're in synthesis view, do not reset view to idea view
+        that.getPanel().getContainingGroup().setCurrentIdea(that.original_idea, true);
       };
 
       var replyView = new MessageSendView({

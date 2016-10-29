@@ -53,23 +53,28 @@ var groupContent = Marionette.CompositeView.extend({
   /**
    * Set the given Idea as the current one to be edited
    * @param  {Idea} idea
+   * @param  {boolean} noResetState: Do not change panels. Rare.
+   * @param  {string} reason: deprecated. Should go to analytics?
    */
-  setCurrentIdea: function(idea, reason, doScroll) {
-    var analytics = Analytics.getInstance();
+  setCurrentIdea: function(idea, noResetState, reason) {
     if (idea !== this._getCurrentIdea()) {
+      var analytics = Analytics.getInstance();
       if (idea !== null) {
         analytics.changeCurrentPage(analytics.pages.IDEA);
-      }
-      else {
-        //If idea is null, assume we are focussed on the messages
+      } else {
+        // If idea is null, assume we are focussed on the messages
         analytics.changeCurrentPage(analytics.pages.MESSAGES);
       }
-      var setReturn = this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
-    }
-    else if (idea === null) {
-      //Hack for pseudo-ideas, so changes are seen and panel closes
-      //Simulate a change event on that model's attribute, to be received by listener in ideaPanel
+      this.model.get('states').at(0).set({currentIdea: idea}, {validate: true});
+    } else if (idea === null) {
+      // Hack for pseudo-ideas, so changes are seen and panel closes
+      // Simulate a change event on that model's attribute, to be received by listener in ideaPanel
       this.trigger("change:pseudoIdea", null);
+    } else {
+      return;
+    }
+    if (!noResetState) {
+      this.NavigationResetDebateState();
     }
   },
   /**
@@ -100,11 +105,14 @@ var groupContent = Marionette.CompositeView.extend({
   isSimpleInterface: function() {
     if (this.findNavigationSidebarPanelSpec()) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   },
+  /**
+   * Specific to the simple interface. Go back to default view.
+   * As things stand, default view is debate state with last idea selected.
+   */
   NavigationResetDefaultState: function() {
     return this.NavigationResetDebateState();
   },
@@ -113,17 +121,15 @@ var groupContent = Marionette.CompositeView.extend({
    * navigation sidebar panel in this group.
    * If there is, get's it back to the default debate view
    */
-  NavigationResetDebateState: function(skip_animation) {
+  NavigationResetDebateState: function() {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       if (this.findNavigationSidebarPanelSpec()) {
         this.model.set('navigationState', 'debate');
-        this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-        this.SimpleUIResetMessageAndIdeaPanelState();
-        var conversationPanel = this.findViewByType(PanelSpecTypes.MESSAGE_LIST);
+        this.SimpleUIResetMessageAndIdeaPanelState(this._getCurrentIdea());
       }
     }
   },
-  NavigationResetContextState: function() {
+  NavigationResetAboutState: function() {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       var nav = this.findNavigationSidebarPanelSpec();
       if (nav) {
@@ -136,8 +142,7 @@ var groupContent = Marionette.CompositeView.extend({
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       if (this.findNavigationSidebarPanelSpec()) {
         this.setCurrentIdea(null);
-        this.removePanels(PanelSpecTypes.DISCUSSION_CONTEXT, PanelSpecTypes.EXTERNAL_VISUALIZATION_CONTEXT);
-        this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST);
+        this.ensureOnlyPanelsVisible(PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL);
         this.ensurePanelsHidden(PanelSpecTypes.IDEA_PANEL);
       }
     }
@@ -153,17 +158,15 @@ var groupContent = Marionette.CompositeView.extend({
       }
     }
   },
-  SimpleUIResetMessageAndIdeaPanelState: function() {
+  SimpleUIResetMessageAndIdeaPanelState: function(idea) {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
       var preferences = Ctx.getPreferences();
       // defined here and in collectionManager.getGroupSpecsCollectionPromise
       if (preferences.simple_view_panel_order === "NMI") {
-          this.ensurePanelsVisible(PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL);
+          this.ensureOnlyPanelsVisible(PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL);
       } else {
-          this.ensurePanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
+          this.ensureOnlyPanelsVisible(PanelSpecTypes.IDEA_PANEL, PanelSpecTypes.MESSAGE_LIST);
       }
-      var nav = this.findNavigationSidebarPanelSpec(),
-      ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
     }
   },
   /**
