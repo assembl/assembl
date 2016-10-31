@@ -5,7 +5,10 @@
  */
 var Backbone = require("backbone"),
     Ctx = require("../common/context.js");
+
+
 /**
+ * An individual preference value.
  * We do not use Base.Model.extend(), because we want to keep Backbone's default behaviour with model urls.
  * Generic case: preference value can be any json, not necessarily a dict.
  * So put it in "value" attribute of this model.
@@ -35,6 +38,7 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
   },
   /**
    * @function app.models.discussionPreference.DiscussionIndividualPreferenceModel.valueAsCollection
+   * The preference is a list or dict of something. Return a collection of that something, or dict items.
    */
   valueAsCollection: function() {
     var value = this.get("value");
@@ -55,6 +59,8 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
     }
   }
 });
+
+
 /**
  * Subcase: pref is a dictionary, so we can use normal backbone
  * @class app.models.discussionPreference.DiscussionPreferenceDictionaryModel
@@ -85,6 +91,8 @@ var DiscussionPreferenceSubCollection = Backbone.Collection.extend({
   },
   model: DiscussionIndividualPreferenceModel
 });
+
+
 /**
  * @class app.models.discussionPreference.DiscussionPreferenceCollection
  */
@@ -119,6 +127,8 @@ var DiscussionPreferenceCollection = Backbone.Collection.extend({
     return prefs;
   },
 });
+
+
 /**
  * @class app.models.discussionPreference.UserPreferenceRawCollection
  * @extends app.models.discussionPreference.DiscussionPreferenceCollection

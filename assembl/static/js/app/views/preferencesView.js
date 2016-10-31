@@ -17,6 +17,10 @@ var Marionette = require("../shims/marionette.js"),
     UserNavigationMenu = require('./user/userNavigationMenu.js'),
     Growl = require('../utils/growl.js');
 
+/**
+ * @function app.views.preferencesView.getPreferenceEditView
+ * Get the appropriate subclass of BasePreferenceView
+ */
 function getPreferenceEditView(preferenceModel, subView) {
   var modelType = preferenceModel.value_type,
       isList = modelType.substring(0, 8) == "list_of_",
@@ -54,7 +58,10 @@ function getPreferenceEditView(preferenceModel, subView) {
 }
 
 
-// A single preference item
+/**
+ * A single preference item
+ * @class app.views.preferencesView.PreferencesItemView
+ */
 var PreferencesItemView = Marionette.LayoutView.extend({
   constructor: function PreferencesItemView() {
     Marionette.LayoutView.apply(this, arguments);
@@ -147,7 +154,11 @@ var PreferencesItemView = Marionette.LayoutView.extend({
 });
 
 
-// A single preference item in a ListPreferenceView
+/**
+ * A single preference item in a ListPreferenceView
+ * @class app.views.preferencesView.ListPreferencesItemView
+ * @extends app.views.preferencesView.PreferencesItemView
+ */
 var ListPreferencesItemView = PreferencesItemView.extend({
   constructor: function ListPreferencesItemView() {
     PreferencesItemView.apply(this, arguments);
@@ -165,9 +176,14 @@ var ListPreferencesItemView = PreferencesItemView.extend({
     this.model.collection.remove(this.model);
     this.listView.render();
     return false;
-  }
+  },
 });
 
+
+/**
+ * Abstract class for preference views
+ * @class app.views.preferencesView.BasePreferenceView
+ */
 var BasePreferenceView = Marionette.LayoutView.extend({
   constructor: function BasePreferenceView() {
     Marionette.LayoutView.apply(this, arguments);
@@ -216,6 +232,11 @@ var BasePreferenceView = Marionette.LayoutView.extend({
   }
 });
 
+/**
+ * View to set a Boolean preference
+ * @class app.views.preferencesView.BoolPreferenceView
+ * @extends app.views.preferencesView.BasePreferenceView
+ */
 var BoolPreferenceView = BasePreferenceView.extend({
   constructor: function BoolPreferenceView() {
     BasePreferenceView.apply(this, arguments);
@@ -226,6 +247,12 @@ var BoolPreferenceView = BasePreferenceView.extend({
   }
 });
 
+
+/**
+ * View to set a text preference
+ * @class app.views.preferencesView.TextPreferenceView
+ * @extends app.views.preferencesView.BasePreferenceView
+ */
 var TextPreferenceView = BasePreferenceView.extend({
   constructor: function TextPreferenceView() {
     BasePreferenceView.apply(this, arguments);
@@ -233,6 +260,12 @@ var TextPreferenceView = BasePreferenceView.extend({
   template: '#tmpl-textPreferenceView'
 });
 
+
+/**
+ * View to set a JSON value preference
+ * @class app.views.preferencesView.JsonPreferenceView
+ * @extends app.views.preferencesView.TextPreferenceView
+ */
 var JsonPreferenceView = TextPreferenceView.extend({
   constructor: function JsonPreferenceView() {
     TextPreferenceView.apply(this, arguments);
@@ -248,6 +281,11 @@ var JsonPreferenceView = TextPreferenceView.extend({
 });
 
 
+/**
+ * View to set a string value preference
+ * @class app.views.preferencesView.StringPreferenceView
+ * @extends app.views.preferencesView.BasePreferenceView
+ */
 var StringPreferenceView = BasePreferenceView.extend({
   constructor: function StringPreferenceView() {
     BasePreferenceView.apply(this, arguments);
@@ -256,6 +294,14 @@ var StringPreferenceView = BasePreferenceView.extend({
 });
 
 
+/**
+ * View for string preference, which is a key in a strdict_of_...
+ * @class app.views.preferencesView.StringKeyPreferenceView
+ * @extends app.views.preferencesView.StringPreferenceView
+ * View to set an integer value preference
+ * @class app.views.preferencesView.IntPreferenceView
+ * @extends app.views.preferencesView.StringPreferenceView
+ */
 var IntPreferenceView = StringPreferenceView.extend({
   constructor: function IntPreferenceView() {
     StringPreferenceView.apply(this, arguments);
@@ -271,6 +317,11 @@ var IntPreferenceView = StringPreferenceView.extend({
 
 
 
+/**
+ * View to set a scalar value preference (chosen from a set)
+ * @class app.views.preferencesView.ScalarPreferenceView
+ * @extends app.views.preferencesView.BasePreferenceView
+ */
 var ScalarPreferenceView = BasePreferenceView.extend({
   constructor: function ScalarPreferenceView() {
     BasePreferenceView.apply(this, arguments);
@@ -285,6 +336,11 @@ var ScalarPreferenceView = BasePreferenceView.extend({
 });
 
 
+/**
+ * View to set a locale value preference (chosen from the set of locales)
+ * @class app.views.preferencesView.LocalePreferenceView
+ * @extends app.views.preferencesView.ScalarPreferenceView
+ */
 var LocalePreferenceView = ScalarPreferenceView.extend({
   constructor: function LocalePreferenceView() {
     BasePreferenceView.apply(this, arguments);
@@ -296,6 +352,12 @@ var LocalePreferenceView = ScalarPreferenceView.extend({
   }
 });
 
+
+/**
+ * @class app.views.preferencesView.UrlPreferenceView
+ * @extends app.views.preferencesView.StringPreferenceView
+ * View to set a URL value preference
+ */
 var UrlPreferenceView = StringPreferenceView.extend({
   constructor: function UrlPreferenceView() {
     StringPreferenceView.apply(this, arguments);
@@ -310,6 +372,11 @@ var UrlPreferenceView = StringPreferenceView.extend({
 });
 
 
+/**
+ * View to set an email value preference
+ * @class app.views.preferencesView.EmailPreferenceView
+ * @extends app.views.preferencesView.StringPreferenceView
+ */
 var EmailPreferenceView = StringPreferenceView.extend({
   constructor: function EmailPreferenceView() {
     StringPreferenceView.apply(this, arguments);
@@ -324,6 +391,11 @@ var EmailPreferenceView = StringPreferenceView.extend({
 });
 
 
+/**
+ * View to set a domain (DNS name) value preference
+ * @class app.views.preferencesView.DomainPreferenceView
+ * @extends app.views.preferencesView.StringPreferenceView
+ */
 var DomainPreferenceView = StringPreferenceView.extend({
   constructor: function DomainPreferenceView() {
     StringPreferenceView.apply(this, arguments);
@@ -339,7 +411,10 @@ var DomainPreferenceView = StringPreferenceView.extend({
 });
 
 
-// The collection view for the items in a preference-as-list
+/**
+ * The collection view for the items in a preference-as-list
+ * @class app.views.preferencesView.ListSubviewCollectionView
+ */
 var ListSubviewCollectionView = Marionette.CollectionView.extend({
   constructor: function ListSubviewCollectionView() {
     Marionette.CollectionView.apply(this, arguments);
@@ -371,7 +446,12 @@ var ListSubviewCollectionView = Marionette.CollectionView.extend({
   childView: ListPreferencesItemView
 });
 
-// A single preference which is a list
+
+/**
+ * @class app.views.preferencesView.ListPreferenceView
+ * @extends app.views.preferencesView.BasePreferenceView
+ * A single preference which is a list
+ */
 var ListPreferenceView = BasePreferenceView.extend({
   constructor: function ListPreferenceView() {
     BasePreferenceView.apply(this, arguments);
@@ -417,7 +497,10 @@ var ListPreferenceView = BasePreferenceView.extend({
 });
 
 
-// The list of all preferences
+/**
+ * The list of all preferences
+ * @class app.views.preferencesView.PreferencesCollectionView
+ */
 var PreferencesCollectionView = Marionette.CollectionView.extend({
   constructor: function PreferencesCollectionView() {
     Marionette.CollectionView.apply(this, arguments);
@@ -432,7 +515,10 @@ var PreferencesCollectionView = Marionette.CollectionView.extend({
 });
 
 
-// Which preferences will we show?
+/**
+ * Which preferences will we show?
+ * @class app.views.preferencesView.PreferenceCollectionSubset
+ */
 var PreferenceCollectionSubset = Backbone.Subset.extend({
   constructor: function PreferenceCollectionSubset() {
     Backbone.Subset.apply(this, arguments);
@@ -455,6 +541,11 @@ var PreferenceCollectionSubset = Backbone.Subset.extend({
 });
 
 
+/**
+ * The subset of preferences which allow a per-user override
+ * @class app.views.preferencesView.UserPreferenceCollectionSubset
+ * @extends app.views.preferencesView.PreferenceCollectionSubset
+ */
 var UserPreferenceCollectionSubset = PreferenceCollectionSubset.extend({
   constructor: function UserPreferenceCollectionSubset() {
     PreferenceCollectionSubset.apply(this, arguments);
@@ -465,6 +556,11 @@ var UserPreferenceCollectionSubset = PreferenceCollectionSubset.extend({
 });
 
 
+/**
+ * The subset of preferences which allow a per-discussion override
+ * @class app.views.preferencesView.DiscussionPreferenceCollectionSubset
+ * @extends app.views.preferencesView.PreferenceCollectionSubset
+ */
 var DiscussionPreferenceCollectionSubset = PreferenceCollectionSubset.extend({
   constructor: function DiscussionPreferenceCollectionSubset() {
     PreferenceCollectionSubset.apply(this, arguments);
@@ -475,7 +571,10 @@ var DiscussionPreferenceCollectionSubset = PreferenceCollectionSubset.extend({
 });
 
 
-// The preferences window
+/**
+ * The preferences window
+ * @class app.views.preferencesView.PreferencesView
+ */
 var PreferencesView = Marionette.LayoutView.extend({
   constructor: function PreferencesView() {
     Marionette.LayoutView.apply(this, arguments);
@@ -554,6 +653,11 @@ var PreferencesView = Marionette.LayoutView.extend({
 });
 
 
+/**
+ * The discussion preferences window
+ * @class app.views.preferencesView.DiscussionPreferencesView
+ * @extends app.views.preferencesView.PreferencesView
+ */
 var DiscussionPreferencesView = PreferencesView.extend({
   constructor: function DiscussionPreferencesView() {
     PreferencesView.apply(this, arguments);
@@ -577,6 +681,11 @@ var DiscussionPreferencesView = PreferencesView.extend({
 });
 
 
+/**
+ * The user preferences window
+ * @class app.views.preferencesView.UserPreferencesView
+ * @extends app.views.preferencesView.PreferencesView
+ */
 var UserPreferencesView = PreferencesView.extend({
   constructor: function UserPreferencesView() {
     PreferencesView.apply(this, arguments);
