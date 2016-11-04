@@ -10,6 +10,7 @@ var _ = require('underscore'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js'),
     Attachment = require('./attachments.js'),
+    IdeaMessageColumn = require('./ideaMessageColumn.js'),
     Permissions = require('../utils/permissions.js');
 /**
  * Idea model
@@ -58,9 +59,14 @@ var IdeaModel = Base.Model.extend({
         objectAttachedToModel: that,
         limits: {
           count: 1,
-          type: 'image'
-        }
-      })
+          type: 'image',
+        }});
+    }
+    if (resp.message_columns !== undefined) {
+      resp.message_columns = new IdeaMessageColumn.Collection(resp.message_columns, {
+        parse: true,
+        targetIdea: that,
+      });
     }
     return Base.Model.prototype.parse.apply(this, arguments);
   },
@@ -97,7 +103,9 @@ var IdeaModel = Base.Model.extend({
     message_view_override: null,
     messages_in_parent: true,
     order: 1,
-    creationDate: null
+    creationDate: null,
+    attachments: undefined,
+    message_columns: undefined,
   },
   //The following should be mostly in view code, but currently the longTitle editor code isn't common in ideaPanel and synthesisView. At least this is mostly DRY.
   /**

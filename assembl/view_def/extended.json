@@ -174,6 +174,8 @@
         "num_total_and_read_posts": true,
         "contributors": "&get_contributors:default",
         "widget_links": "&widget_link_signatures",
+        "message_columns": [":"],
+        "attachments": [":default"],
         "messages_in_parent": true,
         "message_view_override": true,
         "widget_add_post_endpoint": true

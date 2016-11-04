@@ -115,6 +115,8 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     ideas = ideas.filter(and_(*Idea.base_conditions()))
     ideas = ideas.options(
         joinedload_all(Idea.source_links),
+        joinedload_all(Idea.attachments),
+        joinedload_all(Idea.message_columns),
         joinedload_all(Idea.has_showing_widget_links),
         undefer(Idea.num_children))
 
