@@ -152,6 +152,12 @@
         "original_uri": true,
         "order": true
     },
+    "IdeaMessageColumn": {
+        "idea": true,
+        "message_classifier": true,
+        "header": true,
+        "previous_column": true
+    },
     "IdeaGraphView": {
         "creation_date": true,
         "discussion": false
