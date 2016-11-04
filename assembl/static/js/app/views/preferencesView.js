@@ -1,6 +1,5 @@
 "use strict";
 /**
- * 
  * @module app.views.preferencesView
  */
 
@@ -21,15 +20,31 @@ var Marionette = require("../shims/marionette.js"),
  * @function app.views.preferencesView.getPreferenceEditView
  * Get the appropriate subclass of BasePreferenceView
  */
-function getPreferenceEditView(preferenceModel, subView) {
+function getPreferenceEditView(preferenceModel, subViewKey) {
   var modelType = preferenceModel.value_type,
-      isList = modelType.substring(0, 8) == "list_of_",
-      useList = isList && !subView;
-  if (useList) {
-    return ListPreferenceView;
-  } else if (isList) {
-    modelType = modelType.substring(8);
+      subViewKey = (subViewKey !== undefined)?String(subViewKey).split('_'):undefined;
+  while (true) {
+    var isList = modelType.substring(0, 8) == "list_of_",
+        isDict = modelType.substring(0, 11) == "strdict_of_";
+    if (isList) {
+      if (subViewKey !== undefined) {
+        modelType = modelType.substring(8);
+        subViewKey.shift();
+      } else {
+        return ListPreferenceView;
+      }
+    } else if (isDict) {
+      if (subViewKey !== undefined) {
+        modelType = modelType.substring(11);
+        subViewKey.shift();
+      } else {
+        return StrDictPreferenceView;
+      }
+    } else {
+      break;
+    }
   }
+
   switch (modelType) {
     case "bool":
       return BoolPreferenceView;
@@ -41,6 +56,14 @@ function getPreferenceEditView(preferenceModel, subView) {
       return IntPreferenceView;
     case "string":
       return StringPreferenceView;
+    case "langstr":
+    {
+      if (subViewKey !== undefined && subViewKey.length > 0) {
+        return StringPreferenceView;
+      } else {
+        return LangStrPreferenceView;
+      }
+    }
     case "scalar":
       return ScalarPreferenceView;
     case "locale":
@@ -78,6 +101,7 @@ var PreferencesItemView = Marionette.LayoutView.extend({
     "click @ui.resetButton": "resetPreference",
   },
   template: "#tmpl-preferenceItemView",
+  isKeyView: false,
   resetPreference: function() {
     var that = this, model = this.model;
     model.sync("delete", this.model, {
@@ -85,7 +109,7 @@ var PreferencesItemView = Marionette.LayoutView.extend({
         model.sync("read", model, {
           success: function(model2, resp2) {
             // this should be done by backbone, but isn't because we have a success?
-            model.set("value", model2);
+            model.set(that.valueModelKey(), model2);
             // neutralize change
             model.changed = {};
             model._subcollectionCache = undefined;
@@ -112,7 +136,7 @@ var PreferencesItemView = Marionette.LayoutView.extend({
     this.key = options.key || this.model.id;
     this.listKey = options.listKey;
     this.preferenceData = options.mainPrefWindow.preferenceData[this.key];
-    this.listView = options.listView;
+    this.listCollectionView = options.listCollectionView;
     this.childViewOptions = {
         mainPrefWindow: options.mainPrefWindow,
         key: this.key,
@@ -120,17 +144,19 @@ var PreferencesItemView = Marionette.LayoutView.extend({
         listKey: this.listKey,
         preferenceData: this.preferenceData,
         preferenceItemView: this,
-        preference: this.model.get("value")
+        preference: this.model.get("value"),
     };
   },
   serializeData: function() {
-    var preferenceValue = this.model.get("value");
+    var model = this.model;
     if (this.listKey !== undefined) {
-      preferenceValue = preferenceValue[this.listKey];
+      var listKey = String(this.listKey).split("_"),
+          lastKey = parseInt(listKey[listKey.length - 1]);
+      model = this.listCollectionView.listView.submodels.models[lastKey];
     }
     return {
       i18n: i18n,
-      preference: preferenceValue,
+      preference: model.get(this.isKeyView ? "key" : "value"), // isKeyView of editview, really...
       preferenceData: this.preferenceData,
       canModify: this.mainPrefWindow.canSavePreference(this.key),
       listKey: this.listKey,
@@ -138,8 +164,12 @@ var PreferencesItemView = Marionette.LayoutView.extend({
     };
   },
   onRender: function() {
-    var subview = getPreferenceEditView(this.preferenceData, this.listKey !== undefined);
-    this.getRegion("subview").show(new subview(this.childViewOptions));
+    var subview = getPreferenceEditView(this.preferenceData, this.listKey);
+    if (subview) {
+        this.getRegion("subview").show(new subview(this.childViewOptions));
+    } else {
+        console.error("Missing preference subview for ", this.preferenceData);
+    }
   },
   showError: function(error) {
     this.ui.errorMessage.text(error);
@@ -174,7 +204,7 @@ var ListPreferencesItemView = PreferencesItemView.extend({
   template: "#tmpl-listPreferenceItemView",
   deleteItem: function(event) {
     this.model.collection.remove(this.model);
-    this.listView.render();
+    this.listCollectionView.render();
     return false;
   },
 });
@@ -196,6 +226,10 @@ var BasePreferenceView = Marionette.LayoutView.extend({
   },
   template: "#tmpl-basePreferenceView",
   tagName: "span",
+  isKeyView: false,
+  valueModelKey: function() {
+    return (this.isKeyView)?"key":"value";
+  },
   initialize: function(options) {
     this.mainPrefWindow = options.mainPrefWindow;
     this.preferences = options.mainPrefWindow.preferences;
@@ -209,7 +243,7 @@ var BasePreferenceView = Marionette.LayoutView.extend({
     try {
         value = this.processValue(value);
         this.preferenceItemView.hideError();
-        this.model.set("value", value);
+        this.model.set(this.valueModelKey(), value);
     } catch (err) {
         this.preferenceItemView.showError(err);
     }
@@ -218,7 +252,7 @@ var BasePreferenceView = Marionette.LayoutView.extend({
     return this.ui.prefValue.val();
   },
   serializeData: function() {
-    var preferenceValue = this.model.get("value");
+    var preferenceValue = this.model.get(this.valueModelKey());
     return {
       i18n: i18n,
       preference: preferenceValue,
@@ -298,6 +332,61 @@ var StringPreferenceView = BasePreferenceView.extend({
  * View for string preference, which is a key in a strdict_of_...
  * @class app.views.preferencesView.StringKeyPreferenceView
  * @extends app.views.preferencesView.StringPreferenceView
+ */
+var StringKeyPreferenceView = StringPreferenceView.extend({
+  constructor: function StringKeyPreferenceView() {
+    StringPreferenceView.apply(this, arguments);
+  },
+  isKeyView: true,
+});
+
+
+
+/**
+ * A single preference item in a StrDictPreferenceView
+ * @class app.views.preferencesView.DictPreferencesItemView
+ * @extends app.views.preferencesView.PreferencesItemView
+ */
+var DictPreferencesItemView = PreferencesItemView.extend({
+  constructor: function DictPreferencesItemView() {
+    PreferencesItemView.apply(this, arguments);
+  },
+  ui: {
+    deleteButton: ".js_delete",
+    errorMessage: ".control-error",
+    controlGroup: ".control-group"
+  },
+  regions: {
+    key_subview: ".js_prefKeySubview",
+    subview: ".js_prefValueSubview",
+  },
+
+  events: {
+    "click @ui.deleteButton": "deleteItem"
+  },
+  template: "#tmpl-dictPreferenceItemView",
+  deleteItem: function(event) {
+    this.model.collection.remove(this.model);
+    this.listCollectionView.render();
+    return false;
+  },
+  keySubview: StringKeyPreferenceView,
+  onRender: function() {
+    var key_subview = this.keySubview;
+    this.getRegion("key_subview").show(new key_subview(this.childViewOptions));
+    var subview = getPreferenceEditView(this.preferenceData, this.listKey);
+    if (subview) {
+        this.getRegion("subview").show(new subview(this.childViewOptions));
+    } else {
+        console.error("Missing preference subview for ", this.preferenceData);
+    }
+  },
+
+});
+
+
+
+/**
  * View to set an integer value preference
  * @class app.views.preferencesView.IntPreferenceView
  * @extends app.views.preferencesView.StringPreferenceView
@@ -344,6 +433,7 @@ var ScalarPreferenceView = BasePreferenceView.extend({
 var LocalePreferenceView = ScalarPreferenceView.extend({
   constructor: function LocalePreferenceView() {
     BasePreferenceView.apply(this, arguments);
+    //ScalarPreferenceView.apply(this, arguments);
   },
   serializeData: function() {
     var data = ScalarPreferenceView.prototype.serializeData.apply(this, arguments);
@@ -354,9 +444,35 @@ var LocalePreferenceView = ScalarPreferenceView.extend({
 
 
 /**
+ * View for locale preference, which is a key in a Langstring
+ * @class app.views.preferencesView.LocaleKeyPreferenceView
+ * @extends app.views.preferencesView.LocalePreferenceView
+ */
+var LocaleKeyPreferenceView = LocalePreferenceView.extend({
+  constructor: function LocaleKeyPreferenceView() {
+    LocalePreferenceView.apply(this, arguments);
+  },
+  isKeyView: true,
+});
+
+
+/**
+ * A single preference item in a StrDictPreferenceView
+ * @class app.views.preferencesView.StrDictPreferencesItemView
+ * @extends app.views.preferencesView.DictPreferencesItemView
+ */
+var StrDictPreferencesItemView = DictPreferencesItemView.extend({
+  constructor: function StrDictPreferencesItemView() {
+    DictPreferencesItemView.apply(this, arguments);
+  },
+  keySubview: LocaleKeyPreferenceView,
+});
+
+
+/**
+ * View to set a URL value preference
  * @class app.views.preferencesView.UrlPreferenceView
  * @extends app.views.preferencesView.StringPreferenceView
- * View to set a URL value preference
  */
 var UrlPreferenceView = StringPreferenceView.extend({
   constructor: function UrlPreferenceView() {
@@ -423,6 +539,8 @@ var ListSubviewCollectionView = Marionette.CollectionView.extend({
     this.mainPrefWindow = options.mainPrefWindow;
     this.preferences = options.preferences;
     this.key = options.key;
+    this.listKey = options.listKey;
+    this.listView = options.listView;
     this.preferenceData = options.preferenceData;
   },
   childViewOptions: function(model, index) {
@@ -432,14 +550,18 @@ var ListSubviewCollectionView = Marionette.CollectionView.extend({
     if (options === undefined) {
       options = this;
     }
+    if (this.listKey != undefined) {
+      index = this.listKey + "_" + index;
+    }
     return {
       mainPrefWindow: options.mainPrefWindow,
-      listView: this,
+      listCollectionView: this,
       preferences: options.preferences,
       key: options.key,
       preferenceData: options.preferenceData,
       isList: true,
-      model: this.collection.models[index],
+      // or model itself?
+      // model: this.collection.models[index],
       listKey: index
     };
   },
@@ -448,9 +570,63 @@ var ListSubviewCollectionView = Marionette.CollectionView.extend({
 
 
 /**
+ * The collection view for the items in a preference-as-dict
+ * @class app.views.preferencesView.DictSubviewCollectionView
+ */
+var DictSubviewCollectionView = Marionette.CollectionView.extend({
+  constructor: function DictSubviewCollectionView() {
+    Marionette.CollectionView.apply(this, arguments);
+  },
+  initialize: function(options) {
+    this.mainPrefWindow = options.mainPrefWindow;
+    this.preferences = options.preferences;
+    this.key = options.key;
+    this.listKey = options.listKey;
+    this.listView = options.listView;
+    this.preferenceData = options.preferenceData;
+  },
+  childViewOptions: function(model, index) {
+    // This is bizarrely called before initialize;
+    // then we have the options in the object
+    var options = this.options;
+    if (options === undefined) {
+      options = this;
+    }
+    if (this.listKey != undefined) {
+      index = this.listKey + "_" + index;
+    }
+    return {
+      mainPrefWindow: options.mainPrefWindow,
+      listCollectionView: this,
+      preferences: options.preferences,
+      key: options.key,
+      preferenceData: options.preferenceData,
+      isList: true,
+      // model: this.collection.models[index],
+      listKey: index
+    };
+  },
+  childView: DictPreferencesItemView,
+});
+
+
+/**
+ * The collection view for the items in a LangStr
+ * @class app.views.preferencesView.StrDictSubviewCollectionView
+ * @extends app.views.preferencesView.DictSubviewCollectionView
+ */
+var StrDictSubviewCollectionView = DictSubviewCollectionView.extend({
+  constructor: function StrDictSubviewCollectionView() {
+    DictSubviewCollectionView.apply(this, arguments);
+  },
+  childView: StrDictPreferencesItemView,
+});
+
+
+/**
+ * A single preference which is a list
  * @class app.views.preferencesView.ListPreferenceView
  * @extends app.views.preferencesView.BasePreferenceView
- * A single preference which is a list
  */
 var ListPreferenceView = BasePreferenceView.extend({
   constructor: function ListPreferenceView() {
@@ -458,7 +634,7 @@ var ListPreferenceView = BasePreferenceView.extend({
   },
   initialize: function(options) {
     BasePreferenceView.prototype.initialize.apply(this, arguments);
-    this.submodels = this.model.valueAsCollection();
+    this.submodels = this.model.valueAsCollection(this.preferenceData);
   },
   ui: {
     addToList: ".js_add_to_listpref"
@@ -476,7 +652,9 @@ var ListPreferenceView = BasePreferenceView.extend({
       mainPrefWindow: this.mainPrefWindow,
       preferences: this.preferences,
       key: this.key,
-      preferenceData: this.preferenceData
+      listView: this,
+      listKey: this.listKey,
+      preferenceData: this.preferenceData,
     });
     this.showChildView("listPreference", subview);
   },
@@ -494,6 +672,65 @@ var ListPreferenceView = BasePreferenceView.extend({
     this.render();
     return false;
   }
+});
+
+
+
+/**
+ * A single preference which is a dict, with string keys
+ * @class app.views.preferencesView.DictPreferenceView
+ * @extends app.views.preferencesView.ListPreferenceView
+ */
+var StrDictPreferenceView = ListPreferenceView.extend({
+  constructor: function StrDictPreferenceView() {
+    ListPreferenceView.apply(this, arguments);
+  },
+  initialize: function(options) {
+    // skip ListPreferenceView
+    BasePreferenceView.prototype.initialize.apply(this, arguments);
+    this.submodels = this.model.valueAsCollection(this.preferenceData);
+  },
+  subviewClass: DictSubviewCollectionView,
+  onRender: function() {
+    var subview = new this.subviewClass({
+      collection: this.submodels,
+      mainPrefWindow: this.mainPrefWindow,
+      preferences: this.preferences,
+      key: this.key,
+      listView: this,
+      listKey: this.listKey,
+      preferenceData: this.preferenceData,
+    });
+    this.showChildView("listPreference", subview);
+  },
+  addToList: function() {
+    var default_key = 'item_default';
+    if (this.listKey !== undefined) {
+      default_key += "_" + String(this.listKey).split('_').length;
+    }
+    var defaultVal = this.preferenceData[default_key];
+    if (_.isObject(defaultVal)) {
+      // shallow clone, hopefully good enough
+      defaultVal = _.clone(defaultVal);
+    }
+    // Note: Maybe it should not have an ID?
+    var model = new DiscussionPreference.Model({ key: "", value: defaultVal });
+    this.submodels.add([model]);
+    this.render();
+    return false;
+  },
+});
+
+
+/**
+ * @class app.views.preferencesView.LangStrPreferenceView
+ * @extends app.views.preferencesView.StrDictPreferenceView
+ */
+var LangStrPreferenceView = StrDictPreferenceView.extend({
+  constructor: function LangStrPreferenceView() {
+    StrDictPreferenceView.apply(this, arguments);
+  },
+  subviewClass: StrDictSubviewCollectionView,
 });
 
 

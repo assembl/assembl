@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """A set of preferences that apply to a Discussion.
 
 May be defined at the user, Discussion or server level."""
@@ -198,19 +199,29 @@ class Preferences(MutableMapping, Base):
             except Exception as e:
                 raise ValueError(e.message)
         data_type = pref_data.get("value_type", "json")
+        return self.validate_single_value(key, value, pref_data, data_type)
+
+    def validate_single_value(self, key, value, pref_data, data_type):
+        # TODO: Validation for the datatypes.
+        # Types: (bool|json|int|(list_of_|strdict_of_)?(string|text|scalar|url|email|domain|locale|langstr))
         if data_type.startswith("list_of_"):
             assert isinstance(value, (list, tuple)), "Not a list"
             return [
                 self.validate_single_value(key, val, pref_data, data_type[8:])
-                for val in value
-            ]
-        else:
-            return self.validate_single_value(key, value, pref_data, data_type)
-
-    def validate_single_value(self, key, value, pref_data, data_type):
-        # TODO: Validation for the datatypes.
-        # Types: (bool|json|int|(list_of_)?(string|text|scalar|url|email|domain|locale))
-        if data_type == "bool":
+                for val in value]
+        elif data_type.startswith("strdict_of_"):
+            assert isinstance(value, (dict)), "Not a dict"
+            return {
+                self.validate_single_value(key, k, pref_data, "string"):
+                self.validate_single_value(key, v, pref_data, data_type[11:])
+                for (k, v) in value.iteritems()}
+        elif data_type == "langstr":
+            assert isinstance(value, (dict)), "Not a dict"
+            return {
+                self.validate_single_value(key, k, pref_data, "locale"):
+                self.validate_single_value(key, v, pref_data, "string")
+                for (k, v) in value.iteritems()}
+        elif data_type == "bool":
             assert isinstance(value, bool), "Not a boolean"
         elif data_type == "int":
             assert isinstance(value, int), "Not an integer"
@@ -301,7 +312,8 @@ class Preferences(MutableMapping, Base):
     #   if so what permission is required? (default False)
     # scalar_values: "{value: "label"}" a dictionary of permitted options for a scalar value type
     # default: the default value
-    # item_default: the default value for new items in a list_of_...
+    # item_default: the default value for new items in a list_of_... or strdict_of_...
+    # item_default_<n>: the default value for new items in a (list_of_|dict_of)^n...
 
     preference_data_list = [
         # Languages used in the discussion.
@@ -567,7 +579,8 @@ class Preferences(MutableMapping, Base):
 
         # Default expanded/collapsed state of each idea in the table of ideas.
         # A user can override it by opening/closing an idea.
-        # This is a hash where keys are ideas ids.
+        # This is a hash where keys are ideas ids, and values are booleans.
+        # We could use strdict_of_bool, but that would clutter the interface.
         {
             "id": "default_table_of_ideas_collapsed_state",
             "name": _("Default Table of Ideas Collapsed state"),
