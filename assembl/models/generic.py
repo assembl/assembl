@@ -296,7 +296,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         single_parent=True,
         cascade="all, delete-orphan")
 
-    message_classifier = Column(String(100),
+    message_classifier = Column(String(100), index=True,
         doc="Classifier for column views")
 
 

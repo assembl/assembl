@@ -25,7 +25,7 @@ def upgrade(pyramid_env):
         op.add_column('idea', sa.Column(
             "message_view_override", sa.String(100)))
         op.add_column('content', sa.Column(
-            "message_classifier", sa.String(100)))
+            "message_classifier", sa.String(100), index=True))
 
 
 def downgrade(pyramid_env):
