@@ -475,6 +475,36 @@ class Preferences(MutableMapping, Base):
             "default": True
         },
 
+        # What are (ordered) identifiers of columns in multi-column views?
+        {
+            "id": "default_column_identifiers",
+            "name": _("Ids of columns in column view"),
+            "value_type": "list_of_string",
+            "description": _(
+                "What are (ordered) identifiers of columns in multi-column views?"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": ["positive", "negative"],
+        },
+
+        # What are (default) names of columns in multi-column views, in each discussion language?
+        {
+            "id": "default_column_names",
+            "name": _("Names of columns in column view"),
+            "value_type": "strdict_of_langstr",
+            "description": _(
+                "What are (default) names of columns in multi-column views, in each discussion language?"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": {"negative": {"en": "Negative", "fr": "Négatif"}, "positive": {"en": "Positive", "fr": "Positif"}},
+            "item_default": {},
+            "item_default_1": "",
+        },
+
         # Registration requires being a member of this email domain.
         {
             "id": "require_email_domain",
