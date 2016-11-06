@@ -607,6 +607,7 @@ def create_post(request):
     idea_id = request_body.get('idea_id', None)
     subject = request_body.get('subject', None)
     publishes_synthesis_id = request_body.get('publishes_synthesis_id', None)
+    message_classifier = request_body.get('message_classifier', None)
 
     if not body and not publishes_synthesis_id:
         # Should we allow empty messages otherwise?
@@ -676,6 +677,7 @@ def create_post(request):
     post_constructor_args = {
         'discussion': discussion,
         'creator_id': user_id,
+        'message_classifier': message_classifier,
         'subject': subject,
         'body': body
         }

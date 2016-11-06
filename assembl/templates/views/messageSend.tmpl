@@ -1,7 +1,7 @@
 <% if (canPost) { %>
-    <% if ( !reply_message_id ) { %>
+    <% if ( message_send_title ) { %>
       <div class="mbl">
-        <span class="h2"><i class="icon-discuss"></i> {{gettext('Start a new discussion thread')}}</span>
+        <span class="h2"><i class="icon-discuss"></i> <%= message_send_title %></span>
       </div>
     <% } %>
     <form>

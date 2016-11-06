@@ -3602,7 +3602,7 @@ msgid "Load all remaining messages at once"
 msgstr "Alle verbleibenden Nachrichten auf einmal laden"
 
 #: assembl/templates/views/messageList.tmpl:43
-#: assembl/templates/views/messageSend.tmpl:4
+#: assembl/static/js/app/views/messageSend.js:162
 msgid "Start a new discussion thread"
 msgstr "Einen neuen Diskussionsfaden beginnen"
 

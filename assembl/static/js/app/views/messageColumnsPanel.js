@@ -76,6 +76,7 @@ var MessageColumnsPanel = AssemblPanel.extend({
     this.setCurrentIdea(current_idea);
     this.listenTo(this.getGroupState(), "change:currentIdea", function(groupState) {
       that.setCurrentIdea(groupState.get('currentIdea'));
+      that.render();
     });
     this.listenTo(Assembl.vent, 'messageList:showMessageById', function(id, callback) {
       that.showMessageById(id, callback);
@@ -86,20 +87,28 @@ var MessageColumnsPanel = AssemblPanel.extend({
       return;
     }
     if (idea === undefined) {
-      idea = currentIdea;
+      idea = this.currentIdea || this.getGroupState().get("currentIdea");
     } else if (this.currentIdea === idea) {
       return;
     }
     this.currentIdea = idea;
-    this.render();
   },
 
   onRender: function() {
     if (this.isViewDestroyed()) {
       return;
     }
-    var idea = this.currentIdea,
-        columns = idea.get("message_columns"),
+    var idea = this.currentIdea;
+    if (idea == undefined) {
+      // after message send, somehow...
+      idea = this.getGroupState().get("currentIdea");
+      this.setCurrentIdea(idea);
+    }
+    if (idea == undefined) {
+      console.warn("WHY is the idea undefined?");
+      return;
+    }
+    var columns = idea.get("message_columns"),
         announcements = idea.get("announcements");
     if (columns === undefined || columns.length === 0) {
       console.log("TODO: this view should not be alive.");
@@ -144,7 +153,6 @@ var MessageColumnView = BaseMessageColumnView.extend({
     BaseMessageColumnView.apply(this, arguments);
   },
   message_template: '#tmpl-messageColumn',
-  currentViewStyle: BaseMessageColumnView.prototype.ViewStyles.REVERSE_CHRONOLOGICAL,
 
   isCurrentViewStyleThreadedType: function() {
     return false;
@@ -154,8 +162,9 @@ var MessageColumnView = BaseMessageColumnView.extend({
   },
   showTopPostBox: function(options) {
     options.message_classifier = this.model.get('message_classifier');
-    options.message_classifier_name = this.model.get('name').bestValue(this.translationData);
     options.reply_idea = this.idea;
+    options.show_target_context_with_choice = false;
+    options.message_send_title = i18n.sprintf("Send a new %s proposal", this.model.get('name').bestValue(this.translationData));
     // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
     this.newTopicView = new MessageSendView(options);
     this.topPostRegion.show(this.newTopicView);
@@ -177,7 +186,6 @@ var MessageColumnView = BaseMessageColumnView.extend({
     topPostRegion: '@ui.topPostRegion',
   },
   initialize: function(options) {
-    console.log("initializing new MessageColumnView with ", this.model.attributes);
     BaseMessageColumnView.prototype.initialize.apply(this, arguments);
     var that = this,
     collectionManager = new CollectionManager();
@@ -188,6 +196,8 @@ var MessageColumnView = BaseMessageColumnView.extend({
     this.setCurrentIdea(this.idea);
     this.translationData = options.translationData;
     this.messagesIdsPromise = this.currentQuery.getResultMessageIdCollectionPromise();
+    this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
+
     this.messagesIdsPromise.then(function() {
       if (that.isViewDestroyed()) {
         return;
@@ -201,6 +211,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     this.currentQuery.initialize();
     this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, this.idea.getId());
     this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_CLASSIFIED_UNDER, this.model.get("message_classifier"));
+    this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
   },
 
   getGroupState: function() {
@@ -232,44 +243,28 @@ var MessageColumnView = BaseMessageColumnView.extend({
       if (that.isViewDestroyed()) {
         return;
       }
-      // var views_promise = that.getRenderedMessagesFlatPromise(resultMessageIdCollection);
-      // that.getRegion('messageFamilyList').show(new())
 
-      // views_promise.then(function(views) {
-        // if (that.isViewDestroyed()) {
-        //   return;
-        // }
+      if (renderId != that._renderId) {
+        console.log("messageList:onRender() structure collection arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
+        return;
+      }
 
-        if (renderId != that._renderId) {
-          console.log("messageList:onRender() structure collection arrived too late, this is render %d, and render %d is already in progress.  Aborting.", renderId, that._renderId);
-          return;
-        }
+      that.destroyAnnotator();
 
-        that.destroyAnnotator();
+      //Some messages may be present from before
+      that.ui.messageFamilyList.empty();
+      that.clearRenderedMessages();
 
-        //Some messages may be present from before
-        that.ui.messageFamilyList.empty();
-        that.clearRenderedMessages();
+      that.render_real();
+      that.ui.panelBody.scroll(function() {
+        var msgBox = that.$('.messagelist-replybox').height(),
+        scrollH = $(this)[0].scrollHeight - (msgBox + 25),
+        panelScrollTop = $(this).scrollTop() + $(this).innerHeight();
 
-        that.render_real();
-        that.ui.panelBody.scroll(function() {
-
-          var msgBox = that.$('.messagelist-replybox').height(),
-          scrollH = $(this)[0].scrollHeight - (msgBox + 25),
-          panelScrollTop = $(this).scrollTop() + $(this).innerHeight();
-
-          // if (panelScrollTop >= scrollH) {
-          //   that.ui.stickyBar.fadeOut();
-          // } else {
-          //   if (!that.aReplyBoxHasFocus) {
-          //     that.ui.stickyBar.fadeIn();
-          //   }
-          // }
-
-          //This event cannot be bound in ui, because backbone binds to
-          //the top element and scroll does not propagate
-          that.$(".panel-body").scroll(that, that.scrollLogger);
-        });
+        //This event cannot be bound in ui, because backbone binds to
+        //the top element and scroll does not propagate
+        that.$(".panel-body").scroll(that, that.scrollLogger);
+      });
     });
   },
 
