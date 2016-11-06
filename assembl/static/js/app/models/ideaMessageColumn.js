@@ -28,6 +28,7 @@ var IdeaMessageColumnModel = Base.Model.extend({
   defaults: {
     'idea': null,
     'message_classifier': '',
+    'column_name': null,
     'header': '',
     'previous_column': null,
   },
@@ -39,6 +40,13 @@ var IdeaMessageColumnModel = Base.Model.extend({
     /**
      * check typeof variable
      * */
+  },
+
+  parse: function(rawModel) {
+    if (rawModel.name !== undefined) {
+      rawModel.name = new LangString.Model(rawModel.name, {parse: true});
+    }
+    return rawModel;
   },
 });
 /**

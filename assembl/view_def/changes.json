@@ -200,6 +200,7 @@
         "idea": true,
         "message_classifier": true,
         "header": true,
+        "name": ":extended",
         "previous_column": true
     },
     "IdeaGraphView": {

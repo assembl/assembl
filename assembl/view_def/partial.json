@@ -156,6 +156,7 @@
         "idea": true,
         "message_classifier": true,
         "header": true,
+        "name": true,
         "previous_column": true
     },
     "IdeaGraphView": {

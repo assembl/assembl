@@ -24,6 +24,7 @@ from ..auth import (
 from . import DiscussionBoundBase
 from .idea import Idea
 from .generic import Content
+from .langstrings import LangString
 
 
 class IdeaMessageColumn(DiscussionBoundBase):
@@ -36,11 +37,13 @@ class IdeaMessageColumn(DiscussionBoundBase):
         doc="Classifier for column views")
     header = Column(UnicodeText)
     previous_column_id = Column(Integer, ForeignKey(id), nullable=True, unique=True)
+    name_id = Column(Integer, ForeignKey(LangString.id), nullable=False)
 
     idea = relationship(Idea, backref="message_columns")
     previous_column = relationship(
         "IdeaMessageColumn", remote_side=[id],
         backref=backref("next_column", uselist=False))
+    name = relationship(LangString)
 
     def get_discussion_id(self):
         idea = self.idea or Idea.get(self.idea_id)

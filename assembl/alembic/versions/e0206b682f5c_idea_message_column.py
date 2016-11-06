@@ -27,6 +27,7 @@ def upgrade(pyramid_env):
             sa.Column("message_classifier", sa.String(100), index=True, nullable=False),
             sa.Column("header", sa.UnicodeText),
             sa.Column("previous_column_id", sa.Integer, sa.ForeignKey("idea_message_column.id"), unique=True),
+            sa.Column("name_id", sa.Integer, sa.ForeignKey("langstring.id"), nullable=False),
             sa.UniqueConstraint('idea_id', 'message_classifier'))
 
 
