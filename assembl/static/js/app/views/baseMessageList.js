@@ -711,6 +711,7 @@ return cls.extend({
         }
 
         that.scrollToPreviousScrollTarget();
+        // TODO: Why are js_messageList-loadprevloader / loadmoreloader not in ui?
         that.$el.find('.js_messageList-loadprevloader').addClass('hidden');
         if (that._offsetStart <= 0) {
           that.ui.topArea.addClass('hidden');

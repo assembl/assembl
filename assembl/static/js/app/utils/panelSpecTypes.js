@@ -33,6 +33,8 @@ var PanelSpecTypes = {
   },//implemented in views/externalVisualization.js
   CI_DASHBOARD_CONTEXT: {id: 'dashboardVisualizationPanel', code: 'U'
   },//implemented in views/externalVisualization.js
+  MESSAGE_COLUMNS: {id: 'messageColumns', code: 'C'
+  },//implemented in views/messageColumnPanel.js
 
   getByRawId: function(id, failSilently) {
     var panelSpec = _.findWhere(this, {id: id});

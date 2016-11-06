@@ -16,6 +16,7 @@ var _ = require('underscore'),
     SynthesisNavPanel = require('../views/navigation/synthesisInNavigation.js'),
     SynthesisPanel = require('../views/synthesisPanel.js'),
     CollectionManager = require('../common/collectionManager.js'),
+    MessageColumns = require('../views/messageColumnsPanel.js'),
     ExternalVisualizationPanels = require('../views/externalVisualization.js');
 
 /*
@@ -25,7 +26,7 @@ var _ = require('underscore'),
 var panelTypeRegistry = {},
     typeByCode = {};
 _.each([
-    AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanels.externalVisualizationPanel, ExternalVisualizationPanels.dashboardVisualizationPanel
+    AboutNavPanel, ContextPanel, IdeaList, IdeaPanel, MessageList, NavigationView, SegmentList.SegmentListPanel, SynthesisNavPanel, SynthesisPanel, ExternalVisualizationPanels.externalVisualizationPanel, ExternalVisualizationPanels.dashboardVisualizationPanel, MessageColumns,
 ], function(panelClass) {
 
   var panelType = panelClass.prototype.panelType;
