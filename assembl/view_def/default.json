@@ -313,7 +313,7 @@
         "widget_add_post_endpoint": true,
         "messages_in_parent": true,
         "message_view_override": true,
-        "message_columns": [":"],
+        "message_columns": [":default"],
         "attachments": [":default"]
     },
     "RootIdea": {

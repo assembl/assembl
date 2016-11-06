@@ -5,6 +5,7 @@
  */
 var _ = require('underscore'),
     Base = require('./base.js'),
+    LangString = require('./langstring.js'),
     Ctx = require('../common/context.js');
 
 /**
@@ -28,7 +29,7 @@ var IdeaMessageColumnModel = Base.Model.extend({
   defaults: {
     'idea': null,
     'message_classifier': '',
-    'column_name': null,
+    'name': null,
     'header': '',
     'previous_column': null,
   },
