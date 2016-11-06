@@ -170,6 +170,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     messageList: '.messageList-list',
     topArea: '.js_messageList-toparea',
     bottomArea: '.js_messageList-bottomarea',
+    contentPending: '.real-time-updates',
   },
   regions: {
     messageFamilyList: '@ui.messageFamilyList',

@@ -311,7 +311,8 @@ var messageSendView = Marionette.LayoutView.extend({
       subject: subject_ls,
       body: body_ls,
       reply_id: reply_message_id,
-      idea_id: reply_idea_id
+      idea_id: reply_idea_id,
+      message_classification: this.options.message_classification,
     });
 
     this.model.save(null, {
