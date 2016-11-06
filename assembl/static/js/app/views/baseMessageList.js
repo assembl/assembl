@@ -1190,8 +1190,7 @@ return cls.extend({
           return Date.parse(data.object.get('date'));
         }
       }
-    }
-    else if (this.currentViewStyle === this.ViewStyles.RECENT_THREAD_STARTERS) {
+    } else if (this.currentViewStyle === this.ViewStyles.RECENT_THREAD_STARTERS) {
       sortFunction = function(data) {
         if(data.level === 0) {
           return Date.now() - Date.parse(data.object.get('date'));
@@ -1200,8 +1199,11 @@ return cls.extend({
           return Date.parse(data.object.get('date'));
         }
       }
-    }
-    else {
+    } else if (this.currentViewStyle === this.ViewStyles.REVERSE_CHRONOLOGICAL) {
+      sortFunction = function(data) {
+        return Date.now() - Date.parse(data.object.get('date'));
+      }
+    } else {
       sortFunction = function(data) {
         return data.object.get('date');
       }

@@ -4,6 +4,7 @@
         <span class="h2"><i class="icon-discuss"></i> {{gettext('Start a new discussion thread')}}</span>
       </div>
     <% } %>
+    <form>
     <div class="rc rcss">
       {% if user %}
       <a class="img-left avatar img-rounded" href="#"><img src="/user/id/{{user.id}}/avatar/30" width="30" height="30"></a>
@@ -49,6 +50,7 @@
         </div>
       </div>
     </div>
+    </form>
 <% } else { %>
     <div class="warning-box-for-message-post">
       <div class="attachments js_attachment-edit-region"></div>
