@@ -1263,8 +1263,17 @@ class BaseOps(object):
                 setattr(self, accessor_name, value)
                 continue
             elif value is None:
-                # TODO: if a 1-Many list, clear elements?
-                pass
+                # We used to not clear. That was silly, but doing it may
+                # be dangerous.
+                setattr(self, accessor_name, None)
+                # Note: also null the column, because that's what is used
+                # to compute the output json.
+                for col in accessor.local_columns:
+                    # check because otherwise it's spuriously set as modified
+                    if getattr(self, col.name, None):
+                        setattr(self, col.name, None)
+                treated_relns.add(accessor)
+                continue
             else:
                 assert False, "can't assign json type %s"\
                     " to relationship %s of class %s" % (
@@ -1277,6 +1286,13 @@ class BaseOps(object):
                 # Let it throw an exception if reln not nullable?
                 # Or would that come too late?
                 setattr(self, accessor_name, instance)
+                # Note: also set the column, because that's what is used
+                # to compute the output json.
+                if len(accessor.local_columns) == 1:
+                    for col in accessor.local_columns:
+                        setattr(self, col.name, instance.id)
+                else:
+                    print("Multiple column relationship???")
                 treated_relns.add(accessor)
             elif isinstance(accessor, property):
                 setattr(self, accessor_name, instance)
