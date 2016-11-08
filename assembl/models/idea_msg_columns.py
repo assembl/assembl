@@ -52,12 +52,12 @@ class IdeaMessageColumn(DiscussionBoundBase):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         if alias_maker is None:
-            idea_link = cls
+            msg_column = cls
             idea = Idea
         else:
-            idea_link = alias_maker.alias_from_class(cls)
-            idea = alias_maker.alias_from_relns(idea_link.source)
-        return ((idea_link.source_id == idea.id),
+            msg_column = alias_maker.alias_from_class(cls)
+            idea = alias_maker.alias_from_relns(msg_column.idea)
+        return ((msg_column.idea_id == idea.id),
                 (idea.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
