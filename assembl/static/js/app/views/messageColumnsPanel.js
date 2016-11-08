@@ -157,10 +157,13 @@ var MessageColumnView = BaseMessageColumnView.extend({
     return Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY;
   },
   showTopPostBox: function(options) {
-    options.message_classifier = this.model.get('message_classifier');
-    options.reply_idea = this.idea;
-    options.show_target_context_with_choice = false;
-    options.message_send_title = i18n.sprintf("Send a new %s proposal", this.model.get('name').bestValue(this.translationData));
+    _.extend(options, {
+      allow_setting_subject: false,
+      message_classifier: this.model.get('message_classifier'),
+      reply_idea: this.idea,
+      show_target_context_with_choice: false,
+      message_send_title: i18n.sprintf("Send a new %s proposal", this.model.get('name').bestValue(this.translationData)),
+    });
     // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
     this.newTopicView = new MessageSendView(options);
     this.topPostRegion.show(this.newTopicView);
