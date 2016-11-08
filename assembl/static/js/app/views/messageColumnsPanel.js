@@ -57,6 +57,7 @@ var MessageColumnsPanel = AssemblPanel.extend({
 
   regions: {
     messageColumnsList: '@ui.messageColumnsList',
+    ideaAnnouncement: '@ui.ideaAnnouncement',
   },
 
   initialize: function(options) {
@@ -88,6 +89,7 @@ var MessageColumnsPanel = AssemblPanel.extend({
     } else if (this.currentIdea === idea) {
       return;
     }
+    this.announcementPromise = idea.getApplicableAnnouncementPromise();
     this.currentIdea = idea;
   },
 
@@ -95,7 +97,8 @@ var MessageColumnsPanel = AssemblPanel.extend({
     if (this.isViewDestroyed()) {
       return;
     }
-    var idea = this.currentIdea;
+    var that = this,
+        idea = this.currentIdea;
     if (idea == undefined) {
       // after message send, somehow...
       idea = this.getGroupState().get("currentIdea");
@@ -105,17 +108,22 @@ var MessageColumnsPanel = AssemblPanel.extend({
       console.warn("WHY is the idea undefined?");
       return;
     }
-    var columns = idea.get("message_columns"),
-        announcements = idea.get("announcements");
+    var columns = idea.get("message_columns");
     if (columns === undefined || columns.length === 0) {
       console.log("TODO: this view should not be alive.");
       return;
     }
     // first approximation
     this.ui.ideaColumnHeader.html(idea.get("shortTitle"));
-    if (announcements !== undefined && announcements.length > 0) {
-      this.ui.ideaAnnouncement.html(announcements.models[0].get("body"));
-    }
+    this.announcementPromise.then(function(announcement) {
+      if (that.isViewDestroyed() || announcement === undefined) {
+        return;
+      }
+      var announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement});
+      that.showChildView('ideaAnnouncement', announcementMessageView);
+      that.ui.ideaAnnouncement.removeClass('hidden');
+    });
+
     // TODO: What if translation data is not ready by now?
     this.showChildView(
       "messageColumnsList",
