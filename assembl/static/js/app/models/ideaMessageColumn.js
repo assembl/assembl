@@ -66,7 +66,7 @@ var IdeaMessageColumnCollection = Base.Collection.extend({
    * @member {string} app.models.ideaMessageColumn.IdeaMessageColumnCollection.url
    */
   url: function() {
-    return this.targetIdea.urlRoot() + '/' + this.targetIdea.getNumericId() + '/message_columns';
+    return this.targetIdea.getApiV2Url() + '/message_columns';
   },
 
   initialize: function(models, options) {
