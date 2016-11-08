@@ -13,6 +13,7 @@ var Marionette = require('../../shims/marionette.js'),
     PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
     Analytics = require('../../internal_modules/analytics/dispatcher.js'),
     Storage = require('../../objects/storage.js'),
+    Permissions = require('../../utils/permissions.js'),
     UserCustomData = require('../../models/userCustomData.js');
 
 /** Represents the entire content of a single panel group
@@ -174,6 +175,10 @@ var groupContent = Marionette.CompositeView.extend({
             }
             if (user.can(Permissions.ADMIN_DISCUSSION)) {
               this.ensureOnlyPanelsVisible(panelSpec, PanelSpecTypes.IDEA_PANEL);
+              var ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
+              if (!ideaPanel.isPanelMinimized()) {
+                ideaPanel.toggleMinimize();
+              }
             } else {
               this.ensureOnlyPanelsVisible(panelSpec);
             }
