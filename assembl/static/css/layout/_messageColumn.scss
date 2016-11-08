@@ -11,4 +11,29 @@
     .pal{
         padding:0!important;
     }
+    .message-family-container {
+        box-shadow: none;
+        margin: 0;
+        border: none;
+        border-left: 1px solid $txtGray;
+        border-right: 1px solid $txtGray;
+        border-radius: 0;
+    }
+    .message-column-container{
+        border-top: 1px solid $txtGray;
+        border-bottom: 1px solid $txtGray;
+        margin-bottom: 20px;
+    }
+    .idea-classification{
+        display:none;
+    }
+    .message-replybox-openbtn{
+        display:none;
+    }
+    .messageSend-cancelbtn{
+        display:none;
+    }
+    .messageSend-sendbtn{
+        margin: 10px 0 10px 0!important;
+    }
 }

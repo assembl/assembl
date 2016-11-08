@@ -178,9 +178,11 @@ var groupContent = Marionette.CompositeView.extend({
               var ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
               if (!ideaPanel.isPanelMinimized()) {
                 ideaPanel.toggleMinimize();
+                ideaPanel.$el.addClass('minSizeGroup');
               }
             } else {
               this.ensureOnlyPanelsVisible(panelSpec);
+              ideaPanel.$el.removeClass('minSizeGroup');
             }
             return;
           }
