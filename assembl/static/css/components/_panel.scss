@@ -47,6 +47,12 @@ $editablearea_hover_border_size: 1px;
     min-width:450px;
   }
 }
+.messageColumns-panel{
+  min-width:850px;
+  .panelContents{
+    min-width:850px;
+  }
+}
 .minSizeGroup{
   .panel-header-title{
     display:none;

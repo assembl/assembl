@@ -232,7 +232,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     var that = this;
     var renderId = _.clone(this._renderId);
 
-    this.ui.messageColumnHeader.html(this.model.get('name').bestValue(this.translationData));
+    // this.ui.messageColumnHeader.html(this.model.get('name').bestValue(this.translationData));
     this.ui.messageColumnDescription.html(this.model.get('header'));
     this.messagesIdsPromise.then(function(resultMessageIdCollection) {
       if (that.isViewDestroyed()) {
