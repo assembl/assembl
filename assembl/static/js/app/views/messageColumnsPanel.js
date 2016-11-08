@@ -67,12 +67,6 @@ var MessageColumnsPanel = AssemblPanel.extend({
     if(this.isViewDestroyed()) {
       return;
     }
-    this.messagesStructureCollectionPromise = collectionManager.getAllMessageStructureCollectionPromise();
-    this.messageRequestWorker =  collectionManager.getMessageFullModelRequestWorker(
-      collectionManager, this.messagesStructureCollectionPromise)
-    collectionManager.getUserLanguagePreferencesPromise(Ctx).then(function(ulp) {
-      that.translationData = ulp.getTranslationData();
-    });
     this.setCurrentIdea(current_idea);
     this.listenTo(this.getGroupState(), "change:currentIdea", function(groupState) {
       that.setCurrentIdea(groupState.get('currentIdea'));
@@ -127,7 +121,6 @@ var MessageColumnsPanel = AssemblPanel.extend({
         idea: this.currentIdea,
         translationData: this.translationData,
         collection: columns,
-        messageRequestWorker: this.messageRequestWorker,
       }));
   },
   getTitle: function() {
@@ -190,7 +183,6 @@ var MessageColumnView = BaseMessageColumnView.extend({
     var that = this,
     collectionManager = new CollectionManager();
     this.idea = options.idea;
-    this.messageRequestWorker = options.messageRequestWorker;
     this.showMessageByIdInProgress = false;
     this.basePanel = options.basePanel;
     this.setCurrentIdea(this.idea);
