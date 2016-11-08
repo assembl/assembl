@@ -67,6 +67,9 @@ var MessageColumnsPanel = AssemblPanel.extend({
     if(this.isViewDestroyed()) {
       return;
     }
+    collectionManager.getUserLanguagePreferencesPromise(Ctx).then(function(ulp) {
+      that.translationData = ulp.getTranslationData();
+    });
     this.setCurrentIdea(current_idea);
     this.listenTo(this.getGroupState(), "change:currentIdea", function(groupState) {
       that.setCurrentIdea(groupState.get('currentIdea'));
