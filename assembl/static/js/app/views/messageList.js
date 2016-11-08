@@ -424,7 +424,7 @@ var MessageList = BaseMessageList.extend({
   },
 
   showAnnouncement: function(announcement) {
-    announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement});
+    var announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement});
     this.announcementRegion.show(announcementMessageView);
     this.ui.announcementRegion.removeClass('hidden');
   },
