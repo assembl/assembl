@@ -1,6 +1,6 @@
 'use strict';
 /**
- * 
+ *
  * @module app.views.admin.adminMessageColumns
  */
 
@@ -8,28 +8,20 @@ var Assembl = require('../../app.js'),
     Ctx = require('../../common/context.js'),
     i18n = require('../../utils/i18n.js'),
     EditableField = require('../reusableDataFields/editableField.js'),
-    CKEditorField = require('../reusableDataFields/ckeditorField.js'),
-    Permissions = require('../../utils/permissions.js'),
-    PanelSpecTypes = require('../../utils/panelSpecTypes.js'),
-    MessagesInProgress = require('../../objects/messagesInProgress.js'),
-    SegmentList = require('../segmentList.js'),
     IdeaMessageColumn = require('../../models/ideaMessageColumn.js'),
     LangString = require('../../models/langstring.js'),
-    AgentViews = require('../agent.js'),
-    WidgetLinks = require('../widgetLinks.js'),
-    WidgetButtons = require('../widgetButtons.js'),
     CollectionManager = require('../../common/collectionManager.js'),
-    AssemblPanel = require('../assemblPanel.js'),
     Marionette = require('../../shims/marionette.js'),
-    AttachmentViews = require('../attachments.js'),
-    ConfirmModal = require('../confirmModal.js'),
-    AttachmentModels = require('../../models/attachments.js'),
     Growl = require('../../utils/growl.js'),
+    SimpleLangStringEditPanel = require('../simpleLangStringEdit.js'),
     $ = require('jquery'),
     _ = require('underscore'),
     Promise = require('bluebird');
 
 
+/**
+ * @class  app.views.admin.adminMessageColumns.AdminMessageColumnsPanel
+ */
 var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
   constructor: function AdminMessageColumnsPanel() {
     Marionette.LayoutView.apply(this, arguments);
@@ -170,6 +162,9 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
 });
 
 
+/**
+ * @class  app.views.admin.adminMessageColumns.MessageColumnView
+ */
 var MessageColumnView = Marionette.LayoutView.extend({
   constructor: function MessageColumnView() {
     Marionette.LayoutView.apply(this, arguments);
@@ -204,13 +199,11 @@ var MessageColumnView = Marionette.LayoutView.extend({
     };
   },
   onRender: function() {
-    /*
     this.showChildView(
       "columnName",
-      new LangStringEditView({
-        model: this.model.name,
+      new SimpleLangStringEditPanel({
+        model: this.model.get('name'),
       }));
-    */
   },
   reorderColumnUp: function(ev) {
     var index = this.getIndex(),
@@ -259,7 +252,7 @@ var MessageColumnView = Marionette.LayoutView.extend({
 
 /**
  * The collections of columns to be seen on this idea
- * @class app.views.messageColumnsPanel.MessageColumnList
+ * @class app.views.adminMessageColumns.MessageColumnList
  */
 var MessageColumnList = Marionette.CollectionView.extend({
   constructor: function MessageColumnList() {
@@ -272,10 +265,11 @@ var MessageColumnList = Marionette.CollectionView.extend({
 });
 
 
-/*
-  The results modal view
-  It is barely a simple container for the real view: TokenResultView
- */
+/**
+  * The admin modal view
+  * It is barely a simple container for the real view: AdminMessageColumnsPanel
+  * @class app.views.adminMessageColumns.AdminMessageColumnsModal
+  */
 var AdminMessageColumnsModal = Backbone.Modal.extend({
   constructor: function AdminMessageColumnsModal() {
     Backbone.Modal.apply(this, arguments);
