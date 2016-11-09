@@ -1872,6 +1872,26 @@ Context.prototype = {
     this._localeToLangNameCache = this.getJsonFromScriptTag('translation-locale-names');
     return this._localeToLangNameCache;
   },
+
+  _hiddenTargetLocales: ['und', 'mul', 'zxx'],
+  localesAsSortedList: function() {
+    if (this._localesAsSortedList === undefined) {
+      var hiddenTargetLocales = this._hiddenTargetLocales,
+          localeList = _.mapObject(this.getLocaleToLanguageNameCache(), function(name, loc) {
+          return [loc, name];
+      });
+      localeList = _.filter(localeList, function(x) {
+        return hiddenTargetLocales.indexOf(x[0]) < 0;
+      });
+      localeList = _.sortBy(localeList, function(x) {
+        return x[1];
+      });
+      this._localesAsSortedList = localeList;
+    }
+    return this._localesAsSortedList;
+  },
+
+
   /**
    * Cache of the translation service data stored in the <script id="translation-service-data"></script>
    * @returns {Json}

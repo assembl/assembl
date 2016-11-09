@@ -80,23 +80,6 @@ var LanguageSelectionView = Marionette.ItemView.extend({
         this.langCache = this.parentView.langCache;
     },
 
-    _localesAsSortedList: null,
-    hiddenTargetLocales: ['und', 'mul', 'zxx'],
-    localesAsSortedList: function() {
-        var hiddenTargetLocales = this.hiddenTargetLocales;
-        if (this._localesAsSortedList === null) {
-            var localeList = _.map(this.langCache, function(name, loc) {
-                return [loc, name];
-            });
-            localeList = _.filter(localeList, function(x) {
-                return hiddenTargetLocales.indexOf(x[0]) < 0;
-            });
-            localeList = _.sortBy(localeList, function(x) {return x[1];});
-            Object.getPrototypeOf(this)._localesAsSortedList = localeList;
-        }
-        return this._localesAsSortedList;
-    },
-
     nameOfLocale: function(locale) {
         var name = this.langCache[locale];
         if (name === undefined) {
@@ -140,7 +123,7 @@ var LanguageSelectionView = Marionette.ItemView.extend({
     serializeData: function(){
         if ( this.template === "#tmpl-message_translation_question_selection" ){
             return {
-                supportedLanguages: this.localesAsSortedList(),
+                supportedLanguages: Ctx.localesAsSortedList(),
                 translatedTo: this.translatedTo,
                 question: i18n.sprintf(i18n.gettext("Select the language you wish to translate %s to:"),
                     this.nameOfLocale(LangString.LocaleUtils.stripCountry(this.translatedFrom))),
