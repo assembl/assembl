@@ -25,6 +25,7 @@ var Backbone = require('backbone'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     scrollUtils = require('../utils/scrollUtils.js'),
     AssemblPanel = require('./assemblPanel.js'),
+    CKEditorField = require('./reusableDataFields/ckeditorField.js'),
     BaseMessageListMixin = require('./baseMessageList.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Widget = require('../models/widget.js'),
@@ -178,18 +179,6 @@ var MessageColumnView = BaseMessageColumnView.extend({
   getTargetMessageViewStyleFromMessageListConfig: function() {
     return Ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY;
   },
-  showTopPostBox: function(options) {
-    _.extend(options, {
-      allow_setting_subject: false,
-      message_classifier: this.model.get('message_classifier'),
-      reply_idea: this.idea,
-      show_target_context_with_choice: false,
-      message_send_title: i18n.sprintf("Send a new %s proposal", this.model.get('name').bestValue(this.translationData)),
-    });
-    // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
-    this.newTopicView = new MessageSendView(options);
-    this.topPostRegion.show(this.newTopicView);
-  },
   ui: {
     panelBody: ".subpanel-body",
     messageColumnHeader: '.js_messageColumnHeader',
@@ -206,6 +195,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
   regions: {
     messageFamilyList: '@ui.messageFamilyList',
     topPostRegion: '@ui.topPostRegion',
+    messageColumnDescription: '@ui.messageColumnDescription',
   },
   initialize: function(options) {
     BaseMessageColumnView.prototype.initialize.apply(this, arguments);
@@ -264,16 +254,28 @@ var MessageColumnView = BaseMessageColumnView.extend({
     return data;
   },
 
+  processIsEnded: function() {
+    // heuristic: process is ended if header has content.
+    var header = this.model.get('header');
+    return header != undefined && header.length > 0;
+  },
+
   onRender: function() {
     if (this.isViewDestroyed()) {
       return;
     }
     BaseMessageColumnView.prototype.onRender.apply(this, arguments);
-    var that = this;
-    var renderId = _.clone(this._renderId);
+    var that = this,
+        canEdit = Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
+        renderId = _.clone(this._renderId);
 
-    // this.ui.messageColumnHeader.html(this.model.get('name').bestValue(this.translationData));
-    this.ui.messageColumnDescription.html(this.model.get('header'));
+    if (this.processIsEnded() || canEdit) {
+      this.messageColumnDescription.show(new CKEditorField({
+        model: this.model,
+        modelProp: 'header',
+        canEdit: canEdit,
+      }));
+    }
     this.messagesIdsPromise.then(function(resultMessageIdCollection) {
       if (that.isViewDestroyed()) {
         return;
@@ -306,6 +308,22 @@ var MessageColumnView = BaseMessageColumnView.extend({
         that.$(".panel-body").scroll(that, that.scrollLogger);
       });
     });
+  },
+
+  showTopPostBox: function(options) {
+    if (this.processIsEnded()) {
+      return;
+    }
+    _.extend(options, {
+      allow_setting_subject: false,
+      message_classifier: this.model.get('message_classifier'),
+      reply_idea: this.idea,
+      show_target_context_with_choice: false,
+      message_send_title: i18n.sprintf("Send a new %s proposal", this.model.get('name').bestValue(this.translationData)),
+    });
+    // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
+    this.newTopicView = new MessageSendView(options);
+    this.topPostRegion.show(this.newTopicView);
   },
 
 });
