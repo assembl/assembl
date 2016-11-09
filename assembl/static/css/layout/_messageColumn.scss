@@ -45,10 +45,12 @@
     .announcement_title{
         text-align: center;
         color:$white;
+        margin-top: 25px;
     }
     .announcement_body{
         text-align: center;
         color:$white;
+        padding: 0 50px;
     }
     .background-annoucement{
         background-repeat: no-repeat;
@@ -56,12 +58,21 @@
     }
     .announcementMessage{
         background-color: none!important;
-        height: 150px;
+        height: 180px;
     }
     .bx{
         background: none!important;
     }
     .message-conversation-block{
         display:none;
+    }
+    a.img-left.avatar.img-rounded{
+        display:none;
+    }
+    .icon-discuss{
+        display:none;
+    }
+    .messageSend-form{
+        margin-left:0;
     }
 }

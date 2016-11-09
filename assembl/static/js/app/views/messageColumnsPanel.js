@@ -82,6 +82,7 @@ var MessageColumnsPanel = AssemblPanel.extend({
     });
 
     this.attachmentCollection = current_idea.get('attachments');
+    console.log(this.attachmentCollection);
     // this.listenTo(this.attachmentCollection, 'add remove change', function(){
     //   console.log("Listening to attachment collection");
     //   that.render();
