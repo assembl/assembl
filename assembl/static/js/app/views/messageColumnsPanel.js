@@ -52,12 +52,12 @@ var MessageColumnsPanel = AssemblPanel.extend({
   ui: {
     ideaColumnHeader: ".js_ideaColumnHeader",
     ideaAnnouncement: ".js_ideaAnnouncement",
-    messageColumnsList: ".js_messageColumnsList",
+    messageColumnsList: ".js_messageColumnsList"
   },
 
   regions: {
     messageColumnsList: '@ui.messageColumnsList',
-    ideaAnnouncement: '@ui.ideaAnnouncement',
+    ideaAnnouncement: '@ui.ideaAnnouncement'
   },
 
   initialize: function(options) {
@@ -114,7 +114,7 @@ var MessageColumnsPanel = AssemblPanel.extend({
       return;
     }
     // first approximation
-    this.ui.ideaColumnHeader.html(idea.get("shortTitle"));
+    // this.ui.ideaColumnHeader.html(idea.get("shortTitle"));
     this.announcementPromise.then(function(announcement) {
       if (that.isViewDestroyed() || announcement === undefined) {
         return;
@@ -122,8 +122,11 @@ var MessageColumnsPanel = AssemblPanel.extend({
       var announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement});
       that.showChildView('ideaAnnouncement', announcementMessageView);
       that.ui.ideaAnnouncement.removeClass('hidden');
+      var attachmentCollection = that.currentIdea.get('attachments');
+      var announcementImgBackgroundLink = attachmentCollection.models[0].get('external_url');
+      that.ui.ideaAnnouncement.css({'background-image':'url('+announcementImgBackgroundLink+')'});
     });
-
+    
     // TODO: What if translation data is not ready by now?
     this.showChildView(
       "messageColumnsList",

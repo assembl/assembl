@@ -36,4 +36,23 @@
     .messageSend-sendbtn{
         margin: 10px 0 10px 0!important;
     }
+    .creator_info{
+        display:none!important;
+    }
+    .announcementMessage{
+        box-shadow:none;
+    }
+    .announcement_title{
+        text-align: center;
+    }
+    .announcement_body{
+        text-align: center;
+    }
+    .announcementMessage{
+        background-color: none!important;
+        height: 150px;
+    }
+    .bx{
+        background: none!important;
+    }
 }

@@ -279,6 +279,7 @@ var IdeaPanel = AssemblPanel.extend({
   renderAttachments: function(){
     var collection = this.getAttachmentCollection();
     var user = Ctx.getCurrentUser();
+    
     if (user.can(Permissions.EDIT_IDEA)){
       
       var attachmentView = new AttachmentViews.AttachmentEditUploadView({
