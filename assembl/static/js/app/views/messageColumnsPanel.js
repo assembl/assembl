@@ -82,7 +82,6 @@ var MessageColumnsPanel = AssemblPanel.extend({
     });
 
     this.attachmentCollection = current_idea.get('attachments');
-    console.log(this.attachmentCollection);
     // this.listenTo(this.attachmentCollection, 'add remove change', function(){
     //   console.log("Listening to attachment collection");
     //   that.render();
@@ -248,6 +247,16 @@ var MessageColumnView = BaseMessageColumnView.extend({
    */
   syncWithCurrentIdea: function() {
     this.render();
+  },
+
+  serializeData: function() {
+    var data = BaseMessageColumnView.prototype.serializeData.apply(this, arguments);
+    _.extend(data, {
+      column: this.model,
+      canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST),
+      color: this.model.get('color') || 'black',
+    });
+    return data;
   },
 
   onRender: function() {

@@ -269,6 +269,7 @@
         "message_classifier": true,
         "header": true,
         "name": true,
+        "color": true,
         "previous_column": true
     },
     "IdeaGraphView": {

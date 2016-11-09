@@ -178,6 +178,7 @@ var MessageColumnView = Marionette.LayoutView.extend({
   ui: {
     columnId: '.js_column_id',
     columnName: '.js_column_name',
+    columnColor: '.js_column_color',
     columnUp: '.js_column_up',
     columnDown: '.js_column_down',
     columnDelete: '.js_column_delete',
@@ -189,6 +190,8 @@ var MessageColumnView = Marionette.LayoutView.extend({
     'click @ui.columnUp': 'reorderColumnUp',
     'click @ui.columnDown': 'reorderColumnDown',
     'click @ui.columnDelete': 'deleteColumn',
+    'change @ui.columnId': 'changeIdentifier',
+    'change @ui.columnColor': 'changeColor',
   },
   getIndex: function() {
     return _.indexOf(this.model.collection.models, this.model);
@@ -241,7 +244,16 @@ var MessageColumnView = Marionette.LayoutView.extend({
     this.model.destroy();
     ev.preventDefault();
   },
-
+  changeIdentifier: function(ev) {
+    this.model.set('message_classifier', ev.currentTarget.value);
+    this.model.save();
+    ev.preventDefault();
+  },
+  changeColor: function(ev) {
+    this.model.set('color', ev.currentTarget.value);
+    this.model.save();
+    ev.preventDefault();
+  },
 });
 
 

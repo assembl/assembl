@@ -38,6 +38,7 @@ class IdeaMessageColumn(DiscussionBoundBase):
     header = Column(UnicodeText)
     previous_column_id = Column(Integer, ForeignKey(id), nullable=True, unique=True)
     name_id = Column(Integer, ForeignKey(LangString.id), nullable=False)
+    color = Column(String(20))
 
     idea = relationship(Idea, backref="message_columns")
     previous_column = relationship(

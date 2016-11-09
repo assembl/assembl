@@ -31,6 +31,7 @@ var IdeaMessageColumnModel = Base.Model.extend({
     'message_classifier': '',
     'name': null,
     'header': '',
+    'color': null,
     'previous_column': null,
   },
   /**
