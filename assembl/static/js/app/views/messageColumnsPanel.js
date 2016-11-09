@@ -123,8 +123,11 @@ var MessageColumnsPanel = AssemblPanel.extend({
       that.showChildView('ideaAnnouncement', announcementMessageView);
       that.ui.ideaAnnouncement.removeClass('hidden');
       var attachmentCollection = that.currentIdea.get('attachments');
-      var announcementImgBackgroundLink = attachmentCollection.models[0].get('external_url');
-      that.ui.ideaAnnouncement.css({'background-image':'url('+announcementImgBackgroundLink+')'});
+      var attachmentModel = attachmentCollection.getSingleAttachment();
+      if (attachmentModel){
+        var announcementImgBackgroundLink = attachmentModel.get('external_url');
+        that.ui.ideaAnnouncement.css({'background-image':'url('+announcementImgBackgroundLink+')'});  
+      }
     });
     
     // TODO: What if translation data is not ready by now?
