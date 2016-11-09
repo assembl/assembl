@@ -74,15 +74,18 @@ var MessageColumnsPanel = AssemblPanel.extend({
     this.setCurrentIdea(current_idea);
     this.listenTo(this.getGroupState(), "change:currentIdea", function(groupState) {
       that.setCurrentIdea(groupState.get('currentIdea'));
-      that.attachmentCollection = this.currentIdea.get('attachments');
+      that.attachmentCollection = that.currentIdea.get('attachments');
       that.render();
     });
     this.listenTo(Assembl.vent, 'messageList:showMessageById', function(id, callback) {
       that.showMessageById(id, callback);
     });
 
-    this.attachmentCollection = currentIdea.get('attachments');
-    this.attachmentCollection.on('change', this.render, this);
+    this.attachmentCollection = current_idea.get('attachments');
+    // this.listenTo(this.attachmentCollection, 'add remove change', function(){
+    //   console.log("Listening to attachment collection");
+    //   that.render();
+    // });
 
   },
   setCurrentIdea: function(idea) {
@@ -127,10 +130,11 @@ var MessageColumnsPanel = AssemblPanel.extend({
       var announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement});
       that.showChildView('ideaAnnouncement', announcementMessageView);
       that.ui.ideaAnnouncement.removeClass('hidden');
-      var attachmentModel = this.attachmentCollection.getSingleAttachment();
+      var attachmentModel = that.attachmentCollection.getSingleAttachment();
       if (attachmentModel){
         var announcementImgBackgroundLink = attachmentModel.get('external_url');
-        that.ui.ideaAnnouncement.css({'background-image':'url('+announcementImgBackgroundLink+')'});  
+        $('.js_ideaAnnouncement').addClass('background-annoucement');
+        that.ui.ideaAnnouncement.css({'background-image':'url('+announcementImgBackgroundLink+')'});
       }
     });
     

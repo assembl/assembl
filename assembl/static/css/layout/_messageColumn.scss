@@ -44,9 +44,15 @@
     }
     .announcement_title{
         text-align: center;
+        color:$white;
     }
     .announcement_body{
         text-align: center;
+        color:$white;
+    }
+    .background-annoucement{
+        background-repeat: no-repeat;
+        background-size: cover;
     }
     .announcementMessage{
         background-color: none!important;
@@ -54,5 +60,8 @@
     }
     .bx{
         background: none!important;
+    }
+    .message-conversation-block{
+        display:none;
     }
 }
