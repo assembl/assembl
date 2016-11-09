@@ -243,6 +243,10 @@ var MessageColumnView = BaseMessageColumnView.extend({
     return this.basePanel.getContainingGroup();
   },
 
+  unblockPanel: function() {
+    this.basePanel.unblockPanel();
+  },
+
   /**
    * Synchronizes the panel with the currently selected idea (possibly none)
    */
