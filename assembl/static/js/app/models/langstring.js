@@ -208,9 +208,11 @@ var LangStringEntryCollection = Base.Collection.extend({
     Base.Collection.apply(this, arguments);
   },
   /**
-   * @member {string} app.models.langstrings.LangStringEntryCollection.urlRoot
+   * @member {string} app.models.langstrings.LangStringEntryCollection.url
    */
-  urlRoot: Ctx.getApiV2DiscussionUrl("LangStringEntry"),
+  url: function() {
+    return this.langstring.url() + "/entries";
+  },
   /**
    * The model
    * @type {Account}
@@ -259,6 +261,14 @@ var LangString = Base.Model.extend({
     }
     return rawModel;
   },
+
+  /**
+   * @member {string} app.models.langstrings.LangString.url
+   */
+  url: function() {
+    return Ctx.getApiV2Url("LangString") + "/" + this.getNumericId();
+  },
+
   /**
    * @function app.models.langstrings.LangString.initialize
    */
@@ -474,9 +484,9 @@ var LangStringCollection = Base.Collection.extend({
    */
   model: LangString,
   /**
-   * @member {string} app.models.langstrings.LangStringCollection.urlRoot
+   * @member {string} app.models.langstrings.LangStringCollection.url
    */
-  urlRoot: Ctx.getApiV2DiscussionUrl("LangString"),
+  url: Ctx.getApiV2Url("LangString"),
 });
 
 module.exports = {
