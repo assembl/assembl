@@ -12,7 +12,9 @@
 </style>
 
 <div class="subpanel-body col-6-12"  id="message_column_<%= column.getNumericId() %>">
-  <div class="js_messageColumnHeader"></div>
+  <div class="js_messageColumnHeader">
+    <span class="js_messageCount"></span>
+  </div>
   <div class="js_messageColumnDescription"></div>
   <% if (canPost) { %>
     <div class="js_topPostRegion"></div>

@@ -201,6 +201,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     topArea: '.js_messageList-toparea',
     bottomArea: '.js_messageList-bottomarea',
     contentPending: '.real-time-updates',
+    messageCount: '.js_messageCount',
   },
   regions: {
     messageFamilyList: '@ui.messageFamilyList',
@@ -280,6 +281,11 @@ var MessageColumnView = BaseMessageColumnView.extend({
       }
 
       that.destroyAnnotator();
+
+      that.ui.messageCount.html(i18n.sprintf(
+        i18n.gettext("%d messages “%s”"),
+        resultMessageIdCollection.length,
+        that.model.get('name').bestValue(that.translationData)));
 
       //Some messages may be present from before
       that.ui.messageFamilyList.empty();
