@@ -309,6 +309,8 @@ def get_posts(request):
             PostClass.creator_id == post_author_id)
 
     if message_classifiers:
+        if any([len(classifier) == 0 for classifier in message_classifiers]):
+            return {'total': 0, 'posts': []}
         polarities = [classifier[0] != "!" for classifier in message_classifiers]
         polarity = all(polarities)
         if not polarity:

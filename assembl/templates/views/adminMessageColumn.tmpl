@@ -1,0 +1,21 @@
+<div class="subpanel-body">
+  <div>
+    <label>{{ gettext('Identifier') }}</label>
+    <input class="js_column_id" type="text" name="real_name" placeholder="{{ gettext('Identifier') }}" value="<%= column.get('message_classifier') %>" />
+  </div>
+
+  <div>
+    <label>{{ gettext('Name') }}</label>
+    <div class="js_column_name"></div>
+  </div>
+  <div>
+    <% if (index > 0) { %>
+      <button class="js_column_up btn">{{ gettext('Up') }}</button>
+    <% } %>
+    <% if (index < collsize-1) { %>
+      <button class="js_column_down btn">{{ gettext('Down') }}</button>
+    <% } %>
+    <button class="js_column_delete btn">{{ gettext('Delete') }}</button>
+  </div>
+
+</div>

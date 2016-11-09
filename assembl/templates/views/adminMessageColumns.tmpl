@@ -1,0 +1,15 @@
+<div class="define-columns">
+  <form>
+    <div>
+      <label>{{ gettext('Activate multi-column view') }}</label>
+      <input type="checkbox" class="js_activate_columns"
+      <% if (active) { print('checked="checked"'); } %>
+      >
+    </div>
+    <div class="js_messageColumnsList"></div>
+    <div>
+      <button class="js_add_column btn">{{ gettext('Add') }}</button><br/>
+      <button class="js_save btn">{{ gettext('Save') }}</button>
+    </div>
+  </form>
+</div>
