@@ -64,7 +64,8 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
         i = 0,
         preferences = Ctx.getPreferences(),
         column_identifiers = preferences.default_column_identifiers,
-        column_names = preferences.default_column_names;
+        column_names = preferences.default_column_names,
+        colors = preferences.default_column_colors;
 
     for (var i in column_identifiers) {
       var column, identifier = column_identifiers[i],
@@ -74,6 +75,7 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
         idea: currentIdea.id,
         message_classifier: identifier,
         name: name,
+        color: colors[identifier],
       });
       columnCollection.add(column);
       prevColumn = column;

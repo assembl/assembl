@@ -489,6 +489,20 @@ class Preferences(MutableMapping, Base):
             "default": ["positive", "negative"],
         },
 
+        # What are default theme colors of columns in multi-column view
+        {
+            "id": "default_column_colors",
+            "name": _("Default colors of columns in column view"),
+            "value_type": "strdict_of_string",
+            "description": _(
+                "What are (default) theme colors of columns in multi-column views?"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": {"positive": "green", "negative": "red"},
+        },
+
         # What are (default) names of columns in multi-column views, in each discussion language?
         {
             "id": "default_column_names",
