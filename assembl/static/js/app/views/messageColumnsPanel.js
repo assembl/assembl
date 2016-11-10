@@ -82,7 +82,9 @@ var MessageColumnsPanel = AssemblPanel.extend({
       that.showMessageById(id, callback);
     });
 
-    this.attachmentCollection = current_idea.get('attachments');
+    if (current_idea != null) {
+      this.attachmentCollection = current_idea.get('attachments');
+    }
     // this.listenTo(this.attachmentCollection, 'add remove change', function(){
     //   console.log("Listening to attachment collection");
     //   that.render();
