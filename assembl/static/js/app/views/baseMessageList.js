@@ -1729,11 +1729,10 @@ return cls.extend({
       } else if (viewStyle === this.ViewStyles.POPULARITY) {
         this.currentViewStyle = viewStyle;
         this.currentQuery.setView(this.currentQuery.availableViews.POPULARITY);
-      }
-      /*else if (viewStyle === this.ViewStyles.CHRONOLOGICAL) {
+      } else if (viewStyle === this.ViewStyles.CHRONOLOGICAL) {
         this.currentViewStyle = viewStyle;
         this.currentQuery.setView(this.currentQuery.availableViews.CHRONOLOGICAL);
-      }*/
+      }
       else {
         throw new Error("Unsupported view style");
       }

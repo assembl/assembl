@@ -221,6 +221,11 @@ var MessageColumnView = BaseMessageColumnView.extend({
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "popularmessages",
       label: i18n.gettext('Most popular messages first')
     },
+    CHRONOLOGICAL: {
+      id: "chronological",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "chronological",
+      label: i18n.gettext('Oldest messages first')
+    },
   },
 
   initialize: function(options) {
