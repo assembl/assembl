@@ -698,7 +698,7 @@ var MessageView = Marionette.LayoutView.extend({
       }
       if (this.messageListView.currentViewStyle == this.messageListView.ViewStyles.POPULARITY) {
         // the order will have changed.
-        this.messageListView.render();
+        this.messageListView.syncWithCurrentIdea();
       } else {
         var count = this.model.get('like_count');
         if (count > 0) {
