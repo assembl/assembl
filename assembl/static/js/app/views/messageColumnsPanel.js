@@ -313,6 +313,9 @@ var MessageColumnView = BaseMessageColumnView.extend({
         //the top element and scroll does not propagate
         that.$(".panel-body").scroll(that, that.scrollLogger);
       });
+      var columnSize = 12 / that.collection.length;
+      var columnClass = 'col-'+columnSize+'-12';
+      $('.subpanel-body').addClass(columnClass);
     });
   },
 
