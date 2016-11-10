@@ -31,6 +31,10 @@ var Backbone = require('backbone'),
     Widget = require('../models/widget.js'),
     Promise = require('bluebird');
 
+/**
+ * Constants
+ */
+var MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX = "js_messageList-view-";
 
 /**
  * @class app.views.messageColumnsPanel.MessageColumnsPanel
@@ -195,6 +199,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     topArea: '.js_messageList-toparea',
     bottomArea: '.js_messageList-bottomarea',
     contentPending: '.real-time-updates',
+    viewStyleDropdown: ".js_messageListViewStyle-dropdown",
     messageCount: '.js_messageCount',
   },
   regions: {
@@ -202,9 +207,29 @@ var MessageColumnView = BaseMessageColumnView.extend({
     topPostRegion: '@ui.topPostRegion',
     messageColumnDescription: '@ui.messageColumnDescription',
   },
+
+  /**
+   * This is a subset of {app.views.baseMessageList.BaseMessageListMixin.ViewStyles}
+   * @member app.views.messageColumnsPanel.ViewStyles
+   * @type {Object}
+   */
+  ViewStyles: {
+    REVERSE_CHRONOLOGICAL: {
+      id: "reverse_chronological",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "activityfeed",
+      label: i18n.gettext('Newest messages first')
+    },
+    POPULARITY: {
+      id: "popularity",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "popularmessages",
+      label: i18n.gettext('Most popular messages first')
+    },
+  },
+
   initialize: function(options) {
     BaseMessageColumnView.prototype.initialize.apply(this, arguments);
     var that = this,
+        extraEvents = {},
     collectionManager = new CollectionManager();
     this.idea = options.idea;
     this.showMessageByIdInProgress = false;
@@ -213,6 +238,12 @@ var MessageColumnView = BaseMessageColumnView.extend({
     this.translationData = options.translationData;
     this.messagesIdsPromise = this.currentQuery.getResultMessageIdCollectionPromise();
     this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
+
+    _.each(this.ViewStyles, function(messageListViewStyle) {
+      var key = 'click .' + messageListViewStyle.css_class;
+      extraEvents[key] = 'onSelectMessageListViewStyle';
+    });
+    this.delegateEvents(extraEvents);
 
     this.messagesIdsPromise.then(function() {
       if (that.isViewDestroyed()) {
@@ -282,6 +313,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
         canEdit: canEdit,
       }));
     }
+    this.renderMessageListViewStyleDropdown();
     this.messagesIdsPromise.then(function(resultMessageIdCollection) {
       if (that.isViewDestroyed()) {
         return;
@@ -333,6 +365,52 @@ var MessageColumnView = BaseMessageColumnView.extend({
     // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
     this.newTopicView = new MessageSendView(options);
     this.topPostRegion.show(this.newTopicView);
+  },
+
+  /**
+   * Renders the messagelist view style dropdown button
+   */
+  renderMessageListViewStyleDropdown: function() {
+    var that = this,
+        html = "";
+
+    html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">';
+    html += this.currentViewStyle.label;
+    html += '<span class="icon-arrowdown"></span></a>';
+    html += '<ul class="dropdown-menu">';
+    _.each(this.ViewStyles, function(messageListViewStyle) {
+      html += '<li><a class="' + messageListViewStyle.css_class + '">' + messageListViewStyle.label + '</a></li>';
+    });
+    html += '</ul>';
+    this.ui.viewStyleDropdown.html(html);
+  },
+
+  /**
+   * @event
+   */
+  onSelectMessageListViewStyle: function(e) {
+    //console.log("messageListHeader::onSelectMessageListViewStyle()");
+    var messageListViewStyleClass,
+        messageListViewStyleSelected,
+        classes = $(e.currentTarget).attr('class').split(" ");
+    messageListViewStyleClass = _.find(classes, function(cls) {
+      return cls.indexOf(MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX) === 0;
+    });
+    var messageListViewStyleSelected = this.getMessageListViewStyleDefByCssClass(messageListViewStyleClass);
+
+    this.setViewStyle(messageListViewStyleSelected);
+    this.render();
+  },
+
+  /**
+   * get a view style definition by id
+   * @param {messageViewStyle.id} messageListViewStyleClass
+   * @returns {messageViewStyle | undefined}
+   */
+  getMessageListViewStyleDefByCssClass: function(messageListViewStyleClass) {
+    return _.find(this.ViewStyles, function(viewStyle) {
+      return viewStyle.css_class == messageListViewStyleClass;
+    });
   },
 
 });
