@@ -93,12 +93,15 @@ var MessageColumnsPanel = AssemblPanel.extend({
     if (this.isViewDestroyed()) {
       return;
     }
-    if (idea === undefined) {
+    if (idea == null) {
       idea = this.currentIdea || this.getGroupState().get("currentIdea");
-    } else if (this.currentIdea === idea) {
+    }
+    if (this.currentIdea === idea) {
       return;
     }
-    this.announcementPromise = idea.getApplicableAnnouncementPromise();
+    if (idea != null) {
+      this.announcementPromise = idea.getApplicableAnnouncementPromise();
+    }
     this.currentIdea = idea;
   },
 
