@@ -228,15 +228,12 @@ var MessageColumnView = BaseMessageColumnView.extend({
 
   initialize: function(options) {
     BaseMessageColumnView.prototype.initialize.apply(this, arguments);
-    var that = this,
-        extraEvents = {},
+    var extraEvents = {},
     collectionManager = new CollectionManager();
     this.idea = options.idea;
     this.showMessageByIdInProgress = false;
     this.basePanel = options.basePanel;
-    this.setCurrentIdea(this.idea);
     this.translationData = options.translationData;
-    this.messagesIdsPromise = this.currentQuery.getResultMessageIdCollectionPromise();
     this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
 
     _.each(this.ViewStyles, function(messageListViewStyle) {
@@ -244,7 +241,15 @@ var MessageColumnView = BaseMessageColumnView.extend({
       extraEvents[key] = 'onSelectMessageListViewStyle';
     });
     this.delegateEvents(extraEvents);
+    this.setCurrentIdea(this.idea);
+  },
 
+  setCurrentIdea: function(idea) {
+    var that = this;
+    this.currentQuery.initialize();
+    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, this.idea.getId());
+    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_CLASSIFIED_UNDER, this.model.get("message_classifier"));
+    this.messagesIdsPromise = this.currentQuery.getResultMessageIdCollectionPromise();
     this.messagesIdsPromise.then(function() {
       if (that.isViewDestroyed()) {
         return;
@@ -252,13 +257,6 @@ var MessageColumnView = BaseMessageColumnView.extend({
       that.template = that.message_template;
       that.render();
     });
-  },
-
-  setCurrentIdea: function(idea) {
-    this.currentQuery.initialize();
-    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, this.idea.getId());
-    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_CLASSIFIED_UNDER, this.model.get("message_classifier"));
-    this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
   },
 
   getGroupState: function() {
@@ -277,7 +275,8 @@ var MessageColumnView = BaseMessageColumnView.extend({
    * Synchronizes the panel with the currently selected idea (possibly none)
    */
   syncWithCurrentIdea: function() {
-    this.render();
+    var currentIdea = this.getGroupState().get('currentIdea');
+    this.setCurrentIdea(currentIdea);
   },
 
   serializeData: function() {
