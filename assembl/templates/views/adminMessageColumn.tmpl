@@ -1,16 +1,15 @@
-<div class="subpanel-body">
+<div class="subpanel-body bx">
   <div>
     <label>{{ gettext('Identifier') }}</label>
     <input class="js_column_id" type="text" name="column_identifier" placeholder="{{ gettext('Identifier') }}" value="<%= column.get('message_classifier') %>" />
   </div>
-
-  <div>
-    <label>{{ gettext('Name') }}</label>
-    <div class="js_column_name"></div>
-  </div>
   <div>
     <label>{{ gettext('Color') }}</label>
     <input class="js_column_color" type="text" name="column_color" placeholder="{{ gettext('Color') }}" value="<%= column.get('color') %>" />
+  </div>
+  <div class="bx">
+    <label>{{ gettext('Name') }}</label>
+    <div class="js_column_name"></div>
   </div>
   <div>
     <% if (index > 0) { %>
