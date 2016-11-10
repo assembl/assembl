@@ -73,9 +73,7 @@ var MessageColumnsPanel = AssemblPanel.extend({
     if(this.isViewDestroyed()) {
       return;
     }
-    collectionManager.getUserLanguagePreferencesPromise(Ctx).then(function(ulp) {
-      that.translationData = ulp.getTranslationData();
-    });
+    this.translationDataPromise = collectionManager.getUserLanguagePreferencesPromise(Ctx);
     this.setCurrentIdea(current_idea);
     this.listenTo(this.getGroupState(), "change:currentIdea", function(groupState) {
       that.setCurrentIdea(groupState.get('currentIdea'));
@@ -147,14 +145,13 @@ var MessageColumnsPanel = AssemblPanel.extend({
         that.ui.ideaAnnouncement.css({'background-image':'url('+announcementImgBackgroundLink+')'});
       }
     });
-    
-    // TODO: What if translation data is not ready by now?
+
     this.showChildView(
       "messageColumnsList",
       new MessageColumnList({
         basePanel: this,
         idea: this.currentIdea,
-        translationData: this.translationData,
+        translationDataPromise: this.translationDataPromise,
         collection: columns,
       }));
   },
@@ -233,7 +230,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     this.idea = options.idea;
     this.showMessageByIdInProgress = false;
     this.basePanel = options.basePanel;
-    this.translationData = options.translationData;
+    this.translationDataPromise = options.translationDataPromise;
     this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
 
     _.each(this.ViewStyles, function(messageListViewStyle) {
@@ -313,7 +310,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
       }));
     }
     this.renderMessageListViewStyleDropdown();
-    this.messagesIdsPromise.then(function(resultMessageIdCollection) {
+    Promise.join(this.messagesIdsPromise, this.translationDataPromise, function(resultMessageIdCollection, translationData) {
       if (that.isViewDestroyed()) {
         return;
       }
@@ -326,9 +323,9 @@ var MessageColumnView = BaseMessageColumnView.extend({
       that.destroyAnnotator();
 
       that.ui.messageCount.html(i18n.sprintf(
-        i18n.gettext("%d messages “%s”"),
+        i18n.gettext("%d “%s” messages"),
         resultMessageIdCollection.length,
-        that.model.get('name').bestValue(that.translationData)));
+        that.model.get('name').bestValue(translationData)));
 
       //Some messages may be present from before
       that.ui.messageFamilyList.empty();
@@ -351,19 +348,22 @@ var MessageColumnView = BaseMessageColumnView.extend({
   },
 
   showTopPostBox: function(options) {
+    var that = this;
     if (this.processIsEnded()) {
       return;
     }
-    _.extend(options, {
-      allow_setting_subject: false,
-      message_classifier: this.model.get('message_classifier'),
-      reply_idea: this.idea,
-      show_target_context_with_choice: false,
-      message_send_title: i18n.sprintf("Send a new %s proposal", this.model.get('name').bestValue(this.translationData)),
+    this.translationDataPromise.then(function(translationData) {
+      _.extend(options, {
+        allow_setting_subject: false,
+        message_classifier: that.model.get('message_classifier'),
+        reply_idea: that.idea,
+        show_target_context_with_choice: false,
+        message_send_title: i18n.sprintf("Send a new %s proposal", that.model.get('name').bestValue(translationData)),
+      });
+      // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
+      that.newTopicView = new MessageSendView(options);
+      that.topPostRegion.show(that.newTopicView);
     });
-    // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
-    this.newTopicView = new MessageSendView(options);
-    this.topPostRegion.show(this.newTopicView);
   },
 
   /**
