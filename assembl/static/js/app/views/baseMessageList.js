@@ -211,6 +211,11 @@ return cls.extend({
       id: "reverse_chronological",
       css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "activityfeed",
       label: i18n.gettext('Newest messages first')
+    },
+    POPULARITY: {
+      id: "popularity",
+      css_class: MESSAGE_LIST_VIEW_STYLES_CLASS_PREFIX + "popularmessages",
+      label: i18n.gettext('Most popular messages first')
     }/*,
     CHRONOLOGICAL: {
       id: "chronological",
@@ -1721,6 +1726,9 @@ return cls.extend({
       else if (viewStyle === this.ViewStyles.REVERSE_CHRONOLOGICAL) {
         this.currentViewStyle = viewStyle;
         this.currentQuery.setView(this.currentQuery.availableViews.REVERSE_CHRONOLOGICAL);
+      } else if (viewStyle === this.ViewStyles.POPULARITY) {
+        this.currentViewStyle = viewStyle;
+        this.currentQuery.setView(this.currentQuery.availableViews.POPULARITY);
       }
       /*else if (viewStyle === this.ViewStyles.CHRONOLOGICAL) {
         this.currentViewStyle = viewStyle;

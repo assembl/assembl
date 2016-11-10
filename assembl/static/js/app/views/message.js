@@ -696,13 +696,17 @@ var MessageView = Marionette.LayoutView.extend({
       if (Ctx.debugRender) {
         console.log("message:renderLikeCount() is firing for message", this.model.id);
       }
-
-      var count = this.model.get('like_count');
-      if (count > 0) {
-        this.ui.likeCounter.children(".js_likeCountI").text(String(count));
-        this.ui.likeCounter.show();
+      if (this.messageListView.currentViewStyle == this.messageListView.ViewStyles.POPULARITY) {
+        // the order will have changed.
+        this.messageListView.render();
       } else {
-        this.ui.likeCounter.hide();
+        var count = this.model.get('like_count');
+        if (count > 0) {
+          this.ui.likeCounter.children(".js_likeCountI").text(String(count));
+          this.ui.likeCounter.show();
+        } else {
+          this.ui.likeCounter.hide();
+        }
       }
     },
 

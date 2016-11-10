@@ -93,7 +93,7 @@ def get_posts(request):
     order = request.GET.get('order')
     if order is None:
         order = 'chronological'
-    assert order in ('chronological', 'reverse_chronological', 'score')
+    assert order in ('chronological', 'reverse_chronological', 'score', 'popularity')
     if order == 'score':
         assert text_search is not None
 
@@ -416,6 +416,9 @@ def get_posts(request):
         posts = posts.order_by(Content.creation_date.desc())
     elif order == 'score':
         posts = posts.order_by(Content.body_text_index.score_name.desc())
+    elif order == 'popularity':
+        # assume reverse chronological otherwise
+        posts = posts.order_by(Content.like_count.desc(), Content.creation_date.desc())
     else:
         posts = posts.order_by(Content.id)
     # print str(posts)
