@@ -248,6 +248,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     var data = BaseMessageColumnView.prototype.serializeData.apply(this, arguments);
     _.extend(data, {
       column: this.model,
+      numColumns: this.model.collection.length,
       canPost: Ctx.getCurrentUser().can(Permissions.ADD_POST),
       color: this.model.get('color') || 'black',
     });
