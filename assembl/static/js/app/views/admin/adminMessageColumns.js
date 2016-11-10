@@ -132,7 +132,7 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
   },
 
   updateActivateColumns: function(ev) {
-    var elm = $(e.target),
+    var elm = $(ev.target),
         active = elm.is(':checked'),
         idea = this.model;
     if (active) {
