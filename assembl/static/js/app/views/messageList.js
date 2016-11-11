@@ -450,6 +450,24 @@ var MessageList = BaseMessageList.extend({
   },
   */
 
+  constrainViewStyle: function(viewStyle) {
+    if (!viewStyle) {
+      //If invalid, set global default
+      viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
+    }
+    // Do we need still need this code ?
+    else if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
+      if (Ctx.getCurrentUser().isUnknownUser()) {
+        viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
+      }
+      else if ((viewStyle !== this.ViewStyles.RECENTLY_ACTIVE_THREADS) && (viewStyle !== this.ViewStyles.REVERSE_CHRONOLOGICAL)) {
+        //Recently active threads is default view
+        viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
+      }
+    }
+    return viewStyle;
+  },
+
   /**
    * Shows posts which are descendent of a given post
    * @param {string} postId

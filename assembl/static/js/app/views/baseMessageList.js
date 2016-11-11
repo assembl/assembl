@@ -1705,6 +1705,14 @@ return cls.extend({
     return targetMessageViewStyle;
   },
 
+  constrainViewStyle: function(viewStyle) {
+    if (!viewStyle) {
+      //If invalid, set global default
+      viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
+    }
+    return viewStyle;
+  },
+
   /**
    * @event
    * Set the view to the selected viewStyle, if allowable by the current user
@@ -1714,10 +1722,8 @@ return cls.extend({
    */
   setViewStyle: function(viewStyle, DEPRECATED_skip_storage) {
       //console.log("setViewStyle called with: ", viewStyle, "interface type: ", Ctx.getCurrentInterfaceType(), "current user is unknown?:", Ctx.getCurrentUser().isUnknownUser());
-      if (!viewStyle) {
-        //If invalid, set global default
-        viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
-      }
+
+      viewStyle = this.constrainViewStyle(viewStyle);
 
       if (this.isViewStyleThreadedType(viewStyle)) {
         this.currentViewStyle = viewStyle;
@@ -1735,17 +1741,6 @@ return cls.extend({
       }
       else {
         throw new Error("Unsupported view style");
-      }
-
-      // Do we need still need this code ?
-      if (Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.SIMPLE) {
-        if (Ctx.getCurrentUser().isUnknownUser()) {
-          viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
-        }
-        else if ((viewStyle !== this.ViewStyles.RECENTLY_ACTIVE_THREADS) && (viewStyle !== this.ViewStyles.REVERSE_CHRONOLOGICAL)) {
-          //Recently active threads is default view
-          viewStyle = this.ViewStyles.RECENTLY_ACTIVE_THREADS;
-        }
       }
 
       if (!DEPRECATED_skip_storage && this.storedMessageListConfig.viewStyleId != viewStyle.id) {
