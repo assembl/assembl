@@ -228,6 +228,14 @@ var MessageColumnView = BaseMessageColumnView.extend({
     },
   },
 
+  constrainViewStyle: function(viewStyle) {
+    if (!viewStyle) {
+      //If invalid, set global default
+      viewStyle = this.ViewStyles.REVERSE_CHRONOLOGICAL;
+    }
+    return viewStyle;
+  },
+
   initialize: function(options) {
     BaseMessageColumnView.prototype.initialize.apply(this, arguments);
     var extraEvents = {},
