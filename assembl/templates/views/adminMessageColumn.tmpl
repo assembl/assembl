@@ -1,24 +1,26 @@
 <div class="subpanel-body bx">
   <div>
-    <label>{{ gettext('Identifier') }}</label>
-    <input class="js_column_id" type="text" name="column_identifier" placeholder="{{ gettext('Identifier') }}" value="<%= column.get('message_classifier') %>" />
+    <div class="admin-msg-elm">
+      <label>{{ gettext('Identifier') }}</label>
+      <input class="js_column_id" type="text" name="column_identifier" placeholder="{{ gettext('Identifier') }}" value="<%= column.get('message_classifier') %>" />
+    </div>
+    <div class="admin-msg-elm">
+      <label>{{ gettext('Color') }}</label>
+      <input class="js_column_color" type="text" name="column_color" placeholder="{{ gettext('Color') }}" value="<%= column.get('color') %>" />
+    </div>
   </div>
-  <div>
-    <label>{{ gettext('Color') }}</label>
-    <input class="js_column_color" type="text" name="column_color" placeholder="{{ gettext('Color') }}" value="<%= column.get('color') %>" />
-  </div>
-  <div class="bx">
+  <div class="admin-msg-elm bx">
     <label>{{ gettext('Name') }}</label>
     <div class="js_column_name"></div>
   </div>
   <div>
     <% if (index > 0) { %>
-      <button class="js_column_up btn">{{ gettext('Up') }}</button>
+      <button class="js_column_up btn btn-cancel"><i class="icon-arrowup"></i>{{ gettext('Up') }}</button>
     <% } %>
     <% if (index < collsize-1) { %>
-      <button class="js_column_down btn">{{ gettext('Down') }}</button>
+      <button class="js_column_down btn btn-cancel"><i class="icon-arrowdown"></i>{{ gettext('Down') }}</button>
     <% } %>
-    <button class="js_column_delete btn">{{ gettext('Delete') }}</button>
+    <button class="js_column_delete btn btn-cancel">{{ gettext('Delete') }}</button>
   </div>
 
 </div>

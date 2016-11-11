@@ -90,7 +90,17 @@
     .message-subject{
         display:none!important;
     }
-    .real-time-updates{
-        display:none!important;
+}
+
+.modal-define-columns{
+    .admin-msg-col-title{
+        font-size: 16px;
+        padding: 15px 0;
+    }
+    .admin-msg-elm{
+        margin:0 10px 10px 10px;
+        label{
+            font-weight:700;
+        }
     }
 }
