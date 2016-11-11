@@ -14,10 +14,6 @@
 
 <div class="subpanel-body"  id="message_column_<%= column.getNumericId() %>">
   <div class="js_messageColumnDescription"></div>
-  <div class="js_messageColumnHeader">
-    <span class="js_messageCount"></span>
-    <span class="dropdown fr mrs mbxs js_messageListViewStyle-dropdown"></span>
-  </div>
   <% if (canPost) { %>
     <div class="js_topPostRegion"></div>
   <% } %>
@@ -28,6 +24,10 @@
     {% include "views/loader.tmpl" %}
   </div>
   <div class="messageList-list idealist <%= currentViewStyle.id %> pal">
+    <div class="js_messageColumnHeader columnHeader">
+      <span class="js_messageCount"></span>
+      <span class="dropdown fr mrs mbxs js_messageListViewStyle-dropdown"></span>
+    </div>
     <div class="js_messageFamilies_region message-column-container"></div>
   </div>
   <div class="js_messageList-bottomarea messageList-bottomarea tac hidden">

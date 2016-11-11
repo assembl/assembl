@@ -866,12 +866,13 @@ var MessageView = Marionette.LayoutView.extend({
           msg_in_progress_ctx: modelId,
           mandatory_subject_missing_msg: null
         });
-
-        this.ui.messageReplyBox.removeClass('hidden');
-        this.messageReplyBoxRegion.show(this.replyView);
-        if (this.replyBoxHasFocus) {
-          //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
-          this.focusReplyBox();
+        if(!this.model.get('message_classifier')){
+          this.ui.messageReplyBox.removeClass('hidden');
+          this.messageReplyBoxRegion.show(this.replyView);
+          if (this.replyBoxHasFocus) {
+            //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
+            this.focusReplyBox();
+          }
         }
       }
       else {

@@ -359,6 +359,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     }
     this.translationDataPromise.then(function(translationData) {
       _.extend(options, {
+        mandatory_subject_missing_msg: null,
         allow_setting_subject: false,
         message_classifier: that.model.get('message_classifier'),
         reply_idea: that.idea,

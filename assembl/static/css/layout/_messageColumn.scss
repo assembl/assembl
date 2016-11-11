@@ -75,4 +75,22 @@
     .messageSend-form{
         margin-left:0;
     }
+    .columnHeader{
+        border-top: 1px solid $txtGray;
+        border-right: 1px solid $txtGray;
+        border-left: 1px solid $txtGray;
+        padding: 20px 15px 20px 20px;
+        .dropdown-toggle{
+            color:$txtGray1;
+        }
+        .dropdown a{
+            text-decoration:none;
+        }
+    }
+    .message-subject{
+        display:none!important;
+    }
+    .real-time-updates{
+        display:none!important;
+    }
 }
