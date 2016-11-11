@@ -1066,7 +1066,7 @@ return cls.extend({
         options.reply_idea = currentIdea;
       }
 
-      if(Ctx.getCurrentUser().can(Permissions.ADD_POST) && this.template === this.message_template) {
+      if(Ctx.getCurrentUser().can(Permissions.ADD_POST) && this.template !== '#tmpl-loader') {
         this.showTopPostBox(options);
       }
 
