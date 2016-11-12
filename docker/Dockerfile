@@ -1,7 +1,7 @@
 FROM    ubuntu:16.04
 
 ENV     DEBIAN_FRONTEND noninteractive
-ARG	GITREPO=https://github.com/imaginationforpeople/assembl.git
+ARG	GITREPO=https://github.com/assembl/assembl.git
 ARG	GITBRANCH=master
 
 RUN     apt-get update && apt-get install -y \
@@ -28,11 +28,15 @@ RUN     /etc/init.d/ssh start && \
            /etc/init.d/ssh stop
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
+           fab devenv  build_virtualenv && \
+           fab devenv update_pip_requirements && \
+           /etc/init.d/ssh stop
+RUN     /etc/init.d/ssh start && \
+           ssh-keyscan localhost && \
            /etc/init.d/postgresql start && \
            /etc/init.d/redis-server start && \
-           chgrp www-data -R var && \
-           chmod g=u -R var && \
            fab devenv bootstrap_from_checkout && \
+           fab devenv set_file_permissions && \
            . venv/bin/activate && \
            assembl-add-user --email root@localhost --name "Admin" --username admin --password admin local.ini && \
            supervisorctl shutdown && \
