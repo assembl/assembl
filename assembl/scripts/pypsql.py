@@ -23,7 +23,11 @@ def main():
     if args.ask_password:
         password = getpass.getpass("password: ")
     database = args.database or "postgres"
-    cx = psycopg2.connect(user=user, password=password, database=database, host=args.host)
+    host = args.host
+    # TODO: Better check than localhost.
+    if host == 'localhost' and user == getpass.getuser() and password is None:
+        host = None
+    cx = psycopg2.connect(user=user, password=password, database=database, host=host)
     cur = cx.cursor()
     cur.execute(args.commands)
     if args.print_one:

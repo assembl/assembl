@@ -905,6 +905,15 @@ def set_file_permissions():
         run('chmod -R g+rxs var/run')
         run('find assembl/static -type d -print|xargs chmod g+rxs')
         run('find assembl/static -type f -print|xargs chmod g+r')
+        # allow postgres user to use pypsql
+        run('chmod go+x . assembl assembl/scripts')
+        run('chmod go+r assembl/scripts/pypsql.py')
+    with cd(env.venvpath):
+        run('chmod go+rx . bin')
+        run('chmod -R go+r lib')
+        run('find lib -type d -print|xargs chmod go+x')
+        run('chmod go+x bin/python')
+        run('chmod go+r bin/activate')
 
 
 @task
@@ -978,13 +987,15 @@ def check_and_create_database_user():
     with settings(warn_only=True):
         checkUser = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (env.db_user),
-            python=env.venvpath + "/bin/python", password=env.db_password,
+            python=join(env.venvpath, "bin", "python"), password=env.db_password,
             host=env.db_host, user=env.db_user, projectpath=env.projectpath))
     if checkUser.failed:
         print(yellow("User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"))
-        run_db_command(as_venvcmd('assembl-pypsql -u {db_user} -n {host} "{command}"'.format(
+        run_db_command(as_venvcmd('{python} {pypsql} -u {db_user} -n {host} "{command}"'.format(
             command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
                 env.db_user, env.db_password),
+            python=join(env.venvpath, "bin", "python"),
+            pypsql=join(env.projectpath, 'assembl', 'scripts', 'pypsql.py'),
             db_user=system_db_user(), host=env.db_host)))
         # run_db_command("bash -c 'psql -n -d postgres -c \"CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \\\'%s\\\';\"'" % (env.db_user, env.db_password))
     else:
@@ -1625,7 +1636,7 @@ def system_db_user():
     if env.mac:
         # Brew uses user
         return getuser()
-    return "postgres"  # linux posgres
+    return "postgres"  # linux postgres
 
 
 def run_db_command(command, *args, **kwargs):
