@@ -96,6 +96,7 @@ def main(global_config, **settings):
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')
     # config.include('.lib.email')
+    config.include('.lib')
     config.include('.views')
 
     # config.scan('.lib')

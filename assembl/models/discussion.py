@@ -8,6 +8,7 @@ import simplejson as json
 from pyramid.security import Allow, ALL_PERMISSIONS
 from pyramid.settings import asbool
 from pyramid.path import DottedNameResolver
+from pyramid.threadlocal import get_current_registry
 from sqlalchemy import (
     Column,
     Integer,
@@ -27,10 +28,11 @@ from sqlalchemy.exc import InvalidRequestError
 
 from assembl.lib import config
 from assembl.lib.utils import slugify, get_global_base_url, full_class_name
-from ..lib.sqla_types import URLString
+from ..lib.sqla_types import URLString, CoerceUnicode
+from ..lib.sqla import CrudOperation
 from ..lib.locale import strip_country
+from ..lib.discussion_creation import IDiscussionCreationCallback
 from . import DiscussionBoundBase, NamedClassMixin
-from ..lib.sqla_types import CoerceUnicode
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     P_READ, R_SYSADMIN, P_ADMIN_DISC, R_PARTICIPANT, P_SYSADMIN,
@@ -485,6 +487,18 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         #     NotificationSubscription.id.in_(changed))
         # for ns in changed:
         #     ns.send_to_changes(discussion_id=self.id)
+
+    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
+                        discussion_id=None, view_def="changes"):
+        """invoke the modelWatcher on creation"""
+        super(Discussion, self).send_to_changes(
+            connection=connection, operation=operation,
+            discussion_id=discussion_id, view_def=view_def)
+        if operation == CrudOperation.CREATE:
+            reg = get_current_registry()
+            for name, callback in reg.getUtilitiesFor(IDiscussionCreationCallback):
+                callback.discussionCreated(self)
+
 
     @classmethod
     def extra_collections(cls):
