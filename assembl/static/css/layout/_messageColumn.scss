@@ -90,6 +90,19 @@
     .message-subject{
         display:none!important;
     }
+    .message-column-description{
+        border: 1px solid $txtGray;
+        margin: 0 0 20px 0;
+        text-align: justify;
+        li{
+            border-bottom: 1px solid #CCC;
+            padding: 5px 15px 10px 0;
+            &:last-child{
+                border:none;
+                padding: 10px 15px 0 0;
+            }
+        }
+    }
 }
 
 .modal-define-columns{
