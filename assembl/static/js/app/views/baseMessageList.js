@@ -738,10 +738,12 @@ return cls.extend({
         return true;
       });
     }).catch(function(e) {
-      Raven.captureException(e);
+      if (raven_url) {
+        Raven.captureException(e);
+      }
       that.ui.messageFamilyList.add("<div class='error'>We are sorry, a technical error occured during rendering.</div>");
       //For debugging, uncomment the following to get stack traces add true || at the begining of the if
-      if (that.debugPaging || Ctx.debugRender) {
+      if (that.debugPaging || Ctx.debugRender || !raven_url) {
         throw e;
       }
 
@@ -1820,11 +1822,15 @@ return cls.extend({
             throw new Error("resultMessageIdCollection is missing");
           }
         } catch (e) {
-          Raven.captureException(e,
-              { messageId: messageId,
-                visitorViewData: visitorData.visitorViewData
-              }
-          );
+          if (raven_url) {
+            Raven.captureException(e,
+                { messageId: messageId,
+                  visitorViewData: visitorData.visitorViewData
+                }
+            );
+          } else {
+            throw e;
+          }
         }
 
         messageOffset = this.getResultThreadedTraversalOrder(messageId, visitorData.visitorOrderLookupTable, resultMessageIdCollection);

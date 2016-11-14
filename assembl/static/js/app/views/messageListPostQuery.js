@@ -414,7 +414,11 @@ var PostQuery = function() {
         collection.url = url;
         collection.collectionManager = new CollectionManager();
         return Promise.resolve(collection.fetch()).thenReturn(collection).catch(function(e) {
-          Raven.captureException(e);
+          if (raven_url) {
+            Raven.captureException(e);
+          } else {
+            throw e;
+          }
         });
       }
       else {
