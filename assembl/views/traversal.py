@@ -243,10 +243,13 @@ class ClassContext(TraversalContext):
         return query
 
     def get_class(self, typename=None):
+        """Returns the collection class, or subclass designated by typename"""
+        cls = self._class
         if typename is not None:
-            return get_named_class(typename)
-        else:
-            return self.collection.collection_class
+            other_cls = get_named_class(typename)
+            if other_cls and issubclass(other_cls, cls):
+                return other_cls
+        return cls
 
     def get_target_class(self):
         return self._class
@@ -470,10 +473,13 @@ class CollectionContext(TraversalContext):
         return InstanceContext(self, instance)
 
     def get_collection_class(self, typename=None):
+        """Returns the collection class, or subclass designated by typename"""
+        cls = self.collection_class
         if typename is not None:
-            return get_named_class(typename)
-        else:
-            return self.collection_class
+            other_cls = get_named_class(typename)
+            if other_cls and issubclass(other_cls, cls):
+                return other_cls
+        return cls
 
     def get_target_class(self):
         return self.collection_class

@@ -38,12 +38,13 @@ import requests
 from assembl.lib.config import get_config
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.auth import (
-    P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN)
+    P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
+    R_ADMINISTRATOR)
 from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions
 from assembl.models import (Discussion, Permission)
-from ..traversal import InstanceContext
-from . import (JSON_HEADER, FORM_HEADER)
+from ..traversal import InstanceContext, ClassContext
+from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from sqlalchemy.orm.util import aliased
 
 
@@ -822,3 +823,52 @@ def test_results(request):
              permission=P_READ)
 def test_sentry(request):
     raise RuntimeError("Let's test sentry")
+
+
+# This should be a PUT, but the backbone save method is confused by
+# discussion URLs.
+@view_config(context=ClassContext, ctx_class=Discussion,
+             request_method='POST', header=JSON_HEADER)
+def post_discussion(request):
+    from assembl.models import EmailAccount, User, LocalUserRole, Role, AbstractAgentAccount
+    ctx = request.context
+    json = request.json_body
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(user_id, None)
+    if P_SYSADMIN not in permissions:
+        raise HTTPUnauthorized()
+    cls = ctx.get_class(json.get('@type', None))
+    typename = cls.external_typename()
+    # special case: find the user first.
+    creator_email = json.get("creator_email", None)
+    db = Discussion.default_db
+    if creator_email:
+        account = db.query(AbstractAgentAccount).filter_by(
+            email=creator_email, verified=True).first()
+        if account:
+            user = account.profile
+        else:
+            user = User(name=json.get("creator_name", None), verified=True)
+            account = EmailAccount(profile=user, email=creator_email, verified=True)
+            db.add(user)
+            db.flush()
+        json['creator'] = user.uri()
+    try:
+        instances = ctx.create_object(typename, json, user_id)
+        discussion = instances[0]
+        # Hackish. Discussion API? Generic post-init method?
+        discussion.preferences.name = (
+            'discussion_' + json.get('slug', str(discussion.id)))
+        role = db.query(Role).filter_by(name=R_ADMINISTRATOR).first()
+        local_role = LocalUserRole(discussion=discussion, user=user, role=role)
+        instances.append(local_role)
+    except Exception as e:
+        raise HTTPBadRequest(e)
+    if instances:
+        first = instances[0]
+        db = first.db
+        for instance in instances:
+            db.add(instance)
+        db.flush()
+        view = request.GET.get('view', None) or 'default'
+        return CreationResponse(first, user_id, permissions, view)

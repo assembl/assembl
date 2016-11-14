@@ -223,6 +223,8 @@
         "objectives": true,
         "introduction": true,
         "introductionDetails": true,
+        "instigator": true,
+        "creator": true,
         "subscribe_to_notifications_on_signup": true,
         "web_analytics_piwik_id_site": true,
         "help_url": true,

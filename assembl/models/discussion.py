@@ -76,9 +76,11 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     homepage_url = Column(URLString, nullable=True, default=None)
     show_help_in_debate_section = Column(Boolean, default=True)
     preferences_id = Column(Integer, ForeignKey(Preferences.id))
+    creator_id = Column(Integer, ForeignKey('user.id', ondelete="SET NULL"))
 
     preferences = relationship(Preferences, backref=backref(
         'discussion'), cascade="all, delete-orphan", single_parent=True)
+    creator = relationship('User', backref="discussions_created")
 
     @classmethod
     def get_naming_column_name(cls):
@@ -162,7 +164,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         session = session or self.default_db
 
         kwargs['preferences'] = preferences = Preferences(
-            name='discussion_'+kwargs['slug'],
+            name='discussion_'+kwargs.get('slug', str(id(self))),
             cascade_preferences=Preferences.get_default_preferences(session))
         session.add(preferences)
         session.flush()

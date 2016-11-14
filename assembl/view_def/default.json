@@ -283,6 +283,7 @@
         "widget_collection_url": true,
         "objectives": true,
         "instigator": true,
+        "creator": true,
         "introduction": true,
         "introductionDetails": true,
         "sources": [":partial"],
