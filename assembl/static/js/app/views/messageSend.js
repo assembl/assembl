@@ -198,6 +198,9 @@ var messageSendView = Marionette.LayoutView.extend({
     if (!Ctx.getCurrentUser().can(Permissions.ADD_POST)) {
       var that = this, collectionManager = new CollectionManager();
       collectionManager.getDiscussionModelPromise().then(function(discussion) {
+        if (that.isViewDestroyed()) {
+          return;
+        }
         var routeUrl = null;
         if (that.reply_message_model) {
           routeUrl = that.reply_message_model.getRouterUrl({relative: true});
