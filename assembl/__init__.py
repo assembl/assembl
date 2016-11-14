@@ -67,6 +67,7 @@ def main(global_config, **settings):
             'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
             under="pyramid_tm.tm_tween_factory")
 
+    config.include('.auth')
     config.include('.models')
     # Tasks first, because it includes ZCA registration (for now)
     config.include('.tasks')

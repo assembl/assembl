@@ -775,3 +775,15 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
     preference_data_key_list = [p["id"] for p in preference_data_list]
     preference_data_key_set = set(preference_data_key_list)
     preference_data = {p["id"]: p for p in preference_data_list}
+
+
+def includeme(config):
+    """Initialize some preference values"""
+    from ..auth.social_auth import get_active_auth_strategies
+    # Note: This is temporary code, will probably create a new scalar type.
+    settings = config.get_settings()
+    # TODO: Give linguistic names to social auth providers.
+    active_strategies = {
+        k: k for k in get_active_auth_strategies(settings)}
+    active_strategies[''] = _("No special authentication")
+    Preferences.preference_data['authorization_server_backend']['scalar_values'] = active_strategies
