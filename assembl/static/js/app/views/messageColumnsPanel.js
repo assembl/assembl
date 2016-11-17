@@ -64,7 +64,11 @@ var MessageColumnsPanel = AssemblPanel.extend({
     messageColumnsList: '@ui.messageColumnsList',
     ideaAnnouncement: '@ui.ideaAnnouncement'
   },
-
+  serializeData: function() {
+    return {
+      announcementImgBackgroundLink:this.announcementImgBackgroundLink
+    };
+  },
   initialize: function(options) {
     AssemblPanel.prototype.initialize.apply(this, arguments);
     var that = this,
@@ -78,20 +82,31 @@ var MessageColumnsPanel = AssemblPanel.extend({
     this.listenTo(this.getGroupState(), "change:currentIdea", function(groupState) {
       that.setCurrentIdea(groupState.get('currentIdea'));
       that.attachmentCollection = that.currentIdea.get('attachments');
+      that.setAnnoucementBackground();
       that.render();
     });
     this.listenTo(Assembl.vent, 'messageList:showMessageById', function(id, callback) {
       that.showMessageById(id, callback);
     });
 
-    if (current_idea != null) {
-      this.attachmentCollection = current_idea.get('attachments');
+    if (current_idea !== null) {
+      this.attachmentCollection = this.currentIdea.get('attachments');
+      this.setAnnoucementBackground();
     }
-    // this.listenTo(this.attachmentCollection, 'add remove change', function(){
-    //   console.log("Listening to attachment collection");
-    //   that.render();
-    // });
 
+    this.listenTo(this.currentIdea.get('attachments'), 'add remove change', function(){
+      this.setAnnoucementBackground();
+      that.render();
+    });
+
+  },
+  setAnnoucementBackground: function(){
+      var attachmentModel = this.attachmentCollection.getSingleAttachment();
+      if (attachmentModel){
+        this.announcementImgBackgroundLink = attachmentModel.get('external_url');
+      }else{
+        this.announcementImgBackgroundLink = null;
+      }
   },
   setCurrentIdea: function(idea) {
     if (this.isViewDestroyed()) {
@@ -110,6 +125,7 @@ var MessageColumnsPanel = AssemblPanel.extend({
   },
 
   onRender: function() {
+    var that = this;
     if (this.isViewDestroyed()) {
       return;
     }
@@ -135,15 +151,9 @@ var MessageColumnsPanel = AssemblPanel.extend({
       if (that.isViewDestroyed() || announcement === undefined) {
         return;
       }
-      var announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement});
+      var announcementMessageView = new Announcements.AnnouncementMessageView({model: announcement, hide_creator:true});
       that.showChildView('ideaAnnouncement', announcementMessageView);
       that.ui.ideaAnnouncement.removeClass('hidden');
-      var attachmentModel = that.attachmentCollection.getSingleAttachment();
-      if (attachmentModel){
-        var announcementImgBackgroundLink = attachmentModel.get('external_url');
-        $('.js_ideaAnnouncement').addClass('background-annoucement');
-        that.ui.ideaAnnouncement.css({'background-image':'url('+announcementImgBackgroundLink+')'});
-      }
     });
 
     this.showChildView(
@@ -377,6 +387,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
         reply_idea: that.idea,
         show_target_context_with_choice: false,
         message_send_title: i18n.sprintf("Send a new %s proposal", that.model.get('name').bestValue(translationData)),
+        show_cancel_button:true
       });
       // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
       that.newTopicView = new MessageSendView(options);

@@ -34,16 +34,6 @@ var IdeaMessageColumnModel = Base.Model.extend({
     'color': null,
     'previous_column': null,
   },
-  /**
-   * Validate the model attributes
-   * @function app.models.ideaMessageColumn.IdeaMessageColumnModel.validate
-   */
-  validate: function(attrs, options) {
-    /**
-     * check typeof variable
-     * */
-  },
-
   parse: function(rawModel) {
     if (rawModel.name !== undefined) {
       rawModel.name = new LangString.Model(rawModel.name, {parse: true});

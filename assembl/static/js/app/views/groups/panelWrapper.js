@@ -131,7 +131,7 @@ var PanelWrapper = Marionette.LayoutView.extend({
             this.model.set('minWidth',450);
             break;
         case 'messageColumns':
-            this.model.set('minWidth',850);
+            this.model.set('minWidth',630);
             break;
         default:
             this.model.set('minWidth',0);

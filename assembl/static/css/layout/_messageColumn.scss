@@ -8,9 +8,6 @@
     .messageColumnListContainer{
         padding:10px;
     }
-    .pal{
-        padding:0!important;
-    }
     .message-family-container {
         box-shadow: none;
         margin: 0;
@@ -30,15 +27,6 @@
     .message-replybox-openbtn{
         display:none;
     }
-    .messageSend-cancelbtn{
-        display:none;
-    }
-    .messageSend-sendbtn{
-        margin: 10px 0 10px 0!important;
-    }
-    .creator_info{
-        display:none!important;
-    }
     .announcementMessage{
         box-shadow:none;
     }
@@ -52,16 +40,12 @@
         color:$white;
         padding: 0 50px;
     }
-    .background-annoucement{
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
     .announcementMessage{
-        background-color: none!important;
+        background-color: none;
         height: 180px;
     }
     .bx{
-        background: none!important;
+        background: none;
     }
     .message-conversation-block{
         display:none;
@@ -87,9 +71,6 @@
             text-decoration:none;
         }
     }
-    .message-subject{
-        display:none!important;
-    }
     .message-column-description{
         border: 1px solid $txtGray;
         margin: 0 0 20px 0;
@@ -101,6 +82,9 @@
                 border:none;
                 padding: 10px 15px 0 0;
             }
+        }
+        p{
+            padding: 10px 10px 0 10px;
         }
     }
 }

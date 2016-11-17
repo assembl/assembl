@@ -44,7 +44,9 @@
                 <% } else { %>
                   <a class="btn btn-primary btn-sm messageSend-sendbtn"><%= send_button_label %></a>
                 <% } %>
-                <a class="btn btn-cancel btn-sm messageSend-cancelbtn"><%= cancel_button_label %></a>
+                <% if ( !show_cancel_button ) { %>
+                  <a class="btn btn-cancel btn-sm messageSend-cancelbtn"><%= cancel_button_label %></a>
+                <% } %>
             </div>
           </span>
         </div>
