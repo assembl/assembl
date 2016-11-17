@@ -68,6 +68,7 @@ def get_posts(request):
     ids: explicit message ids.
     posted_after_date, posted_before_date: date selection (ISO format)
     post_author: filter by author
+    classifier: filter on message_classifier, or absence thereof (classifier=null). Can be negated with "!"
     """
     localizer = request.localizer
     discussion_id = int(request.matchdict['discussion_id'])

@@ -53,7 +53,6 @@ var IdeaMessageColumnCollection = Base.Collection.extend({
    */
   model: IdeaMessageColumnModel,
   /**
-   * NOT YET FUNCTIONAL, but cannot be left empty.
    * @member {string} app.models.ideaMessageColumn.IdeaMessageColumnCollection.url
    */
   url: function() {

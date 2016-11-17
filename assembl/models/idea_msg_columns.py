@@ -28,17 +28,24 @@ from .langstrings import LangString
 
 
 class IdeaMessageColumn(DiscussionBoundBase):
+    """ A message column definition for an Idea """
     __tablename__ = "idea_message_column"
     __table_args__ = (
         UniqueConstraint('idea_id', 'message_classifier'),)
     id = Column(Integer, primary_key=True)
-    idea_id = Column(Integer, ForeignKey(Idea.id), index=True, nullable=False)
+    idea_id = Column(Integer, ForeignKey(Idea.id), index=True, nullable=False,
+        doc="The idea to which this column applies")
     message_classifier = Column(String(100), index=True, nullable=False,
-        doc="Classifier for column views")
-    header = Column(UnicodeText)
-    previous_column_id = Column(Integer, ForeignKey(id), nullable=True, unique=True)
-    name_id = Column(Integer, ForeignKey(LangString.id), nullable=False)
-    color = Column(String(20))
+        doc=("Identifier for the column, will match "
+             ":py:attr:`assembl.models.generic.Content.message_classifier`"))
+    header = Column(UnicodeText,
+        doc="Text which will be shown above the column")
+    previous_column_id = Column(Integer, ForeignKey(id), nullable=True,
+        unique=True, doc="Allows ordering columns as a linked list")
+    name_id = Column(Integer, ForeignKey(LangString.id), nullable=False,
+        doc="The name of the column as a langstr")
+    color = Column(String(20),
+        doc="A CSS color that will be used to theme the column.")
 
     idea = relationship(Idea, backref="message_columns")
     previous_column = relationship(
