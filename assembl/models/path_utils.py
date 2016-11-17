@@ -433,8 +433,8 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         else:
             assert False, "idea param should be an Idea object or its idea"
         child_results = [
-            res for (child, res) in zip(idea.get_children(), child_results)
-            if bool(res) and idea.propagate_message_count()]
+            res for (child, res) in child_results.iteritems()
+            if bool(res) and child.propagate_message_count()]
         if len(child_results) == 1 and not result:
             # optimisation
             self.copy_result(idea_id, result, child_results[0])
