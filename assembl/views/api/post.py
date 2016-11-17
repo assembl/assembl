@@ -57,10 +57,17 @@ def get_posts(request):
     """
     Query interface on posts
     Filters have two forms:
-    only_*, is for filters that cannot be reversed (ex: only_synthesis)
+    only_*, is for filters that cannot be reversed (ex: only_synthesis, only_orphan)
     is_*, is for filters that can be reversed (ex:is_unread=true returns only unread
-    order can be chronological, reverse_chronological
-    message, is_unread=false returns only read messages)
+     message, is_unread=false returns only read messages)
+    order: can be chronological, reverse_chronological, popularity
+    root_post_id: all posts below the one specified.
+    family_post_id: all posts below the one specified, and all its ancestors.
+    post_reply_to: replies to a given post
+    root_idea_id: all posts associated with the given idea
+    ids: explicit message ids.
+    posted_after_date, posted_before_date: date selection (ISO format)
+    post_author: filter by author
     """
     localizer = request.localizer
     discussion_id = int(request.matchdict['discussion_id'])

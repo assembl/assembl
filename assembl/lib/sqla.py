@@ -1292,7 +1292,7 @@ class BaseOps(object):
                     for col in accessor.local_columns:
                         setattr(self, col.name, instance.id)
                 else:
-                    print("Multiple column relationship???")
+                    raise RuntimeError("Multiple column relationship not handled yet")
                 treated_relns.add(accessor)
             elif isinstance(accessor, property):
                 setattr(self, accessor_name, instance)
