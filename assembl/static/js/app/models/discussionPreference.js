@@ -113,6 +113,9 @@ var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
    * The preference is a list of something. Return a collection of that something.
    */
   valueAsCollection: function() {
+    if (this._subcollectionCache !== undefined) {
+      return this._subcollectionCache;
+    }
     var value = this.get('value'),
         that = this,
         collection,
@@ -130,6 +133,7 @@ var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
         that.set('value', val);
     });
     this._subcollectionCache = collection;
+    return collection;
   },
 });
 
