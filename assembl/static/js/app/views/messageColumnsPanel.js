@@ -90,15 +90,13 @@ var MessageColumnsPanel = AssemblPanel.extend({
     });
 
     if (current_idea !== null) {
-      this.attachmentCollection = this.currentIdea.get('attachments');
+      this.attachmentCollection = current_idea.get('attachments');
       this.setAnnoucementBackground();
+      this.listenTo(current_idea.get('attachments'), 'add remove change', function(){
+        this.setAnnoucementBackground();
+        that.render();
+      });
     }
-
-    this.listenTo(this.currentIdea.get('attachments'), 'add remove change', function(){
-      this.setAnnoucementBackground();
-      that.render();
-    });
-
   },
   setAnnoucementBackground: function(){
       var attachmentModel = this.attachmentCollection.getSingleAttachment();
