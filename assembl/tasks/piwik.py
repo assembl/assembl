@@ -41,21 +41,30 @@ def bind_piwik(discussion, admin=None):
     # TODO: Should this process first check that discussion.web_analytics_piwik_id_site is empty and do something different if it's not? (for example: return an error, so that we empeach discussion statistics to be scattered on different Piwik sites, which is difficult to merge)
 
     try:
-        # Check wether a Piwik user with a `user_email` login exists
+        # Check wether a Piwik user with a `user_email` email exists
         try:
-            user_already_exists = piwik_UsersManager_userExists(piwik_url, piwik_api_token, user_email)
+            user_already_exists = piwik_UsersManager_getUserByEmail(userEmail)
         except requests.ConnectionError:
-            raise RuntimeError("call to Piwik returned an error (piwik_UsersManager_userExists)")
+            raise RuntimeError("call to Piwik returned an error (piwik_UsersManager_getUserByEmail)")
 
         user_created = False
         user_password = ""
+        user_login = user_email
 
         if not user_already_exists:
-            # Create a Piwik user with `user_email` login
+            # Create a Piwik user with `user_email` as login and as email
             user_password = string_generator(size=10)
             user_created = piwik_UsersManager_addUser(piwik_url, piwik_api_token, user_email, user_password, user_email)
             if not user_created:
-                raise requests.ConnectionError()
+                # Try to find if creation failed because of rare/edge case of a Piwik user already existing with the user_email as login but not as email
+                user_with_email_as_login_exists = piwik_UsersManager_userExists(piwik_url, piwik_api_token, user_email)
+                if user_with_email_as_login_exists:
+                    # We will use this strange Piwik user
+                    user_login = user_email
+                else:
+                    raise requests.ConnectionError()
+        else:
+            user_login = user_already_exists[0]["login"]
 
         # Check wether a Piwik site with this URL already exists
         discussion_urls = discussion.get_discussion_urls()
@@ -85,7 +94,7 @@ def bind_piwik(discussion, admin=None):
 
         if site_id:
             # Give "view" permission to Piwik user on Piwik site
-            permission_given = piwik_UsersManager_setUserAccess(piwik_url, piwik_api_token, user_email, "view", [site_id])
+            permission_given = piwik_UsersManager_setUserAccess(piwik_url, piwik_api_token, user_login, "view", [site_id])
             if not permission_given:
                 raise RuntimeError("could not give view permission to Piwik user on Piwik site")
             # Set discussion's piwik id_site property
@@ -125,6 +134,30 @@ def piwik_UsersManager_userExists(piwik_url, piwik_api_token, userLogin):
 
     user_already_exists = asbool(content.get("value", False))
     return user_already_exists
+
+def piwik_UsersManager_getUserByEmail(piwik_url, piwik_api_token, userEmail):
+    params = {
+        "module": "API",
+        "format": "JSON",
+        "token_auth": piwik_api_token
+    }
+    params["method"] = "UsersManager.getUserByEmail"
+    params["userEmail"] = userEmail # Piwik has two different fields for login and email, but a user can have the same value as login and email
+    result = requests.get(piwik_url, params=params, timeout=15)
+    if result.status_code != 200:
+        raise requests.ConnectionError()
+
+    content = result.json() # returns something like [{"login":"aaa","email":"aaa@aaa.com"}] or {"result":"error","message":"L'utilisateur 'aaa@aaa.com' est inexistant."}
+    # print "piwik_UsersManager_getUserByEmail", content
+    if not content:
+        raise requests.ConnectionError()
+
+    if "result" in content and content["result"] == "error":
+        return False
+    if not isinstance(content, list):
+        raise requests.ConnectionError()
+    else:
+        return content
 
 
 def piwik_UsersManager_addUser(piwik_url, piwik_api_token, userLogin, password, email, alias=''):
