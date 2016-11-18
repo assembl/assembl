@@ -342,6 +342,14 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         """
         return get_global_base_url(require_secure)
 
+    def get_discussion_urls(self):
+        discussion_url_http = self.get_base_url(False) + "/" + self.slug
+        discussion_url_https = self.get_base_url(True) + "/" + self.slug
+        discussion_urls = [discussion_url_http]
+        if discussion_url_https != discussion_url_http:
+            discussion_urls.append(discussion_url_https)
+        return discussion_urls
+
     def check_authorized_email(self, user):
         # Check if the user has a verified email from a required domain
         require_email_domain = self.preferences['require_email_domain']
