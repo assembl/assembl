@@ -579,7 +579,7 @@ $previewNumLines: 4;
 
     font-size: 1rem; //This should be rem or something - benoitg
     a {
-      color: $gray4;
+      color: $theme_message_reply_btn_color;
       i {
         color: $theme_message_icon_color;
       }

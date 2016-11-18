@@ -93,23 +93,21 @@
       min-height: 36px;
       @include flex-grow(1);
       cursor: pointer;
-      //color: $gray4;
-      color: $txtGray1;
+      color: $theme_inactivelink_color;
       background-color: $white;
       @include transition(border-bottom 0.2s ease-in);
       border-bottom: 3px solid transparent;
       &:hover {
-        //border-bottom: 3px solid lighten($black, 70%);
-        border-bottom: 3px solid $txtGray1;
+        border-bottom: 3px solid $theme_inactivelink_color;
       }
     }
     .option:first-child {
       //border-right: 1px solid $gray;
     }
     .option.selected {
-      color: $theme_activelink_color;
+      color: $theme_activelinkFilter_color;
       font-weight: 600;
-      border-bottom: 3px solid $theme_activelink_color;
+      border-bottom: 3px solid $theme_activelinkFilter_color;
     }
 
     .show-expert-mode {

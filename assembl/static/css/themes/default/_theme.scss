@@ -37,6 +37,7 @@ $th_local_green: #4ac780;
 
 //Global to the entire scss infrastructure, mandatory variables for EVERY theme
 $theme_activelink_color: $th_local_purple5;
+$theme_activelinkFilter_color: $th_local_purple5;
 $theme_inactivelink_color: $th_local_gray3;
 $theme_checkbox_color: $th_local_purple5;
 $theme_form_field_active_border_color: $th_local_purple5;
@@ -119,6 +120,7 @@ $theme_messagesend_bg_color: $th_local_gray4;
 //The color of the icons of the action buttons on messages
 $theme_message_icon_color: $th_local_purple5;
 $theme_message_highlight_background: $theme_item_selected_color; // in a message, background color of an extract (extracts are harvested sections of a message, which are highlighted in this color)
+$theme_message_reply_btn_color:$th_local_gray6;
 
 //Panel groups
 //$theme_panel_group_header_bg_color: $th_local_gray1;
