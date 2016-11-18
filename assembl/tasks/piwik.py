@@ -43,7 +43,7 @@ def bind_piwik(discussion, admin=None):
     try:
         # Check wether a Piwik user with a `user_email` email exists
         try:
-            user_already_exists = piwik_UsersManager_getUserByEmail(userEmail)
+            user_already_exists = piwik_UsersManager_getUserByEmail(piwik_url, piwik_api_token, user_email)
         except requests.ConnectionError:
             raise RuntimeError("call to Piwik returned an error (piwik_UsersManager_getUserByEmail)")
 
@@ -57,10 +57,12 @@ def bind_piwik(discussion, admin=None):
             user_created = piwik_UsersManager_addUser(piwik_url, piwik_api_token, user_email, user_password, user_email)
             if not user_created:
                 # Try to find if creation failed because of rare/edge case of a Piwik user already existing with the user_email as login but not as email
+                print("##### user not created, trying to find why")
                 user_with_email_as_login_exists = piwik_UsersManager_userExists(piwik_url, piwik_api_token, user_email)
                 if user_with_email_as_login_exists:
                     # We will use this strange Piwik user
                     user_login = user_email
+                    print("##### we are in the rare case!")
                 else:
                     raise requests.ConnectionError()
         else:
@@ -154,7 +156,7 @@ def piwik_UsersManager_getUserByEmail(piwik_url, piwik_api_token, userEmail):
 
     if "result" in content and content["result"] == "error":
         return False
-    if not isinstance(content, list):
+    elif not isinstance(content, list):
         raise requests.ConnectionError()
     else:
         return content
