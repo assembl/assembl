@@ -504,6 +504,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             discussion_id=discussion_id, view_def=view_def)
         if operation == CrudOperation.CREATE:
             reg = get_current_registry()
+            # If any of these callbacks throws an exception, the database transaction fails and so the Discussion object will not be added into the database (Discussion is not created).
+            # Each callback must be indempotent: Calling it once or several times should produce the same result.
             for name, callback in reg.getUtilitiesFor(IDiscussionCreationCallback):
                 callback.discussionCreated(self)
 
