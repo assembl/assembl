@@ -32,6 +32,7 @@ from .idea import Idea
 
 
 class AbstractNamespacedKeyValue(object):
+    """Mixin class for namespace-key-value triples in a namespaced dictionaries (dict of dict)"""
     # No table name, these are simply common columns
     @declared_attr
     def id(self):
@@ -39,14 +40,17 @@ class AbstractNamespacedKeyValue(object):
 
     @declared_attr
     def namespace(self):
+        """The namespace of the key-value tuple"""
         return Column("namespace", String)#, index=True)
 
     @declared_attr
     def key(self):
+        """The key of the key-value tuple"""
         return Column("key", String)#, index=True)
 
     @declared_attr
     def value(self):
+        """The value of the key-value tuple"""
         return Column("value", Text)
 
     target_name = None
@@ -100,9 +104,11 @@ class AbstractNamespacedKeyValue(object):
 
 class AbstractPerUserNamespacedKeyValue(
         AbstractNamespacedKeyValue):
+    """Mixin class for user-namespace-key-value quads in a user-local namespaced dictionaries (dict of dict)"""
     # No table name, these are simply common columns
     @declared_attr
     def user_id(self):
+        """The user of the key-value tuple"""
         return Column("user_id", Integer, ForeignKey(User.id), index=True)
 
     @declared_attr
@@ -155,6 +161,7 @@ class AbstractPerUserNamespacedKeyValue(
 
 
 class NamespacedUserKVCollection(MutableMapping):
+    """View of the :py:class:`AbstractPerUserNamespacedKeyValue` for a given namespace as a python dict"""
 
     def __init__(self, target, user_id, namespace):
         self.target = target
@@ -244,6 +251,7 @@ class NamespacedUserKVCollection(MutableMapping):
 
 
 class NamespacedKVCollection(MutableMapping):
+    """View of the :py:class:`AbstractNamespacedKeyValue` for a given namespace as a python dict"""
 
     def __init__(self, target, namespace):
         self.target = target
@@ -324,6 +332,9 @@ class NamespacedKVCollection(MutableMapping):
 
 
 class UserPreferenceCollection(NamespacedUserKVCollection):
+    """The 'preferences' namespace has some specific behaviour.
+
+    These are user preferences. See :py:mod:.preferences."""
     PREFERENCE_NAMESPACE = "preferences"
     ALLOW_OVERRIDE = "allow_user_override"
 
@@ -395,6 +406,7 @@ class UserPreferenceCollection(NamespacedUserKVCollection):
 
 
 class UserNsDict(MutableMapping):
+    """The dictonary of :py:class:NamespacedUserKVCollection, indexed by namespace, as a python dict"""
     def __init__(self, target, user_id):
         self.target = target
         self.user_id = user_id
@@ -441,6 +453,7 @@ class UserNsDict(MutableMapping):
 
 
 class NsDict(MutableMapping):
+    """The dictonary of :py:class:NamespacedKVCollection, indexed by namespace, as a python dict"""
     def __init__(self, target):
         self.target = target
 
@@ -483,6 +496,7 @@ class NsDict(MutableMapping):
 
 class DiscussionPerUserNamespacedKeyValue(
         DiscussionBoundBase, AbstractPerUserNamespacedKeyValue):
+    """User-local namespaced dictionaries for a given discussion"""
     __tablename__ = 'discussion_peruser_namespaced_key_value'
 
     discussion_id = Column(Integer, ForeignKey(Discussion.id), index=True)
@@ -515,6 +529,7 @@ Discussion.per_user_namespaced_kv_class = DiscussionPerUserNamespacedKeyValue
 
 class IdeaNamespacedKeyValue(
         DiscussionBoundBase, AbstractNamespacedKeyValue):
+    """Namespaced dictionaries for a given idea (not user-bound)"""
     __tablename__ = 'idea_namespaced_key_value'
 
     idea_id = Column(Integer, ForeignKey(Idea.id), index=True)
