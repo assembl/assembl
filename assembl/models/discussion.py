@@ -496,19 +496,16 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         # for ns in changed:
         #     ns.send_to_changes(discussion_id=self.id)
 
-    def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
-                        discussion_id=None, view_def="changes"):
-        """invoke the modelWatcher on creation"""
-        super(Discussion, self).send_to_changes(
-            connection=connection, operation=operation,
-            discussion_id=discussion_id, view_def=view_def)
-        if operation == CrudOperation.CREATE:
-            reg = get_current_registry()
-            # If any of these callbacks throws an exception, the database transaction fails and so the Discussion object will not be added into the database (Discussion is not created).
-            # Each callback must be indempotent: Calling it once or several times should produce the same result.
-            for name, callback in reg.getUtilitiesFor(IDiscussionCreationCallback):
-                callback.discussionCreated(self)
-
+    def invoke_callbacks_after_creation(self, callbacks=None):
+        reg = get_current_registry()
+        # If any of these callbacks throws an exception, the database
+        # transaction fails and so the Discussion object will not
+        # be added to the database (Discussion is not created).
+        known_callbacks = reg.getUtilitiesFor(IDiscussionCreationCallback)
+        if callbacks is not None:
+            known_callbacks = {k: v for (k, v) in known_callbacks.iteritems() if k in callbacks}
+        for name, callback in known_callbacks:
+            callback.discussionCreated(self)
 
     @classmethod
     def extra_collections(cls):

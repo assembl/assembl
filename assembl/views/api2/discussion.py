@@ -862,6 +862,7 @@ def post_discussion(request):
         role = db.query(Role).filter_by(name=R_ADMINISTRATOR).first()
         local_role = LocalUserRole(discussion=discussion, user=user, role=role)
         instances.append(local_role)
+        discussion.invoke_callbacks_after_creation()
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:

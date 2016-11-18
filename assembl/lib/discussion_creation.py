@@ -10,8 +10,16 @@ resolver = DottedNameResolver(__package__)
 
 
 class IDiscussionCreationCallback(interface.Interface):
-    """defines a plugin that will called when a discussion is created"""
+    """defines a plugin that will called when a discussion is created.
+
+    Each callback must be idempotent: Calling it once or several times
+    should produce the same result."""
     def discussionCreated(self, discussion):
+        """called when a discussion is created.
+        No return value, may raise exceptions.
+        Exceptions should make the transaction fail, and the discussion
+        will not be created.
+        """
         pass
 
 

@@ -144,12 +144,14 @@ def discussion_admin(request):
 
         discussion = Discussion(
             topic=topic,
+            creator_id=user_id,
             slug=slug
         )
 
         # Could raise an exception if there is no/incorrect scheme passed
         discussion.homepage = homepage
         session.add(discussion)
+        discussion.invoke_callbacks_after_creation()
 
         create_default_permissions(session, discussion)
         mailbox_class = (
