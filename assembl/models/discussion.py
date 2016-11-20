@@ -29,7 +29,7 @@ from assembl.lib import config
 from assembl.lib.utils import slugify, get_global_base_url, full_class_name
 from ..lib.sqla_types import URLString
 from ..lib.locale import strip_country
-from . import DiscussionBoundBase
+from . import DiscussionBoundBase, NamedClassMixin
 from ..lib.sqla_types import CoerceUnicode
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
@@ -45,7 +45,7 @@ from ..semantic.namespaces import (CATALYST, ASSEMBL, DCTERMS)
 resolver = DottedNameResolver(__package__)
 
 
-class Discussion(DiscussionBoundBase):
+class Discussion(DiscussionBoundBase, NamedClassMixin):
     """
     The context for a specific Assembl discussion.
 
@@ -79,6 +79,10 @@ class Discussion(DiscussionBoundBase):
 
     preferences = relationship(Preferences, backref=backref(
         'discussion'), cascade="all, delete-orphan", single_parent=True)
+
+    @classmethod
+    def get_naming_column_name(cls):
+        return "slug"
 
     @property
     def admin_source(self):

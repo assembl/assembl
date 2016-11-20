@@ -203,10 +203,17 @@ class ClassContext(TraversalContext):
         self.class_alias = aliased(cls, name="alias_%s" % (cls.__name__))
 
     def __getitem__(self, key):
+        from assembl.models import NamedClassMixin
+        num_key = None
+        instance = None
         try:
-            instance = self._class.get_instance(int(key))
+            num_key = int(key)
         except ValueError:
-            raise KeyError()
+            pass
+        if num_key is not None:
+            instance = self._class.get_instance(num_key)
+        if instance is None and issubclass(self._class, NamedClassMixin):
+            instance = self._class.getByName(key)
         if not instance:
             raise KeyError()
         return InstanceContext(self, instance)

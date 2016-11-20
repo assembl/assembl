@@ -17,7 +17,7 @@ from sqlalchemy.orm import relationship
 from ..lib.sqla_types import CoerceUnicode
 from pyramid.httpexceptions import HTTPUnauthorized
 
-from . import Base, DeclarativeAbstractMeta
+from . import Base, DeclarativeAbstractMeta, NamedClassMixin
 from ..auth import *
 from ..lib.abc import classproperty
 from ..lib.locale import _, strip_country
@@ -37,7 +37,7 @@ def merge_json(base, patch):
     return base
 
 
-class Preferences(MutableMapping, Base):
+class Preferences(MutableMapping, Base, NamedClassMixin):
     """
     Cascading preferences
     """
@@ -50,6 +50,10 @@ class Preferences(MutableMapping, Base):
     pref_json = Column("values", Text())  # JSON blob
 
     cascade_preferences = relationship("Preferences", remote_side=[id])
+
+    @classmethod
+    def get_naming_column_name(self):
+        return "name"
 
     @classmethod
     def get_by_name(cls, name=None, session=None):

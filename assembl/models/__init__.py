@@ -89,6 +89,19 @@ class DiscussionBoundTombstone(Tombstone):
             discussion_id or self.discussion_id, self)
 
 
+class NamedClassMixin(object):
+    """A mix-in for models that have a unique name"""
+    @abstractclassmethod
+    def get_naming_column_name(self):
+        return "name"
+
+    @classmethod
+    def getByName(cls, name, session=None, query=None):
+        session = session or cls.default_db
+        query = query or session.query(cls)
+        return query.filter_by(**{cls.get_naming_column_name(): name}).first()
+
+
 from .auth import (
     AbstractAgentAccount,
     AgentProfile,
