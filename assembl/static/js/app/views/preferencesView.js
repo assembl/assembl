@@ -956,8 +956,7 @@ var GlobalPreferencesView = PreferencesView.extend({
     return Ctx.getCurrentUser().can(Permissions.SYSADMIN);
   },
   getNavigationMenu: function() {
-    // TODO: Change this
-    return new AdminNavigationMenu({selectedSection: "discussion_preferences"});
+    return new AdminNavigationMenu({selectedSection: "global_preferences"});
   }
 });
 

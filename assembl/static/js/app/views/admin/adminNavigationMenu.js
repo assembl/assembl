@@ -7,6 +7,7 @@
 var Marionette = require('../../shims/marionette.js'),
     $ = require('jquery'),
     i18n = require('../../utils/i18n.js'),
+    Permissions = require('../../utils/permissions.js'),
     Ctx = require('../../common/context.js');
 
 var adminNavigationMenu = Marionette.LayoutView.extend({
@@ -27,7 +28,8 @@ var adminNavigationMenu = Marionette.LayoutView.extend({
 
   serializeData: function() {
     return {
-      selectedSection: this.selectedSection
+      selectedSection: this.selectedSection,
+      is_sysadmin: Ctx.getCurrentUser().can(Permissions.SYSADMIN),
     };
   },
 

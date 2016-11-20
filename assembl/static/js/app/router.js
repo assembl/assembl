@@ -28,6 +28,7 @@ var Router = Marionette.AppRouter.extend({
     "settings": "settings",
     "about": "about",
     "discussion_preferences": "adminDiscussionPreferences",
+    "global_preferences": "adminGlobalPreferences",
     "sentrytest": "sentryTest",
     "user/notifications": "userNotifications",
     "user/profile": "profile",

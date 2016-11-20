@@ -32,6 +32,7 @@ class FrontendUrls(object):
         'settings': '/settings',
         'about': '/about',
         'admin_discussion_preferences': '/discussion_preferences',
+        'admin_global_preferences': '/global_preferences',
         'notifications': '/notifications',
         'user_notifications': '/user/notifications',
         'profile': '/user/profile',
