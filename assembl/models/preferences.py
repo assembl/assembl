@@ -18,7 +18,7 @@ from ..lib.sqla_types import CoerceUnicode
 from pyramid.httpexceptions import HTTPUnauthorized
 
 from . import Base, DeclarativeAbstractMeta
-from ..auth import P_READ, Everyone, P_ADMIN_DISC, P_SYSADMIN, P_ADD_IDEA
+from ..auth import *
 from ..lib.abc import classproperty
 from ..lib.locale import _, strip_country
 from ..lib import config
@@ -247,6 +247,13 @@ class Preferences(MutableMapping, Base):
                 assert is_email(value), "Not an email"
             elif data_type == "locale":
                 pass  # TODO
+            elif data_type == "permission":
+                assert value in ASSEMBL_PERMISSIONS
+            elif data_type == "role":
+                if value not in SYSTEM_ROLES:
+                    from .auth import Role
+                    assert self.db.query(Role).filter_by(
+                        name=value).count() == 1, "Unknown role"
             elif data_type == "domain":
                 from pyisemail.validators.dns_validator import DNSValidator
                 v = DNSValidator()
@@ -523,6 +530,82 @@ class Preferences(MutableMapping, Base):
             # "backend_validator_function": func_name...?,
             "default": {"negative": {"en": "Negative", "fr": "Négatif"}, "positive": {"en": "Positive", "fr": "Positif"}},
             "item_default": {"": {"en": ""}},
+        },
+
+        # The specification of the default permissions for a discussion
+        {
+            "id": "default_permissions",
+            "name": _("Default permissions"),
+            "value_type": "dict_of_role_to_list_of_permission",
+            "show_in_preferences": False,
+            "description": _(
+                "The basic permissions for a new discussion"),
+            "allow_user_override": None,
+            "modification_permission": P_SYSADMIN,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "item_default": {
+                R_PARTICIPANT: [P_READ],
+            },
+            "default": {
+                R_ADMINISTRATOR: [
+                    P_ADD_EXTRACT,
+                    P_ADD_IDEA,
+                    P_ADD_POST,
+                    P_ADMIN_DISC,
+                    P_DELETE_MY_POST,
+                    P_DELETE_POST,
+                    P_DISC_STATS,
+                    P_EDIT_EXTRACT,
+                    P_EDIT_IDEA,
+                    P_EDIT_MY_EXTRACT,
+                    P_EDIT_POST,
+                    P_EDIT_SYNTHESIS,
+                    P_EXPORT_EXTERNAL_SOURCE,
+                    P_MODERATE,
+                    P_SEND_SYNTHESIS,
+                    P_VOTE,
+                ],
+                R_CATCHER: [
+                    P_ADD_EXTRACT,
+                    P_ADD_IDEA,
+                    P_ADD_POST,
+                    P_DELETE_MY_POST,
+                    P_EDIT_EXTRACT,
+                    P_EDIT_IDEA,
+                    P_EDIT_MY_EXTRACT,
+                    P_VOTE,
+                ],
+                R_MODERATOR: [
+                    P_ADD_EXTRACT,
+                    P_ADD_IDEA,
+                    P_ADD_POST,
+                    P_DELETE_MY_POST,
+                    P_DELETE_POST,
+                    P_DISC_STATS,
+                    P_EDIT_EXTRACT,
+                    P_EDIT_IDEA,
+                    P_EDIT_MY_EXTRACT,
+                    P_EDIT_POST,
+                    P_EDIT_SYNTHESIS,
+                    P_EXPORT_EXTERNAL_SOURCE,
+                    P_MODERATE,
+                    P_SEND_SYNTHESIS,
+                    P_VOTE,
+                ],
+                R_PARTICIPANT: [
+                    P_ADD_POST,
+                    P_DELETE_MY_POST,
+                    P_VOTE,
+                ],
+                Authenticated: [
+                    P_SELF_REGISTER,
+                ],
+                Everyone: [
+                    P_READ,
+                    P_READ_PUBLIC_CIF,
+                ],
+            },
         },
 
         # Registration requires being a member of this email domain.

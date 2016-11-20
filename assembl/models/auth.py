@@ -1362,33 +1362,15 @@ class DiscussionPermission(DiscussionBoundBase):
 def create_default_permissions(session, discussion):
     permissions = {p.name: p for p in session.query(Permission).all()}
     roles = {r.name: r for r in session.query(Role).all()}
-
-    def add_perm(permission_name, role_names):
-        # Note: Must be called within transaction manager
-        for role in role_names:
+    defaults = discussion.preferences['default_permissions']
+    for role_name, permission_names in defaults.iteritems():
+        role = roles.get(role_name, None)
+        assert role, "Unknown role: " + role_name
+        for permission_name in permission_names:
+            permission = permissions.get(permission_name, None)
+            assert permission, "Unknown permission: " + permission_name
             session.add(DiscussionPermission(
-                discussion=discussion, role=roles[role],
-                permission=permissions[permission_name]))
-    add_perm(P_READ, [Everyone])
-    add_perm(P_SELF_REGISTER, [Authenticated])
-    add_perm(P_ADD_POST,
-             [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_EDIT_POST, [R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_DELETE_POST, [R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_DELETE_MY_POST, [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_ADD_EXTRACT,
-             [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_EDIT_EXTRACT, [R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_EDIT_MY_EXTRACT, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_ADD_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_EDIT_IDEA, [R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_EDIT_SYNTHESIS, [R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_SEND_SYNTHESIS, [R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_ADMIN_DISC, [R_ADMINISTRATOR])
-    add_perm(P_SYSADMIN, [R_ADMINISTRATOR])
-    add_perm(P_MODERATE, [R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_VOTE, [R_PARTICIPANT, R_CATCHER, R_MODERATOR, R_ADMINISTRATOR])
-    add_perm(P_DISC_STATS, [R_MODERATOR, R_ADMINISTRATOR])
+                discussion=discussion, role=role, permission=permission))
 
 
 class AnonymousUser(DiscussionBoundBase, User):

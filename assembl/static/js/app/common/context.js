@@ -1725,6 +1725,18 @@ Context.prototype = {
     return this._discussionPreferences;
   },
   /**
+   * Returns names of roles
+   * @returns {Array}
+   * @function app.common.context.Context.getRoleNames
+  **/
+  getRoleNames: function() {
+    if (this._roleNames){
+      return this._roleNames;
+    }
+    this._roleNames = this.getJsonFromScriptTag('role-names');
+    return this._roleNames;
+  },
+  /**
    * Checks if translation service is available
    * @returns {Boolean}
    * @function app.common.context.Context.hasTranslationService

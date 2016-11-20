@@ -66,6 +66,10 @@ function getPreferenceEditView(preferenceModel, subViewKey, useKey) {
       return JsonPreferenceView;
     case "int":
       return IntPreferenceView;
+    case "permission":
+      return PermissionPreferenceView;
+    case "role":
+      return RolePreferenceView;
     case "string":
       return StringPreferenceView;
     case "langstr":
@@ -444,6 +448,50 @@ var LocalePreferenceView = ScalarPreferenceView.extend({
   serializeData: function() {
     var data = ScalarPreferenceView.prototype.serializeData.apply(this, arguments);
     data.scalarOptions = Ctx.getLocaleToLanguageNameCache();
+    return data;
+  },
+});
+
+
+/**
+ * View to set a permission value preference (chosen from the set of permissions)
+ * @class app.views.preferencesView.PermissionPreferenceView
+ * @extends app.views.preferencesView.ScalarPreferenceView
+ */
+var PermissionPreferenceView = ScalarPreferenceView.extend({
+  constructor: function PermissionPreferenceView() {
+    ScalarPreferenceView.apply(this, arguments);
+  },
+  serializeData: function() {
+    var data = ScalarPreferenceView.prototype.serializeData.apply(this, arguments);
+    data.scalarOptions = {};
+    _.each(Permissions, function(key) {
+      data.scalarOptions[key] = key;
+    });
+    return data;
+  },
+});
+
+
+/**
+ * View to set a role value preference (chosen from the set of roles)
+ * @class app.views.preferencesView.RolePreferenceView
+ * @extends app.views.preferencesView.ScalarPreferenceView
+ */
+var RolePreferenceView = ScalarPreferenceView.extend({
+  constructor: function RolePreferenceView() {
+    ScalarPreferenceView.apply(this, arguments);
+  },
+  initialize: function(options) {
+    ScalarPreferenceView.prototype.initialize.apply(this, arguments);
+    this.roles = Ctx.getRoleNames();
+  },
+  serializeData: function() {
+    var data = ScalarPreferenceView.prototype.serializeData.apply(this, arguments);
+    data.scalarOptions = {};
+    _.each(this.roles, function(key) {
+      data.scalarOptions[key] = key;
+    });
     return data;
   },
 });

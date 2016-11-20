@@ -11,7 +11,7 @@ from pyramid.httpexceptions import (
     HTTPNotFound, HTTPSeeOther, HTTPUnauthorized)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
-from assembl.models import Discussion
+from assembl.models import Discussion, Role
 from assembl.models.post import Post
 from assembl.models.idea import Idea
 from assembl.models.langstrings import Locale
@@ -212,6 +212,8 @@ def home_view(request):
     context['translation_locale_names_json'] = locale_labels
 
     context['preferences_json'] = json.dumps(dict(preferences))
+    role_names = [x for (x) in session.query(Role.name).all()]
+    context['role_names'] = json.dumps(role_names)
 
     response = render_to_response('../../templates/index.jinja2', context,
                                   request=request)
