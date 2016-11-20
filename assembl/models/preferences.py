@@ -203,19 +203,23 @@ class Preferences(MutableMapping, Base):
 
     def validate_single_value(self, key, value, pref_data, data_type):
         # TODO: Validation for the datatypes.
-        # Types: (bool|json|int|(list_of_|strdict_of_)?(string|text|scalar|url|email|domain|locale|langstr))
+        # base_type: (bool|json|int|string|text|scalar|url|email|domain|locale|langstr|permission|role)
+        # type: base_type|list_of_(type)|dict_of_(base_type)_to_(type)
         if data_type.startswith("list_of_"):
             assert isinstance(value, (list, tuple)), "Not a list"
             return [
                 self.validate_single_value(key, val, pref_data, data_type[8:])
                 for val in value]
-        elif data_type.startswith("strdict_of_"):
+        elif data_type.startswith("dict_of_"):
             assert isinstance(value, (dict)), "Not a dict"
+            key_type, value_type = data_type[8:].split("_to_", 1)
+            assert "_" not in key_type
             return {
-                self.validate_single_value(key, k, pref_data, "string"):
-                self.validate_single_value(key, v, pref_data, data_type[11:])
+                self.validate_single_value(key, k, pref_data, key_type):
+                self.validate_single_value(key, v, pref_data, value_type)
                 for (k, v) in value.iteritems()}
         elif data_type == "langstr":
+            # Syntactic sugar for dict_of_locale_to_string
             assert isinstance(value, (dict)), "Not a dict"
             return {
                 self.validate_single_value(key, k, pref_data, "locale"):
@@ -303,7 +307,9 @@ class Preferences(MutableMapping, Base):
     # id (the key for the preference as a dictionary)
     # name (for interface)
     # description (for interface, hover help)
-    # value_type: "(list_of_)?(bool|json|int|string|text|scalar|url|email|domain|locale)"
+    # value_type: given by the following grammar:
+    #       base_type = (bool|json|int|string|text|scalar|url|email|domain|locale|langstr|permission|role)
+    #       type = base_type|list_of_(type)|dict_of_(base_type)_to_(type)
     #   more types may be added, but need to be added to both frontend and backend
     # show_in_preferences: Do we always hide this preference?
     # modification_permission: What permission do you need to change that preference?
@@ -312,8 +318,7 @@ class Preferences(MutableMapping, Base):
     #   if so what permission is required? (default False)
     # scalar_values: "{value: "label"}" a dictionary of permitted options for a scalar value type
     # default: the default value
-    # item_default: the default value for new items in a list_of_... or strdict_of_...
-    # item_default_<n>: the default value for new items in a (list_of_|dict_of)^n...
+    # item_default: the default value for new items in a list_of_T... or dict_of_BT_to_T...
 
     preference_data_list = [
         # Languages used in the discussion.
@@ -323,6 +328,7 @@ class Preferences(MutableMapping, Base):
             "name": _("Languages used"),
             "description": _("All languages expected in the discussion"),
             "allow_user_override": None,
+            "item_default": "en",
             "default": [strip_country(x) for x in config.get_config().get(
                 'available_languages', 'fr en').split()]
         },
@@ -486,6 +492,7 @@ class Preferences(MutableMapping, Base):
             "modification_permission": P_ADMIN_DISC,
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
+            "item_default": "",
             "default": ["positive", "negative"],
         },
 
@@ -493,7 +500,7 @@ class Preferences(MutableMapping, Base):
         {
             "id": "default_column_colors",
             "name": _("Default colors of columns in column view"),
-            "value_type": "strdict_of_string",
+            "value_type": "dict_of_string_to_string",
             "description": _(
                 "What are (default) theme colors of columns in multi-column views?"),
             "allow_user_override": None,
@@ -507,7 +514,7 @@ class Preferences(MutableMapping, Base):
         {
             "id": "default_column_names",
             "name": _("Names of columns in column view"),
-            "value_type": "strdict_of_langstr",
+            "value_type": "dict_of_string_to_langstr",
             "description": _(
                 "What are (default) names of columns in multi-column views, in each discussion language?"),
             "allow_user_override": None,
@@ -515,8 +522,7 @@ class Preferences(MutableMapping, Base):
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
             "default": {"negative": {"en": "Negative", "fr": "Négatif"}, "positive": {"en": "Positive", "fr": "Positif"}},
-            "item_default": {},
-            "item_default_1": "",
+            "item_default": {"": {"en": ""}},
         },
 
         # Registration requires being a member of this email domain.
@@ -624,7 +630,7 @@ class Preferences(MutableMapping, Base):
         # Default expanded/collapsed state of each idea in the table of ideas.
         # A user can override it by opening/closing an idea.
         # This is a hash where keys are ideas ids, and values are booleans.
-        # We could use strdict_of_bool, but that would clutter the interface.
+        # We could use dict_of_string_to_bool, but that would clutter the interface.
         {
             "id": "default_table_of_ideas_collapsed_state",
             "name": _("Default Table of Ideas Collapsed state"),

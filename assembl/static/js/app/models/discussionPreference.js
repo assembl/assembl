@@ -40,10 +40,11 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
    * @function app.models.discussionPreference.DiscussionIndividualPreferenceModel.valueAsCollection
    * The preference is a list or dict of something. Return a collection of that something, or dict items.
    */
-  valueAsCollection: function(preferenceData) {
+  valueAsCollection: function(preferenceData, as_list) {
+    // MISSING: Better handling of default_item_X and default_Key...
     if (this._subcollectionCache === undefined) {
       var collection, that = this, value = this.get('value');
-      if (Array.isArray(preferenceData.default)) {
+      if (as_list) {
         if (!Array.isArray(value)) {
           // Error in value type
           // shallow clone, hopefully good enough
@@ -58,7 +59,7 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
               });
             that.set('value', val);
         });
-      } else if (_.isObject(preferenceData.default)) {
+      } else {
         if (!_.isObject(value)) {
           // Error in value type
           // shallow clone, hopefully good enough
@@ -79,10 +80,6 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
               });
             that.set('value', val);
         });
-      } else {
-        console.error("valueAsCollection called on an elementary object?");
-        collection = new DiscussionPreferenceSubCollection();
-        // Ideally recreate from the model's default.
       }
       this._subcollectionCache = collection;
     }
