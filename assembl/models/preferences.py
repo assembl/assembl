@@ -163,6 +163,9 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
 
     def can_edit(self, key, permissions=(P_READ,), pref_data=None):
         if P_SYSADMIN in permissions:
+            if key == 'name' and self.name == self.BASE_PREFS_NAME:
+                # Protect the base name
+                return False
             return True
         if key in ('name', '@extends', 'preference_data'):
             # TODO: Delegate permissions.
@@ -312,6 +315,8 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         data = self.get_preference_data()
         keys = self.preference_data_key_list
         return [data[key] for key in keys]
+
+    crud_permissions = CrudPermissions(P_SYSADMIN)
 
     # This defines the allowed properties and their data format
     # Each preference metadata has the following format:

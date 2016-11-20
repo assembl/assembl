@@ -490,7 +490,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             CollectionDefinition, AbstractCollectionDefinition)
         from .notification import NotificationSubscription
         from ..views.traversal import (
-            UserNsDictCollection, PreferenceCollection)
+            UserNsDictCollection, DiscussionPreferenceCollection)
 
         class AllUsersCollection(AbstractCollectionDefinition):
             def __init__(self, cls):
@@ -590,7 +590,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                 'active_widgets': ActiveWidgetsCollection(cls),
                 'sources': SourcesCollection(cls),
                 'user_ns_kv': UserNsDictCollection(cls),
-                'settings': PreferenceCollection(cls)}
+                'settings': DiscussionPreferenceCollection(cls)}
 
     all_participants = relationship(
         User, viewonly=True, secondary=LocalUserRole.__table__,

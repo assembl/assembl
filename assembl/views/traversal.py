@@ -39,21 +39,23 @@ class DictContext(object):
         return self.subobjects[key]
 
 
+ACL_READABLE = [(Allow, R_SYSADMIN, ALL_PERMISSIONS),
+                (Allow, Everyone, P_READ), DENY_ALL]
+ACL_RESTRICTIVE = [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
+
+
 class AppRoot(DictContext):
     """The root context. Anything not defined by a root comes here."""
     def __init__(self):
-        readable = [(Allow, R_SYSADMIN, ALL_PERMISSIONS),
-                    (Allow, Everyone, P_READ), DENY_ALL]
-        restrictive = [(Allow, R_SYSADMIN, ALL_PERMISSIONS), DENY_ALL]
-        super(AppRoot, self).__init__(readable, {
-            'data': Api2Context(self, restrictive),
-            'admin': DictContext(restrictive, {
+        super(AppRoot, self).__init__(ACL_READABLE, {
+            'data': Api2Context(self, ACL_RESTRICTIVE),
+            'admin': DictContext(ACL_RESTRICTIVE, {
                 'permissions': DictContext(None, {
                     'discussion': DiscussionsContext()})}),
-            'api': DictContext(restrictive, {
+            'api': DictContext(ACL_RESTRICTIVE, {
                 'v1': DictContext(None, {
                     'discussion': DiscussionsContext(),
-                    'token': DictContext(readable)})})})
+                    'token': DictContext(ACL_READABLE)})})})
 
     __parent__ = None
     __name__ = "Assembl"
@@ -203,7 +205,7 @@ class ClassContext(TraversalContext):
         self.class_alias = aliased(cls, name="alias_%s" % (cls.__name__))
 
     def __getitem__(self, key):
-        from assembl.models import NamedClassMixin
+        from assembl.models import NamedClassMixin, Preferences
         num_key = None
         instance = None
         try:
@@ -216,6 +218,9 @@ class ClassContext(TraversalContext):
             instance = self._class.getByName(key)
         if not instance:
             raise KeyError()
+        # TODO: use a protocol for this
+        if isinstance(instance, Preferences):
+            return PreferenceContext(self, instance)
         return InstanceContext(self, instance)
 
     def get_default_view(self):
@@ -1015,22 +1020,19 @@ class NsDictCollection(AbstractCollectionDefinition):
         return c[namespace]
 
 
+
 class PreferenceContext(TraversalContext):
     """Represents a set of preference values (eg for a discussion)
 
-    Backed by a :py:class:`PreferenceCollection`, sub-contexts are
-    :py:class:`PreferenceValueContext`"""
-    def __init__(self, parent_context, collection):
+    Sub-contexts are :py:class:`PreferenceValueContext`"""
+    def __init__(self, parent_context, preferences):
         # Do not call super, because it will set the acl.
-        self.collection = collection
+        self.preferences = preferences
         self.__parent__ = parent_context
-        self.parent_instance = parent_context._instance
-        self.preferences = collection.as_collection(self.parent_instance)
 
     @property
     def __acl__(self):
-        # collection acl?
-        return self.__parent__.__acl__
+        return ACL_RESTRICTIVE
 
     def __getitem__(self, key):
         """returns the :py:class:`PreferenceValueContext` for that preference"""
@@ -1041,13 +1043,29 @@ class PreferenceContext(TraversalContext):
         return Preferences
 
 
+class DiscussionPreferenceContext(PreferenceContext):
+    """Represents a set of preference values for a discussion
+
+    Backed by a :py:class:`DiscussionPreferenceCollection`, sub-contexts are
+    :py:class:`PreferenceValueContext`"""
+    def __init__(self, parent_context, collection):
+        self.collection = collection
+        self.parent_instance = parent_context._instance
+        preferences = collection.as_collection(self.parent_instance)
+        super(DiscussionPreferenceContext, self).__init__(parent_context, preferences)
+
+    @property
+    def __acl__(self):
+        # collection acl?
+        return self.__parent__.__acl__
+
+
 class PreferenceValueContext(TraversalContext):
     """Represents a specific discussion preference"""
     def __init__(self, preferences, parent, key):
         # Do not call super, because it will set the acl.
         self.collection = preferences
         self.__parent__ = parent
-        self.parent_instance = parent.parent_instance
         self.key = key
 
     @property
@@ -1061,17 +1079,16 @@ class PreferenceValueContext(TraversalContext):
         return None
 
 
-class PreferenceCollection(AbstractCollectionDefinition):
-    """Represents the collection of preferences for a given
-    :py:class:`PreferenceContext`."""
+class DiscussionPreferenceCollection(AbstractCollectionDefinition):
+    """Represents the collection of preferences for a given discussion's
+    :py:class:`DiscussionPreferenceContext`."""
     def __init__(self, cls):
         from assembl.models.preferences import Preferences
-        super(PreferenceCollection, self).__init__(
+        super(DiscussionPreferenceCollection, self).__init__(
             cls, Preferences)
 
     def make_context(self, parent_context):
-        print "PreferenceCollection.make_context"
-        return PreferenceContext(parent_context, self)
+        return DiscussionPreferenceContext(parent_context, self)
 
     def decorate_instance(self, instance, assocs, user_id, ctx, kwargs):
         self.__parent__.decorate_instance(
@@ -1084,16 +1101,13 @@ class PreferenceCollection(AbstractCollectionDefinition):
             owner_alias, owner_alias.id != None)
 
     def contains(self, parent_instance, key):
-        print "PreferenceCollection.contains"
         from assembl.models.preferences import Preferences
         return key in Preferences.property_defaults
 
     def as_collection(self, parent_instance):
-        print "PreferenceCollection.as_collection"
         return parent_instance.preferences
 
     def get_instance(self, key, parent_instance):
-        print "PreferenceCollection.get_instance"
         c = self.as_collection(parent_instance)
         return c[key]
 
