@@ -150,16 +150,15 @@ var DiscussionPreferenceSubCollection = Backbone.Collection.extend({
 
 
 /**
- * @class app.models.discussionPreference.DiscussionPreferenceCollection
+ * @class app.models.discussionPreference.PreferenceCollection
  */
-var DiscussionPreferenceCollection = Backbone.Collection.extend({
+var PreferenceCollection = Backbone.Collection.extend({
   /**
    * @function app.models.discussionPreference.DiscussionPreferenceCollection.constructor
    */
   constructor: function DiscussionPreferenceCollection() {
     Backbone.Collection.apply(this, arguments);
   },
-  url: Ctx.getApiV2DiscussionUrl("settings"),
   model: DiscussionIndividualPreferenceModel,
   /**
    * @function app.models.discussionPreference.DiscussionPreferenceCollection.parse
@@ -184,18 +183,47 @@ var DiscussionPreferenceCollection = Backbone.Collection.extend({
   },
 });
 
+/**
+ * @class app.models.discussionPreference.DiscussionPreferenceCollection
+ * @extends app.models.discussionPreference.PreferenceCollection
+ */
+var DiscussionPreferenceCollection = PreferenceCollection.extend({
+  /**
+   * @function app.models.discussionPreference.DiscussionPreferenceCollection.constructor
+   */
+  constructor: function DiscussionPreferenceCollection() {
+    PreferenceCollection.apply(this, arguments);
+  },
+  url: Ctx.getApiV2DiscussionUrl("settings"),
+});
+
+
+/**
+ * @class app.models.discussionPreference.DiscussionPreferenceCollection
+ * @extends app.models.discussionPreference.PreferenceCollection
+ */
+var GlobalPreferenceCollection = PreferenceCollection.extend({
+  /**
+   * @function app.models.discussionPreference.DiscussionPreferenceCollection.constructor
+   */
+  constructor: function GlobalPreferenceCollection() {
+    PreferenceCollection.apply(this, arguments);
+  },
+  url: Ctx.getApiV2Url("Preferences/default"),
+});
+
 
 /**
  * @class app.models.discussionPreference.UserPreferenceRawCollection
- * @extends app.models.discussionPreference.DiscussionPreferenceCollection
+ * @extends app.models.discussionPreference.PreferenceCollection
  */
-var UserPreferenceRawCollection = DiscussionPreferenceCollection.extend({
+var UserPreferenceRawCollection = PreferenceCollection.extend({
   // TODO: Subset of editable? Assume viewable already filtered by backend.
   /**
    * @function app.models.discussionPreference.UserPreferenceRawCollection.constructor
    */
   constructor: function UserPreferenceRawCollection() {
-    DiscussionPreferenceCollection.apply(this, arguments);
+    PreferenceCollection.apply(this, arguments);
   },
   url: Ctx.getApiV2DiscussionUrl("all_users/current/preferences"),
 });
@@ -204,6 +232,7 @@ var UserPreferenceRawCollection = DiscussionPreferenceCollection.extend({
 module.exports = {
   DictModel: DiscussionPreferenceDictionaryModel,
   DiscussionPreferenceCollection: DiscussionPreferenceCollection,
+  GlobalPreferenceCollection: GlobalPreferenceCollection,
   UserPreferenceCollection: UserPreferenceRawCollection,
   Model: DiscussionIndividualPreferenceModel
 };

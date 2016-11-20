@@ -198,6 +198,14 @@ var routeManager = Marionette.Object.extend({
     }
   },
 
+  adminGlobalPreferences: function() {
+    Assembl.headerRegions.show(new NavBar());
+    if (this.userHaveAccess()) {
+      var page = new PreferencesView.GlobalPreferencesView();
+      Assembl.groupContainer.show(page);
+    }
+  },
+
   userNotifications: function() {
     Assembl.headerRegions.show(new NavBar());
     if (this.userHaveAccess()) {

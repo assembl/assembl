@@ -11,6 +11,7 @@ of a Python class for which we
 want to list the instances, or to access a specific instance. It can be
 followed by the database `id` of an instance of this class (for example:
 ``/data/Discussion/6`` ).
+Some classes (Discussion, Preferences) also have unique names which can be used in traversal: ``/data/Discussion/slug`` ).
 
 View defs
 ---------

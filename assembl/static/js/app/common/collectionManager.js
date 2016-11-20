@@ -208,6 +208,12 @@ var CollectionManager = Marionette.Object.extend({
   _allDiscussionPreferences: undefined,
   _allDiscussionPreferencesPromise: undefined,
 
+  /**
+   * Collection of all preferences of the system
+   * @type {DiscussionPreference.Model}
+   */
+  _globalPreferences: undefined,
+  _globalPreferencesPromise: undefined,
 
   /**
    * Dictionary of Collections of each message's idea content link
@@ -1060,6 +1066,25 @@ var CollectionManager = Marionette.Object.extend({
         Raven.captureException(e);
       });
     return this._allDiscussionPreferencesPromise;
+  },
+  /**
+   * Returns the collection of preferences for all discussions
+   * @returns {BaseCollection}
+   * @function app.common.collectionManager.CollectionManager.getDiscussionPreferencePromise
+  **/
+  getGlobalPreferencePromise: function() {
+    if (this._globalPreferencesPromise) {
+      return this._globalPreferencesPromise;
+    }
+
+    this._globalPreferences = new DiscussionPreference.GlobalPreferenceCollection();
+    this._globalPreferences.collectionManager = this;
+    this._globalPreferencesPromise = Promise.resolve(this._globalPreferences.fetch())
+      .thenReturn(this._globalPreferences)
+      .catch(function(e) {
+        Raven.captureException(e);
+      });
+    return this._globalPreferencesPromise;
   },
   /**
    * Returns the collection of preferences for all users 

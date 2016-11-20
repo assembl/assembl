@@ -812,6 +812,21 @@ var DiscussionPreferenceCollectionSubset = PreferenceCollectionSubset.extend({
 
 
 /**
+ * The subset of preferences which allow a per-discussion override
+ * @class app.views.preferencesView.GlobalPreferenceCollectionSubset
+ * @extends app.views.preferencesView.PreferenceCollectionSubset
+ */
+var GlobalPreferenceCollectionSubset = PreferenceCollectionSubset.extend({
+  constructor: function GlobalPreferenceCollectionSubset() {
+    PreferenceCollectionSubset.apply(this, arguments);
+  },
+  prefDataSieve: function(pd) {
+    // TODO
+    return true;
+  },
+});
+
+/**
  * The preferences window
  * @class app.views.preferencesView.PreferencesView
  */
@@ -920,6 +935,32 @@ var DiscussionPreferencesView = PreferencesView.extend({
   }
 });
 
+/**
+ * The preferences window for global (instance-level) preferences
+ * @class app.views.preferencesView.GlobalPreferencesView
+ * @extends app.views.preferencesView.PreferencesView
+ */
+var GlobalPreferencesView = PreferencesView.extend({
+  constructor: function GlobalPreferencesView() {
+    PreferencesView.apply(this, arguments);
+  },
+  initialize: function() {
+    var that = this,
+        collectionManager = new CollectionManager();
+    collectionManager.getGlobalPreferencePromise().then(function(prefs) {
+        that.preferences = new GlobalPreferenceCollectionSubset([], {parent: prefs});
+        that.storePreferences(prefs);
+    });
+  },
+  canSavePreference: function(id) {
+    return Ctx.getCurrentUser().can(Permissions.SYSADMIN);
+  },
+  getNavigationMenu: function() {
+    // TODO: Change this
+    return new AdminNavigationMenu({selectedSection: "discussion_preferences"});
+  }
+});
+
 
 /**
  * The user preferences window
@@ -954,6 +995,7 @@ var UserPreferencesView = PreferencesView.extend({
 
 module.exports = {
     DiscussionPreferencesView: DiscussionPreferencesView,
+    GlobalPreferencesView: GlobalPreferencesView,
     UserPreferencesView: UserPreferencesView
 };
 
