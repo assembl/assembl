@@ -1408,6 +1408,47 @@ def install_database():
         install_postgres()
 
 
+def install_lamp():
+    """
+    Installs Apache2, Mysql and PHP on a Linux Environment
+    """
+    if env.mac:
+        print(red("This task cannot be run on a Macintosh, you fool!"))
+    else:
+        sudo("apt-get install apache2 mysql-server php-mysql php-curl php-cli php-gd")
+
+def uninstall_lamp():
+    """
+    Installs Apache2, Mysql and PHP on a Linux Environment
+    """
+    if env.mac:
+        print(red("This task cannot be run on a Macintosh, you fool!"))
+    else:
+        sudo("apt-get purge apache2 mysql-server php-mysql php-curl php-cli php-gd")
+        sudo("apt-get autoremove")  # Remove dangling dependencies after purging
+
+@task
+def install_piwik():
+    """
+    Install the entire Piwik stack on Linux systems *ONLY*
+    """
+    sanitize_env()
+    execute(install_lamp())
+    print(cyan("About to install Piwik"))
+    print(cyan("About to configure DNS"))
+
+
+@task
+def uninstall_piwik():
+    """
+    Remove all dependencies and configurations related to Piwik on Linux
+    """
+    if env.mac:
+        print(red("This task cannot be run on a Macintosh, you fool!"))
+    else:
+        execute(uninstall_lamp())
+
+
 @task
 def virtuoso_source_upgrade():
     """Upgrades the virtuoso server.  Currently doesn't check if we are already using the latest version."""
