@@ -62,7 +62,7 @@ def bind_piwik(discussion, admin=None):
                 if user_with_email_as_login_exists:
                     # We will use this strange Piwik user
                     user_login = user_email
-                    print("##### we are in the rare case!")
+                    print("##### we are in the rare case of a Piwik user already existing with the user_email as login but not as email")
                 else:
                     raise requests.ConnectionError()
         else:
@@ -98,7 +98,13 @@ def bind_piwik(discussion, admin=None):
             # Give "view" permission to Piwik user on Piwik site
             permission_given = piwik_UsersManager_setUserAccess(piwik_url, piwik_api_token, user_login, "view", [site_id])
             if not permission_given:
-                raise RuntimeError("could not give view permission to Piwik user on Piwik site")
+                # Handle corner case of Piwik response being {"result":"error","message":"This user has Super User access and has already permission to access and modify all websites in Piwik. You may remove the Super User access from this user and try again."}
+                user_has_super_user_access = piwik_UsersManager_hasSuperUserAccess(piwik_url, piwik_api_token, user_login)
+                if user_has_super_user_access:
+                    permission_given = True
+                    print("##### This Piwik user exists and is Super User, so he has access to any Piwik site")
+                else:
+                    raise RuntimeError("Could not give view permission to Piwik user on Piwik site (and user does not seem to have Super User access)")
             # Set discussion's piwik id_site property
             discussion.web_analytics_piwik_id_site = site_id
 
@@ -287,6 +293,29 @@ def piwik_UsersManager_setUserAccess(piwik_url, piwik_api_token, userLogin, acce
 
     user_access_is_set = ("result" in content and content["result"] == "success")
     return user_access_is_set
+
+def piwik_UsersManager_hasSuperUserAccess(piwik_url, piwik_api_token, userLogin):
+    params = {
+        "module": "API",
+        "format": "JSON",
+        "token_auth": piwik_api_token
+    }
+    params["method"] = "UsersManager.hasSuperUserAccess"
+    params["userLogin"] = userLogin
+
+    result = requests.get(piwik_url, params=params, timeout=15)
+
+    if result.status_code != 200:
+        raise requests.ConnectionError()
+    content = result.json() # Content should be like {"value": true}
+    # print "piwik_UsersManager_hasSuperUserAccess", content
+
+    if not content:
+        raise requests.ConnectionError()
+
+
+    return asbool(content.get("value", False))
+
 
 def string_generator(size=10, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
