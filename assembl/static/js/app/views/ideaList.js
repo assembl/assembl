@@ -201,7 +201,6 @@ var IdeaList = AssemblPanel.extend({
           var idea = allIdeasCollection.get(ideaId);
           function success(idea) {
             that.getContainingGroup().setCurrentIdea(idea);
-            that.getContainingGroup().NavigationResetDebateState();
             if (doScroll)
               that.onScrollToIdea(idea);
           }
@@ -224,6 +223,7 @@ var IdeaList = AssemblPanel.extend({
         });
       });
 
+      // This seems to never be triggered.
       this.listenTo(this, 'scrollToIdea', this.onScrollToIdea);
 
       this.listenTo(this.getGroupState(), "change:currentIdea", function(state, currentIdea) {
@@ -661,7 +661,7 @@ var IdeaList = AssemblPanel.extend({
                 });
               }
 
-              that.getContainingGroup().setCurrentIdea(newIdea, "created", true);
+              that.getContainingGroup().setCurrentIdea(newIdea, false, "created");
             });
   },
 

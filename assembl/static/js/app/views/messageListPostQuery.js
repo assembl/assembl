@@ -56,7 +56,14 @@ var PostQuery = function() {
           _supports_paging: true,
           _server_order_param_value: 'reverse_chronological',
           _client_side_implementation: null
-        }
+        },
+      POPULARITY: {
+          id: 'popularity',
+          name: i18n.gettext('Popularity'),
+          _supports_paging: true,
+          _server_order_param_value: 'popularity',
+          _client_side_implementation: null
+      },
     };
 
     /**
@@ -407,7 +414,11 @@ var PostQuery = function() {
         collection.url = url;
         collection.collectionManager = new CollectionManager();
         return Promise.resolve(collection.fetch()).thenReturn(collection).catch(function(e) {
-          Raven.captureException(e);
+          if (raven_url) {
+            Raven.captureException(e);
+          } else {
+            throw e;
+          }
         });
       }
       else {

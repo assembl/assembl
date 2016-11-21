@@ -1,9 +1,10 @@
 <% if (canPost) { %>
-    <% if ( !reply_message_id ) { %>
+    <% if ( message_send_title ) { %>
       <div class="mbl">
-        <span class="h2"><i class="icon-discuss"></i> {{gettext('Start a new discussion thread')}}</span>
+        <span class="h2"><i class="icon-discuss"></i> <%= message_send_title %></span>
       </div>
     <% } %>
+    <form>
     <div class="rc rcss">
       {% if user %}
       <a class="img-left avatar img-rounded" href="#"><img src="/user/id/{{user.id}}/avatar/30" width="30" height="30"></a>
@@ -43,12 +44,15 @@
                 <% } else { %>
                   <a class="btn btn-primary btn-sm messageSend-sendbtn"><%= send_button_label %></a>
                 <% } %>
-                <a class="btn btn-cancel btn-sm messageSend-cancelbtn"><%= cancel_button_label %></a>
+                <% if ( !show_cancel_button ) { %>
+                  <a class="btn btn-cancel btn-sm messageSend-cancelbtn"><%= cancel_button_label %></a>
+                <% } %>
             </div>
           </span>
         </div>
       </div>
     </div>
+    </form>
 <% } else { %>
     <div class="warning-box-for-message-post">
       <div class="attachments js_attachment-edit-region"></div>

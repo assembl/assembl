@@ -150,6 +150,7 @@
         "bodyMimeType": false,
         "body": true,
         "subject": true,
+        "message_classifier": true,
         "widget_ideas": false
     },
     "Post": {
@@ -246,6 +247,8 @@
         "subtype": "rdf_type",
         "order": false,
         "parentId": false,
+        "messages_in_parent": true,
+        "message_view_override": true,
         "parents": false
     },
     "RootIdea": {
@@ -260,6 +263,14 @@
         "is_tombstone": false,
         "subtype": "rdf_type",
         "order": true
+    },
+    "IdeaMessageColumn": {
+        "idea": true,
+        "message_classifier": true,
+        "header": true,
+        "name": true,
+        "color": true,
+        "previous_column": true
     },
     "IdeaGraphView": {
         "discussion": false

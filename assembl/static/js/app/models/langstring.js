@@ -208,9 +208,11 @@ var LangStringEntryCollection = Base.Collection.extend({
     Base.Collection.apply(this, arguments);
   },
   /**
-   * @member {string} app.models.langstrings.LangStringEntryCollection.urlRoot
+   * @member {string} app.models.langstrings.LangStringEntryCollection.url
    */
-  urlRoot: Ctx.getApiV2DiscussionUrl("LangStringEntry"),
+  url: function() {
+    return this.langstring.url() + "/entries";
+  },
   /**
    * The model
    * @type {Account}
@@ -259,6 +261,14 @@ var LangString = Base.Model.extend({
     }
     return rawModel;
   },
+
+  /**
+   * @member {string} app.models.langstrings.LangString.url
+   */
+  url: function() {
+    return Ctx.getApiV2Url("LangString") + "/" + this.getNumericId();
+  },
+
   /**
    * @function app.models.langstrings.LangString.initialize
    */
@@ -307,7 +317,7 @@ var LangString = Base.Model.extend({
    * @param  {LangStringEntry.Collection}       available
    * @param  {LanguagePreference.Collection}    langPrefs
    * @param  {boolean}                          filter_errors   Used to supress errors
-   * @returns {LangStringEntry}          
+   * @returns {LangStringEntry}
    */
   bestOf: function(available, langPrefs, filter_errors) {
     var i, entry, commonLenF, that = this;
@@ -417,7 +427,28 @@ var LangString = Base.Model.extend({
       "@id": this.id,
       entries: new LangStringEntryCollection(newEntries)
     });
-  }
+  },
+  /**
+   * Class method (call on prototype)
+   * Initialize a langstring from a {locale: string} dictionary
+   * @function app.models.langstrings.LangString.initFromDict
+   */
+  initFromDict: function(strdict) {
+    var entries = this.get('entries');
+    if (_.isArray(entries) || !_.isObject(entries)) {
+      entries = new LangStringEntryCollection(entries, {parse: true});
+      this.attributes.entries = entries;
+    }
+    if (strdict != undefined) {
+      _.mapObject(strdict, function(v, k) {
+        entries.add(new LangStringEntry({
+          value: v,
+          '@language': k
+        }));
+      });
+    }
+  },
+
 });
 
 LangString.empty = new LangString({
@@ -453,9 +484,9 @@ var LangStringCollection = Base.Collection.extend({
    */
   model: LangString,
   /**
-   * @member {string} app.models.langstrings.LangStringCollection.urlRoot
+   * @member {string} app.models.langstrings.LangStringCollection.url
    */
-  urlRoot: Ctx.getApiV2DiscussionUrl("LangString"),
+  url: Ctx.getApiV2Url("LangString"),
 });
 
 module.exports = {

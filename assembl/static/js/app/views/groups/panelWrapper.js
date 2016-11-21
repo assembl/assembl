@@ -130,10 +130,13 @@ var PanelWrapper = Marionette.LayoutView.extend({
         case 'contextPanel':
             this.model.set('minWidth',450);
             break;
+        case 'messageColumns':
+            this.model.set('minWidth',630);
+            break;
         default:
             this.model.set('minWidth',0);
             break;
-        }        
+        }
       }else{
         this.model.set('minWidth',screenSize);
       }

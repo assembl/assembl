@@ -1,0 +1,103 @@
+.messageColumns{
+    .subpanel-body{
+        padding:10px;
+        .messageSend{
+            margin: 0 0 20px 0;
+        }
+    }
+    .messageColumnListContainer{
+        padding:10px;
+    }
+    .message-family-container {
+        box-shadow: none;
+        margin: 0;
+        border: none;
+        border-left: 1px solid $txtGray;
+        border-right: 1px solid $txtGray;
+        border-radius: 0;
+    }
+    .message-column-container{
+        border-top: 1px solid $txtGray;
+        border-bottom: 1px solid $txtGray;
+        margin-bottom: 20px;
+    }
+    .idea-classification{
+        display:none;
+    }
+    .message-replybox-openbtn{
+        display:none;
+    }
+    .announcementMessage{
+        box-shadow:none;
+    }
+    .announcement_title{
+        text-align: center;
+        color:$white;
+        margin-top: 25px;
+    }
+    .announcement_body{
+        text-align: center;
+        color:$white;
+        padding: 0 50px;
+    }
+    .announcementMessage{
+        background-color: none;
+        height: 180px;
+    }
+    .bx{
+        background: none;
+    }
+    .message-conversation-block{
+        display:none;
+    }
+    a.img-left.avatar.img-rounded{
+        display:none;
+    }
+    .icon-discuss{
+        display:none;
+    }
+    .messageSend-form{
+        margin-left:0;
+    }
+    .columnHeader{
+        border-top: 1px solid $txtGray;
+        border-right: 1px solid $txtGray;
+        border-left: 1px solid $txtGray;
+        padding: 20px 15px 20px 20px;
+        .dropdown-toggle{
+            color:$txtGray1;
+        }
+        .dropdown a{
+            text-decoration:none;
+        }
+    }
+    .message-column-description{
+        border: 1px solid $txtGray;
+        margin: 0 0 20px 0;
+        text-align: justify;
+        li{
+            border-bottom: 1px solid #CCC;
+            padding: 5px 15px 10px 0;
+            &:last-child{
+                border:none;
+                padding: 10px 15px 0 0;
+            }
+        }
+        p{
+            padding: 10px 10px 0 10px;
+        }
+    }
+}
+
+.modal-define-columns{
+    .admin-msg-col-title{
+        font-size: 16px;
+        padding: 15px 0;
+    }
+    .admin-msg-elm{
+        margin:0 10px 10px 10px;
+        label{
+            font-weight:700;
+        }
+    }
+}

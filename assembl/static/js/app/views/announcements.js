@@ -84,12 +84,13 @@ var AnnouncementMessageView = AbstractAnnouncementView.extend({
     var retval = this.model.toJSON();
     retval.creator = this.creator;
     retval.ctx = Ctx;
+    retval.hide_creator = this.hideCreator;
     return retval;
   },
 
   initialize: function(options) {
     var that = this;
-
+    this.hideCreator = options.hide_creator;
     this.creator = undefined;
     this.model.getCreatorPromise().then(function(creator) {
       if(!that.isViewDestroyed()) {
@@ -102,8 +103,7 @@ var AnnouncementMessageView = AbstractAnnouncementView.extend({
 
   onRender: function() {
     AbstractAnnouncementView.prototype.onRender.call(this);
-
-    if (this.template === '#tmpl-announcementMessage') {
+    if (!this.hideCreator && this.template === '#tmpl-announcementMessage') {
       this.renderCreator();
     }
   },

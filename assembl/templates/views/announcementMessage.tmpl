@@ -6,6 +6,8 @@
   <div class="js_author_avatar_region avatarContainer"></div>
   <div class="author_info_container">
     <span class="js_author_name_region message-author"></span>
-    <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</div>
+    <% if(!hide_creator) { %>
+        <div class="message-date">{{ gettext('<time title="%(precise_date)s">%(nice_date)s</time>')|format(nice_date=nice_date,precise_date=precise_date)|safe }}</div>
+    <% } %>
   </div>
 </div>

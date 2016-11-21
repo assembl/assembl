@@ -57,10 +57,18 @@ def get_posts(request):
     """
     Query interface on posts
     Filters have two forms:
-    only_*, is for filters that cannot be reversed (ex: only_synthesis)
+    only_*, is for filters that cannot be reversed (ex: only_synthesis, only_orphan)
     is_*, is for filters that can be reversed (ex:is_unread=true returns only unread
-    order can be chronological, reverse_chronological
-    message, is_unread=false returns only read messages)
+     message, is_unread=false returns only read messages)
+    order: can be chronological, reverse_chronological, popularity
+    root_post_id: all posts below the one specified.
+    family_post_id: all posts below the one specified, and all its ancestors.
+    post_reply_to: replies to a given post
+    root_idea_id: all posts associated with the given idea
+    ids: explicit message ids.
+    posted_after_date, posted_before_date: date selection (ISO format)
+    post_author: filter by author
+    classifier: filter on message_classifier, or absence thereof (classifier=null). Can be negated with "!"
     """
     localizer = request.localizer
     discussion_id = int(request.matchdict['discussion_id'])
@@ -93,7 +101,7 @@ def get_posts(request):
     order = request.GET.get('order')
     if order is None:
         order = 'chronological'
-    assert order in ('chronological', 'reverse_chronological', 'score')
+    assert order in ('chronological', 'reverse_chronological', 'score', 'popularity')
     if order == 'score':
         assert text_search is not None
 
@@ -131,6 +139,7 @@ def get_posts(request):
 
     posted_after_date = request.GET.get('posted_after_date')
     posted_before_date = request.GET.get('posted_before_date')
+    message_classifiers = request.GET.getall('classifier')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
     ideaContentLinkQuery = discussion.db.query(
@@ -307,6 +316,36 @@ def get_posts(request):
         ideaContentLinkQuery = ideaContentLinkQuery.filter(
             PostClass.creator_id == post_author_id)
 
+    if message_classifiers:
+        if any([len(classifier) == 0 for classifier in message_classifiers]):
+            return {'total': 0, 'posts': []}
+        polarities = [classifier[0] != "!" for classifier in message_classifiers]
+        polarity = all(polarities)
+        if not polarity:
+            message_classifiers = [c.strip("!") for c in message_classifiers]
+        if polarity != any(polarities):
+            raise HTTPBadRequest(_("Do not combine negative and positive classifiers"))
+        # Treat null as no classifier
+        includes_null = 'null' in message_classifiers
+        if includes_null:
+            message_classifiers_nonull = filter(lambda c: c != "null", message_classifiers)
+        if polarity:
+            if len(message_classifiers) == 1:
+                term = PostClass.message_classifier == (None if includes_null else message_classifiers[0])
+            else:
+                term = PostClass.message_classifier.in_(message_classifiers_nonull)
+                if includes_null:
+                    term = term | (PostClass.message_classifier == None)
+        else:
+            if len(message_classifiers) == 1:
+                term = PostClass.message_classifier != (None if includes_null else message_classifiers[0])
+            else:
+                term = PostClass.message_classifier.notin_(message_classifiers_nonull)
+            if not includes_null:
+                term = term | (PostClass.message_classifier == None)
+        posts = posts.filter(term)
+        ideaContentLinkQuery = ideaContentLinkQuery.filter(term)
+
     if post_replies_to:
         parent_alias = aliased(PostClass)
         posts = posts.join(parent_alias, PostClass.parent)
@@ -385,6 +424,9 @@ def get_posts(request):
         posts = posts.order_by(Content.creation_date.desc())
     elif order == 'score':
         posts = posts.order_by(Content.body_text_index.score_name.desc())
+    elif order == 'popularity':
+        # assume reverse chronological otherwise
+        posts = posts.order_by(Content.like_count.desc(), Content.creation_date.desc())
     else:
         posts = posts.order_by(Content.id)
     # print str(posts)
@@ -578,6 +620,7 @@ def create_post(request):
     idea_id = request_body.get('idea_id', None)
     subject = request_body.get('subject', None)
     publishes_synthesis_id = request_body.get('publishes_synthesis_id', None)
+    message_classifier = request_body.get('message_classifier', None)
 
     if not body and not publishes_synthesis_id:
         # Should we allow empty messages otherwise?
@@ -647,6 +690,7 @@ def create_post(request):
     post_constructor_args = {
         'discussion': discussion,
         'creator_id': user_id,
+        'message_classifier': message_classifier,
         'subject': subject,
         'body': body
         }

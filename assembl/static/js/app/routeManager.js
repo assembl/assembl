@@ -484,7 +484,7 @@ var routeManager = Marionette.Object.extend({
             ) {
           /* Reset the context of the user view, if it's too old to be
            usable, or if it wasn't initialized before */
-           
+
           // Find if a group exists that has a navigation panel
           var navigableGroupSpec = groupSpecs.find(function(aGroupSpec) {
             return aGroupSpec.findNavigationSidebarPanelSpec();

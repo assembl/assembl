@@ -85,6 +85,7 @@ var MessageModel = Base.Model.extend({
     metadata_json: null, // this property needs to exist to display the inspiration source of a message (creativity widget)
     publication_state: PublicationStates.PUBLISHED,
     moderator: null,
+    message_classifier: null,
     moderation_text: null,
     moderated_on: null,
     moderator_comment: null

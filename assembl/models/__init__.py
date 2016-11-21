@@ -158,6 +158,9 @@ from .idea import (
     IdeaLink,
     RootIdea,
 )
+from .idea_msg_columns import (
+    IdeaMessageColumn,
+)
 from .action import (
     Action,
     ActionOnIdea,

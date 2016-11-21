@@ -214,7 +214,7 @@ var NavigationView = AssemblPanel.extend({
             analytics.trackEvent(analytics.events.NAVIGATION_OPEN_CONTEXT_SECTION);
             analytics.changeCurrentPage(analytics.pages.SIMPLEUI_CONTEXT_SECTION);
           }
-          this.getContainingGroup().NavigationResetContextState();
+          this.getContainingGroup().NavigationResetAboutState();
           break;
         case 'debate':
           var idealist = new IdeaList({

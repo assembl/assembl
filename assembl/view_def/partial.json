@@ -78,6 +78,7 @@
         "hidden": true,
         "subject": "&get_subject:",
         "body": "&get_body_preview",
+        "message_classifier": true,
         "import_date": false
     },
     "Post": {
@@ -150,6 +151,14 @@
         "is_tombstone": true,
         "original_uri": true,
         "order": true
+    },
+    "IdeaMessageColumn": {
+        "idea": true,
+        "message_classifier": true,
+        "header": true,
+        "name": true,
+        "color": true,
+        "previous_column": true
     },
     "IdeaGraphView": {
         "creation_date": true,

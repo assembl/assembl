@@ -1,0 +1,10 @@
+<div class="control-group">
+      <div class="js_prefKeySubview"></div>
+      <div class="js_prefValueSubview"></div>
+      <span class="help-inline">
+        <p id="js_error" class="control-error hidden"></p>
+      </span>
+  <% if (canModify) { %>
+    <button id="js_delete_<%= preferenceData.id %>_<%= listKey %>" class="js_delete btn btn-cancel">{{ gettext('Delete') }}</button>
+  <% } %>
+</div>

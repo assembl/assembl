@@ -696,13 +696,17 @@ var MessageView = Marionette.LayoutView.extend({
       if (Ctx.debugRender) {
         console.log("message:renderLikeCount() is firing for message", this.model.id);
       }
-
-      var count = this.model.get('like_count');
-      if (count > 0) {
-        this.ui.likeCounter.children(".js_likeCountI").text(String(count));
-        this.ui.likeCounter.show();
+      if (this.messageListView.currentViewStyle == this.messageListView.ViewStyles.POPULARITY) {
+        // the order will have changed.
+        this.messageListView.syncWithCurrentIdea();
       } else {
-        this.ui.likeCounter.hide();
+        var count = this.model.get('like_count');
+        if (count > 0) {
+          this.ui.likeCounter.children(".js_likeCountI").text(String(count));
+          this.ui.likeCounter.show();
+        } else {
+          this.ui.likeCounter.hide();
+        }
       }
     },
 
@@ -862,12 +866,13 @@ var MessageView = Marionette.LayoutView.extend({
           msg_in_progress_ctx: modelId,
           mandatory_subject_missing_msg: null
         });
-
-        this.ui.messageReplyBox.removeClass('hidden');
-        this.messageReplyBoxRegion.show(this.replyView);
-        if (this.replyBoxHasFocus) {
-          //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
-          this.focusReplyBox();
+        if(!this.model.get('message_classifier')){
+          this.ui.messageReplyBox.removeClass('hidden');
+          this.messageReplyBoxRegion.show(this.replyView);
+          if (this.replyBoxHasFocus) {
+            //console.log("Focusing reply box, message had this.replyBoxHasFocus == true");
+            this.focusReplyBox();
+          }
         }
       }
       else {
@@ -1208,7 +1213,7 @@ var MessageView = Marionette.LayoutView.extend({
         this.$('.bbm-modal').addClass('popin');
       },
       events: {
-              'click .js_redirectIdea':'redirectToIdea'
+              'click .js_redirectIdea': 'redirectToIdea',
             },
       redirectToIdea: function() {
         var self = this;
@@ -1226,7 +1231,7 @@ var MessageView = Marionette.LayoutView.extend({
                       if (segment.get('idIdea')) {
                         if (that.messageListView.getContainingGroup().findViewByType(PanelSpecTypes.IDEA_PANEL)) {
                           //FIXME:  Even this isn't proper behaviour.  Maybe we should just pop a panel systematically in this case.
-                          that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea), "from_annotation", true);
+                          that.messageListView.getContainingGroup().setCurrentIdea(allIdeasCollection.get(annotation.idIdea), false, "from_annotation");
                           Assembl.vent.trigger('DEPRECATEDideaPanel:showSegment', segment);
                         }
                         else {

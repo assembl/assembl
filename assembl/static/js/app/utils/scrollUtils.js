@@ -158,7 +158,11 @@ var scrollToElement = function(el, callback, margin, animate, watch) {
       }
     }
     catch (e) {
-      Raven.captureException(e);
+      if (raven_url) {
+        Raven.captureException(e);
+      } else {
+        throw e;
+      }
     }
   }
 

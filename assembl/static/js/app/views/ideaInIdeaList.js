@@ -272,8 +272,6 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
    *                      null: don't filter
    */
   doIdeaChange: function(is_unread) {
-    var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
-
     var analytics = Analytics.getInstance();
     //console.log('Tracking event on idea ', this.model.getShortTitleDisplayText())
     if(!is_unread) {
@@ -284,14 +282,12 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
     }
     analytics.trackEvent(analytics.events.NAVIGATE_TO_IDEA_IN_TABLE_OF_IDEAS);
     this._groupContent.setCurrentIdea(this.model);
+    var messageListView = this._groupContent.findViewByType(PanelSpecTypes.MESSAGE_LIST);
     if (messageListView) {
       //Syncing with current idea below isn't sufficient, as we need to set/unset the unread filter
       messageListView.triggerMethod('messageList:clearAllFilters');
       messageListView.trigger('messageList:addFilterIsRelatedToIdea', this.model, is_unread);
     }
-
-    // Why is this call here?  benoitg - 2015-06-09
-    this._groupContent.NavigationResetDebateState(false);
   },
 
   /**
@@ -479,7 +475,6 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
         // Add as a child idea
         var newIdea = this.model.addSegmentAsChild(segment);
         this._groupContent.setCurrentIdea(newIdea);
-        this._groupContent.NavigationResetDebateState(false);
       } else {
         // Add to the current idea
         this.model.addSegment(segment);
@@ -496,7 +491,9 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
         Ctx.currentAnnotationIdIdea = null;
         Ctx.currentAnnotationNewIdeaParentIdea = this.model;
         Ctx.saveCurrentAnnotationAsExtract();
-        this._groupContent.NavigationResetDebateState(false);
+        // TODO: Should we select that idea? It seems to be done in messageList.@annotationCreated.
+        // See if next line can be removed
+        this._groupContent.NavigationResetDebateState();
       } else {
         // Add as a segment
         Ctx.currentAnnotationIdIdea = this.model.getId();

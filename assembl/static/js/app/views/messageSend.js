@@ -68,6 +68,9 @@ var Backbone = require('backbone'),
  * @param {function} send_callback:  Function.  A callback to call once the message has
  *  been accepted by the server, and the mesasgeList has refreshed.
  *
+ * @param {string} message_classifier: A message classifier that will be set on the message
+ *
+ * @param {string} message_send_title: An overriding value for the form's title
  */
 
 var messageSendView = Marionette.LayoutView.extend({
@@ -154,9 +157,14 @@ var messageSendView = Marionette.LayoutView.extend({
   },
 
   serializeData: function() {
+    var show_cancel_button = ('show_cancel_button' in this.options) ? this.options.show_cancel_button : false;
     var reply_idea = ('reply_idea' in this.options) ? this.options.reply_idea : null;
     var reply_message_id = ('reply_message_id' in this.options) ? this.options.reply_message_id : null;
     var show_target_context_with_choice = ('show_target_context_with_choice' in this.options) ? this.options.show_target_context_with_choice : null;
+    var message_send_title = this.options.message_send_title;
+    if (message_send_title === undefined && reply_message_id === null) {
+      message_send_title = i18n.gettext('Start a new discussion thread');
+    }
 
     //var i18n_post_message_in_this_idea = i18n.gettext('Under the idea "%s"'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
     //var i18n_post_message_in_general_conversation = i18n.gettext('In the general conversation'); // declared only to be spotted for the generation of the .pot file (I didn't manage our tool to detect it in messageSend.tmpl)
@@ -167,6 +175,7 @@ var messageSendView = Marionette.LayoutView.extend({
     return {
       i18n: i18n,
       body_help_message: this.initialBody,
+      message_send_title: message_send_title,
       allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
       cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label : i18n.gettext('Cancel'),
       send_button_label: this.options.send_button_label ? this.options.send_button_label : i18n.gettext('Send'),
@@ -175,6 +184,7 @@ var messageSendView = Marionette.LayoutView.extend({
       msg_in_progress_body: this.options.msg_in_progress_body,
       msg_in_progress_title: this.options.msg_in_progress_title,
       reply_idea: reply_idea,
+      show_cancel_button: show_cancel_button,
       reply_message_id: reply_message_id,
       show_target_context_with_choice: show_target_context_with_choice,
       enable_button: this.options.enable_button
@@ -190,6 +200,9 @@ var messageSendView = Marionette.LayoutView.extend({
     if (!Ctx.getCurrentUser().can(Permissions.ADD_POST)) {
       var that = this, collectionManager = new CollectionManager();
       collectionManager.getDiscussionModelPromise().then(function(discussion) {
+        if (that.isViewDestroyed()) {
+          return;
+        }
         var routeUrl = null;
         if (that.reply_message_model) {
           routeUrl = that.reply_message_model.getRouterUrl({relative: true});
@@ -250,18 +263,15 @@ var messageSendView = Marionette.LayoutView.extend({
         chosenTargetIdeaField = this.$el.find('.messageSend-target input:checked');
     /*console.log("chosenTargetIdea:", chosenTargetIdeaField);
     console.log("chosenTargetIdea val:", chosenTargetIdeaField.val());*/
-    
+
     if (this.sendInProgress !== false) {
       return;
     }
-    /*
-    if (this.options.reply_idea) {
-        reply_idea_id = this.options.reply_idea.getId();
-    }
-    */
     if (chosenTargetIdeaField && chosenTargetIdeaField.val())
     {
       reply_idea_id = chosenTargetIdeaField.val();
+    } else if (this.options.reply_idea) {
+        reply_idea_id = this.options.reply_idea.getId();
     }
 
     if (this.options.reply_message_id) {
@@ -311,7 +321,8 @@ var messageSendView = Marionette.LayoutView.extend({
       subject: subject_ls,
       body: body_ls,
       reply_id: reply_message_id,
-      idea_id: reply_idea_id
+      idea_id: reply_idea_id,
+      message_classifier: this.options.message_classifier,
     });
 
     this.model.save(null, {
@@ -396,7 +407,6 @@ var messageSendView = Marionette.LayoutView.extend({
                           that.messageList.triggerMethod('messageList:clearAllFilters');
 
                           //that.messageList.triggerMethod('messageList:addFilterIsOrphanMessage');
-                          groupContent.NavigationResetDebateState();
 
                           //FIXME:  Remove this magic delay.  Benoitg - 2015-06-09
                           setTimeout(function() {

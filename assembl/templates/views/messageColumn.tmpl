@@ -1,0 +1,42 @@
+
+<div class="real-time-updates tac hidden phl">
+    <button class="btn-real-time js_loadPendingMessages">
+        <span class="pendingMessage"></span>
+    </button>
+</div>
+
+<style type="text/css">
+  #message_column_<%= column.getNumericId() %> .js_agentName,
+  #message_column_<%= column.getNumericId() %> .js_messageCount {
+    color: <%= color %>;
+  }
+</style>
+
+<div class="subpanel-body"  id="message_column_<%= column.getNumericId() %>">
+  <div>
+    <div class="js_messageColumnDescription message-column-description"></div>
+    <% if (canPost) { %>
+      <div class="js_topPostRegion"></div>
+    <% } %>
+    <div class="js_messageList-toparea messageList-toparea margin tac hidden">
+      <a class="js_messageList-prevbutton btn btn-sm btn-secondary mbs">{{ gettext('Load previous messages') }}</a>
+    </div>
+    <div class="js_messageList-loadprevloader hidden">
+      {% include "views/loader.tmpl" %}
+    </div>
+    <div class="messageList-list idealist <%= currentViewStyle.id %>">
+      <div class="js_messageColumnHeader columnHeader">
+        <span class="js_messageCount"></span>
+        <span class="dropdown fr mrs mbxs js_messageListViewStyle-dropdown"></span>
+      </div>
+      <div class="js_messageFamilies_region message-column-container"></div>
+    </div>
+    <div class="js_messageList-bottomarea messageList-bottomarea tac hidden">
+      <a class="js_messageList-morebutton btn btn-sm btn-secondary mbs">{{ gettext('Load more messages') }}</a>
+      <a class="js_messageList-loadallbutton btn btn-sm btn-secondary mbs">{{ gettext('Load all remaining messages at once') }}</a>
+    </div>
+    <div class="js_messageList-loadmoreloader hidden mbxl">
+      {% include "views/loader.tmpl" %}
+    </div>
+  </div>
+</div>

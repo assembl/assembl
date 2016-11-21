@@ -1,0 +1,14 @@
+<div class="define-columns">
+  <form>
+    <div class="js_messageColumnsList"></div>
+    <div>
+      <button class="js_add_column btn btn-primary">{{ gettext('Add') }}</button><br/>
+    </div>
+    <div class="admin-msg-col-title">
+      <label>{{ gettext('Activate multi-column view') }}</label>
+      <input type="checkbox" class="js_activate_columns"
+      <% if (active) { print('checked="checked"'); } %>
+      >
+    </div>
+  </form>
+</div>

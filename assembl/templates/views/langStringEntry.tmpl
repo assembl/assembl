@@ -1,0 +1,13 @@
+<div>
+  <select class="js_locale">
+  <% for (var val in languages) {
+    var name = languages[val][1];
+    var code = languages[val][0]; %>
+    <option value="<%= code %>"
+      <% if (code == model.get('@language')) { print('selected'); } %>
+    ><%= name %></option>
+  <% } %>
+  </select>
+  <input class="js_value" type="text" name="entry_value" value="<%= model.get('value') %>" />
+  <button class="js_delete btn btn-cancel">{{ gettext('Remove') }}</button>
+</div>

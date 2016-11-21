@@ -33,14 +33,16 @@ var PanelSpecTypes = {
   },//implemented in views/externalVisualization.js
   CI_DASHBOARD_CONTEXT: {id: 'dashboardVisualizationPanel', code: 'U'
   },//implemented in views/externalVisualization.js
+  MESSAGE_COLUMNS: {id: 'messageColumns', code: 'C'
+  },//implemented in views/messageColumnPanel.js
 
-  getByRawId: function(id) {
+  getByRawId: function(id, failSilently) {
     var panelSpec = _.findWhere(this, {id: id});
-    if (panelSpec === undefined) {
+    if (panelSpec === undefined && failSilently === undefined) {
       throw new Error("No panelSpecType with the requested id");
     }
 
-    return panelSpec
+    return panelSpec;
   },
 
   /* Return the panelSpecType if valid, undefined if not */
@@ -49,13 +51,12 @@ var PanelSpecTypes = {
       return panelSpecTypeFromObject === panelSpecType;
     });
   },
-    
+
   getNavigationPanelTypes: function() {
       return [PanelSpecTypes.NAV_SIDEBAR,
        PanelSpecTypes.TABLE_OF_IDEAS,
        PanelSpecTypes.SYNTHESIS_EDITOR];
-    }
-    
+  }
 }
 
 module.exports = PanelSpecTypes;

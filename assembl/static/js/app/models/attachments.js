@@ -542,7 +542,17 @@ var ValidationAttachmentCollection = AttachmentCollection.extend({
       collection: [models],
       count: 1
     }
-  }
+  },
+
+  getSingleAttachment: function(){
+    if (this.length > 0){
+      return this.at(0);
+    }
+    else {
+      //There are no attachments.
+      return null;
+    }
+  },
 
 });
 

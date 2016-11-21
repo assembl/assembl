@@ -44,6 +44,7 @@ var groupContainer = Marionette.CollectionView.extend({
         var panelWidth = that.getPanelWidth(panelMinWidth,isPanelMinimized);
         var panel = panelWrapperView.$el;
         if(skipAnimation){
+          panel.stop(true, true); // kill animations that were created during previous calls of this.resizeAllPanels(true), so that the final position width is the one computed during the lastest function call, instead of during the callback of the animation (this occurs when a resizeAllPanels(true) call preceeds a resizeAllPanels(false) call)
           panel.css({'min-width':panelMinWidth});
           panel.width(panelWidth);
         }else{

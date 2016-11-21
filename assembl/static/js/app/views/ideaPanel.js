@@ -23,6 +23,7 @@ var Assembl = require('../app.js'),
     Marionette = require('../shims/marionette.js'),
     AttachmentViews = require('./attachments.js'),
     ConfirmModal = require('./confirmModal.js'),
+    AdminMessageColumns = require('./admin/adminMessageColumns.js'),
     AttachmentModels = require('../models/attachments.js'),
     $ = require('jquery'),
     _ = require('underscore'),
@@ -120,6 +121,7 @@ var IdeaPanel = AssemblPanel.extend({
     'widgetsSection': '.js_ideaPanel-section-widgets',
     'adminSection': '.js_ideaPanel-section-admin',
     'attachmentButton': '.js_attachment-button',
+    'defineColumns': '.js_ideaPanel-defineColumns',
     'attachmentImage': '.js_idea-attachment'
   },
   regions: {
@@ -153,6 +155,7 @@ var IdeaPanel = AssemblPanel.extend({
     'click @ui.closeExtract': 'onSegmentCloseButtonClick',
     'click @ui.clearIdea': 'onClearAllClick',
     'click @ui.deleteIdea': 'onDeleteButtonClick',
+    'click @ui.defineColumns': 'onDefineColumnsClick',
     'click .js_openTargetInPopOver': 'openTargetInPopOver'
   },
 
@@ -173,12 +176,12 @@ var IdeaPanel = AssemblPanel.extend({
   checkContentHeight: function(){
     var domObject = this.$(".content-ideapanel"),
         that = this;
-    if (this.model.get('attachments') && (this.model.get('attachments').length > 0)){
+    if (this.model !== null && this.model.get('attachments') && (this.model.get('attachments').length > 0)){
       if (this.attachmentLoaded){
         var imageDomObject = this.$el.find(".embedded-image-preview");
         this._calculateContentHeight(domObject, imageDomObject);
       }
-      else {      
+      else {
         this.$el.find(".embedded-image-preview").load(function() {
           that.attachmentLoaded = true;
           that._calculateContentHeight(domObject, $(this));
@@ -276,6 +279,7 @@ var IdeaPanel = AssemblPanel.extend({
   renderAttachments: function(){
     var collection = this.getAttachmentCollection();
     var user = Ctx.getCurrentUser();
+    
     if (user.can(Permissions.EDIT_IDEA)){
       
       var attachmentView = new AttachmentViews.AttachmentEditUploadView({
@@ -737,6 +741,7 @@ var IdeaPanel = AssemblPanel.extend({
                   that.model.destroy({
                     success: function() {
                       that.unblockPanel();
+                      // UX question: should we go to the parent idea, if any?
                       that.getContainingGroup().setCurrentIdea(null);
                     },
                     error: function(model, resp) {
@@ -998,6 +1003,18 @@ var IdeaPanel = AssemblPanel.extend({
     });
 
     this.regionDescription.show(description);
+  },
+
+  onDefineColumnsClick: function(e){
+    var that = this;
+
+    var modalView = new AdminMessageColumns({
+      groupContent: this.getContainingGroup(),
+      model: this.model,
+    });
+
+    Ctx.setCurrentModalView(modalView);
+    Assembl.slider.show(modalView);
   },
 
   renderCKEditorLongTitle: function() {

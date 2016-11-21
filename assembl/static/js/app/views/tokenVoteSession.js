@@ -17,7 +17,6 @@ var Marionette = require('../shims/marionette.js'),
   CKEditorField = require('./reusableDataFields/ckeditorField.js'),
   IdeaModel = require('../models/idea.js'),
   i18n = require('../utils/i18n.js'),
-  openIdeaInModal = require('./modals/ideaInModal.js'),
   Ctx = require('../common/context.js'),
   Moment = require('moment'),
   d3 = require('d3');

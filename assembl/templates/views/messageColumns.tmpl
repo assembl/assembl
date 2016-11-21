@@ -1,0 +1,9 @@
+<div class="panel-body">
+  <div class="js_ideaColumnHeader"></div>
+  <% if(announcementImgBackgroundLink){ %>
+    <div class="js_ideaAnnouncement hidden" style="background:url(<%= announcementImgBackgroundLink %>);background-repeat:no-repeat;background-size: cover"></div>
+  <% } else { %>
+    <div class="js_ideaAnnouncement hidden"></div>
+  <% } %>  
+  <div class="js_messageColumnsList messageColumnListContainer"></div>
+</div>

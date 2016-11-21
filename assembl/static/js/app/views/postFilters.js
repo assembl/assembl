@@ -417,7 +417,35 @@ _.extend(FilterPostReplyToUser.prototype, {
       });
     }
   });
-  
+
+function FilterPostClassifiedUnder() {
+  AbstractFilterSingleValue.call(this);
+}
+
+FilterPostClassifiedUnder.prototype = Object.create(AbstractFilterSingleValue.prototype);
+_.extend(FilterPostClassifiedUnder.prototype, {
+    getId: function() {
+      return 'post_classifier';
+    },
+    getServerParam: function() {
+      return 'classifier';
+    },
+    getLabelPromise: function() {
+      return Promise.resolve(i18n.gettext('In column category'));
+    },
+    getHelpText: function() {
+      return i18n.gettext('Only include messages that were classified in a specific category. Use "null" for no category.');
+    },
+    getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
+      return Promise.resolve(individualFilterValue);
+    },
+    getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
+      return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
+        return i18n.sprintf(i18n.gettext("In category: %s"), individualValuesButtons.join(i18n.gettext(' AND ')));
+      });
+    }
+  });
+
 function FilterPostReplyToMe() {
     FilterPostReplyToUser.call(this);
   }
@@ -795,7 +823,6 @@ _.extend(FilterPostIsDeletedOrNot.prototype, {
 });
 
 
-  
 var availableFilters = {
     POST_HAS_ID_IN: FilterPostHasIdIn,
     POST_IS_IN_CONTEXT_OF_IDEA: FilterPostIsInContextOfIdea,
@@ -813,7 +840,8 @@ var availableFilters = {
     POST_REPONDS_TO: FilterPostReplyToUser,
     POST_REPONDS_TO_ME: FilterPostReplyToMe,
     POST_IS_DELETED: FilterPostIsDeleted,
-    POST_IS_DELETED_OR_NOT: FilterPostIsDeletedOrNot
+    POST_IS_DELETED_OR_NOT: FilterPostIsDeletedOrNot,
+    POST_CLASSIFIED_UNDER: FilterPostClassifiedUnder,
   };
 
 module.exports = availableFilters;

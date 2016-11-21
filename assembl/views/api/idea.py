@@ -115,6 +115,8 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     ideas = ideas.filter(and_(*Idea.base_conditions()))
     ideas = ideas.options(
         joinedload_all(Idea.source_links),
+        joinedload_all(Idea.attachments),
+        joinedload_all(Idea.message_columns),
         joinedload_all(Idea.has_showing_widget_links),
         undefer(Idea.num_children))
 
@@ -170,13 +172,17 @@ def save_idea(request):
     if(idea.discussion_id != discussion.id):
         raise HTTPBadRequest(
             "Idea from discussion %s cannot saved from different discussion (%s)." % (idea.discussion_id,discussion.id ))
-    if 'shortTitle' in idea_data:
-        idea.short_title = idea_data['shortTitle']
-    if 'longTitle' in idea_data:
-        idea.long_title = idea_data['longTitle']
-    if 'definition' in idea_data:
-        idea.definition = idea_data['definition']
-    
+    simple_fields = {
+        'shortTitle': 'short_title',
+        'longTitle': 'long_title',
+        'definition': 'definition',
+        'message_view_override': 'message_view_override',
+        'messages_in_parent': 'messages_in_parent',
+    }
+    for key, attr_name in simple_fields.iteritems():
+        if key in idea_data:
+            setattr(idea, attr_name, idea_data[key])
+
     if 'parentId' in idea_data and idea_data['parentId'] is not None:
         # TODO: Make sure this is sent as a list!
         parent = Idea.get_instance(idea_data['parentId'])

@@ -59,7 +59,6 @@ var SynthesisIdeaView = ideaInIdeaList.IdeaView.extend({
     messageListView.triggerMethod('messageList:addFilterIsSynthesisMessage');
 
     this._groupContent.setCurrentIdea(null);
-    this._groupContent.NavigationResetDebateState();
 
     this.$el.addClass('is-selected');
   }

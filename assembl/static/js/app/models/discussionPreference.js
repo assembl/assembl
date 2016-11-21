@@ -5,7 +5,10 @@
  */
 var Backbone = require("backbone"),
     Ctx = require("../common/context.js");
+
+
 /**
+ * An individual preference value.
  * We do not use Base.Model.extend(), because we want to keep Backbone's default behaviour with model urls.
  * Generic case: preference value can be any json, not necessarily a dict.
  * So put it in "value" attribute of this model.
@@ -35,26 +38,59 @@ var DiscussionIndividualPreferenceModel = Backbone.Model.extend({
   },
   /**
    * @function app.models.discussionPreference.DiscussionIndividualPreferenceModel.valueAsCollection
+   * The preference is a list or dict of something. Return a collection of that something, or dict items.
    */
-  valueAsCollection: function() {
-    var value = this.get("value");
-    if (Array.isArray(value)) {
-      if (this._subcollectionCache === undefined) {
-        var that = this, collection;
+  valueAsCollection: function(preferenceData) {
+    if (this._subcollectionCache === undefined) {
+      var collection, that = this, value = this.get('value');
+      if (Array.isArray(preferenceData.default)) {
+        if (!Array.isArray(value)) {
+          // Error in value type
+          // shallow clone, hopefully good enough
+          value = _.clone(preferenceData.default);
+          this.set('value', value);
+        }
         collection = new DiscussionPreferenceSubCollection(value, {parse: true});
         this.listenTo(collection, "reset change add remove", function(model) {
-            var value = model.collection.map(
+            var val = model.collection.map(
               function(aModel) {
-                return aModel.get("value");
+                return aModel.get('value');
               });
-            that.set("value", value);
+            that.set('value', val);
         });
-        this._subcollectionCache = collection;
+      } else if (_.isObject(preferenceData.default)) {
+        if (!_.isObject(value)) {
+          // Error in value type
+          // shallow clone, hopefully good enough
+          value = _.clone(preferenceData.default);
+          this.set('value', value);
+        }
+        // In that case, transform {"value": {k,v}} into [{"key":k, "value": v}]
+        var items = [];
+        _.mapObject(value, function(v, k) {
+          items.push({ key: k, value: v });
+        });
+        collection = new DiscussionPreferenceSubCollection(items);
+        this.listenTo(collection, "reset change add remove", function(model) {
+            var val = {};
+            model.collection.map(
+              function(aModel) {
+                val[aModel.get('key')] = aModel.get('value');
+              });
+            that.set('value', val);
+        });
+      } else {
+        console.error("valueAsCollection called on an elementary object?");
+        collection = new DiscussionPreferenceSubCollection();
+        // Ideally recreate from the model's default.
       }
-      return this._subcollectionCache;
+      this._subcollectionCache = collection;
     }
-  }
+    return this._subcollectionCache;
+  },
 });
+
+
 /**
  * Subcase: pref is a dictionary, so we can use normal backbone
  * @class app.models.discussionPreference.DiscussionPreferenceDictionaryModel
@@ -72,7 +108,36 @@ var DiscussionPreferenceDictionaryModel = Backbone.Model.extend({
   url: function() {
     return Ctx.getApiV2DiscussionUrl("settings/"+this.id);
   },
+  /**
+   * @function app.models.discussionPreference.DiscussionIndividualPreferenceModel.valueAsCollection
+   * The preference is a list of something. Return a collection of that something.
+   */
+  valueAsCollection: function() {
+    if (this._subcollectionCache !== undefined) {
+      return this._subcollectionCache;
+    }
+    var value = this.get('value'),
+        that = this,
+        collection,
+        items = [];
+        _.mapObject(value, function(v, k) {
+          items.push({ key: k, value: v });
+        });
+        collection = new DiscussionPreferenceSubCollection(items, {parse: true});
+    this.listenTo(collection, "reset change add remove", function(model) {
+        var val = {};
+        model.collection.map(
+          function(aModel) {
+            val[aModel.get('key')] = aModel.get('value');
+          });
+        that.set('value', val);
+    });
+    this._subcollectionCache = collection;
+    return collection;
+  },
 });
+
+
 /**
  * @class app.models.discussionPreference.DiscussionPreferenceSubCollection
  */
@@ -85,6 +150,8 @@ var DiscussionPreferenceSubCollection = Backbone.Collection.extend({
   },
   model: DiscussionIndividualPreferenceModel
 });
+
+
 /**
  * @class app.models.discussionPreference.DiscussionPreferenceCollection
  */
@@ -119,6 +186,8 @@ var DiscussionPreferenceCollection = Backbone.Collection.extend({
     return prefs;
   },
 });
+
+
 /**
  * @class app.models.discussionPreference.UserPreferenceRawCollection
  * @extends app.models.discussionPreference.DiscussionPreferenceCollection

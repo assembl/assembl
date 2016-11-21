@@ -91,6 +91,7 @@
         "import_date": false,
         "subject": "&get_subject:",
         "body": "&get_body:",
+        "message_classifier": true,
         "widget_ideas": "&widget_ideas"
     },
     "Post": {
@@ -162,6 +163,8 @@
         "num_total_and_read_posts": true,
         "widget_links": "&widget_link_signatures",
         "proposed_in_post": ":",
+        "messages_in_parent": true,
+        "message_view_override": true,
         "widget_add_post_endpoint": true
     },
     "RootIdea": {

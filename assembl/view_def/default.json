@@ -213,6 +213,7 @@
         "subject": "&get_subject:",
         "body": "&get_body:",
         "widget_ideas": "&widget_ideas",
+        "message_classifier": true,
         "tombstone_date": true
     },
     "Post": {
@@ -310,6 +311,9 @@
         "num_total_and_read_posts": true,
         "widget_links": "&widget_link_signatures",
         "widget_add_post_endpoint": true,
+        "messages_in_parent": true,
+        "message_view_override": true,
+        "message_columns": [":default"],
         "attachments": [":default"]
     },
     "RootIdea": {
@@ -327,6 +331,14 @@
         "subtype": "rdf_type",
         "is_tombstone": true,
         "order": true
+    },
+    "IdeaMessageColumn": {
+        "idea": true,
+        "message_classifier": true,
+        "header": true,
+        "name": ":extended",
+        "color": true,
+        "previous_column": true
     },
     "IdeaGraphView": {
         "creation_date": true,

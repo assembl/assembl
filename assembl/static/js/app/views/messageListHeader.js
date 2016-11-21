@@ -359,6 +359,7 @@ var MessageListHeader = Marionette.ItemView.extend({
 
     this.$("."+this.ViewStyles.NEW_MESSAGES.css_class).html(this.ViewStyles.NEW_MESSAGES.label);
     this.$("."+this.ViewStyles.REVERSE_CHRONOLOGICAL.css_class).html(this.ViewStyles.REVERSE_CHRONOLOGICAL.label);
+    this.$("."+this.ViewStyles.POPULARITY.css_class).html(this.ViewStyles.POPULARITY.label);
   },
 
   /**
