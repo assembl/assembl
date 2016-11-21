@@ -171,13 +171,13 @@ def home_view(request):
     context['canAddExtract'] = canAddExtract
     context['canDisplayTabs'] = True
     preferences = discussion.preferences
+    session = Discussion.default_db
     if user_id != Everyone:
         from assembl.models import UserPreferenceCollection
         user = User.get(user_id)
         preferences = UserPreferenceCollection(user_id, discussion)
         # TODO: user may not exist. Case of session with BD change.
         user.is_visiting_discussion(discussion.id)
-        session = Discussion.default_db
 
         if '_LOCALE_' in request.cookies:
             locale = request.cookies['_LOCALE_']
