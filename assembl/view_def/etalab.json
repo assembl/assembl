@@ -1,0 +1,16 @@
+{
+    "_default": {
+        "id": true,
+        "_default": false
+    },
+    "Discussion": {
+        "creation_date": true,
+        "name": "topic",
+        "slug": true,
+        "url": "&get_url",
+        "status": "'\"running\"",
+        "adminName": "creator_name",
+        "adminEmail": "creator_email",
+        "metadata": "self:etalab_metadata"
+   }
+}

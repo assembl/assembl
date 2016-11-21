@@ -671,6 +671,16 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         frontendUrls = FrontendUrls(self)
         return frontendUrls.get_discussion_url()
 
+    @property
+    def creator_name(self):
+        if self.creator:
+            return self.creator.name
+
+    @property
+    def creator_email(self):
+        if self.creator:
+            return self.creator.get_preferred_email()
+
     def count_contributions_per_agent(
             self, start_date=None, end_date=None, as_agent=True):
         from .post import Post

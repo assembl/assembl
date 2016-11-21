@@ -1,0 +1,9 @@
+{
+    "_default": {
+        "id": false,
+        "_default": false
+    },
+    "Discussion": {
+        "creation_date": true
+    }
+}
