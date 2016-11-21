@@ -1955,3 +1955,40 @@ def env_bel_bluenove():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = getenv("GITBRANCH", "master")
+
+
+""" The various services used by the stack """
+SERVICES = [
+    'postgres',
+    'smtp',
+    'imap',
+    'piwik',
+    'sentry',
+    'memcached',
+    'redis',
+    'mysql',
+]
+
+
+def load_service_configs():
+    """ allows to break a service network configuration into many files.
+    if an instance's .rc file mentions (e.g.) postgres_config = xxx,
+    configuration variables from configs/postgres/xxx.rc will be loaded
+    into env, prefixed by the service name, unless overridden locally.
+    Otherwise, configuration variables from configs/postgres/default.rc
+    will be loaded. This holds for services in SERVICES"""
+    from fabric.state import env
+    from fabric.main import load_settings
+    for service in SERVICES:
+        config_name = env.get(service + "_config", "default")
+        if config_name is None:
+            continue
+        fname = join('configs', service, config_name + ".rc")
+        if os.path.exists(fname):
+            service_config = load_settings(fname)
+            for k, v in service_config.iteritems():
+                k = "_".join((service, k))
+                if k not in env:
+                    env[k] = v
+
+load_service_configs()
