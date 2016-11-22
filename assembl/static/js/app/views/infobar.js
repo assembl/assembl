@@ -44,7 +44,23 @@ var PiwikIframeModal = Backbone.Modal.extend({
   template: '#tmpl-piwikIframeModal',
   className: 'modal-ckeditorfield popin-wrapper',
   keyControl:false,
-  cancelEl: '.close'
+  cancelEl: '.close',
+  initialize: function(){
+    var locale = Ctx.getLocale();
+    this.statsUrl = document.location.hostname + '/index.php?module=CoreAdminHome&action=optOut&language=' + locale;
+    if(this.statsUrl.indexOf('bluenove') > -1){
+      this.statsUrl.replace(document.location.hostname.split('.')[0], 'stats');
+    }
+    else if(this.statsUrl.indexOf('coeus') > -1){
+      this.statsUrl.replace(document.location.hostname.split('.')[0], 'piwik');
+    }
+    else if(this.statsUrl.indexOf('localhost') > -1){
+      this.statsUrl = '//piwik.coeus.ca/index.php?module=CoreAdminHome&action=optOut&language=' + locale;
+    }
+  },
+  serializeData: function(){
+    return { statsUrl:this.statsUrl };
+  }
 });
 
 var WidgetInfobarItemView = Marionette.LayoutView.extend({
