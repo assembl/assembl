@@ -47,14 +47,15 @@ var PiwikIframeModal = Backbone.Modal.extend({
   cancelEl: '.close',
   initialize: function(){
     var locale = Ctx.getLocale();
-    this.statsUrl = document.location.hostname + '/index.php?module=CoreAdminHome&action=optOut&language=' + locale;
-    if(this.statsUrl.indexOf('bluenove') > -1){
-      this.statsUrl.replace(document.location.hostname.split('.')[0], 'stats');
+    var currentLocation = document.location.hostname;
+    var hostName = currentLocation.split('.')[0];
+    if(currentLocation.indexOf('bluenove') > -1){
+      this.statsUrl = currentLocation.replace(hostName, 'stats') + '/index.php?module=CoreAdminHome&action=optOut&language=' + locale;
     }
-    else if(this.statsUrl.indexOf('coeus') > -1){
-      this.statsUrl.replace(document.location.hostname.split('.')[0], 'piwik');
+    else if(currentLocation.indexOf('coeus') > -1){
+      this.statsUrl = currentLocation.replace(hostName, 'piwik') + '/index.php?module=CoreAdminHome&action=optOut&language=' + locale;
     }
-    else if(this.statsUrl.indexOf('localhost') > -1){
+    else if(currentLocation.indexOf('localhost') > -1){
       this.statsUrl = '//piwik.coeus.ca/index.php?module=CoreAdminHome&action=optOut&language=' + locale;
     }
   },
