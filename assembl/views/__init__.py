@@ -210,6 +210,8 @@ def get_default_context(request):
         analytics_settings['piwik'] = {
             'script': web_analytics_piwik_script
         }
+    
+    analytics_url = config.get('web_analytics_piwik_url', None)
 
     (theme_name, theme_relative_path)=get_theme_info(discussion)
     return dict(
@@ -230,6 +232,7 @@ def get_default_context(request):
         theme_relative_path=theme_relative_path,
         minified_js=config.get('minified_js') or False,
         web_analytics=analytics_settings,
+        analytics_url=analytics_url,
         help_url=help_url,
         socket_url=socket_url,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
@@ -237,7 +240,7 @@ def get_default_context(request):
         activate_tour=str(config.get('activate_tour') or False).lower(),
         providers=json.dumps(providers),
         translations=codecs.open(jedfilename, encoding='utf-8').read()
-        )
+    )
 
 
 def process_locale(

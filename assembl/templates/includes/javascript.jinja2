@@ -23,3 +23,9 @@
 </script>
 
 <script type="text/javascript">var start_application = false;</script>
+
+<script type="text/javascript">
+  {% if analytics_url %}
+    var analyticsUrl = "{{ analytics_url }}";
+  {% endif %}
+</script>
