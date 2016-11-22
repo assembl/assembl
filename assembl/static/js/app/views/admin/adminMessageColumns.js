@@ -289,7 +289,7 @@ var AdminMessageColumnsModal = Backbone.Modal.extend({
     var resultView = new AdminMessageColumnsPanel({
       model: this.model,
     });
-    this.ui.body.html(resultView.render().el);
+    $('js_modal-body').html(resultView.render().el);
   },
 
   serializeData: function() {
