@@ -21,6 +21,49 @@ from fabric.api import *
 from fabric.colors import yellow, cyan, red, green
 from fabric.contrib.files import *
 
+
+""" The various services used by the stack """
+SERVICES = [
+    'postgres',
+    'smtp',
+    'imap',
+    'piwik',
+    'sentry',
+    'memcached',
+    'redis',
+    'mysql',
+]
+
+
+def load_service_configs():
+    """ allows to break a service network configuration into many files.
+    Suppose we have a platform instance's configuration specified in
+    platform_xxx.rc. In that file, we can refer to other configuration files
+    with the pattern [service]_config = [service_name]
+    for each service defined in SERVICES above.
+    This function will then look for the file configs/[service]/[service_name].rc
+    and import all the "key = value" pairs therein in the current environment,
+    with keys prefixed with [service]_.
+    Note that variables already defined in the environment, or in the platform's
+    .rc file, will override those found in from service config files."""
+    from fabric.state import env
+    from fabric.main import load_settings
+    for service in SERVICES:
+        config_name = env.get(service + "_config", "default")
+        if config_name is None:
+            continue
+        fname = join('configs', service, config_name + ".rc")
+        if os.path.exists(fname):
+            service_config = load_settings(fname)
+            for k, v in service_config.iteritems():
+                full_key_name = "_".join((service, k))
+                if full_key_name not in env:
+                    env[full_key_name] = v
+
+
+load_service_configs()
+
+
 def realpath(path):
     return run("python -c 'import os,sys;print os.path.realpath(sys.argv[1])' " + path)
 
@@ -1955,40 +1998,3 @@ def env_bel_bluenove():
     env.uses_ngnix = True
     env.uses_uwsgi = True
     env.gitbranch = getenv("GITBRANCH", "master")
-
-
-""" The various services used by the stack """
-SERVICES = [
-    'postgres',
-    'smtp',
-    'imap',
-    'piwik',
-    'sentry',
-    'memcached',
-    'redis',
-    'mysql',
-]
-
-
-def load_service_configs():
-    """ allows to break a service network configuration into many files.
-    if an instance's .rc file mentions (e.g.) postgres_config = xxx,
-    configuration variables from configs/postgres/xxx.rc will be loaded
-    into env, prefixed by the service name, unless overridden locally.
-    Otherwise, configuration variables from configs/postgres/default.rc
-    will be loaded. This holds for services in SERVICES"""
-    from fabric.state import env
-    from fabric.main import load_settings
-    for service in SERVICES:
-        config_name = env.get(service + "_config", "default")
-        if config_name is None:
-            continue
-        fname = join('configs', service, config_name + ".rc")
-        if os.path.exists(fname):
-            service_config = load_settings(fname)
-            for k, v in service_config.iteritems():
-                k = "_".join((service, k))
-                if k not in env:
-                    env[k] = v
-
-load_service_configs()
