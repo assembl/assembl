@@ -23,6 +23,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.i18n import default_locale_negotiator
 from pyramid.settings import asbool
+from pyramid.path import DottedNameResolver
 from zope.component import getGlobalSiteManager
 import sqltap.wsgi
 
@@ -38,7 +39,7 @@ from .lib.database_functions import ensure_functions
 putenv('ODBCINI', join(dirname(dirname(__file__)), 'odbc.ini'))
 
 locale_negotiator = default_locale_negotiator
-
+resolver = DottedNameResolver(__package__)
 
 # Do not import models here, it will break tests.
 def main(global_config, **settings):
@@ -78,9 +79,10 @@ def main(global_config, **settings):
     config.set_session_factory(session_factory)
     if not settings.get('nosecurity', False):
         # import after session to delay loading of BaseOps
-        from auth.util import (
-            authentication_callback, UpgradingSessionAuthenticationPolicy)
-        auth_policy = UpgradingSessionAuthenticationPolicy(
+        from auth.util import authentication_callback
+        auth_policy_name = settings.get(
+            "auth_policy_class", "assembl.auth.util.UpgradingSessionAuthenticationPolicy")
+        auth_policy = resolver.resolve(auth_policy_name)(
             callback=authentication_callback)
         config.set_authentication_policy(auth_policy)
         config.set_authorization_policy(ACLAuthorizationPolicy())

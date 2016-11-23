@@ -1,6 +1,6 @@
 """Sundry utility functions having to do with users or permissions"""
 from csv import reader
-from datetime import datetime
+from datetime import datetime, timedelta
 from os import urandom
 import base64
 
@@ -14,6 +14,7 @@ from pyramid.authentication import SessionAuthenticationPolicy
 from assembl.lib.locale import _
 from ..lib.sqla import get_session_maker
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
+from .password import verify_data_token, Validity
 from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission, IdentityProvider, AgentProfile,
@@ -132,7 +133,8 @@ def get_current_user_id():
 
 
 class UpgradingSessionAuthenticationPolicy(SessionAuthenticationPolicy):
-
+    """ A session authentication policy that tells the underlying beaker session
+    whenever the user logs in or out. Allows to have different cookie policies"""
     def remember(self, request, user_id, **kwargs):
         request.session.elevate_privilege(True)
         return super(UpgradingSessionAuthenticationPolicy, self).remember(
@@ -142,6 +144,59 @@ class UpgradingSessionAuthenticationPolicy(SessionAuthenticationPolicy):
         request.session.elevate_privilege(False)
         return super(UpgradingSessionAuthenticationPolicy, self).forget(
             request)
+
+
+class TokenSessionAuthenticationPolicy(SessionAuthenticationPolicy):
+    """ A session authentication policy that accepts tokens for identity instead of
+    the beaker session's login."""
+
+    def effective_principals(self, request):
+        p = super(TokenSessionAuthenticationPolicy, self
+                  ).effective_principals(request)
+        if len(p) == 1:
+            token = request.headers.get('X-Api-Key', None)
+            if token:
+                # Those tokens are eternal
+                data, valid = verify_data_token(
+                    token, max_age=timedelta(days=36525))
+                if valid == Validity.VALID:
+                    try:
+                        data, salt = data.split('.', 1)
+                        salt = base64.urlsafe_b64decode(salt)
+                        data = [int(i) for i in data.split(',')]
+                        user_id = data[0]
+                        p.append(Authenticated)
+                        p.extend(get_roles(user_id, None))
+                    except:
+                        pass
+        return p
+
+    def authenticated_userid(self, request):
+        user_id = super(TokenSessionAuthenticationPolicy, self
+                        ).authenticated_userid(request)
+        if user_id is None:
+            token = request.headers.get('X-Api-Key', None)
+            if token:
+                # Those tokens are eternal
+                data, valid = verify_data_token(
+                    token, max_age=timedelta(days=36525))
+                if valid == Validity.VALID:
+                    try:
+                        data, salt = data.split('.', 1)
+                        salt = base64.urlsafe_b64decode(salt)
+                        data = [int(i) for i in data.split(',')]
+                        user_id = data[0]
+                    except:
+                        pass
+        return user_id
+
+
+class UpgradingTokenSessionAuthenticationPolicy(
+        TokenSessionAuthenticationPolicy,
+        UpgradingSessionAuthenticationPolicy):
+    """ Mixing :py:class:`UpgradingSessionAuthenticationPolicy` and
+    :py:class:`TokenSessionAuthenticationPolicy`."""
+    pass
 
 
 def authentication_callback(user_id, request):
