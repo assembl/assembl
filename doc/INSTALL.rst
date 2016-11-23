@@ -312,10 +312,11 @@ If you have not added this user to the www-data group as advised previously (or 
 If you do not have an SSL certificate, then you have to set ``accept_secure_connection = false`` and ``require_secure_connection = false`` (because if you set ``accept_secure_connection = true``, then the login page on assembl will try to show using https, which will not work).
 
 
-(exit to sudoer account)
 
 .. code:: sh
 
+    exit # this logs out from the assembl_user user, back to the initial sudoer account
+    cd /home/assembl_user/assembl
     fab env_dev install_builddeps
     fab env_dev bootstrap_from_checkout
     source venv/bin/activate
