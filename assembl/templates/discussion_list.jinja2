@@ -7,58 +7,48 @@
     <h4 class="h4"><a href='{{ discussion.url }}'>{{ discussion.topic }}</a></h4>
     <span class="discussion">
     {% if discussion.admin_url %}
-        <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
+      <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
     {% endif %}
     {% if discussion.admin_url %}
-        <br/><a href='{{ discussion.permissions_url }}'><em>{{ gettext("Permissions") }}</em></a>
+      <br/><a href='{{ discussion.permissions_url }}'><em>{{ gettext("Permissions") }}</em></a>
     {% endif %}
     </span>
   </div>
   {% endfor %}
 
-  <div class="gu gu1of5 bx bx-empty">
-    {% if discussions %}
-         {% if not user %}
-             <h4 class="h4"><a href='/login'>{{ gettext("Sign in") }}</a></h4>
-             {% trans %} to see all available discussions.{% endtrans %}
-         {% endif %}
-     {% else %}
-         {% if user %}
-             <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
-         {% else %}
-             <h4 class="h4"><a href='/login'>{{ gettext("Sign in") }}</a></h4>
-             {% trans %} to see available discussions.{% endtrans %}
-         {% endif %}
-     {% endif %}
+  {% if discussions and not user %}
+    <div class="gu gu1of5 bx bx-default">
+      <h4 class="h4"><a href='/login'>{{ gettext("Sign in") }}</a></h4>
+      {% trans %} to see all available discussions.{% endtrans %}
+    </div>
+  {% endif %}
 
-     {% if discussions_admin_url %}
-         <h4 class="h4"><a href='{{ discussions_admin_url }}'>{{ gettext("Create a new discussion") }}</a></h4>
-     {% endif %}
-     {% if permissions_admin_url %}
-         <h4 class="h4"><a href='{{ permissions_admin_url }}'>{{ gettext("Change global permissions") }}</a></h4>
-     {% endif %}
-     {% if user %}
-         <h4 class="h4"><a href='/logout'>{{ gettext("Sign out") }}</a></h4>
-     {% endif %}
+  {% if not discussions %}
+    <div class="gu gu1of5 bx bx-default">
+    {% if user %}
+      {% if user %}
+        <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
+      {% else %}
+        <h4 class="h4"><a href='/login'>{{ gettext("Sign in") }}</a></h4>
+        {% trans %} to see available discussions.{% endtrans %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+  
+
+  {% if discussions_admin_url or permissions_admin_url or user %}
+  <div class="gu gu1of5 bx bx-default">
+    {% if discussions_admin_url %}
+      <h4 class="h4"><a href='{{ discussions_admin_url }}'>{{ gettext("Create a new discussion") }}</a></h4>
+    {% endif %}
+    {% if permissions_admin_url %}
+      <h4 class="h4"><a href='{{ permissions_admin_url }}'>{{ gettext("Change global permissions") }}</a></h4>
+    {% endif %}
+    {% if user %}
+      <h4 class="h4"><a href='/logout'>{{ gettext("Sign out") }}</a></h4>
+    {% endif %}
   </div>
+  {% endif %}
 </div>
 
-    {#<ul class="discussionlist">
-        {% for discussion in discussions %}
-        <li>
-            <span class="discussion">
-            <a href='{{ discussion.get_url() }}'>{{ discussion.topic }}</a>
-            {% if discussion.admin_url %}
-                <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
-            {% endif %}
-            </span>
-        </li>
-        {% else %}
-            {% if user %}
-                <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
-            {% else %}
-                <em><a href='/login'><em>{{ gettext("Sign in") }}</em>{% trans %} to see available discussions.{% endtrans %}</em>
-            {% endif %}
-        {% endfor %}
-    </ul>#}
 {% endblock %}
