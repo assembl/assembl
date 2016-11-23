@@ -825,18 +825,24 @@ def test_sentry(request):
     raise RuntimeError("Let's test sentry")
 
 
-# This should be a PUT, but the backbone save method is confused by
-# discussion URLs.
+@view_config(route_name='post_discussion_etalab', request_method='POST',
+             header=JSON_HEADER, permission=P_SYSADMIN)
 @view_config(context=ClassContext, ctx_class=Discussion,
-             request_method='POST', header=JSON_HEADER)
+             request_method='POST', header=JSON_HEADER, permission=P_SYSADMIN)
 def post_discussion(request):
     from assembl.models import EmailAccount, User, LocalUserRole, Role, AbstractAgentAccount
     ctx = request.context
     json = request.json_body
     user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, None)
-    if P_SYSADMIN not in permissions:
-        raise HTTPUnauthorized()
+    if request.matched_route and request.matched_route.name == 'post_discussion_etalab':
+        default_view = 'etalab'
+        # Fake an APIv2 context
+        from ..traversal import Api2Context
+        ctx = Api2Context(ctx)
+        ctx = ClassContext(ctx, Discussion)
+    else:
+        default_view = 'default'
     cls = ctx.get_class(json.get('@type', None))
     typename = cls.external_typename()
     # special case: find the user first.
@@ -871,5 +877,5 @@ def post_discussion(request):
         for instance in instances:
             db.add(instance)
         db.flush()
-        view = request.GET.get('view', None) or 'default'
+        view = request.GET.get('view', None) or default_view
         return CreationResponse(first, user_id, permissions, view)

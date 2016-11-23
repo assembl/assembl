@@ -72,7 +72,8 @@ MULTIPART_HEADER = "Content-Type:multipart/form-data"
 
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
-    pass
+    config.add_route('post_discussion_etalab', '/instances')
+    config.add_route('get_discussions_etalab', '/instances')
 
 
 def check_permissions(
