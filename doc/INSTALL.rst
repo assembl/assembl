@@ -234,7 +234,7 @@ update with the following:
 Setting up a production dedicated instance
 ------------------------------------------
 
-Start as a user with sudo access
+Start as a user with sudo access (NOT as root!)
 
 .. code:: sh
 
@@ -291,7 +291,7 @@ Make sure your ssl works, and set
     accept_secure_connection = true
     require_secure_connection = true
 
-Otherwise, your are jeopardiszing passwords...
+Otherwise, you are jeopardizing passwords...
 
 The following must all be unique to the instance.  If you only have one instance on the server, you can keep the defaults
 
