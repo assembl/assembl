@@ -27,7 +27,7 @@ class CreateVMMMailboxAtDiscussionCreation(object):
             host='localhost',
             username=email,
             password=password,
-            admin_sender=config.get('assembl.admin_email'),
+            admin_sender=email,
             discussion=discussion,
             folder='inbox',
             port=143,
