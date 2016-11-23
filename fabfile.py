@@ -499,6 +499,7 @@ def bootstrap_from_checkout():
     execute(build_virtualenv)
     execute(app_update_dependencies)
     execute(app_compile_nodbupdate)
+    execute(set_file_permissions)
     execute(app_db_install)
     execute(app_reload)
     execute(webservers_reload)

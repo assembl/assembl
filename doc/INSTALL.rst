@@ -255,7 +255,6 @@ Start as a user with sudo access (NOT as root!)
 
     git clone https://github.com/assembl/assembl.git
     cd assembl
-    fab env_dev set_file_permissions
     cp production.ini local.ini
 
 Change the values for:
