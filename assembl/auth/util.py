@@ -150,45 +150,45 @@ class TokenSessionAuthenticationPolicy(SessionAuthenticationPolicy):
     """ A session authentication policy that accepts tokens for identity instead of
     the beaker session's login."""
 
+    def user_from_token(self, request):
+        token = request.headers.get('X-Api-Key', None)
+        if token:
+            # Those tokens are eternal
+            data, valid = verify_data_token(
+                token, max_age=timedelta(days=36525))
+            if valid == Validity.VALID:
+                try:
+                    data, salt = data.split('.', 1)
+                    salt = base64.urlsafe_b64decode(salt)
+                    data = [int(i) for i in data.split(',')]
+                    user_id = data[0]
+                    return user_id
+                except:
+                    pass
+
     def effective_principals(self, request):
         p = super(TokenSessionAuthenticationPolicy, self
                   ).effective_principals(request)
         if len(p) == 1:
-            token = request.headers.get('X-Api-Key', None)
-            if token:
-                # Those tokens are eternal
-                data, valid = verify_data_token(
-                    token, max_age=timedelta(days=36525))
-                if valid == Validity.VALID:
-                    try:
-                        data, salt = data.split('.', 1)
-                        salt = base64.urlsafe_b64decode(salt)
-                        data = [int(i) for i in data.split(',')]
-                        user_id = data[0]
-                        p.append(Authenticated)
-                        p.extend(get_roles(user_id, None))
-                    except:
-                        pass
+            user_id = self.user_from_token(request)
+            if user_id:
+                discussion = None
+                # No use case for this yet.
+                # try:
+                #     discussion = discussion_from_request(request)
+                #     if discussion is not None:
+                #         discussion = discussion.id
+                # except:
+                #     pass
+                p.append(Authenticated)
+                p.extend(get_roles(user_id, discussion))
         return p
 
     def authenticated_userid(self, request):
-        user_id = super(TokenSessionAuthenticationPolicy, self
-                        ).authenticated_userid(request)
-        if user_id is None:
-            token = request.headers.get('X-Api-Key', None)
-            if token:
-                # Those tokens are eternal
-                data, valid = verify_data_token(
-                    token, max_age=timedelta(days=36525))
-                if valid == Validity.VALID:
-                    try:
-                        data, salt = data.split('.', 1)
-                        salt = base64.urlsafe_b64decode(salt)
-                        data = [int(i) for i in data.split(',')]
-                        user_id = data[0]
-                    except:
-                        pass
-        return user_id
+        return (
+            super(TokenSessionAuthenticationPolicy, self
+                  ).authenticated_userid(request) or
+            self.user_from_token(request))
 
 
 class UpgradingTokenSessionAuthenticationPolicy(
