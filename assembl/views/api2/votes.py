@@ -31,7 +31,7 @@ def votes_collection_view(request):
     view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
     tombstones = asbool(request.GET.get('tombstones', False))
     q = ctx.create_query(view == 'id_only', tombstones).join(
-        User).filter(User.id == user_id)
+        User, AbstractIdeaVote.voter).filter(User.id == user_id)
     if view == 'id_only':
         return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
     else:

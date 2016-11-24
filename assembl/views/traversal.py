@@ -739,9 +739,17 @@ class CollectionDefinition(AbstractCollectionDefinition):
                 print "Could not join %s to %s" % (owner_alias, query)
                 # This is very likely to fail downstream
                 return query
+        found_key = False
         if inv and not uses_list(inv):
-            query = query.filter(getattr(coll_alias, inv.key) == parent_instance)
-        else:
+            # Try to constrain on coll_alias's key vs owner_alias.
+            # Difficult cases happen when tombstone is part of the
+            # reln's columns
+            for column in inv.local_columns:
+                for fk in column.foreign_keys:
+                    if fk.column.table == parent_instance.__class__.__table__:
+                        query = query.filter(getattr(coll_alias, column.name) == parent_instance.id)
+                        found_key = True
+        if not found_key:
             query = query.filter(owner_alias.id == parent_instance.id)
         return query
 
