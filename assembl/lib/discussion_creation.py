@@ -38,7 +38,8 @@ def setup_discussion_callbacks(registry):
     class_names = aslist(settings.get('discussion_callbacks', ''))
     for class_name in class_names:
         cls = resolver.resolve(class_name)
-        registry.registerUtility(cls(), IDiscussionCreationCallback)
+        registry.registerUtility(
+            cls(), IDiscussionCreationCallback, cls.__name__)
 
 
 def includeme(config):
