@@ -1452,24 +1452,61 @@ def install_database():
         install_postgres()
 
 
+def install_php():
+    if env.mac:
+        # TODO
+        print(red("TODO: Install PHP on a mac"))
+    else:
+        sudo("php-mysql php-curl php-cli php-gd")
+
+
+def install_mysql():
+    if env.mac:
+        # TODO
+        # APACHE already comes pre-installed on Mac OS X El Capitan
+        # Read more here:
+        # https://jason.pureconcepts.net/2015/10/install-apache-php-mysql-mac-os-x-el-capitan/
+        print(red("TODO: Install MySQL on MacOS X"))
+    else:
+        # Check the env variable for all of the values required for mysql installation
+
+        sudo("debconf-set-selections <<< 'mysql-server mysql-server/root_password password {password}".
+            format(password=env.mysql_password))
+        sudo("debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password {password}".
+            format(password=env.mysql_password))
+        sudo("apt-get -y install mysql-server")
+
+
+def install_apache():
+    if env.mac:
+        # TODO
+        # APACHE already comes pre-installed on Mac OS X El Capitan
+        # Read more here:
+        # https://jason.pureconcepts.net/2015/10/install-apache-php-mysql-mac-os-x-el-capitan/
+        print(red("TODO: Install Apache on MacOS X"))
+    else:
+        sudo("apt-get install apache2")
+
+
 def install_lamp():
     """
     Installs Apache2, Mysql and PHP on a Linux Environment
     """
-    if env.mac:
-        print(red("This task cannot be run on a Macintosh, you fool!"))
-    else:
-        sudo("apt-get install apache2 mysql-server php-mysql php-curl php-cli php-gd")
+    execute(install_mysql())
+    execute(install_apache())
+    execute(install_php())
+
 
 def uninstall_lamp():
     """
-    Installs Apache2, Mysql and PHP on a Linux Environment
+    Installs Apache2, Mysql and PHP on a Linux Environment, for dev purposes
     """
     if env.mac:
         print(red("This task cannot be run on a Macintosh, you fool!"))
     else:
         sudo("apt-get purge apache2 mysql-server php-mysql php-curl php-cli php-gd")
         sudo("apt-get autoremove")  # Remove dangling dependencies after purging
+
 
 @task
 def install_piwik():
