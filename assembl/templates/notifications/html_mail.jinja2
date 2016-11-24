@@ -5,6 +5,7 @@ The HTML conforms to ink's CSS.  http://zurb.com/ink/docs.php
 
 It expects variables:
 subscription
+discussion
 notification
 frontendUrls
 ink_css
@@ -12,8 +13,7 @@ assembl_css
 #}
 
 {% set discussionUrl = frontendUrls.get_discussion_url() %}
-{% set notificationConfigUrl = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl() %}
-{% set discussionTopic = subscription.discussion.topic %}
+{% set discussionTopic = discussion.topic %}
 {% set discussionLink='<a href="'+discussionUrl+'">'+discussionTopic+'</a>' %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -70,6 +70,7 @@ assembl_css
                 {% endblock notification_content %}
                 
                 {%- block notification_subscriptions %}
+                {% set notificationConfigUrl = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl() %}
                 <table class="row callout">
                   <tr>
                     <td class="wrapper last">

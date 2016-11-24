@@ -37,6 +37,7 @@ from . import Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
 from ..lib.utils import waiting_get
+from ..lib import config
 from .auth import (
     User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate)
 from .discussion import Discussion
@@ -897,32 +898,57 @@ class Notification(Base):
     def get_notification_subject(self):
         """Typically for email"""
 
-    def get_unlocalized_jinja_env(self):
-        threadlocals = self.threadlocals
-        if getattr(threadlocals, 'jinja_env', None) is None:
-            threadlocals.jinja_env = Environment(
+    @classmethod
+    def make_unlocalized_jinja_env(cls):
+        return Environment(
                 loader=PackageLoader('assembl', 'templates'),
                 extensions=['jinja2.ext.i18n'])
-        return threadlocals.jinja_env
 
-    def get_jinja_env(self):
-        jinja_env = self.get_unlocalized_jinja_env()
-        self.setup_localizer(jinja_env)
+    @classmethod
+    def make_jinja_env(cls, user=None):
+        jinja_env = cls.make_unlocalized_jinja_env()
+        cls.setup_localizer(jinja_env, user)
         return jinja_env
 
-    def get_localizer(self):
-        locale = self.first_matching_subscription.user.get_preferred_locale()
+    def get_jinja_env(self):
+        threadlocals = self.threadlocals
+        if getattr(threadlocals, 'jinja_env', None) is None:
+            threadlocals.jinja_env = self.make_unlocalized_jinja_env()
+        self.setup_localizer(
+            threadlocals.jinja_env, self.first_matching_subscription.user)
+        return threadlocals.jinja_env
+
+    @classmethod
+    def get_localizer(cls, user=None):
+        if user:
+            locale = user.get_preferred_locale()
+        else:
+            locale = config.get(
+                'available_languages', 'fr_CA en_CA').split()[0]
         # TODO: if locale has country code, make sure we fallback properly.
         path = os.path.abspath(join(dirname(__file__), os.path.pardir, 'locale'))
         return make_localizer(locale, [path])
 
-    def setup_localizer(self, jinja_env=None):
-        localizer = self.get_localizer()
-        jinja_env = jinja_env or self.get_unlocalized_jinja_env()
+    @classmethod
+    def setup_localizer(cls, jinja_env=None, user=None):
+        localizer = cls.get_localizer(user)
+        jinja_env = jinja_env or cls.make_unlocalized_jinja_env()
         jinja_env.install_gettext_callables(
             partial(localizer.translate, domain='assembl'),
             partial(localizer.pluralize, domain='assembl'),
             newstyle=True)
+
+    @classmethod
+    def get_css_paths(cls, discussion):
+        from ..views import get_theme_info, get_theme_base_path
+        (theme_name, theme_relative_path) = get_theme_info(discussion)
+        assembl_css_path = os.path.normpath(os.path.join(get_theme_base_path(), theme_relative_path, 'assembl_notifications.css'))
+        assembl_css = open(assembl_css_path)
+        assert assembl_css
+        ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
+        ink_css = open(ink_css_path)
+        assert ink_css
+        return (assembl_css, ink_css)
 
     def get_from_email_address(self):
         from_email = self.first_matching_subscription.discussion.admin_source.admin_sender
@@ -1034,17 +1060,11 @@ class NotificationOnPostCreated(NotificationOnPost):
     def render_to_email_html_part(self):
         from ..lib.frontend_urls import FrontendUrls, URL_DISCRIMINANTS, SOURCE_DISCRIMINANTS
         from premailer import Premailer
-        from ..views import get_theme_info, get_theme_base_path
         discussion = self.first_matching_subscription.discussion
-        (theme_name, theme_relative_path) = get_theme_info(discussion)
-        assembl_css_path = os.path.normpath(os.path.join(get_theme_base_path(), theme_relative_path, 'assembl_notifications.css'))
-        assembl_css = open(assembl_css_path)
-        assert assembl_css
-        ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
-        ink_css = open(ink_css_path)
-        assert ink_css
+        (assembl_css, ink_css) = self.get_css_paths(discussion)
         jinja_env = self.get_jinja_env()
         template_data={'subscription': self.first_matching_subscription,
+                       'discussion': discussion,
                        'notification': self,
                        'frontendUrls': FrontendUrls(discussion),
                        'ink_css': ink_css.read(),
