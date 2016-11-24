@@ -395,7 +395,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     def get_user_template(self, role_name, autocreate=False):
         template = self.db.query(UserTemplate).join(
             Role).filter(Role.name == role_name).join(
-            Discussion).filter(Discussion.id == self.id).first()
+            Discussion, UserTemplate.discussion).filter(
+            Discussion.id == self.id).first()
         changed = False
         if autocreate and not template:
             # There is a template user per discussion.  If it doesn't exist yet
