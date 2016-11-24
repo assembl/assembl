@@ -10,6 +10,7 @@ def discussion(request, test_session, default_preferences):
         d = Discussion(
             topic=u"Jack Layton", slug="jacklayton2",
             subscribe_to_notifications_on_signup=False,
+            creator=None,
             session=test_session)
         test_session.add(d)
     test_session.flush()
@@ -56,7 +57,8 @@ def discussion_synth_notification(request, test_session, discussion):
 def discussion2(request, test_session):
     """An non-empty Discussion fixture with default preferences"""
     from assembl.models import Discussion
-    d = Discussion(topic=u"Second discussion", slug="testdiscussion2")
+    d = Discussion(
+        topic=u"Second discussion", slug="testdiscussion2", creator=None)
     test_session.add(d)
     test_session.add(d.next_synthesis)
     test_session.add(d.root_idea)
