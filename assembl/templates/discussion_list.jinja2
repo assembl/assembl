@@ -16,23 +16,16 @@
   </div>
   {% endfor %}
 
-  {% if discussions and not user %}
+  {% if not discussions %}
     <div class="gu gu1of5 bx bx-default">
-      <h4 class="h4"><a href='/login'>{{ gettext("Sign in") }}</a></h4>
-      {% trans %} to see all available discussions.{% endtrans %}
+      <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
     </div>
   {% endif %}
 
-  {% if not discussions %}
+  {% if not user %}
     <div class="gu gu1of5 bx bx-default">
-    {% if user %}
-      {% if user %}
-        <em>{% trans %}There are no discussions on this server yet{% endtrans %}</em>
-      {% else %}
-        <h4 class="h4"><a href='/login'>{{ gettext("Sign in") }}</a></h4>
-        {% trans %} to see available discussions.{% endtrans %}
-      {% endif %}
-    {% endif %}
+      <h4 class="h4"><a href='/login'>{{ gettext("Sign in") }}</a></h4>
+      {% trans %} to see all available discussions.{% endtrans %}
     </div>
   {% endif %}
   
