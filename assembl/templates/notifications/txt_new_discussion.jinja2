@@ -1,0 +1,22 @@
+{#
+This is a jinja2 template.  Doc:  http://jinja.pocoo.org/docs/dev/templates/
+
+It expects variables:
+discussion
+connection_url
+documentation_url
+admin_email
+admin_name
+admin_org_name
+admin_org_url
+notification
+frontendUrls
+#}
+
+{{gettext("""Congratulations, your Assembl consultation is ready, and you can find it here:
+{discussion_url}
+You can use the following link to define your password:
+{connection_url}
+You will find documentation here:
+{documentation_url}
+You may contact {admin_name} at <{admin_email}>, from {admin_org_name} ({admin_org_url}) for more details.""").format(admin_email=admin_email, admin_name=admin_name, admin_org_url=admin_org_url, admin_org_name=admin_org_name, discussion_url=discussion.get_url(), connection_url=connection_url, documentation_url=documentation_url)}}

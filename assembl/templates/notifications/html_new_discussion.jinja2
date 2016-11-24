@@ -1,0 +1,29 @@
+{#
+This is a jinja2 template.  Doc:  http://jinja.pocoo.org/docs/dev/templates/
+
+The HTML conforms to ink's CSS.  http://zurb.com/ink/docs.php
+
+It expects variables:
+discussion
+connection_url
+documentation_url
+admin_email
+admin_name
+admin_org_name
+admin_org_url
+notification
+frontendUrls
+ink_css
+#}
+
+{% extends "notifications/html_mail.jinja2" %}
+
+{% block notification_content %}
+{{gettext("""<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</a> is ready.</h1>
+<p>You can <a href='{connection_url}'>connect here</a> to define your password.</p>
+<p>You will find <a href='{documentation_url}'>documentation here</a>.</p>
+<p>You may contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a href='{admin_org_url}'>{admin_org_name}</a> for more details.</p>""").format(admin_email=admin_email, admin_name=admin_name, admin_org_url=admin_org_url, admin_org_name=admin_org_name, discussion_url=discussion.get_url(), connection_url=connection_url, documentation_url=documentation_url)}}
+{% endblock notification_content %}
+
+{% block notification_subscriptions %}
+{% endblock notification_subscriptions %}
