@@ -60,6 +60,7 @@ def fetch_posts(request):
             raise HTTPUnauthorized("Only discussion administrator\
                                    can "+'and'.join(requested))
 
+    # TODO: This block of code could be moved downstream. But we could not find a better place yet. See https://github.com/assembl/assembl/pull/51#discussion_r87990963
     if force_restart:
         csource.reset_errors()
 
