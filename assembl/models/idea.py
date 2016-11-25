@@ -435,7 +435,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         if not discussion_data:
             discussion_data = DiscussionGlobalData(
                 cls.default_db(), discussion_id,
-                authenticated_userid(req))
+                authenticated_userid(req) if req else None)
             if req:
                 req.discussion_data = discussion_data
         return discussion_data
