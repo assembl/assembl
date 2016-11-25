@@ -846,15 +846,16 @@ def post_discussion(request):
     cls = ctx.get_class(json.get('@type', None))
     typename = cls.external_typename()
     # special case: find the user first.
-    creator_email = json.get("creator_email", None)
+    creator_email = json.get("adminEmail", None)
     db = Discussion.default_db
+    json['topic'] = json.get('topic', json.get('name', json.get('slug', '')))
     if creator_email:
         account = db.query(AbstractAgentAccount).filter_by(
             email=creator_email, verified=True).first()
         if account:
             user = account.profile
         else:
-            user = User(name=json.get("creator_name", None), verified=True)
+            user = User(name=json.get("adminName", None), verified=True)
             account = EmailAccount(profile=user, email=creator_email, verified=True)
             db.add(user)
             db.flush()
