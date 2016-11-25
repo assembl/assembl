@@ -9,6 +9,7 @@ FIXTURE_DIR = os.path.join(
     os.path.dirname(__file__), '..', '..', 'static', 'js', 'tests', 'fixtures')
 API_PREFIX = '/api/v1/'
 API_DISCUSSION_PREFIX = API_PREFIX + 'discussion/{discussion_id:\d+}'
+API_ETALAB_DISCUSSIONS_PREFIX = '/instances'
 
 
 def includeme(config):

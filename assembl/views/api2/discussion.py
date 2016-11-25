@@ -826,17 +826,21 @@ def test_sentry(request):
     raise RuntimeError("Let's test sentry")
 
 
-@view_config(route_name='post_discussion_etalab', request_method='POST',
-             header=JSON_HEADER, permission=P_SYSADMIN)
 @view_config(context=ClassContext, ctx_class=Discussion,
              request_method='POST', header=JSON_HEADER, permission=P_SYSADMIN)
-def post_discussion(request):
+def post_discussion(request, is_etalab_request=False):
     from assembl.models import EmailAccount, User, LocalUserRole, Role, AbstractAgentAccount
     ctx = request.context
     json = request.json_body
     user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, None)
-    if request.matched_route and request.matched_route.name == 'post_discussion_etalab':
+    if is_etalab_request:
+        # The Etalab specification says that the API call representing the instance creation request must contain the following fields:
+        # - requestIdentifier
+        # - name: the title of the discussion (discussion.topic)
+        # - slug
+        # - adminName
+        # - adminEmail
         default_view = 'etalab'
         # Fake an APIv2 context
         from ..traversal import Api2Context
@@ -885,3 +889,24 @@ def post_discussion(request):
         db.flush()
         view = request.GET.get('view', None) or default_view
         return CreationResponse(first, user_id, permissions, view)
+
+def etalab_get_discussions(request):
+    # Should we check some permissions or token? List only the discussions this user has access to?
+    # According to the Etalab API specification, an Instance object must have the following fields:
+    # - url: we send discussion.get_url(). Note: a discussion may have 2 URLs (HTTP and HTTPS). For this, see discussion.get_discussion_urls()
+    # - name: we use discussion.topic
+    # - adminEmail: email of the discussion creator, who made the API request to create a discusison (so in our case the field will not show if the discussion has been created by another mean)
+    # - adminName: name of this guy, also provided in the discussion creation request (so in our case the field will not show if the discussion has been created by another mean)
+    # - createdAt: TODO: right now we send metadata.creation_date instead => we should probably rename it
+    # We also send the following optional fields:
+    # - id: this field is not in specification's optional nor mandatory fields
+    # - status: "running"
+    # - metadata: metadata.creation_date => will probably be renamed, see above
+
+    view = "etalab"
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(user_id, None)
+    db = Discussion.default_db
+    discussions = db.query(Discussion).all()
+
+    return {"items":[discussion.generic_json(view, user_id, permissions) for discussion in discussions]}
