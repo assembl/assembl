@@ -10,8 +10,7 @@ from collections import defaultdict
 from email.header import decode_header as decode_email_header, Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.utils import parseaddr
-from time import mktime
+from email.utils import parseaddr, mktime_tz, parsedate_tz
 
 import jwzthreading
 from bs4 import BeautifulSoup, Comment
@@ -442,7 +441,7 @@ class AbstractMailbox(PostSource):
         sender_name, sender_email = parseaddr(sender)
         sender_email_account = EmailAccount.get_or_make_profile(self.db, sender_email, sender_name)
         creation_date = datetime.utcfromtimestamp(
-            mktime(email.utils.parsedate(parsed_email['Date'])))
+            mktime_tz(parsedate_tz(parsed_email['Date'])))
         subject = email_header_to_unicode(parsed_email['Subject'], False)
         recipients = email_header_to_unicode(parsed_email['To'])
         body = body.strip()
