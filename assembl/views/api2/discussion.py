@@ -43,6 +43,7 @@ from assembl.auth import (
 from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions
 from assembl.models import (Discussion, Permission)
+from assembl.models.auth import create_default_permissions
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from sqlalchemy.orm.util import aliased
@@ -868,6 +869,7 @@ def post_discussion(request):
         # Hackish. Discussion API? Generic post-init method?
         discussion.preferences.name = (
             'discussion_' + json.get('slug', str(discussion.id)))
+        create_default_permissions(discussion)
         if user is not None:
             role = db.query(Role).filter_by(name=R_ADMINISTRATOR).first()
             local_role = LocalUserRole(discussion=discussion, user=user, role=role)

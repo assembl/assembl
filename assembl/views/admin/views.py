@@ -153,7 +153,7 @@ def discussion_admin(request):
         session.add(discussion)
         discussion.invoke_callbacks_after_creation()
 
-        create_default_permissions(session, discussion)
+        create_default_permissions(discussion)
         mailbox_class = (
             MailingList if g('mailing_list_address') else IMAPMailbox)
         mailbox = mailbox_class(

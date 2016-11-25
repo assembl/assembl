@@ -1359,7 +1359,8 @@ class DiscussionPermission(DiscussionBoundBase):
         return (cls.id == discussion_id, )
 
 
-def create_default_permissions(session, discussion):
+def create_default_permissions(discussion):
+    session = discussion.db
     permissions = {p.name: p for p in session.query(Permission).all()}
     roles = {r.name: r for r in session.query(Role).all()}
     defaults = discussion.preferences['default_permissions']
