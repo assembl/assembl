@@ -860,15 +860,18 @@ def post_discussion(request):
             db.add(user)
             db.flush()
         json['creator'] = user.uri()
+    else:
+        user = None
     try:
         instances = ctx.create_object(typename, json, user_id)
         discussion = instances[0]
         # Hackish. Discussion API? Generic post-init method?
         discussion.preferences.name = (
             'discussion_' + json.get('slug', str(discussion.id)))
-        role = db.query(Role).filter_by(name=R_ADMINISTRATOR).first()
-        local_role = LocalUserRole(discussion=discussion, user=user, role=role)
-        instances.append(local_role)
+        if user is not None:
+            role = db.query(Role).filter_by(name=R_ADMINISTRATOR).first()
+            local_role = LocalUserRole(discussion=discussion, user=user, role=role)
+            instances.append(local_role)
         discussion.invoke_callbacks_after_creation()
     except Exception as e:
         raise HTTPBadRequest(e)
