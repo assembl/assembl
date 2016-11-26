@@ -891,5 +891,5 @@ def post_discussion(request):
             db.add(instance)
         db.flush()
         view = request.GET.get('view', None) or default_view
-        uri = "/".join(API_ETALAB_DISCUSSIONS_PREFIX, str(first.id)) if etalab_discussions else None
+        uri = "/".join(API_ETALAB_DISCUSSIONS_PREFIX, str(first.id)) if is_etalab_request else None
         return CreationResponse(first, user_id, permissions, view, uri=uri)
