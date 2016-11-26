@@ -1,17 +1,18 @@
 """Cornice API for discussions"""
 import json
 
-from pyramid.httpexceptions import HTTPNotFound
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
+from pyramid.security import authenticated_userid, Everyone, Authenticated
 
 from cornice import Service
 
-from assembl.views.api import API_DISCUSSION_PREFIX, API_ETALAB_DISCUSSIONS_PREFIX
+from assembl.views.api import (
+    API_DISCUSSION_PREFIX, API_ETALAB_DISCUSSIONS_PREFIX)
 
 from assembl.models import Discussion
+from assembl.auth.util import discussions_with_access
 
-
-from ...auth import P_READ, P_ADMIN_DISC
+from ...auth import P_READ, P_ADMIN_DISC, P_SYSADMIN
 from ...auth.util import get_permissions
 
 
@@ -22,12 +23,51 @@ discussion = Service(
     renderer='json',
 )
 
+etalab_discussions = Service(
+    name='etalab_discussions',
+    path=API_ETALAB_DISCUSSIONS_PREFIX,
+    description="Etalab endpoint to GET the list of existing Discussion objects, and to POST a new discussion",
+    renderer='json'
+)
 
+etalab_discussion = Service(
+    name='etalab_discussion',
+    path=API_ETALAB_DISCUSSIONS_PREFIX + "/{discussion_id:\d+}",
+    description="Etalab endpoint to GET or DELETE an existing Discussion object",
+    renderer='json'
+)
+
+
+@etalab_discussions.get()
+def etalab_get_discussions(request):
+    # According to the Etalab API specification, an Instance object must have the following fields:
+    # - url: we send discussion.get_url(). Note: a discussion may have 2 URLs (HTTP and HTTPS). For this, see discussion.get_discussion_urls()
+    # - name: we use discussion.topic
+    # - adminEmail: email of the discussion creator, who made the API request to create a discusison (so in our case the field will not show if the discussion has been created by another mean)
+    # - adminName: name of this guy, also provided in the discussion creation request (so in our case the field will not show if the discussion has been created by another mean)
+    # - createdAt: TODO: right now we send metadata.creation_date instead => we should probably rename it
+    # We also send the following optional fields:
+    # - id: this field is not in specification's optional nor mandatory fields
+    # - status: "running"
+    # - metadata: metadata.creation_date => will probably be renamed, see above
+    view = "etalab"
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(user_id, None)
+    if P_READ not in permissions:
+        raise HTTPUnauthorized()
+    discussions = discussions_with_access(user_id)
+    return {"items": [discussion.generic_json(view, user_id, permissions)
+                      for discussion in discussions]}
+
+
+@etalab_discussion.get(permission=P_READ)
 @discussion.get(permission=P_READ)
 def get_discussion(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
-    view_def = request.GET.get('view') or 'default'
+    is_etalab_request = request.matched_route.name == 'etalab_discussion'
+    view_def = request.GET.get(
+        'view', 'etalab' if is_etalab_request else 'default')
     user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
@@ -57,4 +97,3 @@ def post_discussion(request):
         'objectives', discussion.objectives)
 
     return {'ok': True}
-

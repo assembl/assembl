@@ -376,6 +376,11 @@ def error_view(exc, request):
         # format_exc(request.exception))
 
 
+def redirector(request):
+    return HTTPMovedPermanently(request.route_url(
+        'home', discussion_slug=request.matchdict.get('discussion_slug')))
+
+
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
 
@@ -404,15 +409,17 @@ def includeme(config):
     config.include('.auth')
 
     config.include('.api')
-    config.include('.api2')
 
     config.include('.home')
     config.include('.admin')
 
-    config.add_route('home', '/{discussion_slug}')
     config.add_route('home-auto', '/{discussion_slug}/')
-    def redirector(request):
-        return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
+
     config.add_view(redirector, route_name='home-auto')
     default_context['cache_bust'] = \
         config.registry.settings['requirejs.cache_bust']
+
+    # Scan now, to get cornice views
+    config.scan('.')
+    # make sure this comes last to avoid conflicts
+    config.add_route('home', '/{discussion_slug}')

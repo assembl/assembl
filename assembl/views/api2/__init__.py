@@ -71,34 +71,6 @@ JSON_HEADER = "Content-Type:application/(.*\+)?json"
 MULTIPART_HEADER = "Content-Type:multipart/form-data"
 
 
-def includeme(config):
-    """ Initialize views and renderers at app start-up time. """
-
-    # FIXME: Move this code to a better place. But anywhere else I try, I get a 404 on GET /instances :(. -- Quentin
-    from cornice import Service
-    from assembl.views.api import API_ETALAB_DISCUSSIONS_PREFIX
-
-    etalab_discussions = Service(
-        name='etalab_discussions',
-        path=API_ETALAB_DISCUSSIONS_PREFIX,
-        description="Etalab endpoint to GET the list of existing Discussion objects, and to POST a new discussion",
-        renderer='json',
-        permission=P_SYSADMIN
-    )
-
-    @etalab_discussions.get()
-    def etalab_get_discussions(request):
-        from .discussion import etalab_get_discussions
-        return etalab_get_discussions(request)
-
-    @etalab_discussions.post()
-    def etalab_post_discussion(request):
-        from .discussion import post_discussion
-        return post_discussion(request, is_etalab_request=True)
-
-    config.add_cornice_service(etalab_discussions)
-
-
 def check_permissions(
         ctx, user_id, permissions, operation, cls=None):
     cls = cls or ctx.get_target_class()

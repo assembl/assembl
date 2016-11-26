@@ -101,9 +101,6 @@ def main(global_config, **settings):
     config.include('.lib')
     config.include('.views')
 
-    # config.scan('.lib')
-    config.scan('.views')
-
     # jinja2
     config.include('pyramid_jinja2')
     config.add_jinja2_extension('jinja2.ext.i18n')
