@@ -401,3 +401,7 @@ def collection_add_json(request, json=None):
         db.flush()
         view = request.GET.get('view', None) or 'default'
         return CreationResponse(first, user_id, permissions, view)
+
+
+def includeme(config):
+    config.include('.discussion')

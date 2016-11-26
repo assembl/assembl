@@ -409,6 +409,7 @@ def includeme(config):
     config.include('.auth')
 
     config.include('.api')
+    config.include('.api2')
 
     config.include('.home')
     config.include('.admin')

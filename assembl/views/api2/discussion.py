@@ -26,7 +26,8 @@ import simplejson as json
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
-    HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound)
+    HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound,
+    HTTPServerError)
 from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.renderers import JSONP_VALID_CALLBACK
@@ -37,6 +38,7 @@ import requests
 
 from assembl.lib.config import get_config
 from assembl.lib.parsedatetime import parse_datetime
+from assembl.lib.sqla import ObjectNotUniqueError
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
     R_ADMINISTRATOR)
@@ -849,6 +851,7 @@ def post_discussion(request):
         from ..traversal import Api2Context
         ctx = Api2Context(ctx)
         ctx = ClassContext(ctx, Discussion)
+        json['topic'] = json.get('name', json.get('slug', ''))
     else:
         default_view = 'default'
     cls = ctx.get_class(json.get('@type', None))
@@ -856,7 +859,6 @@ def post_discussion(request):
     # special case: find the user first.
     creator_email = json.get("adminEmail", None)
     db = Discussion.default_db
-    json['topic'] = json.get('topic', json.get('name', json.get('slug', '')))
     if creator_email:
         account = db.query(AbstractAgentAccount).filter_by(
             email=creator_email, verified=True).first()
@@ -882,8 +884,10 @@ def post_discussion(request):
             local_role = LocalUserRole(discussion=discussion, user=user, role=role)
             instances.append(local_role)
         discussion.invoke_callbacks_after_creation()
-    except Exception as e:
+    except ObjectNotUniqueError as e:
         raise HTTPBadRequest(e)
+    except Exception as e:
+        raise HTTPServerError(e)
     if instances:
         first = instances[0]
         db = first.db
@@ -891,5 +895,10 @@ def post_discussion(request):
             db.add(instance)
         db.flush()
         view = request.GET.get('view', None) or default_view
-        uri = "/".join(API_ETALAB_DISCUSSIONS_PREFIX, str(first.id)) if is_etalab_request else None
+        uri = "/".join((API_ETALAB_DISCUSSIONS_PREFIX, str(first.id))) if is_etalab_request else None
         return CreationResponse(first, user_id, permissions, view, uri=uri)
+
+
+def includeme(config):
+    # Make sure that the cornice view is registered
+    pass

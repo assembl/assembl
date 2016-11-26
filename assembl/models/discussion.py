@@ -165,6 +165,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     def __init__(self, session=None, *args, **kwargs):
         session = session or self.default_db
 
+        # TODO: Validate slug
         kwargs['preferences'] = preferences = Preferences(
             name='discussion_'+kwargs.get('slug', str(id(self))),
             cascade_preferences=Preferences.get_default_preferences(session))
