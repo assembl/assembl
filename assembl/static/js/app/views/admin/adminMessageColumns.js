@@ -281,15 +281,11 @@ var AdminMessageColumnsModal = Backbone.Modal.extend({
   className: 'modal-define-columns popin-wrapper',
   cancelEl: '.close, .js_close',
 
-  ui: {
-    body: '.js_modal-body',
-  },
-
   onRender: function() {
     var resultView = new AdminMessageColumnsPanel({
       model: this.model,
     });
-    $('js_modal-body').html(resultView.render().el);
+    this.$('.js_modal-body').html(resultView.render().el);
   },
 
   serializeData: function() {
