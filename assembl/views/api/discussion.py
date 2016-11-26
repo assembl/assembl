@@ -6,8 +6,7 @@ from pyramid.security import authenticated_userid, Everyone, Authenticated
 
 from cornice import Service
 
-from assembl.views.api import (
-    API_DISCUSSION_PREFIX, API_ETALAB_DISCUSSIONS_PREFIX)
+from . import API_DISCUSSION_PREFIX, API_ETALAB_DISCUSSIONS_PREFIX
 
 from assembl.models import Discussion
 from assembl.auth.util import discussions_with_access

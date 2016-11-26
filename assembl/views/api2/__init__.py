@@ -84,11 +84,11 @@ def check_permissions(
 class CreationResponse(Response):
     def __init__(
             self, ob_created, user_id=Everyone, permissions=(P_READ,),
-            view='default'):
+            view='default', uri=None):
+        uri = uri or ob_created.uri()
         super(CreationResponse, self).__init__(
             dumps(ob_created.generic_json(view, user_id, permissions)),
-            location=ob_created.uri(),
-            status_code=201)
+            location=uri, status_code=201)
 
 
 @view_config(context=ClassContext, renderer='json',

@@ -47,7 +47,7 @@ from assembl.models.auth import create_default_permissions
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from sqlalchemy.orm.util import aliased
-from ..api.discussion import etalab_discussions
+from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
 
 
 @view_config(context=InstanceContext, request_method='GET',
@@ -891,4 +891,5 @@ def post_discussion(request):
             db.add(instance)
         db.flush()
         view = request.GET.get('view', None) or default_view
-        return CreationResponse(first, user_id, permissions, view)
+        uri = "/".join(API_ETALAB_DISCUSSIONS_PREFIX, str(first.id)) if etalab_discussions else None
+        return CreationResponse(first, user_id, permissions, view, uri=uri)
