@@ -45,7 +45,7 @@ def etalab_get_discussions(request):
     # - name: we use discussion.topic
     # - adminEmail: email of the discussion creator, who made the API request to create a discusison (so in our case the field will not show if the discussion has been created by another mean)
     # - adminName: name of this guy, also provided in the discussion creation request (so in our case the field will not show if the discussion has been created by another mean)
-    # - createdAt: TODO: right now we send metadata.creation_date instead => we should probably rename it
+    # - createdAt: creation date
     # We also send the following optional fields:
     # - id: this field is not in specification's optional nor mandatory fields
     # - status: "running"

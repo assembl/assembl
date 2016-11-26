@@ -4,13 +4,12 @@
         "_default": false
     },
     "Discussion": {
-        "creation_date": true,
+        "createdAt": "creation_date",
         "name": "topic",
         "slug": true,
         "url": "&get_url",
         "status": "'\"running\"",
         "adminName": "creator_name",
-        "adminEmail": "creator_email",
-        "metadata": "self:etalab_metadata"
+        "adminEmail": "creator_email"
    }
 }
