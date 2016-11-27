@@ -648,6 +648,7 @@ def app_compile_nodbupdate():
     execute(compile_messages)
     execute(compile_javascript)
 
+
 @task
 def webservers_reload():
     """
@@ -932,6 +933,7 @@ def install_memcached():
 
 @task
 def set_file_permissions():
+    """Set file permissions for an isolated platform environment"""
     webgrp = '_www' if env.mac else 'www-data'
     # This should cover most cases.
     if webgrp not in run('groups').split():
@@ -1454,26 +1456,26 @@ def install_database():
 
 def install_php():
     if env.mac:
-        # TODO
-        print(red("TODO: Install PHP on a mac"))
+        run("brew tap homebrew/php")
+        run("brew install php56 --with-apache --with-homebrew-curl")
+        run("brew install php56-imagick")
+        # No php-gd in homebrew
     else:
-        sudo("php-mysql php-curl php-cli php-gd")
+        sudo("apt-get -y install php php-mysql php-curl php-cli php-gd")
 
 
 def install_mysql():
     if env.mac:
-        # TODO
-        # APACHE already comes pre-installed on Mac OS X El Capitan
-        # Read more here:
-        # https://jason.pureconcepts.net/2015/10/install-apache-php-mysql-mac-os-x-el-capitan/
-        print(red("TODO: Install MySQL on MacOS X"))
+        run("brew install mysql")
+        print(red("Set your root password with mysql_secure_installation"))
+        print("See https://dev.mysql.com/doc/refman/5.7/en/mysql-secure-installation.html")
     else:
         # Check the env variable for all of the values required for mysql installation
 
-        sudo("debconf-set-selections <<< 'mysql-server mysql-server/root_password password {password}".
-            format(password=env.mysql_password))
-        sudo("debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password {password}".
-            format(password=env.mysql_password))
+        sudo("debconf-set-selections <<< 'mysql-server mysql-server/root_password password {password}".format(
+            password=env.mysql_password))
+        sudo("debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password {password}".format(
+            password=env.mysql_password))
         sudo("apt-get -y install mysql-server")
 
 
@@ -1483,26 +1485,29 @@ def install_apache():
         # APACHE already comes pre-installed on Mac OS X El Capitan
         # Read more here:
         # https://jason.pureconcepts.net/2015/10/install-apache-php-mysql-mac-os-x-el-capitan/
-        print(red("TODO: Install Apache on MacOS X"))
+        run("brew tap homebrew/apache")
+        run("brew install httpd24")
     else:
         sudo("apt-get install apache2")
 
 
+@task
 def install_lamp():
     """
     Installs Apache2, Mysql and PHP on a Linux Environment
     """
-    execute(install_mysql())
-    execute(install_apache())
-    execute(install_php())
+    execute(install_mysql)
+    execute(install_apache)
+    execute(install_php)
 
 
+@task
 def uninstall_lamp():
     """
     Installs Apache2, Mysql and PHP on a Linux Environment, for dev purposes
     """
     if env.mac:
-        print(red("This task cannot be run on a Macintosh, you fool!"))
+        run("brew uninstall php56-imagick php56 homebrew/apache/httpd24 mysql")
     else:
         sudo("apt-get purge apache2 mysql-server php-mysql php-curl php-cli php-gd")
         sudo("apt-get autoremove")  # Remove dangling dependencies after purging
@@ -1513,6 +1518,9 @@ def install_piwik():
     """
     Install the entire Piwik stack on Linux systems *ONLY*
     """
+    if env.mac:
+        print(red("We have not setup piwik on the mac."))
+        return
     sanitize_env()
     execute(install_lamp())
     print(cyan("About to install Piwik"))
@@ -1531,6 +1539,30 @@ def uninstall_piwik():
 
 
 @task
+def install_postfix(external_smtp_host=None):
+    """Install postfx for SMTP."""
+    # TODO: get external_smtp_host from env
+    assert not env.mac
+    sudo("debconf-set-selections <<< 'postfix postfix/mailname string %s'" % (env.host_string,))
+    if external_smtp_host:
+        sudo("debconf-set-selections <<< 'postfix postfix/main_mailer_type string \"Internet with smarthost\"'")
+        sudo("debconf-set-selections <<< 'postfix postfix/relayhost string %s'" % (external_smtp_host,))
+    else:
+        sudo("debconf-set-selections <<< 'postfix postfix/main_mailer_type string \"Internet site\"'")
+    sudo("DEBIAN_FRONTEND=noninteractive apt-get install postfix")
+
+
+@task
+def install_dovecot_vmm():
+    """Install dovecot and vmm for IMAP. Assumes postfix is installed. Configuration TODO."""
+    assert not env.mac
+    execute(install_postfix)
+    sudo("apt-get install dovecot-core dovecot-imapd dovecot-lmtpd"
+         " dovecot-pgsql vmm postfix postfix-pgsql python-egenix-mxdatetime"
+         " python-psycopg2 python-crypto libsasl2-modules"
+         " libsasl2-modules-db sasl2-bin")
+
+
 def virtuoso_source_upgrade():
     """Upgrades the virtuoso server.  Currently doesn't check if we are already using the latest version."""
     sanitize_env()
