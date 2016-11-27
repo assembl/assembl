@@ -16,13 +16,15 @@ var Marionette = require("../shims/marionette.js"),
     UserNavigationMenu = require('./user/userNavigationMenu.js'),
     Growl = require('../utils/growl.js');
 
+
 /**
- * @function app.views.preferencesView.getPreferenceEditView
- * Get the appropriate subclass of BasePreferenceView
+ * @function app.views.preferencesView.getModelElementaryType
+ * Get the type of the model at a given depth given by the subViewKey
  */
-function getPreferenceEditView(preferenceModel, subViewKey, useKey) {
-  var modelType = preferenceModel.value_type,
-      subViewKey = (subViewKey !== undefined)?String(subViewKey).split('_'):undefined;
+function getModelElementaryType(modelType, subViewKey, useKey) {
+  if (subViewKey !== undefined) {
+    subViewKey = String(subViewKey).split('_');
+  }
   while (true) {
     var isList = modelType.substring(0, 8) == "list_of_",
         isDict = modelType.substring(0, 8) == "dict_of_";
@@ -31,7 +33,7 @@ function getPreferenceEditView(preferenceModel, subViewKey, useKey) {
         modelType = modelType.substring(8);
         subViewKey.shift();
       } else {
-        return ListPreferenceView;
+        return "list";
       }
     } else if (isDict) {
       if (subViewKey !== undefined) {
@@ -50,14 +52,40 @@ function getPreferenceEditView(preferenceModel, subViewKey, useKey) {
         }
         subViewKey.shift();
       } else {
-        return DictPreferenceView;
+        return "dict";
       }
     } else {
       break;
     }
   }
 
+  if (modelType == "langstr") {
+    // convenience function
+    if (subViewKey !== undefined && subViewKey.length > 0) {
+      if (useKey) {
+        return "locale";
+      } else {
+        return "string";
+      }
+    } else {
+      return "dict";
+    }
+  }
+  return modelType;
+}
+
+/**
+ * @function app.views.preferencesView.getPreferenceEditView
+ * Get the appropriate subclass of BasePreferenceView
+ */
+function getPreferenceEditView(preferenceModel, subViewKey, useKey) {
+  var modelType = getModelElementaryType(preferenceModel.value_type, subViewKey, useKey);
+
   switch (modelType) {
+    case "list":
+      return ListPreferenceView;
+    case "dict":
+      return DictPreferenceView;
     case "bool":
       return BoolPreferenceView;
     case "text":
@@ -72,19 +100,6 @@ function getPreferenceEditView(preferenceModel, subViewKey, useKey) {
       return RolePreferenceView;
     case "string":
       return StringPreferenceView;
-    case "langstr":
-    {
-      // convenience function
-      if (subViewKey !== undefined && subViewKey.length > 0) {
-        if (useKey) {
-          return LocalePreferenceView;
-        } else {
-          return StringPreferenceView;
-        }
-      } else {
-        return DictPreferenceView;
-      }
-    }
     case "scalar":
       return ScalarPreferenceView;
     case "locale":
@@ -687,6 +702,10 @@ var ListPreferenceView = BasePreferenceView.extend({
         _.each(defaultVal, function(val) {
           defaultVal = val;
         });
+        // special case: dict of list, go down another level.
+        if (_.isArray(defaultVal) && getModelElementaryType(this.preferenceData.value_type, this.listKey, false) == "list") {
+          defaultVal = defaultVal[0];
+        }
       }
     }
     if (_.isObject(defaultVal)) {
