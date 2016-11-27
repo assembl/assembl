@@ -39,7 +39,7 @@ from social.exceptions import (
 
 from assembl.models import (
     EmailAccount, IdentityProvider, SocialAuthAccount,
-    AgentProfile, User, Username, Role, LocalUserRole,
+    AgentProfile, User, Username, Role, LocalUserRole, Preferences,
     AbstractAgentAccount, Discussion, AgentStatusInDiscussion)
 from assembl.auth import (
     P_READ, R_PARTICIPANT, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST)
@@ -129,6 +129,34 @@ def maybe_contextual_route(request, route_name, **args):
             'contextual_'+route_name, discussion_slug=discussion_slug, **args)
 
 
+def get_social_autologin(request, discussion=None, next_view=None):
+    """Look for a mandatory social login"""
+    discussion = discussion or discussion_from_request(request)
+    if discussion:
+        preferences = discussion.preferences
+    else:
+        preferences = Preferences.get_default_preferences()
+    auto_login_backend = preferences['authorization_server_backend']
+    if not auto_login_backend:
+        return None
+    next_view = next_view or request.params.get('next', None)
+    query = {"next": next_view}
+    if ":" in auto_login_backend:
+        auto_login_backend, provider = auto_login_backend.split(":", 1)
+        query['idp'] = provider
+    if discussion:
+        return request.route_url(
+            "contextual_social_auth",
+            discussion_slug=discussion.slug,
+            backend=auto_login_backend,
+            _query=query)
+    else:
+        return request.route_url(
+            "social.auth",
+            backend=auto_login_backend,
+            _query=query)
+
+
 @view_config(
     route_name='logout', request_method='GET',
     renderer='assembl:templates/login.jinja2',
@@ -167,8 +195,12 @@ def login_view(request):
     if request.scheme == "http"\
             and asbool(config.get("accept_secure_connection")):
         raise HTTPFound("https://" + request.host + request.path_qs)
-    return get_login_context(
-        request, request.matched_route.name == 'login_forceproviders')
+    force_providers = request.matched_route.name.endswith('_forceproviders')
+    if request.matched_route.name == 'contextual_login':
+        contextual_login = get_social_autologin(request)
+        if contextual_login:
+            raise HTTPFound(contextual_login)
+    return get_login_context(request, force_providers)
 
 
 def get_profile(request):

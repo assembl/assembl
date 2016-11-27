@@ -28,6 +28,7 @@ from .. import HTTPTemporaryRedirect, get_default_context as base_default_contex
 from assembl.lib.frontend_urls import FrontendUrls
 from assembl import locale_negotiator
 from assembl.nlp.translation_service import DummyGoogleTranslationService
+from ..auth.views import get_social_autologin
 
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
@@ -120,18 +121,9 @@ def home_view(request):
             referrer = request.url
             next_view = path_qs(referrer)
 
-        auto_login_backend = discussion.preferences[
-            'authorization_server_backend']
-        if auto_login_backend:
-            query = {"next": next_view}
-            if ":" in auto_login_backend:
-                auto_login_backend, provider = auto_login_backend.split(":", 1)
-                query['idp'] = provider
-            login_url = request.route_url(
-                "contextual_social_auth",
-                discussion_slug=discussion.slug,
-                backend=auto_login_backend,
-                _query=query)
+        login_url = get_social_autologin(request, discussion, next_view)
+        if login_url:
+            pass
         elif next_view:
             login_url = request.route_url("contextual_login",
                                           discussion_slug=discussion.slug,
