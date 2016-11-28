@@ -357,9 +357,9 @@ class LocaleLabel(Base):
                 cls.locale_id_of_label == cls.named_locale_id)}
 
     @classmethod
-    def load_names(cls):
+    def load_names(cls, db=None):
         from os.path import dirname, join
-        db = cls.default_db
+        db = db or cls.default_db
         fname = join(dirname(dirname(__file__)),
                      'nlp/data/language-names.json')
         with open(fname) as f:
@@ -377,6 +377,10 @@ class LocaleLabel(Base):
                 cls.default_db.add(cls(
                     named_locale_id=l, locale_id_of_label=t, name=name))
         db.flush()
+
+    @classmethod
+    def populate_db(cls, db=None):
+        cls.load_names(db)
 
     crud_permissions = CrudPermissions(P_READ, P_ADMIN_DISC)
 
