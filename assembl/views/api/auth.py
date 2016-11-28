@@ -7,7 +7,7 @@ from cornice import Service
 from pyramid.security import Everyone, Authenticated
 from pyramid.response import Response
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
+from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPServerError
 from sqlalchemy.orm import aliased, joinedload, joinedload_all, contains_eager
 
 from assembl.views.api import API_DISCUSSION_PREFIX
@@ -322,5 +322,6 @@ def saml_metadata_view(request):
         redirect_uri=complete_url,
     )
     metadata, errors = saml_backend.generate_metadata_xml()
-    if not errors:
-        return Response(metadata, content_type='text/xml')
+    if errors:
+        raise HTTPServerError("SAML issue:" + errors)
+    return Response(metadata, content_type='text/xml')
