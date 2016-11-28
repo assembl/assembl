@@ -787,6 +787,7 @@ def install_single_server():
     execute(skeleton_env, None)
     execute(install_database)
     execute(install_assembl_server_deps)
+    execute(check_and_create_database_user)
 
 
 @task
@@ -832,9 +833,10 @@ def install_basetools():
         path_pip = run('which pip')
         assert path_pip == '/usr/local/bin/pip',\
             "Make sure homebrew is in the bash path, got " + path_pip
-        sudo('pip install virtualenv')
+        run('pip install virtualenv')
+        run('pip install psycopg2')
     else:
-        sudo('apt-get install -y python-virtualenv python-pip')
+        sudo('apt-get install -y python-virtualenv python-pip python-psycopg2')
         sudo('apt-get install -y git')
         # sudo('apt-get install -y gettext')
 
@@ -886,14 +888,13 @@ def install_builddeps():
 def update_python_package_builddeps():
     """Install/Update python package native binary dependencies"""
     sanitize_env()
-    print(cyan(
-        'Installing/Updating python package native binary dependencies'))
     # For specific python packages in requirements.txt
     if env.mac:
         # Brew packages come with development headers
         pass
-        # TODO: Make sure database, redis and memcached are installed
     else:
+        print(cyan(
+            'Installing/Updating python package native binary dependencies'))
         sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
              'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
              'libreadline-dev liblapack-dev libatlas-dev libblas-dev '
@@ -954,12 +955,6 @@ def set_file_permissions():
         # allow postgres user to use pypsql
         run('chmod go+x . assembl assembl/scripts')
         run('chmod go+r assembl/scripts/pypsql.py')
-    with cd(env.venvpath):
-        run('chmod go+rx . bin')
-        run('chmod -R go+r lib')
-        run('find lib -type d -print|xargs chmod go+x')
-        run('chmod go+x bin/python')
-        run('chmod go+r bin/activate')
 
 
 @task
@@ -1025,25 +1020,26 @@ def database_create_virtuoso():
 
 
 @task
-def check_and_create_database_user():
+def check_and_create_database_user(host=None, user=None, password=None):
     """
     Create a user and a DB for the project
     """
     sanitize_env()
+    host = host or env.db_host
+    user = user or env.db_user
+    password = password or env.db_password
     with settings(warn_only=True):
         checkUser = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
-            command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (env.db_user),
-            python=join(env.venvpath, "bin", "python"), password=env.db_password,
-            host=env.db_host, user=env.db_user, projectpath=env.projectpath))
+            command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user),
+            password=password, host=host, user=user, projectpath=env.projectpath))
     if checkUser.failed:
         print(yellow("User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"))
-        run_db_command(as_venvcmd('{python} {pypsql} -u {db_user} -n {host} "{command}"'.format(
+        run_db_command('python {pypsql} -u {db_user} -n {host} "{command}"'.format(
             command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
-                env.db_user, env.db_password),
-            python=join(env.venvpath, "bin", "python"),
+                user, password),
             pypsql=join(env.projectpath, 'assembl', 'scripts', 'pypsql.py'),
-            db_user=system_db_user(), host=env.db_host)))
-        # run_db_command("bash -c 'psql -n -d postgres -c \"CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \\\'%s\\\';\"'" % (env.db_user, env.db_password))
+            db_user=system_db_user(), host=host))
+        # run_db_command("bash -c 'psql -n -d postgres -c \"CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \\\'%s\\\';\"'" % (user, password))
     else:
         print(green("User exists and can connect"))
 
@@ -1559,8 +1555,7 @@ def install_dovecot_vmm():
     execute(install_postfix)
     sudo("apt-get install dovecot-core dovecot-imapd dovecot-lmtpd"
          " dovecot-pgsql vmm postfix postfix-pgsql python-egenix-mxdatetime"
-         " python-psycopg2 python-crypto libsasl2-modules"
-         " libsasl2-modules-db sasl2-bin")
+         " python-crypto libsasl2-modules libsasl2-modules-db sasl2-bin")
 
 
 def virtuoso_source_upgrade():

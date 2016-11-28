@@ -312,9 +312,11 @@ If you do not have an SSL certificate, then you have to set ``accept_secure_conn
 
 .. code:: sh
 
-    exit # this logs out from the assembl_user user, back to the initial sudoer account
+    exit  # this logs out from the assembl_user user, back to the initial sudoer account
     cd /home/assembl_user/assembl
     fab env_dev install_single_server
+    sudo -u assembl_user -i  # back to the assembl user
+    cd /home/assembl_user/assembl
     fab env_dev bootstrap_from_checkout
     source venv/bin/activate
     assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
