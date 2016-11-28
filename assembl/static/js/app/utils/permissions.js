@@ -23,6 +23,7 @@ var Permissions = {
   ADMIN_DISCUSSION: "admin_discussion",
   SYSADMIN: "sysadmin",
   MODERATE_POST: "moderate_post",
+  DISC_STATS: 'discussion_stats',
   EXPORT_EXTERNAL_SOURCE: "export_post"
 };
 
