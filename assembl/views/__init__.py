@@ -210,7 +210,7 @@ def get_default_context(request):
         analytics_settings['piwik'] = {
             'script': web_analytics_piwik_script
         }
-    
+
     analytics_url = config.get('web_analytics_piwik_url', None)
 
     (theme_name, theme_relative_path)=get_theme_info(discussion)

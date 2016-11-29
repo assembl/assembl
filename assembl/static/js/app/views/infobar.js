@@ -41,6 +41,26 @@ var PiwikIframeModal = Backbone.Modal.extend({
   constructor: function PiwikIframeModal(){
     Backbone.Modal.apply(this, arguments);
   },
+
+  getStatsUrl: function(){
+    // var url = "//piwik.coeus.ca/index.php?module=CoreAdminHome&action=optOut&language=fr";
+    var url = analyticsUrl;
+    if (! (url[url.length-1] === '/')) {
+      url = url + "/";
+    }
+    url = url + "index.php?module=CoreAdminHome&action=optOut&language=";
+    var locale = Ctx.getLocale() || "fr";  // Either get the locale, or the default is French
+    url = url + locale;
+    // console.log("URL of statistics on Inforbar.js", url);
+    return url;
+  },
+
+  serializeData: function(){
+    return {
+      statsUrl: this.getStatsUrl()
+    };
+  },
+
   template: '#tmpl-piwikIframeModal',
   className: 'modal-ckeditorfield popin-wrapper',
   keyControl:false,
