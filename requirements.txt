@@ -112,7 +112,7 @@ pytest-splinter==1.7.3
 pytest==2.9.2
 python-dateutil==2.5.3
 python-openid==2.2.5
-python-saml==2.1.9
+python-saml==2.2.0
 -e git+https://github.com/assembl/python-social-auth.git@assembl#egg=python_social_auth
 pytz==2016.4
 pyzmq==15.2.0
