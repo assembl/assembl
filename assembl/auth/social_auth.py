@@ -4,6 +4,7 @@
 """
 import re
 from datetime import datetime
+import logging
 
 from pyramid.events import subscriber, BeforeRender
 from pyramid.security import (
@@ -24,6 +25,8 @@ from assembl.models import (
     User, Preferences, AbstractAgentAccount, IdentityProvider)
 from .util import discussion_from_request, maybe_auto_subscribe
 
+
+log = logging.getLogger('assembl')
 
 def login_user(backend, user, user_social_auth):
     remember(backend.strategy.request, user.id)
@@ -267,7 +270,7 @@ def includeme(config):
     settings['login_providers'] = aslist(settings.get('login_providers', ''))
     settings['trusted_login_providers'] = aslist(settings.get('trusted_login_providers', ''))
     if not any(settings['login_providers']):
-        sys.stderr.write('no login providers configured, double check '
+        log.warning('no login providers configured, double check '
                          'your ini file and add a few')
     for name in ('SOCIAL_AUTH_AUTHENTICATION_BACKENDS',
                  'SOCIAL_AUTH_USER_FIELDS',
