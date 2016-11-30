@@ -1535,10 +1535,16 @@ def uninstall_piwik():
 
 
 @task
-def install_postfix(external_smtp_host=None):
+def install_postfix():
     """Install postfx for SMTP."""
-    # TODO: get external_smtp_host from env
     assert not env.mac
+    # take mail host from mail.host
+    config = get_vendor_config()
+    external_smtp_host = None
+    if config.has_section('app:assembl') and config.has_option('app:assembl', 'mail.host'):
+        external_smtp_host = config.get('app:assembl', 'mail.host')
+        if external_smtp_host in ('localhost', '127.0.0.1'):
+            external_smtp_host = None
     sudo("debconf-set-selections <<< 'postfix postfix/mailname string %s'" % (env.host_string,))
     if external_smtp_host:
         sudo("debconf-set-selections <<< 'postfix postfix/main_mailer_type string \"Internet with smarthost\"'")
