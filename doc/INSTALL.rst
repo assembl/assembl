@@ -265,6 +265,8 @@ If you use sentry to monitor:
 * ``raven_url``
 * ``dsn``
 
+Also set up the ``raven_url`` and raven client key where appropriate.
+
 Put your chosen database username and password in
 
 * ``db_database``
@@ -347,5 +349,7 @@ Copy the content of ``doc/sample_systemd_script/assembl.service`` into ``/etc/sy
     systemctl enable assembl
     service assembl restart
 
-ensuite comme d'habitude
-(fichier nginx, domaine dans bluehost et dans ovh, courriels, raven, piwik...)
+There is more to setup:
+You may set up an external or internal SMTP server (TODO), an external IMAP server (TODO), and Piwik
+
+The :doc:`vmm` document explains how to set up an internal IMAP server.
