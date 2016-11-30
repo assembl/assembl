@@ -343,8 +343,8 @@ var MessageColumnView = BaseMessageColumnView.extend({
 
       that.destroyAnnotator();
 
-      that.ui.messageCount.html(i18n.sprintf(
-        i18n.gettext("%d “%s” messages"),
+      that.ui.messageCount.html(i18n.snprintf(
+        i18n.ngettext("%d message on the “%s” theme", "%d messages on the “%s” theme", resultMessageIdCollection.length),
         resultMessageIdCollection.length,
         that.model.get('name').bestValue(translationData)));
 
@@ -384,7 +384,9 @@ var MessageColumnView = BaseMessageColumnView.extend({
         message_classifier: that.model.get('message_classifier'),
         reply_idea: that.idea,
         show_target_context_with_choice: false,
-        message_send_title: i18n.sprintf("Send a new %s proposal", that.model.get('name').bestValue(translationData)),
+        message_send_title: i18n.sprintf(
+          i18n.gettext("Add your point of view on the “%s” theme"),
+          that.model.get('name').bestValue(translationData)),
         show_cancel_button:true
       });
       // Todo: use those options in messageSendView. Maybe use a more lightweight view also?
