@@ -343,7 +343,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
 
       that.destroyAnnotator();
 
-      that.ui.messageCount.html(i18n.snprintf(
+      that.ui.messageCount.html(i18n.sprintf(
         i18n.ngettext("%d message on theme “%s”", "%d messages on theme “%s”", resultMessageIdCollection.length),
         resultMessageIdCollection.length,
         that.model.get('name').bestValue(translationData)));
