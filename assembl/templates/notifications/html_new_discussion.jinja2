@@ -22,7 +22,7 @@ ink_css
 {{gettext("""<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</a> is ready.</h1>
 <p>You can <a href='{connection_url}'>connect here</a> to define your password.</p>
 <p>You will find <a href='{documentation_url}'>documentation here</a>.</p>
-<p>You may contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a href='{admin_org_url}'>{admin_org_name}</a> for more details.</p>""").format(admin_email=admin_email, admin_name=admin_name, admin_org_url=admin_org_url, admin_org_name=admin_org_name, discussion_url=discussion.get_url(), connection_url=connection_url, documentation_url=documentation_url)}}
+<p>The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on structuring your consultation process and building skills in using Assembl, you can contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a href='{admin_org_url}'>{admin_org_name}</a>.</p>""").format(admin_email=admin_email, admin_name=admin_name, admin_org_url=admin_org_url, admin_org_name=admin_org_name, discussion_url=discussion.get_url(), connection_url=connection_url, documentation_url=documentation_url)}}
 {% endblock notification_content %}
 
 {% block notification_subscriptions %}
