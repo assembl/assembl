@@ -44,7 +44,8 @@ var AdminDiscussionSettings = Marionette.LayoutView.extend({
     
     this.getRegion('createSource').show(new SourceView.CreateSource());
 
-    var menu = new AdminNavigationMenu({selectedSection: "settings"});
+    var menu = new AdminNavigationMenu.discussionAdminNavigationMenu(
+      {selectedSection: "settings"});
     this.getRegion('navigationMenuHolder').show(menu);
   },
 

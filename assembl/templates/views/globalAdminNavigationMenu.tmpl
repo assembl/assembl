@@ -1,0 +1,11 @@
+<ul class="man pan adminMenu">
+  <li <% if (selectedSection == 'global_preferences'){ %>class="active"<% } %>>
+    <a href="#global_preferences" class="menu">{{ gettext('Global preferences') }}</a>
+  </li>
+  <li>
+    <a href="/admin/permissions" class="menu">{{ gettext('Global roles') }}</a>
+  </li>
+  <li>
+    <a href="/admin/discussions/" class="menu">{{ gettext('Create a discussion') }}</a>
+  </li>
+</ul>

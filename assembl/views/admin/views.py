@@ -7,6 +7,7 @@ from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
 import transaction
 
+from assembl.lib.locale import (to_posix_string, strip_country)
 from assembl.models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
     LocalUserRole)
@@ -18,10 +19,77 @@ from assembl.auth import (
 from assembl.auth.util import (
     add_multiple_users_csv, user_has_permission, get_permissions)
 from assembl.models.auth import (
-    create_default_permissions, User, Username, AgentProfile)
+    create_default_permissions, User, Username, AgentProfile,
+    LanguagePreferenceOrder)
+from assembl.models import Preferences, Locale
+from assembl import locale_negotiator
+from assembl.lib.utils import get_global_base_url
+from assembl.nlp.translation_service import DummyGoogleTranslationService
+from ..backbone.views import process_locale
 
 
 _ = TranslationStringFactory('assembl')
+
+
+class PseudoDiscussion(object):
+    id = 0
+    topic = "Administration"
+    slug = "admin"
+    homepage_url = None
+    logo = None
+    def translation_service(self):
+        return None
+    def get_base_url(self, *args):
+        return get_global_base_url(True)
+    def get_url(self, *args):
+        return get_global_base_url(True)
+    def get_all_agents_preload(self, user):
+        return []
+
+
+@view_config(route_name='base_admin', request_method='GET', http_cache=60,
+             permission=P_SYSADMIN)
+def base_admin_view(request):
+    """The Base admin view, for frontend urls"""
+    user_id = authenticated_userid(request) or Everyone
+    context = get_default_context(request)
+
+    session = Discussion.default_db
+    preferences = Preferences.get_default_preferences(session)
+    user = User.get(user_id)
+
+    if '_LOCALE_' in request.cookies:
+        locale = request.cookies['_LOCALE_']
+        process_locale(locale, user, session,
+                       LanguagePreferenceOrder.Cookie)
+
+    elif '_LOCALE_' in request.params:
+        locale = request.params['_LOCALE_']
+        process_locale(locale, user, session,
+                       LanguagePreferenceOrder.Parameter)
+    else:
+        locale = locale_negotiator(request)
+        process_locale(locale, user, session,
+                       LanguagePreferenceOrder.OS_Default)
+
+    target_locale = Locale.get_or_create(
+        strip_country(locale), session)
+    locale_labels = json.dumps(
+        DummyGoogleTranslationService.target_locale_labels_cls(target_locale))
+    context['translation_locale_names_json'] = locale_labels
+
+    role_names = [x for (x,) in session.query(Role.name).all()]
+    permission_names = [x for (x,) in session.query(Permission.name).all()]
+    context['role_names'] = json.dumps(role_names)
+    context['permission_names'] = json.dumps(permission_names)
+    context['discussion'] = PseudoDiscussion()
+
+    response = render_to_response('../../templates/adminIndex.jinja2', context,
+                                  request=request)
+    # Prevent caching the home, especially for proper login/logout
+    response.cache_control.max_age = 0
+    response.cache_control.prevent_auto = True
+    return response
 
 
 @view_config(route_name='test_simultaneous_ajax_calls',

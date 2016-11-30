@@ -26,13 +26,12 @@ class FrontendUrls(object):
         assert isinstance(discussion, Discussion)
         self.discussion = discussion
 
-    frontend_routes = {
+    frontend_discussion_routes = {
         'edition': '/edition',
         'partners': '/partners',
         'settings': '/settings',
         'about': '/about',
         'admin_discussion_preferences': '/discussion_preferences',
-        'admin_global_preferences': '/global_preferences',
         'notifications': '/notifications',
         'user_notifications': '/user/notifications',
         'profile': '/user/profile',
@@ -46,7 +45,18 @@ class FrontendUrls(object):
         'purl_widget': '/widget*remainder'
     }
     """
-    The list of frontend routes.
+    The list of frontend discussion routes.
+
+    Important:  This should match with :js:class:`Router`
+    Used by :py:func:`assembl.views.backbone.views.home_view`, these routes
+    will all give the same view and further routing will happen
+    in the frontend."""
+
+    frontend_admin_routes = {
+        'admin_global_preferences': '/global_preferences',
+    }
+    """
+    The list of frontend discussion routes.
 
     Important:  This should match with :js:class:`Router`
     Used by :py:func:`assembl.views.backbone.views.home_view`, these routes
@@ -56,11 +66,21 @@ class FrontendUrls(object):
     @classmethod
     def register_frontend_routes(cls, config):
         from assembl.views.backbone.views import home_view
-        for name, route in cls.frontend_routes.iteritems():
+        for name, route in cls.frontend_discussion_routes.iteritems():
             config.add_route(name, route)
             config.add_view(
                 home_view, route_name=name, request_method='GET',
                 http_cache=60)
+
+    @classmethod
+    def register_frontend_admin_routes(cls, config):
+        from assembl.views.admin.views import base_admin_view
+        for name, route in cls.frontend_admin_routes.iteritems():
+            config.add_route(name, route)
+            config.add_view(
+                base_admin_view, route_name=name, request_method='GET',
+                http_cache=60)
+
 
     # used for route 'purl_posts': '/posts*remainder'
     @staticmethod

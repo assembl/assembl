@@ -6,7 +6,8 @@
         <a href="{{ help_url }}" target="_blank" title="{{ gettext('Help') }}" class="help"><i class="icon-help"></i></a>
     </li>
     {% endif %}
-    
+
+    {% if discussion.id %}
     {% if user %}
     <% if(!isUserSubscribedToDiscussion && canSubscribeToDiscussion ){ %>
     <li class="sub fl mrs">
@@ -20,6 +21,7 @@
     </li>
     {% endif %}
     {% endif %}
+    {% endif %}
 
     <!-- USER PROFILE  -->
     {% if user %}
@@ -31,6 +33,7 @@
         <div class="dropdown" id="tour_step_notifications">
             <a href="#" class="dropdown-toggle username" data-toggle="dropdown" aria-expanded="false"><span>{{ user.display_name() }}</span></a>
             <ul class="dropdown-menu">
+              {% if discussion.id %}
                 {% if user_profile_edit_url %}
                   <li><a href="<%= userProfile() %>"><i class="icon-user"></i>{{ gettext('Profile') }}</a></li>
                 {% endif %}
@@ -52,7 +55,8 @@
                   <li><a href="<%= discussionPermissions() %>"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>
                 <% } %>
                 <li class="divider"></li>
-                <li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
+              {% endif %}
+              <li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
             </ul>
         </div>
         {% else %}

@@ -134,8 +134,9 @@ var adminNotificationSubscriptions = Marionette.LayoutView.extend({
               that.getRegion('notification').show(notif);
 
             });
-    
-    var menu = new AdminNavigationMenu({selectedSection: "notifications"});
+
+    var menu = new AdminNavigationMenu.discussionAdminNavigationMenu(
+      {selectedSection: "notifications"});
     this.getRegion('navigationMenuHolder').show(menu);
   },
 

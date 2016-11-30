@@ -52,7 +52,13 @@ var roleCollection = Base.Collection.extend({
     Base.Collection.apply(this, arguments);
   },
 
-  url: Ctx.getApiV2DiscussionUrl("/all_users/current/local_roles"),
+  url: function() {
+    if (Ctx.isAdminApp()) {
+      return Ctx.getApiV2Url("/User/"+Ctx.getCurrentUserId()+"/roles")
+    } else {
+      return Ctx.getApiV2DiscussionUrl("/all_users/current/local_roles")
+    }
+  },
   model: roleModel,
 
 

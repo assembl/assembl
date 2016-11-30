@@ -157,7 +157,8 @@ var adminPartners = Marionette.LayoutView.extend({
               that.getRegion('partner').show(partnerList);
             });
 
-    var menu = new AdminNavigationMenu({selectedSection: "partners"});
+    var menu = new AdminNavigationMenu.discussionAdminNavigationMenu(
+      {selectedSection: "partners"});
     this.getRegion('navigationMenuHolder').show(menu);
   },
 

@@ -27,6 +27,9 @@ var TourManager = Marionette.Object.extend({
       },
 
   initialize: function() {
+    if (Ctx.isAdminApp()) {
+      return;
+    }
     var that = this,
         currentUser = Ctx.getCurrentUser();
     this.user = currentUser;
