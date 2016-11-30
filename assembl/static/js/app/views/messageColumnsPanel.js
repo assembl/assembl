@@ -344,7 +344,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
       that.destroyAnnotator();
 
       that.ui.messageCount.html(i18n.snprintf(
-        i18n.ngettext("%d message on the “%s” theme", "%d messages on the “%s” theme", resultMessageIdCollection.length),
+        i18n.ngettext("%d message on theme “%s”", "%d messages on theme “%s”", resultMessageIdCollection.length),
         resultMessageIdCollection.length,
         that.model.get('name').bestValue(translationData)));
 
@@ -385,7 +385,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
         reply_idea: that.idea,
         show_target_context_with_choice: false,
         message_send_title: i18n.sprintf(
-          i18n.gettext("Add your point of view on the “%s” theme"),
+          i18n.gettext("Add your thoughts on theme “%s”"),
           that.model.get('name').bestValue(translationData)),
         show_cancel_button:true
       });
