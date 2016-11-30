@@ -1,7 +1,7 @@
 """Cornice API for discussions"""
 import json
 
-from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized
+from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPNoContent
 from pyramid.security import authenticated_userid, Everyone, Authenticated
 
 from cornice import Service
@@ -77,8 +77,6 @@ def get_discussion(request):
     return discussion.generic_json(view_def, user_id, permissions)
 
 
-# This should be a PUT, but the backbone save method is confused by
-# discussion URLs.
 @discussion.put(permission=P_ADMIN_DISC)
 def post_discussion(request):
     discussion_id = int(request.matchdict['discussion_id'])
@@ -96,3 +94,17 @@ def post_discussion(request):
         'objectives', discussion.objectives)
 
     return {'ok': True}
+
+
+@etalab_discussion.delete(permission=P_SYSADMIN)
+@discussion.delete(permission=P_SYSADMIN)
+def delete_discussion(request):
+    discussion_id = int(request.matchdict['discussion_id'])
+    discussion = Discussion.get_instance(discussion_id)
+
+    if not discussion:
+        raise HTTPNotFound(
+            "Discussion with id '%s' not found." % discussion_id)
+
+    discussion.delete()
+    return HTTPNoContent()
