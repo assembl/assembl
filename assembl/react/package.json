@@ -1,0 +1,14 @@
+{
+  "name": "assembl2_v2",
+  "version": "2.0.0",
+  "description": "A new front-end for Assembl",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": ""
+  },
+  "author": "Bluenove Group Inc.",
+  "license": "AGPL-3.0"
+}
