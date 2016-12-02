@@ -5,9 +5,10 @@ import os.path
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
+from pyramid.settings import asbool
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPSeeOther, HTTPUnauthorized)
+    HTTPNotFound, HTTPSeeOther)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -23,11 +24,14 @@ from ...models import (
     Idea,
     Locale,
 )
+
 from .. import (
     HTTPTemporaryRedirect, get_default_context as base_default_context,
     get_locale_from_request)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin
+
+from assembl.lib import config as AssemblConfig
 
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
@@ -169,6 +173,17 @@ def home_view(request):
     return response
 
 
+def react_view(request):
+    """
+    Asbolutely basic view. Nothing more.
+    Must add user authentication, permission, etc.
+    Basic view for the homepage
+    """
+    context = get_default_context(request)
+    return context
+
+
+
 @view_config(route_name='styleguide', request_method='GET', http_cache=60,
              renderer='assembl:templates/styleguide/index.jinja2')
 def styleguide_view(request):
@@ -195,3 +210,11 @@ def frontend_test_view(request):
 def not_found(context, request):
     request.response.status = 404
     return {}
+
+
+def includeme(config):
+    if asbool(AssemblConfig.get('new_frontend', False)):
+        config.add_route('new_home', 'v2/{discussion_slug}')
+        config.add_view(react_view, route_name='new_home',
+                        request_method='GET', http_cache=60,
+                        renderer="assembl:templates/index_react.jinja2")
