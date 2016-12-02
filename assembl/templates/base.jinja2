@@ -23,15 +23,20 @@
 
     {#<link rel="icon" href="/static/img/icon/infinite-1.png" type="image/x-icon">#}
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+    {% block main_css %}
     <link type="text/css" rel="stylesheet" href="/static/css/themes/{{theme_relative_path}}/assembl_web.css" />
     <link type="text/css" rel="stylesheet" href="/static/js/bower/jquery-oembed-all/jquery.oembed.css" />
  
     <link type="text/css" rel="stylesheet" href="/static/js/bower/hopscotch/dist/css/hopscotch.css" />
+    {% endblock %}
 
     {% block extra_css %}{% endblock extra_css %}
     {% include 'includes/feature_detection.jinja2' %}
 
 </head>
+
+{% block body %}
 <body class="preload {{theme_name}}">
     <div id="wrapper">
         <header id="header">{# include with marionette region #}</header>
@@ -54,4 +59,5 @@
     {% block facebook_sdk_load%}{% endblock %}
 
 </body>
+{% endblock %}
 </html>
