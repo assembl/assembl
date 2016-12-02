@@ -5,5 +5,7 @@
 	of the React-based front-end
 */
 
-var element = document.createElement("<p>Hello World!</p>");
+var element = document.createElement("p");
+var content = document.createTextNode("Hello World!");
+element.appendChild(content);
 document.body.appendChild(element);
