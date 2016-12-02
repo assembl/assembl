@@ -1,10 +1,3 @@
-
-<div class="real-time-updates tac hidden phl">
-    <button class="btn-real-time js_loadPendingMessages">
-        <span class="pendingMessage"></span>
-    </button>
-</div>
-
 <style type="text/css">
   #message_column_<%= column.getNumericId() %> .js_agentName,
   #message_column_<%= column.getNumericId() %> .js_messageCount {
@@ -13,6 +6,13 @@
 </style>
 
 <div class="subpanel-body"  id="message_column_<%= column.getNumericId() %>">
+
+  <div class="real-time-updates tac hidden phl">
+      <button class="btn-real-time js_loadPendingMessages">
+          <span class="pendingMessage"></span>
+      </button>
+  </div>
+
   <div>
     <div class="js_messageColumnDescription message-column-description"></div>
     <% if (canPost) { %>

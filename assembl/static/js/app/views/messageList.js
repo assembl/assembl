@@ -165,22 +165,19 @@ var MessageList = BaseMessageList.extend({
    * The events
    * @type {Object}
    */
-  events: function() {
-    var data = {
-        'click .js_messageList-allmessages': 'showAllMessages',
+  events: {
+    'click .js_messageList-allmessages': 'showAllMessages',
 
-        'click @ui.loadPreviousMessagesButton': 'showPreviousMessages',
-        'click @ui.loadNextMessagesButton': 'showNextMessages',
-        'click @ui.loadAllButton': 'showAllMessagesAtOnce',
+    'click @ui.loadPreviousMessagesButton': 'showPreviousMessages',
+    'click @ui.loadNextMessagesButton': 'showNextMessages',
+    'click @ui.loadAllButton': 'showAllMessagesAtOnce',
 
-        'click .js_openTargetInModal': 'openTargetInModal',
+    'click .js_openTargetInModal': 'openTargetInModal',
 
-        'click .js_scrollToTopPostBox': 'scrollToTopPostBox',
+    'click .js_scrollToTopPostBox': 'scrollToTopPostBox',
 
-        'click .js_loadPendingMessages': 'loadPendingMessages',
-        'click @ui.printButton': 'togglePrintableClass'
-    };
-    return data;
+    'click .js_loadPendingMessages': 'loadPendingMessages',
+    'click @ui.printButton': 'togglePrintableClass'
   },
 
   getTitle: function() {

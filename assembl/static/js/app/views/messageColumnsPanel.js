@@ -206,11 +206,16 @@ var MessageColumnView = BaseMessageColumnView.extend({
     contentPending: '.real-time-updates',
     viewStyleDropdown: ".js_messageListViewStyle-dropdown",
     messageCount: '.js_messageCount',
+    loadPendingMessages: '.js_loadPendingMessages',
   },
   regions: {
     messageFamilyList: '@ui.messageFamilyList',
     topPostRegion: '@ui.topPostRegion',
     messageColumnDescription: '@ui.messageColumnDescription',
+  },
+
+  events: {
+    'click @ui.loadPendingMessages': 'loadPendingMessages',
   },
 
   /**
@@ -246,19 +251,18 @@ var MessageColumnView = BaseMessageColumnView.extend({
 
   initialize: function(options) {
     BaseMessageColumnView.prototype.initialize.apply(this, arguments);
-    var extraEvents = {},
-    collectionManager = new CollectionManager();
+    var that=this,
+        collectionManager = new CollectionManager();
     this.idea = options.idea;
+    this.classifier = this.model.get("message_classifier");
     this.showMessageByIdInProgress = false;
     this.basePanel = options.basePanel;
     this.translationDataPromise = options.translationDataPromise;
     this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
 
     _.each(this.ViewStyles, function(messageListViewStyle) {
-      var key = 'click .' + messageListViewStyle.css_class;
-      extraEvents[key] = 'onSelectMessageListViewStyle';
+      that.delegate('click', '.' + messageListViewStyle.css_class, _.bind(that.onSelectMessageListViewStyle, that));
     });
-    this.delegateEvents(extraEvents);
     this.setCurrentIdea(this.idea);
   },
 
@@ -266,7 +270,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     var that = this;
     this.currentQuery.initialize();
     this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_IS_IN_CONTEXT_OF_IDEA, this.idea.getId());
-    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_CLASSIFIED_UNDER, this.model.get("message_classifier"));
+    this.currentQuery.addFilter(this.currentQuery.availableFilters.POST_CLASSIFIED_UNDER, this.classifier);
     this.messagesIdsPromise = this.currentQuery.getResultMessageIdCollectionPromise();
     this.messagesIdsPromise.then(function() {
       if (that.isViewDestroyed()) {
@@ -275,6 +279,18 @@ var MessageColumnView = BaseMessageColumnView.extend({
       that.template = that.message_template;
       that.render();
     });
+  },
+
+  invalidateQuery: function() {
+    BaseMessageColumnView.prototype.invalidateQuery.apply(this, arguments);
+    this.messagesIdsPromise = this.currentQuery.getResultMessageIdCollectionPromise();
+  },
+
+  addPendingMessage: function(message, messageCollection) {
+    if (message.get("message_classifier") == this.classifier) {
+      this.nbPendingMessage += 1;
+      this.showPendingMessages(this.nbPendingMessage);
+    }
   },
 
   getGroupState: function() {
@@ -381,7 +397,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
       _.extend(options, {
         mandatory_subject_missing_msg: null,
         allow_setting_subject: false,
-        message_classifier: that.model.get('message_classifier'),
+        message_classifier: that.classifier,
         reply_idea: that.idea,
         show_target_context_with_choice: false,
         message_send_title: i18n.sprintf(

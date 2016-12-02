@@ -94,14 +94,7 @@ return cls.extend({
     .then(function(allMessageStructureCollection) {
       if(!that.isViewDestroyed()) {
         that.resetPendingMessages(allMessageStructureCollection);
-
-        var callback = _.bind(function() {
-          //Here, this is the collection
-          var nbPendingMessage = this.length - that._initialLenAllMessageStructureCollection;
-          that.showPendingMessages(nbPendingMessage);
-        }, allMessageStructureCollection);
-
-        that.listenTo(allMessageStructureCollection, 'add', callback);
+        that.listenTo(allMessageStructureCollection, 'add', that.addPendingMessage);
       }
     }
 
@@ -2278,11 +2271,18 @@ return cls.extend({
     },
 
   resetPendingMessages: function(allMessageStructureCollection) {
-      this._initialLenAllMessageStructureCollection = allMessageStructureCollection.length;
-      if (this._originalDocumentTitle) {
-        document.title = this._originalDocumentTitle;
-      }
-    },
+    this.nbPendingMessage = 0;
+    this._initialLenAllMessageStructureCollection = allMessageStructureCollection.length;
+    if (this._originalDocumentTitle) {
+      document.title = this._originalDocumentTitle;
+    }
+  },
+
+  addPendingMessage: function(message, messageCollection) {
+    this.nbPendingMessage += 1;
+    this.showPendingMessages(this.nbPendingMessage);
+  },
+
   /**
    * @returns A promise
    */
@@ -2292,10 +2292,14 @@ return cls.extend({
       return collectionManager.getAllMessageStructureCollectionPromise()
         .then(function(allMessageStructureCollection) {
           that.resetPendingMessages(allMessageStructureCollection);
-          that.currentQuery.invalidateResults();
+          that.invalidateQuery();
           that.render();
         });
-    },
+  },
+
+  invalidateQuery: function() {
+    this.currentQuery.invalidateResults();
+  },
 
   /**
    * WARNING, this is a jquery handler, not a backbone one
