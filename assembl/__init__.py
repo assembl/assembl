@@ -93,7 +93,11 @@ def main(global_config, **settings):
         from .lib.migration import bootstrap_db_data
         bootstrap_db_data(session, False)
 
-    config.add_static_view('static', 'static', cache_max_age=3600)
+    if settings.get('new_frontend', False) is False:
+        config.add_static_view('static', 'static', cache_max_age=3600)
+    else:
+        config.add_static_view('react', 'react', cache_max_age=3600)
+
     config.add_static_view('widget', 'widget', cache_max_age=3600)
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')

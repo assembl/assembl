@@ -38,7 +38,8 @@ from ..models.auth import (
 
 
 default_context = {
-    'STATIC_URL': '/static'
+    'STATIC_URL': '/static',
+    'REACT_URL': '/react'
 }
 
 
