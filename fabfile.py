@@ -1539,7 +1539,7 @@ def install_postfix():
     """Install postfx for SMTP."""
     assert not env.mac
     # take mail host from mail.host
-    config = get_vendor_config()
+    config = get_config()
     external_smtp_host = None
     if config.has_section('app:assembl') and config.has_option('app:assembl', 'mail.host'):
         external_smtp_host = config.get('app:assembl', 'mail.host')
@@ -1551,7 +1551,7 @@ def install_postfix():
         sudo("debconf-set-selections <<< 'postfix postfix/relayhost string %s'" % (external_smtp_host,))
     else:
         sudo("debconf-set-selections <<< 'postfix postfix/main_mailer_type string \"Internet site\"'")
-    sudo("DEBIAN_FRONTEND=noninteractive apt-get install postfix")
+    sudo("DEBIAN_FRONTEND=noninteractive apt-get -y install postfix")
 
 
 @task
@@ -1559,7 +1559,7 @@ def install_dovecot_vmm():
     """Install dovecot and vmm for IMAP. Assumes postfix is installed. Configuration TODO."""
     assert not env.mac
     execute(install_postfix)
-    sudo("apt-get install dovecot-core dovecot-imapd dovecot-lmtpd"
+    sudo("apt-get -y install dovecot-core dovecot-imapd dovecot-lmtpd"
          " dovecot-pgsql vmm postfix postfix-pgsql python-egenix-mxdatetime"
          " python-crypto libsasl2-modules libsasl2-modules-db sasl2-bin")
 
@@ -1797,8 +1797,12 @@ def system_db_user():
 def run_db_command(command, *args, **kwargs):
     user = system_db_user()
     if user:
+        # Unix with local postgres installation and local postgres user
+        # we will sudo -u postgres to do the pypsql command
         return sudo(command, *args, user=user, **kwargs)
     else:
+        # Either we have a postgres superuser we can login as,
+        # Or we're postgres owner with brew.
         return run(command, *args, **kwargs)
 
 
