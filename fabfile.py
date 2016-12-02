@@ -846,7 +846,7 @@ def install_builddeps():
         # may require a sudo
         if not run('brew link libevent', quiet=True):
             sudo('brew link libevent')
-        run('brew install zeromq libtool libmemcached gawk')
+        run('brew install zeromq libtool libmemcached gawk libxmlsec1')
         if not exists('/usr/local/bin/pkg-config'):
             run('brew install pkg-config')
         if not exists('/usr/local/bin/autoconf'):
@@ -896,7 +896,7 @@ def update_python_package_builddeps():
         sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
              'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
              'libreadline-dev liblapack-dev libatlas-dev libblas-dev '
-             'libgraphviz-dev')
+             'libgraphviz-dev libxmlsec1-dev')
         print ("We are still trying to get some requirements right for linux, "
                "See http://www.scipy.org/scipylib/building/linux.html "
                "for details.")

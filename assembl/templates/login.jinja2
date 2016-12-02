@@ -60,9 +60,6 @@
         {% if providers %}
           <div class="socialPart">
               <p class="login-box-title">{{ gettext("Log in using one of these social networks") }}</p>
-              {% if providers %}
-              {# <p>{{ gettext("Login with external tools")|safe }}</p> #}
-              {% endif %}
               {{form('google-oauth2', gettext('Login with Google'), true)}}
               {{form('twitter', gettext('Login with Twitter'), true)}}
               {{form('facebook', gettext('Login with Facebook'), true)}}
@@ -71,6 +68,9 @@
               {{form('github', gettext('Login with Github'), false)}}
               {{form('yammer', gettext('Login with Yammer'), false)}}
               {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
+              {% for prov_name, prov_data in saml_providers.items() %}
+                {{form('saml', gettext('Login with ') + (prov_data['description'] or prov_name), false, idp=prov_name)}}
+              {% endfor %}
               {# Need to be refactored #}
               {# {form('openid', gettext('Login with OpenID'), true)} #}
           </div>

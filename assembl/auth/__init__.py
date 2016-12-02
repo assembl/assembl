@@ -98,3 +98,7 @@ class CrudPermissions(object):
             return (self.delete, self.delete_owned)
         else:
             raise ValueError()
+
+
+def includeme(config):
+    config.include('.social_auth')

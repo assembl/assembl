@@ -45,6 +45,7 @@ db_schema = public
 # For virtuoso:
 #db_schema = assembl_test
 db_database = assembl_test
+# db_host = localhost
 
 jinja2.directories = assembl:templates
 

@@ -11,11 +11,14 @@ from pyramid.security import (
     forget,
     Everyone,
     authenticated_userid)
+from pyramid.config import aslist
+import simplejson as json
 
 from social.apps.pyramid_app.utils import backends
 from social.strategies.pyramid_strategy import PyramidStrategy
-from social.utils import to_setting_name
+from social.utils import to_setting_name, setting_name, SETTING_PREFIX
 from social.exceptions import AuthException
+from social.backends.utils import load_backends
 
 from assembl.models import (
     User, Preferences, AbstractAgentAccount, IdentityProvider)
@@ -139,6 +142,21 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
 
 class AssemblStrategy(PyramidStrategy):
 
+    def request_is_secure(self):
+        return self.request.scheme == 'https'
+
+    def request_path(self):
+        return self.request.path
+
+    def request_port(self):
+        return self.request.host_port
+
+    def request_get(self):
+        return self.request.GET
+
+    def request_post(self):
+        return self.request.POST
+
     def get_preferences(self):
         discussion = discussion_from_request(self.request)
         if discussion:
@@ -218,3 +236,53 @@ class AssemblStrategy(PyramidStrategy):
             # Update the user record with any changed info from the auth service.
             'assembl.auth.social_auth.user_details'
         )
+
+
+def get_active_auth_strategies(settings):
+    """Give the list of available social auth providers.
+    Includes multiple instances if a provider can have multiple servers.
+    This currently includes SAML, and eventually wordpress.
+    TODO: Should replace the login_providers config variable"""
+    all_backends = load_backends(settings.get('SOCIAL_AUTH_AUTHENTICATION_BACKENDS'))
+    for backend_name in all_backends:
+        def get_setting(name):
+            return (settings.get(setting_name(SETTING_PREFIX, backend_name, name), None)
+                    or settings.get(setting_name(backend_name, name), None))
+        if backend_name == 'wordpress-oauth2':
+            # TODO: This special case needs to be treated the same as saml asap.
+            # Also: maybe check preferences
+            yield backend_name
+        elif backend_name == 'saml':
+            # special case: Multiple IDPs
+            idps = get_setting('ENABLED_IDPS') or {}
+            for idp in idps.keys():
+                yield 'saml:' + idp
+        elif get_setting('key'):
+            yield backend_name
+
+
+def includeme(config):
+    """Pre-parse certain settings for python_social_auth, then load it."""
+    settings = config.get_settings()
+    settings['login_providers'] = aslist(settings.get('login_providers', ''))
+    settings['trusted_login_providers'] = aslist(settings.get('trusted_login_providers', ''))
+    if not any(settings['login_providers']):
+        sys.stderr.write('no login providers configured, double check '
+                         'your ini file and add a few')
+    for name in ('SOCIAL_AUTH_AUTHENTICATION_BACKENDS',
+                 'SOCIAL_AUTH_USER_FIELDS',
+                 'SOCIAL_AUTH_PROTECTED_USER_FIELDS',
+                 'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION'):
+        settings[name] = aslist(settings.get(name, ''))
+    for name in ('SOCIAL_AUTH_SAML_ORG_INFO',
+                 'SOCIAL_AUTH_SAML_TECHNICAL_CONTACT',
+                 'SOCIAL_AUTH_SAML_SUPPORT_CONTACT',
+                 'SOCIAL_AUTH_SAML_ENABLED_IDPS'):
+        val = settings.get(name, '')
+        if val:
+            settings[name] = json.loads(val)
+    for k in settings.iterkeys():
+        if k.endswith("_SCOPE") and k.startswith("SOCIAL_AUTH_"):
+            settings[k] = aslist(settings.get(k, ''))
+    config.add_request_method(
+        'assembl.auth.social_auth.get_user', 'user', reify=True)
