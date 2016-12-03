@@ -4,8 +4,6 @@ from urllib import quote
 from smtplib import SMTPRecipientsRefused
 from email.header import Header
 import logging
-import re
-
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
@@ -26,7 +24,6 @@ from pyramid.httpexceptions import (
     HTTPBadRequest,
     HTTPServerError)
 from pyramid.settings import asbool
-from bs4 import UnicodeDammit
 from sqlalchemy import desc
 from pyisemail import is_email
 from social.actions import do_auth
@@ -50,6 +47,7 @@ from assembl.auth.util import (
     discussion_from_request, roles_with_permissions, maybe_auto_subscribe)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
+from assembl.lib.utils import normalize_email_name
 from .. import (
     get_default_context, JSONError, get_providers_with_names,
     HTTPTemporaryRedirect)
@@ -1106,10 +1104,7 @@ def send_change_password_email(
             discussion_url=discussion.get_url()))
         sender_name = sender_name or discussion.topic
     if sender_name:
-        sender_name = UnicodeDammit(sender_name).unicode_markup
-        # sanitize
-        sender_name = re.sub(
-            ur"[^-\w\s'\u2019\u2032\u00b4\.\(\)]", '', sender_name, 0, re.UNICODE)
+        sender_name = normalize_email_name(sender_name)
         sender = '"%s" <%s>' % (sender_name, sender_email)
         sender_name = Header(sender_name, 'utf-8').encode()
         if len(sender) > 255:

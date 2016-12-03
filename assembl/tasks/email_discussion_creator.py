@@ -1,5 +1,4 @@
 
-import re
 from email.header import Header
 
 from zope import interface
@@ -8,10 +7,10 @@ from pyramid.threadlocal import get_current_request
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 from pyramid.settings import aslist
-from bs4 import UnicodeDammit
 
 from assembl.lib import config
 from assembl.lib.discussion_creation import IDiscussionCreationCallback
+from assembl.lib.utils import normalize_email_name
 from assembl.auth.password import password_change_token
 
 
@@ -63,10 +62,7 @@ class EmailCreatorAtDiscussionCreation(object):
         localizer = request.localizer
         sender_email = config.get('assembl.admin_email')
         sender_name = discussion.topic
-        sender_name = UnicodeDammit(sender_name).unicode_markup
-        # sanitize
-        sender_name = re.sub(
-            ur"[^-\w\s'\u2019\u2032\u00b4\.\(\)]", '', sender_name, 0, re.UNICODE)
+        sender_name = normalize_email_name(sender_name)
         sender = '"%s" <%s>' % (sender_name, sender_email)
         sender_name = Header(sender_name, 'utf-8').encode()
         if len(sender) > 255:

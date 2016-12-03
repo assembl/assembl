@@ -150,8 +150,10 @@ class TokenSessionAuthenticationPolicy(SessionAuthenticationPolicy):
     """ A session authentication policy that accepts tokens for identity instead of
     the beaker session's login."""
 
+    API_TOKEN_HEADER = 'X-Api-Key'
+
     def user_from_token(self, request):
-        token = request.headers.get('X-Api-Key', None)
+        token = request.headers.get(self.API_TOKEN_HEADER, None)
         if token:
             # Those tokens are eternal
             data, valid = verify_data_token(

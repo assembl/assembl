@@ -7,6 +7,7 @@ from StringIO import StringIO
 
 from pyramid.settings import asbool
 from urlparse import urlparse
+from bs4 import UnicodeDammit
 
 from . import config
 
@@ -113,3 +114,12 @@ def waiting_get(cls, id, lock=False):
             return objectInstance
         sleep(wait_time)
         wait_time *= 1.5
+
+
+def normalize_email_name(name):
+    name = UnicodeDammit(name).unicode_markup
+    # sanitize, keep only words, spaces and minimal punctuation
+    # includes unicode apostrophes, though.
+    name = re.sub(
+        ur"[^-\w\s'\u2019\u2032\u00b4\.\(\)]", '', name, 0, re.UNICODE)
+    return name

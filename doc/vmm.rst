@@ -22,7 +22,6 @@ Installation prerequisites
 .. code:: sh
 
     fab env_dev install_dovecot_vmm
-    # currently on branch openstack
     fab env_dev install_postfix
 
 If the postgres database is local, and that step has not been done:
