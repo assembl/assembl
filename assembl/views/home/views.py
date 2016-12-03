@@ -46,5 +46,6 @@ def discussion_list_view(request):
     if R_SYSADMIN in roles:
         context['discussions_admin_url'] = request.route_url('discussion_admin')
         context['permissions_admin_url'] = request.route_url('general_permissions')
+        context['preferences_admin_url'] = request.route_url('admin_global_preferences')
     context['user'] = user
     return context

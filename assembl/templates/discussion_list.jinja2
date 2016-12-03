@@ -38,6 +38,9 @@
     {% if permissions_admin_url %}
       <h4 class="h4"><a href='{{ permissions_admin_url }}'>{{ gettext("Change global permissions") }}</a></h4>
     {% endif %}
+    {% if preferences_admin_url %}
+      <h4 class="h4"><a href='{{ preferences_admin_url }}'>{{ gettext("Change global preferences") }}</a></h4>
+    {% endif %}
     {% if user %}
       <h4 class="h4"><a href='/logout'>{{ gettext("Sign out") }}</a></h4>
     {% endif %}

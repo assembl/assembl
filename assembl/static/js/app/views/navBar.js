@@ -49,7 +49,7 @@ var navBarLeft = Marionette.LayoutView.extend({
 
     // show a dropdown to admins, for widgets management
     // TODO: add to the dropdown the "discussion permissions" and "discussion parameters" options => so this IdeaWidgets view would only add <li>s to a dropdown which will be built elsewhere
-    if (this.isAdminDiscussion) {
+    if (this.isAdminDiscussion && !Ctx.isAdminApp()) {
       // find root idea
       var collectionManager = new CollectionManager();
       Promise.join(collectionManager.getAllIdeasCollectionPromise(),

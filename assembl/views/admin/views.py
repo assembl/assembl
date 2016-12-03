@@ -7,21 +7,68 @@ from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
 import transaction
 
-from assembl.models import (
-    Discussion, DiscussionPermission, Role, Permission, UserRole,
-    LocalUserRole)
-from .. import get_default_context
-from assembl.models.mail import IMAPMailbox, MailingList
-from assembl.auth import (
+from .. import get_default_context, get_locale_from_request
+from ...lib.utils import get_global_base_url
+from ...auth import (
     R_PARTICIPANT, R_SYSADMIN, R_ADMINISTRATOR, SYSTEM_ROLES,
     P_SYSADMIN, P_ADMIN_DISC, Everyone)
-from assembl.auth.util import (
+from ...auth.util import (
     add_multiple_users_csv, user_has_permission, get_permissions)
-from assembl.models.auth import (
-    create_default_permissions, User, Username, AgentProfile)
+from ...models import (
+    Discussion, DiscussionPermission, Role, Permission, UserRole,
+    LocalUserRole, Preferences, User, Username, AgentProfile,
+    IMAPMailbox, MailingList)
+from ...models.auth import create_default_permissions
+from ...nlp.translation_service import DummyGoogleTranslationService
 
 
 _ = TranslationStringFactory('assembl')
+
+
+class PseudoDiscussion(object):
+    id = 0
+    topic = "Administration"
+    slug = "admin"
+    homepage_url = None
+    logo = None
+    def translation_service(self):
+        return None
+    def get_base_url(self, *args):
+        return get_global_base_url(True)
+    def get_url(self, *args):
+        return get_global_base_url(True)
+    def get_all_agents_preload(self, user):
+        return []
+
+
+@view_config(route_name='base_admin', request_method='GET', http_cache=60,
+             permission=P_SYSADMIN)
+def base_admin_view(request):
+    """The Base admin view, for frontend urls"""
+    user_id = authenticated_userid(request) or Everyone
+    context = get_default_context(request)
+
+    session = Discussion.default_db
+    preferences = Preferences.get_default_preferences(session)
+    user = User.get(user_id)
+
+    target_locale = get_locale_from_request(request, session, user)
+    locale_labels = json.dumps(
+        DummyGoogleTranslationService.target_locale_labels_cls(target_locale))
+    context['translation_locale_names_json'] = locale_labels
+
+    role_names = [x for (x,) in session.query(Role.name).all()]
+    permission_names = [x for (x,) in session.query(Permission.name).all()]
+    context['role_names'] = json.dumps(role_names)
+    context['permission_names'] = json.dumps(permission_names)
+    context['discussion'] = PseudoDiscussion()
+
+    response = render_to_response('../../templates/adminIndex.jinja2', context,
+                                  request=request)
+    # Prevent caching the home, especially for proper login/logout
+    response.cache_control.max_age = 0
+    response.cache_control.prevent_auto = True
+    return response
 
 
 @view_config(route_name='test_simultaneous_ajax_calls',

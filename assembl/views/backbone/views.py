@@ -1,7 +1,6 @@
 """The basic views that host the one-page app"""
 import json
 import os.path
-from collections import defaultdict
 
 from pyramid.view import view_config
 from pyramid.response import Response
@@ -11,23 +10,23 @@ from pyramid.httpexceptions import (
     HTTPNotFound, HTTPSeeOther, HTTPUnauthorized)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
-from assembl.models import Discussion, Role
-from assembl.models.post import Post
-from assembl.models.idea import Idea
-from assembl.models.langstrings import Locale
-from assembl.auth import P_READ, P_ADD_EXTRACT
-from assembl.lib.locale import (to_posix_string, strip_country)
-from assembl.lib.utils import is_url_from_same_server, path_qs
-from ...models.auth import (
-    UserLanguagePreference,
-    LanguagePreferenceOrder,
+
+from ...lib.utils import path_qs
+from ...lib.frontend_urls import FrontendUrls
+from ...auth import P_READ, P_ADD_EXTRACT
+from ...auth.util import user_has_permission
+from ...models import (
+    Discussion,
     User,
+    Role,
+    Post,
+    Idea,
+    Locale,
 )
-from assembl.auth.util import user_has_permission
-from .. import HTTPTemporaryRedirect, get_default_context as base_default_context
-from assembl.lib.frontend_urls import FrontendUrls
-from assembl import locale_negotiator
-from assembl.nlp.translation_service import DummyGoogleTranslationService
+from .. import (
+    HTTPTemporaryRedirect, get_default_context as base_default_context,
+    get_locale_from_request)
+from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin
 
 
@@ -62,39 +61,6 @@ def get_styleguide_components():
                 views[view_name] = view_path
 
     return views
-
-
-def process_locale(
-        locale_code, user, session, source_of_evidence):
-    locale_code = to_posix_string(locale_code)
-    # Updated: Now Locale is a model. Converting posix_string into its
-    # equivalent model. Creates it if it does not exist
-    locale = Locale.get_or_create(locale_code, session)
-
-    if source_of_evidence in LanguagePreferenceOrder.unique_prefs:
-        lang_pref_signatures = defaultdict(list)
-        for lp in user.language_preference:
-            lang_pref_signatures[lp.source_of_evidence].append(lp)
-        while len(lang_pref_signatures[source_of_evidence]) > 1:
-            # legacy multiple values
-            lp = lang_pref_signatures[source_of_evidence].pop()
-            lp.delete()
-        if len(lang_pref_signatures[source_of_evidence]) == 1:
-            lang_pref_signatures[source_of_evidence][0].locale = locale
-            session.flush()
-            return
-        # else creation below
-    else:
-        lang_pref_signatures = {
-            (lp.locale_id, lp.source_of_evidence)
-            for lp in user.language_preference
-        }
-        if (locale.id, source_of_evidence) in lang_pref_signatures:
-            return
-    lang = UserLanguagePreference(
-        user=user, source_of_evidence=source_of_evidence.value, locale=locale)
-    session.add(lang)
-    session.flush()
 
 
 @view_config(route_name='home', request_method='GET', http_cache=60)
@@ -169,32 +135,14 @@ def home_view(request):
     context['canAddExtract'] = canAddExtract
     context['canDisplayTabs'] = True
     preferences = discussion.preferences
-    session = Discussion.default_db
+    session = discussion.db
     if user_id != Everyone:
         from assembl.models import UserPreferenceCollection
         user = User.get(user_id)
         preferences = UserPreferenceCollection(user_id, discussion)
-        # TODO: user may not exist. Case of session with BD change.
-        user.is_visiting_discussion(discussion.id)
-
-        if '_LOCALE_' in request.cookies:
-            locale = request.cookies['_LOCALE_']
-            process_locale(locale, user, session,
-                           LanguagePreferenceOrder.Cookie)
-
-        elif '_LOCALE_' in request.params:
-            locale = request.params['_LOCALE_']
-            process_locale(locale, user, session,
-                           LanguagePreferenceOrder.Parameter)
-        else:
-            locale = locale_negotiator(request)
-            process_locale(locale, user, session,
-                           LanguagePreferenceOrder.OS_Default)
+        target_locale = get_locale_from_request(request, session, user)
     else:
-        locale = request.localizer.locale_name
-
-    target_locale = Locale.get_or_create(
-        strip_country(locale), discussion.db)
+        target_locale = get_locale_from_request(request, session)
 
     translation_service_data = {}
     try:

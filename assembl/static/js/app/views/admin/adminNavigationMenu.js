@@ -15,7 +15,6 @@ var adminNavigationMenu = Marionette.LayoutView.extend({
     Marionette.LayoutView.apply(this, arguments);
   },
 
-  template: '#tmpl-adminNavigationMenu',
   tagName: 'nav',
   className: 'sidebar-nav',
   selectedSection: undefined,
@@ -42,4 +41,21 @@ var adminNavigationMenu = Marionette.LayoutView.extend({
   }
 });
 
-module.exports = adminNavigationMenu;
+var discussionAdminNavigationMenu = adminNavigationMenu.extend({
+  constructor: function discussionAdminNavigationMenu() {
+    adminNavigationMenu.apply(this, arguments);
+  },
+  template:  '#tmpl-discussionAdminNavigationMenu',
+});
+
+var globalAdminNavigationMenu = adminNavigationMenu.extend({
+  constructor: function globalAdminNavigationMenu() {
+    adminNavigationMenu.apply(this, arguments);
+  },
+  template:  '#tmpl-globalAdminNavigationMenu',
+});
+
+module.exports = {
+  discussionAdminNavigationMenu: discussionAdminNavigationMenu,
+  globalAdminNavigationMenu: globalAdminNavigationMenu,
+};

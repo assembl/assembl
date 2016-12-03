@@ -6,6 +6,7 @@
 
 var Marionette = require('./shims/marionette.js'),
     routeManager = require('./routeManager.js'),
+    Ctx = require('./common/context.js'),
     message = require('./models/message.js'),
     idea = require('./models/idea.js'),
     agent = require('./models/agents.js');
@@ -20,7 +21,7 @@ var Router = Marionette.AppRouter.extend({
   controller: routeManager,
 
   //Note:  This should match with assembl/lib/frontend_url.py
-  appRoutes: {
+  discussionRoutes: {
     "": "home",
     "edition": "edition",
     "partners": "partners",
@@ -28,7 +29,6 @@ var Router = Marionette.AppRouter.extend({
     "settings": "settings",
     "about": "about",
     "discussion_preferences": "adminDiscussionPreferences",
-    "global_preferences": "adminGlobalPreferences",
     "sentrytest": "sentryTest",
     "user/notifications": "userNotifications",
     "user/profile": "profile",
@@ -40,9 +40,16 @@ var Router = Marionette.AppRouter.extend({
     "profile/*id": "user",
     "G/*path": "groupSpec",
     "*actions": "defaults"
-  }
+  },
+
+  adminRoutes: {
+    "global_preferences": "adminGlobalPreferences",
+  },
 
 });
+
+Router.prototype.appRoutes = (Ctx.isAdminApp())?
+    Router.prototype.adminRoutes:Router.prototype.discussionRoutes;
 
 // Monkey patch ensures that shared knowledge is in a single file
 // TODO: improve.

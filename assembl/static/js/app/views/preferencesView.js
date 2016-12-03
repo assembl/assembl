@@ -950,7 +950,8 @@ var DiscussionPreferencesView = PreferencesView.extend({
     return Ctx.getCurrentUser().can(neededPerm);
   },
   getNavigationMenu: function() {
-    return new AdminNavigationMenu({selectedSection: "discussion_preferences"});
+    return new AdminNavigationMenu.discussionAdminNavigationMenu(
+      {selectedSection: "discussion_preferences"});
   }
 });
 
@@ -975,7 +976,8 @@ var GlobalPreferencesView = PreferencesView.extend({
     return Ctx.getCurrentUser().can(Permissions.SYSADMIN);
   },
   getNavigationMenu: function() {
-    return new AdminNavigationMenu({selectedSection: "global_preferences"});
+    return new AdminNavigationMenu.globalAdminNavigationMenu(
+      {selectedSection: "global_preferences"});
   }
 });
 

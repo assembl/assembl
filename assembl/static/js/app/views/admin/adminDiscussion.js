@@ -51,7 +51,8 @@ var adminDiscussion = Marionette.LayoutView.extend({
 
   onRender: function() {
     // this is in onRender instead of onBeforeShow because of the re-render in initialize()
-    var menu = new AdminNavigationMenu({selectedSection: "edition"});
+    var menu = new AdminNavigationMenu.discussionAdminNavigationMenu(
+      {selectedSection: "edition"});
     this.getRegion('navigationMenuHolder').show(menu);
 
     this.$('#introduction').autosize();

@@ -5,11 +5,6 @@
   <li <% if (selectedSection == 'discussion_preferences'){ %>class="active"<% } %>>
     <a href="#discussion_preferences" class="menu">{{ gettext('Discussion preferences') }}</a>
   </li>
-  <% if (is_sysadmin) { %>
-  <li <% if (selectedSection == 'global_preferences'){ %>class="active"<% } %>>
-    <a href="#global_preferences" class="menu">{{ gettext('Global preferences') }}</a>
-  </li>
-  <% } %>
   <li <% if (selectedSection == 'settings'){ %>class="active"<% } %>>
     <a href="#settings" class="menu">{{ gettext('Server settings') }}</a>
   </li>

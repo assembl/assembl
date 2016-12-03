@@ -213,6 +213,11 @@ Context.prototype = {
   getDiscussionSlug: function() {
     return this.DISCUSSION_SLUG;
   },
+
+  isAdminApp: function() {
+    return this.DISCUSSION_SLUG == "admin";
+  },
+
   /**
    * Returns the URL of the login page
    * @returns {String}
