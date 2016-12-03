@@ -1,24 +1,9 @@
-{% extends 'base.jinja2' %}
+{% extends 'index.jinja2' %}
 
 {% block page_title %}{% trans %}Administration{% endtrans %}{% endblock %}
 
 {% block meta_tags %}
 {% endblock meta_tags %}
-
-{% block content %}
-<input type="hidden" name="discussion-id" id="discussion-id" value="" />
-<input type="hidden" name="discussion-slug" id="discussion-slug" value="admin" />
-<input type="hidden" name="discussion-topic" id="discussion-topic" value="" />
-<input type="hidden" name="socket-url" id="socket-url" value="{{ socket_url }}" />
-
-{% if user %}
-    <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
-    <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
-{% endif %}
-
-<div id="groupContainer"></div>
-
-{% endblock %}
 
 {% block extra_js %}
     {% if user %}
@@ -41,25 +26,6 @@
     <script type="text/json" id="translation-locale-names">{{ translation_locale_names_json |safe }}</script>
     <script type="text/json" id="translation-service-data">{}</script>
     {% include 'analytics_common.jinja2' %}
-{% endblock %}
-
-{% block backboneTemplates %}
-    <div id="templates">
-        {% for template in templates %}
-            {% set template_path = 'views/' + template + '.tmpl' %}
-            <script id="tmpl-{{template}}" type="text/x-template">
-                {% include template_path %}
-            </script>
-        {% endfor %}
-    </div>
-{% endblock %}
-
-{% block main_js %}
-    <script>
-        var CKEDITOR_BASEPATH = '/static/js/node_modules/ckeditor/';
-    </script>
-    <script src="{{ STATIC_URL }}/js/build/infrastructure.min.js"></script>
-    <script src="{{ STATIC_URL }}/js/build/app.js"></script>
 {% endblock %}
 
 {% block facebook_sdk_load %}
