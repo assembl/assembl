@@ -7,25 +7,19 @@ from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
 import transaction
 
-from assembl.lib.locale import (to_posix_string, strip_country)
-from assembl.models import (
-    Discussion, DiscussionPermission, Role, Permission, UserRole,
-    LocalUserRole)
-from .. import get_default_context
-from assembl.models.mail import IMAPMailbox, MailingList
-from assembl.auth import (
+from .. import get_default_context, get_locale_from_request
+from ...lib.utils import get_global_base_url
+from ...auth import (
     R_PARTICIPANT, R_SYSADMIN, R_ADMINISTRATOR, SYSTEM_ROLES,
     P_SYSADMIN, P_ADMIN_DISC, Everyone)
-from assembl.auth.util import (
+from ...auth.util import (
     add_multiple_users_csv, user_has_permission, get_permissions)
-from assembl.models.auth import (
-    create_default_permissions, User, Username, AgentProfile,
-    LanguagePreferenceOrder)
-from assembl.models import Preferences, Locale
-from assembl import locale_negotiator
-from assembl.lib.utils import get_global_base_url
-from assembl.nlp.translation_service import DummyGoogleTranslationService
-from ..backbone.views import process_locale
+from ...models import (
+    Discussion, DiscussionPermission, Role, Permission, UserRole,
+    LocalUserRole, Preferences, User, Username, AgentProfile,
+    IMAPMailbox, MailingList)
+from ...models.auth import create_default_permissions
+from ...nlp.translation_service import DummyGoogleTranslationService
 
 
 _ = TranslationStringFactory('assembl')
@@ -58,22 +52,7 @@ def base_admin_view(request):
     preferences = Preferences.get_default_preferences(session)
     user = User.get(user_id)
 
-    if '_LOCALE_' in request.cookies:
-        locale = request.cookies['_LOCALE_']
-        process_locale(locale, user, session,
-                       LanguagePreferenceOrder.Cookie)
-
-    elif '_LOCALE_' in request.params:
-        locale = request.params['_LOCALE_']
-        process_locale(locale, user, session,
-                       LanguagePreferenceOrder.Parameter)
-    else:
-        locale = locale_negotiator(request)
-        process_locale(locale, user, session,
-                       LanguagePreferenceOrder.OS_Default)
-
-    target_locale = Locale.get_or_create(
-        strip_country(locale), session)
+    target_locale = get_locale_from_request(request, session, user)
     locale_labels = json.dumps(
         DummyGoogleTranslationService.target_locale_labels_cls(target_locale))
     context['translation_locale_names_json'] = locale_labels
