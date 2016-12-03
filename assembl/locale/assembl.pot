@@ -2046,6 +2046,10 @@ msgstr ""
 msgid "Change global permissions"
 msgstr ""
 
+#: assembl/templates/discussion_list.jinja2:40
+msgid "Change global preferences"
+msgstr ""
+
 #: assembl/templates/discussion_list.jinja2:42
 #: assembl/templates/views/navBarRight.tmpl:55
 msgid "Sign out"

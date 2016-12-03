@@ -2230,6 +2230,10 @@ msgstr "Créer une nouvelle discussion"
 msgid "Change global permissions"
 msgstr "Changer les permissions globales"
 
+#: assembl/templates/discussion_list.jinja2:39
+msgid "Change global preferences"
+msgstr "Changer les préférences globales"
+
 #: assembl/templates/discussion_list.jinja2:42
 #: assembl/templates/views/navBarRight.tmpl:55
 msgid "Sign out"
