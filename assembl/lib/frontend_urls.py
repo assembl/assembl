@@ -66,7 +66,7 @@ class FrontendUrls(object):
     @classmethod
     def register_frontend_routes(cls, config):
         from assembl.views.discussion.views import home_view
-        for name, route in cls.frontend_routes.iteritems():
+        for name, route in cls.frontend_discussion_routes.iteritems():
             config.add_route(name, route)
             config.add_view(
                 home_view, route_name=name, request_method='GET',
