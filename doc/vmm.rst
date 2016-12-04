@@ -47,6 +47,14 @@ Dovecot configuration
 Remember to use the Dovecot 2.x section. We did not set up sieve or
 quotas.
 
+In ``dovecot.conf``, we have the line
+
+.. code:: ini
+
+    protocols = imap lmtp
+
+This might also be handled by ``!include_try /usr/share/dovecot/protocols.d/*.protocol`` in the same file. Look in that directory.
+
 Note that the path for ``dovecot-sql.conf.ext`` is
 ``/etc/dovecot/dovecot-sql.conf.ext`` and not
 ``/usr/local/etc/dovecot/dovecot-sql.conf.ext``.
@@ -58,6 +66,9 @@ In ``/etc/dovecot/conf.d/10-auth.conf``, also put the following:
     disable_plaintext_auth = yes
     !include auth-sql.conf.ext
 
+In ``/etc/dovecot/conf.d/10-ssl.conf``, you could use the same keys as for https (provided you use the same server name.)
+You can uncomment ``ssl = yes``.
+
 Postfix configuration
 ---------------------
 
@@ -66,6 +77,25 @@ In ``/etc/postfix/main.cf`` , add
 .. code:: ini
 
     mydestination = localhost
+
+Also set your ssl key in those variables:
+
+.. code:: ini
+
+    smtpd_tls_cert_file=/path/to/fullchain.pem
+    smtpd_tls_key_file=/path/to/privkey.pem
+    smtp_tls_cert_file=/path/to/fullchain.pem
+    smtp_tls_key_file=/path/to/privkey.pem
+
+and add the following:
+
+.. code:: ini
+
+    smtp_tls_CApath = /etc/ssl/certs
+    smtp_tls_CAfile =  /etc/ssl/certs/ca-certificates.crt
+    smtp_tls_loglevel = 1
+    smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+    smtp_tls_security_level = may
 
 VMM configuration
 -----------------
@@ -76,7 +106,7 @@ Wo don't have ``install.sh``. Instead:
 
     cp /usr/share/doc/vmm/examples/postfix/* /etc/postfix
 
-and adjust passwords by hand in those files.
+and adjust passwords (and host) by hand in those files.
 
 In ``/etc/vmm/vmm.cfg``:
 
@@ -92,10 +122,13 @@ http://wiki2.dovecot.org/Authentication/Mechanisms is the same.)
 
 In ``/etc/vmm/vmm-db.cfg``:
 
+Adjust password, host and:
+
 .. code:: ini
 
     ; Database name (String)
     name = mailsys
+
 
 Use VMM
 -------
@@ -143,3 +176,25 @@ In ``local.ini``
     imap_domain = ...
     discussion_callbacks =
         assembl.tasks.create_vmm_source.CreateVMMMailboxAtDiscussionCreation
+
+
+Testing
+-------
+
+Restart dovecot and postfix (``/etc/init.d/postfix restart`` and ``/etc/init.d/dovecot restart``), and look for any startup error in ``/var/log/mail.log``.
+
+to test postfix, start a ``pshell`` in assembl, and try the following with a real recipient:
+
+.. code:: python
+
+    from pyramid_mailer import get_mailer
+    from pyramid_mailer.message import Message
+    from assembl.lib import config
+
+    mailer = get_mailer(request)
+    message = Message(subject="hello world",
+       sender=config.get('assembl.admin_email'),
+       recipients=["test_recipient@example.com"],body="test")
+    mailer.send_immediately(message)
+
+(Testing dovecot todo.)
