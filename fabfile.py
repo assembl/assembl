@@ -1034,14 +1034,32 @@ def check_and_create_database_user(host=None, user=None, password=None):
             password=password, host=host, user=user, projectpath=env.projectpath))
     if checkUser.failed:
         print(yellow("User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"))
-        run_db_command('python {pypsql} -u {db_user} -n {host} "{command}"'.format(
+        db_user = system_db_user()
+        if host in ("localhost", "127.0.0.1") and db_user:
+            db_password_string = ''
+            sudo_user = db_user
+        else:
+            db_password = env.system_db_password
+            assert db_password, "We need a password for postgres on " + host
+            db_password_string = '-p ' + env.db_password
+            sudo_user = None
+        run_db_command('python {pypsql} -u {db_user} -n {host} {db_password_string} "{command}"'.format(
             command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
                 user, password),
             pypsql=join(env.projectpath, 'assembl', 'scripts', 'pypsql.py'),
-            db_user=system_db_user(), host=host))
-        # run_db_command("bash -c 'psql -n -d postgres -c \"CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD \\\'%s\\\';\"'" % (user, password))
+            db_user=db_user, host=host, db_password_string=db_password_string),
+            sudo_user)
     else:
         print(green("User exists and can connect"))
+
+
+@task
+def check_and_create_sentry_database_user():
+    user = env.sentry_db_user
+    password = env.sentry_db_password
+    host = env.get("sentry_db_host", None)
+    assert user and password, "Please specify sentry database user + password"
+    check_and_create_database_user(host, user, password)
 
 
 def database_create_postgres():
@@ -1794,8 +1812,7 @@ def system_db_user():
     return "postgres"  # linux postgres
 
 
-def run_db_command(command, *args, **kwargs):
-    user = system_db_user()
+def run_db_command(command, user=None, *args, **kwargs):
     if user:
         # Unix with local postgres installation and local postgres user
         # we will sudo -u postgres to do the pypsql command
