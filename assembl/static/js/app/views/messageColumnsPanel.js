@@ -214,8 +214,14 @@ var MessageColumnView = BaseMessageColumnView.extend({
     messageColumnDescription: '@ui.messageColumnDescription',
   },
 
-  events: {
-    'click @ui.loadPendingMessages': 'loadPendingMessages',
+  events: function() {
+    var events = {
+     'click @ui.loadPendingMessages': 'loadPendingMessages',
+    };
+    _.each(this.ViewStyles, function(messageListViewStyle) {
+      events['click .' + messageListViewStyle.css_class] = 'onSelectMessageListViewStyle';
+    });
+    return events;
   },
 
   /**
@@ -259,10 +265,6 @@ var MessageColumnView = BaseMessageColumnView.extend({
     this.basePanel = options.basePanel;
     this.translationDataPromise = options.translationDataPromise;
     this.setViewStyle(this.ViewStyles.REVERSE_CHRONOLOGICAL);
-
-    _.each(this.ViewStyles, function(messageListViewStyle) {
-      that.delegate('click', '.' + messageListViewStyle.css_class, _.bind(that.onSelectMessageListViewStyle, that));
-    });
     this.setCurrentIdea(this.idea);
   },
 
