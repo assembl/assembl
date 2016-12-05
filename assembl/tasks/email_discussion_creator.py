@@ -60,7 +60,6 @@ class EmailCreatorAtDiscussionCreation(object):
         sender_email = config.get('assembl.admin_email')
         mailer = get_mailer(request)
         localizer = request.localizer
-        sender_email = config.get('assembl.admin_email')
         sender_name = discussion.topic
         sender_name = normalize_email_name(sender_name)
         sender = '"%s" <%s>' % (sender_name, sender_email)
