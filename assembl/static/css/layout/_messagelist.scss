@@ -16,7 +16,7 @@
   }
 }
 
-.messageList, .js_messageColumnsList {
+.messageList {
   position: relative;
 
   .messageList-query-info {
@@ -140,23 +140,23 @@
 
   }
 
-  .real-time-updates{
-    position: absolute;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    z-index: 2;
+}
 
-    .btn-real-time{
-      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-      height: 24px;
-      cursor: pointer;
-      @include border-radius(0 0 2px 2px);
-      font-weight: bold;
-      font-size: 12px;
-      border: none;
-    }
+.real-time-updates{
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  z-index: 2;
+
+  .btn-real-time{
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    height: 24px;
+    cursor: pointer;
+    @include border-radius(0 0 2px 2px);
+    font-weight: bold;
+    font-size: 12px;
+    border: none;
   }
-
 }
