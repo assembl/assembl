@@ -183,7 +183,6 @@ def react_view(request):
     return context
 
 
-
 @view_config(route_name='styleguide', request_method='GET', http_cache=60,
              renderer='assembl:templates/styleguide/index.jinja2')
 def styleguide_view(request):

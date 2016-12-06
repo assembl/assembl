@@ -94,8 +94,8 @@ def main(global_config, **settings):
         from .lib.migration import bootstrap_db_data
         bootstrap_db_data(session, False)
 
-    config.add_static_view('react', 'react', cache_max_age=3600)
     config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_static_view('static2', 'static2', cache_max_age=3600)
 
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')
