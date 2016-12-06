@@ -17,6 +17,7 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.sql.functions import count
 
 from ..auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_EDIT_IDEA,
@@ -70,3 +71,28 @@ class IdeaMessageColumn(DiscussionBoundBase):
 
     crud_permissions = CrudPermissions(
         P_ADMIN_DISC, P_READ, delete=P_ADMIN_DISC)
+
+    @classmethod
+    def ensure_ordering_for_idea(cls, idea):
+        """Ensure all columns but one have a previous_column. The linked list is fragile."""
+        columns = idea.message_columns
+        columns_by_id = {c.id: c for c in columns}
+        previous_ids = {c.previous_column_id for c in columns if c.previous_column_id is not None}
+        unfollowed = list(set(columns_by_id.keys()) - previous_ids)
+        unfollowed.sort()
+        while len(unfollowed) > 1:
+            first = unfollowed.pop(0)
+            following = unfollowed[0]
+            columns_by_id[following].previous_column_id = first
+
+    @classmethod
+    def ensure_ordering(cls):
+        """Find ideas with multiple columns that have no previous column"""
+        db = cls.default_db
+        subq = db.query(cls.idea_id
+            ).filter_by(previous_column_id=None
+            ).group_by(cls.idea_id
+            ).having(count(cls.id) > 1).subquery()
+        ideas = db.query(Idea).filter(Idea.id.in_(subq))
+        for idea in ideas:
+            cls.ensure_ordering_for_idea(idea)

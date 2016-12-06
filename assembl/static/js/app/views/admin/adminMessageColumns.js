@@ -230,13 +230,21 @@ var MessageColumnView = Marionette.LayoutView.extend({
     ev.preventDefault();
   },
   deleteColumn: function(ev) {
-    var index = this.getIndex();
-    if (index < this.model.collection.length - 2) {
-      var nextModel = this.model.collection.at(index+1);
-      nextModel.set('previous_column', this.model.get('previous_column'));
-      nextModel.save();
+    var nextModel = null,
+        prevColumn = this.model.get('previous_column'),
+        index = this.getIndex();
+    if (index + 1 < this.model.collection.length) {
+      nextModel = this.model.collection.at(index+1);
     }
-    this.model.destroy();
+    this.model.destroy({
+      success: function() {
+        if (nextModel !== null) {
+          // do this after delete, or uniqueness of previous_column will prevent change.
+          nextModel.set('previous_column', prevColumn);
+          nextModel.save();
+        }
+      },
+    });
     ev.preventDefault();
   },
   changeIdentifier: function(ev) {
