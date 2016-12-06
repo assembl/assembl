@@ -27,14 +27,14 @@ server {
         #Nor will it help your performance after the first hour...
         autoindex on;
 
-        alias /home/ubuntu/assembl/assembl/static;
+        alias /home/assembl_user/assembl/assembl/static;
     }
 
     location / {
 
         include uwsgi_params;
         uwsgi_read_timeout 5m;
-        uwsgi_pass unix:///home/ubuntu/assembl/var/run/uwsgi.sock;
+        uwsgi_pass unix:///home/assembl_user/assembl/var/run/uwsgi.sock;
     }
 
 # So files uploaded to the database are not artificailly limited by nginx

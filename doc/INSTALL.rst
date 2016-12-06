@@ -160,8 +160,8 @@ A note on vagrant
 If you use vagrant, we have a few processes that expect to use socket
 files in %(here)s. Vagrant does not allow creating sockets in a shared
 folder; so if you insist on using vagrant, make sure to move sockets
-locations. There is one is supervisord.conf, and one in an unknown
-location.
+locations. Some are defined in supervisord.conf.tmpl, and changes.socket
+is defined in the .ini files.
 
 Updating an environment
 -----------------------
@@ -234,8 +234,10 @@ update with the following:
 Setting up a production dedicated instance
 ------------------------------------------
 
-In what follows, we will assume that the nginx web server runs in group `www-data`, and that the assembl server runs under a separate user, called `assembl_user`. In the sample files in `doc`, we use `ubuntu` instead of `assembl_user`, as this is the most convenient for cloud setup.
-Note: It is also possible to use the same user, and to put assembl in `/var/www`. It may be simpler for a single-server setup.
+In what follows, we will assume that the nginx web server runs in group ``www-data``,
+and that the assembl server runs under a dedicated user, called ``assembl_user``,
+which should not be a sudoer. We suggest defining a group (``assembl_group``) for all assembl users.
+Note: For a simple single-server setup, it is also possible to use the ``www-data`` user directly, and to put assembl in ``/var/www``.
 
 Start as a user with sudo access
 
@@ -243,16 +245,31 @@ Start as a user with sudo access
 
     sudo apt-get install fabric git openssh-server
     sudo apt-get install nginx uwsgi uwsgi-plugin-python
-    sudo adduser assembl_user #assembl_user is the name of a user dedicated to this instance
-    sudo usermod -G www-data assembl_user
+    sudo addgroup assembl_group
+    sudo adduser assembl_user
+    sudo usermod -G www-data -G assembl_group assembl_user
 
-    # By default, postgres will not use passwords from postgres users who connect through the Unix socket domain (versus a network connection).
-    # So if you want to make your database to be safer and ask for password anyway, edit your /etc/postgresql/9.1/main/pg_hba.conf file and replace
-    # local   all             all                                peer
+
+By default, postgres will not use passwords from postgres users who connect through the Unix socket domain (versus a network connection).
+So if you want to make your database to be safer and ask for password anyway, edit your /etc/postgresql/9.1/main/pg_hba.conf file and
+
+.. code:: ini
+
+    # replace
+    local   all             all                                peer
     # by
-    # local   all             all                                md5
-    # and then run
-    # sudo service postgresql restart
+    local   all             all                                md5
+
+
+and then run
+
+.. code:: sh
+
+    sudo service postgresql restart
+
+Then, as the assembl_user:
+
+.. code:: sh
 
     sudo -u assembl_user -i
 
