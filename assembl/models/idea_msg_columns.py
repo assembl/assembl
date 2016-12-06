@@ -68,4 +68,5 @@ class IdeaMessageColumn(DiscussionBoundBase):
         return ((msg_column.idea_id == idea.id),
                 (idea.discussion_id == discussion_id))
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+    crud_permissions = CrudPermissions(
+        P_ADMIN_DISC, P_READ, delete=P_ADMIN_DISC)
