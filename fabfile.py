@@ -1025,7 +1025,7 @@ def check_and_create_database_user(host=None, user=None, password=None):
     Create a user and a DB for the project
     """
     sanitize_env()
-    host = host or env.db_host
+    host = host or env.postgres_db_host
     user = user or env.db_user
     password = password or env.db_password
     with settings(warn_only=True):
@@ -1039,7 +1039,7 @@ def check_and_create_database_user(host=None, user=None, password=None):
             db_password_string = ''
             sudo_user = db_user
         else:
-            db_password = env.system_db_password
+            db_password = env.postgres_db_password
             assert db_password, "We need a password for postgres on " + host
             db_password_string = '-p ' + env.db_password
             sudo_user = None
@@ -1068,12 +1068,12 @@ def database_create_postgres():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_name),
-            password=env.db_password, host=env.db_host, user=env.db_user))
+            password=env.db_password, host=env.postgres_db_host, user=env.db_user))
     if checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
         createDatabase = run(
         "PGPASSWORD=%s createdb --username=%s  --host=%s --encoding=UNICODE --template=template0 --owner=%s %s" % (
-            env.db_password, env.db_user, env.db_host, env.db_user, env.db_name))
+            env.db_password, env.db_user, env.postgres_db_host, env.db_user, env.db_name))
         if createDatabase.succeeded:
             print(green("Database created successfully!"))
     else:
@@ -1136,7 +1136,7 @@ def database_dump_postgres():
     with prefix(venv_prefix()), cd(env.projectpath):
         run('PGPASSWORD=%s pg_dump --host=%s -U%s --format=custom -b %s > %s' % (
             env.db_password,
-            env.db_host,
+            env.postgres_db_host,
             env.db_user,
             env.db_name,
             absolute_path))
@@ -1211,7 +1211,7 @@ def database_delete_postgres():
     with settings(warn_only=True), hide('stdout'):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_name),
-            password=env.db_password, host=env.db_host, user=env.db_user))
+            password=env.db_password, host=env.postgres_db_host, user=env.db_user))
     if not checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
         deleteDatabase = run('PGPASSWORD=%s dropdb --username=%s %s' % (
@@ -1269,7 +1269,7 @@ def database_restore_postgres():
     with settings(warn_only=True):
         dropped = run('PGPASSWORD=%s dropdb --host=%s --username=%s --no-password %s' % (
             env.db_password,
-            env.db_host,
+            env.postgres_db_host,
             env.db_user,
             env.db_name))
 
@@ -1283,7 +1283,7 @@ def database_restore_postgres():
     with prefix(venv_prefix()), cd(env.projectpath):
         run('PGPASSWORD=%s pg_restore --host=%s --dbname=%s -U%s --schema=public %s' % (
                                                   env.db_password,
-                                                  env.db_host,
+                                                  env.postgres_db_host,
                                                   env.db_name,
                                                   env.db_user,
                                                   remote_db_path())
@@ -1772,9 +1772,9 @@ def commonenv(projectpath, venvpath=None):
     env.db_name = config.get("app:assembl", "db_database")
     # It is recommended you keep localhost even if you have access to
     # unix domain sockets, it's more portable across different pg_hba configurations.
-    env.db_host = 'localhost'
+    env.postgres_db_host = 'localhost'
     if config.has_option("app:assembl", "db_host"):
-        env.db_host = config.get("app:assembl", "db_host")
+        env.postgres_db_host = config.get("app:assembl", "db_host")
 
     env.vroot = config.get('virtuoso', 'virtuoso_root')
     env.vsrc = config.get('virtuoso', 'virtuoso_src')
@@ -1789,7 +1789,7 @@ def commonenv(projectpath, venvpath=None):
     env.uses_ngnix = False
     # Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
-    env.system_db_user = None
+    env.postgres_db_user = None
     env.using_virtuoso = ''
 
     # Minimal dependencies versions
@@ -1802,8 +1802,8 @@ def using_virtuoso():
 
 
 def system_db_user():
-    if env.system_db_user:
-        return env.system_db_user
+    if env.postgres_db_user:
+        return env.postgres_db_user
     if using_virtuoso():
         return None
     if env.mac:
