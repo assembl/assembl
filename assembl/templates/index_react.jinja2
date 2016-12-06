@@ -1,0 +1,14 @@
+{% extends 'base.jinja2' %}
+{% block page_title%}Assembl{% endblock%}
+
+{% block main_css %}
+ 	<link type="text/css" rel="stylesheet" href="{{REACT_URL}}/css/main.css" />
+{% endblock%}
+
+{% block body %}
+	<body>
+		{% block main_js %}
+			<script src="{{REACT_URL}}/build/bundle.js"></script>
+		{% endblock %}
+	</body>
+{% endblock%}

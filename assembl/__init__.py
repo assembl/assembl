@@ -42,6 +42,7 @@ locale_negotiator = default_locale_negotiator
 resolver = DottedNameResolver(__package__)
 
 # Do not import models here, it will break tests.
+# WSGI calls main. This is a convention.
 def main(global_config, **settings):
     """ Return a Pyramid WSGI application. """
     settings['config_uri'] = global_config['__file__']
@@ -94,7 +95,8 @@ def main(global_config, **settings):
         bootstrap_db_data(session, False)
 
     config.add_static_view('static', 'static', cache_max_age=3600)
-    config.add_static_view('widget', 'widget', cache_max_age=3600)
+    config.add_static_view('static2', 'static2', cache_max_age=3600)
+
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')
     # config.include('.lib.email')

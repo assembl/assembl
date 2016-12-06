@@ -38,7 +38,8 @@ from ..models.auth import (
 
 
 default_context = {
-    'STATIC_URL': '/static'
+    'STATIC_URL': '/static',
+    'REACT_URL': '/static2'
 }
 
 
@@ -410,12 +411,13 @@ def includeme(config):
 
     config.include('.api')
     config.include('.api2')
-
-    config.include('.home')
     config.include('.admin')
 
     config.add_route('home-auto', '/{discussion_slug}/')
 
+    config.include('.discussion')
+    def redirector(request):
+        return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
     config.add_view(redirector, route_name='home-auto')
     default_context['cache_bust'] = \
         config.registry.settings['requirejs.cache_bust']
