@@ -119,7 +119,7 @@ and adjust passwords (and host) by hand in those files.
 
 In ``/etc/vmm/vmm.cfg``:
 
-.. code:: patch
+.. code:: diff
 
     135c136
     < password_scheme = SHA512-CRYPT
