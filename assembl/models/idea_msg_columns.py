@@ -41,8 +41,10 @@ class IdeaMessageColumn(DiscussionBoundBase):
              ":py:attr:`assembl.models.generic.Content.message_classifier`"))
     header = Column(UnicodeText,
         doc="Text which will be shown above the column")
-    previous_column_id = Column(Integer, ForeignKey(id), nullable=True,
-        unique=True, doc="Allows ordering columns as a linked list")
+    previous_column_id = Column(
+        Integer, ForeignKey(id, ondelete='SET NULL'),
+        nullable=True, unique=True,
+        doc="Allows ordering columns as a linked list")
     name_id = Column(Integer, ForeignKey(LangString.id), nullable=False,
         doc="The name of the column as a langstr")
     color = Column(String(20),
