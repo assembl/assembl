@@ -421,7 +421,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
         html = "";
 
     html += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">';
-    html += this.currentViewStyle.label;
+    html += '<span class="dropdown-label">'+this.currentViewStyle.label+'</span>';
     html += '<span class="icon-arrowdown"></span></a>';
     html += '<ul class="dropdown-menu">';
     _.each(this.ViewStyles, function(messageListViewStyle) {

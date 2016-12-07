@@ -74,6 +74,16 @@
             padding-right: 1ex;
         }
     }
+    .dropdown-menu{
+        min-width:270px!important;
+        right:-80px!important;
+    }
+    .dropdown-label{
+        display:none;
+    }
+    .message-body {
+        min-width:200px!important;
+    }
     .message-column-description{
         border: 1px solid $txtGray;
         margin: 0 0 20px 0;
