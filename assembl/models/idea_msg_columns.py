@@ -78,12 +78,15 @@ class IdeaMessageColumn(DiscussionBoundBase):
         columns = idea.message_columns
         columns_by_id = {c.id: c for c in columns}
         previous_ids = {c.previous_column_id for c in columns if c.previous_column_id is not None}
-        unfollowed = list(set(columns_by_id.keys()) - previous_ids)
-        unfollowed.sort()
-        while len(unfollowed) > 1:
-            first = unfollowed.pop(0)
-            following = unfollowed[0]
-            columns_by_id[following].previous_column_id = first
+        list_ends = list(set(columns_by_id.keys()) - previous_ids)
+        list_ends.sort()
+        while len(list_ends) > 1:
+            first_end = list_ends.pop(0)
+            following = columns_by_id[list_ends[0]]
+            # find the start of the list
+            while following.previous_column:
+                following = following.previous_column
+            following.previous_column_id = first_end
 
     @classmethod
     def ensure_ordering(cls):
