@@ -1,7 +1,7 @@
 {
-  "name": "assembl2_v2",
+  "name": "assembl_v2",
   "version": "2.0.0",
-  "description": "A new front-end for Assembl",
+  "description": "A new frontend for Assembl",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -10,5 +10,8 @@
     "test": ""
   },
   "author": "Bluenove Group Inc.",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "webpack": "^1.14.0"
+  }
 }
