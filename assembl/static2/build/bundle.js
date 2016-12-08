@@ -57,7 +57,9 @@
   \*************************/
 /***/ function(module, exports) {
 
-	console.log('Hello World');
+	'use strict';
+	
+	console.log('Hello World!!');
 
 /***/ }
 /******/ ]);
