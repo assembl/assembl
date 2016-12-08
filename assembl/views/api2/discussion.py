@@ -277,8 +277,9 @@ def get_time_series_analytics(request):
         end = datetime.now()
     results = []
 
-    from sqlalchemy import Table, MetaData, and_, case, cast, Float
+    from sqlalchemy import Table, MetaData, and_, or_, case, cast, Float
     from sqlalchemy.exc import ProgrammingError
+    from sqlalchemy.orm import with_polymorphic
     import pprint
     import transaction
     with transaction.manager:
@@ -307,7 +308,9 @@ def get_time_series_analytics(request):
         else:
             raise HTTPBadRequest("Please specify an interval")
 
-        from assembl.models import Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea, AbstractIdeaVote
+        from assembl.models import (
+            Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
+            AbstractIdeaVote, Action, ActionOnPost, ActionOnIdea, Content)
 
         # The posters
         post_subquery = discussion.db.query(intervals_table.c.interval_id,
@@ -427,6 +430,59 @@ def get_time_series_analytics(request):
         cumulative_votes_subquery = cumulative_votes_subquery.group_by(intervals_table.c.interval_id)
         cumulative_votes_subquery = cumulative_votes_subquery.subquery()
 
+        content = with_polymorphic(
+                    Content, [], Content.__table__,
+                    aliased=False, flat=True)
+
+        # The actions
+        actions_on_post = discussion.db.query(
+            intervals_table.c.interval_id.label('interval_id'), ActionOnPost.actor_id.label('actor_id'))
+        actions_on_post = actions_on_post.join(content, content.discussion_id == discussion.id)
+        actions_on_post = actions_on_post.join(ActionOnPost, and_(
+            ActionOnPost.post_id == content.id,
+            ActionOnPost.creation_date >= intervals_table.c.interval_start,
+            ActionOnPost.creation_date < intervals_table.c.interval_end
+            ))
+
+        actions_on_idea = discussion.db.query(
+            intervals_table.c.interval_id.label('interval_id'), ActionOnIdea.actor_id.label('actor_id'))
+        actions_on_idea = actions_on_idea.join(Idea, Idea.discussion_id == discussion.id)
+        actions_on_idea = actions_on_idea.join(ActionOnIdea, and_(
+            ActionOnIdea.idea_id == Idea.id,
+            ActionOnIdea.creation_date >= intervals_table.c.interval_start,
+            ActionOnIdea.creation_date < intervals_table.c.interval_end
+            ))
+
+        actions_union_subquery = actions_on_post.union(actions_on_idea).subquery()
+        actions_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(distinct(actions_union_subquery.c.actor_id)).label('count_actors')
+            ).outerjoin(actions_union_subquery, actions_union_subquery.c.interval_id == intervals_table.c.interval_id
+            ).group_by(intervals_table.c.interval_id).subquery()
+
+        # The actions
+        cumulative_actions_on_post = discussion.db.query(
+            intervals_table.c.interval_id.label('interval_id'), ActionOnPost.actor_id.label('actor_id'))
+        cumulative_actions_on_post = cumulative_actions_on_post.join(content, content.discussion_id == discussion.id)
+        cumulative_actions_on_post = cumulative_actions_on_post.join(ActionOnPost, and_(
+            ActionOnPost.post_id == content.id,
+            ActionOnPost.creation_date < intervals_table.c.interval_end
+            ))
+
+        cumulative_actions_on_idea = discussion.db.query(
+            intervals_table.c.interval_id.label('interval_id'), ActionOnIdea.actor_id.label('actor_id'))
+        cumulative_actions_on_idea = cumulative_actions_on_idea.join(Idea, Idea.discussion_id == discussion.id)
+        cumulative_actions_on_idea = cumulative_actions_on_idea.join(ActionOnIdea, and_(
+            ActionOnIdea.idea_id == Idea.id,
+            ActionOnIdea.creation_date < intervals_table.c.interval_end
+            ))
+
+        cumulative_actions_union_subquery = cumulative_actions_on_post.union(cumulative_actions_on_idea).subquery()
+        cumulative_actions_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(distinct(cumulative_actions_union_subquery.c.actor_id)).label('count_cumulative_actors')
+            ).outerjoin(cumulative_actions_union_subquery, cumulative_actions_union_subquery.c.interval_id == intervals_table.c.interval_id
+            ).group_by(intervals_table.c.interval_id).subquery()
+
+
         combined_query = discussion.db.query(intervals_table,
                                              post_subquery,
                                              cumulative_posts_subquery,
@@ -436,6 +492,8 @@ def get_time_series_analytics(request):
                                              votes_subquery,
                                              cumulative_votes_subquery,
                                              members_subquery,
+                                             actions_subquery,
+                                             cumulative_actions_subquery,
                                              case([
                                                    (cumulative_posts_subquery.c.count_cumulative_post_authors == 0, None),
                                                    (cumulative_posts_subquery.c.count_cumulative_post_authors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_posts_subquery.c.count_cumulative_post_authors, Float)))
@@ -455,6 +513,8 @@ def get_time_series_analytics(request):
         combined_query = combined_query.join(cumulative_posts_subquery, cumulative_posts_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(votes_subquery, votes_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_votes_subquery, cumulative_votes_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(actions_subquery, actions_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(cumulative_actions_subquery, actions_subquery.c.interval_id == intervals_table.c.interval_id)
 
         query = combined_query
         query = query.order_by(intervals_table.c.interval_id)
@@ -485,6 +545,8 @@ def get_time_series_analytics(request):
         "count_cumulative_votes",
         "count_voters",
         "count_cumulative_voters",
+        "count_actors",
+        "count_cumulative_actors",
 
         "count_approximate_members",
         "count_first_time_logged_in_visitors",
