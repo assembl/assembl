@@ -541,7 +541,7 @@ def get_time_series_analytics(request):
         "count_cumulative_post_authors",
         "fraction_cumulative_authors_who_posted_in_period",
 
-        "count_voters",
+        "count_votes",
         "count_cumulative_votes",
         "count_voters",
         "count_cumulative_voters",
