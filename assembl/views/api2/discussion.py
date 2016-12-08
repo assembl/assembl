@@ -307,7 +307,7 @@ def get_time_series_analytics(request):
         else:
             raise HTTPBadRequest("Please specify an interval")
 
-        from assembl.models import Post, AgentProfile, AgentStatusInDiscussion, ViewPost
+        from assembl.models import Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea, AbstractIdeaVote
 
         # The posters
         post_subquery = discussion.db.query(intervals_table.c.interval_id,
@@ -405,12 +405,36 @@ def get_time_series_analytics(request):
         subscribers_subquery = subscribers_query.subquery()
         #query = subscribers_query
 
+        # The votes
+        votes_aliased = aliased(AbstractIdeaVote)
+        votes_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(distinct(votes_aliased.id)).label('count_votes'),
+            func.count(distinct(votes_aliased.voter_id)).label('count_voters'),
+            )
+        votes_subquery = votes_subquery.outerjoin(Idea, Idea.discussion_id == discussion.id)
+        votes_subquery = votes_subquery.outerjoin(votes_aliased, and_(votes_aliased.vote_date >= intervals_table.c.interval_start, votes_aliased.vote_date < intervals_table.c.interval_end, votes_aliased.idea_id == Idea.id))
+        votes_subquery = votes_subquery.group_by(intervals_table.c.interval_id)
+        votes_subquery = votes_subquery.subquery()
+
+        # The cumulative posters
+        cumulative_votes_aliased = aliased(AbstractIdeaVote)
+        cumulative_votes_subquery = discussion.db.query(intervals_table.c.interval_id,
+            func.count(cumulative_votes_aliased.id).label('count_cumulative_votes'),
+            func.count(distinct(cumulative_votes_aliased.voter_id)).label('count_cumulative_voters')
+            )
+        cumulative_votes_subquery = cumulative_votes_subquery.outerjoin(Idea, Idea.discussion_id == discussion.id)
+        cumulative_votes_subquery = cumulative_votes_subquery.outerjoin(cumulative_votes_aliased, and_(cumulative_votes_aliased.vote_date < intervals_table.c.interval_end, cumulative_votes_aliased.idea_id == Idea.id))
+        cumulative_votes_subquery = cumulative_votes_subquery.group_by(intervals_table.c.interval_id)
+        cumulative_votes_subquery = cumulative_votes_subquery.subquery()
+
         combined_query = discussion.db.query(intervals_table,
                                              post_subquery,
                                              cumulative_posts_subquery,
                                              post_viewers_subquery,
                                              visitors_subquery,
                                              cumulative_visitors_subquery,
+                                             votes_subquery,
+                                             cumulative_votes_subquery,
                                              members_subquery,
                                              case([
                                                    (cumulative_posts_subquery.c.count_cumulative_post_authors == 0, None),
@@ -429,6 +453,8 @@ def get_time_series_analytics(request):
         combined_query = combined_query.join(members_subquery, members_subquery.c.interval_id==intervals_table.c.interval_id)
         combined_query = combined_query.join(subscribers_subquery, subscribers_subquery.c.interval_id==intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_posts_subquery, cumulative_posts_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(votes_subquery, votes_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(cumulative_votes_subquery, cumulative_votes_subquery.c.interval_id == intervals_table.c.interval_id)
 
         query = combined_query
         query = query.order_by(intervals_table.c.interval_id)
@@ -449,20 +475,26 @@ def get_time_series_analytics(request):
         "interval_id",
         "interval_start",
         "interval_end",
-        "count_first_time_logged_in_visitors",
-        "count_cumulative_logged_in_visitors",
-        "fraction_cumulative_logged_in_visitors_who_posted_in_period",
+        "count_posts",
+        "count_cumulative_posts",
         "count_post_authors",
         "count_cumulative_post_authors",
         "fraction_cumulative_authors_who_posted_in_period",
-        "count_posts",
-        "count_cumulative_posts",
+
+        "count_voters",
+        "count_cumulative_votes",
+        "count_voters",
+        "count_cumulative_voters",
+
+        "count_approximate_members",
+        "count_first_time_logged_in_visitors",
+        "count_cumulative_logged_in_visitors",
+        "fraction_cumulative_logged_in_visitors_who_posted_in_period",
         "recruitment_count_first_visit_in_period",
         "UNRELIABLE_recruitment_count_first_subscribed_in_period",
         "retention_count_last_visit_in_period",
         "UNRELIABLE_retention_count_first_subscribed_in_period",
         "UNRELIABLE_count_post_viewers",
-        "count_approximate_members"
     ]
     # otherwise assume csv
     return csv_response(fieldnames, [r._asdict() for r in results])
