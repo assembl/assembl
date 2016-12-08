@@ -364,7 +364,6 @@ def get_time_series_analytics(request):
         # query = cumulative_visitors_query
 
         # The members (can go up and down...)  Assumes that first_subscribed is available
-        commented_out = """ first_subscribed isn't yet filled in by assembl
         memberAgentStatus = aliased(AgentStatusInDiscussion)
         members_subquery = discussion.db.query(intervals_table.c.interval_id,
             func.count(memberAgentStatus.id).label('count_approximate_members')
@@ -373,7 +372,6 @@ def get_time_series_analytics(request):
         members_subquery = members_subquery.group_by(intervals_table.c.interval_id)
         query = members_subquery
         members_subquery = members_subquery.subquery()
-        """
 
         subscribersAgentStatus = aliased(AgentStatusInDiscussion)
         subscribers_query = discussion.db.query(intervals_table.c.interval_id,
@@ -413,6 +411,7 @@ def get_time_series_analytics(request):
                                              post_viewers_subquery,
                                              visitors_subquery,
                                              cumulative_visitors_subquery,
+                                             members_subquery,
                                              case([
                                                    (cumulative_posts_subquery.c.count_cumulative_post_authors == 0, None),
                                                    (cumulative_posts_subquery.c.count_cumulative_post_authors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_posts_subquery.c.count_cumulative_post_authors, Float)))
@@ -427,7 +426,7 @@ def get_time_series_analytics(request):
         combined_query = combined_query.join(post_viewers_subquery, post_viewers_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(visitors_subquery, visitors_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_visitors_subquery, cumulative_visitors_subquery.c.interval_id == intervals_table.c.interval_id)
-        # combined_query = combined_query.join(members_subquery, members_subquery.c.interval_id==intervals_table.c.interval_id)
+        combined_query = combined_query.join(members_subquery, members_subquery.c.interval_id==intervals_table.c.interval_id)
         combined_query = combined_query.join(subscribers_subquery, subscribers_subquery.c.interval_id==intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_posts_subquery, cumulative_posts_subquery.c.interval_id == intervals_table.c.interval_id)
 
@@ -463,6 +462,7 @@ def get_time_series_analytics(request):
         "retention_count_last_visit_in_period",
         "UNRELIABLE_retention_count_first_subscribed_in_period",
         "UNRELIABLE_count_post_viewers",
+        "count_approximate_members"
     ]
     # otherwise assume csv
     return csv_response(fieldnames, [r._asdict() for r in results])
