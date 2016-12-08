@@ -514,7 +514,7 @@ def get_time_series_analytics(request):
         combined_query = combined_query.join(votes_subquery, votes_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_votes_subquery, cumulative_votes_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(actions_subquery, actions_subquery.c.interval_id == intervals_table.c.interval_id)
-        combined_query = combined_query.join(cumulative_actions_subquery, actions_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(cumulative_actions_subquery, cumulative_actions_subquery.c.interval_id == intervals_table.c.interval_id)
 
         query = combined_query
         query = query.order_by(intervals_table.c.interval_id)
