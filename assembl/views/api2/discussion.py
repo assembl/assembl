@@ -998,6 +998,33 @@ class defaultdict_of_dict(defaultdict):
         super(defaultdict_of_dict, self).__init__(dict)
 
 
+JSON_MIMETYPE = 'application/json'
+CSV_MIMETYPE = 'text/csv'
+XSL_MIMETYPE = 'application/vnd.ms-excel'
+XSLX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+stats_formats = {
+    'json': JSON_MIMETYPE,
+    'csv': CSV_MIMETYPE,
+    'xlsx': XSLX_MIMETYPE,
+    # 'xls': XSL_MIMETYPE,
+}
+
+
+def get_format(request, stats_formats):
+    format = request.GET.get('format', None)
+    if format:
+        format = stats_formats.get(format, None)
+        if not format:
+            raise HTTPBadRequest("format: use one of "+", ".join(stats_formats.keys()))
+    else:
+        # Trick: application/json is first in sorted order, so we get json default.
+        format = request.accept.best_match(sorted(stats_formats.values()))
+        if not format:
+            raise HTTPNotAcceptable("Use one of "+", ".join(stats_formats.values()))
+    return format
+
+
 @view_config(context=InstanceContext, name="participant_time_series_analytics",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
@@ -1023,6 +1050,7 @@ def get_participant_time_series_analytics(request):
         raise HTTPBadRequest("You cannot define an interval and no start")
     if interval and not end:
         end = datetime.now()
+    format = get_format(request, stats_formats)
     results = []
 
     default_data_descriptors = [
@@ -1198,9 +1226,7 @@ def get_participant_time_series_analytics(request):
 
     # intervals_table.drop()  # temporary is dropped implicitly
 
-    if not (request.GET.get('format', None) == 'csv' or
-            request.accept == 'text/csv'):
-            # json default
+    if format == JSON_MIMETYPE:
         from assembl.lib.json import DateJSONEncoder
         combined = []
         interval_id = None
@@ -1229,9 +1255,23 @@ def get_participant_time_series_analytics(request):
         for interval_data in combined:
             interval_data['data'] = interval_data['data'].values()
         return Response(json.dumps(combined, cls=DateJSONEncoder),
-                        content_type='application/json')
+                        content_type=format)
 
-    # otherwise assume csv
+    output = StringIO()
+
+    if format == CSV_MIMETYPE:
+        from csv import writer
+        csv = writer(output, dialect='excel', delimiter=';')
+        def writerow(row):
+            csv.writerow(row)
+    elif format == XSLX_MIMETYPE:
+        from zipfile import ZipFile, ZIP_DEFLATED
+        from openpyxl.workbook import Workbook
+        workbook = Workbook(True)
+        archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
+        worksheet = workbook.create_sheet()
+        def writerow(row):
+            worksheet.append(row)
     by_participant = defaultdict(defaultdict_of_dict)
     interval_ids = set()
     interval_starts = {}
@@ -1253,18 +1293,15 @@ def get_participant_time_series_analytics(request):
     interval_ids = list(interval_ids)
     interval_ids.sort()
     num_cols = 2 + len(interval_ids)*len(data_descriptors)
-    from csv import writer
-    output = StringIO()
-    csv = writer(output, dialect='excel', delimiter=';')
     interval_starts = [interval_starts[id] for id in interval_ids]
     interval_ends = [interval_ends[id] for id in interval_ids]
     row = ['Participant id', 'Participant']
     for data_descriptor in data_descriptors:
         row += [data_descriptor] * len(interval_ids)
-    csv.writerow(row)
-    csv.writerow(['', 'Interval id'] + interval_ids * len(data_descriptors))
-    csv.writerow(['', 'Interval start'] + interval_starts * len(data_descriptors))
-    csv.writerow(['', 'Interval end'] + interval_ends * len(data_descriptors))
+    writerow(row)
+    writerow(['', 'Interval id'] + interval_ids * len(data_descriptors))
+    writerow(['', 'Interval start'] + interval_starts * len(data_descriptors))
+    writerow(['', 'Interval end'] + interval_ends * len(data_descriptors))
     for participant_id, interval_data in by_participant.iteritems():
         row = [participant_id, participant_names[participant_id].encode('utf-8')]
         for data_descriptor in data_descriptors:
@@ -1272,10 +1309,15 @@ def get_participant_time_series_analytics(request):
             for interval_id, data in interval_data.iteritems():
                 row_part[interval_id - 1] = data.get(data_descriptor, '')
             row += row_part
-        csv.writerow(row)
+        writerow(row)
+
+    if format == XSLX_MIMETYPE:
+        from openpyxl.writer.excel import ExcelWriter
+        writer = ExcelWriter(workbook, archive)
+        writer.save('')
 
     output.seek(0)
-    return Response(body_file=output, content_type='text/csv')
+    return Response(body_file=output, content_type=format)
 
 
 def includeme(config):
