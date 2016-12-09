@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
     "dev": "webpack -d --watch",
     "build": "webpack -p"
   },
@@ -15,12 +16,15 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "babel-core": "^6.18.2",
+    "babel-jest": "^17.0.2",
     "babel-loader": "^6.2.9",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "css-loader": "^0.26.1",
     "file-loader": "^0.9.0",
+    "jest": "^17.0.3",
     "node-sass": "^3.13.0",
+    "react-test-renderer": "^15.4.1",
     "redux-thunk": "^2.1.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
