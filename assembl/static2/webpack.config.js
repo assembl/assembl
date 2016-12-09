@@ -2,7 +2,15 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+    devServer: {
+        headers: { 
+            "Access-Control-Allow-Origin": "http://localhost:6543",
+            "Access-Control-Allow-Credentials":true
+        }
+    },
     entry: [
+    'webpack-dev-server/client',
+    'webpack/hot/only-dev-server',
     './js/app/index.js'
     ],
     output: {
@@ -14,7 +22,7 @@ module.exports = {
         loaders: [
         {
             test: /\.js$/,
-            loaders: ['babel'],
+            loaders: ['react-hot', 'babel'],
             include: path.join(__dirname, 'js')
         },
         {
@@ -50,5 +58,8 @@ module.exports = {
             loader: 'url?limit=10000&mimetype=image/svg+xml'
         }
         ]
-    }
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ]
 };
