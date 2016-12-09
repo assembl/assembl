@@ -1074,8 +1074,8 @@ def get_participant_time_series_analytics(request):
             literal('count_posts').label('key'),
             func.count(distinct(Post.id)).label('value'),
             )
-        post_query = post_query.outerjoin(Post, and_(Post.creation_date >= intervals_table.c.interval_start, Post.creation_date < intervals_table.c.interval_end, Post.discussion_id == discussion.id))
-        post_query = post_query.outerjoin(AgentProfile, Post.creator_id == AgentProfile.id)
+        post_query = post_query.join(Post, and_(Post.creation_date >= intervals_table.c.interval_start, Post.creation_date < intervals_table.c.interval_end, Post.discussion_id == discussion.id))
+        post_query = post_query.join(AgentProfile, Post.creator_id == AgentProfile.id)
         post_query = post_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
 
         # Cumulative posters
@@ -1086,11 +1086,11 @@ def get_participant_time_series_analytics(request):
             literal('count_cumulative_posts').label('key'),
             func.count(distinct(Post.id)).label('value'),
             )
-        cumulative_post_query = cumulative_post_query.outerjoin(Post, and_(
+        cumulative_post_query = cumulative_post_query.join(Post, and_(
             Post.creation_date < intervals_table.c.interval_end,
             Post.publication_state == PublicationStates.PUBLISHED,
             Post.discussion_id == discussion.id))
-        cumulative_post_query = cumulative_post_query.outerjoin(AgentProfile, Post.creator_id == AgentProfile.id)
+        cumulative_post_query = cumulative_post_query.join(AgentProfile, Post.creator_id == AgentProfile.id)
         cumulative_post_query = cumulative_post_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
 
         # The likes made
@@ -1101,12 +1101,12 @@ def get_participant_time_series_analytics(request):
             literal('count_liking').label('key'),
             func.count(distinct(LikedPost.id)).label('value'),
             )
-        liking_query = liking_query.outerjoin(Post, Post.discussion_id == discussion.id)
-        liking_query = liking_query.outerjoin(LikedPost, and_(
+        liking_query = liking_query.join(Post, Post.discussion_id == discussion.id)
+        liking_query = liking_query.join(LikedPost, and_(
             LikedPost.creation_date >= intervals_table.c.interval_start,
             LikedPost.creation_date < intervals_table.c.interval_end,
             LikedPost.post_id == Post.id))
-        liking_query = liking_query.outerjoin(AgentProfile, LikedPost.actor_id == AgentProfile.id)
+        liking_query = liking_query.join(AgentProfile, LikedPost.actor_id == AgentProfile.id)
         liking_query = liking_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
 
         # The cumulative active likes made
@@ -1117,12 +1117,12 @@ def get_participant_time_series_analytics(request):
             literal('count_cumulative_liking').label('key'),
             func.count(distinct(LikedPost.id)).label('value'),
             )
-        cumulative_liking_query = cumulative_liking_query.outerjoin(Post, Post.discussion_id == discussion.id)
-        cumulative_liking_query = cumulative_liking_query.outerjoin(LikedPost, and_(
+        cumulative_liking_query = cumulative_liking_query.join(Post, Post.discussion_id == discussion.id)
+        cumulative_liking_query = cumulative_liking_query.join(LikedPost, and_(
             LikedPost.tombstone_date == None,
             LikedPost.creation_date < intervals_table.c.interval_end,
             LikedPost.post_id == Post.id))
-        cumulative_liking_query = cumulative_liking_query.outerjoin(AgentProfile, LikedPost.actor_id == AgentProfile.id)
+        cumulative_liking_query = cumulative_liking_query.join(AgentProfile, LikedPost.actor_id == AgentProfile.id)
         cumulative_liking_query = cumulative_liking_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
 
         # The likes received
@@ -1133,12 +1133,12 @@ def get_participant_time_series_analytics(request):
             literal('count_liked').label('key'),
             func.count(distinct(LikedPost.id)).label('value'),
             )
-        liked_query = liked_query.outerjoin(Post, Post.discussion_id == discussion.id)
-        liked_query = liked_query.outerjoin(LikedPost, and_(
+        liked_query = liked_query.join(Post, Post.discussion_id == discussion.id)
+        liked_query = liked_query.join(LikedPost, and_(
             LikedPost.creation_date >= intervals_table.c.interval_start,
             LikedPost.creation_date < intervals_table.c.interval_end,
             LikedPost.post_id == Post.id))
-        liked_query = liked_query.outerjoin(AgentProfile, Post.creator_id == AgentProfile.id)
+        liked_query = liked_query.join(AgentProfile, Post.creator_id == AgentProfile.id)
         liked_query = liked_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
 
         # The cumulative active likes received
@@ -1164,7 +1164,7 @@ def get_participant_time_series_analytics(request):
             liked_query,
             cumulative_liked_query,
         ).subquery('combined')
-        query = discussion.db.query(intervals_table, combined_subquery).join(
+        query = discussion.db.query(intervals_table, combined_subquery).outerjoin(
             combined_subquery, combined_subquery.c.interval_id == intervals_table.c.interval_id
             ).order_by(intervals_table.c.interval_id)
         results = query.all()
@@ -1172,7 +1172,8 @@ def get_participant_time_series_analytics(request):
         # pprint.pprint(results)
         # end of transaction
 
-    intervals_table.drop()
+    # intervals_table.drop()  # temporary is dropped implicitly
+
     if not (request.GET.get('format', None) == 'csv' or
             request.accept == 'text/csv'):
             # json default
