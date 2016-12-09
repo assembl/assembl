@@ -706,7 +706,10 @@ class LangStringEntry(TombstonableMixin, Base):
         Integer, ForeignKey(LangString.id, ondelete="CASCADE"),
         nullable=False, index=True)
     langstring = relationship(
-        LangString, backref=backref("entries", cascade="all, delete-orphan"))
+        LangString,
+        primaryjoin="and_(LangString.id==LangStringEntry.langstring_id, "
+                    "LangStringEntry.tombstone_date == None)",
+        backref=backref("entries", cascade="all, delete-orphan"))
     # Should we allow locale-less LangStringEntry? (for unknown...)
     locale_id = Column(
         Integer, ForeignKey(
