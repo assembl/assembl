@@ -205,6 +205,7 @@ var MessageColumnView = Marionette.LayoutView.extend({
       "columnName",
       new SimpleLangStringEditPanel({
         model: this.model.get('name'),
+        owner_relative_url: this.model.url() + '/name',
       }));
   },
   reorderColumnDown: function(ev) {
