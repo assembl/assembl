@@ -1325,19 +1325,6 @@ def get_participant_time_series_analytics(request):
         return Response(json.dumps(combined, cls=DateJSONEncoder),
                         content_type=format)
 
-    output = StringIO()
-
-    if format == CSV_MIMETYPE:
-        from csv import writer
-        csv = writer(output, dialect='excel', delimiter=';')
-        writerow =  csv.writerow
-    elif format == XSLX_MIMETYPE:
-        from zipfile import ZipFile, ZIP_DEFLATED
-        from openpyxl.workbook import Workbook
-        workbook = Workbook(True)
-        archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
-        worksheet = workbook.create_sheet()
-        writerow = worksheet.append
     by_participant = defaultdict(defaultdict_of_dict)
     interval_ids = set()
     interval_starts = {}
@@ -1361,13 +1348,14 @@ def get_participant_time_series_analytics(request):
     num_cols = 2 + len(interval_ids)*len(data_descriptors)
     interval_starts = [interval_starts[id] for id in interval_ids]
     interval_ends = [interval_ends[id] for id in interval_ids]
+    rows = []
     row = ['Participant id', 'Participant']
     for data_descriptor in data_descriptors:
         row += [data_descriptor] * len(interval_ids)
-    writerow(row)
-    writerow(['', 'Interval id'] + interval_ids * len(data_descriptors))
-    writerow(['', 'Interval start'] + interval_starts * len(data_descriptors))
-    writerow(['', 'Interval end'] + interval_ends * len(data_descriptors))
+    rows.append(row)
+    rows.append(['', 'Interval id'] + interval_ids * len(data_descriptors))
+    rows.append(['', 'Interval start'] + interval_starts * len(data_descriptors))
+    rows.append(['', 'Interval end'] + interval_ends * len(data_descriptors))
     for participant_id, interval_data in by_participant.iteritems():
         row = [participant_id, participant_names[participant_id].encode('utf-8')]
         for data_descriptor in data_descriptors:
@@ -1375,15 +1363,9 @@ def get_participant_time_series_analytics(request):
             for interval_id, data in interval_data.iteritems():
                 row_part[interval_id - 1] = data.get(data_descriptor, '')
             row += row_part
-        writerow(row)
+        rows.append(row)
 
-    if format == XSLX_MIMETYPE:
-        from openpyxl.writer.excel import ExcelWriter
-        writer = ExcelWriter(workbook, archive)
-        writer.save('')
-
-    output.seek(0)
-    return Response(body_file=output, content_type=format)
+    return csv_response(rows, format)
 
 
 def includeme(config):
