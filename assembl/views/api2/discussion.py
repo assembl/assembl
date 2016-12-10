@@ -18,6 +18,7 @@ from sqlalchemy import (
     Boolean,
     event,
     ForeignKey,
+    cast,
     func,
     distinct
 )
@@ -1260,7 +1261,7 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('active').label('key'),
-                (func.count(actions_union_subquery.c.id) > 0).label('value')
+                cast(func.count(actions_union_subquery.c.id) > 0, Integer).label('value')
                 ).join(actions_union_subquery, actions_union_subquery.c.interval_id == intervals_table.c.interval_id
                 ).join(AgentProfile, actions_union_subquery.c.actor_id == AgentProfile.id
                 ).group_by(intervals_table.c.interval_id, AgentProfile.id)
