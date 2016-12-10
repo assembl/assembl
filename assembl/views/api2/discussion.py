@@ -259,25 +259,29 @@ CSV_MIMETYPE = 'text/csv'
 XSL_MIMETYPE = 'application/vnd.ms-excel'
 XSLX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
-stats_formats = {
+stats_formats_mimetypes = {
     'json': JSON_MIMETYPE,
     'csv': CSV_MIMETYPE,
     'xlsx': XSLX_MIMETYPE,
-    # 'xls': XSL_MIMETYPE,
+    'xls': XSL_MIMETYPE,
 }
 
+# ordered by preference
+default_stats_formats = [XSLX_MIMETYPE, JSON_MIMETYPE, CSV_MIMETYPE]
 
-def get_format(request, stats_formats):
+
+def get_format(request, stats_formats=default_stats_formats):
     format = request.GET.get('format', None)
     if format:
-        format = stats_formats.get(format, None)
+        format = stats_formats_mimetypes.get(format, None)
         if not format:
-            raise HTTPBadRequest("format: use one of "+", ".join(stats_formats.keys()))
+            raise HTTPBadRequest("format: use one of " + ", ".join(
+                [k for (k, v) in stats_formats_mimetypes.iteritems()
+                 if v in stats_formats]))
     else:
-        # Trick: application/json is first in sorted order, so we get json default.
-        format = request.accept.best_match(sorted(stats_formats.values()))
+        format = request.accept.best_match(stats_formats)
         if not format:
-            raise HTTPNotAcceptable("Use one of "+", ".join(stats_formats.values()))
+            raise HTTPNotAcceptable("Use one of " + ", ".join(stats_formats))
     return format
 
 
@@ -312,7 +316,7 @@ def get_time_series_analytics(request):
     start, end, interval = get_time_series_timing(request)
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
-    format = get_format(request, stats_formats)
+    format = get_format(request)
     results = []
 
     from sqlalchemy import Table, MetaData, and_, or_, case, cast, Float
@@ -633,7 +637,7 @@ def csv_response(results, format, fieldnames=None):
              permission=P_DISC_STATS)
 def get_contribution_count(request):
     start, end, interval = get_time_series_timing(request)
-    format = get_format(request, stats_formats)
+    format = get_format(request)
     discussion = request.context._instance
     results = []
     if interval < (end - start):
@@ -696,7 +700,7 @@ def get_contribution_count(request):
              permission=P_DISC_STATS)
 def get_visit_count(request):
     start, end, interval = get_time_series_timing(request)
-    format = get_format(request, stats_formats)
+    format = get_format(request)
     discussion = request.context._instance
     results = []
     if interval < (end - start):
@@ -1028,7 +1032,7 @@ def get_participant_time_series_analytics(request):
     data_descriptors = request.GET.getall("data")
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
-    format = get_format(request, stats_formats)
+    format = get_format(request)
     sort_key = request.GET.get('sort', 'name')
     results = []
 
