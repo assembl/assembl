@@ -3,13 +3,14 @@ var webpack = require('webpack');
 
 module.exports = {
     devServer: {
-        headers: { 
+        inline: true,
+        headers: {
             "Access-Control-Allow-Origin": "http://localhost:6543",
             "Access-Control-Allow-Credentials":true
         }
     },
     entry: [
-    'webpack-dev-server/client',
+    'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/only-dev-server',
     './js/app/index.js'
     ],
