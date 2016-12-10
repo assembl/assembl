@@ -1078,16 +1078,20 @@ def get_participant_time_series_analytics(request):
     results = []
 
     default_data_descriptors = [
-        "count_posts",
-        "count_cumulative_posts",
-        "count_liking",
-        "count_cumulative_liking",
-        "count_liked",
-        "count_cumulative_liked",
+        "posts",
+        "cumulative_posts",
+        "liking",
+        "cumulative_liking",
+        "liked",
+        "cumulative_liked",
+        "replies_received",
+        "cumulative_replies_received",
     ]
     data_descriptors = data_descriptors or default_data_descriptors
     # Impose data_descriptors order
     data_descriptors = [s for s in default_data_descriptors if s in data_descriptors]
+    if not data_descriptors:
+        raise HTTPBadRequest("No valid data descriptor given")
 
     from sqlalchemy import Table, MetaData, and_, or_, case, cast, Float
     from sqlalchemy.exc import ProgrammingError
@@ -1133,13 +1137,13 @@ def get_participant_time_series_analytics(request):
 
         query_components = []
 
-        if 'count_posts' in data_descriptors:
+        if 'posts' in data_descriptors:
             # The posters
             post_query = discussion.db.query(
                 intervals_table.c.interval_id.label('interval_id'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
-                literal('count_posts').label('key'),
+                literal('posts').label('key'),
                 func.count(distinct(Post.id)).label('value'),
                 )
             post_query = post_query.join(Post, and_(Post.creation_date >= intervals_table.c.interval_start, Post.creation_date < intervals_table.c.interval_end, Post.discussion_id == discussion.id))
@@ -1147,13 +1151,13 @@ def get_participant_time_series_analytics(request):
             post_query = post_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(post_query)
 
-        if 'count_cumulative_posts' in data_descriptors:
+        if 'cumulative_posts' in data_descriptors:
             # Cumulative posters
             cumulative_post_query = discussion.db.query(
                 intervals_table.c.interval_id.label('interval_id'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
-                literal('count_cumulative_posts').label('key'),
+                literal('cumulative_posts').label('key'),
                 func.count(distinct(Post.id)).label('value'),
                 )
             cumulative_post_query = cumulative_post_query.join(Post, and_(
@@ -1164,13 +1168,13 @@ def get_participant_time_series_analytics(request):
             cumulative_post_query = cumulative_post_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(cumulative_post_query)
 
-        if 'count_liking' in data_descriptors:
+        if 'liking' in data_descriptors:
             # The likes made
             liking_query = discussion.db.query(
                 intervals_table.c.interval_id.label('interval_id'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
-                literal('count_liking').label('key'),
+                literal('liking').label('key'),
                 func.count(distinct(LikedPost.id)).label('value'),
                 )
             liking_query = liking_query.join(Post, Post.discussion_id == discussion.id)
@@ -1182,13 +1186,13 @@ def get_participant_time_series_analytics(request):
             liking_query = liking_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(liking_query)
 
-        if 'count_cumulative_liking' in data_descriptors:
+        if 'cumulative_liking' in data_descriptors:
             # The cumulative active likes made
             cumulative_liking_query = discussion.db.query(
                 intervals_table.c.interval_id.label('interval_id'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
-                literal('count_cumulative_liking').label('key'),
+                literal('cumulative_liking').label('key'),
                 func.count(distinct(LikedPost.id)).label('value'),
                 )
             cumulative_liking_query = cumulative_liking_query.join(Post, Post.discussion_id == discussion.id)
@@ -1200,13 +1204,13 @@ def get_participant_time_series_analytics(request):
             cumulative_liking_query = cumulative_liking_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(cumulative_liking_query)
 
-        if 'count_liked' in data_descriptors:
+        if 'liked' in data_descriptors:
             # The likes received
             liked_query = discussion.db.query(
                 intervals_table.c.interval_id.label('interval_id'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
-                literal('count_liked').label('key'),
+                literal('liked').label('key'),
                 func.count(distinct(LikedPost.id)).label('value'),
                 )
             liked_query = liked_query.join(Post, Post.discussion_id == discussion.id)
@@ -1218,13 +1222,13 @@ def get_participant_time_series_analytics(request):
             liked_query = liked_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(liked_query)
 
-        if 'count_cumulative_liked' in data_descriptors:
+        if 'cumulative_liked' in data_descriptors:
             # The cumulative active likes received
             cumulative_liked_query = discussion.db.query(
                 intervals_table.c.interval_id.label('interval_id'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
-                literal('count_cumulative_liked').label('key'),
+                literal('cumulative_liked').label('key'),
                 func.count(distinct(LikedPost.id)).label('value'),
                 )
             cumulative_liked_query = cumulative_liked_query.outerjoin(Post, Post.discussion_id == discussion.id)
@@ -1235,6 +1239,46 @@ def get_participant_time_series_analytics(request):
             cumulative_liked_query = cumulative_liked_query.outerjoin(AgentProfile, Post.creator_id == AgentProfile.id)
             cumulative_liked_query = cumulative_liked_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(cumulative_liked_query)
+
+        if 'replies_received' in data_descriptors:
+            # The posters
+            reply_post = aliased(Post)
+            original_post = aliased(Post)
+            reply_post_query = discussion.db.query(
+                intervals_table.c.interval_id.label('interval_id'),
+                AgentProfile.id.label('participant_id'),
+                AgentProfile.name.label('participant'),
+                literal('replies_received').label('key'),
+                func.count(distinct(reply_post.id)).label('value'),
+                ).join(reply_post, and_(
+                    reply_post.creation_date >= intervals_table.c.interval_start,
+                    reply_post.creation_date < intervals_table.c.interval_end,
+                    reply_post.discussion_id == discussion.id)
+                ).join(original_post, original_post.id == reply_post.parent_id
+                ).join(AgentProfile, original_post.creator_id == AgentProfile.id
+                ).group_by(intervals_table.c.interval_id, AgentProfile.id)
+            query_components.append(reply_post_query)
+
+        if 'cumulative_replies_received' in data_descriptors:
+            # The posters
+            reply_post = aliased(Post)
+            original_post = aliased(Post)
+            cumulative_reply_post_query = discussion.db.query(
+                intervals_table.c.interval_id.label('interval_id'),
+                AgentProfile.id.label('participant_id'),
+                AgentProfile.name.label('participant'),
+                literal('cumulative_replies_received').label('key'),
+                func.count(distinct(reply_post.id)).label('value'),
+                ).join(reply_post, and_(
+                    reply_post.creation_date < intervals_table.c.interval_end,
+                    reply_post.publication_state == PublicationStates.PUBLISHED,
+                    reply_post.discussion_id == discussion.id)
+                ).join(original_post, and_(
+                    original_post.id == reply_post.parent_id,
+                    original_post.publication_state == PublicationStates.PUBLISHED)
+                ).join(AgentProfile, original_post.creator_id == AgentProfile.id
+                ).group_by(intervals_table.c.interval_id, AgentProfile.id)
+            query_components.append(cumulative_reply_post_query)
 
         combined_subquery = query_components.pop(0)
         if query_components:
