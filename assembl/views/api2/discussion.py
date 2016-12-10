@@ -39,6 +39,7 @@ import requests
 from assembl.lib.config import get_config
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.lib.sqla import ObjectNotUniqueError
+from assembl.lib.json import DateJSONEncoder
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
     R_ADMINISTRATOR)
@@ -251,6 +252,34 @@ def user_private_view_jsonld(request):
     return Response(body=jdata, content_type=content_type)
 
 
+JSON_MIMETYPE = 'application/json'
+CSV_MIMETYPE = 'text/csv'
+XSL_MIMETYPE = 'application/vnd.ms-excel'
+XSLX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+stats_formats = {
+    'json': JSON_MIMETYPE,
+    'csv': CSV_MIMETYPE,
+    'xlsx': XSLX_MIMETYPE,
+    # 'xls': XSL_MIMETYPE,
+}
+
+
+def get_format(request, stats_formats):
+    format = request.GET.get('format', None)
+    if format:
+        format = stats_formats.get(format, None)
+        if not format:
+            raise HTTPBadRequest("format: use one of "+", ".join(stats_formats.keys()))
+    else:
+        # Trick: application/json is first in sorted order, so we get json default.
+        format = request.accept.best_match(sorted(stats_formats.values()))
+        if not format:
+            raise HTTPNotAcceptable("Use one of "+", ".join(stats_formats.values()))
+    return format
+
+
+
 @view_config(context=InstanceContext, name="time_series_analytics",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
@@ -275,6 +304,7 @@ def get_time_series_analytics(request):
         raise HTTPBadRequest("You cannot define an interval and no start")
     if interval and not end:
         end = datetime.now()
+    format = get_format(request, stats_formats)
     results = []
 
     from sqlalchemy import Table, MetaData, and_, or_, case, cast, Float
@@ -523,10 +553,8 @@ def get_time_series_analytics(request):
         # end of transaction
 
     intervals_table.drop()
-    if not (request.GET.get('format', None) == 'csv' or
-            request.accept == 'text/csv'):
+    if format == JSON_MIMETYPE:
             # json default
-        from assembl.lib.json import DateJSONEncoder
         return Response(json.dumps(results, cls=DateJSONEncoder),
                         content_type='application/json')
 
@@ -558,18 +586,41 @@ def get_time_series_analytics(request):
         "UNRELIABLE_count_post_viewers",
     ]
     # otherwise assume csv
-    return csv_response(fieldnames, [r._asdict() for r in results])
+    return csv_response([r._asdict() for r in results], format, fieldnames)
 
 
-def csv_response(fieldnames, results):
-    from csv import DictWriter
+def csv_response(results, format, fieldnames=None):
     output = StringIO()
-    csv = DictWriter(output, fieldnames=fieldnames, dialect='excel', delimiter=';')
-    csv.writeheader()
-    for r in results:
-        csv.writerow(r)
+
+    if format == CSV_MIMETYPE:
+        from csv import writer
+        csv = writer(output, dialect='excel', delimiter=';')
+        writerow =  csv.writerow
+        empty = ''
+    elif format == XSLX_MIMETYPE:
+        from zipfile import ZipFile, ZIP_DEFLATED
+        from openpyxl.workbook import Workbook
+        workbook = Workbook(True)
+        archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
+        worksheet = workbook.create_sheet()
+        writerow = worksheet.append
+        empty = None
+
+    if fieldnames:
+        writerow(fieldnames)
+        for r in results:
+            writerow([r.get(f, empty) for f in fieldnames])
+    else:
+        for r in results:
+            writerow(r)
+
+    if format == XSLX_MIMETYPE:
+        from openpyxl.writer.excel import ExcelWriter
+        writer = ExcelWriter(workbook, archive)
+        writer.save('')
+
     output.seek(0)
-    return Response(body_file=output, content_type='text/csv')
+    return Response(body_file=output, content_type=format)
 
 
 @view_config(context=InstanceContext, name="contribution_count",
@@ -581,6 +632,7 @@ def get_contribution_count(request):
     start = request.GET.get("start", None)
     end = request.GET.get("end", None)
     interval = request.GET.get("interval", None)
+    format = get_format(request, stats_formats)
     discussion = request.context._instance
     try:
         if start:
@@ -617,15 +669,14 @@ def get_contribution_count(request):
             end = datetime.now()
         r["end"] = end.isoformat()
         results.append(r)
-    if not (request.GET.get('format', None) == 'csv'
-            or request.accept == 'text/csv'):
+    if format == JSON_MIMETYPE:
         # json default
         for v in results:
             v['count'] = {agent.display_name(): count
                           for (agent, count) in v['count']}
-        return Response(json.dumps(results), content_type='application/json')
-    # otherwise assume csv
-    from csv import writer
+        return Response(json.dumps(results, cls=DateJSONEncoder),
+            content_type='application/json')
+
     total_count = defaultdict(int)
     agents = {}
     for v in results:
@@ -637,21 +688,19 @@ def get_contribution_count(request):
         v['count'] = as_dict
     count_list = total_count.items()
     count_list.sort(key=lambda (a, c): c, reverse=True)
-    output = StringIO()
-    csv = writer(output, dialect='excel', delimiter=';')
-    csv.writerow(['Start']+[
+    rows = []
+    rows.append(['Start']+[
         x['start'] for x in results] + ['Total'])
-    csv.writerow(['End']+[
+    rows.append(['End']+[
         x['end'] for x in results] + [''])
     for agent_id, total_count in count_list:
         agent = agents[agent_id]
         agent_name = (
             agent.display_name() or agent.real_name() or
             agent.get_preferred_email())
-        csv.writerow([agent_name.encode('utf-8')] + [
+        rows.append([agent_name.encode('utf-8')] + [
             x['count'].get(agent_id, '') for x in results] + [total_count])
-    output.seek(0)
-    return Response(body_file=output, content_type='text/csv')
+    return csv_response(rows, format)
 
 
 @view_config(context=InstanceContext, name="visit_count",
@@ -663,6 +712,7 @@ def get_visit_count(request):
     start = request.GET.get("start", None)
     end = request.GET.get("end", None)
     interval = request.GET.get("interval", None)
+    format = get_format(request, stats_formats)
     discussion = request.context._instance
     try:
         if start:
@@ -703,13 +753,13 @@ def get_visit_count(request):
             end = datetime.now()
         r["end"] = end.isoformat()
         results.append(r)
-    if not (request.GET.get('format', None) == 'csv'
-            or request.accept == 'text/csv'):
+    if format == JSON_MIMETYPE:
         # json default
-        return Response(json.dumps(results), content_type='application/json')
+        return Response(json.dumps(results, cls=DateJSONEncoder),
+            content_type='application/json')
     # otherwise assume csv
     fieldnames=['start', 'end', 'first_visitors', 'readers']
-    return csv_response(fieldnames, results)
+    return csv_response(results, format, fieldnames)
 
 
 @view_config(context=InstanceContext, name="visitors",
@@ -998,32 +1048,6 @@ class defaultdict_of_dict(defaultdict):
         super(defaultdict_of_dict, self).__init__(dict)
 
 
-JSON_MIMETYPE = 'application/json'
-CSV_MIMETYPE = 'text/csv'
-XSL_MIMETYPE = 'application/vnd.ms-excel'
-XSLX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-
-stats_formats = {
-    'json': JSON_MIMETYPE,
-    'csv': CSV_MIMETYPE,
-    'xlsx': XSLX_MIMETYPE,
-    # 'xls': XSL_MIMETYPE,
-}
-
-
-def get_format(request, stats_formats):
-    format = request.GET.get('format', None)
-    if format:
-        format = stats_formats.get(format, None)
-        if not format:
-            raise HTTPBadRequest("format: use one of "+", ".join(stats_formats.keys()))
-    else:
-        # Trick: application/json is first in sorted order, so we get json default.
-        format = request.accept.best_match(sorted(stats_formats.values()))
-        if not format:
-            raise HTTPNotAcceptable("Use one of "+", ".join(stats_formats.values()))
-    return format
-
 
 @view_config(context=InstanceContext, name="participant_time_series_analytics",
              ctx_instance_class=Discussion, request_method='GET',
@@ -1262,16 +1286,14 @@ def get_participant_time_series_analytics(request):
     if format == CSV_MIMETYPE:
         from csv import writer
         csv = writer(output, dialect='excel', delimiter=';')
-        def writerow(row):
-            csv.writerow(row)
+        writerow =  csv.writerow
     elif format == XSLX_MIMETYPE:
         from zipfile import ZipFile, ZIP_DEFLATED
         from openpyxl.workbook import Workbook
         workbook = Workbook(True)
         archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
         worksheet = workbook.create_sheet()
-        def writerow(row):
-            worksheet.append(row)
+        writerow = worksheet.append
     by_participant = defaultdict(defaultdict_of_dict)
     interval_ids = set()
     interval_starts = {}
