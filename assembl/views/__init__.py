@@ -39,7 +39,6 @@ from ..models.auth import (
 
 default_context = {
     'STATIC_URL': '/static',
-    'REACT_URL': '/static2'
 }
 
 
@@ -117,6 +116,8 @@ def get_default_context(request):
     if request.scheme == "http"\
             and asbool(config.get("require_secure_connection")):
         raise HTTPFound("https://" + request.host + request.path_qs)
+    react_url = 'http://localhost:8080' if asbool(
+        config.get('use_webpack_server')) else '/static2'
     socket_proxied = asbool(config.get('changes.websocket.proxied'))
     websocket_port = None if socket_proxied \
         else config.get('changes.websocket.port')
@@ -236,6 +237,7 @@ def get_default_context(request):
         analytics_url=analytics_url,
         help_url=help_url,
         socket_url=socket_url,
+        REACT_URL=react_url,
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
         activate_tour=str(config.get('activate_tour') or False).lower(),

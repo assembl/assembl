@@ -243,6 +243,8 @@ celery_tasks.translate.imodeleventwatcher = assembl.lib.model_watcher.ModelEvent
 
 cache_viewdefs = true
 minified_js = false
+new_frontend = false
+use_webpack_server = false
 
 test_with_zope = false
 
@@ -378,6 +380,7 @@ autostart_changes_router = true
 autostart_pserve = false
 autostart_nodesass = false
 autostart_gulp = false
+autostart_webpack = false
 autostart_uwsgi = false
 autostart_metrics_server = false
 autostart_metrics_server = false
