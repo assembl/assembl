@@ -652,7 +652,7 @@ def get_contribution_count(request):
         while start < end:
             this_end = min(start+interval, end)
             results.append(dict(
-                start=start.isoformat(), end=this_end.isoformat(),
+                start=start, end=this_end,
                 count=discussion.count_contributions_per_agent(
                     start, this_end)))
             start = this_end
@@ -664,10 +664,10 @@ def get_contribution_count(request):
             (start,) = discussion.db.query(
                 func.min(Post.creation_date)).filter_by(
                 discussion_id=discussion.id).first()
-        r["start"] = start.isoformat()
+        r["start"] = start
         if not end:
             end = datetime.now()
-        r["end"] = end.isoformat()
+        r["end"] = end
         results.append(r)
     if format == JSON_MIMETYPE:
         # json default
@@ -732,7 +732,7 @@ def get_visit_count(request):
         while start < end:
             this_end = min(start+interval, end)
             results.append(dict(
-                start=start.isoformat(), end=this_end.isoformat(),
+                start=start, end=this_end,
                 readers=discussion.count_post_viewers(
                     start, this_end),
                 first_visitors=discussion.count_new_visitors(
@@ -748,10 +748,10 @@ def get_visit_count(request):
             (start,) = discussion.db.query(
                 func.min(AgentStatusInDiscussion.first_visit)).filter_by(
                 discussion_id=discussion.id).first()
-        r["start"] = start.isoformat()
+        r["start"] = start
         if not end:
             end = datetime.now()
-        r["end"] = end.isoformat()
+        r["end"] = end
         results.append(r)
     if format == JSON_MIMETYPE:
         # json default
