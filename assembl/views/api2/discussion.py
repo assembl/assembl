@@ -1039,6 +1039,7 @@ def get_participant_time_series_analytics(request):
         "cumulative_liked",
         "replies_received",
         "cumulative_replies_received",
+        "active",
     ]
     data_descriptors = data_descriptors or default_data_descriptors
     # Impose data_descriptors order
@@ -1080,9 +1081,9 @@ def get_participant_time_series_analytics(request):
             AbstractIdeaVote, Action, ActionOnPost, ActionOnIdea, Content,
             PublicationStates, LikedPost)
 
-        # content = with_polymorphic(
-        #             Content, [], Content.__table__,
-        #             aliased=False, flat=True)
+        content = with_polymorphic(
+                    Content, [], Content.__table__,
+                    aliased=False, flat=True)
         # post = with_polymorphic(Post, [])
 
         query_components = []
@@ -1090,7 +1091,7 @@ def get_participant_time_series_analytics(request):
         if 'posts' in data_descriptors:
             # The posters
             post_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id'),
+                intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('posts').label('key'),
@@ -1104,7 +1105,7 @@ def get_participant_time_series_analytics(request):
         if 'cumulative_posts' in data_descriptors:
             # Cumulative posters
             cumulative_post_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id'),
+                intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('cumulative_posts').label('key'),
@@ -1121,7 +1122,7 @@ def get_participant_time_series_analytics(request):
         if 'liking' in data_descriptors:
             # The likes made
             liking_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id'),
+                intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('liking').label('key'),
@@ -1139,7 +1140,7 @@ def get_participant_time_series_analytics(request):
         if 'cumulative_liking' in data_descriptors:
             # The cumulative active likes made
             cumulative_liking_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id'),
+                intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('cumulative_liking').label('key'),
@@ -1157,7 +1158,7 @@ def get_participant_time_series_analytics(request):
         if 'liked' in data_descriptors:
             # The likes received
             liked_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id'),
+                intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('liked').label('key'),
@@ -1175,7 +1176,7 @@ def get_participant_time_series_analytics(request):
         if 'cumulative_liked' in data_descriptors:
             # The cumulative active likes received
             cumulative_liked_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id'),
+                intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('cumulative_liked').label('key'),
@@ -1195,7 +1196,7 @@ def get_participant_time_series_analytics(request):
             reply_post = aliased(Post)
             original_post = aliased(Post)
             reply_post_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id'),
+                intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('replies_received').label('key'),
@@ -1214,7 +1215,7 @@ def get_participant_time_series_analytics(request):
             reply_post = aliased(Post)
             original_post = aliased(Post)
             cumulative_reply_post_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id'),
+                intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('cumulative_replies_received').label('key'),
@@ -1230,12 +1231,47 @@ def get_participant_time_series_analytics(request):
                 ).group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(cumulative_reply_post_query)
 
+        if "active" in data_descriptors:
+            actions_on_post = discussion.db.query(
+                intervals_table.c.interval_id.label('interval_id'),
+                ActionOnPost.actor_id.label('actor_id'),
+                ActionOnPost.id.label('id'))
+            actions_on_post = actions_on_post.join(content, content.discussion_id == discussion.id)
+            actions_on_post = actions_on_post.join(ActionOnPost, and_(
+                ActionOnPost.post_id == content.id,
+                ActionOnPost.creation_date >= intervals_table.c.interval_start,
+                ActionOnPost.creation_date < intervals_table.c.interval_end
+                ))
+
+            actions_on_idea = discussion.db.query(
+                intervals_table.c.interval_id.label('interval_id'),
+                ActionOnIdea.actor_id.label('actor_id'),
+                ActionOnIdea.id.label('id'))
+            actions_on_idea = actions_on_idea.join(Idea, Idea.discussion_id == discussion.id)
+            actions_on_idea = actions_on_idea.join(ActionOnIdea, and_(
+                ActionOnIdea.idea_id == Idea.id,
+                ActionOnIdea.creation_date >= intervals_table.c.interval_start,
+                ActionOnIdea.creation_date < intervals_table.c.interval_end
+                ))
+
+            actions_union_subquery = actions_on_post.union(actions_on_idea).subquery()
+            active_query = discussion.db.query(
+                intervals_table.c.interval_id.label('interval_id_q'),
+                AgentProfile.id.label('participant_id'),
+                AgentProfile.name.label('participant'),
+                literal('active').label('key'),
+                (func.count(actions_union_subquery.c.id) > 0).label('value')
+                ).join(actions_union_subquery, actions_union_subquery.c.interval_id == intervals_table.c.interval_id
+                ).join(AgentProfile, actions_union_subquery.c.actor_id == AgentProfile.id
+                ).group_by(intervals_table.c.interval_id, AgentProfile.id)
+            query_components.append(active_query)
+
         combined_subquery = query_components.pop(0)
         if query_components:
             combined_subquery = combined_subquery.union(*query_components)
         combined_subquery = combined_subquery.subquery('combined')
         query = discussion.db.query(intervals_table, combined_subquery).outerjoin(
-            combined_subquery, combined_subquery.c.interval_id == intervals_table.c.interval_id
+            combined_subquery, combined_subquery.c.interval_id_q == intervals_table.c.interval_id
             ).order_by(intervals_table.c.interval_id)
         results = query.all()
 
@@ -1249,7 +1285,7 @@ def get_participant_time_series_analytics(request):
         combined = []
         interval_id = None
         interval_data = None
-        interval_elements = {'interval_id', 'interval_start', 'interval_end'}
+        interval_elements = ('interval_id', 'interval_start', 'interval_end')
         # We have fragmented interval+participant+key=>value.
         # Structure we're going for: List of intervals,
         # each data interval has list of combined participant info,
