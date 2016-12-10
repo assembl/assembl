@@ -1029,6 +1029,7 @@ def get_participant_time_series_analytics(request):
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
     format = get_format(request, stats_formats)
+    sort_key = request.GET.get('sort', 'name')
     results = []
 
     default_data_descriptors = [
@@ -1047,6 +1048,8 @@ def get_participant_time_series_analytics(request):
     data_descriptors = [s for s in default_data_descriptors if s in data_descriptors]
     if not data_descriptors:
         raise HTTPBadRequest("No valid data descriptor given")
+    if sort_key and sort_key != 'name' and sort_key not in default_data_descriptors:
+        raise HTTPBadRequest("Invalid sort column")
 
     from sqlalchemy import Table, MetaData, and_, or_, case, cast, Float
     from sqlalchemy.exc import ProgrammingError
@@ -1343,7 +1346,15 @@ def get_participant_time_series_analytics(request):
     rows.append(['', 'Interval id'] + interval_ids * len(data_descriptors))
     rows.append(['', 'Interval start'] + interval_starts * len(data_descriptors))
     rows.append(['', 'Interval end'] + interval_ends * len(data_descriptors))
-    for participant_id, interval_data in by_participant.iteritems():
+    if sort_key == 'name':
+        sorted_participants = [(name, id) for (id, name) in participant_names.iteritems()]
+    else:
+        sorted_participants = [
+            (-by_participant[id].get(interval_ids[-1], {}).get(sort_key, 0), id)
+            for id in participant_names.iterkeys()]
+    sorted_participants.sort()
+    for sort_key, participant_id in sorted_participants:
+        interval_data = by_participant[participant_id]
         row = [participant_id, participant_names[participant_id].encode('utf-8')]
         for data_descriptor in data_descriptors:
             row_part = [''] * len(interval_ids)
