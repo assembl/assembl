@@ -5,7 +5,8 @@ from os import urandom
 from os.path import join, dirname
 from collections import defaultdict
 import random
-from datetime import timedelta
+from datetime import timedelta, datetime
+import isodate
 
 from sqlalchemy import (
     Column,
@@ -279,31 +280,37 @@ def get_format(request, stats_formats):
     return format
 
 
+def get_time_series_timing(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    interval = request.GET.get("interval", None)
+    try:
+        if start:
+            start = parse_datetime(start)
+        else:
+            discussion = request.context._instance
+            start = discussion.creation_date
+            # TODO: Round down at day/week/month according to interval
+        if end:
+            end = parse_datetime(end)
+        else:
+            end = datetime.now()
+        if interval:
+            interval = isodate.parse_duration(interval)
+        else:
+            interval = end - start + timedelta(seconds=1)
+    except isodate.ISO8601Error as e:
+        raise HTTPBadRequest(e)
+    return (start, end, interval)
+
 
 @view_config(context=InstanceContext, name="time_series_analytics",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def get_time_series_analytics(request):
-    import isodate
-    from datetime import datetime
-    start = request.GET.get("start", None)
-    end = request.GET.get("end", None)
-    interval = request.GET.get("interval", None)
+    start, end, interval = get_time_series_timing(request)
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
-    try:
-        if start:
-            start = parse_datetime(start)
-        if end:
-            end = parse_datetime(end)
-        if interval:
-            interval = isodate.parse_duration(interval)
-    except isodate.ISO8601Error as e:
-        raise HTTPBadRequest(e)
-    if interval and not start:
-        raise HTTPBadRequest("You cannot define an interval and no start")
-    if interval and not end:
-        end = datetime.now()
     format = get_format(request, stats_formats)
     results = []
 
@@ -328,15 +335,12 @@ def get_time_series_analytics(request):
         intervals_table.create()
         interval_start = start
         intervals = []
-        if interval:
-            while interval_start < end:
-                interval_end = min(interval_start + interval, end)
-                intervals.append({'interval_start': interval_start, 'interval_end': interval_end})
-                interval_start = interval_start + interval
-            #pprint.pprint(intervals)
-            discussion.db.execute(intervals_table.insert(), intervals)
-        else:
-            raise HTTPBadRequest("Please specify an interval")
+        while interval_start < end:
+            interval_end = min(interval_start + interval, end)
+            intervals.append({'interval_start': interval_start, 'interval_end': interval_end})
+            interval_start = interval_start + interval
+        #pprint.pprint(intervals)
+        discussion.db.execute(intervals_table.insert(), intervals)
 
         from assembl.models import (
             Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
@@ -627,28 +631,11 @@ def csv_response(results, format, fieldnames=None):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def get_contribution_count(request):
-    import isodate
-    from datetime import datetime
-    start = request.GET.get("start", None)
-    end = request.GET.get("end", None)
-    interval = request.GET.get("interval", None)
+    start, end, interval = get_time_series_timing(request)
     format = get_format(request, stats_formats)
     discussion = request.context._instance
-    try:
-        if start:
-            start = parse_datetime(start)
-        if end:
-            end = parse_datetime(end)
-        if interval:
-            interval = isodate.parse_duration(interval)
-    except isodate.ISO8601Error as e:
-        raise HTTPBadRequest(e)
-    if interval and not start:
-        raise HTTPBadRequest("You cannot define an interval and no start")
-    if interval and not end:
-        end = datetime.now()
     results = []
-    if interval:
+    if interval < (end - start):
         while start < end:
             this_end = min(start+interval, end)
             results.append(dict(
@@ -707,28 +694,11 @@ def get_contribution_count(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def get_visit_count(request):
-    import isodate
-    from datetime import datetime
-    start = request.GET.get("start", None)
-    end = request.GET.get("end", None)
-    interval = request.GET.get("interval", None)
+    start, end, interval = get_time_series_timing(request)
     format = get_format(request, stats_formats)
     discussion = request.context._instance
-    try:
-        if start:
-            start = parse_datetime(start)
-        if end:
-            end = parse_datetime(end)
-        if interval:
-            interval = isodate.parse_duration(interval)
-    except isodate.ISO8601Error as e:
-        raise HTTPBadRequest(e)
-    if interval and not start:
-        raise HTTPBadRequest("You cannot define an interval and no start")
-    if interval and not end:
-        end = datetime.now()
     results = []
-    if interval:
+    if interval < (end - start):
         while start < end:
             this_end = min(start+interval, end)
             results.append(dict(
@@ -1053,27 +1023,10 @@ class defaultdict_of_dict(defaultdict):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def get_participant_time_series_analytics(request):
-    import isodate
-    from datetime import datetime
-    start = request.GET.get("start", None)
-    end = request.GET.get("end", None)
-    interval = request.GET.get("interval", None)
+    start, end, interval = get_time_series_timing(request)
     data_descriptors = request.GET.getall("data")
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
-    try:
-        if start:
-            start = parse_datetime(start)
-        if end:
-            end = parse_datetime(end)
-        if interval:
-            interval = isodate.parse_duration(interval)
-    except isodate.ISO8601Error as e:
-        raise HTTPBadRequest(e)
-    if interval and not start:
-        raise HTTPBadRequest("You cannot define an interval and no start")
-    if interval and not end:
-        end = datetime.now()
     format = get_format(request, stats_formats)
     results = []
 
@@ -1115,15 +1068,12 @@ def get_participant_time_series_analytics(request):
         intervals_table.create()
         interval_start = start
         intervals = []
-        if interval:
-            while interval_start < end:
-                interval_end = min(interval_start + interval, end)
-                intervals.append({'interval_start': interval_start, 'interval_end': interval_end})
-                interval_start = interval_start + interval
-            #pprint.pprint(intervals)
-            discussion.db.execute(intervals_table.insert(), intervals)
-        else:
-            raise HTTPBadRequest("Please specify an interval")
+        while interval_start < end:
+            interval_end = min(interval_start + interval, end)
+            intervals.append({'interval_start': interval_start, 'interval_end': interval_end})
+            interval_start = interval_start + interval
+        #pprint.pprint(intervals)
+        discussion.db.execute(intervals_table.insert(), intervals)
 
         from assembl.models import (
             Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
