@@ -119,7 +119,9 @@ def get_default_context(request):
     react_url = '/static2'
     use_webpack_server = asbool(config.get('use_webpack_server'))
     if use_webpack_server:
-        react_url = 'http://localhost:' + config.get('webpack_port', '8080')
+        react_url = 'http://%s:%d' % (
+            config.get('public_hostname', 'localhost'),
+            int(config.get('webpack_port', 8080)))
     socket_proxied = asbool(config.get('changes.websocket.proxied'))
     websocket_port = None if socket_proxied \
         else config.get('changes.websocket.port')

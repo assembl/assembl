@@ -13,6 +13,7 @@ module.exports = _.extend(base_config, {
             "Access-Control-Allow-Credentials":true
         },
         port: process.env.WEBPACK_PORT,
+        host: "0.0.0.0",
     },
     entry: [
     'webpack-dev-server/client?http://localhost:'+process.env.WEBPACK_PORT,
