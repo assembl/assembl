@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var _ = require('underscore');
 var base_config = require('./webpack.config.js');
 
-var webpack_port = parseInt(process.env.WEBPACK_URL.split(':')[1]);
+var webpack_port = parseInt(process.env.WEBPACK_URL.split(':')[2]);
 
 module.exports = _.extend(base_config, {
     devServer: {
