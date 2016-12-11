@@ -175,6 +175,11 @@ public_hostname = localhost
 # Typically 80 for prod, 6543 for dev
 public_port = 6543
 
+# Do we accept https? If so we'll force it in some cases.
+accept_secure_connection = false
+# Do we force https? (TODO)
+require_secure_connection = false
+
 # ZMQ Websockets are used for frontend to backend communication
 
 # ZMQ model changes local socket (backend will connect to this)

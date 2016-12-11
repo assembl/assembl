@@ -93,8 +93,8 @@ def main():
                 notify_celery_broker, translate_celery_broker)
                ), "Define the celery broker"
     secure = config.getboolean(SECTION, 'require_secure_connection')
-    url = 'https' if secure else 'http'
-    url += "://" + config.get(SECTION, 'public_hostname')
+    public_hostname = config.get(SECTION, 'public_hostname')
+    url = "http%s://%s" % ('s' if secure else '', public_hostname)
     port = config.getint(SECTION, 'public_port')
     # default_port = 443 if secure else 80
     # if port != default_port:
@@ -103,6 +103,7 @@ def main():
     webpack_port = 8080
     if config.has_option(SECTION, 'webpack_port'):
         webpack_port = config.getint(SECTION, 'webpack_port')
+    webpack_url = "http://%s:%d" % (public_hostname, webpack_port)
     vars = {
         'IMAP_CELERY_BROKER': imap_celery_broker,
         'NOTIF_DISPATCH_CELERY_BROKER': notif_dispatch_celery_broker,
@@ -131,7 +132,7 @@ def main():
         'edgesense_venv': edgesense_venv,
         'VIRTUAL_ENV': os.environ['VIRTUAL_ENV'],
         'edgesense_code_dir': edgesense_code_dir,
-        'WEBPACK_PORT': webpack_port,
+        'WEBPACK_URL': webpack_url,
         'ASSEMBL_URL': url,
     }
     for var in (
