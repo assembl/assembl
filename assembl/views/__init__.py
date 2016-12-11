@@ -116,8 +116,10 @@ def get_default_context(request):
     if request.scheme == "http"\
             and asbool(config.get("require_secure_connection")):
         raise HTTPFound("https://" + request.host + request.path_qs)
-    react_url = 'http://localhost:8080' if asbool(
-        config.get('use_webpack_server')) else '/static2'
+    react_url = '/static2'
+    use_webpack_server = asbool(config.get('use_webpack_server'))
+    if use_webpack_server:
+        react_url = 'http://localhost:' + config.get('webpack_port', '8080')
     socket_proxied = asbool(config.get('changes.websocket.proxied'))
     websocket_port = None if socket_proxied \
         else config.get('changes.websocket.port')
