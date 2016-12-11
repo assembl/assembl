@@ -2,18 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    devServer: {
-        inline: true,
-        headers: {
-            "Access-Control-Allow-Origin": "http://localhost:6543",
-            "Access-Control-Allow-Credentials":true
-        }
-    },
-    entry: [
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './js/app/index.js'
-    ],
+    entry: './js/app/index.js',
     output: {
         path: path.join(__dirname, 'build'),
         filename: 'bundle.js',
@@ -23,7 +12,7 @@ module.exports = {
         loaders: [
         {
             test: /\.js$/,
-            loaders: ['react-hot', 'babel'],
+            loaders: ['babel'],
             include: path.join(__dirname, 'js')
         },
         {
@@ -61,6 +50,11 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.DefinePlugin({
+          'process.env': {
+            NODE_ENV: JSON.stringify('production')
+          }
+        }),
+        new webpack.optimize.UglifyJsPlugin(),
     ]
 };
