@@ -608,6 +608,8 @@ def update_node(force_reinstall=False):
         venvcmd("nodeenv --node=6.1.0 --npm=3.8.6 --python-virtualenv assembl/static/js")
         with cd(get_node_base_path()):
             venvcmd("npm install reinstall -g", chdir=False)
+        with cd(get_new_node_base_path()):
+            venvcmd("npm install reinstall -g", chdir=False)
     else:
         print(green('Node version ok'))
 
@@ -727,13 +729,25 @@ def get_node_base_path():
     return normpath(join(
             env.projectpath, 'assembl', 'static', 'js'))
 
+def get_new_node_base_path():
+    return normpath(join(
+            env.projectpath, 'assembl', 'static2'))
+
 def get_node_modules_path():
     return normpath(join(
             get_node_base_path(), 'node_modules'))
 
+def get_new_node_modules_path():
+    return normpath(join(
+            get_new_node_base_path(), 'node_modules'))
+
 def get_node_bin_path():
     return normpath(join(
             get_node_modules_path(), '.bin'))
+
+def get_new_node_bin_path():
+    return normpath(join(
+            get_new_node_modules_path(), '.bin'))
 
 def bower_cmd(cmd, relative_path='.'):
     with cd(env.projectpath):
@@ -773,6 +787,12 @@ def update_npm_requirements(force_reinstall=False):
     """ Normally not called manually """
     sanitize_env()
     with cd(get_node_base_path()):
+        if force_reinstall:
+            venvcmd('npm prune', chdir=False)
+            venvcmd('reinstall', chdir=False)
+        else:
+            venvcmd('npm update', chdir=False)
+    with cd(get_new_node_base_path()):
         if force_reinstall:
             venvcmd('npm prune', chdir=False)
             venvcmd('reinstall', chdir=False)
