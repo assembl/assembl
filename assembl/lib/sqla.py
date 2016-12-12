@@ -877,7 +877,7 @@ class BaseOps(object):
                         aliases[target_id] = instance
         if instance is not None:
             instance._do_update_from_json(
-                json, parse_def, aliases, context,
+                json, parse_def, aliases, context, permissions,
                 user_id, DuplicateHandling.USE_ORIGINAL, jsonld)
         else:
             instance = target_cls._do_create_from_json(
@@ -1234,7 +1234,7 @@ class BaseOps(object):
                                 for inst in missing:
                                     setattr(inst, remote.key, None)
                             else:
-                                for inst in missing:
+                                for inst in extra:
                                     if not inst.user_can(
                                             user_id, CrudPermissions.DELETE,
                                             permissions):
@@ -1403,6 +1403,8 @@ class BaseOps(object):
                         # TODO: Use the logic in api2.instance_put_form
                         raise NotImplementedError()
                     else:
+                        # TODO: check the CrudPermissions on subobject,
+                        # UNLESS it's they're inherited (eg Langstring)
                         return other._do_update_from_json(
                             json, parse_def, aliases, context, permissions,
                             user_id, duplicate_handling, jsonld)

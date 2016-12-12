@@ -205,28 +205,32 @@ var MessageColumnView = Marionette.LayoutView.extend({
       "columnName",
       new SimpleLangStringEditPanel({
         model: this.model.get('name'),
+        owner_relative_url: this.model.url() + '/name',
       }));
-  },
-  reorderColumnUp: function(ev) {
-    var index = this.getIndex(),
-        previousModel = this.model.collection.at(index-1);
-    this.model.set('previous_column', previousModel.get('previous_column'));
-    previousModel.set('previous_column', this.model.id);
-    this.model.collection.sort();
-    this.model.save(null, {success: function() {
-      previousModel.save();
-    }});
-
-    ev.preventDefault();
   },
   reorderColumnDown: function(ev) {
     var index = this.getIndex(),
-        nextModel = this.model.collection.at(index+1);
-    nextModel.set('previous_column', this.model.get('previous_column'));
-    this.model.set('previous_column', nextModel.id);
-    this.model.collection.sort();
-    this.model.save();
-    nextModel.save();
+        nextModel = this.model.collection.at(index + 1);
+    Promise.resolve($.ajax(nextModel.url() + "/reorder_up", {
+        method: "POST"})).then(function(data) {
+        nextModel.collection.fetch({
+          success: function() {
+            nextModel.collection.sort();
+          }
+        });
+    });
+    ev.preventDefault();
+  },
+  reorderColumnUp: function(ev) {
+    var model = this.model;
+    Promise.resolve($.ajax(model.url() + "/reorder_up", {
+        method: "POST"})).then(function(data) {
+        model.collection.fetch({
+          success: function() {
+            model.collection.sort();
+          }
+        });
+    });
     ev.preventDefault();
   },
   deleteColumn: function(ev) {
@@ -239,9 +243,8 @@ var MessageColumnView = Marionette.LayoutView.extend({
     this.model.destroy({
       success: function() {
         if (nextModel !== null) {
-          // do this after delete, or uniqueness of previous_column will prevent change.
-          nextModel.set('previous_column', prevColumn);
-          nextModel.save();
+          // update the previous_column value
+          nextModel.fetch();
         }
       },
     });

@@ -46,6 +46,7 @@ var SimpleLangStringEditPanel = Marionette.LayoutView.extend({
     }
     this.langCache = Ctx.localesAsSortedList();
     this.model = options.model;
+    this.owner_relative_url = options.owner_relative_url;
   },
 
   addEntry: function(ev) {
@@ -66,6 +67,7 @@ var SimpleLangStringEditPanel = Marionette.LayoutView.extend({
       new LangStringEntryList({
         basePanel: this,
         langstring: this.model,
+        owner_relative_url: this.owner_relative_url,
         collection: this.model.get('entries'),
       }));
   },
@@ -92,6 +94,7 @@ var LangStringEntryView = Marionette.LayoutView.extend({
   },
   initialize: function(options) {
     this.languages = options.basePanel.langCache;
+    this.owner_relative_url = options.owner_relative_url;
   },
   serializeData: function() {
     return {
@@ -100,18 +103,34 @@ var LangStringEntryView = Marionette.LayoutView.extend({
     };
   },
 
+  modelUrl: function() {
+    var url = this.owner_relative_url + "/" + this.model.langstring().getNumericId() + "/entries";
+    if (this.model.id !== undefined) {
+      url += "/" + this.model.getNumericId();
+    }
+    return url;
+  },
+
   deleteEntry: function(ev) {
-    this.model.destroy();
+    this.model.destroy({url: this.modelUrl()});
     ev.preventDefault();
   },
   changeLocale: function(ev) {
-    this.model.set('@language', ev.currentTarget.value);
-    this.model.save();
+    var that = this;
+    this.model.save({
+      '@language': ev.currentTarget.value
+    }, {
+      url: this.modelUrl(),
+    });
     ev.preventDefault();
   },
   changeValue: function(ev) {
-    this.model.set('value', ev.currentTarget.value);
-    this.model.save();
+    var that = this;
+    this.model.save({
+      value: ev.currentTarget.value
+    }, {
+      url: this.modelUrl(),
+    });
     ev.preventDefault();
   },
 });

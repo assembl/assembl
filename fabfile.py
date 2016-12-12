@@ -1792,6 +1792,7 @@ def commonenv(projectpath, venvpath=None):
     # Where do we find the virtuoso binaries
     env.uses_global_supervisor = False
     env.postgres_db_user = None
+    env.postgres_db_password = None
     env.using_virtuoso = ''
 
     # Minimal dependencies versions
