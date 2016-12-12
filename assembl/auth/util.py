@@ -69,7 +69,8 @@ def get_permissions(user_id, discussion_id):
             return []
         permissions = session.query(Permission.name).join(
             DiscussionPermission, Role, UserRole).filter(
-                UserRole.user_id == user_id
+                UserRole.user_id == user_id,
+                DiscussionPermission.discussion_id == discussion_id
             ).union(session.query(Permission.name).join(
                 DiscussionPermission, Role, LocalUserRole).filter(and_(
                     LocalUserRole.user_id == user_id,
