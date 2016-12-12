@@ -175,6 +175,11 @@ public_hostname = localhost
 # Typically 80 for prod, 6543 for dev
 public_port = 6543
 
+# Do we accept https? If so we'll force it in some cases.
+accept_secure_connection = false
+# Do we force https? (TODO)
+require_secure_connection = false
+
 # ZMQ Websockets are used for frontend to backend communication
 
 # ZMQ model changes local socket (backend will connect to this)
@@ -243,6 +248,8 @@ celery_tasks.translate.imodeleventwatcher = assembl.lib.model_watcher.ModelEvent
 
 cache_viewdefs = true
 minified_js = false
+new_frontend = false
+use_webpack_server = false
 
 test_with_zope = false
 
@@ -378,6 +385,7 @@ autostart_changes_router = true
 autostart_pserve = false
 autostart_nodesass = false
 autostart_gulp = false
+autostart_webpack = false
 autostart_uwsgi = false
 autostart_metrics_server = false
 autostart_metrics_server = false

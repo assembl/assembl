@@ -49,6 +49,7 @@ def main():
         'autostart_pserve': 'false',
         'autostart_nodesass': 'false',
         'autostart_gulp': 'false',
+        'autostart_webpack': 'false',
         'autostart_uwsgi': 'false',
         'autostart_metrics_server': 'false',
         'autostart_edgesense_server': 'false',
@@ -91,6 +92,18 @@ def main():
     assert all((imap_celery_broker, notif_dispatch_celery_broker,
                 notify_celery_broker, translate_celery_broker)
                ), "Define the celery broker"
+    secure = config.getboolean(SECTION, 'require_secure_connection')
+    public_hostname = config.get(SECTION, 'public_hostname')
+    url = "http%s://%s" % ('s' if secure else '', public_hostname)
+    port = config.getint(SECTION, 'public_port')
+    # default_port = 443 if secure else 80
+    # if port != default_port:
+    if port not in (80, 443):
+        url += ':' + str(port)
+    webpack_port = 8080
+    if config.has_option(SECTION, 'webpack_port'):
+        webpack_port = config.getint(SECTION, 'webpack_port')
+    webpack_url = "http://%s:%d" % (public_hostname, webpack_port)
     vars = {
         'IMAP_CELERY_BROKER': imap_celery_broker,
         'NOTIF_DISPATCH_CELERY_BROKER': notif_dispatch_celery_broker,
@@ -106,25 +119,8 @@ def main():
             SECTION, 'celery_tasks.translate.num_workers'),
         'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_uri,
-        'autostart_virtuoso': using_virtuoso and config.get('supervisor', 'autostart_virtuoso'),
-        'autostart_celery_imap': config.get(
-            'supervisor', 'autostart_celery_imap'),
-        'autostart_celery_notification_dispatch': config.get(
-            'supervisor', 'autostart_celery_notification_dispatch'),
-        'autostart_celery_notify': config.get(
-            'supervisor', 'autostart_celery_notify'),
-        'autostart_celery_notify_beat': config.get(
-            'supervisor', 'autostart_celery_notify_beat'),
-        'autostart_celery_translate': config.get(
-            'supervisor', 'autostart_celery_translate'),
-        'autostart_source_reader': config.get(
-            'supervisor', 'autostart_source_reader'),
-        'autostart_changes_router': config.get(
-            'supervisor', 'autostart_changes_router'),
-        'autostart_pserve': config.get('supervisor', 'autostart_pserve'),
-        'autostart_nodesass': config.get('supervisor', 'autostart_nodesass'),
-        'autostart_gulp': config.get('supervisor', 'autostart_gulp'),
-        'autostart_uwsgi': config.get('supervisor', 'autostart_uwsgi'),
+        'autostart_virtuoso': using_virtuoso and config.get(
+            'supervisor', 'autostart_virtuoso'),
         'autostart_metrics_server': (config.get(
             'supervisor', 'autostart_metrics_server')
             if has_metrics_server else 'false'),
@@ -136,7 +132,23 @@ def main():
         'edgesense_venv': edgesense_venv,
         'VIRTUAL_ENV': os.environ['VIRTUAL_ENV'],
         'edgesense_code_dir': edgesense_code_dir,
+        'WEBPACK_URL': webpack_url,
+        'ASSEMBL_URL': url,
     }
+    for var in (
+            'autostart_celery_imap',
+            'autostart_celery_notification_dispatch',
+            'autostart_celery_notify',
+            'autostart_celery_notify_beat',
+            'autostart_celery_translate',
+            'autostart_source_reader',
+            'autostart_changes_router',
+            'autostart_pserve',
+            'autostart_nodesass',
+            'autostart_gulp',
+            'autostart_webpack',
+            'autostart_uwsgi'):
+        vars[var] = config.get('supervisor', var)
     if using_virtuoso:
         vroot = config.get('virtuoso', 'virtuoso_root')
         if vroot == 'system':

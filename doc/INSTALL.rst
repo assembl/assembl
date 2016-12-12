@@ -143,6 +143,7 @@ the ini file):
     changes.websocket.port = 8085
     celery_tasks.broker.broker = redis://localhost:6379/0
     celery_tasks.notification_dispatch.broker = redis://localhost:6379/1
+    webpack_port = 8080
     [server:main]
     port = 6543
     [virtuoso]
