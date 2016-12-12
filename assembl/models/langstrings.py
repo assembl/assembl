@@ -475,7 +475,8 @@ class LangString(Base):
         event.listen(owner_class, "load", load_owner, propagate=True)
         event.listens_for(owner_class, "refresh", load_owner, propagate=True)
         def set_owner(target, value, old_value, initiator):
-            old_value.owner = None
+            if old_value is not None:
+                old_value.owner = None
             value.owner = target
         for reln in relns:
             event.listen(getattr(owner_class, reln), "set", set_owner, propagate=True)
