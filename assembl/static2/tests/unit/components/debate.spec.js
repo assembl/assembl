@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
-import Debate from '../../../js/app/pages/debatePage.js';
+import Debate from '../../../js/app/components/debateComponent.js';
 
 describe('This test concern debate component', () => {
     it('Should test React renderer', () => {
