@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTestRenderer from 'react-test-renderer';
-import Debate from '../../js/app/pages/debatePage.js';
+import Debate from '../../../js/app/pages/debatePage.js';
 
 describe('This test concern debate component', () => {
     it('Should test React renderer', () => {
@@ -11,7 +11,7 @@ describe('This test concern debate component', () => {
         const expectedResponse = {
             type:'p',
             props:{},
-            children:['Hello World! This is the new Assembl frontend with a fake component!']
+            children:['Hello World! This is the new Assembl frontend!']
         };
         expect(result).toEqual(expectedResponse);
     });
