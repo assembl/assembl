@@ -136,7 +136,7 @@ class TranslationService(object):
             # boost with discussion locales.
             data = [
                 (x.prob * (
-                    5 if Locale.Locale.extract_root_locale(x.lang)
+                    5 if Locale.extract_root_locale(x.lang)
                     in expected_locales else 1
                 ), x.lang) for x in language_data]
         data.sort(reverse=True)

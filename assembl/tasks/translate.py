@@ -67,8 +67,8 @@ def translate_content(
             combined = und_subject.value or next(
                 iter(content.subject.non_mt_entries())).value or ''
         if und_body:
-            combined += " " + und_subject.value or next(
-                iter(content.subject.non_mt_entries())).value or ''
+            combined += " " + und_body.value or next(
+                iter(content.body.non_mt_entries())).value or ''
         try:
             language, _ = service.identify(
                 combined, constrain_to_discussion_languages)
