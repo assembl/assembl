@@ -364,7 +364,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
       that.ui.messageCount.html(i18n.sprintf(
         i18n.ngettext("%d message on theme “%s”", "%d messages on theme “%s”", resultMessageIdCollection.length),
         resultMessageIdCollection.length,
-        that.model.get('name').bestValue(translationData)));
+        that.model.get('name').bestValueInterface(translationData)));
 
       //Some messages may be present from before
       that.ui.messageFamilyList.empty();
@@ -404,7 +404,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
         show_target_context_with_choice: false,
         message_send_title: i18n.sprintf(
           i18n.gettext("Add your thoughts on theme “%s”"),
-          that.model.get('name').bestValue(translationData)),
+          that.model.get('name').bestValueInterface(translationData)),
         show_cancel_button:true
       });
       // Todo: use those options in messageSendView. Maybe use a more lightweight view also?

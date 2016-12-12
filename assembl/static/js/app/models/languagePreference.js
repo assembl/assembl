@@ -43,7 +43,7 @@ var LanguagePreferenceModel = Base.Model.extend({
         user: null,
         locale_code: null,
         preferred_order: 0,
-        source_of_evidence: null,
+        source_of_evidence: 0,
         translate_to_name: null
     },
   /**
@@ -99,6 +99,17 @@ var LanguagePreferenceCollection = Base.Collection.extend({
    */
     comparator: function(lp) {
       return lp.get("source_of_evidence") + (lp.get("preferred_order") / 100.0);
+    },
+  /**
+   * Comparator sorts in ascending order, but explicit goes last.
+   * @function app.models.languagePreference.LanguagePreferenceCollection.interface_comparator
+   */
+    interface_comparator: function(lp) {
+      var evidence = lp.get("source_of_evidence");
+      if (!evidence) {
+        evidence = 100;
+      }
+      return evidence + (lp.get("preferred_order") / 100.0);
     },
   /**
    * Comparator sorts in ascending order

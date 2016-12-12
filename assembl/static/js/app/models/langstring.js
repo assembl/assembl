@@ -317,9 +317,10 @@ var LangString = Base.Model.extend({
    * @param  {LangStringEntry.Collection}       available
    * @param  {LanguagePreference.Collection}    langPrefs
    * @param  {boolean}                          filter_errors   Used to supress errors
+   * @param  {boolean}                          for_interface   To be used in interface, prefer discussion to user.
    * @returns {LangStringEntry}
    */
-  bestOf: function(available, langPrefs, filter_errors) {
+  bestOf: function(available, langPrefs, filter_errors, for_interface) {
     var i, entry, commonLenF, that = this;
     if (available.length == 1) {
         return available[0];
@@ -346,7 +347,8 @@ var LangString = Base.Model.extend({
           }
         }
         if (prefCandidates.length) {
-          prefCandidates.sort(langPrefs.comparator);
+          prefCandidates = _.sortBy(prefCandidates,
+            (for_interface)?langPrefs.interface_comparator:langPrefs.comparator);
           for (i = 0; i < prefCandidates.length; i++) {
             var pref = prefCandidates[i],
                 translate_to = pref.get("translate_to_name");
@@ -389,6 +391,13 @@ var LangString = Base.Model.extend({
    */
   bestValue: function(langPrefs) {
     return this.best(langPrefs).get("value");
+  },
+  /**
+   * Determines the best value, favouring interface over user prefs.
+   * @function app.models.langstrings.LangString.bestValueInterface
+   */
+  bestValueInterface: function(langPrefs) {
+    return this.bestOf(this.get("entries").models, langPrefs, false, true).get("value");
   },
   /**
    * @function app.models.langstrings.LangString.originalValue
