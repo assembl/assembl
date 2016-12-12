@@ -889,7 +889,9 @@ class LangStringEntry(TombstonableMixin, Base):
         self.error_count = 0
 
     def user_can(self, user_id, operation, permissions):
-        return self.langstring.user_can(user_id, operation, permissions)
+        if self.langstring is not None:
+            return self.langstring.user_can(user_id, operation, permissions)
+        return super(LangStringEntry, self).user_can(user_id, operation, permissions)
 
     # Those permissions are for an ownerless object. Accept Create before ownership.
     crud_permissions = CrudPermissions(P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN)
