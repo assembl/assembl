@@ -326,6 +326,7 @@ class TokenCategorySpecification(DiscussionBoundBase):
         LangString, foreign_keys=(name_ls_id,),
         backref=backref("name_of_token_category", uselist=False),
         single_parent=True,
+        lazy="joined",
         cascade="all, delete-orphan")
 
     color = Column(String(25))
@@ -366,6 +367,8 @@ class TokenCategorySpecification(DiscussionBoundBase):
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
 
+
+LangString.setup_ownership_load_event(TokenCategorySpecification, ['name'])
 
 
 class LickertVoteSpecification(AbstractVoteSpecification):

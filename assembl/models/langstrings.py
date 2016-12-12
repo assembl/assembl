@@ -4,11 +4,12 @@ from datetime import datetime
 
 from sqlalchemy import (
     Column, ForeignKey, Integer, Boolean, String, SmallInteger,
-    UnicodeText, UniqueConstraint, event, inspect, Sequence)
+    UnicodeText, UniqueConstraint, event, inspect, Sequence, events)
 from sqlalchemy.sql.expression import case
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import (
-    relationship, backref, subqueryload, joinedload, aliased)
+    relationship, backref, subqueryload, joinedload, aliased,
+    attributes)
 from sqlalchemy.orm.query import Query
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
@@ -403,9 +404,7 @@ class LangString(Base):
     def id_sequence(cls):
         return Sequence(cls.id_sequence_name, schema=cls.metadata.schema)
 
-    @declared_attr
-    def id(cls):
-        return Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
 
     def _before_insert(self):
         if self.using_virtuoso:
@@ -463,6 +462,28 @@ class LangString(Base):
     @classmethod
     def reset_cache(cls):
         pass
+
+    # Which object owns this?
+    owner = None
+
+    @classmethod
+    def setup_ownership_load_event(cls, owner_class, relns):
+        def load_owner(target, context):
+            for reln in relns:
+                if reln in target.__dict__:
+                    getattr(target, reln).owner = target
+        event.listen(owner_class, "load", load_owner, propagate=True)
+        event.listens_for(owner_class, "refresh", load_owner, propagate=True)
+        def set_owner(target, value, old_value, initiator):
+            old_value.owner = None
+            value.owner = target
+        for reln in relns:
+            event.listen(getattr(owner_class, reln), "set", set_owner, propagate=True)
+
+    def user_can(self, user_id, operation, permissions):
+        if self.owner is not None:
+            return self.owner.user_can(user_id, operation, permissions)
+        return super(LangString, self).user_can(user_id, operation, permissions)
 
     # TODO: Reinstate when the javascript can handle empty body/subject.
     # def generic_json(
@@ -672,8 +693,8 @@ class LangString(Base):
             db.add(clone)
         return clone
 
-    # TODO: the permissions should really be those of the owning object. Yikes.
-    crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
+    # Those permissions are for an ownerless object. Accept Create before ownership.
+    crud_permissions = CrudPermissions(P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN)
 
 
 if LangString.using_virtuoso:
@@ -867,7 +888,11 @@ class LangStringEntry(TombstonableMixin, Base):
         self.error_code = None
         self.error_count = 0
 
-    crud_permissions = CrudPermissions(P_READ, P_READ, P_SYSADMIN)
+    def user_can(self, user_id, operation, permissions):
+        return self.langstring.user_can(user_id, operation, permissions)
+
+    # Those permissions are for an ownerless object. Accept Create before ownership.
+    crud_permissions = CrudPermissions(P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN)
 
 
 # class TranslationStamp(Base):

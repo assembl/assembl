@@ -14,6 +14,7 @@ from sqlalchemy import (
     inspect,
     select,
     func,
+    event,
     UniqueConstraint,
 )
 from sqlalchemy.orm import relationship, backref, aliased
@@ -54,7 +55,8 @@ class IdeaMessageColumn(DiscussionBoundBase):
     previous_column = relationship(
         "IdeaMessageColumn", remote_side=[id],
         backref=backref("next_column", uselist=False))
-    name = relationship(LangString)
+    name = relationship(LangString, lazy="joined", backref=backref(
+        "name_of_idea_message_column", uselist=False))
 
     def get_discussion_id(self):
         idea = self.idea or Idea.get(self.idea_id)
@@ -101,3 +103,6 @@ class IdeaMessageColumn(DiscussionBoundBase):
         ideas = db.query(Idea).filter(Idea.id.in_(subq))
         for idea in ideas:
             cls.ensure_ordering_for_idea(idea)
+
+
+LangString.setup_ownership_load_event(IdeaMessageColumn, ['name'])

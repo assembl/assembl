@@ -292,13 +292,13 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         LangString,
         primaryjoin=subject_id == LangString.id,
         backref=backref("subject_of_post", uselist=False),
-        single_parent=True,
+        single_parent=True, lazy="joined",
         cascade="all, delete-orphan")
     body = relationship(
         LangString,
         primaryjoin=body_id == LangString.id,
         backref=backref("body_of_post", uselist=False),
-        single_parent=True,
+        single_parent=True, lazy="joined",
         cascade="all, delete-orphan")
 
     message_classifier = Column(String(100), index=True,
@@ -521,3 +521,6 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     crud_permissions = CrudPermissions(
             P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
             P_EDIT_POST, P_ADMIN_DISC)
+
+
+LangString.setup_ownership_load_event(Content, ['subject', 'body'])
