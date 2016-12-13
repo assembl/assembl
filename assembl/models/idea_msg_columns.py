@@ -55,8 +55,10 @@ class IdeaMessageColumn(DiscussionBoundBase):
     previous_column = relationship(
         "IdeaMessageColumn", remote_side=[id],
         backref=backref("next_column", uselist=False))
-    name = relationship(LangString, lazy="joined", backref=backref(
-        "name_of_idea_message_column", uselist=False))
+    name = relationship(LangString,
+        lazy="joined", single_parent=True,
+        backref=backref("name_of_idea_message_column", lazy="dynamic"),
+        cascade="all, delete-orphan")
 
     def get_discussion_id(self):
         idea = self.idea or Idea.get(self.idea_id)

@@ -324,7 +324,7 @@ class TokenCategorySpecification(DiscussionBoundBase):
         backref=backref("token_categories", cascade="all, delete-orphan"))
     name = relationship(
         LangString, foreign_keys=(name_ls_id,),
-        backref=backref("name_of_token_category", uselist=False),
+        backref=backref("name_of_token_category", lazy="dynamic"),
         single_parent=True,
         lazy="joined",
         cascade="all, delete-orphan")

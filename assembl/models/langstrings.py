@@ -4,7 +4,8 @@ from datetime import datetime
 
 from sqlalchemy import (
     Column, ForeignKey, Integer, Boolean, String, SmallInteger,
-    UnicodeText, UniqueConstraint, event, inspect, Sequence, events)
+    UnicodeText, UniqueConstraint, event, inspect, Sequence, events,
+    literal)
 from sqlalchemy.sql.expression import case
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import (
@@ -464,26 +465,46 @@ class LangString(Base):
         pass
 
     # Which object owns this?
-    owner = None
+    owner_object = None
+    _owning_relns = []
 
     @classmethod
     def setup_ownership_load_event(cls, owner_class, relns):
-        def load_owner(target, context):
+        def load_owner_object(target, context):
             for reln in relns:
                 if reln in target.__dict__:
-                    getattr(target, reln).owner = target
-        event.listen(owner_class, "load", load_owner, propagate=True)
-        event.listens_for(owner_class, "refresh", load_owner, propagate=True)
-        def set_owner(target, value, old_value, initiator):
+                    getattr(target, reln).owner_object = target
+        event.listen(owner_class, "load", load_owner_object, propagate=True)
+        event.listens_for(owner_class, "refresh", load_owner_object, propagate=True)
+        def set_owner_object(target, value, old_value, initiator):
             if old_value is not None:
-                old_value.owner = None
-            value.owner = target
+                old_value.owner_object = None
+            value.owner_object = target
         for reln in relns:
-            event.listen(getattr(owner_class, reln), "set", set_owner, propagate=True)
+            cls._owning_relns.append((owner_class, reln))
+            event.listen(getattr(owner_class, reln), "set", set_owner_object, propagate=True)
+
+    def get_owner_object(self):
+        if self.owner_object is None and inspect(self).persistent:
+            self.owner_object = self.owner_object_from_query()
+        return self.owner_object
+
+    def owner_object_from_query(self):
+        queries = []
+        for owning_class, reln_name in self._owning_relns:
+            backref_name = owning_class.__mapper__.relationships[reln_name].backref[0]
+            query = getattr(self, backref_name)
+            query = query.with_entities(owning_class.id, literal(owning_class.__name__).label('classname'))
+            queries.append(query)
+        query = queries[0].union(*queries[1:])
+        id, cls_name = query.first()
+        cls = [cls for (cls, _) in self._owning_relns if cls.__name__ == cls_name][0]
+        return self.db.query(cls).filter_by(id=id).first()
 
     def user_can(self, user_id, operation, permissions):
-        if self.owner is not None:
-            return self.owner.user_can(user_id, operation, permissions)
+        owner_object = self.get_owner_object()
+        if owner_object is not None:
+            return owner_object.user_can(user_id, operation, permissions)
         return super(LangString, self).user_can(user_id, operation, permissions)
 
     # TODO: Reinstate when the javascript can handle empty body/subject.

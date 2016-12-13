@@ -291,13 +291,13 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     subject = relationship(
         LangString,
         primaryjoin=subject_id == LangString.id,
-        backref=backref("subject_of_post", uselist=False),
+        backref=backref("subject_of_post", lazy="dynamic"),
         single_parent=True, lazy="joined",
         cascade="all, delete-orphan")
     body = relationship(
         LangString,
         primaryjoin=body_id == LangString.id,
-        backref=backref("body_of_post", uselist=False),
+        backref=backref("body_of_post", lazy="dynamic"),
         single_parent=True, lazy="joined",
         cascade="all, delete-orphan")
 
