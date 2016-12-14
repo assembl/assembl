@@ -30,7 +30,7 @@ If the postgres database is local, and that step has not been done:
 
     fab devenv install_postgres
 
-Make sure your (full) hostname is set in ``/etc/hostname``
+Make sure your (full) hostname is set in ``/etc/hostname`` and ``/etc/mailname``.
 
 PostgreSQL configuration
 ------------------------
