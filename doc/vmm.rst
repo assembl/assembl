@@ -168,7 +168,7 @@ Then give permissions to that group to execute the vmm ua command:
 
 ::
 
-    %assembls ALL=NOPASSWD: /etc/init.d/nginx restart , /etc/init.d/nginx stop , /etc/init.d/nginx start, /usr/sbin/vmm ua *
+    %assembls ALL=NOPASSWD: /etc/init.d/nginx restart , /etc/init.d/nginx reload , /etc/init.d/nginx stop , /etc/init.d/nginx start, /usr/sbin/vmm ua *
 
 Assembl adjustments
 -------------------
