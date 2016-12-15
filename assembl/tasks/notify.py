@@ -33,6 +33,8 @@ CELERYBEAT_SCHEDULE = {
 
 class NotifyCeleryApp(CeleryWithConfig):
     def on_configure_with_settings(self, settings):
+        global notify_process_mailer
+        notify_process_mailer = mailer_factory_from_settings(settings)
         # setup SETTINGS_SMTP_DELAY
         for name, val in settings.iteritems():
             if name.startswith(SETTINGS_SMTP_DELAY):
