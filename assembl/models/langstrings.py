@@ -497,9 +497,11 @@ class LangString(Base):
             query = query.with_entities(owning_class.id, literal(owning_class.__name__).label('classname'))
             queries.append(query)
         query = queries[0].union(*queries[1:])
-        id, cls_name = query.first()
-        cls = [cls for (cls, _) in self._owning_relns if cls.__name__ == cls_name][0]
-        return self.db.query(cls).filter_by(id=id).first()
+        data = query.first()
+        if data:
+            id, cls_name = data
+            cls = [cls for (cls, _) in self._owning_relns if cls.__name__ == cls_name][0]
+            return self.db.query(cls).filter_by(id=id).first()
 
     def user_can(self, user_id, operation, permissions):
         owner_object = self.get_owner_object()
