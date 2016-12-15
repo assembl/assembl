@@ -8,13 +8,13 @@
 # François Burra <francoisburra@imaginationforpeople.org>, 2014-2016
 # Hotellook, 2014
 # Marc-Antoine Parent <maparent@acm.org>, 2014-2015
-# Quentin Grimaud <quentin.grimaud@gmail.com>, 2014-2015
+# Quentin Grimaud <quentin.grimaud@gmail.com>, 2014-2016
 msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-15 15:42+0100\n"
-"PO-Revision-Date: 2016-12-15 14:41+0000\n"
+"POT-Creation-Date: 2016-12-15 17:05+0100\n"
+"PO-Revision-Date: 2016-12-15 14:46+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: fr\n"
 "Language-Team: French "
@@ -2182,11 +2182,11 @@ msgstr "L’enregistrement de vos configurations a échoué"
 
 #: assembl/tasks/email_discussion_creator.py:69
 msgid "Your consultation was created"
-msgstr ""
+msgstr "Votre consultation a été créée"
 
 #: assembl/templates/adminIndex.jinja2:3
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
 
 #: assembl/templates/cannot_read_discussion.jinja2:4
 msgid "You are not authorized to read this discussion."
@@ -2312,7 +2312,7 @@ msgstr "Se connecter avec Bitbucket"
 
 #: assembl/templates/login.jinja2:72
 msgid "Login with "
-msgstr ""
+msgstr "Se connecter avec "
 
 #: assembl/templates/login.jinja2:87
 msgid "Already have an account?"
@@ -3486,7 +3486,7 @@ msgstr "Préférences globales"
 
 #: assembl/templates/views/globalAdminNavigationMenu.tmpl:9
 msgid "Create a discussion"
-msgstr ""
+msgstr "Créer une discussion"
 
 #: assembl/templates/views/helperDebate.tmpl:4
 msgid "Pick a topic and start contributing"
