@@ -4,7 +4,8 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config
 from pyramid.renderers import render_to_response
 from pyramid.security import authenticated_userid
-from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
+from pyramid.httpexceptions import (
+    HTTPFound, HTTPNotFound, HTTPBadRequest, HTTPUnauthorized)
 import transaction
 
 from .. import get_default_context, get_locale_from_request
@@ -46,6 +47,8 @@ class PseudoDiscussion(object):
 def base_admin_view(request):
     """The Base admin view, for frontend urls"""
     user_id = authenticated_userid(request) or Everyone
+    if user_id == Everyone:
+        raise HTTPUnauthorized()
     context = get_default_context(request)
 
     session = Discussion.default_db
