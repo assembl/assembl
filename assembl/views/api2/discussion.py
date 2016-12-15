@@ -433,13 +433,13 @@ def get_time_series_analytics(request):
                                                           (subscribersAgentStatus.first_subscribed == None, 0),
                                                           (and_(subscribersAgentStatus.first_subscribed < intervals_table.c.interval_end, subscribersAgentStatus.first_subscribed >= intervals_table.c.interval_start), 1)
                                                           ], else_=0)
-                                                         ).label('UNRELIABLE_recruitment_count_first_subscribed_in_period'),
+                                                         ).label('recruitment_count_first_subscribed_in_period'),
                                                 func.sum(
                                                     case([
                                                           (subscribersAgentStatus.last_unsubscribed == None, 0),
                                                           (and_(subscribersAgentStatus.last_unsubscribed < intervals_table.c.interval_end, subscribersAgentStatus.last_unsubscribed >= intervals_table.c.interval_start), 1)
                                                           ], else_=0)
-                                                         ).label('UNRELIABLE_retention_count_first_subscribed_in_period'),
+                                                         ).label('retention_count_last_unsubscribed_in_period'),
                                             )
         subscribers_query = subscribers_query.outerjoin(subscribersAgentStatus, subscribersAgentStatus.discussion_id==discussion.id)
         subscribers_query = subscribers_query.group_by(intervals_table.c.interval_id)
@@ -589,9 +589,9 @@ def get_time_series_analytics(request):
         "count_cumulative_logged_in_visitors",
         "fraction_cumulative_logged_in_visitors_who_posted_in_period",
         "recruitment_count_first_visit_in_period",
-        "UNRELIABLE_recruitment_count_first_subscribed_in_period",
+        "recruitment_count_first_subscribed_in_period",
         "retention_count_last_visit_in_period",
-        "UNRELIABLE_retention_count_first_subscribed_in_period",
+        "retention_count_last_unsubscribed_in_period",
         "UNRELIABLE_count_post_viewers",
     ]
     # otherwise assume csv
