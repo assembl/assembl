@@ -978,7 +978,6 @@ class Notification(Base):
         frontendUrls = FrontendUrls(self.first_matching_subscription.discussion)
         headers = {}
         msg = email.mime.Multipart.MIMEMultipart('alternative')
-        from email.header import Header
         headers['Precedence'] = 'list'
 
         headers['List-ID'] = self.first_matching_subscription.discussion.uri()
@@ -992,14 +991,13 @@ class Notification(Base):
         headers['List-Subscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
         headers['List-Unsubscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
 
-        subject = Header(self.get_notification_subject(), 'utf-8')
-
-        sender = Header(self.event_source_object().creator.name, 'utf-8')
-        sender.append(" <" + self.get_from_email_address() + ">", 'ascii')
+        sender = u"%s <%s>" % (
+            self.event_source_object().creator.name,
+            self.get_from_email_address())
         recipient = self.get_to_email_address()
         message = Message(
-            subject=subject.encode(),
-            sender=sender.encode(),
+            subject=self.get_notification_subject(),
+            sender=sender,
             recipients=[recipient],
             extra_headers=headers,
             body=email_text_part, html=email_html_part)
