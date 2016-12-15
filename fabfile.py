@@ -1118,6 +1118,7 @@ def virtuoso_db_directory():
 
 
 def database_dump_virtuoso():
+    # This next command can ask you to type password for the {{env.user}} user
     if not exists(env.dbdumps_dir):
         run('mkdir -m700 %s' % env.dbdumps_dir)
 
@@ -1742,7 +1743,8 @@ def sanitize_env():
             "uses_memcache ", "uses_uwsgi", "uses_apache", "uses_ngnix",
             "uses_global_supervisor", "using_virtuoso", "uses_apache",
             "uses_ngnix", "mac", "is_production_env"):
-        setattr(env, name, bool(getattr(env, name, False)))
+        # Note that we use as_bool() instead of bool(), so that a variable valued "False" in the .ini file is recognized as boolean False
+        setattr(env, name, as_bool(getattr(env, name, False)))
     if not isinstance(env.hosts, list):
         env.hosts = getattr(env, "hosts", "").split()
 
