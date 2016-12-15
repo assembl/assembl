@@ -142,9 +142,11 @@ def home_view(request):
     session = discussion.db
     if user_id != Everyone:
         from assembl.models import UserPreferenceCollection
+        # TODO: user may not exist. Case of session with BD change.
         user = User.get(user_id)
         preferences = UserPreferenceCollection(user_id, discussion)
         target_locale = get_locale_from_request(request, session, user)
+        user.is_visiting_discussion(discussion.id)
     else:
         target_locale = get_locale_from_request(request, session)
 
