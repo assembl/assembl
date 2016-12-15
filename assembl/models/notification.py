@@ -30,6 +30,7 @@ from  sqlalchemy.orm.exc import DetachedInstanceError
 from zope import interface
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 from pyramid.i18n import TranslationStringFactory, make_localizer
+from pyramid_mailer.message import Message
 from celery import current_task
 from jinja2 import Environment, PackageLoader
 
@@ -967,40 +968,43 @@ class Notification(Base):
         to_email = prefered_email_account.email
         assert to_email
         return to_email
-    
-    def render_to_email(self):
+
+    def render_to_message(self):
         from ..lib.frontend_urls import FrontendUrls
-        email_text_part = self.render_to_email_text_part()
+        email_text_part = self.render_to_email_text_part() or None
         email_html_part = self.render_to_email_html_part()
         if not email_text_part and not email_html_part:
             return ''
         frontendUrls = FrontendUrls(self.first_matching_subscription.discussion)
+        headers = {}
         msg = email.mime.Multipart.MIMEMultipart('alternative')
         from email.header import Header
-        msg['Precedence'] = 'list'
-        
-        msg['List-ID'] = self.first_matching_subscription.discussion.uri()
-        msg['Date'] = email.Utils.formatdate()
+        headers['Precedence'] = 'list'
 
-        msg['Message-ID'] = "<"+self.event_source_object().message_id+">"
+        headers['List-ID'] = self.first_matching_subscription.discussion.uri()
+        headers['Date'] = email.Utils.formatdate()
+
+        headers['Message-ID'] = "<"+self.event_source_object().message_id+">"
         if self.event_source_object().parent:
-            msg['In-Reply-To'] = "<"+self.event_source_object().parent.message_id+">"
+            headers['In-Reply-To'] = "<"+self.event_source_object().parent.message_id+">"
 
         #Archived-At: A direct link to the archived form of an individual email message.
-        msg['List-Subscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
-        msg['List-Unsubscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
-        msg['Subject'] = Header(self.get_notification_subject(), 'utf-8')
+        headers['List-Subscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
+        headers['List-Unsubscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
 
-        from_header = Header(self.event_source_object().creator.name, 'utf-8')
-        from_header.append(" <" + self.get_from_email_address() + ">", 'ascii')
-        msg['From'] = from_header
-        msg['To'] = self.get_to_email_address()
-        if email_text_part:
-            msg.attach(SafeMIMEText(email_text_part.encode('utf-8'), 'plain', 'utf-8'))
-        if email_html_part:
-            msg.attach(SafeMIMEText(email_html_part.encode('utf-8'), 'html', 'utf-8'))
-        
-        return msg.as_string()
+        subject = Header(self.get_notification_subject(), 'utf-8')
+
+        sender = Header(self.event_source_object().creator.name, 'utf-8')
+        sender.append(" <" + self.get_from_email_address() + ">", 'ascii')
+        recipient = self.get_to_email_address()
+        message = Message(
+            subject=subject.encode(),
+            sender=sender.encode(),
+            recipients=[recipient],
+            extra_headers=headers,
+            body=email_text_part, html=email_html_part)
+
+        return message
 
 
 User.notifications = relationship(

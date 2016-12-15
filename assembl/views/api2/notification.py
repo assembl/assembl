@@ -85,7 +85,7 @@ def mail_text_preview(request):
              ctx_instance_class=Notification, permission=P_READ,
              accept="text/html", name="mail")
 def mail(request):
-    return Response(request.context._instance.render_to_email(),
+    return Response(request.context._instance.render_to_message().to_message().as_string(),
                     content_type='text/plain')
 
 

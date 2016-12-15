@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-import smtplib
 import json
 import re
 import quopri

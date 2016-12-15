@@ -6,6 +6,8 @@ from traceback import print_exc
 import logging
 
 import transaction
+from pyramid_mailer import mailer_factory_from_settings
+from pyramid_mailer.message import Message
 
 from ..lib.sqla import mark_changed
 from ..lib.raven_client import capture_exception
@@ -14,6 +16,7 @@ from . import (config_celery_app, CeleryWithConfig)
 
 
 log = logging.getLogger('assembl')
+notify_process_mailer = None
 
 
 CELERYBEAT_SCHEDULE = {
@@ -110,32 +113,14 @@ def process_notification(notification):
                 notification.id, notification.delivery_state))
         return
     try:
-        email_str = notification.render_to_email()
+        email = notification.render_to_message()
         # sys.stderr.write(email_str)
-        mail_host = config.get('mail.host')
-        mail_port = int(config.get('mail.port') or 25)
-        assert mail_host
         recipient = notification.get_to_email_address()
         wait_if_necessary(recipient)
-
-        smtp_connection = smtplib.SMTP(
-            mail_host,
-            mail_port,
-        )
-        smtp_connection.set_debuglevel(1)
-        smtp_retval = smtp_connection.sendmail(
-            notification.get_from_email_address(),
-            recipient,
-            email_str
-        )
-        if smtp_retval:
-            sys.stderr.write("Some but not all recipients failed:")
-            for failed_recipient, errors in smtp_retval:
-                sys.stderr.write(repr(failed_recipient), repr(errors))
+        notify_process_mailer.send_immediately(email, fail_silently=False)
 
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
-        smtp_connection.quit()
         email_was_sent(recipient)
     except UnverifiedEmailException as e:
         sys.stderr.write("Not sending to unverified email: "+repr(e))
@@ -196,4 +181,7 @@ def process_pending_notifications():
 
 
 def includeme(config):
+    global notify_process_mailer
     config_celery_app(notify_celery_app, config.registry.settings)
+    notify_process_mailer = mailer_factory_from_settings(config.registry.settings)
+

@@ -658,72 +658,7 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
     def send_post(self, post):
         #TODO benoitg
         print "TODO: Mail::send_post():  Actually queue message"
-        #self.DECRECATEDsend_mail(sender=post.creator, message_body=post.body, subject=post.subject)
-
-    def DECRECATEDsend_mail(
-        self,
-        sender,
-        message_body,
-        html_body=None,
-        subject='[Assembl]'
-    ):
-        """
-        Send an email from the given sender to the configured recipient(s) of
-        emails for this mailbox.
-        """
-
-        sent_from = ' '.join([
-            "%(sender_name)s on Assembl" % {
-                "sender_name": sender.display_name()
-            },
-            "<%(sender_email)s>" % {
-                "sender_email": sender.get_preferred_email(),
-            }
-        ])
-
-        if type(message_body) == 'str':
-            message_body = message_body.decode('utf-8')
-
-        recipients = self.get_send_address()
-
-        message = MIMEMultipart('alternative')
-        message['Subject'] = Header(subject, 'utf-8')
-        message['From'] = sent_from
-
-        message['To'] = recipients
-
-        plain_text_body = message_body
-        html_body = html_body or message_body
-
-        # TODO: The plain text and html parts of the email should be different,
-        # but we'll see what we can get from the front-end.
-
-        plain_text_part = MIMEText(
-            plain_text_body.encode('utf-8'),
-            'plain',
-            'utf-8'
-        )
-
-        html_part = MIMEText(
-            html_body.encode('utf-8'),
-            'html',
-            'utf-8'
-        )
-
-        message.attach(plain_text_part)
-        message.attach(html_part)
-
-        smtp_connection = smtplib.SMTP(
-            get_current_registry().settings['mail.host']
-        )
-
-        smtp_connection.sendmail(
-            sent_from,
-            recipients,
-            message.as_string()
-        )
-
-        smtp_connection.quit()
+        #make sure you have a request and use the pyramid mailer
 
     def message_ok_to_import(self, message_string):
         """Check if message should be imported at all (not a bounce, vacation,
