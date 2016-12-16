@@ -20,6 +20,37 @@ def test_mocha(browser, test_server, discussion, test_session,
     # print browser.driver.get_log('browser')
     assert not extractor.failures_number
 
+def test_private_discussion_log_in_form_exists_and_works(browser, test_session, discussion, participant1_user, test_server_no_login, test_webrequest):
+    url = "%s/%s/" % (test_server_no_login.url, discussion.slug)
+    test_session.commit()
+    browser.visit(url)
+
+    # This discussion is private, so it should redirect me to the discussion-local login page
+    assert browser.status_code.is_success()
+    assert "/login" in browser.url
+
+    # Make sure the login form is present in the page, with its fields
+    login_form_selector = '.signinWrapper form'
+    input_login_selector = '.signinWrapper form input[name=identifier]'
+    input_password_selector = '.signinWrapper form input[name=password]'
+    submit_selector = '.signinWrapper form .js_login'
+    assert browser.is_element_present_by_css(login_form_selector)
+    assert browser.is_element_present_by_css(input_login_selector)
+    assert browser.is_element_present_by_css(input_password_selector)
+    assert browser.is_element_present_by_css(submit_selector)
+
+    # Try to log in using an existing user
+    browser.find_by_css(input_login_selector).fill(participant1_user.get_preferred_email())
+    browser.find_by_css(input_password_selector).fill('password')
+    browser.find_by_css(submit_selector).first.click()
+
+    # Submitting the login form should log me in, so I should not be on the login page anymore
+    assert "/login" not in browser.url
+
+    # But in this case, the backend logs me in but says I'm not allowed to see this discussion. Why? Fixing this will correspond to another test!
+    # user_dropdown_selector = '.navbar-right .dropdown-toggle.username'
+    # assert browser.is_element_present_by_css(user_dropdown_selector)
+
 
 @flaky(max_runs=3)
 def test_load_messages(
