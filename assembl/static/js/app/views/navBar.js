@@ -286,93 +286,93 @@ var navBar = Marionette.LayoutView.extend({
     }
 
     collectionManager.getNotificationsDiscussionCollectionPromise()
-            .then(function(discussionNotifications) {
-              model.notificationsToShow = _.filter(discussionNotifications.models, function(m) {
-                // keep only the list of notifications which become active when a user follows a discussion
-                return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
-              });
+      .then(function(discussionNotifications) {
+        model.notificationsToShow = _.filter(discussionNotifications.models, function(m) {
+          // keep only the list of notifications which become active when a user follows a discussion
+          return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
+        });
 
-              // we show the popin only if there are default notifications
-              // Actually we want the modal either way; commenting the condition for now. MAP
-              //if ( model.notificationsToShow && model.notificationsToShow.length ){
+        // we show the popin only if there are default notifications
+        // Actually we want the modal either way; commenting the condition for now. MAP
+        //if ( model.notificationsToShow && model.notificationsToShow.length ){
 
-              var Modal = Backbone.Modal.extend({
-  constructor: function Modal() {
-    Backbone.Modal.apply(this, arguments);
-  },
+        var Modal = Backbone.Modal.extend({
+          constructor: function Modal() {
+            Backbone.Modal.apply(this, arguments);
+          },
 
-                template: modalTemplate,
-                className: modalClassName,
-                cancelEl: '.close, .js_close',
-                submitEl: '.js_subscribe',
+          template: modalTemplate,
+          className: modalClassName,
+          cancelEl: '.close, .js_close',
+          submitEl: '.js_subscribe',
 
-                model: model,
-                initialize: function() {
-                  var that = this;
-                  this.$('.bbm-modal').addClass('popin');
-                  var analytics = Analytics.getInstance(),
-                      previousPage = analytics.getCurrentPage();
+          model: model,
+          initialize: function() {
+            var that = this;
+            this.$('.bbm-modal').addClass('popin');
+            var analytics = Analytics.getInstance(),
+                previousPage = analytics.getCurrentPage();
 
-                  this.returningPage = previousPage;
-                  analytics.changeCurrentPage(analytics.pages.NOTIFICATION);
-                },
-                // events: {
-                //   'click .js_subscribe': 'subscription',
-                //   'click .js_close': 'closeModal'
-                // },
-                serializeData: function() {
-                  return {
-                    i18n: i18n,
-                    notificationsToShow: model.notificationsToShow,
-                    urlNotifications: '/' + Ctx.getDiscussionSlug() + '/user/notifications'
-                  }
-                },
-                submit: function(ev) {
-                  var that = this;
-
-                  if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-
-                    var LocalRolesUser = new RolesModel.Model({
-                      role: Roles.PARTICIPANT,
-                      discussion: 'local:Discussion/' + Ctx.getDiscussionId()
-                    });
-                    LocalRolesUser.save(null, {
-                      success: function(model, resp) {
-                        var analytics = Analytics.getInstance();
-                        analytics.trackEvent(analytics.events.JOIN_DISCUSSION);
-
-                        // TODO: Is there a simpler way to do this? MAP
-                        self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
-                        self._store.removeItem('needJoinDiscussion');
-
-                        // reload user data and its permissions (so for example now when he clicks on the "reply" button of a message, it should not show "Before you can reply to this message..." anymore)
-                        try { // we try to be a good Single Page Application and update user data without reloading the whole page
-                          Ctx.updateCurrentUser();
-                        } catch (e) { // but if it does not work, we reload the page
-                          console.log("Error while reloading user data: " + e.message);
-                          location.reload();
-                        }
-                      },
-                      error: function(model, resp) {
-                        console.error('ERROR: joinDiscussion->subscription', resp);
-                      }
-                    })
-                  }
-                },
-
-                cancel: function() {
-                  self._store.removeItem('needJoinDiscussion');
-                  var analytics = Analytics.getInstance();
-                  analytics.trackEvent(analytics.events.JOIN_DISCUSSION_REFUSED);
-                  analytics.changeCurrentPage(this.returningPage, {default: true}); //if page is null, go back to / page
-                }
-              });
-              Assembl.slider.show(new Modal());
-
-              //}
+            this.returningPage = previousPage;
+            analytics.changeCurrentPage(analytics.pages.NOTIFICATION);
+          },
+          // events: {
+          //   'click .js_subscribe': 'subscription',
+          //   'click .js_close': 'closeModal'
+          // },
+          serializeData: function() {
+            return {
+              i18n: i18n,
+              notificationsToShow: model.notificationsToShow,
+              urlNotifications: '/' + Ctx.getDiscussionSlug() + '/user/notifications'
             }
+          },
+          submit: function(ev) {
+            var that = this;
 
-        );
+            if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
+
+              var LocalRolesUser = new RolesModel.Model({
+                role: Roles.PARTICIPANT,
+                discussion: 'local:Discussion/' + Ctx.getDiscussionId()
+              });
+              LocalRolesUser.save(null, {
+                success: function(model, resp) {
+                  var analytics = Analytics.getInstance();
+                  analytics.trackEvent(analytics.events.JOIN_DISCUSSION);
+
+                  // TODO: Is there a simpler way to do this? MAP
+                  self.navBarRight.currentView.ui.joinDiscussion.css('visibility', 'hidden');
+                  self._store.removeItem('needJoinDiscussion');
+
+                  // reload user data and its permissions (so for example now when he clicks on the "reply" button of a message, it should not show "Before you can reply to this message..." anymore)
+                  try { // we try to be a good Single Page Application and update user data without reloading the whole page
+                    Ctx.updateCurrentUser();
+                  } catch (e) { // but if it does not work, we reload the page
+                    console.log("Error while reloading user data: " + e.message);
+                    location.reload();
+                  }
+                },
+                error: function(model, resp) {
+                  console.error('ERROR: joinDiscussion->subscription', resp);
+                }
+              })
+            }
+          },
+
+          cancel: function() {
+            self._store.removeItem('needJoinDiscussion');
+            var analytics = Analytics.getInstance();
+            analytics.trackEvent(analytics.events.JOIN_DISCUSSION_REFUSED);
+            analytics.changeCurrentPage(this.returningPage, {default: true}); //if page is null, go back to / page
+          }
+        });
+        Assembl.slider.show(new Modal());
+
+        //}
+      }
+
+    );
 
   },
 
