@@ -316,10 +316,6 @@ var navBar = Marionette.LayoutView.extend({
             this.returningPage = previousPage;
             analytics.changeCurrentPage(analytics.pages.NOTIFICATION);
           },
-          // events: {
-          //   'click .js_subscribe': 'subscription',
-          //   'click .js_close': 'closeModal'
-          // },
           serializeData: function() {
             return {
               i18n: i18n,
