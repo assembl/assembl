@@ -2,7 +2,7 @@
   "name": "assembl_v2",
   "version": "2.0.0",
   "description": "Assembl frontend",
-  "main": "js/app/index.js",
+  "main": "js/app/index",
   "directories": {
     "test": "tests"
   },
@@ -10,17 +10,28 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "dev": "webpack -d --watch",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "elint": "eslint . --ext .js --ext .jsx --cache || true",
+    "elint:table": "eslint . --ext .js --ext .jsx --cache --format table || true",
+    "elint:summary": "eslint . --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter' || true"
   },
   "author": "Bluenove",
   "license": "AGPL-3.0",
   "devDependencies": {
     "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.1",
     "babel-jest": "^17.0.2",
     "babel-loader": "^6.2.9",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "css-loader": "^0.26.1",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-friendly-formatter": "^2.0.6",
+    "eslint-loader": "^1.6.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.8.0",
     "fbjs": "^0.8.6",
     "file-loader": "^0.9.0",
     "jest": "^17.0.3",
