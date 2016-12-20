@@ -1,7 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var _ = require('underscore');
-var base_config = require('./webpack.config.js');
+var base_config = require('./webpack.config');
 
 var webpack_port = parseInt(process.env.WEBPACK_URL.split(':')[2]);
 
@@ -18,7 +18,7 @@ module.exports = _.extend(base_config, {
     entry: [
     'webpack-dev-server/client?' + process.env.WEBPACK_URL,
     'webpack/hot/only-dev-server',
-    './js/app/index.js'
+    './js/app/index'
     ],
     plugins: [
         new webpack.HotModuleReplacementPlugin()

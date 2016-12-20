@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: './js/app/index.js',
+    entry: './js/app/index',
     output: {
         path: path.join(__dirname, 'build'),
         filename: 'bundle.js',
@@ -11,8 +11,8 @@ module.exports = {
     module: {
         loaders: [
         {
-            test: /\.js$/,
-            loaders: ['babel'],
+            test: /\.jsx?$/,
+            loaders: ['react-hot','babel'],
             include: path.join(__dirname, 'js')
         },
         {
@@ -48,6 +48,9 @@ module.exports = {
             loader: 'url?limit=10000&mimetype=image/svg+xml'
         }
         ]
+    },
+    resolve:{
+        extensions:['','.js','.jsx']
     },
     plugins: [
         new webpack.DefinePlugin({

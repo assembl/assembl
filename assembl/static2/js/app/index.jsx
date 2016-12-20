@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 import '../../css/main.scss';
-import Debate from './components/debateComponent.js';
+import Debate from './components/debateComponent';
+
+require('bootstrap/dist/css/bootstrap.css');
 
 ReactDOM.render(
-  <Debate/>,
+  <Debate />,
   document.getElementById('root')
 );
