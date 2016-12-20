@@ -424,7 +424,7 @@ class BaseOps(object):
             num = int(identifier)
         except ValueError:
             num = cls.get_database_id(identifier)
-        if num >= 0:
+        if num:
             # reimplement get, because can be subclassed
             session = session or cls.default_db
             return session.query(cls).get(num)
