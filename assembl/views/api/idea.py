@@ -186,13 +186,15 @@ def save_idea(request):
     if 'parentId' in idea_data and idea_data['parentId'] is not None:
         # TODO: Make sure this is sent as a list!
         parent = Idea.get_instance(idea_data['parentId'])
+
+        if not parent:
+            raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
+
         # calculate it early to maximize contention.
         prev_ancestors = parent.get_all_ancestors()
         new_ancestors = set()
 
         order = idea_data.get('order', 0.0)
-        if not parent:
-            raise HTTPNotFound("Missing parentId %s" % (idea_data['parentId']))
 
         for parent_link in idea.source_links:
             # still assuming there's only one.
