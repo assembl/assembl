@@ -1,11 +1,10 @@
 import LangString from './langString';
 
 class Context {
-  static getBrowserLanguage() {
-    const browserLang = navigator.language || navigator.userLanguage;
-    let userLang = browserLang.split('-')[0].toLowerCase();
-    if (!LangString[userLang]) userLang = 'en';
-    return userLang;
+  static getLocale(browserLanguage) {
+    let locale = browserLanguage.split('-')[0].toLowerCase();
+    if (!LangString[locale]) locale = 'en';
+    return locale;
   }
 }
 
