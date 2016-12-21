@@ -17,7 +17,7 @@
     {% else %}
     {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
     <li class="sub fl mrs">
-        <a href="{{ discussion.get_url() }}/login?next=/{{discussion.slug}}/user/notifications#" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this discussion') }}</a>
+        <a href="{{ discussion.get_url() }}/login?next=/{{discussion.slug}}" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this discussion') }}</a>
     </li>
     {% endif %}
     {% endif %}
