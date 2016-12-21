@@ -1,7 +1,8 @@
 import React from 'react';
+import { Translate } from 'react-redux-i18n';
 
 const Debate = () => (
-  <p>Hello World! This is the new Assembl frontend!</p>
+  <p><Translate value="debate.panelTitle" /></p>
 );
 
 export default Debate;
