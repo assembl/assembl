@@ -1089,8 +1089,16 @@ class defaultdict_of_dict(defaultdict):
 def get_participant_time_series_analytics(request):
     start, end, interval = get_time_series_timing(request)
     data_descriptors = request.GET.getall("data")
+    with_email = request.GET.get("email", None)
     discussion = request.context._instance
     user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(user_id, discussion.id)
+    if with_email is None:
+        with_email = P_ADMIN_DISC in permissions
+    else:
+        with_email = asbool(with_email)
+        if with_email and P_ADMIN_DISC not in permissions:
+            raise HTTPUnauthorized("Cannot obtain email information")
     format = get_format(request)
     sort_key = request.GET.get('sort', 'name')
     results = []
@@ -1148,7 +1156,7 @@ def get_participant_time_series_analytics(request):
         from assembl.models import (
             Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
             AbstractIdeaVote, Action, ActionOnPost, ActionOnIdea, Content,
-            PublicationStates, LikedPost)
+            PublicationStates, LikedPost, AbstractAgentAccount)
 
         content = with_polymorphic(
                     Content, [], Content.__table__,
@@ -1392,6 +1400,16 @@ def get_participant_time_series_analytics(request):
 
     # intervals_table.drop()  # temporary is dropped implicitly
 
+    if with_email:
+        participant_ids = {row._asdict()['participant_id'] for row in results}
+        # this is somewhat arbitrary...
+        participant_emails = dict(
+            discussion.db.query(AbstractAgentAccount.profile_id, AbstractAgentAccount.email
+                ).filter(AbstractAgentAccount.profile_id.in_(participant_ids),
+                         AbstractAgentAccount.verified == True,
+                         AbstractAgentAccount.email != None
+                ).order_by(AbstractAgentAccount.preferred))
+
     if format == JSON_MIMETYPE:
         from assembl.lib.json import DateJSONEncoder
         combined = []
@@ -1418,6 +1436,8 @@ def get_participant_time_series_analytics(request):
                     data[element['key']] = element['value']
                     data['participant'] = element['participant']
                     data['participant_id'] = participant_id
+                    if with_email:
+                        data['email'] = participant_emails.get(participant_id, '')
         for interval_data in combined:
             interval_data['data'] = interval_data['data'].values()
         return Response(json.dumps(combined, cls=DateJSONEncoder),
@@ -1428,6 +1448,7 @@ def get_participant_time_series_analytics(request):
     interval_starts = {}
     interval_ends = {}
     participant_names = {}
+    email_column = int(with_email)
 
     for element in results:
         element = element._asdict()
@@ -1443,19 +1464,22 @@ def get_participant_time_series_analytics(request):
             by_participant[pid][interval_id][key] = value
     interval_ids = list(interval_ids)
     interval_ids.sort()
-    num_cols = 2 + len(interval_ids)*len(data_descriptors)
+    num_cols = 2 + email_column + len(interval_ids)*len(data_descriptors)
     interval_starts = [interval_starts[id] for id in interval_ids]
     interval_ends = [interval_ends[id] for id in interval_ids]
     rows = []
     row = ['Participant id', 'Participant']
+    if with_email:
+        row.append('Email')
     for data_descriptor in data_descriptors:
         # TODO: i18n
         data_descriptor = ' '.join(data_descriptor.split('_')).title()
         row += [data_descriptor] * len(interval_ids)
     rows.append(row)
-    rows.append(['', 'Interval id'] + interval_ids * len(data_descriptors))
-    rows.append(['', 'Interval start'] + interval_starts * len(data_descriptors))
-    rows.append(['', 'Interval end'] + interval_ends * len(data_descriptors))
+    empty_start = [''] * (1 + email_column)
+    rows.append(empty_start + ['Interval id'] + interval_ids * len(data_descriptors))
+    rows.append(empty_start + ['Interval start'] + interval_starts * len(data_descriptors))
+    rows.append(empty_start + ['Interval end'] + interval_ends * len(data_descriptors))
     if sort_key == 'name':
         sorted_participants = [(name, id) for (id, name) in participant_names.iteritems()]
     else:
@@ -1466,6 +1490,10 @@ def get_participant_time_series_analytics(request):
     for sort_key, participant_id in sorted_participants:
         interval_data = by_participant[participant_id]
         row = [participant_id, participant_names[participant_id].encode('utf-8')]
+        if with_email:
+            email = participant_emails.get(participant_id, '') or ''
+            print 'email', email
+            row.append(email.encode('utf-8'))
         for data_descriptor in data_descriptors:
             row_part = [''] * len(interval_ids)
             for interval_id, data in interval_data.iteritems():
