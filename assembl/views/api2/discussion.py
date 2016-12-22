@@ -1100,7 +1100,7 @@ def get_participant_time_series_analytics(request):
         if with_email and P_ADMIN_DISC not in permissions:
             raise HTTPUnauthorized("Cannot obtain email information")
     format = get_format(request)
-    sort_key = request.GET.get('sort', 'name')
+    sort_key = request.GET.get('sort', 'domain' if with_email else 'name')
     results = []
 
     default_data_descriptors = [
@@ -1121,8 +1121,10 @@ def get_participant_time_series_analytics(request):
     data_descriptors = [s for s in default_data_descriptors if s in data_descriptors]
     if not data_descriptors:
         raise HTTPBadRequest("No valid data descriptor given")
-    if sort_key and sort_key != 'name' and sort_key not in default_data_descriptors:
+    if sort_key and sort_key not in ('name', 'domain') and sort_key not in default_data_descriptors:
         raise HTTPBadRequest("Invalid sort column")
+    if sort_key == 'domain' and P_ADMIN_DISC not in permissions:
+        raise HTTPUnauthorized("Cannot obtain email information")
 
     from sqlalchemy import Table, MetaData, and_, or_, case, cast, Float
     from sqlalchemy.exc import ProgrammingError
@@ -1482,17 +1484,21 @@ def get_participant_time_series_analytics(request):
     rows.append(empty_start + ['Interval end'] + interval_ends * len(data_descriptors))
     if sort_key == 'name':
         sorted_participants = [(name, id) for (id, name) in participant_names.iteritems()]
+    elif sort_key == 'domain':
+        sorted_participants = [(
+            participant_emails.get(id, '').split('@')[-1],
+            name, id) for (id, name) in participant_names.iteritems()]
     else:
         sorted_participants = [
             (-by_participant[id].get(interval_ids[-1], {}).get(sort_key, 0), id)
             for id in participant_names.iterkeys()]
     sorted_participants.sort()
-    for sort_key, participant_id in sorted_participants:
+    sorted_participants = [x[-1] for x in sorted_participants]
+    for participant_id in sorted_participants:
         interval_data = by_participant[participant_id]
         row = [participant_id, participant_names[participant_id].encode('utf-8')]
         if with_email:
             email = participant_emails.get(participant_id, '') or ''
-            print 'email', email
             row.append(email.encode('utf-8'))
         for data_descriptor in data_descriptors:
             row_part = [''] * len(interval_ids)
