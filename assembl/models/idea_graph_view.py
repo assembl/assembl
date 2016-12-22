@@ -286,7 +286,7 @@ class ExplicitSubGraphView(IdeaGraphView):
         if idea:
             result = idea_visitor.visit_idea(idea, level, prev_result)
         visited.add(idea_id)
-        child_results = {}
+        child_results = []
         if result is not IdeaVisitor.CUT_VISIT:
             for link in children_links[idea_id]:
                 child_id = link.target_id
@@ -294,7 +294,7 @@ class ExplicitSubGraphView(IdeaGraphView):
                     child_id, ideas_by_id, children_links, idea_visitor,
                     visited, level+1, result)
                 if r:
-                    child_results[child_id] = r
+                    child_results.append((child_id, r))
         return idea_visitor.end_visit(idea, level, result, child_results)
 
     @classmethod
@@ -528,8 +528,9 @@ class SynthesisHtmlizationVisitor(IdeaVisitor):
         if prev_result is not True:
             idea = None
         if idea or child_results:
+            results = [r for (c, r) in child_results]
             self.result = self.idea_template.render(
-                idea=idea, children=child_results.values(), level=level)
+                idea=idea, children=results, level=level)
             return self.result
 
     def as_html(self):

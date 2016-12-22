@@ -499,13 +499,13 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             return False
         result = idea_visitor.visit_idea(self, level, prev_result)
         visited.add(self)
-        child_results = {}
+        child_results = []
         if result is not IdeaVisitor.CUT_VISIT:
             for child in children_dict.get(self.id, ()):
                 r = child._visit_ideas_depth_first(
                     idea_visitor, visited, level+1, result, children_dict)
                 if r:
-                    child_results[child] = r
+                    child_results.append((child, r))
         return idea_visitor.end_visit(self, level, result, child_results)
 
     @classmethod
@@ -557,13 +557,13 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             return False
         result = idea_visitor.visit_idea(idea_id, level, prev_result)
         visited.add(idea_id)
-        child_results = {}
+        child_results = []
         if result is not IdeaVisitor.CUT_VISIT:
             for child_id in children_dict[idea_id]:
                 r = cls._visit_idea_ids_depth_first(
                     child_id, idea_visitor, children_dict, visited, level+1, result)
                 if r:
-                    child_results[child_id] = r
+                    child_results.append((child, r))
         return idea_visitor.end_visit(idea_id, level, result, child_results)
 
     def visit_ideas_breadth_first(self, idea_visitor):
@@ -578,7 +578,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             self, idea_visitor, visited, level, prev_result):
         children = []
         result = True
-        child_results = {}
+        child_results = []
         for child in self.get_children():
             if child in visited:
                 continue
@@ -587,7 +587,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             if result != IdeaVisitor.CUT_VISIT:
                 children.append(child)
                 if result:
-                    child_results[child] = result
+                    child_results.append((child, r))
         for child in children:
             child._visit_ideas_breadth_first(
                 idea_visitor, visited, level+1, result)
