@@ -563,7 +563,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 r = cls._visit_idea_ids_depth_first(
                     child_id, idea_visitor, children_dict, visited, level+1, result)
                 if r:
-                    child_results.append((child, r))
+                    child_results.append((child_id, r))
         return idea_visitor.end_visit(idea_id, level, result, child_results)
 
     def visit_ideas_breadth_first(self, idea_visitor):
