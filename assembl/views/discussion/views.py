@@ -215,7 +215,7 @@ def not_found(context, request):
 
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
-        config.add_route('new_home', 'v2/{discussion_slug}')
+        config.add_route('new_home', 'v2/{discussion_slug}/*extra_path')
         config.add_view(react_view, route_name='new_home',
                         request_method='GET', http_cache=60,
                         renderer="assembl:templates/index_react.jinja2")
