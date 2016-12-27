@@ -8,15 +8,15 @@ import { loadTranslations, setLocale, syncTranslationWithStore } from 'react-red
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../css/main.scss';
 import Routes from './routes';
-import Context from './utils/context';
-import LangString from './utils/langString';
+import GlobalFunctions from './utils/globalFunctions';
+import Translations from './utils/translations';
 import RootReducer from './reducers/rootReducer';
 
 const store = createStore(RootReducer, applyMiddleware(Thunk));
 const browserLanguage = navigator.language || navigator.userLanguage;
-const userLocale = Context.getLocale(browserLanguage);
+const userLocale = GlobalFunctions.getLocale(browserLanguage);
 syncTranslationWithStore(store);
-store.dispatch(loadTranslations(LangString));
+store.dispatch(loadTranslations(Translations));
 store.dispatch(setLocale(userLocale));
 
 ReactDOM.render(

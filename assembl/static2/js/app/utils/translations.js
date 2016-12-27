@@ -1,4 +1,4 @@
-const LangString = {
+const Translations = {
   fr: {
     authentication: {
       panelTitle: 'Bienvenue dans la page d\'authentification d\'Assembl'
@@ -14,6 +14,9 @@ const LangString = {
     },
     debate: {
       panelTitle: 'Bienvenue dans la page débat d\'Assembl'
+    },
+    notFound: {
+      panelTitle: 'Désolé, cette page n\'existe pas'
     },
     date: {
       format: 'D MMMM YYYY'
@@ -35,6 +38,9 @@ const LangString = {
     debate: {
       panelTitle: 'Welcome to Assembl debate page'
     },
+    notFound: {
+      panelTitle: 'Sorry, this page doesn\'t exist'
+    },
     date: {
       format: 'MMMM Do, YYYY'
     }
@@ -55,10 +61,13 @@ const LangString = {
     debate: {
       panelTitle: 'Willkommen in Assembl - debate page'
     },
+    notFound: {
+      panelTitle: 'Sorry, diese Seite existiert nicht'
+    },
     date: {
       format: 'D MMMM YYYY'
     }
   }
 };
 
-export default LangString;
+export default Translations;
