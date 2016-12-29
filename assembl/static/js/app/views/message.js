@@ -83,48 +83,6 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
     }
 
     else {
-
-      //Current implementation of IdeaContentLink Collection is the creation of the
-      //collection each time for a message for IdeaContentLinks associated with the
-      //message. During the App lifetime, IdeaContentLinks can be created, destroyed,
-      //Ideas created, renamed, destroyed. This collection is stale; it does not know
-      //of any of these changes. As a result, on each init, clear the collection
-      //of any IdeaContentLinks that are out of date.
-
-
-      //First, let's remove the extracts that no longer exist.
-      //Then let's update with the ideas that no longer exist.
-
-      // cm.getAllExtractsCollectionPromise()
-      //   .then(function(extracts){
-      //     var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
-      //       var exists = extracts.get(icl.id);
-      //       return exists ? false: true;
-      //     });
-
-      //     console.log("---- Removing stale extracts -----");
-      //     console.log("From body: ", that.messageView._body.value());
-      //     console.log("staleIdeaContentLinks", staleIdeaContentLinks);
-      //     console.log("All Extracts", extracts);
-      //     //Remove the stale data from the collection
-      //     that.ideaContentLinks.remove(staleIdeaContentLinks);
-      //     return cm.getAllIdeasCollectionPromise();
-      //   })
-      //   .then(function(ideas){
-
-      //     var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
-      //       var exists = ideas.get(icl.get('idIdea'));
-      //       return exists ? false : true;
-      //     });
-
-      //     console.log("---- Removing stale ideas -----");
-      //     console.log("From body: ", that.messageView._body.value());
-      //     console.log("staleIdeaContentLinks", staleIdeaContentLinks);
-      //     console.log("All Ideas", ideas);
-      //     //Now remove the stale links to ideas that no longer exist
-      //     that.ideaContentLinks.remove(staleIdeaContentLinks);
-      //     return that.ideaContentLinks.getIdeaNamesPromise();
-      //   })
       this.ideaContentLinks.getIdeaNamesPromise()
         .then(function(ideaNames){
           that.ideaNames = ideaNames;
@@ -459,6 +417,8 @@ var MessageView = Marionette.LayoutView.extend({
     'click .js_readMore': 'onMessageTitleClick',
     'click .js_readLess': 'onMessageTitleClick',
     'click .message-hoistbtn': 'onMessageHoistClick',
+    'mouseover .js_sentimentNamesList': 'onOverNamesList',
+    'mouseout .js_sentimentNamesList': 'onOutNamesList',
     'click @ui.likeLink': 'onClickLike',
     'click @ui.shareLink': 'onClickShare',
     'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
@@ -1048,7 +1008,12 @@ var MessageView = Marionette.LayoutView.extend({
   postRender: function() {
     return;
   },
-
+  onOverNamesList:function(event){
+    $(event.currentTarget).find('.js_sentimentStats').show();
+  },
+  onOutNamesList:function(){
+    $(event.currentTarget).find('.js_sentimentStats').hide();
+  },
   onClickLike: function(e) {
     var that = this,
     liked_uri = this.model.get('liked'),
