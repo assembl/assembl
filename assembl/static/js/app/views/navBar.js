@@ -84,9 +84,11 @@ var navBarLeft = Marionette.LayoutView.extend({
   },
   serializeData: function() {
     return {
-      isAdminDiscussion: this.isAdminDiscussion
+      isAdminDiscussion: this.isAdminDiscussion,
+      discussionSettings: '/' + Ctx.getDiscussionSlug() + '/edition',
+      discussionPermissions: '/admin/permissions/discussion/' + Ctx.getDiscussionId(),
     };
-  }
+  },
 });
 
 var navBarRight = Marionette.LayoutView.extend({
@@ -178,12 +180,6 @@ var navBarRight = Marionette.LayoutView.extend({
       userProfile: function() {
         return '/' + Ctx.getDiscussionSlug() + '/user/profile';
       },
-      discussionSettings: function() {
-        return '/' + Ctx.getDiscussionSlug() + '/edition';
-      },
-      discussionPermissions: function() {
-        return '/admin/permissions/discussion/' + Ctx.getDiscussionId();
-      }
     }
   },
   setLocale: function(e) {
