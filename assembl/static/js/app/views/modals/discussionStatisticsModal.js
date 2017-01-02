@@ -32,6 +32,8 @@ var StatsModal = Backbone.Modal.extend({
     };
   },
   doDownload: function(url, filename) {
+    // TODO: This will probably fail in IE, see
+    // http://stackoverflow.com/questions/13405129/javascript-create-and-save-file
     var el = this.$el,
         a = document.createElement("a");
     a.href = url;
