@@ -21,6 +21,9 @@
                       <li><a href="<%= discussionSettings %>"><i class="icon-options"></i>{{ gettext('Discussion settings') }}</a></li>
                       <li><a href="<%= discussionPermissions %>"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>
                     <% } %>
+                    <% if (canAccessStatistics) { %>
+                      <li><a class="js_discussion_statistics"><i class="icon-options"></i>{{ gettext('Discussion statistics') }}</a></li>
+                    <% } %>
                     <div class="navbar-widget-configuration-links"></div>
                     <div class="navbar-widget-creation-links"></div>
                   </ul>

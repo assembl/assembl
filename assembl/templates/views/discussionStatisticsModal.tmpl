@@ -1,0 +1,76 @@
+<div class='popin-header'>
+  {{ gettext("Discussion statistics") }}
+</div>
+<div class="popin-body">
+    <div class="content">
+        <form class="core-form form-horizontal">
+          <fieldset>
+
+          <label>{{ gettext('Start date') }}</label>
+          <input class="inline" id="start_date" name="start_date" type="date"></input>
+
+          <label>{{ gettext('End date') }}</label>
+          <input id="end_date" name="end_date" type="date"></input>
+
+          <label>{{ gettext('Interval') }}</label>
+          <select name="interval" id="interval">
+          <option value="" label="{{gettext('Single interval')}}" />
+          <option value="P1Y" label="{{gettext('One year')}}" />
+          <option value="P1M" label="{{gettext('One month')}}" />
+          <option value="P7D" selected="selected" label="{{gettext('One week')}}" />
+          <option value="P1D" label="{{gettext('One day')}}" />
+          <# option value="custom" label="{{gettext('custom')}}" #>
+          </select>
+
+          <label>{{ gettext('Format') }}</label>
+          <select name="format" id="format">
+          <option selected="selected" value="xlsx" label="{{gettext('MS Excel')}}" />
+          <option value="csv" label="{{gettext('Comma-separated values')}}" />
+          <option value="json" label="JSON" />
+          </select>
+
+          <br />
+          <button class="btn btn-primary" name="get_stats" id="get_stats">{{gettext('Get general discussion statistics')}}</button>
+
+          <h3>{{ gettext('Per participant statistics') }}</h3>
+          <label>{{ gettext('Fields') }}</label>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_posts" id="field_posts" /><span class="custom-checkbox-element"></span> {{ gettext('Posts') }}</label>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_posts" id="field_cumulative_posts" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative posts') }}</label>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_liking" id="field_liking" /><span class="custom-checkbox-element"></span> {{ gettext('Liking') }}</label>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_liking" id="field_cumulative_liking" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative liking') }}</label>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_liked" id="field_liked" /><span class="custom-checkbox-element"></span> {{ gettext('Liked') }}</label>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_liked" id="field_cumulative_liked" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative liked') }}</label>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_replies_received" id="field_replies_received" /><span class="custom-checkbox-element"></span> {{ gettext('Replies received') }}</label>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_replies_received" id="field_cumulative_replies_received" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative replies received') }}</label>
+
+          <label>{{ gettext('Sorted by') }}</label>
+          <select name="sort" id="sort">
+          <option value="name" label="{{gettext('Name')}}" <% if (!isDiscussionAdmin) { print('selected="selected"') }%>/>
+          <% if (isDiscussionAdmin) { %>
+          <option value="domain" label="{{gettext('Domain')}}" selected="selected"/>
+          <% } %>
+          <option value="posts" label="{{ gettext('Posts') }}" />
+          <option value="cumulative_posts" label="{{ gettext('Cumulative posts') }}" />
+          <option value="liking" label="{{ gettext('Liking') }}" />
+          <option value="cumulative_liking" label="{{ gettext('Cumulative liking') }}" />
+          <option value="liked" label="{{ gettext('Liked') }}" />
+          <option value="cumulative_liked" label="{{ gettext('Cumulative liked') }}" />
+          <option value="replies_received" label="{{ gettext('Replies received') }}" />
+          <option value="cumulative_replies_received" label="{{ gettext('Cumulative replies received') }}" />
+          </select>
+
+          <br />
+          <% if (isDiscussionAdmin) { %>
+          <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="show_emails" id="show_emails" /><span class="custom-checkbox-element"></span> {{ gettext('Show emails') }}</label>
+          <% } %>
+
+          <button class="btn btn-primary" name="get_participant_stats" id="get_participant_stats">{{gettext('Get discussion participant statistics')}}</button>
+
+          </fieldset>
+        </form>
+    </div>
+</div>
+
+<div class="popin-footer">
+     <button class="btn btn-cancel btn-sm fl js_close">{{ gettext('Close') }}</button>
+</div>
