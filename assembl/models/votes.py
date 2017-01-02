@@ -652,9 +652,12 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
     idea = relationship(
         Idea,
         primaryjoin="and_(Idea.id == AbstractIdeaVote.idea_id,"
-                         "Idea.tombstone_date == None,"
-                         "AbstractIdeaVote.tombstone_date == None)",
-        foreign_keys=(idea_id,), backref="votes")
+                         "Idea.tombstone_date == None)",
+        foreign_keys=(idea_id,),
+        backref=backref(
+            "votes",
+            primaryjoin="and_(Idea.id == AbstractIdeaVote.idea_id,"
+                 "AbstractIdeaVote.tombstone_date == None)"))
 
     vote_spec_id = Column(
         Integer,
@@ -666,9 +669,12 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         backref=backref("votes_ts", cascade="all, delete-orphan"))
     vote_spec = relationship(
         AbstractVoteSpecification,
-        primaryjoin="and_(AbstractVoteSpecification.id==AbstractIdeaVote.vote_spec_id, "
-                         "AbstractIdeaVote.tombstone_date == None)",
-        backref=backref("votes"))
+        primaryjoin="AbstractVoteSpecification.id==AbstractIdeaVote.vote_spec_id",
+        backref=backref(
+            "votes",
+            primaryjoin="and_(AbstractVoteSpecification.id==AbstractIdeaVote.vote_spec_id, "
+                             "AbstractIdeaVote.tombstone_date == None)",
+            ))
 
     criterion_id = Column(
         Integer,
@@ -692,10 +698,14 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         Idea, foreign_keys=(criterion_id,))
     criterion = relationship(
         Idea,
-        primaryjoin=and_(Idea.id == criterion_id,
-                         Idea.tombstone_date == None),
+        primaryjoin="and_(Idea.id == AbstractIdeaVote.criterion_id,"
+                         "Idea.tombstone_date == None)",
         foreign_keys=(criterion_id,),
-        backref="votes_using_this_criterion")
+        backref=backref(
+            "votes_using_this_criterion",
+            primaryjoin="and_(Idea.id == AbstractIdeaVote.criterion_id,"
+                             "AbstractIdeaVote.tombstone_date == None)",
+            ))
 
     vote_date = Column(DateTime, default=datetime.utcnow,
                        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
@@ -710,9 +720,11 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         User, backref=backref("votes_ts", cascade="all, delete-orphan"))
     voter = relationship(
         User,
-        primaryjoin="and_(User.id==AbstractIdeaVote.voter_id, "
-                         "AbstractIdeaVote.tombstone_date == None)",
-        backref="votes")
+        primaryjoin="User.id==AbstractIdeaVote.voter_id",
+        backref=backref(
+            "votes",
+            primaryjoin="and_(User.id==AbstractIdeaVote.voter_id, "
+                             "AbstractIdeaVote.tombstone_date == None)"))
 
     def is_owner(self, user_id):
         return self.voter_id == user_id
@@ -730,9 +742,11 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         nullable=False, index=True)
     widget = relationship(
         "VotingWidget",
-        primaryjoin="and_(VotingWidget.id==AbstractIdeaVote.widget_id, "
-                         "AbstractIdeaVote.tombstone_date == None)",
-        backref="votes")
+        primaryjoin="VotingWidget.id==AbstractIdeaVote.widget_id",
+        backref=backref(
+            "votes",
+            primaryjoin="and_(VotingWidget.id==AbstractIdeaVote.widget_id, "
+                             "AbstractIdeaVote.tombstone_date == None)"))
     widget_ts = relationship(
         "VotingWidget",
         backref=backref("votes_ts", cascade="all, delete-orphan"))

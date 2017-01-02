@@ -118,9 +118,13 @@ class ActionOnPost(Action):
     post = relationship(
         Content,
         primaryjoin="and_(Content.id == ActionOnPost.post_id,"
-                         "ActionOnPost.tombstone_date == None)",
+                         "Content.tombstone_date == None)",
         foreign_keys=(post_id,),
-        backref=backref('actions', cascade="all, delete-orphan"))
+        backref=backref(
+            'actions',
+            primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                             "ActionOnPost.tombstone_date == None)",
+            cascade="all, delete-orphan"))
 
     object_type = 'post'
 
@@ -276,9 +280,14 @@ class ActionOnIdea(Action):
     idea = relationship(
         Idea,
         primaryjoin="and_(Idea.id == ActionOnIdea.idea_id,"
-                         "Idea.tombstone_date == None,"
-                         "ActionOnIdea.tombstone_date == None)",
-        foreign_keys=(idea_id,), backref="actions")
+                         "Idea.tombstone_date == None)",
+        foreign_keys=(idea_id,),
+        backref=backref(
+            'actions',
+            primaryjoin="and_(Idea.id == ActionOnIdea.idea_id,"
+                             "ActionOnIdea.tombstone_date == None)"))
+        # TODO: cascade="all, delete-orphan"
+
 
     object_type = 'idea'
 

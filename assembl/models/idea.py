@@ -1094,16 +1094,22 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
     source = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.source_id, "
-                    "IdeaLink.tombstone_date == None, "
                     "Idea.tombstone_date == None)",
-        backref=backref('target_links', cascade="all, delete-orphan"),
+        backref=backref(
+            'target_links',
+            primaryjoin="and_(Idea.id==IdeaLink.source_id, "
+                        "IdeaLink.tombstone_date == None)",
+            cascade="all, delete-orphan"),
         foreign_keys=(source_id))
     target = relationship(
         'Idea',
         primaryjoin="and_(Idea.id==IdeaLink.target_id, "
-                    "IdeaLink.tombstone_date == None, "
                     "Idea.tombstone_date == None)",
-        backref=backref('source_links', cascade="all, delete-orphan"),
+        backref=backref(
+            'source_links',
+            primaryjoin="and_(Idea.id==IdeaLink.target_id, "
+                        "IdeaLink.tombstone_date == None)",
+            cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     source_ts = relationship(
         'Idea',
