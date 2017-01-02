@@ -530,20 +530,34 @@ def get_time_series_analytics(request):
         actions_on_post = actions_on_post.join(content, content.discussion_id == discussion.id)
         actions_on_post = actions_on_post.join(ActionOnPost, and_(
             ActionOnPost.post_id == content.id,
-            ActionOnPost.creation_date >= intervals_table.c.interval_start,
-            ActionOnPost.creation_date < intervals_table.c.interval_end
-            ))
+            or_(and_(
+                    ActionOnPost.creation_date >= intervals_table.c.interval_start,
+                    ActionOnPost.creation_date < intervals_table.c.interval_end),
+                and_(
+                    ActionOnPost.tombstone_date >= intervals_table.c.interval_start,
+                    ActionOnPost.tombstone_date < intervals_table.c.interval_end))))
 
         actions_on_idea = discussion.db.query(
             intervals_table.c.interval_id.label('interval_id'), ActionOnIdea.actor_id.label('actor_id'))
         actions_on_idea = actions_on_idea.join(Idea, Idea.discussion_id == discussion.id)
         actions_on_idea = actions_on_idea.join(ActionOnIdea, and_(
             ActionOnIdea.idea_id == Idea.id,
-            ActionOnIdea.creation_date >= intervals_table.c.interval_start,
-            ActionOnIdea.creation_date < intervals_table.c.interval_end
-            ))
+            or_(and_(
+                    ActionOnIdea.creation_date >= intervals_table.c.interval_start,
+                    ActionOnIdea.creation_date < intervals_table.c.interval_end),
+                and_(
+                    ActionOnIdea.tombstone_date >= intervals_table.c.interval_start,
+                    ActionOnIdea.tombstone_date < intervals_table.c.interval_end))))
 
-        actions_union_subquery = actions_on_post.union(actions_on_idea).subquery()
+        posts = discussion.db.query(
+            intervals_table.c.interval_id.label('interval_id'),
+            Post.creator_id.label('actor_id'))
+        posts = posts.join(Post, and_(
+            Post.discussion_id == discussion.id,
+            Post.creation_date >= intervals_table.c.interval_start,
+            Post.creation_date < intervals_table.c.interval_end))
+
+        actions_union_subquery = actions_on_post.union(actions_on_idea, posts).subquery()
         actions_subquery = discussion.db.query(intervals_table.c.interval_id,
             func.count(distinct(actions_union_subquery.c.actor_id)).label('count_actors')
             ).outerjoin(actions_union_subquery, actions_union_subquery.c.interval_id == intervals_table.c.interval_id
@@ -555,18 +569,25 @@ def get_time_series_analytics(request):
         cumulative_actions_on_post = cumulative_actions_on_post.join(content, content.discussion_id == discussion.id)
         cumulative_actions_on_post = cumulative_actions_on_post.join(ActionOnPost, and_(
             ActionOnPost.post_id == content.id,
-            ActionOnPost.creation_date < intervals_table.c.interval_end
-            ))
+            or_(ActionOnPost.creation_date < intervals_table.c.interval_end,
+                ActionOnPost.tombstone_date < intervals_table.c.interval_end)))
 
         cumulative_actions_on_idea = discussion.db.query(
             intervals_table.c.interval_id.label('interval_id'), ActionOnIdea.actor_id.label('actor_id'))
         cumulative_actions_on_idea = cumulative_actions_on_idea.join(Idea, Idea.discussion_id == discussion.id)
         cumulative_actions_on_idea = cumulative_actions_on_idea.join(ActionOnIdea, and_(
             ActionOnIdea.idea_id == Idea.id,
-            ActionOnIdea.creation_date < intervals_table.c.interval_end
-            ))
+            or_(ActionOnIdea.creation_date < intervals_table.c.interval_end,
+                ActionOnIdea.tombstone_date < intervals_table.c.interval_end)))
 
-        cumulative_actions_union_subquery = cumulative_actions_on_post.union(cumulative_actions_on_idea).subquery()
+        posts = discussion.db.query(
+            intervals_table.c.interval_id.label('interval_id'),
+            Post.creator_id.label('actor_id'))
+        posts = posts.join(Post, and_(
+            Post.discussion_id == discussion.id,
+            Post.creation_date < intervals_table.c.interval_end))
+
+        cumulative_actions_union_subquery = cumulative_actions_on_post.union(cumulative_actions_on_idea, posts).subquery()
         cumulative_actions_subquery = discussion.db.query(intervals_table.c.interval_id,
             func.count(distinct(cumulative_actions_union_subquery.c.actor_id)).label('count_cumulative_actors')
             ).outerjoin(cumulative_actions_union_subquery, cumulative_actions_union_subquery.c.interval_id == intervals_table.c.interval_id
@@ -1361,9 +1382,12 @@ def get_participant_time_series_analytics(request):
             actions_on_post = actions_on_post.join(content, content.discussion_id == discussion.id)
             actions_on_post = actions_on_post.join(ActionOnPost, and_(
                 ActionOnPost.post_id == content.id,
-                ActionOnPost.creation_date >= intervals_table.c.interval_start,
-                ActionOnPost.creation_date < intervals_table.c.interval_end
-                ))
+                or_(and_(
+                        ActionOnPost.creation_date >= intervals_table.c.interval_start,
+                        ActionOnPost.creation_date < intervals_table.c.interval_end),
+                    and_(
+                        ActionOnPost.tombstone_date >= intervals_table.c.interval_start,
+                        ActionOnPost.tombstone_date < intervals_table.c.interval_end))))
 
             actions_on_idea = discussion.db.query(
                 intervals_table.c.interval_id.label('interval_id'),
@@ -1372,11 +1396,23 @@ def get_participant_time_series_analytics(request):
             actions_on_idea = actions_on_idea.join(Idea, Idea.discussion_id == discussion.id)
             actions_on_idea = actions_on_idea.join(ActionOnIdea, and_(
                 ActionOnIdea.idea_id == Idea.id,
-                ActionOnIdea.creation_date >= intervals_table.c.interval_start,
-                ActionOnIdea.creation_date < intervals_table.c.interval_end
-                ))
+                or_(and_(
+                        ActionOnIdea.creation_date >= intervals_table.c.interval_start,
+                        ActionOnIdea.creation_date < intervals_table.c.interval_end),
+                    and_(
+                        ActionOnIdea.tombstone_date >= intervals_table.c.interval_start,
+                        ActionOnIdea.tombstone_date < intervals_table.c.interval_end))))
 
-            actions_union_subquery = actions_on_post.union(actions_on_idea).subquery()
+            posts = discussion.db.query(
+                intervals_table.c.interval_id.label('interval_id'),
+                Post.creator_id.label('actor_id'),
+                Post.id.label('id'))
+            posts = posts.join(Post, and_(
+                Post.discussion_id == discussion.id,
+                Post.creation_date >= intervals_table.c.interval_start,
+                Post.creation_date < intervals_table.c.interval_end))
+
+            actions_union_subquery = actions_on_post.union(actions_on_idea, posts).subquery()
             active_query = discussion.db.query(
                 intervals_table.c.interval_id.label('interval_id_q'),
                 AgentProfile.id.label('participant_id'),
