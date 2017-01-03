@@ -419,6 +419,7 @@ var MessageView = Marionette.LayoutView.extend({
     'click .message-hoistbtn': 'onMessageHoistClick',
     'mouseover .js_sentimentNamesList': 'onOverNamesList',
     'mouseout .js_sentimentNamesList': 'onOutNamesList',
+    'click .emoticon':'onClickEmoticon',
     'click @ui.likeLink': 'onClickLike',
     'click @ui.shareLink': 'onClickShare',
     'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
@@ -1007,6 +1008,9 @@ var MessageView = Marionette.LayoutView.extend({
    */
   postRender: function() {
     return;
+  },
+  onClickEmoticon:function(event){
+    $(event.target).addClass('active');
   },
   onOverNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').show();
