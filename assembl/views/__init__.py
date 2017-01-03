@@ -428,6 +428,8 @@ def includeme(config):
     default_context['cache_bust'] = \
         config.registry.settings['requirejs.cache_bust']
 
+
+    config.add_route('new_styleguide', '/styleguide')
     # Scan now, to get cornice views
     config.scan('.')
     # make sure this comes last to avoid conflicts

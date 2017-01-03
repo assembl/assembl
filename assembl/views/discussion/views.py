@@ -185,6 +185,15 @@ def react_view(request):
     return context
 
 
+@view_config(route_name='new_styleguide', request_method='GET',
+             renderer='assembl:templates/styleguide/styleguide_v2.jinja2')
+def sytleguide_view(request):
+    """
+    The view renderer for the ne styleguide
+    """
+    return {}
+
+
 @view_config(route_name='styleguide', request_method='GET', http_cache=60,
              renderer='assembl:templates/styleguide/index.jinja2')
 def styleguide_view(request):
@@ -215,7 +224,7 @@ def not_found(context, request):
 
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
-        config.add_route('new_home', 'v2/{discussion_slug}')
+        config.add_route('new_home', 'v2/{discussion_slug}/*extra_path')
         config.add_view(react_view, route_name='new_home',
                         request_method='GET', http_cache=60,
                         renderer="assembl:templates/index_react.jinja2")
