@@ -1,13 +1,3 @@
-
-[submodule "assembl/static/js/lib/backbone"]
-	path = assembl/static/js/lib/backbone
-	url = https://github.com/amdjs/backbone
-[submodule "assembl/static/js/lib/underscore"]
-	path = assembl/static/js/lib/underscore
-	url = https://github.com/amdjs/underscore
-[submodule "assembl/static/js/lib/JSON-js"]
-	path = assembl/static/js/lib/JSON-js
-	url = https://github.com/douglascrockford/JSON-js
 [submodule "assembl/semantic/ontology"]
 	path = assembl/semantic/ontology
 	url = git://github.com/catalyst-fp7/ontology.git
