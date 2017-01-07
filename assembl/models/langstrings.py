@@ -393,13 +393,11 @@ class LangString(Base):
 
     @classmethod
     def subqueryload_option(cls, reln):
-        return subqueryload(reln).joinedload(cls.entries
-            ).contains_eager(LangStringEntry.langstring)
+        return subqueryload(reln).joinedload(cls.entries)
 
     @classmethod
     def joinedload_option(cls, reln):
-        return joinedload(reln).joinedload(cls.entries
-            ).contains_eager(LangStringEntry.langstring)
+        return joinedload(reln).joinedload(cls.entries)
 
     id_sequence_name = "langstring_idsequence"
 
