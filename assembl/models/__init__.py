@@ -184,7 +184,7 @@ from .action import (
     SentimentOfPost,
     LikeSentimentOfPost,
     DisagreeSentimentOfPost,
-    DontUnderstanddSentimentOfPost,
+    DontUnderstandSentimentOfPost,
     MoreInfoSentimentOfPost,
     UniqueActionOnIdea,
     UniqueActionOnPost,

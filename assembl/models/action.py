@@ -23,6 +23,7 @@ from virtuoso.vmapping import IriClass
 from abc import abstractproperty
 
 from . import DiscussionBoundBase, DiscussionBoundTombstone, TombstonableMixin, Post
+from ..lib.sqla import DuplicateHandling
 from ..semantic.namespaces import (
     ASSEMBL, QUADNAMES, VERSION, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -232,6 +233,7 @@ class SentimentOfPost(UniqueActionOnPost):
     )
 
     verb = 'assign_sentiment'
+    default_duplicate_handling = DuplicateHandling.TOMBSTONE
 
     crud_permissions = CrudPermissions(
         P_READ, P_READ, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
@@ -271,7 +273,7 @@ class DisagreeSentimentOfPost(SentimentOfPost):
         return 'disagree'
 
 
-class DontUnderstanddSentimentOfPost(SentimentOfPost):
+class DontUnderstandSentimentOfPost(SentimentOfPost):
     __mapper_args__ = {
         'polymorphic_identity': 'sentiment:dont_understand'
     }
