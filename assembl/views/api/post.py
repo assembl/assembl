@@ -1,6 +1,7 @@
 """Cornice API for posts"""
 from math import ceil
 import logging
+from collections import defaultdict
 
 import simplejson as json
 from cornice import Service
@@ -16,6 +17,7 @@ from sqlalchemy.orm import (
     joinedload_all, aliased, subqueryload_all, undefer)
 from sqlalchemy.sql.expression import bindparam, and_
 from sqlalchemy.sql import cast, column
+from sqlalchemy.sql.functions import count
 
 from jwzthreading import restrip_pat
 
@@ -32,7 +34,7 @@ from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, Content, Idea, ViewPost, User,
     IdeaRelatedPostLink, AgentProfile, LikedPost, LangString,
-    DummyContext, LanguagePreferenceCollection)
+    DummyContext, LanguagePreferenceCollection, SentimentOfPost)
 from assembl.models.post import deleted_publication_states
 from assembl.lib.raven_client import capture_message
 
@@ -333,6 +335,11 @@ def get_posts(request):
                 LikedPost.tombstone_condition(),
                 LikedPost.actor_id == user_id,
                 *LikedPost.get_discussion_conditions(discussion_id))}
+        my_sentiments = {l.post_id: l.type[10:] for l in discussion.db.query(
+            SentimentOfPost).filter(
+                SentimentOfPost.tombstone_condition(),
+                SentimentOfPost.actor_id == user_id,
+                *SentimentOfPost.get_discussion_conditions(discussion_id))}
         if is_unread != None:
             posts = posts.outerjoin(
                 ViewPost, and_(
@@ -368,6 +375,18 @@ def get_posts(request):
         ideaContentLinkQuery = posts.with_entities(
             PostClass.id, PostClass.idea_content_links_above_post)
         ideaContentLinkCache = dict(ideaContentLinkQuery.all())
+        # Note: we could count the like the same way and kill the subquery.
+        # But it interferes with the popularity order,
+        # and the benefit is not that high.
+        sentiment_counts = discussion.db.query(
+                PostClass.id, SentimentOfPost.type, count(SentimentOfPost.id)
+            ).join(SentimentOfPost
+            ).filter(PostClass.id.in_(posts.with_entities(PostClass.id).subquery()),
+                     SentimentOfPost.tombstone_condition()
+            ).group_by(PostClass.id, SentimentOfPost.type)
+        sentiment_counts_by_post_id = defaultdict(dict)
+        for (post_id, sentiment_type, sentiment_count) in sentiment_counts:
+            sentiment_counts_by_post_id[post_id][sentiment_type[10:]] = sentiment_count
         posts = posts.options(
             # undefer(Post.idea_content_links_above_post),
             joinedload_all(Post.creator),
@@ -464,13 +483,14 @@ def get_posts(request):
             serializable_post['read'] = True
         else:
             serializable_post['read'] = False
-        # serializable_post['liked'] = likedpost.uri() if likedpost else False
         serializable_post['liked'] = (
             LikedPost.uri_generic(likedpost) if likedpost else False)
+        serializable_post['my_sentiment'] = my_sentiments.get(post.id, None)
         if view_def != "id_only":
             serializable_post['indirect_idea_content_links'] = (
                 post.indirect_idea_content_links_with_cache(
                     ideaContentLinkCache.get(post.id, None)))
+            serializable_post['sentiment_counts'] = sentiment_counts_by_post_id[post.id]
 
         post_data.append(serializable_post)
 
