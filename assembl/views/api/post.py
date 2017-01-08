@@ -142,8 +142,6 @@ def get_posts(request):
     message_classifiers = request.GET.getall('classifier')
 
     PostClass = SynthesisPost if only_synthesis == "true" else Post
-    ideaContentLinkQuery = discussion.db.query(
-        PostClass.id, PostClass.idea_content_links_above_post)
     if order == 'score':
         posts = discussion.db.query(PostClass, Content.body_text_index.score_name)
     else:
@@ -152,8 +150,6 @@ def get_posts(request):
     posts = posts.filter(
         PostClass.discussion_id == discussion_id,
     )
-    ideaContentLinkQuery = ideaContentLinkQuery.filter(
-        PostClass.discussion_id == discussion_id)
     ##no_of_posts_to_discussion = posts.count()
 
     post_data = []
@@ -184,11 +180,9 @@ def get_posts(request):
     # if deleted == 'false':
     #     deleted = False
     #     posts = posts.filter(PostClass.tombstone_condition())
-    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.tombstone_condition())
     # elif deleted == 'true':
     #     deleted = True
     #     posts = posts.filter(PostClass.not_tombstone_condition())
-    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
     # elif deleted == 'any':
     #     deleted = None
     #     # result will contain deleted and non-deleted posts
@@ -207,7 +201,6 @@ def get_posts(request):
     # if deleted == 'true':
     #     deleted = True
     #     posts = posts.filter(PostClass.not_tombstone_condition())
-    #     ideaContentLinkQuery = ideaContentLinkQuery.filter(PostClass.not_tombstone_condition())
     # end v3
 
     # v4
@@ -233,28 +226,19 @@ def get_posts(request):
         orphans = Idea._get_orphan_posts_statement(
             discussion_id, True, include_deleted=deleted).subquery("orphans")
         posts = posts.join(orphans, PostClass.id == orphans.c.post_id)
-        ideaContentLinkQuery = ideaContentLinkQuery.join(
-            orphans, PostClass.id == orphans.c.post_id)
 
     if root_idea_id:
         related = Idea.get_related_posts_query_c(
             discussion_id, root_idea_id, True, include_deleted=deleted)
         posts = posts.join(related, PostClass.id == related.c.post_id)
-        ideaContentLinkQuery = ideaContentLinkQuery.join(
-            related, PostClass.id == related.c.post_id)
     elif not only_orphan:
         if deleted is not None:
             if deleted:
                 posts = posts.filter(
                     PostClass.publication_state.in_(
                         deleted_publication_states))
-                ideaContentLinkQuery = ideaContentLinkQuery.filter(
-                    PostClass.publication_state.in_(
-                        deleted_publication_states))
             else:
                 posts = posts.filter(
-                    PostClass.tombstone_date == None)
-                ideaContentLinkQuery = ideaContentLinkQuery.filter(
                     PostClass.tombstone_date == None)
 
     if root_post_id:
@@ -279,42 +263,26 @@ def get_posts(request):
             |
             (PostClass.id.in_(ancestor_ids))
             )
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(
-            (Post.ancestry.like(
-            root_post.ancestry + cast(root_post.id, String) + ',%'
-            ))
-            |
-            (PostClass.id==root_post.id)
-            |
-            (PostClass.id.in_(ancestor_ids))
-            )
     else:
         root_post = None
 
     if ids:
         posts = posts.filter(Post.id.in_(ids))
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(Post.id.in_(ids))
 
     if posted_after_date:
         posted_after_date = parse_datetime(posted_after_date)
         if posted_after_date:
             posts = posts.filter(PostClass.creation_date >= posted_after_date)
-            ideaContentLinkQuery = ideaContentLinkQuery.filter(
-                PostClass.creation_date >= posted_after_date)
         #Maybe we should do something if the date is invalid.  benoitg
 
     if posted_before_date:
         posted_before_date = parse_datetime(posted_before_date)
         if posted_before_date:
             posts = posts.filter(PostClass.creation_date <= posted_before_date)
-            ideaContentLinkQuery = ideaContentLinkQuery.filter(
-                PostClass.creation_date <= posted_before_date)
         #Maybe we should do something if the date is invalid.  benoitg
 
     if post_author_id:
         posts = posts.filter(PostClass.creator_id == post_author_id)
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(
-            PostClass.creator_id == post_author_id)
 
     if message_classifiers:
         if any([len(classifier) == 0 for classifier in message_classifiers]):
@@ -344,16 +312,11 @@ def get_posts(request):
             if not includes_null:
                 term = term | (PostClass.message_classifier == None)
         posts = posts.filter(term)
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(term)
 
     if post_replies_to:
         parent_alias = aliased(PostClass)
         posts = posts.join(parent_alias, PostClass.parent)
         posts = posts.filter(parent_alias.creator_id == post_replies_to)
-        ideaContentLinkQuery = ideaContentLinkQuery.join(
-            parent_alias, PostClass.parent)
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(
-            parent_alias.creator_id == post_replies_to)
     # Post read/unread management
     is_unread = request.GET.get('is_unread')
     translations = None
@@ -396,15 +359,15 @@ def get_posts(request):
         offband = () if (order == 'score') else None
         posts = posts.filter(Post.body_text_index.contains(
             text_search.encode('utf-8'), offband=offband))
-        ideaContentLinkQuery = ideaContentLinkQuery.filter(
-            Post.body_text_index.contains(
-                text_search.encode('utf-8'), offband=offband))
 
     # posts = posts.options(contains_eager(Post.source))
     # Horrible hack... But useful for structure load
     if view_def == 'id_only':
         pass  # posts = posts.options(defer(Post.body))
     else:
+        ideaContentLinkQuery = posts.with_entities(
+            PostClass.id, PostClass.idea_content_links_above_post)
+        ideaContentLinkCache = dict(ideaContentLinkQuery.all())
         posts = posts.options(
             # undefer(Post.idea_content_links_above_post),
             joinedload_all(Post.creator),
@@ -416,7 +379,6 @@ def get_posts(request):
             posts = posts.options(*Content.subqueryload_options())
         else:
             posts = posts.options(*Content.joinedload_options())
-        ideaContentLinkCache = dict(ideaContentLinkQuery.all())
 
     if order == 'chronological':
         posts = posts.order_by(Content.creation_date)
