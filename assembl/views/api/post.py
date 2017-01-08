@@ -335,7 +335,7 @@ def get_posts(request):
                 LikedPost.tombstone_condition(),
                 LikedPost.actor_id == user_id,
                 *LikedPost.get_discussion_conditions(discussion_id))}
-        my_sentiments = {l.post_id: l.type[10:] for l in discussion.db.query(
+        my_sentiments = {l.post_id: l for l in discussion.db.query(
             SentimentOfPost).filter(
                 SentimentOfPost.tombstone_condition(),
                 SentimentOfPost.actor_id == user_id,
@@ -485,7 +485,10 @@ def get_posts(request):
             serializable_post['read'] = False
         serializable_post['liked'] = (
             LikedPost.uri_generic(likedpost) if likedpost else False)
-        serializable_post['my_sentiment'] = my_sentiments.get(post.id, None)
+        my_sentiment = my_sentiments.get(post.id, None)
+        if my_sentiment is not None:
+            my_sentiment = my_sentiment.generic_json('default', user_id, permissions)
+        serializable_post['my_sentiment'] = my_sentiment
         if view_def != "id_only":
             serializable_post['indirect_idea_content_links'] = (
                 post.indirect_idea_content_links_with_cache(
