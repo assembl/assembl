@@ -108,7 +108,15 @@ def get_providers_with_names(providers=None):
         providers = aslist(config.get('login_providers'))
     provider_names = dict(IdentityProvider.default_db.query(
         IdentityProvider.provider_type, IdentityProvider.name).all())
-    return {pr: provider_names[pr] for pr in providers}
+    providers = {pr: provider_names[pr] for pr in providers}
+    if 'saml' in providers:
+        del providers['saml']
+        saml_providers = config.get('SOCIAL_AUTH_SAML_ENABLED_IDPS')
+        if not isinstance(saml_providers, dict):
+            saml_providers = json.loads(saml_providers)
+        for prov_id, data in saml_providers.iteritems():
+            providers['saml:' + prov_id] = data["description"]
+    return providers
 
 
 def get_default_context(request):

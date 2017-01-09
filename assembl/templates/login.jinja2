@@ -69,7 +69,7 @@
               {{form('yammer', gettext('Login with Yammer'), false)}}
               {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
               {% for prov_name, prov_data in saml_providers.items() %}
-                {{form('saml', gettext('Login with ') + (prov_data['description'] or prov_name), false, idp=prov_name)}}
+                {{form('saml:'+prov_name, gettext('Login with ') + (prov_data['description'] or prov_name), false, idp=prov_name)}}
               {% endfor %}
               {# Need to be refactored #}
               {# {form('openid', gettext('Login with OpenID'), true)} #}
