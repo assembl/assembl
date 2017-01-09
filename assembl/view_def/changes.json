@@ -95,6 +95,7 @@
         "body": "&get_body:extended",
         "like_count": true,
         "message_classifier": true,
+        "sentiment_counts": true,
         "extracts": [":id_only"]
     },
     "Post": {

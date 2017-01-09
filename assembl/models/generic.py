@@ -20,6 +20,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.sql.functions import count
 from ..lib.sqla_types import CoerceUnicode
 from virtuoso.vmapping import PatternIriClass
 # from virtuoso.textindex import TextIndex, TableWithTextIndex
@@ -508,6 +509,16 @@ class Content(TombstonableMixin, DiscussionBoundBase):
                     discussion_alias.slug, cls.id),
                 name=QUADNAMES.post_external_link_map)
         ]
+
+    @property
+    def sentiment_counts(self):
+        from .action import SentimentOfPost
+        r = self.db.query(
+                SentimentOfPost.type, count(SentimentOfPost.id)
+            ).filter(SentimentOfPost.post_id == self.id,
+                     SentimentOfPost.tombstone_condition()
+            ).group_by(SentimentOfPost.type)
+        return {k[10:]: v for (k, v) in r}
 
     widget_idea_links = relationship('IdeaContentWidgetLink')
 
