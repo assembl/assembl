@@ -1,20 +1,24 @@
 .button-success {
-  background-color: $btn-success;
-  border-color: $btn-success;
-  color: $white;
+  background-color: $btn-success-bkg;
+  border-color: $btn-success-border;
+  color: $btn-success-txt;
 
   &:hover {
-    background-color: $btn-success;
-    border-color: $btn-success;
-    color: $btn-success-txt;
+    background-color: $btn-success-hover-bkg;
+    border-color: $btn-success-hover-border;
+    color: $btn-success-hover-txt;
   }
 }
 
 .button-cancel {
-  background-color: $btn-cancel;
+  background-color: $btn-cancel-bkg;
+  border-color: $btn-cancel-border;
+  color: $btn-cancel-txt;
 
   &:hover {
-    border-color: $btn-cancel-border;
+    background-color: $btn-cancel-hover-bkg;
+    border-color: $btn-cancel-hover-border;
+    color: $btn-cancel-hover-txt;
   }
 }
 

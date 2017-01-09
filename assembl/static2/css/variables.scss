@@ -2,13 +2,25 @@ $white: #fff;
 $lightergrey: #f5f5f5;
 $lightgrey: #e6e6e6;
 $grey: #ccc;
-$darkgrey: #999;
+$darkgrey: #969696;
+$darkergrey: #666;
 $green: #34ad38;
 $blue: #3498db;
 
 $radius: 3px;
 
-$btn-success: $green;
+$btn-success-bkg: $green;
+$btn-success-border: $green;
 $btn-success-txt: $white;
-$btn-cancel: $lightgrey;
-$btn-cancel-border: $grey;
+
+$btn-success-hover-bkg: $green;
+$btn-success-hover-border: $green;
+$btn-success-hover-txt: $white;
+
+$btn-cancel-bkg: $lightgrey;
+$btn-cancel-border: $darkgrey;
+$btn-cancel-txt: $darkergrey;
+
+$btn-cancel-hover-bkg: $lightgrey;
+$btn-cancel-hover-border: $darkgrey;
+$btn-cancel-hover-txt: $darkergrey;
