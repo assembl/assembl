@@ -357,6 +357,7 @@ def get_posts(request):
                 service, LanguagePreferenceCollection.getCurrent(request))
     else:
         #If there is no user_id, all posts are always unread
+        my_sentiments = {}
         if is_unread == "false":
             raise HTTPBadRequest(localizer.translate(
                 _("You must be logged in to view which posts are read")))
