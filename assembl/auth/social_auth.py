@@ -124,6 +124,12 @@ def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
         associate_user as psa_associate_user
     results = psa_associate_user(
         backend, uid, user, social, *args, **kwargs)
+    social = results['social']
+    # Delete old email accounts
+    if social and social.email and results['new_association']:
+        for acc in user.email_accounts:
+            if acc.email == social.email:
+                acc.delete()
     return results
 
 

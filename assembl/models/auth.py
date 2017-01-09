@@ -161,12 +161,15 @@ class AgentProfile(Base):
         or a social account is added to another account.
         All foreign keys that refer to the other agent profile must now refer
         to this one."""
+        from .social_auth import SocialAuthAccount
         log.warn("Merging AgentProfiles: %d <= %d" % (self.id, other_profile.id))
         session = self.db
         assert self.id
         assert not (
             isinstance(other_profile, User) and not isinstance(self, User))
         my_accounts = {a.signature(): a for a in self.accounts}
+        my_social_emails = {s.email for s in self.accounts
+                            if isinstance(s, SocialAuthAccount) and s.email}
         for other_account in other_profile.accounts[:]:
             my_account = my_accounts.get(other_account.signature())
             if my_account:
@@ -180,6 +183,9 @@ class AgentProfile(Base):
                     other_account.merge(my_account)
                     other_account.profile = self
                     session.delete(my_account)
+            elif (isinstance(other_account, EmailAccount) and
+                  other_account.email in my_social_emails):
+                pass
             else:
                 other_account.profile = self
         if other_profile.name and not self.name:
