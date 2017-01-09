@@ -422,19 +422,6 @@ def get_time_series_analytics(request):
         post_viewers_subquery = post_viewers_subquery.group_by(intervals_table.c.interval_id)
         post_viewers_subquery = post_viewers_subquery.subquery()
 
-        # The visitors
-        firstTimeVisitorAgent = aliased(AgentStatusInDiscussion)
-        visitors_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(firstTimeVisitorAgent.id).label('count_first_time_logged_in_visitors'),
-            # func.DB.DBA.BAG_AGG(firstTimeVisitorAgent.id).label('first_time_visitors')
-            )
-        visitors_subquery = visitors_subquery.outerjoin(firstTimeVisitorAgent, and_(
-            firstTimeVisitorAgent.first_visit >= intervals_table.c.interval_start,
-            firstTimeVisitorAgent.first_visit < intervals_table.c.interval_end,
-            firstTimeVisitorAgent.discussion_id == discussion.id))
-        visitors_subquery = visitors_subquery.group_by(intervals_table.c.interval_id)
-        visitors_subquery = visitors_subquery.subquery()
-
         # The cumulative visitors
         cumulativeVisitorAgent = aliased(AgentStatusInDiscussion)
         cumulative_visitors_query = discussion.db.query(intervals_table.c.interval_id,
@@ -600,7 +587,6 @@ def get_time_series_analytics(request):
                                              top_post_subquery,
                                              cumulative_top_posts_subquery,
                                              post_viewers_subquery,
-                                             visitors_subquery,
                                              cumulative_visitors_subquery,
                                              votes_subquery,
                                              cumulative_votes_subquery,
@@ -622,7 +608,6 @@ def get_time_series_analytics(request):
         combined_query = combined_query.join(top_post_subquery, top_post_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_top_posts_subquery, cumulative_top_posts_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(post_viewers_subquery, post_viewers_subquery.c.interval_id == intervals_table.c.interval_id)
-        combined_query = combined_query.join(visitors_subquery, visitors_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_visitors_subquery, cumulative_visitors_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(members_subquery, members_subquery.c.interval_id==intervals_table.c.interval_id)
         combined_query = combined_query.join(subscribers_subquery, subscribers_subquery.c.interval_id==intervals_table.c.interval_id)
