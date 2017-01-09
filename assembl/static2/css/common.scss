@@ -1,4 +1,20 @@
-p {
-  color: $blue;
-  font-size: 24px;
+section {
+  margin: 30px 0;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.padding {
+  padding: 20px 0;
+}
+
+.underline {
+  border-bottom: 1px solid $lightgrey;
+  margin: 0 0 20px;
 }

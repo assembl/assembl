@@ -1,0 +1,48 @@
+.button-success {
+  background-color: $btn-success;
+  border-color: $btn-success;
+  color: $white;
+
+  &:hover {
+    background-color: $btn-success;
+    border-color: $btn-success;
+    color: $btn-success-txt;
+  }
+}
+
+.button-cancel {
+  background-color: $btn-cancel;
+
+  &:hover {
+    border-color: $btn-cancel-border;
+  }
+}
+
+.title-1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.title-2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.title-3 {
+  font-size: 18px;
+  margin: 0 0 10px;
+}
+
+.navbar {
+  background-color: $white;
+  height: 60px;
+}
+
+.box {
+  border: 1px solid $lightgrey;
+  border-radius: $radius;
+  box-shadow: 1px 1px 3px 0 $lightgrey;
+  padding: 15px 20px 20px;
+}

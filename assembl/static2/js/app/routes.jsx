@@ -5,6 +5,7 @@ import Home from './containers/home';
 import Ideas from './containers/ideas';
 import Synthesis from './containers/synthesis';
 import Debate from './containers/debate';
+import Styleguide from './containers/styleguide';
 import NotFound from './containers/notFound';
 
 export default (
@@ -15,6 +16,7 @@ export default (
     <Route path="/v2/:slug/ideas" component={Ideas} />
     <Route path="/v2/:slug/synthesis" component={Synthesis} />
     <Route path="/v2/:slug/debate" component={Debate} />
+    <Route path="/v2/:slug/styleguide" component={Styleguide} />
     <Route path="*" component={NotFound} />
   </Route>
 );

@@ -1,0 +1,15 @@
+.code {
+  color: $darkgrey;
+  display: inline-block;
+}
+
+.menu-item {
+  &:target {
+    background-color: $lightergrey;
+    outline: none;
+  }
+}
+
+#pDebug {
+  display: none;
+}
