@@ -98,6 +98,7 @@
         "subject": "&get_subject:",
         "body": "&get_body:",
         "message_classifier": true,
+        "sentiment_counts": true,
         "widget_ideas": "&widget_ideas"
     },
     "Post": {
