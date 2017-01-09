@@ -102,6 +102,7 @@ def maybe_merge(
             if user and user != logged_in:
                 # logged_in presumably newer?
                 logged_in.merge(user)
+                logged_in.db.delete(user)
                 logged_in.db.flush()
             user = logged_in
         else:
@@ -114,6 +115,7 @@ def maybe_merge(
         # Merge other accounts with same verified email
         for profile in other_users:
             user.merge(profile)
+            logged_in.db.delete(profile)
     return {"user": user}
 
 
