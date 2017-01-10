@@ -129,7 +129,7 @@ def associate_user(backend, uid, user=None, social=None, details=None,
     email = (details or {}).get('email', None)
     if email and results['new_association']:
         for acc in user.email_accounts:
-            if acc.email == email:
+            if acc.email_ci == email:
                 acc.delete()
     return results
 

@@ -168,7 +168,7 @@ class AgentProfile(Base):
         assert not (
             isinstance(other_profile, User) and not isinstance(self, User))
         my_accounts = {a.signature(): a for a in self.accounts}
-        my_social_emails = {s.email for s in self.accounts
+        my_social_emails = {s.email.lower() for s in self.accounts
                             if isinstance(s, SocialAuthAccount) and s.email}
         for other_account in other_profile.accounts[:]:
             my_account = my_accounts.get(other_account.signature())
@@ -184,7 +184,7 @@ class AgentProfile(Base):
                     other_account.profile = self
                     session.delete(my_account)
             elif (isinstance(other_account, EmailAccount) and
-                  other_account.email in my_social_emails):
+                  other_account.email.lower() in my_social_emails):
                 pass
             else:
                 other_account.profile = self
