@@ -127,7 +127,7 @@ def associate_user(backend, uid, user=None, social=None, details=None,
         backend, uid, user, social, *args, **kwargs)
     # Delete old email accounts
     email = (details or {}).get('email', None)
-    if email and results['new_association']:
+    if email and results and results['new_association']:
         for acc in user.email_accounts:
             if acc.email_ci == email:
                 acc.delete()
