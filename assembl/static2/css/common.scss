@@ -1,3 +1,9 @@
+body {
+  background-color: $page-bkg;
+  font-family: $font-family;
+  font-size: $font-size-s;
+}
+
 section {
   margin: 30px 0;
 }
@@ -15,6 +21,15 @@ section {
 }
 
 .underline {
-  border-bottom: 1px solid $lightgrey;
+  border-bottom: $box-border;
   margin: 0 0 20px;
+}
+
+.code {
+  color: $grey3;
+  display: inline-block;
+}
+
+#pDebug {
+  display: none;
 }

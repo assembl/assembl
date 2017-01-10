@@ -1,5 +1,10 @@
 const Translations = {
   fr: {
+    navbar: {
+      home: 'accueil',
+      debate: 'débat',
+      community: 'communauté'
+    },
     authentication: {
       panelTitle: 'Bienvenue dans la page d\'authentification d\'Assembl'
     },
@@ -23,6 +28,11 @@ const Translations = {
     }
   },
   en: {
+    navbar: {
+      home: 'home',
+      debate: 'debate',
+      community: 'community'
+    },
     authentication: {
       panelTitle: 'Welcome to Assembl authentication page'
     },
@@ -46,6 +56,11 @@ const Translations = {
     }
   },
   de: {
+    navbar: {
+      home: 'willkommen',
+      debate: 'debatte',
+      community: 'gemeinschaft'
+    },
     authentication: {
       panelTitle: 'Willkommen in Assembl - authentication page'
     },

@@ -32,21 +32,13 @@ module.exports = {
             loader: "file-loader" 
         },
         {
-            test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, 
-            loader: 'url?limit=10000&mimetype=application/font-woff'
-        },
-        {
-            test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, 
-            loader: 'url?limit=10000&mimetype=application/octet-stream'
+            test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/, 
+            loader: 'url?limit=100000&name=[name].[ext]'
         },
         {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, 
             loader: 'file'
         },
-        {
-            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, 
-            loader: 'url?limit=10000&mimetype=image/svg+xml'
-        }
         ]
     },
     resolve:{

@@ -1,13 +1,16 @@
 import React from 'react';
-import Navbar from '../common/navbar';
+import ProfileIcon from '../common/profileIcon';
 
-class NavBar extends React.Component {
+class Login extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-2 underline" id="navbar">NAVBAR</div>
+        <div className="title-2 underline" id="login">LOGIN</div>
         <section>
-          <Navbar />
+          <div className="left">
+            <ProfileIcon />
+          </div>
+          <div>&nbsp;</div>
         </section>
         <section>
           <div className="title-3">Code</div>
@@ -15,7 +18,7 @@ class NavBar extends React.Component {
             <div>
               <div className="code">
                 <span>&lt;</span>
-                <span>Navbar /</span>
+                <span>ProfileIcon /</span>
                 <span>&gt;</span>
               </div>
             </div>
@@ -26,4 +29,4 @@ class NavBar extends React.Component {
   }
 }
 
-export default NavBar;
+export default Login;

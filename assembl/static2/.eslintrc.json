@@ -15,6 +15,7 @@
         "react"
     ],
     "rules": {
+        "react/prefer-stateless-function": [0, { "ignorePureComponents": false }],
         "comma-dangle": [
           "warn",
           "never"
