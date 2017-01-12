@@ -9,7 +9,7 @@ class ProfileIcon extends React.Component {
           <span className="username">User name</span>
         </a>
       </div>
-      );
+    );
   }
 }
 export default ProfileIcon;

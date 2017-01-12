@@ -10,11 +10,21 @@
   background-color: $btn-success-bkg;
   border-color: $btn-success-border;
   color: $btn-success-txt;
+  font-size: $font-size-s;
+  font-weight: 600;
+  padding: 8px 50px;
 
   &:hover {
     background-color: $btn-success-hover-bkg;
     border-color: $btn-success-hover-border;
     color: $btn-success-hover-txt;
+  }
+
+  &:focus {
+    background-color: $btn-success-hover-bkg;
+    border-color: $btn-success-hover-border;
+    color: $btn-success-hover-txt;
+    outline: none;
   }
 }
 
@@ -34,7 +44,7 @@
   color: $title1-color;
   font-size: $title1-size;
   font-weight: 700;
-  margin: 0 0 10px;
+  margin: 0 0 15px;
 }
 
 .title-2 {
@@ -47,6 +57,14 @@
 .title-3 {
   color: $title3-color;
   font-size: $title3-size;
+  font-weight: 700;
+  margin: 0 0 5px;
+}
+
+.title-4 {
+  color: $title4-color;
+  font-size: $title4-size;
+  font-weight: 700;
   margin: 0 0 10px;
 }
 
@@ -132,22 +150,22 @@
   }
 }
 
-.navbar {
+.nav-bar {
   background-color: $navbar-bkg;
   border: $navbar-border;
-  height: 50px;
+  height: 80px;
 
   .navbar-logo {
-    padding: 10px 20px;
+    padding: 15px 20px;
 
     img {
-      height: 30px;
+      height: 50px;
     }
   }
 
   .navbar-icons {
     cursor: pointer;
-    padding: 13px;
+    padding: 28px;
 
     div {
       margin: 0 10px;
@@ -159,11 +177,15 @@
     font-family: $font-family2;
     font-size: $font-size-xs;
     font-weight: 700;
-    line-height: 50px;
+    line-height: 80px;
     padding: 0 20px;
     text-transform: uppercase;
 
     &:hover {
+      text-decoration: none;
+    }
+
+    &:focus {
       text-decoration: none;
     }
   }
@@ -171,4 +193,8 @@
   .active {
     color: $active-link-color;
   }
+}
+
+.app-content {
+  margin: 80px 0 0;
 }

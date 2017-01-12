@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Glyphicon } from 'react-bootstrap';
 import ProfileIcon from './profileIcon';
@@ -6,23 +8,24 @@ import LanguageMenu from './languageMenu';
 
 class NavBar extends React.Component {
   render() {
+    const { slug } = this.props.app;
     return (
-      <div className="navbar">
+      <div className="nav-bar">
         <div className="left">
           <div className="navbar-logo">
             <img src="../../../../static2/css/img/default_logo.png" alt="logo" />
           </div>
         </div>
         <div className="left">
-          <a className="navbar-item-menu active" href="/home">
+          <Link className="navbar-item-menu" activeClassName="active" to={`/${slug}/home`}>
             <Translate value="navbar.home" />
-          </a>
-          <a className="navbar-item-menu" href="/debate">
+          </Link>
+          <Link className="navbar-item-menu" activeClassName="active" to={`/${slug}/debate`}>
             <Translate value="navbar.debate" />
-          </a>
-          <a className="navbar-item-menu" href="/community">
+          </Link>
+          <Link className="navbar-item-menu" activeClassName="active" to={`/${slug}/community`}>
             <Translate value="navbar.community" />
-          </a>
+          </Link>
         </div>
         <div className="right">
           <div className="navbar-icons">
@@ -37,4 +40,10 @@ class NavBar extends React.Component {
   }
 }
 
-export default NavBar;
+const mapStateToProps = (state) => {
+  return {
+    app: state.app
+  };
+};
+
+export default connect(mapStateToProps)(NavBar);

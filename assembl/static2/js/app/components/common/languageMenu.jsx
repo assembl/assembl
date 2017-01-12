@@ -10,7 +10,7 @@ class Dropdown extends React.Component {
           <MenuItem>DE</MenuItem>
         </NavDropdown>
       </ul>
-    )
+    );
   }
 }
 

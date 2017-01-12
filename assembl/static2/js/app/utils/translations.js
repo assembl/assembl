@@ -9,7 +9,11 @@ const Translations = {
       panelTitle: 'Bienvenue dans la page d\'authentification d\'Assembl'
     },
     home: {
-      panelTitle: 'Bienvenue dans la page d\'accueil d\'Assembl'
+      accessButton: 'J\'accède au débat',
+      contribution: 'contributions',
+      participant: 'participants',
+      visit: 'visites',
+      viewedPages: 'pages vues'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -37,7 +41,11 @@ const Translations = {
       panelTitle: 'Welcome to Assembl authentication page'
     },
     home: {
-      panelTitle: 'Welcome to Assembl home page'
+      accessButton: 'I access to the debate',
+      contribution: 'contributions',
+      participant: 'participants',
+      visit: 'visits',
+      viewedPages: 'Viewed pages'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -65,7 +73,11 @@ const Translations = {
       panelTitle: 'Willkommen in Assembl - authentication page'
     },
     home: {
-      panelTitle: 'Willkommen in Assembl - home page'
+      accessButton: 'Ich gehe zur Debatte',
+      contribution: 'Beiträge',
+      participant: 'Teilnehmer',
+      visit: 'Besuche',
+      viewedPages: 'Seitenaufrufe'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'

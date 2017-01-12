@@ -7,7 +7,7 @@ class Dropdown extends React.Component {
       <div>
         <div className="title-2 underline" id="dropdown">DROPDOWN</div>
         <section>
-          <ul className="dropdown-navbar" style={{margin: 0}}>
+          <ul className="dropdown-navbar" style={{ margin: 0 }}>
             <NavDropdown title="Dropdown" id="nav-dropdown">
               <MenuItem>Action</MenuItem>
               <MenuItem>Another action</MenuItem>
@@ -24,43 +24,43 @@ class Dropdown extends React.Component {
                 <span>&lt;</span>
                 <span>ul className=&quot;dropdown-navbar&quot;</span>
                 <span>&gt;</span>
-                <br/>
-                <span style={{paddingLeft: 20 + 'px'}}>&lt;</span>
+                <br />
+                <span style={{ paddingLeft: `${20}px` }}>&lt;</span>
                 <span>NavDropdown title=&quot;Dropdown&quot; id=&quot;nav-dropdown&quot;</span>
                 <span>&gt;</span>
-                <br/>
-                <span style={{paddingLeft: 40 + 'px'}}>&lt;</span>
+                <br />
+                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
                 <span>MenuItem</span>
                 <span>&gt;</span>
                 <span>Action</span>
                 <span>&lt;</span>
                 <span>/MenuItem</span>
                 <span>&gt;</span>
-                <br/>
-                <span style={{paddingLeft: 40 + 'px'}}>&lt;</span>
+                <br />
+                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
                 <span>MenuItem</span>
                 <span>&gt;</span>
                 <span>Another action</span>
                 <span>&lt;</span>
                 <span>/MenuItem</span>
                 <span>&gt;</span>
-                <br/>
-                <span style={{paddingLeft: 40 + 'px'}}>&lt;</span>
+                <br />
+                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
                 <span>MenuItem divider /</span>
                 <span>&gt;</span>
-                <br/>
-                <span style={{paddingLeft: 40 + 'px'}}>&lt;</span>
+                <br />
+                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
                 <span>MenuItem</span>
                 <span>&gt;</span>
                 <span>Separated link</span>
                 <span>&lt;</span>
                 <span>/MenuItem</span>
                 <span>&gt;</span>
-                <br/>
-                <span style={{paddingLeft: 20 + 'px'}}>&lt;</span>
+                <br />
+                <span style={{ paddingLeft: `${20}px` }}>&lt;</span>
                 <span>/NavDropdown</span>
                 <span>&gt;</span>
-                <br/>
+                <br />
                 <span>&lt;</span>
                 <span>/ul</span>
                 <span>&gt;</span>

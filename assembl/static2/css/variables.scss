@@ -8,9 +8,9 @@ $green: #3bb848;
 
 $radius: 3px;
 
-$border-weight: 1px;
+$border-weight: 2px;
 
-$font-size-xs: 11px;
+$font-size-xs: 12px;
 $font-size-s: 14px;
 $font-size-m: 18px;
 $font-size-l: 22px;
@@ -48,17 +48,19 @@ $btn-cancel-hover-txt: $grey3;
 
 $title1-color: $black;
 $title2-color: $black;
-$title3-color: $black;
+$title3-color: $grey3;
+$title4-color: $grey3;
 $title1-size: $font-size-xl;
 $title2-size: $font-size-l;
 $title3-size: $font-size-m;
+$title4-size: $font-size-xs;
 
 $active-link-color: $green;
 
 $navbar-bkg: $white;
-$navbar-border: $border-weight solid $grey1;
+$navbar-border: none;
 $navbar-text-color: $grey2;
 
 $box-shadow: $shadow;
 $box-bkg: $white;
-$box-border: $border-weight solid $grey1;
+$box-border: $border-weight solid $white;

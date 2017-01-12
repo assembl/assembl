@@ -16,6 +16,19 @@
     ],
     "rules": {
         "react/prefer-stateless-function": [0, { "ignorePureComponents": false }],
+        "react/prop-types": [0, { "ignore": false, "customValidators": false }],
+        "max-len": [
+            "warn",
+            150
+        ],
+        "func-names": [
+            "warn",
+            "never"
+        ],
+        "arrow-body-style": [
+            "error",
+            "always"
+        ],
         "comma-dangle": [
           "warn",
           "never"
