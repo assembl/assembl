@@ -96,6 +96,7 @@
         "like_count": true,
         "message_classifier": true,
         "sentiment_counts": true,
+        "my_sentiment": ":default",
         "extracts": [":id_only"]
     },
     "Post": {
