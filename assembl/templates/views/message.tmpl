@@ -204,10 +204,10 @@
   <% } %>
   <div class="message-actions-container">
     <div class="emoticons">
-      <div data-tooltip="D'accord" data-id="LikeSentimentOfPost" class="emoticon LikeSentimentOfPost"></div>
-      <div data-tooltip="Pas tout compris" data-id="DontUnderstandSentimentOfPost" class="emoticon DontUnderstandSentimentOfPost"></div>
-      <div data-tooltip="Pas d'accord" data-id="DisagreeSentimentOfPost" class="emoticon DisagreeSentimentOfPost"></div>
-      <div data-tooltip="+ d'infos" data-id="MoreInfoSentimentOfPost" class="emoticon MoreInfoSentimentOfPost"></div>
+      <div data-tooltip="{{ gettext('Like') }}" data-id="LikeSentimentOfPost" class="emoticon LikeSentimentOfPost"></div>
+      <div data-tooltip="{{ gettext('Did not get it') }}" data-id="DontUnderstandSentimentOfPost" class="emoticon DontUnderstandSentimentOfPost"></div>
+      <div data-tooltip="{{ gettext('Disagree') }}" data-id="DisagreeSentimentOfPost" class="emoticon DisagreeSentimentOfPost"></div>
+      <div data-tooltip="{{ gettext('Please more info?') }}" data-id="MoreInfoSentimentOfPost" class="emoticon MoreInfoSentimentOfPost"></div>
     </div>
     <div class="js_messageBottomMenu message-menu message-menu-actions">
       {#
@@ -264,7 +264,7 @@
             <rect rx="1" id="gauge-like9" data-color="#46D081" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
             <rect rx="1" id="gauge-like10" data-color="#46D081" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
-          <div data-count="like" class="chart-number">0&nbsp;</div><div class="chart-label">D'accord</div>
+          <div data-count="like" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Like') }}</div>
         </div>
         <div class="bar-chart" style="color:#FAC16F">
           <svg width="25" height="58">
@@ -279,7 +279,7 @@
             <rect rx="1" id="gauge-dont_understand9" data-color="#FAC16F" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
             <rect rx="1" id="gauge-dont_understand10" data-color="#FAC16F" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
-          <div data-count="dont_understand" class="chart-number">0&nbsp;</div><div class="chart-label">Pas tout compris</div>
+          <div data-count="dont_understand" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Did not get it') }}</div>
         </div>
         <div class="bar-chart" style="color:#F2474D">
           <svg width="25" height="58">
@@ -294,7 +294,7 @@
             <rect rx="1" id="gauge-disagree9" data-color="#F2474D" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
             <rect rx="1" id="gauge-disagree10" data-color="#F2474D" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
-          <div data-count="disagree" class="chart-number">0&nbsp;</div><div class="chart-label">Pas d'accord</div>
+          <div data-count="disagree" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Disagree') }}</div>
         </div>
         <div class="bar-chart" style="color:#9374FF">
           <svg width="25" height="58">
@@ -309,7 +309,7 @@
             <rect rx="1" id="gauge-more_info9" data-color="#9374FF" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
             <rect rx="1" id="gauge-more_info10" data-color="#9374FF" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
-          <div data-count="more_info" class="chart-number">0&nbsp;</div><div class="chart-label">+ d'infos</div>
+          <div data-count="more_info" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Please more info?') }}</div>
       </div>
     </div>
   </div>

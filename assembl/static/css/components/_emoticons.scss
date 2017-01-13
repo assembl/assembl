@@ -62,6 +62,7 @@
   box-shadow: 3px 3px 10px 0px #CCCCCC;
   padding: 10px 15px;
   min-width: 480px;
+  margin: 0 0 0 -52px;
 }
 .bar-chart{
   display: inline-block;
@@ -97,8 +98,8 @@
 .MoreInfoSentimentOfPost {
   background-image: url(#{$img-dir}/emoticons/more_infos.svg);
   &:hover:after{
-    width: 34px;
-    left: calc(50% - 17px);
+    width: 66px;
+    left: calc(50% - 33px);
   }
 }
 .DontUnderstandSentimentOfPost {

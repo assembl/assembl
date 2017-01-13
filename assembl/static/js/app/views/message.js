@@ -1036,9 +1036,9 @@ var MessageView = Marionette.LayoutView.extend({
       that.$('.sentiment-names-list').css({"left":(marginLeft+25)+'px'});
       if(mySentiment){
         if(totalCount === 1){
-          that.$('.sentiment-names-list > a').html('Vous');
+          that.$('.sentiment-names-list > a').html(i18n.gettext('You'));
         }else{
-          that.$('.sentiment-names-list > a').html('Vous et '+(totalCount-1)+' autre(s) personne(s)');
+          that.$('.sentiment-names-list > a').html(i18n.gettext('You and ') + (totalCount-1)+' autre(s) personne(s)');
         }
       }else{
         that.$('.sentiment-names-list > a').html(+totalCount+' personne(s)');
