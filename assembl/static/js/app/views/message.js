@@ -1011,6 +1011,8 @@ var MessageView = Marionette.LayoutView.extend({
     return;
   },
   renderSentiments: function() {
+    // console.log('renderSentiments');
+    //$(event.target).addClass('active');
     var that = this;
     var mySentiment = this.model.get('my_sentiment');
     if(mySentiment){
@@ -1045,21 +1047,23 @@ var MessageView = Marionette.LayoutView.extend({
     }
   },
   onClickEmoticon:function(event){
-    var that = this;
-    var currentUser = Ctx.getCurrentUser();
-    var clickedSentiment = $(event.target).attr("data-id");
-    var currentPost = this.model.get("@id");
-    var data = {"target": currentPost, "user": currentUser.id, "@type": clickedSentiment};
-    var payload = JSON.stringify(data);
-    $.ajax(
-      "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments", {
-      method: "POST",
-      contentType: "application/json",
-      dataType: "json",
-      data: payload
-    }).then(function(data) {
-      $(event.target).addClass('active');
-    });
+    //Ctx.isUserConnected();
+    var currentClass = $(event.target).attr("class");
+    if(currentClass.indexOf('active') <= -1){
+      var that = this;
+      var currentUser = Ctx.getCurrentUser();
+      var clickedSentiment = $(event.target).attr("data-id");
+      var currentPost = this.model.get("@id");
+      var data = {"target": currentPost, "user": currentUser.id, "@type": clickedSentiment};
+      var payload = JSON.stringify(data);
+      $.ajax(
+        "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments", {
+        method: "POST",
+        contentType: "application/json",
+        dataType: "json",
+        data: payload
+      });
+    }
   },
   onOverNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').show();
