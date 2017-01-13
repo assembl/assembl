@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-15 17:05+0100\n"
+"POT-Creation-Date: 2017-01-13 11:13-0800\n"
 "PO-Revision-Date: 2016-12-15 14:31+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: de\n"
@@ -46,19 +46,19 @@ msgstr "${val} ist kein String: ${err}"
 msgid "Unknown User ${uid}"
 msgstr "Unbekannter Benutzer ${uid}"
 
-#: assembl/models/notification.py:589
+#: assembl/models/notification.py:590
 msgid "A synthesis is posted"
 msgstr "eine Synthese gepostet wird"
 
-#: assembl/models/notification.py:617
+#: assembl/models/notification.py:618
 msgid "Any message is posted to the discussion"
 msgstr "Nachrichten in der Diskussion gepostet werden"
 
-#: assembl/models/notification.py:645
+#: assembl/models/notification.py:646
 msgid "Someone directly responds to one of your messages"
 msgstr "Jemand antwortet direkt auf eine Ihrer Nachrichten"
 
-#: assembl/models/notification.py:1054
+#: assembl/models/notification.py:1056
 msgid "SYNTHESIS: "
 msgstr "SYNTHESE:"
 
@@ -1107,17 +1107,17 @@ msgstr[0] "%d Nachricht ist zu dieser Idee verfügbar"
 msgstr[1] "%d Nachrichten sind zu dieser Idee verfügbar"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:229
-#: assembl/static/js/app/views/message.js:859
+#: assembl/static/js/app/views/message.js:821
 msgid "Type your response here..."
 msgstr "Antwort hier eingeben ..."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:231
-#: assembl/static/js/app/views/message.js:861
+#: assembl/static/js/app/views/message.js:823
 msgid "Send your reply"
 msgstr "Antwort absenden"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:234
-#: assembl/static/js/app/views/message.js:863
+#: assembl/static/js/app/views/message.js:825
 msgid "You did not type a response yet..."
 msgstr "Sie haben noch keine Antwort eingegeben ..."
 
@@ -1204,12 +1204,12 @@ msgid "Confirm that you want to delete this idea."
 msgstr "Bestätigen Sie, dass Sie diese Idee löschen möchten."
 
 #: assembl/static/js/app/views/ideaPanel.js:754
-#: assembl/static/js/app/views/message.js:1586
+#: assembl/static/js/app/views/message.js:1664
 msgid "No"
 msgstr ""
 
 #: assembl/static/js/app/views/ideaPanel.js:755
-#: assembl/static/js/app/views/message.js:1587
+#: assembl/static/js/app/views/message.js:1665
 msgid "Yes"
 msgstr ""
 
@@ -1223,28 +1223,36 @@ msgstr ""
 msgid "You may want to describe this idea for users here..."
 msgstr ""
 
-#: assembl/static/js/app/views/message.js:174
+#: assembl/static/js/app/views/message.js:132
 msgid "This message is linked to the following idea: "
 msgid_plural "This message is linked to the following ideas: "
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/message.js:178
+#: assembl/static/js/app/views/message.js:136
 #, python-format
 msgid "and %d other idea</a>"
 msgid_plural "and %d other ideas</a>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/message.js:1568
+#: assembl/static/js/app/views/message.js:1039
+msgid "You"
+msgstr ""
+
+#: assembl/static/js/app/views/message.js:1042
+msgid "You and"
+msgstr ""
+
+#: assembl/static/js/app/views/message.js:1646
 msgid "Message has been successfully deleted."
 msgstr ""
 
-#: assembl/static/js/app/views/message.js:1579
+#: assembl/static/js/app/views/message.js:1657
 msgid "Error: Message could not be deleted."
 msgstr ""
 
-#: assembl/static/js/app/views/message.js:1585
+#: assembl/static/js/app/views/message.js:1663
 msgid "Are you sure you want to delete this message?"
 msgstr ""
 
@@ -3674,6 +3682,8 @@ msgid "Unlike"
 msgstr "Gefällt mir nicht"
 
 #: assembl/templates/views/message.tmpl:29
+#: assembl/templates/views/message.tmpl:207
+#: assembl/templates/views/message.tmpl:267
 msgid "Like"
 msgstr "Gefällt mir"
 
@@ -3763,7 +3773,22 @@ msgstr "Mehr lesen"
 msgid "Read less"
 msgstr "Weniger lesen"
 
-#: assembl/templates/views/message.tmpl:215
+#: assembl/templates/views/message.tmpl:208
+#: assembl/templates/views/message.tmpl:282
+msgid "Did not get it"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:209
+#: assembl/templates/views/message.tmpl:297
+msgid "Disagree"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:210
+#: assembl/templates/views/message.tmpl:312
+msgid "More info please?"
+msgstr ""
+
+#: assembl/templates/views/message.tmpl:222
 msgid "Reply"
 msgstr "Antworten"
 
@@ -4191,26 +4216,26 @@ msgstr "abgemeldet"
 msgid "No file given."
 msgstr "Keine Datei angegeben."
 
-#: assembl/views/api/post.py:78 assembl/views/api/post.py:644
+#: assembl/views/api/post.py:80 assembl/views/api/post.py:630
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "Keine Diskussion gefunden mit id=%s"
 
-#: assembl/views/api/post.py:232
+#: assembl/views/api/post.py:227
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr ""
 "Das Einholen von verwaisten Beiträgen zu einer bestimmten Idee wird nicht"
 " unterstützt."
 
-#: assembl/views/api/post.py:327
+#: assembl/views/api/post.py:297
 msgid "Do not combine negative and positive classifiers"
 msgstr ""
 
-#: assembl/views/api/post.py:392
+#: assembl/views/api/post.py:363
 msgid "You must be logged in to view which posts are read"
 msgstr "Sie müssen eingeloggt sein, um zu sehen, welche Beiträge gelesen wurden"
 
-#: assembl/views/api/post.py:628
+#: assembl/views/api/post.py:614
 msgid "Your message is empty"
 msgstr "Ihre Nachricht ist leer"
 
@@ -4454,4 +4479,7 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Keine Diskussionen gefunden für Slug=%s"
+
+#~ msgid "Please more info?"
+#~ msgstr ""
 

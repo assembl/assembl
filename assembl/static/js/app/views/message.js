@@ -1038,11 +1038,25 @@ var MessageView = Marionette.LayoutView.extend({
         if(totalCount === 1){
           that.$('.sentiment-names-list > a').html(i18n.gettext('You'));
         }else{
-          that.$('.sentiment-names-list > a').html(i18n.gettext('You and ') + (totalCount-1)+' autre(s) personne(s)');
+          that.$('.sentiment-names-list > a').html(
+            i18n.gettext('You and') + ' ' + 
+            numOthers + ' ' +
+            i18n.ngettext(numOthers,
+              i18n.gettext("Another person"),
+              i18n.gettext("Other persons")
+            )
+          );
         }
       }else{
-        that.$('.sentiment-names-list > a').html(+totalCount+' personne(s)');
+        that.$('.sentiment-names-list > a').html(
+          totalCount + " " +
+          i18n.ngettext(totalCount,
+            i18n.gettext("person"),
+            i18n.gettext("persons")
+          )
+        );
       }
+      that.$('.sentiment-names-list > a').css("")
       that.$('.js_idea-classification-region').css({"margin-top":"35px"});
     }else{
       that.$('.js_idea-classification-region').css({"margin-top":"0px"});
