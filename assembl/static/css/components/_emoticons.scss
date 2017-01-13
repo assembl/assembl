@@ -12,10 +12,12 @@
   background-position: top center;
   display: inline-block;
   background-size: 28px;
-  cursor: pointer;
   width:28px;
   height: 28px;
   content: "&nbsp;";
+}
+.emoticon-connected {
+  cursor: pointer;
   &:hover{
     transform: scale(1.2);
   }
@@ -59,8 +61,7 @@
   -o-box-shadow: 3px 3px 10px 0px #CCCCCC;
   box-shadow: 3px 3px 10px 0px #CCCCCC;
   padding: 10px 15px;
-  min-width: 450px;
-  
+  min-width: 480px;
 }
 .bar-chart{
   display: inline-block;

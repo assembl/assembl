@@ -1011,8 +1011,6 @@ var MessageView = Marionette.LayoutView.extend({
     return;
   },
   renderSentiments: function() {
-    // console.log('renderSentiments');
-    //$(event.target).addClass('active');
     var that = this;
     var mySentiment = this.model.get('my_sentiment');
     if(mySentiment){
@@ -1045,31 +1043,36 @@ var MessageView = Marionette.LayoutView.extend({
     }else{
       that.$('.js_idea-classification-region').css({"margin-top":"0px"});
     }
+    if(Ctx.isUserConnected()){
+      $('.emoticon').addClass('emoticon-connected');
+    }
   },
   onClickEmoticon:function(event){
-    //Ctx.isUserConnected();
-    var currentClass = $(event.target).attr("class");
-    if(currentClass.indexOf('active') <= -1){
-      var that = this;
-      var currentUser = Ctx.getCurrentUser();
-      var clickedSentiment = $(event.target).attr("data-id");
-      var currentPost = this.model.get("@id");
-      var data = {"target": currentPost, "user": currentUser.id, "@type": clickedSentiment};
-      var payload = JSON.stringify(data);
-      $.ajax(
-        "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments", {
-        method: "POST",
-        contentType: "application/json",
-        dataType: "json",
-        data: payload
-      });
+    var isUserConnected = Ctx.isUserConnected();
+    if(isUserConnected){
+      var currentClass = $(event.target).attr("class");
+      if(currentClass.indexOf('active') <= -1){
+        var that = this;
+        var currentUser = Ctx.getCurrentUser();
+        var clickedSentiment = $(event.target).attr("data-id");
+        var currentPost = this.model.get("@id");
+        var data = {"target": currentPost, "user": currentUser.id, "@type": clickedSentiment};
+        var payload = JSON.stringify(data);
+        $.ajax(
+          "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments", {
+          method: "POST",
+          contentType: "application/json",
+          dataType: "json",
+          data: payload
+        });
+      }
     }
   },
   onOverNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').show();
     this.renderGauge();
   },
-  onOutNamesList:function(){
+  onOutNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').hide();
   },
   renderGauge:function(){
@@ -1077,7 +1080,7 @@ var MessageView = Marionette.LayoutView.extend({
     var sentiment_counts = this.model.get('sentiment_counts');
     $.each(sentiment_counts, function(label,count){
       var countSelector = "div[data-count=" + label + "]";
-      that.$(countSelector).text(count + " ");
+      that.$(countSelector).html(count + "&nbsp;");
       var totalCount = that.getTotalCount();
       var gaugeNumber = that.calculateSentimentGauge(count, totalCount);
       for(var i=0; i <= gaugeNumber; i++){
