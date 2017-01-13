@@ -204,10 +204,10 @@
   <% } %>
   <div class="message-actions-container">
     <div class="emoticons">
-      <div data-tooltip="D'accord" class="emoticon emoticon-agree"></div>
-      <div data-tooltip="Pas tout compris" class="emoticon emoticon-notunderstand"></div>
-      <div data-tooltip="Pas d'accord" class="emoticon emoticon-disagree"></div>
-      <div data-tooltip="+ d'infos" class="emoticon emoticon-moreinfos"></div>
+      <div data-tooltip="D'accord" data-id="LikeSentimentOfPost" class="emoticon LikeSentimentOfPost"></div>
+      <div data-tooltip="Pas tout compris" data-id="DontUnderstandSentimentOfPost" class="emoticon DontUnderstandSentimentOfPost"></div>
+      <div data-tooltip="Pas d'accord" data-id="DisagreeSentimentOfPost" class="emoticon DisagreeSentimentOfPost"></div>
+      <div data-tooltip="+ d'infos" data-id="MoreInfoSentimentOfPost" class="emoticon MoreInfoSentimentOfPost"></div>
     </div>
     <div class="js_messageBottomMenu message-menu message-menu-actions">
       {#
@@ -244,78 +244,78 @@
     </div>
   </div>
   <div class="sentiment-list left">
-    <div class="emo-minified emoticon-agree min" style="left:5px"></div>
-    <div class="emo-minified emoticon-notunderstand min" style="left:15px"></div>
-    <div class="emo-minified emoticon-disagree min" style="left:25px"></div>
-    <div class="emo-minified emoticon-moreinfos min" style="left:35px"></div>
-    <div class="js_sentimentNamesList sentiment-names-list" style="left:60px">
-      <a href="#">Vous, Pauline Thomas et 14 autres personnes</a>
+    <div class="emo-minified like min"></div>
+    <div class="emo-minified dont_understand min"></div>
+    <div class="emo-minified disagree min"></div>
+    <div class="emo-minified more_info min"></div>
+    <div class="js_sentimentNamesList sentiment-names-list">
+      <a href="#"></a>
       <div class="js_sentimentStats sentiment-stats">
         <div class="bar-chart" style="color:#46D081">
           <svg width="25" height="58">
-            <rect rx="1" id="svg_11" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#46D081" fill="#46D081"/>
-            <rect rx="1" id="svg_12" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#46D081" fill="#46D081"/>
-            <rect rx="1" id="svg_13" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#46D081" fill="#46D081"/>
-            <rect rx="1" id="svg_14" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#46D081" fill="#46D081"/>
-            <rect rx="1" id="svg_15" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_16" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_17" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_18" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_19" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_110" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like1" data-color="#46D081" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like2" data-color="#46D081" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like3" data-color="#46D081" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like4" data-color="#46D081" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like5" data-color="#46D081" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like6" data-color="#46D081" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like7" data-color="#46D081" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like8" data-color="#46D081" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like9" data-color="#46D081" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like10" data-color="#46D081" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
-          <div class="chart-number">9&nbsp;</div><div class="chart-label">D'accord</div>
+          <div data-count="like" class="chart-number">0&nbsp;</div><div class="chart-label">D'accord</div>
         </div>
         <div class="bar-chart" style="color:#FAC16F">
           <svg width="25" height="58">
-            <rect rx="1" id="svg_21" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_22" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_23" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_24" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_25" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_26" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_27" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_28" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_29" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_210" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand1" data-color="#FAC16F" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand2" data-color="#FAC16F" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand3" data-color="#FAC16F" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand4" data-color="#FAC16F" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand5" data-color="#FAC16F" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand6" data-color="#FAC16F" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand7" data-color="#FAC16F" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand8" data-color="#FAC16F" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand9" data-color="#FAC16F" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand10" data-color="#FAC16F" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
-          <div class="chart-number">0&nbsp;</div><div class="chart-label">Pas tout compris</div>
+          <div data-count="dont_understand" class="chart-number">0&nbsp;</div><div class="chart-label">Pas tout compris</div>
         </div>
         <div class="bar-chart" style="color:#F2474D">
           <svg width="25" height="58">
-            <rect rx="1" id="svg_31" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#F2474D" fill="#F2474D"/>
-            <rect rx="1" id="svg_32" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#F2474D" fill="#F2474D"/>
-            <rect rx="1" id="svg_33" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#F2474D" fill="#F2474D"/>
-            <rect rx="1" id="svg_34" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_35" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_36" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_37" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_38" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_39" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_310" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree1" data-color="#F2474D" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree2" data-color="#F2474D" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree3" data-color="#F2474D" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree4" data-color="#F2474D" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree5" data-color="#F2474D" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree6" data-color="#F2474D" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree7" data-color="#F2474D" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree8" data-color="#F2474D" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree9" data-color="#F2474D" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree10" data-color="#F2474D" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
-          <div class="chart-number">4&nbsp;</div><div class="chart-label">Pas d'accord</div>
+          <div data-count="disagree" class="chart-number">0&nbsp;</div><div class="chart-label">Pas d'accord</div>
         </div>
         <div class="bar-chart" style="color:#9374FF">
           <svg width="25" height="58">
-            <rect rx="1" id="svg_41" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#9374FF" fill="#9374FF"/>
-            <rect rx="1" id="svg_42" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_43" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_44" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_45" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_46" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_47" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_48" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_49" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="svg_410" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info1" data-color="#9374FF" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info2" data-color="#9374FF" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info3" data-color="#9374FF" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info4" data-color="#9374FF" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info5" data-color="#9374FF" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info6" data-color="#9374FF" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info7" data-color="#9374FF" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info8" data-color="#9374FF" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info9" data-color="#9374FF" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info10" data-color="#9374FF" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
-          <div class="chart-number">1</div><div class="chart-label">+ d'infos</div>
+          <div data-count="more_info" class="chart-number">0&nbsp;</div><div class="chart-label">+ d'infos</div>
       </div>
     </div>
   </div>
   <div class="clear"></div>
   <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
-    <div class="mtm idea-classification js_idea-classification-region"></div>
+    <div class="idea-classification js_idea-classification-region"></div>
   <% } %>
 
 <% } %>

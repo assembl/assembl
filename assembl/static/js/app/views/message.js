@@ -786,6 +786,7 @@ var MessageView = Marionette.LayoutView.extend({
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
       this.renderAuthor();
+      this.renderSentiments();
 
       this.$el.attr("id", "message-" + this.model.get('@id'));
       this.$el.addClass(this.model.get('@type'));
@@ -1009,14 +1010,93 @@ var MessageView = Marionette.LayoutView.extend({
   postRender: function() {
     return;
   },
+  renderSentiments: function() {
+    var that = this;
+    var mySentiment = this.model.get('my_sentiment');
+    if(mySentiment){
+      var activeSentiment = this.model.get('my_sentiment')['@type'];
+      var activeSentimentClass = '.' + activeSentiment;
+      var test = this.$(activeSentimentClass).addClass('active');
+    }
+    var sentiment_counts = this.model.get('sentiment_counts');
+    var increment = 0;
+    var marginLeft = 5;
+    var totalCount = 0;
+    if(!_.isEmpty(sentiment_counts)){
+      $.each(sentiment_counts, function(label,count){
+        totalCount += count;
+        increment++;
+        if(increment > 1){
+          marginLeft += 10;
+        }
+        var sentimentClass = "." + label;
+        that.$(sentimentClass).show();
+        that.$(sentimentClass).css({left:marginLeft+'px'});
+      });
+      that.$('.sentiment-names-list').css({"left":(marginLeft+25)+'px'});
+      if(mySentiment){
+        that.$('.sentiment-names-list > a').html('Vous et '+(totalCount-1)+' autre(s) personne(s)');
+      }else{
+        that.$('.sentiment-names-list > a').html(+totalCount+' personne(s)');
+      }
+      that.$('.js_idea-classification-region').css({"margin-top":"35px"});
+    }else{
+      that.$('.js_idea-classification-region').css({"margin-top":"0px"});
+    }
+  },
   onClickEmoticon:function(event){
-    $(event.target).addClass('active');
+    var that = this;
+    var currentUser = Ctx.getCurrentUser();
+    var clickedSentiment = $(event.target).attr("data-id");
+    var currentPost = this.model.get("@id");
+    var data = {"target": currentPost, "user": currentUser.id, "@type": clickedSentiment};
+    var payload = JSON.stringify(data);
+    $.ajax(
+      "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments", {
+      method: "POST",
+      contentType: "application/json",
+      dataType: "json",
+      data: payload
+    }).then(function(data) {
+      $(event.target).addClass('active');
+    });
   },
   onOverNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').show();
+    this.renderGauge();
   },
   onOutNamesList:function(){
     $(event.currentTarget).find('.js_sentimentStats').hide();
+  },
+  renderGauge:function(){
+    var that = this;
+    var sentiment_counts = this.model.get('sentiment_counts');
+    $.each(sentiment_counts, function(label,count){
+      var countSelector = "div[data-count=" + label + "]";
+      that.$(countSelector).text(count + " ");
+      var totalCount = that.getTotalCount();
+      var gaugeNumber = that.calculateSentimentGauge(count, totalCount);
+      for(var i=0; i <= gaugeNumber; i++){
+        var gaugeSelector = "#gauge-" + label + i;
+        var gaugeColor = that.$(gaugeSelector).attr("data-color");
+        that.$(gaugeSelector).attr("fill", gaugeColor);
+        that.$(gaugeSelector).attr("stroke", gaugeColor);
+      }
+    });
+  },
+  getTotalCount:function(){
+    var totalCount = 0;
+    var sentiment_counts = this.model.get('sentiment_counts');
+    _.each(sentiment_counts, function(count){
+      totalCount += count;
+    });
+    
+    return totalCount;
+  },
+  calculateSentimentGauge:function(count, totalCount){
+    var ratio = (count * 10) / totalCount;
+    
+    return Math.round(ratio);
   },
   onClickLike: function(e) {
     var that = this,

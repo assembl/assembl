@@ -73,6 +73,8 @@ var MessageModel = Base.Model.extend({
     parentId: null,
     subject: LangString.Model.empty,
     like_count: 0,
+    my_sentiment: {},
+    sentiment_counts: {},
     liked: false,
     hidden: false,
     body: LangString.Model.empty,

@@ -1,7 +1,7 @@
 .emoticons {
   width: 50%;
   float: left;
-}
+} 
 .emoticon{
   -webkit-transition: all .2s ease-in-out;
   -moz-transition: all .2s ease-in-out;
@@ -79,55 +79,59 @@
 .left {
   float: left;
 }
-.emoticon-agree {
+.LikeSentimentOfPost {
   background-image:url(#{$img-dir}/emoticons/agree.svg);
   &:hover:after{
     width: 34px;
     left: calc(50% - 17px);
   }
 }
-.emoticon-disagree {
+.DisagreeSentimentOfPost {
   background-image: url(#{$img-dir}/emoticons/disagree.svg);
   &:hover:after{
     width: 44px;
     left: calc(50% - 22px);
   }
 }
-.emoticon-moreinfos {
+.MoreInfoSentimentOfPost {
   background-image: url(#{$img-dir}/emoticons/more_infos.svg);
   &:hover:after{
     width: 34px;
     left: calc(50% - 17px);
   }
 }
-.emoticon-notunderstand {
+.DontUnderstandSentimentOfPost {
   background-image: url(#{$img-dir}/emoticons/not_understand.svg);
   &:hover:after{
     width: 56px;
     left: calc(50% - 28px);
   }
 } 
-.emoticon-agree.active {
+.LikeSentimentOfPost.active {
   background-image: url(#{$img-dir}/emoticons/agree_active.svg);
 }
-.emoticon-disagree.active {
+.DisagreeSentimentOfPost.active {
   background-image: url(#{$img-dir}/emoticons/disagree_active.svg);
 }
-.emoticon-moreinfos.active {
+.MoreInfoSentimentOfPost.active {
   background-image: url(#{$img-dir}/emoticons/more_infos_active.svg);
 }
-.emoticon-notunderstand.active {
+.DontUnderstandSentimentOfPost.active {
   background-image: url(#{$img-dir}/emoticons/not_understand_active.svg);
 }
-.emoticon-agree.min {
+.like.min {
+  display:none;
   background-image: url(#{$img-dir}/emoticons/agree_min.svg);
 }
-.emoticon-disagree.min {
+.disagree.min {
+  display:none;
   background-image: url(#{$img-dir}/emoticons/disagree_min.svg);
 }
-.emoticon-moreinfos.min {
+.more_info.min {
+  display:none;
   background-image: url(#{$img-dir}/emoticons/more_infos_min.svg);
 }
-.emoticon-notunderstand.min {
+.dont_understand.min {
+  display:none;
   background-image: url(#{$img-dir}/emoticons/not_understand_min.svg);
 }
