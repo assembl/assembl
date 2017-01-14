@@ -91,22 +91,22 @@
 .DisagreeSentimentOfPost {
   background-image: url(#{$img-dir}/emoticons/disagree.svg);
   &:hover:after{
-    width: 44px;
-    left: calc(50% - 22px);
+    width: 54px;
+    left: calc(50% - 27px);
   }
 }
 .MoreInfoSentimentOfPost {
   background-image: url(#{$img-dir}/emoticons/more_infos.svg);
   &:hover:after{
-    width: 66px;
-    left: calc(50% - 33px);
+    width: 60px;
+    left: calc(50% - 30px);
   }
 }
 .DontUnderstandSentimentOfPost {
   background-image: url(#{$img-dir}/emoticons/not_understand.svg);
   &:hover:after{
-    width: 56px;
-    left: calc(50% - 28px);
+    width: 66px;
+    left: calc(50% - 33px);
   }
 } 
 .LikeSentimentOfPost.active {
