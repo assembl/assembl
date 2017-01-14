@@ -1036,27 +1036,26 @@ var MessageView = Marionette.LayoutView.extend({
       that.$('.sentiment-names-list').css({"left":(marginLeft+25)+'px'});
       if(mySentiment){
         if(totalCount === 1){
-          that.$('.sentiment-names-list > a').html(i18n.gettext('You'));
+          var msg1 = i18n.gettext('You');
+          
+          that.$('.sentiment-names-list > a').html(msg1);
         }else{
-          that.$('.sentiment-names-list > a').html(
-            i18n.gettext('You and') + ' ' + 
-            numOthers + ' ' +
-            i18n.ngettext(numOthers,
-              i18n.gettext("Another person"),
-              i18n.gettext("Other persons")
-            )
-          );
+          var numOthers = totalCount - 1;
+          var msg2 = i18n.sprintf(i18n.ngettext(
+          'You and %d Another person',
+          'You and %d Other persons',
+          numOthers), numOthers);
+          
+          that.$('.sentiment-names-list > a').html(msg2);
         }
       }else{
-        that.$('.sentiment-names-list > a').html(
-          totalCount + " " +
-          i18n.ngettext(totalCount,
-            i18n.gettext("person"),
-            i18n.gettext("persons")
-          )
-        );
+        var msg3 = i18n.sprintf(i18n.ngettext(
+        '%d person',
+        '%d persons',
+        totalCount), totalCount);
+        
+        that.$('.sentiment-names-list > a').html(msg3);
       }
-      that.$('.sentiment-names-list > a').css("")
       that.$('.js_idea-classification-region').css({"margin-top":"35px"});
     }else{
       that.$('.js_idea-classification-region').css({"margin-top":"0px"});

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-13 11:13-0800\n"
+"POT-Creation-Date: 2017-01-14 11:31+0100\n"
 "PO-Revision-Date: 2016-12-15 14:31+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: es\n"
@@ -1182,9 +1182,19 @@ msgstr[1] ""
 msgid "You"
 msgstr ""
 
-#: assembl/static/js/app/views/message.js:1042
-msgid "You and"
-msgstr ""
+#: assembl/static/js/app/views/message.js:1044
+#, python-format
+msgid "You and %d Another person"
+msgid_plural "You and %d Other persons"
+msgstr[0] ""
+msgstr[1] ""
+
+#: assembl/static/js/app/views/message.js:1052
+#, python-format
+msgid "%d person"
+msgid_plural "%d persons"
+msgstr[0] ""
+msgstr[1] ""
 
 #: assembl/static/js/app/views/message.js:1646
 msgid "Message has been successfully deleted."
@@ -4260,5 +4270,8 @@ msgid "No discussion found for slug=%s"
 msgstr ""
 
 #~ msgid "Please more info?"
+#~ msgstr ""
+
+#~ msgid "You and"
 #~ msgstr ""
 
