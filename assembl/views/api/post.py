@@ -387,7 +387,9 @@ def get_posts(request):
             ).group_by(PostClass.id, SentimentOfPost.type)
         sentiment_counts_by_post_id = defaultdict(dict)
         for (post_id, sentiment_type, sentiment_count) in sentiment_counts:
-            sentiment_counts_by_post_id[post_id][sentiment_type[10:]] = sentiment_count
+            sentiment_counts_by_post_id[post_id][
+                sentiment_type[SentimentOfPost.TYPE_PREFIX_LEN:]
+            ] = sentiment_count
         posts = posts.options(
             # undefer(Post.idea_content_links_above_post),
             joinedload_all(Post.creator),

@@ -519,7 +519,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             ).filter(SentimentOfPost.post_id == self.id,
                      SentimentOfPost.tombstone_condition()
             ).group_by(SentimentOfPost.type)
-        return {k[10:]: v for (k, v) in r}
+        return {k[SentimentOfPost.TYPE_PREFIX_LEN:]: v for (k, v) in r}
 
     @property
     def my_sentiment(self):

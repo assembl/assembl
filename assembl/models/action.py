@@ -235,6 +235,8 @@ class SentimentOfPost(UniqueActionOnPost):
     verb = 'assign_sentiment'
     default_duplicate_handling = DuplicateHandling.TOMBSTONE
 
+    TYPE_PREFIX_LEN = len('sentiment:')
+
     crud_permissions = CrudPermissions(
         P_READ, P_READ, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
 
