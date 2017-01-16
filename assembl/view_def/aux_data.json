@@ -1,0 +1,43 @@
+{
+    "_default": {
+        "id": false,
+        "type": false,
+        "@id": "self",
+        "@type": "&external_typename",
+        "_default": false
+    },
+    "Content": {
+        "like_count": true,
+        "sentiment_counts": true
+    },
+    "Post": {
+        "@extends": "Content"
+    },
+    "AssemblPost": {
+        "@extends": "Post"
+    },
+    "WidgetPost": {
+        "@extends": "AssemblPost"
+    },
+    "IdeaProposalPost": {
+        "@extends": "WidgetPost"
+    },
+    "SynthesisPost": {
+        "@extends": "AssemblPost"
+    },
+    "ImportedPost": {
+        "@extends": "Post"
+    },
+    "FeedPost": {
+        "@extends": "ImportedPost"
+    },
+    "LoomioFeedPost": {
+        "@extends": "FeedPost"
+    },
+    "Email": {
+        "@extends": "ImportedPost"
+    },
+    "Webpage": {
+        "@extends": "Content"
+    }
+}
