@@ -24,6 +24,12 @@ const Translations = {
     debate: {
       panelTitle: 'Bienvenue dans la page débat d\'Assembl'
     },
+    loading: {
+      wait: 'Veuillez patientez...'
+    },
+    error: {
+      reason: 'Désolé, une erreur s\'est produite.'
+    },
     notFound: {
       panelTitle: 'Désolé, cette page n\'existe pas'
     },
@@ -56,6 +62,12 @@ const Translations = {
     debate: {
       panelTitle: 'Welcome to Assembl debate page'
     },
+    loading: {
+      wait: 'Please wait...'
+    },
+    error: {
+      reason: 'Sorry, an error occurred.'
+    },
     notFound: {
       panelTitle: 'Sorry, this page doesn\'t exist'
     },
@@ -87,6 +99,12 @@ const Translations = {
     },
     debate: {
       panelTitle: 'Willkommen in Assembl - debate page'
+    },
+    loading: {
+      wait: 'Bitte warten...'
+    },
+    error: {
+      reason: 'Ist ein Fehler aufgetreten.'
     },
     notFound: {
       panelTitle: 'Sorry, diese Seite existiert nicht'

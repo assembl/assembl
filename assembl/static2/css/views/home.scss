@@ -17,12 +17,14 @@
   }
 
   .header-bkg {
-    height: auto;
-    left: 0;
     opacity: .2;
     position: absolute;
     top: 0;
     width: 100%;
+
+    img {
+      width: 100%;
+    }
   }
 
   .statistic {
