@@ -8,6 +8,7 @@
     },
     "Content": {
         "like_count": true,
+        "my_sentiment": true,
         "sentiment_counts": true
     },
     "Post": {
