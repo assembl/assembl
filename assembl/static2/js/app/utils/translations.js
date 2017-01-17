@@ -25,7 +25,7 @@ const Translations = {
       panelTitle: 'Bienvenue dans la page débat d\'Assembl'
     },
     loading: {
-      wait: 'Veuillez patientez...'
+      wait: 'Veuillez patientez'
     },
     error: {
       reason: 'Désolé, une erreur s\'est produite.'

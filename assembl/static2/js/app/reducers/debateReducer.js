@@ -1,11 +1,11 @@
 const DebateReducer = (state = {}, action) => {
   switch (action.type) {
   case 'FETCH_DEBATE_DATA':
-    return { debateData: null, loading: true, error: null };
+    return { debateData: null, debateLoading: true, debateError: null };
   case 'RESOLVED_FETCH_DEBATE_DATA':
-    return { debateData: action.payload, loading: false, error: null };
+    return { debateData: action.payload, debateLoading: false, debateError: null };
   case 'FAILED_FETCH_DEBATE_DATA':
-    return { debateData: null, loading: false, error: action.error };
+    return { debateData: null, debateLoading: false, debateError: action.error };
   default:
     return state;
   }

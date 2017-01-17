@@ -5,8 +5,8 @@ class DebateActions {
     const that = this;
     return function (dispatch) {
       dispatch(that.loadingDebateData());
-      return DebateService.fetchDebateData(debateId).then((response) => {
-        dispatch(that.resolvedFetchDebateData(response));
+      return DebateService.fetchDebateData(debateId).then((debateData) => {
+        dispatch(that.resolvedFetchDebateData(debateData));
       }).catch((error) => {
         dispatch(that.failedFetchDebateData(error));
       });

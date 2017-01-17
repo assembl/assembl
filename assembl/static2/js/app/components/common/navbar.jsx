@@ -16,7 +16,7 @@ class NavBar extends React.Component {
             <div className="nav-bar">
               <div className="left">
                 <div className="navbar-logo">
-                  <img src="../../../../static2/css/img/default_logo.png" alt="logo" />
+                  <img src={debateData.logo} alt="logo" />
                 </div>
               </div>
               <div className="left">

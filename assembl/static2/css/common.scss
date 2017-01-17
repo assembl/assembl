@@ -8,6 +8,10 @@ section {
   margin: 30px 0;
 }
 
+.inline {
+  display: inline-block;
+}
+
 .left {
   float: left;
 }
@@ -21,15 +25,18 @@ section {
 }
 
 .margin-xs {
-  margin: 5px 0;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .margin-s {
-  margin: 10px 0;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .margin-m {
-  margin: 20px 0;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .margin-l {
@@ -37,12 +44,22 @@ section {
 }
 
 .margin-xl {
-  margin: 50px 0;
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+
+.margin-xxl {
+  margin-bottom: 100px;
+  margin-top: 100px;
 }
 
 .underline {
   border-bottom: $box-border;
   margin: 0 0 20px;
+}
+
+.hidden {
+  display: none;
 }
 
 .code {

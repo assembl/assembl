@@ -1,10 +1,10 @@
 import HttpRequestHandler from '../utils/httpRequestHandler';
 
 class DebateService {
-  static fetchDebateData(debateId) {
-    const fetchUrl = `discussion/${debateId}`;
-    return HttpRequestHandler.request({ method: 'GET', url: fetchUrl }).then((response) => {
-      return response;
+  static fetchDebateData(discussionId) {
+    const fetchUrl = `discussion/${discussionId}`;
+    return HttpRequestHandler.request({ method: 'GET', url: fetchUrl }).then((debateData) => {
+      return debateData;
     });
   }
 }

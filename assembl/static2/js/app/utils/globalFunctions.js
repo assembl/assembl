@@ -6,6 +6,10 @@ class GlobalFunctions {
     if (!Translations[locale]) locale = 'en';
     return locale;
   }
+  static getDiscussionId() {
+    const discussionId = document.getElementById('discussion-id').value;
+    return discussionId;
+  }
 }
 
 export default GlobalFunctions;
