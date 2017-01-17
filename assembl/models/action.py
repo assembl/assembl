@@ -197,8 +197,13 @@ class LikedPost(UniqueActionOnPost):
 
     post_from_like = relationship(
         'Content',
-        backref=backref('was_liked'),
-    )
+        primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                         "Content.tombstone_date == None)",
+        foreign_keys=(ActionOnPost.post_id,),
+        backref=backref(
+            'was_liked',
+            primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                             "ActionOnPost.tombstone_date == None)"))
 
     verb = 'liked'
 
@@ -229,8 +234,13 @@ class SentimentOfPost(UniqueActionOnPost):
 
     post_from_sentiments = relationship(
         'Content',
-        backref=backref('sentiments'),
-    )
+        primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                         "Content.tombstone_date == None)",
+        foreign_keys=(ActionOnPost.post_id,),
+        backref=backref(
+            'sentiments',
+            primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                             "ActionOnPost.tombstone_date == None)"))
 
     verb = 'assign_sentiment'
     default_duplicate_handling = DuplicateHandling.TOMBSTONE

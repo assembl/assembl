@@ -355,6 +355,7 @@ var MessageView = Marionette.LayoutView.extend({
   modelEvents: {
       'replacedBy':'onReplaced',
       'change:like_count':'renderLikeCount',
+      'change:sentiment_counts':'renderSentiments',
       'change':'guardedRender',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
   },
@@ -675,7 +676,7 @@ var MessageView = Marionette.LayoutView.extend({
       var countChangeFound = false,
           changedAttributes = this.model.changedAttributes();
       for (var propName in changedAttributes) {
-        if (propName === "like_count" || propName === "sentiment_count") {
+        if (propName === "like_count" || propName === "sentiment_counts") {
           countChangeFound = true;
           continue;
         }
