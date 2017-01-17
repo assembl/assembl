@@ -83,48 +83,6 @@ var IdeaClassificationNameListView = Marionette.ItemView.extend({
     }
 
     else {
-
-      //Current implementation of IdeaContentLink Collection is the creation of the
-      //collection each time for a message for IdeaContentLinks associated with the
-      //message. During the App lifetime, IdeaContentLinks can be created, destroyed,
-      //Ideas created, renamed, destroyed. This collection is stale; it does not know
-      //of any of these changes. As a result, on each init, clear the collection
-      //of any IdeaContentLinks that are out of date.
-
-
-      //First, let's remove the extracts that no longer exist.
-      //Then let's update with the ideas that no longer exist.
-
-      // cm.getAllExtractsCollectionPromise()
-      //   .then(function(extracts){
-      //     var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
-      //       var exists = extracts.get(icl.id);
-      //       return exists ? false: true;
-      //     });
-
-      //     console.log("---- Removing stale extracts -----");
-      //     console.log("From body: ", that.messageView._body.value());
-      //     console.log("staleIdeaContentLinks", staleIdeaContentLinks);
-      //     console.log("All Extracts", extracts);
-      //     //Remove the stale data from the collection
-      //     that.ideaContentLinks.remove(staleIdeaContentLinks);
-      //     return cm.getAllIdeasCollectionPromise();
-      //   })
-      //   .then(function(ideas){
-
-      //     var staleIdeaContentLinks = that.ideaContentLinks.filter(function(icl){
-      //       var exists = ideas.get(icl.get('idIdea'));
-      //       return exists ? false : true;
-      //     });
-
-      //     console.log("---- Removing stale ideas -----");
-      //     console.log("From body: ", that.messageView._body.value());
-      //     console.log("staleIdeaContentLinks", staleIdeaContentLinks);
-      //     console.log("All Ideas", ideas);
-      //     //Now remove the stale links to ideas that no longer exist
-      //     that.ideaContentLinks.remove(staleIdeaContentLinks);
-      //     return that.ideaContentLinks.getIdeaNamesPromise();
-      //   })
       this.ideaContentLinks.getIdeaNamesPromise()
         .then(function(ideaNames){
           that.ideaNames = ideaNames;
@@ -397,6 +355,7 @@ var MessageView = Marionette.LayoutView.extend({
   modelEvents: {
       'replacedBy':'onReplaced',
       'change:like_count':'renderLikeCount',
+      'change:sentiment_counts':'renderSentiments',
       'change':'guardedRender',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
   },
@@ -459,6 +418,9 @@ var MessageView = Marionette.LayoutView.extend({
     'click .js_readMore': 'onMessageTitleClick',
     'click .js_readLess': 'onMessageTitleClick',
     'click .message-hoistbtn': 'onMessageHoistClick',
+    'mouseover .js_sentimentNamesList': 'onOverNamesList',
+    'mouseout .js_sentimentNamesList': 'onOutNamesList',
+    'click .emoticon':'onClickEmoticon',
     'click @ui.likeLink': 'onClickLike',
     'click @ui.shareLink': 'onClickShare',
     'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
@@ -711,10 +673,11 @@ var MessageView = Marionette.LayoutView.extend({
     },
 
   changeIsPartialRender: function() {
-      var likeFound = false, changedAttributes = this.model.changedAttributes();
+      var countChangeFound = false,
+          changedAttributes = this.model.changedAttributes();
       for (var propName in changedAttributes) {
-        if (propName === "like_count") {
-          likeFound = true;
+        if (propName === "like_count" || propName === "sentiment_counts") {
+          countChangeFound = true;
           continue;
         }
 
@@ -730,7 +693,7 @@ var MessageView = Marionette.LayoutView.extend({
         return false;
       }
 
-      return likeFound;
+      return countChangeFound;
     },
 
   render: function() {
@@ -825,6 +788,7 @@ var MessageView = Marionette.LayoutView.extend({
       Ctx.removeCurrentlyDisplayedTooltips(this.$el);
 
       this.renderAuthor();
+      this.renderSentiments();
 
       this.$el.attr("id", "message-" + this.model.get('@id'));
       this.$el.addClass(this.model.get('@type'));
@@ -1048,7 +1012,122 @@ var MessageView = Marionette.LayoutView.extend({
   postRender: function() {
     return;
   },
+  renderSentiments: function() {
+    var that = this;
+    var mySentiment = this.model.get('my_sentiment');
+    if(mySentiment){
+      var activeSentiment = this.model.get('my_sentiment')['@type'];
+      var activeSentimentClass = '.' + activeSentiment;
+      var test = this.$(activeSentimentClass).addClass('active');
+    }
+    var sentiment_counts = this.model.get('sentiment_counts');
+    var increment = 0;
+    var marginLeft = 5;
+    var totalCount = 0;
+    if(!_.isEmpty(sentiment_counts)){
+      $.each(sentiment_counts, function(label,count){
+        totalCount += count;
+        increment++;
+        if(increment > 1){
+          marginLeft += 10;
+        }
+        var sentimentClass = "." + label;
+        that.$(sentimentClass).show();
+        that.$(sentimentClass).css({left:marginLeft+'px'});
+      });
+      that.$('.sentiment-names-list').css({"left":(marginLeft+25)+'px'});
+      if(mySentiment){
+        if(totalCount === 1){
+          var msg1 = i18n.gettext('You');
+          
+          that.$('.sentiment-names-list > a').html(msg1);
+        }else{
+          var numOthers = totalCount - 1;
+          var msg2 = i18n.sprintf(i18n.ngettext(
+          'You and %d Another person',
+          'You and %d Other persons',
+          numOthers), numOthers);
+          
+          that.$('.sentiment-names-list > a').html(msg2);
+        }
+      }else{
+        var msg3 = i18n.sprintf(i18n.ngettext(
+        '%d person',
+        '%d persons',
+        totalCount), totalCount);
+        
+        that.$('.sentiment-names-list > a').html(msg3);
+      }
+      that.$('.js_idea-classification-region').css({"margin-top":"35px"});
+    }else{
+      that.$('.js_idea-classification-region').css({"margin-top":"0px"});
+    }
+    if(Ctx.isUserConnected()){
+      $('.emoticon').addClass('emoticon-connected');
+    }
+  },
+  onClickEmoticon:function(event){
+    var isUserConnected = Ctx.isUserConnected();
+    if(isUserConnected){
+      var currentClass = $(event.target).attr("class");
+      if(currentClass.indexOf('active') <= -1){
+        var that = this;
+        var currentUser = Ctx.getCurrentUser();
+        var clickedSentiment = $(event.target).attr("data-id");
+        var currentPost = this.model.get("@id");
+        var data = {"target": currentPost, "user": currentUser.id, "@type": clickedSentiment};
+        var payload = JSON.stringify(data);
+        $.ajax(
+          "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments", {
+          method: "POST",
+          contentType: "application/json",
+          dataType: "json",
+          data: payload
+        });
+      }
+    }
+  },
+  onOverNamesList:function(event){
+    $(event.currentTarget).find('.js_sentimentStats').show();
+    this.renderGauge();
+  },
+  onOutNamesList:function(event){
+    $(event.currentTarget).find('.js_sentimentStats').hide();
+  },
+  renderGauge:function(){
+    var that = this;
+    var sentiment_counts = this.model.get('sentiment_counts');
+    $.each(sentiment_counts, function(label,count){
+      var countSelector = "div[data-count=" + label + "]";
+      that.$(countSelector).html(count + "&nbsp;");
+      var totalCount = that.getTotalCount();
+      var gaugeNumber = that.calculateSentimentGauge(count, totalCount);
+      for(var i=0; i <= gaugeNumber; i++){
+        var gaugeSelector = "#gauge-" + label + i;
+        var gaugeColor = that.$(gaugeSelector).attr("data-color");
+        that.$(gaugeSelector).attr("fill", gaugeColor);
+        that.$(gaugeSelector).attr("stroke", gaugeColor);
+      }
+    });
+  },
+  getTotalCount:function(){
+    var totalCount = 0;
+    var sentiment_counts = this.model.get('sentiment_counts');
+    _.each(sentiment_counts, function(count){
+      totalCount += count;
+    });
+    
+    return totalCount;
+  },
+  calculateSentimentGauge:function(count, totalCount){
+    var ratio = (count * 10) / totalCount;
 
+    if(ratio < 1){
+      return 1;
+    }else{
+      return Math.round(ratio);
+    }
+  },
   onClickLike: function(e) {
     var that = this,
     liked_uri = this.model.get('liked'),

@@ -20,6 +20,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.sql.functions import count
 from ..lib.sqla_types import CoerceUnicode
 from virtuoso.vmapping import PatternIriClass
 # from virtuoso.textindex import TextIndex, TableWithTextIndex
@@ -32,6 +33,7 @@ from .langstrings import (LangString, LangStringEntry)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST)
+from ..auth.util import get_current_user_id
 from ..semantic.namespaces import (
     SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES, FOAF)
 from .discussion import Discussion
@@ -508,6 +510,26 @@ class Content(TombstonableMixin, DiscussionBoundBase):
                     discussion_alias.slug, cls.id),
                 name=QUADNAMES.post_external_link_map)
         ]
+
+    @property
+    def sentiment_counts(self):
+        from .action import SentimentOfPost
+        r = self.db.query(
+                SentimentOfPost.type, count(SentimentOfPost.id)
+            ).filter(SentimentOfPost.post_id == self.id,
+                     SentimentOfPost.tombstone_condition()
+            ).group_by(SentimentOfPost.type)
+        return {k[SentimentOfPost.TYPE_PREFIX_LEN:]: v for (k, v) in r}
+
+    @property
+    def my_sentiment(self):
+        # Use only within request
+        from .action import SentimentOfPost
+        user_id = get_current_user_id()
+        if user_id is None:
+            return
+        return self.db.query(SentimentOfPost).filter_by(
+            actor_id=user_id, post_id=self.id, tombstone_date=None).first()
 
     widget_idea_links = relationship('IdeaContentWidgetLink')
 

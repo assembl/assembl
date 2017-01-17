@@ -93,8 +93,8 @@
         "import_date": false,
         "subject": "&get_subject:extended",
         "body": "&get_body:extended",
-        "like_count": true,
         "message_classifier": true,
+        "my_sentiment": ":default",
         "extracts": [":id_only"]
     },
     "Post": {

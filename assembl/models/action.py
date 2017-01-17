@@ -20,8 +20,10 @@ from sqlalchemy import (
 from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship, backref, column_property
 from virtuoso.vmapping import IriClass
+from abc import abstractproperty
 
 from . import DiscussionBoundBase, DiscussionBoundTombstone, TombstonableMixin, Post
+from ..lib.sqla import DuplicateHandling
 from ..semantic.namespaces import (
     ASSEMBL, QUADNAMES, VERSION, RDF, VirtRDF)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -30,6 +32,7 @@ from .generic import Content
 from .discussion import Discussion
 from .idea import Idea
 from ..auth import P_READ, P_SYSADMIN, CrudPermissions
+from ..lib.abc import classproperty
 
 
 class Action(TombstonableMixin, DiscussionBoundBase):
@@ -161,6 +164,12 @@ class UniqueActionOnPost(ActionOnPost):
             actor_id=actor_id, type=self.type, post_id=post_id,
             tombstone_date=self.tombstone_date), True
 
+    def tombstone(self):
+        from .generic import Content
+        return DiscussionBoundTombstone(
+            self, post=Content.uri_generic(self.post_id),
+            actor=User.uri_generic(self.actor_id))
+
 
 class ViewPost(UniqueActionOnPost):
     """
@@ -169,12 +178,6 @@ class ViewPost(UniqueActionOnPost):
     __mapper_args__ = {
         'polymorphic_identity': 'version:ReadStatusChange_P'
     }
-
-    def tombstone(self):
-        from .generic import Content
-        return DiscussionBoundTombstone(
-            self, post=Content.uri_generic(self.post_id),
-            actor=User.uri_generic(self.actor_id))
 
     post_from_view = relationship(
         'Content',
@@ -192,16 +195,15 @@ class LikedPost(UniqueActionOnPost):
         'polymorphic_identity': 'vote:BinaryVote_P'
     }
 
-    def tombstone(self):
-        from .generic import Content
-        return DiscussionBoundTombstone(
-            self, post=Content.uri_generic(self.post_id),
-            actor=User.uri_generic(self.actor_id))
-
     post_from_like = relationship(
         'Content',
-        backref=backref('was_liked'),
-    )
+        primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                         "Content.tombstone_date == None)",
+        foreign_keys=(ActionOnPost.post_id,),
+        backref=backref(
+            'was_liked',
+            primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                             "ActionOnPost.tombstone_date == None)"))
 
     verb = 'liked'
 
@@ -211,14 +213,107 @@ class LikedPost(UniqueActionOnPost):
 
 @event.listens_for(LikedPost, 'after_insert', propagate=True)
 def send_post_to_socket(mapper, connection, target):
-    target.post.send_to_changes()
+    target.post.send_to_changes(view_def="aux_data")
 
 
 @event.listens_for(LikedPost, 'after_update', propagate=True)
 def send_post_to_socket_ts(mapper, connection, target):
     if not inspect(target).unmodified_intersection(('tombstone_date')):
         target.db.expire(target.post, ['like_count'])
-        target.post.send_to_changes()
+        target.post.send_to_changes(view_def="aux_data")
+
+
+class SentimentOfPost(UniqueActionOnPost):
+    """
+    An action of attributing a sentiment to a post.
+    """
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'sentiment:abstract'
+    }
+
+    post_from_sentiments = relationship(
+        'Content',
+        primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                         "Content.tombstone_date == None)",
+        foreign_keys=(ActionOnPost.post_id,),
+        backref=backref(
+            'sentiments',
+            primaryjoin="and_(Content.id == ActionOnPost.post_id,"
+                             "ActionOnPost.tombstone_date == None)"))
+
+    verb = 'assign_sentiment'
+    default_duplicate_handling = DuplicateHandling.TOMBSTONE
+
+    TYPE_PREFIX_LEN = len('sentiment:')
+
+    crud_permissions = CrudPermissions(
+        P_READ, P_READ, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
+
+    def unique_query(self):
+        # Don't use inherited, because no exact type constraint
+        # i.e. sentiments are exclusive
+        query = self.db.query(SentimentOfPost)
+        actor_id = self.actor_id or self.actor.id
+        post_id = self.post_id or self.post.id
+        return query.filter_by(
+            actor_id=actor_id, post_id=post_id,
+            tombstone_date=self.tombstone_date), True
+
+    @abstractproperty
+    def name(self):
+        pass
+
+
+class LikeSentimentOfPost(SentimentOfPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'sentiment:like'
+    }
+
+    @classproperty
+    def name(cls):
+        return 'like'
+
+
+class DisagreeSentimentOfPost(SentimentOfPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'sentiment:disagree'
+    }
+
+    @classproperty
+    def name(cls):
+        return 'disagree'
+
+
+class DontUnderstandSentimentOfPost(SentimentOfPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'sentiment:dont_understand'
+    }
+
+    @classproperty
+    def name(cls):
+        return 'dont_understand'
+
+
+class MoreInfoSentimentOfPost(SentimentOfPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'sentiment:more_info'
+    }
+
+    @classproperty
+    def name(cls):
+        return 'more_info'
+
+
+@event.listens_for(SentimentOfPost, 'after_insert', propagate=True)
+def send_post_to_socket(mapper, connection, target):
+    target.post.send_to_changes(view_def="aux_data")
+
+
+@event.listens_for(SentimentOfPost, 'after_update', propagate=True)
+def send_post_to_socket_ts(mapper, connection, target):
+    if not inspect(target).unmodified_intersection(('tombstone_date')):
+        target.post.send_to_changes(view_def="aux_data")
 
 
 _lpt = LikedPost.__table__

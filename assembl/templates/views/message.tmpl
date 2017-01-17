@@ -26,7 +26,7 @@
 {%- endmacro %}
 
 {% macro showLikeButton() -%}
-<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_likeButton"><% if (message.get('liked')) { %>{{ gettext("Unlike") }}<% } else { %>{{ gettext("Like") }}<% } %></a>
+<a style="display:none" href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_likeButton"><% if (message.get('liked')) { %>{{ gettext("Unlike") }}<% } else { %>{{ gettext("Like") }}<% } %></a>
 {%- endmacro %}
 
 {% macro menuAction() -%}
@@ -202,42 +202,120 @@
     <div class="js_regionMessageModerationOptions"></div>
     <a class="readLess readMoreOrLess js_readLess hidden" href="#" alt="{{ gettext('Read less') }}"><i class="icon-arrowup"></i> {{ gettext('Read less') }}</a>
   <% } %>
-  <div class="js_messageBottomMenu message-menu message-menu-actions">
-    {#
-    <% if( isHoisted === true ){ %>
-      <a class="message-hoistbtn iconbutton icon-upload" data-id="<%= escape(message.get('@id')) %>" data-toggle="tooltip" title="{{gettext('Go back to the entire topic thread')}}"></a>
-    <% } else { %>
-      <a class="message-hoistbtn iconbutton icon-download" data-id="<%= escape(message.get('@id')) %>" data-toggle="tooltip" title="{{gettext('Show only this message and its replies')}}"></a>
-    <% } %>
-    #}
+  <div class="message-actions-container">
+    <div class="emoticons">
+      <div data-tooltip="{{ gettext('Like') }}" data-id="LikeSentimentOfPost" class="emoticon LikeSentimentOfPost"></div>
+      <div data-tooltip="{{ gettext('Disagree') }}" data-id="DisagreeSentimentOfPost" class="emoticon DisagreeSentimentOfPost"></div>
+      <div data-tooltip="{{ gettext('Did not get it') }}" data-id="DontUnderstandSentimentOfPost" class="emoticon DontUnderstandSentimentOfPost"></div>
+      <div data-tooltip="{{ gettext('More info please?') }}" data-id="MoreInfoSentimentOfPost" class="emoticon MoreInfoSentimentOfPost"></div>
+    </div>
+    <div class="js_messageBottomMenu message-menu message-menu-actions">
+      {#
+      <% if( isHoisted === true ){ %>
+        <a class="message-hoistbtn iconbutton icon-upload" data-id="<%= escape(message.get('@id')) %>" data-toggle="tooltip" title="{{gettext('Go back to the entire topic thread')}}"></a>
+      <% } else { %>
+        <a class="message-hoistbtn iconbutton icon-download" data-id="<%= escape(message.get('@id')) %>" data-toggle="tooltip" title="{{gettext('Show only this message and its replies')}}"></a>
+      <% } %>
+      #}
 
-    <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
-      <a href="#" class="js_messageReplyBtn message-replybox-openbtn"><i class="icon-answer"></i>&nbsp;&nbsp;{{ gettext("Reply") }}</a>
-      {#&nbsp;&nbsp;<a href="#"><i class="icon-heart"></i>{{ gettext("I love") }}</a>
-      &nbsp;&nbsp;<a href="#"><i class="icon-download"></i>{{ gettext("share") }}</a>#}
-      <div class="fr">
-        <% if(nuggets){ %>
-          <span class="nb-nuggets"><i class="icon-diamond"></i><span><%= nuggets.length %></span></span>
-        <% } %>
-      </div>
-    <% } %>
+      <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
+        <a href="#" class="js_messageReplyBtn message-replybox-openbtn"><i class="icon-answer"></i>&nbsp;&nbsp;{{ gettext("Reply") }}</a>
+        {#&nbsp;&nbsp;<a href="#"><i class="icon-heart"></i>{{ gettext("I love") }}</a>
+        &nbsp;&nbsp;<a href="#"><i class="icon-download"></i>{{ gettext("share") }}</a>#}
+        <div class="fr">
+          <% if(nuggets){ %>
+            <span class="nb-nuggets"><i class="icon-diamond"></i><span><%= nuggets.length %></span></span>
+          <% } %>
+        </div>
+      <% } %>
 
-    <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW) && user_is_connected ){ %>
-      &nbsp;&nbsp;{{ showLikeButton() }}
-    <% } %>
+      <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW) && user_is_connected ){ %>
+        &nbsp;&nbsp;{{ showLikeButton() }}
+      <% } %>
 
-    <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
-      &nbsp;&nbsp;{{ showShareButton() }}
-    <% } %>
+      <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW ){ %>
+        &nbsp;&nbsp;{{ showShareButton() }}
+      <% } %>
 
-    <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW)){ %>
-      &nbsp;&nbsp;<span class="js_likeCount"><i class="icon-heart"></i><span class="js_likeCountI"><%= message.get("like_count") %></span></span>
-    <% } %>
+      <% if( (viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY || viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.PREVIEW)){ %>
+        &nbsp;&nbsp;<span class="js_likeCount"><i class="icon-heart"></i><span class="js_likeCountI"><%= message.get("like_count") %></span></span>
+      <% } %>
 
+    </div>
   </div>
-
+  <div class="sentiment-list left">
+    <div class="emo-minified more_info min"></div>
+    <div class="emo-minified disagree min"></div>
+    <div class="emo-minified like min"></div>
+    <div class="emo-minified dont_understand min"></div>
+    <div class="js_sentimentNamesList sentiment-names-list">
+      <a href="#"></a>
+      <div class="js_sentimentStats sentiment-stats">
+        <div class="bar-chart" style="color:#46D081">
+          <svg width="25" height="58">
+            <rect rx="1" id="gauge-like1" data-color="#46D081" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like2" data-color="#46D081" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like3" data-color="#46D081" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like4" data-color="#46D081" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like5" data-color="#46D081" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like6" data-color="#46D081" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like7" data-color="#46D081" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like8" data-color="#46D081" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like9" data-color="#46D081" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-like10" data-color="#46D081" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+          </svg>
+          <div data-count="like" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Like') }}</div>
+        </div>
+        <div class="bar-chart" style="color:#FAC16F">
+          <svg width="25" height="58">
+            <rect rx="1" id="gauge-dont_understand1" data-color="#FAC16F" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand2" data-color="#FAC16F" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand3" data-color="#FAC16F" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand4" data-color="#FAC16F" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand5" data-color="#FAC16F" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand6" data-color="#FAC16F" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand7" data-color="#FAC16F" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand8" data-color="#FAC16F" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand9" data-color="#FAC16F" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand10" data-color="#FAC16F" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+          </svg>
+          <div data-count="dont_understand" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Did not get it') }}</div>
+        </div>
+        <div class="bar-chart" style="color:#F2474D">
+          <svg width="25" height="58">
+            <rect rx="1" id="gauge-disagree1" data-color="#F2474D" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree2" data-color="#F2474D" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree3" data-color="#F2474D" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree4" data-color="#F2474D" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree5" data-color="#F2474D" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree6" data-color="#F2474D" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree7" data-color="#F2474D" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree8" data-color="#F2474D" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree9" data-color="#F2474D" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-disagree10" data-color="#F2474D" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+          </svg>
+          <div data-count="disagree" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Disagree') }}</div>
+        </div>
+        <div class="bar-chart" style="color:#9374FF">
+          <svg width="25" height="58">
+            <rect rx="1" id="gauge-more_info1" data-color="#9374FF" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info2" data-color="#9374FF" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info3" data-color="#9374FF" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info4" data-color="#9374FF" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info5" data-color="#9374FF" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info6" data-color="#9374FF" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info7" data-color="#9374FF" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info8" data-color="#9374FF" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info9" data-color="#9374FF" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-more_info10" data-color="#9374FF" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+          </svg>
+          <div data-count="more_info" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('More info please?') }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="clear"></div>
   <% if( viewStyle == ctx.AVAILABLE_MESSAGE_VIEW_STYLES.FULL_BODY ){ %>
-    <div class="mtm idea-classification js_idea-classification-region"></div>
+    <div class="idea-classification js_idea-classification-region"></div>
   <% } %>
 
 <% } %>
