@@ -6,6 +6,7 @@ import Titles from '../components/styleguide/titles';
 import Icons from '../components/styleguide/icons';
 import Login from '../components/styleguide/login';
 import Dropdown from '../components/styleguide/dropdown';
+import Loader from '../components/styleguide/loader';
 
 class Styleguide extends React.Component {
   render() {
@@ -26,6 +27,7 @@ class Styleguide extends React.Component {
             <Icons />
             <Login />
             <Dropdown />
+            <Loader />
           </Col>
         </Row>
       </Grid>
