@@ -37,6 +37,8 @@
         "num_total_and_read_posts": true,
         "contributors": "&get_contributors:",
         "widget_links": "&widget_link_signatures",
-        "widget_add_post_endpoint": true
+        "widget_add_post_endpoint": true,
+        "message_columns": [":default"],
+        "attachments": [":default"]
     }
 }
