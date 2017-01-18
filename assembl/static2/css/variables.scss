@@ -8,7 +8,8 @@ $green: #3bb848;
 
 $radius: 3px;
 
-$border-weight: 2px;
+$border-weight1: 1px;
+$border-weight2: 2px;
 
 $font-size-xs: 12px;
 $font-size-s: 14px;
@@ -63,4 +64,5 @@ $navbar-text-color: $grey2;
 
 $box-shadow: $shadow;
 $box-bkg: $white;
-$box-border: $border-weight solid $white;
+$box-border: $border-weight2 solid $white;
+$burger-menu-border: $border-weight1 solid $grey1;

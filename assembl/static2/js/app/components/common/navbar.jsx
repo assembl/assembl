@@ -7,6 +7,18 @@ import ProfileIcon from './profileIcon';
 import LanguageMenu from './languageMenu';
 
 class NavBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isMenuHidden: true
+    };
+    this.displayMenu = this.displayMenu.bind(this);
+  }
+  displayMenu() {
+    let {isMenuHidden} = this.state;
+    if(!isMenuHidden) this.setState({isMenuHidden:true});
+    if(isMenuHidden) this.setState({isMenuHidden:false});
+  }
   render() {
     const { debateData } = this.props.debate;
     return (
@@ -14,13 +26,13 @@ class NavBar extends React.Component {
         <Row>
           <Navbar fixedTop fluid>
             <div className="nav-bar">
-              <div className="left burger-menu">
+              <div className="left burger-menu" onClick={this.displayMenu}>
                 <div className="black-icon"><Glyphicon glyph="align-justify" /></div>
               </div>
               <div className="left navbar-logo">
                 <img src={debateData.logo} alt="logo" />
               </div>
-              <div className="left nav-menu">
+              <div className="nav-menu left">
                 <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/home`}>
                   <Translate value="navbar.home" />
                 </Link>
@@ -37,6 +49,17 @@ class NavBar extends React.Component {
                   <LanguageMenu />
                   <ProfileIcon />
                 </div>
+              </div>
+              <div className={this.state.isMenuHidden ? "nav-burger-menu hidden" : "nav-burger-menu shown"} onMouseLeave={this.displayMenu}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/home`}>
+                  <Translate value="navbar.home" />
+                </Link>
+                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/debate`}>
+                  <Translate value="navbar.debate" />
+                </Link>
+                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/community`}>
+                  <Translate value="navbar.community" />
+                </Link>
               </div>
             </div>
           </Navbar>

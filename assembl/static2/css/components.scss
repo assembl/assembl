@@ -183,6 +183,7 @@
     text-transform: uppercase;
 
     &:hover {
+      color: $active-link-color;
       text-decoration: none;
     }
 

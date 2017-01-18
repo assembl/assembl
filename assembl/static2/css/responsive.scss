@@ -18,6 +18,10 @@
   }
 
   .nav-bar {
+    .nav-menu {
+      display: none;
+    }
+
     .username {
       display: none;
     }
@@ -28,8 +32,18 @@
       }
     }
 
-    .nav-menu {
-      display: none;
+    .nav-burger-menu {
+      background-color: $white;
+      border-top: $burger-menu-border;
+      left: 0;
+      position: absolute;
+      top: 80px;
+      width: 100%;
+    }
+
+    .navbar-item-menu {
+      border-bottom: $burger-menu-border;
+      display: block;
     }
 
     .navbar-icons {
@@ -110,10 +124,6 @@
 
 @media screen and (max-width: 412px) {
   .nav-bar {
-    .dropdown-navbar {
-      display: none;
-    }
-
     .navbar-icons {
       padding: 28px 5px;
     }

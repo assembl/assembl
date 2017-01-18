@@ -71,6 +71,10 @@ section {
   display: none;
 }
 
+.shown {
+  display: block;
+}
+
 .code {
   color: $grey3;
   display: inline-block;
