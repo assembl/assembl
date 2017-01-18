@@ -1,11 +1,9 @@
 .header {
   background-color: $white;
-  height: 460px;
   overflow: hidden;
   position: relative;
 
   .header-content {
-    padding: 40px;
     position: relative;
     text-align: center;
     z-index: 2;
@@ -17,29 +15,26 @@
   }
 
   .header-bkg {
-    opacity: .2;
+    opacity: .15;
     position: absolute;
     top: 0;
-    width: 100%;
-
-    img {
-      width: 100%;
-    }
   }
 
   .statistic {
-    border-bottom: $box-border;
-    border-top: $box-border;
     margin: 20px auto;
-    padding: 10px;
-    width: 75%;
 
     .stat {
       display: inline-block;
       font-family: $font-family2;
       font-size: $font-size-s;
-      margin: 0 20px 0 0;
+      margin: 0 auto;
+      text-align: center;
       text-transform: uppercase;
+    }
+
+    .stat-box {
+      padding: 0 20px;
     }
   }
 }
+

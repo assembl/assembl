@@ -10,7 +10,6 @@ class Menu extends React.Component {
         <ListGroupItem className="menu-item" href="#icons">Icons</ListGroupItem>
         <ListGroupItem className="menu-item" href="#login">Login</ListGroupItem>
         <ListGroupItem className="menu-item" href="#dropdown">Dropdown</ListGroupItem>
-        <ListGroupItem className="menu-item" href="#navbar">NavBar</ListGroupItem>
       </ListGroup>
     );
   }

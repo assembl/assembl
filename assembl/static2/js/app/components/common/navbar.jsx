@@ -12,14 +12,15 @@ class NavBar extends React.Component {
     return (
       <Grid fluid>
         <Row>
-          <Navbar fixedTop>
+          <Navbar fixedTop fluid>
             <div className="nav-bar">
-              <div className="left">
-                <div className="navbar-logo">
-                  <img src={debateData.logo} alt="logo" />
-                </div>
+              <div className="left burger-menu">
+                <div className="black-icon"><Glyphicon glyph="align-justify" /></div>
               </div>
-              <div className="left">
+              <div className="left navbar-logo">
+                <img src={debateData.logo} alt="logo" />
+              </div>
+              <div className="left nav-menu">
                 <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/home`}>
                   <Translate value="navbar.home" />
                 </Link>

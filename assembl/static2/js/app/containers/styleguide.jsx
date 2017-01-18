@@ -3,7 +3,6 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import Menu from '../components/styleguide/menu';
 import Buttons from '../components/styleguide/buttons';
 import Titles from '../components/styleguide/titles';
-import Navbar from '../components/styleguide/navbar';
 import Icons from '../components/styleguide/icons';
 import Login from '../components/styleguide/login';
 import Dropdown from '../components/styleguide/dropdown';
@@ -27,7 +26,6 @@ class Styleguide extends React.Component {
             <Icons />
             <Login />
             <Dropdown />
-            <Navbar />
           </Col>
         </Row>
       </Grid>

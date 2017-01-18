@@ -9,7 +9,7 @@ class Header extends React.Component {
     const { debateData } = this.props.debate;
     return (
       <div className="header">
-        <Grid>
+        <Grid fluid>
           <Row>
             <div className="header-content">
               <img className="header-logo" src={debateData.logo} alt="logo" />

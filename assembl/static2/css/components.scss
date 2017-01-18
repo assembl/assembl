@@ -194,6 +194,12 @@
   .active {
     color: $active-link-color;
   }
+
+  .burger-menu {
+    cursor: pointer;
+    font-size: 30px;
+    padding: 20px
+  }
 }
 
 .loader {
