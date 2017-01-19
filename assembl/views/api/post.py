@@ -33,7 +33,7 @@ from assembl.tasks.translate import (
 from assembl.models import (
     get_database_id, Post, AssemblPost, SynthesisPost,
     Synthesis, Discussion, Content, Idea, ViewPost, User,
-    IdeaRelatedPostLink, AgentProfile, LikedPost, LangString,
+    IdeaRelatedPostLink, AgentProfile, LangString,
     DummyContext, LanguagePreferenceCollection, SentimentOfPost)
 from assembl.models.post import deleted_publication_states
 from assembl.lib.raven_client import capture_message
@@ -330,11 +330,6 @@ def get_posts(request):
                 ViewPost.tombstone_condition(),
                 ViewPost.actor_id == user_id,
                 *ViewPost.get_discussion_conditions(discussion_id))}
-        liked_posts = {l.post_id: l.id for l in discussion.db.query(
-            LikedPost).filter(
-                LikedPost.tombstone_condition(),
-                LikedPost.actor_id == user_id,
-                *LikedPost.get_discussion_conditions(discussion_id))}
         my_sentiments = {l.post_id: l for l in discussion.db.query(
             SentimentOfPost).filter(
                 SentimentOfPost.tombstone_condition(),
@@ -410,7 +405,7 @@ def get_posts(request):
         posts = posts.order_by(Content.body_text_index.score_name.desc())
     elif order == 'popularity':
         # assume reverse chronological otherwise
-        posts = posts.order_by(Content.like_count.desc(), Content.creation_date.desc())
+        posts = posts.order_by(Content.disagree_count - Content.like_count, Content.creation_date.desc())
     else:
         posts = posts.order_by(Content.id)
     # print str(posts)
@@ -453,7 +448,7 @@ def get_posts(request):
             posts.extend(ancestors.all())
 
     for query_result in posts:
-        score, viewpost, likedpost = None, None, None
+        score, viewpost = None, None
         if not isinstance(query_result, (list, tuple)):
             query_result = [query_result]
         post = query_result[0]
@@ -462,7 +457,6 @@ def get_posts(request):
 
         if user_id != Everyone:
             viewpost = post.id in read_posts
-            likedpost = liked_posts.get(post.id, None)
             if view_def != "id_only":
                 translate_content(
                     post, translation_table=translations, service=service)
@@ -486,8 +480,6 @@ def get_posts(request):
             serializable_post['read'] = True
         else:
             serializable_post['read'] = False
-        serializable_post['liked'] = (
-            LikedPost.uri_generic(likedpost) if likedpost else False)
         my_sentiment = my_sentiments.get(post.id, None)
         if my_sentiment is not None:
             my_sentiment = my_sentiment.generic_json('default', user_id, permissions)

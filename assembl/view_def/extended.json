@@ -92,7 +92,6 @@
     "Content": {
         "date": "creation_date",
         "hidden": true,
-        "like_count": true,
         "discussion": true,
         "import_date": false,
         "subject": "&get_subject:",

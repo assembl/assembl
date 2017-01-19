@@ -187,42 +187,6 @@ class ViewPost(UniqueActionOnPost):
     verb = 'viewed'
 
 
-class LikedPost(UniqueActionOnPost):
-    """
-    A like action on a post.
-    """
-    __mapper_args__ = {
-        'polymorphic_identity': 'vote:BinaryVote_P'
-    }
-
-    post_from_like = relationship(
-        'Content',
-        primaryjoin="and_(Content.id == ActionOnPost.post_id,"
-                         "Content.tombstone_date == None)",
-        foreign_keys=(ActionOnPost.post_id,),
-        backref=backref(
-            'was_liked',
-            primaryjoin="and_(Content.id == ActionOnPost.post_id,"
-                             "ActionOnPost.tombstone_date == None)"))
-
-    verb = 'liked'
-
-    crud_permissions = CrudPermissions(
-        P_READ, P_READ, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
-
-
-@event.listens_for(LikedPost, 'after_insert', propagate=True)
-def send_post_to_socket(mapper, connection, target):
-    target.post.send_to_changes(view_def="aux_data")
-
-
-@event.listens_for(LikedPost, 'after_update', propagate=True)
-def send_post_to_socket_ts(mapper, connection, target):
-    if not inspect(target).unmodified_intersection(('tombstone_date')):
-        target.db.expire(target.post, ['like_count'])
-        target.post.send_to_changes(view_def="aux_data")
-
-
 class SentimentOfPost(UniqueActionOnPost):
     """
     An action of attributing a sentiment to a post.
@@ -316,16 +280,28 @@ def send_post_to_socket_ts(mapper, connection, target):
         target.post.send_to_changes(view_def="aux_data")
 
 
-_lpt = LikedPost.__table__
+_lpt = LikeSentimentOfPost.__table__
 _actt = Action.__table__
 Content.like_count = column_property(
     select([func.count(_actt.c.id)]).where(
         (_lpt.c.id == _actt.c.id)
         & (_lpt.c.post_id == Content.__table__.c.id)
         & (_actt.c.type ==
-           LikedPost.__mapper_args__['polymorphic_identity'])
+           LikeSentimentOfPost.__mapper_args__['polymorphic_identity'])
         & (_actt.c.tombstone_date == None)
-        ).correlate_except(_actt, _lpt))
+        ).correlate_except(_actt, _lpt), deferred=True)
+
+
+_dpt = DisagreeSentimentOfPost.__table__
+_actt2 = Action.__table__
+Content.disagree_count = column_property(
+    select([func.count(_actt2.c.id)]).where(
+        (_dpt.c.id == _actt2.c.id)
+        & (_dpt.c.post_id == Content.__table__.c.id)
+        & (_actt2.c.type ==
+           DisagreeSentimentOfPost.__mapper_args__['polymorphic_identity'])
+        & (_actt2.c.tombstone_date == None)
+        ).correlate_except(_actt2, _dpt), deferred=True)
 
 
 class ExpandPost(UniqueActionOnPost):

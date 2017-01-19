@@ -354,7 +354,6 @@ var MessageView = Marionette.LayoutView.extend({
 
   modelEvents: {
       'replacedBy':'onReplaced',
-      'change:like_count':'renderLikeCount',
       'change:sentiment_counts':'renderSentiments',
       'change':'guardedRender',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
@@ -380,9 +379,7 @@ var MessageView = Marionette.LayoutView.extend({
       moderationOptionsButton: ".js_message-moderation-options",
       deleteMessageButton: ".js_message-delete",
       messageReplyBox: ".js_messageReplyBoxRegion",
-      likeLink: ".js_likeButton",
       shareLink: ".js_shareButton",
-      likeCounter: ".js_likeCount",
       avatar: ".js_avatarContainer",
       name: ".js_nameContainer",
       translation: ".js_regionMessageTranslationQuestions",
@@ -421,7 +418,6 @@ var MessageView = Marionette.LayoutView.extend({
     'mouseover .js_sentimentNamesList': 'onOverNamesList',
     'mouseout .js_sentimentNamesList': 'onOutNamesList',
     'click .emoticon':'onClickEmoticon',
-    'click @ui.likeLink': 'onClickLike',
     'click @ui.shareLink': 'onClickShare',
     'click @ui.jumpToParentButton': 'onMessageJumpToParentClick',
     'click @ui.jumpToMessageInThreadButton': 'onMessageJumpToMessageInThreadClick',
@@ -652,31 +648,11 @@ var MessageView = Marionette.LayoutView.extend({
     };
   },
 
-  renderLikeCount: function() {
-      // specialized render because we do not want a full render.
-      // it may kill a message being written.
-      if (Ctx.debugRender) {
-        console.log("message:renderLikeCount() is firing for message", this.model.id);
-      }
-      if (this.messageListView.currentViewStyle == this.messageListView.ViewStyles.POPULARITY) {
-        // the order will have changed.
-        this.messageListView.syncWithCurrentIdea();
-      } else {
-        var count = this.model.get('like_count');
-        if (count > 0) {
-          this.ui.likeCounter.children(".js_likeCountI").text(String(count));
-          this.ui.likeCounter.show();
-        } else {
-          this.ui.likeCounter.hide();
-        }
-      }
-    },
-
   changeIsPartialRender: function() {
       var countChangeFound = false,
           changedAttributes = this.model.changedAttributes();
       for (var propName in changedAttributes) {
-        if (propName === "like_count" || propName === "sentiment_counts") {
+        if (propName === "sentiment_counts") {
           countChangeFound = true;
           continue;
         }
@@ -764,7 +740,7 @@ var MessageView = Marionette.LayoutView.extend({
         this.removeAnnotations();
       }
 
-      // do not render the whole thing if only the like_count changed.
+      // do not render the whole thing if only the sentiment_counts changed.
       // it may kill the message being edited.
       if (this.changeIsPartialRender()) {
         return;
@@ -1127,38 +1103,6 @@ var MessageView = Marionette.LayoutView.extend({
     }else{
       return Math.round(ratio);
     }
-  },
-  onClickLike: function(e) {
-    var that = this,
-    liked_uri = this.model.get('liked'),
-    analytics = Analytics.getInstance();
-
-    if (liked_uri) {
-      analytics.trackEvent(analytics.events.MESSAGE_UNLIKED);
-      Promise.resolve($.ajax(Ctx.getUrlFromUri(this.model.get('liked')), {
-        method: "DELETE"})).then(function(data) {
-          that.model.set('liked', false);
-        }).catch(function(e) {
-          that.model.set('liked', liked_uri);
-          return false;
-        });
-    } else {
-      analytics.trackEvent(analytics.events.MESSAGE_LIKED);
-      Promise.resolve($.ajax(
-          "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/actions", {
-            method: "POST",
-            contentType: "application/json",
-            dataType: "json",
-            data: '{"@type":"LikedPost"}'
-          })).then(function(data) {
-            that.model.set('liked', data['@id']);
-          }).catch(function(e) {
-            that.model.set('liked', liked_uri);
-            return false;
-          });
-    }
-
-    return false;
   },
 
   onClickShare: function(e) {

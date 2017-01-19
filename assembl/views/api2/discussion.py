@@ -1164,7 +1164,7 @@ def get_participant_time_series_analytics(request):
         from assembl.models import (
             Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
             AbstractIdeaVote, Action, ActionOnPost, ActionOnIdea, Content,
-            PublicationStates, LikedPost, AbstractAgentAccount)
+            PublicationStates, LikeSentimentOfPost, AbstractAgentAccount)
 
         content = with_polymorphic(
                     Content, [], Content.__table__,
@@ -1254,14 +1254,14 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('liking').label('key'),
-                func.count(distinct(LikedPost.id)).label('value'),
+                func.count(distinct(LikeSentimentOfPost.id)).label('value'),
                 )
             liking_query = liking_query.join(Post, Post.discussion_id == discussion.id)
-            liking_query = liking_query.join(LikedPost, and_(
-                LikedPost.creation_date >= intervals_table.c.interval_start,
-                LikedPost.creation_date < intervals_table.c.interval_end,
-                LikedPost.post_id == Post.id))
-            liking_query = liking_query.join(AgentProfile, LikedPost.actor_id == AgentProfile.id)
+            liking_query = liking_query.join(LikeSentimentOfPost, and_(
+                LikeSentimentOfPost.creation_date >= intervals_table.c.interval_start,
+                LikeSentimentOfPost.creation_date < intervals_table.c.interval_end,
+                LikeSentimentOfPost.post_id == Post.id))
+            liking_query = liking_query.join(AgentProfile, LikeSentimentOfPost.actor_id == AgentProfile.id)
             liking_query = liking_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(liking_query)
 
@@ -1272,14 +1272,14 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('cumulative_liking').label('key'),
-                func.count(distinct(LikedPost.id)).label('value'),
+                func.count(distinct(LikeSentimentOfPost.id)).label('value'),
                 )
             cumulative_liking_query = cumulative_liking_query.join(Post, Post.discussion_id == discussion.id)
-            cumulative_liking_query = cumulative_liking_query.join(LikedPost, and_(
-                LikedPost.tombstone_date == None,
-                LikedPost.creation_date < intervals_table.c.interval_end,
-                LikedPost.post_id == Post.id))
-            cumulative_liking_query = cumulative_liking_query.join(AgentProfile, LikedPost.actor_id == AgentProfile.id)
+            cumulative_liking_query = cumulative_liking_query.join(LikeSentimentOfPost, and_(
+                LikeSentimentOfPost.tombstone_date == None,
+                LikeSentimentOfPost.creation_date < intervals_table.c.interval_end,
+                LikeSentimentOfPost.post_id == Post.id))
+            cumulative_liking_query = cumulative_liking_query.join(AgentProfile, LikeSentimentOfPost.actor_id == AgentProfile.id)
             cumulative_liking_query = cumulative_liking_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(cumulative_liking_query)
 
@@ -1290,13 +1290,13 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('liked').label('key'),
-                func.count(distinct(LikedPost.id)).label('value'),
+                func.count(distinct(LikeSentimentOfPost.id)).label('value'),
                 )
             liked_query = liked_query.join(Post, Post.discussion_id == discussion.id)
-            liked_query = liked_query.join(LikedPost, and_(
-                LikedPost.creation_date >= intervals_table.c.interval_start,
-                LikedPost.creation_date < intervals_table.c.interval_end,
-                LikedPost.post_id == Post.id))
+            liked_query = liked_query.join(LikeSentimentOfPost, and_(
+                LikeSentimentOfPost.creation_date >= intervals_table.c.interval_start,
+                LikeSentimentOfPost.creation_date < intervals_table.c.interval_end,
+                LikeSentimentOfPost.post_id == Post.id))
             liked_query = liked_query.join(AgentProfile, Post.creator_id == AgentProfile.id)
             liked_query = liked_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(liked_query)
@@ -1308,13 +1308,13 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.id.label('participant_id'),
                 AgentProfile.name.label('participant'),
                 literal('cumulative_liked').label('key'),
-                func.count(distinct(LikedPost.id)).label('value'),
+                func.count(distinct(LikeSentimentOfPost.id)).label('value'),
                 )
             cumulative_liked_query = cumulative_liked_query.outerjoin(Post, Post.discussion_id == discussion.id)
-            cumulative_liked_query = cumulative_liked_query.outerjoin(LikedPost, and_(
-                LikedPost.tombstone_date == None,
-                LikedPost.creation_date < intervals_table.c.interval_end,
-                LikedPost.post_id == Post.id))
+            cumulative_liked_query = cumulative_liked_query.outerjoin(LikeSentimentOfPost, and_(
+                LikeSentimentOfPost.tombstone_date == None,
+                LikeSentimentOfPost.creation_date < intervals_table.c.interval_end,
+                LikeSentimentOfPost.post_id == Post.id))
             cumulative_liked_query = cumulative_liked_query.outerjoin(AgentProfile, Post.creator_id == AgentProfile.id)
             cumulative_liked_query = cumulative_liked_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(cumulative_liked_query)

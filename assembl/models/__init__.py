@@ -180,7 +180,6 @@ from .action import (
     ActionOnPost,
     CollapsePost,
     ExpandPost,
-    LikedPost,
     SentimentOfPost,
     LikeSentimentOfPost,
     DisagreeSentimentOfPost,
