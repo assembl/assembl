@@ -117,7 +117,8 @@ class AgentProfile(Base):
         if inspect(self).attrs.accounts.loaded_value is NO_VALUE:
             account = self.db.query(AbstractAgentAccount).filter(
                 (AbstractAgentAccount.profile_id == self.id)
-                & (AbstractAgentAccount.email != None)).order_by(
+                & (AbstractAgentAccount.email != None)
+                & (AbstractAgentAccount.email != '')).order_by(
                 AbstractAgentAccount.verified.desc(),
                 AbstractAgentAccount.preferred.desc()).first()
             if account:
