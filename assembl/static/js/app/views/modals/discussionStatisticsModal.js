@@ -83,8 +83,12 @@ var StatsModal = Backbone.Modal.extend({
     ev.preventDefault();
   },
   participantFields: [
-    'posts', 'cumulative_posts', 'liking', 'cumulative_liking', 'liked', 'cumulative_liked',
-    'replies_received', 'cumulative_replies_received', 'active'],
+    'posts', 'cumulative_posts', 'replies_received', 'cumulative_replies_received', 'active',
+    'liking', 'cumulative_liking', 'liked', 'cumulative_liked',
+    'disagreeing', 'cumulative_disagreeing', 'disagreed', 'cumulative_disagreed',
+    'misunderstanding', 'cumulative_misunderstanding', 'misunderstood', 'cumulative_misunderstood',
+    'info_requesting', 'cumulative_info_requesting', 'info_requested', 'cumulative_info_requested',
+    ],
   getParticipantStats: function(ev) {
     var val, separator = "?",
         fields = this.$el.find('fieldset'),
