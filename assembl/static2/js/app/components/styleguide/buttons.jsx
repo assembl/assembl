@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Button } from 'react-bootstrap';
 
 class Buttons extends React.Component {
@@ -26,6 +27,31 @@ class Buttons extends React.Component {
                 <span>&gt;</span>
               </div>
             </div>
+            
+            <div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>Button className=&quot;button-success&quot;</span>
+                <span>&gt;</span>
+              </div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>Link className=&quot;button-link&quot; to=&quot;/link&quot;</span>
+                <span>&gt;</span>
+              </div>
+              <span>Success</span>
+              <div className="code">
+                <span>&lt;</span>
+                <span>/Link</span>
+                <span>&gt;</span>
+              </div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>/Button</span>
+                <span>&gt;</span>
+              </div>
+            </div>
+            
             <div>
               <div className="code">
                 <span>&lt;</span>

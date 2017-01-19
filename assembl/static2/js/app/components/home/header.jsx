@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid, Row, Button } from 'react-bootstrap';
@@ -16,8 +17,8 @@ class Header extends React.Component {
               <div className="title-1">{debateData.topic}</div>
               <div className="title-3">{debateData.introduction}</div>
               <div className="title-4">{debateData.objectives}</div>
-              <Button className="button-success margin-l">
-                <Translate value="home.accessButton" />
+              <Button className="button-success">
+                <Link className="button-link" to={`/v2/${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
               </Button>
               <Statistic />
             </div>

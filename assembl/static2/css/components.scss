@@ -26,6 +26,14 @@
     color: $btn-success-hover-txt;
     outline: none;
   }
+
+  .button-link {
+    color: $btn-success-txt;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 .button-cancel {
