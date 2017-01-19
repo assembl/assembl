@@ -1108,20 +1108,32 @@ def get_participant_time_series_analytics(request):
     format = get_format(request)
     sort_key = request.GET.get('sort', 'domain' if with_email else 'name')
     results = []
+    from assembl.models import (
+        Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
+        AbstractIdeaVote, Action, ActionOnPost, ActionOnIdea, Content,
+        PublicationStates, AbstractAgentAccount, LikeSentimentOfPost,
+        DisagreeSentimentOfPost, DontUnderstandSentimentOfPost,
+        MoreInfoSentimentOfPost)
 
     default_data_descriptors = [
         "posts",
         "cumulative_posts",
         "top_posts",
         "cumulative_top_posts",
-        "liking",
-        "cumulative_liking",
-        "liked",
-        "cumulative_liked",
         "replies_received",
         "cumulative_replies_received",
         "active",
     ]
+    sentiments = [
+        ('liked', 'liking', LikeSentimentOfPost),
+        ('disagreed', 'disagreeing', DisagreeSentimentOfPost),
+        ('misunderstood', 'misunderstanding', DontUnderstandSentimentOfPost),
+        ('info_requested', 'info_requesting', MoreInfoSentimentOfPost),
+    ]
+    for sentiment_in, sentiment_out, sentiment_class in sentiments:
+        default_data_descriptors.extend([
+            sentiment_in, 'cumulative_'+sentiment_in,
+            sentiment_out, 'cumulative_'+sentiment_out])
     data_descriptors = data_descriptors or default_data_descriptors
     # Impose data_descriptors order
     data_descriptors = [s for s in default_data_descriptors if s in data_descriptors]
@@ -1160,11 +1172,6 @@ def get_participant_time_series_analytics(request):
             interval_start = interval_start + interval
         #pprint.pprint(intervals)
         discussion.db.execute(intervals_table.insert(), intervals)
-
-        from assembl.models import (
-            Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
-            AbstractIdeaVote, Action, ActionOnPost, ActionOnIdea, Content,
-            PublicationStates, LikeSentimentOfPost, AbstractAgentAccount)
 
         content = with_polymorphic(
                     Content, [], Content.__table__,
@@ -1247,77 +1254,80 @@ def get_participant_time_series_analytics(request):
                 intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(cumulative_top_post_query)
 
-        if 'liking' in data_descriptors:
-            # The likes made
-            liking_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id_q'),
-                AgentProfile.id.label('participant_id'),
-                AgentProfile.name.label('participant'),
-                literal('liking').label('key'),
-                func.count(distinct(LikeSentimentOfPost.id)).label('value'),
-                )
-            liking_query = liking_query.join(Post, Post.discussion_id == discussion.id)
-            liking_query = liking_query.join(LikeSentimentOfPost, and_(
-                LikeSentimentOfPost.creation_date >= intervals_table.c.interval_start,
-                LikeSentimentOfPost.creation_date < intervals_table.c.interval_end,
-                LikeSentimentOfPost.post_id == Post.id))
-            liking_query = liking_query.join(AgentProfile, LikeSentimentOfPost.actor_id == AgentProfile.id)
-            liking_query = liking_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
-            query_components.append(liking_query)
+        for sentiment_in, sentiment_out, sentiment_class in sentiments:
+            c_sentiment_in = 'cumulative_' + sentiment_in
+            c_sentiment_out = 'cumulative_' + sentiment_out
+            if sentiment_out in data_descriptors:
+                # The likes made
+                query = discussion.db.query(
+                    intervals_table.c.interval_id.label('interval_id_q'),
+                    AgentProfile.id.label('participant_id'),
+                    AgentProfile.name.label('participant'),
+                    literal(sentiment_out).label('key'),
+                    func.count(distinct(sentiment_class.id)).label('value'),
+                    )
+                query = query.join(Post, Post.discussion_id == discussion.id)
+                query = query.join(sentiment_class, and_(
+                    sentiment_class.creation_date >= intervals_table.c.interval_start,
+                    sentiment_class.creation_date < intervals_table.c.interval_end,
+                    sentiment_class.post_id == Post.id))
+                query = query.join(AgentProfile, sentiment_class.actor_id == AgentProfile.id)
+                query = query.group_by(intervals_table.c.interval_id, AgentProfile.id)
+                query_components.append(query)
 
-        if 'cumulative_liking' in data_descriptors:
-            # The cumulative active likes made
-            cumulative_liking_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id_q'),
-                AgentProfile.id.label('participant_id'),
-                AgentProfile.name.label('participant'),
-                literal('cumulative_liking').label('key'),
-                func.count(distinct(LikeSentimentOfPost.id)).label('value'),
-                )
-            cumulative_liking_query = cumulative_liking_query.join(Post, Post.discussion_id == discussion.id)
-            cumulative_liking_query = cumulative_liking_query.join(LikeSentimentOfPost, and_(
-                LikeSentimentOfPost.tombstone_date == None,
-                LikeSentimentOfPost.creation_date < intervals_table.c.interval_end,
-                LikeSentimentOfPost.post_id == Post.id))
-            cumulative_liking_query = cumulative_liking_query.join(AgentProfile, LikeSentimentOfPost.actor_id == AgentProfile.id)
-            cumulative_liking_query = cumulative_liking_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
-            query_components.append(cumulative_liking_query)
+            if c_sentiment_out in data_descriptors:
+                # The cumulative active likes made
+                query = discussion.db.query(
+                    intervals_table.c.interval_id.label('interval_id_q'),
+                    AgentProfile.id.label('participant_id'),
+                    AgentProfile.name.label('participant'),
+                    literal(c_sentiment_out).label('key'),
+                    func.count(distinct(sentiment_class.id)).label('value'),
+                    )
+                query = query.join(Post, Post.discussion_id == discussion.id)
+                query = query.join(sentiment_class, and_(
+                    sentiment_class.tombstone_date == None,
+                    sentiment_class.creation_date < intervals_table.c.interval_end,
+                    sentiment_class.post_id == Post.id))
+                query = query.join(AgentProfile, sentiment_class.actor_id == AgentProfile.id)
+                query = query.group_by(intervals_table.c.interval_id, AgentProfile.id)
+                query_components.append(query)
 
-        if 'liked' in data_descriptors:
-            # The likes received
-            liked_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id_q'),
-                AgentProfile.id.label('participant_id'),
-                AgentProfile.name.label('participant'),
-                literal('liked').label('key'),
-                func.count(distinct(LikeSentimentOfPost.id)).label('value'),
-                )
-            liked_query = liked_query.join(Post, Post.discussion_id == discussion.id)
-            liked_query = liked_query.join(LikeSentimentOfPost, and_(
-                LikeSentimentOfPost.creation_date >= intervals_table.c.interval_start,
-                LikeSentimentOfPost.creation_date < intervals_table.c.interval_end,
-                LikeSentimentOfPost.post_id == Post.id))
-            liked_query = liked_query.join(AgentProfile, Post.creator_id == AgentProfile.id)
-            liked_query = liked_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
-            query_components.append(liked_query)
+            if sentiment_in in data_descriptors:
+                # The likes received
+                query = discussion.db.query(
+                    intervals_table.c.interval_id.label('interval_id_q'),
+                    AgentProfile.id.label('participant_id'),
+                    AgentProfile.name.label('participant'),
+                    literal(sentiment_in).label('key'),
+                    func.count(distinct(sentiment_class.id)).label('value'),
+                    )
+                query = query.join(Post, Post.discussion_id == discussion.id)
+                query = query.join(sentiment_class, and_(
+                    sentiment_class.creation_date >= intervals_table.c.interval_start,
+                    sentiment_class.creation_date < intervals_table.c.interval_end,
+                    sentiment_class.post_id == Post.id))
+                query = query.join(AgentProfile, Post.creator_id == AgentProfile.id)
+                query = query.group_by(intervals_table.c.interval_id, AgentProfile.id)
+                query_components.append(query)
 
-        if 'cumulative_liked' in data_descriptors:
-            # The cumulative active likes received
-            cumulative_liked_query = discussion.db.query(
-                intervals_table.c.interval_id.label('interval_id_q'),
-                AgentProfile.id.label('participant_id'),
-                AgentProfile.name.label('participant'),
-                literal('cumulative_liked').label('key'),
-                func.count(distinct(LikeSentimentOfPost.id)).label('value'),
-                )
-            cumulative_liked_query = cumulative_liked_query.outerjoin(Post, Post.discussion_id == discussion.id)
-            cumulative_liked_query = cumulative_liked_query.outerjoin(LikeSentimentOfPost, and_(
-                LikeSentimentOfPost.tombstone_date == None,
-                LikeSentimentOfPost.creation_date < intervals_table.c.interval_end,
-                LikeSentimentOfPost.post_id == Post.id))
-            cumulative_liked_query = cumulative_liked_query.outerjoin(AgentProfile, Post.creator_id == AgentProfile.id)
-            cumulative_liked_query = cumulative_liked_query.group_by(intervals_table.c.interval_id, AgentProfile.id)
-            query_components.append(cumulative_liked_query)
+            if c_sentiment_in in data_descriptors:
+                # The cumulative active likes received
+                query = discussion.db.query(
+                    intervals_table.c.interval_id.label('interval_id_q'),
+                    AgentProfile.id.label('participant_id'),
+                    AgentProfile.name.label('participant'),
+                    literal(c_sentiment_in).label('key'),
+                    func.count(distinct(sentiment_class.id)).label('value'),
+                    )
+                query = query.outerjoin(Post, Post.discussion_id == discussion.id)
+                query = query.outerjoin(sentiment_class, and_(
+                    sentiment_class.tombstone_date == None,
+                    sentiment_class.creation_date < intervals_table.c.interval_end,
+                    sentiment_class.post_id == Post.id))
+                query = query.outerjoin(AgentProfile, Post.creator_id == AgentProfile.id)
+                query = query.group_by(intervals_table.c.interval_id, AgentProfile.id)
+                query_components.append(query)
 
         if 'replies_received' in data_descriptors:
             # The posters
