@@ -11,6 +11,7 @@ class Menu extends React.Component {
         <ListGroupItem className="menu-item" href="#login">Login</ListGroupItem>
         <ListGroupItem className="menu-item" href="#dropdown">Dropdown</ListGroupItem>
         <ListGroupItem className="menu-item" href="#loader">Loader</ListGroupItem>
+        <ListGroupItem className="menu-item" href="#error">Error</ListGroupItem>
       </ListGroup>
     );
   }

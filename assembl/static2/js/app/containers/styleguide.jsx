@@ -7,6 +7,7 @@ import Icons from '../components/styleguide/icons';
 import Login from '../components/styleguide/login';
 import Dropdown from '../components/styleguide/dropdown';
 import Loader from '../components/styleguide/loader';
+import Error from '../components/styleguide/error';
 
 class Styleguide extends React.Component {
   render() {
@@ -28,6 +29,7 @@ class Styleguide extends React.Component {
             <Login />
             <Dropdown />
             <Loader />
+            <Error />
           </Col>
         </Row>
       </Grid>
