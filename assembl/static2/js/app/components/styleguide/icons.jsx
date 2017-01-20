@@ -14,6 +14,7 @@ class Icons extends React.Component {
           <div className="black-icon"><Glyphicon glyph="user" /></div>
           <div className="black-icon"><Glyphicon glyph="eye-open" /></div>
           <div className="black-icon"><Glyphicon glyph="align-justify" /></div>
+          <div className="black-icon"><Glyphicon glyph="remove" /></div>
         </section>
         <section>
           <div className="title-3">Code</div>
@@ -91,6 +92,17 @@ class Icons extends React.Component {
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>Glyphicon glyph=&quot;align-justify&quot; /</span>
+                <span>&gt;</span>
+                <span>&lt;</span>
+                <span>/div</span>
+                <span>&gt;</span>
+              </div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>div className=&quot;black-icon&quot;</span>
+                <span>&gt;</span>
+                <span>&lt;</span>
+                <span>Glyphicon glyph=&quot;remove&quot; /</span>
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>/div</span>

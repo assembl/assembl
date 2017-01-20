@@ -15,9 +15,9 @@ class NavBar extends React.Component {
     this.displayMenu = this.displayMenu.bind(this);
   }
   displayMenu() {
-    let {isMenuHidden} = this.state;
-    if(!isMenuHidden) this.setState({isMenuHidden:true});
-    if(isMenuHidden) this.setState({isMenuHidden:false});
+    const { isMenuHidden } = this.state;
+    if (!isMenuHidden) this.setState({ isMenuHidden: true });
+    if (isMenuHidden) this.setState({ isMenuHidden: false });
   }
   render() {
     const { debateData } = this.props.debate;
@@ -27,7 +27,8 @@ class NavBar extends React.Component {
           <Navbar fixedTop fluid>
             <div className="nav-bar">
               <div className="left burger-menu" onClick={this.displayMenu}>
-                <div className="black-icon"><Glyphicon glyph="align-justify" /></div>
+                <div className={this.state.isMenuHidden ? 'black-icon shown' : 'black-icon hidden'}><Glyphicon glyph="align-justify" /></div>
+                <div className={this.state.isMenuHidden ? 'black-icon hidden' : 'black-icon shown'}><Glyphicon glyph="remove" /></div>
               </div>
               <div className="left navbar-logo">
                 <img src={debateData.logo} alt="logo" />
@@ -50,7 +51,7 @@ class NavBar extends React.Component {
                   <ProfileIcon />
                 </div>
               </div>
-              <div className={this.state.isMenuHidden ? "nav-burger-menu hidden" : "nav-burger-menu shown"} onMouseLeave={this.displayMenu}>
+              <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'} onMouseLeave={this.displayMenu}>
                 <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/home`}>
                   <Translate value="navbar.home" />
                 </Link>

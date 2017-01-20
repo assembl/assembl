@@ -10,6 +10,7 @@ class Buttons extends React.Component {
         <section>
           <Button className="button-success">Success</Button>
           <Button className="button-cancel">Cancel</Button>
+          <Link className="button-link">Link</Link>
         </section>
         <section>
           <div className="title-3">Code</div>
@@ -27,31 +28,6 @@ class Buttons extends React.Component {
                 <span>&gt;</span>
               </div>
             </div>
-            
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>Button className=&quot;button-success&quot;</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>Link className=&quot;button-link&quot; to=&quot;/link&quot;</span>
-                <span>&gt;</span>
-              </div>
-              <span>Success</span>
-              <div className="code">
-                <span>&lt;</span>
-                <span>/Link</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>/Button</span>
-                <span>&gt;</span>
-              </div>
-            </div>
-            
             <div>
               <div className="code">
                 <span>&lt;</span>
@@ -61,6 +37,19 @@ class Buttons extends React.Component {
               <span>Cancel</span>
               <div className="code">
                 <span>&lt;</span><span>/Button</span><span>&gt;</span>
+              </div>
+            </div>
+            <div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>Link className=&quot;button-link&quot; to=&quot;/link&quot;</span>
+                <span>&gt;</span>
+              </div>
+              <span>Link</span>
+              <div className="code">
+                <span>&lt;</span>
+                <span>/Link</span>
+                <span>&gt;</span>
               </div>
             </div>
           </div>

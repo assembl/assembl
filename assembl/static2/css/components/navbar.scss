@@ -1,0 +1,133 @@
+.nav-bar {
+  background-color: $navbar-bkg;
+  border: $navbar-border;
+  height: 80px;
+
+  .navbar-logo {
+    padding: 15px 20px;
+
+    img {
+      height: 50px;
+    }
+  }
+
+  .navbar-icons {
+    cursor: pointer;
+    padding: 28px;
+  }
+
+  .navbar-item-menu {
+    color: $navbar-text-color;
+    font-family: $font-family2;
+    font-size: $font-size-xs;
+    font-weight: 700;
+    line-height: 80px;
+    padding: 0 20px;
+    text-transform: uppercase;
+
+    &:hover {
+      color: $active-link-color;
+      text-decoration: none;
+    }
+
+    &:focus {
+      text-decoration: none;
+    }
+  }
+
+  .active {
+    color: $active-link-color;
+  }
+
+  .burger-menu {
+    cursor: pointer;
+    font-size: 30px;
+    padding: 20px;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .nav-burger-menu {
+    background-color: $white;
+    left: 0;
+    position: absolute;
+    top: 80px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .nav-bar {
+    margin: 0 auto;
+    width: 1170px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  body {
+    overflow-y: scroll;
+  }
+
+  .nav-bar {
+    .nav-menu {
+      display: none;
+    }
+
+    .username {
+      display: none;
+    }
+
+    .profile-icon {
+      img {
+        margin: 0;
+      }
+    }
+
+    .navbar-item-menu {
+      display: block;
+      text-align: center;
+    }
+
+    .navbar-icons {
+      padding: 28px 15px;
+
+      div {
+        margin: 0 4px;
+      }
+    }
+
+    .dropdown-navbar {
+      margin: 0 0 0 4px;
+    }
+
+    .navbar-logo {
+      padding: 15px 0;
+      position: absolute;
+      text-align: center;
+      width: calc(100% - 30px);
+      z-index: 0;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .nav-bar {
+    .burger-menu {
+      display: none;
+    }
+
+    .navbar-icons {
+      div {
+        margin: 0 10px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 412px) {
+  .nav-bar {
+    .navbar-icons {
+      padding: 28px 5px;
+    }
+  }
+}

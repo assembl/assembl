@@ -2,10 +2,15 @@ body {
   background-color: $page-bkg;
   font-family: $font-family;
   font-size: $font-size-s;
+  overflow-y: scroll;
 }
 
 section {
   margin: 30px 0;
+}
+
+.app-content {
+  margin: 80px 0 0;
 }
 
 .inline {

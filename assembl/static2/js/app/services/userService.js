@@ -9,6 +9,7 @@ class UserService {
     });
   }
   static buildUsers(users) {
+    console.log(users);
     return {
       totalVerifiedUsers: this.getTotalVerifiedUsers(users),
       allUsers: users

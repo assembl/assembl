@@ -4,6 +4,7 @@
   position: relative;
 
   .header-content {
+    padding: 5px;
     position: relative;
     text-align: center;
     z-index: 2;
@@ -15,9 +16,14 @@
   }
 
   .header-bkg {
+    background-image: url('#{$img-dir}/default_header.jpg');
+    background-position: left;
+    background-size: cover;
+    height: 100%;
     opacity: .15;
     position: absolute;
     top: 0;
+    width: 100%;
   }
 
   .statistic {
@@ -34,6 +40,78 @@
 
     .stat-box {
       padding: 0 20px;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .nav-bar {
+    margin: 0 auto;
+    width: 1170px;
+  }
+
+  .header {
+    .header-content {
+      margin: 0 auto;
+      width: 1170px;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .header {
+    .statistic {
+      border-bottom: 0;
+      border-top: 0;
+      width: 100%;
+
+      .stat-inside {
+        display: block;
+      }
+
+      .black-icon {
+        display: block;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .header {
+    .header-content {
+      padding: 40px;
+    }
+
+    .statistic {
+      border-bottom: $box-border;
+      border-top: $box-border;
+      padding: 10px;
+      width: 75%;
+
+      .stat-inside {
+        display: inline-block;
+      }
+
+      .black-icon {
+        display: inline-block;
+      }
+
+      .stat-box {
+        border-left: 0;
+        border-right: 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 412px) {
+  .header {
+    statistic {
+      padding: 0;
+    }
+
+    .header-content {
+      padding: 20px 5px;
     }
   }
 }

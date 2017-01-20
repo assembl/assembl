@@ -15,9 +15,12 @@ class Statistic extends React.Component {
           {postsLoading && <Loader textHidden />}
           {postsError && <Error />}
           {posts &&
-            <div className="stat-box border-right border-left">
+            <div className="stat-box border-right">
               <div className="black-icon"><Glyphicon glyph="comment" /></div>
-              <div className="stat"><div className="stat-inside">{posts.total}&nbsp;</div><div className="stat-inside"><Translate value="home.contribution" /></div></div>
+              <div className="stat">
+                <div className="stat-inside">{posts.total}&nbsp;</div>
+                <div className="stat-inside"><Translate value="home.contribution" /></div>
+              </div>
             </div>
           }
         </div>
@@ -25,9 +28,12 @@ class Statistic extends React.Component {
           {usersLoading && <Loader textHidden />}
           {usersError && <Error />}
           {users &&
-            <div className="stat-box border-right">
+            <div className="stat-box">
               <div className="black-icon"><Glyphicon glyph="user" /></div>
-              <div className="stat"><div className="stat-inside">{users.totalVerifiedUsers}&nbsp;</div><div className="stat-inside"><Translate value="home.participant" /></div></div>
+              <div className="stat">
+                <div className="stat-inside">{users.totalVerifiedUsers}&nbsp;</div>
+                <div className="stat-inside"><Translate value="home.participant" /></div>
+              </div>
             </div>
           }
         </div>

@@ -7,7 +7,7 @@ class Dropdown extends React.Component {
       <div>
         <div className="title-2 underline" id="dropdown">DROPDOWN</div>
         <section>
-          <ul className="dropdown-navbar" style={{ margin: 0 }}>
+          <ul className="dropdown-xs" style={{ margin: 0 }}>
             <NavDropdown title="Dropdown" id="nav-dropdown">
               <MenuItem>Action</MenuItem>
               <MenuItem>Another action</MenuItem>
@@ -22,7 +22,7 @@ class Dropdown extends React.Component {
             <div>
               <div className="code">
                 <span>&lt;</span>
-                <span>ul className=&quot;dropdown-navbar&quot;</span>
+                <span>ul className=&quot;dropdown-xs&quot;</span>
                 <span>&gt;</span>
                 <br />
                 <span style={{ paddingLeft: `${20}px` }}>&lt;</span>

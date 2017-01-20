@@ -1,0 +1,28 @@
+.dropdown-xs {
+  font-size: $font-size-xs;
+  margin: 0 0 0 15px;
+  padding: 4px 0 0;
+
+  .dropdown-toggle {
+    color: $black;
+    font-size: $font-size-xs;
+
+    &:hover {
+      color: $black;
+      text-decoration: none;
+    }
+
+    &:focus {
+      color: $black;
+      text-decoration: none;
+    }
+  }
+
+  .dropdown-menu {
+    min-width: 60px;
+
+    a {
+      font-size: $font-size-xs;
+    }
+  }
+}
