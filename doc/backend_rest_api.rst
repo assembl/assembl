@@ -31,10 +31,7 @@ This will list all collections available from this instance. A
 collection of this list can be one of:
 
 - a relation (in the ORM sense: OneToMany or ManyToOne)
-
-- the backref of a relation (this is an inverse relation, which has been defined in the other class of the relation, not
-in this one)
-
+- the backref of a relation (this is an inverse relation, which has been defined in the other class of the relation, not in this one)
 - a collection which has been defined via ``extra\_collections``. In this case, the JOIN operation has been coded
 manually. (:py:meth:`assembl.views.traversal.CollectionDefinition.decorate_query`, :py:meth:`assembl.views.traversal.CollectionDefinition.decorate_instance`, :py:meth:`assembl.views.traversal.CollectionDefinition.contains`).
 
