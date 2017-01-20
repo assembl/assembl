@@ -21,6 +21,9 @@ const Translations = {
     synthesis: {
       panelTitle: 'Bienvenue dans la synthèse d\'Assembl'
     },
+    community: {
+      panelTitle: 'Bienvenue dans la communauté d\'Assembl'
+    },
     debate: {
       panelTitle: 'Bienvenue dans la page débat d\'Assembl'
     },
@@ -55,6 +58,9 @@ const Translations = {
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
+    },
+    community: {
+      panelTitle: 'Welcome to Assembl community page'
     },
     synthesis: {
       panelTitle: 'Welcome to Assembl synthesis page'
@@ -99,6 +105,9 @@ const Translations = {
     },
     debate: {
       panelTitle: 'Willkommen in Assembl - debate page'
+    },
+    community: {
+      panelTitle: 'Willkommen in Assembl - community page'
     },
     loading: {
       wait: 'Bitte warten...'

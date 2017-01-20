@@ -51,14 +51,14 @@ class NavBar extends React.Component {
                   <ProfileIcon />
                 </div>
               </div>
-              <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'} onMouseLeave={this.displayMenu}>
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/home`}>
+              <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/home`} onClick={this.displayMenu}>
                   <Translate value="navbar.home" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/debate`}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/debate`} onClick={this.displayMenu}>
                   <Translate value="navbar.debate" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/community`}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/community`} onClick={this.displayMenu}>
                   <Translate value="navbar.community" />
                 </Link>
               </div>
