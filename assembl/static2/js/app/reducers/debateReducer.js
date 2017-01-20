@@ -3,9 +3,9 @@ const DebateReducer = (state = {}, action) => {
   case 'FETCH_DEBATE_DATA':
     return { debateData: null, debateLoading: true, debateError: null };
   case 'RESOLVED_FETCH_DEBATE_DATA':
-    return { debateData: action.payload, debateLoading: false, debateError: null };
+    return { debateData: action.debateData, debateLoading: false, debateError: null };
   case 'FAILED_FETCH_DEBATE_DATA':
-    return { debateData: null, debateLoading: false, debateError: action.error };
+    return { debateData: null, debateLoading: false, debateError: action.debateError };
   default:
     return state;
   }

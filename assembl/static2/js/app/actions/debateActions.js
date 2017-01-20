@@ -15,19 +15,19 @@ class DebateActions {
   static loadingDebateData() {
     return {
       type: 'FETCH_DEBATE_DATA',
-      payload: null
+      debateData: null
     };
   }
   static resolvedFetchDebateData(debateData) {
     return {
       type: 'RESOLVED_FETCH_DEBATE_DATA',
-      payload: debateData
+      debateData: debateData
     };
   }
-  static failedFetchDebateData(err) {
+  static failedFetchDebateData(error) {
     return {
       type: 'FAILED_FETCH_DEBATE_DATA',
-      error: err
+      debateError: error
     };
   }
 }

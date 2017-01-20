@@ -15,19 +15,19 @@ class UsersActions {
   static loadingUsers() {
     return {
       type: 'FETCH_USERS',
-      payload: null
+      users: null
     };
   }
   static resolvedFetchUsers(users) {
     return {
       type: 'RESOLVED_FETCH_USERS',
-      payload: users
+      users: users
     };
   }
-  static failedFetchUsers(err) {
+  static failedFetchUsers(error) {
     return {
       type: 'FAILED_FETCH_USERS',
-      error: err
+      usersError: error
     };
   }
 }

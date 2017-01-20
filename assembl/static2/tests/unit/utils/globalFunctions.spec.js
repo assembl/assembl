@@ -7,8 +7,8 @@ describe('This test concern GlobalFunctions Class', () => {
     const expectedResult = ['fr', 'de', 'de', 'en', 'fr', 'de', 'de', 'en', 'fr', 'de', 'en', 'en'];
     let result = [];
     for(let i in testedLocales){
-        let locale = GlobalFunctions.getLocale(testedLocales[i]);
-        result.push(locale);
+      let locale = GlobalFunctions.getLocale(testedLocales[i]);
+      result.push(locale);
     }
     expect(result).toEqual(expectedResult);
   });

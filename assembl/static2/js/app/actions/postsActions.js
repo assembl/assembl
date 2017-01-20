@@ -15,19 +15,19 @@ class PostsActions {
   static loadingPosts() {
     return {
       type: 'FETCH_POSTS',
-      payload: null
+      posts: null
     };
   }
   static resolvedFetchPosts(posts) {
     return {
       type: 'RESOLVED_FETCH_POSTS',
-      payload: posts
+      posts: posts
     };
   }
-  static failedFetchPosts(err) {
+  static failedFetchPosts(error) {
     return {
       type: 'FAILED_FETCH_POSTS',
-      error: err
+      postsError: error
     };
   }
 }
