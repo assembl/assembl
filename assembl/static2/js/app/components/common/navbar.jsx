@@ -21,6 +21,7 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
+    const { path } = this.props;
     return (
       <Grid fluid>
         <Row>
@@ -34,13 +35,13 @@ class NavBar extends React.Component {
                 <img src={debateData.logo} alt="logo" />
               </div>
               <div className="nav-menu left">
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/home`}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/home`}>
                   <Translate value="navbar.home" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/debate`}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/debate`}>
                   <Translate value="navbar.debate" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/community`}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/community`}>
                   <Translate value="navbar.community" />
                 </Link>
               </div>
@@ -52,13 +53,13 @@ class NavBar extends React.Component {
                 </div>
               </div>
               <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'}>
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/home`} onClick={this.displayMenu}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/home`} onClick={this.displayMenu}>
                   <Translate value="navbar.home" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/debate`} onClick={this.displayMenu}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/debate`} onClick={this.displayMenu}>
                   <Translate value="navbar.debate" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`/v2/${debateData.slug}/community`} onClick={this.displayMenu}>
+                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/community`} onClick={this.displayMenu}>
                   <Translate value="navbar.community" />
                 </Link>
               </div>
@@ -72,7 +73,8 @@ class NavBar extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate
+    debate: state.debate,
+    path: state.path
   };
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import GlobalFunctions from '../utils/globalFunctions';
+import PathActions from '../actions/pathActions';
 import DebateActions from '../actions/debateActions';
 import PostsActions from '../actions/postsActions';
 import UsersActions from '../actions/usersActions';
@@ -15,6 +16,7 @@ class App extends React.Component {
     this.props.fetchDebateData(discussionId);
     this.props.fetchPosts(discussionId);
     this.props.fetchUsers(discussionId);
+    this.props.addPath(this.props.route.path);
   }
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
@@ -37,7 +39,8 @@ const mapStateToProps = (state) => {
   return {
     debate: state.debate,
     posts: state.posts,
-    users: state.users
+    users: state.users,
+    path: state.path
   };
 };
 
@@ -51,6 +54,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     fetchUsers: (id) => {
       dispatch(UsersActions.fetchUsers(id));
+    },
+    addPath: (path) => {
+      dispatch(PathActions.addPath(path));
     }
   };
 };

@@ -7,21 +7,23 @@ import Ideas from './containers/ideas';
 import Synthesis from './containers/synthesis';
 import Debate from './containers/debate';
 import Community from './containers/community';
+import Profile from './containers/profile';
 import Styleguide from './containers/styleguide';
 import NotFound from './containers/notFound';
 
 export default (
   <Router>
-    <Route component={App}>
+    <Route path="/v2/" component={App}>
       <IndexRoute component={Home} />
-      <Route path="/v2/:slug/home" component={Home} />
-      <Route path="/v2/:slug/authentication" component={Authentication} />
-      <Route path="/v2/:slug/ideas" component={Ideas} />
-      <Route path="/v2/:slug/synthesis" component={Synthesis} />
-      <Route path="/v2/:slug/debate" component={Debate} />
-      <Route path="/v2/:slug/community" component={Community} />
+      <Route path=":slug/home" component={Home} />
+      <Route path=":slug/authentication" component={Authentication} />
+      <Route path=":slug/ideas" component={Ideas} />
+      <Route path=":slug/synthesis" component={Synthesis} />
+      <Route path=":slug/debate" component={Debate} />
+      <Route path=":slug/community" component={Community} />
     </Route>
-    <Route path="/v2/:slug/styleguide" component={Styleguide} />
+    <Route path=":slug/profile" component={Profile} />
+    <Route path=":slug/styleguide" component={Styleguide} />
     <Route path="*" component={NotFound} />
   </Router>
 );
