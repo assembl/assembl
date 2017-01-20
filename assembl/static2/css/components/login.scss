@@ -1,0 +1,20 @@
+.profile-icon {
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .username {
+    color: $black;
+    font-size: $font-size-xs;
+    font-weight: 700;
+  }
+
+  img {
+    border-radius: 11px;
+    margin: 0 5px 0 0;
+    max-height: 20px;
+    width: 20px;
+  }
+}

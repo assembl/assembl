@@ -1,2 +1,12 @@
 @import 'variables';
+@import 'bootstrap-overrides';
 @import 'common';
+@import 'components/box';
+@import 'components/buttons';
+@import 'components/dropdown';
+@import 'components/icons';
+@import 'components/loader';
+@import 'components/login';
+@import 'components/navbar';
+@import 'components/text';
+@import 'views/home';

@@ -1,8 +1,14 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
+import Header from '../components/home/header';
 
-const Home = () => (
-  <p><Translate value="home.panelTitle" /></p>
-);
+class Home extends React.Component {
+  render() {
+    return (
+      <div>
+        <Header />
+      </div>
+    );
+  }
+}
 
 export default Home;

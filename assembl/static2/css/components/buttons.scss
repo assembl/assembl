@@ -1,0 +1,59 @@
+.button-link {
+  background-color: $btn-success-bkg;
+  border: $button-link-border;
+  border-radius: 4px;
+  color: $btn-success-txt;
+  display: inline-block;
+  font-size: $font-size-s;
+  font-weight: 600;
+  padding: 6px 50px;
+
+  &:hover {
+    background-color: $btn-success-hover-bkg;
+    border-color: $btn-success-hover-border;
+    color: $btn-success-hover-txt;
+    text-decoration: none;
+  }
+
+  &:focus {
+    background-color: $btn-success-hover-bkg;
+    border-color: $btn-success-hover-border;
+    color: $btn-success-hover-txt;
+    outline: none;
+  }
+}
+
+.button-success {
+  background-color: $btn-success-bkg;
+  border-color: $btn-success-border;
+  color: $btn-success-txt;
+  font-size: $font-size-s;
+  font-weight: 600;
+  padding: 6px 50px;
+
+  &:hover {
+    background-color: $btn-success-hover-bkg;
+    border-color: $btn-success-hover-border;
+    color: $btn-success-hover-txt;
+  }
+
+  &:focus {
+    background-color: $btn-success-hover-bkg;
+    border-color: $btn-success-hover-border;
+    color: $btn-success-hover-txt;
+    outline: none;
+  }
+}
+
+.button-cancel {
+  background-color: $btn-cancel-bkg;
+  border-color: $btn-cancel-border;
+  color: $btn-cancel-txt;
+  padding: 6px 50px;
+
+  &:hover {
+    background-color: $btn-cancel-hover-bkg;
+    border-color: $btn-cancel-hover-border;
+    color: $btn-cancel-hover-txt;
+  }
+}

@@ -1,0 +1,31 @@
+.rounded-icon {
+  background-color: $grey2;
+  border-radius: 10px;
+  display: inline-block;
+  height: 20px;
+  margin: 0 5px 0 0;
+  padding: 0 4px;
+  width: 20px;
+
+  span {
+    color: $white;
+    font-size: 12px;
+  }
+}
+
+.white-icon {
+  display: inline-block;
+  font-size: 20px;
+  line-height: 23px;
+  margin: 0 5px 0 0;
+  vertical-align: middle;
+
+  span {
+    color: $grey2;
+  }
+}
+
+.black-icon {
+  display: inline-block;
+  margin: 0 5px 0 0;
+}

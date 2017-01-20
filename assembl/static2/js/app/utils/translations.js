@@ -1,10 +1,19 @@
 const Translations = {
   fr: {
+    navbar: {
+      home: 'accueil',
+      debate: 'débat',
+      community: 'communauté'
+    },
     authentication: {
       panelTitle: 'Bienvenue dans la page d\'authentification d\'Assembl'
     },
     home: {
-      panelTitle: 'Bienvenue dans la page d\'accueil d\'Assembl'
+      accessButton: 'J\'accède au débat',
+      contribution: 'contributions',
+      participant: 'participants',
+      visit: 'visites',
+      viewedPages: 'pages vues'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -15,6 +24,12 @@ const Translations = {
     debate: {
       panelTitle: 'Bienvenue dans la page débat d\'Assembl'
     },
+    loading: {
+      wait: 'Veuillez patientez'
+    },
+    error: {
+      reason: 'Désolé, une erreur s\'est produite :'
+    },
     notFound: {
       panelTitle: 'Désolé, cette page n\'existe pas'
     },
@@ -23,11 +38,20 @@ const Translations = {
     }
   },
   en: {
+    navbar: {
+      home: 'home',
+      debate: 'debate',
+      community: 'community'
+    },
     authentication: {
       panelTitle: 'Welcome to Assembl authentication page'
     },
     home: {
-      panelTitle: 'Welcome to Assembl home page'
+      accessButton: 'I access to the debate',
+      contribution: 'contributions',
+      participant: 'participants',
+      visit: 'visits',
+      viewedPages: 'Viewed pages'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -38,6 +62,12 @@ const Translations = {
     debate: {
       panelTitle: 'Welcome to Assembl debate page'
     },
+    loading: {
+      wait: 'Please wait...'
+    },
+    error: {
+      reason: 'Sorry, an error occurred:'
+    },
     notFound: {
       panelTitle: 'Sorry, this page doesn\'t exist'
     },
@@ -46,11 +76,20 @@ const Translations = {
     }
   },
   de: {
+    navbar: {
+      home: 'willkommen',
+      debate: 'debatte',
+      community: 'gemeinschaft'
+    },
     authentication: {
       panelTitle: 'Willkommen in Assembl - authentication page'
     },
     home: {
-      panelTitle: 'Willkommen in Assembl - home page'
+      accessButton: 'Ich gehe zur Debatte',
+      contribution: 'Beiträge',
+      participant: 'Teilnehmer',
+      visit: 'Besuche',
+      viewedPages: 'Seitenaufrufe'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'
@@ -60,6 +99,12 @@ const Translations = {
     },
     debate: {
       panelTitle: 'Willkommen in Assembl - debate page'
+    },
+    loading: {
+      wait: 'Bitte warten...'
+    },
+    error: {
+      reason: 'Ist ein Fehler aufgetreten:'
     },
     notFound: {
       panelTitle: 'Sorry, diese Seite existiert nicht'

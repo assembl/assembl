@@ -1,1 +1,69 @@
-$blue: #00a9e0;
+$white: #fff;
+$black: #000;
+$grey0: #f5f8fa;
+$grey1: #f3f0f4;
+$grey2: #9b9b9b;
+$grey3: #4a4a4a;
+$green: #3bb848;
+
+$radius: 3px;
+
+$border-weight1: 1px;
+$border-weight2: 2px;
+
+$font-size-xs: 12px;
+$font-size-s: 14px;
+$font-size-m: 18px;
+$font-size-l: 22px;
+$font-size-xl: 32px;
+
+$shadow: 1px 1px 3px 0 $grey1;
+
+$fonts-dir: '/static2/css/fonts';
+$img-dir: '/static2/css/img';
+
+@font-face {
+  font-family: 'avenir condensed';
+  src: url('#{$fonts-dir}/AvenirNextLTPro-Cn.otf');
+}
+
+$font-family: 'Open Sans', sans-serif;
+$font-family2: 'avenir';
+
+$page-bkg: $grey0;
+
+$btn-success-bkg: $green;
+$btn-success-border: $green;
+$btn-success-txt: $white;
+
+$btn-success-hover-bkg: $green;
+$btn-success-hover-border: $green;
+$btn-success-hover-txt: $white;
+
+$btn-cancel-bkg: $grey1;
+$btn-cancel-border: $grey2;
+$btn-cancel-txt: $grey3;
+
+$btn-cancel-hover-bkg: $grey1;
+$btn-cancel-hover-border: $grey2;
+$btn-cancel-hover-txt: $grey3;
+
+$title1-color: $black;
+$title2-color: $black;
+$title3-color: $grey3;
+$title4-color: $grey3;
+$title1-size: $font-size-xl;
+$title2-size: $font-size-l;
+$title3-size: $font-size-m;
+$title4-size: $font-size-xs;
+
+$active-link-color: $green;
+
+$navbar-bkg: $white;
+$navbar-border: none;
+$navbar-text-color: $grey2;
+
+$box-shadow: $shadow;
+$box-bkg: $white;
+$button-link-border: $border-weight1 solid $btn-success-border;
+$box-border: $border-weight2 solid $white;
