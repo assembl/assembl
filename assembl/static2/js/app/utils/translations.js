@@ -28,7 +28,7 @@ const Translations = {
       wait: 'Veuillez patientez'
     },
     error: {
-      reason: 'Désolé, une erreur s\'est produite.'
+      reason: 'Désolé, une erreur s\'est produite :'
     },
     notFound: {
       panelTitle: 'Désolé, cette page n\'existe pas'
@@ -66,7 +66,7 @@ const Translations = {
       wait: 'Please wait...'
     },
     error: {
-      reason: 'Sorry, an error occurred.'
+      reason: 'Sorry, an error occurred:'
     },
     notFound: {
       panelTitle: 'Sorry, this page doesn\'t exist'
@@ -104,7 +104,7 @@ const Translations = {
       wait: 'Bitte warten...'
     },
     error: {
-      reason: 'Ist ein Fehler aufgetreten.'
+      reason: 'Ist ein Fehler aufgetreten:'
     },
     notFound: {
       panelTitle: 'Sorry, diese Seite existiert nicht'

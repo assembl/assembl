@@ -27,7 +27,7 @@ class App extends React.Component {
             <div className="app-content">{this.props.children}</div>
           </div>
         }
-        {debateError && <Error />}
+        {debateError && <Error errorMessage={debateError} />}
       </div>
     );
   }
