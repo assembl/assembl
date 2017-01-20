@@ -11,7 +11,7 @@ class Debate extends React.Component {
       <div>
         {postsLoading && <Loader />}
         {posts && <p><Translate value="debate.panelTitle" /></p>}
-        {postsError && <Error errorMessage={postsError}  />}
+        {postsError && <Error errorMessage={postsError} />}
       </div>
     );
   }
