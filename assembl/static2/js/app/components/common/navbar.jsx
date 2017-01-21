@@ -47,7 +47,9 @@ class NavBar extends React.Component {
               </div>
               <div className="right">
                 <div className="navbar-icons">
-                  <div className="white-icon"><Glyphicon glyph="question-sign" /></div>
+                  <div className="white-icon">
+                    <a href={`${debateData.help_url}`} target="_blank" rel="noopener noreferrer"><Glyphicon glyph="question-sign" /></a>
+                  </div>
                   <LanguageMenu />
                   <ProfileIcon />
                 </div>

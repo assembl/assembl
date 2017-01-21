@@ -22,8 +22,10 @@ export default (
       <Route path=":slug/debate" component={Debate} />
       <Route path=":slug/community" component={Community} />
     </Route>
-    <Route path=":slug/profile" component={Profile} />
-    <Route path=":slug/styleguide" component={Styleguide} />
+    <Route path="/v2/">
+      <Route path=":slug/profile" component={Profile} />
+      <Route path=":slug/styleguide" component={Styleguide} />
+    </Route>
     <Route path="*" component={NotFound} />
   </Router>
 );

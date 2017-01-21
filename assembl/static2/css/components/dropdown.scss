@@ -1,11 +1,13 @@
 .dropdown-xs {
   font-size: $font-size-xs;
-  margin: 0 0 0 15px;
+  margin: 0 0 0 12px;
   padding: 4px 0 0;
+  width: 30px;
 
   .dropdown-toggle {
     color: $black;
     font-size: $font-size-xs;
+    text-transform: uppercase;
 
     &:hover {
       color: $black;
@@ -23,6 +25,7 @@
 
     a {
       font-size: $font-size-xs;
+      text-transform: uppercase;
     }
   }
 }
