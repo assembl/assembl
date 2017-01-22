@@ -50,7 +50,9 @@ class NavBar extends React.Component {
                   <div className="white-icon">
                     <a href={`${debateData.help_url}`} target="_blank" rel="noopener noreferrer"><Glyphicon glyph="question-sign" /></a>
                   </div>
-                  <LanguageMenu />
+                  <div className="navbar-language right">
+                    <LanguageMenu />
+                  </div>
                   <ProfileIcon />
                 </div>
               </div>
@@ -64,6 +66,9 @@ class NavBar extends React.Component {
                 <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/community`} onClick={this.displayMenu}>
                   <Translate value="navbar.community" />
                 </Link>
+                <div className="center">
+                  <LanguageMenu />
+                </div>
               </div>
             </div>
           </Navbar>

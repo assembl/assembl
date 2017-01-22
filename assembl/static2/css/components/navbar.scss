@@ -83,8 +83,13 @@
       }
     }
 
+    .navbar-language {
+      display: none;
+    }
+
     .navbar-item-menu {
       display: block;
+      line-height: 60px;
       text-align: center;
     }
 
@@ -120,6 +125,10 @@
       div {
         margin: 0 10px;
       }
+    }
+
+    .nav-burger-menu {
+      display: none;
     }
   }
 }

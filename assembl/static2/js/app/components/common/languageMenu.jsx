@@ -16,7 +16,7 @@ class LanguageMenu extends React.Component {
       return locArray;
     });
     return (
-      <ul className="dropdown-xs right">
+      <ul className="dropdown-xs">
         <NavDropdown title={locale} id="nav-dropdown">
           {locArray.map((otherLocales) => {
             return (<MenuItem onClick={() => { this.changeLanguage(otherLocales); }} key={otherLocales}>{otherLocales}</MenuItem>);

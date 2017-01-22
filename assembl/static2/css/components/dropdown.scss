@@ -1,6 +1,6 @@
 .dropdown-xs {
   font-size: $font-size-xs;
-  margin: 0 0 0 12px;
+  margin: 0 auto;
   padding: 4px 0 0;
   width: 30px;
 
@@ -26,6 +26,24 @@
     a {
       font-size: $font-size-xs;
       text-transform: uppercase;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .dropdown-xs {
+    height: 60px;
+    padding: 20px 0 0;
+
+    .dropdown-menu {
+      margin: 0 0 0 -33px;
+      text-align: center;
+      width: 80px;
+
+      a {
+        line-height: 40px;
+        width: 78px;
+      }
     }
   }
 }
