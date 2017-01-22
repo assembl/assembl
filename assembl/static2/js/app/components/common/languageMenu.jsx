@@ -6,6 +6,7 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 class LanguageMenu extends React.Component {
   changeLanguage(key) {
     this.props.changeLanguage(key);
+    localStorage.setItem('locale', key);
   }
   render() {
     const { locale, translations } = this.props.i18n;
