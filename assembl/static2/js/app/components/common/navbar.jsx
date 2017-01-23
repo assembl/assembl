@@ -27,47 +27,45 @@ class NavBar extends React.Component {
         <Row>
           <Navbar fixedTop fluid>
             <div className="nav-bar">
-              <div className="left burger-menu" onClick={this.displayMenu}>
+              <div className="burgermenu-icon left" onClick={this.displayMenu}>
                 <div className={this.state.isMenuHidden ? 'black-icon shown' : 'black-icon hidden'}><Glyphicon glyph="align-justify" /></div>
                 <div className={this.state.isMenuHidden ? 'black-icon hidden' : 'black-icon shown'}><Glyphicon glyph="remove" /></div>
               </div>
-              <div className="left navbar-logo">
+              <div className="navbar-logo left">
                 <img src={debateData.logo} alt="logo" />
               </div>
               <div className="nav-menu left">
-                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/home`}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/home`}>
                   <Translate value="navbar.home" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/debate`}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/debate`}>
                   <Translate value="navbar.debate" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/community`}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/community`}>
                   <Translate value="navbar.community" />
                 </Link>
               </div>
-              <div className="right">
-                <div className="navbar-icons">
-                  <div className="white-icon">
-                    <a href={`${debateData.help_url}`} target="_blank" rel="noopener noreferrer"><Glyphicon glyph="question-sign" /></a>
-                  </div>
-                  <div className="navbar-language right">
-                    <LanguageMenu />
-                  </div>
-                  <ProfileIcon />
+              <div className="navbar-icons right">
+                <div className="white-icon">
+                  <a href={`${debateData.help_url}`} target="_blank" rel="noopener noreferrer"><Glyphicon glyph="question-sign" /></a>
                 </div>
+                <div className="navbar-language right">
+                  <LanguageMenu size="xs" />
+                </div>
+                <ProfileIcon />
               </div>
               <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'}>
-                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/home`} onClick={this.displayMenu}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/home`} onClick={this.displayMenu}>
                   <Translate value="navbar.home" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/debate`} onClick={this.displayMenu}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/debate`} onClick={this.displayMenu}>
                   <Translate value="navbar.debate" />
                 </Link>
-                <Link className="navbar-item-menu" activeClassName="active" to={`${path}${debateData.slug}/community`} onClick={this.displayMenu}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/community`} onClick={this.displayMenu}>
                   <Translate value="navbar.community" />
                 </Link>
-                <div className="center">
-                  <LanguageMenu />
+                <div className="burgermenu-language center">
+                  <LanguageMenu size="xl" />
                 </div>
               </div>
             </div>

@@ -16,7 +16,7 @@
     padding: 28px;
   }
 
-  .navbar-item-menu {
+  .navbar-menu-item {
     color: $navbar-text-color;
     font-family: $font-family2;
     font-size: $font-size-xs;
@@ -39,7 +39,7 @@
     color: $active-link-color;
   }
 
-  .burger-menu {
+  .burgermenu-icon {
     cursor: pointer;
     font-size: 30px;
     padding: 20px;
@@ -87,7 +87,7 @@
       display: none;
     }
 
-    .navbar-item-menu {
+    .navbar-menu-item {
       display: block;
       line-height: 60px;
       text-align: center;
@@ -117,7 +117,7 @@
 
 @media screen and (min-width: 768px) {
   .nav-bar {
-    .burger-menu {
+    .burgermenu-icon {
       display: none;
     }
 
