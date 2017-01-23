@@ -110,15 +110,19 @@
   }
 } 
 .LikeSentimentOfPost.active {
+  transform: scale(1.2);
   background-image: url(#{$img-dir}/emoticons/agree_active.svg);
 }
 .DisagreeSentimentOfPost.active {
+  transform: scale(1.2);
   background-image: url(#{$img-dir}/emoticons/disagree_active.svg);
 }
 .MoreInfoSentimentOfPost.active {
+  transform: scale(1.2);
   background-image: url(#{$img-dir}/emoticons/more_infos_active.svg);
 }
 .DontUnderstandSentimentOfPost.active {
+  transform: scale(1.2);
   background-image: url(#{$img-dir}/emoticons/not_understand_active.svg);
 }
 .like.min {

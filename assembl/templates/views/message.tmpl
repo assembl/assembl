@@ -232,10 +232,10 @@
     </div>
   </div>
   <div class="sentiment-list">
-    <div class="emo-minified more_info min"></div>
-    <div class="emo-minified disagree min"></div>
     <div class="emo-minified like min"></div>
+    <div class="emo-minified disagree min"></div>
     <div class="emo-minified dont_understand min"></div>
+    <div class="emo-minified more_info min"></div>
     <div class="js_sentimentNamesList sentiment-names-list">
       <a href="#"></a>
       <div class="js_sentimentStats sentiment-stats">
@@ -254,21 +254,7 @@
           </svg>
           <div data-count="like" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Like') }}</div>
         </div>
-        <div class="bar-chart" style="color:#FAC16F">
-          <svg width="25" height="58">
-            <rect rx="1" id="gauge-dont_understand1" data-color="#FAC16F" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand2" data-color="#FAC16F" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand3" data-color="#FAC16F" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand4" data-color="#FAC16F" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand5" data-color="#FAC16F" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand6" data-color="#FAC16F" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand7" data-color="#FAC16F" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand8" data-color="#FAC16F" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand9" data-color="#FAC16F" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-            <rect rx="1" id="gauge-dont_understand10" data-color="#FAC16F" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
-          </svg>
-          <div data-count="dont_understand" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Did not get it') }}</div>
-        </div>
+
         <div class="bar-chart" style="color:#F2474D">
           <svg width="25" height="58">
             <rect rx="1" id="gauge-disagree1" data-color="#F2474D" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
@@ -283,6 +269,21 @@
             <rect rx="1" id="gauge-disagree10" data-color="#F2474D" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
           </svg>
           <div data-count="disagree" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Disagree') }}</div>
+        </div>
+        <div class="bar-chart" style="color:#FAC16F">
+          <svg width="25" height="58">
+            <rect rx="1" id="gauge-dont_understand1" data-color="#FAC16F" height="3" width="15" y="50" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand2" data-color="#FAC16F" height="3" width="15" y="45" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand3" data-color="#FAC16F" height="3" width="15" y="40" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand4" data-color="#FAC16F" height="3" width="15" y="35" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand5" data-color="#FAC16F" height="3" width="15" y="30" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand6" data-color="#FAC16F" height="3" width="15" y="25" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand7" data-color="#FAC16F" height="3" width="15" y="20" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand8" data-color="#FAC16F" height="3" width="15" y="15.000313" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand9" data-color="#FAC16F" height="3" width="15" y="10.000625" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+            <rect rx="1" id="gauge-dont_understand10" data-color="#FAC16F" height="3" width="15" y="5.000938" x="5" stroke-width="1.5" stroke="#dbd9d9" fill="#dbd9d9"/>
+          </svg>
+          <div data-count="dont_understand" class="chart-number">0&nbsp;</div><div class="chart-label">{{ gettext('Did not get it') }}</div>
         </div>
         <div class="bar-chart" style="color:#9374FF">
           <svg width="25" height="58">

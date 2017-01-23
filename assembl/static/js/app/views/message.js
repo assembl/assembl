@@ -819,11 +819,11 @@ var MessageView = Marionette.LayoutView.extend({
         this.ui.messageReplyBox.addClass('hidden');
       }
 
-      if (this.model.get('like_count') > 0) {
-        this.ui.likeCounter.show();
-      } else {
-        this.ui.likeCounter.hide();
-      }
+      // if (this.model.get('like_count') > 0) {
+      //   this.ui.likeCounter.show();
+      // } else {
+      //   this.ui.likeCounter.hide();
+      // }
 
       //Translation view should only be shown when the message is in full view or in preview mode. Otherwise,
       //do not show it
