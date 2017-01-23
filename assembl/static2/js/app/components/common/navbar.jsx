@@ -38,7 +38,9 @@ class NavBar extends React.Component {
                 <div className={this.state.isMenuHidden ? 'black-icon hidden' : 'black-icon shown'}><Glyphicon glyph="remove" /></div>
               </div>
               <div className="navbar-logo left">
-                <img src={debateData.logo} alt="logo" />
+                <Link to={`${path}${debateData.slug}/home`}>
+                  <img src={debateData.logo} alt="logo" />
+                </Link>
               </div>
               <div className="nav-menu left">
                 <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/home`}>
