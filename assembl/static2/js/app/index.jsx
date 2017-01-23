@@ -14,7 +14,8 @@ import RootReducer from './reducers/rootReducer';
 
 const store = createStore(RootReducer, applyMiddleware(Thunk));
 const browserLanguage = navigator.language || navigator.userLanguage;
-const userLocale = GlobalFunctions.getLocale(browserLanguage);
+const isStoragedlocale = localStorage.getItem('locale') !== null;
+const userLocale = isStoragedlocale ? localStorage.getItem('locale') : GlobalFunctions.getLocale(browserLanguage);
 syncTranslationWithStore(store);
 store.dispatch(loadTranslations(Translations));
 store.dispatch(setLocale(userLocale));

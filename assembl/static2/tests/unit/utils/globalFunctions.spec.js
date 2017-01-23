@@ -12,4 +12,22 @@ describe('This test concern GlobalFunctions Class', () => {
     }
     expect(result).toEqual(expectedResult);
   });
+  
+  it('Should test locales available in translations object and different than the current locale', () => {
+    const translations = {
+      de: {
+        test: 'test'
+      },
+      en: {
+        test: 'test'
+      },
+      fr: {
+        test: 'test'
+      }
+    };
+    const currentLocale = 'fr';
+    const expectedResult = ['de', 'en'];
+    const result = GlobalFunctions.getAvalaibleLocales(currentLocale, translations);
+    expect(result).toEqual(expectedResult);
+  });
 });

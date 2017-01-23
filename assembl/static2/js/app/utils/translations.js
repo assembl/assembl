@@ -27,6 +27,9 @@ const Translations = {
     debate: {
       panelTitle: 'Bienvenue dans la page débat d\'Assembl'
     },
+    profile: {
+      panelTitle: 'Bienvenue dans la page profil d\'Assembl'
+    },
     loading: {
       wait: 'Veuillez patientez'
     },
@@ -68,6 +71,9 @@ const Translations = {
     debate: {
       panelTitle: 'Welcome to Assembl debate page'
     },
+    profile: {
+      panelTitle: 'Welcome to Assembl profile page'
+    },
     loading: {
       wait: 'Please wait...'
     },
@@ -105,6 +111,9 @@ const Translations = {
     },
     debate: {
       panelTitle: 'Willkommen in Assembl - debate page'
+    },
+    profile: {
+      panelTitle: 'Willkommen in Assembl - profile page'
     },
     community: {
       panelTitle: 'Willkommen in Assembl - community page'

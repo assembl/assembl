@@ -1,11 +1,13 @@
 .dropdown-xs {
   font-size: $font-size-xs;
-  margin: 0 0 0 15px;
+  margin: 0 auto;
   padding: 4px 0 0;
+  width: 30px;
 
   .dropdown-toggle {
     color: $black;
     font-size: $font-size-xs;
+    text-transform: uppercase;
 
     &:hover {
       color: $black;
@@ -23,6 +25,62 @@
 
     a {
       font-size: $font-size-xs;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.dropdown-xl {
+  text-transform: uppercase;
+
+  .dropdown {
+    background-color: $white;
+    height: 30px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  li {
+    a {
+      width: 100%;
+
+      &:hover {
+        background-color: $white;
+      }
+    }
+
+    &:not(:last-child) {
+      a {
+        border: 0;
+      }
+    }
+  }
+
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:focus {
+      text-decoration: none;
+    }
+  }
+
+  .dropdown-menu {
+    border: 0;
+    box-shadow: none;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+
+    li {
+      outline: none;
+
+      a {
+        margin: 0 0 10px -6px;
+        outline: none;
+      }
     }
   }
 }
