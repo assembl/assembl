@@ -220,7 +220,7 @@ class Post(Content):
             return LangString.create(
                 self.moderation_text, self.discussion.main_locale)
         elif self.publication_state in deleted_publication_states:
-            return None
+            return LangString.EMPTY(self.db)
         body = self.get_body()
         is_html = self.get_body_mime_type() == 'text/html'
         ls = LangString()
@@ -246,7 +246,7 @@ class Post(Content):
             # TODO: Handle multilingual moderation
             return self.moderation_text
         elif self.publication_state in deleted_publication_states:
-            return None
+            return LangString.EMPTY(self.db)
         body = self.get_body().first_original().value
         is_html = self.get_body_mime_type() == 'text/html'
         shortened = False
@@ -408,12 +408,12 @@ class Post(Content):
 
     def get_original_body_as_html(self):
         if self.publication_state in blocking_publication_states:
-            return None
+            return LangString.EMPTY(self.db)
         return super(Post, self).get_original_body_as_html()
 
     def get_body_as_text(self):
         if self.publication_state in blocking_publication_states:
-            return None
+            return LangString.EMPTY(self.db)
         return super(Post, self).get_body_as_text()
 
     def indirect_idea_content_links(self):
