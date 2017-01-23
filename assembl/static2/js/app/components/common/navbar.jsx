@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Navbar, Glyphicon } from 'react-bootstrap';
@@ -13,6 +13,12 @@ class NavBar extends React.Component {
       isMenuHidden: true
     };
     this.displayMenu = this.displayMenu.bind(this);
+    browserHistory.listen( location =>  {
+      this.setState({ isMenuHidden: true });
+    });
+  }
+  componentWillReceiveProps() {
+    this.setState({ isMenuHidden: true });
   }
   displayMenu() {
     const { isMenuHidden } = this.state;
@@ -55,13 +61,13 @@ class NavBar extends React.Component {
                 <ProfileIcon />
               </div>
               <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'}>
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/home`} onClick={this.displayMenu}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/home`}>
                   <Translate value="navbar.home" />
                 </Link>
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/debate`} onClick={this.displayMenu}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/debate`}>
                   <Translate value="navbar.debate" />
                 </Link>
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/community`} onClick={this.displayMenu}>
+                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/community`}>
                   <Translate value="navbar.community" />
                 </Link>
                 <div className="burgermenu-language center">
@@ -78,6 +84,7 @@ class NavBar extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    i18n: state.i18n,
     debate: state.debate,
     path: state.path
   };
