@@ -1,10 +1,10 @@
 import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Navbar, Glyphicon } from 'react-bootstrap';
 import ProfileIcon from './profileIcon';
 import LanguageMenu from './languageMenu';
+import NavigationMenu from './navigationMenu';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class NavBar extends React.Component {
       isMenuHidden: true
     };
     this.displayMenu = this.displayMenu.bind(this);
-    browserHistory.listen( location =>  {
+    browserHistory.listen(() => {
       this.setState({ isMenuHidden: true });
     });
   }
@@ -43,15 +43,7 @@ class NavBar extends React.Component {
                 </Link>
               </div>
               <div className="nav-menu left">
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/home`}>
-                  <Translate value="navbar.home" />
-                </Link>
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/debate`}>
-                  <Translate value="navbar.debate" />
-                </Link>
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/community`}>
-                  <Translate value="navbar.community" />
-                </Link>
+                <NavigationMenu />
               </div>
               <div className="navbar-icons right">
                 <div className="white-icon">
@@ -63,15 +55,7 @@ class NavBar extends React.Component {
                 <ProfileIcon />
               </div>
               <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'}>
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/home`}>
-                  <Translate value="navbar.home" />
-                </Link>
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/debate`}>
-                  <Translate value="navbar.debate" />
-                </Link>
-                <Link className="navbar-menu-item" activeClassName="active" to={`${path}${debateData.slug}/community`}>
-                  <Translate value="navbar.community" />
-                </Link>
+                <NavigationMenu />
                 <div className="burgermenu-language center">
                   <LanguageMenu size="xl" />
                 </div>
