@@ -4,7 +4,7 @@
   height: 80px;
 
   .navbar-logo {
-    padding: 15px 20px;
+    padding: 15px 20px 15px 0;
 
     img {
       height: 50px;
@@ -13,7 +13,7 @@
 
   .navbar-icons {
     cursor: pointer;
-    padding: 28px;
+    padding: 28px 10px;
   }
 
   .navbar-menu-item {
@@ -42,7 +42,7 @@
   .burgermenu-icon {
     cursor: pointer;
     font-size: 30px;
-    padding: 20px;
+    padding: 20px 10px;
     position: absolute;
     z-index: 2;
   }
@@ -56,18 +56,7 @@
   }
 }
 
-@media (min-width: 1200px) {
-  .nav-bar {
-    margin: 0 auto;
-    width: 1170px;
-  }
-}
-
 @media screen and (max-width: 767px) {
-  body {
-    overflow-y: scroll;
-  }
-
   .nav-bar {
     .nav-menu {
       display: none;
@@ -97,7 +86,7 @@
       padding: 28px 15px;
 
       div {
-        margin: 0 4px;
+        margin: 0 0 0 15px;
       }
     }
 
@@ -123,7 +112,7 @@
 
     .navbar-icons {
       div {
-        margin: 0 10px;
+        margin: 0 0 0 20px;
       }
     }
 
@@ -136,7 +125,7 @@
 @media screen and (max-width: 412px) {
   .nav-bar {
     .navbar-icons {
-      padding: 28px 5px;
+      padding: 28px 10px;
     }
   }
 }

@@ -17,7 +17,6 @@ class NavBar extends React.Component {
     browserHistory.listen(() => {
       this.setState({ isMenuHidden: true });
     });
-    console.log(this.props)
   }
   componentWillReceiveProps() {
     this.setState({ isMenuHidden: true });
@@ -34,7 +33,7 @@ class NavBar extends React.Component {
       <Grid fluid>
         <Row>
           <Navbar fixedTop fluid>
-            <div className="nav-bar">
+            <div className="nav-bar max-container">
               <div className="burgermenu-icon left" onClick={this.displayMenu}>
                 <div className={this.state.isMenuHidden ? 'black-icon shown' : 'black-icon hidden'}><Glyphicon glyph="align-justify" /></div>
                 <div className={this.state.isMenuHidden ? 'black-icon hidden' : 'black-icon shown'}><Glyphicon glyph="remove" /></div>

@@ -12,7 +12,7 @@ class Header extends React.Component {
     const { rootPath } = this.props.path;
     return (
       <div className="header">
-        <Grid fluid>
+        <Grid fluid className="max-container">
           <Row>
             <div className="header-content">
               <img className="header-logo" src={debateData.logo} alt="logo" />
