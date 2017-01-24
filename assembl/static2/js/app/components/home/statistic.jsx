@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Glyphicon } from 'react-bootstrap';
+import MapStateToProps from '../../store/mapStateToProps';
 import Loader from '../common/loader';
 import Error from '../common/error';
 
@@ -42,11 +43,4 @@ class Statistic extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    posts: state.posts,
-    users: state.users
-  };
-};
-
-export default connect(mapStateToProps)(Statistic);
+export default connect(MapStateToProps)(Statistic);

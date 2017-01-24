@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import GlobalFunctions from '../utils/globalFunctions';
-import PathActions from '../actions/pathActions';
-import DebateActions from '../actions/debateActions';
-import PostsActions from '../actions/postsActions';
-import UsersActions from '../actions/usersActions';
+import MapStateToProps from '../store/mapStateToProps';
+import MapDispatchToProps from '../store/mapDispatchToProps';
 import Loader from '../components/common/loader';
 import Error from '../components/common/error';
 import Navbar from '../components/common/navbar';
@@ -35,31 +33,4 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    i18n: state.i18n,
-    debate: state.debate,
-    posts: state.posts,
-    users: state.users,
-    path: state.path
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchDebateData: (id) => {
-      dispatch(DebateActions.fetchDebateData(id));
-    },
-    fetchPosts: (id) => {
-      dispatch(PostsActions.fetchPosts(id));
-    },
-    fetchUsers: (id) => {
-      dispatch(UsersActions.fetchUsers(id));
-    },
-    addPath: (path) => {
-      dispatch(PathActions.addPath(path));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(MapStateToProps, MapDispatchToProps)(App);

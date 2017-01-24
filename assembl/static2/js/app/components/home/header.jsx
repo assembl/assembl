@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
+import MapStateToProps from '../../store/mapStateToProps';
 import Statistic from './statistic';
 
 class Header extends React.Component {
@@ -33,11 +34,4 @@ class Header extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    path: state.path
-  };
-};
-
-export default connect(mapStateToProps)(Header);
+export default connect(MapStateToProps)(Header);

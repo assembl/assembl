@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
+import MapStateToProps from '../store/mapStateToProps';
 import Loader from '../components/common/loader';
 import Error from '../components/common/error';
 
@@ -17,10 +18,4 @@ class Debate extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    posts: state.posts
-  };
-};
-
-export default connect(mapStateToProps)(Debate);
+export default connect(MapStateToProps)(Debate);

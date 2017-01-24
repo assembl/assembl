@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setLocale } from 'react-redux-i18n';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import GlobalFunctions from '../../utils/globalFunctions';
+import MapStateToProps from '../../store/mapStateToProps';
+import MapDispatchToProps from '../../store/mapDispatchToProps';
 
 class LanguageMenu extends React.Component {
   changeLanguage(key) {
@@ -26,19 +27,4 @@ class LanguageMenu extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    i18n: state.i18n,
-    debate: state.debate
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeLanguage: (locale) => {
-      dispatch(setLocale(locale));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(LanguageMenu);
+export default connect(MapStateToProps, MapDispatchToProps)(LanguageMenu);

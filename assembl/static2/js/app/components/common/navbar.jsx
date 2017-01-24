@@ -2,6 +2,7 @@ import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Grid, Row, Navbar, Glyphicon } from 'react-bootstrap';
+import MapStateToProps from '../../store/mapStateToProps';
 import ProfileIcon from './profileIcon';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
@@ -68,12 +69,4 @@ class NavBar extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    i18n: state.i18n,
-    debate: state.debate,
-    path: state.path
-  };
-};
-
-export default connect(mapStateToProps)(NavBar);
+export default connect(MapStateToProps)(NavBar);
