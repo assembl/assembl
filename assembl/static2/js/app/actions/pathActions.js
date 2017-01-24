@@ -1,14 +1,14 @@
 class PathActions {
-  static addPath(path) {
+  static addPath(rootPath) {
     const that = this;
     return function (dispatch) {
-      dispatch(that.resolvedAddPath(path));
+      dispatch(that.resolvedAddPath(rootPath));
     };
   }
-  static resolvedAddPath(path) {
+  static resolvedAddPath(rootPath) {
     return {
       type: 'ADD_PATH',
-      path: path
+      rootPath: rootPath
     };
   }
 }

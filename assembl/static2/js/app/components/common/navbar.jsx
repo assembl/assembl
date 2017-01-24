@@ -17,6 +17,7 @@ class NavBar extends React.Component {
     browserHistory.listen(() => {
       this.setState({ isMenuHidden: true });
     });
+    console.log(this.props)
   }
   componentWillReceiveProps() {
     this.setState({ isMenuHidden: true });
@@ -28,7 +29,7 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
-    const { path } = this.props;
+    const { rootPath } = this.props.path;
     return (
       <Grid fluid>
         <Row>
@@ -39,7 +40,7 @@ class NavBar extends React.Component {
                 <div className={this.state.isMenuHidden ? 'black-icon hidden' : 'black-icon shown'}><Glyphicon glyph="remove" /></div>
               </div>
               <div className="navbar-logo left">
-                <Link to={`${path}${debateData.slug}/home`}>
+                <Link to={`${rootPath}${debateData.slug}/home`}>
                   <img src={debateData.logo} alt="logo" />
                 </Link>
               </div>

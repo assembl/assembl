@@ -9,7 +9,7 @@ import Statistic from './statistic';
 class Header extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { path } = this.props;
+    const { rootPath } = this.props.path;
     return (
       <div className="header">
         <Grid fluid>
@@ -19,7 +19,7 @@ class Header extends React.Component {
               <div className="title-1">{debateData.topic}</div>
               <div className="title-3">{debateData.introduction}</div>
               <div className="title-4">{debateData.objectives}</div>
-              <Link className="button-link margin-l" to={`${path}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
+              <Link className="button-link margin-l" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
               <Statistic />
             </div>
           </Row>
