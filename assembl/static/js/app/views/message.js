@@ -1002,6 +1002,8 @@ var MessageView = Marionette.LayoutView.extend({
       var activeSentiment = this.model.get('my_sentiment')['@type'];
       var activeSentimentClass = '.' + activeSentiment;
       var test = this.$(activeSentimentClass).addClass('active');
+    } else {
+      this.$('.emoticon-connected.active').removeClass('active');
     }
     var sentiment_counts = this.model.get('sentiment_counts');
     var increment = 0;
@@ -1045,8 +1047,10 @@ var MessageView = Marionette.LayoutView.extend({
         that.$('.sentiment-names-list > a').html(msg3);
       }
       that.$('.js_idea-classification-region').css({"margin-top":"35px"});
+      that.$('.sentiment-list').show();
     }else{
       that.$('.js_idea-classification-region').css({"margin-top":"0px"});
+      that.$('.sentiment-list').hide();
     }
     if(Ctx.isUserConnected()){
       $('.emoticon').addClass('emoticon-connected');
