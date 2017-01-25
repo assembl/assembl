@@ -1060,6 +1060,14 @@ var MessageView = Marionette.LayoutView.extend({
           dataType: "json",
           data: payload
         });
+      }else{
+        var mySentimentId = this.model.get('my_sentiment')['@id'].split('/')[1];
+        $.ajax(
+          "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments/" + mySentimentId, {
+          method: "DELETE",
+          contentType: "application/json",
+          dataType: "json"
+        });
       }
     }
   },
