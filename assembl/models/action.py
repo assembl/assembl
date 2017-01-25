@@ -209,6 +209,10 @@ class SentimentOfPost(UniqueActionOnPost):
     verb = 'assign_sentiment'
     default_duplicate_handling = DuplicateHandling.TOMBSTONE
 
+    @classproperty
+    def all_sentiments(cls):
+        return [sub.name for sub in cls.get_subclasses() if sub != cls]
+
     TYPE_PREFIX_LEN = len('sentiment:')
 
     crud_permissions = CrudPermissions(
@@ -276,8 +280,7 @@ def send_post_to_socket(mapper, connection, target):
 
 @event.listens_for(SentimentOfPost, 'after_update', propagate=True)
 def send_post_to_socket_ts(mapper, connection, target):
-    if not inspect(target).unmodified_intersection(('tombstone_date')):
-        target.post.send_to_changes(view_def="aux_data")
+    target.post.send_to_changes(view_def="aux_data")
 
 
 _lpt = LikeSentimentOfPost.__table__

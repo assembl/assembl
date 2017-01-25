@@ -999,17 +999,20 @@ var MessageView = Marionette.LayoutView.extend({
     var sentiment_counts = this.model.get('sentiment_counts');
     var increment = 0;
     var marginLeft = 5;
-    var totalCount = 0;
-    if(!_.isEmpty(sentiment_counts)){
-      $.each(sentiment_counts, function(label,count){
-        totalCount += count;
-        increment++;
-        if(increment > 1){
-          marginLeft += 10;
+    var totalCount = _.reduceRight(
+      _.values(sentiment_counts),
+      function(memo, num) { return memo + num; }, 0);
+    if (totalCount) {
+      $.each(sentiment_counts, function(label, count) {
+        if (count) {
+          increment++;
+          if(increment > 1){
+            marginLeft += 10;
+          }
+          var sentimentClass = "." + label;
+          that.$(sentimentClass).show();
+          that.$(sentimentClass).css({left:marginLeft+'px'});
         }
-        var sentimentClass = "." + label;
-        that.$(sentimentClass).show();
-        that.$(sentimentClass).css({left:marginLeft+'px'});
       });
       that.$('.sentiment-names-list').css({"left":(marginLeft+25)+'px'});
       if(mySentiment){

@@ -514,12 +514,16 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     @property
     def sentiment_counts(self):
         from .action import SentimentOfPost
+        base = {
+            name: 0 for name in SentimentOfPost.all_sentiments
+        }
         r = self.db.query(
                 SentimentOfPost.type, count(SentimentOfPost.id)
             ).filter(SentimentOfPost.post_id == self.id,
                      SentimentOfPost.tombstone_condition()
             ).group_by(SentimentOfPost.type)
-        return {k[SentimentOfPost.TYPE_PREFIX_LEN:]: v for (k, v) in r}
+        base.update({k[SentimentOfPost.TYPE_PREFIX_LEN:]: v for (k, v) in r})
+        return base
 
     @property
     def my_sentiment(self):
