@@ -998,12 +998,11 @@ var MessageView = Marionette.LayoutView.extend({
     if (Ctx.debugRender) {
       console.log('renderSentiments');
     }
+    this.$('.emoticon-connected.active').removeClass('active');
     if(mySentiment){
       var activeSentiment = this.model.get('my_sentiment')['@type'];
       var activeSentimentClass = '.' + activeSentiment;
       var test = this.$(activeSentimentClass).addClass('active');
-    } else {
-      this.$('.emoticon-connected.active').removeClass('active');
     }
     var sentiment_counts = this.model.get('sentiment_counts');
     var increment = 0;
