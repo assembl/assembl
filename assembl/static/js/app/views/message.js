@@ -1011,6 +1011,7 @@ var MessageView = Marionette.LayoutView.extend({
       _.values(sentiment_counts),
       function(memo, num) { return memo + num; }, 0);
     if (totalCount) {
+      this.$('.emo-minified').hide();
       $.each(sentiment_counts, function(label, count) {
         if (count) {
           increment++;
