@@ -355,6 +355,7 @@ var MessageView = Marionette.LayoutView.extend({
   modelEvents: {
       'replacedBy':'onReplaced',
       'change:sentiment_counts':'renderSentiments',
+      'change:my_sentiment':'renderSentiments',
       'change':'guardedRender',
       'openWithFullBodyView': 'onOpenWithFullBodyView'
   },
@@ -652,7 +653,10 @@ var MessageView = Marionette.LayoutView.extend({
       var countChangeFound = false,
           changedAttributes = this.model.changedAttributes();
       for (var propName in changedAttributes) {
-        if (propName === "sentiment_counts") {
+        if (propName === "@view") {
+          continue;
+        }
+        if (propName === "sentiment_counts" || propName === "my_sentiment") {
           countChangeFound = true;
           continue;
         }
@@ -991,6 +995,9 @@ var MessageView = Marionette.LayoutView.extend({
   renderSentiments: function() {
     var that = this;
     var mySentiment = this.model.get('my_sentiment');
+    if (Ctx.debugRender) {
+      console.log('renderSentiments');
+    }
     if(mySentiment){
       var activeSentiment = this.model.get('my_sentiment')['@type'];
       var activeSentimentClass = '.' + activeSentiment;
