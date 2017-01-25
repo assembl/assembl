@@ -8,7 +8,8 @@
         "_default": false
     },
     "Content": {
-        "sentiment_counts": true
+        "@private": "&current_user",
+        "my_sentiment": ":default"
     },
     "Post": {
         "@extends": "Content"

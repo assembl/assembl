@@ -276,11 +276,13 @@ class MoreInfoSentimentOfPost(SentimentOfPost):
 @event.listens_for(SentimentOfPost, 'after_insert', propagate=True)
 def send_post_to_socket(mapper, connection, target):
     target.post.send_to_changes(view_def="aux_data")
+    target.post.send_to_changes(view_def="aux_data_private")
 
 
 @event.listens_for(SentimentOfPost, 'after_update', propagate=True)
 def send_post_to_socket_ts(mapper, connection, target):
     target.post.send_to_changes(view_def="aux_data")
+    target.post.send_to_changes(view_def="aux_data_private")
 
 
 _lpt = LikeSentimentOfPost.__table__

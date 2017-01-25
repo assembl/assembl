@@ -104,7 +104,7 @@ var MessageModel = Base.Model.extend({
     if (rawModel.body !== undefined) {
       rawModel.body = new LangString.Model(rawModel.body, {parse: true});
     }
-    if (rawModel['@view'] == 'aux_data') {
+    if (rawModel['@view'] == 'aux_data_private') {
       // This is a workaround for a bad rule. When a link is null, we omit it in the serialization.
       // If it's a dependent object, we need to know there is actual absence so we get deletion.
       if (rawModel.my_sentiment === undefined) {

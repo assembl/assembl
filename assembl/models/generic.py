@@ -525,6 +525,12 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         base.update({k[SentimentOfPost.TYPE_PREFIX_LEN:]: v for (k, v) in r})
         return base
 
+    def current_user(self):
+        # HACK! Allows to get the current user's uri from view_defs.
+        from .auth import User
+        user_id = get_current_user_id()
+        return User.uri_generic(user_id)
+
     @property
     def my_sentiment(self):
         # Use only within request
