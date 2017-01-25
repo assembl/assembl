@@ -5,7 +5,7 @@ class ProfileIcon extends React.Component {
     return (
       <div className="right profile-icon">
         <a>
-          <img src="../../../../static2/css/img/default_avatar.png" alt="avatar" />
+          <img src="../../../../static2/img/default_avatar.png" alt="avatar" />
           <span className="username">User name</span>
         </a>
       </div>
