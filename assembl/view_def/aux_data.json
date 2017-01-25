@@ -3,6 +3,7 @@
         "id": false,
         "type": false,
         "@id": "self",
+        "@view": "@view",
         "@type": "&external_typename",
         "_default": false
     },
