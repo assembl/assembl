@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
 import GlobalFunctions from '../../utils/globalFunctions';
 import MapStateToProps from '../../store/mapStateToProps';
 import MapDispatchToProps from '../../store/mapDispatchToProps';
@@ -17,13 +18,20 @@ class PartnersSection extends React.Component {
     return (
       <div>
         {partnersLoading && <Loader />}
-        {partners &&
+        {(partners && partners.length) &&
           <div>
             <Grid fluid className="max-container">
               <Row>
-                {partners.map((partner) => {
-                  return (<img key={partner['@id']} src={partner.logo} alt={partner.name} />);
-                })}
+                <div className="partners margin-xl">
+                  <div className="title-3"><Translate value="home.partners" /></div>
+                  {partners.map((partner) => {
+                    return (
+                      <div className="partner-logo" key={partner['@id']}>
+                        <img src={partner.logo} alt={partner.name} />
+                      </div>
+                    );
+                  })}
+                </div>
               </Row>
             </Grid>
           </div>

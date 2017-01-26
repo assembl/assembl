@@ -13,7 +13,8 @@ const Translations = {
       contribution: 'contributions',
       participant: 'participants',
       visit: 'visites',
-      viewedPages: 'pages vues'
+      viewedPages: 'pages vues',
+      partners: 'partenaires'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -57,7 +58,8 @@ const Translations = {
       contribution: 'contributions',
       participant: 'participants',
       visit: 'visits',
-      viewedPages: 'Viewed pages'
+      viewedPages: 'Viewed pages',
+      partners: 'partners'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -101,7 +103,8 @@ const Translations = {
       contribution: 'Beiträge',
       participant: 'Teilnehmer',
       visit: 'Besuche',
-      viewedPages: 'Seitenaufrufe'
+      viewedPages: 'Seitenaufrufe',
+      partners: 'Partnern'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'

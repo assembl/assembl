@@ -62,6 +62,24 @@
   }
 }
 
+.partners {
+  text-align: center;
+
+  .partner-logo {
+    display: inline-block;
+    height: $partner-logo-height;
+    line-height: $partner-logo-height;
+    margin: 0 2px;
+    vertical-align: middle;
+    width: $partner-logo-width;
+  }
+
+  img {
+    max-height: $partner-logo-height;
+    max-width: $partner-logo-width;
+  }
+}
+
 @media screen and (min-width: 768px) {
   .header {
     .header-content {
