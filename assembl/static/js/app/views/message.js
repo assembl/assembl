@@ -653,7 +653,7 @@ var MessageView = Marionette.LayoutView.extend({
       var countChangeFound = false,
           changedAttributes = this.model.changedAttributes();
       for (var propName in changedAttributes) {
-        if (propName === "@view") {
+        if (propName[0] === "@") {
           continue;
         }
         if (propName === "sentiment_counts" || propName === "my_sentiment") {
