@@ -69,14 +69,12 @@
     display: inline-block;
     height: $partner-logo-height;
     line-height: $partner-logo-height;
-    margin: 0 2px;
+    margin: 20px 10px;
     vertical-align: middle;
-    width: $partner-logo-width;
   }
 
   img {
     max-height: $partner-logo-height;
-    max-width: $partner-logo-width;
   }
 }
 

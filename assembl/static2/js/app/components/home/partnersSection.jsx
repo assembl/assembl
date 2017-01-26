@@ -23,7 +23,7 @@ class PartnersSection extends React.Component {
             <Grid fluid className="max-container">
               <Row>
                 <div className="partners margin-xl">
-                  <div className="title-3"><Translate value="home.partners" /></div>
+                  <div className="title-3 margin-l"><Translate value="home.partners" /></div>
                   {partners.map((partner) => {
                     return (
                       <div className="partner-logo" key={partner['@id']}>
