@@ -898,8 +898,8 @@ def install_builddeps():
     else:
         sudo('apt-get install -y build-essential python-dev pandoc')
         sudo('apt-get install -y automake bison flex gperf gawk')
-        sudo('apt-get install -y graphviz pkg-config phantomjs')
-        sudo('apt-get install -y gfortran')
+        sudo('apt-get install -y graphviz pkg-config gfortran')
+        sudo('apt-get install -y phantomjs', warn_only=True)
 
         # will hopefully die soon
         sudo('apt-get install -y unixodbc-dev')
@@ -1757,7 +1757,7 @@ def skeleton_env(projectpath, venvpath=None):
     """
     if len(env.hosts) == 0:
         env.hosts = ['localhost']
-    env.projectpath = projectpath
+    env.projectpath = getattr(env, 'projectpath', projectpath)
     env.gitrepo = getenv("GITREPO", "https://github.com/assembl/assembl.git")
     env.gitbranch = getenv("GITBRANCH", "master")
 

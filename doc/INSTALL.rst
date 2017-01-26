@@ -50,7 +50,7 @@ You can get all that you need to bootstrap with:
 
 .. code:: sh
 
-    apt-get install fabric git openssh-server
+    apt-get install fabric git openssh-server sudo
 
 Check out the code repository, install build dependencies, and bootstrap
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
