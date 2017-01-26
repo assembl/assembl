@@ -27,7 +27,9 @@ class PartnersSection extends React.Component {
                   {partners.map((partner) => {
                     return (
                       <div className="partner-logo" key={partner['@id']}>
-                        <img src={partner.logo} alt={partner.name} />
+                        <a href={`${partner.homepage}`} target="_blank" rel="noopener noreferrer">
+                          <img src={partner.logo} alt={partner.name} />
+                        </a>
                       </div>
                     );
                   })}
