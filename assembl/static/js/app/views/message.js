@@ -1120,7 +1120,7 @@ var MessageView = Marionette.LayoutView.extend({
   calculateSentimentGauge:function(count, totalCount){
     var ratio = (count * 10) / totalCount;
 
-    if(ratio < 1){
+    if (count > 0 && ratio < 1) {
       return 1;
     }else{
       return Math.round(ratio);
