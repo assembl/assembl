@@ -964,7 +964,7 @@ def set_file_permissions():
             sudo('dseditgroup -o edit -a {user} -t user {webgrp}'.format(
                 webgrp=webgrp, user=env.user))
         else:
-            sudo('usermod -G {webgrp} {user}'.format(
+            sudo('usermod -a -G {webgrp} {user}'.format(
                 webgrp=webgrp, user=env.user))
     with cd(env.projectpath):
         run('chmod -R o-rwx .')
