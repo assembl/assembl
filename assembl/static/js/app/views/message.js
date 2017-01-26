@@ -1100,9 +1100,9 @@ var MessageView = Marionette.LayoutView.extend({
       that.$(countSelector).html(count + "&nbsp;");
       var totalCount = that.getTotalCount();
       var gaugeNumber = that.calculateSentimentGauge(count, totalCount);
-      for(var i=0; i <= gaugeNumber; i++){
+      for(var i=1; i <= 10; i++) {
         var gaugeSelector = "#gauge-" + label + i;
-        var gaugeColor = that.$(gaugeSelector).attr("data-color");
+        var gaugeColor = (i <= gaugeNumber)?that.$(gaugeSelector).attr("data-color"):'#dbd9d9';
         that.$(gaugeSelector).attr("fill", gaugeColor);
         that.$(gaugeSelector).attr("stroke", gaugeColor);
       }
