@@ -4,6 +4,7 @@ const MapStateToProps = (state) => {
     debate: state.debate,
     posts: state.posts,
     users: state.users,
+    partners: state.partners,
     path: state.path
   };
 };

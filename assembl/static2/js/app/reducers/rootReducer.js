@@ -4,11 +4,13 @@ import Path from './pathReducer';
 import Debate from './debateReducer';
 import Posts from './postsReducer';
 import Users from './usersReducer';
+import Partners from './partnersReducer';
 
 export default combineReducers({
   i18n: i18nReducer,
   path: Path,
   debate: Debate,
   posts: Posts,
-  users: Users
+  users: Users,
+  partners: Partners
 });

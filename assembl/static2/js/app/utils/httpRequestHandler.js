@@ -1,10 +1,8 @@
-const rootUrl = '/api/v1/';
-
 class RequestHandler {
   static request(obj) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      const url = rootUrl + obj.url;
+      const url = obj.url;
       xhr.open(obj.method, url);
       if (obj.headers) {
         Object.keys(obj.headers).forEach((key) => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Header from '../components/home/header';
+import PartnersSection from '../components/home/partnersSection';
 
 class Home extends React.Component {
   render() {
@@ -17,6 +18,7 @@ class Home extends React.Component {
             </Col>
           </Row>
         </Grid>
+        <PartnersSection />
       </div>
     );
   }
