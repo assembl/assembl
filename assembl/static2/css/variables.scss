@@ -23,8 +23,8 @@ $fonts-dir: '/static2/fonts';
 $img-dir: '/static2/img';
 
 @font-face {
-  font-family: 'avenir condensed';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-Cn.otf');
+  font-family: 'avenir';
+  src: url('#{$fonts-dir}/AvenirNextLTPro-Bold.otf');
 }
 
 $font-family: 'Open Sans', sans-serif;
