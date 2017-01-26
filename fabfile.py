@@ -964,8 +964,12 @@ def set_file_permissions():
             sudo('dseditgroup -o edit -a {user} -t user {webgrp}'.format(
                 webgrp=webgrp, user=env.user))
         else:
-            sudo('usermod -a -G {webgrp} {user}'.format(
-                webgrp=webgrp, user=env.user))
+            usermod_path = run('which usermod', quiet=True)
+            if not usermod_path and exists('/usr/sbin/usermod'):
+                usermod_path = '/usr/sbin/usermod'
+            assert usermod_path, "usermod should be part of your path"
+            sudo('{usermod} -a -G {webgrp} {user}'.format(
+                usermod=usermod_path, webgrp=webgrp, user=env.user))
     with cd(env.projectpath):
         run('chmod -R o-rwx .')
         run('chmod -R g-rw .')
