@@ -18,7 +18,7 @@ class PartnersSection extends React.Component {
     return (
       <div>
         {partnersLoading && <Loader />}
-        {(partners && partners.length) &&
+        {(partners && partners.length > 0) &&
           <div>
             <Grid fluid className="max-container">
               <Row>
