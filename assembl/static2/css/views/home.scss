@@ -38,6 +38,13 @@
       text-transform: uppercase;
     }
 
+    .stat-inside {
+      color: $grey3;
+      font-family: $font-family3;
+      font-size: $font-size-m;
+      letter-spacing: .2px;
+    }
+
     .stat-box {
       padding: 0 20px;
     }
@@ -92,11 +99,7 @@
       width: 75%;
 
       .stat-inside {
-        color: $grey3;
         display: inline-block;
-        font-family: $font-family3;
-        font-size: $font-size-m;
-        letter-spacing: .2px;
       }
 
       .black-icon {
