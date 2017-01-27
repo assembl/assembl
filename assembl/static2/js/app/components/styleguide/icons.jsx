@@ -15,6 +15,11 @@ class Icons extends React.Component {
           <div className="black-icon"><Glyphicon glyph="eye-open" /></div>
           <div className="black-icon"><Glyphicon glyph="align-justify" /></div>
           <div className="black-icon"><Glyphicon glyph="remove" /></div>
+          <div style={{ backgroundColor: '#4a4a4a', width: `${100}px`, padding: `${10}px`, display: 'inline' }}>
+            <img src="/static2/img/social/Facebook.svg" alt="Facebook" width="20px" style={{ marginRight: `${10}px` }} />
+            <img src="/static2/img/social/Twitter.svg" alt="Twitter" width="20px" style={{ marginRight: `${10}px` }} />
+            <img src="/static2/img/social/Linkedin.svg" alt="Linkedin" width="20px" style={{ marginRight: `${10}px` }} />
+          </div>
         </section>
         <section>
           <div className="title-3">Code</div>
@@ -106,6 +111,21 @@ class Icons extends React.Component {
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>/div</span>
+                <span>&gt;</span>
+              </div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>img src=&quot;/static2/img/social/Facebook.svg&quot; alt=&quot;Facebook&quot;/&nbsp;</span>
+                <span>&gt;</span>
+              </div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>img src=&quot;/static2/img/social/Twitter.svg&quot; alt=&quot;Twitter&quot;/&nbsp;</span>
+                <span>&gt;</span>
+              </div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>img src=&quot;/static2/img/social/Linkedin.svg&quot; alt=&quot;Linkedin&quot;/&nbsp;</span>
                 <span>&gt;</span>
               </div>
             </div>
