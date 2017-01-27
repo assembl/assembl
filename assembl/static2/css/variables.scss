@@ -13,7 +13,7 @@ $border-weight2: 2px;
 
 $font-size-xs: 12px;
 $font-size-s: 14px;
-$font-size-m: 18px;
+$font-size-m: 16px;
 $font-size-l: 22px;
 $font-size-xl: 32px;
 
@@ -23,16 +23,23 @@ $fonts-dir: '/static2/fonts';
 $img-dir: '/static2/img';
 
 @font-face {
-  font-family: 'avenir';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-Bold.otf');
+  font-family: 'avenirDemiCn';
+  src: url('#{$fonts-dir}/AvenirNextLTPro-DemiCn.otf');
+}
+
+@font-face {
+  font-family: 'avenirCn';
+  src: url('#{$fonts-dir}/AvenirNextLTPro-Cn.otf');
 }
 
 $font-family: 'Open Sans', sans-serif;
-$font-family2: 'avenir';
+$font-family2: 'avenirDemiCn';
+$font-family3: 'avenirCn';
 
 $app-max-width: 1400px;
 
-$page-bkg: $white;
+$page-bkg-light: $white;
+$page-bkg-dark: $grey0;
 
 $btn-success-bkg: $green;
 $btn-success-border: $green;
@@ -70,6 +77,5 @@ $box-bkg: $white;
 $button-link-border: $border-weight1 solid $btn-success-border;
 $box-border: $border-weight2 solid $white;
 
-$partner-logo-width: 226px;
-$partner-logo-height: 60px;
-
+$partner-logo-width: 150px;
+$partner-logo-height: 50px;

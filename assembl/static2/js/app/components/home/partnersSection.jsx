@@ -24,15 +24,17 @@ class PartnersSection extends React.Component {
               <Row>
                 <div className="partners margin-xl">
                   <div className="title-3 margin-l"><Translate value="home.partners" /></div>
-                  {partners.map((partner) => {
-                    return (
-                      <div className="partner-logo" key={partner['@id']}>
-                        <a href={`${partner.homepage}`} target="_blank" rel="noopener noreferrer">
-                          <img src={partner.logo} alt={partner.name} />
-                        </a>
-                      </div>
-                    );
-                  })}
+                  <div className="margin-l">
+                    {partners.map((partner) => {
+                      return (
+                        <div className="partner-logo" key={partner['@id']}>
+                          <a href={`${partner.homepage}`} target="_blank" rel="noopener noreferrer">
+                            <img src={partner.logo} alt={partner.name} />
+                          </a>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </Row>
             </Grid>

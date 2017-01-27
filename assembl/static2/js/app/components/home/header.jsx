@@ -17,8 +17,8 @@ class Header extends React.Component {
             <div className="header-content">
               <img className="header-logo" src={debateData.logo} alt="logo" />
               <div className="title-1">{debateData.topic}</div>
-              <div className="title-3">{debateData.introduction}</div>
-              <div className="title-4">{debateData.objectives}</div>
+              <div className="title-3 margin-m">{debateData.introduction}</div>
+              <div className="title-4 margin-xs">{debateData.objectives}</div>
               <Link className="button-link margin-l" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
               <Statistic />
             </div>

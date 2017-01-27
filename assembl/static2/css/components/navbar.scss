@@ -19,8 +19,9 @@
   .navbar-menu-item {
     color: $navbar-text-color;
     font-family: $font-family2;
-    font-size: $font-size-xs;
+    font-size: $font-size-s;
     font-weight: 700;
+    letter-spacing: .4px;
     line-height: 80px;
     padding: 0 20px;
     text-transform: uppercase;
