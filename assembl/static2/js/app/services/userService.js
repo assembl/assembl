@@ -3,7 +3,7 @@ import HttpRequestHandler from '../utils/httpRequestHandler';
 class UserService {
   static fetchUsers(discussionId) {
     const that = this;
-    const fetchUsersUrl = `discussion/${discussionId}/agents/`;
+    const fetchUsersUrl = `/api/v1/discussion/${discussionId}/agents/`;
     return HttpRequestHandler.request({ method: 'GET', url: fetchUsersUrl }).then((users) => {
       return that.buildUsers(users);
     });

@@ -10,6 +10,7 @@ import Community from './containers/community';
 import Profile from './containers/profile';
 import Styleguide from './containers/styleguide';
 import NotFound from './containers/notFound';
+import Terms from './containers/terms';
 
 export default (
   <Router>
@@ -21,6 +22,7 @@ export default (
       <Route path=":slug/synthesis" component={Synthesis} />
       <Route path=":slug/debate" component={Debate} />
       <Route path=":slug/community" component={Community} />
+      <Route path=":slug/terms" component={Terms} />
     </Route>
     <Route path="/v2/">
       <Route path=":slug/profile" component={Profile} />

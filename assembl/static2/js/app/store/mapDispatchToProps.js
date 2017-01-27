@@ -3,6 +3,7 @@ import PathActions from '../actions/pathActions';
 import DebateActions from '../actions/debateActions';
 import PostsActions from '../actions/postsActions';
 import UsersActions from '../actions/usersActions';
+import PartnersActions from '../actions/partnersActions';
 
 const MapDispatchToProps = (dispatch) => {
   return {
@@ -14,6 +15,9 @@ const MapDispatchToProps = (dispatch) => {
     },
     fetchUsers: (id) => {
       dispatch(UsersActions.fetchUsers(id));
+    },
+    fetchPartners: (id) => {
+      dispatch(PartnersActions.fetchPartners(id));
     },
     addPath: (path) => {
       dispatch(PathActions.addPath(path));

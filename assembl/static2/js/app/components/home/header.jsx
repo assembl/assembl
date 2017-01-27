@@ -13,16 +13,14 @@ class Header extends React.Component {
     return (
       <div className="header">
         <Grid fluid className="max-container">
-          <Row>
-            <div className="header-content">
-              <img className="header-logo" src={debateData.logo} alt="logo" />
-              <div className="title-1">{debateData.topic}</div>
-              <div className="title-3">{debateData.introduction}</div>
-              <div className="title-4">{debateData.objectives}</div>
-              <Link className="button-link margin-l" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
-              <Statistic />
-            </div>
-          </Row>
+          <div className="header-content">
+            <img className="header-logo" src={debateData.logo} alt="logo" />
+            <div className="title-1">{debateData.topic}</div>
+            <div className="title-3 margin-m">{debateData.introduction}</div>
+            <div className="title-4 margin-xs">{debateData.objectives}</div>
+            <Link className="button-link margin-l" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
+            <Statistic />
+          </div>
         </Grid>
         <Grid fluid>
           <Row>

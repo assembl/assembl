@@ -6,6 +6,7 @@ import MapDispatchToProps from '../store/mapDispatchToProps';
 import Loader from '../components/common/loader';
 import Error from '../components/common/error';
 import Navbar from '../components/common/navbar';
+import Footer from '../components/common/footer';
 
 class App extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class App extends React.Component {
           <div>
             <Navbar />
             <div className="app-content">{this.props.children}</div>
+            <Footer />
           </div>
         }
         {debateError && <Error errorMessage={debateError} />}

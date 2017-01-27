@@ -5,6 +5,10 @@ const Translations = {
       debate: 'débat',
       community: 'communauté'
     },
+    footer: {
+      terms: 'Conditions Générales d\'Utilisation',
+      socialMedias: 'Suivez-nous sur'
+    },
     authentication: {
       panelTitle: 'Bienvenue dans la page d\'authentification d\'Assembl'
     },
@@ -13,7 +17,8 @@ const Translations = {
       contribution: 'contributions',
       participant: 'participants',
       visit: 'visites',
-      viewedPages: 'pages vues'
+      viewedPages: 'pages vues',
+      partners: 'partenaires'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -39,6 +44,9 @@ const Translations = {
     notFound: {
       panelTitle: 'Désolé, cette page n\'existe pas'
     },
+    terms: {
+      panelTitle: 'Conditions Générales d\'Utilisations'
+    },
     date: {
       format: 'D MMMM YYYY'
     }
@@ -49,6 +57,10 @@ const Translations = {
       debate: 'debate',
       community: 'community'
     },
+    footer: {
+      terms: 'Terms and Conditions',
+      socialMedias: 'Follow us'
+    },
     authentication: {
       panelTitle: 'Welcome to Assembl authentication page'
     },
@@ -57,7 +69,8 @@ const Translations = {
       contribution: 'contributions',
       participant: 'participants',
       visit: 'visits',
-      viewedPages: 'Viewed pages'
+      viewedPages: 'Viewed pages',
+      partners: 'partners'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -83,6 +96,9 @@ const Translations = {
     notFound: {
       panelTitle: 'Sorry, this page doesn\'t exist'
     },
+    terms: {
+      panelTitle: 'Terms and Conditions'
+    },
     date: {
       format: 'MMMM Do, YYYY'
     }
@@ -93,6 +109,10 @@ const Translations = {
       debate: 'debatte',
       community: 'gemeinschaft'
     },
+    footer: {
+      terms: 'Nutzungsbedingungen',
+      socialMedias: 'Folge uns'
+    },
     authentication: {
       panelTitle: 'Willkommen in Assembl - authentication page'
     },
@@ -101,7 +121,8 @@ const Translations = {
       contribution: 'Beiträge',
       participant: 'Teilnehmer',
       visit: 'Besuche',
-      viewedPages: 'Seitenaufrufe'
+      viewedPages: 'Seitenaufrufe',
+      partners: 'Partnern'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'
@@ -126,6 +147,9 @@ const Translations = {
     },
     notFound: {
       panelTitle: 'Sorry, diese Seite existiert nicht'
+    },
+    terms: {
+      panelTitle: 'Nutzungsbedingungen'
     },
     date: {
       format: 'D MMMM YYYY'
