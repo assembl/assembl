@@ -20,7 +20,7 @@ class PartnersSection extends React.Component {
         {partnersLoading && <Loader />}
         {(partners && partners.length > 0) &&
           <Grid fluid className="max-container">
-            <div className="partners margin-xl">
+            <div className="partners">
               <div className="title-3"><Translate value="home.partners" /></div>
               <div className="margin-m">
                 {partners.map((partner) => {
