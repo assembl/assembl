@@ -10,12 +10,20 @@ section {
 }
 
 .app-content {
-  margin: 80px 0 0;
+  margin-bottom: $footer-height + 50px;
+  margin-top: 80px;
 }
 
 .max-container {
   margin: 0 auto;
   max-width: $app-max-width;
+}
+
+.fixed-bottom {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
 }
 
 .background-grey {
