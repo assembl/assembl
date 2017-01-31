@@ -42,6 +42,10 @@ class PyramidWebTestRequest(TestRequest):
     # TODO: Find a way to change user here
     authenticated_userid = None
 
+    # How come this is missing in TestRequest?
+    # TODO: Use the negotiator
+    locale_name = 'en'
+
 
 def committing_session_tween_factory(handler, registry):
     # This ensures that the app has the latest state
