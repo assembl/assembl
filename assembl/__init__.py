@@ -21,7 +21,6 @@ from pyramid.config import Configurator
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
-from pyramid.i18n import default_locale_negotiator
 from pyramid.settings import asbool
 from pyramid.path import DottedNameResolver
 from zope.component import getGlobalSiteManager
@@ -38,7 +37,6 @@ from .lib.database_functions import ensure_functions
 #Use a local odbc.ini
 putenv('ODBCINI', join(dirname(dirname(__file__)), 'odbc.ini'))
 
-locale_negotiator = default_locale_negotiator
 resolver = DottedNameResolver(__package__)
 
 # Do not import models here, it will break tests.
@@ -61,8 +59,6 @@ def main(global_config, **settings):
     config.setup_registry(settings=settings, root_factory=root_factory)
     config.add_translation_dirs('assembl:locale/')
 
-    global locale_negotiator
-    locale_negotiator = my_locale_negotiator
     config.set_locale_negotiator(my_locale_negotiator)
     if using_virtuoso():
         config.add_tween(

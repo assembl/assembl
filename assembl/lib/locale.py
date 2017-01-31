@@ -166,6 +166,6 @@ def locale_negotiator(request):
             locale = locale_with_country
     if not locale:
         locale = to_posix_string(request.accept_language.best_match(
-            available, settings.get('pyramid.default_locale_code', 'en')))
+            available, settings.get('pyramid.default_locale_name', 'en')))
     request._LOCALE_ = locale
     return locale

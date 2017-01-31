@@ -28,7 +28,6 @@ from ..lib.locale import (
 from ..lib.utils import get_global_base_url
 from ..lib.raven_client import capture_exception
 from ..auth import R_PARTICIPANT
-from assembl import locale_negotiator
 from ..models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
@@ -308,7 +307,8 @@ def get_locale_from_request(request, session=None, user=None):
             process_locale(locale, user, session,
                            LanguagePreferenceOrder.Parameter)
         else:
-            locale = locale_negotiator(request)
+            # uses my locale negotiator
+            locale = request.locale_name
             process_locale(locale, user, session,
                            LanguagePreferenceOrder.OS_Default)
     else:

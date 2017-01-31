@@ -38,7 +38,6 @@ from rdflib import URIRef
 from virtuoso.vmapping import PatternIriClass
 import transaction
 
-from assembl import locale_negotiator
 from ..lib import config
 from ..lib.utils import get_global_base_url
 from ..lib.locale import to_posix_string
@@ -1647,9 +1646,8 @@ class LanguagePreferenceCollection(object):
                     return req.lang_prefs
                 except Exception:
                     capture_exception()
-            locale = locale_negotiator(req)
-            if not locale:
-                locale = config.get('pyramid.default_locale_name')
+            # use my locale negotiator
+            locale = req.locale_name
             req.lang_prefs = LanguagePreferenceCollectionWithDefault(locale)
         return req.lang_prefs
 
