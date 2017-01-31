@@ -30,29 +30,34 @@
 }
 
 @media screen and (min-width: 768px) {
-  .terms {
-    bottom: 10px;
-  }
-  
-  .social-medias {
-    img {
-      margin: 10px 20px 80px;
+  .footer {
+    .terms {
+      bottom: 10px;
+    }
+
+    .social-medias {
+      img {
+        margin: 10px 20px 80px;
+      }
     }
   }
 }
 
 @media screen and (max-width: 767px) {
-  .terms {
-    bottom: 40px;
-  }
+  .footer {
+    .terms {
+      bottom: 25px;
+    }
 
-  .copyright {
-    width: 100%;
-  }
-  
-  .social-medias {
-    img {
-      margin: 10px 20px 100px;
+    .copyright {
+      font-size: $font-size-xxs;
+      width: 100%;
+    }
+
+    .social-medias {
+      img {
+        margin: 0 20px 100px;
+      }
     }
   }
 }
