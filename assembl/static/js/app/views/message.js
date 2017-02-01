@@ -39,6 +39,15 @@ var MIN_TEXT_TO_TOOLTIP = 5,
     IDEA_CLASSIFICATION_LENGTH = 3;
 
 
+// Enum of conversion between sentiment to statistics
+var SENTIMENT_TO_STASTICS = {
+  LikeSentimentOfPost: 'like',
+  DisagreeSentimentOfPost: 'disagree',
+  DontUnderstandSentimentOfPost: 'idu',
+  MoreInfoSentimentOfPost: 'more',
+  DESELECT: 'deselect'
+};
+
 /**
  * @class app.views.message.IdeaClassificationNameListView
  * Classification view that is shown in the underneath each message
@@ -992,6 +1001,7 @@ var MessageView = Marionette.LayoutView.extend({
   postRender: function() {
     return;
   },
+
   renderSentiments: function() {
     var that = this;
     var mySentiment = this.model.get('my_sentiment');
@@ -1056,12 +1066,14 @@ var MessageView = Marionette.LayoutView.extend({
       $('.emoticon').addClass('emoticon-connected');
     }
   },
-  onClickEmoticon:function(event){
+
+  onClickEmoticon: function(event){
+    console.log("Message Model:", this.model);
     var isUserConnected = Ctx.isUserConnected();
+    var that = this;
     if(isUserConnected){
       var currentClass = $(event.target).attr("class");
       if(currentClass.indexOf('active') <= -1){
-        var that = this;
         var currentUser = Ctx.getCurrentUser();
         var clickedSentiment = $(event.target).attr("data-id");
         var currentPost = this.model.get("@id");
@@ -1074,7 +1086,10 @@ var MessageView = Marionette.LayoutView.extend({
           dataType: "json",
           data: payload
         });
-      }else{
+        // Fire the events regardless of save on server. Async.
+        that.fireSentimentAnalyticsEvent(clickedSentiment); 
+
+      } else{
         var mySentimentId = this.model.get('my_sentiment')['@id'].split('/')[1];
         $.ajax(
           "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments/" + mySentimentId, {
@@ -1082,16 +1097,22 @@ var MessageView = Marionette.LayoutView.extend({
           contentType: "application/json",
           dataType: "json"
         });
+
+        // The sentiment is being removed by the user
+        that.fireSentimentAnalyticsEvent("DESELECT"); 
       }
     }
   },
+
   onOverNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').show();
     this.renderGauge();
   },
+
   onOutNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').hide();
   },
+
   renderGauge:function(){
     var that = this;
     var sentiment_counts = this.model.get('sentiment_counts');
@@ -1108,6 +1129,7 @@ var MessageView = Marionette.LayoutView.extend({
       }
     });
   },
+
   getTotalCount:function(){
     var totalCount = 0;
     var sentiment_counts = this.model.get('sentiment_counts');
@@ -1117,6 +1139,7 @@ var MessageView = Marionette.LayoutView.extend({
     
     return totalCount;
   },
+
   calculateSentimentGauge:function(count, totalCount){
     var ratio = Math.round((count * 10.0) / totalCount);
 
@@ -1124,6 +1147,40 @@ var MessageView = Marionette.LayoutView.extend({
       return 1;
     }else{
       return Math.round(ratio);
+    }
+  },
+
+  /**
+   * Method that converts the backend-based name of the sentiment
+   * to an event name prepared for statistics
+   *
+   * Note: Pass 'DESELECT' in order to track sentiment deselection
+   */
+  fireSentimentAnalyticsEvent: function(sentiment){
+    if (!(SENTIMENT_TO_STASTICS[sentiment])){
+      console.log("sentiment " + sentiment + " is not a valid sentiment. Will not process analytics");
+      return;
+    }
+
+    var analytics = Analytics.getInstance();
+    switch (SENTIMENT_TO_STASTICS[sentiment]){
+      case 'like':
+        analytics.trackEvent(analytics.events.SELECT_SENTIMENT_LIKE);
+        break;
+      case 'disagree':
+        analytics.trackEvent(analytics.events.SELECT_SENTIMENT_DISAGREE);
+        break;
+      case 'idu':
+        analytics.trackEvent(analytics.events.SELECT_SENTIMENT_DU);
+        break;
+      case 'more':
+        analytics.trackEvent(analytics.events.SELECT_SENTIMENT_MORE);
+        break;
+      case 'deselect':
+        analytics.trackEvent(analytics.events.DESELECT_SENTIMENT);
+        break;
+      default:
+        console.warn("Improper sentiment was passed for analytics");
     }
   },
 

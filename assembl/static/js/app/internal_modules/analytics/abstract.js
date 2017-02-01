@@ -412,7 +412,37 @@ var moduleName = 'Analytics_Abstract',
        * Event fired when the user has successfully left the group (ie removed the userRole.PARTICIPANT from his/her list of roles)
        * assembl/static/js/app/models/roles.js
        */
-      LEAVE_DISCUSSION: {action: 'ONBOARDING', category: 'NOTIFICATION', eventName: 'LEAVE_DISCUSSION'}
+      LEAVE_DISCUSSION: {action: 'ONBOARDING', category: 'NOTIFICATION', eventName: 'LEAVE_DISCUSSION'},
+
+      /**
+       * Event fired when a user clicks on the 'Agree' or "Like" sentiment on a message.
+       * All sentiment events are found in assembl/static/js/app/views/message.js
+       */
+      SELECT_SENTIMENT_LIKE: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'SELECT_SENTIMENT_LIKE'},
+
+      /**
+       * Event fired when a user clicks on the 'Disagree' sentiment on a message.
+       * All sentiment events are found in assembl/static/js/app/views/message.js
+       */
+      SELECT_SENTIMENT_DISAGREE: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'SELECT_SENTIMENT_DISAGREE'},
+
+      /**
+       * Event fired when a user clicks on the 'Don't Understand sentiment on a message.
+       * All sentiment events are found in assembl/static/js/app/views/message.js
+       */
+      SELECT_SENTIMENT_DU: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'SELECT_SENTIMENT_DONT_UNDERSTAND'},
+
+      /**
+       * Event fired when a user clicks on the 'More Info' sentiment on a message.
+       * All sentiment events are found in assembl/static/js/app/views/message.js
+       */
+      SELECT_SENTIMENT_MORE: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'SELECT_SENTIMENT_MORE_INFO'},
+
+      /**
+       * Event fired when a user clicks on the 'More Info' sentiment on a message.
+       * All sentiment events are found in assembl/static/js/app/views/message.js
+       */
+      DESELECT_SENTIMENT: {action: 'INTERACTING', category: 'MESSAGE', eventName: 'DESELECT_SENTIMENT'},
   };
 
   /**
