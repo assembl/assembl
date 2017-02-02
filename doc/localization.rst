@@ -5,7 +5,7 @@ Transifex
 ---------
 
 Translation are crowdsourced on transifex (see tranlators.rst). As a
-developper, you need to interace with transifex's servers using
+developper, you need to interface with transifex's servers using
 transifex-client (apt-get install transifex-client on Ubuntu). You'll
 have to create a transifex configuration file:
 

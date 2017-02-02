@@ -356,7 +356,7 @@ well as the content of js/app/lib
 
 Underscore_
   The basis of backbone, but also used extensively in assembl code.  
-  It is a wery usefull Javascript utility library
+  It is a very useful Javascript utility library
 
 Backbone_
   An unopinionated Model-Collection-View Javascript framework

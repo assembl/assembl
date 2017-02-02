@@ -226,35 +226,35 @@ Assembl has several core fixtures that are important to note, in order to run th
 
 - default_db_data
     * A fixture that is rarely explicitly called in a test, however, is vital for successfully
-    running back-end tests. It is responsible for bootstrapping the test database, creating the
-    tables necessary based on the latest models, building the relationships and constraints, etc.
-    Without this fixture, back-end tests could not be done.
+      running back-end tests. It is responsible for bootstrapping the test database, creating the
+      tables necessary based on the latest models, building the relationships and constraints, etc.
+      Without this fixture, back-end tests could not be done.
 
 - test_session
     * Arguably the most important fixture to know. ``test_session`` is the database session
-    fixture. It can be used to query the database, push new models, etc. It is an SQLAlchemy
-    session maker. A ``test_session`` depends on a ``default_db_data``
+      fixture. It can be used to query the database, push new models, etc. It is an SQLAlchemy
+      session maker. A ``test_session`` depends on a ``default_db_data``
 
 - test_server
     * A uWSGI server fixture that refers to an Assembl instance
 
 - test_app
     * An Assembl instance fixture, built on WebTest's TestApp_ testing tool. This fixture
-    builds on ``test_app_no_perm`` and gives the ``admin_user`` fixture administrative permissions,
-    based on Pyramid's authorization policy. User this fixture to make API calls, as it best
-    mocks an Assembl interface
+      builds on ``test_app_no_perm`` and gives the ``admin_user`` fixture administrative permissions,
+      based on Pyramid's authorization policy. User this fixture to make API calls, as it best
+      mocks an Assembl interface
 
 - admin_user
     * A user fixture that has administrative priveledges
 
 - test_adminuser_webrequest
     * A Pyramid GET request to "/", built on WebTest's TestRequest_, that includes an ``admin_user``
-    as its ``authenticated_user_id``.
+      as its ``authenticated_user_id``.
 
 - browser
     * A browser fixture that is built on top of Splinter_ for integration testing. This specific fixture
-    is bound to the `phantom\.js`_ driver. To create a different, use this fixture as a template for
-    creating other drivers. Splinter's has explicit documentation of different driver usages. 
+      is bound to the `phantom\.js`_ driver. To create a different, use this fixture as a template for
+      creating other drivers. Splinter's has explicit documentation of different driver usages.
 
 
 For more information regarding testing a Pyramid application, see the `Pyramid Documentation`_ on testing.
