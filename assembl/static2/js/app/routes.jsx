@@ -25,8 +25,8 @@ export default (
       <Route path=":slug/terms" component={Terms} />
     </Route>
     <Route path="/v2/">
-      <Route path=":slug/profile" component={Profile} />
-      <Route path=":slug/styleguide" component={Styleguide} />
+      <Route path="profile" component={Profile} />
+      <Route path="styleguide" component={Styleguide} />
     </Route>
     <Route path="*" component={NotFound} />
   </Router>
