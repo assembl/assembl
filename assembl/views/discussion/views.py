@@ -187,7 +187,13 @@ def react_view(request):
     Must add user authentication, permission, etc.
     Basic view for the homepage
     """
-    context = base_default_context(request)
+    old_context = base_default_context(request)
+    
+    context = dict(
+        request=old_context['request'],
+        REACT_URL=old_context['REACT_URL'],
+        discussion=old_context['discussion']
+    )
     return context
 
 
