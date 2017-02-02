@@ -1,6 +1,10 @@
 {% extends 'base.jinja2' %}
 {% block page_title%}Assembl{% endblock%}
 
+{% block main_css %}
+	{# Override the main css. #}
+{% endblock %}
+
 {% block body %}
 	<body>
         <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
