@@ -451,7 +451,7 @@ def compile_javascript():
             venvcmd('./node_modules/.bin/gulp browserify:prod', chdir=False)
             venvcmd('./node_modules/.bin/gulp build:test', chdir=False)
         with cd('assembl/static2'):
-            venvcmd('./node_modules/.bin/webpack -p', chdir=False)
+            venvcmd('npm run build', chdir=False)
 
 
 @task
