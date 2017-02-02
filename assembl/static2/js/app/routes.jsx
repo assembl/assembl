@@ -16,6 +16,10 @@ export default (
   <Router>
     <Route path="/v2/" component={App}>
       <IndexRoute component={Home} />
+
+      <Route path="profile" component={Profile} />
+      <Route path="styleguide" component={Styleguide} />
+
       <Route path=":slug/home" component={Home} />
       <Route path=":slug/authentication" component={Authentication} />
       <Route path=":slug/ideas" component={Ideas} />
@@ -23,10 +27,6 @@ export default (
       <Route path=":slug/debate" component={Debate} />
       <Route path=":slug/community" component={Community} />
       <Route path=":slug/terms" component={Terms} />
-    </Route>
-    <Route path="/v2/">
-      <Route path="profile" component={Profile} />
-      <Route path="styleguide" component={Styleguide} />
     </Route>
     <Route path="*" component={NotFound} />
   </Router>
