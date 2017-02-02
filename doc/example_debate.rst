@@ -1,11 +1,11 @@
 Example debate fixture
 ======================
 
-This example debate was created to serve as an example in UI mookups, specifications, etc. It is designed to show a maximum of corner cases in a debate that is as short as possible. It was created in a role playing game caricaturing well known public figures in Québec.
+This example debate was created to serve as an example in UI mockups, specifications, etc. It is designed to show a maximum of corner cases in a debate that is as short as possible. It was created in a role playing game caricaturing well known public figures in Québec.
 
 Flow of messages:
 
-* Lines are the threading of the messages, as would be seen in am mail client supporting threading
+* Lines are the threading of the messages, as would be seen in a mail client supporting threading
 * The number at the begining of the line is the actual chronological order of the messages
 * Brackets fragments of text tagged by the catcher to identify concepts. ``[FragmentId: original text fragment]``
 

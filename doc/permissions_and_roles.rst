@@ -9,7 +9,7 @@ the discussion. Administrators can assign a role to a user.
 
 There are global roles and per-discussion (or local) roles: a user can have a role
 either globally in Assembl or in the context of a given discussion.
-A global role gives gives its related permissions to the user in all discussions.
+A global role gives its related permissions to the user in all discussions.
 A per-discussion role gives its related permissions to the user in this discussion only.
 
 You can change a role’s permissions and so change what it allows to do and
