@@ -2,11 +2,15 @@
 # -*- coding:utf-8 -*-
 from __future__ import with_statement
 
-from os import getenv
+from os import getenv, rmdir
 from getpass import getuser
+from hashlib import sha1
 from platform import system
 from shutil import rmtree
+from shutil import move
+import tarfile
 from time import sleep, strftime
+from urllib import urlretrieve
 import pipes
 from ConfigParser import ConfigParser, SafeConfigParser, NoOptionError
 from StringIO import StringIO
@@ -34,6 +38,7 @@ SERVICES = [
     'redis',
     'mysql',
 ]
+ELASTICSEARCH_VERSION = '5.2.0'
 
 
 def load_service_configs():
@@ -815,6 +820,7 @@ def install_single_server():
     """
     sanitize_env()
     execute(skeleton_env, None)
+    execute(install_elasticsearch)
     execute(install_database)
     execute(install_assembl_server_deps)
     execute(check_and_create_database_user)
@@ -1486,6 +1492,54 @@ def install_or_updgrade_virtuoso():
         execute(virtuoso_source_install)
     else:
         execute(virtuoso_source_upgrade)
+
+
+@task
+def install_elasticsearch():
+    """Install elasticsearch"""
+    if getenv("IN_DOCKER"):
+        return
+
+    if not env.mac:
+        if not exists('/etc/sysctl.d/vm.max_map_count.conf'):
+            # change now
+            sudo("sysctl -w vm.max_map_count=262144")
+            # persist the change
+            sudo("echo 'vm.max_map_count=262144' > /etc/sysctl.d/vm.max_map_count.conf")
+
+    extract_path = normpath(
+        join(env.projectpath, 'var', 'elasticsearch'))
+    if exists(extract_path):
+        print("elasticsearch already installed")
+
+    tar_filename, headers = urlretrieve('https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{version}.tar.gz'.format(version=ELASTICSEARCH_VERSION))
+    sha1_filename, headers = urlretrieve('https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{version}.tar.gz.sha1'.format(version=ELASTICSEARCH_VERSION))
+    with open(tar_filename, 'rb') as tar_file:
+        with open(sha1_filename, 'rb') as sha1_file:
+            if sha1(tar_file.read()).hexdigest() != sha1_file.read():
+                print(red("sha1sum of elasticsearch tarball doesn't match, exiting"))
+                sys.exit(1)
+
+        tar_file.seek(0)
+        with tarfile.open(mode='r:gz', fileobj=tar_file) as tar:
+            tar.extractall(path=extract_path)
+
+        # rename var/elasticsearch/elasticsearch-5.2.0 to var/elasticsearch
+        move(join(extract_path, 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)), extract_path+'.tmp')
+        rmdir(extract_path)
+        move(extract_path+'.tmp', extract_path)
+
+@task
+def upgrade_elasticsearch():
+    if getenv("IN_DOCKER"):
+        return
+
+    extract_path = normpath(
+        join(env.projectpath, 'var', 'elasticsearch'))
+    supervisor_process_stop('elasticsearch')
+    rmtree(extract_path)
+    execute(install_elasticsearch)
+    supervisor_process_start('elasticsearch')
 
 
 def install_postgres():
