@@ -57,5 +57,6 @@ setup(name='assembl',
       assembl-imap-test = assembl.scripts.imap_test:main
       assembl-add-user  = assembl.scripts.add_user:main
       assembl-pypsql  = assembl.scripts.pypsql:main
+      assembl-reindex-all-contents  = assembl.scripts.reindex_all_contents:main
       """,
       )
