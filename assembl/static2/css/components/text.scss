@@ -2,18 +2,21 @@
   color: $title1-color;
   font-size: $title1-size;
   font-weight: 700;
+  margin: 0;
 }
 
 .title-2 {
   color: $title2-color;
   font-size: $title2-size;
   font-weight: 700;
+  margin: 0;
 }
 
 .title-3 {
   color: $title3-color;
   font-size: $title3-size;
   font-weight: 700;
+  margin: 0;
   text-transform: uppercase;
 }
 
@@ -21,4 +24,12 @@
   color: $title4-color;
   font-size: $title4-size;
   font-weight: 700;
+  margin: 0;
+}
+
+.title-5 {
+  color: $title5-color;
+  font-size: $title5-size;
+  font-weight: 700;
+  margin: 0;
 }

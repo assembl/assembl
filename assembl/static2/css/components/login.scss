@@ -18,3 +18,15 @@
     width: 20px;
   }
 }
+
+.login-view {
+  margin: 20px auto;
+  text-align: left;
+  width: 300px;
+
+  .login {
+    border-bottom: $box-border;
+    margin: 0 0 20px;
+    padding: 0 0 15px;
+  }
+}

@@ -16,7 +16,7 @@ class Styleguide extends React.Component {
       <Grid>
         <Row>
           <Col xs={12} md={12}>
-            <div className="title-1 center padding">Assembl Style Guide</div>
+            <h1 className="title-1 center padding">Assembl Style Guide</h1>
           </Col>
         </Row>
         <Row>

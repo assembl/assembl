@@ -19,19 +19,21 @@ class PartnersSection extends React.Component {
       <div>
         {partnersLoading && <Loader />}
         {(partners && partners.length > 0) &&
-          <Grid fluid className="max-container">
-            <div className="partners">
-              <div className="title-3"><Translate value="home.partners" /></div>
-              <div className="margin-m">
-                {partners.map((partner) => {
-                  return (
-                    <div className="partner-logo" key={partner['@id']}>
-                      <a href={`${partner.homepage}`} target="_blank" rel="noopener noreferrer">
-                        <img src={partner.logo} alt={partner.name} />
-                      </a>
-                    </div>
-                  );
-                })}
+          <Grid fluid className="background-light">
+            <div className="max-container">
+              <div className="partners">
+                <h3 className="title-3"><Translate value="home.partners" /></h3>
+                <div className="margin-m">
+                  {partners.map((partner) => {
+                    return (
+                      <div className="partner-logo" key={partner['@id']}>
+                        <a href={`${partner.homepage}`} target="_blank" rel="noopener noreferrer">
+                          <img src={partner.logo} alt={partner.name} />
+                        </a>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </Grid>

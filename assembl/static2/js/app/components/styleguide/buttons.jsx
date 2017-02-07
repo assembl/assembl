@@ -6,14 +6,14 @@ class Buttons extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-2 underline" id="buttons">BUTTONS</div>
+        <h2 className="title-2 underline" id="buttons">BUTTONS</h2>
         <section>
           <Button className="button-success">Success</Button>
           <Button className="button-cancel">Cancel</Button>
           <Link className="button-link">Link</Link>
         </section>
         <section>
-          <div className="title-3">Code</div>
+          <h3 className="title-3">Code</h3>
           <div className="box">
             <div>
               <div className="code">

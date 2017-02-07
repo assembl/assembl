@@ -5,7 +5,7 @@ class Icons extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-2 underline" id="icons">ICONS</div>
+        <h2 className="title-2 underline" id="icons">ICONS</h2>
         <section>
           <div className="rounded-icon"><Glyphicon glyph="search" /></div>
           <div className="white-icon"><Glyphicon glyph="question-sign" /></div>
@@ -22,7 +22,7 @@ class Icons extends React.Component {
           </div>
         </section>
         <section>
-          <div className="title-3">Code</div>
+          <h3 className="title-3">Code</h3>
           <div className="box">
             <div>
               <div className="code">

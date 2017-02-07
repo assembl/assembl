@@ -5,7 +5,7 @@ class Login extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-2 underline" id="login">LOGIN</div>
+        <h2 className="title-2 underline" id="login">LOGIN</h2>
         <section>
           <div className="left">
             <ProfileIcon />
@@ -13,7 +13,7 @@ class Login extends React.Component {
           <div>&nbsp;</div>
         </section>
         <section>
-          <div className="title-3">Code</div>
+          <h3 className="title-3">Code</h3>
           <div className="box">
             <div>
               <div className="code">

@@ -44,6 +44,10 @@ $page-bkg-light: $white;
 $page-bkg-grey: $grey0;
 $page-bkg-dark: $grey3;
 
+$link-color: $grey3;
+$link-hover-color: $green;
+$link-active-color: $green;
+
 $btn-success-bkg: $green;
 $btn-success-border: $green;
 $btn-success-txt: $white;
@@ -64,10 +68,12 @@ $title1-color: $black;
 $title2-color: $black;
 $title3-color: $grey3;
 $title4-color: $grey3;
+$title5-color: $grey3;
 $title1-size: $font-size-xl;
 $title2-size: $font-size-l;
 $title3-size: $font-size-m;
-$title4-size: $font-size-xs;
+$title4-size: $font-size-s;
+$title5-size: $font-size-xs;
 
 $active-link-color: $green;
 
@@ -82,3 +88,5 @@ $box-border: $border-weight2 solid $grey1;
 
 $partner-logo-width: 150px;
 $partner-logo-height: 50px;
+
+$input-txt-bkg-color: $white;

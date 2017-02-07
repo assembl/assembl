@@ -15,9 +15,9 @@ class Header extends React.Component {
         <Grid fluid className="max-container">
           <div className="header-content">
             <img className="header-logo" src={debateData.logo} alt="logo" />
-            <div className="title-1">{debateData.topic}</div>
-            <div className="title-3 margin-m">{debateData.introduction}</div>
-            <div className="title-4 margin-xs">{debateData.objectives}</div>
+            <h1 className="title-1">{debateData.topic}</h1>
+            <h3 className="title-3 margin-m">{debateData.introduction}</h3>
+            <h4 className="title-5 margin-xs uppercase">{debateData.objectives}</h4>
             <Link className="button-link margin-l" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
             <Statistic />
           </div>

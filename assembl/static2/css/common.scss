@@ -1,12 +1,45 @@
 body {
-  background-color: $page-bkg-light;
+  background-color: $page-bkg-grey;
   font-family: $font-family;
   font-size: $font-size-s;
   overflow-y: scroll;
 }
 
+a {
+  color: $link-color;
+  text-decoration: none;
+
+  &:hover {
+    color: $link-hover-color;
+    text-decoration: none;
+  }
+
+  &:active {
+    color: $link-active-color;
+    text-decoration: none;
+  }
+}
+
 section {
   margin: 30px 0;
+}
+
+input {
+  &[type='text'] {
+    box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+
+    &:focus {
+      box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+    }
+  }
+
+  &[type='password'] {
+    box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+
+    &:focus {
+      box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+    }
+  }
 }
 
 .app-content {
@@ -24,6 +57,10 @@ section {
   position: fixed;
   width: 100%;
   z-index: 1000;
+}
+
+.background-light {
+  background-color: $page-bkg-light;
 }
 
 .background-grey {
@@ -90,6 +127,10 @@ section {
 .underline {
   border-bottom: $box-border;
   margin: 0 0 20px;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 .hidden {

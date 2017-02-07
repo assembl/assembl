@@ -9,8 +9,20 @@ const Translations = {
       terms: 'Conditions Générales d\'Utilisation',
       socialMedias: 'Suivez-nous sur'
     },
-    authentication: {
-      panelTitle: 'Bienvenue dans la page d\'authentification d\'Assembl'
+    login: {
+      alreadyAccount: 'Vous avez déjà un compte ?',
+      login: 'Se connecter',
+      forgotPwd: 'Mot de passe oublié ?',
+      noAccount: 'Vous n’avez pas encore de compte ?',
+      signUp: 'Créer un compte',
+      username: 'Email ou nom d\'utilisateur',
+      password: 'Mot de passe'
+    },
+    signup: {
+      panelTitle: 'Bienvenue dans la page d\'inscription d\'Assembl'
+    },
+    changePassword: {
+      panelTitle: 'Bienvenue dans la page changement de mot de passe d\'Assembl'
     },
     home: {
       accessButton: 'J\'accède au débat',
@@ -61,8 +73,20 @@ const Translations = {
       terms: 'Terms and Conditions',
       socialMedias: 'Follow us'
     },
-    authentication: {
-      panelTitle: 'Welcome to Assembl authentication page'
+    login: {
+      alreadyAccount: 'Do you already have an account?',
+      login: 'Log in',
+      forgotPwd: 'Forgot your password?',
+      noAccount: 'No account yet?',
+      signUp: 'Sign up',
+      username: 'Email or user name',
+      password: 'Password'
+    },
+    signup: {
+      panelTitle: 'Welcome to Assembl sign up page'
+    },
+    changePassword: {
+      panelTitle: 'Welcome to Assembl forgot password page'
     },
     home: {
       accessButton: 'I access to the debate',
@@ -113,8 +137,20 @@ const Translations = {
       terms: 'Nutzungsbedingungen',
       socialMedias: 'Folge uns'
     },
-    authentication: {
-      panelTitle: 'Willkommen in Assembl - authentication page'
+    login: {
+      alreadyAccount: 'Haben Sie bereits ein Konto?',
+      login: 'Einloggen',
+      forgotPwd: 'Haben Sie Ihr Passwort vergessen?',
+      noAccount: 'Noch kein Benutzerkonto?',
+      signUp: 'Anmelden',
+      username: 'E-Mail Adresse oder Benutzername',
+      password: 'Passwort'
+    },
+    signup: {
+      panelTitle: 'Willkommen in Assembl - signup page'
+    },
+    changePassword: {
+      panelTitle: 'Willkommen in Assembl - forgot password page'
     },
     home: {
       accessButton: 'Ich gehe zur Debatte',
