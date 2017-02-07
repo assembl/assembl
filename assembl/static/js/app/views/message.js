@@ -1060,7 +1060,6 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   onClickEmoticon: function(event){
-    console.log("Message Model:", this.model);
     var isUserConnected = Ctx.isUserConnected();
     var that = this;
     if(isUserConnected){
