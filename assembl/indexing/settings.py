@@ -40,11 +40,47 @@ MAPPINGS = {
 
 
 def get_index_settings():
-    return {'index_name': 'assembl',
-            'chunk_size': 500,
-            'index_settings': {'number_of_replicas': 0,
-                               'number_of_shards': 1,
-                              }
+    return {"index_name": 'assembl',
+            "chunk_size": 500,
+            "index_settings": {"number_of_replicas": 0,
+                               "number_of_shards": 1,
+                               "analysis": {
+                                 "char_filter": {
+                                    "replace": {
+                                     "type": "mapping",
+                                     "mappings": [
+                                       "&=> and "
+                                     ]
+                                   }
+                                 },
+                                 "filter": {
+                                   "word_delimiter" : {
+                                     "type": "word_delimiter",
+                                     "split_on_numerics": False,
+                                     "split_on_case_change": True,
+                                     "generate_word_parts": True,
+                                     "generate_number_parts": True,
+                                     "catenate_all": True,
+                                     "preserve_original": True,
+                                     "catenate_numbers": True
+                                   }
+                                 },
+                                 "analyzer": {
+                                   "default": {
+                                     "type": "custom",
+                                     "char_filter": [
+                                       "html_strip",
+                                       "replace"
+                                     ],
+                                     "tokenizer": "whitespace",
+                                     "filter": [
+                                         "lowercase",
+                                         "word_delimiter"
+                                     ]
+                                   }
+                                 }
+                               }
+                             }
            }
 
 
