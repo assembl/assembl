@@ -32,21 +32,13 @@ var Marionette = require('../shims/marionette.js'),
     IdeaContentLink = require('../models/ideaContentLink.js'),
     ConfirmModal = require('./confirmModal.js'),
     Growl = require('../utils/growl.js'),
-    MessageModel = require('../models/message.js');
+    MessageModel = require('../models/message.js'),
+    SentimentStastics = require('../models/sentimentStats.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10,
     IDEA_CLASSIFICATION_LENGTH = 3;
 
-
-// Enum of conversion between sentiment to statistics
-var SENTIMENT_TO_STASTICS = {
-  LikeSentimentOfPost: 'like',
-  DisagreeSentimentOfPost: 'disagree',
-  DontUnderstandSentimentOfPost: 'idu',
-  MoreInfoSentimentOfPost: 'more',
-  DESELECT: 'deselect'
-};
 
 /**
  * @class app.views.message.IdeaClassificationNameListView
@@ -1151,37 +1143,10 @@ var MessageView = Marionette.LayoutView.extend({
   },
 
   /**
-   * Method that converts the backend-based name of the sentiment
-   * to an event name prepared for statistics
-   *
-   * Note: Pass 'DESELECT' in order to track sentiment deselection
+   * Method that sends the analytics event according to the specificiation
    */
   fireSentimentAnalyticsEvent: function(sentiment){
-    if (!(SENTIMENT_TO_STASTICS[sentiment])){
-      console.log("sentiment " + sentiment + " is not a valid sentiment. Will not process analytics");
-      return;
-    }
-
-    var analytics = Analytics.getInstance();
-    switch (SENTIMENT_TO_STASTICS[sentiment]){
-      case 'like':
-        analytics.trackEvent(analytics.events.SELECT_SENTIMENT_LIKE);
-        break;
-      case 'disagree':
-        analytics.trackEvent(analytics.events.SELECT_SENTIMENT_DISAGREE);
-        break;
-      case 'idu':
-        analytics.trackEvent(analytics.events.SELECT_SENTIMENT_DU);
-        break;
-      case 'more':
-        analytics.trackEvent(analytics.events.SELECT_SENTIMENT_MORE);
-        break;
-      case 'deselect':
-        analytics.trackEvent(analytics.events.DESELECT_SENTIMENT);
-        break;
-      default:
-        console.warn("Improper sentiment was passed for analytics");
-    }
+    SentimentStastics(sentiment);
   },
 
   onClickShare: function(e) {
