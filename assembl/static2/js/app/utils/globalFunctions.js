@@ -15,8 +15,12 @@ class GlobalFunctions {
     return locArray;
   }
   static getDiscussionId() {
-    const discussionId = document.getElementById('discussion-id').value;
+    const discussionId = document.getElementById('discussion-id') ? document.getElementById('discussion-id').value : null;
     return discussionId;
+  }
+  static getConnectedUserId() {
+    const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : '1296';
+    return userId;
   }
 }
 

@@ -8,7 +8,7 @@ import MapStateToProps from '../../store/mapStateToProps';
 class Footer extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.path;
+    const { rootPath } = this.props.context;
     return (
       <Grid fluid className="background-dark fixed-bottom">
         <div className="max-container">

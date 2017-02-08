@@ -8,7 +8,7 @@ import MapStateToProps from '../../store/mapStateToProps';
 class AsLogin extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.path;
+    const { rootPath } = this.props.context;
     return (
       <div className="login-view">
         <div className="box-title">{debateData.topic}</div>

@@ -28,7 +28,7 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.path;
+    const { rootPath } = this.props.context;
     return (
       <Grid fluid>
         <Navbar fixedTop fluid>

@@ -9,7 +9,7 @@ import Statistic from './statistic';
 class Header extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.path;
+    const { rootPath } = this.props.context;
     return (
       <div className="header">
         <Grid fluid className="max-container">

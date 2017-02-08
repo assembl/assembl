@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import GlobalFunctions from '../../utils/globalFunctions';
 import MapStateToProps from '../../store/mapStateToProps';
 import MapDispatchToProps from '../../store/mapDispatchToProps';
 import Loader from '../common/loader';
@@ -10,8 +9,8 @@ import Error from '../common/error';
 
 class PartnersSection extends React.Component {
   componentWillMount() {
-    const discussionId = GlobalFunctions.getDiscussionId();
-    this.props.fetchPartners(discussionId);
+    const { debateId } = this.props.context;
+    this.props.fetchPartners(debateId);
   }
   render() {
     const { partners, partnersLoading, partnersError } = this.props.partners;

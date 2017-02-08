@@ -9,9 +9,10 @@ import Error from '../components/common/error';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const discussionId = GlobalFunctions.getDiscussionId();
-    this.props.fetchDebateData(discussionId);
-    this.props.addPath(this.props.route.path);
+    const debateId = GlobalFunctions.getDiscussionId();
+    const connectedUserId = GlobalFunctions.getConnectedUserId();
+    this.props.fetchDebateData(debateId);
+    this.props.addContext(this.props.route.path, debateId, connectedUserId);
   }
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;

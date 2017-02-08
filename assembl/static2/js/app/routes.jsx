@@ -28,7 +28,7 @@ export default (
         <Route path=":slug/synthesis" component={Synthesis} />
         <Route path=":slug/debate" component={Debate} />
         <Route path=":slug/community" component={Community} />
-        <Route path="profile" component={Profile} />
+        <Route path="profile/:userId" component={Profile} />
         <Route path=":slug/terms" component={Terms} />
       </Route>
     </Route>

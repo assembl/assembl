@@ -1,9 +1,9 @@
 import HttpRequestHandler from '../utils/httpRequestHandler';
 
 class UserService {
-  static fetchUsers(discussionId) {
+  static fetchUsers(debateId) {
     const that = this;
-    const fetchUsersUrl = `/api/v1/discussion/${discussionId}/agents/`;
+    const fetchUsersUrl = `/api/v1/discussion/${debateId}/agents/`;
     return HttpRequestHandler.request({ method: 'GET', url: fetchUsersUrl }).then((users) => {
       return that.buildUsers(users);
     });
@@ -20,6 +20,12 @@ class UserService {
       if (user.verified) count += 1;
     });
     return count;
+  }
+  static fetchUser(debateId, userId) {
+    const fetchConnectedUserUrl = `/api/v1/discussion/${debateId}/agents/${userId}`;
+    return HttpRequestHandler.request({ method: 'GET', url: fetchConnectedUserUrl }).then((user) => {
+      return user;
+    });
   }
 }
 
