@@ -175,11 +175,9 @@ def home_view(request):
     return response
 
 
-@view_config(route_name='new_home', request_method='GET', http_cache=60,
+@view_config(route_name='v2_with_slug', request_method='GET',
              renderer='assembl:templates/index_react.jinja2')
-@view_config(route_name='new_styleguide', request_method='GET',
-             renderer='assembl:templates/index_react.jinja2')
-@view_config(route_name='new_profile', request_method='GET',
+@view_config(route_name='v2_without_slug', request_method='GET',
              renderer='assembl:templates/index_react.jinja2')
 def react_view(request):
     """
@@ -227,6 +225,5 @@ def not_found(context, request):
 
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
-        config.add_route('new_styleguide', 'v2/styleguide')
-        config.add_route('new_profile', 'v2/profile')
-        config.add_route('new_home', 'v2/{discussion_slug}/*extra_path')
+        config.add_route('v2_with_slug', 'v2/{discussion_slug}/*extra_path')
+        config.add_route('v2_without_slug', 'v2/*extra_path')
