@@ -396,6 +396,9 @@ def redirector(request):
         'home', discussion_slug=request.matchdict.get('discussion_slug')))
 
 
+def is_using_new_frontend():
+    return config.get('new_frontend', False)
+
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """
 
@@ -415,7 +418,12 @@ def includeme(config):
     else:
         config.add_route('discussion_list', '/')
 
-    config.include(backbone_include, route_prefix='/{discussion_slug}')
+    if is_using_new_frontend():
+        config.include('.discussion')  # this is first for new front-end routes
+        config.include(backbone_include, route_prefix='/{discussion_slug}')
+    else:
+        config.include(backbone_include, route_prefix='/{discussion_slug}')
+        config.include('.discussion')
 
     if asbool(config.get_settings().get('assembl_handle_exceptions', 'true')):
         config.add_view(error_view, context=Exception)
@@ -429,15 +437,12 @@ def includeme(config):
 
     config.add_route('home-auto', '/{discussion_slug}/')
 
-    config.include('.discussion')
     def redirector(request):
         return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
     config.add_view(redirector, route_name='home-auto')
     default_context['cache_bust'] = \
         config.registry.settings['requirejs.cache_bust']
 
-
-    config.add_route('new_styleguide', '/styleguide')
     # Scan now, to get cornice views
     config.scan('.')
     # make sure this comes last to avoid conflicts

@@ -175,23 +175,24 @@ def home_view(request):
     return response
 
 
+@view_config(route_name='v2_with_slug', request_method='GET',
+             renderer='assembl:templates/index_react.jinja2')
+@view_config(route_name='v2_without_slug', request_method='GET',
+             renderer='assembl:templates/index_react.jinja2')
 def react_view(request):
     """
     Asbolutely basic view. Nothing more.
     Must add user authentication, permission, etc.
     Basic view for the homepage
     """
-    context = get_default_context(request)
+    old_context = base_default_context(request)
+    
+    context = dict(
+        request=old_context['request'],
+        REACT_URL=old_context['REACT_URL'],
+        discussion=old_context['discussion']
+    )
     return context
-
-
-@view_config(route_name='new_styleguide', request_method='GET',
-             renderer='assembl:templates/styleguide/styleguide_v2.jinja2')
-def sytleguide_view(request):
-    """
-    The view renderer for the ne styleguide
-    """
-    return {}
 
 
 @view_config(route_name='styleguide', request_method='GET', http_cache=60,
@@ -224,7 +225,5 @@ def not_found(context, request):
 
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
-        config.add_route('new_home', 'v2/{discussion_slug}/*extra_path')
-        config.add_view(react_view, route_name='new_home',
-                        request_method='GET', http_cache=60,
-                        renderer="assembl:templates/index_react.jinja2")
+        config.add_route('v2_with_slug', 'v2/{discussion_slug}/*extra_path')
+        config.add_route('v2_without_slug', 'v2/*extra_path')
