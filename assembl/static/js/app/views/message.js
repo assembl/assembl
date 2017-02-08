@@ -453,7 +453,7 @@ var MessageView = Marionette.LayoutView.extend({
 
     'click .js_message-export-facebook': 'exportToFacebook',
 
-    'click .js_openTargetInPopOver': 'openTargetInPopOver'
+    'click .js_openTargetInModal': 'openTargetInModal'
   },
 
   /**
@@ -2010,9 +2010,8 @@ var MessageView = Marionette.LayoutView.extend({
     this.$('.readLess').removeClass('hidden');
   },
 
-  openTargetInPopOver: function(evt) {
-    console.log("message openTargetInPopOver(evt: ", evt);
-    return Ctx.openTargetInPopOver(evt);
+  openTargetInModal: function(evt) {
+    return Ctx.openTargetInModal(evt);
   },
 
   /**

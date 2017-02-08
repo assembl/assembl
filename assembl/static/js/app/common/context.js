@@ -613,6 +613,14 @@ Context.prototype = {
         resizable = options.modal_resizable;
     }
 
+    var modalClass = "";
+    if ( evt && evt.currentTarget && $(evt.currentTarget).attr("data-modal-class") ){
+      modalClass = $(evt.currentTarget).attr("data-modal-class");
+    }
+    if ( _.isObject(options) && "modal_class" in options ){
+      modalClass = options.modal_class;
+    }
+
     var model = new Backbone.Model();
     model.set("iframe_url", target_url);
     model.set("modal_title", modal_title);
@@ -621,8 +629,10 @@ Context.prototype = {
     var className = 'group-modal popin-wrapper iframe-popin';
     if ( _.isObject(options) && "footer" in options && options.footer === false)
         className += " popin-without-footer";
-    if (!resizable)
+    if (!resizable && !modalClass)
         className += " popin-fixed-size";
+
+    className += " " + modalClass;
 
     var Modal = Backbone.Modal.extend({
       template: Ctx.loadTemplate('modalWithIframe'),

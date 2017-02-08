@@ -156,7 +156,7 @@ var IdeaPanel = AssemblPanel.extend({
     'click @ui.clearIdea': 'onClearAllClick',
     'click @ui.deleteIdea': 'onDeleteButtonClick',
     'click @ui.defineColumns': 'onDefineColumnsClick',
-    'click .js_openTargetInPopOver': 'openTargetInPopOver'
+    'click .js_openTargetInModal': 'openTargetInModal'
   },
 
   _calculateContentHeight: function(domObject, imageDomObject){
@@ -1034,9 +1034,8 @@ var IdeaPanel = AssemblPanel.extend({
     this.regionLongTitle.show(ckeditor);
   },
 
-  openTargetInPopOver: function(evt) {
-    console.log("ideaPanel openTargetInPopOver(evt: ", evt);
-    return Ctx.openTargetInPopOver(evt);
+  openTargetInModal: function(evt) {
+    return Ctx.openTargetInModal(evt);
   }
 
 });
