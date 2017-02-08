@@ -20,13 +20,51 @@
 }
 
 .login-view {
-  margin: 20px auto;
+  margin: 60px auto;
   text-align: left;
-  width: 300px;
 
   .login {
     border-bottom: $box-border;
-    margin: 0 0 20px;
-    padding: 0 0 15px;
+    margin: 0 auto 20px;
+    padding: 0 0 20px;
+    width: 60%;
+  }
+
+  .signup {
+    margin: 0 auto;
+    padding: 0 0 10px;
+    width: 60%;
+  }
+}
+
+@media screen and (min-width: 946px) {
+  .login-view {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 945px) {
+  .login-view {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .login-view {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  .login-view {
+    width: 100%;
+
+    .login {
+      width: 90%;
+    }
+
+    .signup {
+      width: 90%;
+    }
   }
 }

@@ -3,6 +3,18 @@
   border: $box-border;
   border-radius: $radius;
   box-shadow: $box-shadow;
-  margin: 10px 0;
   padding: 15px 20px 20px;
+}
+
+.box-title {
+  background-color: $box-title-bkg;
+  border-left: $box-border;
+  border-right: $box-border;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: $box-title-txt;
+  font-size: $title3-size;
+  font-weight: 700;
+  padding: 15px;
+  text-align: center;
 }
