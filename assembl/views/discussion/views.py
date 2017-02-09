@@ -221,8 +221,12 @@ def not_found(context, request):
 
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
+        config.add_route('v2_profile', 'v2/profile/*extra_path')  # need to be before v2_with_slug
         config.add_route('v2_with_slug', 'v2/{discussion_slug}/*extra_path')
         config.add_route('v2_without_slug', 'v2/*extra_path')
+        config.add_view(react_view, route_name='v2_profile',
+            request_method='GET',
+            renderer='assembl:templates/index_react.jinja2')
         config.add_view(react_view, route_name='v2_with_slug',
             request_method='GET',
             renderer='assembl:templates/index_react.jinja2')
