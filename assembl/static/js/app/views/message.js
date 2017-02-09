@@ -32,7 +32,8 @@ var Marionette = require('../shims/marionette.js'),
     IdeaContentLink = require('../models/ideaContentLink.js'),
     ConfirmModal = require('./confirmModal.js'),
     Growl = require('../utils/growl.js'),
-    MessageModel = require('../models/message.js');
+    MessageModel = require('../models/message.js'),
+    SentimentStastics = require('../models/sentimentStats.js');
 
 var MIN_TEXT_TO_TOOLTIP = 5,
     TOOLTIP_TEXT_LENGTH = 10,
@@ -992,6 +993,7 @@ var MessageView = Marionette.LayoutView.extend({
   postRender: function() {
     return;
   },
+
   renderSentiments: function() {
     var that = this;
     var mySentiment = this.model.get('my_sentiment');
@@ -1056,12 +1058,13 @@ var MessageView = Marionette.LayoutView.extend({
       $('.emoticon').addClass('emoticon-connected');
     }
   },
-  onClickEmoticon:function(event){
+
+  onClickEmoticon: function(event){
     var isUserConnected = Ctx.isUserConnected();
+    var that = this;
     if(isUserConnected){
       var currentClass = $(event.target).attr("class");
       if(currentClass.indexOf('active') <= -1){
-        var that = this;
         var currentUser = Ctx.getCurrentUser();
         var clickedSentiment = $(event.target).attr("data-id");
         var currentPost = this.model.get("@id");
@@ -1074,7 +1077,10 @@ var MessageView = Marionette.LayoutView.extend({
           dataType: "json",
           data: payload
         });
-      }else{
+        // Fire the events regardless of save on server. Async.
+        that.fireSentimentAnalyticsEvent(clickedSentiment); 
+
+      } else{
         var mySentimentId = this.model.get('my_sentiment')['@id'].split('/')[1];
         $.ajax(
           "/data/Discussion/" + Ctx.getDiscussionId() + "/posts/" + this.model.getNumericId() + "/sentiments/" + mySentimentId, {
@@ -1082,16 +1088,22 @@ var MessageView = Marionette.LayoutView.extend({
           contentType: "application/json",
           dataType: "json"
         });
+
+        // The sentiment is being removed by the user
+        that.fireSentimentAnalyticsEvent("DESELECT"); 
       }
     }
   },
+
   onOverNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').show();
     this.renderGauge();
   },
+
   onOutNamesList:function(event){
     $(event.currentTarget).find('.js_sentimentStats').hide();
   },
+
   renderGauge:function(){
     var that = this;
     var sentiment_counts = this.model.get('sentiment_counts');
@@ -1108,6 +1120,7 @@ var MessageView = Marionette.LayoutView.extend({
       }
     });
   },
+
   getTotalCount:function(){
     var totalCount = 0;
     var sentiment_counts = this.model.get('sentiment_counts');
@@ -1117,6 +1130,7 @@ var MessageView = Marionette.LayoutView.extend({
     
     return totalCount;
   },
+
   calculateSentimentGauge:function(count, totalCount){
     var ratio = Math.round((count * 10.0) / totalCount);
 
@@ -1125,6 +1139,13 @@ var MessageView = Marionette.LayoutView.extend({
     }else{
       return Math.round(ratio);
     }
+  },
+
+  /**
+   * Method that sends the analytics event according to the specificiation
+   */
+  fireSentimentAnalyticsEvent: function(sentiment){
+    SentimentStastics(sentiment);
   },
 
   onClickShare: function(e) {
