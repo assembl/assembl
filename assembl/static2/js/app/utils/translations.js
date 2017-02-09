@@ -3,7 +3,8 @@ const Translations = {
     navbar: {
       home: 'accueil',
       debate: 'débat',
-      community: 'communauté'
+      community: 'communauté',
+      connection: 'Connexion'
     },
     footer: {
       terms: 'Conditions Générales d\'Utilisation',
@@ -67,7 +68,8 @@ const Translations = {
     navbar: {
       home: 'home',
       debate: 'debate',
-      community: 'community'
+      community: 'community',
+      connection: 'Connection'
     },
     footer: {
       terms: 'Terms and Conditions',
@@ -131,7 +133,8 @@ const Translations = {
     navbar: {
       home: 'willkommen',
       debate: 'debatte',
-      community: 'gemeinschaft'
+      community: 'gemeinschaft',
+      connection: 'Verbindung'
     },
     footer: {
       terms: 'Nutzungsbedingungen',

@@ -63,16 +63,6 @@
       display: none;
     }
 
-    .username {
-      display: none;
-    }
-
-    .profile-icon {
-      img {
-        margin: 0;
-      }
-    }
-
     .navbar-language {
       display: none;
     }
@@ -85,6 +75,9 @@
 
     .navbar-icons {
       padding: 28px 15px;
+      position: absolute;
+      right: 10px;
+      z-index: 10;
 
       div {
         margin: 0 0 0 15px;

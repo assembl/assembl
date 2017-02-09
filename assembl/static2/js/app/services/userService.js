@@ -1,31 +1,30 @@
 import HttpRequestHandler from '../utils/httpRequestHandler';
 
 class UserService {
-  static fetchUsers(debateId) {
+  static fetchUsers(debateId, connectedUserId) {
     const that = this;
     const fetchUsersUrl = `/api/v1/discussion/${debateId}/agents/`;
     return HttpRequestHandler.request({ method: 'GET', url: fetchUsersUrl }).then((users) => {
-      return that.buildUsers(users);
+      return that.buildUsers(users, connectedUserId);
     });
   }
-  static buildUsers(users) {
+  static buildUsers(users, connectedUserId) {
+    const usersData = this.iterateOnAllUsers(users, connectedUserId);
     return {
-      totalVerifiedUsers: this.getTotalVerifiedUsers(users),
-      allUsers: users
+      totalVerifiedUsers: usersData[0],
+      allUsers: users,
+      connectedUser: usersData[1]
     };
   }
-  static getTotalVerifiedUsers(users) {
+  static iterateOnAllUsers(users, connectedUserId) {
     let count = 0;
+    let connectedUser = {};
     users.forEach((user) => {
+      const userId = user['@id'].split('/')[1];
+      if (userId === connectedUserId) connectedUser = user;
       if (user.verified) count += 1;
     });
-    return count;
-  }
-  static fetchUser(debateId, userId) {
-    const fetchConnectedUserUrl = `/api/v1/discussion/${debateId}/agents/${userId}`;
-    return HttpRequestHandler.request({ method: 'GET', url: fetchConnectedUserUrl }).then((user) => {
-      return user;
-    });
+    return [count, connectedUser];
   }
 }
 

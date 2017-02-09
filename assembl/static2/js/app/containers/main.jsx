@@ -7,9 +7,9 @@ import Footer from '../components/common/footer';
 
 class Main extends React.Component {
   componentWillMount() {
-    const { debateId } = this.props.context;
+    const { debateId, connectedUserId } = this.props.context;
     this.props.fetchPosts(debateId);
-    this.props.fetchUsers(debateId);
+    this.props.fetchUsers(debateId, connectedUserId);
   }
   render() {
     return (

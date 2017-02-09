@@ -1,11 +1,11 @@
 import UserService from '../services/userService';
 
 class UsersActions {
-  static fetchUsers(debateId) {
+  static fetchUsers(debateId, connectedUserId) {
     const that = this;
     return function (dispatch) {
       dispatch(that.loadingUsers());
-      return UserService.fetchUsers(debateId).then((users) => {
+      return UserService.fetchUsers(debateId, connectedUserId).then((users) => {
         dispatch(that.resolvedFetchUsers(users));
       }).catch((error) => {
         dispatch(that.failedFetchUsers(error));
