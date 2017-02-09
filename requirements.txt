@@ -33,7 +33,6 @@ docutils==0.12
 dogpile.cache==0.6.1
 ecdsa==0.13
 elasticsearch==5.1.0
-elasticsearch-dsl==5.1.0
 enum34==1.1.6
 et-xmlfile==1.0.1
 Fabric==1.11.1
