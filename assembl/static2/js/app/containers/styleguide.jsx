@@ -8,6 +8,7 @@ import Login from '../components/styleguide/login';
 import Dropdown from '../components/styleguide/dropdown';
 import Loader from '../components/styleguide/loader';
 import Error from '../components/styleguide/error';
+import Box from '../components/styleguide/box';
 import Container from '../components/styleguide/container';
 
 class Styleguide extends React.Component {
@@ -31,6 +32,7 @@ class Styleguide extends React.Component {
             <Dropdown />
             <Loader />
             <Error />
+            <Box />
             <Container />
           </Col>
         </Row>

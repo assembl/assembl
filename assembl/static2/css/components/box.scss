@@ -8,10 +8,9 @@
 
 .box-title {
   background-color: $box-title-bkg;
-  border-left: $box-border;
-  border-right: $box-border;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  box-shadow: $box-shadow;
   color: $box-title-txt;
   font-size: $title3-size;
   font-weight: 700;
