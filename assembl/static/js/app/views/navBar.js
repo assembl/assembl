@@ -22,6 +22,7 @@ var Marionette = require('../shims/marionette.js'),
     DefineGroupModal = require('./groups/defineGroupModal.js'),
     WidgetLinks = require('./widgetLinks.js'),
     Analytics = require('../internal_modules/analytics/dispatcher.js'),
+    StatisticsModal = require('./modals/discussionStatisticsModal.js'),
     AgentViews = require('./agent.js');
 
 var navBarLeft = Marionette.LayoutView.extend({
@@ -34,9 +35,15 @@ var navBarLeft = Marionette.LayoutView.extend({
   initialize: function(options) {
     this.isAdminDiscussion = Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION);
   },
+  ui: {
+    discussionStatistics: ".js_discussion_statistics",
+  },
   regions: {
     widgetMenuConfig: ".navbar-widget-configuration-links",
     widgetMenuCreation: ".navbar-widget-creation-links"
+  },
+  events: {
+    'click @ui.discussionStatistics': 'discussionStatistics',
   },
   onRender: function() {
     var that = this;
@@ -84,9 +91,16 @@ var navBarLeft = Marionette.LayoutView.extend({
   },
   serializeData: function() {
     return {
-      isAdminDiscussion: this.isAdminDiscussion
+      isAdminDiscussion: this.isAdminDiscussion,
+      canAccessStatistics: Ctx.getCurrentUser().can(Permissions.DISC_STATS),
+      discussionSettings: '/' + Ctx.getDiscussionSlug() + '/edition',
+      discussionPermissions: '/admin/permissions/discussion/' + Ctx.getDiscussionId(),
     };
-  }
+  },
+  discussionStatistics: function() {
+      var modal = new StatisticsModal();
+      $('#slider').html(modal.render().el);
+  },
 });
 
 var navBarRight = Marionette.LayoutView.extend({
@@ -178,12 +192,6 @@ var navBarRight = Marionette.LayoutView.extend({
       userProfile: function() {
         return '/' + Ctx.getDiscussionSlug() + '/user/profile';
       },
-      discussionSettings: function() {
-        return '/' + Ctx.getDiscussionSlug() + '/edition';
-      },
-      discussionPermissions: function() {
-        return '/admin/permissions/discussion/' + Ctx.getDiscussionId();
-      }
     }
   },
   setLocale: function(e) {

@@ -1,0 +1,105 @@
+<div class="content">
+  <form class="core-form form-horizontal">
+     <fieldset>
+
+     <label>{{ gettext('Start date') }}</label>
+     <input class="inline" id="start_date" name="start_date" type="date"></input>
+
+     <label>{{ gettext('End date') }}</label>
+     <input id="end_date" name="end_date" type="date"></input>
+
+     <label>{{ gettext('Interval') }}</label>
+     <select name="interval" id="interval">
+     <option value="" label="{{gettext('Single interval')}}" />
+     <option value="P1Y" label="{{gettext('One year')}}" />
+     <option value="P1M" label="{{gettext('One month')}}" />
+     <option value="P7D" selected="selected" label="{{gettext('One week')}}" />
+     <option value="P1D" label="{{gettext('One day')}}" />
+     <# option value="custom" label="{{gettext('custom')}}" #>
+     </select>
+
+     <label>{{ gettext('File format') }}</label>
+     <select name="format" id="format">
+     <option selected="selected" value="xlsx" label="{{gettext('MS Excel')}}" />
+     <option value="csv" label="{{gettext('Comma-separated values')}}" />
+     <option value="json" label="JSON" />
+     </select>
+
+     <br />
+     <br />
+     <button class="btn btn-primary" name="get_stats" id="get_stats">{{gettext('Get general discussion statistics')}}</button>
+
+     <br />
+     <br />
+     <h3>{{ gettext('Per participant statistics') }}</h3>
+     <label>{{ gettext('Fields') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_posts" id="field_posts" /><span class="custom-checkbox-element"></span> {{ gettext('Posts') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_posts" id="field_cumulative_posts" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative posts') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_replies_received" id="field_replies_received" /><span class="custom-checkbox-element"></span> {{ gettext('Replies received') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_replies_received" id="field_cumulative_replies_received" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative replies received') }}</label>
+
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_liking" id="field_liking" /><span class="custom-checkbox-element"></span> {{ gettext('Liking') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_liking" id="field_cumulative_liking" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative liking') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_liked" id="field_liked" /><span class="custom-checkbox-element"></span> {{ gettext('Liked') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_liked" id="field_cumulative_liked" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative liked') }}</label>
+
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_disagreeing" id="field_disagreeing" /><span class="custom-checkbox-element"></span> {{ gettext('Disagreeing') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_disagreeing" id="field_cumulative_disagreeing" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative disagreeing') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_disagreed" id="field_disagreed" /><span class="custom-checkbox-element"></span> {{ gettext('Disagreed') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_disagreed" id="field_cumulative_disagreed" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative disagreed') }}</label>
+
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_misunderstanding" id="field_misunderstanding" /><span class="custom-checkbox-element"></span> {{ gettext('misunderstanding') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_misunderstanding" id="field_cumulative_misunderstanding" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative misunderstanding') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_misunderstood" id="field_misunderstood" /><span class="custom-checkbox-element"></span> {{ gettext('Misunderstood') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_misunderstood" id="field_cumulative_misunderstood" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative misunderstood') }}</label>
+
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_info_requesting" id="field_info_requesting" /><span class="custom-checkbox-element"></span> {{ gettext('Requesting info') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_info_requesting" id="field_cumulative_info_requesting" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative requesting info') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_info_requested" id="field_info_requested" /><span class="custom-checkbox-element"></span> {{ gettext('Info requested') }}</label>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="field_cumulative_info_requested" id="field_cumulative_info_requested" /><span class="custom-checkbox-element"></span> {{ gettext('Cumulative info requested') }}</label>
+
+
+     <label>{{ gettext('Sorted by') }}</label>
+     <select name="sort" id="sort">
+     <option value="name" label="{{gettext('Name')}}" <% if (!isDiscussionAdmin) { print('selected="selected"') }%>/>
+     <% if (isDiscussionAdmin) { %>
+     <option value="domain" label="{{gettext('Domain')}}" selected="selected"/>
+     <% } %>
+     <option value="posts" label="{{ gettext('Posts') }}" />
+     <option value="cumulative_posts" label="{{ gettext('Cumulative posts') }}" />
+     <option value="replies_received" label="{{ gettext('Replies received') }}" />
+     <option value="cumulative_replies_received" label="{{ gettext('Cumulative replies received') }}" />
+
+     <option value="liking" label="{{ gettext('Liking') }}" />
+     <option value="cumulative_liking" label="{{ gettext('Cumulative liking') }}" />
+     <option value="liked" label="{{ gettext('Liked') }}" />
+     <option value="cumulative_liked" label="{{ gettext('Cumulative liked') }}" />
+
+     <option value="disagreeing" label="{{ gettext('Disagreeing') }}" />
+     <option value="cumulative_disagreeing" label="{{ gettext('Cumulative disagreeing') }}" />
+     <option value="disagreed" label="{{ gettext('Disagreed') }}" />
+     <option value="cumulative_disagreed" label="{{ gettext('Cumulative disagreed') }}" />
+
+     <option value="misunderstanding" label="{{ gettext('Misunderstanding') }}" />
+     <option value="cumulative_misunderstanding" label="{{ gettext('Cumulative misunderstanding') }}" />
+     <option value="misunderstood" label="{{ gettext('Misunderstood') }}" />
+     <option value="cumulative_misunderstood" label="{{ gettext('Cumulative misunderstood') }}" />
+
+     <option value="info_requesting" label="{{ gettext('Requesting info') }}" />
+     <option value="cumulative_info_requesting" label="{{ gettext('Cumulative requesting info') }}" />
+     <option value="info_requested" label="{{ gettext('Info requested') }}" />
+     <option value="cumulative_info_requested" label="{{ gettext('Cumulative info requested') }}" />
+
+     </select>
+
+     <br />
+     <% if (isDiscussionAdmin) { %>
+     <label class="checkbox custom-checkbox mrl"><input type="checkbox" checked="checked" name="show_emails" id="show_emails" /><span class="custom-checkbox-element"></span> {{ gettext('Show emails') }}</label>
+     <% } %>
+
+     <br />
+     <button class="btn btn-primary" name="get_participant_stats" id="get_participant_stats">{{gettext('Get discussion participant statistics')}}</button>
+
+     </fieldset>
+  </form>
+</div>

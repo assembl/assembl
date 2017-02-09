@@ -623,7 +623,11 @@ def get_time_series_analytics(request):
         # pprint.pprint(results)
         # end of transaction
 
-    intervals_table.drop()
+    try:
+        intervals_table.drop()  # In case there is a leftover from a previous crash
+    except ProgrammingError:
+        pass
+
     if format == JSON_MIMETYPE:
             # json default
         return Response(json.dumps(results, cls=DateJSONEncoder),
