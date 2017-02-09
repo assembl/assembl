@@ -111,7 +111,7 @@
 
   .popin-footer {
     @include clearfixHack();
-    padding: 15px;
+    padding: 5px;
     background: $white;
     border-radius: 0 0 $borderRadiusM $borderRadiusM;
   }
