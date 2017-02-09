@@ -1,4 +1,6 @@
 .profile-icon {
+  margin: 1px 15px 0;
+
   a {
     &:hover {
       text-decoration: none;
@@ -6,6 +8,12 @@
   }
 
   .username {
+    color: $black;
+    font-size: $font-size-xs;
+    font-weight: 700;
+  }
+
+  .connection {
     color: $black;
     font-size: $font-size-xs;
     font-weight: 700;
@@ -34,6 +42,14 @@
     margin: 0 auto;
     padding: 0 0 10px;
     width: 60%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .profile-icon {
+    .username {
+      display: none;
+    }
   }
 }
 

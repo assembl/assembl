@@ -55,6 +55,10 @@
     top: 80px;
     width: 100%;
   }
+
+  .navbar-language {
+    margin: 0 0 0 5px;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -78,10 +82,6 @@
       position: absolute;
       right: 10px;
       z-index: 10;
-
-      div {
-        margin: 0 0 0 15px;
-      }
     }
 
     .dropdown-navbar {
@@ -102,12 +102,6 @@
   .nav-bar {
     .burgermenu-icon {
       display: none;
-    }
-
-    .navbar-icons {
-      div {
-        margin: 0 0 0 20px;
-      }
     }
 
     .nav-burger-menu {

@@ -8,6 +8,7 @@ class Icons extends React.Component {
         <h2 className="title-2 underline" id="icons">ICONS</h2>
         <section>
           <div className="rounded-icon"><Glyphicon glyph="search" /></div>
+          <div className="rounded-icon"><Glyphicon glyph="user" /></div>
           <div className="white-icon"><Glyphicon glyph="question-sign" /></div>
           <div className="black-icon"><Glyphicon glyph="comment" /></div>
           <div className="black-icon"><Glyphicon glyph="log-in" /></div>
@@ -31,6 +32,17 @@ class Icons extends React.Component {
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>Glyphicon glyph=&quot;search&quot; /</span>
+                <span>&gt;</span>
+                <span>&lt;</span>
+                <span>/div</span>
+                <span>&gt;</span>
+              </div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>div className=&quot;rounded-icon&quot;</span>
+                <span>&gt;</span>
+                <span>&lt;</span>
+                <span>Glyphicon glyph=&quot;user&quot; /</span>
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>/div</span>
