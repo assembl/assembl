@@ -4,7 +4,6 @@ import Menu from '../components/styleguide/menu';
 import Buttons from '../components/styleguide/buttons';
 import Titles from '../components/styleguide/titles';
 import Icons from '../components/styleguide/icons';
-import Login from '../components/styleguide/login';
 import Dropdown from '../components/styleguide/dropdown';
 import Loader from '../components/styleguide/loader';
 import Error from '../components/styleguide/error';
@@ -28,7 +27,6 @@ class Styleguide extends React.Component {
             <Buttons />
             <Titles />
             <Icons />
-            <Login />
             <Dropdown />
             <Loader />
             <Error />
