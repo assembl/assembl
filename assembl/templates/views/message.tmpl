@@ -22,7 +22,7 @@
 {%- endmacro %}
 
 {% macro showShareButton() -%}
-<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_shareButton js_openTargetInPopOver" data-popover-width="200" data-popover-height="56" data-popover-scrolling=""><i class="icon-download"></i>{{ gettext("Share") }}</a>
+<a href="<%= direct_link_relative_url %>" data-href="<%= share_link_url %>" class="js_shareButton js_openTargetInModal" data-modal-title='{{ gettext("Share") }}' data-modal-class="modal-share"><i class="icon-download"></i>{{ gettext("Share") }}</a>
 {%- endmacro %}
 
 {% macro menuAction() -%}

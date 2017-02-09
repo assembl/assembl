@@ -100,6 +100,19 @@
 
 }
 
+.modal-share {
+  > .bbm-modal.bbm-modal--open {
+    min-width: 500px;
+    max-width: 650px;
+    max-height: 600px;
+    iframe {
+      height: 200px !important;
+      width: 100% !important;
+      padding: 10px 10px 0 10px;
+    }
+  }
+}
+
 .modal-firstPost {
   text-align: center;
   .icon-discuss {
