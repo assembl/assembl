@@ -10,21 +10,16 @@ var Backbone = require('backbone'),
     Permissions = require('../../utils/permissions.js'),
     Ctx = require('../../common/context.js');
 
-var StatsModal = Backbone.Modal.extend({
-  constructor: function StatsModal() {
-    Backbone.Modal.apply(this, arguments);
-  },
 
+var DiscussionStatisticsView = Marionette.LayoutView.extend({
+  constructor: function DiscussionStatisticsView() {
+    Marionette.LayoutView.apply(this, arguments);
+  },
   template: '#tmpl-discussionStatisticsModal',
-  className: 'group-modal popin-wrapper',
-  cancelEl: '.js_close',
-  keyControl: false,
+
   events: {
     'click #get_stats': 'getStats',
     'click #get_participant_stats': 'getParticipantStats',
-  },
-  initialize: function(options) {
-    Ctx.setCurrentModalView(this);
   },
   serializeData: function() {
     return {
@@ -125,4 +120,36 @@ var StatsModal = Backbone.Modal.extend({
   },
 });
 
-module.exports = StatsModal;
+
+/**
+  * The admin modal view
+  * It is barely a simple container for the real view: DiscussionStatisticsView
+  * @class app.views.modals.DiscussionStatisticsModal
+  */
+var DiscussionStatisticsModal = Backbone.Modal.extend({
+  constructor: function DiscussionStatisticsModal() {
+    Backbone.Modal.apply(this, arguments);
+  },
+
+  template: '#tmpl-modalWithoutIframe',
+  className: 'modal-define-columns popin-wrapper',
+  cancelEl: '.close, .js_close',
+
+  initialize: function(options) {
+    Ctx.setCurrentModalView(this);
+  },
+
+  onRender: function() {
+    var contentView = new DiscussionStatisticsView();
+    this.$('.js_modal-body').html(contentView.render().el);
+  },
+
+  serializeData: function() {
+    return {
+      modal_title: i18n.gettext('Discussion statistics'),
+    };
+  },
+
+});
+
+module.exports = DiscussionStatisticsModal;
