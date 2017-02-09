@@ -434,6 +434,7 @@ def includeme(config):
     config.include('.api')
     config.include('.api2')
     config.include('.admin')
+    config.include('.search')
 
     config.add_route('home-auto', '/{discussion_slug}/')
 

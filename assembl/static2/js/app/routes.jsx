@@ -14,11 +14,13 @@ import Profile from './containers/profile';
 import Styleguide from './containers/styleguide';
 import NotFound from './containers/notFound';
 import Terms from './containers/terms';
+import Search from './containers/search';
 
 export default (
   <Router>
     <Route path="/v2/styleguide" component={Styleguide} />
     <Route path="/v2/" component={App}>
+      <Route path=":slug/search" component={Search} />
       <Route path=":slug/login" component={Login} />
       <Route path=":slug/signup" component={Signup} />
       <Route path=":slug/changePassword" component={ChangePassword} />
