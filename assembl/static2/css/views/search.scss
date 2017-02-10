@@ -1,6 +1,10 @@
 .sk-layout {
     &__top-bar {
+        z-index: 100;
         position: relative;
+    }
+    &__body{
+        margin: 0 auto 0;
     }
 }
 

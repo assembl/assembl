@@ -15,11 +15,18 @@ config.devServer = {
     port: webpackPort,
     host: "0.0.0.0",
 };
-config.entry = [
-    'webpack-dev-server/client?' + process.env.WEBPACK_URL,
-    'webpack/hot/only-dev-server',
-    './js/app/index'
-];
+config.entry = {
+    bundle: [
+        'webpack-dev-server/client?' + process.env.WEBPACK_URL,
+        'webpack/hot/only-dev-server',
+        './js/app/index'
+    ],
+    searchv1: [
+        'webpack-dev-server/client?' + process.env.WEBPACK_URL,
+        'webpack/hot/only-dev-server',
+        './js/app/searchv1'
+    ]
+};
 config.plugins = [
     new webpack.HotModuleReplacementPlugin()
 ];

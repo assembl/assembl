@@ -1,0 +1,47 @@
+.sk-layout__size-l .sk-top-bar__content {
+    width: 200px;
+}
+
+.sk-search-box {
+    &__icon {
+        margin: 5px 0 0 5px;
+    }
+    &.is-focused {
+        background:white;
+    }
+
+    &.is-focused &__text {
+        color: white;
+    }
+
+    &.is-focused &__text::-webkit-input-placeholder  {
+        color: white;
+    } 
+}
+
+.sk-hits-list {
+    height: 500px;
+    overflow: scroll;
+    flex-flow: row wrap;
+}
+
+.sk-layout {
+    position: relative;
+    top: -45px;
+    &__top-bar {
+        height: 50px;
+        z-index: 100;
+        position: relative;
+        background-color: transparent;
+        box-shadow: none;
+        .sk-search-box {
+            background-color: #9013FE;
+        }
+    }
+    &__body{
+        z-index: 99;
+        position: relative;
+        background-color: #ffffff;
+        box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+    }
+}
