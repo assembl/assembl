@@ -108,6 +108,11 @@ export default class Search extends React.Component {
     // };
   }
 
+  // <DynamicRangeFilter
+  //   field="creation_date"
+  //   id="creation_date"
+  //   title="Creation date"
+  // />
   render() {
     return (
       <SearchkitProvider searchkit={this.searchkit}>
@@ -121,11 +126,6 @@ export default class Search extends React.Component {
           </TopBar>
           <LayoutBody>
             <SideBar>
-              <DynamicRangeFilter
-                field="creation_date"
-                id="creation_date"
-                title="Creation date"
-              />
               <MenuFilter
                 field="type"
                 id="type"
