@@ -9,13 +9,23 @@ a {
   color: $link-color;
   text-decoration: none;
 
+  &:active {
+    color: $link-active-color;
+    text-decoration: none;
+  }
+
+  &:focus {
+    color: $link-hover-color;
+    text-decoration: none;
+  }
+
   &:hover {
     color: $link-hover-color;
     text-decoration: none;
   }
 
-  &:active {
-    color: $link-active-color;
+  &:visited {
+    color: $link-hover-color;
     text-decoration: none;
   }
 }
@@ -144,6 +154,11 @@ input {
 .code {
   color: $grey3;
   display: inline-block;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
 }
 
 #pDebug {

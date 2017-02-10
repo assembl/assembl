@@ -1,16 +1,19 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
-import { Grid, Col } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
+import SignupForm from '../components/login/signupForm';
+import SignUpConfirm from '../components/login/signUpConfirm';
 
 class Signup extends React.Component {
   render() {
+    const isAccountCreated = location.hash === '#success';
     return (
       <Grid fluid>
-        <div className="max-container">
-          <Col xs={12} sm={12}>
-            <Translate value="signup.panelTitle" />
+        <Row className="max-container">
+          <Col xs={12} md={6} className="col-centered">
+            {!isAccountCreated && <SignupForm />}
+            {isAccountCreated && <SignUpConfirm />}
           </Col>
-        </div>
+        </Row>
       </Grid>
     );
   }

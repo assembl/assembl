@@ -1,16 +1,19 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
-import { Grid, Col } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
+import SendPwdForm from '../components/login/sendPwdForm';
+import SendPwdConfirm from '../components/login/sendPwdConfirm';
 
 class ChangePassword extends React.Component {
   render() {
+    const isPwdSend = location.hash === '#success';
     return (
       <Grid fluid>
-        <div className="max-container">
-          <Col xs={12} sm={12}>
-            <Translate value="changePassword.panelTitle" />
+        <Row className="max-container">
+          <Col xs={12} md={6} className="col-centered">
+            {!isPwdSend && <SendPwdForm />}
+            {isPwdSend && <SendPwdConfirm />}
           </Col>
-        </div>
+        </Row>
       </Grid>
     );
   }

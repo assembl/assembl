@@ -20,7 +20,7 @@
         "react/prop-types": [0, { "ignore": false, "customValidators": false }],
         "max-len": [
             "warn",
-            150
+            500
         ],
         "func-names": [
             "warn",

@@ -29,19 +29,18 @@
 
 .login-view {
   margin: 60px auto;
+  max-width: 600px;
   text-align: left;
 
   .login {
     border-bottom: $box-border;
-    margin: 0 auto 20px;
+    margin: 0 5% 20px;
     padding: 0 0 20px;
-    width: 60%;
   }
 
   .signup {
-    margin: 0 auto;
+    margin: 0 5%;
     padding: 0 0 10px;
-    width: 60%;
   }
 }
 
@@ -49,38 +48,6 @@
   .profile-icon {
     .username {
       display: none;
-    }
-  }
-}
-
-@media screen and (min-width: 946px) {
-  .login-view {
-    width: 50%;
-  }
-}
-
-@media screen and (max-width: 945px) {
-  .login-view {
-    width: 60%;
-  }
-}
-
-@media screen and (max-width: 700px) {
-  .login-view {
-    width: 80%;
-  }
-}
-
-@media screen and (max-width: 530px) {
-  .login-view {
-    width: 100%;
-
-    .login {
-      width: 90%;
-    }
-
-    .signup {
-      width: 90%;
     }
   }
 }

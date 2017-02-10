@@ -9,6 +9,13 @@
   padding: 6px 50px;
   text-decoration: none;
 
+  &:active {
+    background-color: $btn-success-hover-bkg;
+    border-color: $btn-success-hover-border;
+    color: $btn-success-hover-txt;
+    text-decoration: none;
+  }
+
   &:hover {
     background-color: $btn-success-hover-bkg;
     border-color: $btn-success-hover-border;
@@ -21,6 +28,13 @@
     border-color: $btn-success-hover-border;
     color: $btn-success-hover-txt;
     outline: none;
+  }
+
+  &:visited {
+    background-color: $btn-success-hover-bkg;
+    border-color: $btn-success-hover-border;
+    color: $btn-success-hover-txt;
+    text-decoration: none;
   }
 }
 
