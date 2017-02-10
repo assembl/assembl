@@ -13,6 +13,7 @@ Installation and administration
 
    INSTALL
    backups
+   howtoupgrade
 
 Stack and architecture
 ----------------------
