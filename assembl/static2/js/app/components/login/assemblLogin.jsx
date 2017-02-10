@@ -16,10 +16,10 @@ class AsLogin extends React.Component {
           <form className="login" method="POST" action={`${rootPath}${debateData.slug}/home`}>
             <h4 className="title-4"><Translate value="login.alreadyAccount" /></h4>
             <FormGroup className="margin-m">
-              <FormControl type="text" name="identifier" placeholder={I18n.t('login.username')} />
+              <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
             </FormGroup>
             <FormGroup>
-              <FormControl type="password" name="password" placeholder={I18n.t('login.password')} />
+              <FormControl type="password" name="password" required placeholder={I18n.t('login.password')} />
             </FormGroup>
             <FormGroup>
               <Button type="submit" name="login" value={I18n.t('login.login')} className="button-success">

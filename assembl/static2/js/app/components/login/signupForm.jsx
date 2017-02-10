@@ -15,16 +15,16 @@ class SignupForm extends React.Component {
         <div className="box">
           <form className="signup" method="POST" action={`${rootPath}${debateData.slug}/signup#success`}>
             <FormGroup className="margin-m">
-              <FormControl type="text" name="name" placeholder={I18n.t('login.fullName')} />
+              <FormControl type="text" name="name" required placeholder={I18n.t('login.fullName')} />
             </FormGroup>
             <FormGroup>
-              <FormControl type="text" name="email" placeholder={I18n.t('login.email')} />
+              <FormControl type="email" name="email" required placeholder={I18n.t('login.email')} />
             </FormGroup>
             <FormGroup>
-              <FormControl type="password" name="password" placeholder={I18n.t('login.password')} />
+              <FormControl type="password" name="password" required placeholder={I18n.t('login.password')} />
             </FormGroup>
             <FormGroup>
-              <FormControl type="password" name="password2" placeholder={I18n.t('login.password2')} />
+              <FormControl type="password" name="password2" required placeholder={I18n.t('login.password2')} />
             </FormGroup>
             <FormGroup>
               <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-success">

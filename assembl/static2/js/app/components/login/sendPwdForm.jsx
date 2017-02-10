@@ -16,7 +16,7 @@ class SendPwdForm extends React.Component {
         <div className="box">
           <form className="resendPwd" method="POST" action={`${rootPath}${debateData.slug}/changePassword#success`}>
             <FormGroup className="margin-m">
-              <FormControl type="text" name="identifier" placeholder={I18n.t('login.username')} />
+              <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
             </FormGroup>
             <FormGroup>
               <Button type="submit" name="change_password" value={I18n.t('login.send')} className="button-success">
