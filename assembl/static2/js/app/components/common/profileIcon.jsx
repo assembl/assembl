@@ -12,15 +12,14 @@ class ProfileIcon extends React.Component {
     const { debateData } = this.props.debate;
     const { users, usersLoading, usersError } = this.props.users;
     const { rootPath, connectedUserId } = this.props.context;
-    const isCurrentUserConnected = connectedUserId ? true : false;
     return (
       <div className="right profile-icon">
-        {!isCurrentUserConnected &&
+        {!connectedUserId &&
           <Link to={`${rootPath}${debateData.slug}/login`}>
             <span className="connection"><Translate value="navbar.connexion" /></span>
           </Link>
         }
-        {isCurrentUserConnected &&
+        {connectedUserId &&
           <div>
             {usersLoading && <Loader textHidden />}
             {users &&
