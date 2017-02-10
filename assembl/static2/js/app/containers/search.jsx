@@ -140,13 +140,13 @@ export default class Search extends React.Component {
                   />
                 </ActionBarRow>
                 <ActionBarRow>
-                  Affichage par : <PageSizeSelector options={[5, 10, 20]} />
+                  Affichage par : <PageSizeSelector options={[20, 50, 100]} />
                   <SelectedFilters />
                   <ResetFilters />
                 </ActionBarRow>
               </ActionBar>
               <Hits
-                hitsPerPage={5}
+                hitsPerPage={20}
                 highlightFields={queryFields}
                 itemComponent={HitItem}
                 mod="sk-hits-list"
