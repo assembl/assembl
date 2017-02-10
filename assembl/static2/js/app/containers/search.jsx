@@ -96,6 +96,7 @@ export default class Search extends React.Component {
       }
       modifiedQuery.query = { bool: { filter: filters } };
       if (simpleQueryString) {
+        simpleQueryString.query = `${simpleQueryString.query}*`;
         modifiedQuery.query.bool.must = [
           { simple_query_string: simpleQueryString }
         ];
@@ -114,7 +115,7 @@ export default class Search extends React.Component {
           <TopBar>
             <SearchBox
               autofocus={false}
-              searchOnChange={false}
+              searchOnChange
               queryFields={queryFields}
             />
           </TopBar>
