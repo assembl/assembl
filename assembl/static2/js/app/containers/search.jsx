@@ -20,7 +20,7 @@ import {
    TopBar,
    ActionBar, ActionBarRow
 } from 'searchkit';
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 import 'searchkit/theming/theme.scss';
 import '../../../css/views/search.scss';
