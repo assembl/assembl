@@ -3,7 +3,7 @@ import React from 'react';
 
 import {
   MenuFilter,
-  DynamicRangeFilter,
+  // DynamicRangeFilter,
   SearchBox,
   Hits,
   HitsStats,
