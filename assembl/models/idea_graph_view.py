@@ -13,6 +13,7 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     ForeignKey,
+    UniqueConstraint,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import join
@@ -91,6 +92,10 @@ class IdeaGraphView(DiscussionBoundBase):
 class SubGraphIdeaAssociation(DiscussionBoundBase):
     """Association table saying that an Idea is part of a ExplicitSubGraphView"""
     __tablename__ = 'sub_graph_idea_association'
+    __table_args__ = (
+        UniqueConstraint("idea_id", "sub_graph_id"),
+    )
+
     id = Column(Integer, primary_key=True)
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
@@ -157,6 +162,9 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
     """Association table saying that an IdeaLink is part of a ExplicitSubGraphView"""
     __tablename__ = 'sub_graph_idea_link_association'
     id = Column(Integer, primary_key=True)
+    __table_args__ = (
+        UniqueConstraint("idea_link_id", "sub_graph_id"),
+    )
 
     sub_graph_id = Column(Integer, ForeignKey(
         'explicit_sub_graph_view.id', ondelete="CASCADE", onupdate="CASCADE"),
