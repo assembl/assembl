@@ -57,8 +57,8 @@ class ElasticChanges(threading.local):
     def index_content(self, content):
         self._join()
         uid, data = get_data(content)
-        doc_type = get_doc_type_from_uid(uid)
         if data:
+            doc_type = get_doc_type_from_uid(uid)
             if uid in self._unindex:
                 del self._unindex[uid]
 
