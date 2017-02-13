@@ -102,9 +102,10 @@ class ElasticChanges(threading.local):
 
             def get_actions(index, unindex):
                 for uid, data in index.iteritems():
+                    doc_type = get_doc_type_from_uid(uid)
                     action = {'_op_type': 'index',
                               '_index': index_name,
-                              '_type': data['doc_type'],
+                              '_type': doc_type,
                               '_id': uid,
                               '_source': data}
                     yield action

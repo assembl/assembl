@@ -32,8 +32,13 @@ def intermediate_commit(contents):
 
 
 def get_indexable_contents(session):
-    from assembl.models import Post # TODO Idea, IdeaAnnouncement, Users
+    from assembl.models import Post, User # TODO Idea, IdeaAnnouncement
     from assembl.models.post import PublicationStates
+
+    query = session.query(User)
+    for user in query:
+        yield user
+
     AllPost = with_polymorphic(Post, '*')
     query = session.query(AllPost
         ).filter(AllPost.tombstone_condition()
@@ -48,10 +53,15 @@ def reindex_content(content, action='update'):
     by the after_insert/update/delete sqlalchemy events.
     """
     from assembl.models.post import PublicationStates
-    from assembl.models import Post, IdeaContentLink
-    indexed_contents = (Post,)
+    from assembl.models import (
+        AgentStatusInDiscussion, Post, User, IdeaContentLink)
+    indexed_contents = (Post, User)
     if action == 'delete' and isinstance(content, indexed_contents):
         changes.unindex_content(content)
+    elif isinstance(content, User):
+        changes.index_content(content)
+    elif isinstance(content, AgentStatusInDiscussion):
+        reindex_content(content.agent_profile)
     elif isinstance(content, Post):
         if (content.publication_state == PublicationStates.PUBLISHED and
                 not content.hidden and content.tombstone_date is None):

@@ -23,7 +23,7 @@ TEXT = {
     'type': 'text',
 }
 
-COMMON = {
+COMMON_POST = {
     'discussion_id': LONG,
     'creation_date': DATE,
     'id': LONG,
@@ -34,7 +34,7 @@ COMMON = {
     'url': KEYWORD,
 }
 
-_POST_MAPPING = COMMON.copy()
+_POST_MAPPING = COMMON_POST.copy()
 _POST_MAPPING.update({
     'body_fr': TEXT,
     'subject_fr': TEXT,
@@ -42,19 +42,26 @@ _POST_MAPPING.update({
     'subject_und': TEXT,
     'body_en': TEXT,
     'subject_en': TEXT,
-    'subtype': KEYWORD,
 })
 
-_SYNTHESIS_MAPPING = COMMON.copy()
+_SYNTHESIS_MAPPING = COMMON_POST.copy()
 _SYNTHESIS_MAPPING.update({
     'subject': TEXT,
     'introduction': TEXT,
     'conclusion': TEXT,
 })
 
+_USER_MAPPING = {
+    'discussion_id': LONG,
+    'creation_date': DATE,
+    'id': LONG,
+    'name': TEXT,
+}
+
 MAPPINGS = {
     'post': _POST_MAPPING,
     'synthesis': _SYNTHESIS_MAPPING,
+    'user': _USER_MAPPING,
 }
 
 

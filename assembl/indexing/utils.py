@@ -47,25 +47,34 @@ def delete_index(index_name):
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Post, SynthesisPost
-    if isinstance(content, Post):
+    from assembl.models import Post, SynthesisPost, User
+    if isinstance(content, User):
         data = {}
-        data['doc_type'] = 'post'
+#        data['url'] = content.get_url()
+        for attr in ('creation_date', 'id'):
+            data[attr] = getattr(content, attr)
+
+        data['name'] = content.name
+        # get all discussions that the user is in via AgentStatusInDiscussion
+        data['discussion_id'] = [s.discussion_id
+                                 for s in content.agent_status_in_discussion]
+        return get_uid(content), data
+
+    elif isinstance(content, Post):
+        data = {}
         data['url'] = content.get_url()
         for attr in ('discussion_id', 'creation_date', 'id', 'parent_id',
                      'creator_id'):
             data[attr] = getattr(content, attr)
 
-        data['subtype'] = content.type
+        data['type'] = content.type  # this is the subtype (assembl_post, email...)
 #        data['publishes_synthesis_id'] = getattr(
 #            content, 'publishes_synthesis_id', None)
         if isinstance(content, SynthesisPost):
-            data['type'] = 'synthesis'
             data['subject'] = content.publishes_synthesis.subject
             data['introduction'] = content.publishes_synthesis.introduction
             data['conclusion'] = content.publishes_synthesis.conclusion
         else:
-            data['type'] = 'post'
             for entry in content.body.entries:
                 data['body_' + entry.locale_code] = entry.value
 
@@ -79,7 +88,16 @@ def get_data(content):
 
 def get_uid(content):
     """Return a global unique identifier"""
-    return '{}:{}'.format(content.external_typename(), content.id)
+    from assembl.models import Post, SynthesisPost, User
+    if isinstance(content, User):
+        doc_type = 'user'
+    elif isinstance(content, Post):
+        if isinstance(content, SynthesisPost):
+            doc_type = 'synthesis'
+        else:
+            doc_type = ' post'
+
+    return '{}:{}'.format(doc_type, content.id)
 
 
 def get_doc_type_from_uid(uid):

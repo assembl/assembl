@@ -46,7 +46,7 @@ const truncate = (text) => {
 // TODO issue with sidebar range filter, it sometime disappears
 // (when there is only 1 result), and the selected range is not kept (maybe because of the date field...)
 
-const PostItem = (props) => {
+const PostHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
@@ -60,7 +60,7 @@ const PostItem = (props) => {
   );
 };
 
-const SynthesisItem = (props) => {
+const SynthesisHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
@@ -76,23 +76,39 @@ const SynthesisItem = (props) => {
   );
 };
 
+const UserHit = (props) => {
+  return (
+    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
+      <div className={props.bemBlocks.item('title')}>
+        <span>{ props.result._source.creation_date }</span>
+        <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.name', props.result._source.name)) }} />
+      </div>
+    </div>
+  );
+};
+
 const HitItem = (props) => {
-  if (props.result._source.type === 'synthesis') {
-    return SynthesisItem(props);
+  switch (props.result._type) {
+  case 'synthesis':
+    return SynthesisHit(props);
+  case 'user':
+    return UserHit(props);
+  default:
+    return PostHit(props);
   }
-  return PostItem(props);
 };
 
 const queryFields = [
+  'name',  // user
   'subject',  // synthesis
   'introduction',  // synthesis
   'conclusion',  // synthesis
-  'subject_und',
-  'subject_fr',
-  'subject_en',
-  'body_und',
-  'body_fr',
-  'body_en'
+  'subject_und', // post
+  'subject_fr', // post
+  'subject_en', // post
+  'body_und', // post
+  'body_fr', // post
+  'body_en' // post
 ];
 
 export default class Search extends React.Component {
@@ -163,7 +179,7 @@ export default class Search extends React.Component {
             <LayoutBody>
               <SideBar>
                 <MenuFilter
-                  field="type"
+                  field="_type"
                   id="type"
                   title="Types"
                 />
