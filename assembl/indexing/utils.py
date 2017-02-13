@@ -49,7 +49,6 @@ def get_data(content):
     return None if we don't index."""
     from assembl.models import Post
     if isinstance(content, Post):
-        # TODO index the can_use...
         data = {}
         data['doc_type'] = 'post'
         data['url'] = content.get_url()
@@ -61,10 +60,10 @@ def get_data(content):
             content, 'publishes_synthesis_id', False)
 
         for entry in content.body.entries:
-            data['body_' + entry.locale.code] = entry.value
+            data['body_' + entry.locale_code] = entry.value
 
         for entry in content.subject.entries:
-            data['subject_' + entry.locale.code] = entry.value
+            data['subject_' + entry.locale_code] = entry.value
 
         return get_uid(content), data
 

@@ -45,6 +45,7 @@ from ..auth import *
 from .decl_enums import EnumSymbol, DeclEnumType
 from .utils import get_global_base_url
 from ..lib.config import get_config
+from ..indexing.reindex import reindex_content
 
 atexit_engines = []
 log = logging.getLogger('assembl')
@@ -1688,6 +1689,7 @@ class Tombstone(object):
 def orm_update_listener(mapper, connection, target):
     if getattr(target, '__history_table__', None):
         return
+    reindex_content(target, 'update')
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
         target.send_to_changes(connection, CrudOperation.UPDATE)
@@ -1696,6 +1698,7 @@ def orm_update_listener(mapper, connection, target):
 def orm_insert_listener(mapper, connection, target):
     if getattr(target, '__history_table__', None):
         return
+    reindex_content(target, 'insert')
     target.send_to_changes(connection, CrudOperation.CREATE)
 
 
@@ -1704,6 +1707,7 @@ def orm_delete_listener(mapper, connection, target):
         connection.info['cdict'] = {}
     if getattr(target, '__history_table__', None):
         return
+    reindex_content(target, 'delete')
     target.tombstone().send_to_changes(connection, CrudOperation.DELETE)
 
 

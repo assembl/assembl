@@ -43,6 +43,27 @@ def get_indexable_contents(session):
         yield post
 
 
+def reindex_content(content, action='update'):
+    """Index, reindex or unindex content. This function is called
+    by the after_insert/update/delete sqlalchemy events.
+    """
+    from assembl.models.post import PublicationStates
+    from assembl.models import Post, IdeaContentLink
+    indexed_contents = (Post,)
+    if action == 'delete' and isinstance(content, indexed_contents):
+        changes.unindex_content(content)
+    elif isinstance(content, Post):
+        if (content.publication_state == PublicationStates.PUBLISHED and
+                not content.hidden and content.tombstone_date is None):
+            changes.index_content(content)
+        else:
+            changes.unindex_content(content)
+    elif isinstance(content, IdeaContentLink):
+        # A AssemblPost is indexed before any IdeaRelatedPostLink is created,
+        # so be sure to reindex content.content if we have a IdeaContentLink
+        reindex_content(content.content)
+
+
 def batch_reindex_elasticsearch(session):
     for content in intermediate_commit(
             reindex_in_elasticsearch(
