@@ -56,15 +56,17 @@ def remove_idea_from_synthesis(request):
     if isinstance(graph_view, Synthesis) and not graph_view.is_next_synthesis:
         raise HTTPBadRequest("Synthesis is published")
     idea = ctx._instance
-    link = SubGraphIdeaAssociation(idea=idea, sub_graph=graph_view)
-    duplicate = link.find_duplicate(True)
-    link.delete()
-    if duplicate:
-        duplicate.delete()
-        graph_view.db.expire(graph_view, ["idea_assocs"])
-        graph_view.send_to_changes()
-        return {
-            "@tombstone": idea.uri()
-        }
-    else:
+
+    link_query = graph_view.db.query(
+        SubGraphIdeaAssociation).filter_by(idea=idea, sub_graph=graph_view)
+    if not link_query.count():
         raise HTTPNotFound("Idea not in view")
+
+    link_query.delete(synchronize_session=False)
+
+    # Send the view on the socket, and recalculate ideas linked to the view
+    graph_view.db.expire(graph_view, ["idea_assocs"])
+    graph_view.send_to_changes()
+    return {
+        "@tombstone": request.url
+    }

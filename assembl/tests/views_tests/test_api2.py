@@ -75,6 +75,12 @@ def test_add_idea_in_synthesis(
         idea=subidea_1_1, sub_graph=synthesis).first()
     assert idea_assoc
 
+    # remove this subidea from synthesis
+    remove_idea_result = test_app.delete(
+        '/data/Discussion/%d/syntheses/%d/ideas/%d' % (
+            discussion.id, synthesis.id, subidea_1_1.id))
+    assert remove_idea_result.status_code == 200
+
 
 def test_add_subidea_in_synthesis(
         discussion, test_app, synthesis_1, subidea_1_1, test_session):
