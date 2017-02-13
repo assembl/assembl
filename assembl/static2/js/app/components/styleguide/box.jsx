@@ -4,13 +4,13 @@ class Box extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="title-2 underline" id="box">BOX</h2>
+        <h2 className="dark-title-2 underline" id="box">BOX</h2>
         <section>
           <div className="box-title">Box title</div>
           <div className="box">Box content</div>
         </section>
         <section>
-          <h3 className="title-3">Code</h3>
+          <h3 className="dark-title-3">Code</h3>
           <div className="box">
             <div>
               <div className="code">

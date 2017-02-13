@@ -19,7 +19,7 @@ class GlobalFunctions {
     return discussionId;
   }
   static getConnectedUserId() {
-    const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
+    const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : '1296';
     return userId;
   }
 }

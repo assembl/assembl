@@ -9,22 +9,7 @@ a {
   color: $link-color;
   text-decoration: none;
 
-  &:active {
-    color: $link-active-color;
-    text-decoration: none;
-  }
-
-  &:focus {
-    color: $link-hover-color;
-    text-decoration: none;
-  }
-
   &:hover {
-    color: $link-hover-color;
-    text-decoration: none;
-  }
-
-  &:visited {
     color: $link-hover-color;
     text-decoration: none;
   }
@@ -53,20 +38,12 @@ input {
 }
 
 .app-content {
-  margin-bottom: $footer-height + 50px;
-  margin-top: 80px;
+  margin: 80px 0 0;
 }
 
 .max-container {
   margin: 0 auto;
   max-width: $app-max-width;
-}
-
-.fixed-bottom {
-  bottom: 0;
-  position: fixed;
-  width: 100%;
-  z-index: 1000;
 }
 
 .background-light {
@@ -98,7 +75,7 @@ input {
 }
 
 .border-right {
-  border-right: $box-border;
+  border-right: $border-color;
 }
 
 .border-left {

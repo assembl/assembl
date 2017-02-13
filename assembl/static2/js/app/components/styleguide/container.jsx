@@ -4,8 +4,8 @@ class Container extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="title-2 underline" id="container">CONTAINER</h2>
-        <h3 className="title-3">Code</h3>
+        <h2 className="dark-title-2 underline" id="container">CONTAINER</h2>
+        <h3 className="dark-title-3">Code</h3>
         <div className="box">
           <div>
             <div className="code">&lt;Grid fluid&gt;</div>

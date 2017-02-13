@@ -14,7 +14,7 @@ class AsLogin extends React.Component {
         <div className="box-title">{debateData.topic}</div>
         <div className="box">
           <form className="login" method="POST" action={`${rootPath}${debateData.slug}/home`}>
-            <h4 className="title-4"><Translate value="login.alreadyAccount" /></h4>
+            <h4 className="dark-title-4"><Translate value="login.alreadyAccount" /></h4>
             <FormGroup className="margin-m">
               <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
             </FormGroup>
@@ -22,7 +22,7 @@ class AsLogin extends React.Component {
               <FormControl type="password" name="password" required placeholder={I18n.t('login.password')} />
             </FormGroup>
             <FormGroup>
-              <Button type="submit" name="login" value={I18n.t('login.login')} className="button-success">
+              <Button type="submit" name="login" value={I18n.t('login.login')} className="button-submit button-dark">
                 <Translate value="login.login" />
               </Button>
             </FormGroup>
@@ -31,8 +31,8 @@ class AsLogin extends React.Component {
             </Link>
           </form>
           <div className="signup">
-            <h4 className="title-4"><Translate value="login.noAccount" /></h4>
-            <Link className="button-link margin-s" to={`${rootPath}${debateData.slug}/signup`}>
+            <h4 className="dark-title-4"><Translate value="login.noAccount" /></h4>
+            <Link className="button-link button-dark margin-s" to={`${rootPath}${debateData.slug}/signup`}>
               <Translate value="login.signUp" />
             </Link>
           </div>

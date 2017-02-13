@@ -21,8 +21,13 @@ class PartnersSection extends React.Component {
           <Grid fluid className="background-light">
             <div className="max-container">
               <div className="partners">
-                <h3 className="title-3"><Translate value="home.partners" /></h3>
-                <div className="margin-m">
+                <div className="title-section">
+                  <div className="title-border">&nbsp;</div>
+                  <h1 className="dark-title-1">
+                    <Translate value="home.partners" />
+                  </h1>
+                </div>
+                <div className="margin-l">
                   {partners.map((partner) => {
                     return (
                       <div className="partner-logo" key={partner['@id']}>

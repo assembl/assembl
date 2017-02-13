@@ -1,10 +1,11 @@
 .nav-bar {
   background-color: $navbar-bkg;
   border: $navbar-border;
+  box-shadow: $box-shadow;
   height: 80px;
 
   .navbar-logo {
-    padding: 15px 20px 15px 0;
+    padding: 15px 15px 15px 0;
 
     img {
       height: 50px;
@@ -19,7 +20,7 @@
   .navbar-menu-item {
     color: $navbar-text-color;
     font-family: $font-family2;
-    font-size: $font-size-s;
+    font-size: $font-size-xxs;
     font-weight: 700;
     letter-spacing: .4px;
     line-height: 80px;
@@ -27,7 +28,7 @@
     text-transform: uppercase;
 
     &:hover {
-      color: $active-link-color;
+      color: $navbar-active-text-color;
       text-decoration: none;
     }
 
@@ -37,7 +38,7 @@
   }
 
   .active {
-    color: $active-link-color;
+    color: $navbar-active-text-color;
   }
 
   .burgermenu-icon {
@@ -100,6 +101,11 @@
 
 @media screen and (min-width: 768px) {
   .nav-bar {
+
+    .navbar-home-item {
+      display: none;
+    }
+
     .burgermenu-icon {
       display: none;
     }
@@ -107,13 +113,25 @@
     .nav-burger-menu {
       display: none;
     }
+
+    .logo-active {
+      border-bottom: $border-active;
+      padding-bottom: 30px;
+    }
   }
 }
 
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 420px) {
   .nav-bar {
     .navbar-icons {
-      padding: 28px 10px;
+      padding: 28px 0;
+    }
+
+    .loader {
+      svg {
+        margin: 0;
+        padding: 0;
+      }
     }
   }
 }

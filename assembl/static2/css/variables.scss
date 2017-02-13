@@ -4,28 +4,21 @@ $grey0: #f5f8fa;
 $grey1: #f3f0f4;
 $grey2: #9b9b9b;
 $grey3: #4a4a4a;
+$grey4: #1d1d1d;
 $green: #3bb848;
+$lightgreen: #93e79d;
+$blue: #140ca0;
+$purple: #5404d7;
+$opacity-purple: rgba(84, 4, 215, .5);
 
-$radius: 3px;
-
-$border-weight1: 1px;
-$border-weight2: 2px;
-
-$font-size-xxs: 8px;
-$font-size-xs: 12px;
-$font-size-s: 14px;
-$font-size-m: 16px;
-$font-size-l: 22px;
-$font-size-xl: 32px;
-
-$shadow: 1px 1px 3px 0 $grey1;
+$app-max-width: 1400px;
 
 $fonts-dir: '/static2/fonts';
 $img-dir: '/static2/img';
 
 @font-face {
   font-family: 'avenirDemiCn';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-DemiCn.otf');
+  src: url('#{$fonts-dir}/AvenirNextLTPro-Regular.otf');
 }
 
 @font-face {
@@ -35,56 +28,65 @@ $img-dir: '/static2/img';
 
 $font-family: 'Open Sans', sans-serif;
 $font-family2: 'avenirDemiCn';
-$font-family3: 'avenirCn';
+$font-family3: 'avenirDemiCn';
 
-$app-max-width: 1400px;
-$footer-height: 130px;
+$font-size-xxxs: 8px;
+$font-size-xxs: 11px;
+$font-size-xs: 12px;
+$font-size-s: 14px;
+$font-size-m: 16px;
+$font-size-l: 22px;
+$font-size-xl: 32px;
+
+$first-color: $purple;
+$second-color: $lightgreen;
+$third-color: $blue;
+$opacity-color: $opacity-purple;
+
+$border-color: 1px solid $second-color;
+$border-title: 3px solid $second-color;
+$border-active: 4px solid $first-color;
 
 $page-bkg-light: $white;
 $page-bkg-grey: $grey0;
-$page-bkg-dark: $grey3;
+$page-bkg-dark: $grey4;
 
-$link-color: $grey3;
-$link-hover-color: $green;
-$link-active-color: $green;
+$link-color: $third-color;
+$link-hover-color: $black;
 
-$btn-success-bkg: $green;
-$btn-success-border: $green;
-$btn-success-txt: $white;
+$btn-radius: 0;
+$btn-text-transform: uppercase;
+$btn-light-border: 2px solid $second-color;
+$btn-dark-border: 2px solid $first-color;
+$btn-light-txt: $white;
+$btn-dark-txt: $black;
+$btn-light-bkg: none;
+$btn-dark-bkg: $white;
 
-$btn-success-hover-bkg: $green;
-$btn-success-hover-border: $green;
-$btn-success-hover-txt: $white;
-
-$btn-cancel-bkg: $grey1;
-$btn-cancel-border: $grey2;
-$btn-cancel-txt: $grey3;
-
-$btn-cancel-hover-bkg: $grey1;
-$btn-cancel-hover-border: $grey2;
-$btn-cancel-hover-txt: $grey3;
-
-$title1-color: $black;
-$title2-color: $black;
-$title3-color: $grey3;
-$title4-color: $grey3;
-$title5-color: $grey3;
+$title1-dark-color: $first-color;
+$title2-dark-color: $first-color;
+$title3-dark-color: $first-color;
+$title4-dark-color: $first-color;
+$title5-dark-color: $first-color;
+$title1-light-color: $white;
+$title2-light-color: $white;
+$title3-light-color: $white;
+$title4-light-color: $white;
+$title5-light-color: $white;
 $title1-size: $font-size-xl;
 $title2-size: $font-size-l;
 $title3-size: $font-size-m;
 $title4-size: $font-size-s;
 $title5-size: $font-size-xs;
 
-$active-link-color: $green;
-
 $navbar-bkg: $white;
 $navbar-border: none;
-$navbar-text-color: $grey2;
+$navbar-text-color: $grey3;
+$navbar-active-text-color: $third-color;
 
-$box-shadow: $shadow;
+$box-shadow: 1px 1px 3px 0 $grey1;
 $box-bkg: $white;
-$button-link-border: $border-weight1 solid $btn-success-border;
-$box-border: $border-weight2 solid $grey1;
+$box-border: 2px solid $grey1;
 $box-title-bkg: $grey3;
 $box-title-txt: $white;
 

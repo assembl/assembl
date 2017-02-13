@@ -10,10 +10,10 @@ class Footer extends React.Component {
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
     return (
-      <Grid fluid className="background-dark fixed-bottom">
+      <Grid fluid className="background-dark">
         <div className="max-container">
           <div className="footer">
-            <p className="margin-l"><Translate value="footer.socialMedias" /></p>
+            <p><Translate value="footer.socialMedias" /></p>
             <div className="social-medias">
               <a href="http://www.facebook.com" target="_blank" rel="noopener noreferrer">
                 <img src="/static2/img/social/Facebook.svg" alt="Facebook" />

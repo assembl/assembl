@@ -27,7 +27,7 @@ class SignupForm extends React.Component {
               <FormControl type="password" name="password2" required placeholder={I18n.t('login.password2')} />
             </FormGroup>
             <FormGroup>
-              <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-success">
+              <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark">
                 <Translate value="login.signUp" />
               </Button>
             </FormGroup>

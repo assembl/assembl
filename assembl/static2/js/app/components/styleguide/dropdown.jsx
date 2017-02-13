@@ -5,7 +5,7 @@ class Dropdown extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="title-2 underline" id="dropdown">DROPDOWN</h2>
+        <h2 className="dark-title-2 underline" id="dropdown">DROPDOWN</h2>
         <section>
           <ul className="dropdown-xs" style={{ margin: 0 }}>
             <NavDropdown title="FR" id="nav-dropdown">
@@ -23,7 +23,7 @@ class Dropdown extends React.Component {
           </ul>
         </section>
         <section>
-          <h3 className="title-3">Code</h3>
+          <h3 className="dark-title-3">Code</h3>
           <div className="box">
             <div>
               <div className="code">

@@ -10,7 +10,7 @@ class NavigationMenu extends React.Component {
     const { rootPath } = this.props.context;
     return (
       <div>
-        <Link className="navbar-menu-item" activeClassName="active" to={`${rootPath}${debateData.slug}/home`}>
+        <Link className="navbar-menu-item navbar-home-item" activeClassName="active" to={`${rootPath}${debateData.slug}/home`}>
           <Translate value="navbar.home" />
         </Link>
         <Link className="navbar-menu-item" activeClassName="active" to={`${rootPath}${debateData.slug}/debate`}>

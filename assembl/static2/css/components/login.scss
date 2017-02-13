@@ -8,15 +8,13 @@
   }
 
   .username {
-    color: $black;
+    color: $navbar-active-text-color;
     font-size: $font-size-xs;
-    font-weight: 700;
   }
 
   .connection {
-    color: $black;
+    color: $navbar-text-color;
     font-size: $font-size-xs;
-    font-weight: 700;
   }
 
   img {
@@ -49,5 +47,11 @@
     .username {
       display: none;
     }
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .profile-icon {
+    margin: 1px 10px 0 15px;
   }
 }
