@@ -47,23 +47,30 @@ def delete_index(index_name):
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Post
+    from assembl.models import Post, SynthesisPost
     if isinstance(content, Post):
         data = {}
         data['doc_type'] = 'post'
         data['url'] = content.get_url()
-        for attr in ('discussion_id', 'creation_date', 'id', 'type', 'parent_id',
+        for attr in ('discussion_id', 'creation_date', 'id', 'parent_id',
                      'creator_id'):
             data[attr] = getattr(content, attr)
 
-        data['publishes_synthesis_id'] = getattr(
-            content, 'publishes_synthesis_id', False)
+        data['subtype'] = content.type
+#        data['publishes_synthesis_id'] = getattr(
+#            content, 'publishes_synthesis_id', None)
+        if isinstance(content, SynthesisPost):
+            data['type'] = 'synthesis'
+            data['subject'] = content.publishes_synthesis.subject
+            data['introduction'] = content.publishes_synthesis.introduction
+            data['conclusion'] = content.publishes_synthesis.conclusion
+        else:
+            data['type'] = 'post'
+            for entry in content.body.entries:
+                data['body_' + entry.locale_code] = entry.value
 
-        for entry in content.body.entries:
-            data['body_' + entry.locale_code] = entry.value
-
-        for entry in content.subject.entries:
-            data['subject_' + entry.locale_code] = entry.value
+            for entry in content.subject.entries:
+                data['subject_' + entry.locale_code] = entry.value
 
         return get_uid(content), data
 

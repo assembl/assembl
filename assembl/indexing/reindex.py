@@ -32,7 +32,7 @@ def intermediate_commit(contents):
 
 
 def get_indexable_contents(session):
-    from assembl.models import Post # TODO Synthesis, Idea, IdeaAnnouncement
+    from assembl.models import Post # TODO Idea, IdeaAnnouncement, Users
     from assembl.models.post import PublicationStates
     AllPost = with_polymorphic(Post, '*')
     query = session.query(AllPost

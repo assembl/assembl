@@ -46,7 +46,7 @@ const truncate = (text) => {
 // TODO issue with sidebar range filter, it sometime disappears
 // (when there is only 1 result), and the selected range is not kept (maybe because of the date field...)
 
-const HitItem = (props) => {
+const PostItem = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
@@ -60,7 +60,33 @@ const HitItem = (props) => {
   );
 };
 
+const SynthesisItem = (props) => {
+  return (
+    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
+      <div className={props.bemBlocks.item('title')}>
+        <span>{ props.result._source.creation_date }</span>
+        <a
+          href={props.result._source.url}
+          dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject', props.result._source.subject) }}
+        />
+        <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.introduction', props.result._source.introduction)) }} />
+        <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.conclusion', props.result._source.conclusion)) }} />
+      </div>
+    </div>
+  );
+};
+
+const HitItem = (props) => {
+  if (props.result._source.type === 'synthesis') {
+    return SynthesisItem(props);
+  }
+  return PostItem(props);
+};
+
 const queryFields = [
+  'subject',  // synthesis
+  'introduction',  // synthesis
+  'conclusion',  // synthesis
   'subject_und',
   'subject_fr',
   'subject_en',
@@ -106,6 +132,15 @@ export default class Search extends React.Component {
     // this.searchkit.translateFunction = (key) => {
     //   return { 'pagination.next': 'Next Page', 'pagination.previous': 'Previous Page' }[key];
     // };
+    this.state = { show: true };
+    // this.removalFn = this.searchkit.addResultsListener((results) => {
+    //   console.log(results);
+    //   if (results.hits.hits.length === 0) {
+    //     this.setState({ show: false });
+    //   } else {
+    //     this.setState({ show: true });
+    //   }
+    // });
   }
 
   // <DynamicRangeFilter
@@ -124,37 +159,40 @@ export default class Search extends React.Component {
               queryFields={queryFields}
             />
           </TopBar>
-          <LayoutBody>
-            <SideBar>
-              <MenuFilter
-                field="type"
-                id="type"
-                title="Types"
-              />
-            </SideBar>
-            <LayoutResults>
-              <ActionBar>
-                <ActionBarRow>
-                  <HitsStats
-                    translations={{ 'hitstats.results_found': '{hitCount} results found' }}
-                  />
-                </ActionBarRow>
-                <ActionBarRow>
-                  Affichage par : <PageSizeSelector options={[20, 50, 100]} />
-                  <SelectedFilters />
-                  <ResetFilters />
-                </ActionBarRow>
-              </ActionBar>
-              <Hits
-                hitsPerPage={20}
-                highlightFields={queryFields}
-                itemComponent={HitItem}
-                mod="sk-hits-list"
-              />
-              <InitialLoader />
-              <Pagination showNumbers />
-            </LayoutResults>
-          </LayoutBody>
+          { this.state.show ?
+            <LayoutBody>
+              <SideBar>
+                <MenuFilter
+                  field="type"
+                  id="type"
+                  title="Types"
+                />
+              </SideBar>
+              <LayoutResults>
+                <ActionBar>
+                  <ActionBarRow>
+                    <HitsStats
+                      translations={{ 'hitstats.results_found': '{hitCount} results found' }}
+                    />
+                  </ActionBarRow>
+                  <ActionBarRow>
+                    Affichage par : <PageSizeSelector options={[20, 50, 100]} />
+                    <SelectedFilters />
+                    <ResetFilters />
+                  </ActionBarRow>
+                </ActionBar>
+                <Hits
+                  hitsPerPage={20}
+                  highlightFields={queryFields}
+                  itemComponent={HitItem}
+                  mod="sk-hits-list"
+                />
+                <InitialLoader />
+                <Pagination showNumbers />
+              </LayoutResults>
+            </LayoutBody>
+          : null
+          }
         </Layout>
       </SearchkitProvider>
     );

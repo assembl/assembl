@@ -13,29 +13,48 @@ KEYWORD = {
     'type': 'keyword'
 }
 
+LONG = {
+    'index': True,
+    'type': 'long',
+}
+
 TEXT = {
     'index': True,
     'type': 'text',
 }
 
-_POST_MAPPING = {
+COMMON = {
+    'discussion_id': LONG,
     'creation_date': DATE,
-    'id': KEYWORD,
+    'id': LONG,
+    'parent_id': LONG,
+    'creator_id': LONG,
+#    'publishes_synthesis_id': KEYWORD,
+    'type': KEYWORD,
+    'url': KEYWORD,
+}
+
+_POST_MAPPING = COMMON.copy()
+_POST_MAPPING.update({
     'body_fr': TEXT,
     'subject_fr': TEXT,
     'body_und': TEXT,
     'subject_und': TEXT,
     'body_en': TEXT,
     'subject_en': TEXT,
-    'type': KEYWORD,
-    'parent_id': KEYWORD,
-    'creator_id': KEYWORD,
-    'publishes_synthesis_id': KEYWORD,
-    'url': KEYWORD,
-}
+    'subtype': KEYWORD,
+})
+
+_SYNTHESIS_MAPPING = COMMON.copy()
+_SYNTHESIS_MAPPING.update({
+    'subject': TEXT,
+    'introduction': TEXT,
+    'conclusion': TEXT,
+})
 
 MAPPINGS = {
-    'post': _POST_MAPPING
+    'post': _POST_MAPPING,
+    'synthesis': _SYNTHESIS_MAPPING,
 }
 
 
