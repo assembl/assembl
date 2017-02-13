@@ -7,10 +7,10 @@ import MapStateToProps from '../../store/mapStateToProps';
 class NavigationMenu extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.path;
+    const { rootPath } = this.props.context;
     return (
       <div>
-        <Link className="navbar-menu-item" activeClassName="active" to={`${rootPath}${debateData.slug}/home`}>
+        <Link className="navbar-menu-item navbar-home-item" activeClassName="active" to={`${rootPath}${debateData.slug}/home`}>
           <Translate value="navbar.home" />
         </Link>
         <Link className="navbar-menu-item" activeClassName="active" to={`${rootPath}${debateData.slug}/debate`}>

@@ -1,21 +1,22 @@
 .dropdown-xs {
   font-size: $font-size-xs;
+  list-style-type: none;
   margin: 0 auto;
   padding: 4px 0 0;
   width: 30px;
 
   .dropdown-toggle {
-    color: $black;
+    color: $third-color;
     font-size: $font-size-xs;
     text-transform: uppercase;
 
     &:hover {
-      color: $black;
+      color: $third-color;
       text-decoration: none;
     }
 
     &:focus {
-      color: $black;
+      color: $third-color;
       text-decoration: none;
     }
   }
@@ -24,13 +25,23 @@
     min-width: 60px;
 
     a {
+      color: $third-color;
       font-size: $font-size-xs;
       text-transform: uppercase;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .caret {
+      color: $third-color;
     }
   }
 }
 
 .dropdown-xl {
+  list-style-type: none;
   text-transform: uppercase;
 
   .dropdown {
@@ -63,6 +74,7 @@
     }
 
     &:focus {
+      outline: none;
       text-decoration: none;
     }
   }

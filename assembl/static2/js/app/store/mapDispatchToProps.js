@@ -1,5 +1,5 @@
 import { setLocale } from 'react-redux-i18n';
-import PathActions from '../actions/pathActions';
+import ContextActions from '../actions/contextActions';
 import DebateActions from '../actions/debateActions';
 import PostsActions from '../actions/postsActions';
 import UsersActions from '../actions/usersActions';
@@ -7,20 +7,20 @@ import PartnersActions from '../actions/partnersActions';
 
 const MapDispatchToProps = (dispatch) => {
   return {
-    fetchDebateData: (id) => {
-      dispatch(DebateActions.fetchDebateData(id));
+    fetchDebateData: (debateId) => {
+      dispatch(DebateActions.fetchDebateData(debateId));
     },
-    fetchPosts: (id) => {
-      dispatch(PostsActions.fetchPosts(id));
+    fetchPosts: (debateId) => {
+      dispatch(PostsActions.fetchPosts(debateId));
     },
-    fetchUsers: (id) => {
-      dispatch(UsersActions.fetchUsers(id));
+    fetchUsers: (debateId, connectedUserId) => {
+      dispatch(UsersActions.fetchUsers(debateId, connectedUserId));
     },
-    fetchPartners: (id) => {
-      dispatch(PartnersActions.fetchPartners(id));
+    fetchPartners: (debateId) => {
+      dispatch(PartnersActions.fetchPartners(debateId));
     },
-    addPath: (path) => {
-      dispatch(PathActions.addPath(path));
+    addContext: (path, debateId, connectedUserId) => {
+      dispatch(ContextActions.addContext(path, debateId, connectedUserId));
     },
     changeLanguage: (locale) => {
       dispatch(setLocale(locale));

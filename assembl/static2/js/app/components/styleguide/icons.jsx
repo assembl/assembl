@@ -5,14 +5,13 @@ class Icons extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-2 underline" id="icons">ICONS</div>
+        <h2 className="dark-title-2 underline" id="icons">ICONS</h2>
         <section>
           <div className="rounded-icon"><Glyphicon glyph="search" /></div>
+          <div className="rounded-icon"><Glyphicon glyph="user" /></div>
           <div className="white-icon"><Glyphicon glyph="question-sign" /></div>
-          <div className="black-icon"><Glyphicon glyph="comment" /></div>
-          <div className="black-icon"><Glyphicon glyph="log-in" /></div>
-          <div className="black-icon"><Glyphicon glyph="user" /></div>
-          <div className="black-icon"><Glyphicon glyph="eye-open" /></div>
+          <div className="color-icon"><Glyphicon glyph="comment" /></div>
+          <div className="color-icon"><Glyphicon glyph="user" /></div>
           <div className="black-icon"><Glyphicon glyph="align-justify" /></div>
           <div className="black-icon"><Glyphicon glyph="remove" /></div>
           <div style={{ backgroundColor: '#4a4a4a', width: `${100}px`, padding: `${10}px`, display: 'inline' }}>
@@ -22,7 +21,7 @@ class Icons extends React.Component {
           </div>
         </section>
         <section>
-          <div className="title-3">Code</div>
+          <h3 className="dark-title-3">Code</h3>
           <div className="box">
             <div>
               <div className="code">
@@ -31,6 +30,17 @@ class Icons extends React.Component {
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>Glyphicon glyph=&quot;search&quot; /</span>
+                <span>&gt;</span>
+                <span>&lt;</span>
+                <span>/div</span>
+                <span>&gt;</span>
+              </div>
+              <div className="code">
+                <span>&lt;</span>
+                <span>div className=&quot;rounded-icon&quot;</span>
+                <span>&gt;</span>
+                <span>&lt;</span>
+                <span>Glyphicon glyph=&quot;user&quot; /</span>
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>/div</span>
@@ -49,7 +59,7 @@ class Icons extends React.Component {
               </div>
               <div className="code">
                 <span>&lt;</span>
-                <span>div className=&quot;black-icon&quot;</span>
+                <span>div className=&quot;color-icon&quot;</span>
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>Glyphicon glyph=&quot;comment&quot; /</span>
@@ -60,32 +70,10 @@ class Icons extends React.Component {
               </div>
               <div className="code">
                 <span>&lt;</span>
-                <span>div className=&quot;black-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;log-in&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;black-icon&quot;</span>
+                <span>div className=&quot;color-icon&quot;</span>
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>Glyphicon glyph=&quot;user&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;black-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;eye-open&quot; /</span>
                 <span>&gt;</span>
                 <span>&lt;</span>
                 <span>/div</span>
@@ -118,11 +106,13 @@ class Icons extends React.Component {
                 <span>img src=&quot;/static2/img/social/Facebook.svg&quot; alt=&quot;Facebook&quot;/&nbsp;</span>
                 <span>&gt;</span>
               </div>
+              <br />
               <div className="code">
                 <span>&lt;</span>
                 <span>img src=&quot;/static2/img/social/Twitter.svg&quot; alt=&quot;Twitter&quot;/&nbsp;</span>
                 <span>&gt;</span>
               </div>
+              <br />
               <div className="code">
                 <span>&lt;</span>
                 <span>img src=&quot;/static2/img/social/Linkedin.svg&quot; alt=&quot;Linkedin&quot;/&nbsp;</span>

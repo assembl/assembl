@@ -14,12 +14,15 @@ class NavBar extends React.Component {
       isMenuHidden: true
     };
     this.displayMenu = this.displayMenu.bind(this);
-    browserHistory.listen(() => {
+    this.unlisten = browserHistory.listen(() => {
       this.setState({ isMenuHidden: true });
     });
   }
   componentWillReceiveProps() {
     this.setState({ isMenuHidden: true });
+  }
+  componentWillUnmount() {
+    this.unlisten();
   }
   displayMenu() {
     const { isMenuHidden } = this.state;
@@ -28,7 +31,7 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.path;
+    const { rootPath } = this.props.context;
     return (
       <Grid fluid>
         <Navbar fixedTop fluid>
@@ -38,7 +41,7 @@ class NavBar extends React.Component {
               <div className={this.state.isMenuHidden ? 'black-icon hidden' : 'black-icon shown'}><Glyphicon glyph="remove" /></div>
             </div>
             <div className="navbar-logo left">
-              <Link to={`${rootPath}${debateData.slug}/home`}>
+              <Link to={`${rootPath}${debateData.slug}/home`} activeClassName="logo-active">
                 <img src={debateData.logo} alt="logo" />
               </Link>
             </div>

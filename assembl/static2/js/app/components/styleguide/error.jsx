@@ -5,7 +5,7 @@ class ErrorComponent extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-2 underline" id="error">ERROR</div>
+        <h2 className="dark-title-2 underline" id="error">ERROR</h2>
         <section>
           <div className="left">
             <Error errorMessage="ErrorMessage" />
@@ -13,7 +13,7 @@ class ErrorComponent extends React.Component {
           <div>&nbsp;</div>
         </section>
         <section>
-          <div className="title-3">Code</div>
+          <h3 className="dark-title-3">Code</h3>
           <div className="box">
             <div>
               <div className="code">

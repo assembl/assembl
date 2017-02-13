@@ -1,8 +1,8 @@
 import HttpRequestHandler from '../utils/httpRequestHandler';
 
 class PartnersService {
-  static fetchPartners(discussionId) {
-    const fetchUrl = `/data/Discussion/${discussionId}/partner_organizations`;
+  static fetchPartners(debateId) {
+    const fetchUrl = `/data/Discussion/${debateId}/partner_organizations`;
     return HttpRequestHandler.request({ method: 'GET', url: fetchUrl }).then((partners) => {
       return partners;
     });

@@ -1,17 +1,44 @@
 body {
-  background-color: $page-bkg-light;
+  background-color: $page-bkg-grey;
   font-family: $font-family;
   font-size: $font-size-s;
   overflow-y: scroll;
+}
+
+a {
+  color: $link-color;
+  text-decoration: none;
+
+  &:hover {
+    color: $link-hover-color;
+    text-decoration: none;
+  }
 }
 
 section {
   margin: 30px 0;
 }
 
+input {
+  &[type='text'] {
+    box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+
+    &:focus {
+      box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+    }
+  }
+
+  &[type='password'] {
+    box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+
+    &:focus {
+      box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+    }
+  }
+}
+
 .app-content {
-  margin-bottom: $footer-height + 50px;
-  margin-top: 80px;
+  margin: 80px 0 0;
 }
 
 .max-container {
@@ -19,11 +46,8 @@ section {
   max-width: $app-max-width;
 }
 
-.fixed-bottom {
-  bottom: 0;
-  position: fixed;
-  width: 100%;
-  z-index: 1000;
+.background-light {
+  background-color: $page-bkg-light;
 }
 
 .background-grey {
@@ -51,7 +75,7 @@ section {
 }
 
 .border-right {
-  border-right: $box-border;
+  border-right: $border-color;
 }
 
 .border-left {
@@ -92,6 +116,10 @@ section {
   margin: 0 0 20px;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
 .hidden {
   display: none;
 }
@@ -103,6 +131,11 @@ section {
 .code {
   color: $grey3;
   display: inline-block;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
 }
 
 #pDebug {

@@ -5,13 +5,13 @@ class Loading extends React.Component {
   render() {
     return (
       <div>
-        <div className="title-2 underline" id="loader">LOADER</div>
+        <h2 className="dark-title-2 underline" id="loader">LOADER</h2>
         <section>
           <Loader />
           <Loader textHidden />
         </section>
         <section>
-          <div className="title-3">Code</div>
+          <h3 className="dark-title-3">Code</h3>
           <div className="box">
             <div>
               <div className="code">

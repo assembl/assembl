@@ -5,7 +5,7 @@ const MapStateToProps = (state) => {
     posts: state.posts,
     users: state.users,
     partners: state.partners,
-    path: state.path
+    context: state.context
   };
 };
 

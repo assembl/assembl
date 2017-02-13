@@ -1,4 +1,6 @@
 .profile-icon {
+  margin: 1px 15px 0;
+
   a {
     &:hover {
       text-decoration: none;
@@ -6,9 +8,13 @@
   }
 
   .username {
-    color: $black;
+    color: $navbar-active-text-color;
     font-size: $font-size-xs;
-    font-weight: 700;
+  }
+
+  .connection {
+    color: $navbar-text-color;
+    font-size: $font-size-xs;
   }
 
   img {
@@ -16,5 +22,36 @@
     margin: 0 5px 0 0;
     max-height: 20px;
     width: 20px;
+  }
+}
+
+.login-view {
+  margin: 60px auto;
+  max-width: 600px;
+  text-align: left;
+
+  .login {
+    border-bottom: $box-border;
+    margin: 0 5% 20px;
+    padding: 0 0 20px;
+  }
+
+  .signup {
+    margin: 0 5%;
+    padding: 0 0 10px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .profile-icon {
+    .username {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .profile-icon {
+    margin: 1px 10px 0 15px;
   }
 }

@@ -4,10 +4,10 @@ import Menu from '../components/styleguide/menu';
 import Buttons from '../components/styleguide/buttons';
 import Titles from '../components/styleguide/titles';
 import Icons from '../components/styleguide/icons';
-import Login from '../components/styleguide/login';
 import Dropdown from '../components/styleguide/dropdown';
 import Loader from '../components/styleguide/loader';
 import Error from '../components/styleguide/error';
+import Box from '../components/styleguide/box';
 import Container from '../components/styleguide/container';
 
 class Styleguide extends React.Component {
@@ -16,7 +16,7 @@ class Styleguide extends React.Component {
       <Grid>
         <Row>
           <Col xs={12} md={12}>
-            <div className="title-1 center padding">Assembl Style Guide</div>
+            <h1 className="dark-title-1 center padding">Assembl Style Guide</h1>
           </Col>
         </Row>
         <Row>
@@ -27,10 +27,10 @@ class Styleguide extends React.Component {
             <Buttons />
             <Titles />
             <Icons />
-            <Login />
             <Dropdown />
             <Loader />
             <Error />
+            <Box />
             <Container />
           </Col>
         </Row>
