@@ -59,6 +59,12 @@
       fill: $white;
     }
   }
+
+  .insert-box {
+    position: absolute;
+    right: 0;
+    top: 80px;
+  }
 }
 
 .partners {
@@ -76,6 +82,14 @@
   img {
     max-height: $partner-logo-height;
     max-width: $partner-logo-width;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .header {
+    .insert-box {
+      display: none;
+    }
   }
 }
 

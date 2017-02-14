@@ -86,6 +86,10 @@ input {
   border-bottom: $box-border;
 }
 
+.border {
+  border: $box-border;
+}
+
 .padding {
   padding: 20px 0;
 }
