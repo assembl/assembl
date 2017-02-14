@@ -24,7 +24,15 @@ var DiscussionStatisticsView = Marionette.LayoutView.extend({
   serializeData: function() {
     return {
       isDiscussionAdmin: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
+      usersFirstVisitURL: Ctx.getApiV2DiscussionUrl("visitors?first=true"),
+      usersLastVisitURL: Ctx.getApiV2DiscussionUrl("visitors"),
     };
+  },
+  onRender: function(){
+    // pre-fill a default date, so that the UI can be used right away
+    var d = Ctx.formatDate(new Date(), 'YYYY-MM-DD');
+    this.$("#start_date").val(d);
+    this.$("#end_date").val(d);
   },
   doDownload: function(url, filename) {
     // TODO: This will probably fail in IE, see
