@@ -10,6 +10,11 @@
     text-align: center;
     z-index: 2;
 
+    .max-text-width {
+      margin: 0 auto;
+      width: 500px;
+    }
+
     .header-logo {
       background-color: $white;
       height: 115px;

@@ -18,10 +18,12 @@ class Header extends React.Component {
         <Grid fluid className="max-container">
           <div className="header-content">
             <img style={{ display: 'none' }} className="header-logo" src={debateData.logo} alt="logo" />
-            <h1 className="light-title-1">{debateData.topic}</h1>
-            <h3 className="light-title-3 margin-m">{debateData.introduction}</h3>
-            <h5 className="light-title-5 margin-xs uppercase">{debateData.objectives}</h5>
-            <Link className="button-link button-light margin-l" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
+            <div className="max-text-width">
+              <h1 className="light-title-1">{debateData.topic}</h1>
+              <h3 className="light-title-3 margin-m">{debateData.introduction}</h3>
+              <h5 className="light-title-5 margin-xs uppercase">{debateData.objectives}</h5>
+              <Link className="button-link button-light margin-l" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
+            </div>
             {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&
               <SynthesisInsert />
             }
