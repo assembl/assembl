@@ -6,17 +6,11 @@ class Container extends React.Component {
       <div>
         <h2 className="dark-title-2 underline" id="container">CONTAINER</h2>
         <h3 className="dark-title-3">Code</h3>
-        <div className="box">
-          <div>
-            <div className="code">&lt;Grid fluid&gt;</div>
-            <br />
-            <div className="code" style={{ paddingLeft: `${20}px` }}>&lt;div className=&quot;max-container&quot;&gt;</div>
-            <br />
-            <div className="code" style={{ paddingLeft: `${20}px` }}>&lt;/div&gt;</div>
-            <br />
-            <div className="code">&lt;/Grid&gt;</div>
-          </div>
-        </div>
+        <pre>
+          <div>&lt;Grid fluid&gt;</div>
+            <div style={{ marginLeft: `${20}px` }}>&lt;div className="max-container"&gt;&lt;/div&gt;</div>
+          <div>&lt;/Grid&gt;</div>
+        </pre>
       </div>
     );
   }

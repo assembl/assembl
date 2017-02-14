@@ -8,13 +8,13 @@ class Dropdown extends React.Component {
         <h2 className="dark-title-2 underline" id="dropdown">DROPDOWN</h2>
         <section>
           <ul className="dropdown-xs" style={{ margin: 0 }}>
-            <NavDropdown title="FR" id="nav-dropdown">
+            <NavDropdown title="FR" id="nav-dropdown-xs">
               <MenuItem>EN</MenuItem>
               <MenuItem>DE</MenuItem>
             </NavDropdown>
           </ul>
           <ul className="dropdown-xl" style={{ margin: `${20}px`, width: `${100}%`, textAlign: 'center' }}>
-            <NavDropdown title="Dropdown" id="nav-dropdown2">
+            <NavDropdown title="Dropdown" id="nav-dropdown-xl">
               <MenuItem>Action</MenuItem>
               <MenuItem>Another action</MenuItem>
               <MenuItem divider />
@@ -24,90 +24,24 @@ class Dropdown extends React.Component {
         </section>
         <section>
           <h3 className="dark-title-3">Code</h3>
-          <div className="box">
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>ul className=&quot;dropdown-xs&quot;</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${20}px` }}>&lt;</span>
-                <span>NavDropdown title=&quot;FR&quot; id=&quot;nav-dropdown&quot;</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
-                <span>MenuItem</span>
-                <span>&gt;</span>
-                <span>EN</span>
-                <span>&lt;</span>
-                <span>/MenuItem</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
-                <span>MenuItem</span>
-                <span>&gt;</span>
-                <span>DE</span>
-                <span>&lt;</span>
-                <span>/MenuItem</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${20}px` }}>&lt;</span>
-                <span>/NavDropdown</span>
-                <span>&gt;</span>
-                <br />
-                <span>&lt;</span>
-                <span>/ul</span>
-                <span>&gt;</span>
-              </div>
-              <br />
-              <br />
-              <div className="code">
-                <span>&lt;</span>
-                <span>ul className=&quot;dropdown-xl&quot;</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${20}px` }}>&lt;</span>
-                <span>NavDropdown title=&quot;dropdown&quot; id=&quot;nav-dropdown&quot;</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
-                <span>MenuItem</span>
-                <span>&gt;</span>
-                <span>action</span>
-                <span>&lt;</span>
-                <span>/MenuItem</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
-                <span>MenuItem</span>
-                <span>&gt;</span>
-                <span>another action</span>
-                <span>&lt;</span>
-                <span>/MenuItem</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
-                <span>Divider /</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${40}px` }}>&lt;</span>
-                <span>MenuItem</span>
-                <span>&gt;</span>
-                <span>separated link</span>
-                <span>&lt;</span>
-                <span>/MenuItem</span>
-                <span>&gt;</span>
-                <br />
-                <span style={{ paddingLeft: `${20}px` }}>&lt;</span>
-                <span>/NavDropdown</span>
-                <span>&gt;</span>
-                <br />
-                <span>&lt;</span>
-                <span>/ul</span>
-                <span>&gt;</span>
-              </div>
-            </div>
-          </div>
+          <pre>
+            <div>&lt;ul className="dropdown-xs"&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;NavDropdown title="FR" id="nav-dropdown-xs"&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;MenuItem>EN&lt;/MenuItem&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;MenuItem>DE&lt;/MenuItem&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;/NavDropdown&gt;</div>
+            <div>&lt;/ul&gt;</div>
+          </pre>
+          <pre>
+            <div>&lt;ul className="dropdown-xl"&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;NavDropdown title="Dropdown" id="nav-dropdown-xl"&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;MenuItem>Action&lt;/MenuItem&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;MenuItem>Another action&lt;/MenuItem&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;MenuItem divider /&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;MenuItem>Separated link&lt;/MenuItem&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;/NavDropdown&gt;</div>
+            <div>&lt;/ul&gt;</div>
+          </pre>
         </section>
       </div>
     );

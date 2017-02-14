@@ -6,7 +6,7 @@ import MapStateToProps from '../../store/mapStateToProps';
 class SynthesisInsert extends React.Component {
   render() {
     const { synthesis } = this.props.synthesis;
-    console.log()
+
     return (
       <div className="insert-box">
         <h3 className="dark-title-3 ellipsis">
@@ -19,7 +19,7 @@ class SynthesisInsert extends React.Component {
         </h3>
         <div className="hyphen">&nbsp;</div>
         <div className="date">
-          <Localize value={synthesis.lastPublishedSynthesis.creation_date} dateFormat="date.format"/>
+          <Localize value={synthesis.lastPublishedSynthesis.creation_date} dateFormat="date.format" />
         </div>
         <div className="ellipsis-content margin-s">
           {synthesis.lastPublishedSynthesis.introduction}

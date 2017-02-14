@@ -22,104 +22,36 @@ class Icons extends React.Component {
         </section>
         <section>
           <h3 className="dark-title-3">Code</h3>
-          <div className="box">
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;rounded-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;search&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;rounded-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;user&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;white-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;question-sign&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;color-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;comment&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;color-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;user&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;black-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;align-justify&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>div className=&quot;black-icon&quot;</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>Glyphicon glyph=&quot;remove&quot; /</span>
-                <span>&gt;</span>
-                <span>&lt;</span>
-                <span>/div</span>
-                <span>&gt;</span>
-              </div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>img src=&quot;/static2/img/social/Facebook.svg&quot; alt=&quot;Facebook&quot;/&nbsp;</span>
-                <span>&gt;</span>
-              </div>
-              <br />
-              <div className="code">
-                <span>&lt;</span>
-                <span>img src=&quot;/static2/img/social/Twitter.svg&quot; alt=&quot;Twitter&quot;/&nbsp;</span>
-                <span>&gt;</span>
-              </div>
-              <br />
-              <div className="code">
-                <span>&lt;</span>
-                <span>img src=&quot;/static2/img/social/Linkedin.svg&quot; alt=&quot;Linkedin&quot;/&nbsp;</span>
-                <span>&gt;</span>
-              </div>
-            </div>
-          </div>
+          <pre>
+            &lt;div className="rounded-icon"&gt;&lt;Glyphicon glyph="search" /&gt;&lt;/div&gt;
+          </pre>
+          <pre>
+            &lt;div className="rounded-icon"&gt;&lt;Glyphicon glyph="user" /&gt;&lt;/div&gt;
+          </pre>
+          <pre>
+            &lt;div className="white-icon"&gt;&lt;Glyphicon glyph="question-sign" /&gt;&lt;/div&gt;
+          </pre>
+          <pre>
+            &lt;div className="color-icon"&gt;&lt;Glyphicon glyph="comment" /&gt;&lt;/div&gt;
+          </pre>
+          <pre>
+            &lt;div className="color-icon"&gt;&lt;Glyphicon glyph="user" /&gt;&lt;/div&gt;
+          </pre>
+          <pre>
+            &lt;div className="black-icon"&gt;&lt;Glyphicon glyph="align-justify" /&gt;&lt;/div&gt;
+          </pre>
+          <pre>
+            &lt;div className="black-icon"&gt;&lt;Glyphicon glyph="remove" /&gt;&lt;/div&gt;
+          </pre>
+          <pre>
+            &lt;img src="/static2/img/social/Facebook.svg" alt="Facebook" width="20px" /&gt;
+          </pre>
+          <pre>
+            &lt;img src="/static2/img/social/Twitter.svg" alt="Twitter" width="20px" /&gt;
+          </pre>
+          <pre>
+            &lt;img src="/static2/img/social/Linkedin.svg" alt="Linkedin" width="20px" /&gt;
+          </pre>
         </section>
       </div>
     );

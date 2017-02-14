@@ -2,6 +2,7 @@ build/*
 node_modules/*
 css/*
 tests/*
+js/app/components/styleguide/*
 package.json
 webpack.config.js
 webpack.dev.config.js

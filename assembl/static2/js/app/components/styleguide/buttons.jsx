@@ -29,82 +29,24 @@ class Buttons extends React.Component {
         </section>
         <section>
           <h3 className="dark-title-3">Code</h3>
-          <div className="box">
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>Button className=&quot;button-submit&nbsp;button-dark&quot;</span>
-                <span>&gt;</span>
-              </div>
-              <span>Submit</span>
-              <div className="code">
-                <span>&lt;</span>
-                <span>/Button</span>
-                <span>&gt;</span>
-              </div>
-            </div>
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>Button className=&quot;button-cancel&nbsp;button-dark&quot;</span>
-                <span>&gt;</span>
-              </div>
-              <span>Cancel</span>
-              <div className="code">
-                <span>&lt;</span><span>/Button</span><span>&gt;</span>
-              </div>
-            </div>
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>Link className=&quot;button-link&nbsp;button-dark&quot; to=&quot;/link&quot;</span>
-                <span>&gt;</span>
-              </div>
-              <span>Link</span>
-              <div className="code">
-                <span>&lt;</span>
-                <span>/Link</span>
-                <span>&gt;</span>
-              </div>
-            </div>
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>Button className=&quot;button-submit&nbsp;button-light&quot;</span>
-                <span>&gt;</span>
-              </div>
-              <span>Submit</span>
-              <div className="code">
-                <span>&lt;</span>
-                <span>/Button</span>
-                <span>&gt;</span>
-              </div>
-            </div>
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>Button className=&quot;button-cancel&nbsp;button-light&quot;</span>
-                <span>&gt;</span>
-              </div>
-              <span>Cancel</span>
-              <div className="code">
-                <span>&lt;</span><span>/Button</span><span>&gt;</span>
-              </div>
-            </div>
-            <div>
-              <div className="code">
-                <span>&lt;</span>
-                <span>Link className=&quot;button-link&nbsp;button-light&quot; to=&quot;/link&quot;</span>
-                <span>&gt;</span>
-              </div>
-              <span>Link</span>
-              <div className="code">
-                <span>&lt;</span>
-                <span>/Link</span>
-                <span>&gt;</span>
-              </div>
-            </div>
-          </div>
+          <pre>
+            &lt;Button className="button-submit button-dark"&gt;Submit&lt;/Button&gt;
+          </pre>
+          <pre>
+            &lt;Button className="button-cancel button-dark"&gt;Cancel&lt;/Button&gt;
+          </pre>
+          <pre>
+            &lt;Link className="button-link button-dark"&gt;Link&lt;/Link&gt;
+          </pre>
+          <pre>
+            &lt;Button className="button-submit button-light"&gt;Submit&lt;/Button&gt;
+          </pre>
+          <pre>
+            &lt;Button className="button-cancel button-light"&gt;Cancel&lt;/Button&gt;
+          </pre>
+          <pre>
+            &lt;Link className="button-link button-light"&gt;Link&lt;/Link&gt;
+          </pre>
         </section>
       </div>
     );

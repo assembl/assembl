@@ -12,17 +12,12 @@ class Loading extends React.Component {
         </section>
         <section>
           <h3 className="dark-title-3">Code</h3>
-          <div className="box">
-            <div>
-              <div className="code">
-                <span>&lt;</span><span>Loader /</span><span>&gt;</span>
-              </div>
-              <br />
-              <div className="code">
-                <span>&lt;</span><span>Loader textHidden /</span><span>&gt;</span>
-              </div>
-            </div>
-          </div>
+          <pre>
+            &lt;Loader /&gt;
+          </pre>
+          <pre>
+            &lt;Loader textHidden /&gt;
+          </pre>
         </section>
       </div>
     );
