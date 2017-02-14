@@ -1689,9 +1689,9 @@ class Tombstone(object):
 def orm_update_listener(mapper, connection, target):
     if getattr(target, '__history_table__', None):
         return
-    reindex_content(target, 'update')
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
+        reindex_content(target, 'update')
         target.send_to_changes(connection, CrudOperation.UPDATE)
 
 
