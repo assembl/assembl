@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Menu from '../components/styleguide/menu';
 import Buttons from '../components/styleguide/buttons';
-import Titles from '../components/styleguide/titles';
+import Text from '../components/styleguide/text';
 import Icons from '../components/styleguide/icons';
 import Dropdown from '../components/styleguide/dropdown';
 import Loader from '../components/styleguide/loader';
@@ -19,13 +19,14 @@ class Styleguide extends React.Component {
             <h1 className="dark-title-1 center padding">Assembl Style Guide</h1>
           </Col>
         </Row>
+        <div className="margin-m">&nbsp;</div>
         <Row>
           <Col xs={12} md={3}>
             <Menu />
           </Col>
           <Col className="box" xs={12} md={9}>
             <Buttons />
-            <Titles />
+            <Text />
             <Icons />
             <Dropdown />
             <Loader />

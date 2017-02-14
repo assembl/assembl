@@ -6,7 +6,7 @@ class Menu extends React.Component {
     return (
       <ListGroup>
         <ListGroupItem className="menu-item" href="#buttons">Buttons</ListGroupItem>
-        <ListGroupItem className="menu-item" href="#titles">Titles</ListGroupItem>
+        <ListGroupItem className="menu-item" href="#text">Text</ListGroupItem>
         <ListGroupItem className="menu-item" href="#icons">Icons</ListGroupItem>
         <ListGroupItem className="menu-item" href="#dropdown">Dropdown</ListGroupItem>
         <ListGroupItem className="menu-item" href="#loader">Loader</ListGroupItem>

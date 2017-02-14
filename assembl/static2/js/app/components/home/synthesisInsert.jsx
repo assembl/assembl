@@ -13,7 +13,7 @@ class SynthesisInsert extends React.Component {
           <div>
             <Translate value="synthesis.title" />
           </div>
-          <div className="margin-xs">
+          <div className="ellipsis margin-xs">
             {synthesis.lastPublishedSynthesis.subject}
           </div>
         </h3>
