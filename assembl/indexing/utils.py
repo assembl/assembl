@@ -55,6 +55,10 @@ def get_data(content):
                      'definition', 'discussion_id'):
             data[attr] = getattr(content, attr)
 
+        if content.announcement:
+            data['title'] = content.announcement.title
+            data['body'] = content.announcement.body
+
         return get_uid(content), data
 
     elif isinstance(content, User):

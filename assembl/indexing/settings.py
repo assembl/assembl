@@ -65,6 +65,8 @@ _IDEA_MAPPING = {
     'short_title': TEXT,
     'long_title': TEXT,
     'definition': TEXT,
+    'title': TEXT,  # announce
+    'body': TEXT,  # announce
 }
 
 MAPPINGS = {

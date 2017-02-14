@@ -50,12 +50,16 @@ const PostHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
-        <span>{ props.result._source.creation_date }</span>
         <a
           href={props.result._source.url}
           dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject_und', props.result._source.subject_und) }}
         />
+      </div>
+      <div className={props.bemBlocks.item('content')}>
         <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.body_und', props.result._source.body_und)) }} />
+      </div>
+      <div className={props.bemBlocks.item('date')}>
+        { `Publié le ${props.result._source.creation_date}` }
       </div>
     </div>
   );
@@ -65,13 +69,17 @@ const SynthesisHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
-        <span>{ props.result._source.creation_date }</span>
         <a
           href={props.result._source.url}
           dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject', props.result._source.subject) }}
         />
+      </div>
+      <div className={props.bemBlocks.item('content')}>
         <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.introduction', props.result._source.introduction)) }} />
         <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.conclusion', props.result._source.conclusion)) }} />
+      </div>
+      <div className={props.bemBlocks.item('date')}>
+        { `Publié le ${props.result._source.creation_date}` }
       </div>
     </div>
   );
@@ -81,8 +89,10 @@ const UserHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
-        <span>{ props.result._source.creation_date }</span>
         <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.name', props.result._source.name)) }} />
+      </div>
+      <div className={props.bemBlocks.item('date')}>
+        { `Membre depuis le ${props.result._source.creation_date}` }
       </div>
     </div>
   );
@@ -92,12 +102,27 @@ const IdeaHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
-        <span>{ props.result._source.creation_date }</span>
         <a
           href={props.result._source.url}
           dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.short_title', props.result._source.short_title) }}
         />
-        Ce qu'il faut retenir :<p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.definition', props.result._source.definition)) }} />
+      </div>
+      <div className={props.bemBlocks.item('content')}>
+        { get(props.result, 'highlight.definition') ?
+          <div>
+            <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.definition', props.result._source.definition)) }} />
+            <p>{ 'Recherche effectuée dans la section "à retenir" de la discussion' }</p>
+          </div>
+          : null
+        }
+        { get(props.result, 'highlight.title') || get(props.result, 'highlight.body') ?
+          <div>
+            <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.title', props.result._source.title)) }} />
+            <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.body', props.result._source.body)) }} />
+            <p>{ 'Recherche effectuée dans la section "consignes" de la discussion' }</p>
+          </div>
+          : null
+        }
       </div>
     </div>
   );
@@ -117,6 +142,8 @@ const HitItem = (props) => {
 };
 
 const queryFields = [
+  'title',  // idea announcement
+  'body',  // idea announcement
   'short_title',  // idea
   'definition',  // idea
   'name',  // user

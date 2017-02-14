@@ -60,7 +60,8 @@ def reindex_content(content, action='update'):
     """
     from assembl.models.post import PublicationStates
     from assembl.models import (
-        AgentStatusInDiscussion, Post, User, Idea, IdeaContentLink)
+        AgentStatusInDiscussion, Post, User, Idea,
+        IdeaContentLink, IdeaAnnouncement)
     indexed_contents = (Post, User, Idea)
     if action == 'delete' and isinstance(content, indexed_contents):
         changes.unindex_content(content)
@@ -83,6 +84,8 @@ def reindex_content(content, action='update'):
         # A AssemblPost is indexed before any IdeaRelatedPostLink is created,
         # so be sure to reindex content.content if we have a IdeaContentLink
         reindex_content(content.content)
+    elif isinstance(content, IdeaAnnouncement):
+        reindex_content(content.idea)
 
 
 def batch_reindex_elasticsearch(session):
