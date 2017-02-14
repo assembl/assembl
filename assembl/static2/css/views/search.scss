@@ -9,6 +9,14 @@
 }
 
 .sk-hits-list-hit {
-    border-bottom: 1px solid purple;
+    border-bottom: 1px solid purple; // TODO use a variable for the color
     width: 100%;
+}
+
+.hidden {
+    .sk-layout {
+        &__body{
+            z-index: 0;
+        }
+    }
 }

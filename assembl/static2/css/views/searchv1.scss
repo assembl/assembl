@@ -1,10 +1,12 @@
+@import "../../../static/css/themes/default/_theme.scss";
+
 .sk-layout__size-l .sk-top-bar__content {
-    width: 200px;
+    width: 400px;
 }
 
 .sk-search-box {
     &__icon {
-        margin: 5px 0 0 5px;
+        margin: 3px 0 0 5px;
     }
     &.is-focused {
         background:white;
@@ -25,17 +27,21 @@
     flex-flow: row wrap;
 }
 
+.sk-hits-list-hit {
+    border-bottom: 1px solid $theme_btn_primary_bg_color;
+}
+
 .sk-layout {
     position: relative;
-    top: -45px;
+    top: -10px;
     &__top-bar {
-        height: 50px;
+        height: 45px;
         z-index: 100;
         position: relative;
         background-color: transparent;
         box-shadow: none;
         .sk-search-box {
-            background-color: #9013FE;
+            background-color: $theme_btn_primary_bg_color;
         }
     }
     &__body{

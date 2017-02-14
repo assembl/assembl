@@ -185,6 +185,7 @@ export default class Search extends React.Component {
       }
       modifiedQuery.query = { bool: { filter: filters } };
       if (simpleQueryString) {
+        this.setState({ show: true });
         simpleQueryString.query = `${simpleQueryString.query}*`;
         modifiedQuery.query.bool.must = [
           { simple_query_string: simpleQueryString }
@@ -195,7 +196,7 @@ export default class Search extends React.Component {
     // this.searchkit.translateFunction = (key) => {
     //   return { 'pagination.next': 'Next Page', 'pagination.previous': 'Previous Page' }[key];
     // };
-    this.state = { show: true };
+    this.state = { show: false };
     // this.removalFn = this.searchkit.addResultsListener((results) => {
     //   console.log(results);
     //   if (results.hits.hits.length === 0) {
@@ -221,41 +222,42 @@ export default class Search extends React.Component {
               searchOnChange
               queryFields={queryFields}
             />
+            <button
+              className="btn"
+              onClick={() => { this.setState({ show: !this.state.show }); }}
+            >{this.state.show ? 'replier les filtres' : 'déplier les filtres'}</button>
           </TopBar>
-          { this.state.show ?
-            <LayoutBody>
-              <SideBar>
-                <MenuFilter
-                  field="_type"
-                  id="type"
-                  title="Types"
-                />
-              </SideBar>
-              <LayoutResults>
-                <ActionBar>
-                  <ActionBarRow>
-                    <HitsStats
-                      translations={{ 'hitstats.results_found': '{hitCount} results found' }}
-                    />
-                  </ActionBarRow>
-                  <ActionBarRow>
-                    Affichage par : <PageSizeSelector options={[20, 50, 100]} />
-                    <SelectedFilters />
-                    <ResetFilters />
-                  </ActionBarRow>
-                </ActionBar>
-                <Hits
-                  hitsPerPage={20}
-                  highlightFields={queryFields}
-                  itemComponent={HitItem}
-                  mod="sk-hits-list"
-                />
-                <InitialLoader />
-                <Pagination showNumbers />
-              </LayoutResults>
-            </LayoutBody>
-          : null
-          }
+          <LayoutBody className={!this.state.show ? 'hidden' : null}>
+            <SideBar>
+              <MenuFilter
+                field="_type"
+                id="type"
+                title="Types"
+              />
+            </SideBar>
+            <LayoutResults>
+              <ActionBar>
+                <ActionBarRow>
+                  <HitsStats
+                    translations={{ 'hitstats.results_found': '{hitCount} results found' }}
+                  />
+                </ActionBarRow>
+                <ActionBarRow>
+                  Affichage par : <PageSizeSelector options={[20, 50, 100]} />
+                  <SelectedFilters />
+                  <ResetFilters />
+                </ActionBarRow>
+              </ActionBar>
+              <Hits
+                hitsPerPage={20}
+                highlightFields={queryFields}
+                itemComponent={HitItem}
+                mod="sk-hits-list"
+              />
+              <InitialLoader />
+              <Pagination showNumbers />
+            </LayoutResults>
+          </LayoutBody>
         </Layout>
       </SearchkitProvider>
     );
