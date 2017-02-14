@@ -47,14 +47,22 @@ def delete_index(index_name):
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Post, SynthesisPost, User
-    if isinstance(content, User):
+    from assembl.models import Idea, Post, SynthesisPost, User
+    if isinstance(content, Idea):
         data = {}
-#        data['url'] = content.get_url()
-        for attr in ('creation_date', 'id'):
+        data['url'] = content.get_url()
+        for attr in ('creation_date', 'id', 'short_title', 'long_title',
+                     'definition', 'discussion_id'):
             data[attr] = getattr(content, attr)
 
-        data['name'] = content.name
+        return get_uid(content), data
+
+    elif isinstance(content, User):
+        data = {}
+#        data['url'] = content.get_url()
+        for attr in ('creation_date', 'id', 'name'):
+            data[attr] = getattr(content, attr)
+
         # get all discussions that the user is in via AgentStatusInDiscussion
         data['discussion_id'] = [s.discussion_id
                                  for s in content.agent_status_in_discussion]
@@ -88,8 +96,10 @@ def get_data(content):
 
 def get_uid(content):
     """Return a global unique identifier"""
-    from assembl.models import Post, SynthesisPost, User
-    if isinstance(content, User):
+    from assembl.models import Idea, Post, SynthesisPost, User
+    if isinstance(content, Idea):
+        doc_type = 'idea'
+    elif isinstance(content, User):
         doc_type = 'user'
     elif isinstance(content, Post):
         if isinstance(content, SynthesisPost):

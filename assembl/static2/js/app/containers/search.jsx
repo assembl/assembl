@@ -50,6 +50,7 @@ const PostHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
+        <span>{ props.result._source.creation_date }</span>
         <a
           href={props.result._source.url}
           dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject_und', props.result._source.subject_und) }}
@@ -87,18 +88,37 @@ const UserHit = (props) => {
   );
 };
 
+const IdeaHit = (props) => {
+  return (
+    <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
+      <div className={props.bemBlocks.item('title')}>
+        <span>{ props.result._source.creation_date }</span>
+        <a
+          href={props.result._source.url}
+          dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.short_title', props.result._source.short_title) }}
+        />
+        Ce qu'il faut retenir :<p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.definition', props.result._source.definition)) }} />
+      </div>
+    </div>
+  );
+};
+
 const HitItem = (props) => {
   switch (props.result._type) {
   case 'synthesis':
     return SynthesisHit(props);
   case 'user':
     return UserHit(props);
+  case 'idea':
+    return IdeaHit(props);
   default:
     return PostHit(props);
   }
 };
 
 const queryFields = [
+  'short_title',  // idea
+  'definition',  // idea
   'name',  // user
   'subject',  // synthesis
   'introduction',  // synthesis

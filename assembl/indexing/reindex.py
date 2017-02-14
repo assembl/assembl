@@ -32,8 +32,14 @@ def intermediate_commit(contents):
 
 
 def get_indexable_contents(session):
-    from assembl.models import Post, User # TODO Idea, IdeaAnnouncement
+    from assembl.models import Post, User, Idea
     from assembl.models.post import PublicationStates
+
+    query = session.query(Idea
+        ).filter(Idea.tombstone_condition()
+        ).filter(Idea.hidden==False)
+    for idea in query:
+        yield idea
 
     query = session.query(User)
     for user in query:
@@ -54,14 +60,19 @@ def reindex_content(content, action='update'):
     """
     from assembl.models.post import PublicationStates
     from assembl.models import (
-        AgentStatusInDiscussion, Post, User, IdeaContentLink)
-    indexed_contents = (Post, User)
+        AgentStatusInDiscussion, Post, User, Idea, IdeaContentLink)
+    indexed_contents = (Post, User, Idea)
     if action == 'delete' and isinstance(content, indexed_contents):
         changes.unindex_content(content)
     elif isinstance(content, User):
         changes.index_content(content)
     elif isinstance(content, AgentStatusInDiscussion):
         reindex_content(content.agent_profile)
+    elif isinstance(content, Idea):
+        if (not content.hidden and content.tombstone_date is None):
+            changes.index_content(content)
+        else:
+            changes.unindex_content(content)
     elif isinstance(content, Post):
         if (content.publication_state == PublicationStates.PUBLISHED and
                 not content.hidden and content.tombstone_date is None):

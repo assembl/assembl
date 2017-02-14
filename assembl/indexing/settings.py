@@ -58,10 +58,20 @@ _USER_MAPPING = {
     'name': TEXT,
 }
 
+_IDEA_MAPPING = {
+    'discussion_id': LONG,
+    'creation_date': DATE,
+    'id': LONG,
+    'short_title': TEXT,
+    'long_title': TEXT,
+    'definition': TEXT,
+}
+
 MAPPINGS = {
     'post': _POST_MAPPING,
     'synthesis': _SYNTHESIS_MAPPING,
     'user': _USER_MAPPING,
+    'idea': _IDEA_MAPPING,
 }
 
 
