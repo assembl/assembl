@@ -5,6 +5,7 @@ import Debate from './debateReducer';
 import Posts from './postsReducer';
 import Users from './usersReducer';
 import Partners from './partnersReducer';
+import Synthesis from './synthesisReducer';
 
 export default combineReducers({
   i18n: i18nReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   debate: Debate,
   posts: Posts,
   users: Users,
-  partners: Partners
+  partners: Partners,
+  synthesis: Synthesis
 });

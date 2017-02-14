@@ -43,7 +43,7 @@ const Translations = {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
     },
     synthesis: {
-      panelTitle: 'Bienvenue dans la synthèse d\'Assembl'
+      title: 'synthèse'
     },
     community: {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
@@ -117,7 +117,7 @@ const Translations = {
       panelTitle: 'Welcome to Assembl community page'
     },
     synthesis: {
-      panelTitle: 'Welcome to Assembl synthesis page'
+      title: 'synthesis'
     },
     debate: {
       panelTitle: 'Welcome to Assembl debate page'
@@ -185,7 +185,7 @@ const Translations = {
       panelTitle: 'Willkommen in Assembl - ideas page'
     },
     synthesis: {
-      panelTitle: 'Willkommen in Assembl - synthesis page'
+      title: 'synthese'
     },
     debate: {
       panelTitle: 'Willkommen in Assembl - debate page'

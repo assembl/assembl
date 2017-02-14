@@ -17,3 +17,21 @@
   padding: 15px;
   text-align: center;
 }
+
+.insert-box {
+  background-color: $box-bkg;
+  height: 185px;
+  padding: 0 20px;
+  position: absolute;
+  right: 0;
+  text-align: left;
+  top: 80px;
+  width: 250px;
+
+  .hyphen {
+    border-top: $border-title;
+    font-size: $font-size-xxxs;
+    margin: 15px 0 2px -45px;
+    width: 50px;
+  }
+}

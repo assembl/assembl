@@ -7,7 +7,7 @@ class Titles extends React.Component {
         <h2 className="dark-title-2 underline" id="titles">TITLES</h2>
         <section>
           <div className="title-section">
-            <div className="title-border">&nbsp;</div>
+            <div className="title-hyphen">&nbsp;</div>
             <h1 className="dark-title-1">Title section</h1>
           </div>
           <h1 className="dark-title-1">Title 1</h1>
@@ -25,7 +25,7 @@ class Titles extends React.Component {
               </div>
               <br />
               <div style={{ paddingLeft: `${20}px` }} className="code">
-                <span>&lt;</span><span>div className=&quot;title-border-1&quot;</span><span>&gt;</span>
+                <span>&lt;</span><span>div className=&quot;title-hyphen-1&quot;</span><span>&gt;</span>
               </div>
               <br />
               <div style={{ paddingLeft: `${40}px` }} className="code">

@@ -5,7 +5,7 @@
   text-align: left;
 }
 
-.title-border {
+.title-hyphen {
   border-top: $border-title;
   display: inline-block;
   line-height: 50px;
@@ -35,7 +35,7 @@
 .dark-title-3 {
   color: $title3-dark-color;
   font-size: $title3-size;
-  font-weight: 700;
+  font-weight: 400;
   text-transform: uppercase;
 }
 
@@ -75,4 +75,28 @@
 .light-title-5 {
   color: $title5-light-color;
   font-size: $title5-size;
+}
+
+.date {
+  color: $second-color;
+  font-size: $font-size-xxs;
+}
+
+.ellipsis-content {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines-to-show;
+  color: $third-color;
+  display: -webkit-box;
+  font-size: $font-size-xs;
+  height: $font-size-xs * $line-height * $lines-to-show;
+  line-height: $line-height;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

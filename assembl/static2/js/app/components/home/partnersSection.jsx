@@ -22,7 +22,7 @@ class PartnersSection extends React.Component {
             <div className="max-container">
               <div className="partners">
                 <div className="title-section">
-                  <div className="title-border">&nbsp;</div>
+                  <div className="title-hyphen">&nbsp;</div>
                   <h1 className="dark-title-1">
                     <Translate value="home.partners" />
                   </h1>
