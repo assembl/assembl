@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 from __future__ import with_statement
 
-from os import getenv, rmdir
+from os import getenv
 from getpass import getuser
 from hashlib import sha1
 from platform import system
@@ -1526,7 +1526,7 @@ def install_elasticsearch():
 
         # rename var/elasticsearch/elasticsearch-5.2.0 to var/elasticsearch
         move(join(extract_path, 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)), extract_path+'.tmp')
-        rmdir(extract_path)
+        rmtree(extract_path)
         move(extract_path+'.tmp', extract_path)
 
 @task
