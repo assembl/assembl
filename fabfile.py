@@ -38,7 +38,7 @@ SERVICES = [
     'redis',
     'mysql',
 ]
-ELASTICSEARCH_VERSION = '5.2.0'
+ELASTICSEARCH_VERSION = '5.2.1'
 
 
 def load_service_configs():
