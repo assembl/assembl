@@ -102,3 +102,7 @@ htmlcov/
 .gtm/
 doc/autodoc
 doc/jsdoc
+
+#elasticsearch
+var/elasticsearch/
+var/esdata/
