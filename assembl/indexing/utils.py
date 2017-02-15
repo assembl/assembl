@@ -50,7 +50,6 @@ def get_data(content):
     from assembl.models import Idea, Post, SynthesisPost, User
     if isinstance(content, Idea):
         data = {}
-        data['url'] = content.get_url()
         for attr in ('creation_date', 'id', 'short_title', 'long_title',
                      'definition', 'discussion_id'):
             data[attr] = getattr(content, attr)
@@ -63,7 +62,6 @@ def get_data(content):
 
     elif isinstance(content, User):
         data = {}
-#        data['url'] = content.get_url()
         for attr in ('creation_date', 'id', 'name'):
             data[attr] = getattr(content, attr)
 
@@ -74,7 +72,6 @@ def get_data(content):
 
     elif isinstance(content, Post):
         data = {}
-        data['url'] = content.get_url()
         for attr in ('discussion_id', 'creation_date', 'id', 'parent_id',
                      'creator_id'):
             data[attr] = getattr(content, attr)
@@ -109,7 +106,7 @@ def get_uid(content):
         if isinstance(content, SynthesisPost):
             doc_type = 'synthesis'
         else:
-            doc_type = ' post'
+            doc_type = 'post'
 
     return '{}:{}'.format(doc_type, content.id)
 

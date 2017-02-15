@@ -31,7 +31,6 @@ COMMON_POST = {
     'creator_id': LONG,
 #    'publishes_synthesis_id': KEYWORD,
     'type': KEYWORD,
-    'url': KEYWORD,
 }
 
 _POST_MAPPING = COMMON_POST.copy()

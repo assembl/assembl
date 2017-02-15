@@ -1,4 +1,5 @@
 /* eslint no-underscore-dangle: 0, react/no-danger: 0 */
+/* global __resourceQuery */
 import React from 'react';
 
 import {
@@ -43,6 +44,47 @@ const truncate = (text) => {
   return modifiedText;
 };
 
+let Link;
+let getUrl;
+if (__resourceQuery) { // v1
+  // const querystring = require('querystring');
+  // const params = querystring.parse(__resourceQuery.slice(1));
+  // if (params.v === '1') {
+  Link = (props) => {
+    return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
+  };
+  getUrl = (hit) => {
+    const slug = document.getElementById('discussion-slug').value;
+    const id = hit._source.id;
+    switch (hit._type) {
+    case 'synthesis':
+      return `${slug}/posts/local:Content/${id}`;
+    case 'user':
+      return undefined;
+    case 'idea':
+      return `${slug}/idea/local:Idea/${id}`;
+    default: // post
+      return `${slug}/posts/local:Content/${id}`;
+    }
+  };
+  // }
+} else {
+  Link = require('react-router').Link;  // eslint-disable-line
+  getUrl = (hit) => {
+    const id = hit._source.id;
+    switch (hit._type) {
+    case 'synthesis':
+      return `posts/${id}`;
+    case 'user':
+      return `profile/${id}`;
+    case 'idea':
+      return `ideas/${id}`;
+    default: // post
+      return `posts/${id}`;
+    }
+  };
+}
+
 // TODO get the right subject highlight, fr, en in priority, then fallback to und(efined). Same for body obviously.
 // TODO pagination component doesn't seem to work
 // TODO translations fr/en
@@ -53,8 +95,8 @@ const PostHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
-        <a
-          href={props.result._source.url}
+        <Link
+          to={getUrl(props.result)}
           dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject_und', props.result._source.subject_und) }}
         />
       </div>
@@ -72,8 +114,8 @@ const SynthesisHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
-        <a
-          href={props.result._source.url}
+        <Link
+          to={getUrl(props.result)}
           dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject', props.result._source.subject) }}
         />
       </div>
@@ -89,10 +131,20 @@ const SynthesisHit = (props) => {
 };
 
 const UserHit = (props) => {
+  const url = getUrl(props.result);
+  const fullname = get(
+    props.result, 'highlight.name', props.result._source.name);
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
-        <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.name', props.result._source.name)) }} />
+        { url ?
+          <Link
+            to={getUrl(props.result)}
+            dangerouslySetInnerHTML={{ __html: fullname }}
+          />
+        :
+          <p dangerouslySetInnerHTML={{ __html: fullname }} />
+        }
       </div>
       <div className={props.bemBlocks.item('date')}>
         { `Membre depuis le ${props.result._source.creation_date}` }
@@ -105,8 +157,8 @@ const IdeaHit = (props) => {
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
-        <a
-          href={props.result._source.url}
+        <Link
+          to={getUrl(props.result)}
           dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.short_title', props.result._source.short_title) }}
         />
       </div>
@@ -139,7 +191,7 @@ const HitItem = (props) => {
     return UserHit(props);
   case 'idea':
     return IdeaHit(props);
-  default:
+  default: // post
     return PostHit(props);
   }
 };
