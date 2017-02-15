@@ -282,7 +282,7 @@ export default class Search extends React.Component {
                   }
                 });
               }}
-            >{this.state.show ? this.searchkit.translate('expand_filters') : this.searchkit.translate('collapse_filters') }</button>
+            >{this.state.show ? this.searchkit.translate('collapse_search') : this.searchkit.translate('expand_search') }</button>
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
