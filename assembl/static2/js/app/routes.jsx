@@ -14,7 +14,7 @@ import Profile from './containers/profile';
 import Styleguide from './containers/styleguide';
 import NotFound from './containers/notFound';
 import Terms from './containers/terms';
-import Search from './containers/search';
+import Search from './components/search';
 
 export default (
   <Router>

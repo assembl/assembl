@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Search from './containers/search';
+import Search from './components/search';
 
 import '../../css/views/searchv1.scss';
 
