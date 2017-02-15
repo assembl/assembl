@@ -163,7 +163,7 @@ export default class Search extends React.Component {
     super();
     const discussionId = GlobalFunctions.getDiscussionId();
     const host = '/';
-    this.searchkit = new SearchkitManager(host);
+    this.searchkit = new SearchkitManager(host, { searchOnLoad: false });
     this.searchkit.setQueryProcessor((plainQueryObject) => {
       // rewrite the query to filter on the current discussion
       const modifiedQuery = plainQueryObject;
@@ -219,11 +219,18 @@ export default class Search extends React.Component {
             <SearchBox
               autofocus={false}
               searchOnChange
+              searchThrottleTime={500}
               queryFields={queryFields}
             />
             <button
               className="btn"
-              onClick={() => { this.setState({ show: !this.state.show }); }}
+              onClick={() => {
+                this.setState({ show: !this.state.show }, () => {
+                  if (this.state.show && !this.searchkit.hasHits()) {
+                    this.searchkit.reloadSearch();
+                  }
+                });
+              }}
             >{this.state.show ? 'replier les filtres' : 'déplier les filtres'}</button>
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
