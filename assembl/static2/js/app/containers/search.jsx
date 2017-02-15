@@ -21,6 +21,10 @@ import {
 } from 'searchkit';
 import get from 'lodash/get';
 
+// Keep the style import here. The reason why it's not in main.scss is because
+// we create a searchv1 bundle that includes only the Search component and its
+// local styles for v1. There is an additional searchv1.scss file that overrides
+// some styles for v1
 import 'searchkit/theming/theme.scss';
 import '../../../css/views/search.scss';
 
