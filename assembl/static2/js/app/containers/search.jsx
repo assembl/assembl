@@ -7,7 +7,6 @@ import {
   SearchBox,
   Hits,
   HitsStats,
-  PageSizeSelector,
   Pagination,
   ResetFilters,
   SelectedFilters,
@@ -243,13 +242,12 @@ export default class Search extends React.Component {
                   />
                 </ActionBarRow>
                 <ActionBarRow>
-                  Affichage par : <PageSizeSelector options={[20, 50, 100]} />
                   <SelectedFilters />
                   <ResetFilters />
                 </ActionBarRow>
               </ActionBar>
               <Hits
-                hitsPerPage={20}
+                hitsPerPage={5}
                 highlightFields={queryFields}
                 itemComponent={HitItem}
                 mod="sk-hits-list"
