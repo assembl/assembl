@@ -30,6 +30,7 @@ import 'searchkit/theming/theme.scss';
 import '../../../css/views/search.scss';
 
 import GlobalFunctions from '../utils/globalFunctions';
+import Translations from '../utils/translations';
 
 const truncate = (text) => {
   if (!text) {
@@ -248,18 +249,12 @@ export default class Search extends React.Component {
       }
       return modifiedQuery;
     });
-    // this.searchkit.translateFunction = (key) => {
-    //   return { 'pagination.next': 'Next Page', 'pagination.previous': 'Previous Page' }[key];
-    // };
+    const browserLanguage = navigator.language || navigator.userLanguage;
+    const locale = GlobalFunctions.getLocale(browserLanguage);
+    this.searchkit.translateFunction = (key) => {
+      return Translations[locale].search[key];
+    };
     this.state = { show: false };
-    // this.removalFn = this.searchkit.addResultsListener((results) => {
-    //   console.log(results);
-    //   if (results.hits.hits.length === 0) {
-    //     this.setState({ show: false });
-    //   } else {
-    //     this.setState({ show: true });
-    //   }
-    // });
   }
 
   // <DynamicRangeFilter
@@ -287,7 +282,7 @@ export default class Search extends React.Component {
                   }
                 });
               }}
-            >{this.state.show ? 'replier les filtres' : 'déplier les filtres'}</button>
+            >{this.state.show ? this.searchkit.translate('expand_filters') : this.searchkit.translate('collapse_filters') }</button>
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
@@ -300,9 +295,7 @@ export default class Search extends React.Component {
             <LayoutResults>
               <ActionBar>
                 <ActionBarRow>
-                  <HitsStats
-                    translations={{ 'hitstats.results_found': '{hitCount} results found' }}
-                  />
+                  <HitsStats />
                 </ActionBarRow>
                 <ActionBarRow>
                   <SelectedFilters />

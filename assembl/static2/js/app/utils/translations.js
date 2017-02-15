@@ -1,5 +1,26 @@
 const Translations = {
   fr: {
+    search: {
+      'reset.clear_all': 'Effacer tous les filtres',
+      'facets.view_more': 'Voir plus',
+      'facets.view_less': 'Voir moins',
+      'facets.view_all': 'Voir tout',
+      'NoHits.NoResultsFound': 'Aucun résultat trouvé pour {query}.',
+      'NoHits.DidYouMean': 'Rechercher pour {suggestion}.',
+      'NoHits.SearchWithoutFilters': 'Rechercher {query} sans filtres',
+      'NoHits.NoResultsFoundDidYouMean': 'Aucun résultat trouvé pour {query}. Vous vouliez peut-être {suggestion} ?',
+      'hitstats.results_found': '{hitCount} résultats trouvés',
+      'pagination.previous': 'Précédent',
+      'pagination.next': 'Suivant',
+      'searchbox.placeholder': 'Recherche',
+      expand_filters: 'déplier les filtres',
+      collapse_filters: 'replier les filtres',
+      All: 'Tout',
+      post: 'Messages',
+      idea: 'Idées',
+      user: 'Personnes',
+      synthesis: 'Synthèses'
+    },
     navbar: {
       home: 'accueil',
       debate: 'débat',
@@ -94,6 +115,27 @@ const Translations = {
     }
   },
   en: {
+    search: {
+      'reset.clear_all': 'Clear All Filters',
+      'facets.view_more': 'View more',
+      'facets.view_less': 'View less',
+      'facets.view_all': 'View all',
+      'NoHits.NoResultsFound': 'No results found for {query}.',
+      'NoHits.DidYouMean': 'Search for {suggestion}.',
+      'NoHits.SearchWithoutFilters': 'Search for {query} without filters',
+      'NoHits.NoResultsFoundDidYouMean': 'No results found for {query}. Did you mean {suggestion}?',
+      'hitstats.results_found': '{hitCount} results found',
+      'pagination.previous': 'Previous',
+      'pagination.next': 'Next',
+      'searchbox.placeholder': 'Search',
+      expand_filters: 'expand filters',
+      collapse_filters: 'collapse filters',
+      All: 'All',
+      post: 'Messages',
+      idea: 'Ideas',
+      user: 'Users',
+      synthesis: 'Synthesis'
+    },
     navbar: {
       home: 'home',
       debate: 'debate',
