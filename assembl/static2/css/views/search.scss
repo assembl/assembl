@@ -1,7 +1,28 @@
+@import "../variables.scss";
+
+.sk-search-box {
+    &.is-focused {
+        background:white;
+    }
+
+    &.is-focused &__text {
+        color: white;
+    }
+
+    &.is-focused &__text::-webkit-input-placeholder  {
+        color: white;
+    }
+}
+
 .sk-layout {
     &__top-bar {
         z-index: 100;
         position: relative;
+        background-color: transparent;
+        box-shadow: none;
+        .sk-search-box {
+            background-color: $first-color;
+        }
     }
     &__body{
         margin: 0 auto 0;
@@ -9,8 +30,9 @@
 }
 
 .sk-hits-list-hit {
-    border-bottom: 1px solid purple; // TODO use a variable for the color
+    border-bottom: 1px solid $first-color;
     width: 100%;
+    flex-direction: column;
 }
 
 .hidden {
