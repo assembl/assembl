@@ -13,6 +13,7 @@ import {
   SelectedFilters,
   SearchkitProvider,
   SearchkitManager,
+  Tabs,
 //   NoHits,
    InitialLoader,
    Layout, LayoutBody, LayoutResults,
@@ -289,20 +290,21 @@ export default class Search extends React.Component {
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
-              <MenuFilter
-                field="_type"
-                id="type"
-                title="Types"
-              />
+              <ResetFilters />
+              <SelectedFilters />
             </SideBar>
             <LayoutResults>
               <ActionBar>
                 <ActionBarRow>
-                  <HitsStats />
+                  <MenuFilter
+                    field="_type"
+                    id="type"
+                    title="Types"
+                    listComponent={Tabs}
+                  />
                 </ActionBarRow>
                 <ActionBarRow>
-                  <SelectedFilters />
-                  <ResetFilters />
+                  <HitsStats />
                 </ActionBarRow>
               </ActionBar>
               <Hits
