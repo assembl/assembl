@@ -88,10 +88,7 @@ if (__resourceQuery) { // v1
 }
 
 // TODO get the right subject highlight, fr, en in priority, then fallback to und(efined). Same for body obviously.
-// TODO pagination component doesn't seem to work
-// TODO translations fr/en
-// TODO issue with sidebar range filter, it sometime disappears
-// (when there is only 1 result), and the selected range is not kept (maybe because of the date field...)
+// TODO translations fr/en of messages in hits, internationalize dates
 
 const PostHit = (props) => {
   return (
