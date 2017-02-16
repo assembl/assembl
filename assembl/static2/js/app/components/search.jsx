@@ -155,6 +155,9 @@ const UserHit = (props) => {
 };
 
 const IdeaHit = (props) => {
+  const definition = truncate(get(props.result, 'highlight.definition', props.result._source.definition));
+  const announceTitle = truncate(get(props.result, 'highlight.title', props.result._source.title));
+  const announceBody = truncate(get(props.result, 'highlight.body', props.result._source.body));
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
@@ -164,17 +167,17 @@ const IdeaHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        { get(props.result, 'highlight.definition') ?
+        { definition ?
           <div>
-            <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.definition', props.result._source.definition)) }} />
-            <p>{ 'Recherche effectuée dans la section "à retenir" de la discussion' }</p>
+            <p dangerouslySetInnerHTML={{ __html: definition }} />
+            { get(props.result, 'highlight.definition') && <p>{ 'Recherche effectuée dans la section "à retenir" de la discussion' }</p> }
           </div>
           : null
         }
         { get(props.result, 'highlight.title') || get(props.result, 'highlight.body') ?
           <div>
-            <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.title', props.result._source.title)) }} />
-            <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.body', props.result._source.body)) }} />
+            <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
+            <p dangerouslySetInnerHTML={{ __html: announceBody }} />
             <p>{ 'Recherche effectuée dans la section "consignes" de la discussion' }</p>
           </div>
           : null
