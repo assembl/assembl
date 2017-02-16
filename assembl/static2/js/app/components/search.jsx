@@ -4,7 +4,8 @@ import React from 'react';
 
 import {
   MenuFilter,
-  // DynamicRangeFilter,
+  Panel,
+  DynamicRangeFilter,
   SearchBox,
   SortingSelector,
   Hits,
@@ -14,7 +15,6 @@ import {
   SelectedFilters,
   SearchkitProvider,
   SearchkitManager,
-  Tabs,
   ItemList,
 //   NoHits,
    InitialLoader,
@@ -260,11 +260,6 @@ export default class Search extends React.Component {
     this.state = { show: false };
   }
 
-  // <DynamicRangeFilter
-  //   field="creation_date"
-  //   id="creation_date"
-  //   title="Creation date"
-  // />
   render() {
     return (
       <SearchkitProvider searchkit={this.searchkit}>
@@ -291,26 +286,29 @@ export default class Search extends React.Component {
             <SideBar>
               <ResetFilters />
               <SelectedFilters />
-              <div className="sk-panel__header">{ this.searchkit.translate('Sort:') }</div>
-              <SortingSelector
-                options={[
-                  { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
-                  { label: 'More recent first', field: 'creation_date', order: 'desc' },
-                  { label: 'Oldest first', field: 'creation_date', order: 'asc' }
-                ]}
-                listComponent={ItemList}
+              <MenuFilter
+                field="_type"
+                id="type"
+                title={this.searchkit.translate('Categories')}
+              />
+              <Panel title={this.searchkit.translate('Sort')}>
+                <SortingSelector
+                  options={[
+                    { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
+                    { label: 'More recent first', field: 'creation_date', order: 'desc' },
+                    { label: 'Oldest first', field: 'creation_date', order: 'asc' }
+                  ]}
+                  listComponent={ItemList}
+                />
+              </Panel>
+              <DynamicRangeFilter
+                field="creation_date"
+                id="creation_date"
+                title={this.searchkit.translate('Filter by date')}
               />
             </SideBar>
             <LayoutResults>
               <ActionBar>
-                <ActionBarRow>
-                  <MenuFilter
-                    field="_type"
-                    id="type"
-                    title="Types"
-                    listComponent={Tabs}
-                  />
-                </ActionBarRow>
                 <ActionBarRow>
                   <HitsStats />
                 </ActionBarRow>
