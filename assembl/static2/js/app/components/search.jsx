@@ -6,6 +6,7 @@ import {
   MenuFilter,
   // DynamicRangeFilter,
   SearchBox,
+  SortingSelector,
   Hits,
   HitsStats,
   Pagination,
@@ -14,6 +15,7 @@ import {
   SearchkitProvider,
   SearchkitManager,
   Tabs,
+  ItemList,
 //   NoHits,
    InitialLoader,
    Layout, LayoutBody, LayoutResults,
@@ -289,6 +291,15 @@ export default class Search extends React.Component {
             <SideBar>
               <ResetFilters />
               <SelectedFilters />
+              <div className="sk-panel__header">{ this.searchkit.translate('Sort:') }</div>
+              <SortingSelector
+                options={[
+                  { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
+                  { label: 'More recent first', field: 'creation_date', order: 'desc' },
+                  { label: 'Oldest first', field: 'creation_date', order: 'asc' }
+                ]}
+                listComponent={ItemList}
+              />
             </SideBar>
             <LayoutResults>
               <ActionBar>
