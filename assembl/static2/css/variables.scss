@@ -9,7 +9,15 @@ $green: #3bb848;
 $lightgreen: #93e79d;
 $blue: #140ca0;
 $purple: #5404d7;
+$yellow: #f0ab2b;
+$cyan: #0095b2;
 $opacity-purple: rgba(84, 4, 215, .5);
+$opacity-cyan: rgba(0, 140, 166, .3);
+
+$first-color: $cyan;
+$second-color: $yellow;
+$third-color: $blue;
+$opacity-color: $opacity-cyan;
 
 $app-max-width: 1400px;
 
@@ -37,11 +45,6 @@ $font-size-s: 14px;
 $font-size-m: 16px;
 $font-size-l: 22px;
 $font-size-xl: 32px;
-
-$first-color: $purple;
-$second-color: $lightgreen;
-$third-color: $blue;
-$opacity-color: $opacity-purple;
 
 $border-color: 1px solid $second-color;
 $border-title: 4px solid $second-color;
