@@ -23,7 +23,7 @@ Setup a development environment
 -------------------------------
 
 Install fabric and a SSH server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You need fabric 1.5.1 and a SSH server installed. Here is how to install them on Mac and on Ubuntu.
 
@@ -33,6 +33,7 @@ On Mac
 First install Homebrew by following the instructions at http://brew.sh ; or simply paste the following in the terminal:
 
 .. code:: sh
+
     ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
 
 Make sure `/usr/local/bin` is in your `$PATH`. Then, install the homebrew python and fabric:
@@ -53,7 +54,7 @@ You can get all that you need to bootstrap with:
     apt-get install fabric git openssh-server sudo
 
 Check out the code repository, install build dependencies, and bootstrap
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can run either:
 
