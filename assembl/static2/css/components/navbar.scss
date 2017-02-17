@@ -4,6 +4,7 @@
 
   .navbar-logo {
     padding: 10px 15px 10px 0;
+    width: 90px;
 
     img {
       height: 40px;
@@ -99,6 +100,9 @@
 
 @media screen and (min-width: 768px) {
   .nav-bar {
+    .nav-menu {
+      width: 250px;
+    }
 
     .navbar-home-item {
       display: none;

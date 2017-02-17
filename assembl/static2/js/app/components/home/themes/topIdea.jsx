@@ -1,22 +1,26 @@
 import React from 'react';
-import { Translate, Localize } from 'react-redux-i18n';
+import { connect } from 'react-redux';
+import { Translate } from 'react-redux-i18n';
+import MapStateToProps from '../../../store/mapStateToProps';
 import IdeaLink from './ideaLink';
 
 class TopIdea extends React.Component {
   render() {
-    const theme = this.props.theme;
-    const keyTitle = this.props.keyTitle;
+    const { ideas } = this.props.ideas;
+    const keyValue = this.props.keyValue;
+    const translateKey = 'home.' + keyValue;
+    const topIdeas = ideas[keyValue];
     return(
       <div className="top-idea theme-box">
         <h2 className="dark-title-2 center">
-          <Translate value={keyTitle} />
+          <Translate value={keyValue} />
         </h2>
-        {theme.map((idea, index) => {
-          return (<IdeaLink key={index} idea={idea} />)
+        {topIdeas.map((idea, index) => {
+          return(<IdeaLink key={index} idea={idea} />);
         })}
       </div>
     );
   }
 }
 
-export default TopIdea;
+export default connect(MapStateToProps)(TopIdea);

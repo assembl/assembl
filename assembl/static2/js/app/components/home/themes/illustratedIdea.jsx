@@ -1,20 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Glyphicon } from 'react-bootstrap';
+import MapStateToProps from '../../../store/mapStateToProps';
 
 class IllustratedIdea extends React.Component {
   render() {
-    const { imgUrl, title, nbPosts, nbUsers } = this.props.theme;
+    const { ideas } = this.props.ideas;
+    const index = this.props.index;
     return(
       <div className="illustrated-idea illustration-box">
-        <div className="image-box" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>&nbsp;</div>
+        <div className="image-box" style={{ backgroundImage: 'url(' + ideas.themes[index].imgUrl + ')' }}>&nbsp;</div>
         <Link className="content-box">
-          <h3 className="light-title-3">{title}</h3>
+          <h3 className="light-title-3">{ideas.themes[index].title}</h3>
           <div className="stats">
-            <div className="inline">{nbPosts}</div>
+            <div className="inline">{ideas.themes[index].nbPosts}</div>
             <div className="white-icon"><Glyphicon glyph="envelope" /></div>
             <div className="inline padding">-</div>
-            <div className="inline">{nbUsers}</div>
+            <div className="inline">{ideas.themes[index].nbUsers}</div>
             <div className="white-icon"><Glyphicon glyph="user" /></div>
           </div>
         </Link>
@@ -26,4 +29,4 @@ class IllustratedIdea extends React.Component {
   }
 }
 
-export default IllustratedIdea;
+export default connect(MapStateToProps)(IllustratedIdea);
