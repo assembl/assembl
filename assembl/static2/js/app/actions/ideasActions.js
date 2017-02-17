@@ -4,8 +4,11 @@ class IdeasActions {
   static fetchIdeas(debateId) {
     const that = this;
     return function (dispatch) {
-      const ideas = IdeaService.fetchIdeas(debateId);
-      dispatch(that.resolvedFetchIdeas(ideas));
+      dispatch(that.loadingIdeas());
+      setTimeout(() => {
+        const ideas = IdeaService.fetchIdeas(debateId);
+        dispatch(that.resolvedFetchIdeas(ideas));
+      }, 5000);
     };
   }
   static loadingIdeas() {
