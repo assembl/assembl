@@ -788,13 +788,11 @@ def update_npm_requirements(force_reinstall=False):
     sanitize_env()
     with cd(get_node_base_path()):
         if force_reinstall:
-            venvcmd('npm prune', chdir=False)
             venvcmd('reinstall', chdir=False)
         else:
             venvcmd('npm update', chdir=False)
     with cd(get_new_node_base_path()):
         if force_reinstall:
-            venvcmd('npm prune', chdir=False)
             venvcmd('reinstall', chdir=False)
         else:
             venvcmd('npm update', chdir=False)
