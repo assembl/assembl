@@ -8,9 +8,9 @@ class IllustratedIdea extends React.Component {
   render() {
     const { ideas } = this.props.ideas;
     const index = this.props.index;
-    return(
+    return (
       <div className="illustrated-idea illustration-box">
-        <div className="image-box" style={{ backgroundImage: 'url(' + ideas.themes[index].imgUrl + ')' }}>&nbsp;</div>
+        <div className="image-box" style={{ backgroundImage: `url(${ideas.themes[index].imgUrl})` }}>&nbsp;</div>
         <Link className="content-box">
           <h3 className="light-title-3">{ideas.themes[index].title}</h3>
           <div className="stats">

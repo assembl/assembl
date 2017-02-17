@@ -24,7 +24,8 @@ class IdeaService {
           imgUrl: 'http://www.visitasilomar.com/media/322487/asilomar-family-on-the-beach_208817447_1000x667.jpg',
           title: 'intégration',
           nbUsers: 24,
-          nbPosts: 435
+          nbPosts: 435,
+          debateId: debateId
         }
       ],
       controversial: [

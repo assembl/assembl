@@ -10,7 +10,7 @@ import Loader from '../common/loader';
 class Themes extends React.Component {
   render() {
     const { ideas, ideasLoading } = this.props.ideas;
-    return(
+    return (
       <div>
         {ideasLoading && <Loader />}
         {(ideas && Object.keys(ideas).length > 4 && ideas.themes.length > 3) &&
