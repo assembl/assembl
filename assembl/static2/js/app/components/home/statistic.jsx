@@ -17,7 +17,7 @@ class Statistic extends React.Component {
           {postsError && <Error errorMessage={postsError} />}
           {posts &&
             <div className="stat-box border-right">
-              <div className="color-icon"><Glyphicon glyph="comment" /></div>
+              <div className="white-icon"><Glyphicon glyph="envelope" /></div>
               <div className="stat">
                 <div className="stat-nb">{posts.total}&nbsp;</div>
                 <div className="stat-nb">
@@ -32,7 +32,7 @@ class Statistic extends React.Component {
           {usersError && <Error errorMessage={usersError} />}
           {users &&
             <div className="stat-box">
-              <div className="color-icon"><Glyphicon glyph="user" /></div>
+              <div className="white-icon"><Glyphicon glyph="user" /></div>
               <div className="stat">
                 <div className="stat-nb">{users.totalVerifiedUsers}&nbsp;</div>
                 <div className="stat-nb">

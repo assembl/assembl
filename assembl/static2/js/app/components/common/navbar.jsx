@@ -49,7 +49,7 @@ class NavBar extends React.Component {
               <NavigationMenu />
             </div>
             <div className="navbar-icons right">
-              <div className="white-icon">
+              <div className="rounded-icon">
                 <a href={`${debateData.help_url}`} target="_blank" rel="noopener noreferrer"><Glyphicon glyph="question-sign" /></a>
               </div>
               <div className="navbar-language right">

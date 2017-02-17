@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Translate, Localize } from 'react-redux-i18n';
 import MapStateToProps from '../../store/mapStateToProps';
 
-class SynthesisInsert extends React.Component {
+class Synthesis extends React.Component {
   render() {
     const { synthesis } = this.props.synthesis;
 
@@ -17,7 +17,7 @@ class SynthesisInsert extends React.Component {
             {synthesis.lastPublishedSynthesis.subject}
           </div>
         </h3>
-        <div className="hyphen">&nbsp;</div>
+        <div className="box-hyphen">&nbsp;</div>
         <div className="date">
           <Localize value={synthesis.lastPublishedSynthesis.creation_date} dateFormat="date.format" />
         </div>
@@ -29,4 +29,4 @@ class SynthesisInsert extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(SynthesisInsert);
+export default connect(MapStateToProps)(Synthesis);

@@ -5,7 +5,7 @@ class ErrorComponent extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="dark-title-2 underline" id="error">ERROR</h2>
+        <h2 className="dark-title-2 underline" id="error" style={{ borderBottom: "1px solid #ccc"}}>ERROR</h2>
         <section>
           <Error errorMessage="ErrorMessage" />
         </section>

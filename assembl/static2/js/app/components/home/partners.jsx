@@ -7,7 +7,7 @@ import MapDispatchToProps from '../../store/mapDispatchToProps';
 import Loader from '../common/loader';
 import Error from '../common/error';
 
-class PartnersSection extends React.Component {
+class Partners extends React.Component {
   componentWillMount() {
     const { debateId } = this.props.context;
     this.props.fetchPartners(debateId);
@@ -48,4 +48,4 @@ class PartnersSection extends React.Component {
   }
 }
 
-export default connect(MapStateToProps, MapDispatchToProps)(PartnersSection);
+export default connect(MapStateToProps, MapDispatchToProps)(Partners);

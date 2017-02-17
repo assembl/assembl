@@ -12,7 +12,7 @@ $purple: #5404d7;
 $yellow: #f0ab2b;
 $cyan: #0095b2;
 $opacity-purple: rgba(84, 4, 215, .5);
-$opacity-cyan: rgba(0, 140, 166, .3);
+$opacity-cyan: rgba(0, 140, 166, .5);
 
 $first-color: $cyan;
 $second-color: $yellow;
@@ -20,6 +20,8 @@ $third-color: $blue;
 $opacity-color: $opacity-cyan;
 
 $app-max-width: 1400px;
+$navbar-height: 60px;
+$navbar-line-height: 64px;
 
 $fonts-dir: '/static2/fonts';
 $img-dir: '/static2/img';
@@ -46,9 +48,9 @@ $font-size-m: 16px;
 $font-size-l: 22px;
 $font-size-xl: 32px;
 
-$border-color: 1px solid $second-color;
 $border-title: 4px solid $second-color;
-$border-active: 4px solid $first-color;
+$border-active: 4px solid $third-color;
+$border-theme: 4px solid $first-color;
 
 $page-bkg-light: $white;
 $page-bkg-grey: $grey0;
@@ -70,17 +72,17 @@ $title1-dark-color: $first-color;
 $title2-dark-color: $first-color;
 $title3-dark-color: $first-color;
 $title4-dark-color: $first-color;
-$title5-dark-color: $first-color;
+$title5-dark-color: $grey4;
 $title1-light-color: $white;
 $title2-light-color: $white;
 $title3-light-color: $white;
 $title4-light-color: $white;
 $title5-light-color: $white;
 $title1-size: $font-size-xl;
-$title2-size: $font-size-l;
+$title2-size: $font-size-m;
 $title3-size: $font-size-m;
 $title4-size: $font-size-s;
-$title5-size: $font-size-xs;
+$title5-size: $font-size-l;
 
 $navbar-bkg: $white;
 $navbar-border: none;
@@ -89,8 +91,8 @@ $navbar-active-text-color: $third-color;
 
 $box-shadow: 1px 1px 3px 0 $grey1;
 $box-bkg: $white;
-$box-border: 2px solid $grey1;
-$box-title-bkg: $grey3;
+$box-border: 1px solid $white;
+$box-title-bkg: $grey4;
 $box-title-txt: $white;
 
 $partner-logo-width: 150px;
@@ -100,3 +102,6 @@ $input-txt-bkg-color: $white;
 
 $line-height: 1.4;
 $lines-to-show: 3;
+
+$small-hyphen-width: 50px;
+$large-hyphen-width: 75px;

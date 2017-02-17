@@ -37,7 +37,13 @@ const Translations = {
       participant: 'participants',
       visit: 'visites',
       viewedPages: 'pages vues',
-      partners: 'partenaires'
+      partners: 'partenaires',
+      themesTitle: 'Les thématiques du débat en cours',
+      themesSubtitle: 'Retrouvez vos discussions à la unes, des plus polémiques au plus plébiscitées',
+      controversial: 'Discussions polémiques',
+      longerThread: 'Thread le plus long',
+      topContributor: 'Top contributeur',
+      recentDiscussion: 'Discussion récente'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -108,7 +114,13 @@ const Translations = {
       participant: 'participants',
       visit: 'visits',
       viewedPages: 'Viewed pages',
-      partners: 'partners'
+      partners: 'partners',
+      themesTitle: 'Themes of the ongoing debate',
+      themesSubtitle: 'Find your most controversial and highly acclaimed discussions on the front page',
+      controversial: 'Controversial discussions',
+      longerThread: 'Longer thread',
+      topContributor: 'Top contributor',
+      recentDiscussion: 'Recent discussion'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -179,7 +191,13 @@ const Translations = {
       participant: 'Teilnehmer',
       visit: 'Besuche',
       viewedPages: 'Seitenaufrufe',
-      partners: 'Partnern'
+      partners: 'Partnern',
+      themesTitle: 'Themen der laufenden Debatte',
+      themesSubtitle: 'Finden Sie Ihre umstrittensten und hoch gefeierten Diskussionen auf der Titelseite',
+      controversial: 'Kontroverse Diskussionen',
+      longerThread: 'Längeren Faden',
+      topContributor: 'Top-Beitrag',
+      recentDiscussion: 'Aktuelle Diskussion'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'

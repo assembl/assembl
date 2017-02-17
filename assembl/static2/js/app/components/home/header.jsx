@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import MapStateToProps from '../../store/mapStateToProps';
 import Statistic from './statistic';
-import SynthesisInsert from './synthesisInsert';
+import Synthesis from './synthesis';
 
 class Header extends React.Component {
   render() {
@@ -17,15 +17,14 @@ class Header extends React.Component {
       <div className="header">
         <Grid fluid className="max-container">
           <div className="header-content">
-            <img style={{ display: 'none' }} className="header-logo" src={debateData.logo} alt="logo" />
+            <img className="header-logo" src={debateData.logo} alt="logo" />
             <div className="max-text-width">
               <h1 className="light-title-1">{debateData.topic}</h1>
-              <h3 className="light-title-3 margin-m">{debateData.introduction}</h3>
-              <h5 className="light-title-5 margin-xs uppercase">{debateData.objectives}</h5>
-              <Link className="button-link button-light margin-l" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
+              <h4 className="light-title-4 uppercase margin-m">{debateData.introduction}&nbsp;{debateData.objectives}</h4>
+              <Link className="button-link button-light margin-xl" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
             </div>
             {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&
-              <SynthesisInsert />
+              <Synthesis />
             }
           </div>
         </Grid>

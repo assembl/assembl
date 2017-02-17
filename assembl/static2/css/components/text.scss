@@ -1,5 +1,4 @@
 .title-section {
-  height: 50px;
   line-height: 50px;
   margin: 70px 0 0;
   text-align: left;
@@ -8,9 +7,13 @@
 .title-hyphen {
   border-top: $border-title;
   display: inline-block;
-  line-height: 50px;
+  height: 5px;
   vertical-align: top;
-  width: 75px;
+  width: $large-hyphen-width;
+}
+
+.subtitle {
+  margin: 0 0 0 $large-hyphen-width;
 }
 
 .dark-title-1 {
@@ -27,9 +30,10 @@
 }
 
 .dark-title-2 {
-  color: $title2-dark-color;
+  color: $black;
   font-size: $title2-size;
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 .dark-title-3 {
@@ -48,7 +52,7 @@
 .dark-title-5 {
   color: $title5-dark-color;
   font-size: $title5-size;
-  font-weight: 700;
+  font-weight: 200;
 }
 
 .light-title-1 {
@@ -75,6 +79,7 @@
 .light-title-5 {
   color: $title5-light-color;
   font-size: $title5-size;
+  font-weight: 200;
 }
 
 .date {
@@ -99,4 +104,20 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media screen and (max-width: 420px) {
+  .title-section {
+    margin: 40px 10px 0;
+
+    .dark-title-1 {
+      display: block;
+      line-height: 40px;
+      margin: -30px 0 0;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+    }
+  }
 }

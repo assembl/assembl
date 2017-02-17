@@ -5,7 +5,7 @@ class Loading extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="dark-title-2 underline" id="loader">LOADER</h2>
+        <h2 className="dark-title-2 underline" id="loader" style={{ borderBottom: "1px solid #ccc"}}>LOADER</h2>
         <section>
           <Loader />
           <Loader textHidden />

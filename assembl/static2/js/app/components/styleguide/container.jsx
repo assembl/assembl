@@ -4,7 +4,7 @@ class Container extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="dark-title-2 underline" id="container">CONTAINER</h2>
+        <h2 className="dark-title-2 underline" id="container" style={{ borderBottom: "1px solid #ccc"}}>CONTAINER</h2>
         <h3 className="dark-title-3">Code</h3>
         <pre>
           <div>&lt;Grid fluid&gt;</div>
