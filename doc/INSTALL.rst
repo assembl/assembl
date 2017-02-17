@@ -4,6 +4,9 @@ Installing Assembl
 Prerequisites
 -------------
 
+-  If you have `yarn <https://yarnpkg.com>`__ javascript package manager
+   installed, it will be used instead of `npm`.
+
 -  On Mac OS X 10.9.2: The system python is incompatible with the clang
    5.1. You need to remove all occurences of ``-mno-fused-madd`` in
    ``/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/_sysconfigdata.py``.

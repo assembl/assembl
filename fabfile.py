@@ -5,6 +5,7 @@ from __future__ import with_statement
 from os import getenv
 from getpass import getuser
 from platform import system
+from shutil import rmtree
 from time import sleep, strftime
 import pipes
 from ConfigParser import ConfigParser, SafeConfigParser, NoOptionError
@@ -791,11 +792,20 @@ def update_npm_requirements(force_reinstall=False):
             venvcmd('reinstall', chdir=False)
         else:
             venvcmd('npm update', chdir=False)
-    with cd(get_new_node_base_path()):
-        if force_reinstall:
-            venvcmd('reinstall', chdir=False)
+
+    static2_path = get_new_node_base_path()
+    with cd(static2_path):
+        if exists('/usr/bin/yarn'):
+            if force_reinstall:
+                print('Removing node_modules directory...')
+                rmtree(os.path.join(static2_path, 'node_modules'))
+
+            venvcmd('/usr/bin/yarn', chdir=False)
         else:
-            venvcmd('npm update', chdir=False)
+            if force_reinstall:
+                venvcmd('reinstall', chdir=False)
+            else:
+                venvcmd('npm update', chdir=False)
 
 
 @task
