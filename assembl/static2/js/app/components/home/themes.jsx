@@ -27,7 +27,7 @@ class Themes extends React.Component {
                   </h5>
                 </div>
               </div>
-              <div className="margin-xl">
+              <div className="margin-xxl">
                 <Col xs={12} sm={6} md={3} className="theme1 no-padding">
                   <TopIdea keyValue="controversial" />
                   <IllustratedIdea index={0} />

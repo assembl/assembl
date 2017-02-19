@@ -43,7 +43,8 @@ const Translations = {
       controversial: 'Discussions polémiques',
       longerThread: 'Thread le plus long',
       topContributor: 'Top contributeur',
-      recentDiscussion: 'Discussion récente'
+      recentDiscussion: 'Discussion récente',
+      objectivesTitle: 'Pourquoi un tel débat'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -120,7 +121,8 @@ const Translations = {
       controversial: 'Controversial discussions',
       longerThread: 'Longer thread',
       topContributor: 'Top contributor',
-      recentDiscussion: 'Recent discussion'
+      recentDiscussion: 'Recent discussion',
+      objectivesTitle: 'Why this debate?'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -197,7 +199,8 @@ const Translations = {
       controversial: 'Kontroverse Diskussionen',
       longerThread: 'Längeren Faden',
       topContributor: 'Top-Beitrag',
-      recentDiscussion: 'Aktuelle Diskussion'
+      recentDiscussion: 'Aktuelle Diskussion',
+      objectivesTitle: 'Warum diese Debatte?'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'

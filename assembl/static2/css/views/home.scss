@@ -22,8 +22,8 @@
   }
 
   .header-bkg {
-    background-image: url('#{$img-dir}/default_header.jpg');
     background-position: left;
+    background-repeat: no-repeat;
     background-size: cover;
     height: 100%;
     opacity: .7;
@@ -71,7 +71,7 @@
 }
 
 .themes {
-  padding: 0 15px 90px;
+  padding: 0 15px 80px;
 
   .theme1 {
     margin: 80px 0 0;
@@ -95,9 +95,10 @@
     }
 
     .idea-link {
+      cursor: pointer;
       height: 125px;
       letter-spacing: 1px;
-      padding: 20px 40px;
+      padding: 25px 40px;
 
       .idea-link-title {
         color: $first-color;
@@ -116,6 +117,22 @@
 
       &:nth-child(3) {
         background-color: $grey1;
+      }
+
+      &:hover {
+        background-color: $opacity-color;
+
+        .idea-link-title {
+          color: $white;
+        }
+
+        .inline {
+          color: $white;
+        }
+
+        span {
+          color: $white;
+        }
       }
     }
   }
@@ -139,6 +156,26 @@
         font-size: 13px;
       }
     }
+  }
+}
+
+.objectives {
+  .objectives-text {
+    font-size: $font-size-m;
+    font-weight: 200;
+    line-height: 30px;
+    margin: 10px 0 0;
+    text-align: justify;
+  }
+
+  .objectives-img {
+    background-size: cover;
+    height: 480px;
+    margin: 20px 0 0;
+  }
+
+  .objectives-images {
+    margin: 50px -15px 0;
   }
 }
 
@@ -229,4 +266,3 @@
     }
   }
 }
-

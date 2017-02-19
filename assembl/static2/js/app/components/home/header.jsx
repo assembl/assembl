@@ -20,8 +20,10 @@ class Header extends React.Component {
             <img className="header-logo" src={debateData.logo} alt="logo" />
             <div className="max-text-width">
               <h1 className="light-title-1">{debateData.topic}</h1>
-              <h4 className="light-title-4 uppercase margin-m">{debateData.introduction}&nbsp;{debateData.objectives}</h4>
-              <Link className="button-link button-light margin-xl" to={`${rootPath}${debateData.slug}/debate`}><Translate value="home.accessButton" /></Link>
+              <h4 className="light-title-4 uppercase margin-m">{debateData.introduction}</h4>
+              <Link className="button-link button-light margin-xl" to={`${rootPath}${debateData.slug}/debate`}>
+                <Translate value="home.accessButton" />
+              </Link>
             </div>
             {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&
               <Synthesis />
@@ -31,7 +33,7 @@ class Header extends React.Component {
         <Grid fluid>
           <Row>
             <Statistic />
-            <div className="header-bkg">&nbsp;</div>
+            <div className="header-bkg" style={{ backgroundImage: `url(${debateData.homepage})` }}>&nbsp;</div>
           </Row>
         </Grid>
       </div>
