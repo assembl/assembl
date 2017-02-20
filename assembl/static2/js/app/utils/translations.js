@@ -44,7 +44,16 @@ const Translations = {
       longerThread: 'Thread le plus long',
       topContributor: 'Top contributeur',
       recentDiscussion: 'Discussion récente',
-      objectivesTitle: 'Pourquoi un tel débat'
+      objectivesTitle: 'Pourquoi un tel débat',
+      timelineTitle: 'La timeline du débat en 4 phases',
+      step1Title: 'Phase découverte',
+      step2Title: 'Phase de divergence',
+      step3Title: 'Phase d\'exploration',
+      step4Title: 'Phase de convergence',
+      step1Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      step2Text: 'Phasellus vitae volutpat ex, quis pulvinar ipsum.',
+      step3Text: 'Phase d\'approffondissement des idées enclines à être soumises lors de la phase de vote.',
+      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -122,7 +131,16 @@ const Translations = {
       longerThread: 'Longer thread',
       topContributor: 'Top contributor',
       recentDiscussion: 'Recent discussion',
-      objectivesTitle: 'Why this debate?'
+      objectivesTitle: 'Why this debate?',
+      timelineTitle: 'The timeline of the debate in 4 phases',
+      step1Title: 'Discovery step',
+      step2Title: 'Divergence step',
+      step3Title: 'Exploration step',
+      step4Title: 'Convergence step',
+      step1Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      step2Text: 'Phasellus vitae volutpat ex, quis pulvinar ipsum.',
+      step3Text: 'Deepening phase of the ideas inclined to be submitted during the voting phase.',
+      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -200,7 +218,16 @@ const Translations = {
       longerThread: 'Längeren Faden',
       topContributor: 'Top-Beitrag',
       recentDiscussion: 'Aktuelle Diskussion',
-      objectivesTitle: 'Warum diese Debatte?'
+      objectivesTitle: 'Warum diese Debatte?',
+      timelineTitle: 'Die Zeitleiste der Debatte in 4 Phasen',
+      step1Title: 'Entdeckungsschritt',
+      step2Title: 'Divergenzschritt',
+      step3Title: 'Erkundungsschritt',
+      step4Title: 'Konvergenz Schritt',
+      step1Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      step2Text: 'Phasellus vitae volutpat ex, quis pulvinar ipsum.',
+      step3Text: 'Vertiefung der Ideen, die in der Abstimmungsphase vorgelegt werden sollen.',
+      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'

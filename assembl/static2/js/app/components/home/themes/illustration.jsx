@@ -4,12 +4,12 @@ import { Link } from 'react-router';
 import { Glyphicon } from 'react-bootstrap';
 import MapStateToProps from '../../../store/mapStateToProps';
 
-class IllustratedIdea extends React.Component {
+class Illustration extends React.Component {
   render() {
     const { ideas } = this.props.ideas;
     const index = this.props.index;
     return (
-      <div className="illustrated-idea illustration-box">
+      <div className="illustration illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${ideas.themes[index].imgUrl})` }}>&nbsp;</div>
         <Link className="content-box">
           <h3 className="light-title-3">{ideas.themes[index].title}</h3>
@@ -29,4 +29,4 @@ class IllustratedIdea extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(IllustratedIdea);
+export default connect(MapStateToProps)(Illustration);

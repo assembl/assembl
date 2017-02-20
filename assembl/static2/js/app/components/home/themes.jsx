@@ -4,7 +4,7 @@ import { Grid, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import MapStateToProps from '../../store/mapStateToProps';
 import TopIdea from './themes/topIdea';
-import IllustratedIdea from './themes/illustratedIdea';
+import Illustration from './themes/illustration';
 import Loader from '../common/loader';
 
 class Themes extends React.Component {
@@ -30,18 +30,18 @@ class Themes extends React.Component {
               <div className="margin-xxl">
                 <Col xs={12} sm={6} md={3} className="theme1 no-padding">
                   <TopIdea keyValue="controversial" />
-                  <IllustratedIdea index={0} />
+                  <Illustration index={0} />
                 </Col>
                 <Col xs={12} sm={6} md={3} className="theme2 no-padding">
-                  <IllustratedIdea index={1} />
+                  <Illustration index={1} />
                   <TopIdea keyValue="longerThread" />
                 </Col>
                 <Col xs={12} sm={6} md={3} className="theme3 no-padding">
                   <TopIdea keyValue="topContributor" />
-                  <IllustratedIdea index={2} />
+                  <Illustration index={2} />
                 </Col>
                 <Col xs={12} sm={6} md={3} className="theme4 no-padding">
-                  <IllustratedIdea index={3} />
+                  <Illustration index={3} />
                   <TopIdea keyValue="recentDiscussion" />
                 </Col>
               </div>

@@ -81,6 +81,20 @@
       ~ .rotate-hyphen {
         display: block;
       }
+
+      .text-box {
+        display: block;
+      }
+    }
+
+    .text-box {
+      display: none;
+      font-size: $font-size-xs;
+      font-weight: 100;
+      letter-spacing: 1px;
+      margin: 80px 0 0;
+      padding: 0 20px 0 0;
+      text-align: justify;
     }
   }
 
