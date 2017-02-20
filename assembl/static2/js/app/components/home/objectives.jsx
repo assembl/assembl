@@ -23,7 +23,7 @@ class Objectives extends React.Component {
           </div>
           <div className="objectives-images">
             <Col xs={12} sm={12} md={6}>
-              <div className="objectives-text text-column">{debateData.objectives}</div>
+              <div className="text text-column">{debateData.objectives}</div>
             </Col>
             <Col xs={12} sm={6} md={3}>
               <div className="objectives-img" style={{backgroundImage: `url(${imgUrl1})`}}>&nbsp;</div>

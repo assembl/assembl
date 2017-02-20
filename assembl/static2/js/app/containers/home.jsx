@@ -5,6 +5,7 @@ import Objectives from '../components/home/objectives';
 import Timeline from '../components/home/timeline';
 import Video from '../components/home/video';
 import Tweet from '../components/home/tweet';
+import Contact from '../components/home/contact';
 import Partners from '../components/home/partners';
 
 class Home extends React.Component {
@@ -17,6 +18,7 @@ class Home extends React.Component {
         <Timeline />
         <Video />
         <Tweet />
+        <Contact />
         <Partners />
       </div>
     );
