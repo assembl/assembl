@@ -12,7 +12,7 @@ class Illustration extends React.Component {
       <div className="illustration illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${ideas.themes[index].imgUrl})` }}>&nbsp;</div>
         <Link className="content-box">
-          <h3 className="light-title-3">{ideas.themes[index].title}</h3>
+          <h3 className="light-title-3 center">{ideas.themes[index].title}</h3>
           <div className="stats">
             <div className="inline">{ideas.themes[index].nbPosts}</div>
             <div className="white-icon"><Glyphicon glyph="envelope" /></div>

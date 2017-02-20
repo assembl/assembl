@@ -53,7 +53,8 @@ const Translations = {
       step1Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       step2Text: 'Phasellus vitae volutpat ex, quis pulvinar ipsum.',
       step3Text: 'Phase d\'approffondissement des idées enclines à être soumises lors de la phase de vote.',
-      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet'
+      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet',
+      video: 'La vidéo du débat'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -140,7 +141,8 @@ const Translations = {
       step1Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       step2Text: 'Phasellus vitae volutpat ex, quis pulvinar ipsum.',
       step3Text: 'Deepening phase of the ideas inclined to be submitted during the voting phase.',
-      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet'
+      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet',
+      video: 'The debate\'s video'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -227,7 +229,8 @@ const Translations = {
       step1Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       step2Text: 'Phasellus vitae volutpat ex, quis pulvinar ipsum.',
       step3Text: 'Vertiefung der Ideen, die in der Abstimmungsphase vorgelegt werden sollen.',
-      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet'
+      step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet',
+      video: 'Das Video der Debatte'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'
