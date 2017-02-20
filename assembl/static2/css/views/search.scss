@@ -1,38 +1,256 @@
 @import "../variables.scss";
+@import "../../node_modules/searchkit/theming/vars.scss";
+// @import "../../node_modules/searchkit/theming/components.scss";
 
-.sk-search-box {
-    &.is-focused {
-        background:white;
-    }
+@import "../../node_modules/searchkit/theming/components/arrows.scss";
+@import "../../node_modules/searchkit/theming/components/actions.scss";
+@import "../../node_modules/searchkit/theming/components/loader.scss";
 
-    &.is-focused &__text {
-        color: white;
-    }
+// @import "../../node_modules/searchkit/theming/components/search-box.scss";
+@import "../../node_modules/searchkit/theming/components/search-icon.scss";
 
-    &.is-focused &__text::-webkit-input-placeholder  {
-        color: white;
-    }
-}
+@import "../../node_modules/searchkit/theming/components/hits-stats.scss";
+@import "../../node_modules/searchkit/theming/components/no-hits.scss";
+
+@import "../../node_modules/searchkit/theming/components/filter-group.scss";
+
+@import "../../node_modules/searchkit/theming/components/filter-item.scss";
+@import "../../node_modules/searchkit/theming/components/item-list.scss";
+@import "../../node_modules/searchkit/theming/components/select.scss";
+@import "../../node_modules/searchkit/theming/components/tabs.scss";
+@import "../../node_modules/searchkit/theming/components/tag-cloud.scss";
+@import "../../node_modules/searchkit/theming/components/toggle.scss";
+
+@import "../../node_modules/searchkit/theming/components/range-input.scss";
+@import "../../node_modules/searchkit/theming/components/range-histogram.scss";
+@import "../../node_modules/searchkit/theming/components/range-slider.scss";
+
+@import "../../node_modules/searchkit/theming/components/hierarchical-menu-filter.scss";
+@import "../../node_modules/searchkit/theming/components/hierarchical-refinement-filter.scss";
+@import "../../node_modules/searchkit/theming/components/input-filter.scss";
+@import "../../node_modules/searchkit/theming/components/numeric-refinement-list-filter.scss";
+@import "../../node_modules/searchkit/theming/components/refinement-list-filter.scss";
+@import "../../node_modules/searchkit/theming/components/selected-filters.scss";
+@import "../../node_modules/searchkit/theming/components/range-filter.scss";
+@import "../../node_modules/searchkit/theming/components/reset-filters.scss";
+@import "../../node_modules/searchkit/theming/components/menu-filter.scss";
+@import "../../node_modules/searchkit/theming/components/tag-filter.scss";
+
+@import "../../node_modules/searchkit/theming/components/pagination.scss";
+
+@import "../../node_modules/searchkit/theming/components/table.scss";
+
+@import "../../node_modules/searchkit/theming/components/panel.scss";
+
+$sk-text-color: white;
 
 .sk-layout {
-    &__top-bar {
-        z-index: 100;
-        position: relative;
-        background-color: transparent;
-        box-shadow: none;
-        .sk-search-box {
-            background-color: $first-color;
-        }
+  float: left;
+
+  &__top-bar {
+    height:40px;
+    padding:5px 0 0 0;
+    z-index:100;
+    position: relative;
+    button {
+        display: inline-block;
     }
-    &__body{
-        margin: 0 auto 0;
+  }
+
+  &__body {
+    position: absolute;
+    z-index: 99;
+    margin: 0 auto 0;
+    top:40px;
+    left:0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+  }
+
+  &__filters {
+    background:$sk-layout-panel-background;
+    padding:15px;
+    margin:15px 0 15px 15px;
+    width: 250px;
+    float: left;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
+
+    .sk-refinement-list,
+    .sk-range-filter,
+    .sk-hierarchical-menu-list,
+    .sk-numeric-refinement-list,
+    .sk-hierarchical-refinement-list {
+      margin-bottom:20px;
     }
+
+    .sk-select {
+      width:100%;
+    }
+
+    .sk-range-input {
+      margin-top:10px;
+    }
+
+  }
+
+  &__results {
+    background:$sk-layout-panel-background;
+    margin:15px 15px 15px 265px;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
+    min-height:600px;
+  }
+
+}
+
+.sk-action-bar {
+  margin:0 15px 15px;
+
+  &-row {
+    margin:0px 0 10px;
+
+    &:last-child {
+      margin:0;
+    }
+  }
+
+  .sk-hits-stats {
+    line-height: 30px;
+  }
+}
+
+.sk-results-list {
+  padding:15px 0;
+}
+
+// components
+
+.sk-search-box {
+  form {
+    position:relative;
+  }
+  input.sk-search-box__text {
+    height: 30px;
+    box-shadow: none;
+    border: 1px solid #ccc;
+    color: black;
+    font-size: 16px;
+    padding: 2px 20px 2px 24px;
+  }
+
+  &__icon {
+      position: absolute;
+      left: 4px;
+      top: 5px;
+      &:before {
+        content:"";
+        @include search-icon;
+        background-size: contain;
+        height: 20px;
+        width: 20px;
+        display: block;
+      }
+      opacity: 0.3;
+  }
+
+  &__action {
+    display:none;
+  }
+
+  &__loader {
+      position: absolute;
+      right: 4px;
+      top: 4px;
+      &.is-hidden {
+        display:none;
+      }
+  }
+}
+
+.sk-search-box, #search-expand {
+    display: inline-block;
+}
+.sk-search-box {
+    margin-right: 4px;
+}
+
+.sk-range-filter {
+  .rc-slider-handle {
+    border-color: $sk-primary-theme-color;
+  }
+  .rc-slider-track {
+    background-color: rgba(156, 162, 153, 0.5);
+  }
+}
+
+.sk-reset-filters {
+  border:none;
+  font-size:14px;
+  margin:0;
+  padding-left:0;
+}
+
+.sk-pagination-navigation {
+  width:300px;
+  margin:10px auto;
+
+  &.is-numbered {
+    width:600px;
+  }
+
+}
+
+.sk-pagination-select {
+  margin: 10px auto;
+  text-align:center;
+}
+
+.sk-hits-list {
+  max-height: 500px;
+  overflow-y: scroll;
+  margin:0 15px 20px;
+
+  em {
+    background:yellow;
+  }
+
+  a {
+    text-decoration: none;
+    color: $sk-action-text-color;
+  }
+
+  &__no-results {
+    text-align:center;
+    margin-top:60px;
+  }
+
+  &__item {
+    margin-bottom:20px;
+  }
 }
 
 .sk-hits-list-hit {
-    border-bottom: 1px solid $first-color;
-    width: 100%;
-    flex-direction: column;
+  padding-bottom: 1em;
+  border-bottom: 1px solid $first-color;
+
+  &__title {
+    line-height:20px;
+    margin:0 0 5px;
+    font-size:18px;
+  }
+
+}
+
+.sk-action-bar {
+  .sk-select, .sk-toggle {
+    margin-left:15px;
+  }
+}
+
+.sk-layout__filters {
+  .sk-select select {
+    width: 100%
+  }
 }
 
 .hidden {

@@ -29,7 +29,7 @@ import get from 'lodash/get';
 // we create a searchv1 bundle that includes only the Search component and its
 // local styles for v1. There is an additional searchv1.scss file that overrides
 // some styles for v1
-import 'searchkit/theming/theme.scss';
+
 import '../../../css/views/search.scss';
 
 import GlobalFunctions from '../utils/globalFunctions';
@@ -272,7 +272,7 @@ export default class Search extends React.Component {
               queryFields={queryFields}
             />
             <button
-              className="btn"
+              className="btn btn-default btn-sm" id="search-expand"
               onClick={() => {
                 this.setState({ show: !this.state.show }, () => {
                   if (this.state.show && !this.searchkit.hasHits()) {

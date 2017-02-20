@@ -1,53 +1,11 @@
 @import "../../../static/css/themes/default/_theme.scss";
 
-.sk-layout__size-l .sk-top-bar__content {
-    width: 400px;
-}
-
-.sk-search-box {
-    &__icon {
-        margin: 3px 0 0 5px;
-    }
-    &.is-focused {
-        background:white;
-    }
-
-    &.is-focused &__text {
-        color: white;
-    }
-
-    &.is-focused &__text::-webkit-input-placeholder  {
-        color: white;
-    } 
-}
-
-.sk-hits-list {
-    height: 500px;
-    overflow: scroll;
-    flex-flow: row wrap;
-}
-
 .sk-hits-list-hit {
     border-bottom: 1px solid $theme_btn_primary_bg_color;
 }
 
-.sk-layout {
-    position: relative;
-    top: -10px;
-    &__top-bar {
-        height: 45px;
-        z-index: 100;
-        position: relative;
-        background-color: transparent;
-        box-shadow: none;
-        .sk-search-box {
-            background-color: $theme_btn_primary_bg_color;
-        }
-    }
-    &__body{
-        z-index: 99;
-        position: relative;
-        background-color: #ffffff;
-        box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+@media screen and (max-width: 1023px) {
+    .joinDiscussion, #search {
+        display: none;
     }
 }
