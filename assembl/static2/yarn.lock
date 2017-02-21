@@ -3349,7 +3349,7 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   dependencies:
     minimist "0.0.8"
 
-moment@^2.13.0:
+moment@^2.13.0, moment@^2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.17.1.tgz#fed9506063f36b10f066c8b59a144d7faebe1d82"
 
@@ -4061,7 +4061,7 @@ qs@6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.2.0.tgz#3b7848c03c2dece69a9522b0fae8c4126d745f3b"
 
-"qs@github:ssetem/qs":
+qs@ssetem/qs:
   version "6.0.1"
   resolved "https://codeload.github.com/ssetem/qs/tar.gz/fb2b80ac750fa375e0d69643adb0840e7e04d1d3"
 
@@ -4180,6 +4180,15 @@ react-bootstrap@^0.30.7:
     uncontrollable "^4.0.1"
     warning "^3.0.0"
 
+react-datepicker@^0.41.1:
+  version "0.41.1"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-0.41.1.tgz#21c26cc3821bee01eb6deb650880fa98f44588ec"
+  dependencies:
+    classnames "^2.2.5"
+    moment "^2.17.1"
+    react-onclickoutside "^5.9.0"
+    tether "^1.4.0"
+
 react-dom@^15.4.1:
   version "15.4.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.2.tgz#015363f05b0a1fd52ae9efdd3a0060d90695208f"
@@ -4206,6 +4215,10 @@ react-i18nify@1.6.0:
     intl "^1.2"
     moment "^2.13.0"
     react "^15.1.0"
+
+react-onclickoutside@^5.9.0:
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-5.9.0.tgz#c47bb506384adc98d686d134b34412ed17b97437"
 
 react-overlays@^0.6.10:
   version "0.6.11"
@@ -4924,6 +4937,10 @@ test-exclude@^2.1.1:
     object-assign "^4.1.0"
     read-pkg-up "^1.0.1"
     require-main-filename "^1.0.1"
+
+tether@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/tether/-/tether-1.4.0.tgz#0f9fa171f75bf58485d8149e94799d7ae74d1c1a"
 
 text-table@^0.2.0, text-table@~0.2.0:
   version "0.2.0"

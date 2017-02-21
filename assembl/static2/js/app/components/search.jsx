@@ -5,14 +5,14 @@ import React from 'react';
 import {
   MenuFilter,
   Panel,
-  DynamicRangeFilter,
+  RangeFilter,
   SearchBox,
   SortingSelector,
   Hits,
   HitsStats,
   Pagination,
   ResetFilters,
-  SelectedFilters,
+  // SelectedFilters,
   SearchkitProvider,
   SearchkitManager,
   ItemList,
@@ -24,6 +24,7 @@ import {
    ActionBar, ActionBarRow
 } from 'searchkit';
 import get from 'lodash/get';
+import moment from 'moment';
 
 // Keep the style import here. The reason why it's not in main.scss is because
 // we create a searchv1 bundle that includes only the Search component and its
@@ -34,6 +35,7 @@ import '../../../css/views/search.scss';
 
 import GlobalFunctions from '../utils/globalFunctions';
 import Translations from '../utils/translations';
+import DateRangeFilter from './search/DateRangeFilter';
 
 const truncate = (text) => {
   if (!text) {
@@ -254,6 +256,7 @@ export default class Search extends React.Component {
     });
     const browserLanguage = navigator.language || navigator.userLanguage;
     const locale = GlobalFunctions.getLocale(browserLanguage);
+    moment.locale(locale);
     this.searchkit.translateFunction = (key) => {
       return Translations[locale].search[key];
     };
@@ -285,7 +288,7 @@ export default class Search extends React.Component {
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
               <ResetFilters />
-              <SelectedFilters />
+              {/* <SelectedFilters /> */}
               <MenuFilter
                 field="_type"
                 id="type"
@@ -301,10 +304,13 @@ export default class Search extends React.Component {
                   listComponent={ItemList}
                 />
               </Panel>
-              <DynamicRangeFilter
+              <RangeFilter
                 field="creation_date"
                 id="creation_date"
                 title={this.searchkit.translate('Filter by date')}
+                rangeComponent={DateRangeFilter}
+                min={946684800000}
+                max={new Date().getTime()}
               />
             </SideBar>
             <LayoutResults>
