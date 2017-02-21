@@ -15,10 +15,6 @@ a {
   }
 }
 
-section {
-  margin: 30px 0;
-}
-
 input {
   &[type='text'] {
     box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
@@ -56,6 +52,30 @@ input {
 
 .background-dark {
   background-color: $page-bkg-dark;
+}
+
+.background-img {
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.content-section {
+  padding: $margin-section 0;
+}
+
+.content-margin {
+  margin: -30px 0 0;
+}
+
+.content-end {
+  clear: both;
+  float: left;
+  height: $margin-section;
+}
+
+.content-start {
+  height: $margin-section;
 }
 
 .inline {

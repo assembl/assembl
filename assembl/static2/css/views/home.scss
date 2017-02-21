@@ -1,4 +1,4 @@
-.header {
+.header-section {
   background-color: $first-color;
   min-height: 380px;
   overflow: hidden;
@@ -62,17 +62,9 @@
       fill: $white;
     }
   }
-
-  .insert-box {
-    position: absolute;
-    right: 0;
-    top: 120px;
-  }
 }
 
-.themes {
-  padding: 0 15px 80px;
-
+.themes-section {
   .theme1 {
     margin: 80px 0 0;
   }
@@ -158,21 +150,17 @@
   }
 }
 
-.objectives {
+.objectives-section {
   .objectives-img {
     background-size: cover;
     height: 480px;
     margin: 20px 0 0;
   }
-
-  .objectives-images {
-    margin: 50px -15px 0;
-  }
 }
 
-.timeline {
+.steps-section {
   .step1 {
-    margin: 120px 0 80px;
+    margin: 120px 0 0;
   }
 
   .step2 {
@@ -188,43 +176,23 @@
   }
 }
 
-.twitter {
-  .single-tweet {
+.video-section {
+  margin: 0 0 0 -15px;
+}
+
+.twitter-section {
+  .tweet-container {
     background-color: $white;
-    height: 760px;
-    margin: 80px;
-    position: absolute;
-    width: 700px;
-    z-index: 10;
-
-    .tweet-content {
-      margin: 60px $large-hyphen-width 0;
-    }
-  }
-
-  .tweet-bkg {
-    background-position: top left;
-    background-repeat: no-repeat;
-    background-size: cover;
-    filter: grayscale(100%);
-    height: 920px;
+    display: inline-block;
   }
 }
 
-.contact {
-  margin-bottom: 80px;
-}
-
-.partners {
-  margin: 0 0 60px;
+.partners-section {
   text-align: center;
 
   .partner-logo {
     display: inline-block;
-    height: $partner-logo-height;
-    line-height: $partner-logo-height;
     margin: 20px;
-    vertical-align: middle;
   }
 
   img {
@@ -234,15 +202,25 @@
 }
 
 @media screen and (max-width: 1100px) {
-  .header {
+  .header-section {
     .insert-box {
       display: none;
     }
   }
 }
 
+@media screen and (min-width: 1100px) {
+  .header-section {
+    .insert-box {
+      position: absolute;
+      right: 0;
+      top: 120px;
+    }
+  }
+}
+
 @media screen and (max-width: 767px) {
-  .header {
+  .header-section {
     .header-content {
       padding: 60px 5px 120px;
     }
@@ -256,7 +234,7 @@
 }
 
 @media screen and (max-width: 991px) {
-  .themes {
+  .themes-section {
     .theme1 {
       margin: 0;
     }
@@ -274,7 +252,7 @@
     }
   }
 
-  .timeline {
+  .steps-section {
     .step1 {
       margin: 0;
     }
@@ -294,7 +272,7 @@
 }
 
 @media screen and (min-width: 768px) {
-  .header {
+  .header-section {
     .header-content {
       padding: 100px 40px 150px;
     }
@@ -308,7 +286,7 @@
 }
 
 @media screen and (max-width: 420px) {
-  .header {
+  .header-section {
     .statistic {
       .stat-box {
         padding: 0 15px;

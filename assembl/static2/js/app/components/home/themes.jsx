@@ -11,23 +11,21 @@ class Themes extends React.Component {
   render() {
     const { ideas, ideasLoading } = this.props.ideas;
     return (
-      <div>
+      <section className="themes-section">
         {ideasLoading && <Loader />}
         {(ideas && Object.keys(ideas).length > 4 && ideas.themes.length > 3) &&
-          <Grid fluid className="background-grey themes">
+          <Grid fluid className="background-grey">
             <div className="max-container">
-              <div>
-                <div className="title-section">
-                  <div className="title-hyphen">&nbsp;</div>
-                  <h1 className="dark-title-1">
-                    <Translate value="home.themesTitle" />
-                  </h1>
-                  <h5 className="dark-title-5 subtitle">
-                    <Translate value="home.themesSubtitle" />
-                  </h5>
-                </div>
+              <div className="title-section">
+                <div className="title-hyphen">&nbsp;</div>
+                <h1 className="dark-title-1">
+                  <Translate value="home.themesTitle" />
+                </h1>
+                <h5 className="dark-title-5 subtitle">
+                  <Translate value="home.themesSubtitle" />
+                </h5>
               </div>
-              <div className="margin-xxl">
+              <div className="content-section">
                 <Col xs={12} sm={6} md={3} className="theme1 no-padding">
                   <TopIdea keyValue="controversial" />
                   <Illustration index={0} />
@@ -46,9 +44,10 @@ class Themes extends React.Component {
                 </Col>
               </div>
             </div>
+            <div className="content-end">&nbsp;</div>
           </Grid>
         }
-      </div>
+      </section>
     );
   }
 }

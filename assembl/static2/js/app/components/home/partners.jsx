@@ -15,19 +15,19 @@ class Partners extends React.Component {
   render() {
     const { partners, partnersLoading, partnersError } = this.props.partners;
     return (
-      <div>
+      <section className="partners-section">
         {partnersLoading && <Loader />}
         {(partners && partners.length > 0) &&
           <Grid fluid className="background-light">
             <div className="max-container">
-              <div className="partners">
-                <div className="title-section">
-                  <div className="title-hyphen">&nbsp;</div>
-                  <h1 className="dark-title-1">
-                    <Translate value="home.partners" />
-                  </h1>
-                </div>
-                <div className="margin-l">
+              <div className="title-section">
+                <div className="title-hyphen">&nbsp;</div>
+                <h1 className="dark-title-1">
+                  <Translate value="home.partners" />
+                </h1>
+              </div>
+              <div className="content-section">
+                <div className="content-margin">
                   {partners.map((partner) => {
                     return (
                       <div className="partner-logo" key={partner['@id']}>
@@ -43,7 +43,7 @@ class Partners extends React.Component {
           </Grid>
         }
         {partnersError && <Error errorMessage={partnersError} />}
-      </div>
+      </section>
     );
   }
 }

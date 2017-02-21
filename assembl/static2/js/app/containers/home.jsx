@@ -2,22 +2,22 @@ import React from 'react';
 import Header from '../components/home/header';
 import Themes from '../components/home/themes';
 import Objectives from '../components/home/objectives';
-import Timeline from '../components/home/timeline';
+import Steps from '../components/home/steps';
 import Video from '../components/home/video';
-import Tweet from '../components/home/tweet';
+import Twitter from '../components/home/twitter';
 import Contact from '../components/home/contact';
 import Partners from '../components/home/partners';
 
 class Home extends React.Component {
   render() {
     return (
-      <div>
+      <div className="home">
         <Header />
         <Themes />
         <Objectives />
-        <Timeline />
+        <Steps />
         <Video />
-        <Tweet />
+        <Twitter />
         <Contact />
         <Partners />
       </div>

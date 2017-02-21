@@ -15,7 +15,7 @@ class Main extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div className="main">
         <Navbar />
         <div className="app-content">{this.props.children}</div>
         <Footer />

@@ -14,7 +14,7 @@ class Header extends React.Component {
     const { synthesis } = this.props.synthesis;
 
     return (
-      <div className="header">
+      <section className="header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
             <img className="header-logo" src={debateData.logo} alt="logo" />
@@ -36,7 +36,7 @@ class Header extends React.Component {
             <div className="header-bkg" style={{ backgroundImage: `url(${debateData.homepage})` }}>&nbsp;</div>
           </Row>
         </Grid>
-      </div>
+      </section>
     );
   }
 }

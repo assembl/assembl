@@ -1,7 +1,10 @@
 .title-section {
-  line-height: 50px;
-  margin: 90px 0 0;
+  margin: $margin-section 0 0;
   text-align: left;
+
+  .dark-title-1 {
+    padding: 15px 0 0;
+  }
 }
 
 .title-hyphen {
@@ -13,7 +16,7 @@
 }
 
 .subtitle {
-  margin: 0 0 0 $large-hyphen-width;
+  margin: 5px 0 0 $large-hyphen-width;
 }
 
 .dark-title-1 {
@@ -22,10 +25,7 @@
   font-size: $title1-size;
   font-weight: 100;
   letter-spacing: 1px;
-  line-height: 50px;
   margin: 0;
-  padding: 10px 0 0;
-  text-align: left;
 }
 
 .dark-title-2 {
@@ -76,6 +76,7 @@
 .light-title-4 {
   color: $title4-light-color;
   font-size: $title4-size;
+  line-height: 20px;
 }
 
 .light-title-5 {
@@ -129,12 +130,11 @@
 
 @media screen and (max-width: 420px) {
   .title-section {
-    margin: 40px 10px 0;
+    margin: $margin-section 10px 0;
 
     .dark-title-1 {
       display: block;
-      line-height: 40px;
-      margin: -30px 0 0;
+      margin: -10px 0 0;
     }
 
     .subtitle {

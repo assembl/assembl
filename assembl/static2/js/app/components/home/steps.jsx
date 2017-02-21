@@ -3,7 +3,7 @@ import { Translate } from 'react-redux-i18n';
 import { Grid, Col } from 'react-bootstrap';
 import Step from './timeline/step';
 
-class Timeline extends React.Component {
+class Steps extends React.Component {
   render() {
     const imgUrl1 = "http://www.circuits-clubmed.fr/sites/default/files/clubmed_circuits_decouverte_mexique_belize_guatemala__0.jpg";
     const imgUrl2 = "http://www.oz-en-oisans.com/sites/default/files/styles/page_slide/public/page/randonnees-oz-1.jpg?itok=-YIbMQuB";
@@ -11,18 +11,16 @@ class Timeline extends React.Component {
     const imgUrl4 = "http://www.geo.fr/var/geo/storage/images/voyages/vos-voyages-de-reve/martinique-terre-de-relief/coucher-de-soleil/597484-1-fre-FR/coucher-de-soleil.jpg";
     
     return (
-      <Grid fluid>
-        <div className="max-container background-grey">
-          <div className="timeline">
-            <div>
-              <div className="title-section">
-                <div className="title-hyphen">&nbsp;</div>
-                <h1 className="dark-title-1">
-                  <Translate value="home.timelineTitle" />
-                </h1>
-              </div>
+      <section className="steps-section">
+        <Grid fluid className="background-grey">
+          <div className="max-container">
+            <div className="title-section">
+              <div className="title-hyphen">&nbsp;</div>
+              <h1 className="dark-title-1">
+                <Translate value="home.timelineTitle" />
+              </h1>
             </div>
-            <div className="margin-xl">
+            <div className="content-section">
               <Col xs={12} sm={6} md={3} className="no-padding step1">
                 <Step imgUrl={imgUrl1} stepNumber={1} title="home.step1Title" text="home.step1Text" />
               </Col>
@@ -37,10 +35,11 @@ class Timeline extends React.Component {
               </Col>
             </div>
           </div>
-        </div>
-      </Grid>
+          <div className="content-end">&nbsp;</div>
+        </Grid>
+      </section>
     );
   }
 }
 
-export default Timeline;
+export default Steps;
