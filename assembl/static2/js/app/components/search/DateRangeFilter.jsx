@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DatePicker from 'react-datepicker/lib/datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
+import { Translate } from 'react-redux-i18n';
 
 const calendarImage = (
   <img
@@ -84,7 +85,7 @@ class DateRangeFilter extends Component {
     return (
       <div className="form-inline date-filter">
         <div className="form-group">
-          <label htmlFor="date_from">Du</label>
+          <label htmlFor="date_from"><Translate value="search.datefilter.from">From</Translate></label>
           <DatePicker
             id="date_from"
             className="form-control sk-input-filter"
@@ -100,7 +101,7 @@ class DateRangeFilter extends Component {
           {calendarImage}
         </div>
         <div className="form-group">
-          <label htmlFor="date_to">Au</label>
+          <label htmlFor="date_to"><Translate value="search.datefilter.to">To</Translate></label>
           <DatePicker
             id="date_to"
             className="form-control sk-input-filter"

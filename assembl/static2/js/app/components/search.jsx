@@ -1,6 +1,7 @@
 /* eslint no-underscore-dangle: 0, react/no-danger: 0 */
 /* global __resourceQuery */
 import React from 'react';
+import { Localize, Translate, I18n } from 'react-redux-i18n';
 
 import {
   MenuFilter,
@@ -24,7 +25,6 @@ import {
    ActionBar, ActionBarRow
 } from 'searchkit';
 import get from 'lodash/get';
-import moment from 'moment';
 
 // Keep the style import here. The reason why it's not in main.scss is because
 // we create a searchv1 bundle that includes only the Search component and its
@@ -34,7 +34,6 @@ import moment from 'moment';
 import '../../../css/views/search.scss';
 
 import GlobalFunctions from '../utils/globalFunctions';
-import Translations from '../utils/translations';
 import DateRangeFilter from './search/DateRangeFilter';
 
 const truncate = (text) => {
@@ -107,7 +106,7 @@ const PostHit = (props) => {
         <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.body_und', props.result._source.body_und)) }} />
       </div>
       <div className={props.bemBlocks.item('date')}>
-        { `Publié le ${props.result._source.creation_date}` }
+        <Translate value="search.published_the" />{' '}<Localize value={props.result._source.creation_date} dateFormat="date.format" />
       </div>
     </div>
   );
@@ -127,7 +126,7 @@ const SynthesisHit = (props) => {
         <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.conclusion', props.result._source.conclusion)) }} />
       </div>
       <div className={props.bemBlocks.item('date')}>
-        { `Publié le ${props.result._source.creation_date}` }
+        <Translate value="search.published_the" />{' '}<Localize value={props.result._source.creation_date} dateFormat="date.format" />
       </div>
     </div>
   );
@@ -150,7 +149,7 @@ const UserHit = (props) => {
         }
       </div>
       <div className={props.bemBlocks.item('date')}>
-        { `Membre depuis le ${props.result._source.creation_date}` }
+        <Translate value="search.published_the" />{' '}<Localize value={props.result._source.creation_date} dateFormat="date.format" />
       </div>
     </div>
   );
@@ -172,7 +171,7 @@ const IdeaHit = (props) => {
         { definition ?
           <div>
             <p dangerouslySetInnerHTML={{ __html: definition }} />
-            { get(props.result, 'highlight.definition') && <p>{ 'Recherche effectuée dans la section "à retenir" de la discussion' }</p> }
+            { get(props.result, 'highlight.definition') && <p><Translate value="search.search_come_from_what_you_need_to_know" /></p> }
           </div>
           : null
         }
@@ -180,7 +179,7 @@ const IdeaHit = (props) => {
           <div>
             <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
             <p dangerouslySetInnerHTML={{ __html: announceBody }} />
-            <p>{ 'Recherche effectuée dans la section "consignes" de la discussion' }</p>
+            <p><Translate value="search.search_come_from_announcement" /></p>
           </div>
           : null
         }
@@ -254,12 +253,10 @@ export default class Search extends React.Component {
       }
       return modifiedQuery;
     });
-    const browserLanguage = navigator.language || navigator.userLanguage;
-    const locale = GlobalFunctions.getLocale(browserLanguage);
-    moment.locale(locale);
+    const translate = I18n.t.bind(I18n);
     this.searchkit.translateFunction = (key) => {
-      return Translations[locale].search[key];
-    };
+      return translate(`search.${key}`);
+    }
     this.state = { show: false };
   }
 
@@ -283,7 +280,7 @@ export default class Search extends React.Component {
                   }
                 });
               }}
-            >{this.state.show ? this.searchkit.translate('collapse_search') : this.searchkit.translate('expand_search') }</button>
+            >{this.state.show ? I18n.t('search.collapse_search') : I18n.t('search.expand_search') }</button>
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
@@ -292,9 +289,9 @@ export default class Search extends React.Component {
               <MenuFilter
                 field="_type"
                 id="type"
-                title={this.searchkit.translate('Categories')}
+                title={I18n.t('search.Categories')}
               />
-              <Panel title={this.searchkit.translate('Sort')}>
+              <Panel title={I18n.t('search.Sort')}>
                 <SortingSelector
                   options={[
                     { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
@@ -307,7 +304,7 @@ export default class Search extends React.Component {
               <RangeFilter
                 field="creation_date"
                 id="creation_date"
-                title={this.searchkit.translate('Filter by date')}
+                title={I18n.t('search.Filter by date')}
                 rangeComponent={DateRangeFilter}
                 min={946684800000}
                 max={new Date().getTime()}

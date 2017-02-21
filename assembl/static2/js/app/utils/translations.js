@@ -1,18 +1,37 @@
 const Translations = {
   fr: {
     search: {
-      'reset.clear_all': 'Effacer tous les filtres',
-      'facets.view_more': 'Voir plus',
-      'facets.view_less': 'Voir moins',
-      'facets.view_all': 'Voir tout',
-      'NoHits.NoResultsFound': 'Aucun résultat trouvé pour {query}.',
-      'NoHits.DidYouMean': 'Rechercher pour {suggestion}.',
-      'NoHits.SearchWithoutFilters': 'Rechercher {query} sans filtres',
-      'NoHits.NoResultsFoundDidYouMean': 'Aucun résultat trouvé pour {query}. Vous vouliez peut-être {suggestion} ?',
-      'hitstats.results_found': '{hitCount} résultats trouvés',
-      'pagination.previous': 'Précédent',
-      'pagination.next': 'Suivant',
-      'searchbox.placeholder': 'Rechercher',
+      reset: {
+        clear_all: 'Effacer tous les filtres'
+      },
+      facets: {
+        view_more: 'Voir plus',
+        view_less: 'Voir moins',
+        view_all: 'Voir tout'
+      },
+      NoHits: {
+        NoResultsFound: 'Aucun résultat trouvé pour {query}.',
+        DidYouMean: 'Rechercher pour {suggestion}.',
+        SearchWithoutFilters: 'Rechercher {query} sans filtres',
+        NoResultsFoundDidYouMean: 'Aucun résultat trouvé pour {query}. Vous vouliez peut-être {suggestion} ?'
+      },
+      hitstats: {
+        results_found: '{hitCount} résultats trouvés'
+      },
+      pagination: {
+        previous: 'Précédent',
+        next: 'Suivant'
+      },
+      searchbox: {
+        placeholder: 'Rechercher'
+      },
+      datefilter: {
+        from: 'Du',
+        to: 'Au'
+      },
+      published_the: 'Publié le',
+      search_come_from_what_you_need_to_know: 'Recherche effectuée dans la section "à retenir" de cette discussion',
+      search_come_from_announcement: 'Recherche effectuée dans la section "consigne" de cette discussion',
       expand_search: 'afficher la recherche',
       collapse_search: 'cacher la recherche',
       Categories: 'Catégories',
@@ -122,18 +141,37 @@ const Translations = {
   },
   en: {
     search: {
-      'reset.clear_all': 'Clear All Filters',
-      'facets.view_more': 'View more',
-      'facets.view_less': 'View less',
-      'facets.view_all': 'View all',
-      'NoHits.NoResultsFound': 'No results found for {query}.',
-      'NoHits.DidYouMean': 'Search for {suggestion}.',
-      'NoHits.SearchWithoutFilters': 'Search for {query} without filters',
-      'NoHits.NoResultsFoundDidYouMean': 'No results found for {query}. Did you mean {suggestion}?',
-      'hitstats.results_found': '{hitCount} results found',
-      'pagination.previous': 'Previous',
-      'pagination.next': 'Next',
-      'searchbox.placeholder': 'Search',
+      reset: {
+        clear_all: 'Clear All Filters'
+      },
+      facets: {
+        view_more: 'View more',
+        view_less: 'View less',
+        view_all: 'View all'
+      },
+      NoHits: {
+        NoResultsFound: 'No results found for {query}.',
+        DidYouMean: 'Search for {suggestion}.',
+        SearchWithoutFilters: 'Search for {query} without filters',
+        NoResultsFoundDidYouMean: 'No results found for {query}. Did you mean {suggestion}?'
+      },
+      hitstats: {
+        results_found: '{hitCount} results found'
+      },
+      pagination: {
+        previous: 'Previous',
+        next: 'Next'
+      },
+      searchbox: {
+        placeholder: 'Search'
+      },
+      datefilter: {
+        from: 'From',
+        to: 'To'
+      },
+      search_come_from_what_you_need_to_know: 'Search done in the "What you need to know" section of this discussion',
+      search_come_from_announcement: 'Search done in the "announcement" section of this discussion',
+      published_the: 'Published the',
       expand_search: 'show search',
       collapse_search: 'hide search',
       Categories: 'Categories',
