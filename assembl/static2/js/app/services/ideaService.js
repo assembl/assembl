@@ -1,33 +1,43 @@
+import HttpRequestHandler from '../utils/httpRequestHandler';
+import GlobalFunctions from '../utils/globalFunctions';
+
 class IdeaService {
   static fetchIdeas(debateId) {
-    return {
-      themes: [
-        {
-          imgUrl: 'http://www.yannarthusbertrand.org/img/2012/03/vu-du-ciel-9_p11_l.jpg',
-          title: 'habitat',
-          nbUsers: 57,
-          nbPosts: 532
-        },
-        {
-          imgUrl: 'https://mir-s3-cdn-cf.behance.net/project_modules/disp/ed1d798517615.560becf461b61.jpg',
-          title: 'egalité',
-          nbUsers: 132,
-          nbPosts: 237
-        },
-        {
-          imgUrl: 'http://cdn.pcwallart.com/images/empire-state-building-at-night-wallpaper-1.jpg',
-          title: 'sécurité',
-          nbUsers: 87,
-          nbPosts: 98
-        },
-        {
-          imgUrl: 'http://www.visitasilomar.com/media/322487/asilomar-family-on-the-beach_208817447_1000x667.jpg',
-          title: 'intégration',
-          nbUsers: 24,
-          nbPosts: 435,
-          debateId: debateId
+    const that = this;
+    const fetchIdeasUrl = `/api/v1/discussion/${debateId}/ideas`;
+    return HttpRequestHandler.request({ method: 'GET', url: fetchIdeasUrl }).then((ideas) => {
+      return {
+        latestIdeas :that.getLastIdeasByCreationDate(ideas),
+        controversial : that.getApiMock('controversial'),
+        longerThread : that.getApiMock('longerThread'),
+        topContributor : that.getApiMock('topContributor'),
+        recentDiscussion : that.getApiMock('recentDiscussion'),
+      };
+    });
+  }
+  static getLastIdeasByCreationDate(ideas) {
+    let latestIdeas = [];
+    const sortedDate = GlobalFunctions.getSortedDate(ideas, 'creationDate');
+    ideas.map((idea) => {
+      const ideaDate = new Date(idea.creationDate);
+      for(let i=1; i <=4; i++){
+        if(sortedDate[sortedDate.length - i] === ideaDate.valueOf()) {
+          const imgUrl = idea.attachments ? idea.attachments[0].external_url : "";
+          const nbPosts = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[0] : 0;
+          const title = idea.shortTitle ? idea.shortTitle : "Idea title";
+          latestIdeas.push({
+            imgUrl: imgUrl,
+            title: idea.shortTitle,
+            nbPosts: nbPosts,
+            nbUsers: 239
+          });
         }
-      ],
+      }
+    });
+    return latestIdeas;
+  }
+  static getApiMock(key) {
+    const mock = {
       controversial: [
         {
           title: 'Intensifier l\'agriculture classique',
@@ -97,6 +107,7 @@ class IdeaService {
         }
       ]
     };
+    return mock[key];
   }
 }
 

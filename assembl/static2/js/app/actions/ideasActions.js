@@ -5,10 +5,11 @@ class IdeasActions {
     const that = this;
     return function (dispatch) {
       dispatch(that.loadingIdeas());
-      setTimeout(() => {
-        const ideas = IdeaService.fetchIdeas(debateId);
+      return IdeaService.fetchIdeas(debateId).then((ideas) => {
         dispatch(that.resolvedFetchIdeas(ideas));
-      }, 5000);
+      }).catch((error) => {
+        dispatch(that.failedFetchIdeas(error));
+      });
     };
   }
   static loadingIdeas() {

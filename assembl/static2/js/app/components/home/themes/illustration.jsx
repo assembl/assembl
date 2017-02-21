@@ -10,14 +10,14 @@ class Illustration extends React.Component {
     const index = this.props.index;
     return (
       <div className="illustration illustration-box">
-        <div className="image-box" style={{ backgroundImage: `url(${ideas.themes[index].imgUrl})` }}>&nbsp;</div>
+        <div className="image-box" style={{ backgroundImage: `url(${ideas.latestIdeas[index].imgUrl})` }}>&nbsp;</div>
         <Link className="content-box">
-          <h3 className="light-title-3 center">{ideas.themes[index].title}</h3>
+          <h3 className="light-title-3 center">{ideas.latestIdeas[index].title}</h3>
           <div className="stats">
-            <div className="inline">{ideas.themes[index].nbPosts}</div>
+            <div className="inline">{ideas.latestIdeas[index].nbPosts}</div>
             <div className="white-icon"><Glyphicon glyph="envelope" /></div>
             <div className="inline padding">-</div>
-            <div className="inline">{ideas.themes[index].nbUsers}</div>
+            <div className="inline">{ideas.latestIdeas[index].nbUsers}</div>
             <div className="white-icon"><Glyphicon glyph="user" /></div>
           </div>
         </Link>

@@ -19,15 +19,15 @@ class GlobalFunctions {
     return discussionId;
   }
   static getConnectedUserId() {
-    const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
+    const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : '1196';
     return userId;
   }
-  static getLatestDate(object, key) {
+  static getSortedDate(object, key) {
     const sortedDate = object.map((item) => {
       const date = item[key];
       return new Date(date).getTime();
     }).sort();
-    return new Date(sortedDate[sortedDate.length - 1]);
+    return sortedDate;
   }
 }
 
