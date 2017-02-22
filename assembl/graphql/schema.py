@@ -6,10 +6,7 @@ from graphene_sqlalchemy.converter import (
 
 from assembl.lib.sqla import get_named_class, get_named_object
 from assembl.lib.sqla_types import EmailString
-from assembl.models import (
-    AgentProfile as AgentProfileModel,
-    User as UserModel
-)
+from assembl import models
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -44,14 +41,14 @@ class URINode(Node):
 class AgentProfile(SQLAlchemyObjectType):
 
     class Meta:
-        model = AgentProfileModel
+        model = models.AgentProfile
         interfaces = (URINode, )
 
 
 class User(AgentProfile):
 
     class Meta:
-        model = UserModel
+        model = models.User
         interfaces = (URINode, )
         exclude_fields = ('password')
 
