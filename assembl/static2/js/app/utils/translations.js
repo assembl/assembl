@@ -1,3 +1,5 @@
+/* eslint eol-last: 0 */
+
 const Translations = {
   fr: {
     search: {
