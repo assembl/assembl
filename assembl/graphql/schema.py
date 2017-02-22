@@ -10,6 +10,7 @@ from assembl import models
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
+models.Base.query = models.Base.default_db.query_property()
 
 
 class URINode(Node):
@@ -55,7 +56,8 @@ class User(AgentProfile):
 
 class Query(graphene.ObjectType):
     node = URINode.Field()
-    agentprofile = graphene.Field(AgentProfile)
+    agent_profiles = SQLAlchemyConnectionField(AgentProfile)
+    agent_profile = graphene.Field(AgentProfile)
     user = graphene.Field(User)
 
 
@@ -63,3 +65,7 @@ schema = graphene.Schema(query=Query)
 
 # this can execute:
 # schema.execute("query {node(id:\"local:AgentProfile/3\") {id ... on AgentProfile {name}} }")
+# schema.execute("query {agentProfiles {edges { node {id name}}} }")
+# This fails:
+# schema.execute("query {agentProfiles {edges { node {id name   ... on User {preferredEmail}}}} }")
+# schema.execute("query {agentProfiles(id:\"local:AgentProfile/3\") {id name} }")
