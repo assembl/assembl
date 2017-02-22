@@ -245,19 +245,21 @@ export default class Search extends React.Component {
       }
       modifiedQuery.query = { bool: { filter: filters } };
       if (simpleQueryString) {
-        this.setState({ show: true });
+        this.setState({ show: true, queryString: simpleQueryString.query });
         simpleQueryString.query = `${simpleQueryString.query}*`;
         modifiedQuery.query.bool.must = [
           { simple_query_string: simpleQueryString }
         ];
+      } else {
+        this.setState({ queryString: null });
       }
       return modifiedQuery;
     });
     const translate = I18n.t.bind(I18n);
     this.searchkit.translateFunction = (key) => {
       return translate(`search.${key}`);
-    }
-    this.state = { show: false };
+    };
+    this.state = { show: false, queryString: null };
   }
 
   render() {
@@ -280,7 +282,10 @@ export default class Search extends React.Component {
                   }
                 });
               }}
-            >{this.state.show ? I18n.t('search.collapse_search') : I18n.t('search.expand_search') }</button>
+            >
+              {this.state.show ? <Translate value="search.collapse_search" /> : null}
+              {!this.state.show && this.state.queryString ? I18n.t('search.expand_search') : null}
+            </button>
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
