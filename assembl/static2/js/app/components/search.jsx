@@ -25,6 +25,7 @@ import {
    ActionBar, ActionBarRow
 } from 'searchkit';
 import get from 'lodash/get';
+import truncate from 'lodash/truncate';
 
 // Keep the style import here. The reason why it's not in main.scss is because
 // we create a searchv1 bundle that includes only the Search component and its
@@ -36,17 +37,21 @@ import '../../../css/views/search.scss';
 import GlobalFunctions from '../utils/globalFunctions';
 import DateRangeFilter from './search/DateRangeFilter';
 
-const truncate = (text) => {
-  if (!text) {
-    return '';
+const FRAGMENT_SIZE = 400;
+
+const highlightedTextOrTruncatedText = (hit, field, options = { omission: ' [...]' }) => {
+  let text = get(hit, `highlight.${field}`);
+  if (text) {
+    if (Array.isArray(text)) {
+      // take the first highlight fragment
+      text = text[0];
+    }
+    return text;
   }
-  let modifiedText = text;
-  if (Array.isArray(text)) {
-    // take the first highlight fragment
-    modifiedText = text[0];
-  }
-  modifiedText = modifiedText.substring(0, 400);
-  return modifiedText;
+
+  text = truncate(hit._source[field],
+    { length: FRAGMENT_SIZE, separator: ' ', omission: options.omission });
+  return text;
 };
 
 let Link;
@@ -103,7 +108,7 @@ const PostHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.body_und', props.result._source.body_und)) }} />
+        <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'body_und') }} />
       </div>
       <div className={props.bemBlocks.item('date')}>
         <Translate value="search.published_the" />{' '}<Localize value={props.result._source.creation_date} dateFormat="date.format" />
@@ -118,12 +123,12 @@ const SynthesisHit = (props) => {
       <div className={props.bemBlocks.item('title')}>
         <Link
           to={getUrl(props.result)}
-          dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject', props.result._source.subject) }}
+          dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'subject') }}
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.introduction', props.result._source.introduction)) }} />
-        <p dangerouslySetInnerHTML={{ __html: truncate(get(props.result, 'highlight.conclusion', props.result._source.conclusion)) }} />
+        <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'introduction') }} />
+        <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'conclusion') }} />
       </div>
       <div className={props.bemBlocks.item('date')}>
         <Translate value="search.published_the" />{' '}<Localize value={props.result._source.creation_date} dateFormat="date.format" />
@@ -156,15 +161,16 @@ const UserHit = (props) => {
 };
 
 const IdeaHit = (props) => {
-  const definition = truncate(get(props.result, 'highlight.definition', props.result._source.definition));
-  const announceTitle = truncate(get(props.result, 'highlight.title', props.result._source.title));
-  const announceBody = truncate(get(props.result, 'highlight.body', props.result._source.body));
+  const shortTitle = highlightedTextOrTruncatedText(props.result, 'short_title');
+  const definition = highlightedTextOrTruncatedText(props.result, 'definition');
+  const announceTitle = highlightedTextOrTruncatedText(props.result, 'title');
+  const announceBody = highlightedTextOrTruncatedText(props.result, 'body');
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
         <Link
           to={getUrl(props.result)}
-          dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.short_title', props.result._source.short_title) }}
+          dangerouslySetInnerHTML={{ __html: shortTitle }}
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
@@ -217,6 +223,15 @@ const queryFields = [
   'body_fr', // post
   'body_en' // post
 ];
+
+// default is fragment_size 100 and number_of_fragments 5,see
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html#_highlighted_fragments
+const customHighlight = {
+  fields: {
+    body: { fragment_size: FRAGMENT_SIZE, number_of_fragments: 1 }
+  }
+};
+// setting it for body field seems to apply the setting to all queryFields
 
 export default class Search extends React.Component {
 
@@ -324,6 +339,7 @@ export default class Search extends React.Component {
               <Hits
                 hitsPerPage={5}
                 highlightFields={queryFields}
+                customHighlight={customHighlight}
                 itemComponent={HitItem}
                 mod="sk-hits-list"
               />
