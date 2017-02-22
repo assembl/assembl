@@ -29,7 +29,7 @@ class URINode(Node):
             return None
         # Note that instance's class may be a subclass of URI's type
         if instance and only_type:
-            assert instance in [cls.name for cls in instance.__class__.mro()],\
+            assert only_type in [cls.__name__ for cls in instance.__class__.mro()],\
                 'Received not compatible node.'
         graphene_type = info.schema.get_type(
             instance.__class__.__name__).graphene_type
