@@ -1769,7 +1769,7 @@ def get_named_class(typename):
 def get_named_object(identifier, typename=None):
     "Get an object given a typename and identifier"
     if typename is None:
-        typename = identifier.split('/')[-2]
+        typename = identifier.split(':')[-1].split('/')[-2]
     cls = get_named_class(typename)
     if cls:
         return cls.get_instance(identifier)
