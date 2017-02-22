@@ -1,58 +1,68 @@
 import graphene
-# from graphene_sqlalchemy import SQLAlchemyObjectType
-from assembl.models import Discussion as DiscussionModel
-from assembl.models import User as UserModel
+from graphene.relay import Node
+from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
+from graphene_sqlalchemy.converter import (
+    convert_column_to_string, convert_sqlalchemy_type)
+
+from assembl.lib.sqla import get_named_class, get_named_object
+from assembl.lib.sqla_types import EmailString
+from assembl.models import (
+    AgentProfile as AgentProfileModel,
+    User as UserModel
+)
 
 
-class Discussion(graphene.ObjectType):
+convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 
-    id = graphene.id
-    topic = graphene.String()
-    slug = graphene.String()
 
-    creation_date = graphene.datetime()
+class URINode(Node):
 
-    help_url = graphene.String()
-    logo_url = graphene.String()
-    homepage_url = graphene.String()
-    creator = graphene.ObjectType()
-    piwik_id = graphene.Integer()
-    introduction = graphene.String()
-    subscribe_to_notifications = graphene.Boolean()
+    class Meta:
+        name = 'Node'
 
-    # id = Column(Integer, primary_key=True,
-    #             info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    @staticmethod
+    def to_global_id(type, id):
+        cls = get_named_class(type)
+        return cls.uri_generic(id)
 
-    # topic = Column(UnicodeText, nullable=False,
-    #                info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+    @staticmethod
+    def get_node_from_global_id(global_id, context, info, only_type=None):
+        instance = get_named_object(global_id)
+        if not instance:
+            return None
+        # Note that instance's class may be a subclass of URI's type
+        if instance and only_type:
+            assert instance in [cls.name for cls in instance.__class__.mro()],\
+                'Received not compatible node.'
+        graphene_type = info.schema.get_type(
+            instance.__class__.__name__).graphene_type
+        if not graphene_type:
+            return None
+        return instance
 
-    # slug = Column(CoerceUnicode, nullable=False, unique=True, index=True)
 
-    # creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-    #                        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
-    # objectives = Column(UnicodeText)
-    # instigator = Column(UnicodeText)
-    # introduction = Column(UnicodeText)
-    # introductionDetails = Column(UnicodeText)
-    # subscribe_to_notifications_on_signup = Column(Boolean, default=True)
-    # web_analytics_piwik_id_site = Column(Integer, nullable=True, default=None)
-    # help_url = Column(URLString, nullable=True, default=None)
-    # logo_url = Column(URLString, nullable=True, default=None)
-    # homepage_url = Column(URLString, nullable=True, default=None)
-    # show_help_in_debate_section = Column(Boolean, default=True)
-    # preferences_id = Column(Integer, ForeignKey(Preferences.id))
-    # creator_id = Column(Integer, ForeignKey('user.id', ondelete="SET NULL"))
+class AgentProfile(SQLAlchemyObjectType):
 
-    # preferences = relationship(Preferences, backref=backref(
-    #     'discussion'), cascade="all, delete-orphan", single_parent=True)
-    # creator = relationship('User', backref="discussions_created")
+    class Meta:
+        model = AgentProfileModel
+        interfaces = (URINode, )
+
+
+class User(AgentProfile):
+
+    class Meta:
+        model = UserModel
+        interfaces = (URINode, )
+        exclude_fields = ('password')
 
 
 class Query(graphene.ObjectType):
-    discussion = graphene.String()
-
-    def resolve_discussion(self, args, context, info):
-        return 'world'
+    node = URINode.Field()
+    agentprofile = graphene.Field(AgentProfile)
+    user = graphene.Field(User)
 
 
 schema = graphene.Schema(query=Query)
+
+# this can execute:
+# schema.execute("query {node(id:\"local:AgentProfile/3\") {id ... on AgentProfile {name}} }")
