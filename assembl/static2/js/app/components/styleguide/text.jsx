@@ -4,10 +4,10 @@ class Text extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="dark-title-2 underline" id="text">TEXT</h2>
+        <h2 className="dark-title-2 underline" id="text" style={{ borderBottom: "1px solid #ccc"}}>TEXT</h2>
         <section>
-          <div className="title-section" style={{ marginTop: `${0}` }}>
-            <div className="title-hyphen">&nbsp;</div>
+          <div className="title-section">
+            <div className="title-hyphen"> </div>
             <h1 className="dark-title-1">Title section</h1>
           </div>
           <h1 className="dark-title-1">Title 1</h1>
@@ -15,11 +15,11 @@ class Text extends React.Component {
           <h3 className="dark-title-3">Title 3</h3>
           <h4 className="dark-title-4">Title 4</h4>
           <h5 className="dark-title-5">Title 5</h5>
-          <h3 className="ellipsis dark-title-3" style={{ width: `${300}px` }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat interdum sem, eget malesuada tortor gravida volutpat. Donec luctus semper tincidunt. Sed vel iaculis libero, eu volutpat ante. Nullam lobortis suscipit lorem, a posuere erat vulputate sed. Integer varius purus diam, nec scelerisque urna vehicula et.
+          <h3 className="ellipsis dark-title-3">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat interdum sem, eget malesuada tortor gravida volutpat. Donec luctus semper tincidunt. Sed vel iaculis libero, eu volutpat ante. Nullam lobortis suscipit lorem, a posuere erat vulputate sed. Integer varius purus diam, nec scelerisque urna vehicula et.
           </h3>
-          <div className="ellipsis-content" style={{ width: `${300}px` }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat interdum sem, eget malesuada tortor gravida volutpat. Donec luctus semper tincidunt. Sed vel iaculis libero, eu volutpat ante. Nullam lobortis suscipit lorem, a posuere erat vulputate sed. Integer varius purus diam, nec scelerisque urna vehicula et.
+          <div className="ellipsis-content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat interdum sem, eget malesuada tortor gravida volutpat. Donec luctus semper tincidunt. Sed vel iaculis libero, eu volutpat ante. Nullam lobortis suscipit lorem, a posuere erat vulputate sed. Integer varius purus diam, nec scelerisque urna vehicula et.
           </div>
           <div className="date margin-m">14 février 2017</div>
         </section>

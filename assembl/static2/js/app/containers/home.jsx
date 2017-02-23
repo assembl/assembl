@@ -1,19 +1,25 @@
 import React from 'react';
-import { Grid } from 'react-bootstrap';
 import Header from '../components/home/header';
-import PartnersSection from '../components/home/partnersSection';
+import Themes from '../components/home/themes';
+import Objectives from '../components/home/objectives';
+import Steps from '../components/home/steps';
+import Video from '../components/home/video';
+import Twitter from '../components/home/twitter';
+import Contact from '../components/home/contact';
+import Partners from '../components/home/partners';
 
 class Home extends React.Component {
   render() {
     return (
-      <div>
+      <div className="home">
         <Header />
-        <Grid fluid className="background-grey">
-          <div className="max-container" style={{ height: `${400}px`, textAlign: 'center', marginTop: `${50}px` }}>
-            Home content
-          </div>
-        </Grid>
-        <PartnersSection />
+        <Themes />
+        <Objectives />
+        <Steps />
+        <Video />
+        <Twitter />
+        <Contact />
+        <Partners />
       </div>
     );
   }

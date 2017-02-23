@@ -5,6 +5,7 @@ import PostsActions from '../actions/postsActions';
 import UsersActions from '../actions/usersActions';
 import PartnersActions from '../actions/partnersActions';
 import SynthesisActions from '../actions/synthesisActions';
+import IdeasActions from '../actions/ideasActions';
 
 const MapDispatchToProps = (dispatch) => {
   return {
@@ -22,6 +23,9 @@ const MapDispatchToProps = (dispatch) => {
     },
     fetchSynthesis: (debateId) => {
       dispatch(SynthesisActions.fetchSynthesis(debateId));
+    },
+    fetchIdeas: (debateId) => {
+      dispatch(IdeasActions.fetchIdeas(debateId));
     },
     addContext: (path, debateId, connectedUserId) => {
       dispatch(ContextActions.addContext(path, debateId, connectedUserId));

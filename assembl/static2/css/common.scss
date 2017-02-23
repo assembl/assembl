@@ -15,10 +15,6 @@ a {
   }
 }
 
-section {
-  margin: 30px 0;
-}
-
 input {
   &[type='text'] {
     box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
@@ -38,7 +34,7 @@ input {
 }
 
 .app-content {
-  margin: 80px 0 0;
+  margin: $navbar-height 0 0;
 }
 
 .max-container {
@@ -58,6 +54,30 @@ input {
   background-color: $page-bkg-dark;
 }
 
+.background-img {
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.content-section {
+  padding: $margin-section 0;
+}
+
+.content-margin {
+  margin: -30px 0 0;
+}
+
+.content-end {
+  clear: both;
+  float: left;
+  height: $margin-section;
+}
+
+.content-start {
+  height: $margin-section;
+}
+
 .inline {
   display: inline-block;
 }
@@ -75,7 +95,7 @@ input {
 }
 
 .border-right {
-  border-right: $border-color;
+  border-right: $box-border;
 }
 
 .border-left {
@@ -90,8 +110,12 @@ input {
   border: $box-border;
 }
 
+.no-padding {
+  padding: 0;
+}
+
 .padding {
-  padding: 20px 0;
+  padding: 15px;
 }
 
 .margin-xs {
@@ -115,8 +139,11 @@ input {
 }
 
 .margin-xxl {
-  margin-bottom: 100px;
-  margin-top: 100px;
+  margin-top: 80px;
+}
+
+.full-size {
+  width: 100%;
 }
 
 .underline {
@@ -134,11 +161,6 @@ input {
 
 .shown {
   display: block;
-}
-
-.code {
-  color: $grey3;
-  display: inline-block;
 }
 
 .col-centered {

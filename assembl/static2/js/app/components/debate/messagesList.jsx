@@ -17,7 +17,7 @@ class MessagesList extends React.Component {
               {posts.posts.map((post) => {
                 return (
                   <div className="box" key={post['@id']}>
-                    <div>{post.body.entries[0].value}</div>
+                    {post.body && <div>{post.body.entries[0].value}</div>}
                   </div>
                 );
               })}

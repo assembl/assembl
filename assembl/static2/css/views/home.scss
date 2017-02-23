@@ -1,32 +1,30 @@
-.header {
+.header-section {
   background-color: $first-color;
   min-height: 380px;
   overflow: hidden;
   position: relative;
 
   .header-content {
-    padding: 5px;
     position: relative;
     text-align: center;
     z-index: 2;
 
     .max-text-width {
       margin: 0 auto;
-      width: 500px;
+      max-width: 500px;
     }
 
     .header-logo {
-      background-color: $white;
-      height: 115px;
+      filter: brightness(0) invert(1);
+      height: 85px;
       padding: 10px;
     }
   }
 
   .header-bkg {
-    background-image: url('#{$img-dir}/default_header.jpg');
     background-position: left;
+    background-repeat: no-repeat;
     background-size: cover;
-    filter: grayscale(100%);
     height: 100%;
     opacity: .7;
     position: absolute;
@@ -39,7 +37,7 @@
     bottom: 0;
     left: 0;
     margin: 0 auto;
-    padding: 8px 0 4px;
+    padding: 10px 0;
     position: absolute;
     text-align: center;
     width: 100%;
@@ -48,40 +46,157 @@
     .stat {
       display: inline-block;
       font-family: $font-family2;
-      margin: 0 0 0 5px;
+      margin: 0 0 0 15px;
       text-align: left;
       text-transform: uppercase;
     }
 
     .stat-nb {
-      color: $second-color;
+      color: $white;
       font-family: $font-family3;
       font-size: $font-size-xs;
       letter-spacing: .2px;
     }
 
-    svg {
-      fill: $white;
+    img {
+      vertical-align: baseline;
     }
-  }
-
-  .insert-box {
-    position: absolute;
-    right: 0;
-    top: 80px;
   }
 }
 
-.partners {
-  margin: 0 0 60px;
+.themes-section {
+  .theme1 {
+    margin: 80px 0 0;
+  }
+
+  .theme2 {
+    margin: 0;
+  }
+
+  .theme3 {
+    margin: 80px 0 0;
+  }
+
+  .theme4 {
+    margin: 40px 0 0;
+  }
+
+  .top-idea {
+    .dark-title-2 {
+      padding: 30px 40px 0;
+    }
+
+    .idea-link {
+      cursor: pointer;
+      height: 125px;
+      letter-spacing: 1px;
+      padding: 25px 40px;
+
+      .idea-link-title {
+        color: $first-color;
+        display: block;
+        text-align: center;
+      }
+
+      .stats {
+        color: $grey3;
+        text-align: center;
+      }
+
+      .black-icon {
+        margin: 0 0 0 5px;
+      }
+
+      &:nth-child(3) {
+        background-color: $grey1;
+      }
+
+      &:hover {
+        background-color: $opacity-color;
+
+        .idea-link-title {
+          color: $white;
+        }
+
+        .inline {
+          color: $white;
+        }
+
+        span {
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .illustration {
+    .content-box {
+      margin: 180px 0 0;
+    }
+
+    .stats {
+      color: $white;
+      margin: 180px 0 0;
+      text-align: center;
+
+      .inline {
+        padding: 0 5px;
+      }
+
+      img {
+        margin: 0 0 5px;
+      }
+    }
+
+    .white-icon {
+      padding: 0 0 0 5px;
+
+      span {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+.objectives-section {
+  .objectives-img {
+    background-size: cover;
+    height: 480px;
+    margin: 20px 0 0;
+  }
+}
+
+.steps-section {
+  .step1 {
+    margin: 120px 0 0;
+  }
+
+  .step2 {
+    margin: 80px 0 0;
+  }
+
+  .step3 {
+    margin: 40px 0 0;
+  }
+
+  .step4 {
+    margin: 0;
+  }
+}
+
+.twitter-section {
+  .tweet-container {
+    background-color: $white;
+    display: inline-block;
+  }
+}
+
+.partners-section {
   text-align: center;
 
   .partner-logo {
     display: inline-block;
-    height: $partner-logo-height;
-    line-height: $partner-logo-height;
     margin: 20px;
-    vertical-align: middle;
   }
 
   img {
@@ -91,15 +206,29 @@
 }
 
 @media screen and (max-width: 1100px) {
-  .header {
+  .header-section {
     .insert-box {
       display: none;
     }
   }
 }
 
+@media screen and (min-width: 1100px) {
+  .header-section {
+    .insert-box {
+      position: absolute;
+      right: 0;
+      top: 120px;
+    }
+  }
+}
+
 @media screen and (max-width: 767px) {
-  .header {
+  .header-section {
+    .header-content {
+      padding: 60px 5px 120px;
+    }
+
     .statistic {
       .stat-box {
         padding: 0 40px;
@@ -108,31 +237,68 @@
   }
 }
 
+@media screen and (max-width: 991px) {
+  .themes-section {
+    .theme1 {
+      margin: 0;
+    }
+
+    .theme2 {
+      margin: 0;
+    }
+
+    .theme3 {
+      margin: 0;
+    }
+
+    .theme4 {
+      margin: 0;
+    }
+  }
+
+  .steps-section {
+    .step1 {
+      margin: 0;
+    }
+
+    .step2 {
+      margin: 0;
+    }
+
+    .step3 {
+      margin: 0;
+    }
+
+    .step4 {
+      margin: 0;
+    }
+  }
+}
+
 @media screen and (min-width: 768px) {
-  .header {
+  .header-section {
     .header-content {
-      padding: 40px 40px 150px;
+      padding: 100px 40px 150px;
     }
 
     .statistic {
       .stat-box {
-        padding: 0 60px;
+        padding: 0 50px;
       }
     }
   }
 }
 
 @media screen and (max-width: 420px) {
-  .header {
+  .header-section {
     .statistic {
       .stat-box {
-        padding: 0 20px;
+        padding: 0 15px;
       }
     }
 
     .header-content {
-      padding: 20px 5px;
+      padding: 60px 5px 120px;
     }
   }
 }
-

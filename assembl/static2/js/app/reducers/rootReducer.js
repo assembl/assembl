@@ -3,6 +3,7 @@ import { i18nReducer } from 'react-redux-i18n';
 import Context from './contextReducer';
 import Debate from './debateReducer';
 import Posts from './postsReducer';
+import Ideas from './ideasReducer';
 import Users from './usersReducer';
 import Partners from './partnersReducer';
 import Synthesis from './synthesisReducer';
@@ -12,6 +13,7 @@ export default combineReducers({
   context: Context,
   debate: Debate,
   posts: Posts,
+  ideas: Ideas,
   users: Users,
   partners: Partners,
   synthesis: Synthesis

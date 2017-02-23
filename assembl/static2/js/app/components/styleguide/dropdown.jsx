@@ -5,7 +5,7 @@ class Dropdown extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="dark-title-2 underline" id="dropdown">DROPDOWN</h2>
+        <h2 className="dark-title-2 underline" id="dropdown" style={{ borderBottom: "1px solid #ccc"}}>DROPDOWN</h2>
         <section>
           <ul className="dropdown-xs" style={{ margin: 0 }}>
             <NavDropdown title="FR" id="nav-dropdown-xs">

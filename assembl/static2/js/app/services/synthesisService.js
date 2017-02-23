@@ -20,7 +20,8 @@ class SynthesisService {
   static getSynthesisByStatus(synthesis) {
     const publishedSynthesis = [];
     const draftSynthesis = [];
-    const latestDate = GlobalFunctions.getLatestDate(synthesis, 'creation_date');
+    const sortedDate = GlobalFunctions.getSortedDate(synthesis, 'creation_date');
+    const latestDate = new Date(sortedDate[sortedDate.length - 1]);
     let lastPublishedSynthesis = {};
     synthesis.forEach((item) => {
       if (!item.is_next_synthesis) publishedSynthesis.push(item);

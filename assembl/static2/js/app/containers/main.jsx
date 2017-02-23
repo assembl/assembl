@@ -9,12 +9,13 @@ class Main extends React.Component {
   componentWillMount() {
     const { debateId, connectedUserId } = this.props.context;
     this.props.fetchPosts(debateId);
+    this.props.fetchIdeas(debateId);
     this.props.fetchSynthesis(debateId);
     this.props.fetchUsers(debateId, connectedUserId);
   }
   render() {
     return (
-      <div>
+      <div className="main">
         <Navbar />
         <div className="app-content">{this.props.children}</div>
         <Footer />

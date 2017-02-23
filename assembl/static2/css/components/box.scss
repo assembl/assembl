@@ -20,15 +20,95 @@
 
 .insert-box {
   background-color: $box-bkg;
-  height: 185px;
-  padding: 0 20px;
+  height: 210px;
+  padding: 10px 30px;
   text-align: left;
-  width: 250px;
+  width: 270px;
 
-  .hyphen {
-    border-top: $border-title;
-    font-size: $font-size-xxxs;
-    margin: 15px 0 2px -45px;
-    width: 50px;
+  .box-hyphen {
+    margin: 10px 0 0 -45px;
+  }
+}
+
+.box-hyphen {
+  border-top: $border-title;
+  display: inline-block;
+  vertical-align: top;
+  width: $small-hyphen-width;
+}
+
+.theme-box {
+  background-color: $white;
+  border-left: $border-theme;
+  margin: -20px 0 0;
+}
+
+.illustration-box {
+  height: 500px;
+
+  .image-box {
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 500px;
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+  }
+
+  .color-box {
+    background-color: $opacity-color;
+    display: none;
+    height: 500px;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+  }
+
+  .content-box {
+    color: $white;
+    cursor: pointer;
+    height: 500px;
+    padding: 0 20px;
+    position: absolute;
+    width: 100%;
+    z-index: 4;
+
+    &:hover {
+      ~ .color-box {
+        display: block;
+      }
+
+      ~ .rotate-hyphen {
+        display: block;
+      }
+
+      .text-box {
+        display: block;
+      }
+    }
+
+    .text-box {
+      display: none;
+      font-size: $font-size-xs;
+      font-weight: 100;
+      letter-spacing: 1px;
+      margin: 220px 0 0;
+      padding: 0 20px;
+    }
+  }
+
+  .box-hyphen {
+    margin: 250px 0 0;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .rotate-hyphen {
+    display: none;
+    margin: 240px 0 0 -10px;
+    position: absolute;
+    transform: rotate(90deg);
+    z-index: 3;
   }
 }

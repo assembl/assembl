@@ -17,10 +17,10 @@ class App extends React.Component {
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
     return (
-      <div>
+      <div className="app">
         {debateLoading && <Loader />}
         {debateData &&
-          <div>{this.props.children}</div>
+          <div className="app-child">{this.props.children}</div>
         }
         {debateError && <Error errorMessage={debateError} />}
       </div>

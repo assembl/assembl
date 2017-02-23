@@ -1,16 +1,22 @@
 .title-section {
-  height: 50px;
-  line-height: 50px;
-  margin: 70px 0 0;
+  margin: $margin-section 0 0;
   text-align: left;
+
+  .dark-title-1 {
+    padding: 15px 0 0;
+  }
 }
 
 .title-hyphen {
   border-top: $border-title;
   display: inline-block;
-  line-height: 50px;
+  height: 5px;
   vertical-align: top;
-  width: 75px;
+  width: $large-hyphen-width;
+}
+
+.subtitle {
+  margin: 5px 0 0 $large-hyphen-width;
 }
 
 .dark-title-1 {
@@ -19,17 +25,14 @@
   font-size: $title1-size;
   font-weight: 100;
   letter-spacing: 1px;
-  line-height: 50px;
   margin: 0;
-  padding: 10px 0 0;
-  text-align: left;
-  text-transform: capitalize;
 }
 
 .dark-title-2 {
-  color: $title2-dark-color;
+  color: $black;
   font-size: $title2-size;
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 .dark-title-3 {
@@ -48,11 +51,12 @@
 .dark-title-5 {
   color: $title5-dark-color;
   font-size: $title5-size;
-  font-weight: 700;
+  font-weight: 200;
 }
 
 .light-title-1 {
   color: $title1-light-color;
+  font-family: $font-family2;
   font-size: $title1-size;
 }
 
@@ -64,22 +68,39 @@
 .light-title-3 {
   color: $title3-light-color;
   font-size: $title3-size;
+  font-weight: 600;
+  line-height: 22px;
   text-transform: uppercase;
 }
 
 .light-title-4 {
   color: $title4-light-color;
   font-size: $title4-size;
+  line-height: 20px;
 }
 
 .light-title-5 {
   color: $title5-light-color;
   font-size: $title5-size;
+  font-weight: 200;
+}
+
+.text {
+  font-size: $font-size-m;
+  font-weight: 200;
+  line-height: 30px;
+  margin: 10px 0 0;
+  text-align: justify;
 }
 
 .date {
   color: $second-color;
   font-size: $font-size-xxs;
+}
+
+.text-column {
+  column-count: 2;
+  column-gap: 30px;
 }
 
 .ellipsis-content {
@@ -99,4 +120,25 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media screen and (max-width: 620px) {
+  .text-column {
+    column-count: 1;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .title-section {
+    margin: $margin-section 10px 0;
+
+    .dark-title-1 {
+      display: block;
+      margin: -10px 0 0;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+    }
+  }
 }

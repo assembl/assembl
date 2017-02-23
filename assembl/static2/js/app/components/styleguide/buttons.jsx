@@ -6,7 +6,7 @@ class Buttons extends React.Component {
   render() {
     return (
       <div>
-        <h2 className="dark-title-2 underline" id="buttons">BUTTONS</h2>
+        <h2 className="dark-title-2 underline" id="buttons" style={{ borderBottom: "1px solid #ccc"}}>BUTTONS</h2>
         <section>
           <div className="margin-s">
             <Button className="button-submit button-dark">Submit</Button>
