@@ -37,7 +37,7 @@
     bottom: 0;
     left: 0;
     margin: 0 auto;
-    padding: 8px 0 4px;
+    padding: 10px 0;
     position: absolute;
     text-align: center;
     width: 100%;
@@ -46,7 +46,7 @@
     .stat {
       display: inline-block;
       font-family: $font-family2;
-      margin: 0 0 0 10px;
+      margin: 0 0 0 15px;
       text-align: left;
       text-transform: uppercase;
     }
@@ -58,8 +58,8 @@
       letter-spacing: .2px;
     }
 
-    svg {
-      fill: $white;
+    img {
+      vertical-align: baseline;
     }
   }
 }
@@ -138,6 +138,14 @@
       color: $white;
       margin: 180px 0 0;
       text-align: center;
+
+      .inline {
+        padding: 0 5px;
+      }
+
+      img {
+        margin: 0 0 5px;
+      }
     }
 
     .white-icon {

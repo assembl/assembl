@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { Glyphicon } from 'react-bootstrap';
+import Glyphicon from '../../common/glyphicon';
 import MapStateToProps from '../../../store/mapStateToProps';
 
 class Illustration extends React.Component {
@@ -16,9 +16,7 @@ class Illustration extends React.Component {
           <h3 className="light-title-3 center">{ideas.latestIdeas[index].title}</h3>
           <div className="stats">
             <div className="inline">{ideas.latestIdeas[index].nbPosts}</div>
-            <div className="white-icon">
-              <Glyphicon glyph="envelope" />
-            </div>
+            <Glyphicon glyph="message" color="white" size={20} desc="Number of contributions" />
           </div>
         </Link>
         <div className="color-box">&nbsp;</div>

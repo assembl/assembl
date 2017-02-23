@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Glyphicon } from 'react-bootstrap';
+import Glyphicon from '../../common/glyphicon';
 
 class Profile extends React.Component {
   render() {
@@ -10,14 +10,10 @@ class Profile extends React.Component {
         <Link className="idea-link-title">{title}</Link>
         <div className="stats">
           <div className="inline">{nbPosts}</div>
-          <div className="black-icon">
-            <Glyphicon glyph="envelope" />
-          </div>
+          <Glyphicon glyph="message" color="white" size={20} desc="Number of contributions" />
           <div className="inline padding">-</div>
           <div className="inline">{nbUsers}</div>
-          <div className="black-icon">
-            <Glyphicon glyph="user" />
-          </div>
+          <Glyphicon glyph="avatar" color="white" size={20} desc="Number of users" />
         </div>
       </div>
     );

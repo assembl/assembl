@@ -1,11 +1,12 @@
 import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Grid, Navbar, Glyphicon } from 'react-bootstrap';
+import { Grid, Navbar } from 'react-bootstrap';
 import MapStateToProps from '../../store/mapStateToProps';
-import ProfileIcon from './profileIcon';
+import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
+import Glyphicon from './glyphicon';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -37,8 +38,12 @@ class NavBar extends React.Component {
         <Navbar fixedTop fluid>
           <div className="nav-bar max-container">
             <div className="burgermenu-icon left" onClick={this.displayMenu}>
-              <div className={this.state.isMenuHidden ? 'black-icon shown' : 'black-icon hidden'}><Glyphicon glyph="align-justify" /></div>
-              <div className={this.state.isMenuHidden ? 'black-icon hidden' : 'black-icon shown'}><Glyphicon glyph="remove" /></div>
+              <div className={this.state.isMenuHidden ? 'shown' : 'hidden'}>
+                <Glyphicon glyph="menuOn" color="black" size={30} desc="Menu on" />
+              </div>
+              <div className={this.state.isMenuHidden ? 'hidden' : 'shown'}>
+                <Glyphicon glyph="menuOff" color="black" size={30} desc="Menu off" />
+              </div>
             </div>
             <div className="navbar-logo left">
               <Link to={`${rootPath}${debateData.slug}/home`} activeClassName="logo-active">
@@ -49,13 +54,13 @@ class NavBar extends React.Component {
               <NavigationMenu />
             </div>
             <div className="navbar-icons right">
-              <div className="rounded-icon">
-                <a href={`${debateData.help_url}`} target="_blank" rel="noopener noreferrer"><Glyphicon glyph="question-sign" /></a>
-              </div>
+              <a href={`${debateData.help_url}`} target="_blank" rel="noopener noreferrer">
+                <Glyphicon glyph="questionSign" color="grey" size={20} desc="Help" />
+              </a>
               <div className="navbar-language right">
                 <LanguageMenu size="xs" />
               </div>
-              <ProfileIcon />
+              <Avatar />
             </div>
             <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'}>
               <NavigationMenu />
