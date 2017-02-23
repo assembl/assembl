@@ -129,6 +129,11 @@ const PostHit = (props) => {
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'body_und') }} />
       </div>
       <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
+      <div>
+        popularity: {source.sentiment_counts.popularity},
+        like: {source.sentiment_counts.like},
+        disagree: {source.sentiment_counts.disagree}
+      </div>
     </div>
   );
 };
@@ -336,8 +341,22 @@ export default class Search extends React.Component {
                 <SortingSelector
                   options={[
                     { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
-                    { label: 'More recent first', field: 'creation_date', order: 'desc' },
-                    { label: 'Oldest first', field: 'creation_date', order: 'asc' }
+                    { label: 'Most recent first', field: 'creation_date', order: 'desc' },
+                    { label: 'Oldest first', field: 'creation_date', order: 'asc' },
+                    { label: 'Most popular messages',
+                      key: 'popularity_desc',
+                      fields: [
+                        { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
+                        { field: 'creation_date', options: { order: 'desc' } }
+                      ]
+                    },
+                    { label: 'Less popular messages',
+                      key: 'popularity_asc',
+                      fields: [
+                        { field: 'sentiment_counts.popularity', options: { order: 'asc' } },
+                        { field: 'creation_date', options: { order: 'desc' } }
+                      ]
+                    }
                   ]}
                   listComponent={ItemList}
                 />

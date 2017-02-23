@@ -51,8 +51,10 @@ const Translations = {
       synthesis: 'Synthèse',
       Sort: 'Trier',
       'By relevance': 'Par pertinence',
-      'More recent first': 'Du plus récent au plus ancien',
+      'Most recent first': 'Du plus récent au plus ancien',
       'Oldest first': 'Du plus ancien au plus récent',
+      'Most popular messages': 'Messages les plus populaires',
+      'Less popular messages': 'Messages les moins populaires',
       'Filter by date': 'Filtrer par date'
     },
     navbar: {
@@ -198,8 +200,10 @@ const Translations = {
       synthesis: 'Synthesis',
       Sort: 'Sort',
       'By relevance': 'By relevance',
-      'More recent first': 'More recent first',
+      'Most recent first': 'More recent first',
       'Oldest first': 'Oldest first',
+      'Most popular messages': 'Most popular messages',
+      'Less popular messages': 'Less popular messages',
       'Filter by date': 'Filter by date'
     },
     navbar: {
