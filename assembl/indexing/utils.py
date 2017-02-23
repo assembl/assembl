@@ -76,6 +76,8 @@ def get_data(content):
                      'creator_id', 'sentiment_counts'):
             data[attr] = getattr(content, attr)
 
+        data['sentiment_tags'] = [key for key in data['sentiment_counts']
+                                  if data['sentiment_counts'][key] > 0]
         data['sentiment_counts']['popularity'] = data['sentiment_counts']['like'] - data['sentiment_counts']['disagree']
         data['type'] = content.type  # this is the subtype (assembl_post, email...)
 #        data['publishes_synthesis_id'] = getattr(

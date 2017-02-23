@@ -337,6 +337,11 @@ export default class Search extends React.Component {
                 id="type"
                 title={I18n.t('search.Categories')}
               />
+              <MenuFilter
+                field="sentiment_tags"
+                id="sentiment_tags"
+                title={I18n.t('search.Messages')}
+              />
               <Panel title={I18n.t('search.Sort')}>
                 <SortingSelector
                   options={[
