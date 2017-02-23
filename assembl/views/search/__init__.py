@@ -34,6 +34,11 @@ def search_endpoint(context, request):
         if creator_id is not None:
             source['creator_name'] = creators_by_id.get(creator_id)
 
+        if hit['_type'] == 'idea':
+            idea = models.Idea.get_instance(source['id'])
+            source['num_posts'] = idea.num_posts
+            source['num_contributors'] = len(idea.get_contributors())
+
     return result
 
 

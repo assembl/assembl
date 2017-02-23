@@ -176,6 +176,7 @@ const UserHit = (props) => {
 };
 
 const IdeaHit = (props) => {
+  const source = props.result._source;
   const shortTitle = highlightedTextOrTruncatedText(props.result, 'short_title');
   const definition = highlightedTextOrTruncatedText(props.result, 'definition');
   const announceTitle = highlightedTextOrTruncatedText(props.result, 'title');
@@ -204,6 +205,9 @@ const IdeaHit = (props) => {
           </div>
           : null
         }
+      </div>
+      <div>
+        <Translate value="search.stats.x_messages" count={source.num_posts} />, <Translate value="search.stats.x_contributors" count={source.num_contributors} />
       </div>
     </div>
   );
