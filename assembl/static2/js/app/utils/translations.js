@@ -32,6 +32,7 @@ const Translations = {
         to: 'Au'
       },
       published_the: 'Publié le',
+      by: 'par',
       search_come_from_what_you_need_to_know: 'Recherche effectuée dans la section "à retenir" de cette discussion',
       search_come_from_announcement: 'Recherche effectuée dans la section "consigne" de cette discussion',
       expand_search: 'afficher la recherche',
@@ -174,6 +175,7 @@ const Translations = {
       search_come_from_what_you_need_to_know: 'Search done in the "What you need to know" section of this discussion',
       search_come_from_announcement: 'Search done in the "announcement" section of this discussion',
       published_the: 'Published the',
+      by: 'by',
       expand_search: 'show search',
       collapse_search: 'hide search',
       Categories: 'Categories',

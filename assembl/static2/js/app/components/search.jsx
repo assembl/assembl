@@ -2,6 +2,7 @@
 /* global __resourceQuery */
 import React from 'react';
 import { Localize, Translate, I18n } from 'react-redux-i18n';
+import styled from 'styled-components';
 
 import {
   MenuFilter,
@@ -33,9 +34,11 @@ import truncate from 'lodash/truncate';
 // some styles for v1
 
 import '../../../css/views/search.scss';
+import colors from '!!sass-variable-loader!../../../css/variables.scss'; // eslint-disable-line
 
 import GlobalFunctions from '../utils/globalFunctions';
 import DateRangeFilter from './search/DateRangeFilter';
+import Avatar from './common/Avatar';
 
 const FRAGMENT_SIZE = 400;
 
@@ -96,28 +99,42 @@ if (__resourceQuery) { // v1
 }
 
 // TODO get the right subject highlight, fr, en in priority, then fallback to und(efined). Same for body obviously.
-// TODO translations fr/en of messages in hits, internationalize dates
+
+const RowInFirstColor = styled.div`
+color: ${colors.firstColor};
+`;
+
+const PublishedInfo = (props) => {
+  const { date, userId, userName } = props;
+  return (
+    <RowInFirstColor>
+      <Translate value="search.published_the" />{' '}<Localize value={date} dateFormat="date.format" />
+      {' '}<Translate value="search.by" />{' '}
+      <Avatar userId={userId} userName={userName} />
+    </RowInFirstColor>
+  );
+};
 
 const PostHit = (props) => {
+  const source = props.result._source;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
         <Link
           to={getUrl(props.result)}
-          dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject_und', props.result._source.subject_und) }}
+          dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject_und', source.subject_und) }}
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'body_und') }} />
       </div>
-      <div className={props.bemBlocks.item('date')}>
-        <Translate value="search.published_the" />{' '}<Localize value={props.result._source.creation_date} dateFormat="date.format" />
-      </div>
+      <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
     </div>
   );
 };
 
 const SynthesisHit = (props) => {
+  const source = props.result._source;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <div className={props.bemBlocks.item('title')}>
@@ -130,14 +147,14 @@ const SynthesisHit = (props) => {
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'introduction') }} />
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'conclusion') }} />
       </div>
-      <div className={props.bemBlocks.item('date')}>
-        <Translate value="search.published_the" />{' '}<Localize value={props.result._source.creation_date} dateFormat="date.format" />
-      </div>
+      <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
     </div>
   );
 };
 
+
 const UserHit = (props) => {
+  const source = props.result._source;
   const url = getUrl(props.result);
   const fullname = get(
     props.result, 'highlight.name', props.result._source.name);
@@ -153,9 +170,7 @@ const UserHit = (props) => {
           <p dangerouslySetInnerHTML={{ __html: fullname }} />
         }
       </div>
-      <div className={props.bemBlocks.item('date')}>
-        <Translate value="search.published_the" />{' '}<Localize value={props.result._source.creation_date} dateFormat="date.format" />
-      </div>
+      <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
     </div>
   );
 };
