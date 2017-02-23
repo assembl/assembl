@@ -9,7 +9,7 @@ describe('This test concern app container', () => {
       <Community />
     );
     const result = renderer.toJSON();
-    const expectedResult = {"children": [{"children": ["Panel Title"], "props": {}, "type": "span"}], "props": {}, "type": "p"};
+    const expectedResult = {"children": [{"children": [{"children": [{"children": ["Panel Title"], "props": {}, "type": "span"}], "props": {"className": "col-sm-12 col-xs-12"}, "type": "div"}], "props": {"className": "max-container"}, "type": "div"}], "props": {"className": "container-fluid"}, "type": "div"};
     expect(result).toEqual(expectedResult);
   });
 });

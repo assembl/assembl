@@ -2,6 +2,7 @@ import HttpRequestHandler from '../utils/httpRequestHandler';
 
 class DebateService {
   static fetchDebateData(debateId) {
+    const that = this;
     const fetchUrl = `/data/Discussion/${debateId}`;
     return HttpRequestHandler.request({ method: 'GET', url: fetchUrl }).then((debateData) => {
       let config;
@@ -10,16 +11,19 @@ class DebateService {
       } catch (e) {
         config = require('../config/default');// eslint-disable-line
       }
-      return {
-        help_url: debateData.help_url,
-        introduction: debateData.introduction,
-        logo: debateData.logo,
-        objectives: debateData.objectives,
-        slug: debateData.slug,
-        topic: debateData.topic,
-        config: config.default
-      };
+      return that.buildDebateData(debateData, config);
     });
+  }
+  static buildDebateData(debateData, config) {
+    return {
+      help_url: debateData.help_url,
+      introduction: debateData.introduction,
+      logo: debateData.logo,
+      objectives: debateData.objectives,
+      slug: debateData.slug,
+      topic: debateData.topic,
+      config: config.default
+    };
   }
 }
 

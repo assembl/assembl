@@ -46,12 +46,23 @@ const mockApi = [
 ];
 
 describe('This test concern user Service', () => {
-  it('Should return the mock built from API response', () => {
+  it('Should return the model built from API response', () => {
     const expectedResult = {
       totalVerifiedUsers: 3,
-      allUsers: mockApi
+      allUsers: mockApi,
+      connectedUser: {
+        "@id":"local:AgentProfile/767",
+        "@type":"User",
+        "@view":null,
+        "accounts":[],
+        "avatar_url_base":"/user/id/11/avatar/",
+        "name":"Aryan Yazdani",
+        "post_count":5,
+        "real_name":"Aryan Yazdani",
+        verified:true
+      }
     };
-    const result = UserService.buildUsers(mockApi);
+    const result = UserService.buildUsers(mockApi, '767');
     expect(result).toEqual(expectedResult);
   });
 });
