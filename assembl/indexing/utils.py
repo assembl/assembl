@@ -73,7 +73,7 @@ def get_data(content):
     elif isinstance(content, Post):
         data = {}
         for attr in ('discussion_id', 'creation_date', 'id', 'parent_id',
-                     'creator_id'):
+                     'creator_id', 'sentiment_counts'):
             data[attr] = getattr(content, attr)
 
         data['type'] = content.type  # this is the subtype (assembl_post, email...)

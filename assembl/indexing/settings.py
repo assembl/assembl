@@ -31,6 +31,7 @@ COMMON_POST = {
     'creator_id': LONG,
 #    'publishes_synthesis_id': KEYWORD,
     'type': KEYWORD,
+    # 'sentiment_counts'
 }
 
 _POST_MAPPING = COMMON_POST.copy()
