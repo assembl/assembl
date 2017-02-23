@@ -1,11 +1,11 @@
-import IdeaService from '../services/ideaService';
+import IdeasService from '../services/ideasService';
 
 class IdeasActions {
   static fetchIdeas(debateId) {
     const that = this;
     return function (dispatch) {
       dispatch(that.loadingIdeas());
-      return IdeaService.fetchIdeas(debateId).then((ideas) => {
+      return IdeasService.fetchIdeas(debateId).then((ideas) => {
         dispatch(that.resolvedFetchIdeas(ideas));
       }).catch((error) => {
         dispatch(that.failedFetchIdeas(error));

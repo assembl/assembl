@@ -1,38 +1,43 @@
 import HttpRequestHandler from '../utils/httpRequestHandler';
 import GlobalFunctions from '../utils/globalFunctions';
 
-class IdeaService {
+class IdeasService {
   static fetchIdeas(debateId) {
     const that = this;
-    const fetchIdeasUrl = `/api/v1/discussion/${debateId}/ideas`;
+    const fetchIdeasUrl = `/data/Discussion/${debateId}/ideas`;
     return HttpRequestHandler.request({ method: 'GET', url: fetchIdeasUrl }).then((ideas) => {
-      return {
-        latestIdeas :that.getLastIdeasByCreationDate(ideas),
-        controversial : that.getApiMock('controversial'),
-        longerThread : that.getApiMock('longerThread'),
-        topContributor : that.getApiMock('topContributor'),
-        recentDiscussion : that.getApiMock('recentDiscussion'),
-      };
+      return that.buildIdeas(ideas);
     });
   }
+  static buildIdeas(ideas) {
+    return {
+      latestIdeas: this.getLastIdeasByCreationDate(ideas),
+      controversial: this.getApiMock('controversial'),
+      longerThread: this.getApiMock('longerThread'),
+      topContributor: this.getApiMock('topContributor'),
+      recentDiscussion: this.getApiMock('recentDiscussion')
+    };
+  }
   static getLastIdeasByCreationDate(ideas) {
-    let latestIdeas = [];
+    const latestIdeas = [];
     const sortedDate = GlobalFunctions.getSortedDate(ideas, 'creationDate');
     ideas.map((idea) => {
       const ideaDate = new Date(idea.creationDate);
-      for(let i=1; i <=4; i++){
-        if(sortedDate[sortedDate.length - i] === ideaDate.valueOf()) {
-          const imgUrl = idea.attachments ? idea.attachments[0].external_url : "";
+      for (let i = 1; i <= 4; i += 1) {
+        if (sortedDate[sortedDate.length - i] === ideaDate.valueOf()) {
+          const imgUrl = idea.attachments ? idea.attachments[0].external_url : '';
           const nbPosts = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[0] : 0;
-          const title = idea.shortTitle ? idea.shortTitle : "Idea title";
-          latestIdeas.push({
+          const title = idea.shortTitle ? idea.shortTitle : '';
+          const ideaId = idea['@id'].split('/')[1];
+          return latestIdeas.push({
+            id: ideaId,
             imgUrl: imgUrl,
-            title: idea.shortTitle,
-            nbPosts: nbPosts,
-            nbUsers: 239
+            title: title,
+            nbPosts: nbPosts
           });
         }
       }
+      return ideaDate;
     });
     return latestIdeas;
   }
@@ -111,4 +116,4 @@ class IdeaService {
   }
 }
 
-export default IdeaService;
+export default IdeasService;

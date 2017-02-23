@@ -13,7 +13,7 @@ class Themes extends React.Component {
     return (
       <section className="themes-section">
         {ideasLoading && <Loader />}
-        {ideas &&
+        {(ideas && ideas.latestIdeas.length >= 4) &&
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="title-section">
@@ -28,26 +28,18 @@ class Themes extends React.Component {
               <div className="content-section">
                 <Col xs={12} sm={6} md={3} className="theme1 no-padding">
                   <TopIdea keyValue="controversial" />
-                  {(ideas.latestIdeas.length >= 4) &&
-                    <Illustration index={0} />
-                  }
+                  <Illustration index={0} />
                 </Col>
                 <Col xs={12} sm={6} md={3} className="theme2 no-padding">
-                  {(ideas.latestIdeas.length >= 4) &&
-                    <Illustration index={1} />
-                  }
+                  <Illustration index={1} />
                   <TopIdea keyValue="longerThread" />
                 </Col>
                 <Col xs={12} sm={6} md={3} className="theme3 no-padding">
                   <TopIdea keyValue="topContributor" />
-                  {(ideas.latestIdeas.length >= 4) &&
-                    <Illustration index={2} />
-                  }
+                  <Illustration index={2} />
                 </Col>
                 <Col xs={12} sm={6} md={3} className="theme4 no-padding">
-                  {(ideas.latestIdeas.length >= 4) &&
-                    <Illustration index={3} />
-                  }
+                  <Illustration index={3} />
                   <TopIdea keyValue="recentDiscussion" />
                 </Col>
               </div>

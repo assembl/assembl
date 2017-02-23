@@ -12,19 +12,21 @@ class Footer extends React.Component {
     return (
       <Grid fluid className="background-dark">
         <div className="max-container">
-          <div className="footer">
-            <p><Translate value="footer.socialMedias" /></p>
-            <div className="social-medias">
-              <a href="http://www.facebook.com" target="_blank" rel="noopener noreferrer">
-                <img src="/static2/img/social/Facebook.svg" alt="Facebook" />
-              </a>
-              <a href="http://www.twitter.com" target="_blank" rel="noopener noreferrer">
-                <img src="/static2/img/social/Twitter.svg" alt="Twitter" />
-              </a>
-              <a href="http://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-                <img src="/static2/img/social/Linkedin.svg" alt="Linkedin" />
-              </a>
-            </div>
+          <div className={debateData.config.footer.socialMedias.length > 0 ? 'footer' : 'footer margin-xl'}>
+            {debateData.config.footer.socialMedias.length > 0 &&
+              <div>
+                <p><Translate value="footer.socialMedias" /></p>
+                <div className="social-medias">
+                  {debateData.config.footer.socialMedias.map((sMedia) => {
+                    return (
+                      <a href={sMedia.url} target="_blank" rel="noopener noreferrer" key={sMedia.title}>
+                        <img src={`/static2/img/social/${sMedia.title}.svg`} alt={sMedia.title} />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            }
             <div className="terms">
               <Link to={`${rootPath}${debateData.slug}/terms`}><Translate value="footer.terms" /></Link>
             </div>

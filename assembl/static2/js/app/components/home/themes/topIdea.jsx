@@ -11,9 +11,9 @@ class TopIdea extends React.Component {
     const translateKey = `home.${keyValue}`;
     const topIdeas = ideas[keyValue];
     const isUserConnected = false;
-    
+
     return (
-      <div className={isUserConnected? 'top-idea theme-box' : 'hidden'}>
+      <div className={isUserConnected ? 'top-idea theme-box' : 'hidden'}>
         <h2 className="dark-title-2 center">
           <Translate value={translateKey} />
         </h2>

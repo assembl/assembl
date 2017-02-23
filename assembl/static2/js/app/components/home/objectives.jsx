@@ -8,10 +8,7 @@ import MapStateToProps from '../../store/mapStateToProps';
 class Objectives extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;   
-    const imgUrl1 = "http://otacute.fr/guidejapon/wp-content/uploads/2015/09/tokyo-1.jpg";
-    const imgUrl2 = "https://images.independenttraveler.com/homepage/newyorkbig.jpg"; 
-    
+    const { rootPath } = this.props.context;
     return (
       <section className="objectives-section">
         <Grid fluid className="background-light">
@@ -28,10 +25,10 @@ class Objectives extends React.Component {
                   <div className="text text-column">{debateData.objectives}</div>
                 </Col>
                 <Col xs={12} sm={6} md={3}>
-                  <div className="objectives-img" style={{backgroundImage: `url(${imgUrl1})`}}>&nbsp;</div>
+                  <div className="objectives-img" style={{ backgroundImage: `url(${debateData.config.home.objectives.img1Url})` }}>&nbsp;</div>
                 </Col>
                 <Col xs={12} sm={6} md={3}>
-                  <div className="objectives-img" style={{backgroundImage: `url(${imgUrl2})`}}>&nbsp;</div>
+                  <div className="objectives-img" style={{ backgroundImage: `url(${debateData.config.home.objectives.img2Url})` }}>&nbsp;</div>
                 </Col>
               </div>
               <div className="center inline full-size margin-xxl">

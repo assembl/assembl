@@ -1,11 +1,11 @@
-import PostService from '../services/postService';
+import PostsService from '../services/postsService';
 
 class PostsActions {
   static fetchPosts(debateId) {
     const that = this;
     return function (dispatch) {
       dispatch(that.loadingPosts());
-      return PostService.fetchPosts(debateId).then((posts) => {
+      return PostsService.fetchPosts(debateId).then((posts) => {
         dispatch(that.resolvedFetchPosts(posts));
       }).catch((error) => {
         dispatch(that.failedFetchPosts(error));

@@ -8,7 +8,7 @@ class Step extends React.Component {
     const title = this.props.title;
     const text = this.props.text;
     const StepNumber = this.props.stepNumber;
-    
+
     return (
       <div className="illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>

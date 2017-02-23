@@ -1,15 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Col } from 'react-bootstrap';
-import Step from './timeline/step';
+import MapStateToProps from '../../store/mapStateToProps';
+import Step from './steps/step';
 
 class Steps extends React.Component {
   render() {
-    const imgUrl1 = "http://www.circuits-clubmed.fr/sites/default/files/clubmed_circuits_decouverte_mexique_belize_guatemala__0.jpg";
-    const imgUrl2 = "http://www.oz-en-oisans.com/sites/default/files/styles/page_slide/public/page/randonnees-oz-1.jpg?itok=-YIbMQuB";
-    const imgUrl3 = "http://cdt65.media.tourinsoft.eu/upload/Lac-de-l-oule.JPG";
-    const imgUrl4 = "http://www.geo.fr/var/geo/storage/images/voyages/vos-voyages-de-reve/martinique-terre-de-relief/coucher-de-soleil/597484-1-fre-FR/coucher-de-soleil.jpg";
-    
+    const { debateData } = this.props.debate;
     return (
       <section className="steps-section">
         <Grid fluid className="background-grey">
@@ -22,16 +20,16 @@ class Steps extends React.Component {
             </div>
             <div className="content-section">
               <Col xs={12} sm={6} md={3} className="no-padding step1">
-                <Step imgUrl={imgUrl1} stepNumber={1} title="home.step1Title" text="home.step1Text" />
+                <Step imgUrl={debateData.config.home.steps.img1Url} stepNumber={1} title="home.step1Title" text="home.step1Text" />
               </Col>
               <Col xs={12} sm={6} md={3} className="no-padding step2">
-                <Step imgUrl={imgUrl2} stepNumber={2} title="home.step2Title" text="home.step2Text" />
+                <Step imgUrl={debateData.config.home.steps.img2Url} stepNumber={2} title="home.step2Title" text="home.step2Text" />
               </Col>
               <Col xs={12} sm={6} md={3} className="no-padding step3">
-                <Step imgUrl={imgUrl3} stepNumber={3} title="home.step3Title" text="home.step3Text" />
+                <Step imgUrl={debateData.config.home.steps.img3Url} stepNumber={3} title="home.step3Title" text="home.step3Text" />
               </Col>
               <Col xs={12} sm={6} md={3} className="no-padding step4">
-                <Step imgUrl={imgUrl4} stepNumber={4} title="home.step4Title" text="home.step4Text" />
+                <Step imgUrl={debateData.config.home.steps.img4Url} stepNumber={4} title="home.step4Title" text="home.step4Text" />
               </Col>
             </div>
           </div>
@@ -42,4 +40,4 @@ class Steps extends React.Component {
   }
 }
 
-export default Steps;
+export default connect(MapStateToProps)(Steps);

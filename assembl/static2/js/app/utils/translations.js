@@ -55,9 +55,11 @@ const Translations = {
       step3Text: 'Phase d\'approffondissement des idées enclines à être soumises lors de la phase de vote.',
       step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet',
       video: 'La vidéo du débat',
-      twitterTitle: 'Twitter',
+      twitterTitle: 'Tweet',
       contact: 'Besoin déchanger au sujet de la plateforme ?',
-      contactUs: 'Contactez-nous'
+      contactUs: 'Contactez-nous',
+      from: 'du',
+      to: 'au'
     },
     ideas: {
       panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
@@ -146,9 +148,11 @@ const Translations = {
       step3Text: 'Deepening phase of the ideas inclined to be submitted during the voting phase.',
       step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet',
       video: 'The debate\'s video',
-      twitterTitle: 'Twitter',
+      twitterTitle: 'Tweet',
       contact: 'Need informations about the platform?',
-      contactUs: 'Contact us'
+      contactUs: 'Contact us',
+      from: 'from',
+      to: 'to'
     },
     ideas: {
       panelTitle: 'Welcome to Assembl ideas page'
@@ -237,9 +241,11 @@ const Translations = {
       step3Text: 'Vertiefung der Ideen, die in der Abstimmungsphase vorgelegt werden sollen.',
       step4Text: 'Donec rhoncus nibh diam, ut facilisis risus fringilla sit amet',
       video: 'Das Video der Debatte',
-      twitterTitle: 'Twitter',
-      contact :'Brauchen Sie Informationen über die Plattform?',
-      contactUs :'kontaktiere uns'
+      twitterTitle: 'Tweet',
+      contact: 'Brauchen Sie Informationen über die Plattform?',
+      contactUs: 'kontaktiere uns',
+      from: 'von',
+      nach: 'bis'
     },
     ideas: {
       panelTitle: 'Willkommen in Assembl - ideas page'

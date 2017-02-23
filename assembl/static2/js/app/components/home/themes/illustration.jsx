@@ -8,6 +8,7 @@ class Illustration extends React.Component {
   render() {
     const { ideas } = this.props.ideas;
     const index = this.props.index;
+
     return (
       <div className="illustration illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${ideas.latestIdeas[index].imgUrl})` }}>&nbsp;</div>
@@ -15,10 +16,9 @@ class Illustration extends React.Component {
           <h3 className="light-title-3 center">{ideas.latestIdeas[index].title}</h3>
           <div className="stats">
             <div className="inline">{ideas.latestIdeas[index].nbPosts}</div>
-            <div className="white-icon"><Glyphicon glyph="envelope" /></div>
-            <div className="inline padding">-</div>
-            <div className="inline">{ideas.latestIdeas[index].nbUsers}</div>
-            <div className="white-icon"><Glyphicon glyph="user" /></div>
+            <div className="white-icon">
+              <Glyphicon glyph="envelope" />
+            </div>
           </div>
         </Link>
         <div className="color-box">&nbsp;</div>
