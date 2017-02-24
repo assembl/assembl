@@ -4,19 +4,3 @@
   box-shadow: none !important;
   height: $navbar-height !important;
 }
-
-.twitter-tweet {
-  display: flex!important;
-}
-
-@media screen and (max-width: 767px) {
-  .twitter-tweet {
-    padding: 15px 15px 15px !important;
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .twitter-tweet {
-    padding: 15px 75px 75px !important;
-  }
-}

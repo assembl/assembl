@@ -15,7 +15,7 @@ class Twitter extends React.Component {
             <div className="max-container">
               <div className="content-section">
                 <Row className="no-margin">
-                  <Col xs={12} md={6} className="no-padding background-light">
+                  <Col xs={12} md={6} className="no-padding">
                     <div className="tweet-container">
                       <div className="title-section">
                         <div className="title-hyphen">&nbsp;</div>
@@ -23,7 +23,9 @@ class Twitter extends React.Component {
                           <Translate value="home.twitterTitle" />
                         </h1>
                       </div>
-                      <TweetEmbed id={debateData.config.home.twitter.id} options={{width: `${620}px` }} />
+                      <div className="tweet-section">
+                        <TweetEmbed id={debateData.config.home.twitter.id} />
+                      </div>
                     </div>
                   </Col>
                 </Row>

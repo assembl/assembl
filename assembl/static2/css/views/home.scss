@@ -187,7 +187,16 @@
 .twitter-section {
   .tweet-container {
     background-color: $white;
-    display: inline-block;
+    max-width: 650px;
+  }
+
+  .title-section {
+    margin: 0;
+    padding: 75px 0 0;
+  }
+
+  .tweet-section {
+    padding: 45px 75px 65px;
   }
 }
 
@@ -299,6 +308,19 @@
 
     .header-content {
       padding: 60px 5px 120px;
+    }
+  }
+
+  .twitter-section {
+    .tweet-section {
+      padding: 10px 20px;
+    }
+
+    .title-section {
+      padding: 20px 0 0;
+      h1 {
+        padding: 0 0 0 20px;
+      }
     }
   }
 }
