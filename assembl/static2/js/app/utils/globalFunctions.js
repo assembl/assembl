@@ -19,7 +19,7 @@ class GlobalFunctions {
     return discussionId;
   }
   static getConnectedUserId() {
-    const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : '360';
+    const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
     return userId;
   }
   static getSortedDate(object, key) {
