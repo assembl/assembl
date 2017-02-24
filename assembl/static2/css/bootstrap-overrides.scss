@@ -8,6 +8,17 @@
 .twitter-tweet {
   display: flex!important;
   max-width: 670px!important;
-  padding: 15px 75px 75px !important;
   width: 100%!important;
+}
+
+@media screen and (max-width: 420px) {
+  .twitter-tweet {
+    padding: 15px 15px 15px !important;
+  }
+}
+
+@media screen and (min-width: 421px) {
+  .twitter-tweet {
+    padding: 15px 75px 75px !important;
+  }
 }
