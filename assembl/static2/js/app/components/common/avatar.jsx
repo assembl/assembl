@@ -23,7 +23,7 @@ class ProfileIcon extends React.Component {
         }
         {connectedUserId &&
           <div>
-            {usersLoading && <Loader textHidden />}
+            {usersLoading && <Loader textHidden color="black" />}
             {users &&
               <Link to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
                 <Glyphicon glyph="avatar" color="grey" size={20} desc="Avatar" />

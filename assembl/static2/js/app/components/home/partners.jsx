@@ -17,7 +17,7 @@ class Partners extends React.Component {
     const { partners, partnersLoading, partnersError } = this.props.partners;
     return (
       <section className="partners-section">
-        {partnersLoading && <Loader />}
+        {partnersLoading && <Loader color="black" />}
         {(partners && partners.length > 0) &&
           <Grid fluid className="background-light">
             <div className="max-container">

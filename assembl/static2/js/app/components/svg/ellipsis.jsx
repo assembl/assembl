@@ -3,7 +3,7 @@ import React from 'react';
 class Ellipsis extends React.Component {
   render() {
     return (
-      <svg width="30" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#000">
+      <svg width="30" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill={this.props.color}>
         <circle cx="15" cy="15" r="15">
           <animate
             attributeName="r"

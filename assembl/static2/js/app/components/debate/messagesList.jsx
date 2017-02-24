@@ -10,7 +10,7 @@ class MessagesList extends React.Component {
     const { posts, postsLoading, postsError } = this.props.posts;
     return (
       <div>
-        {postsLoading && <Loader />}
+        {postsLoading && <Loader color="black" />}
         {posts &&
           <Grid fluid>
             <Row className="max-container">

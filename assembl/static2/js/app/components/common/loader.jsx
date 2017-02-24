@@ -7,7 +7,7 @@ class Loader extends React.Component {
     return (
       <div className={this.props.textHidden ? 'loader' : 'loader margin-loader'}>
         <div className={this.props.textHidden ? 'hidden' : ''}><Translate value="loading.wait" /></div>
-        <Ellipsis />
+        <Ellipsis color={this.props.color} />
       </div>
     );
   }
