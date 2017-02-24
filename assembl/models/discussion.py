@@ -43,8 +43,9 @@ from .auth import (
 from .preferences import Preferences
 from ..semantic.namespaces import (CATALYST, ASSEMBL, DCTERMS)
 
-
 resolver = DottedNameResolver(__package__)
+import logging
+log = logging.getLogger('assembl')
 
 
 class Discussion(DiscussionBoundBase, NamedClassMixin):
@@ -432,6 +433,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             for notif_cls in needed_classes:
                 self.reset_notification_subscriptions_for(notif_cls, roles_subscribed[notif_cls])
 
+
     def reset_notification_subscriptions_for(self, notif_cls, roles_subscribed):
         from .notification import (
             NotificationSubscription, NotificationSubscriptionStatus,
@@ -463,7 +465,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                      "last_status_change_date": datetime.utcnow()},
                     synchronize_session=False)
             # Materialize missing subscriptions
-            missing_subscriptions = self.db.query(User.id
+            missing_subscriptions_query = self.db.query(User.id
                 ).join(LocalUserRole, LocalUserRole.user_id == User.id
                 ).join(AgentStatusInDiscussion,
                        AgentStatusInDiscussion.profile_id == User.id
@@ -473,13 +475,19 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                          AgentStatusInDiscussion.discussion_id == self.id,
                          AgentStatusInDiscussion.last_visit != None,
                          LocalUserRole.role_id.in_(roles_subscribed),
-                         notif_cls.id == None).distinct().all()
-            for (user_id,) in missing_subscriptions:
-                self.db.add(notif_cls(
-                    discussion_id=self.id,
-                    user_id=user_id,
-                    creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                    status=NotificationSubscriptionStatus.ACTIVE))
+                         notif_cls.id == None).distinct()
+
+            def missing_subscriptions_gen():
+                return [
+                    notif_cls(
+                        discussion_id=self.id,
+                        user_id=user_id,
+                        creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                        status=NotificationSubscriptionStatus.ACTIVE)
+                    for (user_id,) in missing_subscriptions_query]
+
+            self.locked_object_creation(
+                missing_subscriptions_gen, NotificationSubscription, 10)
             # exclude from deactivated query
             deactivated = deactivated.except_(
                 default_ns.filter(

@@ -8,8 +8,8 @@ from collections import defaultdict
 from enum import IntEnum
 import logging
 from abc import abstractmethod
-from sqlalchemy.ext.hybrid import hybrid_property
 
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import (
     Boolean,
     Column,
@@ -1087,20 +1087,29 @@ class User(AgentProfile):
                     elif (sub.status == NotificationSubscriptionStatus.INACTIVE_DFT
                             and subscribed[sub.__class__]):
                         sub.status = NotificationSubscriptionStatus.ACTIVE
-            missing = set(needed_classes) - my_subscriptions_classes
-        defaults = []
-        for cls in missing:
-            active = subscribed[cls]
-            sub = cls(
-                discussion_id=discussion_id,
-                user_id=self.id,
-                creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                status=NotificationSubscriptionStatus.ACTIVE if active else NotificationSubscriptionStatus.INACTIVE_DFT)
-            defaults.append(sub)
-            if active:
-                # materialize
-                self.db.add(sub)
-        self.db.flush()
+
+        def create_missing(include_inactive=False):
+            my_sub_types = self.db.query(NotificationSubscription.type).filter_by(
+                discussion_id=discussion_id, user_id=self.id).distinct().all()
+            my_sub_types = {x for (x,) in my_sub_types}
+            return [
+                cls(
+                    discussion_id=discussion_id,
+                    user_id=self.id,
+                    creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                    status=(NotificationSubscriptionStatus.ACTIVE if subscribed[cls]
+                            else NotificationSubscriptionStatus.INACTIVE_DFT)
+                )
+                for cls in needed_classes
+                if (include_inactive or subscribed[cls]) and
+                cls.__mapper_args__['polymorphic_identity'] not in my_sub_types]
+
+        if self.locked_object_creation(create_missing, NotificationSubscription, 10):
+            # if changes, recalculate my_subscriptions
+            my_subscriptions = self.db.query(NotificationSubscription).filter_by(
+                discussion_id=discussion_id, user_id=self.id).all()
+        # Now calculate the dematerialized ones
+        defaults = create_missing(True)
         return chain(my_subscriptions, defaults)
 
     def user_can(self, user_id, operation, permissions):
@@ -1541,13 +1550,9 @@ class UserTemplate(DiscussionBoundBase, User):
             "FOLLOW_SYNTHESES")
         for role in default_config.split('\n'):
             subscribed[role.strip()] = True
-        for attempt in range(10):
+
+        def calculate_missing():
             my_subscriptions = query.all()
-            if attempt > 0 and not my_subscriptions:
-                capture_message(
-                    "On subsequent attempts to create subscriptions, some "
-                    "should exist, if only from other process that caused "
-                    "failure.")
             by_class = defaultdict(list)
             for sub in my_subscriptions:
                 by_class[sub.__class__].append(sub)
@@ -1565,42 +1570,26 @@ class UserTemplate(DiscussionBoundBase, User):
                     for sub in subs[1:]:
                         first_sub.merge(sub)
                         sub.delete()
-                        changed = True
                 by_class[cl] = subs[0]
-            if changed:
-                self.db.flush()
             my_subscriptions = by_class.values()
             missing = needed_classes - my_subscriptions_classes
             if my_subscriptions_classes - needed_classes:
                 log.error("Unknown subscription class: " + repr(
                     my_subscriptions_classes - needed_classes))
-            if not missing:
-                return my_subscriptions, changed
-            changed = True
-            try:
-                defaults = [
-                    cls(
-                        discussion_id=discussion_id,
-                        user_id=my_id,
-                        creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
-                        status=(NotificationSubscriptionStatus.ACTIVE
-                                if subscribed[cls.__mapper__.polymorphic_identity.name]
-                                else NotificationSubscriptionStatus.INACTIVE_DFT))
-                    for cls in missing
-                ]
-                for d in defaults:
-                    self.db.add(d)
-                self.db.flush()
-                my_subscriptions.extend(defaults)
-                return my_subscriptions, True
-            except ObjectNotUniqueError as e:
-                log.error("Notification Subscription just created but not unique")
-                self.db.rollback()
-                # Sleep some time to avoid race condition
-                from time import sleep
-                from random import random
-                sleep(random()/10.0)
-        raise RuntimeError("Could not create the template's subscriptions")
+            return [
+                cls(
+                    discussion_id=discussion_id,
+                    user_id=my_id,
+                    creation_origin=NotificationCreationOrigin.DISCUSSION_DEFAULT,
+                    status=(NotificationSubscriptionStatus.ACTIVE
+                            if subscribed[cls.__mapper__.polymorphic_identity.name]
+                            else NotificationSubscriptionStatus.INACTIVE_DFT))
+                for cls in missing
+            ]
+        changed |= self.locked_object_creation(
+            calculate_missing, num_attempts=10)
+        my_subscriptions = query.all()  # recalculate again...
+        return my_subscriptions, changed
 
 
 Index("user_template", "discussion_id", "role_id")
