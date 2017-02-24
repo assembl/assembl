@@ -57,8 +57,6 @@ class TestWebSite(TestCase):
 
         d1 = test('/data/Discussion/{slug}', True)
         data['discussion_id'] = int(d1['@id'].split('/')[-1])
-        d1 = test('/data/Discussion/{slug}/all_users/current', True)
-        data['user_id'] = int(d1['@id'].split('/')[-1])
 
         test('/data/Discussion/{discussion_id}/user_templates/-/notification_subscriptions')
-        test('/data/Discussion/{discussion_id}/all_users/{user_id}/notification_subscriptions')
+        test('/data/Discussion/{discussion_id}/all_users/current/notification_subscriptions')
