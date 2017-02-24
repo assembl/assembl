@@ -10,9 +10,10 @@ class TestWebSite(TestCase):
 
     def front_page_and_json_disconnected(self):
         data = {'slug': "sandbox"}
+        self.app.lint = False
 
         def test(url):
-            result = self.app.get(url.format(**data))
+            result = self.app.get(url.format(**data), headers=no_gzip)
             self.assertEqual(result.status_code, 200)
             return result._app_iter[0]
 
@@ -36,3 +37,28 @@ class TestWebSite(TestCase):
         test('/data/Discussion/{disc_id}/')
         test('/data/Discussion/{disc_id}/idea_links')
         test('/api/v1/discussion/{disc_id}/posts?{posts}&order=reverse_chronological&view=default')
+
+    def notification_subscriptions(self):
+        self.app.lint = False
+        # create with
+        # assembl-add-user -m test@example.com -p test -d sandbox -l r:participant -n 'Test User' -u test local.ini
+        user_info = {'identifier': 'test@example.com', 'password': 'test'}
+        data = {'slug': 'sandbox'}
+
+        def test(url, json=False):
+            result = self.app.get(url.format(**data), headers=no_gzip)
+            self.assertEqual(result.status_code, 200)
+            if json:
+                return result.json
+            else:
+                return result._app_iter[0]
+
+        self.app.post('/login', user_info, headers=no_gzip)
+
+        d1 = test('/data/Discussion/{slug}', True)
+        data['discussion_id'] = int(d1['@id'].split('/')[-1])
+        d1 = test('/data/Discussion/{slug}/all_users/current', True)
+        data['user_id'] = int(d1['@id'].split('/')[-1])
+
+        test('/data/Discussion/{discussion_id}/user_templates/-/notification_subscriptions')
+        test('/data/Discussion/{discussion_id}/all_users/{user_id}/notification_subscriptions')
