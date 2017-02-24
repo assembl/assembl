@@ -859,9 +859,11 @@ class BaseOps(object):
         Will use an exclusive table lock to ensure that the objects
         are created only once.
 
-        :param func object_generator: a function that will create the objects
-            that need to be created. They will be added and committed in a
-            subtransaction. Will be called many times.
+        :param func object_generator: a function (w/o parameters) that will
+            create the objects that need to be created (as iterable).
+            They will be added and committed in a subtransaction.
+            Will be called many times.
+        :returns: Whether there was anything added (maybe not in this process)
         """
         lock_table_cls = lock_table_cls or self.__class__
         lock_table_name = lock_table_cls.__mapper__.local_table.name
@@ -869,10 +871,12 @@ class BaseOps(object):
         to_be_created = object_generator()
         if not to_be_created:
             return False
+        # After a commit, all objects are normally unusable.
+        # Inhibit that behaviour.
         temp_expire_on_commit = db.expire_on_commit
-        # Do not expire objects
         db.expire_on_commit = False
         try:
+            # Subtransaction
             db.begin_nested()
             for num, attempt in enumerate(
                     transaction.manager.attempts(num_attempts)):
@@ -888,12 +892,12 @@ class BaseOps(object):
                     # recalculate needed objects.
                     # There may be none left after having obtained the lock.
                     to_be_created = object_generator()
-                    if to_be_created:
-                        for ob in to_be_created:
-                            db.add(ob)
+                    for ob in to_be_created:
+                        db.add(ob)
             # implicit commit of subtransaction
             # We _should_ get the transient error reraised if we keep failing.
         except ObjectNotUniqueError as e:
+            # Should not happen anymore. Log if so.
             log.error("locked_object_creation: the generator created "
                       "a non-unique object despite locking." + str(e))
             raise e
