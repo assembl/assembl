@@ -107,11 +107,21 @@ color: ${colors.firstColor};
 const PublishedInfo = (props) => {
   const { date, userId, userName } = props;
   return (
-    <RowInFirstColor>
+    <RowInFirstColor style={{ clear: 'both' }}>
       <Translate value="search.published_the" />{' '}<Localize value={date} dateFormat="date.format" />
       {' '}<Translate value="search.by" />{' '}
       <Avatar userId={userId} userName={userName} />
     </RowInFirstColor>
+  );
+};
+
+const ImageType = (props) => {
+  return (
+    <img
+      style={{ width: 50, height: 50, float: 'left', margin: 20 }}
+      src={`/static2/img/icon-${props.type}.svg`}
+      role="presentation"
+    />
   );
 };
 
@@ -126,6 +136,7 @@ const PostHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
+        <ImageType type={props.result._type} />
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'body_und') }} />
       </div>
       <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
@@ -149,6 +160,7 @@ const SynthesisHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
+        <ImageType type={props.result._type} />
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'introduction') }} />
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'conclusion') }} />
       </div>
@@ -165,6 +177,7 @@ const UserHit = (props) => {
     props.result, 'highlight.name', props.result._source.name);
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
+      <ImageType type={props.result._type} />
       <div className={props.bemBlocks.item('title')}>
         { url ?
           <Link
@@ -195,6 +208,7 @@ const IdeaHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
+        <ImageType type={props.result._type} />
         { definition ?
           <div>
             <p dangerouslySetInnerHTML={{ __html: definition }} />
@@ -211,7 +225,7 @@ const IdeaHit = (props) => {
           : null
         }
       </div>
-      <div>
+      <div style={{ clear: 'both' }}>
         <Translate value="search.stats.x_messages" count={source.num_posts} />, <Translate value="search.stats.x_contributors" count={source.num_contributors} />
       </div>
     </div>
