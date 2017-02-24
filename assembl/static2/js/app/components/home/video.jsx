@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { Grid, Col } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import MapStateToProps from '../../store/mapStateToProps';
 
 class Video extends React.Component {
@@ -20,20 +20,21 @@ class Video extends React.Component {
               </div>
               <div className="content-section">
                 <div className="content-margin">
-                  {debateData.config.home.video.videoText &&
+                  <Row>
+                    {debateData.config.home.video.videoText &&
+                      <Col xs={12} md={6}>
+                        <div className="text">{debateData.config.home.video.videoText}</div>
+                      </Col>
+                    }
                     <Col xs={12} md={6}>
-                      <div className="text">{debateData.config.home.video.videoText}</div>
+                      <div className="video-container">
+                        <iframe src={debateData.config.home.video.videoUrl} frameBorder="0" width="560" height="315" />
+                      </div>
                     </Col>
-                  }
-                  <Col xs={12} md={6}>
-                    <div className="video-container">
-                      <iframe src={debateData.config.home.video.videoUrl} frameBorder="0" width="560" height="315" />
-                    </div>
-                  </Col>
+                  </Row>
                 </div>
               </div>
             </div>
-            <div className="content-end">&nbsp;</div>
           </Grid>
         }
       </section>

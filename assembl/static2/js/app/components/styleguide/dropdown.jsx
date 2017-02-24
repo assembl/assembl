@@ -4,7 +4,7 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 class Dropdown extends React.Component {
   render() {
     return (
-      <div>
+      <div className="margin-xxl">
         <h2 className="dark-title-2 underline" id="dropdown" style={{ borderBottom: "1px solid #ccc"}}>DROPDOWN</h2>
         <section>
           <ul className="dropdown-xs" style={{ margin: 0 }}>

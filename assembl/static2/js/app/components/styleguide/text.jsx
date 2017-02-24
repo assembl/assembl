@@ -3,7 +3,7 @@ import React from 'react';
 class Text extends React.Component {
   render() {
     return (
-      <div>
+      <div className="margin-xxl">
         <h2 className="dark-title-2 underline" id="text" style={{ borderBottom: "1px solid #ccc"}}>TEXT</h2>
         <section>
           <div className="title-section">

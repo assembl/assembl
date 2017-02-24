@@ -27,15 +27,15 @@ const Config = {
   footer: {
     socialMedias: [
       {
-        title: 'Facebook',
+        title: 'facebook',
         url: 'https://www.facebook.com/Citiesflife/?fref=ts'
       },
       {
-        title: 'Twitter',
+        title: 'twitter',
         url: 'https://twitter.com/CitiesFLife'
       },
       {
-        title: 'Linkedin',
+        title: 'linkedin',
         url: 'https://www.linkedin.com/in/citiesflife/'
       }
     ]

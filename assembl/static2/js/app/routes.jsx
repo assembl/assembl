@@ -17,18 +17,18 @@ import Terms from './containers/terms';
 
 export default (
   <Router>
+    <Route path="/v2/styleguide" component={Styleguide} />
+    <Route path="/v2/profile/:userId" component={Profile} />
     <Route path="/v2/" component={App}>
       <Route path=":slug/login" component={Login} />
       <Route path=":slug/signup" component={Signup} />
       <Route path=":slug/changePassword" component={ChangePassword} />
-      <Route path="styleguide" component={Styleguide} />
       <Route component={Main}>
         <Route path=":slug/home" component={Home} />
         <Route path=":slug/ideas" component={Ideas} />
         <Route path=":slug/synthesis" component={Synthesis} />
         <Route path=":slug/debate" component={Debate} />
         <Route path=":slug/community" component={Community} />
-        <Route path="profile/:userId" component={Profile} />
         <Route path=":slug/terms" component={Terms} />
       </Route>
     </Route>

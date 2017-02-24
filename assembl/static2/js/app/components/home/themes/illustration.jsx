@@ -7,12 +7,13 @@ import MapStateToProps from '../../../store/mapStateToProps';
 class Illustration extends React.Component {
   render() {
     const { ideas } = this.props.ideas;
+    const { debateData } = this.props.debate;
+    const { rootPath } = this.props.context;
     const index = this.props.index;
-
     return (
       <div className="illustration illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${ideas.latestIdeas[index].imgUrl})` }}>&nbsp;</div>
-        <Link className="content-box">
+        <Link className="content-box" to={`${rootPath}${debateData.slug}/debate`}>
           <h3 className="light-title-3 center">{ideas.latestIdeas[index].title}</h3>
           <div className="stats">
             <div className="inline">{ideas.latestIdeas[index].nbPosts}</div>

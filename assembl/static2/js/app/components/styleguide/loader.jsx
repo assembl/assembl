@@ -4,7 +4,7 @@ import Loader from '../common/loader';
 class Loading extends React.Component {
   render() {
     return (
-      <div>
+      <div className="margin-xxl">
         <h2 className="dark-title-2 underline" id="loader" style={{ borderBottom: "1px solid #ccc"}}>LOADER</h2>
         <section>
           <Loader />

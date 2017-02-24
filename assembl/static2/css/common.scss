@@ -68,16 +68,6 @@ input {
   margin: -30px 0 0;
 }
 
-.content-end {
-  clear: both;
-  float: left;
-  height: $margin-section;
-}
-
-.content-start {
-  height: $margin-section;
-}
-
 .inline {
   display: inline-block;
 }
@@ -112,6 +102,10 @@ input {
 
 .no-padding {
   padding: 0;
+}
+
+.no-margin {
+  margin: 0;
 }
 
 .padding {

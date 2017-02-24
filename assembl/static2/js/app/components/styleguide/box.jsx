@@ -1,10 +1,11 @@
 import React from 'react';
+import { Row, Col } from 'react-bootstrap';
 
 class Box extends React.Component {
   render() {
     const imgUrl = 'http://www.yannarthusbertrand.org/img/2012/03/vu-du-ciel-9_p11_l.jpg';
     return (
-      <div>
+      <div className="margin-xxl">
         <h2 className="dark-title-2 underline" id="box" style={{ borderBottom: "1px solid #ccc"}}>BOX</h2>
         <section>
           <div className="box-title">Box title</div>
@@ -14,13 +15,17 @@ class Box extends React.Component {
             <div className="box-hyphen">&nbsp;</div>
             <div>Box content</div>
           </div>
-          <div className="illustration-box margin-m" style={{ width: `${300}px` }}>
-            <div className="image-box" style={{ width: `${300}px`, backgroundImage: 'url(' + imgUrl + ')' }}>&nbsp;</div>
-            <a className="content-box" style={{ width: `${300}px` }}>&nbsp;</a>
-            <div className="color-box" style={{ width: `${300}px` }}>&nbsp;</div>
-            <div className="box-hyphen">&nbsp;</div>
-            <div className="box-hyphen rotate-hyphen">&nbsp;</div>
-          </div>
+          <Row>
+            <Col xs={12} md={4} className="no-padding">
+              <div className="illustration-box margin-m">
+                <div className="image-box" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>&nbsp;</div>
+                <a className="content-box">&nbsp;</a>
+                <div className="color-box">&nbsp;</div>
+                <div className="box-hyphen">&nbsp;</div>
+                <div className="box-hyphen rotate-hyphen">&nbsp;</div>
+              </div>
+            </Col>
+          </Row>
           <div className="margin-m">&nbsp;</div>
           <div className="theme-box" style={{ width: `${300}px`, height: `${300}px`, borderTop: '1px solid #f3f0f4', borderRight: '1px solid #f3f0f4', borderBottom: '1px solid #f3f0f4' }}>&nbsp;</div>
         </section>

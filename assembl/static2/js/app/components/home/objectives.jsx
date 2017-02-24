@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import { Grid, Col } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import MapStateToProps from '../../store/mapStateToProps';
 
 class Objectives extends React.Component {
@@ -21,15 +21,17 @@ class Objectives extends React.Component {
             </div>
             <div className="content-section">
               <div className="content-margin">
-                <Col xs={12} sm={12} md={6}>
-                  <div className="text text-column">{debateData.objectives}</div>
-                </Col>
-                <Col xs={12} sm={6} md={3}>
-                  <div className="objectives-img" style={{ backgroundImage: `url(${debateData.config.home.objectives.img1Url})` }}>&nbsp;</div>
-                </Col>
-                <Col xs={12} sm={6} md={3}>
-                  <div className="objectives-img" style={{ backgroundImage: `url(${debateData.config.home.objectives.img2Url})` }}>&nbsp;</div>
-                </Col>
+                <Row>
+                  <Col xs={12} sm={12} md={6}>
+                    <div className="text text-column">{debateData.objectives}</div>
+                  </Col>
+                  <Col xs={12} sm={6} md={3}>
+                    <div className="objectives-img" style={{ backgroundImage: `url(${debateData.config.home.objectives.img1Url})` }}>&nbsp;</div>
+                  </Col>
+                  <Col xs={12} sm={6} md={3}>
+                    <div className="objectives-img" style={{ backgroundImage: `url(${debateData.config.home.objectives.img2Url})` }}>&nbsp;</div>
+                  </Col>
+                </Row>
               </div>
               <div className="center inline full-size margin-xxl">
                 <Link className="button-link button-dark" to={`${rootPath}${debateData.slug}/debate`}>

@@ -4,7 +4,7 @@ import Error from '../common/error';
 class ErrorComponent extends React.Component {
   render() {
     return (
-      <div>
+      <div className="margin-xxl">
         <h2 className="dark-title-2 underline" id="error" style={{ borderBottom: "1px solid #ccc"}}>ERROR</h2>
         <section>
           <Error errorMessage="ErrorMessage" />

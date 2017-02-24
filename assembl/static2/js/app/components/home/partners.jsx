@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { Grid } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import MapStateToProps from '../../store/mapStateToProps';
@@ -31,9 +32,9 @@ class Partners extends React.Component {
                   {partners.map((partner) => {
                     return (
                       <div className="partner-logo" key={partner['@id']}>
-                        <a href={`${partner.homepage}`} target="_blank" rel="noopener noreferrer">
+                        <Link to={`${partner.homepage}`} target="_blank">
                           <img src={partner.logo} alt={partner.name} />
-                        </a>
+                        </Link>
                       </div>
                     );
                   })}

@@ -9,8 +9,7 @@ import NavigationMenu from './navigationMenu';
 import Glyphicon from './glyphicon';
 
 class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
+  componentWillMount() {
     this.state = {
       isMenuHidden: true
     };
@@ -54,9 +53,9 @@ class NavBar extends React.Component {
               <NavigationMenu />
             </div>
             <div className="navbar-icons right">
-              <a href={`${debateData.help_url}`} target="_blank" rel="noopener noreferrer">
+              <Link to={`${debateData.help_url}`} target="_blank">
                 <Glyphicon glyph="questionSign" color="grey" size={20} desc="Help" />
-              </a>
+              </Link>
               <div className="navbar-language right">
                 <LanguageMenu size="xs" />
               </div>
