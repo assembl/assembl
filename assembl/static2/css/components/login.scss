@@ -25,20 +25,27 @@
   }
 }
 
-.login-view {
-  margin: 60px auto;
-  max-width: 600px;
-  text-align: left;
+.login-container {
+  background-color: $page-bkg-grey;
+  height: 100%;
+  position: absolute;
+  width: 100%;
 
-  .login {
-    border-bottom: $box-border;
-    margin: 0 5% 20px;
-    padding: 0 0 20px;
-  }
+  .login-view {
+    margin: 60px auto;
+    max-width: 600px;
+    text-align: left;
 
-  .signup {
-    margin: 0 5%;
-    padding: 0 0 10px;
+    .login {
+      border-bottom: $box-border;
+      margin: 0 5% 20px;
+      padding: 0 0 20px;
+    }
+
+    .signup {
+      margin: 0 5%;
+      padding: 0 0 10px;
+    }
   }
 }
 
@@ -53,5 +60,22 @@
 @media screen and (max-width: 420px) {
   .profile-icon {
     margin: 1px 10px 0 15px;
+  }
+
+  .login-container {
+    background-color: $page-bkg-light;
+
+    .login-view {
+      margin: 0 -30px;
+
+      .box-title {
+        border-radius: 0;
+      }
+
+      .box {
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
   }
 }
