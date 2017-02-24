@@ -7,7 +7,7 @@ import { Translate } from 'react-redux-i18n';
 const calendarImage = (
   <img
     style={{ width: 20, height: 20, marginLeft: 10 }}
-    src="/static2/img/icone-calendrier.svg"
+    src="/static2/img/icon-calendar.svg"
     role="presentation"
   />);
 
