@@ -23,7 +23,7 @@ class Twitter extends React.Component {
                           <Translate value="home.twitterTitle" />
                         </h1>
                       </div>
-                      <TweetEmbed id={debateData.config.home.twitter.id} />
+                      <TweetEmbed id={debateData.config.home.twitter.id} options={{width: `${620}px` }} />
                     </div>
                   </Col>
                 </Row>

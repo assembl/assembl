@@ -7,8 +7,6 @@
 
 .twitter-tweet {
   display: flex!important;
-  max-width: 670px!important;
-  width: 100%!important;
 }
 
 @media screen and (max-width: 420px) {
@@ -17,7 +15,7 @@
   }
 }
 
-@media screen and (min-width: 421px) {
+@media screen and (min-width: 768px) {
   .twitter-tweet {
     padding: 15px 75px 75px !important;
   }
