@@ -25,7 +25,7 @@ class ProfileIcon extends React.Component {
           <div>
             {usersLoading && <Loader textHidden />}
             {users &&
-              <Link to={`${rootPath}profile/${users.connectedUser.name}`}>
+              <Link to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
                 <Glyphicon glyph="avatar" color="grey" size={20} desc="Avatar" />
                 <span className="username">{users.connectedUser.username ? users.connectedUser.username : users.connectedUser.name}</span>
               </Link>
