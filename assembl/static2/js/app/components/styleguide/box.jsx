@@ -43,13 +43,17 @@ class Box extends React.Component {
             <div>&lt;/div&gt;</div>
           </pre>
           <pre>
-            <div>&lt;div className="illustration-box"&gt;</div>
-              <div style={{ marginLeft: `${20}px` }}>&lt;div className="image-box" style=&#123;&#123; backgroundImage: 'url(imgUrl)' &#125;&#125;>&nbsp&lt;/div&gt;</div>
-              <div style={{ marginLeft: `${20}px` }}>&lt;Link className="content-box"&gt;Content here&lt;/Link&gt;</div>
-              <div style={{ marginLeft: `${20}px` }}>&lt;div className="color-box"&gt;&nbsp&lt;/div&gt;</div>
-              <div style={{ marginLeft: `${20}px` }}>&lt;div className="box-hyphen"&gt;&nbsp&lt;/div&gt;</div>
-              <div style={{ marginLeft: `${20}px` }}>&lt;div className="box-hyphen rotate-hyphen"&gt;&nbsp&lt;/div&gt;</div>
-            <div>&lt;/div&gt;</div>
+            <div>&lt;Row&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;Col xs=&#123;12&#125; md=&#123;3&#125; className="no-padding"&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;div className="illustration-box"&gt;</div>
+                  <div style={{ marginLeft: `${60}px` }}>&lt;div className="image-box" style=&#123;&#123; backgroundImage: 'url(imgUrl)' &#125;&#125;>&nbsp&lt;/div&gt;</div>
+                  <div style={{ marginLeft: `${60}px` }}>&lt;Link className="content-box"&gt;Content here&lt;/Link&gt;</div>
+                  <div style={{ marginLeft: `${60}px` }}>&lt;div className="color-box"&gt;&nbsp&lt;/div&gt;</div>
+                  <div style={{ marginLeft: `${60}px` }}>&lt;div className="box-hyphen"&gt;&nbsp&lt;/div&gt;</div>
+                  <div style={{ marginLeft: `${60}px` }}>&lt;div className="box-hyphen rotate-hyphen"&gt;&nbsp&lt;/div&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;/div&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;/Col&gt;</div>
+            <div>&lt;/Row&gt;</div>
           </pre>
           <pre>
             &lt;div className="theme-box"&gt;&nbsp;&lt;/div&gt;
