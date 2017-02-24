@@ -2,6 +2,10 @@
 @import "../../node_modules/searchkit/theming/vars.scss";
 // @import "../../node_modules/searchkit/theming/components.scss";
 
+$sk-active-bg-color: $first-color;
+$sk-action-text-color: $first-color;
+$sk-selector-active-background: $first-color;
+
 @import "../../node_modules/searchkit/theming/components/arrows.scss";
 @import "../../node_modules/searchkit/theming/components/actions.scss";
 @import "../../node_modules/searchkit/theming/components/loader.scss";
@@ -41,8 +45,6 @@
 @import "../../node_modules/searchkit/theming/components/table.scss";
 
 @import "../../node_modules/searchkit/theming/components/panel.scss";
-
-$sk-text-color: white;
 
 .react-datepicker__input-container {
     margin: 0 0 5px 5px;
@@ -216,7 +218,7 @@ $sk-text-color: white;
   margin:0 15px 20px;
 
   em {
-    background:yellow;
+    background: #d6c3f6;
   }
 
   a {
