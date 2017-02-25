@@ -182,6 +182,22 @@
   .step4 {
     margin: 0;
   }
+
+  .bar1 {
+    margin: 80px 0 0;
+  }
+
+  .bar2 {
+    margin: 65px 0 0;
+  }
+
+  .bar3 {
+    margin: 50px 0 0;
+  }
+
+  .bar4 {
+    margin: 35px 0 0;
+  }
 }
 
 .twitter-section {
@@ -244,6 +260,11 @@
       }
     }
   }
+  .steps-section {
+   .hidden-xs {
+    display: none;
+   } 
+  }
 }
 
 @media screen and (max-width: 991px) {
@@ -280,6 +301,22 @@
 
     .step4 {
       margin: 0;
+    }
+
+    .bar1 {
+      margin: 95px 0 0;
+    }
+
+    .bar2 {
+      margin: 80px 0 0;
+    }
+
+    .bar3 {
+      margin: 65px 0 0;
+    }
+
+    .bar4 {
+      margin: 50px 0 0;
     }
   }
 }

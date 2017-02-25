@@ -1,0 +1,38 @@
+.timeline {
+  height: 56px;
+  
+  .bar {
+    background-color: $first-color;
+    bottom: 0;
+    height: 10px;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .bar-bkg {
+    background-color: $grey1;
+    bottom: 0;
+    height: 10px;
+    position: absolute;
+    width: 100%;
+  }
+
+  .pointer {
+    fill: $first-color;
+    position: absolute;
+    z-index: 10;
+  }
+
+  .trsp-pointer {
+    height: 51px;
+  }
+  
+  .timeline-date {
+    color: $first-color;
+    font-size: $font-size-m;
+    letter-spacing: 1px;
+    margin-top: -30px;
+    position: absolute;
+    white-space: nowrap;
+  }
+}
