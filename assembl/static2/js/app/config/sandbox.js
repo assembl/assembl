@@ -2,8 +2,8 @@ const Config = {
   home: {
     header: {
       backgroundImageUrl: 'https://framapic.org/DTDgukI0lLFg/QvUEIscjehd8.jpg',
-      startDate: '2017-01-01T00:00:00Z',
-      endDate: '2017-02-28T23:59:59Z'
+      startDate: '2017-02-01',
+      endDate: '2017-03-31'
     },
     objectives: {
       img1Url: 'https://framapic.org/ibX9g8rDKkId/fHbo8OgaSvuW.jpg',
