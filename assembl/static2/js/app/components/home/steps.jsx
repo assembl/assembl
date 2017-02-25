@@ -11,9 +11,9 @@ class Steps extends React.Component {
   isCurrentStep(index) {
     const currentDate = new Date();
     const timeline = this.props.debate.debateData.config.home.steps.timeline;
-    const startDate = GlobalFunctions.getCustomDate(timeline[index].startDate);
-    const endDate = GlobalFunctions.getCustomDate(timeline[index].endDate);
-    const isCurrentStep = GlobalFunctions.compareDates(currentDate, startDate) && GlobalFunctions.compareDates(endDate, currentDate);
+    const startDate = GlobalFunctions.getDateFromString(timeline[index].startDate);
+    const endDate = GlobalFunctions.getDateFromString(timeline[index].endDate);
+    const isCurrentStep = GlobalFunctions.isDateExpired(currentDate, startDate) && GlobalFunctions.isDateExpired(endDate, currentDate);
 
     return isCurrentStep;
   }

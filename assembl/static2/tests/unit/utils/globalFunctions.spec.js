@@ -84,4 +84,87 @@ describe('This test concern GlobalFunctions Class', () => {
     const result = GlobalFunctions.getSortedDate(object, key);
     expect(result).toEqual(expectedResult);
   });
+
+  it('Should transform a string to a date', () => {
+    const strArray = ['2017-02-14T23:59:59Z', '2017-03-31T23:59:59Z', '2017-11-01T23:59:59Z'];
+    const result = [];
+    const expectedResult = ['Tue Feb 14 2017 23:59:59 GMT+0100 (CET)', 'Fri Mar 31 2017 23:59:59 GMT+0200 (CEST)', 'Wed Nov 01 2017 23:59:59 GMT+0100 (CET)'];
+    strArray.map((str) => {
+      let date = GlobalFunctions.getDateFromString(str);
+      result.push(String(date));
+    });
+    expect(result).toEqual(expectedResult);
+  });
+    
+  it('Should compare 2 dates and return true if the first date is more recent than the second', () => {
+    const currentDate = new Date();
+    const strArray = ['2003-01-01T00:00:00Z', '2137-01-01T00:00:00Z', '2015-11-01T14:05:23Z', '2079-01-01T00:00:00Z'];
+    const result = [];
+    const expectedResult = [true, false, true, false];
+    strArray.map((str) => {
+      let date = GlobalFunctions.getDateFromString(str);
+      let isDateExpired = GlobalFunctions.isDateExpired(currentDate, date);
+      result.push(isDateExpired);
+    });
+    expect(result).toEqual(expectedResult);
+  });
+  
+  it('Should return the number of days between 2 dates', () => {
+    const result = [];
+    const expectedResult = [14, 31, 90, 92, 365];
+    const datesArray = [
+      {
+        date1:'2017-02-14T00:00:00Z',
+        date2:'2017-02-28T00:00:00Z'
+      },
+      {
+        date1:'2017-03-01T00:00:00Z',
+        date2:'2017-04-01T00:00:00Z'
+      },
+      {
+        date1:'2017-01-01T00:00:00Z',
+        date2:'2017-04-01T00:00:00Z'
+      },
+      {
+        date1:'2017-05-01T00:00:00Z',
+        date2:'2017-08-01T00:00:00Z'
+      },
+      {
+        date1:'2017-01-01T00:00:00Z',
+        date2:'2018-01-01T00:00:00Z'
+      }
+    ];
+    datesArray.map((elm) => {
+      const date1 = GlobalFunctions.getDateFromString(elm.date1);
+      const date2 = GlobalFunctions.getDateFromString(elm.date2);
+      const days = GlobalFunctions.getNumberOfDays(date2, date1);
+      result.push(days);
+    });
+    expect(result).toEqual(expectedResult);
+  });
+  
+  it('Should return a percentage', () => {
+    const result = [];
+    const expectedResult = [43.48, 7.49, 7.8];
+    const arr = [
+      {
+        value: 10,
+        total: 23
+      },
+      {
+        value: 32,
+        total: 427
+      },
+      {
+        value: 684,
+        total: 8765
+      }
+    ];
+    arr.map((elm) => {
+      const percentage = GlobalFunctions.calculatePercentage(elm.value, elm.total);
+      result.push(percentage);
+    });
+    expect(result).toEqual(expectedResult);
+  });
 });
+  
