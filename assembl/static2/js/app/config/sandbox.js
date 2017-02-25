@@ -10,24 +10,24 @@ const Config = {
       img2Url: 'https://framapic.org/3FcT7TlNGrCT/popxXrnh6ELR.jpg'
     },
     steps: {
-      img1Url: 'https://framapic.org/CiOjTZIVLFgg/9Xr4dPUMDZJG.jpg',
-      img2Url: 'https://framapic.org/pF0R9jQM5Aof/MortpNh6czMP.jpg',
-      img3Url: 'https://framapic.org/3CL5o6dir9Vk/xQ0Uckbi7ckp.jpg',
-      img4Url: 'https://framapic.org/cKULJ8P6VLFr/Nojx87ovxtjC.jpg',
       timeline: [
         {
+          imgUrl: 'https://framapic.org/CiOjTZIVLFgg/9Xr4dPUMDZJG.jpg',
           startDate: '2017-02-01T00:00:00Z',
           endDate: '2017-02-14T23:59:59Z'
         },
         {
+          imgUrl: 'https://framapic.org/pF0R9jQM5Aof/MortpNh6czMP.jpg',
           startDate: '2017-02-15T00:00:00Z',
           endDate: '2017-02-28T23:59:59Z'
         },
         {
+          imgUrl: 'https://framapic.org/3CL5o6dir9Vk/xQ0Uckbi7ckp.jpg',
           startDate: '2017-03-01T00:00:00Z',
           endDate: '2017-03-14T23:59:59Z'
         },
         {
+          imgUrl: 'https://framapic.org/cKULJ8P6VLFr/Nojx87ovxtjC.jpg',
           startDate: '2017-03-15T00:00:00Z',
           endDate: '2017-03-31T23:59:59Z'
         }

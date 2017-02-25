@@ -8,24 +8,17 @@ import Step from './steps/step';
 import Timeline from './steps/timeline';
 
 class Steps extends React.Component {
-  getCurrentStepIndex() {
-    const { debateData } = this.props.debate;
+  isCurrentStep(index) {
     const currentDate = new Date();
-    let currentStepIndex = 0;
-    debateData.config.home.steps.timeline.map((step, index) => {
-      const startDate = GlobalFunctions.getCustomDate(step.startDate);
-      const endDate = GlobalFunctions.getCustomDate(step.endDate);
-      const isCurrentStep = GlobalFunctions.compareDates(currentDate, startDate) && GlobalFunctions.compareDates(endDate, currentDate);
-      if (isCurrentStep) {
-        currentStepIndex = index;
-      }
-      return index;
-    });
-    return currentStepIndex;
+    const timeline = this.props.debate.debateData.config.home.steps.timeline;
+    const startDate = GlobalFunctions.getCustomDate(timeline[index].startDate);
+    const endDate = GlobalFunctions.getCustomDate(timeline[index].endDate);
+    const isCurrentStep = GlobalFunctions.compareDates(currentDate, startDate) && GlobalFunctions.compareDates(endDate, currentDate);
+
+    return isCurrentStep;
   }
   render() {
-    const currentStepIndex = this.getCurrentStepIndex();
-    const { debateData } = this.props.debate;
+    const timeline = this.props.debate.debateData.config.home.steps.timeline;
     return (
       <section className="steps-section">
         <Grid fluid className="background-grey">
@@ -38,32 +31,22 @@ class Steps extends React.Component {
             </div>
             <div className="content-section">
               <Row className="no-margin">
-                <Col xs={12} sm={6} md={3} className={currentStepIndex !== 0 ? 'no-padding step1 hidden-xs' : 'no-padding step1'}>
-                  <Step imgUrl={debateData.config.home.steps.img1Url} stepNumber={1} title="home.step1Title" text="home.step1Text" />
-                </Col>
-                <Col xs={12} sm={6} md={3} className={currentStepIndex !== 1 ? 'no-padding step2 hidden-xs' : 'no-padding step2'}>
-                  <Step imgUrl={debateData.config.home.steps.img2Url} stepNumber={2} title="home.step2Title" text="home.step2Text" />
-                </Col>
-                <Col xs={12} sm={6} md={3} className={currentStepIndex !== 2 ? 'no-padding step3 hidden-xs' : 'no-padding step3'}>
-                  <Step imgUrl={debateData.config.home.steps.img3Url} stepNumber={3} title="home.step3Title" text="home.step3Text" />
-                </Col>
-                <Col xs={12} sm={6} md={3} className={currentStepIndex !== 3 ? 'no-padding step4 hidden-xs' : 'no-padding step4'}>
-                  <Step imgUrl={debateData.config.home.steps.img4Url} stepNumber={4} title="home.step4Title" text="home.step4Text" />
-                </Col>
+                {timeline.map((step, index) => {
+                  return (
+                    <Col xs={12} sm={6} md={3} className={this.isCurrentStep(index) ? `no-padding step${index}` : `no-padding step${index} hidden-xs`} key={`step${index}`}>
+                      <Step imgUrl={step.imgUrl} index={index} title={`home.step${index}Title`} text={`home.step${index}Text`} />
+                    </Col>
+                  );
+                })}
               </Row>
               <Row className="no-margin">
-                <Col xs={3} sm={3} md={3} className="no-padding bar1">
-                  <Timeline index={0} currentStep={currentStepIndex === 0} />
-                </Col>
-                <Col xs={3} sm={3} md={3} className="no-padding bar2">
-                  <Timeline index={1} currentStep={currentStepIndex === 1} />
-                </Col>
-                <Col xs={3} sm={3} md={3} className="no-padding bar3">
-                  <Timeline index={2} currentStep={currentStepIndex === 2} />
-                </Col>
-                <Col xs={3} sm={3} md={3} className="no-padding bar4">
-                  <Timeline index={3} currentStep={currentStepIndex === 3} />
-                </Col>
+                {timeline.map((step, index) => {
+                  return (
+                    <Col xs={3} sm={3} md={3} className={`no-padding bar${index}`} key={`timeline${index}`}>
+                      <Timeline index={index} currentStep={this.isCurrentStep(index)} />
+                    </Col>
+                  );
+                })}
               </Row>
             </div>
           </div>

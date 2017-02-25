@@ -40,7 +40,7 @@ class GlobalFunctions {
     return (value1 * 100) / value2;
   }
   static getCustomDate(str) {
-    let date = new Date(str);
+    const date = new Date(str);
     date.setHours(date.getHours() + (date.getTimezoneOffset() / 60));
     return date;
   }

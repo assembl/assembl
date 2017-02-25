@@ -9,7 +9,7 @@ class Step extends React.Component {
     const imgUrl = this.props.imgUrl;
     const title = this.props.title;
     const text = this.props.text;
-    const StepNumber = this.props.stepNumber;
+    const StepNumber = this.props.index + 1;
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
     return (
