@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 BOOL = {
     'index': True,
     'type': 'boolean',
@@ -24,19 +27,24 @@ TEXT = {
 }
 
 COMMON_POST = {
-    'discussion_id': LONG,
-    'creation_date': DATE,
-    'id': LONG,
-    'parent_id': LONG,
-    'creator_id': LONG,
-#    'publishes_synthesis_id': KEYWORD,
-    'type': KEYWORD,
-    'sentiment_tags': KEYWORD
-    # 'sentiment_counts'
+    '_parent': {
+        'type': 'user'
+    },
+    'properties': {
+        'discussion_id': LONG,
+        'creation_date': DATE,
+        'id': LONG,
+        'parent_id': LONG,
+        'creator_id': LONG,
+    #    'publishes_synthesis_id': KEYWORD,
+        'type': KEYWORD,
+        'sentiment_tags': KEYWORD
+        # 'sentiment_counts'
+    }
 }
 
-_POST_MAPPING = COMMON_POST.copy()
-_POST_MAPPING.update({
+_POST_MAPPING = deepcopy(COMMON_POST)
+_POST_MAPPING['properties'].update({
     'body_fr': TEXT,
     'subject_fr': TEXT,
     'body_und': TEXT,
@@ -45,29 +53,33 @@ _POST_MAPPING.update({
     'subject_en': TEXT,
 })
 
-_SYNTHESIS_MAPPING = COMMON_POST.copy()
-_SYNTHESIS_MAPPING.update({
+_SYNTHESIS_MAPPING = deepcopy(COMMON_POST)
+_SYNTHESIS_MAPPING['properties'].update({
     'subject': TEXT,
     'introduction': TEXT,
     'conclusion': TEXT,
 })
 
 _USER_MAPPING = {
-    'discussion_id': LONG,
-    'creation_date': DATE,
-    'id': LONG,
-    'name': TEXT,
+    'properties': {
+        'discussion_id': LONG,
+        'creation_date': DATE,
+        'id': LONG,
+        'name': TEXT,
+    }
 }
 
 _IDEA_MAPPING = {
-    'discussion_id': LONG,
-    'creation_date': DATE,
-    'id': LONG,
-    'short_title': TEXT,
-    'long_title': TEXT,
-    'definition': TEXT,
-    'title': TEXT,  # announce
-    'body': TEXT,  # announce
+    'properties': {
+        'discussion_id': LONG,
+        'creation_date': DATE,
+        'id': LONG,
+        'short_title': TEXT,
+        'long_title': TEXT,
+        'definition': TEXT,
+        'title': TEXT,  # announce
+        'body': TEXT,  # announce
+    }
 }
 
 MAPPINGS = {

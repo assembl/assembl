@@ -25,7 +25,7 @@ class ElasticSavepoint(object):
         self.manager = manager
         self._index = index.copy()
         self._unindex = unindex.copy()
-        # self._unindex key: uid, value: doc_type (doc_type is needed to
+        # self._unindex key: uid, value: {doc_type, _parent} which is needed to
         # unindex in elasticsearch)
 
     def rollback(self):
@@ -67,12 +67,15 @@ class ElasticChanges(threading.local):
 
     def unindex_content(self, content):
         self._join()
-        uid = get_uid(content)
+        uid, data = get_data(content)
         if uid in self._index:
             del self._index[uid]
 
         doc_type = get_doc_type_from_uid(uid)
-        self._unindex[uid] = doc_type
+        self._unindex[uid] = {
+            'doc_type': doc_type,
+            '_parent': data.get('_parent', None)
+        }
 
     def savepoint(self):
         return ElasticSavepoint(self, self._index, self._unindex)
@@ -103,18 +106,27 @@ class ElasticChanges(threading.local):
             def get_actions(index, unindex):
                 for uid, data in index.iteritems():
                     doc_type = get_doc_type_from_uid(uid)
+                    parent = data.pop('_parent', None)
                     action = {'_op_type': 'index',
                               '_index': index_name,
                               '_type': doc_type,
                               '_id': uid,
                               '_source': data}
+                    if parent is not None:
+                        action['_parent'] = parent
+
                     yield action
 
-                for uid, doc_type in unindex.iteritems():
+                for uid, data in unindex.iteritems():
+                    doc_type = data['doc_type']
+                    parent = data['_parent']
                     action = {'_op_type': 'delete',
                               '_index': index_name,
                               '_type': doc_type,
                               '_id': uid}
+                    if parent is not None:
+                        action['_parent'] = parent
+
                     yield action
 
             actions = get_actions(self._index, self._unindex)

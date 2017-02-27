@@ -35,7 +35,7 @@ def create_index_and_mapping(index_name):
         es.indices.put_mapping(
                 index=index_name,
                 doc_type=doc_type,
-                body={"properties": mapping}
+                body=mapping
             )
 
 
@@ -79,6 +79,7 @@ def get_data(content):
 
     elif isinstance(content, Post):
         data = {}
+        data['_parent'] = 'user:{}'.format(content.creator_id)
         for attr in ('discussion_id', 'creation_date', 'id', 'parent_id',
                      'creator_id', 'sentiment_counts'):
             data[attr] = getattr(content, attr)
