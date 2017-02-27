@@ -9,11 +9,14 @@ import NavigationMenu from './navigationMenu';
 import Glyphicon from './glyphicon';
 
 class NavBar extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     this.state = {
       isMenuHidden: true
     };
     this.displayMenu = this.displayMenu.bind(this);
+  }
+  componentWillMount() {
     this.unlisten = browserHistory.listen(() => {
       this.setState({ isMenuHidden: true });
     });
