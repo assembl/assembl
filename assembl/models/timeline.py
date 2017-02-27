@@ -19,9 +19,10 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
     P_EDIT_POST, P_ADMIN_DISC)
-from ..lib.sqla_types import CoerceUnicode
+from ..lib.sqla_types import CoerceUnicode, URLString
 from ..semantic.namespaces import TIME, DCTERMS, ASSEMBL
 from .discussion import Discussion
+from .langstrings import LangString
 
 
 class TimelineEvent(DiscussionBoundBase):
@@ -44,11 +45,13 @@ class TimelineEvent(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
-    title = Column(CoerceUnicode(), nullable=False,
+    title_id = Column(Integer(), ForeignKey(LangString.id), nullable=False,
         info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
-    description = Column(UnicodeText,
+    description_id = Column(Integer(), ForeignKey(LangString.id),
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+
+    image_url = Column(URLString())
 
     start = Column(DateTime,
         # Formally, TIME.hasBeginning o TIME.inXSDDateTime
@@ -150,5 +153,6 @@ class DiscussionMilestone(TimelineEvent):
     __mapper_args__ = {
         'polymorphic_identity': 'discussion_milestone',
     }
+
 Discussion.timeline_milestones = relationship(
     DiscussionPhase, order_by=TimelineEvent.start)
