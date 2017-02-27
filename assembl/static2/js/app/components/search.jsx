@@ -5,6 +5,11 @@ import { Localize, Translate, I18n } from 'react-redux-i18n';
 import styled from 'styled-components';
 
 import {
+  BoolMust,
+  RangeQuery,
+  TermQuery,
+  HasChildQuery,
+  CheckboxFilter,
   MenuFilter,
   Panel,
   RangeFilter,
@@ -280,6 +285,7 @@ export default class Search extends React.Component {
   constructor() {
     super();
     const discussionId = GlobalFunctions.getDiscussionId();
+    this.discussionId = discussionId;
     const host = '/';
     this.searchkit = new SearchkitManager(host, { searchOnLoad: false });
     this.searchkit.setQueryProcessor((plainQueryObject) => {
@@ -359,6 +365,17 @@ export default class Search extends React.Component {
                 field="sentiment_tags"
                 id="sentiment_tags"
                 title={I18n.t('search.Messages')}
+              />
+              <CheckboxFilter
+                id="participants-peers"
+                title={I18n.t('search.Participants')}
+                label={I18n.t('search.Participants pleased by their peers')}
+                filter={
+                  HasChildQuery('post', BoolMust([
+                    RangeQuery('sentiment_counts.like', { gt: 0 }),
+                    TermQuery('discussion_id', this.discussionId)
+                  ]))
+                }
               />
               <Panel title={I18n.t('search.Sort')}>
                 <SortingSelector

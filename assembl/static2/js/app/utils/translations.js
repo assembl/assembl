@@ -61,6 +61,7 @@ const Translations = {
       'Oldest first': 'Du plus ancien au plus récent',
       'Most popular messages': 'Messages les plus populaires',
       'Less popular messages': 'Messages les moins populaires',
+      'Participants pleased by their peers': 'Participants plébiscités par leurs pairs',
       'Filter by date': 'Filtrer par période'
     },
     navbar: {
@@ -216,6 +217,7 @@ const Translations = {
       'Oldest first': 'Oldest first',
       'Most popular messages': 'Most popular messages',
       'Less popular messages': 'Less popular messages',
+      'Participants pleased by their peers': 'Participants pleased by their peers',
       'Filter by date': 'Filter by date'
     },
     navbar: {
