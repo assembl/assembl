@@ -51,6 +51,18 @@ class TimelineEvent(DiscussionBoundBase):
     description_id = Column(Integer(), ForeignKey(LangString.id),
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
 
+    title = relationship(LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=title_id == LangString.id,
+        backref=backref("title_of_timeline_event", lazy="dynamic"),
+        cascade="all, delete-orphan")
+
+    description = relationship(LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=description_id == LangString.id,
+        backref=backref("description_of_timeline_event", lazy="dynamic"),
+        cascade="all, delete-orphan")
+
     image_url = Column(URLString())
 
     start = Column(DateTime,

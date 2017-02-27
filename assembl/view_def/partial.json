@@ -286,8 +286,9 @@
         "is_initiator": true
     },
     "TimelineEvent": {
-        "title": true,
-        "description": true,
+        "title": ":",
+        "description": ":",
+        "image_url": true,
         "previous_event": true
     },
     "DiscussionPhase": {
