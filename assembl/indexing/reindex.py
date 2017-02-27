@@ -32,7 +32,7 @@ def intermediate_commit(contents):
 
 
 def get_indexable_contents(session):
-    from assembl.models import Post, User, Idea
+    from assembl.models import AgentProfile, Idea, Post
     from assembl.models.post import PublicationStates
 
     query = session.query(Idea
@@ -41,7 +41,7 @@ def get_indexable_contents(session):
     for idea in query:
         yield idea
 
-    query = session.query(User)
+    query = session.query(AgentProfile)
     for user in query:
         yield user
 
@@ -60,12 +60,12 @@ def reindex_content(content, action='update'):
     """
     from assembl.models.post import PublicationStates
     from assembl.models import (
-        AgentStatusInDiscussion, Post, User, Idea,
+        AgentStatusInDiscussion, Post, AgentProfile, Idea,
         IdeaContentLink, IdeaAnnouncement)
-    indexed_contents = (Post, User, Idea)
+    indexed_contents = (Post, AgentProfile, Idea)
     if action == 'delete' and isinstance(content, indexed_contents):
         changes.unindex_content(content)
-    elif isinstance(content, User):
+    elif isinstance(content, AgentProfile):
         changes.index_content(content)
     elif isinstance(content, AgentStatusInDiscussion):
         reindex_content(content.agent_profile)

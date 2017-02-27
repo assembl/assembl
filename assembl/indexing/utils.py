@@ -47,7 +47,7 @@ def delete_index(index_name):
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Idea, Post, SynthesisPost, User
+    from assembl.models import Idea, Post, SynthesisPost, AgentProfile
     if isinstance(content, Idea):
         data = {}
         for attr in ('creation_date', 'id', 'short_title', 'long_title',
@@ -60,14 +60,21 @@ def get_data(content):
 
         return get_uid(content), data
 
-    elif isinstance(content, User):
+    elif isinstance(content, AgentProfile):
         data = {}
         for attr in ('creation_date', 'id', 'name'):
-            data[attr] = getattr(content, attr)
+            data[attr] = getattr(content, attr, None)
+            # AgentProfile doesn't have creation_date, User does.
 
         # get all discussions that the user is in via AgentStatusInDiscussion
-        data['discussion_id'] = [s.discussion_id
-                                 for s in content.agent_status_in_discussion]
+        data['discussion_id'] = set([s.discussion_id
+                                 for s in content.agent_status_in_discussion])
+        # get discussion_id for all posts of this agent
+        data['discussion_id'] = list(
+            data['discussion_id'].union(
+                [post.discussion_id for post in content.posts_created]
+            )
+        )
         return get_uid(content), data
 
     elif isinstance(content, Post):
@@ -100,10 +107,10 @@ def get_data(content):
 
 def get_uid(content):
     """Return a global unique identifier"""
-    from assembl.models import Idea, Post, SynthesisPost, User
+    from assembl.models import Idea, Post, SynthesisPost, AgentProfile
     if isinstance(content, Idea):
         doc_type = 'idea'
-    elif isinstance(content, User):
+    elif isinstance(content, AgentProfile):
         doc_type = 'user'
     elif isinstance(content, Post):
         if isinstance(content, SynthesisPost):
