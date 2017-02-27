@@ -14,7 +14,13 @@ const Config = {
         {
           imgUrl: 'https://framapic.org/CiOjTZIVLFgg/9Xr4dPUMDZJG.jpg',
           startDate: '2017-02-01T00:00:00Z',
-          endDate: '2017-02-14T23:59:59Z'
+          endDate: '2017-02-14T23:59:59Z',
+          title: {
+            
+          },
+          description: {
+            
+          }
         },
         {
           imgUrl: 'https://framapic.org/pF0R9jQM5Aof/MortpNh6czMP.jpg',

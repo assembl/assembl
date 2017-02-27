@@ -27,19 +27,19 @@ class Themes extends React.Component {
               </div>
               <div className="content-section">
                 <Row className="no-margin">
-                  <Col xs={12} sm={6} md={3} className="theme1 no-padding">
+                  <Col xs={12} sm={6} md={3} className="theme no-padding">
                     <TopIdea keyValue="controversial" />
                     <Illustration index={0} />
                   </Col>
-                  <Col xs={12} sm={6} md={3} className="theme2 no-padding">
+                  <Col xs={12} sm={6} md={3} className="theme no-padding">
                     <Illustration index={1} />
                     <TopIdea keyValue="longerThread" />
                   </Col>
-                  <Col xs={12} sm={6} md={3} className="theme3 no-padding">
+                  <Col xs={12} sm={6} md={3} className="theme no-padding">
                     <TopIdea keyValue="topContributor" />
                     <Illustration index={2} />
                   </Col>
-                  <Col xs={12} sm={6} md={3} className="theme4 no-padding">
+                  <Col xs={12} sm={6} md={3} className="theme no-padding">
                     <Illustration index={3} />
                     <TopIdea keyValue="recentDiscussion" />
                   </Col>

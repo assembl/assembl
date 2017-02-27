@@ -9,7 +9,7 @@ class Video extends React.Component {
     const { debateData } = this.props.debate;
     return (
       <section className="video-section">
-        {debateData.config.home.video &&
+        {Object.keys(debateData.config.home.video).length > 0 &&
           <Grid fluid className="background-light">
             <div className="max-container">
               <div className="title-section">

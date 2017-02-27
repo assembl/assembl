@@ -10,7 +10,7 @@ class Twitter extends React.Component {
     const { debateData } = this.props.debate;
     return (
       <section className="twitter-section">
-        {debateData.config.home.twitter &&
+        {Object.keys(debateData.config.home.twitter).length > 0 &&
           <Grid fluid className="background-img" style={{ backgroundImage: `url(${debateData.config.home.twitter.backgroundImageUrl})` }}>
             <div className="max-container">
               <div className="content-section">
