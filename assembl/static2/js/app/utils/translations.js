@@ -38,6 +38,7 @@ const Translations = {
         x_messages_plural: '%{count} messages'
       },
       published_the: 'Publié le',
+      member_since: 'Membre depuis le',
       by: 'par',
       search_come_from_what_you_need_to_know: 'Recherche effectuée dans la section "à retenir" de cette discussion',
       search_come_from_announcement: 'Recherche effectuée dans la section "consigne" de cette discussion',
@@ -194,6 +195,7 @@ const Translations = {
       search_come_from_what_you_need_to_know: 'Search done in the "What you need to know" section of this discussion',
       search_come_from_announcement: 'Search done in the "announcement" section of this discussion',
       published_the: 'Published the',
+      member_since: 'Member since',
       by: 'by',
       expand_search: 'show search',
       collapse_search: 'hide search',

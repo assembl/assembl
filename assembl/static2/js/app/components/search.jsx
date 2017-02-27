@@ -188,7 +188,11 @@ const UserHit = (props) => {
           <p dangerouslySetInnerHTML={{ __html: fullname }} />
         }
       </div>
-      <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
+      { source.creation_date ?
+        <RowInFirstColor style={{ clear: 'both' }}>
+          <Translate value="search.member_since" />{' '}<Localize value={source.creation_date} dateFormat="date.format" />
+        </RowInFirstColor>
+      : <RowInFirstColor style={{ clear: 'both' }} /> }
     </div>
   );
 };
