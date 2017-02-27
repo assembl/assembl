@@ -391,6 +391,40 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": "NMI"
         },
 
+        # Parameters for frontend settings, for experimentation purposes.
+        # What is put there should become separate parameters for typechecking
+        {
+            "id": "extra_json",
+            "name": _("Extra JSON parameters"),
+            "value_type": "json",
+            "description": _("Parameters for quick frontend settings"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": {}
+        },
+
+        # Discussion Video
+        {
+            "id": "video_url",
+            "name": _("Video URL"),
+            "value_type": "url",
+            "description": _("URL of a video presenting the discussion"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": None
+        },
+
+        # Discussion Video description
+        {
+            "id": "video_description",
+            "name": _("Video description"),
+            "value_type": "dict_of_locale_to_text",
+            "description": _("Description of the video presenting the discussion"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": None
+        },
+
         # Allow social sharing
         {
             "id": "social_sharing",
