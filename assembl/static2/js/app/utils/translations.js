@@ -60,7 +60,7 @@ const Translations = {
       'Oldest first': 'Du plus ancien au plus récent',
       'Most popular messages': 'Messages les plus populaires',
       'Less popular messages': 'Messages les moins populaires',
-      'Filter by date': 'Filtrer par date'
+      'Filter by date': 'Filtrer par période'
     },
     navbar: {
       home: 'accueil',
