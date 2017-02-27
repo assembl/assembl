@@ -140,11 +140,11 @@ const PostHit = (props) => {
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'body_und') }} />
       </div>
       <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
-      <div>
+      {/* <div>
         popularity: {source.sentiment_counts.popularity},
         like: {source.sentiment_counts.like},
         disagree: {source.sentiment_counts.disagree}
-      </div>
+      </div> */}
     </div>
   );
 };
