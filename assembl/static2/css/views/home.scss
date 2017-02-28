@@ -64,6 +64,22 @@
   }
 }
 
+.synthesis-section {
+  display: none;
+
+  .insert-box {
+    width: 100%;
+  }
+
+  .insert-content {
+    color: $third-color;
+  }
+
+  .synthesis-container {
+    padding: 0 0 0 14px;
+  }
+}
+
 .themes-section {
   .theme {
     &:nth-child(1) {
@@ -157,6 +173,11 @@
         font-size: 13px;
       }
     }
+
+    .text-box {
+      margin: 80px 0 0;
+      text-align: center;
+    }
   }
 }
 
@@ -204,6 +225,12 @@
       margin: 35px 0 0;
     }
   }
+
+  .illustration-box {
+    .text-box {
+      margin: 220px 0 0;
+    }
+  }
 }
 
 .twitter-section {
@@ -242,6 +269,10 @@
       display: none;
     }
   }
+
+  .synthesis-section {
+    display: block;
+  }
 }
 
 @media screen and (min-width: 1100px) {
@@ -250,6 +281,20 @@
       position: absolute;
       right: 0;
       top: 120px;
+      width: 270px;
+    }
+
+    .insert-content {
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: $lines-to-show;
+      color: $third-color;
+      display: -webkit-box;
+      font-size: $font-size-xs;
+      height: $font-size-xs * $line-height * $lines-to-show;
+      line-height: $line-height;
+      max-width: 250px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
@@ -270,6 +315,19 @@
   .steps-section {
     .hidden-xs {
       display: none;
+    }
+  }
+
+  .synthesis-section {
+    .insert-content {
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: $lines-to-show;
+      color: $third-color;
+      display: -webkit-box;
+      font-size: $font-size-xs;
+      line-height: $line-height;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

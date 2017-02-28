@@ -162,6 +162,14 @@ input {
   margin: 0 auto;
 }
 
+@media screen and (min-width: 992px) {
+  .col-bottom {
+    display: table-cell;
+    float: none;
+    vertical-align: bottom;
+  }
+}
+
 #pDebug {
   display: none;
 }

@@ -31,7 +31,7 @@ class Footer extends React.Component {
             <div className="terms">
               <Link to={`${rootPath}${debateData.slug}/terms`}><Translate value="footer.terms" /></Link>
             </div>
-            <div className="copyright">© Bluenove-Assembl 2017</div>
+            <div className="copyright">© <Link to="http://assembl.bluenove.com/" target="_blank">Assembl</Link> powered by <Link to="http://bluenove.com/" target="_blank">bluenove</Link></div>
           </div>
         </div>
       </Grid>

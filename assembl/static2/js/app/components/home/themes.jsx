@@ -13,7 +13,7 @@ class Themes extends React.Component {
     return (
       <section className="themes-section">
         {ideasLoading && <Loader color="black" />}
-        {(ideas && ideas.latestIdeas.length >= 4) &&
+        {(ideas && ideas.latestIdeas.length >= 2) &&
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="title-section">

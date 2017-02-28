@@ -20,10 +20,10 @@
 
 .insert-box {
   background-color: $box-bkg;
+  border: $insert-border;
   height: 210px;
-  padding: 10px 30px;
+  padding: 10px 30px 15px;
   text-align: left;
-  width: 270px;
 
   .box-hyphen {
     margin: 10px 0 0 -45px;
@@ -86,6 +86,10 @@
       .text-box {
         display: block;
       }
+
+      .stats {
+        display: none;
+      }
     }
 
     .text-box {
@@ -93,7 +97,6 @@
       font-size: $font-size-xs;
       font-weight: 100;
       letter-spacing: 1px;
-      margin: 220px 0 0;
       padding: 0 20px;
     }
   }

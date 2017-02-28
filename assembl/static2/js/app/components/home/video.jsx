@@ -4,7 +4,19 @@ import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
 import MapStateToProps from '../../store/mapStateToProps';
 
+
 class Video extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isTextHigher: false
+    };
+  }
+  componentDidMount() {
+    const textHeight = document.getElementById('video-txt').clientHeight;
+    const videoHeight = document.getElementById('video-vid').clientHeight;
+    if (textHeight > (videoHeight + 5)) this.setState({ isTextHigher: true });
+  }
   render() {
     const { debateData } = this.props.debate;
     return (
@@ -22,12 +34,12 @@ class Video extends React.Component {
                 <div className="content-margin">
                   <Row>
                     {debateData.config.home.video.videoText &&
-                      <Col xs={12} md={6}>
-                        <div className="text">{debateData.config.home.video.videoText}</div>
+                      <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
+                        <div className="text" id="video-txt">{debateData.config.home.video.videoText}</div>
                       </Col>
                     }
-                    <Col xs={12} md={6}>
-                      <div className="video-container">
+                    <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
+                      <div className="video-container" id="video-vid">
                         <iframe src={debateData.config.home.video.videoUrl} frameBorder="0" width="560" height="315" />
                       </div>
                     </Col>

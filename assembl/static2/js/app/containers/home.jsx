@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../components/home/header';
+import Synthesis from '../components/home/synthesis';
 import Themes from '../components/home/themes';
 import Objectives from '../components/home/objectives';
 import Steps from '../components/home/steps';
@@ -13,6 +14,7 @@ class Home extends React.Component {
     return (
       <div className="home">
         <Header />
+        <Synthesis />
         <Themes />
         <Objectives />
         <Steps />

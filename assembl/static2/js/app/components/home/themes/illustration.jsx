@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Glyphicon from '../../common/glyphicon';
 import MapStateToProps from '../../../store/mapStateToProps';
+import GlobalFunctions from '../../../utils/globalFunctions';
 
 class Illustration extends React.Component {
   render() {
@@ -19,6 +20,7 @@ class Illustration extends React.Component {
             <div className="inline">{ideas.latestIdeas[index].nbPosts}</div>
             <Glyphicon glyph="message" color="white" size={20} desc="Number of contributions" />
           </div>
+          <div className="text-box">{GlobalFunctions.parseHtml(ideas.latestIdeas[index].definition)}</div>
         </Link>
         <div className="color-box">&nbsp;</div>
         <div className="box-hyphen">&nbsp;</div>

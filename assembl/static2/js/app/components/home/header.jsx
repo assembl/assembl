@@ -10,7 +10,7 @@ import Synthesis from './header/synthesis';
 class Header extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
+    const { rootPath, connectedUserId } = this.props.context;
     const { synthesis } = this.props.synthesis;
     return (
       <section className="header-section">
@@ -30,7 +30,7 @@ class Header extends React.Component {
                 <span>&nbsp;</span>
                 <Localize value={debateData.config.home.header.endDate} dateFormat="date.format" />
               </h4>
-              <Link className="button-link button-light margin-xl" to={`${rootPath}${debateData.slug}/debate`}>
+              <Link className="button-link button-light margin-xl" to={connectedUserId ? `${rootPath}${debateData.slug}/debate` : `${rootPath}${debateData.slug}/login`}>
                 <Translate value="home.accessButton" />
               </Link>
             </div>

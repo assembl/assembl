@@ -90,7 +90,6 @@
   font-weight: 200;
   line-height: 30px;
   margin: 10px 0 0;
-  text-align: justify;
 }
 
 .date {
@@ -101,19 +100,6 @@
 .text-column {
   column-count: 2;
   column-gap: 30px;
-}
-
-.ellipsis-content {
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: $lines-to-show;
-  color: $third-color;
-  display: -webkit-box;
-  font-size: $font-size-xs;
-  height: $font-size-xs * $line-height * $lines-to-show;
-  line-height: $line-height;
-  max-width: 250px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .ellipsis {
@@ -130,8 +116,6 @@
 
 @media screen and (max-width: 420px) {
   .title-section {
-    margin: $margin-section 10px 0;
-
     .dark-title-1 {
       display: block;
       margin: -10px 0 0;

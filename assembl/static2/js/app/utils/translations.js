@@ -44,7 +44,7 @@ const Translations = {
       longerThread: 'Thread le plus long',
       topContributor: 'Top contributeur',
       recentDiscussion: 'Discussion récente',
-      objectivesTitle: 'Pourquoi un tel débat',
+      objectivesTitle: 'Pourquoi un tel débat ?',
       timelineTitle: 'La timeline du débat en 4 phases',
       step0Title: 'Phase découverte',
       step1Title: 'Phase de divergence',
