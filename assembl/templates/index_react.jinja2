@@ -10,6 +10,10 @@
 		{% if discussion %}
         	<input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
         {% endif %}
+        {% if user %}
+            <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
+            <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
+        {% endif %}
         <div id='root'></div>
 		{% block main_js %}
 			<script src="{{REACT_URL}}/build/bundle.js"></script>

@@ -186,7 +186,8 @@ def react_view(request):
     context = dict(
         request=old_context['request'],
         REACT_URL=old_context['REACT_URL'],
-        discussion=old_context['discussion']
+        discussion=old_context['discussion'],
+        user=old_context['user']
     )
     return context
 
