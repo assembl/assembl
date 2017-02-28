@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import RoundedImg from './RoundedImg';
 
-const RoundedImgWithMargin = styled(RoundedImg)`
+const RoundedImgWithMargin = styled.img`
+  border-radius: 50%;
   margin-right: 5px;
 `;
 
-const Avatar = (props) => {
+const ProfileLine = (props) => {
   const { userId, userName } = props;
   const src = `/user/id/${userId}/avatar/30`;
   return (
@@ -30,4 +30,4 @@ const Avatar = (props) => {
   );
 };
 
-export default Avatar;
+export default ProfileLine;

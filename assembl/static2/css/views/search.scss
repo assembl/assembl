@@ -1,10 +1,9 @@
 @import "../variables.scss";
 @import "../../node_modules/searchkit/theming/vars.scss";
 // @import "../../node_modules/searchkit/theming/components.scss";
-
-$sk-active-bg-color: $first-color;
-$sk-action-text-color: $first-color;
-$sk-selector-active-background: $first-color;
+$sk-active-bg-color: $purple;
+$sk-action-text-color: $purple;
+$sk-selector-active-background: $purple;
 
 @import "../../node_modules/searchkit/theming/components/arrows.scss";
 @import "../../node_modules/searchkit/theming/components/actions.scss";
@@ -46,9 +45,11 @@ $sk-selector-active-background: $first-color;
 
 @import "../../node_modules/searchkit/theming/components/panel.scss";
 
+.date-filter input {
+    display: inline-block;
+}
 .react-datepicker__input-container {
-    margin: 0 0 5px 5px;
-    width: 70%;
+    display: block !important;
 }
 
 .sk-layout {
@@ -76,7 +77,7 @@ $sk-selector-active-background: $first-color;
   }
 
   &__filters {
-    background:$sk-layout-panel-background;
+    background: #f4f4f4;
     padding:15px;
     margin:15px 0 15px 15px;
     width: 250px;
@@ -131,6 +132,14 @@ $sk-selector-active-background: $first-color;
 }
 
 // components
+
+.sk-panel__header {
+    font-size: 16px;
+}
+.sk-item-list-option__text,
+.sk-item-list-option__count {
+    color: #777;
+}
 
 .sk-search-box {
   form {
@@ -236,16 +245,47 @@ $sk-selector-active-background: $first-color;
   }
 }
 
+$imgtypeWidth: 50px;
+$imgtypeMargin: 30px;
+$marginLeft: $imgtypeWidth + 2*$imgtypeMargin;
+
 .sk-hits-list-hit {
   padding-bottom: 1em;
-  border-bottom: 1px solid $first-color;
+  border-bottom: 1px solid $purple;
+  clear: both;
+  min-height: 9em;
+  position: relative;
 
   &__title {
     line-height:20px;
-    margin:0 0 5px;
+    margin:0 0 5px $marginLeft;
     font-size:18px;
   }
 
+  &__content {
+      margin-left: $marginLeft;
+      margin-bottom: 3em;
+      max-width: 800px;
+  }
+
+  &__info {
+      color: $purple;
+      margin-left: $marginLeft;
+      position: absolute;
+      bottom: 1em;
+  }
+
+  &__icon-message, &__icon-avatar {
+      margin-left: 5px;
+      margin-right: 15px;
+  }
+
+  &__imgtype {
+    width: $imgtypeWidth;
+    height: 50px;
+    float: left;
+    margin: $imgtypeMargin;
+  }
 }
 
 .sk-action-bar {

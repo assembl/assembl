@@ -31,12 +31,6 @@ const Translations = {
         from: 'Du',
         to: 'Au'
       },
-      stats: {
-        x_contributors: '%{count} contributeur',
-        x_contributors_plural: '%{count} contributeurs',
-        x_messages: '%{count} message',
-        x_messages_plural: '%{count} messages'
-      },
       published_the: 'Publié le',
       member_since: 'Membre depuis le',
       by: 'par',
@@ -186,12 +180,6 @@ const Translations = {
       datefilter: {
         from: 'From',
         to: 'To'
-      },
-      stats: {
-        x_contributors: '%{count} contributor',
-        x_contributors_plural: '%{count} contributors',
-        x_messages: '%{count} message',
-        x_messages_plural: '%{count} messages'
       },
       search_come_from_what_you_need_to_know: 'Search done in the "What you need to know" section of this discussion',
       search_come_from_announcement: 'Search done in the "announcement" section of this discussion',

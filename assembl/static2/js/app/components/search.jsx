@@ -2,7 +2,6 @@
 /* global __resourceQuery */
 import React from 'react';
 import { Localize, Translate, I18n } from 'react-redux-i18n';
-import styled from 'styled-components';
 
 import {
   BoolMust,
@@ -32,6 +31,7 @@ import {
 } from 'searchkit';
 import get from 'lodash/get';
 import truncate from 'lodash/truncate';
+import Glyphicon from './common/glyphicon';
 
 // Keep the style import here. The reason why it's not in main.scss is because
 // we create a searchv1 bundle that includes only the Search component and its
@@ -39,11 +39,10 @@ import truncate from 'lodash/truncate';
 // some styles for v1
 
 import '../../../css/views/search.scss';
-import colors from '!!sass-variable-loader!../../../css/variables.scss'; // eslint-disable-line
 
 import GlobalFunctions from '../utils/globalFunctions';
 import DateRangeFilter from './search/DateRangeFilter';
-import Avatar from './common/Avatar';
+import ProfileLine from './common/profileLine';
 
 const FRAGMENT_SIZE = 400;
 
@@ -105,25 +104,21 @@ if (__resourceQuery) { // v1
 
 // TODO get the right subject highlight, fr, en in priority, then fallback to und(efined). Same for body obviously.
 
-const RowInFirstColor = styled.div`
-color: ${colors.firstColor};
-`;
-
 const PublishedInfo = (props) => {
   const { date, userId, userName } = props;
   return (
-    <RowInFirstColor style={{ clear: 'both' }}>
+    <div className={props.className}>
       <Translate value="search.published_the" />{' '}<Localize value={date} dateFormat="date.format" />
       {' '}<Translate value="search.by" />{' '}
-      <Avatar userId={userId} userName={userName} />
-    </RowInFirstColor>
+      <ProfileLine userId={userId} userName={userName} />
+    </div>
   );
 };
 
 const ImageType = (props) => {
   return (
     <img
-      style={{ width: 50, height: 50, float: 'left', margin: 20 }}
+      className={props.className}
       src={`/static2/img/icon-${props.type}.svg`}
       role="presentation"
     />
@@ -134,6 +129,7 @@ const PostHit = (props) => {
   const source = props.result._source;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
+      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
         <Link
           to={getUrl(props.result)}
@@ -141,10 +137,14 @@ const PostHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        <ImageType type={props.result._type} />
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'body_und') }} />
       </div>
-      <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
+      <PublishedInfo
+        className={props.bemBlocks.item('info')}
+        date={source.creation_date}
+        userId={source.creator_id}
+        userName={source.creator_name}
+      />
       {/* <div>
         popularity: {source.sentiment_counts.popularity},
         like: {source.sentiment_counts.like},
@@ -158,6 +158,7 @@ const SynthesisHit = (props) => {
   const source = props.result._source;
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
+      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
         <Link
           to={getUrl(props.result)}
@@ -165,11 +166,15 @@ const SynthesisHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        <ImageType type={props.result._type} />
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'introduction') }} />
         <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'conclusion') }} />
       </div>
-      <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />
+      <PublishedInfo
+        className={props.bemBlocks.item('info')}
+        date={source.creation_date}
+        userId={source.creator_id}
+        userName={source.creator_name}
+      />
     </div>
   );
 };
@@ -182,7 +187,7 @@ const UserHit = (props) => {
     props.result, 'highlight.name', props.result._source.name);
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
-      <ImageType type={props.result._type} />
+      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
         { url ?
           <Link
@@ -194,10 +199,10 @@ const UserHit = (props) => {
         }
       </div>
       { source.creation_date ?
-        <RowInFirstColor style={{ clear: 'both' }}>
+        <div className={props.bemBlocks.item('info')}>
           <Translate value="search.member_since" />{' '}<Localize value={source.creation_date} dateFormat="date.format" />
-        </RowInFirstColor>
-      : <RowInFirstColor style={{ clear: 'both' }} /> }
+        </div>
+      : null }
     </div>
   );
 };
@@ -210,6 +215,7 @@ const IdeaHit = (props) => {
   const announceBody = highlightedTextOrTruncatedText(props.result, 'body');
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
+      <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
         <Link
           to={getUrl(props.result)}
@@ -217,7 +223,6 @@ const IdeaHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        <ImageType type={props.result._type} />
         { definition ?
           <div>
             <p dangerouslySetInnerHTML={{ __html: definition }} />
@@ -234,8 +239,15 @@ const IdeaHit = (props) => {
           : null
         }
       </div>
-      <div style={{ clear: 'both' }}>
-        <Translate value="search.stats.x_messages" count={source.num_posts} />, <Translate value="search.stats.x_contributors" count={source.num_contributors} />
+      <div className={props.bemBlocks.item('info')}>
+        {source.num_posts}
+        <span className={props.bemBlocks.item('icon-message')}>
+          <Glyphicon glyph="message" color="purple" size={20} desc="Number of contributions" />
+        </span>
+        {source.num_contributors}
+        <span className={props.bemBlocks.item('icon-avatar')}>
+          <Glyphicon glyph="avatar" color="purple" size={20} desc="Number of users" />
+        </span>
       </div>
     </div>
   );

@@ -4,12 +4,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import { Translate } from 'react-redux-i18n';
 
-const calendarImage = (
-  <img
-    style={{ width: 20, height: 20, marginLeft: 10 }}
-    src="/static2/img/icon-calendar.svg"
-    role="presentation"
-  />);
+// const calendarImage = (
+//   <img
+//     style={{ width: 20, height: 20, marginLeft: 10 }}
+//     src="/static2/img/icon-calendar.svg"
+//     role="presentation"
+//     className="img-calendar"
+//   />);
 
 class DateRangeFilter extends Component {
 
@@ -83,12 +84,12 @@ class DateRangeFilter extends Component {
 
   render() {
     return (
-      <div className="form-inline date-filter">
-        <div className="form-group">
+      <div className="date-filter">
+        <div>
           <label htmlFor="date_from"><Translate value="search.datefilter.from">From</Translate></label>
           <DatePicker
             id="date_from"
-            className="form-control sk-input-filter"
+            className="form-control"
             // placeholderText="Select start date"
             isClearable
             filterDate={this.isAfterEndDate}
@@ -98,13 +99,13 @@ class DateRangeFilter extends Component {
             endDate={this.state.endDate}
             onChange={this.handleChangeStart}
           />
-          {calendarImage}
+          {/* {calendarImage} */}
         </div>
-        <div className="form-group">
+        <div>
           <label htmlFor="date_to"><Translate value="search.datefilter.to">To</Translate></label>
           <DatePicker
             id="date_to"
-            className="form-control sk-input-filter"
+            className="form-control"
             // placeholderText="Select end date"
             isClearable
             filterDate={this.isBeforeStartDate}
@@ -114,7 +115,7 @@ class DateRangeFilter extends Component {
             endDate={this.state.endDate}
             onChange={this.handleChangeEnd}
           />
-          {calendarImage}
+          {/* {calendarImage} */}
         </div>
       </div>
     );
