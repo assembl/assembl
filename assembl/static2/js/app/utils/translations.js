@@ -2,6 +2,8 @@
 
 const Translations = {
   fr: {
+    'Number of contributions': 'Nombre de messages',
+    'Number of users': 'Nombre de contributeurs',
     search: {
       reset: {
         clear_all: 'Effacer tous les filtres'
