@@ -4141,7 +4141,7 @@ qs@6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.2.0.tgz#3b7848c03c2dece69a9522b0fae8c4126d745f3b"
 
-qs@ssetem/qs:
+"qs@github:ssetem/qs":
   version "6.0.1"
   resolved "https://codeload.github.com/ssetem/qs/tar.gz/fb2b80ac750fa375e0d69643adb0840e7e04d1d3"
 
@@ -4659,9 +4659,9 @@ sax@^1.2.1, sax@~1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.2.tgz#fd8631a23bc7826bef5d871bdb87378c95647828"
 
-searchkit@1.0.0-6:
-  version "1.0.0-6"
-  resolved "https://registry.yarnpkg.com/searchkit/-/searchkit-1.0.0-6.tgz#c1768c8f01627dff5149317eed039592f1b48189"
+searchkit@1.0.0-7:
+  version "1.0.0-7"
+  resolved "https://registry.yarnpkg.com/searchkit/-/searchkit-1.0.0-7.tgz#d2f391b69eab75e1101e77363a6e2eecbc8f6883"
   dependencies:
     "@types/classnames" "0.0.32"
     "@types/enzyme" "^2.7.1"
