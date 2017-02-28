@@ -29,7 +29,7 @@ const mockApi = [
     numChildIdea:16,
     num_orphan_posts:55,
     num_synthesis_posts:8,
-    num_total_and_read_posts:[195, 0],
+    num_total_and_read_posts:[195, 34, 0],
     order:null,
     original_uri:"local:Idea/12",
     parents:[],
@@ -59,6 +59,7 @@ const mockApi = [
       }
     ],
     creationDate:"2015-02-20T16:01:29Z",
+    definition: 'Description de l\'idée',
     extracts:[],
     hidden:false,
     is_tombstone:false,
@@ -67,7 +68,7 @@ const mockApi = [
     numChildIdea:16,
     num_orphan_posts:55,
     num_synthesis_posts:8,
-    num_total_and_read_posts:[231, 0],
+    num_total_and_read_posts:[231, 67, 0],
     order:null,
     original_uri:"local:Idea/38",
     parents:[],
@@ -105,7 +106,7 @@ const mockApi = [
     numChildIdea:16,
     num_orphan_posts:55,
     num_synthesis_posts:8,
-    num_total_and_read_posts:[765, 0],
+    num_total_and_read_posts:[765, 43, 0],
     order:null,
     original_uri:"local:Idea/56",
     parents:[],
@@ -143,7 +144,7 @@ const mockApi = [
     numChildIdea:16,
     num_orphan_posts:55,
     num_synthesis_posts:8,
-    num_total_and_read_posts:[876, 0],
+    num_total_and_read_posts:[876, 13, 0],
     order:null,
     original_uri:"local:Idea/98",
     parents:[],
@@ -181,7 +182,7 @@ const mockApi = [
     numChildIdea:16,
     num_orphan_posts:55,
     num_synthesis_posts:8,
-    num_total_and_read_posts:[876, 0],
+    num_total_and_read_posts:[876, 89, 0],
     order:null,
     original_uri:"local:Idea/27",
     parents:[],
@@ -201,25 +202,33 @@ describe('This test concern ideas Service', () => {
           id:"38",
           imgUrl:"http://localhost:6543/data/Discussion/6/documents/405/data",
           title:"Title 2",
-          nbPosts:231
+          nbPosts:231,
+          nbContributors:67,
+          definition:'Description de l\'idée'
         },
         {
           id:"56",
           imgUrl:"http://localhost:6543/data/Discussion/6/documents/406/data",
           title:"Title 3",
-          nbPosts:765
+          nbPosts:765,
+          nbContributors:43,
+          definition:''
         },
         {
           id:"98",
           imgUrl:"http://localhost:6543/data/Discussion/6/documents/407/data",
           title:"Title 4",
-          nbPosts:876
+          nbPosts:876,
+          nbContributors:13,
+          definition:''
         },
         {
           id:"27",
           imgUrl:"http://localhost:6543/data/Discussion/6/documents/408/data",
           title:"Title 5",
-          nbPosts:876
+          nbPosts:876,
+          nbContributors:89,
+          definition:''
         }
       ],
       controversial: [
