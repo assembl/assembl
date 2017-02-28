@@ -4,6 +4,6 @@
   hr {
     border: 0;
     height: 1px;
-    background: darken(desaturate($theme_navigation_bg, 100%), 7%);
+    background: $theme_navigation_horizontal_rule_background;
   }
 }

@@ -203,7 +203,7 @@
             clear: both;
             min-height: 20px;
             display: block;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid $theme_navigation_horizontal_rule_background;
             border-top: none;
             position: relative;
             border-right: 4px solid transparent;
@@ -225,6 +225,9 @@
           li.selected {
             background-color: $theme_item_selected_color;
             border-right: 4px solid $theme_item_selected_secondary_color;
+          }
+          div > div:last-child li:last-child {
+            border-bottom: none;
           }
         }
       }

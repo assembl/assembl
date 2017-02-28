@@ -107,6 +107,7 @@ $theme_navigation_selected_idea_total_count: $theme_navigation_idea_total_count;
 $theme_navigation_selected_idea_unread_count: $th_local_gray6;
 $theme_navigation_selected_idea_unread_count_background: $th_local_white;
 $theme_navigation_idea_unread_count: $theme_read_unread_item;
+$theme_navigation_horizontal_rule_background: darken(desaturate($theme_navigation_bg, 100%), 7%);
 
 //Navigation + Synthesis panel
 $theme_navigation_or_idea_bg_active: $th_local_gray4; // in the navigation menu, background color of a hovered idea or a hovered synthesis 
