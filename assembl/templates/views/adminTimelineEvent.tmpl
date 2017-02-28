@@ -1,0 +1,26 @@
+<div class="subpanel-body bx">
+  <div>
+    <div class="admin-msg-elm">
+      <label>{{ gettext('Image URL') }}</label>
+      <input class="js_timeline_image_url" type="text" name="timeline_image_url" value="<%= event.get('image_url') %>" />
+    </div>
+  </div>
+  <div class="admin-msg-elm bx">
+    <label>{{ gettext('Title') }}</label>
+    <div class="js_timeline_title"></div>
+  </div>
+  <div class="admin-msg-elm bx">
+    <label>{{ gettext('Description') }}</label>
+    <div class="js_timeline_description"></div>
+  </div>
+  <div>
+    <% if (index > 0) { %>
+      <button class="js_timeline_up btn btn-cancel"><i class="icon-arrowup"></i>⬆</button>
+    <% } %>
+    <% if (index < collsize-1) { %>
+      <button class="js_timeline_down btn btn-cancel"><i class="icon-arrowdown"></i>⬇</button>
+    <% } %>
+    <button class="js_timeline_delete btn btn-cancel">{{ gettext('Delete') }}</button>
+  </div>
+
+</div>

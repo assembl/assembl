@@ -31,6 +31,7 @@ var Marionette = require('./shims/marionette.js'),
     Account = require('./views/user/account.js'),
     Widget = require('./models/widget.js'),
     AdminDiscussionSettings = require('./views/admin/adminDiscussionSettings.js'),
+    AdminTimeline = require('./views/admin/adminTimelineEvents.js'),
     PreferencesView = require('./views/preferencesView.js'),
     FirstIdeaToShowVisitor = require('./views/visitors/firstIdeaToShowVisitor.js'),
     i18n = require('./utils/i18n.js'),
@@ -186,6 +187,14 @@ var routeManager = Marionette.Object.extend({
     Assembl.headerRegions.show(new NavBar());
     if (this.userHaveAccess()) {
       var adminSetting = new AdminDiscussionSettings();
+      Assembl.groupContainer.show(adminSetting);
+    }
+  },
+
+  timeline: function() {
+    Assembl.headerRegions.show(new NavBar());
+    if (this.userHaveAccess()) {
+      var adminSetting = new AdminTimeline();
       Assembl.groupContainer.show(adminSetting);
     }
   },
@@ -532,6 +541,7 @@ var routeManager = Marionette.Object.extend({
     switch (route){
       case 'edition':
       case 'settings':
+      case 'timeline':
       case 'notifications':
       case 'partners':
         access = (!Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)) ? false : true;

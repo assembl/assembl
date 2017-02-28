@@ -280,7 +280,7 @@ var CollectionManager = Marionette.Object.extend({
       case Types.TIMELINE_EVENT:
       case Types.DISCUSSION_PHASE:
       case Types.DISCUSSION_MILESTONE:
-      case TYPES.DISCUSSION_SESSION:
+      case Types.DISCUSSION_SESSION:
         return this.getAllTimelineEventCollectionPromise();
 
       case Types.WIDGET:
