@@ -25,7 +25,7 @@ server {
     location /static {
         #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
         #Nor will it help your performance after the first hour...
-        autoindex on;
+        autoindex off;
 
         alias /home/assembl_user/assembl/assembl/static;
     }
