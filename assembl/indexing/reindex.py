@@ -61,7 +61,7 @@ def reindex_content(content, action='update'):
     from assembl.models.post import PublicationStates
     from assembl.models import (
         AgentStatusInDiscussion, Post, AgentProfile, Idea,
-        IdeaContentLink, IdeaAnnouncement)
+        IdeaContentLink, IdeaAnnouncement, SentimentOfPost)
     indexed_contents = (Post, AgentProfile, Idea)
     if action == 'delete' and isinstance(content, indexed_contents):
         changes.unindex_content(content)
@@ -86,6 +86,8 @@ def reindex_content(content, action='update'):
         reindex_content(content.content)
     elif isinstance(content, IdeaAnnouncement):
         reindex_content(content.idea)
+    elif isinstance(content, SentimentOfPost):
+        reindex_content(content.post_from_sentiments)
 
 
 def batch_reindex_elasticsearch(session):

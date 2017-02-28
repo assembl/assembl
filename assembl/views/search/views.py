@@ -1,11 +1,12 @@
 import json
+from pyramid.events import NewRequest
 from pyramid.view import view_config
 
 from assembl.indexing.utils import connect
 from assembl.indexing.settings import get_index_settings
+from assembl.indexing.changes import changes
 from assembl import models
 from assembl.lib.sqla import get_session_maker
-
 
 def get_curl_query(query):
     return "curl -XGET 'localhost:9200/_search?pretty' -d '{}'".format(
@@ -42,5 +43,12 @@ def search_endpoint(context, request):
     return result
 
 
+def join_transaction(event):
+    changes._join()
+
+
 def includeme(config):
     config.add_route('search', '/_search')
+    # join ElasticChanges datamanager to the transaction at the beginning
+    # of the request to avoid joining when the status is Committing
+    config.add_subscriber(join_transaction, NewRequest)
