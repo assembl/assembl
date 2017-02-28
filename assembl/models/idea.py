@@ -468,9 +468,14 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return counters.get_counts(self.id)[0]
 
     @property
-    def num_read_posts(self):
+    def num_contributors(self):
         counters = self.prepare_counters(self.discussion_id)
         return counters.get_counts(self.id)[1]
+
+    @property
+    def num_read_posts(self):
+        counters = self.prepare_counters(self.discussion_id)
+        return counters.get_counts(self.id)[2]
 
     @property
     def num_total_and_read_posts(self):
@@ -1048,8 +1053,20 @@ class RootIdea(Idea):
         return int(result)
 
     @property
+    def num_contributors(self):
+        """ In the root idea, num_posts is the count of contributors to
+        all non-deleted mesages in the discussion """
+        from .post import Post
+        result = self.db.query(Post.creator_id).filter(
+            Post.discussion_id == self.discussion_id,
+            Post.hidden==False,
+            Post.tombstone_condition()
+        ).distinct().count()
+        return int(result)
+
+    @property
     def num_total_and_read_posts(self):
-        return (self.num_posts, self.num_read_posts)
+        return (self.num_posts, self.num_contributors, self.num_read_posts)
 
     @property
     def num_orphan_posts(self):

@@ -488,6 +488,7 @@ class PostPathCounter(PostPathCombiner):
         self.counts = {}
         self.viewed_counts = {}
         self.read_counts = {}
+        self.contributor_counts = {}
         self.user_id = user_id
         self.calc_subset = calc_subset
 
@@ -519,30 +520,49 @@ class PostPathCounter(PostPathCombiner):
         if self.user_id:
             action_entity = entities['action']
             return q.with_entities(
-                count(content_entity.id), count(action_entity.id)).first()
+                count(content_entity.id),
+                count(post.creator_id.distinct()),
+                count(action_entity.id)).first()
         else:
-            (post_count,) = q.with_entities(
-                count(content_entity.id)).first()
-            return (post_count, 0)
+            (post_count, contributor_count) = q.with_entities(
+                count(content_entity.id),
+                count(post.creator_id.distinct())).first()
+            return (post_count, contributor_count, 0)
 
     def get_counts(self, idea_id):
         if self.counts.get(idea_id, None) is not None:
-            return self.counts[idea_id], self.viewed_counts[idea_id]
+            return (
+                self.counts[idea_id],
+                self.contributor_counts[idea_id],
+                self.viewed_counts[idea_id])
         path_collection = self.paths[idea_id]
         if not path_collection:
-            (path_collection.count, path_collection.viewed_count) = (0, 0)
+            (
+                path_collection.count,
+                path_collection.contributor_count,
+                path_collection.viewed_count
+            ) = (0, 0, 0)
             self.counts[idea_id] = 0
+            self.contributor_counts[idea_id] = 0
             self.viewed_counts[idea_id] = 0
-            return (0, 0)
+            return (0, 0, 0)
         q = path_collection.as_clause(
             self.discussion.db, self.discussion.id, user_id=self.user_id,
             include_deleted=None)
-        (post_count, viewed_count) = self.get_counts_for_query(q)
-        (path_collection.count, path_collection.viewed_count) = (
-            post_count, viewed_count)
+        (
+            post_count, contributor_count, viewed_count
+        ) = self.get_counts_for_query(q)
+        (
+            path_collection.count,
+            path_collection.contributor_count,
+            path_collection.viewed_count
+        ) = (
+            post_count, contributor_count, viewed_count
+        )
         self.counts[idea_id] = post_count
         self.viewed_counts[idea_id] = viewed_count
-        return (post_count, viewed_count)
+        self.contributor_counts[idea_id] = contributor_count
+        return (post_count, contributor_count, viewed_count)
 
     def get_orphan_counts(self, include_deleted=False):
         return self.get_counts_for_query(

@@ -43,7 +43,8 @@ var IdeaModel = Base.Model.extend({
   adjust_num_read_posts: function(resp) {
     if (resp.num_total_and_read_posts !== undefined) {
       this.set('num_posts', resp.num_total_and_read_posts[0]);
-      this.set('num_read_posts', resp.num_total_and_read_posts[1]);
+      this.set('num_contributors', resp.num_total_and_read_posts[1]);
+      this.set('num_read_posts', resp.num_total_and_read_posts[2]);
     }
   },
   /**
