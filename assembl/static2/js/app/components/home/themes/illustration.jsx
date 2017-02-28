@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import Glyphicon from '../../common/glyphicon';
+import Statistic from './statistic';
 import MapStateToProps from '../../../store/mapStateToProps';
 
 class Illustration extends React.Component {
@@ -15,10 +15,7 @@ class Illustration extends React.Component {
         <div className="image-box" style={{ backgroundImage: `url(${ideas.latestIdeas[index].imgUrl})` }}>&nbsp;</div>
         <Link className="content-box" to={`${rootPath}${debateData.slug}/debate`}>
           <h3 className="light-title-3 center">{ideas.latestIdeas[index].title}</h3>
-          <div className="stats">
-            <div className="inline">{ideas.latestIdeas[index].nbPosts}</div>
-            <Glyphicon glyph="message" color="white" size={20} desc="Number of contributions" />
-          </div>
+          <Statistic index={index} />
           <div className="text-box">{<p dangerouslySetInnerHTML={{ __html: ideas.latestIdeas[index].definition }} />}</div>
         </Link>
         <div className="color-box">&nbsp;</div>

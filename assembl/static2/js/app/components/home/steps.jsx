@@ -10,7 +10,7 @@ import Timeline from './steps/timeline';
 class Steps extends React.Component {
   isCurrentStep(index) {
     const currentDate = new Date();
-    const timeline = this.props.debate.debateData.config.home.steps.timeline;
+    const timeline = this.props.debate.debateData.config.home.steps;
     const startDate = GlobalFunctions.getDateFromString(timeline[index].startDate);
     const endDate = GlobalFunctions.getDateFromString(timeline[index].endDate);
     const isCurrentStep = GlobalFunctions.isDateExpired(currentDate, startDate) && GlobalFunctions.isDateExpired(endDate, currentDate);
@@ -18,7 +18,7 @@ class Steps extends React.Component {
     return isCurrentStep;
   }
   render() {
-    const timeline = this.props.debate.debateData.config.home.steps.timeline;
+    const timeline = this.props.debate.debateData.config.home.steps;
     return (
       <section className="steps-section">
         <Grid fluid className="background-grey">

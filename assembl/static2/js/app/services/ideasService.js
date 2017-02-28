@@ -27,6 +27,7 @@ class IdeasService {
         if (sortedDate[sortedDate.length - i] === ideaDate.valueOf()) {
           const imgUrl = idea.attachments ? idea.attachments[0].external_url : '';
           const nbPosts = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[0] : 0;
+          const nbContributors = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[1] : 0;
           const title = idea.shortTitle ? idea.shortTitle : '';
           const definition = idea.definition ? idea.definition : '';
           const ideaId = idea['@id'].split('/')[1];
@@ -35,6 +36,7 @@ class IdeasService {
             imgUrl: imgUrl,
             title: title,
             nbPosts: nbPosts,
+            nbContributors: nbContributors,
             definition: definition
           });
         }

@@ -14,7 +14,7 @@ class Statistic extends React.Component {
         <div className="inline">{ideas.latestIdeas[index].nbPosts}</div>
         <Glyphicon glyph="message" color="white" size={20} desc="Number of contributions" />
         <div className="inline padding">-</div>
-        <div className="inline">{ideas.latestIdeas[index].nbUsers}</div>
+        <div className="inline">{ideas.latestIdeas[index].nbContributors}</div>
         <Glyphicon glyph="avatar" color="white" size={20} desc="Number of users" />
       </div>
     );
