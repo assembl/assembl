@@ -12,7 +12,7 @@ class Video extends React.Component {
       isTextHigher: false
     };
   }
-  componentDidMount() {
+  componentWillReceiveProps() {
     const textHeight = document.getElementById('video-txt').clientHeight;
     const videoHeight = document.getElementById('video-vid').clientHeight;
     if (textHeight > (videoHeight + 5)) this.setState({ isTextHigher: true });
