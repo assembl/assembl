@@ -28,6 +28,8 @@ import {
   // SelectedFilters,
   SideBar,
   SortingSelector,
+  TagFilterConfig,
+  TagFilter,
   TermQuery,
   TopBar
 } from 'searchkit';
@@ -112,7 +114,9 @@ const PublishedInfo = (props) => {
     <div className={props.className}>
       <Translate value="search.published_the" />{' '}<Localize value={date} dateFormat="date.format" />
       {' '}<Translate value="search.by" />{' '}
-      <ProfileLine userId={userId} userName={userName} />
+      <TagFilter key={userId} field="creator_id" value={userId} searchkit={props.searchkit}>
+        <ProfileLine userId={userId} userName={userName} />
+      </TagFilter>
     </div>
   );
 };
@@ -146,6 +150,7 @@ const PostHit = (props) => {
         date={source.creation_date}
         userId={source.creator_id}
         userName={source.creator_name}
+        searchkit={props.searchkit}
       />
       {/* <div>
         popularity: {source.sentiment_counts.popularity},
@@ -391,6 +396,7 @@ export default class Search extends React.Component {
                   ]))
                 }
               />
+              <TagFilterConfig id="creator_id" title="Participant" field="creator_id" />
               <Panel title={I18n.t('search.Sort')}>
                 <SortingSelector
                   options={[

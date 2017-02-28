@@ -4,6 +4,7 @@
 $sk-active-bg-color: $purple;
 $sk-action-text-color: $purple;
 $sk-selector-active-background: $purple;
+$highlightColor: #d6c3f6;
 
 @import "../../node_modules/searchkit/theming/components/arrows.scss";
 @import "../../node_modules/searchkit/theming/components/actions.scss";
@@ -44,6 +45,23 @@ $sk-selector-active-background: $purple;
 @import "../../node_modules/searchkit/theming/components/table.scss";
 
 @import "../../node_modules/searchkit/theming/components/panel.scss";
+
+.sk-tag-filter {
+    display: inline-block;
+    &.is-active {
+        background-color: $highlightColor;
+        font-weight: bold;
+    }
+    &.is-active::after {
+        content: 'x';
+        color: red;
+        border-left: 1px solid #777;
+        padding-left: 1ex;
+        padding-right: 1ex;
+        margin-left: 1ex;
+        margin-top: -1em;
+    }
+}
 
 .date-filter input {
     display: inline-block;
@@ -227,7 +245,7 @@ $sk-selector-active-background: $purple;
   margin:0 15px 20px;
 
   em {
-    background: #d6c3f6;
+    background: $highlightColor;
   }
 
   a {
