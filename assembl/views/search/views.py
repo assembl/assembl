@@ -4,7 +4,7 @@ from pyramid.view import view_config
 
 from assembl.indexing.utils import connect
 from assembl.indexing.settings import get_index_settings
-from assembl.indexing.changes import changes
+from assembl.indexing.changes import changes, in_tests
 from assembl import models
 from assembl.lib.sqla import get_session_maker
 
@@ -44,7 +44,9 @@ def search_endpoint(context, request):
 
 
 def join_transaction(event):
-    changes._join()
+    if not in_tests():
+        changes._join()
+
 
 
 def includeme(config):

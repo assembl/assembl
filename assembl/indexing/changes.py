@@ -1,5 +1,6 @@
 import logging
 import threading
+import os
 
 from transaction.interfaces import ISavepointDataManager, IDataManagerSavepoint
 from zope.interface import implementer
@@ -16,6 +17,10 @@ from .utils import (
     )
 
 logger = logging.getLogger('assembl.indexing')
+
+
+def in_tests():
+    return os.getenv('_', '').endswith('py.test')
 
 
 @implementer(IDataManagerSavepoint)
@@ -55,6 +60,9 @@ class ElasticChanges(threading.local):
             self._activated = True
 
     def index_content(self, content):
+        if in_tests():
+            return
+
         uid, data = get_data(content)
         if data:
             self._join()
@@ -66,6 +74,9 @@ class ElasticChanges(threading.local):
             self._doc_types.add(doc_type)
 
     def unindex_content(self, content):
+        if in_tests():
+            return
+
         self._join()
         uid, data = get_data(content)
         if uid in self._index:
