@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, Localize } from 'react-redux-i18n';
 import MapStateToProps from '../../../store/mapStateToProps';
-import GlobalFunctions from '../../../utils/globalFunctions';
 
 class Synthesis extends React.Component {
   render() {
@@ -24,7 +23,7 @@ class Synthesis extends React.Component {
               <Localize value={synthesis.lastPublishedSynthesis.creation_date} dateFormat="date.format" />
             </div>
             <div className="insert-content margin-s">
-              {GlobalFunctions.parseHtml(synthesis.lastPublishedSynthesis.introduction)}
+              {<p dangerouslySetInnerHTML={{ __html: synthesis.lastPublishedSynthesis.introduction }} />}
             </div>
           </div>
         }

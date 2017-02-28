@@ -44,16 +44,6 @@ class GlobalFunctions {
   static calculatePercentage(value1, value2) {
     return Math.round(((value1 * 100) / value2) * 100) / 100;
   }
-  static parseHtml(str) {
-    if(str === '') return '';
-    let text = '';
-    let el = document.createElement('template');
-    el.innerHTML = str;
-    el.content.childNodes.forEach((node) => {
-      if (node.innerHTML) text += ' ' + node.innerHTML;
-    });
-    return text;
-  }
 }
 
 export default GlobalFunctions;
