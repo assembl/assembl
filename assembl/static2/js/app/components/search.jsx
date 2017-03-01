@@ -401,7 +401,15 @@ export class SearchComponent extends React.Component {
           { field: 'sentiment_counts.popularity', options: { order: 'asc' } },
           { field: 'creation_date', options: { order: 'desc' } }
         ]
-      }]
+      },
+      { label: 'Messages judged unclear',
+        key: 'unclear_desc',
+        fields: [
+          { field: 'sentiment_counts.dont_understand', options: { order: 'desc' } },
+          { field: 'creation_date', options: { order: 'desc' } }
+        ]
+      }
+    ]
     );
     // }
     return (
