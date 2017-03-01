@@ -84,17 +84,6 @@ describe('This test concern GlobalFunctions Class', () => {
     const result = GlobalFunctions.getSortedDate(object, key);
     expect(result).toEqual(expectedResult);
   });
-
-  it('Should transform a string to a date', () => {
-    const strArray = ['2017-02-14T23:59:59Z', '2017-03-31T23:59:59Z', '2017-11-01T23:59:59Z'];
-    const result = [];
-    const expectedResult = ['Tue Feb 14 2017 23:59:59 GMT+0100 (CET)', 'Fri Mar 31 2017 23:59:59 GMT+0200 (CEST)', 'Wed Nov 01 2017 23:59:59 GMT+0100 (CET)'];
-    strArray.map((str) => {
-      let date = GlobalFunctions.getDateFromString(str);
-      result.push(String(date));
-    });
-    expect(result).toEqual(expectedResult);
-  });
     
   it('Should compare 2 dates and return true if the first date is more recent than the second', () => {
     const currentDate = new Date();
