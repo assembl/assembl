@@ -113,12 +113,12 @@ if (__resourceQuery) { // v1
 // TODO get the right subject highlight, fr, en in priority, then fallback to und(efined). Same for body obviously.
 
 const PublishedInfo = (props) => {
-  const { date, userId, userName } = props;
+  const { date, userId, userName, className } = props;
   return (
-    <div className={props.className}>
+    <div className={className}>
       <Translate value="search.published_the" />{' '}<Localize value={date} dateFormat="date.format" />
       {' '}<Translate value="search.by" />{' '}
-      <TagFilter key={userId} field="creator_id" value={userId} searchkit={props.searchkit}>
+      <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
     </div>
@@ -154,7 +154,6 @@ const PostHit = (props) => {
         date={source.creation_date}
         userId={source.creator_id}
         userName={source.creator_name}
-        searchkit={props.searchkit}
       />
       {/* <div>
         popularity: {source.sentiment_counts.popularity},
