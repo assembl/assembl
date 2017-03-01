@@ -376,31 +376,29 @@ export class SearchComponent extends React.Component {
       messagesSelected = this.searchkit.state.type.indexOf('post') >= 0;
       usersSelected = this.searchkit.state.type.indexOf('user') >= 0;
     }
-    const sorts = [
+    let sorts = [
       { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
       { label: 'Most recent first', field: 'creation_date', order: 'desc' },
       { label: 'Oldest first', field: 'creation_date', order: 'asc' }
     ];
-    if (messagesSelected) {
-      sorts.push(
-        { label: 'Most popular messages',
-          key: 'popularity_desc',
-          fields: [
-            { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
-            { field: 'creation_date', options: { order: 'desc' } }
-          ]
-        }
-      );
-      sorts.push(
-        { label: 'Less popular messages',
-          key: 'popularity_asc',
-          fields: [
-            { field: 'sentiment_counts.popularity', options: { order: 'asc' } },
-            { field: 'creation_date', options: { order: 'desc' } }
-          ]
-        }
-      );
-    }
+    // if (messagesSelected) {
+    sorts = sorts.concat([
+      { label: 'Most popular messages',
+        key: 'popularity_desc',
+        fields: [
+          { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
+          { field: 'creation_date', options: { order: 'desc' } }
+        ]
+      },
+      { label: 'Less popular messages',
+        key: 'popularity_asc',
+        fields: [
+          { field: 'sentiment_counts.popularity', options: { order: 'asc' } },
+          { field: 'creation_date', options: { order: 'desc' } }
+        ]
+      }]
+    );
+    // }
     return (
       <SearchkitProvider searchkit={this.searchkit}>
         <Layout size="l">
