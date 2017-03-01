@@ -10,11 +10,11 @@ import {
   BoolMust,
   BoolMustNot,
   CheckboxFilter,
+  CheckboxItemList,
   HasChildQuery,
   Hits,
   HitsStats,
   InitialLoader,
-  ItemList,
   Layout,
   LayoutBody,
   LayoutResults,
@@ -417,6 +417,7 @@ export class SearchComponent extends React.Component {
               <ResetFilters />
               {/* <SelectedFilters /> */}
               <MenuFilter
+                listComponent={CheckboxItemList}
                 field="_type"
                 id="type"
                 title={I18n.t('search.Categories')}
@@ -424,26 +425,28 @@ export class SearchComponent extends React.Component {
               <Panel title={I18n.t('search.Messages')} className={messagesSelected ? null : 'hidden'}>
                 <MenuFilter
                   containerComponent={NoPanel}
+                  listComponent={CheckboxItemList}
                   field="sentiment_tags"
                   id="sentiment_tags"
                   title={I18n.t('search.Messages')}
                 />
                 { connectedUserId ?
-                  <CheckboxFilter
-                    containerComponent={NoPanel}
-                    id="mymessages"
-                    title={I18n.t('search.My messages')}
-                    label={I18n.t('search.My messages')}
-                    filter={TermQuery('creator_id', connectedUserId)}
-                  /> : null }
-                { connectedUserId ?
-                  <CheckboxFilter
-                    containerComponent={NoPanel}
-                    id="messages-in-response"
-                    title={I18n.t('search.Messages in response to my contributions')}
-                    label={I18n.t('search.Messages in response to my contributions')}
-                    filter={TermQuery('parent_creator_id', connectedUserId)}
-                  /> : null }
+                  <div className="sk-panel">
+                    <CheckboxFilter
+                      containerComponent={NoPanel}
+                      id="mymessages"
+                      title={I18n.t('search.My messages')}
+                      label={I18n.t('search.My messages')}
+                      filter={TermQuery('creator_id', connectedUserId)}
+                    />
+                    <CheckboxFilter
+                      containerComponent={NoPanel}
+                      id="messages-in-response"
+                      title={I18n.t('search.Messages in response to my contributions')}
+                      label={I18n.t('search.Messages in response to my contributions')}
+                      filter={TermQuery('parent_creator_id', connectedUserId)}
+                    />
+                  </div> : null }
               </Panel>
               { isExpert ?
                 <Panel title={I18n.t('search.Participants')} className={usersSelected ? null : 'hidden'}>
@@ -510,7 +513,7 @@ export class SearchComponent extends React.Component {
               <Panel title={I18n.t('search.Sort')}>
                 <SortingSelector
                   options={sorts}
-                  listComponent={ItemList}
+                  listComponent={CheckboxItemList}
                 />
               </Panel>
               <RangeFilter
