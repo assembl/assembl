@@ -1,5 +1,3 @@
-/* eslint eol-last: 0 */
-
 const Translations = {
   fr: {
     'Number of contributions': 'Nombre de messages',
@@ -58,7 +56,8 @@ const Translations = {
       'Most popular messages': 'Messages les plus populaires',
       'Less popular messages': 'Messages les moins populaires',
       'Participants pleased by their peers': 'Participants plébiscités par leurs pairs',
-      'Filter by date': 'Filtrer par période'
+      'Filter by date': 'Filtrer par période',
+      'My messages': 'Mes messages'
     },
     navbar: {
       home: 'accueil',
@@ -208,7 +207,8 @@ const Translations = {
       'Most popular messages': 'Most popular messages',
       'Less popular messages': 'Less popular messages',
       'Participants pleased by their peers': 'Participants pleased by their peers',
-      'Filter by date': 'Filter by date'
+      'Filter by date': 'Filter by date',
+      'My messages': 'My messages'
     },
     navbar: {
       home: 'home',

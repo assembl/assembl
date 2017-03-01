@@ -2,6 +2,7 @@
 /* global __resourceQuery */
 import React from 'react';
 import { Localize, Translate, I18n } from 'react-redux-i18n';
+import { connect } from 'react-redux';
 
 import {
   ActionBar,
@@ -44,9 +45,11 @@ import Glyphicon from './common/glyphicon';
 
 import '../../../css/views/search.scss';
 
-import GlobalFunctions from '../utils/globalFunctions';
 import DateRangeFilter from './search/DateRangeFilter';
 import ProfileLine from './common/profileLine';
+import { getConnectedUserId, getDebateId } from '../reducers/contextReducer';
+import { getPermissionsForConnectedUser } from '../reducers/usersReducer';
+import { canUseExpertInterface } from '../utils/permissions';
 
 const FRAGMENT_SIZE = 400;
 
@@ -299,12 +302,10 @@ const customHighlight = {
 };
 // setting it for body field seems to apply the setting to all queryFields
 
-export default class Search extends React.Component {
+export class SearchComponent extends React.Component {
 
-  constructor() {
-    super();
-    const discussionId = GlobalFunctions.getDiscussionId();
-    this.discussionId = discussionId;
+  constructor(props) {
+    super(props);
     const host = '/';
     this.searchkit = new SearchkitManager(host, { searchOnLoad: false });
     this.searchkit.setQueryProcessor((plainQueryObject) => {
@@ -319,7 +320,7 @@ export default class Search extends React.Component {
         filters.push(modifiedQuery.filter);
         delete modifiedQuery.filter;
       }
-      filters.push({ term: { discussion_id: discussionId } });
+      filters.push({ term: { discussion_id: props.discussionId } });
       let simpleQueryString;
       if (modifiedQuery.query) {
         simpleQueryString = modifiedQuery.query.simple_query_string;
@@ -345,6 +346,7 @@ export default class Search extends React.Component {
   }
 
   render() {
+    const { isExpert, connectedUserId, discussionId } = this.props;
     return (
       <SearchkitProvider searchkit={this.searchkit}>
         <Layout size="l">
@@ -385,17 +387,27 @@ export default class Search extends React.Component {
                 id="sentiment_tags"
                 title={I18n.t('search.Messages')}
               />
-              <CheckboxFilter
-                id="participants-peers"
-                title={I18n.t('search.Participants')}
-                label={I18n.t('search.Participants pleased by their peers')}
-                filter={
-                  HasChildQuery('post', BoolMust([
-                    RangeQuery('sentiment_counts.like', { gt: 0 }),
-                    TermQuery('discussion_id', this.discussionId)
-                  ]))
-                }
-              />
+              { connectedUserId ?
+                <CheckboxFilter
+                  id="mymessages"
+                  title={I18n.t('search.My messages')}
+                  label={I18n.t('search.My messages')}
+                  filter={TermQuery('creator_id', connectedUserId)}
+                />
+              : null }
+              { isExpert ?
+                <CheckboxFilter
+                  id="participants-peers"
+                  title={I18n.t('search.Participants')}
+                  label={I18n.t('search.Participants pleased by their peers')}
+                  filter={
+                    HasChildQuery('post', BoolMust([
+                      RangeQuery('sentiment_counts.like', { gt: 0 }),
+                      TermQuery('discussion_id', discussionId)
+                    ]))
+                  }
+                />
+              : null }
               <TagFilterConfig id="creator_id" title="Participant" field="creator_id" />
               <Panel title={I18n.t('search.Sort')}>
                 <SortingSelector
@@ -453,3 +465,15 @@ export default class Search extends React.Component {
   }
 
 }
+
+const mapStateToProps = (state) => {
+  const permissions = getPermissionsForConnectedUser(state);
+  return {
+    isExpert: canUseExpertInterface(permissions),
+    connectedUserId: getConnectedUserId(state),
+    discussionId: getDebateId(state)
+  };
+};
+
+const ConnectedSearch = connect(mapStateToProps)(SearchComponent);
+export default ConnectedSearch;

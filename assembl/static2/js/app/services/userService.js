@@ -1,5 +1,12 @@
 import HttpRequestHandler from '../utils/httpRequestHandler';
 
+export const fetchPermissionsForUser = (discussionId, userId) => {
+  const url = `/api/v1/discussion/${discussionId}/permissions/u/${userId}`;
+  return HttpRequestHandler.request({ method: 'GET', url: url }).then((permissions) => {
+    return permissions;
+  });
+};
+
 class UserService {
   static fetchUsers(debateId, connectedUserId) {
     const that = this;
