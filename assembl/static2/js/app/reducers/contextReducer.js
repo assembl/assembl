@@ -16,3 +16,7 @@ export const getConnectedUserId = (state) => {
 export const getDebateId = (state) => {
   return state.context.debateId;
 };
+
+export const getLocale = (state) => {
+  return state.i18n.locale;
+};

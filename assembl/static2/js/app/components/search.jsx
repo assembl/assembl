@@ -48,13 +48,18 @@ import '../../../css/views/search.scss';
 
 import DateRangeFilter from './search/DateRangeFilter';
 import ProfileLine from './common/profileLine';
-import { getConnectedUserId, getDebateId } from '../reducers/contextReducer';
+import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextReducer';
 import { getPermissionsForConnectedUser } from '../reducers/usersReducer';
 import { canUseExpertInterface } from '../utils/permissions';
 
 const FRAGMENT_SIZE = 400;
 
-const highlightedTextOrTruncatedText = (hit, field, options = { omission: ' [...]' }) => {
+const truncateText = (text) => {
+  return truncate(text,
+    { length: FRAGMENT_SIZE, separator: ' ', omission: ' [...]' });
+};
+
+const highlightedTextOrTruncatedText = (hit, field) => {
   let text = get(hit, `highlight.${field}`);
   if (text) {
     if (Array.isArray(text)) {
@@ -64,8 +69,7 @@ const highlightedTextOrTruncatedText = (hit, field, options = { omission: ' [...
     return text;
   }
 
-  text = truncate(hit._source[field],
-    { length: FRAGMENT_SIZE, separator: ' ', omission: options.omission });
+  text = truncateText(hit._source[field]);
   return text;
 };
 
@@ -110,8 +114,6 @@ if (__resourceQuery) { // v1
   };
 }
 
-// TODO get the right subject highlight, fr, en in priority, then fallback to und(efined). Same for body obviously.
-
 const PublishedInfo = (props) => {
   const { date, userId, userName, className } = props;
   return (
@@ -135,19 +137,29 @@ const ImageType = (props) => {
   );
 };
 
-const PostHit = (props) => {
+const DumbPostHit = (props) => {
+  const locale = props.locale;
   const source = props.result._source;
+  let subject = get(props.result, `highlight.subject_${locale}`, get(props.result, 'highlight.subject_und'));
+  if (!subject) {
+    subject = get(source, `subject_${locale}`, source.subject_und);
+  }
+  let body = get(props.result, `highlight.body_${locale}`, get(props.result, 'highlight.body_und'));
+  if (!body) {
+    body = get(source, `body_${locale}`, source.body_und);
+    body = truncateText(body);
+  }
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
         <Link
           to={getUrl(props.result)}
-          dangerouslySetInnerHTML={{ __html: get(props.result, 'highlight.subject_und', source.subject_und) }}
+          dangerouslySetInnerHTML={{ __html: subject }}
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'body_und') }} />
+        <p dangerouslySetInnerHTML={{ __html: body }} />
       </div>
       <PublishedInfo
         className={props.bemBlocks.item('info')}
@@ -163,6 +175,10 @@ const PostHit = (props) => {
     </div>
   );
 };
+
+const PostHit = connect(
+  (state) => { return { locale: getLocale(state) }; }
+)(DumbPostHit);
 
 const SynthesisHit = (props) => {
   const source = props.result._source;
@@ -266,13 +282,13 @@ const IdeaHit = (props) => {
 const HitItem = (props) => {
   switch (props.result._type) {
   case 'synthesis':
-    return SynthesisHit(props);
+    return <SynthesisHit {...props} />;
   case 'user':
-    return UserHit(props);
+    return <UserHit {...props} />;
   case 'idea':
-    return IdeaHit(props);
+    return <IdeaHit {...props} />;
   default: // post
-    return PostHit(props);
+    return <PostHit {...props} />;
   }
 };
 
