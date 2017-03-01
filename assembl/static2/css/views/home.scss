@@ -152,17 +152,45 @@
       margin: 200px 0 0;
     }
 
+    .content-box {
+      &:hover {
+        .text-box {
+          margin: 220px 0 0;
+        }
+
+        .stat-nb {
+          display: block;
+        }
+
+        .dash {
+          display: none;
+        }
+
+        .stats {
+          color: $white;
+          margin: -210px 0 0;
+          text-align: left;
+        }
+      }
+    }
+
     .stats {
       color: $white;
       margin: 180px 0 0;
       text-align: center;
 
-      .inline {
-        padding: 0 5px;
+      .stat-nb {
+        display: inline;
+        padding: 10px 0 0;
+      }
+
+      .dash {
+        display: inline;
+        padding: 0 10px;
       }
 
       img {
-        margin: 0 0 5px;
+        margin: 0 0 5px 5px;
       }
     }
 
@@ -175,8 +203,10 @@
     }
 
     .text-box {
-      margin: 80px 0 0;
-      text-align: center;
+      p {
+        margin: 80px 0 0;
+        text-align: center;
+      }
     }
   }
 }

@@ -11,11 +11,15 @@ class Statistic extends React.Component {
 
     return (
       <div className="stats">
-        <div className="inline">{ideas.latestIdeas[index].nbPosts}</div>
-        <Glyphicon glyph="message" color="white" size={20} desc="Number of contributions" />
-        <div className="inline padding">-</div>
-        <div className="inline">{ideas.latestIdeas[index].nbContributors}</div>
-        <Glyphicon glyph="avatar" color="white" size={20} desc="Number of users" />
+        <div className="stat-nb">
+          <span>{ideas.latestIdeas[index].nbPosts}</span>
+          <Glyphicon glyph="message" color="white" size={20} desc="Number of contributions" />
+        </div>
+        <div className="dash">-</div>
+        <div className="stat-nb">
+          <span>{ideas.latestIdeas[index].nbContributors}</span>
+          <Glyphicon glyph="avatar" color="white" size={20} desc="Number of users" />
+        </div>
       </div>
     );
   }
