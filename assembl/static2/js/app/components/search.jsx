@@ -402,6 +402,22 @@ export class SearchComponent extends React.Component {
           { field: 'creation_date', options: { order: 'desc' } }
         ]
       },
+      { label: 'Most controversial messages',
+        key: 'controversy_desc',
+        fields: [
+          { field: 'sentiment_counts.controversy', options: { order: 'desc' } },
+          { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
+          { field: 'creation_date', options: { order: 'desc' } }
+        ]
+      },
+      { label: 'Most consensus messages',
+        key: 'consensus_desc',
+        fields: [
+          { field: 'sentiment_counts.consensus', options: { order: 'asc' } },
+          { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
+          { field: 'creation_date', options: { order: 'desc' } }
+        ]
+      },
       { label: 'Messages judged unclear',
         key: 'unclear_desc',
         fields: [

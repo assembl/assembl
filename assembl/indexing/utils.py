@@ -89,7 +89,13 @@ def get_data(content):
 
         data['sentiment_tags'] = [key for key in data['sentiment_counts']
                                   if data['sentiment_counts'][key] > 0]
-        data['sentiment_counts']['popularity'] = data['sentiment_counts']['like'] - data['sentiment_counts']['disagree']
+        like = data['sentiment_counts']['like']
+        disagree = data['sentiment_counts']['disagree']
+        dont_understand = data['sentiment_counts']['dont_understand']
+        more_info = data['sentiment_counts']['more_info']
+        data['sentiment_counts']['popularity'] = like - disagree
+        data['sentiment_counts']['consensus'] = max(like, disagree, dont_understand, more_info) - min(like, disagree, dont_understand, more_info)
+        data['sentiment_counts']['controversy'] = max(like, disagree, 1) / min(like or 1, disagree or 1)
         data['type'] = content.type  # this is the subtype (assembl_post, email...)
 #        data['publishes_synthesis_id'] = getattr(
 #            content, 'publishes_synthesis_id', None)
