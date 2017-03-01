@@ -1,4 +1,4 @@
-/* eslint no-underscore-dangle: 0, react/no-danger: 0 */
+/* eslint no-underscore-dangle: 0 */
 /* global __resourceQuery */
 import React from 'react';
 import { Localize, Translate, I18n } from 'react-redux-i18n';
