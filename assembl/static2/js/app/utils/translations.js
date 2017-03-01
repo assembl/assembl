@@ -58,7 +58,10 @@ const Translations = {
       'Participants pleased by their peers': 'Participants plébiscités par leurs pairs',
       'Filter by date': 'Filtrer par période',
       'My messages': 'Mes messages',
-      'Messages in response to my contributions': 'Messages en réponse à mes contributions'
+      'Messages in response to my contributions': 'Messages en réponse à mes contributions',
+      'Creative participants': 'Participants créatifs',
+      'Reactive participants': 'Participants réactifs',
+      'Learning participants': 'Participants apprenants'
     },
     navbar: {
       home: 'accueil',
@@ -210,7 +213,10 @@ const Translations = {
       'Participants pleased by their peers': 'Participants pleased by their peers',
       'Filter by date': 'Filter by date',
       'My messages': 'My messages',
-      'Messages in response to my contributions': 'Messages in response to my contributions'
+      'Messages in response to my contributions': 'Messages in response to my contributions',
+      'Creative participants': 'Creative participants',
+      'Reactive participants': 'Reactive participants',
+      'Learning participants': 'Learning participants'
     },
     navbar: {
       home: 'home',

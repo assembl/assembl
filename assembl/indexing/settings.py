@@ -34,7 +34,7 @@ COMMON_POST = {
         'discussion_id': LONG,
         'creation_date': DATE,
         'id': LONG,
-        'parent_id': LONG,
+        'parent_id': {'type': 'long', 'null_value': 0},
         'creator_id': LONG,
         'parent_creator_id': LONG,
     #    'publishes_synthesis_id': KEYWORD,

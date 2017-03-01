@@ -8,6 +8,7 @@ import {
   ActionBar,
   ActionBarRow,
   BoolMust,
+  BoolMustNot,
   CheckboxFilter,
   HasChildQuery,
   Hits,
@@ -363,7 +364,7 @@ export class SearchComponent extends React.Component {
     const sorts = [
       { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
       { label: 'Most recent first', field: 'creation_date', order: 'desc' },
-      { label: 'Oldest first', field: 'creation_date', order: 'asc' },
+      { label: 'Oldest first', field: 'creation_date', order: 'asc' }
     ];
     if (messagesSelected) {
       sorts.push(
@@ -448,13 +449,58 @@ export class SearchComponent extends React.Component {
                 <Panel title={I18n.t('search.Participants')} className={usersSelected ? null : 'hidden'}>
                   <CheckboxFilter
                     containerComponent={NoPanel}
+                    id="creative-participants"
+                    title={I18n.t('search.Creative participants')}
+                    label={I18n.t('search.Creative participants')}
+                    filter={
+                      HasChildQuery('post', BoolMust([
+                        TermQuery('discussion_id', discussionId),
+                        TermQuery('parent_id', 0)
+                      ]))
+                    }
+                  />
+                  <CheckboxFilter
+                    containerComponent={NoPanel}
+                    id="reactive-participants"
+                    title={I18n.t('search.Reactive participants')}
+                    label={I18n.t('search.Reactive participants')}
+                    filter={
+                      BoolMust([
+                        HasChildQuery('post', BoolMust([
+                          TermQuery('discussion_id', discussionId),
+                          RangeQuery('parent_id', { gt: 0 })
+                        ])),
+                        BoolMustNot(
+                          HasChildQuery('post', BoolMust([
+                            TermQuery('discussion_id', discussionId),
+                            TermQuery('parent_id', 0)
+                          ]))
+                        )
+                      ])
+                    }
+                  />
+                  <CheckboxFilter
+                    containerComponent={NoPanel}
+                    id="learning-participants"
+                    title={I18n.t('search.Learning participants')}
+                    label={I18n.t('search.Learning participants')}
+                    filter={
+                      BoolMustNot([
+                        HasChildQuery('post',
+                          TermQuery('discussion_id', discussionId)
+                        )
+                      ])
+                    }
+                  />
+                  <CheckboxFilter
+                    containerComponent={NoPanel}
                     id="participants-peers"
-                    title={I18n.t('search.Participants')}
+                    title={I18n.t('search.Participants pleased by their peers')}
                     label={I18n.t('search.Participants pleased by their peers')}
                     filter={
                       HasChildQuery('post', BoolMust([
-                        RangeQuery('sentiment_counts.like', { gt: 0 }),
-                        TermQuery('discussion_id', discussionId)
+                        TermQuery('discussion_id', discussionId),
+                        RangeQuery('sentiment_counts.like', { gt: 0 })
                       ]))
                     }
                   />
