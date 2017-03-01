@@ -2036,15 +2036,15 @@ def env_bluenove_discussions():
     env.gitbranch = getenv("GITBRANCH", "master")
 
 @task
-def env_bluenove_assembl2():
+def env_bluenove_assembl_enterprise():
     """
-    [ENVIRONMENT] Production on http://assembl2.bluenove.com/
+    [ENVIRONMENT] Production on http://assembl-enterprise.bluenove.com/
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    env.hosts = ['assembl2.bluenove.com']
+    env.hosts = ['assembl-enterprise.bluenove.com']
     env.wsginame = "prod.wsgi"
-    env.urlhost = "assembl2.bluenove.com"
+    env.urlhost = "assembl-enterprise.bluenove.com"
     env.user = "www-data"
     env.home = "www-data"
     execute(commonenv, normpath("/home/www/assembl2_bluenove_com/"))
@@ -2106,7 +2106,7 @@ def env_thecampfactory():
     Common environment for Bluenove clients
     """
     env.ini_file = 'local.ini'
-    env.hosts = ['assembl2.bluenove.com']
+    env.hosts = ['assembl-enterprise.bluenove.com']
     env.wsginame = "prod.wsgi"
     env.urlhost = "assembl.thecampfactory.fr"
     env.user = "www-data"
