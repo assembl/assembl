@@ -16,7 +16,6 @@ Assembl is made with the following technologies :
 - [SQLAlchemy](http://www.sqlalchemy.org/)
 - [Postgres](http://postgresql.org)
 
-Assembl is tested on multiple browsers using [BrowserStack](http://www.browserstack.com)
 
 Assembl is developed by [Imagination For People](http://imaginationforpeople.org) and [bluenove](http://bluenove.com)
 
