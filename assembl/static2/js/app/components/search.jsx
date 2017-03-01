@@ -396,21 +396,22 @@ export class SearchComponent extends React.Component {
               searchThrottleTime={500}
               queryFields={queryFields}
             />
-            { this.state.show || (!this.state.show && this.state.queryString) ?
-              <button
-                className="btn btn-default btn-sm" id="search-expand"
-                onClick={() => {
-                  this.setState({ show: !this.state.show }, () => {
-                    if (this.state.show && !this.searchkit.hasHits()) {
-                      this.searchkit.reloadSearch();
-                    }
-                  });
-                }}
-              >
-                {this.state.show ? <Translate value="search.collapse_search" /> : null}
-                {!this.state.show && this.state.queryString ? I18n.t('search.expand_search') : null}
-              </button>
-            : null }
+            <button
+              className="btn btn-default btn-sm" id="search-expand"
+              onClick={() => {
+                this.setState({ show: !this.state.show }, () => {
+                  if (this.state.show && !this.searchkit.hasHits()) {
+                    this.searchkit.reloadSearch();
+                  }
+                });
+              }}
+            >
+              {this.state.show ?
+                <Translate value="search.collapse_search" />
+              :
+                <Translate value="search.expand_search" />
+              }
+            </button>
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
