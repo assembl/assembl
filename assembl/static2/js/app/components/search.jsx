@@ -160,6 +160,16 @@ const DumbPostHit = (props) => {
       </div>
       <div className={props.bemBlocks.item('content')}>
         <p dangerouslySetInnerHTML={{ __html: body }} />
+        <div>
+          <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
+          <div className="emoticonValue">{source.sentiment_counts.like}</div>
+          <div title={I18n.t('search.disagree')} className="emoticon DisagreeSentimentOfPost" />
+          <div className="emoticonValue">{source.sentiment_counts.disagree}</div>
+          <div title={I18n.t('search.dont_understand')} className="emoticon DontUnderstandSentimentOfPost" />
+          <div className="emoticonValue">{source.sentiment_counts.dont_understand}</div>
+          <div title={I18n.t('search.more_info')} className="emoticon MoreInfoSentimentOfPost" />
+          <div className="emoticonValue">{source.sentiment_counts.more_info}</div>
+        </div>
       </div>
       <PublishedInfo
         className={props.bemBlocks.item('info')}
@@ -167,11 +177,6 @@ const DumbPostHit = (props) => {
         userId={source.creator_id}
         userName={source.creator_name}
       />
-      {/* <div>
-        popularity: {source.sentiment_counts.popularity},
-        like: {source.sentiment_counts.like},
-        disagree: {source.sentiment_counts.disagree}
-      </div> */}
     </div>
   );
 };

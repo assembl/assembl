@@ -46,6 +46,33 @@ $highlightColor: #d6c3f6;
 
 @import "../../node_modules/searchkit/theming/components/panel.scss";
 
+
+// include style v1 of emoticons
+@import "../../../static/css/components/_emoticons.scss";
+// overrides the path
+.LikeSentimentOfPost {
+  background-image:url(/static/img/emoticons/agree.svg);
+}
+.DisagreeSentimentOfPost {
+  background-image: url(/static/img/emoticons/disagree.svg);
+}
+.MoreInfoSentimentOfPost {
+  background-image: url(/static/img/emoticons/more_infos.svg);
+}
+.DontUnderstandSentimentOfPost {
+  background-image: url(/static/img/emoticons/not_understand.svg);
+}
+.emoticonValue {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0 0 0 -14px;
+    padding:  2px 0 0 6px;
+    border-radius: 50%;
+    background-color: $highlightColor;
+}
+
+
 .sk-tag-filter {
     display: inline-block;
     &.is-active {
