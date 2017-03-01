@@ -38,7 +38,7 @@ def search_endpoint(context, request):
         if hit['_type'] == 'idea':
             idea = models.Idea.get_instance(source['id'])
             source['num_posts'] = idea.num_posts
-            source['num_contributors'] = len(idea.get_contributors())
+            source['num_contributors'] = idea.num_contributors
 
     return result
 
