@@ -100,12 +100,25 @@
 .text-column {
   column-count: 2;
   column-gap: 30px;
+  font-size: $font-size-m;
+  font-weight: 200;
+  line-height: 30px;
 }
 
 .ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.top-column {
+  height: 60px;
+}
+
+@media screen and (max-width: 991px) {
+  .top-column {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 620px) {
