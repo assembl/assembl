@@ -102,6 +102,13 @@ $highlightColor: #d6c3f6;
     float: left;
     box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
 
+    .sk-panel {
+        margin: 16px 0 0 0;
+        &.filter--type {
+            margin: 0;
+        }
+    }
+
     .sk-refinement-list,
     .sk-range-filter,
     .sk-hierarchical-menu-list,

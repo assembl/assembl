@@ -80,6 +80,9 @@ def get_data(content):
     elif isinstance(content, Post):
         data = {}
         data['_parent'] = 'user:{}'.format(content.creator_id)
+        if content.parent_id is not None:
+            data['parent_creator_id'] = content.parent.creator_id
+
         for attr in ('discussion_id', 'creation_date', 'id', 'parent_id',
                      'creator_id', 'sentiment_counts'):
             data[attr] = getattr(content, attr)

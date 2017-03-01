@@ -276,6 +276,13 @@ const HitItem = (props) => {
   }
 };
 
+const NoPanel = (props) => {
+  return (
+    <div>{props.children}</div>
+  );
+};
+
+
 const queryFields = [
   'title',  // idea announcement
   'body',  // idea announcement
@@ -347,6 +354,37 @@ export class SearchComponent extends React.Component {
 
   render() {
     const { isExpert, connectedUserId, discussionId } = this.props;
+    let messagesSelected = false;
+    let usersSelected = false;
+    if (this.searchkit.state) {
+      messagesSelected = this.searchkit.state.type.indexOf('post') >= 0;
+      usersSelected = this.searchkit.state.type.indexOf('user') >= 0;
+    }
+    const sorts = [
+      { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
+      { label: 'Most recent first', field: 'creation_date', order: 'desc' },
+      { label: 'Oldest first', field: 'creation_date', order: 'asc' },
+    ];
+    if (messagesSelected) {
+      sorts.push(
+        { label: 'Most popular messages',
+          key: 'popularity_desc',
+          fields: [
+            { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
+            { field: 'creation_date', options: { order: 'desc' } }
+          ]
+        }
+      );
+      sorts.push(
+        { label: 'Less popular messages',
+          key: 'popularity_asc',
+          fields: [
+            { field: 'sentiment_counts.popularity', options: { order: 'asc' } },
+            { field: 'creation_date', options: { order: 'desc' } }
+          ]
+        }
+      );
+    }
     return (
       <SearchkitProvider searchkit={this.searchkit}>
         <Layout size="l">
@@ -382,54 +420,50 @@ export class SearchComponent extends React.Component {
                 id="type"
                 title={I18n.t('search.Categories')}
               />
-              <MenuFilter
-                field="sentiment_tags"
-                id="sentiment_tags"
-                title={I18n.t('search.Messages')}
-              />
-              { connectedUserId ?
-                <CheckboxFilter
-                  id="mymessages"
-                  title={I18n.t('search.My messages')}
-                  label={I18n.t('search.My messages')}
-                  filter={TermQuery('creator_id', connectedUserId)}
+              <Panel title={I18n.t('search.Messages')} className={messagesSelected ? null : 'hidden'}>
+                <MenuFilter
+                  containerComponent={NoPanel}
+                  field="sentiment_tags"
+                  id="sentiment_tags"
+                  title={I18n.t('search.Messages')}
                 />
-              : null }
+                { connectedUserId ?
+                  <CheckboxFilter
+                    containerComponent={NoPanel}
+                    id="mymessages"
+                    title={I18n.t('search.My messages')}
+                    label={I18n.t('search.My messages')}
+                    filter={TermQuery('creator_id', connectedUserId)}
+                  /> : null }
+                { connectedUserId ?
+                  <CheckboxFilter
+                    containerComponent={NoPanel}
+                    id="messages-in-response"
+                    title={I18n.t('search.Messages in response to my contributions')}
+                    label={I18n.t('search.Messages in response to my contributions')}
+                    filter={TermQuery('parent_creator_id', connectedUserId)}
+                  /> : null }
+              </Panel>
               { isExpert ?
-                <CheckboxFilter
-                  id="participants-peers"
-                  title={I18n.t('search.Participants')}
-                  label={I18n.t('search.Participants pleased by their peers')}
-                  filter={
-                    HasChildQuery('post', BoolMust([
-                      RangeQuery('sentiment_counts.like', { gt: 0 }),
-                      TermQuery('discussion_id', discussionId)
-                    ]))
-                  }
-                />
+                <Panel title={I18n.t('search.Participants')} className={usersSelected ? null : 'hidden'}>
+                  <CheckboxFilter
+                    containerComponent={NoPanel}
+                    id="participants-peers"
+                    title={I18n.t('search.Participants')}
+                    label={I18n.t('search.Participants pleased by their peers')}
+                    filter={
+                      HasChildQuery('post', BoolMust([
+                        RangeQuery('sentiment_counts.like', { gt: 0 }),
+                        TermQuery('discussion_id', discussionId)
+                      ]))
+                    }
+                  />
+                </Panel>
               : null }
               <TagFilterConfig id="creator_id" title="Participant" field="creator_id" />
               <Panel title={I18n.t('search.Sort')}>
                 <SortingSelector
-                  options={[
-                    { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
-                    { label: 'Most recent first', field: 'creation_date', order: 'desc' },
-                    { label: 'Oldest first', field: 'creation_date', order: 'asc' },
-                    { label: 'Most popular messages',
-                      key: 'popularity_desc',
-                      fields: [
-                        { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
-                        { field: 'creation_date', options: { order: 'desc' } }
-                      ]
-                    },
-                    { label: 'Less popular messages',
-                      key: 'popularity_asc',
-                      fields: [
-                        { field: 'sentiment_counts.popularity', options: { order: 'asc' } },
-                        { field: 'creation_date', options: { order: 'desc' } }
-                      ]
-                    }
-                  ]}
+                  options={sorts}
                   listComponent={ItemList}
                 />
               </Panel>

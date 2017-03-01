@@ -36,6 +36,7 @@ COMMON_POST = {
         'id': LONG,
         'parent_id': LONG,
         'creator_id': LONG,
+        'parent_creator_id': LONG,
     #    'publishes_synthesis_id': KEYWORD,
         'type': KEYWORD,
         'sentiment_tags': KEYWORD

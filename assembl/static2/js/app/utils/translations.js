@@ -57,7 +57,8 @@ const Translations = {
       'Less popular messages': 'Messages les moins populaires',
       'Participants pleased by their peers': 'Participants plébiscités par leurs pairs',
       'Filter by date': 'Filtrer par période',
-      'My messages': 'Mes messages'
+      'My messages': 'Mes messages',
+      'Messages in response to my contributions': 'Messages en réponse à mes contributions'
     },
     navbar: {
       home: 'accueil',
@@ -208,7 +209,8 @@ const Translations = {
       'Less popular messages': 'Less popular messages',
       'Participants pleased by their peers': 'Participants pleased by their peers',
       'Filter by date': 'Filter by date',
-      'My messages': 'My messages'
+      'My messages': 'My messages',
+      'Messages in response to my contributions': 'Messages in response to my contributions'
     },
     navbar: {
       home: 'home',
