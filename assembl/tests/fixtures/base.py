@@ -207,17 +207,49 @@ def test_app(request, admin_user, test_app_no_perm):
 
 
 @pytest.fixture(scope="function")
-def test_app_no_login(request, admin_user, test_app_no_perm):
+def test_app_no_login(request, test_app_no_perm):
     """A configured Assembl fixture with permissions
     and no user logged in"""
     config = testing.setUp(
         registry=test_app_no_perm.app.registry,
         settings=get_config(),
     )
+
     dummy_policy = config.testing_securitypolicy(
-        userid=None, permissive=False)
+    userid=None, permissive=False)
     config.set_authorization_policy(dummy_policy)
     config.set_authentication_policy(dummy_policy)
+
+    return test_app_no_perm
+
+@pytest.fixture(scope="function")
+def test_app_no_login_real_policy(request, test_app_no_perm):
+    """A configured Assembl fixture with permissions
+    and no user logged in"""
+    config = testing.setUp(
+        registry=test_app_no_perm.app.registry,
+        settings=get_config(),
+    )
+
+    from ...auth.util import authentication_callback
+    from pyramid.authorization import ACLAuthorizationPolicy
+    from pyramid.path import DottedNameResolver
+    resolver = DottedNameResolver(__package__)
+    auth_policy_name = "assembl.auth.util.UpgradingSessionAuthenticationPolicy"
+    auth_policy = resolver.resolve(auth_policy_name)(
+        callback=authentication_callback)
+    
+    config.set_authorization_policy(ACLAuthorizationPolicy())
+    config.set_authentication_policy(auth_policy)
+
+    import transaction
+    # ensure default roles and permissions at startup
+    from ...models import get_session_maker
+    with transaction.manager:
+        session = get_session_maker()
+        from ...lib.migration import bootstrap_db_data
+        bootstrap_db_data(session, False)
+
     return test_app_no_perm
 
 
@@ -226,6 +258,19 @@ def test_server(request, test_app, empty_db):
     """A uWSGI server fixture with permissions, admin user logged in"""
 
     server = WSGIServer(application=test_app.app)
+    server.start()
+
+    def fin():
+        print "finalizer test_server"
+        server.stop()
+    request.addfinalizer(fin)
+    return server
+
+@pytest.fixture(scope="function")
+def test_server_no_login_real_policy(request, test_app_no_login_real_policy, empty_db):
+    """A uWSGI server fixture with permissions, and no user logged in"""
+
+    server = WSGIServer(application=test_app_no_login_real_policy.app)
     server.start()
 
     def fin():
