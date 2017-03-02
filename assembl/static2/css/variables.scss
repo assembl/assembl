@@ -28,13 +28,15 @@ $fonts-dir: '/static2/fonts';
 $img-dir: '/static2/img';
 
 @font-face {
-  font-family: 'avenirDemiCn';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-Regular.woff');
+  font-family: 'avenirCn';
+  src: url('#{$fonts-dir}/AvenirNextLTPro-Cn.eot');
+  src: local('☺'), url('#{$fonts-dir}/AvenirNextLTPro-Cn.woff') format('woff'), url('#{$fonts-dir}/AvenirNextLTPro-Cn.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'avenirCn';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-Cn.woff');
+  font-family: 'avenirDemiCn';
+  src: url('#{$fonts-dir}/AvenirNextLTPro-Regular.eot');
+  src: local('☺'), url('#{$fonts-dir}/AvenirNextLTPro-Regular.woff') format('woff'), url('#{$fonts-dir}/AvenirNextLTPro-Regular.ttf') format('truetype');
 }
 
 $font-family: 'Open Sans', sans-serif;
