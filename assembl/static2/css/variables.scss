@@ -29,12 +29,12 @@ $img-dir: '/static2/img';
 
 @font-face {
   font-family: 'avenirDemiCn';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-Regular.otf');
+  src: url('#{$fonts-dir}/AvenirNextLTPro-Regular.woff');
 }
 
 @font-face {
   font-family: 'avenirCn';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-Cn.otf');
+  src: url('#{$fonts-dir}/AvenirNextLTPro-Cn.woff');
 }
 
 $font-family: 'Open Sans', sans-serif;
