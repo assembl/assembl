@@ -1,3 +1,7 @@
+// include style v1 of emoticons
+@import "../../../static/css/base/_variables.scss";
+@import "../../../static/css/components/_emoticons.scss";
+
 @import "../variables.scss";
 @import "../../node_modules/searchkit/theming/vars.scss";
 // @import "../../node_modules/searchkit/theming/components.scss";
@@ -47,21 +51,6 @@ $highlightColor: #d6c3f6;
 @import "../../node_modules/searchkit/theming/components/panel.scss";
 
 
-// include style v1 of emoticons
-@import "../../../static/css/components/_emoticons.scss";
-// overrides the path
-.LikeSentimentOfPost {
-  background-image:url(/static/img/emoticons/agree.svg);
-}
-.DisagreeSentimentOfPost {
-  background-image: url(/static/img/emoticons/disagree.svg);
-}
-.MoreInfoSentimentOfPost {
-  background-image: url(/static/img/emoticons/more_infos.svg);
-}
-.DontUnderstandSentimentOfPost {
-  background-image: url(/static/img/emoticons/not_understand.svg);
-}
 .emoticonValue {
     display: inline-block;
     width: 20px;
