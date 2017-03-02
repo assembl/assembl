@@ -198,6 +198,24 @@ class NotificationSubscription(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
+    def can_merge(self, other):
+        return (self.discussion_id == other.discussion_id
+            and self.type == other.type
+            and self.user_id == other.user_id
+            and self.parent_subscription_id == other.parent_subscription_id)
+
+    def merge(self, other):
+        assert self.can_merge(other)
+        self.creation_date = min(self.creation_date, other.creation_date)
+        if (self.status == NotificationSubscriptionStatus.INACTIVE_DFT
+            or (other.status != NotificationSubscriptionStatus.INACTIVE_DFT
+                and self.last_status_change_date < other.last_status_change_date)):
+            self.status = other.status
+        self.last_status_change_date = max(
+            self.last_status_change_date, other.last_status_change_date)
+        for notification in other.notifications:
+            notification.first_matching_subscription_id = self.id
+
     def get_discussion_id(self):
         return self.discussion_id
 
@@ -436,6 +454,10 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
     def followed_object(self):
         return self.post
 
+    def can_merge(self, other):
+        return (super(NotificationSubscriptionOnPost, self).can_merge(other)
+            and self.post_id == other.post_id)
+
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnPost, self).unique_query()
         post_id = self.post_id or self.post.id
@@ -476,6 +498,10 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     def followed_object(self):
         return self.idea
+
+    def can_merge(self, other):
+        return (super(NotificationSubscriptionOnPost, self).can_merge(other)
+            and self.idea_id == other.idea_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnIdea, self).unique_query()
@@ -518,6 +544,10 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
     def followed_object(self):
         return self.extract
 
+    def can_merge(self, other):
+        return (super(NotificationSubscriptionOnPost, self).can_merge(other)
+            and self.extract_id == other.extract_id)
+
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnExtract, self).unique_query()
         extract_id = self.extract_id or self.extract.id
@@ -558,6 +588,10 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     def followed_object(self):
         return self.user
+
+    def can_merge(self, other):
+        return (super(NotificationSubscriptionOnPost, self).can_merge(other)
+            and self.on_user_id == other.on_user_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnUserAccount, self).unique_query()

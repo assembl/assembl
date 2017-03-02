@@ -10,6 +10,9 @@ import types
 from collections import Iterable, defaultdict
 import atexit
 from abc import abstractmethod
+import logging
+from time import sleep
+from random import random
 
 from enum import Enum
 from anyjson import dumps, loads
@@ -17,7 +20,7 @@ from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
     DateTime, MetaData, engine_from_config, event, Column, Integer,
     inspect)
-from sqlalchemy.exc import NoInspectionAvailable
+from sqlalchemy.exc import NoInspectionAvailable, OperationalError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.associationproxy import AssociationProxy
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
@@ -32,6 +35,7 @@ from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from zope.component import getGlobalSiteManager
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
+import transaction
 
 from .parsedatetime import parse_datetime
 from ..view_def import get_view_def
@@ -43,6 +47,7 @@ from .utils import get_global_base_url
 from ..lib.config import get_config
 
 atexit_engines = []
+log = logging.getLogger('assembl')
 
 
 class CrudOperation(Enum):
@@ -847,6 +852,60 @@ class BaseOps(object):
         return result
 
     dummy_context = DummyContext()
+
+    def locked_object_creation(
+            self, object_generator, lock_table_cls=None, num_attempts=3):
+        """Utility method to create objects as a side effect.
+        Will use an exclusive table lock to ensure that the objects
+        are created only once.
+
+        :param func object_generator: a function (w/o parameters) that will
+            create the objects that need to be created (as iterable).
+            They will be added and committed in a subtransaction.
+            Will be called many times.
+        :returns: Whether there was anything added (maybe not in this process)
+        """
+        lock_table_cls = lock_table_cls or self.__class__
+        lock_table_name = lock_table_cls.__mapper__.local_table.name
+        db = self.db
+        to_be_created = object_generator()
+        if not to_be_created:
+            return False
+        # After a commit, all objects are normally unusable.
+        # Inhibit that behaviour.
+        temp_expire_on_commit = db.expire_on_commit
+        db.expire_on_commit = False
+        try:
+            # Subtransaction
+            db.begin_nested()
+            for num, attempt in enumerate(
+                    transaction.manager.attempts(num_attempts)):
+                with attempt:
+                    try:
+                        db.execute("LOCK TABLE %s IN EXCLUSIVE MODE NOWAIT" % (
+                            lock_table_name,))
+                    except OperationalError as e:
+                        log.info("Could not get the table lock in attempt %d"
+                                 % (num,))
+                        sleep(random() / 10.0)
+                        raise transaction.interfaces.TransientError(e)
+                    # recalculate needed objects.
+                    # There may be none left after having obtained the lock.
+                    to_be_created = object_generator()
+                    for ob in to_be_created:
+                        db.add(ob)
+            # implicit commit of subtransaction
+            # We _should_ get the transient error reraised if we keep failing.
+        except ObjectNotUniqueError as e:
+            # Should not happen anymore. Log if so.
+            log.error("locked_object_creation: the generator created "
+                      "a non-unique object despite locking." + str(e))
+            raise e
+        finally:
+            db.expire_on_commit = temp_expire_on_commit
+        # Some objects were set to be created, even if they were created
+        # on another thread/process
+        return True
 
     def _create_subobject_from_json(
             self, json, target_cls, parse_def, aliases,
