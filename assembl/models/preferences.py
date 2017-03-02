@@ -403,6 +403,17 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": {}
         },
 
+        # Discussion terms of use
+        {
+            "id": "terms_of_use_url",
+            "name": _("Terms of use URL"),
+            "value_type": "url",
+            "description": _("URL of a document presenting terms of use for the discussion"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": None
+        },
+
         # Discussion Video
         {
             "id": "video_url",
