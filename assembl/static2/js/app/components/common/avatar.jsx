@@ -5,7 +5,6 @@ import { Link } from 'react-router';
 import MapStateToProps from '../../store/mapStateToProps';
 import MapDispatchToProps from '../../store/mapDispatchToProps';
 import Loader from './loader';
-import Glyphicon from './glyphicon';
 
 class ProfileIcon extends React.Component {
   render() {
@@ -13,7 +12,7 @@ class ProfileIcon extends React.Component {
     const { users, usersLoading, usersError } = this.props.users;
     const { rootPath, connectedUserId } = this.props.context;
     return (
-      <div className="right profile-icon">
+      <div className="right avatar">
         {!connectedUserId &&
           <Link to={`${rootPath}${debateData.slug}/login`}>
             <span className="connection">
@@ -26,7 +25,7 @@ class ProfileIcon extends React.Component {
             {usersLoading && <Loader textHidden color="black" />}
             {users &&
               <Link to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
-                <Glyphicon glyph="avatar" color="grey" size={20} desc="Avatar" />
+                <span className="glyph-grey">A</span>
                 <span className="username">{users.connectedUser.username ? users.connectedUser.username : users.connectedUser.name}</span>
               </Link>
             }

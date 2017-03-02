@@ -1,5 +1,5 @@
-.profile-icon {
-  margin: 1px 15px 0;
+.avatar {
+  margin: 1px 15px 0 20px;
 
   a {
     &:hover {
@@ -10,18 +10,14 @@
   .username {
     color: $navbar-active-text-color;
     font-size: $font-size-xs;
+    line-height: 23px;
+    padding: 0 0 0 10px;
+    vertical-align: top;
   }
 
   .connection {
     color: $third-color;
     font-size: $font-size-xs;
-  }
-
-  img {
-    border-radius: 11px;
-    margin: 0 5px 0 0;
-    max-height: 20px;
-    width: 20px;
   }
 }
 
@@ -50,7 +46,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .profile-icon {
+  .avatar {
     .username {
       display: none;
     }
@@ -58,7 +54,7 @@
 }
 
 @media screen and (max-width: 420px) {
-  .profile-icon {
+  .avatar {
     margin: 1px 10px 0 15px;
   }
 

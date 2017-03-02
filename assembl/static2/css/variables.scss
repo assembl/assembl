@@ -39,6 +39,14 @@ $img-dir: '/static2/img';
   src: local('☺'), url('#{$fonts-dir}/AvenirNextLTPro-Regular.woff') format('woff'), url('#{$fonts-dir}/AvenirNextLTPro-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'asembl-glyphregular';
+  src: url('#{$fonts-dir}/asembl-glyph-webfont.woff2') format('woff2'),
+       url('#{$fonts-dir}/asembl-glyph-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 $font-family: 'Open Sans', sans-serif;
 $font-family2: 'avenirDemiCn';
 $font-family3: 'avenirCn';

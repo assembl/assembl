@@ -6,7 +6,6 @@ import MapStateToProps from '../../store/mapStateToProps';
 import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
-import Glyphicon from './glyphicon';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -41,10 +40,10 @@ class NavBar extends React.Component {
           <div className="nav-bar max-container">
             <div className="burgermenu-icon left" onClick={this.displayMenu}>
               <div className={this.state.isMenuHidden ? 'shown' : 'hidden'}>
-                <Glyphicon glyph="menuOn" color="black" size={30} desc="Menu on" />
+                <span className="glyph-black">C</span>
               </div>
               <div className={this.state.isMenuHidden ? 'hidden' : 'shown'}>
-                <Glyphicon glyph="menuOff" color="black" size={30} desc="Menu off" />
+                <span className="glyph-black">B</span>
               </div>
             </div>
             <div className="navbar-logo left">
@@ -57,7 +56,7 @@ class NavBar extends React.Component {
             </div>
             <div className="navbar-icons right">
               <Link to={`${debateData.help_url}`} target="_blank">
-                <Glyphicon glyph="questionSign" color="grey" size={20} desc="Help" />
+                <span className="glyph-grey">E</span>
               </Link>
               <div className="navbar-language right">
                 <LanguageMenu size="xs" />

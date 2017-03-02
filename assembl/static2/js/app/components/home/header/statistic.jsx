@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import MapStateToProps from '../../../store/mapStateToProps';
-import Glyphicon from '../../common/glyphicon';
 import Loader from '../../common/loader';
 import Error from '../../common/error';
 
@@ -17,7 +16,7 @@ class Statistic extends React.Component {
           {postsError && <Error errorMessage={postsError} />}
           {posts &&
             <div className="stat-box border-right">
-              <Glyphicon glyph="message" color="white" size={20} desc="Number of contributions" />
+              <span className="glyph-white">D</span>
               <div className="stat">
                 <div className="stat-nb">{posts.total}&nbsp;</div>
                 <div className="stat-nb">
@@ -32,7 +31,7 @@ class Statistic extends React.Component {
           {usersError && <Error errorMessage={usersError} />}
           {users &&
             <div className="stat-box">
-              <Glyphicon glyph="avatar" color="white" size={20} desc="Number of users" />
+              <span className="glyph-white">A</span>
               <div className="stat">
                 <div className="stat-nb">{users.totalVerifiedUsers}&nbsp;</div>
                 <div className="stat-nb">

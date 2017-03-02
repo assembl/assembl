@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Glyphicon from '../common/glyphicon';
 
 class Icons extends React.Component {
   render() {
@@ -9,34 +8,34 @@ class Icons extends React.Component {
         <h2 className="dark-title-2 underline" id="icons" style={{ borderBottom: "1px solid #ccc"}}>ICONS</h2>
         <section>
           <div className="inline padding">
-            <Glyphicon glyph="avatar" color="black" size={30} desc="Alt description" />
+            <span className="glyph-black">A</span>
           </div>
           <div className="inline padding">
-            <Glyphicon glyph="menuOn" color="black" size={30} desc="Alt description" />
+            <span className="glyph-black">B</span>
           </div>
           <div className="inline padding">
-            <Glyphicon glyph="menuOff" color="black" size={30} desc="Alt description" />
+            <span className="glyph-black">C</span>
           </div>
           <div className="inline padding">
-            <Glyphicon glyph="message" color="black" size={30} desc="Alt description" />
+            <span className="glyph-grey">D</span>
           </div>
           <div className="inline padding">
-            <Glyphicon glyph="questionSign" color="black" size={30} desc="Alt description" />
+            <span className="glyph-grey">E</span>
           </div>
           <div style={{backgroundColor:"#000", width:"200px"}}>
             <div className="inline padding">
               <Link to="http://www.facebook.com" target="_blank">
-                <Glyphicon glyph="facebook" color="white" size={30} desc="Facebook" />
-              </Link>
-            </div>
-            <div className="inline padding">
-              <Link to="http://www.twitter.com" target="_blank">
-                <Glyphicon glyph="twitter" color="white" size={30} desc="Twitter" />
+                <span className="glyph-white">F</span>
               </Link>
             </div>
             <div className="inline padding">
               <Link to="http://www.linkedin.com" target="_blank">
-                <Glyphicon glyph="linkedin" color="white" size={30} desc="Linkedin" />
+                <span className="glyph-white">G</span>
+              </Link>
+            </div>
+            <div className="inline padding">
+              <Link to="http://www.twitter.com" target="_blank">
+                <span className="glyph-white">H</span>
               </Link>
             </div>
           </div>
@@ -44,33 +43,33 @@ class Icons extends React.Component {
         <section>
           <h3 className="dark-title-3">Code</h3>
           <pre>
-            &lt;Glyphicon glyph="avatar" color="black" size=&#123;30&#125; desc="Alt description" /&gt;
+            &lt;span className="glyph-black"&gt;A&lt;/span&gt;
           </pre>
           <pre>
-            &lt;Glyphicon glyph="menuOn" color="black" size=&#123;30&#125; desc="Alt description" /&gt;
+            &lt;span className="glyph-black"&gt;B&lt;/span&gt;
           </pre>
           <pre>
-            &lt;Glyphicon glyph="menuOff" color="black" size=&#123;30&#125; desc="Alt description" /&gt;
+            &lt;span className="glyph-black"&gt;C&lt;/span&gt;
           </pre>
           <pre>
-            &lt;Glyphicon glyph="message" color="black" size=&#123;30&#125; desc="Alt description" /&gt;
+            &lt;span className="glyph-grey"&gt;D&lt;/span&gt;
           </pre>
           <pre>
-            &lt;Glyphicon glyph="questionSign" color="black" size=&#123;30&#125; desc="Alt description" /&gt;
+            &lt;span className="glyph-grey"&gt;E&lt;/span&gt;
           </pre>
           <pre>
             <div>&lt;Link to="http://www.facebook.com" target="_blank"&gt;</div>
-              <div style={{paddingLeft:`${20}px`}}>&lt;Glyphicon glyph="facebook" color="white" size=&#123;30&#125; desc="Facebook" /&gt;</div>
-            <div>&lt;/Link&gt;</div>
-          </pre>
-          <pre>
-            <div>&lt;Link to="http://www.twitter.com" target="_blank"&gt;</div>
-              <div style={{paddingLeft:`${20}px`}}>&lt;Glyphicon glyph="twitter" color="white" size=&#123;30&#125; desc="Twitter" /&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;span className="glyph-white"&gt;F&lt;/span&gt;</div>
             <div>&lt;/Link&gt;</div>
           </pre>
           <pre>
             <div>&lt;Link to="http://www.linkedin.com" target="_blank"&gt;</div>
-              <div style={{paddingLeft:`${20}px`}}>&lt;Glyphicon glyph="linkedin" color="white" size=&#123;30&#125; desc="Linkedin" /&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;span className="glyph-white"&gt;G&lt;/span&gt;</div>
+            <div>&lt;/Link&gt;</div>
+          </pre>
+          <pre>
+            <div>&lt;Link to="http://www.twitter.com" target="_blank"&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;span className="glyph-white"&gt;H&lt;/span&gt;</div>
             <div>&lt;/Link&gt;</div>
           </pre>
         </section>
