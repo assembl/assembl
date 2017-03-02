@@ -28,6 +28,7 @@ var TimelineEventModel = Base.Model.extend({
    */
   defaults: {
     'discussion': null,
+    '@type': 'DiscussionPhase',
     'previous_event': null,
     'title': null,
     'description': null,
@@ -43,6 +44,21 @@ var TimelineEventModel = Base.Model.extend({
       rawModel.description = new LangString.Model(rawModel.description, {parse: true});
     }
     return rawModel;
+  },
+
+  getStartNoTZ: function() {
+    var start = this.get('start');
+    if (start !== null) {
+      return start.split('Z').join('')
+    }
+    return start;
+  },
+  getEndNoTZ: function() {
+    var end = this.get('end');
+    if (end !== null) {
+      return end.split('Z').join('')
+    }
+    return end;
   },
 });
 

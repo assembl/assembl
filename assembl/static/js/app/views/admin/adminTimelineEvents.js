@@ -122,6 +122,8 @@ var TimelineEventView = Marionette.LayoutView.extend({
     eventTitle: '.js_timeline_title',
     eventDescription: '.js_timeline_description',
     eventImageUrl: '.js_timeline_image_url',
+    eventStartDate: '.js_start_date',
+    eventEndDate: '.js_end_date',
     eventUp: '.js_timeline_up',
     eventDown: '.js_timeline_down',
     eventDelete: '.js_timeline_delete',
@@ -134,7 +136,9 @@ var TimelineEventView = Marionette.LayoutView.extend({
     'click @ui.eventUp': 'reorderColumnUp',
     'click @ui.eventDown': 'reorderColumnDown',
     'click @ui.eventDelete': 'deleteColumn',
-    'change @ui.eventImageUrl': 'changeColor',
+    'change @ui.eventImageUrl': 'changeImageUrl',
+    'change @ui.eventStartDate': 'changeStartDate',
+    'change @ui.eventEndDate': 'changeEndDate',
   },
   getIndex: function() {
     return _.indexOf(this.model.collection.models, this.model);
@@ -204,6 +208,16 @@ var TimelineEventView = Marionette.LayoutView.extend({
   },
   changeImageUrl: function(ev) {
     this.model.set('image_url', ev.currentTarget.value);
+    this.model.save();
+    ev.preventDefault();
+  },
+  changeStartDate: function(ev) {
+    this.model.set('start', ev.currentTarget.value+"Z");
+    this.model.save();
+    ev.preventDefault();
+  },
+  changeEndDate: function(ev) {
+    this.model.set('end', ev.currentTarget.value+"Z");
     this.model.save();
     ev.preventDefault();
   },
