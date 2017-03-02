@@ -89,7 +89,8 @@ const Translations = {
       panelTitle: 'Conditions Générales d\'Utilisations'
     },
     date: {
-      format: 'D MMMM YYYY'
+      format: 'D MMMM YYYY',
+      format2: 'DD-MM-YYYY'
     }
   },
   en: {
@@ -182,7 +183,8 @@ const Translations = {
       panelTitle: 'Terms and Conditions'
     },
     date: {
-      format: 'MMMM Do, YYYY'
+      format: 'MMMM Do, YYYY',
+      format2: 'MM-DD-YYYY'
     }
   }
 };

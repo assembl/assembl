@@ -47,6 +47,21 @@ class Text extends React.Component {
             &lt;h5 className="dark-title-5"&gt;Title 5&lt;/h5&gt;
           </pre>
           <pre>
+            &lt;h1 className="light-title-1"&gt;Title 1&lt;/h1&gt;
+          </pre>
+          <pre>
+            &lt;h2 className="light-title-2"&gt;Title 2&lt;/h2&gt;
+          </pre>
+          <pre>
+            &lt;h3 className="light-title-3"&gt;Title 3&lt;/h3&gt;
+          </pre>
+          <pre>
+            &lt;h4 className="light-title-4"&gt;Title 4&lt;/h4&gt;
+          </pre>
+          <pre>
+            &lt;h5 className="light-title-5"&gt;Title 5&lt;/h5&gt;
+          </pre>
+          <pre>
             <div>&lt;h3 className="ellipsis dark-title-3"&gt;</div>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat interdum sem, eget malesuada tortor gravida volutpat. Donec luctus semper tincidunt. Sed vel iaculis libero, eu volutpat ante. Nullam lobortis suscipit lorem, a posuere erat vulputate sed. Integer varius purus diam, nec scelerisque urna vehicula et.
             <div>&lt;/h3&gt;</div>

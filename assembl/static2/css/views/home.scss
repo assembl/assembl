@@ -204,8 +204,16 @@
 
     .text-box {
       p {
-        margin: 80px 0 0;
+        -webkit-line-clamp: $lines-to-show;
+        -webkit-box-orient: vertical;
+        display: block;
+        font-size: $font-size-xs;
+        height: $font-size-xs * $line-height * $lines-to-show;
+        line-height: $line-height;
+        margin: 0 auto;
+        overflow: hidden;
         text-align: center;
+        text-overflow: ellipsis;
       }
     }
   }
@@ -272,7 +280,7 @@
 
   .illustration-box {
     .text-box {
-      margin: 220px 0 0;
+      margin: 180px 0 0;
     }
   }
 }
@@ -302,6 +310,7 @@
   }
 
   img {
+    filter: grayscale(100%);
     max-height: $partner-logo-height;
     max-width: $partner-logo-width;
   }

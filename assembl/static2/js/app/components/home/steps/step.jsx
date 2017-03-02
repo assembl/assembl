@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
+import { Translate, Localize } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import MapStateToProps from '../../../store/mapStateToProps';
 
 class Step extends React.Component {
   render() {
     const imgUrl = this.props.imgUrl;
+    const startDate = this.props.startDate;
     const title = this.props.title;
     const text = this.props.text;
     const StepNumber = this.props.index + 1;
@@ -20,6 +21,9 @@ class Step extends React.Component {
           <h3 className="light-title-3">
             <Translate value={title} />
           </h3>
+          <h4 className="light-title-4">
+            <Localize value={startDate} dateFormat="date.format2" />
+          </h4>
           <div className="text-box">
             <Translate value={text} />
           </div>

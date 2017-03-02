@@ -20,7 +20,7 @@ class Synthesis extends React.Component {
             </h3>
             <div className="box-hyphen">&nbsp;</div>
             <div className="date">
-              <Localize value={synthesis.lastPublishedSynthesis.creation_date} dateFormat="date.format" />
+              <Localize value={synthesis.lastPublishedSynthesis.creation_date} dateFormat="date.format2" />
             </div>
             <div className="insert-content margin-s">
               {<p dangerouslySetInnerHTML={{ __html: synthesis.lastPublishedSynthesis.introduction }} />}

@@ -34,7 +34,7 @@ class Steps extends React.Component {
                 {timeline.map((step, index) => {
                   return (
                     <Col xs={12} sm={6} md={3} className={this.isCurrentStep(index) ? 'no-padding step' : 'no-padding step hidden-xs'} key={`step${index}`}>
-                      <Step imgUrl={step.imgUrl} index={index} title={`home.step${index}Title`} text={`home.step${index}Text`} />
+                      <Step imgUrl={step.imgUrl} startDate={step.startDate} index={index} title={`home.step${index}Title`} text={`home.step${index}Text`} />
                     </Col>
                   );
                 })}
