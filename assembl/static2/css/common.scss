@@ -33,22 +33,20 @@ input {
   }
 }
 
-.glyph-white {
+.white {
   color: $white;
-  font-family: 'asembl-glyphregular';
-  font-size: 20px;
 }
 
-.glyph-grey {
+.grey {
   color: $grey2;
-  font-family: 'asembl-glyphregular';
-  font-size: 20px;
 }
 
-.glyph-black {
+.black {
   color: $black;
-  font-family: 'asembl-glyphregular';
-  font-size: 20px;
+}
+
+.color {
+  color: $first-color;
 }
 
 .app-content {

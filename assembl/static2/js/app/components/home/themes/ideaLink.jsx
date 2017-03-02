@@ -9,10 +9,10 @@ class Profile extends React.Component {
         <Link className="idea-link-title">{title}</Link>
         <div className="stats">
           <div className="inline">{nbPosts}</div>
-          <span className="glyph-white">D</span>
+          <span className="icon-profil white">&nbsp;</span>
           <div className="inline padding">-</div>
           <div className="inline">{nbUsers}</div>
-          <span className="glyph-white">A</span>
+          <span className="icon-message white">&nbsp;</span>
         </div>
       </div>
     );

@@ -25,7 +25,7 @@ class ProfileIcon extends React.Component {
             {usersLoading && <Loader textHidden color="black" />}
             {users &&
               <Link to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
-                <span className="glyph-grey">A</span>
+                <span className="icon-profil grey">&nbsp;</span>
                 <span className="username">{users.connectedUser.username ? users.connectedUser.username : users.connectedUser.name}</span>
               </Link>
             }

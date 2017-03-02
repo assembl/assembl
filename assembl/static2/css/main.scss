@@ -1,6 +1,5 @@
 @import 'variables';
-@import 'bootstrap-overrides';
-@import 'common';
+@import 'components/assembl-glyph';
 @import 'components/box';
 @import 'components/buttons';
 @import 'components/dropdown';
@@ -12,3 +11,5 @@
 @import 'components/video';
 @import 'components/timeline';
 @import 'views/home';
+@import 'bootstrap-overrides';
+@import 'common';
