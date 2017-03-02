@@ -59,6 +59,7 @@ _SYNTHESIS_MAPPING['properties'].update({
     'subject': TEXT,
     'introduction': TEXT,
     'conclusion': TEXT,
+    'ideas': TEXT,
 })
 
 _USER_MAPPING = {

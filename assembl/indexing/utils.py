@@ -103,6 +103,8 @@ def get_data(content):
             data['subject'] = content.publishes_synthesis.subject
             data['introduction'] = content.publishes_synthesis.introduction
             data['conclusion'] = content.publishes_synthesis.conclusion
+            data['ideas'] = [idea.long_title or ''
+                             for idea in content.publishes_synthesis.ideas]
         else:
             for entry in content.body.entries:
                 data['body_' + entry.locale_code] = entry.value

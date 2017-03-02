@@ -187,6 +187,7 @@ const PostHit = connect(
 
 const SynthesisHit = (props) => {
   const source = props.result._source;
+  const ideas = get(props.result, 'highlight.ideas');
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
@@ -197,8 +198,11 @@ const SynthesisHit = (props) => {
         />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'introduction') }} />
-        <p dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'conclusion') }} />
+        <p style={{ backgroundColor: '#f4f4f4' }} dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'introduction') }} />
+        { ideas ?
+          <p style={{ paddingLeft: '1em', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: ideas }} />
+        : null }
+        <p style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'conclusion') }} />
       </div>
       <PublishedInfo
         className={props.bemBlocks.item('info')}
@@ -313,6 +317,7 @@ const queryFields = [
   'subject',  // synthesis
   'introduction',  // synthesis
   'conclusion',  // synthesis
+  'ideas',  // synthesis
   'subject_und', // post
   'subject_fr', // post
   'subject_en', // post
