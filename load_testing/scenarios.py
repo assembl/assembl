@@ -40,8 +40,24 @@ class TestWebSite(TestCase):
 
     def notification_subscriptions(self):
         self.app.lint = False
-        # create with
+        # create a user with
         # assembl-add-user -m test@example.com -p test -d sandbox -l r:participant -n 'Test User' -u test local.ini
+        # if you want to run uwsgi from command line, add  --ini-paste-logged for logging
+        # Clear the discussion's (assuming id 6) NotificationSubscriptions with the following in pshell:
+        # for n in db.query(models.NotificationSubscription).filter_by(discussion_id=6):
+        #    n.delete()
+        # db.commit()
+        # At the end of the test, this should be empty:
+        # db.query(models.NotificationSubscription.discussion_id,
+        #            models.NotificationSubscription.user_id,
+        #            models.NotificationSubscription.type,
+        #            func.count(models.NotificationSubscription.id)).group_by(
+        #            models.NotificationSubscription.discussion_id,
+        #            models.NotificationSubscription.user_id,
+        #            models.NotificationSubscription.type).having(
+        #            func.count(models.NotificationSubscription.id)>1).all()
+        # run with
+        # loads-runner scenarios.TestWebSite.notification_subscriptions  --server-url http://localhost:8080/  -u 4 --hits 4
         user_info = {'identifier': 'test@example.com', 'password': 'test'}
         data = {'slug': 'sandbox'}
 

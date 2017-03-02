@@ -857,7 +857,9 @@ class BaseOps(object):
             self, object_generator, lock_table_cls=None, num_attempts=3):
         """Utility method to create objects as a side effect.
         Will use an exclusive table lock to ensure that the objects
-        are created only once.
+        are created only once. Not all object creation should need this,
+        but it should be used when many connexions might attempt to create
+        the same unique objects.
 
         :param func object_generator: a function (w/o parameters) that will
             create the objects that need to be created (as iterable).
