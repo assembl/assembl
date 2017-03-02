@@ -233,11 +233,15 @@ const UserHit = (props) => {
           <p dangerouslySetInnerHTML={{ __html: fullname }} />
         }
       </div>
-      { source.creation_date ?
-        <div className={props.bemBlocks.item('info')}>
-          <Translate value="search.member_since" />{' '}<Localize value={source.creation_date} dateFormat="date.format" />
-        </div>
-      : null }
+      <div className={props.bemBlocks.item('info')}>
+        {source.num_posts}
+        <span className={props.bemBlocks.item('icon-message')}>
+          <Glyphicon glyph="message" color="purple" size={20} desc="Number of contributions" />
+        </span>
+        { source.creation_date ?
+          <span><Translate value="search.member_since" />{' '}<Localize value={source.creation_date} dateFormat="date.format" /></span>
+        : null }
+      </div>
     </div>
   );
 };

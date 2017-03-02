@@ -29,6 +29,10 @@ def search_endpoint(context, request):
     creators = session.query(models.AgentProfile.id, models.AgentProfile.name
         ).filter(models.AgentProfile.id.in_(creator_ids)).all()
     creators_by_id = dict(creators)
+    # u'query': {u'bool': {u'filter': [{u'term': {u'discussion_id': u'23'}}]}}
+    filters = [fil for fil in query['query']['bool']['filter']]
+    discussion_id = [f.values()[0].values()[0]
+                     for f in filters if 'discussion_id' in f.values()[0].keys()][0]
     for hit in result['hits']['hits']:
         source = hit['_source']
         creator_id = source.get('creator_id', None)
@@ -39,6 +43,8 @@ def search_endpoint(context, request):
             idea = models.Idea.get_instance(source['id'])
             source['num_posts'] = idea.num_posts
             source['num_contributors'] = idea.num_contributors
+        elif hit['_type'] == 'user':
+            source['num_posts'] = models.AgentProfile.get_instance(source['id']).count_posts_in_discussion(discussion_id)
 
     return result
 
