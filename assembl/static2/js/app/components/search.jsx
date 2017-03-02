@@ -364,14 +364,32 @@ export class SearchComponent extends React.Component {
         delete modifiedQuery.query.simple_query_string;
       }
       modifiedQuery.query = { bool: { filter: filters } };
+      modifiedQuery.query.bool.must = [];
       if (simpleQueryString) {
         this.setState({ show: true, queryString: simpleQueryString.query });
         simpleQueryString.query = `${simpleQueryString.query}*`;
-        modifiedQuery.query.bool.must = [
+        modifiedQuery.query.bool.must.push(
           { simple_query_string: simpleQueryString }
-        ];
+        );
       } else {
         this.setState({ queryString: null });
+      }
+      if (Object.prototype.hasOwnProperty.call(modifiedQuery.sort[0], 'num_posts')) {
+        modifiedQuery.sort[0] = { _score: modifiedQuery.sort[0].num_posts.order };
+        modifiedQuery.query.bool.must.push({
+          has_child: {
+            type: 'post',
+            score_mode: 'sum',
+            query: {
+              function_score: {
+                query: { bool: { filter: { term: { discussion_id: props.discussionId } } } },
+                script_score: {
+                  script: '1'
+                }
+              }
+            }
+          }
+        });
       }
       return modifiedQuery;
     });
@@ -432,6 +450,18 @@ export class SearchComponent extends React.Component {
         fields: [
           { field: 'sentiment_counts.dont_understand', options: { order: 'desc' } },
           { field: 'creation_date', options: { order: 'desc' } }
+        ]
+      },
+      { label: 'Participants having the most posted messages',
+        key: 'participant_messages_desc',
+        fields: [
+          { field: 'num_posts', options: { order: 'desc' } }
+        ]
+      },
+      { label: 'Participants having the less posted messages',
+        key: 'participant_messages_asc',
+        fields: [
+          { field: 'num_posts', options: { order: 'asc' } }
         ]
       }
     ]
