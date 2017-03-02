@@ -432,8 +432,8 @@ export class SearchComponent extends React.Component {
       { label: 'Most controversial messages',
         key: 'controversy_desc',
         fields: [
-          { field: 'sentiment_counts.controversy', options: { order: 'desc' } },
-          { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
+          { field: 'sentiment_counts.controversy', options: { order: 'asc' } },
+          { field: 'sentiment_counts.total', options: { order: 'desc' } },
           { field: 'creation_date', options: { order: 'desc' } }
         ]
       },
@@ -441,7 +441,7 @@ export class SearchComponent extends React.Component {
         key: 'consensus_desc',
         fields: [
           { field: 'sentiment_counts.consensus', options: { order: 'asc' } },
-          { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
+          { field: 'sentiment_counts.total', options: { order: 'desc' } },
           { field: 'creation_date', options: { order: 'desc' } }
         ]
       },
