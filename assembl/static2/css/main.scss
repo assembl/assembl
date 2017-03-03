@@ -13,3 +13,7 @@
 @import 'views/home';
 @import 'bootstrap-overrides';
 @import 'common';
+
+// include style v1 of emoticons
+@import "../../static/css/base/variables.scss";
+@import "../../static/css/components/emoticons.scss";
