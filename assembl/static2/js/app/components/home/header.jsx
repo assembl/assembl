@@ -24,11 +24,15 @@ class Header extends React.Component {
                 <span>&nbsp;</span>
                 <Translate value="home.from" />
                 <span>&nbsp;</span>
-                <Localize value={debateData.config.home.header.startDate} dateFormat="date.format" />
+                {debateData.startDate && 
+                  <Localize value={debateData.startDate} dateFormat="date.format" />
+                }
                 <span>&nbsp;</span>
                 <Translate value="home.to" />
                 <span>&nbsp;</span>
-                <Localize value={debateData.config.home.header.endDate} dateFormat="date.format" />
+                {debateData.endDate && 
+                  <Localize value={debateData.endDate} dateFormat="date.format" />
+                }
               </h4>
               <Link className="button-link button-light margin-xl" to={connectedUserId ? `${rootPath}${debateData.slug}/debate` : `${rootPath}${debateData.slug}/login`}>
                 <Translate value="home.accessButton" />
@@ -42,7 +46,7 @@ class Header extends React.Component {
         <Grid fluid>
           <Row>
             <Statistic />
-            <div className="header-bkg" style={{ backgroundImage: `url(${debateData.config.home.header.backgroundImageUrl})` }}>&nbsp;</div>
+            <div className="header-bkg" style={{ backgroundImage: `url(${debateData.headerBackgroundUrl})` }}>&nbsp;</div>
           </Row>
         </Grid>
       </section>

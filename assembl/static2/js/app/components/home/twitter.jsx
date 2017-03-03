@@ -10,8 +10,8 @@ class Twitter extends React.Component {
     const { debateData } = this.props.debate;
     return (
       <section className="twitter-section">
-        {Object.keys(debateData.config.home.twitter).length > 0 &&
-          <Grid fluid className="background-img" style={{ backgroundImage: `url(${debateData.config.home.twitter.backgroundImageUrl})` }}>
+        {debateData.twitter &&
+          <Grid fluid className="background-img" style={{ backgroundImage: `url(${debateData.twitter.backgroundImageUrl})` }}>
             <div className="max-container">
               <div className="content-section">
                 <Row className="no-margin">
@@ -24,7 +24,7 @@ class Twitter extends React.Component {
                         </h1>
                       </div>
                       <div className="tweet-section">
-                        <TweetEmbed id={debateData.config.home.twitter.id} />
+                        <TweetEmbed id={debateData.twitter.id} />
                       </div>
                     </div>
                   </Col>

@@ -13,12 +13,12 @@ class Footer extends React.Component {
     return (
       <Grid fluid className="background-dark">
         <div className="max-container">
-          <div className={debateData.config.footer.socialMedias.length > 0 ? 'footer' : 'footer margin-xl'}>
-            {debateData.config.footer.socialMedias.length > 0 &&
+          <div className={debateData.socialMedias ? 'footer' : 'footer margin-xl'}>
+            {debateData.socialMedias &&
               <div>
                 <p><Translate value="footer.socialMedias" /></p>
                 <div className="social-medias">
-                  {debateData.config.footer.socialMedias.map((sMedia) => {
+                  {debateData.socialMedias.map((sMedia) => {
                     return (
                       <Link to={sMedia.url} target="_blank" key={sMedia.title}>
                         <Glyphicon glyph={sMedia.title} color="white" size={30} desc={sMedia.title} />

@@ -30,10 +30,14 @@ class Objectives extends React.Component {
                       </div>
                     </Col>
                     <Col xs={12} sm={6} md={3} className="objectives">
-                      <div className="objectives-img" style={{ backgroundImage: `url(${debateData.config.home.objectives.img1Url})` }}>&nbsp;</div>
+                      {debateData.objectivesBackground &&
+                        <div className="objectives-img" style={{ backgroundImage: `url(${debateData.objectivesBackground.img1Url})` }}>&nbsp;</div>
+                      }
                     </Col>
                     <Col xs={12} sm={6} md={3} className="objectives">
-                      <div className="objectives-img" style={{ backgroundImage: `url(${debateData.config.home.objectives.img2Url})` }}>&nbsp;</div>
+                      {debateData.objectivesBackground &&
+                        <div className="objectives-img" style={{ backgroundImage: `url(${debateData.objectivesBackground.img2Url})` }}>&nbsp;</div>
+                      }
                     </Col>
                   </Row>
                 </div>

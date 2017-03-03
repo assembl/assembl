@@ -13,15 +13,19 @@ class Video extends React.Component {
     };
   }
   componentWillReceiveProps() {
-    const textHeight = document.getElementById('video-txt').clientHeight;
-    const videoHeight = document.getElementById('video-vid').clientHeight;
-    if (textHeight > (videoHeight + 5)) this.setState({ isTextHigher: true });
+    const { debateData } = this.props.debate;
+    if (debateData.videoUrl) {
+      const textHeight = document.getElementById('video-txt').clientHeight;
+      const videoHeight = document.getElementById('video-vid').clientHeight;
+      if (textHeight > (videoHeight + 5)) this.setState({ isTextHigher: true });
+    }
   }
   render() {
     const { debateData } = this.props.debate;
+    const { locale } = this.props.i18n;
     return (
       <section className="video-section">
-        {Object.keys(debateData.config.home.video).length > 0 &&
+        {debateData.videoUrl &&
           <Grid fluid className="background-light">
             <div className="max-container">
               <div className="title-section">
@@ -33,14 +37,14 @@ class Video extends React.Component {
               <div className="content-section">
                 <div className="content-margin">
                   <Row>
-                    {debateData.config.home.video.videoText &&
+                    {debateData.videoDescription[locale] &&
                       <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
-                        <div className="text" id="video-txt">{debateData.config.home.video.videoText}</div>
+                        <div className="text" id="video-txt">{debateData.videoDescription[locale]}</div>
                       </Col>
                     }
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="video-container" id="video-vid">
-                        <iframe src={debateData.config.home.video.videoUrl} frameBorder="0" width="560" height="315" />
+                        <iframe src={debateData.videoUrl} frameBorder="0" width="560" height="315" />
                       </div>
                     </Col>
                   </Row>

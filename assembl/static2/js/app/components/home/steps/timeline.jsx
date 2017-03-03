@@ -10,13 +10,13 @@ class Timeline extends React.Component {
     const { debateData } = this.props.debate;
     const index = this.props.index;
     const currentDate = new Date();
-    const endDate = GlobalFunctions.getDateFromString(debateData.config.home.steps[index].endDate);
+    const endDate = GlobalFunctions.getDateFromString(debateData.timeline[index].endDate);
     const isStepCompleted = GlobalFunctions.isDateExpired(currentDate, endDate);
     let barWidth = 0;
     if (isStepCompleted) {
       barWidth = 100;
     } else {
-      const startDate = GlobalFunctions.getDateFromString(debateData.config.home.steps[index].startDate);
+      const startDate = GlobalFunctions.getDateFromString(debateData.timeline[index].startDate);
       const isStepStarted = GlobalFunctions.isDateExpired(currentDate, startDate);
       if (isStepStarted) {
         const remainingDays = GlobalFunctions.getNumberOfDays(endDate, currentDate);

@@ -59,7 +59,7 @@ class NavBar extends React.Component {
               <Search />
             </div>
             <div className="navbar-icons right">
-              <Link to={`${debateData.help_url}`} target="_blank">
+              <Link to={`${debateData.helpUrl}`} target="_blank">
                 <span className="assembl-icon-faq grey">&nbsp;</span>
               </Link>
               <div className="navbar-language right">
