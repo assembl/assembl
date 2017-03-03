@@ -167,6 +167,9 @@ var AttachmentModel = Base.Model.extend({
       case 'create':
         model.set('idAttachedDocument', this.get('document').id);
         var objectAttachedToBaseType = Types.getBaseType(this.get('objectAttachedToModel').get('@type'));
+        if(objectAttachedToBaseType === Types.DISCUSSION) {
+          model.set('@type', Types.DISCUSSION_ATTACHMENT);
+        }
         if(objectAttachedToBaseType === Types.POST) {
           model.set('@type', Types.POST_ATTACHMENT);
         }

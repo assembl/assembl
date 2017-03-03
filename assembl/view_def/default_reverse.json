@@ -465,6 +465,9 @@
         "creation_date": false,
         "document": false
     },
+    "DiscussionAttachment": {
+        "@extends": "Attachment"
+    },
     "PostAttachment": {
         "@extends": "Attachment",
          "idObjectAttachedTo": "post"

@@ -242,6 +242,18 @@ class Attachment(DiscussionBoundBase):
         return self.document.external_url
 
 
+class DiscussionAttachment(Attachment):
+    __mapper_args__ = {
+        'polymorphic_identity': 'discussion_attachment',
+        'with_polymorphic': '*'
+    }
+
+    # Same crud permissions as a post
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
+    _discussion = relationship("Discussion", backref="discussion_attachments")
+
+
 class PostAttachment(Attachment):
     __tablename__ = "post_attachment"
     id = Column(Integer, ForeignKey(

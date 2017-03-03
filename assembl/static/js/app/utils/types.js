@@ -33,6 +33,7 @@ var Types = {
   FILE: 'File',
   POST_ATTACHMENT: 'PostAttachment',
   IDEA_ATTACHMENT: 'IdeaAttachment',
+  DISCUSSION_ATTACHMENT: 'DiscussionAttachment',
   ANNOUNCEMENT: 'Announcement',
   IDEA_ANNOUNCEMENT: 'IdeaAnnouncement',
   CONTENT_SOURCE: 'ContentSource',

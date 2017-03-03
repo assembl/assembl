@@ -649,6 +649,9 @@
         "creation_date": true,
         "external_url": "external_url"
     },
+    "DiscussionAttachment": {
+        "@extends": "Attachment"
+    },
     "PostAttachment": {
         "@extends": "Attachment",
          "idObjectAttachedTo": "post"
