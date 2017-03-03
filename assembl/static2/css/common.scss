@@ -1,3 +1,7 @@
+html {
+    font-size: 12px;  // the base for the rem unit (used in react-datepicker)
+}
+
 body {
   background-color: $page-bkg-grey;
   font-family: $font-family;

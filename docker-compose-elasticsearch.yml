@@ -1,0 +1,12 @@
+version: '2'
+services:
+  elasticsearch:
+    image: elasticsearch:5
+    environment:
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    command: elasticsearch -Ecluster.name="assembl"
+    restart: always
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - ./var/esdata:/usr/share/elasticsearch/data

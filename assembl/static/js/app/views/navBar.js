@@ -255,6 +255,10 @@ var navBar = Marionette.LayoutView.extend({
     this.getRegion('navBarLeft').show(new navBarLeft());
   },
 
+  onDomRefresh: function() {
+    window.renderSearch();
+  },
+
   switchToExpertInterface: function(e) {
     Ctx.setInterfaceType(Ctx.InterfaceTypes.EXPERT);
   },

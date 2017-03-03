@@ -2,16 +2,19 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ['babel-polyfill', './js/app/index'],
+    entry: {
+        bundle: ['babel-polyfill', './js/app/index'],
+        searchv1: ['babel-polyfill', './js/app/searchv1']
+    },
     output: {
         path: path.join(__dirname, 'build'),
-        filename: 'bundle.js',
+        filename: '[name].js',
         publicPath: '/build/'
     },
     module: {
         loaders: [
         {
-            test: /\.jsx?$/,
+            test: /\.jsx?(\?v=\d)?$/,
             loaders: ['react-hot','babel'],
             include: path.join(__dirname, 'js')
         },

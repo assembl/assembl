@@ -75,6 +75,10 @@ def test_jack_layton_linked_discussion(
         assert posts_by_idea[idea.id] == expected[idea.id]
     assert orphans == expected[None]
 
+    # we need to commit to expire post*.idea_content_links_above_post
+    # used in indirect_idea_content_links_with_cache
+    test_session.commit()
+
     # Post 6 is linked to subidea_1 through its direct link, but not its link through post 1
     post_6 = Post.get(posts_id_by_num[6])
     icls = post_6.indirect_idea_content_links_with_cache(filter=False)

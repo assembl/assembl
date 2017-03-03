@@ -6,6 +6,7 @@ import MapStateToProps from '../../store/mapStateToProps';
 import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
+import Search from '../search';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -40,10 +41,10 @@ class NavBar extends React.Component {
           <div className="nav-bar max-container">
             <div className="burgermenu-icon left" onClick={this.displayMenu}>
               <div className={this.state.isMenuHidden ? 'shown' : 'hidden'}>
-                <span className="icon-menu-on black">&nbsp;</span>
+                <span className="assembl-icon-menu-on black">&nbsp;</span>
               </div>
               <div className={this.state.isMenuHidden ? 'hidden' : 'shown'}>
-                <span className="icon-cancel black">&nbsp;</span>
+                <span className="assembl-icon-cancel black">&nbsp;</span>
               </div>
             </div>
             <div className="navbar-logo left">
@@ -54,9 +55,12 @@ class NavBar extends React.Component {
             <div className="nav-menu left">
               <NavigationMenu />
             </div>
+            <div className="">
+              <Search />
+            </div>
             <div className="navbar-icons right">
               <Link to={`${debateData.help_url}`} target="_blank">
-                <span className="icon-faq grey">&nbsp;</span>
+                <span className="assembl-icon-faq grey">&nbsp;</span>
               </Link>
               <div className="navbar-language right">
                 <LanguageMenu size="xs" />

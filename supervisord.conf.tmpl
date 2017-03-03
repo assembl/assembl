@@ -170,3 +170,10 @@ directory = %(edgesense_code_dir)s
 command=%(edgesense_venv)s/bin/edgesense_catalyst_server
 autostart = %(autostart_edgesense_server)s
 autorestart = true
+
+[program:elasticsearch]
+directory = %(here)s
+command = %(here)s/var/elasticsearch/bin/elasticsearch -Ecluster.name="assembl" -Epath.data="%(here)s/var/esdata" -Epath.logs="%(here)s/var/log/elasticsearch"
+autostart = true
+autorestart = true
+environment = ES_JAVA_OPTS="-Xms1g -Xmx1g"

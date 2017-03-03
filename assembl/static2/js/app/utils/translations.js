@@ -1,5 +1,73 @@
 const Translations = {
   fr: {
+    'Number of contributions': 'Nombre de messages',
+    'Number of users': 'Nombre de contributeurs',
+    search: {
+      reset: {
+        clear_all: 'Effacer tous les filtres'
+      },
+      facets: {
+        view_more: 'Voir plus',
+        view_less: 'Voir moins',
+        view_all: 'Voir tout'
+      },
+      NoHits: {
+        NoResultsFound: 'Aucun résultat trouvé pour {query}.',
+        DidYouMean: 'Rechercher pour {suggestion}.',
+        SearchWithoutFilters: 'Rechercher {query} sans filtres',
+        NoResultsFoundDidYouMean: 'Aucun résultat trouvé pour {query}. Vous vouliez peut-être {suggestion} ?'
+      },
+      hitstats: {
+        results_found: '{hitCount} résultats trouvés'
+      },
+      pagination: {
+        previous: 'Précédent',
+        next: 'Suivant'
+      },
+      searchbox: {
+        placeholder: 'Rechercher'
+      },
+      datefilter: {
+        from: 'Du',
+        to: 'Au'
+      },
+      published_the: 'Publié le',
+      member_since: 'Membre depuis le',
+      by: 'par',
+      search_come_from_what_you_need_to_know: 'Recherche effectuée dans la section "à retenir" de cette discussion',
+      search_come_from_announcement: 'Recherche effectuée dans la section "consigne" de cette discussion',
+      expand_search: 'afficher la recherche',
+      collapse_search: 'cacher la recherche',
+      Categories: 'Catégories',
+      All: 'Tout',
+      post: 'Messages',
+      idea: 'Idées',
+      user: 'Participants',
+      synthesis: 'Synthèse',
+      Messages: 'Messages',
+      like: 'J\'aime',
+      disagree: 'Pas convaincu',
+      dont_understand: 'Pas tout compris',
+      more_info: 'SVP + d\'infos ?',
+      Sort: 'Trier',
+      'By relevance': 'Par pertinence',
+      'Most recent first': 'Du plus récent au plus ancien',
+      'Oldest first': 'Du plus ancien au plus récent',
+      'Most popular messages': 'Messages les plus populaires',
+      'Less popular messages': 'Messages les moins populaires',
+      'Most controversial messages': 'Messages les plus polémiques',
+      'Most consensus messages': 'Messages les plus consensuels',
+      'Messages judged unclear': 'Messages jugés peu clairs',
+      'Participants having the most posted messages': 'Participants ayant le plus grand nombre de messages',
+      'Participants having the less posted messages': 'Participants ayant le moins grand nombre de messages',
+      'Participants pleased by their peers': 'Participants plébiscités par leurs pairs',
+      'Filter by date': 'Filtrer par période',
+      'My messages': 'Mes messages',
+      'Messages in response to my contributions': 'Messages en réponse à mes contributions',
+      'Creative participants': 'Participants créatifs',
+      'Reactive participants': 'Participants réactifs',
+      'Learning participants': 'Participants apprenants'
+    },
     navbar: {
       home: 'accueil',
       debate: 'débat',
@@ -94,6 +162,72 @@ const Translations = {
     }
   },
   en: {
+    search: {
+      reset: {
+        clear_all: 'Clear All Filters'
+      },
+      facets: {
+        view_more: 'View more',
+        view_less: 'View less',
+        view_all: 'View all'
+      },
+      NoHits: {
+        NoResultsFound: 'No results found for {query}.',
+        DidYouMean: 'Search for {suggestion}.',
+        SearchWithoutFilters: 'Search for {query} without filters',
+        NoResultsFoundDidYouMean: 'No results found for {query}. Did you mean {suggestion}?'
+      },
+      hitstats: {
+        results_found: '{hitCount} results found'
+      },
+      pagination: {
+        previous: 'Previous',
+        next: 'Next'
+      },
+      searchbox: {
+        placeholder: 'Search'
+      },
+      datefilter: {
+        from: 'From',
+        to: 'To'
+      },
+      search_come_from_what_you_need_to_know: 'Search done in the "What you need to know" section of this discussion',
+      search_come_from_announcement: 'Search done in the "announcement" section of this discussion',
+      published_the: 'Published the',
+      member_since: 'Member since',
+      by: 'by',
+      expand_search: 'show search',
+      collapse_search: 'hide search',
+      Categories: 'Categories',
+      All: 'All',
+      post: 'Messages',
+      idea: 'Ideas',
+      user: 'Participants',
+      synthesis: 'Synthesis',
+      Messages: 'Messages',
+      like: 'Like',
+      disagree: 'Disagree',
+      dont_understand: 'Did not get it',
+      more_info: 'More info please?',
+      Sort: 'Sort',
+      'By relevance': 'By relevance',
+      'Most recent first': 'More recent first',
+      'Oldest first': 'Oldest first',
+      'Most popular messages': 'Most popular messages',
+      'Less popular messages': 'Less popular messages',
+      'Most controversial messages': 'Most controversial messages',
+      'Most consensus messages': 'Most consensus messages',
+      'Messages judged unclear': 'Messages judged unclear',
+      'Participants having the most posted messages': 'Participants having the most posted messages',
+      'Participants having the less posted messages': 'Participants having the less posted messages',
+      'Participants pleased by their peers': 'Participants pleased by their peers',
+      'Filter by date': 'Filter by date',
+      'My messages': 'My messages',
+      'Messages in response to my contributions': 'Messages in response to my contributions',
+      'Creative participants': 'Creative participants',
+      'Reactive participants': 'Reactive participants',
+      'Learning participants': 'Learning participants'
+    },
     navbar: {
       home: 'home',
       debate: 'debate',

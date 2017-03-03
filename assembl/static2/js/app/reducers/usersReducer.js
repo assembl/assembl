@@ -12,3 +12,19 @@ const UserReducer = (state = {}, action) => {
 };
 
 export default UserReducer;
+
+const emptyArray = [];
+export const getPermissionsForConnectedUser = (state) => {
+  if (!state.users) {
+    return emptyArray;
+  }
+  const debateId = state.context.debateId;
+  if (!state.users.connectedUser) {
+    return emptyArray;
+  }
+  const permissions = state.users.connectedUser.permissions[`local:Discussion/${debateId}`];
+  if (!permissions) {
+    return emptyArray;
+  }
+  return permissions;
+};

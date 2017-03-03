@@ -1,0 +1,22 @@
+// @import "../../../static/css/themes/default/_theme.scss";
+@import '../variables';
+@import '../components/assembl-glyph';
+
+.date-filter {
+    label {
+        font-weight: bold;
+    }
+    input {
+        border: 1px solid #ccc;
+    }
+}
+
+// .sk-hits-list-hit {
+//     border-bottom: 1px solid $theme_btn_primary_bg_color;
+// }
+
+@media screen and (max-width: 1023px) {
+    .joinDiscussion, #search {
+        display: none;
+    }
+}
