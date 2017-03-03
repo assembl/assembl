@@ -36,7 +36,6 @@ import {
 } from 'searchkit';
 import get from 'lodash/get';
 import truncate from 'lodash/truncate';
-import Glyphicon from './common/glyphicon';
 
 // Keep the style import here. The reason why it's not in main.scss is because
 // we create a searchv1 bundle that includes only the Search component and its
@@ -236,7 +235,7 @@ const UserHit = (props) => {
       <div className={props.bemBlocks.item('info')}>
         {source.num_posts}
         <span className={props.bemBlocks.item('icon-message')}>
-          <Glyphicon glyph="message" color="purple" size={20} desc="Number of contributions" />
+          <span className="icon-message" title="Number of contributions" />
         </span>
         { source.creation_date ?
           <span><Translate value="search.member_since" />{' '}<Localize value={source.creation_date} dateFormat="date.format" /></span>
@@ -281,11 +280,11 @@ const IdeaHit = (props) => {
       <div className={props.bemBlocks.item('info')}>
         {source.num_posts}
         <span className={props.bemBlocks.item('icon-message')}>
-          <Glyphicon glyph="message" color="purple" size={20} desc="Number of contributions" />
+          <span className="icon-message" title="Number of contributions" />
         </span>
         {source.num_contributors}
         <span className={props.bemBlocks.item('icon-avatar')}>
-          <Glyphicon glyph="avatar" color="purple" size={20} desc="Number of users" />
+          <span className="icon-profil" title="Number of users" />
         </span>
       </div>
     </div>
