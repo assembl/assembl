@@ -77,7 +77,7 @@ var TimelineEventCollection = Base.Collection.extend({
    * @member {string} app.models.timeline.TimelineEventCollection.url
    */
   url: function() {
-    return Ctx.getApiV2DiscussionUrl() + '/timeline_events';
+    return Ctx.getApiV2DiscussionUrl() + 'timeline_events';
   },
 
   comparator: function(e1, e2) {
