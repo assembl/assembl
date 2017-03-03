@@ -234,8 +234,8 @@ const UserHit = (props) => {
       </div>
       <div className={props.bemBlocks.item('info')}>
         {source.num_posts}
-        <span className={props.bemBlocks.item('icon-message')}>
-          <span className="icon-message" title="Number of contributions" />
+        <span className={props.bemBlocks.item('assembl-icon-message')}>
+          <span className="assembl-icon-message" title="Number of contributions" />
         </span>
         { source.creation_date ?
           <span><Translate value="search.member_since" />{' '}<Localize value={source.creation_date} dateFormat="date.format" /></span>
@@ -279,12 +279,12 @@ const IdeaHit = (props) => {
       </div>
       <div className={props.bemBlocks.item('info')}>
         {source.num_posts}
-        <span className={props.bemBlocks.item('icon-message')}>
-          <span className="icon-message" title="Number of contributions" />
+        <span className={props.bemBlocks.item('assembl-icon-message')}>
+          <span className="assembl-icon-message" title="Number of contributions" />
         </span>
         {source.num_contributors}
-        <span className={props.bemBlocks.item('icon-avatar')}>
-          <span className="icon-profil" title="Number of users" />
+        <span className={props.bemBlocks.item('assembl-icon-avatar')}>
+          <span className="assembl-icon-profil" title="Number of users" />
         </span>
       </div>
     </div>

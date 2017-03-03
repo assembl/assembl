@@ -12,12 +12,12 @@ class Statistic extends React.Component {
       <div className="stats">
         <div className="stat-nb">
           <span>{ideas.latestIdeas[index].nbPosts}</span>
-          <span className="icon-message white">&nbsp;</span>
+          <span className="assembl-icon-message white">&nbsp;</span>
         </div>
         <div className="dash">-</div>
         <div className="stat-nb">
           <span>{ideas.latestIdeas[index].nbContributors}</span>
-          <span className="icon-profil white">&nbsp;</span>
+          <span className="assembl-icon-profil white">&nbsp;</span>
         </div>
       </div>
     );

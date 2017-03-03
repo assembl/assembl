@@ -9,73 +9,73 @@ class Icons extends React.Component {
         <h2 className="dark-title-2 underline" id="icons" style={{ borderBottom: "1px solid #ccc"}}>ICONS</h2>
         <section>
           <div className="inline padding">
-            <span className="icon-add">&nbsp;</span>
+            <span className="assembl-icon-add">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-catch">&nbsp;</span>
+            <span className="assembl-icon-catch">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-checked">&nbsp;</span>
+            <span className="assembl-icon-checked">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-discussion">&nbsp;</span>
+            <span className="assembl-icon-discussion">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-edit">&nbsp;</span>
+            <span className="assembl-icon-edit">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-cancel">&nbsp;</span>
+            <span className="assembl-icon-cancel">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-faq">&nbsp;</span>
+            <span className="assembl-icon-faq">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-filter">&nbsp;</span>
+            <span className="assembl-icon-filter">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-profil">&nbsp;</span>
+            <span className="assembl-icon-profil">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-idea">&nbsp;</span>
+            <span className="assembl-icon-idea">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-link">&nbsp;</span>
+            <span className="assembl-icon-link">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-menu-on">&nbsp;</span>
+            <span className="assembl-icon-menu-on">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-message">&nbsp;</span>
+            <span className="assembl-icon-message">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-expert">&nbsp;</span>
+            <span className="assembl-icon-expert">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-pepite">&nbsp;</span>
+            <span className="assembl-icon-pepite">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-plus">&nbsp;</span>
+            <span className="assembl-icon-plus">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-schedule">&nbsp;</span>
+            <span className="assembl-icon-schedule">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-search">&nbsp;</span>
+            <span className="assembl-icon-search">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-search2">&nbsp;</span>
+            <span className="assembl-icon-search2">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-share">&nbsp;</span>
+            <span className="assembl-icon-share">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-delete">&nbsp;</span>
+            <span className="assembl-icon-delete">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-synthesis">&nbsp;</span>
+            <span className="assembl-icon-synthesis">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="icon-mindmap">&nbsp;</span>
+            <span className="assembl-icon-mindmap">&nbsp;</span>
           </div>
           <div style={{backgroundColor:"#000", width:"200px"}}>
             <div className="inline padding">
@@ -98,73 +98,73 @@ class Icons extends React.Component {
         <section>
           <h3 className="dark-title-3">Code</h3>
           <pre>
-            &lt;span className="icon-add black"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-add black"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-catch white"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-catch white"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-checked grey"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-checked grey"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-discussion"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-discussion"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-edit"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-edit"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-cancel"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-cancel"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-faq"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-faq"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-filter"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-filter"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-profil"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-profil"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-idea"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-idea"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-link"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-link"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-menu-on"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-menu-on"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-message"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-message"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-expert"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-expert"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-pepite"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-pepite"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-plus"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-plus"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-schedule"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-schedule"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-search"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-search"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-search2"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-search2"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-share"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-share"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-delete"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-delete"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-synthesis"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-synthesis"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="icon-mindmap"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-mindmap"&gt;&lt;/span&gt;
           </pre>
           <pre>
             <div>&lt;Link to="http://www.facebook.com" target="_blank"&gt;</div>
