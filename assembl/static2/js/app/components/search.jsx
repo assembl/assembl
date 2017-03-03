@@ -29,7 +29,6 @@ import {
   SearchkitProvider,
   // SelectedFilters,
   SideBar,
-  SortingSelector,
   TagFilterConfig,
   TagFilter,
   TermQuery,
@@ -47,6 +46,7 @@ import Glyphicon from './common/glyphicon';
 import '../../../css/views/search.scss';
 
 import DateRangeFilter from './search/DateRangeFilter';
+import FilteredSortingSelector from './search/SortingSelector';
 import ProfileLine from './common/profileLine';
 import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextReducer';
 import { getPermissionsForConnectedUser } from '../reducers/usersReducer';
@@ -404,33 +404,36 @@ export class SearchComponent extends React.Component {
     const { isExpert, connectedUserId, discussionId } = this.props;
     let messagesSelected = false;
     let usersSelected = false;
+    let selectedCategory = 'All';
     if (this.searchkit.state) {
       messagesSelected = this.searchkit.state.type.indexOf('post') >= 0;
       usersSelected = this.searchkit.state.type.indexOf('user') >= 0;
+      if (this.searchkit.state.type.length > 0) {
+        selectedCategory = this.searchkit.state.type[0];
+      }
     }
     let sorts = [
-      { label: 'By relevance', field: '_score', order: 'desc', defaultOption: true },
-      { label: 'Most recent first', field: 'creation_date', order: 'desc' },
-      { label: 'Oldest first', field: 'creation_date', order: 'asc' }
+      { label: 'By relevance', key: 'common:relevance_desc', field: '_score', order: 'desc', defaultOption: true },
+      { label: 'Most recent first', key: 'common:creation_date_desc', field: 'creation_date', order: 'desc' },
+      { label: 'Oldest first', key: 'common:creation_date_asc', field: 'creation_date', order: 'asc' }
     ];
-    // if (messagesSelected) {
     sorts = sorts.concat([
       { label: 'Most popular messages',
-        key: 'popularity_desc',
+        key: 'post:popularity_desc',
         fields: [
           { field: 'sentiment_counts.popularity', options: { order: 'desc' } },
           { field: 'creation_date', options: { order: 'desc' } }
         ]
       },
       { label: 'Less popular messages',
-        key: 'popularity_asc',
+        key: 'post:popularity_asc',
         fields: [
           { field: 'sentiment_counts.popularity', options: { order: 'asc' } },
           { field: 'creation_date', options: { order: 'desc' } }
         ]
       },
       { label: 'Most controversial messages',
-        key: 'controversy_desc',
+        key: 'post:controversy_desc',
         fields: [
           { field: 'sentiment_counts.controversy', options: { order: 'asc' } },
           { field: 'sentiment_counts.total', options: { order: 'desc' } },
@@ -438,7 +441,7 @@ export class SearchComponent extends React.Component {
         ]
       },
       { label: 'Most consensus messages',
-        key: 'consensus_desc',
+        key: 'post:consensus_desc',
         fields: [
           { field: 'sentiment_counts.consensus', options: { order: 'asc' } },
           { field: 'sentiment_counts.total', options: { order: 'desc' } },
@@ -446,27 +449,27 @@ export class SearchComponent extends React.Component {
         ]
       },
       { label: 'Messages judged unclear',
-        key: 'unclear_desc',
+        key: 'post:unclear_desc',
         fields: [
           { field: 'sentiment_counts.dont_understand', options: { order: 'desc' } },
           { field: 'creation_date', options: { order: 'desc' } }
         ]
-      },
+      }
+    ]);
+    sorts = sorts.concat([
       { label: 'Participants having the most posted messages',
-        key: 'participant_messages_desc',
+        key: 'user:messages_desc',
         fields: [
           { field: 'num_posts', options: { order: 'desc' } }
         ]
       },
       { label: 'Participants having the less posted messages',
-        key: 'participant_messages_asc',
+        key: 'user:messages_asc',
         fields: [
           { field: 'num_posts', options: { order: 'asc' } }
         ]
       }
-    ]
-    );
-    // }
+    ]);
     return (
       <SearchkitProvider searchkit={this.searchkit}>
         <Layout size="l">
@@ -593,8 +596,9 @@ export class SearchComponent extends React.Component {
               : null }
               <TagFilterConfig id="creator_id" title="Participant" field="creator_id" />
               <Panel title={I18n.t('search.Sort')}>
-                <SortingSelector
+                <FilteredSortingSelector
                   options={sorts}
+                  filterPrefix={selectedCategory}
                   listComponent={CheckboxItemList}
                 />
               </Panel>
