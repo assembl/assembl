@@ -11,7 +11,7 @@ class SynthesisContainer extends React.Component {
       <section className="synthesis-section">
         <Grid fluid className="background-light">
           <div className="max-container">
-            <div className="content-section">
+            <div style={{ margin: '20px 0' }}>
               <Row>
                 <Col md={12}>
                   {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&

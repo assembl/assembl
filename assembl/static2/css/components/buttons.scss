@@ -109,21 +109,3 @@
     color: $btn-dark-txt;
   }
 }
-
-@media screen and (max-width: 420px) {
-  .button-link {
-    padding: 10px 30px;
-    width: 100%;
-  }
-
-  .button-submit {
-    padding: 10px 30px;
-    width: 100%;
-  }
-
-  .button-cancel {
-    padding: 10px 30px;
-    width: 100%;
-  }
-}
-

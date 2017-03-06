@@ -16,7 +16,7 @@ class Step extends React.Component {
     return (
       <div className="illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
-        <Link className="content-box" to={`${rootPath}${debateData.slug}/debate`}>
+        <Link className="content-box" to={`${rootPath}${debateData.slug}/home`}>
           <h1 className="light-title-1">{StepNumber}</h1>
           <h3 className="light-title-3">
             <Translate value={title} />

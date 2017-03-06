@@ -322,6 +322,20 @@
   }
 }
 
+.synthesis-container {
+  a {
+    .insert-content {
+      color: $black;
+    }
+
+    &:hover {
+      .insert-content {
+        color: $black;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 1100px) {
   .header-section {
     .insert-box {
@@ -502,6 +516,14 @@
 
       h1 {
         padding: 0 0 0 20px;
+      }
+    }
+  }
+
+  .objectives-section {
+    .objectives {
+      &:nth-child(3) {
+        display: none;
       }
     }
   }
