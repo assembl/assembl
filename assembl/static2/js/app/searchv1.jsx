@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import Thunk from 'redux-thunk';
 import { loadTranslations, setLocale, syncTranslationWithStore } from 'react-redux-i18n';
 import RootReducer from './reducers/rootReducer';
-import GlobalFunctions from './utils/globalFunctions';
+import { getLocale, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
 import Translations from './utils/translations';
 import { canUseExpertInterface } from './utils/permissions';
 import { fetchPermissionsForUser } from './services/userService';
@@ -24,7 +24,7 @@ assembl/static/js/app/views/navBar.js
 const myCreateStore = () => {
   const store = createStore(RootReducer, applyMiddleware(Thunk));
   const assemblLocale = window.assembl_locale.split('_')[0];
-  const userLocale = GlobalFunctions.getLocale(assemblLocale);
+  const userLocale = getLocale(assemblLocale);
   syncTranslationWithStore(store);
   store.dispatch(loadTranslations(Translations));
   store.dispatch(setLocale(userLocale));
@@ -38,8 +38,8 @@ class SearchApp extends React.Component {
     this.state = { isExpert: false };
   }
   componentWillMount() {
-    const discussionId = GlobalFunctions.getDiscussionId();
-    const connectedUserId = GlobalFunctions.getConnectedUserId();
+    const discussionId = getDiscussionId();
+    const connectedUserId = getConnectedUserId();
     this.discussionId = discussionId;
     this.connectedUserId = connectedUserId;
     if (connectedUserId) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
-import GlobalFunctions from '../../utils/globalFunctions';
+import { getDateFromString, isDateExpired } from '../../utils/globalFunctions';
 import MapStateToProps from '../../store/mapStateToProps';
 import Step from './steps/step';
 import Timeline from './steps/timeline';
@@ -11,9 +11,9 @@ class Steps extends React.Component {
   isCurrentStep(index) {
     const currentDate = new Date();
     const { debateData } = this.props.debate;
-    const startDate = GlobalFunctions.getDateFromString(debateData.timeline[index].startDate);
-    const endDate = GlobalFunctions.getDateFromString(debateData.timeline[index].endDate);
-    const isCurrentStep = GlobalFunctions.isDateExpired(currentDate, startDate) && GlobalFunctions.isDateExpired(endDate, currentDate);
+    const startDate = getDateFromString(debateData.timeline[index].startDate);
+    const endDate = getDateFromString(debateData.timeline[index].endDate);
+    const isCurrentStep = isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate);
     return isCurrentStep;
   }
   render() {

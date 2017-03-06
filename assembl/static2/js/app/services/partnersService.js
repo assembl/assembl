@@ -1,12 +1,8 @@
-import HttpRequestHandler from '../utils/httpRequestHandler';
+import { xmlHttpRequest } from '../utils/httpRequestHandler';
 
-class PartnersService {
-  static fetchPartners(debateId) {
-    const fetchUrl = `/data/Discussion/${debateId}/partner_organizations`;
-    return HttpRequestHandler.request({ method: 'GET', url: fetchUrl }).then((partners) => {
-      return partners;
-    });
-  }
-}
-
-export default PartnersService;
+export const getPartners = (debateId) => {
+  const fetchUrl = `/data/Discussion/${debateId}/partner_organizations`;
+  return xmlHttpRequest({ method: 'GET', url: fetchUrl }).then((partners) => {
+    return partners;
+  });
+};

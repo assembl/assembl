@@ -1,35 +1,33 @@
-import UserService from '../services/userService';
+import { getUsers } from '../services/userService';
 
-class UsersActions {
-  static fetchUsers(debateId, connectedUserId) {
-    const that = this;
-    return function (dispatch) {
-      dispatch(that.loadingUsers());
-      return UserService.fetchUsers(debateId, connectedUserId).then((users) => {
-        dispatch(that.resolvedFetchUsers(users));
-      }).catch((error) => {
-        dispatch(that.failedFetchUsers(error));
-      });
-    };
-  }
-  static loadingUsers() {
-    return {
-      type: 'FETCH_USERS',
-      users: null
-    };
-  }
-  static resolvedFetchUsers(users) {
-    return {
-      type: 'RESOLVED_FETCH_USERS',
-      users: users
-    };
-  }
-  static failedFetchUsers(error) {
-    return {
-      type: 'FAILED_FETCH_USERS',
-      usersError: error
-    };
-  }
-}
+const loadingUsers = () => {
+  return {
+    type: 'FETCH_USERS',
+    users: null
+  };
+};
 
-export default UsersActions;
+const resolvedFetchUsers = (users) => {
+  return {
+    type: 'RESOLVED_FETCH_USERS',
+    users: users
+  };
+};
+
+const failedFetchUsers = (error) => {
+  return {
+    type: 'FAILED_FETCH_USERS',
+    usersError: error
+  };
+};
+
+export const fetchUsers = (debateId, connectedUserId) => {
+  return function (dispatch) {
+    dispatch(loadingUsers());
+    return getUsers(debateId, connectedUserId).then((users) => {
+      dispatch(resolvedFetchUsers(users));
+    }).catch((error) => {
+      dispatch(failedFetchUsers(error));
+    });
+  };
+};

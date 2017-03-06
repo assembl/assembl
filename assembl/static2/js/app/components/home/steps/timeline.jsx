@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Localize } from 'react-redux-i18n';
 import MapStateToProps from '../../../store/mapStateToProps';
-import GlobalFunctions from '../../../utils/globalFunctions';
+import { getDateFromString, isDateExpired, getNumberOfDays, calculatePercentage} from '../../../utils/globalFunctions';
 import Pointer from '../../svg/pointer';
 
 class Timeline extends React.Component {
@@ -10,18 +10,18 @@ class Timeline extends React.Component {
     const { debateData } = this.props.debate;
     const index = this.props.index;
     const currentDate = new Date();
-    const endDate = GlobalFunctions.getDateFromString(debateData.timeline[index].endDate);
-    const isStepCompleted = GlobalFunctions.isDateExpired(currentDate, endDate);
+    const endDate = getDateFromString(debateData.timeline[index].endDate);
+    const isStepCompleted = isDateExpired(currentDate, endDate);
     let barWidth = 0;
     if (isStepCompleted) {
       barWidth = 100;
     } else {
-      const startDate = GlobalFunctions.getDateFromString(debateData.timeline[index].startDate);
-      const isStepStarted = GlobalFunctions.isDateExpired(currentDate, startDate);
+      const startDate = getDateFromString(debateData.timeline[index].startDate);
+      const isStepStarted = isDateExpired(currentDate, startDate);
       if (isStepStarted) {
-        const remainingDays = GlobalFunctions.getNumberOfDays(endDate, currentDate);
-        const totalDays = GlobalFunctions.getNumberOfDays(endDate, startDate);
-        const percentage = GlobalFunctions.calculatePercentage(remainingDays, totalDays);
+        const remainingDays = getNumberOfDays(endDate, currentDate);
+        const totalDays = getNumberOfDays(endDate, startDate);
+        const percentage = calculatePercentage(remainingDays, totalDays);
         barWidth = 100 - percentage;
       }
     }

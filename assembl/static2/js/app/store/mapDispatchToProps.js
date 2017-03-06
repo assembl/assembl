@@ -1,34 +1,34 @@
 import { setLocale } from 'react-redux-i18n';
-import ContextActions from '../actions/contextActions';
-import DebateActions from '../actions/debateActions';
-import PostsActions from '../actions/postsActions';
-import UsersActions from '../actions/usersActions';
-import PartnersActions from '../actions/partnersActions';
-import SynthesisActions from '../actions/synthesisActions';
-import IdeasActions from '../actions/ideasActions';
+import { addContext } from '../actions/contextActions';
+import { fetchDebateData } from '../actions/debateActions';
+import { fetchPosts } from '../actions/postsActions';
+import { fetchUsers } from '../actions/usersActions';
+import { fetchPartners } from '../actions/partnersActions';
+import { fetchSynthesis } from '../actions/synthesisActions';
+import { fetchIdeas } from '../actions/ideasActions';
 
 const MapDispatchToProps = (dispatch) => {
   return {
     fetchDebateData: (debateId) => {
-      dispatch(DebateActions.fetchDebateData(debateId));
+      dispatch(fetchDebateData(debateId));
     },
     fetchPosts: (debateId) => {
-      dispatch(PostsActions.fetchPosts(debateId));
+      dispatch(fetchPosts(debateId));
     },
     fetchUsers: (debateId, connectedUserId) => {
-      dispatch(UsersActions.fetchUsers(debateId, connectedUserId));
+      dispatch(fetchUsers(debateId, connectedUserId));
     },
     fetchPartners: (debateId) => {
-      dispatch(PartnersActions.fetchPartners(debateId));
+      dispatch(fetchPartners(debateId));
     },
     fetchSynthesis: (debateId) => {
-      dispatch(SynthesisActions.fetchSynthesis(debateId));
+      dispatch(fetchSynthesis(debateId));
     },
     fetchIdeas: (debateId) => {
-      dispatch(IdeasActions.fetchIdeas(debateId));
+      dispatch(fetchIdeas(debateId));
     },
     addContext: (path, debateId, connectedUserId) => {
-      dispatch(ContextActions.addContext(path, debateId, connectedUserId));
+      dispatch(addContext(path, debateId, connectedUserId));
     },
     changeLanguage: (locale) => {
       dispatch(setLocale(locale));

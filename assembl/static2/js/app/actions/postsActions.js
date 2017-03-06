@@ -1,35 +1,33 @@
-import PostsService from '../services/postsService';
+import { getPosts } from '../services/postsService';
 
-class PostsActions {
-  static fetchPosts(debateId) {
-    const that = this;
-    return function (dispatch) {
-      dispatch(that.loadingPosts());
-      return PostsService.fetchPosts(debateId).then((posts) => {
-        dispatch(that.resolvedFetchPosts(posts));
-      }).catch((error) => {
-        dispatch(that.failedFetchPosts(error));
-      });
-    };
-  }
-  static loadingPosts() {
-    return {
-      type: 'FETCH_POSTS',
-      posts: null
-    };
-  }
-  static resolvedFetchPosts(posts) {
-    return {
-      type: 'RESOLVED_FETCH_POSTS',
-      posts: posts
-    };
-  }
-  static failedFetchPosts(error) {
-    return {
-      type: 'FAILED_FETCH_POSTS',
-      postsError: error
-    };
-  }
-}
+const loadingPosts = () => {
+  return {
+    type: 'FETCH_POSTS',
+    posts: null
+  };
+};
 
-export default PostsActions;
+const resolvedFetchPosts = (posts) => {
+  return {
+    type: 'RESOLVED_FETCH_POSTS',
+    posts: posts
+  };
+};
+
+const failedFetchPosts = (error) => {
+  return {
+    type: 'FAILED_FETCH_POSTS',
+    postsError: error
+  };
+};
+
+export const fetchPosts = (debateId) => {
+  return function (dispatch) {
+    dispatch(loadingPosts());
+    return getPosts(debateId).then((posts) => {
+      dispatch(resolvedFetchPosts(posts));
+    }).catch((error) => {
+      dispatch(failedFetchPosts(error));
+    });
+  };
+};
