@@ -1,5 +1,5 @@
 import React from 'react';
-import GlobalFunctions from '../../../js/app/utils/globalFunctions';
+import { getLocale, getAvalaibleLocales, getSortedDate, getDateFromString, isDateExpired, getNumberOfDays, calculatePercentage } from '../../../js/app/utils/globalFunctions';
 
 describe('This test concern GlobalFunctions Class', () => {
   it('Should test the browser language', () => {
@@ -7,7 +7,7 @@ describe('This test concern GlobalFunctions Class', () => {
     const expectedResult = ['fr', 'en', 'en', 'en', 'fr', 'en', 'en', 'en', 'fr', 'en', 'en', 'en'];
     let result = [];
     for(let i in testedLocales){
-      let locale = GlobalFunctions.getLocale(testedLocales[i]);
+      let locale = getLocale(testedLocales[i]);
       result.push(locale);
     }
     expect(result).toEqual(expectedResult);
@@ -27,7 +27,7 @@ describe('This test concern GlobalFunctions Class', () => {
     };
     const currentLocale = 'fr';
     const expectedResult = ['de', 'en'];
-    const result = GlobalFunctions.getAvalaibleLocales(currentLocale, translations);
+    const result = getAvalaibleLocales(currentLocale, translations);
     expect(result).toEqual(expectedResult);
   });
   
@@ -81,7 +81,7 @@ describe('This test concern GlobalFunctions Class', () => {
     ];
     const key = "creation_date";
     const expectedResult = [1390233689000, 1400769344000, 1400769464000, 1400772591000, 1400772621000, 1401719398000, 1401765185000, 1401765295000, 1487103350154];
-    const result = GlobalFunctions.getSortedDate(object, key);
+    const result = getSortedDate(object, key);
     expect(result).toEqual(expectedResult);
   });
     
@@ -91,9 +91,9 @@ describe('This test concern GlobalFunctions Class', () => {
     const result = [];
     const expectedResult = [true, false, true, false];
     strArray.map((str) => {
-      let date = GlobalFunctions.getDateFromString(str);
-      let isDateExpired = GlobalFunctions.isDateExpired(currentDate, date);
-      result.push(isDateExpired);
+      let date = getDateFromString(str);
+      let dateExpired = isDateExpired(currentDate, date);
+      result.push(dateExpired);
     });
     expect(result).toEqual(expectedResult);
   });
@@ -124,9 +124,9 @@ describe('This test concern GlobalFunctions Class', () => {
       }
     ];
     datesArray.map((elm) => {
-      const date1 = GlobalFunctions.getDateFromString(elm.date1);
-      const date2 = GlobalFunctions.getDateFromString(elm.date2);
-      const days = GlobalFunctions.getNumberOfDays(date2, date1);
+      const date1 = getDateFromString(elm.date1);
+      const date2 = getDateFromString(elm.date2);
+      const days = getNumberOfDays(date2, date1);
       result.push(days);
     });
     expect(result).toEqual(expectedResult);
@@ -150,7 +150,7 @@ describe('This test concern GlobalFunctions Class', () => {
       }
     ];
     arr.map((elm) => {
-      const percentage = GlobalFunctions.calculatePercentage(elm.value, elm.total);
+      const percentage = calculatePercentage(elm.value, elm.total);
       result.push(percentage);
     });
     expect(result).toEqual(expectedResult);

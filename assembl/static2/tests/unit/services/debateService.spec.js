@@ -1,4 +1,4 @@
-import DebateService from '../../../js/app/services/debateService';
+import { buildDebateData } from '../../../js/app/services/debateService';
 
 const mockApi = {
   "@id":"local:Discussion/6",
@@ -65,7 +65,7 @@ describe('This test concern debate Service', () => {
       slug: "sandbox",
       topic: "Ville connectée, quels sont les enjeux de demain ?",
     };
-    const result = DebateService.buildDebateData(mockApi, mockPreferences);
+    const result = buildDebateData(mockApi, mockPreferences);
     expect(result).toEqual(expectedResult);
   });
 });

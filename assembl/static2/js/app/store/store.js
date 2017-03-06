@@ -6,12 +6,12 @@ import { getLocale } from '../utils/globalFunctions';
 import Translations from '../utils/translations';
 
 export const createAppStore = () => {
-    const store = createStore(RootReducer, applyMiddleware(Thunk));
-    const browserLanguage = navigator.language || navigator.userLanguage;
-    const isStoragedlocale = localStorage.getItem('locale') !== null;
-    const userLocale = isStoragedlocale ? localStorage.getItem('locale') : getLocale(browserLanguage);
-    syncTranslationWithStore(store);
-    store.dispatch(loadTranslations(Translations));
-    store.dispatch(setLocale(userLocale));
-    return store;
+  const store = createStore(RootReducer, applyMiddleware(Thunk));
+  const browserLanguage = navigator.language || navigator.userLanguage;
+  const isStoragedlocale = localStorage.getItem('locale') !== null;
+  const userLocale = isStoragedlocale ? localStorage.getItem('locale') : getLocale(browserLanguage);
+  syncTranslationWithStore(store);
+  store.dispatch(loadTranslations(Translations));
+  store.dispatch(setLocale(userLocale));
+  return store;
 };

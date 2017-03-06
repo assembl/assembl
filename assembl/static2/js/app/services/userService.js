@@ -11,7 +11,7 @@ const iterateOnAllUsers = (users, connectedUserId) => {
   return [count, connectedUser];
 };
 
-const buildUsers = (users, connectedUserId) => {
+export const buildUsers = (users, connectedUserId) => {
   const usersData = iterateOnAllUsers(users, connectedUserId);
   return {
     totalVerifiedUsers: usersData[0],

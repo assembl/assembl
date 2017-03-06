@@ -103,7 +103,7 @@ const getLastIdeasByCreationDate = (ideas) => {
   return latestIdeas;
 };
 
-const buildIdeas = (ideas) => {
+export const buildIdeas = (ideas) => {
   return {
     latestIdeas: getLastIdeasByCreationDate(ideas),
     controversial: getApiMock('controversial'),

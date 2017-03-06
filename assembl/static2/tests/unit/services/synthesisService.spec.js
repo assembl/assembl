@@ -1,4 +1,4 @@
-import SynthesisService from '../../../js/app/services/synthesisService';
+import { buildSynthesis } from '../../../js/app/services/synthesisService';
 
 const mockApi = [
   {
@@ -102,7 +102,7 @@ describe('This test concern synthesis Service', () => {
         subject:"phase 2"
       }
     };
-    const result = SynthesisService.buildSynthesis(mockApi);
+    const result = buildSynthesis(mockApi);
     expect(result).toEqual(expectedResult);
   });
 });

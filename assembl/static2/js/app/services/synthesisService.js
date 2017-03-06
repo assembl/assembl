@@ -16,7 +16,7 @@ const getSynthesisByStatus = (synthesis) => {
   return [publishedSynthesis, draftSynthesis, lastPublishedSynthesis];
 };
 
-const buildSynthesis = (synthesis) => {
+export const buildSynthesis = (synthesis) => {
   const allSynthesis = getSynthesisByStatus(synthesis);
   return {
     publishedSynthesis: allSynthesis[0],

@@ -1,4 +1,4 @@
-import IdeasService from '../../../js/app/services/ideasService';
+import { buildIdeas } from '../../../js/app/services/ideasService';
 
 const mockApi = [
   {
@@ -300,7 +300,7 @@ describe('This test concern ideas Service', () => {
         }
       ]
     };
-    const result = IdeasService.buildIdeas(mockApi);
+    const result = buildIdeas(mockApi);
     expect(result).toEqual(expectedResult);
   });
 });

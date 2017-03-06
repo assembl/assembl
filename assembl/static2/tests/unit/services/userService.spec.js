@@ -1,4 +1,4 @@
-import UserService from '../../../js/app/services/userService';
+import { buildUsers } from '../../../js/app/services/userService';
 
 const mockApi = [
   {
@@ -62,7 +62,7 @@ describe('This test concern user Service', () => {
         verified:true
       }
     };
-    const result = UserService.buildUsers(mockApi, '767');
+    const result = buildUsers(mockApi, '767');
     expect(result).toEqual(expectedResult);
   });
 });

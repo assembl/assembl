@@ -1,6 +1,6 @@
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
 
-const buildDebateData = (debateData, prefs) => {
+export const buildDebateData = (debateData, prefs) => {
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
   const startDate = prefs.extra_json && prefs.extra_json.startDate ? prefs.extra_json.startDate : null;
