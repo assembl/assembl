@@ -37,25 +37,30 @@
     bottom: 0;
     left: 0;
     margin: 0 auto;
-    padding: 10px 0;
+    padding: 7px 0;
     position: absolute;
     text-align: center;
     width: 100%;
     z-index: 10;
 
+    .stat-icon {
+      float: left;
+      padding: 7px 0 0;
+    }
+
     .stat {
       display: inline-block;
       font-family: $font-family2;
-      margin: 0 0 0 15px;
+      margin: 2px 0 0 15px;
       text-align: left;
       text-transform: uppercase;
     }
 
     .stat-nb {
       color: $white;
-      font-family: $font-family3;
-      font-size: $font-size-xs;
-      letter-spacing: .7px;
+      font-family: $font-family4;
+      font-size: $font-size-xxs;
+      letter-spacing: $text-letter-spacing;
     }
 
     img {
@@ -69,10 +74,6 @@
 
   .insert-box {
     width: 100%;
-  }
-
-  .insert-content {
-    color: $third-color;
   }
 
   .synthesis-container {
@@ -107,7 +108,7 @@
     .idea-link {
       cursor: pointer;
       height: 125px;
-      letter-spacing: 1px;
+      letter-spacing: $text-letter-spacing;
       padding: 25px 40px;
 
       .idea-link-title {
@@ -212,8 +213,8 @@
         -webkit-line-clamp: $lines-to-show;
         -webkit-box-orient: vertical;
         display: block;
-        font-size: $font-size-xs;
-        height: $font-size-xs * $line-height * $lines-to-show;
+        font-size: $font-size-s;
+        height: $font-size-s * $line-height * $lines-to-show;
         line-height: $line-height;
         margin: 0 auto;
         overflow: hidden;
@@ -345,7 +346,6 @@
     .insert-content {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: $lines-to-show;
-      color: $third-color;
       display: -webkit-box;
       font-size: $font-size-xs;
       height: $font-size-xs * $line-height * $lines-to-show;
@@ -380,7 +380,6 @@
     .insert-content {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: $lines-to-show;
-      color: $third-color;
       display: -webkit-box;
       font-size: $font-size-xs;
       line-height: $line-height;
@@ -394,19 +393,19 @@
   .themes-section {
     .theme {
       &:nth-child(1) {
-        margin: 0;
+        margin: 2px 0 0;
       }
 
       &:nth-child(2) {
-        margin: 0;
+        margin: 2px 0 0;
       }
 
       &:nth-child(3) {
-        margin: 0;
+        margin: 2px 0 0;
       }
 
       &:nth-child(4) {
-        margin: 0;
+        margin: 2px 0 0;
       }
     }
   }
@@ -430,19 +429,19 @@
   .steps-section {
     .step {
       &:nth-child(1) {
-        margin: 0;
+        margin: 2px 0 0;
       }
 
       &:nth-child(2) {
-        margin: 0;
+        margin: 2px 0 0;
       }
 
       &:nth-child(3) {
-        margin: 0;
+        margin: 2px 0 0;
       }
 
       &:nth-child(4) {
-        margin: 0;
+        margin: 2px 0 0;
       }
     }
 

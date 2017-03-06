@@ -1,22 +1,23 @@
 .dropdown-xs {
+  font-family: $font-family2;
   font-size: $font-size-xs;
   list-style-type: none;
   margin: 0 auto;
   padding: 4px 0 0;
-  width: 30px;
+  width: 50px;
 
   .dropdown-toggle {
-    color: $third-color;
+    color: $first-color;
     font-size: $font-size-xs;
     text-transform: uppercase;
 
     &:hover {
-      color: $third-color;
+      color: $first-color;
       text-decoration: none;
     }
 
     &:focus {
-      color: $third-color;
+      color: $first-color;
       text-decoration: none;
     }
   }
@@ -25,24 +26,42 @@
     min-width: 60px;
 
     a {
-      color: $third-color;
+      color: $first-color;
       font-size: $font-size-xs;
       text-transform: uppercase;
 
       &:focus {
+        font-family: $font-family3;
         outline: none;
       }
     }
 
     .caret {
-      color: $third-color;
+      color: $first-color;
     }
   }
 }
 
 .dropdown-xl {
+  font-size: $font-size-xs;
   list-style-type: none;
   text-transform: uppercase;
+
+  .dropdown-toggle {
+    color: $first-color;
+    font-size: $font-size-xs;
+    text-transform: uppercase;
+
+    &:hover {
+      color: $first-color;
+      text-decoration: none;
+    }
+
+    &:focus {
+      color: $first-color;
+      text-decoration: none;
+    }
+  }
 
   .dropdown {
     background-color: $white;
@@ -90,6 +109,8 @@
       outline: none;
 
       a {
+        color: $first-color;
+        font-size: $font-size-xs;
         margin: 0 0 10px -6px;
         outline: none;
       }

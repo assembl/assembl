@@ -1,8 +1,9 @@
 .button-link {
   border-radius: $btn-radius;
   display: inline-block;
+  font-family: $font-family2;
   font-size: $font-size-xs;
-  letter-spacing: 1px;
+  letter-spacing: $button-letter-spacing;
   padding: 10px 50px;
   text-align: center;
   text-decoration: none;
@@ -27,8 +28,9 @@
 
 .button-submit {
   border-radius: $btn-radius;
+  font-family: $font-family2;
   font-size: $font-size-xs;
-  letter-spacing: 1px;
+  letter-spacing: $button-letter-spacing;
   padding: 10px 50px;
   text-align: center;
   text-transform: $btn-text-transform;
@@ -40,8 +42,9 @@
 
 .button-cancel {
   border-radius: $btn-radius;
+  font-family: $font-family2;
   font-size: $font-size-xs;
-  letter-spacing: 1px;
+  letter-spacing: $button-letter-spacing;
   padding: 10px 50px;
   text-align: center;
   text-transform: $btn-text-transform;

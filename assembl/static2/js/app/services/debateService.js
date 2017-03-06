@@ -7,7 +7,7 @@ class DebateService {
     const url2 = `/data/Discussion/${debateId}/preferences`;
     const request1 = HttpRequestHandler.request({ method: 'GET', url: url1 });
     const request2 = HttpRequestHandler.request({ method: 'GET', url: url2 });
-    return Promise.all([request1, request2]).then(function(results) {
+    return Promise.all([request1, request2]).then((results) => {
       const data = results[0];
       const prefs = results[1];
       return that.buildDebateData(data, prefs[0]);

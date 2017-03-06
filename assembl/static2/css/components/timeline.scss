@@ -26,11 +26,11 @@
   .trsp-pointer {
     height: 51px;
   }
-  
+
   .timeline-date {
     color: $first-color;
     font-size: $font-size-m;
-    letter-spacing: 1px;
+    letter-spacing: $text-letter-spacing;
     margin-top: -30px;
     position: absolute;
     white-space: nowrap;

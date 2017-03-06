@@ -10,7 +10,7 @@ class Synthesis extends React.Component {
       <div className="synthesis-container">
         {(Object.keys(synthesis.lastPublishedSynthesis).length > 0 && synthesis.lastPublishedSynthesis.introduction) &&
           <div className="insert-box">
-            <h3 className="dark-title-3 ellipsis">
+            <h3 className="dark-title-4 ellipsis">
               <div>
                 <Translate value="synthesis.title" />
               </div>

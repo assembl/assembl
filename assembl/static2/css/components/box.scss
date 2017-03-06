@@ -13,7 +13,6 @@
   box-shadow: $box-shadow;
   color: $box-title-txt;
   font-size: $title3-size;
-  font-weight: 700;
   padding: 15px;
   text-align: center;
 }
@@ -52,7 +51,7 @@
     background-size: cover;
     height: 500px;
     position: absolute;
-    width: 100%;
+    width: calc(100% - 2px);
     z-index: 0;
   }
 
@@ -61,7 +60,7 @@
     display: none;
     height: 500px;
     position: absolute;
-    width: 100%;
+    width: calc(100% - 2px);
     z-index: 1;
   }
 
@@ -71,7 +70,7 @@
     height: 500px;
     padding: 0 20px;
     position: absolute;
-    width: 100%;
+    width: calc(100% - 2px);
     z-index: 4;
 
     &:hover {
@@ -90,9 +89,9 @@
 
     .text-box {
       display: none;
-      font-size: $font-size-xs;
-      font-weight: 100;
-      letter-spacing: 1px;
+      font-family: $font-family4;
+      font-size: $font-size-s;
+      letter-spacing: $text-letter-spacing;
       padding: 0 20px;
       text-align: center;
     }

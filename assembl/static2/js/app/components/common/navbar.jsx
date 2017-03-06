@@ -55,7 +55,7 @@ class NavBar extends React.Component {
             <div className="nav-menu left">
               <NavigationMenu />
             </div>
-            <div className="">
+            <div className="hidden">
               <Search />
             </div>
             <div className="navbar-icons right">

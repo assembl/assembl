@@ -6,6 +6,7 @@ body {
   background-color: $page-bkg-grey;
   font-family: $font-family;
   font-size: $font-size-s;
+  letter-spacing: $text-letter-spacing;
   overflow-y: scroll;
 }
 
@@ -154,6 +155,10 @@ input {
 
 .margin-xxl {
   margin-top: 80px;
+}
+
+.margin-xxxl {
+  margin-top: 120px;
 }
 
 .full-size {

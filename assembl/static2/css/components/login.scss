@@ -11,12 +11,13 @@
     color: $navbar-active-text-color;
     font-size: $font-size-xs;
     line-height: 23px;
-    padding: 0 0 0 10px;
+    padding: 0 5px 0 0;
     vertical-align: top;
   }
 
   .connection {
-    color: $third-color;
+    color: $first-color;
+    font-family: $font-family2;
     font-size: $font-size-xs;
   }
 }

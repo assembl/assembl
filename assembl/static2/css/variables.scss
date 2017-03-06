@@ -22,44 +22,68 @@ $opacity-color: $opacity-cyan;
 $app-max-width: 1400px;
 $navbar-height: 60px;
 $navbar-line-height: 64px;
-$margin-section: 80px;
+$margin-section: 120px;
 
 $fonts-dir: '/static2/fonts';
 $img-dir: '/static2/img';
 
 @font-face {
-  font-family: 'avenirCn';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-Cn.eot');
-  src: local('☺'), url('#{$fonts-dir}/AvenirNextLTPro-Cn.woff') format('woff'), url('#{$fonts-dir}/AvenirNextLTPro-Cn.ttf') format('truetype');
+  font-family: 'latoRegular';
+  src: url('#{$fonts-dir}/Lato-Regular.eot');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Regular.woff') format('woff'), url('#{$fonts-dir}/Lato-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'avenirDemiCn';
-  src: url('#{$fonts-dir}/AvenirNextLTPro-Regular.eot');
-  src: local('☺'), url('#{$fonts-dir}/AvenirNextLTPro-Regular.woff') format('woff'), url('#{$fonts-dir}/AvenirNextLTPro-Regular.ttf') format('truetype');
+  font-family: 'LatoMedium';
+  src: url('#{$fonts-dir}/Lato-Medium.eot');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Medium.woff') format('woff'), url('#{$fonts-dir}/Lato-Medium.ttf') format('truetype');
 }
 
-$font-family: 'Open Sans', sans-serif;
-$font-family2: 'avenirDemiCn';
-$font-family3: 'avenirCn';
+@font-face {
+  font-family: 'LatoBold';
+  src: url('#{$fonts-dir}/Lato-Bold.eot');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Bold.woff') format('woff'), url('#{$fonts-dir}/Lato-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LatoLight';
+  src: url('#{$fonts-dir}/Lato-Light.eot');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Light.woff') format('woff'), url('#{$fonts-dir}/Lato-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LatoSemiBold';
+  src: url('#{$fonts-dir}/Lato-Semibold.eot');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Semibold.woff') format('woff'), url('#{$fonts-dir}/Lato-Semibold.ttf') format('truetype');
+}
+
+$font-family: 'latoRegular';
+$font-family2: 'LatoMedium';
+$font-family3: 'LatoBold';
+$font-family4: 'LatoLight';
+$font-family5: 'LatoSemiBold';
 
 $font-size-xxxs: 8px;
-$font-size-xxs: 11px;
+$font-size-xxs: 10px;
 $font-size-xs: 12px;
 $font-size-s: 14px;
-$font-size-m: 16px;
+$font-size-m: 18px;
 $font-size-l: 22px;
-$font-size-xl: 32px;
+$font-size-xl: 36px;
+
+$title-letter-spacing: 1.7px;
+$button-letter-spacing: 1.7px;
+$text-letter-spacing: 1.7px;
 
 $border-title: 4px solid $second-color;
-$border-active: 4px solid $third-color;
+$border-active: 4px solid $first-color;
 $border-theme: 4px solid $first-color;
 
 $page-bkg-light: $white;
 $page-bkg-grey: $grey0;
 $page-bkg-dark: $grey4;
 
-$link-color: $third-color;
+$link-color: $first-color;
 $link-hover-color: $black;
 
 $btn-radius: 0;
@@ -69,7 +93,7 @@ $btn-dark-border: 2px solid $first-color;
 $btn-light-txt: $white;
 $btn-dark-txt: $black;
 $btn-light-bkg: none;
-$btn-dark-bkg: $white;
+$btn-dark-bkg: none;
 
 $title1-dark-color: $first-color;
 $title2-dark-color: $first-color;
@@ -89,8 +113,8 @@ $title5-size: $font-size-l;
 
 $navbar-bkg: $white;
 $navbar-border: none;
-$navbar-text-color: $grey3;
-$navbar-active-text-color: $third-color;
+$navbar-text-color: $first-color;
+$navbar-active-text-color: $first-color;
 
 $box-shadow: 1px 1px 3px 0 $grey1;
 $box-bkg: $white;

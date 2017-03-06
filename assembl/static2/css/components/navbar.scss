@@ -20,7 +20,6 @@
     color: $navbar-text-color;
     font-family: $font-family2;
     font-size: $font-size-xxs;
-    font-weight: 700;
     letter-spacing: .4px;
     line-height: $navbar-line-height;
     padding: 0 20px;
@@ -28,6 +27,7 @@
 
     &:hover {
       color: $navbar-active-text-color;
+      font-family: $font-family3;
       text-decoration: none;
     }
 
@@ -37,7 +37,9 @@
   }
 
   .active {
+    border-bottom: $border-active;
     color: $navbar-active-text-color;
+    padding-bottom: 18px;
   }
 
   .burgermenu-icon {

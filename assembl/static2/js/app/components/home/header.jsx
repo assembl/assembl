@@ -24,13 +24,13 @@ class Header extends React.Component {
                 <span>&nbsp;</span>
                 <Translate value="home.from" />
                 <span>&nbsp;</span>
-                {debateData.startDate && 
+                {debateData.startDate &&
                   <Localize value={debateData.startDate} dateFormat="date.format" />
                 }
                 <span>&nbsp;</span>
                 <Translate value="home.to" />
                 <span>&nbsp;</span>
-                {debateData.endDate && 
+                {debateData.endDate &&
                   <Localize value={debateData.endDate} dateFormat="date.format" />
                 }
               </h4>

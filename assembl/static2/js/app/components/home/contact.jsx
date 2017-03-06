@@ -9,12 +9,12 @@ class Contact extends React.Component {
       <section className="contact-section">
         <Grid fluid className="background-grey">
           <div className="max-container center">
-            <div className="margin-xxl">
+            <div className="margin-xl">
               <h1 className="dark-title-1 center">
                 <Translate value="home.contact" />
               </h1>
             </div>
-            <div className="content-section center">
+            <div className="center" style={{ margin: '60px 0' }}>
               <Row>
                 <Col md={12}>
                   <Link className="button-link button-dark" to="http://bluenove.com/contactus/" target="_blank">
