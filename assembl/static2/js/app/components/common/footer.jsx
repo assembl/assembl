@@ -4,7 +4,6 @@ import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Glyphicon from './glyphicon';
-import MapStateToProps from '../../store/mapStateToProps';
 
 class Footer extends React.Component {
   render() {
@@ -39,4 +38,11 @@ class Footer extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Footer);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    context: state.context
+  };
+};
+
+export default connect(mapStateToProps)(Footer);

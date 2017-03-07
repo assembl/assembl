@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MapStateToProps from '../../../store/mapStateToProps';
-import MapDispatchToProps from '../../../store/mapDispatchToProps';
 
 class Statistic extends React.Component {
   render() {
@@ -24,4 +22,10 @@ class Statistic extends React.Component {
   }
 }
 
-export default connect(MapStateToProps, MapDispatchToProps)(Statistic);
+const mapStateToProps = (state) => {
+  return {
+    ideas: state.ideas
+  };
+};
+
+export default connect(mapStateToProps)(Statistic);

@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
-import MapStateToProps from '../../store/mapStateToProps';
 import Loader from '../common/loader';
 import Error from '../common/error';
 
@@ -30,4 +29,10 @@ class MessagesList extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(MessagesList);
+const mapStateToProps = (state) => {
+  return {
+    posts: state.posts
+  };
+};
+
+export default connect(mapStateToProps)(MessagesList);

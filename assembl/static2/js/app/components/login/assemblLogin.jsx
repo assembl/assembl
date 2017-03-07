@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
-import MapStateToProps from '../../store/mapStateToProps';
 
 class AsLogin extends React.Component {
   render() {
@@ -42,4 +41,11 @@ class AsLogin extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(AsLogin);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    context: state.context
+  };
+};
+
+export default connect(mapStateToProps)(AsLogin);

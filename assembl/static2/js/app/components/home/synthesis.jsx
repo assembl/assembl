@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import MapStateToProps from '../../store/mapStateToProps';
 import Synthesis from './header/synthesis';
 
 class SynthesisContainer extends React.Component {
@@ -27,4 +26,10 @@ class SynthesisContainer extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(SynthesisContainer);
+const mapStateToProps = (state) => {
+  return {
+    synthesis: state.synthesis
+  };
+};
+
+export default connect(mapStateToProps)(SynthesisContainer);

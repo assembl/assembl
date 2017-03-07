@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, Localize } from 'react-redux-i18n';
-import MapStateToProps from '../../../store/mapStateToProps';
 
 class Synthesis extends React.Component {
   render() {
@@ -36,4 +35,12 @@ class Synthesis extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Synthesis);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    context: state.context,
+    synthesis: state.synthesis
+  };
+};
+
+export default connect(mapStateToProps)(Synthesis);

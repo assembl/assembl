@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import MapStateToProps from '../../../store/mapStateToProps';
 import IdeaLink from './ideaLink';
 
 class TopIdea extends React.Component {
@@ -25,4 +24,10 @@ class TopIdea extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(TopIdea);
+const mapStateToProps = (state) => {
+  return {
+    ideas: state.ideas
+  };
+};
+
+export default connect(mapStateToProps)(TopIdea);

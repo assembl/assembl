@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { getDateFromString, isDateExpired } from '../../utils/globalFunctions';
-import MapStateToProps from '../../store/mapStateToProps';
 import Step from './steps/step';
 import Timeline from './steps/timeline';
 
@@ -57,4 +56,10 @@ class Steps extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Steps);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate
+  };
+};
+
+export default connect(mapStateToProps)(Steps);

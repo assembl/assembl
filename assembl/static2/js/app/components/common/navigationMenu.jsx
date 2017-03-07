@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import MapStateToProps from '../../store/mapStateToProps';
 
 class NavigationMenu extends React.Component {
   render() {
@@ -21,4 +20,11 @@ class NavigationMenu extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(NavigationMenu);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    context: state.context
+  };
+};
+
+export default connect(mapStateToProps)(NavigationMenu);

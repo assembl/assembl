@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Localize } from 'react-redux-i18n';
-import MapStateToProps from '../../../store/mapStateToProps';
 import { getDateFromString, isDateExpired, getNumberOfDays, calculatePercentage } from '../../../utils/globalFunctions';
 import Pointer from '../../svg/pointer';
 
@@ -53,4 +52,10 @@ class Timeline extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Timeline);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate
+  };
+};
+
+export default connect(mapStateToProps)(Timeline);

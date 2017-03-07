@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
-import MapStateToProps from '../../store/mapStateToProps';
 
 class Objectives extends React.Component {
   render() {
@@ -55,4 +54,11 @@ class Objectives extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Objectives);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    context: state.context
+  };
+};
+
+export default connect(mapStateToProps)(Objectives);

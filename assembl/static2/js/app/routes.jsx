@@ -1,19 +1,19 @@
 import React from 'react';
 import { Router, Route } from 'react-router';
-import App from './containers/app';
-import Main from './containers/main';
-import Login from './containers/login';
-import Signup from './containers/signup';
-import ChangePassword from './containers/changePassword';
-import Home from './containers/home';
-import Ideas from './containers/ideas';
-import Synthesis from './containers/synthesis';
-import Debate from './containers/debate';
-import Community from './containers/community';
-import Profile from './containers/profile';
-import Styleguide from './containers/styleguide';
-import NotFound from './containers/notFound';
-import Terms from './containers/terms';
+import App from './app';
+import Main from './main';
+import Login from './pages/login';
+import Signup from './pages/signup';
+import ChangePassword from './pages/changePassword';
+import Home from './pages/home';
+import Ideas from './pages/ideas';
+import Synthesis from './pages/synthesis';
+import Debate from './pages/debate';
+import Community from './pages/community';
+import Profile from './pages/profile';
+import Styleguide from './pages/styleguide';
+import NotFound from './pages/notFound';
+import Terms from './pages/terms';
 
 export default (
   <Router>

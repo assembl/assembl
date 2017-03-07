@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import MapStateToProps from '../../store/mapStateToProps';
 import TopIdea from './themes/topIdea';
 import Illustration from './themes/illustration';
 import Loader from '../common/loader';
@@ -53,4 +52,10 @@ class Themes extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Themes);
+const mapStateToProps = (state) => {
+  return {
+    ideas: state.ideas
+  };
+};
+
+export default connect(mapStateToProps)(Themes);

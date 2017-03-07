@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
-import MapStateToProps from '../../store/mapStateToProps';
-
 
 class Video extends React.Component {
   constructor(props) {
@@ -58,4 +56,11 @@ class Video extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Video);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    i18n: state.i18n
+  };
+};
+
+export default connect(mapStateToProps)(Video);

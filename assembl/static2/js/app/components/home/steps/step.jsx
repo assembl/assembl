@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, Localize } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import MapStateToProps from '../../../store/mapStateToProps';
 
 class Step extends React.Component {
   render() {
@@ -36,4 +35,11 @@ class Step extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Step);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    context: state.context
+  };
+};
+
+export default connect(mapStateToProps)(Step);

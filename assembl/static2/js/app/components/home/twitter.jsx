@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import TweetEmbed from 'react-tweet-embed';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
-import MapStateToProps from '../../store/mapStateToProps';
 
 class Twitter extends React.Component {
   render() {
@@ -38,4 +37,10 @@ class Twitter extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Twitter);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate
+  };
+};
+
+export default connect(mapStateToProps)(Twitter);

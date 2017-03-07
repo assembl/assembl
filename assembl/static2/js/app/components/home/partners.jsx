@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Grid } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import MapStateToProps from '../../store/mapStateToProps';
-import MapDispatchToProps from '../../store/mapDispatchToProps';
+import { fetchPartners } from '../../actions/partnersActions';
 import Loader from '../common/loader';
 import Error from '../common/error';
 
@@ -49,4 +48,19 @@ class Partners extends React.Component {
   }
 }
 
-export default connect(MapStateToProps, MapDispatchToProps)(Partners);
+const mapStateToProps = (state) => {
+  return {
+    partners: state.partners,
+    context: state.context
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchPartners: (debateId) => {
+      dispatch(fetchPartners(debateId));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Partners);

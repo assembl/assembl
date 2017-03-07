@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
-import MapStateToProps from '../../store/mapStateToProps';
 import Statistic from './header/statistic';
 import Synthesis from './header/synthesis';
 
@@ -54,4 +53,12 @@ class Header extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(Header);
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    context: state.context,
+    synthesis: state.synthesis
+  };
+};
+
+export default connect(mapStateToProps)(Header);
