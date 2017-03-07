@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import MapStateToProps from '../../store/mapStateToProps';
-import TopIdea from './themes/topIdea';
-import Illustration from './themes/illustration';
+import Theme from './themes/theme';
 import Loader from '../common/loader';
 
 class Themes extends React.Component {
@@ -27,22 +26,13 @@ class Themes extends React.Component {
               </div>
               <div className="content-section">
                 <Row className="no-margin">
-                  <Col xs={12} sm={6} md={3} className="theme no-padding">
-                    <TopIdea keyValue="controversial" />
-                    <Illustration index={0} />
-                  </Col>
-                  <Col xs={12} sm={6} md={3} className="theme no-padding">
-                    <Illustration index={1} />
-                    <TopIdea keyValue="longerThread" />
-                  </Col>
-                  <Col xs={12} sm={6} md={3} className="theme no-padding">
-                    <TopIdea keyValue="topContributor" />
-                    <Illustration index={2} />
-                  </Col>
-                  <Col xs={12} sm={6} md={3} className="theme no-padding">
-                    <Illustration index={3} />
-                    <TopIdea keyValue="recentDiscussion" />
-                  </Col>
+                  {ideas.latestIdeas.map((idea, index) => {
+                    return (
+                      <Col xs={12} sm={24 / ideas.latestIdeas.length} md={12 / ideas.latestIdeas.length} className="theme no-padding" key={`theme-${index}`}>
+                        <Theme index={index} />
+                      </Col>
+                    );
+                  })}
                 </Row>
               </div>
             </div>
