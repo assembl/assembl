@@ -1,10 +1,14 @@
 import React from 'react';
-import MessagesList from '../components/debate/messagesList';
+import Thread from '../components/debate/thread';
+import Survey from '../components/debate/survey';
 
 class Debate extends React.Component {
   render() {
     return (
-      <MessagesList />
+      <div className="debate">
+        <Survey />
+        <Thread />
+      </div>
     );
   }
 }

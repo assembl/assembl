@@ -5,7 +5,7 @@ import MapStateToProps from '../../store/mapStateToProps';
 import Loader from '../common/loader';
 import Error from '../common/error';
 
-class MessagesList extends React.Component {
+class Thread extends React.Component {
   render() {
     const { posts, postsLoading, postsError } = this.props.posts;
     return (
@@ -30,4 +30,4 @@ class MessagesList extends React.Component {
   }
 }
 
-export default connect(MapStateToProps)(MessagesList);
+export default connect(MapStateToProps)(Thread);
