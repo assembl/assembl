@@ -837,30 +837,50 @@ def test_add_partner_organization(test_app, discussion):
 
 
 def test_add_timeline_event(test_app, discussion):
-    url = "/data/Discussion/%d/timeline_events/" % (discussion.id,)
+    url = "/data/Discussion/%d/timeline_events" % (discussion.id,)
     phase1 = {
-        'type': "DiscussionPhase",
-        'title': "phase 1",
-        'description': "A first exploratory phase",
-        'start': "20141231T09:00:00"
+        '@type': "DiscussionPhase",
+        'title': {
+            "@type": "LangString",
+            "entries": [{
+                "@type": "LangStringEntry",
+                "value": "phase 1",
+                "@language": "en"}]},
+        'description': {
+            "@type": "LangString",
+            "entries": [{
+                "@type": "LangStringEntry",
+                "value": "A first exploratory phase",
+                "@language": "en"}]},
+        'start': "20141231T09:00:00Z"
     }
 
     # Create the phase
-    r = test_app.post(url, phase1)
+    r = test_app.post_json(url, phase1)
     assert r.status_code == 201
     uri1 = r.location
     discussion.db.flush()
 
     # Create phase2
     phase2 = {
-        'type': "DiscussionPhase",
-        'title': "phase 2",
-        'description': "A second divergent phase",
+        '@type': "DiscussionPhase",
+        'title': {
+            "@type": "LangString",
+            "entries": [{
+                "@type": "LangStringEntry",
+                "value": "phase 2",
+                "@language": "en"}]},
+        'description': {
+            "@type": "LangString",
+            "entries": [{
+                "@type": "LangStringEntry",
+                "value": "A second divergent phase",
+                "@language": "en"}]},
         'previous_event': uri1
     }
 
     # Create the phase
-    r = test_app.post(url, phase2)
+    r = test_app.post_json(url, phase2)
     assert r.status_code == 201
     discussion.db.flush()
     discussion.db.expunge_all()
