@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ReactTestRenderer from 'react-test-renderer';
-import Community from '../../../js/app/containers/community';
+import Community from '../../../js/app/pages/community';
 
 describe('This test concern app container', () => {
   it('Should test React renderer', () => {
