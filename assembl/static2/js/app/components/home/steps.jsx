@@ -32,7 +32,7 @@ class Steps extends React.Component {
                 <Row className="no-margin">
                   {debateData.timeline.map((step, index) => {
                     return (
-                      <Col xs={12} sm={6} md={3} className={this.isCurrentStep(index) ? 'no-padding step' : 'no-padding step hidden-xs'} key={`step${index}`}>
+                      <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={this.isCurrentStep(index) ? 'no-padding step' : 'no-padding step hidden-xs'} key={`step${index}`}>
                         <Step imgUrl={step.imgUrl} startDate={step.startDate} index={index} title={`home.step${index}Title`} text={`home.step${index}Text`} />
                       </Col>
                     );
@@ -41,7 +41,7 @@ class Steps extends React.Component {
                 <Row className="no-margin">
                   {debateData.timeline.map((step, index) => {
                     return (
-                      <Col xs={3} sm={3} md={3} className={'no-padding bar'} key={`timeline${index}`}>
+                      <Col xs={12 / debateData.timeline.length} sm={12 / debateData.timeline.length} md={12 / debateData.timeline.length} className={'no-padding bar'} key={`timeline${index}`}>
                         <Timeline index={index} currentStep={this.isCurrentStep(index)} />
                       </Col>
                     );
