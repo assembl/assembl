@@ -5,7 +5,8 @@ You need to run again::
 
     fab env_dev app_compile
 
-to rebuild supervisord.conf
+to rebuild supervisord.conf from supervisord.conf.tmpl and install
+additional pip dependencies (elasticsearch-py).
 
 install elasticsearch with::
 
@@ -14,11 +15,13 @@ install elasticsearch with::
 (If later you want to upgrade elasticsearch, modify the ELASTICSEARCH_VERSION
 in `fabfile.py` and run the ``fab env_dev upgrade_elasticsearch`` command.)
 
-Restart supervisor to read the new `supervisord.conf` config and start
-elasticsearch::
+Reload supervisord config and start the elasticsearch process with::
 
-    supervisorctl shutdown
-    supervisord
+    supervisorctl update
+
+Check that elasticsearch is running with `supervisorctl status`. If it's not,
+run `supervisorctl start elasticsearch` or check if you have an error in the
+logs.
 
 You can show the stdout elasticsearch logs like this::
 
