@@ -14,6 +14,7 @@ var Assembl = require('../../app.js'),
     Marionette = require('../../shims/marionette.js'),
     Growl = require('../../utils/growl.js'),
     SimpleLangStringEditPanel = require('../simpleLangStringEdit.js'),
+    Moment = require('moment'),
     AdminNavigationMenu = require('./adminNavigationMenu.js'),
     $ = require('jquery'),
     _ = require('underscore'),
@@ -211,14 +212,30 @@ var TimelineEventView = Marionette.LayoutView.extend({
     this.model.save();
     ev.preventDefault();
   },
+  checkDate: function(date) {
+    var date = Moment(date);
+    if (date.isValid()) {
+      return date.utc().format();
+    }
+  },
   changeStartDate: function(ev) {
-    this.model.set('start', ev.currentTarget.value+"Z");
-    this.model.save();
+    var date = this.checkDate(ev.currentTarget.value);
+    if (date != undefined) {
+      this.model.set('start', date);
+      this.model.save();
+    } else {
+      Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("Invalid date and time"));
+    }
     ev.preventDefault();
   },
   changeEndDate: function(ev) {
-    this.model.set('end', ev.currentTarget.value+"Z");
-    this.model.save();
+    var date = this.checkDate(ev.currentTarget.value);
+    if (date != undefined) {
+      this.model.set('end', date);
+      this.model.save();
+    } else {
+      Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext("Invalid date and time"));
+    }
     ev.preventDefault();
   },
 });

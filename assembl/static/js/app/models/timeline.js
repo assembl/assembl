@@ -6,6 +6,7 @@
 var _ = require('underscore'),
     Base = require('./base.js'),
     LangString = require('./langstring.js'),
+    Moment = require('moment'),
     Ctx = require('../common/context.js');
 
 /**
@@ -46,17 +47,23 @@ var TimelineEventModel = Base.Model.extend({
     return rawModel;
   },
 
+  asLocalTime: function(time) {
+      time = Moment.utc(time);
+      time.utcOffset(Moment().utcOffset());
+      return time.format().substring(0, 19);
+  },
+
   getStartNoTZ: function() {
     var start = this.get('start');
     if (start !== null) {
-      return start.split('Z').join('')
+      return this.asLocalTime(start);
     }
     return start;
   },
   getEndNoTZ: function() {
     var end = this.get('end');
     if (end !== null) {
-      return end.split('Z').join('')
+      return this.asLocalTime(end);
     }
     return end;
   },

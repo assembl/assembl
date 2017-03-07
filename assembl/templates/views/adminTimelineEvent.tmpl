@@ -2,13 +2,13 @@
   <div>
     <div class="admin-msg-elm">
       <div class="control-group">
-        <label for="start_date" class="control-label">{{ gettext('Start date') }}</label>
+        <label for="start_date" class="control-label">{{ gettext('Start date (local time)') }}</label>
         <div class="controls">
           <input class="js_start_date input-medium" id="start_date" name="start_date" type="datetime-local" value="<%= event.getStartNoTZ() %>"></input>
         </div>
       </div>
       <div class="control-group">
-        <label for="end_date" class="control-label">{{ gettext('End date') }}</label>
+        <label for="end_date" class="control-label">{{ gettext('End date (local time)') }}</label>
         <div class="controls">
           <input class="js_end_date input-medium" id="end_date" name="end_date" type="datetime-local" value="<%= event.getEndNoTZ() %>"></input>
         </div>
