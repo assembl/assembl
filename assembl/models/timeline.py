@@ -26,6 +26,7 @@ from .langstrings import LangString
 
 
 class TimelineEvent(DiscussionBoundBase):
+    """Abstract event that will be shown in the timeline."""
     __tablename__ = 'timeline_event'
 
     id = Column(Integer, primary_key=True,
@@ -45,19 +46,23 @@ class TimelineEvent(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
-    title_id = Column(Integer(), ForeignKey(LangString.id), nullable=False,
+    title_id = Column(
+        Integer(), ForeignKey(LangString.id), nullable=False,
         info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
 
-    description_id = Column(Integer(), ForeignKey(LangString.id),
+    description_id = Column(
+        Integer(), ForeignKey(LangString.id),
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
 
-    title = relationship(LangString,
+    title = relationship(
+        LangString,
         lazy="joined", single_parent=True,
         primaryjoin=title_id == LangString.id,
         backref=backref("title_of_timeline_event", lazy="dynamic"),
         cascade="all, delete-orphan")
 
-    description = relationship(LangString,
+    description = relationship(
+        LangString,
         lazy="joined", single_parent=True,
         primaryjoin=description_id == LangString.id,
         backref=backref("description_of_timeline_event", lazy="dynamic"),
@@ -65,11 +70,13 @@ class TimelineEvent(DiscussionBoundBase):
 
     image_url = Column(URLString())
 
-    start = Column(DateTime,
+    start = Column(
+        DateTime,
         # Formally, TIME.hasBeginning o TIME.inXSDDateTime
         info={'rdf': QuadMapPatternS(None, TIME.hasBeginning)})
 
-    end = Column(DateTime,
+    end = Column(
+        DateTime,
         info={'rdf': QuadMapPatternS(None, TIME.hasEnd)})
 
     # Since dates are optional, the previous event pointer allows
@@ -82,7 +89,8 @@ class TimelineEvent(DiscussionBoundBase):
 
     previous_event = relationship(
         "TimelineEvent", remote_side=[id], post_update=True, uselist=False,
-        backref=backref("next_event", uselist=False, remote_side=[previous_event_id]))
+        backref=backref("next_event", uselist=False,
+                        remote_side=[previous_event_id]))
 
     def __init__(self, **kwargs):
         previous_event_id = None
@@ -110,7 +118,8 @@ class TimelineEvent(DiscussionBoundBase):
     def set_previous_event(self, previous_event):
         # This allows setting the previous event as an insert.
         # this method may not be reliable with unflushed objects.
-        self.set_previous_event_id(previous_event.id if previous_event is not None else None)
+        self.set_previous_event_id(
+            previous_event.id if previous_event is not None else None)
         self.previous_event = previous_event
         previous_event.next_event = self
 
@@ -118,7 +127,8 @@ class TimelineEvent(DiscussionBoundBase):
         if previous_event_id != self.previous_event_id:
             # TODO: Detect and avoid cycles
             if previous_event_id is not None:
-                existing = self.__class__.get_by(previous_event_id=previous_event_id)
+                existing = self.__class__.get_by(
+                    previous_event_id=previous_event_id)
                 if existing:
                     existing.previous_event = self
             if inspect(self).persistent:
@@ -138,22 +148,32 @@ class TimelineEvent(DiscussionBoundBase):
 
 
 class DiscussionPhase(TimelineEvent):
+    """A phase of the discussion.
+    Ideally, the discussion should always be in one and only one phase,
+    so they should ideally not overlap, though this is not enforced."""
     __mapper_args__ = {
         'polymorphic_identity': 'discussion_phase',
     }
+
+
 Discussion.timeline_phases = relationship(
     DiscussionPhase, order_by=TimelineEvent.start)
 
+
 class DiscussionSession(TimelineEvent):
+    """A session within the discussion, such as creativity or vote.
+    It may overlap with phases."""
     __mapper_args__ = {
         'polymorphic_identity': 'discussion_session',
     }
+
+
 Discussion.timeline_sessions = relationship(
     DiscussionPhase, order_by=TimelineEvent.start)
 
-class DiscussionMilestone(TimelineEvent):
 
-    # This is a point in time, not an interval.
+class DiscussionMilestone(TimelineEvent):
+    """This is a point in time, not an interval."""
     # Not worth an extra table, but we'll disallow "end".
     def __init__(self, **kwargs):
         if 'end' in kwargs:
@@ -165,6 +185,7 @@ class DiscussionMilestone(TimelineEvent):
     __mapper_args__ = {
         'polymorphic_identity': 'discussion_milestone',
     }
+
 
 Discussion.timeline_milestones = relationship(
     DiscussionPhase, order_by=TimelineEvent.start)
