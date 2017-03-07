@@ -30,6 +30,7 @@ class FrontendUrls(object):
         'edition': '/edition',
         'partners': '/partners',
         'settings': '/settings',
+        'timeline': '/timeline',
         'about': '/about',
         'admin_discussion_preferences': '/discussion_preferences',
         'notifications': '/notifications',

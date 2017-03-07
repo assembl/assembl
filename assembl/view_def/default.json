@@ -515,8 +515,9 @@
     },
     "TimelineEvent": {
         "discussion": true,
-        "title": true,
-        "description": true,
+        "title": ":extended",
+        "description": ":extended",
+        "image_url": true,
         "previous_event": true,
         "next_event": true
     },

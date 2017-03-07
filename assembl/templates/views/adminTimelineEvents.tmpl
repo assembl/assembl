@@ -1,0 +1,27 @@
+<div class="grid-pad">
+  <div class="col-3-12 navigation-menu-holder"></div>
+  <div class="col-9-12 admin-section">
+    <section class="section">
+    <div class="admin-title">
+      <h3 class="h3">{{ gettext('Edit timeline') }} - {{discussion.topic}}</h3>
+    </div>
+    <div id="content-container" class="content-container phl ptl">
+      <div class="bx bx-alert-success hidden">
+        <button class="btn btn-cancel btn-sm bx-close" type="button">
+          <i class="icon-delete"></i>
+        </button>
+        {{ gettext("Your change has been saved!") }}
+      </div>
+
+      <div class="gr">
+        <form>
+          <div class="js_timelineEventsList"></div>
+          <div>
+            <button class="js_add_event btn btn-primary">{{ gettext('Add') }}</button><br/>
+          </div>
+        </form>
+      </div>
+    </div>
+    </section>
+  </div>
+</div>

@@ -361,6 +361,28 @@
         "logo": true,
         "is_initiator": true
     },
+    "TimelineEvent": {
+        "discussion": true,
+        "title": true,
+        "description": true,
+        "image_url": true,
+        "previous_event": true,
+        "next_event": true
+    },
+    "DiscussionPhase": {
+        "@extends": "TimelineEvent",
+        "start": true,
+        "end": true
+    },
+    "DiscussionSession": {
+        "@extends": "TimelineEvent",
+        "start": true,
+        "end": true
+    },
+    "DiscussionMilestone": {
+        "@extends": "TimelineEvent",
+        "start": true
+    },
     "LocalUserRole": {
         "role": "&get_role_name"
     },

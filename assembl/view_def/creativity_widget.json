@@ -350,8 +350,9 @@
     },
     "TimelineEvent": {
         "discussion": true,
-        "title": true,
-        "description": true,
+        "title": ":",
+        "description": ":",
+        "image_url": true,
         "previous_event": true,
         "next_event": true
     },

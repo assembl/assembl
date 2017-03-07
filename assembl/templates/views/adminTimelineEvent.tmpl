@@ -1,0 +1,42 @@
+<div class="subpanel-body bx">
+  <div>
+    <div class="admin-msg-elm">
+      <div class="control-group">
+        <label for="start_date" class="control-label">{{ gettext('Start date (local time)') }}</label>
+        <div class="controls">
+          <input class="js_start_date input-medium" id="start_date" name="start_date" type="datetime-local" value="<%= event.getStartNoTZ() %>"></input>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="end_date" class="control-label">{{ gettext('End date (local time)') }}</label>
+        <div class="controls">
+          <input class="js_end_date input-medium" id="end_date" name="end_date" type="datetime-local" value="<%= event.getEndNoTZ() %>"></input>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="timeline_image_url" class="control-label">{{ gettext('Image URL') }}</label>
+        <div class="controls">
+          <input class="js_timeline_image_url input-medium" type="text" name="timeline_image_url" value="<%= event.get('image_url') %>" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="admin-msg-elm bx">
+    <label>{{ gettext('Title') }}</label>
+    <div class="js_timeline_title"></div>
+  </div>
+  <div class="admin-msg-elm bx">
+    <label>{{ gettext('Description') }}</label>
+    <div class="js_timeline_description"></div>
+  </div>
+  <div>
+    <% if (index > 0) { %>
+      <button class="js_timeline_up btn btn-cancel"><i class="icon-arrowup"></i>⬆</button>
+    <% } %>
+    <% if (index < collsize-1) { %>
+      <button class="js_timeline_down btn btn-cancel"><i class="icon-arrowdown"></i>⬇</button>
+    <% } %>
+    <button class="js_timeline_delete btn btn-cancel">{{ gettext('Delete') }}</button>
+  </div>
+
+</div>
