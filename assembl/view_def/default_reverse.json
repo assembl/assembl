@@ -367,7 +367,7 @@
         "description": true,
         "image_url": true,
         "previous_event": true,
-        "next_event": true
+        "next_event": false
     },
     "DiscussionPhase": {
         "@extends": "TimelineEvent",
