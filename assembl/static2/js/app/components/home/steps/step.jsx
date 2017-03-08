@@ -31,7 +31,7 @@ class Step extends React.Component {
           <div className="text-box">
             {description.entries.map((description, index) => {
               return (
-                <span key={`title-${index}`}>{locale === title['@language'] ? description.value : ''}</span>
+                <span key={`desc-${index}`}>{locale === description['@language'] ? description.value : ''}</span>
               )
             })}
           </div>
