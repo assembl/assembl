@@ -366,6 +366,7 @@
         "title": true,
         "description": true,
         "image_url": true,
+        "identifier": true,
         "previous_event": true,
         "next_event": false
     },

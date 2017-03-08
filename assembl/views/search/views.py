@@ -1,6 +1,6 @@
 import json
 from pyramid.events import NewRequest
-from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.httpexceptions import HTTPUnauthorized, HTTPServiceUnavailable
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.view import view_config
 
@@ -8,7 +8,8 @@ from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.indexing.utils import connect
 from assembl.indexing.settings import get_index_settings
-from assembl.indexing.changes import changes, in_tests
+from assembl.indexing.changes import changes
+from assembl.indexing import indexing_active
 from assembl import models
 from assembl.lib.sqla import get_session_maker
 
@@ -20,6 +21,8 @@ def get_curl_query(query):
 
 @view_config(route_name='search', renderer='json')
 def search_endpoint(context, request):
+    if not indexing_active():
+        return HTTPServiceUnavailable("Indexing inactive")
     query = request.json_body
     # u'query': {u'bool': {u'filter': [{u'term': {u'discussion_id': u'23'}}]}}
     filters = [fil for fil in query['query']['bool']['filter']]
@@ -64,7 +67,7 @@ def search_endpoint(context, request):
 
 
 def join_transaction(event):
-    if not in_tests():
+    if indexing_active():
         changes._join()
 
 

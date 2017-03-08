@@ -33,6 +33,7 @@ var TimelineEventModel = Base.Model.extend({
     'previous_event': null,
     'title': null,
     'description': null,
+    "identifier": null,
     'image_url': null,
     'start': null,
     'end': null,

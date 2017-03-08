@@ -1501,11 +1501,14 @@ def install_elasticsearch():
         return
 
     if not env.mac:
-        if not exists('/etc/sysctl.d/vm.max_map_count.conf'):
-            # change now
-            sudo("sysctl -w vm.max_map_count=262144")
-            # persist the change
-            sudo("echo 'vm.max_map_count=262144' > /etc/sysctl.d/vm.max_map_count.conf")
+        release_info = run("lsb_release -i")
+        if "Ubuntu" not in release_info:
+            # not necessary on Ubuntu, assuming debian
+            if not exists('/etc/sysctl.d/vm.max_map_count.conf'):
+                # change now
+                sudo("sysctl -w vm.max_map_count=262144")
+                # persist the change
+                sudo("echo 'vm.max_map_count=262144' > /etc/sysctl.d/vm.max_map_count.conf")
 
     extract_path = normpath(
         join(env.projectpath, 'var', 'elasticsearch'))

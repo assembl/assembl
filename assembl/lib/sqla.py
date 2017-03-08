@@ -1176,7 +1176,7 @@ class BaseOps(object):
                 target_cls = accessor.mapper.class_
                 if accessor.direction == MANYTOMANY:
                     raise NotImplementedError()
-                elif accessor.direction == ONETOMANY:
+                elif accessor.direction == ONETOMANY and accessor.uselist:
                     can_be_list = must_be_list = True
             elif getattr(self.__class__, key, None) is not None and\
                     isinstance(getattr(self.__class__, key), property) and\

@@ -2,6 +2,12 @@
   <div>
     <div class="admin-msg-elm">
       <div class="control-group">
+        <label for="identifier" class="control-label">{{ gettext('Identifier') }}</label>
+        <div class="controls">
+          <input class="js_identifier input-medium" type="text" name="identifier" value="<%= event.get('identifier') %>" />
+        </div>
+      </div>
+      <div class="control-group">
         <label for="start_date" class="control-label">{{ gettext('Start date (local time)') }}</label>
         <div class="controls">
           <input class="js_start_date input-medium" id="start_date" name="start_date" type="datetime-local" value="<%= event.getStartNoTZ() %>"></input>
