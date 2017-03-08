@@ -7,6 +7,7 @@ from zope.interface import implementer
 import transaction
 from elasticsearch.helpers import bulk
 
+from . import indexing_active
 from .settings import get_index_settings
 from .utils import (
     connect,
@@ -17,10 +18,6 @@ from .utils import (
     )
 
 logger = logging.getLogger('assembl.indexing')
-
-
-def in_tests():
-    return os.getenv('_', '').endswith('py.test')
 
 
 @implementer(IDataManagerSavepoint)
@@ -60,7 +57,7 @@ class ElasticChanges(threading.local):
             self._activated = True
 
     def index_content(self, content):
-        if in_tests():
+        if not indexing_active():
             return
 
         uid, data = get_data(content)
@@ -74,7 +71,7 @@ class ElasticChanges(threading.local):
             self._doc_types.add(doc_type)
 
     def unindex_content(self, content):
-        if in_tests():
+        if not indexing_active():
             return
 
         self._join()

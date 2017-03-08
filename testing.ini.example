@@ -47,6 +47,9 @@ db_schema = public
 db_database = assembl_test
 # db_host = localhost
 
+# Do we use elastic_search indexing? Not in testing, for now.
+use_elasticsearch = false
+
 jinja2.directories = assembl:templates
 
 #WHAT IS THIS USED FOR?
