@@ -46,6 +46,9 @@ class TimelineEvent(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
+    identifier = Column(String(60),
+                        doc="An identifier for front-end semantics")
+
     title_id = Column(
         Integer(), ForeignKey(LangString.id), nullable=False,
         info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
