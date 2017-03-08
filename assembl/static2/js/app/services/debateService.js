@@ -1,19 +1,16 @@
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
 
-export const buildDebateData = (debateData, prefs) => {
+export const buildDebateData = (debateData, prefs, timeline) => {
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
-  const startDate = prefs.extra_json && prefs.extra_json.startDate ? prefs.extra_json.startDate : null;
-  const endDate = prefs.extra_json && prefs.extra_json.endDate ? prefs.extra_json.endDate : null;
   const objectivesBackground = prefs.extra_json && prefs.extra_json.objectivesBackground ? prefs.extra_json.objectivesBackground : null;
   const twitter = prefs.extra_json && prefs.extra_json.twitter ? prefs.extra_json.twitter : null;
-  const timeline = prefs.extra_json && prefs.extra_json.timeline ? prefs.extra_json.timeline : null;
   return {
     slug: debateData.slug,
     logo: debateData.logo,
     topic: debateData.topic,
-    startDate: startDate,
-    endDate: endDate,
+    startDate: timeline[0].start,
+    endDate: timeline[timeline.length - 1].end,
     introduction: debateData.introduction,
     objectives: debateData.objectives,
     objectivesBackground: objectivesBackground,
@@ -38,7 +35,6 @@ export const getDebateData = (debateId) => {
     const data = results[0];
     const prefs = results[1];
     const timeline = results[2];
-    console.log(timeline);
-    return buildDebateData(data, prefs[0]);
+    return buildDebateData(data, prefs[0], timeline);
   });
 };

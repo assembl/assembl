@@ -83,7 +83,12 @@ var AdminTimelineEventPanel = Marionette.LayoutView.extend({
       previous_event: lastEventId,
     });
     eventCollection.add(event);
-    event.save();
+    event.save(null, {
+      parse: true,
+      success: function() {
+        // rerender so the langstring ids are up to date
+        eventCollection.render();
+      }});
     ev.preventDefault();
   },
 

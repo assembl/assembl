@@ -42,12 +42,6 @@ export const getNumberOfDays = (date1, date2) => {
   return Math.round(days);
 };
 
-export const getDateFromString = (str) => {
-  const date = new Date(str);
-  date.setHours(date.getHours() + (date.getTimezoneOffset() / 60));
-  return date;
-};
-
 export const calculatePercentage = (value1, value2) => {
   return Math.round(((value1 * 100) / value2) * 100) / 100;
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { getDateFromString, isDateExpired } from '../../utils/globalFunctions';
+import { isDateExpired } from '../../utils/globalFunctions';
 import Step from './steps/step';
 import Timeline from './steps/timeline';
 
@@ -10,8 +10,8 @@ class Steps extends React.Component {
   isCurrentStep(index) {
     const currentDate = new Date();
     const { debateData } = this.props.debate;
-    const startDate = getDateFromString(debateData.timeline[index].startDate);
-    const endDate = getDateFromString(debateData.timeline[index].endDate);
+    const startDate = new Date(debateData.timeline[index].start);
+    const endDate = new Date(debateData.timeline[index].end);
     const isCurrentStep = isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate);
     return isCurrentStep;
   }
@@ -33,7 +33,7 @@ class Steps extends React.Component {
                   {debateData.timeline.map((step, index) => {
                     return (
                       <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={this.isCurrentStep(index) ? 'no-padding step' : 'no-padding step hidden-xs'} key={`step${index}`}>
-                        <Step imgUrl={step.imgUrl} startDate={step.startDate} index={index} title={`home.step${index}Title`} text={`home.step${index}Text`} />
+                        <Step imgUrl={step.image_url} startDate={step.start} index={index} title={step.title} description={step.description} />
                       </Col>
                     );
                   })}

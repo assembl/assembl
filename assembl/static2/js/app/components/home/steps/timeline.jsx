@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Localize } from 'react-redux-i18n';
-import { getDateFromString, isDateExpired, getNumberOfDays, calculatePercentage } from '../../../utils/globalFunctions';
+import { isDateExpired, getNumberOfDays, calculatePercentage } from '../../../utils/globalFunctions';
 import Pointer from '../../svg/pointer';
 
 class Timeline extends React.Component {
@@ -9,13 +9,13 @@ class Timeline extends React.Component {
     const { debateData } = this.props.debate;
     const index = this.props.index;
     const currentDate = new Date();
-    const endDate = getDateFromString(debateData.timeline[index].endDate);
+    const endDate = new Date(debateData.timeline[index].end);
     const isStepCompleted = isDateExpired(currentDate, endDate);
     let barWidth = 0;
     if (isStepCompleted) {
       barWidth = 100;
     } else {
-      const startDate = getDateFromString(debateData.timeline[index].startDate);
+      const startDate = new Date(debateData.timeline[index].start);
       const isStepStarted = isDateExpired(currentDate, startDate);
       if (isStepStarted) {
         const remainingDays = getNumberOfDays(endDate, currentDate);
