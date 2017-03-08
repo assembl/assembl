@@ -30,11 +30,15 @@ export const buildDebateData = (debateData, prefs) => {
 export const getDebateData = (debateId) => {
   const url1 = `/data/Discussion/${debateId}`;
   const url2 = `/data/Discussion/${debateId}/preferences`;
+  const url3 = `/data/Discussion/${debateId}/timeline_events/`;
   const request1 = xmlHttpRequest({ method: 'GET', url: url1 });
   const request2 = xmlHttpRequest({ method: 'GET', url: url2 });
-  return Promise.all([request1, request2]).then((results) => {
+  const request3 = xmlHttpRequest({ method: 'GET', url: url3 });
+  return Promise.all([request1, request2, request3]).then((results) => {
     const data = results[0];
     const prefs = results[1];
+    const timeline = results[2];
+    console.log(timeline);
     return buildDebateData(data, prefs[0]);
   });
 };
