@@ -11,14 +11,16 @@ class Debate extends React.Component {
     const currentDate = new Date();
     const { debateData } = this.props.debate;
     let identifier = null;
-    debateData.timeline.map((phase) => {
-      const startDate = new Date(phase.start);
-      const endDate = new Date(phase.end);
-      if (isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate)) {
-        identifier = phase.identifier;
-      }
-      return identifier;
-    });
+    if (debateData.timeline){
+      debateData.timeline.map((phase) => {
+        const startDate = new Date(phase.start);
+        const endDate = new Date(phase.end);
+        if (isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate)) {
+          identifier = phase.identifier;
+        }
+        return identifier;
+      });
+    }
     return identifier || 'Thread';
   }
   render() {
