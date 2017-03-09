@@ -6,13 +6,15 @@ export const buildDebateData = (debateData, prefs, timeline) => {
   const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
   const objectivesBackground = prefs.extra_json && prefs.extra_json.objectivesBackground ? prefs.extra_json.objectivesBackground : null;
   const twitter = prefs.extra_json && prefs.extra_json.twitter ? prefs.extra_json.twitter : null;
-  const sortedTimeline = getSortedArrayByKey(timeline, 'start');
+  const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
+  const startDate = timeline.length > 0 ? sortedTimeline[0].start : null;
+  const endDate = timeline.length > 0 ? sortedTimeline[timeline.length - 1].end : null;
   return {
     slug: debateData.slug,
     logo: debateData.logo,
     topic: debateData.topic,
-    startDate: sortedTimeline[0].start,
-    endDate: sortedTimeline[timeline.length - 1].end,
+    startDate: startDate,
+    endDate: endDate,
     introduction: debateData.introduction,
     objectives: debateData.objectives,
     objectivesBackground: objectivesBackground,
