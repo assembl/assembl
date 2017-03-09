@@ -6,7 +6,7 @@ export const getLocale = (browserLanguage) => {
   return locale;
 };
 
-export const getAvalaibleLocales = (locale, translations) => {
+export const getAvailableLocales = (locale, translations) => {
   const locArray = [];
   Object.keys(translations).map((key) => {
     if (key !== locale) locArray.push(key);

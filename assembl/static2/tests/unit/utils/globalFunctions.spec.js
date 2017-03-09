@@ -1,5 +1,5 @@
 import React from 'react';
-import { getLocale, getAvalaibleLocales, isDateExpired, getNumberOfDays, calculatePercentage } from '../../../js/app/utils/globalFunctions';
+import { getLocale, getAvailableLocales, isDateExpired, getNumberOfDays, calculatePercentage } from '../../../js/app/utils/globalFunctions';
 
 describe('This test concern GlobalFunctions Class', () => {
   it('Should test the browser language', () => {
@@ -27,7 +27,7 @@ describe('This test concern GlobalFunctions Class', () => {
     };
     const currentLocale = 'fr';
     const expectedResult = ['de', 'en'];
-    const result = getAvalaibleLocales(currentLocale, translations);
+    const result = getAvailableLocales(currentLocale, translations);
     expect(result).toEqual(expectedResult);
   });
   
