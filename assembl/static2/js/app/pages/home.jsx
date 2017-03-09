@@ -3,7 +3,7 @@ import Header from '../components/home/header';
 import Synthesis from '../components/home/synthesis';
 import Themes from '../components/home/themes';
 import Objectives from '../components/home/objectives';
-import Steps from '../components/home/steps';
+import Phases from '../components/home/phases';
 import Video from '../components/home/video';
 import Twitter from '../components/home/twitter';
 import Contact from '../components/home/contact';
@@ -17,7 +17,7 @@ class Home extends React.Component {
         <Synthesis />
         <Themes />
         <Objectives />
-        <Steps />
+        <Phases />
         <Video />
         <Twitter />
         <Contact />

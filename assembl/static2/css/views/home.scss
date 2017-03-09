@@ -247,8 +247,8 @@
   }
 }
 
-.steps-section {
-  .step {
+.phases-section {
+  .phase {
     &:nth-child(1) {
       margin: 120px 0 0;
     }
@@ -384,7 +384,7 @@
     }
   }
 
-  .steps-section {
+  .phases-section {
     .hidden-xs {
       display: none;
     }
@@ -440,8 +440,8 @@
     }
   }
 
-  .steps-section {
-    .step {
+  .phases-section {
+    .phase {
       &:nth-child(1) {
         margin: 2px 0 0;
       }
