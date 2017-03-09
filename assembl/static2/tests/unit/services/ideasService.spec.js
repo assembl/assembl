@@ -199,14 +199,6 @@ describe('This test concern ideas Service', () => {
     const expectedResult = {
       latestIdeas: [
         {
-          id:"38",
-          imgUrl:"http://localhost:6543/data/Discussion/6/documents/405/data",
-          title:"Title 2",
-          nbPosts:231,
-          nbContributors:67,
-          definition:'Description de l\'idée'
-        },
-        {
           id:"56",
           imgUrl:"http://localhost:6543/data/Discussion/6/documents/406/data",
           title:"Title 3",
@@ -229,6 +221,14 @@ describe('This test concern ideas Service', () => {
           nbPosts:876,
           nbContributors:89,
           definition:''
+        },
+        {
+          id:"38",
+          imgUrl:"http://localhost:6543/data/Discussion/6/documents/405/data",
+          title:"Title 2",
+          nbPosts:231,
+          nbContributors:67,
+          definition:'Description de l\'idée'
         }
       ],
       controversial: [

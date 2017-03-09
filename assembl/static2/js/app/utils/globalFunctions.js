@@ -25,12 +25,16 @@ export const getConnectedUserId = () => {
   return userId;
 };
 
-export const getSortedDate = (object, key) => {
-  const sortedDate = object.map((item) => {
-    const date = item[key];
-    return new Date(date).getTime();
-  }).sort();
-  return sortedDate;
+export const getSortedArrayByKey = (arr, key) => {
+  arr.sort((a, b) => {
+    if (a[key] < b[key]) {
+      return -1;
+    } else if (a[key] > b[key]) {
+      return 1;
+    }
+    return 0;
+  });
+  return arr;
 };
 
 export const isDateExpired = (date1, date2) => {

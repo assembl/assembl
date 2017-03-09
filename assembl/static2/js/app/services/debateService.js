@@ -1,21 +1,23 @@
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
+import { getSortedArrayByKey } from '../utils/globalFunctions';
 
 export const buildDebateData = (debateData, prefs, timeline) => {
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
   const objectivesBackground = prefs.extra_json && prefs.extra_json.objectivesBackground ? prefs.extra_json.objectivesBackground : null;
   const twitter = prefs.extra_json && prefs.extra_json.twitter ? prefs.extra_json.twitter : null;
+  const sortedTimeline = getSortedArrayByKey(timeline, 'start');
   return {
     slug: debateData.slug,
     logo: debateData.logo,
     topic: debateData.topic,
-    startDate: timeline[0].start,
-    endDate: timeline[timeline.length - 1].end,
+    startDate: sortedTimeline[0].start,
+    endDate: sortedTimeline[timeline.length - 1].end,
     introduction: debateData.introduction,
     objectives: debateData.objectives,
     objectivesBackground: objectivesBackground,
     headerBackgroundUrl: headerBackgroundUrl,
-    timeline: timeline,
+    timeline: sortedTimeline,
     helpUrl: debateData.help_url,
     videoUrl: prefs.video_url,
     videoDescription: prefs.video_description,

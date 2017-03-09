@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate, Localize } from 'react-redux-i18n';
+import { Localize } from 'react-redux-i18n';
 import { Link } from 'react-router';
 
 class Step extends React.Component {
@@ -19,20 +19,20 @@ class Step extends React.Component {
         <Link className="content-box" to={`${rootPath}${debateData.slug}/home`}>
           <h1 className="light-title-1">{StepNumber}</h1>
           <h3 className="light-title-3">
-            {title.entries.map((title, index) => {
+            {title.entries.map((entry, index) => {
               return (
-                <span key={`title-${index}`}>{locale === title['@language'] ? title.value : ''}</span>
-              )
+                <span key={`title-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
+              );
             })}
           </h3>
           <h4 className="light-title-4">
             <Localize value={startDate} dateFormat="date.format2" />
           </h4>
           <div className="text-box">
-            {description.entries.map((description, index) => {
+            {description.entries.map((entry, index) => {
               return (
-                <span key={`desc-${index}`}>{locale === description['@language'] ? description.value : ''}</span>
-              )
+                <span key={`desc-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
+              );
             })}
           </div>
         </Link>

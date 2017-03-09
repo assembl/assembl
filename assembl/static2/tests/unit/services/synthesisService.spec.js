@@ -47,19 +47,6 @@ describe('This test concern synthesis Service', () => {
     const expectedResult = {
       publishedSynthesis: [
         {
-          "@id":"local:IdeaGraphView/12",
-          "@type":"Synthesis",
-          "@view":"default",
-          conclusion:"Add a conclusion",
-          creation_date:"2014-01-20T16:01:29Z",
-          idea_links:[],
-          ideas:[],
-          introduction:"Introduction de la synthèse",
-          is_next_synthesis:false,
-          published_in_post:"local:Content/2003",
-          subject:"Sujet..."
-        },
-        {
           "@id":"local:IdeaGraphView/329",
           "@type":"Synthesis",
           "@view":"default",
@@ -71,7 +58,20 @@ describe('This test concern synthesis Service', () => {
           is_next_synthesis:false,
           published_in_post:"local:Content/48269",
           subject:"phase 2"
-        } 
+        },
+        {
+          "@id":"local:IdeaGraphView/12",
+          "@type":"Synthesis",
+          "@view":"default",
+          conclusion:"Add a conclusion",
+          creation_date:"2014-01-20T16:01:29Z",
+          idea_links:[],
+          ideas:[],
+          introduction:"Introduction de la synthèse",
+          is_next_synthesis:false,
+          published_in_post:"local:Content/2003",
+          subject:"Sujet..."
+        }
       ],
       draftSynthesis: [
         {
