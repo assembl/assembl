@@ -1,5 +1,5 @@
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
-import { getSortedDate } from '../utils/globalFunctions';
+import { getSortedArrayByKey } from '../utils/globalFunctions';
 
 const getApiMock = (key) => {
   const mock = {
@@ -77,28 +77,25 @@ const getApiMock = (key) => {
 
 const getLastIdeasByCreationDate = (ideas) => {
   const latestIdeas = [];
-  const sortedDate = getSortedDate(ideas, 'creationDate');
-  ideas.map((idea) => {
-    const ideaDate = new Date(idea.creationDate);
-    for (let i = 1; i <= 4; i += 1) {
-      if (sortedDate[sortedDate.length - i] === ideaDate.valueOf()) {
-        const imgUrl = idea.attachments ? idea.attachments[0].external_url : '';
-        const nbPosts = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[0] : 0;
-        const nbContributors = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[1] : 0;
-        const title = idea.shortTitle ? idea.shortTitle : '';
-        const definition = idea.definition ? idea.definition : '';
-        const ideaId = idea['@id'].split('/')[1];
-        return latestIdeas.push({
-          id: ideaId,
-          imgUrl: imgUrl,
-          title: title,
-          nbPosts: nbPosts,
-          nbContributors: nbContributors,
-          definition: definition
-        });
-      }
+  const sortedIdeas = getSortedArrayByKey(ideas, 'creationDate').reverse();
+  sortedIdeas.map((idea, index) => {
+    if (index < 4) {
+      const imgUrl = idea.attachments ? idea.attachments[0].external_url : '';
+      const nbPosts = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[0] : 0;
+      const nbContributors = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[1] : 0;
+      const title = idea.shortTitle ? idea.shortTitle : '';
+      const definition = idea.definition ? idea.definition : '';
+      const ideaId = idea['@id'].split('/')[1];
+      return latestIdeas.push({
+        id: ideaId,
+        imgUrl: imgUrl,
+        title: title,
+        nbPosts: nbPosts,
+        nbContributors: nbContributors,
+        definition: definition
+      });
     }
-    return ideaDate;
+    return idea;
   });
   return latestIdeas;
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Statistic from './statistic';
 
-class Illustration extends React.Component {
+class Theme extends React.Component {
   render() {
     const { ideas } = this.props.ideas;
     const { debateData } = this.props.debate;
@@ -32,4 +32,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Illustration);
+export default connect(mapStateToProps)(Theme);

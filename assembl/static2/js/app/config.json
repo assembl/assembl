@@ -1,19 +1,13 @@
 {
-  "headerBackgroundUrl":"https://framapic.org/DTDgukI0lLFg/QvUEIscjehd8.jpg",
-  "startDate": "2017-02-01",
-  "endDate": "2017-03-31",
   "objectivesBackground": {
     "img1Url": "https://framapic.org/ibX9g8rDKkId/fHbo8OgaSvuW.jpg",
     "img2Url": "https://framapic.org/3FcT7TlNGrCT/popxXrnh6ELR.jpg"
-  },
-  "video": {
-    "videoUrl": "https://www.youtube.com/embed/T8gC9fHGpfg",
-    "videoText": "texte de la vidéo"
   },
   "twitter": {
     "backgroundImageUrl": "https://framapic.org/3EhbBotOOBMb/PVgrOF1tbnvr.jpg",
     "id": "808390464667721728"
   },
+  "headerBackgroundUrl": "https://framapic.org/DTDgukI0lLFg/QvUEIscjehd8.jpg",
   "socialMedias": [
     {
       "url": "https://www.facebook.com/Citiesflife/?fref=ts",
@@ -26,28 +20,6 @@
     {
       "url": "https://www.linkedin.com/in/citiesflife/",
       "title": "linkedin"
-    }
-  ],
-  "timeline": [
-    {
-      "imgUrl": "https://framapic.org/CiOjTZIVLFgg/9Xr4dPUMDZJG.jpg",
-      "startDate": "2017-02-01T00:00:00Z",
-      "endDate": "2017-02-14T23:59:59Z"
-    },
-    {
-      "imgUrl": "https://framapic.org/pF0R9jQM5Aof/MortpNh6czMP.jpg",
-      "startDate": "2017-02-15T00:00:00Z",
-      "endDate": "2017-02-28T23:59:59Z"
-    },
-    {
-      "imgUrl": "https://framapic.org/3CL5o6dir9Vk/xQ0Uckbi7ckp.jpg",
-      "startDate": "2017-03-01T00:00:00Z",
-      "endDate": "2017-03-14T23:59:59Z"
-    },
-    {
-      "imgUrl": "https://framapic.org/cKULJ8P6VLFr/Nojx87ovxtjC.jpg",
-      "startDate": "2017-03-15T00:00:00Z",
-      "endDate": "2017-03-31T23:59:59Z"
     }
   ]
 }

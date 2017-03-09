@@ -1,17 +1,16 @@
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
-import { getSortedDate } from '../utils/globalFunctions';
+import { getSortedArrayByKey } from '../utils/globalFunctions';
 
 const getSynthesisByStatus = (synthesis) => {
   const publishedSynthesis = [];
   const draftSynthesis = [];
-  const sortedDate = getSortedDate(synthesis, 'creation_date');
-  const latestDate = new Date(sortedDate[sortedDate.length - 1]);
   let lastPublishedSynthesis = {};
-  synthesis.forEach((item) => {
+  const sortedSynthesis = getSortedArrayByKey(synthesis, 'creation_date').reverse();
+  sortedSynthesis.map((item, index) => {
     if (!item.is_next_synthesis) publishedSynthesis.push(item);
     else draftSynthesis.push(item);
-    const synthesisDate = new Date(item.creation_date);
-    if (latestDate.valueOf() === synthesisDate.valueOf()) lastPublishedSynthesis = item;
+    if (index < 1) lastPublishedSynthesis = item;
+    return item;
   });
   return [publishedSynthesis, draftSynthesis, lastPublishedSynthesis];
 };

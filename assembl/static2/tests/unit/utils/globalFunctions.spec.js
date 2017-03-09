@@ -1,5 +1,5 @@
 import React from 'react';
-import { getLocale, getAvalaibleLocales, getSortedDate, getDateFromString, isDateExpired, getNumberOfDays, calculatePercentage } from '../../../js/app/utils/globalFunctions';
+import { getLocale, getAvalaibleLocales, isDateExpired, getNumberOfDays, calculatePercentage } from '../../../js/app/utils/globalFunctions';
 
 describe('This test concern GlobalFunctions Class', () => {
   it('Should test the browser language', () => {
@@ -31,73 +31,6 @@ describe('This test concern GlobalFunctions Class', () => {
     expect(result).toEqual(expectedResult);
   });
   
-  it('Should return an array sorted by dates', () => {
-    const object = [
-      {
-        id: "1",
-        text: "text1",
-        creation_date: "2014-01-20T16:01:29Z"
-      },
-      {
-        id: "2",
-        text: "text2",
-        creation_date: "2014-05-22T14:35:44Z"
-      },
-      {
-        id: "3",
-        text: "text3",
-        creation_date: "2014-05-22T14:37:44Z"
-      },
-      {
-        id: "4",
-        text: "text4",
-        creation_date: "2014-05-22T15:29:51Z"
-      },
-      {
-        id: "5",
-        text: "text5",
-        creation_date: "2014-05-22T15:30:21Z"
-      },
-      {
-        id: "6",
-        text: "text6",
-        creation_date: "2014-06-02T14:29:58Z"
-      },
-      {
-        id: "7",
-        text: "text7",
-        creation_date: "2014-06-03T03:13:05Z"
-      },
-      {
-        id: "8",
-        text: "text8",
-        creation_date: "2014-06-03T03:14:55Z"
-      },
-      {
-        id: "8",
-        text: "text8",
-        creation_date: "2017-02-14T20:15:50.154885Z"
-      }
-    ];
-    const key = "creation_date";
-    const expectedResult = [1390233689000, 1400769344000, 1400769464000, 1400772591000, 1400772621000, 1401719398000, 1401765185000, 1401765295000, 1487103350154];
-    const result = getSortedDate(object, key);
-    expect(result).toEqual(expectedResult);
-  });
-    
-  it('Should compare 2 dates and return true if the first date is more recent than the second', () => {
-    const currentDate = new Date();
-    const strArray = ['2003-01-01T00:00:00Z', '2137-01-01T00:00:00Z', '2015-11-01T14:05:23Z', '2079-01-01T00:00:00Z'];
-    const result = [];
-    const expectedResult = [true, false, true, false];
-    strArray.map((str) => {
-      let date = getDateFromString(str);
-      let dateExpired = isDateExpired(currentDate, date);
-      result.push(dateExpired);
-    });
-    expect(result).toEqual(expectedResult);
-  });
-  
   it('Should return the number of days between 2 dates', () => {
     const result = [];
     const expectedResult = [14, 31, 90, 92, 365];
@@ -124,8 +57,8 @@ describe('This test concern GlobalFunctions Class', () => {
       }
     ];
     datesArray.map((elm) => {
-      const date1 = getDateFromString(elm.date1);
-      const date2 = getDateFromString(elm.date2);
+      const date1 = new Date(elm.date1);
+      const date2 = new Date(elm.date2);
       const days = getNumberOfDays(date2, date1);
       result.push(days);
     });

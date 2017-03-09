@@ -1,24 +1,23 @@
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
+import { getSortedArrayByKey } from '../utils/globalFunctions';
 
-export const buildDebateData = (debateData, prefs) => {
+export const buildDebateData = (debateData, prefs, timeline) => {
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
-  const startDate = prefs.extra_json && prefs.extra_json.startDate ? prefs.extra_json.startDate : null;
-  const endDate = prefs.extra_json && prefs.extra_json.endDate ? prefs.extra_json.endDate : null;
   const objectivesBackground = prefs.extra_json && prefs.extra_json.objectivesBackground ? prefs.extra_json.objectivesBackground : null;
   const twitter = prefs.extra_json && prefs.extra_json.twitter ? prefs.extra_json.twitter : null;
-  const timeline = prefs.extra_json && prefs.extra_json.timeline ? prefs.extra_json.timeline : null;
+  const sortedTimeline = getSortedArrayByKey(timeline, 'start');
   return {
     slug: debateData.slug,
     logo: debateData.logo,
     topic: debateData.topic,
-    startDate: startDate,
-    endDate: endDate,
+    startDate: sortedTimeline[0].start,
+    endDate: sortedTimeline[timeline.length - 1].end,
     introduction: debateData.introduction,
     objectives: debateData.objectives,
     objectivesBackground: objectivesBackground,
     headerBackgroundUrl: headerBackgroundUrl,
-    timeline: timeline,
+    timeline: sortedTimeline,
     helpUrl: debateData.help_url,
     videoUrl: prefs.video_url,
     videoDescription: prefs.video_description,
@@ -30,11 +29,14 @@ export const buildDebateData = (debateData, prefs) => {
 export const getDebateData = (debateId) => {
   const url1 = `/data/Discussion/${debateId}`;
   const url2 = `/data/Discussion/${debateId}/preferences`;
+  const url3 = `/data/Discussion/${debateId}/timeline_events/`;
   const request1 = xmlHttpRequest({ method: 'GET', url: url1 });
   const request2 = xmlHttpRequest({ method: 'GET', url: url2 });
-  return Promise.all([request1, request2]).then((results) => {
+  const request3 = xmlHttpRequest({ method: 'GET', url: url3 });
+  return Promise.all([request1, request2, request3]).then((results) => {
     const data = results[0];
     const prefs = results[1];
-    return buildDebateData(data, prefs[0]);
+    const timeline = results[2];
+    return buildDebateData(data, prefs[0], timeline);
   });
 };

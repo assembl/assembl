@@ -8,7 +8,7 @@ class Signup extends React.Component {
     const isAccountCreated = location.hash === '#success';
     return (
       <Grid fluid className="login-container">
-        <Row className="max-container">
+        <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
             {!isAccountCreated && <SignupForm />}
             {isAccountCreated && <SignUpConfirm />}

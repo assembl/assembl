@@ -25,12 +25,16 @@ export const getConnectedUserId = () => {
   return userId;
 };
 
-export const getSortedDate = (object, key) => {
-  const sortedDate = object.map((item) => {
-    const date = item[key];
-    return new Date(date).getTime();
-  }).sort();
-  return sortedDate;
+export const getSortedArrayByKey = (arr, key) => {
+  arr.sort((a, b) => {
+    if (a[key] < b[key]) {
+      return -1;
+    } else if (a[key] > b[key]) {
+      return 1;
+    }
+    return 0;
+  });
+  return arr;
 };
 
 export const isDateExpired = (date1, date2) => {
@@ -40,12 +44,6 @@ export const isDateExpired = (date1, date2) => {
 export const getNumberOfDays = (date1, date2) => {
   const days = (date1 - date2) / (1000 * 60 * 60 * 24);
   return Math.round(days);
-};
-
-export const getDateFromString = (str) => {
-  const date = new Date(str);
-  date.setHours(date.getHours() + (date.getTimezoneOffset() / 60));
-  return date;
 };
 
 export const calculatePercentage = (value1, value2) => {

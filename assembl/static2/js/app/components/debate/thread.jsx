@@ -4,7 +4,7 @@ import { Grid, Row } from 'react-bootstrap';
 import Loader from '../common/loader';
 import Error from '../common/error';
 
-class MessagesList extends React.Component {
+class Thread extends React.Component {
   render() {
     const { posts, postsLoading, postsError } = this.props.posts;
     return (
@@ -35,4 +35,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(MessagesList);
+export default connect(mapStateToProps)(Thread);

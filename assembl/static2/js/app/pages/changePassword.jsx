@@ -8,7 +8,7 @@ class ChangePassword extends React.Component {
     const isPwdSend = location.hash === '#success';
     return (
       <Grid fluid className="login-container">
-        <Row className="max-container">
+        <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
             {!isPwdSend && <SendPwdForm />}
             {isPwdSend && <SendPwdConfirm />}
