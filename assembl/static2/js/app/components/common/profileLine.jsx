@@ -1,10 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const RoundedImgWithMargin = styled.img`
-  border-radius: 50%;
-  margin-right: 5px;
-`;
+import '../../../../css/components/profileLine.scss';
 
 const ProfileLine = (props) => {
   const { userId, userName } = props;
@@ -17,8 +12,8 @@ const ProfileLine = (props) => {
     //   data-placement="top"
     //   data-original-title={userName}
     // >
-    <span>
-      <RoundedImgWithMargin
+    <span className="profileLine">
+      <img
         src={src}
         width="30"
         height="30"
