@@ -8,11 +8,15 @@ class AsLogin extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
+    const next = "next" in this.props ? this.props.next : `${rootPath}${debateData.slug}/home` ;
     return (
       <div className="login-view">
         <div className="box-title">{debateData.topic}</div>
         <div className="box">
-          <form className="login" method="POST" action={`${rootPath}${debateData.slug}/home`}>
+          <form className="login" method="POST" action={`/${debateData.slug}/login`}>
+            { next ?
+              <input type="hidden" name="next" value={`${next}`} />
+              : null }
             <h4 className="dark-title-4"><Translate value="login.alreadyAccount" /></h4>
             <FormGroup className="margin-m">
               <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />

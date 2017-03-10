@@ -12,7 +12,7 @@ class ProfileIcon extends React.Component {
     return (
       <div className="right avatar">
         {!connectedUserId &&
-          <Link to={`${rootPath}${debateData.slug}/login`}>
+          <Link to={`${rootPath}${debateData.slug}/login?next=${rootPath}${debateData.slug}/home`}>
             <span className="connection">
               <Translate value="navbar.connexion" />
             </span>
