@@ -54,6 +54,12 @@ def search_endpoint(context, request):
     for hit in result['hits']['hits']:
         source = hit['_source']
         creator_id = source.get('creator_id', None)
+        # Remove inner_hits key to not leak posts from private discussion.
+        # You can easily craft a query to get the participants of a public
+        # discussion and do a has_child filter with inner_hits on a private discussion.
+        if 'inner_hits' in hit:
+            del hit['inner_hits']
+
         if creator_id is not None:
             source['creator_name'] = creators_by_id.get(creator_id)
 
