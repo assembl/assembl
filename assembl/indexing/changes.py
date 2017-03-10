@@ -1,3 +1,46 @@
+"""
+You can read http://transaction.readthedocs.io/en/latest/ to know more about
+data (resource) managers participating in a transaction. We have here two
+data managers in the transaction, sqlalchemy data manager from zope.sqlalchemy
+(see venv/lib/python2.7/site-packages/zope/sqlalchemy/datamanager.py), and here
+elasticsearch.
+We use an elasticsearch data manager to queue all changes and only put
+the changes to elasticsearch if postgres successfully committed the transaction.
+
+When a commit occurs, the data managers are first sorted by their sortKey,
+sqlalchemy is first (key is "~sqlalchemy..."), elasticsearch is second
+(key is "ZZZZZ..."). Here is the workflow:
+
+- sqlalchemy tpc_begin() does session.flush()
+- elasticsearch (changes.py) tpc_begin() does nothing
+- sqlalchemy commit() expires objects
+- elasticsearch commit() does nothing
+- sqlalchemy tpc_vote() commits to postgres. If an exception occurs,
+  it will call tpc_abort on all resource managers, so clearing pending changes
+  for elasticsearch data manager.
+- elasticsearch tpc_vote() does nothing
+- sqlalchemy tpc_finish() does nothing
+- elasticsearch tpc_finish() write to elasticsearch. If an exception occurs,
+  tpc_abort will be called on all resources managers, but here the changes are
+  already committed to postgres, so it actually doesn't really do anything.
+  But you get a 500 http code.
+
+For the savepoint stuff, you can actually at any moment in your code use
+`savepoint = transaction.savepoint()` and if there is an exception,
+rollback with `savepoint.rollback()` to return the transaction to this saved
+state. For postgres, this is implemented with nested transaction if supported.
+
+If an object is modified several times during the transaction, only the last
+modification (including all previous changes) is kept. There is only a single
+request to elasticsearch at the end of the transaction.
+We are using the elasticsearch bulk REST api to index several documents
+in one request. It's just a PUT request and it returns immediately.
+The indexing in elasticsearch is then done asynchronously.
+If by any bad luck, the elasticsearch is not responding, the postgres database
+and elasticsearch will be out of sync. We can always reindex completely the
+elasticsearch index to sync it again with the postgres database.
+"""
+
 import logging
 import threading
 import os
