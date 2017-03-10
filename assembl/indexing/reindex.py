@@ -8,16 +8,12 @@ from assembl.indexing import indexing_active
 
 
 def reindex_in_elasticsearch(contents):
-    if not indexing_active():
-        return
     for content in contents:
         changes.index_content(content)
         yield content
 
 
 def intermediate_commit(contents):
-    if not indexing_active():
-        return
     logger = logging.getLogger('assembl')
     count = 0
     for content in contents:
@@ -39,8 +35,6 @@ def intermediate_commit(contents):
 def get_indexable_contents(session):
     from assembl.models import AgentProfile, Idea, Post
     from assembl.models.post import PublicationStates
-    if not indexing_active():
-        return
 
     query = session.query(Idea
         ).filter(Idea.tombstone_condition()
@@ -69,8 +63,10 @@ def reindex_content(content, action='update'):
     from assembl.models import (
         AgentStatusInDiscussion, Post, AgentProfile, Idea,
         IdeaContentLink, IdeaAnnouncement, SentimentOfPost)
+
     if not indexing_active():
         return
+
     indexed_contents = (Post, AgentProfile, Idea)
     if action == 'delete' and isinstance(content, indexed_contents):
         changes.unindex_content(content)
@@ -110,8 +106,6 @@ def batch_reindex_elasticsearch(session):
 
 
 def reindex_all_contents(session, delete=True):
-    if not indexing_active():
-        return
     if delete:
         settings = get_index_settings()
         index_name = settings['index_name']

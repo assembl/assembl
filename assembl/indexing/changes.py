@@ -50,7 +50,6 @@ from zope.interface import implementer
 import transaction
 from elasticsearch.helpers import bulk
 
-from . import indexing_active
 from .settings import get_index_settings
 from .utils import (
     connect,
@@ -100,9 +99,6 @@ class ElasticChanges(threading.local):
             self._activated = True
 
     def index_content(self, content):
-        if not indexing_active():
-            return
-
         uid, data = get_data(content)
         if data:
             self._join()
@@ -114,9 +110,6 @@ class ElasticChanges(threading.local):
             self._doc_types.add(doc_type)
 
     def unindex_content(self, content):
-        if not indexing_active():
-            return
-
         self._join()
         uid, data = get_data(content)
         if uid in self._index:

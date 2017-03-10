@@ -23,6 +23,7 @@ def get_curl_query(query):
 def search_endpoint(context, request):
     if not indexing_active():
         return HTTPServiceUnavailable("Indexing inactive")
+
     query = request.json_body
     # u'query': {u'bool': {u'filter': [{u'term': {u'discussion_id': u'23'}}]}}
     filters = [fil for fil in query['query']['bool']['filter']]
