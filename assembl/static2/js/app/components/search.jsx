@@ -117,7 +117,7 @@ const PublishedInfo = (props) => {
   const { date, userId, userName, className } = props;
   return (
     <div className={className}>
-      <Translate value="search.published_the" />{' '}<Localize value={date} dateFormat="date.format" />
+      <Translate value="search.published_on" />{' '}<Localize value={date} dateFormat="date.format" />
       {' '}<Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
