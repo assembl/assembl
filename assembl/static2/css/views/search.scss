@@ -1,5 +1,10 @@
 @import "../variables.scss";
 @import "../../node_modules/searchkit/theming/vars.scss";
+
+// The class names starting with sk- comes mainly from the searchkit library.
+// We reuse the components' styles from searchkit as is excepted for the
+// search-box component and layout.
+
 // @import "../../node_modules/searchkit/theming/components.scss";
 $sk-active-bg-color: $purple;
 $sk-action-text-color: $purple;
