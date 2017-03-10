@@ -59,10 +59,27 @@ def search_endpoint(context, request):
 
         if hit['_type'] == 'idea':
             idea = models.Idea.get_instance(source['id'])
+            # The check is not really necessary because it's the same
+            # 'read' permission as the discussion, but it doesn't cost anything
+            # to check it and the READ permission may change in the future.
+            if not idea.user_can(user_id, CrudPermissions.READ, permissions):
+                raise HTTPUnauthorized
+
             source['num_posts'] = idea.num_posts
             source['num_contributors'] = idea.num_contributors
         elif hit['_type'] == 'user':
-            source['num_posts'] = models.AgentProfile.get_instance(source['id']).count_posts_in_discussion(discussion_id)
+            agent_profile = models.AgentProfile.get_instance(source['id'])
+            if not agent_profile.user_can(user_id, CrudPermissions.READ, permissions):
+                raise HTTPUnauthorized
+
+            source['num_posts'] = agent_profile.count_posts_in_discussion(discussion_id)
+        # Don't do an extra request to verify the CrudPermissions.READ permission
+        # for post or synthesis.
+        # It's currently the same 'read' permission as the discussion.
+        # elif hit['_type'] in ('synthesis', 'post'):
+        #     post = models.Post.get_instance(source['id'])
+        #     if not post.user_can(user_id, CrudPermissions.READ, permissions):
+        #         raise HTTPUnauthorized
 
     return result
 
