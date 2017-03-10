@@ -8,7 +8,6 @@ import RootReducer from './reducers/rootReducer';
 import { getLocale, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
 import Translations from './utils/translations';
 import { canUseExpertInterface } from './utils/permissions';
-import { fetchPermissionsForUser } from './services/userService';
 
 import { SearchComponent } from './components/search.jsx?v=1'; // eslint-disable-line
 import '../../css/views/searchv1.scss';
@@ -42,12 +41,12 @@ class SearchApp extends React.Component {
     this.discussionId = discussionId;
     this.connectedUserId = connectedUserId;
     if (connectedUserId) {
-      fetchPermissionsForUser(discussionId, connectedUserId).then((permissions) => {
-        const isExpert = canUseExpertInterface(permissions);
-        if (isExpert) {
-          this.setState({ isExpert: true });
-        }
-      });
+      let permissions = document.getElementById('permissions-json') ? document.getElementById('permissions-json').text : '[]';
+      permissions = JSON.parse(permissions);
+      const isExpert = canUseExpertInterface(permissions);
+      if (isExpert) {
+        this.setState({ isExpert: true });
+      }
     }
   }
 
