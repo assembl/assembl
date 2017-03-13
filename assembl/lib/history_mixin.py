@@ -90,7 +90,8 @@ class HistoryMixin(TombstonableMixin):
 
     @declared_attr
     def __table_args__(cls):
-        return (UniqueConstraint('base_id', 'tombstone_date'), )
+        if cls == cls.base_polymorphic_class():
+            return (UniqueConstraint('base_id', 'tombstone_date'), )
 
     @declared_attr
     def identity_table(cls):

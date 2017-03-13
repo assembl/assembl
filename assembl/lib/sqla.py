@@ -365,15 +365,21 @@ class BaseOps(object):
             self.external_typename(), getattr(self, 'id', None) or -1)
 
     @classmethod
-    def external_typename_with_inheritance(cls):
-        """Returns the :py:meth:`external_typename` of the root class below this one."""
-        if cls.__mapper__.polymorphic_identity is not None:
+    def base_polymorphic_class(cls):
+        """Returns the base class of this class above Base."""
+        mapper_args = getattr(cls, '__mapper_args__', {})
+        if mapper_args.get('polymorphic_identity', None) is not None:
             for nextclass in cls.mro():
                 if getattr(nextclass, '__mapper__', None) is None:
                     break
                 if nextclass.__mapper__.polymorphic_identity is not None:
                     cls = nextclass
-        return cls.external_typename()
+        return cls
+
+    @classmethod
+    def external_typename_with_inheritance(cls):
+        """Returns the :py:meth:`external_typename` of the root class below this one."""
+        return cls.base_polymorphic_class().external_typename()
 
     @classmethod
     def uri_generic(cls, id, base_uri='local:'):
