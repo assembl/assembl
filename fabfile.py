@@ -1495,8 +1495,25 @@ def install_or_updgrade_virtuoso():
 
 
 @task
+def install_java():
+    """Installs oracle jdk 1.8. Requires sudo."""
+    if env.mac:
+        run("brew update")
+        # run("brew install caskroom/cask/brew-cask")
+        run("brew cask install java")
+    else:
+        sudo("add-apt-repository -y ppa:webupd8team/java")
+        sudo("apt update")
+        sudo("apt install -y oracle-java8-installer")
+        sudo("apt install oracle-java8-set-default")
+
+
+@task
 def install_elasticsearch():
     """Install elasticsearch"""
+    print(red("Java 1.8 must be installed in order to progress."))
+    print(cyan("If you wish to install java 1.8, execute the install_java command. You must have sudo access."))
+
     if getenv("IN_DOCKER"):
         return
 
