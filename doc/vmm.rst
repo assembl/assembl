@@ -35,6 +35,17 @@ Make sure your (full) hostname is set in ``/etc/hostname`` and ``/etc/mailname``
 PostgreSQL configuration
 ------------------------
 
+Please ensure you have a the psycoph2 driver installed when you continue with the permission setup. This can be done in two different ways. The recommended way is to use the system repository, like shown below.
+
+.. code:: sh
+    sudo apt-get install python-psycopg2
+
+Another way is to use the global ``pip`` system. This is the less recommended way.
+
+.. code:: sh
+    pip install psycopg2
+ 
+
 ``pg_hba.conf`` is in ``/etc/postgresql/9.5/main/``.
 
 We did not bother to create a mailsys entry since ``all`` already has
