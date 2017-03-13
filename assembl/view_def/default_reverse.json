@@ -182,6 +182,9 @@
     "AssemblPost": {
         "@extends": "Post"
     },
+    "PropositionPost": {
+        "@extends": "AssemblPost"
+    },
     "WidgetPost": {
         "@extends": "AssemblPost",
         "metadata_json": true
@@ -251,6 +254,12 @@
         "messages_in_parent": true,
         "message_view_override": true,
         "parents": false
+    },
+    "Thematic": {
+        "@extends": "Idea"
+    },
+    "Question": {
+        "@extends": "Idea"
     },
     "RootIdea": {
         "@extends": "Idea",

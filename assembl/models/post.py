@@ -651,6 +651,15 @@ class SynthesisPost(AssemblPost):
         return self.publishes_synthesis.as_html(jinja_env)
 
 
+class PropositionPost(AssemblPost):
+    """
+    A proposition to a question in phase 1
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'proposition_post',
+    }
+
+
 class WidgetPost(AssemblPost):
     """
     A Post that comes from an inspiration widget

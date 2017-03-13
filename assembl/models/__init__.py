@@ -154,6 +154,7 @@ from .post import (
     IdeaProposalPost,
     ImportedPost,
     Post,
+    PropositionPost,
     PublicationStates,
     WidgetPost,
     SynthesisPost,
@@ -170,6 +171,10 @@ from .idea import (
     Idea,
     IdeaLink,
     RootIdea,
+)
+from .thematic import (
+    Question,
+    Thematic,
 )
 from .idea_msg_columns import (
     IdeaMessageColumn,
