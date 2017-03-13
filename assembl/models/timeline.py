@@ -147,7 +147,10 @@ class TimelineEvent(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC)
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
+
+LangString.setup_ownership_load_event(TimelineEvent, ['title', 'description'])
 
 
 class DiscussionPhase(TimelineEvent):
