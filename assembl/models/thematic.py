@@ -16,6 +16,7 @@ from sqlalchemy import (
     func,
 )
 
+from ..auth import CrudPermissions, P_ADMIN_DISC, P_READ
 from .idea import Idea
 from .langstrings import LangString
 
@@ -77,6 +78,8 @@ class Thematic(Idea):
 
     video_html_code = Column(UnicodeText)
 
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
 
 LangString.setup_ownership_load_event(Thematic, ['title', 'description'])
 
@@ -105,6 +108,8 @@ class Question(Idea):
         primaryjoin=title_id == LangString.id,
         backref=backref("title_of_thematic", lazy="dynamic"),
         cascade="all, delete-orphan")
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
 
 
 LangString.setup_ownership_load_event(Question, ['title'])
