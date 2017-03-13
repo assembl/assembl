@@ -78,6 +78,9 @@ class Thematic(Idea):
     video_html_code = Column(UnicodeText)
 
 
+LangString.setup_ownership_load_event(Thematic, ['title', 'description'])
+
+
 class Question(Idea):
     """
     A question in a thematic for phase 1.
@@ -102,3 +105,6 @@ class Question(Idea):
         primaryjoin=title_id == LangString.id,
         backref=backref("title_of_thematic", lazy="dynamic"),
         cascade="all, delete-orphan")
+
+
+LangString.setup_ownership_load_event(Question, ['title'])
