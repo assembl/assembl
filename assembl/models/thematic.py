@@ -106,7 +106,7 @@ class Question(Idea):
         LangString,
         lazy="joined", single_parent=True,
         primaryjoin=title_id == LangString.id,
-        backref=backref("title_of_thematic", lazy="dynamic"),
+        backref=backref("title_of_question", lazy="dynamic"),
         cascade="all, delete-orphan")
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
