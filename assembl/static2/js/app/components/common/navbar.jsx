@@ -33,7 +33,7 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
+    const { rootPath, connectedUserId } = this.props.context;
     return (
       <Grid fluid>
         <Navbar fixedTop fluid>
@@ -58,9 +58,11 @@ class NavBar extends React.Component {
               <Search />
             </div>
             <div className="navbar-icons right">
-              <Link to={`${debateData.helpUrl}`} target="_blank">
-                <span className="assembl-icon-faq grey">&nbsp;</span>
-              </Link>
+              {connectedUserId &&
+                <Link to={`${debateData.helpUrl}`} target="_blank">
+                  <span className="assembl-icon-faq grey">&nbsp;</span>
+                </Link>
+              }
               <div className="navbar-language right">
                 <LanguageMenu size="xs" />
               </div>

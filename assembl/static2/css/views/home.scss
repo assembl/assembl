@@ -51,7 +51,7 @@
     .stat {
       display: inline-block;
       font-family: $font-family2;
-      margin: 2px 0 0 15px;
+      margin: 2px 0 0 2px;
       text-align: left;
       text-transform: uppercase;
     }
@@ -497,7 +497,7 @@
   .header-section {
     .statistic {
       .stat-box {
-        padding: 0 15px;
+        padding: 0 10px;
       }
     }
 

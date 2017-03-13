@@ -18,23 +18,27 @@ class Step extends React.Component {
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
         <Link className="content-box" to={`${rootPath}${debateData.slug}/home`}>
           <h1 className="light-title-1">{StepNumber}</h1>
-          <h3 className="light-title-3">
-            {title.entries.map((entry, index) => {
-              return (
-                <span key={`title-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
-              );
-            })}
-          </h3>
+          {title &&
+            <h3 className="light-title-3">
+              {title.entries.map((entry, index) => {
+                return (
+                  <span key={`title-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
+                );
+              })}
+            </h3>
+          }
           <h4 className="light-title-4">
             <Localize value={startDate} dateFormat="date.format2" />
           </h4>
-          <div className="text-box">
-            {description.entries.map((entry, index) => {
-              return (
-                <span key={`desc-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
-              );
-            })}
-          </div>
+          {description &&
+            <div className="text-box">
+              {description.entries.map((entry, index) => {
+                return (
+                  <span key={`desc-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
+                );
+              })}
+            </div>
+          }
         </Link>
         <div className="color-box">&nbsp;</div>
         <div className="box-hyphen">&nbsp;</div>
