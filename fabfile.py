@@ -820,6 +820,7 @@ def install_single_server():
     """
     sanitize_env()
     execute(skeleton_env, None)
+    execute(install_java)
     execute(install_elasticsearch)
     execute(install_database)
     execute(install_assembl_server_deps)

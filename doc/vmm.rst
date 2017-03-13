@@ -35,7 +35,7 @@ Make sure your (full) hostname is set in ``/etc/hostname`` and ``/etc/mailname``
 PostgreSQL configuration
 ------------------------
 
-Please ensure you have a the psycoph2 driver installed when you continue with the permission setup. This can be done in two different ways. The recommended way is to use the system repository, like shown below.
+Please ensure you have a the psycopg2 driver installed when you continue with the permission setup. This can be done in two different ways. The recommended way is to use the system repository, like shown below.
 
 .. code:: sh
     sudo apt-get install python-psycopg2
