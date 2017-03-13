@@ -2049,6 +2049,28 @@ def env_coeus_assembl2():
 
 
 @task
+def env_dev_staging():
+    """
+    [ENVIRONMENT] Staging on http://assembl2.coeus.ca/
+    Main staging environment
+    """
+    env.ini_file = 'local.ini'
+    env.hosts = ['dev-assembl.bluenove.com']
+    env.wsginame = "staging.wsgi"
+    env.urlhost = "dev-assembl.bluenove.com"
+    env.user = "assembl_user"
+    env.home = "assembl_user"
+    execute(commonenv, normpath("/home/assembl_user/assembl"))
+    require('projectname', provided_by=('commonenv',))
+
+    env.is_production_env = False
+    env.uses_apache = False
+    env.uses_ngnix = True
+    env.uses_uwsgi = True
+    env.gitbranch = getenv("GITBRANCH", "develop")
+
+
+@task
 def env_inm_agora():
     """
     [ENVIRONMENT] Production on http://agora.inm.qc.ca/
@@ -2061,7 +2083,7 @@ def env_inm_agora():
     env.urlhost = "agora.inm.qc.ca"
     env.user = "www-data"
     env.home = "www-data"
-    execute(commonenv, normpath("/home/www/assembl_inm/"))
+    execute(commonenv, normpath("/home/assembl_user/assembl"))
     require('projectname', provided_by=('commonenv',))
 
     env.is_production_env = True
