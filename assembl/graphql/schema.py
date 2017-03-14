@@ -61,7 +61,17 @@ class Query(graphene.ObjectType):
     user = graphene.Field(User)
 
 
-schema = graphene.Schema(query=Query)
+Schema = graphene.Schema(query=Query)
+
+"""
+query {
+    getUserAgent(id: $ID){
+        edge {
+            whatever
+        }
+    }
+}
+"""
 
 # this can execute:
 # schema.execute("query {node(id:\"local:AgentProfile/3\") {id ... on AgentProfile {name}} }")

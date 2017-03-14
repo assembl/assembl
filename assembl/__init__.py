@@ -98,6 +98,7 @@ def main(global_config, **settings):
     # config.include('.lib.email')
     config.include('.lib')
     config.include('.views')
+    config.include('.graphql')
 
     # jinja2
     config.include('pyramid_jinja2')
