@@ -1333,12 +1333,14 @@ def database_restore_postgres():
 
     # Restore data
     with prefix(venv_prefix()), cd(env.projectpath):
-        run('PGPASSWORD=%s pg_restore --host=%s --dbname=%s -U%s --schema=public %s' % (
-                                                  env.db_password,
-                                                  env.postgres_db_host,
-                                                  env.db_name,
-                                                  env.db_user,
-                                                  remote_db_path())
+        run('PGPASSWORD=%s pg_restore --no-owner \
+                --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
+                env.db_password,
+                env.db_user,
+                env.postgres_db_host,
+                env.db_name,
+                env.db_user,
+                remote_db_path())
         )
 
     if(env.wsginame != 'dev.wsgi'):
@@ -2069,8 +2071,8 @@ def env_coeus_assembl2():
 @task
 def env_dev_staging():
     """
-    [ENVIRONMENT] Staging on http://assembl2.coeus.ca/
-    Main staging environment
+    [ENVIRONMENT] Staging on http://dev-assembl.bluenove.com/
+    New staging environment
     """
     env.ini_file = 'local.ini'
     env.hosts = ['dev-assembl.bluenove.com']
