@@ -45,6 +45,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "apollo-client": "^1.0.0-rc.2",
     "babel-polyfill": "^6.23.0",
     "bootstrap": "^3.3.7",
     "lodash": "^4.17.4",
@@ -53,6 +54,7 @@
     "graphql": "^0.8.2",
     "isomorphic-fetch": "^2.2.1",
     "react": "^15.4.1",
+    "react-apollo": "^1.0.0-rc.2",
     "react-bootstrap": "^0.30.7",
     "react-datepicker": "^0.41.1",
     "react-dom": "^15.4.1",
