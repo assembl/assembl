@@ -3,6 +3,7 @@
 from __future__ import with_statement
 
 from os import getenv
+import sys
 from getpass import getuser
 from hashlib import sha1
 from platform import system
@@ -1499,24 +1500,31 @@ def install_or_updgrade_virtuoso():
 
 @task
 def install_java():
-    """Installs oracle jdk 1.8. Requires sudo."""
+    """Install Oracle Java 8. Require sudo."""
+    if getenv("IN_DOCKER"):
+        return
+
     if env.mac:
         run("brew update")
         # run("brew install caskroom/cask/brew-cask")
         run("brew cask install java")
     else:
-        sudo("add-apt-repository -y ppa:webupd8team/java")
-        sudo("apt update")
-        sudo("apt install -y oracle-java8-installer")
-        sudo("apt install oracle-java8-set-default")
+        release_info = run("lsb_release -i")
+        if "Ubuntu" in release_info:
+            sudo("add-apt-repository -y ppa:webupd8team/java")
+            sudo("apt update")
+            sudo("apt install -y oracle-java8-installer")
+            sudo("apt install oracle-java8-set-default")
+        else:  # assuming debian
+            if not exists('/usr/bin/java'):
+                print(red("Java 8 must be installed in order to progress. This is needed for elasticsearch."))
+                print(cyan("Debian instructions to install Oracle Java 8: http://www.webupd8.org/2014/03/how-to-install-oracle-java-8-in-debian.html"))
+                sys.exit(1)
 
 
 @task
 def install_elasticsearch():
     """Install elasticsearch"""
-    print(red("Java 1.8 must be installed in order to progress."))
-    print(cyan("If you wish to install java 1.8, execute the install_java command. You must have sudo access."))
-
     if getenv("IN_DOCKER"):
         return
 
