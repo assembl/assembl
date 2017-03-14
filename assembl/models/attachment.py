@@ -235,7 +235,7 @@ class Attachment(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return (cls.id == discussion_id,)
+        return (cls.discussion_id == discussion_id,)
 
     @property
     def external_url(self):
