@@ -99,4 +99,10 @@ def includeme(config):
     config.add_route('search', '/_search')
     # join ElasticChanges datamanager to the transaction at the beginning
     # of the request to avoid joining when the status is Committing
+    # If I don't do that, the elasticsearch data manager may actually join
+    # the transaction when the transaction is committing, and this fail with an error.
+    # The after_insert sqlalchemy event that I use to index an object (and so the
+    # elasticsearch data manager join the transaction) is triggered via the session.flush()
+    # in the tcp_begin of sqlalchemy data manager. You can't add data managers to a
+    # transaction which is in a Committing state.
     config.add_subscriber(join_transaction, NewRequest)
