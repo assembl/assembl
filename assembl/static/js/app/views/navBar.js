@@ -256,7 +256,9 @@ var navBar = Marionette.LayoutView.extend({
   },
 
   onDomRefresh: function() {
-    window.renderSearch();
+    if (typeof window.renderSearch !== 'undefined') {
+      window.renderSearch();
+    }
   },
 
   switchToExpertInterface: function(e) {
