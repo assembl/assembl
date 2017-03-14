@@ -1697,6 +1697,10 @@ def orm_update_listener(mapper, connection, target):
         return
     session = object_session(target)
     if session.is_modified(target, include_collections=False):
+        # If the indexation fails, the postgres transaction is already committed, so there is no loss of data here.
+        # If an object is modified several times during the transaction, only the last modification (including all previous changes) is kept. There is only a single request to elasticsearch at the end of the transaction.
+        # We are using the elasticsearch bulk rest api here to index several documents with one request. It's just a PUT request and it returns immediately. The indexing in elasticsearch is then done asynchronously.
+        # If by any bad luck, the elasticsearch is not responding, the postgres database and elasticsearch will be out of sync. We can always reindex completely the elasticsearch index which take 1 or 2 minutes to sync it again with the postgres database.
         reindex_content(target, 'update')
         target.send_to_changes(connection, CrudOperation.UPDATE)
 
