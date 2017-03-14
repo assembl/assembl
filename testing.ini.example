@@ -207,6 +207,8 @@ changes.websocket.port = 8085
 # Whether the websocket is proxied by nginx, and exposed through the public_port
 changes.websocket.proxied = false
 changes.prefix = /socket
+# This may use another port than above, in case of reverse proxying.
+changes.websocket.url = //%(public_hostname)s:%(public_port)s%(changes.prefix)s/
 
 # Notification broker. possible configurations:
 
