@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 import Loader from './loader';
 
 class ProfileIcon extends React.Component {
@@ -22,10 +24,17 @@ class ProfileIcon extends React.Component {
           <div>
             {usersLoading && <Loader textHidden color="black" />}
             {users &&
-              <Link to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
+              <div>
                 <span className="assembl-icon-profil grey">&nbsp;</span>
-                <span className="username">{users.connectedUser.username ? users.connectedUser.username : users.connectedUser.name}</span>
-              </Link>
+                <DropdownButton bsStyle="link" title={users.connectedUser.username ? users.connectedUser.username : users.connectedUser.name} id="user-dropdown">
+                  <LinkContainer to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
+                    <MenuItem>Profile</MenuItem>
+                  </LinkContainer>
+                  <LinkContainer to={`/logout?next=${rootPath}${debateData.slug}/home`}>
+                    <MenuItem>Log out</MenuItem>
+                  </LinkContainer>
+                </DropdownButton>
+              </div>
             }
             {usersError &&
               <span className="connection"><Translate value="navbar.connexion" /></span>
