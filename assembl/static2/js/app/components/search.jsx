@@ -139,13 +139,22 @@ const ImageType = (props) => {
 const DumbPostHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
-  let subject = get(props.result, `highlight.subject_${locale}`, get(props.result, 'highlight.subject_und'));
+  const mtfromSuffix = locale === 'fr' ? 'en' : 'fr';
+  let subject = get(props.result, `highlight.subject_${locale}`,
+    get(props.result, `highlight.subject_${locale}-x-mtfrom-${mtfromSuffix}`,
+      get(props.result, 'highlight.subject_und')));
   if (!subject) {
-    subject = get(source, `subject_${locale}`, source.subject_und);
+    subject = get(source, `subject_${locale}`,
+      get(source, `subject_${locale}-x-mtfrom-${mtfromSuffix}`,
+        source.subject_und));
   }
-  let body = get(props.result, `highlight.body_${locale}`, get(props.result, 'highlight.body_und'));
+  let body = get(props.result, `highlight.body_${locale}`,
+    get(props.result, `highlight.body_${locale}-x-mtfrom-${mtfromSuffix}`,
+      get(props.result, 'highlight.body_und')));
   if (!body) {
-    body = get(source, `body_${locale}`, source.body_und);
+    body = get(source, `body_${locale}`,
+      get(source, `body_${locale}-x-mtfrom-${mtfromSuffix}`,
+        source.body_und));
     body = truncateText(body);
   }
   return (
@@ -323,9 +332,13 @@ const queryFields = [
   'ideas',  // synthesis
   'subject_und', // post
   'subject_fr', // post
+  'subject_fr-x-mtfrom-en', // post
+  'subject_en-x-mtfrom-fr', // post
   'subject_en', // post
   'body_und', // post
   'body_fr', // post
+  'body_fr-x-mtfrom-en', // post
+  'body_en-x-mtfrom-fr', // post
   'body_en' // post
 ];
 
