@@ -1,20 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 class Statistic extends React.Component {
   render() {
-    const { ideas } = this.props.ideas;
-    const index = this.props.index;
-
+    const nbPosts = this.props.nbPosts;
+    const nbContributors = this.props.nbContributors;
     return (
       <div className="stats">
         <div className="stat-nb">
-          <span>{ideas.latestIdeas[index].nbPosts}</span>
+          <span>{nbPosts}</span>
           <span className="assembl-icon-message white">&nbsp;</span>
         </div>
         <div className="dash">-</div>
         <div className="stat-nb">
-          <span>{ideas.latestIdeas[index].nbContributors}</span>
+          <span>{nbContributors}</span>
           <span className="assembl-icon-profil white">&nbsp;</span>
         </div>
       </div>
@@ -22,10 +20,4 @@ class Statistic extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    ideas: state.ideas
-  };
-};
-
-export default connect(mapStateToProps)(Statistic);
+export default Statistic;

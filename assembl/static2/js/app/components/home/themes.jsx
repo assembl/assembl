@@ -2,12 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import Theme from './themes/theme';
+import ThematicPreview from '../common/thematicPreview';
 import Loader from '../common/loader';
 
 class Themes extends React.Component {
   render() {
     const { ideas, ideasLoading } = this.props.ideas;
+    const { debateData } = this.props.debate;
+    const { rootPath, connectedUserId } = this.props.context;
     return (
       <section className="themes-section">
         {ideasLoading && <Loader color="black" />}
@@ -28,7 +30,7 @@ class Themes extends React.Component {
                   {ideas.latestIdeas.map((idea, index) => {
                     return (
                       <Col xs={12} sm={24 / ideas.latestIdeas.length} md={12 / ideas.latestIdeas.length} className="theme no-padding" key={`theme-${index}`}>
-                        <Theme index={index} />
+                        <ThematicPreview bkgImgUrl={idea.imgUrl} nbPosts={idea.nbPosts} nbContributors={idea.nbContributors} link={connectedUserId ? `/${debateData.slug}/idea/local:Idea/${idea.id}` : `${rootPath}${debateData.slug}/login`} title={idea.title} description={<p dangerouslySetInnerHTML={{ __html: idea.definition }} />} />
                       </Col>
                     );
                   })}
@@ -44,6 +46,8 @@ class Themes extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    debate: state.debate,
+    context: state.context,
     ideas: state.ideas
   };
 };
