@@ -17,6 +17,7 @@ class AsLogin extends React.Component {
             { next ?
               <input type="hidden" name="next" value={`${next}`} />
               : null }
+            <input type="hidden" name="referer" value="v2" />
             <h4 className="dark-title-4"><Translate value="login.alreadyAccount" /></h4>
             <FormGroup className="margin-m">
               <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
