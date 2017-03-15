@@ -133,6 +133,11 @@
   .spacer--big {
     clear: right;
   }
+
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
 }
 
 .loginbox.register {
