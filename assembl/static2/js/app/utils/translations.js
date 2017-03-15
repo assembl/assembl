@@ -131,7 +131,9 @@ const Translations = {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
     },
     debate: {
-      panelTitle: 'Bienvenue dans la page débat d\'Assembl'
+      survey: {
+        themesTitle: 'Choisissez une thematique !'
+      }
     },
     profile: {
       panelTitle: 'Bienvenue dans la page profil d\'Assembl'
@@ -283,7 +285,9 @@ const Translations = {
       title: 'synthesis'
     },
     debate: {
-      panelTitle: 'Welcome to Assembl debate page'
+      survey: {
+        themesTitle: 'Choose a theme!'
+      }
     },
     profile: {
       panelTitle: 'Welcome to Assembl profile page'
