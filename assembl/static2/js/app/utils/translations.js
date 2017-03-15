@@ -72,7 +72,9 @@ const Translations = {
       home: 'accueil',
       debate: 'débat',
       community: 'communauté',
-      connection: 'Connexion'
+      connection: 'Connexion',
+      profile: 'Profil',
+      logout: 'Se déconnecter'
     },
     footer: {
       terms: 'Conditions Générales d\'Utilisation',
@@ -240,7 +242,9 @@ const Translations = {
       home: 'home',
       debate: 'debate',
       community: 'community',
-      connection: 'Connection'
+      connection: 'Connection',
+      profile: 'Profil',
+      logout: 'Se déconnecter'
     },
     footer: {
       terms: 'Terms and Conditions',

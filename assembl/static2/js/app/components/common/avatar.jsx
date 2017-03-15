@@ -28,9 +28,9 @@ class ProfileIcon extends React.Component {
                 <span className="assembl-icon-profil grey">&nbsp;</span>
                 <DropdownButton bsStyle="link" title={users.connectedUser.username ? users.connectedUser.username : users.connectedUser.name} id="user-dropdown">
                   <LinkContainer to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
-                    <MenuItem>Profile</MenuItem>
+                    <MenuItem><Translate value="navbar.profile" /></MenuItem>
                   </LinkContainer>
-                  <MenuItem href={`/logout?next=${rootPath}${debateData.slug}/home`}>Log out</MenuItem>
+                  <MenuItem href={`/logout?next=${rootPath}${debateData.slug}/home`}><Translate value="navbar.logout" /></MenuItem>
                 </DropdownButton>
               </div>
             }
