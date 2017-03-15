@@ -19,8 +19,9 @@ class Header extends React.Component {
             <div className="max-text-width">
               <h1 className="light-title-1">{debateData.topic}</h1>
               <h4 className="light-title-4 uppercase margin-m">
-                <span>{debateData.introduction}</span>
+                <span dangerouslySetInnerHTML={{ __html: debateData.introduction }} />
                 <span>&nbsp;</span>
+                <br />
                 <Translate value="home.from" />
                 <span>&nbsp;</span>
                 {debateData.startDate &&
