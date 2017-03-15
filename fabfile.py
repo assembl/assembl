@@ -2143,7 +2143,7 @@ def env_bluenove_discussions():
     env.gitbranch = getenv("GITBRANCH", "master")
 
 @task
-def env_bluenove_assembl_enterprise():
+def env_bluenove_enterprise():
     """
     [ENVIRONMENT] Production on http://assembl-enterprise.bluenove.com/
     Common environment for Bluenove clients
@@ -2164,15 +2164,15 @@ def env_bluenove_assembl_enterprise():
     env.gitbranch = getenv("GITBRANCH", "master")
 
 @task
-def env_bluenove_agora2():
+def env_bluenove_civic():
     """
-    [ENVIRONMENT] Production on http://agora2.bluenove.com/
+    [ENVIRONMENT] Production on http://assembl-civic.bluenove.com/
     Common environment for Bluenove european public debates
     """
     env.ini_file = 'local.ini'
-    env.hosts = ['agora2.bluenove.com']
+    env.hosts = ['assembl-civic.bluenove.com']
     env.wsginame = "prod.wsgi"
-    env.urlhost = "agora2.bluenove.com"
+    env.urlhost = "assembl-civic.bluenove.com"
     env.user = "assembl_agora2"
     env.home = "assembl_agora2"
     execute(commonenv, normpath("/home/assembl_agora2/assembl/"))
