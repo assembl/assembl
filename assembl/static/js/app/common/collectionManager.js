@@ -1143,8 +1143,8 @@ var CollectionManager = Marionette.Object.extend({
       });
     return this._allUserPreferencesPromise;
   },
-  getNotificationsUserCollectionPromise: function() {
-    if (this._allNotificationsUserCollectionPromise) {
+  getNotificationsUserCollectionPromise: function(reset) {
+    if (this._allNotificationsUserCollectionPromise && !reset) {
       return this._allNotificationsUserCollectionPromise;
     }
       this._allNotificationsUserCollection = new NotificationSubscription.Collection();

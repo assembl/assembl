@@ -181,6 +181,7 @@ var TemplateSubscriptions = Marionette.CollectionView.extend({
   childView: TemplateSubscription,
   initialize: function(options) {
     var addableGlobalSubscriptions = new Backbone.Collection();
+    this.notificationTemplates = options.notificationTemplates;
 
     options.notificationTemplates.each(function(template) {
       var alreadyPresent = options.notificationsUser.find(function(subscription) {
@@ -311,10 +312,7 @@ var Subscriber = Marionette.ItemView.extend({
 
     if (this.role) {
       this.roles.UnsubscribeUserFromDiscussion();
-      // this is a partial solution, because the collections also need updating
-      // this.parent.updateRole(null);
-      // horrible temporary hack
-      location.reload();
+      this.parent.updateRole(null);
     }
   },
 
@@ -335,10 +333,7 @@ var Subscriber = Marionette.ItemView.extend({
                 success: function(model, resp) {
                   that.roles.add(model);
                   analytics.trackEvent(analytics.events.JOIN_DISCUSSION);
-                  // this is a partial solution, because the collections also need updating
-                  // that.parent.updateRole(model);
-                  // horrible temporary hack
-                  location.reload();
+                  that.parent.updateRole(model);
                 },
                 error: function(model, resp) {
                   console.error('ERROR: joinDiscussion->subscription', resp);
@@ -409,8 +404,33 @@ var userNotificationSubscriptions = Marionette.LayoutView.extend({
   },
 
   updateRole: function(role) {
+    var that = this,
+        allRoles = this.userNotification.childViewOptions.roles,
+        notificationTemplates = this.templateSubscriptions.notificationTemplates;
     this.userNotification.updateRole(role);
     this.templateSubscriptions.updateRole(role);
+    if (this.role == null && role != null) {
+      // rebuild the notification collections
+      this.getRegion('userNotifications').reset();
+      this.getRegion('templateSubscription').reset();
+      var collectionManager = new CollectionManager();
+      collectionManager.getNotificationsUserCollectionPromise(true).then(function(NotificationsUser) {
+        that.userNotification = new Notifications({
+          notificationsUser: NotificationsUser,
+          role: role,
+          roles: allRoles,
+        });
+        that.getRegion('userNotifications').show(that.userNotification);
+
+        that.templateSubscriptions = new TemplateSubscriptions({
+          notificationTemplates: notificationTemplates,
+          notificationsUser: NotificationsUser,
+          role: role,
+          roles: allRoles
+        });
+        that.getRegion('templateSubscription').show(that.templateSubscriptions);
+      });
+    }
   },
 
   serializeData: function() {
