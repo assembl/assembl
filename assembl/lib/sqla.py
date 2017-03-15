@@ -177,8 +177,20 @@ class TableLockCreationThread(Thread):
         try:
             for num in range(self.num_attempts):
                 db = session_maker()
-                # Get the ThreadTransactionManager in the most horrible way.
-                tm = next(iter(db.dispatch.before_commit.listeners)).im_self.transaction_manager
+                # Get the ThreadTransactionManager in a still quite horrible way.
+                tm = getattr(session_maker.session_factory.kw['extension'], 'transaction_manager', None)
+                if tm is None:
+                    # testing
+                    from contextlib import contextmanager
+                    @contextmanager
+                    def CommittingTm(db):
+                        try:
+                            yield
+                        except Exception as e:
+                            db.rollback()
+                            raise e
+                        db.commit()
+                    tm = CommittingTm(db)
                 with tm:
                     try:
                         db.execute("LOCK TABLE %s IN EXCLUSIVE MODE NOWAIT" % (
