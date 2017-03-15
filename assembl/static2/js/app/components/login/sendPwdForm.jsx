@@ -7,13 +7,16 @@ class SendPwdForm extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
+    const error_message = ("error_message" in this.props && this.props.error_message) ? this.props.error_message : null;
     return (
       <div className="login-view">
         <div className="box-title">
           <Translate value="login.forgotPwd" />
         </div>
         <div className="box">
-          <form className="resendPwd" method="POST" action={`${rootPath}${debateData.slug}/changePassword#success`}>
+          <form className="resendPwd" method="POST" action={`/${debateData.slug}/req_password_change`}>
+            <input type="hidden" name="referer" value="v2" />
+            { error_message ? <div className="error-message">{error_message}</div> : null }
             <FormGroup className="margin-m">
               <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
             </FormGroup>

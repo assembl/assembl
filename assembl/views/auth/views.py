@@ -468,6 +468,10 @@ def from_identifier(identifier):
             return (username.user, None)
     return None, None
 
+def coming_from_v2_frontend(request):
+    referer = request.params.get('referer', '').strip()
+    return referer == 'v2'
+
 
 @view_config(
     route_name='login',
@@ -490,19 +494,15 @@ def assembl_login_complete_view(request):
     session = AgentProfile.default_db
     identifier = request.params.get('identifier', '').strip()
     password = request.params.get('password', '').strip()
-    referer = request.params.get('referer', '').strip()
     next_view = handle_next_view(request, True)
     logged_in = authenticated_userid(request)
     localizer = request.localizer
     user = None
     user, account = from_identifier(identifier)
 
-    def logging_in_from_v2_frontend_view():
-        return referer == 'v2'
-
     if not user:
         error_message = localizer.translate(_("This user cannot be found"))
-        if logging_in_from_v2_frontend_view():
+        if coming_from_v2_frontend(request):
             return HTTPFound(location=maybe_contextual_route(
                 request, 'v2_frontend_generic', extra_path="login", _query={"error": error_message}))
         else:
@@ -525,7 +525,7 @@ def assembl_login_complete_view(request):
         # TODO: handle high failure count
         session.add(user)
 
-        if logging_in_from_v2_frontend_view():
+        if coming_from_v2_frontend(request):
             return HTTPFound(location=maybe_contextual_route(
                 request, 'v2_frontend_generic', extra_path="login", _query={"error": error_message}))
         else:
@@ -814,6 +814,7 @@ def request_password_change(request):
     user_id = request.params.get('user_id') or ''
     error = request.params.get('error') or ''
     user = None
+
     if user_id:
         try:
             user = User.get(int(user_id))
@@ -827,15 +828,18 @@ def request_password_change(request):
         else:
             error = error or localizer.translate(_("This user cannot be found"))
     if error or not user:
-        slug = request.matchdict.get('discussion_slug', None)
-
-        return dict(
-            get_default_context(request),
-            error=error,
-            user_id=user_id,
-            identifier=identifier,
-            slug_prefix="/" + slug if slug else "",
-            title=localizer.translate(_('I forgot my password')))
+        if coming_from_v2_frontend(request):
+            return HTTPFound(location=maybe_contextual_route(
+                request, 'v2_frontend_generic', extra_path="changePassword", _query={"error": error}))
+        else:
+            slug = request.matchdict.get('discussion_slug', None)
+            return dict(
+                get_default_context(request),
+                error=error,
+                user_id=user_id,
+                identifier=identifier,
+                slug_prefix="/" + slug if slug else "",
+                title=localizer.translate(_('I forgot my password')))
 
     discussion_slug = request.matchdict.get('discussion_slug', None)
     route = 'password_change_sent'
