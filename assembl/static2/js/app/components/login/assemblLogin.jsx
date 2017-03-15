@@ -8,7 +8,8 @@ class AsLogin extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
-    const next = "next" in this.props ? this.props.next : `${rootPath}${debateData.slug}/home` ;
+    const next = ("next" in this.props && this.props.next) ? this.props.next : `${rootPath}${debateData.slug}/home` ;
+    const error_message = ("error_message" in this.props  && this.props.error_message) ? this.props.error_message : null;
     return (
       <div className="login-view">
         <div className="box-title">{debateData.topic}</div>
@@ -19,6 +20,7 @@ class AsLogin extends React.Component {
               : null }
             <input type="hidden" name="referer" value="v2" />
             <h4 className="dark-title-4"><Translate value="login.alreadyAccount" /></h4>
+            { error_message ? <div className="error-message">{error_message}</div> : null }
             <FormGroup className="margin-m">
               <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
             </FormGroup>
