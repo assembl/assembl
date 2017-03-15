@@ -537,7 +537,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
                 if isinstance(instance, NotificationSubscription):
-                    NotificationSubscription.discussion_id = parent_instance.id
+                    instance.discussion_id = parent_instance.id
 
             def contains(self, parent_instance, instance):
                 return True
