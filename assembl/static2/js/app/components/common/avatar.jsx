@@ -30,9 +30,7 @@ class ProfileIcon extends React.Component {
                   <LinkContainer to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
                     <MenuItem>Profile</MenuItem>
                   </LinkContainer>
-                  <LinkContainer to={`/logout?next=${rootPath}${debateData.slug}/home`}>
-                    <MenuItem>Log out</MenuItem>
-                  </LinkContainer>
+                  <MenuItem href={`/logout?next=${rootPath}${debateData.slug}/home`}>Log out</MenuItem>
                 </DropdownButton>
               </div>
             }
