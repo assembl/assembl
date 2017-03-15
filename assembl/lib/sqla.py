@@ -13,6 +13,7 @@ from abc import abstractmethod
 import logging
 from time import sleep
 from random import random
+from threading import Thread
 
 from enum import Enum
 from anyjson import dumps, loads
@@ -147,6 +148,67 @@ class ChainingContext(object):
         if isinstance(self.instance, cls):
             return self.instance
         return self.context.get_instance_of_class(cls)
+
+
+class TableLockCreationThread(Thread):
+    """Utility class to create objects as a side effect.
+    Will use an exclusive table lock to ensure that the objects
+    are created only once. Does it on another thread to minimize
+    the time that the table is locked. Not all object creation should
+    need this, but it should be used when many connexions might attempt
+    to create the same unique objects.
+
+    :param func object_generator: a function (w/o parameters) that will
+        create the objects that need to be created (as iterable).
+        They will be added and committed in a subtransaction.
+        Will be called many times.
+    :returns: Whether there was anything added (maybe not in this process)
+    """
+    def __init__(self, object_generator, lock_table_name, num_attempts=3):
+        super(TableLockCreationThread, self).__init__()
+        self.object_generator = object_generator
+        self.lock_table_name = lock_table_name
+        self.num_attempts = num_attempts
+        self.success = None
+        self.created = False
+
+    def run(self):
+        session_maker = get_session_maker()
+        try:
+            for num in range(self.num_attempts):
+                db = session_maker()
+                # Get the ThreadTransactionManager in the most horrible way.
+                tm = next(iter(db.dispatch.before_commit.listeners)).im_self.transaction_manager
+                with tm:
+                    try:
+                        db.execute("LOCK TABLE %s IN EXCLUSIVE MODE NOWAIT" % (
+                            self.lock_table_name,))
+                    except OperationalError as e:
+                        log.info("Could not get the table lock in attempt %d"
+                                 % (num,))
+                        sleep(random() / 10.0)
+                        continue
+                    # recalculate needed objects.
+                    # There may be none left after having obtained the lock.
+                    to_be_created = self.object_generator()
+                    for ob in to_be_created:
+                        self.created = True
+                        db.add(ob)
+                # implicit commit of subtransaction
+                # We _should_ get the transient error reraised if we keep failing.
+                self.success = True
+        except ObjectNotUniqueError as e:
+            # Should not happen anymore. Log if so.
+            self.success = False
+            log.error("locked_object_creation: the generator created "
+                      "a non-unique object despite locking." + str(e))
+            self.exception = e
+        except Exception as e:
+            print e
+            import pdb
+            pdb.post_mortem()
+            self.success = False
+            self.exception = e
 
 
 class BaseOps(object):
@@ -876,45 +938,17 @@ class BaseOps(object):
         """
         lock_table_cls = lock_table_cls or self.__class__
         lock_table_name = lock_table_cls.__mapper__.local_table.name
-        db = self.db
         to_be_created = object_generator()
         if not to_be_created:
             return False
-        # After a commit, all objects are normally unusable.
-        # Inhibit that behaviour.
-        temp_expire_on_commit = db.expire_on_commit
-        db.expire_on_commit = False
-        try:
-            # Subtransaction
-            db.begin_nested()
-            for num, attempt in enumerate(
-                    transaction.manager.attempts(num_attempts)):
-                with attempt:
-                    try:
-                        db.execute("LOCK TABLE %s IN EXCLUSIVE MODE NOWAIT" % (
-                            lock_table_name,))
-                    except OperationalError as e:
-                        log.info("Could not get the table lock in attempt %d"
-                                 % (num,))
-                        sleep(random() / 10.0)
-                        raise transaction.interfaces.TransientError(e)
-                    # recalculate needed objects.
-                    # There may be none left after having obtained the lock.
-                    to_be_created = object_generator()
-                    for ob in to_be_created:
-                        db.add(ob)
-            # implicit commit of subtransaction
-            # We _should_ get the transient error reraised if we keep failing.
-        except ObjectNotUniqueError as e:
-            # Should not happen anymore. Log if so.
-            log.error("locked_object_creation: the generator created "
-                      "a non-unique object despite locking." + str(e))
-            raise e
-        finally:
-            db.expire_on_commit = temp_expire_on_commit
-        # Some objects were set to be created, even if they were created
-        # on another thread/process
-        return True
+        # Do this on another thread to minimize lock time.
+        operation = TableLockCreationThread(
+            object_generator, lock_table_name, num_attempts)
+        operation.start()
+        operation.join()
+        if operation.success is False:
+            raise operation.exception
+        return operation.created
 
     def _create_subobject_from_json(
             self, json, target_cls, parse_def, aliases,
