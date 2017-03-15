@@ -80,7 +80,7 @@ const getLastIdeasByCreationDate = (ideas) => {
   const sortedIdeas = getSortedArrayByKey(ideas, 'creationDate').reverse();
   sortedIdeas.map((idea, index) => {
     if (index < 4) {
-      const imgUrl = idea.attachments ? idea.attachments[0].external_url : '';
+      const imgUrl = idea.attachments && idea.attachments.length ? idea.attachments[0].external_url : '';
       const nbPosts = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[0] : 0;
       const nbContributors = idea.num_total_and_read_posts ? idea.num_total_and_read_posts[1] : 0;
       const title = idea.shortTitle ? idea.shortTitle : '';
