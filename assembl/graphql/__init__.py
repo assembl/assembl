@@ -2,6 +2,6 @@
 
 
 def includeme(config):
-    config.add_route('graphql', '/graphql')
-    config.add_route('graphql_debug', 'graphiql')
+    config.add_route('graphql', '/{discussion_slug}/graphql')
+    config.add_route('graphql_debug', '/{discussion_slug}/graphiql')
     config.scan()
