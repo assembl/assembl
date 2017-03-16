@@ -188,11 +188,12 @@ $highlightColor: #d6c3f6;
     position:relative;
   }
   input.sk-search-box__text {
+    width: 14em;
     height: 30px;
     box-shadow: none;
     border: 1px solid #ccc;
     color: black;
-    font-size: 16px;
+    font-size: 12px;
     padding: 2px 20px 2px 24px;
   }
 
@@ -229,7 +230,7 @@ $highlightColor: #d6c3f6;
     display: inline-block;
 }
 .sk-search-box {
-    margin-right: 4px;
+    margin-right: 10px;
 }
 
 .sk-range-filter {
