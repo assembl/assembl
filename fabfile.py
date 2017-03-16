@@ -1311,12 +1311,32 @@ def database_restore_virtuoso():
     execute(supervisor_process_start, 'virtuoso')
 
 
+@task
+def postgres_user_detach():
+    """Terminate the PID processes owned by the assembl user"""
+    process_list = run('psql -U %s -h %s -d %s -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" ' % (
+                        env.db_user,
+                        env.postgres_db_host,
+                        env.db_name))
+
+    pids = process_list.split("\r\n")[2:-1:]
+    for pid in pids:
+        run('psql -U %s -h %s -d %s -c "SELECT pg_terminate_backend(%s);"' % (
+            env.db_user,
+            env.postgres_db_host,
+            env.db_name,
+            pid))
+
+
 def database_restore_postgres():
     assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
     env.debug = True
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
+
+    # Kill postgres processes in order to be able to drop tables
+    execute(postgres_user_detach)
 
     # Drop db
     with settings(warn_only=True):
@@ -1334,8 +1354,7 @@ def database_restore_postgres():
 
     # Restore data
     with prefix(venv_prefix()), cd(env.projectpath):
-        run('PGPASSWORD=%s pg_restore --no-owner \
-                --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
+        run('PGPASSWORD=%s pg_restore --no-owner --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
                 env.db_password,
                 env.db_user,
                 env.postgres_db_host,
