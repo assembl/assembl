@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchSynthesis } from './actions/synthesisActions';
-import { fetchIdeas } from './actions/ideasActions';
 import { fetchPosts } from './actions/postsActions';
 import { fetchUsers } from './actions/usersActions';
 import Navbar from './components/common/navbar';
@@ -11,7 +10,6 @@ class Main extends React.Component {
   componentWillMount() {
     const { debateId, connectedUserId } = this.props.context;
     this.props.fetchPosts(debateId);
-    this.props.fetchIdeas(debateId);
     this.props.fetchSynthesis(debateId);
     this.props.fetchUsers(debateId, connectedUserId);
   }
@@ -42,9 +40,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     fetchSynthesis: (debateId) => {
       dispatch(fetchSynthesis(debateId));
-    },
-    fetchIdeas: (debateId) => {
-      dispatch(fetchIdeas(debateId));
     }
   };
 };

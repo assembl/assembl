@@ -34,7 +34,6 @@ export default (
       <Route component={Main}>
         <Route path=":slug/profile/:userId" component={Profile} />
         <Route path=":slug/home" component={Home} />
-        <Route path=":slug/ideas" component={Ideas} />
         <Route path=":slug/synthesis" component={Synthesis} />
         <Route path=":slug/debate" component={Debate}>
           <Route path="survey/theme/:id" component={Survey} />

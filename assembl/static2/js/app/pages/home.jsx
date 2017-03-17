@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../components/home/header';
 import Synthesis from '../components/home/synthesis';
-import Themes from '../components/home/themes';
 import Objectives from '../components/home/objectives';
 import Phases from '../components/home/phases';
 import Video from '../components/home/video';
@@ -15,7 +14,6 @@ class Home extends React.Component {
       <div className="home">
         <Header />
         <Synthesis />
-        <Themes />
         <Objectives />
         <Phases />
         <Video />

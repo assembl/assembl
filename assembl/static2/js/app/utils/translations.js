@@ -121,9 +121,6 @@ const Translations = {
       from: 'du',
       to: 'au'
     },
-    ideas: {
-      panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
-    },
     synthesis: {
       title: 'synthèse'
     },
@@ -274,9 +271,6 @@ const Translations = {
       contactUs: 'Contact us',
       from: 'from',
       to: 'to'
-    },
-    ideas: {
-      panelTitle: 'Welcome to Assembl ideas page'
     },
     community: {
       panelTitle: 'Welcome to Assembl community page'
