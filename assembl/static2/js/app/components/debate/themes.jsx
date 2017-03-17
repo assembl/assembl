@@ -5,20 +5,23 @@ import { Translate } from 'react-redux-i18n';
 import gql from 'graphql-tag';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { isDateExpired } from '../../utils/globalFunctions';
+import NotStartedPhase from './notStartedPhase';
 import Loader from '../common/loader';
 import ThematicPreview from '../common/thematicPreview';
 
 class Survey extends React.Component {
   isPhaseStarted (timeline, queryIdentifier) {
     const currentDate = new Date();
+    let startDatePhase = "";
     let isStarted = false;
     timeline.map((phase) => {
       if(phase.identifier === queryIdentifier) {
         let startDate = new Date(phase.start);
         isStarted = isDateExpired(currentDate, startDate);
+        startDatePhase = phase.start;
       }
     });
-    return isStarted;
+    return [isStarted, startDatePhase];
   }
   render() {
     const { thematics, loading } = this.props.data;
@@ -26,7 +29,8 @@ class Survey extends React.Component {
     const { rootPath } = this.props.context;
     const { identifier, queryPhase } = this.props;
     const phaseToDisplay = queryPhase ? queryPhase : identifier;
-    const isPhaseStarted = this.isPhaseStarted(debateData.timeline, phaseToDisplay);
+    const isPhaseStarted = this.isPhaseStarted(debateData.timeline, phaseToDisplay)[0];
+    const startDatePhase = this.isPhaseStarted(debateData.timeline, phaseToDisplay)[1];
     if (isPhaseStarted) {
       return (
         <section className={`themes-section`}>
@@ -58,7 +62,7 @@ class Survey extends React.Component {
       );
     } else {
       return(
-        <div>Sorry this phase is not started</div>
+        <NotStartedPhase startDate={startDatePhase} />
       );
     }
   }

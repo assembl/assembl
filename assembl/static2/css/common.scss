@@ -191,6 +191,12 @@ input {
   clear: both;
 }
 
+.bottom {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+}
+
 @media screen and (min-width: 992px) {
   .col-bottom {
     display: table-cell;

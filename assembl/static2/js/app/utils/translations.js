@@ -130,7 +130,8 @@ const Translations = {
     debate: {
       survey: {
         themesTitle: 'Choisissez une thematique !'
-      }
+      },
+      notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
     },
     profile: {
       panelTitle: 'Bienvenue dans la page profil d\'Assembl'
@@ -281,7 +282,8 @@ const Translations = {
     debate: {
       survey: {
         themesTitle: 'Choose a theme!'
-      }
+      },
+      notStarted: 'This phase is not started. Please come back from the'
     },
     profile: {
       panelTitle: 'Welcome to Assembl profile page'
