@@ -187,6 +187,10 @@ input {
   margin: 0 auto;
 }
 
+.clear {
+  clear: both;
+}
+
 @media screen and (min-width: 992px) {
   .col-bottom {
     display: table-cell;

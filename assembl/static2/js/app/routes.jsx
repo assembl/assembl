@@ -9,6 +9,10 @@ import Home from './pages/home';
 import Ideas from './pages/ideas';
 import Synthesis from './pages/synthesis';
 import Debate from './pages/debate';
+import Survey from './pages/survey';
+import Thread from './pages/thread';
+import TwoColumns from './pages/twoColumns';
+import TokenVote from './pages/tokenVote';
 import Community from './pages/community';
 import Profile from './pages/profile';
 import Styleguide from './pages/styleguide';
@@ -32,7 +36,12 @@ export default (
         <Route path=":slug/home" component={Home} />
         <Route path=":slug/ideas" component={Ideas} />
         <Route path=":slug/synthesis" component={Synthesis} />
-        <Route path=":slug/debate" component={Debate} />
+        <Route path=":slug/debate" component={Debate}>
+          <Route path="survey/theme/:id" component={Survey} />
+          <Route path="thread/theme/:id" component={Thread} />
+          <Route path="twoColumns/theme/:id" component={TwoColumns} />
+          <Route path="tokenVote/theme/:id" component={TokenVote} />
+        </Route>
         <Route path=":slug/community" component={Community} />
         <Route path=":slug/terms" component={Terms} />
       </Route>

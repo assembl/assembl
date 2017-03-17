@@ -9,11 +9,14 @@ import ThematicPreview from '../common/thematicPreview';
 
 class Survey extends React.Component {
   render() {
-    const { ideas, loading } = this.props.data;
+    const { thematics, loading } = this.props.data;
+    const { debateData } = this.props.debate;
+    const { rootPath } = this.props.context;
+    const { identifier } = this.props;
     return (
-      <section className="themes-section">
+      <section className={`${identifier}-section`}>
         {loading && <Loader color="black" />}
-        {ideas &&
+        {thematics &&
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="title-section">
@@ -24,15 +27,11 @@ class Survey extends React.Component {
               </div>
               <div className="content-section">
                 <Row className="no-margin">
-                  {ideas.map((idea, index) => {
+                  {thematics.map((thematic, index) => {
                     return(
-                      <div key={`thematic-${index}`} >
-                        {idea.title &&
-                          <Col xs={12} sm={6} md={3} className="no-padding">
-                            <ThematicPreview bkgImgUrl={'/data/Discussion/6/documents/'+(421+index)+'/data'} nbPosts={idea.numPosts} nbContributors="12" link="" title={idea.title} description={idea.description} />
-                          </Col>
-                        }
-                      </div>
+                      <Col xs={12} sm={6} md={3} className={index%4 === 0 ? 'theme no-padding clear' : 'theme no-padding'} key={`thematic-${index}`}>
+                        <ThematicPreview imgUrl={thematic.imgUrl} numPosts={thematic.numPosts} numContributors={thematic.numContributors} link={`${rootPath}${debateData.slug}/debate/survey/theme/${thematic.id.split(':')[1]}`} title={thematic.title} description={thematic.description} />
+                      </Col>
                     )
                   })}
                 </Row>
@@ -49,34 +48,32 @@ Survey.propTypes = {
   data: React.PropTypes.shape({
     loading: React.PropTypes.bool.isRequired,
     error: React.PropTypes.object,
-    thematics: React.PropTypes.object,
+    thematics: React.PropTypes.Array,
   }).isRequired,
 };
 
 const ThematicQuery = gql`
   query ThematicQuery($lang: String!) {
-   ideas {
+   thematics: ideas {
      ... on Thematic {
        id,
        title(lang: $lang),
        description,
-       numPosts
+       numPosts,
+       numContributors,
+       imgUrl
      }
    }
   }
 `;
 
-const SurveyWithData = graphql(ThematicQuery, {
-  options: ({ i18n }) => ({
-    variables: {
-      lang: i18n.locale
-    }
-  }),
-})(Survey);
+const SurveyWithData = graphql(ThematicQuery)(Survey);
 
 const mapStateToProps = (state) => {
   return {
-    i18n: state.i18n
+    lang: state.i18n.locale,
+    debate: state.debate,
+    context: state.context
   };
 };
 

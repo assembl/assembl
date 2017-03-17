@@ -1,22 +1,25 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Statistic from './statistic';
 
 class Thematic extends React.Component {
   render() {
-    const bkgImgUrl = this.props.bkgImgUrl;
-    const link = this.props.link;
-    const title = this.props.title;
-    const description = this.props.description;
-    const nbPosts = this.props.nbPosts;
-    const nbContributors = this.props.nbContributors;
+    const {
+      imgUrl,
+      link,
+      title,
+      description,
+      numPosts,
+      numContributors
+    } = this.props;
     return (
       <div className="illustration illustration-box">
-        <div className="image-box" style={{ backgroundImage: `url(${bkgImgUrl})` }}>&nbsp;</div>
-        <a className="content-box" href={link}>
+        <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
+        <Link className="content-box" to={link}>
           <h3 className="light-title-3 center">{title}</h3>
-          <Statistic nbPosts={nbPosts} nbContributors={nbContributors} />
+          <Statistic numPosts={numPosts} numContributors={numContributors} />
           <div className="text-box">{description}</div>
-        </a>
+        </Link>
         <div className="color-box">&nbsp;</div>
         <div className="box-hyphen">&nbsp;</div>
         <div className="box-hyphen rotate-hyphen">&nbsp;</div>

@@ -1,10 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { isDateExpired } from '../utils/globalFunctions';
-import Survey from '../components/debate/survey';
-import Thread from '../components/debate/thread';
-import TwoColumns from '../components/debate/twoColumns';
-import TokenVote from '../components/debate/tokenVote';
+import Themes from '../components/debate/themes';
 
 class Debate extends React.Component {
   getCurrentStepIdentifier() {
@@ -21,26 +18,24 @@ class Debate extends React.Component {
         return identifier;
       });
     }
-    return identifier || 'Thread';
+    return identifier || 'thread';
   }
   render() {
     const currentIdentifier = this.getCurrentStepIdentifier();
-    return (
-      <div className="debate">
-        {currentIdentifier === 'Survey' &&
-          <Survey />
-        }
-        {currentIdentifier === 'Thread' &&
-          <Thread />
-        }
-        {currentIdentifier === 'TwoColumns' &&
-          <TwoColumns />
-        }
-        {currentIdentifier === 'TokenVote' &&
-          <TokenVote />
-        }
-      </div>
-    );
+    const isParentRoute = this.props.location.pathname.split('debate')[1].length === 0;
+    if (isParentRoute) {
+      return (
+        <div className="debate">
+          <Themes identifier={currentIdentifier} />
+        </div>
+      );
+    } else {
+      return (
+        <div className="debate">
+          {this.props.children}
+        </div>
+      );
+    }
   }
 }
 

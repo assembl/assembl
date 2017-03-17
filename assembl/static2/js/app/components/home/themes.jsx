@@ -30,7 +30,7 @@ class Themes extends React.Component {
                   {ideas.latestIdeas.map((idea, index) => {
                     return (
                       <Col xs={12} sm={24 / ideas.latestIdeas.length} md={12 / ideas.latestIdeas.length} className="theme no-padding" key={`theme-${index}`}>
-                        <ThematicPreview bkgImgUrl={idea.imgUrl} nbPosts={idea.nbPosts} nbContributors={idea.nbContributors} link={connectedUserId ? `/${debateData.slug}/idea/local:Idea/${idea.id}` : `${rootPath}${debateData.slug}/login`} title={idea.title} description={<p dangerouslySetInnerHTML={{ __html: idea.definition }} />} />
+                        <ThematicPreview imgUrl={idea.imgUrl} numPosts={idea.nbPosts} numContributors={idea.nbContributors} link={connectedUserId ? `/${debateData.slug}/idea/local:Idea/${idea.id}` : `${rootPath}${debateData.slug}/login`} title={idea.title} description={<p dangerouslySetInnerHTML={{ __html: idea.definition }} />} />
                       </Col>
                     );
                   })}
