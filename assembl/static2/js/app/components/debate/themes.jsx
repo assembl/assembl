@@ -77,11 +77,11 @@ Survey.propTypes = {
 };
 
 const ThematicQuery = gql`
-  query ThematicQuery($lang: String!) {
+  query ThematicQuery($lang: String!, $identifier: String!) {
    thematics: ideas {
      ... on Thematic {
        id,
-       identifier,
+       identifier(identifier: $identifier),
        title(lang: $lang),
        description,
        numPosts,
