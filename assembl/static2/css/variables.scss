@@ -5,6 +5,7 @@ $grey1: #e7e6f5;
 $grey2: #9b9b9b;
 $grey3: #4a4a4a;
 $grey4: #1d1d1d;
+$grey5: #d8d8d8;
 $green: #3bb848;
 $lightgreen: #93e79d;
 $blue: #140ca0;
@@ -113,7 +114,7 @@ $title4-size: $font-size-s;
 $title5-size: $font-size-l;
 
 $navbar-bkg: $white;
-$navbar-border: none;
+$navbar-border: 1px solid $grey1;
 $navbar-text-color: $first-color;
 $navbar-active-text-color: $first-color;
 

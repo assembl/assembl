@@ -1,4 +1,8 @@
 .debate {
+  .debate-section {
+    margin: $navbar-height*2 0 0;
+  }
+
   .themes-section {
     .theme {
       &:nth-child(1) {

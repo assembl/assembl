@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { isDateExpired } from '../utils/globalFunctions';
-import Themes from '../components/debate/themes';
+import Themes from '../components/debate/common/themes';
+import Timeline from '../components/debate/navigation/timeline';
 
 class Debate extends React.Component {
   getCurrentStepIdentifier() {
     const currentDate = new Date();
     const { debateData } = this.props.debate;
     let identifier = null;
-    if (debateData.timeline){
+    if (debateData.timeline) {
       debateData.timeline.map((phase) => {
         const startDate = new Date(phase.start);
         const endDate = new Date(phase.end);
@@ -24,19 +25,15 @@ class Debate extends React.Component {
     const currentIdentifier = this.getCurrentStepIdentifier();
     const isParentRoute = this.props.location.pathname.split('debate')[1].length === 0;
     const queryPhase = this.props.location.query.phase;
-    if (isParentRoute) {
-      return (
-        <div className="debate">
+    return (
+      <div className="debate">
+        <Timeline />
+        {isParentRoute &&
           <Themes identifier={currentIdentifier} queryPhase={queryPhase} />
-        </div>
-      );
-    } else {
-      return (
-        <div className="debate">
-          {this.props.children}
-        </div>
-      );
-    }
+        }
+        {!isParentRoute && this.props.children}
+      </div>
+    );
   }
 }
 

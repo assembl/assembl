@@ -2,19 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { isDateExpired } from '../../utils/globalFunctions';
+import { isCurrentStep } from '../../utils/timeline';
 import Phase from './phases/phase';
 import Timeline from './phases/timeline';
 
 class Phases extends React.Component {
-  isCurrentStep(index) {
-    const currentDate = new Date();
-    const { debateData } = this.props.debate;
-    const startDate = new Date(debateData.timeline[index].start);
-    const endDate = new Date(debateData.timeline[index].end);
-    const isCurrentStep = isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate);
-    return isCurrentStep;
-  }
   render() {
     const { debateData } = this.props.debate;
     return (
@@ -32,7 +24,7 @@ class Phases extends React.Component {
                 <Row className="no-margin">
                   {debateData.timeline.map((phase, index) => {
                     return (
-                      <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={this.isCurrentStep(index) ? 'no-padding phase' : 'no-padding phase hidden-xs'} key={`phase${index}`}>
+                      <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={isCurrentStep(index, debateData.timeline) ? 'no-padding phase' : 'no-padding phase hidden-xs'} key={`phase${index}`}>
                         <Phase imgUrl={phase.image_url} startDate={phase.start} index={index} title={phase.title} description={phase.description} identifier={phase.identifier} />
                       </Col>
                     );
@@ -42,7 +34,7 @@ class Phases extends React.Component {
                   {debateData.timeline.map((phase, index) => {
                     return (
                       <Col xs={12 / debateData.timeline.length} sm={12 / debateData.timeline.length} md={12 / debateData.timeline.length} className={'no-padding bar'} key={`timeline${index}`}>
-                        <Timeline index={index} currentStep={this.isCurrentStep(index)} />
+                        <Timeline index={index} />
                       </Col>
                     );
                   })}

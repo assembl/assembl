@@ -17,9 +17,9 @@ class Step extends React.Component {
           <h1 className="light-title-1">{StepNumber}</h1>
           {title &&
             <h3 className="light-title-3">
-              {title.entries.map((entry, index) => {
+              {title.entries.map((entry, index2) => {
                 return (
-                  <span key={`title-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
+                  <span key={`title-${index2}`}>{locale === entry['@language'] ? entry.value : ''}</span>
                 );
               })}
             </h3>
@@ -29,9 +29,9 @@ class Step extends React.Component {
           </h4>
           {description &&
             <div className="text-box">
-              {description.entries.map((entry, index) => {
+              {description.entries.map((entry, index3) => {
                 return (
-                  <span key={`desc-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
+                  <span key={`desc-${index3}`}>{locale === entry['@language'] ? entry.value : ''}</span>
                 );
               })}
             </div>

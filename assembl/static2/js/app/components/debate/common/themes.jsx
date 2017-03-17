@@ -4,19 +4,19 @@ import { graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import gql from 'graphql-tag';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { isDateExpired } from '../../utils/globalFunctions';
+import { isDateExpired } from '../../../utils/globalFunctions';
 import NotStartedPhase from './notStartedPhase';
-import Loader from '../common/loader';
-import ThematicPreview from '../common/thematicPreview';
+import Loader from '../../common/loader';
+import ThematicPreview from '../../common/thematicPreview';
 
 class Survey extends React.Component {
-  isPhaseStarted (timeline, queryIdentifier) {
+  isPhaseStarted(timeline, queryIdentifier) { // eslint-disable-line
     const currentDate = new Date();
-    let startDatePhase = "";
+    let startDatePhase = '';
     let isStarted = false;
-    timeline.map((phase) => {
-      if(phase.identifier === queryIdentifier) {
-        let startDate = new Date(phase.start);
+    timeline.map((phase) => { // eslint-disable-line
+      if (phase.identifier === queryIdentifier) {
+        const startDate = new Date(phase.start);
         isStarted = isDateExpired(currentDate, startDate);
         startDatePhase = phase.start;
       }
@@ -28,12 +28,12 @@ class Survey extends React.Component {
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
     const { identifier, queryPhase } = this.props;
-    const phaseToDisplay = queryPhase ? queryPhase : identifier;
-    const isPhaseStarted = this.isPhaseStarted(debateData.timeline, phaseToDisplay)[0];
+    const phaseToDisplay = queryPhase || identifier;
+    const phaseStarted = this.isPhaseStarted(debateData.timeline, phaseToDisplay)[0];
     const startDatePhase = this.isPhaseStarted(debateData.timeline, phaseToDisplay)[1];
-    if (isPhaseStarted) {
+    if (phaseStarted) {
       return (
-        <section className={`themes-section`}>
+        <section className="themes-section">
           {loading && <Loader color="black" />}
           {thematics &&
             <Grid fluid className="background-grey">
@@ -47,11 +47,11 @@ class Survey extends React.Component {
                 <div className="content-section">
                   <Row className="no-margin">
                     {thematics.map((thematic, index) => {
-                      return(
-                        <Col xs={12} sm={6} md={3} className={index%4 === 0 ? 'theme no-padding clear' : 'theme no-padding'} key={`thematic-${index}`}>
+                      return (
+                        <Col xs={12} sm={6} md={3} className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'} key={`thematic-${index}`}>
                           <ThematicPreview imgUrl={thematic.imgUrl} numPosts={thematic.numPosts} numContributors={thematic.numContributors} link={`${rootPath}${debateData.slug}/debate/${phaseToDisplay}/theme/${thematic.id.split(':')[1]}`} title={thematic.title} description={thematic.description} />
                         </Col>
-                      )
+                      );
                     })}
                   </Row>
                 </div>
@@ -60,11 +60,10 @@ class Survey extends React.Component {
           }
         </section>
       );
-    } else {
-      return(
-        <NotStartedPhase startDate={startDatePhase} />
-      );
     }
+    return (
+      <NotStartedPhase startDate={startDatePhase} />
+    );
   }
 }
 
@@ -72,8 +71,8 @@ Survey.propTypes = {
   data: React.PropTypes.shape({
     loading: React.PropTypes.bool.isRequired,
     error: React.PropTypes.object,
-    thematics: React.PropTypes.Array,
-  }).isRequired,
+    thematics: React.PropTypes.Array
+  }).isRequired
 };
 
 const ThematicQuery = gql`

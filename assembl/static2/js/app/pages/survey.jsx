@@ -5,7 +5,7 @@ import Proposals from '../components/debate/survey/proposals';
 class Survey extends React.Component {
   render() {
     return (
-      <div>
+      <div className="debate-section">
         <Questions />
         <Proposals />
       </div>

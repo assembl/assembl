@@ -283,7 +283,7 @@ const Translations = {
       survey: {
         themesTitle: 'Choose a theme!'
       },
-      notStarted: 'This phase is not started. Please come back from the'
+      notStarted: 'This phase is not started. Please come back from the '
     },
     profile: {
       panelTitle: 'Welcome to Assembl profile page'

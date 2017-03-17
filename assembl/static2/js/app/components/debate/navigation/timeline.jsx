@@ -1,0 +1,31 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { isCurrentStep, isStepCompleted, getBarWidth } from '../../../utils/timeline';
+import TimelineBar from './timelineBar';
+
+class Timeline extends React.Component {
+  render() {
+    const { debateData } = this.props.debate;
+    const { locale } = this.props.i18n;
+    return (
+      <div className="min-timeline-container">
+        <div className="max-container">
+          {debateData.timeline.map((phase, index) => {
+            return (
+              <TimelineBar title={phase.title} locale={locale} index={index} key={`timeline-${index}`} barWidth={getBarWidth(index, debateData.timeline)} isCurrentStep={isCurrentStep(index, debateData.timeline)} isStepCompleted={isStepCompleted(index, debateData.timeline)} />
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    i18n: state.i18n
+  };
+};
+
+export default connect(mapStateToProps)(Timeline);
