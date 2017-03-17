@@ -23,10 +23,11 @@ class Debate extends React.Component {
   render() {
     const currentIdentifier = this.getCurrentStepIdentifier();
     const isParentRoute = this.props.location.pathname.split('debate')[1].length === 0;
+    const queryPhase = this.props.location.query.phase;
     if (isParentRoute) {
       return (
         <div className="debate">
-          <Themes identifier={currentIdentifier} />
+          <Themes identifier={currentIdentifier} queryPhase={queryPhase} />
         </div>
       );
     } else {

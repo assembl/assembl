@@ -5,18 +5,15 @@ import { Link } from 'react-router';
 
 class Step extends React.Component {
   render() {
-    const imgUrl = this.props.imgUrl;
-    const startDate = this.props.startDate;
-    const title = this.props.title;
-    const description = this.props.description;
-    const StepNumber = this.props.index + 1;
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
     const { locale } = this.props.i18n;
+    const { imgUrl, startDate, title, description, index, identifier } = this.props;
+    const StepNumber = index + 1;
     return (
       <div className="illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
-        <Link className="content-box" to={`${rootPath}${debateData.slug}/home`}>
+        <Link className="content-box" to={`${rootPath}${debateData.slug}/debate?phase=${identifier}`}>
           <h1 className="light-title-1">{StepNumber}</h1>
           {title &&
             <h3 className="light-title-3">

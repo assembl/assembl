@@ -33,7 +33,7 @@ class Phases extends React.Component {
                   {debateData.timeline.map((phase, index) => {
                     return (
                       <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={this.isCurrentStep(index) ? 'no-padding phase' : 'no-padding phase hidden-xs'} key={`phase${index}`}>
-                        <Phase imgUrl={phase.image_url} startDate={phase.start} index={index} title={phase.title} description={phase.description} />
+                        <Phase imgUrl={phase.image_url} startDate={phase.start} index={index} title={phase.title} description={phase.description} identifier={phase.identifier} />
                       </Col>
                     );
                   })}

@@ -3,7 +3,7 @@ import React from 'react';
 class TokenVote extends React.Component {
   render() {
     return (
-      <div>TokenVote</div>
+      <div>Sorry, the token vote session is not started</div>
     );
   }
 }

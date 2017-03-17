@@ -6,7 +6,6 @@ import Login from './pages/login';
 import Signup from './pages/signup';
 import ChangePassword from './pages/changePassword';
 import Home from './pages/home';
-import Ideas from './pages/ideas';
 import Synthesis from './pages/synthesis';
 import Debate from './pages/debate';
 import Survey from './pages/survey';
