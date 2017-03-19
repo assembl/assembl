@@ -1,52 +1,70 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { isDateExpired } from '../utils/globalFunctions';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
 import Timeline from '../components/debate/navigation/timeline';
 import Thumbnails from '../components/debate/navigation/thumbnails';
 
 class Debate extends React.Component {
-  getCurrentStepIdentifier() {
-    const currentDate = new Date();
-    const { debateData } = this.props.debate;
-    let identifier = null;
-    if (debateData.timeline) {
-      debateData.timeline.map((phase) => {
-        const startDate = new Date(phase.start);
-        const endDate = new Date(phase.end);
-        if (isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate)) {
-          identifier = phase.identifier;
-        }
-        return identifier;
-      });
-    }
-    return identifier || 'thread';
-  }
   render() {
-    const currentIdentifier = this.getCurrentStepIdentifier();
+    const { identifier } = this.props;
+    const { loading, thematics } = this.props.data;
     const isParentRoute = this.props.location.pathname.split('debate')[1].length === 0;
-    const queryPhase = this.props.location.query.phase;
+    const queryIdentifier = this.props.location.query.phase;
     return (
-      <div className="debate">
-        <Timeline showNavigation={!isParentRoute} />
-        {isParentRoute &&
-          <Themes identifier={currentIdentifier} queryPhase={queryPhase} />
-        }
-        {!isParentRoute &&
-          <section className="debate-section">
-            <Thumbnails showNavigation={!isParentRoute} />
-            {this.props.children}
-          </section>
+      <div>
+        {loading && <Loader color="black" />}
+        {thematics &&
+          <div className="debate">
+            <Timeline showNavigation={!isParentRoute} />
+            {isParentRoute &&
+              <Themes thematics={thematics} identifier={identifier} queryIdentifier={queryIdentifier} />
+            }
+            {!isParentRoute &&
+              <section className="debate-section">
+                <Thumbnails showNavigation={!isParentRoute} />
+                {this.props.children}
+              </section>
+            }
+          </div>
         }
       </div>
     );
   }
 }
 
+Debate.propTypes = {
+  data: React.PropTypes.shape({
+    loading: React.PropTypes.bool.isRequired,
+    error: React.PropTypes.object,
+    thematics: React.PropTypes.Array
+  }).isRequired
+};
+
+const ThematicQuery = gql`
+  query ThematicQuery($lang: String!, $identifier: String!) {
+   thematics: ideas {
+     ... on Thematic {
+       id,
+       identifier(identifier: $identifier),
+       title(lang: $lang),
+       description,
+       numPosts,
+       numContributors,
+       imgUrl
+     }
+   }
+  }
+`;
+
+const DebateWithData = graphql(ThematicQuery)(Debate);
+
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate
+    lang: state.i18n.locale
   };
 };
 
-export default connect(mapStateToProps)(Debate);
+export default connect(mapStateToProps)(DebateWithData);

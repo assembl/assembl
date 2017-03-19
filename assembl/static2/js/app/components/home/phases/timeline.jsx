@@ -1,20 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Localize } from 'react-redux-i18n';
-import { isCurrentStep, getBarWidth } from '../../../utils/timeline';
+import { isCurrentPhase, getBarWidth } from '../../../utils/timeline';
 import Pointer from '../../svg/pointer';
 
 class Timeline extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { index } = this.props;
-    const currentStep = isCurrentStep(index, debateData.timeline);
+    const currentPhase = isCurrentPhase(index, debateData.timeline);
     const barWidth = getBarWidth(index, debateData.timeline);
     const currentDate = new Date();
     const datePosition = 100 - barWidth;
     return (
       <div className="timeline">
-        {currentStep &&
+        {currentPhase &&
           <div>
             <div className="timeline-date" style={index === 0 ? { left: `${barWidth}%` } : { right: `${datePosition}%` }}>
               <Localize value={currentDate} dateFormat="date.format" />
@@ -22,7 +22,7 @@ class Timeline extends React.Component {
             <Pointer position={barWidth} />
           </div>
         }
-        {!currentStep &&
+        {!currentPhase &&
           <div className="trsp-pointer">&nbsp;</div>
         }
         <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>

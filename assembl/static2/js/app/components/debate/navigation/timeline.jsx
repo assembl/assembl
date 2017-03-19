@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { isCurrentStep, isStepCompleted, getBarWidth } from '../../../utils/timeline';
+import { isCurrentPhase, isStepCompleted, getBarWidth } from '../../../utils/timeline';
 import TimelineBar from './timelineBar';
 
 class Timeline extends React.Component {
@@ -13,7 +13,7 @@ class Timeline extends React.Component {
         <div className="max-container">
           {debateData.timeline.map((phase, index) => {
             return (
-              <TimelineBar title={phase.title} locale={locale} index={index} key={`timeline-${index}`} barWidth={getBarWidth(index, debateData.timeline)} isCurrentStep={isCurrentStep(index, debateData.timeline)} isStepCompleted={isStepCompleted(index, debateData.timeline)} showNavigation={showNavigation} />
+              <TimelineBar title={phase.title} locale={locale} index={index} key={`timeline-${index}`} barWidth={getBarWidth(index, debateData.timeline)} isCurrentPhase={isCurrentPhase(index, debateData.timeline)} isStepCompleted={isStepCompleted(index, debateData.timeline)} showNavigation={showNavigation} />
             );
           })}
         </div>

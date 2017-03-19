@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { isCurrentStep } from '../../utils/timeline';
+import { isCurrentPhase } from '../../utils/timeline';
 import Phase from './phases/phase';
 import Timeline from './phases/timeline';
 
@@ -24,7 +24,7 @@ class Phases extends React.Component {
                 <Row className="no-margin">
                   {debateData.timeline.map((phase, index) => {
                     return (
-                      <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={isCurrentStep(index, debateData.timeline) ? 'no-padding phase' : 'no-padding phase hidden-xs'} key={`phase${index}`}>
+                      <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={isCurrentPhase(index, debateData.timeline) ? 'no-padding phase' : 'no-padding phase hidden-xs'} key={`phase${index}`}>
                         <Phase imgUrl={phase.image_url} startDate={phase.start} index={index} title={phase.title} description={phase.description} identifier={phase.identifier} />
                       </Col>
                     );

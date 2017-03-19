@@ -1,11 +1,33 @@
 import { isDateExpired, getNumberOfDays, calculatePercentage } from './globalFunctions';
 
-export const isCurrentStep = (index, timeline) => {
+export const isPhaseStarted = (timeline, identifier) => {
+  const currentDate = new Date();
+  let isStarted = false;
+  timeline.map((phase) => {
+    if (phase.identifier === identifier) {
+      const startDate = new Date(phase.start);
+      isStarted = isDateExpired(currentDate, startDate);
+    }
+  });
+  return isStarted;
+};
+
+export const getStartDatePhase = (timeline, identifier) => {
+  let startDatePhase = '';
+  timeline.map((phase) => {
+    if (phase.identifier === identifier) {
+      startDatePhase = phase.start;
+    }
+  });
+  return startDatePhase;
+};
+
+export const isCurrentPhase = (index, timeline) => {
   const currentDate = new Date();
   const startDate = new Date(timeline[index].start);
   const endDate = new Date(timeline[index].end);
-  const currentStep = isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate);
-  return currentStep;
+  const currentPhase = isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate);
+  return currentPhase;
 };
 
 export const isStepCompleted = (index, timeline) => {
