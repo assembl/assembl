@@ -1,0 +1,55 @@
+.thumbnails-nav {
+  position: relative;
+
+  .thumbnails-container {
+    background-color: $grey5;
+    height: $navbar-height+20px;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .thumbnails {
+    margin: 0 0 0 90px;
+  }
+
+  .thumb-img-container {
+    float: left;
+    min-height: 1px;
+    width: 130px;
+  }
+
+  .thumb-img {
+    background-size: cover;
+    cursor: pointer;
+    display: inline-block;
+    height: 76px;
+    margin: 2px 0;
+    position: absolute;
+    width: 120px;
+    z-index: 10;
+
+    &:hover {
+      opacity: .5;
+
+      ~ .color-box {
+        display: block;
+      }
+    }
+  }
+
+  .color-box {
+    display: inline-block;
+    background-color: $first-color;
+    display: none;
+    margin: 2px 0;
+    position: absolute;
+    width: 120px;
+    height: 76px;
+    z-index: 3;
+  }
+
+  .thumb {
+    height: $navbar-height+20px;
+  }
+}

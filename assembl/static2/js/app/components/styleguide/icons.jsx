@@ -9,7 +9,10 @@ class Icons extends React.Component {
         <h2 className="dark-title-2 underline" id="icons" style={{ borderBottom: "1px solid #ccc"}}>ICONS</h2>
         <section>
           <div className="inline padding">
-            <span className="assembl-icon-add">&nbsp;</span>
+            <span className="assembl-icon-down-dir color">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-add grey">&nbsp;</span>
           </div>
           <div className="inline padding">
             <span className="assembl-icon-catch">&nbsp;</span>
@@ -98,13 +101,16 @@ class Icons extends React.Component {
         <section>
           <h3 className="dark-title-3">Code</h3>
           <pre>
-            &lt;span className="assembl-icon-add black"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-down-dir color"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="assembl-icon-catch white"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-add grey"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="assembl-icon-checked grey"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-catch black"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-checked white"&gt;&lt;/span&gt;
           </pre>
           <pre>
             &lt;span className="assembl-icon-discussion"&gt;&lt;/span&gt;

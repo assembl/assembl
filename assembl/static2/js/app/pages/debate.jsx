@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { isDateExpired } from '../utils/globalFunctions';
 import Themes from '../components/debate/common/themes';
 import Timeline from '../components/debate/navigation/timeline';
+import Thumbnails from '../components/debate/navigation/thumbnails';
 
 class Debate extends React.Component {
   getCurrentStepIdentifier() {
@@ -27,11 +28,16 @@ class Debate extends React.Component {
     const queryPhase = this.props.location.query.phase;
     return (
       <div className="debate">
-        <Timeline />
+        <Timeline showNavigation={!isParentRoute} />
         {isParentRoute &&
           <Themes identifier={currentIdentifier} queryPhase={queryPhase} />
         }
-        {!isParentRoute && this.props.children}
+        {!isParentRoute &&
+          <section className="debate-section">
+            <Thumbnails showNavigation={!isParentRoute} />
+            {this.props.children}
+          </section>
+        }
       </div>
     );
   }

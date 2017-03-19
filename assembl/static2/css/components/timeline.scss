@@ -36,88 +36,76 @@
     white-space: nowrap;
   }
 }
-
-.min-timeline-container {
-  background-color: $white;
-  border-bottom: $navbar-border;
-  border-top: $navbar-border;
-  height: $navbar-height;
-  padding: 13px 0 0 100px;
-  position: fixed;
-  top: $navbar-height;
-  width: 100%;
-  z-index: 100;
   
-  .minimized-timeline {
+.minimized-timeline {
 
-    .active {
-      background-color: $first-color;
-    }
+  .active {
+    background-color: $first-color;
+  }
 
-    .not-active {
-      background-color: $grey5;
-    }
+  .not-active {
+    background-color: $grey5;
+  }
 
-    .timeline-number {
-      border: 2px solid $white;
-      border-radius: 18px;
-      color: $white;
-      font-size: $font-size-xxxs;
-      height: 18px;
-      line-height: 14px;
-      padding: 0 0 0 1px;
-      position: absolute;
-      text-align: center;
-      width: 18px;
-      z-index: 2;
-    }
+  .timeline-number {
+    border: 2px solid $white;
+    border-radius: 18px;
+    color: $white;
+    font-size: $font-size-xxxs;
+    height: 18px;
+    line-height: 14px;
+    padding: 0 0 0 1px;
+    position: absolute;
+    text-align: center;
+    width: 18px;
+    z-index: 2;
+  }
 
-    .timeline-bar-1 {
-      background-color: $grey5;
-      height: 6px;
-      margin: 6px 0 0 11px;
-      position: absolute;
-      width: 100px;
-      z-index: 0;
-    }
+  .timeline-bar-1 {
+    background-color: $grey5;
+    height: 6px;
+    margin: 6px 0 0 11px;
+    position: absolute;
+    width: 100px;
+    z-index: 0;
+  }
 
-    .timeline-bar-2 {
-      background-color: $first-color;
-      height: 6px;
-      margin: 6px 0 0 11px;
-      position: absolute;
-      z-index: 1;
-    }
+  .timeline-bar-2 {
+    background-color: $first-color;
+    height: 6px;
+    margin: 6px 0 0 11px;
+    position: absolute;
+    z-index: 1;
+  }
 
-    .timeline-title {
-      cursor: pointer;
-      font-size: 10px;
-      padding: 0 0 0 15px;
-      position: absolute;
-      text-align: center;
-      top: 28px;
-      width: 100px;
-    }
+  .timeline-title {
+    cursor: pointer;
+    font-size: 10px;
+    padding: 0 0 0 15px;
+    position: absolute;
+    text-align: center;
+    top: 28px;
+    width: 100px;
+  }
 
-    .txt-active {
-      color: $first-color;
-    }
+  .txt-active {
+    color: $first-color;
+  }
 
-    .txt-not-active {
-      color: $grey5;
-    }
+  .txt-not-active {
+    color: $grey5;
+  }
 
-    .assembl-icon-down-dir:before {
-      font-size: 15px;
-    }
+  .assembl-icon-down-dir:before {
+    font-size: 15px;
+  }
 
-    .arrow {
-      cursor: pointer;
-      padding: 0 0 0 15px;
-      position: absolute;
-      text-align: center;
-      top: 40px;
-      width: 100px;
-    }
+  .arrow {
+    cursor: pointer;
+    padding: 0 0 0 15px;
+    position: absolute;
+    text-align: center;
+    top: 40px;
+    width: 100px;
   }
 }

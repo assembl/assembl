@@ -7,16 +7,17 @@ class Timeline extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
+    const { showNavigation } = this.props;
     return (
-      <div className="min-timeline-container">
+      <section className="timeline-section">
         <div className="max-container">
           {debateData.timeline.map((phase, index) => {
             return (
-              <TimelineBar title={phase.title} locale={locale} index={index} key={`timeline-${index}`} barWidth={getBarWidth(index, debateData.timeline)} isCurrentStep={isCurrentStep(index, debateData.timeline)} isStepCompleted={isStepCompleted(index, debateData.timeline)} />
+              <TimelineBar title={phase.title} locale={locale} index={index} key={`timeline-${index}`} barWidth={getBarWidth(index, debateData.timeline)} isCurrentStep={isCurrentStep(index, debateData.timeline)} isStepCompleted={isStepCompleted(index, debateData.timeline)} showNavigation={showNavigation} />
             );
           })}
         </div>
-      </div>
+      </section>
     );
   }
 }

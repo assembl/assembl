@@ -1,9 +1,23 @@
 .debate {
+
+  .timeline-section {
+    background-color: $white;
+    border-bottom: $navbar-border;
+    border-top: $navbar-border;
+    height: $navbar-height;
+    padding: 13px 0 0 100px;
+    position: fixed;
+    top: $navbar-height;
+    width: 100%;
+    z-index: 100;
+  }
+
   .debate-section {
     margin: $navbar-height*2 0 0;
   }
 
   .themes-section {
+    margin: 120px 0 0;
     .theme {
       &:nth-child(1) {
         margin: 80px 0 0;

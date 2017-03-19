@@ -9,7 +9,7 @@ import NotStartedPhase from './notStartedPhase';
 import Loader from '../../common/loader';
 import ThematicPreview from '../../common/thematicPreview';
 
-class Survey extends React.Component {
+class Themes extends React.Component {
   isPhaseStarted(timeline, queryIdentifier) { // eslint-disable-line
     const currentDate = new Date();
     let startDatePhase = '';
@@ -67,7 +67,7 @@ class Survey extends React.Component {
   }
 }
 
-Survey.propTypes = {
+Themes.propTypes = {
   data: React.PropTypes.shape({
     loading: React.PropTypes.bool.isRequired,
     error: React.PropTypes.object,
@@ -91,7 +91,7 @@ const ThematicQuery = gql`
   }
 `;
 
-const SurveyWithData = graphql(ThematicQuery)(Survey);
+const ThemesWithData = graphql(ThematicQuery)(Themes);
 
 const mapStateToProps = (state) => {
   return {
@@ -101,4 +101,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SurveyWithData);
+export default connect(mapStateToProps)(ThemesWithData);
