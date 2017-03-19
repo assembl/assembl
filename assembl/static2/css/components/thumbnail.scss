@@ -21,7 +21,6 @@
 
   .thumb-img {
     background-size: cover;
-    cursor: pointer;
     display: inline-block;
     height: 76px;
     margin: 2px 0;
@@ -35,6 +34,14 @@
       ~ .color-box {
         display: block;
       }
+    }
+  }
+
+  .active {
+    opacity: .5;
+
+    ~ .color-box {
+      display: block;
     }
   }
 

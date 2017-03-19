@@ -8,10 +8,9 @@ import ThematicPreview from '../../common/thematicPreview';
 
 class Themes extends React.Component {
   render() {
-    const { thematics } = this.props;
+    const { thematics, identifier, queryIdentifier } = this.props;
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
-    const { identifier, queryIdentifier } = this.props;
     const identifierToDisplay = queryIdentifier || identifier;
     const phaseStarted = isPhaseStarted(debateData.timeline, identifierToDisplay);
     const startDatePhase = getStartDatePhase(debateData.timeline, identifierToDisplay);
@@ -31,7 +30,14 @@ class Themes extends React.Component {
                   {thematics.map((thematic, index) => {
                     return (
                       <Col xs={12} sm={6} md={3} className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'} key={`thematic-${index}`}>
-                        <ThematicPreview imgUrl={thematic.imgUrl} numPosts={thematic.numPosts} numContributors={thematic.numContributors} link={`${rootPath}${debateData.slug}/debate/${identifierToDisplay}/theme/${thematic.id.split(':')[1]}`} title={thematic.title} description={thematic.description} />
+                        <ThematicPreview
+                          imgUrl={thematic.imgUrl}
+                          numPosts={thematic.numPosts}
+                          numContributors={thematic.numContributors}
+                          link={`${rootPath}${debateData.slug}/debate/${identifierToDisplay}/theme/${thematic.id.split(':')[1]}`}
+                          title={thematic.title}
+                          description={thematic.description}
+                        />
                       </Col>
                     );
                   })}

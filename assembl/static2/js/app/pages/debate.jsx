@@ -11,8 +11,10 @@ class Debate extends React.Component {
   render() {
     const { identifier } = this.props;
     const { loading, thematics } = this.props.data;
+    const locationIdentifier = this.props.location.pathname.split('debate')[1].length > 0 ? this.props.location.pathname.split('debate/')[1].split('/')[0] : null;
+    const queryIdentifier = this.props.location.query.phase || locationIdentifier;
     const isParentRoute = this.props.location.pathname.split('debate')[1].length === 0;
-    const queryIdentifier = this.props.location.query.phase;
+    const themeId = this.props.location.pathname.split('theme/')[1];
     return (
       <div>
         {loading && <Loader color="black" />}
@@ -20,11 +22,21 @@ class Debate extends React.Component {
           <div className="debate">
             <Timeline showNavigation={!isParentRoute} />
             {isParentRoute &&
-              <Themes thematics={thematics} identifier={identifier} queryIdentifier={queryIdentifier} />
+              <Themes
+                thematics={thematics}
+                identifier={identifier}
+                queryIdentifier={queryIdentifier}
+              />
             }
             {!isParentRoute &&
               <section className="debate-section">
-                <Thumbnails showNavigation={!isParentRoute} />
+                <Thumbnails
+                  showNavigation={!isParentRoute}
+                  thematics={thematics}
+                  themeId={themeId}
+                  identifier={identifier}
+                  queryIdentifier={queryIdentifier}
+                />
                 {this.props.children}
               </section>
             }
