@@ -11,7 +11,7 @@ class Debate extends React.Component {
   render() {
     const { identifier } = this.props;
     const { loading, thematics } = this.props.data;
-    const locationIdentifier = this.props.location.pathname.split('debate')[1].length > 0 ? this.props.location.pathname.split('debate/')[1].split('/')[0] : null;
+    const locationIdentifier = this.props.location.pathname.split('debate')[1].length > 0 ? this.props.location.pathname.split('debate/')[1].split('/')[0] : identifier;
     const queryIdentifier = this.props.location.query.phase || locationIdentifier;
     const isParentRoute = this.props.location.pathname.split('debate')[1].length === 0;
     const themeId = this.props.location.pathname.split('theme/')[1];
@@ -20,11 +20,10 @@ class Debate extends React.Component {
         {loading && <Loader color="black" />}
         {thematics &&
           <div className="debate">
-            <Timeline showNavigation={!isParentRoute} />
+            <Timeline showNavigation={!isParentRoute} queryIdentifier={queryIdentifier} />
             {isParentRoute &&
               <Themes
                 thematics={thematics}
-                identifier={identifier}
                 queryIdentifier={queryIdentifier}
               />
             }

@@ -8,6 +8,8 @@ class TimelineSegment extends React.Component {
       isCurrentPhase,
       showNavigation,
       isStepCompleted,
+      identifier,
+      queryIdentifier,
       title,
       locale
     } = this.props;
@@ -20,12 +22,12 @@ class TimelineSegment extends React.Component {
         <div className="timeline-bar-1">&nbsp;</div>
         {title.entries.map((entry, index2) => {
           return (
-            <div className={isCurrentPhase ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={`title-${index2}`}>
+            <div className={identifier === queryIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={`title-${index2}`}>
               {locale === entry['@language'] ? entry.value : ''}
             </div>
           );
         })}
-        <span className={isCurrentPhase && showNavigation ? 'arrow assembl-icon-down-dir color' : 'hidden'}>&nbsp;</span>
+        <span className={identifier === queryIdentifier && showNavigation ? 'arrow assembl-icon-down-dir color' : 'hidden'}>&nbsp;</span>
       </div>
     );
   }
