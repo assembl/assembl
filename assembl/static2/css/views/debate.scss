@@ -159,6 +159,22 @@
   }
 }
 
+@media screen and (max-width: 600px) {
+  .debate {
+    .timeline-section {
+      display: none;
+    }
+
+    .themes-section {
+      margin: 60px 0 0;
+    }
+
+    .debate-section {
+      margin: 60px 0 0;
+    }
+  }
+}
+
 @media screen and (max-width: 991px) {
   .debate {
     .themes-section {

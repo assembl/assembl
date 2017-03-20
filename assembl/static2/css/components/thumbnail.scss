@@ -4,13 +4,15 @@
   .thumbnails-container {
     background-color: $grey5;
     height: $navbar-height+20px;
+    overflow-x: scroll;
     position: fixed;
     width: 100%;
     z-index: 100;
-  }
 
-  .thumbnails {
-    margin: 0 0 0 90px;
+    .thumbnails {
+      display: -webkit-box;
+      overflow-x: scroll;
+    }
   }
 
   .thumb-img-container {
@@ -58,5 +60,21 @@
 
   .thumb {
     height: $navbar-height+20px;
+  }
+}
+
+@media screen and (min-width: 601px) {
+  .thumbnails-container {
+    .thumbnails {
+      padding: 0 0 0 90px;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .thumbnails-container {
+    .thumbnails {
+      padding: 0;
+    }
   }
 }
