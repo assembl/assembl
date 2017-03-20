@@ -18,6 +18,26 @@ import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
 import Terms from './pages/terms';
 
+const DebateChild = (props) => {
+  switch (props.params.phase) {
+    case "survey":
+    return <Survey />;
+    break;
+    case "thread":
+    return <Thread />;
+    break;
+    case "twoColumns":
+    return <TwoColumns />;
+    break;
+    case "tokenVote":
+    return <TokenVote />;
+    break;
+    default:
+    return <Survey />;
+    break;
+  }
+}
+
 export default (
   <Router>
     <Route component={App}>
@@ -35,10 +55,7 @@ export default (
         <Route path=":slug/home" component={Home} />
         <Route path=":slug/synthesis" component={Synthesis} />
         <Route path=":slug/debate" component={Debate}>
-          <Route path="survey/theme/:id" component={Survey} />
-          <Route path="thread/theme/:id" component={Thread} />
-          <Route path="twoColumns/theme/:id" component={TwoColumns} />
-          <Route path="tokenVote/theme/:id" component={TokenVote} />
+          <Route path=":phase/theme/:themeId" component={DebateChild} />
         </Route>
         <Route path=":slug/community" component={Community} />
         <Route path=":slug/terms" component={Terms} />

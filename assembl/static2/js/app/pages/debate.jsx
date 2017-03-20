@@ -11,10 +11,10 @@ class Debate extends React.Component {
   render() {
     const { identifier } = this.props;
     const { loading, thematics } = this.props.data;
-    const locationIdentifier = this.props.location.pathname.split('debate')[1].length > 0 ? this.props.location.pathname.split('debate/')[1].split('/')[0] : identifier;
+    const locationIdentifier = this.props.params.phase || identifier;
     const queryIdentifier = this.props.location.query.phase || locationIdentifier;
-    const isParentRoute = this.props.location.pathname.split('debate')[1].length === 0;
-    const themeId = this.props.location.pathname.split('theme/')[1];
+    const isParentRoute = !this.props.params.phase || false;
+    const themeId = this.props.params.themeId || null;
     return (
       <div>
         {loading && <Loader color="black" />}
