@@ -8,8 +8,8 @@ class Timeline extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { index } = this.props;
-    const currentPhase = isCurrentPhase(index, debateData.timeline);
-    const barWidth = getBarWidth(index, debateData.timeline);
+    const currentPhase = isCurrentPhase(debateData.timeline[index]);
+    const barWidth = getBarWidth(debateData.timeline[index]);
     const currentDate = new Date();
     const datePosition = 100 - barWidth;
     return (

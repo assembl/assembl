@@ -36,29 +36,29 @@ export const getStartDatePhase = (timeline, identifier) => {
   return startDatePhase;
 };
 
-export const isCurrentPhase = (index, timeline) => {
+export const isCurrentPhase = (phase) => {
   const currentDate = new Date();
-  const startDate = new Date(timeline[index].start);
-  const endDate = new Date(timeline[index].end);
+  const startDate = new Date(phase.start);
+  const endDate = new Date(phase.end);
   const currentPhase = isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate);
   return currentPhase;
 };
 
-export const isStepCompleted = (index, timeline) => {
+export const isStepCompleted = (phase) => {
   const currentDate = new Date();
-  const endDate = new Date(timeline[index].end);
+  const endDate = new Date(phase.end);
   return isDateExpired(currentDate, endDate);
 };
 
-export const getBarWidth = (index, timeline) => {
+export const getBarWidth = (phase) => {
   const currentDate = new Date();
-  const endDate = new Date(timeline[index].end);
+  const endDate = new Date(phase.end);
   const stepCompleted = isDateExpired(currentDate, endDate);
   let barWidth = 0;
   if (stepCompleted) {
     barWidth = 100;
   } else {
-    const startDate = new Date(timeline[index].start);
+    const startDate = new Date(phase.start);
     const isStepStarted = isDateExpired(currentDate, startDate);
     if (isStepStarted) {
       const remainingDays = getNumberOfDays(endDate, currentDate);
