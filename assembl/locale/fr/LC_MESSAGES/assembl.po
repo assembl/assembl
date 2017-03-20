@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-14 11:31+0100\n"
+"POT-Creation-Date: 2017-03-20 14:10-0400\n"
 "PO-Revision-Date: 2016-12-15 14:46+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: fr\n"
@@ -51,19 +51,19 @@ msgstr "${val} n’est pas une chaîne: ${err}"
 msgid "Unknown User ${uid}"
 msgstr "Utilisateur non-identifié ${uid}"
 
-#: assembl/models/notification.py:590
+#: assembl/models/notification.py:624
 msgid "A synthesis is posted"
 msgstr "Une synthèse est publiée"
 
-#: assembl/models/notification.py:618
+#: assembl/models/notification.py:652
 msgid "Any message is posted to the discussion"
 msgstr "N’importe quel message est envoyé à la discussion"
 
-#: assembl/models/notification.py:646
+#: assembl/models/notification.py:680
 msgid "Someone directly responds to one of your messages"
 msgstr "Quelqu’un répond directement à un de vos messages"
 
-#: assembl/models/notification.py:1056
+#: assembl/models/notification.py:1090
 msgid "SYNTHESIS: "
 msgstr "SYNTHÈSE: "
 
@@ -119,19 +119,51 @@ msgstr "Navigation, Messages, Idée"
 msgid "Order of panels"
 msgstr "Ordre des panneaux"
 
-#: assembl/models/preferences.py:397
+#: assembl/models/preferences.py:398
+msgid "Extra JSON parameters"
+msgstr "Paramètres JSON supplémentaires"
+
+#: assembl/models/preferences.py:400
+msgid "Parameters for quick frontend settings"
+msgstr "Définition rapide de paramètres pour le frontend"
+
+#: assembl/models/preferences.py:409
+msgid "Terms of use URL"
+msgstr "URL des conditions d'utilisation"
+
+#: assembl/models/preferences.py:411
+msgid "URL of a document presenting terms of use for the discussion"
+msgstr "URL d'un document présentant les conditions générales d'utilisation"
+
+#: assembl/models/preferences.py:420
+msgid "Video URL"
+msgstr "URL de vidéo"
+
+#: assembl/models/preferences.py:422
+msgid "URL of a video presenting the discussion"
+msgstr "URL d'un vidéo présentant la discussion"
+
+#: assembl/models/preferences.py:431
+msgid "Video description"
+msgstr "Description du vidéo"
+
+#: assembl/models/preferences.py:433
+msgid "Description of the video presenting the discussion"
+msgstr "Description du vidéo présentant la discussion"
+
+#: assembl/models/preferences.py:442
 msgid "Social sharing"
 msgstr "Partage social"
 
-#: assembl/models/preferences.py:400
+#: assembl/models/preferences.py:445
 msgid "Show the share button on posts and ideas"
 msgstr "Voir le bouton Partager sur les messages et le panneau Idée"
 
-#: assembl/models/preferences.py:411
+#: assembl/models/preferences.py:456
 msgid "Private authentication server"
 msgstr "Serveur d'identification privé"
 
-#: assembl/models/preferences.py:413
+#: assembl/models/preferences.py:458
 msgid ""
 "Endpoint URL of a private authentication that users will mandatorily have"
 " to authenticate themselves with."
@@ -139,53 +171,53 @@ msgstr ""
 "Point d'API d'un serveur d'identification privé auprès duquel les "
 "participants devront obligatoirement s'identifier."
 
-#: assembl/models/preferences.py:427 assembl/models/preferences.py:788
+#: assembl/models/preferences.py:472 assembl/models/preferences.py:833
 msgid "No special authentication"
 msgstr "Pas d'authentification spécifique"
 
-#: assembl/models/preferences.py:429
+#: assembl/models/preferences.py:474
 msgid "WordPress OAuth Server"
 msgstr "WordPress OAuth Server"
 
-#: assembl/models/preferences.py:431
+#: assembl/models/preferences.py:476
 msgid "Authentication service type"
 msgstr "Type du service d'identification"
 
-#: assembl/models/preferences.py:433
+#: assembl/models/preferences.py:478
 msgid "The python-social-auth backend for the private authentication server."
 msgstr "Le module de python-social-auth pour le serveur d'identification privé."
 
-#: assembl/models/preferences.py:445
+#: assembl/models/preferences.py:490
 msgid "Authentication key"
 msgstr "Clé d'identification"
 
-#: assembl/models/preferences.py:446
+#: assembl/models/preferences.py:491
 msgid "Key for assembl as a client of the authentication server"
 msgstr "Clé pour Assembl comme client du serveur d'identification"
 
-#: assembl/models/preferences.py:458
+#: assembl/models/preferences.py:503
 msgid "Authentication secret"
 msgstr "Secret d'identification"
 
-#: assembl/models/preferences.py:459
+#: assembl/models/preferences.py:504
 msgid "Secret for assembl as a client of the authentication server"
 msgstr "Secret pour Assembl comme client du serveur d'identification"
 
-#: assembl/models/preferences.py:472
+#: assembl/models/preferences.py:517
 msgid "Allow access to moderated text"
 msgstr "Autoriser l'accès à un message modéré"
 
-#: assembl/models/preferences.py:475
+#: assembl/models/preferences.py:520
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr ""
 "Les messages modérés sont-ils simplement cachés ou rendus inaccessibles "
 "par défaut?"
 
-#: assembl/models/preferences.py:488
+#: assembl/models/preferences.py:533
 msgid "Idea panel opens automatically"
 msgstr "Le panneau idée s'ouvre automatiquement"
 
-#: assembl/models/preferences.py:491
+#: assembl/models/preferences.py:536
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
@@ -194,31 +226,31 @@ msgstr ""
 "cliquée depuis la table des idées ? (et se ferme quand une section "
 "spéciale est cliquée)"
 
-#: assembl/models/preferences.py:503
+#: assembl/models/preferences.py:548
 msgid "Ids of columns in column view"
 msgstr "Ids des colonnes (vue par colonnes)"
 
-#: assembl/models/preferences.py:505
+#: assembl/models/preferences.py:550
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr ""
 "Quels sont les identifiants des colonnes dans la vue des messages par "
 "colonnes? (dans l'ordre)"
 
-#: assembl/models/preferences.py:518
+#: assembl/models/preferences.py:563
 msgid "Default colors of columns in column view"
 msgstr "Couleurs par défaut des colonnes (vue par colonnes)"
 
-#: assembl/models/preferences.py:520
+#: assembl/models/preferences.py:565
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr ""
 "Quelles sont les couleurs thématiques par défaut pour les colonnes dans "
 "la vue des messages par colonnes?"
 
-#: assembl/models/preferences.py:532
+#: assembl/models/preferences.py:577
 msgid "Names of columns in column view"
 msgstr "Nom des colonnes (vue par colonnes)"
 
-#: assembl/models/preferences.py:534
+#: assembl/models/preferences.py:579
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
@@ -226,19 +258,19 @@ msgstr ""
 "Quels est le nom des colonnes dans la vue des messages par colonnes, dans"
 " chacune des langues de la discussion?"
 
-#: assembl/models/preferences.py:547
+#: assembl/models/preferences.py:592
 msgid "Default permissions"
 msgstr "Permissions par défaut:"
 
-#: assembl/models/preferences.py:550
+#: assembl/models/preferences.py:595
 msgid "The basic permissions for a new discussion"
 msgstr "Les permissions de base pour une nouvelle discussion"
 
-#: assembl/models/preferences.py:623
+#: assembl/models/preferences.py:668
 msgid "Require Email Domain"
 msgstr "Nécessite le domaine d'email"
 
-#: assembl/models/preferences.py:626
+#: assembl/models/preferences.py:671
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -250,39 +282,39 @@ msgstr ""
 "défini sur un de ces domaines peuvent s'auto-inscrire. Si cette liste est"
 " vide, n'importe qui peut s'auto-inscrire. "
 
-#: assembl/models/preferences.py:642
+#: assembl/models/preferences.py:687
 msgid "Show CI Dashboard"
 msgstr "Montrer le CI Dashboard"
 
-#: assembl/models/preferences.py:645
+#: assembl/models/preferences.py:690
 msgid "Show the CI Dashboard in the panel group window"
 msgstr ""
 "Montrer le tableau de bord d’intelligence collective (CI Dashboard) dans "
 "le dialogue de groupe de pannaux"
 
-#: assembl/models/preferences.py:657
+#: assembl/models/preferences.py:702
 msgid "URL of CI Dashboard"
 msgstr "URL du CI Dashboard"
 
-#: assembl/models/preferences.py:659
+#: assembl/models/preferences.py:704
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr ""
 "Configuration des visualisations montrées dans le tableau de bord "
 "d’intelligence collective (CI Dashboard)"
 
-#: assembl/models/preferences.py:677
+#: assembl/models/preferences.py:722
 msgid "Catalyst Visualizations"
 msgstr "Visualisations Catalyst"
 
-#: assembl/models/preferences.py:680
+#: assembl/models/preferences.py:725
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "Une description en JSON des visualisations Catalyst disponibles"
 
-#: assembl/models/preferences.py:692
+#: assembl/models/preferences.py:737
 msgid "Navigation sections"
 msgstr "Sections de navigation"
 
-#: assembl/models/preferences.py:695
+#: assembl/models/preferences.py:740
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
@@ -290,21 +322,21 @@ msgstr ""
 "Une spécification en JSON des visualisations Catalyst à montrer dans le "
 "navigateur"
 
-#: assembl/models/preferences.py:708
+#: assembl/models/preferences.py:753
 msgid "Catalyst translations"
 msgstr "Traduction Catalyst"
 
-#: assembl/models/preferences.py:711
+#: assembl/models/preferences.py:756
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
 "Traductions applicables aux visualisations Catalyst, dans le format Jed "
 "(JSON)"
 
-#: assembl/models/preferences.py:728
+#: assembl/models/preferences.py:773
 msgid "Default Table of Ideas Collapsed state"
 msgstr "État déployé/replié par défaut de la Table des Idées"
 
-#: assembl/models/preferences.py:731
+#: assembl/models/preferences.py:776
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
@@ -312,29 +344,29 @@ msgstr ""
 "L’état déployé/replié par défaut pour chaque idée dans la table des "
 "idées. (L’état déployé/replié de l’utilisateur aura préséance.)"
 
-#: assembl/models/preferences.py:746
+#: assembl/models/preferences.py:791
 msgid "Preference data"
 msgstr "Données de préférences"
 
-#: assembl/models/preferences.py:749
+#: assembl/models/preferences.py:794
 msgid "The preference configuration; override only with care"
 msgstr ""
 "La configuration des préférences; faire très attention si vous "
 "l’outrepassez."
 
-#: assembl/models/preferences.py:761
+#: assembl/models/preferences.py:806
 msgid "Cookies banner"
 msgstr "Bandeau de cookies"
 
-#: assembl/models/preferences.py:764
+#: assembl/models/preferences.py:809
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "Afficher le bandeau qui permet de désactiver les cookies Piwik"
 
-#: assembl/static/js/app/routeManager.js:526
+#: assembl/static/js/app/routeManager.js:535
 msgid "You must be logged in to access this page."
 msgstr "Vous devez être connecté pour accéder à cette page."
 
-#: assembl/static/js/app/routeManager.js:548
+#: assembl/static/js/app/routeManager.js:558
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
 "Votre niveau de permissions ne vous permet pas de voir le reste ce de "
@@ -352,11 +384,11 @@ msgstr "Aperçu des messages"
 msgid "Complete messages"
 msgstr "Messages complets"
 
-#: assembl/static/js/app/common/context.js:883
+#: assembl/static/js/app/common/context.js:893
 msgid "Extract"
 msgstr "Extrait"
 
-#: assembl/static/js/app/common/context.js:1245
+#: assembl/static/js/app/common/context.js:1255
 msgid "ajax error message:"
 msgstr "Message d’erreur ajax:"
 
@@ -404,33 +436,33 @@ msgstr "Ne rien montrer de particulier"
 msgid "Show the following preview at the end of your message"
 msgstr "Montrer l’aperçu suivant à la fin de votre message"
 
-#: assembl/static/js/app/models/attachments.js:453
+#: assembl/static/js/app/models/attachments.js:456
 msgid "Sorry, only an image type is supported in this upload. Please try again."
 msgstr ""
 "Pardon, nous n'acceptons que les types d'image pour le téléversement. "
 "Veuillez réessayer."
 
-#: assembl/static/js/app/models/idea.js:119
+#: assembl/static/js/app/models/idea.js:120
 msgid "The root idea will not be in the synthesis"
 msgstr "L’idée-racine ne fera pas partie de la synthèse"
 
-#: assembl/static/js/app/models/idea.js:130
+#: assembl/static/js/app/models/idea.js:131
 msgid "Add a description of this idea"
 msgstr "Ajouter une description de cette idée"
 
-#: assembl/static/js/app/models/idea.js:142
+#: assembl/static/js/app/models/idea.js:143
 msgid "The root idea will never be in the synthesis"
 msgstr "L’idée-racine ne fera jamais partie de la synthèse"
 
-#: assembl/static/js/app/models/idea.js:155
+#: assembl/static/js/app/models/idea.js:156
 msgid "You can add an expression for the next synthesis"
 msgstr "Vous pouvez spécifier l’expression dans la prochaine synthèse"
 
-#: assembl/static/js/app/models/idea.js:166
+#: assembl/static/js/app/models/idea.js:167
 msgid "All posts"
 msgstr "Tous les messages"
 
-#: assembl/static/js/app/models/idea.js:178
+#: assembl/static/js/app/models/idea.js:179
 #: assembl/static/js/app/views/ideaPanel.js:522
 msgid "New idea"
 msgstr "Ajouter une idée"
@@ -1154,17 +1186,17 @@ msgstr[0] "%d message est disponible sous cette idée"
 msgstr[1] "%d messages sont disponibles sous cette idée"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:229
-#: assembl/static/js/app/views/message.js:821
+#: assembl/static/js/app/views/message.js:804
 msgid "Type your response here..."
 msgstr "Écrivez votre réponse ici..."
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:231
-#: assembl/static/js/app/views/message.js:823
+#: assembl/static/js/app/views/message.js:806
 msgid "Send your reply"
 msgstr "Envoyez votre réponse"
 
 #: assembl/static/js/app/views/ideaInSynthesis.js:234
-#: assembl/static/js/app/views/message.js:825
+#: assembl/static/js/app/views/message.js:808
 msgid "You did not type a response yet..."
 msgstr "Vous n’avez pas encore écrit de réponse"
 
@@ -1253,12 +1285,12 @@ msgid "Confirm that you want to delete this idea."
 msgstr "Confirmez que vous souhaitez supprimer cette idée."
 
 #: assembl/static/js/app/views/ideaPanel.js:754
-#: assembl/static/js/app/views/message.js:1664
+#: assembl/static/js/app/views/message.js:1652
 msgid "No"
 msgstr "Non"
 
 #: assembl/static/js/app/views/ideaPanel.js:755
-#: assembl/static/js/app/views/message.js:1665
+#: assembl/static/js/app/views/message.js:1653
 msgid "Yes"
 msgstr "Oui"
 
@@ -1270,46 +1302,45 @@ msgstr "Confirmez que vous souhaitez renvoyer tous les extraits au presse-papier
 msgid "You may want to describe this idea for users here..."
 msgstr "Vous pouvez décrire cette idée ici pour les utilisateurs..."
 
-#: assembl/static/js/app/views/message.js:132
+#: assembl/static/js/app/views/message.js:133
 msgid "This message is linked to the following idea: "
 msgid_plural "This message is linked to the following ideas: "
 msgstr[0] "Ce message est en lien avec l’idée :"
 msgstr[1] "Ce message est en lien avec les idées :"
 
-#: assembl/static/js/app/views/message.js:136
+#: assembl/static/js/app/views/message.js:137
 #, python-format
 msgid "and %d other idea</a>"
 msgid_plural "and %d other ideas</a>"
 msgstr[0] "et %d autre idée"
 msgstr[1] "et %d autres idées"
 
-#: assembl/static/js/app/views/message.js:1039
+#: assembl/static/js/app/views/message.js:1031
 msgid "You"
 msgstr "Vous"
 
-#: assembl/static/js/app/views/message.js:1044
-#, python-format
+#: assembl/static/js/app/views/message.js:1036
 msgid "You and %d Another person"
 msgid_plural "You and %d Other persons"
 msgstr[0] "Vous et %d autre personne"
 msgstr[1] "Vous et %d autres personnes"
 
-#: assembl/static/js/app/views/message.js:1052
+#: assembl/static/js/app/views/message.js:1044
 #, python-format
 msgid "%d person"
 msgid_plural "%d persons"
 msgstr[0] "%d personne"
 msgstr[1] "%d personnes"
 
-#: assembl/static/js/app/views/message.js:1646
+#: assembl/static/js/app/views/message.js:1634
 msgid "Message has been successfully deleted."
 msgstr "Le message a été supprimé avec succès."
 
-#: assembl/static/js/app/views/message.js:1657
+#: assembl/static/js/app/views/message.js:1645
 msgid "Error: Message could not be deleted."
 msgstr "Erreur : Il n'a pas été possible de supprimer le message."
 
-#: assembl/static/js/app/views/message.js:1663
+#: assembl/static/js/app/views/message.js:1651
 msgid "Are you sure you want to delete this message?"
 msgstr "Êtes-vous sûr de vouloir supprimer ce message ?"
 
@@ -2093,6 +2124,11 @@ msgstr "Colonnes sauvegardées"
 msgid "Define columns"
 msgstr "Définir les colonnes"
 
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:240
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:250
+msgid "Invalid date and time"
+msgstr "date et heure invalide"
+
 #: assembl/static/js/app/views/admin/generalSource.js:79
 msgid "There was a reimport error!"
 msgstr "Erreur au courd de la ré-importation!"
@@ -2176,6 +2212,11 @@ msgstr ""
 msgid "Lock panel"
 msgstr "Verrouiller le panneau"
 
+#: assembl/static/js/app/views/modals/discussionStatisticsModal.js:157
+#: assembl/templates/views/navBarLeft.tmpl:25
+msgid "Discussion statistics"
+msgstr "Statistiques de la discussion"
+
 #: assembl/static/js/app/views/modals/ideaInModal.js:44
 #: assembl/static/js/app/views/modals/ideaInModal.js:49
 #, python-format
@@ -2238,7 +2279,7 @@ msgid "There are no discussions on this server yet"
 msgstr "Il n’y a pas encore de discussions sur ce serveur."
 
 #: assembl/templates/discussion_list.jinja2:27
-#: assembl/templates/views/navBarRight.tmpl:64
+#: assembl/templates/views/navBarRight.tmpl:60
 msgid "Sign in"
 msgstr "Connectez-vous"
 
@@ -2259,7 +2300,7 @@ msgid "Change global preferences"
 msgstr "Changer les préférences globales"
 
 #: assembl/templates/discussion_list.jinja2:45
-#: assembl/templates/views/navBarRight.tmpl:59
+#: assembl/templates/views/navBarRight.tmpl:55
 msgid "Sign out"
 msgstr "Déconnexion"
 
@@ -2374,6 +2415,7 @@ msgstr "Identifiant souhaité"
 
 #: assembl/templates/profile.jinja2:56 assembl/templates/view_profile.jinja2:29
 #: assembl/templates/views/adminMessageColumn.tmpl:13
+#: assembl/templates/views/discussionStatisticsModal.tmpl:95
 msgid "Name"
 msgstr "Nom"
 
@@ -2862,7 +2904,7 @@ msgid "Save changes"
 msgstr "Sauvegarder les modifications"
 
 #: assembl/templates/views/adminDiscussionSettings.tmpl:6
-#: assembl/templates/views/navBarRight.tmpl:54
+#: assembl/templates/views/navBarLeft.tmpl:21
 msgid "Discussion settings"
 msgstr "Paramètres de la discussion"
 
@@ -2899,7 +2941,7 @@ msgid "Manual start"
 msgstr "Démarrage manuel"
 
 #: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:15
-#: assembl/templates/views/message.tmpl:37
+#: assembl/templates/views/message.tmpl:33
 #: assembl/templates/views/messageDeletedByUser.tmpl:25
 #: assembl/templates/views/messageListHeader.tmpl:4
 msgid "More options"
@@ -2907,6 +2949,7 @@ msgstr "Plus d’options"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:4
 #: assembl/templates/views/adminMessageColumn.tmpl:5
+#: assembl/templates/views/adminTimelineEvent.tmpl:5
 msgid "Identifier"
 msgstr "Identifiant"
 
@@ -2916,6 +2959,7 @@ msgid "Color"
 msgstr "Couleur"
 
 #: assembl/templates/views/adminMessageColumn.tmpl:23
+#: assembl/templates/views/adminTimelineEvent.tmpl:45
 #: assembl/templates/views/dictPreferenceItemView.tmpl:8
 #: assembl/templates/views/listPreferenceItemView.tmpl:7
 #: assembl/templates/views/partnersInAdmin.tmpl:20
@@ -2924,6 +2968,7 @@ msgstr "Supprimer"
 
 #: assembl/templates/views/adminMessageColumns.tmpl:5
 #: assembl/templates/views/adminPartnerForm.tmpl:62
+#: assembl/templates/views/adminTimelineEvents.tmpl:20
 #: assembl/templates/views/listPreferenceView.tmpl:4
 msgid "Add"
 msgstr "Ajouter"
@@ -2938,6 +2983,7 @@ msgid "Edit notifications"
 msgstr "Configurer les notifications"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:13
+#: assembl/templates/views/adminTimelineEvents.tmpl:13
 msgid "Your change has been saved!"
 msgstr "Vos changements ont été sauvegardés !"
 
@@ -2983,6 +3029,7 @@ msgstr "Ce champ est obligatoire"
 
 #: assembl/templates/views/adminPartnerEditForm.tmpl:20
 #: assembl/templates/views/adminPartnerForm.tmpl:19
+#: assembl/templates/views/adminTimelineEvent.tmpl:35
 msgid "Description"
 msgstr "Description"
 
@@ -3050,6 +3097,27 @@ msgstr "Partenaire ajouté avec succès"
 #: assembl/templates/views/adminPartners.tmpl:19
 msgid "Add partner"
 msgstr "Ajouter un partenaire"
+
+#: assembl/templates/views/adminTimelineEvent.tmpl:11
+msgid "Start date (local time)"
+msgstr "Date de début (heure locale)"
+
+#: assembl/templates/views/adminTimelineEvent.tmpl:17
+msgid "End date (local time)"
+msgstr "Date de fin (heure locale)"
+
+#: assembl/templates/views/adminTimelineEvent.tmpl:23
+msgid "Image URL"
+msgstr "URL d'une image"
+
+#: assembl/templates/views/adminTimelineEvent.tmpl:31
+msgid "Title"
+msgstr "Titre"
+
+#: assembl/templates/views/adminTimelineEvents.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
+msgid "Edit timeline"
+msgstr "Éditer la ligne de temps"
 
 #: assembl/templates/views/agentAvatar.tmpl:4
 msgid "anonymous"
@@ -3139,8 +3207,8 @@ msgid "Add a new announcement to this idea"
 msgstr "Ajouter une nouvelle annonce à cette idée"
 
 #: assembl/templates/views/announcementMessage.tmpl:10
-#: assembl/templates/views/message.tmpl:154
-#: assembl/templates/views/message.tmpl:173
+#: assembl/templates/views/message.tmpl:150
+#: assembl/templates/views/message.tmpl:169
 #: assembl/templates/views/messageDeletedByUser.tmpl:53
 #: assembl/templates/views/messageDeletedByUser.tmpl:72
 #, python-format
@@ -3296,16 +3364,215 @@ msgstr "Préférences de la discussion"
 msgid "Server settings"
 msgstr "Paramètres du serveur"
 
-#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:18
 msgid "Edit partners"
 msgstr "Éditer les partenaires"
 
-#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:18
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:21
 #: assembl/templates/views/userAccountForm.tmpl:43
 #: assembl/templates/views/userNavigationMenu.tmpl:17
 #: assembl/templates/views/userProfile.tmpl:75
 msgid "Return to the discussion"
 msgstr "Revenir à la discussion"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:4
+msgid "Users visits"
+msgstr "Visites des utilisateurs"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:7
+msgid "Users' date of first visit"
+msgstr "Date de première visite"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:8
+msgid "Users' date of last visit"
+msgstr "Date de dernière visite"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:14
+msgid "Time series analytics"
+msgstr "Série temporelle"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:18
+msgid "Start date"
+msgstr "Date de début"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:22
+msgid "End date"
+msgstr "Date de fin"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:26
+msgid "Interval"
+msgstr "Intervalle"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:28
+msgid "Single interval"
+msgstr "Un seul intervalle"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:29
+msgid "One year"
+msgstr "Un an"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:30
+msgid "One month"
+msgstr "Un mois"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:31
+msgid "One week"
+msgstr "Une semaine"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:32
+msgid "One day"
+msgstr "Un jour"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:33
+msgid "custom"
+msgstr "sur mesure"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:37
+msgid "File format"
+msgstr "Format de fichier"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:39
+msgid "MS Excel"
+msgstr "MS Excel"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:40
+msgid "Comma-separated values"
+msgstr "Valeurs séparées par des virgules (CSV)"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:52
+msgid "General discussion statistics"
+msgstr "Statistiques générales de la discussion"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:53
+msgid "Get general discussion statistics"
+msgstr "Obtenir les statistiques générales de la discussion"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:60
+msgid "Per participant statistics"
+msgstr "Statistiques par participant"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:62
+msgid "Show fields:"
+msgstr "Montrer les champs:"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:65
+#: assembl/templates/views/discussionStatisticsModal.tmpl:99
+msgid "Posts"
+msgstr "Messages"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:66
+#: assembl/templates/views/discussionStatisticsModal.tmpl:100
+msgid "Cumulative posts"
+msgstr "Messages cumulatifs"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:67
+#: assembl/templates/views/discussionStatisticsModal.tmpl:101
+msgid "Replies received"
+msgstr "Réponses reçues"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:68
+#: assembl/templates/views/discussionStatisticsModal.tmpl:102
+msgid "Cumulative replies received"
+msgstr "Réponses reçues cumulatives"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:70
+#: assembl/templates/views/discussionStatisticsModal.tmpl:104
+msgid "Liking"
+msgstr "Approuvant"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:71
+#: assembl/templates/views/discussionStatisticsModal.tmpl:105
+msgid "Cumulative liking"
+msgstr "Approuvant cumulatif"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:72
+#: assembl/templates/views/discussionStatisticsModal.tmpl:106
+msgid "Liked"
+msgstr "Approuvé"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:73
+#: assembl/templates/views/discussionStatisticsModal.tmpl:107
+msgid "Cumulative liked"
+msgstr "Approuvé cumulatif"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:75
+#: assembl/templates/views/discussionStatisticsModal.tmpl:109
+msgid "Disagreeing"
+msgstr "Désapprouvant"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:76
+#: assembl/templates/views/discussionStatisticsModal.tmpl:110
+msgid "Cumulative disagreeing"
+msgstr "Désapprouvant cumulatif"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:77
+#: assembl/templates/views/discussionStatisticsModal.tmpl:111
+msgid "Disagreed"
+msgstr "Désapprouvé"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:78
+#: assembl/templates/views/discussionStatisticsModal.tmpl:112
+msgid "Cumulative disagreed"
+msgstr "Désapprouvé cumulatif"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:80
+msgid "misunderstanding"
+msgstr "Comprenant mal"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:81
+#: assembl/templates/views/discussionStatisticsModal.tmpl:115
+msgid "Cumulative misunderstanding"
+msgstr "Comprenant mal cumulatif"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:82
+#: assembl/templates/views/discussionStatisticsModal.tmpl:116
+msgid "Misunderstood"
+msgstr "Mal compris"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:83
+#: assembl/templates/views/discussionStatisticsModal.tmpl:117
+msgid "Cumulative misunderstood"
+msgstr "Mal compris cumulatif"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:85
+#: assembl/templates/views/discussionStatisticsModal.tmpl:119
+msgid "Requesting info"
+msgstr "Demandant plus d'information"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:86
+#: assembl/templates/views/discussionStatisticsModal.tmpl:120
+msgid "Cumulative requesting info"
+msgstr "Demandant plus d'information cumulatif"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:87
+#: assembl/templates/views/discussionStatisticsModal.tmpl:121
+msgid "Info requested"
+msgstr "Demandé plus d'information"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:88
+#: assembl/templates/views/discussionStatisticsModal.tmpl:122
+msgid "Cumulative info requested"
+msgstr "Demandé plus d'information cumulatif"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:93
+msgid "Sorted by"
+msgstr "Triés par"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:97
+msgid "Domain"
+msgstr "Domaine"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:114
+msgid "Misunderstanding"
+msgstr "Comprenant mal"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:127
+msgid "Show emails"
+msgstr "Montrer les courriels"
+
+#: assembl/templates/views/discussionStatisticsModal.tmpl:133
+msgid "Get discussion participant statistics"
+msgstr "Obtenir les statistiques des participants à la discussion"
 
 #: assembl/templates/views/exportPostModal-fb-group.tmpl:2
 msgid "Select Group"
@@ -3786,14 +4053,14 @@ msgid "Keep up with the evolution of the discussion"
 msgstr "Suivez l’évolution de la discussion"
 
 #: assembl/templates/views/message.tmpl:10
-#: assembl/templates/views/message.tmpl:43
+#: assembl/templates/views/message.tmpl:39
 #: assembl/templates/views/messageDeletedByUser.tmpl:10
 #: assembl/templates/views/messageDeletedByUser.tmpl:31
 msgid "Mark as unread"
 msgstr "Marquer non-lu"
 
 #: assembl/templates/views/message.tmpl:12
-#: assembl/templates/views/message.tmpl:45
+#: assembl/templates/views/message.tmpl:41
 #: assembl/templates/views/messageDeletedByUser.tmpl:12
 #: assembl/templates/views/messageDeletedByUser.tmpl:33
 msgid "Mark as read"
@@ -3807,85 +4074,75 @@ msgstr "Ce lien a inspiré l’auteur lors de la rédaction de ce message"
 msgid "Inspiration source"
 msgstr "Source d’inspiration"
 
-#: assembl/templates/views/message.tmpl:29
-msgid "Unlike"
-msgstr "Je n’aime plus"
-
-#: assembl/templates/views/message.tmpl:29
-#: assembl/templates/views/message.tmpl:207
-#: assembl/templates/views/message.tmpl:267
-msgid "Like"
-msgstr "J’aime"
-
-#: assembl/templates/views/message.tmpl:50
+#: assembl/templates/views/message.tmpl:46
 msgid "Export Post"
 msgstr "Exporter le message"
 
-#: assembl/templates/views/message.tmpl:61
+#: assembl/templates/views/message.tmpl:57
 msgid "Show this message in its entire thread (clears all filters)"
 msgstr "Voir ce messages dans son enfilade entière (supprime tous les filtres)"
 
-#: assembl/templates/views/message.tmpl:64
+#: assembl/templates/views/message.tmpl:60
 msgid "Show this message in the full Newest first view (clears all filters)"
 msgstr ""
 "Voir ce messages dans la vue chronologique-inverse complète (supprime "
 "tous les filtres)"
 
-#: assembl/templates/views/message.tmpl:68
+#: assembl/templates/views/message.tmpl:64
 msgid "Go back to the entire topic thread"
 msgstr "Retourner à l’enfilade complète de ce sujet"
 
-#: assembl/templates/views/message.tmpl:70
+#: assembl/templates/views/message.tmpl:66
 msgid "Show only this message and its replies"
 msgstr "Afficher seulement ce message et ses réponses"
 
-#: assembl/templates/views/message.tmpl:74
+#: assembl/templates/views/message.tmpl:70
 #, python-format
 msgid "Show all posts by %s"
 msgstr "Voir tous les messages de %s"
 
-#: assembl/templates/views/message.tmpl:78
+#: assembl/templates/views/message.tmpl:74
 #: assembl/templates/views/messageDeletedByUser.tmpl:38
 msgid "Send an email to this user"
 msgstr "Envoyez un courriel à cet utilisateur"
 
-#: assembl/templates/views/message.tmpl:83
+#: assembl/templates/views/message.tmpl:79
 msgid "Display translation preferences"
 msgstr "Voir les préférences de traduction"
 
-#: assembl/templates/views/message.tmpl:88
+#: assembl/templates/views/message.tmpl:84
 msgid "Show/hide extracts"
 msgstr "Montrer/cacher les extraits"
 
-#: assembl/templates/views/message.tmpl:92
+#: assembl/templates/views/message.tmpl:88
 msgid "Moderation options"
 msgstr "Options de modération"
 
-#: assembl/templates/views/message.tmpl:96
+#: assembl/templates/views/message.tmpl:92
 msgid "Export Post in HTML"
 msgstr "Exporter le message en HTML"
 
-#: assembl/templates/views/message.tmpl:100
+#: assembl/templates/views/message.tmpl:96
 msgid "Delete this message"
 msgstr "Supprimer ce message"
 
-#: assembl/templates/views/message.tmpl:113
+#: assembl/templates/views/message.tmpl:109
 msgid "View the original message"
 msgstr "Voir le message original"
 
-#: assembl/templates/views/message.tmpl:116
+#: assembl/templates/views/message.tmpl:112
 msgid "Return to the translated message"
 msgstr "Retour à la traduction"
 
-#: assembl/templates/views/message.tmpl:130
+#: assembl/templates/views/message.tmpl:126
 msgid "Sorry, we could not translate this message."
 msgstr "Désolé, nous n’avons pas pu traduire ce message."
 
-#: assembl/templates/views/message.tmpl:132
+#: assembl/templates/views/message.tmpl:128
 msgid "Please try again later."
 msgstr "Veuillez réessayer plus tard."
 
-#: assembl/templates/views/message.tmpl:135
+#: assembl/templates/views/message.tmpl:131
 msgid ""
 "Sorry, we cannot translate this because we could not identify the source "
 "language."
@@ -3893,32 +4150,37 @@ msgstr ""
 "Désolé, nous ne pouvons pas traduire ceci car nous n'arrivons pas à "
 "identifier la langue d'origine."
 
-#: assembl/templates/views/message.tmpl:194
+#: assembl/templates/views/message.tmpl:190
 #: assembl/templates/views/messageDeletedByUser.tmpl:92
 msgid "Read more"
 msgstr "Lire plus"
 
-#: assembl/templates/views/message.tmpl:203
+#: assembl/templates/views/message.tmpl:199
 #: assembl/templates/views/messageDeletedByUser.tmpl:100
 msgid "Read less"
 msgstr "Lire moins"
 
-#: assembl/templates/views/message.tmpl:208
-#: assembl/templates/views/message.tmpl:282
-msgid "Did not get it"
-msgstr "Pas tout compris"
+#: assembl/templates/views/message.tmpl:203
+#: assembl/templates/views/message.tmpl:255
+msgid "Like"
+msgstr "J’aime"
 
-#: assembl/templates/views/message.tmpl:209
-#: assembl/templates/views/message.tmpl:297
+#: assembl/templates/views/message.tmpl:204
+#: assembl/templates/views/message.tmpl:271
 msgid "Disagree"
-msgstr "Pas convaincu"
+msgstr "En désaccord"
 
-#: assembl/templates/views/message.tmpl:210
-#: assembl/templates/views/message.tmpl:312
+#: assembl/templates/views/message.tmpl:205
+#: assembl/templates/views/message.tmpl:286
+msgid "Did not get it"
+msgstr "Je ne comprends pas"
+
+#: assembl/templates/views/message.tmpl:206
+#: assembl/templates/views/message.tmpl:301
 msgid "More info please?"
-msgstr "SVP + d’infos ?"
+msgstr "Complément d'information svp?"
 
-#: assembl/templates/views/message.tmpl:222
+#: assembl/templates/views/message.tmpl:218
 msgid "Reply"
 msgstr "Répondre"
 
@@ -4034,6 +4296,10 @@ msgstr "Cliquez ici pour voir le message original"
 msgid "Connecting..."
 msgstr "Connexion en cours..."
 
+#: assembl/templates/views/navBarLeft.tmpl:22
+msgid "Discussion permissions"
+msgstr "Permissions de la discussion"
+
 #: assembl/templates/views/navBarRight.tmpl:6
 msgid "Help"
 msgstr "Aide"
@@ -4061,10 +4327,6 @@ msgstr "Passer au mode simple"
 #: assembl/templates/views/navBarRight.tmpl:50
 msgid "Switch to full-functionality mode"
 msgstr "Passer au mode fonctionnalités complètes"
-
-#: assembl/templates/views/navBarRight.tmpl:55
-msgid "Discussion permissions"
-msgstr "Permissions de la discussion"
 
 #: assembl/templates/views/navigation.tmpl:23
 msgid "About"
@@ -4220,7 +4482,7 @@ msgstr "Ajouter une entrée"
 msgid "Add a social account"
 msgstr "Ajouter un compte social"
 
-#: assembl/templates/views/socialProviders.tmpl:11
+#: assembl/templates/views/socialProviders.tmpl:17
 #, python-format
 msgid "Add a %s account"
 msgstr "Ajouter un compte %s"
@@ -4355,7 +4617,7 @@ msgstr "désabonné"
 msgid "No file given."
 msgstr "Pas de fichier envoyé."
 
-#: assembl/views/api/post.py:80 assembl/views/api/post.py:630
+#: assembl/views/api/post.py:80 assembl/views/api/post.py:624
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "Aucune discussion trouvée avec l’id=%s"
@@ -4370,11 +4632,11 @@ msgstr ""
 msgid "Do not combine negative and positive classifiers"
 msgstr "Ne pas combiner les classificateurs négatifs et positifs"
 
-#: assembl/views/api/post.py:363
+#: assembl/views/api/post.py:358
 msgid "You must be logged in to view which posts are read"
 msgstr "Vous devez être connecté pour voir quels messages ont été lus"
 
-#: assembl/views/api/post.py:614
+#: assembl/views/api/post.py:608
 msgid "Your message is empty"
 msgstr "Votre message est vide"
 
@@ -4676,7 +4938,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n’avons pas de discussion sous le code=%s"
-
-#~ msgid "You and"
-#~ msgstr "Vous et"
 
