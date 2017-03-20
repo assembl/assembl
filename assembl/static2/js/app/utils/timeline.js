@@ -1,5 +1,19 @@
 import { isDateExpired, getNumberOfDays, calculatePercentage } from './globalFunctions';
 
+export const getCurrentPhaseIdentifier = (timeline) => {
+    const currentDate = new Date();
+    let identifier = null;
+    timeline.map((phase) => {
+      const startDate = new Date(phase.start);
+      const endDate = new Date(phase.end);
+      if (isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate)) {
+        identifier = phase.identifier;
+      }
+      return identifier;
+    });
+    return identifier || 'thread';
+};
+
 export const isPhaseStarted = (timeline, identifier) => {
   const currentDate = new Date();
   let isStarted = false;

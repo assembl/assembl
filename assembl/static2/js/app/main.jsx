@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { isDateExpired } from './utils/globalFunctions';
+import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';
 import { fetchPosts } from './actions/postsActions';
 import { fetchUsers } from './actions/usersActions';
@@ -10,8 +10,19 @@ import Footer from './components/common/footer';
 class Main extends React.Component {
   constructor(props) {
     super(props);
+    const { debateData } = this.props.debate;
+    const paramsIdentifier = this.props.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
+    const queryIdentifier = this.props.location.query.phase || paramsIdentifier;
     this.state = {
-      identifier: this.getCurrentPhaseIdentifier()
+      identifier: queryIdentifier
+    };
+  }
+  componentWillReceiveProps(nextProps) {
+    const { debateData } = this.props.debate;
+    const paramsIdentifier = nextProps.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
+    const queryIdentifier = nextProps.location.query.phase || paramsIdentifier;
+    this.state = {
+      identifier: queryIdentifier
     };
   }
   componentWillMount() {
@@ -34,22 +45,6 @@ class Main extends React.Component {
         <Footer />
       </div>
     );
-  }
-  getCurrentPhaseIdentifier() {
-    const currentDate = new Date();
-    const { debateData } = this.props.debate;
-    let identifier = null;
-    if (debateData.timeline) {
-      debateData.timeline.map((phase) => {
-        const startDate = new Date(phase.start);
-        const endDate = new Date(phase.end);
-        if (isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate)) {
-          identifier = phase.identifier;
-        }
-        return identifier;
-      });
-    }
-    return identifier || 'thread';
   }
 }
 
