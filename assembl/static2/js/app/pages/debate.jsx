@@ -9,10 +9,10 @@ import Thumbnails from '../components/debate/navigation/thumbnails';
 
 class Debate extends React.Component {
   render() {
-    const { identifier } = this.props;
     const { loading, thematics } = this.props.data;
-    const locationIdentifier = this.props.params.phase || identifier;
-    const queryIdentifier = this.props.location.query.phase || locationIdentifier;
+    const { identifier } = this.props;
+    const paramsIdentifier = this.props.params.phase || identifier;
+    const queryIdentifier = this.props.location.query.phase || paramsIdentifier;
     const isParentRoute = !this.props.params.phase || false;
     const themeId = this.props.params.themeId || null;
     return (
@@ -20,7 +20,10 @@ class Debate extends React.Component {
         {loading && <Loader color="black" />}
         {thematics &&
           <div className="debate">
-            <Timeline showNavigation={!isParentRoute} queryIdentifier={queryIdentifier} />
+            <Timeline
+              showNavigation={!isParentRoute}
+              queryIdentifier={queryIdentifier}
+            />
             {isParentRoute &&
               <Themes
                 thematics={thematics}
@@ -32,9 +35,9 @@ class Debate extends React.Component {
                 <Thumbnails
                   showNavigation={!isParentRoute}
                   thematics={thematics}
-                  themeId={themeId}
-                  identifier={identifier}
                   queryIdentifier={queryIdentifier}
+                  identifier={identifier}
+                  themeId={themeId}
                 />
                 {this.props.children}
               </section>
@@ -56,10 +59,10 @@ Debate.propTypes = {
 
 const ThematicQuery = gql`
   query ThematicQuery($lang: String!, $identifier: String!) {
-   thematics: ideas {
+   thematics: ideas(identifier: $identifier) {
      ... on Thematic {
        id,
-       identifier(identifier: $identifier),
+       identifier,
        title(lang: $lang),
        description,
        numPosts,

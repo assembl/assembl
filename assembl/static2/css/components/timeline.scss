@@ -89,11 +89,23 @@
   }
 
   .txt-active {
-    color: $first-color;
+    a {
+      color: $first-color;
+
+      &:focus {
+        text-decoration: none;
+      }
+    }
   }
 
   .txt-not-active {
-    color: $grey5;
+    a {
+      color: $grey5;
+
+      &:hover {
+        color: $grey2;
+      }
+    }
   }
 
   .assembl-icon-down-dir:before {

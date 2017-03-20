@@ -1,7 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
 class TimelineSegment extends React.Component {
   render() {
+    const { rootPath } = this.props.context;
+    const { debateData } = this.props.debate;
     const {
       index,
       barWidth,
@@ -23,7 +27,7 @@ class TimelineSegment extends React.Component {
         {title.entries.map((entry, index2) => {
           return (
             <div className={identifier === queryIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={`title-${index2}`}>
-              {locale === entry['@language'] ? entry.value : ''}
+              <Link to={`${rootPath}${debateData.slug}/debate?phase=${identifier}`}>{locale === entry['@language'] ? entry.value : ''}</Link>
             </div>
           );
         })}
@@ -33,4 +37,11 @@ class TimelineSegment extends React.Component {
   }
 }
 
-export default TimelineSegment;
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    context: state.context
+  };
+};
+
+export default connect(mapStateToProps)(TimelineSegment);
