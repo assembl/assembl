@@ -7,7 +7,7 @@ class Timeline extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
-    const { showNavigation, queryIdentifier } = this.props;
+    const { showNavigation, identifier } = this.props;
     return (
       <section className="timeline-section">
         <div className="max-container">
@@ -22,8 +22,8 @@ class Timeline extends React.Component {
                 isCurrentPhase={isCurrentPhase(index, debateData.timeline)}
                 isStepCompleted={isStepCompleted(index, debateData.timeline)}
                 showNavigation={showNavigation}
-                queryIdentifier={queryIdentifier}
-                identifier={phase.identifier}
+                identifier={identifier}
+                phaseIdentifier={phase.identifier}
               />
             );
           })}

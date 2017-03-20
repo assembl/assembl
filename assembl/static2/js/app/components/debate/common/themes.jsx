@@ -8,12 +8,11 @@ import ThematicPreview from '../../common/thematicPreview';
 
 class Themes extends React.Component {
   render() {
-    const { thematics, identifier, queryIdentifier } = this.props;
+    const { thematics, identifier } = this.props;
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
-    const identifierToDisplay = queryIdentifier || identifier;
-    const phaseStarted = isPhaseStarted(debateData.timeline, identifierToDisplay);
-    const startDatePhase = getStartDatePhase(debateData.timeline, identifierToDisplay);
+    const phaseStarted = isPhaseStarted(debateData.timeline, identifier);
+    const startDatePhase = getStartDatePhase(debateData.timeline, identifier);
     if (phaseStarted) {
       return (
         <section className="themes-section">
@@ -34,7 +33,7 @@ class Themes extends React.Component {
                           imgUrl={thematic.imgUrl}
                           numPosts={thematic.numPosts}
                           numContributors={thematic.numContributors}
-                          link={`${rootPath}${debateData.slug}/debate/${identifierToDisplay}/theme/${thematic.id.split(':')[1]}`}
+                          link={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id.split(':')[1]}`}
                           title={thematic.title}
                           description={thematic.description}
                         />

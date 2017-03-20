@@ -11,8 +11,6 @@ class Debate extends React.Component {
   render() {
     const { loading, thematics } = this.props.data;
     const { identifier } = this.props;
-    const paramsIdentifier = this.props.params.phase || identifier;
-    const queryIdentifier = this.props.location.query.phase || paramsIdentifier;
     const isParentRoute = !this.props.params.phase || false;
     const themeId = this.props.params.themeId || null;
     return (
@@ -22,12 +20,12 @@ class Debate extends React.Component {
           <div className="debate">
             <Timeline
               showNavigation={!isParentRoute}
-              queryIdentifier={queryIdentifier}
+              identifier={identifier}
             />
             {isParentRoute &&
               <Themes
                 thematics={thematics}
-                queryIdentifier={queryIdentifier}
+                identifier={identifier}
               />
             }
             {!isParentRoute &&
@@ -35,7 +33,6 @@ class Debate extends React.Component {
                 <Thumbnails
                   showNavigation={!isParentRoute}
                   thematics={thematics}
-                  queryIdentifier={queryIdentifier}
                   identifier={identifier}
                   themeId={themeId}
                 />

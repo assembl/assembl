@@ -13,7 +13,7 @@ class TimelineSegment extends React.Component {
       showNavigation,
       isStepCompleted,
       identifier,
-      queryIdentifier,
+      phaseIdentifier,
       title,
       locale
     } = this.props;
@@ -26,12 +26,12 @@ class TimelineSegment extends React.Component {
         <div className="timeline-bar-1">&nbsp;</div>
         {title.entries.map((entry, index2) => {
           return (
-            <div className={identifier === queryIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={`title-${index2}`}>
-              <Link to={`${rootPath}${debateData.slug}/debate?phase=${identifier}`}>{locale === entry['@language'] ? entry.value : ''}</Link>
+            <div className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={`title-${index2}`}>
+              <Link to={`${rootPath}${debateData.slug}/debate?phase=${phaseIdentifier}`}>{locale === entry['@language'] ? entry.value : ''}</Link>
             </div>
           );
         })}
-        <span className={identifier === queryIdentifier && showNavigation ? 'arrow assembl-icon-down-dir color' : 'hidden'}>&nbsp;</span>
+        <span className={identifier === phaseIdentifier && showNavigation ? 'arrow assembl-icon-down-dir color' : 'hidden'}>&nbsp;</span>
       </div>
     );
   }
