@@ -1000,7 +1000,7 @@ def set_file_permissions():
         run('chmod -R o-rwx .')
         run('chmod -R g-rw .')
         run('chgrp {webgrp} . assembl var var/run'.format(webgrp=webgrp))
-        run('chgrp -R {webgrp} assembl/static'.format(webgrp=webgrp))
+        run('chgrp -R {webgrp} assembl/static assembl/static2'.format(webgrp=webgrp))
         run('chmod -R g+rxs var/run')
         run('find assembl/static -type d -print|xargs chmod g+rxs')
         run('find assembl/static -type f -print|xargs chmod g+r')
