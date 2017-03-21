@@ -23,8 +23,8 @@ class Thumbnails extends React.Component {
               {thematics.map((thematic, index) => {
                 return(
                   <div className="thumb-img-container" key={`thumb-${index}`}>
-                    <Link to={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id.split(':')[1]}`}>
-                      <div className={themeId == thematic.id.split(':')[1] ? 'thumb-img active' : 'thumb-img'} style={{ backgroundImage: `url(${thematic.imgUrl})` }}>&nbsp;</div>
+                    <Link to={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id}`}>
+                      <div className={themeId == thematic.id ? 'thumb-img active' : 'thumb-img'} style={{ backgroundImage: `url(${thematic.imgUrl})` }}>&nbsp;</div>
                       <div className="color-box">&nbsp;</div>
                     </Link>
                   </div>
@@ -33,7 +33,6 @@ class Thumbnails extends React.Component {
             </div>
           </div>
         </div>
-        <div className="thumb">&nbsp;</div>
       </Grid>
     );
   }

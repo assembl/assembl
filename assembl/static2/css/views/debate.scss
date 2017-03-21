@@ -5,11 +5,23 @@
     border-bottom: $navbar-border;
     border-top: $navbar-border;
     height: $navbar-height;
-    padding: 13px 0 0 100px;
+    padding: 13px 0 0;
     position: fixed;
     top: $navbar-height;
     width: 100%;
     z-index: 100;
+
+
+    .timeline-container {
+      margin: 0 0 0 85px;
+    }
+
+    .burger-menu {
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      width: 60px;
+    }
   }
 
   .debate-section {

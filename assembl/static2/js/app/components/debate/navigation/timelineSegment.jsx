@@ -31,7 +31,6 @@ class TimelineSegment extends React.Component {
             </div>
           );
         })}
-        <span className={identifier === phaseIdentifier && showNavigation ? 'arrow assembl-icon-down-dir color' : 'hidden'}>&nbsp;</span>
       </div>
     );
   }

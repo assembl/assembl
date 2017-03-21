@@ -15,7 +15,7 @@ class Debate extends React.Component {
     const themeId = this.props.params.themeId || null;
     const children = React.Children.map(this.props.children, function (child) {
       return React.cloneElement(child, {
-        id: `thematic:${themeId}`,
+        id: themeId,
         identifier: identifier
       });
     });
@@ -24,10 +24,15 @@ class Debate extends React.Component {
         {loading && <Loader color="black" />}
         {thematics &&
           <div className="debate">
-            <Timeline
-              showNavigation={!isParentRoute}
-              identifier={identifier}
-            />
+            <section className="timeline-section">
+              <div className="max-container">
+                <div className="burger-menu"><span className="assembl-icon-menu-on"></span></div>
+                <Timeline
+                  showNavigation={!isParentRoute}
+                  identifier={identifier}
+                />
+              </div>
+            </section>
             {isParentRoute &&
               <Themes
                 thematics={thematics}

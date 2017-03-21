@@ -205,6 +205,10 @@ input {
   width: 100%;
 }
 
+.relative {
+  position: relative;
+}
+
 @media screen and (min-width: 992px) {
   .col-bottom {
     display: table-cell;

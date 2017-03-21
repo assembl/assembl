@@ -33,7 +33,7 @@ class Themes extends React.Component {
                           imgUrl={thematic.imgUrl}
                           numPosts={thematic.numPosts}
                           numContributors={thematic.numContributors}
-                          link={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id.split(':')[1]}`}
+                          link={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id}`}
                           title={thematic.title}
                           description={thematic.description}
                         />
