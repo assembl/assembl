@@ -14,11 +14,13 @@ $yellow: #f0ab2b;
 $cyan: #0095b2;
 $opacity-purple: rgba(84, 4, 215, .5);
 $opacity-cyan: rgba(0, 140, 166, .5);
+$min-opacity-cyan: rgba(0, 140, 166, .1);
 
 $first-color: $cyan;
 $second-color: $yellow;
 $third-color: $blue;
 $opacity-color: $opacity-cyan;
+$min-opacity-color: $min-opacity-cyan;
 
 $app-max-width: 1400px;
 $navbar-height: 60px;

@@ -13,6 +13,12 @@ class Debate extends React.Component {
     const { identifier } = this.props;
     const isParentRoute = !this.props.params.phase || false;
     const themeId = this.props.params.themeId || null;
+    const children = React.Children.map(this.props.children, function (child) {
+      return React.cloneElement(child, {
+        id: `thematic:${themeId}`,
+        identifier: identifier
+      });
+    });
     return (
       <div>
         {loading && <Loader color="black" />}
@@ -36,7 +42,7 @@ class Debate extends React.Component {
                   identifier={identifier}
                   themeId={themeId}
                 />
-                {this.props.children}
+                {children}
               </section>
             }
           </div>
@@ -56,17 +62,17 @@ Debate.propTypes = {
 
 const ThematicQuery = gql`
   query ThematicQuery($lang: String!, $identifier: String!) {
-   thematics: ideas(identifier: $identifier) {
-     ... on Thematic {
-       id,
-       identifier,
-       title(lang: $lang),
-       description,
-       numPosts,
-       numContributors,
-       imgUrl
-     }
-   }
+    thematics: ideas(identifier: $identifier) {
+      ... on Thematic {
+        id,
+        identifier,
+        title(lang: $lang),
+        description,
+        numPosts,
+        numContributors,
+        imgUrl
+      }
+    }
   }
 `;
 

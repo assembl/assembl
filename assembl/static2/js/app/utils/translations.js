@@ -129,7 +129,8 @@ const Translations = {
     },
     debate: {
       survey: {
-        themesTitle: 'Choisissez une thematique !'
+        themesTitle: 'Choisissez une thematique !',
+        txtAreaPh: 'Ecrivez votre proposition'
       },
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
     },
@@ -281,7 +282,8 @@ const Translations = {
     },
     debate: {
       survey: {
-        themesTitle: 'Choose a theme!'
+        themesTitle: 'Choose a theme!',
+        txtAreaPh: 'Write your proposal'
       },
       notStarted: 'This phase is not started. Please come back from the '
     },

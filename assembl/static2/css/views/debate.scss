@@ -157,6 +157,82 @@
       }
     }
   }
+
+  .header-section {
+    background-color: $first-color;
+    min-height: 380px;
+    overflow: hidden;
+    position: relative;
+
+    .header-content {
+      position: relative;
+      text-align: center;
+      z-index: 2;
+
+      .max-text-width {
+        margin: 0 auto;
+        max-width: 500px;
+      }
+    }
+
+    .header-bkg {
+      background-position: left;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100%;
+      opacity: .7;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+  }
+
+  .questions-section {
+    .txt-area {
+      border-bottom: none;
+      border-left: 5px solid $first-color;
+      border-radius: initial;
+      border-right: none;
+      border-top: none;
+      box-shadow: none;
+      font-family: $font-family4;
+      font-size: $font-size-s;
+      height: 250px;
+    }
+  }
+
+  .video-section {
+    .video-col {
+      margin: -15px 0 0;
+    }
+
+    .video-description {
+      color: $first-color;
+      font-size: $font-size-s;
+      line-height: 30px;
+      margin: 0 auto;
+      text-align: center;
+      width: 200px;
+
+      .description-txt {
+        margin: 40px 0 25px;
+        text-align: left;
+      }
+    }
+
+    .assembl-icon-pepite {
+      &:before {
+        font-size: 60px;
+      }
+    }
+  }
+
+  .navigation-section {
+    .question-nav {
+      color: $first-color;
+      height: $navbar-height;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {

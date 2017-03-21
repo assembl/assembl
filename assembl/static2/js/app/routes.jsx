@@ -21,19 +21,19 @@ import Terms from './pages/terms';
 const DebateChild = (props) => {
   switch (props.params.phase) {
     case "survey":
-    return <Survey />;
+    return <Survey id={props.id} identifier={props.identifier} />;
     break;
     case "thread":
-    return <Thread />;
+    return <Thread id={props.id} identifier={props.identifier} />;
     break;
     case "twoColumns":
-    return <TwoColumns />;
+    return <TwoColumns id={props.id} identifier={props.identifier} />;
     break;
     case "tokenVote":
-    return <TokenVote />;
+    return <TokenVote id={props.id} identifier={props.identifier} />;
     break;
     default:
-    return <Survey />;
+    return <Survey id={props.id} identifier={props.identifier} />;
     break;
   }
 }

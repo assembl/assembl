@@ -3,7 +3,7 @@ import React from 'react';
 class Proposals extends React.Component {
   render() {
     return (
-      <p>Proposals</p>
+      <div className="margin-xxl">Proposals</div>
     );
   }
 }
