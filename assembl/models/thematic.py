@@ -56,6 +56,9 @@ class Thematic(Idea):
         backref=backref("description_of_thematic", lazy="dynamic"),
         cascade="all, delete-orphan")
 
+    identifier = Column(String(60),
+        doc="An identifier correspond to a specific phase.")
+
     video_title_id = Column(
         Integer(), ForeignKey(LangString.id))
 
