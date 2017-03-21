@@ -25,8 +25,13 @@ export const getDiscussionSlug = () => {
 };
 
 export const getConnectedUserId = () => {
-  const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
+  const userId = document.getElementById('user-id') ? document.getElementById('user-id').value: null;
   return userId;
+};
+
+export const getConnectedUserName = () => {
+  const userName = document.getElementById('user-displayname') ? document.getElementById('user-displayname').value : null;
+  return userName;
 };
 
 export const getSortedArrayByKey = (arr, key) => {

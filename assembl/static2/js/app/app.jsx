@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
+import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import Loader from './components/common/loader';
@@ -11,8 +11,9 @@ class App extends React.Component {
     super(props);
     const debateId = getDiscussionId();
     const connectedUserId = getConnectedUserId();
+    const connectedUserName = getConnectedUserName();
     this.props.fetchDebateData(debateId);
-    this.props.addContext(this.props.route.path, debateId, connectedUserId);
+    this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
   }
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
@@ -39,8 +40,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchDebateData: (debateId) => {
       dispatch(fetchDebateData(debateId));
     },
-    addContext: (path, debateId, connectedUserId) => {
-      dispatch(addContext(path, debateId, connectedUserId));
+    addContext: (path, debateId, connectedUserId, connectedUserName) => {
+      dispatch(addContext(path, debateId, connectedUserId, connectedUserName));
     }
   };
 };

@@ -9,8 +9,7 @@ import Loader from './loader';
 class ProfileIcon extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { users, usersLoading, usersError } = this.props.users;
-    const { rootPath, connectedUserId } = this.props.context;
+    const { rootPath, connectedUserId, connectedUserName } = this.props.context;
     return (
       <div className="right avatar">
         {!connectedUserId &&
@@ -20,34 +19,25 @@ class ProfileIcon extends React.Component {
             </span>
           </Link>
         }
-        {connectedUserId &&
-          <div>
-            {usersLoading && <Loader textHidden color="black" />}
-            {users &&
-              <div>
-                <span className="assembl-icon-profil grey">&nbsp;</span>
-                <DropdownButton bsStyle="link" title={users.connectedUser.username ? users.connectedUser.username : users.connectedUser.name} id="user-dropdown">
-                  <LinkContainer to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
-                    <MenuItem><Translate value="navbar.profile" /></MenuItem>
-                  </LinkContainer>
-                  <MenuItem href={`/logout?next=${rootPath}${debateData.slug}/home`}><Translate value="navbar.logout" /></MenuItem>
-                </DropdownButton>
-              </div>
-            }
-            {usersError &&
-              <span className="connection"><Translate value="navbar.connexion" /></span>
-            }
-          </div>
+        {connectedUserId && connectedUserName && 
+            <div>
+              <span className="assembl-icon-profil grey">&nbsp;</span>
+              <DropdownButton bsStyle="link" title={connectedUserName} id="user-dropdown">
+                <LinkContainer to={`${rootPath}${debateData.slug}/profile/${connectedUserName}`}>
+                  <MenuItem><Translate value="navbar.profile" /></MenuItem>
+                </LinkContainer>
+                <MenuItem href={`/logout?next=${rootPath}${debateData.slug}/home`}><Translate value="navbar.logout" /></MenuItem>
+              </DropdownButton>
+            </div>
         }
       </div>
     );
-  }
-}
+  };
+};
 
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
-    users: state.users,
     context: state.context
   };
 };
