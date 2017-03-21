@@ -27,7 +27,25 @@ $panelHeaderTitleHeight:50px;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
 
+@media screen and (max-width: 450px) {
+    .js_messageBottomMenu.message-menu.message-menu-actions{
+        margin: 11px 0 20px 0;
+        width: 100%;
+    } 
+    .emoticons {
+        width:100%;
+    }
+    .sentiment-names-list {
+        a {
+            max-width: 80px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            display: block;
+        }
+    }
 }
 
 @media screen and (max-width: 840px) {
@@ -123,9 +141,7 @@ $panelHeaderTitleHeight:50px;
     .js_messageListView-print{
         display:none;
     }
-    .js_messageBottomMenu.message-menu.message-menu-actions{
-        margin: 20px 0 0 0;
-    }
+
     a.js_messageReplyBtn.message-replybox-openbtn {
         margin: 0 6px 0 0;
     }
