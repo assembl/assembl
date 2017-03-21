@@ -28,10 +28,32 @@ $panelHeaderTitleHeight:50px;
         white-space: nowrap;
     }
 }
-
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 360px) {
+    .icon-download {
+        &:before {
+            margin:0!important;
+        }   
+    }
     .js_messageBottomMenu.message-menu.message-menu-actions{
-        margin: 11px 0 20px 0;
+        margin: 40px -18px 20px 0!important;
+        width: 100%;
+    }
+    .sentiment-names-list {
+        a {
+            max-width: 180px!important;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            display: block;
+        }
+    }
+}
+@media screen and (max-width: 450px) {
+    a.js_messageReplyBtn.message-replybox-openbtn {
+        margin: 0!important;
+    }
+    .js_messageBottomMenu.message-menu.message-menu-actions{
+        margin: 13px -18px 20px 0;
         width: 100%;
     } 
     .emoticons {
@@ -39,7 +61,7 @@ $panelHeaderTitleHeight:50px;
     }
     .sentiment-names-list {
         a {
-            max-width: 80px;
+            max-width: 100px;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
