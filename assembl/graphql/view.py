@@ -17,6 +17,8 @@ from assembl.lib import config as AssemblConfig
 from assembl.graphql.schema import Schema
 
 
+# Only allow POST (query may be GET, but mutations should always be a POST,
+# but there is no such check for now in graphql-wsgi)
 @view_config(request_method='POST', route_name='graphql')
 def graphql_api(request):
     slug = request.matchdict['discussion_slug']
