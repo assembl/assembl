@@ -132,6 +132,7 @@ const Translations = {
         themesTitle: 'Choisissez une thematique !',
         txtAreaPh: 'Ecrivez votre proposition'
       },
+      themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
     },
     profile: {
@@ -285,6 +286,7 @@ const Translations = {
         themesTitle: 'Choose a theme!',
         txtAreaPh: 'Write your proposal'
       },
+      themes: 'Themes',
       notStarted: 'This phase is not started. Please come back from the '
     },
     profile: {

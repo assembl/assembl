@@ -1,13 +1,60 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Translate } from 'react-redux-i18n';
 import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
 import Timeline from '../components/debate/navigation/timeline';
 import Thumbnails from '../components/debate/navigation/thumbnails';
 
 class Debate extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isThumbnailsHidden: true,
+      isTimelineHidden: false
+    };
+    this.showThumbnails = this.showThumbnails.bind(this);
+    this.hideThumbnails = this.hideThumbnails.bind(this);
+    this.displayThumbnails = this.displayThumbnails.bind(this);
+    this.displayTimeline = this.displayTimeline.bind(this);
+  }
+  componentDidMount() {
+      window.addEventListener('scroll', this.displayTimeline);
+  }
+  componentWillUnmount() {
+      window.removeEventListener('scroll', this.displayTimeline);
+  }
+  showThumbnails() {
+    const { isThumbnailsHidden } = this.state;
+    this.setState({ isThumbnailsHidden: false });
+  }
+  hideThumbnails() {
+    const { isThumbnailsHidden } = this.state;
+    this.setState({ isThumbnailsHidden: true });
+  }
+  displayThumbnails() {
+    const { isThumbnailsHidden } = this.state;
+    if(!isThumbnailsHidden) this.setState({ isThumbnailsHidden: true });
+    if(isThumbnailsHidden) this.setState({ isThumbnailsHidden: false });
+  }
+  displayTimeline() {
+    const { isTimelineHidden } = this.state;
+    let top  = window.pageYOffset || document.documentElement.scrollTop;
+    if (top > 400) {
+      this.setState({
+        isTimelineHidden: true,
+        isThumbnailsHidden: true
+      });
+    } else {
+      this.setState({
+        isTimelineHidden: false,
+        isThumbnailsHidden: true
+      });
+    }
+  }
   render() {
     const { loading, thematics } = this.props.data;
     const { identifier } = this.props;
@@ -20,13 +67,20 @@ class Debate extends React.Component {
       });
     });
     return (
-      <div>
+      <div className="debate">
         {loading && <Loader color="black" />}
         {thematics &&
-          <div className="debate">
-            <section className="timeline-section">
+          <div>
+            <section className={this.state.isTimelineHidden ? 'hidden' : 'shown timeline-section'}>
               <div className="max-container">
-                <div className="burger-menu"><span className="assembl-icon-menu-on"></span></div>
+                {!isParentRoute &&
+                  <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
+                    <div className="assembl-icon-thumb"></div>
+                    <div className="burger-menu-label">
+                      <Translate value="debate.themes" />
+                    </div>
+                  </div>
+                }
                 <Timeline
                   showNavigation={!isParentRoute}
                   identifier={identifier}
@@ -41,12 +95,14 @@ class Debate extends React.Component {
             }
             {!isParentRoute &&
               <section className="debate-section">
-                <Thumbnails
-                  showNavigation={!isParentRoute}
-                  thematics={thematics}
-                  identifier={identifier}
-                  themeId={themeId}
-                />
+                <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
+                  <Thumbnails
+                    showNavigation={!isParentRoute}
+                    thematics={thematics}
+                    identifier={identifier}
+                    themeId={themeId}
+                  />
+                </div>
                 {children}
               </section>
             }

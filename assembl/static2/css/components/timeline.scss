@@ -36,7 +36,7 @@
     white-space: nowrap;
   }
 }
-  
+
 .minimized-timeline {
 
   .active {
@@ -59,6 +59,12 @@
     text-align: center;
     width: 18px;
     z-index: 2;
+
+    .assembl-icon-checked {
+      &:before {
+        font-size: $font-size-xxxs;
+      }
+    }
   }
 
   .timeline-bar-1 {

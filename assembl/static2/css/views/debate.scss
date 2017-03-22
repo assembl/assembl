@@ -13,14 +13,18 @@
 
 
     .timeline-container {
-      margin: 0 0 0 85px;
+      margin: 0 0 0 100px;
     }
 
     .burger-menu {
       cursor: pointer;
       position: absolute;
-      top: 20px;
-      width: 60px;
+      text-align: center;
+      top: 12px;
+    }
+
+    .burger-menu-label {
+      font-size: $font-size-xxs;
     }
   }
 
@@ -177,6 +181,7 @@
     position: relative;
 
     .header-content {
+      margin: 60px 0 0;
       position: relative;
       text-align: center;
       z-index: 2;
@@ -244,6 +249,12 @@
       color: $first-color;
       height: $navbar-height;
     }
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .burger-menu {
+    padding: 0 0 0 15px;
   }
 }
 

@@ -26,6 +26,9 @@ class Thumbnails extends React.Component {
                     <Link to={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id}`}>
                       <div className={themeId == thematic.id ? 'thumb-img active' : 'thumb-img'} style={{ backgroundImage: `url(${thematic.imgUrl})` }}>&nbsp;</div>
                       <div className="color-box">&nbsp;</div>
+                      <div className="thumb-title">
+                        <div className="thumb-title-inner">{thematic.title}</div>
+                      </div>
                     </Link>
                   </div>
                 )

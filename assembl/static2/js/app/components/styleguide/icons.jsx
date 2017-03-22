@@ -21,6 +21,9 @@ class Icons extends React.Component {
             <span className="assembl-icon-checked">&nbsp;</span>
           </div>
           <div className="inline padding">
+            <span className="assembl-icon-thumb">&nbsp;</span>
+          </div>
+          <div className="inline padding">
             <span className="assembl-icon-discussion">&nbsp;</span>
           </div>
           <div className="inline padding">
@@ -111,6 +114,9 @@ class Icons extends React.Component {
           </pre>
           <pre>
             &lt;span className="assembl-icon-checked white"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-thumb"&gt;&lt;/span&gt;
           </pre>
           <pre>
             &lt;span className="assembl-icon-discussion"&gt;&lt;/span&gt;
