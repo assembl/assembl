@@ -13,7 +13,7 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.threadlocal import get_current_request
 
-from assembl.auth import CrudPermissions
+from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.lib.sqla_types import EmailString
 from assembl import models
@@ -259,9 +259,62 @@ class Query(graphene.ObjectType):
         return query
 
 
-Schema = graphene.Schema(query=Query)
+class CreateThematic(graphene.Mutation):
+    class Input:
+        title = graphene.String(required=True)
+        lang = graphene.String(required=True)
+        identifier = graphene.String(required=True)
+        # TODO description, video
+        # TODO should be possible to specify the title and description in several languages
+        # TODO upload img
 
-"""
+    thematic = graphene.Field(lambda: Thematic)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Thematic
+        request = get_current_request()
+        discussion_id = context['discussion_id']
+
+        user_id = authenticated_userid(request) or Everyone
+
+        # to test the mutation in a pshell, comment the 4 lines
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        lang = args.get('lang')
+        identifier = args.get('identifier')
+        with cls.default_db.no_autoflush:
+            title = models.LangString.create(args.get('title'), locale_code=lang)
+            saobj = cls(
+                discussion_id=discussion_id,
+                title=title,
+                identifier=identifier)
+            db = saobj.db
+            db.add(saobj)
+            db.flush()
+
+        return CreateThematic(thematic=saobj)
+
+# TODO UpdateThematic
+# TODO DeleteThematic, raise exception if questions associated with it
+# TODO CreateQuestion
+# TODO UpdateQuestion
+# TODO DeleteQuestion, raise exception if posts associated with it.
+# TODO CreatePost
+# TODO AddSentimentToPost
+
+
+class Mutations(graphene.ObjectType):
+    create_thematic = CreateThematic.Field()
+
+
+Schema = graphene.Schema(query=Query, mutation=Mutations)
+
+
+'''
 $ pshell local.ini
 import json
 from assembl.graphql.schema import Schema as schema
@@ -282,7 +335,19 @@ print json.dumps(schema.execute('query { posts(first: 5) { pageInfo { endCursor 
 # curl --silent -XPOST -H "Content-Type:application/json" -d '{ "query": "query { posts(first: 5) { pageInfo { endCursor hasNextPage } edges { node { ... on Post {id, creator { name }} } } } }" }' http://localhost:6543/sandbox/graphql
 
 #get thematics with questions:
-print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title } } }', context_value={"discussion_id": 16}).errors, indent=2)
+print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value={"discussion_id": 16}).data, indent=2)
 
-"""
+print json.dumps(schema.execute("""
+mutation myFirstMutation {
+    createThematic(title:"Comprendre les dynamiques et les enjeux", lang:"fr", identifier:"survey") {
+        thematic {
+            title,
+            identifier
+        }
+    }
+}
+""", context_value={"discussion_id": 16}).errors, indent=2)
 
+In pshell, you need to commit if you want it to be persistent.
+
+'''
