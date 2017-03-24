@@ -1,15 +1,13 @@
 from collections import OrderedDict
 
 import six
-from graphene_sqlalchemy import SQLAlchemyObjectType
-from graphene_sqlalchemy.converter import (
-    convert_column_to_string, convert_sqlalchemy_type)
 from graphene_sqlalchemy.types import construct_fields
 from graphene.types.interface import Interface, InterfaceMeta
 from graphene.types.options import Options
 from graphene.types.utils import merge, yank_fields_from_attrs
 from graphene.types.field import Field
 from graphene.types.union import Union, UnionMeta
+from graphene.types.utils import get_field_as
 from graphene.utils.is_base_type import is_base_type
 from graphene_sqlalchemy.registry import Registry, get_global_registry
 from graphene_sqlalchemy.utils import is_mapped

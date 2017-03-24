@@ -1,14 +1,12 @@
-from collections import OrderedDict
 
 from sqlalchemy.orm.exc import NoResultFound
-import six
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy.converter import (
     convert_column_to_string, convert_sqlalchemy_type)
-from graphene_sqlalchemy.utils import get_query, is_mapped
+from graphene_sqlalchemy.utils import get_query
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.threadlocal import get_current_request
