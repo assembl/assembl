@@ -9,7 +9,6 @@ from graphene_sqlalchemy.converter import (
 from graphene_sqlalchemy.utils import get_query
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import authenticated_userid, Everyone
-from pyramid.threadlocal import get_current_request
 
 from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
@@ -30,9 +29,8 @@ class SecureObjectType(object):
         except NoResultFound:
             return None
 
-        request = get_current_request()
-        discussion_id = context['discussion_id']
-        user_id = authenticated_userid(request) or Everyone
+        discussion_id = context.matchdict['discussion_id']
+        user_id = authenticated_userid(context) or Everyone
         permissions = get_permissions(user_id, discussion_id)
         if not result.user_can(user_id, CrudPermissions.READ, permissions):
             raise HTTPUnauthorized()
@@ -218,7 +216,7 @@ class Query(graphene.ObjectType):
         connection_type = info.return_type.graphene_type  # this is IdeaConnection
         model = connection_type._meta.node._meta.model  # this is models.Idea
         query = get_query(model, context)
-        discussion_id = context['discussion_id']
+        discussion_id = context.matchdict['discussion_id']
         query = query.filter(model.discussion_id == discussion_id
             ).filter(model.hidden == False
             ).filter(model.tombstone_condition())
@@ -230,7 +228,7 @@ class Query(graphene.ObjectType):
         connection_type = info.return_type.graphene_type  # this is PostConnection
         model = connection_type._meta.node._meta.model  # this is models.PostUnion
         query = get_query(model, context)
-        discussion_id = context['discussion_id']
+        discussion_id = context.matchdict['discussion_id']
         query = query.filter(model.discussion_id == discussion_id
             ).filter(model.hidden == False
             ).filter(model.tombstone_condition()
@@ -248,7 +246,7 @@ class Query(graphene.ObjectType):
     def resolve_thematics(self, args, context, info):
         identifier = args.get('identifier', None)
         model = Thematic._meta.model
-        discussion_id = context['discussion_id']
+        discussion_id = context.matchdict['discussion_id']
         query = get_query(model, context
             ).filter(model.discussion_id == discussion_id)
         if identifier is not None:
@@ -264,17 +262,15 @@ class CreateThematic(graphene.Mutation):
         identifier = graphene.String(required=True)
         # TODO description, video
         # TODO should be possible to specify the title and description in several languages
-        # TODO upload img
+        # TODO upload img example http://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/forms/file_uploads.html
 
     thematic = graphene.Field(lambda: Thematic)
 
     @staticmethod
     def mutate(root, args, context, info):
         cls = models.Thematic
-        request = get_current_request()
-        discussion_id = context['discussion_id']
-
-        user_id = authenticated_userid(request) or Everyone
+        discussion_id = context.matchdict['discussion_id']
+        user_id = authenticated_userid(context) or Everyone
 
         # to test the mutation in a pshell, comment the 4 lines
         permissions = get_permissions(user_id, discussion_id)
@@ -317,23 +313,25 @@ $ pshell local.ini
 import json
 from assembl.graphql.schema import Schema as schema
 
+request.matchdict = {"discussion_id": 16}
+
 #print the schema as text:
 print str(schema)
 
 #schema.execute returns a ExecutionResult object with data and errors attributes on it.
 
 #get node:
-print json.dumps(schema.execute('query { node(id:"UG9zdDoyMzU5") { ... on Post { id, creator { name } } } }', context_value={"discussion_id": 16}).data, indent=2)
+print json.dumps(schema.execute('query { node(id:"UG9zdDoyMzU5") { ... on Post { id, creator { name } } } }', context_value=request).data, indent=2)
 
 #get ideas:
-print json.dumps(schema.execute('query { ideas(first: 5) { pageInfo { endCursor hasNextPage } edges { node { id } } } }', context_value={"discussion_id": 16}).data, indent=2)
+print json.dumps(schema.execute('query { ideas(first: 5) { pageInfo { endCursor hasNextPage } edges { node { id } } } }', context_value=request).data, indent=2)
 
 #get posts:
-print json.dumps(schema.execute('query { posts(first: 5) { pageInfo { endCursor hasNextPage } edges { node { ... on Post {id, creator { name }, subject, body, sentimentCounts {dontUnderstand disagree like moreInfo }} } } } }', context_value={"discussion_id": 16}).data, indent=2)
+print json.dumps(schema.execute('query { posts(first: 5) { pageInfo { endCursor hasNextPage } edges { node { ... on Post {id, creator { name }, subject, body, sentimentCounts {dontUnderstand disagree like moreInfo }} } } } }', context_value=request).data, indent=2)
 # curl --silent -XPOST -H "Content-Type:application/json" -d '{ "query": "query { posts(first: 5) { pageInfo { endCursor hasNextPage } edges { node { ... on Post {id, creator { name }} } } } }" }' http://localhost:6543/sandbox/graphql
 
 #get thematics with questions:
-print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value={"discussion_id": 16}).data, indent=2)
+print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=request).data, indent=2)
 
 print json.dumps(schema.execute("""
 mutation myFirstMutation {
@@ -344,7 +342,7 @@ mutation myFirstMutation {
         }
     }
 }
-""", context_value={"discussion_id": 16}).errors, indent=2)
+""", context_value=request).data, indent=2)
 
 In pshell, you need to commit if you want it to be persistent.
 
