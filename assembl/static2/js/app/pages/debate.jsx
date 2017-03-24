@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -22,27 +21,24 @@ class Debate extends React.Component {
     this.displayTimeline = this.displayTimeline.bind(this);
   }
   componentDidMount() {
-      window.addEventListener('scroll', this.displayTimeline);
+    window.addEventListener('scroll', this.displayTimeline);
   }
   componentWillUnmount() {
-      window.removeEventListener('scroll', this.displayTimeline);
+    window.removeEventListener('scroll', this.displayTimeline);
   }
   showThumbnails() {
-    const { isThumbnailsHidden } = this.state;
     this.setState({ isThumbnailsHidden: false });
   }
   hideThumbnails() {
-    const { isThumbnailsHidden } = this.state;
     this.setState({ isThumbnailsHidden: true });
   }
   displayThumbnails() {
     const { isThumbnailsHidden } = this.state;
-    if(!isThumbnailsHidden) this.setState({ isThumbnailsHidden: true });
-    if(isThumbnailsHidden) this.setState({ isThumbnailsHidden: false });
+    if (!isThumbnailsHidden) this.setState({ isThumbnailsHidden: true });
+    if (isThumbnailsHidden) this.setState({ isThumbnailsHidden: false });
   }
   displayTimeline() {
-    const { isTimelineHidden } = this.state;
-    let top  = window.pageYOffset || document.documentElement.scrollTop;
+    const top = window.pageYOffset || document.documentElement.scrollTop;
     if (top > 400) {
       this.setState({
         isTimelineHidden: true,
@@ -60,7 +56,7 @@ class Debate extends React.Component {
     const { identifier } = this.props;
     const isParentRoute = !this.props.params.phase || false;
     const themeId = this.props.params.themeId || null;
-    const children = React.Children.map(this.props.children, function (child) {
+    const children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
         id: themeId,
         identifier: identifier
@@ -75,7 +71,7 @@ class Debate extends React.Component {
               <div className="max-container">
                 {!isParentRoute &&
                   <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
-                    <div className="assembl-icon-thumb"></div>
+                    <div className="assembl-icon-thumb" />
                     <div className="burger-menu-label">
                       <Translate value="debate.themes" />
                     </div>

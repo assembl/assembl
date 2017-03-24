@@ -179,6 +179,7 @@
     min-height: 380px;
     overflow: hidden;
     position: relative;
+    z-index: 10;
 
     .header-content {
       margin: 60px 0 0;
@@ -204,21 +205,42 @@
     }
   }
 
-  .questions-section {
-    .txt-area {
-      border-bottom: none;
-      border-left: 5px solid $first-color;
-      border-radius: initial;
-      border-right: none;
-      border-top: none;
-      box-shadow: none;
-      font-family: $font-family4;
-      font-size: $font-size-s;
-      height: 250px;
+  .questions {
+    .questions-section {
+      .txt-area {
+        border-bottom: none;
+        border-left: 5px solid $first-color;
+        border-radius: initial;
+        border-right: none;
+        border-top: none;
+        box-shadow: none;
+        font-family: $font-family4;
+        font-size: $font-size-s;
+        height: 250px;
+      }
+
+      &:nth-child(1) {
+        .question-title-section {
+          margin: 60px 0 0;
+          padding: 60px 0 60px;
+        }
+      }
+    }
+
+    .question-title-section {
+      margin: 60px 0 0;
+      padding: 60px 0 60px;
+      text-align: left;
+
+      .dark-title-1 {
+        padding: 15px 0 0;
+      }
     }
   }
 
   .video-section {
+    z-index: 100;
+
     .video-col {
       margin: -15px 0 0;
     }
@@ -245,9 +267,59 @@
   }
 
   .navigation-section {
+    width: 100%;
+    z-index: 0;
+
     .question-nav {
       color: $first-color;
       height: $navbar-height;
+
+      .question-numbers {
+        max-width: 350px;
+        position: relative;
+
+        .txt {
+          margin: 10px 0 5px;
+        }
+
+        .bar {
+          background-color: $first-color;
+          height: 10px;
+          position: absolute;
+          z-index: 2;
+        }
+
+        .bkg-bar {
+          background-color: $white;
+          height: 10px;
+          width: 100%;
+          z-index: 1;
+        }
+      }
+
+      .arrow {
+        background-color: $white;
+        border-radius: 30px;
+        cursor: pointer;
+        display: inline-block;
+        line-height: 30px;
+        height: 30px;
+        margin: 15px 0 0 30px;
+        text-align: center;
+        width: 30px;
+
+        .assembl-icon-up-open {
+          &:before {
+            font-size: 16px;
+          }
+        }
+
+        .assembl-icon-down-open {
+          &:before {
+            font-size: 16px;
+          }
+        }
+      }
     }
   }
 }
@@ -255,6 +327,12 @@
 @media screen and (max-width: 1280px) {
   .burger-menu {
     padding: 0 0 0 15px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .navigation-section.shown {
+    display: none;
   }
 }
 

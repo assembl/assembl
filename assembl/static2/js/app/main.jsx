@@ -17,6 +17,12 @@ class Main extends React.Component {
       identifier: queryIdentifier
     };
   }
+  componentWillMount() {
+    const { debateId, connectedUserId } = this.props.context;
+    this.props.fetchPosts(debateId);
+    this.props.fetchSynthesis(debateId);
+    this.props.fetchUsers(debateId, connectedUserId);
+  }
   componentWillReceiveProps(nextProps) {
     const { debateData } = this.props.debate;
     const paramsIdentifier = nextProps.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
@@ -25,15 +31,9 @@ class Main extends React.Component {
       identifier: queryIdentifier
     };
   }
-  componentWillMount() {
-    const { debateId, connectedUserId } = this.props.context;
-    this.props.fetchPosts(debateId);
-    this.props.fetchSynthesis(debateId);
-    this.props.fetchUsers(debateId, connectedUserId);
-  }
   render() {
     const that = this;
-    const children = React.Children.map(this.props.children, function (child) {
+    const children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
         identifier: that.state.identifier
       });

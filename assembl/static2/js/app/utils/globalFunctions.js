@@ -49,3 +49,34 @@ export const getNumberOfDays = (date1, date2) => {
 export const calculatePercentage = (value1, value2) => {
   return Math.round(((value1 * 100) / value2) * 100) / 100;
 };
+
+export const getDomElementOffset = (el) => {
+  const rect = el.getBoundingClientRect();
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+  return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+};
+
+export const getCssAttribute = (selector, attribute, unit) => {
+  const div = document.querySelector(selector);
+  const style = div.currentStyle || window.getComputedStyle(div);
+  return { marginTop: style[attribute].split(unit)[0] };
+};
+
+export const scrollToElement = (element, to, duration) => {
+  if (element.scrollTop === to) return;
+  const diff = to - element.scrollTop;
+  const scrollStep = Math.PI / (duration / 10);
+  let count = 0;
+  let currPos = 0;
+  const start = element.scrollTop;
+  const scrollInterval = setInterval(() => {
+    if ((Math.round(element.scrollTop / 10) * 10) !== (Math.round(to / 10) * 10)) {
+      count += 1;
+      currPos = start + (diff * (0.5 - (0.5 * Math.cos(count * scrollStep))));
+      element.scrollTop = currPos; //eslint-disable-line
+    } else {
+      clearInterval(scrollInterval);
+    }
+  }, 10);
+};

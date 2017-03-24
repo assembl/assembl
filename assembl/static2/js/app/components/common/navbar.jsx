@@ -5,7 +5,6 @@ import { Grid, Navbar } from 'react-bootstrap';
 import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
-import Search from '../search';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -37,7 +36,7 @@ class NavBar extends React.Component {
     return (
       <Grid fluid>
         <Navbar fixedTop fluid>
-          <div className="nav-bar max-container">
+          <div className="nav-bar max-container" id="navbar">
             <div className="burgermenu-icon left" onClick={this.displayMenu}>
               <div className={this.state.isMenuHidden ? 'shown' : 'hidden'}>
                 <span className="assembl-icon-menu-on black">&nbsp;</span>
@@ -53,9 +52,6 @@ class NavBar extends React.Component {
             </div>
             <div className="nav-menu left">
               <NavigationMenu />
-            </div>
-            <div className="hidden">
-              <Search />
             </div>
             <div className="navbar-icons right">
               {connectedUserId &&

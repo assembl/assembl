@@ -1,23 +1,22 @@
 import { isDateExpired, getNumberOfDays, calculatePercentage } from './globalFunctions';
 
 export const getCurrentPhaseIdentifier = (timeline) => {
-    const currentDate = new Date();
-    let identifier = null;
-    timeline.map((phase) => {
-      const startDate = new Date(phase.start);
-      const endDate = new Date(phase.end);
-      if (isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate)) {
-        identifier = phase.identifier;
-      }
-      return identifier;
-    });
-    return identifier || 'thread';
+  const currentDate = new Date();
+  let identifier = null;
+  timeline.map((phase) => { //eslint-disable-line
+    const startDate = new Date(phase.start);
+    const endDate = new Date(phase.end);
+    if (isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate)) {
+      identifier = phase.identifier;
+    }
+  });
+  return identifier || 'thread';
 };
 
 export const isPhaseStarted = (timeline, identifier) => {
   const currentDate = new Date();
   let isStarted = false;
-  timeline.map((phase) => {
+  timeline.map((phase) => { //eslint-disable-line
     if (phase.identifier === identifier) {
       const startDate = new Date(phase.start);
       isStarted = isDateExpired(currentDate, startDate);
@@ -28,7 +27,7 @@ export const isPhaseStarted = (timeline, identifier) => {
 
 export const getStartDatePhase = (timeline, identifier) => {
   let startDatePhase = '';
-  timeline.map((phase) => {
+  timeline.map((phase) => { //eslint-disable-line
     if (phase.identifier === identifier) {
       startDatePhase = phase.start;
     }

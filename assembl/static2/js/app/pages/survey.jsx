@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import Loader from '../components/common/loader';
 import Video from '../components/debate/survey/video';
 import Header from '../components/debate/survey/header';
-import Questions from '../components/debate/survey/questions';
+import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 
@@ -16,18 +16,20 @@ class Survey extends React.Component {
       <div className="survey">
         {loading && <Loader color="black" />}
         {theme &&
-          <div>
+          <div className="relative">
             <Header title={theme.title} imgUrl={theme.imgUrl} />
             {theme.video &&
               <Video title={theme.video.title} description={theme.video.description} htmlCode={theme.video.htmlCode} />
             }
-            {theme.questions && theme.questions.map((question, index) => {
-              return(
-                <Questions title={question.title} key={`question-${index}`} />
-              )
-            })}
-            {theme.questions && 
-              <Navigation />
+            <div className="questions">
+              {theme.questions && theme.questions.map((question, index) => {
+                return (
+                  <Question title={question.title} key={`question-${index}`} index={index + 1} />
+                );
+              })}
+            </div>
+            {theme.questions &&
+              <Navigation questionsLength={theme.questions.length} />
             }
             <Proposals />
           </div>

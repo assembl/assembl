@@ -130,7 +130,10 @@ const Translations = {
     debate: {
       survey: {
         themesTitle: 'Choisissez une thematique !',
-        txtAreaPh: 'Ecrivez votre proposition'
+        txtAreaPh: 'Ecrivez votre proposition',
+        question: 'Question',
+        on: 'sur',
+        titleVideo: 'Une vidéo pour mieux comprendre le sujet...'
       },
       themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
@@ -284,7 +287,10 @@ const Translations = {
     debate: {
       survey: {
         themesTitle: 'Choose a theme!',
-        txtAreaPh: 'Write your proposal'
+        txtAreaPh: 'Write your proposal',
+        question: 'Question',
+        on: 'on',
+        titleVideo: 'A video to better understand the subject...'
       },
       themes: 'Themes',
       notStarted: 'This phase is not started. Please come back from the '

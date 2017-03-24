@@ -10,13 +10,17 @@ $green: #3bb848;
 $lightgreen: #93e79d;
 $blue: #140ca0;
 $purple: #5404d7;
+$purple-light: #e7e6f5;
 $yellow: #f0ab2b;
 $cyan: #0095b2;
+$cyan-light: #d1eef6;
+
 $opacity-purple: rgba(84, 4, 215, .5);
 $opacity-cyan: rgba(0, 140, 166, .5);
 $min-opacity-cyan: rgba(0, 140, 166, .1);
 
 $first-color: $cyan;
+$first-color-light: $cyan-light;
 $second-color: $yellow;
 $third-color: $blue;
 $opacity-color: $opacity-cyan;

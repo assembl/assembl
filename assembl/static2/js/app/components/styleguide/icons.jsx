@@ -83,6 +83,12 @@ class Icons extends React.Component {
           <div className="inline padding">
             <span className="assembl-icon-mindmap">&nbsp;</span>
           </div>
+          <div className="inline padding">
+            <span className="assembl-icon-down-open">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-up-open">&nbsp;</span>
+          </div>
           <div style={{backgroundColor:"#000", width:"200px"}}>
             <div className="inline padding">
               <Link to="http://www.facebook.com" target="_blank">
@@ -177,6 +183,12 @@ class Icons extends React.Component {
           </pre>
           <pre>
             &lt;span className="assembl-icon-mindmap"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-down-open"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-up-open"&gt;&lt;/span&gt;
           </pre>
           <pre>
             <div>&lt;Link to="http://www.facebook.com" target="_blank"&gt;</div>

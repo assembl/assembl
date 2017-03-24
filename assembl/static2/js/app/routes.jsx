@@ -20,23 +20,18 @@ import Terms from './pages/terms';
 
 const DebateChild = (props) => {
   switch (props.params.phase) {
-    case "survey":
+  case 'survey':
     return <Survey id={props.id} identifier={props.identifier} />;
-    break;
-    case "thread":
+  case 'thread':
     return <Thread id={props.id} identifier={props.identifier} />;
-    break;
-    case "twoColumns":
+  case 'twoColumns':
     return <TwoColumns id={props.id} identifier={props.identifier} />;
-    break;
-    case "tokenVote":
+  case 'tokenVote':
     return <TokenVote id={props.id} identifier={props.identifier} />;
-    break;
-    default:
+  default:
     return <Survey id={props.id} identifier={props.identifier} />;
-    break;
   }
-}
+};
 
 export default (
   <Router>
