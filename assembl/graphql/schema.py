@@ -8,7 +8,7 @@ from graphene_sqlalchemy.converter import (
     convert_column_to_string, convert_sqlalchemy_type)
 from graphene_sqlalchemy.utils import get_query
 from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 
 from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
@@ -30,7 +30,7 @@ class SecureObjectType(object):
             return None
 
         discussion_id = context.matchdict['discussion_id']
-        user_id = authenticated_userid(context) or Everyone
+        user_id = context.authenticated_userid or Everyone
         permissions = get_permissions(user_id, discussion_id)
         if not result.user_can(user_id, CrudPermissions.READ, permissions):
             raise HTTPUnauthorized()
@@ -270,9 +270,8 @@ class CreateThematic(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
-        user_id = authenticated_userid(context) or Everyone
+        user_id = context.authenticated_userid or Everyone
 
-        # to test the mutation in a pshell, comment the 4 lines
         permissions = get_permissions(user_id, discussion_id)
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
@@ -313,7 +312,12 @@ $ pshell local.ini
 import json
 from assembl.graphql.schema import Schema as schema
 
+from assembl.tests.utils import PyramidWebTestRequest
+request = PyramidWebTestRequest.blank('/', method="POST")
 request.matchdict = {"discussion_id": 16}
+# take the first sysadmin:
+userid = models.User.default_db.query(models.User).join(models.User.roles).filter(models.Role.id == 7)[0:1][0].id
+request.authenticated_userid = userid
 
 #print the schema as text:
 print str(schema)
@@ -329,6 +333,8 @@ print json.dumps(schema.execute('query { ideas(first: 5) { pageInfo { endCursor 
 #get posts:
 print json.dumps(schema.execute('query { posts(first: 5) { pageInfo { endCursor hasNextPage } edges { node { ... on Post {id, creator { name }, subject, body, sentimentCounts {dontUnderstand disagree like moreInfo }} } } } }', context_value=request).data, indent=2)
 # curl --silent -XPOST -H "Content-Type:application/json" -d '{ "query": "query { posts(first: 5) { pageInfo { endCursor hasNextPage } edges { node { ... on Post {id, creator { name }} } } } }" }' http://localhost:6543/sandbox/graphql
+# to be authenticated add the assembl_session cookie (look the value in the Chrome console):
+# -H 'Cookie:assembl_session=d8deabe718595c01d3899aa686ac027193cc7d6984bd73b14afc42738d798018629b6e8a;'
 
 #get thematics with questions:
 print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=request).data, indent=2)
