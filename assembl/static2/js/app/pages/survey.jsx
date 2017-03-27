@@ -24,7 +24,7 @@ class Survey extends React.Component {
             <div className="questions">
               {theme.questions && theme.questions.map((question, index) => {
                 return (
-                  <Question title={question.title} key={`question-${index}`} index={index + 1} />
+                  <Question title={question.title} key={index} index={index + 1} />
                 );
               })}
             </div>

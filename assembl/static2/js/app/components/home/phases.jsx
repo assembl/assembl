@@ -24,7 +24,7 @@ class Phases extends React.Component {
                 <Row className="no-margin">
                   {debateData.timeline.map((phase, index) => {
                     return (
-                      <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={isCurrentPhase(debateData.timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'} key={`phase${index}`}>
+                      <Col xs={12} sm={24 / debateData.timeline.length} md={12 / debateData.timeline.length} className={isCurrentPhase(debateData.timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'} key={index}>
                         <Phase imgUrl={phase.image_url} startDate={phase.start} index={index} title={phase.title} description={phase.description} identifier={phase.identifier} />
                       </Col>
                     );
@@ -33,7 +33,7 @@ class Phases extends React.Component {
                 <Row className="no-margin">
                   {debateData.timeline.map((phase, index) => {
                     return (
-                      <Col xs={12 / debateData.timeline.length} sm={12 / debateData.timeline.length} md={12 / debateData.timeline.length} className={'no-padding bar'} key={`timeline${index}`}>
+                      <Col xs={12 / debateData.timeline.length} sm={12 / debateData.timeline.length} md={12 / debateData.timeline.length} className={'no-padding bar'} key={index}>
                         <Timeline index={index} />
                       </Col>
                     );

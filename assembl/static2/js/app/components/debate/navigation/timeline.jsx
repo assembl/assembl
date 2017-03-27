@@ -16,7 +16,7 @@ class Timeline extends React.Component {
               title={phase.title}
               locale={locale}
               index={index}
-              key={`timeline-${index}`}
+              key={index}
               barWidth={getBarWidth(debateData.timeline[index])}
               isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
               isStepCompleted={isStepCompleted(phase)}

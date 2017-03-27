@@ -28,7 +28,7 @@ class Themes extends React.Component {
                 <Row className="no-margin">
                   {thematics.map((thematic, index) => {
                     return (
-                      <Col xs={12} sm={6} md={3} className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'} key={`thematic-${index}`}>
+                      <Col xs={12} sm={6} md={3} className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'} key={index}>
                         <ThematicPreview
                           imgUrl={thematic.imgUrl}
                           numPosts={thematic.numPosts}

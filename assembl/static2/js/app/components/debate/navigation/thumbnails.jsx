@@ -23,7 +23,7 @@ class Thumbnails extends React.Component {
             <div className="thumbnails">
               {thematics.map((thematic, index) => {
                 return (
-                  <div className="thumb-img-container" key={`thumb-${index}`}>
+                  <div className="thumb-img-container" key={index}>
                     <Link to={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id}`}>
                       <div className={themeId === thematic.id ? 'thumb-img active' : 'thumb-img'} style={{ backgroundImage: `url(${thematic.imgUrl})` }}>&nbsp;</div>
                       <div className="color-box">&nbsp;</div>
