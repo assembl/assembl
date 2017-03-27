@@ -1,3 +1,7 @@
+.hiddenNavbar {
+  display: none;
+}
+
 .nav-bar {
   background-color: $navbar-bkg;
   height: $navbar-height;
@@ -34,12 +38,6 @@
     &:focus {
       text-decoration: none;
     }
-  }
-
-  .active {
-    border-bottom: $border-active;
-    color: $navbar-active-text-color;
-    padding-bottom: 18px;
   }
 
   .burgermenu-icon {
@@ -104,6 +102,10 @@
       width: calc(100% - 30px);
       z-index: 0;
     }
+
+    .active {
+      font-family: $font-family3;
+    }
   }
 }
 
@@ -131,6 +133,18 @@
       height: 50px;
       width: $large-hyphen-width;
     }
+
+    .active {
+      border-bottom: $border-active;
+      color: $navbar-active-text-color;
+      padding-bottom: 18px;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .hiddenNavbar {
+    display: block;
   }
 }
 

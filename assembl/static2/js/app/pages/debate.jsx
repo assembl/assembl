@@ -12,48 +12,28 @@ class Debate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isThumbnailsHidden: true,
-      isTimelineHidden: false
+      isThumbnailsHidden: true
     };
     this.showThumbnails = this.showThumbnails.bind(this);
     this.hideThumbnails = this.hideThumbnails.bind(this);
     this.displayThumbnails = this.displayThumbnails.bind(this);
-    this.displayTimeline = this.displayTimeline.bind(this);
-  }
-  componentDidMount() {
-    window.addEventListener('scroll', this.displayTimeline);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.displayTimeline);
   }
   showThumbnails() {
     this.setState({ isThumbnailsHidden: false });
   }
   hideThumbnails() {
-    this.setState({ isThumbnailsHidden: true });
+    setTimeout(() => {
+      this.setState({ isThumbnailsHidden: true });
+    }, 400);
   }
   displayThumbnails() {
     const { isThumbnailsHidden } = this.state;
     if (!isThumbnailsHidden) this.setState({ isThumbnailsHidden: true });
     if (isThumbnailsHidden) this.setState({ isThumbnailsHidden: false });
   }
-  displayTimeline() {
-    const top = window.pageYOffset || document.documentElement.scrollTop;
-    if (top > 400) {
-      this.setState({
-        isTimelineHidden: true,
-        isThumbnailsHidden: true
-      });
-    } else {
-      this.setState({
-        isTimelineHidden: false,
-        isThumbnailsHidden: true
-      });
-    }
-  }
   render() {
     const { loading, thematics } = this.props.data;
-    const { identifier } = this.props;
+    const { identifier, isNavbarHidden } = this.props;
     const isParentRoute = !this.props.params.phase || false;
     const themeId = this.props.params.themeId || null;
     const children = React.Children.map(this.props.children, (child) => {
@@ -67,7 +47,7 @@ class Debate extends React.Component {
         {loading && <Loader color="black" />}
         {thematics &&
           <div>
-            <section className={this.state.isTimelineHidden ? 'hidden' : 'shown timeline-section'}>
+            <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'}>
               <div className="max-container">
                 {!isParentRoute &&
                   <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
@@ -97,6 +77,7 @@ class Debate extends React.Component {
                     thematics={thematics}
                     identifier={identifier}
                     themeId={themeId}
+                    isNavbarHidden={isNavbarHidden}
                   />
                 </div>
                 {children}

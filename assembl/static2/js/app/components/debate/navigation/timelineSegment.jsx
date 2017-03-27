@@ -27,7 +27,9 @@ class TimelineSegment extends React.Component {
         {title.entries.map((entry, index2) => {
           return (
             <div className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={`title-${index2}`}>
-              <Link to={`${rootPath}${debateData.slug}/debate?phase=${phaseIdentifier}`}>{locale === entry['@language'] ? entry.value : ''}</Link>
+              <Link to={isStepCompleted || isCurrentPhase ? `${rootPath}${debateData.slug}/debate?phase=${phaseIdentifier}` : null}>
+                {locale === entry['@language'] ? entry.value : ''}
+              </Link>
             </div>
           );
         })}

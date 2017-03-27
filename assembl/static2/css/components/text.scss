@@ -4,6 +4,7 @@
 
   .dark-title-1 {
     padding: 15px 0 0;
+    width: calc(100% - 75px);
   }
 }
 
@@ -143,7 +144,8 @@
 
     .dark-title-1 {
       display: block;
-      margin: -10px 0 0;
+      margin: -10px 0 0 32px;
+      width: calc(100% - 30px);
     }
 
     .subtitle {

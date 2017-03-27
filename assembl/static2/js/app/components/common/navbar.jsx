@@ -20,7 +20,9 @@ class NavBar extends React.Component {
     });
   }
   componentWillReceiveProps() {
-    this.setState({ isMenuHidden: true });
+    this.state = {
+      isMenuHidden: true
+    };
   }
   componentWillUnmount() {
     this.unlisten();
@@ -33,8 +35,9 @@ class NavBar extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { rootPath, connectedUserId } = this.props.context;
+    const { isHidden } = this.props;
     return (
-      <Grid fluid>
+      <Grid fluid className={isHidden ? 'hiddenNavbar' : 'shown'}>
         <Navbar fixedTop fluid>
           <div className="nav-bar max-container" id="navbar">
             <div className="burgermenu-icon left" onClick={this.displayMenu}>

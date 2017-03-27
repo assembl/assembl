@@ -11,9 +11,10 @@
     border-bottom: $navbar-border;
     height: $navbar-height+20px;
     overflow-x: scroll;
+    overflow-y: hidden;
     position: fixed;
     width: 100%;
-    z-index: 100;
+    z-index: 200;
 
     .thumbnails {
       display: -webkit-box;
@@ -37,7 +38,6 @@
     z-index: 10;
 
     &:hover {
-      border: 1px solid $first-color;
       opacity: .8;
 
       ~ .color-box {
@@ -71,6 +71,10 @@
     ~ .color-box {
       display: block;
     }
+  }
+
+  .active-title {
+    font-family: $font-family3;
   }
 
   .color-box {

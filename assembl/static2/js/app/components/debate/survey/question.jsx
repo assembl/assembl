@@ -22,17 +22,27 @@ class Questions extends React.Component {
   updateDimensions() {
     const componentHeight = this.question.clientHeight;
     const screenHeight = window.innerHeight - document.getElementById('navbar').clientHeight;
+    const screenWidth = window.innerWidth;
     setTimeout(() => {
       this.setState({
         screenHeight: screenHeight,
-        componentHeight: componentHeight
+        componentHeight: componentHeight,
+        screenWidth: screenWidth
       });
     }, 600);
   }
   render() {
     const { index } = this.props;
     return (
-      <section className="questions-section" id={`q${index}`} ref={(q) => { this.question = q; }} style={this.state.componentHeight < this.state.screenHeight ? { height: this.state.screenHeight } : { height: `${100}%` }}>
+      <section
+        className="questions-section"
+        id={`q${index}`}
+        ref={(q) => { this.question = q; }}
+        style={
+          this.state.componentHeight < this.state.screenHeight && this.state.screenWidth >= 600 ?
+            { height: this.state.screenHeight } : { height: `${100}%` }
+        }
+      >
         <Grid fluid className="background-grey">
           <div className="max-container">
             <div className="question-title-section">

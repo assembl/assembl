@@ -24,9 +24,9 @@ class Navigation extends React.Component {
     window.addEventListener('scroll', this.displayPagination);
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({
+    this.state = {
       questionsLength: nextProps.questionsLength
-    });
+    };
   }
   componentWillUnmount() {
     window.removeEventListener('scroll', this.displayNav);
