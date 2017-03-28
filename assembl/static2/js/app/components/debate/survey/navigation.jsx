@@ -33,10 +33,10 @@ class Navigation extends React.Component {
     window.removeEventListener('scroll', this.displayPagination);
   }
   getQuestionsOffset(questionsLength) { //eslint-disable-line
-    const marginTop = getCssAttribute('.question-title-section', 'marginTop', 'px').marginTop;
+    const marginTop = getCssAttribute('.question-title', 'marginTop', 'px').marginTop;
     const offsetArray = [];
     for (let i = 0; i < questionsLength; i += 1) {
-      const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title-section')[i]).top + (marginTop * 2));
+      const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top + (marginTop * 2));
       offsetArray.push(questionOffset);
     }
     return offsetArray;

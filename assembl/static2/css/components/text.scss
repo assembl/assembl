@@ -96,6 +96,15 @@
   font-size: $title5-size;
 }
 
+.background-title {
+  background-color: $first-color-light;
+  color: $first-color;
+  font-size: $font-size-m;
+  margin: 0 0 $margin-section-xs 0;
+  padding: 20px;
+  text-align: left;
+}
+
 .text {
   font-family: $font-family4;
   font-size: $font-size-s;

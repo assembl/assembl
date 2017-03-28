@@ -226,7 +226,7 @@
       }
     }
 
-    .question-title-section {
+    .question-title {
       text-align: left;
 
       .dark-title-1 {
@@ -305,6 +305,10 @@
         }
       }
     }
+  }
+  
+  .proposals-section {
+    margin: $margin-section 0 0 0;
   }
 }
 
@@ -447,7 +451,7 @@
     padding-top: 0;
   }
 
-  .question-title-section {
+  .question-title {
     margin: $margin-section 0;
   }
 }
@@ -485,7 +489,7 @@
     }
   }
 
-  .question-title-section {
+  .question-title {
     margin: $margin-section-xs 0 $margin-section-xs / 2;
 
     .dark-title-1 {

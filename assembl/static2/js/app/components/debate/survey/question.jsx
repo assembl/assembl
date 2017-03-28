@@ -32,7 +32,7 @@ class Questions extends React.Component {
     }, 600);
   }
   render() {
-    const { index } = this.props;
+    const { index, title } = this.props;
     return (
       <section
         className="questions-section"
@@ -45,10 +45,10 @@ class Questions extends React.Component {
       >
         <Grid fluid className="background-grey">
           <div className="max-container">
-            <div className="question-title-section">
+            <div className="question-title">
               <div className="title-hyphen">&nbsp;</div>
               <h1 className="dark-title-1">
-                {this.props.title}
+                {`${index}/ ${title}`}
               </h1>
             </div>
             <Col xs={12} md={9} className="col-centered">

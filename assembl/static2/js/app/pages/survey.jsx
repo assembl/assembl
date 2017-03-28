@@ -2,6 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { Link } from 'react-router';
+import { Translate } from 'react-redux-i18n';
+import { Grid } from 'react-bootstrap';
 import Loader from '../components/common/loader';
 import Video from '../components/debate/survey/video';
 import Header from '../components/debate/survey/header';
@@ -31,7 +34,30 @@ class Survey extends React.Component {
             {theme.questions &&
               <Navigation questionsLength={theme.questions.length} />
             }
-            <Proposals />
+            <div className="proposals">
+              <section className="proposals-section" id="proposals">
+                <Grid fluid className="background-light">
+                  <div className="max-container">
+                    <div className="title-section">
+                      <div className="title-hyphen">&nbsp;</div>
+                      <h1 className="dark-title-1">
+                        <Translate value="debate.survey.proposalsTitle" />
+                      </h1>
+                    </div>
+                    <div className="content-section center">
+                      {theme.questions && theme.questions.map((question, index) => {
+                        return (
+                          <Proposals title={question.title} posts={question.posts} key={index} index={index + 1} />
+                        );
+                      })}
+                      <Link to="?moreproposals" className="button-link button-dark">
+                        <Translate value="debate.survey.moreProposals" />
+                      </Link>
+                    </div>
+                  </div>
+                </Grid>
+              </section>
+            </div>
           </div>
         }
       </div>
@@ -60,7 +86,18 @@ const ThemeQuery = gql`
         }
       }
       questions: ideas {
-        ... on Idea {title}
+        ... on Idea {
+          title,
+          posts{
+            ... on Proposition {
+              body,
+              sentimentCounts{
+                like,
+                disagree
+              }
+            }
+          }
+        }
       }
     }
   }

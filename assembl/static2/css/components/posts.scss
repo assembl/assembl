@@ -1,0 +1,109 @@
+.proposals {
+  .box {
+    border-bottom: $navbar-border;
+    border-left: $border-theme;
+    border-right: $navbar-border;
+    border-top: $navbar-border;
+    margin: 0 auto 40px;
+    max-width: 900px;
+    padding: 0;
+    position: relative;
+    text-align: center;
+  }
+  
+  .content {
+    float:left;
+    width: 80%;
+  }
+
+  .statistic {
+    background-color: $first-color-light;
+    float:left;
+    height: 100%;
+    padding: 20px 0 0;
+    position: absolute;
+    right: 0;
+    width: 20%;
+  }
+
+  .user {
+    padding: 30px 0 0 40px;
+    text-align: left;
+
+    .username {
+      color: $first-color;
+    }
+  }
+
+  .body {
+    font-family: $font-family4;
+    padding: 20px 50px 0 73px;
+    text-align: left;
+  }
+
+  .sentiments {
+    border-top: $navbar-border;
+    font-family: $font-family4;
+    margin: 25px 50px 10px 73px;
+    padding: 15px 0 0;
+    text-align: left;
+  }
+
+  .sentiment {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 0 0 15px;
+    transition: all .2s ease-in-out;
+    vertical-align: middle;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  .stat-sentiment {
+    margin: -15px 0 0;
+    padding: 0 0 0 3px;
+  }
+
+  .min-sentiment {
+    display: inline-block;
+    font-family: $font-family4;
+    font-size: $font-size-xxs;
+    text-align: left;
+    width: 60px;
+
+    svg {
+      vertical-align: bottom;
+    }
+
+    .txt {
+      padding: 0 0 0 5px;
+    }
+  }
+
+  .statistic {
+    background-color: $first-color-light;
+    min-width: 150px;
+  }
+
+  .totalSentimentsCount {
+    font-family: $font-family3;
+    font-size: $font-size-sm;
+    letter-spacing: initial;
+    margin: 20px 0 0;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+  }
+
+  .sentimentsCountLabel {
+    font-family: $font-family4;
+    font-size: $font-size-xxs;
+    letter-spacing: initial;
+    margin: 20px 0 0;
+    position: absolute;
+    top: 70px;
+    width: 100%;
+  }
+}

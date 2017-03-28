@@ -20,9 +20,7 @@ class NavBar extends React.Component {
     });
   }
   componentWillReceiveProps() {
-    this.setState = {
-      isMenuHidden: true
-    };
+    this.setState({ isMenuHidden: true });
   }
   componentWillUnmount() {
     this.unlisten();

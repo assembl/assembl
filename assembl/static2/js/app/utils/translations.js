@@ -133,7 +133,11 @@ const Translations = {
         txtAreaPh: 'Ecrivez votre proposition',
         question: 'Question',
         on: 'sur',
-        titleVideo: 'Une vidéo pour mieux comprendre le sujet...'
+        titleVideo: 'Une vidéo pour mieux comprendre le sujet...',
+        proposalsTitle: 'Etes-vous d\'accord avec les propositions exprimées ?',
+        reactions: 'Réactions',
+        react: 'Réagissez :',
+        'moreProposals': 'Voir plus de propositions'
       },
       themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
@@ -290,7 +294,11 @@ const Translations = {
         txtAreaPh: 'Write your proposal',
         question: 'Question',
         on: 'on',
-        titleVideo: 'A video to better understand the subject...'
+        titleVideo: 'A video to better understand the subject...',
+        proposalsTitle: 'Do you agree with proposals?',
+        reactions: 'Reactions',
+        react: 'React:',
+        'moreProposals': 'More proposals'
       },
       themes: 'Themes',
       notStarted: 'This phase is not started. Please come back from the '

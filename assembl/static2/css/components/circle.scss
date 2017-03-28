@@ -1,0 +1,17 @@
+.gauge {
+  transform: rotate(270deg);
+}
+
+.circle {
+  stroke-width: 1.2em;
+  fill: transparent;
+  transform: rotate(0.1deg);
+}
+
+.radial-red {
+  stroke: $red;
+}
+
+.radial-green {
+  stroke: $green;
+}
