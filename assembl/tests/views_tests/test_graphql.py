@@ -46,7 +46,29 @@ def test_get_thematics(discussion, graphql_request, test_session):
 def test_mutation_create_thematic(graphql_request):
     res = schema.execute("""
 mutation myFirstMutation {
-    createThematic(title:"Comprendre les dynamiques et les enjeux", lang:"fr", identifier:"survey") {
+    createThematic(titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], identifier:"survey") {
+        thematic {
+            title,
+            identifier
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createThematic': {
+            u'thematic': {
+                u'title': u'Comprendre les dynamiques et les enjeux',
+                u'identifier': 'survey'
+    }}}
+
+
+def test_mutation_create_thematic_multilang(graphql_request):
+    res = schema.execute("""
+mutation myFirstMutation {
+    createThematic(titleEntries:[
+        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+        {value:"Understanding the dynamics and issues", localeCode:"en"}
+    ], identifier:"survey") {
         thematic {
             title,
             identifier
@@ -66,7 +88,7 @@ def test_mutation_create_thematic_no_permission(graphql_request):
     graphql_request.authenticated_userid = None
     res = schema.execute("""
 mutation myFirstMutation {
-    createThematic(title:"Comprendre les dynamiques et les enjeux", lang:"fr", identifier:"survey") {
+    createThematic(titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], identifier:"survey") {
         thematic {
             title,
             identifier

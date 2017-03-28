@@ -255,13 +255,25 @@ class Query(graphene.ObjectType):
         return query
 
 
+class LangStringEntryFields(graphene.AbstractType):
+    value = graphene.String(required=True)
+    locale_code = graphene.String(required=True)
+
+
+class LangStringEntry(graphene.ObjectType, LangStringEntryFields):
+    pass
+
+
+class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):
+    pass
+
+
 class CreateThematic(graphene.Mutation):
     class Input:
-        title = graphene.String(required=True)
-        lang = graphene.String(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        description_entries = graphene.List(LangStringEntryInput)
         identifier = graphene.String(required=True)
-        # TODO description, video
-        # TODO should be possible to specify the title and description in several languages
+        # TODO video
         # TODO upload img example http://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/forms/file_uploads.html
 
     thematic = graphene.Field(lambda: Thematic)
@@ -280,11 +292,50 @@ class CreateThematic(graphene.Mutation):
         lang = args.get('lang')
         identifier = args.get('identifier')
         with cls.default_db.no_autoflush:
-            title = models.LangString.create(args.get('title'), locale_code=lang)
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception('titleEntries needs at least one entry')
+
+            title_langstring = models.LangString.create(
+                title_entries[0]['value'],
+                title_entries[0]['locale_code'])
+            for entry in title_entries[1:]:
+                locale_id = models.Locale.get_id_of(entry['locale_code'])
+                title_langstring.add_entry(
+                    models.LangStringEntry(
+                        langstring=title_langstring,
+                        value=entry['value'],
+                        locale_id=locale_id
+                    )
+                )
+
+            description_entries = args.get('description_entries')
+            if description_entries is not None and len(description_entries) > 0:
+                description_langstring = models.LangString.create(
+                    description_entries[0]['value'],
+                    description_entries[0]['locale_code'])
+                for entry in description_entries[1:]:
+                    locale_id = models.Locale.get_id_of(entry['locale_code'])
+                    description_langstring.add_entry(
+                        models.LangStringEntry(
+                            langstring=description_langstring,
+                            value=entry['value'],
+                            locale_id=locale_id
+                        )
+                    )
+            else:
+                description_langstring = None
+
+
+            kwargs = {}
+            if description_langstring is not None:
+                kwargs['description'] = description_langstring
+
             saobj = cls(
                 discussion_id=discussion_id,
-                title=title,
-                identifier=identifier)
+                title=title_langstring,
+                identifier=identifier,
+                **kwargs)
             db = saobj.db
             db.add(saobj)
             db.flush()
@@ -339,17 +390,7 @@ print json.dumps(schema.execute('query { posts(first: 5) { pageInfo { endCursor 
 #get thematics with questions:
 print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=request).data, indent=2)
 
-print json.dumps(schema.execute("""
-mutation myFirstMutation {
-    createThematic(title:"Comprendre les dynamiques et les enjeux", lang:"fr", identifier:"survey") {
-        thematic {
-            title,
-            identifier
-        }
-    }
-}
-""", context_value=request).data, indent=2)
-
-In pshell, you need to commit if you want it to be persistent.
+For mutations, see examples in tests/test_graphql.py
+In pshell, you need to db.commit() if you want a mutation to be persistent.
 
 '''
