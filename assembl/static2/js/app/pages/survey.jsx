@@ -2,9 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
-import { Grid } from 'react-bootstrap';
+import { Grid, Button } from 'react-bootstrap';
 import Loader from '../components/common/loader';
 import Video from '../components/debate/survey/video';
 import Header from '../components/debate/survey/header';
@@ -13,6 +12,12 @@ import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 
 class Survey extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { moreProposals: false };
+    this.showMoreProposals = this.showMoreProposals.bind(this);
+    this.getIfProposals = this.getIfProposals.bind(this);
+  }
   render() {
     const { loading, theme } = this.props.data;
     return (
@@ -47,12 +52,14 @@ class Survey extends React.Component {
                     <div className="content-section center">
                       {theme.questions && theme.questions.map((question, index) => {
                         return (
-                          <Proposals title={question.title} posts={question.posts} key={index} index={index + 1} />
+                          <Proposals title={question.title} posts={question.posts} moreProposals={this.state.moreProposals} key={index} index={index + 1} />
                         );
                       })}
-                      <Link to="?moreproposals" className="button-link button-dark">
-                        <Translate value="debate.survey.moreProposals" />
-                      </Link>
+                      {(!this.state.moreProposals && this.getIfProposals(theme.questions)) &&
+                        <Button className="button-submit button-dark" onClick={this.showMoreProposals}>
+                          <Translate value="debate.survey.moreProposals" />
+                        </Button>
+                      }
                     </div>
                   </div>
                 </Grid>
@@ -62,6 +69,19 @@ class Survey extends React.Component {
         }
       </div>
     );
+  }
+  showMoreProposals() {
+    this.setState({
+      moreProposals: true
+    });
+  }
+  getIfProposals(questions) {
+    if (!questions) return false;
+    let isProposals = false;
+    questions.forEach((question) => {
+      if (question.posts) isProposals = true;
+    });
+    return isProposals;
   }
 }
 

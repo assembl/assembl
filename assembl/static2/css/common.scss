@@ -211,6 +211,10 @@ input {
   position: relative;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 @media screen and (min-width: 992px) {
   .col-bottom {
     display: table-cell;

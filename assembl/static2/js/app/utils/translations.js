@@ -137,7 +137,8 @@ const Translations = {
         proposalsTitle: 'Etes-vous d\'accord avec les propositions exprimées ?',
         reactions: 'Réactions',
         react: 'Réagissez :',
-        'moreProposals': 'Voir plus de propositions'
+        'moreProposals': 'Voir plus de propositions',
+        'noProposals': 'Il n\'y a pas de propositions. Soyez le premier à contribuer !'
       },
       themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
@@ -298,7 +299,8 @@ const Translations = {
         proposalsTitle: 'Do you agree with proposals?',
         reactions: 'Reactions',
         react: 'React:',
-        'moreProposals': 'More proposals'
+        'moreProposals': 'More proposals',
+        'noProposals': 'There are no proposals for the moment. Be the first to contribute!'
       },
       themes: 'Themes',
       notStarted: 'This phase is not started. Please come back from the '
