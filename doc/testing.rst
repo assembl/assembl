@@ -241,11 +241,11 @@ Assembl has several core fixtures that are important to note, in order to run th
 - test_app
     * An Assembl instance fixture, built on WebTest's TestApp_ testing tool. This fixture
       builds on ``test_app_no_perm`` and gives the ``admin_user`` fixture administrative permissions,
-      based on Pyramid's authorization policy. User this fixture to make API calls, as it best
+      based on Pyramid's authorization policy. Use this fixture to make API calls, as it best
       mocks an Assembl interface
 
 - admin_user
-    * A user fixture that has administrative priveledges
+    * A user fixture that has administrative privileges
 
 - test_adminuser_webrequest
     * A Pyramid GET request to "/", built on WebTest's TestRequest_, that includes an ``admin_user``
@@ -254,7 +254,7 @@ Assembl has several core fixtures that are important to note, in order to run th
 - browser
     * A browser fixture that is built on top of Splinter_ for integration testing. This specific fixture
       is bound to the `phantom\.js`_ driver. To create a different, use this fixture as a template for
-      creating other drivers. Splinter's has explicit documentation of different driver usages.
+      creating other drivers. Splinter has explicit documentation of different driver usages.
 
 
 For more information regarding testing a Pyramid application, see the `Pyramid Documentation`_ on testing.
