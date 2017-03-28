@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import { getDomElementOffset, scrollToElement, getCssAttribute, calculatePercentage } from '../../../utils/globalFunctions';
+import { getDomElementOffset, scrollToElement, calculatePercentage } from '../../../utils/globalFunctions';
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -33,10 +33,9 @@ class Navigation extends React.Component {
     window.removeEventListener('scroll', this.displayPagination);
   }
   getQuestionsOffset(questionsLength) { //eslint-disable-line
-    const marginTop = getCssAttribute('.question-title', 'marginTop', 'px').marginTop;
     const offsetArray = [];
     for (let i = 0; i < questionsLength; i += 1) {
-      const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top + (marginTop * 2));
+      const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top);
       offsetArray.push(questionOffset);
     }
     return offsetArray;

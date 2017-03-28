@@ -57,12 +57,6 @@ export const getDomElementOffset = (el) => {
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 };
 
-export const getCssAttribute = (selector, attribute, unit) => {
-  const div = document.querySelector(selector);
-  const style = div.currentStyle || window.getComputedStyle(div);
-  return { marginTop: style[attribute].split(unit)[0] };
-};
-
 export const scrollToElement = (element, to, duration) => {
   if (element.scrollTop === to) return;
   const diff = to - element.scrollTop;
