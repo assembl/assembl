@@ -47,6 +47,9 @@ class SecureObjectType(object):
 
 
 def resolve_langstring(langstring, locale_code):
+    """If locale_code is None, return the best lang based on user prefs,
+    otherwise respect the locale_code and return the right translation or None.
+    """
     if langstring is None:
         return None
 
@@ -55,6 +58,28 @@ def resolve_langstring(langstring, locale_code):
 
     return {models.Locale.code_for_id(locale_id): e.value
             for locale_id, e in langstring.entries_as_dict.items()}.get(locale_code, None)
+
+
+def langstring_from_input_entries(entries):
+    """Return a LangString SA object based on GraphQL LangStringEntryInput entries.
+    """
+    if entries is not None and len(entries) > 0:
+        langstring = models.LangString.create(
+            entries[0]['value'],
+            entries[0]['locale_code'])
+        for entry in entries[1:]:
+            locale_id = models.Locale.get_id_of(entry['locale_code'])
+            langstring.add_entry(
+                models.LangStringEntry(
+                    langstring=langstring,
+                    value=entry['value'],
+                    locale_id=locale_id
+                )
+            )
+
+        return langstring
+
+    return None
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
@@ -181,7 +206,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     title = graphene.String(lang=graphene.String())
     description = graphene.String(lang=graphene.String())
     questions = graphene.List(Question)
-    video = graphene.Field(Video)
+    video = graphene.Field(Video, lang=graphene.String())
     img_url = graphene.String()
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
@@ -275,12 +300,18 @@ class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):
     pass
 
 
+class VideoInput(graphene.InputObjectType):
+    title_entries = graphene.List(LangStringEntryInput)
+    description_entries = graphene.List(LangStringEntryInput)
+    html_code = graphene.String()
+
+
 class CreateThematic(graphene.Mutation):
     class Input:
         title_entries = graphene.List(LangStringEntryInput, required=True)
         description_entries = graphene.List(LangStringEntryInput)
         identifier = graphene.String(required=True)
-        # TODO video
+        video = graphene.Argument(VideoInput)
         # TODO upload img example http://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/forms/file_uploads.html
 
     thematic = graphene.Field(lambda: Thematic)
@@ -302,40 +333,23 @@ class CreateThematic(graphene.Mutation):
             if len(title_entries) == 0:
                 raise Exception('titleEntries needs at least one entry')
 
-            title_langstring = models.LangString.create(
-                title_entries[0]['value'],
-                title_entries[0]['locale_code'])
-            for entry in title_entries[1:]:
-                locale_id = models.Locale.get_id_of(entry['locale_code'])
-                title_langstring.add_entry(
-                    models.LangStringEntry(
-                        langstring=title_langstring,
-                        value=entry['value'],
-                        locale_id=locale_id
-                    )
-                )
-
-            description_entries = args.get('description_entries')
-            if description_entries is not None and len(description_entries) > 0:
-                description_langstring = models.LangString.create(
-                    description_entries[0]['value'],
-                    description_entries[0]['locale_code'])
-                for entry in description_entries[1:]:
-                    locale_id = models.Locale.get_id_of(entry['locale_code'])
-                    description_langstring.add_entry(
-                        models.LangStringEntry(
-                            langstring=description_langstring,
-                            value=entry['value'],
-                            locale_id=locale_id
-                        )
-                    )
-            else:
-                description_langstring = None
-
-
+            title_langstring = langstring_from_input_entries(title_entries)
+            description_langstring = langstring_from_input_entries(args.get('description_entries'))
             kwargs = {}
             if description_langstring is not None:
                 kwargs['description'] = description_langstring
+
+            video = args.get('video')
+            if video is not None:
+                video_title = langstring_from_input_entries(video['title_entries'])
+                if video_title is not None:
+                    kwargs['video_title'] = video_title
+
+                video_description = langstring_from_input_entries(video['description_entries'])
+                if video_description is not None:
+                    kwargs['video_description'] = video_description
+
+                kwargs['video_html_code'] = video['html_code']
 
             saobj = cls(
                 discussion_id=discussion_id,
