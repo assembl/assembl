@@ -220,6 +220,15 @@ def not_found(context, request):
     return {}
 
 
+def list_react_views(config, routes):
+    """Adds list of routes to the `assembl.views.discussion.views.react_view` method"""
+    if not routes:
+        return
+    for route in routes:
+        config.add_view(react_view, route_name=route,
+                        request_method='GET',
+                        renderer='assembl:templates/index_react.jinja2')
+
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
         config.add_route('landing_page', '/{discussion_slug}/home')
@@ -227,16 +236,11 @@ def includeme(config):
         config.add_route('contextual_v2_frontend_generic', 'v2/{discussion_slug}/*extra_path')
         config.add_route('v2_without_slug', 'v2/*extra_path')
 
-        # Should move these into view_configs later
-        config.add_view(react_view, route_name='landing_page',
-                        request_method='GET',
-                        renderer='assembl:templates/index_react.jinja2')
-        config.add_view(react_view, route_name='v2_profile',
-                        request_method='GET',
-                        renderer='assembl:templates/index_react.jinja2')
-        config.add_view(react_view, route_name='contextual_v2_frontend_generic',
-                        request_method='GET',
-                        renderer='assembl:templates/index_react.jinja2')
-        config.add_view(react_view, route_name='v2_without_slug',
-                        request_method='GET',
-                        renderer='assembl:templates/index_react.jinja2')
+        react_routese = [
+                            "landing_page",
+                            "v2_profile",
+                            "contextual_v2_frontend_generic",
+                            "v2_without_slug",
+                        ]
+
+        list_react_views(config, react_routese)
