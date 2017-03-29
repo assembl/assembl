@@ -46,6 +46,17 @@ class SecureObjectType(object):
 # manually.
 
 
+def resolve_langstring(langstring, locale_code):
+    if langstring is None:
+        return None
+
+    if locale_code is None:
+        return langstring.best_entry_in_request().value
+
+    return {models.Locale.code_for_id(locale_id): e.value
+            for locale_id, e in langstring.entries_as_dict.items()}.get(locale_code, None)
+
+
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.AgentProfile
@@ -79,11 +90,11 @@ class PostInterface(SQLAlchemyInterface):
     sentiment_counts = graphene.Field(SentimentCounts)
 
     def resolve_subject(self, args, context, info):
-        subject = self.get_subject().best_lang().value
+        subject = resolve_langstring(self.get_subject(), args.get('lang'))
         return subject
 
     def resolve_body(self, args, context, info):
-        body = self.get_body().best_lang().value
+        body = resolve_langstring(self.get_body(), args.get('lang'))
         return body
 
     def resolve_sentiment_counts(self, args, context, info):
@@ -153,7 +164,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
     posts = graphene.List(PropositionPost)
 
     def resolve_title(self, args, context, info):
-        title = self.title.best_lang().value
+        title = resolve_langstring(self.title, args.get('lang'))
         return title
 
     def resolve_posts(self, args, context, info):
@@ -176,22 +187,18 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     num_contributors = graphene.Int()
 
     def resolve_title(self, args, context, info):
-        title = self.title.best_lang().value
+        title = resolve_langstring(self.title, args.get('lang'))
         return title
 
     def resolve_description(self, args, context, info):
-        description = self.description
-        description = description.best_lang().value if description is not None else None
-        return description
+        return resolve_langstring(self.description, args.get('lang'))
 
     def resolve_questions(self, args, context, info):
         return self.get_children()
 
     def resolve_video(self, args, context, info):
-        title = self.video_title
-        title = title.best_lang().value if title is not None else None
-        description = self.video_description
-        description = description.best_lang().value if description is not None else None
+        title = resolve_langstring(self.video_title, args.get('lang'))
+        description = resolve_langstring(self.video_description, args.get('lang'))
         return Video(
             title=title,
             description=description,
@@ -289,7 +296,6 @@ class CreateThematic(graphene.Mutation):
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
-        lang = args.get('lang')
         identifier = args.get('identifier')
         with cls.default_db.no_autoflush:
             title_entries = args.get('title_entries')

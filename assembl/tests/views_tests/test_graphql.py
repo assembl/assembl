@@ -43,26 +43,7 @@ def test_get_thematics(discussion, graphql_request, test_session):
                                    u'title': None}}]}
 
 
-def test_mutation_create_thematic(graphql_request):
-    res = schema.execute("""
-mutation myFirstMutation {
-    createThematic(titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], identifier:"survey") {
-        thematic {
-            title,
-            identifier
-        }
-    }
-}
-""", context_value=graphql_request)
-    assert json.loads(json.dumps(res.data)) == {
-        u'createThematic': {
-            u'thematic': {
-                u'title': u'Comprendre les dynamiques et les enjeux',
-                u'identifier': 'survey'
-    }}}
-
-
-def test_mutation_create_thematic_multilang(graphql_request):
+def test_mutation_create_thematic_multilang_implicit_en(graphql_request, user_language_preference_en_cookie):
     res = schema.execute("""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -79,7 +60,74 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createThematic': {
             u'thematic': {
+                u'title': u'Understanding the dynamics and issues',
+                u'identifier': 'survey'
+    }}}
+
+
+def test_mutation_create_thematic_multilang_implicit_fr(graphql_request, user_language_preference_fr_cookie):
+    # adding en then fr on purpose, to really test that it looks at user preferences, not just the first original title
+    res = schema.execute("""
+mutation myFirstMutation {
+    createThematic(titleEntries:[
+        {value:"Understanding the dynamics and issues", localeCode:"en"}
+        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+    ], identifier:"survey") {
+        thematic {
+            title,
+            identifier
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createThematic': {
+            u'thematic': {
                 u'title': u'Comprendre les dynamiques et les enjeux',
+                u'identifier': 'survey'
+    }}}
+
+
+def test_mutation_create_thematic_multilang_explicit_fr(graphql_request):
+    res = schema.execute("""
+mutation myFirstMutation {
+    createThematic(titleEntries:[
+        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+        {value:"Understanding the dynamics and issues", localeCode:"en"}
+    ], identifier:"survey") {
+        thematic {
+            title(lang:"fr"),
+            identifier
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createThematic': {
+            u'thematic': {
+                u'title': u'Comprendre les dynamiques et les enjeux',
+                u'identifier': 'survey'
+    }}}
+
+
+def test_mutation_create_thematic_multilang_explicit_en(graphql_request):
+    res = schema.execute("""
+mutation myFirstMutation {
+    createThematic(titleEntries:[
+        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+        {value:"Understanding the dynamics and issues", localeCode:"en"}
+    ], identifier:"survey") {
+        thematic {
+            title(lang:"en"),
+            identifier
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createThematic': {
+            u'thematic': {
+                u'title': u'Understanding the dynamics and issues',
                 u'identifier': 'survey'
     }}}
 
