@@ -308,6 +308,8 @@ class VideoInput(graphene.InputObjectType):
 
 class CreateThematic(graphene.Mutation):
     class Input:
+        # Careful, having required=True on a graphene.List only means
+        # it can't be None, having an empty [] is perfectly valid.
         title_entries = graphene.List(LangStringEntryInput, required=True)
         description_entries = graphene.List(LangStringEntryInput)
         identifier = graphene.String(required=True)
@@ -331,7 +333,10 @@ class CreateThematic(graphene.Mutation):
         with cls.default_db.no_autoflush:
             title_entries = args.get('title_entries')
             if len(title_entries) == 0:
-                raise Exception('titleEntries needs at least one entry')
+                raise Exception('Thematic titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
 
             title_langstring = langstring_from_input_entries(title_entries)
             description_langstring = langstring_from_input_entries(args.get('description_entries'))

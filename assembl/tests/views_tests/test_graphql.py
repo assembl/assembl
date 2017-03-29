@@ -207,6 +207,23 @@ mutation myFirstMutation {
     }}}
 
 
+def test_mutation_create_raise_if_no_title_entries(graphql_request):
+    res = schema.execute("""
+mutation myFirstMutation {
+    createThematic(titleEntries:[], identifier:"survey") {
+        thematic {
+            title(lang:"en"),
+            identifier
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createThematic': None
+    }
+    assert res.errors[0].args[0] == 'Thematic titleEntries needs at least one entry'
+
+
 def test_mutation_create_thematic_no_permission(graphql_request):
     graphql_request.authenticated_userid = None
     res = schema.execute("""
