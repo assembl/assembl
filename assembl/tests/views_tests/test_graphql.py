@@ -237,3 +237,37 @@ mutation myFirstMutation {
 }
 """, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == { u'createThematic': None }
+
+
+def test_mutation_create_thematic_with_questions(graphql_request):
+    res = schema.execute("""
+mutation myFirstMutation {
+    createThematic(
+        titleEntries:[
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+            {value:"Understanding the dynamics and issues", localeCode:"en"}
+        ],
+        questions:[
+            {titleEntries:[
+                {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
+            ]},
+        ],
+        identifier:"survey",
+    ) {
+        thematic {
+            title(lang:"fr"),
+            identifier
+            questions { title(lang:"fr") }
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createThematic': {
+            u'thematic': {
+                u'title': u'Comprendre les dynamiques et les enjeux',
+                u'identifier': u'survey',
+                u'questions': [
+                    {u'title': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}
+                ]
+    }}}

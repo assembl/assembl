@@ -306,6 +306,10 @@ class VideoInput(graphene.InputObjectType):
     html_code = graphene.String()
 
 
+class QuestionInput(graphene.InputObjectType):
+    title_entries = graphene.List(LangStringEntryInput, required=True)
+
+
 class CreateThematic(graphene.Mutation):
     class Input:
         # Careful, having required=True on a graphene.List only means
@@ -314,6 +318,7 @@ class CreateThematic(graphene.Mutation):
         description_entries = graphene.List(LangStringEntryInput)
         identifier = graphene.String(required=True)
         video = graphene.Argument(VideoInput)
+        questions = graphene.List(QuestionInput)
         # TODO upload img example http://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/forms/file_uploads.html
 
     thematic = graphene.Field(lambda: Thematic)
@@ -364,6 +369,19 @@ class CreateThematic(graphene.Mutation):
             db = saobj.db
             db.add(saobj)
             db.flush()
+
+            questions_input = args.get('questions')
+            if questions_input is not None:
+                for question_input in questions_input:
+                    title_ls = langstring_from_input_entries(
+                        question_input['title_entries'])
+                    saobj.children.append(
+                        models.Question(
+                            title=title_ls,
+                            discussion_id=discussion_id
+                        )
+                    )
+                db.flush()
 
         return CreateThematic(thematic=saobj)
 
