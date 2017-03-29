@@ -39,7 +39,7 @@ class FrontendUrls(object):
         'account': '/user/account',
         'user_discussion_preferences': '/user/discussion_preferences',
         'sentrytest': '/sentrytest',
-        'groupSpec': '/G*remainder',
+        'groupSpec': '/G/*remainder',
         'purl_posts': '/posts*remainder',
         'purl_idea': '/idea*remainder',
         'purl_user': '/profile*remainder',
