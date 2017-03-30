@@ -419,7 +419,9 @@ def includeme(config):
         config.add_route('discussion_list', '/')
 
     if is_using_new_frontend():
-        config.include('.discussion')  # this is first for new front-end routes
+        # Register the react views before the backbone
+        # TODO: Remove this logic after routes are reordered
+        config.include('.discussion')
         config.include(backbone_include, route_prefix='/{discussion_slug}')
     else:
         config.include(backbone_include, route_prefix='/{discussion_slug}')
