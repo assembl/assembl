@@ -1,18 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
 
-import pytest
 from graphql_relay.node.node import to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
-
-
-@pytest.fixture(scope="function")
-def graphql_request(request, test_adminuser_webrequest, discussion):
-    req = test_adminuser_webrequest
-    req.matchdict = {"discussion_id": discussion.id}
-    return req
 
 
 def test_get_thematics_noresult(graphql_request):

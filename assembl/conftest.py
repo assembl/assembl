@@ -11,6 +11,7 @@ from assembl.tests.fixtures.base import *
 from assembl.tests.fixtures.auth import *
 from assembl.tests.fixtures.discussion import *
 from assembl.tests.fixtures.creativity_session import *
+from assembl.tests.fixtures.graphql import *
 from assembl.tests.fixtures.idea_content_links import *
 from assembl.tests.fixtures.ideas import *
 from assembl.tests.fixtures.langstring import *
