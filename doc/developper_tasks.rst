@@ -22,7 +22,9 @@ Download a copy of a remote database to develop locally
     supervisorctl restart dev:
 
 
-Run tests
+.. _TestingAnchor:
+
+How to Run Tests
 ---------
 
 Only the first time you run it:

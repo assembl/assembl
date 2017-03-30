@@ -257,6 +257,12 @@ Assembl has several core fixtures that are important to note, in order to run th
       creating other drivers. Splinter has explicit documentation of different driver usages.
 
 
+Getting Started
+^^^^^^^^^^^^^^^
+
+To get started with testing in Assembl, please refer to the :ref:`TestingAnchor`.
+
+
 For more information regarding testing a Pyramid application, see the `Pyramid Documentation`_ on testing.
 Assembl uses WebTest_ to conduct it's integration testing of a Pyramid application.
 
