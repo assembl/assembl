@@ -186,14 +186,16 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', )
 
     title = graphene.String(lang=graphene.String())
-    posts = graphene.List(PropositionPost)
+    posts = graphene.List(PropositionPost, random=graphene.Boolean())  # TODO should be a real ConnectionField
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
         return title
 
     def resolve_posts(self, args, context, info):
-        # TODO
+        # TODO if args.get('random') return 10 posts, the first ones are the posts created by the user,
+        # then the remaining ones are in random order
+        # if random is False, return all the posts in creation_date desc order
         return []
 
 
@@ -385,12 +387,9 @@ class CreateThematic(graphene.Mutation):
 
         return CreateThematic(thematic=saobj)
 
-# TODO UpdateThematic
+# TODO UpdateThematic and questions
 # TODO DeleteThematic, raise exception if questions associated with it
-# TODO CreateQuestion
-# TODO UpdateQuestion
-# TODO DeleteQuestion, raise exception if posts associated with it.
-# TODO CreatePost
+# TODO CreateProposal which publish the post
 # TODO AddSentimentToPost
 
 
