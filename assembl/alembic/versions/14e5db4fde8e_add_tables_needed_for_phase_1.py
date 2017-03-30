@@ -33,6 +33,7 @@ def upgrade(pyramid_env):
             sa.Column('video_description_id', sa.Integer,
                 sa.ForeignKey('langstring.id')),
             sa.Column('video_html_code', sa.UnicodeText),
+            sa.Column('identifier', sa.String(60))
         )
         op.create_table(
             'question',
@@ -47,4 +48,3 @@ def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table('thematic')
         op.drop_table('question')
-        op.drop_table('proposition')
