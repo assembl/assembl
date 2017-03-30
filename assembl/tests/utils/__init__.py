@@ -51,7 +51,9 @@ def committing_session_tween_factory(handler, registry):
     # This ensures that the app has the latest state
     def committing_session_tween(request):
         get_session_maker().commit()
-        return handler(request)
+        resp = handler(request)
+        get_session_maker().flush()
+        return resp
 
     return committing_session_tween
 
