@@ -220,8 +220,8 @@ def not_found(context, request):
     return {}
 
 
-def list_react_views(config, routes):
-    """Adds list of routes to the `assembl.views.discussion.views.react_view` method"""
+def register_react_views(config, routes):
+    """Add list of routes to the `assembl.views.discussion.views.react_view` method."""
     if not routes:
         return
     for route in routes:
@@ -236,11 +236,11 @@ def includeme(config):
         config.add_route('contextual_v2_frontend_generic', 'v2/{discussion_slug}/*extra_path')
         config.add_route('v2_without_slug', 'v2/*extra_path')
 
-        react_routese = [
+        react_routes = [
                             "landing_page",
                             "v2_profile",
                             "contextual_v2_frontend_generic",
                             "v2_without_slug",
                         ]
 
-        list_react_views(config, react_routese)
+        register_react_views(config, react_routes)
