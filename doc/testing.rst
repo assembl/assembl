@@ -263,6 +263,12 @@ Getting Started
 To get started with testing in Assembl, please refer to the :ref:`TestingAnchor`.
 
 
+Getting Started
+^^^^^^^^^^^^^^^
+
+To get started with testing in Assembl, please refer to the :ref:`TestingAnchor`.
+
+
 For more information regarding testing a Pyramid application, see the `Pyramid Documentation`_ on testing.
 Assembl uses WebTest_ to conduct it's integration testing of a Pyramid application.
 
