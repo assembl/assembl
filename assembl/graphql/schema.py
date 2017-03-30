@@ -404,13 +404,17 @@ Schema = graphene.Schema(query=Query, mutation=Mutations)
 $ pshell local.ini
 import json
 from assembl.graphql.schema import Schema as schema
-
 from assembl.tests.utils import PyramidWebTestRequest
+
 request = PyramidWebTestRequest.blank('/', method="POST")
-request.matchdict = {"discussion_id": 16}
+request.matchdict = {"discussion_id": 6}
 # take the first sysadmin:
 userid = models.User.default_db.query(models.User).join(models.User.roles).filter(models.Role.id == 7)[0:1][0].id
 request.authenticated_userid = userid
+
+# and after that, execute a query or mutation....
+# For mutations, see examples in tests/test_graphql.py (replace graphql_request by request)
+# In pshell, you need to db.commit() if you want a mutation to be persistent.
 
 #print the schema as text:
 print str(schema)
@@ -431,8 +435,5 @@ print json.dumps(schema.execute('query { posts(first: 5) { pageInfo { endCursor 
 
 #get thematics with questions:
 print json.dumps(schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=request).data, indent=2)
-
-For mutations, see examples in tests/test_graphql.py
-In pshell, you need to db.commit() if you want a mutation to be persistent.
 
 '''

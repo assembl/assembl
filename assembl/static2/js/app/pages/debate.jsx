@@ -100,12 +100,12 @@ Debate.propTypes = {
 
 const ThematicQuery = gql`
   query ThematicQuery($lang: String!, $identifier: String!) {
-    thematics: ideas(identifier: $identifier) {
+    thematics(identifier: $identifier) {
       ... on Thematic {
         id,
         identifier,
         title(lang: $lang),
-        description,
+        description(lang: $lang),
         numPosts,
         numContributors,
         imgUrl

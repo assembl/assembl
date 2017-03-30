@@ -20,6 +20,10 @@ export const getDiscussionId = () => {
   return discussionId;
 };
 
+export const getDiscussionSlug = () => {
+  return document.getElementById('discussion-slug') ? document.getElementById('discussion-slug').value : null;
+};
+
 export const getConnectedUserId = () => {
   const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
   return userId;

@@ -9,6 +9,7 @@
 	<body>
 		{% if discussion %}
         	<input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
+        	<input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
         {% endif %}
         {% if user %}
             <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />

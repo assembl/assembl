@@ -95,25 +95,25 @@ Survey.propTypes = {
 
 const ThemeQuery = gql`
   query ThemeQuery($lang: String!, $id: ID!) {
-    theme: idea(id: $id) {
+    theme: node(id: $id) {
       ... on Thematic {
         title(lang: $lang),
         imgUrl,
-        video{
+        video(lang: $lang){
           title,
           description,
           htmlCode
         }
-      }
-      questions: ideas {
-        ... on Idea {
-          title,
-          posts{
-            ... on Proposition {
-              body,
-              sentimentCounts{
-                like,
-                disagree
+        questions {
+          ... on Question {
+            title(lang: $lang),
+            posts{
+              ... on PropositionPost {
+                body,
+                sentimentCounts{
+                  like,
+                  disagree
+                }
               }
             }
           }
