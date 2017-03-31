@@ -155,12 +155,17 @@ def test_session(request, db_default_data):
 
 
 @pytest.fixture(scope="function")
-def admin_user(request, test_session, db_default_data):
+def admin_user(request, test_session):
     """A User fixture with R_SYSADMIN role"""
 
     from assembl.models import User, UserRole, Role
-    u = User(name=u"Mr. Administrator", type="user")
+    u = User(name=u"Mr. Administrator", type="user",
+        verified=True)
+    from assembl.models import EmailAccount
+    account = EmailAccount(email="admin@assembl.com", profile=u, verified=True)
+
     test_session.add(u)
+    test_session.add(account)
     r = Role.get_role(R_SYSADMIN, test_session)
     ur = UserRole(user=u, role=r)
     test_session.add(ur)
@@ -173,6 +178,7 @@ def admin_user(request, test_session, db_default_data):
         user = test_session.query(User).get(uid)
         user_role = user.roles[0]
         test_session.delete(user_role)
+        test_session.delete(account)
         test_session.delete(user)
         test_session.flush()
     request.addfinalizer(fin)
