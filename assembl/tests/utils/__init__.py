@@ -39,6 +39,16 @@ class PyramidWebTestRequest(TestRequest):
         finally:
             manager.pop()
 
+    def route_path(self, name, *args, **kwargs):
+        assert self.app
+        return self.app.app.request_factory({}).route_path(
+            name, *args, **kwargs)
+
+    def route_url(self, name, *args, **kwargs):
+        assert self.app
+        return self.app.app.request_factory({}).route_url(
+            name, *args, **kwargs)
+
     # TODO: Find a way to change user here
     authenticated_userid = None
 
