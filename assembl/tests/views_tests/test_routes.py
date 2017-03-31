@@ -134,3 +134,97 @@ def test_route_discussion_logout(discussion, test_app):
     route = discussion_route(slug, "styleguide")
     resp = test_app.get(route)
     assert resp.status_int == 200
+
+def test_route_discussion_show_allproviders(discussion, test_app):
+    """/slug/login_showallproviders"""
+    slug = discussion.slug
+
+    # Not logged in
+    route = discussion_route(slug, "login_showallproviders")
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_discussion_register(discussion, test_app):
+    """/slug/register"""
+    slug = discussion.slug
+
+    # Not logged in
+    route = discussion_route(slug, "register")
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_discussion_register(discussion, test_app):
+    """/slug/register"""
+    slug = discussion.slug
+
+    # Not logged in
+    route = discussion_route(slug, "register")
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_discussion_post(discussion, root_post_1, test_app):
+    """/slug/posts/%id"""
+    slug = discussion.slug
+
+    from urllib import quote_plus
+    # Encode the URL so that it is compatible with URLs
+    url_post_id = quote_plus(root_post_1.uri())
+    route = discussion_route(slug, "posts", url_post_id)
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
+    """/slug/idea/%id"""
+    slug = discussion.slug
+
+    from urllib import quote_plus
+    # Encode the URL so that it is compatible with URLs
+    url_post_id = quote_plus(subidea_1.uri())
+    route = discussion_route(slug, "idea", url_post_id)
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_admin(test_app):
+    """/admin"""
+    # if not logged in, should be forbidden
+
+    route = discussion_route(slug, "admin")
+    resp = test_app.get(route)
+    assert resp.status_int == 403
+
+def test_route_admin_sysadmin_login(test_app, admin_user):
+    """/admin"""
+
+    # must login first as a sysadmin
+    # test_app.post("/login", {
+    #         'identifier': admin_user.email,
+    #         'password': 'password'
+    #     })
+
+    route = discussion_route(slug, "admin")
+    resp = test_app.get(route)
+    assert resp.status_int != 200
+
+def test_route_admin_discussion(discussion, test_app):
+    """/admin/discussions/"""
+
+    # This route must be terminated in slash.
+    # TODO: If this is not by design, fix it
+    route = discussion_route(slug, "admin", "discussions") + "/"
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_admin_discussion_permissions(discussion, test_app):
+    """/admin/permissions"""
+
+    route = discussion_route(slug, "admin", "permissions")
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_admin_permission_edit(discussion, test_app):
+    """/admin/permissions/edit/*id"""
+
+    discussion_id = discussion.id
+    route = discussion_route(slug, "admin", "permissions", "edit", discussion_id)
+    resp = test_app.get(route)
+    assert resp.status_int == 200    
