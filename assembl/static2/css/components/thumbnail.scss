@@ -38,7 +38,7 @@
     z-index: 10;
 
     &:hover {
-      opacity: .8;
+      opacity: .5;
 
       ~ .color-box {
         display: block;
@@ -66,7 +66,7 @@
 
   .active {
     border: 1px solid $first-color;
-    opacity: .8;
+    opacity: .5;
 
     ~ .color-box {
       display: block;

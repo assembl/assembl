@@ -10,6 +10,12 @@ class Text extends React.Component {
             <div className="title-hyphen"> </div>
             <h1 className="dark-title-1">Title section</h1>
           </div>
+          <h3 className="collapsed-title margin-xl">
+            <span>Title</span>
+            <div className="inline right">
+              <span className="assembl-icon-down-open color pointer" />
+            </div>
+          </h3>
           <h1 className="dark-title-1">Title 1</h1>
           <h2 className="dark-title-2">Title 2</h2>
           <h3 className="dark-title-3">Title 3</h3>
@@ -30,6 +36,14 @@ class Text extends React.Component {
               <div style={{ marginLeft: `${20}px` }}>&lt;div className="title-hyphen"&gt;&nbsp;&lt;/div&gt;</div>
               <div style={{ marginLeft: `${20}px` }}>&lt;h1 className="dark-title-1"&gt;Title section&lt;/h1&gt;</div>
             <div>&lt;/div&gt;</div>
+          </pre>
+          <pre>
+            <div>&lt;h3 className="collapsed-title"&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;span&gt;Title&lt;/span&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;div className="inline right"&gt;</div>
+                <div style={{ marginLeft: `${40}px` }}>&lt;span className="assembl-icon-down-open color pointer" /&gt;</div>
+              <div style={{ marginLeft: `${20}px` }}>&lt;/div&gt;</div>
+            <div>&lt;/h3&gt;</div>
           </pre>
           <pre>
             &lt;h1 className="dark-title-1"&gt;Title 1&lt;/h1&gt;

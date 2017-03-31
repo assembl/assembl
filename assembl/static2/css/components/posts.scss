@@ -49,18 +49,6 @@
     text-align: left;
   }
 
-  .sentiment {
-    cursor: pointer;
-    display: inline-block;
-    margin: 0 0 0 15px;
-    transition: all .2s ease-in-out;
-    vertical-align: middle;
-
-    &:hover {
-      transform: scale(1.2);
-    }
-  }
-
   .stat-sentiment {
     margin: -15px 0 0;
     padding: 0 0 0 3px;
@@ -105,5 +93,17 @@
     position: absolute;
     top: 70px;
     width: 100%;
+  }
+}
+
+.sentiment {
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 0 0 15px;
+  transition: all .2s ease-in-out;
+  vertical-align: middle;
+
+  &:hover {
+    transform: scale(1.2);
   }
 }

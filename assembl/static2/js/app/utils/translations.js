@@ -129,10 +129,9 @@ const Translations = {
     },
     debate: {
       survey: {
-        themesTitle: 'Choisissez une thematique !',
+        themesTitle: 'Choisissez une thématique !',
         txtAreaPh: 'Ecrivez votre proposition',
-        question: 'Question',
-        on: 'sur',
+        question_x_on_total: 'Question %{current} sur %{total}',
         titleVideo: 'Une vidéo pour mieux comprendre le sujet...',
         proposalsTitle: 'Etes-vous d\'accord avec les propositions exprimées ?',
         reactions: 'Réactions',
@@ -293,8 +292,7 @@ const Translations = {
       survey: {
         themesTitle: 'Choose a theme!',
         txtAreaPh: 'Write your proposal',
-        question: 'Question',
-        on: 'on',
+        question_x_on_total: 'Question %{current} on %{total}',
         titleVideo: 'A video to better understand the subject...',
         proposalsTitle: 'Do you agree with proposals?',
         reactions: 'Reactions',

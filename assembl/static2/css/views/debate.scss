@@ -214,6 +214,7 @@
   .questions {
     .questions-section {
       .txt-area {
+        background: $linear-gradient;
         border-bottom: none;
         border-left: 5px solid $first-color;
         border-radius: initial;
@@ -223,6 +224,8 @@
         font-family: $font-family4;
         font-size: $font-size-s;
         height: 250px;
+        letter-spacing: 1px;
+        padding: 20px;
       }
     }
 
@@ -263,19 +266,20 @@
         position: relative;
 
         .txt {
-          margin: 10px 0 5px;
+          font-family: $font-family4;
+          margin: 14px 0 5px;
         }
 
         .bar {
           background-color: $first-color;
-          height: 10px;
+          height: 6px;
           position: absolute;
           z-index: 2;
         }
 
         .bkg-bar {
           background-color: $white;
-          height: 10px;
+          height: 6px;
           width: 100%;
           z-index: 1;
         }
@@ -283,24 +287,25 @@
 
       .arrow {
         background-color: $white;
-        border-radius: 30px;
+        border-radius: 36px;
         cursor: pointer;
         display: inline-block;
         line-height: 30px;
-        height: 30px;
+        height: 36px;
         margin: 15px 0 0 30px;
-        text-align: center;
-        width: 30px;
+        padding: 2px 0 0 5px;
+        text-align: left;
+        width: 36px;
 
         .assembl-icon-up-open {
           &:before {
-            font-size: 16px;
+            font-size: 12px;
           }
         }
 
         .assembl-icon-down-open {
           &:before {
-            font-size: 16px;
+            font-size: 12px;
           }
         }
       }
@@ -430,7 +435,8 @@
 
     .video-description {
       color: $first-color;
-      font-size: $font-size-s;
+      font-family: $font-family7;
+      font-size: $font-size-sm;
       line-height: 30px;
       margin: 0 auto;
       text-align: center;

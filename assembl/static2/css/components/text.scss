@@ -27,7 +27,9 @@
   font-family: $font-family4;
   font-size: $title1-size;
   letter-spacing: $title-letter-spacing;
+  line-height: 56px;
   margin: 0;
+  max-width: 1100px;
 }
 
 .dark-title-2 {
@@ -96,7 +98,7 @@
   font-size: $title5-size;
 }
 
-.background-title {
+.collapsed-title {
   background-color: $first-color-light;
   color: $first-color;
   font-size: $font-size-m;

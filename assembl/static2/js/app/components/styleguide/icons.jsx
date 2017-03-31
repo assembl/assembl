@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Glyphicon from '../common/glyphicon';
+import Like from '../svg/like';
+import Disagree from '../svg/disagree';
+import Circle from '../svg/circle';
 
 class Icons extends React.Component {
   render() {
@@ -88,6 +91,19 @@ class Icons extends React.Component {
           </div>
           <div className="inline padding">
             <span className="assembl-icon-up-open">&nbsp;</span>
+          </div>
+          <div>
+            <div className="sentiment">
+              <Like size={25} />
+            </div>
+          </div>
+          <div>
+            <div className="sentiment">
+              <Disagree size={25} />
+            </div>
+          </div>
+          <div>
+            <Circle like={123} disagree={12} />
           </div>
           <div style={{backgroundColor:"#000", width:"200px"}}>
             <div className="inline padding">
@@ -189,6 +205,19 @@ class Icons extends React.Component {
           </pre>
           <pre>
             &lt;span className="assembl-icon-up-open"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            <div>&lt;div className="sentiment"&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;Like size=&#123;25&#125; /&gt; from './components/svg/like'</div>
+            <div>&lt;/div&gt;</div>
+          </pre>
+          <pre>
+            <div>&lt;div className="sentiment"&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;Disagree size=&#123;25&#125; /&gt; from './components/svg/disagree'</div>
+            <div>&lt;/div&gt;</div>
+          </pre>
+          <pre>
+            &lt;Circle like=&#123;123&#125; disagree=&#123;12&#125; /&gt; from './components/svg/circle'
           </pre>
           <pre>
             <div>&lt;Link to="http://www.facebook.com" target="_blank"&gt;</div>

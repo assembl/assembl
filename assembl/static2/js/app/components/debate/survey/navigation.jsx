@@ -106,10 +106,7 @@ class Navigation extends React.Component {
                 <Col xs={6} md={6} className="no-padding">
                   <div className="question-numbers">
                     <div className="txt">
-                      <Translate value="debate.survey.question" />
-                      &nbsp;{this.state.currentQuestionNumber}&nbsp;
-                      <Translate value="debate.survey.on" />
-                      &nbsp;{this.state.questionsLength}
+                      <Translate value="debate.survey.question_x_on_total" current={this.state.currentQuestionNumber} total={this.state.questionsLength} />
                     </div>
                     <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>
                     <div className="bkg-bar">&nbsp;</div>
