@@ -9,6 +9,7 @@ from itertools import chain
 import transaction
 from sqlalchemy.sql.functions import count
 from webtest import TestRequest
+from webob.request import environ_from_url
 from pyramid.threadlocal import manager
 
 from assembl.lib.sqla import (
@@ -30,7 +31,9 @@ class PyramidWebTestRequest(TestRequest):
     """
     def __init__(self, *args, **kwargs):
         super(PyramidWebTestRequest, self).__init__(*args, **kwargs)
-        manager.push({'request': self, 'registry': self.registry})
+        manager.push({'request': self, 'registry': self._registry})
+        self._base_pyramid_request = self._pyramid_app.request_factory(
+            environ_from_url('/'))
 
     def get_response(self, app, catch_exc_info=True):
         try:
@@ -40,13 +43,11 @@ class PyramidWebTestRequest(TestRequest):
             manager.pop()
 
     def route_path(self, name, *args, **kwargs):
-        assert self.app
-        return self.app.app.request_factory({}).route_path(
+        return self._base_pyramid_request.route_path(
             name, *args, **kwargs)
 
     def route_url(self, name, *args, **kwargs):
-        assert self.app
-        return self.app.app.request_factory({}).route_url(
+        return self._base_pyramid_request.route_url(
             name, *args, **kwargs)
 
     # TODO: Find a way to change user here

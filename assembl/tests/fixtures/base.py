@@ -97,7 +97,8 @@ def test_app_no_perm(request, base_registry, db_tables):
     app = TestApp(assembl.main(
         global_config, nosecurity=True, **get_config()))
     app.PyramidWebTestRequest = PyramidWebTestRequest
-    PyramidWebTestRequest.registry = base_registry
+    PyramidWebTestRequest._pyramid_app = app.app
+    PyramidWebTestRequest._registry = base_registry
     return app
 
 
@@ -105,7 +106,6 @@ def test_app_no_perm(request, base_registry, db_tables):
 def test_webrequest(request, test_app_no_perm):
     """A Pyramid request fixture with no user authorized"""
     req = PyramidWebTestRequest.blank('/', method="GET")
-    req.app = test_app_no_perm
 
     def fin():
         print "finalizer test_webrequest"
@@ -184,7 +184,6 @@ def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
     """A Pyramid request fixture with an ADMIN user authorized"""
     req = PyramidWebTestRequest.blank('/', method="GET")
     req.authenticated_userid = admin_user.id
-    req.app = test_app_no_perm
 
     def fin():
         # The request was not called
