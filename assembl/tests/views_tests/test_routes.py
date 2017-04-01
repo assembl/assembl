@@ -1,8 +1,11 @@
 import pytest
 
+backbone_prefix = "debate"
 
-def discussion_route(slug, *args):
-    return ("/%s/" % slug) + "/".join(s.strip("/") for s in args)
+def discussion_route(slug, *args, **kwargs):
+    prefix = kwargs.get('prefix', "")
+    prefix = "/" + prefix if (prefix is not "" and not prefix.startswith("/")) else prefix
+    return ("%s/%s/" % (prefix, slug)) + "/".join(s.strip("/") if isinstance(s, basestring) else str(s) for s in args)
 
 
 def test_route_paths(discussion, test_app, test_adminuser_webrequest):
@@ -17,14 +20,14 @@ def test_route_discussion_root(discussion, test_app):
     slug = discussion.slug
 
     route = "/%s" % slug
-    resp = test_app.get(route)
+    resp = test_app.get(route, prefix="debate")
     assert resp.status_int == 200
 
 def test_route_discussion_root_redirector(discussion, test_app):
     """/slug/ redirects to /slug"""
     slug = discussion.slug
 
-    route = discussion_route(slug)
+    route = discussion_route(slug, prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 301
 
@@ -50,7 +53,7 @@ def test_route_discussion_user_profile(discussion, test_app):
     """/slug/user/profile"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "user", "profile")
+    route = discussion_route(slug, "user", "profile", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -58,7 +61,7 @@ def test_route_discussion_partner(discussion, test_app):
     """/slug/partner"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "partners")
+    route = discussion_route(slug, "partners", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -66,7 +69,7 @@ def test_route_discussion_about(discussion, test_app):
     """/slug/about"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "about")
+    route = discussion_route(slug, "about", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -74,7 +77,7 @@ def test_route_discussion_preferences(discussion, test_app):
     """/slug/discussion_preferences"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "discussion_preferences")
+    route = discussion_route(slug, "discussion_preferences", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -82,7 +85,7 @@ def test_route_discussion_settings(discussion, test_app):
     """/slug/settings"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "settings")
+    route = discussion_route(slug, "settings", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -90,7 +93,7 @@ def test_route_discussion_user_notification(discussion, test_app):
     """/slug/user/notifications"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "user", "notifications")
+    route = discussion_route(slug, "user", "notifications", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -98,7 +101,7 @@ def test_route_discussion_user_account(discussion, test_app):
     """/slug/user/account"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "user", "account")
+    route = discussion_route(slug, "user", "account", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -106,7 +109,7 @@ def test_route_discussion_user_discussion_preferences(discussion, test_app):
     """/slug/user/discussion_preferences"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "user", "discussion_preferences")
+    route = discussion_route(slug, "user", "discussion_preferences", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -114,7 +117,7 @@ def test_route_discussion_edition(discussion, test_app):
     """/slug/edition"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "edition")
+    route = discussion_route(slug, "edition", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -122,7 +125,7 @@ def test_route_discussion_notifications(discussion, test_app):
     """/slug/notifications"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "notifications")
+    route = discussion_route(slug, "notifications", prefix="debate")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -130,16 +133,24 @@ def test_route_discussion_styleguide(discussion, test_app):
     """/slug/styleguide"""
     slug = discussion.slug
 
-    route = discussion_route(slug, "styleguide")
+    route = discussion_route(slug, "styleguide", prefix="debate")
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_logout(test_app):
+    """/logout"""
+
+    # Not logged in
+    route = "/logout"
     resp = test_app.get(route)
     assert resp.status_int == 200
 
 def test_route_discussion_logout(discussion, test_app):
-    """/slug/styleguide"""
+    """/logout"""
     slug = discussion.slug
 
     # Not logged in
-    route = discussion_route(slug, "styleguide")
+    route = discussion_route("logout")
     resp = test_app.get(route)
     assert resp.status_int == 200
 
@@ -161,16 +172,7 @@ def test_route_discussion_register(discussion, test_app):
     resp = test_app.get(route)
     assert resp.status_int == 200
 
-def test_route_discussion_register(discussion, test_app):
-    """/slug/register"""
-    slug = discussion.slug
-
-    # Not logged in
-    route = discussion_route(slug, "register")
-    resp = test_app.get(route)
-    assert resp.status_int == 200
-
-def test_route_discussion_post(discussion, root_post_1, test_app):
+def test_route_discussion_post_legacy(discussion, root_post_1, test_app):
     """/slug/posts/%id"""
     slug = discussion.slug
 
@@ -181,7 +183,18 @@ def test_route_discussion_post(discussion, root_post_1, test_app):
     resp = test_app.get(route)
     assert resp.status_int == 200
 
-def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
+def test_route_discussion_post(discussion, root_post_1, test_app):
+    """/debate/slug/posts/%id"""
+    slug = discussion.slug
+
+    from urllib import quote_plus
+    # Encode the URL so that it is compatible with URLs
+    url_post_id = quote_plus(root_post_1.uri())
+    route = discussion_route(slug, "posts", url_post_id, prefix="debate")
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1, test_app):
     """/slug/idea/%id"""
     slug = discussion.slug
 
@@ -192,13 +205,24 @@ def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
     resp = test_app.get(route)
     assert resp.status_int == 200
 
+def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
+    """/debate/slug/idea/%id"""
+    slug = discussion.slug
+
+    from urllib import quote_plus
+    # Encode the URL so that it is compatible with URLs
+    url_post_id = quote_plus(subidea_1.uri())
+    route = discussion_route(slug, "idea", url_post_id, prefix="debate")
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
 def test_route_admin(test_app):
     """/admin"""
     # if not logged in, should be forbidden
 
-    route = discussion_route(slug, "admin")
+    route = "/admin"
     resp = test_app.get(route)
-    assert resp.status_int == 403
+    assert resp.status_int == 200
 
 def test_route_admin_sysadmin_login(test_app, admin_user):
     """/admin"""
