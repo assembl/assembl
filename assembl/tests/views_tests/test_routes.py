@@ -4,12 +4,12 @@ import pytest
 def discussion_route(slug, *args):
     return ("/%s/" % slug) + "/".join(s.strip("/") for s in args)
 
-@pytest.mark.skip(reason="incompleted, here for documentation")
+
 def test_route_paths(discussion, test_app, test_adminuser_webrequest):
-    
-    assert (test_adminuser_webrequest.route_url('contextual_login',
-                      discussion_slug=discussion.slug) ==
-                      '/%s/login' % discussion.slug )
+    assert test_adminuser_webrequest.route_path(
+        'contextual_login',
+        discussion_slug=discussion.slug
+    ) == '/%s/login' % discussion.slug
 
 
 def test_route_discussion_root(discussion, test_app):
