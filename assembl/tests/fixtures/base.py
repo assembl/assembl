@@ -97,6 +97,7 @@ def test_app_no_perm(request, base_registry, db_tables):
     app = TestApp(assembl.main(
         global_config, nosecurity=True, **get_config()))
     app.PyramidWebTestRequest = PyramidWebTestRequest
+    PyramidWebTestRequest.registry = base_registry
     return app
 
 

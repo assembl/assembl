@@ -30,7 +30,7 @@ class PyramidWebTestRequest(TestRequest):
     """
     def __init__(self, *args, **kwargs):
         super(PyramidWebTestRequest, self).__init__(*args, **kwargs)
-        manager.push({'request': self})
+        manager.push({'request': self, 'registry': self.registry})
 
     def get_response(self, app, catch_exc_info=True):
         try:
