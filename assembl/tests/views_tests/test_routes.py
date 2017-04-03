@@ -8,12 +8,15 @@ def discussion_route(slug, *args, **kwargs):
     return ("%s/%s/" % (prefix, slug)) + "/".join(s.strip("/") if isinstance(s, basestring) else str(s) for s in args)
 
 
-def test_route_paths(discussion, test_app, test_adminuser_webrequest):
-    assert test_adminuser_webrequest.route_path(
-        'contextual_login',
-        discussion_slug=discussion.slug
-    ) == '/%s/login' % discussion.slug
+def assert_path(request, route_name, match, **kwargs):
+    assert request.route_path(route_name, **kwargs) == match 
 
+def test_route_paths(discussion, test_app, test_adminuser_webrequest):
+    req = test_adminuser_webrequest
+    slug = discussion.slug
+
+    assert_path(req, 'landing_page', '/%s/home' % slug, discussion_slug=slug)
+    assert_path(req, 'contextual_login', '/%s/login' % slug, discussion_slug=slug)
 
 def test_route_discussion_root(discussion, test_app):
     """/slug"""
