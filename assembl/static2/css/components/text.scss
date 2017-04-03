@@ -105,6 +105,18 @@
   margin: 0 0 $margin-section-xs 0;
   padding: 20px;
   text-align: left;
+
+  .assembl-icon-up-open {
+    &:before {
+      font-size: 12px;
+    }
+  }
+
+  .assembl-icon-down-open {
+    &:before {
+      font-size: 12px;
+    }
+  }
 }
 
 .text {
