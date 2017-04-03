@@ -1131,7 +1131,14 @@ def root_factory(request):
     """The factory function for the root context"""
     # OK, this is the old code... I need to do better, but fix first.
     from ..models import Discussion
-    if request.matchdict and 'discussion_id' in request.matchdict:
+    if request.matchdict and 'traverse' in request.matchdict:
+        # hack: reset request as if pure traversal
+        from pyramid.interfaces import IRequest
+        del request.matchdict
+        del request.matched_route
+        request.request_iface = IRequest
+        return AppRoot()
+    elif request.matchdict and 'discussion_id' in request.matchdict:
         discussion_id = int(request.matchdict['discussion_id'])
         discussion = Discussion.default_db.query(Discussion).get(discussion_id)
         if not discussion:
@@ -1144,6 +1151,7 @@ def root_factory(request):
         if not discussion:
             raise HTTPNotFound("No discussion named %s" % (discussion_slug,))
         return discussion
+    # fallthrough: Use traversal
     return AppRoot()
 
 
@@ -1160,3 +1168,5 @@ def includeme(config):
     config.add_view_predicate('ctx_collection_class',
                               CollectionContextClassPredicate,
                               weighs_less_than='ctx_named_collection')
+    config.add_route('data', '/data/*traverse')
+
