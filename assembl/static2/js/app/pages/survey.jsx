@@ -52,7 +52,7 @@ class Survey extends React.Component {
                     <div className="content-section center">
                       {theme.questions && theme.questions.map((question, index) => {
                         return (
-                          <Proposals title={question.title} posts={question.posts} moreProposals={this.state.moreProposals} key={index} index={index + 1} />
+                          <Proposals title={question.title} posts={question.posts} moreProposals={this.state.moreProposals} questionIndex={index + 1} key={index} />
                         );
                       })}
                       {(!this.state.moreProposals && this.getIfProposals(theme.questions)) &&
@@ -109,6 +109,7 @@ const ThemeQuery = gql`
             title(lang: $lang),
             posts{
               ... on PropositionPost {
+                id,
                 body,
                 sentimentCounts{
                   like,
