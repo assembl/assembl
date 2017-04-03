@@ -424,7 +424,6 @@ def includeme(config):
 
     config.include(backbone_include, route_prefix='/debate/{discussion_slug}')
     config.include(legacy_backbone_include, route_prefix='/{discussion_slug}')
-    config.include('.discussion')
 
     if asbool(config.get_settings().get('assembl_handle_exceptions', 'true')):
         config.add_view(error_view, context=Exception)
@@ -448,4 +447,5 @@ def includeme(config):
     # Scan now, to get cornice views
     config.scan('.')
     # make sure this comes last to avoid conflicts
-    config.add_route('home', '/{discussion_slug}')
+    config.add_route('home', '/debate/{discussion_slug}')
+    config.include('.discussion')  # Must be last routes to be called
