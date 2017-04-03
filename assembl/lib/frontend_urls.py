@@ -82,6 +82,16 @@ class FrontendUrls(object):
                 base_admin_view, route_name=name, request_method='GET',
                 http_cache=60)
 
+    @classmethod
+    def register_legacy_routes(cls, config):
+        from assembl.views.discussion.views import home_view
+        for name, route in cls.frontend_discussion_routes.iteritems():
+            if name.startswith('purl'):
+                name = 'legacy_' + name
+                config.add_route(name, route)
+                config.add_view(
+                    home_view, route_name=name, request_method='GET',
+                    http_cache=60)
 
     # used for route 'purl_posts': '/posts*remainder'
     @staticmethod

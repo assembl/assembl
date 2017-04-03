@@ -57,6 +57,9 @@ def backbone_include(config):
     config.add_route('styleguide', '/styleguide')
     config.add_route('test', '/test')
 
+def legacy_backbone_include(config):
+    FrontendUrls.register_legacy_routes(config)
+
 def get_theme_base_path():
     theme_base_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
                               'static', 'css', 'themes')
@@ -418,14 +421,10 @@ def includeme(config):
     else:
         config.add_route('discussion_list', '/')
 
-    if is_using_new_frontend():
-        # Register the react views before the backbone
-        # TODO: Remove this logic after routes are reordered
-        config.include('.discussion')
-        config.include(backbone_include, route_prefix='/{discussion_slug}')
-    else:
-        config.include(backbone_include, route_prefix='/{discussion_slug}')
-        config.include('.discussion')
+
+    config.include(backbone_include, route_prefix='/debate/{discussion_slug}')
+    config.include(legacy_backbone_include, route_prefix='/{discussion_slug}')
+    config.include('.discussion')
 
     if asbool(config.get_settings().get('assembl_handle_exceptions', 'true')):
         config.add_view(error_view, context=Exception)
