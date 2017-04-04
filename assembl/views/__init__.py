@@ -436,7 +436,7 @@ def includeme(config):
     config.include('.admin')
     config.include('.search')
 
-    config.add_route('home-auto', '/{discussion_slug}/')
+    config.add_route('home-auto', '/debate/{discussion_slug}/')
     config.add_route('home', '/debate/{discussion_slug}')
 
     def redirector(request):

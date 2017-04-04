@@ -8,7 +8,7 @@ from pyramid.renderers import render_to_response
 from pyramid.settings import asbool
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPSeeOther)
+    HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -231,12 +231,19 @@ def register_react_views(config, routes):
 
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
+        config.add_route('new_home', '/{discussion_slug}')
+        config.add_route('auto_new_home', '/{discussion_slug}/')
         config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
         config.add_route('new_styleguide', '/styleguide')
 
         react_routes = [
+                            "new_home",
                             "new_styleguide",
                             "general_react_page"
                         ]
 
         register_react_views(config, react_routes)
+
+        def redirector(request):
+            return HTTPMovedPermanently(request.route_url('new_home', discussion_slug=request.matchdict.get('discussion_slug')))
+        config.add_view(redirector, route_name='auto_new_home')
