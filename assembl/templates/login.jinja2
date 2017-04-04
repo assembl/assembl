@@ -31,7 +31,7 @@
   {% if name in providers %}
     {% if discussion %}
       <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/{{discussion.slug}}/login/{{name.split(':')[0]}}">
-        <input type="hidden" name="next" value="/{{discussion.slug}}" />
+        <input type="hidden" name="next" value="/{{discussion.slug}}/home" />
     {% else %}
       <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/login/{{name.split(':')[0]}}">
     {% endif %}
