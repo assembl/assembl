@@ -36,6 +36,10 @@ const DebateChild = (props) => {
 export default (
   <Router>
     <Route path="/styleguide" component={Styleguide} />
+    {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
+    <Route path="/login" component={Login} />
+    <Route path="/signup" component={Signup} />
+    <Route path="/changePassword" component={ChangePassword} />
     <Route path="/" component={App}>
       <Route path=":slug/login" component={Login} />
       <Route path=":slug/signup" component={Signup} />
