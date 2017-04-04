@@ -19,6 +19,26 @@ class Post extends React.Component {
     this.handleLike = this.handleLike.bind(this);
     this.handleDisagree = this.handleDisagree.bind(this);
   }
+  handleLike() {
+    const postId = this.props.post.id;
+    const type = 'LIKE';
+    this.props.mutate({ variables: { postId: postId, type: type } })
+    .then((sentiments) => {
+      this.setState({
+        like: sentiments.data.addSentiment.like
+      });
+    });
+  }
+  handleDisagree() {
+    const postId = this.props.post.id;
+    const type = 'DISAGREE';
+    this.props.mutate({ variables: { postId: postId, type: type } })
+    .then((sentiments) => {
+      this.setState({
+        disagree: sentiments.data.addSentiment.disagree
+      });
+    });
+  }
   render() {
     const isUserConnected = getConnectedUserId() !== null;
     const { postIndex, moreProposals, post, redirectToLogin } = this.props;
@@ -34,13 +54,13 @@ class Post extends React.Component {
             <Translate value="debate.survey.react" />
             <div
               className="sentiment"
-              onClick={() => {isUserConnected ? this.handleLike() : redirectToLogin()}}
+              onClick={() => { isUserConnected ? this.handleLike() : redirectToLogin(); }}
             >
               <Like size={25} />
             </div>
             <div
               className="sentiment"
-              onClick={() => {isUserConnected ? this.handleDisagree() : redirectToLogin()}}
+              onClick={() => { isUserConnected ? this.handleDisagree() : redirectToLogin(); }}
             >
               <Disagree size={25} />
             </div>
@@ -70,26 +90,6 @@ class Post extends React.Component {
         <div className="clear">&nbsp;</div>
       </div>
     );
-  }
-  handleLike() {
-    const postId = this.props.post.id;
-    const type = 'LIKE';
-    this.props.mutate({variables: {postId, type}})
-    .then((sentiments) => {
-      this.setState({
-        like: sentiments.data.addSentiment.like
-      });
-    });
-  }
-  handleDisagree() {
-    const postId = this.props.post.id;
-    const type = 'DISAGREE';
-    this.props.mutate({variables: {postId, type}})
-    .then((sentiments) => {
-      this.setState({
-        disagree: sentiments.data.addSentiment.disagree
-      });
-    });
   }
 }
 

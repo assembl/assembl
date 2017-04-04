@@ -1,28 +1,55 @@
 import React from 'react';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
 
-class Questions extends React.Component {
+class Question extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      componentHeight: 0,
-      screenHeight: 0,
-      remainingChars: 0,
       showSubmitButton: false
     };
     this.updateDimensions = this.updateDimensions.bind(this);
+    this.getProposalText = this.getProposalText.bind(this);
+    this.createPost = this.createPost.bind(this);
   }
   componentDidMount() {
     const maxChars = this.txtarea.props.maxLength;
-    this.setState({
+    this.state = {
       remainingChars: maxChars
-    });
+    };
     this.updateDimensions();
     window.addEventListener('resize', this.updateDimensions);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions);
+  }
+  getRemainingChars(e) {
+    const maxChars = this.txtarea.props.maxLength;
+    const remainingChars = maxChars - e.currentTarget.value.length;
+    this.setState({
+      remainingChars: remainingChars
+    });
+  }
+  getProposalText(e) {
+    const txtValue = e.currentTarget.value;
+    this.setState({
+      postBody: txtValue
+    });
+  }
+  displaySubmitButton(e) {
+    const nbChars = e.currentTarget.value.length;
+    if (nbChars > 10) {
+      this.setState({
+        showSubmitButton: true
+      });
+    } else {
+      this.setState({
+        showSubmitButton: false
+      });
+    }
   }
   updateDimensions() {
     const componentHeight = this.question.clientHeight;
@@ -36,24 +63,14 @@ class Questions extends React.Component {
       });
     }, 600);
   }
-  getRemainingChars(e) {
-    const maxChars = this.txtarea.props.maxLength;
-    const remainingChars = maxChars - e.currentTarget.value.length;
-    this.setState({
-      remainingChars: remainingChars
+  createPost() {
+    const ideaId = this.props.themeId;
+    const creatorId = getConnectedUserId();
+    const body = this.state.postBody;
+    this.props.mutate({ variables: { ideaId: ideaId, creatorId: creatorId, body: body } })
+    .then((post) => {
+      console.log(post);
     });
-  }
-  displaySubmitButton(e) {
-    const nbChars = e.currentTarget.value.length;
-    if(nbChars > 10) {
-      this.setState({
-        showSubmitButton: true
-      });
-    } else {
-      this.setState({
-        showSubmitButton: false
-      });
-    }
   }
   render() {
     const { index, title } = this.props;
@@ -88,13 +105,14 @@ class Questions extends React.Component {
                   }}
                   maxLength={1200}
                   ref={(t) => { this.txtarea = t; }}
+                  onBlur={this.getProposalText}
                 />
               </FormGroup>
               <div className="annotation right margin-s">
                 <Translate value="debate.survey.remaining_x_characters" nbCharacters={this.state.remainingChars} />
               </div>
               {this.state.showSubmitButton &&
-                <Button className="button-submit button-dark right margin-m clear">
+                <Button onClick={this.createPost} className="button-submit button-dark right margin-m clear">
                   <Translate value="debate.survey.submit" />
                 </Button>
               }
@@ -106,4 +124,19 @@ class Questions extends React.Component {
   }
 }
 
-export default Questions;
+Question.propTypes = {
+  mutate: React.PropTypes.func.isRequired
+};
+
+const createPostMutation = gql`
+  mutation createPost($ideaId: ID, $creatorId: ID, $body: String!) {
+    createPost(ideaId:$ideaId, creatorId: $creatorId, body: $body) {
+      id,
+      body
+    }
+  }
+`;
+
+const QuestionWithMutation = graphql(createPostMutation)(Question);
+
+export default QuestionWithMutation;

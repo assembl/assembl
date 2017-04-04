@@ -1,5 +1,5 @@
 import React from 'react';
-import { calculatePercentage } from '../../utils/globalFunctions'
+import { calculatePercentage } from '../../utils/globalFunctions';
 
 class Circle extends React.Component {
   render() {
@@ -9,7 +9,7 @@ class Circle extends React.Component {
     const circumference = 2 * radius * Math.PI;
     const green = (100 - calculatePercentage(like, totalCount)) / 100;
     const red = (100 - calculatePercentage(disagree, totalCount)) / 100;
-    const redOffset = - circumference * red;
+    const redOffset = -circumference * red;
     const greenOffset = circumference * green;
     return (
       <svg
@@ -41,7 +41,3 @@ class Circle extends React.Component {
 }
 
 export default Circle;
-
-
-
-

@@ -38,5 +38,5 @@ class Proposals extends React.Component {
     );
   }
 }
-    
+
 export default Proposals;

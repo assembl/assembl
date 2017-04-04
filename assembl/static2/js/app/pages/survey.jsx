@@ -23,9 +23,23 @@ class Survey extends React.Component {
     this.getIfProposals = this.getIfProposals.bind(this);
     this.redirectToLogin = this.redirectToLogin.bind(this);
   }
+  getIfProposals(questions) {
+    this.questions = questions;
+    if (!this.questions) return false;
+    let isProposals = false;
+    this.questions.forEach((question) => {
+      if (question.posts) isProposals = true;
+    });
+    return isProposals;
+  }
+  showMoreProposals() {
+    this.setState({
+      moreProposals: true
+    });
+  }
   redirectToLogin() {
     const { connectedUserId } = this.props.context;
-    if(connectedUserId){
+    if (connectedUserId) {
       this.setState({
         showModal: false
       });
@@ -37,7 +51,7 @@ class Survey extends React.Component {
   }
   render() {
     const { loading, theme } = this.props.data;
-    const { rootPath, connectedUserId } = this.props.context;
+    const { rootPath } = this.props.context;
     const { debateData } = this.props.debate;
     return (
       <div className="survey">
@@ -66,6 +80,7 @@ class Survey extends React.Component {
                     title={question.title}
                     index={index + 1}
                     key={index}
+                    themeId={theme.id}
                   />
                 );
               })}
@@ -110,19 +125,6 @@ class Survey extends React.Component {
         }
       </div>
     );
-  }
-  showMoreProposals() {
-    this.setState({
-      moreProposals: true
-    });
-  }
-  getIfProposals(questions) {
-    if (!questions) return false;
-    let isProposals = false;
-    questions.forEach((question) => {
-      if (question.posts) isProposals = true;
-    });
-    return isProposals;
   }
 }
 

@@ -87,7 +87,7 @@ class Disagree extends React.Component {
           />
         </g>
       </svg>
-      );
+    );
   }
 }
 
