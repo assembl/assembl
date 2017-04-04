@@ -26,7 +26,7 @@ App.on('start', function() {
   if (Backbone.history) {
     Backbone.history.start({
       pushState: true,
-      root: '/' + $('#discussion-slug').val()
+      root: '/debate/' + $('#discussion-slug').val()
     });
 
     if (Backbone.history._hasPushState) {
