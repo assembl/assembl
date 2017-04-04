@@ -47,6 +47,11 @@ var Router = Marionette.AppRouter.extend({
     "global_preferences": "adminGlobalPreferences",
   },
 
+  /* For debug purposes only! */
+  onRoute: function(name, path, argument){
+    // console.log(arguments);
+  }
+
 });
 
 Router.prototype.appRoutes = (Ctx.isAdminApp())?
