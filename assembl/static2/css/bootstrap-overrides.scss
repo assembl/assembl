@@ -4,3 +4,20 @@
   box-shadow: none !important;
   height: $navbar-height !important;
 }
+
+.modal-content {
+  .modal-header {
+    border: none;
+  }
+
+  .modal-body {
+    padding: 0 50px 15px 50px;
+    text-align: center;
+  }
+
+  .modal-footer {
+    border: none;
+    padding: 15px 50px 50px 50px;
+    text-align: center;
+  }
+}

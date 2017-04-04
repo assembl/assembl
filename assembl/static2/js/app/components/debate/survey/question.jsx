@@ -2,7 +2,6 @@ import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl } from 'react-bootstrap';
 
-
 class Questions extends React.Component {
   constructor(props) {
     super(props);
@@ -53,7 +52,12 @@ class Questions extends React.Component {
             </div>
             <Col xs={12} md={9} className="col-centered">
               <FormGroup className="no-margin" controlId="formControlsTextarea">
-                <FormControl className="txt-area" componentClass="textarea" placeholder={I18n.t('debate.survey.txtAreaPh')} />
+                <FormControl
+                  className="txt-area"
+                  componentClass="textarea"
+                  placeholder={I18n.t('debate.survey.txtAreaPh')}
+                  onClick={this.props.redirectToLogin}
+                />
               </FormGroup>
             </Col>
           </div>

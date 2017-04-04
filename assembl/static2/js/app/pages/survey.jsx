@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Translate } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
+import Modal from '../components/common/modal';
 import Loader from '../components/common/loader';
 import Video from '../components/debate/survey/video';
 import Header from '../components/debate/survey/header';
@@ -14,25 +15,58 @@ import Proposals from '../components/debate/survey/proposals';
 class Survey extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { moreProposals: false };
+    this.state = {
+      moreProposals: false,
+      showModal: false
+    };
     this.showMoreProposals = this.showMoreProposals.bind(this);
     this.getIfProposals = this.getIfProposals.bind(this);
+    this.redirectToLogin = this.redirectToLogin.bind(this);
+  }
+  redirectToLogin() {
+    const { connectedUserId } = this.props.context;
+    if(connectedUserId){
+      this.setState({
+        showModal: false
+      });
+    } else {
+      this.setState({
+        showModal: true
+      });
+    }
   }
   render() {
     const { loading, theme } = this.props.data;
+    const { rootPath, connectedUserId } = this.props.context;
+    const { debateData } = this.props.debate;
     return (
       <div className="survey">
         {loading && <Loader color="black" />}
         {theme &&
           <div className="relative">
             <Header title={theme.title} imgUrl={theme.imgUrl} />
+            <Modal
+              body={I18n.t('debate.survey.modalBody')}
+              link={`${rootPath}${debateData.slug}/login`}
+              footer={I18n.t('debate.survey.modalFooter')}
+              showModal={this.state.showModal}
+            />
             {theme.video &&
-              <Video title={theme.video.title} description={theme.video.description} htmlCode={theme.video.htmlCode} />
+              <Video
+                title={theme.video.title}
+                description={theme.video.description}
+                htmlCode={theme.video.htmlCode}
+              />
             }
             <div className="questions">
               {theme.questions && theme.questions.map((question, index) => {
                 return (
-                  <Question title={question.title} key={index} index={index + 1} />
+                  <Question
+                    redirectToLogin={this.redirectToLogin}
+                    title={question.title}
+                    index={index + 1}
+                    key={index}
+                  />
                 );
               })}
             </div>
@@ -52,7 +86,14 @@ class Survey extends React.Component {
                     <div className="content-section center">
                       {theme.questions && theme.questions.map((question, index) => {
                         return (
-                          <Proposals title={question.title} posts={question.posts} moreProposals={this.state.moreProposals} questionIndex={index + 1} key={index} />
+                          <Proposals
+                            title={question.title}
+                            posts={question.posts}
+                            moreProposals={this.state.moreProposals}
+                            questionIndex={index + 1}
+                            redirectToLogin={this.redirectToLogin}
+                            key={index}
+                          />
                         );
                       })}
                       {(!this.state.moreProposals && this.getIfProposals(theme.questions)) &&
@@ -128,7 +169,9 @@ const SurveyWithData = graphql(ThemeQuery)(Survey);
 
 const mapStateToProps = (state) => {
   return {
-    lang: state.i18n.locale
+    lang: state.i18n.locale,
+    context: state.context,
+    debate: state.debate
   };
 };
 

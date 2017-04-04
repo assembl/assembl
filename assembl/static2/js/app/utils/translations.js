@@ -137,7 +137,9 @@ const Translations = {
         reactions: 'Réactions',
         react: 'Réagissez :',
         'moreProposals': 'Voir plus de propositions',
-        'noProposals': 'Il n\'y a pas de propositions. Soyez le premier à contribuer !'
+        'noProposals': 'Il n\'y a pas de propositions. Soyez le premier à contribuer !',
+        'modalBody': 'Vous devez être connecté pour faire une proposition ou voter.',
+        'modalFooter': 'Connectez-vous'
       },
       themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
@@ -298,7 +300,9 @@ const Translations = {
         reactions: 'Reactions',
         react: 'React:',
         'moreProposals': 'More proposals',
-        'noProposals': 'There are no proposals for the moment. Be the first to contribute!'
+        'noProposals': 'There are no proposals for the moment. Be the first to contribute!',
+        'modalBody': 'You have to be connected to do a proposal or to vote.',
+        'modalFooter': 'Please connect'
       },
       themes: 'Themes',
       notStarted: 'This phase is not started. Please come back from the '

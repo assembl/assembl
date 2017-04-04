@@ -2,6 +2,7 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Translate } from 'react-redux-i18n';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Circle from '../../svg/circle';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -19,7 +20,8 @@ class Post extends React.Component {
     this.handleDisagree = this.handleDisagree.bind(this);
   }
   render() {
-    const { postIndex, moreProposals, post } = this.props;
+    const isUserConnected = getConnectedUserId() !== null;
+    const { postIndex, moreProposals, post, redirectToLogin } = this.props;
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
@@ -30,10 +32,16 @@ class Post extends React.Component {
           <div className="body">{post.body}</div>
           <div className="sentiments">
             <Translate value="debate.survey.react" />
-            <div className="sentiment" onClick={this.handleLike}>
+            <div
+              className="sentiment"
+              onClick={() => {isUserConnected ? this.handleLike() : redirectToLogin()}}
+            >
               <Like size={25} />
             </div>
-            <div className="sentiment" onClick={this.handleDisagree}>
+            <div
+              className="sentiment"
+              onClick={() => {isUserConnected ? this.handleDisagree() : redirectToLogin()}}
+            >
               <Disagree size={25} />
             </div>
           </div>
