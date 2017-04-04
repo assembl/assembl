@@ -437,6 +437,7 @@ def includeme(config):
     config.include('.search')
 
     config.add_route('home-auto', '/{discussion_slug}/')
+    config.add_route('home', '/debate/{discussion_slug}')
 
     def redirector(request):
         return HTTPMovedPermanently(request.route_url('home', discussion_slug=request.matchdict.get('discussion_slug')))
@@ -446,6 +447,4 @@ def includeme(config):
 
     # Scan now, to get cornice views
     config.scan('.')
-    # make sure this comes last to avoid conflicts
-    config.add_route('home', '/debate/{discussion_slug}')
     config.include('.discussion')  # Must be last routes to be called

@@ -231,20 +231,12 @@ def register_react_views(config, routes):
 
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
-        config.add_route('v2_profile', '/profile/*extra_path')  # need to be before contextual_v2_frontend_generic
-        # config.add_route('new_home', '/{discussion_slug}')
-        # config.add_route('landing_page', '/{discussion_slug}/home')
         config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
-        # config.add_route('contextual_v2_frontend_generic', 'v2/{discussion_slug}/*extra_path')
-        # config.add_route('v2_without_slug', 'v2/*extra_path')
+        config.add_route('new_styleguide', '/styleguide')
 
         react_routes = [
-                            "v2_profile",
-                            # "new_home",
-                            "general_react_page",
-                            # "landing_page",
-                            # "contextual_v2_frontend_generic",
-                            # "v2_without_slug",
+                            "new_styleguide",
+                            "general_react_page"
                         ]
 
         register_react_views(config, react_routes)
