@@ -1,17 +1,23 @@
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
-import { Grid, Col, FormGroup, FormControl } from 'react-bootstrap';
+import { Translate, I18n } from 'react-redux-i18n';
+import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 
 class Questions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       componentHeight: 0,
-      screenHeight: 0
+      screenHeight: 0,
+      remainingChars: 0,
+      showSubmitButton: false
     };
     this.updateDimensions = this.updateDimensions.bind(this);
   }
   componentDidMount() {
+    const maxChars = this.txtarea.props.maxLength;
+    this.setState({
+      remainingChars: maxChars
+    });
     this.updateDimensions();
     window.addEventListener('resize', this.updateDimensions);
   }
@@ -29,6 +35,25 @@ class Questions extends React.Component {
         screenWidth: screenWidth
       });
     }, 600);
+  }
+  getRemainingChars(e) {
+    const maxChars = this.txtarea.props.maxLength;
+    const remainingChars = maxChars - e.currentTarget.value.length;
+    this.setState({
+      remainingChars: remainingChars
+    });
+  }
+  displaySubmitButton(e) {
+    const nbChars = e.currentTarget.value.length;
+    if(nbChars > 10) {
+      this.setState({
+        showSubmitButton: true
+      });
+    } else {
+      this.setState({
+        showSubmitButton: false
+      });
+    }
   }
   render() {
     const { index, title } = this.props;
@@ -57,8 +82,22 @@ class Questions extends React.Component {
                   componentClass="textarea"
                   placeholder={I18n.t('debate.survey.txtAreaPh')}
                   onClick={this.props.redirectToLogin}
+                  onKeyUp={(e) => {
+                    this.getRemainingChars(e);
+                    this.displaySubmitButton(e);
+                  }}
+                  maxLength={1200}
+                  ref={(t) => { this.txtarea = t; }}
                 />
               </FormGroup>
+              <div className="annotation right margin-s">
+                <Translate value="debate.survey.remaining_x_characters" nbCharacters={this.state.remainingChars} />
+              </div>
+              {this.state.showSubmitButton &&
+                <Button className="button-submit button-dark right margin-m clear">
+                  <Translate value="debate.survey.submit" />
+                </Button>
+              }
             </Col>
           </div>
         </Grid>

@@ -139,7 +139,9 @@ const Translations = {
         'moreProposals': 'Voir plus de propositions',
         'noProposals': 'Il n\'y a pas de propositions. Soyez le premier à contribuer !',
         'modalBody': 'Vous devez être connecté pour faire une proposition ou voter.',
-        'modalFooter': 'Connectez-vous'
+        'modalFooter': 'Connectez-vous',
+        'submit': 'Envoyer',
+        'remaining_x_characters': 'Il vous reste %{nbCharacters} caractères'
       },
       themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
@@ -302,7 +304,9 @@ const Translations = {
         'moreProposals': 'More proposals',
         'noProposals': 'There are no proposals for the moment. Be the first to contribute!',
         'modalBody': 'You have to be connected to do a proposal or to vote.',
-        'modalFooter': 'Please connect'
+        'modalFooter': 'Please connect',
+        'submit': 'Submit',
+        'remaining_x_characters': 'You have %{nbCharacters} characters left'
       },
       themes: 'Themes',
       notStarted: 'This phase is not started. Please come back from the '

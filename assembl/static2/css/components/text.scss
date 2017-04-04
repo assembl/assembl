@@ -149,6 +149,12 @@
   height: 60px;
 }
 
+.annotation {
+  color: $first-color;
+  font-family: $font-family4;
+  font-size: $font-size-xs;
+}
+
 @media screen and (max-width: 991px) {
   .top-column {
     display: none;

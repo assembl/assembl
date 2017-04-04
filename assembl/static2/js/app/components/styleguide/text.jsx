@@ -28,6 +28,7 @@ class Text extends React.Component {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat interdum sem, eget malesuada tortor gravida volutpat. Donec luctus semper tincidunt. Sed vel iaculis libero, eu volutpat ante. Nullam lobortis suscipit lorem, a posuere erat vulputate sed. Integer varius purus diam, nec scelerisque urna vehicula et.
           </div>
           <div className="date margin-m">14 février 2017</div>
+          <div className="annotation margin-m">Lorem ipsum dolor sit amet</div>
         </section>
         <section>
           <h3 className="dark-title-3">Code</h3>
@@ -87,6 +88,9 @@ class Text extends React.Component {
           </pre>
           <pre>
             &lt;div className="date"&gt;14 février 2017&lt;/div&gt;
+          </pre>
+          <pre>
+            &lt;div className="annotation"&gt;Lorem ipsum dolor sit amet&lt;/div&gt;
           </pre>
         </section>
       </div>
