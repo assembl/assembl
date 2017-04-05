@@ -17,6 +17,46 @@ import Profile from './pages/profile';
 import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
 import Terms from './pages/terms';
+import parse from './utils/literalStringParser';
+
+
+/*
+  TODO: Create a cache of all of the routes, with routeNames, so that
+  throughout the app, we can call upon these paths. Variables must be
+  allowed.
+  eg. router.getRouteFor("login", {slug: 'discussion_slug'})
+  // => '/discussion_slug/login'
+*/
+
+class RoutesMap {
+  constructor() {
+    this._routes = {
+      'styleguide': "/styleguide",
+      'login': "/login",
+      'signup': "signup",
+      'changePassword': "changePassword",
+      'cxtLogin': "${slug}/login",
+      'cxtSignup': "${slug}/signup",
+      'cxtChangePassword': "${slug}/changePassword",
+      'home': "${slug}/home",
+      'profile': "${slug}/profile/${userId}",
+      'ideas': "${slug}/ideas",
+      'synthesis': "${slug}/synthesis",
+      'debate': "${slug}/debate",
+      'community': "${slug}/community",
+      'terms': "${slug}/terms"
+    };
+  }
+
+  get(name, args){
+    let literal = this._routes[name];
+    let a = parse(literal, args);
+    return a;
+  }
+}
+
+export let Routes = new RoutesMap();
+
 
 const DebateChild = (props) => {
   switch (props.params.phase) {
