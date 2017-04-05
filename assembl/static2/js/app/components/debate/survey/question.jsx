@@ -64,12 +64,17 @@ class Question extends React.Component {
     }, 600);
   }
   createPost() {
-    const ideaId = this.props.themeId;
+    const maxChars = this.txtarea.props.maxLength;
+    const questionId = this.props.questionId;
     const creatorId = getConnectedUserId();
     const body = this.state.postBody;
-    this.props.mutate({ variables: { ideaId: ideaId, creatorId: creatorId, body: body } })
+    this.props.mutate({ variables: { questionId: questionId, creatorId: creatorId, body: body } })
     .then((post) => {
-      console.log(post);
+      this.setState({
+        postBody: '',
+        showSubmitButton: false,
+        remainingChars: maxChars
+      });
     });
   }
   render() {
@@ -103,16 +108,17 @@ class Question extends React.Component {
                     this.getRemainingChars(e);
                     this.displaySubmitButton(e);
                   }}
-                  maxLength={1200}
+                  value={this.state.postBody}
+                  maxLength={800}
                   ref={(t) => { this.txtarea = t; }}
-                  onBlur={this.getProposalText}
+                  onChange={this.getProposalText}
                 />
               </FormGroup>
               <div className="annotation right margin-s">
                 <Translate value="debate.survey.remaining_x_characters" nbCharacters={this.state.remainingChars} />
               </div>
               {this.state.showSubmitButton &&
-                <Button onClick={this.createPost} className="button-submit button-dark right margin-m clear">
+                <Button onClick={this.createPost} className="button-submit button-dark right margin-l clear">
                   <Translate value="debate.survey.submit" />
                 </Button>
               }

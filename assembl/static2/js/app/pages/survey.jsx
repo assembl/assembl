@@ -80,7 +80,7 @@ class Survey extends React.Component {
                     title={question.title}
                     index={index + 1}
                     key={index}
-                    themeId={theme.id}
+                    questionId={question.id}
                   />
                 );
               })}
