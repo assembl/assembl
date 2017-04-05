@@ -22,7 +22,8 @@ from . import (
     FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
     collection_add_json, instance_view, check_permissions, CreationResponse)
 from assembl.lib.sqla import ObjectNotUniqueError
-from ..auth.views import send_change_password_email
+from ..auth.views import (
+    send_change_password_email, from_identifier)
 
 
 @view_config(
@@ -289,33 +290,39 @@ def verify_password(request):
 
 
 @view_config(
-    context=InstanceContext, ctx_instance_class=AgentProfile,
-    request_method='GET', name="password_reset", renderer='json')
-def reset_password_user(request):
-    ctx = request.context
-    user = ctx._instance
-    if not isinstance(user, User):
-        raise HTTPPreconditionFailed("This is not a user")
-    email = user.get_preferred_email()
-    if not email:
-        raise HTTPPreconditionFailed("This user has no email")
-    send_change_password_email(request, user, email,
-        discussion=discussion_from_request(request))
-    return HTTPOk()
-
-
+    context=CollectionContext, ctx_collection_class=AgentProfile,
+    request_method='POST', name="password_reset", header=FORM_HEADER)
 @view_config(
-    context=InstanceContext, ctx_instance_class=AbstractAgentAccount,
-    request_method='GET', name="password_reset", renderer='json')
-def reset_password_account(request):
-    ctx = request.context
-    account = ctx._instance
-    user = account.profile
+    context=ClassContext, ctx_class=AgentProfile, header=FORM_HEADER,
+    request_method='POST', name="password_reset")
+def reset_password(request):
+    identifier = request.params.get('identifier')
+    user_id = request.params.get('user_id')
+    email = None
+    user = None
+
+    if user_id:
+        user = AgentProfile.get(int(user_id))
+        if not user:
+            raise HTTPNotFound()
+        if identifier:
+            for account in user.accounts:
+                if identifier == account.email:
+                    email = identifier
+                    break
+            else:
+                email = user.get_preferred_email()
+                if not email:
+                    raise HTTPPreconditionFailed("This user has no email")
+    elif identifier:
+        user, account = from_identifier(identifier)
+        if not user:
+            raise HTTPNotFound()
+    else:
+        raise HTTPBadRequest("Please give an identifier")
     if not isinstance(user, User):
         raise HTTPPreconditionFailed("This is not a user")
-    if not account.email:
-        raise HTTPPreconditionFailed("This account has no email")
-    send_change_password_email(request, user, account.email,
+    send_change_password_email(request, user, email,
         discussion=discussion_from_request(request))
     return HTTPOk()
 
