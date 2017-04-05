@@ -112,19 +112,19 @@ def handle_next_view(request, consume=False, default_suffix='home'):
 
 
 def maybe_contextual_route(request, route_name, **args):
-    discussion_slug = request.matchdict.get('discussion_slug', None)
+    discussion_slug = None
+    if request.matchdict:
+        discussion_slug = request.matchdict.get('discussion_slug', None)
     if discussion_slug is None:
-        discussion_id = request.matchdict.get('discussion_id', None)
-        if discussion_id is None:
-            return request.route_url(route_name, **args)
-        else:
-            discussion = Discussion.get(int(discussion_id))
-            return request.route_url(
-                'contextual_'+route_name,
-                discussion_slug=discussion.slug, **args)
+        discussion = discussion_from_request(request)
+        if discussion:
+            discussion_slug = discussion.slug
+    if discussion_slug is None:
+        return request.route_url(route_name, **args)
     else:
         return request.route_url(
-            'contextual_'+route_name, discussion_slug=discussion_slug, **args)
+            'contextual_' + route_name,
+            discussion_slug=discussion_slug, **args)
 
 
 def get_social_autologin(request, discussion=None, next_view=None):

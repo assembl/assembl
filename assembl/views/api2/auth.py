@@ -6,7 +6,8 @@ from pyramid.view import view_config
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
-    HTTPOk, HTTPNoContent, HTTPForbidden, HTTPNotImplemented)
+    HTTPOk, HTTPNoContent, HTTPForbidden, HTTPNotImplemented,
+    HTTPPreconditionFailed)
 
 from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
@@ -14,13 +15,14 @@ from assembl.auth import (
 from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
     UserLanguagePreference)
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, discussion_from_request
 from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from .. import JSONError
 from . import (
     FORM_HEADER, JSON_HEADER, collection_view, instance_put_json,
     collection_add_json, instance_view, check_permissions, CreationResponse)
 from assembl.lib.sqla import ObjectNotUniqueError
+from ..auth.views import send_change_password_email
 
 
 @view_config(
@@ -284,6 +286,38 @@ def verify_password(request):
     if password is not None:
         return user.check_password(password)
     raise HTTPBadRequest("Please provide a password")
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=AgentProfile,
+    request_method='GET', name="password_reset", renderer='json')
+def reset_password_user(request):
+    ctx = request.context
+    user = ctx._instance
+    if not isinstance(user, User):
+        raise HTTPPreconditionFailed("This is not a user")
+    email = user.get_preferred_email()
+    if not email:
+        raise HTTPPreconditionFailed("This user has no email")
+    send_change_password_email(request, user, email,
+        discussion=discussion_from_request(request))
+    return HTTPOk()
+
+
+@view_config(
+    context=InstanceContext, ctx_instance_class=AbstractAgentAccount,
+    request_method='GET', name="password_reset", renderer='json')
+def reset_password_account(request):
+    ctx = request.context
+    account = ctx._instance
+    user = account.profile
+    if not isinstance(user, User):
+        raise HTTPPreconditionFailed("This is not a user")
+    if not account.email:
+        raise HTTPPreconditionFailed("This account has no email")
+    send_change_password_email(request, user, account.email,
+        discussion=discussion_from_request(request))
+    return HTTPOk()
 
 
 @view_config(
