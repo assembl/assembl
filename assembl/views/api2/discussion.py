@@ -29,7 +29,7 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound,
-    HTTPServerError)
+    HTTPServerError, HTTPConflict)
 from pyramid_dogpile_cache import get_region
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.renderers import JSONP_VALID_CALLBACK
@@ -1064,7 +1064,7 @@ def post_discussion(request):
             instances.append(local_role)
         discussion.invoke_callbacks_after_creation()
     except ObjectNotUniqueError as e:
-        raise HTTPBadRequest(e)
+        raise HTTPConflict(e)
     except Exception as e:
         raise HTTPServerError(e)
     if instances:
