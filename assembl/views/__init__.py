@@ -229,10 +229,23 @@ def get_default_context(request):
 
     analytics_url = config.get('web_analytics_piwik_url', None)
 
+    if discussion:
+        def get_route(name, **kwargs):
+            try:
+                return request.route_path('contextual_' + name,
+                                          discussion_slug=discussion.slug,
+                                          **kwargs)
+            except KeyError:
+                return request.route_path(name, **kwargs)
+    else:
+        def get_route(name, **kwargs):
+            return request.route_path(name, **kwargs)
+
     (theme_name, theme_relative_path)=get_theme_info(discussion)
     return dict(
         default_context,
         request=request,
+        get_route=get_route,
         user=user,
         templates=get_template_views(),
         discussion=discussion or {},  # Templates won't load without a discussion object
