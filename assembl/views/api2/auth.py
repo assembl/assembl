@@ -1,20 +1,27 @@
 from simplejson import dumps, loads
 from string import Template
+from datetime import datetime
 
 from pyramid.response import Response
 from pyramid.view import view_config
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.settings import asbool
+from pyramid.security import (
+    authenticated_userid, Everyone, NO_PERMISSION_REQUIRED)
+from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
     HTTPOk, HTTPNoContent, HTTPForbidden, HTTPNotImplemented,
-    HTTPPreconditionFailed)
+    HTTPPreconditionFailed, HTTPConflict)
+from pyisemail import is_email
 
+from assembl.lib.sqla_types import EmailString
+from ...lib import config
 from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
     R_PARTICIPANT, P_READ, CrudPermissions)
 from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
-    UserLanguagePreference)
+    UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username)
 from assembl.auth.util import get_permissions, discussion_from_request
 from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from .. import JSONError
@@ -23,7 +30,11 @@ from . import (
     collection_add_json, instance_view, check_permissions, CreationResponse)
 from assembl.lib.sqla import ObjectNotUniqueError
 from ..auth.views import (
-    send_change_password_email, from_identifier)
+    send_change_password_email, from_identifier, send_confirmation_email,
+    maybe_auto_subscribe)
+
+
+_ = TranslationStringFactory('assembl')
 
 
 @view_config(
@@ -270,7 +281,6 @@ def send_account_verification(request):
     if instance.verified:
         return HTTPNoContent(
             "No need to verify email <%s>" % (instance.email))
-    from assembl.views.auth.views import send_confirmation_email
     request.matchdict = {}
     send_confirmation_email(request, instance)
     return {}
@@ -291,10 +301,12 @@ def verify_password(request):
 
 @view_config(
     context=CollectionContext, ctx_collection_class=AgentProfile,
-    request_method='POST', name="password_reset", header=FORM_HEADER)
+    request_method='POST', permission=NO_PERMISSION_REQUIRED,
+    name="password_reset", header=FORM_HEADER)
 @view_config(
     context=ClassContext, ctx_class=AgentProfile, header=FORM_HEADER,
-    request_method='POST', name="password_reset")
+    request_method='POST', permission=NO_PERMISSION_REQUIRED,
+    name="password_reset")
 def reset_password(request):
     identifier = request.params.get('identifier')
     user_id = request.params.get('user_id')
@@ -327,6 +339,92 @@ def reset_password(request):
     send_change_password_email(request, user, email,
         discussion=discussion_from_request(request))
     return HTTPOk()
+
+
+@view_config(
+    context=CollectionContext, ctx_collection_class=AgentProfile,
+    request_method='POST', header=JSON_HEADER,
+    permission=NO_PERMISSION_REQUIRED)
+@view_config(
+    context=ClassContext, ctx_class=User, header=JSON_HEADER,
+    request_method='POST', permission=NO_PERMISSION_REQUIRED)
+def assembl_register_user(request):
+    ctx = request.context
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    localizer = request.localizer
+    session = AgentProfile.default_db
+    json = request.json
+    name = json.get('real_name', '').strip()
+    if not name or len(name) < 3:
+        raise HTTPBadRequest(localizer.translate(_(
+            "Please use a name of at least 3 characters")))
+    password = json.get('password', '').strip()
+    # TODO: Check password strength. maybe pwdmeter?
+    email = None
+    for account in json.get('accounts', ()):
+        email = account.get('email', None)
+        if not is_email(email):
+            raise HTTPBadRequest(localizer.translate(_(
+                "This is not a valid email")))
+        email = EmailString.normalize_email_case(email)
+        # Find agent account to avoid duplicates!
+        if session.query(AbstractAgentAccount).filter_by(
+                email_ci=email, verified=True).count():
+            raise HTTPConflict(localizer.translate(_(
+                "We already have a user with this email.")))
+    if not email:
+        raise HTTPBadRequest(localizer.translate(_(
+            "No email")))
+    username = json.get('username', None)
+    if username:
+        if session.query(Username).filter_by(
+                username=username).count():
+            raise HTTPConflict(localizer.translate(_(
+                "We already have a user with this username.")))
+
+    validate_registration = asbool(config.get(
+        'assembl.validate_registration_emails'))
+
+    old_autoflush = session.autoflush
+    session.autoflush = False
+    try:
+        now = datetime.utcnow()
+        instances = ctx.create_object("User", request.json, user_id)
+        if not instances:
+            raise HTTPBadRequest()
+        user = instances[0]
+        user.creation_date = now
+        for instance in instances:
+            session.add(instance)
+        discussion = discussion_from_request(request)
+        if discussion:
+            agent_status = AgentStatusInDiscussion(
+                agent_profile=user, discussion=discussion,
+                first_visit=now, last_visit=now,
+                user_created_on_this_discussion=True)
+            session.add(agent_status)
+        session.flush()
+        account = user.accounts[0]
+        email = account.email
+        if validate_registration:
+            send_confirmation_email(request, account)
+        else:
+            user.verified = True
+            for account in user.accounts:
+                account.verified = True
+            if asbool(config.get('pyramid.debug_authorization')):
+                # for debugging purposes
+                from assembl.auth.password import email_token
+                print "email token:", request.route_url(
+                    'user_confirm_email', ticket=email_token(account))
+            if discussion:
+                maybe_auto_subscribe(user, discussion)
+        session.flush()
+        return CreationResponse(user, user_id, permissions)
+    finally:
+        session.autoflush = old_autoflush
 
 
 @view_config(
