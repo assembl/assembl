@@ -310,16 +310,18 @@ def reset_password(request):
                 if identifier == account.email:
                     email = identifier
                     break
-            else:
-                email = user.get_preferred_email()
-                if not email:
-                    raise HTTPPreconditionFailed("This user has no email")
     elif identifier:
         user, account = from_identifier(identifier)
         if not user:
             raise HTTPNotFound()
+        if account:
+            email = account.email
     else:
         raise HTTPBadRequest("Please give an identifier")
+    if not email:
+        email = user.get_preferred_email()
+        if not email:
+            raise HTTPPreconditionFailed("This user has no email")
     if not isinstance(user, User):
         raise HTTPPreconditionFailed("This is not a user")
     send_change_password_email(request, user, email,
