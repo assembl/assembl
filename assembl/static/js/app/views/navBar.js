@@ -184,14 +184,17 @@ var navBarRight = Marionette.LayoutView.extend({
   templateHelpers: function() {
     return {
       urlNotifications: function() {
-        return '/' + Ctx.getDiscussionSlug() + '/user/notifications';
+        return '/debate/' + Ctx.getDiscussionSlug() +  '/user/notifications';
       },
       urlLogOut: function() {
-        return '/' + Ctx.getDiscussionSlug() + '/logout';
+        return '/debate/' + Ctx.getDiscussionSlug() + '/logout';
       },
       userProfile: function() {
-        return '/' + Ctx.getDiscussionSlug() + '/user/profile';
+        return '/debate/' + Ctx.getDiscussionSlug() + '/user/profile';
       },
+      urlLogin: function() {
+        return '/debate/' + Ctx.getDiscussionSlug() + '/login?next=/' + Ctx.getDiscussionSlug() + '/home'
+      }
     }
   },
   setLocale: function(e) {
