@@ -404,10 +404,9 @@ Schema = graphene.Schema(query=Query, mutation=Mutations)
 $ pshell local.ini
 import json
 from assembl.graphql.schema import Schema as schema
-from assembl.tests.utils import PyramidWebTestRequest
-
-request = PyramidWebTestRequest.blank('/', method="POST")
-request.matchdict = {"discussion_id": 6}
+from webtest import TestRequest
+request = TestRequest.blank('/', method="POST")
+request.matchdict = {"discussion_id": 16}
 # take the first sysadmin:
 userid = models.User.default_db.query(models.User).join(models.User.roles).filter(models.Role.id == 7)[0:1][0].id
 request.authenticated_userid = userid
