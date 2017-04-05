@@ -696,6 +696,11 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         frontendUrls = FrontendUrls(self)
         return frontendUrls.get_discussion_url()
 
+    def get_legacy_url(self, *args, **kwargs):
+        from assembl.lib.frontend_urls import FrontendUrls
+        frontendUrls = FrontendUrls(self)
+        return frontendUrls.get_legacy_discussion_url(*args, **kwargs)
+
     @property
     def creator_name(self):
         if self.creator:
