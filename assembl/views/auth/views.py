@@ -474,13 +474,11 @@ def coming_from_v2_frontend(request):
     route_name='login',
     request_method='POST',
     permission=NO_PERMISSION_REQUIRED,
-    renderer='assembl:templates/login.jinja2'
 )
 @view_config(
     route_name='contextual_login',
     request_method='POST',
     permission=NO_PERMISSION_REQUIRED,
-    renderer='assembl:templates/login.jinja2'
 )
 def assembl_login_complete_view(request):
     """
@@ -489,22 +487,21 @@ def assembl_login_complete_view(request):
     """
 
     session = AgentProfile.default_db
-    identifier = request.params.get('identifier', '').strip()
+    # POST before GET
+    identifier = (request.POST.get('identifier').strip() or
+                  request.GET.get('identifier').strip() or '')
     password = request.params.get('password', '').strip()
     next_view = handle_next_view(request, True)
     logged_in = authenticated_userid(request)
     localizer = request.localizer
     user = None
     user, account = from_identifier(identifier)
-
     if not user:
         error_message = localizer.translate(_("This user cannot be found"))
-        if coming_from_v2_frontend(request):
-            return HTTPFound(location=maybe_contextual_route(
-                request, 'v2_frontend_generic', extra_path="login", _query={"error": error_message}))
-        else:
-            return dict(get_login_context(request),
-                        error=error_message)
+        request.session.flash(error_message)
+        return HTTPFound(location=maybe_contextual_route(
+            request, 'login',
+            _query={"identifier": identifier} if identifier else None))
     if account and not account.verified:
         return HTTPFound(location=maybe_contextual_route(
             request, 'confirm_emailid_sent', email_account_id=account.id))
@@ -520,14 +517,10 @@ def assembl_login_complete_view(request):
         error_message = localizer.translate(_("Invalid user and password"))
         user.login_failures += 1
         # TODO: handle high failure count
-        session.add(user)
-
-        if coming_from_v2_frontend(request):
-            return HTTPFound(location=maybe_contextual_route(
-                request, 'v2_frontend_generic', extra_path="login", _query={"error": error_message}))
-        else:
-            return dict(get_login_context(request),
-                        error=error_message)
+        request.session.flash(error_message)
+        return HTTPFound(location=maybe_contextual_route(
+            request, 'login',
+            _query={"identifier": identifier} if identifier else None))
     user.last_login = datetime.utcnow()
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
