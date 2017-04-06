@@ -3,10 +3,10 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Translate } from 'react-redux-i18n';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
+import PostCreator from './postCreator';
 import Circle from '../../svg/circle';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
-
 
 class Post extends React.Component {
   constructor(props) {
@@ -40,6 +40,7 @@ class Post extends React.Component {
     });
   }
   render() {
+    const { id } = this.props;
     const isUserConnected = getConnectedUserId() !== null;
     const { postIndex, moreProposals, post, redirectToLogin } = this.props;
     return (
@@ -47,7 +48,7 @@ class Post extends React.Component {
         <div className="content">
           <div className="user">
             <span className="assembl-icon-profil grey">&nbsp;</span>
-            <span className="username">Pauline</span>
+            <PostCreator id={id} />
           </div>
           <div className="body">{post.body}</div>
           <div className="sentiments">

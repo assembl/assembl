@@ -68,7 +68,7 @@ class Question extends React.Component {
     const questionId = this.props.questionId;
     const creatorId = getConnectedUserId();
     const body = this.state.postBody;
-    this.props.mutate({ variables: { questionId: questionId, creatorId: creatorId, body: body } })
+    this.props.mutate({ variables: { ideaId: questionId, creatorId: creatorId, body: body } })
     .then((post) => {
       this.setState({
         postBody: '',
@@ -109,7 +109,7 @@ class Question extends React.Component {
                     this.displaySubmitButton(e);
                   }}
                   value={this.state.postBody}
-                  maxLength={800}
+                  maxLength={300}
                   ref={(t) => { this.txtarea = t; }}
                   onChange={this.getProposalText}
                 />
