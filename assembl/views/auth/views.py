@@ -446,9 +446,8 @@ def smtp_error_view(exc, request):
     if path_info.startswith('/data/') or path_info.startswith('/api/'):
         return JSONError(400, message)
     referrer = request.environ['HTTP_REFERER']
-    if '?' in referrer:
-        referrer = referrer.split('?')[0]
-    referrer += '?error='+quote(message)
+    request.session.flash(message)
+    referrer = referrer.split('?')[0]
     return HTTPFound(location=referrer)
 
 
@@ -636,7 +635,7 @@ def user_confirm_email(request):
         discussions = account.profile.involved_in_discussion
         if len(discussions) == 1:
             inferred_discussion = discussions[0]
-    if account.verified and logged_in:
+    if account and account.verified and logged_in:
         # no need to revalidate, just send to discussion.
         # Question: maybe_auto_subscribe? Doubt it.
         return HTTPFound(location=request.route_url(
@@ -656,9 +655,9 @@ def user_confirm_email(request):
             else:
                 error = localizer.translate(_(
                     "This link has been used. We sent another."))
+            request.session.flash(error)
             return HTTPFound(location=maybe_contextual_route(
-                request, 'confirm_emailid_sent', email_account_id=account.id,
-                _query=(dict(error=error))))
+                request, 'confirm_emailid_sent', email_account_id=account.id))
         else:
             if account and account.verified:
                 # bad token, verified account... send them to login
@@ -668,12 +667,11 @@ def user_confirm_email(request):
                 # now what? We do not have the email.
                 # Just send to login for now
                 error = localizer.translate(_(
-                    "This link is not valid. Please attempt to login to get another one."
-                    )) % (account.email,)
+                    "This link is not valid. Please attempt to login to get another one."))
+            request.session.flash(error)
             return HTTPFound(location=maybe_contextual_route(
                 request, 'login', _query=dict(
-                    identifier=account.email if account else None,
-                    message=error)))
+                    identifier=account.email if account else None)))
 
     # By now we know we have a good token; make it login-equivalent.
     user = account.profile
@@ -958,11 +956,10 @@ def do_password_change(request):
         else:
             error = localizer.translate(_(
                 "This link has been used. Do you want us to send another?"))
-
+        request.session.flash(error)
         return HTTPFound(location=maybe_contextual_route(
             request, 'request_password_change', _query=dict(
-                user_id=user.id if user else '',
-                error=error)))
+                user_id=user.id if user else '')))
 
     # V+: Valid token (encompasses P-B+, W-, B-L+); ALSO V-L+
     # V+P-B- should not happen, but we'll treat it the same.
@@ -1027,11 +1024,10 @@ def finish_password_change(request):
         else:
             error = localizer.translate(_(
                 "This link has been used. Do you want us to send another?"))
-
+        request.session.flash(error)
         return HTTPFound(location=maybe_contextual_route(
             request, 'request_password_change', _query=dict(
-                user_id=user.id if user else '',
-                error=error)))
+                user_id=user.id if user else '')))
 
     discussion_slug = request.matchdict.get('discussion_slug', None)
     error = None

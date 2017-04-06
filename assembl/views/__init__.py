@@ -121,7 +121,8 @@ def get_providers_with_names(providers=None):
     return providers
 
 
-def get_default_context(request):
+def get_default_context(request, **kwargs):
+    kwargs.update(default_context)
     from ..auth.util import get_user, get_current_discussion
     if request.scheme == "http"\
             and asbool(config.get("require_secure_connection")):
@@ -241,9 +242,15 @@ def get_default_context(request):
         def get_route(name, **kwargs):
             return request.route_path(name, **kwargs)
 
+    errors = request.session.pop_flash()
+    if kwargs.get('error', None):
+        errors.append(kwargs['error'])
+    if errors:
+        kwargs['error'] = '\n'.join(errors)
+
     (theme_name, theme_relative_path)=get_theme_info(discussion)
     return dict(
-        default_context,
+        kwargs,
         request=request,
         get_route=get_route,
         user=user,
