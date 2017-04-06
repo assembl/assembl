@@ -104,21 +104,52 @@ def get_theme_info(discussion):
         return ('default', 'default')
 
 
-def get_providers_with_names(providers=None):
-    from ..models.auth import IdentityProvider
+def get_providers_by_name(get_route, providers=None):
+    from assembl.models.auth import IdentityProvider
     if providers is None:
         providers = aslist(config.get('login_providers'))
-    provider_names = dict(IdentityProvider.default_db.query(
-        IdentityProvider.provider_type, IdentityProvider.name).all())
-    providers = {pr: provider_names[pr] for pr in providers}
+    providers_by_name = dict(IdentityProvider.default_db.query(
+        IdentityProvider.name, IdentityProvider.provider_type).all())
+    saml_providers = []
     if 'saml' in providers:
-        del providers['saml']
+        del providers_by_name['saml']
         saml_providers = config.get('SOCIAL_AUTH_SAML_ENABLED_IDPS')
         if not isinstance(saml_providers, dict):
             saml_providers = json.loads(saml_providers)
-        for prov_id, data in saml_providers.iteritems():
-            providers['saml:' + prov_id] = data["description"]
+    providers = {
+        name: {
+            "add_social_account": get_route('add_social_account', backend=ptype),
+            "login": get_route('login', backend=ptype),
+        } for (name, ptype) in providers_by_name.iteritems() if ptype in providers
+    }
+    providers.update({
+        data["description"]: {
+            "add_social_account": get_route('add_social_account', backend='saml'),
+            "login": get_route('login', backend='saml'),
+            "extra" : {
+                "idp": prov_id
+            }
+        }
+        for prov_id, data in saml_providers.iteritems()
+        })
+
     return providers
+
+
+def create_get_route(request, discussion=None):
+    if discussion:
+        def get_route(name, **kwargs):
+            try:
+                return request.route_path('contextual_' + name,
+                                          discussion_slug=discussion.slug,
+                                          **kwargs)
+            except KeyError:
+                return request.route_path(
+                    name, discussion_slug=discussion.slug, **kwargs)
+    else:
+        def get_route(name, **kwargs):
+            return request.route_path(name, **kwargs)
+    return get_route
 
 
 def get_default_context(request, **kwargs):
@@ -197,7 +228,6 @@ def get_default_context(request, **kwargs):
             get_language(localizer.locale_name), 'LC_MESSAGES',
             'assembl.jed.json')
     assert os.path.exists(jedfilename)
-    providers = get_providers_with_names()
 
     from ..models.facebook_integration import language_sdk_existance
     fb_lang_exists, fb_locale = language_sdk_existance(get_language(localizer.locale_name),
@@ -230,18 +260,8 @@ def get_default_context(request, **kwargs):
 
     analytics_url = config.get('web_analytics_piwik_url', None)
 
-    if discussion:
-        def get_route(name, **kwargs):
-            try:
-                return request.route_path('contextual_' + name,
-                                          discussion_slug=discussion.slug,
-                                          **kwargs)
-            except KeyError:
-                return request.route_path(
-                    name, discussion_slug=discussion.slug, **kwargs)
-    else:
-        def get_route(name, **kwargs):
-            return request.route_path(name, **kwargs)
+    get_route = create_get_route(request, discussion)
+    providers = get_providers_by_name(get_route)
 
     errors = request.session.pop_flash()
     if kwargs.get('error', None):

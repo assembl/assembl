@@ -49,8 +49,8 @@ from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.utils import normalize_email_name
 from .. import (
-    get_default_context, JSONError, get_providers_with_names,
-    HTTPTemporaryRedirect)
+    get_default_context, JSONError, get_providers_by_name,
+    HTTPTemporaryRedirect, create_get_route)
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger('assembl')
@@ -67,8 +67,9 @@ def get_login_context(request, force_show_providers=False):
     else:
         p_slug = ""
         request.session.pop('discussion')
-    providers = get_providers_with_names()
     discussion = discussion_from_request(request)
+    get_routes = create_get_route(request, discussion)
+    providers = get_providers_by_name(get_routes)
     hide_registration = (discussion
         and not public_roles.intersection(set(roles_with_permissions(
             discussion, P_READ)))
@@ -314,12 +315,13 @@ def assembl_profile(request):
         (ea, session.query(AbstractAgentAccount).filter_by(
             email_ci=ea.email_ci, verified=True).first())
         for ea in profile.email_accounts if not ea.verified]
+    get_route = create_get_route(request, discussion_from_request(request))
     return render_to_response(
         'assembl:templates/profile.jinja2',
         dict(get_default_context(request),
              error='<br />'.join(errors),
              unverified_emails=unverified_emails,
-             providers=get_providers_with_names(),
+             providers=get_providers_by_name(get_route),
              google_consumer_key=request.registry.settings.get(
                  'google.consumer_key', ''),
              the_user=profile,
