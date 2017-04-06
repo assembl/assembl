@@ -69,14 +69,6 @@ var profile = Marionette.LayoutView.extend({
         Growl.showBottomGrowl(Growl.GrowlReason.ERROR, i18n.gettext('Your settings failed to update.'));
       }
     })
-  },
-
-  templateHelpers: function() {
-    return {
-      urlDiscussion: function() {
-        return '/' + Ctx.getDiscussionSlug() + '/';
-      }
-    }
   }
 });
 

@@ -73,7 +73,7 @@ var socialProvidersList = Marionette.ItemView.extend({
     this.providers = options.providers;
   },
   serializeData: function() {
-    return {i18n: i18n, providers: _.keys(this.providers), names: this.providers};
+    return {i18n: i18n, providers: this.providers};
   }
 });
 
@@ -91,13 +91,6 @@ var userAccount =  Marionette.ItemView.extend({
   serializeData: function() {
     return {
       user: this.model
-    }
-  },
-  templateHelpers: function() {
-    return {
-      urlDiscussion: function() {
-        return '/' + Ctx.getDiscussionSlug() + '/';
-      }
     }
   },
   saveAccount: function(e) {
