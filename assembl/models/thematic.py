@@ -84,7 +84,8 @@ class Thematic(Idea):
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
 
 
-LangString.setup_ownership_load_event(Thematic, ['title', 'description'])
+LangString.setup_ownership_load_event(Thematic,
+    ['title', 'description', 'video_title', 'video_description'])
 
 
 class Question(Idea):
