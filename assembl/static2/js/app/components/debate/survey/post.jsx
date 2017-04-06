@@ -46,10 +46,7 @@ class Post extends React.Component {
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
-          <div className="user">
-            <span className="assembl-icon-profil grey">&nbsp;</span>
-            <PostCreator id={id} />
-          </div>
+          <PostCreator id={id} />
           <div className="body">{post.body}</div>
           <div className="sentiments">
             <Translate value="debate.survey.react" />

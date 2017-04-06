@@ -10,7 +10,10 @@ class PostCreator extends React.Component {
       <div className="inline">
         {loading && <Loader />}
         {proposition && 
-          <span className="username">{proposition.creator.name}</span>
+          <div className="user">
+            <span className="assembl-icon-profil grey">&nbsp;</span>
+            <span className="username">{proposition.creator.name}</span>
+          </div>
         }
       </div>
     );
