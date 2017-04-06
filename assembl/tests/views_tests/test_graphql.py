@@ -8,7 +8,7 @@ from assembl.graphql.schema import Schema as schema
 
 
 def test_get_thematics_noresult(graphql_request):
-    res = schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
@@ -23,7 +23,7 @@ def test_get_thematics_no_video(discussion, graphql_request, test_session):
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
-    res = schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': None,
                         u'id': thematic_gid,
@@ -57,7 +57,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
-    res = schema.execute('query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': None,
                         u'id': thematic_gid,
@@ -72,7 +72,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
 
 
 def test_mutation_create_thematic_with_video(graphql_request):
-    res = schema.execute("""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
         {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
@@ -111,7 +111,7 @@ mutation myFirstMutation {
 
 
 def test_mutation_create_thematic_multilang_implicit_en(graphql_request, user_language_preference_en_cookie):
-    res = schema.execute("""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
         {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
@@ -128,13 +128,13 @@ mutation myFirstMutation {
         u'createThematic': {
             u'thematic': {
                 u'title': u'Understanding the dynamics and issues',
-                u'identifier': 'survey'
+                u'identifier': u'survey'
     }}}
 
 
 def test_mutation_create_thematic_multilang_implicit_fr(graphql_request, user_language_preference_fr_cookie):
     # adding en then fr on purpose, to really test that it looks at user preferences, not just the first original title
-    res = schema.execute("""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
         {value:"Understanding the dynamics and issues", localeCode:"en"}
@@ -151,12 +151,12 @@ mutation myFirstMutation {
         u'createThematic': {
             u'thematic': {
                 u'title': u'Comprendre les dynamiques et les enjeux',
-                u'identifier': 'survey'
+                u'identifier': u'survey'
     }}}
 
 
 def test_mutation_create_thematic_multilang_explicit_fr(graphql_request):
-    res = schema.execute("""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
         {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
@@ -173,12 +173,12 @@ mutation myFirstMutation {
         u'createThematic': {
             u'thematic': {
                 u'title': u'Comprendre les dynamiques et les enjeux',
-                u'identifier': 'survey'
+                u'identifier': u'survey'
     }}}
 
 
 def test_mutation_create_thematic_multilang_explicit_en(graphql_request):
-    res = schema.execute("""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
         {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
@@ -200,7 +200,7 @@ mutation myFirstMutation {
 
 
 def test_mutation_create_raise_if_no_title_entries(graphql_request):
-    res = schema.execute("""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[], identifier:"survey") {
         thematic {
@@ -218,7 +218,7 @@ mutation myFirstMutation {
 
 def test_mutation_create_thematic_no_permission(graphql_request):
     graphql_request.authenticated_userid = None
-    res = schema.execute("""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[{value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}], identifier:"survey") {
         thematic {
@@ -232,7 +232,7 @@ mutation myFirstMutation {
 
 
 def test_mutation_create_thematic_with_questions(graphql_request):
-    res = schema.execute("""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
         titleEntries:[
@@ -260,6 +260,6 @@ mutation myFirstMutation {
                 u'title': u'Comprendre les dynamiques et les enjeux',
                 u'identifier': u'survey',
                 u'questions': [
-                    {u'title': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}
+                    {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}
                 ]
     }}}
