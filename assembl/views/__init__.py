@@ -237,7 +237,8 @@ def get_default_context(request, **kwargs):
                                           discussion_slug=discussion.slug,
                                           **kwargs)
             except KeyError:
-                return request.route_path(name, **kwargs)
+                return request.route_path(
+                    name, discussion_slug=discussion.slug, **kwargs)
     else:
         def get_route(name, **kwargs):
             return request.route_path(name, **kwargs)

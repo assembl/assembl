@@ -17,8 +17,7 @@
     {% else %}
     {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
     <li class="sub fl mrs">
-        <a href="<%= urlLogin() %>" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this discussion') }}</a>
-        }
+        <a href="{{ get_route('login')}}?next={{ get_route('new_home')}}/home" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this discussion') }}</a>
     </li>
     {% endif %}
     {% endif %}
@@ -36,10 +35,10 @@
             <ul class="dropdown-menu">
               {% if discussion.id %}
                 {% if user_profile_edit_url %}
-                  <li><a href="<%= userProfile() %>"><i class="icon-user"></i>{{ gettext('Profile') }}</a></li>
+                  <li><a href="{{ get_route('profile') }}"><i class="icon-user"></i>{{ gettext('Profile') }}</a></li>
                 {% endif %}
                 <% if(isUserSubscribedToDiscussion || canSubscribeToDiscussion){ %>
-                  <li><a href="<%= urlNotifications() %>"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
+                  <li><a href="{{ get_route('user_notifications') }}"><i class="icon-bell"></i>{{ gettext('Notifications') }}</a></li>
                 <% } %>
                 <% if(Ctx.canUseExpertInterface()){ %>
                   <% if(Ctx.getCurrentInterfaceType() === Ctx.InterfaceTypes.EXPERT) { %>
@@ -53,12 +52,12 @@
                 <% } %>
                 <li class="divider"></li>
               {% endif %}
-              <li><a href="<%= urlLogOut() %>" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
+              <li><a href="{{ get_route('logout') }}" class="sign-out"><i class="icon-logout"></i>{{ gettext('Sign out') }}</a></li>
             </ul>
         </div>
         {% else %}
           {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-            <a href="{{ discussion.get_legacy_url('/login') }}" class="btn btn-default btn-sm sign-in-link">{{ gettext('Sign in') }}</a>
+            <a href="{{ get_route('login')}}?next={{ get_route('new_home')}}/home" class="btn btn-default btn-sm sign-in-link">{{ gettext('Sign in') }}</a>
           {% endif %}
         {% endif %}
     </li>
