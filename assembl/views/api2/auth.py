@@ -312,6 +312,7 @@ def reset_password(request):
     user_id = request.params.get('user_id')
     email = None
     user = None
+    localizer = request.localizer
 
     if user_id:
         user = AgentProfile.get(int(user_id))
@@ -329,13 +330,19 @@ def reset_password(request):
         if account:
             email = account.email
     else:
-        raise HTTPBadRequest("Please give an identifier")
+        error = localizer(_("Please give an identifier"))
+        request.session.flash(error)
+        raise HTTPBadRequest(error)
     if not email:
         email = user.get_preferred_email()
         if not email:
-            raise HTTPPreconditionFailed("This user has no email")
+            error = localizer(_("This user has no email"))
+            request.session.flash(error)
+            raise HTTPPreconditionFailed(error)
     if not isinstance(user, User):
-        raise HTTPPreconditionFailed("This is not a user")
+        error = localizer(_("This is not a user"))
+        request.session.flash(error)
+        raise HTTPPreconditionFailed(error)
     send_change_password_email(request, user, email,
         discussion=discussion_from_request(request))
     return HTTPOk()
@@ -358,31 +365,41 @@ def assembl_register_user(request):
     json = request.json
     name = json.get('real_name', '').strip()
     if not name or len(name) < 3:
-        raise HTTPBadRequest(localizer.translate(_(
-            "Please use a name of at least 3 characters")))
+        error = localizer.translate(_(
+            "Please use a name of at least 3 characters"))
+        request.session.flash(error)
+        raise HTTPBadRequest(error)
     password = json.get('password', '').strip()
     # TODO: Check password strength. maybe pwdmeter?
     email = None
     for account in json.get('accounts', ()):
         email = account.get('email', None)
         if not is_email(email):
-            raise HTTPBadRequest(localizer.translate(_(
-                "This is not a valid email")))
+            error = localizer.translate(_(
+                "This is not a valid email"))
+            request.session.flash(error)
+            raise HTTPBadRequest(error)
         email = EmailString.normalize_email_case(email)
         # Find agent account to avoid duplicates!
         if session.query(AbstractAgentAccount).filter_by(
                 email_ci=email, verified=True).count():
-            raise HTTPConflict(localizer.translate(_(
-                "We already have a user with this email.")))
+            error = localizer.translate(_(
+                "We already have a user with this email."))
+            request.session.flash(error)
+            raise HTTPConflict(error)
     if not email:
-        raise HTTPBadRequest(localizer.translate(_(
-            "No email")))
+        error = localizer.translate(_(
+            "No email."))
+        request.session.flash(error)
+        raise HTTPBadRequest(error)
     username = json.get('username', None)
     if username:
         if session.query(Username).filter_by(
                 username=username).count():
-            raise HTTPConflict(localizer.translate(_(
-                "We already have a user with this username.")))
+            error = localizer.translate(_(
+                "We already have a user with this username."))
+            request.session.flash(error)
+            raise HTTPConflict(error)
 
     validate_registration = asbool(config.get(
         'assembl.validate_registration_emails'))

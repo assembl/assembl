@@ -359,8 +359,6 @@ def assembl_register_view(request):
             raise HTTPFound("https://" + request.host + request.path_qs)
         response = dict(get_login_context(request),
                     slug_prefix=p_slug)
-        if request.GET.get('error', None):
-            response['error'] = request.GET['error']
         return response
     forget(request)
     session = AgentProfile.default_db
