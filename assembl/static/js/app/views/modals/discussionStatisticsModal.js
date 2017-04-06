@@ -8,6 +8,7 @@ var Backbone = require('backbone'),
     $ = require('jquery'),
     _ = require('underscore'),
     Permissions = require('../../utils/permissions.js'),
+    CollectionManager = require('../../common/collectionManager.js'),
     Ctx = require('../../common/context.js');
 
 
@@ -21,6 +22,18 @@ var DiscussionStatisticsView = Marionette.LayoutView.extend({
     'click #get_stats': 'getStats',
     'click #get_participant_stats': 'getParticipantStats',
   },
+  initialize: function(options) {
+    var that = this,
+        cm = new CollectionManager();
+    this.discussionStartDate = Ctx.formatDate(new Date(), 'YYYY-MM-DD');
+    cm.getDiscussionModelPromise().then(function(discussion) {
+      var field = that.$("#start_date");
+      that.discussionStartDate = discussion.get('creation_date').substr(0, 10);
+      if (field) {
+        field.val(that.discussionStartDate);
+      }
+    });
+  },
   serializeData: function() {
     return {
       isDiscussionAdmin: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
@@ -31,7 +44,7 @@ var DiscussionStatisticsView = Marionette.LayoutView.extend({
   onRender: function(){
     // pre-fill a default date, so that the UI can be used right away
     var d = Ctx.formatDate(new Date(), 'YYYY-MM-DD');
-    this.$("#start_date").val(d);
+    this.$("#start_date").val(this.discussionStartDate);
     this.$("#end_date").val(d);
   },
   doDownload: function(url, filename) {
@@ -74,7 +87,20 @@ var DiscussionStatisticsView = Marionette.LayoutView.extend({
     }
     return url;
   },
+  checkDates: function() {
+    var fields = this.$el.find('fieldset'),
+        startDate = fields.children('#start_date').val(),
+        endDate = fields.children('#end_date').val();
+    if (endDate <= startDate) {
+      alert(_("The end date should be later than the start date"));
+    }
+    return (endDate > startDate);
+  },
   getStats: function(ev) {
+    if (!this.checkDates()) {
+      ev.preventDefault();
+      return;
+    }
     try {
       var url = '/time_series_analytics';
       url = this.addCommonStats(url);
@@ -93,6 +119,10 @@ var DiscussionStatisticsView = Marionette.LayoutView.extend({
     'info_requesting', 'cumulative_info_requesting', 'info_requested', 'cumulative_info_requested',
     ],
   getParticipantStats: function(ev) {
+    if (!this.checkDates()) {
+      ev.preventDefault();
+      return;
+    }
     var val, separator = "?",
         fields = this.$el.find('fieldset'),
         url = '/participant_time_series_analytics';
