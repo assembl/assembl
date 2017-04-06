@@ -122,16 +122,17 @@ def get_providers_by_name(get_route, providers=None):
             "login": get_route('login', backend=ptype),
         } for (name, ptype) in providers_by_name.iteritems() if ptype in providers
     }
-    providers.update({
-        data["description"]: {
-            "add_social_account": get_route('add_social_account', backend='saml'),
-            "login": get_route('login', backend='saml'),
-            "extra" : {
-                "idp": prov_id
+    if 'saml' in providers:
+        providers.update({
+            data["description"]: {
+                "add_social_account": get_route('add_social_account', backend='saml'),
+                "login": get_route('login', backend='saml'),
+                "extra" : {
+                    "idp": prov_id
+                }
             }
-        }
-        for prov_id, data in saml_providers.iteritems()
-        })
+            for prov_id, data in saml_providers.iteritems()
+            })
 
     return providers
 
