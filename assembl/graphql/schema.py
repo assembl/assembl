@@ -355,6 +355,7 @@ class CreateThematic(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         user_id = context.authenticated_userid or Everyone
 
         permissions = get_permissions(user_id, discussion_id)
@@ -389,11 +390,36 @@ class CreateThematic(graphene.Mutation):
 
                 kwargs['video_html_code'] = video['html_code']
 
+            # Our thematic, because it inherits from Idea, needs to be
+            # associated to the root idea of the discussion.
+            # We create a hidden root thematic, corresponding to the
+            # `identifier` phase, child of the root idea,
+            # and add our thematic as a child of this root thematic.
+            root_thematic = [idea
+                             for idea in discussion.root_idea.get_children()
+                             if getattr(idea, 'identifier', '') == identifier]
+            if not root_thematic:
+                short_title = u'Phase {}'.format(identifier)
+                root_thematic = cls(
+                    discussion_id=discussion_id,
+                    short_title=short_title,
+                    title=langstring_from_input_entries(
+                        [{'locale_code': 'en', 'value': short_title}]),
+                    identifier=identifier,
+                    hidden=True)
+                discussion.root_idea.children.append(root_thematic)
+            else:
+                root_thematic = root_thematic[0]
+
+            # take the first entry and set it for short_title
+            short_title = title_entries[0]['value']
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
+                short_title=short_title,
                 identifier=identifier,
                 **kwargs)
+            root_thematic.children.append(saobj)
             db = saobj.db
             db.add(saobj)
             db.flush()
