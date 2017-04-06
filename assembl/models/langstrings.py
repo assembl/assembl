@@ -473,7 +473,9 @@ class LangString(Base):
         def load_owner_object(target, context):
             for reln in relns:
                 if reln in target.__dict__:
-                    getattr(target, reln).owner_object = target
+                    ls = getattr(target, reln)
+                    if ls is not None:
+                        ls.owner_object = target
         event.listen(owner_class, "load", load_owner_object, propagate=True)
         event.listens_for(owner_class, "refresh", load_owner_object, propagate=True)
         def set_owner_object(target, value, old_value, initiator):
