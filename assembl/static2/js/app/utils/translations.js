@@ -141,7 +141,8 @@ const Translations = {
         modalBody: 'Vous devez être connecté pour faire une proposition ou voter.',
         modalFooter: 'Connectez-vous',
         submit: 'Envoyer',
-        remaining_x_characters: 'Il vous reste %{nbCharacters} caractères'
+        remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
+        postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !'
       },
       themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
@@ -306,7 +307,8 @@ const Translations = {
         modalBody: 'You have to be connected to do a proposal or to vote.',
         modalFooter: 'Please connect',
         submit: 'Submit',
-        remaining_x_characters: 'You have %{nbCharacters} characters left'
+        remaining_x_characters: 'You have %{nbCharacters} characters left',
+        postSuccess: 'Thanks for your participation. Your proposal has been sent!'
       },
       themes: 'Themes',
       notStarted: 'This phase is not started. Please come back from the '

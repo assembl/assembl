@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
+import Alert from '../components/common/alert';
 import Modal from '../components/common/modal';
 import Loader from '../components/common/loader';
 import Video from '../components/debate/survey/video';
@@ -22,6 +23,7 @@ class Survey extends React.Component {
     this.showMoreProposals = this.showMoreProposals.bind(this);
     this.getIfProposals = this.getIfProposals.bind(this);
     this.redirectToLogin = this.redirectToLogin.bind(this);
+    this.displayAlert = this.displayAlert.bind(this);
   }
   getIfProposals(questions) {
     this.questions = questions;
@@ -49,6 +51,18 @@ class Survey extends React.Component {
       });
     }
   }
+  displayAlert(style, msg) {
+    this.setState({
+      alertStyle: style,
+      alertMsg: msg,
+      showAlert: true
+    });
+    setTimeout(() => {
+      this.setState({
+        showAlert: false
+      });
+    }, 5000);
+  }
   render() {
     const { loading, theme } = this.props.data;
     const { rootPath } = this.props.context;
@@ -65,6 +79,7 @@ class Survey extends React.Component {
               footer={I18n.t('debate.survey.modalFooter')}
               showModal={this.state.showModal}
             />
+            <Alert showAlert={this.state.showAlert} style={this.state.alertStyle} msg={this.state.alertMsg} />
             {theme.video &&
               <Video
                 title={theme.video.title}
@@ -77,6 +92,7 @@ class Survey extends React.Component {
                 return (
                   <Question
                     redirectToLogin={this.redirectToLogin}
+                    displayAlert={this.displayAlert}
                     title={question.title}
                     index={index + 1}
                     key={index}
@@ -107,6 +123,7 @@ class Survey extends React.Component {
                             moreProposals={this.state.moreProposals}
                             questionIndex={index + 1}
                             redirectToLogin={this.redirectToLogin}
+                            displayAlert={this.displayAlert}
                             key={index}
                           />
                         );
@@ -154,7 +171,8 @@ const ThemeQuery = gql`
               ... on PropositionPost {
                 id,
                 body,
-                sentimentCounts{
+                mySentiment,
+                sentimentCounts {
                   like,
                   disagree
                 }

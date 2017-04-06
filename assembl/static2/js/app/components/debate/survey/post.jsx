@@ -19,30 +19,37 @@ class Post extends React.Component {
     this.handleLike = this.handleLike.bind(this);
     this.handleDisagree = this.handleDisagree.bind(this);
   }
-  handleLike() {
-    const postId = this.props.post.id;
+  handleLike(event) {
+    const target = event.currentTarget;
+    const postId = this.props.id;
     const type = 'LIKE';
     this.props.mutate({ variables: { postId: postId, type: type } })
     .then((sentiments) => {
+      target.setAttribute("class", "sentiment sentiment-active");
       this.setState({
         like: sentiments.data.addSentiment.like
       });
+    }).catch((error) => {
+      this.props.displayAlert('danger', `${error}`);
     });
   }
-  handleDisagree() {
-    const postId = this.props.post.id;
+  handleDisagree(event) {
+    const target = event.currentTarget;
+    const postId = this.props.id;
     const type = 'DISAGREE';
     this.props.mutate({ variables: { postId: postId, type: type } })
     .then((sentiments) => {
+      target.setAttribute("class", "sentiment sentiment-active");
       this.setState({
         disagree: sentiments.data.addSentiment.disagree
       });
+    }).catch((error) => {
+      this.props.displayAlert('danger', `${error}`);
     });
   }
   render() {
-    const { id } = this.props;
     const isUserConnected = getConnectedUserId() !== null;
-    const { postIndex, moreProposals, post, redirectToLogin } = this.props;
+    const { postIndex, moreProposals, post, redirectToLogin, id } = this.props;
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
@@ -51,14 +58,14 @@ class Post extends React.Component {
           <div className="sentiments">
             <Translate value="debate.survey.react" />
             <div
-              className="sentiment"
-              onClick={() => { isUserConnected ? this.handleLike() : redirectToLogin(); }}
+              className={post.mySentiment === 'like' ? 'sentiment sentiment-active' : 'sentiment'}
+              onClick={(event) => { isUserConnected ? this.handleLike(event) : redirectToLogin(); }}
             >
               <Like size={25} />
             </div>
             <div
-              className="sentiment"
-              onClick={() => { isUserConnected ? this.handleDisagree() : redirectToLogin(); }}
+              className={post.mySentiment === 'disagree' ? 'sentiment sentiment-active' : 'sentiment'}
+              onClick={(event) => { isUserConnected ? this.handleDisagree(event) : redirectToLogin(); }}
             >
               <Disagree size={25} />
             </div>

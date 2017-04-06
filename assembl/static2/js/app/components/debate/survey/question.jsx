@@ -70,11 +70,14 @@ class Question extends React.Component {
     const body = this.state.postBody;
     this.props.mutate({ variables: { ideaId: questionId, creatorId: creatorId, body: body } })
     .then((post) => {
+      this.props.displayAlert('success', I18n.t('debate.survey.postSuccess'));
       this.setState({
         postBody: '',
         showSubmitButton: false,
         remainingChars: maxChars
       });
+    }).catch((error) => {
+      this.props.displayAlert('danger', `${error}`);
     });
   }
   render() {
