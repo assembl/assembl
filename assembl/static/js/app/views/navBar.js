@@ -181,22 +181,6 @@ var navBarRight = Marionette.LayoutView.extend({
       isAdminDiscussion: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
     }
   },
-  templateHelpers: function() {
-    return {
-      urlNotifications: function() {
-        return '/debate/' + Ctx.getDiscussionSlug() +  '/user/notifications';
-      },
-      urlLogOut: function() {
-        return '/debate/' + Ctx.getDiscussionSlug() + '/logout';
-      },
-      userProfile: function() {
-        return '/debate/' + Ctx.getDiscussionSlug() + '/user/profile';
-      },
-      urlLogin: function() {
-        return '/debate/' + Ctx.getDiscussionSlug() + '/login?next=/' + Ctx.getDiscussionSlug() + '/home'
-      }
-    }
-  },
   setLocale: function(e) {
     var lang = $(e.target).attr('data-locale');
     Ctx.setLocale(lang);
