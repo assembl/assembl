@@ -1,9 +1,6 @@
 """API to get an authentication token, for use by Web annotation"""
-import json
-import transaction
 
 from pyramid.security import authenticated_userid, Everyone
-from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.view import view_config
 from pyramid.response import Response
 

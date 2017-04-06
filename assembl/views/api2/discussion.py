@@ -4,24 +4,28 @@ from cStringIO import StringIO
 from os import urandom
 from os.path import join, dirname
 from collections import defaultdict
-import random
 from datetime import timedelta, datetime
 import isodate
+#import pprint
 
 from sqlalchemy import (
     Column,
     Integer,
-    UnicodeText,
     DateTime,
-    Text,
-    String,
-    Boolean,
-    event,
-    ForeignKey,
     cast,
     func,
-    distinct
+    distinct,
+    Table,
+    MetaData,
+    and_,
+    or_,
+    case,
+    Float,
 )
+from sqlalchemy.orm import with_polymorphic
+from sqlalchemy.orm.util import aliased
+from sqlalchemy.sql.expression import literal
+import transaction
 
 
 import simplejson as json
@@ -51,7 +55,6 @@ from assembl.models import (Discussion, Permission)
 from assembl.models.auth import create_default_permissions
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
-from sqlalchemy.orm.util import aliased
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
 
 
@@ -319,11 +322,6 @@ def get_time_series_analytics(request):
     format = get_format(request)
     results = []
 
-    from sqlalchemy import Table, MetaData, and_, or_, case, cast, Float
-    from sqlalchemy.exc import ProgrammingError
-    from sqlalchemy.orm import with_polymorphic
-    import pprint
-    import transaction
     with transaction.manager:
         bind = discussion.db.connection()
         metadata = MetaData(discussion.db.get_bind())  # make sure we are using the same connexion
@@ -713,7 +711,6 @@ def get_contribution_count(request):
         r = dict(count=discussion.count_contributions_per_agent(start, end))
         if not start:
             from assembl.models import Post
-            from sqlalchemy import func
             (start,) = discussion.db.query(
                 func.min(Post.creation_date)).filter_by(
                 discussion_id=discussion.id).first()
@@ -780,7 +777,6 @@ def get_visit_count(request):
             first_visitors=discussion.count_new_visitors(start, end))
         if not start:
             from assembl.models import AgentStatusInDiscussion
-            from sqlalchemy import func
             (start,) = discussion.db.query(
                 func.min(AgentStatusInDiscussion.first_visit)).filter_by(
                 discussion_id=discussion.id).first()
@@ -1140,12 +1136,6 @@ def get_participant_time_series_analytics(request):
     if sort_key == 'domain' and P_ADMIN_DISC not in permissions:
         raise HTTPUnauthorized("Cannot obtain email information")
 
-    from sqlalchemy import Table, MetaData, and_, or_, case, cast, Float
-    from sqlalchemy.exc import ProgrammingError
-    from sqlalchemy.orm import with_polymorphic
-    from sqlalchemy.sql.expression import literal
-    import pprint
-    import transaction
     with transaction.manager:
         bind = discussion.db.connection()
         metadata = MetaData(discussion.db.get_bind())  # make sure we are using the same connexion

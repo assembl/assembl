@@ -1,6 +1,5 @@
 """Cornice API for extracts"""
 import json
-import transaction
 
 from cornice import Service
 
@@ -273,10 +272,8 @@ def delete_extract(request):
     if not extract:
         return HTTPNoContent()
 
-    with transaction.manager:
-        # TODO: Tombstonable extracts???
-        Extract.default_db.delete(extract)
-    request.response.status = HTTPNoContent.code
+    # TODO: Tombstonable extracts???
+    extract.delete()
     return HTTPNoContent()
 
 

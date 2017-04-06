@@ -1,6 +1,5 @@
 """API for roles and permissions"""
 import json
-import transaction
 
 from cornice import Service
 
