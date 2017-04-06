@@ -185,8 +185,16 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         Discussion,
         backref=backref(
             'ideas', order_by=creation_date,
-            cascade="all, delete-orphan"),
+            primaryjoin="and_(Idea.discussion_id==Discussion.id, "
+                        "Idea.tombstone_date == None)"),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+    )
+
+    discussion_ts = relationship(
+        Discussion,
+        backref=backref(
+            'ideas_ts', order_by=creation_date,
+            cascade="all, delete-orphan")
     )
 
     #widget_id = deferred(Column(Integer, ForeignKey('widget.id')))
@@ -1226,10 +1234,37 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)
 
+    # discussion = relationship(
+    #     Discussion, viewonly=True, uselist=False, backref="idea_links",
+    #     secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
+    #     info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+
+
     discussion = relationship(
-        Discussion, viewonly=True, uselist=False, backref="idea_links",
-        secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion,
+        viewonly=True,
+        uselist=False,
+        secondary=Idea.__table__,
+        primaryjoin=(source_id == Idea.id),
+        # secondaryjoin=(Idea.discussion_id == Discussion.id),
+        backref=backref(
+            'idea_links',
+            primaryjoin=(Idea.discussion_id == Discussion.id),
+            secondaryjoin="""and_(IdeaLink.source_id==Idea.id,
+                             Idea.tombstone_date == None,
+                             IdeaLink.tombstone_date == None)"""),
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+    )
+
+    discussion_ts = relationship(
+        Discussion,
+        viewonly=True,
+        uselist=False,
+        secondary=Idea.__table__,
+        primaryjoin=(source_id == Idea.id),
+        backref='idea_links_ts',
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+    )
 
 
 _it = Idea.__table__
