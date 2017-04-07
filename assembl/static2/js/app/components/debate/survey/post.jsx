@@ -56,7 +56,9 @@ class Post extends React.Component {
           <PostCreator id={id} />
           <div className="body">{post.body}</div>
           <div className="sentiments">
-            <Translate value="debate.survey.react" />
+            <div className="sentiment-label">
+              <Translate value="debate.survey.react" />
+            </div>
             <div
               className={post.mySentiment === 'like' ? 'sentiment sentiment-active' : 'sentiment'}
               onClick={(event) => { isUserConnected ? this.handleLike(event) : redirectToLogin(); }}

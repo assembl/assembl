@@ -82,6 +82,7 @@
   font-family: $font-family5;
   font-size: $title3-size;
   text-transform: uppercase;
+  line-height: $title3-size + 10px;
 }
 
 .light-title-4 {
@@ -106,15 +107,20 @@
   padding: 20px;
   text-align: left;
 
-  .assembl-icon-up-open {
-    &:before {
-      font-size: 12px;
-    }
-  }
+  .proposal-arrow {
+    display: inline;
+    float: right;
 
-  .assembl-icon-down-open {
-    &:before {
-      font-size: 12px;
+    .assembl-icon-up-open {
+      &:before {
+        font-size: 12px;
+      }
+    }
+
+    .assembl-icon-down-open {
+      &:before {
+        font-size: 12px;
+      }
     }
   }
 }
@@ -167,6 +173,33 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .collapsed-title {
+    font-size: $font-size-s;
+    line-height: $font-size-s + 6px;
+    margin: 0 -15px 30px -15px;
+    text-align: center;
+
+    .proposal-arrow {
+      display: block;
+      float: none;
+      margin: 10px 0 0;
+
+      .assembl-icon-up-open {
+        &:before {
+          font-size: 8px;
+        }
+      }
+
+      .assembl-icon-down-open {
+        &:before {
+          font-size: 8px;
+        }
+      }
+    }
+  }
+}
+  
 @media screen and (max-width: 420px) {
   .title-section {
     margin: $margin-section-xs 0 0;

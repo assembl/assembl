@@ -18,7 +18,7 @@ class Proposals extends React.Component {
       <div className={questionIndex < 2 || moreProposals ? 'shown' : 'hidden'}>
         <h3 className="collapsed-title">
           <span>{`${questionIndex}/ ${title}`}</span>
-          <div className={moreProposals && posts ? 'shown inline right' : 'hidden inline right'}>
+          <div className={moreProposals && posts ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
             <span className={this.state.hideProposals ? 'assembl-icon-down-open color pointer' : 'assembl-icon-up-open color pointer'} onClick={this.displayProposals} />
           </div>
         </h3>

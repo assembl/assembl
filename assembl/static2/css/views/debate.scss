@@ -1,5 +1,5 @@
 .debate {
-  
+
   .timeline-top {
     top: 0;
   }
@@ -114,7 +114,8 @@
       .content-box {
         &:hover {
           .text-box {
-            margin: 220px 0 0;
+            position: absolute;
+            bottom: 50px;
           }
 
           .stat-nb {
@@ -127,16 +128,19 @@
 
           .stats {
             color: $white;
-            margin: -210px 0 0;
             text-align: left;
+            top: 50px;
           }
         }
       }
 
       .stats {
+        bottom: 50px;
         color: $white;
-        margin: 180px 0 0;
+        padding: 0 20px 0 0;
+        position: absolute;
         text-align: center;
+        width: 100%;
 
         .stat-nb {
           display: inline;
@@ -470,7 +474,7 @@
       .dark-title-1 {
         display: block;
         font-size: $font-size-l;
-        line-height: 32px;
+        line-height: $font-size-l + 10px;
         margin: 10px 0 0 32px;
         width: calc(100% - 30px);
       }
@@ -502,7 +506,7 @@
       display: block;
       font-size: $font-size-l;
       line-height: 36px;
-      margin: -10px 0 0 32px;
+      margin: 0 0 0 32px;
       width: calc(100% - 30px);
     }
   }

@@ -108,13 +108,13 @@ class Survey extends React.Component {
               <section className="proposals-section" id="proposals">
                 <Grid fluid className="background-light">
                   <div className="max-container">
-                    <div className="title-section">
+                    <div className="question-title">
                       <div className="title-hyphen">&nbsp;</div>
                       <h1 className="dark-title-1">
                         <Translate value="debate.survey.proposalsTitle" />
                       </h1>
                     </div>
-                    <div className="content-section center">
+                    <div className="center">
                       {theme.questions && theme.questions.map((question, index) => {
                         return (
                           <Proposals
