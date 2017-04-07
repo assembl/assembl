@@ -417,7 +417,7 @@ def assembl_register_view(request):
             # for debugging purposes
             from assembl.auth.password import email_token
             print "email token:", request.route_url(
-                'user_confirm_email', ticket=email_token(email_account))
+                'user_confirm_email', token=email_token(email_account))
         headers = remember(request, user.id)
         user.last_login = datetime.utcnow()
         request.response.headerlist.extend(headers)
@@ -597,7 +597,7 @@ def confirm_emailid_sent(request):
     permission=NO_PERMISSION_REQUIRED
 )
 def user_confirm_email(request):
-    token = request.matchdict.get('ticket')
+    token = request.matchdict.get('token') or ''
     account, validity = verify_email_token(token)
     session = AbstractAgentAccount.default_db
     logged_in = authenticated_userid(request)  # if mismatch?
@@ -894,7 +894,7 @@ def do_password_change(request):
     welcome = 'welcome' in request.matched_route.name
     localizer = request.localizer
     discussion = discussion_from_request(request)
-    token = request.matchdict.get('ticket')
+    token = request.matchdict.get('token')
     user, validity = verify_password_change_token(token)
     logged_in = authenticated_userid(request)
     if user and user.id != logged_in:
@@ -1066,7 +1066,7 @@ The {assembl} Team"""))
         confirm_what=confirm_what,
         confirm_url=maybe_contextual_route(
             request, 'user_confirm_email',
-            ticket=email_token(email))
+            token=email_token(email))
     )
     message = Message(
         subject=subject.format(**data),
@@ -1088,7 +1088,7 @@ def send_change_password_email(
         confirm_url=maybe_contextual_route(
             request,
             'welcome' if welcome else 'do_password_change',
-            ticket=password_change_token(profile)))
+            token=password_change_token(profile)))
     sender_email = config.get('assembl.admin_email')
     if discussion:
         data.update(dict(

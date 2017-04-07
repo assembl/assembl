@@ -23,7 +23,7 @@ from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
     UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username)
 from assembl.auth.password import (
-    verify_password_change_token, get_data_token_time)
+    verify_password_change_token, get_data_token_time, Validity)
 from assembl.auth.util import get_permissions, discussion_from_request
 from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from .. import JSONError
@@ -355,8 +355,8 @@ def reset_password(request):
     request_method='POST', permission=NO_PERMISSION_REQUIRED,
     name="do_password_change")
 def do_password_change(request):
-    token = request.params.get('token')
-    password = request.params.get('password')
+    token = request.params.get('token') or ''
+    password = request.params.get('password') or ''
     # TODO: Check password quality!
     localizer = request.localizer
     user, validity = verify_password_change_token(token)
@@ -471,7 +471,7 @@ def assembl_register_user(request):
                 # for debugging purposes
                 from assembl.auth.password import email_token
                 print "email token:", request.route_url(
-                    'user_confirm_email', ticket=email_token(account))
+                    'user_confirm_email', token=email_token(account))
             if discussion:
                 maybe_auto_subscribe(user, discussion)
         session.flush()

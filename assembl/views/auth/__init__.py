@@ -36,7 +36,7 @@ def includeme(config):
     config.add_route('profile_user', '/user/{type}/{identifier}')
     config.add_route('avatar', '/user/{type}/{identifier}/avatar/{size:\d+}')
     legacy_contextual_route('register', '/register')
-    legacy_contextual_route('user_confirm_email', '/users/email_confirm/{ticket}')
+    legacy_contextual_route('user_confirm_email', '/users/email_confirm/{token}')
     # Do we want this?
     # config.add_route('profile_search', '/usernames/{user_name}')
     # TODO: secure next three methods to avoid spamming the user.
@@ -47,8 +47,8 @@ def includeme(config):
     legacy_contextual_route('password_change_sent',
                      '/password_change_sent/{profile_id:\d+}')
     legacy_contextual_route('request_password_change', '/req_password_change')
-    legacy_contextual_route('do_password_change', '/do_password_change/{ticket}')
-    legacy_contextual_route('welcome', '/welcome/{ticket}')
+    legacy_contextual_route('do_password_change', '/do_password_change/{token}')
+    legacy_contextual_route('welcome', '/welcome/{token}')
     legacy_contextual_route('finish_password_change', '/finish_password_change')
     config.add_route('contextual_social_auth', '/{discussion_slug}/login/{backend}')
     legacy_contextual_route('add_social_account', '/add_account/{backend}')
