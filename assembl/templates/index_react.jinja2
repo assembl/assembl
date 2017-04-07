@@ -15,6 +15,15 @@
             <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
             <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
         {% endif %}
+        {% if token %}
+    		<script type="application/json" id="token">{{ token |safe }}</script>
+        {% endif %}
+        {% if error %}
+    		<div class='hidden' id="errorMessage">{{ error }}</div>
+        {% endif %}
+        {% if messages %}
+    		<div class='hidden' id="serverMessages">{{ messages }}</div>
+        {% endif %}
         <div id='root'></div>
 		{% block main_js %}
 			<script src="{{REACT_URL}}/build/bundle.js"></script>
