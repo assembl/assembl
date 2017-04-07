@@ -62,10 +62,8 @@ public_roles = {Everyone, Authenticated}
 def get_login_context(request, force_show_providers=False):
     slug = request.matchdict.get('discussion_slug', None)
     if slug:
-        p_slug = "/" + slug
         request.session['discussion'] = slug
     else:
-        p_slug = ""
         request.session.pop('discussion')
     discussion = discussion_from_request(request)
     get_routes = create_get_route(request, discussion)
@@ -85,7 +83,6 @@ def get_login_context(request, force_show_providers=False):
             del providers[provider]
 
     return dict(get_default_context(request),
-                slug_prefix=p_slug,
                 providers=providers,
                 saml_providers=request.registry.settings.get(
                     'SOCIAL_AUTH_SAML_ENABLED_IDPS', {}),
@@ -354,14 +351,12 @@ def avatar(request):
 )
 def assembl_register_view(request):
     slug = request.matchdict.get('discussion_slug', "")
-    p_slug = "/" + slug if slug else ""
     next_view = handle_next_view(request)
     if not request.params.get('email'):
         if request.scheme == "http"\
                 and asbool(config.get("accept_secure_connection")):
             raise HTTPFound("https://" + request.host + request.path_qs)
-        response = dict(get_login_context(request),
-                    slug_prefix=p_slug)
+        response = get_login_context(request)
         return response
     forget(request)
     session = AgentProfile.default_db
@@ -369,7 +364,6 @@ def assembl_register_view(request):
     name = request.params.get('name', '').strip()
     if not name or len(name) < 3:
         return dict(get_default_context(request),
-            slug_prefix=p_slug,
             error=localizer.translate(_(
                 "Please use a name of at least 3 characters")))
     password = request.params.get('password', '').strip()
@@ -377,7 +371,6 @@ def assembl_register_view(request):
     email = request.params.get('email', '').strip()
     if not is_email(email):
         return dict(get_default_context(request),
-                    slug_prefix=p_slug,
                     error=localizer.translate(_(
                         "This is not a valid email")))
     email = EmailString.normalize_email_case(email)
@@ -385,12 +378,10 @@ def assembl_register_view(request):
     if session.query(AbstractAgentAccount).filter_by(
             email_ci=email, verified=True).count():
         return dict(get_default_context(request),
-                    slug_prefix=p_slug,
                     error=localizer.translate(_(
                         "We already have a user with this email.")))
     if password != password2:
         return dict(get_default_context(request),
-                    slug_prefix=p_slug,
                     error=localizer.translate(_(
                         "The passwords should be identical")))
 
@@ -569,17 +560,15 @@ def confirm_emailid_sent(request):
     if not email:
         raise HTTPNotFound()
     localizer = request.localizer
-    slug = request.matchdict.get('discussion_slug', None)
-    slug_prefix = "/" + slug if slug else ""
+    context = get_default_context(request)
     if email.verified:
         # Your email is fine, why do you want to confirm it?
         # Temporary: explain, but it's a dead-end.
         # TODO: Unlog and redirect to login.
         return dict(
-            get_default_context(request),
-            slug_prefix=slug_prefix,
+            context,
             profile_id=email.profile_id,
-            action = "%s/confirm_email_sent_id/%d" % (slug_prefix, id),
+            action = context['get_route'](confirm_email_sent_id, email_account_id=id),
             email_account_id=str(id),
             title=localizer.translate(_('This email address is already confirmed')),
             description=localizer.translate(_(
@@ -587,8 +576,7 @@ def confirm_emailid_sent(request):
     send_confirmation_email(request, email)
     return dict(
         get_default_context(request),
-        action = "%s/confirm_email_sent_id/%d" % (slug_prefix, id),
-        slug_prefix=slug_prefix,
+        action = context['get_route'](confirm_email_sent_id, email_account_id=id),
         profile_id=email.profile_id,
         email_account_id=request.matchdict.get('email_account_id'),
         title=localizer.translate(_('Confirmation requested')),
@@ -771,11 +759,10 @@ def confirm_email_sent(request):
             # Normal case: Send an email. May be spamming
             for email_account in unverified_emails:
                 send_confirmation_email(request, email_account)
-            slug = request.matchdict.get('discussion_slug', None)
-            slug_prefix = "/" + slug if slug else ""
+            context = get_default_context(request)
             return dict(
-                get_default_context(request),
-                action = "%s/confirm_email_sent/%s" % (slug_prefix, email),
+                context
+                action=context['get_route']("confirm_email_sent", email=email),
                 email=email,
                 title=localizer.translate(_('Confirmation requested')),
                 description=localizer.translate(_(
@@ -825,13 +812,11 @@ def request_password_change(request):
             return HTTPFound(location=maybe_contextual_route(
                 request, 'v2_frontend_generic', extra_path="changePassword", _query={"error": error}))
         else:
-            slug = request.matchdict.get('discussion_slug', None)
             return dict(
                 get_default_context(request),
                 error=error,
                 user_id=user_id,
                 identifier=identifier,
-                slug_prefix="/" + slug if slug else "",
                 title=localizer.translate(_('I forgot my password')))
 
     discussion_slug = request.matchdict.get('discussion_slug', None)
@@ -867,14 +852,12 @@ def password_change_sent(request):
         discussion = discussion_from_request(request)
         send_change_password_email(request, profile, email,
             discussion=discussion)
-    slug = request.matchdict.get('discussion_slug', None)
-    slug_prefix = "/" + slug if slug else ""
     profile_id=int(request.matchdict.get('profile_id'))
+    context = get_default_context(request)
     return dict(
-        get_default_context(request),
+        context,
         profile_id=profile_id,
-        slug_prefix=slug_prefix,
-        action = "%s/password_change_sent/%d" % (slug_prefix, profile_id),
+        action = context['get_route']("password_change_sent", profile_id=profile_id),
         error=request.params.get('error'),
         title=localizer.translate(_('Password change requested')),
         description=localizer.translate(_(
@@ -956,8 +939,6 @@ def do_password_change(request):
     # V+: Valid token (encompasses P-B+, W-, B-L+); ALSO V-L+
     # V+P-B- should not happen, but we'll treat it the same.
     # go through password change dialog. We'll complete login afterwards.
-    slug = discussion.slug if discussion else ""
-    slug_prefix = "/" + slug if slug else ""
     if welcome:
         if discussion:
             request.session.flash(localizer.translate(_(
@@ -1041,10 +1022,9 @@ def finish_password_change(request):
             'home' if discussion else 'discussion_list',
             discussion_slug=discussion.slug))
 
-    slug_prefix = "/" + (discussion.slug if discussion else "")
     return dict(
         get_default_context(request),
-        title=title, slug_prefix=slug_prefix, token=token, error=error)
+        title=title, token=token, error=error)
 
 
 def send_confirmation_email(request, email):
