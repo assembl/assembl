@@ -761,7 +761,7 @@ def confirm_email_sent(request):
                 send_confirmation_email(request, email_account)
             context = get_default_context(request)
             return dict(
-                context
+                context,
                 action=context['get_route']("confirm_email_sent", email=email),
                 email=email,
                 title=localizer.translate(_('Confirmation requested')),
