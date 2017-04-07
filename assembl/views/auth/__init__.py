@@ -56,7 +56,8 @@ def includeme(config):
     # Keep those in synchrony with assembl/static2/js/app/routes.jsx
     react_contextual_route('login', '/login')
     react_contextual_route('register', '/signup')
-    react_contextual_route('request_password_change', '/changePassword')
+    react_contextual_route('request_password_change', '/requestPasswordChange')
+    react_contextual_route('do_password_change', '/changePassword')
     config.include('social.apps.pyramid_app')
     config.scan()
     config.scan('social.apps.pyramid_app')

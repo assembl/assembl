@@ -951,7 +951,7 @@ def do_password_change(request):
                 "Please choose your password for security reasons.")
                 ).format(name=user.name), 'message')
     raise HTTPFound(location=maybe_contextual_route(
-            request, 'finish_password_change', _query=dict(
+            request, 'react_do_password_change', _query=dict(
                 token=token, welcome=welcome)))
 
 

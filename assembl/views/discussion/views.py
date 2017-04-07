@@ -182,12 +182,15 @@ def react_view(request):
     Basic view for the homepage
     """
     old_context = base_default_context(request)
-    
+
     context = dict(
         request=old_context['request'],
         REACT_URL=old_context['REACT_URL'],
         discussion=old_context['discussion'],
-        user=old_context['user']
+        user=old_context['user'],
+        error=old_context.get('error', None),
+        messages=old_context.get('messages', None),
+        token=request.params.get('token', None)
     )
     return context
 
