@@ -568,7 +568,7 @@ def confirm_emailid_sent(request):
         return dict(
             context,
             profile_id=email.profile_id,
-            action = context['get_route'](confirm_email_sent_id, email_account_id=id),
+            action = context['get_route']("confirm_emailid_sent", email_account_id=id),
             email_account_id=str(id),
             title=localizer.translate(_('This email address is already confirmed')),
             description=localizer.translate(_(
@@ -576,7 +576,7 @@ def confirm_emailid_sent(request):
     send_confirmation_email(request, email)
     return dict(
         get_default_context(request),
-        action = context['get_route'](confirm_email_sent_id, email_account_id=id),
+        action = context['get_route']("confirm_emailid_sent", email_account_id=id),
         profile_id=email.profile_id,
         email_account_id=request.matchdict.get('email_account_id'),
         title=localizer.translate(_('Confirmation requested')),
