@@ -365,7 +365,7 @@ def do_password_change(request):
         user is None or token_date is None or (
             user.last_login and token_date < user.last_login))
 
-    if (validity != Validity.VALID or old_token) and not logged_in:
+    if (validity != Validity.VALID or old_token):
         # V-, V+P+W-B-L-: Invalid or obsolete token (obsolete+logged in treated later.)
         # Offer to send a new token
         if validity != Validity.VALID:
