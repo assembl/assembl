@@ -268,7 +268,10 @@ def get_default_context(request, **kwargs):
     if kwargs.get('error', None):
         errors.append(kwargs['error'])
     if errors:
-        kwargs['error'] = '\n'.join(errors)
+        kwargs['error'] = '<br />'.join(errors)
+    messages = request.session.pop_flash('message')
+    if messages:
+        kwargs['messages'] = '<br />'.join(messages)
 
     (theme_name, theme_relative_path)=get_theme_info(discussion)
     return dict(
@@ -385,7 +388,8 @@ class JSONError(HTTPException):
         self.content_type = 'text/plain'
         super(JSONError, self).__init__(
             detail, headers, comment,
-            body='{"error":"%s", "status":%d}' % (detail, code), **kw)
+            body='{"error":%s, "status":%d}' % (
+                json.dumps(detail), code), **kw)
 
         def prepare(self, environ):
             r = super(JSONError, self).prepare(environ)
