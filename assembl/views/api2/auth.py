@@ -347,6 +347,44 @@ def reset_password(request):
 
 @view_config(
     context=CollectionContext, ctx_collection_class=AgentProfile,
+    request_method='POST', permission=NO_PERMISSION_REQUIRED,
+    name="do_password_change", header=FORM_HEADER)
+@view_config(
+    context=ClassContext, ctx_class=AgentProfile, header=FORM_HEADER,
+    request_method='POST', permission=NO_PERMISSION_REQUIRED,
+    name="do_password_change")
+def do_password_change(request):
+    token = request.params.get('token')
+    password = request.params.get('password')
+    # TODO: Check password quality!
+    localizer = request.localizer
+    user, validity = verify_password_change_token(token)
+    token_date = get_data_token_time(token)
+    old_token = (
+        user is None or token_date is None or (
+            user.last_login and token_date < user.last_login))
+
+    if (validity != Validity.VALID or old_token) and not logged_in:
+        # V-, V+P+W-B-L-: Invalid or obsolete token (obsolete+logged in treated later.)
+        # Offer to send a new token
+        if validity != Validity.VALID:
+            error = localizer.translate(_(
+                "This link is not valid. Do you want us to send another?"))
+        else:
+            error = localizer.translate(_(
+                "This link has been used. Do you want us to send another?"))
+        raise JSONError(HTTPBadRequest.code, {
+            "error_code": validity.name,
+            "error": error})
+    user.password_p = password
+    user.last_login = datetime.utcnow()
+    headers = remember(request, user.id)
+    request.response.headerlist.extend(headers)
+    return HTTPOk()
+
+
+@view_config(
+    context=CollectionContext, ctx_collection_class=AgentProfile,
     request_method='POST', header=JSON_HEADER,
     permission=NO_PERMISSION_REQUIRED)
 @view_config(
