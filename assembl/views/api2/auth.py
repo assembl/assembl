@@ -22,6 +22,8 @@ from assembl.auth import (
 from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
     UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username)
+from assembl.auth.password import (
+    verify_password_change_token, get_data_token_time)
 from assembl.auth.util import get_permissions, discussion_from_request
 from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from .. import JSONError
@@ -32,7 +34,6 @@ from assembl.lib.sqla import ObjectNotUniqueError
 from ..auth.views import (
     send_change_password_email, from_identifier, send_confirmation_email,
     maybe_auto_subscribe)
-
 
 _ = TranslationStringFactory('assembl')
 
