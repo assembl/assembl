@@ -21,7 +21,7 @@ class SendPwdForm extends React.Component {
               <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
             </FormGroup>
             <FormGroup>
-              <Button type="submit" name="change_password" value={I18n.t('login.send')} className="button-submit button-dark">
+              <Button type="submit" name="send_req_password" value={I18n.t('login.send')} className="button-submit button-dark">
                 <Translate value="login.send" />
               </Button>
             </FormGroup>

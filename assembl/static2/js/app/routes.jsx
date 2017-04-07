@@ -5,6 +5,7 @@ import Main from './main';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import ChangePassword from './pages/changePassword';
+import RequestPasswordChange from './pages/requestPasswordChange';
 import Home from './pages/home';
 import Synthesis from './pages/synthesis';
 import Debate from './pages/debate';
@@ -35,9 +36,11 @@ class RoutesMap {
       'login': "/login",
       'signup': "signup",
       'changePassword': "changePassword",
+      'requestPasswordChange': 'requestPasswordChange',
       'cxtLogin': "${slug}/login",
       'cxtSignup': "${slug}/signup",
       'cxtChangePassword': "${slug}/changePassword",
+      'cxtRequestPasswordChange': "${slug}/req_password_change",
       'home': "${slug}/home",
       'profile': "${slug}/profile/${userId}",
       'ideas': "${slug}/ideas",
@@ -80,6 +83,7 @@ export default (
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
     <Route path="/changePassword" component={ChangePassword} />
+    <Route path="/req_password_change" component={RequestPasswordChange} />
     <Route path="/" component={App}>
       <Route path=":slug/login" component={Login} />
       <Route path=":slug/signup" component={Signup} />
@@ -94,6 +98,7 @@ export default (
         </Route>
         <Route path=":slug/community" component={Community} />
         <Route path=":slug/terms" component={Terms} />
+        <Route path=":slug/req_password_change" component={RequestPasswordChange} />
       </Route>
     </Route>
     <Route path="*" component={NotFound} />
