@@ -93,7 +93,8 @@ def get_login_context(request, force_show_providers=False):
                 identifier = request.params.get('identifier', ''),
                 google_consumer_key=request.registry.settings.get(
                     'google.consumer_key', ''),
-                next=handle_next_view(request))
+                next=handle_next_view(request),
+                get_route=get_routes)
 
 def _get_route_from_path(request, path):
     from pyramid.urldispatch import IRoutesMapper

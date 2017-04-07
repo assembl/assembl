@@ -14,11 +14,7 @@
   {#<meta property="og:site_name" content="Assembl" />#}
   {#<meta property="og:locale" content="fr_FR" />#}
   {# not shown because introduction may not be public and has HTML, so it should be filtered. TODO: filter. <meta property="og:description" content="{{ discussion.introduction }}" />#}
-  {% if discussion %}
-    <meta property="og:url" content="{{ request.application_url }}/{{ discussion.slug }}/login" />
-  {% else %}
-    <meta property="og:url" content="{{ request.application_url }}/login" />
-  {% endif %}
+  <meta property="og:url" content="{{ get_route('login') }}" />
   <meta property="og:image" content="{{ request.application_url }}/static/css/themes/default/img/crowd2.jpg" />
   <meta property="og:image:width" content="1600" />
   <meta property="og:image:height" content="222" />
@@ -27,24 +23,32 @@
   <meta property="og:image:height" content="35" />
 {% endblock meta_tags %}
 
-{% macro form(name, title, image) %}
-  {% if name in providers %}
-    {% if discussion %}
-      <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/{{discussion.slug}}/login/{{name.split(':')[0]}}">
-        <input type="hidden" name="next" value="/{{discussion.slug}}/home" />
-    {% else %}
-      <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="/login/{{name.split(':')[0]}}">
-    {% endif %}
+{% macro subform(name, title, image, kw) %}
+  {% if discussion %}
+    <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="{{ get_route('social_auth', backend=name) }}">
+      <input type="hidden" name="next" value="{{ get_route('new_home')}}/home" />
+  {% else %}
+    <form id="{{name}}" class="mts js_login_{{name}}" method="get" action="{{ get_route('social.auth', backend=name)}}">
+  {% endif %}
 
-  {% for k,v in kwargs.items() %}
-      <input type="hidden" name="{{ k }}" value="{{ v }}" />
+  {% for k,v in kw.items() %}
+    <input type="hidden" name="{{ k }}" value="{{ v }}" />
   {% endfor %}
 
   {% if name == "openid" %}
-      <div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />
+    <div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />
   {% endif %}
-     <button type="submit" class="{{name}}-bg mbs">{{title}}</button>
-  </form>
+    <button type="submit" class="{{name}}-bg mbs">{{title}}</button>
+    </form>
+{% endmacro%}
+
+{% macro form(name, title, image) %}
+  {% if name in providers %}
+    {% if alternate_name in kwargs.items() %}
+      {{ subform(alternate_name, title, image, kwargs) }}
+    {% else %}
+      {{ subform(name, title, image, kwargs) }}
+    {% endif %}
   {% endif %}
 {% endmacro %}
 
@@ -60,7 +64,7 @@
         {% if providers %}
           <div class="socialPart">
               <p class="login-box-title">{{ gettext("Log in using one of these social networks") }}</p>
-              {{form('google-oauth2', gettext('Login with Google'), true)}}
+              {{form('google-oauth2', gettext('Login with Google'), true, alternate_name='google')}}
               {{form('twitter', gettext('Login with Twitter'), true)}}
               {{form('facebook', gettext('Login with Facebook'), true)}}
               {{form('yahoo', gettext('Login with Yahoo'), true, oauth='true', openid_identifier='yahoo.com')}}
