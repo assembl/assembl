@@ -820,6 +820,7 @@ def request_password_change(request):
         else:
             error = error or localizer.translate(_("This user cannot be found"))
     if error or not user:
+        # This is not how to do this!
         if coming_from_v2_frontend(request):
             return HTTPFound(location=maybe_contextual_route(
                 request, 'v2_frontend_generic', extra_path="changePassword", _query={"error": error}))
@@ -888,17 +889,14 @@ def password_change_sent(request):
 )
 @view_config(
     route_name='contextual_welcome', request_method="GET",
-    renderer='assembl:templates/do_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
     route_name='do_password_change', request_method="GET",
-    renderer='assembl:templates/do_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
     route_name='contextual_do_password_change', request_method="GET",
-    renderer='assembl:templates/do_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 def do_password_change(request):
@@ -962,42 +960,44 @@ def do_password_change(request):
     slug_prefix = "/" + slug if slug else ""
     if welcome:
         if discussion:
-            discussion_topic = discussion.topic
-            welcome_text = localizer.translate(_(
-                "You will enter the discussion as <b>{name}</b>.")).format(name=user.name)
+            request.session.flash(localizer.translate(_(
+                "You will enter the discussion as <b>{name}</b>.")
+                ).format(name=user.name), 'message')
         else:
-            discussion_topic = "Assembl"
-            welcome_text = localizer.translate(_(
-                "You will enter Assembl as <b>{name}</b>."))
-        welcome_text += "</p><p>" + localizer.translate(_(
-            "Please choose your password for security reasons."))
-        title = localizer.translate(_('Welcome to {discussion_topic}.')).format(
-            discussion_topic=discussion_topic)
-    else:
-        title = localizer.translate(_('Change your password'))
-        welcome_text = ""
-    return dict(
-        get_default_context(request),
-        slug_prefix=slug_prefix,
-        description=welcome_text,
-        token=token,
-        title=title)
+            request.session.flash(localizer.translate(_(
+                "You will enter Assembl as <b>{name}</b>.")
+                ).format(name=user.name), 'message')
+        request.session.flash(localizer.translate(_(
+                "Please choose your password for security reasons.")
+                ).format(name=user.name), 'message')
+    raise HTTPFound(location=maybe_contextual_route(
+            request, 'finish_password_change', _query=dict(
+                token=token, welcome=welcome)))
 
 
 @view_config(
-    route_name='finish_password_change', request_method="POST",
+    route_name='finish_password_change', request_method=("GET", "POST"),
     renderer='assembl:templates/do_password_change.jinja2',
     permission=NO_PERMISSION_REQUIRED
 )
 @view_config(
-    route_name='contextual_finish_password_change', request_method="POST",
+    route_name='contextual_finish_password_change',
+    request_method=("GET", "POST"), permission=NO_PERMISSION_REQUIRED,
     renderer='assembl:templates/do_password_change.jinja2',
-    permission=NO_PERMISSION_REQUIRED
 )
 def finish_password_change(request):
     localizer = request.localizer
     token = request.params.get('token')
     title = request.params.get('title')
+    welcome = asbool(request.params.get('welcome'))
+    discussion = discussion_from_request(request)
+    if welcome:
+        title = localizer.translate(_(
+            'Welcome to {discussion_topic}.')).format(
+            discussion_topic=discussion.topic if discussion else "Assembl")
+    else:
+        title = localizer.translate(_('Change your password'))
+
     user, validity = verify_password_change_token(token)
     logged_in = authenticated_userid(request)  # if mismatch?
     if user and user.id != logged_in:
@@ -1023,7 +1023,6 @@ def finish_password_change(request):
             request, 'request_password_change', _query=dict(
                 user_id=user.id if user else '')))
 
-    discussion_slug = request.matchdict.get('discussion_slug', None)
     error = None
     p1, p2 = (request.params.get('password1', '').strip(),
               request.params.get('password2', '').strip())
@@ -1034,17 +1033,15 @@ def finish_password_change(request):
         user.last_login = datetime.utcnow()
         headers = remember(request, user.id)
         request.response.headerlist.extend(headers)
-        if discussion_slug:
-            discussion = discussion_from_request(request)
+        if discussion:
             maybe_auto_subscribe(user, discussion)
+        request.session.flash(localizer.translate(_(
+            "Password changed")), 'message')
         return HTTPFound(location=request.route_url(
-            'home' if discussion_slug else 'discussion_list',
-            discussion_slug=discussion_slug,
-            _query=dict(
-                message=localizer.translate(_(
-                    "Password changed")))))
+            'home' if discussion else 'discussion_list',
+            discussion_slug=discussion.slug))
 
-    slug_prefix = "/" + discussion_slug if discussion_slug else ""
+    slug_prefix = "/" + (discussion.slug if discussion else "")
     return dict(
         get_default_context(request),
         title=title, slug_prefix=slug_prefix, token=token, error=error)
