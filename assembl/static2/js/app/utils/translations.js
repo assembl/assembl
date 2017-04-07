@@ -96,7 +96,8 @@ const Translations = {
       sendPwdConfirm: 'Changement de mot de passe demandé',
       sendPwdMsg: 'Nous vous avons envoyé un email avec un lien temporaire. Cliquez sur ce lien pour vous connecter et changer votre mot de passe.',
       resend: 'Renvoyer l\'email',
-      accountCreatedMsg: 'Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si vous ne le recevez pas, veuillez vérifier qu\'il n\'est pas dans votre courrier indésirable ou cliquez sur le bouton "Renvoer l\'email" ci-dessous.'
+      accountCreatedMsg: 'Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si vous ne le recevez pas, veuillez vérifier qu\'il n\'est pas dans votre courrier indésirable ou cliquez sur le bouton "Renvoer l\'email" ci-dessous.',
+      changePassword: 'Changez votre mot de passe',
     },
     changePassword: {
       panelTitle: 'Bienvenue dans la page changement de mot de passe d\'Assembl'
@@ -266,7 +267,8 @@ const Translations = {
       sendPwdConfirm: 'Password change requested',
       sendPwdMsg: 'We have sent you an email with a temporary connection link. Please use that link to log in and change your password.',
       resend: 'Resend the email',
-      accountCreatedMsg: 'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. If you did not receive any confirmation e-mail, check your spams then click here.'
+      accountCreatedMsg: 'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. If you did not receive any confirmation e-mail, check your spams then click here.',
+      changePassword: 'Change Password',
     },
     changePassword: {
       panelTitle: 'Welcome to Assembl forgot password page'
