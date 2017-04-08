@@ -164,7 +164,7 @@ def create_get_route(request, discussion=None):
                     name, discussion_slug=discussion.slug, **kwargs)
     else:
         def get_route(name, **kwargs):
-            return request.route_path(name, **kwargs)
+            return request.route_path(name, discussion_slug='', **kwargs)
     return get_route
 
 
