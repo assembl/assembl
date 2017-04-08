@@ -40,7 +40,7 @@ class RoutesMap {
       'cxtLogin': "${slug}/login",
       'cxtSignup': "${slug}/signup",
       'cxtChangePassword': "${slug}/changePassword",
-      'cxtRequestPasswordChange': "${slug}/req_password_change",
+      'cxtRequestPasswordChange': "${slug}/requestPasswordChange",
       'home': "${slug}/home",
       'profile': "${slug}/profile/${userId}",
       'ideas': "${slug}/ideas",
@@ -83,7 +83,7 @@ export default (
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
     <Route path="/changePassword" component={ChangePassword} />
-    <Route path="/req_password_change" component={RequestPasswordChange} />
+    <Route path="/requestPasswordChange" component={RequestPasswordChange} />
     <Route path="/" component={App}>
       <Route path=":slug/login" component={Login} />
       <Route path=":slug/signup" component={Signup} />
