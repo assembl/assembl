@@ -27,13 +27,16 @@ export const xmlHttpRequest = (obj) => {
     }
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
-        resolve(JSON.parse(xhr.response));
+        let resp = xhr.response;
+        try { resp = JSON.parse(resp); }
+        catch (e){}
+        resolve(resp);
       } else {
-        reject(xhr.statusText);
+        reject(xhr.responseText || xhr.statusText);
       }
     };
     xhr.onerror = () => {
-      return reject(xhr.statusText);
+      return reject(xhr.responseText || xhr.statusText);
     };
     xhr.send(payload);
   });

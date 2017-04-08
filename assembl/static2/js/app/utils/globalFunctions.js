@@ -35,7 +35,7 @@ export const getConnectedUserName = () => {
 };
 
 export const getAuthorizationToken = () => {
-  return document.getElementById('token') ? document.getElementById('token').value : null;
+  return document.getElementById('token') ? document.getElementById('token').text : null;
 }
 
 export const getSortedArrayByKey = (arr, key) => {
