@@ -6,7 +6,7 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.settings import asbool
 from pyramid.security import (
-    authenticated_userid, Everyone, NO_PERMISSION_REQUIRED)
+    authenticated_userid, Everyone, NO_PERMISSION_REQUIRED, remember)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,

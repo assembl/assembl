@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { Routes } from '../../routes';
 
 class SendPwdForm extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
+    const route = '';
     const error_message = ("error_message" in this.props && this.props.error_message) ? this.props.error_message : null;
     return (
       <div className="login-view">

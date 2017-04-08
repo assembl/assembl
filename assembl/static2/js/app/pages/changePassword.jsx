@@ -3,7 +3,8 @@ import { Grid, Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap'
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { getAuthorizationToken } from '../utils/globalFunctions';
-import { postChangePassword } from '../services/authenticationService'; 
+import { postChangePassword } from '../services/authenticationService';
+import { Routes } from '../routes'; 
 
 class ChangePassword extends React.Component {
   constructor(props){
@@ -28,12 +29,25 @@ class ChangePassword extends React.Component {
     const payload = this.state;
     const that = this;
     postChangePassword(payload).then((resp) => {
-      console.log("success");
+      const slug = that.props.params.slug;
+      if (slug){
+        let route = '/' + Routes.get('home', {slug});
+        const url = new URL(route, window.location.href);
+        console.log(url);
+        window.location = url;
+      }
+      //Get a slug, reload to the home_view
+      //If no slug, go to forbidden page...
     })
     .catch( (error)=> {
-      //TODO: Use the new Alert system from Phase1 branch
-      console.log("error");
-      alert("You dun goofed");
+      try {
+        const resp = JSON.parse(error);
+        //TODO: Use the new Alert system from Phase1 branch
+        alert(resp.error.error);
+      }
+      catch (e) {
+        console.error("Failed to parse json from object ", error);
+      }
     });
 
   }
