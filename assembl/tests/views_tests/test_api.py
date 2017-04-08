@@ -196,7 +196,8 @@ def disabledtest_next_synthesis_idea_management(
 
 
 def test_api_register(discussion, test_app_no_perm,
-                      discussion_synth_notification):
+                      discussion_synth_notification,
+                      test_webrequest):
     from assembl.models import AbstractAgentAccount
     test_app_no_perm.app.registry.\
         settings['assembl.validate_registration_emails'] = 'true'
@@ -214,7 +215,8 @@ def test_api_register(discussion, test_app_no_perm,
         # Register
         email = "jsmith@example.com"
         password = '1234'
-        r = test_app_no_perm.post("/register", {
+        path = test_webrequest.route_path('register')
+        r = test_app_no_perm.post(path, {
             'name': "John Smith",
             'email': email,
             'password': password,
@@ -241,12 +243,15 @@ def test_api_register(discussion, test_app_no_perm,
         token = token.group(1)
         assert token
         # Confirm token
-        r = test_app_no_perm.get("/users/email_confirm/" + token)
+        path = test_webrequest.route_path('user_confirm_email', token=token)
+        r = test_app_no_perm.get(path)
         assert r.status_code == 302 and urlparse(r.location).path == '/'
         assert account.verified
         assert account.profile.verified
         discussion.db.flush()
-        r = test_app_no_perm.post("/" + discussion.slug + "/login", dict(
+        path = test_webrequest.route_path(
+            'contextual_login', discussion_slug=discussion.slug)
+        r = test_app_no_perm.post(path, dict(
             identifier=email, password=password, ))
         assert r.status_code == 302
         discussion.db.flush()
@@ -255,7 +260,8 @@ def test_api_register(discussion, test_app_no_perm,
 
 
 def test_csv_subscribe(discussion, test_app_no_perm,
-                       test_app, discussion_synth_notification):
+                       test_app, discussion_synth_notification,
+                       test_webrequest):
     from assembl.models import User, AbstractAgentAccount
     test_app_no_perm.app.registry.\
         settings['assembl.validate_registration_emails'] = 'true'
@@ -307,7 +313,9 @@ def test_csv_subscribe(discussion, test_app_no_perm,
         # Logged in with link
         r = test_app_no_perm.get(link)
         discussion.db.flush()
-        # assert r.status_code == 200
+        assert r.status_code == 302
+        r = test_app_no_perm.get(r.location)
+        assert r.status_code == 200
         form = r.lxml.xpath('//form')[0]
         r = test_app_no_perm.post(form.attrib['action'], params=dict(
             token=unquote(link.split('/')[-1]),
@@ -315,8 +323,9 @@ def test_csv_subscribe(discussion, test_app_no_perm,
             password2="abcd",
             email=email,
             change_password="select"))
-        assert r.status_code == 302 and urlparse(r.location).path == (
-            '/' + discussion.slug)
+        assert r.status_code == 302 and urlparse(
+            r.location).path == test_webrequest.route_path(
+            'home', discussion_slug=discussion.slug)
         discussion.db.expire(account.profile, [
             "agent_status_in_discussion", "notification_subscriptions"])
         assert len(account.profile.notification_subscriptions) > 0

@@ -109,8 +109,11 @@ def fake_response_handler(url=None, **kwargs):
 
 
 def test_social_login(
-        test_session, test_app, discussion, google_identity_provider, request):
-    res = test_app.get("/login/" + google_identity_provider.provider_type)
+        test_session, test_app, discussion, google_identity_provider, request,
+        test_webrequest):
+    path = test_webrequest.route_path(
+        'social.auth', backend=google_identity_provider.provider_type)
+    res = test_app.get(path)
     assert res.status_code == 302  # Found
     url = urlparse.urlparse(res.location)
     qs = urlparse.parse_qs(url.query)
@@ -119,13 +122,14 @@ def test_social_login(
     session_state = 'session_state'
     with mock.patch('requests.sessions.Session.request') as mock_request:
         mock_request.side_effect = fake_response_handler
-        res2 = test_app.get(
-            "/complete/" + google_identity_provider.provider_type, {
-                'state': state,
-                'code': code,
-                'authuser': '0',
-                'session_state': session_state,
-                'prompt': 'none'})
+        path = test_webrequest.route_path(
+            'social.complete', backend=google_identity_provider.provider_type)
+        res2 = test_app.get(path, {
+            'state': state,
+            'code': code,
+            'authuser': '0',
+            'session_state': session_state,
+            'prompt': 'none'})
         assert res2.status_code == 302
         assert mock_request.call_count > 1
         urls_called = {call[1]['url'] for call in mock_request.call_args_list}
@@ -143,7 +147,9 @@ def test_add_social_account(
         test_session, test_app, discussion, admin_user,
         google_identity_provider, base_registry, test_webrequest):
     session_factory = base_registry.getUtility(ISessionFactory)
-    res = test_app.get("/login/" + google_identity_provider.provider_type)
+    path = test_webrequest.route_path(
+        'social.auth', backend=google_identity_provider.provider_type)
+    res = test_app.get(path)
     assert res.status_code == 302  # Found
     url = urlparse.urlparse(res.location)
     qs = urlparse.parse_qs(url.query)
@@ -158,13 +164,14 @@ def test_add_social_account(
 
     with mock.patch('requests.sessions.Session.request') as mock_request:
         mock_request.side_effect = fake_response_handler
-        res2 = test_app.get(
-            "/complete/" + google_identity_provider.provider_type, {
-                'state': state,
-                'code': code,
-                'authuser': '0',
-                'session_state': session_state,
-                'prompt': 'none'})
+        path = test_webrequest.route_path(
+            'social.complete', backend=google_identity_provider.provider_type)
+        res2 = test_app.get(path, {
+            'state': state,
+            'code': code,
+            'authuser': '0',
+            'session_state': session_state,
+            'prompt': 'none'})
         assert res2.status_code == 302
         assert mock_request.call_count > 1
         urls_called = {call[1]['url'] for call in mock_request.call_args_list}
@@ -180,7 +187,9 @@ def test_add_social_account(
 def test_merge_social_account(
         test_session, test_app, discussion, participant1_user,
         google_identity_provider, base_registry, test_webrequest):
-    res = test_app.get("/login/" + google_identity_provider.provider_type)
+    path = test_webrequest.route_path(
+        'social.auth', backend=google_identity_provider.provider_type)
+    res = test_app.get(path)
     assert res.status_code == 302  # Found
     url = urlparse.urlparse(res.location)
     qs = urlparse.parse_qs(url.query)
@@ -190,13 +199,14 @@ def test_merge_social_account(
 
     with mock.patch('requests.sessions.Session.request') as mock_request:
         mock_request.side_effect = fake_response_handler
-        res2 = test_app.get(
-            "/complete/" + google_identity_provider.provider_type, {
-                'state': state,
-                'code': code,
-                'authuser': '0',
-                'session_state': session_state,
-                'prompt': 'none'})
+        path = test_webrequest.route_path(
+            'social.complete', backend=google_identity_provider.provider_type)
+        res2 = test_app.get(path, {
+            'state': state,
+            'code': code,
+            'authuser': '0',
+            'session_state': session_state,
+            'prompt': 'none'})
         assert res2.status_code == 302
         assert mock_request.call_count > 1
         urls_called = {call[1]['url'] for call in mock_request.call_args_list}

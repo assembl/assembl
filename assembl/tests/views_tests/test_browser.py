@@ -13,7 +13,8 @@ def test_mocha(browser, test_server, discussion, test_session,
                test_webrequest, json_representation_of_fixtures):
     """Test using real browser."""
     from jasmine_runner.commands import run_extractor_with_browser
-    url = "%s/%s/test" % (test_server.url, discussion.slug)
+    url = test_server.url + test_webrequest.route_path(
+        'test', discussion_slug=discussion.slug)
     test_session.commit()
     extractor = run_extractor_with_browser(url, browser, False)
     # print extractor.get_failures()
@@ -65,7 +66,8 @@ def test_load_messages(
         browser, test_server, test_session, discussion,
         jack_layton_mailbox, test_webrequest):
     """Test using real browser."""
-    url = "%s/%s/" % (test_server.url, discussion.slug)
+    url = test_server.url + test_webrequest.route_path(
+        'home', discussion_slug=discussion.slug)
     test_session.commit()
     browser.visit(url)
     assert browser.is_element_present_by_css('.js_navigation', wait_time=120)
