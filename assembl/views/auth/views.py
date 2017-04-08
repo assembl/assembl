@@ -23,7 +23,7 @@ from pyramid.httpexceptions import (
     HTTPNotFound,
     HTTPBadRequest,
     HTTPServerError)
-from pyramid.settings import asbool
+from pyramid.settings import asbool, aslist
 from sqlalchemy import desc
 from pyisemail import is_email
 from social.actions import do_auth
@@ -49,7 +49,7 @@ from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.utils import normalize_email_name
 from .. import (
-    get_default_context, JSONError, get_providers_by_name,
+    get_default_context, JSONError, get_provider_data,
     HTTPTemporaryRedirect, create_get_route)
 
 _ = TranslationStringFactory('assembl')
@@ -67,20 +67,19 @@ def get_login_context(request, force_show_providers=False):
         request.session.pop('discussion')
     discussion = discussion_from_request(request)
     get_routes = create_get_route(request, discussion)
-    providers = get_providers_by_name(get_routes)
+    providers = get_provider_data(get_routes)
     hide_registration = (discussion
         and not public_roles.intersection(set(roles_with_permissions(
             discussion, P_READ)))
         and not roles_with_permissions(
             discussion, P_SELF_REGISTER_REQUEST, P_SELF_REGISTER))
     if not force_show_providers:
-        hide_providers = request.registry.settings.get(
-            'hide_login_providers', ())
+        hide_providers = aslist(request.registry.settings.get(
+            'hide_login_providers', ()))
 
         if isinstance(hide_providers, (str, unicode)):
             hide_providers = (hide_providers, )
-        for provider in hide_providers:
-            del providers[provider]
+        providers = [p for p in providers if p['type'] not in hide_providers]
 
     return dict(get_default_context(request),
                 providers=providers,
@@ -319,7 +318,7 @@ def assembl_profile(request):
         dict(get_default_context(request),
              error='<br />'.join(errors),
              unverified_emails=unverified_emails,
-             providers=get_providers_by_name(get_route),
+             providers=get_provider_data(get_route),
              google_consumer_key=request.registry.settings.get(
                  'google.consumer_key', ''),
              the_user=profile,

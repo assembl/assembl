@@ -104,37 +104,52 @@ def get_theme_info(discussion):
         return ('default', 'default')
 
 
-def get_providers_by_name(get_route, providers=None):
+def get_provider_data(get_route, providers=None):
     from assembl.models.auth import IdentityProvider
     if providers is None:
         providers = aslist(config.get('login_providers'))
-    providers_by_name = dict(IdentityProvider.default_db.query(
-        IdentityProvider.name, IdentityProvider.provider_type).all())
+    providers_by_name = IdentityProvider.default_db.query(
+        IdentityProvider.name, IdentityProvider.provider_type
+    ).order_by(IdentityProvider.id).all()
     saml_providers = []
     if 'saml' in providers:
-        del providers_by_name['saml']
         saml_providers = config.get('SOCIAL_AUTH_SAML_ENABLED_IDPS')
         if not isinstance(saml_providers, dict):
             saml_providers = json.loads(saml_providers)
-    providers = {
-        name: {
-            "add_social_account": get_route('add_social_account', backend=ptype),
+    provider_data = [
+        {
+            "name": name.capitalize(),
+            "type": ptype,
+            "extra": {},
+            "add_social_account": get_route(
+                'add_social_account', backend=ptype),
             "login": get_route('login', backend=ptype),
-        } for (name, ptype) in providers_by_name.iteritems() if ptype in providers
-    }
-    if 'saml' in providers:
-        providers.update({
-            data["description"]: {
-                "add_social_account": get_route('add_social_account', backend='saml'),
+        } for (name, ptype) in providers_by_name
+        if ptype in providers
+    ]
+    if 'yahoo' in providers:
+        for provider in provider_data:
+            if provider['type'] == 'yahoo':
+                provider['extra'] = {
+                    "oauth": True,
+                    "openid_identifier": 'yahoo.com',
+                }
+    if saml_providers:
+        provider_data.extend([
+            {
+                "name": data["description"],
+                "type": "saml",
+                "add_social_account": get_route(
+                    'add_social_account', backend='saml'),
                 "login": get_route('login', backend='saml'),
-                "extra" : {
+                "extra": {
                     "idp": prov_id
                 }
             }
             for prov_id, data in saml_providers.iteritems()
-            })
+        ])
 
-    return providers
+    return provider_data
 
 
 def create_get_route(request, discussion=None):
@@ -262,7 +277,7 @@ def get_default_context(request, **kwargs):
     analytics_url = config.get('web_analytics_piwik_url', None)
 
     get_route = create_get_route(request, discussion)
-    providers = get_providers_by_name(get_route)
+    providers = get_provider_data(get_route)
 
     errors = request.session.pop_flash()
     if kwargs.get('error', None):

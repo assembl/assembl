@@ -4,21 +4,13 @@
             <label for="optionsCheckboxList" class="control-label">{{ gettext('Add a social account') }}</label>
         </div>
         <div class="col-8-12 no-pad controls">
-        <% for (var provider_name in providers) {
-        var action_path = providers[provider_name]["add_social_account"],
-            // Retrieve subprovider in condition of SAML
-            // TODO: Move this OUT of template!
-            pos = provider_name.indexOf(':'),
-            sub_provider=null;
-            if (pos>0) {
-                sub_provider=provider.substr(pos+1);
-                provider_name = provider.substr(0, pos);
-            } %>
-        <form id="<%= provider_name %>" class="mts" method="post" action="<%= action_path %>">
-         <button type="submit" class="<%= provider_name %>-bg mbs"><%= i18n.sprintf("{{gettext('Add a %s account')}}", provider_name) %></button>
-         <% if (sub_provider) {
-         print("<input type='hidden' name='idp' value='"+sub_provider+"'/>");
-         }%>
+        <% for (var i in providers) {
+            var provider = providers[i]; %>
+        <form id="<%= provider.name %>" class="mts" method="post" action="<%= provider.add_social_account %>">
+         <button type="submit" class="<%= provider.type %>-bg mbs"><%= i18n.sprintf("{{gettext('Add a %s account')}}", provider.name) %></button>
+         <% for (var k in provider.extra) {
+         print("<input type='hidden' name='" + k + "' value='" + provider.extra[k] + "'/>");
+         } %>
         </form>
         <% } %>
         </div>
