@@ -298,7 +298,7 @@ celery_tasks.translate.imodeleventwatcher = assembl.lib.model_watcher.ModelEvent
 
 cache_viewdefs = true
 minified_js = false
-new_frontend = false
+new_frontend = true
 use_webpack_server = false
 
 test_with_zope = false
