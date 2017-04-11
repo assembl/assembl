@@ -260,8 +260,45 @@ Assembl has several core fixtures that are important to note, in order to run th
 For more information regarding testing a Pyramid application, see the `Pyramid Documentation`_ on testing.
 Assembl uses WebTest_ to conduct it's integration testing of a Pyramid application.
 
-Integration
-===========
+
+Authentication Token From Email
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is a simple tutorial for sections that are not documented well.In order to test authentication tokens sent
+to newly registered users, or users who have forgotten their passwords, the following steps will simplify your job.
+It is hardly an automated process, but it is useful to have this knowledge.
+
+First, uncomment the following line from your `local.ini` file
+
+.. code:: ini
+
+    # mail.port = 8025
+
+This will enable you to use a debugging server. Open a new terminal.
+
+.. code:: sh
+    source venv/bin/activate
+    python -m smtpd -n -c DebuggingServer
+
+Outgoing emails will be viewable in the terminal. To test it, run a local assembl instance.
+
+.. code:: sh
+    source venv/bin/activate
+    supervisord
+    supervisorctl start dev:server
+
+Enter the login page, and choose the option "Forgot my password". Enter your username or email, assuming that you already
+have an account in your local Assembl instance. Submit. You should now see the outbound email in your `DebuggingServer` terminal.
+In the plaintext section of the email, copy the URL sent to change the password. This URL must, in fact, be altered. Here is a the mapping::
+
+    "=" => line-break
+    "%3D" => "="
+
+Replacing those characters, you should have a URL like the following
+
+`http://localhost:6543/debate/sandbox/do_password_change/037672017097193710TvqNU6m5zof0wwK7hpwZkn14-0K9cH8DeHEDtiEy7ASpLdY=`
+
+Viola! You now have a fully formed URL for changing a password, including the authentication token required to do so. 
 
 TODO
 
