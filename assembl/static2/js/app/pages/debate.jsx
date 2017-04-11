@@ -47,7 +47,7 @@ class Debate extends React.Component {
         {loading && <Loader color="black" />}
         {thematics &&
           <div>
-            <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'}>
+            <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'} id="timeline">
               <div className="max-container">
                 {!isParentRoute &&
                   <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>

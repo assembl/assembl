@@ -84,13 +84,15 @@ class Navigation extends React.Component {
     });
   }
   scrollToNextQuestion() {
+    const navbarHeight = document.getElementById('timeline').clientHeight;
     const target = document.getElementById(`q${this.state.currentQuestionNumber + 1}`);
-    const targetOffset = getDomElementOffset(target).top;
+    const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
     scrollToElement(document.body, targetOffset, 600);
   }
   scrollToPreviousQuestion() {
+    const navbarHeight = document.getElementById('timeline').clientHeight;
     const target = document.getElementById(`q${this.state.currentQuestionNumber - 1}`);
-    const targetOffset = getDomElementOffset(target).top;
+    const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
     scrollToElement(document.body, targetOffset, 600);
   }
   render() {
