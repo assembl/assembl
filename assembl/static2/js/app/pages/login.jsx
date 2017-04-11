@@ -16,7 +16,7 @@ class Login extends React.Component {
     return (
       <Grid fluid className="login-container">
         <div className="login-view">
-          <div className="box-title">{debateData ? debateData.topic : I18n.t('loginTitle')}</div>
+          <div className="box-title">{debateData ? debateData.topic : I18n.t('login.login')}</div>
           <div className="box">
             <Row className="max-container center">
               <Col xs={12} md={6}>
