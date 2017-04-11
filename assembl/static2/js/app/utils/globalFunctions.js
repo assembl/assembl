@@ -38,6 +38,16 @@ export const getAuthorizationToken = () => {
   return document.getElementById('token') ? document.getElementById('token').text : null;
 }
 
+export const getProvidersData = () => {
+  const data = document.getElementById('login-providers') ? document.getElementById('login-providers').text : null;
+  try {
+    return JSON.parse(data); 
+  }
+  catch (e) {
+    return null;
+  }
+}
+
 export const getSortedArrayByKey = (arr, key) => {
   arr.sort((a, b) => {
     if (a[key] < b[key]) {

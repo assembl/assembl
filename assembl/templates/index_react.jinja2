@@ -11,22 +11,25 @@
         	<input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
         	<input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
         {% endif %}
+        {% if providers %}
+            <script type='application/json' id='login-providers'>{{providers|safe}}</script>
+        {% endif %}
         {% if user %}
-            <input type="hidden" name="user-id" id="user-id" value="{{ user.id }}" />
-            <input type="hidden" name="user-displayname" id="user-displayname" value="{{ user.display_name() }}" />
+            <input type='hidden' name='user-id' id='user-id' value='{{ user.id }}' />
+            <input type='hidden' name='user-displayname' id='user-displayname' value='{{ user.display_name() }}' />
         {% endif %}
         {% if token %}
-    		<script type="application/json" id="token">{{ token |safe }}</script>
+    		<script type='application/json' id='token'>{{ token |safe }}</script>
         {% endif %}
         {% if error %}
-    		<div class='hidden' id="errorMessage">{{ error }}</div>
+    		<div class='hidden' id='errorMessage'>{{ error }}</div>
         {% endif %}
         {% if messages %}
-    		<div class='hidden' id="serverMessages">{{ messages }}</div>
+    		<div class='hidden' id='serverMessages'>{{ messages }}</div>
         {% endif %}
         <div id='root'></div>
 		{% block main_js %}
-			<script src="{{REACT_URL}}/build/bundle.js"></script>
+			<script src='{{REACT_URL}}/build/bundle.js'></script>
 		{% endblock %}
 	</body>
 {% endblock%}
