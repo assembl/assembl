@@ -248,7 +248,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         from .idea_graph_view import Synthesis
         from .post import SynthesisPost, PublicationStates
         return self.db.query(
-            Synthesis).join(SynthesisPost
+            Synthesis).outerjoin(SynthesisPost
             ).options(
             subqueryload_all(
             'idea_assocs.idea'),
@@ -257,8 +257,9 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             subqueryload_all(
             Synthesis.published_in_post)).filter(
             Synthesis.discussion_id == self.id,
-            SynthesisPost.publication_state == PublicationStates.PUBLISHED,
-            SynthesisPost.tombstone_condition()).all()
+            (SynthesisPost.id == None) |
+            ((SynthesisPost.publication_state == PublicationStates.PUBLISHED) &
+             SynthesisPost.tombstone_condition())).all()
 
     def get_permissions_by_role(self):
         roleperms = self.db.query(Role.name, Permission.name).select_from(
