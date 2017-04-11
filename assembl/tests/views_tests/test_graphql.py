@@ -263,3 +263,71 @@ mutation myFirstMutation {
                     {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}
                 ]
     }}}
+
+
+def test_update_thematic(graphql_request):
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createThematic(
+        titleEntries:[
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+            {value:"Understanding the dynamics and issues", localeCode:"en"}
+        ],
+        questions:[
+            {titleEntries:[
+                {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
+            ]},
+        ],
+        identifier:"survey",
+    ) {
+        thematic {
+            id
+            titleEntries { localeCode value },
+            identifier
+            questions { id, titleEntries { localeCode value } }
+        }
+    }
+}
+""", context_value=graphql_request)
+    thematic_id = res.data['createThematic']['thematic']['id']
+    first_question_id = res.data['createThematic']['thematic']['questions'][0]['id']
+    # to test the modification, we delete the first letter of each message
+    res = schema.execute(u"""
+mutation secondMutation {
+    updateThematic(
+        id: "%s",
+        titleEntries:[
+            {value:"omprendre les dynamiques et les enjeux", localeCode:"fr"},
+            {value:"nderstanding the dynamics and issues", localeCode:"en"}
+        ],
+        questions:[
+            {id: "%s",
+             titleEntries:[
+                {value:"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
+            ]},
+        ],
+        identifier:"urvey",
+    ) {
+        thematic {
+            titleEntries { localeCode value },
+            identifier
+            questions { titleEntries { localeCode value } }
+        }
+    }
+}
+""" % (thematic_id, first_question_id), context_value=graphql_request)
+    thematic_id
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateThematic': {
+            u'thematic': {
+                u'titleEntries': [
+                    {u'value': u"omprendre les dynamiques et les enjeux", u'localeCode': u"fr"},
+                    {u'value': u"nderstanding the dynamics and issues", u'localeCode': u"en"}
+                ],
+                u'identifier': u'urvey',
+                u'questions': [
+                    {u'titleEntries': [
+                        {u'value': u"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
+                    ]},
+                ]
+    }}}

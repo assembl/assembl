@@ -1,3 +1,4 @@
+from datetime import datetime
 
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
@@ -47,6 +48,17 @@ class SecureObjectType(object):
 # manually.
 
 
+def get_entries(langstring):
+    # langstring.entries is a backref, it doesn't get updated until the commit.
+    # Even with db.flush(), new entries doesn't show up or a specific entry show up
+    # several times... so we do the query instead of using langstring.entries
+    results = models.LangStringEntry.query.join(
+            models.LangStringEntry.langstring
+        ).filter(models.LangStringEntry.tombstone_date == None
+        ).filter(models.LangString.id == langstring.id).all()
+    return results
+
+
 def resolve_langstring(langstring, locale_code):
     """If locale_code is None, return the best lang based on user prefs,
     otherwise respect the locale_code and return the right translation or None.
@@ -57,8 +69,25 @@ def resolve_langstring(langstring, locale_code):
     if locale_code is None:
         return langstring.best_entry_in_request().value
 
-    return {models.Locale.code_for_id(locale_id): e.value
-            for locale_id, e in langstring.entries_as_dict.items()}.get(locale_code, None)
+    return {e.locale_code: e.value
+            for e in get_entries(langstring)}.get(locale_code, None)
+
+
+def resolve_langstring_entries(obj, attr):
+    langstring = getattr(obj, attr, None)
+    if langstring is None:
+        return []
+
+    entries = []
+    for entry in get_entries(langstring):
+        entries.append(
+            LangStringEntry(
+                locale_code=entry.locale_code,
+                value=entry.value
+            )
+        )
+
+    return entries
 
 
 def langstring_from_input_entries(entries):
@@ -81,6 +110,54 @@ def langstring_from_input_entries(entries):
         return langstring
 
     return None
+
+
+def update_langstring_from_input_entries(obj, attr, entries):
+    """Update langstring from getattr(obj, attr) based on GraphQL LangStringEntryInput entries.
+    """
+    langstring = getattr(obj, attr, None)
+    if langstring is None:
+        new_langstring = langstring_from_input_entries(entries)
+        if new_langstring is not None:
+            setattr(obj, attr, new_langstring)
+        return
+
+    current_title_entries_by_locale_code = {
+        e.locale_code: e for e in get_entries(langstring)}
+    if entries is not None:
+        for entry in entries:
+            locale_code = entry['locale_code']
+            current_entry = current_title_entries_by_locale_code.get(locale_code, None)
+            if current_entry is not None:
+                if current_entry.value != entry['value']:
+                    if not entry['value']:
+                        current_entry.tombstone_date = datetime.utcnow()
+                    else:
+                        current_entry.change_value(entry['value'])
+            else:
+                locale_id = models.Locale.get_id_of(locale_code)
+                langstring.add_entry(
+                    models.LangStringEntry(
+                        langstring=langstring,
+                        value=entry['value'],
+                        locale_id=locale_id
+                    )
+                )
+    # need to flush or get_entries(langstring) will not give the new entries
+    langstring.db.flush()
+
+
+class LangStringEntryFields(graphene.AbstractType):
+    value = graphene.String(required=True)
+    locale_code = graphene.String(required=True)
+
+
+class LangStringEntry(graphene.ObjectType, LangStringEntryFields):
+    pass
+
+
+class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):
+    pass
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
@@ -114,6 +191,7 @@ class PostInterface(SQLAlchemyInterface):
     subject = graphene.String(lang=graphene.String())
     body = graphene.String(lang=graphene.String())
     sentiment_counts = graphene.Field(SentimentCounts)
+    # TODO my_sentiment
 
     def resolve_subject(self, args, context, info):
         subject = resolve_langstring(self.get_subject(), args.get('lang'))
@@ -198,11 +276,15 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', )
 
     title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
     posts = SQLAlchemyConnectionField(PostConnection, random=graphene.Boolean())
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
         return title
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
 
     def resolve_posts(self, args, context, info):
         random = args.get('random', False)
@@ -230,7 +312,9 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'identifier')
 
     title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
     description = graphene.String(lang=graphene.String())
+    description_entries = graphene.List(LangStringEntry)
     questions = graphene.List(Question)
     video = graphene.Field(Video, lang=graphene.String())
     img_url = graphene.String()
@@ -241,8 +325,14 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         title = resolve_langstring(self.title, args.get('lang'))
         return title
 
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
     def resolve_description(self, args, context, info):
         return resolve_langstring(self.description, args.get('lang'))
+
+    def resolve_description_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'description')
 
     def resolve_questions(self, args, context, info):
         return self.get_children()
@@ -315,19 +405,6 @@ class Query(graphene.ObjectType):
         return query
 
 
-class LangStringEntryFields(graphene.AbstractType):
-    value = graphene.String(required=True)
-    locale_code = graphene.String(required=True)
-
-
-class LangStringEntry(graphene.ObjectType, LangStringEntryFields):
-    pass
-
-
-class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):
-    pass
-
-
 class VideoInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput)
     description_entries = graphene.List(LangStringEntryInput)
@@ -335,6 +412,7 @@ class VideoInput(graphene.InputObjectType):
 
 
 class QuestionInput(graphene.InputObjectType):
+    id = graphene.ID()
     title_entries = graphene.List(LangStringEntryInput, required=True)
 
 
@@ -439,14 +517,95 @@ class CreateThematic(graphene.Mutation):
 
         return CreateThematic(thematic=saobj)
 
-# TODO UpdateThematic and questions
+
+class UpdateThematic(graphene.Mutation):
+    class Input:
+        id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        description_entries = graphene.List(LangStringEntryInput)
+        identifier = graphene.String(required=True)
+        video = graphene.Argument(VideoInput)
+        questions = graphene.List(QuestionInput)
+
+    thematic = graphene.Field(lambda: Thematic)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Thematic
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+
+        thematic_id = args.get('id')
+        id_ = int(Node.from_global_id(thematic_id)[1])
+        thematic = cls.get(id_)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = thematic.user_can(user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception('Thematic titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(thematic, 'title', title_entries)
+            update_langstring_from_input_entries(thematic, 'description', args.get('description_entries'))
+            kwargs = {}
+            video = args.get('video')
+            if video is not None:
+                update_langstring_from_input_entries(thematic, 'video_title', video['title_entries'])
+                update_langstring_from_input_entries(thematic, 'video_description', video['description_entries'])
+                kwargs['video_html_code'] = video['html_code']
+
+            # take the first entry and set it for short_title
+            kwargs['short_title'] = title_entries[0]['value']
+            kwargs['identifier'] = args.get('identifier')
+            for attr, value in kwargs.items():
+                setattr(thematic, attr, value)
+            db = thematic.db
+            db.flush()
+
+            questions_input = args.get('questions')
+            # TODO delete questions that are not in questions_input? or have an explicit DeleteQuestion mutation?
+            # TODO raise exception if proposals associated to deleted question?
+            if questions_input is not None:
+                for question_input in questions_input:
+                    if question_input.get('id', None) is not None:
+                        id_ = int(Node.from_global_id(question_input['id'])[1])
+                        question = models.Question.get(id_)
+                        update_langstring_from_input_entries(
+                            question, 'title', question_input['title_entries'])
+                    else:
+                        title_ls = langstring_from_input_entries(
+                            question_input['title_entries'])
+                        models.Question(
+                            title=title_ls,
+                            discussion_id=discussion_id
+                        )
+                        thematic.children.append(
+                            models.Question(
+                                title=title_ls,
+                                discussion_id=discussion_id
+                            )
+                        )
+                db.flush()
+
+        return UpdateThematic(thematic=thematic)
+
 # TODO DeleteThematic, raise exception if questions associated with it
 # TODO CreatePost which publish the post
 # TODO AddSentimentToPost
+# TODO DeleteSentimentToPost
+# TODO csv export
 
 
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
+    update_thematic = UpdateThematic.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

@@ -848,7 +848,7 @@ class LangStringEntry(TombstonableMixin, Base):
         return Locale.is_machine_translated
 
     def change_value(self, new_value):
-        self.tombstone = datetime.utcnow()
+        self.tombstone_date = datetime.utcnow()
         new_version = self.__class__(
             langstring_id=self.langstring_id,
             locale_id=self.locale_id,
