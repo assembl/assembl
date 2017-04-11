@@ -19,6 +19,8 @@ import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
 import Terms from './pages/terms';
 import parse from './utils/literalStringParser';
+import capitalize from 'lodash/capitalize';
+import urljoin from 'url-join';
 
 
 /*
@@ -32,8 +34,8 @@ import parse from './utils/literalStringParser';
 class RoutesMap {
   constructor() {
     this._routes = {
-      'styleguide': "/styleguide",
-      'login': "/login",
+      'styleguide': "styleguide",
+      'login': "login",
       'signup': "signup",
       'changePassword': "changePassword",
       'requestPasswordChange': 'requestPasswordChange',
@@ -51,10 +53,37 @@ class RoutesMap {
     };
   }
 
+  basePath(){
+    return window.location.protocol + '//' + window.location.host;
+  }
+
+  convertToContextualName(name){
+    const base = 'ctx';
+    let workingName = capitalize(name);
+    return base + workingName;
+  }
+
+  maybePrependSlash(pre, s){
+    return pre ? '/' + s : s;
+  }
+
   get(name, args){
+    //Shitty way to enforce a boolean type without crashing
+    const pre = ('preSlash' in args && args['preSlash'] === false) ? false : true;
+    
+    if (!(name in this._routes)){
+      throw Error(`${name} is not a valid path!`);
+    }
+
     let literal = this._routes[name];
+    literal = this.maybePrependSlash(literal);
     let a = parse(literal, args);
     return a;
+  }
+
+  getFullPath(name, args){
+    const rel = this.get(name, args);
+    return urljoin(this.basePath(), rel);
   }
 }
 
