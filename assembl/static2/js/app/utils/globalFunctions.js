@@ -63,6 +63,9 @@ export const getDomElementOffset = (el) => {
 
 export const scrollToElement = (element, to, duration) => {
   if (element.scrollTop === to) return;
+  for (let i = 1; i < 99999; i++) {
+    clearInterval(i);
+  }
   const diff = to - element.scrollTop;
   const scrollStep = Math.PI / (duration / 10);
   let count = 0;

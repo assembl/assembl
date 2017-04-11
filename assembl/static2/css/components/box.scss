@@ -112,7 +112,7 @@
 }
 
 .alert {
-  bottom: 0;
+  top: $navbar-height + 20px;
   position: fixed;
   right: 20px;
   transition: opacity 1s ease-in-out;
