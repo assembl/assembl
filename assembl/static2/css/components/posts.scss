@@ -12,7 +12,6 @@
   }
 
   .user {
-    padding: 30px 0 0 40px;
     text-align: left;
 
     .username {
@@ -22,20 +21,17 @@
 
   .body {
     font-family: $font-family4;
-    padding: 20px 50px 0 73px;
     text-align: left;
   }
 
   .sentiments {
     border-top: $navbar-border;
     font-family: $font-family4;
-    margin: 25px 50px 10px 73px;
     padding: 15px 0 0;
     text-align: left;
   }
 
   .stat-sentiment {
-    margin: -15px 0 0;
     padding: 0 0 0 3px;
   }
 
@@ -75,14 +71,27 @@
     width: 100%;
   }
 }
-@media screen and (min-width: 421px) {
-  .content {
-    float:left;
-    text-align: left;
-    width: 80%;
-  }
 
+@media screen and (min-width: 600px) {
   .proposals {
+    .sentiment-label {
+      display: inline-block;
+    }
+
+    .stat-sentiment {
+      margin: -15px 0 0;
+    }
+
+    .content {
+      float:left;
+      text-align: left;
+      width: 80%;
+
+      .user {
+        padding: 30px 0 0 40px;
+      }
+    }
+
     .statistic {
       background-color: $first-color-light;
       float:left;
@@ -93,29 +102,69 @@
       right: 0;
       width: 20%;
     }
+
+    .body {
+      padding: 20px 50px 0 73px;
+    }
+
+    .sentiments {
+      margin: 25px 50px 10px 73px;
+    }
   }
 }
 
-@media screen and (max-width: 420px) {
-  .content {
-    text-align: left;
-  }
-
-  .sentiment-label {
-    display: none;
-  }
-
-  .totalSentimentsCount {
-    display: none;
-  }
-
-  .sentimentsCountLabel {
-    display: none;
-  }
+@media screen and (max-width: 599px) {
   .proposals {
     .statistic {
-      background-color: $white;
-      width: 100%;
+      float: right;
+      height: 0;
+      margin: -95px 0 0;
+    }
+
+    .gauge {
+      transform: scale(0.45);
+    }
+
+    .content {
+      text-align: left;
+
+      .user {
+        padding: 30px 20px 0;
+      }
+    }
+
+    .stat-sentiment {
+      display: inline-block;
+      float: inherit;
+      margin: 50px 10px 0 -40px;
+    }
+
+    .sentiment-label {
+      display: none;
+    }
+
+    .totalSentimentsCount {
+      display: none;
+    }
+
+    .sentimentsCountLabel {
+      display: none;
+    }
+
+    .body {
+      padding: 20px 20px 0 25px;
+    }
+
+    .sentiments {
+      margin: 25px 20px 10px 25px;
+    }
+
+    .min-sentiment {
+      margin: 0 0 5px 0;
+    }
+
+    .clear {
+      height: 10px;
     }
   }
 }

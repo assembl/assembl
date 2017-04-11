@@ -15,9 +15,3 @@
 .radial-green {
   stroke: $green;
 }
-
-@media screen and (max-width: 420px) {
-  .gauge {
-    transform: scale(0.5);
-  }
-}

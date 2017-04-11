@@ -134,6 +134,7 @@ class Survey extends React.Component {
                         </Button>
                       }
                     </div>
+                    <div className="margin-xl">&nbsp;</div>
                   </div>
                 </Grid>
               </section>
