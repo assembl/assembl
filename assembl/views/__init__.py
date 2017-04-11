@@ -123,7 +123,7 @@ def get_provider_data(get_route, providers=None):
             "extra": {},
             "add_social_account": get_route(
                 'add_social_account', backend=ptype),
-            "login": get_route('login', backend=ptype),
+            "login": get_route('social_auth', backend=ptype),
         } for (name, ptype) in providers_by_name
         if ptype in providers
     ]
@@ -164,6 +164,8 @@ def create_get_route(request, discussion=None):
                     name, discussion_slug=discussion.slug, **kwargs)
     else:
         def get_route(name, **kwargs):
+            if name == 'social_auth':
+                name = 'social.auth'
             return request.route_path(name, discussion_slug='', **kwargs)
     return get_route
 
