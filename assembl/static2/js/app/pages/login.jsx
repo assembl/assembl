@@ -10,7 +10,6 @@ import { getProvidersData } from '../utils/globalFunctions';
 class Login extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
     const providers = getProvidersData();
     let next = get(this.props, 'location.query.next', null);
     let error_message = get(this.props, 'location.query.error', null);
@@ -25,7 +24,7 @@ class Login extends React.Component {
               </Col>          
               <Col xs={12} md={6}>
                 <AsLogin next={next} error_message={error_message}
-                  slug={debateData? debateData.slug : null} rootPath={rootPath}/>
+                  slug={debateData? debateData.slug : null}/>
               </Col>
             </Row>
           </div>
