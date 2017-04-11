@@ -3,16 +3,17 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
+import { Routes } from '../../routes';
 
 class AsLogin extends React.Component {
   render() {
-    const slug = this.props.slug;
+    const slug = this.props.slug; // Could be null!
     const rootPath = this.props.rootPath;
-    const next = ("next" in this.props && this.props.next) ? this.props.next : `${rootPath}${slug}/home` ;
+    const next = ("next" in this.props && this.props.next) ? this.props.next : Routes.getFullPath('home', {slug}) ;
     const error_message = ("error_message" in this.props  && this.props.error_message) ? this.props.error_message : null;
     return (
       <div>
-        <form className="login" method="POST" action={`/${slug}/login`}>
+        <form className="login" method="POST" action={ Routes.get('login', {slug}) }>
           { next ?
             <input type="hidden" name="next" value={`${next}`} />
             : null }
@@ -30,13 +31,13 @@ class AsLogin extends React.Component {
               <Translate value="login.login" />
             </Button>
           </FormGroup>
-          <Link to={`${rootPath}${slug}/changePassword`}>
+          <Link to={Routes.get('signup', {slug} )}>
             <Translate value="login.forgotPwd" />
           </Link>
         </form>
         <div className="signup">
           <h4 className="dark-title-4"><Translate value="login.noAccount" /></h4>
-          <Link className="button-link button-dark margin-s" to={`${rootPath}${slug}/signup`}>
+          <Link className="button-link button-dark margin-s" to={Routes.get('signup', {slug} )}>
             <Translate value="login.signUp" />
           </Link>
         </div>

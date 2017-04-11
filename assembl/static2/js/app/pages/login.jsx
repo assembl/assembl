@@ -2,31 +2,30 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import get from 'lodash/get';
+import { I18n } from 'react-redux-i18n';
 import AsLogin from '../components/login/assemblLogin';
-import {Facebook, Google, Twitter} from '../components/login/socialMediaLogin';
-import parse from '../utils/literalStringParser';
-
+import {SocialMedia} from '../components/login/socialMediaLogin';
+import { getProvidersData } from '../utils/globalFunctions';
 
 class Login extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;    
+    const { rootPath } = this.props.context;
+    const providers = getProvidersData();
     let next = get(this.props, 'location.query.next', null);
     let error_message = get(this.props, 'location.query.error', null);
     return (
       <Grid fluid className="login-container">
         <div className="login-view">
-          <div className="box-title">{debateData.topic}</div>
+          <div className="box-title">{debateData ? debateData.topic : I18n.t('loginTitle')}</div>
           <div className="box">
             <Row className="max-container center">
               <Col xs={12} md={6}>
-                <Facebook />
-                <Twitter />
-                <Google />
+                {providers.length > 0 && <SocialMedia providers={providers} /> }
               </Col>          
               <Col xs={12} md={6}>
                 <AsLogin next={next} error_message={error_message}
-                  slug={debateData.slug} rootPath={rootPath}/>
+                  slug={debateData? debateData.slug : null} rootPath={rootPath}/>
               </Col>
             </Row>
           </div>
