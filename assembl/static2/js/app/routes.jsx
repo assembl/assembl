@@ -19,7 +19,7 @@ import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
 import Terms from './pages/terms';
 import parse from './utils/literalStringParser';
-import capitalize from 'lodash/capitalize';
+import { capitalize } from './utils/globalFunctions';
 import urljoin from 'url-join';
 
 
@@ -72,11 +72,11 @@ class RoutesMap {
     const pre = ('preSlash' in args && args['preSlash'] === false) ? false : true;
     const isCtx = 'ctx' in args ? args['ctx'] : false;
 
+    name = isCtx ? this.convertToContextualName(name) : name;
     if (!(name in this._routes)){
       throw Error(`${name} is not a valid path!`);
     }
 
-    name = isCtx ? this.convertToContextualName(name) : name;
     let literal = this._routes[name];
     literal = this.maybePrependSlash(pre, literal);
     let a = parse(literal, args);
@@ -96,6 +96,13 @@ class RoutesMap {
 
 export let Routes = new RoutesMap();
 
+const getRouteForRouter = (name, isCtx, args) => {
+  const newArgs = args || {};
+  newArgs['slug'] = ':slug';
+  newArgs['preSlash'] = false;
+  if (isCtx) { return Routes.getContextual(name, newArgs); }
+  return Routes.get(name, newArgs);
+}
 
 const DebateChild = (props) => {
   switch (props.params.phase) {
@@ -119,11 +126,11 @@ export default (
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
     <Route path="/changePassword" component={ChangePassword} />
-    <Route path="/requestPasswordChange" component={RequestPasswordChange} />
+    <Route path={getRouteForRouter('requestPasswordChange')} component={RequestPasswordChange} />
     <Route path="/" component={App}>
-      <Route path=":slug/login" component={Login} />
-      <Route path=":slug/signup" component={Signup} />
-      <Route path=":slug/changePassword" component={ChangePassword} />
+      <Route path={getRouteForRouter('login', true)} component={Login} />
+      <Route path={getRouteForRouter('signup', true)} component={Signup} />
+      <Route path={getRouteForRouter('changePassword', true)} component={ChangePassword} />
       <Route component={Main}>
         <Route path=":slug/home" component={Home} />
         <Route path=":slug/profile/:userId" component={Profile} />
@@ -135,6 +142,14 @@ export default (
         <Route path=":slug/community" component={Community} />
         <Route path=":slug/terms" component={Terms} />
         <Route path=":slug/req_password_change" component={RequestPasswordChange} />
+        <Route path={getRouteForRouter('home')} component={Home} />
+        <Route path={getRouteForRouter('profile', false, {userId: ':userId'})} component={Profile} />
+        <Route path={getRouteForRouter('ideas')} component={Ideas} />
+        <Route path={getRouteForRouter('synthesis')} component={Synthesis} />
+        <Route path={getRouteForRouter('debate')} component={Debate} />
+        <Route path={getRouteForRouter('community')} component={Community} />
+        <Route path={getRouteForRouter('terms')} component={Terms} />
+        <Route path={getRouteForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
       </Route>
     </Route>
     <Route path="*" component={NotFound} />

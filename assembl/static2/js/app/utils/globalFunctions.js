@@ -73,6 +73,14 @@ export const calculatePercentage = (value1, value2) => {
   return Math.round(((value1 * 100) / value2) * 100) / 100;
 };
 
+/*
+  Handrolled instead of using lowdash
+  Because lowdash/capitalize lowercases everything else
+*/
+export const capitalize = (s) => {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 export const getDomElementOffset = (el) => {
   const rect = el.getBoundingClientRect();
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
