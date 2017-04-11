@@ -246,15 +246,19 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     def get_all_syntheses(self):
         from .idea_graph_view import Synthesis
+        from .post import SynthesisPost, PublicationStates
         return self.db.query(
-            Synthesis).options(
+            Synthesis).join(SynthesisPost
+            ).options(
             subqueryload_all(
             'idea_assocs.idea'),
             subqueryload_all(
             'idealink_assocs.idea_link'),
             subqueryload_all(
             Synthesis.published_in_post)).filter(
-            Synthesis.discussion_id == self.id).all()
+            Synthesis.discussion_id == self.id,
+            SynthesisPost.publication_state == PublicationStates.PUBLISHED,
+            SynthesisPost.tombstone_condition()).all()
 
     def get_permissions_by_role(self):
         roleperms = self.db.query(Role.name, Permission.name).select_from(
