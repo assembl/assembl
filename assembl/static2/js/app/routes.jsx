@@ -39,10 +39,10 @@ class RoutesMap {
       'signup': "signup",
       'changePassword': "changePassword",
       'requestPasswordChange': 'requestPasswordChange',
-      'cxtLogin': "${slug}/login",
-      'cxtSignup': "${slug}/signup",
-      'cxtChangePassword': "${slug}/changePassword",
-      'cxtRequestPasswordChange': "${slug}/requestPasswordChange",
+      'ctxLogin': "${slug}/login",
+      'ctxSignup': "${slug}/signup",
+      'ctxChangePassword': "${slug}/changePassword",
+      'ctxRequestPasswordChange': "${slug}/requestPasswordChange",
       'home': "${slug}/home",
       'profile': "${slug}/profile/${userId}",
       'ideas': "${slug}/ideas",
@@ -70,15 +70,22 @@ class RoutesMap {
   get(name, args){
     //Shitty way to enforce a boolean type without crashing
     const pre = ('preSlash' in args && args['preSlash'] === false) ? false : true;
-    
+    const isCtx = 'ctx' in args ? args['ctx'] : false;
+
     if (!(name in this._routes)){
       throw Error(`${name} is not a valid path!`);
     }
 
+    name = isCtx ? this.convertToContextualName(name) : name;
     let literal = this._routes[name];
-    literal = this.maybePrependSlash(literal);
+    literal = this.maybePrependSlash(pre, literal);
     let a = parse(literal, args);
     return a;
+  }
+
+  getContextual(name, args){
+    args['ctx'] = true;
+    return this.get(name, args);
   }
 
   getFullPath(name, args){
