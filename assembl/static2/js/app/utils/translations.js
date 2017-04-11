@@ -1,5 +1,6 @@
 const Translations = {
   fr: {
+    login: 'Authentifier',
     'Number of contributions': 'Nombre de messages',
     'Number of users': 'Nombre de contributeurs',
     search: {
@@ -173,6 +174,7 @@ const Translations = {
     }
   },
   en: {
+    login: 'Login',
     search: {
       reset: {
         clear_all: 'Clear All Filters'
