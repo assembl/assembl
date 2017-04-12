@@ -7,6 +7,7 @@ import Posts from './postsReducer';
 import Users from './usersReducer';
 import Partners from './partnersReducer';
 import Synthesis from './synthesisReducer';
+import Auth from './authenticationReducer';
 
 export default combineReducers({
   apollo: client.reducer(),
@@ -16,5 +17,6 @@ export default combineReducers({
   posts: Posts,
   users: Users,
   partners: Partners,
-  synthesis: Synthesis
+  synthesis: Synthesis,
+  auth: Auth
 });
