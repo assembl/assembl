@@ -99,7 +99,8 @@ const Translations = {
       accountCreatedMsg: 'Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si vous ne le recevez pas, veuillez vérifier qu\'il n\'est pas dans votre courrier indésirable ou cliquez sur le bouton "Renvoer l\'email" ci-dessous.',
       changePassword: 'Changez votre mot de passe',
       incorrectPassword: 'Les mots de passe que vous avez écrits ne correspondent pas',
-      somethingWentWrong: 'Nous sommes desolés ! Quelque chose s\'est mal passé. Veuillez ré-essayer'
+      somethingWentWrong: 'Nous sommes desolés ! Quelque chose s\'est mal passé. Veuillez ré-essayer',
+      userName: 'Nom d\'utilisateur (optionnel)'
     },
     changePassword: {
       panelTitle: 'Bienvenue dans la page changement de mot de passe d\'Assembl'
@@ -272,7 +273,8 @@ const Translations = {
       accountCreatedMsg: 'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. If you did not receive any confirmation e-mail, check your spams then click here.',
       changePassword: 'Change Password',
       incorrectPassword: 'The passwords that you have entered do not match',
-      somethingWentWrong: 'We are sorry! Something went terribly wrong. Please try again'
+      somethingWentWrong: 'We are sorry! Something went terribly wrong. Please try again',
+      userName: "Username (optional)"
     },
     changePassword: {
       panelTitle: 'Welcome to Assembl forgot password page'
