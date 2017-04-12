@@ -3,7 +3,6 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
-import { getConnectedUserId } from '../../../utils/globalFunctions';
 
 class Question extends React.Component {
   constructor(props) {
@@ -66,9 +65,8 @@ class Question extends React.Component {
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
     const questionId = this.props.questionId;
-    const creatorId = getConnectedUserId();
     const body = this.state.postBody;
-    this.props.mutate({ variables: { ideaId: questionId, creatorId: creatorId, body: body } })
+    this.props.mutate({ variables: { ideaId: questionId, body: body } })
     .then((post) => {
       this.props.displayAlert('success', I18n.t('debate.survey.postSuccess'));
       this.setState({
@@ -138,10 +136,18 @@ Question.propTypes = {
 };
 
 const createPostMutation = gql`
-  mutation createPost($ideaId: ID, $creatorId: ID, $body: String!) {
-    createPost(ideaId:$ideaId, creatorId: $creatorId, body: $body) {
-      id,
-      body
+  mutation createPost($ideaId: ID, $body: String!) {
+    createPost(ideaId:$ideaId, body: $body) {
+      post {
+        ... on PropositionPost {
+          id,
+          body,
+          creator {
+            id,
+            name
+          }
+        }
+      }
     }
   }
 `;

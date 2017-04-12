@@ -1,5 +1,6 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
+import update from 'immutability-helper';
 import gql from 'graphql-tag';
 import { Translate } from 'react-redux-i18n';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -20,32 +21,53 @@ class Post extends React.Component {
     this.handleDisagree = this.handleDisagree.bind(this);
   }
   handleLike(event) {
+    const { post, id } = this.props;
     const target = event.currentTarget;
-    const postId = this.props.id;
     const type = 'LIKE';
-    this.props.mutate({ variables: { postId: postId, type: type } })
-    .then((sentiments) => {
-      target.setAttribute("class", "sentiment sentiment-active");
-      this.setState({
-        like: sentiments.data.addSentiment.like
-      });
-    }).catch((error) => {
-      this.props.displayAlert('danger', `${error}`);
-    });
+    const isMySentiment = post.mySentiment === 'like';
+    if(isMySentiment) {
+      this.deleteSentiment(target, type);
+    } else {
+      this.addSentiment(target, type);
+    }
   }
   handleDisagree(event) {
+    const { post } = this.props;
     const target = event.currentTarget;
-    const postId = this.props.id;
     const type = 'DISAGREE';
-    this.props.mutate({ variables: { postId: postId, type: type } })
+    const isMySentiment = post.mySentiment === 'disagree';
+    if(isMySentiment) {
+      this.deleteSentiment(target, type);
+    } else {
+      this.addSentiment(target, type);
+    }
+  }
+  addSentiment(target, type) {
+    const { id } = this.props;
+    this.props.addSentiment({ variables: { postId: id, type: type } })
     .then((sentiments) => {
       target.setAttribute("class", "sentiment sentiment-active");
       this.setState({
+        like: sentiments.data.addSentiment.like,
         disagree: sentiments.data.addSentiment.disagree
       });
     }).catch((error) => {
       this.props.displayAlert('danger', `${error}`);
     });
+  }
+  deleteSentiment(target, type) {
+    console.log('delete a sentiment');
+    const { id } = this.props;
+    // this.props.deleteSentiment({ variables: { postId: id, type: type } })
+    // .then((sentiments) => {
+    //   target.setAttribute("class", "sentiment");
+    //   this.setState({
+    //     like: sentiments.data.addSentiment.like,
+    //     disagree: sentiments.data.addSentiment.disagree
+    //   });
+    // }).catch((error) => {
+    //   this.props.displayAlert('danger', `${error}`);
+    // });
   }
   render() {
     const isUserConnected = getConnectedUserId() !== null;
@@ -101,10 +123,11 @@ class Post extends React.Component {
 }
 
 Post.propTypes = {
-  mutate: React.PropTypes.func.isRequired
+  addSentiment: React.PropTypes.func.isRequired,
+  deleteSentiment: React.PropTypes.func.isRequired
 };
 
-const addSentimentMutation = gql`
+const addSentiment = gql`
   mutation addSentiment($type: SentimentType!, $postId: ID!) {
     addSentiment(postId:$postId, type: $type) {
       like,
@@ -113,6 +136,22 @@ const addSentimentMutation = gql`
   }
 `;
 
-const PostWithMutation = graphql(addSentimentMutation)(Post);
+const deleteSentiment = gql`
+  mutation deleteSentiment($type: SentimentType!, $postId: ID!) {
+    deleteSentiment(postId:$postId, type: $type) {
+      like,
+      disagree
+    }
+  }
+`;
 
-export default PostWithMutation;
+const PostWithMutations =  compose(
+  graphql(addSentiment, {
+    name: 'addSentiment'
+  }),
+  graphql(deleteSentiment, {
+    name: 'deleteSentiment'  
+  })
+)(Post);
+
+export default PostWithMutations;
