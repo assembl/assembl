@@ -428,7 +428,8 @@ class Query(graphene.ObjectType):
         query = get_query(model, context
             ).filter(model.discussion_id == discussion_id)
         if identifier is not None:
-            query = query.filter(model.identifier == identifier)
+            query = query.filter(model.identifier == identifier
+            ).filter(model.hidden == False).order_by(model.id)
 
         return query
 
