@@ -25,11 +25,14 @@ export const signupAction = (payload) => {
     return signUp(payload).then((success) => {
       dispatch(signupSuccess());
     }).catch((error) => {
+      //Should match on a more generic thing that accounts for JS errors + 
+      //server returned errors
       switch (error.name) {
-        case 'TypeError': {
+        case 'PasswordMismatchError': {
           return dispatch(signupIncorrectPassword());
         }
         default: {
+          //console.log("Error on signupActionCreator", error);
           return dispatch(signupGeneralError(error));
         }
       }

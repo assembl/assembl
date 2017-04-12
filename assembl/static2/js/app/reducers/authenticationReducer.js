@@ -1,4 +1,4 @@
-const AuthReducer = (state = {}, action) => {
+const AuthReducer = (state = {signupSuccess: {success: false, reason: null}}, action) => {
   switch (action.type) {
   case 'SIGNUP_SUCCESS':
     return { signupSuccess: {success: true}};
