@@ -8,13 +8,19 @@ class Signup extends React.Component {
 
   render() {
     console.log(this.props);
-    const isAccountCreated = false;
+    let signupConfirm = false;
+    //Data has been fetched from the backend
+    if ('signupSuccess' in this.props.auth) {
+      if (this.props.auth.signupSuccess.success === true) {
+        signupConfirm = this.props.auth.signupSuccess.success;
+      }
+    }
     return (
       <Grid fluid className="login-container">
         <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
-            {!isAccountCreated && <SignupForm/>}
-            // {isAccountCreated && <SignUpConfirm />}
+            {!signupConfirm && <SignupForm />}
+            {signupConfirm && <SignUpConfirm />}
           </Col>
         </Row> 
       </Grid>

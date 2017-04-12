@@ -25,13 +25,12 @@ class SignupForm extends React.Component {
     let s = {};
     const name = e.target.name;
     s[name] = e.target.value;
-    console.log("changing state to", s);
     this.setState(s);
   }
   
   signupHandler(e){
     e.preventDefault();
-    signupAction(this.state);
+    this.props.signUp(this.state);
   }
 
   errorMessageHandler(data){
@@ -60,6 +59,11 @@ class SignupForm extends React.Component {
               <FormControl type="text" name="name" required
                            placeholder={I18n.t('login.fullName')} onChange={this.inputHandler}/>
             </FormGroup>
+            <FormGroup>
+              <FormControl type="text" name="username"
+                           placeholder={I18n.t('login.userName')} onChange={this.inputHandler}/>
+            </FormGroup>
+
             <FormGroup>
               <FormControl type="email" name="email" required
                            placeholder={I18n.t('login.email')} onChange={this.inputHandler}/>
@@ -105,4 +109,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SignupForm);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signUp: (payload) => {
+      dispatch(signupAction(payload));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);
