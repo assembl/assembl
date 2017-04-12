@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
 import graphene
+from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy import SQLAlchemyConnectionField
@@ -16,6 +17,10 @@ from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.lib.sqla_types import EmailString
 from assembl import models
+from assembl.models.action import (
+    SentimentOfPost,
+    LikeSentimentOfPost, DisagreeSentimentOfPost,
+    DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -664,8 +669,70 @@ class CreatePost(graphene.Mutation):
 
         return CreatePost(post=new_post)
 
+
+sentiments_enum = PyEnum('SentimentTypes', (
+    ('LIKE', 'LIKE'),
+    ('DISAGREE', 'DISAGREE'),
+    ('DONT_UNDERSTAND', 'DONT_UNDERSTAND'),
+    ('MORE_INFO', 'MORE_INFO')))
+SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
+
+
+class AddSentiment(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        type = graphene.Argument(
+            type=SentimentTypes,
+            required=True
+        )
+
+    sentiment_counts = graphene.Field(lambda: SentimentCounts)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        user_id = context.authenticated_userid or Everyone
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = SentimentOfPost.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        sentiment_type = args.get('type')
+        if SentimentTypes.LIKE.name == sentiment_type:
+            sentiment = LikeSentimentOfPost(
+                post=post, discussion=discussion, actor_id=user_id)
+        elif SentimentTypes.DISAGREE.name == sentiment_type:
+            sentiment = DisagreeSentimentOfPost(
+                post=post, discussion=discussion, actor_id=user_id)
+        elif SentimentTypes.DONT_UNDERSTAND.name == sentiment_type:
+            sentiment = DontUnderstandSentimentOfPost(
+                post=post, discussion=discussion, actor_id=user_id)
+        elif SentimentTypes.MORE_INFO.name == sentiment_type:
+            sentiment = MoreInfoSentimentOfPost(
+                post=post, discussion=discussion, actor_id=user_id)
+
+        sentiment = sentiment.handle_duplication(
+            permissions=permissions, user_id=user_id)
+        sentiment.db.add(sentiment)
+        sentiment.db.flush()
+
+        sentiment_counts = post.sentiment_counts
+        sentiment_counts = SentimentCounts(
+            dont_understand=sentiment_counts['dont_understand'],
+            disagree=sentiment_counts['disagree'],
+            like=sentiment_counts['like'],
+            more_info=sentiment_counts['more_info'],
+        )
+        return AddSentiment(sentiment_counts=sentiment_counts)
+
 # TODO DeleteThematic, raise exception if questions associated with it
-# TODO AddSentimentToPost
 # TODO DeleteSentimentToPost
 # TODO csv export
 
@@ -674,6 +741,7 @@ class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
     create_post = CreatePost.Field()
+    add_sentiment = AddSentiment.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

@@ -390,3 +390,125 @@ mutation myFirstMutation {
                 u'body': u"une proposition...",
                 u'creator': {u'name': u'Mr. Administrator'}
     }}}
+
+
+def create_proposal(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on PropositionPost {
+                id,
+                body,
+                creator { name },
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    post_id = res.data['createPost']['post']['id']
+    return post_id
+
+
+def test_mutation_add_sentiment(graphql_request):
+    post_id = create_proposal(graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+      sentimentCounts {
+        like
+        disagree
+      }
+    }
+}
+""" % post_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'addSentiment': {
+            u'sentimentCounts': {
+               u'like': 1,
+               u'disagree': 0,
+            }
+        }
+    }
+
+
+def test_mutation_add_sentiment_like_then_disagree(graphql_request):
+    post_id = create_proposal(graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+      sentimentCounts {
+        like
+        disagree
+      }
+    }
+}
+""" % post_id, context_value=graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:DISAGREE
+    ) {
+      sentimentCounts {
+        like
+        disagree
+      }
+    }
+}
+""" % post_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'addSentiment': {
+            u'sentimentCounts': {
+               u'like': 0,
+               u'disagree': 1,
+            }
+        }
+    }
+
+def test_mutation_add_sentiment_like_twice(graphql_request):
+    post_id = create_proposal(graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+      sentimentCounts {
+        like
+        disagree
+      }
+    }
+}
+""" % post_id, context_value=graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+      sentimentCounts {
+        like
+        disagree
+      }
+    }
+}
+""" % post_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'addSentiment': {
+            u'sentimentCounts': {
+               u'like': 1,
+               u'disagree': 0,
+            }
+        }
+    }
