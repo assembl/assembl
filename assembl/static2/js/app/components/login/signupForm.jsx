@@ -18,6 +18,7 @@ class SignupForm extends React.Component {
 
     this.signupHandler = this.signupHandler.bind(this);
     this.inputHandler = this.inputHandler.bind(this);
+    this.errorMessageHandler = this.errorMessageHandler.bind(this);
   }
 
   inputHandler(e){
@@ -33,8 +34,23 @@ class SignupForm extends React.Component {
     signupAction(this.state);
   }
 
+  errorMessageHandler(data){
+    if (data.success === false) {
+      //Add more cases to this switch statement, as needed
+      switch (data.reason){
+        case 'password': {
+          return I18n.t('login.incorrectPassword')
+        }
+        default: {
+          return I18n.t('login.somethingWentWrong')
+        }
+      }
+    }
+  }
+
   render() {
     const { debateData } = this.props.debate;
+    const { auth } = this.props;
     return (
       <div className="login-view">
         <div className="box-title">{debateData.topic}</div>
@@ -72,6 +88,9 @@ class SignupForm extends React.Component {
               </Link>
             </FormGroup>
           </form>
+          <div>
+            {this.errorMessageHandler(auth)}
+          </div>
         </div>
       </div>
     );
@@ -81,7 +100,8 @@ class SignupForm extends React.Component {
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
-    context: state.context
+    context: state.context,
+    auth: state.auth
   };
 };
 
