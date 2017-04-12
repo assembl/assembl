@@ -265,7 +265,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_update_thematic(graphql_request):
+def create_thematic(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
@@ -291,6 +291,11 @@ mutation myFirstMutation {
 """, context_value=graphql_request)
     thematic_id = res.data['createThematic']['thematic']['id']
     first_question_id = res.data['createThematic']['thematic']['questions'][0]['id']
+    return thematic_id, first_question_id
+
+
+def test_update_thematic(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
     # to test the modification, we delete the first letter of each message
     res = schema.execute(u"""
 mutation secondMutation {
@@ -316,7 +321,6 @@ mutation secondMutation {
     }
 }
 """ % (thematic_id, first_question_id), context_value=graphql_request)
-    thematic_id
     assert json.loads(json.dumps(res.data)) == {
         u'updateThematic': {
             u'thematic': {
@@ -330,4 +334,59 @@ mutation secondMutation {
                         {u'value': u"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
                     ]},
                 ]
+    }}}
+
+
+def test_mutation_create_post(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        subject:"Proposition 1",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on PropositionPost {
+                subject,
+                body,
+                creator { name },
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition 1',
+                u'body': u"une proposition...",
+                u'creator': {u'name': u'Mr. Administrator'}
+    }}}
+
+
+def test_mutation_create_post_without_subject(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on PropositionPost {
+                subject,
+                body,
+                creator { name },
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition',
+                u'body': u"une proposition...",
+                u'creator': {u'name': u'Mr. Administrator'}
     }}}

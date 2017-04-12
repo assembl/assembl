@@ -596,8 +596,75 @@ class UpdateThematic(graphene.Mutation):
 
         return UpdateThematic(thematic=thematic)
 
+
+class CreatePost(graphene.Mutation):
+    class Input:
+        subject = graphene.String()
+        body = graphene.String(required=True)
+        idea_id = graphene.ID(required=True)
+        # TODO: for a real post (not a proposal), we need to handle parent_id
+        # see related code in views/api/post.py
+
+    post = graphene.Field(lambda: PostUnion)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+
+        idea_id = args.get('idea_id')
+        idea_id = int(Node.from_global_id(idea_id)[1])
+        in_reply_to_idea = models.Idea.get(idea_id)
+        if isinstance(in_reply_to_idea, models.Question):
+            cls = models.PropositionPost
+        else:
+            cls = models.Post
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            subject = args.get('subject')
+            body = args.get('body')
+            if subject is None:
+                # TODO for real post, need the same logic than in views/api/post.py
+                subject_entries = [
+                    {'value': u'Proposition', u'locale_code': u'und'}
+                ]
+            else:
+                subject_entries = [
+                    {'value': subject, u'locale_code': u'und'}
+                ]
+
+            body_entries = [
+                {'value': body, u'locale_code': u'und'}
+            ]
+
+            subject_langstring = langstring_from_input_entries(subject_entries)
+            body_langstring = langstring_from_input_entries(body_entries)
+            discussion = models.Discussion.get(discussion_id)
+            new_post = cls(
+                discussion=discussion,
+                subject=subject_langstring,
+                body=body_langstring,
+                creator_id=user_id
+            )
+            db = new_post.db
+            db.add(new_post)
+            idea_post_link = models.IdeaRelatedPostLink(
+                creator_id=user_id,
+                content=new_post,
+                idea=in_reply_to_idea
+            )
+            db.add(idea_post_link)
+            db.flush()
+
+        return CreatePost(post=new_post)
+
 # TODO DeleteThematic, raise exception if questions associated with it
-# TODO CreatePost which publish the post
 # TODO AddSentimentToPost
 # TODO DeleteSentimentToPost
 # TODO csv export
@@ -606,6 +673,7 @@ class UpdateThematic(graphene.Mutation):
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
+    create_post = CreatePost.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
