@@ -378,6 +378,7 @@ mutation myFirstMutation {
                 subject,
                 body,
                 creator { name },
+                mySentiment
             }
         }
     }
@@ -388,7 +389,8 @@ mutation myFirstMutation {
             u'post': {
                 u'subject': u'Proposition',
                 u'body': u"une proposition...",
-                u'creator': {u'name': u'Mr. Administrator'}
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'mySentiment': None
     }}}
 
 
@@ -422,18 +424,26 @@ mutation myFirstMutation {
         postId:"%s",
         type:LIKE
     ) {
-      sentimentCounts {
-        like
-        disagree
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
       }
     }
 }
 """ % post_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'addSentiment': {
-            u'sentimentCounts': {
-               u'like': 1,
-               u'disagree': 0,
+            u'post': {
+                u'sentimentCounts': {
+                   u'like': 1,
+                   u'disagree': 0,
+                },
+                u'mySentiment': u"LIKE"
             }
         }
     }
@@ -447,10 +457,6 @@ mutation myFirstMutation {
         postId:"%s",
         type:LIKE
     ) {
-      sentimentCounts {
-        like
-        disagree
-      }
     }
 }
 """ % post_id, context_value=graphql_request)
@@ -460,18 +466,26 @@ mutation myFirstMutation {
         postId:"%s",
         type:DISAGREE
     ) {
-      sentimentCounts {
-        like
-        disagree
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
       }
     }
 }
 """ % post_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'addSentiment': {
-            u'sentimentCounts': {
-               u'like': 0,
-               u'disagree': 1,
+            u'post': {
+                u'sentimentCounts': {
+                   u'like': 0,
+                   u'disagree': 1,
+                },
+                u'mySentiment': u"DISAGREE"
             }
         }
     }
@@ -484,10 +498,6 @@ mutation myFirstMutation {
         postId:"%s",
         type:LIKE
     ) {
-      sentimentCounts {
-        like
-        disagree
-      }
     }
 }
 """ % post_id, context_value=graphql_request)
@@ -497,85 +507,75 @@ mutation myFirstMutation {
         postId:"%s",
         type:LIKE
     ) {
-      sentimentCounts {
-        like
-        disagree
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
       }
     }
 }
 """ % post_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'addSentiment': {
-            u'sentimentCounts': {
-               u'like': 1,
-               u'disagree': 0,
+            u'post': {
+                u'sentimentCounts': {
+                    u'like': 1,
+                    u'disagree': 0,
+                },
+                u'mySentiment': u"LIKE"
             }
         }
     }
 
-def test_my_sentiment(graphql_request):
+def test_mutation_delete_sentiment(graphql_request):
     post_id = create_proposal(graphql_request)
-    schema.execute(u"""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
         postId:"%s",
         type:LIKE
     ) {
-      sentimentCounts {
-        like
-        disagree
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
       }
     }
 }
 """ % post_id, context_value=graphql_request)
     res = schema.execute(u"""
-query myPost {
-    node(
-        id:"%s",
+mutation myFirstMutation {
+    deleteSentiment(
+        postId:"%s",
     ) {
-      ... on PropositionPost {
-        sentimentCounts {
-          like
-          disagree
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
         }
-        mySentiment
       }
     }
 }
 """ % post_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-        u'node': {
-            u'sentimentCounts': {
-               u'like': 1,
-               u'disagree': 0,
-            },
-            u'mySentiment': u'LIKE'
-        }
-    }
-
-def test_my_sentiment_none(graphql_request):
-    post_id = create_proposal(graphql_request)
-    res = schema.execute(u"""
-query myPost {
-    node(
-        id:"%s",
-    ) {
-      ... on PropositionPost {
-        sentimentCounts {
-          like
-          disagree
-        }
-        mySentiment
-      }
-    }
-}
-""" % post_id, context_value=graphql_request)
-    assert json.loads(json.dumps(res.data)) == {
-        u'node': {
-            u'sentimentCounts': {
-               u'like': 0,
-               u'disagree': 0,
-            },
-            u'mySentiment': None
+        u'deleteSentiment': {
+            u'post': {
+                u'sentimentCounts': {
+                    u'like': 0,
+                    u'disagree': 0,
+                },
+                u'mySentiment': None
+            }
         }
     }

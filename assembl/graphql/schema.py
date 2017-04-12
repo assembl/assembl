@@ -690,7 +690,7 @@ class AddSentiment(graphene.Mutation):
             required=True
         )
 
-    sentiment_counts = graphene.Field(lambda: SentimentCounts)
+    post = graphene.Field(lambda: PostUnion)
 
     @staticmethod
     def mutate(root, args, context, info):
@@ -726,18 +726,34 @@ class AddSentiment(graphene.Mutation):
             permissions=permissions, user_id=user_id)
         sentiment.db.add(sentiment)
         sentiment.db.flush()
+        return AddSentiment(post=post)
 
-        sentiment_counts = post.sentiment_counts
-        sentiment_counts = SentimentCounts(
-            dont_understand=sentiment_counts['dont_understand'],
-            disagree=sentiment_counts['disagree'],
-            like=sentiment_counts['like'],
-            more_info=sentiment_counts['more_info'],
-        )
-        return AddSentiment(sentiment_counts=sentiment_counts)
+
+class DeleteSentiment(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+
+    post = graphene.Field(lambda: PostUnion)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = SentimentOfPost.user_can_cls(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        post.my_sentiment.tombstone_date = datetime.utcnow()
+        post.db.flush()
+        return DeleteSentiment(post=post)
 
 # TODO DeleteThematic, raise exception if questions associated with it
-# TODO DeleteSentimentToPost
 # TODO csv export
 
 
@@ -746,6 +762,7 @@ class Mutations(graphene.ObjectType):
     update_thematic = UpdateThematic.Field()
     create_post = CreatePost.Field()
     add_sentiment = AddSentiment.Field()
+    delete_sentiment = DeleteSentiment.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
