@@ -113,6 +113,7 @@ def get_provider_data(get_route, providers=None):
     ).order_by(IdentityProvider.id).all()
     saml_providers = []
     if 'saml' in providers:
+        providers.remove('saml')
         saml_providers = config.get('SOCIAL_AUTH_SAML_ENABLED_IDPS')
         if not isinstance(saml_providers, dict):
             saml_providers = json.loads(saml_providers)
