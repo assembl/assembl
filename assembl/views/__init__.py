@@ -141,7 +141,7 @@ def get_provider_data(get_route, providers=None):
                 "type": "saml",
                 "add_social_account": get_route(
                     'add_social_account', backend='saml'),
-                "login": get_route('login', backend='saml'),
+                "login": get_route('social_auth', backend='saml'),
                 "extra": {
                     "idp": prov_id
                 }

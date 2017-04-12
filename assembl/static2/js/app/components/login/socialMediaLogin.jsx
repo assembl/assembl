@@ -27,7 +27,7 @@ export class SocialMedia extends React.Component {
               return (<li key={provider['name']}>
                 <form id={provider.name} method="get" action={ provider.login } >
                   {Object.keys(provider.extra).map( (k) => {
-                    <input type="hidden" name={k} value={provider.extra[k]} />
+                    return (<input type="hidden" name={k} value={provider.extra[k]} />)
                     })
                   }
                   <button type="submit">{provider.name}</button>
