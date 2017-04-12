@@ -1,22 +1,31 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import SignupForm from '../components/login/signupForm';
 import SignUpConfirm from '../components/login/signUpConfirm';
 
 class Signup extends React.Component {
+
   render() {
-    const isAccountCreated = location.hash === '#success';
+    console.log(this.props);
+    const isAccountCreated = false;
     return (
       <Grid fluid className="login-container">
         <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
-            {!isAccountCreated && <SignupForm />}
-            {isAccountCreated && <SignUpConfirm />}
+            {!isAccountCreated && <SignupForm/>}
+            // {isAccountCreated && <SignUpConfirm />}
           </Col>
-        </Row>
+        </Row> 
       </Grid>
     );
   }
 }
 
-export default Signup;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth
+  }
+};
+
+export default connect(mapStateToProps)(Signup);
