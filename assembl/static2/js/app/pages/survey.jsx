@@ -169,13 +169,17 @@ const ThemeQuery = gql`
           ... on Question {
             title(lang: $lang),
             posts{
-              ... on PropositionPost {
-                id,
-                body,
-                mySentiment,
-                sentimentCounts {
-                  like,
-                  disagree
+              edges {
+                node {
+                  ... on PropositionPost {
+                    id,
+                    body,
+                    mySentiment,
+                    sentimentCounts {
+                      like,
+                      disagree
+                    }
+                  }
                 }
               }
             }

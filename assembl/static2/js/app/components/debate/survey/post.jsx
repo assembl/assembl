@@ -1,6 +1,5 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
-import update from 'immutability-helper';
 import gql from 'graphql-tag';
 import { Translate } from 'react-redux-i18n';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
