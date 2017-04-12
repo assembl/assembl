@@ -512,3 +512,70 @@ mutation myFirstMutation {
             }
         }
     }
+
+def test_my_sentiment(graphql_request):
+    post_id = create_proposal(graphql_request)
+    schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+      sentimentCounts {
+        like
+        disagree
+      }
+    }
+}
+""" % post_id, context_value=graphql_request)
+    res = schema.execute(u"""
+query myPost {
+    node(
+        id:"%s",
+    ) {
+      ... on PropositionPost {
+        sentimentCounts {
+          like
+          disagree
+        }
+        mySentiment
+      }
+    }
+}
+""" % post_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'node': {
+            u'sentimentCounts': {
+               u'like': 1,
+               u'disagree': 0,
+            },
+            u'mySentiment': u'LIKE'
+        }
+    }
+
+def test_my_sentiment_none(graphql_request):
+    post_id = create_proposal(graphql_request)
+    res = schema.execute(u"""
+query myPost {
+    node(
+        id:"%s",
+    ) {
+      ... on PropositionPost {
+        sentimentCounts {
+          like
+          disagree
+        }
+        mySentiment
+      }
+    }
+}
+""" % post_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'node': {
+            u'sentimentCounts': {
+               u'like': 0,
+               u'disagree': 0,
+            },
+            u'mySentiment': None
+        }
+    }

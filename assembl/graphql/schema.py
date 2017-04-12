@@ -165,6 +165,14 @@ class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):
     pass
 
 
+sentiments_enum = PyEnum('SentimentTypes', (
+    ('LIKE', 'LIKE'),
+    ('DISAGREE', 'DISAGREE'),
+    ('DONT_UNDERSTAND', 'DONT_UNDERSTAND'),
+    ('MORE_INFO', 'MORE_INFO')))
+SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
+
+
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.AgentProfile
@@ -196,7 +204,7 @@ class PostInterface(SQLAlchemyInterface):
     subject = graphene.String(lang=graphene.String())
     body = graphene.String(lang=graphene.String())
     sentiment_counts = graphene.Field(SentimentCounts)
-    # TODO my_sentiment
+    my_sentiment = graphene.Field(type=SentimentTypes)
 
     def resolve_subject(self, args, context, info):
         subject = resolve_langstring(self.get_subject(), args.get('lang'))
@@ -214,6 +222,10 @@ class PostInterface(SQLAlchemyInterface):
             like=sentiment_counts['like'],
             more_info=sentiment_counts['more_info'],
         )
+
+    def resolve_my_sentiment(self, args, context, info):
+        my_sentiment = self.my_sentiment
+        return my_sentiment.name.upper()
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -668,14 +680,6 @@ class CreatePost(graphene.Mutation):
             db.flush()
 
         return CreatePost(post=new_post)
-
-
-sentiments_enum = PyEnum('SentimentTypes', (
-    ('LIKE', 'LIKE'),
-    ('DISAGREE', 'DISAGREE'),
-    ('DONT_UNDERSTAND', 'DONT_UNDERSTAND'),
-    ('MORE_INFO', 'MORE_INFO')))
-SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
 
 
 class AddSentiment(graphene.Mutation):
