@@ -2,6 +2,12 @@ const convertToURLEncodedString = (obj) => {
   return Object.keys(obj).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`).join('&'); 
 }
 
+/*
+  A global async method that returns a Promisified ajax call
+  @params payload [Object] The object that will be sent
+  @params isJson [Boolean] Pass a flag if the object is JSON. Default is form header.
+  @retuns [Promise]
+*/
 
 export const xmlHttpRequest = (obj) => {
   return new Promise((resolve, reject) => {
@@ -13,7 +19,7 @@ export const xmlHttpRequest = (obj) => {
       obj.headers = obj.headers || {};
       if (obj.isJson && obj.isJson === true){
         obj.headers['Content-Type'] = 'application/json';
-        payload = JSON.encode(obj.payload);
+        payload = JSON.stringify(obj.payload);
       }
       else {
         obj.headers['Content-Type'] = 'application/x-www-form-urlencoded';
