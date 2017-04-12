@@ -18,21 +18,26 @@ export class SocialMedia extends React.Component {
     super(props);
   }
 
+  //TODO: className="`${provider.type}-bg`" on button
   render() {
     return (
       <div>
         <ul>
           {this.props.providers.map( (provider) => {
               return (<li key={provider['type']}>
-                <a href={provider['login']}>{provider['name']}</a>
-              </li>)
+                <form id={provider.name} method="get" action={ provider.login } >
+                  {Object.keys(provider.extra).map( (k) => {
+                    <input type="hidden" name={k} value={provider.extra[k]} />
+                    })
+                  }
+                  <button type="submit">{provider.name}</button>
+                </form>
+              </li>
+              );
             })
           }
         </ul>
       </div>
-    );
-	}
+    )
+  }
 }
-
-
-
