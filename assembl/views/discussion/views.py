@@ -236,12 +236,14 @@ def register_react_views(config, routes):
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
         config.add_route('new_home', '/{discussion_slug}/home')
+        config.add_route('new_home_bare', '/{discussion_slug}')
         config.add_route('auto_new_home', '/{discussion_slug}/')
         config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
         config.add_route('new_styleguide', '/styleguide')
 
         react_routes = [
                             "new_home",
+                            "new_home_bare",
                             "new_styleguide",
                             "general_react_page"
                         ]
