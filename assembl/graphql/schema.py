@@ -9,7 +9,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy.converter import (
     convert_column_to_string, convert_sqlalchemy_type)
-from graphene_sqlalchemy.utils import get_query
+from graphene_sqlalchemy.utils import get_query, is_mapped
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 
@@ -275,6 +275,17 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'short_title', )
 
     posts = SQLAlchemyConnectionField(PostConnection)
+
+    @classmethod
+    def is_type_of(cls, root, context, info):
+        if isinstance(root, cls):
+            return True
+        if not is_mapped(type(root)):
+            raise Exception((
+                'Received incompatible instance "{}".'
+            ).format(root))
+        #return isinstance(root, cls._meta.model)
+        return type(root) == type(cls._meta.model)
 
     def resolve_posts(self, args, context, info):
         connection_type = info.return_type.graphene_type  # this is PostConnection
