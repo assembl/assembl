@@ -50,7 +50,7 @@ def includeme(config):
     legacy_contextual_route('do_password_change', '/do_password_change/{token}')
     legacy_contextual_route('welcome', '/welcome/{token}')
     legacy_contextual_route('finish_password_change', '/finish_password_change')
-    config.add_route('contextual_social_auth', '/{discussion_slug}/login/{backend}')
+    config.add_route('contextual_social.auth', '/{discussion_slug}/login/{backend}')
     legacy_contextual_route('add_social_account', '/add_account/{backend}')
 
     # Keep those in synchrony with assembl/static2/js/app/routes.jsx
