@@ -290,7 +290,7 @@ def send_account_verification(request):
 # Should I add a secure_connection condition?
 @view_config(
     context=InstanceContext, ctx_instance_class=User,
-    request_method='GET', name="verify_password", renderer='json')
+    request_method='POST', name="verify_password", renderer='json')
 def verify_password(request):
     ctx = request.context
     user = ctx._instance

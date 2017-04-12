@@ -4,7 +4,7 @@
 <div class="gr discussionlist">
   {% for discussion in discussions %}
   <div class="gu gu1of5 bx bx-default">
-    <h4 class="h4"><a href='{{ discussion.url }}'>{{ discussion.topic }}</a></h4>
+    <h4 class="h4"><a href='{{ get_route('home', discussion_slug=discussion.slug) }}'>{{ discussion.topic }}</a></h4>
     <span class="discussion">
     {% if discussion.admin_url %}
       <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>
@@ -24,7 +24,7 @@
 
   {% if not user %}
     <div class="gu gu1of5 bx bx-default">
-      <h4 class="h4"><a href='/login'>{{ gettext("Sign in") }}</a></h4>
+      <h4 class="h4"><a href="{{get_route('login')}}">{{ gettext("Sign in") }}</a></h4>
       {% trans %} to see all available discussions.{% endtrans %}
     </div>
   {% endif %}
@@ -42,7 +42,7 @@
       <h4 class="h4"><a href='{{ preferences_admin_url }}'>{{ gettext("Change global preferences") }}</a></h4>
     {% endif %}
     {% if user %}
-      <h4 class="h4"><a href='/logout'>{{ gettext("Sign out") }}</a></h4>
+      <h4 class="h4"><a href="{{ get_route('logout') }}">{{ gettext("Sign out") }}</a></h4>
     {% endif %}
   </div>
   {% endif %}

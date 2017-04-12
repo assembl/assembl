@@ -2,5 +2,5 @@
 
 {% block content %}
 <h1>401 {{ gettext("You are not authorized to read this discussion.") }}</h1>
-<p>{{ gettext('You may <a href="/%(slug)s/logout">logout</a> and login as another user with those permissions.') |format(slug=discussion.slug)|safe}}</p>
+<p>{{ gettext('You may <a href="%(logout)s">logout</a> and login as another user with those permissions.') |format(logout=get_route('logout'))|safe}}</p>
 {% endblock %}

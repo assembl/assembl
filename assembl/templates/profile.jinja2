@@ -18,24 +18,6 @@
     </div>
 {% endblock %}
 
-{% macro form(name, title, image) %}
-{% if name in providers %}
-<form id="{{name}}" method="post" action="/login/{{name}}">
-    {% for k,v in kwargs.items() %}
-    <input type="hidden" name="{{ k }}" value="{{ v }}" />
-    {% endfor %}
-    {% if name == "openid" %}
-    <input type="text" name="openid_identifier" />
-    {% endif %}
-    {% if image %}
-    <input type="image" value="" src="{{ STATIC_URL }}/img/loginbox/{{name}}.png" alt="{{title}}"/>
-    {% else %}
-    <input type="submit" value="{{ title }}" />
-    {% endif %}
-</form>
-{% endif %}
-{% endmacro %}
-
 {% block content %}
  
 <div class="form-profile">
@@ -222,17 +204,24 @@
 
     {% if providers %}
     <p>{{ gettext("Connect other accounts to Assembl")|safe }}</p>
+              {% for provider in providers %}
+                <form id="{{provider.name}}" class="mts js_login_{{provider.type}}" method="get" action="{{provider.add_account}}">
+                  {% if discussion %}
+                    <input type="hidden" name="next" value="{{ get_route('home')}}" />
+                  {% endif %}
+
+                  {% for k, v in provider.extra.items() %}
+                    <input type="hidden" name="{{ k }}" value="{{ v }}" />
+                  {% endfor %}
+
+                  {% if provider.type == "openid" %}
+                    <div class="openid-icon-bg"></div><input type="text" class="openid-bg" name="openid_identifier" class="form-control" />
+                  {% endif %}
+                  <button type="submit" class="{{provider.type}}-bg mbs">{{gettext('Login with ') + provider.name}}</button>
+                </form>
+              {% endfor %}
     {% endif %}
 
-    {{form('google', gettext('Login with Google'), true)}}
-    {{form('twitter', gettext('Login with Twitter'), true)}}
-    {{form('facebook', gettext('Login with Facebook'), true)}}
-    {{form('yahoo', gettext('Login with Yahoo'), true,
-            oauth='true', openid_identifier='yahoo.com')}}
-    {{form('live', gettext('Login with Windows Live'), false)}}
-    {{form('github', gettext('Login with Github'), false)}}
-    {{form('bitbucket', gettext('Login with Bitbucket'), false)}}
-    {{form('openid', gettext('Login with OpenID'), true)}}
     <div class="spacer spacer--huge"></div>
     </form>
 </div>
