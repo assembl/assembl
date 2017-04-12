@@ -4,7 +4,7 @@
 <div class="gr discussionlist">
   {% for discussion in discussions %}
   <div class="gu gu1of5 bx bx-default">
-    <h4 class="h4"><a href='{{ get_route('home', discussion_slug=discussion.slug) }}'>{{ discussion.topic }}</a></h4>
+    <h4 class="h4"><a href='{{ get_route('new_home', discussion_slug=discussion.slug) }}'>{{ discussion.topic }}</a></h4>
     <span class="discussion">
     {% if discussion.admin_url %}
       <br/><a href='{{ discussion.admin_url }}'><em>{{ gettext("Admin") }}</em></a>

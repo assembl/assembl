@@ -17,7 +17,7 @@
     {% else %}
     {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
     <li class="sub fl mrs">
-        <a href="{{ get_route('login')}}?next={{ get_route('new_home')}}/home" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this discussion') }}</a>
+        <a href="{{ get_route('react_login')}}?next={{ get_route('new_home')}}" class="btn btn-primary btn-sm joinDiscussion js_needJoinDiscussion" >{{ gettext('Join this discussion') }}</a>
     </li>
     {% endif %}
     {% endif %}
@@ -57,7 +57,7 @@
         </div>
         {% else %}
           {% if request.current_route_path().split('/')[-1] not in ('login', 'register')  %}
-            <a href="{{ get_route('login')}}?next={{ get_route('new_home')}}/home" class="btn btn-default btn-sm sign-in-link">{{ gettext('Sign in') }}</a>
+            <a href="{{ get_route('react_login')}}?next={{ get_route('new_home')}}" class="btn btn-default btn-sm sign-in-link">{{ gettext('Sign in') }}</a>
           {% endif %}
         {% endif %}
     </li>
