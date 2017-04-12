@@ -1,4 +1,5 @@
 from datetime import datetime
+import random
 
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
@@ -375,8 +376,14 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         )
 
     def resolve_img_url(self, args, context, info):
+        images = [
+            'https://framapic.org/CiOjTZIVLFgg/9Xr4dPUMDZJG.jpg',
+            'https://framapic.org/pF0R9jQM5Aof/MortpNh6czMP.jpg',
+            'https://framapic.org/3CL5o6dir9Vk/xQ0Uckbi7ckp.jpg',
+            'https://framapic.org/cKULJ8P6VLFr/Nojx87ovxtjC.jpg'
+        ]
         # TODO imgUrl
-        return ""
+        return random.sample(images, 1)[0]
 
 
 class Query(graphene.ObjectType):
