@@ -144,7 +144,7 @@ def get_social_autologin(request, discussion=None, next_view=None):
         query['idp'] = provider
     if discussion:
         return request.route_url(
-            "contextual_social_auth",
+            "contextual_social.auth",
             discussion_slug=discussion.slug,
             backend=auto_login_backend,
             _query=query)
@@ -523,7 +523,7 @@ def assembl_login_complete_view(request):
     return HTTPFound(location=next_view)
 
 
-@view_config(route_name="contextual_social_auth", request_method=('GET', 'POST'))
+@view_config(route_name="contextual_social.auth", request_method=('GET', 'POST'))
 @psa('social.complete')
 def auth(request):
     request.session['discussion'] = request.matchdict['discussion_slug']

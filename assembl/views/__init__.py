@@ -124,7 +124,7 @@ def get_provider_data(get_route, providers=None):
             "extra": {},
             "add_social_account": get_route(
                 'add_social_account', backend=ptype),
-            "login": get_route('social_auth', backend=ptype),
+            "login": get_route('social.auth', backend=ptype),
         } for (name, ptype) in providers_by_name
         if ptype in providers
     ]
@@ -142,7 +142,7 @@ def get_provider_data(get_route, providers=None):
                 "type": "saml",
                 "add_social_account": get_route(
                     'add_social_account', backend='saml'),
-                "login": get_route('social_auth', backend='saml'),
+                "login": get_route('social.auth', backend='saml'),
                 "extra": {
                     "idp": prov_id
                 }
@@ -165,8 +165,6 @@ def create_get_route(request, discussion=None):
                     name, discussion_slug=discussion.slug, **kwargs)
     else:
         def get_route(name, **kwargs):
-            if name == 'social_auth':
-                name = 'social.auth'
             return request.route_path(name, discussion_slug='', **kwargs)
     return get_route
 
@@ -419,7 +417,7 @@ class JSONError(HTTPException):
             return r
 
 
-# TODO social_auth: Test the heck out of this.
+# TODO social.auth: Test the heck out of this.
 @view_config(context=AuthMissingParameter)
 def csrf_error_view(exc, request):
     if "HTTP_COOKIE" not in request.environ:
