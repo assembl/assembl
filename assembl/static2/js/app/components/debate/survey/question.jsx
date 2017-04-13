@@ -69,15 +69,14 @@ class Question extends React.Component {
     this.props.mutate({ variables: { ideaId: questionId, body: body } })
     .then((post) => {
       this.props.displayAlert('success', I18n.t('debate.survey.postSuccess'));
-    //   this.setState({
-    //     postBody: '',
-    //     showSubmitButton: false,
-    //     remainingChars: maxChars
-    //   });
-    })
-    // .catch((error) => {
-    //   this.props.displayAlert('danger', `${error}`);
-    // });
+      this.setState({
+        postBody: '',
+        showSubmitButton: false,
+        remainingChars: maxChars
+      });
+    }).catch((error) => {
+      this.props.displayAlert('danger', `${error}`);
+    });
   }
   render() {
     const { index, title } = this.props;

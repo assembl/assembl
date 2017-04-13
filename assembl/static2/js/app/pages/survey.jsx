@@ -1,6 +1,6 @@
 import React from 'react';
-// import { connect } from 'react-redux';
-import { connect, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
+import { graphql } from 'react-apollo';
 import update from 'immutability-helper';
 import gql from 'graphql-tag';
 import { I18n, Translate } from 'react-redux-i18n';
@@ -65,7 +65,6 @@ class Survey extends React.Component {
     }, 10000);
   }
   render() {
-    console.log(this.props);
     const { loading, theme } = this.props.data;
     const { rootPath } = this.props.context;
     const { debateData } = this.props.debate;
@@ -164,7 +163,7 @@ const ThemeQuery = gql`
           ... on Question {
             title(lang: $lang),
             id,
-            posts{
+            posts(first: 10, random: true){
               edges {
                 node {
                   ... on PropositionPost {
@@ -186,41 +185,15 @@ const ThemeQuery = gql`
   }
 `;
 
-// Survey.propTypes = {
-//   data: React.PropTypes.shape({
-//     loading: React.PropTypes.bool.isRequired,
-//     error: React.PropTypes.object,
-//     theme: React.PropTypes.Array
-//   }).isRequired
-// };
+Survey.propTypes = {
+  data: React.PropTypes.shape({
+    loading: React.PropTypes.bool.isRequired,
+    error: React.PropTypes.object,
+    theme: React.PropTypes.Array
+  }).isRequired
+};
 
-// const SurveyWithData = graphql(ThemeQuery, {
-//   props: ({ ownProps, data }) => ({
-//     data: data
-//   }),
-//   options({ params }) {
-//     return {
-//       reducer: (previousResult, action, variables) => {
-//         if (action.type === 'APOLLO_MUTATION_RESULT' && action.operationName === 'createPost'){
-//           return update(previousResult, {
-//             theme: {
-//               questions: {
-//                 0: {
-//                   posts: {
-//                     edges: {
-//                       $unshift: [{ node: action.result.data.createPost.post }]
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//           });
-//         }
-//         return previousResult;
-//       },
-//     };
-//   }
-// })(Survey);
+const SurveyWithData = graphql(ThemeQuery)(Survey);
 
 const mapStateToProps = (state) => {
   return {
@@ -230,13 +203,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapQueriesToProps = (state) => {
-  return {
-    data: { ThemeQuery }
-  }
-}
-
-// export default connect(mapStateToProps)(SurveyWithData);
-
-
-export default connect(mapQueriesToProps)(Survey);
+export default connect(mapStateToProps)(SurveyWithData);
