@@ -1505,7 +1505,7 @@ Context.prototype = {
   getAbsoluteURLFromDiscussionRelativeURL: function(url) {
     if (url && url[0] == "/")
         url = url.substring(1);
-    return this.format('{0}//{1}/{2}/{3}', location.protocol, location.host, this.getDiscussionSlug(), url);
+    return this.format('{0}//{1}/{2}/{3}/{4}', location.protocol, location.host, 'debate', this.getDiscussionSlug(), url);
   },
   /**
    * Returns an relative url from a discussion relative url
@@ -1516,7 +1516,7 @@ Context.prototype = {
   getRelativeURLFromDiscussionRelativeURL: function(url) {
     if (url && url[0] == "/")
         url = url.substring(1);
-    return this.format('/{0}/{1}', this.getDiscussionSlug(), url);
+    return this.format('/{0}/{1}/{2}', 'debate', this.getDiscussionSlug(), url);
   },
   /**
    * Helper function to add query string to a URL
