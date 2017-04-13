@@ -21,6 +21,7 @@ import Terms from './pages/terms';
 import parse from './utils/literalStringParser';
 import { capitalize } from './utils/globalFunctions';
 import urljoin from 'url-join';
+import cloneDeep from 'lodash/clonedeep';
 
 
 /*
@@ -36,6 +37,7 @@ class RoutesMap {
     this._routes = {
       'oldLogout': 'legacy/logout',
       'oldLogin': 'debate/login',
+      'oldDebate': 'debate/${slug}',
       'styleguide': "styleguide",
       'login': "login",
       'signup': "signup",
@@ -73,6 +75,7 @@ class RoutesMap {
 
   get(name, args){
     //Shitty way to enforce a boolean type without crashing
+    args = args || {};
     const pre = ('preSlash' in args && args['preSlash'] === false) ? false : true;
     const isCtx = 'ctx' in args ? args['ctx'] : false;
 
@@ -88,8 +91,9 @@ class RoutesMap {
   }
 
   getContextual(name, args){
-    args['ctx'] = true;
-    return this.get(name, args);
+    const newArgs = cloneDeep(args); //Do not mutuate args!!
+    newArgs['ctx'] = true;
+    return this.get(name, newArgs);
   }
 
   getFullPath(name, args){
