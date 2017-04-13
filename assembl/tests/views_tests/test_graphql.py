@@ -294,6 +294,73 @@ mutation myFirstMutation {
     return thematic_id, first_question_id
 
 
+def create_proposal(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on PropositionPost {
+                id,
+                body,
+                creator { name },
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    post_id = res.data['createPost']['post']['id']
+    return post_id
+
+
+def test_get_thematic_via_node_query(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            __typename,
+            ... on Thematic {
+                title
+            }
+        }
+    }""" % thematic_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+            u'node': {u"__typename": u"Thematic",
+                      u"title": u"Understanding the dynamics and issues"}}
+
+
+def test_get_question_via_node_query(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            __typename,
+            ... on Question {
+                title
+            }
+        }
+    }""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+            u'node': {u"__typename": u"Question",
+                      u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}}
+
+
+def test_get_proposition_post_via_node_query(graphql_request):
+    post_id = create_proposal(graphql_request)
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            __typename,
+            ... on PropositionPost {
+                body
+            }
+        }
+    }""" % post_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+            u'node': {u"__typename": u"PropositionPost",
+                      u"body": u"une proposition..."}}
+
+
 def test_update_thematic(graphql_request):
     thematic_id, first_question_id = create_thematic(graphql_request)
     # to test the modification, we delete the first letter of each message
@@ -392,28 +459,6 @@ mutation myFirstMutation {
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'mySentiment': None
     }}}
-
-
-def create_proposal(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
-    res = schema.execute(u"""
-mutation myFirstMutation {
-    createPost(
-        ideaId:"%s",
-        body:"une proposition..."
-    ) {
-        post {
-            ... on PropositionPost {
-                id,
-                body,
-                creator { name },
-            }
-        }
-    }
-}
-""" % first_question_id, context_value=graphql_request)
-    post_id = res.data['createPost']['post']['id']
-    return post_id
 
 
 def test_mutation_add_sentiment(graphql_request):

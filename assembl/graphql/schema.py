@@ -235,6 +235,17 @@ class Post(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, PostInterface)
         only_fields = ('id', )  # inherits fields from Post interface only
 
+    @classmethod
+    def is_type_of(cls, root, context, info):
+        if isinstance(root, cls):
+            return True
+        if not is_mapped(type(root)):
+            raise Exception((
+                'Received incompatible instance "{}".'
+            ).format(root))
+        return (isinstance(root, cls._meta.model)
+                and type(root) != type(models.PropositionPost))
+
 
 class PropositionPost(Post):
     class Meta:
@@ -279,13 +290,27 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     @classmethod
     def is_type_of(cls, root, context, info):
+        # This is the method defined in SQLAlchemyObjectType where
+        # we changed the isinstance by a type comparison.
+        # For a node query, graphql in
+        # graphene/types/typemap.py(43)resolve_type()
+        # which calls graphql/execution/executor.py(351)get_default_resolve_type_fn()
+        # will try to know the object type from the SA object.
+        # It actually iterate over all registered object types and return
+        # the first one where is_type_of return True.
+        # And here we have in the following order Idea, Question, Thematic.
+        # So a node query on a Thematic or Question was returning the Idea object type.
+        # Here we fix the issue by overriding the is_type_of method
+        # for the Idea type to do a type comparison so that
+        # models.Question/models.Thematic which
+        # inherits from models.Idea doesn't return true
         if isinstance(root, cls):
             return True
         if not is_mapped(type(root)):
             raise Exception((
                 'Received incompatible instance "{}".'
             ).format(root))
-        #return isinstance(root, cls._meta.model)
+        # return isinstance(root, cls._meta.model)  # this was the original code
         return type(root) == type(cls._meta.model)
 
     def resolve_posts(self, args, context, info):
