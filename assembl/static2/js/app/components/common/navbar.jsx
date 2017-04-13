@@ -5,6 +5,8 @@ import { Grid, Navbar } from 'react-bootstrap';
 import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
+import { Routes } from '../../routes';
+
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -46,7 +48,7 @@ class NavBar extends React.Component {
               </div>
             </div>
             <div className="navbar-logo left">
-              <Link to={`${rootPath}${debateData.slug}/home`} activeClassName="logo-active">
+              <Link to={Routes.get('home', {slug: debateData.slug})} activeClassName="logo-active">
                 <img src={debateData.logo} alt="logo" />
               </Link>
             </div>
