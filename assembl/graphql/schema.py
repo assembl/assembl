@@ -226,6 +226,9 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_my_sentiment(self, args, context, info):
         my_sentiment = self.my_sentiment
+        if my_sentiment is None:
+            return None
+
         return my_sentiment.name.upper()
 
 
