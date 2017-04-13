@@ -100,7 +100,9 @@ const Translations = {
       changePassword: 'Changez votre mot de passe',
       incorrectPassword: 'Les mots de passe que vous avez écrits ne correspondent pas',
       somethingWentWrong: 'Nous sommes desolés ! Quelque chose s\'est mal passé. Veuillez ré-essayer',
-      userName: 'Nom d\'utilisateur (optionnel)'
+      userName: 'Nom d\'utilisateur (optionnel)',
+      passwordChangeRequestSuccess: 'Super ! Un e-mail vous a été envoyé. Assurez-vous de vérifier également votre dossier spam',
+      passwordChangeRequestError: 'Oh oh ! Il semble y avoir un problème de notre côté. Veuillez réessayer plus tard'
     },
     changePassword: {
       panelTitle: 'Bienvenue dans la page changement de mot de passe d\'Assembl'
@@ -274,7 +276,9 @@ const Translations = {
       changePassword: 'Change Password',
       incorrectPassword: 'The passwords that you have entered do not match',
       somethingWentWrong: 'We are sorry! Something went terribly wrong. Please try again',
-      userName: "Username (optional)"
+      userName: "Username (optional)",
+      passwordChangeRequestSuccess: 'Great! An email has been sent to your account. Make sure to check your spam folder as well',
+      passwordChangeRequestError: 'Oh oh! There seems to be a problem on our end. Please try again later.'
     },
     changePassword: {
       panelTitle: 'Welcome to Assembl forgot password page'

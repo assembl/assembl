@@ -1,19 +1,25 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import SendPwdForm from '../components/login/sendPwdForm';
 import SendPwdConfirm from '../components/login/sendPwdConfirm';
-import get from 'lodash/get';
 
 class RequestPasswordChange extends React.Component {
   render() {
-    const isPwdSend = location.hash === '#success';
-    let error_message = get(this.props, 'location.query.error', null);
+    console.log("props", this.props);
+    const { auth } = this.props;
+    let pwdSendConfirm = null;
+    if ('passwordChangeRequest' in auth){
+      if (auth.passwordChangeRequest.success !== null){
+        pwdSendConfirm = auth.passwordChangeRequest.success;
+      }
+    }
     return (
       <Grid fluid className="login-container">
         <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
-            {!isPwdSend && <SendPwdForm error_message={error_message} />}
-            {isPwdSend && <SendPwdConfirm />}
+            {!pwdSendConfirm && <SendPwdForm />}
+            {pwdSendConfirm && <SendPwdConfirm />}
           </Col>
         </Row>
       </Grid>
@@ -21,4 +27,10 @@ class RequestPasswordChange extends React.Component {
   }
 }
 
-export default RequestPasswordChange;
+const mapStateToProps = (state) =>{
+  return {
+    auth: state.auth
+  }
+};
+
+export default connect(mapStateToProps)(RequestPasswordChange);

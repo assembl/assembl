@@ -3,24 +3,52 @@ import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Routes } from '../../routes';
+import inputHandler from '../../utils/inputHandler';
+import { requestPasswordChangeAction } from '../../actions/authenticationActions';
 
 class SendPwdForm extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {identifier: null};
+    this.submitHandler = this.submitHandler.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.messageHandler = this.messageHandler.bind(this);
+  }
+
+  handleInput(e){
+    inputHandler(this, e);
+    const el = document.getElementById('sendPwdForm-error');
+    if (el) { el.innerHTML = ''; }  // BUG: Only shows once; if fails beyond first time, no error shown!
+  }
+
+  messageHandler(){
+    return (
+      <div>
+        {
+          this.props.auth.passwordChangeRequest.success == null ? <span></span> : 
+          <div id='sendPwdForm-error'><Translate value='login.passwordChangeRequestError' /></div> 
+        }
+      </div>
+    )
+  }
+
+  submitHandler(e){
+    e.preventDefault();
+    this.props.sendRequest(this.state.identifier);
+  }
+
   render() {
-    const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
-    const route = '';
-    const error_message = ("error_message" in this.props && this.props.error_message) ? this.props.error_message : null;
     return (
       <div className="login-view">
         <div className="box-title">
           <Translate value="login.forgotPwd" />
         </div>
         <div className="box">
-          <form className="resendPwd" method="POST" action={`/${debateData.slug}/req_password_change`}>
+          <form className="resendPwd" onSubmit={this.submitHandler}>
             <input type="hidden" name="referer" value="v2" />
-            { error_message ? <div className="error-message">{error_message}</div> : null }
             <FormGroup className="margin-m">
-              <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
+              <FormControl type="text" name="identifier" required
+                           placeholder={I18n.t('login.username')} onChange={this.handleInput} />
             </FormGroup>
             <FormGroup>
               <Button type="submit" name="send_req_password" value={I18n.t('login.send')} className="button-submit button-dark">
@@ -28,6 +56,9 @@ class SendPwdForm extends React.Component {
               </Button>
             </FormGroup>
           </form>
+          <div className="error-message">
+            {this.messageHandler()}
+          </div>
         </div>
       </div>
     );
@@ -36,9 +67,14 @@ class SendPwdForm extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    auth: state.auth
   };
 };
 
-export default connect(mapStateToProps)(SendPwdForm);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    sendRequest: (id) => dispatch(requestPasswordChangeAction(id))
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SendPwdForm);
