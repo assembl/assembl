@@ -34,6 +34,8 @@ import urljoin from 'url-join';
 class RoutesMap {
   constructor() {
     this._routes = {
+      'oldLogout': 'legacy/logout',
+      'oldLogin': 'debate/login',
       'styleguide': "styleguide",
       'login': "login",
       'signup': "signup",
@@ -43,6 +45,8 @@ class RoutesMap {
       'ctxSignup': "${slug}/signup",
       'ctxChangePassword': "${slug}/changePassword",
       'ctxRequestPasswordChange': "${slug}/requestPasswordChange",
+      'ctxOldLogout': 'debate/${slug}/logout',
+      'ctxOldLogin': 'debate/${slug}/login',
       'home': "${slug}/home",
       'profile': "${slug}/profile/${userId}",
       'ideas': "${slug}/ideas",
@@ -131,6 +135,7 @@ export default (
       <Route path={getRouteForRouter('login', true)} component={Login} />
       <Route path={getRouteForRouter('signup', true)} component={Signup} />
       <Route path={getRouteForRouter('changePassword', true)} component={ChangePassword} />
+      <Route path={getRouteForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
       <Route component={Main}>
         <Route path=":slug/home" component={Home} />
         <Route path=":slug/profile/:userId" component={Profile} />
@@ -149,7 +154,6 @@ export default (
         <Route path={getRouteForRouter('debate')} component={Debate} />
         <Route path={getRouteForRouter('community')} component={Community} />
         <Route path={getRouteForRouter('terms')} component={Terms} />
-        <Route path={getRouteForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
       </Route>
     </Route>
     <Route path="*" component={NotFound} />

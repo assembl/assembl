@@ -12,7 +12,7 @@ class AsLogin extends React.Component {
     const error_message = ("error_message" in this.props  && this.props.error_message) ? this.props.error_message : null;
     return (
       <div>
-        <form className="login" method="POST" action={ Routes.getContextual('login', {slug: slug}) }>
+        <form className="login" method="POST" action={ Routes.getFullPath('ctxOldLogin', {slug: slug}) }>
           { next ?
             <input type="hidden" name="next" value={`${next}`} />
             : null }
@@ -30,7 +30,7 @@ class AsLogin extends React.Component {
               <Translate value="login.login" />
             </Button>
           </FormGroup>
-          <Link to={Routes.getContextual('signup', {slug} )}>
+          <Link to={Routes.getContextual('requestPasswordChange', {slug} )}>
             <Translate value="login.forgotPwd" />
           </Link>
         </form>

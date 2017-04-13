@@ -512,7 +512,7 @@ def assembl_login_complete_view(request):
         # TODO: handle high failure count
         request.session.flash(error_message)
         return HTTPFound(location=maybe_contextual_route(
-            request, 'login',
+            request, 'react_login' if coming_from_v2_frontend(request) else 'login',
             _query={"identifier": identifier} if identifier else None))
     user.last_login = datetime.utcnow()
     headers = remember(request, user.id)
