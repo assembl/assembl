@@ -357,7 +357,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 ).order_by(desc(model.creation_date), model.id)
             # TODO: retrieve ids, do the random and get the posts for these ids
             query = [e for e, dontcare in query.all()]
-            query = random_sample(query, args.get('first', 10))
+            query = random_sample(query, min(len(query), args.get('first', 10)))
         else:
             connection_type = info.return_type.graphene_type  # this is PostConnection
             model = connection_type._meta.node._meta.model  # this is models.PostUnion
