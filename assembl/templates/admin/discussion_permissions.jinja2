@@ -7,7 +7,7 @@
 {% block content %}
 <div class="error-message">{{error}}</div>
 <div class="bx bx-default admin-permissions mbl mhl">
-<h1 class="h1">{% trans %}Discussion {% endtrans %} <a href="/{{discussion.slug}}">{{discussion.topic}}</a></h1>
+<h1 class="h1">{% trans %}Discussion {% endtrans %} <a href="{{ get_route('home') }}">{{discussion.topic}}</a></h1>
 <h4 class="h4">{% trans %}Role permissions:{% endtrans %}</h4>
 <form method="POST" action="#">
 <table id="role_permissions" class="table">
