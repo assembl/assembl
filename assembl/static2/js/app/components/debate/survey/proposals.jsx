@@ -22,7 +22,7 @@ class Proposals extends React.Component {
             <span className={this.state.hideProposals ? 'assembl-icon-down-open color pointer' : 'assembl-icon-up-open color pointer'} onClick={this.displayProposals} />
           </div>
         </h3>
-        {posts &&
+        {posts.length > 0 &&
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {posts.map((post, index) => {
               return (
@@ -31,7 +31,7 @@ class Proposals extends React.Component {
             })}
           </div>
         }
-        {!posts &&
+        {posts.length === 0 &&
           <Translate value="debate.survey.noProposals" />
         }
       </div>

@@ -30,7 +30,7 @@ class Survey extends React.Component {
     if (!this.questions) return false;
     let isProposals = false;
     this.questions.forEach((question) => {
-      if (question.posts) isProposals = true;
+      if (question.posts.edges.length > 0) isProposals = true;
     });
     return isProposals;
   }
@@ -61,7 +61,7 @@ class Survey extends React.Component {
       this.setState({
         showAlert: false
       });
-    }, 5000);
+    }, 10000);
   }
   render() {
     const { loading, theme } = this.props.data;
@@ -119,7 +119,7 @@ class Survey extends React.Component {
                         return (
                           <Proposals
                             title={question.title}
-                            posts={question.posts}
+                            posts={question.posts.edges}
                             moreProposals={this.state.moreProposals}
                             questionIndex={index + 1}
                             redirectToLogin={this.redirectToLogin}
@@ -160,6 +160,7 @@ const ThemeQuery = gql`
       ... on Thematic {
         title(lang: $lang),
         imgUrl,
+        id,
         video(lang: $lang){
           title,
           description,
@@ -168,6 +169,7 @@ const ThemeQuery = gql`
         questions {
           ... on Question {
             title(lang: $lang),
+            id,
             posts{
               edges {
                 node {

@@ -64,7 +64,7 @@ class Question extends React.Component {
   }
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
-    const questionId = this.props.questionId;
+    const { questionId } = this.props;
     const body = this.state.postBody;
     this.props.mutate({ variables: { ideaId: questionId, body: body } })
     .then((post) => {
@@ -136,7 +136,7 @@ Question.propTypes = {
 };
 
 const createPostMutation = gql`
-  mutation createPost($ideaId: ID, $body: String!) {
+  mutation createPost($ideaId: ID!, $body: String!) {
     createPost(ideaId:$ideaId, body: $body) {
       post {
         ... on PropositionPost {
