@@ -111,17 +111,28 @@ class FrontendUrls(object):
         return urljoin(
             self.discussion.get_base_url(), '/static/img/assembl.png')
 
-    def get_discussion_url(self):
-        #from pyramid.request import Request
-        #req = Request.blank('/', base_url=self.discussion.get_base_url())
-        #Celery didn't like this.  To revisit once we have virtual hosts
-        #return req.route_url('home', discussion_slug=self.discussion.slug)
-        return urljoin(self.discussion.get_base_url(), self.discussion.slug)
+    def get_discussion_url(self, request=None):
+        """
+        from pyramid.request import Request
+        req = Request.blank('/', base_url=self.discussion.get_base_url())
+        Celery didn't like this.  To revisit once we have virtual hosts
+        return req.route_url('home', discussion_slug=self.discussion.slug)
 
-    def get_legacy_discussion_url(self, *args, **kwargs):
-        """Return the legacy URL of discusison."""
-        return urljoin(self.discussion.get_base_url(), "debate", self.discussion.slug, *args)
+        Returns the legacy URL route. Currently, /debate/{discussion_slug}
+        """
 
+        from assembl.views import create_get_route
+        if request is None:
+            # Shouldn't do this. Method should only be used in context
+            # of a request!
+            from pyramid.threadlocal import get_current_request
+            request = get_current_request()
+
+        get_route = create_get_route(request, self.discussion)
+        return urljoin(self.discussion.get_base_url(), get_route('home'))
+
+    # TODO: Decommission all of the route methods below. They are
+    # no longer Object Oriented.
     def getUserNotificationSubscriptionsConfigurationUrl(self):
         return self.get_discussion_url() + '/user/notifications'
 

@@ -691,15 +691,10 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             return (id for (id,) in query.all())
         return query.all()
 
-    def get_url(self):
+    def get_url(self, request=None):
         from assembl.lib.frontend_urls import FrontendUrls
         frontendUrls = FrontendUrls(self)
-        return frontendUrls.get_discussion_url()
-
-    def get_legacy_url(self, *args, **kwargs):
-        from assembl.lib.frontend_urls import FrontendUrls
-        frontendUrls = FrontendUrls(self)
-        return frontendUrls.get_legacy_discussion_url(*args, **kwargs)
+        return frontendUrls.get_discussion_url(request)
 
     @property
     def creator_name(self):
