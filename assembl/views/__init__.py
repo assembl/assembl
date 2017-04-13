@@ -294,6 +294,8 @@ def get_default_context(request, **kwargs):
     if messages:
         kwargs['messages'] = '<br />'.join(messages)
 
+    admin_email = config.get('assembl.admin_email') or "assembl.admin@bluenove.com"
+
     (theme_name, theme_relative_path)=get_theme_info(discussion)
     return dict(
         kwargs,
@@ -322,7 +324,8 @@ def get_default_context(request, **kwargs):
         raven_url=config.get('raven_url') or '',
         activate_tour=str(config.get('activate_tour') or False).lower(),
         providers=json.dumps(providers),
-        translations=codecs.open(jedfilename, encoding='utf-8').read()
+        translations=codecs.open(jedfilename, encoding='utf-8').read(),
+        admin_email=admin_email
     )
 
 
