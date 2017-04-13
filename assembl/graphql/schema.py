@@ -1,5 +1,5 @@
 from datetime import datetime
-import random
+from random import sample as random_sample
 
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
@@ -347,13 +347,23 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         # then the remaining ones are in random order.
         # If random is False, return all the posts in creation_date desc order.
         if random:
-            return []
+            connection_type = info.return_type.graphene_type  # this is PostConnection
+            model = connection_type._meta.node._meta.model  # this is models.PostUnion
+            query = self.get_related_posts_query(
+                ).filter(model.publication_state == models.PublicationStates.PUBLISHED
+                ).order_by(desc(model.creation_date), model.id)
+            # TODO: retrieve ids, do the random and get the posts for these ids
+            query = [e for e, dontcare in query.all()]
+            query = random_sample(query, args.get('first', 10))
         else:
             connection_type = info.return_type.graphene_type  # this is PostConnection
             model = connection_type._meta.node._meta.model  # this is models.PostUnion
             query = self.get_related_posts_query(
                 ).filter(model.publication_state == models.PublicationStates.PUBLISHED
                 ).order_by(desc(model.creation_date), model.id)
+            # TODO: this returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 >
+            # so we get all results here, not performant
+            query = [e for e, dontcare in query.all()]
 
         # pagination is done after that, no need to do it ourself
         return query
@@ -408,7 +418,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
             'https://framapic.org/cKULJ8P6VLFr/Nojx87ovxtjC.jpg'
         ]
         # TODO imgUrl
-        return random.sample(images, 1)[0]
+        return random_sample(images, 1)[0]
 
 
 class Query(graphene.ObjectType):

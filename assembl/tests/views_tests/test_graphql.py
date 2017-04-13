@@ -624,3 +624,52 @@ mutation myFirstMutation {
             }
         }
     }
+
+def create_proposal_x(graphql_request, first_question_id, idx):
+    schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        body:"une proposition %s"
+    ) {
+        post {
+            ... on PropositionPost {
+                id,
+                body,
+                creator { name },
+            }
+        }
+    }
+}
+""" % (first_question_id, idx), context_value=graphql_request)
+
+def create_proposals(graphql_request, first_question_id):
+    for idx in range(15):
+        create_proposal_x(graphql_request, first_question_id, idx)
+
+def test_get_proposals(graphql_request, test_session):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    create_proposals(graphql_request, first_question_id)
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            ... on Question {
+                title,
+                posts(first:10) {
+                    edges {
+                        node {
+                        ... on PropositionPost { body } } } } } } }""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+            u'node': {
+                u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",
+                u"posts":
+                    {u'edges': [{u'node': {u'body': u'une proposition 14'}},
+                                {u'node': {u'body': u'une proposition 13'}},
+                                {u'node': {u'body': u'une proposition 12'}},
+                                {u'node': {u'body': u'une proposition 11'}},
+                                {u'node': {u'body': u'une proposition 10'}},
+                                {u'node': {u'body': u'une proposition 9'}},
+                                {u'node': {u'body': u'une proposition 8'}},
+                                {u'node': {u'body': u'une proposition 7'}},
+                                {u'node': {u'body': u'une proposition 6'}},
+                                {u'node': {u'body': u'une proposition 5'}}]},
+                }}
