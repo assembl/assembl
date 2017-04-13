@@ -92,9 +92,7 @@ var navBarLeft = Marionette.LayoutView.extend({
   serializeData: function() {
     return {
       isAdminDiscussion: this.isAdminDiscussion,
-      canAccessStatistics: Ctx.getCurrentUser().can(Permissions.DISC_STATS),
-      discussionSettings: '/' + Ctx.getDiscussionSlug() + '/edition',
-      discussionPermissions: '/admin/permissions/discussion/' + Ctx.getDiscussionId(),
+      canAccessStatistics: Ctx.getCurrentUser().can(Permissions.DISC_STATS)
     };
   },
   discussionStatistics: function() {

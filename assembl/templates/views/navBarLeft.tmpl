@@ -18,8 +18,8 @@
                   </a>
                   <ul class="dropdown-menu">
                     <% if(isAdminDiscussion){ %>
-                      <li><a href="<%= discussionSettings %>"><i class="icon-options"></i>{{ gettext('Discussion settings') }}</a></li>
-                      <li><a href="<%= discussionPermissions %>"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>
+                      <li><a href="{{ get_route('edition') }}"><i class="icon-options"></i>{{ gettext('Discussion settings') }}</a></li>
+                      <li><a href="{{ get_route('discussion_permissions', discussion_id=discussion.id)}}"><i class="icon-options"></i>{{ gettext('Discussion permissions') }}</a></li>
                     <% } %>
                     <% if (canAccessStatistics) { %>
                       <li><a class="js_discussion_statistics"><i class="icon-options"></i>{{ gettext('Discussion statistics') }}</a></li>
