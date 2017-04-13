@@ -34,3 +34,16 @@ export const signUp = (payload) => {
     payload: newPayload
   });
 };
+
+export const changePasswordRequest = (id) => {
+  const route = '/data/AgentProfile/password_reset';
+  const payload = {
+    identifier: id
+  }
+
+  return xmlHttpRequest({
+    method: 'POST',
+    url: route,
+    payload: payload
+  });
+};

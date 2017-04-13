@@ -1,4 +1,4 @@
-import { signUp } from '../services/authenticationService';
+import { signUp, changePasswordRequest } from '../services/authenticationService';
 
 
 const signupSuccess = () => {
@@ -38,4 +38,26 @@ export const signupAction = (payload) => {
       }
     });
   };
+};
+
+
+const passwordRequestSuccess = {
+  type: 'REQUEST_PASSWORD_CHANGE_SUCCESS'
+};
+
+const passwordRequestError = {
+  type: 'REQUEST_PASSWORD_CHANGE_ERROR'
+};
+
+export const requestPasswordChangeAction = (id) => {
+  return (dispatch) => {
+    return changePasswordRequest(id).then(
+      (success) => {
+        dispatch(passwordRequestSuccess);
+      }
+    )
+    .catch( (error) => {
+      dispatch(passwordRequestError);
+    })
+  }
 };
