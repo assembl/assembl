@@ -9,8 +9,7 @@ class Proposals extends React.Component {
     this.displayProposals = this.displayProposals.bind(this);
   }
   displayProposals() {
-    if (this.state.hideProposals) this.setState({ hideProposals: false });
-    if (!this.state.hideProposals) this.setState({ hideProposals: true });
+    this.setState({ hideProposals: !this.state.hideProposals });
   }
   render() {
     const { questionIndex, title, posts, moreProposals } = this.props;
@@ -18,7 +17,7 @@ class Proposals extends React.Component {
       <div className={questionIndex < 2 || moreProposals ? 'shown' : 'hidden'}>
         <h3 className="collapsed-title">
           <span>{`${questionIndex}/ ${title}`}</span>
-          <div className={moreProposals && posts ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
+          <div className={moreProposals && posts.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
             <span className={this.state.hideProposals ? 'assembl-icon-down-open color pointer' : 'assembl-icon-up-open color pointer'} onClick={this.displayProposals} />
           </div>
         </h3>

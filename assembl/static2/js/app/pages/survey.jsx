@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { graphql } from 'react-apollo';
+// import { connect } from 'react-redux';
+import { connect, graphql } from 'react-apollo';
+import update from 'immutability-helper';
 import gql from 'graphql-tag';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
@@ -30,7 +31,7 @@ class Survey extends React.Component {
     if (!this.questions) return false;
     let isProposals = false;
     this.questions.forEach((question) => {
-      if (question.posts.edges.length > 3) isProposals = true;
+      if (question.posts.edges.length > 0) isProposals = true;
     });
     return isProposals;
   }
@@ -64,6 +65,7 @@ class Survey extends React.Component {
     }, 10000);
   }
   render() {
+    console.log(this.props);
     const { loading, theme } = this.props.data;
     const { rootPath } = this.props.context;
     const { debateData } = this.props.debate;
@@ -146,14 +148,6 @@ class Survey extends React.Component {
   }
 }
 
-Survey.propTypes = {
-  data: React.PropTypes.shape({
-    loading: React.PropTypes.bool.isRequired,
-    error: React.PropTypes.object,
-    theme: React.PropTypes.Array
-  }).isRequired
-};
-
 const ThemeQuery = gql`
   query ThemeQuery($lang: String!, $id: ID!) {
     theme: node(id: $id) {
@@ -192,7 +186,41 @@ const ThemeQuery = gql`
   }
 `;
 
-const SurveyWithData = graphql(ThemeQuery)(Survey);
+// Survey.propTypes = {
+//   data: React.PropTypes.shape({
+//     loading: React.PropTypes.bool.isRequired,
+//     error: React.PropTypes.object,
+//     theme: React.PropTypes.Array
+//   }).isRequired
+// };
+
+// const SurveyWithData = graphql(ThemeQuery, {
+//   props: ({ ownProps, data }) => ({
+//     data: data
+//   }),
+//   options({ params }) {
+//     return {
+//       reducer: (previousResult, action, variables) => {
+//         if (action.type === 'APOLLO_MUTATION_RESULT' && action.operationName === 'createPost'){
+//           return update(previousResult, {
+//             theme: {
+//               questions: {
+//                 0: {
+//                   posts: {
+//                     edges: {
+//                       $unshift: [{ node: action.result.data.createPost.post }]
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           });
+//         }
+//         return previousResult;
+//       },
+//     };
+//   }
+// })(Survey);
 
 const mapStateToProps = (state) => {
   return {
@@ -202,4 +230,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SurveyWithData);
+const mapQueriesToProps = (state) => {
+  return {
+    data: { ThemeQuery }
+  }
+}
+
+// export default connect(mapStateToProps)(SurveyWithData);
+
+
+export default connect(mapQueriesToProps)(Survey);

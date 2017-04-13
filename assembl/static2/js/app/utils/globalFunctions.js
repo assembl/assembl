@@ -61,17 +61,17 @@ export const getDomElementOffset = (el) => {
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 };
 
+let scrollInterval;
+
 export const scrollToElement = (element, to, duration) => {
   if (element.scrollTop === to) return;
-  for (let i = 1; i < 99999; i++) {
-    clearInterval(i);
-  }
+  clearInterval(scrollInterval);
   const diff = to - element.scrollTop;
   const scrollStep = Math.PI / (duration / 10);
   let count = 0;
   let currPos = 0;
   const start = element.scrollTop;
-  const scrollInterval = setInterval(() => {
+  scrollInterval = setInterval(() => {
     if ((Math.round(element.scrollTop / 10) * 10) !== (Math.round(to / 10) * 10)) {
       count += 1;
       currPos = start + (diff * (0.5 - (0.5 * Math.cos(count * scrollStep))));
