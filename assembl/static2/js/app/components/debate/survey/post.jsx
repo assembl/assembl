@@ -23,7 +23,7 @@ class Post extends React.Component {
     const { post, id } = this.props;
     const target = event.currentTarget;
     const type = 'LIKE';
-    const isMySentiment = post.mySentiment === 'like';
+    const isMySentiment = post.mySentiment === 'LIKE';
     if(isMySentiment) {
       this.deleteSentiment(target, type);
     } else {
@@ -34,9 +34,9 @@ class Post extends React.Component {
     const { post } = this.props;
     const target = event.currentTarget;
     const type = 'DISAGREE';
-    const isMySentiment = post.mySentiment === 'disagree';
+    const isMySentiment = post.mySentiment === 'DISAGREE';
     if(isMySentiment) {
-      this.deleteSentiment(target, type);
+      this.deleteSentiment(target);
     } else {
       this.addSentiment(target, type);
     }
@@ -47,26 +47,25 @@ class Post extends React.Component {
     .then((sentiments) => {
       target.setAttribute("class", "sentiment sentiment-active");
       this.setState({
-        like: sentiments.data.addSentiment.like,
-        disagree: sentiments.data.addSentiment.disagree
+        like: sentiments.data.addSentiment.post.sentimentCounts.like,
+        disagree: sentiments.data.addSentiment.post.sentimentCounts.disagree
       });
     }).catch((error) => {
       this.props.displayAlert('danger', `${error}`);
     });
   }
-  deleteSentiment(target, type) {
-    console.log('delete a sentiment');
+  deleteSentiment(target) {
     const { id } = this.props;
-    // this.props.deleteSentiment({ variables: { postId: id, type: type } })
-    // .then((sentiments) => {
-    //   target.setAttribute("class", "sentiment");
-    //   this.setState({
-    //     like: sentiments.data.addSentiment.like,
-    //     disagree: sentiments.data.addSentiment.disagree
-    //   });
-    // }).catch((error) => {
-    //   this.props.displayAlert('danger', `${error}`);
-    // });
+    this.props.deleteSentiment({ variables: { postId: id} })
+    .then((sentiments) => {
+      target.setAttribute("class", "sentiment");
+      this.setState({
+        like: sentiments.data.deleteSentiment.post.sentimentCounts.like,
+        disagree: sentiments.data.deleteSentiment.post.sentimentCounts.disagree
+      });
+    }).catch((error) => {
+      this.props.displayAlert('danger', `${error}`);
+    });
   }
   render() {
     const isUserConnected = getConnectedUserId() !== null;
@@ -81,13 +80,13 @@ class Post extends React.Component {
               <Translate value="debate.survey.react" />
             </div>
             <div
-              className={post.mySentiment === 'like' ? 'sentiment sentiment-active' : 'sentiment'}
+              className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
               onClick={(event) => { isUserConnected ? this.handleLike(event) : redirectToLogin(); }}
             >
               <Like size={25} />
             </div>
             <div
-              className={post.mySentiment === 'disagree' ? 'sentiment sentiment-active' : 'sentiment'}
+              className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
               onClick={(event) => { isUserConnected ? this.handleDisagree(event) : redirectToLogin(); }}
             >
               <Disagree size={25} />
@@ -127,19 +126,35 @@ Post.propTypes = {
 };
 
 const addSentiment = gql`
-  mutation addSentiment($type: SentimentType!, $postId: ID!) {
+  mutation addSentiment($type: SentimentTypes!, $postId: ID!) {
     addSentiment(postId:$postId, type: $type) {
-      like,
-      disagree
+      post {
+        ... on PropositionPost {
+          id,
+          sentimentCounts {
+            like,
+            disagree
+          }
+          mySentiment
+        }
+      }
     }
   }
 `;
 
 const deleteSentiment = gql`
-  mutation deleteSentiment($type: SentimentType!, $postId: ID!) {
-    deleteSentiment(postId:$postId, type: $type) {
-      like,
-      disagree
+  mutation deleteSentiment($postId: ID!) {
+    deleteSentiment(postId:$postId) {
+      post {
+        ... on PropositionPost {
+          id,
+          sentimentCounts {
+            like,
+            disagree
+          }
+          mySentiment
+        }
+      }
     }
   }
 `;

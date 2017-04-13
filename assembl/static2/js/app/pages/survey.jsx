@@ -30,7 +30,7 @@ class Survey extends React.Component {
     if (!this.questions) return false;
     let isProposals = false;
     this.questions.forEach((question) => {
-      if (question.posts.edges.length > 0) isProposals = true;
+      if (question.posts.edges.length > 3) isProposals = true;
     });
     return isProposals;
   }

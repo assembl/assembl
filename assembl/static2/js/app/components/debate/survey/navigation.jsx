@@ -43,17 +43,18 @@ class Navigation extends React.Component {
     return offsetArray;
   }
   displayNav() {
+    const { questionsLength } = this.props;
     const proposals = document.getElementById('proposals');
     const proposalsOffset = getDomElementOffset(proposals).top;
-    const limiteToShow = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight + document.getElementById('nav').clientHeight;
-    const limiteToHide = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight;
+    const limitToShow = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight + document.getElementById('nav').clientHeight;
+    const limitToHide = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight;
     const windowOffset = window.pageYOffset + window.innerHeight;
-    if (windowOffset < limiteToHide) {
+    if (windowOffset < limitToHide) {
       this.setState({
         isHidden: true
       });
     }
-    if (windowOffset > limiteToShow) {
+    if (windowOffset > limitToShow) {
       this.setState({
         isHidden: false
       });
