@@ -356,7 +356,10 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 ).filter(model.publication_state == models.PublicationStates.PUBLISHED
                 ).order_by(desc(model.creation_date), model.id)
             # TODO: retrieve ids, do the random and get the posts for these ids
-            query = [e for e, dontcare in query.all()]
+            if context.authenticated_userid:
+                query = [e for e, dontcare in query.all()]
+            else:
+                query = query.all()
             query = random_sample(query, min(len(query), args.get('first', 10)))
         else:
             connection_type = info.return_type.graphene_type  # this is PostConnection
@@ -365,8 +368,10 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 ).filter(model.publication_state == models.PublicationStates.PUBLISHED
                 ).order_by(desc(model.creation_date), model.id)
             # TODO: this returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 >
+            # only when connected...
             # so we get all results here, not performant
-            query = [e for e, dontcare in query.all()]
+            if context.authenticated_userid:
+                query = [e for e, dontcare in query.all()]
 
         # pagination is done after that, no need to do it ourself
         return query
