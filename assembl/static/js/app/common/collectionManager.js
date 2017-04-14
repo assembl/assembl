@@ -792,7 +792,8 @@ var CollectionManager = Marionette.Object.extend({
     var that = this;
 
     if (skip_group_state === undefined) {
-      skip_group_state = false;
+      // if you cannot use expert interface, you cannot recover from a mangled state.
+      skip_group_state = !Ctx.canUseExpertInterface();
     }
 
     if (this._allGroupSpecsCollectionPromise === undefined) {
