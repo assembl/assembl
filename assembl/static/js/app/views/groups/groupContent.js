@@ -161,6 +161,7 @@ var groupContent = Marionette.CompositeView.extend({
   },
   SimpleUIResetMessageAndIdeaPanelState: function(idea) {
     if (!this.isViewDestroyed()) {  //Because this is called from outside the view
+      var preferences = Ctx.getPreferences();
       if (idea != null) {
         var messageViewOverride = idea.get('message_view_override');
         if (messageViewOverride !== null) {
@@ -174,7 +175,11 @@ var groupContent = Marionette.CompositeView.extend({
               this.removePanels(PanelSpecTypes.MESSAGE_LIST);
             }
             if (user.can(Permissions.ADMIN_DISCUSSION)) {
-              this.ensureOnlyPanelsVisible(panelSpec, PanelSpecTypes.IDEA_PANEL);
+              if (preferences.simple_view_panel_order === "NMI") {
+                this.ensureOnlyPanelsVisible(panelSpec, PanelSpecTypes.IDEA_PANEL);
+              } else {
+                this.ensureOnlyPanelsVisible(PanelSpecTypes.IDEA_PANEL, panelSpec);
+              }
               var ideaPanel = this.findPanelWrapperByType(PanelSpecTypes.IDEA_PANEL);
               if (!ideaPanel.isPanelMinimized()) {
                 ideaPanel.toggleMinimize();
@@ -187,7 +192,6 @@ var groupContent = Marionette.CompositeView.extend({
           }
         }
       }
-      var preferences = Ctx.getPreferences();
       // defined here and in collectionManager.getGroupSpecsCollectionPromise
       if (preferences.simple_view_panel_order === "NMI") {
           this.ensureOnlyPanelsVisible(PanelSpecTypes.MESSAGE_LIST, PanelSpecTypes.IDEA_PANEL);
