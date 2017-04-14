@@ -142,8 +142,9 @@ var GroupSpecModel = Base.Model.extend({
     var that = this;
     _.each(list_of_options, function(option) {
       if (!that.getPanelSpecByType(option)) {
-        that.addPanel({'type': option.id}, position++);
+        that.addPanel({'type': option.id}, position);
       }
+      position++;
     });
   },
   /**
