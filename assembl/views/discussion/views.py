@@ -231,6 +231,22 @@ def react_view(request):
     return context
 
 
+def test_error_view(request):
+    ctx = get_default_context(request)
+    tp = request.matchdict.get('type', None)
+    if not tp:
+        return HTTPNotFound()
+    tp = tp[0]
+    from pyramid_jinja2 import IJinja2Environment
+    jinja_env = request.registry.queryUtility(
+        IJinja2Environment, name='.jinja2')
+
+    if tp == 'unauthorized':
+        template = jinja_env.get_template('react_unauthorized.jinja2')
+        body = template.render(ctx)
+        return Response(body, 401)
+
+
 @view_config(route_name='styleguide', request_method='GET', http_cache=60,
              renderer='assembl:templates/styleguide/index.jinja2')
 def styleguide_view(request):
@@ -268,8 +284,10 @@ def register_react_views(config, routes):
                         request_method='GET',
                         renderer='assembl:templates/index_react.jinja2')
 
+
 def includeme(config):
     if asbool(AssemblConfig.get('new_frontend', False)):
+        config.add_route('test_error_view', '/{discussion_slug}/test/*type')
         config.add_route('new_home', '/{discussion_slug}/home')
         config.add_route('new_home_bare', '/{discussion_slug}')
         config.add_route('auto_new_home', '/{discussion_slug}/')
@@ -284,6 +302,11 @@ def includeme(config):
                         ]
 
         register_react_views(config, react_routes)
+
+        # Use these routes to test global views
+        config.add_view(test_error_view, route_name='test_error_view',
+                        request_method='GET')
+
 
         def redirector(request):
             return HTTPMovedPermanently(request.route_url('new_home', discussion_slug=request.matchdict.get('discussion_slug')))
