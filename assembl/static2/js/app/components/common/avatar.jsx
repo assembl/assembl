@@ -28,7 +28,7 @@ class ProfileIcon extends React.Component {
                 <LinkContainer to={`${Routes.get('profile', {slug: debateData.slug, userId: connectedUserName})}`}>
                   <MenuItem><Translate value="navbar.profile" /></MenuItem>
                 </LinkContainer>
-                <MenuItem href={`${Routes.get('logout', slug)}?next=${Routes.get('home', slug)}`}>
+                <MenuItem href={`${Routes.getContextual('oldLogout', slug)}?next=${Routes.get('home', slug)}`}>
                   <Translate value="navbar.logout" />
                 </MenuItem>
               </DropdownButton>
