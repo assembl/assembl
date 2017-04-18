@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: "off", no-empty: "off" */
 const convertToURLEncodedString = (obj) => {
   return Object.keys(obj).map((k) => { return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`; }).join('&');
 };

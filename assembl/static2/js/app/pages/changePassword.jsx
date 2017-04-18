@@ -1,3 +1,5 @@
+/* eslint no-alert: "off" */
+
 import React from 'react';
 import { Grid, Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';

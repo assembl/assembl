@@ -1,3 +1,5 @@
+/* eslint no-template-curly-in-string: "off", import/no-unresolved: "off" */
+
 import React from 'react';
 import { Router, Route } from 'react-router';
 import urljoin from 'url-join';

@@ -6,6 +6,7 @@
   eg. parse("Hello ${name}", {name: "World"})
   => "Hello World"
 */
+/* eslint no-useless-escape: off, no-new-func: off */
 
 const cache = {};
 
