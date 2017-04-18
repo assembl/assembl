@@ -1,19 +1,18 @@
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
-import { PasswordMismatchError } from '../utils/errors'; 
+import { PasswordMismatchError } from '../utils/errors';
 
 export const postChangePassword = (payload) => {
   const route = '/data/AgentProfile/do_password_change';
   return xmlHttpRequest({
-	  	method: 'POST',
-	  	url: route,
-	  	payload: payload
-	  });
+    method: 'POST',
+    url: route,
+    payload: payload
+  });
 };
 
 export const signUp = (payload) => {
   if (payload.password1 !== payload.password2) {
-    alert("Passwords don't match");
-    return Promise.reject(new PasswordMismatchError("Passwords do not match!"));
+    return Promise.reject(new PasswordMismatchError('Passwords do not match!'));
   }
 
   const route = '/data/User';
@@ -39,7 +38,7 @@ export const changePasswordRequest = (id) => {
   const route = '/data/AgentProfile/password_reset';
   const payload = {
     identifier: id
-  }
+  };
 
   return xmlHttpRequest({
     method: 'POST',

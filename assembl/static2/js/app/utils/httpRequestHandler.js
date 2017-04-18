@@ -1,6 +1,6 @@
 const convertToURLEncodedString = (obj) => {
-  return Object.keys(obj).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`).join('&'); 
-}
+  return Object.keys(obj).map((k) => { return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`; }).join('&');
+};
 
 /*
   A global async method that returns a Promisified ajax call
@@ -15,13 +15,12 @@ export const xmlHttpRequest = (obj) => {
     const url = obj.url;
     let payload = obj.payload;
     xhr.open(obj.method, url);
-    if (obj.method.toLowerCase() === 'post'){
+    if (obj.method.toLowerCase() === 'post') {
       obj.headers = obj.headers || {};
-      if (obj.isJson && obj.isJson === true){
+      if (obj.isJson && obj.isJson === true) {
         obj.headers['Content-Type'] = 'application/json';
         payload = JSON.stringify(obj.payload);
-      }
-      else {
+      } else {
         obj.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         payload = convertToURLEncodedString(payload);
       }
@@ -34,8 +33,7 @@ export const xmlHttpRequest = (obj) => {
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         let resp = xhr.response;
-        try { resp = JSON.parse(resp); }
-        catch (e){}
+        try { resp = JSON.parse(resp); } catch (e) {}
         resolve(resp);
       } else {
         reject(xhr.responseText || xhr.statusText);

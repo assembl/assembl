@@ -1,7 +1,7 @@
 const ContextReducer = (state = {}, action) => {
   switch (action.type) {
   case 'ADD_CONTEXT':
-    return { 
+    return {
     	rootPath: action.rootPath,
     	debateId: action.debateId,
     	connectedUserId: action.connectedUserId,
@@ -27,5 +27,5 @@ export const getLocale = (state) => {
 };
 
 export const getConnectedUserName = (state) => {
-	return state.context.connectedUserName;
+  return state.context.connectedUserName;
 };

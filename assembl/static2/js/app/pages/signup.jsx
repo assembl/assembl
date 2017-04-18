@@ -7,9 +7,9 @@ import SignUpConfirm from '../components/login/signUpConfirm';
 class Signup extends React.Component {
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     let signupConfirm = false;
-    //Data has been fetched from the backend
+    // Data has been fetched from the backend
     if ('signupSuccess' in this.props.auth) {
       if (this.props.auth.signupSuccess.success === true) {
         signupConfirm = this.props.auth.signupSuccess.success;
@@ -22,7 +22,7 @@ class Signup extends React.Component {
             {!signupConfirm && <SignupForm />}
             {signupConfirm && <SignUpConfirm />}
           </Col>
-        </Row> 
+        </Row>
       </Grid>
     );
   }
@@ -31,7 +31,7 @@ class Signup extends React.Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth
-  }
+  };
 };
 
 export default connect(mapStateToProps)(Signup);

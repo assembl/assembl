@@ -276,7 +276,7 @@ const Translations = {
       changePassword: 'Change Password',
       incorrectPassword: 'The passwords that you have entered do not match',
       somethingWentWrong: 'We are sorry! Something went terribly wrong. Please try again',
-      userName: "Username (optional)",
+      userName: 'Username (optional)',
       passwordChangeRequestSuccess: 'Great! An email has been sent to your account. Make sure to check your spam folder as well',
       passwordChangeRequestError: 'Oh oh! There seems to be a problem on our end. Please try again later.'
     },

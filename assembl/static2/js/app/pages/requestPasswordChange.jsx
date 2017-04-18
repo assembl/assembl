@@ -6,11 +6,11 @@ import SendPwdConfirm from '../components/login/sendPwdConfirm';
 
 class RequestPasswordChange extends React.Component {
   render() {
-    console.log("props", this.props);
+    // console.log('props', this.props);
     const { auth } = this.props;
     let pwdSendConfirm = null;
-    if ('passwordChangeRequest' in auth){
-      if (auth.passwordChangeRequest.success !== null){
+    if ('passwordChangeRequest' in auth) {
+      if (auth.passwordChangeRequest.success !== null) {
         pwdSendConfirm = auth.passwordChangeRequest.success;
       }
     }
@@ -27,10 +27,10 @@ class RequestPasswordChange extends React.Component {
   }
 }
 
-const mapStateToProps = (state) =>{
+const mapStateToProps = (state) => {
   return {
     auth: state.auth
-  }
+  };
 };
 
 export default connect(mapStateToProps)(RequestPasswordChange);

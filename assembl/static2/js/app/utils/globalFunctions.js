@@ -25,7 +25,7 @@ export const getDiscussionSlug = () => {
 };
 
 export const getConnectedUserId = () => {
-  const userId = document.getElementById('user-id') ? document.getElementById('user-id').value: null;
+  const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
   return userId;
 };
 
@@ -36,17 +36,16 @@ export const getConnectedUserName = () => {
 
 export const getAuthorizationToken = () => {
   return document.getElementById('token') ? document.getElementById('token').text : null;
-}
+};
 
 export const getProvidersData = () => {
   const data = document.getElementById('login-providers') ? document.getElementById('login-providers').text : null;
   try {
-    return JSON.parse(data); 
-  }
-  catch (e) {
+    return JSON.parse(data);
+  } catch (e) {
     return null;
   }
-}
+};
 
 export const getSortedArrayByKey = (arr, key) => {
   arr.sort((a, b) => {

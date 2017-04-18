@@ -1,5 +1,7 @@
 import React from 'react';
 import { Router, Route } from 'react-router';
+import urljoin from 'url-join';
+import cloneDeep from 'lodash/clonedeep';
 import App from './app';
 import Main from './main';
 import Login from './pages/login';
@@ -20,8 +22,6 @@ import NotFound from './pages/notFound';
 import Terms from './pages/terms';
 import parse from './utils/literalStringParser';
 import { capitalize } from './utils/globalFunctions';
-import urljoin from 'url-join';
-import cloneDeep from 'lodash/clonedeep';
 
 
 /*
@@ -33,84 +33,85 @@ import cloneDeep from 'lodash/clonedeep';
 */
 
 class RoutesMap {
-  constructor() {
-    this._routes = {
-      'oldLogout': 'legacy/logout',
-      'oldLogin': 'debate/login',
-      'oldDebate': 'debate/${slug}',
-      'styleguide': "styleguide",
-      'login': "login",
-      'signup': "signup",
-      'changePassword': "changePassword",
-      'requestPasswordChange': 'requestPasswordChange',
-      'ctxLogin': "${slug}/login",
-      'ctxSignup': "${slug}/signup",
-      'ctxChangePassword': "${slug}/changePassword",
-      'ctxRequestPasswordChange': "${slug}/requestPasswordChange",
-      'ctxOldLogout': 'debate/${slug}/logout',
-      'ctxOldLogin': 'debate/${slug}/login',
-      'home': "${slug}/home",
-      'profile': "${slug}/profile/${userId}",
-      'ideas': "${slug}/ideas",
-      'synthesis': "${slug}/synthesis",
-      'debate': "${slug}/debate",
-      'community': "${slug}/community",
-      'terms': "${slug}/terms"
-    };
+  static basePath() {
+    return `${window.location.protocol}//${window.location.host}`;
   }
 
-  basePath(){
-    return window.location.protocol + '//' + window.location.host;
-  }
-
-  convertToContextualName(name){
+  static convertToContextualName(name) {
     const base = 'ctx';
-    let workingName = capitalize(name);
+    const workingName = capitalize(name);
     return base + workingName;
   }
 
-  maybePrependSlash(pre, s){
-    return pre ? '/' + s : s;
+  static maybePrependSlash(pre, s) {
+    return pre ? `/${s}` : s;
   }
 
-  get(name, args){
-    //Shitty way to enforce a boolean type without crashing
-    args = args || {};
-    const pre = ('preSlash' in args && args['preSlash'] === false) ? false : true;
-    const isCtx = 'ctx' in args ? args['ctx'] : false;
+  constructor() {
+    this.routes = {
+      oldLogout: 'legacy/logout',
+      oldLogin: 'debate/login',
+      oldDebate: 'debate/${slug}',
+      styleguide: 'styleguide',
+      login: 'login',
+      signup: 'signup',
+      changePassword: 'changePassword',
+      requestPasswordChange: 'requestPasswordChange',
+      ctxLogin: '${slug}/login',
+      ctxSignup: '${slug}/signup',
+      ctxChangePassword: '${slug}/changePassword',
+      ctxRequestPasswordChange: '${slug}/requestPasswordChange',
+      ctxOldLogout: 'debate/${slug}/logout',
+      ctxOldLogin: 'debate/${slug}/login',
+      home: '${slug}/home',
+      profile: '${slug}/profile/${userId}',
+      ideas: '${slug}/ideas',
+      synthesis: '${slug}/synthesis',
+      debate: '${slug}/debate',
+      community: '${slug}/community',
+      terms: '${slug}/terms'
+    };
+  }
 
-    name = isCtx ? this.convertToContextualName(name) : name;
-    if (!(name in this._routes)){
-      throw Error(`${name} is not a valid path!`);
+
+  get(name, args) {
+    // Shitty way to enforce a boolean type without crashing
+    const newArgs = args || {};
+    const pre = !(('preSlash' in newArgs && newArgs.preSlash === false));
+    const isCtx = 'ctx' in newArgs ? newArgs.ctx : false;
+
+    const newName = isCtx ? this.convertToContextualName(name) : name;
+    if (!(newName in this.routes)) {
+      throw Error(`${newName} is not a valid path!`);
     }
 
-    let literal = this._routes[name];
+    let literal = this.routes[newName];
     literal = this.maybePrependSlash(pre, literal);
-    let a = parse(literal, args);
+    const a = parse(literal, newArgs);
     return a;
   }
 
-  getContextual(name, args){
-    const newArgs = cloneDeep(args); //Do not mutuate args!!
-    newArgs['ctx'] = true;
+  getContextual(name, args) {
+    const newArgs = cloneDeep(args); // Do not mutuate args!!
+    newArgs.ctx = true;
     return this.get(name, newArgs);
   }
 
-  getFullPath(name, args){
+  getFullPath(name, args) {
     const rel = this.get(name, args);
     return urljoin(this.basePath(), rel);
   }
 }
 
-export let Routes = new RoutesMap();
+export const Routes = new RoutesMap();
 
 const getRouteForRouter = (name, isCtx, args) => {
   const newArgs = args || {};
-  newArgs['slug'] = ':slug';
-  newArgs['preSlash'] = false;
+  newArgs.slug = ':slug';
+  newArgs.preSlash = false;
   if (isCtx) { return Routes.getContextual(name, newArgs); }
   return Routes.get(name, newArgs);
-}
+};
 
 const DebateChild = (props) => {
   switch (props.params.phase) {
@@ -152,7 +153,7 @@ export default (
         <Route path=":slug/terms" component={Terms} />
         <Route path=":slug/req_password_change" component={RequestPasswordChange} />
         <Route path={getRouteForRouter('home')} component={Home} />
-        <Route path={getRouteForRouter('profile', false, {userId: ':userId'})} component={Profile} />
+        <Route path={getRouteForRouter('profile', false, { userId: ':userId' })} component={Profile} />
         <Route path={getRouteForRouter('ideas')} component={Ideas} />
         <Route path={getRouteForRouter('synthesis')} component={Synthesis} />
         <Route path={getRouteForRouter('debate')} component={Debate} />

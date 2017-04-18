@@ -33,7 +33,7 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath, connectedUserId } = this.props.context;
+    const { connectedUserId } = this.props.context;
     const { isHidden } = this.props;
     return (
       <Grid fluid className={isHidden ? 'hiddenNavbar' : 'shown'}>
@@ -48,7 +48,7 @@ class NavBar extends React.Component {
               </div>
             </div>
             <div className="navbar-logo left">
-              <Link to={Routes.get('home', {slug: debateData.slug})} activeClassName="logo-active">
+              <Link to={Routes.get('home', { slug: debateData.slug })} activeClassName="logo-active">
                 <img src={debateData.logo} alt="logo" />
               </Link>
             </div>
