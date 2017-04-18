@@ -32,10 +32,10 @@ class Main extends React.Component {
     const { debateData } = this.props.debate;
     const paramsIdentifier = nextProps.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
     const queryIdentifier = nextProps.location.query.phase || paramsIdentifier;
-    this.state = {
+    this.setState({
       identifier: queryIdentifier,
       isNavbarHidden: false
-    };
+    });
     scrollToElement(document.body, 0, 0);
   }
   componentWillUnmount() {

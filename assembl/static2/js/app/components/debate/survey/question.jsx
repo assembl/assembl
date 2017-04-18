@@ -91,7 +91,7 @@ class Question extends React.Component {
         ref={(q) => { this.question = q; }}
         style={
           this.state.componentHeight < this.state.screenHeight && this.state.screenWidth >= 768 ?
-            { height: this.state.screenHeight } : { height: `${100}%` }
+            { height: this.state.screenHeight } : { height: '100%' }
         }
       >
         <Grid fluid className="background-grey">

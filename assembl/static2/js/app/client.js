@@ -7,8 +7,7 @@ const client = new ApolloClient({
     opts: {
       credentials: 'same-origin'
     }
-  }),
-  dataIdFromObject: o => o.id
+  })
 });
 
 export default client;

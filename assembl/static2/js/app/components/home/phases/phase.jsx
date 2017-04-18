@@ -9,12 +9,12 @@ class Step extends React.Component {
     const { rootPath } = this.props.context;
     const { locale } = this.props.i18n;
     const { imgUrl, startDate, title, description, index, identifier } = this.props;
-    const StepNumber = index + 1;
+    const stepNumber = index + 1;
     return (
       <div className="illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
         <Link className="content-box" to={`${rootPath}${debateData.slug}/debate?phase=${identifier}`}>
-          <h1 className="light-title-1">{StepNumber}</h1>
+          <h1 className="light-title-1">{stepNumber}</h1>
           {title &&
             <h3 className="light-title-3">
               {title.entries.map((entry, index2) => {

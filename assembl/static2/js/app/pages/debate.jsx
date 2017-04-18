@@ -28,8 +28,7 @@ class Debate extends React.Component {
   }
   displayThumbnails() {
     const { isThumbnailsHidden } = this.state;
-    if (!isThumbnailsHidden) this.setState({ isThumbnailsHidden: true });
-    if (isThumbnailsHidden) this.setState({ isThumbnailsHidden: false });
+    this.setState({ isThumbnailsHidden: !this.state.isThumbnailsHidden });
   }
   render() {
     const { loading, thematics } = this.props.data;

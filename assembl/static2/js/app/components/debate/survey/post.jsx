@@ -14,31 +14,42 @@ class Post extends React.Component {
     const { post } = this.props;
     this.state = {
       like: post.sentimentCounts.like,
-      disagree: post.sentimentCounts.disagree
+      disagree: post.sentimentCounts.disagree,
+      mySentiment: post.mySentiment
     };
     this.handleLike = this.handleLike.bind(this);
     this.handleDisagree = this.handleDisagree.bind(this);
   }
   handleLike(event) {
-    const { post } = this.props;
-    const target = event.currentTarget;
-    const type = 'LIKE';
-    const isMySentiment = post.mySentiment === 'LIKE';
-    if (isMySentiment) {
-      this.deleteSentiment(target, type);
+    const isUserConnected = getConnectedUserId() !== null;
+    const { redirectToLogin } = this.props;
+    if (isUserConnected) {
+      const target = event.currentTarget;
+      const type = 'LIKE';
+      const isMySentiment = this.state.mySentiment === 'LIKE';
+      if (isMySentiment) {
+        this.deleteSentiment(target);
+      } else {
+        this.addSentiment(target, type);
+      }
     } else {
-      this.addSentiment(target, type);
+      redirectToLogin();
     }
   }
   handleDisagree(event) {
-    const { post } = this.props;
-    const target = event.currentTarget;
-    const type = 'DISAGREE';
-    const isMySentiment = post.mySentiment === 'DISAGREE';
-    if (isMySentiment) {
-      this.deleteSentiment(target);
+    const isUserConnected = getConnectedUserId() !== null;
+    const { redirectToLogin } = this.props;
+    if (isUserConnected) {
+      const target = event.currentTarget;
+      const type = 'DISAGREE';
+      const isMySentiment = this.state.mySentiment === 'DISAGREE';
+      if (isMySentiment) {
+        this.deleteSentiment(target);
+      } else {
+        this.addSentiment(target, type);
+      }
     } else {
-      this.addSentiment(target, type);
+      redirectToLogin();
     }
   }
   addSentiment(target, type) {
@@ -48,7 +59,8 @@ class Post extends React.Component {
       target.setAttribute('class', 'sentiment sentiment-active');
       this.setState({
         like: sentiments.data.addSentiment.post.sentimentCounts.like,
-        disagree: sentiments.data.addSentiment.post.sentimentCounts.disagree
+        disagree: sentiments.data.addSentiment.post.sentimentCounts.disagree,
+        mySentiment: sentiments.data.addSentiment.post.mySentiment
       });
     }).catch((error) => {
       this.props.displayAlert('danger', `${error}`);
@@ -61,15 +73,15 @@ class Post extends React.Component {
       target.setAttribute('class', 'sentiment');
       this.setState({
         like: sentiments.data.deleteSentiment.post.sentimentCounts.like,
-        disagree: sentiments.data.deleteSentiment.post.sentimentCounts.disagree
+        disagree: sentiments.data.deleteSentiment.post.sentimentCounts.disagree,
+        mySentiment: sentiments.data.deleteSentiment.post.mySentiment
       });
     }).catch((error) => {
       this.props.displayAlert('danger', `${error}`);
     });
   }
   render() {
-    const isUserConnected = getConnectedUserId() !== null;
-    const { postIndex, moreProposals, post, redirectToLogin, id } = this.props;
+    const { postIndex, moreProposals, post, id } = this.props;
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
@@ -80,14 +92,14 @@ class Post extends React.Component {
               <Translate value="debate.survey.react" />
             </div>
             <div
-              className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
-              onClick={(event) => { isUserConnected ? this.handleLike(event) : redirectToLogin(); }}
+              className={this.state.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
+              onClick={this.handleLike}
             >
               <Like size={25} />
             </div>
             <div
-              className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
-              onClick={(event) => { isUserConnected ? this.handleDisagree(event) : redirectToLogin(); }}
+              className={this.state.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
+              onClick={this.handleDisagree}
             >
               <Disagree size={25} />
             </div>
