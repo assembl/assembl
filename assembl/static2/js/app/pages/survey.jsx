@@ -164,7 +164,7 @@ const ThemeQuery = gql`
           ... on Question {
             title(lang: $lang),
             id,
-            posts(first: 10, random: false){
+            posts(first: 10, random: true){
               edges {
                 node {
                   ... on PropositionPost {
