@@ -27,8 +27,7 @@ class NavBar extends React.Component {
   }
   displayMenu() {
     const { isMenuHidden } = this.state;
-    if (!isMenuHidden) this.setState({ isMenuHidden: true });
-    if (isMenuHidden) this.setState({ isMenuHidden: false });
+    this.setState({ isMenuHidden: !isMenuHidden });
   }
   render() {
     const { debateData } = this.props.debate;
