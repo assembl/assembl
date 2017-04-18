@@ -345,33 +345,28 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_posts(self, args, context, info):
         random = args.get('random', False)
+        connection_type = info.return_type.graphene_type  # this is PostConnection
+        model = connection_type._meta.node._meta.model  # this is models.Post
+        related = self.get_related_posts_query(True)
         # TODO
         # If random is True returns 10 posts, the first one is the latest post created by the user,
         # then the remaining ones are in random order.
         # If random is False, return all the posts in creation_date desc order.
         if random:
-            connection_type = info.return_type.graphene_type  # this is PostConnection
-            model = connection_type._meta.node._meta.model  # this is models.PostUnion
-            query = self.get_related_posts_query(
-                ).filter(model.publication_state == models.PublicationStates.PUBLISHED
-                ).order_by(desc(model.creation_date), model.id)
-            # TODO: retrieve ids, do the random and get the posts for these ids
-            if context.authenticated_userid:
-                query = [e for e, dontcare in query.all()]
-            else:
-                query = query.all()
-            query = random_sample(query, min(len(query), args.get('first', 10)))
+            query = model.default_db.query(model.id).join(
+                related, model.id == related.c.post_id
+                ).filter(model.publication_state == models.PublicationStates.PUBLISHED)
+            # retrieve ids, do the random and get the posts for these ids
+            posts_ids = [e[0] for e in query]
+            random_posts_ids = random_sample(
+                posts_ids, min(len(posts_ids), args.get('first', 10)))
+            query = model.query.filter(model.id.in_(random_posts_ids))
         else:
-            connection_type = info.return_type.graphene_type  # this is PostConnection
-            model = connection_type._meta.node._meta.model  # this is models.PostUnion
-            query = self.get_related_posts_query(
+            # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
+            query = model.query.join(
+                related, model.id == related.c.post_id
                 ).filter(model.publication_state == models.PublicationStates.PUBLISHED
                 ).order_by(desc(model.creation_date), model.id)
-            # TODO: this returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 >
-            # only when connected...
-            # so we get all results here, not performant
-            if context.authenticated_userid:
-                query = [e for e, dontcare in query.all()]
 
         # pagination is done after that, no need to do it ourself
         return query
