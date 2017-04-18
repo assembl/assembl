@@ -175,7 +175,17 @@ class ElasticChanges(threading.local):
 
             actions = get_actions(self._index, self._unindex)
             es = connect()
-            bulk(es, actions, chunk_size=self._settings['chunk_size'])
+            bulk(es, actions, chunk_size=self._settings['chunk_size'],
+                raise_on_error=False)
+            # set raise_on_error=False to not raise a BulkIndexError and so a transaction error (shouldn't happen in tpc_finish)
+            # when we try to unindex an idea that was not indexed (this is
+            # the case for hidden ideas associated to a synthesis)
+            # Example of item in unindex:
+            # {'idea:2580': {'_parent': None, 'doc_type': 'idea'}
+            # and the resulting error:
+            # {u'delete': {u'status': 404, u'_type': u'idea', u'_index': u'assembl',
+            # u'_shards': {u'successful': 1, u'failed': 0, u'total': 1},
+            # u'_version': 1, u'result': u'not_found', u'found': False, u'_id': u'idea:2580'}}
 
         self._clear()
 
