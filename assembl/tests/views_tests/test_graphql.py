@@ -316,6 +316,22 @@ mutation myFirstMutation {
     return post_id
 
 
+def test_delete_thematic(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    deleteThematic(
+        thematicId:"%s",
+    ) {
+        success
+    }
+}
+""" % thematic_id, context_value=graphql_request)
+    assert True == res.data['deleteThematic']['success']
+    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {u'thematics': []}
+
+
 def test_get_thematic_via_node_query(graphql_request):
     thematic_id, first_question_id = create_thematic(graphql_request)
     res = schema.execute(u"""query {

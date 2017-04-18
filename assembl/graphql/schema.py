@@ -445,7 +445,7 @@ class Query(graphene.ObjectType):
     node = Node.Field()
     posts = SQLAlchemyConnectionField(PostConnection, idea_id=graphene.ID())
     ideas = SQLAlchemyConnectionField(Idea)
-    thematics = graphene.List(Thematic, identifier=graphene.String())
+    thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
     # agent_profiles = SQLAlchemyConnectionField(AgentProfile)
 
     def resolve_ideas(self, args, context, info):
@@ -488,11 +488,11 @@ class Query(graphene.ObjectType):
         model = Thematic._meta.model
         discussion_id = context.matchdict['discussion_id']
         query = get_query(model, context
-            ).filter(model.discussion_id == discussion_id)
-        if identifier is not None:
-            query = query.filter(model.identifier == identifier
-            ).filter(model.hidden == False).order_by(model.id)
-
+            ).filter(model.discussion_id == discussion_id
+            ).filter(model.identifier == identifier
+            ).filter(model.hidden == False
+            ).filter(model.tombstone_date == None
+            ).order_by(model.id)
         return query
 
 
@@ -695,6 +695,31 @@ class UpdateThematic(graphene.Mutation):
         return UpdateThematic(thematic=thematic)
 
 
+class DeleteThematic(graphene.Mutation):
+    class Input:
+        thematic_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+
+        thematic_id = args.get('thematic_id')
+        thematic_id = int(Node.from_global_id(thematic_id)[1])
+        thematic = models.Thematic.get(thematic_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = models.Thematic.user_can_cls(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        thematic.tombstone_date = datetime.utcnow()
+        thematic.db.flush()
+        return DeleteThematic(success=True)
+
+
 class CreatePost(graphene.Mutation):
     class Input:
         subject = graphene.String()
@@ -834,13 +859,11 @@ class DeleteSentiment(graphene.Mutation):
         post.db.flush()
         return DeleteSentiment(post=post)
 
-# TODO DeleteThematic, raise exception if questions associated with it
-# TODO csv export
-
 
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
+    delete_thematic = DeleteThematic.Field()
     create_post = CreatePost.Field()
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
