@@ -57,7 +57,7 @@ class Navigation extends React.Component {
     const windowOffset = window.pageYOffset + window.innerHeight;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
-    if (windowOffset < limitToHide && isPhaseCompleted) {
+    if (windowOffset < limitToHide && !isPhaseCompleted) {
       this.setState({
         isHidden: true
       });
