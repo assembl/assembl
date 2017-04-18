@@ -81,13 +81,13 @@ class Post extends React.Component {
             </div>
             <div
               className={this.state.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
-              onClick={(event) => this.handleSentiment(event, 'LIKE')}
+              onClick={(event) => { this.handleSentiment(event, 'LIKE'); }}
             >
               <Like size={25} />
             </div>
             <div
               className={this.state.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
-              onClick={(event) => this.handleSentiment(event, 'DISAGREE')}
+              onClick={(event) => { this.handleSentiment(event, 'DISAGREE'); }}
             >
               <Disagree size={25} />
             </div>
