@@ -42,15 +42,7 @@ class Survey extends React.Component {
   }
   redirectToLogin() {
     const { connectedUserId } = this.props.context;
-    if (connectedUserId) {
-      this.setState({
-        showModal: false
-      });
-    } else {
-      this.setState({
-        showModal: true
-      });
-    }
+    this.setState({ showModal: !connectedUserId });
   }
   displayAlert(style, msg) {
     this.setState({

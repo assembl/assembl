@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Translate } from 'react-redux-i18n';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
 import Circle from '../../svg/circle';
 import Like from '../../svg/like';
@@ -17,36 +19,22 @@ class Post extends React.Component {
       disagree: post.sentimentCounts.disagree,
       mySentiment: post.mySentiment
     };
-    this.handleLike = this.handleLike.bind(this);
-    this.handleDisagree = this.handleDisagree.bind(this);
+    this.handleSentiment = this.handleSentiment.bind(this);
   }
-  handleLike(event) {
+  handleSentiment(event, type) {
     const isUserConnected = getConnectedUserId() !== null;
     const { redirectToLogin } = this.props;
     if (isUserConnected) {
-      const target = event.currentTarget;
-      const type = 'LIKE';
-      const isMySentiment = this.state.mySentiment === 'LIKE';
-      if (isMySentiment) {
-        this.deleteSentiment(target);
-      } else {
-        this.addSentiment(target, type);
-      }
-    } else {
-      redirectToLogin();
-    }
-  }
-  handleDisagree(event) {
-    const isUserConnected = getConnectedUserId() !== null;
-    const { redirectToLogin } = this.props;
-    if (isUserConnected) {
-      const target = event.currentTarget;
-      const type = 'DISAGREE';
-      const isMySentiment = this.state.mySentiment === 'DISAGREE';
-      if (isMySentiment) {
-        this.deleteSentiment(target);
-      } else {
-        this.addSentiment(target, type);
+      const { debateData } = this.props.debate;
+      const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+      if (!isPhaseCompleted) {
+        const target = event.currentTarget;
+        const isMySentiment = this.state.mySentiment === type;
+        if (isMySentiment) {
+          this.deleteSentiment(target);
+        } else {
+          this.addSentiment(target, type);
+        }
       }
     } else {
       redirectToLogin();
@@ -93,13 +81,13 @@ class Post extends React.Component {
             </div>
             <div
               className={this.state.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
-              onClick={this.handleLike}
+              onClick={(event) => this.handleSentiment(event, 'LIKE')}
             >
               <Like size={25} />
             </div>
             <div
               className={this.state.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
-              onClick={this.handleDisagree}
+              onClick={(event) => this.handleSentiment(event, 'DISAGREE')}
             >
               <Disagree size={25} />
             </div>
@@ -180,4 +168,10 @@ const PostWithMutations = compose(
   })
 )(Post);
 
-export default PostWithMutations;
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate
+  };
+};
+
+export default connect(mapStateToProps)(PostWithMutations);

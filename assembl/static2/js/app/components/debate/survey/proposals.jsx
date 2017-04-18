@@ -25,7 +25,15 @@ class Proposals extends React.Component {
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {posts.map((post, index) => {
               return (
-                <Post post={post.node} id={post.node.id} postIndex={index} moreProposals={moreProposals} redirectToLogin={this.props.redirectToLogin} displayAlert={this.props.displayAlert} key={index} />
+                <Post
+                  post={post.node}
+                  id={post.node.id}
+                  postIndex={index}
+                  moreProposals={moreProposals}
+                  redirectToLogin={this.props.redirectToLogin}
+                  displayAlert={this.props.displayAlert}
+                  key={index}
+                />
               );
             })}
           </div>
