@@ -43,6 +43,30 @@ export const isCurrentPhase = (phase) => {
   return currentPhase;
 };
 
+export const getPhaseName = (timeline, identifier, locale) => {
+  let phaseName = '';
+  timeline.forEach((phase) => {
+    if (phase.identifier === identifier) {
+      phase.title.entries.forEach((entry) => {
+        if(entry['@language'] === locale) {
+          phaseName = entry.value;
+        }
+      });
+    }
+  });
+  return phaseName;
+}
+
+export const getIfPhaseCompletedByIdentifier = (timeline, identifier) => {
+  let isPhaseCompleted = false;
+  timeline.forEach((phase) => {
+    if(identifier === phase.identifier) {
+      isPhaseCompleted = isStepCompleted(phase);
+    }
+  });
+  return isPhaseCompleted;
+}
+
 export const isStepCompleted = (phase) => {
   const currentDate = new Date();
   const endDate = new Date(phase.end);

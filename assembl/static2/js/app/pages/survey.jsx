@@ -13,6 +13,7 @@ import Header from '../components/debate/survey/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
+import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 
 class Survey extends React.Component {
   constructor(props) {
@@ -68,6 +69,7 @@ class Survey extends React.Component {
     const { loading, theme } = this.props.data;
     const { rootPath } = this.props.context;
     const { debateData } = this.props.debate;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
       <div className="survey">
         {loading && <Loader color="black" />}
@@ -106,7 +108,7 @@ class Survey extends React.Component {
               <Navigation questionsLength={theme.questions.length} />
             }
             <div className="proposals">
-              <section className="proposals-section" id="proposals">
+              <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">
                 <Grid fluid className="background-light">
                   <div className="max-container">
                     <div className="question-title">

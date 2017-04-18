@@ -142,7 +142,9 @@ const Translations = {
         modalFooter: 'Connectez-vous',
         submit: 'Envoyer',
         remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
-        postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !'
+        postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
+        endPhase: 'La phase %{closedPhaseName} est terminée.',
+        goTo: 'Rendez-vous sur la phase %{currentPhaseName}.'
       },
       themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
@@ -308,7 +310,9 @@ const Translations = {
         modalFooter: 'Please connect',
         submit: 'Submit',
         remaining_x_characters: 'You have %{nbCharacters} characters left',
-        postSuccess: 'Thanks for your participation. Your proposal has been sent!'
+        postSuccess: 'Thanks for your participation. Your proposal has been sent!',
+        endPhase: 'The %{closedPhaseName} phase is closed.',
+        goTo: 'Go to %{currentPhaseName} phase.'
       },
       themes: 'Themes',
       notStarted: 'This phase is not started. Please come back from the '

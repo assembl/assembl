@@ -1,7 +1,9 @@
 import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { getDomElementOffset, scrollToElement, calculatePercentage } from '../../../utils/globalFunctions';
+import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -49,12 +51,14 @@ class Navigation extends React.Component {
     const limitToShow = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight + document.getElementById('nav').clientHeight;
     const limitToHide = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight;
     const windowOffset = window.pageYOffset + window.innerHeight;
-    if (windowOffset < limitToHide) {
+    const { debateData } = this.props.debate;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+    if (windowOffset < limitToHide && isPhaseCompleted) {
       this.setState({
         isHidden: true
       });
     }
-    if (windowOffset > limitToShow) {
+    if (windowOffset > limitToShow && !isPhaseCompleted) {
       this.setState({
         isHidden: false
       });
@@ -134,4 +138,10 @@ class Navigation extends React.Component {
   }
 }
 
-export default Navigation;
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate
+  };
+};
+
+export default connect(mapStateToProps)(Navigation);

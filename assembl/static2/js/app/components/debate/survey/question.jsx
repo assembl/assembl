@@ -1,8 +1,10 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 class Question extends React.Component {
   constructor(props) {
@@ -80,9 +82,11 @@ class Question extends React.Component {
   }
   render() {
     const { index, title } = this.props;
+    const { debateData } = this.props.debate;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
       <section
-        className="questions-section"
+        className={isPhaseCompleted ? 'hidden' : 'questions-section'}
         id={`q${index}`}
         ref={(q) => { this.question = q; }}
         style={
@@ -154,4 +158,10 @@ const createPostMutation = gql`
 
 const QuestionWithMutation = graphql(createPostMutation)(Question);
 
-export default QuestionWithMutation;
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate
+  };
+};
+
+export default connect(mapStateToProps)(QuestionWithMutation);
