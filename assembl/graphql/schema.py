@@ -348,19 +348,36 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         connection_type = info.return_type.graphene_type  # this is PostConnection
         model = connection_type._meta.node._meta.model  # this is models.Post
         related = self.get_related_posts_query(True)
-        # TODO
         # If random is True returns 10 posts, the first one is the latest post created by the user,
         # then the remaining ones are in random order.
         # If random is False, return all the posts in creation_date desc order.
         if random:
+            user_id = context.authenticated_userid
+            if user_id is None:
+                first_post = None
+            else:
+                first_post = model.query.join(
+                    related, model.id == related.c.post_id
+                    ).filter(model.creator_id == user_id
+                    ).order_by(desc(model.creation_date), model.id).first()
+
             query = model.default_db.query(model.id).join(
                 related, model.id == related.c.post_id
                 ).filter(model.publication_state == models.PublicationStates.PUBLISHED)
             # retrieve ids, do the random and get the posts for these ids
-            posts_ids = [e[0] for e in query]
+            post_ids = [e[0] for e in query]
+            limit = args.get('first', 10)
+            if first_post is not None:
+                first_post_id = first_post.id
+                post_ids = [post_id for post_id in post_ids if post_id != first_post_id]
+                limit -= 1
+
             random_posts_ids = random_sample(
-                posts_ids, min(len(posts_ids), args.get('first', 10)))
-            query = model.query.filter(model.id.in_(random_posts_ids))
+                post_ids, min(len(post_ids), limit))
+            query = model.query.filter(model.id.in_(random_posts_ids)).all()
+            if first_post is not None:
+                query = [first_post] + query
+
         else:
             # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
             query = model.query.join(
