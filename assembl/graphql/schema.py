@@ -661,12 +661,13 @@ class UpdateThematic(graphene.Mutation):
             db.flush()
 
             questions_input = args.get('questions')
-            # TODO delete questions that are not in questions_input? or have an explicit DeleteQuestion mutation?
-            # TODO raise exception if proposals associated to deleted question?
+            existing_questions = {question.id: question for question in thematic.get_children()}
+            updated_questions = set()
             if questions_input is not None:
                 for question_input in questions_input:
                     if question_input.get('id', None) is not None:
                         id_ = int(Node.from_global_id(question_input['id'])[1])
+                        updated_questions.add(id_)
                         question = models.Question.get(id_)
                         update_langstring_from_input_entries(
                             question, 'title', question_input['title_entries'])
@@ -683,7 +684,13 @@ class UpdateThematic(graphene.Mutation):
                                 discussion_id=discussion_id
                             )
                         )
-                db.flush()
+
+            # remove question (tombstone it) that are not in questions_input
+            for question_id in set(existing_questions.keys()
+                    ).difference(updated_questions):
+                existing_questions[question_id].tombstone_date = datetime.utcnow()
+
+            db.flush()
 
         return UpdateThematic(thematic=thematic)
 

@@ -404,6 +404,41 @@ mutation secondMutation {
     }}}
 
 
+def test_update_thematic_delete_question(graphql_request):
+    thematic_id, first_question_id = create_thematic(graphql_request)
+    res = schema.execute(u"""
+mutation secondMutation {
+    updateThematic(
+        id: "%s",
+        titleEntries:[
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+            {value:"Understanding the dynamics and issues", localeCode:"en"}
+        ],
+        questions:[
+        ],
+        identifier:"survey",
+    ) {
+        thematic {
+            titleEntries { localeCode value },
+            identifier
+            questions { titleEntries { localeCode value } }
+        }
+    }
+}
+""" % (thematic_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateThematic': {
+            u'thematic': {
+                u'titleEntries': [
+                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"},
+                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"}
+                ],
+                u'identifier': u'survey',
+                u'questions': [
+                ]
+    }}}
+
+
 def test_mutation_create_post(graphql_request):
     thematic_id, first_question_id = create_thematic(graphql_request)
     res = schema.execute(u"""
