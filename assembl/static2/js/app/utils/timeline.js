@@ -48,29 +48,29 @@ export const getPhaseName = (timeline, identifier, locale) => {
   timeline.forEach((phase) => {
     if (phase.identifier === identifier) {
       phase.title.entries.forEach((entry) => {
-        if(entry['@language'] === locale) {
+        if (entry['@language'] === locale) {
           phaseName = entry.value;
         }
       });
     }
   });
   return phaseName;
-}
-
-export const getIfPhaseCompletedByIdentifier = (timeline, identifier) => {
-  let isPhaseCompleted = false;
-  timeline.forEach((phase) => {
-    if(identifier === phase.identifier) {
-      isPhaseCompleted = isStepCompleted(phase);
-    }
-  });
-  return isPhaseCompleted;
-}
+};
 
 export const isStepCompleted = (phase) => {
   const currentDate = new Date();
   const endDate = new Date(phase.end);
   return isDateExpired(currentDate, endDate);
+};
+
+export const getIfPhaseCompletedByIdentifier = (timeline, identifier) => {
+  let isPhaseCompleted = false;
+  timeline.forEach((phase) => {
+    if (identifier === phase.identifier) {
+      isPhaseCompleted = isStepCompleted(phase);
+    }
+  });
+  return isPhaseCompleted;
 };
 
 export const getBarWidth = (phase) => {

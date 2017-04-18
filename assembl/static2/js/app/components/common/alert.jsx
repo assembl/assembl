@@ -4,7 +4,7 @@ import { Alert } from 'react-bootstrap';
 class AssemblAlert extends React.Component {
   render() {
     const { showAlert, style, msg } = this.props;
-    return(
+    return (
       <Alert className={showAlert ? 'showAlert' : 'hideAlert'} bsStyle={style}>{msg}</Alert>
     );
   }

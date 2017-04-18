@@ -45,7 +45,6 @@ class Navigation extends React.Component {
     return offsetArray;
   }
   displayNav() {
-    const { questionsLength } = this.props;
     const proposals = document.getElementById('proposals');
     const proposalsOffset = getDomElementOffset(proposals).top;
     const limitToShow = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight + document.getElementById('nav').clientHeight;

@@ -20,11 +20,11 @@ class Post extends React.Component {
     this.handleDisagree = this.handleDisagree.bind(this);
   }
   handleLike(event) {
-    const { post, id } = this.props;
+    const { post } = this.props;
     const target = event.currentTarget;
     const type = 'LIKE';
     const isMySentiment = post.mySentiment === 'LIKE';
-    if(isMySentiment) {
+    if (isMySentiment) {
       this.deleteSentiment(target, type);
     } else {
       this.addSentiment(target, type);
@@ -35,7 +35,7 @@ class Post extends React.Component {
     const target = event.currentTarget;
     const type = 'DISAGREE';
     const isMySentiment = post.mySentiment === 'DISAGREE';
-    if(isMySentiment) {
+    if (isMySentiment) {
       this.deleteSentiment(target);
     } else {
       this.addSentiment(target, type);
@@ -45,7 +45,7 @@ class Post extends React.Component {
     const { id } = this.props;
     this.props.addSentiment({ variables: { postId: id, type: type } })
     .then((sentiments) => {
-      target.setAttribute("class", "sentiment sentiment-active");
+      target.setAttribute('class', 'sentiment sentiment-active');
       this.setState({
         like: sentiments.data.addSentiment.post.sentimentCounts.like,
         disagree: sentiments.data.addSentiment.post.sentimentCounts.disagree
@@ -56,9 +56,9 @@ class Post extends React.Component {
   }
   deleteSentiment(target) {
     const { id } = this.props;
-    this.props.deleteSentiment({ variables: { postId: id} })
+    this.props.deleteSentiment({ variables: { postId: id } })
     .then((sentiments) => {
-      target.setAttribute("class", "sentiment");
+      target.setAttribute('class', 'sentiment');
       this.setState({
         like: sentiments.data.deleteSentiment.post.sentimentCounts.like,
         disagree: sentiments.data.deleteSentiment.post.sentimentCounts.disagree
@@ -159,12 +159,12 @@ const deleteSentiment = gql`
   }
 `;
 
-const PostWithMutations =  compose(
+const PostWithMutations = compose(
   graphql(addSentiment, {
     name: 'addSentiment'
   }),
   graphql(deleteSentiment, {
-    name: 'deleteSentiment'  
+    name: 'deleteSentiment'
   })
 )(Post);
 

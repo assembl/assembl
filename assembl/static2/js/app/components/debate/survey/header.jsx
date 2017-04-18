@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { getPhaseName, getCurrentPhaseIdentifier, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { Translate } from 'react-redux-i18n';
+import { getPhaseName, getCurrentPhaseIdentifier, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 class Header extends React.Component {
   render() {

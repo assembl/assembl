@@ -69,7 +69,7 @@ class Question extends React.Component {
     const { questionId } = this.props;
     const body = this.state.postBody;
     this.props.mutate({ variables: { ideaId: questionId, body: body } })
-    .then((post) => {
+    .then(() => {
       this.props.displayAlert('success', I18n.t('debate.survey.postSuccess'));
       this.setState({
         postBody: '',

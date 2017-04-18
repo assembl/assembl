@@ -9,7 +9,7 @@ class PostCreator extends React.Component {
     return (
       <div className="inline">
         {loading && <Loader textHidden color="black" />}
-        {proposition && 
+        {proposition &&
           <div className="user">
             <span className="assembl-icon-profil grey">&nbsp;</span>
             <span className="username">{proposition.creator.name}</span>

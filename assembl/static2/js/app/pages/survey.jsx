@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
-import update from 'immutability-helper';
 import gql from 'graphql-tag';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
