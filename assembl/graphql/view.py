@@ -37,8 +37,3 @@ def graphql_api(request):
 
     solver = graphql_wsgi(Schema)
     return solver(request)
-
-
-#TODO: Add graphql support
-# def graphiql_view(request):
-#     pass
