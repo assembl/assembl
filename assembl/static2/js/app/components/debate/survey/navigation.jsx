@@ -48,8 +48,12 @@ class Navigation extends React.Component {
   displayNav() {
     const proposals = document.getElementById('proposals');
     const proposalsOffset = getDomElementOffset(proposals).top;
-    const limitToShow = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight + document.getElementById('nav').clientHeight;
-    const limitToHide = getDomElementOffset(document.getElementsByClassName('txt-area')[0]).top + document.getElementsByClassName('txt-area')[0].clientHeight;
+    const firstTextarea = document.getElementsByClassName('txt-area')[0];
+    if (!firstTextarea) {
+      return;
+    }
+    const limitToHide = getDomElementOffset(firstTextarea).top + firstTextarea.clientHeight;
+    const limitToShow = limitToHide + document.getElementById('nav').clientHeight;
     const windowOffset = window.pageYOffset + window.innerHeight;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
