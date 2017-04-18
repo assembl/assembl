@@ -112,12 +112,11 @@
 }
 
 .alert {
-  top: $navbar-height + 20px;
+  left: 0;
   position: fixed;
-  right: 20px;
   transition: opacity 1s ease-in-out;
   text-align: center;
-  width: 250px;
+  width: 100%;
   z-index: 100000;
 }
 
