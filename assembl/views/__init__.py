@@ -179,6 +179,9 @@ def get_default_context(request, **kwargs):
     react_url = '/static2'
     use_webpack_server = asbool(config.get('use_webpack_server'))
     if use_webpack_server:
+        # Allow to specify a distinct webpack_host in configuration.
+        # Useful for development tests of social auth through a reverse tunnel.
+        # Otherwise fallback on public_hostname, then localhost.
         webpack_host = config.get(
             'webpack_host',
             config.get('public_hostname',
