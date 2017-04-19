@@ -26,6 +26,11 @@ class Survey extends React.Component {
     this.redirectToLogin = this.redirectToLogin.bind(this);
     this.displayAlert = this.displayAlert.bind(this);
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      moreProposals: false
+    });
+  }
   getIfProposals(questions) {
     this.questions = questions;
     if (!this.questions) return false;
