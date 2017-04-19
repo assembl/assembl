@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
+import { throttle } from 'lodash';
 import { getDomElementOffset, scrollToElement, calculatePercentage } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
@@ -22,8 +23,8 @@ class Navigation extends React.Component {
     };
   }
   componentDidMount() {
-    window.addEventListener('scroll', this.displayNav);
-    window.addEventListener('scroll', this.displayPagination);
+    window.addEventListener('scroll', _.throttle(this.displayNav, 100));
+    window.addEventListener('scroll', _.throttle(this.displayPagination, 100));
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -34,8 +35,8 @@ class Navigation extends React.Component {
     });
   }
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.displayNav);
-    window.removeEventListener('scroll', this.displayPagination);
+    window.removeEventListener('scroll', _.throttle(this.displayNav, 100));
+    window.removeEventListener('scroll', _.throttle(this.displayPagination, 100));
   }
   getQuestionsOffset(questionsLength) { //eslint-disable-line
     const offsetArray = [];
