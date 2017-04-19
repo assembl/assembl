@@ -18,7 +18,7 @@ class App extends React.Component {
     const { debateData, debateLoading, debateError } = this.props.debate;
     return (
       <div className="app">
-        {debateLoading && <Loader loading={debateLoading} />}
+        {debateLoading && <Loader />}
         {debateData &&
           <div className="app-child">{this.props.children}</div>
         }

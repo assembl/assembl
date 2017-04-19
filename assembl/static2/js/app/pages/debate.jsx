@@ -42,7 +42,7 @@ class Debate extends React.Component {
     });
     return (
       <div className="debate">
-        {loading && <Loader loading color="black" />}
+        {loading && <Loader color="black" />}
         {thematics &&
           <div>
             <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'} id="timeline">

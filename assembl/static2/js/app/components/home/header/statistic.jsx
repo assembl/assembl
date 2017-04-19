@@ -13,7 +13,7 @@ class Statistic extends React.Component {
         <div className="inline">
           {postsLoading &&
             <div className="stat-loader">
-              <Loader loading={postsLoading} textHidden color="white" />
+              <Loader textHidden color="white" />
             </div>
           }
           {postsError && <Error errorMessage={postsError} />}
