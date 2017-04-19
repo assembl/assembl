@@ -285,6 +285,11 @@ class SocialAuthAccount(
         self.username = details.get('username', self.username)
         # TODO: Maybe see if username usable for user?
         fullname = details.get("fullname")
+        if not fullname:
+            first_name = details.get('first_name', None)
+            last_name = details.get('last_name', None)
+            if first_name and last_name:
+                fullname = ' '.join((first_name, last_name))
         if fullname and not self.user.name:
             self.user.name = fullname
 
