@@ -27,7 +27,7 @@ class Main extends React.Component {
     this.props.fetchUsers(debateId, connectedUserId);
   }
   componentDidMount() {
-    window.addEventListener('scroll', _.throttle(this.displayHeader, 100));
+    window.addEventListener('scroll', throttle(this.displayHeader, 100));
   }
   componentWillReceiveProps(nextProps) {
     const { debateData } = this.props.debate;
@@ -40,7 +40,7 @@ class Main extends React.Component {
     scrollToElement(document.body, 0, 0);
   }
   componentWillUnmount() {
-    window.removeEventListener('scroll', _.throttle(this.displayHeader, 100));
+    window.removeEventListener('scroll', throttle(this.displayHeader, 100));
   }
   displayHeader() {
     const isDebateView = this.props.location.pathname.indexOf('debate') > -1;

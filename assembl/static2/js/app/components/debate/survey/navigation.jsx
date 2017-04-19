@@ -23,8 +23,8 @@ class Navigation extends React.Component {
     };
   }
   componentDidMount() {
-    window.addEventListener('scroll', _.throttle(this.displayNav, 100));
-    window.addEventListener('scroll', _.throttle(this.displayPagination, 100));
+    window.addEventListener('scroll', throttle(this.displayNav, 100));
+    window.addEventListener('scroll', throttle(this.displayPagination, 100));
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -35,12 +35,13 @@ class Navigation extends React.Component {
     });
   }
   componentWillUnmount() {
-    window.removeEventListener('scroll', _.throttle(this.displayNav, 100));
-    window.removeEventListener('scroll', _.throttle(this.displayPagination, 100));
+    window.removeEventListener('scroll', throttle(this.displayNav, 100));
+    window.removeEventListener('scroll', throttle(this.displayPagination, 100));
   }
-  getQuestionsOffset(questionsLength) { //eslint-disable-line
+  getQuestionsOffset(questionsLength) {
     const offsetArray = [];
-    for (let i = 0; i < questionsLength; i += 1) {
+    this.questionsLength = questionsLength;
+    for (let i = 0; i < this.questionsLength; i += 1) {
       const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top);
       offsetArray.push(questionOffset);
     }
