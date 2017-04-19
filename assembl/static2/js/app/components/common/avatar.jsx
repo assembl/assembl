@@ -20,7 +20,7 @@ class ProfileIcon extends React.Component {
         }
         {connectedUserId &&
           <div>
-            {usersLoading && <Loader textHidden color="black" />}
+            {usersLoading && <Loader loading={usersLoading} textHidden color="black" />}
             {users &&
               <Link to={`${rootPath}${debateData.slug}/profile/${users.connectedUser.name}`}>
                 <span className="assembl-icon-profil grey">&nbsp;</span>

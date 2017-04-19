@@ -12,7 +12,7 @@ class Themes extends React.Component {
     const { rootPath, connectedUserId } = this.props.context;
     return (
       <section className="themes-section">
-        {ideasLoading && <Loader color="black" />}
+        {ideasLoading && <Loader loading={ideasLoading} color="black" />}
         {(ideas && ideas.latestIdeas.length >= 2) &&
           <Grid fluid className="background-grey">
             <div className="max-container">

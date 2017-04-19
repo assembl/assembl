@@ -1,12 +1,27 @@
-.loader {
+.loader-container-xl {
+  height: 100px;
+  margin: 140px 0;
+  overflow: hidden;
+  position: relative;
   text-align: center;
-
-  svg {
-    margin: 0 40px;
-    width: 30px;
-  }
+  width: 100%;
 }
 
-.margin-loader {
-  margin: 100px 0;
+.loader-container-xs {
+  position: relative;
+  width: 30px;
+}
+
+.loader {
+  left: 0;
+  position: absolute;
+  text-align: center;
+  top: 0px;
+  width: 100%;
+  z-index: 10000;
+
+  svg {
+    margin: 0;
+    width: 30px;
+  }
 }

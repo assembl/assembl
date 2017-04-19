@@ -1,5 +1,4 @@
 .debate {
-
   .timeline-top {
     top: 0;
   }
@@ -326,6 +325,10 @@
   
   .proposals-section {
     margin: $margin-section 0 0 0;
+  }
+
+  .postcreator-loader {
+    margin: 40px;
   }
 }
 

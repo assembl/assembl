@@ -11,7 +11,11 @@ class Statistic extends React.Component {
     return (
       <div className="statistic">
         <div className="inline">
-          {postsLoading && <Loader textHidden color="white" />}
+          {postsLoading &&
+            <div className="stat-loader">
+              <Loader loading={postsLoading} textHidden color="white" />
+            </div>
+          }
           {postsError && <Error errorMessage={postsError} />}
           {posts &&
             <div className="stat-box border-right">

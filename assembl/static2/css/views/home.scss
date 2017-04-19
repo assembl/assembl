@@ -44,6 +44,10 @@
       width: 100%;
       z-index: 10;
 
+      .stat-loader {
+        margin-top: -20px;
+      }
+
       .stat-icon {
         float: left;
         padding: 7px 0 0;

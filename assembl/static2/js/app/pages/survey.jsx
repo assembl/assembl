@@ -63,7 +63,7 @@ class Survey extends React.Component {
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
       <div className="survey">
-        {loading && <Loader color="black" />}
+        {loading && <Loader loading color="black" />}
         {theme &&
           <div className="relative">
             <Header title={theme.title} imgUrl={theme.imgUrl} />
