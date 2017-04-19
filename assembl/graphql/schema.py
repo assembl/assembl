@@ -37,7 +37,11 @@ class SecureObjectType(object):
         except NoResultFound:
             return None
 
+        # The user can't retrieve a content from a different discussion
         discussion_id = context.matchdict['discussion_id']
+        if result.discussion_id != discussion_id:
+            raise HTTPUnauthorized()
+
         user_id = context.authenticated_userid or Everyone
         permissions = get_permissions(user_id, discussion_id)
         if not result.user_can(user_id, CrudPermissions.READ, permissions):
