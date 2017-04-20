@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import Glyphicon from '../common/glyphicon';
 import Like from '../svg/like';
 import Disagree from '../svg/disagree';
-import Circle from '../svg/circle';
+import Doughnut from '../svg/doughnut';
 
 class Icons extends React.Component {
   render() {
@@ -103,7 +103,7 @@ class Icons extends React.Component {
             </div>
           </div>
           <div>
-            <Circle like={123} disagree={12} />
+            <Doughnut like={123} disagree={12} />
           </div>
           <div style={{backgroundColor:"#000", width:"200px"}}>
             <div className="inline padding">
@@ -217,7 +217,7 @@ class Icons extends React.Component {
             <div>&lt;/div&gt;</div>
           </pre>
           <pre>
-            &lt;Circle like=&#123;123&#125; disagree=&#123;12&#125; /&gt; from './components/svg/circle'
+            &lt;Doughnut like=&#123;123&#125; disagree=&#123;12&#125; /&gt; from './components/svg/Doughnut'
           </pre>
           <pre>
             <div>&lt;Link to="http://www.facebook.com" target="_blank"&gt;</div>

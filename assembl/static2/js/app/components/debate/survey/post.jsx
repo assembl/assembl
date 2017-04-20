@@ -6,7 +6,7 @@ import { Translate } from 'react-redux-i18n';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
-import Circle from '../../svg/circle';
+import Doughnut from '../../svg/doughnut';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 
@@ -100,7 +100,7 @@ class Post extends React.Component {
           <div className="sentimentsCountLabel">
             <Translate value="debate.survey.reactions" />
           </div>
-          <Circle like={this.state.like} disagree={this.state.disagree} />
+          <Doughnut like={this.state.like} disagree={this.state.disagree} />
           <div className="stat-sentiment">
             <div>
               <div className="min-sentiment">

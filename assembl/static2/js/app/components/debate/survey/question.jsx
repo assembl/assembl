@@ -42,7 +42,8 @@ class Question extends React.Component {
   }
   displaySubmitButton(e) {
     const nbChars = e.currentTarget.value.length;
-    if (nbChars > 10) {
+    const minAcceptableChars = 10
+    if (nbChars > minAcceptableChars) {
       this.setState({
         showSubmitButton: true
       });
@@ -56,13 +57,11 @@ class Question extends React.Component {
     const componentHeight = this.question.clientHeight;
     const screenHeight = window.innerHeight - document.getElementById('navbar').clientHeight;
     const screenWidth = window.innerWidth;
-    setTimeout(() => {
-      this.setState({
-        screenHeight: screenHeight,
-        componentHeight: componentHeight,
-        screenWidth: screenWidth
-      });
-    }, 600);
+    this.setState({
+      screenHeight: screenHeight,
+      componentHeight: componentHeight,
+      screenWidth: screenWidth
+    });
   }
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
