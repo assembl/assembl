@@ -42,7 +42,7 @@ class Question extends React.Component {
   }
   displaySubmitButton(e) {
     const nbChars = e.currentTarget.value.length;
-    const minAcceptableChars = 10
+    const minAcceptableChars = 10;
     if (nbChars > minAcceptableChars) {
       this.setState({
         showSubmitButton: true

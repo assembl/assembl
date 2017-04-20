@@ -41,17 +41,17 @@ class Navigation extends React.Component {
     const offsetArray = [];
     this.questionsLength = questionsLength;
     for (let i = 0; i < this.questionsLength; i += 1) {
-      if(!document.getElementsByClassName('question-title')[i]) {
+      if (!document.getElementsByClassName('question-title')[i]) {
         return;
       }
       const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top);
       offsetArray.push(questionOffset);
     }
-    return offsetArray;
+    return offsetArray; // eslint-disable-line
   }
   displayNav() {
     const proposals = document.getElementById('proposals');
-    if(!proposals) {
+    if (!proposals) {
       return;
     }
     const proposalsOffset = getDomElementOffset(proposals).top;
@@ -88,7 +88,7 @@ class Navigation extends React.Component {
   }
   displayPagination() {
     const questionsOffset = this.getQuestionsOffset(this.state.questionsLength);
-    if(!questionsOffset) {
+    if (!questionsOffset) {
       return;
     }
     const windowOffset = window.pageYOffset + window.innerHeight;
