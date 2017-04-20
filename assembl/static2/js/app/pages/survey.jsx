@@ -75,7 +75,7 @@ class Survey extends React.Component {
             <Modal
               body={I18n.t('debate.survey.modalBody')}
               footer
-              button={link: `${rootPath}${debateData.slug}/login`, label: I18n.t('debate.survey.modalFooter'), internalLink: true}
+              button={{link: `${rootPath}${debateData.slug}/login`, label: I18n.t('debate.survey.modalFooter'), internalLink: true}}
               showModal={this.state.showModal}
             />
             <Alert showAlert={this.state.showAlert} style={this.state.alertStyle} msg={this.state.alertMsg} />
