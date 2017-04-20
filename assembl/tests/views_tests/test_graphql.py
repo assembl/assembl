@@ -333,8 +333,8 @@ mutation secondMutation {
     updateThematic(
         id: "%s",
         titleEntries:[
-            {value:"omprendre les dynamiques et les enjeux", localeCode:"fr"},
-            {value:"nderstanding the dynamics and issues", localeCode:"en"}
+            {value:"nderstanding the dynamics and issues", localeCode:"en"},
+            {value:"omprendre les dynamiques et les enjeux", localeCode:"fr"}
         ],
         questions:[
             {id: "%s",
@@ -356,8 +356,8 @@ mutation secondMutation {
         u'updateThematic': {
             u'thematic': {
                 u'titleEntries': [
-                    {u'value': u"omprendre les dynamiques et les enjeux", u'localeCode': u"fr"},
-                    {u'value': u"nderstanding the dynamics and issues", u'localeCode': u"en"}
+                    {u'value': u"nderstanding the dynamics and issues", u'localeCode': u"en"},
+                    {u'value': u"omprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
                 ],
                 u'identifier': u'urvey',
                 u'questions': [
@@ -375,8 +375,8 @@ mutation secondMutation {
     updateThematic(
         id: "%s",
         titleEntries:[
-            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
-            {value:"Understanding the dynamics and issues", localeCode:"en"}
+            {value:"Understanding the dynamics and issues", localeCode:"en"},
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
         ],
         questions:[
         ],
@@ -394,8 +394,8 @@ mutation secondMutation {
         u'updateThematic': {
             u'thematic': {
                 u'titleEntries': [
-                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"},
-                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"}
+                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"},
+                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
                 ],
                 u'identifier': u'survey',
                 u'questions': [

@@ -66,7 +66,7 @@ def get_entries(langstring):
             models.LangStringEntry.langstring
         ).filter(models.LangStringEntry.tombstone_date == None
         ).filter(models.LangString.id == langstring.id).all()
-    return results
+    return sorted(results, key=lambda e: e.locale_code)
 
 
 def resolve_langstring(langstring, locale_code):
