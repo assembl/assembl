@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Glyphicon from '../common/glyphicon';
+import Like from '../svg/like';
+import Disagree from '../svg/disagree';
+import Doughnut from '../svg/doughnut';
 
 class Icons extends React.Component {
   render() {
@@ -9,13 +12,19 @@ class Icons extends React.Component {
         <h2 className="dark-title-2 underline" id="icons" style={{ borderBottom: "1px solid #ccc"}}>ICONS</h2>
         <section>
           <div className="inline padding">
-            <span className="assembl-icon-add">&nbsp;</span>
+            <span className="assembl-icon-down-dir color">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-add grey">&nbsp;</span>
           </div>
           <div className="inline padding">
             <span className="assembl-icon-catch">&nbsp;</span>
           </div>
           <div className="inline padding">
             <span className="assembl-icon-checked">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-thumb">&nbsp;</span>
           </div>
           <div className="inline padding">
             <span className="assembl-icon-discussion">&nbsp;</span>
@@ -77,6 +86,25 @@ class Icons extends React.Component {
           <div className="inline padding">
             <span className="assembl-icon-mindmap">&nbsp;</span>
           </div>
+          <div className="inline padding">
+            <span className="assembl-icon-down-open">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-up-open">&nbsp;</span>
+          </div>
+          <div>
+            <div className="sentiment">
+              <Like size={25} />
+            </div>
+          </div>
+          <div>
+            <div className="sentiment">
+              <Disagree size={25} />
+            </div>
+          </div>
+          <div>
+            <Doughnut like={123} disagree={12} />
+          </div>
           <div style={{backgroundColor:"#000", width:"200px"}}>
             <div className="inline padding">
               <Link to="http://www.facebook.com" target="_blank">
@@ -98,13 +126,19 @@ class Icons extends React.Component {
         <section>
           <h3 className="dark-title-3">Code</h3>
           <pre>
-            &lt;span className="assembl-icon-add black"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-down-dir color"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="assembl-icon-catch white"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-add grey"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="assembl-icon-checked grey"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-catch black"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-checked white"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-thumb"&gt;&lt;/span&gt;
           </pre>
           <pre>
             &lt;span className="assembl-icon-discussion"&gt;&lt;/span&gt;
@@ -165,6 +199,25 @@ class Icons extends React.Component {
           </pre>
           <pre>
             &lt;span className="assembl-icon-mindmap"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-down-open"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-up-open"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            <div>&lt;div className="sentiment"&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;Like size=&#123;25&#125; /&gt; from './components/svg/like'</div>
+            <div>&lt;/div&gt;</div>
+          </pre>
+          <pre>
+            <div>&lt;div className="sentiment"&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;Disagree size=&#123;25&#125; /&gt; from './components/svg/disagree'</div>
+            <div>&lt;/div&gt;</div>
+          </pre>
+          <pre>
+            &lt;Doughnut like=&#123;123&#125; disagree=&#123;12&#125; /&gt; from './components/svg/Doughnut'
           </pre>
           <pre>
             <div>&lt;Link to="http://www.facebook.com" target="_blank"&gt;</div>

@@ -1,0 +1,174 @@
+.proposals {
+  .box {
+    border-bottom: $navbar-border;
+    border-left: $border-theme;
+    border-right: $navbar-border;
+    border-top: $navbar-border;
+    margin: 0 auto 40px;
+    max-width: 900px;
+    padding: 0;
+    position: relative;
+    text-align: center;
+  }
+
+  .user {
+    text-align: left;
+
+    .username {
+      color: $first-color;
+    }
+  }
+
+  .body {
+    font-family: $font-family4;
+    text-align: left;
+  }
+
+  .sentiments {
+    border-top: $navbar-border;
+    font-family: $font-family4;
+    padding: 15px 0 0;
+    text-align: left;
+  }
+
+  .stat-sentiment {
+    padding: 0 0 0 3px;
+  }
+
+  .min-sentiment {
+    display: inline-block;
+    font-family: $font-family4;
+    font-size: $font-size-xxs;
+    text-align: left;
+    width: 60px;
+
+    svg {
+      vertical-align: bottom;
+    }
+
+    .txt {
+      padding: 0 0 0 5px;
+    }
+  }
+
+  .totalSentimentsCount {
+    font-family: $font-family3;
+    font-size: $font-size-sm;
+    letter-spacing: initial;
+    margin: 20px 0 0;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+  }
+
+  .sentimentsCountLabel {
+    font-family: $font-family4;
+    font-size: $font-size-xxs;
+    letter-spacing: initial;
+    margin: 20px 0 0;
+    position: absolute;
+    top: 70px;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .proposals {
+    .sentiment-label {
+      display: inline-block;
+    }
+
+    .stat-sentiment {
+      margin: -15px 0 0;
+    }
+
+    .content {
+      float:left;
+      text-align: left;
+      width: 80%;
+
+      .user {
+        padding: 30px 0 0 40px;
+      }
+    }
+
+    .statistic {
+      background-color: $first-color-light;
+      float:left;
+      height: 100%;
+      min-width: 150px;
+      padding: 20px 0 0;
+      position: absolute;
+      right: 0;
+      width: 20%;
+    }
+
+    .body {
+      padding: 20px 50px 0 73px;
+    }
+
+    .sentiments {
+      margin: 25px 50px 10px 73px;
+    }
+
+    .box {
+      min-height: 230px;
+    }
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .proposals {
+    .statistic {
+      float: right;
+      height: 0;
+      margin: -95px 0 0;
+    }
+
+    .gauge {
+      transform: scale(0.45);
+    }
+
+    .content {
+      text-align: left;
+
+      .user {
+        padding: 30px 20px 0;
+      }
+    }
+
+    .stat-sentiment {
+      display: inline-block;
+      float: inherit;
+      margin: 50px 10px 0 -40px;
+    }
+
+    .sentiment-label {
+      display: none;
+    }
+
+    .totalSentimentsCount {
+      display: none;
+    }
+
+    .sentimentsCountLabel {
+      display: none;
+    }
+
+    .body {
+      padding: 20px 20px 0 25px;
+    }
+
+    .sentiments {
+      margin: 25px 20px 10px 25px;
+    }
+
+    .min-sentiment {
+      margin: 0 0 5px 0;
+    }
+
+    .clear {
+      height: 10px;
+    }
+  }
+}

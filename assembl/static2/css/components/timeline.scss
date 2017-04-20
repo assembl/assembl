@@ -36,3 +36,85 @@
     white-space: nowrap;
   }
 }
+
+.minimized-timeline {
+
+  .active {
+    background-color: $first-color;
+  }
+
+  .not-active {
+    background-color: $grey5;
+  }
+
+  .timeline-number {
+    border: 2px solid $white;
+    border-radius: 18px;
+    color: $white;
+    font-size: $font-size-xxxs;
+    height: 18px;
+    line-height: 14px;
+    padding: 0 0 0 1px;
+    position: absolute;
+    text-align: center;
+    width: 18px;
+    z-index: 2;
+
+    .assembl-icon-checked {
+      &:before {
+        font-size: $font-size-xxxs;
+      }
+    }
+  }
+
+  .timeline-bar-1 {
+    background-color: $grey5;
+    height: 6px;
+    margin: 6px 0 0 11px;
+    position: absolute;
+    width: 100px;
+    z-index: 0;
+  }
+
+  .timeline-bar-2 {
+    background-color: $first-color;
+    height: 6px;
+    margin: 6px 0 0 11px;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .timeline-title {
+    cursor: pointer;
+    font-size: 10px;
+    padding: 0 0 0 15px;
+    position: absolute;
+    text-align: center;
+    top: 28px;
+    width: 100px;
+  }
+
+  .txt-active {
+    a {
+      color: $first-color;
+
+      &:focus {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .txt-not-active {
+    a {
+      color: $grey5;
+
+      &:hover {
+        color: $first-color;
+      }
+    }
+  }
+
+  .assembl-icon-down-dir:before {
+    font-size: 15px;
+  }
+}

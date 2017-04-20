@@ -38,6 +38,16 @@
   &:focus {
     outline: none;
   }
+
+  &:active {
+    box-shadow: none;
+
+    &:focus {
+      background-color: $white;
+      box-shadow: none;
+      outline: none;
+    }
+  }
 }
 
 .button-cancel {
@@ -107,5 +117,11 @@
     background: $btn-dark-bkg;
     border: $btn-dark-border;
     color: $btn-dark-txt;
+  }
+
+  &:active {
+    &:focus {
+      border: $btn-dark-border;
+    }
   }
 }

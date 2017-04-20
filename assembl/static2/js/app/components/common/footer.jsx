@@ -10,7 +10,7 @@ class Footer extends React.Component {
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
     return (
-      <Grid fluid className="background-dark">
+      <Grid fluid className="background-dark relative">
         <div className="max-container">
           <div className={debateData.socialMedias ? 'footer' : 'footer margin-xl'}>
             {debateData.socialMedias &&

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
-import Loader from '../common/loader';
-import Error from '../common/error';
+import Loader from '../../common/loader';
+import Error from '../../common/error';
 
 class Thread extends React.Component {
   render() {

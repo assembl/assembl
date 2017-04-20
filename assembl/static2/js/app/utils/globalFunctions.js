@@ -20,6 +20,10 @@ export const getDiscussionId = () => {
   return discussionId;
 };
 
+export const getDiscussionSlug = () => {
+  return document.getElementById('discussion-slug') ? document.getElementById('discussion-slug').value : null;
+};
+
 export const getConnectedUserId = () => {
   const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
   return userId;
@@ -48,4 +52,32 @@ export const getNumberOfDays = (date1, date2) => {
 
 export const calculatePercentage = (value1, value2) => {
   return Math.round(((value1 * 100) / value2) * 100) / 100;
+};
+
+export const getDomElementOffset = (el) => {
+  const rect = el.getBoundingClientRect();
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+  return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+};
+
+let scrollInterval;
+
+export const scrollToElement = (element, to, duration) => {
+  if (element.scrollTop === to) return;
+  clearInterval(scrollInterval);
+  const diff = to - element.scrollTop;
+  const scrollStep = Math.PI / (duration / 10);
+  let count = 0;
+  let currPos = 0;
+  const start = element.scrollTop;
+  scrollInterval = setInterval(() => {
+    if ((Math.round(element.scrollTop / 10) * 10) !== (Math.round(to / 10) * 10)) {
+      count += 1;
+      currPos = start + (diff * (0.5 - (0.5 * Math.cos(count * scrollStep))));
+      element.scrollTop = currPos; //eslint-disable-line
+    } else {
+      clearInterval(scrollInterval);
+    }
+  }, 10);
 };

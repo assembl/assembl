@@ -121,9 +121,6 @@ const Translations = {
       from: 'du',
       to: 'au'
     },
-    ideas: {
-      panelTitle: 'Bienvenue dans la table des idées d\'Assembl'
-    },
     synthesis: {
       title: 'synthèse'
     },
@@ -131,7 +128,26 @@ const Translations = {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
     },
     debate: {
-      panelTitle: 'Bienvenue dans la page débat d\'Assembl'
+      survey: {
+        themesTitle: 'Choisissez une thématique !',
+        txtAreaPh: 'Ecrivez votre proposition',
+        question_x_on_total: 'Question %{current} sur %{total}',
+        titleVideo: 'Une vidéo pour mieux comprendre le sujet...',
+        proposalsTitle: 'Etes-vous d\'accord avec les propositions ?',
+        reactions: 'Réactions',
+        react: 'Réagissez :',
+        moreProposals: 'Voir plus de propositions',
+        noProposals: 'Il n\'y a pas de propositions. Soyez le premier à contribuer !',
+        modalBody: 'Vous devez être connecté pour faire une proposition ou voter.',
+        modalFooter: 'Connectez-vous',
+        submit: 'Envoyer',
+        remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
+        postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
+        endPhase: 'La phase %{closedPhaseName} est terminée.',
+        goTo: 'Rendez-vous sur la phase %{currentPhaseName}.'
+      },
+      themes: 'Thèmes',
+      notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
     },
     profile: {
       panelTitle: 'Bienvenue dans la page profil d\'Assembl'
@@ -273,9 +289,6 @@ const Translations = {
       from: 'from',
       to: 'to'
     },
-    ideas: {
-      panelTitle: 'Welcome to Assembl ideas page'
-    },
     community: {
       panelTitle: 'Welcome to Assembl community page'
     },
@@ -283,7 +296,26 @@ const Translations = {
       title: 'synthesis'
     },
     debate: {
-      panelTitle: 'Welcome to Assembl debate page'
+      survey: {
+        themesTitle: 'Choose a theme!',
+        txtAreaPh: 'Write your proposal',
+        question_x_on_total: 'Question %{current} on %{total}',
+        titleVideo: 'A video to better understand the subject...',
+        proposalsTitle: 'Do you agree with proposals?',
+        reactions: 'Reactions',
+        react: 'React:',
+        moreProposals: 'More proposals',
+        noProposals: 'There are no proposals for the moment. Be the first to contribute!',
+        modalBody: 'You have to be connected to do a proposal or to vote.',
+        modalFooter: 'Please connect',
+        submit: 'Submit',
+        remaining_x_characters: 'You have %{nbCharacters} characters left',
+        postSuccess: 'Thanks for your participation. Your proposal has been sent!',
+        endPhase: 'The %{closedPhaseName} phase is closed.',
+        goTo: 'Go to %{currentPhaseName} phase.'
+      },
+      themes: 'Themes',
+      notStarted: 'This phase is not started. Please come back from the '
     },
     profile: {
       panelTitle: 'Welcome to Assembl profile page'

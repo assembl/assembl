@@ -1,0 +1,19 @@
+.sentiment {
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 0 0 15px;
+  transition: all .2s ease-in-out;
+  vertical-align: middle;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.sentiment-active {
+  transform: scale(1.2);
+
+  svg {
+    stroke-width: 2px;
+  }
+}

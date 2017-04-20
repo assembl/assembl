@@ -5,19 +5,29 @@ $grey1: #e7e6f5;
 $grey2: #9b9b9b;
 $grey3: #4a4a4a;
 $grey4: #1d1d1d;
-$green: #3bb848;
+$grey5: #d8d8d8;
+$grey6: #eef0f7;
+$red: #f75959;
+$green: #46d38d;
 $lightgreen: #93e79d;
 $blue: #140ca0;
 $purple: #5404d7;
+$purple-light: #e7e6f5;
 $yellow: #f0ab2b;
 $cyan: #0095b2;
+$cyan-light: #d1eef6;
+
 $opacity-purple: rgba(84, 4, 215, .5);
 $opacity-cyan: rgba(0, 140, 166, .5);
+$min-opacity-cyan: rgba(0, 140, 166, .1);
+$linear-gradient: linear-gradient( 90deg, $grey6, $white );
 
 $first-color: $cyan;
+$first-color-light: $cyan-light;
 $second-color: $yellow;
 $third-color: $blue;
 $opacity-color: $opacity-cyan;
+$min-opacity-color: $min-opacity-cyan;
 
 $app-max-width: 1400px;
 $navbar-height: 60px;
@@ -58,18 +68,33 @@ $img-dir: '/static2/img';
   src: local('☺'), url('#{$fonts-dir}/Lato-Semibold.woff') format('woff'), url('#{$fonts-dir}/Lato-Semibold.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'LatoItalic';
+  src: url('#{$fonts-dir}/Lato-Italic.eot');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Italic.woff') format('woff'), url('#{$fonts-dir}/Lato-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LatoLightItalic';
+  src: url('#{$fonts-dir}/Lato-LightItalic.eot');
+  src: local('☺'), url('#{$fonts-dir}/Lato-LightItalic.woff') format('woff'), url('#{$fonts-dir}/Lato-LightItalic.ttf') format('truetype');
+}
+
 $font-family: 'latoRegular';
 $font-family2: 'LatoMedium';
 $font-family3: 'LatoBold';
 $font-family4: 'LatoLight';
 $font-family5: 'LatoSemiBold';
+$font-family6: 'LatoItalic';
+$font-family7: 'LatoLightItalic';
 
 $font-size-xxxs: 8px;
 $font-size-xxs: 10px;
 $font-size-xs: 12px;
 $font-size-s: 14px;
+$font-size-sm: 16px;
 $font-size-m: 18px;
-$font-size-l: 22px;
+$font-size-l: 26px;
 $font-size-xl: 36px;
 
 $title-letter-spacing: 1.7px;
@@ -113,11 +138,11 @@ $title4-size: $font-size-s;
 $title5-size: $font-size-l;
 
 $navbar-bkg: $white;
-$navbar-border: none;
+$navbar-border: 1px solid $grey1;
 $navbar-text-color: $first-color;
 $navbar-active-text-color: $first-color;
 
-$box-shadow: 1px 1px 3px 0 $grey1;
+$box-shadow: none;
 $box-bkg: $white;
 $box-border: 1px solid $white;
 $insert-border: 1px solid $grey1;

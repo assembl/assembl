@@ -5,24 +5,21 @@ import { Link } from 'react-router';
 
 class Step extends React.Component {
   render() {
-    const imgUrl = this.props.imgUrl;
-    const startDate = this.props.startDate;
-    const title = this.props.title;
-    const description = this.props.description;
-    const StepNumber = this.props.index + 1;
     const { debateData } = this.props.debate;
     const { rootPath } = this.props.context;
     const { locale } = this.props.i18n;
+    const { imgUrl, startDate, title, description, index, identifier } = this.props;
+    const stepNumber = index + 1;
     return (
       <div className="illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
-        <Link className="content-box" to={`${rootPath}${debateData.slug}/home`}>
-          <h1 className="light-title-1">{StepNumber}</h1>
+        <Link className="content-box" to={`${rootPath}${debateData.slug}/debate?phase=${identifier}`}>
+          <h1 className="light-title-1">{stepNumber}</h1>
           {title &&
             <h3 className="light-title-3">
-              {title.entries.map((entry, index) => {
+              {title.entries.map((entry, index2) => {
                 return (
-                  <span key={`title-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
+                  <span key={index2}>{locale === entry['@language'] ? entry.value : ''}</span>
                 );
               })}
             </h3>
@@ -32,9 +29,9 @@ class Step extends React.Component {
           </h4>
           {description &&
             <div className="text-box">
-              {description.entries.map((entry, index) => {
+              {description.entries.map((entry, index3) => {
                 return (
-                  <span key={`desc-${index}`}>{locale === entry['@language'] ? entry.value : ''}</span>
+                  <span key={index3}>{locale === entry['@language'] ? entry.value : ''}</span>
                 );
               })}
             </div>

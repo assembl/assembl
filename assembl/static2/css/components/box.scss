@@ -1,7 +1,6 @@
 .box {
   background-color: $box-bkg;
   border: $box-border;
-  border-radius: 3px;
   box-shadow: $box-shadow;
   padding: 15px 20px 20px;
 }
@@ -110,4 +109,21 @@
     transform: rotate(90deg);
     z-index: 3;
   }
+}
+
+.alert {
+  left: 0;
+  position: fixed;
+  transition: opacity 1s ease-in-out;
+  text-align: center;
+  width: 100%;
+  z-index: 100000;
+}
+
+.showAlert {
+  opacity: 1;
+}
+
+.hideAlert {
+  opacity: 0;
 }

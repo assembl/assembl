@@ -263,3 +263,388 @@ mutation myFirstMutation {
                     {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}
                 ]
     }}}
+
+
+def test_delete_thematic(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    deleteThematic(
+        thematicId:"%s",
+    ) {
+        success
+    }
+}
+""" % thematic_id, context_value=graphql_request)
+    assert True == res.data['deleteThematic']['success']
+    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, description, htmlCode} } }', context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {u'thematics': []}
+
+
+def test_get_thematic_via_node_query(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            __typename,
+            ... on Thematic {
+                title
+            }
+        }
+    }""" % thematic_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+            u'node': {u"__typename": u"Thematic",
+                      u"title": u"Understanding the dynamics and issues"}}
+
+
+def test_get_question_via_node_query(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            __typename,
+            ... on Question {
+                title
+            }
+        }
+    }""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+            u'node': {u"__typename": u"Question",
+                      u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}}
+
+
+def test_get_proposition_post_via_node_query(graphql_request, proposition_id):
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            __typename,
+            ... on PropositionPost {
+                body
+            }
+        }
+    }""" % proposition_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+            u'node': {u"__typename": u"PropositionPost",
+                      u"body": u"une proposition..."}}
+
+
+def test_update_thematic(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    # to test the modification, we delete the first letter of each message
+    res = schema.execute(u"""
+mutation secondMutation {
+    updateThematic(
+        id: "%s",
+        titleEntries:[
+            {value:"nderstanding the dynamics and issues", localeCode:"en"},
+            {value:"omprendre les dynamiques et les enjeux", localeCode:"fr"}
+        ],
+        questions:[
+            {id: "%s",
+             titleEntries:[
+                {value:"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
+            ]},
+        ],
+        identifier:"urvey",
+    ) {
+        thematic {
+            titleEntries { localeCode value },
+            identifier
+            questions { titleEntries { localeCode value } }
+        }
+    }
+}
+""" % (thematic_id, first_question_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateThematic': {
+            u'thematic': {
+                u'titleEntries': [
+                    {u'value': u"nderstanding the dynamics and issues", u'localeCode': u"en"},
+                    {u'value': u"omprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                ],
+                u'identifier': u'urvey',
+                u'questions': [
+                    {u'titleEntries': [
+                        {u'value': u"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
+                    ]},
+                ]
+    }}}
+
+
+def test_update_thematic_delete_question(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation secondMutation {
+    updateThematic(
+        id: "%s",
+        titleEntries:[
+            {value:"Understanding the dynamics and issues", localeCode:"en"},
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
+        ],
+        questions:[
+        ],
+        identifier:"survey",
+    ) {
+        thematic {
+            titleEntries { localeCode value },
+            identifier
+            questions { titleEntries { localeCode value } }
+        }
+    }
+}
+""" % (thematic_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateThematic': {
+            u'thematic': {
+                u'titleEntries': [
+                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"},
+                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                ],
+                u'identifier': u'survey',
+                u'questions': [
+                ]
+    }}}
+
+
+def test_mutation_create_post(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        subject:"Proposition 1",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on PropositionPost {
+                subject,
+                body,
+                creator { name },
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition 1',
+                u'body': u"une proposition...",
+                u'creator': {u'name': u'Mr. Administrator'}
+    }}}
+
+
+def test_mutation_create_post_without_subject(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on PropositionPost {
+                subject,
+                body,
+                creator { name },
+                mySentiment
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition',
+                u'body': u"une proposition...",
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'mySentiment': None
+    }}}
+
+
+def test_mutation_add_sentiment(graphql_request, proposition_id):
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
+      }
+    }
+}
+""" % proposition_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'addSentiment': {
+            u'post': {
+                u'sentimentCounts': {
+                   u'like': 1,
+                   u'disagree': 0,
+                },
+                u'mySentiment': u"LIKE"
+            }
+        }
+    }
+
+
+def test_mutation_add_sentiment_like_then_disagree(graphql_request, proposition_id):
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+    }
+}
+""" % proposition_id, context_value=graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:DISAGREE
+    ) {
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
+      }
+    }
+}
+""" % proposition_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'addSentiment': {
+            u'post': {
+                u'sentimentCounts': {
+                   u'like': 0,
+                   u'disagree': 1,
+                },
+                u'mySentiment': u"DISAGREE"
+            }
+        }
+    }
+
+
+def test_mutation_add_sentiment_like_twice(graphql_request, proposition_id):
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+    }
+}
+""" % proposition_id, context_value=graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
+      }
+    }
+}
+""" % proposition_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'addSentiment': {
+            u'post': {
+                u'sentimentCounts': {
+                    u'like': 1,
+                    u'disagree': 0,
+                },
+                u'mySentiment': u"LIKE"
+            }
+        }
+    }
+
+
+def test_mutation_delete_sentiment(graphql_request, proposition_id):
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:LIKE
+    ) {
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
+      }
+    }
+}
+""" % proposition_id, context_value=graphql_request)
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    deleteSentiment(
+        postId:"%s",
+    ) {
+      post {
+        ... on PropositionPost {
+          sentimentCounts {
+            like
+            disagree
+          }
+          mySentiment
+        }
+      }
+    }
+}
+""" % proposition_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'deleteSentiment': {
+            u'post': {
+                u'sentimentCounts': {
+                    u'like': 0,
+                    u'disagree': 0,
+                },
+                u'mySentiment': None
+            }
+        }
+    }
+
+
+def test_get_proposals(graphql_request, thematic_and_question, proposals):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            ... on Question {
+                title,
+                posts(first:10) {
+                    edges {
+                        node {
+                        ... on PropositionPost { body } } } } } } }""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+            u'node': {
+                u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",
+                u"posts":
+                    {u'edges': [{u'node': {u'body': u'une proposition 14'}},
+                                {u'node': {u'body': u'une proposition 13'}},
+                                {u'node': {u'body': u'une proposition 12'}},
+                                {u'node': {u'body': u'une proposition 11'}},
+                                {u'node': {u'body': u'une proposition 10'}},
+                                {u'node': {u'body': u'une proposition 9'}},
+                                {u'node': {u'body': u'une proposition 8'}},
+                                {u'node': {u'body': u'une proposition 7'}},
+                                {u'node': {u'body': u'une proposition 6'}},
+                                {u'node': {u'body': u'une proposition 5'}}]},
+                }}
