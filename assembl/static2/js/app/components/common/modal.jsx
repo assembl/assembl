@@ -42,7 +42,11 @@ class AssemblModal extends React.Component {
         }
         {footer &&
           <Modal.Footer>
-            <Link to={link} className="button-link button-dark">{ footer }</Link>
+            {footerTxt &&
+              <div>{ footerTxt }</div>
+            }
+            {button.internalLink ? <Link to={button.link} className="button-link button-dark">{ button.label }</Link> : <a href={button.link}>{ button.label }</a>
+            }
           </Modal.Footer>
         }
       </Modal>
