@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 import { scrollToElement } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';

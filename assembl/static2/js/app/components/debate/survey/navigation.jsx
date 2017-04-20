@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 import { getDomElementOffset, scrollToElement, calculatePercentage } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
