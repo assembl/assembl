@@ -19,8 +19,7 @@ class TimelineSegment extends React.Component {
     return (
       <div className="minimized-timeline" style={{ marginLeft: `${index * 100}px` }}>
         <div className={isStepCompleted || isCurrentPhase ? 'timeline-number active' : 'timeline-number not-active'}>
-          {!isStepCompleted && <span>{index + 1}</span>}
-          {isStepCompleted && <span className="assembl-icon-checked white" />}
+          {isStepCompleted ? <span className="assembl-icon-checked white" /> : <span>{index + 1}</span>}
         </div>
         <div className="timeline-bar-2" style={{ width: `${barWidth}px` }}>&nbsp;</div>
         <div className="timeline-bar-1">&nbsp;</div>
