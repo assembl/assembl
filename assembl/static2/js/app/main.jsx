@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import throttle from 'lodash/throttle';
 import { scrollToElement } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';
@@ -27,7 +26,7 @@ class Main extends React.Component {
     this.props.fetchUsers(debateId, connectedUserId);
   }
   componentDidMount() {
-    window.addEventListener('scroll', throttle(this.displayHeader, 100));
+    window.addEventListener('scroll', this.displayHeader);
   }
   componentWillReceiveProps(nextProps) {
     const { debateData } = this.props.debate;
@@ -40,7 +39,7 @@ class Main extends React.Component {
     scrollToElement(document.body, 0, 0);
   }
   componentWillUnmount() {
-    window.removeEventListener('scroll', throttle(this.displayHeader, 100));
+    window.removeEventListener('scroll', this.displayHeader);
   }
   displayHeader() {
     const isDebateView = this.props.location.pathname.indexOf('debate') > -1;

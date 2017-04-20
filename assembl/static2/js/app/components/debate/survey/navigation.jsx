@@ -2,7 +2,6 @@ import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import throttle from 'lodash/throttle';
 import { getDomElementOffset, scrollToElement, calculatePercentage } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
@@ -23,8 +22,8 @@ class Navigation extends React.Component {
     };
   }
   componentDidMount() {
-    window.addEventListener('scroll', throttle(this.displayNav, 100));
-    window.addEventListener('scroll', throttle(this.displayPagination, 100));
+    window.addEventListener('scroll', this.displayNav);
+    window.addEventListener('scroll', this.displayPagination);
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -35,13 +34,16 @@ class Navigation extends React.Component {
     });
   }
   componentWillUnmount() {
-    window.removeEventListener('scroll', throttle(this.displayNav, 100));
-    window.removeEventListener('scroll', throttle(this.displayPagination, 100));
+    window.removeEventListener('scroll', this.displayNav);
+    window.removeEventListener('scroll', this.displayPagination);
   }
   getQuestionsOffset(questionsLength) {
     const offsetArray = [];
     this.questionsLength = questionsLength;
     for (let i = 0; i < this.questionsLength; i += 1) {
+      if(!document.getElementsByClassName('question-title')[i]) {
+        return;
+      }
       const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top);
       offsetArray.push(questionOffset);
     }
@@ -49,6 +51,9 @@ class Navigation extends React.Component {
   }
   displayNav() {
     const proposals = document.getElementById('proposals');
+    if(!proposals) {
+      return;
+    }
     const proposalsOffset = getDomElementOffset(proposals).top;
     const firstTextarea = document.getElementsByClassName('txt-area')[0];
     if (!firstTextarea) {
@@ -83,6 +88,9 @@ class Navigation extends React.Component {
   }
   displayPagination() {
     const questionsOffset = this.getQuestionsOffset(this.state.questionsLength);
+    if(!questionsOffset) {
+      return;
+    }
     const windowOffset = window.pageYOffset + window.innerHeight;
     let currentQuestionNumber = 0;
     for (let i = 0; i < this.state.questionsLength; i += 1) {
