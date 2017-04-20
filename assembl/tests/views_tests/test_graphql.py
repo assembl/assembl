@@ -71,7 +71,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
                                    }}]}
 
 
-def test_mutation_create_thematic_with_video(graphql_request):
+def test_mutation_thematic_and_question_with_video(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -110,7 +110,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_create_thematic_multilang_implicit_en(graphql_request, user_language_preference_en_cookie):
+def test_mutation_thematic_and_question_multilang_implicit_en(graphql_request, user_language_preference_en_cookie):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -132,7 +132,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_create_thematic_multilang_implicit_fr(graphql_request, user_language_preference_fr_cookie):
+def test_mutation_thematic_and_question_multilang_implicit_fr(graphql_request, user_language_preference_fr_cookie):
     # adding en then fr on purpose, to really test that it looks at user preferences, not just the first original title
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -155,7 +155,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_create_thematic_multilang_explicit_fr(graphql_request):
+def test_mutation_thematic_and_question_multilang_explicit_fr(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -177,7 +177,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_create_thematic_multilang_explicit_en(graphql_request):
+def test_mutation_thematic_and_question_multilang_explicit_en(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -216,7 +216,7 @@ mutation myFirstMutation {
     assert res.errors[0].args[0] == 'Thematic titleEntries needs at least one entry'
 
 
-def test_mutation_create_thematic_no_permission(graphql_request):
+def test_mutation_thematic_and_question_no_permission(graphql_request):
     graphql_request.authenticated_userid = None
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -231,7 +231,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == { u'createThematic': None }
 
 
-def test_mutation_create_thematic_with_questions(graphql_request):
+def test_mutation_thematic_and_question_with_questions(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
@@ -265,59 +265,8 @@ mutation myFirstMutation {
     }}}
 
 
-def create_thematic(graphql_request):
-    res = schema.execute(u"""
-mutation myFirstMutation {
-    createThematic(
-        titleEntries:[
-            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
-            {value:"Understanding the dynamics and issues", localeCode:"en"}
-        ],
-        questions:[
-            {titleEntries:[
-                {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
-            ]},
-        ],
-        identifier:"survey",
-    ) {
-        thematic {
-            id
-            titleEntries { localeCode value },
-            identifier
-            questions { id, titleEntries { localeCode value } }
-        }
-    }
-}
-""", context_value=graphql_request)
-    thematic_id = res.data['createThematic']['thematic']['id']
-    first_question_id = res.data['createThematic']['thematic']['questions'][0]['id']
-    return thematic_id, first_question_id
-
-
-def create_proposal(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
-    res = schema.execute(u"""
-mutation myFirstMutation {
-    createPost(
-        ideaId:"%s",
-        body:"une proposition..."
-    ) {
-        post {
-            ... on PropositionPost {
-                id,
-                body,
-                creator { name },
-            }
-        }
-    }
-}
-""" % first_question_id, context_value=graphql_request)
-    post_id = res.data['createPost']['post']['id']
-    return post_id
-
-
-def test_delete_thematic(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
+def test_delete_thematic(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
 mutation myFirstMutation {
     deleteThematic(
@@ -332,8 +281,8 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
-def test_get_thematic_via_node_query(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
+def test_get_thematic_via_node_query(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""query {
         node(id:"%s") {
             __typename,
@@ -347,8 +296,8 @@ def test_get_thematic_via_node_query(graphql_request):
                       u"title": u"Understanding the dynamics and issues"}}
 
 
-def test_get_question_via_node_query(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
+def test_get_question_via_node_query(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""query {
         node(id:"%s") {
             __typename,
@@ -362,8 +311,7 @@ def test_get_question_via_node_query(graphql_request):
                       u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}}
 
 
-def test_get_proposition_post_via_node_query(graphql_request):
-    post_id = create_proposal(graphql_request)
+def test_get_proposition_post_via_node_query(graphql_request, proposition_id):
     res = schema.execute(u"""query {
         node(id:"%s") {
             __typename,
@@ -371,14 +319,14 @@ def test_get_proposition_post_via_node_query(graphql_request):
                 body
             }
         }
-    }""" % post_id, context_value=graphql_request)
+    }""" % proposition_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
             u'node': {u"__typename": u"PropositionPost",
                       u"body": u"une proposition..."}}
 
 
-def test_update_thematic(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
+def test_update_thematic(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
     # to test the modification, we delete the first letter of each message
     res = schema.execute(u"""
 mutation secondMutation {
@@ -420,8 +368,8 @@ mutation secondMutation {
     }}}
 
 
-def test_update_thematic_delete_question(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
+def test_update_thematic_delete_question(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
 mutation secondMutation {
     updateThematic(
@@ -455,8 +403,8 @@ mutation secondMutation {
     }}}
 
 
-def test_mutation_create_post(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
+def test_mutation_create_post(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
 mutation myFirstMutation {
     createPost(
@@ -483,8 +431,8 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_create_post_without_subject(graphql_request):
-    thematic_id, first_question_id = create_thematic(graphql_request)
+def test_mutation_create_post_without_subject(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
 mutation myFirstMutation {
     createPost(
@@ -512,8 +460,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_add_sentiment(graphql_request):
-    post_id = create_proposal(graphql_request)
+def test_mutation_add_sentiment(graphql_request, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -531,7 +478,7 @@ mutation myFirstMutation {
       }
     }
 }
-""" % post_id, context_value=graphql_request)
+""" % proposition_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'addSentiment': {
             u'post': {
@@ -545,8 +492,7 @@ mutation myFirstMutation {
     }
 
 
-def test_mutation_add_sentiment_like_then_disagree(graphql_request):
-    post_id = create_proposal(graphql_request)
+def test_mutation_add_sentiment_like_then_disagree(graphql_request, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -555,7 +501,7 @@ mutation myFirstMutation {
     ) {
     }
 }
-""" % post_id, context_value=graphql_request)
+""" % proposition_id, context_value=graphql_request)
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -573,7 +519,7 @@ mutation myFirstMutation {
       }
     }
 }
-""" % post_id, context_value=graphql_request)
+""" % proposition_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'addSentiment': {
             u'post': {
@@ -586,8 +532,8 @@ mutation myFirstMutation {
         }
     }
 
-def test_mutation_add_sentiment_like_twice(graphql_request):
-    post_id = create_proposal(graphql_request)
+
+def test_mutation_add_sentiment_like_twice(graphql_request, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -596,7 +542,7 @@ mutation myFirstMutation {
     ) {
     }
 }
-""" % post_id, context_value=graphql_request)
+""" % proposition_id, context_value=graphql_request)
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -614,7 +560,7 @@ mutation myFirstMutation {
       }
     }
 }
-""" % post_id, context_value=graphql_request)
+""" % proposition_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'addSentiment': {
             u'post': {
@@ -627,8 +573,8 @@ mutation myFirstMutation {
         }
     }
 
-def test_mutation_delete_sentiment(graphql_request):
-    post_id = create_proposal(graphql_request)
+
+def test_mutation_delete_sentiment(graphql_request, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -646,7 +592,7 @@ mutation myFirstMutation {
       }
     }
 }
-""" % post_id, context_value=graphql_request)
+""" % proposition_id, context_value=graphql_request)
     res = schema.execute(u"""
 mutation myFirstMutation {
     deleteSentiment(
@@ -663,7 +609,7 @@ mutation myFirstMutation {
       }
     }
 }
-""" % post_id, context_value=graphql_request)
+""" % proposition_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'deleteSentiment': {
             u'post': {
@@ -676,31 +622,9 @@ mutation myFirstMutation {
         }
     }
 
-def create_proposal_x(graphql_request, first_question_id, idx):
-    schema.execute(u"""
-mutation myFirstMutation {
-    createPost(
-        ideaId:"%s",
-        body:"une proposition %s"
-    ) {
-        post {
-            ... on PropositionPost {
-                id,
-                body,
-                creator { name },
-            }
-        }
-    }
-}
-""" % (first_question_id, idx), context_value=graphql_request)
 
-def create_proposals(graphql_request, first_question_id):
-    for idx in range(15):
-        create_proposal_x(graphql_request, first_question_id, idx)
-
-def test_get_proposals(graphql_request, test_session):
-    thematic_id, first_question_id = create_thematic(graphql_request)
-    create_proposals(graphql_request, first_question_id)
+def test_get_proposals(graphql_request, thematic_and_question, proposals):
+    thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""query {
         node(id:"%s") {
             ... on Question {
