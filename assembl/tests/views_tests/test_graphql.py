@@ -71,7 +71,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
                                    }}]}
 
 
-def test_mutation_thematic_and_question_with_video(graphql_request):
+def test_mutation_create_thematic_with_video(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -110,7 +110,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_thematic_and_question_multilang_implicit_en(graphql_request, user_language_preference_en_cookie):
+def test_mutation_create_thematic_multilang_implicit_en(graphql_request, user_language_preference_en_cookie):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -132,7 +132,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_thematic_and_question_multilang_implicit_fr(graphql_request, user_language_preference_fr_cookie):
+def test_mutation_create_thematic_multilang_implicit_fr(graphql_request, user_language_preference_fr_cookie):
     # adding en then fr on purpose, to really test that it looks at user preferences, not just the first original title
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -155,7 +155,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_thematic_and_question_multilang_explicit_fr(graphql_request):
+def test_mutation_create_thematic_multilang_explicit_fr(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -177,7 +177,7 @@ mutation myFirstMutation {
     }}}
 
 
-def test_mutation_thematic_and_question_multilang_explicit_en(graphql_request):
+def test_mutation_create_thematic_multilang_explicit_en(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -216,7 +216,7 @@ mutation myFirstMutation {
     assert res.errors[0].args[0] == 'Thematic titleEntries needs at least one entry'
 
 
-def test_mutation_thematic_and_question_no_permission(graphql_request):
+def test_mutation_create_thematic_no_permission(graphql_request):
     graphql_request.authenticated_userid = None
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -231,7 +231,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == { u'createThematic': None }
 
 
-def test_mutation_thematic_and_question_with_questions(graphql_request):
+def test_mutation_create_thematic_with_questions(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
