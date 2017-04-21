@@ -115,7 +115,7 @@ def maybe_merge(
         # Merge other accounts with same verified email
         for profile in other_users:
             user.merge(profile)
-            logged_in.db.delete(profile)
+            profile.delete()
     return {"user": user}
 
 
