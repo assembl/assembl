@@ -1085,7 +1085,7 @@ class RootIdea(Idea):
     @property
     def num_synthesis_posts(self):
         """ In the root idea, this is the count of all published and non-deleted SynthesisPost of the discussion """
-        return len(self.discussion.get_all_published_syntheses())
+        return self.discussion.get_all_syntheses_query(False).count()
 
     def discussion_topic(self):
         return self.discussion.topic

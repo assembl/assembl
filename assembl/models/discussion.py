@@ -245,9 +245,14 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                    ).first()
 
     # returns a list of published and non-deleted syntheses, as well as the draft of the not yet published synthesis
-    def get_all_syntheses(self):
+    def get_all_syntheses_query(self, include_unpublished=True):
         from .idea_graph_view import Synthesis
         from .post import SynthesisPost, PublicationStates
+        condition = (
+            (SynthesisPost.publication_state == PublicationStates.PUBLISHED) &
+            SynthesisPost.tombstone_condition())
+        if include_unpublished:
+            condition = condition | (SynthesisPost.id == None)
         return self.db.query(
             Synthesis).outerjoin(SynthesisPost
             ).options(
@@ -258,26 +263,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             subqueryload_all(
             Synthesis.published_in_post)).filter(
             Synthesis.discussion_id == self.id,
-            (SynthesisPost.id == None) |
-            ((SynthesisPost.publication_state == PublicationStates.PUBLISHED) &
-             SynthesisPost.tombstone_condition())).all()
-
-    # returns a list of published and non-deleted syntheses
-    def get_all_published_syntheses(self):
-        from .idea_graph_view import Synthesis
-        from .post import SynthesisPost, PublicationStates
-        return self.db.query(
-            Synthesis).join(SynthesisPost
-            ).options(
-            subqueryload_all(
-            'idea_assocs.idea'),
-            subqueryload_all(
-            'idealink_assocs.idea_link'),
-            subqueryload_all(
-            Synthesis.published_in_post)).filter(
-            Synthesis.discussion_id == self.id,
-            SynthesisPost.publication_state == PublicationStates.PUBLISHED,
-            SynthesisPost.tombstone_condition()).all()
+            condition)
 
     def get_permissions_by_role(self):
         roleperms = self.db.query(Role.name, Permission.name).select_from(

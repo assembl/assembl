@@ -27,7 +27,7 @@ def get_syntheses(request):
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     user_id = authenticated_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
-    syntheses = discussion.get_all_syntheses()
+    syntheses = discussion.get_all_syntheses_query()
     view_def = request.GET.get('view') or 'default'
     res = [synthesis.generic_json(view_def, user_id, permissions)
            for synthesis in syntheses]
