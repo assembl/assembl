@@ -1084,12 +1084,8 @@ class RootIdea(Idea):
 
     @property
     def num_synthesis_posts(self):
-        """ In the root idea, this is the count of all mesages in the system """
-        from .post import Post, SynthesisPost
-        result = self.db.query(SynthesisPost).filter(
-            Post.discussion_id == self.discussion_id
-        ).count()
-        return int(result)
+        """ In the root idea, this is the count of all published and non-deleted SynthesisPost of the discussion """
+        return len(self.discussion.get_all_published_syntheses())
 
     def discussion_topic(self):
         return self.discussion.topic
