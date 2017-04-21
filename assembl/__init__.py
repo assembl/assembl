@@ -92,13 +92,13 @@ def main(global_config, **settings):
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('static2', 'static2', cache_max_age=3600)
+    config.include('.graphql')  # This MUST be above views import
 
     config.include('cornice')  # REST services library.
     # config.include('.lib.alembic')
     # config.include('.lib.email')
     config.include('.lib')
     config.include('.views')
-    config.include('.graphql')
 
     # jinja2
     config.include('pyramid_jinja2')
