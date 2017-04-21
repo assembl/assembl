@@ -89,51 +89,96 @@ SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = next_view
 
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = assembl.auth.wordpress.WordPressServerOAuth2
     social.backends.twitter.TwitterOAuth
+    social.backends.open_id.OpenIdAuth
+    social.backends.google.GoogleOpenId
     social.backends.google.GoogleOAuth2
+    social.backends.google.GoogleOAuth
+    social.backends.yahoo.YahooOpenId
+    social.backends.stripe.StripeOAuth2
+    social.backends.persona.PersonaAuth
+    social.backends.facebook.FacebookOAuth2
+    social.backends.facebook.FacebookAppOAuth2
+    social.backends.yahoo.YahooOAuth
+    social.backends.angel.AngelOAuth2
+    social.backends.behance.BehanceOAuth2
+    social.backends.bitbucket.BitbucketOAuth
+    social.backends.box.BoxOAuth2
+    social.backends.linkedin.LinkedinOAuth
+    social.backends.github.GithubOAuth2
+    social.backends.foursquare.FoursquareOAuth2
+    social.backends.instagram.InstagramOAuth2
+    social.backends.live.LiveOAuth2
+    social.backends.vk.VKOAuth2
+    social.backends.dailymotion.DailymotionOAuth2
+    social.backends.disqus.DisqusOAuth2
+    social.backends.dropbox.DropboxOAuth
+    social.backends.eveonline.EVEOnlineOAuth2
+    social.backends.evernote.EvernoteSandboxOAuth
+    social.backends.flickr.FlickrOAuth
+    social.backends.livejournal.LiveJournalOpenId
+    social.backends.soundcloud.SoundcloudOAuth2
+    social.backends.thisismyjam.ThisIsMyJamOAuth1
+    social.backends.stocktwits.StocktwitsOAuth2
+    social.backends.tripit.TripItOAuth
+    social.backends.twilio.TwilioAuth
+    social.backends.clef.ClefOAuth2
+    social.backends.xing.XingOAuth
+    social.backends.yandex.YandexOAuth2
+    social.backends.podio.PodioOAuth2
+    social.backends.reddit.RedditOAuth2
+    social.backends.mineid.MineIDOAuth2
+    social.backends.wunderlist.WunderlistOAuth2
+    social.backends.saml.SAMLAuth
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = fake_key
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = fake_secret
 
-
+# Those will be shown in the login page
 login_providers = google-oauth2
-# facebook
-# twitter
-# github
-# google
-# openid
+    # facebook
+    # twitter
+
+# Users from these providers (if enabled in login_providers) will not need
+# to verify their email
+trusted_login_providers = facebook google-oauth2 twitter
 
 # https://developers.facebook.com/docs/facebook-login/getting-started-web/
 # https://developers.facebook.com/apps/
 #
+SOCIAL_AUTH_FACEBOOK_KEY = ...
+SOCIAL_AUTH_FACEBOOK_SECRET = ...
+SOCIAL_AUTH_FACEBOOK_SCOPE = public_profile
+    email
+
+# Further parameters for facebook import/export
 # facebook.consumer_key =
 # facebook.consumer_secret =
-facebook.scope = public_profile,email
-facebook.app_access_token =
-facebook.export_permissions = public_profile, email, publish_actions, user_posts, user_likes, manage_pages, publish_pages, user_groups, user_managed_groups
-facebook.debug_mode = false
-facebook.api_version = 
+# facebook.app_access_token =
+# facebook.export_permissions = public_profile, email, publish_actions, user_posts, user_likes, manage_pages, publish_pages, user_groups, user_managed_groups
+# facebook.debug_mode = false
+# facebook.api_version =
 supported_exports_list =
 
 # https://dev.twitter.com/apps/new
 #
-# twitter.consumer_key =
-# twitter.consumer_secret =
+SOCIAL_AUTH_TWITTER_KEY = ...
+SOCIAL_AUTH_TWITTER_SECRET = ...
 
 # http://developer.github.com/v3/oauth/
 # https://github.com/settings/applications
-#
-# github.consumer_key =
-# github.consumer_secret =
-github.scope = repo
+SOCIAL_AUTH_GITHUB_KEY = ...
+SOCIAL_AUTH_GITHUB_SECRET = ...
+SOCIAL_AUTH_GITHUB_SCOPE = repo
 
-# https://code.google.com/apis/console/ ; API Access; Create Client ID
-#
-# google.consumer_key =
-# google.consumer_secret =
-google.scope = userinfo.profile
+# https://code.google.com/apis/console/ ; API & auth; Credentials; Create Client ID for web application
+# API & auth; APIs; Google+ API: Activate
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ...
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ...
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = https://www.googleapis.com/auth/userinfo.email
+    https://www.googleapis.com/auth/userinfo.profile
 
-# This should be the front-facing URL
-# openid.realm=
+# Based on https://wp-oauth.com/
+SOCIAL_AUTH_WORDPRESS_OAUTH2_KEY = ....
+SOCIAL_AUTH_WORDPRESS_OAUTH2_SECRET = ....
+
 
 # Absolute url of image to show for users that do not have an avatar.
 # If not present, assembl default will be used.
