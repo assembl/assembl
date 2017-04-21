@@ -16,10 +16,12 @@ class SendPwdForm extends React.Component {
 
   handleInput(e) {
     inputHandler(this, e);
-    const el = document.getElementById('sendPwdForm-error');
-    if (el) { el.innerHTML = ''; }  // BUG: Only shows once; if fails beyond first time, no error shown!
   }
 
+  /*
+    TODO: Remove this method and the <div> section in the ReactDOM when the alert system
+    is implemented
+  */
   messageHandler() {
     return (
       <div>
@@ -34,6 +36,7 @@ class SendPwdForm extends React.Component {
   submitHandler(e) {
     e.preventDefault();
     this.props.sendRequest(this.state.identifier);
+    // TODO: Implement Alert system in case of failure
   }
 
   render() {

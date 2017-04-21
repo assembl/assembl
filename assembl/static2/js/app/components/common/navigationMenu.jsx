@@ -7,7 +7,6 @@ import { Routes } from '../../routes';
 class NavigationMenu extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    // TODO: When turnling url into Link, do not forget activeClassName="active"
     return (
       <div>
         <a className="navbar-menu-item" href={Routes.getFullPath('oldDebate', { slug: debateData.slug })}>

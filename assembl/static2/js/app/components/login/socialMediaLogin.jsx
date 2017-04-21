@@ -1,22 +1,8 @@
 import React from 'react';
 import { form } from 'react-bootstrap';
 
-
-// class SocialMediaItem extends React.Component {
-//   render() {
-//     const typeName = this.props.provider.type;
-//     const name = this.props.provider.name;
-//     const link = this.props.provider.login;
-//     return (
-//       <div className={typeName}>
-//         <a href={link}>{name}</a>
-//       </div>;
-//     )
-//   }
-// }
-
 export class SocialMedia extends React.Component {
-  // TODO: className="`${provider.type}-bg`" on button
+  // TODO: Add proper CSS to each social media item
   render() {
     return (
       <div>

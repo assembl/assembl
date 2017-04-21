@@ -32,7 +32,6 @@ class ChangePassword extends React.Component {
       if (slug) {
         const route = `/${Routes.get('home', { slug: slug })}`;
         const url = new URL(route, window.location.href);
-        // console.log(url);
         window.location = url;
       }
       // Get a slug, reload to the home_view
@@ -44,7 +43,6 @@ class ChangePassword extends React.Component {
         // TODO: Use the new Alert system from Phase1 branch
         alert(resp.error.error);
       } catch (exception) {
-        // console.error('Failed to parse json from object ', error);
       }
     });
   }

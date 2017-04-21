@@ -6,7 +6,6 @@ import SendPwdConfirm from '../components/login/sendPwdConfirm';
 
 class RequestPasswordChange extends React.Component {
   render() {
-    // console.log('props', this.props);
     const { auth } = this.props;
     let pwdSendConfirm = null;
     if ('passwordChangeRequest' in auth) {
@@ -18,8 +17,7 @@ class RequestPasswordChange extends React.Component {
       <Grid fluid className="login-container">
         <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
-            {!pwdSendConfirm && <SendPwdForm />}
-            {pwdSendConfirm && <SendPwdConfirm />}
+            {pwdSendConfirm ? <SendPwdConfirm /> : <SendPwdForm /> }
           </Col>
         </Row>
       </Grid>

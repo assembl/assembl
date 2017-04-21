@@ -8,9 +8,10 @@ import { signupAction } from '../../actions/authenticationActions';
 import inputHandler from '../../utils/inputHandler';
 
 class SignupForm extends React.Component {
+  // TODO: Remove this handler and its DOM association and implement
+  // Alert system when ready
   static errorMessageHandler(data) {
     if (data.success === false) {
-      // Add more cases to this switch statement, as needed
       switch (data.reason) {
       case 'password': {
         return I18n.t('login.incorrectPassword');
@@ -56,33 +57,47 @@ class SignupForm extends React.Component {
           <form className="signup" onSubmit={this.signupHandler}>
             <FormGroup className="margin-m">
               <FormControl
-                type="text" name="name" required
-                placeholder={I18n.t('login.fullName')} onChange={this.handleInput}
+                type="text"
+                name="name"
+                required
+                placeholder={I18n.t('login.fullName')}
+                onChange={this.handleInput}
               />
             </FormGroup>
             <FormGroup>
               <FormControl
-                type="text" name="username"
-                placeholder={I18n.t('login.userName')} onChange={this.handleInput}
+                type="text"
+                name="username"
+                placeholder={I18n.t('login.userName')}
+                onChange={this.handleInput}
               />
             </FormGroup>
 
             <FormGroup>
               <FormControl
-                type="email" name="email" required
-                placeholder={I18n.t('login.email')} onChange={this.handleInput}
+                type="email"
+                name="email"
+                required
+                placeholder={I18n.t('login.email')}
+                onChange={this.handleInput}
               />
             </FormGroup>
             <FormGroup>
               <FormControl
-                type="password" name="password1" required
-                placeholder={I18n.t('login.password')} onChange={this.handleInput}
+                type="password"
+                name="password1"
+                required
+                placeholder={I18n.t('login.password')}
+                onChange={this.handleInput}
               />
             </FormGroup>
             <FormGroup>
               <FormControl
-                type="password" name="password2" required
-                placeholder={I18n.t('login.password2')} onChange={this.handleInput}
+                type="password"
+                name="password2"
+                required
+                placeholder={I18n.t('login.password2')}
+                onChange={this.handleInput}
               />
             </FormGroup>
             <FormGroup>
@@ -90,9 +105,8 @@ class SignupForm extends React.Component {
                 type="submit"
                 name="register"
                 value={I18n.t('login.signUp')}
-                className="button-submit button-dark"
-              >
-                <Translate value="login.signUp" />
+                className="button-submit button-dark">
+                  <Translate value="login.signUp" />
               </Button>
             </FormGroup>
             <FormGroup>

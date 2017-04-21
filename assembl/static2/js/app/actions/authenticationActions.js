@@ -32,7 +32,6 @@ export const signupAction = (payload) => {
         return dispatch(signupIncorrectPassword());
       }
       default: {
-          // console.log("Error on signupActionCreator", error);
         return dispatch(signupGeneralError(error));
       }
       }
