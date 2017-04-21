@@ -6,7 +6,7 @@ from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.settings import asbool
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
@@ -70,7 +70,7 @@ def get_styleguide_components():
 @view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
     """The main view on a discussion"""
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     context = get_default_context(request)
     discussion = context["discussion"]
     canRead = user_has_permission(discussion.id, user_id, P_READ)
@@ -182,7 +182,7 @@ def react_view(request):
     Basic view for the homepage
     """
     old_context = base_default_context(request)
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     discussion = old_context["discussion"]
     canRead = user_has_permission(discussion.id, user_id, P_READ)
     if not canRead and user_id == Everyone:
