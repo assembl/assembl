@@ -363,18 +363,28 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     def check_authorized_email(self, user):
         # Check if the user has a verified email from a required domain
+        from .social_auth import SocialAuthAccount
         require_email_domain = self.preferences['require_email_domain']
-        if not require_email_domain:
+        autologin_backend = self.preferences['authorization_server_backend']
+        if not (require_email_domain or autologin_backend):
             return True
         for account in user.accounts:
             if not account.verified:
                 continue
-            email = account.email
-            if not email or '@' not in email:
-                continue
-            email = email.split('@', 1)[-1]
-            if email.lower() in require_email_domain:
-                return True
+            # Note that this allows an account which is either from the SSO
+            # OR from an allowed domain, if any. In most cases, only one
+            # validation mechanism will be defined.
+            if require_email_domain:
+                email = account.email
+                if not email or '@' not in email:
+                    continue
+                email = email.split('@', 1)[-1]
+                if email.lower() in require_email_domain:
+                    return True
+            if autologin_backend:
+                if isinstance(account, SocialAuthAccount):
+                    if account.provider_with_idp == autologin_backend:
+                        return True
         return False
 
     @property

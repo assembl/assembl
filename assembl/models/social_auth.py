@@ -135,6 +135,15 @@ class SocialAuthAccount(
     def provider(self):
         return self.identity_provider.provider_type
 
+    @property
+    def provider_with_idp(self):
+        provider = self.provider
+        if provider == 'saml':
+            idp_name = self.uid.split(':')[0]
+            # Also available as self.extra_data['idp_name']
+            return ':'.join((provider, idp_name))
+        return provider
+
     @provider.setter
     def provider(self, value):
         self.identity_provider = IdentityProvider.get_by_type(value)
