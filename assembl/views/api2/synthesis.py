@@ -1,12 +1,16 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPBadRequest, HTTPNotFound)
 from pyramid.response import Response
+from pyramid.security import authenticated_userid, Everyone
+from pyramid.settings import asbool
 import simplejson as json
 
-from assembl.auth import (P_READ, P_EDIT_SYNTHESIS)
+from assembl.auth import (P_READ, P_EDIT_SYNTHESIS, CrudPermissions)
 from assembl.models import (
     Discussion, Idea, SubGraphIdeaAssociation, Synthesis)
+from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext, CollectionContext
+from . import check_permissions
 
 
 @view_config(context=InstanceContext, renderer='json', request_method='GET',
@@ -14,6 +18,30 @@ from ..traversal import InstanceContext, CollectionContext
              accept="application/json", name="notifications")
 def discussion_notifications(request):
     return list(request.context._instance.get_notifications())
+
+
+@view_config(context=CollectionContext, renderer='json', request_method='GET',
+             ctx_named_collection="Discussion.syntheses", permission=P_READ,
+             accept="application/json")
+def get_syntheses(request, default_view='default'):
+    ctx = request.context
+    user_id = authenticated_userid(request) or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    check_permissions(ctx, user_id, permissions, CrudPermissions.READ)
+    include_unpublished = P_EDIT_SYNTHESIS in permissions
+    view = request.GET.get('view', None) or ctx.get_default_view() or default_view
+    include_tombstones = asbool(request.GET.get('tombstones', False))
+    discussion = ctx.get_instance_of_class(Discussion)
+    q = discussion.get_all_syntheses_query(
+        include_unpublished=include_unpublished,
+        include_tombstones=include_tombstones)
+    if view == 'id_only':
+        q = q.with_entities(Synthesis.id)
+        return [ctx.collection_class.uri_generic(x) for (x,) in q.all()]
+    else:
+        res = [i.generic_json(view, user_id, permissions) for i in q.all()]
+        return [x for x in res if x is not None]
 
 
 @view_config(context=CollectionContext, renderer='json', request_method='POST',

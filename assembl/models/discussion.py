@@ -245,12 +245,12 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                    ).first()
 
     # returns a list of published and non-deleted syntheses, as well as the draft of the not yet published synthesis
-    def get_all_syntheses_query(self, include_unpublished=True):
+    def get_all_syntheses_query(self, include_unpublished=True, include_tombstones=False):
         from .idea_graph_view import Synthesis
         from .post import SynthesisPost, PublicationStates
-        condition = (
-            (SynthesisPost.publication_state == PublicationStates.PUBLISHED) &
-            SynthesisPost.tombstone_condition())
+        condition = SynthesisPost.publication_state == PublicationStates.PUBLISHED
+        if not include_tombstones:
+            condition = condition & SynthesisPost.tombstone_condition()
         if include_unpublished:
             condition = condition | (SynthesisPost.id == None)
         return self.db.query(
