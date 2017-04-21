@@ -458,10 +458,6 @@ def from_identifier(identifier):
             return (username.user, None)
     return None, None
 
-def coming_from_v2_frontend(request):
-    referer = request.params.get('referer', '').strip()
-    return referer == 'v2'
-
 
 @view_config(
     route_name='login',
@@ -512,7 +508,7 @@ def assembl_login_complete_view(request):
         # TODO: handle high failure count
         request.session.flash(error_message)
         return HTTPFound(location=maybe_contextual_route(
-            request, 'react_login' if coming_from_v2_frontend(request) else 'login',
+            request, 'react_login',
             _query={"identifier": identifier} if identifier else None))
     user.last_login = datetime.utcnow()
     headers = remember(request, user.id)
@@ -806,17 +802,10 @@ def request_password_change(request):
         else:
             error = error or localizer.translate(_("This user cannot be found"))
     if error or not user:
-        # This is not how to do this!
-        if coming_from_v2_frontend(request):
-            return HTTPFound(location=maybe_contextual_route(
-                request, 'v2_frontend_generic', extra_path="changePassword", _query={"error": error}))
-        else:
-            return dict(
-                get_default_context(request),
-                error=error,
-                user_id=user_id,
-                identifier=identifier,
-                title=localizer.translate(_('I forgot my password')))
+        context = get_default_context(request)
+        get_route = context['get_route']
+        request.session.flash(error)
+        return HTTPFound(location=get_route('react_request_password_change'))
 
     discussion_slug = request.matchdict.get('discussion_slug', None)
     route = 'password_change_sent'
