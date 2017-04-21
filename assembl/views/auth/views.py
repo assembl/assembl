@@ -138,6 +138,8 @@ def get_social_autologin(request, discussion=None, next_view=None):
     if not auto_login_backend:
         return None
     next_view = next_view or request.params.get('next', None)
+    if discussion and not next_view:
+        next_view = request.route_path('home', discussion_slug=discussion.slug)
     query = {"next": next_view}
     if ":" in auto_login_backend:
         auto_login_backend, provider = auto_login_backend.split(":", 1)
