@@ -43,7 +43,6 @@ def test_route_discussion_root_redirector(discussion, test_app):
 @pytest.mark.xfail
 def test_route_discussion_home(discussion, test_app):
     """/slug/home"""
-    # TODO: Implement this route!
     slug = discussion.slug
 
     route = discussion_route(slug, "home")

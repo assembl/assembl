@@ -73,8 +73,8 @@ export const calculatePercentage = (value1, value2) => {
 };
 
 /*
-  Handrolled instead of using lowdash
-  Because lowdash/capitalize lowercases everything else
+  Handrolled instead of using lodash
+  Because lodash/capitalize lowercases everything else
 */
 export const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1);

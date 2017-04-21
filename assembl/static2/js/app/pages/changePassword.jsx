@@ -5,6 +5,7 @@ import { Grid, Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap'
 import { Translate, I18n } from 'react-redux-i18n';
 import { getAuthorizationToken } from '../utils/globalFunctions';
 import { postChangePassword } from '../services/authenticationService';
+import inputHandler from '../utils/inputHandler';
 import { Routes } from '../routes';
 
 class ChangePassword extends React.Component {
@@ -19,10 +20,7 @@ class ChangePassword extends React.Component {
   }
 
   handleChangePassword(e) {
-    // console.log('handle password', e);
-    const s = {};
-    s[e.target.name] = e.target.value;
-    this.setState(s);
+    inputHandler(this, e);
   }
 
   submitForm(e) {
