@@ -29,7 +29,7 @@ from .. import (
     HTTPTemporaryRedirect, get_default_context as base_default_context,
     get_locale_from_request)
 from ...nlp.translation_service import DummyGoogleTranslationService
-from ..auth.views import get_social_autologin
+from ..auth.views import get_social_autologin, get_login_context
 
 from assembl.lib import config as AssemblConfig
 
@@ -186,8 +186,15 @@ def react_view(request):
     discussion = old_context["discussion"]
     canRead = user_has_permission(discussion.id, user_id, P_READ)
     if not canRead and user_id == Everyone:
-       # User isn't logged-in and discussion isn't public:
-        # redirect to login page
+        # User isn't logged-in and discussion isn't public:
+        # Maybe we're already in a login/register page etc.
+        name = request.matched_route.name
+        if name.startswith("contextual_react_") and name[17:] in (
+                "login", "register", "request_password_change",
+                "do_password_change"):
+            return get_login_context(request)
+
+        # otherwise redirect to login page
         next_view = request.params.get('next', None)
         if not next_view and discussion:
             # next_view = request.route_url("")
@@ -204,7 +211,7 @@ def react_view(request):
                                           _query={"next": next_view})
         else:
             login_url = request.route_url(
-                'general_react_page', discussion_slug=discussion.slug,
+                'contextual_react_login', discussion_slug=discussion.slug,
                 extra_path='/login')
         return HTTPTemporaryRedirect(login_url)
     elif not canRead:
