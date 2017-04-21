@@ -5,7 +5,7 @@ import { Grid, Navbar } from 'react-bootstrap';
 import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
-import { Routes } from '../../routes';
+import Routes from '../../utils/routeMap';
 
 
 class NavBar extends React.Component {

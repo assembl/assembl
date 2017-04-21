@@ -4,7 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
-import { Routes } from '../../routes';
+import Routes from '../../utils/routeMap';
 
 class ProfileIcon extends React.Component {
   render() {

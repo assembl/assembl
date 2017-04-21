@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import { Routes } from '../../routes';
+import Routes from '../../utils/routeMap';
 
 class NavigationMenu extends React.Component {
   render() {

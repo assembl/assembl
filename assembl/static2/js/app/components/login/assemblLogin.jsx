@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Routes } from '../../routes';
+import Routes from '../../utils/routeMap';
 
 class AsLogin extends React.Component {
   render() {

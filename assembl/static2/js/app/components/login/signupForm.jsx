@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
-import { Routes } from '../../routes';
 import { signupAction } from '../../actions/authenticationActions';
+import Routes from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
 
 class SignupForm extends React.Component {

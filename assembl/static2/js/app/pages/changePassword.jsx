@@ -6,7 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { getAuthorizationToken } from '../utils/globalFunctions';
 import { postChangePassword } from '../services/authenticationService';
 import inputHandler from '../utils/inputHandler';
-import { Routes } from '../routes';
+import Routes from '../utils/routeMap';
 
 class ChangePassword extends React.Component {
   constructor(props) {
