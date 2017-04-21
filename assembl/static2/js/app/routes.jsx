@@ -63,7 +63,6 @@ export default (
         <Route path=":slug/req_password_change" component={RequestPasswordChange} />
         <Route path={Routes.routeForRouter('home')} component={Home} />
         <Route path={Routes.routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
-        <Route path={Routes.routeForRouter('ideas')} component={Ideas} />
         <Route path={Routes.routeForRouter('synthesis')} component={Synthesis} />
         <Route path={Routes.routeForRouter('debate')} component={Debate} />
         <Route path={Routes.routeForRouter('community')} component={Community} />
