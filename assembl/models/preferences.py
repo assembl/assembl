@@ -476,7 +476,10 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "name": _(
                 "Authentication service type"),
             "description": _(
-                "The python-social-auth backend for the private authentication server."),
+                "A primary authentication server for this discussion, defined "
+                "as a python-social-auth backend. Participants will be "
+                "auto-logged in to that server, and discussion auto-"
+                "subscription will require an account from this backend."),
             "allow_user_override": None,
             "modification_permission": P_SYSADMIN,
             # "frontend_validator_function": func_name...?,

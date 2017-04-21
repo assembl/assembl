@@ -139,6 +139,7 @@ class SocialAuthAccount(
     def provider_with_idp(self):
         provider = self.provider
         if provider == 'saml':
+            # PSA prefixes SAML uids with the idp_name
             idp_name = self.uid.split(':')[0]
             # Also available as self.extra_data['idp_name']
             return ':'.join((provider, idp_name))
