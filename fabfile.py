@@ -1002,8 +1002,10 @@ def set_file_permissions():
         run('chgrp {webgrp} . assembl var var/run'.format(webgrp=webgrp))
         run('chgrp -R {webgrp} assembl/static assembl/static2'.format(webgrp=webgrp))
         run('chmod -R g+rxs var/run')
-        run('find assembl/static -type d -print|xargs chmod g+rxs')
-        run('find assembl/static -type f -print|xargs chmod g+r')
+        run('find assembl/static -type d -print0 |xargs -0 chmod g+rxs')
+        run('find assembl/static -type f -print0 |xargs -0 chmod g+r')
+        run('find assembl/static2 -type d -print0 |xargs -0 chmod g+rxs')
+        run('find assembl/static2 -type f -print0 |xargs -0 chmod g+r')
         # allow postgres user to use pypsql
         run('chmod go+x . assembl assembl/scripts')
         run('chmod go+r assembl/scripts/pypsql.py')
