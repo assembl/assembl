@@ -10,7 +10,7 @@ class Timeline extends React.Component {
     const { showNavigation, identifier } = this.props;
     return (
       <div className="timeline-container">
-        {debateData.timeline.map((phase, index) => {
+        {debateData.timeline && debateData.timeline.map((phase, index) => {
           return (
             <TimelineSegment
               title={phase.title}

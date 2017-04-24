@@ -4,7 +4,7 @@
 import urljoin from 'url-join';
 import cloneDeep from 'lodash/clonedeep';
 import parse from './literalStringParser';
-import { capitalize } from './globalFunctions';
+import { capitalize, getDiscussionSlug } from './globalFunctions';
 
 //TODO: Add a constructor to include the discussion slug, if available in the DOM,
 //so that a simplified method call can be made without passing the slug in each
@@ -25,6 +25,7 @@ class RouteMap {
   }
 
   constructor() {
+    const slug = getDiscussionSlug();
     this.routes = {
       oldLogout: 'legacy/logout',
       oldLogin: 'debate/login',
