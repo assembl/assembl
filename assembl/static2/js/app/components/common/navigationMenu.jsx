@@ -9,9 +9,9 @@ class NavigationMenu extends React.Component {
     const { debateData } = this.props.debate;
     return (
       <div>
-        <a className="navbar-menu-item" href={Routes.getFullPath('oldDebate', { slug: debateData.slug })}>
+        <Link className="navbar-menu-item" to={Routes.get('debate', { slug: debateData.slug })}>
           <Translate value="navbar.debate" />
-        </a>
+        </Link>
         <Link className="navbar-menu-item" activeClassName="active" to={Routes.get('community', { slug: debateData.slug })}>
           <Translate value="navbar.community" />
         </Link>
