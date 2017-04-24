@@ -1,14 +1,15 @@
 /*
   A global map of routes managed by React front-end.
 */
+/* eslint no-template-curly-in-string: "off", import/no-unresolved: "off" */
 import urljoin from 'url-join';
 import cloneDeep from 'lodash/clonedeep';
 import parse from './literalStringParser';
 import { capitalize, getDiscussionSlug } from './globalFunctions';
 
-//TODO: Add a constructor to include the discussion slug, if available in the DOM,
-//so that a simplified method call can be made without passing the slug in each
-//component
+// TODO: Add a constructor to include the discussion slug, if available in the DOM,
+// so that a simplified method call can be made without passing the slug in each
+// component
 class RouteMap {
   basePath() {
     return `${window.location.protocol}//${window.location.host}`;
@@ -25,7 +26,7 @@ class RouteMap {
   }
 
   constructor() {
-    const slug = getDiscussionSlug();
+    this.slug = getDiscussionSlug();
     this.routes = {
       oldLogout: 'legacy/logout',
       oldLogin: 'debate/login',
@@ -52,9 +53,8 @@ class RouteMap {
   }
 
   get(name, args) {
-    // Shitty way to enforce a boolean type without crashing
     const newArgs = args || {};
-    const pre = !(('preSlash' in newArgs && newArgs.preSlash === false));
+    const pre = ('preSlash' in newArgs) ? newArgs.preSlash : true;
     const isCtx = 'ctx' in newArgs ? newArgs.ctx : false;
 
     const newName = isCtx ? this.convertToContextualName(name) : name;
@@ -75,7 +75,7 @@ class RouteMap {
   }
 
   getFullPath(name, args) {
-    const rel = this.get(name, args);
+    const rel = this.get(name, { ...args, preSlash: false });
     return urljoin(this.basePath(), rel);
   }
 
@@ -84,7 +84,17 @@ class RouteMap {
     newArgs.slug = ':slug';
     newArgs.preSlash = false;
     if (isCtx) { return this.getContextual(name, newArgs); }
-    return this.get(name, newArgs);    
+    return this.get(name, newArgs);
+  }
+
+  getWithSlug(name, args){
+    const args = {...args, slug: this.slug};
+    return this.get(name, args);
+  }
+
+  getFullPathWithSlug(name, args){
+    const args = {...args, slug: this.slug};
+    return this.getFullPath(name, args);
   }
 }
 
