@@ -25,7 +25,7 @@ class ProfileIcon extends React.Component {
             <span className="assembl-icon-profil grey">&nbsp;</span>
             <ul className="dropdown-xs">
               <NavDropdown title={connectedUserName} id="user-dropdown">
-                <LinkContainer to={`${Routes.get('profile', { ...slug, userId: connectedUserName })}`}>
+                <LinkContainer active={false} to={`${Routes.get('profile', { ...slug, userId: connectedUserId })}`}>
                   <MenuItem>
                     <Translate value="navbar.profile" />
                   </MenuItem>
