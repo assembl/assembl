@@ -15,7 +15,7 @@ class ProfileIcon extends React.Component {
       <div className="right avatar">
         {!connectedUserId &&
           <Link to={`${Routes.getContextual('login', slug)}?next=${Routes.getCurrentView()}`}>
-            <span className="connection">
+            <div className="connection">
               <Translate value="navbar.connexion" />
             </div>
           </Link>
