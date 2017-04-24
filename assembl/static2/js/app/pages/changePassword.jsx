@@ -43,6 +43,8 @@ class ChangePassword extends React.Component {
         // TODO: Use the new Alert system from Phase1 branch
         alert(resp.error.error);
       } catch (exception) {
+        // TODO: Use the new Alert system from Phase1 branch
+        alert(exception);
       }
     });
   }

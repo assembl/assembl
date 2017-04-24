@@ -1,5 +1,3 @@
-/* eslint no-template-curly-in-string: "off", import/no-unresolved: "off" */
-
 import React from 'react';
 import { Router, Route } from 'react-router';
 import App from './app';

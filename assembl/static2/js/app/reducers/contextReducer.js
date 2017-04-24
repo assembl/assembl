@@ -2,10 +2,10 @@ const ContextReducer = (state = {}, action) => {
   switch (action.type) {
   case 'ADD_CONTEXT':
     return {
-    	rootPath: action.rootPath,
-    	debateId: action.debateId,
-    	connectedUserId: action.connectedUserId,
-    	connectedUserName: action.connectedUserName
+      rootPath: action.rootPath,
+      debateId: action.debateId,
+      connectedUserId: action.connectedUserId,
+      connectedUserName: action.connectedUserName
     };
   default:
     return state;
