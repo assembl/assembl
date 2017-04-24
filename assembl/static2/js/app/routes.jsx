@@ -56,7 +56,6 @@ export default (
         <Route path={Routes.routeForRouter('community')} component={Community} />
         <Route path={Routes.routeForRouter('terms')} component={Terms} />
         <Route path={Routes.routeForRouter('phase', false, {phase: ':phase', themeId: ':themeId'})} component={DebateChild} />
-        </Route>
       </Route>
     </Route>
     <Route path="*" component={NotFound} />

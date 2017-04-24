@@ -89,13 +89,13 @@ class RouteMap {
   }
 
   getWithSlug(name, args){
-    const args = {...args, slug: this.slug};
-    return this.get(name, args);
+    const newArgs = {...args, slug: this.slug};
+    return this.get(name, newArgs);
   }
 
   getFullPathWithSlug(name, args){
-    const args = {...args, slug: this.slug};
-    return this.getFullPath(name, args);
+    const newArgs = {...args, slug: this.slug};
+    return this.getFullPath(name, newArgs);
   }
 }
 
