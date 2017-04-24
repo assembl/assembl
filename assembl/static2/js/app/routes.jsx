@@ -52,10 +52,11 @@ export default (
         <Route path={Routes.routeForRouter('home')} component={Home} />
         <Route path={Routes.routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
         <Route path={Routes.routeForRouter('synthesis')} component={Synthesis} />
-        <Route path={Routes.routeForRouter('debate')} component={Debate} />
         <Route path={Routes.routeForRouter('community')} component={Community} />
         <Route path={Routes.routeForRouter('terms')} component={Terms} />
-        <Route path={Routes.routeForRouter('phase', false, { phase: ':phase', themeId: ':themeId' })} component={DebateChild} />
+        <Route path={Routes.routeForRouter('debate')} component={Debate}>
+          <Route path={Routes.routeForRouter('phase', false, { phase: ':phase', themeId: ':themeId' })} component={DebateChild} />
+        </Route>
       </Route>
     </Route>
     <Route path="*" component={NotFound} />
