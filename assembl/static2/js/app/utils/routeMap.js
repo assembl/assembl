@@ -48,7 +48,8 @@ class RouteMap {
       synthesis: '${slug}/synthesis',
       debate: '${slug}/debate',
       community: '${slug}/community',
-      terms: '${slug}/terms'
+      terms: '${slug}/terms',
+      phase: '${phase}/theme/${themeId}'
     };
   }
 
@@ -82,7 +83,7 @@ class RouteMap {
   routeForRouter(name, isCtx, args) {
     const newArgs = args || {};
     newArgs.slug = ':slug';
-    newArgs.preSlash = false;
+    newArgs.preSlash = newArgs.preSlash ? newArgs.preSlash : false;
     if (isCtx) { return this.getContextual(name, newArgs); }
     return this.get(name, newArgs);
   }
