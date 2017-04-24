@@ -97,6 +97,12 @@ class RouteMap {
     const newArgs = { ...args, slug: this.slug };
     return this.getFullPath(name, newArgs);
   }
+
+  getCurrentView() {
+    //Not the best solution.
+    //TODO: Find better solution to maitain state of currentView
+    return window.location.href;
+  }
 }
 
 const Routes = new RouteMap();
