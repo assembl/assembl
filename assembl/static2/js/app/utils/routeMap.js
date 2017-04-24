@@ -1,7 +1,7 @@
 /*
   A global map of routes managed by React front-end.
 */
-/* eslint no-template-curly-in-string: "off", import/no-unresolved: "off" */
+/* eslint no-template-curly-in-string: "off", import/no-unresolved: "off", class-methods-use-this: "off" */
 import urljoin from 'url-join';
 import cloneDeep from 'lodash/clonedeep';
 import parse from './literalStringParser';
@@ -88,13 +88,13 @@ class RouteMap {
     return this.get(name, newArgs);
   }
 
-  getWithSlug(name, args){
-    const newArgs = {...args, slug: this.slug};
+  getWithSlug(name, args) {
+    const newArgs = { ...args, slug: this.slug };
     return this.get(name, newArgs);
   }
 
-  getFullPathWithSlug(name, args){
-    const newArgs = {...args, slug: this.slug};
+  getFullPathWithSlug(name, args) {
+    const newArgs = { ...args, slug: this.slug };
     return this.getFullPath(name, newArgs);
   }
 }

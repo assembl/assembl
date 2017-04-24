@@ -37,11 +37,11 @@ const DebateChild = (props) => {
 
 export default (
   <Router>
-    <Route path={Routes.routeForRouter('styleguide', false, {preSlash: true})} component={Styleguide} />
+    <Route path={Routes.routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
     {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
-    <Route path={Routes.routeForRouter('login', false, {preSlash: true})} component={Login} />
-    <Route path={Routes.routeForRouter('signup', false, {preSlash: true})} component={Signup} />
-    <Route path={Routes.routeForRouter('changePassword', false, {preSlash: true})} component={ChangePassword} />
+    <Route path={Routes.routeForRouter('login', false, { preSlash: true })} component={Login} />
+    <Route path={Routes.routeForRouter('signup', false, { preSlash: true })} component={Signup} />
+    <Route path={Routes.routeForRouter('changePassword', false, { preSlash: true })} component={ChangePassword} />
     <Route path={Routes.routeForRouter('requestPasswordChange')} component={RequestPasswordChange} />
     <Route path="/" component={App}>
       <Route path={Routes.routeForRouter('login', true)} component={Login} />
@@ -55,7 +55,7 @@ export default (
         <Route path={Routes.routeForRouter('debate')} component={Debate} />
         <Route path={Routes.routeForRouter('community')} component={Community} />
         <Route path={Routes.routeForRouter('terms')} component={Terms} />
-        <Route path={Routes.routeForRouter('phase', false, {phase: ':phase', themeId: ':themeId'})} component={DebateChild} />
+        <Route path={Routes.routeForRouter('phase', false, { phase: ':phase', themeId: ':themeId' })} component={DebateChild} />
       </Route>
     </Route>
     <Route path="*" component={NotFound} />
