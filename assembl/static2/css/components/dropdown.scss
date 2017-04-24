@@ -1,15 +1,15 @@
 .dropdown-xs {
+  display: inline-block;
   font-family: $font-family2;
-  font-size: $font-size-xs;
+  font-size: $font-size-s;
   list-style-type: none;
   margin: 0 auto;
-  padding: 4px 0 0;
-  width: 50px;
+  padding: 0;
+  vertical-align: text-bottom;
 
   .dropdown-toggle {
     color: $first-color;
     font-size: $font-size-xs;
-    text-transform: uppercase;
 
     &:hover {
       color: $first-color;
@@ -28,7 +28,6 @@
     a {
       color: $first-color;
       font-size: $font-size-xs;
-      text-transform: uppercase;
 
       &:focus {
         font-family: $font-family3;
