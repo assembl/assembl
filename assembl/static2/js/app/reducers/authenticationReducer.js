@@ -15,7 +15,7 @@ const AuthReducer = (state = defaultCase, action) => {
   case 'SIGNUP_INCORRECT_PASSWORD':
     return { signupSuccess: { success: false, reason: 'password' } };
   case 'SIGNUP_GENERAL_ERROR':
-    return { signupSuccess: { success: false, reason: 'general' } };
+    return { signupSuccess: { success: false, reason: 'general', data: action.error } };
 
   case 'REQUEST_PASSWORD_CHANGE_SUCCESS':
     return { passwordChangeRequest: { success: true } };

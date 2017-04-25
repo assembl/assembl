@@ -6,24 +6,9 @@ import { Link } from 'react-router';
 import { signupAction } from '../../actions/authenticationActions';
 import Routes from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
+import AlertManager from '../../utils/alert';
 
 class SignupForm extends React.Component {
-  // TODO: Remove this handler and its DOM association and implement
-  // Alert system when ready
-  errorMessageHandler(data) {
-    if (data.success === false) {
-      switch (data.reason) {
-      case 'password': {
-        return I18n.t('login.incorrectPassword');
-      }
-      default: {
-        return I18n.t('login.somethingWentWrong');
-      }
-      }
-    }
-    return '';
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +20,6 @@ class SignupForm extends React.Component {
 
     this.signupHandler = this.signupHandler.bind(this);
     this.handleInput = this.handleInput.bind(this);
-    this.errorMessageHandler = this.errorMessageHandler.bind(this);
   }
 
   handleInput(e) {
@@ -47,9 +31,27 @@ class SignupForm extends React.Component {
     this.props.signUp(this.state);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { auth } = nextProps;
+    let msg;
+    if (auth.signupSuccess.success === false) {
+      const { reason } = auth.signupSuccess;
+      switch (reason) {
+        case 'password': {
+          msg = I18n.t('login.incorrectPassword');
+          break;
+        }
+        default: {
+          msg = I18n.t('login.somethingWentWrong');
+          break;
+        }
+      }
+      AlertManager.displayAlert('danger', msg, true);
+    }
+  }
+
   render() {
     const { debateData } = this.props.debate;
-    const { auth } = this.props;
     return (
       <div className="login-view">
         <div className="box-title">{debateData.topic}</div>
@@ -118,9 +120,6 @@ class SignupForm extends React.Component {
               </Link>
             </FormGroup>
           </form>
-          <div>
-            {this.errorMessageHandler(auth)}
-          </div>
         </div>
       </div>
     );
