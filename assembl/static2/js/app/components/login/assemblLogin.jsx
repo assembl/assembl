@@ -8,7 +8,7 @@ import Routes from '../../utils/routeMap';
 class AsLogin extends React.Component {
   render() {
     const { slug } = this.props;
-    const next = ('next' in this.props && this.props.next) ? this.props.next : Routes.getFullPath('home', { slug: slug, preSlash: false });
+    const next = ('next' in this.props && this.props.next) ? this.props.next : Routes.getCurrentView();
     const errorMessage = ('error_message' in this.props && this.props.error_message) ? this.props.error_message : null;
     return (
       <div>

@@ -99,8 +99,6 @@ class RouteMap {
   }
 
   getCurrentView() {
-    //Not the best solution.
-    //TODO: Find better solution to maitain state of currentView
     return window.location.href;
   }
 }
