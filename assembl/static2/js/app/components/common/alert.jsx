@@ -10,12 +10,10 @@ class AssemblAlert extends React.Component {
   }
 
   componentDidMount(){
-    console.log('didMount', this.props);
     if (this.props.isBase === true) { this.setState({base: true}); }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('willRecieveProps', nextProps);
     if (nextProps.isBase === true) { this.setState({base: true}); }
   }
 
