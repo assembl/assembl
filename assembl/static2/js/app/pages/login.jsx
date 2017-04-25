@@ -12,23 +12,26 @@ class Login extends React.Component {
     const { debateData } = this.props.debate;
     const providers = getProvidersData();
     const next = get(this.props, 'location.query.next', null);
+    const isSocialMedias = providers.length > 0;
     return (
-      <Grid fluid className="login-container">
-        <div className="login-view">
+      <Grid fluid>
+        <Col xs={12} md={isSocialMedias ? 6 : 4} className="col-centered">
           <div className="box-title">{debateData ? debateData.topic : I18n.t('login.login')}</div>
           <div className="box">
-            <Row className="max-container center">
-              <Col xs={12} md={6}>
-                {providers.length > 0 && <SocialMedia providers={providers} /> }
-              </Col>
-              <Col xs={12} md={6}>
-                <AsLogin
-                  next={next} slug={debateData ? debateData.slug : null}
-                />
-              </Col>
-            </Row>
+            {isSocialMedias && 
+              <div>
+                <Col xs={12} md={5}>
+                  <SocialMedia providers={providers} /> 
+                </Col>
+                <Col xs={12} md={1}>&nbsp;</Col>
+              </div>
+            }
+            <Col xs={12} md={isSocialMedias ? 6 : 12}>
+              <AsLogin next={next} slug={debateData ? debateData.slug : null} />
+            </Col>
+            <div className="clear">&nbsp;</div>
           </div>
-        </div>
+        </Col>
       </Grid>
     );
   }

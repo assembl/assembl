@@ -82,6 +82,7 @@ const Translations = {
     },
     login: {
       alreadyAccount: 'Vous avez déjà un compte ?',
+      loginWithSocialMedia: 'Vous utilisez un réseau social ?',
       password: 'Mot de passe',
       email: 'Email',
       login: 'Se connecter',
@@ -258,6 +259,7 @@ const Translations = {
     },
     login: {
       alreadyAccount: 'Do you already have an account?',
+      loginWithSocialMedia: 'Vous utilisez un réseau social ?',
       password: 'Password',
       email: 'Email',
       login: 'Log in',

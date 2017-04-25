@@ -17,7 +17,9 @@ class AsLogin extends React.Component {
             <input type="hidden" name="next" value={`${next}`} />
             : null }
           <input type="hidden" name="referer" value="v2" />
-          <h4 className="dark-title-4"><Translate value="login.alreadyAccount" /></h4>
+          <h4 className="dark-title-4">
+            <Translate value="login.alreadyAccount" />
+          </h4>
           { errorMessage ? <div className="error-message">{errorMessage}</div> : null }
           <FormGroup className="margin-m">
             <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
@@ -34,8 +36,10 @@ class AsLogin extends React.Component {
             <Translate value="login.forgotPwd" />
           </Link>
         </form>
-        <div className="signup">
-          <h4 className="dark-title-4"><Translate value="login.noAccount" /></h4>
+        <div className="signup border-top margin-m">
+          <h4 className="dark-title-4 margin-m">
+            <Translate value="login.noAccount" />
+          </h4>
           <Link className="button-link button-dark margin-s" to={Routes.getContextual('signup', { slug: slug })}>
             <Translate value="login.signUp" />
           </Link>

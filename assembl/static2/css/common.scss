@@ -115,20 +115,24 @@ input {
   margin-right: auto;
 }
 
+.border-top {
+  border-top: $navbar-border;
+}
+
 .border-right {
-  border-right: $box-border;
+  border-right: $navbar-border;
 }
 
 .border-left {
-  border-left: $box-border;
+  border-left: $navbar-border;
 }
 
 .border-bottom {
-  border-bottom: $box-border;
+  border-bottom: $navbar-border;
 }
 
 .border {
-  border: $box-border;
+  border: $navbar-border;
 }
 
 .no-padding {
