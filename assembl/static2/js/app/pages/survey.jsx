@@ -24,13 +24,14 @@ class Survey extends React.Component {
     this.showMoreProposals = this.showMoreProposals.bind(this);
     this.getIfProposals = this.getIfProposals.bind(this);
     this.redirectToLogin = this.redirectToLogin.bind(this);
-    this.displayAlert = this.displayAlert.bind(this);
   }
+
   componentWillReceiveProps() {
     this.setState({
       moreProposals: false
     });
   }
+
   getIfProposals(questions) {
     this.questions = questions;
     if (!this.questions) return false;
@@ -40,27 +41,18 @@ class Survey extends React.Component {
     });
     return isProposals;
   }
+
   showMoreProposals() {
     this.setState({
       moreProposals: true
     });
   }
+
   redirectToLogin() {
     const { connectedUserId } = this.props.context;
     this.setState({ showModal: !connectedUserId });
   }
-  displayAlert(style, msg) {
-    this.setState({
-      alertStyle: style,
-      alertMsg: msg,
-      showAlert: true
-    });
-    setTimeout(() => {
-      this.setState({
-        showAlert: false
-      });
-    }, 10000);
-  }
+
   render() {
     const { loading, theme } = this.props.data;
     const { rootPath } = this.props.context;
@@ -78,7 +70,6 @@ class Survey extends React.Component {
               button={{ link: `${rootPath}${debateData.slug}/login`, label: I18n.t('debate.survey.modalFooter'), internalLink: true }}
               showModal={this.state.showModal}
             />
-            <Alert showAlert={this.state.showAlert} style={this.state.alertStyle} msg={this.state.alertMsg} />
             {theme.video &&
               <Video
                 title={theme.video.title}
@@ -91,7 +82,6 @@ class Survey extends React.Component {
                 return (
                   <Question
                     redirectToLogin={this.redirectToLogin}
-                    displayAlert={this.displayAlert}
                     title={question.title}
                     index={index + 1}
                     key={index}
@@ -122,7 +112,6 @@ class Survey extends React.Component {
                             moreProposals={this.state.moreProposals}
                             questionIndex={index + 1}
                             redirectToLogin={this.redirectToLogin}
-                            displayAlert={this.displayAlert}
                             key={index}
                           />
                         );

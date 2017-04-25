@@ -9,6 +9,7 @@ import PostCreator from './postCreator';
 import Doughnut from '../../svg/doughnut';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
+import AlertManager from '../../../utils/alert';
 
 class Post extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class Post extends React.Component {
         mySentiment: sentiments.data.addSentiment.post.mySentiment
       });
     }).catch((error) => {
-      this.props.displayAlert('danger', `${error}`);
+      AlertManager.displayAlert('danger', `${error}`);
     });
   }
   deleteSentiment(target) {
@@ -65,7 +66,7 @@ class Post extends React.Component {
         mySentiment: sentiments.data.deleteSentiment.post.mySentiment
       });
     }).catch((error) => {
-      this.props.displayAlert('danger', `${error}`);
+      AlertManager.displayAlert('danger', `${error}`);
     });
   }
   render() {

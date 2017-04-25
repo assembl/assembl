@@ -31,7 +31,6 @@ class Proposals extends React.Component {
                   postIndex={index}
                   moreProposals={moreProposals}
                   redirectToLogin={this.props.redirectToLogin}
-                  displayAlert={this.props.displayAlert}
                   key={index}
                 />
               );

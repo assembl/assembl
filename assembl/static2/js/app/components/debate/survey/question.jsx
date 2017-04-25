@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import AlertManager from '../../../utils/alert';
 
 class Question extends React.Component {
   constructor(props) {
@@ -69,14 +70,14 @@ class Question extends React.Component {
     const body = this.state.postBody;
     this.props.mutate({ variables: { ideaId: questionId, body: body } })
     .then(() => {
-      this.props.displayAlert('success', I18n.t('debate.survey.postSuccess'));
+      AlertManager.displayAlert('success', I18n.t('debate.survey.postSuccess'));
       this.setState({
         postBody: '',
         showSubmitButton: false,
         remainingChars: maxChars
       });
     }).catch((error) => {
-      this.props.displayAlert('danger', `${error}`);
+      AlertManager.displayAlert('danger', `${error}`);
     });
   }
   render() {
