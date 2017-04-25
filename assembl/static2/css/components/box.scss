@@ -117,13 +117,14 @@
   height: $navbar-height;
   position: fixed;
   transition: opacity 1s ease-in-out;
+  top: $navbar-height;
   text-align: center;
   width: 100%;
 }
 
 .showAlert {
   opacity: 1;
-  z-index: 100000;
+  z-index: 1000;
 }
 
 .hideAlert {
