@@ -11,7 +11,7 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
     HTTPOk, HTTPNoContent, HTTPForbidden, HTTPNotImplemented,
-    HTTPPreconditionFailed, HTTPConflict)
+    HTTPPreconditionFailed, HTTPConflict, HTTPInternalServerError)
 from pyisemail import is_email
 
 from assembl.lib.sqla_types import EmailString
@@ -388,6 +388,14 @@ def do_password_change(request):
     return HTTPOk()
 
 
+signup_error_types = {
+    'SHORT_NAME': 'short_name',
+    'INVALID_EMAIL': 'invalid_email',
+    'EXISTING_EMAIL': 'existing_email',
+    'EXISTING_USERNAME': 'existing_username',
+    'PASSWORD': 'password'
+}
+
 @view_config(
     context=CollectionContext, ctx_collection_class=AgentProfile,
     request_method='POST', header=JSON_HEADER,
@@ -408,6 +416,7 @@ def assembl_register_user(request):
     if not name or len(name) < 3:
         errors['name'] = localizer.translate(_(
             "Please use a name of at least 3 characters"))
+        errors['type'] = signup_error_types['SHORT_NAME']
     password = json.get('password', '').strip()
     # TODO: Check password strength. maybe pwdmeter?
     email = None
@@ -417,6 +426,7 @@ def assembl_register_user(request):
         if not is_email(email):
             errors['email'] = localizer.translate(_(
                 "This is not a valid email"))
+            errors['type'] = signup_error_types['INVALID_EMAIL']
             error_code = HTTPBadRequest.code
             continue
         email = EmailString.normalize_email_case(email)
@@ -425,10 +435,12 @@ def assembl_register_user(request):
                 email_ci=email, verified=True).count():
             errors['email'] = localizer.translate(_(
                 "We already have a user with this email."))
+            errors['type'] = signup_error_types['EXISTING_EMAIL']
             error_code = HTTPConflict.code
     if not email:
         errors['email'] = localizer.translate(_(
             "No email."))
+        errors['type'] = signup_error_types['INVALID_EMAIL']
         error_code = HTTPBadRequest.code
     username = json.get('username', None)
     if username:
@@ -436,6 +448,7 @@ def assembl_register_user(request):
                 username=username).count():
             errors['username'] = localizer.translate(_(
                 "We already have a user with this username."))
+            errors['type'] = signup_error_types['EXISTING_USERNAME']
             error_code = HTTPConflict.code
 
     if errors:
@@ -450,7 +463,7 @@ def assembl_register_user(request):
         now = datetime.utcnow()
         instances = ctx.create_object("User", request.json, user_id)
         if not instances:
-            raise HTTPBadRequest()
+            raise JSONError(500, {})  # Required for new front-end to not fail
         user = instances[0]
         user.creation_date = now
         for instance in instances:
