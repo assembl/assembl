@@ -3,10 +3,9 @@ import { Alert } from 'react-bootstrap';
 
 class AssemblAlert extends React.Component {
   render() {
-    const { showAlert, style, msg } = this.props;
-    return (
-      <Alert className={showAlert ? 'showAlert' : 'hideAlert'} bsStyle={style}>{msg}</Alert>
-    );
+    const { showAlert, style, msg, isBase } = this.props;
+    if (isBase) { return (<Alert className='hideAlert' /> ); }
+    else { return (<Alert className={showAlert ? 'showAlert' : 'hideAlert'} bsStyle={style}>{msg}</Alert> ); }
   }
 }
 
