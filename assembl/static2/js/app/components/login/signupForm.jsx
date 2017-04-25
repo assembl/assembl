@@ -10,7 +10,7 @@ import inputHandler from '../../utils/inputHandler';
 class SignupForm extends React.Component {
   // TODO: Remove this handler and its DOM association and implement
   // Alert system when ready
-  static errorMessageHandler(data) {
+  errorMessageHandler(data) {
     if (data.success === false) {
       switch (data.reason) {
       case 'password': {
