@@ -1071,10 +1071,10 @@ def send_change_password_email(
         sender_name=None, welcome=False):
     mailer = get_mailer(request)
     localizer = request.localizer
+    route_maker = create_get_route(request, discussion)
     data = dict(
         assembl="Assembl", name=profile.name,
-        confirm_url=maybe_contextual_route(
-            request,
+        confirm_url=request.host_url + route_maker(
             'welcome' if welcome else 'do_password_change',
             token=password_change_token(profile)))
     sender_email = config.get('assembl.admin_email')

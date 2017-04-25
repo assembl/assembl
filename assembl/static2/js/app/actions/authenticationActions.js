@@ -48,9 +48,9 @@ const passwordRequestError = {
   type: 'REQUEST_PASSWORD_CHANGE_ERROR'
 };
 
-export const requestPasswordChangeAction = (id) => {
+export const requestPasswordChangeAction = (id, discussionSlug) => {
   return (dispatch) => {
-    return changePasswordRequest(id).then(
+    return changePasswordRequest(id, discussionSlug).then(
       () => {
         dispatch(passwordRequestSuccess);
       }

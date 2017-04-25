@@ -183,51 +183,54 @@ def react_view(request):
     """
     old_context = base_default_context(request)
     user_id = request.authenticated_userid or Everyone
-    discussion = old_context["discussion"]
-    canRead = user_has_permission(discussion.id, user_id, P_READ)
-    if not canRead and user_id == Everyone:
-        # User isn't logged-in and discussion isn't public:
-        # Maybe we're already in a login/register page etc.
-        name = request.matched_route.name
-        if name.startswith("contextual_react_") and name[17:] in (
-                "login", "register", "request_password_change",
-                "do_password_change"):
-            return get_login_context(request)
+    discussion = old_context["discussion"] or None
+    if discussion:
+        canRead = user_has_permission(discussion.id, user_id, P_READ)
+        if not canRead and user_id == Everyone:
+            # User isn't logged-in and discussion isn't public:
+            # Maybe we're already in a login/register page etc.
+            name = request.matched_route.name
+            if name.startswith("contextual_react_") and name[17:] in (
+                    "login", "register", "request_password_change",
+                    "do_password_change"):
+                return get_login_context(request)
 
-        # otherwise redirect to login page
-        next_view = request.params.get('next', None)
-        if not next_view and discussion:
-            # next_view = request.route_url("")
-            next_view = request.route_path("new_home",
-                                           discussion_slug=discussion.slug)
+            # otherwise redirect to login page
+            next_view = request.params.get('next', None)
+            if not next_view and discussion:
+                # next_view = request.route_url("")
+                next_view = request.route_path("new_home",
+                                               discussion_slug=discussion.slug)
 
-        login_url = get_social_autologin(request, discussion, next_view)
-        if login_url:
-            pass
-        elif next_view:
-            login_url = request.route_url("general_react_page",
-                                          discussion_slug=discussion.slug,
-                                          extra_path='/login',
-                                          _query={"next": next_view})
-        else:
-            login_url = request.route_url(
-                'contextual_react_login', discussion_slug=discussion.slug,
-                extra_path='/login')
-        return HTTPTemporaryRedirect(login_url)
-    elif not canRead:
-        # User is logged-in but doesn't have access to the discussion
-        # Would use render_to_response, except for the 401
-        from pyramid_jinja2 import IJinja2Environment
-        jinja_env = request.registry.queryUtility(
-            IJinja2Environment, name='.jinja2')
-        template = jinja_env.get_template('react_unauthorized.jinja2')
-        body = template.render(get_default_context(request))
-        return Response(body, 401)
+            login_url = get_social_autologin(request, discussion, next_view)
+            if login_url:
+                pass
+            elif next_view:
+                login_url = request.route_url("general_react_page",
+                                              discussion_slug=discussion.slug,
+                                              extra_path='/login',
+                                              _query={"next": next_view})
+            else:
+                login_url = request.route_url(
+                    'contextual_react_login', discussion_slug=discussion.slug,
+                    extra_path='/login')
+            return HTTPTemporaryRedirect(login_url)
+        elif not canRead:
+            # User is logged-in but doesn't have access to the discussion
+            # Would use render_to_response, except for the 401
+            from pyramid_jinja2 import IJinja2Environment
+            jinja_env = request.registry.queryUtility(
+                IJinja2Environment, name='.jinja2')
+            template = jinja_env.get_template('react_unauthorized.jinja2')
+            body = template.render(get_default_context(request))
+            return Response(body, 401)
+    else:
+        return get_login_context(request)
 
     context = dict(
         request=old_context['request'],
         REACT_URL=old_context['REACT_URL'],
-        discussion=old_context['discussion'],
+        discussion=discussion,
         user=old_context['user'],
         error=old_context.get('error', None),
         messages=old_context.get('messages', None),

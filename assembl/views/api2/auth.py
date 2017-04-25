@@ -303,14 +303,19 @@ def verify_password(request):
 @view_config(
     context=CollectionContext, ctx_collection_class=AgentProfile,
     request_method='POST', permission=NO_PERMISSION_REQUIRED,
-    name="password_reset", header=FORM_HEADER)
+    name="password_reset", header=JSON_HEADER)
 @view_config(
-    context=ClassContext, ctx_class=AgentProfile, header=FORM_HEADER,
+    context=ClassContext, ctx_class=AgentProfile, header=JSON_HEADER,
     request_method='POST', permission=NO_PERMISSION_REQUIRED,
     name="password_reset")
 def reset_password(request):
-    identifier = request.params.get('identifier')
-    user_id = request.params.get('user_id')
+    identifier = request.json_body.get('identifier')
+    user_id = request.json_body.get('user_id')
+    slug = request.json_body.get('discussion_slug')
+    discussion = None
+    if slug:
+        discussion = Discussion.default_db.query(
+            Discussion).filter_by(slug=slug).first()
     email = None
     user = None
     localizer = request.localizer
@@ -341,22 +346,21 @@ def reset_password(request):
     if not isinstance(user, User):
         error = localizer(_("This is not a user"))
         raise JSONError(HTTPPreconditionFailed.code, error)
-    send_change_password_email(request, user, email,
-        discussion=discussion_from_request(request))
+    send_change_password_email(request, user, email, discussion=discussion)
     return HTTPOk()
 
 
 @view_config(
     context=CollectionContext, ctx_collection_class=AgentProfile,
     request_method='POST', permission=NO_PERMISSION_REQUIRED,
-    name="do_password_change", header=FORM_HEADER)
+    name="do_password_change", header=JSON_HEADER)
 @view_config(
-    context=ClassContext, ctx_class=AgentProfile, header=FORM_HEADER,
+    context=ClassContext, ctx_class=AgentProfile, header=JSON_HEADER,
     request_method='POST', permission=NO_PERMISSION_REQUIRED,
     name="do_password_change")
 def do_password_change(request):
-    token = request.params.get('token') or ''
-    password = request.params.get('password') or ''
+    token = request.json_body.get('token') or ''
+    password = request.json_body.get('password') or ''
     # TODO: Check password quality!
     localizer = request.localizer
     user, validity = verify_password_change_token(token)

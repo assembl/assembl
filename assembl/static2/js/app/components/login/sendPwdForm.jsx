@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
-import inputHandler from '../../utils/inputHandler';
+import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { requestPasswordChangeAction } from '../../actions/authenticationActions';
+import inputHandler from '../../utils/inputHandler';
 
 class SendPwdForm extends React.Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class SendPwdForm extends React.Component {
 
   submitHandler(e) {
     e.preventDefault();
-    this.props.sendRequest(this.state.identifier);
+    this.props.sendRequest(this.state.identifier, getDiscussionSlug());
     // TODO: Implement Alert system in case of failure
   }
 
@@ -77,7 +78,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    sendRequest: (id) => { return dispatch(requestPasswordChangeAction(id)); }
+    sendRequest: (id, discussionSlug) => { return dispatch(requestPasswordChangeAction(id, discussionSlug)); }
   };
 };
 

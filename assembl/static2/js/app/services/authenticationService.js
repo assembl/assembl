@@ -6,6 +6,7 @@ export const postChangePassword = (payload) => {
   return xmlHttpRequest({
     method: 'POST',
     url: route,
+    isJson: true,
     payload: payload
   });
 };
@@ -34,15 +35,17 @@ export const signUp = (payload) => {
   });
 };
 
-export const changePasswordRequest = (id) => {
+export const changePasswordRequest = (id, discussionSlug) => {
   const route = '/data/AgentProfile/password_reset';
   const payload = {
+    discussion_slug: discussionSlug,
     identifier: id
   };
 
   return xmlHttpRequest({
     method: 'POST',
     url: route,
+    isJson: true,
     payload: payload
   });
 };
