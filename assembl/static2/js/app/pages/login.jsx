@@ -14,8 +14,8 @@ class Login extends React.Component {
     const next = get(this.props, 'location.query.next', null);
     const isSocialMedias = providers.length > 0;
     return (
-      <Grid fluid>
-        <Col xs={12} md={isSocialMedias ? 6 : 4} className="col-centered">
+      <Grid fluid className="login-grid">
+        <Col xs={12} sm={isSocialMedias ? 9 : 6} lg={isSocialMedias ? 7 : 4} className="login-container col-centered">
           <div className="box-title">{debateData ? debateData.topic : I18n.t('login.login')}</div>
           <div className="box">
             {isSocialMedias && 
