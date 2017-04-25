@@ -26,6 +26,9 @@ export const signUp = (payload) => {
       '@type': 'EmailAccount'
     }]
   };
+  if (payload.discussionSlug) {
+    newPayload.discussion_slug = payload.discussionSlug;
+  }
 
   return xmlHttpRequest({
     method: 'POST',

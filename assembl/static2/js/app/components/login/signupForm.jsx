@@ -4,6 +4,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { signupAction } from '../../actions/authenticationActions';
+import { getDiscussionSlug } from '../../utils/globalFunctions';
 import Routes from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
 import AlertManager from '../../utils/alert';
@@ -28,7 +29,7 @@ class SignupForm extends React.Component {
 
   signupHandler(e) {
     e.preventDefault();
-    this.props.signUp(this.state);
+    this.props.signUp({ ...this.state, discussionSlug: getDiscussionSlug()});
   }
 
   componentWillReceiveProps(nextProps) {
