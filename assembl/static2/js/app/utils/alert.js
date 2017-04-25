@@ -10,6 +10,7 @@ class AlertManagerClass {
 
   displayAlert(style, msg, time=6000) {
     this.alertComponent.setState({
+      base: false,
       alertStyle: style,
       alertMsg: msg,
       showAlert: true
