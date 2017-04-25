@@ -411,6 +411,12 @@ def assembl_register_user(request):
     localizer = request.localizer
     session = AgentProfile.default_db
     json = request.json
+    discussion = discussion_from_request(request)
+    if not discussion:
+        # possibly in the args
+        slug = json['discussion_slug']
+        if slug:
+            discussion = session.query(Discussion).filter_by(slug=slug).first()
     name = json.get('real_name', '').strip()
     errors = {}
     if not name or len(name) < 3:
@@ -468,7 +474,6 @@ def assembl_register_user(request):
         user.creation_date = now
         for instance in instances:
             session.add(instance)
-        discussion = discussion_from_request(request)
         if discussion:
             agent_status = AgentStatusInDiscussion(
                 agent_profile=user, discussion=discussion,
