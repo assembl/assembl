@@ -404,6 +404,7 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
     in self.paths is globally complete"""
     def __init__(self, discussion):
         super(PostPathCombiner, self).__init__(discussion)
+        self.postponed_paths = []
 
     def init_from(self, post_path_global_collection):
         for id, paths in post_path_global_collection.paths.iteritems():
@@ -433,15 +434,21 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         else:
             assert False, "idea param should be an Idea object or its idea"
         child_results = [
-            res for (child, res) in child_results
-            if bool(res) and child.propagate_message_count()]
-        if len(child_results) == 1 and not result:
+            (child, res) for (child, res) in child_results if bool(res)]
+        if (len(child_results) == 1 and not result and
+                child_results[0][0].propagate_message_count()):
             # optimisation
-            self.copy_result(idea_id, result, child_results[0])
+            self.copy_result(idea_id, result, child_results[0][1])
         else:
-            for r in child_results:
-                result.combine(r)
-        self.root_idea_id = idea_id
+            for (child, res) in child_results:
+                if child.propagate_message_count():
+                    result.combine(res)
+                else:
+                    self.postponed_paths.append(res)
+        if isinstance(idea, RootIdea):
+            self.root_idea_id = idea_id
+            for path in self.postponed_paths:
+                result.combine(path)
         return result
 
     def orphan_clause(self, user_id=None, content=None, include_deleted=False):
