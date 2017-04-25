@@ -8,12 +8,13 @@ class AlertManagerClass {
     this.alertComponent = comp;
   }
 
-  displayAlert(style, msg, time=6000) {
+  displayAlert(style, msg, topPosition=false, time=6000) {
     this.alertComponent.setState({
       base: false,
       alertStyle: style,
       alertMsg: msg,
-      showAlert: true
+      showAlert: true,
+      topPosition: topPosition
     });
     setTimeout(() => {
       this.alertComponent.setState({
