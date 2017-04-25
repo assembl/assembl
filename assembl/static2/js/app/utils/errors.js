@@ -3,4 +3,9 @@
   to manage results of async Action Creators, amongst other things.
 */
 
-export class PasswordMismatchError extends Error {}
+export class PasswordMismatchError extends Error {
+  constructor(...args){
+    super(...args);
+    this.name = 'PasswordMismatchError';
+  }
+}

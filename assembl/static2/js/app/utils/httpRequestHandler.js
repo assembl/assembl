@@ -34,13 +34,17 @@ export const xmlHttpRequest = (obj) => {
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         let resp = xhr.response;
-        try { resp = JSON.parse(resp); } catch (e) {}
+        resp = JSON.parse(resp);  // Fail hard, fail fast
         resolve(resp);
       } else {
-        reject(xhr.responseText || xhr.statusText);
+        let resp;
+        //TODO: Agree on contract with backend for all APIs
+        if (xhr.responseText) { resp = JSON.parse(xhr.responseText); }
+        reject(resp || xhr.statusText);
       }
     };
     xhr.onerror = () => {
+      //TODO: If JSON returned format, parse accordingly
       return reject(xhr.responseText || xhr.statusText);
     };
     xhr.send(payload);
