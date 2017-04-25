@@ -18,7 +18,7 @@ export class SocialMedia extends React.Component {
                   })
                 }
                 <button className={`btn btn-block btn-social btn-${provider.name.toLowerCase()}`} type="submit">
-                  <i className={`fa fa-${provider.name.toLowerCase()}`}></i>
+                  <i className={`assembl-icon-${provider.name.toLowerCase()}`}></i>
                   {provider.name}
                 </button>
               </form>

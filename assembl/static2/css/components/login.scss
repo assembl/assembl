@@ -32,6 +32,16 @@
       padding: 10px 0 0;
     }
   }
+
+  .btn-social {
+    i {
+      &:before {
+        font-size: 18px;
+        line-height: 32px;
+        vertical-align: text-bottom;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 767px) {
