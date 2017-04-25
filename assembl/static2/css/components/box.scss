@@ -112,18 +112,21 @@
 }
 
 .alert {
+  border: none;
   left: 0;
+  height: $navbar-height;
   position: fixed;
   transition: opacity 1s ease-in-out;
   text-align: center;
   width: 100%;
-  z-index: 100000;
 }
 
 .showAlert {
   opacity: 1;
+  z-index: 100000;
 }
 
 .hideAlert {
   opacity: 0;
+  z-index: -1;
 }
