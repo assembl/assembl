@@ -3,11 +3,9 @@
 */
 
 // Singleton object that will contain the AlertManager, which will be used to show/hide/manipulate the alert system
-let alert;
-
-class AlertManager {
-  constructor(component){
-    this.alertComponent = component;
+class AlertManagerClass {
+  setComponent(comp) {
+    this.alertComponent = comp;
   }
 
   displayAlert(style, msg, time=6000) {
@@ -24,10 +22,6 @@ class AlertManager {
   };
 }
 
-export const Alert = (comp) => {
-  if (!alert && comp) {
-    alert = new AlertManager(comp)
-    return alert;
-  }
-  else { return alert; }
-};
+const manager = new AlertManagerClass();
+
+export default manager;
