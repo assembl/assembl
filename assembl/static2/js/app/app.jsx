@@ -5,8 +5,6 @@ import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import Loader from './components/common/loader';
 import Error from './components/common/error';
-import AlertManager from './utils/alert';
-import Alert from './components/common/alert';
 
 class App extends React.Component {
   constructor(props) {
@@ -22,12 +20,7 @@ class App extends React.Component {
     return (
       <div className="app">
         {debateLoading && <Loader />}
-        {debateData &&
-          <div>
-            <Alert isBase ref={(alertComponent) => { AlertManager.setComponent(alertComponent); }} />
-            <div className="app-child">{this.props.children}</div>
-          </div>
-        }
+        {debateData && <div className="app-child">{this.props.children}</div>}
         {debateError && <Error errorMessage={debateError} />}
       </div>
     );
