@@ -3,6 +3,7 @@ var webpack = require('webpack');
 var baseConfig = require('./webpack.config');
 
 var webpackPort = parseInt(process.env.WEBPACK_URL.split(':')[2]);
+var webpackHost = process.env.WEBPACK_URL.split('://')[1].split(':')[0];
 
 var config = Object.create(baseConfig);
 
@@ -13,7 +14,7 @@ config.devServer = {
         "Access-Control-Allow-Credentials":true
     },
     port: webpackPort,
-    host: "0.0.0.0",
+    host: webpackHost
 };
 config.entry = {
     bundle: [
