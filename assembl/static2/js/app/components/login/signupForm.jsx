@@ -22,6 +22,7 @@ class SignupForm extends React.Component {
     this.signupHandler = this.signupHandler.bind(this);
     this.handleInput = this.handleInput.bind(this);
   }
+
   componentWillReceiveProps(nextProps) {
     const { auth } = nextProps;
     let msg;
@@ -62,15 +63,26 @@ class SignupForm extends React.Component {
       AlertManager.displayAlert('danger', msg, true);
     }
   }
+
   handleInput(e) {
     inputHandler(this, e);
   }
+
   signupHandler(e) {
     e.preventDefault();
-    this.props.signUp({ ...this.state, discussionSlug: getDiscussionSlug() });
+    const slug = getDiscussionSlug();
+    if (slug) { this.props.signUp({ ...this.state, discussionSlug: slug }); }
+    else { this.props.signUp(this.state); }
   }
+
   render() {
-    const { debateData } = this.props.debate;
+    let { debateData } = this.props.debate;
+    if (!debateData) {
+      // Non-contextual signup process
+      debateData = {};
+      debateData.topic = I18n.t('login.createAccount');
+      debateData.slug = null;
+    }
     return (
       <div className="login-view">
         <div className="box-title">{debateData.topic}</div>
@@ -134,7 +146,9 @@ class SignupForm extends React.Component {
             <FormGroup>
               <Translate value="login.alreadyAccount" />
               <span>&nbsp;</span>
-              <Link to={Routes.getContextual('login', { slug: debateData.slug })}>
+              <Link to={debateData.slug ?
+                Routes.getContextual('login', { slug: debateData.slug }) : Routes.get('login')}
+              >
                 <Translate value="login.login" />
               </Link>
             </FormGroup>

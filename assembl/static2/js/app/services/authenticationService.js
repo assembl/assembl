@@ -40,9 +40,10 @@ export const signUp = (payload) => {
 export const changePasswordRequest = (id, discussionSlug) => {
   const route = '/data/AgentProfile/password_reset';
   const payload = {
-    discussion_slug: discussionSlug,
     identifier: id
   };
+
+  if (discussionSlug) { payload.discussion_slug = discussionSlug; }
 
   return xmlHttpRequest({
     method: 'POST',

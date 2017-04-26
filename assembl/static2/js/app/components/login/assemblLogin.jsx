@@ -32,7 +32,7 @@ class AsLogin extends React.Component {
               <Translate value="login.login" />
             </Button>
           </FormGroup>
-          <Link to={Routes.getContextual('requestPasswordChange', { slug: slug })}>
+          <Link to={slug ? Routes.getContextual('requestPasswordChange', { slug: slug }) : Routes.get('requestPasswordChange')}>
             <Translate value="login.forgotPwd" />
           </Link>
         </form>
@@ -40,7 +40,9 @@ class AsLogin extends React.Component {
           <h4 className="dark-title-4 margin-m">
             <Translate value="login.noAccount" />
           </h4>
-          <Link className="button-link button-dark margin-s" to={Routes.getContextual('signup', { slug: slug })}>
+          <Link
+            className="button-link button-dark margin-s"
+            to={slug ? Routes.getContextual('signup', { slug: slug }) : Routes.get('signup')}>
             <Translate value="login.signUp" />
           </Link>
         </div>

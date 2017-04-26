@@ -27,7 +27,7 @@ class Login extends React.Component {
               </div>
             }
             <Col xs={12} md={isSocialMedias ? 6 : 12}>
-              <AsLogin next={next} slug={debateData ? debateData.slug : null} />
+              {debateData ? <AsLogin next={next} slug={debateData.slug} /> : <AsLogin next={next} />}
             </Col>
             <div className="clear">&nbsp;</div>
           </div>
