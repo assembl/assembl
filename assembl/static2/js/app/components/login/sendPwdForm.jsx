@@ -5,6 +5,7 @@ import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { requestPasswordChangeAction } from '../../actions/authenticationActions';
 import inputHandler from '../../utils/inputHandler';
+import AlertManager from '../../utils/alert';
 
 class SendPwdForm extends React.Component {
   constructor(props) {
@@ -12,32 +13,23 @@ class SendPwdForm extends React.Component {
     this.state = { identifier: null };
     this.submitHandler = this.submitHandler.bind(this);
     this.handleInput = this.handleInput.bind(this);
-    this.messageHandler = this.messageHandler.bind(this);
   }
 
   handleInput(e) {
     inputHandler(this, e);
   }
 
-  /*
-    TODO: Remove this method and the <div> section in the ReactDOM when the alert system
-    is implemented
-  */
-  messageHandler() {
-    return (
-      <div>
-        {
-          this.props.auth.passwordChangeRequest.success == null ? <span /> :
-          <div id="sendPwdForm-error"><Translate value="login.passwordChangeRequestError" /></div>
-        }
-      </div>
-    );
-  }
-
   submitHandler(e) {
     e.preventDefault();
     this.props.sendRequest(this.state.identifier, getDiscussionSlug());
-    // TODO: Implement Alert system in case of failure
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { auth } = nextProps;
+    if (auth.passwordChangeRequest && auth.passwordChangeRequest.success === false) {
+      const msg = I18n.t('login.passwordChangeRequestError');
+      AlertManager.displayAlert('danger', msg, true);
+    }
   }
 
   render() {
@@ -61,9 +53,6 @@ class SendPwdForm extends React.Component {
               </Button>
             </FormGroup>
           </form>
-          <div className="error-message">
-            {this.messageHandler()}
-          </div>
         </div>
       </div>
     );

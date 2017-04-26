@@ -3,6 +3,9 @@ const convertToURLEncodedString = (obj) => {
   return Object.keys(obj).map((k) => { return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`; }).join('&');
 };
 
+const getResponseContentType = (xhr) => {
+  return xhr.getResponseHeader('Content-Type').split(';')[0];
+}
 /*
   A global async method that returns a Promisified ajax call
   @params payload [Object] The object that will be sent
@@ -38,9 +41,17 @@ export const xmlHttpRequest = (obj) => {
         resolve(resp);
       } else {
         let resp;
-        //TODO: Agree on contract with backend for all APIs
-        if (xhr.responseText) { resp = JSON.parse(xhr.responseText); }
-        reject(resp || xhr.statusText);
+        //TODO: Agree on contract with backend for all APIs!!
+        const contentType = getResponseContentType(xhr);
+        if (contentType !== "text/plain") {
+          // A non-JSONError response, likely from Pyramid itself
+          // Short term solution until contract established
+          reject(xhr.status);
+        }
+        else {
+          if (xhr.responseText) { resp = JSON.parse(xhr.responseText); }
+          reject(resp || xhr.statusText);
+        }
       }
     };
     xhr.onerror = () => {
