@@ -3,7 +3,6 @@
 */
 /* eslint no-template-curly-in-string: "off", import/no-unresolved: "off", class-methods-use-this: "off" */
 import urljoin from 'url-join';
-import cloneDeep from 'lodash/clonedeep';
 import parse from './literalStringParser';
 import { capitalize, getDiscussionSlug } from './globalFunctions';
 
@@ -70,8 +69,7 @@ class RouteMap {
   }
 
   getContextual(name, args) {
-    const newArgs = cloneDeep(args); // Do not mutuate args!!
-    newArgs.ctx = true;
+    const newArgs = {...args, ctx: true}; // Do not mutate args!
     return this.get(name, newArgs);
   }
 
@@ -100,6 +98,16 @@ class RouteMap {
 
   getCurrentView() {
     return window.location.href;
+  }
+
+  matchPath(path, routeName, args){
+    const path2 = this.get(routeName, args);
+    return path === path2;
+  }
+
+  matchContextualPath(path, routeName, args){
+    const newArgs = {...args, ctx: true};
+    return this.matchPath(path, routeName, newArgs);
   }
 }
 
