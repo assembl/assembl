@@ -84,7 +84,7 @@ def get_permissions(user_id, discussion_id):
     return [x[0] for x in permissions.distinct()]
 
 
-def discussion_from_request(request):
+def discussion_from_request(request, check_session=True):
     from ..models import Discussion
     from assembl.views.traversal import TraversalContext
     if request.matchdict:
@@ -107,14 +107,17 @@ def discussion_from_request(request):
         discussion_id = request.context.get_discussion_id()
         if discussion_id:
             return Discussion.get(discussion_id)
-    if request.session.get("discussion", None):
-        slug = request.session["discussion"]
-        session = get_session_maker()()
-        discussion = session.query(Discussion).filter_by(
-            slug=slug).first()
-        if not discussion:
-            raise HTTPNotFound("No discussion named %s" % (slug,))
-        return discussion
+    if (check_session):
+        if request.session.get("discussion", None):
+            slug = request.session["discussion"]
+            session = get_session_maker()()
+            discussion = session.query(Discussion).filter_by(
+                slug=slug).first()
+            if not discussion:
+                raise HTTPNotFound("No discussion named %s" % (slug,))
+            return discussion
+    else:
+        return None
 
 
 def get_current_discussion():
