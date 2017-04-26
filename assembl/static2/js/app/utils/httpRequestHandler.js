@@ -39,16 +39,15 @@ export const xmlHttpRequest = (obj) => {
       } else {
         let resp;
         // TODO: Agree on contract with backend for all APIs!!
-        const contentType = getResponseContentType(xhr);
-        if (contentType !== 'text/plain') {
+        // Current system not very intuitive nor friendly
+        try {
+          resp = JSON.parse(xhr.responseText);
+          reject(resp || xhr.statusText);
+        }
+        catch (e) {
           // A non-JSONError response, likely from Pyramid itself
           // Short term solution until contract established
           reject(xhr.status);
-        } else {
-          if (xhr.responseText) {
-            resp = JSON.parse(xhr.responseText);
-          }
-          reject(resp || xhr.statusText);
         }
       }
     };
