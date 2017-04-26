@@ -17,7 +17,11 @@ class SendPwdForm extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { auth } = nextProps;
     if (auth.passwordChangeRequest && auth.passwordChangeRequest.success === false) {
-      const msg = I18n.t('login.passwordChangeRequestError');
+      let msg;
+      if (auth.passwordChangeRequest.data === 404) {
+        msg = I18n.t('login.emailNotFound');
+      }
+      else { msg = I18n.t('login.passwordChangeRequestError'); }
       AlertManager.displayAlert('danger', msg, true);
     }
   }

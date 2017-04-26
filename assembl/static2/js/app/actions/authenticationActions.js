@@ -41,8 +41,11 @@ export const signupAction = (payload) => {
 const passwordRequestSuccess = {
   type: 'REQUEST_PASSWORD_CHANGE_SUCCESS'
 };
-const passwordRequestError = {
-  type: 'REQUEST_PASSWORD_CHANGE_ERROR'
+const passwordRequestError = (error) => {
+  return {
+    type: 'REQUEST_PASSWORD_CHANGE_ERROR',
+    data: error
+  };
 };
 export const requestPasswordChangeAction = (id, discussionSlug) => {
   return (dispatch) => {
@@ -51,8 +54,8 @@ export const requestPasswordChangeAction = (id, discussionSlug) => {
         dispatch(passwordRequestSuccess);
       }
     )
-    .catch(() => {
-      dispatch(passwordRequestError);
+    .catch((error) => {
+      dispatch(passwordRequestError(error));
     });
   };
 };

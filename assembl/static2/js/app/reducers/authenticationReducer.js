@@ -20,7 +20,7 @@ const AuthReducer = (state = defaultCase, action) => {
   case 'REQUEST_PASSWORD_CHANGE_SUCCESS':
     return { passwordChangeRequest: { success: true } };
   case 'REQUEST_PASSWORD_CHANGE_ERROR':
-    return { passwordChangeRequest: { success: false } };
+    return { passwordChangeRequest: { success: false, data: action.data } };
   default:
     return state;
   }
