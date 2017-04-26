@@ -396,6 +396,7 @@ signup_error_types = {
     'PASSWORD': 'password'
 }
 
+
 @view_config(
     context=CollectionContext, ctx_collection_class=AgentProfile,
     request_method='POST', header=JSON_HEADER,
@@ -404,10 +405,7 @@ signup_error_types = {
     context=ClassContext, ctx_class=User, header=JSON_HEADER,
     request_method='POST', permission=NO_PERMISSION_REQUIRED)
 def assembl_register_user(request):
-    ctx = request.context
     user_id = authenticated_userid(request) or Everyone
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
     localizer = request.localizer
     session = AgentProfile.default_db
     json = request.json
@@ -417,6 +415,9 @@ def assembl_register_user(request):
         slug = json['discussion_slug']
         if slug:
             discussion = session.query(Discussion).filter_by(slug=slug).first()
+
+    permissions = get_permissions(
+        user_id, discussion.id if discussion else None)
 
     if discussion and not (
             P_SELF_REGISTER in permissions or
@@ -474,13 +475,20 @@ def assembl_register_user(request):
     session.autoflush = False
     try:
         now = datetime.utcnow()
-        instances = ctx.create_object("User", request.json, user_id)
-        if not instances:
-            raise JSONError(500, {})  # Required for new front-end to not fail
-        user = instances[0]
-        user.creation_date = now
-        for instance in instances:
-            session.add(instance)
+        user = User(
+            name=name,
+            password=password,
+            verified=not validate_registration,
+            creation_date=now
+        )
+
+        session.add(user)
+        session.flush()
+
+        user.update_from_json(json, user_id=user.id)
+        account = user.accounts[0]
+        email = account.email
+        account.verified = not validate_registration
         if discussion:
             agent_status = AgentStatusInDiscussion(
                 agent_profile=user, discussion=discussion,
@@ -488,8 +496,7 @@ def assembl_register_user(request):
                 user_created_on_this_discussion=True)
             session.add(agent_status)
         session.flush()
-        account = user.accounts[0]
-        email = account.email
+
         if validate_registration:
             send_confirmation_email(request, account)
         else:
