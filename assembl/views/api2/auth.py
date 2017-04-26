@@ -410,12 +410,6 @@ def assembl_register_user(request):
     session = AgentProfile.default_db
     json = request.json
     discussion = discussion_from_request(request)
-    if not discussion:
-        # possibly in the args
-        slug = json['discussion_slug']
-        if slug:
-            discussion = session.query(Discussion).filter_by(slug=slug).first()
-
     permissions = get_permissions(
         user_id, discussion.id if discussion else None)
 

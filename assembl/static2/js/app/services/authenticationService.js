@@ -16,7 +16,9 @@ export const signUp = (payload) => {
     return Promise.reject(new PasswordMismatchError('Passwords do not match!'));
   }
 
-  const route = '/data/User';
+  let route;
+  if (payload.discussionSlug) { route = '/data/User'; }
+  else { route = `/data/Discussion/${payload.discussionSlug}/all_users`; }
   const newPayload = {
     username: payload.username || null,
     real_name: payload.name,
@@ -26,9 +28,6 @@ export const signUp = (payload) => {
       '@type': 'EmailAccount'
     }]
   };
-  if (payload.discussionSlug) {
-    newPayload.discussion_slug = payload.discussionSlug;
-  }
 
   return xmlHttpRequest({
     method: 'POST',
