@@ -103,8 +103,7 @@ def main():
     webpack_port = 8080
     if config.has_option(SECTION, 'webpack_port'):
         webpack_port = config.getint(SECTION, 'webpack_port')
-    webpack_host = "%s:%d" % (public_hostname, webpack_port)
-    webpack_url = "http://" + webpack_host
+    webpack_url = "http://%s:%d" % (public_hostname, webpack_port)
     vars = {
         'IMAP_CELERY_BROKER': imap_celery_broker,
         'NOTIF_DISPATCH_CELERY_BROKER': notif_dispatch_celery_broker,
@@ -134,7 +133,6 @@ def main():
         'VIRTUAL_ENV': os.environ['VIRTUAL_ENV'],
         'edgesense_code_dir': edgesense_code_dir,
         'WEBPACK_URL': webpack_url,
-        'WEBPACK_HOST': webpack_host,
         'ASSEMBL_URL': url,
     }
     for var in (
