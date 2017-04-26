@@ -44,7 +44,8 @@ from assembl.auth.password import (
     verify_email_token, verify_password_change_token,
     password_change_token, Validity, get_data_token_time)
 from assembl.auth.util import (
-    discussion_from_request, roles_with_permissions, maybe_auto_subscribe)
+    discussion_from_request, roles_with_permissions, maybe_auto_subscribe,
+    get_permissions)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.utils import normalize_email_name
@@ -403,6 +404,11 @@ def assembl_register_view(request):
     session.add(user)
     session.add(email_account)
     discussion = discussion_from_request(request)
+    if discussion:
+        permissions = get_permissions(Everyone, discussion.id)
+        if not (P_SELF_REGISTER in permissions or
+                P_SELF_REGISTER_REQUEST in permissions):
+            discussion = None
     if discussion:
         _now = datetime.utcnow()
         agent_status = AgentStatusInDiscussion(

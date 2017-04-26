@@ -417,6 +417,13 @@ def assembl_register_user(request):
         slug = json['discussion_slug']
         if slug:
             discussion = session.query(Discussion).filter_by(slug=slug).first()
+
+    if discussion and not (
+            P_SELF_REGISTER in permissions or
+            P_SELF_REGISTER_REQUEST in permissions):
+        # Consider it without context
+        discussion = None
+
     name = json.get('real_name', '').strip()
     errors = {}
     if not name or len(name) < 3:
