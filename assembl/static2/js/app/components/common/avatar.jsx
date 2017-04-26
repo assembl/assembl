@@ -30,7 +30,7 @@ class ProfileIcon extends React.Component {
         {!connectedUserId &&
           <Link onMouseOver={this.getCurrentView} to={`${Routes.getContextual('login', slug)}?next=${this.state.next}`}>
             <div className="connection">
-              <Translate value="navbar.connexion" />
+              <Translate value="navbar.connection" />
             </div>
           </Link>
         }

@@ -250,9 +250,9 @@ const Translations = {
       home: 'home',
       debate: 'debate',
       community: 'community',
-      connection: 'Connection',
-      profile: 'Profil',
-      logout: 'Se déconnecter'
+      connection: 'Login',
+      profile: 'Profile',
+      logout: 'Logout'
     },
     footer: {
       terms: 'Terms and Conditions',
