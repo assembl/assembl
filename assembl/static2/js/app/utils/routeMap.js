@@ -97,7 +97,7 @@ class RouteMap {
   }
 
   getCurrentView() {
-    return window.location.href;
+    return window.location.pathname;
   }
 
   matchPath(path, routeName, args){

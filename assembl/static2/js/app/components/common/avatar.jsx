@@ -7,6 +7,20 @@ import { NavDropdown, MenuItem } from 'react-bootstrap';
 import Routes from '../../utils/routeMap';
 
 class ProfileIcon extends React.Component {
+  constructor(props) {
+    super(props);
+    const next = Routes.getCurrentView();
+    this.state = {
+      next: next
+    };
+    this.getCurrentView = this.getCurrentView.bind(this);
+  }
+  getCurrentView() {
+    const next = Routes.getCurrentView();
+    this.setState({
+      next: next
+    });
+  }
   render() {
     const { debateData } = this.props.debate;
     const slug = { slug: debateData.slug };
@@ -14,7 +28,7 @@ class ProfileIcon extends React.Component {
     return (
       <div className="right avatar">
         {!connectedUserId &&
-          <Link to={`${Routes.getContextual('login', slug)}?next=${Routes.getCurrentView()}`}>
+          <Link onMouseOver={this.getCurrentView} to={`${Routes.getContextual('login', slug)}?next=${this.state.next}`}>
             <div className="connection">
               <Translate value="navbar.connexion" />
             </div>
