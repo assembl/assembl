@@ -282,7 +282,7 @@ const Translations = {
       userName: 'Username (optional)',
       passwordChangeRequestSuccess: 'Great! An email has been sent to your account. Make sure to check your spam folder as well',
       passwordChangeRequestError: 'Oh oh! There seems to be a problem on our end. Please try again later.',
-      invalidEmail: "Invalid email"
+      invalidEmail: 'Invalid email'
     },
     changePassword: {
       panelTitle: 'Welcome to Assembl forgot password page'

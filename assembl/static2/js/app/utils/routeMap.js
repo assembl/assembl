@@ -5,25 +5,10 @@
 import urljoin from 'url-join';
 import parse from './literalStringParser';
 import { capitalize, getDiscussionSlug } from './globalFunctions';
-
 // TODO: Add a constructor to include the discussion slug, if available in the DOM,
 // so that a simplified method call can be made without passing the slug in each
 // component
 class RouteMap {
-  basePath() {
-    return `${window.location.protocol}//${window.location.host}`;
-  }
-
-  convertToContextualName(name) {
-    const base = 'ctx';
-    const workingName = capitalize(name);
-    return base + workingName;
-  }
-
-  maybePrependSlash(pre, s) {
-    return pre ? `/${s}` : s;
-  }
-
   constructor() {
     this.slug = getDiscussionSlug();
     this.routes = {
@@ -51,7 +36,17 @@ class RouteMap {
       phase: '${phase}/theme/${themeId}'
     };
   }
-
+  basePath() {
+    return `${window.location.protocol}//${window.location.host}`;
+  }
+  convertToContextualName(name) {
+    const base = 'ctx';
+    const workingName = capitalize(name);
+    return base + workingName;
+  }
+  maybePrependSlash(pre, s) {
+    return pre ? `/${s}` : s;
+  }
   get(name, args) {
     const newArgs = args || {};
     const pre = ('preSlash' in newArgs) ? newArgs.preSlash : true;
@@ -67,17 +62,14 @@ class RouteMap {
     const a = parse(literal, newArgs);
     return a;
   }
-
   getContextual(name, args) {
-    const newArgs = {...args, ctx: true}; // Do not mutate args!
+    const newArgs = { ...args, ctx: true }; // Do not mutate args!
     return this.get(name, newArgs);
   }
-
   getFullPath(name, args) {
     const rel = this.get(name, { ...args, preSlash: false });
     return urljoin(this.basePath(), rel);
   }
-
   routeForRouter(name, isCtx, args) {
     const newArgs = args || {};
     newArgs.slug = ':slug';
@@ -85,28 +77,23 @@ class RouteMap {
     if (isCtx) { return this.getContextual(name, newArgs); }
     return this.get(name, newArgs);
   }
-
   getWithSlug(name, args) {
     const newArgs = { ...args, slug: this.slug };
     return this.get(name, newArgs);
   }
-
   getFullPathWithSlug(name, args) {
     const newArgs = { ...args, slug: this.slug };
     return this.getFullPath(name, newArgs);
   }
-
   getCurrentView() {
     return window.location.pathname;
   }
-
-  matchPath(path, routeName, args){
+  matchPath(path, routeName, args) {
     const path2 = this.get(routeName, args);
     return path === path2;
   }
-
-  matchContextualPath(path, routeName, args){
-    const newArgs = {...args, ctx: true};
+  matchContextualPath(path, routeName, args) {
+    const newArgs = { ...args, ctx: true };
     return this.matchPath(path, routeName, newArgs);
   }
 }

@@ -24,7 +24,7 @@ class App extends React.Component {
         {debateLoading && <Loader />}
         {debateData &&
           <div>
-            <Alert isBase ref={(alertComponent) => AlertManager.setComponent(alertComponent)}/>
+            <Alert isBase ref={(alertComponent) => { AlertManager.setComponent(alertComponent); }} />
             <div className="app-child">{this.props.children}</div>
           </div>
         }

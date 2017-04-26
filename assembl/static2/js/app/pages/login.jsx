@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Col } from 'react-bootstrap';
 import get from 'lodash/get';
 import { I18n } from 'react-redux-i18n';
 import AsLogin from '../components/login/assemblLogin';
@@ -18,10 +18,10 @@ class Login extends React.Component {
         <Col xs={12} sm={isSocialMedias ? 9 : 6} lg={isSocialMedias ? 7 : 4} className="login-container col-centered">
           <div className="box-title">{debateData ? debateData.topic : I18n.t('login.login')}</div>
           <div className="box">
-            {isSocialMedias && 
+            {isSocialMedias &&
               <div>
                 <Col xs={12} md={5}>
-                  <SocialMedia providers={providers} /> 
+                  <SocialMedia providers={providers} />
                 </Col>
                 <Col xs={12} md={1}>&nbsp;</Col>
               </div>

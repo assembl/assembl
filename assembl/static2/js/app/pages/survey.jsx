@@ -4,7 +4,6 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
-import Alert from '../components/common/alert';
 import Modal from '../components/common/modal';
 import Loader from '../components/common/loader';
 import Video from '../components/debate/survey/video';

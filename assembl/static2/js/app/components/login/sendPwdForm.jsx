@@ -14,16 +14,6 @@ class SendPwdForm extends React.Component {
     this.submitHandler = this.submitHandler.bind(this);
     this.handleInput = this.handleInput.bind(this);
   }
-
-  handleInput(e) {
-    inputHandler(this, e);
-  }
-
-  submitHandler(e) {
-    e.preventDefault();
-    this.props.sendRequest(this.state.identifier, getDiscussionSlug());
-  }
-
   componentWillReceiveProps(nextProps) {
     const { auth } = nextProps;
     if (auth.passwordChangeRequest && auth.passwordChangeRequest.success === false) {
@@ -31,7 +21,13 @@ class SendPwdForm extends React.Component {
       AlertManager.displayAlert('danger', msg, true);
     }
   }
-
+  handleInput(e) {
+    inputHandler(this, e);
+  }
+  submitHandler(e) {
+    e.preventDefault();
+    this.props.sendRequest(this.state.identifier, getDiscussionSlug());
+  }
   render() {
     return (
       <div className="login-view">

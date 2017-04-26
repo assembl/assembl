@@ -6,21 +6,28 @@ class AssemblAlert extends React.Component {
     super(props);
     this.state = {
       base: true
+    };
+  }
+  componentDidMount() {
+    if (this.props.isBase === true) {
+      this.setState({
+        base: true
+      });
     }
   }
-
-  componentDidMount(){
-    if (this.props.isBase === true) { this.setState({base: true}); }
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isBase === true) { this.setState({base: true}); }
+    if (nextProps.isBase === true) {
+      this.setState({
+        base: true
+      });
+    }
   }
-
   render() {
-    const { showAlert, alertStyle, alertMsg, topPosition} = this.state;
-    if (this.state.base) { return (<Alert className='hideAlert' /> ); }
-    else { return (<Alert style={topPosition ? {top: 0} : {margin: 0}} className={showAlert ? 'showAlert' : 'hideAlert'} bsStyle={alertStyle}>{alertMsg}</Alert> ); }
+    const { showAlert, alertStyle, alertMsg, topPosition } = this.state;
+    if (this.state.base) {
+      return (<Alert className="hideAlert" />);
+    }
+    return (<Alert style={topPosition ? { top: 0 } : { margin: 0 }} className={showAlert ? 'showAlert' : 'hideAlert'} bsStyle={alertStyle}>{alertMsg}</Alert>);
   }
 }
 

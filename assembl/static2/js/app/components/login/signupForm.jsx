@@ -22,35 +22,31 @@ class SignupForm extends React.Component {
     this.signupHandler = this.signupHandler.bind(this);
     this.handleInput = this.handleInput.bind(this);
   }
-
-  handleInput(e) {
-    inputHandler(this, e);
-  }
-
-  signupHandler(e) {
-    e.preventDefault();
-    this.props.signUp({ ...this.state, discussionSlug: getDiscussionSlug()});
-  }
-
   componentWillReceiveProps(nextProps) {
     const { auth } = nextProps;
     let msg;
     if (auth.signupSuccess.success === false) {
       const { reason } = auth.signupSuccess;
       switch (reason) {
-        case 'password': {
-          msg = I18n.t('login.incorrectPassword');
-          break;
-        }
-        default: {
-          msg = I18n.t('login.somethingWentWrong');
-          break;
-        }
+      case 'password': {
+        msg = I18n.t('login.incorrectPassword');
+        break;
+      }
+      default: {
+        msg = I18n.t('login.somethingWentWrong');
+        break;
+      }
       }
       AlertManager.displayAlert('danger', msg, true);
     }
   }
-
+  handleInput(e) {
+    inputHandler(this, e);
+  }
+  signupHandler(e) {
+    e.preventDefault();
+    this.props.signUp({ ...this.state, discussionSlug: getDiscussionSlug() });
+  }
   render() {
     const { debateData } = this.props.debate;
     return (
