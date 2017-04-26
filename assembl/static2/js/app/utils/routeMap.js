@@ -5,9 +5,7 @@
 import urljoin from 'url-join';
 import parse from './literalStringParser';
 import { capitalize, getDiscussionSlug } from './globalFunctions';
-// TODO: Add a constructor to include the discussion slug, if available in the DOM,
-// so that a simplified method call can be made without passing the slug in each
-// component
+
 class RouteMap {
   constructor() {
     this.slug = getDiscussionSlug();
