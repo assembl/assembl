@@ -264,7 +264,7 @@ const Translations = {
     },
     login: {
       alreadyAccount: 'Do you already have an account?',
-      loginWithSocialMedia: 'Vous utilisez un réseau social ?',
+      loginWithSocialMedia: 'Care to use social media?',
       password: 'Password',
       email: 'Email',
       login: 'Log in',
