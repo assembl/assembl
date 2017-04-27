@@ -175,12 +175,24 @@ def home_view(request):
     return response
 
 
+def is_login_route(route_name):
+    if route_name.startswith('contextual_'):
+        route_name = route_name[11:]
+    if route_name.startswith('react_'):
+        route_name = route_name[6:]
+    return route_name in (
+        "login", "register", "request_password_change",
+        "do_password_change")
+
+
 def react_view(request):
     """
     Asbolutely basic view. Nothing more.
     Must add user authentication, permission, etc.
     Basic view for the homepage
     """
+    if is_login_route(request.matched_route.name):
+        request.session.pop('discussion')
     old_context = base_default_context(request)
     user_id = request.authenticated_userid or Everyone
     discussion = old_context["discussion"] or None
@@ -189,10 +201,7 @@ def react_view(request):
         if not canRead and user_id == Everyone:
             # User isn't logged-in and discussion isn't public:
             # Maybe we're already in a login/register page etc.
-            name = request.matched_route.name
-            if name.startswith("contextual_react_") and name[17:] in (
-                    "login", "register", "request_password_change",
-                    "do_password_change"):
+            if is_login_route(request.matched_route.name):
                 return get_login_context(request)
 
             # otherwise redirect to login page
