@@ -17,8 +17,7 @@ export const signUp = (payload) => {
   }
 
   let route;
-  if (!payload.discussionSlug) { route = '/data/User'; }
-  else { route = `/data/Discussion/${payload.discussionSlug}/all_users`; }
+  if (!payload.discussionSlug) { route = '/data/User'; } else { route = `/data/Discussion/${payload.discussionSlug}/all_users`; }
   const newPayload = {
     username: payload.username || null,
     real_name: payload.name,

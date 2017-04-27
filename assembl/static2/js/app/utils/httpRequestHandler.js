@@ -1,7 +1,7 @@
 const convertToURLEncodedString = (obj) => {
   return Object.keys(obj).map((k) => { return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`; }).join('&');
 };
-const getResponseContentType = (xhr) => {
+const getResponseContentType = (xhr) => { // eslint-disable-line no-unused-vars
   return xhr.getResponseHeader('Content-Type').split(';')[0];
 };
 /*
@@ -43,8 +43,7 @@ export const xmlHttpRequest = (obj) => {
         try {
           resp = JSON.parse(xhr.responseText);
           reject(resp || xhr.statusText);
-        }
-        catch (e) {
+        } catch (e) {
           // A non-JSONError response, likely from Pyramid itself
           // Short term solution until contract established
           reject(xhr.status);

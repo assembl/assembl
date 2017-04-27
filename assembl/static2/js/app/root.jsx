@@ -1,5 +1,4 @@
 import React from 'react';
-import App from './app';
 import Alert from './components/common/alert';
 import AlertManager from './utils/alert';
 
@@ -8,11 +7,11 @@ import AlertManager from './utils/alert';
   to exist in every context should be placed here. Eg. Alert, Modal, etc.
 */
 
-export default ({children}) => {
-	return (
+export default ({ children }) => {
+  return (
     <div>
       <Alert isBase ref={(alertComponent) => { AlertManager.setComponent(alertComponent); }} />
       <div className="root-child">{children}</div>
     </div>
   );
-}
+};

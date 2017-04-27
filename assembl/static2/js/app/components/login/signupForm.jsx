@@ -35,23 +35,23 @@ class SignupForm extends React.Component {
       }
       case 'general': {
         switch (auth.signupSuccess.data.error.type) {
-          case 'invalid_email': {
-            msg = I18n.t('login.invalidEmail');
-            break;
-          }
-          case 'existing_username': {
-            msg = I18n.t('login.existingUsername');
-            break;
-          }
-          case 'existing_email': {
-            msg = I18n.t('login.existingEmail');
-            break;
-          }
-          case 'short_name':
-          case 'password':
-          default: {
-            msg = I18n.t('login.somethingWentWrong');
-          }
+        case 'invalid_email': {
+          msg = I18n.t('login.invalidEmail');
+          break;
+        }
+        case 'existing_username': {
+          msg = I18n.t('login.existingUsername');
+          break;
+        }
+        case 'existing_email': {
+          msg = I18n.t('login.existingEmail');
+          break;
+        }
+        case 'short_name':
+        case 'password':
+        default: {
+          msg = I18n.t('login.somethingWentWrong');
+        }
         }
         break;
       }
@@ -71,8 +71,7 @@ class SignupForm extends React.Component {
   signupHandler(e) {
     e.preventDefault();
     const slug = getDiscussionSlug();
-    if (slug) { this.props.signUp({ ...this.state, discussionSlug: slug }); }
-    else { this.props.signUp(this.state); }
+    if (slug) { this.props.signUp({ ...this.state, discussionSlug: slug }); } else { this.props.signUp(this.state); }
   }
 
   render() {
@@ -146,7 +145,8 @@ class SignupForm extends React.Component {
             <FormGroup>
               <Translate value="login.alreadyAccount" />
               <span>&nbsp;</span>
-              <Link to={debateData.slug ?
+              <Link
+                to={debateData.slug ?
                 Routes.getContextual('login', { slug: debateData.slug }) : Routes.get('login')}
               >
                 <Translate value="login.login" />

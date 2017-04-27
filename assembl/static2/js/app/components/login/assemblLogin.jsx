@@ -42,7 +42,8 @@ class AsLogin extends React.Component {
           </h4>
           <Link
             className="button-link button-dark margin-s"
-            to={slug ? Routes.getContextual('signup', { slug: slug }) : Routes.get('signup')}>
+            to={slug ? Routes.getContextual('signup', { slug: slug }) : Routes.get('signup')}
+          >
             <Translate value="login.signUp" />
           </Link>
         </div>
