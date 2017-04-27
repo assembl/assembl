@@ -12,7 +12,7 @@ class Login extends React.Component {
     const { debateData } = this.props.debate;
     const providers = getProvidersData();
     const next = get(this.props, 'location.query.next', null);
-    const isSocialMedias = providers.length > 0;
+    const isSocialMedias = providers && providers.length > 0;
     return (
       <Grid fluid className="login-grid">
         <Col xs={12} sm={isSocialMedias ? 9 : 6} lg={isSocialMedias ? 7 : 4} className="login-container col-centered">
