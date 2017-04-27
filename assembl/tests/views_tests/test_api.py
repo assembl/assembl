@@ -4,6 +4,7 @@ import json
 import re
 import quopri
 import mock
+import pytest
 from urlparse import urlparse
 from urllib import unquote
 from urllib import urlencode, quote_plus
