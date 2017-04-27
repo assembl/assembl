@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { browserHistory } from 'react-router';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
 import Modal from '../components/common/modal';
@@ -27,9 +28,12 @@ class Survey extends React.Component {
     this.redirectToLogin = this.redirectToLogin.bind(this);
   }
   componentWillReceiveProps() {
-    this.setState({
-      moreProposals: false
+    this.unlisten = browserHistory.listen(() => {
+      this.setState({ moreProposals: false });
     });
+  }
+  componentWillUnmount() {
+    this.unlisten();
   }
   getIfProposals(questions) {
     this.questions = questions;
