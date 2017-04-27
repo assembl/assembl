@@ -172,7 +172,7 @@ def create_get_route(request, discussion=None):
 
 def get_default_context(request, **kwargs):
     kwargs.update(default_context)
-    from ..auth.util import get_user, discussion_from_request
+    from ..auth.util import get_user, get_current_discussion
     if request.scheme == "http"\
             and asbool(config.get("require_secure_connection")):
         raise HTTPFound("https://" + request.host + request.path_qs)
@@ -213,7 +213,7 @@ def get_default_context(request, **kwargs):
 
     web_analytics_piwik_script = config.get(
         'web_analytics_piwik_script') or False
-    discussion = discussion_from_request(request, check_session=False)
+    discussion = get_current_discussion()
     if (web_analytics_piwik_script and discussion
             and discussion.web_analytics_piwik_id_site):
         web_analytics_piwik_script = web_analytics_piwik_script % (
