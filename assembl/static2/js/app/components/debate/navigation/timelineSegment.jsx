@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import Routes from '../../../utils/routeMap';
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
 class TimelineSegment extends React.Component {
   render() {
-    const { rootPath } = this.props.context;
-    const { debateData } = this.props.debate;
+    const slug = { slug: getDiscussionSlug() };
     const {
       index,
       barWidth,
@@ -26,7 +27,7 @@ class TimelineSegment extends React.Component {
         {title.entries.map((entry, index2) => {
           return (
             <div className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={index2}>
-              <Link to={isStepCompleted || isCurrentPhase ? `${rootPath}${debateData.slug}/debate?phase=${phaseIdentifier}` : null}>
+              <Link to={isStepCompleted || isCurrentPhase ? `${Routes.get('debate', slug)}?phase=${phaseIdentifier}` : null}>
                 {locale === entry['@language'] ? entry.value : ''}
               </Link>
             </div>
@@ -39,8 +40,7 @@ class TimelineSegment extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 

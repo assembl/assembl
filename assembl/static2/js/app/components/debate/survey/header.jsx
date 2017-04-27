@@ -4,12 +4,13 @@ import { Grid, Row } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { getPhaseName, getCurrentPhaseIdentifier, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import Routes from '../../../utils/routeMap';
 
 class Header extends React.Component {
   render() {
     const { title, imgUrl } = this.props;
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
+    const slug = { slug: debateData.slug };
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     const surveyPhaseName = getPhaseName(debateData.timeline, 'survey', locale).toLowerCase();
@@ -20,7 +21,7 @@ class Header extends React.Component {
         <Grid fluid className="max-container">
           <div className="header-content">
             <h1 className="light-title-1">{isPhaseCompleted ? <Translate value="debate.survey.endPhase" closedPhaseName={surveyPhaseName} /> : title}</h1>
-            <Link to={`${rootPath}${debateData.slug}/debate`}>{isPhaseCompleted ? <Translate value="debate.survey.goTo" currentPhaseName={currentPhaseName} /> : ''}</Link>
+            <Link to={`${Routes.get('debate', slug)}`}>{isPhaseCompleted ? <Translate value="debate.survey.goTo" currentPhaseName={currentPhaseName} /> : ''}</Link>
           </div>
         </Grid>
         <Grid fluid>
@@ -36,7 +37,6 @@ class Header extends React.Component {
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
-    context: state.context,
     i18n: state.i18n
   };
 };

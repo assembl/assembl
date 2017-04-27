@@ -6,11 +6,12 @@ import { Translate } from 'react-redux-i18n';
 import { fetchPartners } from '../../actions/partnersActions';
 import Loader from '../common/loader';
 import Error from '../common/error';
+import { getDiscussionId } from '../../utils/globalFunctions';
 
 class Partners extends React.Component {
   componentWillMount() {
-    const { debateId } = this.props.context;
-    this.props.fetchPartners(debateId);
+    const discussionId = getDiscussionId();
+    this.props.fetchPartners(discussionId);
   }
   render() {
     const { partners, partnersLoading, partnersError } = this.props.partners;
@@ -50,15 +51,14 @@ class Partners extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    partners: state.partners,
-    context: state.context
+    partners: state.partners
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchPartners: (debateId) => {
-      dispatch(fetchPartners(debateId));
+    fetchPartners: (discussionId) => {
+      dispatch(fetchPartners(discussionId));
     }
   };
 };

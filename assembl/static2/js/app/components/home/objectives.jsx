@@ -3,11 +3,14 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
+import Routes from '../../utils/routeMap';
+import { getConnectedUserId, getDiscussionSlug } from '../../utils/globalFunctions';
 
 class Objectives extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath, connectedUserId } = this.props.context;
+    const connectedUserId = getConnectedUserId();
+    const slug = { slug: getDiscussionSlug() };
     return (
       <section className="objectives-section">
         {debateData.objectives &&
@@ -41,7 +44,7 @@ class Objectives extends React.Component {
                   </Row>
                 </div>
                 <div className="center inline full-size margin-xxl">
-                  <Link className="button-link button-dark" to={connectedUserId ? `${rootPath}${debateData.slug}/debate` : `${rootPath}${debateData.slug}/login`}>
+                  <Link className="button-link button-dark" to={connectedUserId ? `${Routes.get('debate', slug)}` : `${Routes.getContextual('login', slug)}?next=${Routes.get('home', slug)}`}>
                     <Translate value="home.accessButton" />
                   </Link>
                 </div>
@@ -56,8 +59,7 @@ class Objectives extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 

@@ -6,7 +6,7 @@ import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
 import Routes from '../../utils/routeMap';
-
+import { getConnectedUserId } from '../../utils/globalFunctions';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -33,7 +33,8 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
-    const { connectedUserId } = this.props.context;
+    const slug = { slug: debateData.slug };
+    const connectedUserId = getConnectedUserId();
     const { isHidden } = this.props;
     return (
       <Grid fluid className={isHidden ? 'hiddenNavbar' : 'shown'}>
@@ -48,7 +49,7 @@ class NavBar extends React.Component {
               </div>
             </div>
             <div className="navbar-logo left">
-              <Link to={Routes.get('home', { slug: debateData.slug })} activeClassName="logo-active">
+              <Link to={`${Routes.get('home', slug)}`} activeClassName="logo-active">
                 <img src={debateData.logo} alt="logo" />
               </Link>
             </div>
@@ -81,8 +82,7 @@ class NavBar extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 

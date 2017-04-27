@@ -39,8 +39,7 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { scrollToElement } from './utils/globalFunctions';
+import { scrollToElement, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';
 import { fetchPosts } from './actions/postsActions';
@@ -20,10 +20,11 @@ class Main extends React.Component {
     this.displayHeader = this.displayHeader.bind(this);
   }
   componentWillMount() {
-    const { debateId, connectedUserId } = this.props.context;
-    this.props.fetchPosts(debateId);
-    this.props.fetchSynthesis(debateId);
-    this.props.fetchUsers(debateId, connectedUserId);
+    const discussionId = getDiscussionId();
+    const connectedUserId = getConnectedUserId();
+    this.props.fetchPosts(discussionId);
+    this.props.fetchSynthesis(discussionId);
+    this.props.fetchUsers(discussionId, connectedUserId);
   }
   componentDidMount() {
     window.addEventListener('scroll', this.displayHeader);
@@ -74,21 +75,20 @@ class Main extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchPosts: (debateId) => {
-      dispatch(fetchPosts(debateId));
+    fetchPosts: (discussionId) => {
+      dispatch(fetchPosts(discussionId));
     },
-    fetchUsers: (debateId, connectedUserId) => {
-      dispatch(fetchUsers(debateId, connectedUserId));
+    fetchUsers: (discussionId, connectedUserId) => {
+      dispatch(fetchUsers(discussionId, connectedUserId));
     },
-    fetchSynthesis: (debateId) => {
-      dispatch(fetchSynthesis(debateId));
+    fetchSynthesis: (discussionId) => {
+      dispatch(fetchSynthesis(discussionId));
     }
   };
 };

@@ -4,11 +4,12 @@ import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Glyphicon from './glyphicon';
+import Routes from '../../utils/routeMap';
 
 class Footer extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
+    const slug = { slug: debateData.slug };
     return (
       <Grid fluid className="background-dark relative">
         <div className="max-container">
@@ -28,7 +29,7 @@ class Footer extends React.Component {
               </div>
             }
             <div className="terms">
-              <Link to={`${rootPath}${debateData.slug}/terms`}><Translate value="footer.terms" /></Link>
+              <Link to={`${Routes.get('terms', slug)}`}><Translate value="footer.terms" /></Link>
             </div>
             <div className="copyright">© <Link to="http://assembl.bluenove.com/" target="_blank">Assembl</Link> powered by <Link to="http://bluenove.com/" target="_blank">bluenove</Link></div>
           </div>
@@ -40,8 +41,7 @@ class Footer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 

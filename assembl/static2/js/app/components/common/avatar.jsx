@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import Routes from '../../utils/routeMap';
+import { getConnectedUserName, getConnectedUserId, getDiscussionSlug } from '../../utils/globalFunctions';
 
 class ProfileIcon extends React.Component {
   constructor(props) {
@@ -22,9 +22,9 @@ class ProfileIcon extends React.Component {
     });
   }
   render() {
-    const { debateData } = this.props.debate;
-    const slug = { slug: debateData.slug };
-    const { connectedUserId, connectedUserName } = this.props.context;
+    const slug = { slug: getDiscussionSlug() };
+    const connectedUserId = getConnectedUserId();
+    const connectedUserName = getConnectedUserName();
     return (
       <div className="right avatar">
         {!connectedUserId &&
@@ -56,11 +56,4 @@ class ProfileIcon extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    context: state.context
-  };
-};
-
-export default connect(mapStateToProps)(ProfileIcon);
+export default ProfileIcon;

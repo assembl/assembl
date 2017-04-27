@@ -1,16 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, Localize } from 'react-redux-i18n';
+import { getConnectedUserId, getDiscussionSlug } from '../../../utils/globalFunctions';
+import Routes from '../../../utils/routeMap';
 
 class Synthesis extends React.Component {
   render() {
     const { synthesis } = this.props.synthesis;
-    const { debateData } = this.props.debate;
-    const { rootPath, connectedUserId } = this.props.context;
+    const slug = { slug: getDiscussionSlug() };
+    const connectedUserId = getConnectedUserId();
+    const next = Routes.getCurrentView();
     return (
       <div className="synthesis-container">
         {(Object.keys(synthesis.lastPublishedSynthesis).length > 0 && synthesis.lastPublishedSynthesis.introduction) &&
-          <a href={connectedUserId ? `/${debateData.slug}/posts/${synthesis.lastPublishedSynthesis.published_in_post}` : `${rootPath}${debateData.slug}/login`}>
+          <a href={connectedUserId ? `${Routes.get('oldDebate', slug)}/posts/${synthesis.lastPublishedSynthesis.published_in_post}` : `${Routes.getContextual('login', slug)}?next=${next}`}>
             <div className="insert-box">
               <h3 className="dark-title-4 ellipsis">
                 <div>
@@ -37,8 +40,6 @@ class Synthesis extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context,
     synthesis: state.synthesis
   };
 };

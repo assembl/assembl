@@ -5,12 +5,14 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { isPhaseStarted, getStartDatePhase } from '../../../utils/timeline';
 import NotStartedPhase from './notStartedPhase';
 import ThematicPreview from '../../common/thematicPreview';
+import Routes from '../../../utils/routeMap';
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
 class Themes extends React.Component {
   render() {
     const { thematics, identifier } = this.props;
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
+    const slug = { slug: getDiscussionSlug() };
     const phaseStarted = isPhaseStarted(debateData.timeline, identifier);
     const startDatePhase = getStartDatePhase(debateData.timeline, identifier);
     if (phaseStarted) {
@@ -33,7 +35,7 @@ class Themes extends React.Component {
                           imgUrl={thematic.imgUrl}
                           numPosts={thematic.numPosts}
                           numContributors={thematic.numContributors}
-                          link={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id}`}
+                          link={`${Routes.get('debate', slug)}/${identifier}/theme/${thematic.id}`}
                           title={thematic.title}
                           description={thematic.description}
                         />
@@ -55,8 +57,7 @@ class Themes extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 

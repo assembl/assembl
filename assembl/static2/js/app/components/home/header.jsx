@@ -5,12 +5,15 @@ import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import Statistic from './header/statistic';
 import Synthesis from './header/synthesis';
+import Routes from '../../utils/routeMap';
+import { getConnectedUserId, getDiscussionSlug } from '../../utils/globalFunctions';
 
 class Header extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const { rootPath, connectedUserId } = this.props.context;
     const { synthesis } = this.props.synthesis;
+    const connectedUserId = getConnectedUserId();
+    const slug = { slug: getDiscussionSlug() };
     return (
       <section className="header-section">
         <Grid fluid className="max-container">
@@ -34,7 +37,7 @@ class Header extends React.Component {
                   <Localize value={debateData.endDate} dateFormat="date.format" />
                 }
               </h4>
-              <Link className="button-link button-light margin-xl" to={connectedUserId ? `${rootPath}${debateData.slug}/debate` : `${rootPath}${debateData.slug}/login`}>
+              <Link className="button-link button-light margin-xl" to={connectedUserId ? `${Routes.get('debate', slug)}` : `${Routes.getContextual('login', slug)}?next=${Routes.get('home', slug)}`}>
                 <Translate value="home.accessButton" />
               </Link>
             </div>
@@ -57,7 +60,6 @@ class Header extends React.Component {
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
-    context: state.context,
     synthesis: state.synthesis
   };
 };

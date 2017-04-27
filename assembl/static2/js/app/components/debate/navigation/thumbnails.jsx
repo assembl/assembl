@@ -3,6 +3,7 @@ import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { isPhaseStarted } from '../../../utils/timeline';
+import Routes from '../../../utils/routeMap';
 
 class Thumbnails extends React.Component {
   render() {
@@ -14,7 +15,7 @@ class Thumbnails extends React.Component {
       isNavbarHidden
     } = this.props;
     const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
+    const slug = { slug: debateData.slug };
     const phaseStarted = isPhaseStarted(debateData.timeline, identifier);
     return (
       <Grid fluid className={showNavigation && phaseStarted ? 'thumbnails-nav no-padding' : 'hidden'}>
@@ -24,7 +25,7 @@ class Thumbnails extends React.Component {
               {thematics.map((thematic, index) => {
                 return (
                   <div className="thumb-img-container" key={index}>
-                    <Link to={`${rootPath}${debateData.slug}/debate/${identifier}/theme/${thematic.id}`}>
+                    <Link to={`${Routes.get('debate', slug)}/${identifier}/theme/${thematic.id}`}>
                       <div className={themeId === thematic.id ? 'thumb-img active' : 'thumb-img'} style={{ backgroundImage: `url(${thematic.imgUrl})` }}>&nbsp;</div>
                       <div className="color-box">&nbsp;</div>
                       <div className="thumb-title">
@@ -46,8 +47,7 @@ class Thumbnails extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 

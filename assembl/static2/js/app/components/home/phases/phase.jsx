@@ -2,18 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Localize } from 'react-redux-i18n';
 import { Link } from 'react-router';
+import Routes from '../../../utils/routeMap';
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
 class Step extends React.Component {
   render() {
-    const { debateData } = this.props.debate;
-    const { rootPath } = this.props.context;
+    const slug = { slug: getDiscussionSlug() };
     const { locale } = this.props.i18n;
     const { imgUrl, startDate, title, description, index, identifier } = this.props;
     const stepNumber = index + 1;
     return (
       <div className="illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
-        <Link className="content-box" to={`${rootPath}${debateData.slug}/debate?phase=${identifier}`}>
+        <Link className="content-box" to={`${Routes.get('debate', slug)}?phase=${identifier}`}>
           <h1 className="light-title-1">{stepNumber}</h1>
           {title &&
             <h3 className="light-title-3">
@@ -48,8 +49,7 @@ class Step extends React.Component {
 const mapStateToProps = (state) => {
   return {
     i18n: state.i18n,
-    debate: state.debate,
-    context: state.context
+    debate: state.debate
   };
 };
 

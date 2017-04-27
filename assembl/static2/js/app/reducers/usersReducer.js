@@ -1,3 +1,5 @@
+import { getDiscussionId } from '../utils/globalFunctions';
+
 const UserReducer = (state = {}, action) => {
   switch (action.type) {
   case 'FETCH_USERS':
@@ -18,11 +20,11 @@ export const getPermissionsForConnectedUser = (state) => {
   if (!state.users) {
     return emptyArray;
   }
-  const debateId = state.context.debateId;
+  const discussionId = getDiscussionId();
   if (!state.users.connectedUser) {
     return emptyArray;
   }
-  const permissions = state.users.connectedUser.permissions[`local:Discussion/${debateId}`];
+  const permissions = state.users.connectedUser.permissions[`local:Discussion/${discussionId}`];
   if (!permissions) {
     return emptyArray;
   }

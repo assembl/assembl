@@ -12,6 +12,8 @@ import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
+import Routes from '../utils/routeMap';
+import { getConnectedUserId } from '../utils/globalFunctions';
 
 class Survey extends React.Component {
   constructor(props) {
@@ -24,13 +26,11 @@ class Survey extends React.Component {
     this.getIfProposals = this.getIfProposals.bind(this);
     this.redirectToLogin = this.redirectToLogin.bind(this);
   }
-
   componentWillReceiveProps() {
     this.setState({
       moreProposals: false
     });
   }
-
   getIfProposals(questions) {
     this.questions = questions;
     if (!this.questions) return false;
@@ -40,23 +40,21 @@ class Survey extends React.Component {
     });
     return isProposals;
   }
-
   showMoreProposals() {
     this.setState({
       moreProposals: true
     });
   }
-
   redirectToLogin() {
-    const { connectedUserId } = this.props.context;
+    const connectedUserId = getConnectedUserId();
     this.setState({ showModal: !connectedUserId });
   }
-
   render() {
     const { loading, theme } = this.props.data;
-    const { rootPath } = this.props.context;
     const { debateData } = this.props.debate;
+    const slug = { slug: debateData.slug };
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+    const next = Routes.getCurrentView();
     return (
       <div className="survey">
         {loading && <Loader color="black" />}
@@ -66,7 +64,7 @@ class Survey extends React.Component {
             <Modal
               body={I18n.t('debate.survey.modalBody')}
               footer
-              button={{ link: `${rootPath}${debateData.slug}/login`, label: I18n.t('debate.survey.modalFooter'), internalLink: true }}
+              button={{ link: `${Routes.getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true }}
               showModal={this.state.showModal}
             />
             {theme.video &&
@@ -184,7 +182,6 @@ const SurveyWithData = graphql(ThemeQuery)(Survey);
 const mapStateToProps = (state) => {
   return {
     lang: state.i18n.locale,
-    context: state.context,
     debate: state.debate
   };
 };
