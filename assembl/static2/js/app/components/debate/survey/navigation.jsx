@@ -77,7 +77,8 @@ class Navigation extends React.Component {
     if (windowOffset > proposalsOffset) {
       this.setState({
         navPosition: 'absolute',
-        navBottom: proposals.clientHeight
+        navBottom: proposals.clientHeight,
+        isHidden: true
       });
     } else {
       this.setState({
