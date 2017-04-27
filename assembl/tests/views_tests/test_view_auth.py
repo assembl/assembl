@@ -22,7 +22,7 @@ def test_assembl_login(discussion, participant1_user,
         ('identifier', participant1_user.get_preferred_email()),
         ('password', 'password')]))
     assert (res.status_code == 302 and urlparse.urlparse(
-        res.location).path == '/' + discussion.slug + '/')
+        res.location).path == '/' + discussion.slug + '/home')
     assert test_app_no_login.app.registry.getUtility(
         IAuthorizationPolicy).remembered == participant1_user.id
 
@@ -39,7 +39,7 @@ def test_assembl_login_mixed_case(discussion, participant1_user,
          participant1_user.get_preferred_email().title()),
         ('password', 'password')]))
     assert (res.status_code == 302 and urlparse.urlparse(
-        res.location).path == '/' + discussion.slug + '/')
+        res.location).path == '/' + discussion.slug + '/home')
     assert test_app_no_login.app.registry.getUtility(
         IAuthorizationPolicy).remembered == participant1_user.id
 

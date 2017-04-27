@@ -259,6 +259,7 @@ def test_api_register(discussion, test_app_no_perm,
         assert len(account.profile.notification_subscriptions) > 0
 
 
+@pytest.mark.xfail
 def test_csv_subscribe(discussion, test_app_no_perm,
                        test_app, discussion_synth_notification,
                        test_webrequest):
@@ -316,6 +317,7 @@ def test_csv_subscribe(discussion, test_app_no_perm,
         assert r.status_code == 302
         r = test_app_no_perm.get(r.location)
         assert r.status_code == 200
+        # TODO: Use the test browser, since the form is created by JS
         form = r.lxml.xpath('//form')[0]
         r = test_app_no_perm.post(form.attrib['action'], params=dict(
             token=unquote(link.split('/')[-1]),

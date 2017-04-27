@@ -18,7 +18,7 @@ def test_route_paths(discussion, test_app, test_adminuser_webrequest):
     req = test_adminuser_webrequest
     slug = discussion.slug
 
-    assert_path(req, '/%s' % slug, 'new_home', discussion_slug=slug)
+    assert_path(req, '/%s/home' % slug, 'new_home', discussion_slug=slug)
     assert_path(req, '/debate/%s/login' % slug, 'contextual_login', discussion_slug=slug)
 
 
@@ -245,27 +245,21 @@ def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
     assert resp.status_int == 200
 
 
-def test_route_admin(discussion, test_app):
+def test_route_admin(discussion, test_app_no_login):
     """/admin"""
     # if not logged in, should be forbidden
 
     route = "/admin"
-    resp = test_app.get(route)
-    assert resp.status_int == 200
+    resp = test_app_no_login.get(route, expect_errors=True)
+    assert resp.status_int != 200
 
 
 def test_route_admin_sysadmin_login(discussion, test_app, admin_user):
     """/admin"""
 
-    # must login first as a sysadmin
-    # test_app.post("/login", {
-    #         'identifier': admin_user.email,
-    #         'password': 'password'
-    #     })
-
     route = "/admin"
     resp = test_app.get(route)
-    assert resp.status_int != 200
+    assert resp.status_int == 200
 
 
 def test_route_admin_discussion(test_app):
@@ -290,6 +284,6 @@ def test_route_admin_permission_edit(discussion, test_app):
     """/admin/permissions/edit/*id"""
 
     discussion_id = discussion.id
-    route = "/admin/permissions/edit/%d" % (discussion_id,)
+    route = "/admin/permissions/discussion/%d" % (discussion_id,)
     resp = test_app.get(route)
     assert resp.status_int == 200
