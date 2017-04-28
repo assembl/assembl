@@ -9,6 +9,7 @@ import Loader from '../components/styleguide/loader';
 import Error from '../components/styleguide/error';
 import Box from '../components/styleguide/box';
 import Container from '../components/styleguide/container';
+import Utilities from '../components/styleguide/utilities';
 
 class Styleguide extends React.Component {
   render() {
@@ -33,6 +34,7 @@ class Styleguide extends React.Component {
             <Error />
             <Box />
             <Container />
+            <Utilities />
           </Col>
         </Row>
       </Grid>
