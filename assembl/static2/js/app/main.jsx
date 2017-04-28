@@ -1,6 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { scrollToPosition, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
+import {
+  scrollToPosition,
+  getDiscussionId,
+  getConnectedUserId,
+  getDocumentScrollTop
+} from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';
 import { fetchPosts } from './actions/postsActions';
@@ -15,7 +20,8 @@ class Main extends React.Component {
     const paramsIdentifier = this.props.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
     const queryIdentifier = this.props.location.query.phase || paramsIdentifier;
     this.state = {
-      identifier: queryIdentifier
+      identifier: queryIdentifier,
+      location: this.props.location.pathname
     };
     this.displayHeader = this.displayHeader.bind(this);
   }
@@ -30,12 +36,14 @@ class Main extends React.Component {
     window.addEventListener('scroll', this.displayHeader);
   }
   componentWillReceiveProps(nextProps) {
+    const location = nextProps.location.pathname;
     const { debateData } = this.props.debate;
     const paramsIdentifier = nextProps.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
     const queryIdentifier = nextProps.location.query.phase || paramsIdentifier;
     this.setState({
       identifier: queryIdentifier,
-      isNavbarHidden: false
+      isNavbarHidden: false,
+      location: location
     });
 
     scrollToPosition(0, 0);
@@ -45,7 +53,7 @@ class Main extends React.Component {
   }
   displayHeader() {
     const isDebateView = this.props.location.pathname.indexOf('debate') > -1;
-    const top = window.pageYOffset || document.documentElement.scrollTop;
+    const top = getDocumentScrollTop();
     if (top > 400 && isDebateView) {
       this.setState({
         isNavbarHidden: true
@@ -66,7 +74,7 @@ class Main extends React.Component {
     });
     return (
       <div className="main">
-        <Navbar isHidden={this.state.isNavbarHidden} />
+        <Navbar isHidden={this.state.isNavbarHidden} location={this.state.location}/>
         <div className="app-content">{children}</div>
         <Footer />
       </div>

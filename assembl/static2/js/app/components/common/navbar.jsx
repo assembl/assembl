@@ -65,7 +65,7 @@ class NavBar extends React.Component {
               <div className="navbar-language right">
                 <LanguageMenu size="xs" />
               </div>
-              <Avatar />
+              <Avatar location={this.props.location} />
             </div>
             <div className={this.state.isMenuHidden ? 'nav-burger-menu hidden' : 'nav-burger-menu shown'}>
               <NavigationMenu />
