@@ -5,9 +5,9 @@ import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { signupAction } from '../../actions/authenticationActions';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
-import Routes from '../../utils/routeMap';
+import { get, getContextual } from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
-import AlertManager from '../../utils/alert';
+import { displayAlert } from '../../utils/utilityManager';
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -60,7 +60,7 @@ class SignupForm extends React.Component {
         break;
       }
       }
-      AlertManager.displayAlert('danger', msg, true);
+      displayAlert('danger', msg, true);
     }
   }
 
@@ -147,7 +147,7 @@ class SignupForm extends React.Component {
               <span>&nbsp;</span>
               <Link
                 to={debateData.slug ?
-                Routes.getContextual('login', { slug: debateData.slug }) : Routes.get('login')}
+                getContextual('login', { slug: debateData.slug }) : get('login')}
               >
                 <Translate value="login.login" />
               </Link>

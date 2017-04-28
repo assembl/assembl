@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Localize } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import Routes from '../../../utils/routeMap';
+import { get } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
 class Step extends React.Component {
@@ -14,7 +14,7 @@ class Step extends React.Component {
     return (
       <div className="illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
-        <Link className="content-box" to={`${Routes.get('debate', slug)}?phase=${identifier}`}>
+        <Link className="content-box" to={`${get('debate', slug)}?phase=${identifier}`}>
           <h1 className="light-title-1">{stepNumber}</h1>
           {title &&
             <h3 className="light-title-3">

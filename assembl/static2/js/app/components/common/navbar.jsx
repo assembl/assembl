@@ -5,7 +5,7 @@ import { Grid, Navbar } from 'react-bootstrap';
 import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
-import Routes from '../../utils/routeMap';
+import { get } from '../../utils/routeMap';
 import { getConnectedUserId } from '../../utils/globalFunctions';
 
 class NavBar extends React.Component {
@@ -49,7 +49,7 @@ class NavBar extends React.Component {
               </div>
             </div>
             <div className="navbar-logo left">
-              <Link to={`${Routes.get('home', slug)}`} activeClassName="logo-active">
+              <Link to={`${get('home', slug)}`} activeClassName="logo-active">
                 <img src={debateData.logo} alt="logo" />
               </Link>
             </div>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
-import Routes from '../../utils/routeMap';
+import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 
 class Objectives extends React.Component {
@@ -43,7 +43,7 @@ class Objectives extends React.Component {
                   </Row>
                 </div>
                 <div className="center inline full-size margin-xxl">
-                  <Link className="button-link button-dark" to={`${Routes.get('debate', slug)}`}>
+                  <Link className="button-link button-dark" to={`${get('debate', slug)}`}>
                     <Translate value="home.accessButton" />
                   </Link>
                 </div>

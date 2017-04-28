@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Loader from '../../common/loader';
@@ -25,10 +26,10 @@ class PostCreator extends React.Component {
 }
 
 PostCreator.propTypes = {
-  data: React.PropTypes.shape({
-    loading: React.PropTypes.bool.isRequired,
-    error: React.PropTypes.object,
-    proposition: React.PropTypes.Array
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.object,
+    proposition: PropTypes.Array
   }).isRequired
 };
 

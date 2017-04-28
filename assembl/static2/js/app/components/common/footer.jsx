@@ -4,7 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Glyphicon from './glyphicon';
-import Routes from '../../utils/routeMap';
+import { get } from '../../utils/routeMap';
 
 class Footer extends React.Component {
   render() {
@@ -29,7 +29,7 @@ class Footer extends React.Component {
               </div>
             }
             <div className="terms">
-              <Link to={`${Routes.get('terms', slug)}`}><Translate value="footer.terms" /></Link>
+              <Link to={`${get('terms', slug)}`}><Translate value="footer.terms" /></Link>
             </div>
             <div className="copyright">© <Link to="http://assembl.bluenove.com/" target="_blank">Assembl</Link> powered by <Link to="http://bluenove.com/" target="_blank">bluenove</Link></div>
           </div>

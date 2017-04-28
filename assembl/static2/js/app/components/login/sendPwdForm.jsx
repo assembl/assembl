@@ -5,7 +5,7 @@ import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { requestPasswordChangeAction } from '../../actions/authenticationActions';
 import inputHandler from '../../utils/inputHandler';
-import AlertManager from '../../utils/alert';
+import { displayAlert } from '../../utils/utilityManager';
 
 class SendPwdForm extends React.Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class SendPwdForm extends React.Component {
       if (auth.passwordChangeRequest.data === 404) {
         msg = I18n.t('login.emailNotFound');
       } else { msg = I18n.t('login.passwordChangeRequestError'); }
-      AlertManager.displayAlert('danger', msg, true);
+      displayAlert('danger', msg, true);
     }
   }
   handleInput(e) {

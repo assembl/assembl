@@ -6,7 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { getAuthorizationToken } from '../utils/globalFunctions';
 import { postChangePassword } from '../services/authenticationService';
 import inputHandler from '../utils/inputHandler';
-import Routes from '../utils/routeMap';
+import { get } from '../utils/routeMap';
 
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class ChangePassword extends React.Component {
     postChangePassword(payload).then(() => {
       const slug = that.props.params.slug;
       if (slug) {
-        const route = `/${Routes.get('home', { slug: slug })}`;
+        const route = `/${get('home', { slug: slug })}`;
         const url = new URL(route, window.location.href);
         window.location = url;
       }

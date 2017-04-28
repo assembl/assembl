@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -89,10 +90,10 @@ class Debate extends React.Component {
 }
 
 Debate.propTypes = {
-  data: React.PropTypes.shape({
-    loading: React.PropTypes.bool.isRequired,
-    error: React.PropTypes.object,
-    thematics: React.PropTypes.Array
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.object,
+    thematics: PropTypes.Array
   }).isRequired
 };
 

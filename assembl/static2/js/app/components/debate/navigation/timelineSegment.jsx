@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import Routes from '../../../utils/routeMap';
+import { get } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
 class TimelineSegment extends React.Component {
@@ -27,7 +27,7 @@ class TimelineSegment extends React.Component {
         {title.entries.map((entry, index2) => {
           return (
             <div className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={index2}>
-              <Link to={isStepCompleted || isCurrentPhase ? `${Routes.get('debate', slug)}?phase=${phaseIdentifier}` : null}>
+              <Link to={isStepCompleted || isCurrentPhase ? `${get('debate', slug)}?phase=${phaseIdentifier}` : null}>
                 {locale === entry['@language'] ? entry.value : ''}
               </Link>
             </div>

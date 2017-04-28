@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import Statistic from './header/statistic';
 import Synthesis from './header/synthesis';
-import Routes from '../../utils/routeMap';
+import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 
 class Header extends React.Component {
@@ -36,7 +36,7 @@ class Header extends React.Component {
                   <Localize value={debateData.endDate} dateFormat="date.format" />
                 }
               </h4>
-              <Link className="button-link button-light margin-xl" to={`${Routes.get('debate', slug)}`}>
+              <Link className="button-link button-light margin-xl" to={`${get('debate', slug)}`}>
                 <Translate value="home.accessButton" />
               </Link>
             </div>

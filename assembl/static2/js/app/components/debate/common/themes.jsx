@@ -5,7 +5,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { isPhaseStarted, getStartDatePhase } from '../../../utils/timeline';
 import NotStartedPhase from './notStartedPhase';
 import ThematicPreview from '../../common/thematicPreview';
-import Routes from '../../../utils/routeMap';
+import { get } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
 class Themes extends React.Component {
@@ -35,7 +35,7 @@ class Themes extends React.Component {
                           imgUrl={thematic.imgUrl}
                           numPosts={thematic.numPosts}
                           numContributors={thematic.numContributors}
-                          link={`${Routes.get('debate', slug)}/${identifier}/theme/${thematic.id}`}
+                          link={`${get('debate', slug)}/${identifier}/theme/${thematic.id}`}
                           title={thematic.title}
                           description={thematic.description}
                         />
