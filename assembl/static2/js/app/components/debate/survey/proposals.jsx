@@ -30,7 +30,6 @@ class Proposals extends React.Component {
                   id={post.node.id}
                   postIndex={index}
                   moreProposals={moreProposals}
-                  redirectToLogin={this.props.redirectToLogin}
                   key={index}
                 />
               );

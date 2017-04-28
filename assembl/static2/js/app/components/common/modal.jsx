@@ -27,7 +27,7 @@ class AssemblModal extends React.Component {
     });
   }
   render() {
-    const { title, body, footer, footerTxt, button } = this.props;
+    const { title, body, footer, footerTxt, button } = this.state;
     return (
       <Modal show={this.state.showModal} onHide={this.close}>
         <Modal.Header closeButton>

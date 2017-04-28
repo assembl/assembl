@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
@@ -10,6 +10,8 @@ import Doughnut from '../../svg/doughnut';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import AlertManager from '../../../utils/alert';
+import ModalManager from '../../../utils/modal';
+import Routes from '../../../utils/routeMap';
 
 class Post extends React.Component {
   constructor(props) {
@@ -24,7 +26,6 @@ class Post extends React.Component {
   }
   handleSentiment(event, type) {
     const isUserConnected = getConnectedUserId() !== null;
-    const { redirectToLogin } = this.props;
     if (isUserConnected) {
       const { debateData } = this.props.debate;
       const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
@@ -38,8 +39,15 @@ class Post extends React.Component {
         }
       }
     } else {
-      redirectToLogin();
+      this.redirectToLogin();
     }
+  }
+  redirectToLogin() {
+    const next = Routes.getCurrentView();
+    const slug = { slug: this.props.debate.debateData.slug };
+    const body = I18n.t('debate.survey.modalBody');
+    const button = { link: `${Routes.getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
+    ModalManager.displayModal(null, body, true, null, button, true);
   }
   addSentiment(target, type) {
     const { id } = this.props;

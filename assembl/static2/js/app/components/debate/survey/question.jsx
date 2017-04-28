@@ -4,8 +4,11 @@ import gql from 'graphql-tag';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import AlertManager from '../../../utils/alert';
+import ModalManager from '../../../utils/modal';
+import Routes from '../../../utils/routeMap';
 
 class Question extends React.Component {
   constructor(props) {
@@ -16,6 +19,7 @@ class Question extends React.Component {
     this.updateDimensions = this.updateDimensions.bind(this);
     this.getProposalText = this.getProposalText.bind(this);
     this.createPost = this.createPost.bind(this);
+    this.redirectToLogin = this.redirectToLogin.bind(this);
   }
   componentDidMount() {
     const maxChars = this.txtarea.props.maxLength;
@@ -80,6 +84,16 @@ class Question extends React.Component {
       AlertManager.displayAlert('danger', `${error}`);
     });
   }
+  redirectToLogin() {
+    const isUserConnected = getConnectedUserId();
+    if(!isUserConnected) {
+      const next = Routes.getCurrentView();
+      const slug = { slug: this.props.debate.debateData.slug };
+      const body = I18n.t('debate.survey.modalBody');
+      const button = { link: `${Routes.getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
+      ModalManager.displayModal(null, body, true, null, button, true);
+    }
+  }
   render() {
     const { index, title } = this.props;
     const { debateData } = this.props.debate;
@@ -107,8 +121,8 @@ class Question extends React.Component {
                 <FormControl
                   className="txt-area"
                   componentClass="textarea"
+                  onClick={this.redirectToLogin}
                   placeholder={I18n.t('debate.survey.txtAreaPh')}
-                  onClick={this.props.redirectToLogin}
                   onKeyUp={(e) => {
                     this.getRemainingChars(e);
                     this.displaySubmitButton(e);

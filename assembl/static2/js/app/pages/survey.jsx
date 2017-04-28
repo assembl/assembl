@@ -5,7 +5,6 @@ import gql from 'graphql-tag';
 import { browserHistory } from 'react-router';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
-import Modal from '../components/common/modal';
 import Loader from '../components/common/loader';
 import Video from '../components/debate/survey/video';
 import Header from '../components/debate/survey/header';
@@ -25,7 +24,6 @@ class Survey extends React.Component {
     };
     this.showMoreProposals = this.showMoreProposals.bind(this);
     this.getIfProposals = this.getIfProposals.bind(this);
-    this.redirectToLogin = this.redirectToLogin.bind(this);
   }
   componentWillReceiveProps() {
     this.unlisten = browserHistory.listen(() => {
@@ -49,10 +47,6 @@ class Survey extends React.Component {
       moreProposals: true
     });
   }
-  redirectToLogin() {
-    const connectedUserId = getConnectedUserId();
-    this.setState({ showModal: !connectedUserId });
-  }
   render() {
     const { loading, theme } = this.props.data;
     const { debateData } = this.props.debate;
@@ -65,12 +59,6 @@ class Survey extends React.Component {
         {theme &&
           <div className="relative">
             <Header title={theme.title} imgUrl={theme.imgUrl} />
-            <Modal
-              body={I18n.t('debate.survey.modalBody')}
-              footer
-              button={{ link: `${Routes.getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true }}
-              showModal={this.state.showModal}
-            />
             {theme.video &&
               <Video
                 title={theme.video.title}
@@ -82,7 +70,6 @@ class Survey extends React.Component {
               {theme.questions && theme.questions.map((question, index) => {
                 return (
                   <Question
-                    redirectToLogin={this.redirectToLogin}
                     title={question.title}
                     index={index + 1}
                     key={index}
@@ -112,7 +99,6 @@ class Survey extends React.Component {
                             posts={question.posts.edges}
                             moreProposals={this.state.moreProposals}
                             questionIndex={index + 1}
-                            redirectToLogin={this.redirectToLogin}
                             key={index}
                           />
                         );
