@@ -21,3 +21,11 @@
     text-align: center;
   }
 }
+
+.tooltip.top .tooltip-inner {
+    background-color: $grey4;
+}
+
+.tooltip.top .tooltip-arrow {
+      border-top-color: $grey4;
+}

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Translate, I18n } from 'react-redux-i18n';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
@@ -79,6 +80,16 @@ class Post extends React.Component {
   }
   render() {
     const { postIndex, moreProposals, post, id } = this.props;
+    const likeTooltip = (
+      <Tooltip id="likeTooltip">
+        <Translate value="debate.like" />
+      </Tooltip>
+    );
+    const disagreeTooltip = (
+      <Tooltip id="disagreeTooltip">
+        <Translate value="debate.disagree" />
+      </Tooltip>
+    );
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
@@ -88,18 +99,22 @@ class Post extends React.Component {
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />
             </div>
-            <div
-              className={this.state.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
-              onClick={(event) => { this.handleSentiment(event, 'LIKE'); }}
-            >
-              <Like size={25} />
-            </div>
-            <div
-              className={this.state.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
-              onClick={(event) => { this.handleSentiment(event, 'DISAGREE'); }}
-            >
-              <Disagree size={25} />
-            </div>
+            <OverlayTrigger placement="top" overlay={likeTooltip}>
+              <div
+                className={this.state.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
+                onClick={(event) => { this.handleSentiment(event, 'LIKE'); }}
+              >
+                <Like size={25} />
+              </div>
+            </OverlayTrigger>
+            <OverlayTrigger placement="top" overlay={disagreeTooltip}>
+              <div
+                className={this.state.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
+                onClick={(event) => { this.handleSentiment(event, 'DISAGREE'); }}
+              >
+                <Disagree size={25} />
+              </div>
+            </OverlayTrigger>
           </div>
         </div>
         <div className="statistic">

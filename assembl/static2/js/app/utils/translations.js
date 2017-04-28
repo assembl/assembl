@@ -142,6 +142,8 @@ const Translations = {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
     },
     debate: {
+      like: 'J\'aime',
+      disagree: 'Pas d\'accord',
       survey: {
         themesTitle: 'Choisissez une thématique !',
         txtAreaPh: 'Ecrivez votre proposition',
@@ -158,7 +160,7 @@ const Translations = {
         remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
         postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
         endPhase: 'La phase %{closedPhaseName} est terminée.',
-        goTo: 'Rendez-vous sur la phase %{currentPhaseName}.'
+        goTo: 'Rendez-vous sur la phase %{currentPhaseName}.',
       },
       themes: 'Thèmes',
       notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
@@ -323,6 +325,8 @@ const Translations = {
       title: 'synthesis'
     },
     debate: {
+      like: 'Like',
+      disagree: 'Disagree',
       survey: {
         themesTitle: 'Choose a theme!',
         txtAreaPh: 'Write your proposal',
