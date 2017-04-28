@@ -26,7 +26,7 @@ export const displayAlert = (style, msg, topPosition = false, time = 6000) => {
     topPosition: topPosition
   });
   setTimeout(() => {
-    this.alertComponent.setState({
+    alertManager.component.setState({
       showAlert: false
     });
   }, time);
