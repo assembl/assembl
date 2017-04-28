@@ -4,7 +4,7 @@ import { Grid, Row } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { getPhaseName, getCurrentPhaseIdentifier, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
-import Routes from '../../../utils/routeMap';
+import { get } from '../../../utils/routeMap';
 
 class Header extends React.Component {
   render() {
@@ -21,7 +21,7 @@ class Header extends React.Component {
         <Grid fluid className="max-container">
           <div className="header-content">
             <h1 className="light-title-1">{isPhaseCompleted ? <Translate value="debate.survey.endPhase" closedPhaseName={surveyPhaseName} /> : title}</h1>
-            <Link to={`${Routes.get('debate', slug)}`}>{isPhaseCompleted ? <Translate value="debate.survey.goTo" currentPhaseName={currentPhaseName} /> : ''}</Link>
+            <Link to={`${get('debate', slug)}`}>{isPhaseCompleted ? <Translate value="debate.survey.goTo" currentPhaseName={currentPhaseName} /> : ''}</Link>
           </div>
         </Grid>
         <Grid fluid>

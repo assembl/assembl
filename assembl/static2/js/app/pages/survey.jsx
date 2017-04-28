@@ -12,7 +12,7 @@ import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
-import Routes from '../utils/routeMap';
+import { getCurrentView } from '../utils/routeMap';
 import { getConnectedUserId } from '../utils/globalFunctions';
 
 class Survey extends React.Component {
@@ -52,7 +52,7 @@ class Survey extends React.Component {
     const { debateData } = this.props.debate;
     const slug = { slug: debateData.slug };
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
-    const next = Routes.getCurrentView();
+    const next = getCurrentView();
     return (
       <div className="survey">
         {loading && <Loader color="black" />}

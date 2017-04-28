@@ -11,7 +11,7 @@ import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import AlertManager from '../../../utils/alert';
 import ModalManager from '../../../utils/modal';
-import Routes from '../../../utils/routeMap';
+import { getCurrentView, getContextual } from '../../../utils/routeMap';
 
 class Post extends React.Component {
   constructor(props) {
@@ -43,10 +43,10 @@ class Post extends React.Component {
     }
   }
   redirectToLogin() {
-    const next = Routes.getCurrentView();
+    const next = getCurrentView();
     const slug = { slug: this.props.debate.debateData.slug };
     const body = I18n.t('debate.survey.modalBody');
-    const button = { link: `${Routes.getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
+    const button = { link: `${getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
     ModalManager.displayModal(null, body, true, null, button, true);
   }
   addSentiment(target, type) {

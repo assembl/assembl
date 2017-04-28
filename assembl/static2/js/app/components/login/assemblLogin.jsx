@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
-import Routes from '../../utils/routeMap';
+import { get, getFullPath, getContextual } from '../../utils/routeMap';
 
 class AsLogin extends React.Component {
   render() {
     const { slug } = this.props;
-    const next = this.props.next ? this.props.next : Routes.get('home', { slug: slug });
+    const next = this.props.next ? this.props.next : get('home', { slug: slug });
     const errorMessage = ('error_message' in this.props && this.props.error_message) ? this.props.error_message : null;
     return (
       <div>
-        <form className="login" method="POST" action={Routes.getFullPath('ctxOldLogin', { slug: slug })}>
+        <form className="login" method="POST" action={getFullPath('ctxOldLogin', { slug: slug })}>
           { next ?
             <input type="hidden" name="next" value={`${next}`} />
             : null }
@@ -32,7 +32,7 @@ class AsLogin extends React.Component {
               <Translate value="login.login" />
             </Button>
           </FormGroup>
-          <Link to={slug ? Routes.getContextual('requestPasswordChange', { slug: slug }) : Routes.get('requestPasswordChange')}>
+          <Link to={slug ? getContextual('requestPasswordChange', { slug: slug }) : get('requestPasswordChange')}>
             <Translate value="login.forgotPwd" />
           </Link>
         </form>
@@ -42,7 +42,7 @@ class AsLogin extends React.Component {
           </h4>
           <Link
             className="button-link button-dark margin-s"
-            to={slug ? Routes.getContextual('signup', { slug: slug }) : Routes.get('signup')}
+            to={slug ? getContextual('signup', { slug: slug }) : get('signup')}
           >
             <Translate value="login.signUp" />
           </Link>

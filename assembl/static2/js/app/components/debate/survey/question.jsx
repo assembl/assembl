@@ -8,7 +8,7 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import AlertManager from '../../../utils/alert';
 import ModalManager from '../../../utils/modal';
-import Routes from '../../../utils/routeMap';
+import { getCurrentView, getContextual } from '../../../utils/routeMap';
 
 class Question extends React.Component {
   constructor(props) {
@@ -87,10 +87,10 @@ class Question extends React.Component {
   redirectToLogin() {
     const isUserConnected = getConnectedUserId();
     if(!isUserConnected) {
-      const next = Routes.getCurrentView();
+      const next = getCurrentView();
       const slug = { slug: this.props.debate.debateData.slug };
       const body = I18n.t('debate.survey.modalBody');
-      const button = { link: `${Routes.getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
+      const button = { link: `${getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
       ModalManager.displayModal(null, body, true, null, button, true);
     }
   }

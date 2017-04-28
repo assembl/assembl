@@ -3,7 +3,7 @@ import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { isPhaseStarted } from '../../../utils/timeline';
-import Routes from '../../../utils/routeMap';
+import { get } from '../../../utils/routeMap';
 
 class Thumbnails extends React.Component {
   render() {
@@ -25,7 +25,7 @@ class Thumbnails extends React.Component {
               {thematics.map((thematic, index) => {
                 return (
                   <div className="thumb-img-container" key={index}>
-                    <Link to={`${Routes.get('debate', slug)}/${identifier}/theme/${thematic.id}`}>
+                    <Link to={`${get('debate', slug)}/${identifier}/theme/${thematic.id}`}>
                       <div className={themeId === thematic.id ? 'thumb-img active' : 'thumb-img'} style={{ backgroundImage: `url(${thematic.imgUrl})` }}>&nbsp;</div>
                       <div className="color-box">&nbsp;</div>
                       <div className="thumb-title">
