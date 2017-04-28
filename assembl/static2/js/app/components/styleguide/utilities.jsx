@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { displayModal, displayAlert } from '../../utils/utilityManager';
 
-class Utilities extends React.Component {
+export default class Utilities extends React.Component {
   constructor(props) {
     super(props);
     this.showAlert = this.showAlert.bind(this);
@@ -50,5 +50,3 @@ class Utilities extends React.Component {
     );
   }
 }
-
-export default Utilities;

@@ -11,12 +11,6 @@ class ProfileIcon extends React.Component {
     super(props);
     this.setCurrentView = this.setCurrentView.bind(this);
   }
-  setCurrentView() {
-    const { location } = this.props;
-    this.setState({
-      next: location
-    });
-  }
   componentWillMount() {
     this.setCurrentView();
   }
@@ -25,7 +19,12 @@ class ProfileIcon extends React.Component {
       this.setState({ next: nextProps.location });
     }
   }
-
+  setCurrentView() {
+    const { location } = this.props;
+    this.setState({
+      next: location
+    });
+  }
   render() {
     const slug = { slug: getDiscussionSlug() };
     const connectedUserId = getConnectedUserId();
