@@ -4,12 +4,11 @@ import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Routes from '../../utils/routeMap';
-import { getConnectedUserId, getDiscussionSlug } from '../../utils/globalFunctions';
+import { getDiscussionSlug } from '../../utils/globalFunctions';
 
 class Objectives extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const connectedUserId = getConnectedUserId();
     const slug = { slug: getDiscussionSlug() };
     return (
       <section className="objectives-section">
@@ -44,7 +43,7 @@ class Objectives extends React.Component {
                   </Row>
                 </div>
                 <div className="center inline full-size margin-xxl">
-                  <Link className="button-link button-dark" to={connectedUserId ? `${Routes.get('debate', slug)}` : `${Routes.getContextual('login', slug)}?next=${Routes.get('home', slug)}`}>
+                  <Link className="button-link button-dark" to={`${Routes.get('debate', slug)}`}>
                     <Translate value="home.accessButton" />
                   </Link>
                 </div>

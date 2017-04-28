@@ -6,13 +6,12 @@ import { Grid, Row } from 'react-bootstrap';
 import Statistic from './header/statistic';
 import Synthesis from './header/synthesis';
 import Routes from '../../utils/routeMap';
-import { getConnectedUserId, getDiscussionSlug } from '../../utils/globalFunctions';
+import { getDiscussionSlug } from '../../utils/globalFunctions';
 
 class Header extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { synthesis } = this.props.synthesis;
-    const connectedUserId = getConnectedUserId();
     const slug = { slug: getDiscussionSlug() };
     return (
       <section className="header-section">
@@ -37,7 +36,7 @@ class Header extends React.Component {
                   <Localize value={debateData.endDate} dateFormat="date.format" />
                 }
               </h4>
-              <Link className="button-link button-light margin-xl" to={connectedUserId ? `${Routes.get('debate', slug)}` : `${Routes.getContextual('login', slug)}?next=${Routes.get('home', slug)}`}>
+              <Link className="button-link button-light margin-xl" to={`${Routes.get('debate', slug)}`}>
                 <Translate value="home.accessButton" />
               </Link>
             </div>
