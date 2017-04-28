@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -160,10 +161,10 @@ const ThemeQuery = gql`
 `;
 
 Survey.propTypes = {
-  data: React.PropTypes.shape({
-    loading: React.PropTypes.bool.isRequired,
-    error: React.PropTypes.object,
-    theme: React.PropTypes.Array
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.object,
+    theme: PropTypes.Array
   }).isRequired
 };
 

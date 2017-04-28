@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -130,8 +131,8 @@ class Post extends React.Component {
 }
 
 Post.propTypes = {
-  addSentiment: React.PropTypes.func.isRequired,
-  deleteSentiment: React.PropTypes.func.isRequired
+  addSentiment: PropTypes.func.isRequired,
+  deleteSentiment: PropTypes.func.isRequired
 };
 
 const addSentiment = gql`

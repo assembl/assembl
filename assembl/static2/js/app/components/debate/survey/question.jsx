@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { connect } from 'react-redux';
@@ -150,7 +151,7 @@ class Question extends React.Component {
 }
 
 Question.propTypes = {
-  mutate: React.PropTypes.func.isRequired
+  mutate: PropTypes.func.isRequired
 };
 
 const createPostMutation = gql`
