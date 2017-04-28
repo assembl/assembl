@@ -7,7 +7,7 @@ import { signupAction } from '../../actions/authenticationActions';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { get, getContextual } from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
-import AlertManager from '../../utils/alert';
+import { displayAlert } from '../../utils/utilityManager';
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -60,7 +60,7 @@ class SignupForm extends React.Component {
         break;
       }
       }
-      AlertManager.displayAlert('danger', msg, true);
+      displayAlert('danger', msg, true);
     }
   }
 

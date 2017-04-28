@@ -10,8 +10,7 @@ import PostCreator from './postCreator';
 import Doughnut from '../../svg/doughnut';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
-import AlertManager from '../../../utils/alert';
-import ModalManager from '../../../utils/modal';
+import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
 
 class Post extends React.Component {
@@ -48,7 +47,7 @@ class Post extends React.Component {
     const slug = { slug: this.props.debate.debateData.slug };
     const body = I18n.t('debate.survey.modalBody');
     const button = { link: `${getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
-    ModalManager.displayModal(null, body, true, null, button, true);
+    displayModal(null, body, true, null, button, true);
   }
   addSentiment(target, type) {
     const { id } = this.props;
@@ -61,7 +60,7 @@ class Post extends React.Component {
         mySentiment: sentiments.data.addSentiment.post.mySentiment
       });
     }).catch((error) => {
-      AlertManager.displayAlert('danger', `${error}`);
+      displayAlert('danger', `${error}`);
     });
   }
   deleteSentiment(target) {
@@ -75,7 +74,7 @@ class Post extends React.Component {
         mySentiment: sentiments.data.deleteSentiment.post.mySentiment
       });
     }).catch((error) => {
-      AlertManager.displayAlert('danger', `${error}`);
+      displayAlert('danger', `${error}`);
     });
   }
   render() {

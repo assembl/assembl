@@ -7,8 +7,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
-import AlertManager from '../../../utils/alert';
-import ModalManager from '../../../utils/modal';
+import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
 
 class Question extends React.Component {
@@ -75,14 +74,14 @@ class Question extends React.Component {
     const body = this.state.postBody;
     this.props.mutate({ variables: { ideaId: questionId, body: body } })
     .then(() => {
-      AlertManager.displayAlert('success', I18n.t('debate.survey.postSuccess'));
+      displayAlert('success', I18n.t('debate.survey.postSuccess'));
       this.setState({
         postBody: '',
         showSubmitButton: false,
         remainingChars: maxChars
       });
     }).catch((error) => {
-      AlertManager.displayAlert('danger', `${error}`);
+      displayAlert('danger', `${error}`);
     });
   }
   redirectToLogin() {
@@ -92,7 +91,7 @@ class Question extends React.Component {
       const slug = { slug: this.props.debate.debateData.slug };
       const body = I18n.t('debate.survey.modalBody');
       const button = { link: `${getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
-      ModalManager.displayModal(null, body, true, null, button, true);
+      displayModal(null, body, true, null, button, true);
     }
   }
   render() {
