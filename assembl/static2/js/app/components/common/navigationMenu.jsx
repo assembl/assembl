@@ -9,7 +9,7 @@ class NavigationMenu extends React.Component {
     const { debateData } = this.props.debate;
     return (
       <div>
-        <Link className="navbar-menu-item" to={get('debate', { slug: debateData.slug })}>
+        <Link className="navbar-menu-item" activeClassName="active" to={get('debate', { slug: debateData.slug })}>
           <Translate value="navbar.debate" />
         </Link>
         <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
