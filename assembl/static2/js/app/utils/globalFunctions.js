@@ -81,7 +81,7 @@ export const capitalize = (s) => {
 };
 
 
-const getDocumentScrollTop = () => {
+export const getDocumentScrollTop = () => {
   return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 };
 
