@@ -26,7 +26,7 @@ class Survey extends React.Component {
     this.showMoreProposals = this.showMoreProposals.bind(this);
     this.getIfProposals = this.getIfProposals.bind(this);
   }
-  componentWillReceiveProps() {
+  componentWillMount() {
     this.unlisten = browserHistory.listen(() => {
       this.setState({ moreProposals: false });
     });
