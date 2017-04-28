@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-28 14:52+0200\n"
-"PO-Revision-Date: 2017-04-28 15:00+0200\n"
-"Last-Translator: Marc-Antoine Parent <maparent@acm.org>\n"
+"POT-Creation-Date: 2017-04-28 15:30+0200\n"
+"PO-Revision-Date: 2017-04-28 15:40+0200\n"
+"Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: fr\n"
 "Language-Team: French (http://www.transifex.com/assembl/assembl/language/fr/)\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -4022,11 +4022,11 @@ msgstr "J’aime"
 
 #: assembl/templates/views/message.tmpl:204 assembl/templates/views/message.tmpl:271
 msgid "Disagree"
-msgstr "En désaccord"
+msgstr "Pas convaincu"
 
 #: assembl/templates/views/message.tmpl:205 assembl/templates/views/message.tmpl:286
 msgid "Did not get it"
-msgstr "Je ne comprends pas"
+msgstr "Pas tout compris"
 
 #: assembl/templates/views/message.tmpl:206 assembl/templates/views/message.tmpl:301
 msgid "More info please?"
