@@ -13,7 +13,7 @@ class Circle extends React.Component {
     const greenOffset = circumference * green;
     return (
       <svg
-        className="gauge"
+        className="doughnut"
         height="10em"
         width="10em"
       >
