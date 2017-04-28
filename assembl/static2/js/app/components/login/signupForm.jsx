@@ -137,7 +137,7 @@ class SignupForm extends React.Component {
                 type="submit"
                 name="register"
                 value={I18n.t('login.signUp')}
-                className="button-submit button-dark"
+                className="button-submit button-dark margin-m"
               >
                 <Translate value="login.signUp" />
               </Button>

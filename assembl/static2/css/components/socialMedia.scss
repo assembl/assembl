@@ -8,7 +8,15 @@
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis
+  text-overflow: ellipsis;
+
+  i {
+    &:before {
+      font-size: 18px;
+      line-height: 32px;
+      vertical-align: text-bottom;
+    }
+  }
 }
 .btn-social>:first-child {
   position: absolute;

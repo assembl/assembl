@@ -13,7 +13,7 @@ class SignUpConfirm extends React.Component {
               <Translate value="login.accountCreatedMsg" />
             </FormGroup>
             <FormGroup>
-              <Button type="submit" name="resend" value={I18n.t('login.resend')} className="button-submit button-dark">
+              <Button type="submit" name="resend" value={I18n.t('login.resend')} className="margin-m button-submit button-dark">
                 <Translate value="login.resend" />
               </Button>
             </FormGroup>
