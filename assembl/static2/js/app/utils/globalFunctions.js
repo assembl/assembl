@@ -80,28 +80,35 @@ export const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
+
+const getDocumentScrollTop = () => {
+  return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+};
+
 export const getDomElementOffset = (el) => {
   const rect = el.getBoundingClientRect();
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop = getDocumentScrollTop();
+  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 };
 
 let scrollInterval;
 
-export const scrollToElement = (element, to, duration) => {
-  if (element.scrollTop === to) return;
+export const scrollToPosition = (to, duration) => {
+  const startPosition = getDocumentScrollTop()
+  if (startPosition === to) return;
   clearInterval(scrollInterval);
-  const diff = to - element.scrollTop;
+  const diff = to - startPosition;
   const scrollStep = Math.PI / (duration / 10);
   let count = 0;
   let currPos = 0;
-  const start = element.scrollTop;
+  let start = startPosition;
   scrollInterval = setInterval(() => {
-    if ((Math.round(element.scrollTop / 10) * 10) !== (Math.round(to / 10) * 10)) {
+    if ((Math.round(getDocumentScrollTop() / 10) * 10) !== (Math.round(to / 10) * 10)) {
       count += 1;
       currPos = start + (diff * (0.5 - (0.5 * Math.cos(count * scrollStep))));
-      element.scrollTop = currPos; //eslint-disable-line
+      document.body.scrollTop = currPos; //Chrome/FF
+      document.documentElement.scrollTop = currPos; //Firefox
     } else {
       clearInterval(scrollInterval);
     }

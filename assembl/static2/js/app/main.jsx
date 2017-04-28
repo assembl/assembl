@@ -1,6 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { scrollToElement, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
+import { scrollToPosition, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';
 import { fetchPosts } from './actions/postsActions';
@@ -37,7 +38,8 @@ class Main extends React.Component {
       identifier: queryIdentifier,
       isNavbarHidden: false
     });
-    scrollToElement(document.body, 0, 0);
+
+    scrollToPosition(0, 0);
   }
   componentWillUnmount() {
     window.removeEventListener('scroll', this.displayHeader);

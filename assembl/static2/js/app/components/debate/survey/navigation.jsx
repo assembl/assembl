@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { getDomElementOffset, scrollToElement, calculatePercentage } from '../../../utils/globalFunctions';
+import { getDomElementOffset, scrollToPosition, calculatePercentage } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 class Navigation extends React.Component {
@@ -107,13 +107,13 @@ class Navigation extends React.Component {
     const navbarHeight = document.getElementById('timeline').clientHeight;
     const target = document.getElementById(`q${this.state.currentQuestionNumber + 1}`);
     const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
-    scrollToElement(document.body, targetOffset, 600);
+    scrollToPosition(targetOffset, 600);
   }
   scrollToPreviousQuestion() {
     const navbarHeight = document.getElementById('timeline').clientHeight;
     const target = document.getElementById(`q${this.state.currentQuestionNumber - 1}`);
     const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
-    scrollToElement(document.body, targetOffset, 600);
+    scrollToPosition(targetOffset, 600);
   }
   render() {
     const barWidth = calculatePercentage(this.state.currentQuestionNumber, this.state.questionsLength);
