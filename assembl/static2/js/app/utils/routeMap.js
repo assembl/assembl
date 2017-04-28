@@ -22,6 +22,7 @@ const routes = {
   ctxOldLogout: 'debate/${slug}/logout',
   ctxOldLogin: 'debate/${slug}/login',
   home: '${slug}/home',
+  homeBare: '${slug}',
   profile: '${slug}/profile/${userId}',
   ideas: '${slug}/ideas',
   synthesis: '${slug}/synthesis',
