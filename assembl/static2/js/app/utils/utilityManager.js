@@ -5,7 +5,7 @@ class UtilityManager {
   setComponent(comp) {
     this.component = comp;
   }
-};
+}
 
 export const modalManager = new UtilityManager();
 

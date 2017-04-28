@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { scrollToPosition, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';

@@ -95,20 +95,20 @@ export const getDomElementOffset = (el) => {
 let scrollInterval;
 
 export const scrollToPosition = (to, duration) => {
-  const startPosition = getDocumentScrollTop()
+  const startPosition = getDocumentScrollTop();
   if (startPosition === to) return;
   clearInterval(scrollInterval);
   const diff = to - startPosition;
   const scrollStep = Math.PI / (duration / 10);
   let count = 0;
   let currPos = 0;
-  let start = startPosition;
+  const start = startPosition;
   scrollInterval = setInterval(() => {
     if ((Math.round(getDocumentScrollTop() / 10) * 10) !== (Math.round(to / 10) * 10)) {
       count += 1;
       currPos = start + (diff * (0.5 - (0.5 * Math.cos(count * scrollStep))));
-      document.body.scrollTop = currPos; //Chrome/FF
-      document.documentElement.scrollTop = currPos; //Firefox
+      document.body.scrollTop = currPos; // Chrome/FF
+      document.documentElement.scrollTop = currPos; // Firefox
     } else {
       clearInterval(scrollInterval);
     }

@@ -86,7 +86,7 @@ class Question extends React.Component {
   }
   redirectToLogin() {
     const isUserConnected = getConnectedUserId();
-    if(!isUserConnected) {
+    if (!isUserConnected) {
       const next = getCurrentView();
       const slug = { slug: this.props.debate.debateData.slug };
       const body = I18n.t('debate.survey.modalBody');

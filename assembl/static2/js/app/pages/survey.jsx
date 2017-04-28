@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import { browserHistory } from 'react-router';
-import { I18n, Translate } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
 import Loader from '../components/common/loader';
 import Video from '../components/debate/survey/video';
@@ -13,8 +13,6 @@ import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
-import { getCurrentView } from '../utils/routeMap';
-import { getConnectedUserId } from '../utils/globalFunctions';
 
 class Survey extends React.Component {
   constructor(props) {
@@ -51,9 +49,7 @@ class Survey extends React.Component {
   render() {
     const { loading, theme } = this.props.data;
     const { debateData } = this.props.debate;
-    const slug = { slug: debateData.slug };
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
-    const next = getCurrentView();
     return (
       <div className="survey">
         {loading && <Loader color="black" />}
