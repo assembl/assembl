@@ -4178,7 +4178,7 @@ msgstr "Je ne comprends pas"
 #: assembl/templates/views/message.tmpl:206
 #: assembl/templates/views/message.tmpl:301
 msgid "More info please?"
-msgstr "Complément d'information svp?"
+msgstr "SVP + d'infos ?"
 
 #: assembl/templates/views/message.tmpl:218
 msgid "Reply"
