@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { displayModal, displayAlert } from '../../utils/utilityManager';
 
-export default class Utilities extends React.Component {
+class Utilities extends React.Component {
   constructor(props) {
     super(props);
     this.showAlert = this.showAlert.bind(this);
@@ -16,7 +16,7 @@ export default class Utilities extends React.Component {
     const body = 'Le contenu de la modale est en paramètre aussi';
     const footer = true;
     const footerTxt = 'Je peux mettre un footer';
-    const button = { internalLink: true, label: 'Link', link:'/styleguide', true };
+    const button = { internalLink: true, label: 'Link', link:'/styleguide' };
     displayModal(title, body, footer, footerTxt, button, true);
   }
   render() {
@@ -50,3 +50,5 @@ export default class Utilities extends React.Component {
     );
   }
 }
+
+export default Utilities;
