@@ -57,6 +57,7 @@ def test_route_discussion_login(discussion, test_app):
     route = discussion_route(slug, "login")
     resp = test_app.get(route)
     assert resp.status_int == 200
+    test_app.cookiejar.clear()
 
 
 def test_route_discussion_user_profile(discussion, test_app):
@@ -185,6 +186,7 @@ def test_route_discussion_show_allproviders(discussion, test_app):
     route = discussion_route(slug, "login_showallproviders")
     resp = test_app.get(route)
     assert resp.status_int == 200
+    test_app.cookiejar.clear()
 
 
 def test_route_discussion_register(discussion, test_app):
@@ -195,6 +197,7 @@ def test_route_discussion_register(discussion, test_app):
     route = discussion_route(slug, "register", backbone=True)
     resp = test_app.get(route)
     assert resp.status_int == 200
+    test_app.cookiejar.clear()
 
 
 def test_route_discussion_post_legacy(discussion, root_post_1, test_app):
