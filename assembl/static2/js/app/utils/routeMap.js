@@ -30,7 +30,6 @@ const routes = {
   terms: '${slug}/terms',
   phase: '${phase}/theme/${themeId}'
 };
-
 const basePath = () => {
   return `${window.location.protocol}//${window.location.host}`;
 };
@@ -62,12 +61,10 @@ export const get = (name, args) => {
   const newArgs = args || {};
   const pre = ('preSlash' in newArgs) ? newArgs.preSlash : true;
   const isCtx = 'ctx' in newArgs ? newArgs.ctx : false;
-
   const newName = isCtx ? convertToContextualName(name) : name;
   if (!(newName in routes)) {
     throw Error(`${newName} is not a valid path!`);
   }
-
   let literal = routes[newName];
   literal = maybePrependSlash(pre, literal);
   const a = parse(literal, newArgs);
