@@ -97,7 +97,7 @@ const Translations = {
       sendPwdConfirm: 'Changement de mot de passe demandé',
       sendPwdMsg: 'Nous vous avons envoyé un email avec un lien temporaire. Cliquez sur ce lien pour vous connecter et changer votre mot de passe.',
       resend: 'Renvoyer l\'email',
-      accountCreatedMsg: 'Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si vous ne le recevez pas, veuillez vérifier qu\'il n\'est pas dans votre courrier indésirable ou cliquez sur le bouton "Renvoer l\'email" ci-dessous.',
+      accountCreatedMsg: 'Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si vous ne le recevez pas, veuillez vérifier qu\'il n\'est pas dans votre courrier indésirable ou cliquez sur le bouton "Renvoyer l\'email" ci-dessous.',
       changePassword: 'Changez votre mot de passe',
       incorrectPassword: 'Les mots de passe que vous avez écrits ne correspondent pas',
       somethingWentWrong: 'Nous sommes desolés ! Quelque chose s\'est mal passé. Veuillez ré-essayer',
