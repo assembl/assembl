@@ -53,6 +53,7 @@ export default (
         <Route path={Routes.routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
         <Route component={Main}>
           <Route path={Routes.routeForRouter('home')} component={Home} />
+          <Route path={Routes.routeForRouter('homeBare')} component={Home} />
           <Route path={Routes.routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
           <Route path={Routes.routeForRouter('synthesis')} component={Synthesis} />
           <Route path={Routes.routeForRouter('community')} component={Community} />
