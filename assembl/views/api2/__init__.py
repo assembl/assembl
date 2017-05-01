@@ -365,7 +365,7 @@ def class_add(request):
     try:
         instances = ctx.create_object(typename, None, user_id, **args)
     except ObjectNotUniqueError as e:
-        raise JSONError(409, str(e))
+        raise JSONError(str(e), code=409)
     except Exception as e:
         raise HTTPBadRequest(e)
     if instances:

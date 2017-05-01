@@ -450,7 +450,7 @@ def smtp_error_view(exc, request):
     message = localizer.translate(_(
             "Your email was refused by the SMTP server.  You probably entered an email that does not exist."))
     if path_info.startswith('/data/') or path_info.startswith('/api/'):
-        return JSONError(400, message)
+        return JSONError(message)
     referrer = request.environ['HTTP_REFERER']
     request.session.flash(message)
     referrer = referrer.split('?')[0]
