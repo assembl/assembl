@@ -34,7 +34,14 @@ export const xmlHttpRequest = (obj) => {
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         let resp = xhr.response;
-        resp = JSON.parse(resp);  // Fail hard, fail fast
+        try {
+          resp = JSON.parse(resp);
+        }
+        catch (e) {
+          // TODO: Remove console warn AFTER a successful contract is agreed upon
+          console.warn("A successful response did not return JSON. Passing status only.");
+          resp = xhr.status;
+        }
         resolve(resp);
       } else {
         let resp;
