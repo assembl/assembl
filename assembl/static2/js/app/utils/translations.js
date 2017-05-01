@@ -107,7 +107,8 @@ const Translations = {
       invalidEmail: 'L’e-mail que vous avez renseigné est invalide',
       existingUsername: 'Le nom d’utilisateur que vous avez renseigné existe déjà',
       existingEmail: 'L’e-mail que vous avez renseigné existe déjà',
-      emailNotFound: 'L’e-mail que vous avez renseigné n’a pas été trouvé. Veuillez réessayer.'
+      emailNotFound: 'L’e-mail que vous avez renseigné n’a pas été trouvé. Veuillez réessayer.',
+      incorrectPasswordLogin: 'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.'
 
     },
     changePassword: {
@@ -291,7 +292,8 @@ const Translations = {
       invalidEmail: 'The email you have entered is invalid',
       existingUsername: 'The username you have entered already exists',
       existingEmail: 'The email you have entered already exists',
-      emailNotFound: 'The email you have entered was not found. Please try again.'
+      emailNotFound: 'The email you have entered was not found. Please try again.',
+      incorrectPasswordLogin: 'The password you have entered does not match with the entered user. Please try again.'
     },
     changePassword: {
       panelTitle: 'Welcome to Assembl forgot password page'
