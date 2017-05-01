@@ -482,23 +482,27 @@ def assembl_login_complete_view(request):
     This backend view handles login form submissions received from both v1 and v2 frontend views.
     Check if proper authorization. Otherwise send to another page.
     """
-
     session = AgentProfile.default_db
     # POST before GET
     identifier = (request.POST.get('identifier').strip() or
                   request.GET.get('identifier').strip() or '')
     password = request.params.get('password', '').strip()
+    referrer = request.POST.get('referrer', None)
+    is_v2 = True if referrer == 'v2' else False
     next_view = handle_next_view(request, True)
     logged_in = authenticated_userid(request)
     localizer = request.localizer
     user = None
     user, account = from_identifier(identifier)
+    query = {"identifier": identifier,
+             "next": next_view} if identifier else {"next": next_view}
     if not user:
         error_message = localizer.translate(_("This user cannot be found"))
         request.session.flash(error_message)
+        route_name = 'react_login' if is_v2 else 'login'
         return HTTPFound(location=maybe_contextual_route(
-            request, 'login',
-            _query={"identifier": identifier} if identifier else None))
+            request, route_name,
+            _query=query))
     if account and not account.verified:
         return HTTPFound(location=maybe_contextual_route(
             request, 'confirm_emailid_sent', email_account_id=account.id))
@@ -517,7 +521,7 @@ def assembl_login_complete_view(request):
         request.session.flash(error_message)
         return HTTPFound(location=maybe_contextual_route(
             request, 'react_login',
-            _query={"identifier": identifier} if identifier else None))
+            _query=query))
     user.last_login = datetime.utcnow()
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)

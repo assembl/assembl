@@ -16,7 +16,7 @@ class AsLogin extends React.Component {
           { next ?
             <input type="hidden" name="next" value={`${next}`} />
             : null }
-          <input type="hidden" name="referer" value="v2" />
+          <input type="hidden" name="referrer" value="v2" />
           <h4 className="dark-title-4">
             <Translate value="login.alreadyAccount" />
           </h4>
