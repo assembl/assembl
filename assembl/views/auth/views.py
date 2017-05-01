@@ -1036,8 +1036,7 @@ Please confirm your email address &lt;{email}&gt; and complete your registration
 Best regards,
 The {assembl} Team"""))
         html_message = localizer.translate(_(u"""<p>Hello, {name}, and welcome to {assembl}!</p>
-<p>Please <a href="{confirm_url}">click here to confirm your email address</a>
-&lt;{email}&gt; and complete your registration.</p>
+<p>Please <a href="{confirm_url}">click here to confirm your email address</a> and complete your registration.</p>
 <p>Best regards,<br />The {assembl} Team</p>"""))
     else:
         text_message = localizer.translate(_(u"""Hello, {name}!
