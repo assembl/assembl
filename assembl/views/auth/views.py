@@ -111,6 +111,8 @@ def handle_next_view(request, consume=False, default_suffix='home'):
 
 
 def maybe_contextual_route(request, route_name, **args):
+    # TODO : Update this logic, as it uses session storage to identify slug as well,
+    # it is called from places where session might not be a good idea.
     discussion_slug = None
     if request.matchdict:
         discussion_slug = request.matchdict.get('discussion_slug', None)
@@ -622,7 +624,7 @@ def user_confirm_email(request):
         # no need to revalidate, just send to discussion.
         # Question: maybe_auto_subscribe? Doubt it.
         return HTTPFound(location=request.route_url(
-            'home' if inferred_discussion else 'discussion_list',
+            'new_home' if inferred_discussion else 'discussion_list',
             discussion_slug=inferred_discussion.slug,
             _query=dict(message=localizer.translate(
                 _("Email <%s> already confirmed")) % (account.email,))))
@@ -653,7 +655,7 @@ def user_confirm_email(request):
                     "This link is not valid. Please attempt to login to get another one."))
             request.session.flash(error)
             return HTTPFound(location=maybe_contextual_route(
-                request, 'login', _query=dict(
+                request, 'react_login', _query=dict(
                     identifier=account.email if account else None)))
 
     # By now we know we have a good token; make it login-equivalent.
