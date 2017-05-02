@@ -360,9 +360,15 @@ def reset_password(request):
     name="do_password_change")
 def do_password_change(request):
     token = request.json_body.get('token') or ''
-    password = request.json_body.get('password') or ''
-    # TODO: Check password quality!
+    password1 = request.json_body.get('password1') or None
+    password2 = request.json_body.get('password2') or None
     localizer = request.localizer
+    if password1 is None or password2 is None or password2 != password1:
+        raise JSONError(HTTPBadRequest.code, {
+            'error': localizer.translate(_("Passwords are mismatched"))
+        })
+
+    # TODO: Check password quality!
     user, validity = verify_password_change_token(token)
     token_date = get_data_token_time(token)
     old_token = (
@@ -381,7 +387,8 @@ def do_password_change(request):
         raise JSONError(HTTPBadRequest.code, {
             "error_code": validity.name,
             "error": error})
-    user.password_p = password
+
+    user.password_p = password1
     user.last_login = datetime.utcnow()
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
