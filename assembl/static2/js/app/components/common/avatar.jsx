@@ -29,6 +29,7 @@ class ProfileIcon extends React.Component {
     const slug = { slug: getDiscussionSlug() };
     const connectedUserId = getConnectedUserId();
     const connectedUserName = getConnectedUserName();
+    const dropdownUser = <div className="inline"><span className="assembl-icon-profil grey">&nbsp;</span><span className="username">{connectedUserName}</span></div>;
     return (
       <div className="right avatar">
         {!connectedUserId &&
@@ -40,9 +41,8 @@ class ProfileIcon extends React.Component {
         }
         {connectedUserId && connectedUserName &&
           <div>
-            <span className="assembl-icon-profil grey">&nbsp;</span>
             <ul className="dropdown-xs">
-              <NavDropdown title={connectedUserName} id="user-dropdown">
+              <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
                 <LinkContainer active={false} to={`${get('profile', { ...slug, userId: connectedUserId })}`}>
                   <MenuItem>
                     <Translate value="navbar.profile" />

@@ -15,7 +15,7 @@ class LanguageMenu extends React.Component {
     const availableLocales = getAvailableLocales(locale, translations);
     return (
       <ul className={`dropdown-${size} uppercase`}>
-        <NavDropdown title={locale} id="nav-dropdown">
+        <NavDropdown pullRight title={locale} id="nav-dropdown">
           {availableLocales.map((loc) => {
             return (<MenuItem onClick={() => { this.changeLanguage(loc); }} key={loc}>{loc}</MenuItem>);
           }
