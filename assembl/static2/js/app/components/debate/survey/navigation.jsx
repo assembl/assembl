@@ -54,7 +54,7 @@ class Navigation extends React.Component {
         return;
       }
       const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top);
-      offsetArray.push(questionOffset + 40);
+      offsetArray.push(questionOffset + 20);
     }
     return offsetArray; // eslint-disable-line
   }
