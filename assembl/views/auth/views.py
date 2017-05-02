@@ -523,8 +523,9 @@ def assembl_login_complete_view(request):
         request.session.flash(error_message)
         # TODO: Confirm sets of error codes between backend/frontend
         query.update({"error": 422})
+        route_name = 'react_login' if is_v2 else 'login'
         return HTTPFound(location=maybe_contextual_route(
-            request, 'react_login',
+            request, route_name,
             _query=query))
     user.last_login = datetime.utcnow()
     headers = remember(request, user.id)
