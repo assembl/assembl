@@ -131,6 +131,7 @@ class Question extends React.Component {
                 <FormControl
                   className="txt-area"
                   componentClass="textarea"
+                  id={`txt${index}`}
                   onClick={this.redirectToLogin}
                   placeholder={I18n.t('debate.survey.txtAreaPh')}
                   onKeyUp={(e) => {
