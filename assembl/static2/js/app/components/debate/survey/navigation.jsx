@@ -54,7 +54,7 @@ class Navigation extends React.Component {
         return;
       }
       const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top);
-      offsetArray.push(questionOffset);
+      offsetArray.push(questionOffset + 40);
     }
     return offsetArray; // eslint-disable-line
   }
@@ -116,7 +116,12 @@ class Navigation extends React.Component {
   scrollToNextQuestion() {
     const navbarHeight = document.getElementById('timeline').clientHeight;
     const target = document.getElementById(`q${this.state.currentQuestionNumber + 1}`);
-    const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
+    let targetOffset;
+    if (window.innerWidth >= 768) {
+      targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
+    } else {
+      targetOffset = Number(getDomElementOffset(target).top) - 140;
+    }
     scrollToPosition(targetOffset, 600);
   }
   scrollToPreviousQuestion() {
@@ -132,8 +137,15 @@ class Navigation extends React.Component {
   }
   scrollToQuestion(questionIndex) {
     const navbarHeight = document.getElementById('timeline').clientHeight;
-    const target = document.getElementById(`q${questionIndex}`);
-    const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
+    let target;
+    let targetOffset;
+    if (window.innerWidth >= 768) {
+      target = document.getElementById(`q${questionIndex}`);
+      targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
+    } else {
+      target = document.getElementById(`txt${questionIndex}`);
+      targetOffset = Number(getDomElementOffset(target).top) - 140;
+    }
     scrollToPosition(targetOffset, 600);
     this.props.scrollToPosition(false);
   }
