@@ -38,7 +38,7 @@ export const xmlHttpRequest = (obj) => {
           resp = JSON.parse(resp);
         } catch (e) {
           // TODO: Remove console warn AFTER a successful contract is agreed upon
-          console.warn('A successful response did not return JSON. Passing status only.');
+          console.warn('A successful response did not return JSON. Passing status only.'); // eslint-disable-line
           resp = xhr.status;
         }
         resolve(resp);
