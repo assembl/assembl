@@ -9,26 +9,26 @@ import { getProvidersData } from '../utils/globalFunctions';
 import { displayAlert } from '../utils/utilityManager';
 
 class Login extends React.Component {
-  componentDidMount(){
+  componentDidMount() {
     let error = get(this.props, 'location.query.error', null);
     error = (error && typeof error === 'string') ? parseInt(error) : error;
     let msg;
     if (error) {
-      switch(error) {
-        case 404: {
-          msg = I18n.t('login.emailNotFound');
-          displayAlert('danger', msg, true);
-          break;
-        }
-        case 422: {
-          msg = I18n.t('login.incorrectPasswordLogin');
-          displayAlert('danger', msg, true);
-          break;
-        }
-        default: {
-          msg = I18n.t('login.somethingWentWrong');
-          displayAlert('danger', msg, true);
-        }
+      switch (error) {
+      case 404: {
+        msg = I18n.t('login.emailNotFound');
+        displayAlert('danger', msg, true);
+        break;
+      }
+      case 422: {
+        msg = I18n.t('login.incorrectPasswordLogin');
+        displayAlert('danger', msg, true);
+        break;
+      }
+      default: {
+        msg = I18n.t('login.somethingWentWrong');
+        displayAlert('danger', msg, true);
+      }
       }
     }
   }

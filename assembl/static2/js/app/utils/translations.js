@@ -161,10 +161,10 @@ const Translations = {
         remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
         postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
         endPhase: 'La phase %{closedPhaseName} est terminée.',
-        goTo: 'Rendez-vous sur la phase %{currentPhaseName}.',
+        goTo: 'Rendez-vous sur la phase %{currentPhaseName}.'
       },
       themes: 'Thèmes',
-      notStarted: 'Cette phase n\'a pas encore commencé. Merci de revenir à partir du '
+      notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
     },
     profile: {
       panelTitle: 'Bienvenue dans la page profil d\'Assembl'
@@ -348,7 +348,7 @@ const Translations = {
         goTo: 'Go to %{currentPhaseName} phase.'
       },
       themes: 'Themes',
-      notStarted: 'This phase is not started. Please come back from the '
+      notStarted: 'The %{phaseName} phase is not started. Please come back from the '
     },
     profile: {
       panelTitle: 'Welcome to Assembl profile page'

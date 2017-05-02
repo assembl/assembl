@@ -1,20 +1,39 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Localize } from 'react-redux-i18n';
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
+import { Translate, Localize } from 'react-redux-i18n';
 import { get } from '../../../utils/routeMap';
-import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { isPhaseStarted, getStartDatePhase, getPhaseName } from '../../../utils/timeline';
+import { displayModal } from '../../../utils/utilityManager';
 
 class Step extends React.Component {
+  constructor(props) {
+    super(props);
+    this.displayPhase = this.displayPhase.bind(this);
+  }
+  displayPhase() {
+    const { identifier } = this.props;
+    const { debateData } = this.props.debate;
+    const slug = { slug: debateData.slug };
+    const phaseStarted = isPhaseStarted(debateData.timeline, identifier);
+    if (phaseStarted) {
+      browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
+    } else {
+      const { locale } = this.props.i18n;
+      const startDate = getStartDatePhase(debateData.timeline, identifier);
+      const phaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
+      const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
+      displayModal(null, body, true, null, null, true);
+    }
+  }
   render() {
-    const slug = { slug: getDiscussionSlug() };
     const { locale } = this.props.i18n;
-    const { imgUrl, startDate, title, description, index, identifier } = this.props;
+    const { imgUrl, startDate, title, description, index } = this.props;
     const stepNumber = index + 1;
     return (
       <div className="illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
-        <Link className="content-box" to={`${get('debate', slug)}?phase=${identifier}`}>
+        <div onClick={this.displayPhase} className="content-box">
           <h1 className="light-title-1">{stepNumber}</h1>
           {title &&
             <h3 className="light-title-3">
@@ -37,7 +56,7 @@ class Step extends React.Component {
               })}
             </div>
           }
-        </Link>
+        </div>
         <div className="color-box">&nbsp;</div>
         <div className="box-hyphen">&nbsp;</div>
         <div className="box-hyphen rotate-hyphen">&nbsp;</div>
