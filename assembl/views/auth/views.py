@@ -104,10 +104,17 @@ def _get_route_from_path(request, path):
 
 
 def handle_next_view(request, consume=False, default_suffix='home'):
-    slug = request.matchdict.get('discussion_slug', None)
-    default = "/".join((x for x in ('', slug, default_suffix)
-                        if x is not None))
-    return request.params.get('next', default)
+    next_value = request.params.get('next', None)
+    if next_value:
+        return next_value
+    else:
+        slug = request.matchdict.get('discussion_slug', None)
+        if slug:
+            default = "/".join((x for x in ('', slug, default_suffix)
+                                if x is not None))
+            return default
+        else:
+            return "/"
 
 
 def maybe_contextual_route(request, route_name, **args):
