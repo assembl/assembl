@@ -3,6 +3,10 @@ import { PasswordMismatchError } from '../utils/errors';
 
 export const postChangePassword = (payload) => {
   const route = '/data/AgentProfile/do_password_change';
+  if (payload.password1 !== payload.password2) {
+    return Promise.reject(new PasswordMismatchError('Passwords do not match!'));
+  }
+
   return xmlHttpRequest({
     method: 'POST',
     url: route,

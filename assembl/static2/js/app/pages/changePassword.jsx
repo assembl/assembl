@@ -7,6 +7,7 @@ import { getAuthorizationToken } from '../utils/globalFunctions';
 import { postChangePassword } from '../services/authenticationService';
 import inputHandler from '../utils/inputHandler';
 import { get } from '../utils/routeMap';
+import { displayAlert } from '../utils/utilityManager';
 
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -38,13 +39,21 @@ class ChangePassword extends React.Component {
       // If no slug, go to forbidden page...
     })
     .catch((error) => {
-      try {
-        const resp = JSON.parse(error);
-        // TODO: Use the new Alert system from Phase1 branch
-        alert(resp.error.error);
-      } catch (exception) {
-        // TODO: Use the new Alert system from Phase1 branch
-        alert(exception);
+      let msg;
+      if (error instanceof Error) {
+        if (error.name === "PasswordMismatchError") {
+          msg = I18n.t('login.incorrectPassword');
+          displayAlert('danger', msg, true);
+        }
+      }
+      else {
+        try {
+          const resp = JSON.parse(error);
+          displayAlert('danger', resp.error.type, true);
+        } catch (exception) {
+          msg = I18n.t('login.somethingWentWrong');
+          displayAlert('danger', msg, true);
+        }
       }
     });
   }
