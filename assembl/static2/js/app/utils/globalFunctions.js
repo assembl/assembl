@@ -104,7 +104,7 @@ export const scrollToPosition = (to, duration) => {
   let currPos = 0;
   const start = startPosition;
   scrollInterval = setInterval(() => {
-    if ((Math.round(getDocumentScrollTop() / 10) * 10) !== (Math.round(to / 10) * 10)) {
+    if ((Math.round(getDocumentScrollTop() / 20) * 20) !== (Math.round(to / 20) * 20)) {
       count += 1;
       currPos = start + (diff * (0.5 - (0.5 * Math.cos(count * scrollStep))));
       document.body.scrollTop = currPos; // Chrome/FF

@@ -19,10 +19,13 @@ class Survey extends React.Component {
     super(props);
     this.state = {
       moreProposals: false,
-      showModal: false
+      showModal: false,
+      scrollToNext: false
     };
     this.showMoreProposals = this.showMoreProposals.bind(this);
     this.getIfProposals = this.getIfProposals.bind(this);
+    this.scrollToNextQuestion = this.scrollToNextQuestion.bind(this);
+    this.scrollToPosition = this.scrollToPosition.bind(this);
   }
   componentWillMount() {
     this.unlisten = browserHistory.listen(() => {
@@ -44,6 +47,17 @@ class Survey extends React.Component {
   showMoreProposals() {
     this.setState({
       moreProposals: true
+    });
+  }
+  scrollToNextQuestion(scrollToNext) {
+    this.setState({
+      scrollToNext: scrollToNext
+    });
+  }
+  scrollToPosition(scrollPos, questionIndex) {
+    this.setState({
+      scrollPos: scrollPos,
+      questionIndex: questionIndex
     });
   }
   render() {
@@ -71,12 +85,21 @@ class Survey extends React.Component {
                     index={index + 1}
                     key={index}
                     questionId={question.id}
+                    scrollToNextQuestion={this.scrollToNextQuestion}
+                    scrollToPosition={this.scrollToPosition}
                   />
                 );
               })}
             </div>
             {theme.questions &&
-              <Navigation questionsLength={theme.questions.length} />
+              <Navigation
+                questionsLength={theme.questions.length}
+                scrollToNextQuestion={this.scrollToNextQuestion}
+                scrollToNext={this.state.scrollToNext}
+                scrollToPosition={this.scrollToPosition}
+                scrollPos={this.state.scrollPos}
+                questionIndex={this.state.questionIndex}
+              />
             }
             <div className="proposals">
               <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">

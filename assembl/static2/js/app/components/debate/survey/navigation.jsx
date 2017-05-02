@@ -1,3 +1,8 @@
+
+
+
+
+
 import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -31,6 +36,15 @@ class Navigation extends React.Component {
     }, () => {
       this.displayNav();
       this.displayPagination();
+      if (nextProps.scrollToNext && this.state.currentQuestionNumber < this.state.questionsLength) {
+        this.scrollToNextQuestion();
+      }
+      if (nextProps.scrollToNext && this.state.currentQuestionNumber === this.state.questionsLength) {
+        this.scrollToProposals();
+      }
+      if (nextProps.scrollPos) {
+        this.scrollToQuestion(nextProps.questionIndex);
+      }
     });
   }
   componentWillUnmount() {
@@ -102,6 +116,7 @@ class Navigation extends React.Component {
     this.setState({
       currentQuestionNumber: currentQuestionNumber
     });
+    this.props.scrollToNextQuestion(false);
   }
   scrollToNextQuestion() {
     const navbarHeight = document.getElementById('timeline').clientHeight;
@@ -114,6 +129,18 @@ class Navigation extends React.Component {
     const target = document.getElementById(`q${this.state.currentQuestionNumber - 1}`);
     const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
     scrollToPosition(targetOffset, 600);
+  }
+  scrollToProposals() {
+    const target = document.getElementById('proposals');
+    const targetOffset = Number(getDomElementOffset(target).top);
+    scrollToPosition(targetOffset, 600);
+  }
+  scrollToQuestion(questionIndex) {
+    const navbarHeight = document.getElementById('timeline').clientHeight;
+    const target = document.getElementById(`q${questionIndex}`);
+    const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
+    scrollToPosition(targetOffset, 600);
+    this.props.scrollToPosition(false);
   }
   render() {
     const barWidth = calculatePercentage(this.state.currentQuestionNumber, this.state.questionsLength);
@@ -137,12 +164,14 @@ class Navigation extends React.Component {
                   </div>
                 </Col>
                 <Col xs={6} md={6} className="no-padding">
-                  <div className="arrow right" onClick={this.state.currentQuestionNumber === this.state.questionsLength ? null : this.scrollToNextQuestion}>
+                  <div className="arrow right" onClick={this.state.currentQuestionNumber === this.state.questionsLength ? this.scrollToProposals : this.scrollToNextQuestion}>
                     <span className="assembl-icon-down-open" />
                   </div>
-                  <div className="arrow right" onClick={this.state.currentQuestionNumber === 1 ? null : this.scrollToPreviousQuestion}>
-                    <span className="assembl-icon-up-open" />
-                  </div>
+                  {this.state.currentQuestionNumber > 1 &&
+                    <div className="arrow right" onClick={this.scrollToPreviousQuestion}>
+                      <span className="assembl-icon-up-open" />
+                    </div>
+                  }
                 </Col>
               </Col>
             </div>

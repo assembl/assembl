@@ -70,10 +70,11 @@ class Question extends React.Component {
   }
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
-    const { questionId } = this.props;
+    const { questionId, scrollToNextQuestion } = this.props;
     const body = this.state.postBody;
     this.props.mutate({ variables: { ideaId: questionId, body: body } })
     .then(() => {
+      scrollToNextQuestion(true);
       displayAlert('success', I18n.t('debate.survey.postSuccess'));
       this.setState({
         postBody: '',
@@ -92,6 +93,8 @@ class Question extends React.Component {
       const body = I18n.t('debate.survey.modalBody');
       const button = { link: `${getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
       displayModal(null, body, true, null, button, true);
+    } else {
+      this.props.scrollToPosition(true, this.props.index);
     }
   }
   render() {
