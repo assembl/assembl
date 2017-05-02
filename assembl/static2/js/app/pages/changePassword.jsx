@@ -1,7 +1,7 @@
 /* eslint no-alert: "off" */
 
 import React from 'react';
-import { Grid, Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { getAuthorizationToken } from '../utils/globalFunctions';
 import { postChangePassword } from '../services/authenticationService';
@@ -51,37 +51,45 @@ class ChangePassword extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="box-title">
-          <Translate value="login.changePassword" />
-        </div>
-        <div className="box">
-          <Grid fluid className="login-container">
-            <Row className="max-container center">
-              <Col xs={12} md={6} className="col-centered">
-                <form>
-                  <FormGroup className="margin-m">
-                    <FormControl type="text" name="password1" required onChange={this.handleChangePassword} />
-                  </FormGroup>
-                  <FormGroup className="margin-m">
-                    <FormControl type="text" name="password2" required onChange={this.handleChangePassword} />
-                  </FormGroup>
-                  <FormGroup>
-                    <Button
-                      type="submit"
-                      name="change_password"
-                      value={I18n.t('login.send')} className="button-submit button-dark"
-                      onClick={this.submitForm}
-                    >
-                      <Translate value="login.send" />
-                    </Button>
-                  </FormGroup>
-                </form>
-              </Col>
-            </Row>
-          </Grid>
-        </div>
-      </div>
+      <Grid fluid className="login-grid">
+        <Col xs={12} md={6} className="login-container col-centered center">
+          <div className="box-title">
+            <Translate value="login.changePassword" />
+          </div>
+          <div className="box">
+            <form>
+              <FormGroup className="margin-m">
+                <FormControl
+                  type="password"
+                  name="password1"
+                  required
+                  placeholder={I18n.t('login.newPassword')}
+                  onChange={this.handleChangePassword}
+                />
+              </FormGroup>
+              <FormGroup className="margin-m">
+                <FormControl
+                  type="password"
+                  name="password2"
+                  required
+                  placeholder={I18n.t('login.newPassword2')}
+                  onChange={this.handleChangePassword}
+                />
+              </FormGroup>
+              <FormGroup className="margin-l">
+                <Button
+                  type="submit"
+                  name="change_password"
+                  value={I18n.t('login.changePassword')} className="button-submit button-dark"
+                  onClick={this.submitForm}
+                >
+                  <Translate value="login.changePassword" />
+                </Button>
+              </FormGroup>
+            </form>
+          </div>
+        </Col>
+      </Grid>
     );
   }
 }
