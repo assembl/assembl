@@ -94,22 +94,32 @@
     width: 100px;
   }
 
+  .txt-not-active {
+    a {
+      color: $grey5;
+    }
+
+    &:hover {
+      ~ .timeline-number {
+        background-color: $first-color;
+      }
+
+      ~ .timeline-bar-1 {
+        background-color: $first-color;
+      }
+
+      a {
+        color: $first-color;
+      }
+    }
+  }
+
   .txt-active {
     a {
       color: $first-color;
 
       &:focus {
         text-decoration: none;
-      }
-    }
-  }
-
-  .txt-not-active {
-    a {
-      color: $grey5;
-
-      &:hover {
-        color: $first-color;
       }
     }
   }
