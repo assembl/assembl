@@ -318,8 +318,7 @@ var navBar = Marionette.LayoutView.extend({
           serializeData: function() {
             return {
               i18n: i18n,
-              notificationsToShow: model.notificationsToShow,
-              urlNotifications: '/' + Ctx.getDiscussionSlug() + '/user/notifications'
+              notificationsToShow: model.notificationsToShow
             }
           },
           submit: function(ev) {
