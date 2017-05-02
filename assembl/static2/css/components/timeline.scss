@@ -95,7 +95,7 @@
   }
 
   .txt-not-active {
-    a {
+    .timeline-link {
       color: $grey5;
     }
 
@@ -108,19 +108,15 @@
         background-color: $first-color;
       }
 
-      a {
+      .timeline-link {
         color: $first-color;
       }
     }
   }
 
   .txt-active {
-    a {
+    .timeline-link {
       color: $first-color;
-
-      &:focus {
-        text-decoration: none;
-      }
     }
   }
 

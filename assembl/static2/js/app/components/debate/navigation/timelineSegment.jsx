@@ -1,31 +1,50 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
+import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { get } from '../../../utils/routeMap';
-import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { displayModal } from '../../../utils/utilityManager';
+import { getStartDatePhase, getPhaseName } from '../../../utils/timeline';
 
 class TimelineSegment extends React.Component {
+  constructor(props) {
+    super(props);
+    this.displayPhase = this.displayPhase.bind(this);
+  }
+  displayPhase() {
+    const { isStepCompleted, isCurrentPhase, phaseIdentifier } = this.props;
+    const { debateData } = this.props.debate;
+    const slug = { slug: debateData.slug };
+    if (isStepCompleted || isCurrentPhase) {
+      browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
+    } else {
+      const { locale } = this.props.i18n;
+      const startDate = getStartDatePhase(debateData.timeline, phaseIdentifier);
+      const phaseName = getPhaseName(debateData.timeline, phaseIdentifier, locale).toLowerCase();
+      const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
+      displayModal(null, body, true, null, null, true);
+    }
+  }
   render() {
-    const slug = { slug: getDiscussionSlug() };
     const {
       index,
       barWidth,
+      identifier,
       isCurrentPhase,
       isStepCompleted,
-      identifier,
       phaseIdentifier,
       title,
       locale
     } = this.props;
     return (
       <div className="minimized-timeline" style={{ marginLeft: `${index * 100}px` }}>
-        {title.entries.map((entry, index2) => {
+        {title.entries.map((entry, index2) => { // eslint-disable-line
           if (locale === entry['@language']) {
             return (
-              <div className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={index2}>
-                <Link to={isStepCompleted || isCurrentPhase ? `${get('debate', slug)}?phase=${phaseIdentifier}` : null}>
+              <div onClick={this.displayPhase} className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={index2}>
+                <div className="timeline-link">
                   { entry.value }
-                </Link>
+                </div>
               </div>
             );
           }
@@ -42,6 +61,7 @@ class TimelineSegment extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    i18n: state.i18n,
     debate: state.debate
   };
 };
