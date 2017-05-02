@@ -156,6 +156,8 @@ def get_provider_data(get_route, providers=None):
 def create_get_route(request, discussion=None):
     if discussion:
         def get_route(name, **kwargs):
+            if name == "bare_slug":
+                name = "new_home" if discussion.preferences['landing_page'] else "home"
             try:
                 return request.route_path('contextual_' + name,
                                           discussion_slug=discussion.slug,
@@ -490,9 +492,6 @@ def redirector(request):
     return HTTPMovedPermanently(request.route_url(
         'home', discussion_slug=request.matchdict.get('discussion_slug')))
 
-
-def is_using_new_frontend():
-    return config.get('new_frontend', False)
 
 def includeme(config):
     """ Initialize views and renderers at app start-up time. """

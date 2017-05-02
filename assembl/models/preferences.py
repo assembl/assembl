@@ -348,6 +348,15 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": [strip_country(x) for x in config.get_config().get(
                 'available_languages', 'fr en').split()]
         },
+        # Whether the discussion uses the new React landing page
+        {
+            "id": "landing_page",
+            "value_type": "bool",
+            "name": _("Use landing page"),
+            "description": _("Are users directed to the landing page and phases at login, or diretly to the debate"),
+            "allow_user_override": None,
+            "default": False,
+        },
         # full class name of translation service to use, if any
         # e.g. assembl.nlp.translate.GoogleTranslationService
         {
