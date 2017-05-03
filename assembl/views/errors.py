@@ -9,3 +9,5 @@ class ErrorTypes(Enum):
     EXISTING_EMAIL = 3
     EXISTING_USERNAME = 4
     PASSWORD = 5
+    INVALID_USERNAME = 6
+    NOT_FOUND = 7

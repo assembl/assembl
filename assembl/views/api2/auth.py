@@ -324,7 +324,10 @@ def reset_password(request):
     if user_id:
         user = AgentProfile.get(int(user_id))
         if not user:
-            raise HTTPNotFound()
+            raise JSONError(
+                _("The user does not exist"),
+                ErrorTypes.NOT_FOUND,
+                code=HTTPNotFound.code)
         if identifier:
             for account in user.accounts:
                 if identifier == account.email:
@@ -333,7 +336,10 @@ def reset_password(request):
     elif identifier:
         user, account = from_identifier(identifier)
         if not user:
-            raise HTTPNotFound()
+            raise JSONError(
+                _("This email does not exist"),
+                ErrorTypes.NOT_FOUND,
+                code=HTTPNotFound.code)
         if account:
             email = account.email
     else:
