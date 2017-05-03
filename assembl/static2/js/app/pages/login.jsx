@@ -49,7 +49,7 @@ class Login extends React.Component {
             {hasSocialMedias &&
               <div>
                 <Col xs={12} md={5}>
-                  <SocialMedia providers={providers} />
+                  {debateData ? <SocialMedia providers={providers} next={next} slug={debateData.slug} /> : <AsLogin next={next} providers={providers} />}
                 </Col>
                 <Col xs={12} md={1}>&nbsp;</Col>
               </div>
