@@ -1048,14 +1048,14 @@ def send_confirmation_email(request, email):
         confirm_what = localizer.translate(_('account'))
         text_message = localizer.translate(_(u"""Hello, {name}, and welcome to {assembl}!
 
-Please confirm your email address &lt;{email}&gt; and complete your registration by clicking the link below.
+Please confirm your email address and complete your registration by clicking the link below.
 <{confirm_url}>
 
 Best regards,
 The {assembl} Team"""))
         html_message = localizer.translate(_(u"""<p>Hello, {name}, and welcome to {assembl}!</p>
 <p>Please <a href="{confirm_url}">click here to confirm your email address</a>
-&lt;{email}&gt; and complete your registration.</p>
+and complete your registration.</p>
 <p>Best regards,<br />The {assembl} Team</p>"""))
     else:
         text_message = localizer.translate(_(u"""Hello, {name}!
@@ -1067,7 +1067,7 @@ Best regards,
 The {assembl} Team"""))
         html_message = localizer.translate(_(u"""<p>Hello, {name}!</p>
 <p>Please <a href="{confirm_url}">click here to confirm your new email address</a>
-&lt;{email}&gt; on your {assembl} account.</p>
+on your {assembl} account.</p>
 <p>Best regards,<br />The {assembl} Team</p>"""))
 
     from assembl.auth.password import email_token
