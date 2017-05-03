@@ -47,8 +47,8 @@ class ChangePassword extends React.Component {
         }
       } else {
         try {
-          const resp = JSON.parse(error);
-          displayAlert('danger', resp.error.type, true);
+          const firstError = error[0];
+          displayAlert('danger', firstError.message, true);
         } catch (exception) {
           msg = I18n.t('login.somethingWentWrong');
           displayAlert('danger', msg, true);
