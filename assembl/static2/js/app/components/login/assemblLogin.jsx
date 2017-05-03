@@ -8,11 +8,15 @@ import { get, getFullPath, getContextual } from '../../utils/routeMap';
 class AsLogin extends React.Component {
   render() {
     const { slug } = this.props;
-    const next = this.props.next ? this.props.next : get('home', { slug: slug });
+    const next = this.props.next ?
+      this.props.next
+      : (
+        slug ? get('home', { slug: slug }) : null
+      );
     const errorMessage = ('error_message' in this.props && this.props.error_message) ? this.props.error_message : null;
     return (
       <div>
-        <form className="login" method="POST" action={getFullPath('ctxOldLogin', { slug: slug })}>
+        <form className="login" method="POST" action={slug ? getFullPath('ctxOldLogin', { slug: slug }) : getFullPath('oldLogin')}>
           { next ?
             <input type="hidden" name="next" value={`${next}`} />
             : null }

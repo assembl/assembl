@@ -7,7 +7,7 @@ import { capitalize } from './globalFunctions';
 /* eslint no-template-curly-in-string: "off"*/
 const routes = {
   oldLogout: 'legacy/logout',
-  oldLogin: 'debate/login',
+  oldLogin: 'legacy/login',
   oldDebate: 'debate/${slug}',
   styleguide: 'styleguide',
   login: 'login',
