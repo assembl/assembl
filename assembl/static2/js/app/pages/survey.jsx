@@ -19,13 +19,11 @@ class Survey extends React.Component {
     super(props);
     this.state = {
       moreProposals: false,
-      showModal: false,
-      scrollToNext: false
+      showModal: false
     };
     this.showMoreProposals = this.showMoreProposals.bind(this);
     this.getIfProposals = this.getIfProposals.bind(this);
-    this.scrollToNextQuestion = this.scrollToNextQuestion.bind(this);
-    this.scrollToPosition = this.scrollToPosition.bind(this);
+    this.scrollToQuestion = this.scrollToQuestion.bind(this);
   }
   componentWillMount() {
     this.unlisten = browserHistory.listen(() => {
@@ -49,14 +47,9 @@ class Survey extends React.Component {
       moreProposals: true
     });
   }
-  scrollToNextQuestion(scrollToNext) {
+  scrollToQuestion(isScroll, questionIndex) {
     this.setState({
-      scrollToNext: scrollToNext
-    });
-  }
-  scrollToPosition(scrollPos, questionIndex) {
-    this.setState({
-      scrollPos: scrollPos,
+      isScroll: isScroll,
       questionIndex: questionIndex
     });
   }
@@ -85,8 +78,7 @@ class Survey extends React.Component {
                     index={index + 1}
                     key={index}
                     questionId={question.id}
-                    scrollToNextQuestion={this.scrollToNextQuestion}
-                    scrollToPosition={this.scrollToPosition}
+                    scrollToQuestion={this.scrollToQuestion}
                   />
                 );
               })}
@@ -94,11 +86,9 @@ class Survey extends React.Component {
             {theme.questions &&
               <Navigation
                 questionsLength={theme.questions.length}
-                scrollToNextQuestion={this.scrollToNextQuestion}
-                scrollToNext={this.state.scrollToNext}
-                scrollToPosition={this.scrollToPosition}
-                scrollPos={this.state.scrollPos}
                 questionIndex={this.state.questionIndex}
+                isScroll={this.state.isScroll}
+                scrollToQuestion={this.scrollToQuestion}
               />
             }
             <div className="proposals">

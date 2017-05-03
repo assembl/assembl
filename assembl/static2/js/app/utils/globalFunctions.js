@@ -111,6 +111,8 @@ export const scrollToPosition = (to, duration) => {
       document.documentElement.scrollTop = currPos; // Firefox
     } else {
       clearInterval(scrollInterval);
+      document.body.scrollTop = to;
+      document.documentElement.scrollTop = to;
     }
   }, 10);
 };

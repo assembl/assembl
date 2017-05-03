@@ -41,12 +41,11 @@ class ChangePassword extends React.Component {
     .catch((error) => {
       let msg;
       if (error instanceof Error) {
-        if (error.name === "PasswordMismatchError") {
+        if (error.name === 'PasswordMismatchError') {
           msg = I18n.t('login.incorrectPassword');
           displayAlert('danger', msg, true);
         }
-      }
-      else {
+      } else {
         try {
           const resp = JSON.parse(error);
           displayAlert('danger', resp.error.type, true);

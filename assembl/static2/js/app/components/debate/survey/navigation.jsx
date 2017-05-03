@@ -5,14 +5,16 @@ import { Translate } from 'react-redux-i18n';
 import { getDomElementOffset, scrollToPosition, calculatePercentage } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
+// This is the minimum width to make this navigation bar usable
+const MIN_WIDTH = 768;
+
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
     const { questionsLength } = this.props;
     this.displayNav = this.displayNav.bind(this);
     this.displayPagination = this.displayPagination.bind(this);
-    this.scrollToNextQuestion = this.scrollToNextQuestion.bind(this);
-    this.scrollToPreviousQuestion = this.scrollToPreviousQuestion.bind(this);
+    this.scrollToQuestion = this.scrollToQuestion.bind(this);
     this.state = {
       navPosition: 'fixed',
       navBottom: 0,
@@ -31,13 +33,7 @@ class Navigation extends React.Component {
     }, () => {
       this.displayNav();
       this.displayPagination();
-      if (nextProps.scrollToNext && this.state.currentQuestionNumber < this.state.questionsLength) {
-        this.scrollToNextQuestion();
-      }
-      if (nextProps.scrollToNext && this.state.currentQuestionNumber === this.state.questionsLength) {
-        this.scrollToProposals();
-      }
-      if (nextProps.scrollPos) {
+      if (nextProps.isScroll && nextProps.questionIndex && window.innerWidth >= MIN_WIDTH) {
         this.scrollToQuestion(nextProps.questionIndex);
       }
     });
@@ -54,7 +50,7 @@ class Navigation extends React.Component {
         return;
       }
       const questionOffset = Number(getDomElementOffset(document.getElementsByClassName('question-title')[i]).top);
-      offsetArray.push(questionOffset + 20);
+      offsetArray.push(questionOffset);
     }
     return offsetArray; // eslint-disable-line
   }
@@ -111,43 +107,18 @@ class Navigation extends React.Component {
     this.setState({
       currentQuestionNumber: currentQuestionNumber
     });
-    this.props.scrollToNextQuestion(false);
-  }
-  scrollToNextQuestion() {
-    const navbarHeight = document.getElementById('timeline').clientHeight;
-    const target = document.getElementById(`q${this.state.currentQuestionNumber + 1}`);
-    let targetOffset;
-    if (window.innerWidth >= 768) {
-      targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
-    } else {
-      targetOffset = Number(getDomElementOffset(target).top) - 140;
-    }
-    scrollToPosition(targetOffset, 600);
-  }
-  scrollToPreviousQuestion() {
-    const navbarHeight = document.getElementById('timeline').clientHeight;
-    const target = document.getElementById(`q${this.state.currentQuestionNumber - 1}`);
-    const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
-    scrollToPosition(targetOffset, 600);
-  }
-  scrollToProposals() {
-    const target = document.getElementById('proposals');
-    const targetOffset = Number(getDomElementOffset(target).top);
-    scrollToPosition(targetOffset, 600);
   }
   scrollToQuestion(questionIndex) {
     const navbarHeight = document.getElementById('timeline').clientHeight;
     let target;
-    let targetOffset;
-    if (window.innerWidth >= 768) {
-      target = document.getElementById(`q${questionIndex}`);
-      targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
+    if (questionIndex > this.state.questionsLength) {
+      target = document.getElementById('proposals');
     } else {
-      target = document.getElementById(`txt${questionIndex}`);
-      targetOffset = Number(getDomElementOffset(target).top) - 140;
+      target = document.getElementById(`q${questionIndex}`);
     }
+    const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
     scrollToPosition(targetOffset, 600);
-    this.props.scrollToPosition(false);
+    this.props.scrollToQuestion(false);
   }
   render() {
     const barWidth = calculatePercentage(this.state.currentQuestionNumber, this.state.questionsLength);
@@ -171,11 +142,17 @@ class Navigation extends React.Component {
                   </div>
                 </Col>
                 <Col xs={6} md={6} className="no-padding">
-                  <div className="arrow right" onClick={this.state.currentQuestionNumber === this.state.questionsLength ? this.scrollToProposals : this.scrollToNextQuestion}>
+                  <div
+                    className="arrow right"
+                    onClick={() => { this.scrollToQuestion(this.state.currentQuestionNumber + 1); }}
+                  >
                     <span className="assembl-icon-down-open" />
                   </div>
                   {this.state.currentQuestionNumber > 1 &&
-                    <div className="arrow right" onClick={this.scrollToPreviousQuestion}>
+                    <div
+                      className="arrow right"
+                      onClick={() => { this.scrollToQuestion(this.state.currentQuestionNumber - 1); }}
+                    >
                       <span className="assembl-icon-up-open" />
                     </div>
                   }

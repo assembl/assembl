@@ -29,6 +29,12 @@ class Question extends React.Component {
     this.updateDimensions();
     window.addEventListener('resize', this.updateDimensions);
   }
+  componentWillReceiveProps() {
+    this.state = {
+      showSubmitButton: false,
+      postBody: ''
+    };
+  }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions);
   }
@@ -70,11 +76,11 @@ class Question extends React.Component {
   }
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
-    const { questionId, scrollToNextQuestion } = this.props;
+    const { questionId, scrollToQuestion, index } = this.props;
     const body = this.state.postBody;
     this.props.mutate({ variables: { ideaId: questionId, body: body } })
     .then(() => {
-      scrollToNextQuestion(true);
+      scrollToQuestion(true, index + 1);
       displayAlert('success', I18n.t('debate.survey.postSuccess'));
       this.setState({
         postBody: '',
@@ -87,6 +93,7 @@ class Question extends React.Component {
   }
   redirectToLogin() {
     const isUserConnected = getConnectedUserId();
+    const { scrollToQuestion, index } = this.props;
     if (!isUserConnected) {
       const next = getCurrentView();
       const slug = { slug: this.props.debate.debateData.slug };
@@ -94,7 +101,7 @@ class Question extends React.Component {
       const button = { link: `${getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
       displayModal(null, body, true, null, button, true);
     } else {
-      this.props.scrollToPosition(true, this.props.index);
+      scrollToQuestion(true, index);
     }
   }
   render() {
@@ -124,7 +131,6 @@ class Question extends React.Component {
                 <FormControl
                   className="txt-area"
                   componentClass="textarea"
-                  id={`txt${index}`}
                   onClick={this.redirectToLogin}
                   placeholder={I18n.t('debate.survey.txtAreaPh')}
                   onKeyUp={(e) => {
