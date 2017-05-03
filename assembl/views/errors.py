@@ -1,8 +1,11 @@
 from enum import Enum
 
-# Only specify and NOT_FOUND if it adds information that the FE might
-# care about, over and beyond the HTTP code. Furthermore, be very
-# specific about what was not found. Eg. USER_NOT_FOUND vs NOT_FOUND
+# These optional errors subtypes allow to refine the meaning of an
+# HTTP error code, so the frontend can better direct the user to
+# correct their action.
+# In particular, it can specify affected form elements.
+# which element is affected.
+# Not mandatory unless it adds information that the frontend will use.
 
 
 class ErrorTypes(Enum):
