@@ -365,7 +365,8 @@ def do_password_change(request):
     password2 = request.json_body.get('password2') or None
     localizer = request.localizer
     if password1 is None or password2 is None or password2 != password1:
-        raise JSONError(localizer.translate(_("Passwords are mismatched")))
+        error = localizer.translate(_("The passwords that were entered are mismatched!"))
+        raise JSONError(error, ErrorTypes.PASSWORD)
 
     # TODO: Check password quality!
     user, validity = verify_password_change_token(token)
@@ -383,7 +384,7 @@ def do_password_change(request):
         else:
             error = localizer.translate(_(
                 "This link has been used. Do you want us to send another?"))
-        raise JSONError(error, Validity)
+        raise JSONError(error, validity)
     user.password_p = password1
     user.last_login = datetime.utcnow()
     headers = remember(request, user.id)
