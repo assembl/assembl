@@ -1,5 +1,9 @@
 from enum import Enum
 
+# Only specify and NOT_FOUND if it adds information that the FE might
+# care about, over and beyond the HTTP code. Furthermore, be very
+# specific about what was not found. Eg. USER_NOT_FOUND vs NOT_FOUND
+
 
 class ErrorTypes(Enum):
     """These are agreed-upon error names between frontend and backend.
@@ -10,4 +14,3 @@ class ErrorTypes(Enum):
     EXISTING_USERNAME = 4
     PASSWORD = 5
     INVALID_USERNAME = 6
-    NOT_FOUND = 7

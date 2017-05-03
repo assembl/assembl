@@ -326,7 +326,6 @@ def reset_password(request):
         if not user:
             raise JSONError(
                 _("The user does not exist"),
-                ErrorTypes.NOT_FOUND,
                 code=HTTPNotFound.code)
         if identifier:
             for account in user.accounts:
@@ -338,7 +337,6 @@ def reset_password(request):
         if not user:
             raise JSONError(
                 _("This email does not exist"),
-                ErrorTypes.NOT_FOUND,
                 code=HTTPNotFound.code)
         if account:
             email = account.email
