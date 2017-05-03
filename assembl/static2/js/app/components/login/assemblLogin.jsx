@@ -24,7 +24,6 @@ class AsLogin extends React.Component {
           <h4 className="dark-title-4">
             <Translate value="login.alreadyAccount" />
           </h4>
-          { errorMessage ? <div className="error-message">{errorMessage}</div> : null }
           <FormGroup className="margin-m">
             <FormControl type="text" name="identifier" required placeholder={I18n.t('login.username')} />
           </FormGroup>
