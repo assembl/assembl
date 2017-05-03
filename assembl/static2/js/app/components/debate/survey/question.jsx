@@ -30,9 +30,11 @@ class Question extends React.Component {
     window.addEventListener('resize', this.updateDimensions);
   }
   componentWillReceiveProps() {
+    const maxChars = this.txtarea.props.maxLength;
     this.state = {
       showSubmitButton: false,
-      postBody: ''
+      postBody: '',
+      remainingChars: maxChars
     };
   }
   componentWillUnmount() {
@@ -66,7 +68,7 @@ class Question extends React.Component {
   }
   updateDimensions() {
     const componentHeight = this.question.clientHeight;
-    const screenHeight = window.innerHeight - document.getElementById('navbar').clientHeight;
+    const screenHeight = window.innerHeight - document.getElementById('timeline').clientHeight;
     const screenWidth = window.innerWidth;
     this.setState({
       screenHeight: screenHeight,

@@ -1,10 +1,9 @@
 .alert {
   border: none;
   left: 0;
-  height: $navbar-height;
   position: fixed;
-  transition: opacity 1s ease-in-out;
   top: $navbar-height;
+  transition: opacity 1s ease-in-out;
   text-align: center;
   width: 100%;
 }
@@ -17,4 +16,16 @@
 .hideAlert {
   opacity: 0;
   z-index: -1;
+}
+
+@media screen and (min-width: 601px) {
+  .alert {
+    height: $navbar-height;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .alert {
+    height: $navbar-height + 20;
+  }
 }

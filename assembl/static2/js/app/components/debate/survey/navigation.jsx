@@ -93,6 +93,7 @@ class Navigation extends React.Component {
     }
   }
   displayPagination() {
+    const navbarHeight = document.getElementById('timeline').clientHeight;
     const questionsOffset = this.getQuestionsOffset(this.state.questionsLength);
     if (!questionsOffset) {
       return;
@@ -100,7 +101,7 @@ class Navigation extends React.Component {
     const windowOffset = window.pageYOffset + window.innerHeight;
     let currentQuestionNumber = 0;
     for (let i = 0; i < this.state.questionsLength; i += 1) {
-      if (windowOffset > questionsOffset[i]) {
+      if (windowOffset > (questionsOffset[i] + navbarHeight)) {
         currentQuestionNumber = i + 1;
       }
     }

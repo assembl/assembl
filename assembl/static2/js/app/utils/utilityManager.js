@@ -11,7 +11,7 @@ export const modalManager = new UtilityManager();
 
 export const alertManager = new UtilityManager();
 
-export const displayAlert = (style, msg, topPosition = false, time = 6000) => {
+export const displayAlert = (style, msg, topPosition = false, time = 4000) => {
   /*
     alertStyle:String => bootstrap class (success, warning, danger or info)
     alertMsg:String => the message displayed in the alert
