@@ -43,22 +43,15 @@ export const xmlHttpRequest = (obj) => {
         }
         resolve(resp);
       } else {
-        let resp;
-        // TODO: Agree on contract with backend for all APIs!!
-        // Current system not very intuitive nor friendly
-        try {
-          resp = JSON.parse(xhr.responseText);
-          reject(resp || xhr.statusText);
-        } catch (e) {
-          // A non-JSONError response, likely from Pyramid itself
-          // Short term solution until contract established
-          reject(xhr.status);
-        }
+        // Contract agreed upon. If API is to fail, must respond with
+        // JSONError type. Front-end respects this type of response only.
+        const resp = JSON.parse(xhr.responseText);
+        reject(resp);
       }
     };
     xhr.onerror = () => {
-      // TODO: If JSON returned format, parse accordingly
-      return reject(xhr.responseText || xhr.statusText);
+      // Network level failure
+      return reject(xhr.statusText || xhr.responseText);
     };
     xhr.send(payload);
   });

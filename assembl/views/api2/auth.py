@@ -361,11 +361,12 @@ def reset_password(request):
     name="do_password_change")
 def do_password_change(request):
     token = request.json_body.get('token') or ''
-    password1 = request.json_body.get('password1') or None
-    password2 = request.json_body.get('password2') or None
+    password1 = request.json_body.get('password1', '').strip()
+    password2 = request.json_body.get('password2', '').strip()
     localizer = request.localizer
-    if password1 is None or password2 is None or password2 != password1:
-        error = localizer.translate(_("The passwords that were entered are mismatched!"))
+    if password1 is '' or password2 is '' or password2 != password1:
+        error = localizer.translate(
+            _("The passwords that were entered are mismatched!"))
         raise JSONError(error, ErrorTypes.PASSWORD)
 
     # TODO: Check password quality!
