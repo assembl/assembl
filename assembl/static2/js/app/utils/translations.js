@@ -172,7 +172,7 @@ const Translations = {
       panelTitle: 'Bienvenue dans la page profil d\'Assembl'
     },
     loading: {
-      wait: 'Veuillez patientez'
+      wait: 'Veuillez patienter'
     },
     error: {
       reason: 'Désolé, une erreur s\'est produite :'
