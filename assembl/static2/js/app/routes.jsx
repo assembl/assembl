@@ -19,6 +19,8 @@ import Profile from './pages/profile';
 import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
 import Terms from './pages/terms';
+import Administration from './pages/administration';
+import SurveyAdmin from './pages/surveyAdmin';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateChild = (props) => {
@@ -60,6 +62,9 @@ export default (
           <Route path={routeForRouter('terms')} component={Terms} />
           <Route path={routeForRouter('debate')} component={Debate}>
             <Route path={routeForRouter('phase', false, { phase: ':phase', themeId: ':themeId' })} component={DebateChild} />
+          </Route>
+          <Route path={routeForRouter('administration')} component={Administration} >
+            <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={SurveyAdmin} />
           </Route>
         </Route>
       </Route>

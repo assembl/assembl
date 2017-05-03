@@ -1,0 +1,23 @@
+.administration {
+  margin: $margin-section 0;
+
+  .admin-menu {
+    position: fixed;
+
+    .list-group-item {
+      background: none;
+      border: none;
+      color: $grey2;
+      padding: 5px 15px;
+
+      a {
+        color: $grey2;
+      }
+
+      .active {
+        color: $first-color;
+        text-decoration: none;
+      }
+    }
+  }
+}
