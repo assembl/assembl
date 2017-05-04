@@ -48,7 +48,7 @@ export const xmlHttpRequest = (obj) => {
         // JSONError type. Front-end respects this type of response only.
         const respType = getResponseContentType(xhr);
         if (respType === 'application/json') { resp = JSON.parse(xhr.responseText); }
-        else { resp = xhr.status; }
+        else { resp = [{ type: 'nonJson', message: '', status: xhr.status}] }
         reject(resp);
       }
     };
