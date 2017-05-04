@@ -238,9 +238,10 @@ def react_view(request):
             return Response(body, 401)
         if not canUseReact:
             # Discussion not set up for landing page
-            extra_path = request.path[1:].split("/")  # exclude preceding slash
-            if len(extra_path) > 1:
-                extra_path = "/" + "/".join(extra_path[1:])
+            extra_path = request.path.split("/")  # There is a preceding slash
+            if len(extra_path) > 2:
+                # Carry over all paths after the slug
+                extra_path = "/" + "/".join(extra_path[2:])
             else:
                 extra_path = None
             query = request.query_string or None
