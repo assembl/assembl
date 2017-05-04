@@ -326,12 +326,14 @@ def includeme(config):
     config.add_route('bare_slug', '/{discussion_slug}')
     config.add_route('auto_bare_slug', '/{discussion_slug}/')
     config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
+    config.add_route('new_login', '/login')
 
     react_routes = [
                         "new_home",
                         "bare_slug",
                         "new_styleguide",
-                        "general_react_page"
+                        "general_react_page",
+                        "new_login"
                     ]
 
     register_react_views(config, react_routes)
