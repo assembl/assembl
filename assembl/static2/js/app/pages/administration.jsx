@@ -10,7 +10,9 @@ class Administration extends React.Component {
           <Grid fluid>
             <Row>
               <Col xs={12} md={4}>
-                <Menu />
+                <div className="admin-menu-container">
+                  <Menu />
+                </div>
               </Col>
               <Col xs={12} md={4}>{this.props.children}</Col>
             </Row>

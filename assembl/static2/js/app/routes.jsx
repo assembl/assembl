@@ -21,6 +21,7 @@ import NotFound from './pages/notFound';
 import Terms from './pages/terms';
 import Administration from './pages/administration';
 import SurveyAdmin from './pages/surveyAdmin';
+import ThreadAdmin from './pages/threadAdmin';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateChild = (props) => {
@@ -35,6 +36,21 @@ const DebateChild = (props) => {
     return <TokenVote id={props.id} identifier={props.identifier} />;
   default:
     return <Survey id={props.id} identifier={props.identifier} />;
+  }
+};
+
+const AdminChild = (props) => {
+  switch (props.params.phase) {
+  case 'survey':
+    return <SurveyAdmin />;
+  case 'thread':
+    return <ThreadAdmin />;
+  case 'twoColumns':
+    return <SurveyAdmin />;
+  case 'tokenVote':
+    return <SurveyAdmin />;
+  default:
+    return <SurveyAdmin />;
   }
 };
 
@@ -64,7 +80,7 @@ export default (
             <Route path={routeForRouter('phase', false, { phase: ':phase', themeId: ':themeId' })} component={DebateChild} />
           </Route>
           <Route path={routeForRouter('administration')} component={Administration} >
-            <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={SurveyAdmin} />
+            <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />
           </Route>
         </Route>
       </Route>

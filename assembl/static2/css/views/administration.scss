@@ -1,22 +1,41 @@
 .administration {
   margin: $margin-section 0;
 
-  .admin-menu {
-    position: fixed;
+  .admin-menu-container {
+    height: 280px;
+    position: relative;
+  }
 
-    .list-group-item {
-      background: none;
-      border: none;
-      color: $grey2;
-      padding: 5px 15px;
+  .admin-menu {
+    padding: 0;
+    position: fixed;
+    list-style-type: none;
+
+    li {
+      padding: 0 0 15px;
 
       a {
         color: $grey2;
-      }
 
-      .active {
-        color: $first-color;
-        text-decoration: none;
+        &:hover {
+          color: $first-color;
+        }
+      }
+    }
+
+    .active {
+      color: $first-color;
+      text-decoration: none;
+    }
+  }
+
+  .admin-menu2 {
+    list-style-type: none;
+    padding: 15px 0 0 30px;
+
+    li {
+      &:last-child {
+        padding: 0;
       }
     }
   }

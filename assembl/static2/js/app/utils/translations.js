@@ -186,6 +186,21 @@ const Translations = {
     terms: {
       panelTitle: 'Conditions Générales d\'Utilisations'
     },
+    administration: {
+      edition: 'Discussion',
+      landingpage: 'Landing page',
+      survey: [
+        {
+          section0: 'Créer les thématiques'
+        },
+        {
+          section1: 'Renseigner les thématiques'
+        },
+        {
+          section2: 'Exporter les données'
+        }
+      ]
+    },
     date: {
       format: 'D MMMM YYYY',
       format2: 'DD-MM-YYYY'
@@ -374,6 +389,10 @@ const Translations = {
     },
     terms: {
       panelTitle: 'Terms and Conditions'
+    },
+    administration: {
+      edition: 'Discussion',
+      landingpage: 'Landing page'
     },
     date: {
       format: 'MMMM Do, YYYY',
