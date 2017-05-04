@@ -34,25 +34,8 @@ class SignupForm extends React.Component {
         break;
       }
       case 'general': {
-        switch (auth.signupSuccess.data.error.type) {
-        case 'invalid_email': {
-          msg = I18n.t('login.invalidEmail');
-          break;
-        }
-        case 'existing_username': {
-          msg = I18n.t('login.existingUsername');
-          break;
-        }
-        case 'existing_email': {
-          msg = I18n.t('login.existingEmail');
-          break;
-        }
-        case 'short_name':
-        case 'password':
-        default: {
-          msg = I18n.t('login.somethingWentWrong');
-        }
-        }
+        const firstError = auth.signupSuccess.data[0];
+        msg = firstError.message;
         break;
       }
       default: {
