@@ -218,15 +218,14 @@ def react_view(request):
             if login_url:
                 pass
             elif next_view:
-                # TODO: What if !canUseReact here?
-                login_url = request.route_url("general_react_page",
+                # Assuming that the next_view already knows about canUseReact.
+                # If not, will be re-routed
+                login_url = request.route_url("contextual_react_login",
                                               discussion_slug=discussion.slug,
-                                              extra_path='/login',
                                               _query={"next": next_view})
             else:
                 login_url = request.route_url(
-                    'contextual_react_login', discussion_slug=discussion.slug,
-                    extra_path='/login')
+                    'contextual_react_login', discussion_slug=discussion.slug)
             return HTTPTemporaryRedirect(login_url)
         elif not canRead:
             # User is logged-in but doesn't have access to the discussion
