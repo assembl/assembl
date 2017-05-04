@@ -32,8 +32,9 @@ export const xmlHttpRequest = (obj) => {
       });
     }
     xhr.onload = () => {
+      let resp;
       if (xhr.status >= 200 && xhr.status < 300) {
-        let resp = xhr.response;
+        resp = xhr.response;
         try {
           resp = JSON.parse(resp);
         } catch (e) {
@@ -45,7 +46,9 @@ export const xmlHttpRequest = (obj) => {
       } else {
         // Contract agreed upon. If API is to fail, must respond with
         // JSONError type. Front-end respects this type of response only.
-        const resp = JSON.parse(xhr.responseText);
+        const respType = getResponseContentType(xhr);
+        if (respType === 'application/json') { resp = JSON.parse(xhr.responseText); }
+        else { resp = xhr.status; }
         reject(resp);
       }
     };
