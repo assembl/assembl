@@ -196,8 +196,11 @@ def react_view(request):
     old_context = base_default_context(request)
     user_id = request.authenticated_userid or Everyone
     discussion = old_context["discussion"] or None
+    get_route = old_context["get_route"]
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, P_READ)
+        canUseReact = (is_login_route(request.matched_route.name) or
+                       discussion.preferences['landing_page'])
         if not canRead and user_id == Everyone:
             # User isn't logged-in and discussion isn't public:
             # Maybe we're already in a login/register page etc.
@@ -206,23 +209,23 @@ def react_view(request):
 
             # otherwise redirect to login page
             next_view = request.params.get('next', None)
-            if not next_view and discussion:
+            if not next_view:
                 # next_view = request.route_url("")
-                next_view = request.route_path("new_home",
+                next_view = request.route_path("new_home" if canUseReact else "home",
                                                discussion_slug=discussion.slug)
 
             login_url = get_social_autologin(request, discussion, next_view)
             if login_url:
                 pass
             elif next_view:
-                login_url = request.route_url("general_react_page",
+                # Assuming that the next_view already knows about canUseReact.
+                # If not, will be re-routed
+                login_url = request.route_url("contextual_react_login",
                                               discussion_slug=discussion.slug,
-                                              extra_path='/login',
                                               _query={"next": next_view})
             else:
                 login_url = request.route_url(
-                    'contextual_react_login', discussion_slug=discussion.slug,
-                    extra_path='/login')
+                    'contextual_react_login', discussion_slug=discussion.slug)
             return HTTPTemporaryRedirect(login_url)
         elif not canRead:
             # User is logged-in but doesn't have access to the discussion
@@ -233,6 +236,20 @@ def react_view(request):
             template = jinja_env.get_template('react_unauthorized.jinja2')
             body = template.render(get_default_context(request))
             return Response(body, 401)
+        if not canUseReact:
+            # Discussion not set up for landing page
+            extra_path = request.path.split("/")  # There is a preceding slash
+            if len(extra_path) > 2:
+                # Carry over all paths after the slug
+                extra_path = "/" + "/".join(extra_path[2:])
+            else:
+                extra_path = None
+            query = request.query_string or None
+            url = request.route_url('home',
+                                    discussion_slug=discussion.slug,
+                                    extra_path=extra_path,
+                                    _query=query)
+            return HTTPTemporaryRedirect(url)
     else:
         return get_login_context(request)
 
@@ -245,7 +262,7 @@ def react_view(request):
         messages=old_context.get('messages', None),
         token=request.params.get('token', None),
         providers=old_context.get('providers', None),
-        get_route=old_context.get('get_route', None)
+        get_route=get_route
     )
     return context
 
@@ -305,28 +322,28 @@ def register_react_views(config, routes):
 
 
 def includeme(config):
-    if asbool(AssemblConfig.get('new_frontend', False)):
-        config.add_route('new_styleguide', '/styleguide')
-        config.add_route('test_error_view', '/{discussion_slug}/test/*type')
-        config.add_route('new_home', '/{discussion_slug}/home')
-        config.add_route('new_home_bare', '/{discussion_slug}')
-        config.add_route('auto_new_home', '/{discussion_slug}/')
-        config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
+    config.add_route('new_styleguide', '/styleguide')
+    config.add_route('test_error_view', '/{discussion_slug}/test/*type')
+    config.add_route('new_home', '/{discussion_slug}/home')
+    config.add_route('bare_slug', '/{discussion_slug}')
+    config.add_route('auto_bare_slug', '/{discussion_slug}/')
+    config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
 
-        react_routes = [
-                            "new_home",
-                            "new_home_bare",
-                            "new_styleguide",
-                            "general_react_page"
-                        ]
+    react_routes = [
+                        "new_home",
+                        "bare_slug",
+                        "new_styleguide",
+                        "general_react_page"
+                    ]
 
-        register_react_views(config, react_routes)
+    register_react_views(config, react_routes)
 
-        # Use these routes to test global views
-        config.add_view(test_error_view, route_name='test_error_view',
-                        request_method='GET')
+    # Use these routes to test global views
+    config.add_view(test_error_view, route_name='test_error_view',
+                    request_method='GET')
 
-
-        def redirector(request):
-            return HTTPMovedPermanently(request.route_url('new_home', discussion_slug=request.matchdict.get('discussion_slug')))
-        config.add_view(redirector, route_name='auto_new_home')
+    def redirector(request):
+        return HTTPMovedPermanently(request.route_url(
+            'bare_slug',
+            discussion_slug=request.matchdict.get('discussion_slug')))
+    config.add_view(redirector, route_name='auto_bare_slug')

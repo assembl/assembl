@@ -639,11 +639,19 @@ def user_confirm_email(request):
     if account and account.verified and logged_in:
         # no need to revalidate, just send to discussion.
         # Question: maybe_auto_subscribe? Doubt it.
+        if inferred_discussion:
+            if inferred_discussion.preferences['landing_page']:
+                route = 'new_home'
+            else:
+                route = 'home'
+        else:
+            route = 'discussion_list'
+        error = localizer.translate(
+            _("Email <%s> already confirmed")) % (account.email,)
+        request.session.flash(error)
         return HTTPFound(location=request.route_url(
-            'new_home' if inferred_discussion else 'discussion_list',
-            discussion_slug=inferred_discussion.slug,
-            _query=dict(message=localizer.translate(
-                _("Email <%s> already confirmed")) % (account.email,))))
+            route,
+            discussion_slug=inferred_discussion.slug if inferred_discussion else None))
 
     if validity != Validity.VALID or old_token:
         # V-, B-: Invalid or obsolete token

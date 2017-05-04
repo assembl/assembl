@@ -207,7 +207,7 @@
               {% for provider in providers %}
                 <form id="{{provider.name}}" class="mts js_login_{{provider.type}}" method="get" action="{{provider.add_account}}">
                   {% if discussion %}
-                    <input type="hidden" name="next" value="{{ get_route('new_home')}}" />
+                    <input type="hidden" name="next" value="{{ get_route('bare_slug')}}" />
                   {% endif %}
 
                   {% for k, v in provider.extra.items() %}
