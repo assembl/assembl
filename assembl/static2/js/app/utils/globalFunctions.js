@@ -34,8 +34,8 @@ export const getConnectedUserName = () => {
   return userName;
 };
 
-export const getAuthorizationToken = () => {
-  return document.getElementById('token') ? document.getElementById('token').text : null;
+export const getAuthorizationToken = (location) => {
+  return 'token' in location.query ? location.query.token : null;
 };
 
 export const getProvidersData = () => {

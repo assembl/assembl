@@ -260,7 +260,6 @@ def react_view(request):
         user=old_context['user'],
         error=old_context.get('error', None),
         messages=old_context.get('messages', None),
-        token=request.params.get('token', None),
         providers=old_context.get('providers', None),
         get_route=get_route
     )

@@ -16,7 +16,7 @@ class ChangePassword extends React.Component {
     this.submitForm = this.submitForm.bind(this);
 
     this.state = {
-      token: getAuthorizationToken()
+      token: getAuthorizationToken(this.props.location)
     };
   }
 
