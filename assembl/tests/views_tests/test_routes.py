@@ -22,13 +22,26 @@ def test_route_paths(discussion, test_app, test_adminuser_webrequest):
     assert_path(req, '/debate/%s/login' % slug, 'contextual_login', discussion_slug=slug)
 
 
-def test_route_discussion_root(discussion, test_app):
+def test_route_discussion_root(
+        discussion, test_app, test_adminuser_webrequest):
     """/slug"""
     slug = discussion.slug
 
     route = "/%s" % slug
+    original = discussion.preferences['landing_page']
+    discussion.preferences['landing_page'] = False
+    discussion.db.commit()
+    resp = test_app.get(route)
+    assert resp.status_int == 307
+    assert resp.location == test_adminuser_webrequest.route_url(
+        'home', discussion_slug=discussion.slug)
+
+    discussion.preferences['landing_page'] = True
+    discussion.db.commit()
     resp = test_app.get(route)
     assert resp.status_int == 200
+    discussion.preferences['landing_page'] = original
+    discussion.db.commit()
 
 
 def test_route_discussion_root_redirector(discussion, test_app):
