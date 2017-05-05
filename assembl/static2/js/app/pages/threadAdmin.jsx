@@ -1,6 +1,6 @@
 import React from 'react';
 
-class threadAdmin extends React.Component {
+class ThreadAdmin extends React.Component {
   render() {
     return (
       <p>Administration de la phase thread</p>
@@ -8,4 +8,4 @@ class threadAdmin extends React.Component {
   }
 }
 
-export default threadAdmin;
+export default ThreadAdmin;

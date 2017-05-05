@@ -39,7 +39,7 @@ class Menu extends React.Component {
                   {translations[locale].administration[phase.identifier].map((section, index) => {
                     return (
                       <li key={index}>
-                        <Link to="/admin">
+                        <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}?section=${index+1}`} activeClassName="active">
                           {section[`section${index}`]}
                         </Link>
                       </li>

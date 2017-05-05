@@ -1,6 +1,6 @@
 import React from 'react';
 
-class surveyAdmin extends React.Component {
+class SurveyAdmin extends React.Component {
   render() {
     return (
       <p>Administration de la phase survey</p>
@@ -8,4 +8,4 @@ class surveyAdmin extends React.Component {
   }
 }
 
-export default surveyAdmin;
+export default SurveyAdmin;

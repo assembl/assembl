@@ -22,6 +22,8 @@ import Terms from './pages/terms';
 import Administration from './pages/administration';
 import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
+import TwoColumnsAdmin from './pages/twoColumnsAdmin';
+import TokenVoteAdmin from './pages/tokenVoteAdmin';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateChild = (props) => {
@@ -35,7 +37,7 @@ const DebateChild = (props) => {
   case 'tokenVote':
     return <TokenVote id={props.id} identifier={props.identifier} />;
   default:
-    return <Survey id={props.id} identifier={props.identifier} />;
+    return <Thread id={props.id} identifier={props.identifier} />;
   }
 };
 
@@ -46,11 +48,11 @@ const AdminChild = (props) => {
   case 'thread':
     return <ThreadAdmin />;
   case 'twoColumns':
-    return <SurveyAdmin />;
+    return <TwoColumnsAdmin />;
   case 'tokenVote':
-    return <SurveyAdmin />;
+    return <TokenVoteAdmin />;
   default:
-    return <SurveyAdmin />;
+    return <ThreadAdmin />;
   }
 };
 
