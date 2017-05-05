@@ -150,6 +150,13 @@ def get_provider_data(get_route, providers=None):
             for prov_id, data in saml_providers.iteritems()
         ])
 
+    provider_data.append({
+        'name': 'Test SNCF',
+        'type': 'dummy',
+        'add_social_account': 'whatever',
+        'login': 'whatever',
+        'extra': {}
+    })
     return provider_data
 
 
