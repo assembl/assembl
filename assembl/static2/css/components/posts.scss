@@ -22,6 +22,7 @@
   .body {
     font-family: $font-family4;
     text-align: left;
+    word-break: break-word;
   }
 
   .sentiments {
@@ -71,6 +72,10 @@
     position: absolute;
     top: 70px;
     width: 100%;
+  }
+
+  .no-proposals {
+    margin: 0 0 70px;
   }
 }
 

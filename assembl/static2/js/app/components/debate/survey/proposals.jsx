@@ -37,7 +37,9 @@ class Proposals extends React.Component {
           </div>
         }
         {posts.length === 0 &&
-          <Translate value="debate.survey.noProposals" />
+          <div className="no-proposals">
+            <Translate value="debate.survey.noProposals" />
+          </div>
         }
       </div>
     );
