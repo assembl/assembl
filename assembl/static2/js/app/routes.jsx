@@ -44,7 +44,7 @@ const DebateChild = (props) => {
 const AdminChild = (props) => {
   switch (props.params.phase) {
   case 'survey':
-    return <SurveyAdmin />;
+    return <SurveyAdmin section={`section${props.location.query.section}`} />;
   case 'thread':
     return <ThreadAdmin />;
   case 'twoColumns':

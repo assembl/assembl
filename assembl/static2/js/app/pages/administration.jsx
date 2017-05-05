@@ -14,7 +14,7 @@ class Administration extends React.Component {
                   <Menu />
                 </div>
               </Col>
-              <Col xs={12} md={4}>{this.props.children}</Col>
+              <Col xs={12} md={8}>{this.props.children}</Col>
             </Row>
           </Grid>
         </div>
