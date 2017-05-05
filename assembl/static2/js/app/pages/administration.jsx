@@ -4,6 +4,7 @@ import Menu from '../components/administration/menu';
 
 class Administration extends React.Component {
   render() {
+    const { phase } = this.props.params;
     return (
       <div className="administration">
         <div className="max-container">
@@ -11,7 +12,7 @@ class Administration extends React.Component {
             <Row>
               <Col xs={12} md={4}>
                 <div className="admin-menu-container">
-                  <Menu />
+                  <Menu requestedPhase={phase} />
                 </div>
               </Col>
               <Col xs={12} md={8}>{this.props.children}</Col>

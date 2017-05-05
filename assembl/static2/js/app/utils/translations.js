@@ -189,17 +189,7 @@ const Translations = {
     administration: {
       edition: 'Discussion',
       landingpage: 'Landing page',
-      survey: [
-        {
-          section0: 'Créer les thématiques'
-        },
-        {
-          section1: 'Renseigner les thématiques'
-        },
-        {
-          section2: 'Exporter les données'
-        }
-      ]
+      survey: ['Créer les thématiques', 'Renseigner les thématiques', 'Exporter les données']
     },
     date: {
       format: 'D MMMM YYYY',
@@ -392,7 +382,8 @@ const Translations = {
     },
     administration: {
       edition: 'Discussion',
-      landingpage: 'Landing page'
+      landingpage: 'Landing page',
+      survey: ['Create themes', 'Edit themes', 'Export data']
     },
     date: {
       format: 'MMMM Do, YYYY',

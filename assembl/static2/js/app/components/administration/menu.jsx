@@ -10,15 +10,16 @@ class Menu extends React.Component {
     const slug = { slug: getDiscussionSlug() };
     const { timeline } = this.props.debate.debateData;
     const { locale, translations } = this.props.i18n;
+    const { requestedPhase } = this.props;
     return (
       <ul className="admin-menu">
         <li className="menu-item">
-          <Link to={`${get('administration', slug)}`}>
+          <Link to={`${get('administration', slug)}/discussion`} activeClassName="active">
             <Translate value="administration.edition" />
           </Link>
         </li>
         <li className="menu-item">
-          <Link to={`${get('administration', slug)}`}>
+          <Link to={`${get('administration', slug)}/landingPage`} activeClassName="active">
             <Translate value="administration.landingpage" />
           </Link>
         </li>
@@ -35,12 +36,12 @@ class Menu extends React.Component {
                 })}
               </Link>
               {translations.fr.administration[phase.identifier] &&
-                <ul className="admin-menu2">
+                <ul className={phase.identifier === requestedPhase ? 'shown admin-menu2' : 'hidden admin-menu2'}>
                   {translations[locale].administration[phase.identifier].map((section, index) => {
                     return (
                       <li key={index}>
                         <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}?section=${index+1}`} activeClassName="active">
-                          {section[`section${index}`]}
+                          {section}
                         </Link>
                       </li>
                     )
