@@ -63,6 +63,8 @@ def fetch_facebook_sdk_locales():
     global facebook_sdk_locales
     xml_path = 'https://www.facebook.com/translations/FacebookLocales.xml'
     req = r.get(xml_path)
+    if not req.ok:
+        return
     xml = req.content
     root = etree.fromstring(xml)
     locales = root.xpath('//representation/text()')
