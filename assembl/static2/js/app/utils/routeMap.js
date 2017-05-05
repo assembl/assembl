@@ -10,6 +10,7 @@ const routes = {
   oldLogin: 'legacy/login',
   oldDebate: 'debate/${slug}',
   styleguide: 'styleguide',
+  root: '',
   login: 'login',
   signup: 'signup',
   changePassword: 'changePassword',
