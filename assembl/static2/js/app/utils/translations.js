@@ -283,7 +283,7 @@ const Translations = {
       createAccount: 'Create an account',
       send: 'Send',
       sendPwdConfirm: 'Password change requested',
-      accountCreated: 'Your account was created',
+      accountCreated: 'Your account has been created',
       sendPwdMsg: 'We have sent you an email with a temporary connection link. Please use that link to log in and change your password. Make sure to check your spam folder if an email is not in your inbox',
       resend: 'Resend the email',
       accountCreatedMsg: 'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.',
