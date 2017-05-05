@@ -283,12 +283,14 @@ First, uncomment the following line from your `local.ini` file
 This will enable you to use a debugging server. Open a new terminal.
 
 .. code:: sh
+
     source venv/bin/activate
     python -m smtpd -n -c DebuggingServer
 
 Outgoing emails will be viewable in the terminal. To test it, run a local assembl instance.
 
 .. code:: sh
+
     source venv/bin/activate
     supervisord
     supervisorctl start dev:server
