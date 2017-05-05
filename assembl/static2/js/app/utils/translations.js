@@ -95,7 +95,7 @@ const Translations = {
       createAccount: 'Créer un compte',
       send: 'Envoyer',
       sendPwdConfirm: 'Changement de mot de passe demandé',
-      accountCreated: 'Votre compte d\'être créé',
+      accountCreated: 'Votre compte vient d\'être créé',
       sendPwdMsg: 'Nous vous avons envoyé un email avec un lien de connexion temporaire. Cliquez sur ce lien pour vous connecter et changer votre mot de passe. Si l\'email n\'est pas arrivé dans votre boîte de réception, veuillez vérifier dans vos spams.',
       resend: 'Renvoyer l\'email',
       accountCreatedMsg: 'Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si l\'email n\'est pas arrivé dans votre boîte de réception, veuillez vérifier dans vos spams.',
