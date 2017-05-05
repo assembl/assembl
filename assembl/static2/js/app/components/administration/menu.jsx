@@ -35,7 +35,7 @@ class Menu extends React.Component {
                   }
                 })}
               </Link>
-              {translations.fr.administration[phase.identifier] &&
+              {translations[locale].administration[phase.identifier] &&
                 <ul className={phase.identifier === requestedPhase ? 'shown admin-menu2' : 'hidden admin-menu2'}>
                   {translations[locale].administration[phase.identifier].map((section, index) => {
                     return (

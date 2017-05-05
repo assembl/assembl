@@ -11,17 +11,15 @@ class Administration extends React.Component {
         <div className="max-container">
           <Grid fluid>
             <Row>
-              <Col xs={12} md={12}>
-                <LanguageMenu />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={4}>
+              <Col xs={12} md={3}>
                 <div className="admin-menu-container">
                   <Menu requestedPhase={phase} />
                 </div>
               </Col>
               <Col xs={12} md={8}>{this.props.children}</Col>
+              <Col xs={12} md={1}>
+                <LanguageMenu />
+              </Col>
             </Row>
           </Grid>
         </div>

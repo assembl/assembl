@@ -39,4 +39,50 @@
       }
     }
   }
+
+  .language-menu {
+    position: fixed;
+  }
+
+  .admin-box {
+    background-color: $white;
+
+    .dark-title-3 {
+      padding: 40px 40px 0;
+    }
+
+    .admin-content {
+      padding: 30px 40px 80px;
+      text-align: center;
+    }
+
+    .annotation {
+      border-bottom: $navbar-border;
+      margin: 0 40px 20px;
+      padding: 0 0 40px;
+    }
+  }
+
+  .plus {
+    background-color: $first-color;
+    border-radius: 20px;
+    color: $white;
+    cursor: pointer;
+    height: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 0 1px 2px;
+    text-align: center;
+    width: 20px;
+  }
+
+  input[type='text'] {
+    margin: 0 auto;
+    max-width: 400px;
+  }
+
+  input[type='file'] {
+    margin: 0 auto;
+    max-width: 400px;
+  }
 }

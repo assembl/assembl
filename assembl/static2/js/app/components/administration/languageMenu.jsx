@@ -6,10 +6,12 @@ class LanguageMenu extends React.Component {
   render() {
     const { translations } = this.props.i18n;
     return(
-      <div>
-        {Object.keys(translations).map((key, index) => {
-          return (<span key={index}>{key.toUpperCase()}</span>);
-        })}
+      <div className="relative right">
+        <div className="language-menu">
+          {Object.keys(translations).map((key, index) => {
+            return (<div key={index}>{key.toUpperCase()}</div>);
+          })}
+        </div>
       </div>
     );
   }
