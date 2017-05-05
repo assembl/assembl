@@ -118,7 +118,7 @@ class Navigation extends React.Component {
       target = document.getElementById(`q${questionIndex}`);
     }
     const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
-    scrollToPosition(targetOffset, 600);
+    scrollToPosition((targetOffset - 40), 600);
     this.props.scrollToQuestion(false);
   }
   render() {
