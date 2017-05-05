@@ -267,11 +267,18 @@ var messageSendView = Marionette.LayoutView.extend({
     if (this.sendInProgress !== false) {
       return;
     }
-    if (chosenTargetIdeaField && chosenTargetIdeaField.val())
-    {
-      reply_idea_id = chosenTargetIdeaField.val();
+    // If there is a UI input which tells in which idea to post the message, then post in this idea.
+    // The value of this UI input can be empty, which means the message has to be posted in the general debate discussion.
+    // If there is no field, post in idea given in options, if any.
+    if (chosenTargetIdeaField && chosenTargetIdeaField.length){
+      if (chosenTargetIdeaField.val()){
+        reply_idea_id = chosenTargetIdeaField.val();
+      }
+      else {
+        reply_idea_id = null;
+      }
     } else if (this.options.reply_idea) {
-        reply_idea_id = this.options.reply_idea.getId();
+      reply_idea_id = this.options.reply_idea.getId();
     }
 
     if (this.options.reply_message_id) {
