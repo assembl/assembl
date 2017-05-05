@@ -32,13 +32,13 @@ class ChangePassword extends React.Component {
       const slug = getDiscussionSlug();
       let route, url;
       if (slug) {
-        route = `/${get('home', { slug: slug })}`;
-        url = new URL(route, that.props.location.origin);
+        route = get('home', { slug: slug });
+        url = new URL(route, window.location.origin);
         window.location = url;
       }
       else {
-        route = `/${get('root')}`;
-        url = new URL(route, that.props.location.origin);
+        route = get('root');
+        url = new URL(route, window.location.origin);
         window.location = url;
       }
     })
