@@ -153,7 +153,10 @@ def get_provider_data(get_route, providers=None):
     return provider_data
 
 
-def create_get_route(request, discussion=None):
+def create_get_route(request, discussion=0):
+    if discussion is 0:  # None would be a known absence, don't recalculate
+        from assembl.auth.util import discussion_from_request
+        discussion = discussion_from_request(request)
     if discussion:
         def get_route(name, **kwargs):
             if name == "bare_slug":

@@ -322,7 +322,7 @@ def assembl_profile(request):
         (ea, session.query(AbstractAgentAccount).filter_by(
             email_ci=ea.email_ci, verified=True).first())
         for ea in profile.email_accounts if not ea.verified]
-    get_route = create_get_route(request, discussion_from_request(request))
+    get_route = create_get_route(request)
     return render_to_response(
         'assembl:templates/profile.jinja2',
         dict(get_default_context(request),
@@ -738,10 +738,10 @@ def user_confirm_email(request):
 )
 def login_denied_view(request):
     localizer = request.localizer
-    return dict(get_login_context(request),
-                error=localizer.translate(_('Login failed, try again')))
-    # TODO: If logged in otherwise, go to profile page.
-    # Otherwise, back to login page
+    request.session.flash(localizer.translate(_('Login failed, try again')))
+    get_route = create_get_route(request)
+    return HTTPFound(location=get_route('react_login',
+                     _query=request.GET or None))
 
 
 @view_config(
