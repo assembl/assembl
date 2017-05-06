@@ -546,6 +546,7 @@ def assembl_login_complete_view(request):
 @view_config(route_name="contextual_social.auth", request_method=('GET', 'POST'))
 @psa('social.complete')
 def auth(request):
+    forget(request)
     request.session['discussion'] = request.matchdict['discussion_slug']
     request.session['add_account'] = False
     return do_auth(request.backend, redirect_name='next')
