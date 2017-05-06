@@ -737,6 +737,7 @@ def user_confirm_email(request):
     renderer='assembl:templates/login.jinja2',
 )
 def login_denied_view(request):
+    # TODO: Go to appropriate login page, and flash error message.
     localizer = request.localizer
     request.session.flash(localizer.translate(_('Login failed, try again')))
     get_route = create_get_route(request)

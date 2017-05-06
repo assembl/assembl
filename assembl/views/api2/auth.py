@@ -6,7 +6,7 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.settings import asbool
 from pyramid.security import (
-    authenticated_userid, Everyone, NO_PERMISSION_REQUIRED, remember)
+    authenticated_userid, Everyone, NO_PERMISSION_REQUIRED, remember, forget)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
@@ -302,6 +302,16 @@ def verify_password(request):
 
 
 @view_config(
+    context=CollectionContext, ctx_instance_class=User,
+    request_method='POST', permission=NO_PERMISSION_REQUIRED,
+    name="logout", renderer='json')
+def logout(request):
+    forget(request)
+    # Interesting question: Should I add a parameter
+    # to log out of the social service?
+
+
+@view_config(
     context=CollectionContext, ctx_collection_class=AgentProfile,
     request_method='POST', permission=NO_PERMISSION_REQUIRED,
     name="password_reset", header=JSON_HEADER)
@@ -405,13 +415,13 @@ def do_password_change(request):
     context=ClassContext, ctx_class=User, header=JSON_HEADER,
     request_method='POST', permission=NO_PERMISSION_REQUIRED)
 def assembl_register_user(request):
-    user_id = authenticated_userid(request) or Everyone
+    forget(request)
     localizer = request.localizer
     session = AgentProfile.default_db
     json = request.json
     discussion = discussion_from_request(request)
     permissions = get_permissions(
-        user_id, discussion.id if discussion else None)
+        Everyone, discussion.id if discussion else None)
 
     if discussion and not (
             P_SELF_REGISTER in permissions or
@@ -501,7 +511,7 @@ def assembl_register_user(request):
             if discussion:
                 maybe_auto_subscribe(user, discussion)
         session.flush()
-        return CreationResponse(user, user_id, permissions)
+        return CreationResponse(user, Everyone, permissions)
     finally:
         session.autoflush = old_autoflush
 

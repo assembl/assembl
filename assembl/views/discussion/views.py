@@ -5,8 +5,7 @@ import os.path
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
-from pyramid.settings import asbool
-from pyramid.security import Everyone
+from pyramid.security import Everyone, forget
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
@@ -30,8 +29,6 @@ from .. import (
     get_locale_from_request)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
-
-from assembl.lib import config as AssemblConfig
 
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
@@ -175,11 +172,15 @@ def home_view(request):
     return response
 
 
-def is_login_route(route_name):
+def bare_route_name(route_name):
     if route_name.startswith('contextual_'):
         route_name = route_name[11:]
     if route_name.startswith('react_'):
         route_name = route_name[6:]
+    return route_name
+
+
+def is_login_route(route_name):
     return route_name in (
         "login", "register", "request_password_change",
         "do_password_change")
@@ -191,20 +192,23 @@ def react_view(request):
     Must add user authentication, permission, etc.
     Basic view for the homepage
     """
-    if is_login_route(request.matched_route.name):
+    bare_route = bare_route_name(request.matched_route.name)
+    if is_login_route(bare_route):
         request.session.pop('discussion')
+        if bare_route in ("register", "login"):
+            forget(request)
     old_context = base_default_context(request)
     user_id = request.authenticated_userid or Everyone
     discussion = old_context["discussion"] or None
     get_route = old_context["get_route"]
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, P_READ)
-        canUseReact = (is_login_route(request.matched_route.name) or
+        canUseReact = (is_login_route(bare_route) or
                        discussion.preferences['landing_page'])
         if not canRead and user_id == Everyone:
             # User isn't logged-in and discussion isn't public:
             # Maybe we're already in a login/register page etc.
-            if is_login_route(request.matched_route.name):
+            if is_login_route(bare_route):
                 return get_login_context(request)
 
             # otherwise redirect to login page
