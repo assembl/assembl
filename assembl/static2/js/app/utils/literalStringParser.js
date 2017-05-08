@@ -17,7 +17,7 @@ const createParser = (template) => {
   // Afterwards, replace anything that's not ${map.expressions}' (etc) with a blank string.
   .replace(/(\$\{(?!map\.)[^}]+\})/g, '');
 
-  return Function('map', `return \`${sanitized}\``);
+  return new Function('map', `return \`${sanitized}\``);
 };
 
 
