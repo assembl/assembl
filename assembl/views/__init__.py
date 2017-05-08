@@ -180,7 +180,7 @@ def get_default_context(request, **kwargs):
     from ..auth.util import get_user, get_current_discussion
     if request.scheme == "http"\
             and asbool(config.get("require_secure_connection")):
-        return HTTPFound("https://" + request.host + request.path_qs)
+        raise HTTPFound("https://" + request.host + request.path_qs)
     react_url = '/static2'
     use_webpack_server = asbool(config.get('use_webpack_server'))
     if use_webpack_server:
