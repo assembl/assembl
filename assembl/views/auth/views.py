@@ -725,12 +725,17 @@ def user_confirm_email(request):
                 )) % (account.email,)
 
     if inferred_discussion:
-        return HTTPFound(location=request.route_url(
-            'home', discussion_slug=inferred_discussion.slug,
-            _query=dict(message=message)))
+        if inferred_discussion.preferences['landing_page']:
+            route = 'new_home'
+        else:
+            route = 'home'
     else:
-        return HTTPFound(
-            location=request.route_url('discussion_list'))
+        route = 'discussion_list'
+    return HTTPFound(location=request.route_url(
+        route,
+        discussion_slug=inferred_discussion.slug
+        if inferred_discussion else None,
+        _query=dict(message=message)))
 
 
 @view_config(
