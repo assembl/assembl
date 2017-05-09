@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-03 12:12+0200\n"
+"POT-Creation-Date: 2017-05-09 11:08+0200\n"
 "PO-Revision-Date: 2014-07-24 17:38-0500\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: en\n"
@@ -68,113 +68,123 @@ msgstr ""
 msgid "All languages expected in the discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:355 assembl/models/preferences.py:369
+#: assembl/models/preferences.py:355
+msgid "Use landing page"
+msgstr ""
+
+#: assembl/models/preferences.py:356
+msgid ""
+"Are users directed to the landing page and phases at login, or diretly to"
+" the debate"
+msgstr ""
+
+#: assembl/models/preferences.py:364 assembl/models/preferences.py:378
 msgid "Translation service"
 msgstr ""
 
-#: assembl/models/preferences.py:358
+#: assembl/models/preferences.py:367
 msgid "No translation"
 msgstr ""
 
-#: assembl/models/preferences.py:360
+#: assembl/models/preferences.py:369
 msgid "Dummy translation service (two steps)"
 msgstr ""
 
-#: assembl/models/preferences.py:362
+#: assembl/models/preferences.py:371
 msgid "Dummy translation service (one step)"
 msgstr ""
 
-#: assembl/models/preferences.py:364
+#: assembl/models/preferences.py:373
 msgid "Dummy translation service (two steps) with errors"
 msgstr ""
 
-#: assembl/models/preferences.py:366
+#: assembl/models/preferences.py:375
 msgid "Dummy translation service (one step) with errors"
 msgstr ""
 
-#: assembl/models/preferences.py:368
+#: assembl/models/preferences.py:377
 msgid "Google Translate"
 msgstr ""
 
-#: assembl/models/preferences.py:381
+#: assembl/models/preferences.py:390
 msgid "Panel order in simple view"
 msgstr ""
 
-#: assembl/models/preferences.py:384
+#: assembl/models/preferences.py:393
 msgid "Navigation, Idea, Messages"
 msgstr ""
 
-#: assembl/models/preferences.py:385
+#: assembl/models/preferences.py:394
 msgid "Navigation, Messages, Idea"
 msgstr ""
 
-#: assembl/models/preferences.py:386
+#: assembl/models/preferences.py:395
 msgid "Order of panels"
 msgstr ""
 
-#: assembl/models/preferences.py:398
+#: assembl/models/preferences.py:407
 msgid "Extra JSON parameters"
 msgstr ""
 
-#: assembl/models/preferences.py:400
+#: assembl/models/preferences.py:409
 msgid "Parameters for quick frontend settings"
 msgstr ""
 
-#: assembl/models/preferences.py:409
+#: assembl/models/preferences.py:418
 msgid "Terms of use URL"
 msgstr ""
 
-#: assembl/models/preferences.py:411
+#: assembl/models/preferences.py:420
 msgid "URL of a document presenting terms of use for the discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:420
+#: assembl/models/preferences.py:429
 msgid "Video URL"
 msgstr ""
 
-#: assembl/models/preferences.py:422
+#: assembl/models/preferences.py:431
 msgid "URL of a video presenting the discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:431
+#: assembl/models/preferences.py:440
 msgid "Video description"
 msgstr ""
 
-#: assembl/models/preferences.py:433
+#: assembl/models/preferences.py:442
 msgid "Description of the video presenting the discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:442
+#: assembl/models/preferences.py:451
 msgid "Social sharing"
 msgstr ""
 
-#: assembl/models/preferences.py:445
+#: assembl/models/preferences.py:454
 msgid "Show the share button on posts and ideas"
 msgstr ""
 
-#: assembl/models/preferences.py:456
+#: assembl/models/preferences.py:465
 msgid "Private authentication server"
 msgstr ""
 
-#: assembl/models/preferences.py:458
+#: assembl/models/preferences.py:467
 msgid ""
 "Endpoint URL of a private authentication that users will mandatorily have"
 " to authenticate themselves with."
 msgstr ""
 
-#: assembl/models/preferences.py:472 assembl/models/preferences.py:836
+#: assembl/models/preferences.py:481 assembl/models/preferences.py:845
 msgid "No special authentication"
 msgstr ""
 
-#: assembl/models/preferences.py:474
+#: assembl/models/preferences.py:483
 msgid "WordPress OAuth Server"
 msgstr ""
 
-#: assembl/models/preferences.py:476
+#: assembl/models/preferences.py:485
 msgid "Authentication service type"
 msgstr ""
 
-#: assembl/models/preferences.py:478
+#: assembl/models/preferences.py:487
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -182,79 +192,79 @@ msgid ""
 "backend."
 msgstr ""
 
-#: assembl/models/preferences.py:493
+#: assembl/models/preferences.py:502
 msgid "Authentication key"
 msgstr ""
 
-#: assembl/models/preferences.py:494
+#: assembl/models/preferences.py:503
 msgid "Key for assembl as a client of the authentication server"
 msgstr ""
 
-#: assembl/models/preferences.py:506
+#: assembl/models/preferences.py:515
 msgid "Authentication secret"
 msgstr ""
 
-#: assembl/models/preferences.py:507
+#: assembl/models/preferences.py:516
 msgid "Secret for assembl as a client of the authentication server"
 msgstr ""
 
-#: assembl/models/preferences.py:520
+#: assembl/models/preferences.py:529
 msgid "Allow access to moderated text"
 msgstr ""
 
-#: assembl/models/preferences.py:523
+#: assembl/models/preferences.py:532
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr ""
 
-#: assembl/models/preferences.py:536
+#: assembl/models/preferences.py:545
 msgid "Idea panel opens automatically"
 msgstr ""
 
-#: assembl/models/preferences.py:539
+#: assembl/models/preferences.py:548
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
 msgstr ""
 
-#: assembl/models/preferences.py:551
+#: assembl/models/preferences.py:560
 msgid "Ids of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:553
+#: assembl/models/preferences.py:562
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr ""
 
-#: assembl/models/preferences.py:566
+#: assembl/models/preferences.py:575
 msgid "Default colors of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:568
+#: assembl/models/preferences.py:577
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr ""
 
-#: assembl/models/preferences.py:580
+#: assembl/models/preferences.py:589
 msgid "Names of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:582
+#: assembl/models/preferences.py:591
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
 msgstr ""
 
-#: assembl/models/preferences.py:595
+#: assembl/models/preferences.py:604
 msgid "Default permissions"
 msgstr ""
 
-#: assembl/models/preferences.py:598
+#: assembl/models/preferences.py:607
 msgid "The basic permissions for a new discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:671
+#: assembl/models/preferences.py:680
 msgid "Require Email Domain"
 msgstr ""
 
-#: assembl/models/preferences.py:674
+#: assembl/models/preferences.py:683
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -262,71 +272,71 @@ msgid ""
 "empty."
 msgstr ""
 
-#: assembl/models/preferences.py:690
+#: assembl/models/preferences.py:699
 msgid "Show CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:693
+#: assembl/models/preferences.py:702
 msgid "Show the CI Dashboard in the panel group window"
 msgstr ""
 
-#: assembl/models/preferences.py:705
+#: assembl/models/preferences.py:714
 msgid "URL of CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:707
+#: assembl/models/preferences.py:716
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:725
+#: assembl/models/preferences.py:734
 msgid "Catalyst Visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:728
+#: assembl/models/preferences.py:737
 msgid "A JSON description of available Catalyst visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:740
+#: assembl/models/preferences.py:749
 msgid "Navigation sections"
 msgstr ""
 
-#: assembl/models/preferences.py:743
+#: assembl/models/preferences.py:752
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
 msgstr ""
 
-#: assembl/models/preferences.py:756
+#: assembl/models/preferences.py:765
 msgid "Catalyst translations"
 msgstr ""
 
-#: assembl/models/preferences.py:759
+#: assembl/models/preferences.py:768
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
 
-#: assembl/models/preferences.py:776
+#: assembl/models/preferences.py:785
 msgid "Default Table of Ideas Collapsed state"
 msgstr ""
 
-#: assembl/models/preferences.py:779
+#: assembl/models/preferences.py:788
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
 msgstr ""
 
-#: assembl/models/preferences.py:794
+#: assembl/models/preferences.py:803
 msgid "Preference data"
 msgstr ""
 
-#: assembl/models/preferences.py:797
+#: assembl/models/preferences.py:806
 msgid "The preference configuration; override only with care"
 msgstr ""
 
-#: assembl/models/preferences.py:809
+#: assembl/models/preferences.py:818
 msgid "Cookies banner"
 msgstr ""
 
-#: assembl/models/preferences.py:812
+#: assembl/models/preferences.py:821
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr ""
 
@@ -1375,19 +1385,19 @@ msgstr ""
 msgid "Before you can post a message %s"
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:285
+#: assembl/static/js/app/views/messageSend.js:292
 msgid "You need to set a subject before you can send your message..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:295
+#: assembl/static/js/app/views/messageSend.js:302
 msgid "You need to type a message before you can send your message..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:303
+#: assembl/static/js/app/views/messageSend.js:310
 msgid "Sending..."
 msgstr ""
 
-#: assembl/static/js/app/views/messageSend.js:335
+#: assembl/static/js/app/views/messageSend.js:342
 msgid "Message posted!"
 msgstr ""
 
@@ -2408,7 +2418,7 @@ msgid "Sender name:"
 msgstr ""
 
 #: assembl/templates/admin/discussion_permissions.jinja2:125
-#: assembl/views/auth/views.py:988
+#: assembl/views/auth/views.py:1003
 msgid "Welcome to {discussion_topic}."
 msgstr ""
 
@@ -4283,50 +4293,58 @@ msgstr ""
 msgid "Your message is empty"
 msgstr ""
 
-#: assembl/views/api2/auth.py:339
+#: assembl/views/api2/auth.py:338
+msgid "The user does not exist"
+msgstr ""
+
+#: assembl/views/api2/auth.py:349
+msgid "This email does not exist"
+msgstr ""
+
+#: assembl/views/api2/auth.py:354
 msgid "Please give an identifier"
 msgstr ""
 
-#: assembl/views/api2/auth.py:344
+#: assembl/views/api2/auth.py:359
 msgid "This user has no email"
 msgstr ""
 
-#: assembl/views/api2/auth.py:347
+#: assembl/views/api2/auth.py:362
 msgid "This is not a user"
 msgstr ""
 
-#: assembl/views/api2/auth.py:368
-msgid "Passwords are mismatched"
+#: assembl/views/api2/auth.py:383
+msgid "The passwords that were entered are mismatched!"
 msgstr ""
 
-#: assembl/views/api2/auth.py:382 assembl/views/auth/views.py:941
-#: assembl/views/auth/views.py:1009
+#: assembl/views/api2/auth.py:397 assembl/views/auth/views.py:956
+#: assembl/views/auth/views.py:1024
 msgid "This link is not valid. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/api2/auth.py:385 assembl/views/auth/views.py:944
-#: assembl/views/auth/views.py:1012
+#: assembl/views/api2/auth.py:400 assembl/views/auth/views.py:959
+#: assembl/views/auth/views.py:1027
 msgid "This link has been used. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/api2/auth.py:432 assembl/views/auth/views.py:376
+#: assembl/views/api2/auth.py:435 assembl/views/auth/views.py:376
 msgid "Please use a name of at least 3 characters"
 msgstr ""
 
-#: assembl/views/api2/auth.py:442 assembl/views/auth/views.py:311
+#: assembl/views/api2/auth.py:444 assembl/views/auth/views.py:311
 #: assembl/views/auth/views.py:383
 msgid "This is not a valid email"
 msgstr ""
 
-#: assembl/views/api2/auth.py:451 assembl/views/auth/views.py:390
+#: assembl/views/api2/auth.py:452 assembl/views/auth/views.py:390
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:456
+#: assembl/views/api2/auth.py:457
 msgid "No email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:464
+#: assembl/views/api2/auth.py:463
 msgid "We already have a user with this username."
 msgstr ""
 
@@ -4335,7 +4353,7 @@ msgstr ""
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:303 assembl/views/auth/views.py:1023
+#: assembl/views/auth/views.py:303 assembl/views/auth/views.py:1038
 msgid "The passwords are not identical"
 msgstr ""
 
@@ -4349,8 +4367,8 @@ msgid ""
 " that does not exist."
 msgstr ""
 
-#: assembl/views/auth/views.py:507 assembl/views/auth/views.py:821
-#: assembl/views/auth/views.py:827
+#: assembl/views/auth/views.py:507 assembl/views/auth/views.py:836
+#: assembl/views/auth/views.py:842
 msgid "This user cannot be found"
 msgstr ""
 
@@ -4358,19 +4376,19 @@ msgstr ""
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:592
+#: assembl/views/auth/views.py:593
 msgid "This email address is already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:593
+#: assembl/views/auth/views.py:594
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:601 assembl/views/auth/views.py:786
+#: assembl/views/auth/views.py:602 assembl/views/auth/views.py:801
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:602 assembl/views/auth/views.py:787
+#: assembl/views/auth/views.py:603 assembl/views/auth/views.py:802
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. It contains a confirmation link, please click on"
@@ -4378,91 +4396,91 @@ msgid ""
 "confirmation e-mail (check your spams), click here."
 msgstr ""
 
-#: assembl/views/auth/views.py:646 assembl/views/auth/views.py:666
-#: assembl/views/auth/views.py:688
+#: assembl/views/auth/views.py:651 assembl/views/auth/views.py:675
+#: assembl/views/auth/views.py:697
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:654
+#: assembl/views/auth/views.py:663
 msgid "This link was not valid. We sent another."
 msgstr ""
 
-#: assembl/views/auth/views.py:657
+#: assembl/views/auth/views.py:666
 msgid "This link has been used. We sent another."
 msgstr ""
 
-#: assembl/views/auth/views.py:670
+#: assembl/views/auth/views.py:679
 msgid "This link is not valid. Please attempt to login to get another one."
 msgstr ""
 
-#: assembl/views/auth/views.py:709
+#: assembl/views/auth/views.py:718
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
 
-#: assembl/views/auth/views.py:714
+#: assembl/views/auth/views.py:723
 #, python-format
 msgid "Your email address %s has been confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:734
+#: assembl/views/auth/views.py:748
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:774
+#: assembl/views/auth/views.py:789
 msgid "This email is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:795
+#: assembl/views/auth/views.py:810
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:874
+#: assembl/views/auth/views.py:889
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:875
+#: assembl/views/auth/views.py:890
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:956
+#: assembl/views/auth/views.py:971
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr ""
 
-#: assembl/views/auth/views.py:960
+#: assembl/views/auth/views.py:975
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr ""
 
-#: assembl/views/auth/views.py:963
+#: assembl/views/auth/views.py:978
 msgid "Please choose your password for security reasons."
 msgstr ""
 
-#: assembl/views/auth/views.py:992
+#: assembl/views/auth/views.py:1007
 msgid "Change your password"
 msgstr ""
 
-#: assembl/views/auth/views.py:1031
+#: assembl/views/auth/views.py:1046
 msgid "Password changed"
 msgstr ""
 
-#: assembl/views/auth/views.py:1045
+#: assembl/views/auth/views.py:1060
 msgid "email"
 msgstr ""
 
-#: assembl/views/auth/views.py:1046
+#: assembl/views/auth/views.py:1061
 msgid "Please confirm your {confirm_what} with {assembl}"
 msgstr ""
 
-#: assembl/views/auth/views.py:1048
+#: assembl/views/auth/views.py:1063
 msgid "account"
 msgstr ""
 
-#: assembl/views/auth/views.py:1049
+#: assembl/views/auth/views.py:1064
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
@@ -4474,7 +4492,7 @@ msgid ""
 "The {assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:1056
+#: assembl/views/auth/views.py:1071
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
@@ -4483,7 +4501,7 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1061
+#: assembl/views/auth/views.py:1076
 msgid ""
 "Hello, {name}!\n"
 "\n"
@@ -4495,7 +4513,7 @@ msgid ""
 "The {assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:1068
+#: assembl/views/auth/views.py:1083
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
@@ -4504,11 +4522,11 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1119
+#: assembl/views/auth/views.py:1134
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:1123
+#: assembl/views/auth/views.py:1138
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -4520,7 +4538,7 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:1129
+#: assembl/views/auth/views.py:1144
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
@@ -4534,7 +4552,7 @@ msgid ""
 "The {assembl} Team\n"
 msgstr ""
 
-#: assembl/views/discussion/views.py:51
+#: assembl/views/discussion/views.py:48
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
@@ -5710,32 +5728,6 @@ msgstr ""
 #~ msgid "I forgot my password"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "Hello, {name}, and welcome to {assembl}!\n"
-#~ "\n"
-#~ "Please confirm your email address "
-#~ "&lt;{email}&gt; and complete your registration"
-#~ " by clicking the link below.\n"
-#~ "<{confirm_url}>\n"
-#~ "\n"
-#~ "Best regards,\n"
-#~ "The {assembl} Team"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
-#~ "<p>Please <a href=\"{confirm_url}\">click here "
-#~ "to confirm your email address</a>\n"
-#~ "&lt;{email}&gt; and complete your registration.</p>\n"
-#~ "<p>Best regards,<br />The {assembl} Team</p>"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "<p>Hello, {name}!</p>\n"
-#~ "<p>Please <a href=\"{confirm_url}\">click here "
-#~ "to confirm your new email address</a>"
-#~ "\n"
-#~ "&lt;{email}&gt; on your {assembl} account.</p>\n"
-#~ "<p>Best regards,<br />The {assembl} Team</p>"
+#~ msgid "Passwords are mismatched"
 #~ msgstr ""
 
