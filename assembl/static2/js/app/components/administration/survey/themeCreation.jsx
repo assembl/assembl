@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { Button, FormGroup, FormControl } from 'react-bootstrap';
 import ThemeCreationForm from './themeCreationForm';
 
 class ThemeCreation extends React.Component {
