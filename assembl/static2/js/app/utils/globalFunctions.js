@@ -47,6 +47,11 @@ export const getProvidersData = () => {
   }
 };
 
+export const getPossibleErrorMessage = () => {
+  const data = document.getElementById('errorMessage') ? document.getElementById('errorMessage').innerHTML : null;
+  return data;
+}
+
 export const getSortedArrayByKey = (arr, key) => {
   arr.sort((a, b) => {
     if (a[key] < b[key]) {

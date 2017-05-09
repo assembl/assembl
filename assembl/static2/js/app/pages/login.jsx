@@ -5,31 +5,18 @@ import get from 'lodash/get';
 import { I18n } from 'react-redux-i18n';
 import AsLogin from '../components/login/assemblLogin';
 import { SocialMedia } from '../components/login/socialMediaLogin';
-import { getProvidersData, getDiscussionId } from '../utils/globalFunctions';
+import {
+  getProvidersData,
+  getDiscussionId,
+  getPossibleErrorMessage
+} from '../utils/globalFunctions';
 import { displayAlert } from '../utils/utilityManager';
 
 class Login extends React.Component {
   componentDidMount() {
-    let error = get(this.props, 'location.query.error', null);
-    error = (error && typeof error === 'string') ? parseInt(error, 10) : error;
-    let msg;
+    const error = getPossibleErrorMessage(); 
     if (error) {
-      switch (error) {
-      case 404: {
-        msg = I18n.t('login.emailNotFound');
-        displayAlert('danger', msg, true);
-        break;
-      }
-      case 422: {
-        msg = I18n.t('login.incorrectPasswordLogin');
-        displayAlert('danger', msg, true);
-        break;
-      }
-      default: {
-        msg = I18n.t('login.somethingWentWrong');
-        displayAlert('danger', msg, true);
-      }
-      }
+      displayAlert('danger', error, true);
     }
   }
 
