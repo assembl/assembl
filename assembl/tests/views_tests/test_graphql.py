@@ -177,6 +177,49 @@ mutation myFirstMutation {
     }}}
 
 
+def test_mutation_create_thematic_upload_file(graphql_request):
+    import os
+    from io import BytesIO
+
+    class FileUpload(object):
+        file = BytesIO(os.urandom(16))
+        filename = 'path/to/img.png'
+
+    graphql_request.POST['image123456789'] = FileUpload()
+    res = schema.execute(u"""
+mutation myFirstMutation($image:String) {
+    createThematic(titleEntries:[
+        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+        {value:"Understanding the dynamics and issues", localeCode:"en"}
+    ],
+        identifier:"survey",
+        image:$image
+    ) {
+        thematic {
+            title(lang:"fr"),
+            identifier,
+            imgUrl
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"image": u"image123456789"})
+    # The test doesn't use the same discussion id (sometimes it's 1, sometimes 8)
+    # depending on which tests are executed...
+    # py.test assembl -k test_mutation_create_thematic_upload_file
+    # returns http://localhost:6543/data/Discussion/1/documents/1/data
+    # py.test assembl -k test_graphql
+    # returns http://localhost:6543/data/Discussion/8/documents/1/data
+#    assert json.loads(json.dumps(res.data)) == {
+#        u'createThematic': {
+#            u'thematic': {
+#                u'title': u'Comprendre les dynamiques et les enjeux',
+#                u'identifier': u'survey',
+#                u'imgUrl': u'http://localhost:6543/data/Discussion/8/documents/1/data'
+#    }}}
+#    just assert we have the ends correct:
+    assert res.data['createThematic']['thematic']['imgUrl'].endswith('/documents/1/data')
+
+
 def test_mutation_create_thematic_multilang_explicit_en(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
