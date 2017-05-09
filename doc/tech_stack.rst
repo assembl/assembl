@@ -344,6 +344,11 @@ not mature at that point, and later on their advantages were not deemed worth
 the cost of a transition. We have since added the Marionette_ layer above 
 Backbone_, which gives us a richer MVC model in the frontend.
 
+
+Furthermore, we are currently embarking on a redesign of the entire front-end
+architecture! The initial phase of the development is nearly complete. Further
+information can be found below. See section `New Frontend`_
+
 Packages and libraries we use directly
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -468,6 +473,72 @@ changes from the backend to the frontend through a websocket using SockJS_, so
 that Assembl participants get live updates of data.
 
 
+.. _`New Frontend`:
+
+New Front-end
+^^^^^^^^^^^^^
+
+The new front-end will be based on Facebook_ technologies, as we feel that this
+is the technology that the market is converging towards. We use React_, alongside
+its ecosystem of tooling. Furthermore, we have made the decision to migrate away
+from RESTful_ APIs in favour of new GraphQL_ methodologies as much of our data
+can be labeled in graph form.
+
+New Front-end Stack
+~~~~~~~~~~~~~~~~~~~
+
+React_:
+  The underbelly of our new front-end. We use component based approach in order to
+  simplify the development and comprehension of views throughout Assembl.
+
+`React Router`_:
+  The defacto router for React. We use declarative approach to match routes to views,
+  and to maintain a history stack.
+
+`React Bootstrap`_:
+  The `Assembl Styleguide`_ is based strongly on this package, as it converts typically
+  Bootstrap_ related CSS/JS items into React-based components.
+
+Redux_:
+  The popular Flux implementation that is often coupled with React. Our state management
+  library for components
+
+Apollo_:
+  A popular and future-thinking GraphQL_ library to manage calls to our graphQL server as
+  well as managing the state of responses within components. It is a Provider-wrapper around
+  Redux_.
+
+lodash_:
+  The lightweight alternative to Underscore_.
+
+BabelJS_:
+  The new codebase will utilize the latest in `ECMAScript 6`_ standard. Babel will be used
+  to transpile the modern code to currently compatible javascript versions used by
+  popular browsers today.
+
+Webpack_:
+  The new front-end's asset managemnet library will be Webpack instead of Gulp_. Webpack offers
+  more flexibility in managing the pipleline and the modern front-end stack is converging to this
+  tool.
+
+ESLint_:
+  The new front-end will use AirBnb_ as it's Javascript coding standard. As a result, this linter
+  is chosen in order for all developers to be on the same page in terms of development.
+
+New Front-end's Backend Stack
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are not many changes in the backend for the new front-end, technology wise. The notable exception
+is the migration away from RESTful APIs in Pyramid_ towards GraphQL_.
+
+Graphene_:
+  The GraphQL implementation for Python that is widely used.
+
+`Graphene SQLAlchemy`_:
+  A further wrapper for Graphene_ that will enable the use SQLAlchemy_ models to be used to generate a
+  schema for GraphQL.
+
+
 Templating, HTML and CSS
 ------------------------
 
@@ -571,11 +642,15 @@ We have used multiple processes rather than threads.
 .. _`polyglot persistence`: http://martinfowler.com/bliki/PolyglotPersistence.html
 .. _`Python Social Auth`: http://psa.matiasaguirre.net/
 .. _`Virtuoso-python`: https://github.com/maparent/virtuoso-python
+.. _Apollo: http://dev.apollodata.com/
+.. _AirBnb: https://github.com/airbnb/javascript
 .. _Alembic: http://alembic.zzzcomputing.com/en/latest/
 .. _Angular: https://angularjs.org/
 .. _Annotator: http://annotatorjs.org/
+.. _`Assembl Styleguide`: https://dev-assembl.bluenove.com/styleguide
 .. _anyjson: http://bitbucket.org/runeh/anyjson/
 .. _Babel: http://pythonhosted.org/Babel/
+.. _BabelJS: https://babeljs.io/
 .. _Backbone: http://backbonejs.org/
 .. _Beaker: http://beaker.readthedocs.io/en/latest/
 .. _Beaker: http://beaker.readthedocs.io/en/latest/
@@ -595,14 +670,20 @@ We have used multiple processes rather than threads.
 .. _coverage: https://coverage.readthedocs.io/
 .. _D3: https://d3js.org/
 .. _dogpile: http://pythonhosted.org/dogpile/
+.. _ESLint: http://eslint.org/
+.. _`ECMAScript 6`: http://es6-features.org/
 .. _enum34: https://bitbucket.org/stoneleaf/enum34
 .. _Fabric: http://www.fabfile.org/
+.. _Facebook: https://developers.facebook.com/products/
 .. _facebook_sdk: https://facebook-sdk.readthedocs.io/en/latest/
 .. _feedparser: http://pythonhosted.org/feedparser/
 .. _flaky: https://github.com/box/flaky
 .. _flower: http://flower.readthedocs.io/en/latest/index.html
 .. _gensim: http://pythonhosted.org/gensim/
 .. _google_api_python_client: http://github.com/google/google-api-python-client/
+.. _Graphene: http://graphene-python.org/
+.. _`Graphene SQLAlchemy`: http://docs.graphene-python.org/projects/sqlalchemy/en/latest/
+.. _GraphQL: http://graphql.org/learn/
 .. _Graphviz: http://www.graphviz.org/
 .. _Gulp: http://gulpjs.com/
 .. _Hopscotch: http://linkedin.github.io/hopscotch/
@@ -617,6 +698,7 @@ We have used multiple processes rather than threads.
 .. _jwzthreading: http://www.amk.ca/python/code/jwz.html
 .. _Kombu: http://kombu.readthedocs.io/en/latest/
 .. _langdetect: https://github.com/Mimino666/langdetect
+.. _lodash: https://lodash.com/
 .. _linkifyjs: http://soapbox.github.io/linkifyjs/
 .. _lxml: http://lxml.de/
 .. _Marionette: http://marionettejs.com/
@@ -661,7 +743,12 @@ We have used multiple processes rather than threads.
 .. _raven_py: https://github.com/getsentry/raven-python
 .. _RDFLib: https://rdflib.readthedocs.io/en/stable/
 .. _rdflib_jsonld: https://github.com/RDFLib/rdflib-jsonld
+.. _React: https://facebook.github.io/react/
+.. _`React Bootstrap`: https://react-bootstrap.github.io/
+.. _`React Router`: https://reacttraining.com/react-router/web/guides/quick-start
 .. _Redis: http://redis.io/
+.. _Redux: http://redux.js.org/
+.. _RESTful: https://en.wikipedia.org/wiki/Representational_state_transfer
 .. _requests: http://python-requests.org/
 .. _scikit_learn: http://scikit-learn.org/
 .. _selenium: http://www.seleniumhq.org/
@@ -687,6 +774,7 @@ We have used multiple processes rather than threads.
 .. _waitress: https://github.com/Pylons/waitress
 .. _WebOb: http://webob.readthedocs.org/
 .. _WebTest: https://webtest.readthedocs.org/en/latest/
+.. _Webpack: https://webpack.github.io/
 .. _Werkzeug: http://werkzeug.pocoo.org/
 .. _WSGI: https://www.python.org/dev/peps/pep-0333/
 .. _ZeroMQ: http://zeromq.org/
