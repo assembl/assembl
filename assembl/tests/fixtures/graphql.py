@@ -66,7 +66,7 @@ mutation myFirstMutation {
 
 def create_proposal_x(graphql_request, first_question_id, idx):
     from assembl.graphql.schema import Schema as schema
-    schema.execute(u"""
+    res = schema.execute(u"""
 mutation myFirstMutation {
     createPost(
         ideaId:"%s",
@@ -82,10 +82,39 @@ mutation myFirstMutation {
     }
 }
 """ % (first_question_id, idx), context_value=graphql_request)
+    return res.data['createPost']['post']['id']
 
 
 @pytest.fixture(scope="function")
 def proposals(graphql_request, thematic_and_question):
     thematic_id, first_question_id = thematic_and_question
+    proposals = []
     for idx in range(15):
-        create_proposal_x(graphql_request, first_question_id, idx)
+        proposal_id = create_proposal_x(graphql_request, first_question_id, idx)
+        proposals.append(proposal_id)
+
+    return proposals
+
+
+@pytest.fixture(scope="function")
+def proposals_with_sentiments(graphql_request, proposals, admin_user):
+    from assembl.graphql.schema import Schema as schema
+    # add a sentiment to the first post
+    proposal_id = proposals[0]
+    mutation = u"""
+mutation myFirstMutation {
+    addSentiment(
+        postId:"%s",
+        type:%s
+    ) {
+      post {
+        ... on PropositionPost {
+          mySentiment
+        }
+      }
+    }
+}
+""" % (proposal_id, 'LIKE')
+    schema.execute(
+        mutation,
+        context_value=graphql_request)

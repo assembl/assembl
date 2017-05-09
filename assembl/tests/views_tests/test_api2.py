@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-
+import csv
 import pytest
 from datetime import datetime, timedelta
 import simplejson as json
+from StringIO import StringIO
 
 from assembl.models import (
     AbstractIdeaVote,
@@ -26,6 +27,20 @@ def local_to_absolute(uri):
     if uri.startswith('local:'):
         return '/data/' + uri[6:]
     return uri
+
+
+def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
+    # csv.py doesn't do Unicode; encode temporarily as UTF-8:
+    csv_reader = csv.reader(
+        utf_8_encoder(unicode_csv_data), dialect=dialect, **kwargs)
+    for row in csv_reader:
+        # decode UTF-8 back to Unicode, cell by cell:
+        yield [unicode(cell, 'utf-8') for cell in row]
+
+
+def utf_8_encoder(unicode_csv_data):
+    for line in unicode_csv_data:
+        yield line.encode('utf-8')
 
 
 def test_get_ideas(discussion, test_app, synthesis_1,
@@ -899,3 +914,55 @@ def test_add_timeline_event(test_app, discussion):
     # check that the link was made in both directions
     assert phase1_data['next_event'] == phase2_data['@id']
     assert phase1_data['@type'] == 'DiscussionPhase'
+
+
+def test_phase1_export(proposals_with_sentiments, discussion, test_app):
+
+    THEMATIC_NAME = 0
+    QUESTION_ID = 1
+    QUESTION_TITLE = 2
+    POST_BODY = 3
+    POST_LIKE_COUNT = 4
+    POST_DISAGREE_COUNT = 5
+    POST_CREATOR_NAME = 6
+    POST_CREATOR_EMAIL = 7
+    POST_CREATION_DATE = 8
+    SENTIMENT_ACTOR_NAME = 9
+    SENTIMENT_ACTOR_EMAIL = 10
+    SENTIMENT_CREATION_DATE = 11
+
+    response = test_app.get(
+        '/data/Discussion/{}/phase1_csv_export'.format(discussion.id))
+    csv_file = StringIO()
+    csv_file.write(response.app_iter[0].decode('utf-8'))
+    csv_file.seek(0)
+    assert response.status_code == 200
+    result = unicode_csv_reader(csv_file, dialect='excel')
+    result = csv.reader(csv_file, dialect='excel')
+    result = list(result)
+
+    header = result[0]
+    assert header[QUESTION_ID] == u'Numéro de la question'
+    assert header[SENTIMENT_ACTOR_NAME] == u"Nom du votant"
+
+    first_row = result[1]
+    assert first_row[THEMATIC_NAME] == u'Comprendre les dynamiques et les enjeux'
+    assert first_row[QUESTION_TITLE] == u"Comment qualifiez-vous l'emergence "\
+                                         "de l'Intelligence Artificielle "\
+                                         "dans notre société ?"
+    assert first_row[POST_BODY] == u'une proposition 14'
+    assert first_row[POST_LIKE_COUNT] == u'0'
+    assert first_row[POST_DISAGREE_COUNT] == u'0'
+    assert first_row[POST_CREATOR_NAME] == u'Mr. Administrator'
+    assert first_row[POST_CREATOR_EMAIL] == u''
+    date = datetime.today().strftime('%d/%m/%Y')
+    assert first_row[POST_CREATION_DATE].startswith(date)
+    assert first_row[SENTIMENT_ACTOR_NAME] == u''
+    assert first_row[SENTIMENT_ACTOR_EMAIL] == u''
+    assert first_row[SENTIMENT_CREATION_DATE] == u''
+
+    last_row = result[-1]
+    assert last_row[THEMATIC_NAME] == u'Comprendre les dynamiques et les enjeux'
+    assert last_row[POST_LIKE_COUNT] == u'1'
+    assert last_row[POST_DISAGREE_COUNT] == u'0'
+    assert last_row[SENTIMENT_ACTOR_NAME] == u'Mr. Administrator'

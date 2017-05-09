@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+import csv
 import re
+import tempfile
 import base64
 from cStringIO import StringIO
 from os import urandom
@@ -20,6 +23,7 @@ from sqlalchemy import (
     and_,
     or_,
     case,
+    desc,
     Float,
 )
 from sqlalchemy.orm import with_polymorphic
@@ -27,9 +31,8 @@ from sqlalchemy.orm.util import aliased
 from sqlalchemy.sql.expression import literal
 import transaction
 
-
 import simplejson as json
-from pyramid.response import Response
+from pyramid.response import FileIter, Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound,
@@ -51,8 +54,10 @@ from assembl.auth import (
     R_ADMINISTRATOR)
 from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions
+from assembl.graphql.schema import resolve_langstring
 from assembl.models import (Discussion, Permission)
 from assembl.models.auth import create_default_permissions
+from assembl.utils import format_date, get_thematics, get_question_posts
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
@@ -1522,6 +1527,84 @@ def get_participant_time_series_analytics(request):
         rows.append(row)
 
     return csv_response(rows, format)
+
+
+@view_config(context=InstanceContext, request_method='GET',
+             ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
+             name="phase1_csv_export")
+def phase1_csv_export(request):
+    """CSV export for phase 1."""
+    language = 'fr'
+    discussion_id = request.context.get_discussion_id()
+    THEMATIC_NAME = u"Nom de la thématique"
+    QUESTION_ID = u"Numéro de la question"
+    QUESTION_TITLE = u"Intitulé de la question"
+    POST_BODY = u"Réponse"
+    POST_LIKE_COUNT = u"Nombre de \"J'aime\""
+    POST_DISAGREE_COUNT = u"Nombre de \"En désaccord\""
+    POST_CREATOR_NAME = u"Nom du contributeur"
+    POST_CREATOR_EMAIL = u"Adresse mail du contributeur"
+    POST_CREATION_DATE = u"Date/heure du post"
+    SENTIMENT_ACTOR_NAME = u"Nom du votant"
+    SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
+    SENTIMENT_CREATION_DATE = u"Date/heure du vote"
+    fieldnames = [
+        THEMATIC_NAME,
+        QUESTION_ID,
+        QUESTION_TITLE,
+        POST_BODY,
+        POST_LIKE_COUNT,
+        POST_DISAGREE_COUNT,
+        POST_CREATOR_NAME,
+        POST_CREATOR_EMAIL,
+        POST_CREATION_DATE,
+        SENTIMENT_ACTOR_NAME,
+        SENTIMENT_ACTOR_EMAIL,
+        SENTIMENT_CREATION_DATE,
+    ]
+
+    output = tempfile.NamedTemporaryFile('w+b', delete=True)
+    # include BOM for Excel to open the file in UTF-8 properly
+    output.write(u'\ufeff'.encode('utf-8'))
+    writer = csv.DictWriter(
+        output, dialect='excel', fieldnames=fieldnames)
+    writer.writeheader()
+    thematics = get_thematics(discussion_id, 'survey')
+    for thematic in thematics:
+        row = {}
+        row[THEMATIC_NAME] = resolve_langstring(thematic.title, language)
+        for question in thematic.get_children():
+            row[QUESTION_ID] = question.id
+            row[QUESTION_TITLE] = resolve_langstring(question.title, language)
+            posts = get_question_posts(question)
+            for post in posts:
+                row[POST_BODY] = resolve_langstring(post.get_body(), None)
+                row[POST_CREATOR_NAME] = post.creator.name
+                row[POST_CREATOR_EMAIL] = post.creator.preferred_email
+                row[POST_CREATION_DATE] = format_date(post.creation_date)
+                row[POST_LIKE_COUNT] = post.like_count
+                row[POST_DISAGREE_COUNT] = post.disagree_count
+                if not post.sentiments:
+                    row[SENTIMENT_ACTOR_NAME] = ''
+                    row[SENTIMENT_ACTOR_EMAIL] = ''
+                    row[SENTIMENT_CREATION_DATE] = ''
+                    writer.writerow(row)
+
+                for sentiment in post.sentiments:
+                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.name
+                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.preferred_email
+                    row[SENTIMENT_CREATION_DATE] = format_date(
+                        sentiment.creation_date)
+                    writer.writerow(row)
+
+    output.seek(0)
+    response = request.response
+    filename = 'phase1_export'
+    response.content_type = 'application/vnd.ms-excel'
+    response.content_disposition = 'attachment; filename="{}.csv"'.format(
+        filename)
+    response.app_iter = FileIter(output)
+    return response
 
 
 def includeme(config):
