@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
+import ThemeCreationForm from './themeCreationForm';
 
 class ThemeCreation extends React.Component {
   render() {
@@ -17,14 +18,7 @@ class ThemeCreation extends React.Component {
         </div>
         <div className="admin-content">
           <form>
-            <FormGroup>
-              <FormControl type="text" placeholder="Enter text" />
-            </FormGroup>
-            <FormGroup className="margin-l">
-              <FormControl type="file" />
-            </FormGroup>
-            <div className="plus margin-l">+</div>
-            <Button className="button-submit button-dark margin-l">Suivant</Button>
+            <ThemeCreationForm />
           </form>
         </div>
       </div>
