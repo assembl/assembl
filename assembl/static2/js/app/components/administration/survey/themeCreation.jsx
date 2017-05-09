@@ -15,22 +15,20 @@ class ThemeCreation extends React.Component {
     this.addThemeCreationForm = this.addThemeCreationForm.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    if(this.state.formList.length > 1) {
-      const formList = [];
-      this.state.formList.forEach((form, index) => {
-        formList.push(
-          <ThemeCreationForm
-            index={index}
-            selectedLocale={nextProps.selectedLocale}
-            key={index}
-          />
-        )
-      });
-      this.setState(prevState => ({
-        selectedLocale: nextProps.selectedLocale,
-        formList: formList
-      }));
-    }
+    const formList = [];
+    this.state.formList.forEach((form, index) => {
+      formList.push(
+        <ThemeCreationForm
+          index={index}
+          selectedLocale={nextProps.selectedLocale}
+          key={index}
+        />
+      )
+    });
+    this.setState({
+      selectedLocale: nextProps.selectedLocale,
+      formList: formList
+    });
   }
   addThemeCreationForm() {
     this.setState(prevState => ({
@@ -45,7 +43,6 @@ class ThemeCreation extends React.Component {
   }
   render() {
     const { locale, translations } = this.props;
-    console.log('render')
     return (
       <div className="admin-box">
         <h3 className="dark-title-3">

@@ -2,6 +2,7 @@ import React from 'react';
 import En from '../svg/flags/en';
 import Fr from '../svg/flags/fr';
 
+// TO DO get it dynamically
 const Flag = (key) => {
   switch (key) {
   case 'en':
@@ -12,6 +13,8 @@ const Flag = (key) => {
     return <Fr />;
   }
 };
+
+//TO DO Put the selectedLocale in the store
 
 class LanguageMenu extends React.Component {
   constructor(props) {
