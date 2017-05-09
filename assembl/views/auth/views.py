@@ -507,8 +507,6 @@ def assembl_login_complete_view(request):
         error_message = localizer.translate(_("This user cannot be found"))
         request.session.flash(error_message)
         route_name = 'react_login' if is_v2 else 'login'
-        # TODO: Confirm sets of error codes between backend/frontend
-        query.update({"error": 404})
         return HTTPFound(location=maybe_contextual_route(
             request, route_name,
             _query=query))
@@ -528,8 +526,6 @@ def assembl_login_complete_view(request):
         user.login_failures += 1
         # TODO: handle high failure count
         request.session.flash(error_message)
-        # TODO: Confirm sets of error codes between backend/frontend
-        query.update({"error": 422})
         route_name = 'react_login' if is_v2 else 'login'
         return HTTPFound(location=maybe_contextual_route(
             request, route_name,
