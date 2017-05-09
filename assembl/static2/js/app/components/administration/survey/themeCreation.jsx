@@ -35,7 +35,7 @@ class ThemeCreation extends React.Component {
 const mapStateToProps = (state) => {
   return {
     i18n: state.i18n
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps)(ThemeCreation);

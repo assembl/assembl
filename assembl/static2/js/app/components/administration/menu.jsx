@@ -27,7 +27,7 @@ class Menu extends React.Component {
           return (
             <li className="menu-item" key={phaseIndex}>
               <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}`} activeClassName="active">
-                {phase.title.entries.map((entry, index) => {
+                {phase.title.entries.map((entry, index) => { // eslint-disable-line
                   if (entry['@language'] === locale) {
                     return (
                       <span key={index}>Phase - {phaseIndex + 1} {entry.value}</span>
@@ -40,11 +40,11 @@ class Menu extends React.Component {
                   {translations[locale].administration[phase.identifier].map((section, index) => {
                     return (
                       <li key={index}>
-                        <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}?section=${index+1}`} activeClassName="active">
+                        <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}?section=${index + 1}`} activeClassName="active">
                           {section}
                         </Link>
                       </li>
-                    )
+                    );
                   })}
                 </ul>
               }
@@ -60,7 +60,7 @@ const mapStateToProps = (state) => {
   return {
     debate: state.debate,
     i18n: state.i18n
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps)(Menu);
