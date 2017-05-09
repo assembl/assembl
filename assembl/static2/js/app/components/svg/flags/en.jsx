@@ -4,6 +4,8 @@ class enFlag extends React.Component {
   render() {
     return (
       <svg
+        width={`${20}px`}
+        height={`${20}px`}
         x={`${0}px`}
         y={`${0}px`}
         viewBox="0 0 512 512"

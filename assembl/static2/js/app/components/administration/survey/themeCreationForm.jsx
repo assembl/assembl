@@ -1,18 +1,27 @@
 import React from 'react';
-import { Button, FormGroup, FormControl } from 'react-bootstrap';
+import { Translate, I18n } from 'react-redux-i18n';
+import { FormGroup, FormControl } from 'react-bootstrap';
 
 class ThemeCreationForm extends React.Component {
   render() {
+    const { index, selectedLocale } = this.props;
+    const trsl = I18n.t('administration.ph.title');
+    const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
     return (
-      <div>
+      <div className="form-container">
+        <div className="title">
+          <Translate value="administration.themeNum" index={index + 1} />
+        </div>
         <FormGroup>
-          <FormControl type="text" placeholder="Enter text" />
+          <FormControl type="text" placeholder={ph} />
         </FormGroup>
-        <FormGroup className="margin-l">
-          <FormControl type="file" />
+        <FormGroup>
+          <FormControl type="text" placeholder="Composant provisoire" />
         </FormGroup>
-        <div className="plus margin-l">+</div>
-        <Button className="button-submit button-dark margin-l">Suivant</Button>
+        <div className="pointer right">
+          <span className="assembl-icon-delete grey" />
+        </div>
+        <div className="separator" />
       </div>
     );
   }

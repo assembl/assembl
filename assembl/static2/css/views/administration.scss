@@ -57,9 +57,7 @@
     }
 
     .annotation {
-      border-bottom: $navbar-border;
       margin: 0 40px 20px;
-      padding: 0 0 40px;
     }
   }
 
@@ -76,20 +74,39 @@
     width: 20px;
   }
 
+  .form-container {
+    margin: 0 auto;
+    max-width: 400px;
+
+    .title {
+      margin: 0 0 20px;
+      text-align: left;
+    }
+  }
+
   .flag-container {
     cursor: pointer;
-    height: 20px;
     margin: 20px 15px 0;
-    width: 20px;
   }
 
-  input[type='text'] {
-    margin: 0 auto;
-    max-width: 400px;
+  .flag-container.active {
+    border: $btn-dark-border;
+    border-radius: 20px;
+    height: 24px;
+    margin: 20px 15px 0 13px;
+    width: 24px;
   }
 
-  input[type='file'] {
-    margin: 0 auto;
-    max-width: 400px;
+  .assembl-icon-delete {
+    &:before {
+      font-size: 15px;
+    }
+  }
+
+  .separator {
+    border-bottom: $navbar-border;
+    clear: both;
+    margin: 0 0 40px;
+    padding: 0 0 15px;
   }
 }

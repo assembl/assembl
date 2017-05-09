@@ -5,11 +5,15 @@ import SurveyExport from '../components/administration/survey/surveyExport';
 
 class SurveyAdmin extends React.Component {
   render() {
-    const { section } = this.props;
+    const { section, locale, translations, selectedLocale } = this.props;
     return (
       <div className="survey-admin">
         {section === 'section1' &&
-          <ThemeCreation />
+          <ThemeCreation
+            locale={locale}
+            translations={translations}
+            selectedLocale={selectedLocale}
+          />
         }
         {section === 'section2' &&
           <ThemeEdition />
