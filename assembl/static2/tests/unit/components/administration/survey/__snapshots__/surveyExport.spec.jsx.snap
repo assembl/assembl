@@ -1,0 +1,26 @@
+exports[`SurveyExport component should render an admin section title 1`] = `
+<div>
+  <div>
+    <h3
+      className="dark-title-3" />
+    <div
+      className="box-hyphen" />
+    <div
+      className="annotation">
+      Annotation
+    </div>
+  </div>
+  <div
+    className="admin-content">
+    <a
+      className="button-link button-dark margin-l"
+      href="/data/Discussion/null/phase1_csv_export"
+      onClick={[Function]}
+      style={Object {}}>
+      <span>
+        Link
+      </span>
+    </a>
+  </div>
+</div>
+`;

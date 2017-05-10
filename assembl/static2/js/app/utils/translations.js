@@ -113,7 +113,6 @@ const Translations = {
       incorrectPasswordLogin: 'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.',
       newPassword: 'Nouveau mot de passe',
       newPassword2: 'Ré-entrez le nouveau mot de passe'
-
     },
     changePassword: {
       panelTitle: 'Bienvenue dans la page changement de mot de passe d\'Assembl'
@@ -194,6 +193,11 @@ const Translations = {
       themeNum: 'Thématique %{index}',
       ph: {
         title: 'Titre'
+      },
+      surveyExport: {
+        title: 'Exporter les données du débat',
+        annotation: 'Vous pouvez exporter l\'ensemble des données du débat en cliquant simplement sur le bouton Exporter',
+        link: 'Exporter'
       }
     },
     date: {
@@ -393,6 +397,11 @@ const Translations = {
       themeNum: 'Theme %{index}',
       ph: {
         title: 'Title'
+      },
+      surveyExport: {
+        title: 'Export the debate data',
+        annotation: 'You can export all the debate data by clicking on the Export button',
+        link: 'Export'
       }
     },
     date: {
