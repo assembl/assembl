@@ -24,9 +24,11 @@ App.addInitializer(function() {
 
 App.on('start', function() {
   if (Backbone.history) {
+    var discussionSlug = $('#discussion-slug').val();
+    var discussionId = $('#discussion-id').val();
     Backbone.history.start({
       pushState: true,
-      root: '/debate/' + $('#discussion-slug').val()
+      root: (discussionId == 0) ? '/admin' : ('/debate/' + discussionSlug),
     });
 
     if (Backbone.history._hasPushState) {
