@@ -4,10 +4,10 @@ class frFlag extends React.Component {
   render() {
     return (
       <svg
-        width={`${20}px`}
-        height={`${20}px`}
-        x={`${0}px`}
-        y={`${0}px`}
+        width="20px"
+        height="20px"
+        x="0px"
+        y="0px"
         viewBox="0 0 512 512"
         style={{ enableBackground: 'new 0 0 512 512' }}
       >
