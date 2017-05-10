@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { addAdminData } from '../../actions/adminActions';
 import En from '../svg/flags/en';
 import Fr from '../svg/flags/fr';
 
@@ -14,26 +16,18 @@ const Flag = (key) => {
   }
 };
 
-//TO DO Put the selectedLocale in the store
-
 class LanguageMenu extends React.Component {
   constructor(props) {
     super(props);
-    const { selectedLocale } = this.props;
-    this.state = {
-      selectedLocale: selectedLocale
-    };
     this.changeLanguage = this.changeLanguage.bind(this);
   }
   changeLanguage(event) {
     const selectedLocale = event.currentTarget.getAttribute('id');
-    this.setState({
-      selectedLocale: selectedLocale
-    });
-    this.props.changeLanguage(selectedLocale);
+    this.props.addAdminData(selectedLocale);
   }
   render() {
-    const { translations } = this.props;
+    const { translations } = this.props.i18n;
+    const { selectedLocale } = this.props.admin;
     return (
       <div className="relative">
         <div className="language-menu">
@@ -42,7 +36,7 @@ class LanguageMenu extends React.Component {
               <div
                 onClick={this.changeLanguage}
                 id={key}
-                className={this.state.selectedLocale === key ? 'flag-container active' : 'flag-container'}
+                className={selectedLocale === key ? 'flag-container active' : 'flag-container'}
                 key={index}
               >
                 {Flag(key)}
@@ -55,4 +49,19 @@ class LanguageMenu extends React.Component {
   }
 }
 
-export default LanguageMenu;
+const mapStateToProps = (state) => {
+  return {
+    i18n: state.i18n,
+    admin: state.admin
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addAdminData: (selectedLocale) => {
+      dispatch(addAdminData(selectedLocale));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LanguageMenu);
