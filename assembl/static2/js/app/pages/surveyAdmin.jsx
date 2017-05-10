@@ -14,12 +14,12 @@ class SurveyAdmin extends React.Component {
     this.props.addAdminData(selectedLocale, surveyData);
   }
   render() {
-    const { section } = this.props;
+    const { i18n, section } = this.props;
     return (
       <div className="survey-admin">
-        <ThemeCreation showSection={section === 'section1'} />
-        <ThemeEdition showSection={section === 'section2'} />
-        <SurveyExport showSection={section === 'section3'} />
+        <ThemeCreation i18n={i18n} showSection={section === 'section1'} />
+        <ThemeEdition i18n={i18n} showSection={section === 'section2'} />
+        <SurveyExport i18n={i18n} showSection={section === 'section3'} />
       </div>
     );
   }
@@ -27,7 +27,8 @@ class SurveyAdmin extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    admin: state.admin
+    admin: state.admin,
+    i18n: state.i18n
   };
 };
 

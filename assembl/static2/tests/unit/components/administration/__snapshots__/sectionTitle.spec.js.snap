@@ -1,0 +1,14 @@
+exports[`SectionTitle component should render an admin section title 1`] = `
+<div>
+  <h3
+    className="dark-title-3">
+    Mon titre de section
+  </h3>
+  <div
+    className="box-hyphen" />
+  <div
+    className="annotation">
+    foobar
+  </div>
+</div>
+`;
