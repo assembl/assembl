@@ -109,4 +109,72 @@
     margin: 0 0 40px;
     padding: 0 0 15px;
   }
+
+  .admin-navbar {
+    background-color: $first-color-light;
+    height: $navbar-height;
+    width: 100%;
+
+    .step-numbers {
+      max-width: 250px;
+      padding: 0 0 0 40px;
+      position: relative;
+      width: 100%;
+
+      .txt {
+        color: $first-color;
+        font-family: $font-family4;
+        font-size: $font-size-xs;
+        margin: 12px 0 5px;
+      }
+
+      .bar {
+        background-color: $first-color;
+        height: 6px;
+        position: absolute;
+        z-index: 2;
+      }
+
+      .bkg-bar {
+        background-color: $white;
+        height: 6px;
+        width: 100%;
+        position: absolute;
+        z-index: 1;
+      }
+    }
+  }
+
+  .arrow-container {
+    padding: 0 40px 0 0;
+    .arrow {
+      background-color: $white;
+      border-radius: 26px;
+      cursor: pointer;
+      display: inline-block;
+      line-height: 20px;
+      height: 26px;
+      margin: 18px 0 0 30px;
+      padding: 0 0 0 4px;
+      text-align: left;
+      transform: rotate(90deg);
+      width: 26px;
+
+      .assembl-icon-up-open {
+        color: $first-color;
+
+        &:before {
+          font-size: 8px;
+        }
+      }
+
+      .assembl-icon-down-open {
+        color: $first-color;
+
+        &:before {
+          font-size: 8px;
+        }
+      }
+    }
+  }
 }

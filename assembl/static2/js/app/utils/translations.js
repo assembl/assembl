@@ -198,7 +198,8 @@ const Translations = {
         title: 'Exporter les données du débat',
         annotation: 'Vous pouvez exporter l\'ensemble des données du débat en cliquant simplement sur le bouton Exporter',
         link: 'Exporter'
-      }
+      },
+      step_x_total: 'Etape %{num} sur %{total}',
     },
     date: {
       format: 'D MMMM YYYY',
@@ -402,7 +403,8 @@ const Translations = {
         title: 'Export the debate data',
         annotation: 'You can export all the debate data by clicking on the Export button',
         link: 'Export'
-      }
+      },
+      step_x_total: 'Step %{num} on %{total}',
     },
     date: {
       format: 'MMMM Do, YYYY',
