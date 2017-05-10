@@ -296,6 +296,9 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'short_title', )
 
     posts = SQLAlchemyConnectionField(PostConnection)
+    num_posts = graphene.Int()
+    num_contributors = graphene.Int()
+    parent_id = graphene.ID()
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -320,14 +323,26 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 'Received incompatible instance "{}".'
             ).format(root))
         # return isinstance(root, cls._meta.model)  # this was the original code
-        return type(root) == type(cls._meta.model)
+        return type(root) == cls._meta.model or type(root) == models.RootIdea
+
+
+    def resolve_parent_id(self, args, context, info):
+        parents = self.get_parents()
+        if not parents:
+            return None
+
+        return Node.to_global_id('Idea', parents[0].id)
 
     def resolve_posts(self, args, context, info):
         connection_type = info.return_type.graphene_type  # this is PostConnection
         model = connection_type._meta.node._meta.model  # this is models.PostUnion
-        query = self.get_related_posts_query(
+        related = self.get_related_posts_query(True)
+        # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
+        query = model.query.join(
+            related, model.id == related.c.post_id
             ).filter(model.publication_state == models.PublicationStates.PUBLISHED
             ).order_by(desc(model.creation_date), model.id)
+
         # pagination is done after that, no need to do it ourself
         return query
 
@@ -456,7 +471,7 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         root_idea_id = discussion.root_idea.id
         descendants_query = model.get_descendants_query(
-            root_idea_id, inclusive=False)
+            root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
             ).filter(model.hidden == False).order_by(model.id)
         # pagination is done after that, no need to do it ourself
