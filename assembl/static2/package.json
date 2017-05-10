@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "apollo-client": "^1.2.2",
+    "apollo-upload-client": "^4.0.3",
     "babel-polyfill": "^6.23.0",
     "bootstrap": "^3.3.7",
     "graphiql": "^0.8.1",

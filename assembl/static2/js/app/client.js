@@ -1,4 +1,5 @@
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import ApolloClient from 'apollo-client';
+import { createNetworkInterface } from 'apollo-upload-client';
 import { getDiscussionSlug } from './utils/globalFunctions';
 import { getFullPath } from './utils/routeMap';
 import fetch from 'isomorphic-fetch';  // eslint-disable-line
