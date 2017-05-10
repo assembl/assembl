@@ -6,7 +6,7 @@ class ThemeCreationForm extends React.Component {
   constructor(props) {
     super(props);
     // TO DO get it from the API + get available locales
-    const obj  = {
+    const obj = {
       title: {
         fr: '',
         en: ''
@@ -17,8 +17,8 @@ class ThemeCreationForm extends React.Component {
   }
   getTitleValue(event) {
     const { selectedLocale } = this.props;
-    let val = event.target.value;
-    let obj  = this.state.title;
+    const val = event.target.value;
+    const obj = this.state.title;
     obj[selectedLocale] = val;
     this.setState(obj);
   }
