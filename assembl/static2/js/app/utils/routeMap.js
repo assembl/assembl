@@ -9,6 +9,7 @@ const routes = {
   oldLogout: 'legacy/logout',
   oldLogin: 'legacy/login',
   oldDebate: 'debate/${slug}',
+  oldProfile: 'debate/${slug}/user/profile',
   styleguide: 'styleguide',
   root: '',
   login: 'login',

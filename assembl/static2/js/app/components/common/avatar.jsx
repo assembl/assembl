@@ -43,11 +43,12 @@ class ProfileIcon extends React.Component {
           <div>
             <ul className="dropdown-xs">
               <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
-                <LinkContainer active={false} to={`${get('profile', { ...slug, userId: connectedUserId })}`}>
-                  <MenuItem>
-                    <Translate value="navbar.profile" />
-                  </MenuItem>
-                </LinkContainer>
+                <MenuItem
+                  href={get('oldProfile', slug)}
+                  target="_blank"
+                >
+                  <Translate value="navbar.profile" />
+                </MenuItem>
                 <MenuItem href={`${getContextual('oldLogout', slug)}?next=${get('home', slug)}`}>
                   <Translate value="navbar.logout" />
                 </MenuItem>

@@ -12,9 +12,11 @@ class NavigationMenu extends React.Component {
         <Link className="navbar-menu-item" activeClassName="active" to={get('debate', { slug: debateData.slug })}>
           <Translate value="navbar.debate" />
         </Link>
-        <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
-          <Translate value="navbar.community" />
-        </Link>
+        {false &&
+          <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
+            <Translate value="navbar.community" />
+          </Link>
+        }
       </div>
     );
   }
