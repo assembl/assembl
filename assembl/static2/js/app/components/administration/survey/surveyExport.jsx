@@ -18,6 +18,5 @@ const surveyExport = ({ i18n, showSection }) => {
     </div>
   );
 };
->>>>>>> Phase 1 csv export page
 
 export default surveyExport;

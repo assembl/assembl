@@ -1,5 +1,6 @@
 exports[`SurveyExport component should render an admin section title 1`] = `
-<div>
+<div
+  className="hidden">
   <div>
     <h3
       className="dark-title-3" />
