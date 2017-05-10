@@ -363,8 +363,8 @@ def maybe_auto_subscribe(user, discussion):
     # really auto-subscribe user
     user.subscribe(discussion)
     discussion.db.flush()
-    # apply new notifications
-    user.get_notification_subscriptions(discussion.id)
+    # apply new notifications (on the same thread)
+    user.get_notification_subscriptions(discussion.id, on_thread=False)
     return True
 
 

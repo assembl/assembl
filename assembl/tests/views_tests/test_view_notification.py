@@ -27,8 +27,8 @@ def test_default_notifications(test_app, test_session, discussion, participant1_
     # Template created
     assert len(discussion.user_templates) == 1
     template = discussion.user_templates[0]
-    # Template has no subscriptions to start with
-    assert not len(template.notification_subscriptions)
+    # Template has base subscriptions to start with
+    assert len(template.notification_subscriptions) == 3
     # Get the user's notifications. Should not be empty.
     response = test_app.get(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions' % (
@@ -96,8 +96,8 @@ def test_user_unsubscribed_stable(test_app, discussion, admin_user, participant1
     # Template created
     assert len(discussion.user_templates) == 1
     template = discussion.user_templates[0]
-    # Template has no subscriptions to start with
-    assert not len(template.notification_subscriptions)
+    # Template has base subscriptions to start with
+    assert len(template.notification_subscriptions) == 3
     # Get the user's notifications. Should not be empty.
     response = test_app.get(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions' % (
@@ -158,8 +158,8 @@ def test_user_subscribed_stable(test_app, discussion, admin_user, participant1_u
    # Template created
     assert len(discussion.user_templates) == 1
     template = discussion.user_templates[0]
-    # Template has no subscriptions to start with
-    assert not len(template.notification_subscriptions)
+    # Template has base subscriptions to start with
+    assert len(template.notification_subscriptions) == 3
     # Get the user's notifications. Should not be empty.
     response = test_app.get(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions' % (

@@ -27,30 +27,15 @@ def discussion(request, test_session, default_preferences):
         preferences = discussion.preferences
         discussion.preferences = None
         discussion.preferences_id = None
+        for ut in discussion.user_templates:
+            for ns in ut.notification_subscriptions:
+                ns.delete()
+            ut.delete()
         test_session.delete(preferences)
         test_session.delete(discussion)
         test_session.flush()
     request.addfinalizer(fin)
     return d
-
-
-@pytest.fixture(scope="function")
-def discussion_synth_notification(request, test_session, discussion):
-    """Notification Subscription on Synthesis fixture"""
-    from assembl.models import (
-        NotificationSubscriptionFollowSyntheses, NotificationCreationOrigin)
-    u = discussion.user_templates[0]
-    sns = NotificationSubscriptionFollowSyntheses(
-        user=u, discussion=discussion,
-        creation_origin=NotificationCreationOrigin.USER_REQUESTED)
-    test_session.expire(u, ['notification_subscriptions'])
-
-    def fin():
-        print "finalizer discussion_synth_notification"
-        test_session.delete(sns)
-        test_session.flush()
-    request.addfinalizer(fin)
-    return sns
 
 
 @pytest.fixture(scope="function")
@@ -70,6 +55,10 @@ def discussion2(request, test_session):
         test_session.delete(d.table_of_contents)
         test_session.delete(d.root_idea)
         test_session.delete(d.next_synthesis)
+        for ut in d.user_templates:
+            for ns in ut.notification_subscriptions:
+                ns.delete()
+            ut.delete()
         preferences = d.preferences
         d.preferences = None
         test_session.delete(preferences)
