@@ -1,5 +1,6 @@
 import { loadTranslations, setLocale, syncTranslationWithStore } from 'react-redux-i18n';
 
+import { updateSelectedLocale } from '../actions/adminActions';
 import configureStore from './configureStore';
 import middlewares from './middlewares';
 import rootReducer from '../reducers/rootReducer';
@@ -20,5 +21,6 @@ export default function createAppStore(initialState) {
   syncTranslationWithStore(store);
   store.dispatch(loadTranslations(Translations));
   store.dispatch(setLocale(userLocale));
+  store.dispatch(updateSelectedLocale(userLocale));
   return store;
 }

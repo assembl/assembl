@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addAdminData } from '../../actions/adminActions';
+
+import { updateSelectedLocale } from '../../actions/adminActions';
 import En from '../svg/flags/en';
 import Fr from '../svg/flags/fr';
 
@@ -16,50 +17,40 @@ const Flag = (key) => {
   }
 };
 
-class LanguageMenu extends React.Component {
-  constructor(props) {
-    super(props);
-    this.changeLanguage = this.changeLanguage.bind(this);
-  }
-  changeLanguage(event) {
-    const selectedLocale = event.currentTarget.getAttribute('id');
-    this.props.addAdminData(selectedLocale);
-  }
-  render() {
-    const { translations } = this.props.i18n;
-    const { selectedLocale } = this.props.admin;
-    return (
-      <div className="relative">
-        <div className="language-menu">
-          {Object.keys(translations).map((key, index) => {
-            return (
-              <div
-                onClick={this.changeLanguage}
-                id={key}
-                className={selectedLocale === key ? 'flag-container active' : 'flag-container'}
-                key={index}
-              >
-                {Flag(key)}
-              </div>
-            );
-          })}
-        </div>
+const LanguageMenu = ({ changeLocale, selectedLocale, translations }) => {
+  return (
+    <div className="relative">
+      <div className="language-menu">
+        {Object.keys(translations).map((key, index) => {
+          return (
+            <div
+              onClick={() => {
+                return changeLocale(key);
+              }}
+              id={key}
+              className={selectedLocale === key ? 'flag-container active' : 'flag-container'}
+              key={index}
+            >
+              {Flag(key)}
+            </div>
+          );
+        })}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
-    i18n: state.i18n,
-    admin: state.admin
+    translations: state.i18n.translations,
+    selectedLocale: state.admin.selectedLocale
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAdminData: (selectedLocale) => {
-      dispatch(addAdminData(selectedLocale));
+    changeLocale: (newLocale) => {
+      dispatch(updateSelectedLocale(newLocale));
     }
   };
 };
