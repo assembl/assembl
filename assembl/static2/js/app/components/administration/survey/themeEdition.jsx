@@ -2,8 +2,9 @@ import React from 'react';
 
 class themeEdition extends React.Component {
   render() {
+    const { showSection } = this.props;
     return (
-      <p>themeEdition assembl</p>
+      <p className={showSection ? 'shown' : 'hidden'}>themeEdition assembl</p>
     );
   }
 }

@@ -48,8 +48,9 @@ class ThemeCreation extends React.Component {
   }
   render() {
     const { locale, translations } = this.props.i18n;
+    const { showSection } = this.props;
     return (
-      <div className="admin-box">
+      <div className={showSection ? 'show admin-box' : 'hidden'}>
         <h3 className="dark-title-3">
           {translations[locale].administration.survey[0]}
         </h3>

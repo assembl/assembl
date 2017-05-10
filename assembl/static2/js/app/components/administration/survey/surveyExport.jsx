@@ -2,8 +2,9 @@ import React from 'react';
 
 class surveyExport extends React.Component {
   render() {
+    const { showSection } = this.props;
     return (
-      <p>surveyExport assembl</p>
+      <p className={showSection ? 'shown' : 'hidden'}>surveyExport assembl</p>
     );
   }
 }

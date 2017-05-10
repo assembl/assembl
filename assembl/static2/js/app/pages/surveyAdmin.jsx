@@ -17,15 +17,9 @@ class SurveyAdmin extends React.Component {
     const { section } = this.props;
     return (
       <div className="survey-admin">
-        {section === 'section1' &&
-          <ThemeCreation />
-        }
-        {section === 'section2' &&
-          <ThemeEdition />
-        }
-        {section === 'section3' &&
-          <SurveyExport />
-        }
+        <ThemeCreation showSection={section === 'section1'} />
+        <ThemeEdition showSection={section === 'section2'} />
+        <SurveyExport showSection={section === 'section3'} />
       </div>
     );
   }
