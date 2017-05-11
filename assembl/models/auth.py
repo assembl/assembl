@@ -1014,7 +1014,7 @@ class User(AgentProfile):
             return self.get_preferences_for_discussion(discussion)
 
     def get_notification_subscriptions(
-            self, discussion_id, reset_defaults=False):
+            self, discussion_id, reset_defaults=False, on_thread=True):
         """the notification subscriptions for this user and discussion.
         Includes materialized subscriptions from the template."""
         from .notification import (
@@ -1069,7 +1069,7 @@ class User(AgentProfile):
         subscribed = defaultdict(bool)
         for role in my_roles:
             template, changed = discussion.get_user_template(
-                role, role == R_PARTICIPANT)
+                role, role == R_PARTICIPANT, on_thread)
             if template is None:
                 continue
             template_subscriptions = template.get_notification_subscriptions()
@@ -1104,11 +1104,16 @@ class User(AgentProfile):
                 if (include_inactive or subscribed[cls]) and
                 cls.__mapper_args__['polymorphic_identity'] not in my_sub_types]
 
-        if self.locked_object_creation(create_missing, NotificationSubscription, 10):
-            # if changes, recalculate my_subscriptions
-            my_subscriptions = self.db.query(NotificationSubscription).filter_by(
-                discussion_id=discussion_id, user_id=self.id).all()
-        # Now calculate the dematerialized ones
+        if on_thread:
+            if self.locked_object_creation(create_missing, NotificationSubscription, 10):
+                # if changes, recalculate my_subscriptions
+                my_subscriptions = self.db.query(NotificationSubscription).filter_by(
+                    discussion_id=discussion_id, user_id=self.id).all()
+        else:
+            for ob in create_missing():
+                self.db.add(ob)
+                my_subscriptions.append(ob)
+        # Now calculate the dematerialized ones (always out-of-thread)
         defaults = create_missing(True)
         return chain(my_subscriptions, defaults)
 
@@ -1522,7 +1527,7 @@ class UserTemplate(DiscussionBoundBase, User):
     def get_notification_subscriptions(self):
         return self.get_notification_subscriptions_and_changed()[0]
 
-    def get_notification_subscriptions_and_changed(self):
+    def get_notification_subscriptions_and_changed(self, on_thread=True):
         """the notification subscriptions for this template.
         Materializes applicable subscriptions.."""
         from .notification import (
@@ -1586,8 +1591,13 @@ class UserTemplate(DiscussionBoundBase, User):
                             else NotificationSubscriptionStatus.INACTIVE_DFT))
                 for cls in missing
             ]
-        changed |= self.locked_object_creation(
-            calculate_missing, num_attempts=10)
+        if on_thread:
+            changed |= self.locked_object_creation(
+                calculate_missing, num_attempts=10)
+        else:
+            for ob in calculate_missing():
+                self.db.add(ob)
+                changed = True
         my_subscriptions = query.all()  # recalculate again...
         return my_subscriptions, changed
 

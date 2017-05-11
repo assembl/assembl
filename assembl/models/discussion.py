@@ -205,6 +205,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         participant = session.query(Role).filter_by(name=R_PARTICIPANT).one()
         participant_template = UserTemplate(
             discussion=self, for_role=participant)
+        # Precreate notification subscriptions
+        participant_template.get_notification_subscriptions_and_changed(False)
         session.add(participant_template)
 
     def unique_query(self):
@@ -413,7 +415,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             for n in widget.has_notification():
                 yield n
 
-    def get_user_template(self, role_name, autocreate=False):
+    def get_user_template(self, role_name, autocreate=False, on_thread=True):
         template = self.db.query(UserTemplate).join(
             Role).filter(Role.name == role_name).join(
             Discussion, UserTemplate.discussion).filter(
@@ -427,13 +429,13 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             role = self.db.query(Role).filter_by(name=role_name).one()
             template = UserTemplate(for_role=role, discussion=self)
             self.db.add(template)
-            subs, changed = template.get_notification_subscriptions_and_changed()
+            subs, changed = template.get_notification_subscriptions_and_changed(on_thread)
             self.db.flush()
         return template, changed
 
-    def get_participant_template(self):
+    def get_participant_template(self, on_thread=True):
         from ..auth import R_PARTICIPANT
-        return self.get_user_template(R_PARTICIPANT, True)
+        return self.get_user_template(R_PARTICIPANT, True, on_thread)
 
     def reset_notification_subscriptions_from_defaults(self, force=True):
         """Reset all notification subscriptions for this discussion"""
