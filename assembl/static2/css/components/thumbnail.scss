@@ -6,7 +6,7 @@
     border-top: $navbar-border;
     border-bottom: $navbar-border;
     height: $navbar-height+20px;
-    overflow-x: scroll;
+    overflow-x: visible;
     overflow-y: hidden;
     position: fixed;
     width: 100%;
@@ -14,7 +14,7 @@
 
     .thumbnails {
       display: -webkit-box;
-      overflow-x: scroll;
+      overflow-x: visible;
     }
   }
 
