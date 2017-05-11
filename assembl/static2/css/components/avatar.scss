@@ -21,6 +21,10 @@
     font-size: $font-size-xs;
     margin: 3px 0;
   }
+
+  .caret {
+    padding-bottom: 5px;
+  }
 }
 
 @media screen and (max-width: 767px) {
