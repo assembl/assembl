@@ -13,6 +13,8 @@ export const surveyThemes = (state = [], action) => {
   switch (action.type) {
   case 'ADD_THEME_TO_SURVEY':
     return [...state, action.id];
+  case 'REMOVE_SURVEY_THEME':
+    return [...state.slice(0, state.indexOf(action.id)), ...state.slice(state.indexOf(action.id) + 1)];
   default:
     return state;
   }
@@ -28,6 +30,11 @@ export const surveyThemesById = (state = {}, action) => {
         image: undefined
       }
     };
+  case 'REMOVE_SURVEY_THEME': {
+    const newState = { ...state };
+    delete newState[action.id];
+    return newState;
+  }
   case 'UPDATE_SURVEY_THEME_TITLE': {
     const newState = { ...state };
     newState[action.themeId].titlesByLocale[action.locale] = action.newTitle;

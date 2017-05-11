@@ -35,3 +35,10 @@ export const updateThemeImage = (themeId, file) => {
     type: 'UPDATE_SURVEY_THEME_IMAGE'
   };
 };
+
+export const removeTheme = (id) => {
+  return {
+    id: id,
+    type: 'REMOVE_SURVEY_THEME'
+  };
+};

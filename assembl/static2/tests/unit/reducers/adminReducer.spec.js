@@ -46,6 +46,14 @@ describe('Admin reducers', () => {
       const actual = surveyThemes(state, action);
       expect(actual).toEqual(expected);
     });
+
+    it('should handle REMOVE_SURVEY_THEME action type', () => {
+      const state = ['0', '1', '9', '11'];
+      const action = { type: 'REMOVE_SURVEY_THEME', id: '9' };
+      const expected = ['0', '1', '11'];
+      const actual = surveyThemes(state, action);
+      expect(actual).toEqual(expected);
+    });
   });
 
   describe('surveyThemesById reducer', () => {
@@ -80,6 +88,19 @@ describe('Admin reducers', () => {
         2: { titlesByLocale: {}, image: undefined }
       };
       const action = { type: 'ADD_THEME_TO_SURVEY', id: '2' };
+      const actual = surveyThemesById(state, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle REMOVE_SURVEY_THEME action type', () => {
+      const state = {
+        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
+        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
+      };
+      const expected = {
+        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined }
+      };
+      const action = { type: 'REMOVE_SURVEY_THEME', id: '1' };
       const actual = surveyThemesById(state, action);
       expect(actual).toEqual(expected);
     });

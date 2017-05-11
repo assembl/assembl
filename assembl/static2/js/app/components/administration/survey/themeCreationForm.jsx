@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { FormGroup, FormControl } from 'react-bootstrap';
+import { Button, FormGroup, FormControl } from 'react-bootstrap';
 
-import { updateThemeTitle, updateThemeImage } from '../../../actions/adminActions';
+import { removeTheme, updateThemeTitle, updateThemeImage } from '../../../actions/adminActions';
 import ImageUploader from '../../common/imageUploader';
 
-const ThemeCreationForm = ({ id, image, selectedLocale, title, updateTitle, updateImage }) => {
+const ThemeCreationForm = ({ id, image, removeTheme, selectedLocale, title, updateTitle, updateImage }) => {
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
   const index = (Number(id) + 1).toString();
@@ -34,7 +34,9 @@ const ThemeCreationForm = ({ id, image, selectedLocale, title, updateTitle, upda
         />
       </FormGroup>
       <div className="pointer right">
-        <span className="assembl-icon-delete grey" />
+        <Button onClick={removeTheme}>
+          <span className="assembl-icon-delete grey" />
+        </Button>
       </div>
       <div className="separator" />
     </div>
@@ -55,6 +57,9 @@ const mapStateToProps = ({ admin }, { id, selectedLocale }) => {
 
 const mapDispatchToProps = (dispatch, { id, selectedLocale }) => {
   return {
+    removeTheme: () => {
+      return dispatch(removeTheme(id));
+    },
     updateTitle: (value) => {
       return dispatch(updateThemeTitle(id, selectedLocale, value));
     },
