@@ -59,4 +59,17 @@ describe('Admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('updateThemeImage action', () => {
+    const { updateThemeImage } = actions;
+    it('should return a UPDATE_SURVEY_THEME_IMAGE action type', () => {
+      const expected = {
+        themeId: '33',
+        file: { name: 'foobar.png' },
+        type: 'UPDATE_SURVEY_THEME_IMAGE'
+      };
+      const actual = updateThemeImage('33', { name: 'foobar.png' });
+      expect(actual).toEqual(expected);
+    });
+  });
 });

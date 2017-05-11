@@ -71,13 +71,13 @@ describe('Admin reducers', () => {
 
     it('should handle ADD_THEME_TO_SURVEY action type', () => {
       const state = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: null },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: null }
+        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
+        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
       };
       const expected = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: null },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: null },
-        2: { titlesByLocale: {}, image: null }
+        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
+        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined },
+        2: { titlesByLocale: {}, image: undefined }
       };
       const action = { type: 'ADD_THEME_TO_SURVEY', id: '2' };
       const actual = surveyThemesById(state, action);
@@ -86,17 +86,36 @@ describe('Admin reducers', () => {
 
     it('should handle UPDATE_SURVEY_THEME_TITLE action type', () => {
       const state = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: null },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: null }
+        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
+        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
       };
       const expected = {
-        0: { titlesByLocale: { fr: 'Salut', en: 'Hello' }, image: null },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: null }
+        0: { titlesByLocale: { fr: 'Salut', en: 'Hello' }, image: undefined },
+        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
       };
       const action = {
         newTitle: 'Salut',
         locale: 'fr',
         type: 'UPDATE_SURVEY_THEME_TITLE',
+        themeId: '0'
+      };
+      const actual = surveyThemesById(state, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle UPDATE_SURVEY_THEME_IMAGE action type', () => {
+      const myFile = { name: 'foobar.png' };
+      const state = {
+        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
+        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
+      };
+      const expected = {
+        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: myFile },
+        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
+      };
+      const action = {
+        file: myFile,
+        type: 'UPDATE_SURVEY_THEME_IMAGE',
         themeId: '0'
       };
       const actual = surveyThemesById(state, action);

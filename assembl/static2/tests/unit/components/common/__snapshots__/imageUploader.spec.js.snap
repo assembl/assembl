@@ -1,0 +1,31 @@
+exports[`ImageUploader component should render an image uploader 1`] = `
+<div>
+  <div>
+    <span>
+      foobar.png
+    </span>
+    <img
+      alt="foobar.png"
+      className="img-thumbnail"
+      src="" />
+  </div>
+  <button
+    className="btn btn-default"
+    disabled={false}
+    onClick={[Function]}
+    type="button">
+    <span>
+      Upload Button
+    </span>
+  </button>
+  <input
+    accept="image/*"
+    onChange={[Function]}
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+    type="file" />
+</div>
+`;

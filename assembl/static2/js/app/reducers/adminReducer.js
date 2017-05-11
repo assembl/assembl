@@ -25,12 +25,17 @@ export const surveyThemesById = (state = {}, action) => {
       ...state,
       [action.id]: {
         titlesByLocale: {},
-        image: null
+        image: undefined
       }
     };
   case 'UPDATE_SURVEY_THEME_TITLE': {
     const newState = { ...state };
     newState[action.themeId].titlesByLocale[action.locale] = action.newTitle;
+    return newState;
+  }
+  case 'UPDATE_SURVEY_THEME_IMAGE': {
+    const newState = { ...state };
+    newState[action.themeId].image = action.file;
     return newState;
   }
   default:

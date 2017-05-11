@@ -27,3 +27,11 @@ export const updateThemeTitle = (themeId, locale, newTitle) => {
     type: 'UPDATE_SURVEY_THEME_TITLE'
   };
 };
+
+export const updateThemeImage = (themeId, file) => {
+  return {
+    themeId: themeId,
+    file: file,
+    type: 'UPDATE_SURVEY_THEME_IMAGE'
+  };
+};
