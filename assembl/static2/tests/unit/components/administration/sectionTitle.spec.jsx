@@ -3,8 +3,8 @@ import renderer from 'react-test-renderer';
 
 import SectionTitle from '../../../../js/app/components/administration/sectionTitle';
 
-describe('SectionTitle component', function () {
-  it('should render an admin section title', function () {
+describe('SectionTitle component', () => {
+  it('should render an admin section title', () => {
     const i18n = {
       locale: 'fr',
       translations: {
@@ -23,16 +23,9 @@ describe('SectionTitle component', function () {
           }
         }
       }
-    }
-    const component = renderer.create(
-      <SectionTitle
-        i18n={i18n}
-        phase="survey"
-        tabId="0"
-        annotation="foobar"
-      />
-    )
-    const tree = component.toJSON()
-    expect(tree).toMatchSnapshot()
-  })
-})
+    };
+    const component = renderer.create(<SectionTitle i18n={i18n} phase="survey" tabId="0" annotation="foobar" />);
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+});
