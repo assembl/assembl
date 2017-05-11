@@ -34,9 +34,9 @@ class Post extends React.Component {
         const target = event.currentTarget;
         const isMySentiment = this.state.mySentiment === type;
         if (isMySentiment) {
-          this.deleteSentiment(target);
+          this.handleDeleteSentiment(target);
         } else {
-          this.addSentiment(target, type);
+          this.handleAddSentiment(target, type);
         }
       }
     } else {
@@ -50,7 +50,7 @@ class Post extends React.Component {
     const button = { link: `${getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
     displayModal(null, body, true, null, button, true);
   }
-  addSentiment(target, type) {
+  handleAddSentiment(target, type) {
     const { id } = this.props;
     this.props.addSentiment({ variables: { postId: id, type: type } })
     .then((sentiments) => {
@@ -64,7 +64,7 @@ class Post extends React.Component {
       displayAlert('danger', `${error}`);
     });
   }
-  deleteSentiment(target) {
+  handleDeleteSentiment(target) {
     const { id } = this.props;
     this.props.deleteSentiment({ variables: { postId: id } })
     .then((sentiments) => {
