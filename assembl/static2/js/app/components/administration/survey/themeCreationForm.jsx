@@ -47,7 +47,7 @@ ThemeCreationForm.defaultProps = {
   title: ''
 };
 
-const mapStateToProps = ({ admin }, { id, selectedLocale }) => {
+export const mapStateToProps = ({ admin }, { id, selectedLocale }) => {
   const theme = admin.surveyThemesById[id];
   return {
     image: theme.image,
@@ -55,7 +55,7 @@ const mapStateToProps = ({ admin }, { id, selectedLocale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, selectedLocale }) => {
+export const mapDispatchToProps = (dispatch, { id, selectedLocale }) => {
   return {
     remove: () => {
       return dispatch(removeTheme(id));
