@@ -1,0 +1,66 @@
+exports[`ThemeCreationForm component should render a theme creation form 1`] = `
+<div
+  className="form-container">
+  <div
+    className="title">
+    <span>
+      Theme Num
+    </span>
+  </div>
+  <div
+    className="form-group">
+    <input
+      className="form-control"
+      id={undefined}
+      onChange={[Function]}
+      placeholder="Title FR"
+      type="text"
+      value="My theme" />
+  </div>
+  <div
+    className="form-group">
+    <div>
+      <div>
+        <span>
+          foobar.png
+        </span>
+        <img
+          alt="foobar.png"
+          className="img-thumbnail"
+          src="" />
+      </div>
+      <button
+        className="btn btn-default"
+        disabled={false}
+        onClick={[Function]}
+        type="button">
+        <span>
+          Upload Button
+        </span>
+      </button>
+      <input
+        accept="image/*"
+        onChange={[Function]}
+        style={
+          Object {
+            "display": "none",
+          }
+        }
+        type="file" />
+    </div>
+  </div>
+  <div
+    className="pointer right">
+    <button
+      className="btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      type="button">
+      <span
+        className="assembl-icon-delete grey" />
+    </button>
+  </div>
+  <div
+    className="separator" />
+</div>
+`;

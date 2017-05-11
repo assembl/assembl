@@ -6,7 +6,7 @@ import { Button, FormGroup, FormControl } from 'react-bootstrap';
 import { removeTheme, updateThemeTitle, updateThemeImage } from '../../../actions/adminActions';
 import ImageUploader from '../../common/imageUploader';
 
-const ThemeCreationForm = ({ id, image, remove, selectedLocale, title, updateTitle, updateImage }) => {
+export const ThemeCreationForm = ({ id, image, remove, selectedLocale, title, updateTitle, updateImage }) => {
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
   const index = (Number(id) + 1).toString();
