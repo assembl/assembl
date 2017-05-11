@@ -36,7 +36,7 @@ describe('Admin actions', () => {
           }
         };
       };
-      var actual;
+      let actual;
       const dispatchMock = (x) => {
         actual = x;
       };
