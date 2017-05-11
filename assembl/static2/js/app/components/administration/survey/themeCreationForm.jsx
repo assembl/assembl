@@ -6,7 +6,7 @@ import { Button, FormGroup, FormControl } from 'react-bootstrap';
 import { removeTheme, updateThemeTitle, updateThemeImage } from '../../../actions/adminActions';
 import ImageUploader from '../../common/imageUploader';
 
-const ThemeCreationForm = ({ id, image, removeTheme, selectedLocale, title, updateTitle, updateImage }) => {
+const ThemeCreationForm = ({ id, image, remove, selectedLocale, title, updateTitle, updateImage }) => {
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
   const index = (Number(id) + 1).toString();
@@ -34,7 +34,7 @@ const ThemeCreationForm = ({ id, image, removeTheme, selectedLocale, title, upda
         />
       </FormGroup>
       <div className="pointer right">
-        <Button onClick={removeTheme}>
+        <Button onClick={remove}>
           <span className="assembl-icon-delete grey" />
         </Button>
       </div>
@@ -57,7 +57,7 @@ const mapStateToProps = ({ admin }, { id, selectedLocale }) => {
 
 const mapDispatchToProps = (dispatch, { id, selectedLocale }) => {
   return {
-    removeTheme: () => {
+    remove: () => {
       return dispatch(removeTheme(id));
     },
     updateTitle: (value) => {
