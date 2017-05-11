@@ -21,8 +21,8 @@ export const addThemeToSurvey = () => {
 
 export const updateThemeTitle = (themeId, locale, newTitle) => {
   return {
-    locale: locale,
     themeId: themeId,
+    locale: locale,
     newTitle: newTitle,
     type: 'UPDATE_SURVEY_THEME_TITLE'
   };
