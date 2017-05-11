@@ -13,12 +13,13 @@
     z-index: 200;
 
     .thumbnails {
-      display: -webkit-box;
+      display: flex;
       overflow-x: visible;
     }
   }
 
   .thumb-img-container {
+    display: inline-table;
     float: left;
     min-height: 1px;
   }
