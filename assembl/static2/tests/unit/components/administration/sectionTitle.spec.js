@@ -27,6 +27,7 @@ describe('SectionTitle component', function () {
     const component = renderer.create(
       <SectionTitle
         i18n={i18n}
+        phase="survey"
         tabId="0"
         annotation="foobar"
       />

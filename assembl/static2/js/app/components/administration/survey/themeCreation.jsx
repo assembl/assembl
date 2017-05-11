@@ -10,7 +10,7 @@ import ThemeCreationForm from './themeCreationForm';
 const ThemeCreation = ({ addTheme, i18n, selectedLocale, showSection, themes }) => {
   return (
     <div className={showSection ? 'show admin-box' : 'hidden'}>
-      <SectionTitle i18n={i18n} tabId="0" annotation={I18n.t('administration.annotation')} />
+      <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <form>
           {themes.map((id) => {
