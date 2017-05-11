@@ -1,11 +1,11 @@
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import { getDiscussionSlug } from './utils/globalFunctions';
-// Add fetch polyfill for IE 10
+import { getFullPath } from './utils/routeMap';
 import fetch from 'isomorphic-fetch';  // eslint-disable-line
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: `${window.location.origin}/${getDiscussionSlug()}/graphql`,
+    uri: getFullPath('graphql', {slug: getDiscussionSlug()}),
     opts: {
       credentials: 'same-origin'
     }
