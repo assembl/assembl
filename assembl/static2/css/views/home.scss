@@ -303,8 +303,10 @@
 
     img {
       filter: grayscale(100%);
+      height: auto;
       max-height: $partner-logo-height;
       max-width: $partner-logo-width;
+      width: auto;
     }
   }
 
