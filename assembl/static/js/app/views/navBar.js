@@ -284,8 +284,11 @@ var navBar = Marionette.LayoutView.extend({
       modalTemplate = _.template($('#tmpl-firstLoginAfterAutoSubscribeToNotifications').html());
     }
 
-    collectionManager.getNotificationsDiscussionCollectionPromise()
-      .then(function(discussionNotifications) {
+    Promise.join(
+      collectionManager.getNotificationsDiscussionCollectionPromise(),
+      collectionManager.getLocalRoleCollectionPromise(),
+      function(discussionNotifications, localRoles) {
+        var isUserSubscribedToDiscussion = localRoles.isUserSubscribedToDiscussion();
         model.notificationsToShow = _.filter(discussionNotifications.models, function(m) {
           // keep only the list of notifications which become active when a user follows a discussion
           return (m.get('creation_origin') === 'DISCUSSION_DEFAULT') && (m.get('status') === 'ACTIVE');
@@ -324,8 +327,7 @@ var navBar = Marionette.LayoutView.extend({
           submit: function(ev) {
             var that = this;
 
-            if (Ctx.getDiscussionId() && Ctx.getCurrentUserId()) {
-
+            if (Ctx.getDiscussionId() && Ctx.getCurrentUserId() && !isUserSubscribedToDiscussion) {
               var LocalRolesUser = new RolesModel.Model({
                 role: Roles.PARTICIPANT,
                 discussion: 'local:Discussion/' + Ctx.getDiscussionId()
