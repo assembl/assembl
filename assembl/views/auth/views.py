@@ -83,7 +83,7 @@ def get_login_context(request, force_show_providers=False):
         providers = [p for p in providers if p['type'] not in hide_providers]
 
     return dict(get_default_context(request),
-                providers=providers,
+                providers=json.dumps(providers),
                 saml_providers=request.registry.settings.get(
                     'SOCIAL_AUTH_SAML_ENABLED_IDPS', {}),
                 hide_registration=hide_registration,
@@ -143,11 +143,17 @@ def get_social_autologin(request, discussion=None, next_view=None):
     else:
         preferences = Preferences.get_default_preferences()
     auto_login_backend = preferences['authorization_server_backend']
+    landing_page = preferences['landing_page']
     if not auto_login_backend:
         return None
     next_view = next_view or request.params.get('next', None)
     if discussion and not next_view:
-        next_view = request.route_path('home', discussion_slug=discussion.slug)
+        if landing_page:
+            next_view = request.route_path('new_home',
+                                           discussion_slug=discussion.slug)
+        else:
+            next_view = request.route_path('home',
+                                           discussion_slug=discussion.slug)
     query = {"next": next_view}
     if ":" in auto_login_backend:
         auto_login_backend, provider = auto_login_backend.split(":", 1)
@@ -328,7 +334,7 @@ def assembl_profile(request):
         dict(get_default_context(request),
              error='<br />'.join(errors),
              unverified_emails=unverified_emails,
-             providers=get_provider_data(get_route),
+             providers=json.dumps(get_provider_data(get_route)),
              google_consumer_key=request.registry.settings.get(
                  'google.consumer_key', ''),
              the_user=profile,
