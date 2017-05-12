@@ -4,16 +4,13 @@ import { Link } from 'react-router';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { get, getFullPath, getContextual } from '../../utils/routeMap';
+import { getDiscussionSlug } from '../../utils/globalFunctions';
 
 class AsLogin extends React.Component {
   render() {
-    const { slug } = this.props;
-    const next = this.props.next ?
-      this.props.next
-      : (
-        slug ? get('home', { slug: slug }) : null
-      );
-    const errorMessage = ('error_message' in this.props && this.props.error_message) ? this.props.error_message : null;
+    const slug = getDiscussionSlug();
+    let next;
+    if (this.props.next) { next = this.props.next; } else if (slug) { next = get('home', { slug: slug }); } else { next = null; }
     return (
       <div>
         <form className="login" method="POST" action={slug ? getFullPath('ctxOldLogin', { slug: slug }) : getFullPath('oldLogin')}>

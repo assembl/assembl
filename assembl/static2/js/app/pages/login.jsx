@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Grid, Col } from 'react-bootstrap';
 import get from 'lodash/get';
 import { I18n } from 'react-redux-i18n';
@@ -7,42 +6,44 @@ import AsLogin from '../components/login/assemblLogin';
 import { SocialMedia } from '../components/login/socialMediaLogin';
 import {
   getProvidersData,
-  getDiscussionId,
+  getDiscussionSlug,
   getPossibleErrorMessage
 } from '../utils/globalFunctions';
 import { displayAlert } from '../utils/utilityManager';
 
 class Login extends React.Component {
   componentDidMount() {
-    const error = getPossibleErrorMessage(); 
+    const error = getPossibleErrorMessage();
     if (error) {
       displayAlert('danger', error, true);
     }
   }
 
   render() {
-    const { debateData } = this.props.debate;
+    const slug = getDiscussionSlug();
     const providers = getProvidersData();
     const next = get(this.props, 'location.query.next', null);
     // Disable social media login for contextless login until post-login path
     // is determined
     // TODO: Determine contextless social media login action
-    const hasSocialMedias = providers && getDiscussionId() && providers.length > 0;
+    const hasSocialMedias = providers && slug && providers.length > 0;
     return (
       <Grid fluid className="login-grid">
         <Col xs={12} sm={hasSocialMedias ? 9 : 6} lg={hasSocialMedias ? 7 : 4} className="login-container col-centered">
-          <div className="box-title">{debateData ? debateData.topic : I18n.t('login.login')}</div>
+          <div className="box-title">{I18n.t('login.login')}</div>
           <div className="box">
             {hasSocialMedias &&
               <div>
                 <Col xs={12} md={5}>
-                  {debateData ? <SocialMedia providers={providers} next={next} slug={debateData.slug} /> : <AsLogin next={next} providers={providers} />}
+                  {slug ? <SocialMedia providers={providers} next={next} slug={slug} /> :
+                  <SocialMedia providers={providers} next={next} />
+                  }
                 </Col>
                 <Col xs={12} md={1}>&nbsp;</Col>
               </div>
             }
             <Col xs={12} md={hasSocialMedias ? 6 : 12}>
-              {debateData ? <AsLogin next={next} slug={debateData.slug} /> : <AsLogin next={next} />}
+              {slug ? <AsLogin next={next} slug={slug} /> : <AsLogin next={next} />}
             </Col>
             <div className="clear">&nbsp;</div>
           </div>
@@ -52,10 +53,4 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate
-  };
-};
-
-export default connect(mapStateToProps)(Login);
+export default Login;

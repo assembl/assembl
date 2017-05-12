@@ -45,12 +45,12 @@ export default (
       <Route path={routeForRouter('signup', false, { preSlash: true })} component={Signup} />
       <Route path={routeForRouter('changePassword', false, { preSlash: true })} component={ChangePassword} />
       <Route path={routeForRouter('requestPasswordChange')} component={RequestPasswordChange} />
+      {/* These are contextual routes for the ones above */}
+      <Route path={routeForRouter('login', true)} component={Login} />
+      <Route path={routeForRouter('signup', true)} component={Signup} />
+      <Route path={routeForRouter('changePassword', true)} component={ChangePassword} />
+      <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
       <Route component={App}>
-        {/* These are contextual routes for the ones above */}
-        <Route path={routeForRouter('login', true)} component={Login} />
-        <Route path={routeForRouter('signup', true)} component={Signup} />
-        <Route path={routeForRouter('changePassword', true)} component={ChangePassword} />
-        <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
         <Route component={Main}>
           <Route path={routeForRouter('home')} component={Home} />
           <Route path={routeForRouter('homeBare')} component={Home} />

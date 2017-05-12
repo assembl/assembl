@@ -58,16 +58,10 @@ class SignupForm extends React.Component {
   }
 
   render() {
-    let { debateData } = this.props.debate;
-    if (!debateData) {
-      // Non-contextual signup process
-      debateData = {};
-      debateData.topic = I18n.t('login.createAccount');
-      debateData.slug = null;
-    }
+    const slug = getDiscussionSlug();
     return (
       <div className="login-view">
-        <div className="box-title">{debateData.topic}</div>
+        <div className="box-title">{I18n.t('login.createAccount')}</div>
         <div className="box">
           <form className="signup" onSubmit={this.signupHandler}>
             <FormGroup className="margin-m">
@@ -129,8 +123,8 @@ class SignupForm extends React.Component {
               <Translate value="login.alreadyAccount" />
               <span>&nbsp;</span>
               <Link
-                to={debateData.slug ?
-                getContextual('login', { slug: debateData.slug }) : get('login')}
+                to={slug ?
+                getContextual('login', { slug: slug }) : get('login')}
               >
                 <Translate value="login.login" />
               </Link>
@@ -144,7 +138,6 @@ class SignupForm extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate,
     auth: state.auth
   };
 };
