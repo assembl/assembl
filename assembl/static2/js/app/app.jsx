@@ -1,6 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
+import {
+  getDiscussionId,
+  getConnectedUserId,
+  getConnectedUserName
+} from './utils/globalFunctions';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import Loader from './components/common/loader';

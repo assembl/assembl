@@ -50,7 +50,7 @@ export const getProvidersData = () => {
 export const getPossibleErrorMessage = () => {
   const data = document.getElementById('errorMessage') ? document.getElementById('errorMessage').innerHTML : null;
   return data;
-}
+};
 
 export const getSortedArrayByKey = (arr, key) => {
   arr.sort((a, b) => {
@@ -109,7 +109,7 @@ export const scrollToPosition = (to, duration) => {
   let currPos = 0;
   const start = startPosition;
   scrollInterval = setInterval(() => {
-    if((Math.round(getDocumentScrollTop() / 10) * 10) === (Math.round(to / 10) * 10) || (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if ((Math.round(getDocumentScrollTop() / 10) * 10) === (Math.round(to / 10) * 10) || (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
       clearInterval(scrollInterval);
       document.body.scrollTop = to;
       document.documentElement.scrollTop = to;

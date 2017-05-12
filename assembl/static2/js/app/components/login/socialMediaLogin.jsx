@@ -8,20 +8,14 @@ const convertNameToCssClass = (name) => {
           .toLowerCase()
           .split(/\s+/)
           .filter(Boolean)
-          .join("_");
-  };
+          .join('_');
+};
 
 export class SocialMedia extends React.Component {
   render() {
     const { slug } = this.props;
-    const next = this.props.next ?
-      this.props.next
-      : (
-        slug ?
-          get('home', { slug: this.props.slug })
-          :
-          null
-      );
+    let next;
+    if (this.props.next) { next = this.props.next; } else if (slug) { next = get('home', { slug: this.props.slug }); } else { next = null; }
     return (
       <div className="social-media">
         <h4 className="dark-title-4">

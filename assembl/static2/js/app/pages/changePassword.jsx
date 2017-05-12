@@ -27,16 +27,15 @@ class ChangePassword extends React.Component {
   submitForm(e) {
     e.preventDefault();
     const payload = this.state;
-    const that = this;
     postChangePassword(payload).then(() => {
       const slug = getDiscussionSlug();
-      let route, url;
+      let route;
+      let url;
       if (slug) {
         route = get('home', { slug: slug });
         url = new URL(route, window.location.origin);
         window.location = url;
-      }
-      else {
+      } else {
         route = get('root');
         url = new URL(route, window.location.origin);
         window.location = url;

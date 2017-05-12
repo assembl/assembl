@@ -20,8 +20,7 @@ class SendPwdForm extends React.Component {
     if (resp && resp.success === false) {
       const firstError = resp.data[0];
       let msg;
-      if (firstError.type === 'nonJson') { msg = I18n.t('login.somethingWentWrong'); }
-      else { msg = firstError.message; }
+      if (firstError.type === 'nonJson') { msg = I18n.t('login.somethingWentWrong'); } else { msg = firstError.message; }
       displayAlert('danger', msg, true);
     }
   }

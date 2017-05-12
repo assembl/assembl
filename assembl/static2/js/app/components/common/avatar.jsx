@@ -1,7 +1,6 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getContextual, get } from '../../utils/routeMap';
 import { getConnectedUserName, getConnectedUserId, getDiscussionSlug } from '../../utils/globalFunctions';

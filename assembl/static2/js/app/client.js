@@ -5,7 +5,7 @@ import fetch from 'isomorphic-fetch';  // eslint-disable-line
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: getFullPath('graphql', {slug: getDiscussionSlug()}),
+    uri: getFullPath('graphql', { slug: getDiscussionSlug() }),
     opts: {
       credentials: 'same-origin'
     }
