@@ -29,18 +29,29 @@ from fabric.colors import yellow, cyan, red, green
 from fabric.contrib.files import *
 
 
-""" The various services used by the stack """
-SERVICES = [
-    'postgres',
-    'smtp',
-    'imap',
-    'piwik',
-    'sentry',
-    'memcached',
-    'redis',
-    'mysql',
-]
 ELASTICSEARCH_VERSION = '5.2.2'
+
+
+def combine_rc(rc_filename, overlay=None):
+    """Take a rc filename, load it as fabric would.
+
+    If it specifies an _extends value, consider this file
+    to be an overlay of the named file."""
+    from fabric.main import load_settings
+    assert os.path.exists(rc_filename)
+    service_config = load_settings(rc_filename)
+    if '_extends' in service_config:
+        fname = join(dirname(rc_filename), service_config['_extends'])
+        service_config = combine_rc(fname, service_config)
+    if overlay is not None:
+        service_config.update(overlay)
+    service_config.pop('_extends', None)
+    service_config.pop('', None)
+    return service_config
+
+
+def filter_global_names(rc_data):
+    return {k.lstrip('*'): v for (k, v) in rc_data.iteritems()}
 
 
 def load_service_configs():
@@ -55,18 +66,14 @@ def load_service_configs():
     Note that variables already defined in the environment, or in the platform's
     .rc file, will override those found in from service config files."""
     from fabric.state import env
-    from fabric.main import load_settings
-    for service in SERVICES:
-        config_name = env.get(service + "_config", "default")
-        if config_name is None:
-            continue
-        fname = join('configs', service, config_name + ".rc")
-        if os.path.exists(fname):
-            service_config = load_settings(fname)
-            for k, v in service_config.iteritems():
-                full_key_name = "_".join((service, k))
-                if full_key_name not in env:
-                    env[full_key_name] = v
+    rc_file = env['rcfile']
+    if os.path.exists(rc_file):
+        full = filter_global_names(combine_rc(rc_file))
+        env.update(full)
+        # env['hosts'] = [env['public_hostname']]
+        print env
+    # else:
+    #     print "please specify a .rc file"
 
 
 load_service_configs()
