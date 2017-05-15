@@ -23,16 +23,6 @@ serverurl = unix:///%(here)s/var/run/supervisor.sock
 [rpcinterface:supervisor]
 supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
-[program:virtuoso]
-directory = %(here)s/var/db
-command = %(VIRTUOSO_ROOT)s/bin/virtuoso-t +foreground
-autostart = %(autostart_virtuoso)s
-autorestart = true
-startsecs = 10
-#Start virtuoso before other processes
-priority = 100
-stopsignal = INT
-
 [program:celery_imap]
 directory = %(here)s
 command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.tasks.imap -n imap -c %(IMAP_CELERY_NUM_WORKERS)s -b %(IMAP_CELERY_BROKER)s -Q imap

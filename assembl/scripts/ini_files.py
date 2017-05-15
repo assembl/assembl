@@ -41,7 +41,6 @@ DEFAULTS = {
     'celery_tasks.notify.num_workers': '2',
     'celery_tasks.translate.num_workers': '2',
     # Sensible defaults
-    'autostart_virtuoso': 'false',
     'autostart_celery_imap': 'false',
     'autostart_celery_notification_dispatch': 'true',
     'autostart_celery_notify': 'true',
@@ -80,7 +79,6 @@ def ensureSection(config, section):
 def generate_ini_files(config, config_fname):
     """Generate the supervisor.conf from its template and .ini file."""
     # TODO: Use .rc file instead of .ini file.
-    using_virtuoso = 'virtuoso' in config.get('app:assembl', 'sqlalchemy.url')
     try:
         metrics_code_dir = config.get('metrics', 'metrics_code_dir')
         metrics_cl = config.get('metrics', 'metrics_cl')
@@ -143,8 +141,6 @@ def generate_ini_files(config, config_fname):
             SECTION, 'celery_tasks.translate.num_workers'),
         'here': dirname(abspath('supervisord.conf')),
         'CONFIG_FILE': config_fname,
-        'autostart_virtuoso': using_virtuoso and config.get(
-            'supervisor', 'autostart_virtuoso'),
         'autostart_metrics_server': (config.get(
             'supervisor', 'autostart_metrics_server')
             if has_metrics_server else 'false'),
@@ -173,61 +169,8 @@ def generate_ini_files(config, config_fname):
             'autostart_webpack',
             'autostart_uwsgi'):
         vars[var] = config.get('supervisor', var)
-    if using_virtuoso:
-        vroot = config.get('virtuoso', 'virtuoso_root')
-        if vroot == 'system':
-            # Magic value
-            if system().startswith('Darwin'):
-                vroot = '/usr/local/virtuoso-opensource'
-            else:
-                vroot = '/usr'
-        elif not vroot[0] == '/':
-            # Relative path
-            vroot = join(dirname(dirname(dirname(__file__))), vroot)
-        assert exists(vroot), "virtuoso_root directory does not exist"
-        assert exists(join(vroot, 'bin', 'virtuoso-t')),\
-            "virtuoso_root directory does not contain bin/virtuoso-t"
-        assert exists('var/db/virtuoso.ini.tmpl'),\
-            "Please run this script from the assembl root."
-        vroot_var = join(vroot, 'var')
-        if not exists(vroot_var):
-            vroot_var = '/var'
-        vroot_lib = join(vroot, 'lib')
-        assert exists(vroot_lib)
-        if not exists(join(vroot_lib, 'virtodbcu.so'))\
-                and exists(join(vroot_lib, 'odbc', 'virtodbcu.so')):
-            vroot_lib = join(vroot_lib, 'odbc')
-        vname = 'virtuoso'
-        if not exists(join(vroot, 'share', vname)):
-            names = listdir(join(vroot, 'share'))
-            names = [n for n in names
-                     if exists(join(vroot, 'share', n, 'vad'))]
-            assert len(names) == 1, "Cannot identify the vad directory"
-            vname = names[0]
-        assert exists(join(vroot_var, 'lib', vname, 'vsp')),\
-            "Cannot identify the VSP directory"
-        vars.update({
-            'VIRTUOSO_SERVER_PORT': config.getint('virtuoso', 'http_port'),
-            'VIRTUOSO_HOSTNAME': config.get(SECTION, 'public_hostname'),
-            'VIRTUOSO_PORT': config.getint('virtuoso', 'port'),
-            'VIRTUOSO_ROOT': vroot,
-            'VIRTUOSO_ROOT_VAR': vroot_var,
-            'VIRTUOSO_ROOT_LIB': vroot_lib,
-            'VIRTUOSO_SUBDIR_NAME': vname,
-        })
-    else:
-        # dummy values
-        vars.update({
-            'VIRTUOSO_SERVER_PORT': 8890,
-            'VIRTUOSO_HOSTNAME': 'localhost',
-            'VIRTUOSO_PORT': 1111,
-            'VIRTUOSO_ROOT': '/usr',
-            'VIRTUOSO_ROOT_VAR': '/usr/var',
-            'VIRTUOSO_ROOT_LIB': '/usr/var/lib',
-            'VIRTUOSO_SUBDIR_NAME': '/usr/share/virtuoso/vad',
-        })
 
-    for fname in ('var/db/virtuoso.ini', 'odbc.ini', 'supervisord.conf',):
+    for fname in ('supervisord.conf',):
         print fname
         with open(fname + '.tmpl') as tmpl, open(fname, 'w') as inifile:
             inifile.write(tmpl.read() % vars)
