@@ -128,8 +128,16 @@ class FrontendUrls(object):
             from pyramid.threadlocal import get_current_request
             request = get_current_request()
 
-        get_route = create_get_route(request, self.discussion)
-        return urljoin(self.discussion.get_base_url(), get_route('home'))
+        # TODO: If the route for 'home' is EVER changed, this value MUST be
+        # synced. KEEP it as 'home' instead of 'new_home', because usage of
+        # this method is kept mostly for legacy routes that do not exist in
+        # new front-end yet.
+        if request is None:
+            route = '/debate/' + self.discussion.slug
+        else:
+            get_route = create_get_route(request, self.discussion)
+            route = get_route('home')
+        return urljoin(self.discussion.get_base_url(), route)
 
     # TODO: Decommission all of the route methods below. They are
     # no longer Object Oriented.
