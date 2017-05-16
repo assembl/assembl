@@ -36,6 +36,7 @@ class Question extends React.Component {
       postBody: '',
       remainingChars: maxChars
     };
+    this.updateDimensions();
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions);
@@ -67,12 +68,10 @@ class Question extends React.Component {
     }
   }
   updateDimensions() {
-    const componentHeight = this.question.clientHeight;
     const screenHeight = window.innerHeight - document.getElementById('timeline').clientHeight;
     const screenWidth = window.innerWidth;
     this.setState({
       screenHeight: screenHeight,
-      componentHeight: componentHeight,
       screenWidth: screenWidth
     });
   }
@@ -114,9 +113,8 @@ class Question extends React.Component {
       <section
         className={isPhaseCompleted ? 'hidden' : 'questions-section'}
         id={`q${index}`}
-        ref={(q) => { this.question = q; }}
         style={
-          this.state.componentHeight < this.state.screenHeight && this.state.screenWidth >= 768 ?
+          this.state.screenWidth >= 768 ?
             { height: this.state.screenHeight } : { height: '100%' }
         }
       >
