@@ -20,11 +20,14 @@ from os.path import join, dirname, split, normpath
 # Other calls to os.path rarely mostly don't work remotely. Use locally only.
 import os.path
 from functools import wraps
+import re
 
-from fabric.operations import put, get
-from fabric.api import *
+from fabric.operations import (
+    put, get, local, sudo, run, require)
+from fabric.contrib.files import (exists, is_link)
+from fabric.api import (
+    abort, cd, env, execute, hide, prefix, settings, task as fab_task)
 from fabric.colors import yellow, cyan, red, green
-from fabric.contrib.files import *
 
 
 ELASTICSEARCH_VERSION = '5.2.2'
@@ -60,41 +63,40 @@ def as_bool(b):
 
 def sanitize_env():
     """Ensure boolean and list env variables are such"""
-    assert os.path.exists(env.rcfile),\
-        "You must specify a rc file"
     for name in (
             "uses_memcache ", "uses_uwsgi", "uses_apache", "uses_ngnix",
             "uses_global_supervisor", "uses_apache",
             "uses_ngnix", "mac", "is_production_env"):
-        # Note that we use as_bool() instead of bool(), so that a variable valued "False" in the .ini file is recognized as boolean False
+        # Note that we use as_bool() instead of bool(),
+        # so that a variable valued "False" in the .ini
+        # file is recognized as boolean False
         setattr(env, name, as_bool(getattr(env, name, False)))
+    env.host_string = env.get('public_hostname', 'localhost')
     if not env.get('hosts', None):
-        env.hosts = env.public_hostname
+        env.hosts = env.get('public_hostname', 'localhost')
     if not isinstance(env.hosts, list):
         env.hosts = getattr(env, "hosts", "").split()
 
 
-def load_service_configs():
-    """ allows to break a service network configuration into many files.
-    Suppose we have a platform instance's configuration specified in
-    platform_xxx.rc. In that file, we can refer to other configuration files
-    with the pattern [service]_config = [service_name]
-    for each service defined in SERVICES above.
-    This function will then look for the file configs/[service]/[service_name].rc
-    and import all the "key = value" pairs therein in the current environment,
-    with keys prefixed with [service]_.
-    Note that variables already defined in the environment, or in the platform's
-    .rc file, will override those found in from service config files."""
+def load_rcfile_config():
+    """Load the enviroment from the .rc file."""
     from fabric.state import env
     rc_file = env['rcfile']
-    if os.path.exists(rc_file):
-        full = filter_global_names(combine_rc(rc_file))
-        print full
-        env.update(full)
-        env['hosts'] = [env['public_hostname']]
-        sanitize_env()
+    if not rc_file:
+        abort("You must specify a .rc file")
+    if not os.path.exists(env.rcfile):
+        abort("This .rc file does not exist locally: " + rc_file)
+    full = filter_global_names(combine_rc(rc_file))
+    env.update(full)
+    sanitize_env()
 
-load_service_configs()
+
+def task(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        load_rcfile_config()
+        return func(*args, **kwargs)
+    return fab_task(wrapper)
 
 
 def realpath(path):
