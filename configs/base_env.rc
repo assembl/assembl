@@ -1,0 +1,76 @@
+ini_files = production.ini RANDOM RC_DATA
+*db_host = localhost
+*db_user = assembl
+# TODO: If generated remotely, fetch in fabfile
+*db_password = assembl
+*db_database = assembl
+db_schema = public
+postgres_db_user = postgres
+postgres_db_password =
+smtp_host = localhost
+imap_host = localhost
+piwik_host = localhost
+sentry_host = localhost
+memcached_host = localhost
+mysql_host=localhost
+webpack_host=localhost
+# Not used yet
+elasticsearch_host=localhost
+# Internal host
+platform_host = localhost
+# External hostname: Will almost always be overridden in a host-specific rc file.
+public_hostname = localhost
+redis_host = localhost
+# ZMQ model changes local socket (backend will connect to this)
+# UNIQUE_PER_SERVER
+# Convention:
+# /0 - /3: reserved for development
+# /4: reserved for automated testing
+# /5 - /12: production
+redis_socket = 5
+# The port to use for the websocket (client frontends will connect to this)
+# In prod, your firewall needs to allow this through or proxy it through nginx
+# UNIQUE_PER_SERVER
+# Convention:
+# 8085 thru 8087: reserved for development
+# 8088 thru 8089: reserved for automated testing
+# 8090-: production
+changes.websocket.port = 8090
+# ZMQ model changes local socket (backend will connect to this)
+# UNIQUE_PER_SERVER
+# Convention:
+# /0 thru /2: reserved for development
+# /3 thru /4: reserved for automated testing
+# /5-: production
+changes.socket = ipc:///tmp/assembl_changes/5
+
+host_string =
+ini_file = local.ini
+gitrepo = https://github.com/assembl/assembl.git
+wsginame = prod.wsgi
+gitbranch = master
+projectname = assembl
+uses_memcache = true
+uses_uwsgi = true
+uses_apache =
+uses_ngnix = true
+uses_global_supervisor = true
+uses_apache = false
+mac = false
+is_production_env = true
+
+supervisor__autostart_celery_imap = true
+supervisor__autostart_celery_notification_dispatch = true
+supervisor__autostart_celery_notify = true
+supervisor__autostart_celery_notify_beat = true
+supervisor__autostart_celery_translate = false
+supervisor__autostart_source_reader = true
+supervisor__autostart_changes_router = true
+supervisor__autostart_pserve = false
+supervisor__autostart_nodesass = false
+supervisor__autostart_gulp = false
+supervisor__autostart_webpack = false
+supervisor__autostart_uwsgi = false
+supervisor__autostart_metrics_server = false
+supervisor__autostart_metrics_server = false
+supervisor__autostart_edgesense_server = false
