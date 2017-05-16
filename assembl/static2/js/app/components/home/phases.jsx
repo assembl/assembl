@@ -11,13 +11,13 @@ class Phases extends React.Component {
     const { debateData } = this.props.debate;
     return (
       <section className="phases-section">
-        {debateData.timeline &&
+        {(debateData.timeline && debateData.timeline.length > 1) &&
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="title-section">
                 <div className="title-hyphen">&nbsp;</div>
                 <h1 className="dark-title-1">
-                  <Translate value="home.timelineTitle" />
+                  <Translate value="home.timelineTitle" phaseNumber={debateData.timeline.length} />
                 </h1>
               </div>
               <div className="content-section">
