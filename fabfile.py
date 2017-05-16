@@ -48,7 +48,28 @@ def combine_rc(rc_filename, overlay=None):
 
 
 def filter_global_names(rc_data):
+    """Some keys in rc files are prefixed with * for ini conversion purposes"""
     return {k.lstrip('*'): v for (k, v) in rc_data.iteritems()}
+
+
+def as_bool(b):
+    return str(b).lower() in {"1", "true", "yes", "t", "on"}
+
+
+def sanitize_env():
+    """Ensure boolean and list env variables are such"""
+    assert os.path.exists(env.rcfile),\
+        "You must specify a rc file"
+    for name in (
+            "uses_memcache ", "uses_uwsgi", "uses_apache", "uses_ngnix",
+            "uses_global_supervisor", "uses_apache",
+            "uses_ngnix", "mac", "is_production_env"):
+        # Note that we use as_bool() instead of bool(), so that a variable valued "False" in the .ini file is recognized as boolean False
+        setattr(env, name, as_bool(getattr(env, name, False)))
+    if not env.get('hosts', None):
+        env.hosts = env.public_hostname
+    if not isinstance(env.hosts, list):
+        env.hosts = getattr(env, "hosts", "").split()
 
 
 def load_service_configs():
@@ -68,9 +89,9 @@ def load_service_configs():
         full = filter_global_names(combine_rc(rc_file))
         env.update(full)
         # env['hosts'] = [env['public_hostname']]
-        print env
     # else:
     #     print "please specify a .rc file"
+    sanitize_env()
 
 
 load_service_configs()
@@ -100,7 +121,6 @@ def listdir(path):
 @task
 def supervisor_restart():
     "Restart supervisor itself."
-    sanitize_env()
     with hide('running', 'stdout'):
         supervisord_cmd_result = venvcmd("supervisorctl shutdown")
     # Another supervisor,upstart, etc may be watching it, give it a little while
@@ -216,10 +236,6 @@ def maintenance_mode_stop():
     supervisor_process_start('prod:uwsgi')
 
 
-def as_bool(b):
-    return str(b).lower() in {"1", "true", "yes", "t", "on"}
-
-
 def filter_autostart_processes(processes):
     return [p for p in processes
             if as_bool(env.get('supervisor__autostart_' + p, False))]
@@ -228,7 +244,6 @@ def filter_autostart_processes(processes):
 @task
 def app_majorupdate():
     "This update is so major that assembl needs to be put in maintenance mode. Only for production."
-    sanitize_env()
     execute(database_dump)
     execute(updatemaincode)
     execute(app_update_dependencies)
@@ -256,7 +271,6 @@ def app_reload():
     """
     Restart all necessary processes after an update
     """
-    sanitize_env()
     if env.uses_global_supervisor:
         print(cyan('Asking supervisor to restart %(projectname)s' % env))
         run("sudo /usr/bin/supervisorctl restart %(projectname)s" % env)
@@ -317,7 +331,6 @@ def build_virtualenv():
     """
     Build the virtualenv
     """
-    sanitize_env()
     print(cyan('Creating a fresh virtualenv'))
     require('venvpath', provided_by=('commonenv'))
     import sys
@@ -355,7 +368,6 @@ def update_pip_requirements(force_reinstall=False):
     """
     update external dependencies on remote host
     """
-    sanitize_env()
     print(cyan('Updating requirements using PIP'))
     venvcmd('pip install -U "pip>=6" ')
 
@@ -371,7 +383,6 @@ def app_db_update():
     """
     Migrates database using south
     """
-    sanitize_env()
     print(cyan('Migrating database'))
     venvcmd('alembic -c %s upgrade head' % (env.ini_file))
 
@@ -381,7 +392,6 @@ def reset_semantic_mappings():
     """
     Reset semantic mappings after a database restore
     """
-    sanitize_env()
     print(cyan('Resetting semantic mappings'))
     venvcmd("echo 'import assembl.semantic ; assembl.semantic.reset_semantic_mapping()'|pshell %s" % env.ini_file)
 
@@ -400,7 +410,6 @@ def make_messages():
     """
     Run *.po file generation for translation
     """
-    sanitize_env()
     cmd = "python setup.py extract_messages"
     venvcmd(cmd)
     cmd = "python setup.py update_catalog"
@@ -412,7 +421,6 @@ def compile_messages():
     """
     Run compile *.mo file from *.po
     """
-    sanitize_env()
     cmd = "python setup.py compile_catalog"
     venvcmd(cmd)
     venvcmd("python assembl/scripts/po2json.py")
@@ -423,7 +431,6 @@ def compile_stylesheets():
     """
     Generate *.css files from *.scss
     """
-    sanitize_env()
     with cd(env.projectpath):
         with cd('assembl/static/js'):
             venvcmd('./node_modules/.bin/gulp sass', chdir=False)
@@ -437,7 +444,6 @@ def compile_javascript():
     """
     Generates and minifies javascript
     """
-    sanitize_env()
     with cd(env.projectpath):
         with cd('assembl/static/js'):
             venvcmd('./node_modules/.bin/gulp libs', chdir=False)
@@ -450,7 +456,6 @@ def compile_javascript():
 @task
 def compile_javascript_tests():
     """Generates unified javascript test file"""
-    sanitize_env()
     with cd(env.projectpath):
         with cd('assembl/static/js'):
             venvcmd('./node_modules/.bin/gulp build:test', chdir=False)
@@ -474,7 +479,6 @@ def bootstrap(projectpath):
 
     takes the same arguments at env_dev, but projectpath is mandatory
     """
-    sanitize_env()
     #env.projectname = "assembl"
     assert projectpath, "projectpath is mandatory, and corresponds to the directory where assembl will be installed"
 
@@ -489,7 +493,6 @@ def bootstrap_from_checkout():
     """
     Creates the virtualenv and install the app from git checkout
     """
-    sanitize_env()
     execute(updatemaincode)
     execute(build_virtualenv)
     execute(app_update_dependencies)
@@ -540,7 +543,6 @@ def app_fullupdate():
     Full Update: Update to latest git, update dependencies and compile app.
     You need internet connectivity, and can't run this on a branch.
     """
-    sanitize_env()
     execute(database_dump)
     execute(updatemaincode)
     execute(app_compile)
@@ -553,7 +555,6 @@ def app_update():
     Useful for deploying hotfixes.  You need internet connectivity, and can't
     run this on a branch.
     """
-    sanitize_env()
     execute(database_dump)
     execute(updatemaincode)
     execute(app_compile_noupdate)
@@ -565,7 +566,6 @@ def app_update_dependencies(force_reinstall=False):
     Updates all python and javascript dependencies.  Everything that requires a
     network connection to update
     """
-    sanitize_env()
     execute(update_vendor_themes_1)
     execute(update_vendor_themes_2)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
@@ -582,7 +582,6 @@ def app_reinstall_all_dependencies():
     Reinstall all python and javascript dependencies.
     Usefull after a OS upgrade, node upgrade, etc.
     """
-    sanitize_env()
     execute(app_update_dependencies, force_reinstall=True)
 
 @task
@@ -590,7 +589,6 @@ def update_node(force_reinstall=False):
     """
     Install node and npm to a known-good version
     """
-    sanitize_env()
     node_version_cmd_regex = re.compile('^v6\.1\.0')
     with settings(warn_only=True), hide('running', 'stdout'):
         node_version_cmd_result = venvcmd("node --version")
@@ -616,7 +614,6 @@ def app_compile():
     You need internet connectivity.  If you are on a plane, use
     app_compile_noupdate instead.
     """
-    sanitize_env()
     execute(app_update_dependencies)
     execute(app_compile_noupdate)
 
@@ -627,7 +624,6 @@ def app_compile_noupdate():
     Fast Update: Doesn't touch git state, don't update requirements, and rebuild
     all generated files. You normally do not need to have internet connectivity.
     """
-    sanitize_env()
     execute(app_compile_nodbupdate)
     execute(app_db_update)
     # tests()
@@ -638,7 +634,6 @@ def app_compile_noupdate():
 @task
 def app_compile_nodbupdate():
     """Separated mostly for tests, which need to run alembic manually"""
-    sanitize_env()
     execute(app_setup)
     execute(compile_stylesheets)
     execute(compile_messages)
@@ -650,7 +645,6 @@ def webservers_reload():
     """
     Reload the webserver stack.
     """
-    sanitize_env()
     if env.uses_apache:
         print(cyan("Reloading apache"))
         # Apache (sudo is part of command line here because we don't have full
@@ -766,7 +760,6 @@ def _bower_foreach_do(cmd):
 @task
 def update_bower_requirements(force_reinstall=False):
     """ Normally not called manually """
-    sanitize_env()
     execute(_bower_foreach_do, 'prune')
     if force_reinstall:
         execute(_bower_foreach_do, 'install --force')
@@ -777,7 +770,6 @@ def update_bower_requirements(force_reinstall=False):
 @task
 def update_npm_requirements(force_reinstall=False):
     """ Normally not called manually """
-    sanitize_env()
     with cd(get_node_base_path()):
         if force_reinstall:
             venvcmd('reinstall', chdir=False)
@@ -804,7 +796,6 @@ def install_single_server():
     """
     Will install all assembl components on a single server
     """
-    sanitize_env()
     execute(skeleton_env, None)
     execute(install_java)
     execute(install_elasticsearch)
@@ -821,7 +812,6 @@ def install_assembl_server_deps():
     """
     Will install most assembl components on a single server, except db
     """
-    sanitize_env()
     execute(skeleton_env, None)
     execute(install_assembl_deps)
 
@@ -831,7 +821,6 @@ def install_assembl_deps():
     """
     Will install commonly needed build deps for pip django virtualenvs.
     """
-    sanitize_env()
     execute(skeleton_env, None)
     execute(install_basetools)
     execute(install_builddeps)
@@ -903,7 +892,6 @@ def install_builddeps():
 @task
 def update_python_package_builddeps():
     """Install/Update python package native binary dependencies"""
-    sanitize_env()
     # For specific python packages in requirements.txt
     if env.mac:
         # Brew packages come with development headers
@@ -992,7 +980,6 @@ def set_file_permissions():
 @task
 def start_edit_fontello_fonts():
     """Prepare to edit the fontello fonts in Fontello."""
-    sanitize_env()
     assert env.hosts == ['localhost'], "Meant to be run locally"
     try:
         import requests
@@ -1018,7 +1005,6 @@ def start_edit_fontello_fonts():
 @task
 def compile_fontello_fonts():
     """Compile the fontello fonts once you have edited them in Fontello. Run start_edit_fontello_fonts first."""
-    sanitize_env()
     from zipfile import ZipFile
     from StringIO import StringIO
     assert env.hosts == ['localhost'], "Meant to be run locally"
@@ -1052,7 +1038,6 @@ def check_and_create_database_user(host=None, user=None, password=None):
     """
     Create a user and a DB for the project
     """
-    sanitize_env()
     host = host or env.db_host
     user = user or env.db_user
     password = password or env.db_password
@@ -1093,7 +1078,6 @@ def check_and_create_sentry_database_user():
 @task
 def database_create():
     """Create the database for this assembl instance"""
-    sanitize_env()
     execute(check_and_create_database_user)
 
     with settings(warn_only=True):
@@ -1116,7 +1100,6 @@ def database_dump():
     """
     Dumps the database on remote site
     """
-    sanitize_env()
     if not exists(env.dbdumps_dir):
         run('mkdir -m700 %s' % env.dbdumps_dir)
 
@@ -1143,7 +1126,6 @@ def database_download():
     """
     Dumps and downloads the database from the target server
     """
-    sanitize_env()
     destination = join('./', get_db_dump_name())
     if is_link(destination):
         print('Clearing symlink at %s to make way for downloaded file' % (destination))
@@ -1157,7 +1139,6 @@ def database_upload():
     """
     Uploads a local database backup to the target environment's server
     """
-    sanitize_env()
     if(env.wsginame != 'dev.wsgi'):
         put(get_db_dump_name(), remote_db_path())
 
@@ -1167,7 +1148,6 @@ def database_delete():
     """
     Deletes the database instance
     """
-    sanitize_env()
     if(env.is_production_env is True):
         abort(red("You are not allowed to delete the database of a production " +
                 "environment.  If this is a server restore situation, you " +
@@ -1211,7 +1191,6 @@ def database_restore():
     """
     Restores the database backed up on the remote server
     """
-    sanitize_env()
     assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
     env.debug = True
 
@@ -1280,7 +1259,6 @@ def flushmemcache():
     """
     Resetting all data in memcached
     """
-    sanitize_env()
     if env.uses_memcache:
         print(cyan('Resetting all data in memcached :'))
         wait_str = "" if env.mac else "-q 2"
@@ -1380,7 +1358,6 @@ def install_database():
     """
     Install a postgresql DB server
     """
-    sanitize_env()
     print(cyan('Installing Postgresql'))
     if env.mac:
         run('brew install postgresql')
@@ -1461,7 +1438,6 @@ def install_piwik():
     if env.mac:
         print(red("We have not setup piwik on the mac."))
         return
-    sanitize_env()
     execute(install_lamp())
     print(cyan("About to install Piwik"))
     print(cyan("About to configure DNS"))
@@ -1571,20 +1547,6 @@ def update_vendor_themes_2():
     update_vendor_themes(2)
 
 
-def sanitize_env():
-    """Ensure boolean and list env variables are such"""
-    assert getattr(env, "ini_file", None),\
-        "You must specify an environment task or a rc file"
-    for name in (
-            "uses_memcache ", "uses_uwsgi", "uses_apache", "uses_ngnix",
-            "uses_global_supervisor", "uses_apache",
-            "uses_ngnix", "mac", "is_production_env"):
-        # Note that we use as_bool() instead of bool(), so that a variable valued "False" in the .ini file is recognized as boolean False
-        setattr(env, name, as_bool(getattr(env, name, False)))
-    if not isinstance(env.hosts, list):
-        env.hosts = getattr(env, "hosts", "").split()
-
-
 # # Server scenarios
 def skeleton_env(projectpath, venvpath=None):
     """
@@ -1663,7 +1625,6 @@ def run_db_command(command, user=None, *args, **kwargs):
 @task
 def build_doc():
     """Build the Sphinx documentation"""
-    sanitize_env()
     with cd(env.projectpath):
         run('rm -rf doc/autodoc doc/jsdoc')
         venvcmd('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
