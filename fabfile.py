@@ -52,9 +52,9 @@ def combine_rc(rc_filename, overlay=None):
 
 
 def filter_global_names(rc_data):
-    """Some keys in rc files are prefixed with * for ini conversion purposes"""
-    return {k.lstrip('*'): v for (k, v) in rc_data.iteritems()
-            if k[0] != '_' and v != '__delete_key__'}
+    """Some keys in rc files are prefixed with * or _ for ini conversion purposes"""
+    return {k.lstrip('*').lstrip('_'): v for (k, v) in rc_data.iteritems()
+            if v != '__delete_key__'}
 
 
 def as_bool(b):
