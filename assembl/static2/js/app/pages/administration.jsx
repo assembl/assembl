@@ -3,6 +3,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
+import SaveButton from '../components/administration/saveButton';
 
 const Administration = ({ children, params }) => {
   const { phase } = params;
@@ -10,6 +11,12 @@ const Administration = ({ children, params }) => {
     <div className="administration">
       <div className="max-container">
         <Grid fluid>
+          <Row>
+            <Col xs={0} md={3} />
+            <Col xs={12} md={9}>
+              <SaveButton />
+            </Col>
+          </Row>
           <Row>
             <Col xs={12} md={3}>
               <div className="admin-menu-container">
