@@ -48,7 +48,7 @@ google-api-python-client==1.5.1
 graphql-core==1.0.1
 graphene-sqlalchemy==1.1.1
 graphene==1.2
--e git+https://github.com/ecreall/graphql-wsgi.git@ffdbdb218bfab0c3e9dffc5731451467ffb59edf#egg=graphql-wsgi
+-e git+https://github.com/ecreall/graphql-wsgi.git@dfe5f6f027e77dce2d9cfe3fb93eadb14764a0be#egg=graphql-wsgi
 greenlet==0.4.10
 hiredis==0.2.0
 html5lib==0.9999999
