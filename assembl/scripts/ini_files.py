@@ -258,7 +258,7 @@ def rc_to_ini(rc_info, default_section=SECTION):
         unless prefixed by "{section}__" .
     Keys prefixed with an underscore are not passed on.
     Keys prefixed with a star are put in the global (DEFAULT) section.
-    Value of '__' is eliminated if existing.
+    Value of '__delete_key__' is eliminated if existing.
     """
     p = Parser()
     for key, val in rc_info.iteritems():
@@ -273,9 +273,9 @@ def rc_to_ini(rc_info, default_section=SECTION):
         else:
             section = default_section
         ensureSection(p, section)
-        if val == '__':
+        if val == '__delete_key__':
             # Allow to remove a variable from rc
-            # so we can access underlying ini
+            # so we can fall back to underlying ini
             p.remove_option(section, key)
         else:
             p.set(section, key, val)

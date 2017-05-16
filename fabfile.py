@@ -19,6 +19,7 @@ from StringIO import StringIO
 from os.path import join, dirname, split, normpath
 # Other calls to os.path rarely mostly don't work remotely. Use locally only.
 import os.path
+from functools import wraps
 
 from fabric.operations import put, get
 from fabric.api import *
@@ -49,7 +50,8 @@ def combine_rc(rc_filename, overlay=None):
 
 def filter_global_names(rc_data):
     """Some keys in rc files are prefixed with * for ini conversion purposes"""
-    return {k.lstrip('*'): v for (k, v) in rc_data.iteritems()}
+    return {k.lstrip('*'): v for (k, v) in rc_data.iteritems()
+            if k[0] != '_' and v != '__delete_key__'}
 
 
 def as_bool(b):
@@ -87,12 +89,10 @@ def load_service_configs():
     rc_file = env['rcfile']
     if os.path.exists(rc_file):
         full = filter_global_names(combine_rc(rc_file))
+        print full
         env.update(full)
-        # env['hosts'] = [env['public_hostname']]
-    # else:
-    #     print "please specify a .rc file"
-    sanitize_env()
-
+        env['hosts'] = [env['public_hostname']]
+        sanitize_env()
 
 load_service_configs()
 
