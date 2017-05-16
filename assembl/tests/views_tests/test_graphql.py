@@ -185,15 +185,15 @@ def test_mutation_create_thematic_upload_file(graphql_request):
         file = BytesIO(os.urandom(16))
         filename = 'path/to/img.png'
 
-    graphql_request.POST['image123456789'] = FileUpload()
+    graphql_request.POST['variables.img'] = FileUpload()
     res = schema.execute(u"""
-mutation myFirstMutation($image:String) {
+mutation myFirstMutation($img:String) {
     createThematic(titleEntries:[
         {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
         {value:"Understanding the dynamics and issues", localeCode:"en"}
     ],
         identifier:"survey",
-        image:$image
+        image:$img
     ) {
         thematic {
             title(lang:"fr"),
@@ -202,7 +202,7 @@ mutation myFirstMutation($image:String) {
         }
     }
 }
-""", context_value=graphql_request, variable_values={"image": u"image123456789"})
+""", context_value=graphql_request, variable_values={"img": u"variables.img"})
     # The test doesn't use the same discussion id (sometimes it's 1, sometimes 8)
     # depending on which tests are executed...
     # py.test assembl -k test_mutation_create_thematic_upload_file

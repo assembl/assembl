@@ -525,10 +525,13 @@ class QuestionInput(graphene.InputObjectType):
 # How the file upload works
 # With the https://github.com/jaydenseric/apollo-upload-client
 # networkInterface, if there is a File object in a graphql variable, the File data
-# is appended to the POST body as a part with an identifier, the identifier
-# is set in the variable instead which reference this part.
-# So here image input field is a simple String,
-# which is the identifier of the FileUpload object you will find in context.POST
+# is appended to the POST body as a part with an identifier starting with 'variables.',
+# For example if we use 'img' File variable in a mutation,
+# 'variables.img' will be available in context.POST, 'img' is removed from the
+# variables in the json by apollo-upload-client, but graphql-wsgi put back
+# {'img': 'variables.img'}
+# in the variables, so here `image` input argument will be 'variables.img'
+# (assuming assigning image: $img in the mutation)
 class CreateThematic(graphene.Mutation):
     class Input:
         # Careful, having required=True on a graphene.List only means
