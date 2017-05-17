@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
-import { gql, graphql } from 'react-apollo';
+import { gql, graphql, withApollo } from 'react-apollo';
 import { Button } from 'react-bootstrap';
 
 import SectionTitle from '../sectionTitle';
@@ -19,12 +19,26 @@ const GetThematics = gql`
 }
 `;
 
-const ThemeCreation = ({ data, i18n, selectedLocale, showSection }) => {
+const ThemeCreation = ({ client, data, i18n, selectedLocale, showSection }) => {
   if (data.loading) {
     return null;
   }
 
-  const addTheme = () => {};
+  const addTheme = () => {
+    const newThemeId = Math.round(Math.random() * -1000000);
+    const thematicsData = client.readQuery({ query: GetThematics });
+    thematicsData.thematics.push({
+      id: newThemeId,
+      titleEntries: [],
+      image: undefined,
+      __typename: 'Thematic'
+    });
+    return client.writeQuery({
+      query: GetThematics,
+      data: thematicsData
+    });
+  };
+
   const themes = data.thematics;
   return (
     <div className={showSection ? 'show admin-box' : 'hidden'}>
@@ -50,4 +64,4 @@ const mapStateToProps = ({ admin }) => {
 
 const ThemeCreationContainer = connect(mapStateToProps)(ThemeCreation);
 
-export default graphql(GetThematics)(ThemeCreationContainer);
+export default withApollo(graphql(GetThematics)(ThemeCreationContainer));
