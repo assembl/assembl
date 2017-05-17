@@ -1,20 +1,38 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
+import { gql, graphql } from 'react-apollo';
 import { Button } from 'react-bootstrap';
 
-import { addThemeToSurvey } from '../../../actions/adminActions';
 import SectionTitle from '../sectionTitle';
 import ThemeCreationForm from './themeCreationForm';
 
-const ThemeCreation = ({ addTheme, i18n, selectedLocale, showSection, themes }) => {
+const GetThematics = gql`
+{
+  thematics(identifier:"survey") {
+    id,
+    titleEntries {
+      localeCode,
+      value
+    }
+  }
+}
+`;
+
+const ThemeCreation = ({ data, i18n, selectedLocale, showSection }) => {
+  if (data.loading) {
+    return null;
+  }
+
+  const addTheme = () => {};
+  const themes = data.thematics;
   return (
     <div className={showSection ? 'show admin-box' : 'hidden'}>
       <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <form>
-          {themes.map((id) => {
-            return <ThemeCreationForm key={id} id={id} selectedLocale={selectedLocale} />;
+          {themes.map((theme, idx) => {
+            return <ThemeCreationForm key={theme.id} id={theme.id} index={idx} image={theme.image} selectedLocale={selectedLocale} titleEntries={theme.titleEntries} />;
           })}
           <div onClick={addTheme} className="plus margin-l">+</div>
           <Button className="button-submit button-dark margin-l">Suivant</Button>
@@ -26,17 +44,10 @@ const ThemeCreation = ({ addTheme, i18n, selectedLocale, showSection, themes }) 
 
 const mapStateToProps = ({ admin }) => {
   return {
-    selectedLocale: admin.selectedLocale,
-    themes: admin.surveyThemes
+    selectedLocale: admin.selectedLocale
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addTheme: () => {
-      return dispatch(addThemeToSurvey());
-    }
-  };
-};
+const ThemeCreationContainer = connect(mapStateToProps)(ThemeCreation);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ThemeCreation);
+export default graphql(GetThematics)(ThemeCreationContainer);

@@ -1,19 +1,25 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
 
-import { removeTheme, updateThemeTitle, updateThemeImage } from '../../../actions/adminActions';
 import ImageUploader from '../../common/imageUploader';
 
-export const ThemeCreationForm = ({ id, image, remove, selectedLocale, title, updateTitle, updateImage }) => {
+export const DumbThemeCreationForm = ({ image, index, selectedLocale, titleEntries }) => {
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
-  const index = (Number(id) + 1).toString();
+  const num = (Number(index) + 1).toString();
+  const titleEntry = titleEntries.find((entry) => {
+    return entry.localeCode === selectedLocale;
+  });
+  const title = titleEntry ? titleEntry.value : '';
+  const remove = () => {}; // TODO
+  const updateImage = () => {}; // TODO
+  const updateTitle = () => {}; // TODO
+
   return (
     <div className="form-container">
       <div className="title">
-        <Translate value="administration.themeNum" index={index} />
+        <Translate value="administration.themeNum" index={num} />
       </div>
       <FormGroup>
         <FormControl
@@ -43,30 +49,8 @@ export const ThemeCreationForm = ({ id, image, remove, selectedLocale, title, up
   );
 };
 
-ThemeCreationForm.defaultProps = {
+DumbThemeCreationForm.defaultProps = {
   title: ''
 };
 
-export const mapStateToProps = ({ admin }, { id, selectedLocale }) => {
-  const theme = admin.surveyThemesById[id];
-  return {
-    image: theme.image,
-    title: theme.titlesByLocale[selectedLocale]
-  };
-};
-
-export const mapDispatchToProps = (dispatch, { id, selectedLocale }) => {
-  return {
-    remove: () => {
-      return dispatch(removeTheme(id));
-    },
-    updateTitle: (value) => {
-      return dispatch(updateThemeTitle(id, selectedLocale, value));
-    },
-    updateImage: (files) => {
-      return dispatch(updateThemeImage(id, files[0]));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ThemeCreationForm);
+export default DumbThemeCreationForm;
