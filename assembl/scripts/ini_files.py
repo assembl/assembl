@@ -212,7 +212,7 @@ def dump(ini_file):
                 print e
 
 
-def populate_random(saml_info):
+def populate_random(saml_info, random_file):
     """Populate random.ini
 
     Create missing random values according to random.tmpl.ini
@@ -220,10 +220,10 @@ def populate_random(saml_info):
     from base64 import b64encode
     from os import urandom
     base = Parser()
-    base.read(RANDOM_FILE + ".tmpl")
+    base.read(random_file + ".tmpl")
     existing = Parser()
-    if exists(RANDOM_FILE):
-        existing.read(RANDOM_FILE)
+    if exists(random_file):
+        existing.read(random_file)
     combine_ini(base, existing)
     saml = None
     changed = False
@@ -246,7 +246,7 @@ def populate_random(saml_info):
                 base.set(section, key, value)
                 changed = True
     if changed:
-        with open(RANDOM_FILE, 'w') as f:
+        with open(random_file, 'w') as f:
             base.write(f)
     return base
 
@@ -354,7 +354,7 @@ def diff_ini(first, second, diff=None):
     return diff
 
 
-def compose(rc_filename):
+def compose(rc_filename, random_file):
     """Compose local.ini from the given .rc file"""
     rc_info = combine_rc(rc_filename)
     ini_sequence = rc_info.get('ini_files', None)
@@ -365,20 +365,20 @@ def compose(rc_filename):
         if overlay == 'RC_DATA':
             overlay = rc_to_ini(rc_info)
         elif overlay == 'RANDOM':
-            overlay = populate_random(extract_saml_info(rc_info))
+            overlay = populate_random(extract_saml_info(rc_info), random_file)
         combine_ini(base, overlay)
     return base
 
 
-def migrate(rc_filename, expected_ini):
+def migrate(rc_filename, expected_ini, random_file):
     """Create a overlay.rc file from the local.ini and a base .rc file"""
     expected_ini = asParser(expected_ini)
     rc_data = combine_rc(rc_filename)
-    random_data = populate_random(extract_saml_info(rc_data))
+    random_data = populate_random(extract_saml_info(rc_data), random_file)
     random_data = combine_ini(random_data, expected_ini, False)
     with open(RANDOM_FILE, 'w') as f:
         random_data.write(f)
-    base = compose(rc_filename)
+    base = compose(rc_filename, random_file)
     diff = diff_ini(base, expected_ini)
     return iniconfig_to_rc(diff, extends=rc_filename)
 
@@ -410,6 +410,8 @@ def main():
     parser_compose = subparsers.add_parser('compose', help=short_help(compose))
     parser_compose.add_argument('--output', '-o', type=FileType('w'),
                                 default=sys.stdout, help='The output file')
+    parser_compose.add_argument('--random', '-r', help='random.ini file',
+                                default=RANDOM_FILE)
     parser_compose.add_argument('input', help='Input rc file')
 
     # ini migrate
@@ -420,11 +422,15 @@ def main():
     parser_migrate.add_argument(
         '--ini', '-i', type=FileType('r'), default=None,
         help="INI file we're migrating, usually local.ini")
+    parser_migrate.add_argument('--random', '-r', help='random.ini file',
+                                default=RANDOM_FILE)
     parser_migrate.add_argument('rc', help='Base rc file')
 
     # random.ini
     parser_random = subparsers.add_parser(
         'random', help=short_help(populate_random))
+    parser_random.add_argument('--random', '-r', help='random.ini file',
+                               default=RANDOM_FILE)
     parser_random.add_argument('input', help='Input rc file (for saml)')
 
     # dump .ini
@@ -453,9 +459,9 @@ def main():
         base.write(args.output)
     elif args.command == 'random':
         rc_info = combine_rc(args.input)
-        populate_random(extract_saml_info(rc_info))
+        populate_random(extract_saml_info(rc_info), args.random)
     elif args.command == 'compose':
-        ini_info = compose(args.input)
+        ini_info = compose(args.input, args.random)
         ini_info.write(args.output)
     elif args.command == 'migrate':
         ini_file = args.ini
@@ -463,7 +469,7 @@ def main():
             ini_file = asParser('local.ini')
         else:
             ini_file = asParser(ini_file)
-        rc_file = migrate(args.rc, ini_file)
+        rc_file = migrate(args.rc, ini_file, args.random)
         args.output.write(rc_file.getvalue())
     elif args.command == 'diff':
         diff = diff_ini(args.base, args.second)
