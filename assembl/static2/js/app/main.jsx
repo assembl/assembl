@@ -10,6 +10,7 @@ import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';
 import { fetchPosts } from './actions/postsActions';
 import { fetchUsers } from './actions/usersActions';
+import { addRedirectionToV1 } from './actions/phaseActions';
 import Navbar from './components/common/navbar';
 import Footer from './components/common/footer';
 
@@ -28,6 +29,10 @@ class Main extends React.Component {
   componentWillMount() {
     const discussionId = getDiscussionId();
     const connectedUserId = getConnectedUserId();
+    const { debateData } = this.props.debate;
+    const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
+    const isRedirectionToV1 = currentPhaseIdentifier !== 'survey';
+    this.props.addRedirectionToV1(isRedirectionToV1);
     this.props.fetchPosts(discussionId);
     this.props.fetchSynthesis(discussionId);
     this.props.fetchUsers(discussionId, connectedUserId);
@@ -98,6 +103,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     fetchSynthesis: (discussionId) => {
       dispatch(fetchSynthesis(discussionId));
+    },
+    addRedirectionToV1: (discussionId) => {
+      dispatch(addRedirectionToV1(discussionId));
     }
   };
 };

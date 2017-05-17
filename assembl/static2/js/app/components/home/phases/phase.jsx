@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { Translate, Localize } from 'react-redux-i18n';
 import { get } from '../../../utils/routeMap';
-import { isPhaseStarted, getStartDatePhase, getPhaseName } from '../../../utils/timeline';
+import { isPhaseStarted, getStartDatePhase, getPhaseName, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 
 class Step extends React.Component {
@@ -14,14 +14,25 @@ class Step extends React.Component {
   displayPhase() {
     const { identifier } = this.props;
     const { debateData } = this.props.debate;
+    const { locale } = this.props.i18n;
+    const { isRedirectionToV1 } = this.props.phase;
     const slug = { slug: debateData.slug };
     const phaseStarted = isPhaseStarted(debateData.timeline, identifier);
+    const phaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     if (phaseStarted) {
-      browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
+      // This redirection should be removed when the phase 2 will be done
+      if (isRedirectionToV1 && !isPhaseCompleted) {
+        const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+        displayModal(null, body, true, null, null, true);
+        setTimeout(() => {
+          window.location = `${get('oldDebate', slug)}`;
+        }, 6000);
+      } else {
+        browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
+      }
     } else {
-      const { locale } = this.props.i18n;
       const startDate = getStartDatePhase(debateData.timeline, identifier);
-      const phaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
       const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
       displayModal(null, body, true, null, null, true);
     }
@@ -68,7 +79,8 @@ class Step extends React.Component {
 const mapStateToProps = (state) => {
   return {
     i18n: state.i18n,
-    debate: state.debate
+    debate: state.debate,
+    phase: state.phase
   };
 };
 

@@ -1,18 +1,41 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { browserHistory } from 'react-router';
 import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
-import { Grid, Row } from 'react-bootstrap';
+import { Grid, Row, Button } from 'react-bootstrap';
 import Statistic from './header/statistic';
 import Synthesis from './header/synthesis';
 import { get } from '../../utils/routeMap';
+import { getPhaseName, getCurrentPhaseIdentifier } from '../../utils/timeline';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
+import { displayModal } from '../../utils/utilityManager';
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.displayPhase = this.displayPhase.bind(this);
+  }
+  // This redirection should be removed when the phase 2 will be done
+  displayPhase() {
+    const slug = { slug: getDiscussionSlug() };
+    const { isRedirectionToV1 } = this.props.phase;
+    const { timeline } = this.props.debate.debateData;
+    const { locale } = this.props.i18n;
+    const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
+    const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
+    const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+    if (isRedirectionToV1) {
+      displayModal(null, body, true, null, null, true);
+      setTimeout(() => {
+        window.location = `${get('oldDebate', slug)}`;
+      }, 6000);
+    } else {
+      browserHistory.push(`${get('debate', slug)}`);
+    }
+  }
   render() {
     const { debateData } = this.props.debate;
     const { synthesis } = this.props.synthesis;
-    const slug = { slug: getDiscussionSlug() };
     return (
       <section className="header-section">
         <Grid fluid className="max-container">
@@ -36,9 +59,9 @@ class Header extends React.Component {
                   <Localize value={debateData.endDate} dateFormat="date.format" />
                 }
               </h4>
-              <Link className="button-link button-light margin-xl" to={`${get('debate', slug)}`}>
+              <Button onClick={this.displayPhase} className="button-submit button-light margin-xl">
                 <Translate value="home.accessButton" />
-              </Link>
+              </Button>
             </div>
             {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&
               <Synthesis />
@@ -59,7 +82,9 @@ class Header extends React.Component {
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
-    synthesis: state.synthesis
+    synthesis: state.synthesis,
+    phase: state.phase,
+    i18n: state.i18n
   };
 };
 

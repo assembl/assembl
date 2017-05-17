@@ -2,6 +2,7 @@ const Translations = {
   fr: {
     'Number of contributions': 'Nombre de messages',
     'Number of users': 'Nombre de contributeurs',
+    redirectToV1: 'Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d\'amélioration, veuillez nous excuser pour le changement d\'interface.',
     search: {
       reset: {
         clear_all: 'Effacer tous les filtres'
@@ -190,6 +191,7 @@ const Translations = {
     }
   },
   en: {
+    redirectToV1: 'You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change.',
     search: {
       reset: {
         clear_all: 'Clear All Filters'

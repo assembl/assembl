@@ -8,6 +8,7 @@ import Users from './usersReducer';
 import Partners from './partnersReducer';
 import Synthesis from './synthesisReducer';
 import Auth from './authenticationReducer';
+import Phase from './phaseReducer';
 
 export default combineReducers({
   apollo: client.reducer(),
@@ -18,5 +19,6 @@ export default combineReducers({
   users: Users,
   partners: Partners,
   synthesis: Synthesis,
-  auth: Auth
+  auth: Auth,
+  phase: Phase
 });

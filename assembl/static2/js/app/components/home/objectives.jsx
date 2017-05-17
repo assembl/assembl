@@ -1,15 +1,38 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { Link } from 'react-router';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { browserHistory } from 'react-router';
+import { Grid, Row, Col, Button } from 'react-bootstrap';
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
+import { displayModal } from '../../utils/utilityManager';
+import { getCurrentPhaseIdentifier, getPhaseName } from '../../utils/timeline';
 
 class Objectives extends React.Component {
+  constructor(props) {
+    super(props);
+    this.displayPhase = this.displayPhase.bind(this);
+  }
+  // This redirection should be removed when the phase 2 will be done
+  displayPhase() {
+    const slug = { slug: getDiscussionSlug() };
+    const { isRedirectionToV1 } = this.props.phase;
+    const { timeline } = this.props.debate.debateData;
+    const { locale } = this.props.i18n;
+    const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
+    const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
+    const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+    if (isRedirectionToV1) {
+      displayModal(null, body, true, null, null, true);
+      setTimeout(() => {
+        window.location = `${get('oldDebate', slug)}`;
+      }, 6000);
+    } else {
+      browserHistory.push(`${get('debate', slug)}`);
+    }
+  }
   render() {
     const { debateData } = this.props.debate;
-    const slug = { slug: getDiscussionSlug() };
     return (
       <section className="objectives-section">
         {debateData.objectives &&
@@ -43,9 +66,9 @@ class Objectives extends React.Component {
                   </Row>
                 </div>
                 <div className="center inline full-size margin-xxl">
-                  <Link className="button-link button-dark" to={`${get('debate', slug)}`}>
+                  <Button onClick={this.displayPhase} className="button-submit button-dark">
                     <Translate value="home.accessButton" />
-                  </Link>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -58,7 +81,9 @@ class Objectives extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate
+    debate: state.debate,
+    phase: state.phase,
+    i18n: state.i18n
   };
 };
 

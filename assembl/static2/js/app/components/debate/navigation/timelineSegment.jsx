@@ -4,7 +4,7 @@ import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { get } from '../../../utils/routeMap';
 import { displayModal } from '../../../utils/utilityManager';
-import { getStartDatePhase, getPhaseName } from '../../../utils/timeline';
+import { getStartDatePhase, getPhaseName, isPhaseStarted } from '../../../utils/timeline';
 
 class TimelineSegment extends React.Component {
   constructor(props) {
@@ -12,15 +12,25 @@ class TimelineSegment extends React.Component {
     this.displayPhase = this.displayPhase.bind(this);
   }
   displayPhase() {
-    const { isStepCompleted, isCurrentPhase, phaseIdentifier } = this.props;
+    const { locale } = this.props.i18n;
+    const { isStepCompleted, phaseIdentifier } = this.props;
     const { debateData } = this.props.debate;
+    const { isRedirectionToV1 } = this.props.phase;
     const slug = { slug: debateData.slug };
-    if (isStepCompleted || isCurrentPhase) {
-      browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
+    const phaseStarted = isPhaseStarted(debateData.timeline, phaseIdentifier);
+    const phaseName = getPhaseName(debateData.timeline, phaseIdentifier, locale).toLowerCase();
+    if (phaseStarted) {
+      if (isRedirectionToV1 && !isStepCompleted) {
+        const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+        displayModal(null, body, true, null, null, true);
+        setTimeout(() => {
+          window.location = `${get('oldDebate', slug)}`;
+        }, 6000);
+      } else {
+        browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
+      }
     } else {
-      const { locale } = this.props.i18n;
       const startDate = getStartDatePhase(debateData.timeline, phaseIdentifier);
-      const phaseName = getPhaseName(debateData.timeline, phaseIdentifier, locale).toLowerCase();
       const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
       displayModal(null, body, true, null, null, true);
     }
@@ -62,7 +72,8 @@ class TimelineSegment extends React.Component {
 const mapStateToProps = (state) => {
   return {
     i18n: state.i18n,
-    debate: state.debate
+    debate: state.debate,
+    phase: state.phase
   };
 };
 
