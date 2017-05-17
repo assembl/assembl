@@ -39,7 +39,7 @@ const ThemeCreation = ({ client, data, i18n, selectedLocale, showSection }) => {
     });
   };
 
-  const themes = data.thematics;
+  const themes = data.thematics || [];
   return (
     <div className={showSection ? 'show admin-box' : 'hidden'}>
       <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />

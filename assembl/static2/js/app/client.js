@@ -8,6 +8,7 @@ const client = new ApolloClient({
   networkInterface: createNetworkInterface({
     uri: getFullPath('graphql', { slug: getDiscussionSlug() }),
     opts: {
+      addTypename: true,
       credentials: 'same-origin'
     }
   })
