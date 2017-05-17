@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { browserHistory } from 'react-router';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 import { get } from '../../utils/routeMap';
@@ -22,8 +22,9 @@ class Objectives extends React.Component {
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
     const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
     const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+    const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
     if (isRedirectionToV1) {
-      displayModal(null, body, true, null, null, true);
+      displayModal(null, body, true, null, button, true);
       setTimeout(() => {
         window.location = `${get('oldDebate', slug)}`;
       }, 6000);

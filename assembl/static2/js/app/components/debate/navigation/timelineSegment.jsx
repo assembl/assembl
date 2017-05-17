@@ -1,6 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
-import { Translate, Localize } from 'react-redux-i18n';
+import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { get } from '../../../utils/routeMap';
 import { displayModal } from '../../../utils/utilityManager';
@@ -20,9 +20,11 @@ class TimelineSegment extends React.Component {
     const phaseStarted = isPhaseStarted(debateData.timeline, phaseIdentifier);
     const phaseName = getPhaseName(debateData.timeline, phaseIdentifier, locale).toLowerCase();
     if (phaseStarted) {
+      // This redirection should be removed when the phase 2 will be done
       if (isRedirectionToV1 && !isStepCompleted) {
         const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-        displayModal(null, body, true, null, null, true);
+        const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+        displayModal(null, body, true, null, button, true);
         setTimeout(() => {
           window.location = `${get('oldDebate', slug)}`;
         }, 6000);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 
 class AssemblModal extends React.Component {
   constructor(props) {
@@ -10,6 +10,7 @@ class AssemblModal extends React.Component {
     };
     this.close = this.close.bind(this);
     this.open = this.open.bind(this);
+    this.goToUrl = this.goToUrl.bind(this);
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -25,6 +26,10 @@ class AssemblModal extends React.Component {
     this.setState({
       showModal: true
     });
+  }
+  goToUrl(url) {
+    this.url = url;
+    window.location = this.url;
   }
   render() {
     const { title, body, footer, footerTxt, button } = this.state;
@@ -47,7 +52,7 @@ class AssemblModal extends React.Component {
             }
             {button &&
               <div>
-                {button.internalLink ? <Link to={button.link} className="button-link button-dark">{ button.label }</Link> : <a href={button.link}>{ button.label }</a>}
+                {button.internalLink ? <Link to={button.link} className="button-link button-dark">{ button.label }</Link> : <Button onClick={() => { this.goToUrl(button.link); }} className="button-submit button-dark">{ button.label }</Button>}
               </div>
             }
           </Modal.Footer>

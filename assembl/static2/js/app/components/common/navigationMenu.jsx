@@ -1,15 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
-import { Link } from 'react-router';
+import { Translate, I18n } from 'react-redux-i18n';
+import { Link, browserHistory } from 'react-router';
 import { get } from '../../utils/routeMap';
+import { displayModal } from '../../utils/utilityManager';
+import { getDiscussionSlug } from '../../utils/globalFunctions';
+import { getCurrentPhaseIdentifier, getPhaseName } from '../../utils/timeline';
 
 class NavigationMenu extends React.Component {
+  constructor(props) {
+    super(props);
+    this.displayPhase = this.displayPhase.bind(this);
+  }
+  // This redirection should be removed when the phase 2 will be done
+  displayPhase() {
+    const slug = { slug: getDiscussionSlug() };
+    const { isRedirectionToV1 } = this.props.phase;
+    const { timeline } = this.props.debate.debateData;
+    const { locale } = this.props.i18n;
+    const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
+    const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
+    const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+    const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+    if (isRedirectionToV1) {
+      displayModal(null, body, true, null, button, true);
+      setTimeout(() => {
+        window.location = `${get('oldDebate', slug)}`;
+      }, 6000);
+    } else {
+      browserHistory.push(`${get('debate', slug)}`);
+    }
+  }
   render() {
     const { debateData } = this.props.debate;
     return (
       <div>
-        <Link className="navbar-menu-item" activeClassName="active" to={get('debate', { slug: debateData.slug })}>
+        <Link onClick={this.displayPhase} className="navbar-menu-item pointer" activeClassName="active">
           <Translate value="navbar.debate" />
         </Link>
         {false &&
@@ -24,7 +50,9 @@ class NavigationMenu extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate
+    debate: state.debate,
+    phase: state.phase,
+    i18n: state.i18n
   };
 };
 

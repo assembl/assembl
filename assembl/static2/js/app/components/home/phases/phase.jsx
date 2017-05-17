@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { Translate, Localize } from 'react-redux-i18n';
+import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { get } from '../../../utils/routeMap';
 import { isPhaseStarted, getStartDatePhase, getPhaseName, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
@@ -24,7 +24,8 @@ class Step extends React.Component {
       // This redirection should be removed when the phase 2 will be done
       if (isRedirectionToV1 && !isPhaseCompleted) {
         const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-        displayModal(null, body, true, null, null, true);
+        const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+        displayModal(null, body, true, null, button, true);
         setTimeout(() => {
           window.location = `${get('oldDebate', slug)}`;
         }, 6000);
