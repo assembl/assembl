@@ -45,9 +45,13 @@ changes.websocket.port = 8085
 # /5-: production
 changes.socket = ipc:///tmp/assembl_changes/0
 env.wsginame = dev.wsgi
-gitbranch = develop
+_gitbranch = develop
 supervisor__autostart_celery_notify = false
 supervisor__autostart_celery_notify_beat = false
 supervisor__autostart_webpack = true
 supervisor__autostart_uwsgi = false
-uses_global_supervisor = false
+_uses_global_supervisor = false
+_uses_ngnix = false
+_uses_uwsgi = false
+_is_production_env = false
+_wsginame = dev.wsgi

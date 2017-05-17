@@ -335,7 +335,7 @@ def diff_ini(first, second, diff=None):
                 diff.set(section, option, value)
             continue
         else:
-            vars = _Chainmap(second._sections[section], first._sections[section])
+            vars = _Chainmap(second._sections[section], first._sections[section], second._defaults, first._defaults)
             for option, value2 in second.items(section):
                 if not first.has_option(section, option):
                     ensureSection(diff, section)
@@ -346,7 +346,7 @@ def diff_ini(first, second, diff=None):
                     # try to interpolate, and see if it would amount to the same.
                     try:
                         value1 = interpolating._interpolate(section, option, value1, vars)
-                    except:
+                    except Exception as e:
                         pass
                 if value1 != value2:
                     ensureSection(diff, section)

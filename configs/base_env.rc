@@ -10,16 +10,22 @@ postgres_db_password =
 smtp_host = localhost
 imap_host = localhost
 piwik_host = localhost
-sentry_host = localhost
+*sentry_scheme = https
+*sentry_host = localhost
+_sentry_db_host = localhost
+# _sentry_db_password =
+
 memcached_host = localhost
 mysql_host=localhost
 webpack_host=localhost
 # Not used yet
 elasticsearch_host=localhost
-# Internal host
-platform_host = localhost
 # External hostname: Will almost always be overridden in a host-specific rc file.
-public_hostname = localhost
+# Note that unlike _hosts, the DNS for public_hostname need not exist at time of creation.
+public_hostname =
+# Name of server, if different from public_hostname. Plural because could be applied to many servers.
+# Will use public_hostname if empty
+_hosts =
 redis_host = localhost
 # ZMQ model changes local socket (backend will connect to this)
 # UNIQUE_PER_SERVER
@@ -44,11 +50,9 @@ changes.websocket.port = 8090
 # /5-: production
 changes.socket = ipc:///tmp/assembl_changes/5
 
-host_string =
 ini_file = local.ini
 gitrepo = https://github.com/assembl/assembl.git
 wsginame = prod.wsgi
-gitbranch = master
 projectname = assembl
 uses_memcache = true
 uses_uwsgi = true
@@ -58,6 +62,27 @@ uses_global_supervisor = true
 uses_apache = false
 mac = false
 is_production_env = true
+_postgres_db_user = postgres
+_uses_apache = false
+_uses_global_supervisor = true
+_uses_memcache = true
+_uses_ngnix = true
+_uses_uwsgi = true
+_gitrepo = https://github.com/assembl/assembl.git
+_gitbranch = master
+_is_production_env = true
+# Legacy: Can be prod.wsgi, staging.wsgi or dev.wsgi.
+_wsginame = prod.wsgi
+_ini_file = local.ini
+_projectname = assembl
+
+# Those need to be overridden in the server-specific file
+# _postgres_db_password
+# _user
+# _venvpath
+# _projectpath
+# _dbdumps_dir
+
 
 supervisor__autostart_celery_imap = true
 supervisor__autostart_celery_notification_dispatch = true
