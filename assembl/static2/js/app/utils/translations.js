@@ -48,7 +48,7 @@ const Translations = {
       like: 'J\'aime',
       disagree: 'Pas convaincu',
       dont_understand: 'Pas tout compris',
-      more_info: 'SVP + d\'infos ?',
+      more_info: 'SVP + d\'infos',
       Sort: 'Trier',
       'By relevance': 'Par pertinence',
       'Most recent first': 'Du plus récent au plus ancien',
