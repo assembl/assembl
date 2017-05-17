@@ -315,7 +315,7 @@ def extract_saml_info(rc_info):
     return saml_info
 
 
-def diff_ini(first, second, diff=None):
+def diff_ini(first, second, diff=None, existing_only=False):
     """Diff ini files
 
     Generate a parser with any value in the second that is different in the first.
@@ -329,17 +329,18 @@ def diff_ini(first, second, diff=None):
     interpolating = SafeConfigParser()
     for section in second.sections():
         if section != 'DEFAULT' and not first.has_section(section):
-            diff.add_section(section)
-            for option in second.options(section):
-                value = second.get(section, option)
-                diff.set(section, option, value)
-            continue
+            if not existing_only:
+                diff.add_section(section)
+                for option in second.options(section):
+                    value = second.get(section, option)
+                    diff.set(section, option, value)
         else:
             vars = _Chainmap(second._sections[section], first._sections[section], second._defaults, first._defaults)
             for option, value2 in second.items(section):
                 if not first.has_option(section, option):
-                    ensureSection(diff, section)
-                    diff.set(section, option, value2)
+                    if not existing_only:
+                        ensureSection(diff, section)
+                        diff.set(section, option, value2)
                     continue
                 value1 = first.get(section, option)
                 if value1 != value2 and '%(' in value1:
@@ -442,6 +443,9 @@ def main():
     parser_diff = subparsers.add_parser('diff', help=short_help(diff_ini))
     parser_diff.add_argument('--output', '-o', type=FileType('w'),
                              default=sys.stdout, help='The output file')
+    parser_diff.add_argument(
+        '--existing_only', '-e', action="store_true", default=False,
+        help='Only show changes to keys existing in first file')
     parser_diff.add_argument('base', type=FileType('r'),
                              help='Base ini file')
     parser_diff.add_argument('second', type=FileType('r'),
@@ -472,7 +476,8 @@ def main():
         rc_file = migrate(args.rc, ini_file, args.random)
         args.output.write(rc_file.getvalue())
     elif args.command == 'diff':
-        diff = diff_ini(args.base, args.second)
+        diff = diff_ini(args.base, args.second,
+                        existing_only=args.existing_only)
         diff.write(args.output)
     if args.command == 'dump':
         dump(args.ini)
