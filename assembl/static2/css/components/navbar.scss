@@ -8,11 +8,12 @@
 
   .navbar-logo {
     height: auto;
-    padding: 10px 15px 10px 0;
+    padding: 0 15px 0 0;
     width: 90px;
 
     img {
-      height: 40px;
+      max-height: 40px;
+      max-width: 85px;
     }
   }
 
@@ -130,8 +131,10 @@
     .logo-active {
       border-bottom: $border-active;
       display: block;
-      height: 50px;
-      width: $large-hyphen-width;
+      height: $navbar-height;
+      line-height: $navbar-height;
+      vertical-align: middle;
+      width: 85px;
     }
 
     .active {

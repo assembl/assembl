@@ -11,38 +11,40 @@ class Phases extends React.Component {
     const { debateData } = this.props.debate;
     return (
       <section className="phases-section">
-        {(debateData.timeline && debateData.timeline.length > 1) &&
+        {debateData.timeline &&
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="title-section">
                 <div className="title-hyphen">&nbsp;</div>
                 <h1 className="dark-title-1">
-                  <Translate value="home.timelineTitle" phaseNumber={debateData.timeline.length} />
+                  <Translate value="home.timelineTitle" />
                 </h1>
               </div>
               <div className="content-section">
-                <Row className="no-margin">
-                  {debateData.timeline.map((phase, index) => {
-                    return (
-                      <Col
-                        xs={12}
-                        sm={24 / debateData.timeline.length}
-                        md={12 / debateData.timeline.length}
-                        className={isCurrentPhase(debateData.timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'}
-                        key={index}
-                      >
-                        <Phase
-                          imgUrl={phase.image_url}
-                          startDate={phase.start}
-                          index={index}
-                          title={phase.title}
-                          description={phase.description}
-                          identifier={phase.identifier}
-                        />
-                      </Col>
-                    );
-                  })}
-                </Row>
+                {debateData.timeline.length > 1 &&
+                  <Row className="no-margin">
+                    {debateData.timeline.map((phase, index) => {
+                      return (
+                        <Col
+                          xs={12}
+                          sm={24 / debateData.timeline.length}
+                          md={12 / debateData.timeline.length}
+                          className={isCurrentPhase(debateData.timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'}
+                          key={index}
+                        >
+                          <Phase
+                            imgUrl={phase.image_url}
+                            startDate={phase.start}
+                            index={index}
+                            title={phase.title}
+                            description={phase.description}
+                            identifier={phase.identifier}
+                          />
+                        </Col>
+                      );
+                    })}
+                  </Row>
+                }
                 <Row className="no-margin">
                   {debateData.timeline.map((phase, index) => {
                     return (
