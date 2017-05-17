@@ -83,7 +83,8 @@ def get_login_context(request, force_show_providers=False):
         providers = [p for p in providers if p['type'] not in hide_providers]
 
     return dict(get_default_context(request),
-                providers=json.dumps(providers),
+                providers=providers,
+                providers_json=json.dumps(providers),
                 saml_providers=request.registry.settings.get(
                     'SOCIAL_AUTH_SAML_ENABLED_IDPS', {}),
                 hide_registration=hide_registration,
@@ -329,12 +330,14 @@ def assembl_profile(request):
             email_ci=ea.email_ci, verified=True).first())
         for ea in profile.email_accounts if not ea.verified]
     get_route = create_get_route(request)
+    providers = get_provider_data(get_route)
     return render_to_response(
         'assembl:templates/profile.jinja2',
         dict(get_default_context(request),
              error='<br />'.join(errors),
              unverified_emails=unverified_emails,
-             providers=json.dumps(get_provider_data(get_route)),
+             providers=providers,
+             providers_json=json.dumps(providers),
              google_consumer_key=request.registry.settings.get(
                  'google.consumer_key', ''),
              the_user=profile,

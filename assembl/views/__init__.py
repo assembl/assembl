@@ -334,7 +334,8 @@ def get_default_context(request, **kwargs):
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
         activate_tour=str(config.get('activate_tour') or False).lower(),
-        providers=json.dumps(providers),
+        providers=providers,
+        providers_json=json.dumps(providers),
         translations=io.open(jedfilename, encoding='utf-8').read(),
         admin_email=admin_email
     )

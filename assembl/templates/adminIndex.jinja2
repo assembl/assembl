@@ -15,7 +15,7 @@
     <script type="text/javascript">start_application = true;</script>
 {#     <script type="text/json" id="inheritance-json">{{ discussion.get_json_inheritance_for('User', 'Idea', 'IdeaLink', 'Post', 'Widget') |safe }}</script>
  #}
-    <script type="text/json" id="login-providers">{{providers|safe}}</script>
+    <script type="text/json" id="login-providers">{{providers_json|safe}}</script>
     {% if user %}
         <script type="text/json" id="current-user-json">{{ user.get_agent_preload() |safe }}</script>
     {% endif %}

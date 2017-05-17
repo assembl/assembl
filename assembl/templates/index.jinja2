@@ -83,7 +83,7 @@
     <script type="application/json" id="users-json">{{ discussion.get_all_agents_preload(user) |safe }}</script>
     <script type="application/json" id="inheritance-json">{{ discussion.get_json_inheritance_for('User', 'Idea', 'IdeaLink', 'Post', 'Widget') |safe }}</script>
     <script type="application/json" id="extracts-json">{{ discussion.get_related_extracts_preload(user_id=userId) |safe }}</script>
-    <script type="application/json" id="login-providers">{{providers|safe}}</script>
+    <script type="application/json" id="login-providers">{{providers_json}}</script>
     {% if user %}
         <script type="application/json" id="current-user-json">{{ user.get_agent_preload() |safe }}</script>
         <script type="application/json" id="read-posts-json">{{ discussion.get_read_posts_ids_preload(userId) |safe }}</script>
