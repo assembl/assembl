@@ -22,6 +22,7 @@ export const buildDebateData = (debateData, prefs, timeline) => {
     timeline: sortedTimeline,
     helpUrl: debateData.help_url,
     videoUrl: prefs.video_url,
+    termsOfUseUrl: prefs.terms_of_use_url,
     videoDescription: prefs.video_description,
     socialMedias: socialMedias,
     twitter: twitter

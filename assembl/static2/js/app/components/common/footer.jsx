@@ -28,9 +28,11 @@ class Footer extends React.Component {
                 </div>
               </div>
             }
-            <div className="terms">
-              <Link to={`${get('terms', slug)}`}><Translate value="footer.terms" /></Link>
-            </div>
+            {debateData.termsOfUseUrl &&
+              <div className="terms">
+                <Link to={debateData.termsOfUseUrl} target="_blank"><Translate value="footer.terms" /></Link>
+              </div>
+            }
             <div className="copyright">© <Link to="http://assembl.bluenove.com/" target="_blank">Assembl</Link> powered by <Link to="http://bluenove.com/" target="_blank">bluenove</Link></div>
           </div>
         </div>
