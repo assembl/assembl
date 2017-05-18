@@ -826,6 +826,8 @@ def install_single_server():
     execute(install_database)
     execute(install_assembl_server_deps)
     execute(check_and_create_database_user)
+    execute(install_redis)
+    execute(install_memcached)
 
 
 @task
@@ -836,8 +838,6 @@ def install_assembl_server_deps():
     sanitize_env()
     execute(skeleton_env, None)
     execute(install_assembl_deps)
-    execute(install_redis)
-    execute(install_memcached)
 
 
 @task
