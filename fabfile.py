@@ -140,7 +140,7 @@ def create_local_ini():
 
     if env.host_string == 'localhost':
         # The easy case
-        venv("python assembl/scripts/ini_files.py compose -o local.ini " + env.rcfile)
+        venvcmd("python assembl/scripts/ini_files.py compose -o local.ini " + env.rcfile)
     else:
         # get placeholder filenames
         with NamedTemporaryFile(delete=False) as f:
@@ -161,6 +161,58 @@ def create_local_ini():
                 put(random_file_name, random_ini_path)
             # send the local file
             put(local_file_name, local_ini_path)
+        finally:
+            os.unlink(random_file_name)
+            os.unlink(local_file_name)
+
+
+@task
+def migrate_local_ini():
+    """Generate a .rc file to match the existing local.ini file.
+    (requires a base .rc file)"""
+    random_ini_path = os.path.join(env.projectpath, 'random.ini')
+    local_ini_path = os.path.join(env.projectpath, 'local.ini')
+    dest_path = env.rcfile + '.' + int(time())
+
+    if env.host_string == 'localhost':
+        # The easy case
+        random_base = random_ini_path
+        # first protect or generate the random data
+        if not exists(random_ini_path):
+            random_base += ".tmpl"
+        venvcmd("python assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
+                random_ini_path, random_base, local_ini_path))
+        venvcmd("python assembl/scripts/ini_files.py migrate -o %s %s " % (
+            dest_path, env.rcfile))
+    else:
+        # OK, this is horrid because I need the local venv.
+        local_venv = env.get("local_venv", "./venv")
+        assert os.path.exists(local_venv + "/bin/python"),\
+            "No usable local venv"
+        # get placeholder filenames
+        with NamedTemporaryFile(delete=False) as f:
+            random_file_name = f.name
+        with NamedTemporaryFile(delete=False) as f:
+            local_file_name = f.name
+        try:
+            # remote server case
+            # Load the random file if any in a temp file
+            has_random = exists(random_ini_path)
+            if has_random:
+                # Backup the random file
+                run("cp %s %s.%d" % (random_file_name, random_file_name, int(time())))
+                get(random_ini_path, random_file_name)
+            get(local_ini_path, local_file_name)
+            random_base = random_ini_path if has_random else "random.ini.tmpl"
+            with settings(host_string="localhost", venvpath=local_venv):
+                # Create the new random file with the local.ini data
+                venvcmd("python assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
+                    random_file_name, random_base, local_file_name))
+                # Create the new rc file.
+                venvcmd("python assembl/scripts/ini_files.py migrate -o %s -i %s -r %s %s" % (
+                    dest_path, local_file_name, random_file_name, env.rcfile))
+            # Overwrite the random file
+            put(random_file_name, random_ini_path)
         finally:
             os.unlink(random_file_name)
             os.unlink(local_file_name)
@@ -348,10 +400,10 @@ def as_venvcmd(cmd, chdir=False):
     return cmd
 
 
-def venvcmd(cmd, shell=True, user=None, pty=False, chdir=True):
+def venvcmd(cmd, chdir=True, user=None, pty=False, **kwargs):
     if not user:
         user = env.user
-    return run(as_venvcmd(cmd, chdir), shell=shell, pty=pty)
+    return run(as_venvcmd(cmd, chdir), pty=pty, **kwargs)
 
 
 def venv_prefix():
