@@ -1,0 +1,25 @@
+
+_extends = base_env.rc
+_projectpath = /opt/assembl
+_venvpath = /opt/assembl/venv
+_dbdumps_dir = /opt/assembl/assembl_dumps
+db_password = __delete_key__
+public_hostname = assembl.cloud
+_hosts = localhost
+
+*db_host = postgres.cloud
+smtp_host = mail.cloud
+imap_host = mail.cloud
+piwik_host = piwik.cloud
+*sentry_host = sentry.cloud
+nginx_host = nginx.cloud
+
+# for now
+uses_global_supervisor = false
+
+# Replace with your company information
+saml_country = FR
+saml_state = Hauts-de-Seine
+saml_locality = Levallois-Perret
+saml_org = Bluenove
+saml_email = assembl@bluenove.com

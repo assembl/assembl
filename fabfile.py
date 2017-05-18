@@ -634,7 +634,9 @@ def updatemaincode():
 def app_setup():
     venvcmd('pip install -e ./')
     execute(setup_var_directory)
-    venvcmd('assembl-ini-files %s' % (env.ini_file))
+    if not exists(env.ini_file):
+        execute(create_local_ini)
+    venvcmd('assembl-ini-files populate %s' % (env.ini_file))
 
 
 @task
