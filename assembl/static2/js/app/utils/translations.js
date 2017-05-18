@@ -307,7 +307,7 @@ const Translations = {
       panelTitle: 'Welcome to Assembl forgot password page'
     },
     home: {
-      accessButton: 'I access to the debate',
+      accessButton: 'Access the debate',
       contribution: 'contributions',
       participant: 'participants',
       visit: 'visits',
@@ -319,11 +319,11 @@ const Translations = {
       longerThread: 'Longer thread',
       topContributor: 'Top contributor',
       recentDiscussion: 'Recent discussion',
-      objectivesTitle: 'Why this debate?',
+      objectivesTitle: 'What is the objective of this debate?',
       timelineTitle: 'The timeline of the debate',
-      video: 'The debate\'s video',
+      video: 'Video of the debate',
       twitterTitle: 'Tweet',
-      contact: 'Need informations about the platform?',
+      contact: 'Do you wish to know more about the platform?',
       contactUs: 'Contact us',
       from: 'from',
       to: 'to'
