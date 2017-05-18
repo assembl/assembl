@@ -298,7 +298,7 @@ def rc_to_ini(rc_info, default_section=SECTION):
     return p
 
 
-def iniconfig_to_rc(parser, dest=None, extends=None):
+def iniconfig_to_rc(parser, dest=None, extends=None, target_dir=None):
     """Convert a ConfigParser to a .rc file.
 
     That file is written to dest, or to a returned file-like object
@@ -307,6 +307,11 @@ def iniconfig_to_rc(parser, dest=None, extends=None):
     if dest is None:
         dest = StringIO()
     if extends:
+        if target_dir is not None:
+            target_dir = os.path.abspath(target_dir)
+            extends_dir = os.path.abspath(os.path.dirname(extends))
+            extends = os.path.join(os.path.relpath(extends_dir, target_dir),
+                                   os.path.basename(extends))
         dest.write("_extends = %s\n" % (extends,))
     for section in parser.sections():
         if section == SECTION:
@@ -387,7 +392,7 @@ def compose(rc_filename, random_file):
     return base
 
 
-def migrate(rc_filename, expected_ini, random_file):
+def migrate(rc_filename, expected_ini, random_file, target_dir=None):
     """Create a overlay.rc file from the local.ini and a base .rc file"""
     expected_ini = asParser(expected_ini)
     rc_data = combine_rc(rc_filename)
@@ -397,7 +402,7 @@ def migrate(rc_filename, expected_ini, random_file):
         random_data.write(f)
     base = compose(rc_filename, random_file)
     diff = diff_ini(base, expected_ini)
-    return iniconfig_to_rc(diff, extends=rc_filename)
+    return iniconfig_to_rc(diff, extends=rc_filename, target_dir=target_dir)
 
 
 def main():
@@ -489,7 +494,8 @@ def main():
             ini_file = asParser('local.ini')
         else:
             ini_file = asParser(ini_file)
-        rc_file = migrate(args.rc, ini_file, args.random)
+        target_dir = os.path.dirname(args.output.name) if args.output.name[0] != '<' else None
+        rc_file = migrate(args.rc, ini_file, args.random, target_dir=target_dir)
         args.output.write(rc_file.getvalue())
     elif args.command == 'diff':
         diff = diff_ini(args.base, args.second,
