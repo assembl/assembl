@@ -11,7 +11,7 @@ from platform import system
 from shutil import rmtree
 from shutil import move
 import tarfile
-from time import sleep, strftime
+from time import sleep, strftime, time
 from urllib import urlretrieve
 from ConfigParser import ConfigParser, SafeConfigParser, NoOptionError
 from StringIO import StringIO
@@ -20,6 +20,7 @@ from os.path import join, dirname, split, normpath
 # Other calls to os.path rarely mostly don't work remotely. Use locally only.
 import os.path
 from functools import wraps
+from tempfile import NamedTemporaryFile
 import re
 
 from fabric.operations import (
@@ -83,6 +84,7 @@ def sanitize_env():
     # nor env.host_string are set properly. Revisit with Fabric2.
     if not env.get('host_string', None):
         env.host_string = env.hosts[0]
+    # TODO Take elements from skeleton_env
 
 
 def load_rcfile_config():
@@ -125,6 +127,43 @@ def getmtime(path):
 
 def listdir(path):
     return run("ls " + path).split()
+
+
+@task
+def create_local_ini():
+    """Replace the local.ini file with one composed from the current .rc file"""
+    random_ini_path = os.path.join(env.projectpath, 'random.ini')
+    local_ini_path = os.path.join(env.projectpath, 'local.ini')
+    if exists(local_ini_path):
+        run('cp %s %s.%d' % (
+            local_ini_path, local_ini_path, int(time())))
+
+    if env.host_string == 'localhost':
+        # The easy case
+        venv("python assembl/scripts/ini_files.py compose -o local.ini " + env.rcfile)
+    else:
+        # get placeholder filenames
+        with NamedTemporaryFile(delete=False) as f:
+            random_file_name = f.name
+        with NamedTemporaryFile(delete=False) as f:
+            local_file_name = f.name
+        try:
+            # remote server case
+            # Load the random file if any in a temp file
+            if exists(random_ini_path):
+                get(random_ini_path, random_file_name)
+            rt = os.path.getmtime(random_file_name)
+            # create the local.ini in a temp file
+            venvcmd("python assembl/scripts/ini_files.py compose -o %s -r %s %s" % (
+                local_file_name, random_file_name, env.rcfile))
+            # send the random file if changed
+            if rt != os.path.getmtime(random_file_name):
+                put(random_file_name, random_ini_path)
+            # send the local file
+            put(local_file_name, local_ini_path)
+        finally:
+            os.unlink(random_file_name)
+            os.unlink(local_file_name)
 
 
 @task

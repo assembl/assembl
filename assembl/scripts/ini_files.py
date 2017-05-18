@@ -28,6 +28,8 @@ RANDOM_FILE = 'random.ini'
 # TODO: Subclass ConfigParser to give a warning whenever a value
 # is taken from the defaults.
 
+# TODO: check encoding?
+
 DEFAULTS = {
     # Define either the first or all others.
     'celery_tasks.broker': '',
