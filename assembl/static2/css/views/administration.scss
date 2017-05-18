@@ -1,5 +1,5 @@
 .administration {
-  margin: $margin-section 0;
+  margin: $margin-section + $navbar-height 0;
 
   .admin-menu-container {
     height: 350px;
@@ -176,5 +176,16 @@
         }
       }
     }
+  }
+
+  .save-bar {
+    border-top: $navbar-border;
+    background-color: $white;
+    height: $navbar-height;
+    padding: 10px 0;
+    position: fixed;
+    top:$navbar-height;
+    width: 100%;
+    z-index: 100;
   }
 }

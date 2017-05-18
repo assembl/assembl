@@ -27,7 +27,7 @@ const SaveButton = ({ mutate, themes }) => {
     });
   };
   return (
-    <Button className="button-submit button-dark" onClick={saveAction}>
+    <Button className="button-submit button-dark right" onClick={saveAction}>
       <Translate value="administration.saveThemes" />
     </Button>
   );

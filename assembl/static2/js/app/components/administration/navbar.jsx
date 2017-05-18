@@ -15,6 +15,12 @@ class Navbar extends React.Component {
     };
     this.goToSection = this.goToSection.bind(this);
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      currentStep: nextProps.currentStep,
+      totalSteps: nextProps.totalSteps
+    });
+  }
   goToSection(stepNb) {
     const slug = { slug: getDiscussionSlug() };
     const { phaseIdentifier } = this.props;
@@ -26,31 +32,31 @@ class Navbar extends React.Component {
   render() {
     const barWidth = calculatePercentage(this.state.currentStep, this.state.totalSteps);
     return (
-        <div className="admin-navbar">
-          <Col xs={6} md={6}>
-            <div className="step-numbers">
-              <div className="txt">
-                <Translate value="administration.step_x_total" num={this.state.currentStep} total={this.state.totalSteps} />
-              </div>
-              <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>
-              <div className="bkg-bar">&nbsp;</div>
+      <div className="admin-navbar">
+        <Col xs={6} md={6}>
+          <div className="step-numbers">
+            <div className="txt">
+              <Translate value="administration.step_x_total" num={this.state.currentStep} total={this.state.totalSteps} />
             </div>
-          </Col>
-          <Col xs={6} md={6}>
-            <div className="arrow-container">
-              {this.state.currentStep < this.state.totalSteps &&
-                <div onClick={() => { this.goToSection(this.state.currentStep + 1) }} className="arrow right">
-                  <span className="assembl-icon-up-open" />
-                </div>
-              }
-              {this.state.currentStep > 1 &&
-                <div onClick={() => { this.goToSection(this.state.currentStep - 1) }} className="arrow right">
-                  <span className="assembl-icon-down-open" />
-                </div>
-              }
+            <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>
+            <div className="bkg-bar">&nbsp;</div>
+          </div>
+        </Col>
+        <Col xs={6} md={6}>
+          <div className="arrow-container">
+            {this.state.currentStep < this.state.totalSteps &&
+            <div onClick={() => { this.goToSection(this.state.currentStep + 1); }} className="arrow right">
+              <span className="assembl-icon-up-open" />
             </div>
-          </Col>
-        </div>
+              }
+            {this.state.currentStep > 1 &&
+            <div onClick={() => { this.goToSection(this.state.currentStep - 1); }} className="arrow right">
+              <span className="assembl-icon-down-open" />
+            </div>
+              }
+          </div>
+        </Col>
+      </div>
     );
   }
 }

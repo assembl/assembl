@@ -47,7 +47,7 @@ export const xmlHttpRequest = (obj) => {
         // Contract agreed upon. If API is to fail, must respond with
         // JSONError type. Front-end respects this type of response only.
         const respType = getResponseContentType(xhr);
-        if (respType === 'application/json') { resp = JSON.parse(xhr.responseText); } else { resp = [{ type: 'nonJson', message: null, status: xhr.status }]; }
+        if (respType === 'application/json') { resp = JSON.parse(xhr.responseText); } else { resp = [{ type: 'nonJson', message: '', status: xhr.status }]; }
         reject(resp);
       }
     };

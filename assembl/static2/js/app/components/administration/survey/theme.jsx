@@ -2,10 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { gql, graphql, withApollo } from 'react-apollo';
-import { Button } from 'react-bootstrap';
 
 import SectionTitle from '../sectionTitle';
-import ThemeCreationForm from './themeCreationForm';
+import ThemeForm from './themeForm';
 
 const GetThematics = gql`
 {
@@ -19,7 +18,7 @@ const GetThematics = gql`
 }
 `;
 
-const ThemeCreation = ({ client, data, i18n, selectedLocale, showSection }) => {
+const Theme = ({ client, data, i18n, selectedLocale, showSection }) => {
   if (data.loading) {
     return null;
   }
@@ -46,10 +45,9 @@ const ThemeCreation = ({ client, data, i18n, selectedLocale, showSection }) => {
       <div className="admin-content">
         <form>
           {themes.map((theme, idx) => {
-            return <ThemeCreationForm key={theme.id} id={theme.id} index={idx} image={theme.image} selectedLocale={selectedLocale} titleEntries={theme.titleEntries} />;
+            return <ThemeForm key={theme.id} id={theme.id} index={idx} image={theme.image} selectedLocale={selectedLocale} titleEntries={theme.titleEntries} />;
           })}
           <div onClick={addTheme} className="plus margin-l">+</div>
-          <Button className="button-submit button-dark margin-l">Suivant</Button>
         </form>
       </div>
     </div>
@@ -62,6 +60,6 @@ const mapStateToProps = ({ admin }) => {
   };
 };
 
-const ThemeCreationContainer = connect(mapStateToProps)(ThemeCreation);
+const ThemeContainer = connect(mapStateToProps)(Theme);
 
-export default withApollo(graphql(GetThematics)(ThemeCreationContainer));
+export default withApollo(graphql(GetThematics)(ThemeContainer));

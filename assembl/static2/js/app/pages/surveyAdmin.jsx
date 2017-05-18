@@ -1,16 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import ThemeCreation from '../components/administration/survey/themeCreation';
-import ThemeEdition from '../components/administration/survey/themeEdition';
-import SurveyExport from '../components/administration/survey/surveyExport';
+import Theme from '../components/administration/survey/theme';
+import Question from '../components/administration/survey/question';
+import Export from '../components/administration/survey/export';
+import Navbar from '../components/administration/navbar';
 
 const SurveyAdmin = ({ i18n, section }) => {
   return (
     <div className="survey-admin">
-      <ThemeCreation i18n={i18n} showSection={section === 'section1'} />
-      <ThemeEdition i18n={i18n} showSection={section === 'section2'} />
-      <SurveyExport i18n={i18n} showSection={section === 'section3'} />
+      <Theme i18n={i18n} showSection={section === '1'} />
+      <Question i18n={i18n} showSection={section === '2'} />
+      <Export i18n={i18n} showSection={section === '3'} />
+      {!isNaN(Number(section)) &&
+        <Navbar
+          currentStep={Number(section)}
+          totalSteps={3}
+          phaseIdentifier="survey"
+        />
+      }
     </div>
   );
 };
