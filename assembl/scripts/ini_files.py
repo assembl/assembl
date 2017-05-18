@@ -221,31 +221,45 @@ def populate_random(saml_info, random_file):
     Do not change existing ones"""
     from base64 import b64encode
     from os import urandom
+    from assembl.auth.make_saml import make_saml_key, make_saml_cert
     base = Parser()
-    base.read(random_file + ".tmpl")
+    base.read(os.path.basename(random_file) + ".tmpl")
     existing = Parser()
     if exists(random_file):
         existing.read(random_file)
     combine_ini(base, existing)
-    saml = None
+    saml_keys = {}
     changed = False
+
     for section in base.sections():
         for key, value in base.items(section):
-            if value.startswith('{random') and value.endswith("}"):
+            keyu = key.upper()
+            # too much knowdledge, but hard to avoid
+            if "SAML" in keyu and keyu.endswith("_PRIVATE_KEY"):
+                prefix = keyu[:-12]
+                if value == "{saml_key}":
+                    saml_key_text, saml_key = make_saml_key()
+                    base.set(section, key, saml_key_text)
+                    saml_keys[prefix] = saml_key
+                    changed = True
+                else:
+                    saml_keys[prefix] = value
+            elif value.startswith('{random') and value.endswith("}"):
                 value = b64encode(urandom(int(value[7:-1])))
                 base.set(section, key, value)
                 changed = True
-            elif value.startswith('{saml'):
-                if saml is None:
-                    from assembl.auth.make_saml import make_saml_key
-                    saml = make_saml_key(**saml_info)
-                if value == '{saml_key}':
-                    value = saml[0]
-                elif value == '{saml_cert}':
-                    value = saml[1]
-                else:
-                    assert False, "wrong saml code: " + value
-                base.set(section, key, value)
+
+    # Do certs in second pass, to be sure keys are set
+    for section in base.sections():
+        for key, value in base.items(section):
+            keyu = key.upper()
+            if ("SAML" in keyu and keyu.endswith("_PUBLIC_CERT") and
+                    value == '{saml_cert}'):
+                prefix = keyu[:-12]
+                # If key is not there, it IS a mismatch and and error.
+                saml_key = saml_keys[prefix]
+                saml_cert_text, _ = make_saml_cert(saml_key, **saml_info)
+                base.set(section, key, saml_cert_text)
                 changed = True
     if changed:
         with open(random_file, 'w') as f:

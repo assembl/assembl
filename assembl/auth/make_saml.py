@@ -24,11 +24,7 @@ def cleanup_x509_text(txt):
     return '  ' + '\n  '.join(kt) + '\n'
 
 
-def make_saml_key(
-        country='', state='', locality='', org='', cn='', email='',
-        alt_names=None, days=365):
-    if alt_names and isinstance(alt_names(str, unicode)):
-        alt_names = alt_names.split()
+def make_saml_key():
     key = rsa.generate_private_key(
         public_exponent=65537,
         key_size=2048,
@@ -38,6 +34,23 @@ def make_saml_key(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.TraditionalOpenSSL,
         encryption_algorithm=serialization.NoEncryption())
+    return (cleanup_x509_text(key_text), key)
+
+
+def private_key_from_cleaned_text(key_text):
+    key_text = '\n'.join([l.strip() for l in
+                          str(key_text).strip('\n').split('\n')])
+    key_text = "-----BEGIN RSA PRIVATE KEY-----\n\n%s\n-----END RSA PRIVATE KEY-----\n" % key_text
+    return serialization.load_pem_private_key(
+        key_text, password=None, backend=default_backend())
+
+
+def make_saml_cert(key, country='', state='', locality='', org='', cn='',
+                   email='', alt_names=None, days=365):
+    if isinstance(key, (str, unicode)):
+        key = private_key_from_cleaned_text(key)
+    if alt_names and isinstance(alt_names(str, unicode)):
+        alt_names = alt_names.split()
     subject = x509.Name([
         # Provide various details about who we are.
         x509.NameAttribute(NameOID.COUNTRY_NAME, unicode(country)),
@@ -81,7 +94,7 @@ def make_saml_key(
             critical=False)
     crt = crt.sign(key, hashes.SHA256(), default_backend())
     crt_text = crt.public_bytes(serialization.Encoding.PEM)
-    return cleanup_x509_text(key_text), cleanup_x509_text(crt_text)
+    return (cleanup_x509_text(crt_text), crt)
 
 
 if __name__ == '__main__':
@@ -89,5 +102,8 @@ if __name__ == '__main__':
                  "locality": "Levallois-Perret", "org": "Bluenove",
                  "cn": "assembl-enterprise.bluenove.com",
                  "email": "assembl@bluenove.com"}
-    (key, crt) = make_saml_key(**saml_info)
-    print key, crt
+    key_text, key = make_saml_key()
+    crt_text, crt = make_saml_cert(key, **saml_info)
+    print key_text
+    print
+    print crt_text
