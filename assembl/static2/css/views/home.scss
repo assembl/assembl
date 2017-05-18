@@ -1,4 +1,52 @@
 .home {
+  .home-section  {
+    &:nth-child(2) {
+      .container-fluid {
+        background-color: $page-bkg-grey;
+      }
+    }
+    &:nth-child(3) {
+      .container-fluid {
+        background-color: $page-bkg-light;
+      }
+    }
+    &:nth-child(4) {
+      .container-fluid {
+        background-color: $page-bkg-grey;
+      }
+    }
+    &:nth-child(5) {
+      .container-fluid {
+        background-color: $page-bkg-light;
+      }
+    }
+    &:nth-child(6) {
+      .container-fluid {
+        background-color: $page-bkg-grey;
+      }
+    }
+    &:nth-child(7) {
+      .container-fluid {
+        background-color: $page-bkg-light;
+      }
+    }
+    &:nth-child(8) {
+      .container-fluid {
+        background-color: $page-bkg-grey;
+      }
+    }
+    &:nth-child(9) {
+      .container-fluid {
+        background-color: $page-bkg-light;
+      }
+    }
+    &:nth-child(10) {
+      .container-fluid {
+        background-color: $page-bkg-grey;
+      }
+    }
+  }
+
   .header-section {
     background-color: $first-color;
     min-height: 380px;

@@ -38,7 +38,7 @@ class Header extends React.Component {
     const { debateData } = this.props.debate;
     const { synthesis } = this.props.synthesis;
     return (
-      <section className="header-section">
+      <section className="home-section header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
             <img className="header-logo" src={debateData.logo} alt="logo" />

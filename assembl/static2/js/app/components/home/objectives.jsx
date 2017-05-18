@@ -35,46 +35,44 @@ class Objectives extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     return (
-      <section className="objectives-section">
-        {debateData.objectives &&
-          <Grid fluid className="background-light">
-            <div className="max-container">
-              <div className="title-section">
-                <div className="title-hyphen">&nbsp;</div>
-                <h1 className="dark-title-1">
-                  <Translate value="home.objectivesTitle" />
-                </h1>
+      <section className="home-section objectives-section">
+        <Grid fluid>
+          <div className="max-container">
+            <div className="title-section">
+              <div className="title-hyphen">&nbsp;</div>
+              <h1 className="dark-title-1">
+                <Translate value="home.objectivesTitle" />
+              </h1>
+            </div>
+            <div className="content-section">
+              <div className="content-margin">
+                <Row>
+                  <Col xs={12} sm={12} md={6} className="objectives">
+                    <div className="text-column">
+                      <div className="top-column">&nbsp;</div>
+                      {debateData.objectives}
+                    </div>
+                  </Col>
+                  <Col xs={12} sm={6} md={3} className="objectives">
+                    {debateData.objectivesBackground &&
+                      <div className="objectives-img" style={{ backgroundImage: `url(${debateData.objectivesBackground.img1Url})` }}>&nbsp;</div>
+                    }
+                  </Col>
+                  <Col xs={12} sm={6} md={3} className="objectives">
+                    {debateData.objectivesBackground &&
+                      <div className="objectives-img" style={{ backgroundImage: `url(${debateData.objectivesBackground.img2Url})` }}>&nbsp;</div>
+                    }
+                  </Col>
+                </Row>
               </div>
-              <div className="content-section">
-                <div className="content-margin">
-                  <Row>
-                    <Col xs={12} sm={12} md={6} className="objectives">
-                      <div className="text-column">
-                        <div className="top-column">&nbsp;</div>
-                        {debateData.objectives}
-                      </div>
-                    </Col>
-                    <Col xs={12} sm={6} md={3} className="objectives">
-                      {debateData.objectivesBackground &&
-                        <div className="objectives-img" style={{ backgroundImage: `url(${debateData.objectivesBackground.img1Url})` }}>&nbsp;</div>
-                      }
-                    </Col>
-                    <Col xs={12} sm={6} md={3} className="objectives">
-                      {debateData.objectivesBackground &&
-                        <div className="objectives-img" style={{ backgroundImage: `url(${debateData.objectivesBackground.img2Url})` }}>&nbsp;</div>
-                      }
-                    </Col>
-                  </Row>
-                </div>
-                <div className="center inline full-size margin-xxl">
-                  <Button onClick={this.displayPhase} className="button-submit button-dark">
-                    <Translate value="home.accessButton" />
-                  </Button>
-                </div>
+              <div className="center inline full-size margin-xxl">
+                <Button onClick={this.displayPhase} className="button-submit button-dark">
+                  <Translate value="home.accessButton" />
+                </Button>
               </div>
             </div>
-          </Grid>
-        }
+          </div>
+        </Grid>
       </section>
     );
   }

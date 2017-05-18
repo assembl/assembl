@@ -7,7 +7,7 @@ class SynthesisContainer extends React.Component {
   render() {
     const { synthesis } = this.props.synthesis;
     return (
-      <section className="synthesis-section">
+      <section className="home-section synthesis-section">
         <Grid fluid className="background-light">
           <div className="max-container">
             <div style={{ margin: '20px 0' }}>

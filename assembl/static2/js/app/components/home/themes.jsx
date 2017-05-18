@@ -14,7 +14,7 @@ class Themes extends React.Component {
     const slug = { slug: debateData.slug };
     const connectedUserId = getConnectedUserId();
     return (
-      <section className="themes-section">
+      <section className="home-section themes-section">
         {ideasLoading && <Loader color="black" />}
         {(ideas && ideas.latestIdeas.length >= 2) &&
           <Grid fluid className="background-grey">

@@ -16,10 +16,10 @@ class Partners extends React.Component {
   render() {
     const { partners, partnersLoading, partnersError } = this.props.partners;
     return (
-      <section className="partners-section">
+      <section className="home-section partners-section">
         {partnersLoading && <Loader color="black" />}
         {(partners && partners.length > 0) &&
-          <Grid fluid className="background-light">
+          <Grid fluid>
             <div className="max-container">
               <div className="title-section">
                 <div className="title-hyphen">&nbsp;</div>

@@ -10,60 +10,56 @@ class Phases extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     return (
-      <section className="phases-section">
-        {debateData.timeline &&
-          <Grid fluid className="background-grey">
-            <div className="max-container">
-              <div className="title-section">
-                <div className="title-hyphen">&nbsp;</div>
-                <h1 className="dark-title-1">
-                  <Translate value="home.timelineTitle" />
-                </h1>
-              </div>
-              <div className="content-section">
-                {debateData.timeline.length > 1 &&
-                  <Row className="no-margin">
-                    {debateData.timeline.map((phase, index) => {
-                      return (
-                        <Col
-                          xs={12}
-                          sm={24 / debateData.timeline.length}
-                          md={12 / debateData.timeline.length}
-                          className={isCurrentPhase(debateData.timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'}
-                          key={index}
-                        >
-                          <Phase
-                            imgUrl={phase.image_url}
-                            startDate={phase.start}
-                            index={index}
-                            title={phase.title}
-                            description={phase.description}
-                            identifier={phase.identifier}
-                          />
-                        </Col>
-                      );
-                    })}
-                  </Row>
-                }
-                <Row className="no-margin">
-                  {debateData.timeline.map((phase, index) => {
-                    return (
-                      <Col
-                        xs={12 / debateData.timeline.length}
-                        sm={12 / debateData.timeline.length}
-                        md={12 / debateData.timeline.length}
-                        className={'no-padding bar'}
-                        key={index}
-                      >
-                        <Timeline index={index} />
-                      </Col>
-                    );
-                  })}
-                </Row>
-              </div>
+      <section className="home-section phases-section">
+        <Grid fluid>
+          <div className="max-container">
+            <div className="title-section">
+              <div className="title-hyphen">&nbsp;</div>
+              <h1 className="dark-title-1">
+                <Translate value="home.timelineTitle" />
+              </h1>
             </div>
-          </Grid>
-        }
+            <div className="content-section">
+              <Row className="no-margin">
+                {debateData.timeline.map((phase, index) => {
+                  return (
+                    <Col
+                      xs={12}
+                      sm={24 / debateData.timeline.length}
+                      md={12 / debateData.timeline.length}
+                      className={isCurrentPhase(debateData.timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'}
+                      key={index}
+                    >
+                      <Phase
+                        imgUrl={phase.image_url}
+                        startDate={phase.start}
+                        index={index}
+                        title={phase.title}
+                        description={phase.description}
+                        identifier={phase.identifier}
+                      />
+                    </Col>
+                  );
+                })}
+              </Row>
+              <Row className="no-margin">
+                {debateData.timeline.map((phase, index) => {
+                  return (
+                    <Col
+                      xs={12 / debateData.timeline.length}
+                      sm={12 / debateData.timeline.length}
+                      md={12 / debateData.timeline.length}
+                      className={'no-padding bar'}
+                      key={index}
+                    >
+                      <Timeline index={index} />
+                    </Col>
+                  );
+                })}
+              </Row>
+            </div>
+          </div>
+        </Grid>
       </section>
     );
   }

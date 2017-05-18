@@ -8,30 +8,28 @@ class Twitter extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     return (
-      <section className="twitter-section">
-        {debateData.twitter &&
-          <Grid fluid className="background-img" style={{ backgroundImage: `url(${debateData.twitter.backgroundImageUrl})` }}>
-            <div className="max-container">
-              <div className="content-section">
-                <Row className="no-margin">
-                  <Col xs={12} md={6} className="no-padding">
-                    <div className="tweet-container">
-                      <div className="title-section">
-                        <div className="title-hyphen">&nbsp;</div>
-                        <h1 className="dark-title-1">
-                          <Translate value="home.twitterTitle" />
-                        </h1>
-                      </div>
-                      <div className="tweet-section">
-                        <TweetEmbed id={debateData.twitter.id} />
-                      </div>
+      <section className="home-section twitter-section">
+        <Grid fluid className="background-img" style={{ backgroundImage: `url(${debateData.twitter.backgroundImageUrl})` }}>
+          <div className="max-container">
+            <div className="content-section">
+              <Row className="no-margin">
+                <Col xs={12} md={6} className="no-padding">
+                  <div className="tweet-container">
+                    <div className="title-section">
+                      <div className="title-hyphen">&nbsp;</div>
+                      <h1 className="dark-title-1">
+                        <Translate value="home.twitterTitle" />
+                      </h1>
                     </div>
-                  </Col>
-                </Row>
-              </div>
+                    <div className="tweet-section">
+                      <TweetEmbed id={debateData.twitter.id} />
+                    </div>
+                  </div>
+                </Col>
+              </Row>
             </div>
-          </Grid>
-        }
+          </div>
+        </Grid>
       </section>
     );
   }

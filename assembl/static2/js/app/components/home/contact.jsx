@@ -6,8 +6,8 @@ import { Grid, Row, Col } from 'react-bootstrap';
 class Contact extends React.Component {
   render() {
     return (
-      <section className="contact-section">
-        <Grid fluid className="background-grey">
+      <section className="home-section contact-section">
+        <Grid fluid>
           <div className="max-container center">
             <div className="margin-xl">
               <h1 className="dark-title-1 center">
