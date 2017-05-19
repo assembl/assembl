@@ -12,6 +12,7 @@ Installation and administration
    :maxdepth: 2
 
    INSTALL
+   configuration
    backups
    howtoupgrade
 

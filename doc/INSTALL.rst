@@ -74,10 +74,10 @@ or:
 
     git clone https://github.com/assembl/assembl.git
     cd assembl
-    fab env_dev install_single_server
-    fab env_dev bootstrap_from_checkout
+    fab -c configs/develop.rc install_single_server
+    fab -c configs/develop.rc bootstrap_from_checkout
 
-Note: If on Mac, command fab env_dev install_single_server outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
+Note: If on Mac, command fab -c configs/develop.rc install_single_server outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
 
 Note: If you get the following error: ``fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)`` Then you'll need to reconfigure your ssh server
 
@@ -103,7 +103,7 @@ superuser):
 
 .. code:: sh
 
-    assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword development.ini
+    assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
 
 Note: Just running ``$venv/bin/supervisord`` will NOT work, as celery will
 run command line tools, thus breaking out of the environment. You need
@@ -127,12 +127,11 @@ Multiple environments
 ~~~~~~~~~~~~~~~~~~~~~
 
 If you want to run multiple environments on your machine, you should
-have different values for various parameters in ``development.ini``. In
-that case, you would copy it to a ``local.ini`` file, and customize the
-values there; substitute ``local.ini`` for ``development.ini`` in the
-rest of the instructions in this file.
+have different values for various parameters in ``.rc`` files in the ``configs``
+directory. You would create a ``configs/local.rc`` based on ``configs/develop.rc``,
+as described in :doc:`configuration`.
 
-Once you create your local.ini, re-run the ``fab env_dev app_setup``
+Once you create your local.rc, re-run the ``fab -c configs/local.rc app_setup``
 step.
 
 The variables that have to be different between instances are the
@@ -141,18 +140,12 @@ the ini file):
 
 .. code:: ini
 
-    [app:main]
     public_port = 6543
     changes.socket = ipc:///tmp/assembl_changes/0
     changes.websocket.port = 8085
-    celery_tasks.broker.broker = redis://localhost:6379/0
-    celery_tasks.notification_dispatch.broker = redis://localhost:6379/1
+    redis_socket = 0
     webpack_port = 8080
-    [server:main]
-    port = 6543
-    [virtuoso]
-    port = 5132
-    http_port = 8892
+    server:main__port = 6543
 
 Most of these are ports, and it should be easy to find an unoccupied
 port; in the case of ``changes.socket``, you simply need a different
@@ -175,7 +168,7 @@ Updating an environment
 
     cd ~/assembl
     #Any git operations (ex:  git pull)
-    fab env_dev app_compile
+    fab -c configs/develop.rc app_compile
     $venv/bin/supervisorctl start dev:*
 
 You can monitor any of the processes, for example pserve, with these
@@ -198,14 +191,14 @@ css, all compiled files, update dependencies, database schema, etc.):
 
 .. code:: sh
 
-    fab env_dev app_compile
+    fab -c configs/develop.rc app_compile
 
 Updating an environment to it's specified branch, tag or revision:
 
 .. code:: sh
 
     cd ~/assembl
-    fab env_dev app_fullupdate
+    fab -c configs/develop.rc app_fullupdate
 
 Schema migrations
 ~~~~~~~~~~~~~~~~~
@@ -214,13 +207,13 @@ Upgrade to latest manally:
 
 .. code:: sh
 
-    alembic -c development.ini upgrade head
+    alembic -c local.ini upgrade head
 
 Create a new one:
 
 .. code:: sh
 
-    alembic -c development.ini revision -m "Your message"
+    alembic -c local.ini revision -m "Your message"
     Make sure to verify the generated code...
 
 Autogeneration (--autogenerate) isn't supported since we don't have full
@@ -280,7 +273,6 @@ Then, as the assembl_user:
 
     git clone https://github.com/assembl/assembl.git
     cd assembl
-    cp production.ini local.ini
 
 Change the values for:
 
@@ -336,10 +328,10 @@ If you do not have an SSL certificate, then you have to set ``accept_secure_conn
 
     exit  # this logs out from the assembl_user user, back to the initial sudoer account
     cd /home/assembl_user/assembl
-    fab env_dev install_single_server
+    fab -c configs/develop.rc install_single_server
     sudo -u assembl_user -i  # back to the assembl user
     cd /home/assembl_user/assembl
-    fab env_dev bootstrap_from_checkout
+    fab -c configs/develop.rc bootstrap_from_checkout
     source venv/bin/activate
     assembl-add-user --email your_email@email.com --name "Your Name" --username desiredusername --password yourpassword local.ini
 

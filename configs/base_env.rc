@@ -50,7 +50,6 @@ changes.websocket.port = 8090
 # /5-: production
 changes.socket = ipc:///tmp/assembl_changes/5
 
-ini_file = local.ini
 gitrepo = https://github.com/assembl/assembl.git
 wsginame = prod.wsgi
 projectname = assembl

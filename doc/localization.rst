@@ -46,14 +46,14 @@ updating, etc.). It needs to be run before any translation work:
 
 ::
 
-    fab env_dev make_messages
+    fab -c configs/develop.rc make_messages
 
 The second generates the runtime files and needs to be run before you
 can see the actual translations in the application:
 
 ::
 
-    fab env_dev compile_messages
+    fab -c configs/develop.rc compile_messages
 
 The translation workflow
 ------------------------
@@ -74,7 +74,7 @@ The translation workflow
 
    ::
 
-       fab env_dev make_messages
+       fab -c configs/develop.rc make_messages
 
 3. Mandatory: Push the pot file back to transifex:
 

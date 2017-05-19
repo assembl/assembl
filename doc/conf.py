@@ -32,7 +32,7 @@ from pyramid.paster import bootstrap
 if os.path.exists('../local.ini'):
   bootstrap('../local.ini')
 else:
-  bootstrap('../development.ini')
+  bootstrap('../production.ini')
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom

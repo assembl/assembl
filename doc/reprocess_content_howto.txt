@@ -1,4 +1,4 @@
-pshell development.ini
+pshell local.ini
 
 mailboxes = db.query(models.AbstractMailbox)
 for mailbox in mailboxes:

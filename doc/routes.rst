@@ -1,5 +1,5 @@
 Static routes
 -------------
 
-.. autopyramid:: development.ini
+.. autopyramid:: production.ini
     :format: httpdomain

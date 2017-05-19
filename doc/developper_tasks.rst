@@ -12,11 +12,11 @@ Download a copy of a remote database to develop locally
 
 .. code:: sh
 
-    fab env_name_of_remote_env database_download
-    fab env_dev database_restore
+    fab -c configs/config_of_remote_instance.rc database_download
+    fab -c configs/develop.rc database_restore
     # Make sure the database username and passwords in local.ini match the ones of the database you just downloaded
-    fab env_dev app_compile #(To make sure the database schema is up to date and restore.  You can also use app_compile_noupdate if you are in a hurry)
-    fab env_dev reset_semantic_mappings
+    fab -c configs/develop.rc app_compile #(To make sure the database schema is up to date and restore.  You can also use app_compile_noupdate if you are in a hurry)
+    fab -c configs/develop.rc reset_semantic_mappings
     # Grab a coffee...
     exit
     supervisorctl restart dev:
@@ -56,7 +56,7 @@ Python shell with database connection
 
 .. code:: sh
 
-    pshell development.ini
+    pshell local.ini
 
 Note:  We recommend you install ipython with ``pip install ipython`` before you
 run pshell.  You will get a much nicer interface

@@ -1,8 +1,8 @@
 #dropdb -U assembl assembl
 #createdb -U assembl assembl
-#assembl-db-manage development.ini bootstrap
+#assembl-db-manage local.ini bootstrap
 
-#In pshell development.ini, paste:
+#In pshell local.ini, paste:
 
 from assembl.auth.models import *
 from assembl.synthesis.models import *

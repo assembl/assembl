@@ -21,8 +21,8 @@ Installation prerequisites
 
 .. code:: sh
 
-    fab env_dev install_dovecot_vmm
-    fab env_dev install_postfix
+    fab -c configs/develop.rc install_dovecot_vmm
+    fab -c configs/develop.rc install_postfix
 
 If the postgres database is local, and that step has not been done:
 

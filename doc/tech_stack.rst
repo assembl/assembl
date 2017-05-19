@@ -565,14 +565,14 @@ Styleguide:
 
 Build system
 ------------
-Fabric_
+Fabric_:
   Used as main orchestrator of the build.  To see available commands, 
-type fab list for the assembl virtualenv
+  type ``fab --list`` for the assembl virtualenv
 
-Pip_
+Pip_:
   Used for python package management
 
-Setuptools_
+Setuptools_:
   Used for python package building
 
 npm_:
@@ -590,14 +590,14 @@ Translation
 
 Assembl uses a gettext style translation pipeline.  It goes through the pyramid 
 machinery to extract the stransatable strings, including the strings from the 
-frontend in ``fab env_dev make_messages``
+frontend in ``fab -c configs/develop.rc make_messages``
 
 Python gettext https://docs.python.org/2/library/gettext.html , 
 
 This is setup in ``setup.cfg`` and ``message-extraction.ini``
 
 The po files are subsequently converted to JSON usable from Jed_ in the 
-frontend.  This happens in ``po2json.py`` called by ``fab env_dev compile_messages``
+frontend.  This happens in ``po2json.py`` called by ``fab -c configs/develop.rc compile_messages``
 
 See :doc:`localization`
 
