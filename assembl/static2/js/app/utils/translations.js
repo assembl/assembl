@@ -203,7 +203,8 @@ const Translations = {
         link: 'Exporter'
       },
       step_x_total: 'Etape %{num} sur %{total}',
-      saveThemes: 'Sauvegarder'
+      saveThemes: 'Sauvegarder',
+      successThemeCreation: 'Les thématiques ont été enregistrées avec succès !'
     },
     date: {
       format: 'D MMMM YYYY',
@@ -412,7 +413,8 @@ const Translations = {
         link: 'Export'
       },
       step_x_total: 'Step %{num} on %{total}',
-      saveThemes: 'Save'
+      saveThemes: 'Save',
+      successThemeCreation: 'Themes have been saved with success!'
     },
     date: {
       format: 'MMMM Do, YYYY',
