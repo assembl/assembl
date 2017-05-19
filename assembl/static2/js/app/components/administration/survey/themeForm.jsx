@@ -1,9 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { gql, withApollo } from 'react-apollo';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
 
+import { listThematicsToDelete } from '../../../actions/adminActions';
 import ImageUploader from '../../common/imageUploader';
+
+const GetThematics = gql`
+{
+  thematics(identifier:"survey") {
+    id,
+    titleEntries {
+      localeCode,
+      value
+    }
+  }
+}
+`;
 
 export const updateTitle = (client, id, selectedLocale, titleEntryIndex, value) => {
   let entryIndex = titleEntryIndex;
@@ -52,7 +66,7 @@ export const updateTitle = (client, id, selectedLocale, titleEntryIndex, value) 
   });
 };
 
-export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale, titleEntries }) => {
+export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale, titleEntries, thematicsToDelete, listThematicsToDelete }) => {
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
   const num = (Number(index) + 1).toString();
@@ -61,7 +75,20 @@ export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale
   });
   const titleEntryIndex = titleEntries.indexOf(titleEntry);
   const title = titleEntry ? titleEntry.value : '';
-  const remove = () => {}; // TODO
+  const remove = (thematicId) => {
+    thematicsToDelete.push(thematicId);
+    listThematicsToDelete(thematicsToDelete);
+    const thematicsData = client.readQuery({ query: GetThematics });
+    thematicsData.thematics.forEach((thematic, index) => {
+      if (thematic.id === thematicId) {
+        thematicsData.thematics.splice(index, 1);
+      }
+    });
+    return client.writeQuery({
+      query: GetThematics,
+      data: thematicsData
+    });
+  };
   const updateImage = () => {}; // TODO
   const handleTitleChange = (e) => {
     return updateTitle(client, id, selectedLocale, titleEntryIndex, e.target.value);
@@ -83,7 +110,7 @@ export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale
         />
       </FormGroup>
       <div className="pointer right">
-        <Button onClick={remove}>
+        <Button onClick={() => { remove(id); }}>
           <span className="assembl-icon-delete grey" />
         </Button>
       </div>
@@ -96,4 +123,18 @@ DumbThemeCreationForm.defaultProps = {
   title: ''
 };
 
-export default withApollo(DumbThemeCreationForm);
+const mapStateToProps = (state) => {
+  return {
+    thematicsToDelete : state.admin.thematicsToDelete
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    listThematicsToDelete: (thematicsToDelete) => {
+      dispatch(listThematicsToDelete(thematicsToDelete));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withApollo(DumbThemeCreationForm));

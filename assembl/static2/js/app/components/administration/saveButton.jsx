@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { gql, graphql, withApollo, compose } from 'react-apollo';
 import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -22,48 +23,45 @@ const createLanguageEntries = (titles) => {
   });
 };
 
-const SaveButton = ({ client, createThematic, updateThematic, deleteThematic }) => {
+const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
   const saveAction = () => {
     const thematicsData = client.readQuery({ query: GetThematics });
+    let promisesArray = [];
     thematicsData.thematics.forEach((t) => {
       if (t.id < 0) {
-        createThematic({
+        const p1 = createThematic({
           variables: {
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
             image: t.image
           }
-        })
-        .then(() => {
-          displayAlert('success', I18n.t('administration.successThemeCreation'));
-        })
-        .catch((error) => {
-          displayAlert('danger', `${error}`);
         });
+        promisesArray.push(p1);
       } else {
-        updateThematic({
+        const p2 = updateThematic({
           variables: {
             id: t.id,
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries)
           }
-        })
-        .then(() => {
-          displayAlert('success', I18n.t('administration.successThemeCreation'));
-        })
-        .catch((error) => {
-          displayAlert('danger', `${error}`);
         });
+        promisesArray.push(p2);
       }
-
-      // TO DO delete a thematic
-      // mutate({
-      //   variables: {
-      //     thematicId: t.id
-      //   }
-      // }).then((res) => {
-      //   return console.log(res);
-      // });
+    });
+    if (thematicsToDelete.length > 0) {
+      thematicsToDelete.forEach((id) => {
+        const p3 = deleteThematic({
+          variables: {
+            thematicId: id
+          }
+        })
+        promisesArray.push(p3);
+      });
+    }
+    Promise.all(promisesArray).then(() => { 
+      displayAlert('success', I18n.t('administration.successThemeCreation'));
+    }).catch((error) => { 
+      displayAlert('danger', `${error}`);
     });
   };
   return (
@@ -115,4 +113,10 @@ const SaveButtonWithMutations = compose(
   })
 )(SaveButton);
 
-export default withApollo(SaveButtonWithMutations);
+const mapStateToProps = (state) => {
+  return {
+    thematicsToDelete : state.admin.thematicsToDelete
+  };
+};
+
+export default connect(mapStateToProps)(withApollo(SaveButtonWithMutations));
