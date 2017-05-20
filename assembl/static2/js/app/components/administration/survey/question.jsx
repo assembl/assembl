@@ -1,8 +1,8 @@
 import React from 'react';
 import { gql, graphql, withApollo } from 'react-apollo';
 import { Link } from 'react-router';
-import { Row, Col } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
+import { Row, Col } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import VideoForm from './videoForm';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
@@ -14,17 +14,34 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
+    },
+    video {
+      htmlCode,
+      title,
+      description
     }
   }
 }
 `;
 
-const Question = ({ data, i18n }) => {
-  if (data.loading) {
-    return null;
-  }
-  const thematics = data.thematics || [];
+const getVideoByThematicId = (thematics, queriedId) => {
+  let video = {};
+  thematics.forEach((thematic) => {
+    if (thematic.id === queriedId) {
+      video = thematic.video;
+    }
+  });
+  return video;
+};
+
+const Question = ({ client, data, i18n, selectedLocale, queriedId }) => {
+  
+  const thematicsData = client.readQuery({ query: GetThematics });
+  const thematics = thematicsData.thematics || [];
   const slug = getDiscussionSlug();
+  
+  const video = getVideoByThematicId(thematics, queriedId);
+  
   return (
     <div className="admin-box">
       <SectionTitle i18n={i18n} phase="survey" tabId="1" annotation={I18n.t('administration.annotation')} />
@@ -40,9 +57,9 @@ const Question = ({ data, i18n }) => {
             )
           })}
         </Row>
-        <div className="form-container">
-          <VideoForm />
-        </div>
+        <Row className="margin-xl">
+          <VideoForm video={video} selectedLocale={selectedLocale} id={queriedId} />
+        </Row>
       </div>
     </div>
   );

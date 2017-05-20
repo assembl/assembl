@@ -6,6 +6,7 @@ import { gql, graphql, withApollo } from 'react-apollo';
 import SectionTitle from '../sectionTitle';
 import ThemeForm from './themeForm';
 
+
 const GetThematics = gql`
 {
   thematics(identifier:"survey") {
@@ -13,15 +14,17 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
+    },
+    video {
+      htmlCode,
+      title,
+      description
     }
   }
 }
 `;
 
 const Theme = ({ client, data, i18n, selectedLocale }) => {
-  if (data.loading) {
-    return null;
-  }
 
   const addTheme = () => {
     const newThemeId = Math.round(Math.random() * -1000000);
@@ -30,6 +33,7 @@ const Theme = ({ client, data, i18n, selectedLocale }) => {
       id: newThemeId,
       titleEntries: [],
       image: undefined,
+      video: [],
       __typename: 'Thematic'
     });
     return client.writeQuery({
@@ -38,7 +42,8 @@ const Theme = ({ client, data, i18n, selectedLocale }) => {
     });
   };
 
-  const themes = data.thematics || [];
+  const thematicsData = client.readQuery({ query: GetThematics });
+  const themes = thematicsData.thematics || [];
   return (
     <div className="admin-box">
       <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />
@@ -54,12 +59,4 @@ const Theme = ({ client, data, i18n, selectedLocale }) => {
   );
 };
 
-const mapStateToProps = ({ admin }) => {
-  return {
-    selectedLocale: admin.selectedLocale
-  };
-};
-
-const ThemeContainer = connect(mapStateToProps)(Theme);
-
-export default withApollo(graphql(GetThematics)(ThemeContainer));
+export default withApollo(Theme);

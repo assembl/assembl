@@ -1,25 +1,77 @@
 import React from 'react';
-import { FormGroup, FormControl, Checkbox } from 'react-bootstrap';
+import { gql, graphql, withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
+import { FormGroup, FormControl, Checkbox } from 'react-bootstrap';
 
+const GetThematics = gql`
+{
+  thematics(identifier:"survey") {
+    id,
+    titleEntries {
+      localeCode,
+      value
+    },
+    video {
+      htmlCode,
+      title,
+      description
+    }
+  }
+}
+`;
+
+export const updateTitle = (client, id, selectedLocale, value) => {
+  const thematicsData = client.readQuery({ query: GetThematics });
+  thematicsData.thematics.forEach((thematic) => {
+    if (thematic.id === id) {
+      thematic.video.title = value;
+    }
+  });
+  client.writeQuery({
+    query: GetThematics,
+    data: thematicsData
+  });
+};
+
+const VideoForm = ({ client, video, id, selectedLocale }) => {
   
-const VideoForm = ({  }) => {
+  const title = video.title || '';
+  
+  const handleCheckboxChange = () => {};
+  const handleTitleChange = (e) => {
+    updateTitle(client, id, selectedLocale, e.target.value);
+  };
+  const handleDescriptionChange = () => {};
+  const handleUrlChange = () => {};
   return (
-    <div className="margin-xl">
+    <div className="form-container">
       <FormGroup>
-        <Checkbox>
+        <Checkbox checked={video.htmlCode ? true : false} onChange={handleCheckboxChange}>
           <Translate value="administration.videoModule" />
         </Checkbox>
       </FormGroup>
-      <div>
+      <div className={video.htmlCode ? 'video-form' : 'hidden'}>
         <FormGroup>
-          <FormControl type="text" />
+          <FormControl
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+          />
         </FormGroup>
         <FormGroup>
-          <FormControl className="text-area" componentClass="textarea" />
+          <FormControl
+            componentClass="textarea"
+            className="text-area"
+            value={video.description || ''}
+            onChange={handleDescriptionChange}
+          />
         </FormGroup>
         <FormGroup>
-          <FormControl type="text" />
+          <FormControl
+            type="text"
+            value={video.htmlCode || ''}
+            onChange={handleUrlChange}
+          />
         </FormGroup>
         <div className="separator" />
       </div>
@@ -27,7 +79,4 @@ const VideoForm = ({  }) => {
   )
 };
 
- export default VideoForm;
-
-
-
+export default withApollo(VideoForm);

@@ -12,6 +12,11 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
+    },
+    video {
+      htmlCode,
+      title,
+      description
     }
   }
 }
@@ -21,6 +26,10 @@ const createLanguageEntries = (titles) => {
   return titles.map((title) => {
     return { value: title.value, localeCode: title.localeCode };
   });
+};
+
+const createVideoEntries = (video) => {
+  return { title: video.title, description: "test", htmlCode: "https://www.youtube.com/embed/gacuFWZRjw0" };
 };
 
 const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
@@ -33,7 +42,8 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
           variables: {
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
-            image: t.image
+            image: t.image,
+            video: createVideoEntries(t.video)
           }
         });
         promisesArray.push(p1);
@@ -42,7 +52,8 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
           variables: {
             id: t.id,
             identifier: 'survey',
-            titleEntries: createLanguageEntries(t.titleEntries)
+            titleEntries: createLanguageEntries(t.titleEntries),
+            video: createVideoEntries(t.video)
           }
         });
         promisesArray.push(p2);
@@ -76,7 +87,12 @@ const createThematic = gql`
     createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries) {
       thematic {
         title,
-        imgUrl
+        imgUrl,
+        video {
+          title,
+          description,
+          htmlCode
+        }
       }
     }
   }
@@ -87,7 +103,12 @@ const updateThematic = gql`
     updateThematic(id:$id, identifier: $identifier, titleEntries: $titleEntries) {
       thematic {
         title,
-        imgUrl
+        imgUrl,
+        video {
+          title,
+          description,
+          htmlCode
+        }
       }
     }
   }
