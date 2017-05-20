@@ -18,7 +18,7 @@ const GetThematics = gql`
 }
 `;
 
-const Theme = ({ client, data, i18n, selectedLocale, showSection }) => {
+const Theme = ({ client, data, i18n, selectedLocale }) => {
   if (data.loading) {
     return null;
   }
@@ -40,7 +40,7 @@ const Theme = ({ client, data, i18n, selectedLocale, showSection }) => {
 
   const themes = data.thematics || [];
   return (
-    <div className={showSection ? 'show admin-box' : 'hidden'}>
+    <div className="admin-box">
       <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <form>
