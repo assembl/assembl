@@ -12,11 +12,6 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
-    },
-    video {
-      htmlCode,
-      title,
-      description
     }
   }
 }
@@ -28,52 +23,49 @@ const createLanguageEntries = (titles) => {
   });
 };
 
-const createVideoEntries = (video) => {
-  return { title: video.title, description: "test", htmlCode: "https://www.youtube.com/embed/gacuFWZRjw0" };
-};
-
 const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
   const saveAction = () => {
     const thematicsData = client.readQuery({ query: GetThematics });
     let promisesArray = [];
     thematicsData.thematics.forEach((t) => {
+      // Create a thematic
       if (t.id < 0) {
         const p1 = createThematic({
           variables: {
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
-            image: t.image,
-            video: createVideoEntries(t.video)
+            image: t.image
           }
         });
         promisesArray.push(p1);
       } else {
+        // Update a thematic
         const p2 = updateThematic({
           variables: {
             id: t.id,
             identifier: 'survey',
-            titleEntries: createLanguageEntries(t.titleEntries),
-            video: createVideoEntries(t.video)
+            titleEntries: createLanguageEntries(t.titleEntries)
           }
         });
         promisesArray.push(p2);
       }
     });
+    // Delete a thematic
     if (thematicsToDelete.length > 0) {
       thematicsToDelete.forEach((id) => {
         if (isNaN(id)) {
-          const p3 = deleteThematic({
+          const p5 = deleteThematic({
             variables: {
               thematicId: id
             }
           })
-          promisesArray.push(p3);
+          promisesArray.push(p5);
         }
       });
     }
     Promise.all(promisesArray).then(() => { 
       displayAlert('success', I18n.t('administration.successThemeCreation'));
-    }).catch((error) => { 
+    }).catch((error) => {
       displayAlert('danger', `${error}`);
     });
   };
@@ -89,12 +81,18 @@ const createThematic = gql`
     createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries) {
       thematic {
         title,
-        imgUrl,
-        video {
-          title,
-          description,
-          htmlCode
-        }
+        imgUrl
+      }
+    }
+  }
+`;
+
+const createThematicWithVideo = gql`
+  mutation createThematicWithVideo($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!) {
+    createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries) {
+      thematic {
+        title,
+        imgUrl
       }
     }
   }
@@ -105,12 +103,7 @@ const updateThematic = gql`
     updateThematic(id:$id, identifier: $identifier, titleEntries: $titleEntries) {
       thematic {
         title,
-        imgUrl,
-        video {
-          title,
-          description,
-          htmlCode
-        }
+        imgUrl
       }
     }
   }

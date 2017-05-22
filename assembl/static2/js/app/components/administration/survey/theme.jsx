@@ -6,7 +6,6 @@ import { gql, graphql, withApollo } from 'react-apollo';
 import SectionTitle from '../sectionTitle';
 import ThemeForm from './themeForm';
 
-
 const GetThematics = gql`
 {
   thematics(identifier:"survey") {
@@ -14,11 +13,6 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
-    },
-    video {
-      htmlCode,
-      title,
-      description
     }
   }
 }
@@ -33,7 +27,6 @@ const Theme = ({ client, i18n, selectedLocale }) => {
       id: newThemeId,
       titleEntries: [],
       image: undefined,
-      video: [],
       __typename: 'Thematic'
     });
     return client.writeQuery({
@@ -44,6 +37,7 @@ const Theme = ({ client, i18n, selectedLocale }) => {
 
   const thematicsData = client.readQuery({ query: GetThematics });
   const themes = thematicsData.thematics || [];
+  
   return (
     <div className="admin-box">
       <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />

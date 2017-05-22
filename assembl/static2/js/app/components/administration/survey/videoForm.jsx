@@ -12,49 +12,66 @@ const GetThematics = gql`
       value
     },
     video {
-      htmlCode,
       title,
-      description
+      description,
+      htmlCode
     }
   }
 }
 `;
 
-export const updateTitle = (client, id, selectedLocale, value) => {
+const addVideo = (client) => {
   const thematicsData = client.readQuery({ query: GetThematics });
   thematicsData.thematics.forEach((thematic) => {
-    if (thematic.id === id) {
-      thematic.video.title = value;
-    }
+    thematic.video = {
+      title: null,
+      description: null,
+      htmlCode: null,
+      __typename: 'Video'
+    };
   });
-  client.writeQuery({
+  return client.writeQuery({
     query: GetThematics,
     data: thematicsData
   });
 };
 
-const VideoForm = ({ client, video, id, selectedLocale }) => {
-  
-  const title = video.title || '';
-  
-  const handleCheckboxChange = () => {};
-  const handleTitleChange = (e) => {
-    updateTitle(client, id, selectedLocale, e.target.value);
+const updateText = (client, field, value) => {
+  const thematicsData = client.readQuery({ query: GetThematics });
+  thematicsData.thematics.forEach((thematic) => {
+    thematic.video[field] = value;
+  });
+  return client.writeQuery({
+    query: GetThematics,
+    data: thematicsData
+  });
+};
+
+const VideoForm = ({ client }) => {
+
+  const handleCheckboxChange = (e) => {
+    addVideo(client);
   };
-  const handleDescriptionChange = () => {};
-  const handleUrlChange = () => {};
+  const handleTitleChange = (e) => {
+    updateText(client, 'title', e.target.value);
+  };
+  const handleDescriptionChange = (e) => {
+    updateText(client, 'description', e.target.value);
+  };
+  const handleUrlChange = (e) => {
+    updateText(client, 'htmlCode', e.target.value);
+  };
   return (
     <div className="form-container">
       <FormGroup>
-        <Checkbox checked={video.htmlCode ? true : false} onChange={handleCheckboxChange}>
+        <Checkbox onChange={handleCheckboxChange}>
           <Translate value="administration.videoModule" />
         </Checkbox>
       </FormGroup>
-      <div className={video.htmlCode ? 'video-form' : 'hidden'}>
+      <div className="video-form">
         <FormGroup>
           <FormControl
             type="text"
-            value={title}
             onChange={handleTitleChange}
           />
         </FormGroup>
@@ -62,14 +79,12 @@ const VideoForm = ({ client, video, id, selectedLocale }) => {
           <FormControl
             componentClass="textarea"
             className="text-area"
-            value={video.description || ''}
             onChange={handleDescriptionChange}
           />
         </FormGroup>
         <FormGroup>
           <FormControl
             type="text"
-            value={video.htmlCode || ''}
             onChange={handleUrlChange}
           />
         </FormGroup>
