@@ -24,23 +24,23 @@ const GetThematics = gql`
 }
 `;
 
-const getVideoByThematicId = (thematics, queriedId) => {
+const getVideoByThematicId = (thematics, thematicId) => {
   let video = {};
   thematics.forEach((thematic) => {
-    if (thematic.id === queriedId) {
+    if (thematic.id === thematicId) {
       video = thematic.video;
     }
   });
   return video;
 };
 
-const Question = ({ client, data, i18n, selectedLocale, queriedId }) => {
+const Question = ({ client, data, i18n, selectedLocale, thematicId }) => {
   
   const thematicsData = client.readQuery({ query: GetThematics });
   const thematics = thematicsData.thematics || [];
   const slug = getDiscussionSlug();
   
-  const video = getVideoByThematicId(thematics, queriedId);
+  const video = getVideoByThematicId(thematics, thematicId);
   
   return (
     <div className="admin-box">
@@ -58,7 +58,7 @@ const Question = ({ client, data, i18n, selectedLocale, queriedId }) => {
           })}
         </Row>
         <Row className="margin-xl">
-          <VideoForm video={video} selectedLocale={selectedLocale} id={queriedId} />
+          <VideoForm video={video} selectedLocale={selectedLocale} id={thematicId} />
         </Row>
       </div>
     </div>

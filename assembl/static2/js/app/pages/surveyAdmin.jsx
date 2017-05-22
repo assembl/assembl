@@ -24,7 +24,7 @@ const GetThematics = gql`
 }
 `;
 
-const SurveyAdmin = ({ data, i18n, selectedLocale, section, queriedId }) => {
+const SurveyAdmin = ({ data, i18n, selectedLocale, section, thematicId }) => {
   if (data.loading) {
     return null;
   }
@@ -44,7 +44,7 @@ const SurveyAdmin = ({ data, i18n, selectedLocale, section, queriedId }) => {
           i18n={i18n}
           selectedLocale={selectedLocale}
           data={data}
-          queriedId={queriedId}
+          thematicId={thematicId}
         />
       }
       {section === '3' &&
