@@ -24,7 +24,7 @@ const GetThematics = gql`
 }
 `;
 
-const Theme = ({ client, data, i18n, selectedLocale }) => {
+const Theme = ({ client, i18n, selectedLocale }) => {
 
   const addTheme = () => {
     const newThemeId = Math.round(Math.random() * -1000000);

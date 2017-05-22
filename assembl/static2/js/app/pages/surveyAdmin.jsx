@@ -36,7 +36,6 @@ const SurveyAdmin = ({ data, i18n, selectedLocale, section, thematicId }) => {
         <Theme
           i18n={i18n}
           selectedLocale={selectedLocale}
-          data={data}
         />
       }
       {section === '2' &&

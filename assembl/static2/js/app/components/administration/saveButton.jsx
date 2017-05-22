@@ -61,12 +61,14 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
     });
     if (thematicsToDelete.length > 0) {
       thematicsToDelete.forEach((id) => {
-        const p3 = deleteThematic({
-          variables: {
-            thematicId: id
-          }
-        })
-        promisesArray.push(p3);
+        if (isNaN(id)) {
+          const p3 = deleteThematic({
+            variables: {
+              thematicId: id
+            }
+          })
+          promisesArray.push(p3);
+        }
       });
     }
     Promise.all(promisesArray).then(() => { 
