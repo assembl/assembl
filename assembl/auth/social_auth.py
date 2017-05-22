@@ -58,6 +58,8 @@ def user_details(
     if social:
         social.interpret_social_auth_details(details)
         social.set_extra_data(response)
+        if social.verified:
+            social.profile.verified = True
 
 
 def associate_by_email(backend, details, provider=None, user=None, *args, **kwargs):
