@@ -4,6 +4,7 @@
 import argparse
 import getpass
 import psycopg2
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 
 def main():
@@ -14,6 +15,7 @@ def main():
     parser.add_argument('--ask_password', '-P', action="store_true",
                         help='ask for database password',)
     parser.add_argument('--database', '-d', help="database")
+    parser.add_argument('--autocommit', action="store_true", help="autocommit")
     parser.add_argument('--print_one', '-1', action="store_true",
                         help="print first return row (fails if none)")
     parser.add_argument('commands', help="sql commands")
@@ -28,6 +30,8 @@ def main():
     if host == 'localhost' and user == getpass.getuser() and password is None:
         host = None
     cx = psycopg2.connect(user=user, password=password, database=database, host=host)
+    if args.autocommit:
+        cx.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cur = cx.cursor()
     cur.execute(args.commands)
     if args.print_one:

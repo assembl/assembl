@@ -72,8 +72,7 @@ def sanitize_env():
         # so that a variable valued "False" in the .ini
         # file is recognized as boolean False
         setattr(env, name, as_bool(getattr(env, name, False)))
-    public_hostname = env.public_hostname
-    assert public_hostname
+    public_hostname = env.get("public_hostname", "localhost")
     if not env.get('hosts', None):
         env.hosts = [public_hostname]
     elif not isinstance(env.hosts, list):
@@ -95,8 +94,8 @@ def load_rcfile_config():
         abort("You must specify a .rc file")
     if not os.path.exists(env.rcfile):
         abort("This .rc file does not exist locally: " + rc_file)
-    full = filter_global_names(combine_rc(rc_file))
-    env.update(full)
+    env.update(filter_global_names(env))
+    env.update(filter_global_names(combine_rc(rc_file)))
     sanitize_env()
 
 
@@ -1154,9 +1153,9 @@ def check_and_create_database_user(host=None, user=None, password=None):
             db_password_string = ''
             sudo_user = db_user
         else:
-            db_password = env.postgres_db_password
-            assert db_password, "We need a password for postgres on " + host
-            db_password_string = '-p ' + env.db_password
+            db_password = env.get('postgres_db_password', None)
+            assert db_password is not None, "We need a password for postgres on " + host
+            db_password_string = "-p '%s'" % db_password
             sudo_user = None
         run_db_command('python {pypsql} -u {db_user} -n {host} {db_password_string} "{command}"'.format(
             command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
@@ -1180,7 +1179,7 @@ def check_and_create_sentry_database_user():
 def check_if_database_exists():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
-            command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_name),
+            command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
         return not checkDatabase.failed
 
@@ -1190,11 +1189,12 @@ def database_create():
     """Create the database for this assembl instance"""
     execute(check_and_create_database_user)
 
-    if check_if_database_exists():
+    if not check_if_database_exists():
         print(yellow("Cannot connect to database, trying to create"))
-        createDatabase = run(
-        "PGPASSWORD=%s createdb --username=%s  --host=%s --encoding=UNICODE --template=template0 --owner=%s %s" % (
-            env.db_password, env.db_user, env.db_host, env.db_user, env.db_name))
+        createDatabase = venvcmd('assembl-pypsql --autocommit -u {user} -p {password} -n {host}'
+                ' "CREATE DATABASE {database} WITH OWNER = {user} TEMPLATE = template0 ENCODING = UNICODE"'.format(
+                    user=env.db_user, password=env.db_password, host=env.db_host,
+                    database=env.db_database))
         if createDatabase.succeeded:
             print(green("Database created successfully!"))
     else:
@@ -1219,7 +1219,7 @@ def database_dump():
             env.db_password,
             env.db_host,
             env.db_user,
-            env.db_name,
+            env.db_database,
             absolute_path))
 
     # Make symlink to latest
@@ -1263,12 +1263,12 @@ def database_delete():
 
     with settings(warn_only=True), hide('stdout'):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
-            command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_name),
+            command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
     if not checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
         deleteDatabase = run('PGPASSWORD=%s dropdb --host=%s --username=%s %s' % (
-            env.db_password, env.postgres_db_host, env.db_user, env.db_name))
+            env.db_password, env.postgres_db_host, env.db_user, env.db_database))
         if deleteDatabase.succeeded:
             print(green("Database deleted successfully!"))
     else:
@@ -1281,14 +1281,14 @@ def postgres_user_detach():
     process_list = run('psql -U %s -h %s -d %s -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" ' % (
                         env.db_user,
                         env.db_host,
-                        env.db_name))
+                        env.db_database))
 
     pids = process_list.split("\r\n")[2:-1:]
     for pid in pids:
         run('psql -U %s -h %s -d %s -c "SELECT pg_terminate_backend(%s);"' % (
             env.db_user,
             env.db_host,
-            env.db_name,
+            env.db_database,
             pid))
 
 
@@ -1311,7 +1311,7 @@ def database_restore():
             env.db_password,
             env.db_host,
             env.db_user,
-            env.db_name))
+            env.db_database))
 
         assert dropped.succeeded or "does not exist" in dropped, \
             "Could not drop the database"
@@ -1325,7 +1325,7 @@ def database_restore():
                 env.db_password,
                 env.db_user,
                 env.db_host,
-                env.db_name,
+                env.db_database,
                 env.db_user,
                 remote_db_path())
         )

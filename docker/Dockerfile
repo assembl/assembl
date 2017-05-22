@@ -2,7 +2,7 @@
 FROM    debian:jessie
 
 ENV     DEBIAN_FRONTEND noninteractive
-ARG	GITREPO=https://github.com/assembl/assembl.git
+ARG	GITREPO=assembl/assembl
 ARG	GITBRANCH=composite_ini
 ARG DOCKER_RC=configs/docker.rc
 ARG BUILDING_DOCKER=true
@@ -11,20 +11,24 @@ RUN     apt-get update && apt-get install -y \
             fabric \
             git \
             openssh-server \
-            pandoc \
             sudo \
             net-tools \
             monit \
             uwsgi \
+            curl \
             uwsgi-plugin-python
 RUN     ssh-keygen -P '' -f ~/.ssh/id_rsa && \
             cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-RUN     cd /opt ; set -x ; git clone -b $GITBRANCH $GITREPO
-WORKDIR /opt/assembl
+WORKDIR /opt
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
-           fab -c $DOCKER_RC install_assembl_server_deps && \
+           curl -o fabfile.py https://raw.githubusercontent.com/$GITREPO/$GITBRANCH/fabfile.py && \
+           touch empty.rc && \
+           fab -c empty.rc install_assembl_server_deps && \
+           rm fabfile.py empty.rc && \
            /etc/init.d/ssh stop
+RUN     cd /opt ; set -x ; git clone -b $GITBRANCH https://github.com/$GITREPO.git
+WORKDIR /opt/assembl
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
            fab -c $DOCKER_RC build_virtualenv && \
