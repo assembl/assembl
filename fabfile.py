@@ -1177,16 +1177,20 @@ def check_and_create_sentry_database_user():
     check_and_create_database_user(host, user, password)
 
 
+def check_if_database_exists():
+    with settings(warn_only=True):
+        checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
+            command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_name),
+            password=env.db_password, host=env.db_host, user=env.db_user))
+        return not checkDatabase.failed
+
+
 @task
 def database_create():
     """Create the database for this assembl instance"""
     execute(check_and_create_database_user)
 
-    with settings(warn_only=True):
-        checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
-            command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_name),
-            password=env.db_password, host=env.db_host, user=env.db_user))
-    if checkDatabase.failed:
+    if check_if_database_exists():
         print(yellow("Cannot connect to database, trying to create"))
         createDatabase = run(
         "PGPASSWORD=%s createdb --username=%s  --host=%s --encoding=UNICODE --template=template0 --owner=%s %s" % (
@@ -1364,6 +1368,33 @@ def flushmemcache():
         print(cyan('Resetting all data in memcached :'))
         wait_str = "" if env.mac else "-q 2"
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
+
+
+@task
+def docker_startup():
+    """Startup assembl from within a docker environment.
+
+    Verify if your database environment exists, and create it otherwise."""
+    if as_bool(getenv("BUILDING_DOCKER", True)):
+        return
+    if not exists(env.ini_file):
+        execute(create_local_ini)
+    if not exists("supervisord.conf"):
+        venvcmd('assembl-ini-files populate %s' % (env.ini_file))
+    execute(check_and_create_database_user)
+    if check_if_database_exists():
+        execute(app_db_update)
+    else:
+        execute(app_db_install)
+        execute(create_first_admin_user)
+    venvcmd("supervisord")
+
+
+@task
+def create_first_admin_user():
+    email = env.get("first_admin_email", None)
+    assert email, "Please set the first_admin_email in the .rc environment"
+    venvcmd("assembl-add-user -m %s -u admin -n Admin -p admin --bypass-password local.ini" % email)
 
 
 @task

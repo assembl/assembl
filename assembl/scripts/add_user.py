@@ -49,6 +49,9 @@ def main():
                         help="local user role")
     parser.add_argument("-d", "--discussion",
                         help="slug of discussion context for local user role")
+    parser.add_argument(
+        "--bypass-password", action='store_true',
+        help="Bypass password, use the password recovery mechanism")
     args = parser.parse_args()
     env = bootstrap(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')
@@ -85,11 +88,12 @@ def main():
         args.username = raw_input()
     if args.username.lower() == 's':
         args.username = getuser()
-    while not args.password:
-        password = getpass("Password:")
-        password2 = getpass("Confirm password:")
-        if password == password2:
-            args.password = password
+    if not args.bypass_password:
+        while not args.password:
+            password = getpass("Password:")
+            password2 = getpass("Confirm password:")
+            if password == password2:
+                args.password = password
     if args.role:
         assert args.role in all_roles,\
             "Role %s does not exist" % (args.role, )

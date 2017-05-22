@@ -4,6 +4,8 @@ FROM    debian:jessie
 ENV     DEBIAN_FRONTEND noninteractive
 ARG	GITREPO=https://github.com/assembl/assembl.git
 ARG	GITBRANCH=composite_ini
+ARG DOCKER_RC=configs/docker.rc
+ARG BUILDING_DOCKER=true
 
 RUN     apt-get update && apt-get install -y \
             fabric \
@@ -21,30 +23,17 @@ RUN     cd /opt ; set -x ; git clone -b $GITBRANCH $GITREPO
 WORKDIR /opt/assembl
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
-           fab -c configs/docker.rc install_assembl_server_deps && \
+           fab -c $DOCKER_RC install_assembl_server_deps && \
            /etc/init.d/ssh stop
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
-           fab -c configs/docker.rc build_virtualenv && \
-           fab -c configs/docker.rc app_update_dependencies && \
-           fab -c configs/docker.rc app_compile_nodbupdate && \
-           fab -c configs/docker.rc set_file_permissions && \
+           fab -c $DOCKER_RC build_virtualenv && \
+           fab -c $DOCKER_RC app_update_dependencies && \
+           fab -c $DOCKER_RC app_compile_nodbupdate && \
+           fab -c $DOCKER_RC set_file_permissions && \
            /etc/init.d/ssh stop
-# RUN     /etc/init.d/ssh start && \
-#            ssh-keyscan localhost && \
-#            /etc/init.d/postgresql start && \
-#            /etc/init.d/redis-server start && \
-#            fab -c configs/docker.rc bootstrap_from_checkout && \
-#            fab -c configs/docker.rc set_file_permissions && \
-#            . venv/bin/activate && \
-#            assembl-add-user --email root@localhost --name "Admin" --username admin --password admin local.ini && \
-#            supervisorctl shutdown && \
-#            /etc/init.d/postgresql stop && \
-#            /etc/init.d/redis-server stop && \
-#            /etc/init.d/ssh stop
 EXPOSE 80
 CMD     /etc/init.d/ssh start && \
         . venv/bin/activate && \
-        supervisord && \
-        supervisorctl start prod: && \
+        fab -c $DOCKER_RC docker_startup && \
         tail -f /dev/null
