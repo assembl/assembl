@@ -12,10 +12,12 @@ from assembl.indexing.changes import changes
 from assembl.indexing import indexing_active
 from assembl import models
 from assembl.lib.sqla import get_session_maker
+from assembl.lib import config
 
 
 def get_curl_query(query):
-    return "curl -XGET 'localhost:9200/_search?pretty' -d '{}'".format(
+    return "curl -XGET '{}:9200/_search?pretty' -d '{}'".format(
+        config.get('elasticsearch_host', 'localhost'),
         json.dumps(query).replace("'", "\\u0027"))
 
 

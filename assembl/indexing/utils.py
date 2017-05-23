@@ -1,5 +1,6 @@
 import os
 
+from assembl.lib import config
 from elasticsearch.client import Elasticsearch
 
 from assembl.indexing.settings import get_index_settings, MAPPINGS
@@ -10,7 +11,7 @@ _es = None
 def connect():
     global _es
     if _es is None:
-        server = os.getenv('ELASTICSEARCH_PORT', '127.0.0.1:9200')
+        server = config.get('elasticsearch_host', 'localhost') + ':9200'
         _es = Elasticsearch(server)
     return _es
 
