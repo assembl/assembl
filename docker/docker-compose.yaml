@@ -1,0 +1,67 @@
+version: "3"
+
+networks:
+  my_net:
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+    networks:
+      - my_net
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    ports:
+      - 9200:9200
+
+  redis:
+    image: redis:3.0-alpine
+    networks:
+      - my_net
+
+  memcached:
+    image: memcached:1.4-alpine
+    networks:
+      - my_net
+
+  database:
+    image: postgres:9.5.5-alpine
+    networks:
+      - my_net
+
+  web:
+    image: nginx:1.12-alpine
+    ports:
+      - "8080:80"
+    volumes:
+     - ./nginx_config_docker/default:/etc/nginx/conf.d/assembl1.template
+     - ../var/docker/stack1/assembl1_run:/opt/assembl/var/run
+    environment:
+      ASSEMBL_HOST: assembl
+      PUBLIC_HOSTNAME: assemlbl1.local
+    depends_on:
+      - assembl1
+    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/assembl1.template > /etc/nginx/sites-enabled/assembl1 && nginx -g 'daemon off;'"
+    networks:
+      - my_net
+
+  assembl1:
+    image: assembl:latest
+    volumes:
+      - ../var/docker/stack1:/var/docker_data
+      - ../var/docker/stack1/assembl1_run:/opt/assembl/var/run
+    environment:
+      DOCKER_RC: /var/docker_data/assembl1.rc
+      BUILDING_DOCKER: "false"
+    depends_on:
+      - redis
+      - memcached
+      - database
+    command: sh -c 'cd /opt/assembl; /etc/init.d/ssh start ; . venv/bin/activate ; env BUILDING_DOCKER=false fab -c /var/docker_data/assembl1.rc docker_startup ; tail -f /dev/null'
+    networks:
+      - my_net
