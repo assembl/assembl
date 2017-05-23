@@ -12,7 +12,7 @@
         	<input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
         {% endif %}
         {% if providers %}
-            <script type='application/json' id='login-providers'>{{providers|safe}}</script>
+            <script type='application/json' id='login-providers'>{{providers_json|safe}}</script>
         {% endif %}
         {% if user %}
             <input type='hidden' name='user-id' id='user-id' value='{{ user.id }}' />
