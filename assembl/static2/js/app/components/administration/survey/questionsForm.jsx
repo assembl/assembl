@@ -24,15 +24,17 @@ const GetThematics = gql`
 
 const QuestionsForm = ({ client, thematicId, lang }) => {
   const thematicsData = client.readQuery({ query: GetThematics });
+
   const thematics = thematicsData.thematics;
   const thematic = thematics.find((t) => {
-    return t.id === thematicId;
-  });
-  const thematicIndex = thematics.findIndex((t) => {
-    return t.id === thematicId;
+    return String(t.id) === thematicId;
   });
 
-  const questions = thematic.questions || [];
+  const thematicIndex = thematics.findIndex((t) => {
+    return String(t.id) === thematicId;
+  });
+
+  const questions = thematic ? thematic.questions : [];
 
   const addQuestion = () => {
     thematicsData.thematics[thematicIndex].questions.push({

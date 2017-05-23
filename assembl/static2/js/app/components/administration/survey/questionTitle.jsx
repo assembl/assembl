@@ -26,7 +26,6 @@ const updateTitle = (client, tIndex, qIndex, selectedLocale, titleEntryIndex, va
   const entryIndex = titleEntryIndex;
 
   const thematicsData = client.readQuery({ query: GetThematics });
-  const thematics = thematicsData.thematics;
 
   const newTitleEntries = {
     localeCode: selectedLocale,
@@ -35,9 +34,9 @@ const updateTitle = (client, tIndex, qIndex, selectedLocale, titleEntryIndex, va
   };
 
   if (entryIndex === -1) {
-    thematics[thematicIndex].questions[questionIndex].titleEntries.push(newTitleEntries);
+    thematicsData.thematics[thematicIndex].questions[questionIndex].titleEntries.push(newTitleEntries);
   } else {
-    thematics[thematicIndex].questions[questionIndex].titleEntries.splice(entryIndex, 1, newTitleEntries);
+    thematicsData.thematics[thematicIndex].questions[questionIndex].titleEntries.splice(entryIndex, 1, newTitleEntries);
   }
 
   client.writeQuery({
@@ -47,6 +46,7 @@ const updateTitle = (client, tIndex, qIndex, selectedLocale, titleEntryIndex, va
 };
 
 const QuestionsTitle = ({ client, tIndex, qIndex, titleEntries, selectedLocale }) => {
+
   const titleEntry = titleEntries.find((entry) => {
     return entry.localeCode === selectedLocale;
   });

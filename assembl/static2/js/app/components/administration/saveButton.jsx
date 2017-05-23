@@ -12,6 +12,12 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
+    },
+    questions {
+      titleEntries {
+        localeCode,
+        value
+      }
     }
   }
 }
@@ -23,18 +29,34 @@ const createLanguageEntries = (titles) => {
   });
 };
 
+const createQuestionEntries = (questions) => {
+  let questionsArray = [];
+  let titlesArray = [];
+  questions.forEach((question) => {
+    question.titleEntries.forEach((title) => {
+      titlesArray.push({
+        value: title.value,
+        localeCode: title.localeCode
+      });
+    });
+    questionsArray.push({titleEntries: titlesArray})
+  });
+  return questionsArray;
+};
+
 const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
   const saveAction = () => {
     const thematicsData = client.readQuery({ query: GetThematics });
     const promisesArray = [];
     thematicsData.thematics.forEach((t) => {
-      // Create a thematic
+      // To create a thematic, get if its ID is a negative number
       if (t.id < 0) {
         const p1 = createThematic({
           variables: {
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
-            image: t.image
+            image: t.image,
+            questions: createQuestionEntries(t.questions)
           }
           // TO DO update the apollo store after a mutation
           // update: (client, { data: { createThematic } }) => {
@@ -50,7 +72,8 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
           variables: {
             id: t.id,
             identifier: 'survey',
-            titleEntries: createLanguageEntries(t.titleEntries)
+            titleEntries: createLanguageEntries(t.titleEntries),
+            questions: createQuestionEntries(t.questions)
           }
         });
         promisesArray.push(p2);
@@ -87,7 +110,10 @@ const createThematic = gql`
     createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries) {
       thematic {
         title,
-        imgUrl
+        imgUrl,
+        questions {
+          title
+        }
       }
     }
   }
@@ -98,7 +124,10 @@ const updateThematic = gql`
     updateThematic(id:$id, identifier: $identifier, titleEntries: $titleEntries) {
       thematic {
         title,
-        imgUrl
+        imgUrl,
+        questions {
+          title
+        }
       }
     }
   }
