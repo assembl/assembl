@@ -6,13 +6,17 @@ _dbdumps_dir = /opt/assembl/assembl_dumps
 db_password = __delete_key__
 public_hostname = assembl.cloud
 _hosts = localhost
+_postgres_db_password = 
 
-*db_host = postgres.cloud
-smtp_host = mail.cloud
-imap_host = mail.cloud
-piwik_host = piwik.cloud
-*sentry_host = sentry.cloud
-nginx_host = nginx.cloud
+*db_host = database
+smtp_host = localhost
+imap_host = localhost
+piwik_host = piwik
+*sentry_host = sentry
+redis_host = redis
+memcached_host = memchached
+elasticsearch_host = elasticsearch
+nginx_host = web
 
 # for now
 uses_global_supervisor = false

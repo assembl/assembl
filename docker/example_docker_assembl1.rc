@@ -1,0 +1,9 @@
+_extends = /opt/assembl/configs/docker.rc
+db_database = assembl1_docker
+db_user = assembl1_docker
+db_password = assembl1_docker
+
+raven_url =
+handler_sentry__args = ()
+filter:raven__dsn =
+first_admin_email = me@example.com
