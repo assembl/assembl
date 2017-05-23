@@ -17,8 +17,8 @@ RUN     apt-get update && apt-get install -y \
             uwsgi \
             curl \
             uwsgi-plugin-python
-RUN     ssh-keygen -P '' -f ~/.ssh/id_rsa && \
-            cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+RUN         useradd -m -U -G www-data assembl_user && \
+            sudo -u assembl_user -i sh -c "cd ; ssh-keygen -P '' -f .ssh/id_rsa && cat .ssh/id_rsa.pub >> .ssh/authorized_keys"
 WORKDIR /opt
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
@@ -31,6 +31,7 @@ RUN     cd /opt ; set -x ; git clone -b $GITBRANCH https://github.com/$GITREPO.g
 WORKDIR /opt/assembl
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
+           chown -R assembl_user:assembl_user . && \
            fab -c $DOCKER_RC build_virtualenv && \
            fab -c $DOCKER_RC app_update_dependencies && \
            fab -c $DOCKER_RC app_compile_nodbupdate && \

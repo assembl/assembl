@@ -7,6 +7,7 @@ db_password = __delete_key__
 public_hostname = assembl.cloud
 _hosts = localhost
 _postgres_db_password = 
+_user = assembl_user
 
 *db_host = database
 smtp_host = localhost
