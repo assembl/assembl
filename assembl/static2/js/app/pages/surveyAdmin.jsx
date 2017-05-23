@@ -2,9 +2,9 @@ import React from 'react';
 import { gql, graphql, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 
-import Theme from '../components/administration/survey/theme';
-import Question from '../components/administration/survey/question';
-import Export from '../components/administration/survey/export';
+import ThemeSection from '../components/administration/survey/themeSection';
+import QuestionSection from '../components/administration/survey/questionSection';
+import ExportSection from '../components/administration/survey/exportSection';
 import Navbar from '../components/administration/navbar';
 
 const GetThematics = gql`
@@ -14,6 +14,12 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
+    },
+    questions {
+      titleEntries {
+        localeCode,
+        value
+      }
     }
   }
 }
@@ -28,14 +34,14 @@ const SurveyAdmin = ({ data, i18n, selectedLocale, section, thematicId }) => {
   return (
     <div className="survey-admin">
       {section === '1' &&
-        <Theme
+        <ThemeSection
           i18n={i18n}
           selectedLocale={selectedLocale}
           data={data}
         />
       }
       {section === '2' &&
-        <Question
+        <QuestionSection
           i18n={i18n}
           selectedLocale={selectedLocale}
           data={data}
@@ -43,7 +49,7 @@ const SurveyAdmin = ({ data, i18n, selectedLocale, section, thematicId }) => {
         />
       }
       {section === '3' &&
-        <Export i18n={i18n} />
+        <ExportSection i18n={i18n} />
       }
       {!isNaN(currentStep) &&
         <Navbar

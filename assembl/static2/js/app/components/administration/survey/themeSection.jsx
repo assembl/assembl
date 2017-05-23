@@ -1,7 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
-import { gql, graphql, withApollo } from 'react-apollo';
+import { gql, withApollo } from 'react-apollo';
 
 import SectionTitle from '../sectionTitle';
 import ThemeForm from './themeForm';
@@ -13,13 +12,18 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
+    },
+    questions {
+      titleEntries {
+        localeCode,
+        value
+      }
     }
   }
 }
 `;
 
-const Theme = ({ client, i18n, selectedLocale }) => {
-
+const ThemeSection = ({ client, i18n, selectedLocale }) => {
   const addTheme = () => {
     const newThemeId = Math.round(Math.random() * -1000000);
     const thematicsData = client.readQuery({ query: GetThematics });
@@ -27,6 +31,7 @@ const Theme = ({ client, i18n, selectedLocale }) => {
       id: newThemeId,
       titleEntries: [],
       image: undefined,
+      questions: [],
       __typename: 'Thematic'
     });
     return client.writeQuery({
@@ -37,7 +42,7 @@ const Theme = ({ client, i18n, selectedLocale }) => {
 
   const thematicsData = client.readQuery({ query: GetThematics });
   const themes = thematicsData.thematics || [];
-  
+
   return (
     <div className="admin-box">
       <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />
@@ -53,4 +58,4 @@ const Theme = ({ client, i18n, selectedLocale }) => {
   );
 };
 
-export default withApollo(Theme);
+export default withApollo(ThemeSection);

@@ -26,7 +26,7 @@ const createLanguageEntries = (titles) => {
 const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
   const saveAction = () => {
     const thematicsData = client.readQuery({ query: GetThematics });
-    let promisesArray = [];
+    const promisesArray = [];
     thematicsData.thematics.forEach((t) => {
       // Create a thematic
       if (t.id < 0) {
@@ -36,6 +36,12 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             titleEntries: createLanguageEntries(t.titleEntries),
             image: t.image
           }
+          // TO DO update the apollo store after a mutation
+          // update: (client, { data: { createThematic } }) => {
+          //   const data = client.readQuery({ query: GetThematics });
+          //   data.thematics.push(createThematic);
+          //   client.writeQuery({ query: GetThematics, data });
+          // }
         });
         promisesArray.push(p1);
       } else {
@@ -58,12 +64,12 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             variables: {
               thematicId: id
             }
-          })
+          });
           promisesArray.push(p5);
         }
       });
     }
-    Promise.all(promisesArray).then(() => { 
+    Promise.all(promisesArray).then(() => {
       displayAlert('success', I18n.t('administration.successThemeCreation'));
     }).catch((error) => {
       displayAlert('danger', `${error}`);
@@ -78,17 +84,6 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
 
 const createThematic = gql`
   mutation createThematic($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!) {
-    createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries) {
-      thematic {
-        title,
-        imgUrl
-      }
-    }
-  }
-`;
-
-const createThematicWithVideo = gql`
-  mutation createThematicWithVideo($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!) {
     createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries) {
       thematic {
         title,
@@ -131,7 +126,7 @@ const SaveButtonWithMutations = compose(
 
 const mapStateToProps = (state) => {
   return {
-    thematicsToDelete : state.admin.thematicsToDelete
+    thematicsToDelete: state.admin.thematicsToDelete
   };
 };
 

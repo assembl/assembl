@@ -1,65 +1,20 @@
 import React from 'react';
-import { gql, graphql, withApollo } from 'react-apollo';
+import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { FormGroup, FormControl, Checkbox } from 'react-bootstrap';
 
-const GetThematics = gql`
-{
-  thematics(identifier:"survey") {
-    id,
-    titleEntries {
-      localeCode,
-      value
-    },
-    video {
-      title,
-      description,
-      htmlCode
-    }
-  }
-}
-`;
+const VideoForm = () => {
+  const handleCheckboxChange = () => {
 
-const addVideo = (client) => {
-  const thematicsData = client.readQuery({ query: GetThematics });
-  thematicsData.thematics.forEach((thematic) => {
-    thematic.video = {
-      title: null,
-      description: null,
-      htmlCode: null,
-      __typename: 'Video'
-    };
-  });
-  return client.writeQuery({
-    query: GetThematics,
-    data: thematicsData
-  });
-};
-
-const updateText = (client, field, value) => {
-  const thematicsData = client.readQuery({ query: GetThematics });
-  thematicsData.thematics.forEach((thematic) => {
-    thematic.video[field] = value;
-  });
-  return client.writeQuery({
-    query: GetThematics,
-    data: thematicsData
-  });
-};
-
-const VideoForm = ({ client }) => {
-
-  const handleCheckboxChange = (e) => {
-    addVideo(client);
   };
-  const handleTitleChange = (e) => {
-    updateText(client, 'title', e.target.value);
+  const handleTitleChange = () => {
+
   };
-  const handleDescriptionChange = (e) => {
-    updateText(client, 'description', e.target.value);
+  const handleDescriptionChange = () => {
+
   };
-  const handleUrlChange = (e) => {
-    updateText(client, 'htmlCode', e.target.value);
+  const handleUrlChange = () => {
+
   };
   return (
     <div className="form-container">
@@ -91,7 +46,7 @@ const VideoForm = ({ client }) => {
         <div className="separator" />
       </div>
     </div>
-  )
+  );
 };
 
 export default withApollo(VideoForm);

@@ -9,7 +9,7 @@ export const listThematicsToDelete = (thematicsToDelete) => {
   return {
     thematicsToDelete: thematicsToDelete,
     type: 'LIST_THEMATICS_TO_DELETE'
-  }
+  };
 };
 
 // export const resolvedAddThemeToSurvey = (id) => {

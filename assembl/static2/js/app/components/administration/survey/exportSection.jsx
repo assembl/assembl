@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { getDiscussionId } from '../../../utils/globalFunctions';
 import SectionTitle from '../sectionTitle';
 
-const Export = ({ i18n }) => {
+const ExportSection = ({ i18n }) => {
   const debateId = getDiscussionId();
   return (
     <div className="admin-box">
@@ -19,4 +19,4 @@ const Export = ({ i18n }) => {
   );
 };
 
-export default Export;
+export default ExportSection;

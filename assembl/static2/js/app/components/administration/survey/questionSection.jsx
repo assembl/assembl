@@ -1,8 +1,10 @@
 import React from 'react';
-import { gql, graphql, withApollo } from 'react-apollo';
+import { gql, withApollo } from 'react-apollo';
 import { Link } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
+
+import QuestionsForm from './questionsForm';
 import SectionTitle from '../sectionTitle';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
@@ -13,13 +15,18 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
+    },
+    questions {
+      titleEntries {
+        localeCode,
+        value
+      }
     }
   }
 }
 `;
 
-const Question = ({ client, i18n, selectedLocale, thematicId }) => {
-  
+const QuestionSection = ({ client, i18n, selectedLocale, thematicId }) => {
   const thematicsData = client.readQuery({ query: GetThematics });
   const thematics = thematicsData.thematics || [];
   const slug = getDiscussionSlug();
@@ -30,18 +37,23 @@ const Question = ({ client, i18n, selectedLocale, thematicId }) => {
       <div className="admin-content">
         <Row>
           {thematics.map((thematic, index) => {
-            return(
+            return (
               <Col xs={12} md={Math.round(12 / thematics.length)} key={index}>
                 <Link className="tab-title" activeClassName="tab-title-active" to={`/${slug}/administration/survey?section=2&thematic=${thematic.id}`}>
                   {`${I18n.t('administration.thematic')} ${index + 1}`}
                 </Link>
               </Col>
-            )
+            );
           })}
         </Row>
+        {thematicId &&
+          <Row>
+            <QuestionsForm thematicId={thematicId} lang={selectedLocale} />
+          </Row>
+        }
       </div>
     </div>
   );
 };
 
-export default withApollo(Question);
+export default withApollo(QuestionSection);

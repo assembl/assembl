@@ -66,7 +66,7 @@ export const updateTitle = (client, id, selectedLocale, titleEntryIndex, value) 
   });
 };
 
-export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale, titleEntries, thematicsToDelete, listThematicsToDelete }) => {
+export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale, titleEntries, thematicsToDelete, addThematicsToDelete }) => {
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
   const num = (Number(index) + 1).toString();
@@ -77,11 +77,11 @@ export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale
   const title = titleEntry ? titleEntry.value : '';
   const remove = (thematicId) => {
     thematicsToDelete.push(thematicId);
-    listThematicsToDelete(thematicsToDelete);
+    addThematicsToDelete(thematicsToDelete);
     const thematicsData = client.readQuery({ query: GetThematics });
-    thematicsData.thematics.forEach((thematic, index) => {
+    thematicsData.thematics.forEach((thematic, index2) => {
       if (thematic.id === thematicId) {
-        thematicsData.thematics.splice(index, 1);
+        thematicsData.thematics.splice(index2, 1);
       }
     });
     return client.writeQuery({
@@ -125,13 +125,13 @@ DumbThemeCreationForm.defaultProps = {
 
 const mapStateToProps = (state) => {
   return {
-    thematicsToDelete : state.admin.thematicsToDelete
+    thematicsToDelete: state.admin.thematicsToDelete
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    listThematicsToDelete: (thematicsToDelete) => {
+    addThematicsToDelete: (thematicsToDelete) => {
       dispatch(listThematicsToDelete(thematicsToDelete));
     }
   };
