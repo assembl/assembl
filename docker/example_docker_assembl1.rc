@@ -7,3 +7,5 @@ raven_url =
 handler_sentry__args = ()
 filter:raven__dsn =
 first_admin_email = me@example.com
+accept_secure_connection = false
+require_secure_connection = false

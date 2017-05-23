@@ -97,3 +97,4 @@ supervisor__autostart_uwsgi = false
 supervisor__autostart_metrics_server = false
 supervisor__autostart_metrics_server = false
 supervisor__autostart_edgesense_server = false
+supervisor__autostart_elasticsearch = true

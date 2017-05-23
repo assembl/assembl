@@ -18,7 +18,9 @@ RUN     apt-get update && apt-get install -y \
             curl \
             uwsgi-plugin-python
 RUN         useradd -m -U -G www-data assembl_user && \
-            sudo -u assembl_user -i sh -c "cd ; ssh-keygen -P '' -f .ssh/id_rsa && cat .ssh/id_rsa.pub >> .ssh/authorized_keys"
+            ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && \
+            sudo -u assembl_user -i sh -c "cd && mkdir .ssh && ssh-keygen -P '' -f .ssh/id_rsa && cat .ssh/id_rsa.pub >> .ssh/authorized_keys" && \
+            cat ~/.ssh/id_rsa.pub >> ~assembl_user/.ssh/authorized_keys
 WORKDIR /opt
 RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
@@ -33,6 +35,7 @@ RUN     /etc/init.d/ssh start && \
            ssh-keyscan localhost && \
            chown -R assembl_user:assembl_user . && \
            fab -c $DOCKER_RC build_virtualenv && \
+           chown assembl_user:assembl_user fabfile.pyc && \
            fab -c $DOCKER_RC app_update_dependencies && \
            fab -c $DOCKER_RC app_compile_nodbupdate && \
            fab -c $DOCKER_RC set_file_permissions && \

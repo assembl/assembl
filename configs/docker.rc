@@ -15,9 +15,12 @@ imap_host = localhost
 piwik_host = piwik
 *sentry_host = sentry
 redis_host = redis
-memcached_host = memchached
+memcached_host = memcached
 elasticsearch_host = elasticsearch
 nginx_host = web
+supervisor__autostart_uwsgi = true
+supervisor__autostart_elasticsearch = false
+uwsgi__socket = 0.0.0.0:9000
 
 # for now
 uses_global_supervisor = false

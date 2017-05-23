@@ -3,6 +3,9 @@ version: "3"
 networks:
   my_net:
 
+volumes:
+  assembl_static:
+
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
@@ -42,22 +45,25 @@ services:
     ports:
       - "8080:80"
     volumes:
-     - ./nginx_config_docker/default:/etc/nginx/conf.d/assembl1.template
-     - ../var/docker/stack1/assembl1_run:/opt/assembl/var/run
+      - ./nginx_config_docker:/opt/default_config
+      - assembl_static:/opt/assembl_static
     environment:
-      ASSEMBL_HOST: assembl
+      ASSEMBL_HOST: assembl1
       PUBLIC_HOSTNAME: assemlbl1.local
+      http_upgrade: '$http_upgrade'
     depends_on:
       - assembl1
-    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/assembl1.template > /etc/nginx/sites-enabled/assembl1 && nginx -g 'daemon off;'"
+    command: /bin/sh -c "sed -e 's/ASSEMBL_HOST/assembl1/; s/PUBLIC_HOSTNAME/assemlbl1.local/;' < /opt/default_config/default > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     networks:
       - my_net
 
   assembl1:
     image: assembl:latest
+    ports:
+      - "8090:8090"
     volumes:
       - ../var/docker/stack1:/var/docker_data
-      - ../var/docker/stack1/assembl1_run:/opt/assembl/var/run
+      - assembl_static:/opt/assembl_static
     environment:
       DOCKER_RC: /var/docker_data/assembl1.rc
       BUILDING_DOCKER: "false"
