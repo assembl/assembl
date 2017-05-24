@@ -581,6 +581,7 @@ def app_update_dependencies(force_reinstall=False):
     """
     sanitize_env()
     execute(update_vendor_themes)
+    execute(update_vendor_themes, frontend_version=2)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     #Nodeenv is installed by python , so this must be after update_pip_requirements
     execute(update_node, force_reinstall=force_reinstall)
@@ -1828,7 +1829,7 @@ def get_vendor_config():
 
 
 @task
-def update_vendor_themes():
+def update_vendor_themes(frontend_version=1):
     """Update optional themes in assembl/static/css/themes/vendor"""
     sanitize_env()
     config = get_vendor_config()
@@ -1838,8 +1839,9 @@ def update_vendor_themes():
         urls_string = config.get(config_section_name, 'git-urls')
         if urls_string:
             urls = urls_string.split(',')
+        base_path = "assembl/static2/css/themes/vendor" if frontend_version == 2 else "assembl/static/css/themes/vendor"
         vendor_themes_path = normpath(join(
-                env.projectpath, "assembl/static/css/themes/vendor"))
+                env.projectpath, base_path))
         print vendor_themes_path
         with settings(warn_only=True), cd(env.projectpath):
             # We do not use env.gitbranch, because in env_deb it may not match the real current branch

@@ -1,0 +1,9 @@
+You can create additional themes by creating a folder with a theme.scss inside
+
+Use the default theme as an example.  
+
+You can select which theme is active with default_theme in the ini file.
+
+For example:
+
+default_theme = folder_you_created
