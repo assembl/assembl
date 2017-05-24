@@ -78,6 +78,6 @@ services:
       - memcached
       - redis
       - elasticsearch
-    command: sh -c 'cd /opt/assembl; /etc/init.d/ssh start ; . venv/bin/activate ; env BUILDING_DOCKER=false fab -c /var/docker_data/assembl1.rc docker_startup ; tail -f /dev/null'
+    command: sh -c 'cd /opt/assembl; /etc/init.d/ssh start ; chown assembl_user /opt/assembl_static; . venv/bin/activate ; env BUILDING_DOCKER=false fab -c /var/docker_data/assembl1.rc docker_startup ; tail -f /dev/null'
     networks:
       - my_net

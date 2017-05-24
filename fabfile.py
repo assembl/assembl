@@ -1390,7 +1390,7 @@ def docker_startup():
         run("cp -rp %s/assembl/static2 /opt/assembl_static/" % env.projectpath)
         copied = True
     if copied:
-        run("chmod a+r /opt/assembl_static/static")
+        run("chmod -R a+r /opt/assembl_static")
         run("find /opt/assembl_static -type d | xargs chmod a+x")
     execute(check_and_create_database_user)
     if check_if_database_exists():
