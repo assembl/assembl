@@ -214,16 +214,21 @@ def dump(ini_file):
                 print e
 
 
-def populate_random(saml_info, random_file):
+def populate_random(random_file, random_template=None, saml_info=None):
     """Populate random.ini
 
-    Create missing random values according to random.tmpl.ini
-    Do not change existing ones"""
+    Create missing random values according to the template
+    Do not change existing values"""
     from base64 import b64encode
     from os import urandom
     from assembl.auth.make_saml import make_saml_key, make_saml_cert
     base = Parser()
-    base.read(os.path.basename(random_file) + ".tmpl")
+    if random_template is None:
+        random_template = os.path.basename(random_file) + ".tmpl"
+    if isinstance(random_template, file):
+        base.readfp(random_template)
+    else:
+        base.read(random_template)
     existing = Parser()
     if exists(random_file):
         existing.read(random_file)
@@ -255,6 +260,7 @@ def populate_random(saml_info, random_file):
             keyu = key.upper()
             if ("SAML" in keyu and keyu.endswith("_PUBLIC_CERT") and
                     value == '{saml_cert}'):
+                assert saml_info
                 prefix = keyu[:-12]
                 # If key is not there, it IS a mismatch and and error.
                 saml_key = saml_keys[prefix]
@@ -386,8 +392,10 @@ def compose(rc_filename, random_file):
     for overlay in ini_sequence:
         if overlay == 'RC_DATA':
             overlay = rc_to_ini(rc_info)
-        elif overlay == 'RANDOM':
-            overlay = populate_random(extract_saml_info(rc_info), random_file)
+        elif overlay.startswith('RANDOM'):
+            template = overlay.split(':')[1] if ':' in overlay else None
+            overlay = populate_random(
+                random_file, template, extract_saml_info(rc_info))
         combine_ini(base, overlay)
     return base
 
@@ -396,7 +404,7 @@ def migrate(rc_filename, expected_ini, random_file, target_dir=None):
     """Create a overlay.rc file from the local.ini and a base .rc file"""
     expected_ini = asParser(expected_ini)
     rc_data = combine_rc(rc_filename)
-    random_data = populate_random(extract_saml_info(rc_data), random_file)
+    random_data = populate_random(random_file, None, extract_saml_info(rc_data))
     random_data = combine_ini(random_data, expected_ini, False)
     with open(RANDOM_FILE, 'w') as f:
         random_data.write(f)
@@ -453,6 +461,8 @@ def main():
         'random', help=short_help(populate_random))
     parser_random.add_argument('--random', '-r', help='random.ini file',
                                default=RANDOM_FILE)
+    parser_random.add_argument('--template', '-t', help='random template file',
+                               type=FileType('r'), default=None)
     parser_random.add_argument('input', help='Input rc file (for saml)')
 
     # dump .ini
@@ -484,7 +494,7 @@ def main():
         base.write(args.output)
     elif args.command == 'random':
         rc_info = combine_rc(args.input)
-        populate_random(extract_saml_info(rc_info), args.random)
+        populate_random(args.random, args.template, extract_saml_info(rc_info))
     elif args.command == 'compose':
         ini_info = compose(args.input, args.random)
         ini_info.write(args.output)
