@@ -24,7 +24,7 @@ supervisor__autostart_elasticsearch = false
 uwsgi__socket = 0.0.0.0:9000
 
 # for now
-uses_global_supervisor = false
+_uses_global_supervisor = false
 
 # Replace with your company information
 saml_country = FR

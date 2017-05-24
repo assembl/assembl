@@ -50,17 +50,7 @@ changes.websocket.port = 8090
 # /5-: production
 changes.socket = ipc:///tmp/assembl_changes/5
 
-gitrepo = https://github.com/assembl/assembl.git
-wsginame = prod.wsgi
-projectname = assembl
-uses_memcache = true
-uses_uwsgi = true
-uses_apache =
-uses_ngnix = true
-uses_global_supervisor = true
-uses_apache = false
 mac = false
-is_production_env = true
 _uses_apache = false
 _uses_global_supervisor = true
 _uses_memcache = true
@@ -94,7 +84,6 @@ supervisor__autostart_nodesass = false
 supervisor__autostart_gulp = false
 supervisor__autostart_webpack = false
 supervisor__autostart_uwsgi = false
-supervisor__autostart_metrics_server = false
 supervisor__autostart_metrics_server = false
 supervisor__autostart_edgesense_server = false
 supervisor__autostart_elasticsearch = true
