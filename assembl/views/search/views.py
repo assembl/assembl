@@ -16,7 +16,11 @@ from assembl.lib import config
 
 
 def get_curl_query(query):
-    return "curl -XGET '{}:9200/_search?pretty' -d '{}'".format(
+    auth = config.get('elastic_search_basic_auth', '')
+    if auth:
+        auth = '-u ' + auth
+    return "curl {} -XGET '{}:9200/_search?pretty' -d '{}'".format(
+        auth,
         config.get('elasticsearch_host', 'localhost'),
         json.dumps(query).replace("'", "\\u0027"))
 

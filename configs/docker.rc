@@ -17,6 +17,7 @@ piwik_host = piwik
 redis_host = redis
 memcached_host = memcached
 elasticsearch_host = elasticsearch
+elastic_search_basic_auth = elastic:changeme
 nginx_host = web
 supervisor__autostart_uwsgi = true
 supervisor__autostart_elasticsearch = false

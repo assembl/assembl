@@ -12,7 +12,8 @@ def connect():
     global _es
     if _es is None:
         server = config.get('elasticsearch_host', 'localhost') + ':9200'
-        _es = Elasticsearch(server)
+        auth = config.get('elastic_search_basic_auth', None)
+        _es = Elasticsearch(server, **{'http_auth': a for a in (auth,) if a})
     return _es
 
 
