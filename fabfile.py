@@ -1381,6 +1381,17 @@ def docker_startup():
         execute(create_local_ini)
     if not exists("supervisord.conf"):
         venvcmd('assembl-ini-files populate %s' % (env.ini_file))
+    # Copy the static file. This needs improvements.
+    copied = False
+    if not exists("/opt/assembl_static/static"):
+        run("cp -rp %s/assembl/static /opt/assembl_static/" % env.projectpath)
+        copied = True
+    if not exists("/opt/assembl_static/static2"):
+        run("cp -rp %s/assembl/static2 /opt/assembl_static/" % env.projectpath)
+        copied = True
+    if copied:
+        run("chmod a+r /opt/assembl_static/static")
+        run("find /opt/assembl_static -type d | xargs chmod a+x")
     execute(check_and_create_database_user)
     if check_if_database_exists():
         execute(app_db_update)
