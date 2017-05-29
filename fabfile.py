@@ -1833,7 +1833,7 @@ def update_vendor_themes(frontend_version=1):
     """Update optional themes in assembl/static/css/themes/vendor"""
     sanitize_env()
     config = get_vendor_config()
-    config_section_name = 'theme_repositories'
+    config_section_name = 'theme2_repositories' if frontend_version == 2 else 'theme_repositories'
     if config.has_section(config_section_name):
         urls = []
         urls_string = config.get(config_section_name, 'git-urls')
