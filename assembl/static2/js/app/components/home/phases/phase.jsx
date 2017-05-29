@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { get } from '../../../utils/routeMap';
-import { isPhaseStarted, getStartDatePhase, getPhaseName, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getPhaseStatus, isSeveralIdentifiers, getStartDatePhase, getPhaseName } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 
 class Step extends React.Component {
@@ -15,27 +15,34 @@ class Step extends React.Component {
     const { identifier } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
-    const { isRedirectionToV1 } = this.props.phase;
     const slug = { slug: debateData.slug };
-    const phaseStarted = isPhaseStarted(debateData.timeline, identifier);
     const phaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
-    if (phaseStarted) {
-      // This redirection should be removed when the phase 2 will be done
-      if (isRedirectionToV1 && !isPhaseCompleted) {
-        const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-        const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
-        displayModal(null, body, true, null, button, true);
-        setTimeout(() => {
-          window.location = `${get('oldDebate', slug)}`;
-        }, 6000);
-      } else {
-        browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
+    const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
+    const phaseStatus = getPhaseStatus(debateData.timeline, identifier);
+    if (isSeveralPhases) {
+      if (phaseStatus === 'notStarted') {
+        const startDate = getStartDatePhase(debateData.timeline, identifier);
+        const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
+        displayModal(null, body, true, null, null, true);
+      }
+      if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
+        if (identifier === 'survey') {
+          browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
+        } else {
+          const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+          const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+          displayModal(null, body, true, null, button, true);
+          setTimeout(() => {
+            window.location = `${get('oldDebate', slug)}`;
+          }, 6000);
+        }
       }
     } else {
-      const startDate = getStartDatePhase(debateData.timeline, identifier);
-      const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
-      displayModal(null, body, true, null, null, true);
+      if (identifier === 'survey') {
+        browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
+      } else {
+        window.location = `${get('oldDebate', slug)}`;
+      }
     }
   }
   render() {
@@ -80,8 +87,7 @@ class Step extends React.Component {
 const mapStateToProps = (state) => {
   return {
     i18n: state.i18n,
-    debate: state.debate,
-    phase: state.phase
+    debate: state.debate
   };
 };
 

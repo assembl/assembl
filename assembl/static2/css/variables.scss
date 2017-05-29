@@ -8,26 +8,29 @@ $grey4: #1d1d1d;
 $grey5: #d8d8d8;
 $grey6: #eef0f7;
 $red: #f75959;
-$green: #46d38d;
+$green: #8DC4B3;
 $lightgreen: #93e79d;
-$blue: #140ca0;
+$blue: #7490CA;
 $purple: #5404d7;
 $purple-light: #e7e6f5;
 $yellow: #f0ab2b;
 $cyan: #0095b2;
 $cyan-light: #d1eef6;
+$blue-light: rgba(53, 66, 105, 0.5);
+$opacity-blue: rgba(53, 66, 105, 0.5);
+$min-opacity-blue: rgba(53, 66, 105, .1);
 
 $opacity-purple: rgba(84, 4, 215, .5);
 $opacity-cyan: rgba(0, 140, 166, .5);
 $min-opacity-cyan: rgba(0, 140, 166, .1);
 $linear-gradient: linear-gradient( 90deg, $grey6, $white );
 
-$first-color: $cyan;
-$first-color-light: $cyan-light;
-$second-color: $yellow;
+$first-color: $blue;
+$first-color-light: $blue-light;
+$second-color: $green;
 $third-color: $blue;
-$opacity-color: $opacity-cyan;
-$min-opacity-color: $min-opacity-cyan;
+$opacity-color: $opacity-blue;
+$min-opacity-color: $min-opacity-blue;
 
 $app-max-width: 1400px;
 $navbar-height: 60px;

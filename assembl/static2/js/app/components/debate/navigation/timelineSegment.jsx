@@ -4,7 +4,7 @@ import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { get } from '../../../utils/routeMap';
 import { displayModal } from '../../../utils/utilityManager';
-import { getStartDatePhase, getPhaseName, isPhaseStarted } from '../../../utils/timeline';
+import { getPhaseStatus, isSeveralIdentifiers, getStartDatePhase, getPhaseName } from '../../../utils/timeline';
 
 class TimelineSegment extends React.Component {
   constructor(props) {
@@ -13,28 +13,36 @@ class TimelineSegment extends React.Component {
   }
   displayPhase() {
     const { locale } = this.props.i18n;
-    const { isStepCompleted, phaseIdentifier } = this.props;
+    const { phaseIdentifier } = this.props;
     const { debateData } = this.props.debate;
-    const { isRedirectionToV1 } = this.props.phase;
     const slug = { slug: debateData.slug };
-    const phaseStarted = isPhaseStarted(debateData.timeline, phaseIdentifier);
     const phaseName = getPhaseName(debateData.timeline, phaseIdentifier, locale).toLowerCase();
-    if (phaseStarted) {
-      // This redirection should be removed when the phase 2 will be done
-      if (isRedirectionToV1 && !isStepCompleted) {
-        const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-        const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
-        displayModal(null, body, true, null, button, true);
-        setTimeout(() => {
-          window.location = `${get('oldDebate', slug)}`;
-        }, 6000);
-      } else {
-        browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
+    const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
+    const phaseStatus = getPhaseStatus(debateData.timeline, phaseIdentifier);
+    if (isSeveralPhases) {
+      if (phaseStatus === 'notStarted') {
+        const startDate = getStartDatePhase(debateData.timeline, phaseIdentifier);
+        const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
+        displayModal(null, body, true, null, null, true);
+      }
+      if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
+        if (phaseIdentifier === 'survey') {
+          browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
+        } else {
+          const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+          const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+          displayModal(null, body, true, null, button, true);
+          setTimeout(() => {
+            window.location = `${get('oldDebate', slug)}`;
+          }, 6000);
+        }
       }
     } else {
-      const startDate = getStartDatePhase(debateData.timeline, phaseIdentifier);
-      const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
-      displayModal(null, body, true, null, null, true);
+      if (phaseIdentifier === 'survey') {
+        browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
+      } else {
+        window.location = `${get('oldDebate', slug)}`;
+      }
     }
   }
   render() {
@@ -74,8 +82,7 @@ class TimelineSegment extends React.Component {
 const mapStateToProps = (state) => {
   return {
     i18n: state.i18n,
-    debate: state.debate,
-    phase: state.phase
+    debate: state.debate
   };
 };
 

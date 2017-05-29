@@ -6,11 +6,11 @@ export const getCurrentPhaseIdentifier = (_timeline) => {
     timeline = [];
   }
   const currentDate = new Date();
-  let identifier = null;
+  let identifier = '';
   timeline.forEach((phase) => {
     const startDate = new Date(phase.start);
     const endDate = new Date(phase.end);
-    if (isDateExpired(currentDate, startDate) && isDateExpired(endDate, currentDate)) {
+    if (currentDate > startDate && currentDate < endDate) {
       identifier = phase.identifier;
     }
   });
@@ -32,6 +32,48 @@ export const isPhaseStarted = (_timeline, _identifier) => {
     }
   });
   return isStarted;
+};
+
+let key = '';
+export const isSeveralIdentifiers = (_timeline) => {
+  let timeline = _timeline;
+  if (!timeline) {
+    timeline = [];
+  }
+  let isSeveral = false;
+  timeline.forEach((phase) => {
+    if (key !== phase.identifier && key !== '') {
+      isSeveral = true;
+    }
+    key = phase.identifier;
+  });
+  return isSeveral;
+};
+
+export const getPhaseStatus = (_timeline, _identifier) => {
+  const identifier = _identifier;
+  let timeline = _timeline;
+  if (!timeline) {
+    timeline = [];
+  }
+  let status = '';
+  const currentDate = new Date();
+  timeline.forEach((phase) => {
+    const startDate = new Date(phase.start);
+    const endDate = new Date(phase.end);
+    if (identifier === phase.identifier) {
+      if (currentDate < startDate && currentDate < endDate) {
+        status = 'notStarted';
+      }
+      if (currentDate > startDate && currentDate < endDate) {
+        status = 'inProgress';
+      }
+      if (currentDate > startDate && currentDate > endDate) {
+        status = 'completed';
+      }
+    }
+  });
+  return status;
 };
 
 export const getStartDatePhase = (_timeline, _identifier) => {
