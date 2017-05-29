@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
 
+import VideoForm from './videoForm';
 import QuestionsForm from './questionsForm';
 import SectionTitle from '../sectionTitle';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
@@ -48,6 +49,7 @@ const QuestionSection = ({ client, i18n, selectedLocale, thematicId }) => {
         </Row>
         {thematicId &&
           <Row>
+            <VideoForm selectedLocale={selectedLocale} />
             <QuestionsForm thematicId={thematicId} lang={selectedLocale} />
           </Row>
         }
