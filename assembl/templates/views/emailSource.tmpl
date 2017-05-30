@@ -12,7 +12,7 @@
             <!-- email without name. TODO: validate -->
 			<label for="admin_sender" class="control-label">{{ gettext("Admin sender") }}</label>
 			<div class="controls">
-				<input type="text" id="admin_sender" class="input-xxlarge" value="<%= admin_sender %>">
+				<input type="email" id="admin_sender" class="input-xxlarge" value="<%= admin_sender %>" required>
         <span class="help-inline">{{ gettext("This field is an e-mail address, and is mandatory: it will be the value of notification emails' From field") }}</span>
 			</div>
 		</div>
