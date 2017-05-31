@@ -30,6 +30,53 @@ const GetThematics = gql`
 }
 `;
 
+
+const createThematic = gql`
+  mutation createThematic($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
+    createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
+      thematic {
+        title,
+        imgUrl,
+        video {
+          title,
+          description,
+          htmlCode
+        },
+        questions {
+          title
+        }
+      }
+    }
+  }
+`;
+
+const updateThematic = gql`
+  mutation updateThematic($id:ID!, $identifier: String!, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
+    updateThematic(id:$id, identifier: $identifier, titleEntries: $titleEntries, questions: $questions, video: $video) {
+      thematic {
+        title,
+        imgUrl,
+        video {
+          title,
+          description,
+          htmlCode
+        },
+        questions {
+          title
+        }
+      }
+    }
+  }
+`;
+
+const deleteThematic = gql`
+  mutation deleteThematic($thematicId: ID!) {
+    deleteThematic(thematicId: $thematicId) {
+      success
+    }
+  }
+`;
+
 const createLanguageEntries = (titles) => {
   return titles.map((title) => {
     return { value: title.value, localeCode: title.localeCode };
@@ -106,6 +153,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
               identifier: 'survey',
               titleEntries: createLanguageEntries(t.titleEntries),
               video: createVideoEntries(t.video),
+              image: t.image,
               questions: createQuestionEntries(t.questions)
             }
           };
@@ -115,6 +163,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
               id: t.id,
               identifier: 'survey',
               titleEntries: createLanguageEntries(t.titleEntries),
+              image: t.image,
               questions: createQuestionEntries(t.questions)
             }
           };
@@ -127,20 +176,23 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
     if (thematicsToDelete.length > 0) {
       thematicsToDelete.forEach((id) => {
         if (isNaN(id)) {
-          const p5 = deleteThematic({
+          let payload = {
             variables: {
               thematicId: id
             }
-          });
-          promisesArray.push(p5);
+          };
+          const p3 = deleteThematic(payload);
+          promisesArray.push(p3);
         }
       });
     }
+    console.log(promisesArray);
     Promise.all(promisesArray).then(() => {
       displayAlert('success', I18n.t('administration.successThemeCreation'));
-    }).catch((error) => {
-      displayAlert('danger', `${error}`);
-    });
+    })
+    // .catch((error) => {
+    //   displayAlert('danger', `${error}`);
+    // });
   };
   return (
     <Button className="button-submit button-dark right" onClick={saveAction}>
@@ -148,52 +200,6 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
     </Button>
   );
 };
-
-const createThematic = gql`
-  mutation createThematic($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
-    createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
-      thematic {
-        title,
-        imgUrl,
-        video {
-          title,
-          description,
-          htmlCode
-        },
-        questions {
-          title
-        }
-      }
-    }
-  }
-`;
-
-const updateThematic = gql`
-  mutation updateThematic($id:ID!, $identifier: String!, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
-    updateThematic(id:$id, identifier: $identifier, titleEntries: $titleEntries, questions: $questions, video: $video) {
-      thematic {
-        title,
-        imgUrl,
-        video {
-          title,
-          description,
-          htmlCode
-        },
-        questions {
-          title
-        }
-      }
-    }
-  }
-`;
-
-const deleteThematic = gql`
-  mutation deleteThematic($thematicId: ID!) {
-    deleteThematic(thematicId: $thematicId) {
-      success
-    }
-  }
-`;
 
 const SaveButtonWithMutations = compose(
   graphql(createThematic, {
