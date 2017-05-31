@@ -66,33 +66,59 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
     thematicsData.thematics.forEach((t) => {
       // To create a thematic, get if its ID is a negative number
       if (t.id < 0) {
-        const p1 = createThematic({
-          variables: {
-            identifier: 'survey',
-            titleEntries: createLanguageEntries(t.titleEntries),
-            image: t.image,
-            video: createVideoEntries(t.video),
-            questions: createQuestionEntries(t.questions)
+        let payload = {};
+        if (t.video.length > 0) {
+          payload = {
+            variables: {
+              identifier: 'survey',
+              titleEntries: createLanguageEntries(t.titleEntries),
+              image: t.image,
+              video: createVideoEntries(t.video),
+              questions: createQuestionEntries(t.questions)
+            }
           }
-          // TO DO update the apollo store after a mutation
-          // update: (client, { data: { createThematic } }) => {
-          //   const data = client.readQuery({ query: GetThematics });
-          //   data.thematics.push(createThematic);
-          //   client.writeQuery({ query: GetThematics, data });
-          // }
-        });
+        } else {
+          payload = {
+            variables: {
+              identifier: 'survey',
+              titleEntries: createLanguageEntries(t.titleEntries),
+              image: t.image,
+              questions: createQuestionEntries(t.questions)
+            }
+          }
+        }
+        const p1 = createThematic(payload);
+        // TO DO update the apollo store after a mutation
+        // update: (client, { data: { createThematic } }) => {
+        //   const data = client.readQuery({ query: GetThematics });
+        //   data.thematics.push(createThematic);
+        //   client.writeQuery({ query: GetThematics, data });
+        // }
         promisesArray.push(p1);
       } else {
         // Update a thematic
-        const p2 = updateThematic({
-          variables: {
-            id: t.id,
-            identifier: 'survey',
-            titleEntries: createLanguageEntries(t.titleEntries),
-            video: createVideoEntries(t.video),
-            questions: createQuestionEntries(t.questions)
-          }
-        });
+        let payload = {};
+        if (t.video.length > 0) {
+          payload = {
+            variables: {
+              id: t.id,
+              identifier: 'survey',
+              titleEntries: createLanguageEntries(t.titleEntries),
+              video: createVideoEntries(t.video),
+              questions: createQuestionEntries(t.questions)
+            }
+          };
+        } else {
+          payload = {
+            variables: {
+              id: t.id,
+              identifier: 'survey',
+              titleEntries: createLanguageEntries(t.titleEntries),
+              questions: createQuestionEntries(t.questions)
+            }
+          };
+        }
+        const p2 = updateThematic(payload);
         promisesArray.push(p2);
       }
     });
