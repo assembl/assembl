@@ -953,7 +953,9 @@ def install_certbot():
 @task
 def generate_certificate():
     """Generate a certificate for https, and add renewal to crontab"""
-    sudo("certbot certonly --webroot -w /var/www/html -d " + env.public_hostname)
+    hostname = env.public_hostname
+    if not exists('/etc/letsencrypt/live/%s/fullchain.pem' % (hostname)):
+        sudo("certbot certonly --webroot -w /var/www/html -d " + hostname)
     sudo("echo '12 3 * * 3 letsencrypt renew' | uniq | crontab")
 
 
