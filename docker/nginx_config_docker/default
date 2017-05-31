@@ -1,15 +1,18 @@
 server {
-    listen 80;
-    #listen    443 ssl;
+    listen    80;
+    #listen   [::]:80;
+    #listen   443 ssl;
+    #listen   [::]:443 ssl;
 
+    # This is the server name, if you're running multiple servers
     server_name PUBLIC_HOSTNAME;
 
-    #ssl_certificate     /etc/ssl/assembl.yourdomain.com/assembl.yourdomain.com.crt;
-    #ssl_certificate_key /etc/ssl/assembl.yourdomain.com/assembl.yourdomain.com.key;
+    ssl_certificate     /etc/letsencrypt/live/PUBLIC_HOSTNAME/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/PUBLIC_HOSTNAME/privkey.pem;
 
-    location /something_or_other.html {
+    location /.well-known {
         #This is for domain verification
-        alias /opt/assembl/something_or_other.html;
+        alias /var/www/html/.well-known;
     }
 
     location /socket {
@@ -22,7 +25,7 @@ server {
     location /static {
         #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
         #Nor will it help your performance after the first hour...
-        autoindex on;
+        autoindex off;
 
         alias /opt/assembl_static/static;
     }
@@ -30,7 +33,7 @@ server {
     location /static2 {
         #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
         #Nor will it help your performance after the first hour...
-        autoindex on;
+        autoindex off;
 
         alias /opt/assembl_static/static2;
     }
