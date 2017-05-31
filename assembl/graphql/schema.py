@@ -722,10 +722,6 @@ class UpdateThematic(graphene.Mutation):
                     else:
                         title_ls = langstring_from_input_entries(
                             question_input['title_entries'])
-                        models.Question(
-                            title=title_ls,
-                            discussion_id=discussion_id
-                        )
                         thematic.children.append(
                             models.Question(
                                 title=title_ls,
