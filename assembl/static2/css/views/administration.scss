@@ -210,4 +210,23 @@
   .text-area {
     height: 100px;
   }
+
+  .preview {
+    border: $navbar-border;
+    border-radius: 10px;
+    margin: 10px 0 0;
+    padding: 5px;
+
+    img {
+      border-radius: 10px;
+      max-width: 390px;
+    }
+  }
+
+  .preview-title {
+    color: $grey3;
+    font-family: $font-family6;
+    font-size: $font-size-xs;
+    margin: 10px 0 20px 5px;
+  }
 }

@@ -14,6 +14,7 @@ const GetThematics = gql`
       localeCode,
       value
     },
+    imgUrl,
     video {
       title,
       description,
@@ -98,7 +99,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
       } else {
         // Update a thematic
         let payload = {};
-        if (t.video.length > 0) {
+        if (t.video.htmlCode !== null) {
           payload = {
             variables: {
               id: t.id,

@@ -77,7 +77,7 @@ export const updateTitle = (client, id, selectedLocale, titleEntryIndex, value) 
   });
 };
 
-export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale, titleEntries, thematicsToDelete, addThematicsToDelete }) => {
+export const DumbThemeCreationForm = ({ client, id, imgUrl, index, selectedLocale, titleEntries, thematicsToDelete, addThematicsToDelete }) => {
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
   const num = (Number(index) + 1).toString();
@@ -100,7 +100,9 @@ export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale
       data: thematicsData
     });
   };
-  const updateImage = () => {}; // TODO
+  const updateImage = (file) => {
+    console.log(file);
+  };
   const handleTitleChange = (e) => {
     return updateTitle(client, id, selectedLocale, titleEntryIndex, e.target.value);
   };
@@ -114,9 +116,9 @@ export const DumbThemeCreationForm = ({ client, id, image, index, selectedLocale
       </FormGroup>
       <FormGroup>
         <ImageUploader
-          file={image}
-          handleChange={(e) => {
-            return updateImage(e.target.files);
+          imgUrl={imgUrl}
+          handleChange={(file) => {
+            return updateImage(file);
           }}
         />
       </FormGroup>

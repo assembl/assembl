@@ -13,6 +13,7 @@ const GetThematics = gql`
       localeCode,
       value
     },
+    imgUrl,
     video {
       title,
       description,
@@ -35,7 +36,7 @@ const ThemeSection = ({ client, i18n, selectedLocale }) => {
     thematicsData.thematics.push({
       id: newThemeId,
       titleEntries: [],
-      image: undefined,
+      imgUrl: undefined,
       questions: [],
       video: [],
       __typename: 'Thematic'
@@ -55,7 +56,7 @@ const ThemeSection = ({ client, i18n, selectedLocale }) => {
       <div className="admin-content">
         <form>
           {themes.map((theme, idx) => {
-            return <ThemeForm key={theme.id} id={theme.id} index={idx} image={theme.image} selectedLocale={selectedLocale} titleEntries={theme.titleEntries} />;
+            return <ThemeForm key={theme.id} id={theme.id} index={idx} imgUrl={theme.imgUrl} selectedLocale={selectedLocale} titleEntries={theme.titleEntries} />;
           })}
           <div onClick={addTheme} className="plus margin-l">+</div>
         </form>

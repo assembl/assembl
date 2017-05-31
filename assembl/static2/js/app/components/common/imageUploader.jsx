@@ -1,53 +1,58 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
-import { Button, Image } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 class ImageUploader extends React.Component {
-  constructor() {
-    super();
-    this.handleUploadButtonClick = this.handleUploadButtonClick.bind(this);
+  constructor(props) {
+    super(props);
+    const { imgUrl } = this.props;
     this.state = {
-      imageUrl: ''
-    };
+      imgName: '',
+      imgUrl: imgUrl
+    }
+    this.handleChangePreview = this.handleChangePreview.bind(this);
+    this.handleUploadButtonClick = this.handleUploadButtonClick.bind(this);
   }
-
   handleUploadButtonClick() {
     this.fileInput.click();
   }
-
-  render() {
-    const { file, handleChange } = this.props;
+  handleChangePreview() {
+    const preview = this.preview;
+    const file    = this.fileInput.files[0];
+    const reader  = new FileReader();
+    reader.addEventListener("load", () => {
+      this.setState({
+        imgName: file.name || '',
+        imgUrl: reader.result
+      });
+    }, false);
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (function (theFile, c) {
-        return function (e) {
-          c.setState({
-            imageUrl: e.target.result
-          });
-        };
-      }(file, this));
       reader.readAsDataURL(file);
+      this.props.handleChange(file);
     }
-
+  }
+  render() {
     return (
       <div>
-        {file
-          ? <div>
-            <span>{file.name}</span>
-            <Image alt={file.name} src={this.state.imageUrl} thumbnail />
-          </div>
-          : null}
-
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
+        <div className="preview">
+          <img
+            src={this.state.imgUrl}
+            ref={(p) => {
+              return (this.preview = p);
+            }}
+            alt="Image preview"
+          />
+        </div>
+        <div className="preview-title">{this.state.imgName}</div>
         <input
-          style={{ display: 'none' }}
           type="file"
-          accept="image/*"
-          onChange={handleChange}
-          ref={(c) => {
-            return (this.fileInput = c);
+          onChange={this.handleChangePreview}
+          className="hidden"
+          ref={(p) => {
+            return (this.fileInput = p);
           }}
         />
       </div>

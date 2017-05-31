@@ -10,6 +10,7 @@ const GetThematics = gql`
       localeCode,
       value
     },
+    imgUrl,
     video {
       title,
       description,
