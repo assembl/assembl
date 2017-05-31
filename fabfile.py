@@ -931,13 +931,14 @@ def install_assembl_deps():
     execute(install_basetools)
     execute(install_builddeps)
 
+
 @task
 def install_certbot():
     """Install letsencrypt.org certbot"""
     if env.mac:
         return
     if exists('/etc/os-release'):
-        release_data = exec('cat /etc/os-release')
+        release_data = run('cat /etc/os-release')
         if 'jessie' in release_data:
             sudo("echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list")
             sudo("apt-get update")
@@ -1014,10 +1015,12 @@ def install_builddeps():
         # They exist on macports, but do we want to install that?
         if not exists('/usr/local/bin/gfortran'):
             run('brew install gcc isl')
+        if not run('pip install -U jinja2', quiet=True):
+            sudo('pip install -U jinja2')
     else:
         sudo('apt-get install -y build-essential python-dev pandoc')
         sudo('apt-get install -y automake bison flex gperf gawk')
-        sudo('apt-get install -y graphviz pkg-config gfortran')
+        sudo('apt-get install -y graphviz pkg-config gfortran python-jinja2')
         sudo('apt-get install -y phantomjs', warn_only=True)
     execute(update_python_package_builddeps)
 
@@ -1400,6 +1403,34 @@ def flushmemcache():
         print(cyan('Resetting all data in memcached :'))
         wait_str = "" if env.mac else "-q 2"
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
+
+
+@task
+def docker_compose():
+    from jinja2 import Environment, FileSystemLoader
+    assert env.docker_assembl_hosts, "Define docker_assembl_hosts"
+    if not os.path.exists("./docker/build"):
+        os.mkdir("./docker/build")
+    else:
+        pass # TODO: Delete contents
+    if not isinstance(env.docker_assembl_hosts, list):
+        env.docker_assembl_hosts = env.docker_assembl_hosts.split()
+    jenv = Environment(
+        loader=FileSystemLoader('./docker'),
+        autoescape=lambda t: False)
+    rc_template = jenv.get_template('assembl_subprocess.rc.jinja2')
+    nginx_template = jenv.get_template('nginx_default.jinja2')
+    compose_template = jenv.get_template('docker-compose.yaml.jinja2')
+    for i, hostname in enumerate(env.docker_assembl_hosts):
+        with open('./docker/build/assembl%d.rc' % (i+1,), 'w') as f:
+            f.write(rc_template.render(
+                public_hostname_=hostname, assembl_index=i+1, **env))
+        with open('./docker/build/nginx_%s.conf' % (hostname,), 'w') as f:
+            f.write(nginx_template.render(
+                public_hostname_=hostname, assembl_index=i+1, **env))
+    with open('./docker/build/docker-compose.yaml', 'w') as f:
+        f.write(compose_template.render(**env))
+    # run("docker-compose -f docker/build/docker-compose.yaml up")
 
 
 @task

@@ -51,33 +51,55 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./nginx_config_docker:/opt/default_config
+      - .:/opt/default_config
       - assembl_static:/opt/assembl_static
     environment:
-      ASSEMBL_HOST: assembl1
-      PUBLIC_HOSTNAME: assemlbl1.local
       http_upgrade: '$http_upgrade'
     depends_on:
-      - assembl1
-    command: /bin/sh -c "sed -e 's/ASSEMBL_HOST/assembl1/; s/PUBLIC_HOSTNAME/assemlbl1.local/;' < /opt/default_config/default > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+{%- for hostname in docker_assembl_hosts %}
+      - assembl{{ loop.index }}{% endfor %}
+    command: /bin/sh -c "cp /opt/default_config/nginx_*.conf > /etc/nginx/conf.d && nginx -g 'daemon off;'"
     networks:
       - my_net
 
-  assembl1:
+{% if docker_sentry == 'docker' %}
+  # TODO: Configure sentry
+  sentry:
+    image: sentry:latest
+{% endif %}
+
+{% if docker_imap == 'docker' or docker_smtp == 'docker' %}
+  # TODO: Add mail
+  # mail:
+  #   image: mailu:stable
+
+{% endif %}
+
+{% if docker_piwik == 'docker' %}
+  # TODO: Configure piwik
+  # piwik:
+  #   image: piwik:latest
+{% endif %}
+
+{% for hostname in docker_assembl_hosts %}
+  assembl{{ loop.index }}:
     image: assembl:latest
     ports:
       - "8090:8090"
     volumes:
-      - ../var/docker/stack1:/var/docker_data
+      - .:/var/docker_data
       - assembl_static:/opt/assembl_static
     environment:
-      DOCKER_RC: /var/docker_data/assembl1.rc
+      DOCKER_RC: /var/docker_data/assembl{{ loop.index }}.rc
       BUILDING_DOCKER: "false"
     depends_on:
       - database
       - memcached
       - redis
       - elasticsearch
-    command: sh -c 'cd /opt/assembl; /etc/init.d/ssh start ; chown assembl_user /opt/assembl_static; . venv/bin/activate ; env BUILDING_DOCKER=false fab -c /var/docker_data/assembl1.rc docker_startup ; tail -f /dev/null'
+    command: sh -c 'cd /opt/assembl; /etc/init.d/ssh start ; chown assembl_user /opt/assembl_static; . venv/bin/activate ; env BUILDING_DOCKER=false fab -c /var/docker_data/assembl{{ loop.index }}.rc docker_startup ; tail -f /dev/null'
     networks:
       - my_net
+{% endfor %}
+
+}

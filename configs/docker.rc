@@ -24,9 +24,39 @@ uwsgi__socket = 0.0.0.0:9000
 # for now
 _uses_global_supervisor = false
 
+# Override what follows in your specific docker.rc file
+
+# What are the public hostnames of your assembl hosts? Can be multiple, separated by spaces
+docker_assembl_hosts = assembl1.local assembl2.local
+
 # Replace with your company information
 saml_country = FR
 saml_state = Hauts-de-Seine
 saml_locality = Levallois-Perret
 saml_org = Bluenove
 saml_email = assembl@bluenove.com
+
+# Are we using sentry from docker? If not, give a hostname or nothing
+docker_sentry = docker
+
+# Are we using piwik from docker? If not, give a hostname or nothing
+docker_piwik = docker
+
+# Are we using smtp from docker? If not, give a hostname or nothing
+docker_smtp = docker
+
+# Are we using sentry from docker? If not, give a hostname or nothing
+docker_imap = docker
+
+# Are we exposing our docker host on IPv6?
+docker_ipv6 =
+
+# Are we enabling https on the docker nginx?
+docker_https =
+
+# Will the docker nginx be secured through a reverse proxy?
+docker_secure_rproxy = true
+
+# Will we use the certbot on this docker instance?
+docker_certbot =
+

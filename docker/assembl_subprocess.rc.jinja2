@@ -1,0 +1,53 @@
+# you should use your own extension of configs/docker.rc
+_extends = {{docker_base_rc}}
+
+*db_database = assembl{{ assembl_index }}
+*db_user = assembl{{ assembl_index }}
+
+public_hostname = {{ public_hostname_ }}
+
+first_admin_email = admin@{{ public_hostname_ }}
+
+{% if docker_sentry == 'docker' %}
+*sentry_host = sentry
+{% elif docker_sentry %}
+*sentry_host = {{ docker_sentry }}
+{% else %}
+raven_url =
+handler_sentry__args = ()
+filter:raven__dsn =
+{% endif %}
+
+{% if docker_piwik == 'docker' %}
+piwik_host = piwik
+{% elif docker_piwik %}
+piwik_host = {{ docker_piwik }}
+{% else %}
+web_analytics_piwik_script =
+discussion_callbacks =
+{% endif %}
+
+{% if docker_smtp == 'docker' %}
+smtp_host = mail
+{% elif docker_smtp %}
+smtp_host = {{ docker_smtp }}
+{% else %}
+smtp_host = localhost
+{% endif %}
+
+{% if docker_imap == 'docker' %}
+imap_host = imap
+{% elif docker_imap %}
+imap_host = {{ docker_imap }}
+{% else %}
+imap_host = localhost
+{% endif %}
+
+{% if docker_secure_rproxy or docker_https %}
+accept_secure_connection = true
+require_secure_connection = true
+{% else %}
+accept_secure_connection = false
+require_secure_connection = false
+{% endif %}
+
