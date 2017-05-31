@@ -931,6 +931,31 @@ def install_assembl_deps():
     execute(install_basetools)
     execute(install_builddeps)
 
+@task
+def install_certbot():
+    """Install letsencrypt.org certbot"""
+    if env.mac:
+        return
+    if exists('/etc/os-release'):
+        release_data = exec('cat /etc/os-release')
+        if 'jessie' in release_data:
+            sudo("echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list")
+            sudo("apt-get update")
+        elif 'ubuntu' in release_data:
+            sudo("apt-get install software-properties-common")
+            sudo("add-apt-repository ppa:certbot/certbot")
+            sudo("apt-get update")
+        else:
+            raise NotImplementedError("Unknown distribution")
+        sudo("apt-get install python-certbot-nginx")
+
+
+@task
+def generate_certificate():
+    """Generate a certificate for https, and add renewal to crontab"""
+    sudo("certbot certonly --webroot -w /var/www/html -d " + env.public_hostname)
+    sudo("echo '12 3 * * 3 letsencrypt renew' | uniq | crontab")
+
 
 # # Server packages
 def install_basetools():
