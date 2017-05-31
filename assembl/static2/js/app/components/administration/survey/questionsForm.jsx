@@ -12,6 +12,11 @@ const GetThematics = gql`
       localeCode,
       value
     },
+    video {
+      title,
+      description,
+      htmlCode
+    }
     questions {
       titleEntries {
         localeCode,
@@ -48,7 +53,7 @@ const QuestionsForm = ({ client, thematicId, lang }) => {
   };
 
   return (
-    <div className="form-container">
+    <div className={thematic ? 'form-container' : 'hidden'}>
       <div className="margin-xl">
         {questions.map((question, index) => {
           return (

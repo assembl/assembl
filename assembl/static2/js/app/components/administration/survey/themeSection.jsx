@@ -13,6 +13,11 @@ const GetThematics = gql`
       localeCode,
       value
     },
+    video {
+      title,
+      description,
+      htmlCode
+    },
     questions {
       titleEntries {
         localeCode,
@@ -32,6 +37,7 @@ const ThemeSection = ({ client, i18n, selectedLocale }) => {
       titleEntries: [],
       image: undefined,
       questions: [],
+      video: [],
       __typename: 'Thematic'
     });
     return client.writeQuery({

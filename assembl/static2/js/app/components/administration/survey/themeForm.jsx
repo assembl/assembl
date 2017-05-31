@@ -14,6 +14,17 @@ const GetThematics = gql`
     titleEntries {
       localeCode,
       value
+    },
+    video {
+      title,
+      description,
+      htmlCode
+    }
+    questions {
+      titleEntries {
+        localeCode,
+        value
+      }
     }
   }
 }

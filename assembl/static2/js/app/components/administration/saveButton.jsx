@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { gql, graphql, withApollo, compose } from 'react-apollo';
+import { browserHistory } from 'react-router';
 import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { displayAlert } from '../../utils/utilityManager';
@@ -13,6 +14,11 @@ const GetThematics = gql`
       localeCode,
       value
     },
+    video {
+      title,
+      description,
+      htmlCode
+    }
     questions {
       titleEntries {
         localeCode,
@@ -44,6 +50,15 @@ const createQuestionEntries = (questions) => {
   return questionsArray;
 };
 
+const createVideoEntries = (v) => {
+  const video = {
+    titleEntries: [{ value: v.title, localeCode: "fr" }],
+    descriptionEntries: [{ value: v.description, localeCode: "fr" }],
+    htmlCode: v.htmlCode
+  };
+  return video;
+};
+
 const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
   const saveAction = () => {
     const thematicsData = client.readQuery({ query: GetThematics });
@@ -56,6 +71,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
             image: t.image,
+            video: createVideoEntries(t.video),
             questions: createQuestionEntries(t.questions)
           }
           // TO DO update the apollo store after a mutation
@@ -73,6 +89,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             id: t.id,
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
+            video: createVideoEntries(t.video),
             questions: createQuestionEntries(t.questions)
           }
         });
@@ -106,11 +123,16 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
 };
 
 const createThematic = gql`
-  mutation createThematic($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!) {
-    createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries) {
+  mutation createThematic($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
+    createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
       thematic {
         title,
         imgUrl,
+        video {
+          title,
+          description,
+          htmlCode
+        },
         questions {
           title
         }
@@ -120,11 +142,16 @@ const createThematic = gql`
 `;
 
 const updateThematic = gql`
-  mutation updateThematic($id:ID!, $identifier: String!, $titleEntries: [LangStringEntryInput]!) {
-    updateThematic(id:$id, identifier: $identifier, titleEntries: $titleEntries) {
+  mutation updateThematic($id:ID!, $identifier: String!, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
+    updateThematic(id:$id, identifier: $identifier, titleEntries: $titleEntries, questions: $questions, video: $video) {
       thematic {
         title,
         imgUrl,
+        video {
+          title,
+          description,
+          htmlCode
+        },
         questions {
           title
         }

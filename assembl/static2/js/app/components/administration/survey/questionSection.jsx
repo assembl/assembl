@@ -17,6 +17,11 @@ const GetThematics = gql`
       localeCode,
       value
     },
+    video {
+      title,
+      description,
+      htmlCode
+    },
     questions {
       titleEntries {
         localeCode,
@@ -49,7 +54,7 @@ const QuestionSection = ({ client, i18n, selectedLocale, thematicId }) => {
         </Row>
         {thematicId &&
           <Row>
-            <VideoForm selectedLocale={selectedLocale} />
+            <VideoForm thematicId={thematicId} selectedLocale={selectedLocale} />
             <QuestionsForm thematicId={thematicId} lang={selectedLocale} />
           </Row>
         }

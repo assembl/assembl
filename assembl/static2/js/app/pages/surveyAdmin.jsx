@@ -15,6 +15,11 @@ const GetThematics = gql`
       localeCode,
       value
     },
+    video {
+      title,
+      description,
+      htmlCode
+    },
     questions {
       titleEntries {
         localeCode,
