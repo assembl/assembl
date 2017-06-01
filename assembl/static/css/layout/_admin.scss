@@ -98,6 +98,10 @@ table {
       width: 100%;
     }
 
+    input:invalid {
+      border: 3px inset red;
+    }
+
   }
 
   #adminDiscussion {

@@ -6,7 +6,7 @@ import { Grid, Row, Col, Button } from 'react-bootstrap';
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { displayModal } from '../../utils/utilityManager';
-import { getCurrentPhaseIdentifier, getPhaseName } from '../../utils/timeline';
+import { getCurrentPhaseIdentifier, getPhaseName, isSeveralIdentifiers } from '../../utils/timeline';
 
 class Objectives extends React.Component {
   constructor(props) {
@@ -23,11 +23,16 @@ class Objectives extends React.Component {
     const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
     const body = <Translate value="redirectToV1" phaseName={phaseName} />;
     const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+    const isSeveralPhases = isSeveralIdentifiers(timeline);
     if (isRedirectionToV1) {
-      displayModal(null, body, true, null, button, true);
-      setTimeout(() => {
+      if (isSeveralPhases) {
+        displayModal(null, body, true, null, button, true);
+        setTimeout(() => {
+          window.location = `${get('oldDebate', slug)}`;
+        }, 6000);
+      } else {
         window.location = `${get('oldDebate', slug)}`;
-      }, 6000);
+      }
     } else {
       browserHistory.push(`${get('debate', slug)}`);
     }

@@ -1,82 +1,84 @@
-<form class="core-form form-horizontal" id="discussion-settings">
+<form class="core-form" id="discussion-settings">
   <fieldset class="prl">
 
-    <div class="control-group fr">
-      <label for="name" class="control-label">name</label>
+    <div class="control-group">
+      <label for="name" class="control-label">{{ gettext("Name") }}</label>
       <div class="controls">
         <input type="text" id="name" class="input-xxlarge" value="<%= name %>">
       </div>
     </div>
 
-    <div class="control-group fr">
+    <div class="control-group">
             <!-- email without name. TODO: validate -->
-			<label for="admin_sender" class="control-label">admin sender</label>
+			<label for="admin_sender" class="control-label">{{ gettext("Admin sender") }}</label>
 			<div class="controls">
-				<input type="text" id="admin_sender" class="input-xxlarge" value="<%= admin_sender %>">
+				<input type="email" id="admin_sender" class="input-xxlarge" value="<%= admin_sender %>" required>
+        <span class="help-inline">{{ gettext("This field is an e-mail address, and is mandatory: it will be the value of notification emails' From field") }}</span>
 			</div>
 		</div>
 
-     <div class="control-group fr">
+     <div class="control-group">
             <!-- For mailing lists only: Where messages are sent to the list. -->
-			 <label for="post_email_address" class="control-label">post email address</label>
+			 <label for="post_email_address" class="control-label">{{ gettext("Post email address") }}</label>
 			 <div class="controls">
 				 <input type="text" id="post_email_address" class="input-xxlarge" value="<%= post_email_address %>">
+         <span class="help-inline">{{ gettext("For mailing lists only: Where messages are sent to the list") }}</span>
 			 </div>
 		 </div>
 
-			<div class="control-group fr">
-				<label for="host" class="control-label">host</label>
+			<div class="control-group">
+				<label for="host" class="control-label">{{ gettext("Host") }}</label>
 				<div class="controls">
 					<input type="text" id="host" class="input-xxlarge" value="<%= host %>">
 				</div>
 			</div>
 
-      <div class="control-group fr">
-          <label class="control-label">use ssl</label>
+      <div class="control-group">
+          <label class="control-label">{{ gettext("Use SSL") }}</label>
 
           <div class="controls">
               <label class="radio custom-radio input-xxlarge">
                   <input type="radio" id="use_ssl" <%= use_ssl ? 'checked': '' %> name="use_ssl" value="true">
                   <span class="custom-radio-element"></span>
-                  true
+                  {{ gettext("True") }}
               </label>
               <label class="radio custom-radio input-xxlarge">
                   <input type="radio" id="use_ssl" <%= use_ssl ? "": "checked" %> name="use_ssl" value="false">
                   <span class="custom-radio-element"></span>
-                  false
+                  {{ gettext("False") }}
               </label>
           </div>
 
-          <label for="folder" class="control-label">folder</label>
+          <label for="folder" class="control-label">{{ gettext("Folder") }}</label>
 
           <div class="controls">
               <input type="text" id="folder" class="input-xxlarge" value="<%= folder %>">
           </div>
       </div>
 
-      <div class="control-group fr">
-				<label for="port" class="control-label">port</label>
+      <div class="control-group">
+				<label for="port" class="control-label">{{ gettext("Port") }}</label>
 				<div class="controls">
 					<input type="text" id="port" class="input-xxlarge" value="<%= port %>">
 				</div>
 			</div>
 
-			<div class="control-group fr">
-				<label for="port" class="control-label">username</label>
+			<div class="control-group">
+				<label for="port" class="control-label">{{ gettext("Username") }}</label>
 				<div class="controls">
 					<input type="text" id="username" class="input-xxlarge" value="<%= username %>">
 				</div>
 			</div>
 
-			<div class="control-group fr">
-				<label for="port" class="control-label">password</label>
+			<div class="control-group">
+				<label for="port" class="control-label">{{ gettext("Password") }}</label>
 				<div class="controls">
 					<input type="password" id="password" class="input-xxlarge" value="<%= password %>">
 				</div>
 			</div>
 
   </fieldset>
-	<div class="form-actions fr">
+	<div class="form-actions">
 		<button class="btn btn-primary js_saveSource fr" type="submit">{{ gettext("Save changes") }}</button>
 	</div>
 </form>

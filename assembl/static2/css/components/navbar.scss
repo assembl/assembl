@@ -9,11 +9,13 @@
   .navbar-logo {
     height: auto;
     padding: 0 15px 0 0;
-    width: 90px;
 
     img {
       max-height: 40px;
-      max-width: 85px;
+    }
+
+    a {
+      line-height: 60px;
     }
   }
 
@@ -134,7 +136,6 @@
       height: $navbar-height;
       line-height: $navbar-height;
       vertical-align: middle;
-      width: 85px;
     }
 
     .active {
