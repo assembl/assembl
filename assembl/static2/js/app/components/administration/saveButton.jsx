@@ -85,8 +85,8 @@ const createLanguageEntries = (titles) => {
 
 const createQuestionEntries = (questions) => {
   let questionsArray = [];
-  let titlesArray = [];
   questions.forEach((question) => {
+    let titlesArray = [];
     question.titleEntries.forEach((title) => {
       titlesArray.push({
         value: title.value,
@@ -192,7 +192,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
         }).catch((error) => {
           displayAlert('danger', `${error}`);
         });
-      }, 200);
+      }, 400);
     });
   };
   return (
