@@ -1,3 +1,7 @@
+/*
+Once you have made changes to this file, you have to run `supervisorctl restart dev:webpack` to see the effect.
+*/
+
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -46,11 +50,11 @@ module.exports = {
         },
         {
             test: /\.scss$/,
-            loader: ExtractTextPlugin.extract('css!sass')
+            loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
         },
         { 
             test: /\.css$/, 
-            loader: "style-loader!css-loader" 
+            loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
         },
         { 
             test: /\.png$/, 

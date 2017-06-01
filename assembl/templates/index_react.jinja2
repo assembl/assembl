@@ -3,6 +3,7 @@
 
 {% block main_css %}
   {# Override the main CSS. #}
+  <link type="text/css" rel="stylesheet" href="/static2/build/bundle.css" />
   <link type="text/css" rel="stylesheet" href="/static2/build/theme_{{theme_name}}_web.css" />
 {% endblock %}
 
@@ -27,7 +28,7 @@
     {% endif %}
     <div id='root'></div>
     {% block main_js %}
-      <script src='{{REACT_URL}}/build/bundle.js'></script>
+      <script src='{{REACT_URL}}/static2/build/bundle.js'></script>
     {% endblock %}
   </body>
 {% endblock%}
