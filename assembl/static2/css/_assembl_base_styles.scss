@@ -1,4 +1,3 @@
-@import "../../static/css/base/variables.scss";
 //@import 'variables'; // The current theme imports the default theme which imports variables.scss. The current theme then overrides some of these variables.
 @import 'components/alert';
 @import 'components/assembl-glyph';
@@ -24,4 +23,5 @@
 @import 'common';
 
 // include style v1 of emoticons
+@import "../../static/css/base/variables.scss";
 @import "../../static/css/components/emoticons.scss";
