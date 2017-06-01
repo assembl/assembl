@@ -37,7 +37,7 @@ class ImageUploader extends React.Component {
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
-        <div className="preview">
+        <div className={this.state.imgUrl ? 'preview' : 'hidden'}>
           <img
             src={this.state.imgUrl}
             ref={(p) => {

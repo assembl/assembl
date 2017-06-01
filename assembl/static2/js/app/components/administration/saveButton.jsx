@@ -111,10 +111,10 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
   const saveAction = () => {
     const thematicsData = client.readQuery({ query: GetThematics });
     const promisesArray = [];
+    let payload = {};
     thematicsData.thematics.forEach((t) => {
       // To create a thematic, get if its ID is a negative number
       if (t.id < 0) {
-        let payload = {};
         if (t.video.length > 0) {
           payload = {
             variables: {
@@ -145,7 +145,6 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
         promisesArray.push(p1);
       } else {
         // Update a thematic
-        let payload = {};
         if (t.video.htmlCode !== null) {
           payload = {
             variables: {
@@ -176,7 +175,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
     if (thematicsToDelete.length > 0) {
       thematicsToDelete.forEach((id) => {
         if (isNaN(id)) {
-          let payload = {
+          payload = {
             variables: {
               thematicId: id
             }
@@ -186,7 +185,6 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
         }
       });
     }
-    console.log(promisesArray);
     Promise.all(promisesArray).then(() => {
       displayAlert('success', I18n.t('administration.successThemeCreation'));
     })
