@@ -1,5 +1,5 @@
 _extends = base_env.rc
-ini_files = production.ini develop_overlay.ini RANDOM RC_DATA
+ini_files = production.ini develop_overlay.ini RANDOM:random.ini.tmpl RC_DATA
 # ZMQ model changes local socket (backend will connect to this)
 # UNIQUE_PER_SERVER
 # Convention:
@@ -10,7 +10,7 @@ redis_socket = 0
 # Change this to the port visible from the outside
 # Typically 80 for prod, 6543 for dev
 # In dev, will often match server:main__port unless proxying
-public_port = $(port)s
+public_port = 6543
 # Other public_port values
 # public_port = 9991
 # public_port = 8080
