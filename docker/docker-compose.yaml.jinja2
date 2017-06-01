@@ -24,8 +24,6 @@ services:
       resources:
         limits:
           memory: 1g
-    ports:
-      - 9200:9200
 
   redis:
     image: redis:3.0-alpine
@@ -84,8 +82,6 @@ services:
 {% for hostname in docker_assembl_hosts %}
   assembl{{ loop.index }}:
     image: assembl:latest
-    ports:
-      - "8090:8090"
     volumes:
       - .:/var/docker_data
       - assembl_static:/opt/assembl_static
@@ -101,5 +97,3 @@ services:
     networks:
       - my_net
 {% endfor %}
-
-}
