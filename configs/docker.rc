@@ -29,6 +29,12 @@ _uses_global_supervisor = false
 # What are the public hostnames of your assembl hosts? Can be multiple, separated by spaces
 docker_assembl_hosts = assembl1.local assembl2.local
 
+# This is where you give the path to your base docker.rc file,
+# presumably overriding this one.
+# If it is not part of git, you would probably store it in docker/build,
+# which is visible to the docker image as /opt/default_config
+docker_base_rc = ~/configs/docker.rc
+
 # Replace with your company information
 saml_country = FR
 saml_state = Hauts-de-Seine

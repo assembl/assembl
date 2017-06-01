@@ -40,10 +40,19 @@ def combine_rc(rc_filename, overlay=None):
     If it specifies an _extends value, consider this file
     to be an overlay of the named file."""
     from fabric.main import load_settings
-    assert os.path.exists(rc_filename)
+    assert os.path.exists(rc_filename), "Can't find " + rc_filename
     service_config = load_settings(rc_filename)
     if '_extends' in service_config:
-        fname = join(dirname(rc_filename), service_config['_extends'])
+        fname = service_config['_extends']
+        # We want fname to be usable both on host and target.
+        # Use project-path-relative names to that effect.
+        if fname.startswith('~/'):
+            path = dirname(__file__)
+            if env.host_string != 'localhost':
+                path = env.get('projectpath', path)
+            fname = join(path, fname[2:])
+        else:
+            fname = join(dirname(rc_filename), fname)
         service_config = combine_rc(fname, service_config)
     if overlay is not None:
         service_config.update(overlay)
