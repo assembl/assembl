@@ -194,4 +194,10 @@ class ElasticChanges(threading.local):
         self._clear()
 
 
-changes = ElasticChanges(transaction.manager)
+changes = None
+
+
+def includeme(config):
+    """ Initialize changes. """
+    global changes
+    changes = ElasticChanges(transaction.manager)
