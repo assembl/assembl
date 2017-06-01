@@ -92,8 +92,8 @@ MAPPINGS = {
 }
 
 
-def get_index_settings():
-    return {"index_name": 'assembl',
+def get_index_settings(config):
+    return {"index_name": config.get('elasticsearch_index', 'assembl'),
             "chunk_size": 500,
             "index_settings": {"number_of_replicas": 0,
                                "number_of_shards": 1,

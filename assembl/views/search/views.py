@@ -45,7 +45,7 @@ def search_endpoint(context, request):
         raise HTTPUnauthorized()
 
     es = connect()
-    index_name = get_index_settings()['index_name']
+    index_name = get_index_settings(config)['index_name']
 #    print get_curl_query(query)
     result = es.search(index=index_name, body=query)
 

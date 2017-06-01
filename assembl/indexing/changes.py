@@ -50,6 +50,7 @@ from zope.interface import implementer
 import transaction
 from elasticsearch.helpers import bulk
 
+from assembl.lib import config
 from .settings import get_index_settings
 from .utils import (
     connect,
@@ -89,7 +90,7 @@ class ElasticChanges(threading.local):
         self._unindex = {}
         self._settings = None
         self._doc_types = set()
-        self._settings = get_index_settings()
+        self._settings = get_index_settings(config)
         self._activated = False
 
     def _join(self):

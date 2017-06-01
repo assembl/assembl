@@ -20,6 +20,8 @@ mysql_host=localhost
 webpack_host=localhost
 # Not used yet
 elasticsearch_host=localhost
+elasticsearch_index=assembl
+
 # External hostname: Will almost always be overridden in a host-specific rc file.
 # Note that unlike _hosts, the DNS for public_hostname need not exist at time of creation.
 public_hostname =

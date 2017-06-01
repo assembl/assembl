@@ -21,7 +21,7 @@ def create_index(index_name):
     """Create the index and return connection.
     """
     es = connect()
-    settings = get_index_settings()['index_settings']
+    settings = get_index_settings(config)['index_settings']
     exists = es.indices.exists(index_name)
     if not exists:
         es.indices.create(index=index_name, body={'settings': settings})

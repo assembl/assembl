@@ -1,6 +1,7 @@
 import logging
 from sqlalchemy.orm import with_polymorphic
 
+from assembl.lib import config
 from assembl.indexing.changes import changes
 from assembl.indexing.utils import delete_index, create_index_and_mapping
 from assembl.indexing.settings import get_index_settings
@@ -107,7 +108,7 @@ def batch_reindex_elasticsearch(session):
 
 def reindex_all_contents(session, delete=True):
     if delete:
-        settings = get_index_settings()
+        settings = get_index_settings(config)
         index_name = settings['index_name']
         delete_index(index_name)
         create_index_and_mapping(index_name)
