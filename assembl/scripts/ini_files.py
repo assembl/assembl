@@ -198,6 +198,21 @@ def combine_ini(config, overlay, adding=True):
     return config
 
 
+def migrate_beaker_config(random_ini, overlay):
+    """Migrate old-style session... to beaker.session..."""
+    for section in random_ini.sections():
+        # Avoid including DEFAULTSECT
+        if not overlay.has_section(section):
+            continue
+        o_section = overlay._sections[section]
+        for key in random_ini._sections[section]:
+            if key.startswith("beaker."):
+                old_key = key[7:]
+                if old_key in o_section and key not in o_section:
+                    overlay.set(section, key, overlay.get(section, old_key))
+    return overlay
+
+
 def dump(ini_file):
     """Dump the ini file, showing interpolations and errors."""
     ini_file = asParser(ini_file, SafeConfigParser)
@@ -417,6 +432,7 @@ def migrate(rc_filename, expected_ini, random_file=None, target_dir=None):
     if templates:
         random_data = populate_random(
             random_file, templates, extract_saml_info(rc_data))
+        migrate_beaker_config(random_data, expected_ini)
         random_data = combine_ini(random_data, expected_ini, False)
         with open(RANDOM_FILE, 'w') as f:
             random_data.write(f)
