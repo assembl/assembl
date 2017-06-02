@@ -1,0 +1,4 @@
+_extends = develop.rc
+_mac = true
+# Use the underlying user
+_postgres_db_user = __delete_key__
