@@ -9,7 +9,7 @@ class ImageUploader extends React.Component {
     this.state = {
       imgName: '',
       imgUrl: imgUrl
-    }
+    };
     this.handleChangePreview = this.handleChangePreview.bind(this);
     this.handleUploadButtonClick = this.handleUploadButtonClick.bind(this);
   }
@@ -17,18 +17,17 @@ class ImageUploader extends React.Component {
     this.fileInput.click();
   }
   handleChangePreview() {
-    const preview = this.preview;
-    const file    = this.fileInput.files[0];
-    const reader  = new FileReader();
-    reader.addEventListener("load", () => {
+    const file = this.fileInput.files[0];
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
       this.setState({
         imgName: file.name || '',
         imgUrl: reader.result
       });
+      this.props.handleImageChange(file, this.state.imgUrl);
     }, false);
     if (file) {
       reader.readAsDataURL(file);
-      this.props.handleChange(file);
     }
   }
   render() {
@@ -43,7 +42,7 @@ class ImageUploader extends React.Component {
             ref={(p) => {
               return (this.preview = p);
             }}
-            alt="Image preview"
+            alt="preview"
           />
         </div>
         <div className="preview-title">{this.state.imgName}</div>

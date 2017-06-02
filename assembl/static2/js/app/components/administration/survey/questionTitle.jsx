@@ -52,7 +52,6 @@ const updateTitle = (client, tIndex, qIndex, selectedLocale, titleEntryIndex, va
 };
 
 const QuestionsTitle = ({ client, tIndex, qIndex, titleEntries, selectedLocale }) => {
-
   const titleEntry = titleEntries.find((entry) => {
     return entry.localeCode === selectedLocale;
   });

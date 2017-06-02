@@ -28,7 +28,6 @@ const GetThematics = gql`
 `;
 
 const VideoForm = ({ client, thematicId, selectedLocale }) => {
-  
   const thematicsData = client.readQuery({ query: GetThematics });
   const findThematic = thematicsData.thematics.find((t) => {
     return String(t.id) === thematicId;
@@ -49,30 +48,30 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
 
   const addVideo = () => {
     thematicsData.thematics[thematicIndex].video = {
-      title: "",
-      description: "",
-      htmlCode: "",
-      __typename: "Video"
-    }
+      title: '',
+      description: '',
+      htmlCode: '',
+      __typename: 'Video'
+    };
     client.writeQuery({
       query: GetThematics,
       data: thematicsData
     });
   };
-  
+
   const removeVideo = () => {
     thematicsData.thematics[thematicIndex].video = {
       title: null,
       description: null,
       htmlCode: null,
-      __typename: "Video"
-    }
+      __typename: 'Video'
+    };
     client.writeQuery({
       query: GetThematics,
       data: thematicsData
     });
   };
-  
+
   const updateText = (fieldName, value) => {
     thematicsData.thematics[thematicIndex].video[fieldName] = value;
     client.writeQuery({
@@ -80,7 +79,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
       data: thematicsData
     });
   };
-  
+
   const handleCheckboxChange = (e) => {
     if (e.target.checked) {
       addVideo();
@@ -98,7 +97,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
     updateText('htmlCode', e.target.value);
   };
   return (
-    <div className={findThematic ? 'form-container' : 'hidden' }>
+    <div className={findThematic ? 'form-container' : 'hidden'}>
       <div className="margin-xl">
         <FormGroup>
           <Checkbox checked={isVideo} onChange={handleCheckboxChange}>
