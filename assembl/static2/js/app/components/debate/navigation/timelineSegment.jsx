@@ -4,7 +4,7 @@ import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { get } from '../../../utils/routeMap';
 import { displayModal } from '../../../utils/utilityManager';
-import { getPhaseStatus, isSeveralIdentifiers, getStartDatePhase, getPhaseName } from '../../../utils/timeline';
+import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 
 class TimelineSegment extends React.Component {
   constructor(props) {
@@ -13,15 +13,19 @@ class TimelineSegment extends React.Component {
   }
   displayPhase() {
     const { locale } = this.props.i18n;
-    const { phaseIdentifier } = this.props;
+    const { phaseIdentifier, title, startDate } = this.props;
     const { debateData } = this.props.debate;
     const slug = { slug: debateData.slug };
-    const phaseName = getPhaseName(debateData.timeline, phaseIdentifier, locale).toLowerCase();
+    let phaseName = "";
+    title.entries.forEach((entry, index2) => {
+      if (locale === entry['@language']) {
+        phaseName = entry.value.toLowerCase();
+      }
+    });
     const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
     const phaseStatus = getPhaseStatus(debateData.timeline, phaseIdentifier);
     if (isSeveralPhases) {
       if (phaseStatus === 'notStarted') {
-        const startDate = getStartDatePhase(debateData.timeline, phaseIdentifier);
         const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
         displayModal(null, body, true, null, null, true);
       }

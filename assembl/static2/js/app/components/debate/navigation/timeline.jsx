@@ -22,6 +22,7 @@ class Timeline extends React.Component {
               showNavigation={showNavigation}
               identifier={identifier}
               phaseIdentifier={phase.identifier}
+              startDate={phase.start}
             />
           );
         })}
