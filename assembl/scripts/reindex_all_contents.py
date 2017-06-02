@@ -12,6 +12,8 @@ from assembl.lib.sqla import (
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.indexing.reindex import reindex_all_contents
+from assembl.indexing.changes import configure_indexing
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -23,6 +25,7 @@ def main():
     set_config(settings)
     logging.config.fileConfig(args.configuration)
     configure_zmq(settings['changes.socket'], False)
+    configure_indexing(settings)
     configure_engine(settings, True)
     session = get_session_maker()()
     try:

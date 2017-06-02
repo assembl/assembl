@@ -54,3 +54,5 @@ def pytest_configure(config):
     from .lib.zmqlib import configure_zmq
     configure_zmq(app_settings['changes.socket'],
                   app_settings['changes.multiplex'])
+    from assembl.indexing.changes import configure_indexing
+    configure_indexing(app_settings)

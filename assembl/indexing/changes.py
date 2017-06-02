@@ -194,10 +194,19 @@ class ElasticChanges(threading.local):
         self._clear()
 
 
-changes = None
+_changes = None
+
+
+def get_changes():
+    global _changes
+    return _changes
+
+
+def configure_indexing(config):
+    global _changes
+    _changes = ElasticChanges(transaction.manager)
 
 
 def includeme(config):
     """ Initialize changes. """
-    global changes
-    changes = ElasticChanges(transaction.manager)
+    configure_indexing(config)

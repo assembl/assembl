@@ -11,6 +11,7 @@ from assembl.lib.sqla import (
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.semantic import upgrade_semantic_mapping
+from assembl.indexing.changes import configure_indexing
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -23,8 +24,9 @@ fileConfig(config.config_file_name)
 set_config(config.file_config._sections['app:assembl'])
 pyramid_env = bootstrap(config.config_file_name)
 configure_zmq(pyramid_env['registry'].settings['changes.socket'], False)
-
 configure_engine(pyramid_env['registry'].settings, False)
+configure_indexing(pyramid_env['registry'].settings)
+
 
 def run_migrations_online():
     """Run migrations in 'online' mode.

@@ -43,10 +43,10 @@ saml_org = Bluenove
 saml_email = assembl@bluenove.com
 
 # Are we using sentry from docker? If not, give a hostname or nothing
-docker_sentry = docker
+docker_sentry = 
 
 # Are we using piwik from docker? If not, give a hostname or nothing
-docker_piwik = docker
+docker_piwik = 
 
 # Are we using smtp from docker? If not, give a hostname or nothing
 docker_smtp = docker

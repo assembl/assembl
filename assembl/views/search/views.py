@@ -8,7 +8,7 @@ from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.indexing.utils import connect
 from assembl.indexing.settings import get_index_settings
-from assembl.indexing.changes import changes
+from assembl.indexing.changes import get_changes
 from assembl.indexing import indexing_active
 from assembl import models
 from assembl.lib.sqla import get_session_maker
@@ -98,7 +98,7 @@ def search_endpoint(context, request):
 
 def join_transaction(event):
     if indexing_active():
-        changes._join()
+        get_changes()._join()
 
 
 def includeme(config):

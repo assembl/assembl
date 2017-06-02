@@ -21,9 +21,11 @@ from celery import Celery
 from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
 from ..lib.config import set_config
-from assembl.lib.raven_client import setup_raven, capture_exception
+from assembl.lib.raven_client import setup_raven
 from zope.component import getGlobalSiteManager
 from ..lib.model_watcher import configure_model_watcher
+from assembl.indexing.changes import configure_indexing
+
 
 _settings = None
 
@@ -135,6 +137,7 @@ def init_from_celery(celery_app):
     setup_raven(config)
     set_config(settings)
     configure_engine(settings, False)
+    configure_indexing(settings)
     configure(registry, celery_app.main)
     from .threaded_model_watcher import ThreadDispatcher
     threaded_watcher_class_name = settings.get(

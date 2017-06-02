@@ -11,6 +11,7 @@ from assembl.lib.sqla import (
     configure_engine, get_session_maker)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
+from assembl.indexing.changes import configure_indexing
 
 
 def clean_avatars(db):
@@ -31,5 +32,6 @@ if __name__ == '__main__':
     logging.config.fileConfig(config_fname)
     configure_zmq(settings['changes.socket'], False)
     configure_engine(settings, True)
+    configure_indexing(settings)
     session = get_session_maker()()
     clean_avatars(session)

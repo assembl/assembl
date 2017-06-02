@@ -2,7 +2,7 @@ import logging
 from sqlalchemy.orm import with_polymorphic
 
 from assembl.lib import config
-from assembl.indexing.changes import changes
+from assembl.indexing.changes import get_changes
 from assembl.indexing.utils import delete_index, create_index_and_mapping
 from assembl.indexing.settings import get_index_settings
 from assembl.indexing import indexing_active
@@ -10,13 +10,14 @@ from assembl.indexing import indexing_active
 
 def reindex_in_elasticsearch(contents):
     for content in contents:
-        changes.index_content(content)
+        get_changes().index_content(content)
         yield content
 
 
 def intermediate_commit(contents):
     logger = logging.getLogger('assembl')
     count = 0
+    changes = get_changes()
     for content in contents:
         count += 1
         if count % 100 == 0:
@@ -69,6 +70,7 @@ def reindex_content(content, action='update'):
         return
 
     indexed_contents = (Post, AgentProfile, Idea)
+    changes = get_changes()
     if action == 'delete' and isinstance(content, indexed_contents):
         changes.unindex_content(content)
     elif isinstance(content, AgentProfile):

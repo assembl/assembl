@@ -49,6 +49,7 @@ if __name__ == '__main__':
 
     from assembl.lib.sqla import configure_engine
     from assembl.lib.zmqlib import configure_zmq
+    from assembl.indexing.changes import configure_indexing
     from assembl.lib.model_watcher import configure_model_watcher
     from assembl.lib.config import set_config
 
@@ -57,6 +58,7 @@ if __name__ == '__main__':
     settings = get_appsettings(conf, 'assembl')
     set_config(settings)
     configure_zmq(settings['changes.socket'], False)
+    configure_indexing(settings)
     configure_model_watcher(env['registry'], 'assembl')
     engine = configure_engine(settings, True)
     from assembl import models as m

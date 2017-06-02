@@ -17,6 +17,7 @@ from assembl.lib.sqla import (
     configure_engine, get_metadata, get_session_maker, mark_changed)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
+from assembl.indexing.changes import configure_indexing
 
 
 def rebuild_all_tables_fkeys(session, rebuild_tables=None, delete_missing=False):
@@ -293,6 +294,7 @@ if __name__ == '__main__':
     set_config(settings)
     logging.config.fileConfig(args.configuration)
     configure_zmq(settings['changes.socket'], False)
+    configure_indexing(settings)
     configure_engine(settings, True)
     session = get_session_maker()()
     import assembl.models

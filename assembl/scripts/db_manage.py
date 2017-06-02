@@ -15,8 +15,10 @@ from alembic.migration import MigrationContext
 from ..lib.migration import bootstrap_db, bootstrap_db_data
 from ..lib.sqla import configure_engine, mark_changed
 from ..lib.zmqlib import configure_zmq
+from ..indexing.changes import configure_indexing
 from ..lib.config import set_config
 from sqlalchemy.orm import sessionmaker
+
 
 init_instructions = [
     "user_create('%(db_user)s', '%(db_password)s')",
@@ -35,6 +37,7 @@ def main():
     settings = get_appsettings(args.configuration, 'assembl')
     set_config(settings)
     configure_zmq(settings['changes.socket'], False)
+    configure_indexing(settings)
     engine = configure_engine(settings, True)
     admin_engine = engine
     from assembl.lib.sqla import using_virtuoso

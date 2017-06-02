@@ -28,6 +28,7 @@ from assembl.lib.sqla import (
     configure_engine, get_session_maker, make_session_maker, get_metadata,
     session_maker_is_initialized)
 from assembl.lib.zmqlib import configure_zmq
+from assembl.indexing.changes import configure_indexing
 from assembl.lib.model_watcher import configure_model_watcher
 from assembl.lib.raven_client import setup_raven, capture_exception
 
@@ -608,6 +609,7 @@ def engine_from_settings(config, full_config=False):
     if full_config:
         env = bootstrap(config)
         configure_zmq(settings['changes.socket'], False)
+        configure_indexing(settings)
         configure_model_watcher(env['registry'], 'assembl')
         logging.config.fileConfig(config)
         session = get_session_maker()

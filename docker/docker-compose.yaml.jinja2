@@ -64,6 +64,9 @@ services:
   # TODO: Configure sentry
   sentry:
     image: sentry:latest
+    depends_on:
+      - database
+      - redis
 {% endif %}
 
 {% if docker_imap == 'docker' or docker_smtp == 'docker' %}
