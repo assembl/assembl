@@ -183,6 +183,14 @@ def create_local_ini():
             os.unlink(local_file_name)
 
 
+def get_random_templates():
+    templates = [r for r in env.get('ini_files', '').split()
+                 if r.startswith('RANDOM')]
+    assert len(templates) == 1, \
+        "Please define a RANDOM phase in ini_files"
+    return templates.split(':')[1:]
+
+
 @task
 def migrate_local_ini():
     """Generate a .rc file to match the existing local.ini file.
@@ -193,12 +201,16 @@ def migrate_local_ini():
 
     if env.host_string == 'localhost':
         # The easy case
-        random_base = random_ini_path
         # first protect or generate the random data
         if not exists(random_ini_path):
-            random_base += ".tmpl"
+            # Create a random.ini from specified random*.tmpl files.
+            templates = get_random_templates()
+            venvcmd("python assembl/scripts/ini_files.py combine -o " +
+                    random_ini_path + " " + " ".join(templates))
+        # Note: we do not handle the case of an existing but incomplete
+        # random.ini file. migrate is designed to be run only once.
         venvcmd("python assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
-                random_ini_path, random_base, local_ini_path))
+                random_ini_path, random_ini_path, local_ini_path))
         venvcmd("python assembl/scripts/ini_files.py migrate -o %s %s " % (
             dest_path, env.rcfile))
     else:
@@ -208,7 +220,9 @@ def migrate_local_ini():
             "No usable local venv"
         # get placeholder filenames
         with NamedTemporaryFile(delete=False) as f:
-            random_file_name = f.name
+            base_random_file_name = f.name
+        with NamedTemporaryFile(delete=False) as f:
+            dest_random_file_name = f.name
         with NamedTemporaryFile(delete=False) as f:
             local_file_name = f.name
         try:
@@ -217,21 +231,30 @@ def migrate_local_ini():
             has_random = exists(random_ini_path)
             if has_random:
                 # Backup the random file
-                run("cp %s %s.%d" % (random_file_name, random_file_name, int(time())))
-                get(random_ini_path, random_file_name)
+                run("cp %s %s.%d" % (
+                    base_random_file_name, base_random_file_name,
+                    int(time())))
+                get(random_ini_path, base_random_file_name)
             get(local_ini_path, local_file_name)
-            random_base = random_ini_path if has_random else "random.ini.tmpl"
+            # ??? should be base_random_file_name
             with settings(host_string="localhost", venvpath=local_venv):
+                if not has_random:
+                    templates = get_random_templates()
+                    venvcmd("python assembl/scripts/ini_files.py combine -o " +
+                            base_random_file_name + " " + " ".join(templates))
                 # Create the new random file with the local.ini data
                 venvcmd("python assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
-                    random_file_name, random_base, local_file_name))
+                        dest_random_file_name, base_random_file_name,
+                        local_file_name))
                 # Create the new rc file.
                 venvcmd("python assembl/scripts/ini_files.py migrate -o %s -i %s -r %s %s" % (
-                    dest_path, local_file_name, random_file_name, env.rcfile))
+                        dest_path, local_file_name, dest_random_file_name,
+                        env.rcfile))
             # Overwrite the random file
-            put(random_file_name, random_ini_path)
+            put(dest_random_file_name, random_ini_path)
         finally:
-            os.unlink(random_file_name)
+            os.unlink(base_random_file_name)
+            os.unlink(dest_random_file_name)
             os.unlink(local_file_name)
 
 

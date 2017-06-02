@@ -214,7 +214,7 @@ def dump(ini_file):
                 print e
 
 
-def populate_random(random_file, random_template=None, saml_info=None):
+def populate_random(random_file, random_templates, saml_info=None):
     """Populate random.ini
 
     Create missing random values according to the template
@@ -223,12 +223,10 @@ def populate_random(random_file, random_template=None, saml_info=None):
     from os import urandom
     from assembl.auth.make_saml import make_saml_key, make_saml_cert
     base = Parser()
-    if random_template is None:
-        random_template = os.path.basename(random_file) + ".tmpl"
-    if isinstance(random_template, file):
-        base.readfp(random_template)
-    else:
-        base.read(random_template)
+    assert random_templates, "Please give one or more templates"
+    for template in random_templates:
+        assert exists(template), "Cannot find template " + template
+        base.read(template)
     existing = Parser()
     if exists(random_file):
         existing.read(random_file)
@@ -382,7 +380,7 @@ def diff_ini(first, second, diff=None, existing_only=False):
     return diff
 
 
-def compose(rc_filename, random_file):
+def compose(rc_filename, random_file=None):
     """Compose local.ini from the given .rc file"""
     rc_info = combine_rc(rc_filename)
     ini_sequence = rc_info.get('ini_files', None)
@@ -393,21 +391,31 @@ def compose(rc_filename, random_file):
         if overlay == 'RC_DATA':
             overlay = rc_to_ini(rc_info)
         elif overlay.startswith('RANDOM'):
-            template = overlay.split(':')[1] if ':' in overlay else None
-            overlay = populate_random(
-                random_file, template, extract_saml_info(rc_info))
+            templates = overlay.split(':')[1:]
+            if random_file:
+                overlay = populate_random(
+                    random_file, templates, extract_saml_info(rc_info))
         combine_ini(base, overlay)
     return base
 
 
-def migrate(rc_filename, expected_ini, random_file, target_dir=None):
+def migrate(rc_filename, expected_ini, random_file=None, target_dir=None):
     """Create a overlay.rc file from the local.ini and a base .rc file"""
     expected_ini = asParser(expected_ini)
     rc_data = combine_rc(rc_filename)
-    random_data = populate_random(random_file, None, extract_saml_info(rc_data))
-    random_data = combine_ini(random_data, expected_ini, False)
-    with open(RANDOM_FILE, 'w') as f:
-        random_data.write(f)
+    ini_files = rc_data.get('ini_files', None)
+    assert ini_files, "Define ini_files"
+    random = [f for f in ini_files.split() if f.startswith("RANDOM")]
+    if random:
+        assert len(random) == 1, "Only a single random element in ini_files"
+        templates = random[0].split(":")[1:]
+        random_data = populate_random(
+            random_file, templates, extract_saml_info(rc_data))
+        random_data = combine_ini(random_data, expected_ini, False)
+        with open(RANDOM_FILE, 'w') as f:
+            random_data.write(f)
+    else:
+        random_file = None
     base = compose(rc_filename, random_file)
     diff = diff_ini(base, expected_ini)
     return iniconfig_to_rc(diff, extends=rc_filename, target_dir=target_dir)
@@ -461,8 +469,8 @@ def main():
         'random', help=short_help(populate_random))
     parser_random.add_argument('--random', '-r', help='random.ini file',
                                default=RANDOM_FILE)
-    parser_random.add_argument('--template', '-t', help='random template file',
-                               type=FileType('r'), default=None)
+    parser_random.add_argument('--template', '-t', help='random template files',
+                               action='append', default=[])
     parser_random.add_argument('input', help='Input rc file (for saml)')
 
     # dump .ini
