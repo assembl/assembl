@@ -93,7 +93,7 @@ mutation myFirstMutation {
         thematic {
             title,
             identifier
-            video {title, description, htmlCode}
+            video {title, titleEntries { localeCode value }, description, descriptionEntries { localeCode value }, htmlCode}
         }
     }
 }
@@ -104,7 +104,15 @@ mutation myFirstMutation {
                 u'title': u'Understanding the dynamics and issues',
                 u'identifier': 'survey',
                 u'video': {u'title': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
+                           u'titleEntries': [{
+                               u'value': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
+                               u'localeCode': u"fr"
+                           }],
                            u'description': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
+                           u'descriptionEntries': [{
+                               u'value': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
+                               u'localeCode': u"fr"
+                           }],
                            u'htmlCode': u"<object>....</object>",
                            }
     }}}

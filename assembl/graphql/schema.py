@@ -287,6 +287,8 @@ class Video(graphene.ObjectType):
     title = graphene.String()
     description = graphene.String()
     html_code = graphene.String()
+    title_entries = graphene.List(LangStringEntry)
+    description_entries = graphene.List(LangStringEntry)
 
 
 class Idea(SecureObjectType, SQLAlchemyObjectType):
@@ -444,10 +446,14 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_video(self, args, context, info):
         title = resolve_langstring(self.video_title, args.get('lang'))
+        title_entries = resolve_langstring_entries(self, 'video_title')
         description = resolve_langstring(self.video_description, args.get('lang'))
+        description_entries = resolve_langstring_entries(self, 'video_description')
         return Video(
             title=title,
+            title_entries=title_entries,
             description=description,
+            description_entries=description_entries,
             html_code=self.video_html_code,
         )
 
