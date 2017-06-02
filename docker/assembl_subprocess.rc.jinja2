@@ -9,6 +9,14 @@ public_hostname = {{ public_hostname_ }}
 
 first_admin_email = admin@{{ public_hostname_ }}
 
+redis_socket = {{ assembl_index }}
+
+uwsgi__socket = 0.0.0.0:{{ 9000 + assembl_index }}
+
+*sentry_key = a
+*sentry_secret = b
+*sentry_id = {{ assembl_index }}
+
 {% if docker_sentry == 'docker' %}
 *sentry_host = sentry
 {% elif docker_sentry %}

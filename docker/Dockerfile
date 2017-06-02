@@ -40,7 +40,6 @@ RUN     /etc/init.d/ssh start && \
            fab -c $DOCKER_RC app_compile_nodbupdate && \
            fab -c $DOCKER_RC set_file_permissions && \
            /etc/init.d/ssh stop
-EXPOSE 80
 CMD     /etc/init.d/ssh start && \
         . venv/bin/activate && \
         fab -c $DOCKER_RC docker_startup && \
