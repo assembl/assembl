@@ -665,6 +665,7 @@ class UpdateThematic(graphene.Mutation):
         identifier = graphene.String(required=True)
         video = graphene.Argument(VideoInput)
         questions = graphene.List(QuestionInput)
+        image = graphene.String()  # this is the identifier of the part in a multipart POST
 
     thematic = graphene.Field(lambda: Thematic)
 
@@ -672,6 +673,7 @@ class UpdateThematic(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         user_id = context.authenticated_userid or Everyone
 
         thematic_id = args.get('id')
@@ -706,6 +708,34 @@ class UpdateThematic(graphene.Mutation):
             for attr, value in kwargs.items():
                 setattr(thematic, attr, value)
             db = thematic.db
+
+            # add uploaded image as an attachment to the idea
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = mimetypes.guess_type(filename)[0]
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                # if there is already an attachment, remove it (but the old
+                # image stays on the server)
+                if thematic.attachments:
+                    thematic.attachments.remove(thematic.attachments[0])
+
+                attachment = models.IdeaAttachment(
+                    document=document,
+#                    idea=thematic,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="EMBED_ATTACHMENT"
+                )
+                thematic.attachments.append(attachment)
             db.flush()
 
             questions_input = args.get('questions')

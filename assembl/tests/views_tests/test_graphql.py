@@ -178,6 +178,7 @@ mutation myFirstMutation {
 
 
 def test_mutation_create_thematic_upload_file(graphql_request):
+    # create thematic
     import os
     from io import BytesIO
 
@@ -196,6 +197,7 @@ mutation myFirstMutation($img:String) {
         image:$img
     ) {
         thematic {
+            id,
             title(lang:"fr"),
             identifier,
             imgUrl
@@ -218,6 +220,36 @@ mutation myFirstMutation($img:String) {
 #    }}}
 #    just assert we have the ends correct:
     assert res.data['createThematic']['thematic']['imgUrl'].endswith('/documents/1/data')
+    thematic_id = res.data['createThematic']['thematic']['id']
+
+    # and update it to change the image
+
+    class FileUpload2(object):
+        file = BytesIO(os.urandom(16))
+        filename = 'path/to/img2.png'
+
+    graphql_request.POST['variables.img'] = FileUpload2()
+    res = schema.execute(u"""
+mutation myFirstMutation($img:String, $thematicId:ID!) {
+    updateThematic(
+        id:$thematicId,
+        titleEntries:[
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+            {value:"Understanding the dynamics and issues", localeCode:"en"}
+        ],
+        identifier:"survey",
+        image:$img
+    ) {
+        thematic {
+            title(lang:"fr"),
+            identifier,
+            imgUrl
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"thematicId": thematic_id,
+                                                     "img": u"variables.img"})
+    assert res.data['updateThematic']['thematic']['imgUrl'].endswith('/documents/2/data')
 
 
 def test_mutation_create_thematic_multilang_explicit_en(graphql_request):
