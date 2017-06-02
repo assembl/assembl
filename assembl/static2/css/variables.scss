@@ -25,12 +25,17 @@ $opacity-cyan: rgba(0, 140, 166, .5);
 $min-opacity-cyan: rgba(0, 140, 166, .1);
 $linear-gradient: linear-gradient( 90deg, $grey6, $white );
 
-$first-color: $blue;
-$first-color-light: $blue-light;
-$second-color: $green;
-$third-color: $blue;
-$opacity-color: $opacity-blue;
-$min-opacity-color: $min-opacity-blue;
+$blue-harvard: #005b81;
+$green-harvard: #44cd54;
+$blue-light-harvard: rgba(0, 91, 129, 0.5);
+$blue-light-min-harvard: rgba(0, 91, 129, 0.1);
+
+$first-color: $blue-harvard;
+$first-color-light: $blue-light-harvard;
+$second-color: $green-harvard;
+$third-color: $blue-harvard;
+$opacity-color: $blue-light-harvard;
+$min-opacity-color: $blue-light-min-harvard;
 
 $app-max-width: 1400px;
 $navbar-height: 60px;
