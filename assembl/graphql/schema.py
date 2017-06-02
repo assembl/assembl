@@ -548,6 +548,7 @@ class CreateThematic(graphene.Mutation):
         video = graphene.Argument(VideoInput)
         questions = graphene.List(QuestionInput)
         image = graphene.String()  # this is the identifier of the part in a multipart POST
+        order = graphene.Int()
 
     thematic = graphene.Field(lambda: Thematic)
 
@@ -619,9 +620,12 @@ class CreateThematic(graphene.Mutation):
                 short_title=short_title,
                 identifier=identifier,
                 **kwargs)
-            root_thematic.children.append(saobj)
             db = saobj.db
             db.add(saobj)
+            order = len(root_thematic.get_children()) + 1
+            db.add(
+                models.IdeaLink(source=root_thematic, target=saobj,
+                         order=args.get('order', order)))
 
             # add uploaded image as an attachment to the idea
             image = args.get('image')
@@ -649,15 +653,16 @@ class CreateThematic(graphene.Mutation):
 
             questions_input = args.get('questions')
             if questions_input is not None:
-                for question_input in questions_input:
+                for idx, question_input in enumerate(questions_input):
                     title_ls = langstring_from_input_entries(
                         question_input['title_entries'])
-                    saobj.children.append(
-                        models.Question(
-                            title=title_ls,
-                            discussion_id=discussion_id
-                        )
+                    question = models.Question(
+                        title=title_ls,
+                        discussion_id=discussion_id
                     )
+                    db.add(
+                        models.IdeaLink(source=saobj, target=question,
+                                        order=idx + 1))
                 db.flush()
 
         return CreateThematic(thematic=saobj)
@@ -748,22 +753,25 @@ class UpdateThematic(graphene.Mutation):
             existing_questions = {question.id: question for question in thematic.get_children()}
             updated_questions = set()
             if questions_input is not None:
-                for question_input in questions_input:
+                for idx, question_input in enumerate(questions_input):
                     if question_input.get('id', None) is not None:
                         id_ = int(Node.from_global_id(question_input['id'])[1])
                         updated_questions.add(id_)
                         question = models.Question.get(id_)
                         update_langstring_from_input_entries(
                             question, 'title', question_input['title_entries'])
+                        # modify question order
+                        question.source_links[0].order = idx + 1
                     else:
                         title_ls = langstring_from_input_entries(
                             question_input['title_entries'])
-                        thematic.children.append(
-                            models.Question(
-                                title=title_ls,
-                                discussion_id=discussion_id
-                            )
+                        question = models.Question(
+                            title=title_ls,
+                            discussion_id=discussion_id
                         )
+                        db.add(
+                            models.IdeaLink(source=thematic, target=question,
+                                     order=idx + 1))
 
             # remove question (tombstone it) that are not in questions_input
             for question_id in set(existing_questions.keys()

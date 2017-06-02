@@ -326,6 +326,12 @@ mutation myFirstMutation {
             {titleEntries:[
                 {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
             ]},
+            {titleEntries:[
+                {value:"Second question ?", localeCode:"fr"}
+            ]},
+            {titleEntries:[
+                {value:"Third question ?", localeCode:"fr"}
+            ]},
         ],
         identifier:"survey",
     ) {
@@ -343,7 +349,9 @@ mutation myFirstMutation {
                 u'title': u'Comprendre les dynamiques et les enjeux',
                 u'identifier': u'survey',
                 u'questions': [
-                    {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}
+                    {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"},
+                    {u'title': u"Second question ?"},
+                    {u'title': u"Third question ?"}
                 ]
     }}}
 
@@ -487,6 +495,7 @@ mutation secondMutation {
 
 
 def test_update_thematic_add_question(graphql_request, thematic_and_question):
+    # This test add a new question and change the questions order
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
 mutation secondMutation {
@@ -497,12 +506,12 @@ mutation secondMutation {
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
         ],
         questions:[
+            {titleEntries:[
+                {value:"Second question but first!", localeCode:"fr"}
+            ]},
             {id: "%s",
              titleEntries:[
                 {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
-            ]},
-            {titleEntries:[
-                {value:"Second question ?", localeCode:"fr"}
             ]},
         ],
         identifier:"survey",
@@ -525,10 +534,10 @@ mutation secondMutation {
                 u'identifier': u'survey',
                 u'questions': [
                     {u'titleEntries': [
-                        {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': "fr"}
+                        {u'value': u"Second question but first!", u'localeCode': u"fr"}
                     ]},
                     {u'titleEntries': [
-                        {u'value': u"Second question ?", u'localeCode': "fr"}
+                        {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
                     ]},
                 ]
     }}}
