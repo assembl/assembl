@@ -26,7 +26,7 @@ code:: ini
 
     configs/base_env.rc:
     ini_file = local.ini
-    ini_files = production.ini RANDOM RC_DATA
+    ini_files = production.ini RANDOM:random.ini.tmpl RC_DATA
     hosts = localhost
     *db_user = assembl
     *db_password = assembl
@@ -41,15 +41,15 @@ code:: py
       "hosts": "myinstance.example.com",
       "projectpath": "/home/assembl_user/assembl",
       "ini_file": "local.ini",
-      "ini_files": "production.ini RANDOM RC_DATA",
+      "ini_files": "production.ini RANDOM:random.ini.tmpl RC_DATA",
       "supervisor__autostart_changes_router": "true",
     }
 
-The same dictionary composition method is used to compose the ``local.ini`` file, in :py:func:`assembl.scripts.ini_files.compose`. The basis is the ``ini_files`` variable: each ``.ini`` file mentioned (path relative to project root) is combined in turn, with values overriding the previous one in the sequence, and the resulting combination file is written out to ``local.ini`` in the ``create_local_ini`` fab task. There are two magic values that can be used in the ``ini_files`` list: ``RANDOM`` and ``RC_DATA``. Those are mostly useful when creating the ``local.ini`` file used by pyramid.
+The same dictionary composition method is used to compose the ``local.ini`` file, in :py:func:`assembl.scripts.ini_files.compose`. The basis is the ``ini_files`` variable: each ``.ini`` file mentioned (path relative to project root) is combined in turn, with values overriding the previous one in the sequence, and the resulting combination file is written out to ``local.ini`` in the ``create_local_ini`` fab task. There are two magic values that can be used in the ``ini_files`` list: ``RANDOM:...`` and ``RC_DATA``. Those are mostly useful when creating the ``local.ini`` file used by pyramid.
 
 ``RC_DATA`` corresponds to the data from the `.rc` files itself. Most of key-value pairs will be in the ``app:assembl`` section by default. A key-value pair can be assigned to any section if the key follows the ``section_name__key_name`` format. If the key was preceded by a ``_``, it is not injected in the ``.ini`` file at all (this is for fabric-only values). Similarly, if the value is ``__delete_key__``, it is not injected in the ``.ini`` file. (This can allow to mask a value from an inherited ``.rc`` file, and use the value from the ``.ini`` file that precedes the ``RC_DATA`` step in the ``ini_files`` chain.) If the key was preceded by a ``*``, it goes in the ``DEFAULT`` section, and its value is available in all sections. This is useful for cross-section variable interpolation, as described in :py:mod:`ConfigParser`.
 
-``RANDOM`` will use data from the ``random.ini`` file, but will first ensure that it is populated with random values generated with the ``assembl-ini-files random ...rc`` subcommand. That subcommand will generate the ``random.ini`` file from ``random.ini.tmpl`` if it does not exist. If a value is already set, it is preserved, but missing (new) values will still be added. The codes for random generation are the following: ``{random66}``, for example, will create a random string of length (4/3)66 (rounded up). ``{saml_key}`` will create a X509 key (without its armour) and ``{saml_crt}`` will create a self-signed certificate using data from ``saml_...`` keys and the ``public_hostname``. Those have to be set in keys following the ``XXX_PRIVATE_KEY`` and ``XXX_PUBLIC_CERT`` pattern respectively.
+``RANDOM:...`` will use data from the ``random.ini`` file, but will first ensure that it is populated with random values generated with the ``assembl-ini-files random ...rc`` subcommand. If it does not exist, that subcommand will first generate the ``random.ini`` file by combining the template files mentioned after ``RANDOM:`` (project-relative paths, separated by further ``:``). If a value is already set, it is preserved, but missing (new) values will still be added. The codes for random generation are the following: ``{random66}``, for example, will create a random string of length (4/3)66 (rounded up). ``{saml_key}`` will create a X509 key (without its armour) and ``{saml_crt}`` will create a self-signed certificate using data from ``saml_...`` keys and the ``public_hostname``. Those have to be set in keys following the ``XXX_PRIVATE_KEY`` and ``XXX_PUBLIC_CERT`` pattern respectively.
 
 
 specific .rc file keys
