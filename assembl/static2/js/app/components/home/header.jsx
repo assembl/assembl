@@ -46,7 +46,9 @@ class Header extends React.Component {
       <section className="home-section header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
-            <img className="header-logo" src={debateData.logo} alt="logo" />
+            {debateData.headerLogoUrl ?
+              <img className="header-logo" src={debateData.headerLogoUrl} alt="logo" /> : null
+            }
             <div className="max-text-width">
               <h1 className="light-title-1">{debateData.topic}</h1>
               <h4 className="light-title-4 uppercase margin-m">
