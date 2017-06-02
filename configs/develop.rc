@@ -1,4 +1,5 @@
 _extends = base_env.rc
+public_hostname = localhost
 ini_files = production.ini develop_overlay.ini RANDOM:random.ini.tmpl RC_DATA
 # ZMQ model changes local socket (backend will connect to this)
 # UNIQUE_PER_SERVER
@@ -55,3 +56,8 @@ _uses_ngnix = false
 _uses_uwsgi = false
 _is_production_env = false
 _wsginame = dev.wsgi
+
+# If you want to see emails, run this in another console:
+# python -m smtpd -n -c DebuggingServer
+mail.port = 8025
+mail.host = localhost

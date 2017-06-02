@@ -14,6 +14,8 @@ piwik_host = localhost
 *sentry_host = localhost
 _sentry_db_host = localhost
 # _sentry_db_password =
+# Replace with your admin email if necessary
+assembl.admin_email = webmaster@%(public_hostname)s
 
 memcached_host = localhost
 mysql_host=localhost
