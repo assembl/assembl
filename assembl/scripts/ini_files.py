@@ -214,7 +214,7 @@ def dump(ini_file):
                 print e
 
 
-def populate_random(random_file, random_templates, saml_info=None):
+def populate_random(random_file, random_templates=None, saml_info=None):
     """Populate random.ini
 
     Create missing random values according to the template
@@ -399,16 +399,22 @@ def compose(rc_filename, random_file=None):
     return base
 
 
+def extract_random_templates(ini_files):
+    ini_files = ini_files or ''
+    random = [f for f in ini_files.split() if f.startswith("RANDOM")]
+    if random:
+        assert len(random) == 1, "Only a single random element in ini_files"
+        return random[0].split(":")[1:]
+    return []
+
+
 def migrate(rc_filename, expected_ini, random_file=None, target_dir=None):
     """Create a overlay.rc file from the local.ini and a base .rc file"""
     expected_ini = asParser(expected_ini)
     rc_data = combine_rc(rc_filename)
     ini_files = rc_data.get('ini_files', None)
-    assert ini_files, "Define ini_files"
-    random = [f for f in ini_files.split() if f.startswith("RANDOM")]
-    if random:
-        assert len(random) == 1, "Only a single random element in ini_files"
-        templates = random[0].split(":")[1:]
+    templates = extract_random_templates(ini_files)
+    if templates:
         random_data = populate_random(
             random_file, templates, extract_saml_info(rc_data))
         random_data = combine_ini(random_data, expected_ini, False)
@@ -502,7 +508,9 @@ def main():
         base.write(args.output)
     elif args.command == 'random':
         rc_info = combine_rc(args.input)
-        populate_random(args.random, args.template, extract_saml_info(rc_info))
+        templates = args.template or extract_random_templates(
+            rc_info.get('ini_files', ''))
+        populate_random(args.random, templates, extract_saml_info(rc_info))
     elif args.command == 'compose':
         ini_info = compose(args.input, args.random)
         ini_info.write(args.output)
