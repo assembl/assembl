@@ -435,14 +435,15 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         )
 
     def resolve_img_url(self, args, context, info):
+        index = self.get_parents()[0].get_children().index(self)
         images = [
-            'https://framapic.org/CiOjTZIVLFgg/9Xr4dPUMDZJG.jpg',
-            'https://framapic.org/pF0R9jQM5Aof/MortpNh6czMP.jpg',
-            'https://framapic.org/3CL5o6dir9Vk/xQ0Uckbi7ckp.jpg',
-            'https://framapic.org/cKULJ8P6VLFr/Nojx87ovxtjC.jpg'
+            'https://framapic.org/MmJ9xEj08x8G/dRZSK23VYyIc.jpg',
+            'https://framapic.org/sLFxLbI7QXnL/vIGtwrsGWaq1.jpg',
+            'https://framapic.org/Vxp74KNPvM1u/bj2HslDBD0WN.jpg',
+            'https://framapic.org/k4g9CP4yEYFn/a2eTXC9Giyjy.jpg'
         ]
         # TODO imgUrl
-        return random_sample(images, 1)[0]
+        return images[index]
 
 
 class Query(graphene.ObjectType):
