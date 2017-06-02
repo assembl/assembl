@@ -210,6 +210,10 @@ def migrate_beaker_config(random_ini, overlay):
                 old_key = key[7:]
                 if old_key in o_section and key not in o_section:
                     overlay.set(section, key, overlay.get(section, old_key))
+            elif key == 'session.secret':
+                alt_key = 'beaker.' + key
+                if alt_key in o_section and key not in o_section:
+                    overlay.set(section, key, overlay.get(section, alt_key))
     return overlay
 
 
