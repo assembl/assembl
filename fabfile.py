@@ -1251,6 +1251,22 @@ def check_if_database_exists():
         return not checkDatabase.failed
 
 
+def check_if_db_tables_exist():
+    with settings(warn_only=True):
+        checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
+            command="SELECT count(*) from permission", database=env.db_database,
+            password=env.db_password, host=env.db_host, user=env.db_user))
+        return not checkDatabase.failed
+
+
+def check_if_first_user():
+    with settings(warn_only=True):
+        checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
+            command="SELECT count(*) from public.user", database=env.db_database,
+            password=env.db_password, host=env.db_host, user=env.db_user))
+        return not checkDatabase.failed and int(checkDatabase.strip('()L,')) > 0
+
+
 @task
 def database_create():
     """Create the database for this assembl instance"""
@@ -1488,10 +1504,14 @@ def docker_startup():
         run("chmod -R a+r /opt/assembl_static")
         run("find /opt/assembl_static -type d | xargs chmod a+x")
     execute(check_and_create_database_user)
-    if check_if_database_exists():
-        execute(app_db_update)
-    else:
+    if not check_if_database_exists():
         execute(app_db_install)
+    elif not check_if_db_tables_exist():
+        # DB exists, maybe separate the boostrap test
+        execute(app_db_install)
+    else:
+        execute(app_db_update)
+    if not check_if_first_user():
         execute(create_first_admin_user)
     venvcmd("supervisord")
 
