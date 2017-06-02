@@ -3,7 +3,7 @@ import csv
 import pytest
 from datetime import datetime, timedelta
 import simplejson as json
-from StringIO import StringIO
+from io import BytesIO
 
 from assembl.models import (
     AbstractIdeaVote,
@@ -27,20 +27,6 @@ def local_to_absolute(uri):
     if uri.startswith('local:'):
         return '/data/' + uri[6:]
     return uri
-
-
-def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
-    # csv.py doesn't do Unicode; encode temporarily as UTF-8:
-    csv_reader = csv.reader(
-        utf_8_encoder(unicode_csv_data), dialect=dialect, **kwargs)
-    for row in csv_reader:
-        # decode UTF-8 back to Unicode, cell by cell:
-        yield [unicode(cell, 'utf-8') for cell in row]
-
-
-def utf_8_encoder(unicode_csv_data):
-    for line in unicode_csv_data:
-        yield line.encode('utf-8')
 
 
 def test_get_ideas(discussion, test_app, synthesis_1,
@@ -933,36 +919,35 @@ def test_phase1_export(proposals_with_sentiments, discussion, test_app):
 
     response = test_app.get(
         '/data/Discussion/{}/phase1_csv_export'.format(discussion.id))
-    csv_file = StringIO()
-    csv_file.write(response.app_iter[0].decode('utf-8'))
+    csv_file = BytesIO()
+    csv_file.write(response.app_iter[0])
     csv_file.seek(0)
     assert response.status_code == 200
-    result = unicode_csv_reader(csv_file, dialect='excel')
     result = csv.reader(csv_file, dialect='excel')
     result = list(result)
 
     header = result[0]
-    assert header[QUESTION_ID] == u'Numéro de la question'
-    assert header[SENTIMENT_ACTOR_NAME] == u"Nom du votant"
+    assert header[QUESTION_ID] == b'Numéro de la question'
+    assert header[SENTIMENT_ACTOR_NAME] == b"Nom du votant"
 
     first_row = result[1]
-    assert first_row[THEMATIC_NAME] == u'Comprendre les dynamiques et les enjeux'
-    assert first_row[QUESTION_TITLE] == u"Comment qualifiez-vous l'emergence "\
-                                         "de l'Intelligence Artificielle "\
-                                         "dans notre société ?"
-    assert first_row[POST_BODY] == u'une proposition 14'
-    assert first_row[POST_LIKE_COUNT] == u'0'
-    assert first_row[POST_DISAGREE_COUNT] == u'0'
-    assert first_row[POST_CREATOR_NAME] == u'Mr. Administrator'
-    assert first_row[POST_CREATOR_EMAIL] == u''
+    assert first_row[THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
+    assert first_row[QUESTION_TITLE] == b"Comment qualifiez-vous l'emergence "\
+                                        b"de l'Intelligence Artificielle "\
+                                        b"dans notre société ?"
+    assert first_row[POST_BODY] == b'une proposition 14'
+    assert first_row[POST_LIKE_COUNT] == b'0'
+    assert first_row[POST_DISAGREE_COUNT] == b'0'
+    assert first_row[POST_CREATOR_NAME] == b'Mr. Administrator'
+    assert first_row[POST_CREATOR_EMAIL] == b''
     date = datetime.today().strftime('%d/%m/%Y')
     assert first_row[POST_CREATION_DATE].startswith(date)
-    assert first_row[SENTIMENT_ACTOR_NAME] == u''
-    assert first_row[SENTIMENT_ACTOR_EMAIL] == u''
-    assert first_row[SENTIMENT_CREATION_DATE] == u''
+    assert first_row[SENTIMENT_ACTOR_NAME] == b''
+    assert first_row[SENTIMENT_ACTOR_EMAIL] == b''
+    assert first_row[SENTIMENT_CREATION_DATE] == b''
 
     last_row = result[-1]
-    assert last_row[THEMATIC_NAME] == u'Comprendre les dynamiques et les enjeux'
-    assert last_row[POST_LIKE_COUNT] == u'1'
-    assert last_row[POST_DISAGREE_COUNT] == u'0'
-    assert last_row[SENTIMENT_ACTOR_NAME] == u'Mr. Administrator'
+    assert last_row[THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
+    assert last_row[POST_LIKE_COUNT] == b'1'
+    assert last_row[POST_DISAGREE_COUNT] == b'0'
+    assert last_row[SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'
