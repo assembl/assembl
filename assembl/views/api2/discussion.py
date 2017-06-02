@@ -1529,6 +1529,14 @@ def get_participant_time_series_analytics(request):
     return csv_response(rows, format)
 
 
+def convert_to_utf8(rowdict):
+    row = {}
+    for key, value in rowdict.items():
+        row[key.encode('utf-8')] = value.encode('utf-8') if isinstance(value, unicode) else value
+
+    return row
+
+
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
              name="phase1_csv_export")
@@ -1549,18 +1557,18 @@ def phase1_csv_export(request):
     SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
     SENTIMENT_CREATION_DATE = u"Date/heure du vote"
     fieldnames = [
-        THEMATIC_NAME,
-        QUESTION_ID,
-        QUESTION_TITLE,
-        POST_BODY,
-        POST_LIKE_COUNT,
-        POST_DISAGREE_COUNT,
-        POST_CREATOR_NAME,
-        POST_CREATOR_EMAIL,
-        POST_CREATION_DATE,
-        SENTIMENT_ACTOR_NAME,
-        SENTIMENT_ACTOR_EMAIL,
-        SENTIMENT_CREATION_DATE,
+        THEMATIC_NAME.encode('utf-8'),
+        QUESTION_ID.encode('utf-8'),
+        QUESTION_TITLE.encode('utf-8'),
+        POST_BODY.encode('utf-8'),
+        POST_LIKE_COUNT.encode('utf-8'),
+        POST_DISAGREE_COUNT.encode('utf-8'),
+        POST_CREATOR_NAME.encode('utf-8'),
+        POST_CREATOR_EMAIL.encode('utf-8'),
+        POST_CREATION_DATE.encode('utf-8'),
+        SENTIMENT_ACTOR_NAME.encode('utf-8'),
+        SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
+        SENTIMENT_CREATION_DATE.encode('utf-8'),
     ]
 
     output = tempfile.NamedTemporaryFile('w+b', delete=True)
@@ -1585,17 +1593,17 @@ def phase1_csv_export(request):
                 row[POST_LIKE_COUNT] = post.like_count
                 row[POST_DISAGREE_COUNT] = post.disagree_count
                 if not post.sentiments:
-                    row[SENTIMENT_ACTOR_NAME] = ''
-                    row[SENTIMENT_ACTOR_EMAIL] = ''
-                    row[SENTIMENT_CREATION_DATE] = ''
-                    writer.writerow(row)
+                    row[SENTIMENT_ACTOR_NAME] = u''
+                    row[SENTIMENT_ACTOR_EMAIL] = u''
+                    row[SENTIMENT_CREATION_DATE] = u''
+                    writer.writerow(convert_to_utf8(row))
 
                 for sentiment in post.sentiments:
                     row[SENTIMENT_ACTOR_NAME] = sentiment.actor.name
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.preferred_email
                     row[SENTIMENT_CREATION_DATE] = format_date(
                         sentiment.creation_date)
-                    writer.writerow(row)
+                    writer.writerow(convert_to_utf8(row))
 
     output.seek(0)
     response = request.response
