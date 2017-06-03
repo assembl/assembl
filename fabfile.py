@@ -74,7 +74,7 @@ def as_bool(b):
 def sanitize_env():
     """Ensure boolean and list env variables are such"""
     for name in (
-            "uses_memcache ", "uses_uwsgi", "uses_apache", "uses_ngnix",
+            "uses_memcache", "uses_uwsgi", "uses_apache",
             "uses_global_supervisor", "uses_apache",
             "uses_ngnix", "mac", "is_production_env"):
         # Note that we use as_bool() instead of bool(),
@@ -99,9 +99,10 @@ def sanitize_env():
         env.mac = system().startswith('Darwin')
     else:
         env.mac = False
+    env.projectpath = env.get('projectpath', dirname(__file__))
     env.venvpath = env.get('venvpath', join(env.projectpath, 'venv'))
     env.dbdumps_dir = env.get('dbdumps_dir', join(
-        env.projectpath, '%s_dumps' % env.projectname))
+        env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
 
 
 def load_rcfile_config():
