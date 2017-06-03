@@ -51,10 +51,10 @@ DEFAULTS = {
     'autostart_source_reader': 'true',
     'autostart_changes_router': 'true',
     'autostart_pserve': 'false',
-    'autostart_nodesass': 'false',
     'autostart_gulp': 'false',
     'autostart_webpack': 'false',
     'autostart_uwsgi': 'false',
+    'autostart_elasticsearch_server': 'false',
     'autostart_metrics_server': 'false',
     'autostart_edgesense_server': 'false',
 }
@@ -166,9 +166,9 @@ def generate_ini_files(config, config_fname):
             'autostart_source_reader',
             'autostart_changes_router',
             'autostart_pserve',
-            'autostart_nodesass',
             'autostart_gulp',
             'autostart_webpack',
+            'autostart_elasticsearch_server',
             'autostart_uwsgi'):
         vars[var] = config.get('supervisor', var)
 
