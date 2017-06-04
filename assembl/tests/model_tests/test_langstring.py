@@ -179,7 +179,7 @@ def test_user_language_preference_en_to_fr_explicit_and_fr_explicit(
     Add {fr: Explicit} to User Language Preference
     Expect: IntegrityError
     """
-    from pyodbc import IntegrityError
+    from sqlalchemy.exc import IntegrityError
     from assembl.models.auth import (
         LanguagePreferenceOrder,
         UserLanguagePreference
