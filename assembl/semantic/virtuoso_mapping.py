@@ -12,7 +12,7 @@ from base64 import urlsafe_b64encode, urlsafe_b64decode
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.properties import RelationshipProperty
+# from sqlalchemy.orm.properties import RelationshipProperty
 from rdflib import Graph, ConjunctiveGraph, URIRef
 import simplejson as json
 
@@ -20,12 +20,15 @@ from . import (context_url, ontology_dir, local_context_loc)
 from ..lib.config import get_config
 from ..lib.utils import get_global_base_url
 from ..lib.sqla import class_registry, Base
-from .namespaces import (ASSEMBL, QUADNAMES, RDF, OWL, CATALYST, SIOC, FOAF)
-from virtuoso.vmapping import (
-    QuadMapPattern, QuadStorage, GraphQuadMapPattern, IriClass,
-    PatternGraphQuadMapPattern, ClassPatternExtractor, VirtRDF)
-from virtuoso.vstore import Virtuoso
-from virtuoso.alchemy import SparqlClause
+from .namespaces import (
+    ASSEMBL, QUADNAMES, RDF, OWL, CATALYST, SIOC, FOAF, VirtRDF)
+from sqla_rdfbridge.mapping import (
+    QuadMapPattern, GraphQuadMapPattern, IriClass)
+from sqla_rdfbridge.quadextractor import ClassPatternExtractor
+# from virtuoso.vmapping import (
+#     QuadStorage,  PatternGraphQuadMapPattern)
+# from virtuoso.vstore import Virtuoso
+# from virtuoso.alchemy import SparqlClause
 
 
 def get_session():
@@ -62,70 +65,6 @@ formats = dict(
     xml='xml',
     trig='trig'
 )
-
-function_definition_stmts = {
-    "DB.DBA._ID_TO_IRI": '''CREATE FUNCTION DB.DBA._ID_TO_IRI (
-        in id IRI_ID) returns IRI
-    {
-        return id_to_iri(id);
-    }''',
-    "DB.DBA._ID_TO_IRI_INVERSE": '''CREATE FUNCTION DB.DBA._ID_TO_IRI_INVERSE (
-        in id_iri IRI) returns IRI_ID
-    {
-        return iri_to_id(id_iri);
-    }''',
-    "DB.DBA._EXPAND_QNAME": """CREATE FUNCTION DB.DBA._EXPAND_QNAME (
-        in qname varchar) returns IRI
-    {
-        declare exit handler for sqlstate '22023' {
-            return qname;
-        };
-        return __xml_nsexpand_iristr(qname);
-    }""",
-    "DB.DBA._EXPAND_QNAME_SUFFIX": """CREATE FUNCTION DB.DBA._EXPAND_QNAME_SUFFIX (
-        in qname varchar) returns IRI
-    {
-        declare exit handler for sqlstate '22023' {
-            return qname;
-        };
-        declare exp varchar;
-        exp := __xml_nsexpand_iristr(qname);
-        return substring(exp, 1, length(exp)-2);
-    }""",
-    "DB.DBA._EXPAND_QNAME_INVERSE": """CREATE FUNCTION
-        DB.DBA._EXPAND_QNAME_INVERSE (in iri IRI) returns varchar
-    {
-        declare prefix, abbrev, local varchar;
-        prefix := iri_split(iri, local);
-        abbrev := __xml_get_ns_prefix(prefix, 2);
-        if (abbrev) {
-        return concat(abbrev, ':', local);
-        }
-        return iri;
-    }"""
-}
-
-iri_definition_stmts = {
-    VirtRDF.iri_id: """SPARQL
-    create iri class virtrdf:iri_id using
-      function DB.DBA._ID_TO_IRI (in id varchar)
-        returns varchar,
-      function DB.DBA._ID_TO_IRI_INVERSE (in id_iri varchar)
-        returns varchar
-    """,
-    VirtRDF.QNAME_ID: """SPARQL
-    create iri class virtrdf:QNAME_ID using
-      function DB.DBA._EXPAND_QNAME (in id varchar)
-        returns varchar,
-      function DB.DBA._EXPAND_QNAME_INVERSE (in id_iri varchar)
-        returns varchar
-    """,
-    VirtRDF.QNAME_ID_SUFFIX: """SPARQL
-    create iri class virtrdf:QNAME_ID_SUFFIX using
-      function DB.DBA._EXPAND_QNAME_SUFFIX (in id varchar)
-        returns varchar
-    """
-}
 
 
 def load_ontologies(session, reload=None):
@@ -348,7 +287,7 @@ class AESObfuscator(object):
 
 
 
-class AssemblPatternGraphQuadMapPattern(PatternGraphQuadMapPattern):
+class AssemblPatternGraphQuadMapPattern(GraphQuadMapPattern):
     def __init__(
             self, graph_iri_pattern, storage, alias_set, section,
             discussion_id, name=None, option=None, nsm=None):
@@ -665,16 +604,7 @@ class AssemblQuadStorageManager(object):
         self.session.execute('GRANT EXECUTE ON "%s" TO PUBLIC' % fname)
 
     def declare_functions(self):
-        for name, stmt in function_definition_stmts.iteritems():
-            exists = bool(self.session.execute(text(
-                "SELECT COUNT(*) FROM SYS_PROCEDURES WHERE P_NAME = :name"
-                ).bindparams(name=name)).first()[0])
-            if not exists:
-                self.session.execute(stmt)
-                self.make_function_public(name)
-        for name, stmt in iri_definition_stmts.iteritems():
-            if not self.mapping_exists(name, IriClass.mapping_type):
-                self.session.execute(stmt)
+        pass
 
     def drop_all(self, force=True):
         for storage in self.storages:

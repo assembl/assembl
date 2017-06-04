@@ -16,7 +16,7 @@ from sqlalchemy import (
     event,
 )
 from rdflib import URIRef
-from virtuoso.vmapping import PatternIriClass
+from sqla_rdfbridge.mapping import PatternIriClass
 
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS

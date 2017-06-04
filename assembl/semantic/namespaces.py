@@ -3,7 +3,6 @@ from rdflib import Graph as _Graph
 from rdflib.namespace import (
     Namespace, NamespaceManager as _NamespaceManager,
     RDF, RDFS, OWL, XSD, DC, DCTERMS, FOAF, SKOS)  # VOID
-from virtuoso.vmapping import VirtRDF
 
 SIOC = Namespace('http://rdfs.org/sioc/ns#')
 OA = Namespace('http://www.openannotation.org/ns/')
@@ -20,6 +19,7 @@ QUADNAMES = Namespace('http://purl.org/assembl/quadnames/')
 # COHERE = Namespace('http://cohere.open.ac.uk/ontology/cohere.owl#')
 # DUL = Namespace('http://www.loa-cnr.it/ontologies/DUL.owl#')
 # AIF = Namespace('http://www.arg.dundee.ac.uk/aif#')
+VirtRDF = Namespace('http://www.openlinksw.com/schemas/virtrdf#')
 
 namespace_manager = _NamespaceManager(_Graph())
 _name, _var = None, None

@@ -35,7 +35,7 @@ from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql.functions import count
 from pyramid.security import Everyone, Authenticated
 from rdflib import URIRef
-from virtuoso.vmapping import PatternIriClass
+from sqla_rdfbridge.mapping import PatternIriClass
 import transaction
 
 from ..lib import config

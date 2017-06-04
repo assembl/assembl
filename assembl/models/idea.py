@@ -31,7 +31,7 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
-from virtuoso.vmapping import IriClass, PatternIriClass
+from sqla_rdfbridge.mapping import IriClass, PatternIriClass
 
 from ..lib.utils import get_global_base_url
 from ..nlp.wordcounter import WordCounter

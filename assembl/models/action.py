@@ -19,7 +19,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship, backref, column_property
-from virtuoso.vmapping import IriClass
+from sqla_rdfbridge.mapping import IriClass
 from abc import abstractproperty
 
 from . import DiscussionBoundBase, DiscussionBoundTombstone, TombstonableMixin, Post

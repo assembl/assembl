@@ -906,11 +906,6 @@ def install_builddeps():
         # glibtoolize, bison, flex, gperf are on osx by default.
         # brew does not know aclocal, autoheader...
         # They exist on macports, but do we want to install that?
-        if not exists('/usr/local/lib/libiodbc.2.dylib'):
-            run('brew install libiodbc')
-            # may require a sudo
-            if not run('brew link libiodbc', quiet=True):
-                sudo('brew link libiodbc')
         if not exists('/usr/local/bin/gfortran'):
             run('brew install gcc isl')
     else:
@@ -918,9 +913,6 @@ def install_builddeps():
         sudo('apt-get install -y automake bison flex gperf gawk')
         sudo('apt-get install -y graphviz pkg-config gfortran')
         sudo('apt-get install -y phantomjs', warn_only=True)
-
-        # will hopefully die soon
-        sudo('apt-get install -y unixodbc-dev')
     execute(update_python_package_builddeps)
 
 

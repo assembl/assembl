@@ -32,7 +32,7 @@ from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
 from sqlalchemy.engine import strategies
-from virtuoso.vmapping import PatternIriClass
+from sqla_rdfbridge.mapping import PatternIriClass
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from zope.component import getGlobalSiteManager

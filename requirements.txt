@@ -97,7 +97,6 @@ pyIsEmail==v1.3.1
 dnspython==1.14.0   # must come after pyisemail?
 PyJWT==1.4.0
 pylibmc==1.5.1
--e git+https://github.com/maparent/pyodbc.git@v3-virtuoso#egg=pyodbc
 pyOpenSSL==16.0.0
 pyparsing==2.1.5
 pyramid-autodoc==1.0.0
@@ -158,7 +157,7 @@ Unidecode==0.4.19
 uritemplate==0.6
 uwsgitop==0.9
 venusian==1.0
--e git+https://github.com/maparent/virtuoso-python#egg=virtuoso
+-e git+https://github.com/maparent/sqlalchemy-rdfbridge.git#egg=sqlalchemy-rdfbridge
 psycopg2==2.6.1
 waitress==0.9.0
 WebOb==1.6.1
