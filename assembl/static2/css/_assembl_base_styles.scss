@@ -1,3 +1,5 @@
+// Any new CSS file MUST be added here to be compiled.
+
 //@import 'variables'; // The current theme imports the default theme which imports variables.scss. The current theme then overrides some of these variables.
 @import 'components/alert';
 @import 'components/assembl-glyph';

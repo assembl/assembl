@@ -20,7 +20,7 @@
   Variables in this section should only be used within this current theme file. NEVER refer to these color variables in other SCSS files.
 */
 
-$th_local_brand_logo_red: #FF0000;
+$th_local_brand_logo_color: #0095b2;
 
 
 /*
@@ -28,10 +28,10 @@ $th_local_brand_logo_red: #FF0000;
   You can redefine here any of the default theme variables. Theme variables are used in the entire SCSS infrastructure. Theme variables which are not redefined by a theme will keep their default value, which is defined in css/themes/default/_theme.scss and in css/variables.scss.
 */
 
-$first-color: $th_local_brand_logo_red;
-$first-color-light: $th_local_brand_logo_red;
-$second-color: $th_local_brand_logo_red;
-$third-color: $th_local_brand_logo_red;
+$first-color: $th_local_brand_logo_color;
+$first-color-light: $th_local_brand_logo_color;
+$second-color: $th_local_brand_logo_color;
+$third-color: $th_local_brand_logo_color;
 $title1-dark-color: $first-color;
 $title2-dark-color: $first-color;
 $title3-dark-color: $first-color;
@@ -43,4 +43,4 @@ $title3-light-color: $white;
 $title4-light-color: $white;
 $title5-light-color: $white;
 
-
+$footer-link-text-color: $th_local_brand_logo_color;
