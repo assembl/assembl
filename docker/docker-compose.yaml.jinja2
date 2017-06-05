@@ -89,7 +89,7 @@ services:
       SENTRY_DB_PASSWORD: postgres
       SENTRY_REDIS_HOST: redis
       SENTRY_SINGLE_ORGANIZATION: "true"
-      SENTRY_SECRET_KEY: jran5_Hnoherknoudr65_Ryaboeeenh40_Bloboo
+      SENTRY_SECRET_KEY: {{ sentry_secret }}
 
   sentry_celery_beat:
     image: sentry:latest
@@ -108,7 +108,7 @@ services:
       SENTRY_DB_PASSWORD: postgres
       SENTRY_REDIS_HOST: redis
       SENTRY_SINGLE_ORGANIZATION: "true"
-      SENTRY_SECRET_KEY: jran5_Hnoherknoudr65_Ryaboeeenh40_Bloboo
+      SENTRY_SECRET_KEY: {{ sentry_secret }}
 
   sentry_celery_worker:
     image: sentry:latest
@@ -127,7 +127,7 @@ services:
       SENTRY_DB_PASSWORD: postgres
       SENTRY_REDIS_HOST: redis
       SENTRY_SINGLE_ORGANIZATION: "true"
-      SENTRY_SECRET_KEY: jran5_Hnoherknoudr65_Ryaboeeenh40_Bloboo
+      SENTRY_SECRET_KEY: {{ sentry_secret }}
 {% endif %}
 
 {% if docker_imap == 'docker' or docker_smtp == 'docker' %}

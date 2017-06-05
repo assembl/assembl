@@ -1470,6 +1470,11 @@ def docker_compose():
     rc_template = jenv.get_template('assembl_subprocess.rc.jinja2')
     nginx_template = jenv.get_template('nginx_default.jinja2')
     compose_template = jenv.get_template('docker-compose.yaml.jinja2')
+    # Get random information to give to docker
+    if os.path.exists("random.ini"):
+        cp = SafeConfigParser()
+        cp.read("random.ini")
+        env.update(cp._sections.get("app:assembl", {}))
     for i, hostname in enumerate(env.docker_assembl_hosts):
         with open('./docker/build/assembl%d.rc' % (i+1,), 'w') as f:
             f.write(rc_template.render(
