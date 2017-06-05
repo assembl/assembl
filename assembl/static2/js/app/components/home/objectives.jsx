@@ -55,7 +55,7 @@ class Objectives extends React.Component {
                   <Col xs={12} sm={12} md={6} className="objectives">
                     <div className="text-column">
                       <div className="top-column">&nbsp;</div>
-                      {debateData.objectives}
+                      <span dangerouslySetInnerHTML={{ __html: debateData.objectives }} />
                     </div>
                   </Col>
                   <Col xs={12} sm={6} md={3} className="objectives">

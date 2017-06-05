@@ -28,7 +28,9 @@ class Video extends React.Component {
             <div className="title-section">
               <div className="title-hyphen">&nbsp;</div>
               <h1 className="dark-title-1">
-                <Translate value="home.video" />
+                {debateData.videoTitle ?
+                  debateData.videoTitle[locale] : <Translate value="home.video" />
+                }
               </h1>
             </div>
             <div className="content-section">

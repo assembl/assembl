@@ -4,7 +4,8 @@ import {
   scrollToPosition,
   getDiscussionId,
   getConnectedUserId,
-  getDocumentScrollTop
+  getDocumentScrollTop,
+  getDiscussionSlug
 } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';
@@ -57,7 +58,8 @@ class Main extends React.Component {
     window.removeEventListener('scroll', this.displayHeader);
   }
   displayHeader() {
-    const isDebateView = this.props.location.pathname.indexOf('debate') > -1;
+    const slug = getDiscussionSlug();
+    const isDebateView = this.props.location.pathname.indexOf(`${slug}/debate`) > -1;
     const top = getDocumentScrollTop();
     if (top > 400 && isDebateView) {
       this.setState({

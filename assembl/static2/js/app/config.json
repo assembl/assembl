@@ -22,5 +22,9 @@
       "url": "https://www.linkedin.com/in/citiesflife/",
       "title": "linkedin"
     }
-  ]
+  ],
+  "videoTitle": {
+    "fr": "Quel sera le résultat ?",
+    "en": "What will be the outcome?"
+  }
 }

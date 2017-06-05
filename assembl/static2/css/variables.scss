@@ -31,12 +31,18 @@ $blue-light-harvard: #7fadc0;
 $blue-opacity-harvard: rgba(0, 91, 129, 0.5);
 $blue-opacity-min-harvard: rgba(0, 91, 129, 0.1);
 
-$first-color: $blue-harvard;
-$first-color-light: $blue-light-harvard;
-$second-color: $green-harvard;
-$third-color: $blue-harvard;
-$opacity-color: $blue-opacity-harvard;
-$min-opacity-color: $blue-opacity-min-harvard;
+$blue-michelin: #48556D;
+$green-michelin: #8DC4B3;
+$blue-light-michelin: rgba(72, 85, 109, 0.5);
+$blue-opacity-michelin: rgba(72, 85, 109, 0.5);
+$blue-opacity-min-michelin: rgba(72, 85, 109, 0.1);
+
+$first-color: $blue-michelin;
+$first-color-light: $blue-light-michelin;
+$second-color: $green-michelin;
+$third-color: $blue-michelin;
+$opacity-color: $blue-opacity-michelin;
+$min-opacity-color: $blue-opacity-min-michelin;
 
 $app-max-width: 1400px;
 $navbar-height: 60px;
