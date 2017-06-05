@@ -319,11 +319,11 @@ const Translations = {
       longerThread: 'Longer thread',
       topContributor: 'Top contributor',
       recentDiscussion: 'Recent discussion',
-      objectivesTitle: 'What is the objective of this debate?',
+      objectivesTitle: 'What is the objective of the debate?',
       timelineTitle: 'The timeline of the debate',
       video: 'Video of the debate',
       twitterTitle: 'Tweet',
-      contact: 'Do you wish to know more about the platform?',
+      contact: 'Do you wish to know more about this platform?',
       contactUs: 'Contact us',
       from: 'from',
       to: 'to'
@@ -356,7 +356,7 @@ const Translations = {
         goTo: 'Go to %{currentPhaseName} phase.'
       },
       themes: 'Themes',
-      notStarted: 'The %{phaseName} phase is not started. Please come back from the '
+      notStarted: 'The %{phaseName} phase has not started. Please come back from '
     },
     profile: {
       panelTitle: 'Welcome to Assembl profile page'
