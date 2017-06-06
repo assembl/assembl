@@ -60,18 +60,19 @@ def backbone_include(config):
 def legacy_backbone_include(config):
     FrontendUrls.register_legacy_routes(config)
 
-def get_theme_base_path():
+def get_theme_base_path(frontend_version=1):
+    frontend_folder = 'static2' if frontend_version == 2 else 'static'
     theme_base_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                              'static', 'css', 'themes')
+                              frontend_folder, 'css', 'themes')
     return theme_base_path
 
-def find_theme(theme_name):
+def find_theme(theme_name, frontend_version=1):
     """
     Recursively looks for a theme with the provided name in the theme path folder
     @returns the theme path fragment relative to the theme base_path, or 
     None if not found
     """
-    theme_base_path = get_theme_base_path()
+    theme_base_path = get_theme_base_path(frontend_version)
 
     walk_results = os.walk(theme_base_path, followlinks=True)
     for (dirpath, dirnames, filenames) in walk_results:
@@ -85,7 +86,7 @@ def find_theme(theme_name):
 
     return None
 
-def get_theme_info(discussion):
+def get_theme_info(discussion, frontend_version=1):
     """
     @return (theme_name, theme_relative_path) the relative path is relative to the theme_base_path.  See find_theme.
     """
@@ -93,11 +94,11 @@ def get_theme_info(discussion):
     theme_path = None
     if discussion:
         # Legacy code: Slug override
-        theme_path = find_theme(discussion.slug)
+        theme_path = find_theme(discussion.slug, frontend_version)
     if theme_path:
         theme_name = discussion.slug
     else:
-        theme_path = find_theme(theme_name)
+        theme_path = find_theme(theme_name, frontend_version)
     if theme_path is not None:
         return (theme_name, theme_path)
     else:

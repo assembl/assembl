@@ -26,7 +26,7 @@ from ...models import (
 
 from .. import (
     HTTPTemporaryRedirect, get_default_context as base_default_context,
-    get_locale_from_request)
+    get_locale_from_request, get_theme_info)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
 
@@ -257,6 +257,7 @@ def react_view(request):
     else:
         return get_login_context(request)
 
+    (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
     context = dict(
         request=old_context['request'],
         REACT_URL=old_context['REACT_URL'],
@@ -265,7 +266,9 @@ def react_view(request):
         error=old_context.get('error', None),
         messages=old_context.get('messages', None),
         providers_json=old_context.get('providers_json', None),
-        get_route=get_route
+        get_route=get_route,
+        theme_name=theme_name,
+        theme_relative_path=theme_relative_path
     )
     return context
 

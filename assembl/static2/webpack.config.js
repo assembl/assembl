@@ -1,11 +1,41 @@
+/*
+Once you have made changes to this file, you have to run `supervisorctl restart dev:webpack` to see the effect.
+*/
+
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var glob = require('glob');
+var _ = require('lodash');
+
+
+function theme_entries() {
+    var entries = {},
+        paths = glob.sync('./css/themes/**/*_web.scss'),
+        i, path, parts, name;
+    for (i = 0; i < paths.length; i++) {
+        path = paths[i];
+        parts = path.split('/');
+        name = 'theme_' + parts[parts.length - 2] + '_web';
+        entries[name] = path;
+    }
+    paths = glob.sync('./css/themes/**/*_notifications.scss');
+    for (i = 0; i < paths.length; i++) {
+        path = paths[i];
+        parts = path.split('/');
+        name = 'theme_' + parts[parts.length - 2] + '_notifications';
+        entries[name] = path;
+    }
+    return entries;
+}
+
+var general_entries = {
+    bundle: ['babel-polyfill', './js/app/index'],
+    searchv1: ['babel-polyfill', './js/app/searchv1']
+};
 
 module.exports = {
-    entry: {
-        bundle: ['babel-polyfill', './js/app/index'],
-        searchv1: ['babel-polyfill', './js/app/searchv1']
-    },
+    entry: _.extend(theme_entries(), general_entries),
     output: {
         path: path.join(__dirname, 'build'),
         filename: '[name].js',
@@ -20,11 +50,11 @@ module.exports = {
         },
         {
             test: /\.scss$/,
-            loaders: ['style', 'css', 'sass']
+            loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
         },
         { 
             test: /\.css$/, 
-            loader: "style-loader!css-loader" 
+            loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
         },
         { 
             test: /\.png$/, 
@@ -54,5 +84,6 @@ module.exports = {
           }
         }),
         new webpack.optimize.UglifyJsPlugin(),
+        new ExtractTextPlugin("[name].css"),
     ]
 };

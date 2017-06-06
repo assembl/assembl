@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var baseConfig = require('./webpack.config');
 
 var webpackPort = parseInt(process.env.WEBPACK_URL.split(':')[2]);
@@ -29,7 +30,8 @@ config.entry = {
     ]
 };
 config.plugins = [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin("[name].css")
 ];
 
 module.exports = config;
