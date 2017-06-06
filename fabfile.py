@@ -101,6 +101,7 @@ def sanitize_env():
         env.mac = False
     env.projectpath = env.get('projectpath', dirname(__file__))
     env.venvpath = env.get('venvpath', join(env.projectpath, 'venv'))
+    env.random_file = env.get('random_file', 'random.ini')
     env.dbdumps_dir = env.get('dbdumps_dir', join(
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
 
@@ -1013,11 +1014,10 @@ def install_basetools():
         path_pip = run('which pip')
         assert path_pip == '/usr/local/bin/pip',\
             "Make sure homebrew is in the bash path, got " + path_pip
-        run('pip install virtualenv')
-        run('pip install psycopg2')
+        run('pip install virtualenv psycopg2 requests')
     else:
         sudo('apt-get install -y python-virtualenv python-pip python-psycopg2')
-        sudo('apt-get install -y git')
+        sudo('apt-get install -y python-requests git')
         # sudo('apt-get install -y gettext')
 
 
@@ -1150,11 +1150,7 @@ def set_file_permissions():
 def start_edit_fontello_fonts():
     """Prepare to edit the fontello fonts in Fontello."""
     assert env.hosts == ['localhost'], "Meant to be run locally"
-    try:
-        import requests
-    except ImportError:
-        raise RuntimeError(
-            "Please 'pip install requests' in your main environment")
+    import requests
     font_dir = join(
         env.projectpath, 'assembl', 'static', 'css', 'fonts')
     config_file = join(font_dir, 'config.json')
@@ -1177,11 +1173,7 @@ def compile_fontello_fonts():
     from zipfile import ZipFile
     from StringIO import StringIO
     assert env.hosts == ['localhost'], "Meant to be run locally"
-    try:
-        import requests
-    except ImportError:
-        raise RuntimeError(
-            "Please 'pip install requests' in your main environment")
+    import requests
     font_dir = join(
         env.projectpath, 'assembl', 'static', 'css', 'fonts')
     config_file = join(font_dir, 'config.json')
@@ -1242,6 +1234,59 @@ def check_and_create_sentry_database_user():
     host = env.get("sentry_db_host", None)
     assert user and password, "Please specify sentry database user + password"
     check_and_create_database_user(host, user, password)
+
+
+@task
+def create_sentry_project():
+    """Create a project for the current assembl server.
+    Mostly useful for Docker."""
+    if os.path.exists(env.random_file):
+        env.update(as_rc(env.random_file))
+    if env.get("sentry_key", None) and env.get("sentry_secret", None):
+        return
+    import requests
+    from ConfigParser import RawConfigParser
+    assert env.sentry_host, env.sentry_api_token
+    headers = {"Authorization": "Bearer " + env.sentry_api_token}
+    organization = env.get("sentry_organization", "sentry")
+    team = env.get("sentry_team", "sentry")
+    base = "{scheme}://{host}:{port}/api/0/".format(
+        scheme='https' if as_bool(env.get("sentry_is_secure", False)) else 'http',
+        port=env.get("sentry_port", "80"),
+        host=env.sentry_host)
+    host = env.public_hostname
+    slug = "_".join(env.public_hostname.lower().split("."))
+    projects_url = "{base}teams/{organization}/{team}/projects/".format(
+        base=base, organization=organization, team=team)
+    r = requests.get(projects_url, headers=headers)
+    assert r, "Could not access sentry"
+    project_slugs = [p['slug'] for p in r.json()]
+    if slug not in project_slugs:
+        r = requests.post(projects_url, headers=headers, json={
+            "name": env.public_hostname,
+            "slug": slug})
+        assert r
+    key_url = "{base}projects/{organization}/{slug}/keys/".format(
+        base=base, organization=organization, slug=slug)
+    r = requests.get(key_url, headers=headers)
+    assert r
+    keys = r.json()
+    assert len(keys), "No key defined?"
+    default = [k for k in keys if k["label"] == "Default"]
+    if default:
+        key = default[0]
+    else:
+        key = keys[0]
+    # This should ideally go in the .rc file, but fab should not write rc files.
+    # putting it in the local random file for now.
+    parser = RawConfigParser()
+    parser.optionxform = str
+    if os.path.exists(env.random_file):
+        parser.read(env.random_file)
+    parser.set("DEFAULT", "sentry_key", key["public"])
+    parser.set("DEFAULT", "sentry_secret", key["secret"])
+    with open(env.random_file, 'w') as f:
+        parser.write(f)
 
 
 def check_if_database_exists():
@@ -1454,6 +1499,20 @@ def flushmemcache():
         run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
 
 
+def as_rc(ini_filename):
+    cp = SafeConfigParser()
+    cp.read(ini_filename)
+    r = {}
+    for section in cp.sections():
+        for k, v in cp.items(section):
+            if k[0] in ("_*"):
+                k = k[1:]
+            elif section not in ('app:assembl', 'DEFAULT'):
+                k = "__".join((section, k))
+            r[k] = v
+    return r
+
+
 @task
 def docker_compose():
     from jinja2 import Environment, FileSystemLoader
@@ -1471,12 +1530,9 @@ def docker_compose():
     nginx_template = jenv.get_template('nginx_default.jinja2')
     compose_template = jenv.get_template('docker-compose.yaml.jinja2')
     compose_stage1_template = jenv.get_template('docker-compose-stage1.yaml.jinja2')
-    random_file = env.random_file or "random.ini"
     # Get local random information to give to docker
-    if os.path.exists(random_file):
-        cp = SafeConfigParser()
-        cp.read(random_file)
-        env.update(cp._sections.get("app:assembl", {}))
+    if os.path.exists(env.random_file):
+        env.update(as_rc(env.random_file))
     for i, hostname in enumerate(env.docker_assembl_hosts):
         with open('./docker/build/assembl%d.rc' % (i+1,), 'w') as f:
             f.write(rc_template.render(
@@ -1532,6 +1588,7 @@ def docker_startup():
         execute(app_db_update)
     if not check_if_first_user():
         execute(create_first_admin_user)
+    execute(create_sentry_project)
     venvcmd("supervisord")
 
 

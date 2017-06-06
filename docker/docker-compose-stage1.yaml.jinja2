@@ -53,7 +53,7 @@ services:
       SENTRY_DB_PASSWORD: {{ sentry_db_password }}
       SENTRY_REDIS_HOST: redis
       SENTRY_SINGLE_ORGANIZATION: "true"
-      SENTRY_SECRET_KEY: {{ sentry_secret }}
+      SENTRY_SECRET_KEY: {{ sentry_secret_key }}
 {% endif %}
 
 {% if docker_imap == 'docker' or docker_smtp == 'docker' %}

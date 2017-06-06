@@ -90,7 +90,7 @@ services:
       SENTRY_DB_PASSWORD: {{ sentry_db_password }}
       SENTRY_REDIS_HOST: redis
       SENTRY_SINGLE_ORGANIZATION: "true"
-      SENTRY_SECRET_KEY: {{ sentry_secret }}
+      SENTRY_SECRET_KEY: {{ sentry_secret_key }}
 {#    SENTRY_EMAIL_HOST:
       SENTRY_EMAIL_PORT:
       SENTRY_EMAIL_USER:
@@ -118,7 +118,7 @@ services:
       SENTRY_DB_PASSWORD: {{ sentry_db_password }}
       SENTRY_REDIS_HOST: redis
       SENTRY_SINGLE_ORGANIZATION: "true"
-      SENTRY_SECRET_KEY: {{ sentry_secret }}
+      SENTRY_SECRET_KEY: {{ sentry_secret_key }}
 
   sentry_celery_worker:
     image: sentry:latest
@@ -138,7 +138,7 @@ services:
       SENTRY_DB_PASSWORD: {{ sentry_db_password }}
       SENTRY_REDIS_HOST: redis
       SENTRY_SINGLE_ORGANIZATION: "true"
-      SENTRY_SECRET_KEY: {{ sentry_secret }}
+      SENTRY_SECRET_KEY: {{ sentry_secret_key }}
 {% endif %}
 
 {% if docker_imap == 'docker' or docker_smtp == 'docker' %}
