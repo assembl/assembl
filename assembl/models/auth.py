@@ -1666,7 +1666,7 @@ class LanguagePreferenceCollection(object):
     allowing to decide on which languages to display."""
 
     @abstractmethod
-    def find_locale(self, locale):
+    def find_locale(self, locale, db=None):
         pass
 
     @classmethod
@@ -1704,13 +1704,13 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     def default_locale_code(self):
         return self.default_locale
 
-    def find_locale(self, locale):
+    def find_locale(self, locale, db=None):
         if Locale.compatible(locale, self.default_locale.code):
             return UserLanguagePreference(
                 locale=self.default_locale, locale_id=self.default_locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie.value)
         else:
-            locale = Locale.get_or_create(locale)
+            locale = Locale.get_or_create(locale, db)
             return UserLanguagePreference(
                 locale=locale, locale_id=locale.id,
                 translate_to_locale=self.default_locale,
