@@ -1524,9 +1524,9 @@ def docker_startup():
     elif not check_if_db_tables_exist():
         # DB exists, maybe separate the boostrap test
         execute(app_db_install)
+        execute(reindex_elasticsearch)
     else:
         execute(app_db_update)
-    execute(reindex_elasticsearch, True)
     if not check_if_first_user():
         execute(create_first_admin_user)
     venvcmd("supervisord")
