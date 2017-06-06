@@ -406,14 +406,14 @@ def compose(rc_filename, random_file=None):
     assert ini_sequence, "Define ini_files"
     ini_sequence = ini_sequence.split()
     base = Parser()
+    random_file = random_file or rc_info.get('random_file', RANDOM_FILE)
     for overlay in ini_sequence:
         if overlay == 'RC_DATA':
             overlay = rc_to_ini(rc_info)
         elif overlay.startswith('RANDOM'):
             templates = overlay.split(':')[1:]
-            if random_file:
-                overlay = populate_random(
-                    random_file, templates, extract_saml_info(rc_info))
+            overlay = populate_random(
+                random_file, templates, extract_saml_info(rc_info))
         combine_ini(base, overlay)
     return base
 
@@ -432,13 +432,14 @@ def migrate(rc_filename, expected_ini, random_file=None, target_dir=None):
     expected_ini = asParser(expected_ini)
     rc_data = combine_rc(rc_filename)
     ini_files = rc_data.get('ini_files', None)
+    random_file = random_file or rc_data.get('random_file', RANDOM_FILE)
     templates = extract_random_templates(ini_files)
     if templates:
         random_data = populate_random(
             random_file, templates, extract_saml_info(rc_data))
         migrate_beaker_config(random_data, expected_ini)
         random_data = combine_ini(random_data, expected_ini, False)
-        with open(RANDOM_FILE, 'w') as f:
+        with open(random_file, 'w') as f:
             random_data.write(f)
     else:
         random_file = None
@@ -475,7 +476,7 @@ def main():
     parser_compose.add_argument('--output', '-o', type=FileType('w'),
                                 default=sys.stdout, help='The output file')
     parser_compose.add_argument('--random', '-r', help='random.ini file',
-                                default=RANDOM_FILE)
+                                default=None)
     parser_compose.add_argument('input', help='Input rc file')
 
     # ini migrate
@@ -487,14 +488,14 @@ def main():
         '--ini', '-i', type=FileType('r'), default=None,
         help="INI file we're migrating, usually local.ini")
     parser_migrate.add_argument('--random', '-r', help='random.ini file',
-                                default=RANDOM_FILE)
+                                default=None)
     parser_migrate.add_argument('rc', help='Base rc file')
 
     # random.ini
     parser_random = subparsers.add_parser(
         'random', help=short_help(populate_random))
     parser_random.add_argument('--random', '-r', help='random.ini file',
-                               default=RANDOM_FILE)
+                               default=None)
     parser_random.add_argument('--template', '-t', help='random template files',
                                action='append', default=[])
     parser_random.add_argument('input', help='Input rc file (for saml)')
@@ -528,9 +529,10 @@ def main():
         base.write(args.output)
     elif args.command == 'random':
         rc_info = combine_rc(args.input)
+        random_file = args.random or rc_info.get('random_file', RANDOM_FILE)
         templates = args.template or extract_random_templates(
             rc_info.get('ini_files', ''))
-        populate_random(args.random, templates, extract_saml_info(rc_info))
+        populate_random(random_file, templates, extract_saml_info(rc_info))
     elif args.command == 'compose':
         ini_info = compose(args.input, args.random)
         ini_info.write(args.output)

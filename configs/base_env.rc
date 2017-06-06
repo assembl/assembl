@@ -1,4 +1,6 @@
 ini_files = production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
+# The file that will hold the generated random keys.
+random_file = random.ini
 *db_host = localhost
 *db_user = assembl
 # TODO: If generated remotely, fetch in fabfile

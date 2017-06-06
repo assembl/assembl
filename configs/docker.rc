@@ -27,6 +27,9 @@ _uses_global_supervisor = false
 
 # Override what follows in your specific docker.rc file
 
+# Have a local file with the random values for this specific deploy
+random_file = configs/docker_random.ini
+
 # What are the public hostnames of your assembl hosts? Can be multiple, separated by spaces
 docker_assembl_hosts = assembl1.docker assembl2.docker
 

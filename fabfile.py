@@ -150,7 +150,7 @@ def listdir(path):
 @task
 def create_local_ini():
     """Replace the local.ini file with one composed from the current .rc file"""
-    random_ini_path = os.path.join(env.projectpath, 'random.ini')
+    random_ini_path = os.path.join(env.projectpath, env.random_file)
     local_ini_path = os.path.join(env.projectpath, 'local.ini')
     if exists(local_ini_path):
         run('cp %s %s.%d' % (
@@ -196,7 +196,7 @@ def get_random_templates():
 def migrate_local_ini():
     """Generate a .rc file to match the existing local.ini file.
     (requires a base .rc file)"""
-    random_ini_path = os.path.join(env.projectpath, 'random.ini')
+    random_ini_path = os.path.join(env.projectpath, env.random_file)
     local_ini_path = os.path.join(env.projectpath, 'local.ini')
     dest_path = env.rcfile + '.' + int(time())
 
@@ -1470,10 +1470,11 @@ def docker_compose():
     rc_template = jenv.get_template('assembl_subprocess.rc.jinja2')
     nginx_template = jenv.get_template('nginx_default.jinja2')
     compose_template = jenv.get_template('docker-compose.yaml.jinja2')
-    # Get random information to give to docker
-    if os.path.exists("random.ini"):
+    random_file = env.random_file or "random.ini"
+    # Get local random information to give to docker
+    if os.path.exists(random_file):
         cp = SafeConfigParser()
-        cp.read("random.ini")
+        cp.read(random_file)
         env.update(cp._sections.get("app:assembl", {}))
     for i, hostname in enumerate(env.docker_assembl_hosts):
         with open('./docker/build/assembl%d.rc' % (i+1,), 'w') as f:
