@@ -1,7 +1,6 @@
 import React from 'react';
 import { gql, withApollo } from 'react-apollo';
-import { FormControl } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
+import { FormControl, Button } from 'react-bootstrap';
 
 const GetThematics = gql`
 {
@@ -75,24 +74,24 @@ const QuestionsTitle = ({ client, tIndex, qIndex, titleEntries, selectedLocale }
   });
   const title = titleEntry ? titleEntry.value : '';
   const titleEntryIndex = titleEntries.indexOf(titleEntry);
-  
+
   const handleRemoveQuestion = () => {
     remove(client, tIndex, qIndex);
   };
-  
+
   const handleQuestionChange = (e) => {
     updateTitle(client, tIndex, qIndex, selectedLocale, titleEntryIndex, e.target.value);
   };
 
   return (
-    <div>
+    <div className="question-section">
       <FormControl
         componentClass="textarea"
         className="text-area"
         value={title}
         onChange={handleQuestionChange}
       />
-      <div className="pointer right">
+      <div className="pointer right margin-s">
         <Button onClick={handleRemoveQuestion}>
           <span className="assembl-icon-delete grey" />
         </Button>

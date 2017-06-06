@@ -60,7 +60,7 @@ const createVideoEntries = (v) => {
   const video = {
     titleEntries: v.titleEntries !== null ? createLanguageEntries(v.titleEntries) : [],
     descriptionEntries: v.descriptionEntries !== null ? createLanguageEntries(v.descriptionEntries) : [],
-    htmlCode: v.htmlCode  !== null ? v.htmlCode : ""
+    htmlCode: v.htmlCode !== null ? v.htmlCode : ''
   };
   return video;
 };

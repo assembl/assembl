@@ -52,7 +52,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
   }) : {};
   const titleEntryIndex = video.titleEntries ? video.titleEntries.indexOf(titleEntry) : -1;
   const title = titleEntry ? titleEntry.value : '';
-  const descriptionEntry =  video.descriptionEntries ? video.descriptionEntries.find((entry) => {
+  const descriptionEntry = video.descriptionEntries ? video.descriptionEntries.find((entry) => {
     return entry.localeCode === selectedLocale;
   }) : {};
   const descriptionEntryIndex = video.descriptionEntries ? video.descriptionEntries.indexOf(descriptionEntry) : -1;
@@ -101,7 +101,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
       data: thematicsData
     });
   };
-  
+
   const updateUrl = (value) => {
     thematicsData.thematics[thematicIndex].video.htmlCode = value;
     client.writeQuery({
@@ -109,7 +109,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
       data: thematicsData
     });
   };
-  
+
   const handleCheckboxChange = (e) => {
     if (e.target.checked) {
       addVideo();
