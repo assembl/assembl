@@ -42,7 +42,7 @@ const ThemeSection = ({ client, i18n, selectedLocale }) => {
     thematicsData.thematics.push({
       id: newThemeId,
       titleEntries: [],
-      imgUrl: '',
+      imgUrl: null,
       questions: [],
       video: [],
       __typename: 'Thematic'
