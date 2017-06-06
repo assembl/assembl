@@ -128,7 +128,7 @@ def init_from_celery(celery_app):
     rootdir = dirname(dirname(dirname(realpath(__file__))))
     settings_file = join(rootdir, 'local.ini')
     if not exists(settings_file):
-        settings_file = join(rootdir, 'development.ini')
+        settings_file = join(rootdir, 'production.ini')
     _settings = settings = get_appsettings(settings_file, 'assembl')
     config = ConfigParser.SafeConfigParser()
     config.read(settings_file)
