@@ -1,6 +1,7 @@
 import React from 'react';
 import { gql, withApollo } from 'react-apollo';
 import { FormControl } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 const GetThematics = gql`
 {
@@ -57,24 +58,46 @@ const updateTitle = (client, tIndex, qIndex, selectedLocale, titleEntryIndex, va
   });
 };
 
+const remove = (client, tIndex, qIndex) => {
+  const thematicIndex = tIndex;
+  const questionIndex = qIndex;
+  const thematicsData = client.readQuery({ query: GetThematics });
+  thematicsData.thematics[thematicIndex].questions.splice(questionIndex, 1);
+  client.writeQuery({
+    query: GetThematics,
+    data: thematicsData
+  });
+};
+
 const QuestionsTitle = ({ client, tIndex, qIndex, titleEntries, selectedLocale }) => {
   const titleEntry = titleEntries.find((entry) => {
     return entry.localeCode === selectedLocale;
   });
   const title = titleEntry ? titleEntry.value : '';
   const titleEntryIndex = titleEntries.indexOf(titleEntry);
-
+  
+  const handleRemoveQuestion = () => {
+    remove(client, tIndex, qIndex);
+  };
+  
   const handleQuestionChange = (e) => {
     updateTitle(client, tIndex, qIndex, selectedLocale, titleEntryIndex, e.target.value);
   };
 
   return (
-    <FormControl
-      componentClass="textarea"
-      className="text-area"
-      value={title}
-      onChange={handleQuestionChange}
-    />
+    <div>
+      <FormControl
+        componentClass="textarea"
+        className="text-area"
+        value={title}
+        onChange={handleQuestionChange}
+      />
+      <div className="pointer right">
+        <Button onClick={handleRemoveQuestion}>
+          <span className="assembl-icon-delete grey" />
+        </Button>
+      </div>
+    </div>
   );
 };
 

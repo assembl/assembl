@@ -114,14 +114,10 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
         }
       });
     }
-    promisesArray.forEach((promise) => {
-      setTimeout(() => {
-        promise.then(() => {
-          displayAlert('success', I18n.t('administration.successThemeCreation'));
-        }).catch((error) => {
-          displayAlert('danger', `${error}`);
-        });
-      }, 400);
+    Promise.all(promisesArray).then(() => {
+      displayAlert('success', I18n.t('administration.successThemeCreation'));
+    }).catch((error) => {
+      displayAlert('danger', `${error}`);
     });
   };
   return (
