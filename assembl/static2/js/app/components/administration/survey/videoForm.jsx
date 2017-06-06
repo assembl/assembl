@@ -43,7 +43,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
   });
   const thematic = findThematic || [];
   const video = thematic.video || {};
-  const isVideo = video.htmlCode !== null && video.htmlCode !== undefined;
+  const isVideo = video.htmlCode !== '' && video.htmlCode !== undefined;
   const titlePh = `${I18n.t('administration.ph.title')} ${selectedLocale.toUpperCase()}`;
   const quotePh = `${I18n.t('administration.ph.quote')} ${selectedLocale.toUpperCase()}`;
   const videoLinkPh = `${I18n.t('administration.ph.videoLink')} ${selectedLocale.toUpperCase()}`;
@@ -52,7 +52,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
   }) : {};
   const titleEntryIndex = video.titleEntries ? video.titleEntries.indexOf(titleEntry) : -1;
   const title = titleEntry ? titleEntry.value : '';
-  const descriptionEntry = video.descriptionEntries ? video.descriptionEntries.find((entry) => {
+  const descriptionEntry =  video.descriptionEntries ? video.descriptionEntries.find((entry) => {
     return entry.localeCode === selectedLocale;
   }) : {};
   const descriptionEntryIndex = video.descriptionEntries ? video.descriptionEntries.indexOf(descriptionEntry) : -1;
@@ -63,7 +63,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
     thematicsData.thematics[thematicIndex].video = {
       titleEntries: [],
       descriptionEntries: [],
-      htmlCode: '',
+      htmlCode: null,
       __typename: 'Video'
     };
     client.writeQuery({
@@ -74,9 +74,9 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
 
   const removeVideo = () => {
     thematicsData.thematics[thematicIndex].video = {
-      titleEntries: null,
-      descriptionEntries: null,
-      htmlCode: null,
+      titleEntries: [],
+      descriptionEntries: [],
+      htmlCode: '',
       __typename: 'Video'
     };
     client.writeQuery({
@@ -101,7 +101,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
       data: thematicsData
     });
   };
-
+  
   const updateUrl = (value) => {
     thematicsData.thematics[thematicIndex].video.htmlCode = value;
     client.writeQuery({
@@ -109,7 +109,7 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
       data: thematicsData
     });
   };
-
+  
   const handleCheckboxChange = (e) => {
     if (e.target.checked) {
       addVideo();
