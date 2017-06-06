@@ -1470,6 +1470,7 @@ def docker_compose():
     rc_template = jenv.get_template('assembl_subprocess.rc.jinja2')
     nginx_template = jenv.get_template('nginx_default.jinja2')
     compose_template = jenv.get_template('docker-compose.yaml.jinja2')
+    compose_stage1_template = jenv.get_template('docker-compose-stage1.yaml.jinja2')
     random_file = env.random_file or "random.ini"
     # Get local random information to give to docker
     if os.path.exists(random_file):
@@ -1485,6 +1486,8 @@ def docker_compose():
                 public_hostname_=hostname, assembl_index=i+1, **env))
     with open('./docker/build/docker-compose.yaml', 'w') as f:
         f.write(compose_template.render(**env))
+    with open('./docker/build/docker-compose-stage1.yaml', 'w') as f:
+        f.write(compose_stage1_template.render(**env))
     # run("docker-compose -f docker/build/docker-compose.yaml up")
 
 

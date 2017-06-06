@@ -1,5 +1,6 @@
 
 _extends = base_env.rc
+ini_files = production.ini develop_overlay.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl:random_docker.ini.tmpl RC_DATA
 _projectpath = /opt/assembl
 db_password = __delete_key__
 public_hostname = assembl.cloud
@@ -48,6 +49,12 @@ saml_email = assembl@bluenove.com
 
 # Are we using sentry from docker? If not, give a hostname or nothing
 docker_sentry = docker
+
+# Replace with the sentry admin user email
+sentry_admin_email = assembl@bluenove.com
+
+# Fill after stage 1 if you use a dockerized sentry
+sentry_api_token = 
 
 # Are we using piwik from docker? If not, give a hostname or nothing
 docker_piwik = 

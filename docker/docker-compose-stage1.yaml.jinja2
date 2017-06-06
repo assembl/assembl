@@ -1,0 +1,70 @@
+version: "3"
+
+networks:
+  my_net:
+
+volumes:
+  pgdata:
+  redisdata:
+
+services:
+  redis:
+    image: redis:3.0-alpine
+    volumes:
+      - redisdata:/data
+    networks:
+      - my_net
+
+  memcached:
+    image: memcached:1.4-alpine
+    networks:
+      - my_net
+
+  database:
+    image: postgres:9.5.5-alpine
+{%- if docker_sentry == 'docker' %}
+    command: /bin/sh -c "( env PGDATA=/var/lib/postgresql/data /docker-entrypoint.sh postgres&) ; sleep 6 ; psql -U postgres -c \"create user sentry with createdb password '{{sentry_db_password}}'\"; psql -U postgres -c \"create database sentry with owner=sentry encoding='utf-8'\"; tail -f /dev/null"
+{%- endif %}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my_net
+
+{% if docker_sentry == 'docker' %}
+  sentry:
+    image: sentry:latest
+    depends_on:
+     - redis
+     - database
+    links:
+     - redis
+     - database:postgres
+    networks:
+      - my_net
+    ports:
+     - 9000:9000
+    stdin_open: true
+    tty: true
+    command: /bin/sh -c "sleep 10 ; sentry upgrade --noinput ; sentry createuser --email {{sentry_admin_email}} --password {{sentry_admin_password}} --superuser --no-input ; sentry run web"
+    environment:
+      SENTRY_POSTGRES_HOST: postgres
+      SENTRY_DB_USER: sentry
+      SENTRY_DB_NAME: sentry
+      SENTRY_DB_PASSWORD: {{ sentry_db_password }}
+      SENTRY_REDIS_HOST: redis
+      SENTRY_SINGLE_ORGANIZATION: "true"
+      SENTRY_SECRET_KEY: {{ sentry_secret }}
+{% endif %}
+
+{% if docker_imap == 'docker' or docker_smtp == 'docker' %}
+  # TODO: Add mail
+  # mail:
+  #   image: mailu:stable
+
+{% endif %}
+
+{% if docker_piwik == 'docker' %}
+  # TODO: Configure piwik
+  # piwik:
+  #   image: piwik:latest
+{% endif %}
