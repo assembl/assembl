@@ -1489,6 +1489,14 @@ def docker_compose():
 
 
 @task
+def reindex_elasticsearch(bg=False):
+    cmd = "assembl-reindex-all-contents local.ini"
+    if bg:
+        cmd += "&"
+    venvcmd(cmd)
+
+
+@task
 def docker_startup():
     """Startup assembl from within a docker environment.
 
@@ -1518,6 +1526,7 @@ def docker_startup():
         execute(app_db_install)
     else:
         execute(app_db_update)
+    execute(reindex_elasticsearch, True)
     if not check_if_first_user():
         execute(create_first_admin_user)
     venvcmd("supervisord")
