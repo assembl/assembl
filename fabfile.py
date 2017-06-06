@@ -823,6 +823,7 @@ def install_single_server():
     execute(skeleton_env, None)
     execute(install_java)
     execute(install_elasticsearch)
+    execute(install_yarn)
     execute(install_database)
     execute(install_assembl_server_deps)
     execute(check_and_create_database_user)
@@ -1541,6 +1542,19 @@ def install_java():
                 print(red("Java 8 must be installed in order to progress. This is needed for elasticsearch."))
                 print(cyan("Debian instructions to install Oracle Java 8: http://www.webupd8.org/2014/03/how-to-install-oracle-java-8-in-debian.html"))
                 sys.exit(1)
+
+
+@task
+def install_yarn():
+    """Install yarn"""
+    if not env.mac:
+        if not exists('/etc/apt/sources.list.d/yarn.list'):
+            sudo('echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list')
+            sudo('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -')
+            sudo('apt-get update')
+            sudo('apt-get install yarn')
+    else:
+        run('brew install yarn')
 
 
 @task
