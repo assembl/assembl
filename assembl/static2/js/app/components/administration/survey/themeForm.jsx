@@ -17,10 +17,16 @@ const GetThematics = gql`
     },
     imgUrl,
     video {
-      title,
-      description,
+      titleEntries {
+        localeCode,
+        value
+      },
+      descriptionEntries {
+        localeCode,
+        value
+      },
       htmlCode
-    }
+    },
     questions {
       titleEntries {
         localeCode,

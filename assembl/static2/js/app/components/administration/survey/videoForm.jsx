@@ -13,8 +13,14 @@ const GetThematics = gql`
     },
     imgUrl,
     video {
-      title,
-      description,
+      titleEntries {
+        localeCode,
+        value
+      },
+      descriptionEntries {
+        localeCode,
+        value
+      },
       htmlCode
     },
     questions {
@@ -35,21 +41,28 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
   const thematicIndex = thematicsData.thematics.findIndex((t) => {
     return String(t.id) === thematicId;
   });
-
   const thematic = findThematic || [];
   const video = thematic.video || {};
   const isVideo = video.htmlCode !== null && video.htmlCode !== undefined;
   const titlePh = `${I18n.t('administration.ph.title')} ${selectedLocale.toUpperCase()}`;
   const quotePh = `${I18n.t('administration.ph.quote')} ${selectedLocale.toUpperCase()}`;
   const videoLinkPh = `${I18n.t('administration.ph.videoLink')} ${selectedLocale.toUpperCase()}`;
-  const title = video.title || '';
-  const description = video.description || '';
+  const titleEntry = video.titleEntries ? video.titleEntries.find((entry) => {
+    return entry.localeCode === selectedLocale;
+  }) : {};
+  const titleEntryIndex = video.titleEntries ? video.titleEntries.indexOf(titleEntry) : -1;
+  const title = titleEntry ? titleEntry.value : '';
+  const descriptionEntry =  video.descriptionEntries ? video.descriptionEntries.find((entry) => {
+    return entry.localeCode === selectedLocale;
+  }) : {};
+  const descriptionEntryIndex = video.descriptionEntries ? video.descriptionEntries.indexOf(descriptionEntry) : -1;
+  const description = descriptionEntry ? descriptionEntry.value : '';
   const htmlCode = video.htmlCode || '';
 
   const addVideo = () => {
     thematicsData.thematics[thematicIndex].video = {
-      title: '',
-      description: '',
+      titleEntries: [],
+      descriptionEntries: [],
       htmlCode: '',
       __typename: 'Video'
     };
@@ -61,8 +74,8 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
 
   const removeVideo = () => {
     thematicsData.thematics[thematicIndex].video = {
-      title: null,
-      description: null,
+      titleEntries: null,
+      descriptionEntries: null,
       htmlCode: null,
       __typename: 'Video'
     };
@@ -72,14 +85,31 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
     });
   };
 
-  const updateText = (fieldName, value) => {
-    thematicsData.thematics[thematicIndex].video[fieldName] = value;
+  const updateText = (fieldName, value, entryIndex) => {
+    const newEntries = {
+      localeCode: selectedLocale,
+      value: value,
+      __typename: 'LangStringEntry'
+    };
+    if (entryIndex === -1) {
+      thematicsData.thematics[thematicIndex].video[fieldName].push(newEntries);
+    } else {
+      thematicsData.thematics[thematicIndex].video[fieldName].splice(entryIndex, 1, newEntries);
+    }
     client.writeQuery({
       query: GetThematics,
       data: thematicsData
     });
   };
-
+  
+  const updateUrl = (value) => {
+    thematicsData.thematics[thematicIndex].video.htmlCode = value;
+    client.writeQuery({
+      query: GetThematics,
+      data: thematicsData
+    });
+  };
+  
   const handleCheckboxChange = (e) => {
     if (e.target.checked) {
       addVideo();
@@ -88,13 +118,13 @@ const VideoForm = ({ client, thematicId, selectedLocale }) => {
     }
   };
   const handleTitleChange = (e) => {
-    updateText('title', e.target.value);
+    updateText('titleEntries', e.target.value, titleEntryIndex);
   };
   const handleDescriptionChange = (e) => {
-    updateText('description', e.target.value);
+    updateText('descriptionEntries', e.target.value, descriptionEntryIndex);
   };
   const handleUrlChange = (e) => {
-    updateText('htmlCode', e.target.value);
+    updateUrl(e.target.value);
   };
   return (
     <div className={findThematic ? 'form-container' : 'hidden'}>

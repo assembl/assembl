@@ -15,10 +15,16 @@ const GetThematics = gql`
     },
     imgUrl,
     video {
-      title,
-      description,
+      titleEntries {
+        localeCode,
+        value
+      },
+      descriptionEntries {
+        localeCode,
+        value
+      },
       htmlCode
-    }
+    },
     questions {
       titleEntries {
         localeCode,
@@ -52,9 +58,9 @@ const createQuestionEntries = (questions) => {
 
 const createVideoEntries = (v) => {
   const video = {
-    titleEntries: [{ value: v.title, localeCode: 'fr' }],
-    descriptionEntries: [{ value: v.description, localeCode: 'fr' }],
-    htmlCode: v.htmlCode
+    titleEntries: v.titleEntries !== null ? createLanguageEntries(v.titleEntries) : [],
+    descriptionEntries: v.descriptionEntries !== null ? createLanguageEntries(v.descriptionEntries) : [],
+    htmlCode: v.htmlCode  !== null ? v.htmlCode : ""
   };
   return video;
 };
@@ -72,7 +78,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
             image: t.imgUrl,
-            video: t.video.length > 0 ? createVideoEntries(t.video) : null,
+            video: t.video.length === 0 ? null : createVideoEntries(t.video),
             questions: createQuestionEntries(t.questions)
           }
         };
@@ -85,7 +91,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             id: t.id,
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
-            video: t.video.htmlCode !== null ? createVideoEntries(t.video) : null,
+            video: createVideoEntries(t.video),
             image: typeof t.imgUrl === 'string' ? null : t.imgUrl,
             questions: createQuestionEntries(t.questions)
           }
