@@ -78,11 +78,15 @@ def resolve_langstring(langstring, locale_code):
     if langstring is None:
         return None
 
+    entries = get_entries(langstring)
+    if not entries:
+        return None
+
     if locale_code is None:
         return langstring.best_entry_in_request().value
 
     return {e.locale_code: e.value
-            for e in get_entries(langstring)}.get(locale_code, None)
+            for e in entries}.get(locale_code, None)
 
 
 def resolve_langstring_entries(obj, attr):

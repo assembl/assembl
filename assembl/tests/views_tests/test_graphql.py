@@ -511,7 +511,7 @@ mutation myMutation($thematicId:ID!) {
             titleEntries { localeCode value },
             identifier
             questions { titleEntries { localeCode value } }
-            video(lang:"fr") { titleEntries { localeCode value }, descriptionEntries { localeCode value }, title, description, htmlCode }
+            video { titleEntries { localeCode value }, descriptionEntries { localeCode value }, title, description, htmlCode }
         }
     }
 }
