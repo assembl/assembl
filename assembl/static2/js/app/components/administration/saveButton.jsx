@@ -65,6 +65,14 @@ const createVideoEntries = (v) => {
   return video;
 };
 
+const runSerial = (promises) => {
+  let result = Promise.resolve();
+  promises.forEach((promise) => {
+    result = result.then(() => { return promise; });
+  });
+  return result;
+};
+
 const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
   const saveAction = () => {
     const thematicsData = client.readQuery({ query: GetThematics });
@@ -114,7 +122,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
         }
       });
     }
-    Promise.all(promisesArray).then(() => {
+    runSerial(promisesArray).then(() => {
       displayAlert('success', I18n.t('administration.successThemeCreation'));
     }).catch((error) => {
       displayAlert('danger', `${error}`);
