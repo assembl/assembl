@@ -1776,8 +1776,9 @@ def get_vendor_config():
 def update_vendor_themes(frontend_version=1):
     sanitize_env()
     assert frontend_version in (1, 2)
-    theme_varname = "theme%d_repositories__git-urls" % frontend_version
-    base_path = "assembl/static%d/css/themes/vendor" % frontend_version
+    frontend_version_s = '2' if frontend_version == 2 else ''
+    theme_varname = "theme%s_repositories__git-urls" % frontend_version_s
+    base_path = "assembl/static%s/css/themes/vendor" % frontend_version_s
     if env.get(theme_varname, None):
         urls = []
         urls_string = env.get(theme_varname)
