@@ -494,6 +494,49 @@ mutation secondMutation {
     }}}
 
 
+def test_update_thematic_delete_video(graphql_request, thematic_with_video_and_question):
+    thematic_id, first_question_id = thematic_with_video_and_question
+    res = schema.execute(u"""
+mutation myMutation($thematicId:ID!) {
+    updateThematic(
+        id:$thematicId,
+        titleEntries:[
+            {value:"Understanding the dynamics and issues", localeCode:"en"},
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
+        ],
+        video: {titleEntries: [], descriptionEntries: [], htmlCode: ""}
+        identifier:"survey",
+    ) {
+        thematic {
+            titleEntries { localeCode value },
+            identifier
+            questions { titleEntries { localeCode value } }
+            video(lang:"fr") { titleEntries { localeCode value }, descriptionEntries { localeCode value }, title, description, htmlCode }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"thematicId": thematic_id})
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateThematic': {
+            u'thematic': {
+                u'titleEntries': [
+                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"},
+                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                ],
+                u'identifier': u'survey',
+                u'questions': [
+                    {u'titleEntries': [
+                        {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
+                    ]},
+                ],
+                u'video': {u'description': None,
+                           u'htmlCode': u"",
+                           u'title': None,
+                           u'titleEntries': [],
+                           u'descriptionEntries': []}
+    }}}
+
+
 def test_update_thematic_add_question(graphql_request, thematic_and_question):
     # This test add a new question and change the questions order
     thematic_id, first_question_id = thematic_and_question

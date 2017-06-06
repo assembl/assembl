@@ -42,6 +42,48 @@ mutation myFirstMutation {
 
 
 @pytest.fixture(scope="function")
+def thematic_with_video_and_question(graphql_request):
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createThematic(
+        titleEntries:[
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+            {value:"Understanding the dynamics and issues", localeCode:"en"}
+        ],
+        questions:[
+            {titleEntries:[
+                {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
+            ]},
+        ],
+        video: {
+            titleEntries:[
+                {value:"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
+                 localeCode:"fr"},
+            ]
+            descriptionEntries:[
+                {value:"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
+                 localeCode:"fr"},
+            ],
+            htmlCode:"<object>....</object>"
+        },
+        identifier:"survey",
+    ) {
+        thematic {
+            id
+            titleEntries { localeCode value },
+            identifier
+            questions { id, titleEntries { localeCode value } }
+        }
+    }
+}
+""", context_value=graphql_request)
+    thematic_id = res.data['createThematic']['thematic']['id']
+    first_question_id = res.data['createThematic']['thematic']['questions'][0]['id']
+    return thematic_id, first_question_id
+
+
+@pytest.fixture(scope="function")
 def proposition_id(graphql_request, thematic_and_question):
     from assembl.graphql.schema import Schema as schema
     thematic_id, first_question_id = thematic_and_question

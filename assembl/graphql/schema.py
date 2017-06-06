@@ -137,6 +137,11 @@ def update_langstring_from_input_entries(obj, attr, entries):
     current_title_entries_by_locale_code = {
         e.locale_code: e for e in get_entries(langstring)}
     if entries is not None:
+        # if we have an empty list, remove all existing entries
+        if len(entries) == 0:
+            for e in current_title_entries_by_locale_code.values():
+                e.tombstone_date = datetime.utcnow()
+
         for entry in entries:
             locale_code = entry['locale_code']
             current_entry = current_title_entries_by_locale_code.get(locale_code, None)
@@ -773,10 +778,10 @@ class UpdateThematic(graphene.Mutation):
                             models.IdeaLink(source=thematic, target=question,
                                      order=idx + 1))
 
-            # remove question (tombstone it) that are not in questions_input
-            for question_id in set(existing_questions.keys()
-                    ).difference(updated_questions):
-                existing_questions[question_id].tombstone_date = datetime.utcnow()
+                # remove question (tombstone it) that are not in questions_input
+                for question_id in set(existing_questions.keys()
+                        ).difference(updated_questions):
+                    existing_questions[question_id].tombstone_date = datetime.utcnow()
 
             db.flush()
 
