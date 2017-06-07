@@ -1285,6 +1285,7 @@ def create_sentry_project():
         parser.read(env.random_file)
     parser.set("DEFAULT", "sentry_key", key["public"])
     parser.set("DEFAULT", "sentry_secret", key["secret"])
+    parser.set("DEFAULT", "sentry_id", key["projectId"])
     with open(env.random_file, 'w') as f:
         parser.write(f)
 
