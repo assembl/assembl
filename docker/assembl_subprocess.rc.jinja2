@@ -52,10 +52,11 @@ imap_host = {{ docker_imap }}
 imap_host = localhost
 {% endif %}
 
-{% if docker_secure_rproxy or docker_https %}
+{% if docker_https %}
 accept_secure_connection = true
 require_secure_connection = true
 {% else %}
+{# esp. docker_secure_rproxy #}
 accept_secure_connection = false
 require_secure_connection = false
 {% endif %}
