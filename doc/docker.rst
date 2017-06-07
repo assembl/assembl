@@ -1,13 +1,38 @@
 Building a docker image
 =======================
 
-::
+First the image itself:
+
+.. code:: sh
 
     docker build --tag assembl docker
-    docker run -d -p 8080:80 assembl
-    firefox http://localhost:8080
 
-The user is admin password admin
+Then, create a ``configs/my_docker.rc`` with the following content:
+
+.. code:: ini
+
+    _extends = docker.rc
+    docker_assembl_hosts = <public hostnames of your assembl processes>
+
+Look at ``configs/docker.rc`` for other variables to override, notably mail servers. Decide whether you want to use an in-docker sentry or an external sentry server.
+
+.. code:: sh
+
+    docker build --tag assembl docker
+    assembl-ini-files random configs/docker.rc
+    fab -c configs/docker.rc docker_compose
+    docker-compose -f docker/build/docker-compose-stage1.yaml up
+
+Go to ``localhost:9000`` to create a token for the admin user (username in ``configs/docker.rc``, generated password in ``configs/docker_random.ini``). Make sure that token can administer projects (and organizations?). Add ``sentry_api_token = (the token)`` to your ``my_docker.rc``.
+
+Then stop the docker containers (``Ctrl-C`` in the docker-compose window, or ``docker-compose -f docker/build/docker-compose-stage1.yaml down``), then:
+
+.. code:: sh
+
+    fab -c configs/my_docker.rc docker_compose
+    docker-compose -f docker/build/docker-compose.yaml up
+
+Your admin user for each assembl server will be ``admin@hostname``. Use the password recovery progress to set its initial password. (If you want to pshell instead, you can do it from ``docker exec -i -t build_assembl1_1 bash``.)
 
 When developing the docker image, the build can be instructed to use
 a git repository different from the official develop branch with:

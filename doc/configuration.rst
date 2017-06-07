@@ -15,7 +15,7 @@ The enriched .rc file format
 
 ``.rc`` file, in the ``configs`` directory, are a series of ``key=value`` pairs, with some keys having special meaning for fabric only. The ``_extends`` key, if present, gives the relative path of another ``.rc`` file, whose values will be injected in the fabfile's ``env``, unless overridden by the current ``.rc`` file; this is done in :py:func:`fabfile.combine_rc`, called through the ``@task`` decorator. The keys are further filtered so ``*`` and ``_`` prefixes are eliminated from keys, and so are values of ``__delete_key__``. So, for example, if we have the following two files:
 
-.. code::ini
+.. code:: ini
 
     # configs/instance.rc
     _extends = base_env.rc
