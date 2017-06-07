@@ -969,6 +969,13 @@ class Mutations(graphene.ObjectType):
 Schema = graphene.Schema(query=Query, mutation=Mutations)
 
 
+def print_schema_json(schema):
+    import json
+    schema_dict = schema.introspect()
+    with open('/tmp/schema.json', 'w') as outfile:
+        json.dump(schema_dict, outfile)
+
+
 '''
 $ pshell local.ini
 import json
