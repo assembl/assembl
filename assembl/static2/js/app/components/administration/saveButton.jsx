@@ -65,12 +65,10 @@ const createVideo = (v) => {
   return video;
 };
 
-const runSerial = (promises) => {
+const runSerial = (tasks) => {
   let result = Promise.resolve();
-  promises.forEach((promise) => {
-    result = result.then(() => {
-      return promise;
-    });
+  tasks.forEach((task) => {
+    result = result.then(task);
   });
   return result;
 };
@@ -79,11 +77,10 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
   const saveAction = () => {
     const thematicsData = client.readQuery({ query: GetThematics });
     const promisesArray = [];
-    let payload = {};
     thematicsData.thematics.forEach((t) => {
       // To create a thematic, get if its ID is a negative number
       if (t.id < 0) {
-        payload = {
+        const payload = {
           variables: {
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
@@ -92,11 +89,11 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             questions: createQuestionEntries(t.questions)
           }
         };
-        const p1 = createThematic(payload);
+        const p1 = () => { return createThematic(payload); };
         promisesArray.push(p1);
       } else {
         // Update a thematic
-        payload = {
+        const payload = {
           variables: {
             id: t.id,
             identifier: 'survey',
@@ -106,7 +103,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             questions: createQuestionEntries(t.questions)
           }
         };
-        const p2 = updateThematic(payload);
+        const p2 = () => { return updateThematic(payload); };
         promisesArray.push(p2);
       }
     });
@@ -114,12 +111,12 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
     if (thematicsToDelete.length > 0) {
       thematicsToDelete.forEach((id) => {
         if (isNaN(id)) {
-          payload = {
+          const payload = {
             variables: {
               thematicId: id
             }
           };
-          const p3 = deleteThematic(payload);
+          const p3 = () => { return deleteThematic(payload); };
           promisesArray.push(p3);
         }
       });
