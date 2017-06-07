@@ -193,6 +193,9 @@ const Translations = {
       thematic: 'Thématique',
       edition: 'Discussion',
       landingpage: 'Landing page',
+      menu: {
+        phase: 'Phase %{count} - %{description}'
+      },
       survey: ['Créer les thématiques', 'Renseigner les thématiques', 'Exporter les données'],
       annotation: 'Module à renseigner obligatoirement. Les champs * sont requis.',
       themeNum: 'Thématique %{index}',
@@ -407,6 +410,9 @@ const Translations = {
       thematic: 'Theme',
       edition: 'Discussion',
       landingpage: 'Landing page',
+      menu: {
+        phase: 'Phase %{count} - %{description}'
+      },
       survey: ['Create themes', 'Edit themes', 'Export data'],
       annotation: 'Module to be completed. * Fields are required.',
       themeNum: 'Theme %{index}',

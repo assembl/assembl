@@ -30,7 +30,9 @@ class Menu extends React.Component {
                 {phase.title.entries.map((entry, index) => { // eslint-disable-line
                   if (entry['@language'] === locale) {
                     return (
-                      <span key={index}>Phase - {phaseIndex + 1} {entry.value}</span>
+                      <span key={index}>
+                        <Translate value="administration.menu.phase" count={phaseIndex + 1} description={entry.value} />
+                      </span>
                     );
                   }
                 })}
