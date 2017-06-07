@@ -44,14 +44,7 @@ const createLanguageEntries = (titles) => {
 const createQuestionEntries = (questions) => {
   const questionsArray = [];
   questions.forEach((question) => {
-    const titlesArray = [];
-    question.titleEntries.forEach((title) => {
-      titlesArray.push({
-        value: title.value,
-        localeCode: title.localeCode
-      });
-    });
-    questionsArray.push({ titleEntries: titlesArray });
+    questionsArray.push({ titleEntries: createLanguageEntries(question.titleEntries) });
   });
   return questionsArray;
 };
