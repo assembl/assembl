@@ -124,11 +124,13 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
         }
       });
     }
-    runSerial(promisesArray).then(() => {
-      displayAlert('success', I18n.t('administration.successThemeCreation'));
-    }).catch((error) => {
-      displayAlert('danger', `${error}`);
-    });
+    runSerial(promisesArray)
+      .then(() => {
+        displayAlert('success', I18n.t('administration.successThemeCreation'));
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
   };
   return (
     <Button className="button-submit button-dark right" onClick={saveAction}>
