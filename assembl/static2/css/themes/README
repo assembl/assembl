@@ -8,6 +8,10 @@ Use the default theme as an example (this is the "default" folder).
 
 Copy the `vendor_config.ini.example` file which is at the root of the Assembl repository, to `vendor_config.ini`. Edit its contents to mention the URL or URLs of your theme repositories. These repositories will be fetched when you run assembl's upgrade commands, and will be pointed to the same branch as assembl code if possible.
 
+If you use several theme repositories (that is if you use both theme systems of Assembl, or use several repositories for one theme system), and these repositories are stored on github with restricted permissions, authentication to repositories can be tricky. Follow these steps:
+* Create a specific github user, for example "yourorganization-bot"
+* Add it as member of these themes repositories, with a read-only permission (no write permission)
+* Go to the Settings page of this github user, section "SSH and GPG keys". For each of your Assembl servers, add the SSH public key of the system user which runs assembl (for example, in `/home/assembl_user/.ssh/id_rsa.pub`). If your server does not have an SSH key yet, create one.
 
 
 # Defining which theme is shown as default
