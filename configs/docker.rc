@@ -56,6 +56,8 @@ sentry_admin_email = assembl@bluenove.com
 # Fill after stage 1 if you use a dockerized sentry
 sentry_api_token = 
 
+sentry_port = 9000
+
 # Are we using piwik from docker? If not, give a hostname or nothing
 docker_piwik = 
 

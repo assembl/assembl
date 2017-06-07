@@ -168,7 +168,10 @@ services:
       - memcached
       - redis
       - elasticsearch
-    command: sh -c 'cd /opt/assembl; /etc/init.d/ssh start ; chown assembl_user /opt/assembl_static; git pull ; . venv/bin/activate ; env BUILDING_DOCKER=false fab -c /var/docker_data/assembl{{ loop.index }}.rc docker_startup ; tail -f /dev/null'
+{%- if docker_sentry == 'docker' %}
+      - sentry
+{%- endif %}
+    command: sh -c 'cd /opt/assembl; /etc/init.d/ssh start ; chown assembl_user /opt/assembl_static; git pull ; . venv/bin/activate ; sleep 5; env BUILDING_DOCKER=false fab -c /var/docker_data/assembl{{ loop.index }}.rc docker_startup ; tail -f /dev/null'
     networks:
       - my_net
 {% endfor %}
