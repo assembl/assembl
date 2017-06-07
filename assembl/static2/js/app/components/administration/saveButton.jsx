@@ -68,13 +68,7 @@ const runSerial = (tasks) => {
 
 const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
   const saveAction = () => {
-    let thematics;
-    try {
-      const thematicsData = client.readQuery({ query: GetThematics });
-      thematics = thematicsData.thematics;
-    } catch (e) {
-      thematics = [];
-    }
+    const { thematics } = client.readQuery({ query: GetThematics });
     const promisesArray = [];
     thematics.forEach((t) => {
       // To create a thematic, get if its ID is a negative number
