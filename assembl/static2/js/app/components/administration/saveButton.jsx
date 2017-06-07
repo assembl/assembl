@@ -56,7 +56,7 @@ const createQuestionEntries = (questions) => {
   return questionsArray;
 };
 
-const createVideoEntries = (v) => {
+const createVideo = (v) => {
   const video = {
     titleEntries: v.titleEntries !== null ? createLanguageEntries(v.titleEntries) : [],
     descriptionEntries: v.descriptionEntries !== null ? createLanguageEntries(v.descriptionEntries) : [],
@@ -68,7 +68,9 @@ const createVideoEntries = (v) => {
 const runSerial = (promises) => {
   let result = Promise.resolve();
   promises.forEach((promise) => {
-    result = result.then(() => { return promise; });
+    result = result.then(() => {
+      return promise;
+    });
   });
   return result;
 };
@@ -86,7 +88,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
             image: t.imgUrl,
-            video: t.video.length === 0 ? null : createVideoEntries(t.video),
+            video: t.video.length === 0 ? null : createVideo(t.video),
             questions: createQuestionEntries(t.questions)
           }
         };
