@@ -49,14 +49,17 @@ const QuestionsForm = ({ client, thematicId, lang }) => {
   const questions = thematic ? thematic.questions : [];
 
   const addQuestion = () => {
-    thematicsData.thematics[thematicIndex].questions.push({
-      titleEntries: [],
-      __typename: 'Question'
-    });
-    client.writeQuery({
-      query: GetThematics,
-      data: thematicsData
-    });
+    if (thematicIndex !== -1) {
+      thematicsData.thematics[thematicIndex].questions.push({
+        titleEntries: [],
+        __typename: 'Question'
+      });
+
+      client.writeQuery({
+        query: GetThematics,
+        data: thematicsData
+      });
+    }
   };
 
   return (
