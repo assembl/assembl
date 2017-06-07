@@ -1,6 +1,6 @@
 
 _extends = base_env.rc
-ini_files = production.ini develop_overlay.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl:random_docker.ini.tmpl RC_DATA
+ini_files = production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl:random_docker.ini.tmpl RC_DATA
 _projectpath = /opt/assembl
 db_password = __delete_key__
 public_hostname = assembl.cloud
