@@ -101,7 +101,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             id: t.id,
             identifier: 'survey',
             titleEntries: createLanguageEntries(t.titleEntries),
-            video: createVideoEntries(t.video),
+            video: createVideo(t.video),
             image: typeof t.imgUrl === 'string' ? null : t.imgUrl,
             questions: createQuestionEntries(t.questions)
           }
