@@ -27,7 +27,7 @@ class Menu extends React.Component {
           return (
             <li className="menu-item" key={phaseIndex}>
               <Link to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}`} activeClassName="active">
-                {phase.title.entries.map((entry, index) => { // eslint-disable-line
+                {phase.title.entries.map((entry, index) => {
                   if (entry['@language'] === locale) {
                     return (
                       <span key={index}>
@@ -35,6 +35,8 @@ class Menu extends React.Component {
                       </span>
                     );
                   }
+
+                  return null;
                 })}
               </Link>
               {translations[locale].administration[phase.identifier] &&
@@ -48,8 +50,7 @@ class Menu extends React.Component {
                       </li>
                     );
                   })}
-                </ul>
-              }
+                </ul>}
             </li>
           );
         })}
