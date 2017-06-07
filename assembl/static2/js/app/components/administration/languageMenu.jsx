@@ -6,8 +6,8 @@ import En from '../svg/flags/en';
 import Fr from '../svg/flags/fr';
 
 // TO DO get it dynamically
-const Flag = (key) => {
-  switch (key) {
+const Flag = ({ locale }) => {
+  switch (locale) {
   case 'en':
     return <En />;
   case 'fr':
@@ -31,7 +31,7 @@ const LanguageMenu = ({ changeLocale, selectedLocale, translations }) => {
               className={selectedLocale === key ? 'flag-container active' : 'flag-container'}
               key={index}
             >
-              {Flag(key)}
+              <Flag locale={key} />
             </div>
           );
         })}
