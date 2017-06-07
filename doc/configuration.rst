@@ -8,7 +8,7 @@ Assembl is composed of many components, most of which rely on ``.ini`` files. Bu
 
 Because fabric is the root process, we decided that all information would be set in ``.rc`` files, and the ``local.ini`` file would be generated from those files; but we added a layering mechanism to ``.rc`` files, so each file could be said to ``_extend`` another ``.rc`` file. But because the ``.rc`` file format is so simplistic, we also layer ``.ini`` files, in a stack that can be specified in the ``.rc`` files.
 
-Earlier, the fabfile.py would itself contain instance-specific information (as environments) and read some more instance-specific information from the ``local.ini`` file itself. This meant there were multiple sources of truth, and consistency of ``local.ini`` files had to be maintained by hand, with uneven results. Now, the ``.rc`` files will be the single source of truth and all ``.ini`` files, including the ``local.ini`` will be generated from them. The migration from hand-maintained local.ini files to generated local.ini files will be explained further in `Migrating to RC files`_. 
+Earlier, the fabfile.py would itself contain instance-specific information (as environments) and read some more instance-specific information from the ``local.ini`` file itself. This meant there were multiple sources of truth, and consistency of ``local.ini`` files had to be maintained by hand, with uneven results. Now, the ``.rc`` files will be the single source of truth and all ``.ini`` files, including the ``local.ini`` will be generated from them. The migration from hand-maintained local.ini files to generated local.ini files will be explained further in `Migrating to RC files`_.
 
 The enriched .rc file format
 ----------------------------
@@ -58,23 +58,44 @@ In some cases, especially with docker, we want the ``.ini`` file components in `
 ``RANDOM:...`` will use data from the ``random_file`` (usually ``random.ini``), but will first ensure that it is populated with random values generated with the ``assembl-ini-files random ...rc`` subcommand. If it does not exist, that subcommand will first generate the ``random_file`` file by combining the template files mentioned after ``RANDOM:`` (project-relative paths, separated by further ``:``). If a value is already set, it is preserved, but missing (new) values will still be added. The codes for random generation are the following: ``{random66}``, for example, will create a random string of length (4/3)66 (rounded up). ``{saml_key}`` will create a X509 key (without its armour) and ``{saml_crt}`` will create a self-signed certificate using data from ``saml_...`` keys and the ``public_hostname``. Those have to be set in keys following the ``XXX_PRIVATE_KEY`` and ``XXX_PUBLIC_CERT`` pattern respectively.
 
 
-Key .rc Files
-~~~~~~~~~~~~~
+Key .rc and .ini Files
+~~~~~~~~~~~~~~~~~~~~~~
 
 Below are a list of key ``rc files`` and what their intended purposes are. You are welcome to create more ``rc files`` or
 change the existing structure. Just ensure you update the ``_extends`` chain along the way. Below is a typical setup.
 
 base_env.rc
-    This is the default base...blah blah
+    These are the base variables with some documentation; builds on ``production.ini``. This should be a good base for a production environment.
+
+develop.rc
+    (<- ``base_env.rc``) This adds the layer ``develop_overlay.ini``, and many development-specific settings. In some cases, it's about masking production values.
+
+mac.rc
+    (<- ``develop.rc``) Settings specific to macs (and homebrew.)
 
 docker.rc
-    Etc
+    (<- ``base_env.rc``) This is a basis for the docker install. See :doc:`docker`
 
-random.rc
-    blah
+mycompany.rc
+    (<- ``base_env.rc``) Create such a file to add company-specific information, such as saml contacts, piwik and sentry servers, etc.
 
-TODO
-    todo
+myserver.rc
+    (<- ``mycompany.rc``) server-specific information: ``public_hostname``, raven keys, social login keys, etc.
+
+production.ini
+    Most variables should be defined at that layer. Suitable base for a production environment
+
+develop_overlay.ini
+    A layer for production variables (It is somewhat arbitrary what goes here vs ``develop.rc``.)
+
+random.ini.tmpl
+    Variables that need to be initialized with random salt at server creation.
+
+saml_random.ini.tmpl
+    More random variables, specific to saml authentication.
+
+docker_random.ini
+    More random variables, specific to docker installation.
 
 
 Specific .rc File Keys
@@ -143,55 +164,55 @@ piwik_host:
     The host of your Sentry installation, if any.
 
 theme_repositories__git-urls:
-    TODO
+    Cf. ``vendor_config.ini.example``
 
 uwsgi__uid:
-    TODO
+    The UID of the uwsgi user.
 
 login_providers:
-    TODO
+    The active social login providers (see python-social-auth)
 
 _gitbranch:
-    TODO
+    the git branch active on this server.
 
 _is_production_env:
-    TODO
+    self-explanatory.
 
 _postgres_db_user:
-    TODO
+    The main postgres user, if we need to create our own database/user.
 
 _sentry_db_host:
-    TODO
+    The name of the sentry host
 
 _uses_apache:
-    TODO
+    Legacy.
 
 _uses_ngnix:
-    TODO
+    True in production, usually false in development.
 
 _uses_memcache:
-    TODO
-
-_uses_ngnix:
-    TODO
+    True.
 
 _wsginame:
-    TODO
+    Legacy. Allows to distinguish production/development/staging in some fab operations.
 
 \*sentry_id:\
-    TODO
+    The identifier of the sentry project of this server
 
 \*sentry_key:\
-    TODO
+    The public key of the sentry project of this server
 
 \*sentry_secret:\
-    TODO
+    The public key of the sentry project of this server
 
 \*sentry_host:\
-    TODO
+    The hostname of the sentry server
 
 \*sentry_scheme:\
-    TODO
+    The scheme of the sentry server (http or https)
+
+\*sentry_port:\
+    The port of the sentry server
 
 
 (to be continued)
