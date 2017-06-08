@@ -329,10 +329,10 @@ mutation myFirstMutation {
                 {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
             ]},
             {titleEntries:[
-                {value:"Second question ?", localeCode:"fr"}
+                {value:"Seconde question ?", localeCode:"fr"}
             ]},
             {titleEntries:[
-                {value:"Third question ?", localeCode:"fr"}
+                {value:"Troisième question ?", localeCode:"fr"}
             ]},
         ],
         identifier:"survey",
@@ -352,8 +352,8 @@ mutation myFirstMutation {
                 u'identifier': u'survey',
                 u'questions': [
                     {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"},
-                    {u'title': u"Second question ?"},
-                    {u'title': u"Third question ?"}
+                    {u'title': u"Seconde question ?"},
+                    {u'title': u"Troisième question ?"}
                 ]
     }}}
 
@@ -552,7 +552,7 @@ mutation secondMutation {
         ],
         questions:[
             {titleEntries:[
-                {value:"Second question but first!", localeCode:"fr"}
+                {value:"Seconde question mais en premier !", localeCode:"fr"}
             ]},
             {id: "%s",
              titleEntries:[
@@ -579,7 +579,7 @@ mutation secondMutation {
                 u'identifier': u'survey',
                 u'questions': [
                     {u'titleEntries': [
-                        {u'value': u"Second question but first!", u'localeCode': u"fr"}
+                        {u'value': u"Seconde question mais en premier !", u'localeCode': u"fr"}
                     ]},
                     {u'titleEntries': [
                         {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
