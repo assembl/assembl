@@ -741,9 +741,10 @@ class UpdateThematic(graphene.Mutation):
                     mime_type=mime_type,
                     title=filename,
                     data=data)
-                # if there is already an attachment, remove it (but the old
-                # image stays on the server)
+                # if there is already an attachment, remove it with the
+                # associated document (image)
                 if thematic.attachments:
+                    db.delete(thematic.attachments[0].document)
                     thematic.attachments.remove(thematic.attachments[0])
 
                 attachment = models.IdeaAttachment(
