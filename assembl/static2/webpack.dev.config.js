@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var _ = require('lodash');
 var baseConfig = require('./webpack.config');
 
 var webpackPort = parseInt(process.env.WEBPACK_URL.split(':')[2]);
@@ -17,7 +18,7 @@ config.devServer = {
     port: webpackPort,
     host: webpackHost
 };
-config.entry = {
+config.entry = _.extend(config.entry, {
     bundle: [
         'webpack-dev-server/client?' + process.env.WEBPACK_URL,
         'webpack/hot/only-dev-server',
@@ -28,7 +29,7 @@ config.entry = {
         'webpack/hot/only-dev-server',
         './js/app/searchv1'
     ]
-};
+});
 config.plugins = [
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin("[name].css")
