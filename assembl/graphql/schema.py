@@ -1,5 +1,4 @@
 from datetime import datetime
-import mimetypes
 import os.path
 from random import sample as random_sample
 
@@ -640,7 +639,7 @@ class CreateThematic(graphene.Mutation):
             image = args.get('image')
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
-                mime_type = mimetypes.guess_type(filename)[0]
+                mime_type = context.POST[image].type
                 uploaded_file = context.POST[image].file
                 uploaded_file.seek(0)
                 data = uploaded_file.read()
@@ -733,7 +732,7 @@ class UpdateThematic(graphene.Mutation):
             image = args.get('image')
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
-                mime_type = mimetypes.guess_type(filename)[0]
+                mime_type = context.POST[image].type
                 uploaded_file = context.POST[image].file
                 uploaded_file.seek(0)
                 data = uploaded_file.read()

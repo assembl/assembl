@@ -190,11 +190,12 @@ def test_mutation_create_thematic_upload_file(graphql_request):
     import os
     from io import BytesIO
 
-    class FileUpload(object):
+    class FieldStorage(object):
         file = BytesIO(os.urandom(16))
-        filename = 'path/to/img.png'
+        filename = u'path/to/img.png'
+        type = 'image/png'
 
-    graphql_request.POST['variables.img'] = FileUpload()
+    graphql_request.POST['variables.img'] = FieldStorage()
     res = schema.execute(u"""
 mutation myFirstMutation($img:String) {
     createThematic(titleEntries:[
@@ -232,11 +233,12 @@ mutation myFirstMutation($img:String) {
 
     # and update it to change the image
 
-    class FileUpload2(object):
+    class FieldStorage(object):
         file = BytesIO(os.urandom(16))
-        filename = 'path/to/img2.png'
+        filename = u'path/to/img2.png'
+        type = 'image/png'
 
-    graphql_request.POST['variables.img'] = FileUpload2()
+    graphql_request.POST['variables.img'] = FieldStorage()
     res = schema.execute(u"""
 mutation myFirstMutation($img:String, $thematicId:ID!) {
     updateThematic(
