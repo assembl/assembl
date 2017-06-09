@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { compose, connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { gql, withApollo } from 'react-apollo';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
@@ -189,4 +189,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withApollo(DumbThemeCreationForm));
+export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(DumbThemeCreationForm);

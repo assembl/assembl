@@ -193,4 +193,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(withApollo(SaveButtonWithMutations));
+export default compose(connect(mapStateToProps), withApollo)(SaveButtonWithMutations);
