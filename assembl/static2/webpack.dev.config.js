@@ -16,7 +16,12 @@ config.devServer = {
         "Access-Control-Allow-Credentials":true
     },
     port: webpackPort,
-    host: webpackHost
+    host: webpackHost,
+    proxy: {
+      '/static2': {
+        target: process.env.ASSEMBL_URL
+      }
+    }
 };
 config.entry = _.extend(config.entry, {
     bundle: [
