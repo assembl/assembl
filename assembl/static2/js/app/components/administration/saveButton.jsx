@@ -82,7 +82,9 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             questions: createQuestionEntries(t.questions)
           }
         };
-        const p1 = () => { return createThematic(payload); };
+        const p1 = () => {
+          return createThematic(payload);
+        };
         promisesArray.push(p1);
       } else {
         // Update a thematic
@@ -96,7 +98,9 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
             questions: createQuestionEntries(t.questions)
           }
         };
-        const p2 = () => { return updateThematic(payload); };
+        const p2 = () => {
+          return updateThematic(payload);
+        };
         promisesArray.push(p2);
       }
     });
@@ -109,7 +113,9 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
               thematicId: id
             }
           };
-          const p3 = () => { return deleteThematic(payload); };
+          const p3 = () => {
+            return deleteThematic(payload);
+          };
           promisesArray.push(p3);
         }
       });

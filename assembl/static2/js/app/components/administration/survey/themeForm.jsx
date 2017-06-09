@@ -152,13 +152,14 @@ export const DumbThemeCreationForm = ({ client, id, imgUrl, index, selectedLocal
         <FormControl type="text" placeholder={ph} value={title} onChange={handleTitleChange} />
       </FormGroup>
       <FormGroup>
-        <ImageUploader
-          imgUrl={previewUrl}
-          handleImageChange={handleImageChange}
-        />
+        <ImageUploader imgUrl={previewUrl} handleImageChange={handleImageChange} />
       </FormGroup>
       <div className="pointer right">
-        <Button onClick={() => { remove(id); }}>
+        <Button
+          onClick={() => {
+            remove(id);
+          }}
+        >
           <span className="assembl-icon-delete grey" />
         </Button>
       </div>
