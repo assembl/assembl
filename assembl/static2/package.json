@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "build": "webpack -p --progress --colors",
+    "build": "webpack --progress --colors",
     "elint": "eslint . --ext .js --ext .jsx --cache || true",
     "elint:fix": "eslint . --ext .js --ext .jsx --fix || true",
     "elint:table": "eslint . --ext .js --ext .jsx --cache --format table || true",
