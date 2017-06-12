@@ -14,7 +14,8 @@ def main(argv=sys.argv, quiet=False):
 
 
 class PShellCommandA(PShellCommand):
-
+    """Reimplement part of :py:class:`pyramid.scripts.pshell.PShellCommand`
+    to skip variables declared in the DEFAULT section of the .ini file."""
     def pshell_file_config(self, filename):
         config = self.ConfigParser()
         config.optionxform = str

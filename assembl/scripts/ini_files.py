@@ -64,12 +64,12 @@ def asParser(fob, cls=Parser):
     """ConfigParser from a .ini filename or open file object. Idempotent."""
     if isinstance(fob, cls):
         return fob
-    p = cls()
+    parser = cls()
     if isinstance(fob, (str, unicode)):
-        p.read(fob)
+        parser.read(fob)
     else:
-        p.readfp(fob)
-    return p
+        parser.readfp(fob)
+    return parser
 
 
 def ensureSection(config, section):
@@ -200,14 +200,15 @@ def combine_ini(config, overlay, adding=True):
 
 def migrate_beaker_config(random_ini, overlay):
     """Migrate old-style session... to beaker.session..."""
+    PREFIX = "beaker."
     for section in random_ini.sections():
         # Avoid including DEFAULTSECT
         if not overlay.has_section(section):
             continue
         o_section = overlay._sections[section]
         for key in random_ini._sections[section]:
-            if key.startswith("beaker."):
-                old_key = key[7:]
+            if key.startswith(PREFIX):
+                old_key = key[len(PREFIX):]
                 if old_key in o_section and key not in o_section:
                     overlay.set(section, key, overlay.get(section, old_key))
             elif key == 'session.secret':
@@ -267,7 +268,9 @@ def populate_random(random_file, random_templates=None, saml_info=None):
                 else:
                     saml_keys[prefix] = value
             elif value.startswith('{random') and value.endswith("}"):
-                value = b64encode(urandom(int(value[7:-1])))
+                size = int(value[7:-1])
+                assert 0 < size < 100
+                value = b64encode(urandom(size))
                 base.set(section, key, value)
                 changed = True
 
@@ -449,7 +452,7 @@ def migrate(rc_filename, expected_ini, random_file=None, target_dir=None):
 
 
 def main():
-    parser = ArgumentParser(prog='ini_files.py')
+    parser = ArgumentParser(prog=os.path.basename(__file__))
     subparsers = parser.add_subparsers(dest='command', title="subcommands")
 
     def short_help(fn):
@@ -487,8 +490,9 @@ def main():
     parser_migrate.add_argument(
         '--ini', '-i', type=FileType('r'), default=None,
         help="INI file we're migrating, usually local.ini")
-    parser_migrate.add_argument('--random', '-r', help='random.ini file',
-                                default=None)
+    parser_migrate.add_argument('--random', '-r', default=None,
+                                help='file where random values will be stored,'
+                                     ' and fetched if existing',)
     parser_migrate.add_argument('rc', help='Base rc file')
 
     # random.ini

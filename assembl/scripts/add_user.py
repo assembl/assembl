@@ -52,7 +52,8 @@ def main():
                         help="slug of discussion context for local user role")
     parser.add_argument(
         "--bypass-password", action='store_true',
-        help="Bypass password, use the password recovery mechanism")
+        help="Do not ask for password now, use the application's password "
+        " recovery function to assign a password to this user later.")
     args = parser.parse_args()
     env = bootstrap(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')

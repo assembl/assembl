@@ -62,7 +62,10 @@ def combine_rc(rc_filename, overlay=None):
 
 
 def filter_global_names(rc_data):
-    """Some keys in rc files are prefixed with * or _ for ini conversion purposes"""
+    """Returns a copy of the dict with normalized key names.
+    Some keys in rc files are prefixed with * or _ for ini conversion purposes,
+    those are stripped. If the value is '__delete_key__',
+    the pair is filtered out."""
     return {k.lstrip('*').lstrip('_'): v for (k, v) in rc_data.iteritems()
             if v != '__delete_key__'}
 

@@ -81,8 +81,7 @@ def make_saml_cert(key, country='', state='', locality='', org='', cn='',
         x509.BasicConstraints(True, 0), False
     ).add_extension(
         skid, False
-    )
-    crt = crt.add_extension(
+    ).add_extension(
         x509.AuthorityKeyIdentifier(
             skid.digest, [x509.DirectoryName(subject)], serial_number), False
     )

@@ -12,11 +12,10 @@ Download a copy of a remote database to develop locally
 
 .. code:: sh
 
-    fab -c configs/config_of_remote_instance.rc database_download
+    fab -c configs/{config_of_remote_instance}.rc database_download
     fab -c configs/develop.rc database_restore
     # Make sure the database username and passwords in local.ini match the ones of the database you just downloaded
     fab -c configs/develop.rc app_compile #(To make sure the database schema is up to date and restore.  You can also use app_compile_noupdate if you are in a hurry)
-    fab -c configs/develop.rc reset_semantic_mappings
     # Grab a coffee...
     exit
     supervisorctl restart dev:

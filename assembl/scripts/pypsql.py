@@ -15,7 +15,9 @@ def main():
     parser.add_argument('--ask_password', '-P', action="store_true",
                         help='ask for database password',)
     parser.add_argument('--database', '-d', help="database")
-    parser.add_argument('--autocommit', action="store_true", help="autocommit")
+    parser.add_argument('--autocommit', action="store_true",
+                        help="set autocommit isolation level"
+                             "(necessary for some db-level commands)")
     parser.add_argument('--print_one', '-1', action="store_true",
                         help="print first return row (fails if none)")
     parser.add_argument('commands', help="sql commands")
