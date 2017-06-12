@@ -37,6 +37,7 @@ from ..lib.utils import get_global_base_url
 from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase, HistoryMixin
 from .discussion import Discussion
+from .langstrings import LangString
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_EDIT_IDEA,
@@ -155,6 +156,22 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     short_title = Column(
         UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+    title_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    description_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    title = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=title_id == LangString.id,
+        backref=backref("idea_from_title", lazy="dynamic"),
+        cascade="all, delete-orphan")
+    description = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=description_id == LangString.id,
+        backref=backref("idea_from_description", lazy="dynamic"),
+        cascade="all, delete-orphan")
     definition = Column(
         UnicodeText,
         info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
@@ -1014,6 +1031,9 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
         P_ADMIN_DISC)
+
+LangString.setup_ownership_load_event(Idea,
+    ['title', 'description'])
 
 
 class RootIdea(Idea):
