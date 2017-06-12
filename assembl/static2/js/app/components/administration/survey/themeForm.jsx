@@ -1,101 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { compose, gql, withApollo } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
 
 import { listThematicsToDelete, listPreviewsToDisplay } from '../../../actions/adminActions';
 import ImageUploader from '../../common/imageUploader';
-
-const GetThematics = gql`
-{
-  thematics(identifier:"survey") {
-    id,
-    titleEntries {
-      localeCode,
-      value
-    },
-    imgUrl,
-    video {
-      titleEntries {
-        localeCode,
-        value
-      },
-      descriptionEntries {
-        localeCode,
-        value
-      },
-      htmlCode
-    },
-    questions {
-      titleEntries {
-        localeCode,
-        value
-      }
-    }
-  }
-}
-`;
+import withLoadingIndicator from '../../common/withLoadingIndicator';
+import { ThematicsQuery, ThematicQuery } from '../../../graphql';
 
 export const updateTitle = (client, id, selectedLocale, titleEntryIndex, value) => {
-  let entryIndex = titleEntryIndex;
+  const data = client.readQuery({ query: ThematicQuery, variables: { id: id } });
+  const modifiedEntry = { localeCode: selectedLocale, value: value, __typename: 'LangStringEntry' };
   if (titleEntryIndex === -1) {
-    const res = client.readFragment({
-      id: `Thematic:${id}`,
-      fragment: gql`
-        fragment thematic on Thematic {
-          titleEntries
-        }
-      `
-    });
-    entryIndex = res.titleEntries.length;
-    const newTitleEntries = res.titleEntries;
-    newTitleEntries.push({
-      id: `Thematic:${id}.titleEntries.${entryIndex}`,
-      type: 'id'
-    });
-    client.writeFragment({
-      id: `Thematic:${id}`,
-      fragment: gql`
-        fragment thematic on Thematic {
-          titleEntries
-        }
-      `,
-      data: {
-        titleEntries: newTitleEntries,
-        __typename: 'Thematic'
-      }
-    });
+    data.thematic.titleEntries.push(modifiedEntry);
+  } else {
+    data.thematic.titleEntries[titleEntryIndex] = modifiedEntry;
   }
-  client.writeFragment({
-    id: `Thematic:${id}.titleEntries.${entryIndex}`,
-    fragment: gql`
-      fragment entry on LangStringEntry {
-        localeCode,
-        value,
-        __typename
-      }
-    `,
-    data: {
-      localeCode: selectedLocale,
-      value: value,
-      __typename: 'LangStringEntry'
-    }
-  });
+  client.writeQuery({ query: ThematicQuery, variables: { id: id }, data: data });
 };
 
 export const updateImage = (client, id, file) => {
-  client.writeFragment({
-    id: `Thematic:${id}`,
-    fragment: gql`
-      fragment thematicImg on Thematic {
-        imgUrl
-      }
-    `,
-    data: {
-      imgUrl: file,
-      __typename: 'Thematic'
-    }
+  const data = client.readQuery({ query: ThematicQuery, variables: { id: id } });
+  data.thematic.imgUrl = file;
+  client.writeQuery({
+    data: data,
+    query: ThematicQuery,
+    variables: { id: id }
   });
 };
 
@@ -111,7 +42,9 @@ export const getPreviewToDisplay = (previewsToDisplay, imgUrl, thematicId) => {
   return previewUrl;
 };
 
-export const DumbThemeCreationForm = ({ client, id, imgUrl, index, selectedLocale, titleEntries, thematicsToDelete, addThematicsToDelete, previewsToDisplay, addPreviewsToDisplay }) => {
+export const DumbThemeCreationForm = ({ client, data, id, index, selectedLocale, thematicsToDelete, addThematicsToDelete, previewsToDisplay, addPreviewsToDisplay }) => {
+  const { thematic: { imgUrl, titleEntries } } = data;
+
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
   const num = (Number(index) + 1).toString();
@@ -124,14 +57,14 @@ export const DumbThemeCreationForm = ({ client, id, imgUrl, index, selectedLocal
   const remove = (thematicId) => {
     thematicsToDelete.push(thematicId);
     addThematicsToDelete(thematicsToDelete);
-    const thematicsData = client.readQuery({ query: GetThematics });
+    const thematicsData = client.readQuery({ query: ThematicsQuery });
     thematicsData.thematics.forEach((thematic, index2) => {
       if (thematic.id === thematicId) {
         thematicsData.thematics.splice(index2, 1);
       }
     });
     return client.writeQuery({
-      query: GetThematics,
+      query: ThematicsQuery,
       data: thematicsData
     });
   };
@@ -190,4 +123,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(DumbThemeCreationForm);
+export default compose(connect(mapStateToProps, mapDispatchToProps), graphql(ThematicQuery), withLoadingIndicator, withApollo)(DumbThemeCreationForm);

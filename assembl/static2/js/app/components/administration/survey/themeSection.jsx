@@ -62,7 +62,7 @@ const ThemeSection = ({ client, i18n, selectedLocale }) => {
       <div className="admin-content">
         <form>
           {themes.map((theme, idx) => {
-            return <ThemeForm key={theme.id} id={theme.id} index={idx} imgUrl={theme.imgUrl} selectedLocale={selectedLocale} titleEntries={theme.titleEntries} />;
+            return <ThemeForm key={theme.id} id={theme.id} index={idx} selectedLocale={selectedLocale} />;
           })}
           <div onClick={addTheme} className="plus margin-l">+</div>
         </form>

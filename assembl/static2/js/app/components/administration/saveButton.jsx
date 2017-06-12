@@ -5,35 +5,7 @@ import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { displayAlert } from '../../utils/utilityManager';
 
-const GetThematics = gql`
-{
-  thematics(identifier:"survey") {
-    id,
-    titleEntries {
-      localeCode,
-      value
-    },
-    imgUrl,
-    video {
-      titleEntries {
-        localeCode,
-        value
-      },
-      descriptionEntries {
-        localeCode,
-        value
-      },
-      htmlCode
-    },
-    questions {
-      titleEntries {
-        localeCode,
-        value
-      }
-    }
-  }
-}
-`;
+import { ThematicsQuery, ThematicQuery } from '../../graphql';
 
 const createLanguageEntries = (titles) => {
   return titles.map((title) => {
@@ -68,18 +40,21 @@ const runSerial = (tasks) => {
 
 const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
   const saveAction = () => {
-    const { thematics } = client.readQuery({ query: GetThematics });
+    const { thematics } = client.readQuery({ query: ThematicsQuery });
     const promisesArray = [];
     thematics.forEach((t) => {
-      // To create a thematic, get if its ID is a negative number
+      // we have to use ThematicQuery to get the data that we have modified in Apollo's cache
+      const data = client.readQuery({ query: ThematicQuery, variables: { id: t.id } });
+      const thematic = data.thematic;
+      // create a thematic if its ID is a negative number
       if (t.id < 0) {
         const payload = {
           variables: {
             identifier: 'survey',
-            titleEntries: createLanguageEntries(t.titleEntries),
-            image: t.imgUrl,
-            video: t.video.length === 0 ? null : createVideo(t.video),
-            questions: createQuestionEntries(t.questions)
+            titleEntries: createLanguageEntries(thematic.titleEntries),
+            image: thematic.imgUrl,
+            video: thematic.video.length === 0 ? null : createVideo(thematic.video),
+            questions: createQuestionEntries(thematic.questions)
           }
         };
         const p1 = () => {
@@ -92,10 +67,10 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
           variables: {
             id: t.id,
             identifier: 'survey',
-            titleEntries: createLanguageEntries(t.titleEntries),
-            video: createVideo(t.video),
-            image: typeof t.imgUrl === 'string' ? null : t.imgUrl,
-            questions: createQuestionEntries(t.questions)
+            titleEntries: createLanguageEntries(thematic.titleEntries),
+            video: createVideo(thematic.video),
+            image: typeof thematic.imgUrl === 'string' ? null : thematic.imgUrl,
+            questions: createQuestionEntries(thematic.questions)
           }
         };
         const p2 = () => {
