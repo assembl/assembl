@@ -1,7 +1,7 @@
 import React from 'react';
-import { compose, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { gql, withApollo } from 'react-apollo';
+import { compose, gql, withApollo } from 'react-apollo';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
 
 import { listThematicsToDelete, listPreviewsToDisplay } from '../../../actions/adminActions';
