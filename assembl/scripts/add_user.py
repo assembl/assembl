@@ -60,7 +60,7 @@ def main():
     configure_zmq(settings['changes.socket'], False)
     configure_model_watcher(env['registry'], 'assembl')
     engine = configure_engine(settings, True)
-    configure_indexing(settings)
+    configure_indexing()
     from assembl.models import Role
     from assembl.auth.util import add_user
     all_roles = {r.name: r for r in Role.default_db.query(Role).all()}

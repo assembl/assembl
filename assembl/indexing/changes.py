@@ -202,11 +202,11 @@ def get_changes():
     return _changes
 
 
-def configure_indexing(config):
+def configure_indexing():
     global _changes
     _changes = ElasticChanges(transaction.manager)
 
 
 def includeme(config):
     """ Initialize changes. """
-    configure_indexing(config)
+    configure_indexing()

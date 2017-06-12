@@ -37,7 +37,7 @@ def main():
     settings = get_appsettings(args.configuration, 'assembl')
     set_config(settings)
     configure_zmq(settings['changes.socket'], False)
-    configure_indexing(settings)
+    configure_indexing()
     engine = configure_engine(settings, True)
     admin_engine = engine
     from assembl.lib.sqla import using_virtuoso

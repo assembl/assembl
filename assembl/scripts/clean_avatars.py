@@ -32,6 +32,6 @@ if __name__ == '__main__':
     logging.config.fileConfig(config_fname)
     configure_zmq(settings['changes.socket'], False)
     configure_engine(settings, True)
-    configure_indexing(settings)
+    configure_indexing()
     session = get_session_maker()()
     clean_avatars(session)

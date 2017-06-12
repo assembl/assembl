@@ -609,7 +609,7 @@ def engine_from_settings(config, full_config=False):
     if full_config:
         env = bootstrap(config)
         configure_zmq(settings['changes.socket'], False)
-        configure_indexing(settings)
+        configure_indexing()
         configure_model_watcher(env['registry'], 'assembl')
         logging.config.fileConfig(config)
         session = get_session_maker()
