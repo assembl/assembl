@@ -124,6 +124,7 @@ directory = %(here)s
 command = %(VIRTUAL_ENV)s/bin/pserve --reload %(CONFIG_FILE)s
 autostart = %(autostart_pserve)s
 autorestart = false
+environment = NODE_ENV=development
 
 [program:gulp]
 directory = %(here)s/assembl/static/js

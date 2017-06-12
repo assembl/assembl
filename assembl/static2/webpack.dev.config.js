@@ -1,4 +1,3 @@
-var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
 var _ = require('lodash');
@@ -8,11 +7,6 @@ var webpackHost = process.env.WEBPACK_URL.split('://')[1].split(':')[0];
 
 // if you want to work on another theme, change this variable
 var THEME = "default";
-
-// remove production css build, css should be injected in development mode
-// You will have 404 for these files in development, this is normal.
-fs.unlink(path.join(__dirname, 'build', 'theme_' + THEME + '_web.css'), function(){});
-fs.unlink(path.join(__dirname, 'build', 'bundle.css'), function(){});
 
 // For css hot reload to work, don't use ExtractTextPlugin
 module.exports = {
