@@ -11,10 +11,3 @@ export const listThematicsToDelete = (thematicsToDelete) => {
     type: 'LIST_THEMATICS_TO_DELETE'
   };
 };
-
-export const listPreviewsToDisplay = (previewsToDisplay) => {
-  return {
-    previewsToDisplay: previewsToDisplay,
-    type: 'LIST_PREVIEWS_TO_DISPLAY'
-  };
-};

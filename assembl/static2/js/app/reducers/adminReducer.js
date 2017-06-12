@@ -18,17 +18,7 @@ export const thematicsToDelete = (state = [], action) => {
   }
 };
 
-export const previewsToDisplay = (state = [], action) => {
-  switch (action.type) {
-  case 'LIST_PREVIEWS_TO_DISPLAY':
-    return action.previewsToDisplay;
-  default:
-    return state;
-  }
-};
-
 export default combineReducers({
   selectedLocale: selectedLocale,
-  thematicsToDelete: thematicsToDelete,
-  previewsToDisplay: previewsToDisplay
+  thematicsToDelete: thematicsToDelete
 });

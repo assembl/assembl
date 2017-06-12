@@ -4,7 +4,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { compose, graphql, withApollo } from 'react-apollo';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
 
-import { listThematicsToDelete, listPreviewsToDisplay } from '../../../actions/adminActions';
+import { listThematicsToDelete } from '../../../actions/adminActions';
 import ImageUploader from '../../common/imageUploader';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
 import { ThematicsQuery, ThematicQuery } from '../../../graphql';
@@ -22,6 +22,7 @@ export const updateTitle = (client, id, selectedLocale, titleEntryIndex, value) 
 
 export const updateImage = (client, id, file) => {
   const data = client.readQuery({ query: ThematicQuery, variables: { id: id } });
+  // we need to store file object in imgUrl to be able to create/update the thematic
   data.thematic.imgUrl = file;
   client.writeQuery({
     data: data,
@@ -30,21 +31,8 @@ export const updateImage = (client, id, file) => {
   });
 };
 
-export const getPreviewToDisplay = (previewsToDisplay, imgUrl, thematicId) => {
-  let previewUrl = imgUrl;
-  if (previewsToDisplay.length > 0) {
-    previewsToDisplay.forEach((preview) => {
-      if (preview.thematicId === thematicId) {
-        previewUrl = preview.imgUrl;
-      }
-    });
-  }
-  return previewUrl;
-};
-
-export const DumbThemeCreationForm = ({ client, data, id, index, selectedLocale, thematicsToDelete, addThematicsToDelete, previewsToDisplay, addPreviewsToDisplay }) => {
+export const DumbThemeCreationForm = ({ client, data, id, index, selectedLocale, thematicsToDelete, addThematicsToDelete }) => {
   const { thematic: { imgUrl, titleEntries } } = data;
-
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
   const num = (Number(index) + 1).toString();
@@ -53,7 +41,6 @@ export const DumbThemeCreationForm = ({ client, data, id, index, selectedLocale,
   });
   const titleEntryIndex = titleEntries.indexOf(titleEntry);
   const title = titleEntry ? titleEntry.value : '';
-  const previewUrl = getPreviewToDisplay(previewsToDisplay, imgUrl, id);
   const remove = (thematicId) => {
     thematicsToDelete.push(thematicId);
     addThematicsToDelete(thematicsToDelete);
@@ -68,14 +55,15 @@ export const DumbThemeCreationForm = ({ client, data, id, index, selectedLocale,
       data: thematicsData
     });
   };
-  const handleImageChange = (file, url) => {
-    previewsToDisplay.push({ thematicId: id, imgUrl: url });
-    addPreviewsToDisplay(previewsToDisplay);
-    updateImage(client, id, file);
-  };
+
   const handleTitleChange = (e) => {
     return updateTitle(client, id, selectedLocale, titleEntryIndex, e.target.value);
   };
+
+  const handleImageChange = (file) => {
+    updateImage(client, id, file);
+  };
+
   return (
     <div className="form-container">
       <div className="title">
@@ -85,7 +73,7 @@ export const DumbThemeCreationForm = ({ client, data, id, index, selectedLocale,
         <FormControl type="text" placeholder={ph} value={title} onChange={handleTitleChange} />
       </FormGroup>
       <FormGroup>
-        <ImageUploader imgUrl={previewUrl} handleImageChange={handleImageChange} />
+        <ImageUploader imgUrl={imgUrl} handleImageChange={handleImageChange} />
       </FormGroup>
       <div className="pointer right">
         <Button
@@ -107,8 +95,7 @@ DumbThemeCreationForm.defaultProps = {
 
 const mapStateToProps = (state) => {
   return {
-    thematicsToDelete: state.admin.thematicsToDelete,
-    previewsToDisplay: state.admin.previewsToDisplay
+    thematicsToDelete: state.admin.thematicsToDelete
   };
 };
 
@@ -116,9 +103,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addThematicsToDelete: (thematicsToDelete) => {
       dispatch(listThematicsToDelete(thematicsToDelete));
-    },
-    addPreviewsToDisplay: (previewsToDisplay) => {
-      dispatch(listPreviewsToDisplay(previewsToDisplay));
     }
   };
 };
