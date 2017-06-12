@@ -7,6 +7,13 @@ import Translations from './utils/translations';
 
 export const createAppStore = () => {
   const store = createStore(RootReducer, applyMiddleware(Thunk));
+  if (module.hot) {
+    module.hot.accept('./reducers/rootReducer', () => {
+      const nextRootReducer = require('./reducers/rootReducer').default;  // eslint-disable-line
+      store.replaceReducer(nextRootReducer);
+    });
+  }
+
   const browserLanguage = navigator.language || navigator.userLanguage;
   const isStoragedlocale = localStorage.getItem('locale') !== null;
   const userLocale = isStoragedlocale ? localStorage.getItem('locale') : getLocale(browserLanguage);

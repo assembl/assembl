@@ -124,6 +124,7 @@ directory = %(here)s
 command = %(VIRTUAL_ENV)s/bin/pserve --reload %(CONFIG_FILE)s
 autostart = %(autostart_pserve)s
 autorestart = false
+environment = NODE_ENV=development
 
 [program:gulp]
 directory = %(here)s/assembl/static/js
@@ -133,7 +134,7 @@ autorestart = true
 
 [program:webpack]
 directory = %(here)s/assembl/static2
-command = %(VIRTUAL_ENV)s/bin/node %(here)s/assembl/static2/node_modules/.bin/webpack-dev-server -d --config webpack.dev.config.js
+command = %(VIRTUAL_ENV)s/bin/node %(here)s/assembl/static2/node_modules/.bin/webpack-dev-server --config webpack.dev.config.js
 autostart = %(autostart_webpack)s
 autorestart = true
 environment = VIRTUAL_ENV="%(VIRTUAL_ENV)s",PATH="%(VIRTUAL_ENV)s/bin:%%(ENV_PATH)s",ASSEMBL_URL="%(ASSEMBL_URL)s",WEBPACK_URL="%(WEBPACK_URL)s"

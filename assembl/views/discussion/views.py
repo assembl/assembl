@@ -1,5 +1,6 @@
 """The basic views that host the one-page app"""
 import json
+import os
 import os.path
 
 from pyramid.view import view_config
@@ -261,6 +262,7 @@ def react_view(request):
     context = dict(
         request=old_context['request'],
         REACT_URL=old_context['REACT_URL'],
+        NODE_ENV=os.getenv('NODE_ENV', 'production'),
         discussion=discussion,
         user=old_context['user'],
         error=old_context.get('error', None),
