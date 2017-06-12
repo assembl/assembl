@@ -56,7 +56,7 @@ export const DumbThemeCreationForm = ({ client, data, id, index, selectedLocale,
     });
   };
 
-  const handleTitleChange = (e) => {
+  const handleTitleBlur = (e) => {
     return updateTitle(client, id, selectedLocale, titleEntryIndex, e.target.value);
   };
 
@@ -70,7 +70,7 @@ export const DumbThemeCreationForm = ({ client, data, id, index, selectedLocale,
         <Translate value="administration.themeNum" index={num} />
       </div>
       <FormGroup>
-        <FormControl type="text" placeholder={ph} value={title} onChange={handleTitleChange} />
+        <FormControl type="text" placeholder={ph} defaultValue={title} onBlur={handleTitleBlur} />
       </FormGroup>
       <FormGroup>
         <ImageUploader imgUrl={imgUrl} handleImageChange={handleImageChange} />
