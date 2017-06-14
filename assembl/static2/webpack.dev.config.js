@@ -70,7 +70,8 @@ module.exports = {
         },
         {
             test: /\.scss$/,
-            loader: 'style!css?sourceMap=true!sass?sourceMap=true'
+            //loader: 'style!css?sourceMap=true!sass?sourceMap=true'  // fonts are not loaded when using sourceMap...
+            loaders: ['style', 'css', 'sass']
         },
         {
             test: /\.css$/,
