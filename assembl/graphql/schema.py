@@ -209,6 +209,11 @@ class SentimentCounts(graphene.ObjectType):
     more_info = graphene.Int()
 
 
+class IdeaContentLink(graphene.ObjectType):
+    idea_id = graphene.ID(required=True)
+    type = graphene.String(required=True)
+
+
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
@@ -220,6 +225,7 @@ class PostInterface(SQLAlchemyInterface):
     body = graphene.String(lang=graphene.String())
     sentiment_counts = graphene.Field(SentimentCounts)
     my_sentiment = graphene.Field(type=SentimentTypes)
+    idea_content_links = graphene.List(IdeaContentLink)
 
     def resolve_subject(self, args, context, info):
         subject = resolve_langstring(self.get_subject(), args.get('lang'))
@@ -244,6 +250,13 @@ class PostInterface(SQLAlchemyInterface):
             return None
 
         return my_sentiment.name.upper()
+
+    def resolve_idea_content_links(self, args, context, info):
+        links = [(models.Idea.get_database_id(link['idIdea']), link['@type'])
+                    for link in self.indirect_idea_content_links_with_cache()]
+        return [IdeaContentLink(idea_id=Node.to_global_id('Idea', idea_id),
+                                type=type)
+                for idea_id, type in links]
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
