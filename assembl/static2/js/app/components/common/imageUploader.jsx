@@ -39,7 +39,7 @@ class ImageUploader extends React.Component {
   updateImageInfo(imgUrl) {
     // warning: here imgUrl can be an url or a File object
     // update image src and name if imgUrl is a File
-    if (Object.getPrototypeOf(imgUrl) === File.prototype) {
+    if (imgUrl && Object.getPrototypeOf(imgUrl) === File.prototype) {
       const file = imgUrl;
       const reader = new FileReader();
       reader.addEventListener(
