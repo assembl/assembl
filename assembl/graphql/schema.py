@@ -305,9 +305,15 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', 'short_title', )
 
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    description = graphene.String(lang=graphene.String())
+    description_entries = graphene.List(LangStringEntry)
+    children = graphene.List(lambda: Idea)
+    img_url = graphene.String()
+    order = graphene.Float()
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
-    order = graphene.Float()
     parent_id = graphene.ID()
     posts = SQLAlchemyConnectionField(PostConnection)
 
@@ -335,6 +341,31 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             ).format(root))
         # return isinstance(root, cls._meta.model)  # this was the original code
         return type(root) == cls._meta.model or type(root) == models.RootIdea
+
+    def resolve_title(self, args, context, info):
+        title = resolve_langstring(self.title, args.get('lang'))
+        # If the idea was created from the old api or v1 interface, we don't
+        # have title, return short_title.
+        if title is None:
+            return self.short_title
+
+        return title
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
+    def resolve_description(self, args, context, info):
+        return resolve_langstring(self.description, args.get('lang'))
+
+    def resolve_description_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'description')
+
+    def resolve_children(self, args, context, info):
+        return self.get_children()
+
+    def resolve_img_url(self, args, context, info):
+        if self.attachments:
+            return self.attachments[0].external_url
 
     def resolve_order(self, args, context, info):
         return self.get_order_from_first_parent()
@@ -483,13 +514,17 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
 class Query(graphene.ObjectType):
     node = Node.Field()
     posts = SQLAlchemyConnectionField(PostConnection, idea_id=graphene.ID())
-    ideas = SQLAlchemyConnectionField(Idea)
+    root_idea = graphene.Field(Idea)
+    ideas = graphene.List(Idea)
     thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
-    # agent_profiles = SQLAlchemyConnectionField(AgentProfile)
+
+    def resolve_root_idea(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.root_idea
 
     def resolve_ideas(self, args, context, info):
-        connection_type = info.return_type.graphene_type  # this is IdeaConnection
-        model = connection_type._meta.node._meta.model  # this is models.Idea
+        model = models.Idea
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -498,7 +533,6 @@ class Query(graphene.ObjectType):
             root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
             ).filter(model.hidden == False).order_by(model.id)
-        # pagination is done after that, no need to do it ourself
         return query
 
     def resolve_posts(self, args, context, info):
@@ -524,7 +558,6 @@ class Query(graphene.ObjectType):
 
     def resolve_thematics(self, args, context, info):
         identifier = args.get('identifier', None)
-        model = Thematic._meta.model
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         root_thematic = get_root_thematic_for_phase(discussion, identifier)
