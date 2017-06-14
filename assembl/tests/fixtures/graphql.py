@@ -45,7 +45,7 @@ mutation myFirstMutation {
 def thematic_with_video_and_question(graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
-mutation myFirstMutation {
+mutation myMutation {
     createThematic(
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
@@ -81,6 +81,54 @@ mutation myFirstMutation {
     thematic_id = res.data['createThematic']['thematic']['id']
     first_question_id = res.data['createThematic']['thematic']['questions'][0]['id']
     return thematic_id, first_question_id
+
+
+@pytest.fixture(scope="function")
+def second_thematic_with_questions(graphql_request):
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(u"""
+mutation myMutation {
+    createThematic(
+        titleEntries:[
+            {value:"AI revolution", localeCode:"en"}
+        ],
+        questions:[
+            {titleEntries:[
+                {value:"How does AI already impact us?", localeCode:"en"}
+            ]},
+            {titleEntries:[
+                {value:"What are the most promising AI applications in the short term?", localeCode:"en"}
+            ]},
+            {titleEntries:[
+                {value:"How would you explain algorithmic biases to a kid?", localeCode:"en"}
+            ]},
+            {titleEntries:[
+                {value:"What sectors will be the most affected by AI?", localeCode:"en"}
+            ]},
+        ],
+        video: {
+            titleEntries:[
+                {value:"A video to better understand the subject...",
+                 localeCode:"en"},
+            ]
+            htmlCode:"https://www.youtube.com/embed/GJM1TlHML4E?list=PL1HxVG_mcuktmbRELCxOiQlZLCFKzhBcJ"
+        },
+        identifier:"survey",
+    ) {
+        thematic {
+            id
+            order
+            titleEntries { localeCode value },
+            identifier
+            questions { id, titleEntries { localeCode value } }
+        }
+    }
+}
+""", context_value=graphql_request)
+    thematic_id = res.data['createThematic']['thematic']['id']
+    question_ids = [question['id']
+        for question in res.data['createThematic']['thematic']['questions']]
+    return thematic_id, question_ids
 
 
 @pytest.fixture(scope="function")

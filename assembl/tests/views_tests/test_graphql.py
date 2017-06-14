@@ -5,6 +5,7 @@ from graphql_relay.node.node import to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
+from assembl.graphql.schema import create_root_thematic
 
 
 def test_get_thematics_noresult(graphql_request):
@@ -15,11 +16,13 @@ def test_get_thematics_noresult(graphql_request):
 def test_get_thematics_no_video(discussion, graphql_request, test_session):
     title = u"Comprendre les dynamiques et les enjeux"
     title = models.LangString.create(title, locale_code="fr")
+    root_thematic = create_root_thematic(discussion, "survey")
     thematic = models.Thematic(
         discussion_id=discussion.id,
         title=title,
         identifier="survey")
-    test_session.add(thematic)
+    test_session.add(
+        models.IdeaLink(source=root_thematic, target=thematic, order=1.0))
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
@@ -45,6 +48,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
     video_desc = models.LangString.create(
         u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
         locale_code="fr")
+    root_thematic = create_root_thematic(discussion, "survey")
     thematic = models.Thematic(
         discussion_id=discussion.id,
         title=title,
@@ -53,7 +57,8 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
         video_description=video_desc,
         video_html_code=u"<object>....</object>",
     )
-    test_session.add(thematic)
+    test_session.add(
+        models.IdeaLink(source=root_thematic, target=thematic, order=1.0))
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
@@ -834,6 +839,71 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals):
                                 {u'node': {u'body': u'une proposition 5'}}]},
                 }}
 
+def test_get_thematics_order(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { title, order } }',
+        context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'thematics': [
+            {u'order': 1.0, u'title': u'Understanding the dynamics and issues'},
+            {u'order': 2.0, u'title': u'AI revolution'}
+        ]
+    }
+
+def test_thematics_change_order(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+    thematic_id, _ = thematic_with_video_and_question
+    res = schema.execute(u"""
+mutation myMutation($thematicId:ID!, $order:Float!) {
+    updateThematic(
+        id:$thematicId,
+        order:$order
+    ) {
+        thematic {
+            order
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"thematicId": thematic_id,
+                                                     "order": 3.0})
+
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { title, order } }',
+        context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'thematics': [
+            {u'order': 2.0, u'title': u'AI revolution'},
+            {u'order': 3.0, u'title': u'Understanding the dynamics and issues'}
+        ]
+    }
+
+def test_insert_thematic_between_two_thematics(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+    res = schema.execute(u"""
+mutation myMutation {
+    createThematic(
+        titleEntries:[
+            {value:"AI for the common good", localeCode:"en"}
+        ],
+        identifier:"survey",
+        order: 1.5
+    ) {
+        thematic {
+            order
+        }
+    }
+}
+""", context_value=graphql_request)
+
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { title, order } }',
+        context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'thematics': [
+            {u'order': 1.0, u'title': u'Understanding the dynamics and issues'},
+            {u'order': 1.5, u'title': u'AI for the common good'},
+            {u'order': 2.0, u'title': u'AI revolution'}
+        ]
+    }
 
 def test_graphql_get_ideas(discussion, graphql_request, subidea_1_1_1):
     res = schema.execute(
@@ -842,7 +912,12 @@ def test_graphql_get_ideas(discussion, graphql_request, subidea_1_1_1):
                 edges {
                     node {
                         ... on Idea {
-                            id, shortTitle, numPosts, numContributors, parentId,
+                            id
+                            shortTitle
+                            numPosts
+                            numContributors
+                            parentId
+                            order
                             posts(first:10) {
                                 edges {
                                     node {
@@ -855,10 +930,14 @@ def test_graphql_get_ideas(discussion, graphql_request, subidea_1_1_1):
     third_idea = res.data['ideas']['edges'][3]['node']
     assert root_idea['shortTitle'] is None
     assert root_idea['parentId'] is None
+    assert root_idea['order'] is None
     assert first_idea['shortTitle'] == u'Favor economic growth'
     assert first_idea['parentId'] == root_idea['id']
+    assert first_idea['order'] == 0.0
     assert second_idea['shortTitle'] == u'Lower taxes'
     assert second_idea['parentId'] == first_idea['id']
+    assert second_idea['order'] == 0.0
     assert third_idea['shortTitle'] == u'Lower government revenue'
     assert third_idea['parentId'] == second_idea['id']
+    assert third_idea['order'] == 0.0
     assert len(res.errors) == 0
