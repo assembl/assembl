@@ -13,62 +13,66 @@ describe('Admin actions', () => {
     });
   });
 
-  describe('resolvedAddThemeToSurvey action', () => {
-    const { resolvedAddThemeToSurvey } = actions;
-    it('should return a ADD_THEME_TO_SURVEY action type', () => {
+  describe('updateThematics action', () => {
+    const { updateThematics } = actions;
+    it('should return a UPDATE_THEMATICS action type', () => {
+      const thematics = [{ id: '0', titleEntries: [{ localeCode: 'en', value: 'Foo ' }] }, { id: '1', titleEntries: [{ localeCode: 'en', value: 'Bar ' }] }];
+      const actual = updateThematics(thematics);
       const expected = {
-        id: 'foo',
-        type: 'ADD_THEME_TO_SURVEY'
+        thematics: thematics,
+        type: 'UPDATE_THEMATICS'
       };
-      const actual = resolvedAddThemeToSurvey('foo');
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('addThemeToSurvey action', () => {
-    const { addThemeToSurvey, resolvedAddThemeToSurvey } = actions;
-    it('should return a function that dispatch resolvedAddThemeToSurvey', () => {
-      const outputFunction = addThemeToSurvey('foo');
-      const getStateMock = () => {
-        return {
-          admin: {
-            surveyThemes: ['foo', 'bar']
-          }
-        };
+  describe('updateThematicImgUrl action', () => {
+    const { updateThematicImgUrl } = actions;
+    it('should return a UPDATE_THEMATIC_IMG_URL action type', () => {
+      const actual = updateThematicImgUrl('1', 'http://example.com/foobar.jpg');
+      const expected = {
+        id: '1',
+        value: 'http://example.com/foobar.jpg',
+        type: 'UPDATE_THEMATIC_IMG_URL'
       };
-      let actual;
-      const dispatchMock = (x) => {
-        actual = x;
-      };
-      outputFunction(dispatchMock, getStateMock);
-      const expected = resolvedAddThemeToSurvey('2');
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('updateThemeTitle action', () => {
-    const { updateThemeTitle } = actions;
-    it('should return a UPDATE_SURVEY_THEME_TITLE action type', () => {
+  describe('updateThematicTitle action', () => {
+    const { updateThematicTitle } = actions;
+    it('should return a UPDATE_THEMATIC_TITLE action type', () => {
+      const actual = updateThematicTitle('1', 'en', 'New title');
       const expected = {
-        locale: 'fr',
-        themeId: '33',
-        newTitle: 'Les enjeux de l\'intelligence artificielle',
-        type: 'UPDATE_SURVEY_THEME_TITLE'
+        id: '1',
+        locale: 'en',
+        value: 'New title',
+        type: 'UPDATE_THEMATIC_TITLE'
       };
-      const actual = updateThemeTitle('33', 'fr', 'Les enjeux de l\'intelligence artificielle');
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('updateThemeImage action', () => {
-    const { updateThemeImage } = actions;
-    it('should return a UPDATE_SURVEY_THEME_IMAGE action type', () => {
+  describe('deleteThematic action', () => {
+    const { deleteThematic } = actions;
+    it('should return a DELETE_THEMATIC action type', () => {
+      const actual = deleteThematic('1');
       const expected = {
-        themeId: '33',
-        file: { name: 'foobar.png' },
-        type: 'UPDATE_SURVEY_THEME_IMAGE'
+        id: '1',
+        type: 'DELETE_THEMATIC'
       };
-      const actual = updateThemeImage('33', { name: 'foobar.png' });
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('createNewThematic action', () => {
+    const { createNewThematic } = actions;
+    it('should return a CREATE_NEW_THEMATIC action type', () => {
+      const actual = createNewThematic('1');
+      const expected = {
+        id: '1',
+        type: 'CREATE_NEW_THEMATIC'
+      };
       expect(actual).toEqual(expected);
     });
   });

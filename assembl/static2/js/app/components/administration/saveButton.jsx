@@ -5,31 +5,6 @@ import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { displayAlert } from '../../utils/utilityManager';
 
-import { ThematicsQuery, ThematicQuery } from '../../graphql';
-
-const createLanguageEntries = (titles) => {
-  return titles.map((title) => {
-    return { value: title.value, localeCode: title.localeCode };
-  });
-};
-
-const createQuestionEntries = (questions) => {
-  const questionsArray = [];
-  questions.forEach((question) => {
-    questionsArray.push({ titleEntries: createLanguageEntries(question.titleEntries) });
-  });
-  return questionsArray;
-};
-
-const createVideo = (v) => {
-  const video = {
-    titleEntries: v.titleEntries !== null ? createLanguageEntries(v.titleEntries) : [],
-    descriptionEntries: v.descriptionEntries !== null ? createLanguageEntries(v.descriptionEntries) : [],
-    htmlCode: v.htmlCode !== null ? v.htmlCode : ''
-  };
-  return video;
-};
-
 const runSerial = (tasks) => {
   let result = Promise.resolve();
   tasks.forEach((task) => {
@@ -38,40 +13,46 @@ const runSerial = (tasks) => {
   return result;
 };
 
-const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, thematicsToDelete }) => {
+const createVariablesForMutation = (thematic) => {
+  return {
+    identifier: 'survey',
+    titleEntries: thematic.titleEntries,
+    image: typeof thematic.imgUrl === 'string' ? null : thematic.imgUrl,
+    video: thematic.video,
+    questions: thematic.questions
+  };
+};
+
+const SaveButton = ({ createThematic, updateThematic, deleteThematic, thematics }) => {
   const saveAction = () => {
-    const { thematics } = client.readQuery({ query: ThematicsQuery });
     const promisesArray = [];
-    thematics.forEach((t) => {
-      // we have to use ThematicQuery to get the data that we have modified in Apollo's cache
-      const data = client.readQuery({ query: ThematicQuery, variables: { id: t.id } });
-      const thematic = data.thematic;
-      // create a thematic if its ID is a negative number
-      if (t.id < 0) {
+    thematics.forEach((thematic) => {
+      if (thematic.isNew && !thematic.toDelete) {
+        // create thematic
         const payload = {
-          variables: {
-            identifier: 'survey',
-            titleEntries: createLanguageEntries(thematic.titleEntries),
-            image: thematic.imgUrl,
-            video: thematic.video.length === 0 ? null : createVideo(thematic.video),
-            questions: createQuestionEntries(thematic.questions)
-          }
+          variables: createVariablesForMutation(thematic)
         };
         const p1 = () => {
           return createThematic(payload);
         };
         promisesArray.push(p1);
-      } else {
-        // Update a thematic
+      } else if (thematic.toDelete && !thematic.isNew) {
+        // delete thematic
         const payload = {
           variables: {
-            id: t.id,
-            identifier: 'survey',
-            titleEntries: createLanguageEntries(thematic.titleEntries),
-            video: createVideo(thematic.video),
-            image: typeof thematic.imgUrl === 'string' ? null : thematic.imgUrl,
-            questions: createQuestionEntries(thematic.questions)
+            thematicId: thematic.id
           }
+        };
+        const p3 = () => {
+          return deleteThematic(payload);
+        };
+        promisesArray.push(p3);
+      } else {
+        // update thematic
+        const variables = createVariablesForMutation(thematic);
+        variables.id = thematic.id;
+        const payload = {
+          variables: variables
         };
         const p2 = () => {
           return updateThematic(payload);
@@ -79,22 +60,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
         promisesArray.push(p2);
       }
     });
-    // Delete a thematic
-    if (thematicsToDelete.length > 0) {
-      thematicsToDelete.forEach((id) => {
-        if (isNaN(id)) {
-          const payload = {
-            variables: {
-              thematicId: id
-            }
-          };
-          const p3 = () => {
-            return deleteThematic(payload);
-          };
-          promisesArray.push(p3);
-        }
-      });
-    }
+
     runSerial(promisesArray)
       .then(() => {
         displayAlert('success', I18n.t('administration.successThemeCreation'));
@@ -103,6 +69,7 @@ const SaveButton = ({ client, createThematic, updateThematic, deleteThematic, th
         displayAlert('danger', `${error}`);
       });
   };
+
   return (
     <Button className="button-submit button-dark right" onClick={saveAction}>
       <Translate value="administration.saveThemes" />
@@ -168,9 +135,11 @@ const SaveButtonWithMutations = compose(
   })
 )(SaveButton);
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }) => {
   return {
-    thematicsToDelete: state.admin.thematicsToDelete
+    thematics: thematicsInOrder.toArray().map((id) => {
+      return thematicsById.get(id).toJS();
+    })
   };
 };
 

@@ -1,3 +1,5 @@
+import { fromJS, List, Map } from 'immutable';
+
 import * as reducers from '../../../js/app/reducers/adminReducer';
 
 describe('Admin reducers', () => {
@@ -26,121 +28,143 @@ describe('Admin reducers', () => {
     });
   });
 
-  describe('surveyThemes reducer', () => {
-    const { surveyThemes } = reducers;
+  describe('thematicsInOrder reducer', () => {
+    const { thematicsInOrder } = reducers;
     it('should return the initial state', () => {
-      expect(surveyThemes(undefined, {})).toEqual([]);
+      const action = {};
+      expect(thematicsInOrder(undefined, action)).toEqual(List());
     });
 
-    it('should return state by default', () => {
-      const state = ['0', '1'];
-      const expected = ['0', '1'];
-      const actual = surveyThemes(state, {});
-      expect(actual).toEqual(expected);
+    it('should return the current state for other actions', () => {
+      const action = { type: 'FOOBAR' };
+      const oldState = List(['0', '1']);
+      expect(thematicsInOrder(oldState, action)).toEqual(oldState);
     });
 
-    it('should handle ADD_THEME_TO_SURVEY action type', () => {
-      const state = ['0', '1'];
-      const action = { type: 'ADD_THEME_TO_SURVEY', id: '42' };
-      const expected = ['0', '1', '42'];
-      const actual = surveyThemes(state, action);
-      expect(actual).toEqual(expected);
+    it('should handle CREATE_NEW_THEMATIC action type', () => {
+      const action = {
+        id: '-278290',
+        type: 'CREATE_NEW_THEMATIC'
+      };
+      const oldState = List(['0', '1']);
+      const expected = List(['0', '1', '-278290']);
+      const newState = thematicsInOrder(oldState, action);
+      expect(newState).toEqual(expected);
     });
 
-    it('should handle REMOVE_SURVEY_THEME action type', () => {
-      const state = ['0', '1', '9', '11'];
-      const action = { type: 'REMOVE_SURVEY_THEME', id: '9' };
-      const expected = ['0', '1', '11'];
-      const actual = surveyThemes(state, action);
-      expect(actual).toEqual(expected);
+    it('should handle UPDATE_THEMATICS action type', () => {
+      const action = {
+        thematics: [{ id: '42' }, { id: '27' }],
+        type: 'UPDATE_THEMATICS'
+      };
+      const oldState = List(['0', '1']);
+      const expected = List(['42', '27']);
+      const newState = thematicsInOrder(oldState, action);
+      expect(newState).toEqual(expected);
     });
   });
 
-  describe('surveyThemesById reducer', () => {
-    const { surveyThemesById } = reducers;
+  describe('thematicsById reducer', () => {
+    const { thematicsById } = reducers;
     it('should return the initial state', () => {
-      expect(surveyThemesById(undefined, {})).toEqual({});
+      const action = {};
+      expect(thematicsById(undefined, action)).toEqual(Map());
     });
 
-    it('should return state by default', () => {
-      const state = {
-        0: {
-          title: 'Foo'
-        }
-      };
-      const expected = {
-        0: {
-          title: 'Foo'
-        }
-      };
-      const actual = surveyThemesById(state, {});
-      expect(actual).toEqual(expected);
+    it('should return the current state for other actions', () => {
+      const action = { type: 'FOOBAR' };
+      const oldState = Map({ 1: { id: '1', titleEntries: [] } });
+      expect(thematicsById(oldState, action)).toEqual(oldState);
     });
 
-    it('should handle ADD_THEME_TO_SURVEY action type', () => {
-      const state = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
-      };
-      const expected = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined },
-        2: { titlesByLocale: {}, image: undefined }
-      };
-      const action = { type: 'ADD_THEME_TO_SURVEY', id: '2' };
-      const actual = surveyThemesById(state, action);
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle REMOVE_SURVEY_THEME action type', () => {
-      const state = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
-      };
-      const expected = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined }
-      };
-      const action = { type: 'REMOVE_SURVEY_THEME', id: '1' };
-      const actual = surveyThemesById(state, action);
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle UPDATE_SURVEY_THEME_TITLE action type', () => {
-      const state = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
-      };
-      const expected = {
-        0: { titlesByLocale: { fr: 'Salut', en: 'Hello' }, image: undefined },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
-      };
+    it('should handle CREATE_NEW_THEMATIC action type', () => {
       const action = {
-        newTitle: 'Salut',
+        id: '-278290',
+        type: 'CREATE_NEW_THEMATIC'
+      };
+      const oldState = fromJS({
+        0: {
+          id: '0'
+        },
+        1: {
+          id: '1'
+        }
+      });
+      const expected = {
+        0: {
+          id: '0'
+        },
+        1: {
+          id: '1'
+        },
+        '-278290': {
+          id: '-278290',
+          isNew: true,
+          toDelete: false,
+          imgUrl: '',
+          questions: [],
+          titleEntries: [],
+          video: {
+            titleEntries: [],
+            descriptionEntries: [],
+            htmlCode: null
+          }
+        }
+      };
+      const newState = thematicsById(oldState, action);
+      expect(newState.toJS()).toEqual(expected);
+    });
+
+    it('should handle DELETE_THEMATIC action type');
+
+    it('should handle UPDATE_THEMATIC_IMG_URL action type');
+
+    it('should handle UPDATE_THEMATIC_TITLE action type', () => {
+      const action = {
+        id: '1',
         locale: 'fr',
-        type: 'UPDATE_SURVEY_THEME_TITLE',
-        themeId: '0'
+        value: 'Nouveau titre',
+        type: 'UPDATE_THEMATIC_TITLE'
       };
-      const actual = surveyThemesById(state, action);
-      expect(actual).toEqual(expected);
+      const oldState = fromJS({
+        0: {},
+        1: {
+          titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
+        }
+      });
+      const expected = fromJS({
+        0: {},
+        1: {
+          titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Nouveau titre' }]
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
     });
 
-    it('should handle UPDATE_SURVEY_THEME_IMAGE action type', () => {
-      const myFile = { name: 'foobar.png' };
-      const state = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: undefined },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
-      };
-      const expected = {
-        0: { titlesByLocale: { fr: 'Bonjour', en: 'Hello' }, image: myFile },
-        1: { titlesByLocale: { fr: 'Au revoir', en: 'Goodbye' }, image: undefined }
-      };
+    it('should handle UPDATE_THEMATIC_TITLE action type with a new locale', () => {
       const action = {
-        file: myFile,
-        type: 'UPDATE_SURVEY_THEME_IMAGE',
-        themeId: '0'
+        id: '1',
+        locale: 'de',
+        value: 'Mein Titel',
+        type: 'UPDATE_THEMATIC_TITLE'
       };
-      const actual = surveyThemesById(state, action);
-      expect(actual).toEqual(expected);
+      const oldState = fromJS({
+        0: {},
+        1: {
+          titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
+        }
+      });
+      const expected = fromJS({
+        0: {},
+        1: {
+          titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }, { localeCode: 'de', value: 'Mein Titel' }]
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
     });
+
+    it('should handle UPDATE_THEMATICS action type');
   });
 });

@@ -1,74 +1,42 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
-import { gql, withApollo } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import SectionTitle from '../sectionTitle';
 import ThemeForm from './themeForm';
+import { createNewThematic } from '../../../actions/adminActions';
 
-const GetThematics = gql`
-{
-  thematics(identifier:"survey") {
-    id,
-    titleEntries {
-      localeCode,
-      value
-    },
-    imgUrl,
-    video {
-      titleEntries {
-        localeCode,
-        value
-      },
-      descriptionEntries {
-        localeCode,
-        value
-      },
-      htmlCode
-    },
-    questions {
-      titleEntries {
-        localeCode,
-        value
-      }
-    }
-  }
-}
-`;
-
-const ThemeSection = ({ client, i18n, selectedLocale }) => {
-  const addTheme = () => {
-    const newThemeId = Math.round(Math.random() * -1000000);
-    const thematicsData = client.readQuery({ query: GetThematics });
-    thematicsData.thematics.push({
-      id: newThemeId,
-      titleEntries: [],
-      imgUrl: null,
-      questions: [],
-      video: [],
-      __typename: 'Thematic'
-    });
-    return client.writeQuery({
-      query: GetThematics,
-      data: thematicsData
-    });
-  };
-
-  const thematicsData = client.readQuery({ query: GetThematics });
-  const themes = thematicsData.thematics || [];
-
+const ThemeSection = ({ addThematic, i18n, selectedLocale, thematics }) => {
   return (
     <div className="admin-box">
       <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <form>
-          {themes.map((theme, idx) => {
-            return <ThemeForm key={theme.id} id={theme.id} index={idx} selectedLocale={selectedLocale} />;
+          {thematics.map((id, idx) => {
+            return <ThemeForm key={id} id={id} index={idx} selectedLocale={selectedLocale} />;
           })}
-          <div onClick={addTheme} className="plus margin-l">+</div>
+          <div onClick={addThematic} className="plus margin-l">+</div>
         </form>
       </div>
     </div>
   );
 };
 
-export default withApollo(ThemeSection);
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }) => {
+  return {
+    thematics: thematicsInOrder.filter((id) => {
+      return !thematicsById.getIn([id, 'toDelete']);
+    })
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addThematic: () => {
+      const newThemeId = Math.round(Math.random() * -1000000).toString();
+      dispatch(createNewThematic(newThemeId));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ThemeSection);
