@@ -16,9 +16,11 @@ export class QuestionSection extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      selectedThematicId: nextProps.thematics ? nextProps.thematics[0] : ''
-    });
+    if (!this.state.selectedThematicId) {
+      this.setState({
+        selectedThematicId: nextProps.thematics ? nextProps.thematics[0] : ''
+      });
+    }
   }
 
   render() {
