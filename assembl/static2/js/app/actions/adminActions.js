@@ -68,3 +68,19 @@ export const removeQuestion = (thematicId, index) => {
     type: 'REMOVE_QUESTION'
   };
 };
+
+export const toggleVideo = (id) => {
+  return { id: id, type: 'TOGGLE_VIDEO' };
+};
+
+export const updateVideoHtmlCode = (id, value) => {
+  return { id: id, value: value, type: 'UPDATE_VIDEO_HTML_CODE' };
+};
+
+export const updateVideoDescription = (id, locale, value) => {
+  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION' };
+};
+
+export const updateVideoTitle = (id, locale, value) => {
+  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_TITLE' };
+};

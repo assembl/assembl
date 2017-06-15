@@ -262,5 +262,132 @@ describe('Admin reducers', () => {
     });
 
     it('should handle UPDATE_THEMATICS action type');
+
+    it('should handle TOGGLE_VIDEO action type', () => {
+      const action = {
+        id: '1',
+        value: 'foobar',
+        type: 'TOGGLE_VIDEO'
+      };
+      const oldState = fromJS({
+        1: {
+          video: {
+            descriptionEntries: [],
+            htmlCode: 'foobar',
+            titleEntries: [{ localeCode: 'fr', value: 'Mon titre' }]
+          }
+        }
+      });
+      const expected = fromJS({
+        1: {
+          video: null
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+
+      const reducedTwiceExpected = fromJS({
+        1: {
+          video: {
+            descriptionEntries: [],
+            htmlCode: '',
+            titleEntries: []
+          }
+        }
+      });
+      const reducedTwiceState = thematicsById(newState, action);
+      expect(reducedTwiceState).toEqual(reducedTwiceExpected);
+    });
+
+    it('should handle UPDATE_VIDEO_HTML_CODE action type', () => {
+      const action = {
+        id: '1',
+        value: 'new code',
+        type: 'UPDATE_VIDEO_HTML_CODE'
+      };
+      const oldState = fromJS({
+        1: {
+          video: {
+            descriptionEntries: [],
+            htmlCode: 'old code',
+            titleEntries: []
+          }
+        }
+      });
+      const expected = fromJS({
+        1: {
+          video: {
+            descriptionEntries: [],
+            htmlCode: 'new code',
+            titleEntries: []
+          }
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VIDEO_DESCRIPTION action type', () => {
+      const action = {
+        id: '1',
+        locale: 'en',
+        value: 'My new description',
+        type: 'UPDATE_VIDEO_DESCRIPTION'
+      };
+      const oldState = fromJS({
+        1: {
+          video: {
+            descriptionEntries: [],
+            htmlCode: '',
+            titleEntries: []
+          }
+        }
+      });
+      const expected = fromJS({
+        1: {
+          video: {
+            descriptionEntries: [
+              {
+                localeCode: 'en',
+                value: 'My new description'
+              }
+            ],
+            htmlCode: '',
+            titleEntries: []
+          }
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VIDEO_TITLE action type', () => {
+      const action = {
+        id: '1',
+        locale: 'en',
+        value: 'My better title',
+        type: 'UPDATE_VIDEO_TITLE'
+      };
+      const oldState = fromJS({
+        1: {
+          video: {
+            descriptionEntries: [],
+            htmlCode: '',
+            titleEntries: [{ localeCode: 'fr', value: 'Ma vidéo' }, { localeCode: 'en', value: 'My video' }]
+          }
+        }
+      });
+      const expected = fromJS({
+        1: {
+          video: {
+            descriptionEntries: [],
+            htmlCode: '',
+            titleEntries: [{ localeCode: 'fr', value: 'Ma vidéo' }, { localeCode: 'en', value: 'My better title' }]
+          }
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+    });
   });
 });

@@ -1,6 +1,20 @@
 import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 
+const updateInEntries = (locale, value) => {
+  return (entries) => {
+    const entryIndex = entries.findIndex((entry) => {
+      return entry.get('localeCode') === locale;
+    });
+
+    if (entryIndex === -1) {
+      return entries.push(Map({ localeCode: locale, value: value }));
+    }
+
+    return entries.setIn([entryIndex, 'value'], value);
+  };
+};
+
 export const selectedLocale = (state = 'fr', action) => {
   switch (action.type) {
   case 'UPDATE_SELECTED_LOCALE':
@@ -93,6 +107,23 @@ export const thematicsById = (state = Map(), action) => {
     });
     return fromJS(newState);
   }
+  case 'TOGGLE_VIDEO':
+    return state.updateIn([action.id, 'video'], (video) => {
+      if (video) {
+        return null;
+      }
+      return fromJS({
+        descriptionEntries: [],
+        htmlCode: '',
+        titleEntries: []
+      });
+    });
+  case 'UPDATE_VIDEO_DESCRIPTION':
+    return state.updateIn([action.id, 'video', 'descriptionEntries'], updateInEntries(action.locale, action.value));
+  case 'UPDATE_VIDEO_HTML_CODE':
+    return state.setIn([action.id, 'video', 'htmlCode'], action.value);
+  case 'UPDATE_VIDEO_TITLE':
+    return state.updateIn([action.id, 'video', 'titleEntries'], updateInEntries(action.locale, action.value));
   default:
     return state;
   }
