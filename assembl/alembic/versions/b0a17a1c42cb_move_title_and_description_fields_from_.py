@@ -34,9 +34,9 @@ def upgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
-        db.execute("UPDATE idea SET title_id = (SELECT title_id FROM thematic WHERE id=idea.id)")
-        db.execute("UPDATE idea SET description_id = (SELECT description_id FROM thematic WHERE id=idea.id)")
-        db.execute("UPDATE idea SET title_id = (SELECT title_id FROM question WHERE id=idea.id)")
+        db.execute("UPDATE idea SET title_id = (SELECT title_id FROM thematic WHERE id=idea.id) WHERE idea.sqla_type='thematic'")
+        db.execute("UPDATE idea SET description_id = (SELECT description_id FROM thematic WHERE id=idea.id) WHERE idea.sqla_type='thematic'")
+        db.execute("UPDATE idea SET title_id = (SELECT title_id FROM question WHERE id=idea.id) WHERE idea.sqla_type='question'")
         mark_changed()
 
     with context.begin_transaction():
