@@ -16,8 +16,8 @@ class Step extends React.Component {
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const slug = { slug: debateData.slug };
-    let phaseName = "";
-    title.entries.forEach((entry, index2) => {
+    let phaseName = '';
+    title.entries.forEach((entry) => {
       if (locale === entry['@language']) {
         phaseName = entry.value.toLowerCase();
       }
@@ -41,12 +41,10 @@ class Step extends React.Component {
           }, 6000);
         }
       }
+    } else if (identifier === 'survey') {
+      browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
     } else {
-      if (identifier === 'survey') {
-        browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
-      } else {
-        window.location = `${get('oldDebate', slug)}`;
-      }
+      window.location = `${get('oldDebate', slug)}`;
     }
   }
   render() {

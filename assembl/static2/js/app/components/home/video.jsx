@@ -12,9 +12,11 @@ class Video extends React.Component {
   }
   componentWillReceiveProps() {
     const { debateData } = this.props.debate;
-    if (debateData.videoUrl) {
-      const textHeight = document.getElementById('video-txt').clientHeight;
-      const videoHeight = document.getElementById('video-vid').clientHeight;
+    const videoTxt = document.getElementById('video-txt');
+    const video = document.getElementById('video-vid');
+    if (debateData.videoUrl && videoTxt) {
+      const textHeight = videoTxt.clientHeight;
+      const videoHeight = video.clientHeight;
       if (textHeight > (videoHeight + 5)) this.setState({ isTextHigher: true });
     }
   }

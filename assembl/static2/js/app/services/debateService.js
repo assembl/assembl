@@ -8,6 +8,7 @@ export const buildDebateData = (debateData, prefs, timeline) => {
   const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
   const objectivesBackground = prefs.extra_json && prefs.extra_json.objectivesBackground ? prefs.extra_json.objectivesBackground : null;
   const twitter = prefs.extra_json && prefs.extra_json.twitter ? prefs.extra_json.twitter : null;
+  const chatbot = prefs.extra_json && prefs.extra_json.chatbot ? prefs.extra_json.chatbot : null;
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
   const startDate = timeline.length > 0 ? sortedTimeline[0].start : null;
   const endDate = timeline.length > 0 ? sortedTimeline[timeline.length - 1].end : null;
@@ -29,7 +30,8 @@ export const buildDebateData = (debateData, prefs, timeline) => {
     termsOfUseUrl: prefs.terms_of_use_url,
     videoDescription: prefs.video_description,
     socialMedias: socialMedias,
-    twitter: twitter
+    twitter: twitter,
+    chatbot: chatbot
   };
 };
 

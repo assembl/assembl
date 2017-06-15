@@ -138,7 +138,8 @@ const Translations = {
       contact: 'Besoin d\'échanger au sujet de la plateforme ?',
       contactUs: 'Contactez-nous',
       from: 'du',
-      to: 'au'
+      to: 'au',
+      chatbot: 'Dévouvrez Barbara'
     },
     synthesis: {
       title: 'synthèse'
@@ -326,7 +327,8 @@ const Translations = {
       contact: 'Do you wish to know more about this platform?',
       contactUs: 'Contact us',
       from: 'from',
-      to: 'to'
+      to: 'to',
+      chatbot: 'Discover Barbara'
     },
     community: {
       panelTitle: 'Welcome to Assembl community page'

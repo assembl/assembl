@@ -4,12 +4,10 @@ import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Glyphicon from './glyphicon';
-import { get } from '../../utils/routeMap';
 
 class Footer extends React.Component {
   render() {
     const { debateData } = this.props.debate;
-    const slug = { slug: debateData.slug };
     return (
       <Grid fluid className="background-dark relative">
         <div className="max-container">

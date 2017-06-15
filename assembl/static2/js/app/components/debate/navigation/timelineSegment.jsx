@@ -16,8 +16,8 @@ class TimelineSegment extends React.Component {
     const { phaseIdentifier, title, startDate } = this.props;
     const { debateData } = this.props.debate;
     const slug = { slug: debateData.slug };
-    let phaseName = "";
-    title.entries.forEach((entry, index2) => {
+    let phaseName = '';
+    title.entries.forEach((entry) => {
       if (locale === entry['@language']) {
         phaseName = entry.value.toLowerCase();
       }
@@ -41,12 +41,10 @@ class TimelineSegment extends React.Component {
           }, 6000);
         }
       }
+    } else if (phaseIdentifier === 'survey') {
+      browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
     } else {
-      if (phaseIdentifier === 'survey') {
-        browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
-      } else {
-        window.location = `${get('oldDebate', slug)}`;
-      }
+      window.location = `${get('oldDebate', slug)}`;
     }
   }
   render() {

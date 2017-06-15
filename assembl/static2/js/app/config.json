@@ -26,5 +26,12 @@
   "videoTitle": {
     "fr": "Quel sera le résultat ?",
     "en": "What will be the outcome?"
+  },
+  "chatbot": {
+    "titleEntries": {
+      "fr":"Peu de temps ? Découvrez Barbara27, l’assistante qui vous inspire tout au long du débat.",
+      "en":"Not much time ? Discover Barbara27, the assistant who inspires you throughout the debate."
+    },
+    "link":"https://www.messenger.com/t/VoxeBot"
   }
 }
