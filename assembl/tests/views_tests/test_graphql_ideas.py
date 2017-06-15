@@ -80,6 +80,7 @@ def xtest_graphql_idea_content_links(jack_layton_linked_discussion, graphql_requ
                     id
                     title
                     titleEntries { value, localeCode }
+                    contributors { id, name }
                     shortTitle
                     numPosts
                     numContributors
@@ -97,3 +98,6 @@ def xtest_graphql_idea_content_links(jack_layton_linked_discussion, graphql_requ
     assert len(idea_content_links) == 7
     assert idea_content_links[0]['ideaId'] in idea_ids
     assert idea_content_links[0]['type'] == u'IdeaContentPositiveLink'
+    contributors = res.data['ideas'][0]['contributors']
+    assert len(contributors) == 9
+    assert contributors[0]['name'] == u'M. Animator'

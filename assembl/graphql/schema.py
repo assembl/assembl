@@ -329,6 +329,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     num_contributors = graphene.Int()
     parent_id = graphene.ID()
     posts = SQLAlchemyConnectionField(PostConnection)
+    contributors = graphene.List(AgentProfile)
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -402,6 +403,11 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
         # pagination is done after that, no need to do it ourself
         return query
+
+    def resolve_contributors(self, args, context, info):
+        contributor_ids = [cid for (cid,) in self.get_contributors_query()]
+        contributors = [models.AgentProfile.get(cid) for cid in contributor_ids]
+        return contributors
 
 
 class Question(SecureObjectType, SQLAlchemyObjectType):

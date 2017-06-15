@@ -668,7 +668,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 AgentProfile.id.in_(ids))}
             return [agents[id] for id in ids]
 
-    def get_contributors(self):
+    def get_contributors_query(self):
         from .generic import Content
         from .post import Post
         from sqlalchemy.sql.functions import count
@@ -688,7 +688,10 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 post.creator_id
             ).order_by(
                 count(post.id.distinct()).desc())
+        return query
 
+    def get_contributors(self):
+        query = self.get_contributors_query()
         return ['local:AgentProfile/' + str(i) for (i,) in query]
 
     def get_discussion_id(self):
