@@ -139,7 +139,7 @@ const Translations = {
       contactUs: 'Contactez-nous',
       from: 'du',
       to: 'au',
-      chatbot: 'Dévouvrez Barbara'
+      chatbot: 'Chat avec %{chatbotName}'
     },
     synthesis: {
       title: 'synthèse'
@@ -328,7 +328,7 @@ const Translations = {
       contactUs: 'Contact us',
       from: 'from',
       to: 'to',
-      chatbot: 'Discover Barbara'
+      chatbot: 'Chat with %{chatbotName}'
     },
     community: {
       panelTitle: 'Welcome to Assembl community page'

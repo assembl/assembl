@@ -17,7 +17,7 @@ const Chatbot = ({ chatbot, locale }) => {
             <Row>
               <Col md={12}>
                 <Link className="button-link button-dark" to={chatbot.link} target="_blank">
-                  <Translate value="home.chatbot" />
+                  <Translate value="home.chatbot" chatbotName={chatbot.name} />
                 </Link>
               </Col>
             </Row>
