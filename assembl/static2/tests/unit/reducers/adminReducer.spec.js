@@ -77,6 +77,33 @@ describe('Admin reducers', () => {
       expect(thematicsById(oldState, action)).toEqual(oldState);
     });
 
+    it('should handle ADD_QUESTION_TO_THEMATIC action type', () => {
+      const action = { id: '1', locale: 'fr', type: 'ADD_QUESTION_TO_THEMATIC' };
+      const oldState = fromJS({
+        1: {
+          questions: [
+            {
+              titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
+            }
+          ]
+        }
+      });
+      const expected = fromJS({
+        1: {
+          questions: [
+            {
+              titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
+            },
+            {
+              titleEntries: [{ localeCode: 'fr', value: '' }]
+            }
+          ]
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+    });
+
     it('should handle CREATE_NEW_THEMATIC action type', () => {
       const action = {
         id: '-278290',
@@ -116,6 +143,75 @@ describe('Admin reducers', () => {
     });
 
     it('should handle DELETE_THEMATIC action type');
+
+    it('should handle REMOVE_QUESTION action type', () => {
+      const action = { thematicId: '1', index: '1', type: 'REMOVE_QUESTION' };
+      const oldState = fromJS({
+        1: {
+          questions: [
+            {
+              titleEntries: [{ localeCode: 'en', value: 'Why?' }, { localeCode: 'fr', value: 'Pourquoi?' }]
+            },
+            {
+              titleEntries: [{ localeCode: 'en', value: 'When?' }, { localeCode: 'fr', value: 'Quand?' }]
+            },
+            {
+              titleEntries: [{ localeCode: 'en', value: 'How?' }, { localeCode: 'fr', value: 'Comment?' }]
+            }
+          ]
+        }
+      });
+      const expected = fromJS({
+        1: {
+          questions: [
+            {
+              titleEntries: [{ localeCode: 'en', value: 'Why?' }, { localeCode: 'fr', value: 'Pourquoi?' }]
+            },
+            {
+              titleEntries: [{ localeCode: 'en', value: 'How?' }, { localeCode: 'fr', value: 'Comment?' }]
+            }
+          ]
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+    });
+
+    it('should handle UPDATE_QUESTION_TITLE action type', () => {
+      const action = { thematicId: '1', index: '1', locale: 'en', value: 'What?', type: 'UPDATE_QUESTION_TITLE' };
+      const oldState = fromJS({
+        1: {
+          questions: [
+            {
+              titleEntries: [{ localeCode: 'en', value: 'Why?' }, { localeCode: 'fr', value: 'Pourquoi?' }]
+            },
+            {
+              titleEntries: [{ localeCode: 'en', value: 'When?' }, { localeCode: 'fr', value: 'Quand?' }]
+            },
+            {
+              titleEntries: [{ localeCode: 'en', value: 'How?' }, { localeCode: 'fr', value: 'Comment?' }]
+            }
+          ]
+        }
+      });
+      const expected = fromJS({
+        1: {
+          questions: [
+            {
+              titleEntries: [{ localeCode: 'en', value: 'Why?' }, { localeCode: 'fr', value: 'Pourquoi?' }]
+            },
+            {
+              titleEntries: [{ localeCode: 'en', value: 'What?' }, { localeCode: 'fr', value: 'Quand?' }]
+            },
+            {
+              titleEntries: [{ localeCode: 'en', value: 'How?' }, { localeCode: 'fr', value: 'Comment?' }]
+            }
+          ]
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+    });
 
     it('should handle UPDATE_THEMATIC_IMG_URL action type');
 

@@ -45,31 +45,10 @@ const SurveyAdmin = ({ data, i18n, selectedLocale, section, thematicId }) => {
   const currentStep = parseInt(section, 10);
   return (
     <div className="survey-admin">
-      {section === '1' &&
-        <ThemeSection
-          i18n={i18n}
-          selectedLocale={selectedLocale}
-          data={data}
-        />
-      }
-      {section === '2' &&
-        <QuestionSection
-          i18n={i18n}
-          selectedLocale={selectedLocale}
-          data={data}
-          thematicId={thematicId}
-        />
-      }
-      {section === '3' &&
-        <ExportSection i18n={i18n} />
-      }
-      {!isNaN(currentStep) &&
-        <Navbar
-          currentStep={currentStep}
-          totalSteps={3}
-          phaseIdentifier="survey"
-        />
-      }
+      {section === '1' && <ThemeSection i18n={i18n} selectedLocale={selectedLocale} data={data} />}
+      {section === '2' && <QuestionSection i18n={i18n} selectedLocale={selectedLocale} data={data} selectedThematicId={thematicId} />}
+      {section === '3' && <ExportSection i18n={i18n} />}
+      {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="survey" />}
     </div>
   );
 };

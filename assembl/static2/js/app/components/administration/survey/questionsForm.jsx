@@ -1,74 +1,18 @@
 import React from 'react';
-import { gql, withApollo } from 'react-apollo';
+import { connect } from 'react-redux';
 import { FormGroup } from 'react-bootstrap';
 
 import QuestionTitle from './questionTitle';
+import { addQuestionToThematic } from '../../../actions/adminActions';
 
-const GetThematics = gql`
-{
-  thematics(identifier:"survey") {
-    id,
-    titleEntries {
-      localeCode,
-      value
-    },
-    imgUrl,
-    video {
-      titleEntries {
-        localeCode,
-        value
-      },
-      descriptionEntries {
-        localeCode,
-        value
-      },
-      htmlCode
-    },
-    questions {
-      titleEntries {
-        localeCode,
-        value
-      }
-    }
-  }
-}
-`;
-
-const QuestionsForm = ({ client, thematicId, lang }) => {
-  const thematicsData = client.readQuery({ query: GetThematics });
-
-  const thematics = thematicsData.thematics;
-  const thematic = thematics.find((t) => {
-    return String(t.id) === thematicId;
-  });
-
-  const thematicIndex = thematics.findIndex((t) => {
-    return String(t.id) === thematicId;
-  });
-
-  const questions = thematic ? thematic.questions : [];
-
-  const addQuestion = () => {
-    if (thematicIndex !== -1) {
-      thematicsData.thematics[thematicIndex].questions.push({
-        titleEntries: [],
-        __typename: 'Question'
-      });
-
-      client.writeQuery({
-        query: GetThematics,
-        data: thematicsData
-      });
-    }
-  };
-
+const QuestionsForm = ({ addQuestion, selectedLocale, thematicId, questions }) => {
   return (
-    <div className={thematic ? 'form-container' : 'hidden'}>
+    <div className={thematicId ? 'form-container' : 'hidden'}>
       <div className="margin-xl">
         {questions.map((question, index) => {
           return (
             <FormGroup key={index}>
-              <QuestionTitle tIndex={thematicIndex} qIndex={index} titleEntries={question.titleEntries} selectedLocale={lang} />
+              <QuestionTitle thematicId={thematicId} qIndex={index} titleEntries={question.titleEntries} selectedLocale={selectedLocale} />
             </FormGroup>
           );
         })}
@@ -78,4 +22,19 @@ const QuestionsForm = ({ client, thematicId, lang }) => {
   );
 };
 
-export default withApollo(QuestionsForm);
+export const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }, { thematicId }) => {
+  return {
+    thematics: thematicsInOrder,
+    questions: thematicsById.get(thematicId).get('questions').toJS()
+  };
+};
+
+export const mapDispatchToProps = (dispatch, { thematicId, selectedLocale }) => {
+  return {
+    addQuestion: () => {
+      return dispatch(addQuestionToThematic(thematicId, selectedLocale));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionsForm);

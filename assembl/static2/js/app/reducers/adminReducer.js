@@ -28,6 +28,14 @@ export const thematicsInOrder = (state = List(), action) => {
 
 export const thematicsById = (state = Map(), action) => {
   switch (action.type) {
+  case 'ADD_QUESTION_TO_THEMATIC': {
+    const newQuestion = fromJS({
+      titleEntries: [{ localeCode: action.locale, value: '' }]
+    });
+    return state.updateIn([action.id, 'questions'], (questions) => {
+      return questions.push(newQuestion);
+    });
+  }
   case 'CREATE_NEW_THEMATIC': {
     const emptyThematic = Map({
       toDelete: false,
@@ -45,6 +53,22 @@ export const thematicsById = (state = Map(), action) => {
   }
   case 'DELETE_THEMATIC':
     return state.setIn([action.id, 'toDelete'], true);
+  case 'REMOVE_QUESTION':
+    return state.updateIn([action.thematicId, 'questions'], (questions) => {
+      return questions.remove(action.index);
+    });
+  case 'UPDATE_QUESTION_TITLE':
+    return state.updateIn([action.thematicId, 'questions', action.index, 'titleEntries'], (titleEntries) => {
+      const titleEntryIndex = titleEntries.findIndex((entry) => {
+        return entry.get('localeCode') === action.locale;
+      });
+
+      if (titleEntryIndex === -1) {
+        return titleEntries.push(Map({ localeCode: action.locale, value: action.value }));
+      }
+
+      return titleEntries.setIn([titleEntryIndex, 'value'], action.value);
+    });
   case 'UPDATE_THEMATIC_IMG_URL':
     return state.setIn([action.id, 'imgUrl'], action.value);
   case 'UPDATE_THEMATIC_TITLE': {

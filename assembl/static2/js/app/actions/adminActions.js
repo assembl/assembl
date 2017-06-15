@@ -42,3 +42,29 @@ export const createNewThematic = (id) => {
     type: 'CREATE_NEW_THEMATIC'
   };
 };
+
+export const addQuestionToThematic = (id, locale) => {
+  return {
+    id: id,
+    locale: locale,
+    type: 'ADD_QUESTION_TO_THEMATIC'
+  };
+};
+
+export const updateQuestionTitle = (thematicId, index, locale, value) => {
+  return {
+    thematicId: thematicId,
+    index: index,
+    locale: locale,
+    value: value,
+    type: 'UPDATE_QUESTION_TITLE'
+  };
+};
+
+export const removeQuestion = (thematicId, index) => {
+  return {
+    thematicId: thematicId,
+    index: index,
+    type: 'REMOVE_QUESTION'
+  };
+};

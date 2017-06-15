@@ -1,73 +1,60 @@
 import React from 'react';
-import { gql, withApollo } from 'react-apollo';
-import { Link } from 'react-router';
+import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
 
 import VideoForm from './videoForm';
 import QuestionsForm from './questionsForm';
 import SectionTitle from '../sectionTitle';
-import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
-const GetThematics = gql`
-{
-  thematics(identifier:"survey") {
-    id,
-    titleEntries {
-      localeCode,
-      value
-    },
-    imgUrl,
-    video {
-      titleEntries {
-        localeCode,
-        value
-      },
-      descriptionEntries {
-        localeCode,
-        value
-      },
-      htmlCode
-    },
-    questions {
-      titleEntries {
-        localeCode,
-        value
-      }
-    }
+export class QuestionSection extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedThematicId: props.thematics ? props.thematics[0] : ''
+    };
+  }
+
+  render() {
+    const { i18n, selectedLocale, thematics } = this.props;
+    const selectedThematicId = this.state.selectedThematicId;
+    return (
+      <div className="admin-box">
+        <SectionTitle i18n={i18n} phase="survey" tabId="1" annotation={I18n.t('administration.annotation')} />
+        <div className="admin-content">
+          <Row>
+            {thematics.map((thematicId, index) => {
+              const linkClassName = selectedThematicId === thematicId ? 'tab-title-active' : 'tab-title';
+              return (
+                <Col xs={12} md={Math.round(12 / thematics.length)} key={index}>
+                  <a
+                    className={linkClassName}
+                    key={thematicId}
+                    onClick={() => {
+                      this.setState({ selectedThematicId: thematicId });
+                    }}
+                  >
+                    {`${I18n.t('administration.thematic')} ${index + 1}`}
+                  </a>
+                </Col>
+              );
+            })}
+          </Row>
+          {selectedThematicId &&
+            <Row>
+              <VideoForm thematicId={selectedThematicId} selectedLocale={selectedLocale} />
+              <QuestionsForm thematicId={selectedThematicId} selectedLocale={selectedLocale} />
+            </Row>}
+        </div>
+      </div>
+    );
   }
 }
-`;
 
-const QuestionSection = ({ client, i18n, selectedLocale, thematicId }) => {
-  const thematicsData = client.readQuery({ query: GetThematics });
-  const thematics = thematicsData.thematics || [];
-  const slug = getDiscussionSlug();
-
-  return (
-    <div className="admin-box">
-      <SectionTitle i18n={i18n} phase="survey" tabId="1" annotation={I18n.t('administration.annotation')} />
-      <div className="admin-content">
-        <Row>
-          {thematics.map((thematic, index) => {
-            return (
-              <Col xs={12} md={Math.round(12 / thematics.length)} key={index}>
-                <Link className="tab-title" activeClassName="tab-title-active" to={`/${slug}/administration/survey?section=2&thematic=${thematic.id}`}>
-                  {`${I18n.t('administration.thematic')} ${index + 1}`}
-                </Link>
-              </Col>
-            );
-          })}
-        </Row>
-        {thematicId &&
-          <Row>
-            <VideoForm thematicId={thematicId} selectedLocale={selectedLocale} />
-            <QuestionsForm thematicId={thematicId} lang={selectedLocale} />
-          </Row>
-        }
-      </div>
-    </div>
-  );
+const mapStateToProps = ({ admin: { thematicsInOrder } }) => {
+  return {
+    thematics: thematicsInOrder
+  };
 };
 
-export default withApollo(QuestionSection);
+export default connect(mapStateToProps)(QuestionSection);

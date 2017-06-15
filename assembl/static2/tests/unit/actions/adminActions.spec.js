@@ -76,4 +76,44 @@ describe('Admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('addQuestionToThematic action', () => {
+    const { addQuestionToThematic } = actions;
+    it('should return a ADD_QUESTION_TO_THEMATIC action type', () => {
+      const actual = addQuestionToThematic('1');
+      const expected = {
+        id: '1',
+        type: 'ADD_QUESTION_TO_THEMATIC'
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateQuestionTitle action', () => {
+    const { updateQuestionTitle } = actions;
+    it('should return a UPDATE_QUESTION_TITLE action type', () => {
+      const actual = updateQuestionTitle('1', '2', 'en', 'New title');
+      const expected = {
+        thematicId: '1',
+        index: '2',
+        locale: 'en',
+        value: 'New title',
+        type: 'UPDATE_QUESTION_TITLE'
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('removeQuestion action', () => {
+    const { removeQuestion } = actions;
+    it('should return a REMOVE_QUESTION action type', () => {
+      const actual = removeQuestion('1', '2');
+      const expected = {
+        thematicId: '1',
+        index: '2',
+        type: 'REMOVE_QUESTION'
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
 });
