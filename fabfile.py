@@ -1332,7 +1332,7 @@ def database_restore_postgres():
         execute(webservers_stop)
 
     # Kill postgres processes in order to be able to drop tables
-    execute(postgres_user_detach)
+    #execute(postgres_user_detach)
 
     # Drop db
     with settings(warn_only=True):
