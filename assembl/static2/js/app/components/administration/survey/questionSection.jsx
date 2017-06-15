@@ -15,6 +15,12 @@ export class QuestionSection extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selectedThematicId: nextProps.thematics ? nextProps.thematics[0] : ''
+    });
+  }
+
   render() {
     const { i18n, selectedLocale, thematics } = this.props;
     const selectedThematicId = this.state.selectedThematicId;
@@ -53,7 +59,7 @@ export class QuestionSection extends React.Component {
 
 const mapStateToProps = ({ admin: { thematicsInOrder } }) => {
   return {
-    thematics: thematicsInOrder
+    thematics: thematicsInOrder.toArray()
   };
 };
 
