@@ -129,8 +129,30 @@ export const thematicsById = (state = Map(), action) => {
   }
 };
 
+export const thematicsHaveChanged = (state = false, action) => {
+  switch (action.type) {
+  case 'UPDATE_THEMATICS':
+    return false;
+  case 'ADD_QUESTION_TO_THEMATIC':
+  case 'CREATE_NEW_THEMATIC':
+  case 'DELETE_THEMATIC':
+  case 'REMOVE_QUESTION':
+  case 'UPDATE_QUESTION_TITLE':
+  case 'UPDATE_THEMATIC_IMG_URL':
+  case 'UPDATE_THEMATIC_TITLE':
+  case 'TOGGLE_VIDEO':
+  case 'UPDATE_VIDEO_DESCRIPTION':
+  case 'UPDATE_VIDEO_HTML_CODE':
+  case 'UPDATE_VIDEO_TITLE':
+    return true;
+  default:
+    return state;
+  }
+};
+
 export default combineReducers({
   selectedLocale: selectedLocale,
+  thematicsHaveChanged: thematicsHaveChanged,
   thematicsInOrder: thematicsInOrder,
   thematicsById: thematicsById
 });

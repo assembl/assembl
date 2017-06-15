@@ -23,7 +23,7 @@ const createVariablesForMutation = (thematic) => {
   };
 };
 
-const SaveButton = ({ createThematic, updateThematic, deleteThematic, thematics }) => {
+const SaveButton = ({ createThematic, deleteThematic, enabled, thematics, updateThematic }) => {
   const saveAction = () => {
     const promisesArray = [];
     thematics.forEach((thematic) => {
@@ -71,7 +71,7 @@ const SaveButton = ({ createThematic, updateThematic, deleteThematic, thematics 
   };
 
   return (
-    <Button className="button-submit button-dark right" onClick={saveAction}>
+    <Button className="button-submit button-dark right" disabled={!enabled} onClick={saveAction}>
       <Translate value="administration.saveThemes" />
     </Button>
   );
@@ -135,8 +135,9 @@ const SaveButtonWithMutations = compose(
   })
 )(SaveButton);
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }) => {
+const mapStateToProps = ({ admin: { thematicsById, thematicsHaveChanged, thematicsInOrder } }) => {
   return {
+    enabled: thematicsHaveChanged,
     thematics: thematicsInOrder.toArray().map((id) => {
       return thematicsById.get(id).toJS();
     })
