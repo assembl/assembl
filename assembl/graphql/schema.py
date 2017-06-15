@@ -443,7 +443,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
             'https://framapic.org/k4g9CP4yEYFn/a2eTXC9Giyjy.jpg'
         ]
         # TODO imgUrl
-        return images[index]
+        return images[index % 4]
 
 
 class Query(graphene.ObjectType):
