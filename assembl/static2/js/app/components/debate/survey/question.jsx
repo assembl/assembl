@@ -127,7 +127,7 @@ class Question extends React.Component {
               </h1>
             </div>
             <Col xs={12} md={9} className="col-centered">
-              <FormGroup className="no-margin" controlId="formControlsTextarea">
+              <FormGroup className="no-margin">
                 <FormControl
                   className="txt-area"
                   componentClass="textarea"
