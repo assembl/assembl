@@ -22,11 +22,13 @@ const ThemeSection = ({ addThematic, i18n, selectedLocale, thematics }) => {
   );
 };
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }) => {
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale }, i18n }) => {
   return {
     thematics: thematicsInOrder.filter((id) => {
       return !thematicsById.getIn([id, 'toDelete']);
-    })
+    }),
+    i18n: i18n,
+    selectedLocale: selectedLocale
   };
 };
 

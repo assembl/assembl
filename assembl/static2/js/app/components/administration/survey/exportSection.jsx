@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 
@@ -19,4 +20,10 @@ const ExportSection = ({ i18n }) => {
   );
 };
 
-export default ExportSection;
+const mapStateToProps = ({ i18n }) => {
+  return {
+    i18n: i18n
+  };
+};
+
+export default connect(mapStateToProps)(ExportSection);
