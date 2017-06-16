@@ -1,10 +1,11 @@
-/* Higher order component that displays an empty div if props.data.loading is true and else displays the wrapped component */
+/* Higher order component that displays the loader component if props.data.loading is true and else displays the wrapped component */
 import React from 'react';
+import Loader from './loader';
 
 const withLoadingIndicator = (WrappedComponent) => {
   return (props) => {
     if (props.data.loading) {
-      return <div />;
+      return <Loader />;
     }
     return <WrappedComponent {...props} />;
   };
