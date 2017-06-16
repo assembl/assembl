@@ -59,9 +59,13 @@ export class QuestionSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsInOrder } }) => {
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }) => {
   return {
-    thematics: thematicsInOrder.toArray()
+    thematics: thematicsInOrder
+      .filter((id) => {
+        return !thematicsById.getIn([id, 'toDelete']);
+      })
+      .toArray()
   };
 };
 
