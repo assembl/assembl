@@ -4,6 +4,7 @@ from __future__ import with_statement
 
 from os import getenv
 import sys
+import re
 from getpass import getuser
 from hashlib import sha1
 from platform import system
