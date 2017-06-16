@@ -28,6 +28,7 @@ class Administration extends React.Component {
   }
 
   putThematicsInStore(data) {
+    // filter with the same query to remove stuff like __typename from the structure
     const filteredThematics = filter(ThematicsQuery, data);
     this.props.updateThematics(filteredThematics.thematics);
   }
