@@ -1,4 +1,4 @@
-pip==8.1.2
+pip==9.0.1
 setuptools==23.1.0
 alabaster==0.7.8
 alembic==0.8.6
@@ -35,7 +35,7 @@ ecdsa==0.13
 elasticsearch==5.1.0
 enum34==1.1.6
 et-xmlfile==1.0.1
-Fabric==1.11.1
+Fabric==1.13.2
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
 -e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
 flaky==3.1.1
@@ -80,7 +80,7 @@ numpy==1.11.0
 #oauthlib==1.1.0
 oauth2client==2.2.0
 openpyxl==2.4.1
-paramiko==1.17.1 # rq.filter: <2
+paramiko==2.2.1
 PasteDeploy==1.5.2
 PdbSublimeTextSupport==0.2
 polib==1.0.7
