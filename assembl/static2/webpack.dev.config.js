@@ -1,12 +1,30 @@
 var path = require('path');
 var webpack = require('webpack');
+var glob = require('glob');
 var _ = require('lodash');
 
 var webpackPort = parseInt(process.env.WEBPACK_URL.split(':')[2]);
 var webpackHost = process.env.WEBPACK_URL.split('://')[1].split(':')[0];
 
-// if you want to work on another theme, change this variable
-var THEME = "default";
+function theme_entries() {
+    var entries = {},
+        paths = glob.sync('./css/themes/**/*_web.scss'),
+        i, path, parts, name;
+    for (i = 0; i < paths.length; i++) {
+        path = paths[i];
+        parts = path.split('/');
+        name = 'theme_' + parts[parts.length - 2] + '_web';
+        entries[name] = path;
+    }
+    paths = glob.sync('./css/themes/**/*_notifications.scss');
+    for (i = 0; i < paths.length; i++) {
+        path = paths[i];
+        parts = path.split('/');
+        name = 'theme_' + parts[parts.length - 2] + '_notifications';
+        entries[name] = path;
+    }
+    return entries;
+}
 
 // For css hot reload to work, don't use ExtractTextPlugin
 module.exports = {
@@ -26,19 +44,18 @@ module.exports = {
           }
         }
     },
-    entry: {
+    entry: _.extend(theme_entries(), {
         bundle: [
             'webpack-dev-server/client?' + process.env.WEBPACK_URL,
             'react-hot-loader/patch',
             './js/app/index',
-            './css/themes/' + THEME + '/assembl_web.scss'
         ],
         searchv1: [
             'webpack-dev-server/client?' + process.env.WEBPACK_URL,
             'react-hot-loader/patch',
             './js/app/searchv1'
         ]
-    },
+    }),
     output: {
         path: path.join(__dirname, 'build'),
         filename: '[name].js',
