@@ -23,7 +23,7 @@ const createVariablesForMutation = (thematic) => {
   };
 };
 
-const SaveButton = ({ createThematic, deleteThematic, enabled, thematics, updateThematic }) => {
+const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic }) => {
   const saveAction = () => {
     const promisesArray = [];
     thematics.forEach((thematic) => {
@@ -63,6 +63,7 @@ const SaveButton = ({ createThematic, deleteThematic, enabled, thematics, update
 
     runSerial(promisesArray)
       .then(() => {
+        refetchThematics();
         displayAlert('success', I18n.t('administration.successThemeCreation'));
       })
       .catch((error) => {

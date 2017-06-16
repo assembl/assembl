@@ -22,7 +22,9 @@ class Administration extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.putThematicsInStore(nextProps.data);
+    if (nextProps.data.thematics !== this.props.data.thematics) {
+      this.putThematicsInStore(nextProps.data);
+    }
   }
 
   putThematicsInStore(data) {
@@ -31,7 +33,7 @@ class Administration extends React.Component {
   }
 
   render() {
-    const { children, params } = this.props;
+    const { children, data, params } = this.props;
     const { phase } = params;
     return (
       <div className="administration">
@@ -41,7 +43,7 @@ class Administration extends React.Component {
               <Row>
                 <Col xs={12} md={3} />
                 <Col xs={12} md={8}>
-                  <SaveButton />
+                  <SaveButton refetchThematics={data.refetch} />
                 </Col>
                 <Col xs={12} md={1} />
               </Row>
