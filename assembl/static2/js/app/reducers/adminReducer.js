@@ -53,7 +53,7 @@ export const thematicsById = (state = Map(), action) => {
   case 'CREATE_NEW_THEMATIC': {
     const emptyThematic = Map({
       toDelete: false,
-      imgUrl: '',
+      imgUrl: null,
       isNew: true,
       questions: List(),
       titleEntries: List(),
