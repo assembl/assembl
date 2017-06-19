@@ -17,7 +17,7 @@ const createVariablesForMutation = (thematic) => {
   return {
     identifier: 'survey',
     titleEntries: thematic.titleEntries,
-    image: typeof thematic.imgUrl === 'string' ? null : thematic.imgUrl,
+    image: thematic.imgUrl,
     video: thematic.video,
     questions: thematic.questions
   };
