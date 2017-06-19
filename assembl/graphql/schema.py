@@ -4,6 +4,7 @@ from random import sample as random_sample
 
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm import joinedload_all, undefer
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
@@ -388,14 +389,23 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         return Node.to_global_id('Idea', parents[0].id)
 
     def resolve_posts(self, args, context, info):
-        connection_type = info.return_type.graphene_type  # this is PostConnection
-        model = connection_type._meta.node._meta.model  # this is models.PostUnion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         related = self.get_related_posts_query(True)
         # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
-        query = model.query.join(
-            related, model.id == related.c.post_id
-            ).filter(model.publication_state == models.PublicationStates.PUBLISHED
-            ).order_by(desc(model.creation_date), model.id)
+        Post = models.Post
+        query = Post.query.join(
+            related, Post.id == related.c.post_id
+            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
+            ).order_by(desc(Post.creation_date), Post.id
+            ).options(
+                joinedload_all(Post.creator),
+                undefer(Post.idea_content_links_above_post)
+            )
+        if len(discussion.discussion_locales) > 1:
+            query = query.options(*models.Content.subqueryload_options())
+        else:
+            query = query.options(*models.Content.joinedload_options())
 
         # pagination is done after that, no need to do it ourself
         return query
@@ -424,9 +434,10 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'title')
 
     def resolve_posts(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         random = args.get('random', False)
-        connection_type = info.return_type.graphene_type  # this is PostConnection
-        model = connection_type._meta.node._meta.model  # this is models.Post
+        Post = models.Post
         related = self.get_related_posts_query(True)
         # If random is True returns 10 posts, the first one is the latest post created by the user,
         # then the remaining ones are in random order.
@@ -436,14 +447,14 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             if user_id is None:
                 first_post = None
             else:
-                first_post = model.query.join(
-                    related, model.id == related.c.post_id
-                    ).filter(model.creator_id == user_id
-                    ).order_by(desc(model.creation_date), model.id).first()
+                first_post = Post.query.join(
+                    related, Post.id == related.c.post_id
+                    ).filter(Post.creator_id == user_id
+                    ).order_by(desc(Post.creation_date), Post.id).first()
 
-            query = model.default_db.query(model.id).join(
-                related, model.id == related.c.post_id
-                ).filter(model.publication_state == models.PublicationStates.PUBLISHED)
+            query = Post.default_db.query(Post.id).join(
+                related, Post.id == related.c.post_id
+                ).filter(Post.publication_state == models.PublicationStates.PUBLISHED)
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
             limit = args.get('first', 10)
@@ -454,16 +465,35 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
             random_posts_ids = random_sample(
                 post_ids, min(len(post_ids), limit))
-            query = model.query.filter(model.id.in_(random_posts_ids)).all()
+            query = Post.query.filter(Post.id.in_(random_posts_ids)
+                ).options(
+                    joinedload_all(Post.creator),
+                )
+            if len(discussion.discussion_locales) > 1:
+                query = query.options(
+                    models.LangString.subqueryload_option(Post.body))
+            else:
+                query = query.options(
+                    models.LangString.joinedload_option(Post.body))
+
             if first_post is not None:
-                query = [first_post] + query
+                query = [first_post] + query.all()
 
         else:
             # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
-            query = model.query.join(
-                related, model.id == related.c.post_id
-                ).filter(model.publication_state == models.PublicationStates.PUBLISHED
-                ).order_by(desc(model.creation_date), model.id)
+            query = Post.query.join(
+                related, Post.id == related.c.post_id
+                ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
+                ).order_by(desc(Post.creation_date), Post.id
+                ).options(
+                    joinedload_all(Post.creator),
+                )
+            if len(discussion.discussion_locales) > 1:
+                query = query.options(
+                    models.LangString.subqueryload_option(Post.body))
+            else:
+                query = query.options(
+                    models.LangString.joinedload_option(Post.body))
 
         # pagination is done after that, no need to do it ourself
         return query
@@ -551,9 +581,8 @@ class Query(graphene.ObjectType):
         return query
 
     def resolve_posts(self, args, context, info):
-        connection_type = info.return_type.graphene_type  # this is PostConnection
-        model = connection_type._meta.node._meta.model  # this is models.PostUnion
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         idea_id = args.get('idea_id', None)
         if idea_id is not None:
             id_ = int(Node.from_global_id(idea_id)[1])
@@ -564,9 +593,20 @@ class Query(graphene.ObjectType):
             discussion = models.Discussion.get(discussion_id)
             idea = discussion.root_idea
 
-        query = idea.get_related_posts_query(
-            ).filter(model.publication_state == models.PublicationStates.PUBLISHED
-            ).order_by(desc(model.creation_date), model.id)
+        Post = models.Post
+        related = idea.get_related_posts_query(True)
+        query = Post.query.join(
+            related, Post.id == related.c.post_id
+            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
+            ).order_by(desc(Post.creation_date), Post.id
+            ).options(
+                joinedload_all(Post.creator),
+                undefer(Post.idea_content_links_above_post)
+            )
+        if len(discussion.discussion_locales) > 1:
+            query = query.options(*models.Content.subqueryload_options())
+        else:
+            query = query.options(*models.Content.joinedload_options())
 
         # pagination is done after that, no need to do it ourself
         return query
