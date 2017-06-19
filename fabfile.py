@@ -1264,8 +1264,8 @@ def database_delete_postgres():
             password=env.db_password, host=env.postgres_db_host, user=env.db_user))
     if not checkDatabase.failed:
         print(yellow("Cannot connect to database, trying to create"))
-        deleteDatabase = run('PGPASSWORD=%s dropdb --username=%s %s' % (
-            env.db_password, env.db_user, env.db_name))
+        deleteDatabase = run('PGPASSWORD=%s dropdb --host=%s --username=%s %s' % (
+            env.db_password, env.postgres_db_host, env.db_user, env.db_name))
         if deleteDatabase.succeeded:
             print(green("Database deleted successfully!"))
     else:
