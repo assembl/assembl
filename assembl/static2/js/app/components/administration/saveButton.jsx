@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { gql, graphql, withApollo, compose } from 'react-apollo';
+import { graphql, withApollo, compose } from 'react-apollo';
 import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
+
 import { displayAlert } from '../../utils/utilityManager';
+import { createThematic, updateThematic, deleteThematic } from '../../graphql/ThematicMutations';
 
 const runSerial = (tasks) => {
   let result = Promise.resolve();
@@ -77,52 +79,6 @@ const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics,
     </Button>
   );
 };
-
-const createThematic = gql`
-  mutation createThematic($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
-    createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
-      thematic {
-        title,
-        imgUrl,
-        video {
-          title,
-          description,
-          htmlCode
-        },
-        questions {
-          title
-        }
-      }
-    }
-  }
-`;
-
-const updateThematic = gql`
-  mutation updateThematic($id:ID!, $identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
-    updateThematic(id:$id, identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
-      thematic {
-        title,
-        imgUrl,
-        video {
-          title,
-          description,
-          htmlCode
-        },
-        questions {
-          title
-        }
-      }
-    }
-  }
-`;
-
-const deleteThematic = gql`
-  mutation deleteThematic($thematicId: ID!) {
-    deleteThematic(thematicId: $thematicId) {
-      success
-    }
-  }
-`;
 
 const SaveButtonWithMutations = compose(
   graphql(createThematic, {
