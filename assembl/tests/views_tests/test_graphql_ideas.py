@@ -72,7 +72,7 @@ def test_graphql_get_direct_ideas_from_root_idea(graphql_request, subidea_1_1_1)
 
 
 # this test works in isolation, but not with all tests...
-def xtest_graphql_idea_content_links(jack_layton_linked_discussion, graphql_request):
+def xtest_graphql_indirect_dea_content_links(jack_layton_linked_discussion, graphql_request):
     res = schema.execute(
         u"""query {
             ideas {
@@ -90,11 +90,11 @@ def xtest_graphql_idea_content_links(jack_layton_linked_discussion, graphql_requ
                         edges {
                             node {
                                 ... on Post {
-                                    ideaContentLinks { ideaId, type } subject body
+                                    indirectIdeaContentLinks { ideaId, type } subject body
         } } } } } } }
         """, context_value=graphql_request)
     idea_ids = [idea['id'] for idea in res.data['ideas']]
-    idea_content_links = res.data['ideas'][0]['posts']['edges'][0]['node']['ideaContentLinks']
+    idea_content_links = res.data['ideas'][0]['posts']['edges'][0]['node']['indirectIdeaContentLinks']
     assert len(idea_content_links) == 7
     assert idea_content_links[0]['ideaId'] in idea_ids
     assert idea_content_links[0]['type'] == u'IdeaContentPositiveLink'
