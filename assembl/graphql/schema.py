@@ -226,6 +226,7 @@ class PostInterface(SQLAlchemyInterface):
     sentiment_counts = graphene.Field(SentimentCounts)
     my_sentiment = graphene.Field(type=SentimentTypes)
     indirect_idea_content_links = graphene.List(IdeaContentLink)
+    parent_id = graphene.ID()
 
     def resolve_subject(self, args, context, info):
         subject = resolve_langstring(self.get_subject(), args.get('lang'))
@@ -257,6 +258,12 @@ class PostInterface(SQLAlchemyInterface):
         return [IdeaContentLink(idea_id=Node.to_global_id('Idea', idea_id),
                                 type=type)
                 for idea_id, type in links]
+
+    def resolve_parent_id(self, args, context, info):
+        if self.parent_id is None:
+            return None
+
+        return Node.to_global_id('Post', self.parent_id)
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
