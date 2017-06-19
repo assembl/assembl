@@ -32,7 +32,7 @@ export class QuestionSection extends React.Component {
         <div className="admin-content">
           <Row>
             {thematics.map((thematicId, index) => {
-              const linkClassName = selectedThematicId === thematicId ? 'tab-title-active' : 'tab-title';
+              const linkClassName = selectedThematicId === thematicId ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
               return (
                 <Col xs={12} md={Math.round(12 / thematics.length)} key={index}>
                   <a

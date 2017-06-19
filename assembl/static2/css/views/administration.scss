@@ -197,6 +197,7 @@
   .tab-title {
     border-bottom: $border-not-active;
     color: $grey1;
+    cursor: pointer;
     display: block;
     padding: 0 0 5px 0;
   }
@@ -204,6 +205,8 @@
   .tab-title-active {
     border-bottom: $border-active;
     color: $grey3;
+    cursor: pointer;
+    display: block;
     text-decoration: none;
   }
 
