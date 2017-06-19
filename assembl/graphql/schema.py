@@ -59,17 +59,6 @@ class SecureObjectType(object):
 # manually.
 
 
-def get_entries(langstring):
-    # langstring.entries is a backref, it doesn't get updated until the commit.
-    # Even with db.flush(), new entries doesn't show up or a specific entry show up
-    # several times... so we do the query instead of using langstring.entries
-    results = models.LangStringEntry.query.join(
-            models.LangStringEntry.langstring
-        ).filter(models.LangStringEntry.tombstone_date == None
-        ).filter(models.LangString.id == langstring.id).all()
-    return sorted(results, key=lambda e: e.locale_code)
-
-
 def resolve_langstring(langstring, locale_code):
     """If locale_code is None, return the best lang based on user prefs,
     otherwise respect the locale_code and return the right translation or None.
@@ -77,7 +66,7 @@ def resolve_langstring(langstring, locale_code):
     if langstring is None:
         return None
 
-    entries = get_entries(langstring)
+    entries = langstring.entries
     if not entries:
         return None
 
@@ -94,7 +83,7 @@ def resolve_langstring_entries(obj, attr):
         return []
 
     entries = []
-    for entry in get_entries(langstring):
+    for entry in sorted(langstring.entries, key=lambda e: e.locale_code):
         entries.append(
             LangStringEntry(
                 locale_code=entry.locale_code,
@@ -138,7 +127,7 @@ def update_langstring_from_input_entries(obj, attr, entries):
         return
 
     current_title_entries_by_locale_code = {
-        e.locale_code: e for e in get_entries(langstring)}
+        e.locale_code: e for e in langstring.entries}
     if entries is not None:
         # if we have an empty list, remove all existing entries
         if len(entries) == 0:
@@ -163,7 +152,7 @@ def update_langstring_from_input_entries(obj, attr, entries):
                         locale_id=locale_id
                     )
                 )
-    # need to flush or get_entries(langstring) will not give the new entries
+    langstring.db.expire(langstring, ['entries'])
     langstring.db.flush()
 
 
