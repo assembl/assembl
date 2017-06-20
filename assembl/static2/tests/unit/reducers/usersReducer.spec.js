@@ -3,37 +3,37 @@ import UsersReducer from '../../../js/app/reducers/usersReducer';
 describe('Return posts state changes', () => {
   it('Should handle FETCH_USERS', () => {
     expect(
-      UsersReducer([],{
+      UsersReducer([], {
         type: 'FETCH_USERS'
       }))
     .toEqual({
-      users:null,
-      usersLoading:true,
-      usersError:null
+      users: null,
+      usersLoading: true,
+      usersError: null
     });
   });
   it('Should handle RESOLVED_FETCH_USERS', () => {
     expect(
-      UsersReducer([],{
+      UsersReducer([], {
         type: 'RESOLVED_FETCH_USERS',
-        users:{data:'data'}
+        users: { data: 'data' }
       }))
     .toEqual({
-      users:{data:'data'},
-      usersLoading:false,
-      usersError:null
+      users: { data: 'data' },
+      usersLoading: false,
+      usersError: null
     });
   });
   it('Should handle FAILED_FETCH_USERS', () => {
     expect(
-      UsersReducer([],{
+      UsersReducer([], {
         type: 'FAILED_FETCH_USERS',
-        usersError:'Forbidden'
+        usersError: 'Forbidden'
       }))
     .toEqual({
-      users:null,
-      usersLoading:false,
-      usersError:'Forbidden'
+      users: null,
+      usersLoading: false,
+      usersError: 'Forbidden'
     });
   });
 });

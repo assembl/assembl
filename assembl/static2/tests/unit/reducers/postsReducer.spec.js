@@ -3,37 +3,37 @@ import PostsReducer from '../../../js/app/reducers/postsReducer';
 describe('Return posts state changes', () => {
   it('Should handle FETCH_POSTS', () => {
     expect(
-      PostsReducer([],{
+      PostsReducer([], {
         type: 'FETCH_POSTS'
       }))
     .toEqual({
-      posts:null,
-      postsLoading:true,
-      postsError:null
+      posts: null,
+      postsLoading: true,
+      postsError: null
     });
   });
   it('Should handle RESOLVED_FETCH_POSTS', () => {
     expect(
-      PostsReducer([],{
+      PostsReducer([], {
         type: 'RESOLVED_FETCH_POSTS',
-        posts:{data:'data'}
+        posts: { data: 'data' }
       }))
     .toEqual({
-      posts:{data:'data'},
-      postsLoading:false,
-      postsError:null
+      posts: { data: 'data' },
+      postsLoading: false,
+      postsError: null
     });
   });
   it('Should handle FAILED_FETCH_POSTS', () => {
     expect(
-      PostsReducer([],{
+      PostsReducer([], {
         type: 'FAILED_FETCH_POSTS',
-        postsError:'Forbidden'
+        postsError: 'Forbidden'
       }))
     .toEqual({
-      posts:null,
-      postsLoading:false,
-      postsError:'Forbidden'
+      posts: null,
+      postsLoading: false,
+      postsError: 'Forbidden'
     });
   });
 });

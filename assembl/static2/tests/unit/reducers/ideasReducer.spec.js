@@ -3,37 +3,37 @@ import IdeasReducer from '../../../js/app/reducers/ideasReducer';
 describe('Return ideas state changes', () => {
   it('Should handle FETCH_IDEAS', () => {
     expect(
-      IdeasReducer([],{
+      IdeasReducer([], {
         type: 'FETCH_IDEAS'
       }))
     .toEqual({
-      ideas:null,
-      ideasLoading:true,
-      ideasError:null
+      ideas: null,
+      ideasLoading: true,
+      ideasError: null
     });
   });
   it('Should handle RESOLVED_FETCH_IDEAS', () => {
     expect(
-      IdeasReducer([],{
+      IdeasReducer([], {
         type: 'RESOLVED_FETCH_IDEAS',
-        ideas:{data:'data'}
+        ideas: { data: 'data' }
       }))
     .toEqual({
-      ideas:{data:'data'},
-      ideasLoading:false,
-      ideasError:null
+      ideas: { data: 'data' },
+      ideasLoading: false,
+      ideasError: null
     });
   });
   it('Should handle FAILED_FETCH_IDEAS', () => {
     expect(
-      IdeasReducer([],{
+      IdeasReducer([], {
         type: 'FAILED_FETCH_IDEAS',
-        ideasError:'Forbidden'
+        ideasError: 'Forbidden'
       }))
     .toEqual({
-      ideas:null,
-      ideasLoading:false,
-      ideasError:'Forbidden'
+      ideas: null,
+      ideasLoading: false,
+      ideasError: 'Forbidden'
     });
   });
 });
