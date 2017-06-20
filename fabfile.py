@@ -1250,7 +1250,7 @@ def check_and_create_sentry_database_user():
 @task
 def create_sentry_project():
     """Create a project for the current assembl server.
-    Mostly useful for Docker."""
+    Mostly useful for Docker. Tested on Docker 8."""
     if os.path.exists(env.random_file):
         env.update(as_rc(env.random_file))
     if env.get("sentry_key", None) and env.get("sentry_secret", None):
@@ -1317,7 +1317,7 @@ def check_if_db_tables_exist():
         return not checkDatabase.failed
 
 
-def check_if_first_user():
+def check_if_first_user_exists():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command="SELECT count(*) from public.user", database=env.db_database,
@@ -1599,7 +1599,7 @@ def docker_startup():
         execute(reindex_elasticsearch)
     else:
         execute(app_db_update)
-    if not check_if_first_user():
+    if not check_if_first_user_exists():
         execute(create_first_admin_user)
     venvcmd("supervisord")
 

@@ -203,7 +203,7 @@ _wsginame:
     The public key of the sentry project of this server
 
 \*sentry_secret:\
-    The public key of the sentry project of this server
+    The private key of the sentry project of this server
 
 \*sentry_host:\
     The hostname of the sentry server

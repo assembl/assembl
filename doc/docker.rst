@@ -32,7 +32,7 @@ Then stop the docker containers (``Ctrl-C`` in the docker-compose window, or ``d
     fab -c configs/my_docker.rc docker_compose
     docker-compose -f docker/build/docker-compose.yaml up
 
-Your admin user for each assembl server will be ``admin@hostname``. Use the password recovery progress to set its initial password. (If you want to pshell instead, you can do it from ``docker exec -i -t build_assembl1_1 bash``.)
+Your admin user for each assembl server will be ``admin@hostname``. Use the password recovery process to set its initial password. (If you want to pshell instead, you can do it from ``docker exec -i -t build_assembl1_1 bash``.)
 
 When developing the docker image, the build can be instructed to use
 a git repository different from the official develop branch with:
