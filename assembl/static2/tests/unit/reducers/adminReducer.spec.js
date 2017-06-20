@@ -131,11 +131,7 @@ describe('Admin reducers', () => {
           imgUrl: null,
           questions: [],
           titleEntries: [],
-          video: {
-            titleEntries: [],
-            descriptionEntries: [],
-            htmlCode: null
-          }
+          video: null
         }
       };
       const newState = thematicsById(oldState, action);

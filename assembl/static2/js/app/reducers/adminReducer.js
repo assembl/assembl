@@ -57,11 +57,7 @@ export const thematicsById = (state = Map(), action) => {
       isNew: true,
       questions: List(),
       titleEntries: List(),
-      video: Map({
-        titleEntries: List(),
-        descriptionEntries: List(),
-        htmlCode: null
-      })
+      video: null
     });
     return state.set(action.id, emptyThematic.set('id', action.id));
   }

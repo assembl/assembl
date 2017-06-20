@@ -461,6 +461,9 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
         title_entries = resolve_langstring_entries(self, 'video_title')
         description = resolve_langstring(self.video_description, args.get('lang'))
         description_entries = resolve_langstring_entries(self, 'video_description')
+        if not (title_entries or description_entries or self.video_html_code):
+            return None
+
         return Video(
             title=title,
             title_entries=title_entries,
@@ -738,13 +741,13 @@ class UpdateThematic(graphene.Mutation):
             update_langstring_from_input_entries(thematic, 'title', title_entries)
             update_langstring_from_input_entries(thematic, 'description', args.get('description_entries'))
             kwargs = {}
-            video = args.get('video')
+            video = args.get('video', None)
             if video is not None:
                 update_langstring_from_input_entries(
-                    thematic, 'video_title', video.get('title_entries', None))
+                    thematic, 'video_title', video.get('title_entries', []))
                 update_langstring_from_input_entries(
                     thematic, 'video_description',
-                    video.get('description_entries', None))
+                    video.get('description_entries', []))
                 kwargs['video_html_code'] = video.get('html_code', None)
 
             # take the first entry and set it for short_title

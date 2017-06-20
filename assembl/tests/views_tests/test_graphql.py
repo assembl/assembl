@@ -34,9 +34,7 @@ def test_get_thematics_no_video(discussion, graphql_request, test_session):
                         u'numPosts': 0,
                         u'questions': [],
                         u'title': u'Comprendre les dynamiques et les enjeux',
-                        u'video': {u'description': None,
-                                   u'htmlCode': None,
-                                   u'title': None}}]}
+                        u'video': None}]}
 
 
 def test_get_thematics_with_video(discussion, graphql_request, test_session):
@@ -511,7 +509,7 @@ mutation myMutation($thematicId:ID!) {
             {value:"Understanding the dynamics and issues", localeCode:"en"},
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
         ],
-        video: {titleEntries: [], descriptionEntries: [], htmlCode: ""}
+        video:{},
         identifier:"survey",
     ) {
         thematic {
@@ -536,11 +534,7 @@ mutation myMutation($thematicId:ID!) {
                         {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
                     ]},
                 ],
-                u'video': {u'description': None,
-                           u'htmlCode': u"",
-                           u'title': None,
-                           u'titleEntries': [],
-                           u'descriptionEntries': []}
+                u'video': None
     }}}
 
 
