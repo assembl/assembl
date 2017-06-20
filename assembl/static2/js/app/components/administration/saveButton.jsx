@@ -71,7 +71,7 @@ const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics,
         displayAlert('success', I18n.t('administration.successThemeCreation'));
       })
       .catch((error) => {
-        displayAlert('danger', `${error}`);
+        displayAlert('danger', `${error}`, false, 30000);
       });
   };
 
