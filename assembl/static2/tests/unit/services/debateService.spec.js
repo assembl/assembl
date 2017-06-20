@@ -55,6 +55,7 @@ const mockTimeline = [];
 describe('This test concern debate Service', () => {
   it('Should return the model built from API response', () => {
     const expectedResult = {
+      chatbot: null,
       slug: "",
       logo: "",
       topic: "",

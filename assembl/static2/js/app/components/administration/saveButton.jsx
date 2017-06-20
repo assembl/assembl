@@ -27,7 +27,7 @@ const createVariablesForMutation = (thematic) => {
   };
 };
 
-const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic }) => {
+const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic }) => {  // eslint-disable-line no-shadow
   const saveAction = () => {
     const promisesArray = [];
     thematics.forEach((thematic) => {

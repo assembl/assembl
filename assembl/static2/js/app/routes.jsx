@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route } from 'react-router';
+import { Route } from 'react-router';
 import Root from './root';
 import App from './app';
 import Main from './main';

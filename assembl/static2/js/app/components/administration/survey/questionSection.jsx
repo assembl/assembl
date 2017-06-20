@@ -7,7 +7,7 @@ import VideoForm from './videoForm';
 import QuestionsForm from './questionsForm';
 import SectionTitle from '../sectionTitle';
 
-export class QuestionSection extends React.Component {
+class QuestionSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

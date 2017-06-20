@@ -22,5 +22,5 @@ export default combineReducers({
   synthesis: Synthesis,
   auth: Auth,
   phase: Phase,
-  admin: Admin,
+  admin: Admin
 });
