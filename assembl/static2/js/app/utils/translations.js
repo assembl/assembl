@@ -75,7 +75,8 @@ const Translations = {
       community: 'communauté',
       connection: 'Connexion',
       profile: 'Profil',
-      logout: 'Se déconnecter'
+      logout: 'Se déconnecter',
+      administration: 'Administration'
     },
     footer: {
       terms: 'Conditions Générales d\'Utilisation',
@@ -292,7 +293,8 @@ const Translations = {
       community: 'community',
       connection: 'Login',
       profile: 'Profile',
-      logout: 'Logout'
+      logout: 'Logout',
+      administration: 'Administration'
     },
     footer: {
       terms: 'Terms and Conditions',

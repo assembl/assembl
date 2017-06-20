@@ -2,6 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Link, browserHistory } from 'react-router';
+
+import { getPermissionsForConnectedUser } from '../../reducers/usersReducer';
+import { connectedUserIsAdmin } from '../../utils/permissions';
 import { get } from '../../utils/routeMap';
 import { displayModal } from '../../utils/utilityManager';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
@@ -38,11 +41,17 @@ class NavigationMenu extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
+    const { isAdmin } = this.props;
     return (
       <div>
         <Link onClick={this.displayPhase} className="navbar-menu-item pointer" activeClassName="active">
           <Translate value="navbar.debate" />
         </Link>
+        {isAdmin &&
+          <Link to={get('administration', { slug: debateData.slug })} className="navbar-menu-item pointer" activeClassName="active">
+            <Translate value="navbar.administration" />
+          </Link>
+        }
         {false &&
           <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
             <Translate value="navbar.community" />
@@ -54,7 +63,9 @@ class NavigationMenu extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+  const permissions = getPermissionsForConnectedUser(state);
   return {
+    isAdmin: connectedUserIsAdmin(permissions),
     debate: state.debate,
     phase: state.phase,
     i18n: state.i18n
