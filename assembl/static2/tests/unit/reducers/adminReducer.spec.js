@@ -128,7 +128,7 @@ describe('Admin reducers', () => {
           id: '-278290',
           isNew: true,
           toDelete: false,
-          imgUrl: '',
+          imgUrl: null,
           questions: [],
           titleEntries: [],
           video: {

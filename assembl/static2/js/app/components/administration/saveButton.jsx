@@ -16,10 +16,12 @@ const runSerial = (tasks) => {
 };
 
 const createVariablesForMutation = (thematic) => {
+  // If imgUrl is an object, it means it's a File.
+  // We need to send image: null if we didn't change the image.
   return {
     identifier: 'survey',
     titleEntries: thematic.titleEntries,
-    image: thematic.imgUrl,
+    image: typeof thematic.imgUrl === 'object' ? thematic.imgUrl : null,
     video: thematic.video,
     questions: thematic.questions
   };
