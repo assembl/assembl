@@ -31,7 +31,9 @@ const routes = {
   debate: '${slug}/debate',
   community: '${slug}/community',
   terms: '${slug}/terms',
-  phase: '${phase}/theme/${themeId}'
+  phase: '${phase}/theme/${themeId}',
+  administration: '${slug}/administration',
+  adminPhase: '${phase}'
 };
 const convertToContextualName = (name) => {
   const base = 'ctx';

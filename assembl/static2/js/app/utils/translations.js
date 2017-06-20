@@ -113,7 +113,6 @@ const Translations = {
       incorrectPasswordLogin: 'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.',
       newPassword: 'Nouveau mot de passe',
       newPassword2: 'Ré-entrez le nouveau mot de passe'
-
     },
     changePassword: {
       panelTitle: 'Bienvenue dans la page changement de mot de passe d\'Assembl'
@@ -132,7 +131,7 @@ const Translations = {
       topContributor: 'Top contributeur',
       recentDiscussion: 'Discussion récente',
       objectivesTitle: 'Pourquoi un tel débat ?',
-      timelineTitle: 'La timeline du débat',
+      timelineTitle: 'La timeline du débat en %{count} phases',
       video: 'La vidéo du débat',
       twitterTitle: 'Tweet',
       contact: 'Besoin d\'échanger au sujet de la plateforme ?',
@@ -143,6 +142,9 @@ const Translations = {
     },
     synthesis: {
       title: 'synthèse'
+    },
+    common: {
+      uploadButton: 'Choisissez un fichier'
     },
     community: {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
@@ -185,6 +187,31 @@ const Translations = {
     },
     terms: {
       panelTitle: 'Conditions Générales d\'Utilisations'
+    },
+    administration: {
+      videoModule: 'Option module vidéo',
+      thematic: 'Thématique',
+      edition: 'Discussion',
+      landingpage: 'Landing page',
+      menu: {
+        phase: 'Phase %{count} - %{description}'
+      },
+      survey: ['Créer les thématiques', 'Renseigner les thématiques', 'Exporter les données'],
+      annotation: 'Module à renseigner obligatoirement. Les champs * sont requis.',
+      themeNum: 'Thématique %{index}',
+      ph: {
+        title: 'Titre*',
+        quote: 'Citation',
+        videoLink: 'Lien vidéo*'
+      },
+      surveyExport: {
+        title: 'Exporter les données du débat',
+        annotation: 'Vous pouvez exporter l\'ensemble des données du débat en cliquant simplement sur le bouton Exporter',
+        link: 'Exporter'
+      },
+      step_x_total: 'Etape %{num} sur %{total}',
+      saveThemes: 'Sauvegarder',
+      successThemeCreation: 'Les thématiques ont été enregistrées avec succès !'
     },
     date: {
       format: 'D MMMM YYYY',
@@ -321,7 +348,7 @@ const Translations = {
       topContributor: 'Top contributor',
       recentDiscussion: 'Recent discussion',
       objectivesTitle: 'What is the objective of the debate?',
-      timelineTitle: 'The timeline of the debate',
+      timelineTitle: 'The timeline of the debate in %{count} phases',
       video: 'Video of the debate',
       twitterTitle: 'Tweet',
       contact: 'Do you wish to know more about this platform?',
@@ -332,6 +359,9 @@ const Translations = {
     },
     community: {
       panelTitle: 'Welcome to Assembl community page'
+    },
+    common: {
+      uploadButton: 'Choose a file to upload'
     },
     synthesis: {
       title: 'synthesis'
@@ -374,6 +404,31 @@ const Translations = {
     },
     terms: {
       panelTitle: 'Terms and Conditions'
+    },
+    administration: {
+      videoModule: 'Video module',
+      thematic: 'Theme',
+      edition: 'Discussion',
+      landingpage: 'Landing page',
+      menu: {
+        phase: 'Phase %{count} - %{description}'
+      },
+      survey: ['Create themes', 'Edit themes', 'Export data'],
+      annotation: 'Module to be completed. * Fields are required.',
+      themeNum: 'Theme %{index}',
+      ph: {
+        title: 'Title*',
+        quote: 'Quote',
+        videoLink: 'Video link*'
+      },
+      surveyExport: {
+        title: 'Export the debate data',
+        annotation: 'You can export all the debate data by clicking on the Export button',
+        link: 'Export'
+      },
+      step_x_total: 'Step %{num} on %{total}',
+      saveThemes: 'Save',
+      successThemeCreation: 'Themes have been saved with success!'
     },
     date: {
       format: 'MMMM Do, YYYY',

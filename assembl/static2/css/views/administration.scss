@@ -1,0 +1,239 @@
+.administration {
+  margin: $margin-section + $navbar-height 0;
+
+  .admin-menu-container {
+    height: 350px;
+    position: relative;
+  }
+
+  .admin-menu {
+    padding: 0;
+    position: fixed;
+    list-style-type: none;
+
+    li {
+      padding: 0 0 15px;
+
+      a {
+        color: $grey2;
+
+        &:hover {
+          color: $first-color;
+        }
+      }
+    }
+
+    .active {
+      color: $first-color;
+      text-decoration: none;
+    }
+  }
+
+  .admin-menu2 {
+    list-style-type: none;
+    padding: 15px 0 0 30px;
+
+    li {
+      &:last-child {
+        padding: 0;
+      }
+    }
+  }
+
+  .language-menu {
+    position: fixed;
+  }
+
+  .admin-box {
+    background-color: $white;
+
+    .dark-title-3 {
+      padding: 40px 40px 0;
+    }
+
+    .admin-content {
+      padding: 30px 40px 80px;
+      text-align: center;
+    }
+
+    .annotation {
+      margin: 0 40px 20px;
+    }
+  }
+
+  .plus {
+    background-color: $first-color;
+    border-radius: 20px;
+    color: $white;
+    cursor: pointer;
+    height: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 0 1px 2px;
+    text-align: center;
+    width: 20px;
+  }
+
+  .form-container {
+    margin: 0 auto;
+    max-width: 400px;
+    text-align: left;
+
+    .title {
+      margin: 0 0 20px;
+      text-align: left;
+    }
+
+    .form-control {
+      font-size: 12px;
+    }
+  }
+
+  .flag-container {
+    cursor: pointer;
+    margin: 20px 15px 0;
+  }
+
+  .flag-container.active {
+    border: $btn-dark-border;
+    border-radius: 20px;
+    height: 24px;
+    margin: 20px 15px 0 13px;
+    width: 24px;
+  }
+
+  .assembl-icon-delete {
+    &:before {
+      font-size: 15px;
+    }
+  }
+
+  .separator {
+    border-bottom: $navbar-border;
+    clear: both;
+    margin: 0 0 40px;
+    padding: 0 0 15px;
+  }
+
+  .admin-navbar {
+    background-color: $first-color-light;
+    height: $navbar-height;
+    width: 100%;
+
+    .step-numbers {
+      max-width: 250px;
+      padding: 0 0 0 40px;
+      position: relative;
+      width: 100%;
+
+      .txt {
+        color: $first-color;
+        font-family: $font-family4;
+        font-size: $font-size-xs;
+        margin: 12px 0 5px;
+      }
+
+      .bar {
+        background-color: $first-color;
+        height: 6px;
+        position: absolute;
+        z-index: 2;
+      }
+
+      .bkg-bar {
+        background-color: $white;
+        height: 6px;
+        width: 100%;
+        position: absolute;
+        z-index: 1;
+      }
+    }
+  }
+
+  .arrow-container {
+    padding: 0 40px 0 0;
+    .arrow {
+      background-color: $white;
+      border-radius: 26px;
+      cursor: pointer;
+      display: inline-block;
+      line-height: 20px;
+      height: 26px;
+      margin: 18px 0 0 30px;
+      padding: 0 0 0 4px;
+      text-align: left;
+      transform: rotate(90deg);
+      width: 26px;
+
+      .assembl-icon-up-open {
+        color: $first-color;
+
+        &:before {
+          font-size: 8px;
+        }
+      }
+
+      .assembl-icon-down-open {
+        color: $first-color;
+
+        &:before {
+          font-size: 8px;
+        }
+      }
+    }
+  }
+
+  .save-bar {
+    border-top: $navbar-border;
+    background-color: $white;
+    height: $navbar-height;
+    padding: 10px 0;
+    position: fixed;
+    top:$navbar-height;
+    width: 100%;
+    z-index: 100;
+  }
+  
+  .tab-title {
+    border-bottom: $border-not-active;
+    color: $grey1;
+    cursor: pointer;
+    display: block;
+    padding: 0 0 5px 0;
+  }
+
+  .tab-title-active {
+    border-bottom: $border-active;
+    color: $grey3;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+  }
+
+  .text-area {
+    height: 100px;
+  }
+
+  .preview {
+    border: $navbar-border;
+    border-radius: 10px;
+    margin: 10px 0 0;
+    padding: 5px;
+
+    img {
+      border-radius: 10px;
+      max-width: 390px;
+    }
+  }
+
+  .preview-title {
+    color: $grey3;
+    font-family: $font-family6;
+    font-size: $font-size-xs;
+    margin: 10px 0 20px 5px;
+  }
+
+  .question-section {
+    margin: 0 0 75px 0;
+  }
+}

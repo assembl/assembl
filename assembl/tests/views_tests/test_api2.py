@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-
+import csv
 import pytest
 from datetime import datetime, timedelta
 import simplejson as json
+from io import BytesIO
 
 from assembl.models import (
     AbstractIdeaVote,
@@ -899,3 +900,54 @@ def test_add_timeline_event(test_app, discussion):
     # check that the link was made in both directions
     assert phase1_data['next_event'] == phase2_data['@id']
     assert phase1_data['@type'] == 'DiscussionPhase'
+
+
+def test_phase1_export(proposals_with_sentiments, discussion, test_app):
+
+    THEMATIC_NAME = 0
+    QUESTION_ID = 1
+    QUESTION_TITLE = 2
+    POST_BODY = 3
+    POST_LIKE_COUNT = 4
+    POST_DISAGREE_COUNT = 5
+    POST_CREATOR_NAME = 6
+    POST_CREATOR_EMAIL = 7
+    POST_CREATION_DATE = 8
+    SENTIMENT_ACTOR_NAME = 9
+    SENTIMENT_ACTOR_EMAIL = 10
+    SENTIMENT_CREATION_DATE = 11
+
+    response = test_app.get(
+        '/data/Discussion/{}/phase1_csv_export'.format(discussion.id))
+    csv_file = BytesIO()
+    csv_file.write(response.app_iter[0])
+    csv_file.seek(0)
+    assert response.status_code == 200
+    result = csv.reader(csv_file, dialect='excel')
+    result = list(result)
+
+    header = result[0]
+    assert header[QUESTION_ID] == b'Numéro de la question'
+    assert header[SENTIMENT_ACTOR_NAME] == b"Nom du votant"
+
+    first_row = result[1]
+    assert first_row[THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
+    assert first_row[QUESTION_TITLE] == b"Comment qualifiez-vous l'emergence "\
+                                        b"de l'Intelligence Artificielle "\
+                                        b"dans notre société ?"
+    assert first_row[POST_BODY] == b'une proposition 14'
+    assert first_row[POST_LIKE_COUNT] == b'0'
+    assert first_row[POST_DISAGREE_COUNT] == b'0'
+    assert first_row[POST_CREATOR_NAME] == b'Mr. Administrator'
+    assert first_row[POST_CREATOR_EMAIL] == b''
+    date = datetime.today().strftime('%d/%m/%Y')
+    assert first_row[POST_CREATION_DATE].startswith(date)
+    assert first_row[SENTIMENT_ACTOR_NAME] == b''
+    assert first_row[SENTIMENT_ACTOR_EMAIL] == b''
+    assert first_row[SENTIMENT_CREATION_DATE] == b''
+
+    last_row = result[-1]
+    assert last_row[THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
+    assert last_row[POST_LIKE_COUNT] == b'1'
+    assert last_row[POST_DISAGREE_COUNT] == b'0'
+    assert last_row[SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'

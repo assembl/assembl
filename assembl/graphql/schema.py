@@ -1,4 +1,5 @@
 from datetime import datetime
+import os.path
 from random import sample as random_sample
 
 from sqlalchemy import desc
@@ -76,11 +77,15 @@ def resolve_langstring(langstring, locale_code):
     if langstring is None:
         return None
 
+    entries = get_entries(langstring)
+    if not entries:
+        return None
+
     if locale_code is None:
         return langstring.best_entry_in_request().value
 
     return {e.locale_code: e.value
-            for e in get_entries(langstring)}.get(locale_code, None)
+            for e in entries}.get(locale_code, None)
 
 
 def resolve_langstring_entries(obj, attr):
@@ -135,6 +140,11 @@ def update_langstring_from_input_entries(obj, attr, entries):
     current_title_entries_by_locale_code = {
         e.locale_code: e for e in get_entries(langstring)}
     if entries is not None:
+        # if we have an empty list, remove all existing entries
+        if len(entries) == 0:
+            for e in current_title_entries_by_locale_code.values():
+                e.tombstone_date = datetime.utcnow()
+
         for entry in entries:
             locale_code = entry['locale_code']
             current_entry = current_title_entries_by_locale_code.get(locale_code, None)
@@ -285,6 +295,8 @@ class Video(graphene.ObjectType):
     title = graphene.String()
     description = graphene.String()
     html_code = graphene.String()
+    title_entries = graphene.List(LangStringEntry)
+    description_entries = graphene.List(LangStringEntry)
 
 
 class Idea(SecureObjectType, SQLAlchemyObjectType):
@@ -293,6 +305,10 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', 'short_title', )
 
+    num_posts = graphene.Int()
+    num_contributors = graphene.Int()
+    order = graphene.Float()
+    parent_id = graphene.ID()
     posts = SQLAlchemyConnectionField(PostConnection)
 
     @classmethod
@@ -318,14 +334,28 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 'Received incompatible instance "{}".'
             ).format(root))
         # return isinstance(root, cls._meta.model)  # this was the original code
-        return type(root) == type(cls._meta.model)
+        return type(root) == cls._meta.model or type(root) == models.RootIdea
+
+    def resolve_order(self, args, context, info):
+        return self.get_order_from_first_parent()
+
+    def resolve_parent_id(self, args, context, info):
+        parents = self.get_parents()
+        if not parents:
+            return None
+
+        return Node.to_global_id('Idea', parents[0].id)
 
     def resolve_posts(self, args, context, info):
         connection_type = info.return_type.graphene_type  # this is PostConnection
         model = connection_type._meta.node._meta.model  # this is models.PostUnion
-        query = self.get_related_posts_query(
+        related = self.get_related_posts_query(True)
+        # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
+        query = model.query.join(
+            related, model.id == related.c.post_id
             ).filter(model.publication_state == models.PublicationStates.PUBLISHED
             ).order_by(desc(model.creation_date), model.id)
+
         # pagination is done after that, no need to do it ourself
         return query
 
@@ -408,6 +438,7 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     img_url = graphene.String()
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
+    order = graphene.Float()
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
@@ -427,23 +458,26 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_video(self, args, context, info):
         title = resolve_langstring(self.video_title, args.get('lang'))
+        title_entries = resolve_langstring_entries(self, 'video_title')
         description = resolve_langstring(self.video_description, args.get('lang'))
+        description_entries = resolve_langstring_entries(self, 'video_description')
+        if not (title_entries or description_entries or self.video_html_code):
+            return None
+
         return Video(
             title=title,
+            title_entries=title_entries,
             description=description,
+            description_entries=description_entries,
             html_code=self.video_html_code,
         )
 
     def resolve_img_url(self, args, context, info):
-        index = self.get_parents()[0].get_children().index(self)
-        images = [
-            'https://framapic.org/MmJ9xEj08x8G/dRZSK23VYyIc.jpg',
-            'https://framapic.org/sLFxLbI7QXnL/vIGtwrsGWaq1.jpg',
-            'https://framapic.org/Vxp74KNPvM1u/bj2HslDBD0WN.jpg',
-            'https://framapic.org/k4g9CP4yEYFn/a2eTXC9Giyjy.jpg'
-        ]
-        # TODO imgUrl
-        return images[index % 4]
+        if self.attachments:
+            return self.attachments[0].external_url
+
+    def resolve_order(self, args, context, info):
+        return self.get_order_from_first_parent()
 
 
 class Query(graphene.ObjectType):
@@ -461,7 +495,7 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         root_idea_id = discussion.root_idea.id
         descendants_query = model.get_descendants_query(
-            root_idea_id, inclusive=False)
+            root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
             ).filter(model.hidden == False).order_by(model.id)
         # pagination is done after that, no need to do it ourself
@@ -492,13 +526,12 @@ class Query(graphene.ObjectType):
         identifier = args.get('identifier', None)
         model = Thematic._meta.model
         discussion_id = context.matchdict['discussion_id']
-        query = get_query(model, context
-            ).filter(model.discussion_id == discussion_id
-            ).filter(model.identifier == identifier
-            ).filter(model.hidden == False
-            ).filter(model.tombstone_date == None
-            ).order_by(model.id)
-        return query
+        discussion = models.Discussion.get(discussion_id)
+        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        if root_thematic is None:
+            return []
+
+        return root_thematic.get_children()
 
 
 class VideoInput(graphene.InputObjectType):
@@ -512,6 +545,41 @@ class QuestionInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput, required=True)
 
 
+def get_root_thematic_for_phase(discussion, identifier):
+    """Return root thematic for the given phase `identifier` on `discussion`.
+    """
+    root_thematic = [idea
+                     for idea in discussion.root_idea.get_children()
+                     if getattr(idea, 'identifier', '') == identifier]
+    return root_thematic[0] if root_thematic else None
+
+
+def create_root_thematic(discussion, identifier):
+    """Create the root thematic (hidden) for the given phase `identifier`
+    on `discussion`.
+    """
+    short_title = u'Phase {}'.format(identifier)
+    root_thematic = models.Thematic(
+        discussion_id=discussion.id,
+        short_title=short_title,
+        title=langstring_from_input_entries(
+            [{'locale_code': 'en', 'value': short_title}]),
+        identifier=identifier,
+        hidden=True)
+    discussion.root_idea.children.append(root_thematic)
+    return root_thematic
+
+
+# How the file upload works
+# With the https://github.com/jaydenseric/apollo-upload-client
+# networkInterface, if there is a File object in a graphql variable, the File data
+# is appended to the POST body as a part with an identifier starting with 'variables.',
+# For example if we use 'img' File variable in a mutation,
+# 'variables.img' will be available in context.POST, 'img' is removed from the
+# variables in the json by apollo-upload-client, but graphql-wsgi put back
+# {'img': 'variables.img'}
+# in the variables, so here `image` input argument will be 'variables.img'
+# (assuming assigning image: $img in the mutation)
 class CreateThematic(graphene.Mutation):
     class Input:
         # Careful, having required=True on a graphene.List only means
@@ -521,7 +589,8 @@ class CreateThematic(graphene.Mutation):
         identifier = graphene.String(required=True)
         video = graphene.Argument(VideoInput)
         questions = graphene.List(QuestionInput)
-        # TODO upload img example http://docs.pylonsproject.org/projects/pyramid-cookbook/en/latest/forms/file_uploads.html
+        image = graphene.String()  # this is the identifier of the part in a multipart POST
+        order = graphene.Float()
 
     thematic = graphene.Field(lambda: Thematic)
 
@@ -554,36 +623,27 @@ class CreateThematic(graphene.Mutation):
 
             video = args.get('video')
             if video is not None:
-                video_title = langstring_from_input_entries(video['title_entries'])
+                video_title = langstring_from_input_entries(video.get('title_entries', None))
                 if video_title is not None:
                     kwargs['video_title'] = video_title
 
-                video_description = langstring_from_input_entries(video['description_entries'])
+                video_description = langstring_from_input_entries(
+                    video.get('description_entries', None))
                 if video_description is not None:
                     kwargs['video_description'] = video_description
 
-                kwargs['video_html_code'] = video['html_code']
+                video_html_code = video.get('html_code', None)
+                if video_html_code is not None:
+                    kwargs['video_html_code'] = video_html_code
 
             # Our thematic, because it inherits from Idea, needs to be
             # associated to the root idea of the discussion.
             # We create a hidden root thematic, corresponding to the
             # `identifier` phase, child of the root idea,
             # and add our thematic as a child of this root thematic.
-            root_thematic = [idea
-                             for idea in discussion.root_idea.get_children()
-                             if getattr(idea, 'identifier', '') == identifier]
-            if not root_thematic:
-                short_title = u'Phase {}'.format(identifier)
-                root_thematic = cls(
-                    discussion_id=discussion_id,
-                    short_title=short_title,
-                    title=langstring_from_input_entries(
-                        [{'locale_code': 'en', 'value': short_title}]),
-                    identifier=identifier,
-                    hidden=True)
-                discussion.root_idea.children.append(root_thematic)
-            else:
-                root_thematic = root_thematic[0]
+            root_thematic = get_root_thematic_for_phase(discussion, identifier)
+            if root_thematic is None:
+                root_thematic = create_root_thematic(discussion, identifier)
 
             # take the first entry and set it for short_title
             short_title = title_entries[0]['value']
@@ -593,22 +653,49 @@ class CreateThematic(graphene.Mutation):
                 short_title=short_title,
                 identifier=identifier,
                 **kwargs)
-            root_thematic.children.append(saobj)
             db = saobj.db
             db.add(saobj)
+            order = len(root_thematic.get_children()) + 1.0
+            db.add(
+                models.IdeaLink(source=root_thematic, target=saobj,
+                         order=args.get('order', order)))
+
+            # add uploaded image as an attachment to the idea
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                attachment = models.IdeaAttachment(
+                    document=document,
+                    idea=saobj,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="EMBED_ATTACHMENT"
+                )
+
             db.flush()
 
             questions_input = args.get('questions')
             if questions_input is not None:
-                for question_input in questions_input:
+                for idx, question_input in enumerate(questions_input):
                     title_ls = langstring_from_input_entries(
                         question_input['title_entries'])
-                    saobj.children.append(
-                        models.Question(
-                            title=title_ls,
-                            discussion_id=discussion_id
-                        )
+                    question = models.Question(
+                        title=title_ls,
+                        discussion_id=discussion_id
                     )
+                    db.add(
+                        models.IdeaLink(source=saobj, target=question,
+                                        order=idx + 1.0))
                 db.flush()
 
         return CreateThematic(thematic=saobj)
@@ -617,11 +704,13 @@ class CreateThematic(graphene.Mutation):
 class UpdateThematic(graphene.Mutation):
     class Input:
         id = graphene.ID(required=True)
-        title_entries = graphene.List(LangStringEntryInput, required=True)
+        title_entries = graphene.List(LangStringEntryInput)
         description_entries = graphene.List(LangStringEntryInput)
-        identifier = graphene.String(required=True)
+        identifier = graphene.String()
         video = graphene.Argument(VideoInput)
         questions = graphene.List(QuestionInput)
+        image = graphene.String()  # this is the identifier of the part in a multipart POST
+        order = graphene.Float()
 
     thematic = graphene.Field(lambda: Thematic)
 
@@ -629,6 +718,7 @@ class UpdateThematic(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         user_id = context.authenticated_userid or Everyone
 
         thematic_id = args.get('id')
@@ -642,7 +732,7 @@ class UpdateThematic(graphene.Mutation):
 
         with cls.default_db.no_autoflush:
             title_entries = args.get('title_entries')
-            if len(title_entries) == 0:
+            if title_entries is not None and len(title_entries) == 0:
                 raise Exception('Thematic titleEntries needs at least one entry')
                 # Better to have this message than
                 # 'NoneType' object has no attribute 'owner_object'
@@ -651,49 +741,90 @@ class UpdateThematic(graphene.Mutation):
             update_langstring_from_input_entries(thematic, 'title', title_entries)
             update_langstring_from_input_entries(thematic, 'description', args.get('description_entries'))
             kwargs = {}
-            video = args.get('video')
+            video = args.get('video', None)
             if video is not None:
-                update_langstring_from_input_entries(thematic, 'video_title', video['title_entries'])
-                update_langstring_from_input_entries(thematic, 'video_description', video['description_entries'])
-                kwargs['video_html_code'] = video['html_code']
+                update_langstring_from_input_entries(
+                    thematic, 'video_title', video.get('title_entries', []))
+                update_langstring_from_input_entries(
+                    thematic, 'video_description',
+                    video.get('description_entries', []))
+                kwargs['video_html_code'] = video.get('html_code', None)
 
             # take the first entry and set it for short_title
-            kwargs['short_title'] = title_entries[0]['value']
-            kwargs['identifier'] = args.get('identifier')
+            if title_entries is not None:
+                kwargs['short_title'] = title_entries[0]['value']
+
+            if args.get('identifier') is not None:
+                kwargs['identifier'] = args.get('identifier')
+
             for attr, value in kwargs.items():
                 setattr(thematic, attr, value)
+
             db = thematic.db
+
+            # change order if needed
+            order = args.get('order')
+            if order:
+                thematic.source_links[0].order = order
+
+            # add uploaded image as an attachment to the idea
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                # if there is already an attachment, remove it with the
+                # associated document (image)
+                if thematic.attachments:
+                    db.delete(thematic.attachments[0].document)
+                    thematic.attachments.remove(thematic.attachments[0])
+
+                attachment = models.IdeaAttachment(
+                    document=document,
+#                    idea=thematic,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="EMBED_ATTACHMENT"
+                )
+                thematic.attachments.append(attachment)
             db.flush()
 
             questions_input = args.get('questions')
             existing_questions = {question.id: question for question in thematic.get_children()}
             updated_questions = set()
             if questions_input is not None:
-                for question_input in questions_input:
+                for idx, question_input in enumerate(questions_input):
                     if question_input.get('id', None) is not None:
                         id_ = int(Node.from_global_id(question_input['id'])[1])
                         updated_questions.add(id_)
                         question = models.Question.get(id_)
                         update_langstring_from_input_entries(
                             question, 'title', question_input['title_entries'])
+                        # modify question order
+                        question.source_links[0].order = idx + 1.0
                     else:
                         title_ls = langstring_from_input_entries(
                             question_input['title_entries'])
-                        models.Question(
+                        question = models.Question(
                             title=title_ls,
                             discussion_id=discussion_id
                         )
-                        thematic.children.append(
-                            models.Question(
-                                title=title_ls,
-                                discussion_id=discussion_id
-                            )
-                        )
+                        db.add(
+                            models.IdeaLink(source=thematic, target=question,
+                                     order=idx + 1.0))
 
-            # remove question (tombstone it) that are not in questions_input
-            for question_id in set(existing_questions.keys()
-                    ).difference(updated_questions):
-                existing_questions[question_id].tombstone_date = datetime.utcnow()
+                # remove question (tombstone it) that are not in questions_input
+                for question_id in set(existing_questions.keys()
+                        ).difference(updated_questions):
+                    existing_questions[question_id].tombstone_date = datetime.utcnow()
 
             db.flush()
 
@@ -875,6 +1006,13 @@ class Mutations(graphene.ObjectType):
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
+
+
+def print_schema_json(schema):
+    import json
+    schema_dict = schema.introspect()
+    with open('/tmp/schema.json', 'w') as outfile:
+        json.dump(schema_dict, outfile)
 
 
 '''

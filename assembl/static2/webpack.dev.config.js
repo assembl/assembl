@@ -29,7 +29,7 @@ function theme_entries() {
 // For css hot reload to work, don't use ExtractTextPlugin
 module.exports = {
     devServer: {
-        devtool: 'eval',
+        devtool: '#cheap-module-eval-source-map',  // http://webpack.github.io/docs/configuration.html#devtool
         inline: true,
         hot: true,
         headers: {
@@ -70,6 +70,7 @@ module.exports = {
         },
         {
             test: /\.scss$/,
+            //loader: 'style!css?sourceMap=true!sass?sourceMap=true'  // fonts are not loaded when using sourceMap...
             loaders: ['style', 'css', 'sass']
         },
         {
@@ -99,5 +100,10 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+          'process.env': {
+            NODE_ENV: JSON.stringify('development')
+          }
+        }),
     ]
 };

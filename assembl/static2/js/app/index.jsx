@@ -4,7 +4,7 @@ import { AppContainer } from 'react-hot-loader';
 import { Router, browserHistory } from 'react-router';
 import { ApolloProvider } from 'react-apollo';
 import 'bootstrap/dist/css/bootstrap.css';
-import { createAppStore } from './store';
+import createAppStore from './store';
 import client from './client';
 import Routes from './routes';
 

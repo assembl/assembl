@@ -9,7 +9,8 @@ describe('Return posts state changes', () => {
     .toEqual({
       debateData:null,
       debateLoading:true,
-      debateError:null
+      debateError:null,
+      isUnauthorized:false
     });
   });
   it('Should handle RESOLVED_FETCH_DEBATE_DATA', () => {
@@ -21,7 +22,8 @@ describe('Return posts state changes', () => {
     .toEqual({
       debateData:{data:'data'},
       debateLoading:false,
-      debateError:null
+      debateError:null,
+      isUnauthorized:false
     });
   });
   it('Should handle FAILED_FETCH_DEBATE_DATA', () => {
@@ -33,7 +35,8 @@ describe('Return posts state changes', () => {
     .toEqual({
       debateData:null,
       debateLoading:false,
-      debateError:'Forbidden'
+      debateError:'Forbidden',
+      isUnauthorized:false
     });
   });
 });

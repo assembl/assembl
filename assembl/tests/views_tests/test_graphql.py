@@ -5,6 +5,7 @@ from graphql_relay.node.node import to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
+from assembl.graphql.schema import create_root_thematic
 
 
 def test_get_thematics_noresult(graphql_request):
@@ -15,11 +16,13 @@ def test_get_thematics_noresult(graphql_request):
 def test_get_thematics_no_video(discussion, graphql_request, test_session):
     title = u"Comprendre les dynamiques et les enjeux"
     title = models.LangString.create(title, locale_code="fr")
+    root_thematic = create_root_thematic(discussion, "survey")
     thematic = models.Thematic(
         discussion_id=discussion.id,
         title=title,
         identifier="survey")
-    test_session.add(thematic)
+    test_session.add(
+        models.IdeaLink(source=root_thematic, target=thematic, order=1.0))
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
@@ -31,9 +34,7 @@ def test_get_thematics_no_video(discussion, graphql_request, test_session):
                         u'numPosts': 0,
                         u'questions': [],
                         u'title': u'Comprendre les dynamiques et les enjeux',
-                        u'video': {u'description': None,
-                                   u'htmlCode': None,
-                                   u'title': None}}]}
+                        u'video': None}]}
 
 
 def test_get_thematics_with_video(discussion, graphql_request, test_session):
@@ -45,6 +46,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
     video_desc = models.LangString.create(
         u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
         locale_code="fr")
+    root_thematic = create_root_thematic(discussion, "survey")
     thematic = models.Thematic(
         discussion_id=discussion.id,
         title=title,
@@ -53,7 +55,8 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
         video_description=video_desc,
         video_html_code=u"<object>....</object>",
     )
-    test_session.add(thematic)
+    test_session.add(
+        models.IdeaLink(source=root_thematic, target=thematic, order=1.0))
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
@@ -93,7 +96,7 @@ mutation myFirstMutation {
         thematic {
             title,
             identifier
-            video {title, description, htmlCode}
+            video {title, titleEntries { localeCode value }, description, descriptionEntries { localeCode value }, htmlCode}
         }
     }
 }
@@ -104,7 +107,15 @@ mutation myFirstMutation {
                 u'title': u'Understanding the dynamics and issues',
                 u'identifier': 'survey',
                 u'video': {u'title': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
+                           u'titleEntries': [{
+                               u'value': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
+                               u'localeCode': u"fr"
+                           }],
                            u'description': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
+                           u'descriptionEntries': [{
+                               u'value': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
+                               u'localeCode': u"fr"
+                           }],
                            u'htmlCode': u"<object>....</object>",
                            }
     }}}
@@ -177,6 +188,83 @@ mutation myFirstMutation {
     }}}
 
 
+def test_mutation_create_thematic_upload_file(graphql_request):
+    # create thematic
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+    res = schema.execute(u"""
+mutation myFirstMutation($img:String) {
+    createThematic(titleEntries:[
+        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+        {value:"Understanding the dynamics and issues", localeCode:"en"}
+    ],
+        identifier:"survey",
+        image:$img
+    ) {
+        thematic {
+            id,
+            title(lang:"fr"),
+            identifier,
+            imgUrl
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"img": u"variables.img"})
+    # The test doesn't use the same discussion id (sometimes it's 1, sometimes 8)
+    # depending on which tests are executed...
+    # py.test assembl -k test_mutation_create_thematic_upload_file
+    # returns http://localhost:6543/data/Discussion/1/documents/1/data
+    # py.test assembl -k test_graphql
+    # returns http://localhost:6543/data/Discussion/8/documents/1/data
+#    assert json.loads(json.dumps(res.data)) == {
+#        u'createThematic': {
+#            u'thematic': {
+#                u'title': u'Comprendre les dynamiques et les enjeux',
+#                u'identifier': u'survey',
+#                u'imgUrl': u'http://localhost:6543/data/Discussion/8/documents/1/data'
+#    }}}
+#    just assert we have the ends correct:
+    assert res.data['createThematic']['thematic']['imgUrl'].endswith('/documents/1/data')
+    thematic_id = res.data['createThematic']['thematic']['id']
+
+    # and update it to change the image
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/img2.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.img'] = FieldStorage()
+    res = schema.execute(u"""
+mutation myFirstMutation($img:String, $thematicId:ID!) {
+    updateThematic(
+        id:$thematicId,
+        titleEntries:[
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+            {value:"Understanding the dynamics and issues", localeCode:"en"}
+        ],
+        identifier:"survey",
+        image:$img
+    ) {
+        thematic {
+            title(lang:"fr"),
+            identifier,
+            imgUrl
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"thematicId": thematic_id,
+                                                     "img": u"variables.img"})
+    assert res.data['updateThematic']['thematic']['imgUrl'].endswith('/documents/2/data')
+
+
 def test_mutation_create_thematic_multilang_explicit_en(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -243,6 +331,12 @@ mutation myFirstMutation {
             {titleEntries:[
                 {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
             ]},
+            {titleEntries:[
+                {value:"Seconde question ?", localeCode:"fr"}
+            ]},
+            {titleEntries:[
+                {value:"Troisième question ?", localeCode:"fr"}
+            ]},
         ],
         identifier:"survey",
     ) {
@@ -260,7 +354,9 @@ mutation myFirstMutation {
                 u'title': u'Comprendre les dynamiques et les enjeux',
                 u'identifier': u'survey',
                 u'questions': [
-                    {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}
+                    {u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"},
+                    {u'title': u"Seconde question ?"},
+                    {u'title': u"Troisième question ?"}
                 ]
     }}}
 
@@ -399,6 +495,94 @@ mutation secondMutation {
                 ],
                 u'identifier': u'survey',
                 u'questions': [
+                ]
+    }}}
+
+
+def test_update_thematic_delete_video(graphql_request, thematic_with_video_and_question):
+    thematic_id, first_question_id = thematic_with_video_and_question
+    res = schema.execute(u"""
+mutation myMutation($thematicId:ID!) {
+    updateThematic(
+        id:$thematicId,
+        titleEntries:[
+            {value:"Understanding the dynamics and issues", localeCode:"en"},
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
+        ],
+        video:{},
+        identifier:"survey",
+    ) {
+        thematic {
+            titleEntries { localeCode value },
+            identifier
+            questions { titleEntries { localeCode value } }
+            video { titleEntries { localeCode value }, descriptionEntries { localeCode value }, title, description, htmlCode }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"thematicId": thematic_id})
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateThematic': {
+            u'thematic': {
+                u'titleEntries': [
+                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"},
+                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                ],
+                u'identifier': u'survey',
+                u'questions': [
+                    {u'titleEntries': [
+                        {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
+                    ]},
+                ],
+                u'video': None
+    }}}
+
+
+def test_update_thematic_add_question(graphql_request, thematic_and_question):
+    # This test add a new question and change the questions order
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation secondMutation {
+    updateThematic(
+        id: "%s",
+        titleEntries:[
+            {value:"Understanding the dynamics and issues", localeCode:"en"},
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"}
+        ],
+        questions:[
+            {titleEntries:[
+                {value:"Seconde question mais en premier !", localeCode:"fr"}
+            ]},
+            {id: "%s",
+             titleEntries:[
+                {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
+            ]},
+        ],
+        identifier:"survey",
+    ) {
+        thematic {
+            titleEntries { localeCode value },
+            identifier
+            questions { titleEntries { localeCode value } }
+        }
+    }
+}
+""" % (thematic_id, first_question_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateThematic': {
+            u'thematic': {
+                u'titleEntries': [
+                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"},
+                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                ],
+                u'identifier': u'survey',
+                u'questions': [
+                    {u'titleEntries': [
+                        {u'value': u"Seconde question mais en premier !", u'localeCode': u"fr"}
+                    ]},
+                    {u'titleEntries': [
+                        {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
+                    ]},
                 ]
     }}}
 
@@ -648,3 +832,106 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals):
                                 {u'node': {u'body': u'une proposition 6'}},
                                 {u'node': {u'body': u'une proposition 5'}}]},
                 }}
+
+def test_get_thematics_order(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { title, order } }',
+        context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'thematics': [
+            {u'order': 1.0, u'title': u'Understanding the dynamics and issues'},
+            {u'order': 2.0, u'title': u'AI revolution'}
+        ]
+    }
+
+def test_thematics_change_order(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+    thematic_id, _ = thematic_with_video_and_question
+    res = schema.execute(u"""
+mutation myMutation($thematicId:ID!, $order:Float!) {
+    updateThematic(
+        id:$thematicId,
+        order:$order
+    ) {
+        thematic {
+            order
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"thematicId": thematic_id,
+                                                     "order": 3.0})
+
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { title, order } }',
+        context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'thematics': [
+            {u'order': 2.0, u'title': u'AI revolution'},
+            {u'order': 3.0, u'title': u'Understanding the dynamics and issues'}
+        ]
+    }
+
+def test_insert_thematic_between_two_thematics(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+    res = schema.execute(u"""
+mutation myMutation {
+    createThematic(
+        titleEntries:[
+            {value:"AI for the common good", localeCode:"en"}
+        ],
+        identifier:"survey",
+        order: 1.5
+    ) {
+        thematic {
+            order
+        }
+    }
+}
+""", context_value=graphql_request)
+
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { title, order } }',
+        context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'thematics': [
+            {u'order': 1.0, u'title': u'Understanding the dynamics and issues'},
+            {u'order': 1.5, u'title': u'AI for the common good'},
+            {u'order': 2.0, u'title': u'AI revolution'}
+        ]
+    }
+
+def test_graphql_get_ideas(discussion, graphql_request, subidea_1_1_1):
+    res = schema.execute(
+        u"""query {
+            ideas {
+                edges {
+                    node {
+                        ... on Idea {
+                            id
+                            shortTitle
+                            numPosts
+                            numContributors
+                            parentId
+                            order
+                            posts(first:10) {
+                                edges {
+                                    node {
+                                        ... on PropositionPost { subject body } } } } } } } } }
+        """, context_value=graphql_request)
+    assert len(res.data['ideas']['edges']) == 4
+    root_idea = res.data['ideas']['edges'][0]['node']
+    first_idea = res.data['ideas']['edges'][1]['node']
+    second_idea = res.data['ideas']['edges'][2]['node']
+    third_idea = res.data['ideas']['edges'][3]['node']
+    assert root_idea['shortTitle'] is None
+    assert root_idea['parentId'] is None
+    assert root_idea['order'] is None
+    assert first_idea['shortTitle'] == u'Favor economic growth'
+    assert first_idea['parentId'] == root_idea['id']
+    assert first_idea['order'] == 0.0
+    assert second_idea['shortTitle'] == u'Lower taxes'
+    assert second_idea['parentId'] == first_idea['id']
+    assert second_idea['order'] == 0.0
+    assert third_idea['shortTitle'] == u'Lower government revenue'
+    assert third_idea['parentId'] == second_idea['id']
+    assert third_idea['order'] == 0.0
+    assert len(res.errors) == 0
