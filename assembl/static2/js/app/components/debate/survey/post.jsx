@@ -1,8 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { graphql, compose } from 'react-apollo';
-import gql from 'graphql-tag';
+import { compose, gql, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';

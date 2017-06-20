@@ -1,4 +1,4 @@
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from 'react-apollo';
 import { createNetworkInterface } from 'apollo-upload-client';
 import { getDiscussionSlug } from './utils/globalFunctions';
 import { getFullPath } from './utils/routeMap';

@@ -1,7 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { gql, graphql } from 'react-apollo';
 import Loader from '../../common/loader';
 
 class PostCreator extends React.Component {

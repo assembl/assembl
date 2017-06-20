@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { graphql, withApollo, compose } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 

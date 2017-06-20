@@ -1,8 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { gql, graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
