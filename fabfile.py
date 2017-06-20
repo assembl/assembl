@@ -162,9 +162,12 @@ def create_local_ini():
             local_ini_path, local_ini_path, int(time())))
 
     if env.host_string == 'localhost':
-        # The easy case
+        # The easy case: create a local.ini locally.
         venvcmd("python assembl/scripts/ini_files.py compose -o local.ini " + env.rcfile)
     else:
+        # Create a local.ini file on the remote server
+        # without disturbing local random/local.ini files.
+
         # get placeholder filenames
         with NamedTemporaryFile(delete=False) as f:
             random_file_name = f.name
@@ -200,7 +203,11 @@ def get_random_templates():
 @task
 def migrate_local_ini():
     """Generate a .rc file to match the existing local.ini file.
-    (requires a base .rc file)"""
+    (requires a base .rc file)
+
+    This should be used only once,
+    to migrate from a hand-crafted local.ini to the new generated
+    local.ini system."""
     random_ini_path = os.path.join(env.projectpath, env.random_file)
     local_ini_path = os.path.join(env.projectpath, 'local.ini')
     dest_path = env.rcfile + '.' + int(time())
