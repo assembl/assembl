@@ -4,6 +4,7 @@ from random import sample as random_sample
 
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm import joinedload_all, undefer
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
@@ -59,17 +60,6 @@ class SecureObjectType(object):
 # manually.
 
 
-def get_entries(langstring):
-    # langstring.entries is a backref, it doesn't get updated until the commit.
-    # Even with db.flush(), new entries doesn't show up or a specific entry show up
-    # several times... so we do the query instead of using langstring.entries
-    results = models.LangStringEntry.query.join(
-            models.LangStringEntry.langstring
-        ).filter(models.LangStringEntry.tombstone_date == None
-        ).filter(models.LangString.id == langstring.id).all()
-    return sorted(results, key=lambda e: e.locale_code)
-
-
 def resolve_langstring(langstring, locale_code):
     """If locale_code is None, return the best lang based on user prefs,
     otherwise respect the locale_code and return the right translation or None.
@@ -77,7 +67,7 @@ def resolve_langstring(langstring, locale_code):
     if langstring is None:
         return None
 
-    entries = get_entries(langstring)
+    entries = langstring.entries
     if not entries:
         return None
 
@@ -94,7 +84,7 @@ def resolve_langstring_entries(obj, attr):
         return []
 
     entries = []
-    for entry in get_entries(langstring):
+    for entry in sorted(langstring.entries, key=lambda e: e.locale_code):
         entries.append(
             LangStringEntry(
                 locale_code=entry.locale_code,
@@ -138,7 +128,7 @@ def update_langstring_from_input_entries(obj, attr, entries):
         return
 
     current_title_entries_by_locale_code = {
-        e.locale_code: e for e in get_entries(langstring)}
+        e.locale_code: e for e in langstring.entries}
     if entries is not None:
         # if we have an empty list, remove all existing entries
         if len(entries) == 0:
@@ -163,7 +153,7 @@ def update_langstring_from_input_entries(obj, attr, entries):
                         locale_id=locale_id
                     )
                 )
-    # need to flush or get_entries(langstring) will not give the new entries
+    langstring.db.expire(langstring, ['entries'])
     langstring.db.flush()
 
 
@@ -209,6 +199,11 @@ class SentimentCounts(graphene.ObjectType):
     more_info = graphene.Int()
 
 
+class IdeaContentLink(graphene.ObjectType):
+    idea_id = graphene.ID(required=True)
+    type = graphene.String(required=True)
+
+
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
@@ -220,6 +215,8 @@ class PostInterface(SQLAlchemyInterface):
     body = graphene.String(lang=graphene.String())
     sentiment_counts = graphene.Field(SentimentCounts)
     my_sentiment = graphene.Field(type=SentimentTypes)
+    indirect_idea_content_links = graphene.List(IdeaContentLink)
+    parent_id = graphene.ID()
 
     def resolve_subject(self, args, context, info):
         subject = resolve_langstring(self.get_subject(), args.get('lang'))
@@ -244,6 +241,19 @@ class PostInterface(SQLAlchemyInterface):
             return None
 
         return my_sentiment.name.upper()
+
+    def resolve_indirect_idea_content_links(self, args, context, info):
+        links = [(models.Idea.get_database_id(link['idIdea']), link['@type'])
+                    for link in self.indirect_idea_content_links_with_cache()]
+        return [IdeaContentLink(idea_id=Node.to_global_id('Idea', idea_id),
+                                type=type)
+                for idea_id, type in links]
+
+    def resolve_parent_id(self, args, context, info):
+        if self.parent_id is None:
+            return None
+
+        return Node.to_global_id('Post', self.parent_id)
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -305,11 +315,18 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', 'short_title', )
 
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    description = graphene.String(lang=graphene.String())
+    description_entries = graphene.List(LangStringEntry)
+    children = graphene.List(lambda: Idea)
+    img_url = graphene.String()
+    order = graphene.Float()
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
-    order = graphene.Float()
     parent_id = graphene.ID()
     posts = SQLAlchemyConnectionField(PostConnection)
+    contributors = graphene.List(AgentProfile)
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -336,6 +353,31 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         # return isinstance(root, cls._meta.model)  # this was the original code
         return type(root) == cls._meta.model or type(root) == models.RootIdea
 
+    def resolve_title(self, args, context, info):
+        title = resolve_langstring(self.title, args.get('lang'))
+        # If the idea was created from the old api or v1 interface, we don't
+        # have title, return short_title.
+        if title is None:
+            return self.short_title
+
+        return title
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
+    def resolve_description(self, args, context, info):
+        return resolve_langstring(self.description, args.get('lang'))
+
+    def resolve_description_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'description')
+
+    def resolve_children(self, args, context, info):
+        return self.get_children()
+
+    def resolve_img_url(self, args, context, info):
+        if self.attachments:
+            return self.attachments[0].external_url
+
     def resolve_order(self, args, context, info):
         return self.get_order_from_first_parent()
 
@@ -347,17 +389,31 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         return Node.to_global_id('Idea', parents[0].id)
 
     def resolve_posts(self, args, context, info):
-        connection_type = info.return_type.graphene_type  # this is PostConnection
-        model = connection_type._meta.node._meta.model  # this is models.PostUnion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         related = self.get_related_posts_query(True)
         # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
-        query = model.query.join(
-            related, model.id == related.c.post_id
-            ).filter(model.publication_state == models.PublicationStates.PUBLISHED
-            ).order_by(desc(model.creation_date), model.id)
+        Post = models.Post
+        query = Post.query.join(
+            related, Post.id == related.c.post_id
+            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
+            ).order_by(desc(Post.creation_date), Post.id
+            ).options(
+                joinedload_all(Post.creator),
+                undefer(Post.idea_content_links_above_post)
+            )
+        if len(discussion.discussion_locales) > 1:
+            query = query.options(*models.Content.subqueryload_options())
+        else:
+            query = query.options(*models.Content.joinedload_options())
 
         # pagination is done after that, no need to do it ourself
         return query
+
+    def resolve_contributors(self, args, context, info):
+        contributor_ids = [cid for (cid,) in self.get_contributors_query()]
+        contributors = [models.AgentProfile.get(cid) for cid in contributor_ids]
+        return contributors
 
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
@@ -378,9 +434,10 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'title')
 
     def resolve_posts(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         random = args.get('random', False)
-        connection_type = info.return_type.graphene_type  # this is PostConnection
-        model = connection_type._meta.node._meta.model  # this is models.Post
+        Post = models.Post
         related = self.get_related_posts_query(True)
         # If random is True returns 10 posts, the first one is the latest post created by the user,
         # then the remaining ones are in random order.
@@ -390,14 +447,14 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             if user_id is None:
                 first_post = None
             else:
-                first_post = model.query.join(
-                    related, model.id == related.c.post_id
-                    ).filter(model.creator_id == user_id
-                    ).order_by(desc(model.creation_date), model.id).first()
+                first_post = Post.query.join(
+                    related, Post.id == related.c.post_id
+                    ).filter(Post.creator_id == user_id
+                    ).order_by(desc(Post.creation_date), Post.id).first()
 
-            query = model.default_db.query(model.id).join(
-                related, model.id == related.c.post_id
-                ).filter(model.publication_state == models.PublicationStates.PUBLISHED)
+            query = Post.default_db.query(Post.id).join(
+                related, Post.id == related.c.post_id
+                ).filter(Post.publication_state == models.PublicationStates.PUBLISHED)
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
             limit = args.get('first', 10)
@@ -408,16 +465,35 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
             random_posts_ids = random_sample(
                 post_ids, min(len(post_ids), limit))
-            query = model.query.filter(model.id.in_(random_posts_ids)).all()
+            query = Post.query.filter(Post.id.in_(random_posts_ids)
+                ).options(
+                    joinedload_all(Post.creator),
+                )
+            if len(discussion.discussion_locales) > 1:
+                query = query.options(
+                    models.LangString.subqueryload_option(Post.body))
+            else:
+                query = query.options(
+                    models.LangString.joinedload_option(Post.body))
+
             if first_post is not None:
-                query = [first_post] + query
+                query = [first_post] + query.all()
 
         else:
             # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
-            query = model.query.join(
-                related, model.id == related.c.post_id
-                ).filter(model.publication_state == models.PublicationStates.PUBLISHED
-                ).order_by(desc(model.creation_date), model.id)
+            query = Post.query.join(
+                related, Post.id == related.c.post_id
+                ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
+                ).order_by(desc(Post.creation_date), Post.id
+                ).options(
+                    joinedload_all(Post.creator),
+                )
+            if len(discussion.discussion_locales) > 1:
+                query = query.options(
+                    models.LangString.subqueryload_option(Post.body))
+            else:
+                query = query.options(
+                    models.LangString.joinedload_option(Post.body))
 
         # pagination is done after that, no need to do it ourself
         return query
@@ -483,13 +559,17 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
 class Query(graphene.ObjectType):
     node = Node.Field()
     posts = SQLAlchemyConnectionField(PostConnection, idea_id=graphene.ID())
-    ideas = SQLAlchemyConnectionField(Idea)
+    root_idea = graphene.Field(Idea)
+    ideas = graphene.List(Idea)
     thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
-    # agent_profiles = SQLAlchemyConnectionField(AgentProfile)
+
+    def resolve_root_idea(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.root_idea
 
     def resolve_ideas(self, args, context, info):
-        connection_type = info.return_type.graphene_type  # this is IdeaConnection
-        model = connection_type._meta.node._meta.model  # this is models.Idea
+        model = models.Idea
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -498,13 +578,11 @@ class Query(graphene.ObjectType):
             root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
             ).filter(model.hidden == False).order_by(model.id)
-        # pagination is done after that, no need to do it ourself
         return query
 
     def resolve_posts(self, args, context, info):
-        connection_type = info.return_type.graphene_type  # this is PostConnection
-        model = connection_type._meta.node._meta.model  # this is models.PostUnion
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         idea_id = args.get('idea_id', None)
         if idea_id is not None:
             id_ = int(Node.from_global_id(idea_id)[1])
@@ -515,16 +593,26 @@ class Query(graphene.ObjectType):
             discussion = models.Discussion.get(discussion_id)
             idea = discussion.root_idea
 
-        query = idea.get_related_posts_query(
-            ).filter(model.publication_state == models.PublicationStates.PUBLISHED
-            ).order_by(desc(model.creation_date), model.id)
+        Post = models.Post
+        related = idea.get_related_posts_query(True)
+        query = Post.query.join(
+            related, Post.id == related.c.post_id
+            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
+            ).order_by(desc(Post.creation_date), Post.id
+            ).options(
+                joinedload_all(Post.creator),
+                undefer(Post.idea_content_links_above_post)
+            )
+        if len(discussion.discussion_locales) > 1:
+            query = query.options(*models.Content.subqueryload_options())
+        else:
+            query = query.options(*models.Content.joinedload_options())
 
         # pagination is done after that, no need to do it ourself
         return query
 
     def resolve_thematics(self, args, context, info):
         identifier = args.get('identifier', None)
-        model = Thematic._meta.model
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         root_thematic = get_root_thematic_for_phase(discussion, identifier)
