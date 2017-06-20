@@ -197,7 +197,7 @@ const Translations = {
       menu: {
         phase: 'Phase %{count} - %{description}'
       },
-      survey: ['Créer les thématiques', 'Renseigner les thématiques', 'Exporter les données'],
+      survey: ['Définir les thématiques', 'Définir les questions', 'Exporter les données'],
       annotation: 'Module à renseigner obligatoirement. Les champs * sont requis.',
       themeNum: 'Thématique %{index}',
       ph: {
@@ -415,7 +415,7 @@ const Translations = {
       menu: {
         phase: 'Phase %{count} - %{description}'
       },
-      survey: ['Create themes', 'Edit themes', 'Export data'],
+      survey: ['Set themes', 'Set questions', 'Export data'],
       annotation: 'Module to be completed. * Fields are required.',
       themeNum: 'Theme %{index}',
       ph: {
