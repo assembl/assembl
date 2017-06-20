@@ -197,7 +197,7 @@ const Translations = {
       menu: {
         phase: 'Phase %{count} - %{description}'
       },
-      survey: ['Définir les thématiques', 'Définir les questions', 'Exporter les données'],
+      survey: ['Renseigner les thématiques', 'Renseigner les questions', 'Exporter les données'],
       annotation: 'Module à renseigner obligatoirement. Les champs * sont requis.',
       themeNum: 'Thématique %{index}',
       ph: {
