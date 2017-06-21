@@ -164,7 +164,11 @@ piwik_host:
     The host of your Sentry installation, if any.
 
 theme_repositories__git-urls:
-    Cf. ``vendor_config.ini.example``
+    Themes for version 1 of Assembl's frontend. Comma separated list of git repositories URLs, typically ``git@github.com:mycompany/assembl-client-themes.git`` .
+    You will have to create a read-only git user, and put its public key on each server where those themes is deployed.
+
+theme2_repositories__git-urls:
+    Themes for version 2 of Assembl's frontend. Comma separated list of git repositories URLs, typically ``git@github.com:mycompany/assembl2-client-themes.git`` . As above otherwise.
 
 uwsgi__uid:
     The UID of the uwsgi user.

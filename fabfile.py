@@ -1834,21 +1834,6 @@ def install_dovecot_vmm():
          " python-crypto libsasl2-modules libsasl2-modules-db sasl2-bin")
 
 
-def get_vendor_config():
-    config = SafeConfigParser()
-    vendor_config_path = normpath(join(
-            env.projectpath, 'vendor_config.ini'))
-    fp = StringIO()
-    with settings(warn_only=True):
-        get_retval = get(vendor_config_path, fp)
-    if get_retval.failed:
-        print yellow('No vendor ini file present at %s, skipping' % vendor_config_path)
-        return config
-    fp.seek(0)  # Yes, this is mandatory
-    config.readfp(fp)
-    return config
-
-
 def update_vendor_themes(frontend_version=1):
     sanitize_env()
     assert frontend_version in (1, 2)
