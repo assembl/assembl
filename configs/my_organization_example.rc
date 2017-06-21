@@ -1,0 +1,19 @@
+# This is an example of what information you would set at an organization-wide level, possibly in a private repository under configs.
+# Individual servers would extend this file.
+_extends=../base_env.rc
+ini_files = production.ini configs/bluenove-server-configs/saml.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
+piwik_host = stats.my_organization.org
+*sentry_host = sentry.my_organization.org
+
+help_url = http://assembl.myorganization.org/guides-and-user-documentation/
+
+# These two repository are used for holding theme information
+theme_repositories__git-urls = git@github.com:myorganization/assembl-client-themes.git
+theme2_repositories__git-urls = git@github.com:myorganization/assembl2-client-themes.git
+
+# Information used to create the SAML certificate
+saml_country = MyCountry_2letter_code
+saml_state = MyState
+saml_locality = MyCity
+saml_org = My Organization name
+saml_email = assembl@myorganization.org
