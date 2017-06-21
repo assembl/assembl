@@ -109,6 +109,7 @@ def sanitize_env():
     env.random_file = env.get('random_file', 'random.ini')
     env.dbdumps_dir = env.get('dbdumps_dir', join(
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
+    env.ini_file = env.get('ini_file', 'local.ini')
 
 
 def load_rcfile_config():
@@ -157,14 +158,15 @@ def listdir(path):
 def create_local_ini():
     """Replace the local.ini file with one composed from the current .rc file"""
     random_ini_path = os.path.join(env.projectpath, env.random_file)
-    local_ini_path = os.path.join(env.projectpath, 'local.ini')
+    local_ini_path = os.path.join(env.projectpath, env.ini_file)
     if exists(local_ini_path):
         run('cp %s %s.%d' % (
             local_ini_path, local_ini_path, int(time())))
 
     if env.host_string == 'localhost':
         # The easy case: create a local.ini locally.
-        venvcmd("python assembl/scripts/ini_files.py compose -o local.ini " + env.rcfile)
+        venvcmd("python assembl/scripts/ini_files.py compose -o %s %s" % (
+            env.ini_file, env.rcfile))
     else:
         # Create a local.ini file on the remote server
         # without disturbing local random/local.ini files.
@@ -216,7 +218,7 @@ def migrate_local_ini():
     to migrate from a hand-crafted local.ini to the new generated
     local.ini system."""
     random_ini_path = os.path.join(env.projectpath, env.random_file)
-    local_ini_path = os.path.join(env.projectpath, 'local.ini')
+    local_ini_path = os.path.join(env.projectpath, env.ini_file)
     dest_path = env.rcfile + '.' + int(time())
 
     if env.host_string == 'localhost':
@@ -1569,7 +1571,7 @@ def docker_compose():
 
 @task
 def reindex_elasticsearch(bg=False):
-    cmd = "assembl-reindex-all-contents local.ini"
+    cmd = "assembl-reindex-all-contents " + env.ini_file
     if bg:
         cmd += "&"
     venvcmd(cmd)
@@ -1616,7 +1618,8 @@ def docker_startup():
 def create_first_admin_user():
     email = env.get("first_admin_email", None)
     assert email, "Please set the first_admin_email in the .rc environment"
-    venvcmd("assembl-add-user -m %s -u admin -n Admin -p admin --bypass-password local.ini" % email)
+    venvcmd("assembl-add-user -m %s -u admin -n Admin -p admin --bypass-password %s" % (
+        email, env.ini_file))
 
 
 @task

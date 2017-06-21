@@ -8,7 +8,9 @@ Assembl is composed of many components, most of which rely on ``.ini`` files. Bu
 
 Because fabric is the root process, we decided that all information would be set in ``.rc`` files, and the ``local.ini`` file would be generated from those files; but we added a layering mechanism to ``.rc`` files, so each file could be said to ``_extend`` another ``.rc`` file. But because the ``.rc`` file format is so simplistic, we also layer ``.ini`` files, in a stack that can be specified in the ``.rc`` files.
 
-Earlier, the fabfile.py would itself contain instance-specific information (as environments) and read some more instance-specific information from the ``local.ini`` file itself. This meant there were multiple sources of truth, and consistency of ``local.ini`` files had to be maintained by hand, with uneven results. Now, the ``.rc`` files will be the single source of truth and all ``.ini`` files, including the ``local.ini`` will be generated from them. The migration from hand-maintained local.ini files to generated local.ini files will be explained further in `Migrating to RC files`_.
+Earlier, the fabfile.py would itself contain instance-specific information (as environments) and read some more instance-specific information from the ``local.ini`` file itself. This meant there were multiple sources of truth, and consistency of ``local.ini`` files had to be maintained by hand, with uneven results. Now, the ``.rc`` files will be the single source of truth and all ``.ini`` files, including the ``local.ini`` will be generated from them. The migration from hand-maintained ``local.ini`` files to generated ``local.ini`` files will be explained further in `Migrating to RC files`_.
+
+The name of the ``local.ini`` file itself is given in the ``.rc`` variable ``ini_file``. This allows a development machine to store its testing configuration in ``testing.ini`` without destroying the local ``local.ini`` file.
 
 The enriched .rc file format
 ----------------------------
@@ -128,7 +130,7 @@ _dbdumps_dir:
     The directory path to the database backup directory, usually ``<projectpath>/assembl_dumps``
 
 _ini_file:
-    The name of the ``local.ini`` file used by pyramid.
+    The name of the ``local.ini`` file used by pyramid. Always ``local.ini`` except for testing.
 
 saml_country:
     The country of your organization, exposed in the saml key.
