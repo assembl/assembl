@@ -4,6 +4,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
 
 import { deleteThematic, updateThematicImgUrl, updateThematicTitle } from '../../../actions/adminActions';
+import FormControlWithLabel from '../../common/formControlWithLabel';
 import ImageUploader from '../../common/imageUploader';
 
 export const DumbThemeCreationForm = ({ imgUrl, index, markAsToDelete, selectedLocale, title, toDelete, updateImgUrl, updateTitle }) => {
@@ -27,9 +28,7 @@ export const DumbThemeCreationForm = ({ imgUrl, index, markAsToDelete, selectedL
       <div className="title">
         <Translate value="administration.themeNum" index={num} />
       </div>
-      <FormGroup>
-        <FormControl type="text" placeholder={ph} value={title} onChange={handleTitleChange} />
-      </FormGroup>
+      <FormControlWithLabel label={ph} onChange={handleTitleChange} type="text" value={title} />
       <FormGroup>
         <ImageUploader imgUrl={imgUrl} handleImageChange={handleImageChange} />
       </FormGroup>

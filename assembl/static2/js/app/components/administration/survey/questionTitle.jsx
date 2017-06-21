@@ -1,19 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormControl, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import { removeQuestion, updateQuestionTitle } from '../../../actions/adminActions';
+import FormControlWithLabel from '../../common/formControlWithLabel';
 
-const QuestionsTitle = ({ titleEntries, remove, selectedLocale, updateTitle }) => {
+const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTitle }) => {
   const titleEntry = titleEntries.find((entry) => {
     return entry.localeCode === selectedLocale;
   });
   const title = titleEntry ? titleEntry.value : '';
+  const label = `Rédaction question ${qIndex + 1}`;
   return (
     <div className="question-section">
-      <FormControl
+      <FormControlWithLabel
         componentClass="textarea"
         className="text-area"
+        label={label}
         value={title}
         onChange={(e) => {
           return updateTitle(e.target.value);
