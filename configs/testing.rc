@@ -53,3 +53,7 @@ web_analytics_piwik_script =
 filter:raven__dsn =
 raven_url =
 handler_sentry__args =
+saml_country = FR
+saml_state = Hauts-de-Seine
+saml_locality = Levallois-Perret
+saml_org = Bluenove
