@@ -1,5 +1,10 @@
 _extends = ./base_env.rc
-pipeline:main__pipeline =  assembl
+_wsginame = dev.wsgi
+_urlhost = localhost
+_uses_apache = False
+_uses_ngnix = False
+_gitbranch = develop
+pipeline:main__pipeline = assembl
 pyramid.default_locale_name = en
 assembl_handle_exceptions = false
 tm.attempts = 2
