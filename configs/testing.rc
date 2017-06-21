@@ -58,3 +58,4 @@ saml_state = Hauts-de-Seine
 saml_locality = Levallois-Perret
 saml_org = Bluenove
 saml_email = testing@assembl.net
+mail.tls = false
