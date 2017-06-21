@@ -104,7 +104,8 @@ def sanitize_env():
     else:
         env.mac = False
     env.projectpath = env.get('projectpath', dirname(__file__))
-    env.venvpath = env.get('venvpath', join(env.projectpath, 'venv'))
+    if not env.get('venvpath', None):
+        env.venvpath = getenv('VIRTUAL_ENV', join(env.projectpath, 'venv'))
     env.random_file = env.get('random_file', 'random.ini')
     env.dbdumps_dir = env.get('dbdumps_dir', join(
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
