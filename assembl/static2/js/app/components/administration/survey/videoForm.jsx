@@ -40,7 +40,6 @@ const VideoForm = ({ description, hasVideo, htmlCode, selectedLocale, title, tog
               }}
             />
             <FormControlWithLabel
-              componentClass="textarea"
               id="video-link"
               type="text"
               label={videoLinkPh}
