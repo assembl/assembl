@@ -78,6 +78,7 @@ class Survey extends React.Component {
                     key={index}
                     questionId={question.id}
                     scrollToQuestion={this.scrollToQuestion}
+                    refetchTheme={this.props.data.refetch}
                   />
                 );
               })}
