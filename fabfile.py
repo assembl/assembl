@@ -168,6 +168,10 @@ def create_local_ini():
         # Create a local.ini file on the remote server
         # without disturbing local random/local.ini files.
 
+        # OK, this is horrid because I need the local venv.
+        local_venv = env.get("local_venv", "./venv")
+        assert os.path.exists(local_venv + "/bin/python"),\
+            "No usable local venv"
         # get placeholder filenames
         with NamedTemporaryFile(delete=False) as f:
             random_file_name = f.name
@@ -180,8 +184,10 @@ def create_local_ini():
                 get(random_ini_path, random_file_name)
             rt = os.path.getmtime(random_file_name)
             # create the local.ini in a temp file
-            venvcmd("python assembl/scripts/ini_files.py compose -o %s -r %s %s" % (
-                local_file_name, random_file_name, env.rcfile))
+            with settings(host_string="localhost", venvpath=local_venv,
+                          user=getuser(), projectpath=os.getcwd()):
+                venvcmd("python assembl/scripts/ini_files.py compose -o %s -r %s %s" % (
+                    local_file_name, random_file_name, env.rcfile))
             # send the random file if changed
             if rt != os.path.getmtime(random_file_name):
                 put(random_file_name, random_ini_path)
@@ -250,7 +256,8 @@ def migrate_local_ini():
                 get(random_ini_path, base_random_file_name)
             get(local_ini_path, local_file_name)
             # ??? should be base_random_file_name
-            with settings(host_string="localhost", venvpath=local_venv):
+            with settings(host_string="localhost", venvpath=local_venv,
+                          user=getuser(), projectpath=os.getcwd()):
                 if not has_random:
                     templates = get_random_templates()
                     venvcmd("python assembl/scripts/ini_files.py combine -o " +
