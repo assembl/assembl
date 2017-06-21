@@ -77,12 +77,13 @@ class Question extends React.Component {
   }
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
-    const { questionId, scrollToQuestion, index } = this.props;
+    const { questionId, scrollToQuestion, index, refetchTheme } = this.props;
     const body = this.state.postBody;
     this.props.mutate({ variables: { ideaId: questionId, body: body } })
     .then(() => {
       scrollToQuestion(true, index + 1);
       displayAlert('success', I18n.t('debate.survey.postSuccess'));
+      refetchTheme();
       this.setState({
         postBody: '',
         showSubmitButton: false,
