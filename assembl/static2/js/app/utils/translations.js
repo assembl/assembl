@@ -181,7 +181,8 @@ const Translations = {
       wait: 'Veuillez patienter'
     },
     error: {
-      reason: 'Désolé, une erreur s\'est produite :'
+      reason: 'Désolé, une erreur s\'est produite :',
+      required: 'Ce champ est obligatoire.'
     },
     notFound: {
       panelTitle: 'Désolé, cette page n\'existe pas'
@@ -399,7 +400,8 @@ const Translations = {
       wait: 'Please wait...'
     },
     error: {
-      reason: 'Sorry, an error occurred:'
+      reason: 'Sorry, an error occurred:',
+      required: 'This field is required.'
     },
     notFound: {
       panelTitle: 'Sorry, this page doesn\'t exist'

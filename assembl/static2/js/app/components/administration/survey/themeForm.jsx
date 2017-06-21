@@ -28,7 +28,7 @@ export const DumbThemeCreationForm = ({ imgUrl, index, markAsToDelete, selectedL
       <div className="title">
         <Translate value="administration.themeNum" index={num} />
       </div>
-      <FormControlWithLabel label={ph} onChange={handleTitleChange} type="text" value={title} />
+      <FormControlWithLabel label={ph} onChange={handleTitleChange} required type="text" value={title} />
       <FormGroup>
         <ImageUploader imgUrl={imgUrl} handleImageChange={handleImageChange} />
       </FormGroup>

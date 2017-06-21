@@ -23,6 +23,7 @@ const VideoForm = ({ description, hasVideo, htmlCode, selectedLocale, title, tog
             <FormControlWithLabel
               id="video-title"
               label={titlePh}
+              required
               type="text"
               value={title}
               onChange={(e) => {
@@ -41,6 +42,7 @@ const VideoForm = ({ description, hasVideo, htmlCode, selectedLocale, title, tog
             />
             <FormControlWithLabel
               id="video-link"
+              required
               type="text"
               label={videoLinkPh}
               value={htmlCode}

@@ -17,6 +17,7 @@ const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTi
         componentClass="textarea"
         className="text-area"
         label={label}
+        required
         value={title}
         onChange={(e) => {
           return updateTitle(e.target.value);

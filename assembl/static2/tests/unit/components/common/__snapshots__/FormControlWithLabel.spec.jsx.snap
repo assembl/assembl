@@ -1,9 +1,10 @@
-exports[`FormControlWithLabel component should render form control with label 1`] = `
+exports[`FormControlWithLabel component should render a form control with label 1`] = `
 <div
   className="form-group">
   <my-class
     className="form-control"
     id="my-input"
+    onBlur={[Function]}
     onChange={[Function]}
     placeholder="Foobar"
     type="text"
@@ -11,7 +12,7 @@ exports[`FormControlWithLabel component should render form control with label 1`
 </div>
 `;
 
-exports[`FormControlWithLabel component should render form control with label with a value 1`] = `
+exports[`FormControlWithLabel component should render a form control with label with a value 1`] = `
 <div
   className="form-group">
   <label
@@ -22,6 +23,7 @@ exports[`FormControlWithLabel component should render form control with label wi
   <my-class
     className="form-control"
     id="my-input"
+    onBlur={[Function]}
     onChange={[Function]}
     placeholder="Foobar"
     type="text"
