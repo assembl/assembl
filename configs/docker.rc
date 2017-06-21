@@ -19,7 +19,7 @@ elasticsearch_host = elasticsearch
 elastic_search_basic_auth = elastic:changeme
 nginx_host = web
 supervisor__autostart_uwsgi = true
-supervisor__autostart_elasticsearch = false
+supervisor__autostart_elasticsearch_server = false
 uwsgi__socket = 0.0.0.0:9000
 uwsgi__processes = 3
 
