@@ -30,7 +30,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--test-settings-file",
         action="store",
-        default='testing.ini',
+        default='local.ini',
         dest="test_settings_file",
         help="Test INI file to be used during testing.")
     parser.addoption(
