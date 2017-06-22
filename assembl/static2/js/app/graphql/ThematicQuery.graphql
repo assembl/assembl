@@ -1,0 +1,28 @@
+query ThematicQuery($id: ID!) {
+  thematic: node(id: $id) {
+    ... on Thematic {
+      titleEntries {
+        localeCode,
+        value
+      },
+      imgUrl,
+      video {
+        titleEntries {
+          localeCode,
+          value
+        },
+        descriptionEntries {
+          localeCode,
+          value
+        },
+        htmlCodex
+      },
+      questions {
+        titleEntries {
+          localeCode,
+          value
+        }
+      }
+    }
+  }
+}

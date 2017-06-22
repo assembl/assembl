@@ -9,7 +9,7 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SaveButton from '../components/administration/saveButton';
-import ThematicsQuery from '../graphql/ThematicsQuery';
+import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 
 class Administration extends React.Component {
   constructor() {
@@ -79,4 +79,10 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(graphql(ThematicsQuery), withLoadingIndicator, connect(null, mapDispatchToProps))(Administration);
+export default compose(
+  graphql(ThematicsQuery, {
+    options: { variables: { identifier: 'survey' } }
+  }),
+  withLoadingIndicator,
+  connect(null, mapDispatchToProps)
+)(Administration);

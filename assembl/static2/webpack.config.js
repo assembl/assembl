@@ -73,6 +73,11 @@ module.exports = {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, 
             loader: 'file'
         },
+        {
+          test: /\.(graphql|gql)$/,
+          exclude: /node_modules/,
+          loader: 'graphql-tag/loader'
+        },
         ]
     },
     resolve:{

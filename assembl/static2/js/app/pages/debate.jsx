@@ -1,12 +1,13 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
 import Timeline from '../components/debate/navigation/timeline';
 import Thumbnails from '../components/debate/navigation/thumbnails';
+import DebateThematicsQuery from '../graphql/DebateThematicsQuery.graphql';
 
 class Debate extends React.Component {
   constructor(props) {
@@ -96,23 +97,7 @@ Debate.propTypes = {
   }).isRequired
 };
 
-const ThematicQuery = gql`
-  query ThematicQuery($lang: String!, $identifier: String!) {
-    thematics(identifier: $identifier) {
-      ... on Thematic {
-        id,
-        identifier,
-        title(lang: $lang),
-        description(lang: $lang),
-        numPosts,
-        numContributors,
-        imgUrl
-      }
-    }
-  }
-`;
-
-const DebateWithData = graphql(ThematicQuery)(Debate);
+const DebateWithData = graphql(DebateThematicsQuery)(Debate);
 
 const mapStateToProps = (state) => {
   return {

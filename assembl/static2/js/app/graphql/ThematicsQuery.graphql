@@ -1,8 +1,5 @@
-import { gql } from 'react-apollo';
-
-const ThematicsQuery = gql`
-{
-  thematics(identifier:"survey") {
+query ThematicsQuery($identifier: String!) {
+  thematics(identifier:$identifier) {
     id,
     titleEntries {
       localeCode,
@@ -28,6 +25,3 @@ const ThematicsQuery = gql`
     }
   }
 }
-`;
-
-export default ThematicsQuery;
