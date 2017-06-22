@@ -43,6 +43,6 @@ export const connectedUserIsAdmin = (permissions) => {
   if (permissions.length === 0) {
     return false;
   }
-  
+
   return permissions.indexOf(Permissions.ADMIN_DISCUSSION) > -1;
 };

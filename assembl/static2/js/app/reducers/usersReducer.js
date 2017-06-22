@@ -33,6 +33,6 @@ export const getPermissionsForConnectedUser = (state) => {
   }
 
   const permissions = state.users.users.connectedUser.permissions[`local:Discussion/${discussionId}`];
-  
+
   return permissions;
 };

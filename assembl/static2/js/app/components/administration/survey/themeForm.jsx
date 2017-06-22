@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Button, FormGroup, Tooltip, OverlayTrigger } from 'react-bootstrap'
+import { Button, FormGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import { deleteThematic, updateThematicImgUrl, updateThematicTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
