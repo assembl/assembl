@@ -70,7 +70,10 @@ assembl/static/css/*.css
 # static2
 /assembl/static2/node_modules/
 /assembl/static2/build/
+/assembl/static2/coverage/
 /assembl/static2/.eslintcache
+/assembl/static2/npm-debug.log
+/assembl/static2/yarn-error.log
 
 # Vagrant
 .bash_profile
