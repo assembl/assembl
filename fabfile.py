@@ -97,7 +97,8 @@ def sanitize_env():
     if not env.get('host_string', None):
         env.host_string = env.hosts[0]
     #Are we on localhost
-    if set(env.hosts) - set(['localhost', '127.0.0.1']) == set():
+    is_local = set(env.hosts) - set(['localhost', '127.0.0.1']) == set()
+    if is_local:
         #WARNING:  This code will run locally, NOT on the remote server,
         # so it's only valid if we are connecting to localhost
         env.mac = system().startswith('Darwin')
@@ -105,7 +106,11 @@ def sanitize_env():
         env.mac = False
     env.projectpath = env.get('projectpath', dirname(__file__))
     if not env.get('venvpath', None):
-        env.venvpath = getenv('VIRTUAL_ENV', join(env.projectpath, 'venv'))
+        if is_local:
+            # Trust VIRTUAL_ENV, important for Jenkins case.
+            env.venvpath = getenv('VIRTUAL_ENV', None)
+        if not env.get('venvpath', None):
+            env.venvpath = join(env.projectpath, 'venv')
     env.random_file = env.get('random_file', 'random.ini')
     env.dbdumps_dir = env.get('dbdumps_dir', join(
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
