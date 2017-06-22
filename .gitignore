@@ -33,11 +33,13 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 /assembl_dumps
 
 # local
+/random.ini
 /local.ini
 /testing.ini
 /local.cfg
 /assembl.db
 /vendor_config.ini
+/configs
 
 # app
 /data/*
