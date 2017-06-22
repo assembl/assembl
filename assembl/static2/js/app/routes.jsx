@@ -12,7 +12,7 @@ import Synthesis from './pages/synthesis';
 import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
-import Thread from './pages/thread';
+import Idea from './pages/idea';
 import TwoColumns from './pages/twoColumns';
 import TokenVote from './pages/tokenVote';
 import Community from './pages/community';
@@ -47,7 +47,7 @@ const DebateChild = (props) => {
   case 'survey':
     return <Survey id={props.id} identifier={props.identifier} />;
   case 'thread':
-    return <Thread id={props.id} identifier={props.identifier} />;
+    return <Idea id={props.id} identifier={props.identifier} />;
   case 'twoColumns':
     return <TwoColumns id={props.id} identifier={props.identifier} />;
   case 'tokenVote':
