@@ -29,15 +29,18 @@ const unauthorizedDebateData = {
 export const fetchDebateData = (debateId) => {
   return function (dispatch) {
     dispatch(loadingDebateData());
-    return getDebateData(debateId).then((debateData) => {
-      dispatch(resolvedFetchDebateData(debateData));
-    }).catch((error) => {
-      const firstError = error[0];
-      if (firstError.status === 401) {
-        dispatch(unauthorizedDebateData);
-      } else {
-        dispatch(failedFetchDebateData(error));
+    return getDebateData(debateId).then(
+      (debateData) => {
+        dispatch(resolvedFetchDebateData(debateData));
+      },
+      (error) => {
+        const firstError = error[0];
+        if (firstError.status === 401) {
+          dispatch(unauthorizedDebateData);
+        } else {
+          dispatch(failedFetchDebateData(error));
+        }
       }
-    });
+    );
   };
 };
