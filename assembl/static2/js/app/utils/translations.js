@@ -217,7 +217,7 @@ const Translations = {
         annotation: 'Vous pouvez exporter l\'ensemble des données du débat en cliquant simplement sur le bouton Exporter',
         link: 'Exporter'
       },
-      step_x_total: 'Etape %{num} sur %{total}',
+      step_x_total: 'Section %{num} sur %{total}',
       saveThemes: 'Sauvegarder',
       successThemeCreation: 'Les thématiques ont été enregistrées avec succès !'
     },
@@ -442,7 +442,7 @@ const Translations = {
         annotation: 'You can export all the debate data by clicking on the Export button',
         link: 'Export'
       },
-      step_x_total: 'Step %{num} on %{total}',
+      step_x_total: 'Section %{num} on %{total}',
       saveThemes: 'Save',
       successThemeCreation: 'Themes have been saved with success!'
     },
