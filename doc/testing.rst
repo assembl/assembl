@@ -270,7 +270,7 @@ Assembl uses WebTest_ to conduct it's integration testing of a Pyramid applicati
 Authentication Token From Email
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is a simple tutorial for sections that are not documented well.In order to test authentication tokens sent
+This is a simple tutorial for sections that are not documented well. In order to test authentication tokens sent
 to newly registered users, or users who have forgotten their passwords, the following steps will simplify your job.
 It is hardly an automated process, but it is useful to have this knowledge.
 
