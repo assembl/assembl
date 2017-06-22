@@ -24,7 +24,7 @@ const createVariablesForMutation = (thematic) => {
     identifier: 'survey',
     titleEntries: thematic.titleEntries,
     image: typeof thematic.imgUrl === 'object' ? thematic.imgUrl : null,
-    video: thematic.video === null ? {} : thematic.video,  // pass {} to remove all video fields on server side
+    video: thematic.video === null ? {} : thematic.video, // pass {} to remove all video fields on server side
     questions: thematic.questions
   };
 };
