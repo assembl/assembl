@@ -1,0 +1,9 @@
+query postCreator ($id: ID!) {
+  proposition: node(id: $id) {
+    ... on PropositionPost {
+      creator{
+        name
+      }
+    }
+  }
+}

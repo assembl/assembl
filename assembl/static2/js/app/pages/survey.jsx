@@ -1,17 +1,18 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { gql, graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { browserHistory } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
-import Loader from '../components/common/loader';
+import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Video from '../components/debate/survey/video';
 import Header from '../components/debate/survey/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
+import ThematicQuery from '../graphql/ThematicQuery.graphql';
 
 class Survey extends React.Component {
   constructor(props) {
@@ -53,131 +54,60 @@ class Survey extends React.Component {
     });
   }
   render() {
-    const { loading, theme } = this.props.data;
+    const { thematic: { imgUrl, questions, title, video } } = this.props.data;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
       <div className="survey">
-        {loading && <Loader color="black" />}
-        {theme &&
-          <div className="relative">
-            <Header title={theme.title} imgUrl={theme.imgUrl} />
-            {theme.video &&
-              <Video
-                title={theme.video.title}
-                description={theme.video.description}
-                htmlCode={theme.video.htmlCode}
-              />
-            }
-            <div className="questions">
-              {theme.questions && theme.questions.map((question, index) => {
-                return (
-                  <Question
-                    title={question.title}
-                    index={index + 1}
-                    key={index}
-                    questionId={question.id}
-                    scrollToQuestion={this.scrollToQuestion}
-                    refetchTheme={this.props.data.refetch}
-                  />
-                );
+        <div className="relative">
+          <Header title={title} imgUrl={imgUrl} />
+          {video && <Video title={video.title} description={video.description} htmlCode={video.htmlCode} />}
+          <div className="questions">
+            {questions &&
+              questions.map((question, index) => {
+                return <Question title={question.title} index={index + 1} key={index} questionId={question.id} scrollToQuestion={this.scrollToQuestion} refetchTheme={this.props.data.refetch} />;
               })}
-            </div>
-            {theme.questions &&
-              <Navigation
-                questionsLength={theme.questions.length}
-                questionIndex={this.state.questionIndex}
-                isScroll={this.state.isScroll}
-                scrollToQuestion={this.scrollToQuestion}
-              />
-            }
-            <div className="proposals">
-              <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">
-                <Grid fluid className="background-light">
-                  <div className="max-container">
-                    <div className="question-title">
-                      <div className="title-hyphen">&nbsp;</div>
-                      <h1 className="dark-title-1">
-                        <Translate value="debate.survey.proposalsTitle" />
-                      </h1>
-                    </div>
-                    <div className="center">
-                      {theme.questions && theme.questions.map((question, index) => {
-                        return (
-                          <Proposals
-                            title={question.title}
-                            posts={question.posts.edges}
-                            moreProposals={this.state.moreProposals}
-                            questionIndex={index + 1}
-                            key={index}
-                          />
-                        );
-                      })}
-                      {(!this.state.moreProposals && this.getIfProposals(theme.questions)) &&
-                        <Button className="button-submit button-dark" onClick={this.showMoreProposals}>
-                          <Translate value="debate.survey.moreProposals" />
-                        </Button>
-                      }
-                    </div>
-                    <div className="margin-xl">&nbsp;</div>
-                  </div>
-                </Grid>
-              </section>
-            </div>
           </div>
-        }
+          {questions && <Navigation questionsLength={questions.length} questionIndex={this.state.questionIndex} isScroll={this.state.isScroll} scrollToQuestion={this.scrollToQuestion} />}
+          <div className="proposals">
+            <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">
+              <Grid fluid className="background-light">
+                <div className="max-container">
+                  <div className="question-title">
+                    <div className="title-hyphen">&nbsp;</div>
+                    <h1 className="dark-title-1">
+                      <Translate value="debate.survey.proposalsTitle" />
+                    </h1>
+                  </div>
+                  <div className="center">
+                    {questions &&
+                      questions.map((question, index) => {
+                        return <Proposals title={question.title} posts={question.posts.edges} moreProposals={this.state.moreProposals} questionIndex={index + 1} key={index} />;
+                      })}
+                    {!this.state.moreProposals &&
+                      this.getIfProposals(questions) &&
+                      <Button className="button-submit button-dark" onClick={this.showMoreProposals}>
+                        <Translate value="debate.survey.moreProposals" />
+                      </Button>}
+                  </div>
+                  <div className="margin-xl">&nbsp;</div>
+                </div>
+              </Grid>
+            </section>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-const ThemeQuery = gql`
-  query ThemeQuery($lang: String!, $id: ID!) {
-    theme: node(id: $id) {
-      ... on Thematic {
-        title(lang: $lang),
-        imgUrl,
-        id,
-        video(lang: $lang){
-          title,
-          description,
-          htmlCode
-        }
-        questions {
-          ... on Question {
-            title(lang: $lang),
-            id,
-            posts(first: 10, random: true){
-              edges {
-                node {
-                  ... on PropositionPost {
-                    id,
-                    body,
-                    mySentiment,
-                    sentimentCounts {
-                      like,
-                      disagree
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 Survey.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
-    theme: PropTypes.Array
+    thematic: PropTypes.Array
   }).isRequired
 };
-
-const SurveyWithData = graphql(ThemeQuery)(Survey);
 
 const mapStateToProps = (state) => {
   return {
@@ -186,4 +116,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SurveyWithData);
+export default compose(connect(mapStateToProps), graphql(ThematicQuery), withLoadingIndicator({ color: 'black' }))(Survey);

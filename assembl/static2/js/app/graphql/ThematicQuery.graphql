@@ -1,0 +1,35 @@
+query ThematicQuery($lang: String!, $id: ID!) {
+  thematic: node(id: $id) {
+    ... on Thematic {
+      title(lang: $lang),
+      imgUrl,
+      id,
+      video(lang: $lang){
+        title,
+        description,
+        htmlCode
+      }
+      questions {
+        ... on Question {
+          title(lang: $lang),
+          id,
+          posts(first: 10, random: true){
+            edges {
+              node {
+                ... on PropositionPost {
+                  id,
+                  body,
+                  mySentiment,
+                  sentimentCounts {
+                    like,
+                    disagree
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
