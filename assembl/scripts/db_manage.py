@@ -6,6 +6,7 @@ import subprocess
 import sys
 import os
 import time
+from os.path import join, dirname, exists
 
 from pyramid.paster import get_appsettings
 import transaction
@@ -20,14 +21,6 @@ from ..lib.config import set_config
 from sqlalchemy.orm import sessionmaker
 
 
-init_instructions = [
-    "user_create('%(db_user)s', '%(db_password)s')",
-    "grant select on db..tables to %(db_user)s",
-    "grant select on db..sys_users to %(db_user)s",
-    "grant select on db..sys_cluster to  %(db_user)s",
-    "db..user_set_qualifier ('%(db_user)s', '%(db_schema)s')"]
-
-
 def main():
     parser = argparse.ArgumentParser(description="Manage database bootstrap, backup and update.")
     parser.add_argument("configuration", help="configuration file")
@@ -39,37 +32,36 @@ def main():
     configure_zmq(settings['changes.socket'], False)
     configure_indexing()
     engine = configure_engine(settings, True)
-    admin_engine = engine
-    from assembl.lib.sqla import using_virtuoso
-    if using_virtuoso():
-        admin_engine = create_engine_sqla('virtuoso://dba:dba@VOSU')
-    else:
-        admin_engine = engine
     if args.command == "bootstrap":
-        SessionMaker = sessionmaker(admin_engine)
-        session = SessionMaker()
-        if using_virtuoso() and not session.execute(
-                "select count(*) from db..sys_users"
-                " where u_name = '%(db_user)s'" % settings).scalar():
-            for i in init_instructions:
-                session.execute(i % settings)
-            session.commit()
         db = bootstrap_db(args.configuration)
         bootstrap_db_data(db)
         mark_changed()
         transaction.commit()
 
     elif args.command == "backup":
-        admin_engine.execute("backup_context_clear()")
-        
-        filename_prefix = 'assembl-virtuoso-backup' # % time.strftime('%Y%m%d%H%M%S')
-        #virtuoso will add this suffix to the filename no matter what we do
-        virtuoso_suffix = "1.bp"
-        # Unfortunately adding , 3600, vector('"+os.getcwd()+"') typically
-        # doesn't work as forbidden by default virtuoso configuration.
-        admin_engine.execute("backup_online('"+filename_prefix+"', 524288)")
-        
-        sys.stdout.write(filename_prefix+virtuoso_suffix+'\n')
+        projectpath = dirname(dirname(dirname(__file__)))
+        dbdumps_dir = join(projectpath, "assembl_dumps")
+        if not exists(dbdumps_dir):
+            subprocess.check_call('mkdir -m700 ' + dbdumps_dir)
+
+        filename = 'db_%s.sql.pgdump' % time.strftime('%Y%m%d')
+        file_path = join(dbdumps_dir, filename)
+        pg_dump_path = subprocess.check_output(['which', 'pg_dump']).strip()
+        # Dump
+        subprocess.check_call(
+            [
+                pg_dump_path,
+                '--host=' + settings['db_host'],
+                '-U' + settings['db_user'],
+                '--format=custom',
+                '-b', settings['db_database'],
+                '-f', file_path],
+            env={"PGPASSWORD": settings['db_password']})
+
+        # Make symlink to latest
+        subprocess.check_call([
+            'ln', '-sf', file_path, 'assembl-backup.pgdump'])
+
     elif args.command == "alembic":
         context = MigrationContext.configure(engine.connect())
         db_version = context.get_current_revision()
@@ -83,6 +75,7 @@ def main():
         cmd = ['alembic', '-c', args.configuration] + args.alembic_args
 
         print(subprocess.check_output(cmd))
-            
+
+
 if __name__ == '__main__':
     main()

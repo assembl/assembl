@@ -8,21 +8,22 @@ BORG_PASSPHRASE='' borg init --encryption=keyfile $REPOSITORY || true
 echo "Do not worry if the above command fails, it is expected to fail except the first time it is run"
 
 cd $ASSEMBL_PATH
-#In case the virtuoso file backup fails
-fab -c configs/develop.rc database_dump
+#In case the database backup fails
+$ASSEMBL_PATH/venv/bin/assembl-db-manage local.ini backup
 #Make sure we back up the database dump from the last deployment:
-cp --dereference $ASSEMBL_PATH/assembl-virtuoso-backup.bp $ASSEMBL_PATH/assembl-virtuoso-backup-real.bp
+cp --dereference $ASSEMBL_PATH/assembl-backup.pgdump $ASSEMBL_PATH/assembl-backup-real.pgdump
 NAME="`hostname`-`basename $ASSEMBL_PATH`-`date --iso-8601='minutes'`"
 #set -x
-borg create                             \
-    $REPOSITORY::$NAME      \
-    $ASSEMBL_PATH                               \
-    --exclude $ASSEMBL_PATH/src                             \
-    --exclude $ASSEMBL_PATH/venv                            \
-    --exclude $ASSEMBL_PATH/vendor                            \
-    --exclude $ASSEMBL_PATH/node_modules                            \
-    --exclude $ASSEMBL_PATH/assembl/static/js/bower                            \
-    --exclude $ASSEMBL_PATH/assembl/static/*/bower_components \
+borg create \
+    $REPOSITORY::$NAME \
+    $ASSEMBL_PATH \
+    --exclude $ASSEMBL_PATH/src \
+    --exclude $ASSEMBL_PATH/venv \
+    --exclude $ASSEMBL_PATH/vendor \
+    --exclude $ASSEMBL_PATH/assembl/static/js/bower \
+    --exclude $ASSEMBL_PATH/assembl/static/widget/*/bower_components \
+    --exclude $ASSEMBL_PATH/assembl/static/js/node_modules \
+    --exclude $ASSEMBL_PATH/assembl/static2/node_modules \
     --exclude $ASSEMBL_PATH/.git \
     --exclude '*.sass-cache' \
     --exclude $ASSEMBL_PATH/assembl_dumps \
@@ -31,7 +32,7 @@ borg create                             \
     --stats
 #    --verbose
 
-rm $ASSEMBL_PATH/assembl-virtuoso-backup-real.bp
+rm $ASSEMBL_PATH/assembl-backup-real.pgdump
 # Use the `prune` subcommand to maintain 7 daily, 4 weekly
 # and 6 monthly archives.
 borg prune --info --list --stats $REPOSITORY --keep-daily=7 --keep-weekly=4 --keep-monthly=6
