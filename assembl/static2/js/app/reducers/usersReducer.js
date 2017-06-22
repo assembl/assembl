@@ -16,17 +16,23 @@ const UserReducer = (state = {}, action) => {
 export default UserReducer;
 
 const emptyArray = [];
+const discussionId = getDiscussionId();
+
 export const getPermissionsForConnectedUser = (state) => {
   if (!state.users) {
     return emptyArray;
   }
-  const discussionId = getDiscussionId();
-  if (!state.users.connectedUser) {
+  if (state.users.users === null) {
     return emptyArray;
   }
-  const permissions = state.users.connectedUser.permissions[`local:Discussion/${discussionId}`];
-  if (!permissions) {
+  if (state.users.usersLoading) {
     return emptyArray;
   }
+  if (!state.users.users.connectedUser.permissions) {
+    return emptyArray;
+  }
+
+  const permissions = state.users.users.connectedUser.permissions[`local:Discussion/${discussionId}`];
+
   return permissions;
 };

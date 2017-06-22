@@ -1,10 +1,17 @@
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import SectionTitle from '../sectionTitle';
 import ThemeForm from './themeForm';
 import { createNewThematic } from '../../../actions/adminActions';
+
+const addTooltip = (
+  <Tooltip id="addTooltip">
+    <Translate value="administration.addThematic" />
+  </Tooltip>
+);
 
 const ThemeSection = ({ addThematic, i18n, selectedLocale, thematics }) => {
   return (
@@ -15,7 +22,9 @@ const ThemeSection = ({ addThematic, i18n, selectedLocale, thematics }) => {
           {thematics.map((id, idx) => {
             return <ThemeForm key={id} id={id} index={idx} selectedLocale={selectedLocale} />;
           })}
-          <div onClick={addThematic} className="plus margin-l">+</div>
+          <OverlayTrigger placement="top" overlay={addTooltip}>
+            <div onClick={addThematic} className="plus margin-l">+</div>
+          </OverlayTrigger>
         </form>
       </div>
     </div>

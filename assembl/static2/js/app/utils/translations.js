@@ -75,7 +75,8 @@ const Translations = {
       community: 'communauté',
       connection: 'Connexion',
       profile: 'Profil',
-      logout: 'Se déconnecter'
+      logout: 'Se déconnecter',
+      administration: 'Administration'
     },
     footer: {
       terms: 'Conditions Générales d\'Utilisation',
@@ -180,7 +181,8 @@ const Translations = {
       wait: 'Veuillez patienter'
     },
     error: {
-      reason: 'Désolé, une erreur s\'est produite :'
+      reason: 'Désolé, une erreur s\'est produite :',
+      required: 'Ce champ est obligatoire.'
     },
     notFound: {
       panelTitle: 'Désolé, cette page n\'existe pas'
@@ -189,6 +191,12 @@ const Translations = {
       panelTitle: 'Conditions Générales d\'Utilisations'
     },
     administration: {
+      addThematic: 'Ajouter une thématique',
+      addQuestion: 'Ajouter une question',
+      deleteThematic: 'Supprimer la thématique',
+      deleteQuestion: 'Supprimer la question',
+      changeLanguage: 'Renseigner une autre langue',
+      question_label: 'Question',
       videoModule: 'Option module vidéo',
       thematic: 'Thématique',
       edition: 'Discussion',
@@ -196,20 +204,20 @@ const Translations = {
       menu: {
         phase: 'Phase %{count} - %{description}'
       },
-      survey: ['Créer les thématiques', 'Renseigner les thématiques', 'Exporter les données'],
+      survey: ['Renseigner les thématiques', 'Renseigner les questions', 'Exporter les données'],
       annotation: 'Module à renseigner obligatoirement. Les champs * sont requis.',
       themeNum: 'Thématique %{index}',
       ph: {
-        title: 'Titre*',
+        title: '*Titre',
         quote: 'Citation',
-        videoLink: 'Lien vidéo*'
+        videoLink: '*Lien vidéo'
       },
       surveyExport: {
         title: 'Exporter les données du débat',
         annotation: 'Vous pouvez exporter l\'ensemble des données du débat en cliquant simplement sur le bouton Exporter',
         link: 'Exporter'
       },
-      step_x_total: 'Etape %{num} sur %{total}',
+      step_x_total: 'Section %{num} sur %{total}',
       saveThemes: 'Sauvegarder',
       successThemeCreation: 'Les thématiques ont été enregistrées avec succès !'
     },
@@ -292,7 +300,8 @@ const Translations = {
       community: 'community',
       connection: 'Login',
       profile: 'Profile',
-      logout: 'Logout'
+      logout: 'Logout',
+      administration: 'Administration'
     },
     footer: {
       terms: 'Terms and Conditions',
@@ -397,7 +406,8 @@ const Translations = {
       wait: 'Please wait...'
     },
     error: {
-      reason: 'Sorry, an error occurred:'
+      reason: 'Sorry, an error occurred:',
+      required: 'This field is required.'
     },
     notFound: {
       panelTitle: 'Sorry, this page doesn\'t exist'
@@ -406,6 +416,12 @@ const Translations = {
       panelTitle: 'Terms and Conditions'
     },
     administration: {
+      addThematic: 'Add a theme',
+      addQuestion: 'Add a question',
+      deleteThematic: 'Delete the theme',
+      deleteQuestion: 'Delete the question',
+      changeLanguage: 'Set another language',
+      question_label: 'Question',
       videoModule: 'Video module',
       thematic: 'Theme',
       edition: 'Discussion',
@@ -413,20 +429,20 @@ const Translations = {
       menu: {
         phase: 'Phase %{count} - %{description}'
       },
-      survey: ['Create themes', 'Edit themes', 'Export data'],
+      survey: ['Set themes', 'Set questions', 'Export data'],
       annotation: 'Module to be completed. * Fields are required.',
       themeNum: 'Theme %{index}',
       ph: {
-        title: 'Title*',
+        title: '*Title',
         quote: 'Quote',
-        videoLink: 'Video link*'
+        videoLink: '*Video link'
       },
       surveyExport: {
         title: 'Export the debate data',
         annotation: 'You can export all the debate data by clicking on the Export button',
         link: 'Export'
       },
-      step_x_total: 'Step %{num} on %{total}',
+      step_x_total: 'Section %{num} on %{total}',
       saveThemes: 'Save',
       successThemeCreation: 'Themes have been saved with success!'
     },

@@ -29,6 +29,7 @@ const createVariablesForMutation = (thematic) => {
 
 const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic }) => {  // eslint-disable-line no-shadow
   const saveAction = () => {
+    displayAlert('success', `${I18n.t('loading.wait')}...`);
     const promisesArray = [];
     thematics.forEach((thematic) => {
       if (thematic.isNew && !thematic.toDelete) {
@@ -71,7 +72,7 @@ const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics,
         displayAlert('success', I18n.t('administration.successThemeCreation'));
       })
       .catch((error) => {
-        displayAlert('danger', `${error}`);
+        displayAlert('danger', `${error}`, false, 30000);
       });
   };
 

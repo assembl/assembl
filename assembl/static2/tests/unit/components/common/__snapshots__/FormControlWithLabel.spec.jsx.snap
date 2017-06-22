@@ -1,0 +1,32 @@
+exports[`FormControlWithLabel component should render a form control with label 1`] = `
+<div
+  className="form-group">
+  <my-class
+    className="form-control"
+    id="my-input"
+    onBlur={[Function]}
+    onChange={[Function]}
+    placeholder="Foobar"
+    type="text"
+    value="" />
+</div>
+`;
+
+exports[`FormControlWithLabel component should render a form control with label with a value 1`] = `
+<div
+  className="form-group">
+  <label
+    className="control-label"
+    htmlFor="my-input">
+    Foobar
+  </label>
+  <my-class
+    className="form-control"
+    id="my-input"
+    onBlur={[Function]}
+    onChange={[Function]}
+    placeholder="Foobar"
+    type="text"
+    value="some-value" />
+</div>
+`;

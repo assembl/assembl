@@ -35,7 +35,14 @@ export const expertPermissions = [
   Permissions.ADMIN_DISCUSSION,
   Permissions.SYSADMIN
 ];
-
 export const canUseExpertInterface = (permissions) => {
   return intersection([permissions, expertPermissions]).length > 0;
+};
+
+export const connectedUserIsAdmin = (permissions) => {
+  if (permissions.length === 0) {
+    return false;
+  }
+
+  return permissions.indexOf(Permissions.ADMIN_DISCUSSION) > -1;
 };

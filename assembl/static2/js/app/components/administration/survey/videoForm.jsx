@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { FormGroup, FormControl, Checkbox } from 'react-bootstrap';
+import { FormGroup, Checkbox } from 'react-bootstrap';
 
 import { toggleVideo, updateVideoHtmlCode, updateVideoDescription, updateVideoTitle } from '../../../actions/adminActions';
+import FormControlWithLabel from '../../common/formControlWithLabel';
 
 const VideoForm = ({ description, hasVideo, htmlCode, selectedLocale, title, toggle, updateDescription, updateTitle, updateHtmlCode }) => {
   const titlePh = `${I18n.t('administration.ph.title')} ${selectedLocale.toUpperCase()}`;
@@ -19,37 +20,36 @@ const VideoForm = ({ description, hasVideo, htmlCode, selectedLocale, title, tog
         </FormGroup>
         {hasVideo
           ? <div className="video-form">
-            <FormGroup>
-              <FormControl
-                type="text"
-                placeholder={titlePh}
-                value={title}
-                onChange={(e) => {
-                  return updateTitle(e.target.value);
-                }}
-              />
-            </FormGroup>
-            <FormGroup>
-              <FormControl
-                componentClass="textarea"
-                className="text-area"
-                placeholder={quotePh}
-                value={description}
-                onChange={(e) => {
-                  return updateDescription(e.target.value);
-                }}
-              />
-            </FormGroup>
-            <FormGroup>
-              <FormControl
-                type="text"
-                placeholder={videoLinkPh}
-                value={htmlCode}
-                onChange={(e) => {
-                  return updateHtmlCode(e.target.value);
-                }}
-              />
-            </FormGroup>
+            <FormControlWithLabel
+              id="video-title"
+              label={titlePh}
+              required
+              type="text"
+              value={title}
+              onChange={(e) => {
+                return updateTitle(e.target.value);
+              }}
+            />
+            <FormControlWithLabel
+              componentClass="textarea"
+              id="video-description"
+              type="text-area"
+              label={quotePh}
+              value={description}
+              onChange={(e) => {
+                return updateDescription(e.target.value);
+              }}
+            />
+            <FormControlWithLabel
+              id="video-link"
+              required
+              type="text"
+              label={videoLinkPh}
+              value={htmlCode}
+              onChange={(e) => {
+                return updateHtmlCode(e.target.value);
+              }}
+            />
             <div className="separator" />
           </div>
           : null}

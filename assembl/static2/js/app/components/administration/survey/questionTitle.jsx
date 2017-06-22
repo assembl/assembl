@@ -1,28 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormControl, Button } from 'react-bootstrap';
+import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
 
 import { removeQuestion, updateQuestionTitle } from '../../../actions/adminActions';
+import FormControlWithLabel from '../../common/formControlWithLabel';
 
-const QuestionsTitle = ({ titleEntries, remove, selectedLocale, updateTitle }) => {
+const deleteTooltip = (
+  <Tooltip id="plusTooltip">
+    <Translate value="administration.deleteQuestion" />
+  </Tooltip>
+);
+
+const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTitle }) => {
   const titleEntry = titleEntries.find((entry) => {
     return entry.localeCode === selectedLocale;
   });
   const title = titleEntry ? titleEntry.value : '';
+  const label = `${I18n.t('administration.question_label')} ${qIndex + 1}`;
   return (
     <div className="question-section">
-      <FormControl
+      <FormControlWithLabel
         componentClass="textarea"
         className="text-area"
+        label={label}
+        required
         value={title}
         onChange={(e) => {
           return updateTitle(e.target.value);
         }}
       />
       <div className="pointer right margin-s">
-        <Button onClick={remove}>
-          <span className="assembl-icon-delete grey" />
-        </Button>
+        <OverlayTrigger placement="top" overlay={deleteTooltip}>
+          <Button onClick={remove}>
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </OverlayTrigger>
       </div>
     </div>
   );

@@ -1,10 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Button, FormGroup, FormControl } from 'react-bootstrap';
+import { Button, FormGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import { deleteThematic, updateThematicImgUrl, updateThematicTitle } from '../../../actions/adminActions';
+import FormControlWithLabel from '../../common/formControlWithLabel';
 import ImageUploader from '../../common/imageUploader';
+
+const deleteTooltip = (
+  <Tooltip id="plusTooltip">
+    <Translate value="administration.deleteThematic" />
+  </Tooltip>
+);
 
 export const DumbThemeCreationForm = ({ imgUrl, index, markAsToDelete, selectedLocale, title, toDelete, updateImgUrl, updateTitle }) => {
   if (toDelete) {
@@ -27,16 +34,16 @@ export const DumbThemeCreationForm = ({ imgUrl, index, markAsToDelete, selectedL
       <div className="title">
         <Translate value="administration.themeNum" index={num} />
       </div>
-      <FormGroup>
-        <FormControl type="text" placeholder={ph} value={title} onChange={handleTitleChange} />
-      </FormGroup>
+      <FormControlWithLabel label={ph} onChange={handleTitleChange} required type="text" value={title} />
       <FormGroup>
         <ImageUploader imgUrl={imgUrl} handleImageChange={handleImageChange} />
       </FormGroup>
       <div className="pointer right">
-        <Button onClick={markAsToDelete}>
-          <span className="assembl-icon-delete grey" />
-        </Button>
+        <OverlayTrigger placement="top" overlay={deleteTooltip}>
+          <Button onClick={markAsToDelete}>
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </OverlayTrigger>
       </div>
       <div className="separator" />
     </div>
