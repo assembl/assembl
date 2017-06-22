@@ -2,12 +2,14 @@
 import React from 'react';
 import Loader from './loader';
 
-const withLoadingIndicator = (WrappedComponent) => {
-  return (props) => {
-    if (props.data.loading) {
-      return <Loader />;
-    }
-    return <WrappedComponent {...props} />;
+const withLoadingIndicator = (loaderProps = {}) => {
+  return (WrappedComponent) => {
+    return (props) => {
+      if (props.data.loading) {
+        return <Loader {...loaderProps} />;
+      }
+      return <WrappedComponent {...props} />;
+    };
   };
 };
 

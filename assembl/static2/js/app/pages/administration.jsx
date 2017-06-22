@@ -80,9 +80,9 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default compose(
+  connect(null, mapDispatchToProps),
   graphql(ThematicsQuery, {
     options: { variables: { identifier: 'survey' } }
   }),
-  withLoadingIndicator,
-  connect(null, mapDispatchToProps)
+  withLoadingIndicator()
 )(Administration);
