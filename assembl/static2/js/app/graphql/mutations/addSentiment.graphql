@@ -1,0 +1,14 @@
+mutation addSentiment($type: SentimentTypes!, $postId: ID!) {
+  addSentiment(postId:$postId, type: $type) {
+    post {
+      ... on PropositionPost {
+        id,
+        sentimentCounts {
+          like,
+          disagree
+        }
+        mySentiment
+      }
+    }
+  }
+}

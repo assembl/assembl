@@ -1,0 +1,14 @@
+mutation deleteSentiment($postId: ID!) {
+  deleteSentiment(postId:$postId) {
+    post {
+      ... on PropositionPost {
+        id,
+        sentimentCounts {
+          like,
+          disagree
+        }
+        mySentiment
+      }
+    }
+  }
+}

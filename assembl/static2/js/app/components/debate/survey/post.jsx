@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, gql, graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -12,6 +12,8 @@ import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
+import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
+import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 
 class Post extends React.Component {
   constructor(props) {
@@ -148,45 +150,11 @@ Post.propTypes = {
   deleteSentiment: PropTypes.func.isRequired
 };
 
-const addSentiment = gql`
-  mutation addSentiment($type: SentimentTypes!, $postId: ID!) {
-    addSentiment(postId:$postId, type: $type) {
-      post {
-        ... on PropositionPost {
-          id,
-          sentimentCounts {
-            like,
-            disagree
-          }
-          mySentiment
-        }
-      }
-    }
-  }
-`;
-
-const deleteSentiment = gql`
-  mutation deleteSentiment($postId: ID!) {
-    deleteSentiment(postId:$postId) {
-      post {
-        ... on PropositionPost {
-          id,
-          sentimentCounts {
-            like,
-            disagree
-          }
-          mySentiment
-        }
-      }
-    }
-  }
-`;
-
 const PostWithMutations = compose(
-  graphql(addSentiment, {
+  graphql(addSentimentMutation, {
     name: 'addSentiment'
   }),
-  graphql(deleteSentiment, {
+  graphql(deleteSentimentMutation, {
     name: 'deleteSentiment'
   })
 )(Post);
