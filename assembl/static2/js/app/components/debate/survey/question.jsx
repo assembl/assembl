@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
@@ -8,6 +8,7 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
+import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 
 class Question extends React.Component {
   constructor(props) {
@@ -163,23 +164,6 @@ class Question extends React.Component {
 Question.propTypes = {
   mutate: PropTypes.func.isRequired
 };
-
-const createPostMutation = gql`
-  mutation createPost($ideaId: ID!, $body: String!) {
-    createPost(ideaId:$ideaId, body: $body) {
-      post {
-        ... on PropositionPost {
-          id,
-          body,
-          creator {
-            id,
-            name
-          }
-        }
-      }
-    }
-  }
-`;
 
 const QuestionWithMutation = graphql(createPostMutation)(Question);
 

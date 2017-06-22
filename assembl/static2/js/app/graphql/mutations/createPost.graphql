@@ -1,0 +1,14 @@
+mutation createPost($ideaId: ID!, $body: String!) {
+  createPost(ideaId:$ideaId, body: $body) {
+    post {
+      ... on PropositionPost {
+        id,
+        body,
+        creator {
+          id,
+          name
+        }
+      }
+    }
+  }
+}
