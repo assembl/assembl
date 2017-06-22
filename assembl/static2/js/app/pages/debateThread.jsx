@@ -1,15 +1,14 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { graphql } from 'react-apollo';
+import { gql, graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
 import Timeline from '../components/debate/navigation/timeline';
 import Thumbnails from '../components/debate/navigation/thumbnails';
-import DebateThematicsQuery from '../graphql/DebateThematicsQuery.graphql';
 
-class Debate extends React.Component {
+class DebateThread extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +30,8 @@ class Debate extends React.Component {
     this.setState({ isThumbnailsHidden: !this.state.isThumbnailsHidden });
   }
   render() {
-    const { loading, thematics } = this.props.data;
+    const { loading, rootIdea } = this.props.data;
+    const thematics = rootIdea ? rootIdea.children : [];
     const { identifier, isNavbarHidden } = this.props;
     const isParentRoute = !this.props.params.themeId || false;
     const themeId = this.props.params.themeId || null;
@@ -46,10 +46,7 @@ class Debate extends React.Component {
         {loading && <Loader color="black" />}
         {thematics &&
           <div>
-            <section
-              className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'}
-              id="timeline"
-            >
+            <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'} id="timeline">
               <div className="max-container">
                 {!isParentRoute &&
                   <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
@@ -57,11 +54,20 @@ class Debate extends React.Component {
                     <div className="burger-menu-label">
                       <Translate value="debate.themes" />
                     </div>
-                  </div>}
-                <Timeline showNavigation={!isParentRoute} identifier={identifier} />
+                  </div>
+                }
+                <Timeline
+                  showNavigation={!isParentRoute}
+                  identifier={identifier}
+                />
               </div>
             </section>
-            {isParentRoute && <Themes thematics={thematics} identifier={identifier} />}
+            {isParentRoute &&
+              <Themes
+                thematics={thematics}
+                identifier={identifier}
+              />
+            }
             {!isParentRoute &&
               <section className="debate-section">
                 <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
@@ -74,22 +80,41 @@ class Debate extends React.Component {
                   />
                 </div>
                 {children}
-              </section>}
-          </div>}
+              </section>
+            }
+          </div>
+        }
       </div>
     );
   }
 }
 
-Debate.propTypes = {
+DebateThread.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object,
-    thematics: PropTypes.Array
+    ideas: PropTypes.Array
   }).isRequired
 };
 
-const DebateWithData = graphql(DebateThematicsQuery)(Debate);
+const RootIdeasQuery = gql`
+  query RootIdeasQuery($lang: String!) {
+    rootIdea {
+      children {
+        ... on Idea {
+          id,
+          title(lang: $lang),
+          description(lang: $lang),
+          numPosts,
+          numContributors,
+          imgUrl
+        }
+      }
+    }
+  }
+`;
+
+const DebateWithData = graphql(RootIdeasQuery)(DebateThread);
 
 const mapStateToProps = (state) => {
   return {
