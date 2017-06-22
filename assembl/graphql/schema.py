@@ -390,7 +390,8 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'description')
 
     def resolve_children(self, args, context, info):
-        return self.get_children()
+        # filter on child.hidden to not include the root thematic in the children of root_idea
+        return [child for child in self.get_children() if not child.hidden]
 
     def resolve_parent_id(self, args, context, info):
         parents = self.get_parents()
