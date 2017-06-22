@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
+import { I18n } from 'react-redux-i18n';
 
 import { removeQuestion, updateQuestionTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -10,7 +11,7 @@ const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTi
     return entry.localeCode === selectedLocale;
   });
   const title = titleEntry ? titleEntry.value : '';
-  const label = `Rédaction question ${qIndex + 1}`;
+  const label = `${I18n.t('administration.question_label')} ${qIndex + 1}`;
   return (
     <div className="question-section">
       <FormControlWithLabel

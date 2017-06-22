@@ -191,6 +191,7 @@ const Translations = {
       panelTitle: 'Conditions Générales d\'Utilisations'
     },
     administration: {
+      question_label: 'Question',
       videoModule: 'Option module vidéo',
       thematic: 'Thématique',
       edition: 'Discussion',
@@ -202,9 +203,9 @@ const Translations = {
       annotation: 'Module à renseigner obligatoirement. Les champs * sont requis.',
       themeNum: 'Thématique %{index}',
       ph: {
-        title: 'Titre*',
+        title: '*Titre',
         quote: 'Citation',
-        videoLink: 'Lien vidéo*'
+        videoLink: '*Lien vidéo'
       },
       surveyExport: {
         title: 'Exporter les données du débat',
@@ -410,6 +411,7 @@ const Translations = {
       panelTitle: 'Terms and Conditions'
     },
     administration: {
+      question_label: 'Question',
       videoModule: 'Video module',
       thematic: 'Theme',
       edition: 'Discussion',
@@ -421,9 +423,9 @@ const Translations = {
       annotation: 'Module to be completed. * Fields are required.',
       themeNum: 'Theme %{index}',
       ph: {
-        title: 'Title*',
+        title: '*Title',
         quote: 'Quote',
-        videoLink: 'Video link*'
+        videoLink: '*Video link'
       },
       surveyExport: {
         title: 'Export the debate data',
