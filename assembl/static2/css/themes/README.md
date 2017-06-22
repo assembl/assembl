@@ -6,7 +6,14 @@ Use the default theme as an example (this is the "default" folder).
 
 # Using a git repository to store themes
 
-Copy the `vendor_config.ini.example` file which is at the root of the Assembl repository, to `vendor_config.ini`. Edit its contents to mention the URL or URLs of your theme repositories. These repositories will be fetched when you run assembl's upgrade commands, and will be pointed to the same branch as assembl code if possible.
+In the `configs/{your_environment}.rc` configuration file, set variables `theme_repositories__git-urls` and `theme2_repositories__git-urls` to the git URL of your themes repositories. For example:
+
+```
+theme_repositories__git-urls = git@github.com:myorganization/assembl-client-themes.git
+theme2_repositories__git-urls = git@github.com:myorganization/assembl2-client-themes.git
+```
+
+These repositories will be fetched when you run assembl's upgrade commands, and will be pointed to the same branch as assembl code if possible.
 
 If you use several theme repositories (that is if you use both theme systems of Assembl, or use several repositories for one theme system), and these repositories are stored on github with restricted permissions, authentication to repositories can be tricky. Follow these steps:
 * Create a specific github user, for example "yourorganization-bot"
