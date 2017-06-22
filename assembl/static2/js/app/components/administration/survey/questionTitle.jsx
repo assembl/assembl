@@ -1,10 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
-import { I18n } from 'react-redux-i18n';
+import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
 
 import { removeQuestion, updateQuestionTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
+
+const deleteTooltip = (
+  <Tooltip id="plusTooltip">
+    <Translate value="administration.deleteQuestion" />
+  </Tooltip>
+);
 
 const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTitle }) => {
   const titleEntry = titleEntries.find((entry) => {
@@ -25,9 +31,11 @@ const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTi
         }}
       />
       <div className="pointer right margin-s">
-        <Button onClick={remove}>
-          <span className="assembl-icon-delete grey" />
-        </Button>
+        <OverlayTrigger placement="top" overlay={deleteTooltip}>
+          <Button onClick={remove}>
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </OverlayTrigger>
       </div>
     </div>
   );

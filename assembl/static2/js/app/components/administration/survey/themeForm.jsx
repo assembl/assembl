@@ -1,11 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Button, FormGroup } from 'react-bootstrap';
+import { Button, FormGroup, Tooltip, OverlayTrigger } from 'react-bootstrap'
 
 import { deleteThematic, updateThematicImgUrl, updateThematicTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import ImageUploader from '../../common/imageUploader';
+
+const deleteTooltip = (
+  <Tooltip id="plusTooltip">
+    <Translate value="administration.deleteThematic" />
+  </Tooltip>
+);
 
 export const DumbThemeCreationForm = ({ imgUrl, index, markAsToDelete, selectedLocale, title, toDelete, updateImgUrl, updateTitle }) => {
   if (toDelete) {
@@ -33,9 +39,11 @@ export const DumbThemeCreationForm = ({ imgUrl, index, markAsToDelete, selectedL
         <ImageUploader imgUrl={imgUrl} handleImageChange={handleImageChange} />
       </FormGroup>
       <div className="pointer right">
-        <Button onClick={markAsToDelete}>
-          <span className="assembl-icon-delete grey" />
-        </Button>
+        <OverlayTrigger placement="top" overlay={deleteTooltip}>
+          <Button onClick={markAsToDelete}>
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </OverlayTrigger>
       </div>
       <div className="separator" />
     </div>

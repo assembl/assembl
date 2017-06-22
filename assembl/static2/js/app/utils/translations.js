@@ -191,6 +191,10 @@ const Translations = {
       panelTitle: 'Conditions Générales d\'Utilisations'
     },
     administration: {
+      addThematic: 'Ajouter une thématique',
+      addQuestion: 'Ajouter une question',
+      deleteThematic: 'Supprimer la thématique',
+      deleteQuestion: 'Supprimer la question',
       question_label: 'Question',
       videoModule: 'Option module vidéo',
       thematic: 'Thématique',
@@ -411,6 +415,10 @@ const Translations = {
       panelTitle: 'Terms and Conditions'
     },
     administration: {
+      addThematic: 'Add a theme',
+      addQuestion: 'Add a question',
+      deleteThematic: 'Delete the theme',
+      deleteQuestion: 'Delete the question',
       question_label: 'Question',
       videoModule: 'Video module',
       thematic: 'Theme',

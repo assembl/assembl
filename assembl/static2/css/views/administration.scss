@@ -93,7 +93,6 @@
   .flag-container {
     cursor: pointer;
     margin: 20px 15px 0;
-    transition: all .2s ease-in-out;
 
     &:hover {
       transform: scale(1.2);
@@ -191,6 +190,7 @@
   }
 
   .save-bar {
+    border-bottom: $navbar-border;
     border-top: $navbar-border;
     background-color: $white;
     height: $navbar-height;
