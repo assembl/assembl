@@ -54,7 +54,11 @@ class SignupForm extends React.Component {
   signupHandler(e) {
     e.preventDefault();
     const slug = getDiscussionSlug();
-    if (slug) { this.props.signUp({ ...this.state, discussionSlug: slug }); } else { this.props.signUp(this.state); }
+    if (slug) {
+      this.props.signUp({ ...this.state, discussionSlug: slug });
+    } else {
+      this.props.signUp(this.state);
+    }
   }
 
   render() {
@@ -65,31 +69,14 @@ class SignupForm extends React.Component {
         <div className="box">
           <form className="signup" onSubmit={this.signupHandler}>
             <FormGroup className="margin-m">
-              <FormControl
-                type="text"
-                name="name"
-                required
-                placeholder={I18n.t('login.fullName')}
-                onChange={this.handleInput}
-              />
+              <FormControl type="text" name="name" required placeholder={I18n.t('login.fullName')} onChange={this.handleInput} />
             </FormGroup>
             <FormGroup>
-              <FormControl
-                type="text"
-                name="username"
-                placeholder={I18n.t('login.userName')}
-                onChange={this.handleInput}
-              />
+              <FormControl type="text" name="username" placeholder={I18n.t('login.userName')} onChange={this.handleInput} />
             </FormGroup>
 
             <FormGroup>
-              <FormControl
-                type="email"
-                name="email"
-                required
-                placeholder={I18n.t('login.email')}
-                onChange={this.handleInput}
-              />
+              <FormControl type="email" name="email" required placeholder={I18n.t('login.email')} onChange={this.handleInput} />
             </FormGroup>
             <FormGroup>
               <FormControl
@@ -110,22 +97,14 @@ class SignupForm extends React.Component {
               />
             </FormGroup>
             <FormGroup>
-              <Button
-                type="submit"
-                name="register"
-                value={I18n.t('login.signUp')}
-                className="button-submit button-dark margin-m"
-              >
+              <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark margin-m">
                 <Translate value="login.signUp" />
               </Button>
             </FormGroup>
             <FormGroup>
               <Translate value="login.alreadyAccount" />
               <span>&nbsp;</span>
-              <Link
-                to={slug ?
-                getContextual('login', { slug: slug }) : get('login')}
-              >
+              <Link to={slug ? getContextual('login', { slug: slug }) : get('login')}>
                 <Translate value="login.login" />
               </Link>
             </FormGroup>

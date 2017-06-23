@@ -80,7 +80,7 @@ export default [
         <Route path={routeForRouter('debate')} component={Debate}>
           <Route path={routeForRouter('phase', false, { phase: ':phase', themeId: ':themeId' })} component={DebateChild} />
         </Route>
-        <Route path={routeForRouter('administration')} component={Administration} >
+        <Route path={routeForRouter('administration')} component={Administration}>
           <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />
         </Route>
       </Route>

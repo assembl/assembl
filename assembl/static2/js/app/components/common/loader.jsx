@@ -7,9 +7,7 @@ class Loader extends React.Component {
     return (
       <div className={this.props.textHidden ? 'loader-container-xs' : 'loader-container-xl'}>
         <div className="loader">
-          {!this.props.textHidden &&
-            <Translate value="loading.wait" />
-          }
+          {!this.props.textHidden && <Translate value="loading.wait" />}
           <div className="relative">
             <Ellipsis color={this.props.color} />
           </div>

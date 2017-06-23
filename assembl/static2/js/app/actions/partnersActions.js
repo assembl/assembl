@@ -24,10 +24,12 @@ const failedFetchPartners = (error) => {
 export const fetchPartners = (debateId) => {
   return function (dispatch) {
     dispatch(loadingPartners());
-    return getPartners(debateId).then((partners) => {
-      dispatch(resolvedFetchPartners(partners));
-    }).catch((error) => {
-      dispatch(failedFetchPartners(error));
-    });
+    return getPartners(debateId)
+      .then((partners) => {
+        dispatch(resolvedFetchPartners(partners));
+      })
+      .catch((error) => {
+        dispatch(failedFetchPartners(error));
+      });
   };
 };

@@ -11,7 +11,7 @@ export default function createAppStore(initialState) {
   const store = configureStore(initialState, rootReducer, middlewares);
   if (module.hot) {
     module.hot.accept('../reducers/rootReducer', () => {
-      const nextRootReducer = require('../reducers/rootReducer').default;  // eslint-disable-line
+      const nextRootReducer = require('../reducers/rootReducer').default; // eslint-disable-line
       store.replaceReducer(nextRootReducer);
     });
   }

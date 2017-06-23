@@ -24,8 +24,7 @@ class Video extends React.Component {
                         <div className="description-txt">{description}</div>
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
-                    </Col>
-                  }
+                    </Col>}
                   <Col xs={12} sm={description ? 5 : 6} className={description ? 'video-col' : 'col-centered no-padding'}>
                     <div className="video-container" id="video-vid">
                       <iframe src={htmlCode} frameBorder="0" width="560" height="315" />
@@ -35,8 +34,7 @@ class Video extends React.Component {
                 </Row>
               </div>
             </div>
-          </Grid>
-        }
+          </Grid>}
       </section>
     );
   }

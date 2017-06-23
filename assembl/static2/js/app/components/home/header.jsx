@@ -46,9 +46,7 @@ class Header extends React.Component {
       <section className="home-section header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
-            {debateData.headerLogoUrl ?
-              <img className="header-logo" src={debateData.headerLogoUrl} alt="logo" /> : null
-            }
+            {debateData.headerLogoUrl ? <img className="header-logo" src={debateData.headerLogoUrl} alt="logo" /> : null}
             <div className="max-text-width">
               <h1 className="light-title-1">{debateData.topic}</h1>
               <h4 className="light-title-4 uppercase margin-m">
@@ -57,23 +55,17 @@ class Header extends React.Component {
                 <br />
                 <Translate value="home.from" />
                 <span>&nbsp;</span>
-                {debateData.startDate &&
-                  <Localize value={debateData.startDate} dateFormat="date.format" />
-                }
+                {debateData.startDate && <Localize value={debateData.startDate} dateFormat="date.format" />}
                 <span>&nbsp;</span>
                 <Translate value="home.to" />
                 <span>&nbsp;</span>
-                {debateData.endDate &&
-                  <Localize value={debateData.endDate} dateFormat="date.format" />
-                }
+                {debateData.endDate && <Localize value={debateData.endDate} dateFormat="date.format" />}
               </h4>
               <Button onClick={this.displayPhase} className="button-submit button-light margin-xl">
                 <Translate value="home.accessButton" />
               </Button>
             </div>
-            {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&
-              <Synthesis />
-            }
+            {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 && <Synthesis />}
           </div>
         </Grid>
         <Grid fluid>

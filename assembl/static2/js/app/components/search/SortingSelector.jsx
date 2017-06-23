@@ -1,8 +1,4 @@
-import {
-  SortingSelector,
-  renderComponent
-} from 'searchkit';
-
+import { SortingSelector, renderComponent } from 'searchkit';
 
 class FilteredSortingSelector extends SortingSelector {
   render() {
@@ -23,7 +19,9 @@ class FilteredSortingSelector extends SortingSelector {
       setItems: this.setItems.bind(this),
       toggleItem: this.toggleItem.bind(this),
       disabled: disabled,
-      urlBuilder: (item) => { return this.accessor.urlWithState(item.key); },
+      urlBuilder: (item) => {
+        return this.accessor.urlWithState(item.key);
+      },
       translate: this.translate
     });
   }

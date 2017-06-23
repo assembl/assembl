@@ -28,7 +28,11 @@ class ProfileIcon extends React.Component {
     const slug = { slug: getDiscussionSlug() };
     const connectedUserId = getConnectedUserId();
     const connectedUserName = getConnectedUserName();
-    const dropdownUser = <div className="inline"><span className="assembl-icon-profil grey">&nbsp;</span><span className="username">{connectedUserName}</span></div>;
+    const dropdownUser = (
+      <div className="inline">
+        <span className="assembl-icon-profil grey">&nbsp;</span><span className="username">{connectedUserName}</span>
+      </div>
+    );
     return (
       <div className="right avatar">
         {!connectedUserId &&
@@ -36,16 +40,13 @@ class ProfileIcon extends React.Component {
             <div className="connection">
               <Translate value="navbar.connection" />
             </div>
-          </Link>
-        }
-        {connectedUserId && connectedUserName &&
+          </Link>}
+        {connectedUserId &&
+          connectedUserName &&
           <div>
             <ul className="dropdown-xs">
               <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
-                <MenuItem
-                  href={get('oldProfile', slug)}
-                  target="_blank"
-                >
+                <MenuItem href={get('oldProfile', slug)} target="_blank">
                   <Translate value="navbar.profile" />
                 </MenuItem>
                 <MenuItem href={`${getContextual('oldLogout', slug)}?next=${get('home', slug)}`}>
@@ -53,8 +54,7 @@ class ProfileIcon extends React.Component {
                 </MenuItem>
               </NavDropdown>
             </ul>
-          </div>
-        }
+          </div>}
       </div>
     );
   }

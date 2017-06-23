@@ -1,8 +1,10 @@
+/* eslint max-len: "off" */
 const Translations = {
   fr: {
     'Number of contributions': 'Nombre de messages',
     'Number of users': 'Nombre de contributeurs',
-    redirectToV1: 'Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d\'amélioration, veuillez nous excuser pour le changement d\'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.',
+    redirectToV1:
+      'Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d\'amélioration, veuillez nous excuser pour le changement d\'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.',
     search: {
       reset: {
         clear_all: 'Effacer tous les filtres'
@@ -98,9 +100,11 @@ const Translations = {
       send: 'Envoyer',
       sendPwdConfirm: 'Changement de mot de passe demandé',
       accountCreated: 'Votre compte vient d\'être créé',
-      sendPwdMsg: 'Nous vous avons envoyé un email avec un lien de connexion temporaire. Cliquez sur ce lien pour vous connecter et changer votre mot de passe. Si l\'email n\'est pas arrivé dans votre boîte de réception, veuillez vérifier dans vos spams.',
+      sendPwdMsg:
+        'Nous vous avons envoyé un email avec un lien de connexion temporaire. Cliquez sur ce lien pour vous connecter et changer votre mot de passe. Si l\'email n\'est pas arrivé dans votre boîte de réception, veuillez vérifier dans vos spams.',
       resend: 'Renvoyer l\'email',
-      accountCreatedMsg: 'Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si l\'email n\'est pas arrivé dans votre boîte de réception, veuillez vérifier dans vos spams.',
+      accountCreatedMsg:
+        'Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si l\'email n\'est pas arrivé dans votre boîte de réception, veuillez vérifier dans vos spams.',
       changePassword: 'Changez votre mot de passe',
       incorrectPassword: 'Les mots de passe que vous avez écrits ne correspondent pas',
       somethingWentWrong: 'Nous sommes desolés ! Quelque chose s\'est mal passé. Veuillez ré-essayer',
@@ -111,7 +115,8 @@ const Translations = {
       existingUsername: 'Le nom d’utilisateur que vous avez renseigné existe déjà',
       existingEmail: 'L’e-mail que vous avez renseigné existe déjà',
       emailNotFound: 'L’e-mail que vous avez renseigné n’a pas été trouvé. Veuillez réessayer.',
-      incorrectPasswordLogin: 'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.',
+      incorrectPasswordLogin:
+        'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.',
       newPassword: 'Nouveau mot de passe',
       newPassword2: 'Ré-entrez le nouveau mot de passe'
     },
@@ -227,7 +232,8 @@ const Translations = {
     }
   },
   en: {
-    redirectToV1: 'You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.',
+    redirectToV1:
+      'You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.',
     search: {
       reset: {
         clear_all: 'Clear All Filters'
@@ -323,9 +329,11 @@ const Translations = {
       send: 'Send',
       sendPwdConfirm: 'Password change requested',
       accountCreated: 'Your account has been created',
-      sendPwdMsg: 'We have sent you an email with a temporary connection link. Please use that link to log in and change your password. Make sure to check your spam folder if an email is not in your inbox',
+      sendPwdMsg:
+        'We have sent you an email with a temporary connection link. Please use that link to log in and change your password. Make sure to check your spam folder if an email is not in your inbox',
       resend: 'Resend the email',
-      accountCreatedMsg: 'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.',
+      accountCreatedMsg:
+        'A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.',
       changePassword: 'Change Password',
       incorrectPassword: 'The passwords that you have entered do not match',
       somethingWentWrong: 'We are sorry! Something went terribly wrong. Please try again',

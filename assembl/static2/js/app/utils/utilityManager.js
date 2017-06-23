@@ -1,5 +1,6 @@
 /*
-  Singleton object that will contain the AlertManager, ModalManager which will be used to show/hide/manipulate the alert/modal system
+  Singleton object that will contain the AlertManager, ModalManager which will
+  be used to show/hide/manipulate the alert/modal system
 */
 class UtilityManager {
   setComponent(comp) {

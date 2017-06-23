@@ -24,7 +24,9 @@ class Navbar extends React.Component {
   goToSection(stepNb) {
     const slug = { slug: getDiscussionSlug() };
     const { phaseIdentifier } = this.props;
-    browserHistory.push(`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phaseIdentifier })}?section=${stepNb}`);
+    browserHistory.push(
+      `${get('administration', slug)}${get('adminPhase', { ...slug, phase: phaseIdentifier })}?section=${stepNb}`
+    );
     this.setState({
       currentStep: stepNb
     });
@@ -45,15 +47,23 @@ class Navbar extends React.Component {
         <Col xs={6} md={6}>
           <div className="arrow-container">
             {this.state.currentStep < this.state.totalSteps &&
-            <div onClick={() => { this.goToSection(this.state.currentStep + 1); }} className="arrow right">
-              <span className="assembl-icon-up-open" />
-            </div>
-              }
+              <div
+                onClick={() => {
+                  this.goToSection(this.state.currentStep + 1);
+                }}
+                className="arrow right"
+              >
+                <span className="assembl-icon-up-open" />
+              </div>}
             {this.state.currentStep > 1 &&
-            <div onClick={() => { this.goToSection(this.state.currentStep - 1); }} className="arrow right">
-              <span className="assembl-icon-down-open" />
-            </div>
-              }
+              <div
+                onClick={() => {
+                  this.goToSection(this.state.currentStep - 1);
+                }}
+                className="arrow right"
+              >
+                <span className="assembl-icon-down-open" />
+              </div>}
           </div>
         </Col>
       </div>

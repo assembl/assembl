@@ -46,7 +46,10 @@ class Debate extends React.Component {
         {loading && <Loader color="black" />}
         {thematics &&
           <div>
-            <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'} id="timeline">
+            <section
+              className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'}
+              id="timeline"
+            >
               <div className="max-container">
                 {!isParentRoute &&
                   <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
@@ -54,20 +57,11 @@ class Debate extends React.Component {
                     <div className="burger-menu-label">
                       <Translate value="debate.themes" />
                     </div>
-                  </div>
-                }
-                <Timeline
-                  showNavigation={!isParentRoute}
-                  identifier={identifier}
-                />
+                  </div>}
+                <Timeline showNavigation={!isParentRoute} identifier={identifier} />
               </div>
             </section>
-            {isParentRoute &&
-              <Themes
-                thematics={thematics}
-                identifier={identifier}
-              />
-            }
+            {isParentRoute && <Themes thematics={thematics} identifier={identifier} />}
             {!isParentRoute &&
               <section className="debate-section">
                 <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
@@ -80,10 +74,8 @@ class Debate extends React.Component {
                   />
                 </div>
                 {children}
-              </section>
-            }
-          </div>
-        }
+              </section>}
+          </div>}
       </div>
     );
   }

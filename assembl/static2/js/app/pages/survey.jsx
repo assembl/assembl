@@ -66,10 +66,25 @@ class Survey extends React.Component {
           <div className="questions">
             {questions &&
               questions.map((question, index) => {
-                return <Question title={question.title} index={index + 1} key={index} questionId={question.id} scrollToQuestion={this.scrollToQuestion} refetchTheme={this.props.data.refetch} />;
+                return (
+                  <Question
+                    title={question.title}
+                    index={index + 1}
+                    key={index}
+                    questionId={question.id}
+                    scrollToQuestion={this.scrollToQuestion}
+                    refetchTheme={this.props.data.refetch}
+                  />
+                );
               })}
           </div>
-          {questions && <Navigation questionsLength={questions.length} questionIndex={this.state.questionIndex} isScroll={this.state.isScroll} scrollToQuestion={this.scrollToQuestion} />}
+          {questions &&
+            <Navigation
+              questionsLength={questions.length}
+              questionIndex={this.state.questionIndex}
+              isScroll={this.state.isScroll}
+              scrollToQuestion={this.scrollToQuestion}
+            />}
           <div className="proposals">
             <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">
               <Grid fluid className="background-light">
@@ -83,7 +98,15 @@ class Survey extends React.Component {
                   <div className="center">
                     {questions &&
                       questions.map((question, index) => {
-                        return <Proposals title={question.title} posts={question.posts.edges} moreProposals={this.state.moreProposals} questionIndex={index + 1} key={index} />;
+                        return (
+                          <Proposals
+                            title={question.title}
+                            posts={question.posts.edges}
+                            moreProposals={this.state.moreProposals}
+                            questionIndex={index + 1}
+                            key={index}
+                          />
+                        );
                       })}
                     {!this.state.moreProposals &&
                       this.getIfProposals(questions) &&

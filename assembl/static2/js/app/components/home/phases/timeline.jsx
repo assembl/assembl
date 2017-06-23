@@ -14,16 +14,14 @@ class Timeline extends React.Component {
     const datePosition = 100 - barWidth;
     return (
       <div className="timeline">
-        {currentPhase ?
-          <div>
+        {currentPhase
+          ? <div>
             <div className="timeline-date" style={index === 0 ? { left: `${barWidth}%` } : { right: `${datePosition}%` }}>
               <Localize value={currentDate} dateFormat="date.format" />
             </div>
             <Pointer position={barWidth} />
           </div>
-          :
-          <div className="trsp-pointer">&nbsp;</div>
-        }
+          : <div className="trsp-pointer">&nbsp;</div>}
         <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>
         <div className="bar-bkg">&nbsp;</div>
       </div>

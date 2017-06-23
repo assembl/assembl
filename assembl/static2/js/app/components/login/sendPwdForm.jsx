@@ -20,7 +20,11 @@ class SendPwdForm extends React.Component {
     if (resp && resp.success === false) {
       const firstError = resp.data[0];
       let msg;
-      if (firstError.type === 'nonJson') { msg = I18n.t('login.somethingWentWrong'); } else { msg = firstError.message; }
+      if (firstError.type === 'nonJson') {
+        msg = I18n.t('login.somethingWentWrong');
+      } else {
+        msg = firstError.message;
+      }
       displayAlert('danger', msg, true);
     }
   }
@@ -42,12 +46,20 @@ class SendPwdForm extends React.Component {
             <input type="hidden" name="referer" value="v2" />
             <FormGroup className="margin-m">
               <FormControl
-                type="text" name="identifier" required
-                placeholder={I18n.t('login.username')} onChange={this.handleInput}
+                type="text"
+                name="identifier"
+                required
+                placeholder={I18n.t('login.username')}
+                onChange={this.handleInput}
               />
             </FormGroup>
             <FormGroup>
-              <Button type="submit" name="send_req_password" value={I18n.t('login.send')} className="button-submit button-dark margin-m">
+              <Button
+                type="submit"
+                name="send_req_password"
+                value={I18n.t('login.send')}
+                className="button-submit button-dark margin-m"
+              >
                 <Translate value="login.send" />
               </Button>
             </FormGroup>
@@ -66,7 +78,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    sendRequest: (id, discussionSlug) => { return dispatch(requestPasswordChangeAction(id, discussionSlug)); }
+    sendRequest: (id, discussionSlug) => {
+      return dispatch(requestPasswordChangeAction(id, discussionSlug));
+    }
   };
 };
 

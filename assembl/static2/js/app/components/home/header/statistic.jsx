@@ -14,8 +14,7 @@ class Statistic extends React.Component {
           {postsLoading &&
             <div className="stat-loader">
               <Loader textHidden color="white" />
-            </div>
-          }
+            </div>}
           {postsError && <Error errorMessage={postsError} />}
           {posts &&
             <div className="stat-box border-right">
@@ -26,8 +25,7 @@ class Statistic extends React.Component {
                   <Translate value="home.contribution" />
                 </div>
               </div>
-            </div>
-          }
+            </div>}
         </div>
         <div className="inline">
           {usersLoading && <Loader textHidden color="white" />}
@@ -41,8 +39,7 @@ class Statistic extends React.Component {
                   <Translate value="home.participant" />
                 </div>
               </div>
-            </div>
-          }
+            </div>}
         </div>
       </div>
     );

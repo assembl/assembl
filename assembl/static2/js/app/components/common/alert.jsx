@@ -20,7 +20,7 @@ class AssemblAlert extends React.Component {
   render() {
     const { showAlert, alertStyle, alertMsg, topPosition } = this.state;
     if (this.state.base) {
-      return (<Alert className="hideAlert" />);
+      return <Alert className="hideAlert" />;
     }
     return (
       <Alert

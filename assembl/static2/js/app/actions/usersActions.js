@@ -24,10 +24,12 @@ const failedFetchUsers = (error) => {
 export const fetchUsers = (debateId, connectedUserId) => {
   return function (dispatch) {
     dispatch(loadingUsers());
-    return getUsers(debateId, connectedUserId).then((users) => {
-      dispatch(resolvedFetchUsers(users));
-    }).catch((error) => {
-      dispatch(failedFetchUsers(error));
-    });
+    return getUsers(debateId, connectedUserId)
+      .then((users) => {
+        dispatch(resolvedFetchUsers(users));
+      })
+      .catch((error) => {
+        dispatch(failedFetchUsers(error));
+      });
   };
 };

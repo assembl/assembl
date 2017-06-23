@@ -26,7 +26,11 @@ class TimelineSegment extends React.Component {
     const phaseStatus = getPhaseStatus(debateData.timeline, phaseIdentifier);
     if (isSeveralPhases) {
       if (phaseStatus === 'notStarted') {
-        const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
+        const body = (
+          <div>
+            <Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" />
+          </div>
+        );
         displayModal(null, body, true, null, null, true);
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
@@ -48,29 +52,26 @@ class TimelineSegment extends React.Component {
     }
   }
   render() {
-    const {
-      index,
-      barWidth,
-      identifier,
-      isCurrentPhase,
-      isStepCompleted,
-      phaseIdentifier,
-      title,
-      locale
-    } = this.props;
+    const { index, barWidth, identifier, isCurrentPhase, isStepCompleted, phaseIdentifier, title, locale } = this.props;
     return (
       <div className="minimized-timeline" style={{ marginLeft: `${index * 100}px` }}>
-        {title.entries.map((entry, index2) => { // eslint-disable-line
-          if (locale === entry['@language']) {
+        {title.entries
+          .filter((entry) => {
+            return locale === entry['@language'];
+          })
+          .map((entry, index2) => {
             return (
-              <div onClick={this.displayPhase} className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'} key={index2}>
+              <div
+                onClick={this.displayPhase}
+                className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'}
+                key={index2}
+              >
                 <div className="timeline-link">
-                  { entry.value }
+                  {entry.value}
                 </div>
               </div>
             );
-          }
-        })}
+          })}
         <div className={isStepCompleted || isCurrentPhase ? 'timeline-number active' : 'timeline-number not-active'}>
           {isStepCompleted ? <span className="assembl-icon-checked white" /> : <span>{index + 1}</span>}
         </div>

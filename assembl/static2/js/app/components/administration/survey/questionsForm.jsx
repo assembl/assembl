@@ -19,7 +19,12 @@ const QuestionsForm = ({ addQuestion, selectedLocale, thematicId, questions }) =
         {questions.map((question, index) => {
           return (
             <FormGroup key={index}>
-              <QuestionTitle thematicId={thematicId} qIndex={index} titleEntries={question.titleEntries} selectedLocale={selectedLocale} />
+              <QuestionTitle
+                thematicId={thematicId}
+                qIndex={index}
+                titleEntries={question.titleEntries}
+                selectedLocale={selectedLocale}
+              />
             </FormGroup>
           );
         })}

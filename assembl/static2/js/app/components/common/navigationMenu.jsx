@@ -48,15 +48,17 @@ class NavigationMenu extends React.Component {
           <Translate value="navbar.debate" />
         </Link>
         {isAdmin &&
-          <Link to={get('administration', { slug: debateData.slug })} className="navbar-menu-item pointer" activeClassName="active">
+          <Link
+            to={get('administration', { slug: debateData.slug })}
+            className="navbar-menu-item pointer"
+            activeClassName="active"
+          >
             <Translate value="navbar.administration" />
-          </Link>
-        }
+          </Link>}
         {false &&
           <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
             <Translate value="navbar.community" />
-          </Link>
-        }
+          </Link>}
       </div>
     );
   }

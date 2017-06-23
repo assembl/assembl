@@ -21,15 +21,21 @@ export const signUp = (payload) => {
   }
 
   let route;
-  if (!payload.discussionSlug) { route = '/data/User'; } else { route = `/data/Discussion/${payload.discussionSlug}/all_users`; }
+  if (!payload.discussionSlug) {
+    route = '/data/User';
+  } else {
+    route = `/data/Discussion/${payload.discussionSlug}/all_users`;
+  }
   const newPayload = {
     username: payload.username || null,
     real_name: payload.name,
     password: payload.password1,
-    accounts: [{
-      email: payload.email,
-      '@type': 'EmailAccount'
-    }]
+    accounts: [
+      {
+        email: payload.email,
+        '@type': 'EmailAccount'
+      }
+    ]
   };
 
   return xmlHttpRequest({
@@ -46,7 +52,9 @@ export const changePasswordRequest = (id, discussionSlug) => {
     identifier: id
   };
 
-  if (discussionSlug) { payload.discussion_slug = discussionSlug; }
+  if (discussionSlug) {
+    payload.discussion_slug = discussionSlug;
+  }
 
   return xmlHttpRequest({
     method: 'POST',

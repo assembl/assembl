@@ -10,22 +10,23 @@ class Timeline extends React.Component {
     const { showNavigation, identifier } = this.props;
     return (
       <div className="timeline-container">
-        {debateData.timeline && debateData.timeline.map((phase, index) => {
-          return (
-            <TimelineSegment
-              title={phase.title}
-              locale={locale}
-              index={index}
-              key={index}
-              barWidth={getBarWidth(debateData.timeline[index])}
-              isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
-              showNavigation={showNavigation}
-              identifier={identifier}
-              phaseIdentifier={phase.identifier}
-              startDate={phase.start}
-            />
-          );
-        })}
+        {debateData.timeline &&
+          debateData.timeline.map((phase, index) => {
+            return (
+              <TimelineSegment
+                title={phase.title}
+                locale={locale}
+                index={index}
+                key={index}
+                barWidth={getBarWidth(debateData.timeline[index])}
+                isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
+                showNavigation={showNavigation}
+                identifier={identifier}
+                phaseIdentifier={phase.identifier}
+                startDate={phase.start}
+              />
+            );
+          })}
       </div>
     );
   }

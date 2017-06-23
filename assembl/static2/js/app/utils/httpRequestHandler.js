@@ -1,7 +1,12 @@
 const convertToURLEncodedString = (obj) => {
-  return Object.keys(obj).map((k) => { return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`; }).join('&');
+  return Object.keys(obj)
+    .map((k) => {
+      return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`;
+    })
+    .join('&');
 };
-const getResponseContentType = (xhr) => { // eslint-disable-line no-unused-vars
+const getResponseContentType = (xhr) => {
+  // eslint-disable-line no-unused-vars
   return xhr.getResponseHeader('Content-Type').split(';')[0];
 };
 /*
@@ -47,7 +52,11 @@ export const xmlHttpRequest = (obj) => {
         // Contract agreed upon. If API is to fail, must respond with
         // JSONError type. Front-end respects this type of response only.
         const respType = getResponseContentType(xhr);
-        if (respType === 'application/json') { resp = JSON.parse(xhr.responseText); } else { resp = [{ type: 'nonJson', message: '', status: xhr.status }]; }
+        if (respType === 'application/json') {
+          resp = JSON.parse(xhr.responseText);
+        } else {
+          resp = [{ type: 'nonJson', message: '', status: xhr.status }];
+        }
         reject(resp);
       }
     };

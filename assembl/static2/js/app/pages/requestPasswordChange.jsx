@@ -17,7 +17,7 @@ class RequestPasswordChange extends React.Component {
       <Grid fluid className="login-container">
         <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
-            {pwdSendConfirm ? <SendPwdConfirm /> : <SendPwdForm /> }
+            {pwdSendConfirm ? <SendPwdConfirm /> : <SendPwdForm />}
           </Col>
         </Row>
       </Grid>

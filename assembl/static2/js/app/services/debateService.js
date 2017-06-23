@@ -5,8 +5,12 @@ export const buildDebateData = (debateData, prefs, timeline) => {
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const videoTitle = prefs.extra_json && prefs.extra_json.videoTitle ? prefs.extra_json.videoTitle : null;
   const headerLogoUrl = prefs.extra_json && prefs.extra_json.headerLogoUrl ? prefs.extra_json.headerLogoUrl : null;
-  const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
-  const objectivesBackground = prefs.extra_json && prefs.extra_json.objectivesBackground ? prefs.extra_json.objectivesBackground : null;
+  const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl
+    ? prefs.extra_json.headerBackgroundUrl
+    : null;
+  const objectivesBackground = prefs.extra_json && prefs.extra_json.objectivesBackground
+    ? prefs.extra_json.objectivesBackground
+    : null;
   const twitter = prefs.extra_json && prefs.extra_json.twitter ? prefs.extra_json.twitter : null;
   const chatbot = prefs.extra_json && prefs.extra_json.chatbot ? prefs.extra_json.chatbot : null;
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;

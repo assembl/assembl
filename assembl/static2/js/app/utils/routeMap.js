@@ -45,7 +45,7 @@ const maybePrependSlash = (pre, s) => {
 };
 export const get = (name, args) => {
   const newArgs = args || {};
-  const pre = ('preSlash' in newArgs) ? newArgs.preSlash : true;
+  const pre = 'preSlash' in newArgs ? newArgs.preSlash : true;
   const isCtx = 'ctx' in newArgs ? newArgs.ctx : false;
   const newName = isCtx ? convertToContextualName(name) : name;
   if (!(newName in routes)) {
@@ -71,7 +71,9 @@ export const routeForRouter = (name, isCtx, args) => {
   const newArgs = args || {};
   newArgs.slug = ':slug';
   newArgs.preSlash = newArgs.preSlash ? newArgs.preSlash : false;
-  if (isCtx) { return getContextual(name, newArgs); }
+  if (isCtx) {
+    return getContextual(name, newArgs);
+  }
   return get(name, newArgs);
 };
 export const getCurrentView = () => {

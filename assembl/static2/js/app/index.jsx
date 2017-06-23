@@ -10,7 +10,6 @@ import Routes from './routes';
 
 const store = createAppStore();
 
-
 ReactDOM.render(
   <AppContainer>
     <ApolloProvider store={store} client={client}>
@@ -23,7 +22,7 @@ ReactDOM.render(
 // Hot Module Replacement API
 if (module.hot) {
   module.hot.accept('./routes', () => {
-    const NewRoutes = require('./routes').default;  // eslint-disable-line
+    const NewRoutes = require('./routes').default; // eslint-disable-line
     ReactDOM.render(
       <AppContainer>
         <ApolloProvider store={store} client={client}>

@@ -28,15 +28,18 @@ class Navigation extends React.Component {
     window.addEventListener('scroll', this.displayPagination);
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      questionsLength: nextProps.questionsLength
-    }, () => {
-      this.displayNav();
-      this.displayPagination();
-      if (nextProps.isScroll && nextProps.questionIndex && window.innerWidth >= MIN_WIDTH) {
-        this.scrollToQuestion(nextProps.questionIndex);
+    this.setState(
+      {
+        questionsLength: nextProps.questionsLength
+      },
+      () => {
+        this.displayNav();
+        this.displayPagination();
+        if (nextProps.isScroll && nextProps.questionIndex && window.innerWidth >= MIN_WIDTH) {
+          this.scrollToQuestion(nextProps.questionIndex);
+        }
       }
-    });
+    );
   }
   componentWillUnmount() {
     window.removeEventListener('scroll', this.displayNav);
@@ -101,7 +104,7 @@ class Navigation extends React.Component {
     const windowOffset = window.pageYOffset + window.innerHeight;
     let currentQuestionNumber = 0;
     for (let i = 0; i < this.state.questionsLength; i += 1) {
-      if (windowOffset > (questionsOffset[i] + navbarHeight)) {
+      if (windowOffset > questionsOffset[i] + navbarHeight) {
         currentQuestionNumber = i + 1;
       }
     }
@@ -118,7 +121,7 @@ class Navigation extends React.Component {
       target = document.getElementById(`q${questionIndex}`);
     }
     const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
-    scrollToPosition((targetOffset - 40), 600);
+    scrollToPosition(targetOffset - 40, 600);
     this.props.scrollToQuestion(false);
   }
   render() {
@@ -136,7 +139,11 @@ class Navigation extends React.Component {
                 <Col xs={6} md={6} className="no-padding">
                   <div className="question-numbers">
                     <div className="txt">
-                      <Translate value="debate.survey.question_x_on_total" current={this.state.currentQuestionNumber} total={this.state.questionsLength} />
+                      <Translate
+                        value="debate.survey.question_x_on_total"
+                        current={this.state.currentQuestionNumber}
+                        total={this.state.questionsLength}
+                      />
                     </div>
                     <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>
                     <div className="bkg-bar">&nbsp;</div>
@@ -145,18 +152,21 @@ class Navigation extends React.Component {
                 <Col xs={6} md={6} className="no-padding">
                   <div
                     className="arrow right"
-                    onClick={() => { this.scrollToQuestion(this.state.currentQuestionNumber + 1); }}
+                    onClick={() => {
+                      this.scrollToQuestion(this.state.currentQuestionNumber + 1);
+                    }}
                   >
                     <span className="assembl-icon-down-open" />
                   </div>
                   {this.state.currentQuestionNumber > 1 &&
                     <div
                       className="arrow right"
-                      onClick={() => { this.scrollToQuestion(this.state.currentQuestionNumber - 1); }}
+                      onClick={() => {
+                        this.scrollToQuestion(this.state.currentQuestionNumber - 1);
+                      }}
                     >
                       <span className="assembl-icon-up-open" />
-                    </div>
-                  }
+                    </div>}
                 </Col>
               </Col>
             </div>

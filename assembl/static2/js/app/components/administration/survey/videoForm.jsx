@@ -6,7 +6,17 @@ import { FormGroup, Checkbox } from 'react-bootstrap';
 import { toggleVideo, updateVideoHtmlCode, updateVideoDescription, updateVideoTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
-const VideoForm = ({ description, hasVideo, htmlCode, selectedLocale, title, toggle, updateDescription, updateTitle, updateHtmlCode }) => {
+const VideoForm = ({
+  description,
+  hasVideo,
+  htmlCode,
+  selectedLocale,
+  title,
+  toggle,
+  updateDescription,
+  updateTitle,
+  updateHtmlCode
+}) => {
   const titlePh = `${I18n.t('administration.ph.title')} ${selectedLocale.toUpperCase()}`;
   const quotePh = `${I18n.t('administration.ph.quote')} ${selectedLocale.toUpperCase()}`;
   const videoLinkPh = `${I18n.t('administration.ph.videoLink')} ${selectedLocale.toUpperCase()}`;

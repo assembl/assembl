@@ -18,7 +18,6 @@ and the Search react component is rendered via the onDomRefresh event in
 assembl/static/js/app/views/navBar.js
 */
 
-
 const myCreateStore = () => {
   const store = createStore(RootReducer, applyMiddleware(Thunk));
   const assemblLocale = window.assembl_locale.split('_')[0];
@@ -28,7 +27,6 @@ const myCreateStore = () => {
   store.dispatch(setLocale(userLocale));
   return store;
 };
-
 
 class SearchApp extends React.Component {
   constructor(props) {
@@ -52,15 +50,10 @@ class SearchApp extends React.Component {
 
   render() {
     return (
-      <SearchComponent
-        isExpert={this.state.isExpert}
-        connectedUserId={this.connectedUserId}
-        discussionId={this.discussionId}
-      />
+      <SearchComponent isExpert={this.state.isExpert} connectedUserId={this.connectedUserId} discussionId={this.discussionId} />
     );
   }
 }
-
 
 const store = myCreateStore();
 const renderSearch = () => {

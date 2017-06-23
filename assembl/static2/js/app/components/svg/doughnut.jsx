@@ -12,11 +12,7 @@ class Circle extends React.Component {
     const redOffset = -circumference * red;
     const greenOffset = circumference * green;
     return (
-      <svg
-        className="doughnut"
-        height="10em"
-        width="10em"
-      >
+      <svg className="doughnut" height="10em" width="10em">
         <circle
           className="circle radial-red"
           r={`${radius}em`}

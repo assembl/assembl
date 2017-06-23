@@ -5,7 +5,6 @@ import SignupForm from '../components/login/signupForm';
 import SignUpConfirm from '../components/login/signUpConfirm';
 
 class Signup extends React.Component {
-
   render() {
     let signupConfirm = false;
     // Data has been fetched from the backend
@@ -18,7 +17,7 @@ class Signup extends React.Component {
       <Grid fluid className="login-container">
         <Row className="max-container center">
           <Col xs={12} md={6} className="col-centered">
-            {signupConfirm ? <SignUpConfirm /> : <SignupForm /> }
+            {signupConfirm ? <SignUpConfirm /> : <SignupForm />}
           </Col>
         </Row>
       </Grid>

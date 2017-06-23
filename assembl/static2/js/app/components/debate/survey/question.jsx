@@ -102,7 +102,11 @@ class Question extends React.Component {
       const next = getCurrentView();
       const slug = { slug: this.props.debate.debateData.slug };
       const body = I18n.t('debate.survey.modalBody');
-      const button = { link: `${getContextual('login', slug)}?next=${next}`, label: I18n.t('debate.survey.modalFooter'), internalLink: true };
+      const button = {
+        link: `${getContextual('login', slug)}?next=${next}`,
+        label: I18n.t('debate.survey.modalFooter'),
+        internalLink: true
+      };
       displayModal(null, body, true, null, button, true);
     } else {
       scrollToQuestion(true, index);
@@ -113,7 +117,11 @@ class Question extends React.Component {
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
-      <section className={isPhaseCompleted ? 'hidden' : 'questions-section'} id={`q${index}`} style={this.state.screenWidth >= 768 ? { height: this.state.screenHeight } : { height: '100%' }}>
+      <section
+        className={isPhaseCompleted ? 'hidden' : 'questions-section'}
+        id={`q${index}`}
+        style={this.state.screenWidth >= 768 ? { height: this.state.screenHeight } : { height: '100%' }}
+      >
         <Grid fluid className="background-grey">
           <div className="max-container">
             <div className="question-title">

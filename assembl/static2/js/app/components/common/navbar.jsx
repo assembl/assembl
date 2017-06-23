@@ -60,8 +60,7 @@ class NavBar extends React.Component {
               {connectedUserId &&
                 <Link to={`${debateData.helpUrl}`} target="_blank">
                   <span className="assembl-icon-faq grey">&nbsp;</span>
-                </Link>
-              }
+                </Link>}
               <div className="navbar-language right">
                 <LanguageMenu size="xs" />
               </div>

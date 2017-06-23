@@ -24,10 +24,12 @@ const failedFetchPosts = (error) => {
 export const fetchPosts = (debateId) => {
   return function (dispatch) {
     dispatch(loadingPosts());
-    return getPosts(debateId).then((posts) => {
-      dispatch(resolvedFetchPosts(posts));
-    }).catch((error) => {
-      dispatch(failedFetchPosts(error));
-    });
+    return getPosts(debateId)
+      .then((posts) => {
+        dispatch(resolvedFetchPosts(posts));
+      })
+      .catch((error) => {
+        dispatch(failedFetchPosts(error));
+      });
   };
 };

@@ -24,10 +24,12 @@ const failedFetchSynthesis = (error) => {
 export const fetchSynthesis = (debateId) => {
   return function (dispatch) {
     dispatch(loadingSynthesis());
-    return getSynthesis(debateId).then((synthesis) => {
-      dispatch(resolvedFetchSynthesis(synthesis));
-    }).catch((error) => {
-      dispatch(failedFetchSynthesis(error));
-    });
+    return getSynthesis(debateId)
+      .then((synthesis) => {
+        dispatch(resolvedFetchSynthesis(synthesis));
+      })
+      .catch((error) => {
+        dispatch(failedFetchSynthesis(error));
+      });
   };
 };

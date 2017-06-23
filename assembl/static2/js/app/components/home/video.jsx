@@ -17,7 +17,7 @@ class Video extends React.Component {
     if (debateData.videoUrl && videoTxt) {
       const textHeight = videoTxt.clientHeight;
       const videoHeight = video.clientHeight;
-      if (textHeight > (videoHeight + 5)) this.setState({ isTextHigher: true });
+      if (textHeight > videoHeight + 5) this.setState({ isTextHigher: true });
     }
   }
   render() {
@@ -30,9 +30,7 @@ class Video extends React.Component {
             <div className="title-section">
               <div className="title-hyphen">&nbsp;</div>
               <h1 className="dark-title-1">
-                {debateData.videoTitle ?
-                  debateData.videoTitle[locale] : <Translate value="home.video" />
-                }
+                {debateData.videoTitle ? debateData.videoTitle[locale] : <Translate value="home.video" />}
               </h1>
             </div>
             <div className="content-section">
@@ -41,8 +39,7 @@ class Video extends React.Component {
                   {debateData.videoDescription[locale] &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="text" id="video-txt">{debateData.videoDescription[locale]}</div>
-                    </Col>
-                  }
+                    </Col>}
                   <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                     <div className="video-container" id="video-vid">
                       <iframe src={debateData.videoUrl} frameBorder="0" width="560" height="315" />

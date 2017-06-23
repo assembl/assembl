@@ -18,22 +18,12 @@ class Home extends React.Component {
       <div className="home">
         <Header />
         <Synthesis />
-        {debateData.objectives &&
-          <Objectives />
-        }
-        {(debateData.timeline && debateData.timeline.length > 1) &&
-          <Phases />
-        }
-        {debateData.videoUrl &&
-          <Video />
-        }
-        {debateData.twitter &&
-          <Twitter />
-        }
+        {debateData.objectives && <Objectives />}
+        {debateData.timeline && debateData.timeline.length > 1 && <Phases />}
+        {debateData.videoUrl && <Video />}
+        {debateData.twitter && <Twitter />}
         <Contact />
-        {debateData.chatbot &&
-          <Chatbot chatbot={debateData.chatbot} locale={locale} />
-        }
+        {debateData.chatbot && <Chatbot chatbot={debateData.chatbot} locale={locale} />}
         <Partners />
       </div>
     );

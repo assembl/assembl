@@ -17,7 +17,7 @@ class TopIdea extends React.Component {
           <Translate value={translateKey} />
         </h2>
         {topIdeas.map((idea, index) => {
-          return (<IdeaLink key={index} idea={idea} />);
+          return <IdeaLink key={index} idea={idea} />;
         })}
       </div>
     );

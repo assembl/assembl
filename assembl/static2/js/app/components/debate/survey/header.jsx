@@ -20,8 +20,12 @@ class Header extends React.Component {
       <section className="header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
-            <h1 className="light-title-1">{isPhaseCompleted ? <Translate value="debate.survey.endPhase" closedPhaseName={surveyPhaseName} /> : title}</h1>
-            <Link to={`${get('debate', slug)}`}>{isPhaseCompleted ? <Translate value="debate.survey.goTo" currentPhaseName={currentPhaseName} /> : ''}</Link>
+            <h1 className="light-title-1">
+              {isPhaseCompleted ? <Translate value="debate.survey.endPhase" closedPhaseName={surveyPhaseName} /> : title}
+            </h1>
+            <Link to={`${get('debate', slug)}`}>
+              {isPhaseCompleted ? <Translate value="debate.survey.goTo" currentPhaseName={currentPhaseName} /> : ''}
+            </Link>
           </div>
         </Grid>
         <Grid fluid>

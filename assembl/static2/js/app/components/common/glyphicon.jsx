@@ -8,7 +8,13 @@ class Glyphicon extends React.Component {
     const size = this.props.size;
     const desc = this.props.desc;
     return (
-      <img width={`${size}px`} height={`${size}px`} src={`/static2/img/icons/${color}/${glyph}.svg`} alt={I18n.t(desc)} title={I18n.t(desc)} />
+      <img
+        width={`${size}px`}
+        height={`${size}px`}
+        src={`/static2/img/icons/${color}/${glyph}.svg`}
+        alt={I18n.t(desc)}
+        title={I18n.t(desc)}
+      />
     );
   }
 }

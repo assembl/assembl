@@ -13,7 +13,16 @@ const deleteTooltip = (
   </Tooltip>
 );
 
-export const DumbThemeCreationForm = ({ imgUrl, index, markAsToDelete, selectedLocale, title, toDelete, updateImgUrl, updateTitle }) => {
+export const DumbThemeCreationForm = ({
+  imgUrl,
+  index,
+  markAsToDelete,
+  selectedLocale,
+  title,
+  toDelete,
+  updateImgUrl,
+  updateTitle
+}) => {
   if (toDelete) {
     return null;
   }

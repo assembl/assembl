@@ -4,14 +4,7 @@ import Statistic from './statistic';
 
 class Thematic extends React.Component {
   render() {
-    const {
-      imgUrl,
-      link,
-      title,
-      description,
-      numPosts,
-      numContributors
-    } = this.props;
+    const { imgUrl, link, title, description, numPosts, numContributors } = this.props;
     return (
       <div className="illustration illustration-box">
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>

@@ -74,7 +74,7 @@ export const getNumberOfDays = (date1, date2) => {
 };
 
 export const calculatePercentage = (value1, value2) => {
-  return Math.round(((value1 * 100) / value2) * 100) / 100;
+  return Math.round(value1 * 100 / value2 * 100) / 100;
 };
 
 /*
@@ -84,7 +84,6 @@ export const calculatePercentage = (value1, value2) => {
 export const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
-
 
 export const getDocumentScrollTop = () => {
   return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -109,13 +108,16 @@ export const scrollToPosition = (to, duration) => {
   let currPos = 0;
   const start = startPosition;
   scrollInterval = setInterval(() => {
-    if ((Math.round(getDocumentScrollTop() / 10) * 10) === (Math.round(to / 10) * 10) || (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if (
+      Math.round(getDocumentScrollTop() / 10) * 10 === Math.round(to / 10) * 10 ||
+      window.innerHeight + window.scrollY >= document.body.offsetHeight
+    ) {
       clearInterval(scrollInterval);
       document.body.scrollTop = to;
       document.documentElement.scrollTop = to;
     } else {
       count += 1;
-      currPos = start + (diff * (0.5 - (0.5 * Math.cos(count * scrollStep))));
+      currPos = start + diff * (0.5 - 0.5 * Math.cos(count * scrollStep));
       document.body.scrollTop = currPos; // Chrome/FF
       document.documentElement.scrollTop = currPos; // Firefox
     }

@@ -26,7 +26,11 @@ class Step extends React.Component {
     const phaseStatus = getPhaseStatus(debateData.timeline, identifier);
     if (isSeveralPhases) {
       if (phaseStatus === 'notStarted') {
-        const body = <div><Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" /></div>;
+        const body = (
+          <div>
+            <Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" />
+          </div>
+        );
         displayModal(null, body, true, null, null, true);
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
@@ -59,24 +63,18 @@ class Step extends React.Component {
           {title &&
             <h3 className="light-title-3">
               {title.entries.map((entry, index2) => {
-                return (
-                  <span key={index2}>{locale === entry['@language'] ? entry.value : ''}</span>
-                );
+                return <span key={index2}>{locale === entry['@language'] ? entry.value : ''}</span>;
               })}
-            </h3>
-          }
+            </h3>}
           <h4 className="light-title-4">
             <Localize value={startDate} dateFormat="date.format2" />
           </h4>
           {description &&
             <div className="text-box">
               {description.entries.map((entry, index3) => {
-                return (
-                  <span key={index3}>{locale === entry['@language'] ? entry.value : ''}</span>
-                );
+                return <span key={index3}>{locale === entry['@language'] ? entry.value : ''}</span>;
               })}
-            </div>
-          }
+            </div>}
         </div>
         <div className="color-box">&nbsp;</div>
         <div className="box-hyphen">&nbsp;</div>

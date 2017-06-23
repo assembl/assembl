@@ -16,11 +16,12 @@ class SendPwdConfirm extends React.Component {
             <FormGroup>
               <Translate value="login.sendPwdMsg" />
             </FormGroup>
-            {false && <FormGroup>
-              <Button type="submit" name="resend" value={I18n.t('login.resend')} className="button-submit button-dark margin-m">
-                <Translate value="login.resend" />
-              </Button>
-            </FormGroup>}
+            {false &&
+              <FormGroup>
+                <Button type="submit" name="resend" value={I18n.t('login.resend')} className="button-submit button-dark margin-m">
+                  <Translate value="login.resend" />
+                </Button>
+              </FormGroup>}
           </form>
         </div>
       </div>

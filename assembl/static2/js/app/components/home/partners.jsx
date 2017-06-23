@@ -18,7 +18,8 @@ class Partners extends React.Component {
     return (
       <section className="home-section partners-section">
         {partnersLoading && <Loader color="black" />}
-        {(partners && partners.length > 0) &&
+        {partners &&
+          partners.length > 0 &&
           <Grid fluid>
             <div className="max-container">
               <div className="title-section">
@@ -41,8 +42,7 @@ class Partners extends React.Component {
                 </div>
               </div>
             </div>
-          </Grid>
-        }
+          </Grid>}
         {partnersError && <Error errorMessage={partnersError} />}
       </section>
     );

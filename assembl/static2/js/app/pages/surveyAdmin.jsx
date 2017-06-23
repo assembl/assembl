@@ -17,5 +17,4 @@ const SurveyAdmin = ({ section }) => {
   );
 };
 
-
 export default SurveyAdmin;

@@ -4,11 +4,7 @@ import get from 'lodash/get';
 import { I18n } from 'react-redux-i18n';
 import AsLogin from '../components/login/assemblLogin';
 import { SocialMedia } from '../components/login/socialMediaLogin';
-import {
-  getProvidersData,
-  getDiscussionSlug,
-  getPossibleErrorMessage
-} from '../utils/globalFunctions';
+import { getProvidersData, getDiscussionSlug, getPossibleErrorMessage } from '../utils/globalFunctions';
 import { displayAlert } from '../utils/utilityManager';
 
 class Login extends React.Component {
@@ -35,13 +31,12 @@ class Login extends React.Component {
             {hasSocialMedias &&
               <div>
                 <Col xs={12} md={5}>
-                  {slug ? <SocialMedia providers={providers} next={next} slug={slug} /> :
-                  <SocialMedia providers={providers} next={next} />
-                  }
+                  {slug
+                    ? <SocialMedia providers={providers} next={next} slug={slug} />
+                    : <SocialMedia providers={providers} next={next} />}
                 </Col>
                 <Col xs={12} md={1}>&nbsp;</Col>
-              </div>
-            }
+              </div>}
             <Col xs={12} md={hasSocialMedias ? 6 : 12}>
               {slug ? <AsLogin next={next} slug={slug} /> : <AsLogin next={next} />}
             </Col>

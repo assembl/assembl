@@ -10,13 +10,21 @@ class AsLogin extends React.Component {
   render() {
     const slug = getDiscussionSlug();
     let next;
-    if (this.props.next) { next = this.props.next; } else if (slug) { next = get('home', { slug: slug }); } else { next = null; }
+    if (this.props.next) {
+      next = this.props.next;
+    } else if (slug) {
+      next = get('home', { slug: slug });
+    } else {
+      next = null;
+    }
     return (
       <div>
-        <form className="login" method="POST" action={slug ? getFullPath('ctxOldLogin', { slug: slug }) : getFullPath('oldLogin')}>
-          { next ?
-            <input type="hidden" name="next" value={`${next}`} />
-            : null }
+        <form
+          className="login"
+          method="POST"
+          action={slug ? getFullPath('ctxOldLogin', { slug: slug }) : getFullPath('oldLogin')}
+        >
+          {next ? <input type="hidden" name="next" value={`${next}`} /> : null}
           <input type="hidden" name="referrer" value="v2" />
           <h4 className="dark-title-4">
             <Translate value="login.alreadyAccount" />
@@ -40,10 +48,7 @@ class AsLogin extends React.Component {
           <h4 className="dark-title-4 margin-m">
             <Translate value="login.noAccount" />
           </h4>
-          <Link
-            className="button-link button-dark margin-s"
-            to={slug ? getContextual('signup', { slug: slug }) : get('signup')}
-          >
+          <Link className="button-link button-dark margin-s" to={slug ? getContextual('signup', { slug: slug }) : get('signup')}>
             <Translate value="login.signUp" />
           </Link>
         </div>

@@ -21,8 +21,7 @@ class Thread extends React.Component {
                 );
               })}
             </Row>
-          </Grid>
-        }
+          </Grid>}
         {postsError && <Error errorMessage={postsError} />}
       </div>
     );

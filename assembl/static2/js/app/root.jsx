@@ -9,8 +9,17 @@ import { modalManager, alertManager } from './utils/utilityManager';
 export default ({ children }) => {
   return (
     <div>
-      <Modal ref={(modalComponent) => { modalManager.setComponent(modalComponent); }} />
-      <Alert isBase ref={(alertComponent) => { alertManager.setComponent(alertComponent); }} />
+      <Modal
+        ref={(modalComponent) => {
+          modalManager.setComponent(modalComponent);
+        }}
+      />
+      <Alert
+        isBase
+        ref={(alertComponent) => {
+          alertManager.setComponent(alertComponent);
+        }}
+      />
       <div className="root-child">{children}</div>
     </div>
   );

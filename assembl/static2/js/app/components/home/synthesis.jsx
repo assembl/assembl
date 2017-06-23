@@ -13,9 +13,7 @@ class SynthesisContainer extends React.Component {
             <div style={{ margin: '20px 0' }}>
               <Row>
                 <Col md={12}>
-                  {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&
-                    <Synthesis />
-                  }
+                  {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 && <Synthesis />}
                 </Col>
               </Row>
             </div>

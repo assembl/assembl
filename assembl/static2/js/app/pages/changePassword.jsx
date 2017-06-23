@@ -27,37 +27,38 @@ class ChangePassword extends React.Component {
   submitForm(e) {
     e.preventDefault();
     const payload = this.state;
-    postChangePassword(payload).then(() => {
-      const slug = getDiscussionSlug();
-      let route;
-      let url;
-      if (slug) {
-        route = get('home', { slug: slug });
-        url = new URL(route, window.location.origin);
-        window.location = url;
-      } else {
-        route = get('root');
-        url = new URL(route, window.location.origin);
-        window.location = url;
-      }
-    })
-    .catch((error) => {
-      let msg;
-      if (error instanceof Error) {
-        if (error.name === 'PasswordMismatchError') {
-          msg = I18n.t('login.incorrectPassword');
-          displayAlert('danger', msg, true);
+    postChangePassword(payload)
+      .then(() => {
+        const slug = getDiscussionSlug();
+        let route;
+        let url;
+        if (slug) {
+          route = get('home', { slug: slug });
+          url = new URL(route, window.location.origin);
+          window.location = url;
+        } else {
+          route = get('root');
+          url = new URL(route, window.location.origin);
+          window.location = url;
         }
-      } else {
-        try {
-          const firstError = error[0];
-          displayAlert('danger', firstError.message, true);
-        } catch (exception) {
-          msg = I18n.t('login.somethingWentWrong');
-          displayAlert('danger', msg, true);
+      })
+      .catch((error) => {
+        let msg;
+        if (error instanceof Error) {
+          if (error.name === 'PasswordMismatchError') {
+            msg = I18n.t('login.incorrectPassword');
+            displayAlert('danger', msg, true);
+          }
+        } else {
+          try {
+            const firstError = error[0];
+            displayAlert('danger', firstError.message, true);
+          } catch (exception) {
+            msg = I18n.t('login.somethingWentWrong');
+            displayAlert('danger', msg, true);
+          }
         }
-      }
-    });
+      });
   }
 
   render() {
@@ -91,7 +92,8 @@ class ChangePassword extends React.Component {
                 <Button
                   type="submit"
                   name="change_password"
-                  value={I18n.t('login.changePassword')} className="button-submit button-dark"
+                  value={I18n.t('login.changePassword')}
+                  className="button-submit button-dark"
                   onClick={this.submitForm}
                 >
                   <Translate value="login.changePassword" />
@@ -104,6 +106,5 @@ class ChangePassword extends React.Component {
     );
   }
 }
-
 
 export default ChangePassword;

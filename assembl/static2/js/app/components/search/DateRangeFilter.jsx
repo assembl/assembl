@@ -13,7 +13,6 @@ import { Translate } from 'react-redux-i18n';
 //   />);
 
 class DateRangeFilter extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -45,15 +44,21 @@ class DateRangeFilter extends Component {
   }
 
   handleChangeStart(event) {
-    this.setState({
-      startDate: event
-    }, this.updateSearch);
+    this.setState(
+      {
+        startDate: event
+      },
+      this.updateSearch
+    );
   }
 
   handleChangeEnd(event) {
-    this.setState({
-      endDate: event && event.endOf('day')
-    }, this.updateSearch);
+    this.setState(
+      {
+        endDate: event && event.endOf('day')
+      },
+      this.updateSearch
+    );
   }
 
   updateSearch() {

@@ -18,7 +18,10 @@ const ProfileLine = (props) => {
         width="30"
         height="30"
         alt={userName}
-        onError={(e) => { const target = e.target; target.src = '/static/img/icon/user.png'; }}
+        onError={(e) => {
+          const target = e.target;
+          target.src = '/static/img/icon/user.png';
+        }}
       />
       {userName}
     </span>

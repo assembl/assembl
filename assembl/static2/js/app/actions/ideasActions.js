@@ -24,10 +24,12 @@ const failedFetchIdeas = (error) => {
 export const fetchIdeas = (debateId) => {
   return function (dispatch) {
     dispatch(loadingIdeas());
-    return getIdeas(debateId).then((ideas) => {
-      dispatch(resolvedFetchIdeas(ideas));
-    }).catch((error) => {
-      dispatch(failedFetchIdeas(error));
-    });
+    return getIdeas(debateId)
+      .then((ideas) => {
+        dispatch(resolvedFetchIdeas(ideas));
+      })
+      .catch((error) => {
+        dispatch(failedFetchIdeas(error));
+      });
   };
 };

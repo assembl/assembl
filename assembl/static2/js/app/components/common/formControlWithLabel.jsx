@@ -33,7 +33,15 @@ class FormControlWithLabel extends React.Component {
     return (
       <FormGroup validationState={this.state.validationState}>
         {value ? <ControlLabel htmlFor={id}>{label}</ControlLabel> : null}
-        <FormControl componentClass={componentClass} id={id} type={type} placeholder={label} onChange={onChange} value={value} onBlur={this.setValidationState} />
+        <FormControl
+          componentClass={componentClass}
+          id={id}
+          type={type}
+          placeholder={label}
+          onChange={onChange}
+          value={value}
+          onBlur={this.setValidationState}
+        />
         {this.state.errorMessage ? <HelpBlock>{this.state.errorMessage}</HelpBlock> : null}
       </FormGroup>
     );
