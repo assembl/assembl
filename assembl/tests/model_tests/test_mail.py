@@ -34,10 +34,10 @@ Hello,
 
 This text is the real text
     """
-
+    
     check_striping_plaintext(original, expected, "Gmail plaintext, french")
-
-
+    
+    
     original = """
 
 Yes, let's give access to the sandbox for the Professor from Hawai.
@@ -60,9 +60,9 @@ Thanks
 
 Frank
     """
-
+    
     check_striping_plaintext(original, expected, "Gmail plaintext, us 2014")
-
+    
 def test_strip_quotations_plaintext_outlook():
 
     original = """
@@ -80,9 +80,9 @@ Begin reply text
     expected = """
 Begin message text
     """
-
+    
     check_striping_plaintext(original, expected, "Outlook plaintext, french")
-
+    
 
 def check_striping_html(original, expected, fail_msg):
     result = AbstractMailbox.strip_full_message_quoting_html(original)
@@ -94,7 +94,7 @@ def check_striping_html(original, expected, fail_msg):
                                 original,
                                 expected,
                                 result)
-
+        
 def test_strip_quotations_html_gmail():
     original = """
 <div dir="ltr">Reply text<br></div>
@@ -113,9 +113,9 @@ Benoit Grégoire, ing., PMP, PSM<br>
 
 <br></div>
     """
-
+    
     check_striping_html(original, expected, "Gmail")
-
+    
 def test_strip_quotations_html_applemail():
     original = """
 <html>
@@ -154,22 +154,22 @@ def test_strip_quotations_html_applemail():
             Signature
          </div>
          <br>
-
+         
          <br>
       </div>
    </body>
 </html>
 """
     check_striping_html(original, expected, "Apple mail french, old version")
-
-
+    
+    
     original = """
 <html>
    <head>
       <meta http-equiv="Content-Type" content="text/html charset=iso-8859-1">
    </head>
    <body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
-      Test 3
+      Test 3 
       <div>
          <br>
          <div style="">
@@ -194,8 +194,8 @@ def test_strip_quotations_html_applemail():
       <meta http-equiv="Content-Type" content="text/html charset=iso-8859-1">
    </head>
    <body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
-      Test 3
-
+      Test 3 
+      
    </body>
 </html>
 """
@@ -210,16 +210,16 @@ def test_strip_quotations_html_outlook():
       <META content="MSHTML 6.00.6000.21264" name=GENERATOR>
    </HEAD>
    <BODY>
-      <DIV dir=ltr align=left><SPAN class=847504013-06062011><FONT face=Arial
+      <DIV dir=ltr align=left><SPAN class=847504013-06062011><FONT face=Arial 
          color=#0000ff size=2>Some text</FONT></SPAN>
       </DIV>
       <BLOCKQUOTE style="MARGIN-RIGHT: 0px">
          <DIV class=OutlookMessageHeader lang=fr dir=ltr align=left>
             <HR tabIndex=-1>
-            <FONT face=Tahoma size=2><B>De :</B> jmichelcornu@gmail.com
-            [mailto:jmichelcornu@gmail.com] <B>De la part de</B> Jean-Michel
-            Cornu<BR><B>Envoyé :</B> 06 June 2011 11:03<BR><B>À :</B> innovation
-            monétaire<BR><B>Objet :</B> [innovationmonetaire] Démarrage de
+            <FONT face=Tahoma size=2><B>De :</B> jmichelcornu@gmail.com 
+            [mailto:jmichelcornu@gmail.com] <B>De la part de</B> Jean-Michel 
+            Cornu<BR><B>Envoyé :</B> 06 June 2011 11:03<BR><B>À :</B> innovation 
+            monétaire<BR><B>Objet :</B> [innovationmonetaire] Démarrage de 
             l'expédition sur l'innovation monétaire<BR></FONT><BR>
          </DIV>
          <DIV></DIV>
@@ -237,16 +237,16 @@ def test_strip_quotations_html_outlook():
       <META content="MSHTML 6.00.6000.21264" name=GENERATOR>
    </HEAD>
    <BODY>
-      <DIV dir=ltr align=left><SPAN class=847504013-06062011><FONT face=Arial
+      <DIV dir=ltr align=left><SPAN class=847504013-06062011><FONT face=Arial 
          color=#0000ff size=2>Some text</FONT></SPAN>
       </DIV>
-
+      
       <PRE>Signature</PRE>
    </BODY>
 </HTML>
 """
     check_striping_html(original, expected, "Outlook recent")
-
+    
     original = """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
@@ -255,22 +255,22 @@ def test_strip_quotations_html_outlook():
       <META content="MSHTML 6.00.2900.6082" name=GENERATOR>
    </HEAD>
    <BODY>
-      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN
+      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN 
          class=426362517-06062011>Begin real text</SPAN></FONT></DIV>
       <DIV dir=ltr align=left>
-         <FONT face=Arial color=#0000ff
+         <FONT face=Arial color=#0000ff 
             size=2>
             <SPAN class=426362517-06062011>
       </DIV>
       <DIV dir=ltr align=left>
       <HR tabIndex=-1>
       </DIV>
-      <DIV dir=ltr align=left><FONT face="Times New Roman" color=#000000 size=3>
-      </FONT></SPAN></FONT><FONT face=Tahoma size=2><B>De :</B>
-      jmichelcornu@gmail.com [mailto:jmichelcornu@gmail.com] <B>De la part de</B>
-      Jean-Michel Cornu<BR><B>Envoyé :</B> lundi 6 juin 2011
-      11:03<BR><B>À :</B> innovation monétaire<BR><B>Objet :</B>
-      [innovationmonetaire] Démarrage de l'expédition sur l'innovation
+      <DIV dir=ltr align=left><FONT face="Times New Roman" color=#000000 size=3> 
+      </FONT></SPAN></FONT><FONT face=Tahoma size=2><B>De :</B> 
+      jmichelcornu@gmail.com [mailto:jmichelcornu@gmail.com] <B>De la part de</B> 
+      Jean-Michel Cornu<BR><B>Envoyé :</B> lundi 6 juin 2011 
+      11:03<BR><B>À :</B> innovation monétaire<BR><B>Objet :</B> 
+      [innovationmonetaire] Démarrage de l'expédition sur l'innovation 
       monétaire<BR></FONT><BR></DIV>
       <DIV></DIV>
       Begin quoted text
@@ -286,10 +286,10 @@ def test_strip_quotations_html_outlook():
       <META content="MSHTML 6.00.2900.6082" name=GENERATOR>
    </HEAD>
    <BODY>
-      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN
+      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN 
          class=426362517-06062011>Begin real text</SPAN></FONT></DIV>
       <DIV dir=ltr align=left>
-         <FONT face=Arial color=#0000ff
+         <FONT face=Arial color=#0000ff 
             size=2>
             <SPAN class=426362517-06062011>
       </DIV>
@@ -300,7 +300,7 @@ def test_strip_quotations_html_outlook():
 </HTML>
 """
     check_striping_html(original, expected, "Outlook french, no identifying class")
-
+    
     original = """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
@@ -309,22 +309,22 @@ def test_strip_quotations_html_outlook():
       <META content="MSHTML 6.00.2900.6082" name=GENERATOR>
    </HEAD>
    <BODY>
-      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN
+      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN 
          class=426362517-06062011>Begin real text</SPAN></FONT></DIV>
       <DIV dir=ltr align=left>
-         <FONT face=Arial color=#0000ff
+         <FONT face=Arial color=#0000ff 
             size=2>
             <SPAN class=426362517-06062011>
       </DIV>
       <DIV dir=ltr align=left>
       <HR tabIndex=-1>
       </DIV>
-      <DIV dir=ltr align=left><FONT face="Times New Roman" color=#000000 size=3>
-      </FONT></SPAN></FONT><FONT face=Tahoma size=2><B>From:</B>
-      jmichelcornu@gmail.com [mailto:jmichelcornu@gmail.com] <B>De la part de</B>
-      Jean-Michel Cornu<BR><B>Sent:</B> lundi 6 juin 2011
-      11:03<BR><B>To:</B> innovation monétaire<BR><B>Subject:</B>
-      [innovationmonetaire] Démarrage de l'expédition sur l'innovation
+      <DIV dir=ltr align=left><FONT face="Times New Roman" color=#000000 size=3> 
+      </FONT></SPAN></FONT><FONT face=Tahoma size=2><B>From:</B> 
+      jmichelcornu@gmail.com [mailto:jmichelcornu@gmail.com] <B>De la part de</B> 
+      Jean-Michel Cornu<BR><B>Sent:</B> lundi 6 juin 2011 
+      11:03<BR><B>To:</B> innovation monétaire<BR><B>Subject:</B> 
+      [innovationmonetaire] Démarrage de l'expédition sur l'innovation 
       monétaire<BR></FONT><BR></DIV>
       <DIV></DIV>
       Begin quoted text
@@ -340,10 +340,10 @@ def test_strip_quotations_html_outlook():
       <META content="MSHTML 6.00.2900.6082" name=GENERATOR>
    </HEAD>
    <BODY>
-      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN
+      <DIV dir=ltr align=left><FONT face=Arial color=#0000ff size=2><SPAN 
          class=426362517-06062011>Begin real text</SPAN></FONT></DIV>
       <DIV dir=ltr align=left>
-         <FONT face=Arial color=#0000ff
+         <FONT face=Arial color=#0000ff 
             size=2>
             <SPAN class=426362517-06062011>
       </DIV>
@@ -356,7 +356,7 @@ def test_strip_quotations_html_outlook():
     check_striping_html(original, expected, "Outlook english, no identifying class")
 
 
-
+    
 def test_strip_quotations_html_thunderbird():
     original = """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -447,3 +447,5 @@ Yes!
 """
 
     check_striping_plaintext(original, expected, "Gmail plaintext, circa 2012")
+
+    
