@@ -5,8 +5,8 @@ describe('Return posts state changes', () => {
     expect(
       DebateReducer([], {
         type: 'FETCH_DEBATE_DATA'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       debateData: null,
       debateLoading: true,
       debateError: null,
@@ -18,8 +18,8 @@ describe('Return posts state changes', () => {
       DebateReducer([], {
         type: 'RESOLVED_FETCH_DEBATE_DATA',
         debateData: { data: 'data' }
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       debateData: { data: 'data' },
       debateLoading: false,
       debateError: null,
@@ -31,8 +31,8 @@ describe('Return posts state changes', () => {
       DebateReducer([], {
         type: 'FAILED_FETCH_DEBATE_DATA',
         debateError: 'Forbidden'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       debateData: null,
       debateLoading: false,
       debateError: 'Forbidden',

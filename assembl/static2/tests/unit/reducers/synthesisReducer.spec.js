@@ -5,8 +5,8 @@ describe('Return synthesis state changes', () => {
     expect(
       SynthesisReducer([], {
         type: 'FETCH_SYNTHESIS'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       synthesis: null,
       synthesisLoading: true,
       synthesisError: null
@@ -17,8 +17,8 @@ describe('Return synthesis state changes', () => {
       SynthesisReducer([], {
         type: 'RESOLVED_FETCH_SYNTHESIS',
         synthesis: { data: 'data' }
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       synthesis: { data: 'data' },
       synthesisLoading: false,
       synthesisError: null
@@ -29,8 +29,8 @@ describe('Return synthesis state changes', () => {
       SynthesisReducer([], {
         type: 'FAILED_FETCH_SYNTHESIS',
         synthesisError: 'Forbidden'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       synthesis: null,
       synthesisLoading: false,
       synthesisError: 'Forbidden'

@@ -5,8 +5,8 @@ describe('Return posts state changes', () => {
     expect(
       PostsReducer([], {
         type: 'FETCH_POSTS'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       posts: null,
       postsLoading: true,
       postsError: null
@@ -17,8 +17,8 @@ describe('Return posts state changes', () => {
       PostsReducer([], {
         type: 'RESOLVED_FETCH_POSTS',
         posts: { data: 'data' }
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       posts: { data: 'data' },
       postsLoading: false,
       postsError: null
@@ -29,8 +29,8 @@ describe('Return posts state changes', () => {
       PostsReducer([], {
         type: 'FAILED_FETCH_POSTS',
         postsError: 'Forbidden'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       posts: null,
       postsLoading: false,
       postsError: 'Forbidden'

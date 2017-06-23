@@ -8,8 +8,8 @@ describe('Return context state changes', () => {
         rootPath: { data: 'data' },
         debateId: { data: 'data' },
         connectedUserId: { data: 'data' }
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       rootPath: { data: 'data' },
       debateId: { data: 'data' },
       connectedUserId: { data: 'data' }

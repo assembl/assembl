@@ -5,8 +5,8 @@ describe('Return posts state changes', () => {
     expect(
       UsersReducer([], {
         type: 'FETCH_USERS'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       users: null,
       usersLoading: true,
       usersError: null
@@ -17,8 +17,8 @@ describe('Return posts state changes', () => {
       UsersReducer([], {
         type: 'RESOLVED_FETCH_USERS',
         users: { data: 'data' }
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       users: { data: 'data' },
       usersLoading: false,
       usersError: null
@@ -29,8 +29,8 @@ describe('Return posts state changes', () => {
       UsersReducer([], {
         type: 'FAILED_FETCH_USERS',
         usersError: 'Forbidden'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       users: null,
       usersLoading: false,
       usersError: 'Forbidden'

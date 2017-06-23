@@ -1,5 +1,5 @@
 /* Helpers for tests involving graphql/apollo */
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from 'react-apollo';
 import { addMockFunctionsToSchema } from 'graphql-tools';
 import { mockNetworkInterfaceWithSchema } from 'apollo-test-utils';
 import { buildClientSchema } from 'graphql';

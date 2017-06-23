@@ -16,7 +16,10 @@ describe('Admin actions', () => {
   describe('updateThematics action', () => {
     const { updateThematics } = actions;
     it('should return a UPDATE_THEMATICS action type', () => {
-      const thematics = [{ id: '0', titleEntries: [{ localeCode: 'en', value: 'Foo ' }] }, { id: '1', titleEntries: [{ localeCode: 'en', value: 'Bar ' }] }];
+      const thematics = [
+        { id: '0', titleEntries: [{ localeCode: 'en', value: 'Foo ' }] },
+        { id: '1', titleEntries: [{ localeCode: 'en', value: 'Bar ' }] }
+      ];
       const actual = updateThematics(thematics);
       const expected = {
         thematics: thematics,

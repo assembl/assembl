@@ -5,8 +5,8 @@ describe('Return posts state changes', () => {
     expect(
       UsersReducer([], {
         type: 'FETCH_PARTNERS'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       partners: null,
       partnersLoading: true,
       partnersError: null
@@ -17,8 +17,8 @@ describe('Return posts state changes', () => {
       UsersReducer([], {
         type: 'RESOLVED_FETCH_PARTNERS',
         partners: { data: 'data' }
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       partners: { data: 'data' },
       partnersLoading: false,
       partnersError: null
@@ -29,8 +29,8 @@ describe('Return posts state changes', () => {
       UsersReducer([], {
         type: 'FAILED_FETCH_PARTNERS',
         partnersError: 'Forbidden'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       partners: null,
       partnersLoading: false,
       partnersError: 'Forbidden'

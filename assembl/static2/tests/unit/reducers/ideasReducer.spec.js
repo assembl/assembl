@@ -5,8 +5,8 @@ describe('Return ideas state changes', () => {
     expect(
       IdeasReducer([], {
         type: 'FETCH_IDEAS'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       ideas: null,
       ideasLoading: true,
       ideasError: null
@@ -17,8 +17,8 @@ describe('Return ideas state changes', () => {
       IdeasReducer([], {
         type: 'RESOLVED_FETCH_IDEAS',
         ideas: { data: 'data' }
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       ideas: { data: 'data' },
       ideasLoading: false,
       ideasError: null
@@ -29,8 +29,8 @@ describe('Return ideas state changes', () => {
       IdeasReducer([], {
         type: 'FAILED_FETCH_IDEAS',
         ideasError: 'Forbidden'
-      }))
-    .toEqual({
+      })
+    ).toEqual({
       ideas: null,
       ideasLoading: false,
       ideasError: 'Forbidden'

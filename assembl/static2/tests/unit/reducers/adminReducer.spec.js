@@ -250,7 +250,11 @@ describe('Admin reducers', () => {
       const expected = fromJS({
         0: {},
         1: {
-          titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }, { localeCode: 'de', value: 'Mein Titel' }]
+          titleEntries: [
+            { localeCode: 'en', value: 'My title' },
+            { localeCode: 'fr', value: 'Mon titre' },
+            { localeCode: 'de', value: 'Mein Titel' }
+          ]
         }
       });
       const newState = thematicsById(oldState, action);
