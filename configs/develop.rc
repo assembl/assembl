@@ -53,7 +53,6 @@ supervisor__autostart_webpack = true
 supervisor__autostart_uwsgi = false
 supervisor__autostart_celery_imap = false
 supervisor__autostart_source_reader = false
-_uses_global_supervisor = false
 _uses_ngnix = false
 _uses_uwsgi = false
 _is_production_env = false

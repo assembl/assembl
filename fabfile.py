@@ -211,7 +211,7 @@ def get_random_templates():
                  if r.startswith('RANDOM')]
     assert len(templates) == 1, \
         "Please define a RANDOM phase in ini_files"
-    return templates.split(':')[1:]
+    return templates[0].split(':')[1:]
 
 
 @task
@@ -224,7 +224,7 @@ def migrate_local_ini():
     local.ini system."""
     random_ini_path = os.path.join(env.projectpath, env.random_file)
     local_ini_path = os.path.join(env.projectpath, env.ini_file)
-    dest_path = env.rcfile + '.' + int(time())
+    dest_path = env.rcfile + '.' + str(time())
 
     if env.host_string == 'localhost':
         # The easy case

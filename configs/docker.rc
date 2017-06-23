@@ -23,9 +23,6 @@ supervisor__autostart_elasticsearch_server = false
 uwsgi__socket = 0.0.0.0:9000
 uwsgi__processes = 3
 
-# for now
-_uses_global_supervisor = false
-
 # Override what follows in your specific docker.rc file
 
 # Have a local file with the random values for this specific deploy

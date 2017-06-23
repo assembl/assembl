@@ -58,7 +58,8 @@ changes.socket = ipc:///tmp/assembl_changes/5
 
 mac = false
 _uses_apache = false
-_uses_global_supervisor = true
+# We now use systemd instead of a global supervisor
+_uses_global_supervisor = false
 _uses_memcache = true
 _uses_ngnix = true
 _uses_uwsgi = true
