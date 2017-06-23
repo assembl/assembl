@@ -80,7 +80,7 @@ def get_incoming_fks(table):
     for t in get_metadata().sorted_tables:
         for fk in t.foreign_keys:
             if fk.column.table == table:
-                incoming.add(fk)    
+                incoming.add(fk)
     return incoming
 
 

@@ -126,4 +126,3 @@ class SQLAlchemyUnionMeta(UnionMeta):
 
 class SQLAlchemyUnion(six.with_metaclass(SQLAlchemyUnionMeta, Union)):
     pass
-

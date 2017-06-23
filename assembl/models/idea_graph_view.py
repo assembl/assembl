@@ -452,7 +452,7 @@ class Synthesis(ExplicitSubGraphView):
 
     def publish(self):
         """ Publication is the end of a synthesis's lifecycle.
-        It creates and returns a frozen copy of its state 
+        It creates and returns a frozen copy of its state
         using tombstones for ideas and links."""
         frozen_synthesis = self.copy()
         self.db.add(frozen_synthesis)

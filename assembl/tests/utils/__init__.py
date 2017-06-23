@@ -151,7 +151,7 @@ def base_fixture_dirname():
 def api_call_to_fname(api_call, method="GET", **args):
     """Translate an API call to a filename containing most of the call information
 
-    Used in :js:func:`ajaxMock`"""    
+    Used in :js:func:`ajaxMock`"""
     import os
     import os.path
     base_fixture_dir = base_fixture_dirname()

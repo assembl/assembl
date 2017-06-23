@@ -900,7 +900,7 @@ class SKLearnClusteringSemanticAnalysis(SemanticAnalysisData):
                 for post_id in cluster:
                     f.write("<dt><a target='out' href='%(url)sposts/local:Content/%(post_id)d'>Post %(post_id)d</a> (%(ideas)s):</dt>\n" % dict(
                         url=self.discussion_url,
-                        post_id=post_id, 
+                        post_id=post_id,
                         ideas=','.join((
                             str(p) for p in post_info[post_id]['ideas']))))
                     f.write("<dd>%s</dd>" % (

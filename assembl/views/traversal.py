@@ -126,7 +126,7 @@ class TraversalContext(object):
 
 class Api2Context(TraversalContext):
     """The root class for the magic API (``/data``)
-    
+
     Sub-contexts are :py:class:`ClassContext`"""
     _class_cache = {}
 
@@ -1169,4 +1169,3 @@ def includeme(config):
                               CollectionContextClassPredicate,
                               weighs_less_than='ctx_named_collection')
     config.add_route('data', '/data/*traverse')
-

@@ -246,7 +246,7 @@ def test_app_no_login_real_policy(request, test_app_no_perm):
     auth_policy_name = "assembl.auth.util.UpgradingSessionAuthenticationPolicy"
     auth_policy = resolver.resolve(auth_policy_name)(
         callback=authentication_callback)
-    
+
     config.set_authorization_policy(ACLAuthorizationPolicy())
     config.set_authentication_policy(auth_policy)
 

@@ -101,13 +101,13 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     ideas = ideas.outerjoin(SubGraphIdeaAssociation,
                     and_(SubGraphIdeaAssociation.sub_graph_id==next_synthesis.id, SubGraphIdeaAssociation.idea_id==Idea.id)
         )
-    
+
     ideas = ideas.outerjoin(IdeaLink,
                     and_(IdeaLink.target_id==Idea.id)
         )
-    
+
     ideas = ideas.order_by(IdeaLink.order, Idea.creation_date)
-    
+
     if ids:
         ids = [get_database_id("Idea", id) for id in ids]
         ideas = ideas.filter(Idea.id.in_(ids))

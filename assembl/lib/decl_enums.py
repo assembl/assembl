@@ -18,7 +18,7 @@ class EnumSymbol(object):
         self.description = description
 
     def __reduce__(self):
-        """Allow unpickling to return the symbol 
+        """Allow unpickling to return the symbol
         linked to the DeclEnum class."""
         return getattr, (self.cls_, self.name)
 
@@ -54,7 +54,7 @@ class DeclEnum(object):
             return cls._reg[value]
         except KeyError:
             raise ValueError(
-                    "Invalid value for %r: %r" % 
+                    "Invalid value for %r: %r" %
                     (cls.__name__, value)
                 )
 
@@ -72,10 +72,10 @@ class DeclEnumType(SchemaType, TypeDecorator):
         super(DeclEnumType, self).__init__(**kwargs)
         self.enum = enum
         self.impl = Enum(
-                        *enum.values(), 
+                        *enum.values(),
                         name="ck%s" % re.sub(
-                                    '([A-Z])', 
-                                    lambda m:"_" + m.group(1).lower(), 
+                                    '([A-Z])',
+                                    lambda m:"_" + m.group(1).lower(),
                                     enum.__name__)
                     )
 

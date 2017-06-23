@@ -541,7 +541,7 @@ class SourceDispatcher(ConsumerMixin):
             self.readers[source_id] = reader
             if reader is None:
                 return False
-            
+
             reader.setup_read(reimport, **kwargs)
             reader.start()
             return True

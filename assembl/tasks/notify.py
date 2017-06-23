@@ -186,4 +186,3 @@ def includeme(config):
     global notify_process_mailer
     config_celery_app(notify_celery_app, config.registry.settings)
     notify_process_mailer = mailer_factory_from_settings(config.registry.settings)
-

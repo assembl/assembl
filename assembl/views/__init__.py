@@ -1,4 +1,4 @@
-""" App URL routing and renderers are configured in this module. 
+""" App URL routing and renderers are configured in this module.
 
 Note that Assembl is a `hybrid app`_, and combines routes and :py:mod:`traversal`.
 
@@ -69,7 +69,7 @@ def get_theme_base_path(frontend_version=1):
 def find_theme(theme_name, frontend_version=1):
     """
     Recursively looks for a theme with the provided name in the theme path folder
-    @returns the theme path fragment relative to the theme base_path, or 
+    @returns the theme path fragment relative to the theme base_path, or
     None if not found
     """
     theme_base_path = get_theme_base_path(frontend_version)

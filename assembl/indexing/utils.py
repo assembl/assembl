@@ -140,4 +140,3 @@ def get_uid(content):
 def get_doc_type_from_uid(uid):
     """Return doc_type from the uid."""
     return uid.split(':')[0]
-

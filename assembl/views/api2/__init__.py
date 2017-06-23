@@ -8,7 +8,7 @@ The other endpoints follow the pattern
 ``/data/<classname>/<instance id>(/<collection name>/<instance id>)+``
 So we speak of class, instance or collection context, depending where we are in the URL.
 
-It is generally possible to PUT or DEL on any instance context, 
+It is generally possible to PUT or DEL on any instance context,
 and to POST to any class or collection context.
 POST will return a 201 with the link in the body in the Location response header.
 
@@ -28,7 +28,7 @@ the widget collection view in :py:mod:`assembl.views.api2.widget`.
 Note that the view_config must have at least as many specifiers as the one it tries to override!
 
 Permissions for the default views are specified by the crud_permissions class attribute, but more specific
-views may have their own permissions system. 
+views may have their own permissions system.
 For that reason, it will be generally useful to POST/PUT through collections accessed from the discussion, such as
 ``/data/Discussion/<number>(/<collection name>/<instance id>)+``
 as opposed to the bare URLs ``/data/<Classname>/<instance db id>`` which are provided after a POST.

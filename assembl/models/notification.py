@@ -650,7 +650,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
 
     def get_human_readable_description(self):
         return _("Any message is posted to the discussion")
-    
+
     def wouldCreateNotification(self, discussion_id, verb, object):
         parentWouldCreate = super(NotificationSubscriptionFollowAllMessages, self).wouldCreateNotification(discussion_id, verb, object)
         return parentWouldCreate and (verb == CrudVerbs.CREATE) and isinstance(object, Post) and discussion_id == object.get_discussion_id()
@@ -678,7 +678,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
 
     def get_human_readable_description(self):
         return _("Someone directly responds to one of your messages")
-    
+
     def wouldCreateNotification(self, discussion_id, verb, object):
         parentWouldCreate = super(NotificationSubscriptionFollowOwnMessageDirectReplies, self).wouldCreateNotification(discussion_id, verb, object)
         return ( parentWouldCreate
@@ -788,7 +788,7 @@ class NotificationDeliveryStateType(DeclEnum):
     DELIVERY_TEMPORARY_FAILURE = "DELIVERY_TEMPORARY_FAILURE", "Active notification whose delivery is delayed.  Ex:  email soft-bounce, smtp server is down, etc."
     OBSOLETED = "OBSOLETED", "Inactive notification that has been rendered useless by some event.  For example, the user has read the message the notification was about from the web interface before the notification was delivered"
     EXPIRED = "EXPIRED", "Similar to OBSOLETED:  Inactive notification that has been rendered obsolete by the mere passage of time since the first delivery attempt."
-    
+
     @classmethod
     def getNonRetryableDeliveryStates(cls):
         # TODO benoitg: Validate that QUEUED is non-retryable
@@ -897,10 +897,10 @@ class Notification(Base):
     @abstractmethod
     def event_source_object(self):
         pass
-    
+
     def event_source_type(self):
         return self.event_source_object().external_typename()
-    
+
     def get_applicable_subscriptions(self):
         """ Fist matching_subscription is guaranteed to always be on top """
         #TODO: Store CRUDVERB
@@ -918,7 +918,7 @@ class Notification(Base):
                 return cmp(x.priority, y.priority)
         applicableInstances.sort(cmp=sortSubscriptions)
         return applicableInstances
-    
+
     def render_to_email_html_part(self):
         """Override in child classes if your notification can be represented as
          email HTML part.  Otherwise return a falsy string (len must be defined)"""
@@ -928,7 +928,7 @@ class Notification(Base):
         """Override in child classes if your notification can be represented as
          email HTML part.  Otherwise return a falsy string (len must be defined)"""
         return ''
-    
+
     @abstractmethod
     def get_notification_subject(self):
         """Typically for email"""
@@ -1079,10 +1079,10 @@ class NotificationOnPostCreated(NotificationOnPost):
         'polymorphic_identity': NotificationClasses.NOTIFICATION_ON_POST_CREATED,
         'with_polymorphic': '*'
     }
-    
+
     def event_source_object(self):
         return NotificationOnPost.event_source_object(self)
-    
+
     def get_notification_subject(self):
         loc = self.get_localizer()
         subject = "[" + self.first_matching_subscription.discussion.topic + "] "

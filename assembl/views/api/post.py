@@ -495,8 +495,8 @@ def get_posts(request):
     # Benoitg:  For now, this completely garbles threading without intelligent
     #handling of pagination.  Disabling
     #posts = posts.limit(page_size).offset(data['startIndex']-1)
-    # This code isn't up to date.  If limiting the query by page, we need to 
-    # calculate the counts with a separate query to have the right number of 
+    # This code isn't up to date.  If limiting the query by page, we need to
+    # calculate the counts with a separate query to have the right number of
     # results
     #no_of_messages_viewed_by_user = discussion.db.query(ViewPost).join(
     #    Post

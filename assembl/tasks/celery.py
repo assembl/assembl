@@ -13,4 +13,3 @@ from .imap import imap_celery_app
 from .translate import translation_celery_app
 
 celery = notify_celery_app
-

@@ -47,7 +47,7 @@ def test_extracts(discussion, participant1_user, reply_post_2, test_app,
     assert res.status_code == 200
     extracts = json.loads(res.body)
     assert len(extracts) == 1
-    
+
     #Load extract directly
     res = test_app.get(base_url + "/" + quote_plus(extract_post_1_to_subidea_1_1.uri()))
     assert res.status_code == 200
@@ -57,7 +57,7 @@ def test_extracts(discussion, participant1_user, reply_post_2, test_app,
     #Check the API returns a 404 for extracts that never existed
     res = test_app.get(base_url + "/" + quote_plus("id_that_does_not_exist"), expect_errors=True)
     assert res.status_code == 404
-    
+
     #Create (Post)
     res = test_app.post(base_url, json.dumps(extract_data))
     assert res.status_code == 200
@@ -71,7 +71,7 @@ def test_extracts(discussion, participant1_user, reply_post_2, test_app,
     extracts = json.loads(res.body)
     assert len(extracts) == 2
     assert extract_id in [e['@id'] for e in extracts]
-    
+
     #Update (PUT)
     #TODO:  We should test this field by field
     url = base_url + "/" + quote_plus(extract_id)
@@ -495,7 +495,7 @@ def test_api_get_posts_from_idea(
     assert res.status_code == 200
     res_data = json.loads(res.body)
     extract_post_2_to_subidea_1_id = res_data['@id']
-    
+
     check_number_of_posts(subidea_1_1, 2,
                           "Child idea should still have two posts")
     check_number_of_posts(subidea_1, 2,

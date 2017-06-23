@@ -159,7 +159,7 @@ class IMAPReader(SourceReader):
                 # a) we don't import only new messages or
                 # b) the message with self.source.last_imported_email_uid hasn't been found
                 #    (may have been deleted)
-                # In this case we request all messages and rely on duplicate 
+                # In this case we request all messages and rely on duplicate
                 # detection
                 command = "ALL"
                 search_status, search_result = mailbox.uid('search', None, command)
