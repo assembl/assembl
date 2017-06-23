@@ -202,6 +202,7 @@ def react_view(request):
     user_id = request.authenticated_userid or Everyone
     discussion = old_context["discussion"] or None
     get_route = old_context["get_route"]
+    (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, P_READ)
         canUseReact = (is_login_route(bare_route) or
@@ -210,7 +211,11 @@ def react_view(request):
             # User isn't logged-in and discussion isn't public:
             # Maybe we're already in a login/register page etc.
             if is_login_route(bare_route):
-                return get_login_context(request)
+                context = get_login_context(request)
+                context.update({
+                    "theme_name": theme_name,
+                    "theme_relative_path": theme_relative_path})
+                return context
 
             # otherwise redirect to login page
             next_view = request.params.get('next', None)
@@ -256,9 +261,12 @@ def react_view(request):
                                     _query=query)
             return HTTPTemporaryRedirect(url)
     else:
-        return get_login_context(request)
+        context = get_login_context(request)
+        context.update({
+            "theme_name": theme_name,
+            "theme_relative_path": theme_relative_path})
+        return context
 
-    (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
     context = dict(
         request=old_context['request'],
         REACT_URL=old_context['REACT_URL'],
