@@ -4,6 +4,7 @@
 #ASSEMBL_PATH=/home/benoitg/development/assembl
 #REPOSITORY=www-data@coeus.ca:/media/backup/assembl_backups.borg
 
+BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 BORG_PASSPHRASE='' borg init --encryption=keyfile $REPOSITORY || true
 echo "Do not worry if the above command fails, it is expected to fail except the first time it is run"
 
@@ -14,7 +15,6 @@ $ASSEMBL_PATH/venv/bin/assembl-db-manage local.ini backup
 cp --dereference $ASSEMBL_PATH/assembl-backup.pgdump $ASSEMBL_PATH/assembl-backup-real.pgdump
 NAME="`hostname`-`basename $ASSEMBL_PATH`-`date --iso-8601='minutes'`"
 #set -x
-BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 borg create \
     $REPOSITORY::$NAME \
     $ASSEMBL_PATH \
