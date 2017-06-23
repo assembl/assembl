@@ -14,6 +14,7 @@ $ASSEMBL_PATH/venv/bin/assembl-db-manage local.ini backup
 cp --dereference $ASSEMBL_PATH/assembl-backup.pgdump $ASSEMBL_PATH/assembl-backup-real.pgdump
 NAME="`hostname`-`basename $ASSEMBL_PATH`-`date --iso-8601='minutes'`"
 #set -x
+BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 borg create \
     $REPOSITORY::$NAME \
     $ASSEMBL_PATH \
@@ -21,7 +22,7 @@ borg create \
     --exclude $ASSEMBL_PATH/venv \
     --exclude $ASSEMBL_PATH/vendor \
     --exclude $ASSEMBL_PATH/assembl/static/js/bower \
-    --exclude $ASSEMBL_PATH/assembl/static/widget/*/bower_components \
+    --exclude $ASSEMBL_PATH'/assembl/static/widget/*/bower_components' \
     --exclude $ASSEMBL_PATH/assembl/static/js/node_modules \
     --exclude $ASSEMBL_PATH/assembl/static2/node_modules \
     --exclude $ASSEMBL_PATH/.git \
