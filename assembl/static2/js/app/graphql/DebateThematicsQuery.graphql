@@ -1,0 +1,13 @@
+query DebateThematicsQuery($lang: String!, $identifier: String!) {
+  thematics(identifier: $identifier) {
+    ... on Thematic {
+      id,
+      identifier,
+      title(lang: $lang),
+      description(lang: $lang),
+      numPosts,
+      numContributors,
+      imgUrl
+    }
+  }
+}

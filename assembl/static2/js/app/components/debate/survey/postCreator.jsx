@@ -1,7 +1,8 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import Loader from '../../common/loader';
+import PostCreatorQuery from '../../../graphql/PostCreatorQuery.graphql';
 
 class PostCreator extends React.Component {
   render() {
@@ -11,14 +12,12 @@ class PostCreator extends React.Component {
         {loading &&
           <div className="postcreator-loader">
             <Loader textHidden color="black" />
-          </div>
-        }
+          </div>}
         {proposition &&
           <div className="user">
             <span className="assembl-icon-profil grey">&nbsp;</span>
             <span className="username">{proposition.creator.name}</span>
-          </div>
-        }
+          </div>}
       </div>
     );
   }
@@ -32,18 +31,6 @@ PostCreator.propTypes = {
   }).isRequired
 };
 
-const postCreatorQuery = gql`
-  query postCreator ($id: ID!) {
-    proposition: node(id: $id) {
-      ... on PropositionPost {
-        creator{
-          name
-        }
-      }
-    }
-  }
-`;
-
-const PostCreatorWithData = graphql(postCreatorQuery)(PostCreator);
+const PostCreatorWithData = graphql(PostCreatorQuery)(PostCreator);
 
 export default PostCreatorWithData;

@@ -1,0 +1,5 @@
+mutation deleteThematic($thematicId: ID!) {
+  deleteThematic(thematicId: $thematicId) {
+    success
+  }
+}

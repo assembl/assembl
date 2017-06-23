@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
@@ -8,6 +8,7 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
+import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 
 class Question extends React.Component {
   constructor(props) {
@@ -78,19 +79,21 @@ class Question extends React.Component {
     const maxChars = this.txtarea.props.maxLength;
     const { questionId, scrollToQuestion, index, refetchTheme } = this.props;
     const body = this.state.postBody;
-    this.props.mutate({ variables: { ideaId: questionId, body: body } })
-    .then(() => {
-      scrollToQuestion(true, index + 1);
-      displayAlert('success', I18n.t('debate.survey.postSuccess'));
-      refetchTheme();
-      this.setState({
-        postBody: '',
-        showSubmitButton: false,
-        remainingChars: maxChars
+    this.props
+      .mutate({ variables: { ideaId: questionId, body: body } })
+      .then(() => {
+        scrollToQuestion(true, index + 1);
+        displayAlert('success', I18n.t('debate.survey.postSuccess'));
+        refetchTheme();
+        this.setState({
+          postBody: '',
+          showSubmitButton: false,
+          remainingChars: maxChars
+        });
+      })
+      .catch((error) => {
+        displayAlert('danger', error);
       });
-    }).catch((error) => {
-      displayAlert('danger', `${error}`);
-    });
   }
   redirectToLogin() {
     const isUserConnected = getConnectedUserId();
@@ -110,14 +113,7 @@ class Question extends React.Component {
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
-      <section
-        className={isPhaseCompleted ? 'hidden' : 'questions-section'}
-        id={`q${index}`}
-        style={
-          this.state.screenWidth >= 768 ?
-            { height: this.state.screenHeight } : { height: '100%' }
-        }
-      >
+      <section className={isPhaseCompleted ? 'hidden' : 'questions-section'} id={`q${index}`} style={this.state.screenWidth >= 768 ? { height: this.state.screenHeight } : { height: '100%' }}>
         <Grid fluid className="background-grey">
           <div className="max-container">
             <div className="question-title">
@@ -140,7 +136,9 @@ class Question extends React.Component {
                   }}
                   value={this.state.postBody}
                   maxLength={300}
-                  ref={(t) => { this.txtarea = t; }}
+                  ref={(t) => {
+                    this.txtarea = t;
+                  }}
                   onChange={this.getProposalText}
                 />
               </FormGroup>
@@ -150,8 +148,7 @@ class Question extends React.Component {
               {this.state.showSubmitButton &&
                 <Button onClick={this.createPost} className="button-submit button-dark right margin-l clear">
                   <Translate value="debate.survey.submit" />
-                </Button>
-              }
+                </Button>}
             </Col>
           </div>
         </Grid>
@@ -163,23 +160,6 @@ class Question extends React.Component {
 Question.propTypes = {
   mutate: PropTypes.func.isRequired
 };
-
-const createPostMutation = gql`
-  mutation createPost($ideaId: ID!, $body: String!) {
-    createPost(ideaId:$ideaId, body: $body) {
-      post {
-        ... on PropositionPost {
-          id,
-          body,
-          creator {
-            id,
-            name
-          }
-        }
-      }
-    }
-  }
-`;
 
 const QuestionWithMutation = graphql(createPostMutation)(Question);
 

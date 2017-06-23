@@ -5,7 +5,9 @@ import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
 import { displayAlert } from '../../utils/utilityManager';
-import { createThematic, updateThematic, deleteThematic } from '../../graphql/ThematicMutations';
+import createThematicMutation from '../../graphql/mutations/createThematic.graphql';
+import deleteThematicMutation from '../../graphql/mutations/deleteThematic.graphql';
+import updateThematicMutation from '../../graphql/mutations/updateThematic.graphql';
 
 const runSerial = (tasks) => {
   let result = Promise.resolve();
@@ -22,12 +24,12 @@ const createVariablesForMutation = (thematic) => {
     identifier: 'survey',
     titleEntries: thematic.titleEntries,
     image: typeof thematic.imgUrl === 'object' ? thematic.imgUrl : null,
-    video: thematic.video === null ? {} : thematic.video,  // pass {} to remove all video fields on server side
+    video: thematic.video === null ? {} : thematic.video, // pass {} to remove all video fields on server side
     questions: thematic.questions
   };
 };
 
-const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic }) => {  // eslint-disable-line no-shadow
+const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
     const promisesArray = [];
@@ -84,13 +86,13 @@ const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics,
 };
 
 const SaveButtonWithMutations = compose(
-  graphql(createThematic, {
+  graphql(createThematicMutation, {
     name: 'createThematic'
   }),
-  graphql(updateThematic, {
+  graphql(updateThematicMutation, {
     name: 'updateThematic'
   }),
-  graphql(deleteThematic, {
+  graphql(deleteThematicMutation, {
     name: 'deleteThematic'
   })
 )(SaveButton);

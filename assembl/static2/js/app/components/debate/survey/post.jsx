@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, gql, graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -12,6 +12,8 @@ import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
+import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
+import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 
 class Post extends React.Component {
   constructor(props) {
@@ -51,31 +53,35 @@ class Post extends React.Component {
   }
   handleAddSentiment(target, type) {
     const { id } = this.props;
-    this.props.addSentiment({ variables: { postId: id, type: type } })
-    .then((sentiments) => {
-      target.setAttribute('class', 'sentiment sentiment-active');
-      this.setState({
-        like: sentiments.data.addSentiment.post.sentimentCounts.like,
-        disagree: sentiments.data.addSentiment.post.sentimentCounts.disagree,
-        mySentiment: sentiments.data.addSentiment.post.mySentiment
+    this.props
+      .addSentiment({ variables: { postId: id, type: type } })
+      .then((sentiments) => {
+        target.setAttribute('class', 'sentiment sentiment-active');
+        this.setState({
+          like: sentiments.data.addSentiment.post.sentimentCounts.like,
+          disagree: sentiments.data.addSentiment.post.sentimentCounts.disagree,
+          mySentiment: sentiments.data.addSentiment.post.mySentiment
+        });
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
       });
-    }).catch((error) => {
-      displayAlert('danger', `${error}`);
-    });
   }
   handleDeleteSentiment(target) {
     const { id } = this.props;
-    this.props.deleteSentiment({ variables: { postId: id } })
-    .then((sentiments) => {
-      target.setAttribute('class', 'sentiment');
-      this.setState({
-        like: sentiments.data.deleteSentiment.post.sentimentCounts.like,
-        disagree: sentiments.data.deleteSentiment.post.sentimentCounts.disagree,
-        mySentiment: sentiments.data.deleteSentiment.post.mySentiment
+    this.props
+      .deleteSentiment({ variables: { postId: id } })
+      .then((sentiments) => {
+        target.setAttribute('class', 'sentiment');
+        this.setState({
+          like: sentiments.data.deleteSentiment.post.sentimentCounts.like,
+          disagree: sentiments.data.deleteSentiment.post.sentimentCounts.disagree,
+          mySentiment: sentiments.data.deleteSentiment.post.mySentiment
+        });
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
       });
-    }).catch((error) => {
-      displayAlert('danger', `${error}`);
-    });
   }
   render() {
     const { postIndex, moreProposals, post, id } = this.props;
@@ -101,7 +107,9 @@ class Post extends React.Component {
             <OverlayTrigger placement="top" overlay={likeTooltip}>
               <div
                 className={this.state.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
-                onClick={(event) => { this.handleSentiment(event, 'LIKE'); }}
+                onClick={(event) => {
+                  this.handleSentiment(event, 'LIKE');
+                }}
               >
                 <Like size={25} />
               </div>
@@ -109,7 +117,9 @@ class Post extends React.Component {
             <OverlayTrigger placement="top" overlay={disagreeTooltip}>
               <div
                 className={this.state.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
-                onClick={(event) => { this.handleSentiment(event, 'DISAGREE'); }}
+                onClick={(event) => {
+                  this.handleSentiment(event, 'DISAGREE');
+                }}
               >
                 <Disagree size={25} />
               </div>
@@ -148,45 +158,11 @@ Post.propTypes = {
   deleteSentiment: PropTypes.func.isRequired
 };
 
-const addSentiment = gql`
-  mutation addSentiment($type: SentimentTypes!, $postId: ID!) {
-    addSentiment(postId:$postId, type: $type) {
-      post {
-        ... on PropositionPost {
-          id,
-          sentimentCounts {
-            like,
-            disagree
-          }
-          mySentiment
-        }
-      }
-    }
-  }
-`;
-
-const deleteSentiment = gql`
-  mutation deleteSentiment($postId: ID!) {
-    deleteSentiment(postId:$postId) {
-      post {
-        ... on PropositionPost {
-          id,
-          sentimentCounts {
-            like,
-            disagree
-          }
-          mySentiment
-        }
-      }
-    }
-  }
-`;
-
 const PostWithMutations = compose(
-  graphql(addSentiment, {
+  graphql(addSentimentMutation, {
     name: 'addSentiment'
   }),
-  graphql(deleteSentiment, {
+  graphql(deleteSentimentMutation, {
     name: 'deleteSentiment'
   })
 )(Post);

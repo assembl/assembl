@@ -1,0 +1,16 @@
+mutation updateThematic($id:ID!, $identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
+  updateThematic(id:$id, identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
+    thematic {
+      title,
+      imgUrl,
+      video {
+        title,
+        description,
+        htmlCode
+      },
+      questions {
+        title
+      }
+    }
+  }
+}
