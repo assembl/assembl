@@ -19,7 +19,7 @@ Look at ``configs/docker.rc`` for other variables to override, notably mail serv
 .. code:: sh
 
     docker build --tag assembl docker
-    assembl-ini-files random configs/docker.rc
+    assembl-ini-files random -o configs/docker_random.ini configs/docker.rc
     fab -c configs/docker.rc docker_compose
     docker-compose -f docker/build/docker-compose-stage1.yaml up
 
