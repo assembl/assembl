@@ -47,18 +47,18 @@ def private_key_from_cleaned_text(key_text):
 
 def make_saml_cert(key, country='', state='', locality='', org='', cn='',
                    email='', alt_names=None, days=365):
-    if isinstance(key, (str, unicode)):
+    if isinstance(key, basestring):
         key = private_key_from_cleaned_text(key)
-    if alt_names and isinstance(alt_names(str, unicode)):
-        alt_names = alt_names.split()
+    if alt_names and isinstance(alt_names, basestring):
+        alt_names = alt_names.decode('utf-8').split()
     subject = x509.Name([
         # Provide various details about who we are.
-        x509.NameAttribute(NameOID.COUNTRY_NAME, unicode(country)),
-        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, unicode(state)),
-        x509.NameAttribute(NameOID.LOCALITY_NAME, unicode(locality)),
-        x509.NameAttribute(NameOID.ORGANIZATION_NAME, unicode(org)),
-        x509.NameAttribute(NameOID.COMMON_NAME, unicode(cn)),
-        x509.NameAttribute(NameOID.EMAIL_ADDRESS, unicode(email)),
+        x509.NameAttribute(NameOID.COUNTRY_NAME, country.decode('utf-8')),
+        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, state.decode('utf-8')),
+        x509.NameAttribute(NameOID.LOCALITY_NAME, locality.decode('utf-8')),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, org.decode('utf-8')),
+        x509.NameAttribute(NameOID.COMMON_NAME, cn.decode('utf-8')),
+        x509.NameAttribute(NameOID.EMAIL_ADDRESS, email.decode('utf-8')),
     ])
     pkey = key.public_key()
     skid = x509.SubjectKeyIdentifier.from_public_key(pkey)
