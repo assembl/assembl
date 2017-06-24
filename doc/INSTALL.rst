@@ -77,6 +77,9 @@ or:
     fab -c configs/develop.rc install_single_server
     fab -c configs/develop.rc bootstrap_from_checkout
 
+
+Note: If on Mac: replace ``configs/develop.rc`` with ``configs/mac.rc``.
+
 Note: If on Mac, command fab -c configs/develop.rc install_single_server outputs "Low level socket error: connecting to host localhost on port 22: Unable to connect to port 22 on 127.0.0.1", you have to go to System preferences > Sharing > check "Enable remote login", and retry the command.
 
 Note: If you get the following error: ``fabric.exceptions.NetworkError: Incompatible ssh server (no acceptable macs)`` Then you'll need to reconfigure your ssh server
