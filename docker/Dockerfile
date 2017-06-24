@@ -3,7 +3,7 @@ FROM    debian:jessie
 
 ENV     DEBIAN_FRONTEND noninteractive
 ARG	GITREPO=assembl/assembl
-ARG	GITBRANCH=develop
+ARG	GITBRANCH=master
 ARG DOCKER_RC=configs/docker.rc
 ARG BUILDING_DOCKER=true
 
