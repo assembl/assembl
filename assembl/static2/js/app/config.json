@@ -1,32 +1,63 @@
+// This file is a placeholder until the admin section of the home page is done.
+// Copy/paste into "../debate/sandbox/discussion_preferences > Extra JSON parameters" and use your own data.
+
 {
-  "objectivesBackground": {
-    "img1Url": "https://framapic.org/ibX9g8rDKkId/fHbo8OgaSvuW.jpg",
-    "img2Url": "https://framapic.org/3FcT7TlNGrCT/popxXrnh6ELR.jpg"
+  // Header section: URL of the logo
+  "headerLogoUrl": "http://www.grdf.fr/documents/10184/6812d0ec-df0c-4acc-89e1-1493d3e8712e",
+  // Header section: Topic of the debate
+  "topic": {
+    "titleEntries": {
+      "fr": "Les défis de la mobilité",
+      "en": "Challenges of mobility"
+    }
   },
+  // Header section: Introduction under the topic
+  "introduction": {
+    "titleEntries": {
+      "fr": "Co-construction, mobilité de demain, de l'ambition à l'action",
+      "en": "Co-constructing, tomorrow's mobility, from ambition to action"
+    }
+  },
+  // Header section: dates of the debate
+  "dates": {
+    "startDate": "2017-05-01",
+    "endDate": "2017-05-31"
+  },
+  // Header section: background image
+  "headerBackgroundUrl": "https://framapic.org/DTDgukI0lLFg/QvUEIscjehd8.jpg",
+  // Objectives section: titles, descriptions and illustrations
+  "objectives": {
+    "titleEntries": {
+      "fr": "Quel est l'objectif de ce débat ?",
+      "en": "What is the objective of the debate?"
+    },
+    "descriptionEntries": {
+      "fr": "Movin'On Continues prend une approche collaborative pour relever les défis de la mobilité. Il vise à être la continuation des discussions tenues à Movin'On. Il vise à créer une communauté engagée d'acteurs de la mobilité de demain. L'objectif de ce projet est de créer collectivement la mobilité de demain, de l'ambition à l'action. Nous utilisons l'intelligence collective pour confronter les idées et co-construire un plan pour les transformer en action. Comme Michelin, un fier commanditaire de la coopération mondiale permanente et permanente, encourage constamment la créativité et l'innovation dans la mobilité durable, notamment avec Think and Do Tank: Open Lab Challenge Bibendum. Un écosystème collaboratif axé sur les défis de l'avenir de la mobilité, il est organisé autour des communautés des parties prenantes et place le citoyen individuel au cœur de ses préoccupations. En tant que tel, Michelin, Open Lab et Bluenove ont uni leurs forces pour que vous, les citoyens, puissiez construire l'avenir de la mobilité et devenir des acteurs actifs de ce processus de réflexion et de création, grâce au débat Movin'On Continues qui aura lieu En ligne du 12 juin au septembre 2017.",
+      "en": "Movin'On Continues takes on a collaborative approach to tackle the challenges of mobility. It aims to be the continuation of the discussions held at Movin'On. It aims to create an engaged community of tomorrow's mobility actors. The objective of this project is to collectively create tomorrow's mobility, from ambition to action. We are using collective intelligence to confront ideas and co-construct a plan to turn them into action. As Michelin, a proud sponsor of permanent and ongoing global cooperation, is constantly encouraging creativity and innovation in sustainable mobility, notably with its Think and Do Tank: Open Lab Challenge Bibendum. A collaborative ecosystem focused on the challenges of the future of mobility, it is organized around stakeholders’ communities, and places the individual citizen at the heart of its preoccupation. As such, Michelin, Open Lab and bluenove have joined forces so that you, the citizens, can co-construct the future of mobility and become active players in this process of reflection and creation, thanks to the Movin’On Continues debate, taking place online from June 12 to September, 2017."
+    },
+    "images": {
+      "img1Url": "https://framapic.org/ibX9g8rDKkId/fHbo8OgaSvuW.jpg",
+      "img2Url": "https://framapic.org/3FcT7TlNGrCT/popxXrnh6ELR.jpg"
+    }
+  },
+  // Video section: URL, titles, descriptions
+  "video": {
+    "videoUrl": "https://www.youtube.com/embed/PhjIcwGvjt0",
+    "titleEntries": {
+      "fr": "Quel sera le résultat ?",
+      "en": "What will be the outcome?"
+    },
+    "descriptionEntries": {
+      "fr": "Le résultat final de ce débat sera une série de recommandations pour l'avenir de la mobilité. Il sera publié par Michelin et accessible à tous. Si vous participez au débat, vous serez cité dans le document en tant que co-écrivain. Vous co-créerez une feuille de route pour l'avenir de la mobilité. Ce sera un document court et concis présentant les prochaines étapes pour résoudre les problèmes de mobilité de l'ambition à l'action.",
+      "en": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action."
+    }
+  },
+  // Twitter section: Background image, ID of the tweet
   "twitter": {
     "backgroundImageUrl": "https://framapic.org/3EhbBotOOBMb/PVgrOF1tbnvr.jpg",
     "id": "808390464667721728"
   },
-  "headerBackgroundUrl": "https://framapic.org/DTDgukI0lLFg/QvUEIscjehd8.jpg",
-  "headerLogoUrl": "https://framapic.org/8pbQvcmJfljB/oBbs13ac8CuI.png",
-  "socialMedias": [
-    {
-      "url": "https://www.facebook.com/Citiesflife/?fref=ts",
-      "title": "facebook"
-    },
-    {
-      "url": "https://twitter.com/CitiesFLife",
-      "title": "twitter"
-    },
-    {
-      "url": "https://www.linkedin.com/in/citiesflife/",
-      "title": "linkedin"
-    }
-  ],
-  "videoTitle": {
-    "fr": "Quel sera le résultat ?",
-    "en": "What will be the outcome?"
-  },
+  // Chatbot section: link to the chatbot tool, name of the chatbot, titles
  "chatbot": {
     "link": "https://www.messenger.com/t/VoxeBot",
     "name": "Barbara27",
@@ -34,5 +65,73 @@
       "fr": "Peu de temps ? Découvrez Barbara27, l’assistante qui vous inspire tout au long du débat.",
       "en": "Short on time? Why not contact Barbara27, the assistant who will assist you throughout the debate."
     }
-  }
+  },
+  // Partners section: link, logo, name
+  "partners": [
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/YisQV9E8WBsM/X8VpDly6LAui.png",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/DE2fWUB8lizu/BLedhh9Jo1Pd.png",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/y2hoEmaIFVrD/n1rAm4uzK5u6.png",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/b7wc3yTNJ2LH/uPCKUpRRksJC.jpg",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/gjWcekbNKGvc/WSIrMIh6vrND.jpg",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/cOolesoiKwdG/XQScdEqzGJhR.png",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/3SjOYdiuCfm7/d1s5wMjD11Ie.png",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/LZSd31mWolhV/yeKsQvS2sCN0.png",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/0Wbh9AUc7Y3G/a8hH0EJetIxg.jpg",
+      "name": "Michelin"
+    },
+    {
+      "link": "http://citiesforlife-latribune.paris/",
+      "logo": "https://framapic.org/FyrAaESDdbs0/4vGwhoEqQyZK.png",
+      "name": "Michelin"
+    }
+  ],
+  // Footer section: url to the social media, name of the social media (Facebook, Twitter and Linkedin available)
+  "socialMedias": [
+    {
+      "url": "https://www.facebook.com/Citiesflife/?fref=ts",
+      "name": "facebook"
+    },
+    {
+      "url": "https://twitter.com/CitiesFLife",
+      "name": "twitter"
+    },
+    {
+      "url": "https://www.linkedin.com/in/citiesflife/",
+      "name": "linkedin"
+    }
+  ]
 }

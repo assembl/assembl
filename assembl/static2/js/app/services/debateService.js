@@ -2,30 +2,28 @@ import { xmlHttpRequest } from '../utils/httpRequestHandler';
 import { getSortedArrayByKey } from '../utils/globalFunctions';
 
 export const buildDebateData = (debateData, prefs, timeline) => {
-  const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
-  const videoTitle = prefs.extra_json && prefs.extra_json.videoTitle ? prefs.extra_json.videoTitle : null;
-  const headerLogoUrl = prefs.extra_json && prefs.extra_json.headerLogoUrl ? prefs.extra_json.headerLogoUrl : null;
   const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl
     ? prefs.extra_json.headerBackgroundUrl
     : null;
-  const objectivesBackground = prefs.extra_json && prefs.extra_json.objectivesBackground
-    ? prefs.extra_json.objectivesBackground
-    : null;
+  const headerLogoUrl = prefs.extra_json && prefs.extra_json.headerLogoUrl ? prefs.extra_json.headerLogoUrl : null;
+  const topic = prefs.extra_json && prefs.extra_json.topic ? prefs.extra_json.topic : null;
+  const introduction = prefs.extra_json && prefs.extra_json.introduction ? prefs.extra_json.introduction : null;
+  const dates = prefs.extra_json && prefs.extra_json.dates ? prefs.extra_json.dates : null;
+  const objectives = prefs.extra_json && prefs.extra_json.objectives ? prefs.extra_json.objectives : null;
+  const video = prefs.extra_json && prefs.extra_json.video ? prefs.extra_json.video : null;
   const twitter = prefs.extra_json && prefs.extra_json.twitter ? prefs.extra_json.twitter : null;
   const chatbot = prefs.extra_json && prefs.extra_json.chatbot ? prefs.extra_json.chatbot : null;
+  const partners = prefs.extra_json && prefs.extra_json.partners ? prefs.extra_json.partners : null;
+  const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
-  const startDate = timeline.length > 0 ? sortedTimeline[0].start : null;
-  const endDate = timeline.length > 0 ? sortedTimeline[timeline.length - 1].end : null;
   return {
     slug: debateData.slug,
     logo: debateData.logo,
-    topic: debateData.topic,
-    startDate: startDate,
-    endDate: endDate,
-    introduction: debateData.introduction,
-    objectives: debateData.objectives,
-    objectivesBackground: objectivesBackground,
-    videoTitle: videoTitle,
+    topic: topic,
+    dates: dates,
+    introduction: introduction,
+    objectives: objectives,
+    video: video,
     headerLogoUrl: headerLogoUrl,
     headerBackgroundUrl: headerBackgroundUrl,
     timeline: sortedTimeline,
@@ -35,7 +33,8 @@ export const buildDebateData = (debateData, prefs, timeline) => {
     videoDescription: prefs.video_description,
     socialMedias: socialMedias,
     twitter: twitter,
-    chatbot: chatbot
+    chatbot: chatbot,
+    partners: partners
   };
 };
 

@@ -20,11 +20,11 @@ class Home extends React.Component {
         <Synthesis />
         {debateData.objectives && <Objectives />}
         {debateData.timeline && debateData.timeline.length > 1 && <Phases />}
-        {debateData.videoUrl && <Video />}
+        {debateData.video && <Video />}
         {debateData.twitter && <Twitter />}
         <Contact />
         {debateData.chatbot && <Chatbot chatbot={debateData.chatbot} locale={locale} />}
-        <Partners />
+        {debateData.partners && <Partners />}
       </div>
     );
   }
