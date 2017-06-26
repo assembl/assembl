@@ -184,6 +184,11 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', 'name')
 
+    user_id = graphene.Int(required=True)
+
+    def resolve_user_id(self, args, context, info):
+        return self.id
+
 
 # class User(AgentProfile):
 #     class Meta:
@@ -200,8 +205,12 @@ class SentimentCounts(graphene.ObjectType):
 
 
 class IdeaContentLink(graphene.ObjectType):
-    idea_id = graphene.ID(required=True)
+    idea_id = graphene.Int(required=True)
     type = graphene.String(required=True)
+    idea = graphene.Field(lambda: Idea)
+
+    def resolve_idea(self, args, context, info):
+        return models.Idea.get(self.idea_id)
 
 
 class PostInterface(SQLAlchemyInterface):
@@ -245,7 +254,7 @@ class PostInterface(SQLAlchemyInterface):
     def resolve_indirect_idea_content_links(self, args, context, info):
         links = [(models.Idea.get_database_id(link['idIdea']), link['@type'])
                     for link in self.indirect_idea_content_links_with_cache()]
-        return [IdeaContentLink(idea_id=Node.to_global_id('Idea', idea_id),
+        return [IdeaContentLink(idea_id=idea_id,
                                 type=type)
                 for idea_id, type in links]
 
