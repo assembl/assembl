@@ -1656,6 +1656,8 @@ def install_yarn():
     """Install yarn"""
     if not env.mac:
         if not exists('/etc/apt/sources.list.d/yarn.list'):
+            sudo('apt-get update')
+            sudo('apt-get install apt-transport-https')
             sudo('echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list')
             sudo('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -')
             sudo('apt-get update')
