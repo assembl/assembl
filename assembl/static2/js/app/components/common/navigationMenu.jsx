@@ -23,19 +23,19 @@ class NavigationMenu extends React.Component {
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
     const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
     const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-    const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+    const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
     const isSeveralPhases = isSeveralIdentifiers(timeline);
     if (isRedirectionToV1) {
       if (isSeveralPhases) {
         displayModal(null, body, true, null, button, true);
         setTimeout(() => {
-          window.location = `${get('oldDebate', slug)}`;
+          window.location = get('oldDebate', slug);
         }, 6000);
       } else {
-        window.location = `${get('oldDebate', slug)}`;
+        window.location = get('oldDebate', slug);
       }
     } else {
-      browserHistory.push(`${get('debate', slug)}`);
+      browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
     }
   }
   render() {
