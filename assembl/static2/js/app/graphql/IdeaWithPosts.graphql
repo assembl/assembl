@@ -1,0 +1,17 @@
+query IdeaWithPosts($lang: String!, $id: ID!) {
+  idea: node(id:$id) {
+    ... on Idea {
+      id
+      title(lang: $lang)
+      description(lang: $lang)
+      imgUrl
+      posts(first: 20) {
+        edges {
+          node {
+            ... on Post { id, subject body }
+          }
+        }
+      }
+    }
+  }
+}

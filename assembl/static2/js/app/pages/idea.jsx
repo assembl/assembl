@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, graphql, gql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import Header from '../components/debate/survey/header';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Post from '../components/debate/thread/post';
+import IdeaWithPosts from '../graphql/IdeaWithPosts.graphql';
 
 class Idea extends React.Component {
   render() {
@@ -23,30 +24,10 @@ class Idea extends React.Component {
   }
 }
 
-const IdeaWithPostsByIdeaQuery = gql`
-  query PostsByIdeaQuery($lang: String!, $id: ID!) {
-    idea: node(id:$id) {
-      ... on Idea {
-        id
-        title(lang: $lang)
-        description(lang: $lang)
-        imgUrl
-        posts(first: 20) {
-          edges {
-            node {
-              ... on Post { id, subject body }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 const mapStateToProps = (state) => {
   return {
     lang: state.i18n.locale
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(IdeaWithPostsByIdeaQuery), withLoadingIndicator())(Idea);
+export default compose(connect(mapStateToProps), graphql(IdeaWithPosts), withLoadingIndicator())(Idea);
