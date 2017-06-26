@@ -46,32 +46,32 @@ module.exports = {
         loaders: [
         {
             test: /\.jsx?(\?v=\d)?$/,
-            loaders: ['babel'],
+            loader: 'babel-loader',
             include: path.join(__dirname, 'js')
         },
         {
             test: /\.scss$/,
             loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
         },
-        { 
-            test: /\.css$/, 
+        {
+            test: /\.css$/,
             loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
         },
-        { 
-            test: /\.png$/, 
-            loader: "url-loader?limit=100000" 
-        },
-        { 
-            test: /\.jpg$/, 
-            loader: "file-loader" 
+        {
+            test: /\.png$/,
+            loader: 'url-loader?limit=100000'
         },
         {
-            test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/, 
-            loader: 'url?limit=100000&name=[name].[ext]'
+            test: /\.jpg$/,
+            loader: 'file-loader'
         },
         {
-            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, 
-            loader: 'file'
+            test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
+            loader: 'url-loader?limit=100000&name=[name].[ext]'
+        },
+        {
+            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+            loader: 'file-loader'
         },
         {
           test: /\.(graphql|gql)$/,
@@ -81,7 +81,7 @@ module.exports = {
         ]
     },
     resolve:{
-        extensions:['','.js','.jsx']
+        extensions:['', '.js', '.jsx']
     },
     plugins: [
         new webpack.DefinePlugin({

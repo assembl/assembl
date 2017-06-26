@@ -34,7 +34,7 @@ module.exports = {
         hot: true,
         headers: {
             "Access-Control-Allow-Origin": process.env.ASSEMBL_URL,
-            "Access-Control-Allow-Credentials":true
+            "Access-Control-Allow-Credentials": 'true'
         },
         port: webpackPort,
         host: webpackHost,
@@ -65,33 +65,32 @@ module.exports = {
         loaders: [
         {
             test: /\.jsx?(\?v=\d)?$/,
-            loaders: ['babel'],
+            loader: 'babel-loader',
             include: path.join(__dirname, 'js')
         },
         {
             test: /\.scss$/,
-            //loader: 'style!css?sourceMap=true!sass?sourceMap=true'  // fonts are not loaded when using sourceMap...
-            loaders: ['style', 'css', 'sass']
+            loaders: ['style-loader', 'css-loader', 'sass-loader']
         },
         {
             test: /\.css$/,
-            loaders: ['style', 'css', 'sass']
+            loaders: ['style-loader', 'css-loader', 'sass-loader']
         },
         {
             test: /\.png$/,
-            loader: "url-loader?limit=100000"
+            loader: 'url-loader?limit=100000'
         },
         {
             test: /\.jpg$/,
-            loader: "file-loader"
+            loader: 'file-loader'
         },
         {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-            loader: 'url?limit=100000&name=[name].[ext]'
+            loader: 'url-loader?limit=100000&name=[name].[ext]'
         },
         {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            loader: 'file'
+            loader: 'file-loader'
         },
         {
           test: /\.(graphql|gql)$/,
