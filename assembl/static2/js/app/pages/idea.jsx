@@ -14,7 +14,7 @@ class Idea extends React.Component {
           <Header title={idea.title} imgUrl={idea.imgUrl} />
           <div>
             {idea.posts.edges.map((edge) => {
-              return <Post {...edge.node} />;
+              return <Post {...edge.node} key={edge.node.id} />;
             })}
           </div>
         </div>
@@ -34,7 +34,7 @@ const IdeaWithPostsByIdeaQuery = gql`
         posts(first: 20) {
           edges {
             node {
-              ... on Post { subject body }
+              ... on Post { id, subject body }
             }
           }
         }
