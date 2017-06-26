@@ -53,7 +53,7 @@ const DebateChild = (props) => {
   case 'tokenVote':
     return <TokenVote id={props.id} identifier={props.identifier} />;
   default:
-    return <Thread id={props.id} identifier={props.identifier} />;
+    return <Idea id={props.id} identifier={props.identifier} />;
   }
 };
 

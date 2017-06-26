@@ -34,7 +34,7 @@ class Themes extends React.Component {
                         imgUrl={thematic.imgUrl}
                         numPosts={thematic.numPosts}
                         numContributors={thematic.numContributors}
-                        link={`${get('debate', { slug: slug, phase: identifier })}${get('theme', {themeId: thematic.id})}`}
+                        link={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}
                         title={thematic.title}
                         description={thematic.description}
                       />

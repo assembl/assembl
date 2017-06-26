@@ -15,7 +15,7 @@ class TimelineSegment extends React.Component {
     const { locale } = this.props.i18n;
     const { phaseIdentifier, title, startDate } = this.props;
     const { debateData } = this.props.debate;
-    const slug = { slug: debateData.slug }
+    const slug = { slug: debateData.slug };
     const params = { slug: debateData.slug, phase: phaseIdentifier };
     let phaseName = '';
     title.entries.forEach((entry) => {
