@@ -9,7 +9,7 @@ class Thumbnails extends React.Component {
   render() {
     const { showNavigation, identifier, thematics, themeId, isNavbarHidden } = this.props;
     const { debateData } = this.props.debate;
-    const slug = { slug: debateData.slug };
+    const slug = debateData.slug;
     const phaseStarted = isPhaseStarted(debateData.timeline, identifier);
     return (
       <Grid fluid className={showNavigation && phaseStarted ? 'thumbnails-nav no-padding' : 'hidden'}>
@@ -19,13 +19,11 @@ class Thumbnails extends React.Component {
               {thematics.map((thematic, index) => {
                 return (
                   <div className="thumb-img-container" key={index}>
-                    <Link to={`${get('debate', slug)}/${identifier}/theme/${thematic.id}`}>
+                    <Link to={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}>
                       <div
                         className={themeId === thematic.id ? 'thumb-img active' : 'thumb-img'}
                         style={{ backgroundImage: `url(${thematic.imgUrl})` }}
-                      >
-                        &nbsp;
-                      </div>
+                      />
                       <div className="color-box">&nbsp;</div>
                       <div className="thumb-title">
                         <div className={themeId === thematic.id ? 'thumb-title-inner active-title' : 'thumb-title-inner'}>
