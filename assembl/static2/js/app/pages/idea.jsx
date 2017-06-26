@@ -49,4 +49,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(IdeaWithPostsByIdeaQuery), withLoadingIndicator)(Idea);
+export default compose(connect(mapStateToProps), graphql(IdeaWithPostsByIdeaQuery), withLoadingIndicator())(Idea);
