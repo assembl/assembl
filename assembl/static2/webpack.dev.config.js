@@ -28,8 +28,8 @@ function theme_entries() {
 
 // For css hot reload to work, don't use ExtractTextPlugin
 module.exports = {
+    devtool: '#cheap-module-eval-source-map',  // http://webpack.github.io/docs/configuration.html#devtool
     devServer: {
-        devtool: '#cheap-module-eval-source-map',  // http://webpack.github.io/docs/configuration.html#devtool
         inline: true,
         hot: true,
         headers: {
