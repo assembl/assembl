@@ -391,7 +391,7 @@ const Translations = {
         txtAreaPh: 'Write your proposal',
         question_x_on_total: 'Question %{current} on %{total}',
         titleVideo: 'A video to better understand the subject...',
-        proposalsTitle: 'Do you agree with proposals?',
+        proposalsTitle: 'Do you agree with the proposals?',
         reactions: 'Reactions',
         react: 'React:',
         moreProposals: 'More proposals',
