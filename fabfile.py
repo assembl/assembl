@@ -967,7 +967,6 @@ def install_single_server():
     """
     execute(install_java)
     execute(install_elasticsearch)
-    execute(install_yarn)
     execute(install_database)
     execute(install_assembl_server_deps)
     execute(check_and_create_database_user)
@@ -980,6 +979,7 @@ def install_assembl_server_deps():
     """
     Will install most assembl components on a single server, except db
     """
+    execute(install_yarn)
     execute(install_assembl_deps)
 
 
