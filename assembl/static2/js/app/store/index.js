@@ -7,7 +7,8 @@ import rootReducer from '../reducers/rootReducer';
 import { getLocale } from '../utils/globalFunctions';
 import Translations from '../utils/translations';
 
-export default function createAppStore(initialState) {
+export default function createAppStore(apolloClient, initialState) {
+  middlewares.push(apolloClient.middleware());
   const store = configureStore(initialState, rootReducer, middlewares);
   if (module.hot) {
     module.hot.accept('../reducers/rootReducer', () => {
