@@ -19,7 +19,7 @@ export class SocialMedia extends React.Component {
       next = null;
     }
     return (
-      <div className="social-media">
+      <div className="login-providers-list">
         <h4 className="dark-title-4">
           <Translate value="login.loginWithSocialMedia" />
         </h4>
