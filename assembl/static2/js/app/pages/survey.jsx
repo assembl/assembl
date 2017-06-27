@@ -61,7 +61,7 @@ class Survey extends React.Component {
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} />
+          <Header title={title} imgUrl={imgUrl} identifier="survey" />
           {isValidVideo ? <Video title={video.title} description={video.description} htmlCode={video.htmlCode} /> : null}
           <div className="questions">
             {questions &&

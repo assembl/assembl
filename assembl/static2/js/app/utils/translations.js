@@ -173,8 +173,7 @@ const Translations = {
         submit: 'Envoyer',
         remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
         postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
-        endPhase: 'La phase %{closedPhaseName} est terminée.',
-        goTo: 'Rendez-vous sur la phase %{currentPhaseName}.'
+        endPhase: 'La phase %{closedPhaseName} est terminée.'
       },
       themes: 'Thèmes',
       notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
@@ -401,8 +400,7 @@ const Translations = {
         submit: 'Submit',
         remaining_x_characters: 'You have %{nbCharacters} characters left',
         postSuccess: 'Thanks for your participation. Your proposal has been sent!',
-        endPhase: 'The %{closedPhaseName} phase is closed.',
-        goTo: 'Go to %{currentPhaseName} phase.'
+        endPhase: 'The %{closedPhaseName} phase is closed.'
       },
       themes: 'Themes',
       notStarted: 'The %{phaseName} phase has not started. Please come back from '

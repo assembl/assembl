@@ -12,7 +12,7 @@ class Idea extends React.Component {
     const { idea } = this.props.data;
     return (
       <div className="idea">
-        <Header title={idea.title} imgUrl={idea.imgUrl} />
+        <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
           <Grid fluid className="background-light">
             <div className="max-container">
