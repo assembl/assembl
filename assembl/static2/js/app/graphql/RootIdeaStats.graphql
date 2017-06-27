@@ -1,0 +1,11 @@
+query RootIdeaStats($identifier: String) {
+  rootIdea(identifier: $identifier) {
+    ... on Node {
+      id
+    }
+    ... on IdeaInterface {
+      numPosts
+    }
+  }
+  numParticipants
+}

@@ -1,45 +1,38 @@
 import React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import Loader from '../../common/loader';
-import Error from '../../common/error';
+import RootIdeaStats from '../../../graphql/RootIdeaStats.graphql';
+import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
+import { getCurrentPhaseIdentifier } from '../../../utils/timeline';
 
 class Statistic extends React.Component {
   render() {
-    const { posts, postsLoading, postsError } = this.props.posts;
-    const { users, usersLoading, usersError } = this.props.users;
+    const { rootIdea, numParticipants } = this.props.data;
     return (
       <div className="statistic">
-        <div className="inline">
-          {postsLoading &&
-            <div className="stat-loader">
-              <Loader textHidden color="white" />
-            </div>}
-          {postsError && <Error errorMessage={postsError} />}
-          {posts &&
+        {rootIdea !== null &&
+          <div className="inline">
             <div className="stat-box border-right">
               <div className="stat-icon assembl-icon-message white">&nbsp;</div>
               <div className="stat">
-                <div className="stat-nb">{posts.total}&nbsp;</div>
+                <div className="stat-nb">{rootIdea.numPosts}&nbsp;</div>
                 <div className="stat-nb">
                   <Translate value="home.contribution" />
                 </div>
               </div>
-            </div>}
-        </div>
+            </div>
+          </div>}
         <div className="inline">
-          {usersLoading && <Loader textHidden color="white" />}
-          {usersError && <Error errorMessage={usersError} />}
-          {users &&
-            <div className="stat-box">
-              <div className="stat-icon assembl-icon-profil white">&nbsp;</div>
-              <div className="stat">
-                <div className="stat-nb">{users.totalVerifiedUsers}&nbsp;</div>
-                <div className="stat-nb">
-                  <Translate value="home.participant" />
-                </div>
+          <div className="stat-box">
+            <div className="stat-icon assembl-icon-profil white">&nbsp;</div>
+            <div className="stat">
+              <div className="stat-nb">{numParticipants}&nbsp;</div>
+              <div className="stat-nb">
+                <Translate value="home.participant" />
               </div>
-            </div>}
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -48,9 +41,12 @@ class Statistic extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    posts: state.posts,
-    users: state.users
+    identifier: getCurrentPhaseIdentifier(state.debate.debateData.timeline) // used as variable in RootIdeaStats query
   };
 };
 
-export default connect(mapStateToProps)(Statistic);
+export default compose(
+  connect(mapStateToProps),
+  graphql(RootIdeaStats),
+  withLoadingIndicator({ textHidden: true, color: 'white' })
+)(Statistic);

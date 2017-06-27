@@ -1,5 +1,7 @@
 import intersection from 'lodash/intersection';
 
+import { getConnectedUserPermissions } from '../utils/globalFunctions';
+
 const Permissions = {
   READ: 'read',
   READ_PUBLIC_CIF: 'read_public_cif',
@@ -35,11 +37,13 @@ export const expertPermissions = [
   Permissions.ADMIN_DISCUSSION,
   Permissions.SYSADMIN
 ];
-export const canUseExpertInterface = (permissions) => {
+export const connectedUserIsExpert = () => {
+  const permissions = getConnectedUserPermissions();
   return intersection([permissions, expertPermissions]).length > 0;
 };
 
-export const connectedUserIsAdmin = (permissions) => {
+export const connectedUserIsAdmin = () => {
+  const permissions = getConnectedUserPermissions();
   if (permissions.length === 0) {
     return false;
   }

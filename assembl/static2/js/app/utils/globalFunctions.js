@@ -34,6 +34,12 @@ export const getConnectedUserName = () => {
   return userName;
 };
 
+export const getConnectedUserPermissions = () => {
+  let permissions = document.getElementById('permissions-json') ? document.getElementById('permissions-json').text : '[]';
+  permissions = JSON.parse(permissions);
+  return permissions;
+};
+
 export const getAuthorizationToken = (location) => {
   return 'token' in location.query ? location.query.token : null;
 };

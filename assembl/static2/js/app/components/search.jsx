@@ -48,8 +48,7 @@ import DateRangeFilter from './search/DateRangeFilter';
 import FilteredSortingSelector from './search/SortingSelector';
 import ProfileLine from './common/profileLine';
 import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextReducer';
-import { getPermissionsForConnectedUser } from '../reducers/usersReducer';
-import { canUseExpertInterface } from '../utils/permissions';
+import { connectedUserIsExpert } from '../utils/permissions';
 
 const FRAGMENT_SIZE = 400;
 
@@ -602,9 +601,8 @@ export class SearchComponent extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const permissions = getPermissionsForConnectedUser(state);
   return {
-    isExpert: canUseExpertInterface(permissions),
+    isExpert: connectedUserIsExpert(),
     connectedUserId: getConnectedUserId(state),
     discussionId: getDebateId(state)
   };
