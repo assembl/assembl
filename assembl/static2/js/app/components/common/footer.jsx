@@ -18,8 +18,8 @@ class Footer extends React.Component {
                 <div className="social-medias">
                   {debateData.socialMedias.map((sMedia) => {
                     return (
-                      <Link to={sMedia.url} target="_blank" key={sMedia.title}>
-                        <Glyphicon glyph={sMedia.title} color="white" size={30} desc={sMedia.title} />
+                      <Link to={sMedia.url} target="_blank" key={sMedia.name}>
+                        <Glyphicon glyph={sMedia.name} color="white" size={30} desc={sMedia.name} />
                       </Link>
                     );
                   })}

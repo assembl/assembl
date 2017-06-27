@@ -42,24 +42,26 @@ class Header extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { synthesis } = this.props.synthesis;
+    const { locale } = this.props.i18n;
     return (
       <section className="home-section header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
             {debateData.headerLogoUrl ? <img className="header-logo" src={debateData.headerLogoUrl} alt="logo" /> : null}
             <div className="max-text-width">
-              <h1 className="light-title-1">{debateData.topic}</h1>
+              {debateData.topic && <h1 className="light-title-1">{debateData.topic.titleEntries[locale]}</h1>}
               <h4 className="light-title-4 uppercase margin-m">
-                <span dangerouslySetInnerHTML={{ __html: debateData.introduction }} />
-                <span>&nbsp;</span>
-                <br />
-                <Translate value="home.from" />
-                <span>&nbsp;</span>
-                {debateData.startDate && <Localize value={debateData.startDate} dateFormat="date.format" />}
-                <span>&nbsp;</span>
-                <Translate value="home.to" />
-                <span>&nbsp;</span>
-                {debateData.endDate && <Localize value={debateData.endDate} dateFormat="date.format" />}
+                {debateData.introduction && <span>{debateData.introduction.titleEntries[locale]}</span>}
+                {debateData.dates &&
+                  <div>
+                    <Translate value="home.from" />
+                    <span>&nbsp;</span>
+                    <Localize value={debateData.dates.startDate} dateFormat="date.format" />
+                    <span>&nbsp;</span>
+                    <Translate value="home.to" />
+                    <span>&nbsp;</span>
+                    <Localize value={debateData.dates.endDate} dateFormat="date.format" />
+                  </div>}
               </h4>
               <Button onClick={this.displayPhase} className="button-submit button-light margin-xl">
                 <Translate value="home.accessButton" />
