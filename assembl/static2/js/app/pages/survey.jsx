@@ -7,7 +7,7 @@ import { Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Video from '../components/debate/survey/video';
-import Header from '../components/debate/survey/header';
+import Header from '../components/debate/common/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
