@@ -33,6 +33,7 @@ class Phases extends React.Component {
                       <Phase
                         imgUrl={phase.image_url}
                         startDate={phase.start}
+                        endDate={phase.end}
                         index={index}
                         title={phase.title}
                         description={phase.description}

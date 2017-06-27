@@ -12,7 +12,7 @@ class Phase extends React.Component {
     this.displayPhase = this.displayPhase.bind(this);
   }
   displayPhase() {
-    const { identifier, startDate, title } = this.props;
+    const { identifier, startDate, endDate, title } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const slug = { slug: debateData.slug };
@@ -24,7 +24,7 @@ class Phase extends React.Component {
       }
     });
     const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
-    const phaseStatus = getPhaseStatus(debateData.timeline, identifier);
+    const phaseStatus = getPhaseStatus(startDate, endDate);
     if (isSeveralPhases) {
       if (phaseStatus === 'notStarted') {
         const body = (

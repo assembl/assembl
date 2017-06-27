@@ -24,6 +24,7 @@ class Timeline extends React.Component {
                 identifier={identifier}
                 phaseIdentifier={phase.identifier}
                 startDate={phase.start}
+                endDate={phase.end}
               />
             );
           })}

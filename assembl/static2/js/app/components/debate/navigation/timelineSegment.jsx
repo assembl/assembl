@@ -13,7 +13,7 @@ class TimelineSegment extends React.Component {
   }
   displayPhase() {
     const { locale } = this.props.i18n;
-    const { phaseIdentifier, title, startDate } = this.props;
+    const { phaseIdentifier, title, startDate, endDate } = this.props;
     const { debateData } = this.props.debate;
     const slug = { slug: debateData.slug };
     const params = { slug: debateData.slug, phase: phaseIdentifier };
@@ -24,7 +24,7 @@ class TimelineSegment extends React.Component {
       }
     });
     const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
-    const phaseStatus = getPhaseStatus(debateData.timeline, phaseIdentifier);
+    const phaseStatus = getPhaseStatus(startDate, endDate);
     if (isSeveralPhases) {
       if (phaseStatus === 'notStarted') {
         const body = (

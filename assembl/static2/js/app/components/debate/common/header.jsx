@@ -21,10 +21,12 @@ class Header extends React.Component {
         <Grid fluid className="max-container">
           <div className="header-content">
             <h1 className="light-title-1">
-              {isPhaseCompleted ? <Translate value="debate.survey.endPhase" closedPhaseName={surveyPhaseName} /> : title}
+              {title}
+              <br />
+              {isPhaseCompleted && <Translate value="debate.survey.endPhase" closedPhaseName={surveyPhaseName} />}
             </h1>
             <Link to={`${get('debate', slug)}`}>
-              {isPhaseCompleted ? <Translate value="debate.survey.goTo" currentPhaseName={currentPhaseName} /> : ''}
+              {isPhaseCompleted && <Translate value="debate.survey.goTo" currentPhaseName={currentPhaseName} />}
             </Link>
           </div>
         </Grid>
