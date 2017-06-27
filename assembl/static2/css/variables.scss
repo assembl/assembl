@@ -130,8 +130,13 @@ $link-hover-color: $black;
 
 $btn-radius: 0;
 $btn-text-transform: uppercase;
-$btn-light-border: 2px solid $second-color;
-$btn-dark-border: 2px solid $first-color;
+
+$btn-light-border-width: 2px;
+$btn-light-border-style: solid;
+
+$btn-dark-border-width: 2px;
+$btn-dark-border-style: solid;
+
 $btn-light-txt: $white;
 $btn-dark-txt: $black;
 $btn-light-bkg: none;

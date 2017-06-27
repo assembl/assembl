@@ -1,43 +1,49 @@
-.button-link {
-  border-radius: $btn-radius;
-  display: inline-block;
-  font-family: $font-family2;
-  font-size: $font-size-xs;
-  letter-spacing: $button-letter-spacing;
-  padding: 10px 50px;
-  text-align: center;
-  text-decoration: none;
-  text-transform: $btn-text-transform;
+/* Begin Code specific to the button hover animation (horizontal fill of background and inversion of text color) */
 
-  &:active {
+@mixin button-with-hover-animation($text-color, $border-color, $hover-background-color: $border-color, $background-color: initial) {
+  position: relative; /* so that on hover, background animation can fill the button instead of its parent */
+  background-color: $background-color;
+  border-color: $border-color;
+  color: $text-color;
+  z-index: 0;
+
+  &:hover, &:focus, &:active, &:focus:active, &:active:hover {
+    color: invert($text-color); /* opposite of current non-hover color */
+    border-color: $border-color;
+    background-color: $background-color;
     text-decoration: none;
   }
 
-  &:hover {
-    text-decoration: none;
+  &:before {
+    content: "";
+    position: absolute;
+    background: $hover-background-color;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+    top: 0;
+    z-index: -1;
+    transition: right 0.09s ease-in, color 1s ease-in;
   }
 
-  &:focus {
-    outline: none;
-  }
-
-  &:visited {
-    text-decoration: none;
+  &:hover:before, &:focus:before, &:active:before, &:focus:active:before {
+    right: 0;
   }
 }
 
-.button-submit {
-  border-radius: $btn-radius;
-  font-family: $font-family2;
-  font-size: $font-size-xs;
-  letter-spacing: $button-letter-spacing;
-  padding: 10px 50px;
-  text-align: center;
-  text-transform: $btn-text-transform;
+/* End Code specific to the button hover animation (horizontal fill of background and inversion of text color) */
 
-  &:focus {
-    outline: none;
-  }
+
+.button-link {
+  @include button-with-hover-animation($btn-light-txt, $btn-light-border-color);
+  @extend .button-generic;
+  display: inline-block;
+  padding: 10px 50px;
+}
+
+.button-submit {
+  @extend .button-generic;
+  padding: 10px 50px;
 
   &:active {
     box-shadow: none;
@@ -45,83 +51,48 @@
     &:focus {
       background-color: $white;
       box-shadow: none;
-      outline: none;
     }
   }
 }
 
 .button-cancel {
+  @extend .button-generic;
+  padding: 10px 50px;
+}
+
+.button-light {
+  @include button-with-hover-animation($btn-light-txt, $btn-light-border-color);
+  background: $btn-light-bkg;
+  border-width: $btn-light-border-width;
+  border-style: $btn-light-border-style;
+  border-color: $btn-light-border-color;
+  color: $btn-light-txt;
+}
+
+.button-dark {
+  @include button-with-hover-animation($btn-dark-txt, $btn-dark-border-color);
+  background: $btn-dark-bkg;
+  border-width: $btn-dark-border-width;
+  border-style: $btn-dark-border-style;
+  border-color: $btn-dark-border-color;
+  color: $btn-dark-txt;
+}
+
+
+.button-generic {
   border-radius: $btn-radius;
   font-family: $font-family2;
   font-size: $font-size-xs;
   letter-spacing: $button-letter-spacing;
-  padding: 10px 50px;
   text-align: center;
   text-transform: $btn-text-transform;
-}
+  text-decoration: none;
 
-.button-light {
-  background: $btn-light-bkg;
-  border: $btn-light-border;
-  color: $btn-light-txt;
-
-  &:active {
-    background: $btn-light-bkg;
-    border: $btn-light-border;
-    color: $btn-light-txt;
-  }
-
-  &:hover {
-    background: $btn-light-bkg;
-    border: $btn-light-border;
-    color: $btn-light-txt;
-  }
-
-  &:focus {
-    background: $btn-light-bkg;
-    border: $btn-light-border;
-    color: $btn-light-txt;
-  }
-
-  &:visited {
-    background: $btn-light-bkg;
-    border: $btn-light-border;
-    color: $btn-light-txt;
+  &:active, &:hover, &:focus, &:visited {
+    text-decoration: none;
+    outline: none;
   }
 }
 
-.button-dark {
-  background: $btn-dark-bkg;
-  border: $btn-dark-border;
-  color: $btn-dark-txt;
 
-  &:active {
-    background: $btn-dark-bkg;
-    border: $btn-dark-border;
-    color: $btn-dark-txt;
-  }
 
-  &:hover {
-    background: $btn-dark-bkg;
-    border: $btn-dark-border;
-    color: $btn-dark-txt;
-  }
-
-  &:focus {
-    background: $btn-dark-bkg;
-    border: $btn-dark-border;
-    color: $btn-dark-txt;
-  }
-
-  &:visited {
-    background: $btn-dark-bkg;
-    border: $btn-dark-border;
-    color: $btn-dark-txt;
-  }
-
-  &:active {
-    &:focus {
-      border: $btn-dark-border;
-    }
-  }
-}

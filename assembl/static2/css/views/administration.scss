@@ -100,7 +100,9 @@
   }
 
   .flag-container.active {
-    border: $btn-dark-border;
+    border-width: $btn-dark-border-width;
+    border-style: $btn-dark-border-style;
+    border-color: $btn-dark-border-color;
     border-radius: 20px;
     height: 24px;
     margin: 20px 15px 0 13px;
@@ -115,7 +117,9 @@
   }
 
   .separator {
-    border-bottom: $btn-dark-border;
+    border-bottom-width: $btn-dark-border-width;
+    border-bottom-style: $btn-dark-border-style;
+    border-bottom-color: $btn-dark-border-color;
     clear: both;
     margin: 0 0 50px;
     padding: 40px 0 15px;
