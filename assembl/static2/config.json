@@ -106,7 +106,7 @@
     },
     {
       "uid": "5f113cb713f31db878b669762457203c",
-      "css": "icone-profil",
+      "css": "profil",
       "code": 59401,
       "src": "custom_icons",
       "selected": true,
@@ -319,6 +319,46 @@
       "css": "cancel",
       "code": 59397,
       "src": "modernpics"
+    },
+    {
+      "uid": "8ax1xqcbzz1hobyd4i7f0unwib1bztip",
+      "css": "down-dir",
+      "code": 59400,
+      "src": "modernpics"
+    },
+    {
+      "uid": "2b6bf06e87a223ccd1ddc1874932ca86",
+      "css": "thumb",
+      "code": 61450,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "e46de8ab5f0d4134859fdceadeb88a41",
+      "css": "down-open",
+      "code": 59403,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M74.1 111.6C74.1 95.1 80.4 78.5 93.1 65.8 118.4 40.5 159.4 40.5 184.7 65.8L916.7 797.8 1648.6 65.8C1674 40.5 1714.9 40.5 1740.3 65.8 1765.6 91.2 1765.6 132.1 1740.3 157.5L995 902.7C951.8 945.9 881.5 945.9 838.3 902.7L93.1 157.5C80.4 144.8 74.1 128.2 74.1 111.6Z",
+        "width": 1833
+      },
+      "search": [
+        "arrow-thin-down"
+      ]
+    },
+    {
+      "uid": "89b8a4729a0eefbc52c26eaa4fc46c96",
+      "css": "up-open",
+      "code": 59434,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M1759.3 888.4C1759.3 904.9 1752.9 921.5 1740.3 934.2 1714.9 959.5 1674 959.5 1648.6 934.2L916.7 202.2 184.7 934.2C159.4 959.5 118.4 959.5 93.1 934.2 67.7 908.8 67.7 867.9 93.1 842.5L838.3 97.3C881.5 54.1 951.8 54.1 995 97.3L1740.3 842.5C1752.9 855.2 1759.3 871.8 1759.3 888.4Z",
+        "width": 1833
+      },
+      "search": [
+        "arrow-thin-up"
+      ]
     },
     {
       "uid": "8042c2d234f549346b152cfcf45b16c5",

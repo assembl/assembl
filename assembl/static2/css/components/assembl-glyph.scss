@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'assembl-glyph';
-  src: url('#{$fonts-dir}/assembl-glyph.eot?34258671');
-  src: url('#{$fonts-dir}/assembl-glyph.eot?34258671#iefix') format('embedded-opentype'),
-       url('#{$fonts-dir}/assembl-glyph.woff2?34258671') format('woff2'),
-       url('#{$fonts-dir}/assembl-glyph.woff?34258671') format('woff'),
-       url('#{$fonts-dir}/assembl-glyph.ttf?34258671') format('truetype'),
-       url('#{$fonts-dir}/assembl-glyph.svg?34258671#assembl-glyph') format('svg');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?30877994');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?30877994#iefix') format('embedded-opentype'),
+       url('#{$fonts-dir}/assembl-glyph.woff2?30877994') format('woff2'),
+       url('#{$fonts-dir}/assembl-glyph.woff?30877994') format('woff'),
+       url('#{$fonts-dir}/assembl-glyph.ttf?30877994') format('truetype'),
+       url('#{$fonts-dir}/assembl-glyph.svg?30877994#assembl-glyph') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,60 +15,59 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'assembl-glyph';
-    src: url('../font/assembl-glyph.svg?34258671#assembl-glyph') format('svg');
+    src: url('#{$fonts-dir}/assembl-glyph.svg?30877994#assembl-glyph') format('svg');
   }
 }
 */
- 
+
  [class^="assembl-icon-"]:before, [class*=" assembl-icon-"]:before {
   font-family: "assembl-glyph";
   font-style: normal;
   font-size: 20px;
   font-weight: normal;
   speak: none;
- 
+
   display: inline-block;
   text-decoration: inherit;
   width: 1em;
   margin-right: .2em;
   text-align: center;
   /* opacity: .8; */
- 
+
   /* For safety - reset parent styles, that can break glyph codes*/
   font-variant: normal;
   text-transform: none;
- 
+
   /* fix buttons height, for twitter bootstrap */
   line-height: 1em;
- 
+
   /* Animation center compensation - margins should be symmetric */
   /* remove if not needed */
   margin-left: .2em;
- 
+
   /* you can be more comfortable with increased icons size */
   /* font-size: 120%; */
- 
+
   /* Font smoothing. That was taken from TWBS */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
- 
+
   /* Uncomment for 3D effect */
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.assembl-icon-up-open:before { content: '\e82f'; } /* '' */
-.assembl-icon-down-open:before { content: '\e830'; } /* '' */
 .assembl-icon-add:before { content: '\e800'; } /* '' */
 .assembl-icon-catch:before { content: '\e801'; } /* '' */
 .assembl-icon-checked:before { content: '\e802'; } /* '' */
 .assembl-icon-discussion:before { content: '\e803'; } /* '' */
 .assembl-icon-edit:before { content: '\e804'; } /* '' */
 .assembl-icon-cancel:before { content: '\e805'; } /* '' */
-.assembl-icon-down-dir:before { content: '\e808'; } /* '' */
 .assembl-icon-faq:before { content: '\e806'; } /* '' */
 .assembl-icon-filter:before { content: '\e807'; } /* '' */
+.assembl-icon-down-dir:before { content: '\e808'; } /* '' */
 .assembl-icon-profil:before { content: '\e809'; } /* '' */
 .assembl-icon-idea:before { content: '\e80a'; } /* '' */
+.assembl-icon-down-open:before { content: '\e80b'; } /* '' */
 .assembl-icon-link:before { content: '\e80f'; } /* '' */
 .assembl-icon-menu-on:before { content: '\e812'; } /* '' */
 .assembl-icon-message:before { content: '\e813'; } /* '' */
@@ -82,8 +81,5 @@
 .assembl-icon-delete:before { content: '\e825'; } /* '' */
 .assembl-icon-synthesis:before { content: '\e826'; } /* '' */
 .assembl-icon-mindmap:before { content: '\e829'; } /* '' */
+.assembl-icon-up-open:before { content: '\e82a'; } /* '' */
 .assembl-icon-thumb:before { content: '\f00a'; } /* '' */
-.assembl-icon-twitter:before { content: '\f099'; } /* '' */
-.assembl-icon-facebook:before { content: '\f09a'; } /* '' */
-.assembl-icon-linkedin:before { content: '\f0e1'; } /* '' */
-.assembl-icon-google:before { content: '\f1a0'; } /* '' */
