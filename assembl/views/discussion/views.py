@@ -216,7 +216,10 @@ def react_view(request):
                 context = get_login_context(request)
                 context.update({
                     "theme_name": theme_name,
-                    "theme_relative_path": theme_relative_path})
+                    "theme_relative_path": theme_relative_path,
+                    "REACT_URL": old_context['REACT_URL'],
+                    "NODE_ENV": node_env,
+                })
                 return context
 
             # otherwise redirect to login page
