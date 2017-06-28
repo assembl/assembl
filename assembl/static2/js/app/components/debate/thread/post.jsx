@@ -12,8 +12,8 @@ export default class Post extends React.Component {
     return (
       <div className="posts">
         <div className="box">
-          <Row>
-            <Col xs={12} md={10}>
+          <Row className="post-row">
+            <Col xs={12} md={11} className="post-left">
               <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} />
               {/* TODO convert creationDate to "x months ago" with momentjs */}
               <h3 className="dark-title-3">{parentId !== null ? <span>Rep. 1 :</span> : null}{subject}</h3>
@@ -29,21 +29,21 @@ export default class Post extends React.Component {
               <div className="annotation">x réponses à ce post</div>
               {/* TODO */}
             </Col>
-            <Col xs={12} md={2}>
-              <span className="assembl-icon-share" /> {/* TODO should be a answer icon */}
-              <span className="assembl-icon-share" />
-              <div className="sentiments">
-                <div className={mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}>
+            <Col xs={12} md={1} className="post-right">
+              <div className="assembl-icon-share" /> {/* TODO should be a answer icon */}
+              <div className="assembl-icon-share" />
+              <div>
+                <div>
                   <Like size={15} />&nbsp;<span className="txt">{sentimentCounts.like}</span>
                 </div>
-                <div className={mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}>
+                <div>
                   <Disagree size={15} />&nbsp;<span className="txt">{sentimentCounts.disagree}</span>
                 </div>
-                <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
+                <div>
                   <Disagree size={15} />&nbsp;<span className="txt">{sentimentCounts.dontUnderstand}</span>{' '}
                   {/* TODO DontUnderstand svg  */}
                 </div>
-                <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
+                <div>
                   <Disagree size={15} />&nbsp;<span className="txt">{sentimentCounts.moreInfo}</span>
                   {/* TODO MoreInfo svg  */}
                 </div>

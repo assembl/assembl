@@ -80,6 +80,25 @@
 }
 
 .posts {
+    .post-row {
+        margin-right: -20px;
+        margin-left: -20px;
+        margin-top: -15px;
+        margin-bottom: -20px;
+        overflow: hidden;
+    }
+
+    .post-left {
+        padding: 35px;
+    }
+
+    .post-right {
+        background-color: $first-color-light;
+        margin-bottom: -99999px!important;
+        padding-bottom: 99999px!important;
+        padding: 0;
+    }
+
     .box {
       border-bottom: $navbar-border;
       border-left: $border-theme;
@@ -87,7 +106,6 @@
       border-top: $navbar-border;
       margin: 0 auto 40px;
       max-width: 600px;
-      padding: 40px;
       position: relative;
       text-align: left;
     }
