@@ -26,8 +26,7 @@ After updating icons on Fontello, re-download the icons and update the following
 
 - Copy/paste to override the :download:`assembl/static2/config.json` with the latest version of this file
 - Copy/paste to override the fonts files (\*\.woff, \*\.woff2, \*\.ttf, \*\.eot, etc) files to the files hosted under ``assembl/static2/fonts/`` folder.
-- Update :download:`assembl/static2/css/components/assembl-glyph.scss` in order to have the latest CSS versions of the
-icons available to you. An example is shown below.
+- Update :download:`assembl/static2/css/components/assembl-glyph.scss` in order to have the latest CSS versions of the icons available to you. An example is shown below.
 
 
 .. code-block:: scss
