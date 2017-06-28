@@ -785,6 +785,7 @@ def app_compile():
     """
     execute(app_update_dependencies)
     execute(app_compile_noupdate)
+    execute(build_doc)
 
 
 @task
