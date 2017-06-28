@@ -1,5 +1,12 @@
-Fontello
---------
+Updating Fonts and Icons in Assembl
+===================================
+
+There are currently (as of 06/28/2017) two methods in using fontello in order to update icons and fonts
+in Assembl.
+
+
+Assembl Version 1
+-----------------
 
 To add icons to Fontello, first run ``fab devenv start_edit_fontello_fonts``.
 This will open a web page on Fontello with our icons preselected, and initialize a local ID.
@@ -7,3 +14,28 @@ Select more icons on this page, upload SVG files, and name them as "name" not "i
 You need to add them on _icon.scss with the right unicode. You have to clear the cache to see them on Chrome.
 
 To edit the svg paths themselves, take the SVG paths in config.json and edit them in a svg editor, such as http://svg-edit.googlecode.com/svn/branches/stable/editor/svg-editor.html
+
+
+Assembl Version 2
+-----------------
+
+To add icons to Fontello_, visit the website first. Create the environment that Assembl currently has on the platform
+by uploading the :download:`assembl/static2/config.json` file.
+
+After updating icons on Fontello, re-download the icons and update the following:
+
+- Copy/paste to override the :download:`assembl/static2/config.json` with the latest version of this file
+- Copy/paste to override the fonts files (*.woff, *.woff2, *.ttf, *.eot, etc) files to the files hosted under ``assembl/static2/fonts/`` folder.
+- Update :download:`assembl/static2/css/components/assembl-glyph.scss` in order to have the latest CSS versions of the
+icons available to you. An example is shown below.
+
+
+.. code-block:: scss
+
+	// Add a new line similar in fashion to the template shown below
+	// .assembl-icon-<icon-name>:before { content: <Icon Bytecode>; } /* <Shape of the icon> */
+	// For example:
+
+	.assembl-icon-google:before { content: '\f1a0'; } /* '' */
+
+.. _Fontello: http://fontello.com

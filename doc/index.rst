@@ -28,7 +28,7 @@ Stack and architecture
    synchronization
 * `Target login and authentication flowchart <https://github.com/assembl/assembl/blob/develop/doc/login_flowchart.pdf>`_
 
-Developping and contributing to Assembl
+Developing and contributing to Assembl
 ---------------------------------------
 
 .. toctree::
@@ -41,6 +41,7 @@ Developping and contributing to Assembl
    testing
    example_debate
    new_class
+   fontello
 
 APIs
 ----
