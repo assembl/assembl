@@ -176,7 +176,9 @@ const Translations = {
         endPhase: 'La phase %{closedPhaseName} est terminée.'
       },
       thread: {
-        linkIdea: 'Ce post est en lien avec les thématiques suivantes :'
+        linkIdea: 'Ce post est en lien avec les thématiques suivantes :',
+        foldedPostLink: 'Voir la réponse de %{creatorName}',
+        noPostsInThread: 'Soyez le premier à contribuer, démarrez une discussion !'
       },
       themes: 'Thèmes',
       notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '

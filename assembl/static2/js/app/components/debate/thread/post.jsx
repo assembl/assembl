@@ -1,10 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
+import { createSelector } from 'reselect';
 
+import { postSelector } from '../../../selectors';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import ProfileLine from '../../common/profileLine';
+
+const postMapStateToProps = createSelector(postSelector, (post) => {
+  return { expanded: post.get('showResponses', false) };
+});
+
+export const connectPostToState = connect(postMapStateToProps);
+
+export const PostFolded = ({ creator }) => {
+  return <a><Translate value="debate.thread.foldedPostLink" creatorName={creator.name} /></a>;
+};
 
 export default class Post extends React.Component {
   render() {
