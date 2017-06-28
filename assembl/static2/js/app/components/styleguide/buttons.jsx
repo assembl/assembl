@@ -7,7 +7,7 @@ class Buttons extends React.Component {
     return (
       <div>
         <h2 className="dark-title-2 underline" id="buttons" style={{ borderBottom: "1px solid #ccc"}}>BUTTONS</h2>
-        <section>
+        <section style={{ backgroundColor: "#fff", padding: "10px", margin: "10px" }}>
           <div className="margin-s">
             <Button className="button-submit button-dark">Submit</Button>
           </div>
@@ -17,6 +17,8 @@ class Buttons extends React.Component {
           <div className="margin-s">
             <Link className="button-link button-dark">Link</Link>
           </div>
+        </section>
+        <section style={{ backgroundColor: "#aaa", padding: "10px", margin: "10px" }}>
           <div className="margin-s">
             <Button className="button-submit button-light">Submit</Button>
           </div>
