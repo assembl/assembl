@@ -25,7 +25,7 @@ by uploading the :download:`assembl/static2/config.json` file.
 After updating icons on Fontello, re-download the icons and update the following:
 
 - Copy/paste to override the :download:`assembl/static2/config.json` with the latest version of this file
-- Copy/paste to override the fonts files (*.woff, *.woff2, *.ttf, *.eot, etc) files to the files hosted under ``assembl/static2/fonts/`` folder.
+- Copy/paste to override the fonts files (\*\.woff, \*\.woff2, \*\.ttf, \*\.eot, etc) files to the files hosted under ``assembl/static2/fonts/`` folder.
 - Update :download:`assembl/static2/css/components/assembl-glyph.scss` in order to have the latest CSS versions of the
 icons available to you. An example is shown below.
 
@@ -37,5 +37,13 @@ icons available to you. An example is shown below.
 	// For example:
 
 	.assembl-icon-google:before { content: '\f1a0'; } /* '' */
+
+.. note::
+
+	Be careful if you decide to change this directory, as you must also update the Webpack process in order to accomodate the new location for the fonts. The fonts directory, which is consumed in the stylesheets is defined in ``assembl/static2/css/variables.scss``. The definition is shown below.
+
+.. code-block:: scss
+
+	$fonts-dir: '/static2/fonts';
 
 .. _Fontello: http://fontello.com
