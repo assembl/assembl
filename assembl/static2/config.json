@@ -361,6 +361,20 @@
       ]
     },
     {
+      "uid": "7b9468f5870996df3732e2300f717da1",
+      "css": "back-arrow",
+      "code": 59478,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M388.9 305.6V83.3L0 472.2 388.9 861.1V633.3C666.7 633.3 861.1 722.2 1000 916.7 944.4 638.9 777.8 361.1 388.9 305.6Z",
+        "width": 1000
+      },
+      "search": [
+        "back-arrow"
+      ]
+    },
+    {
       "uid": "8042c2d234f549346b152cfcf45b16c5",
       "css": "facebook",
       "code": 59397,

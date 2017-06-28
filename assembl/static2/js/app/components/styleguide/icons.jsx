@@ -78,6 +78,9 @@ class Icons extends React.Component {
             <span className="assembl-icon-share">&nbsp;</span>
           </div>
           <div className="inline padding">
+            <span className="assembl-icon-back-arrow">&nbsp;</span>
+          </div>
+          <div className="inline padding">
             <span className="assembl-icon-delete">&nbsp;</span>
           </div>
           <div className="inline padding">
@@ -190,6 +193,9 @@ class Icons extends React.Component {
           </pre>
           <pre>
             &lt;span className="assembl-icon-share"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-back-arrow"&gt;&lt;/span&gt;
           </pre>
           <pre>
             &lt;span className="assembl-icon-delete"&gt;&lt;/span&gt;

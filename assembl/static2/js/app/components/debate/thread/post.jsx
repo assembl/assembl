@@ -43,8 +43,8 @@ export default class Post extends React.Component {
               {/* TODO */}
             </Col>
             <Col xs={12} md={1} className="post-right">
-              <div className="assembl-icon-share" /> {/* TODO should be a answer icon */}
-              <div className="assembl-icon-share" />
+              <div className="assembl-icon-back-arrow color" />
+              <div className="assembl-icon-share color" />
               <div>
                 <div>
                   <Like size={15} />&nbsp;<span className="txt">{sentimentCounts.like}</span>
