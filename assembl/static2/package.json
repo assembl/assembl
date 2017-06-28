@@ -12,10 +12,10 @@
     "build": "webpack --progress --colors",
     "coverage": "jest --coverage",
     "dev": "webpack -d --watch",
-    "elint": "eslint . --ext .js --ext .jsx --cache || true",
-    "elint:fix": "eslint . --ext .js --ext .jsx --fix || true",
-    "elint:table": "eslint . --ext .js --ext .jsx --cache --format table || true",
-    "elint:summary": "eslint . --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter' || true"
+    "eslint": "eslint . --ext .js --ext .jsx --cache || true",
+    "eslint:fix": "eslint . --ext .js --ext .jsx --fix || true",
+    "eslint:table": "eslint . --ext .js --ext .jsx --cache --format table || true",
+    "eslint:summary": "eslint . --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter' || true"
   },
   "author": "Bluenove",
   "license": "AGPL-3.0",
