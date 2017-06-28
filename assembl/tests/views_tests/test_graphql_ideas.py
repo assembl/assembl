@@ -52,23 +52,78 @@ def test_graphql_get_direct_ideas_from_root_idea(graphql_request, subidea_1_1_1)
     res = schema.execute(
         u"""query {
             rootIdea {
-              children {
-                ... on Idea {
-                    id
-                    title
-                    titleEntries { value, localeCode }
-                    shortTitle
-                    numPosts
-                    numContributors
-                    parentId
-                    order
-                    posts(first:10) {
-                        edges {
-                            node {
-                                ... on Post { subject body } } } } } } } }
+              ... on Idea {
+                  children {
+                    ... on Idea {
+                        id
+                        title
+                        titleEntries { value, localeCode }
+                        shortTitle
+                        numPosts
+                        numContributors
+                        parentId
+                        order
+                        posts(first:10) {
+                            edges {
+                                node {
+                                    ... on Post { subject body } } } } } } } } }
         """, context_value=graphql_request)
     assert len(res.data['rootIdea']['children']) == 1
     assert res.data['rootIdea']['children'][0]['title'] == u'Favor economic growth'
+
+
+def test_graphql_discussion_counters_survey_phase_no_thematic(graphql_request):
+    res = schema.execute(
+        u"""query RootIdeaStats($identifier: String) {
+              rootIdea(identifier: $identifier) {
+                ... on Node {
+                  id
+                }
+                ... on IdeaInterface {
+                  numPosts
+                }
+              }
+              numParticipants
+            }
+        """, context_value=graphql_request, variable_values={'identifier': 'survey'})
+    assert res.data['rootIdea'] is None
+    assert res.data['numParticipants'] == 1
+
+
+def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request, proposals):
+    res = schema.execute(
+        u"""query RootIdeaStats($identifier: String) {
+              rootIdea(identifier: $identifier) {
+                ... on Node {
+                  id
+                }
+                ... on IdeaInterface {
+                  numPosts
+                }
+              }
+              numParticipants
+            }
+        """, context_value=graphql_request, variable_values={'identifier': 'survey'})
+    assert res.data['rootIdea']['numPosts'] == 15
+    assert res.data['numParticipants'] == 1
+
+
+def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
+    res = schema.execute(
+        u"""query RootIdeaStats($identifier: String) {
+              rootIdea(identifier: $identifier) {
+                ... on Node {
+                  id
+                }
+                ... on IdeaInterface {
+                  numPosts
+                }
+              }
+              numParticipants
+            }
+        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+    assert res.data['rootIdea']['numPosts'] == 0  # should be 0 and not 15
+    assert res.data['numParticipants'] == 1
 
 
 # this test works in isolation, but not with all tests...

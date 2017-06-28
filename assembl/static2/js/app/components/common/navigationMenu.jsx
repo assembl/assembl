@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Link, browserHistory } from 'react-router';
 
-import { getPermissionsForConnectedUser } from '../../reducers/usersReducer';
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import { get } from '../../utils/routeMap';
 import { displayModal } from '../../utils/utilityManager';
@@ -65,9 +64,8 @@ class NavigationMenu extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const permissions = getPermissionsForConnectedUser(state);
   return {
-    isAdmin: connectedUserIsAdmin(permissions),
+    isAdmin: connectedUserIsAdmin(),
     debate: state.debate,
     phase: state.phase,
     i18n: state.i18n

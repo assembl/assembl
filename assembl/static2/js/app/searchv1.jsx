@@ -7,7 +7,7 @@ import { loadTranslations, setLocale, syncTranslationWithStore } from 'react-red
 import RootReducer from './reducers/rootReducer';
 import { getLocale, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
 import Translations from './utils/translations';
-import { canUseExpertInterface } from './utils/permissions';
+import { connectedUserIsExpert } from './utils/permissions';
 
 import { SearchComponent } from './components/search.jsx?v=1'; // eslint-disable-line
 import '../../css/views/searchv1.scss';
@@ -39,9 +39,7 @@ class SearchApp extends React.Component {
     this.discussionId = discussionId;
     this.connectedUserId = connectedUserId;
     if (connectedUserId) {
-      let permissions = document.getElementById('permissions-json') ? document.getElementById('permissions-json').text : '[]';
-      permissions = JSON.parse(permissions);
-      const isExpert = canUseExpertInterface(permissions);
+      const isExpert = connectedUserIsExpert();
       if (isExpert) {
         this.setState({ isExpert: true });
       }

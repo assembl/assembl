@@ -309,10 +309,32 @@ class Video(graphene.ObjectType):
     description_entries = graphene.List(LangStringEntry)
 
 
+class IdeaInterface(graphene.Interface):
+    num_posts = graphene.Int()
+    num_contributors = graphene.Int()
+    img_url = graphene.String()
+    order = graphene.Float()
+
+    def resolve_num_posts(self, args, context, info):
+        if isinstance(self, models.RootIdea):
+            # we need this special case to not count posts from root thematic
+            return self.num_posts - sum([child.num_posts
+                for child in self.get_children() if child.hidden])
+
+        return self.num_posts
+
+    def resolve_img_url(self, args, context, info):
+        if self.attachments:
+            return self.attachments[0].external_url
+
+    def resolve_order(self, args, context, info):
+        return self.get_order_from_first_parent()
+
+
 class Idea(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Idea
-        interfaces = (Node, )
+        interfaces = (Node, IdeaInterface)
         only_fields = ('id', 'short_title', )
 
     title = graphene.String(lang=graphene.String())
@@ -320,10 +342,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     description = graphene.String(lang=graphene.String())
     description_entries = graphene.List(LangStringEntry)
     children = graphene.List(lambda: Idea)
-    img_url = graphene.String()
-    order = graphene.Float()
-    num_posts = graphene.Int()
-    num_contributors = graphene.Int()
     parent_id = graphene.ID()
     posts = SQLAlchemyConnectionField(PostConnection)
     contributors = graphene.List(AgentProfile)
@@ -373,13 +391,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_children(self, args, context, info):
         return self.get_children()
-
-    def resolve_img_url(self, args, context, info):
-        if self.attachments:
-            return self.attachments[0].external_url
-
-    def resolve_order(self, args, context, info):
-        return self.get_order_from_first_parent()
 
     def resolve_parent_id(self, args, context, info):
         parents = self.get_parents()
@@ -502,7 +513,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 class Thematic(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Thematic
-        interfaces = (Node, )
+        interfaces = (Node, IdeaInterface)
         only_fields = ('id', 'identifier')
 
     title = graphene.String(lang=graphene.String())
@@ -511,10 +522,6 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     description_entries = graphene.List(LangStringEntry)
     questions = graphene.List(Question)
     video = graphene.Field(Video, lang=graphene.String())
-    img_url = graphene.String()
-    num_posts = graphene.Int()
-    num_contributors = graphene.Int()
-    order = graphene.Float()
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
@@ -548,25 +555,39 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
             html_code=self.video_html_code,
         )
 
-    def resolve_img_url(self, args, context, info):
-        if self.attachments:
-            return self.attachments[0].external_url
 
-    def resolve_order(self, args, context, info):
-        return self.get_order_from_first_parent()
+class IdeaUnion(SQLAlchemyUnion):
+    class Meta:
+        types = (Idea, Thematic)
+        model = models.Idea
+
+    @classmethod
+    def resolve_type(cls, instance, context, info):
+        if isinstance(instance, graphene.ObjectType):
+            return type(instance)
+        elif isinstance(instance, models.Thematic): # must be above Idea
+            return Thematic
+        elif isinstance(instance, models.Idea):
+            return Idea
 
 
 class Query(graphene.ObjectType):
     node = Node.Field()
     posts = SQLAlchemyConnectionField(PostConnection, idea_id=graphene.ID())
-    root_idea = graphene.Field(Idea)
+    root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
     ideas = graphene.List(Idea)
     thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
+    num_participants = graphene.Int()
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return discussion.root_idea
+        identifier = args.get('identifier')
+        if identifier is None or identifier == 'thread':
+            return discussion.root_idea
+
+        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        return root_thematic
 
     def resolve_ideas(self, args, context, info):
         model = models.Idea
@@ -620,6 +641,12 @@ class Query(graphene.ObjectType):
             return []
 
         return root_thematic.get_children()
+
+    def resolve_num_participants(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.get_participants_query(
+            ids_only=True, include_readers=True).count()
 
 
 class VideoInput(graphene.InputObjectType):
