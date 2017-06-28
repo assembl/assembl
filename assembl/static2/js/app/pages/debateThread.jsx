@@ -1,12 +1,13 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
 import Timeline from '../components/debate/navigation/timeline';
 import Thumbnails from '../components/debate/navigation/thumbnails';
+import RootIdeasQuery from '../graphql/RootIdeasQuery.graphql';
 
 class DebateThread extends React.Component {
   constructor(props) {
@@ -88,23 +89,6 @@ DebateThread.propTypes = {
     ideas: PropTypes.Array
   }).isRequired
 };
-
-const RootIdeasQuery = gql`
-  query RootIdeasQuery($lang: String!) {
-    rootIdea {
-      children {
-        ... on Idea {
-          id,
-          title(lang: $lang),
-          description(lang: $lang),
-          numPosts,
-          numContributors,
-          imgUrl
-        }
-      }
-    }
-  }
-`;
 
 const DebateWithData = graphql(RootIdeasQuery)(DebateThread);
 
