@@ -175,6 +175,9 @@ const Translations = {
         postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
         endPhase: 'La phase %{closedPhaseName} est terminée.'
       },
+      thread: {
+        linkIdea: 'Ce post est en lien avec les thématiques suivantes :'
+      },
       themes: 'Thèmes',
       notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
     },
@@ -401,6 +404,9 @@ const Translations = {
         remaining_x_characters: 'You have %{nbCharacters} characters left',
         postSuccess: 'Thanks for your participation. Your proposal has been sent!',
         endPhase: 'The %{closedPhaseName} phase is closed.'
+      },
+      thread: {
+        linkIdea: 'This post is related to the following themes:'
       },
       themes: 'Themes',
       notStarted: 'The %{phaseName} phase has not started. Please come back from '

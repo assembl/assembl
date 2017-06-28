@@ -11,18 +11,6 @@
     text-align: center;
   }
 
-  .thread-box {
-    border-bottom: $navbar-border;
-    border-left: $border-theme;
-    border-right: $navbar-border;
-    border-top: $navbar-border;
-    margin: 0 auto 40px;
-    max-width: 600px;
-    padding: 0;
-    position: relative;
-    text-align: center;
-  }
-
   .user {
     text-align: left;
 
@@ -89,6 +77,62 @@
   .no-proposals {
     margin: 0 0 70px;
   }
+}
+
+.posts {
+    .box {
+      border-bottom: $navbar-border;
+      border-left: $border-theme;
+      border-right: $navbar-border;
+      border-top: $navbar-border;
+      margin: 0 auto 40px;
+      max-width: 600px;
+      padding: 40px;
+      position: relative;
+      text-align: left;
+    }
+
+    .profileLine {
+        img {
+            vertical-align: text-bottom;
+        }
+
+        .creator {
+            color: $second-color;
+            padding: 0 0 0 10px;
+        }
+
+        .date {
+            color: $grey2;
+            font-size: $font-size-xs;
+            padding: 0 0 0 10px;
+        }
+    }
+
+    .body {
+        padding: 20px 0;
+    }
+
+    .link-idea {
+        border-bottom: $navbar-border;
+        border-top: $navbar-border;
+        margin: 0 0 15px 0;
+        padding: 20px 0;
+
+        .label {
+            color: $grey2;
+            font-size: $font-size-xs;
+        }
+
+        .badges {
+            padding: 10px 0;
+
+            .badge {
+                background-color: $grey1;
+                color: $grey3;
+            }
+        }
+    }
 }
 
 @media screen and (min-width: 600px) {
