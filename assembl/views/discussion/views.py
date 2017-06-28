@@ -203,6 +203,8 @@ def react_view(request):
     discussion = old_context["discussion"] or None
     get_route = old_context["get_route"]
     (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
+    node_env = os.getenv('NODE_ENV', 'production')
+
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, P_READ)
         canUseReact = (is_login_route(bare_route) or
@@ -264,13 +266,16 @@ def react_view(request):
         context = get_login_context(request)
         context.update({
             "theme_name": theme_name,
-            "theme_relative_path": theme_relative_path})
+            "theme_relative_path": theme_relative_path,
+            "REACT_URL": old_context['REACT_URL'],
+            "NODE_ENV": node_env,
+        })
         return context
 
     context = dict(
         request=old_context['request'],
         REACT_URL=old_context['REACT_URL'],
-        NODE_ENV=os.getenv('NODE_ENV', 'production'),
+        NODE_ENV=node_env,
         discussion=discussion,
         user=old_context['user'],
         error=old_context.get('error', None),

@@ -1,0 +1,54 @@
+
+/* This file is meant to define cascade variables. Cascade variables are variables which definition in a theme is not mandatory, but which by default have a value that depend on other theme variables. So if these theme variables they depend on are re-defined in a theme, cascade variables would have to use changed values. For this, we use the "!default" keyword of SCSS. */
+
+$btn-light-border-color: $second-color !default;
+$btn-dark-border-color: $first-color !default;
+
+$border-title: 4px solid $second-color !default;
+$border-active: 4px solid $first-color !default;
+$border-theme: 4px solid $first-color !default;
+$border-not-active: 4px solid $grey2 !default;
+
+$page-bkg-light: $white !default;
+$page-bkg-grey: $grey0 !default;
+$page-bkg-dark: $grey4 !default;
+
+$link-color: $first-color !default;
+$link-hover-color: $black !default;
+
+$btn-light-txt: $white !default;
+$btn-dark-txt: $black !default;
+$btn-light-bkg: none !default;
+$btn-dark-bkg: none !default;
+
+$title1-dark-color: $first-color !default;
+$title2-dark-color: $first-color !default;
+$title3-dark-color: $first-color !default;
+$title4-dark-color: $first-color !default;
+$title5-dark-color: $grey4 !default;
+$title1-light-color: $white !default;
+$title2-light-color: $white !default;
+$title3-light-color: $white !default;
+$title4-light-color: $white !default;
+$title5-light-color: $white !default;
+$title1-size: $font-size-xl !default;
+$title2-size: $font-size-m !default;
+$title3-size: $font-size-m !default;
+$title4-size: $font-size-s !default;
+$title5-size: $font-size-l !default;
+
+$navbar-bkg: $white !default;
+$navbar-border: 1px solid $grey1 !default;
+$navbar-text-color: $first-color !default;
+$navbar-active-text-color: $first-color !default;
+
+$box-shadow: none !default;
+$box-bkg: $white !default;
+$box-border: 1px solid $white !default;
+$insert-border: 1px solid $grey1 !default;
+$box-title-bkg: $grey4 !default;
+$box-title-txt: $white !default;
+
+$input-txt-bkg-color: $white !default;
+
+$footer-link-text-color: $white !default;
