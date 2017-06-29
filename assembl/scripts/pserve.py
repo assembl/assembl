@@ -8,7 +8,7 @@ def main(argv=sys.argv, quiet=False):
     try:
         os.environ["NODE_ENV"] = "development"
         return command.run()
-    except:
+    except Exception:
         import pdb; pdb.post_mortem()
 
 
