@@ -15,15 +15,11 @@ import Post, { connectPostToState, PostFolded } from '../components/debate/threa
 import Tree from '../components/common/tree';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
-const transformPosts = (posts, expandedItems) => {
+export const transformPosts = (posts) => {
   let postsByParent = Map();
   posts.forEach((p) => {
     const items = postsByParent.get(p.parentId, List());
-    const pWithExpanded = {
-      ...p,
-      expanded: expandedItems.includes(p.id)
-    };
-    postsByParent = postsByParent.set(p.parentId, items.push(pWithExpanded));
+    postsByParent = postsByParent.set(p.parentId, items.push(p));
   });
 
   const getChildren = (id) => {
@@ -42,12 +38,12 @@ const transformPosts = (posts, expandedItems) => {
 
 class Idea extends React.Component {
   render() {
-    const { expandedItems, toggleItem } = this.props;
+    const { toggleItem } = this.props;
     const { idea } = this.props.data;
     const rawPosts = idea.posts.edges.map((e) => {
       return e.node;
     });
-    const posts = transformPosts(rawPosts, expandedItems);
+    const posts = transformPosts(rawPosts);
     if (posts.length === 1) {
       posts[0].isOnlyTopLevel = true; // it is the only top level post
     }
