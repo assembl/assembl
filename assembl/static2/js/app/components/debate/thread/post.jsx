@@ -23,7 +23,17 @@ export const PostFolded = ({ creator }) => {
 
 export default class Post extends React.Component {
   render() {
-    const { subject, body, parentId, indirectIdeaContentLinks, mySentiment, sentimentCounts, creator, creationDate } = this.props;
+    const {
+      children,
+      subject,
+      body,
+      parentId,
+      indirectIdeaContentLinks,
+      mySentiment,
+      sentimentCounts,
+      creator,
+      creationDate
+    } = this.props;
     let count = 1;
     const totalSentimentsCount =
       sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo;
@@ -44,7 +54,7 @@ export default class Post extends React.Component {
                   })}
                 </div>
               </div>
-              <div className="annotation">x réponses à ce post</div>
+              <div className="annotation"><Translate value="debate.thread.numberOfResponses" count={children.length} /></div>
               {/* TODO */}
             </Col>
             <Col xs={12} md={1} className="post-right">

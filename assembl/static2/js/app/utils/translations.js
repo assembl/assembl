@@ -178,7 +178,10 @@ const Translations = {
       thread: {
         linkIdea: 'Ce post est en lien avec les thématiques suivantes :',
         foldedPostLink: 'Voir la réponse de %{creatorName}',
-        noPostsInThread: 'Soyez le premier à contribuer, démarrez une discussion !'
+        noPostsInThread: 'Soyez le premier à contribuer, démarrez une discussion !',
+        numberOfResponses: '%{count} réponses à ce post',
+        numberOfResponses_0: 'Aucune réponse à ce post',
+        numberOfResponses_1: '%{count} réponse à ce post'
       },
       themes: 'Thèmes',
       notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
@@ -408,7 +411,12 @@ const Translations = {
         endPhase: 'The %{closedPhaseName} phase is closed.'
       },
       thread: {
-        linkIdea: 'This post is related to the following themes:'
+        linkIdea: 'This post is related to the following themes:',
+        foldedPostLink: 'Show %{creatorName}\'s response',
+        noPostsInThread: 'Be the first to contribute, start a discussion!',
+        numberOfResponses: '%{count} responses to this post',
+        numberOfResponses_0: 'No response to this post',
+        numberOfResponses_1: '%{count} response to this post'
       },
       themes: 'Themes',
       notStarted: 'The %{phaseName} phase has not started. Please come back from '
