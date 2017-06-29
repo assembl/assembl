@@ -20,7 +20,19 @@ class Child extends React.Component {
   }
 
   renderToggleLink(expanded) {
-    return <div className="plus">{expanded ? '-' : '+'}</div>;
+    const { id, toggleItem } = this.props;
+    return (
+      <div
+        onClick={(event) => {
+          event.stopPropagation();
+          toggleItem(id);
+          globalList.recomputeRowHeights();
+        }}
+        className="expand"
+      >
+        {expanded ? <span className="assembl-icon-minus-circled" /> : <span className="assembl-icon-plus-circled" />}
+      </div>
+    );
   }
 
   render() {
@@ -38,34 +50,36 @@ class Child extends React.Component {
     return (
       <div className={`level level-${level}`}>
         <InnerComponent {...this.props} />
-        <a
-          onClick={(event) => {
-            event.stopPropagation();
-            toggleItem(id);
-            globalList.recomputeRowHeights();
-          }}
-          className="expand"
-        >
-          {children.length > 0 ? this.renderToggleLink(expanded) : null}
-          {children && expanded
-            ? children.map((child, idx) => {
-              return (
-                <ConnectedChildComponent
-                  key={`${id}-child-${idx}`}
-                  {...child}
-                  ConnectedChildComponent={ConnectedChildComponent}
-                  level={level + 1}
-                  InnerComponent={InnerComponent}
-                  InnerComponentFolded={InnerComponentFolded}
-                  SeparatorComponent={SeparatorComponent}
-                  toggleItem={toggleItem}
-                />
-              );
-            })
-            : children.map((child, idx) => {
-              return <InnerComponentFolded key={idx} {...child} />;
-            })}
-        </a>
+        {children.length > 0 ? this.renderToggleLink(expanded) : null}
+        {children && expanded
+          ? children.map((child, idx) => {
+            return (
+              <ConnectedChildComponent
+                key={`${id}-child-${idx}`}
+                {...child}
+                ConnectedChildComponent={ConnectedChildComponent}
+                level={level + 1}
+                InnerComponent={InnerComponent}
+                InnerComponentFolded={InnerComponentFolded}
+                SeparatorComponent={SeparatorComponent}
+                toggleItem={toggleItem}
+              />
+            );
+          })
+          : children.map((child, idx) => {
+            return (
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  toggleItem(id);
+                  globalList.recomputeRowHeights();
+                }}
+                className="post-folded"
+              >
+                <InnerComponentFolded key={idx} {...child} />
+              </div>
+            );
+          })}
       </div>
     );
   }
@@ -75,12 +89,12 @@ Child.defaultProps = {
   level: 0
 };
 
-const cellRenderer = ({ index, key, parent, style }) => {
+const cellRenderer = ({ index, key, parent }) => {
   const { ConnectedChildComponent, data, toggleItem, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
-      <div key={`child-${index}`} style={style}>
+      <div key={`child-${index}`}>
         <ConnectedChildComponent
           {...childData}
           ConnectedChildComponent={ConnectedChildComponent}

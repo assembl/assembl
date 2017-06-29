@@ -1,35 +1,76 @@
 .level {
-    max-width: 600px;
+    width: 600px;
     margin: 0 auto;
 }
 
 .expand {
+    font-size: $font-size-xs;
     cursor: pointer;
-    display: block;
-    margin: 20px 0;
+    color: $first-color;
+    display: inline-block;
 
-    .plus {
-        background-color: $first-color;
-        border-radius: 10px;
-        display: inline-block;
-        height: 15px;
-        width: 15px;
-        color: $white;
-        font-size: 18px;
-        line-height: 12px;
-        margin: 0 5px 0;
-        text-align: center;
-        padding: 1px 0 0 1px;
-        vertical-align: middle;
-    }
+    position: relative;
+    height: 80px;
+    border-bottom: 1px solid $grey1;
+    border-left: 1px solid $grey1;
+    width: $tree-indentation;
 
     span {
-        font-size: $font-size-xs;
+        position: absolute;
+        bottom: -12px;
+        left: $tree-indentation - 15px;
+    }
+}
+
+.post-folded {
+    font-size: $font-size-xs;
+    cursor: pointer;
+    color: $first-color;
+    display: inline-block;
+
+    position: relative;
+
+    span {
+        display: block;
+        position: absolute;
+        width: 400px;
+        bottom: -10px;
+        left: 15px;
     }
 }
 
 .infinite-separator {
-    margin: 0 auto;
-    max-width: 600px;
+    margin: $margin-section auto;
+    max-width: 200px;
     text-align: center;
+    border-bottom: 1px solid $first-color;
+    position: relative;
+
+    span {
+        position: absolute;
+        background-color: $white;
+        width: 50px;
+        padding: 0 15px 0 0;
+        top: -8px;
+        margin: 0 0 0 -20px;
+    }
+}
+
+.level-1, .level-2, .level-3, .level-4, .level-5, .level-6 {
+    margin-left: $tree-indentation;
+    margin-top: -6px;
+    padding-left: $tree-indentation;
+    border-top: 1px solid $grey1;
+
+    .box {
+        border-top: none;
+    }
+}
+
+.ReactVirtualized__Grid {
+    overflow-y: hidden!important;
+
+    &:focus {
+        outline: none!important;
+    }
 }

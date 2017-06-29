@@ -98,6 +98,12 @@ class Icons extends React.Component {
           <div className="inline padding">
             <span className="assembl-icon-symbol-assembl">&nbsp;</span>
           </div>
+          <div className="inline padding">
+            <span className="assembl-icon-plus-circled">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-minus-circled">&nbsp;</span>
+          </div>
           <div>
             <div className="sentiment">
               <Like size={25} />
@@ -217,6 +223,12 @@ class Icons extends React.Component {
           </pre>
           <pre>
             &lt;span className="assembl-icon-symbol-assembl"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-plus-circled"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-minus-circled"&gt;&lt;/span&gt;
           </pre>
           <pre>
             <div>&lt;div className="sentiment"&gt;</div>
