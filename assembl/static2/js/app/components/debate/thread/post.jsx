@@ -65,28 +65,28 @@ export default class Post extends React.Component {
                 </div>
                 <div className="sentiments-count margin-m">
                   {Object.keys(sentimentCounts).map((sentiment, index) => {
-                    if (parseFloat(sentimentCounts[sentiment]) > 0 && sentiment === 'like') {
+                    if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
                       return (
                         <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
                           <Like size={15} />
                         </div>
                       );
                     }
-                    if (parseFloat(sentimentCounts[sentiment]) > 0 && sentiment === 'disagree') {
+                    if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
                       return (
                         <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
                           <Disagree size={15} />
                         </div>
                       );
                     }
-                    if (parseFloat(sentimentCounts[sentiment]) > 0 && sentiment === 'dontUnderstand') {
+                    if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
                       return (
                         <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
                           <DontUnderstand size={15} />
                         </div>
                       );
                     }
-                    if (parseFloat(sentimentCounts[sentiment]) > 0 && sentiment === 'moreInfo') {
+                    if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
                       return (
                         <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
                           <MoreInfo size={15} />
