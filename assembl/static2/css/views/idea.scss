@@ -1,0 +1,29 @@
+.level {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.expand {
+    cursor: pointer;
+    display: block;
+    margin: 20px 0;
+
+    .plus {
+        background-color: $first-color;
+        border-radius: 10px;
+        display: inline-block;
+        height: 15px;
+        width: 15px;
+        color: $white;
+        font-size: 18px;
+        line-height: 12px;
+        margin: 0 5px 0;
+        text-align: center;
+        padding: 1px 0 0 1px;
+        vertical-align: middle;
+    }
+
+    span {
+        font-size: $font-size-xs;
+    }
+}

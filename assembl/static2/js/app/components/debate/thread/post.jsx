@@ -18,7 +18,7 @@ const postMapStateToProps = createSelector(postSelector, (post) => {
 export const connectPostToState = connect(postMapStateToProps);
 
 export const PostFolded = ({ creator }) => {
-  return <a><Translate value="debate.thread.foldedPostLink" creatorName={creator.name} /></a>;
+  return <Translate value="debate.thread.foldedPostLink" creatorName={creator.name} />;
 };
 
 export default class Post extends React.Component {

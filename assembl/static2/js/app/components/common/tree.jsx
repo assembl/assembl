@@ -17,20 +17,7 @@ class Child extends React.Component {
   }
 
   renderToggleLink(expanded) {
-    const { id, toggleItem } = this.props;
-    return (
-      <div>
-        <a
-          onClick={(event) => {
-            event.stopPropagation();
-            toggleItem(id);
-            globalList.recomputeRowHeights();
-          }}
-        >
-          {expanded ? <span className="minus margin-l">-</span> : <span className="plus margin-l">+</span>}
-        </a>
-      </div>
-    );
+    return <div className="plus">{expanded ? '-' : '+'}</div>;
   }
 
   render() {
@@ -46,27 +33,36 @@ class Child extends React.Component {
       toggleItem
     } = this.props;
     return (
-      <div className={`level-${level}`}>
+      <div className={`level level-${level}`}>
         <InnerComponent {...this.props} />
-        {children.length > 0 ? this.renderToggleLink(expanded) : null}
-        {children && expanded
-          ? children.map((child, idx) => {
-            return (
-              <ConnectedChildComponent
-                key={`${id}-child-${idx}`}
-                {...child}
-                ConnectedChildComponent={ConnectedChildComponent}
-                level={level + 1}
-                InnerComponent={InnerComponent}
-                InnerComponentFolded={InnerComponentFolded}
-                SeparatorComponent={SeparatorComponent}
-                toggleItem={toggleItem}
-              />
-            );
-          })
-          : children.map((child, idx) => {
-            return <InnerComponentFolded key={idx} {...child} />;
-          })}
+        <a
+          onClick={(event) => {
+            event.stopPropagation();
+            toggleItem(id);
+            globalList.recomputeRowHeights();
+          }}
+          className="expand"
+        >
+          {children.length > 0 ? this.renderToggleLink(expanded) : null}
+          {children && expanded
+            ? children.map((child, idx) => {
+              return (
+                <ConnectedChildComponent
+                  key={`${id}-child-${idx}`}
+                  {...child}
+                  ConnectedChildComponent={ConnectedChildComponent}
+                  level={level + 1}
+                  InnerComponent={InnerComponent}
+                  InnerComponentFolded={InnerComponentFolded}
+                  SeparatorComponent={SeparatorComponent}
+                  toggleItem={toggleItem}
+                />
+              );
+            })
+            : children.map((child, idx) => {
+              return <InnerComponentFolded key={idx} {...child} />;
+            })}
+        </a>
       </div>
     );
   }
