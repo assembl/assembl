@@ -7,6 +7,8 @@ import { createSelector } from 'reselect';
 import { postSelector } from '../../../selectors';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
+import DontUnderstand from '../../svg/dontUnderstand';
+import MoreInfo from '../../svg/moreInfo';
 import ProfileLine from '../../common/profileLine';
 
 const postMapStateToProps = createSelector(postSelector, (post) => {
@@ -22,6 +24,9 @@ export const PostFolded = ({ creator }) => {
 export default class Post extends React.Component {
   render() {
     const { subject, body, parentId, indirectIdeaContentLinks, mySentiment, sentimentCounts, creator, creationDate } = this.props;
+    let count = 1;
+    const totalSentimentsCount =
+      sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo;
     return (
       <div className="posts">
         <div className="box">
@@ -43,28 +48,57 @@ export default class Post extends React.Component {
               {/* TODO */}
             </Col>
             <Col xs={12} md={1} className="post-right">
-              <div className="assembl-icon-back-arrow color" />
-              <div className="assembl-icon-share color" />
-              <div>
-                <div>
-                  <Like size={15} />&nbsp;<span className="txt">{sentimentCounts.like}</span>
+              <div className="assembl-icon-back-arrow color pointer" />
+              <div className="assembl-icon-share color margin-s pointer" />
+              <div className="margin-s">
+                <div className={mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}>
+                  <Like size={25} />
                 </div>
-                <div>
-                  <Disagree size={15} />&nbsp;<span className="txt">{sentimentCounts.disagree}</span>
+                <div className={mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}>
+                  <Disagree size={25} />
                 </div>
-                <div>
-                  <Disagree size={15} />&nbsp;<span className="txt">{sentimentCounts.dontUnderstand}</span>{' '}
-                  {/* TODO DontUnderstand svg  */}
+                <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
+                  <DontUnderstand size={25} />
                 </div>
-                <div>
-                  <Disagree size={15} />&nbsp;<span className="txt">{sentimentCounts.moreInfo}</span>
-                  {/* TODO MoreInfo svg  */}
+                <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
+                  <MoreInfo size={25} />
                 </div>
-                <div>
-                  {/* TODO icon x reactions  */}
-                  <span className="txt">
-                    {sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo}
-                  </span>
+                <div className="sentiments-count margin-m">
+                  {Object.keys(sentimentCounts).map((sentiment, index) => {
+                    if (parseFloat(sentimentCounts[sentiment]) > 0 && sentiment === 'like') {
+                      return (
+                        <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                          <Like size={15} />
+                        </div>
+                      );
+                    }
+                    if (parseFloat(sentimentCounts[sentiment]) > 0 && sentiment === 'disagree') {
+                      return (
+                        <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                          <Disagree size={15} />
+                        </div>
+                      );
+                    }
+                    if (parseFloat(sentimentCounts[sentiment]) > 0 && sentiment === 'dontUnderstand') {
+                      return (
+                        <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                          <DontUnderstand size={15} />
+                        </div>
+                      );
+                    }
+                    if (parseFloat(sentimentCounts[sentiment]) > 0 && sentiment === 'moreInfo') {
+                      return (
+                        <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                          <MoreInfo size={15} />
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                  {totalSentimentsCount > 0 &&
+                    <div className="txt" style={{ marginLeft: `${(count += 1 * 6)}px` }}>
+                      {totalSentimentsCount}
+                    </div>}
                 </div>
               </div>
             </Col>
