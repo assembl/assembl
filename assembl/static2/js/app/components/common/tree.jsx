@@ -1,14 +1,17 @@
 import React from 'react';
-import { AutoSizer, List } from 'react-virtualized';
+import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 
 /*
   TODO: avoid globalList
-  TODO: adjust ROW_HEIGHT and FOLDED_CHILD_HEIGHT values
   TODO: InnerComponentFolded should be able to toggle the item
-  TODO:
 */
 
 let globalList;
+const cache = new CellMeasurerCache({
+  defaultHeight: 600,
+  minHeight: 500,
+  fixedWidth: true
+});
 
 class Child extends React.Component {
   constructor() {
@@ -72,44 +75,24 @@ Child.defaultProps = {
   level: 0
 };
 
-const cellRenderer = ({ index, parent, style }) => {
+const cellRenderer = ({ index, key, parent, style }) => {
   const { ConnectedChildComponent, data, toggleItem, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
   const childData = data[index];
   return (
-    <div key={`child-${index}`} style={style}>
-      <ConnectedChildComponent
-        {...childData}
-        ConnectedChildComponent={ConnectedChildComponent}
-        InnerComponent={InnerComponent}
-        InnerComponentFolded={InnerComponentFolded}
-        SeparatorComponent={SeparatorComponent}
-        toggleItem={toggleItem}
-      />
-      {!childData.isOnlyTopLevel ? <SeparatorComponent /> : null}
-    </div>
+    <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+      <div key={`child-${index}`} style={style}>
+        <ConnectedChildComponent
+          {...childData}
+          ConnectedChildComponent={ConnectedChildComponent}
+          InnerComponent={InnerComponent}
+          InnerComponentFolded={InnerComponentFolded}
+          SeparatorComponent={SeparatorComponent}
+          toggleItem={toggleItem}
+        />
+        {!childData.isOnlyTopLevel ? <SeparatorComponent /> : null}
+      </div>
+    </CellMeasurer>
   );
-};
-
-const ROW_HEIGHT = 500;
-const FOLDED_CHILD_HEIGHT = 50;
-
-const getExpandedItemCount = (item) => {
-  let count = 1;
-  if (item.expanded) {
-    count += item.children.map(getExpandedItemCount).reduce((total, childrenCount) => {
-      return total + childrenCount;
-    }, 0);
-  }
-
-  return count;
-};
-
-const rowHeight = (childData) => {
-  if (childData.expanded) {
-    return getExpandedItemCount(childData) * ROW_HEIGHT;
-  }
-
-  return ROW_HEIGHT + childData.children.length * FOLDED_CHILD_HEIGHT;
 };
 
 const Tree = ({
@@ -126,6 +109,8 @@ const Tree = ({
   const ConnectedChildComponent = connectChildFunction(Child);
   return (
     <List
+      rowHeight={cache.rowHeight}
+      deferredMeasurementCache={cache}
       ConnectedChildComponent={ConnectedChildComponent}
       data={data}
       height={height}
@@ -136,9 +121,6 @@ const Tree = ({
         globalList = ref;
       }}
       rowCount={data.length}
-      rowHeight={({ index }) => {
-        return rowHeight(data[index]);
-      }}
       rowRenderer={cellRenderer}
       SeparatorComponent={SeparatorComponent}
       toggleItem={toggleItem}
