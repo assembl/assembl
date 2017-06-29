@@ -7,6 +7,10 @@ const convertNameToCssClass = (name) => {
   return name.toLowerCase().split(/\s+/).filter(Boolean).join('_');
 };
 
+const reverseString = (s) => {
+  return s.split("").reverse().join("");
+}
+
 export class SocialMedia extends React.Component {
   render() {
     const { slug } = this.props;
@@ -28,7 +32,7 @@ export class SocialMedia extends React.Component {
             const providerName = convertNameToCssClass(provider.name);
             return (
               <li key={provider.name}>
-                <form id={provider.name} method="get" action={provider.login}>
+                <form id={reverseString(provider.name)} method="get" action={provider.login}>
                   {next ? <input type="hidden" name="next" value={`${next}`} /> : null}
                   {provider.extra &&
                     Object.keys(provider.extra).map((k) => {
