@@ -1,7 +1,11 @@
 import React from 'react';
 
 const InfiniteSeparator = () => {
-  return <div className="center infinite-separator">----------- separator -----------</div>;
+  return (
+    <div className="infinite-separator">
+      <span className="assembl-icon-symbol-assembl color" />
+    </div>
+  );
 };
 
 export default InfiniteSeparator;

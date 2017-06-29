@@ -95,6 +95,9 @@ class Icons extends React.Component {
           <div className="inline padding">
             <span className="assembl-icon-up-open">&nbsp;</span>
           </div>
+          <div className="inline padding">
+            <span className="assembl-icon-symbol-assembl">&nbsp;</span>
+          </div>
           <div>
             <div className="sentiment">
               <Like size={25} />
@@ -211,6 +214,9 @@ class Icons extends React.Component {
           </pre>
           <pre>
             &lt;span className="assembl-icon-up-open"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-symbol-assembl"&gt;&lt;/span&gt;
           </pre>
           <pre>
             <div>&lt;div className="sentiment"&gt;</div>
