@@ -254,9 +254,11 @@ class PostInterface(SQLAlchemyInterface):
     def resolve_indirect_idea_content_links(self, args, context, info):
         links = [(models.Idea.get_database_id(link['idIdea']), link['@type'])
                     for link in self.indirect_idea_content_links_with_cache()]
+        # for @type == 'Extract', idIdea is None
+        # only return links with the IdeaRelatedPostLink type
         return [IdeaContentLink(idea_id=idea_id,
                                 type=type)
-                for idea_id, type in links]
+                for idea_id, type in links if type == 'IdeaRelatedPostLink']
 
     def resolve_parent_id(self, args, context, info):
         if self.parent_id is None:
