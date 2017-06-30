@@ -1,13 +1,8 @@
 const fs = require('fs');
 const translations = require('../js/app/utils/translations');
+const flattenDeep = require('lodash/flattenDeep');
 
 const englishTranslations = translations.en;
-
-function flatten(arr) {
-  return arr.reduce((flat, toFlatten) => {
-    return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
-  }, []);
-}
 
 const object2messages = (fullkey, objOrString) => {
   if (typeof objOrString === 'string') {
@@ -22,7 +17,7 @@ const object2messages = (fullkey, objOrString) => {
   });
 };
 
-const messages = flatten(object2messages('', englishTranslations));
+const messages = flattenDeep(object2messages('', englishTranslations));
 
 const wstream = fs.createWriteStream('./messages.json');
 wstream.write(JSON.stringify(messages, null, 2));
