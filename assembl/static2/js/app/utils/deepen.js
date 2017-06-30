@@ -1,3 +1,10 @@
+/*
+   Transform an object with dotted keys into nested objects
+   Example:
+   deepen({ 'ab.cd.e': 'foo', 'ab.cd.f': 'bar', 'ab.g': 'foo2' }));
+   returns
+   { ab: { cd: { e: 'foo', f: 'bar' }, g: 'foo2' } }
+*/
 export default function deepen(o) {
   const oo = {};
   Object.keys(o).forEach((k) => {
