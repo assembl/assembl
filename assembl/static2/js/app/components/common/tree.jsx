@@ -50,7 +50,7 @@ class Child extends React.Component {
     const cssClasses = () => {
       let cls = `level level-${level}`;
       if (level > 0) {
-        cls += ' border-left';
+        cls += ' border-left child-level';
       }
       if (level > 4) {
         cls += ' padding-right';

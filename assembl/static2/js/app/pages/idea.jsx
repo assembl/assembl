@@ -61,7 +61,7 @@ class Idea extends React.Component {
                   InnerComponent={Post}
                   InnerComponentFolded={PostFolded}
                   noRowsRenderer={() => {
-                    return <Translate value="debate.thread.noPostsInThread" />;
+                    return <div className="center"><Translate value="debate.thread.noPostsInThread" /></div>;
                   }}
                   SeparatorComponent={InfiniteSeparator}
                   toggleItem={toggleItem}

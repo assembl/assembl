@@ -1,6 +1,16 @@
 .level {
     width: 600px;
     margin: 0 auto;
+
+    .box {
+        border-left: 4px solid $first-color;
+    }
+}
+
+.child-level {
+    .box {
+        border-left: 4px solid $first-color-light;
+    }
 }
 
 .expand-indented {
