@@ -8,8 +8,8 @@ const convertNameToCssClass = (name) => {
 };
 
 const reverseString = (s) => {
-  return s.split("").reverse().join("");
-}
+  return s.split('').reverse().join('');
+};
 
 export class SocialMedia extends React.Component {
   render() {
