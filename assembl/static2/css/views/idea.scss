@@ -3,14 +3,14 @@
     margin: 0 auto;
 }
 
-.expand {
+.expand-indented {
     font-size: $font-size-xs;
     cursor: pointer;
     color: $first-color;
     display: inline-block;
-
+    margin-bottom: -6px;
     position: relative;
-    height: 80px;
+    height: $post-space;
     border-bottom: 1px solid $grey1;
     border-left: 1px solid $grey1;
     width: $tree-indentation;
@@ -22,12 +22,25 @@
     }
 }
 
-.post-folded {
-    font-size: $font-size-xs;
-    cursor: pointer;
+.expand {
+    border-left: 1px solid $grey1;
     color: $first-color;
-    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    height: $post-space;
 
+    span {
+        position: absolute;
+        bottom: 28px;
+        left: -14px;
+    }
+}
+
+.post-folded {
+    color: $first-color;
+    cursor: pointer;
+    display: inline-block;
+    font-size: $font-size-xs;
     position: relative;
 
     span {
@@ -56,15 +69,24 @@
     }
 }
 
-.level-1, .level-2, .level-3, .level-4, .level-5, .level-6 {
+.level-1, .level-2, .level-3, .level-4 {
     margin-left: $tree-indentation;
-    margin-top: -6px;
+    padding-bottom: $post-space;
     padding-left: $tree-indentation;
     border-top: 1px solid $grey1;
 
     .box {
         border-top: none;
     }
+
+    &:last-child {
+        border-left: none!important;
+        padding-bottom: 0!important;
+    }
+}
+
+.padding-right {
+    padding-right: $tree-indentation;
 }
 
 .ReactVirtualized__Grid {

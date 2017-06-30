@@ -19,7 +19,7 @@ class Child extends React.Component {
     this.renderToggleLink = this.renderToggleLink.bind(this);
   }
 
-  renderToggleLink(expanded) {
+  renderToggleLink(expanded, indented) {
     const { id, toggleItem } = this.props;
     return (
       <div
@@ -28,7 +28,7 @@ class Child extends React.Component {
           toggleItem(id);
           globalList.recomputeRowHeights();
         }}
-        className="expand"
+        className={indented ? 'expand-indented' : 'expand'}
       >
         {expanded ? <span className="assembl-icon-minus-circled" /> : <span className="assembl-icon-plus-circled" />}
       </div>
@@ -47,10 +47,20 @@ class Child extends React.Component {
       SeparatorComponent,
       toggleItem
     } = this.props;
+    const cssClasses = () => {
+      let cls = `level level-${level}`;
+      if (level > 0) {
+        cls += ' border-left';
+      }
+      if (level > 4) {
+        cls += ' padding-right';
+      }
+      return cls;
+    };
     return (
-      <div className={`level level-${level}`}>
+      <div className={cssClasses()}>
         <InnerComponent {...this.props} />
-        {children.length > 0 ? this.renderToggleLink(expanded) : null}
+        {children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {children && expanded
           ? children.map((child, idx) => {
             return (
