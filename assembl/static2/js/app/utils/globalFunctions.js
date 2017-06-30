@@ -1,4 +1,12 @@
+// import deepen from './deepen';
 import Translations from './translations';
+
+// import jp from '../../../translations/jp.json';
+// Translations.jp = deepen(jp);
+
+export const getTranslations = () => {
+  return Translations;
+};
 
 export const getLocale = (browserLanguage) => {
   let locale = browserLanguage.split('-')[0].toLowerCase();

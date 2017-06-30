@@ -5,8 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import Thunk from 'redux-thunk';
 import { loadTranslations, setLocale, syncTranslationWithStore } from 'react-redux-i18n';
 import RootReducer from './reducers/rootReducer';
-import { getLocale, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
-import Translations from './utils/translations';
+import { getLocale, getTranslations, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
 import { connectedUserIsExpert } from './utils/permissions';
 
 import { SearchComponent } from './components/search.jsx?v=1'; // eslint-disable-line
@@ -23,7 +22,7 @@ const myCreateStore = () => {
   const assemblLocale = window.assembl_locale.split('_')[0];
   const userLocale = getLocale(assemblLocale);
   syncTranslationWithStore(store);
-  store.dispatch(loadTranslations(Translations));
+  store.dispatch(loadTranslations(getTranslations()));
   store.dispatch(setLocale(userLocale));
   return store;
 };

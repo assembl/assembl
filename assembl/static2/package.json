@@ -15,7 +15,9 @@
     "eslint": "eslint . --ext .js --ext .jsx --cache",
     "eslint:fix": "eslint . --ext .js --ext .jsx --fix",
     "eslint:table": "eslint . --ext .js --ext .jsx --cache --format table",
-    "eslint:summary": "eslint . --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter'"
+    "eslint:summary": "eslint . --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter'",
+    "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
+    "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'"
   },
   "author": "Bluenove",
   "license": "AGPL-3.0",
@@ -59,6 +61,7 @@
     "immutability-helper": "^2.2.0",
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",
+    "json-loader": "^0.5.4",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
     "prop-types": "^15.5.8",
@@ -68,6 +71,7 @@
     "react-datepicker": "^0.41.1",
     "react-dom": "^15.4.1",
     "react-hot-loader": "^3.0.0-beta.7",
+    "react-intl-po": "^2.0.2",
     "react-redux": "^4.4.6",
     "react-redux-i18n": "^0.1.1",
     "react-router": "^3.0.0",

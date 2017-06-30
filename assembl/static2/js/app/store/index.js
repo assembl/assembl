@@ -4,8 +4,7 @@ import { updateSelectedLocale } from '../actions/adminActions';
 import configureStore from './configureStore';
 import middlewares from './middlewares';
 import rootReducer from '../reducers/rootReducer';
-import { getLocale } from '../utils/globalFunctions';
-import Translations from '../utils/translations';
+import { getLocale, getTranslations } from '../utils/globalFunctions';
 
 export default function createAppStore(initialState) {
   const store = configureStore(initialState, rootReducer, middlewares);
@@ -19,7 +18,7 @@ export default function createAppStore(initialState) {
   const isStoragedlocale = localStorage.getItem('locale') !== null;
   const userLocale = isStoragedlocale ? localStorage.getItem('locale') : getLocale(browserLanguage);
   syncTranslationWithStore(store);
-  store.dispatch(loadTranslations(Translations));
+  store.dispatch(loadTranslations(getTranslations()));
   store.dispatch(setLocale(userLocale));
   store.dispatch(updateSelectedLocale(userLocale));
   return store;

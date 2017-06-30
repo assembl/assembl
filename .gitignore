@@ -74,6 +74,7 @@ assembl/static/css/*.css
 /assembl/static2/.eslintcache
 /assembl/static2/npm-debug.log
 /assembl/static2/yarn-error.log
+/assembl/static2/messages.json
 
 # Vagrant
 .bash_profile
