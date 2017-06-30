@@ -970,6 +970,7 @@ def install_single_server():
     execute(install_elasticsearch)
     execute(install_database)
     execute(install_assembl_server_deps)
+    execute(app_setup)
     execute(check_and_create_database_user)
     execute(install_redis)
     execute(install_memcached)
