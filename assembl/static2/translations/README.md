@@ -12,11 +12,13 @@ To export the messages, meaning converting English messages from
     npm run i18n:export
 
 This generates an intermediate file static2/messages.json from which we generate the
-pot file using react-intl-po (but we don't use react-intl or 
+pot file using react-intl-po (but we don't use react-intl or
 babel-plugin-react-intl in this project).
 
 The `i18n:export` command takes care of resyncing the existing `locale/assembl-v2/*.po`
-files with the pot file if msgmerge command is installed.
+files with the pot file with the msgmerge command.
+To have the msgmerge command on debian/Ubuntu `apt-get install gettext`, and on
+macOS `brew install gettext; brew link gettext`.
 
 
 # Add a new language
