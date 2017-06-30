@@ -226,6 +226,10 @@ const Translations = {
       saveThemes: 'Sauvegarder',
       successThemeCreation: 'Les thématiques ont été enregistrées avec succès !'
     },
+    unauthorizedAdministration: {
+      unauthorizedMessage: 'Vous n\'êtes pas autorisé à accéder à l\'administration. Veuillez contacter l\'administrateur du site.',
+      returnButton: 'Retour à l\'accueil'
+    },
     date: {
       format: 'D MMMM YYYY',
       format2: 'DD-MM-YYYY'
@@ -453,6 +457,10 @@ const Translations = {
       step_x_total: 'Section %{num} on %{total}',
       saveThemes: 'Save',
       successThemeCreation: 'Themes have been saved with success!'
+    },
+    unauthorizedAdministration: {
+      unauthorizedMessage: 'You are not authorized to access the administration section. Please contact the administrator of the website.',
+      returnButton: 'Back to home'
     },
     date: {
       format: 'MMMM Do, YYYY',

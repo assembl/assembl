@@ -20,6 +20,7 @@ import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
 import Terms from './pages/terms';
 import Administration from './pages/administration';
+import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import TwoColumnsAdmin from './pages/twoColumnsAdmin';
@@ -80,6 +81,7 @@ export default [
         <Route path={routeForRouter('debate')} component={Debate}>
           <Route path={routeForRouter('phase', false, { phase: ':phase', themeId: ':themeId' })} component={DebateChild} />
         </Route>
+        <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
         <Route path={routeForRouter('administration')} component={Administration}>
           <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />
         </Route>

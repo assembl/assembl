@@ -33,6 +33,7 @@ const routes = {
   terms: '${slug}/terms',
   phase: '${phase}/theme/${themeId}',
   administration: '${slug}/administration',
+  unauthorizedAdministration: '${slug}/unauthorizedAdministration',
   adminPhase: '${phase}'
 };
 const convertToContextualName = (name) => {

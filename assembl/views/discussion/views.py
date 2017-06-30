@@ -249,6 +249,11 @@ def react_view(request, required_permission=P_READ):
                 login_url = request.route_url(
                     'contextual_react_login', discussion_slug=discussion.slug)
             return HTTPTemporaryRedirect(login_url)
+        elif not canRead and required_permission == P_ADMIN_DISC and canUseReact:
+            redirect_url = request.route_path("general_react_page",
+                                               discussion_slug=discussion.slug,
+                                               extra_path="unauthorizedAdministration")
+            return HTTPTemporaryRedirect(redirect_url)
         elif not canRead:
             # User is logged-in but doesn't have access to the discussion
             # Would use render_to_response, except for the 401
