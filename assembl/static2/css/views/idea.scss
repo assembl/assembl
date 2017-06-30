@@ -106,3 +106,9 @@
         outline: none!important;
     }
 }
+
+@media screen and (max-width: 600px) {
+    .level {
+        width: 100%;
+    }
+}

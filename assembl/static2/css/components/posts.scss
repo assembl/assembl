@@ -98,6 +98,10 @@
         padding-bottom: 99999px!important;
         padding: 20px 0;
         text-align: center;
+
+        .answers {
+            display: none;
+        }
     }
 
     .box {
@@ -109,6 +113,13 @@
       max-width: 600px;
       position: relative;
       text-align: left;
+
+      .label {
+          display: block;
+          white-space: normal;
+          text-align: left;
+          line-height: 20px;
+      }
     }
 
     .profileLine {
@@ -152,6 +163,20 @@
                 color: $grey3;
             }
         }
+    }
+
+    .post-action {
+        cursor: pointer;
+        margin: 10px 0 0;
+        transition: all .2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+
+    .add-sentiment {
+        margin: 20px 0 0;
     }
 }
 
@@ -254,4 +279,66 @@
       height: 10px;
     }
   }
+}
+
+@media screen and (max-width: 992px) {
+    .posts {
+        .post-right {
+            background: none;
+
+            .answers {
+                float: right;
+                display: block;
+                padding: 20px 20px 0 0;
+            }
+        }
+
+        .post-left {
+            padding: 35px 35px 0;
+
+            .answers {
+                display: none;
+            }
+        }
+
+        .post-icons {
+            border-bottom: 1px solid $grey1;
+            border-top: 1px solid $grey1;
+            padding: 18px 0 10px;
+
+            .post-action {
+                display: inline-block;
+                margin: 0 10px;
+            }
+
+            .add-sentiment {
+                display: inline-block;
+                margin: 0;
+
+                .sentiment {
+                    margin: 0 10px;
+                }
+            }
+        }
+
+        .link-idea {
+            border-bottom: none;
+            margin: 0;
+            padding: 20px 0 0;
+        }
+
+        .sentiments-count {
+            float: left;
+
+            .txt {
+                margin-left: 30px;
+                text-align: left;
+                padding: 0 0 0 30px;
+            }
+        }
+
+        .min-sentiment {
+            padding: 1px 0 0 10px;
+        }
+    }
 }

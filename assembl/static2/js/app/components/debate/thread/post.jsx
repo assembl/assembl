@@ -55,25 +55,34 @@ export default class Post extends React.Component {
                   })}
                 </div>
               </div>
-              <div className="annotation"><Translate value="debate.thread.numberOfResponses" count={children.length} /></div>
-              {/* TODO */}
+              <div className="answers annotation">
+                <Translate value="debate.thread.numberOfResponses" count={children.length} />
+              </div>
             </Col>
             <Col xs={12} md={1} className="post-right">
-              <div className="assembl-icon-back-arrow color pointer" />
-              <div className="assembl-icon-share color margin-s pointer" />
-              <div className="margin-s">
-                <div className={mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}>
-                  <Like size={25} />
+              <div className="post-icons">
+                <div className="post-action">
+                  <span className="assembl-icon-back-arrow color" />
                 </div>
-                <div className={mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}>
-                  <Disagree size={25} />
+                <div className="post-action">
+                  <span className="assembl-icon-share color" />
                 </div>
-                <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
-                  <DontUnderstand size={25} />
+                <div className="add-sentiment">
+                  <div className={mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}>
+                    <Like size={25} />
+                  </div>
+                  <div className={mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}>
+                    <Disagree size={25} />
+                  </div>
+                  <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
+                    <DontUnderstand size={25} />
+                  </div>
+                  <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
+                    <MoreInfo size={25} />
+                  </div>
                 </div>
-                <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
-                  <MoreInfo size={25} />
-                </div>
+              </div>
+              {totalSentimentsCount > 0 &&
                 <div className="sentiments-count margin-m">
                   {Object.keys(sentimentCounts).map((sentiment, index) => {
                     if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
@@ -106,12 +115,14 @@ export default class Post extends React.Component {
                     }
                     return null;
                   })}
-                  {totalSentimentsCount > 0 &&
-                    <div className="txt" style={{ marginLeft: `${(count += 1 * 6)}px` }}>
-                      {totalSentimentsCount}
-                    </div>}
-                </div>
+                  <div className="txt" style={{ marginLeft: `${(count += 1 * 6)}px` }}>
+                    {totalSentimentsCount}
+                  </div>
+                </div>}
+              <div className="answers annotation">
+                <Translate value="debate.thread.numberOfResponses" count={children.length} />
               </div>
+              <div className="clear">&nbsp;</div>
             </Col>
           </Row>
         </div>
