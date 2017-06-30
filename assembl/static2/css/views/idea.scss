@@ -120,10 +120,48 @@
     }
 }
 
+@media screen and (max-width: 992px) {
+    .idea {
+        .border-left {
+            border-left: none;
+        }
+
+        .level {
+            border-top: 1px solid $grey1;
+            margin-top: 20px;
+        }
+
+        .level-1 {
+            margin-left: 20px;
+            padding-left: 0;
+            padding-right: 20px;
+        }
+
+        .level-2, .level-3, .level-4 {
+            margin-left: 0;
+            padding-left: 0;
+            padding-bottom: 0;
+        }
+
+        .expand-indented {
+            display: none;
+        }
+
+        .expand {
+            display: none;
+        }
+
+        .padding-right {
+            padding-right: 0;
+        }
+    }
+}
+
 @media screen and (max-width: 600px) {
     .idea {
         .level {
             width: 100%;
+            padding-bottom: 0;
         }
     }
 }
