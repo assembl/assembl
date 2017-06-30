@@ -29,6 +29,8 @@ If you want to add a new language, say Japanese, copy `assembl-v2.pot` to
     import jp from '../../../translations/jp.json';
     Translations.jp = deepen(jp);
 
+Edit the po file with a dedicated editor like https://poedit.net
+
 
 # Import translations
 
