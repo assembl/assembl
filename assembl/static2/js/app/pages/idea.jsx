@@ -50,7 +50,7 @@ class Idea extends React.Component {
         <section className="post-section">
           <Grid fluid className="background-light">
             <div className="max-container">
-              <div className="content-section" style={{ height: 2000 }}>
+              <div className="content-section">
                 <Tree
                   connectChildFunction={connectPostToState}
                   data={posts}

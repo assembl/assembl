@@ -1,5 +1,5 @@
 import React from 'react';
-import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
+import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 
 /*
   TODO: avoid globalList
@@ -133,6 +133,7 @@ const Tree = ({
   const ConnectedChildComponent = connectChildFunction(Child);
   return (
     <List
+      autoHeight
       rowHeight={cache.rowHeight}
       deferredMeasurementCache={cache}
       ConnectedChildComponent={ConnectedChildComponent}
@@ -161,10 +162,16 @@ Tree.defaultProps = {
 
 export default (props) => {
   return (
-    <AutoSizer>
-      {({ height, width }) => {
-        return <Tree height={height} width={width} {...props} />;
+    <WindowScroller>
+      {({ height }) => {
+        return (
+          <AutoSizer disableHeight>
+            {({ width }) => {
+              return <Tree height={height} {...props} width={width} />;
+            }}
+          </AutoSizer>
+        );
       }}
-    </AutoSizer>
+    </WindowScroller>
   );
 };
