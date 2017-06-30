@@ -10,9 +10,10 @@ import Disagree from '../../svg/disagree';
 import DontUnderstand from '../../svg/dontUnderstand';
 import MoreInfo from '../../svg/moreInfo';
 import ProfileLine from '../../common/profileLine';
+import { SHOW_POST_RESPONSES } from '../../../constants';
 
 const postMapStateToProps = createSelector(postSelector, (post) => {
-  return { expanded: post.get('showResponses', false) };
+  return { expanded: post.get('showResponses', SHOW_POST_RESPONSES) };
 });
 
 export const connectPostToState = connect(postMapStateToProps);

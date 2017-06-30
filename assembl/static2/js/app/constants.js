@@ -1,0 +1,1 @@
+export const SHOW_POST_RESPONSES = true; // should we show all post responses while loading the posts thread?
