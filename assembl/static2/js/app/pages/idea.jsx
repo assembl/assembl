@@ -44,10 +44,6 @@ class Idea extends React.Component {
       return e.node;
     });
     const posts = transformPosts(rawPosts);
-    if (posts.length === 1) {
-      posts[0].isOnlyTopLevel = true; // it is the only top level post
-    }
-
     return (
       <div className="idea">
         <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
