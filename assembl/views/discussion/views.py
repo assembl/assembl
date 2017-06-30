@@ -14,7 +14,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from ...lib.utils import path_qs
 from ...lib.frontend_urls import FrontendUrls
-from ...auth import P_READ, P_ADD_EXTRACT
+from ...auth import P_READ, P_ADD_EXTRACT, P_ADMIN_DISC
 from ...auth.util import user_has_permission
 from ...models import (
     Discussion,
@@ -187,7 +187,14 @@ def is_login_route(route_name):
         "do_password_change")
 
 
-def react_view(request):
+def admin_react_view(request):
+    """
+    Checks that user is logged in and is admin of discussion
+    """
+    return react_view(request, required_permission=P_ADMIN_DISC)
+
+
+def react_view(request, required_permission=P_READ):
     """
     Asbolutely basic view. Nothing more.
     Must add user authentication, permission, etc.
@@ -206,7 +213,7 @@ def react_view(request):
     node_env = os.getenv('NODE_ENV', 'production')
 
     if discussion:
-        canRead = user_has_permission(discussion.id, user_id, P_READ)
+        canRead = user_has_permission(discussion.id, user_id, required_permission)
         canUseReact = (is_login_route(bare_route) or
                        discussion.preferences['landing_page'])
         if not canRead and user_id == Everyone:
@@ -335,12 +342,12 @@ def not_found(context, request):
     return {}
 
 
-def register_react_views(config, routes):
+def register_react_views(config, routes, view=react_view):
     """Add list of routes to the `assembl.views.discussion.views.react_view` method."""
     if not routes:
         return
     for route in routes:
-        config.add_view(react_view, route_name=route,
+        config.add_view(view, route_name=route,
                         request_method='GET',
                         renderer='assembl:templates/index_react.jinja2')
 
@@ -351,8 +358,12 @@ def includeme(config):
     config.add_route('new_home', '/{discussion_slug}/home')
     config.add_route('bare_slug', '/{discussion_slug}')
     config.add_route('auto_bare_slug', '/{discussion_slug}/')
+    config.add_route('admin_react_page', '/{discussion_slug}/administration*extra_path')
     config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
 
+    admin_react_routes = [
+                        "admin_react_page",
+                    ]
     react_routes = [
                         "new_home",
                         "bare_slug",
@@ -360,6 +371,7 @@ def includeme(config):
                         "general_react_page"
                     ]
 
+    register_react_views(config, admin_react_routes, admin_react_view)
     register_react_views(config, react_routes)
 
     # Use these routes to test global views
