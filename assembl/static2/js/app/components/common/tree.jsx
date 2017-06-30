@@ -103,7 +103,7 @@ const cellRenderer = ({ index, key, parent }) => {
           SeparatorComponent={SeparatorComponent}
           toggleItem={toggleItem}
         />
-        {!childData.isOnlyTopLevel ? <SeparatorComponent /> : null}
+        {!childData.isOnlyTopLevel && index + 1 < data.length ? <SeparatorComponent /> : null}
       </div>
     </CellMeasurer>
   );
