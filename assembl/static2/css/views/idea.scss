@@ -1,114 +1,129 @@
-.level {
-    width: 600px;
-    margin: 0 auto;
-
-    .box {
-        border-left: 4px solid $first-color;
+.idea {
+    .content-section {
+        ~ div {
+            padding-bottom: $margin-section;
+        }
     }
-}
+    .level {
+        width: 600px;
+        margin: 0 auto;
 
-.child-level {
-    .box {
-        border-left: 4px solid $first-color-light;
-    }
-}
-
-.expand-indented {
-    font-size: $font-size-xs;
-    cursor: pointer;
-    color: $first-color;
-    display: inline-block;
-    margin-bottom: -6px;
-    position: relative;
-    height: $post-space;
-    border-bottom: 1px solid $grey1;
-    border-left: 1px solid $grey1;
-    width: $tree-indentation;
-
-    span {
-        position: absolute;
-        bottom: -12px;
-        left: $tree-indentation - 15px;
-    }
-}
-
-.expand {
-    border-left: 1px solid $grey1;
-    color: $first-color;
-    cursor: pointer;
-    position: relative;
-    height: $post-space;
-
-    span {
-        position: absolute;
-        bottom: 28px;
-        left: -14px;
-    }
-}
-
-.post-folded {
-    color: $first-color;
-    cursor: pointer;
-    display: inline-block;
-    font-size: $font-size-xs;
-    position: relative;
-
-    span {
-        display: block;
-        position: absolute;
-        width: 400px;
-        bottom: -10px;
-        left: 15px;
-    }
-}
-
-.infinite-separator {
-    margin: $margin-section auto;
-    max-width: 200px;
-    text-align: center;
-    border-bottom: 1px solid $first-color;
-    position: relative;
-
-    span {
-        position: absolute;
-        background-color: $white;
-        width: 50px;
-        padding: 0 15px 0 0;
-        top: -8px;
-        margin: 0 0 0 -20px;
-    }
-}
-
-.level-1, .level-2, .level-3, .level-4 {
-    margin-left: $tree-indentation;
-    padding-bottom: $post-space;
-    padding-left: $tree-indentation;
-    border-top: 1px solid $grey1;
-
-    .box {
-        border-top: none;
+        .box {
+            border-left: 4px solid $first-color;
+        }
     }
 
-    &:last-child {
-        border-left: none!important;
-        padding-bottom: 0!important;
+    .child-level {
+        .box {
+            border-left: 4px solid $first-color-light;
+        }
     }
-}
 
-.padding-right {
-    padding-right: $tree-indentation;
-}
+    .expand-indented {
+        font-size: $font-size-xs;
+        cursor: pointer;
+        color: $first-color;
+        display: inline-block;
+        margin-bottom: -6px;
+        position: relative;
+        height: $post-space;
+        border-bottom: 1px solid $grey1;
+        border-left: 1px solid $grey1;
+        width: $tree-indentation;
 
-.ReactVirtualized__Grid {
-    overflow-y: hidden!important;
+        span {
+            position: absolute;
+            bottom: -12px;
+            left: $tree-indentation - 15px;
+        }
+    }
 
-    &:focus {
-        outline: none!important;
+    .expand {
+        border-left: 1px solid $grey1;
+        color: $first-color;
+        cursor: pointer;
+        position: relative;
+        height: $post-space;
+
+        span {
+            position: absolute;
+            bottom: 28px;
+            left: -14px;
+        }
+    }
+
+    .post-folded {
+        color: $first-color;
+        cursor: pointer;
+        display: inline-block;
+        font-size: $font-size-xs;
+        position: relative;
+
+        span {
+            display: block;
+            position: absolute;
+            width: 400px;
+            bottom: -10px;
+            left: 15px;
+        }
+    }
+
+    .infinite-separator {
+        margin: $margin-section auto;
+        max-width: 200px;
+        text-align: center;
+        border-bottom: 1px solid $first-color;
+        position: relative;
+
+        span {
+            position: absolute;
+            background-color: $white;
+            width: 50px;
+            padding: 0 15px 0 0;
+            top: -8px;
+            margin: 0 0 0 -20px;
+        }
+    }
+
+    .level-1, .level-2, .level-3, .level-4 {
+        margin-left: $tree-indentation;
+        padding-bottom: $post-space;
+        padding-left: $tree-indentation;
+        border-top: 1px solid $grey1;
+
+        .box {
+            border-top: none;
+        }
+
+        &:last-child {
+            border-left: none!important;
+            padding-bottom: 0!important;
+        }
+    }
+
+    .padding-right {
+        padding-right: $tree-indentation;
+    }
+
+    .ReactVirtualized__Grid {
+        overflow-y: hidden!important;
+        padding-bottom: $margin-section;
+
+        &:focus {
+            outline: none!important;
+        }
+    }
+
+    .ReactVirtualized__Grid__innerScrollContainer {
+        overflow: visible!important;
+        padding-bottom: $margin-section;
     }
 }
 
 @media screen and (max-width: 600px) {
-    .level {
-        width: 100%;
+    .idea {
+        .level {
+            width: 100%;
+        }
     }
 }
