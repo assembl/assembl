@@ -4,7 +4,7 @@ const flattenDeep = require('lodash/flattenDeep');
 
 const englishTranslations = translations.en;
 
-const object2messages = (fullkey, objOrString) => {
+const nestedObjects2nestedMessages = (objOrString, fullkey = '') => {
   if (typeof objOrString === 'string') {
     return {
       id: fullkey,
@@ -13,11 +13,17 @@ const object2messages = (fullkey, objOrString) => {
   }
   return Object.keys(objOrString).map((key) => {
     const newfullkey = fullkey ? `${fullkey}.${key}` : key;
-    return object2messages(newfullkey, objOrString[key]);
+    return nestedObjects2nestedMessages(objOrString[key], newfullkey);
   });
 };
 
-const messages = flattenDeep(object2messages('', englishTranslations));
+const nestedObjects2messages = (objOrString, fullkey = '') => {
+  return flattenDeep(nestedObjects2nestedMessages(objOrString, fullkey));
+};
+
+const messages = flattenDeep(nestedObjects2messages(englishTranslations));
 
 const wstream = fs.createWriteStream('./messages.json');
 wstream.write(JSON.stringify(messages, null, 2));
+
+module.exports = nestedObjects2messages;
