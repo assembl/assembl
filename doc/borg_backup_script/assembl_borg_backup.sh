@@ -21,6 +21,7 @@ borg create \
     --exclude $ASSEMBL_PATH/src \
     --exclude $ASSEMBL_PATH/venv \
     --exclude $ASSEMBL_PATH/vendor \
+    --exclude $ASSEMBL_PATH/var \
     --exclude $ASSEMBL_PATH/assembl/static/js/bower \
     --exclude $ASSEMBL_PATH'/assembl/static/widget/*/bower_components' \
     --exclude $ASSEMBL_PATH/assembl/static/js/node_modules \
