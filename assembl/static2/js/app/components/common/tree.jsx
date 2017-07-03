@@ -109,7 +109,7 @@ const cellRenderer = ({ index, key, parent, style }) => {
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
-      <div key={`child-${index}`} style={style}>
+      <div style={style}>
         <ConnectedChildComponent
           {...childData}
           rowIndex={index}
