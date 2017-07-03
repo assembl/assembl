@@ -79,6 +79,7 @@ class Child extends React.Component {
           : children.map((child, idx) => {
             return (
               <div
+                key={idx}
                 onClick={(event) => {
                   event.stopPropagation();
                   toggleItem(id);
@@ -86,7 +87,7 @@ class Child extends React.Component {
                 }}
                 className="post-folded"
               >
-                <InnerComponentFolded key={idx} {...child} />
+                <InnerComponentFolded {...child} />
               </div>
             );
           })}
