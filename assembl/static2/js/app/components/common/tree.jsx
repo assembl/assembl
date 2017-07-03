@@ -13,9 +13,9 @@ const cache = new CellMeasurerCache({
   fixedWidth: true
 });
 
-class Child extends React.Component {
-  constructor() {
-    super();
+class Child extends React.PureComponent {
+  constructor(props) {
+    super(props);
     this.renderToggleLink = this.renderToggleLink.bind(this);
   }
 
