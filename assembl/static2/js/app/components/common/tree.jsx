@@ -177,7 +177,12 @@ export default (props) => {
     <WindowScroller>
       {({ height, isScrolling, onChildScroll }) => {
         return (
-          <AutoSizer disableHeight>
+          <AutoSizer
+            disableHeight
+            onResize={() => {
+              return globalList.recomputeRowHeights();
+            }}
+          >
             {({ width }) => {
               return <Tree height={height} isScrolling={isScrolling} onScroll={onChildScroll} {...props} width={width} />;
             }}
