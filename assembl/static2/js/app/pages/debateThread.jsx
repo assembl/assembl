@@ -3,7 +3,6 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
-import Loader from '../components/common/loader';
 import Themes from '../components/debate/common/themes';
 import Timeline from '../components/debate/navigation/timeline';
 import Thumbnails from '../components/debate/navigation/thumbnails';
@@ -31,7 +30,7 @@ class DebateThread extends React.Component {
     this.setState({ isThumbnailsHidden: !this.state.isThumbnailsHidden });
   }
   render() {
-    const { loading, rootIdea } = this.props.data;
+    const { rootIdea } = this.props.data;
     const thematics = rootIdea ? rootIdea.children : [];
     const { identifier, isNavbarHidden } = this.props;
     const isParentRoute = !this.props.params.themeId || false;
@@ -44,7 +43,6 @@ class DebateThread extends React.Component {
     });
     return (
       <div className="debate">
-        {loading && <Loader color="black" />}
         {thematics &&
           <div>
             <section
