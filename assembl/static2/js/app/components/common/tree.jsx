@@ -146,11 +146,12 @@ const Tree = ({
         globalList = ref;
       }}
       rowCount={data.length}
-      overscanRowCount={2}
+      overscanRowCount={data.length}
       rowRenderer={cellRenderer}
       SeparatorComponent={SeparatorComponent}
       toggleItem={toggleItem}
       width={width}
+      className="tree-list"
     />
   );
 };
