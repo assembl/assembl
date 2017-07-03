@@ -15,11 +15,11 @@ const ProfileLine = (props) => {
           alt={userName}
           onError={(e) => {
             const target = e.target;
-            target.src = '/static/img/icon/user.png';
+            target.src = '/static2/img/icons/avatar.png';
           }}
         />
       </div>
-      <div className="inline">
+      <div className="user">
         <div className="creator">{userName}</div>
         {creationDate &&
           <div className="date">
