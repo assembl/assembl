@@ -125,7 +125,9 @@ const Tree = ({
   height,
   InnerComponent, // component that will be rendered in the child
   InnerComponentFolded, // component that will be used to render the children when folded
+  isScrolling,
   noRowsRenderer,
+  onScroll,
   SeparatorComponent, // separator component between first level children
   toggleItem,
   width
@@ -141,12 +143,14 @@ const Tree = ({
       height={height}
       InnerComponent={InnerComponent}
       InnerComponentFolded={InnerComponentFolded}
+      isScrolling={isScrolling}
       noRowsRenderer={noRowsRenderer}
       ref={function (ref) {
         globalList = ref;
       }}
       rowCount={data.length}
       overscanRowCount={data.length}
+      onScroll={onScroll}
       rowRenderer={cellRenderer}
       SeparatorComponent={SeparatorComponent}
       toggleItem={toggleItem}
@@ -165,11 +169,11 @@ Tree.defaultProps = {
 export default (props) => {
   return (
     <WindowScroller>
-      {({ height }) => {
+      {({ height, isScrolling, onChildScroll }) => {
         return (
           <AutoSizer disableHeight>
             {({ width }) => {
-              return <Tree height={height} {...props} width={width} />;
+              return <Tree height={height} isScrolling={isScrolling} onScroll={onChildScroll} {...props} width={width} />;
             }}
           </AutoSizer>
         );
