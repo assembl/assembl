@@ -1,9 +1,4 @@
 .idea {
-    .content-section {
-        ~ div {
-            padding-bottom: $margin-section;
-        }
-    }
     .level {
         width: 600px;
         margin: 0 auto;
@@ -106,17 +101,9 @@
     }
 
     .ReactVirtualized__Grid {
-        overflow-y: hidden!important;
-        padding-bottom: $margin-section;
-
-        &:focus {
-            outline: none!important;
-        }
-    }
-
-    .ReactVirtualized__Grid__innerScrollContainer {
-        overflow: visible!important;
-        padding-bottom: $margin-section;
+      &:focus {
+          outline: none!important;
+      }
     }
 }
 

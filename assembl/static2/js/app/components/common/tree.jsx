@@ -99,12 +99,12 @@ Child.defaultProps = {
   level: 0
 };
 
-const cellRenderer = ({ index, key, parent }) => {
+const cellRenderer = ({ index, key, parent, style }) => {
   const { ConnectedChildComponent, data, toggleItem, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
-      <div key={`child-${index}`}>
+      <div key={`child-${index}`} style={style}>
         <ConnectedChildComponent
           {...childData}
           ConnectedChildComponent={ConnectedChildComponent}
@@ -146,6 +146,7 @@ const Tree = ({
         globalList = ref;
       }}
       rowCount={data.length}
+      overscanRowCount={2}
       rowRenderer={cellRenderer}
       SeparatorComponent={SeparatorComponent}
       toggleItem={toggleItem}
