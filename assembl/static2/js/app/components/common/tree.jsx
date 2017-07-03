@@ -20,12 +20,13 @@ class Child extends React.PureComponent {
   }
 
   renderToggleLink(expanded, indented) {
-    const { id, toggleItem } = this.props;
+    const { id, rowIndex, toggleItem } = this.props;
     return (
       <div
         onClick={(event) => {
           event.stopPropagation();
           toggleItem(id);
+          cache.clear(rowIndex, 0);
           globalList.recomputeRowHeights();
         }}
         className={indented ? 'expand-indented' : 'expand'}
@@ -44,6 +45,7 @@ class Child extends React.PureComponent {
       InnerComponent,
       InnerComponentFolded,
       level,
+      rowIndex, // the index of the row (i.e. level 0 item) in the List
       SeparatorComponent,
       toggleItem
     } = this.props;
@@ -69,6 +71,7 @@ class Child extends React.PureComponent {
                 {...child}
                 ConnectedChildComponent={ConnectedChildComponent}
                 level={level + 1}
+                rowIndex={rowIndex}
                 InnerComponent={InnerComponent}
                 InnerComponentFolded={InnerComponentFolded}
                 SeparatorComponent={SeparatorComponent}
@@ -83,6 +86,7 @@ class Child extends React.PureComponent {
                 onClick={(event) => {
                   event.stopPropagation();
                   toggleItem(id);
+                  cache.clear(rowIndex, 0);
                   globalList.recomputeRowHeights();
                 }}
                 className="post-folded"
@@ -108,6 +112,7 @@ const cellRenderer = ({ index, key, parent, style }) => {
       <div key={`child-${index}`} style={style}>
         <ConnectedChildComponent
           {...childData}
+          rowIndex={index}
           ConnectedChildComponent={ConnectedChildComponent}
           InnerComponent={InnerComponent}
           InnerComponentFolded={InnerComponentFolded}
