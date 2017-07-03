@@ -24,7 +24,7 @@ const ProfileLine = (props) => {
         <div className="creator">{userName}</div>
         {creationDate &&
           <div className="date">
-            {moment(creationDate).lang(locale).fromNow()}
+            {moment(creationDate).locale(locale).fromNow()}
           </div>}
       </div>
     </div>
