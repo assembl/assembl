@@ -1,9 +1,10 @@
 import React from 'react';
-import { Localize } from 'react-redux-i18n';
+import { connect } from 'react-redux';
+import moment from 'moment';
 import '../../../../css/components/profileLine.scss';
 
 const ProfileLine = (props) => {
-  const { userId, userName, creationDate } = props;
+  const { userId, userName, creationDate, locale } = props;
   const src = `/user/id/${userId}/avatar/30`;
   return (
     <div className="profileLine">
@@ -23,11 +24,17 @@ const ProfileLine = (props) => {
         <div className="creator">{userName}</div>
         {creationDate &&
           <div className="date">
-            <Localize value={creationDate} dateFormat="date.format" />
+            {moment(creationDate).lang(locale).fromNow()}
           </div>}
       </div>
     </div>
   );
 };
 
-export default ProfileLine;
+const mapStateToProps = (state) => {
+  return {
+    locale: state.i18n.locale
+  };
+};
+
+export default connect(mapStateToProps)(ProfileLine);
