@@ -69,8 +69,8 @@ kombu==3.0.35
 langdetect==1.0.6
 lingua==4.9
 lxml==3.6.0
-# Must come after lxml
-dm.xmlsec.binding==1.3.2
+# Must come after lxml. Fake install option to disable wheel.
+dm.xmlsec.binding==1.3.2 --install-option="-q"
 Mako==1.0.4
 MarkupSafe==0.23
 meld3==1.0.2
