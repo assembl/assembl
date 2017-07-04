@@ -33,7 +33,6 @@ from pyramid.i18n import TranslationStringFactory, make_localizer
 from pyramid_mailer.message import Message
 from celery import current_task
 from jinja2 import Environment, PackageLoader
-from ..lib.sqla import mark_changed
 
 from . import Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
@@ -725,12 +724,11 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
         assert isinstance(objectInstance, DiscussionBoundBase)
         applicableInstancesByUser = defaultdict(list)
         subscriptionClasses = get_concrete_subclasses_recursive(NotificationSubscription)
-        with transaction.manager:
-            for subscriptionClass in subscriptionClasses:
-                applicableInstances = subscriptionClass.findApplicableInstances(objectInstance.get_discussion_id(), CrudVerbs.CREATE, objectInstance)
-                for subscription in applicableInstances:
-                    applicableInstancesByUser[subscription.user_id].append(subscription)
-            num_instances = len([v for v in applicableInstancesByUser.itervalues() if v])
+        for subscriptionClass in subscriptionClasses:
+            applicableInstances = subscriptionClass.findApplicableInstances(objectInstance.get_discussion_id(), CrudVerbs.CREATE, objectInstance)
+            for subscription in applicableInstances:
+                applicableInstancesByUser[subscription.user_id].append(subscription)
+        num_instances = len([v for v in applicableInstancesByUser.itervalues() if v])
         print "processEvent: %d notifications created for %s %s %d" % (
             num_instances, verb, objectClass.__name__, objectId)
         with transaction.manager:
@@ -738,7 +736,9 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
                 if(len(applicableInstances) > 0):
                     applicableInstances.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
                     applicableInstances[0].process(objectInstance.get_discussion_id(), verb, objectInstance, applicableInstances[1:])
-                    mark_changed()
+        if bool(current_task):
+            # In a celery task, there's no one else to commit
+            objectInstance.db.commit()
 
 
     def processPostCreated(self, id):
