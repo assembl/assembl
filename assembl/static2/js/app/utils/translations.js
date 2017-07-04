@@ -388,7 +388,7 @@ const Translations = {
       disagree: 'Disagree',
       survey: {
         themesTitle: 'Choose a theme!',
-        txtAreaPh: 'Write your proposal',
+        txtAreaPh: 'Write your opinion',
         question_x_on_total: 'Question %{current} on %{total}',
         titleVideo: 'A video to better understand the subject...',
         proposalsTitle: 'Do you agree with proposals?',
