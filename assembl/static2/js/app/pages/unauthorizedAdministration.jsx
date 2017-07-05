@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { get } from '../utils/routeMap';
 import { getDiscussionSlug } from '../utils/globalFunctions';
 
-let UnauthorizedAdministration = (props) => {
+const UnauthorizedAdministration = () => {
   const slug = getDiscussionSlug();
   return (
     <div className="unauthorized-administration">
@@ -12,12 +12,12 @@ let UnauthorizedAdministration = (props) => {
         <Translate value="unauthorizedAdministration.unauthorizedMessage" />
       </div>
       <div>
-        <Link className="button-link button-dark margin-l" href={`${get('home', { slug })}`}>
+        <Link className="button-link button-dark margin-l" href={`${get('home', { slug: slug })}`}>
           <Translate value="unauthorizedAdministration.returnButton" />
         </Link>
       </div>
     </div>
   );
-}
+};
 
 export default UnauthorizedAdministration;
