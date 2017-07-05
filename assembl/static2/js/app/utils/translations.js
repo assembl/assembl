@@ -399,7 +399,7 @@ const Translations = {
       disagree: 'Disagree',
       survey: {
         themesTitle: 'Choose a theme!',
-        txtAreaPh: 'Write your point of view',
+        txtAreaPh: 'Share your point of view',
         question_x_on_total: 'Question %{current} on %{total}',
         titleVideo: 'A video to better understand the subject...',
         proposalsTitle: 'Do you agree with these points of view?',
