@@ -483,4 +483,4 @@ const Translations = {
   }
 };
 
-export default Translations;
+module.exports = Translations; // keep commonJS syntax for the node i18n:export script to work

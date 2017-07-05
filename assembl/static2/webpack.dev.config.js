@@ -97,6 +97,10 @@ module.exports = {
           exclude: /node_modules/,
           loader: 'graphql-tag/loader'
         },
+        {
+          test: /\.json$/,
+          loader: 'json-loader'
+        },
         ]
     },
     resolve:{

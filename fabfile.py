@@ -1927,3 +1927,47 @@ def build_doc():
         venvcmd('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
         venvcmd('python assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (env.ini_file))
         venvcmd('sphinx-build doc assembl/static/techdocs')
+
+
+@task
+def install_translation_dependencies():
+    """Install core dependencies needed in order to translate objects
+    in React-based Assembl"""
+    if env.mac:
+        run("brew install gettext; brew link --force gettext")
+    else:
+        sudo("apt-get install gettext")
+
+
+@task
+def make_new_messages():
+    """Build .po files for React based instances of Assembl"""
+    with cd(env.projectpath + "/assembl/static2/"):
+        run("npm run i18n:export")
+
+
+@task
+def compile_new_messages():
+    """Build the locale.json files from the corresponding po files"""
+    with cd(env.projectpath + "/assembl/static2/"):
+        run("npm run i18n:import")
+
+
+@task
+def build_po_files():
+    """Build translation files for both versions of Assembl"""
+
+    # Version 1
+    execute(make_messages)
+    # Version 2
+    execute(make_new_messages)
+
+
+@task
+def build_translation_json_files():
+    """Build locale json files from .po files for each locale"""
+
+    # Version1
+    execute(compile_messages)
+    # Version2
+    execute(compile_new_messages)

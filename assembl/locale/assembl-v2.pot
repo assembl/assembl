@@ -1,0 +1,1191 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2017-06-30T16:48:50.106Z\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+"X-Generator: react-intl-po\n"
+
+
+#: messages.json
+#. [administration.addQuestion]
+#. defaultMessage is:
+#. Add a question
+msgid "administration.addQuestion"
+msgstr ""
+
+#: messages.json
+#. [administration.addThematic]
+#. defaultMessage is:
+#. Add a theme
+msgid "administration.addThematic"
+msgstr ""
+
+#: messages.json
+#. [administration.annotation]
+#. defaultMessage is:
+#. Module to be completed. * Fields are required.
+msgid "administration.annotation"
+msgstr ""
+
+#: messages.json
+#. [administration.changeLanguage]
+#. defaultMessage is:
+#. Set another language
+msgid "administration.changeLanguage"
+msgstr ""
+
+#: messages.json
+#. [administration.deleteQuestion]
+#. defaultMessage is:
+#. Delete the question
+msgid "administration.deleteQuestion"
+msgstr ""
+
+#: messages.json
+#. [administration.deleteThematic]
+#. defaultMessage is:
+#. Delete the theme
+msgid "administration.deleteThematic"
+msgstr ""
+
+#: messages.json
+#. [administration.edition]
+#. defaultMessage is:
+#. Discussion
+msgid "administration.edition"
+msgstr ""
+
+#: messages.json
+#. [administration.landingpage]
+#. defaultMessage is:
+#. Landing page
+msgid "administration.landingpage"
+msgstr ""
+
+#: messages.json
+#. [administration.menu.phase]
+#. defaultMessage is:
+#. Phase %{count} - %{description}
+msgid "administration.menu.phase"
+msgstr ""
+
+#: messages.json
+#. [administration.ph.quote]
+#. defaultMessage is:
+#. Quote
+msgid "administration.ph.quote"
+msgstr ""
+
+#: messages.json
+#. [administration.ph.title]
+#. defaultMessage is:
+#. *Title
+msgid "administration.ph.title"
+msgstr ""
+
+#: messages.json
+#. [administration.ph.videoLink]
+#. defaultMessage is:
+#. *Video link
+msgid "administration.ph.videoLink"
+msgstr ""
+
+#: messages.json
+#. [administration.question_label]
+#. defaultMessage is:
+#. Question
+msgid "administration.question_label"
+msgstr ""
+
+#: messages.json
+#. [administration.saveThemes]
+#. defaultMessage is:
+#. Save
+msgid "administration.saveThemes"
+msgstr ""
+
+#: messages.json
+#. [administration.step_x_total]
+#. defaultMessage is:
+#. Section %{num} on %{total}
+msgid "administration.step_x_total"
+msgstr ""
+
+#: messages.json
+#. [administration.successThemeCreation]
+#. defaultMessage is:
+#. Themes have been saved with success!
+msgid "administration.successThemeCreation"
+msgstr ""
+
+#: messages.json
+#. [administration.survey.0]
+#. defaultMessage is:
+#. Set themes
+msgid "administration.survey.0"
+msgstr ""
+
+#: messages.json
+#. [administration.survey.1]
+#. defaultMessage is:
+#. Set questions
+msgid "administration.survey.1"
+msgstr ""
+
+#: messages.json
+#. [administration.survey.2]
+#. defaultMessage is:
+#. Export data
+msgid "administration.survey.2"
+msgstr ""
+
+#: messages.json
+#. [administration.surveyExport.annotation]
+#. defaultMessage is:
+#. You can export all the debate data by clicking on the Export button
+msgid "administration.surveyExport.annotation"
+msgstr ""
+
+#: messages.json
+#. [administration.surveyExport.link]
+#. defaultMessage is:
+#. Export
+msgid "administration.surveyExport.link"
+msgstr ""
+
+#: messages.json
+#. [administration.surveyExport.title]
+#. defaultMessage is:
+#. Export the debate data
+msgid "administration.surveyExport.title"
+msgstr ""
+
+#: messages.json
+#. [administration.thematic]
+#. defaultMessage is:
+#. Theme
+msgid "administration.thematic"
+msgstr ""
+
+#: messages.json
+#. [administration.themeNum]
+#. defaultMessage is:
+#. Theme %{index}
+msgid "administration.themeNum"
+msgstr ""
+
+#: messages.json
+#. [administration.videoModule]
+#. defaultMessage is:
+#. Video module
+msgid "administration.videoModule"
+msgstr ""
+
+#: messages.json
+#. [changePassword.panelTitle]
+#. defaultMessage is:
+#. Welcome to Assembl forgot password page
+msgid "changePassword.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [common.uploadButton]
+#. defaultMessage is:
+#. Choose a file to upload
+msgid "common.uploadButton"
+msgstr ""
+
+#: messages.json
+#. [community.panelTitle]
+#. defaultMessage is:
+#. Welcome to Assembl community page
+msgid "community.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [date.format]
+#. defaultMessage is:
+#. MMMM Do, YYYY
+msgid "date.format"
+msgstr ""
+
+#: messages.json
+#. [date.format2]
+#. defaultMessage is:
+#. MM-DD-YYYY
+msgid "date.format2"
+msgstr ""
+
+#: messages.json
+#. [debate.disagree]
+#. defaultMessage is:
+#. Disagree
+msgid "debate.disagree"
+msgstr ""
+
+#: messages.json
+#. [debate.like]
+#. defaultMessage is:
+#. Like
+msgid "debate.like"
+msgstr ""
+
+#: messages.json
+#. [debate.notStarted]
+#. defaultMessage is:
+#. The %{phaseName} phase has not started. Please come back from 
+msgid "debate.notStarted"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.endPhase]
+#. defaultMessage is:
+#. The %{closedPhaseName} phase is closed.
+msgid "debate.survey.endPhase"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.goTo]
+#. defaultMessage is:
+#. Go to %{currentPhaseName} phase.
+msgid "debate.survey.goTo"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.modalBody]
+#. defaultMessage is:
+#. You have to be connected to do a proposal or to vote.
+msgid "debate.survey.modalBody"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.modalFooter]
+#. defaultMessage is:
+#. Please connect
+msgid "debate.survey.modalFooter"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.moreProposals]
+#. defaultMessage is:
+#. More proposals
+msgid "debate.survey.moreProposals"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.noProposals]
+#. defaultMessage is:
+#. There are no proposals for the moment. Be the first to contribute!
+msgid "debate.survey.noProposals"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.postSuccess]
+#. defaultMessage is:
+#. Thanks for your participation. Your proposal has been sent!
+msgid "debate.survey.postSuccess"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.proposalsTitle]
+#. defaultMessage is:
+#. Do you agree with the proposals?
+msgid "debate.survey.proposalsTitle"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.question_x_on_total]
+#. defaultMessage is:
+#. Question %{current} on %{total}
+msgid "debate.survey.question_x_on_total"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.react]
+#. defaultMessage is:
+#. React:
+msgid "debate.survey.react"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.reactions]
+#. defaultMessage is:
+#. Reactions
+msgid "debate.survey.reactions"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.remaining_x_characters]
+#. defaultMessage is:
+#. You have %{nbCharacters} characters left
+msgid "debate.survey.remaining_x_characters"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.submit]
+#. defaultMessage is:
+#. Submit
+msgid "debate.survey.submit"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.themesTitle]
+#. defaultMessage is:
+#. Choose a theme!
+msgid "debate.survey.themesTitle"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.titleVideo]
+#. defaultMessage is:
+#. A video to better understand the subject...
+msgid "debate.survey.titleVideo"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.txtAreaPh]
+#. defaultMessage is:
+#. Write your proposal
+msgid "debate.survey.txtAreaPh"
+msgstr ""
+
+#: messages.json
+#. [debate.themes]
+#. defaultMessage is:
+#. Themes
+msgid "debate.themes"
+msgstr ""
+
+#: messages.json
+#. [error.reason]
+#. defaultMessage is:
+#. Sorry, an error occurred:
+msgid "error.reason"
+msgstr ""
+
+#: messages.json
+#. [error.required]
+#. defaultMessage is:
+#. This field is required.
+msgid "error.required"
+msgstr ""
+
+#: messages.json
+#. [footer.socialMedias]
+#. defaultMessage is:
+#. Follow us
+msgid "footer.socialMedias"
+msgstr ""
+
+#: messages.json
+#. [footer.terms]
+#. defaultMessage is:
+#. Terms and Conditions
+msgid "footer.terms"
+msgstr ""
+
+#: messages.json
+#. [home.accessButton]
+#. defaultMessage is:
+#. Access the debate
+msgid "home.accessButton"
+msgstr ""
+
+#: messages.json
+#. [home.chatbot]
+#. defaultMessage is:
+#. Chat with %{chatbotName}
+msgid "home.chatbot"
+msgstr ""
+
+#: messages.json
+#. [home.contact]
+#. defaultMessage is:
+#. Do you wish to know more about this platform?
+msgid "home.contact"
+msgstr ""
+
+#: messages.json
+#. [home.contactUs]
+#. defaultMessage is:
+#. Contact us
+msgid "home.contactUs"
+msgstr ""
+
+#: messages.json
+#. [home.contribution]
+#. defaultMessage is:
+#. contributions
+msgid "home.contribution"
+msgstr ""
+
+#: messages.json
+#. [home.controversial]
+#. defaultMessage is:
+#. Controversial discussions
+msgid "home.controversial"
+msgstr ""
+
+#: messages.json
+#. [home.from]
+#. defaultMessage is:
+#. from
+msgid "home.from"
+msgstr ""
+
+#: messages.json
+#. [home.longerThread]
+#. defaultMessage is:
+#. Longer thread
+msgid "home.longerThread"
+msgstr ""
+
+#: messages.json
+#. [home.objectivesTitle]
+#. defaultMessage is:
+#. What is the objective of the debate?
+msgid "home.objectivesTitle"
+msgstr ""
+
+#: messages.json
+#. [home.participant]
+#. defaultMessage is:
+#. participants
+msgid "home.participant"
+msgstr ""
+
+#: messages.json
+#. [home.partners]
+#. defaultMessage is:
+#. Partners
+msgid "home.partners"
+msgstr ""
+
+#: messages.json
+#. [home.recentDiscussion]
+#. defaultMessage is:
+#. Recent discussion
+msgid "home.recentDiscussion"
+msgstr ""
+
+#: messages.json
+#. [home.themesSubtitle]
+#. defaultMessage is:
+#. Find your most controversial and highly acclaimed discussions on the front page
+msgid "home.themesSubtitle"
+msgstr ""
+
+#: messages.json
+#. [home.themesTitle]
+#. defaultMessage is:
+#. Themes of the ongoing debate
+msgid "home.themesTitle"
+msgstr ""
+
+#: messages.json
+#. [home.timelineTitle]
+#. defaultMessage is:
+#. The timeline of the debate in %{count} phases
+msgid "home.timelineTitle"
+msgstr ""
+
+#: messages.json
+#. [home.to]
+#. defaultMessage is:
+#. to
+msgid "home.to"
+msgstr ""
+
+#: messages.json
+#. [home.topContributor]
+#. defaultMessage is:
+#. Top contributor
+msgid "home.topContributor"
+msgstr ""
+
+#: messages.json
+#. [home.twitterTitle]
+#. defaultMessage is:
+#. Tweet
+msgid "home.twitterTitle"
+msgstr ""
+
+#: messages.json
+#. [home.video]
+#. defaultMessage is:
+#. Video of the debate
+msgid "home.video"
+msgstr ""
+
+#: messages.json
+#. [home.viewedPages]
+#. defaultMessage is:
+#. Viewed pages
+msgid "home.viewedPages"
+msgstr ""
+
+#: messages.json
+#. [home.visit]
+#. defaultMessage is:
+#. visits
+msgid "home.visit"
+msgstr ""
+
+#: messages.json
+#. [loading.wait]
+#. defaultMessage is:
+#. Please wait...
+msgid "loading.wait"
+msgstr ""
+
+#: messages.json
+#. [login.accountCreated]
+#. defaultMessage is:
+#. Your account has been created
+msgid "login.accountCreated"
+msgstr ""
+
+#: messages.json
+#. [login.accountCreatedMsg]
+#. defaultMessage is:
+#. A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.
+msgid "login.accountCreatedMsg"
+msgstr ""
+
+#: messages.json
+#. [login.alreadyAccount]
+#. defaultMessage is:
+#. Do you already have an account?
+msgid "login.alreadyAccount"
+msgstr ""
+
+#: messages.json
+#. [login.changePassword]
+#. defaultMessage is:
+#. Change Password
+msgid "login.changePassword"
+msgstr ""
+
+#: messages.json
+#. [login.createAccount]
+#. defaultMessage is:
+#. Create an account
+msgid "login.createAccount"
+msgstr ""
+
+#: messages.json
+#. [login.email]
+#. defaultMessage is:
+#. Email
+msgid "login.email"
+msgstr ""
+
+#: messages.json
+#. [login.emailNotFound]
+#. defaultMessage is:
+#. The email you have entered was not found. Please try again.
+msgid "login.emailNotFound"
+msgstr ""
+
+#: messages.json
+#. [login.existingEmail]
+#. defaultMessage is:
+#. The email you have entered already exists
+msgid "login.existingEmail"
+msgstr ""
+
+#: messages.json
+#. [login.existingUsername]
+#. defaultMessage is:
+#. The username you have entered already exists
+msgid "login.existingUsername"
+msgstr ""
+
+#: messages.json
+#. [login.forgotPwd]
+#. defaultMessage is:
+#. Forgot your password?
+msgid "login.forgotPwd"
+msgstr ""
+
+#: messages.json
+#. [login.fullName]
+#. defaultMessage is:
+#. Full name
+msgid "login.fullName"
+msgstr ""
+
+#: messages.json
+#. [login.incorrectPassword]
+#. defaultMessage is:
+#. The passwords that you have entered do not match
+msgid "login.incorrectPassword"
+msgstr ""
+
+#: messages.json
+#. [login.incorrectPasswordLogin]
+#. defaultMessage is:
+#. The password you have entered does not match with the entered user. Please try again.
+msgid "login.incorrectPasswordLogin"
+msgstr ""
+
+#: messages.json
+#. [login.invalidEmail]
+#. defaultMessage is:
+#. The email you have entered is invalid
+msgid "login.invalidEmail"
+msgstr ""
+
+#: messages.json
+#. [login.login]
+#. defaultMessage is:
+#. Log in
+msgid "login.login"
+msgstr ""
+
+#: messages.json
+#. [login.loginWithSocialMedia]
+#. defaultMessage is:
+#. Care to use social media?
+msgid "login.loginWithSocialMedia"
+msgstr ""
+
+#: messages.json
+#. [login.newPassword]
+#. defaultMessage is:
+#. New password
+msgid "login.newPassword"
+msgstr ""
+
+#: messages.json
+#. [login.newPassword2]
+#. defaultMessage is:
+#. Re-enter new password
+msgid "login.newPassword2"
+msgstr ""
+
+#: messages.json
+#. [login.noAccount]
+#. defaultMessage is:
+#. No account yet?
+msgid "login.noAccount"
+msgstr ""
+
+#: messages.json
+#. [login.password]
+#. defaultMessage is:
+#. Password
+msgid "login.password"
+msgstr ""
+
+#: messages.json
+#. [login.password2]
+#. defaultMessage is:
+#. Repeat password
+msgid "login.password2"
+msgstr ""
+
+#: messages.json
+#. [login.passwordChangeRequestError]
+#. defaultMessage is:
+#. Oh oh! There seems to be a problem on our end. Please try again later.
+msgid "login.passwordChangeRequestError"
+msgstr ""
+
+#: messages.json
+#. [login.passwordChangeRequestSuccess]
+#. defaultMessage is:
+#. Great! An email has been sent to your account. Make sure to check your spam folder as well
+msgid "login.passwordChangeRequestSuccess"
+msgstr ""
+
+#: messages.json
+#. [login.resend]
+#. defaultMessage is:
+#. Resend the email
+msgid "login.resend"
+msgstr ""
+
+#: messages.json
+#. [login.send]
+#. defaultMessage is:
+#. Send
+msgid "login.send"
+msgstr ""
+
+#: messages.json
+#. [login.sendPwdConfirm]
+#. defaultMessage is:
+#. Password change requested
+msgid "login.sendPwdConfirm"
+msgstr ""
+
+#: messages.json
+#. [login.sendPwdMsg]
+#. defaultMessage is:
+#. We have sent you an email with a temporary connection link. Please use that link to log in and change your password. Make sure to check your spam folder if an email is not in your inbox
+msgid "login.sendPwdMsg"
+msgstr ""
+
+#: messages.json
+#. [login.signUp]
+#. defaultMessage is:
+#. Sign up
+msgid "login.signUp"
+msgstr ""
+
+#: messages.json
+#. [login.somethingWentWrong]
+#. defaultMessage is:
+#. We are sorry! Something went terribly wrong. Please try again
+msgid "login.somethingWentWrong"
+msgstr ""
+
+#: messages.json
+#. [login.userName]
+#. defaultMessage is:
+#. Username (optional)
+msgid "login.userName"
+msgstr ""
+
+#: messages.json
+#. [login.username]
+#. defaultMessage is:
+#. Email or user name
+msgid "login.username"
+msgstr ""
+
+#: messages.json
+#. [navbar.administration]
+#. defaultMessage is:
+#. Administration
+msgid "navbar.administration"
+msgstr ""
+
+#: messages.json
+#. [navbar.community]
+#. defaultMessage is:
+#. community
+msgid "navbar.community"
+msgstr ""
+
+#: messages.json
+#. [navbar.connection]
+#. defaultMessage is:
+#. Login
+msgid "navbar.connection"
+msgstr ""
+
+#: messages.json
+#. [navbar.debate]
+#. defaultMessage is:
+#. debate
+msgid "navbar.debate"
+msgstr ""
+
+#: messages.json
+#. [navbar.home]
+#. defaultMessage is:
+#. home
+msgid "navbar.home"
+msgstr ""
+
+#: messages.json
+#. [navbar.logout]
+#. defaultMessage is:
+#. Logout
+msgid "navbar.logout"
+msgstr ""
+
+#: messages.json
+#. [navbar.profile]
+#. defaultMessage is:
+#. Profile
+msgid "navbar.profile"
+msgstr ""
+
+#: messages.json
+#. [notFound.panelTitle]
+#. defaultMessage is:
+#. Sorry, this page doesn't exist
+msgid "notFound.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [profile.panelTitle]
+#. defaultMessage is:
+#. Welcome to Assembl profile page
+msgid "profile.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [redirectToV1]
+#. defaultMessage is:
+#. You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.
+msgid "redirectToV1"
+msgstr ""
+
+#: messages.json
+#. [search.All]
+#. defaultMessage is:
+#. All
+msgid "search.All"
+msgstr ""
+
+#: messages.json
+#. [search.By relevance]
+#. defaultMessage is:
+#. By relevance
+msgid "search.By relevance"
+msgstr ""
+
+#: messages.json
+#. [search.Categories]
+#. defaultMessage is:
+#. Categories
+msgid "search.Categories"
+msgstr ""
+
+#: messages.json
+#. [search.Creative participants]
+#. defaultMessage is:
+#. Creative participants
+msgid "search.Creative participants"
+msgstr ""
+
+#: messages.json
+#. [search.Filter by date]
+#. defaultMessage is:
+#. Filter by date
+msgid "search.Filter by date"
+msgstr ""
+
+#: messages.json
+#. [search.Learning participants]
+#. defaultMessage is:
+#. Learning participants
+msgid "search.Learning participants"
+msgstr ""
+
+#: messages.json
+#. [search.Less popular messages]
+#. defaultMessage is:
+#. Less popular messages
+msgid "search.Less popular messages"
+msgstr ""
+
+#: messages.json
+#. [search.Messages]
+#. defaultMessage is:
+#. Messages
+msgid "search.Messages"
+msgstr ""
+
+#: messages.json
+#. [search.Messages in response to my contributions]
+#. defaultMessage is:
+#. Messages in response to my contributions
+msgid "search.Messages in response to my contributions"
+msgstr ""
+
+#: messages.json
+#. [search.Messages judged unclear]
+#. defaultMessage is:
+#. Messages judged unclear
+msgid "search.Messages judged unclear"
+msgstr ""
+
+#: messages.json
+#. [search.Most consensus messages]
+#. defaultMessage is:
+#. Most consensus messages
+msgid "search.Most consensus messages"
+msgstr ""
+
+#: messages.json
+#. [search.Most controversial messages]
+#. defaultMessage is:
+#. Most controversial messages
+msgid "search.Most controversial messages"
+msgstr ""
+
+#: messages.json
+#. [search.Most popular messages]
+#. defaultMessage is:
+#. Most popular messages
+msgid "search.Most popular messages"
+msgstr ""
+
+#: messages.json
+#. [search.Most recent first]
+#. defaultMessage is:
+#. More recent first
+msgid "search.Most recent first"
+msgstr ""
+
+#: messages.json
+#. [search.My messages]
+#. defaultMessage is:
+#. My messages
+msgid "search.My messages"
+msgstr ""
+
+#: messages.json
+#. [search.NoHits.DidYouMean]
+#. defaultMessage is:
+#. Search for {suggestion}.
+msgid "search.NoHits.DidYouMean"
+msgstr ""
+
+#: messages.json
+#. [search.NoHits.NoResultsFound]
+#. defaultMessage is:
+#. No results found for {query}.
+msgid "search.NoHits.NoResultsFound"
+msgstr ""
+
+#: messages.json
+#. [search.NoHits.NoResultsFoundDidYouMean]
+#. defaultMessage is:
+#. No results found for {query}. Did you mean {suggestion}?
+msgid "search.NoHits.NoResultsFoundDidYouMean"
+msgstr ""
+
+#: messages.json
+#. [search.NoHits.SearchWithoutFilters]
+#. defaultMessage is:
+#. Search for {query} without filters
+msgid "search.NoHits.SearchWithoutFilters"
+msgstr ""
+
+#: messages.json
+#. [search.Oldest first]
+#. defaultMessage is:
+#. Oldest first
+msgid "search.Oldest first"
+msgstr ""
+
+#: messages.json
+#. [search.Participants having the less posted messages]
+#. defaultMessage is:
+#. Participants having the less posted messages
+msgid "search.Participants having the less posted messages"
+msgstr ""
+
+#: messages.json
+#. [search.Participants having the most posted messages]
+#. defaultMessage is:
+#. Participants having the most posted messages
+msgid "search.Participants having the most posted messages"
+msgstr ""
+
+#: messages.json
+#. [search.Participants pleased by their peers]
+#. defaultMessage is:
+#. Participants pleased by their peers
+msgid "search.Participants pleased by their peers"
+msgstr ""
+
+#: messages.json
+#. [search.Reactive participants]
+#. defaultMessage is:
+#. Reactive participants
+msgid "search.Reactive participants"
+msgstr ""
+
+#: messages.json
+#. [search.Sort]
+#. defaultMessage is:
+#. Sort
+msgid "search.Sort"
+msgstr ""
+
+#: messages.json
+#. [search.by]
+#. defaultMessage is:
+#. by
+msgid "search.by"
+msgstr ""
+
+#: messages.json
+#. [search.collapse_search]
+#. defaultMessage is:
+#. Hide search
+msgid "search.collapse_search"
+msgstr ""
+
+#: messages.json
+#. [search.datefilter.from]
+#. defaultMessage is:
+#. From
+msgid "search.datefilter.from"
+msgstr ""
+
+#: messages.json
+#. [search.datefilter.to]
+#. defaultMessage is:
+#. To
+msgid "search.datefilter.to"
+msgstr ""
+
+#: messages.json
+#. [search.disagree]
+#. defaultMessage is:
+#. Disagree
+msgid "search.disagree"
+msgstr ""
+
+#: messages.json
+#. [search.dont_understand]
+#. defaultMessage is:
+#. Did not get it
+msgid "search.dont_understand"
+msgstr ""
+
+#: messages.json
+#. [search.expand_search]
+#. defaultMessage is:
+#. Show search
+msgid "search.expand_search"
+msgstr ""
+
+#: messages.json
+#. [search.facets.view_all]
+#. defaultMessage is:
+#. View all
+msgid "search.facets.view_all"
+msgstr ""
+
+#: messages.json
+#. [search.facets.view_less]
+#. defaultMessage is:
+#. View less
+msgid "search.facets.view_less"
+msgstr ""
+
+#: messages.json
+#. [search.facets.view_more]
+#. defaultMessage is:
+#. View more
+msgid "search.facets.view_more"
+msgstr ""
+
+#: messages.json
+#. [search.hitstats.results_found]
+#. defaultMessage is:
+#. {hitCount} results found
+msgid "search.hitstats.results_found"
+msgstr ""
+
+#: messages.json
+#. [search.idea]
+#. defaultMessage is:
+#. Ideas
+msgid "search.idea"
+msgstr ""
+
+#: messages.json
+#. [search.like]
+#. defaultMessage is:
+#. Like
+msgid "search.like"
+msgstr ""
+
+#: messages.json
+#. [search.member_since]
+#. defaultMessage is:
+#. Member since
+msgid "search.member_since"
+msgstr ""
+
+#: messages.json
+#. [search.more_info]
+#. defaultMessage is:
+#. More info please?
+msgid "search.more_info"
+msgstr ""
+
+#: messages.json
+#. [search.pagination.next]
+#. defaultMessage is:
+#. Next
+msgid "search.pagination.next"
+msgstr ""
+
+#: messages.json
+#. [search.pagination.previous]
+#. defaultMessage is:
+#. Previous
+msgid "search.pagination.previous"
+msgstr ""
+
+#: messages.json
+#. [search.post]
+#. defaultMessage is:
+#. Messages
+msgid "search.post"
+msgstr ""
+
+#: messages.json
+#. [search.published_on]
+#. defaultMessage is:
+#. Published on
+msgid "search.published_on"
+msgstr ""
+
+#: messages.json
+#. [search.reset.clear_all]
+#. defaultMessage is:
+#. Clear All Filters
+msgid "search.reset.clear_all"
+msgstr ""
+
+#: messages.json
+#. [search.search_come_from_announcement]
+#. defaultMessage is:
+#. Search done in the "announcement" section of this discussion
+msgid "search.search_come_from_announcement"
+msgstr ""
+
+#: messages.json
+#. [search.search_come_from_what_you_need_to_know]
+#. defaultMessage is:
+#. Search done in the "What you need to know" section of this discussion
+msgid "search.search_come_from_what_you_need_to_know"
+msgstr ""
+
+#: messages.json
+#. [search.searchbox.placeholder]
+#. defaultMessage is:
+#. Search
+msgid "search.searchbox.placeholder"
+msgstr ""
+
+#: messages.json
+#. [search.synthesis]
+#. defaultMessage is:
+#. Synthesis
+msgid "search.synthesis"
+msgstr ""
+
+#: messages.json
+#. [search.user]
+#. defaultMessage is:
+#. Participants
+msgid "search.user"
+msgstr ""
+
+#: messages.json
+#. [synthesis.title]
+#. defaultMessage is:
+#. synthesis
+msgid "synthesis.title"
+msgstr ""
+
+#: messages.json
+#. [terms.panelTitle]
+#. defaultMessage is:
+#. Terms and Conditions
+msgid "terms.panelTitle"
+msgstr ""
