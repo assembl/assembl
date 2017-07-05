@@ -139,6 +139,7 @@ const Tree = ({
   width
 }) => {
   const ConnectedChildComponent = connectChildFunction(Child);
+  cache.clearAll(); // TO DO: find a better way to do that. It's used to adapt the height of the tree when we the idea changes
   return (
     <List
       autoHeight

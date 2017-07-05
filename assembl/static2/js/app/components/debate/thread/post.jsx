@@ -35,7 +35,9 @@ export default class Post extends React.Component {
       creator,
       creationDate
     } = this.props;
-    let count = 1;
+    let count = -1;
+    const nbSentimentType = 0;
+    const margin = 6;
     const totalSentimentsCount =
       sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo;
     return (
@@ -44,7 +46,6 @@ export default class Post extends React.Component {
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
               <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} />
-              {/* TODO convert creationDate to "x months ago" with momentjs */}
               <h3 className="dark-title-3">{parentId !== null ? <span>Rep. 1 :</span> : null}{subject}</h3>
               <div className="body">{body}</div>
               <div className="link-idea">
@@ -84,38 +85,42 @@ export default class Post extends React.Component {
               </div>
               {totalSentimentsCount > 0 &&
                 <div className="sentiments-count margin-m">
-                  {Object.keys(sentimentCounts).map((sentiment, index) => {
-                    if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
-                      return (
-                        <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                          <Like size={15} />
-                        </div>
-                      );
-                    }
-                    if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
-                      return (
-                        <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                          <Disagree size={15} />
-                        </div>
-                      );
-                    }
-                    if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
-                      return (
-                        <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                          <DontUnderstand size={15} />
-                        </div>
-                      );
-                    }
-                    if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
-                      return (
-                        <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                          <MoreInfo size={15} />
-                        </div>
-                      );
-                    }
-                    return null;
-                  })}
-                  <div className="txt" style={{ marginLeft: `${(count += 1 * 6)}px` }}>
+                  <div>
+                    <div>
+                      {Object.keys(sentimentCounts).map((sentiment, index) => {
+                        if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
+                          return (
+                            <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                              <Like size={15} />
+                            </div>
+                          );
+                        }
+                        if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
+                          return (
+                            <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                              <Disagree size={15} />
+                            </div>
+                          );
+                        }
+                        if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
+                          return (
+                            <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                              <DontUnderstand size={15} />
+                            </div>
+                          );
+                        }
+                        if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
+                          return (
+                            <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                              <MoreInfo size={15} />
+                            </div>
+                          );
+                        }
+                        return null;
+                      })}
+                    </div>
+                  </div>
+                  <div className="txt">
                     {totalSentimentsCount}
                   </div>
                 </div>}
