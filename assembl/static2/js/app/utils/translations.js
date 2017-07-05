@@ -388,7 +388,7 @@ const Translations = {
       disagree: 'Disagree',
       survey: {
         themesTitle: 'Choose a theme!',
-        txtAreaPh: 'Write your opinion',
+        txtAreaPh: 'Write your point of view',
         question_x_on_total: 'Question %{current} on %{total}',
         titleVideo: 'A video to better understand the subject...',
         proposalsTitle: 'Do you agree with proposals?',
@@ -453,6 +453,11 @@ const Translations = {
       step_x_total: 'Section %{num} on %{total}',
       saveThemes: 'Save',
       successThemeCreation: 'Themes have been saved with success!'
+    },
+    unauthorizedAdministration: {
+      unauthorizedMessage:
+        'You are not authorized to access the administration section. Please contact the administrator of the website.',
+      returnButton: 'Back to home'
     },
     date: {
       format: 'MMMM Do, YYYY',
