@@ -35,9 +35,7 @@ export default class Post extends React.Component {
       creator,
       creationDate
     } = this.props;
-    let count = -1;
-    const nbSentimentType = 0;
-    const margin = 6;
+    let count = 0;
     const totalSentimentsCount =
       sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo;
     return (
