@@ -26,6 +26,10 @@
       position: absolute;
       text-align: center;
       top: 12px;
+
+      &:hover {
+          color: $grey2;
+      }
     }
 
     .burger-menu-label {
@@ -63,7 +67,7 @@
       &:nth-child(6) {
         margin: -78px 0 0;
       }
-      
+
       &:nth-child(7) {
         margin: 2px 0 0;
       }
@@ -71,11 +75,11 @@
       &:nth-child(8) {
         margin: -38px 0 0;
       }
-      
+
       &:nth-child(9) {
         margin: 2px 0 0;
       }
-      
+
       &:nth-child(10) {
         margin: -78px 0 0;
       }
@@ -83,7 +87,7 @@
       &:nth-child(11) {
         margin: 2px 0 0;
       }
-      
+
       &:nth-child(12) {
         margin: -38px 0 0;
       }
@@ -91,7 +95,7 @@
       &:nth-child(13) {
         margin: 2px 0 0;
       }
-      
+
       &:nth-child(14) {
         margin: -78px 0 0;
       }
@@ -99,7 +103,7 @@
       &:nth-child(15) {
         margin: 2px 0 0;
       }
-      
+
       &:nth-child(16) {
         margin: -38px 0 0;
       }
@@ -322,7 +326,7 @@
       }
     }
   }
-  
+
   .proposals-section {
     margin: $margin-section 0 0 0;
   }
@@ -360,7 +364,7 @@
       .alert {
         top: ($navbar-height * 2) + 20px;
       }
-    }    
+    }
 
     .timeline-section {
       display: none;

@@ -8,7 +8,7 @@ import { getDiscussionSlug } from '../../../utils/globalFunctions';
 class Themes extends React.Component {
   render() {
     const { thematics, identifier } = this.props;
-    const slug = { slug: getDiscussionSlug() };
+    const slug = getDiscussionSlug();
     return (
       <section className="themes-section">
         <Grid fluid className="background-grey">
@@ -34,7 +34,7 @@ class Themes extends React.Component {
                         imgUrl={thematic.imgUrl}
                         numPosts={thematic.numPosts}
                         numContributors={thematic.numContributors}
-                        link={`${get('debate', slug)}/${identifier}/theme/${thematic.id}`}
+                        link={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}
                         title={thematic.title}
                         description={thematic.description}
                       />

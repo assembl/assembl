@@ -1,0 +1,32 @@
+query IdeaWithPosts($lang: String!, $id: ID!) {
+  idea: node(id:$id) {
+    ... on Idea {
+      id
+      title(lang: $lang)
+      description(lang: $lang)
+      imgUrl
+      posts(first: 20) {
+        edges {
+          node {
+            ... on Post {
+              id
+              subject
+              body
+              mySentiment
+              sentimentCounts {
+                like
+                disagree
+                dontUnderstand
+                moreInfo
+              }
+              indirectIdeaContentLinks { idea { id title } }
+              creator { id userId name }
+              parentId
+              creationDate
+            }
+          }
+        }
+      }
+    }
+  }
+}

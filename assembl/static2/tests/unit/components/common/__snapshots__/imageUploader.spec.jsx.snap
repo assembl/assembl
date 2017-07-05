@@ -1,27 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`ImageUploader component should render an image uploader 1`] = `
 <div>
   <button
     className="btn btn-default"
     disabled={false}
     onClick={[Function]}
-    type="button">
+    type="button"
+  >
     <span>
       Upload Button
     </span>
   </button>
   <div
-    className="hidden">
+    className="hidden"
+  >
     <img
       alt="preview"
-      src={undefined} />
+      src={undefined}
+    />
   </div>
   <div
-    className="preview-title">
+    className="preview-title"
+  >
     
   </div>
   <input
     className="hidden"
     onChange={[Function]}
-    type="file" />
+    type="file"
+  />
 </div>
 `;

@@ -79,6 +79,107 @@
   }
 }
 
+.posts {
+    .post-row {
+        margin-right: -20px;
+        margin-left: -20px;
+        margin-top: -15px;
+        margin-bottom: -20px;
+        overflow: hidden;
+    }
+
+    .post-left {
+        padding: 35px;
+    }
+
+    .post-right {
+        background-color: $first-color-light;
+        margin-bottom: -99999px!important;
+        padding-bottom: 99999px!important;
+        padding: 20px 0;
+        text-align: center;
+
+        .answers {
+            display: none;
+        }
+    }
+
+    .box {
+      border-bottom: $navbar-border;
+      border-left: $border-theme;
+      border-right: $navbar-border;
+      border-top: $navbar-border;
+      margin: 0 auto;
+      max-width: 600px;
+      position: relative;
+      text-align: left;
+
+      .label {
+          display: block;
+          white-space: normal;
+          text-align: left;
+          line-height: 20px;
+      }
+    }
+
+    .profileLine {
+        img {
+            vertical-align: text-bottom;
+        }
+
+        .creator {
+            color: $second-color;
+            padding: 0 0 0 10px;
+        }
+
+        .date {
+            color: $grey2;
+            font-size: $font-size-xs;
+            padding: 0 0 0 10px;
+        }
+    }
+
+    .body {
+        padding: 20px 0;
+        word-break: break-all;
+    }
+
+    .link-idea {
+        border-bottom: $navbar-border;
+        border-top: $navbar-border;
+        margin: 0 0 15px 0;
+        padding: 20px 0;
+
+        .label {
+            color: $grey2;
+            font-size: $font-size-xs;
+        }
+
+        .badges {
+            padding: 10px 0;
+
+            .badge {
+                background-color: $grey1;
+                color: $grey3;
+            }
+        }
+    }
+
+    .post-action {
+        cursor: pointer;
+        margin: 10px 0 0;
+        transition: all .2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+
+    .add-sentiment {
+        margin: 20px 0 0;
+    }
+}
+
 @media screen and (min-width: 600px) {
   .proposals {
     .sentiment-label {
@@ -178,4 +279,66 @@
       height: 10px;
     }
   }
+}
+
+@media screen and (max-width: 992px) {
+    .posts {
+        .post-right {
+            background: none;
+
+            .answers {
+                float: right;
+                display: block;
+                padding: 20px 20px 0 0;
+            }
+        }
+
+        .post-left {
+            padding: 35px 35px 0;
+
+            .answers {
+                display: none;
+            }
+        }
+
+        .post-icons {
+            border-bottom: 1px solid $grey1;
+            border-top: 1px solid $grey1;
+            padding: 18px 0 10px;
+
+            .post-action {
+                display: inline-block;
+                margin: 0 10px;
+            }
+
+            .add-sentiment {
+                display: inline-block;
+                margin: 0;
+
+                .sentiment {
+                    margin: 0 10px;
+                }
+            }
+        }
+
+        .link-idea {
+            border-bottom: none;
+            margin: 0;
+            padding: 20px 0 0;
+        }
+
+        .sentiments-count {
+            float: left;
+
+            .txt {
+                margin-left: 30px;
+                text-align: left;
+                padding: 0 0 0 30px;
+            }
+        }
+
+        .min-sentiment {
+            padding: 1px 0 0 10px;
+        }
+    }
 }

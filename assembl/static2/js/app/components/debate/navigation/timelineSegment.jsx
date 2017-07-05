@@ -13,9 +13,10 @@ class TimelineSegment extends React.Component {
   }
   displayPhase() {
     const { locale } = this.props.i18n;
-    const { phaseIdentifier, title, startDate } = this.props;
+    const { phaseIdentifier, title, startDate, endDate } = this.props;
     const { debateData } = this.props.debate;
     const slug = { slug: debateData.slug };
+    const params = { slug: debateData.slug, phase: phaseIdentifier };
     let phaseName = '';
     title.entries.forEach((entry) => {
       if (locale === entry['@language']) {
@@ -23,7 +24,7 @@ class TimelineSegment extends React.Component {
       }
     });
     const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
-    const phaseStatus = getPhaseStatus(debateData.timeline, phaseIdentifier);
+    const phaseStatus = getPhaseStatus(startDate, endDate);
     if (isSeveralPhases) {
       if (phaseStatus === 'notStarted') {
         const body = (
@@ -35,20 +36,20 @@ class TimelineSegment extends React.Component {
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
         if (phaseIdentifier === 'survey') {
-          browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
+          browserHistory.push(get('debate', params));
         } else {
           const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-          const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+          const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
           displayModal(null, body, true, null, button, true);
           setTimeout(() => {
-            window.location = `${get('oldDebate', slug)}`;
+            window.location = get('oldDebate', slug);
           }, 6000);
         }
       }
     } else if (phaseIdentifier === 'survey') {
-      browserHistory.push(`${get('debate', slug)}?phase=${phaseIdentifier}`);
+      browserHistory.push(get('debate', params));
     } else {
-      window.location = `${get('oldDebate', slug)}`;
+      window.location = get('oldDebate', slug);
     }
   }
   render() {

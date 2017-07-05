@@ -1,0 +1,154 @@
+.idea {
+    .level {
+        width: 600px;
+        margin: 0 auto;
+
+        .box {
+            border-left: 4px solid $first-color;
+        }
+    }
+
+    .child-level {
+        .box {
+            border-left: 4px solid $first-color-light;
+        }
+    }
+
+    .expand-indented {
+        font-size: $font-size-xs;
+        cursor: pointer;
+        color: $first-color;
+        display: inline-block;
+        margin-bottom: -6px;
+        position: relative;
+        height: $post-space;
+        border-bottom: 1px solid $grey1;
+        border-left: 1px solid $grey1;
+        width: $tree-indentation;
+
+        span {
+            position: absolute;
+            bottom: -12px;
+            left: $tree-indentation - 15px;
+        }
+    }
+
+    .expand {
+        border-left: 1px solid $grey1;
+        color: $first-color;
+        cursor: pointer;
+        position: relative;
+        height: $post-space;
+
+        span {
+            position: absolute;
+            bottom: 28px;
+            left: -14px;
+        }
+    }
+
+    .post-folded {
+        color: $first-color;
+        cursor: pointer;
+        display: inline-block;
+        font-size: $font-size-xs;
+        position: relative;
+
+        span {
+            display: block;
+            position: absolute;
+            width: 400px;
+            bottom: -13px;
+            left: 15px;
+        }
+    }
+
+    .infinite-separator {
+        margin: $margin-section auto;
+        max-width: 200px;
+        text-align: center;
+        border-bottom: 1px solid $first-color;
+        position: relative;
+
+        span {
+            position: absolute;
+            background-color: $white;
+            width: 50px;
+            padding: 0 15px 0 0;
+            top: -8px;
+            margin: 0 0 0 -20px;
+        }
+    }
+
+    .level-1, .level-2, .level-3, .level-4 {
+        margin-left: $tree-indentation;
+        padding-bottom: $post-space;
+        padding-left: $tree-indentation;
+        border-top: 1px solid $grey1;
+
+        .box {
+            border-top: none;
+        }
+
+        &:last-child {
+            border-left: none!important;
+            padding-bottom: 0!important;
+        }
+    }
+
+    .padding-right {
+        padding-right: $tree-indentation;
+    }
+
+    .tree-list {
+      &:focus {
+          outline: none;
+      }
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .idea {
+        .border-left {
+            border-left: none;
+        }
+
+        .level {
+            border-top: 1px solid $grey1;
+            margin-top: 20px;
+        }
+
+        .level-1 {
+            margin-left: 20px;
+            padding-left: 0;
+            padding-right: 20px;
+        }
+
+        .level-2, .level-3, .level-4 {
+            margin-left: 0;
+            padding-left: 0;
+            padding-bottom: 0;
+        }
+
+        .expand-indented {
+            display: none;
+        }
+
+        .expand {
+            display: none;
+        }
+
+        .padding-right {
+            padding-right: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .idea {
+        .level {
+            width: 100%;
+            padding-bottom: 0;
+        }
+    }
+}

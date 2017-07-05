@@ -16,7 +16,6 @@ $purple-light: #e7e6f5;
 $yellow: #f0ab2b;
 $cyan: #0095b2;
 $cyan-light: #d1eef6;
-$blue-light: rgba(53, 66, 105, 0.5);
 $opacity-blue: rgba(53, 66, 105, 0.5);
 $min-opacity-blue: rgba(53, 66, 105, .1);
 
@@ -25,23 +24,12 @@ $opacity-cyan: rgba(0, 140, 166, .5);
 $min-opacity-cyan: rgba(0, 140, 166, .1);
 $linear-gradient: linear-gradient( 90deg, $grey6, $white );
 
-$blue-harvard: #005b81;
-$green-harvard: #44cd54;
-$blue-light-harvard: #7fadc0;
-$blue-opacity-harvard: rgba(0, 91, 129, 0.5);
-$blue-opacity-min-harvard: rgba(0, 91, 129, 0.1);
-
-$blue-michelin: #48556D;
-$green-michelin: #8DC4B3;
-$blue-light-michelin: rgba(72, 85, 109, 0.5);
-$blue-opacity-michelin: rgba(72, 85, 109, 0.5);
-$blue-opacity-min-michelin: rgba(72, 85, 109, 0.1);
-
-$first-color: $blue-harvard;
-$first-color-light: $blue-light-harvard;
-$second-color: $green-harvard;
-$opacity-color: $blue-opacity-harvard;
-$min-opacity-color: $blue-opacity-min-harvard;
+$first-color: $cyan;
+$first-color-light: $cyan-light;
+$second-color: $yellow;
+$third-color: $cyan;
+$opacity-color: $opacity-blue;
+$min-opacity-color: $min-opacity-blue;
 
 $app-max-width: 1400px;
 $navbar-height: 60px;
@@ -132,3 +120,6 @@ $lines-to-show: 3;
 
 $small-hyphen-width: 50px;
 $large-hyphen-width: 75px;
+
+$tree-indentation: 40px;
+$post-space: 80px;

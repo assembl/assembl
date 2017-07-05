@@ -33,7 +33,7 @@ class Debate extends React.Component {
   render() {
     const { loading, thematics } = this.props.data;
     const { identifier, isNavbarHidden } = this.props;
-    const isParentRoute = !this.props.params.phase || false;
+    const isParentRoute = !this.props.params.themeId || false;
     const themeId = this.props.params.themeId || null;
     const children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {

@@ -28,10 +28,10 @@ const routes = {
   profile: '${slug}/profile/${userId}',
   ideas: '${slug}/ideas',
   synthesis: '${slug}/synthesis',
-  debate: '${slug}/debate',
+  debate: '${slug}/debate/${phase}',
   community: '${slug}/community',
   terms: '${slug}/terms',
-  phase: '${phase}/theme/${themeId}',
+  theme: 'theme/${themeId}',
   administration: '${slug}/administration',
   adminPhase: '${phase}'
 };

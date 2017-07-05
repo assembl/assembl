@@ -7,7 +7,7 @@ import { Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Video from '../components/debate/survey/video';
-import Header from '../components/debate/survey/header';
+import Header from '../components/debate/common/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
@@ -61,7 +61,7 @@ class Survey extends React.Component {
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} />
+          <Header title={title} imgUrl={imgUrl} identifier="survey" />
           {isValidVideo ? <Video title={video.title} description={video.description} htmlCode={video.htmlCode} /> : null}
           <div className="questions">
             {questions &&

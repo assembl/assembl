@@ -78,6 +78,9 @@ class Icons extends React.Component {
             <span className="assembl-icon-share">&nbsp;</span>
           </div>
           <div className="inline padding">
+            <span className="assembl-icon-back-arrow">&nbsp;</span>
+          </div>
+          <div className="inline padding">
             <span className="assembl-icon-delete">&nbsp;</span>
           </div>
           <div className="inline padding">
@@ -91,6 +94,15 @@ class Icons extends React.Component {
           </div>
           <div className="inline padding">
             <span className="assembl-icon-up-open">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-symbol-assembl">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-plus-circled">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            <span className="assembl-icon-minus-circled">&nbsp;</span>
           </div>
           <div>
             <div className="sentiment">
@@ -192,6 +204,9 @@ class Icons extends React.Component {
             &lt;span className="assembl-icon-share"&gt;&lt;/span&gt;
           </pre>
           <pre>
+            &lt;span className="assembl-icon-back-arrow"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
             &lt;span className="assembl-icon-delete"&gt;&lt;/span&gt;
           </pre>
           <pre>
@@ -205,6 +220,15 @@ class Icons extends React.Component {
           </pre>
           <pre>
             &lt;span className="assembl-icon-up-open"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-symbol-assembl"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-plus-circled"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-minus-circled"&gt;&lt;/span&gt;
           </pre>
           <pre>
             <div>&lt;div className="sentiment"&gt;</div>

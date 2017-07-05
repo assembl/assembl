@@ -204,7 +204,7 @@
     width: 100%;
     z-index: 100;
   }
-  
+
   .tab-title {
     border-bottom: $border-not-active;
     color: $grey2;
@@ -248,7 +248,7 @@
   .question-section {
     margin: 0 0 75px 0;
   }
-  
+
   label {
     font-family: $font-family2;
     font-size: $font-size-xs;
@@ -263,11 +263,11 @@
   input:-moz-placeholder, textarea:-moz-placeholder {
     font-family: $font-family6;
   }
-   
+
   input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     font-family: $font-family6;
   }
-   
+
   input.placeholder, textarea.placeholder {
     font-family: $font-family6;
   }

@@ -1,4 +1,11 @@
-.profileLine img {
-    border-radius: 50%;
-    margin-right: 5px;
+.profileLine {
+    img {
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .user {
+        vertical-align: bottom;
+        display: inline-block;
+    }
 }

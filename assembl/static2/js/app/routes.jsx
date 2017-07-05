@@ -10,8 +10,9 @@ import RequestPasswordChange from './pages/requestPasswordChange';
 import Home from './pages/home';
 import Synthesis from './pages/synthesis';
 import Debate from './pages/debate';
+import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
-import Thread from './pages/thread';
+import Idea from './pages/idea';
 import TwoColumns from './pages/twoColumns';
 import TokenVote from './pages/tokenVote';
 import Community from './pages/community';
@@ -26,18 +27,33 @@ import TwoColumnsAdmin from './pages/twoColumnsAdmin';
 import TokenVoteAdmin from './pages/tokenVoteAdmin';
 import { routeForRouter } from './utils/routeMap';
 
+const DebateHome = (props) => {
+  switch (props.params.phase) {
+  case 'survey':
+    return <Debate {...props} />;
+  case 'thread':
+    return <DebateThread {...props} />;
+  case 'twoColumns':
+    return <Debate {...props} />;
+  case 'tokenVote':
+    return <Debate {...props} />;
+  default:
+    return <Debate {...props} />;
+  }
+};
+
 const DebateChild = (props) => {
   switch (props.params.phase) {
   case 'survey':
     return <Survey id={props.id} identifier={props.identifier} />;
   case 'thread':
-    return <Thread id={props.id} identifier={props.identifier} />;
+    return <Idea id={props.id} identifier={props.identifier} />;
   case 'twoColumns':
     return <TwoColumns id={props.id} identifier={props.identifier} />;
   case 'tokenVote':
     return <TokenVote id={props.id} identifier={props.identifier} />;
   default:
-    return <Thread id={props.id} identifier={props.identifier} />;
+    return <Idea id={props.id} identifier={props.identifier} />;
   }
 };
 
@@ -77,8 +93,8 @@ export default [
         <Route path={routeForRouter('synthesis')} component={Synthesis} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('terms')} component={Terms} />
-        <Route path={routeForRouter('debate')} component={Debate}>
-          <Route path={routeForRouter('phase', false, { phase: ':phase', themeId: ':themeId' })} component={DebateChild} />
+        <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
+          <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
         </Route>
         <Route path={routeForRouter('administration')} component={Administration}>
           <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />

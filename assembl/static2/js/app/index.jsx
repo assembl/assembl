@@ -8,7 +8,7 @@ import createAppStore from './store';
 import client from './client';
 import Routes from './routes';
 
-const store = createAppStore();
+const store = createAppStore(client);
 
 ReactDOM.render(
   <AppContainer>

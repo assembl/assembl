@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostFolded component should render an folded post uploader 1`] = `
+<a>
+  <Translate
+    creatorName="John Doe"
+    value="debate.thread.foldedPostLink"
+  />
+</a>
+`;

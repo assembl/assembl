@@ -6,16 +6,17 @@ import { get } from '../../../utils/routeMap';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 
-class Step extends React.Component {
+class Phase extends React.Component {
   constructor(props) {
     super(props);
     this.displayPhase = this.displayPhase.bind(this);
   }
   displayPhase() {
-    const { identifier, startDate, title } = this.props;
+    const { identifier, startDate, endDate, title } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const slug = { slug: debateData.slug };
+    const params = { slug: debateData.slug, phase: identifier };
     let phaseName = '';
     title.entries.forEach((entry) => {
       if (locale === entry['@language']) {
@@ -23,7 +24,7 @@ class Step extends React.Component {
       }
     });
     const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
-    const phaseStatus = getPhaseStatus(debateData.timeline, identifier);
+    const phaseStatus = getPhaseStatus(startDate, endDate);
     if (isSeveralPhases) {
       if (phaseStatus === 'notStarted') {
         const body = (
@@ -35,20 +36,20 @@ class Step extends React.Component {
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
         if (identifier === 'survey') {
-          browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
+          browserHistory.push(get('debate', params));
         } else {
           const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-          const button = { link: `${get('oldDebate', slug)}`, label: I18n.t('home.accessButton'), internalLink: false };
+          const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
           displayModal(null, body, true, null, button, true);
           setTimeout(() => {
-            window.location = `${get('oldDebate', slug)}`;
+            window.location = get('oldDebate', slug);
           }, 6000);
         }
       }
     } else if (identifier === 'survey') {
-      browserHistory.push(`${get('debate', slug)}?phase=${identifier}`);
+      browserHistory.push(get('debate', params));
     } else {
-      window.location = `${get('oldDebate', slug)}`;
+      window.location = get('oldDebate', slug);
     }
   }
   render() {
@@ -91,4 +92,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Step);
+export default connect(mapStateToProps)(Phase);

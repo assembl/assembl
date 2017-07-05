@@ -23,7 +23,7 @@
     "apollo-test-utils": "^0.3.0",
     "babel-core": "^6.18.2",
     "babel-eslint": "^7.1.1",
-    "babel-jest": "^17.0.2",
+    "babel-jest": "^20.0.3",
     "babel-loader": "^6.2.9",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.18.0",
@@ -41,7 +41,9 @@
     "file-loader": "^0.9.0",
     "glob": "^7.1.2",
     "graphql-tools": "^1.0.0",
-    "jest": "^17.0.3",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^20.0.4",
+    "jest-transform-graphql": "^2.1.0",
     "node-sass": "^3.13.0",
     "react-test-renderer": "^15.4.1",
     "sass-loader": "^4.0.2",
@@ -60,7 +62,7 @@
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
-    "moment": "^2.17.1",
+    "moment": "^2.18.1",
     "prop-types": "^15.5.8",
     "react": "^15.4.1",
     "react-apollo": "^1.2.0",
@@ -72,9 +74,22 @@
     "react-redux-i18n": "^0.1.1",
     "react-router": "^3.0.0",
     "react-tweet-embed": "^1.0.3",
+    "react-virtualized": "^9.8.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
+    "reselect": "^3.0.1",
     "searchkit": "1.0.0-7",
     "url-join": "^2.0.0"
+  },
+  "jest": {
+    "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less|scss)$": "identity-obj-proxy"
+    },
+    "transform": {
+      "\\.(gql|graphql)$": "jest-transform-graphql",
+      "\\.(js|jsx)$": "babel-jest"
+    }
   }
 }
