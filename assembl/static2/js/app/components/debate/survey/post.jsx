@@ -18,22 +18,17 @@ import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.
 class Post extends React.Component {
   constructor(props) {
     super(props);
-    const { post } = this.props;
-    this.state = {
-      like: post.sentimentCounts.like,
-      disagree: post.sentimentCounts.disagree,
-      mySentiment: post.mySentiment
-    };
     this.handleSentiment = this.handleSentiment.bind(this);
   }
   handleSentiment(event, type) {
+    const { post } = this.props;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
       const { debateData } = this.props.debate;
       const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
       if (!isPhaseCompleted) {
         const target = event.currentTarget;
-        const isMySentiment = this.state.mySentiment === type;
+        const isMySentiment = post.mySentiment === type;
         if (isMySentiment) {
           this.handleDeleteSentiment(target);
         } else {
@@ -56,32 +51,24 @@ class Post extends React.Component {
     displayModal(null, body, true, null, button, true);
   }
   handleAddSentiment(target, type) {
-    const { id } = this.props;
+    const { id, refetchTheme } = this.props;
     this.props
       .addSentiment({ variables: { postId: id, type: type } })
-      .then((sentiments) => {
+      .then(() => {
+        refetchTheme();
         target.setAttribute('class', 'sentiment sentiment-active');
-        this.setState({
-          like: sentiments.data.addSentiment.post.sentimentCounts.like,
-          disagree: sentiments.data.addSentiment.post.sentimentCounts.disagree,
-          mySentiment: sentiments.data.addSentiment.post.mySentiment
-        });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
       });
   }
   handleDeleteSentiment(target) {
-    const { id } = this.props;
+    const { id, refetchTheme } = this.props;
     this.props
       .deleteSentiment({ variables: { postId: id } })
-      .then((sentiments) => {
+      .then(() => {
+        refetchTheme();
         target.setAttribute('class', 'sentiment');
-        this.setState({
-          like: sentiments.data.deleteSentiment.post.sentimentCounts.like,
-          disagree: sentiments.data.deleteSentiment.post.sentimentCounts.disagree,
-          mySentiment: sentiments.data.deleteSentiment.post.mySentiment
-        });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -110,7 +97,7 @@ class Post extends React.Component {
             </div>
             <OverlayTrigger placement="top" overlay={likeTooltip}>
               <div
-                className={this.state.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
+                className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
                 onClick={(event) => {
                   this.handleSentiment(event, 'LIKE');
                 }}
@@ -120,7 +107,7 @@ class Post extends React.Component {
             </OverlayTrigger>
             <OverlayTrigger placement="top" overlay={disagreeTooltip}>
               <div
-                className={this.state.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
+                className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
                 onClick={(event) => {
                   this.handleSentiment(event, 'DISAGREE');
                 }}
@@ -132,21 +119,21 @@ class Post extends React.Component {
         </div>
         <div className="statistic">
           <div className="totalSentimentsCount">
-            {this.state.like + this.state.disagree}
+            {post.sentimentCounts.like + post.sentimentCounts.disagree}
           </div>
           <div className="sentimentsCountLabel">
             <Translate value="debate.survey.reactions" />
           </div>
-          <Doughnut like={this.state.like} disagree={this.state.disagree} />
+          <Doughnut like={post.sentimentCounts.like} disagree={post.sentimentCounts.disagree} />
           <div className="stat-sentiment">
             <div>
               <div className="min-sentiment">
-                <Like size={15} />&nbsp;<span className="txt">{this.state.like}</span>
+                <Like size={15} />&nbsp;<span className="txt">{post.sentimentCounts.like}</span>
               </div>
             </div>
             <div>
               <div className="min-sentiment">
-                <Disagree size={15} />&nbsp;<span className="txt">{this.state.disagree}</span>
+                <Disagree size={15} />&nbsp;<span className="txt">{post.sentimentCounts.disagree}</span>
               </div>
             </div>
           </div>

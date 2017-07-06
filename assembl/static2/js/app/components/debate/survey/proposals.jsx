@@ -12,7 +12,7 @@ class Proposals extends React.Component {
     this.setState({ hideProposals: !this.state.hideProposals });
   }
   render() {
-    const { questionIndex, title, posts, moreProposals } = this.props;
+    const { questionIndex, title, posts, moreProposals, refetchTheme } = this.props;
     return (
       <div className={questionIndex < 2 || moreProposals ? 'shown' : 'hidden'}>
         <h3 className="collapsed-title">
@@ -27,7 +27,16 @@ class Proposals extends React.Component {
         {posts.length > 0 &&
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {posts.map((post, index) => {
-              return <Post post={post.node} id={post.node.id} postIndex={index} moreProposals={moreProposals} key={index} />;
+              return (
+                <Post
+                  refetchTheme={refetchTheme}
+                  post={post.node}
+                  id={post.node.id}
+                  postIndex={index}
+                  moreProposals={moreProposals}
+                  key={index}
+                />
+              );
             })}
           </div>}
         {posts.length === 0 &&

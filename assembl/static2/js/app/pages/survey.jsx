@@ -105,6 +105,7 @@ class Survey extends React.Component {
                             moreProposals={this.state.moreProposals}
                             questionIndex={index + 1}
                             key={index}
+                            refetchTheme={this.props.data.refetch}
                           />
                         );
                       })}
