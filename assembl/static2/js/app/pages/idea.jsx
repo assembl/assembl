@@ -15,6 +15,8 @@ import Post, { connectPostToState, PostFolded } from '../components/debate/threa
 import Tree from '../components/common/tree';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
+import { MainDiscussion } from './../components/debate/thread/mainDiscussion';
+
 export const transformPosts = (posts) => {
   let postsByParent = Map();
   posts.forEach((p) => {
@@ -44,12 +46,19 @@ class Idea extends React.Component {
       return e.node;
     });
     const posts = transformPosts(rawPosts);
+
     return (
       <div className="idea">
         <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
+
         <section className="post-section">
           <Grid fluid className="background-light">
             <div className="max-container">
+              <MainDiscussion
+                ideaId={idea.id}
+                disccussionSubject={this.disccussionSubject} // TODO: use state values when using redux state
+                disccussionBody={this.disccussionBody} // TODO: use state values when using redux state
+              />
               <div className="content-section">
                 <Tree
                   connectChildFunction={connectPostToState}
