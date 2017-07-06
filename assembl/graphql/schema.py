@@ -1011,7 +1011,7 @@ class CreatePost(graphene.Mutation):
         if isinstance(in_reply_to_idea, models.Question):
             cls = models.PropositionPost
         else:
-            cls = models.Post
+            cls = models.AssemblPost
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
