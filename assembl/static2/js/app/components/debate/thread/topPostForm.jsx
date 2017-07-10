@@ -7,7 +7,9 @@ import { I18n, Translate } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { updateTopPostFormStatus, updateTopPostSubject, updateTopPostBody } from '../../../actions/postsActions';
-import { displayAlert } from '../../../utils/utilityManager';
+import { displayModal, displayAlert } from '../../../utils/utilityManager';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { getCurrentView, getContextual } from '../../../utils/routeMap';
 
 const TEXT_AREA_MAX_LENGTH = 1500;
 const TEXT_AREA_ROWS = 12;
@@ -22,10 +24,27 @@ const TopPostForm = ({
   updateFormStatus,
   isFormActive,
   mutate,
-  refetchIdea
+  refetchIdea,
+  slug
 }) => {
   const displayForm = (isActive) => {
     return updateFormStatus(isActive);
+  };
+
+  const redirectToLogin = () => {
+    const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
+    const next = getCurrentView();
+    const modalBody = I18n.t('debate.survey.modalBody');
+    const button = {
+      link: `${getContextual('login', slug)}?next=${next}`,
+      label: I18n.t('debate.survey.modalFooter'),
+      internalLink: true
+    };
+    if (!isUserConnected) {
+      displayModal(null, modalBody, true, null, button, true);
+    } else {
+      displayForm(true);
+    }
   };
 
   const emptySubject = () => {
@@ -62,7 +81,7 @@ const TopPostForm = ({
   };
 
   const handleInputFocus = () => {
-    return displayForm(true);
+    return redirectToLogin();
   };
 
   const handleSubjectChange = (e) => {
@@ -122,11 +141,12 @@ const TopPostForm = ({
   );
 };
 
-const mapStateToProps = ({ posts }) => {
+const mapStateToProps = ({ posts, debate }) => {
   return {
     subject: posts.topPostSubject,
     body: posts.topPostBody,
-    isFormActive: posts.topPostFormStatus
+    isFormActive: posts.topPostFormStatus,
+    slug: debate.debateData.slug
   };
 };
 
