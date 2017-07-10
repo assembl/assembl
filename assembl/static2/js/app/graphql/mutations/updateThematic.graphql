@@ -9,6 +9,7 @@ mutation updateThematic($id:ID!, $identifier: String!, $image: String, $titleEnt
         htmlCode
       },
       questions {
+        id,
         title
       }
     }

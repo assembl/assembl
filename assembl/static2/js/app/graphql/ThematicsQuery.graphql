@@ -18,6 +18,7 @@ query ThematicsQuery($identifier: String!) {
       htmlCode
     },
     questions {
+      id,
       titleEntries {
         localeCode,
         value
