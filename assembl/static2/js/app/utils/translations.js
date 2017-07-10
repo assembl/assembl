@@ -3,6 +3,7 @@ const Translations = {
   fr: {
     'Number of contributions': 'Nombre de messages',
     'Number of users': 'Nombre de contributeurs',
+    cancel: 'Annuler',
     redirectToV1:
       'Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d\'amélioration, veuillez nous excuser pour le changement d\'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.',
     search: {
@@ -156,6 +157,9 @@ const Translations = {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
     },
     debate: {
+      subject: 'Ecrivez le titre',
+      insert: 'Ecrivez votre message',
+      post: 'Poster',
       like: 'J\'aime',
       disagree: 'Pas d\'accord',
       survey: {
@@ -181,7 +185,8 @@ const Translations = {
         noPostsInThread: 'Soyez le premier à contribuer, démarrez une discussion !',
         numberOfResponses: '%{count} réponses à ce post',
         numberOfResponses_0: 'Aucune réponse à ce post',
-        numberOfResponses_1: '%{count} réponse à ce post'
+        numberOfResponses_1: '%{count} réponse à ce post',
+        startDiscussion: 'Je démarre une discussion'
       },
       themes: 'Thèmes',
       notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
@@ -243,6 +248,7 @@ const Translations = {
     }
   },
   en: {
+    cancel: 'Annuler',
     redirectToV1:
       'You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.',
     search: {
@@ -395,6 +401,9 @@ const Translations = {
       title: 'synthesis'
     },
     debate: {
+      subject: 'Write the title',
+      insert: 'Write your message',
+      post: 'Post',
       like: 'Like',
       disagree: 'Disagree',
       survey: {
@@ -420,7 +429,8 @@ const Translations = {
         noPostsInThread: 'Be the first to contribute, start a discussion!',
         numberOfResponses: '%{count} responses to this post',
         numberOfResponses_0: 'No response to this post',
-        numberOfResponses_1: '%{count} response to this post'
+        numberOfResponses_1: '%{count} response to this post',
+        startDiscussion: 'Start a discussion'
       },
       themes: 'Themes',
       notStarted: 'The %{phaseName} phase has not started. Please come back from '
@@ -473,7 +483,8 @@ const Translations = {
       successThemeCreation: 'Themes have been saved with success!'
     },
     unauthorizedAdministration: {
-      unauthorizedMessage: 'You are not authorized to access the administration section. Please contact the administrator of the website.',
+      unauthorizedMessage:
+        'You are not authorized to access the administration section. Please contact the administrator of the website.',
       returnButton: 'Back to home'
     },
     date: {
