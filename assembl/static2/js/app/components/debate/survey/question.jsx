@@ -150,8 +150,8 @@ class Question extends React.Component {
                   onChange={this.getProposalText}
                 />
               </FormGroup>
-              <div className="annotation right margin-s">
-                <Translate value="debate.survey.remaining_x_characters" nbCharacters={this.state.remainingChars} />
+              <div className="annotation margin-s">
+                <Translate value="debate.remaining_x_characters" nbCharacters={this.state.remainingChars} />
               </div>
               {this.state.showSubmitButton &&
                 <Button onClick={this.createPost} className="button-submit button-dark right margin-l clear">

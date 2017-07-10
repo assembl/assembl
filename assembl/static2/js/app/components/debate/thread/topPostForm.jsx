@@ -2,18 +2,24 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
-import { Row, Col, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { updateTopPostFormStatus, updateTopPostSubject, updateTopPostBody } from '../../../actions/postsActions';
+import {
+  updateTopPostFormStatus,
+  updateTopPostSubject,
+  updateTopPostBody,
+  updateSubjectRemaingChars,
+  updateBodyRemaingChars
+} from '../../../actions/postsActions';
 import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
 
+const TEXT_INPUT_MAX_LENGTH = 100;
 const TEXT_AREA_MAX_LENGTH = 1500;
 const TEXT_AREA_ROWS = 12;
-const TEXT_INPUT_MAX_LENGTH = 200;
 
 const TopPostForm = ({
   ideaId,
@@ -25,7 +31,11 @@ const TopPostForm = ({
   isFormActive,
   mutate,
   refetchIdea,
-  slug
+  slug,
+  subjectRemainingChars,
+  updateSubjectChars,
+  bodyRemainingChars,
+  updateBodyChars
 }) => {
   const displayForm = (isActive) => {
     return updateFormStatus(isActive);
@@ -91,11 +101,17 @@ const TopPostForm = ({
   };
 
   const handleSubjectChange = (e) => {
-    return updateSubject(e.target.value);
+    const maxChars = TEXT_INPUT_MAX_LENGTH;
+    const remaining = maxChars - e.target.value.length;
+    updateSubjectChars(remaining);
+    updateSubject(e.target.value);
   };
 
   const handleBodyChange = (e) => {
-    return updateBody(e.target.value);
+    const maxChars = TEXT_AREA_MAX_LENGTH;
+    const remaining = maxChars - e.target.value.length;
+    updateBodyChars(remaining);
+    updateBody(e.target.value);
   };
 
   return (
@@ -123,6 +139,12 @@ const TopPostForm = ({
               onFocus={handleInputFocus}
               onChange={handleSubjectChange}
             />
+            <div className="annotation margin-s">
+              <Translate
+                value="debate.remaining_x_characters"
+                nbCharacters={subjectRemainingChars < 10000 ? subjectRemainingChars : TEXT_INPUT_MAX_LENGTH}
+              />
+            </div>
             <div className={isFormActive ? 'margin-m' : 'hidden'}>
               {body ? <div className="form-label">{I18n.t('debate.insert')}</div> : null}
               <FormControl
@@ -134,6 +156,12 @@ const TopPostForm = ({
                 value={body}
                 onChange={handleBodyChange}
               />
+              <div className="annotation margin-s">
+                <Translate
+                  value="debate.remaining_x_characters"
+                  nbCharacters={bodyRemainingChars < 10000 ? bodyRemainingChars : TEXT_AREA_MAX_LENGTH}
+                />
+              </div>
               <button type="reset" className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
                 <Translate value="cancel" />
               </button>
@@ -154,6 +182,8 @@ const mapStateToProps = ({ posts, debate }) => {
     subject: posts.topPostSubject,
     body: posts.topPostBody,
     isFormActive: posts.topPostFormStatus,
+    subjectRemainingChars: posts.subjectRemainingChars,
+    bodyRemainingChars: posts.bodyRemainingChars,
     slug: debate.debateData.slug
   };
 };
@@ -168,6 +198,12 @@ export const mapDispatchToProps = (dispatch) => {
     },
     updateBody: (topPostBody) => {
       return dispatch(updateTopPostBody(topPostBody));
+    },
+    updateSubjectChars: (subjectRemainingChars) => {
+      return dispatch(updateSubjectRemaingChars(subjectRemainingChars));
+    },
+    updateBodyChars: (bodyRemainingChars) => {
+      return dispatch(updateBodyRemaingChars(bodyRemainingChars));
     }
   };
 };

@@ -25,3 +25,17 @@ export const updateTopPostFormStatus = (isTopPostFormActive) => {
     type: 'UPDATE_TOP_POST_FORM_STATUS'
   };
 };
+
+export const updateSubjectRemaingChars = (subjectRemainingChars) => {
+  return {
+    subjectRemainingChars: subjectRemainingChars,
+    type: 'UPDATE_SUBJECT_REMAINING_CHARS'
+  };
+};
+
+export const updateBodyRemaingChars = (bodyRemainingChars) => {
+  return {
+    bodyRemainingChars: bodyRemainingChars,
+    type: 'UPDATE_BODY_REMAINING_CHARS'
+  };
+};

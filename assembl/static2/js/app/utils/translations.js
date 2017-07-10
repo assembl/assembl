@@ -162,6 +162,7 @@ const Translations = {
       post: 'Poster',
       like: 'J\'aime',
       disagree: 'Pas d\'accord',
+      remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
       survey: {
         themesTitle: 'Choisissez une thématique !',
         txtAreaPh: 'Ecrivez votre proposition',
@@ -175,7 +176,6 @@ const Translations = {
         modalBody: 'Vous devez être connecté pour faire une proposition ou voter.',
         modalFooter: 'Connectez-vous',
         submit: 'Envoyer',
-        remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
         postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
         endPhase: 'La phase %{closedPhaseName} est terminée.'
       },
@@ -409,6 +409,7 @@ const Translations = {
       post: 'Post',
       like: 'Like',
       disagree: 'Disagree',
+      remaining_x_characters: 'You have %{nbCharacters} characters left',
       survey: {
         themesTitle: 'Choose a theme!',
         txtAreaPh: 'Write your opinion',
@@ -422,7 +423,6 @@ const Translations = {
         modalBody: 'You have to be connected to do a proposal or to vote.',
         modalFooter: 'Please connect',
         submit: 'Submit',
-        remaining_x_characters: 'You have %{nbCharacters} characters left',
         postSuccess: 'Thanks for your participation. Your proposal has been sent!',
         endPhase: 'The %{closedPhaseName} phase is closed.'
       },
