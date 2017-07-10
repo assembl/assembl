@@ -402,7 +402,7 @@ const Translations = {
     },
     debate: {
       subject: 'Write the title',
-      insert: 'Write your message',
+      insert: 'Post a comment',
       post: 'Post',
       like: 'Like',
       disagree: 'Disagree',
@@ -430,7 +430,7 @@ const Translations = {
         numberOfResponses: '%{count} responses to this post',
         numberOfResponses_0: 'No response to this post',
         numberOfResponses_1: '%{count} response to this post',
-        startDiscussion: 'Start a discussion'
+        startDiscussion: 'Start a new thread'
       },
       themes: 'Themes',
       notStarted: 'The %{phaseName} phase has not started. Please come back from '
