@@ -11,4 +11,36 @@ export const postsById = (state = Map(), action) => {
   return state;
 };
 
-export default combineReducers({ postsById: postsById });
+export const topPostSubject = (state = '', action) => {
+  switch (action.type) {
+  case 'UPDATE_TOP_POST_SUBJECT':
+    return action.topPostSubject;
+  default:
+    return state;
+  }
+};
+
+export const topPostBody = (state = '', action) => {
+  switch (action.type) {
+  case 'UPDATE_TOP_POST_BODY':
+    return action.topPostBody;
+  default:
+    return state;
+  }
+};
+
+export const topPostFormStatus = (state = false, action) => {
+  switch (action.type) {
+  case 'UPDATE_TOP_POST_FORM_STATUS':
+    return action.isTopPostFormActive;
+  default:
+    return state;
+  }
+};
+
+export default combineReducers({
+  postsById: postsById,
+  topPostSubject: topPostSubject,
+  topPostBody: topPostBody,
+  topPostFormStatus: topPostFormStatus
+});

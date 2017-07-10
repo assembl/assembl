@@ -15,7 +15,7 @@ import Post, { connectPostToState, PostFolded } from '../components/debate/threa
 import Tree from '../components/common/tree';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
-import { MainDiscussion } from './../components/debate/thread/mainDiscussion';
+import TopPostForm from './../components/debate/thread/topPostForm';
 
 export const transformPosts = (posts) => {
   let postsByParent = Map();
@@ -50,15 +50,16 @@ class Idea extends React.Component {
     return (
       <div className="idea">
         <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
-
         <section className="post-section">
-          <Grid fluid className="background-light">
+          <Grid fluid className="background-color">
             <div className="max-container">
-              <MainDiscussion
-                ideaId={idea.id}
-                disccussionSubject={this.disccussionSubject} // TODO: use state values when using redux state
-                disccussionBody={this.disccussionBody} // TODO: use state values when using redux state
-              />
+              <div className="top-post-form">
+                <TopPostForm ideaId={idea.id} refetchIdea={this.props.data.refetch} />
+              </div>
+            </div>
+          </Grid>
+          <Grid fluid className="background-grey">
+            <div className="max-container">
               <div className="content-section">
                 <Tree
                   connectChildFunction={connectPostToState}
