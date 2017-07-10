@@ -50,6 +50,7 @@ class Idea extends React.Component {
     return (
       <div className="idea">
         <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
+
         <section className="post-section">
           <Grid fluid className="background-color">
             <div className="max-container">
