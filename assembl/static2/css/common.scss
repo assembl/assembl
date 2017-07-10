@@ -231,6 +231,13 @@ input.placeholder, textarea.placeholder {
   cursor: pointer;
 }
 
+.form-label {
+    color: $grey3;
+    font-family: $font-family6;
+    font-size: $font-size-s;
+    padding: 0 0 5px 3px;
+}
+
 @media screen and (min-width: 992px) {
   .col-bottom {
     display: table-cell;

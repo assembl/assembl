@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
-import { Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { Row, Col, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
@@ -68,7 +68,7 @@ const TopPostForm = ({
   };
 
   const createTopPost = () => {
-    if (subject !== '' && body !== '') {
+    if (subject && body) {
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })
         .then(() => {
@@ -79,9 +79,9 @@ const TopPostForm = ({
         .catch((error) => {
           displayAlert('danger', error);
         });
-    } else if (subject === '') {
+    } else if (!subject) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
-    } else if (body === '') {
+    } else if (!body) {
       displayAlert('warning', I18n.t('debate.thread.fillBody'));
     }
   };
@@ -114,6 +114,7 @@ const TopPostForm = ({
       <Col xs={12} sm={7} md={6} className="no-padding">
         <div className="form-container">
           <FormGroup>
+            {subject ? <div className="form-label">{I18n.t('debate.subject')}</div> : null}
             <FormControl
               type="text"
               placeholder={I18n.t('debate.subject')}
@@ -123,6 +124,7 @@ const TopPostForm = ({
               onChange={handleSubjectChange}
             />
             <div className={isFormActive ? 'margin-m' : 'hidden'}>
+              {body ? <div className="form-label">{I18n.t('debate.insert')}</div> : null}
               <FormControl
                 className="txt-area"
                 componentClass="textarea"
