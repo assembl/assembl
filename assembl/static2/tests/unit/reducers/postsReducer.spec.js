@@ -75,4 +75,54 @@ describe('Posts reducers', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('subjectRemainingChars reducer', () => {
+    const { subjectRemainingChars } = reducers;
+    it('should return the initial state', () => {
+      expect(subjectRemainingChars(undefined, {})).toEqual(10000);
+    });
+
+    it('should return state by default', () => {
+      const state = 1234;
+      const expected = 1234;
+      const actual = subjectRemainingChars(state, {});
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle UPDATE_SUBJECT_REMAINING_CHARS action type', () => {
+      const state = 100;
+      const action = {
+        type: 'UPDATE_SUBJECT_REMAINING_CHARS',
+        subjectRemainingChars: 100
+      };
+      const actual = subjectRemainingChars(state, action);
+      const expected = 100;
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('bodyRemainingChars reducer', () => {
+    const { bodyRemainingChars } = reducers;
+    it('should return the initial state', () => {
+      expect(bodyRemainingChars(undefined, {})).toEqual(10000);
+    });
+
+    it('should return state by default', () => {
+      const state = 1234;
+      const expected = 1234;
+      const actual = bodyRemainingChars(state, {});
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle UPDATE_BODY_REMAINING_CHARS action type', () => {
+      const state = 100;
+      const action = {
+        type: 'UPDATE_BODY_REMAINING_CHARS',
+        bodyRemainingChars: 100
+      };
+      const actual = bodyRemainingChars(state, action);
+      const expected = 100;
+      expect(actual).toEqual(expected);
+    });
+  });
 });

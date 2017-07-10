@@ -48,4 +48,28 @@ describe('Posts actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('updateSubjectRemaingChars action', () => {
+    const { updateSubjectRemaingChars } = actions;
+    it('should return a UPDATE_SUBJECT_REMAINING_CHARS action type', () => {
+      const expected = {
+        subjectRemainingChars: 124,
+        type: 'UPDATE_SUBJECT_REMAINING_CHARS'
+      };
+      const actual = updateSubjectRemaingChars(124);
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateBodyRemaingChars action', () => {
+    const { updateBodyRemaingChars } = actions;
+    it('should return a UPDATE_BODY_REMAINING_CHARS action type', () => {
+      const expected = {
+        bodyRemainingChars: 1204,
+        type: 'UPDATE_BODY_REMAINING_CHARS'
+      };
+      const actual = updateBodyRemaingChars(1204);
+      expect(actual).toEqual(expected);
+    });
+  });
 });
