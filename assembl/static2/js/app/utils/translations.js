@@ -180,6 +180,9 @@ const Translations = {
         endPhase: 'La phase %{closedPhaseName} est terminée.'
       },
       thread: {
+        postSuccess: 'Merci pour votre participation. Votre message a bien été envoyée !',
+        fillSubject: 'Veuillez écrire un titre',
+        fillBody: 'Veuillez écrire un message',
         linkIdea: 'Ce post est en lien avec les thématiques suivantes :',
         foldedPostLink: 'Voir la réponse de %{creatorName}',
         noPostsInThread: 'Soyez le premier à contribuer, démarrez une discussion !',
@@ -424,6 +427,9 @@ const Translations = {
         endPhase: 'The %{closedPhaseName} phase is closed.'
       },
       thread: {
+        postSuccess: 'Thanks for your participation. Your comment has been sent!',
+        fillSubject: 'Please, write a title',
+        fillBody: 'Please, write a comment',
         linkIdea: 'This post is related to the following themes:',
         foldedPostLink: 'Show %{creatorName}\'s response',
         noPostsInThread: 'Be the first to contribute, start a discussion!',

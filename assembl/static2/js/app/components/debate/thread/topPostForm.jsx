@@ -68,16 +68,22 @@ const TopPostForm = ({
   };
 
   const createTopPost = () => {
-    displayAlert('success', I18n.t('loading.wait'));
-    mutate({ variables: variables })
-      .then(() => {
-        refetchIdea();
-        displayAlert('success', I18n.t('debate.survey.postSuccess'));
-        resetForm();
-      })
-      .catch((error) => {
-        displayAlert('danger', error);
-      });
+    if (subject !== '' && body !== '') {
+      displayAlert('success', I18n.t('loading.wait'));
+      mutate({ variables: variables })
+        .then(() => {
+          refetchIdea();
+          displayAlert('success', I18n.t('debate.thread.postSuccess'));
+          resetForm();
+        })
+        .catch((error) => {
+          displayAlert('danger', error);
+        });
+    } else if (subject === '') {
+      displayAlert('warning', I18n.t('debate.thread.fillSubject'));
+    } else if (body === '') {
+      displayAlert('warning', I18n.t('debate.thread.fillBody'));
+    }
   };
 
   const handleInputFocus = () => {
