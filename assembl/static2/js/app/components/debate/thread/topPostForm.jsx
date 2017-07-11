@@ -66,6 +66,8 @@ const TopPostForm = ({
   };
 
   const resetForm = () => {
+    updateSubjectChars(TEXT_INPUT_MAX_LENGTH);
+    updateBodyChars(TEXT_AREA_MAX_LENGTH);
     displayForm(false);
     emptySubject();
     emptyBody();
