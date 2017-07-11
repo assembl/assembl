@@ -19,7 +19,7 @@ class Circle extends React.Component {
           cx={`${5}em`}
           cy={`${5}em`}
           fill="transparent"
-          strokeDasharray={`${circumference}em`}
+          strokeDasharray={`-${circumference}em`}
           strokeDashoffset={`${redOffset}em`}
         />
         <circle
