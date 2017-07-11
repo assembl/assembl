@@ -41,7 +41,7 @@ const TopPostForm = ({
     return updateFormStatus(isActive);
   };
 
-  const redirectToLogin = () => {
+  const inviteToLogin = () => {
     const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
     const next = getCurrentView();
     const modalBody = I18n.t('debate.survey.modalBody');
@@ -99,19 +99,21 @@ const TopPostForm = ({
   };
 
   const handleInputFocus = () => {
-    return redirectToLogin();
+    return inviteToLogin();
   };
 
   const handleSubjectChange = (e) => {
     const maxChars = TEXT_INPUT_MAX_LENGTH;
-    const remaining = maxChars - e.target.value.length;
+    const length = e.target.value.length;
+    const remaining = maxChars - length;
     updateSubjectChars(remaining);
     updateSubject(e.target.value);
   };
 
   const handleBodyChange = (e) => {
     const maxChars = TEXT_AREA_MAX_LENGTH;
-    const remaining = maxChars - e.target.value.length;
+    const length = e.target.value.length;
+    const remaining = maxChars - length;
     updateBodyChars(remaining);
     updateBody(e.target.value);
   };
