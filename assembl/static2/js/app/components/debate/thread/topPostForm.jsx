@@ -17,8 +17,8 @@ import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
 
-const TEXT_INPUT_MAX_LENGTH = 100;
-const TEXT_AREA_MAX_LENGTH = 1500;
+const TEXT_INPUT_MAX_LENGTH = 140;
+const TEXT_AREA_MAX_LENGTH = 3000;
 const TEXT_AREA_ROWS = 12;
 
 const TopPostForm = ({
@@ -141,7 +141,7 @@ const TopPostForm = ({
               onFocus={handleInputFocus}
               onChange={handleSubjectChange}
             />
-            <div className="annotation margin-s">
+            <div className="annotation margin-xs">
               <Translate
                 value="debate.remaining_x_characters"
                 nbCharacters={subjectRemainingChars < 10000 ? subjectRemainingChars : TEXT_INPUT_MAX_LENGTH}
@@ -158,7 +158,7 @@ const TopPostForm = ({
                 value={body}
                 onChange={handleBodyChange}
               />
-              <div className="annotation margin-s">
+              <div className="annotation margin-xs">
                 <Translate
                   value="debate.remaining_x_characters"
                   nbCharacters={bodyRemainingChars < 10000 ? bodyRemainingChars : TEXT_AREA_MAX_LENGTH}
@@ -167,7 +167,11 @@ const TopPostForm = ({
               <button type="reset" className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
                 <Translate value="cancel" />
               </button>
-              <Button className="button-submit button-dark btn btn-default right margin-l" onClick={createTopPost}>
+              <Button
+                className="button-submit button-dark btn btn-default right margin-l"
+                onClick={createTopPost}
+                style={{ marginBottom: '30px' }}
+              >
                 <Translate value="debate.post" />
               </Button>
             </div>
