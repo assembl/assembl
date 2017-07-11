@@ -167,9 +167,10 @@
 }
 
 .annotation {
-  color: $first-color;
-  font-family: $font-family4;
-  font-size: $font-size-xs;
+    text-align: right;
+    color: $first-color;
+    font-family: $font-family4;
+    font-size: $font-size-xxs;
 }
 
 @media screen and (max-width: 991px) {

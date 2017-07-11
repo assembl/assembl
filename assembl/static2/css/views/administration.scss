@@ -259,16 +259,4 @@
     font-size: $font-size-xs;
     margin: 5px 0 0 5px;
   }
-
-  input:-moz-placeholder, textarea:-moz-placeholder {
-    font-family: $font-family6;
-  }
-
-  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-    font-family: $font-family6;
-  }
-
-  input.placeholder, textarea.placeholder {
-    font-family: $font-family6;
-  }
 }

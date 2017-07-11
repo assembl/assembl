@@ -3,6 +3,7 @@ const Translations = {
   fr: {
     'Number of contributions': 'Nombre de messages',
     'Number of users': 'Nombre de contributeurs',
+    cancel: 'Annuler',
     redirectToV1:
       'Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d\'amélioration, veuillez nous excuser pour le changement d\'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.',
     search: {
@@ -156,8 +157,12 @@ const Translations = {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
     },
     debate: {
+      subject: 'Ecrivez le titre',
+      insert: 'Ecrivez votre message',
+      post: 'Poster',
       like: 'J\'aime',
       disagree: 'Pas d\'accord',
+      remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
       survey: {
         themesTitle: 'Choisissez une thématique !',
         txtAreaPh: 'Ecrivez votre proposition',
@@ -171,17 +176,20 @@ const Translations = {
         modalBody: 'Vous devez être connecté pour faire une proposition ou voter.',
         modalFooter: 'Connectez-vous',
         submit: 'Envoyer',
-        remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
         postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
         endPhase: 'La phase %{closedPhaseName} est terminée.'
       },
       thread: {
+        postSuccess: 'Merci pour votre participation. Votre message a bien été envoyée !',
+        fillSubject: 'Veuillez écrire un titre',
+        fillBody: 'Veuillez écrire un message',
         linkIdea: 'Ce post est en lien avec les thématiques suivantes :',
         foldedPostLink: 'Voir la réponse de %{creatorName}',
         noPostsInThread: 'Soyez le premier à contribuer, démarrez une discussion !',
         numberOfResponses: '%{count} réponses à ce post',
         numberOfResponses_0: 'Aucune réponse à ce post',
-        numberOfResponses_1: '%{count} réponse à ce post'
+        numberOfResponses_1: '%{count} réponse à ce post',
+        startDiscussion: 'Je démarre une discussion'
       },
       themes: 'Thèmes',
       notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
@@ -243,6 +251,7 @@ const Translations = {
     }
   },
   en: {
+    cancel: 'Annuler',
     redirectToV1:
       'You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.',
     search: {
@@ -395,8 +404,12 @@ const Translations = {
       title: 'synthesis'
     },
     debate: {
+      subject: 'Write the title',
+      insert: 'Post a comment',
+      post: 'Post',
       like: 'Like',
       disagree: 'Disagree',
+      remaining_x_characters: 'You have %{nbCharacters} characters left',
       survey: {
         themesTitle: 'Choose a theme!',
         txtAreaPh: 'Write your point of view',
@@ -410,17 +423,20 @@ const Translations = {
         modalBody: 'You have to be connected to do a proposal or to vote.',
         modalFooter: 'Please connect',
         submit: 'Submit',
-        remaining_x_characters: 'You have %{nbCharacters} characters left',
         postSuccess: 'Thanks for your participation. Your proposal has been sent!',
         endPhase: 'The %{closedPhaseName} phase is closed.'
       },
       thread: {
+        postSuccess: 'Thanks for your participation. Your comment has been sent!',
+        fillSubject: 'Please, write a title',
+        fillBody: 'Please, write a comment',
         linkIdea: 'This post is related to the following themes:',
         foldedPostLink: 'Show %{creatorName}\'s response',
         noPostsInThread: 'Be the first to contribute, start a discussion!',
         numberOfResponses: '%{count} responses to this post',
         numberOfResponses_0: 'No response to this post',
-        numberOfResponses_1: '%{count} response to this post'
+        numberOfResponses_1: '%{count} response to this post',
+        startDiscussion: 'Start a new thread'
       },
       themes: 'Themes',
       notStarted: 'The %{phaseName} phase has not started. Please come back from '

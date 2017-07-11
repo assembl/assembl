@@ -22,7 +22,7 @@
   .body {
     font-family: $font-family4;
     text-align: left;
-    word-break: break-word;
+    word-wrap: break-word;
   }
 
   .sentiments {
@@ -141,7 +141,7 @@
 
     .body {
         padding: 20px 0;
-        word-break: break-all;
+        word-wrap: break-word;
     }
 
     .link-idea {
@@ -161,6 +161,9 @@
             .badge {
                 background-color: $grey1;
                 color: $grey3;
+                text-align: left;
+                white-space: normal;
+                word-wrap: break-word;
             }
         }
     }

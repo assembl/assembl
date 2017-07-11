@@ -21,21 +21,33 @@ a {
 }
 
 input {
-  &[type='text'] {
-    box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+    &[type='text'] {
+        box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
 
-    &:focus {
-      box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+        &:focus {
+            box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+        }
     }
-  }
 
-  &[type='password'] {
-    box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+    &[type='password'] {
+        box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
 
-    &:focus {
-      box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+        &:focus {
+            box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+        }
     }
-  }
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+  font-family: $font-family6;
+}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+  font-family: $font-family6;
+}
+
+input.placeholder, textarea.placeholder {
+  font-family: $font-family6;
 }
 
 .white {
@@ -217,6 +229,13 @@ input {
 
 .pointer {
   cursor: pointer;
+}
+
+.form-label {
+    color: $grey3;
+    font-family: $font-family6;
+    font-size: $font-size-s;
+    padding: 0 0 5px 3px;
 }
 
 @media screen and (min-width: 992px) {
