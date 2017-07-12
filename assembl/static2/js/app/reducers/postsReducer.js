@@ -82,6 +82,7 @@ export const bodyAnswerPostRemainingChars = (state = 10000, action) => {
     return state;
   }
 };
+
 export default combineReducers({
   postsById: postsById,
   topPostSubject: topPostSubject,
