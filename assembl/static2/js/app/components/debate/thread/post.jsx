@@ -139,7 +139,7 @@ const Post = ({
         </Row>
       </div>
       {activeAnswerFormId === id
-        ? <div className="answer-form"><AnswerForm parentId={parentId} ideaId={ideaId} refetchIdea={refetchIdea} /></div>
+        ? <div className="answer-form"><AnswerForm parentId={id} ideaId={ideaId} refetchIdea={refetchIdea} /></div>
         : null}
     </div>
   );
