@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
-import { Row, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
@@ -17,6 +17,7 @@ import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
 import { TxtAreaWithRemainingChars } from '../../common/txtAreaWithRemainingChars';
+import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 
 const TEXT_INPUT_MAX_LENGTH = 140;
 const TEXT_AREA_MAX_LENGTH = 3000;
@@ -127,21 +128,14 @@ const TopPostForm = ({
       <Col xs={12} sm={7} md={6} className="no-padding">
         <div className="form-container">
           <FormGroup>
-            {subject ? <div className="form-label">{I18n.t('debate.subject')}</div> : null}
-            <FormControl
-              type="text"
-              placeholder={I18n.t('debate.subject')}
-              maxLength={TEXT_INPUT_MAX_LENGTH}
+            <TextInputWithRemainingChars
               value={subject}
-              onFocus={handleInputFocus}
-              onChange={handleSubjectChange}
+              label={I18n.t('debate.subject')}
+              maxLength={TEXT_INPUT_MAX_LENGTH}
+              handleTxtChange={handleSubjectChange}
+              handleInputFocus={handleInputFocus}
+              remainingChars={subjectTopPostRemainingChars}
             />
-            <div className="annotation margin-xs">
-              <Translate
-                value="debate.remaining_x_characters"
-                nbCharacters={subjectTopPostRemainingChars < 10000 ? subjectTopPostRemainingChars : TEXT_INPUT_MAX_LENGTH}
-              />
-            </div>
             <div className={isFormActive ? 'margin-m' : 'hidden'}>
               <TxtAreaWithRemainingChars
                 value={body}
