@@ -11,6 +11,15 @@ export const postsById = (state = Map(), action) => {
   return state;
 };
 
+export const topPostFormStatus = (state = false, action) => {
+  switch (action.type) {
+  case 'UPDATE_TOP_POST_FORM_STATUS':
+    return action.isTopPostFormActive;
+  default:
+    return state;
+  }
+};
+
 export const topPostSubject = (state = '', action) => {
   switch (action.type) {
   case 'UPDATE_TOP_POST_SUBJECT':
@@ -29,38 +38,58 @@ export const topPostBody = (state = '', action) => {
   }
 };
 
-export const topPostFormStatus = (state = false, action) => {
+export const subjectTopPostRemainingChars = (state = 10000, action) => {
   switch (action.type) {
-  case 'UPDATE_TOP_POST_FORM_STATUS':
-    return action.isTopPostFormActive;
+  case 'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS':
+    return action.subjectTopPostRemainingChars;
   default:
     return state;
   }
 };
 
-export const subjectRemainingChars = (state = 10000, action) => {
+export const bodyTopPostRemainingChars = (state = 10000, action) => {
   switch (action.type) {
-  case 'UPDATE_SUBJECT_REMAINING_CHARS':
-    return action.subjectRemainingChars;
+  case 'UPDATE_TOP_POST_BODY_REMAINING_CHARS':
+    return action.bodyTopPostRemainingChars;
   default:
     return state;
   }
 };
 
-export const bodyRemainingChars = (state = 10000, action) => {
+export const answerPostFormStatus = (state = false, action) => {
   switch (action.type) {
-  case 'UPDATE_BODY_REMAINING_CHARS':
-    return action.bodyRemainingChars;
+  case 'UPDATE_ANSWER_POST_FORM_STATUS':
+    return action.isAnswerPostFormActive;
   default:
     return state;
   }
 };
 
+export const answerPostBody = (state = '', action) => {
+  switch (action.type) {
+  case 'UPDATE_ANSWER_POST_BODY':
+    return action.answerPostBody;
+  default:
+    return state;
+  }
+};
+
+export const bodyAnswerPostRemainingChars = (state = 10000, action) => {
+  switch (action.type) {
+  case 'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS':
+    return action.bodyAnswerPostRemainingChars;
+  default:
+    return state;
+  }
+};
 export default combineReducers({
   postsById: postsById,
   topPostSubject: topPostSubject,
   topPostBody: topPostBody,
   topPostFormStatus: topPostFormStatus,
-  subjectRemainingChars: subjectRemainingChars,
-  bodyRemainingChars: bodyRemainingChars
+  subjectTopPostRemainingChars: subjectTopPostRemainingChars,
+  bodyTopPostRemainingChars: bodyTopPostRemainingChars,
+  answerPostBody: answerPostBody,
+  bodyAnswerPostRemainingChars: bodyAnswerPostRemainingChars,
+  answerPostFormStatus: answerPostFormStatus
 });

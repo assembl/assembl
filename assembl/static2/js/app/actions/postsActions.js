@@ -5,6 +5,13 @@ export const togglePostResponses = (id) => {
   };
 };
 
+export const updateTopPostFormStatus = (isTopPostFormActive) => {
+  return {
+    isTopPostFormActive: isTopPostFormActive,
+    type: 'UPDATE_TOP_POST_FORM_STATUS'
+  };
+};
+
 export const updateTopPostSubject = (topPostSubject) => {
   return {
     topPostSubject: topPostSubject,
@@ -19,23 +26,37 @@ export const updateTopPostBody = (topPostBody) => {
   };
 };
 
-export const updateTopPostFormStatus = (isTopPostFormActive) => {
+export const updateTopPostSubjectRemaingChars = (subjectTopPostRemainingChars) => {
   return {
-    isTopPostFormActive: isTopPostFormActive,
-    type: 'UPDATE_TOP_POST_FORM_STATUS'
+    subjectTopPostRemainingChars: subjectTopPostRemainingChars,
+    type: 'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS'
   };
 };
 
-export const updateSubjectRemaingChars = (subjectRemainingChars) => {
+export const updateTopPostBodyRemaingChars = (bodyTopPostRemainingChars) => {
   return {
-    subjectRemainingChars: subjectRemainingChars,
-    type: 'UPDATE_SUBJECT_REMAINING_CHARS'
+    bodyTopPostRemainingChars: bodyTopPostRemainingChars,
+    type: 'UPDATE_TOP_POST_BODY_REMAINING_CHARS'
   };
 };
 
-export const updateBodyRemaingChars = (bodyRemainingChars) => {
+export const updateAnswerPostFormStatus = (isAnswerPostFormActive) => {
   return {
-    bodyRemainingChars: bodyRemainingChars,
-    type: 'UPDATE_BODY_REMAINING_CHARS'
+    isAnswerPostFormActive: isAnswerPostFormActive,
+    type: 'UPDATE_ANSWER_POST_FORM_STATUS'
+  };
+};
+
+export const updateAnswerPostBody = (answerPostBody) => {
+  return {
+    answerPostBody: answerPostBody,
+    type: 'UPDATE_ANSWER_POST_BODY'
+  };
+};
+
+export const updateAnswerPostBodyRemaingChars = (bodyAnswerPostRemainingChars) => {
+  return {
+    bodyAnswerPostRemainingChars: bodyAnswerPostRemainingChars,
+    type: 'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS'
   };
 };

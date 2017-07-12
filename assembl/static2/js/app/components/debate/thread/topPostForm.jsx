@@ -10,12 +10,13 @@ import {
   updateTopPostFormStatus,
   updateTopPostSubject,
   updateTopPostBody,
-  updateSubjectRemaingChars,
-  updateBodyRemaingChars
+  updateTopPostSubjectRemaingChars,
+  updateTopPostBodyRemaingChars
 } from '../../../actions/postsActions';
 import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
+import { TxtAreaWithRemainingChars } from '../../common/txtAreaWithRemainingChars';
 
 const TEXT_INPUT_MAX_LENGTH = 140;
 const TEXT_AREA_MAX_LENGTH = 3000;
@@ -32,9 +33,9 @@ const TopPostForm = ({
   mutate,
   refetchIdea,
   slug,
-  subjectRemainingChars,
+  subjectTopPostRemainingChars,
   updateSubjectChars,
-  bodyRemainingChars,
+  bodyTopPostRemainingChars,
   updateBodyChars
 }) => {
   const displayForm = (isActive) => {
@@ -57,20 +58,12 @@ const TopPostForm = ({
     }
   };
 
-  const emptySubject = () => {
-    return updateSubject('');
-  };
-
-  const emptyBody = () => {
-    return updateBody('');
-  };
-
   const resetForm = () => {
     updateSubjectChars(TEXT_INPUT_MAX_LENGTH);
     updateBodyChars(TEXT_AREA_MAX_LENGTH);
     displayForm(false);
-    emptySubject();
-    emptyBody();
+    updateSubject('');
+    updateBody('');
   };
 
   const variables = {
@@ -146,26 +139,18 @@ const TopPostForm = ({
             <div className="annotation margin-xs">
               <Translate
                 value="debate.remaining_x_characters"
-                nbCharacters={subjectRemainingChars < 10000 ? subjectRemainingChars : TEXT_INPUT_MAX_LENGTH}
+                nbCharacters={subjectTopPostRemainingChars < 10000 ? subjectTopPostRemainingChars : TEXT_INPUT_MAX_LENGTH}
               />
             </div>
             <div className={isFormActive ? 'margin-m' : 'hidden'}>
-              {body ? <div className="form-label">{I18n.t('debate.insert')}</div> : null}
-              <FormControl
-                className="txt-area"
-                componentClass="textarea"
-                placeholder={I18n.t('debate.insert')}
+              <TxtAreaWithRemainingChars
+                value={body}
+                label={I18n.t('debate.insert')}
                 maxLength={TEXT_AREA_MAX_LENGTH}
                 rows={TEXT_AREA_ROWS}
-                value={body}
-                onChange={handleBodyChange}
+                handleTxtChange={handleBodyChange}
+                remainingChars={bodyTopPostRemainingChars}
               />
-              <div className="annotation margin-xs">
-                <Translate
-                  value="debate.remaining_x_characters"
-                  nbCharacters={bodyRemainingChars < 10000 ? bodyRemainingChars : TEXT_AREA_MAX_LENGTH}
-                />
-              </div>
               <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
                 <Translate value="cancel" />
               </Button>
@@ -190,28 +175,28 @@ const mapStateToProps = ({ posts, debate }) => {
     subject: posts.topPostSubject,
     body: posts.topPostBody,
     isFormActive: posts.topPostFormStatus,
-    subjectRemainingChars: posts.subjectRemainingChars,
-    bodyRemainingChars: posts.bodyRemainingChars,
+    subjectTopPostRemainingChars: posts.subjectTopPostRemainingChars,
+    bodyTopPostRemainingChars: posts.bodyTopPostRemainingChars,
     slug: debate.debateData.slug
   };
 };
 
-export const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     updateFormStatus: (isFormActive) => {
       return dispatch(updateTopPostFormStatus(isFormActive));
     },
-    updateSubject: (topPostSubject) => {
-      return dispatch(updateTopPostSubject(topPostSubject));
+    updateSubject: (subject) => {
+      return dispatch(updateTopPostSubject(subject));
     },
-    updateBody: (topPostBody) => {
-      return dispatch(updateTopPostBody(topPostBody));
+    updateBody: (body) => {
+      return dispatch(updateTopPostBody(body));
     },
     updateSubjectChars: (subjectRemainingChars) => {
-      return dispatch(updateSubjectRemaingChars(subjectRemainingChars));
+      return dispatch(updateTopPostSubjectRemaingChars(subjectRemainingChars));
     },
     updateBodyChars: (bodyRemainingChars) => {
-      return dispatch(updateBodyRemaingChars(bodyRemainingChars));
+      return dispatch(updateTopPostBodyRemaingChars(bodyRemainingChars));
     }
   };
 };
