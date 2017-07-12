@@ -20,6 +20,7 @@ query ThematicQuery($lang: String!, $id: ID!) {
                   id,
                   body,
                   mySentiment,
+                  parentId,
                   sentimentCounts {
                     like,
                     disagree
