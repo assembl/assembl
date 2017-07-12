@@ -29,7 +29,6 @@ const Post = ({
   children,
   subject,
   body,
-  parentId,
   indirectIdeaContentLinks,
   mySentiment,
   sentimentCounts,
@@ -53,7 +52,7 @@ const Post = ({
         <Row className="post-row">
           <Col xs={12} md={11} className="post-left">
             <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} />
-            <h3 className="dark-title-3">{parentId !== null ? <span>Rep. 1 :</span> : null}{subject}</h3>
+            <h3 className="dark-title-3">{subject}</h3>
             <div className="body">{body}</div>
             <div className="link-idea">
               <div className="label"><Translate value="debate.thread.linkIdea" /></div>
