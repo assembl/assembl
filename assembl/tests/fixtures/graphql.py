@@ -11,6 +11,51 @@ def graphql_request(request, test_adminuser_webrequest, discussion, fr_locale, e
 
 
 @pytest.fixture(scope="function")
+def idea_in_thread_phase(graphql_request):
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createIdea(
+        titleEntries:[
+            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
+            {value:"Understanding the dynamics and issues", localeCode:"en"}
+        ],
+    ) {
+        idea {
+            id,
+            titleEntries { localeCode value }
+        }
+    }
+}
+""", context_value=graphql_request)
+    idea_id = res.data['createIdea']['idea']['id']
+    return idea_id
+
+@pytest.fixture(scope="function")
+def top_post_in_thread_phase(graphql_request, idea_in_thread_phase):
+    from assembl.graphql.schema import Schema as schema
+    idea_id = idea_in_thread_phase
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        subject:"Manger des choux à la crème",
+        body:"Je recommande de manger des choux à la crème, c'est très bon, et ça permet de maintenir l'industrie de la patisserie française."
+    ) {
+        post {
+            ... on AssemblPost {
+                id
+            }
+        }
+    }
+}
+""" % idea_id, context_value=graphql_request)
+    post_id = res.data['createPost']['post']['id']
+
+    return post_id
+
+
+@pytest.fixture(scope="function")
 def thematic_and_question(graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
@@ -28,9 +73,9 @@ mutation myFirstMutation {
         identifier:"survey",
     ) {
         thematic {
-            id
+            id,
             titleEntries { localeCode value },
-            identifier
+            identifier,
             questions { id, titleEntries { localeCode value } }
         }
     }
@@ -70,9 +115,9 @@ mutation myMutation {
         identifier:"survey",
     ) {
         thematic {
-            id
+            id,
             titleEntries { localeCode value },
-            identifier
+            identifier,
             questions { id, titleEntries { localeCode value } }
         }
     }
@@ -117,9 +162,9 @@ mutation myMutation {
     ) {
         thematic {
             id
-            order
+            order,
             titleEntries { localeCode value },
-            identifier
+            identifier,
             questions { id, titleEntries { localeCode value } }
         }
     }

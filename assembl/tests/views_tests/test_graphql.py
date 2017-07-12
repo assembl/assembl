@@ -806,6 +806,38 @@ mutation myFirstMutation {
         }
     }
 
+def test_mutation_create_reply_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        parentId:"%s",
+        subject:"Proposition 1",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on AssemblPost {
+                subject,
+                body,
+                parentId,
+                creator { name },
+            }
+        }
+    }
+}
+""" % (idea_id, in_reply_to_post_id), context_value=graphql_request)
+    #import pdb; pdb.set_trace()
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition 1',
+                u'body': u"une proposition...",
+                u'parentId': in_reply_to_post_id,
+                u'creator': {u'name': u'Mr. Administrator'}
+    }}}
+
 
 def test_get_proposals(graphql_request, thematic_and_question, proposals):
     thematic_id, first_question_id = thematic_and_question
