@@ -22,7 +22,7 @@ const AnswerForm = ({
   updateBody,
   updateBodyChars,
   slug,
-  // parentId,
+  parentId,
   ideaId,
   refetchIdea,
   hideAnswerForm
@@ -57,7 +57,7 @@ const AnswerForm = ({
 
   const variables = {
     ideaId: ideaId,
-    // parentId: parentId, // TO DO add the parentId in the mutation
+    parentId: parentId,
     body: body
   };
 

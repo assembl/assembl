@@ -1,10 +1,11 @@
-mutation createPost($ideaId: ID!, $subject: String, $body: String!) {
-  createPost(ideaId:$ideaId, subject: $subject, body: $body) {
+mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: ID) {
+  createPost(ideaId:$ideaId, subject: $subject, body: $body, parentId: $parentId) {
     post {
       ... on PropositionPost {
         id,
         subject,
         body,
+        parentId,
         creator {
           id,
           name
