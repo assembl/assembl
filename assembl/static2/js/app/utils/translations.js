@@ -157,6 +157,7 @@ const Translations = {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
     },
     debate: {
+      answer: 'Je réponds :',
       subject: 'Ecrivez le titre',
       insert: 'Ecrivez votre message',
       post: 'Poster',
@@ -404,6 +405,7 @@ const Translations = {
       title: 'synthesis'
     },
     debate: {
+      answer: 'I answer:',
       subject: 'Write the title',
       insert: 'Post a comment',
       post: 'Post',

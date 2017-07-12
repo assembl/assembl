@@ -11,6 +11,7 @@ import DontUnderstand from '../../svg/dontUnderstand';
 import MoreInfo from '../../svg/moreInfo';
 import ProfileLine from '../../common/profileLine';
 import { SHOW_POST_RESPONSES } from '../../../constants';
+import AnswerForm from './answerForm';
 
 const postMapStateToProps = createSelector(postSelector, (post) => {
   return { expanded: post.get('showResponses', SHOW_POST_RESPONSES) };
@@ -128,6 +129,9 @@ export default class Post extends React.Component {
               <div className="clear">&nbsp;</div>
             </Col>
           </Row>
+        </div>
+        <div className="answer-form">
+          <AnswerForm />
         </div>
       </div>
     );

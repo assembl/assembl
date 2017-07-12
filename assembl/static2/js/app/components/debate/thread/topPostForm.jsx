@@ -166,9 +166,9 @@ const TopPostForm = ({
                   nbCharacters={bodyRemainingChars < 10000 ? bodyRemainingChars : TEXT_AREA_MAX_LENGTH}
                 />
               </div>
-              <button type="reset" className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
+              <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
                 <Translate value="cancel" />
-              </button>
+              </Button>
               <Button
                 className="button-submit button-dark btn btn-default right margin-l"
                 onClick={createTopPost}
