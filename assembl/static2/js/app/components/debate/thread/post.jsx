@@ -36,7 +36,9 @@ const Post = ({
   creator,
   creationDate,
   showAnswerForm,
-  activeAnswerFormId
+  activeAnswerFormId,
+  ideaId,
+  refetchIdea
 }) => {
   let count = 0;
   const totalSentimentsCount =
@@ -136,7 +138,9 @@ const Post = ({
           </Col>
         </Row>
       </div>
-      {activeAnswerFormId === id ? <div className="answer-form"><AnswerForm parentId={parentId} /></div> : null}
+      {activeAnswerFormId === id
+        ? <div className="answer-form"><AnswerForm parentId={parentId} ideaId={ideaId} refetchIdea={refetchIdea} /></div>
+        : null}
     </div>
   );
 };
