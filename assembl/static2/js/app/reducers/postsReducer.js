@@ -56,10 +56,10 @@ export const bodyTopPostRemainingChars = (state = 10000, action) => {
   }
 };
 
-export const answerPostFormStatus = (state = false, action) => {
+export const activeAnswerFormId = (state = null, action) => {
   switch (action.type) {
-  case 'UPDATE_ANSWER_POST_FORM_STATUS':
-    return action.isAnswerPostFormActive;
+  case 'UPDATE_ACTIVE_ANSWER_FORM_ID':
+    return action.activeAnswerFormId;
   default:
     return state;
   }
@@ -92,5 +92,5 @@ export default combineReducers({
   bodyTopPostRemainingChars: bodyTopPostRemainingChars,
   answerPostBody: answerPostBody,
   bodyAnswerPostRemainingChars: bodyAnswerPostRemainingChars,
-  answerPostFormStatus: answerPostFormStatus
+  activeAnswerFormId: activeAnswerFormId
 });

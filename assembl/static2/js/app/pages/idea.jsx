@@ -42,15 +42,15 @@ class Idea extends React.Component {
   render() {
     const { toggleItem } = this.props;
     const { idea } = this.props.data;
+    const refetchIdea = this.props.data.refetch;
     const rawPosts = idea.posts.edges.map((e) => {
-      return e.node;
+      return { ...e.node, refetchIdea: refetchIdea, ideaId: idea.id };
     });
     const posts = transformPosts(rawPosts);
 
     return (
       <div className="idea">
         <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
-
         <section className="post-section">
           <Grid fluid className="background-color">
             <div className="max-container">

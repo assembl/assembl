@@ -6,11 +6,7 @@ import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import {
-  updateAnswerPostBody,
-  updateAnswerPostBodyRemaingChars,
-  updateAnswerPostFormStatus
-} from '../../../actions/postsActions';
+import { updateAnswerPostBody, updateAnswerPostBodyRemaingChars, updateActiveAnswerFormId } from '../../../actions/postsActions';
 import { displayModal, displayAlert } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getCurrentView, getContextual } from '../../../utils/routeMap';
@@ -26,10 +22,10 @@ const AnswerForm = ({
   updateBody,
   updateBodyChars,
   slug,
+  // parentId,
   ideaId,
-  parentId,
   refetchIdea,
-  updateAnswerFormStatus
+  hideAnswerForm
 }) => {
   const handleBodyChange = (e) => {
     const maxChars = TEXT_AREA_MAX_LENGTH;
@@ -40,7 +36,7 @@ const AnswerForm = ({
   };
 
   const resetForm = () => {
-    updateAnswerFormStatus(false);
+    hideAnswerForm();
     updateBodyChars(TEXT_AREA_MAX_LENGTH);
     updateBody('');
   };
@@ -60,7 +56,7 @@ const AnswerForm = ({
   };
 
   const variables = {
-    ideaId: 'SWRlYToyMzY1', // TO DO get the idea ID
+    ideaId: ideaId,
     // parentId: parentId, // TO DO add the parentId in the mutation
     body: body
   };
@@ -70,7 +66,7 @@ const AnswerForm = ({
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })
         .then(() => {
-          // refetchIdea(); // TO DO get refetchIdea
+          refetchIdea();
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
           resetForm();
         })
@@ -125,8 +121,8 @@ const mapDispatchToProps = (dispatch) => {
     updateBodyChars: (bodyRemainingChars) => {
       return dispatch(updateAnswerPostBodyRemaingChars(bodyRemainingChars));
     },
-    updateAnswerFormStatus: (isAnswerPostFormActive) => {
-      return dispatch(updateAnswerPostFormStatus(isAnswerPostFormActive));
+    hideAnswerForm: () => {
+      return dispatch(updateActiveAnswerFormId(null));
     }
   };
 };

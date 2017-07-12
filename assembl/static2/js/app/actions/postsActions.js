@@ -40,10 +40,10 @@ export const updateTopPostBodyRemaingChars = (bodyTopPostRemainingChars) => {
   };
 };
 
-export const updateAnswerPostFormStatus = (isAnswerPostFormActive) => {
+export const updateActiveAnswerFormId = (activeAnswerFormId) => {
   return {
-    isAnswerPostFormActive: isAnswerPostFormActive,
-    type: 'UPDATE_ANSWER_POST_FORM_STATUS'
+    activeAnswerFormId: activeAnswerFormId,
+    type: 'UPDATE_ACTIVE_ANSWER_FORM_ID'
   };
 };
 

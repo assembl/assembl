@@ -4,7 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
 import { createSelector } from 'reselect';
 
-import { updateAnswerPostFormStatus } from '../../../actions/postsActions';
+import { updateActiveAnswerFormId } from '../../../actions/postsActions';
 import { postSelector } from '../../../selectors';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -25,6 +25,7 @@ export const PostFolded = ({ creator }) => {
 };
 
 const Post = ({
+  id,
   children,
   subject,
   body,
@@ -34,15 +35,15 @@ const Post = ({
   sentimentCounts,
   creator,
   creationDate,
-  updateAnswerFormStatus,
-  isAnswerPostFormActive
+  showAnswerForm,
+  activeAnswerFormId
 }) => {
   let count = 0;
   const totalSentimentsCount =
     sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo;
 
   const handleAnswerClick = () => {
-    updateAnswerFormStatus(true);
+    showAnswerForm(id);
   };
   return (
     <div className="posts">
@@ -135,22 +136,22 @@ const Post = ({
           </Col>
         </Row>
       </div>
-      {isAnswerPostFormActive ? <div className="answer-form"><AnswerForm parentId={parentId} /></div> : null}
+      {activeAnswerFormId === id ? <div className="answer-form"><AnswerForm parentId={parentId} /></div> : null}
     </div>
   );
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateAnswerFormStatus: (isAnswerPostFormActive) => {
-      return dispatch(updateAnswerPostFormStatus(isAnswerPostFormActive));
+    showAnswerForm: (activeAnswerFormId) => {
+      return dispatch(updateActiveAnswerFormId(activeAnswerFormId));
     }
   };
 };
 
 const mapStateToProps = ({ posts }) => {
   return {
-    isAnswerPostFormActive: posts.answerPostFormStatus
+    activeAnswerFormId: posts.activeAnswerFormId
   };
 };
 

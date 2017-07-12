@@ -126,27 +126,27 @@ describe('Posts reducers', () => {
     });
   });
 
-  describe('answerPostFormStatus reducer', () => {
-    const { answerPostFormStatus } = reducers;
+  describe('activeAnswerFormId reducer', () => {
+    const { activeAnswerFormId } = reducers;
     it('should return the initial state', () => {
-      expect(answerPostFormStatus(undefined, {})).toEqual(false);
+      expect(activeAnswerFormId(undefined, {})).toEqual(null);
     });
 
     it('should return state by default', () => {
-      const state = false;
-      const expected = false;
-      const actual = answerPostFormStatus(state, {});
+      const state = null;
+      const expected = null;
+      const actual = activeAnswerFormId(state, {});
       expect(actual).toEqual(expected);
     });
 
-    it('should handle UPDATE_ANSWER_POST_FORM_STATUS action type', () => {
-      const state = true;
+    it('should handle UPDATE_ACTIVE_ANSWER_FORM_ID action type', () => {
+      const state = '1234';
       const action = {
-        type: 'UPDATE_ANSWER_POST_FORM_STATUS',
-        isAnswerPostFormActive: true
+        type: 'UPDATE_ACTIVE_ANSWER_FORM_ID',
+        activeAnswerFormId: '1234'
       };
-      const actual = answerPostFormStatus(state, action);
-      const expected = true;
+      const actual = activeAnswerFormId(state, action);
+      const expected = '1234';
       expect(actual).toEqual(expected);
     });
   });
