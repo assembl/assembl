@@ -28,13 +28,13 @@ class Objectives extends React.Component {
       if (isSeveralPhases) {
         displayModal(null, body, true, null, button, true);
         setTimeout(() => {
-          window.location = `${get('oldDebate', slug)}`;
+          window.location = get('oldDebate', slug);
         }, 6000);
       } else {
-        window.location = `${get('oldDebate', slug)}`;
+        window.location = get('oldDebate', slug);
       }
     } else {
-      browserHistory.push(`${get('debate', slug)}`);
+      browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
     }
   }
   render() {
