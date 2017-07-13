@@ -101,10 +101,10 @@ class Question extends React.Component {
     if (!isUserConnected) {
       const next = getCurrentView();
       const slug = { slug: this.props.debate.debateData.slug };
-      const body = I18n.t('debate.survey.modalBody');
+      const body = I18n.t('login.loginModalBody');
       const button = {
         link: `${getContextual('login', slug)}?next=${next}`,
-        label: I18n.t('debate.survey.modalFooter'),
+        label: I18n.t('login.loginModalFooter'),
         internalLink: true
       };
       displayModal(null, body, true, null, button, true);

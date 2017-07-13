@@ -44,10 +44,10 @@ const AnswerForm = ({
   const inviteToLogin = () => {
     const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
     const next = getCurrentView();
-    const modalBody = I18n.t('debate.survey.modalBody');
+    const modalBody = I18n.t('login.loginModalBody');
     const button = {
       link: `${getContextual('login', slug)}?next=${next}`,
-      label: I18n.t('debate.survey.modalFooter'),
+      label: I18n.t('login.loginModalFooter'),
       internalLink: true
     };
     if (!isUserConnected) {
