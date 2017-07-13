@@ -418,7 +418,7 @@ const Translations = {
         proposalsTitle: 'Do you agree with these points of view?',
         reactions: 'Reactions',
         react: 'React:',
-        moreProposals: 'More proposals',
+        moreProposals: 'More points of view',
         noProposals: 'There is no point of view for the moment. Be the first to contribute!',
         modalBody: 'You have to be connected to do a proposal or to vote.',
         modalFooter: 'Please connect',
