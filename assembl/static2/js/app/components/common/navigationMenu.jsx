@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import { get } from '../../utils/routeMap';
@@ -12,40 +12,71 @@ import { getCurrentPhaseIdentifier, getPhaseName, isSeveralIdentifiers } from '.
 class NavigationMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.displayPhase = this.displayPhase.bind(this);
+    this.state = {
+      phaseContext: ''
+    };
+    this.displayModal = this.displayModal.bind(this);
+  }
+  componentWillMount() {
+    const { isRedirectionToV1 } = this.props.phase;
+    const { timeline } = this.props.debate.debateData;
+    const isSeveralPhases = isSeveralIdentifiers(timeline);
+    if (isRedirectionToV1) {
+      if (isSeveralPhases) {
+        this.setState({
+          phaseContext: 'modal'
+        });
+      } else {
+        this.setState({
+          phaseContext: 'old'
+        });
+      }
+    } else {
+      this.setState({
+        phaseContext: 'new'
+      });
+    }
   }
   // This redirection should be removed when the phase 2 will be done
-  displayPhase() {
+  displayModal() {
     const slug = { slug: getDiscussionSlug() };
-    const { isRedirectionToV1 } = this.props.phase;
     const { timeline } = this.props.debate.debateData;
     const { locale } = this.props.i18n;
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
     const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
     const body = <Translate value="redirectToV1" phaseName={phaseName} />;
     const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
-    const isSeveralPhases = isSeveralIdentifiers(timeline);
-    if (isRedirectionToV1) {
-      if (isSeveralPhases) {
-        displayModal(null, body, true, null, button, true);
-        setTimeout(() => {
-          window.location = get('oldDebate', slug);
-        }, 6000);
-      } else {
-        window.location = get('oldDebate', slug);
-      }
-    } else {
-      browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
-    }
+    displayModal(null, body, true, null, button, true);
+    setTimeout(() => {
+      window.location = get('oldDebate', slug);
+    }, 6000);
   }
   render() {
     const { debateData } = this.props.debate;
     const { isAdmin } = this.props;
+    const slug = { slug: getDiscussionSlug() };
+    const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
     return (
       <div>
-        <Link onClick={this.displayPhase} className="navbar-menu-item pointer" activeClassName="active">
-          <Translate value="navbar.debate" />
-        </Link>
+        {this.state.phaseContext === 'modal'
+          ? <Link onClick={this.displayModal} className="navbar-menu-item pointer">
+            <Translate value="navbar.debate" />
+          </Link>
+          : null}
+        {this.state.phaseContext === 'old'
+          ? <a className="navbar-menu-item pointer" href={get('oldDebate', slug)}>
+            <Translate value="navbar.debate" />
+          </a>
+          : null}
+        {this.state.phaseContext === 'new'
+          ? <Link
+            to={get('debate', { ...slug, phase: currentPhaseIdentifier })}
+            className="navbar-menu-item pointer"
+            activeClassName="active"
+          >
+            <Translate value="navbar.debate" />
+          </Link>
+          : null}
         {isAdmin &&
           <Link
             to={get('administration', { slug: debateData.slug })}
