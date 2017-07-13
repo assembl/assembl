@@ -11,77 +11,37 @@ export const postsById = (state = Map(), action) => {
   return state;
 };
 
-export const topPostFormStatus = (state = false, action) => {
-  switch (action.type) {
-  case 'UPDATE_TOP_POST_FORM_STATUS':
-    return action.isTopPostFormActive;
-  default:
-    return state;
-  }
+export const basicReducerFactory = (initialState, handledAction, returnedProp) => {
+  return (state = initialState, action) => {
+    switch (action.type) {
+    case handledAction:
+      return action[returnedProp];
+    default:
+      return state;
+    }
+  };
 };
 
-export const topPostSubject = (state = '', action) => {
-  switch (action.type) {
-  case 'UPDATE_TOP_POST_SUBJECT':
-    return action.topPostSubject;
-  default:
-    return state;
-  }
-};
-
-export const topPostBody = (state = '', action) => {
-  switch (action.type) {
-  case 'UPDATE_TOP_POST_BODY':
-    return action.topPostBody;
-  default:
-    return state;
-  }
-};
-
-export const subjectTopPostRemainingChars = (state = 10000, action) => {
-  switch (action.type) {
-  case 'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS':
-    return action.subjectTopPostRemainingChars;
-  default:
-    return state;
-  }
-};
-
-export const bodyTopPostRemainingChars = (state = 10000, action) => {
-  switch (action.type) {
-  case 'UPDATE_TOP_POST_BODY_REMAINING_CHARS':
-    return action.bodyTopPostRemainingChars;
-  default:
-    return state;
-  }
-};
-
-export const activeAnswerFormId = (state = null, action) => {
-  switch (action.type) {
-  case 'UPDATE_ACTIVE_ANSWER_FORM_ID':
-    return action.activeAnswerFormId;
-  default:
-    return state;
-  }
-};
-
-export const answerPostBody = (state = '', action) => {
-  switch (action.type) {
-  case 'UPDATE_ANSWER_POST_BODY':
-    return action.answerPostBody;
-  default:
-    return state;
-  }
-};
-
-export const bodyAnswerPostRemainingChars = (state = 10000, action) => {
-  switch (action.type) {
-  case 'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS':
-    return action.bodyAnswerPostRemainingChars;
-  default:
-    return state;
-  }
-};
+export const topPostSubject = basicReducerFactory('', 'UPDATE_TOP_POST_SUBJECT', 'topPostSubject');
+export const topPostBody = basicReducerFactory('', 'UPDATE_TOP_POST_BODY', 'topPostBody');
+export const answerPostBody = basicReducerFactory('', 'UPDATE_ANSWER_POST_BODY', 'answerPostBody');
+export const subjectTopPostRemainingChars = basicReducerFactory(
+  10000,
+  'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS',
+  'subjectTopPostRemainingChars'
+);
+export const bodyTopPostRemainingChars = basicReducerFactory(
+  10000,
+  'UPDATE_TOP_POST_BODY_REMAINING_CHARS',
+  'bodyTopPostRemainingChars'
+);
+export const bodyAnswerPostRemainingChars = basicReducerFactory(
+  10000,
+  'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS',
+  'bodyAnswerPostRemainingChars'
+);
+export const topPostFormStatus = basicReducerFactory(false, 'UPDATE_TOP_POST_FORM_STATUS', 'isTopPostFormActive');
+export const activeAnswerFormId = basicReducerFactory(null, 'UPDATE_ACTIVE_ANSWER_FORM_ID', 'activeAnswerFormId');
 
 export default combineReducers({
   postsById: postsById,
