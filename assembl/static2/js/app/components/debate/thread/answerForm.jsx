@@ -7,9 +7,8 @@ import { Translate, I18n } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { updateAnswerPostBody, updateAnswerPostBodyRemaingChars, updateActiveAnswerFormId } from '../../../actions/postsActions';
-import { displayModal, displayAlert } from '../../../utils/utilityManager';
+import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { getCurrentView, getContextual } from '../../../utils/routeMap';
 import { TxtAreaWithRemainingChars } from '../../common/txtAreaWithRemainingChars';
 
 const TEXT_AREA_MAX_LENGTH = 3000;
@@ -21,7 +20,6 @@ const AnswerForm = ({
   mutate,
   updateBody,
   updateBodyChars,
-  slug,
   parentId,
   ideaId,
   refetchIdea,
@@ -41,17 +39,10 @@ const AnswerForm = ({
     updateBody('');
   };
 
-  const inviteToLogin = () => {
+  const handleInputFocus = () => {
     const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
-    const next = getCurrentView();
-    const modalBody = I18n.t('login.loginModalBody');
-    const button = {
-      link: `${getContextual('login', slug)}?next=${next}`,
-      label: I18n.t('login.loginModalFooter'),
-      internalLink: true
-    };
     if (!isUserConnected) {
-      displayModal(null, modalBody, true, null, button, true);
+      inviteUserToLogin();
     }
   };
 
@@ -90,7 +81,7 @@ const AnswerForm = ({
             maxLength={TEXT_AREA_MAX_LENGTH}
             rows={TEXT_AREA_ROWS}
             handleTxtChange={handleBodyChange}
-            handleInputFocus={inviteToLogin}
+            handleInputFocus={handleInputFocus}
             remainingChars={bodyRemainingChars}
           />
           <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>

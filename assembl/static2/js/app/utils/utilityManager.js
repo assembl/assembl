@@ -1,3 +1,7 @@
+import { I18n } from 'react-redux-i18n';
+import { getCurrentView, getContextual } from '../utils/routeMap';
+import { getDiscussionSlug } from '../utils/globalFunctions';
+
 /*
   Singleton object that will contain the AlertManager, ModalManager which will
   be used to show/hide/manipulate the alert/modal system
@@ -43,6 +47,7 @@ export const displayModal = (title, body, footer, footerTxt, button, showModal) 
                     button.label:String => label of the button;
                     button.internalLink:Boolean => true if a Link from react-router is needed and false if a href is needed
   */
+
   modalManager.component.setState({
     title: title,
     body: body,
@@ -51,4 +56,16 @@ export const displayModal = (title, body, footer, footerTxt, button, showModal) 
     button: button,
     showModal: showModal
   });
+};
+
+export const inviteUserToLogin = () => {
+  const slug = getDiscussionSlug();
+  const next = getCurrentView();
+  const modalBody = I18n.t('login.loginModalBody');
+  const button = {
+    link: `${getContextual('login', slug)}?next=${next}`,
+    label: I18n.t('login.loginModalFooter'),
+    internalLink: true
+  };
+  displayModal(null, modalBody, true, null, button, true);
 };

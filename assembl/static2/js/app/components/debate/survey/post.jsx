@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
@@ -10,8 +10,7 @@ import PostCreator from './postCreator';
 import Doughnut from '../../svg/doughnut';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
-import { displayModal, displayAlert } from '../../../utils/utilityManager';
-import { getCurrentView, getContextual } from '../../../utils/routeMap';
+import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 
@@ -36,19 +35,8 @@ class Post extends React.Component {
         }
       }
     } else {
-      this.redirectToLogin();
+      inviteUserToLogin();
     }
-  }
-  redirectToLogin() {
-    const next = getCurrentView();
-    const slug = { slug: this.props.debate.debateData.slug };
-    const body = I18n.t('login.loginModalBody');
-    const button = {
-      link: `${getContextual('login', slug)}?next=${next}`,
-      label: I18n.t('login.loginModalFooter'),
-      internalLink: true
-    };
-    displayModal(null, body, true, null, button, true);
   }
   handleAddSentiment(target, type) {
     const { id, refetchTheme } = this.props;

@@ -13,9 +13,8 @@ import {
   updateTopPostSubjectRemaingChars,
   updateTopPostBodyRemaingChars
 } from '../../../actions/postsActions';
-import { displayModal, displayAlert } from '../../../utils/utilityManager';
+import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { getCurrentView, getContextual } from '../../../utils/routeMap';
 import { TxtAreaWithRemainingChars } from '../../common/txtAreaWithRemainingChars';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 
@@ -33,7 +32,6 @@ const TopPostForm = ({
   isFormActive,
   mutate,
   refetchIdea,
-  slug,
   subjectTopPostRemainingChars,
   updateSubjectChars,
   bodyTopPostRemainingChars,
@@ -41,22 +39,6 @@ const TopPostForm = ({
 }) => {
   const displayForm = (isActive) => {
     return updateFormStatus(isActive);
-  };
-
-  const inviteToLogin = () => {
-    const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
-    const next = getCurrentView();
-    const modalBody = I18n.t('login.loginModalBody');
-    const button = {
-      link: `${getContextual('login', slug)}?next=${next}`,
-      label: I18n.t('login.loginModalFooter'),
-      internalLink: true
-    };
-    if (!isUserConnected) {
-      displayModal(null, modalBody, true, null, button, true);
-    } else {
-      displayForm(true);
-    }
   };
 
   const resetForm = () => {
@@ -93,7 +75,12 @@ const TopPostForm = ({
   };
 
   const handleInputFocus = () => {
-    return inviteToLogin();
+    const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
+    if (!isUserConnected) {
+      inviteUserToLogin();
+    } else {
+      displayForm(true);
+    }
   };
 
   const handleSubjectChange = (e) => {
