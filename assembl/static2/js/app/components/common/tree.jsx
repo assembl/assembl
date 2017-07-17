@@ -90,15 +90,15 @@ class Child extends React.PureComponent {
               SeparatorComponent={SeparatorComponent}
               toggleItem={toggleItem}
             />
-            : <div>
+            : <div
+              className="postfolded-container"
+              key={idx}
+              onClick={(event) => {
+                this.expandCollapse(event);
+              }}
+            >
               {children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
-              <div
-                key={idx}
-                onClick={(event) => {
-                  this.expandCollapse(event);
-                }}
-                className="post-folded"
-              >
+              <div className="post-folded">
                 <InnerComponentFolded {...child} />
               </div>
             </div>;
