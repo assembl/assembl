@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 
 import { updateActiveAnswerFormId } from '../../../actions/postsActions';
 import { postSelector } from '../../../selectors';
+import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunctions';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import DontUnderstand from '../../svg/dontUnderstand';
@@ -46,6 +47,12 @@ const Post = ({
 
   const handleAnswerClick = () => {
     showAnswerForm(id);
+    setTimeout(() => {
+      const txtarea = document.getElementById(id);
+      const txtareaOffset = getDomElementOffset(txtarea).top;
+      scrollToPosition(txtareaOffset - txtarea.clientHeight, 600);
+      txtarea.focus();
+    }, 500);
   };
   return (
     <div className="posts">

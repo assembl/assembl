@@ -83,6 +83,7 @@ const AnswerForm = ({
             handleTxtChange={handleBodyChange}
             handleInputFocus={handleInputFocus}
             remainingChars={bodyRemainingChars}
+            domId={parentId}
           />
           <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
             <Translate value="cancel" />
