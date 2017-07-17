@@ -502,12 +502,12 @@ def build_virtualenv():
     print(cyan('Creating a fresh virtualenv'))
     assert env.venvpath
     import sys
-    # This is incorrect, it will check locally instead fo on the remote server
-    if hasattr(sys, 'real_prefix'):
+    # This relies on env.venvpath
+    if exists(join(env.venvpath, "bin/activate")):
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
-    run('virtualenv %(venvpath)s' % env)
+    run('python -mvirtualenv %(venvpath)s' % env)
     if env.mac:
         # Virtualenv does not reuse distutils.cfg from the homebrew python,
         # and that sometimes precludes building python modules.
@@ -663,6 +663,8 @@ def bootstrap_from_checkout():
     execute(updatemaincode)
     execute(build_virtualenv)
     execute(app_update_dependencies)
+    execute(app_setup)
+    execute(check_and_create_database_user)
     execute(app_compile_nodbupdate)
     execute(set_file_permissions)
     execute(app_db_install)
@@ -964,14 +966,13 @@ def update_npm_requirements(force_reinstall=False):
 @task
 def install_single_server():
     """
-    Will install all assembl components on a single server
+    Will install all assembl components on a single server.
+    Follow with bootstrap_from_checkout
     """
     execute(install_java)
     execute(install_elasticsearch)
     execute(install_database)
     execute(install_assembl_server_deps)
-    execute(app_setup)
-    execute(check_and_create_database_user)
     execute(install_redis)
     execute(install_memcached)
 
