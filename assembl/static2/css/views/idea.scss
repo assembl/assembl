@@ -63,6 +63,15 @@
         }
     }
 
+    .no-shift {
+        .post-folded {
+            span {
+                bottom: 0;
+                left: 0;
+            }
+        }
+    }
+
     .infinite-separator {
         margin: $margin-section auto;
         max-width: 200px;
@@ -92,6 +101,14 @@
 
         &:last-child {
             border-left: none!important;
+            padding-bottom: 0!important;
+        }
+    }
+
+    .level-5 {
+        padding-bottom: $post-space;
+
+        &:last-child {
             padding-bottom: 0!important;
         }
     }
