@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, Redirect } from 'react-router';
 import Root from './root';
 import App from './app';
 import Main from './main';
@@ -88,6 +88,7 @@ export default [
     <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
     <Route component={App}>
       <Route component={Main}>
+        <Redirect from={routeForRouter('homeBare')} to={routeForRouter('home')} />
         <Route path={routeForRouter('home')} component={Home} />
         <Route path={routeForRouter('homeBare')} component={Home} />
         <Route path={routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
