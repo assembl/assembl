@@ -13,6 +13,18 @@ describe('Posts actions', () => {
     });
   });
 
+  describe('updateTopPostFormStatus action', () => {
+    const { updateTopPostFormStatus } = actions;
+    it('should return a UPDATE_TOP_POST_FORM_STATUS action type', () => {
+      const expected = {
+        isTopPostFormActive: true,
+        type: 'UPDATE_TOP_POST_FORM_STATUS'
+      };
+      const actual = updateTopPostFormStatus(true);
+      expect(actual).toEqual(expected);
+    });
+  });
+
   describe('updateTopPostSubject action', () => {
     const { updateTopPostSubject } = actions;
     it('should return a UPDATE_TOP_POST_SUBJECT action type', () => {
@@ -37,38 +49,62 @@ describe('Posts actions', () => {
     });
   });
 
-  describe('updateTopPostFormStatus action', () => {
-    const { updateTopPostFormStatus } = actions;
-    it('should return a UPDATE_TOP_POST_FORM_STATUS action type', () => {
+  describe('updateTopPostSubjectRemaingChars action', () => {
+    const { updateTopPostSubjectRemaingChars } = actions;
+    it('should return a UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS action type', () => {
       const expected = {
-        isTopPostFormActive: true,
-        type: 'UPDATE_TOP_POST_FORM_STATUS'
+        subjectTopPostRemainingChars: 124,
+        type: 'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS'
       };
-      const actual = updateTopPostFormStatus(true);
+      const actual = updateTopPostSubjectRemaingChars(124);
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('updateSubjectRemaingChars action', () => {
-    const { updateSubjectRemaingChars } = actions;
-    it('should return a UPDATE_SUBJECT_REMAINING_CHARS action type', () => {
+  describe('updateTopPostBodyRemaingChars action', () => {
+    const { updateTopPostBodyRemaingChars } = actions;
+    it('should return a UPDATE_TOP_POST_BODY_REMAINING_CHARS action type', () => {
       const expected = {
-        subjectRemainingChars: 124,
-        type: 'UPDATE_SUBJECT_REMAINING_CHARS'
+        bodyTopPostRemainingChars: 1204,
+        type: 'UPDATE_TOP_POST_BODY_REMAINING_CHARS'
       };
-      const actual = updateSubjectRemaingChars(124);
+      const actual = updateTopPostBodyRemaingChars(1204);
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('updateBodyRemaingChars action', () => {
-    const { updateBodyRemaingChars } = actions;
-    it('should return a UPDATE_BODY_REMAINING_CHARS action type', () => {
+  describe('updateActiveAnswerFormId action', () => {
+    const { updateActiveAnswerFormId } = actions;
+    it('should return a UPDATE_ACTIVE_ANSWER_FORM_ID action type', () => {
       const expected = {
-        bodyRemainingChars: 1204,
-        type: 'UPDATE_BODY_REMAINING_CHARS'
+        activeAnswerFormId: '1204',
+        type: 'UPDATE_ACTIVE_ANSWER_FORM_ID'
       };
-      const actual = updateBodyRemaingChars(1204);
+      const actual = updateActiveAnswerFormId('1204');
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateAnswerPostBody action', () => {
+    const { updateAnswerPostBody } = actions;
+    it('should return a UPDATE_ANSWER_POST_BODY action type', () => {
+      const expected = {
+        answerPostBody: 'New body',
+        type: 'UPDATE_ANSWER_POST_BODY'
+      };
+      const actual = updateAnswerPostBody('New body');
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateAnswerPostBodyRemaingChars action', () => {
+    const { updateAnswerPostBodyRemaingChars } = actions;
+    it('should return a UPDATE_ANSWER_POST_BODY action type', () => {
+      const expected = {
+        bodyAnswerPostRemainingChars: 102,
+        type: 'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS'
+      };
+      const actual = updateAnswerPostBodyRemaingChars(102);
       expect(actual).toEqual(expected);
     });
   });

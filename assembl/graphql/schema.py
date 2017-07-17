@@ -15,6 +15,7 @@ from graphene_sqlalchemy.converter import (
 from graphene_sqlalchemy.utils import get_query, is_mapped
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
+from jwzthreading import restrip_pat
 
 from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
@@ -269,7 +270,7 @@ class PostInterface(SQLAlchemyInterface):
         if self.parent_id is None:
             return None
 
-        return Node.to_global_id('Post', self.parent_id)
+        return Node.to_global_id(self.__class__.__name__, self.parent_id)
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -296,10 +297,16 @@ class PropositionPost(Post):
         interfaces = (Node, PostInterface)
         only_fields = ('id', )  # inherits fields from Post interface only
 
+class AssemblPost(Post):
+    class Meta:
+        model = models.AssemblPost
+        interfaces = (Node, PostInterface)
+        only_fields = ('id', )  # inherits fields from Post interface only
+
 
 class PostUnion(SQLAlchemyUnion):
     class Meta:
-        types = (PropositionPost, Post)
+        types = (PropositionPost, AssemblPost, Post)
         model = models.Post
 
     @classmethod
@@ -308,6 +315,8 @@ class PostUnion(SQLAlchemyUnion):
             return type(instance)
         elif isinstance(instance, models.PropositionPost): # must be above Post
             return PropositionPost
+        elif isinstance(instance, models.AssemblPost): # must be above Post
+            return AssemblPost
         elif isinstance(instance, models.Post):
             return Post
 
@@ -701,6 +710,103 @@ def create_root_thematic(discussion, identifier):
     discussion.root_idea.children.append(root_thematic)
     return root_thematic
 
+# Create an Idea to be used in a Thread phase (and displayed in frontend version 1 or 2)
+# Maybe some of its logic should be factorized with CreateThematic
+# For now, we on purpose do not make use of an "identifier" input (identifier of the phase this idea will be visible in) like we would do in CreateThematic mutation, because behavior between frontend v1 and v2 has not yet been completely clarified.
+class CreateIdea(graphene.Mutation):
+    class Input:
+        # Careful, having required=True on a graphene.List only means
+        # it can't be None, having an empty [] is perfectly valid.
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        description_entries = graphene.List(LangStringEntryInput)
+        image = graphene.String()  # this is the identifier of the part in a multipart POST
+        order = graphene.Float()
+        parent_id = graphene.ID()
+
+    idea = graphene.Field(lambda: Idea)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Idea
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception('Idea titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            title_langstring = langstring_from_input_entries(title_entries)
+            description_langstring = langstring_from_input_entries(args.get('description_entries'))
+            kwargs = {}
+            if description_langstring is not None:
+                kwargs['description'] = description_langstring
+
+
+            parent_idea_id = args.get('parent_id')
+            if parent_idea_id:
+                    parent_idea_id = int(Node.from_global_id(parent_idea_id)[1])
+                    if parent_idea_id:
+                        parent_idea = models.Idea.get(parent_idea_id)
+                        if not parent_idea:
+                            raise Exception('Parent Idea not found')
+                        if parent_idea.discussion != discussion:
+                            # No cross-debate references are allowed, for security reasons
+                            raise Exception('Parent Idea does not belong to this discussion')
+                    else:
+                        raise Exception('Parent Idea not found')
+            if not parent_idea_id:
+                parent_idea = discussion.root_idea
+
+            # take the first entry and set it for short_title
+            short_title = title_entries[0]['value']
+            saobj = cls(
+                discussion_id=discussion_id,
+                title=title_langstring,
+                short_title=short_title,
+                **kwargs)
+            db = saobj.db
+            db.add(saobj)
+            order = len(parent_idea.get_children()) + 1.0
+            db.add(
+                models.IdeaLink(source=parent_idea, target=saobj,
+                         order=args.get('order', order)))
+
+            # add uploaded image as an attachment to the idea
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                attachment = models.IdeaAttachment(
+                    document=document,
+                    idea=saobj,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="EMBED_ATTACHMENT"
+                )
+
+            db.flush()
+
+        return CreateIdea(idea=saobj)
+
 
 # How the file upload works
 # With the https://github.com/jaydenseric/apollo-upload-client
@@ -999,8 +1105,7 @@ class CreatePost(graphene.Mutation):
         subject = graphene.String()
         body = graphene.String(required=True)
         idea_id = graphene.ID(required=True)
-        # TODO: for a real post (not a proposal), we need to handle parent_id
-        # see related code in views/api/post.py
+        parent_id = graphene.ID() # A Post (except proposals in survey phase) can reply to another post. See related code in views/api/post.py
 
     post = graphene.Field(lambda: PostUnion)
 
@@ -1009,6 +1114,7 @@ class CreatePost(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
 
         user_id = context.authenticated_userid or Everyone
+        discussion = models.Discussion.get(discussion_id)
 
         idea_id = args.get('idea_id')
         idea_id = int(Node.from_global_id(idea_id)[1])
@@ -1018,6 +1124,14 @@ class CreatePost(graphene.Mutation):
         else:
             cls = models.AssemblPost
 
+        in_reply_to_post = None
+        if cls == models.AssemblPost:
+            in_reply_to_post_id = args.get('parent_id')
+            if in_reply_to_post_id:
+                in_reply_to_post_id = int(Node.from_global_id(in_reply_to_post_id)[1])
+                if in_reply_to_post_id:
+                    in_reply_to_post = models.Post.get(in_reply_to_post_id)
+
         permissions = get_permissions(user_id, discussion_id)
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
@@ -1026,15 +1140,24 @@ class CreatePost(graphene.Mutation):
         with cls.default_db.no_autoflush:
             subject = args.get('subject')
             body = args.get('body')
-            if subject is None:
-                # TODO for real post, need the same logic than in views/api/post.py
-                subject_entries = [
-                    {'value': u'Proposition', u'locale_code': u'und'}
-                ]
-            else:
-                subject_entries = [
-                    {'value': subject, u'locale_code': u'und'}
-                ]
+            if subject is None: # We apply the same logic than in views/api/post.py::create_post
+                if cls == models.AssemblPost:
+                    if in_reply_to_post:
+                        subject = (
+                            in_reply_to_post.get_title().first_original().value or ''
+                            if in_reply_to_post.get_title() else '')
+                    elif in_reply_to_idea:
+                        subject = (in_reply_to_idea.short_title
+                                   if in_reply_to_idea.short_title else '')
+                    else:
+                        subject = discussion.topic if discussion.topic else ''
+                    if subject is not None and len(subject):
+                        subject = u'Re: ' + restrip_pat.sub('', subject).strip()
+                else:
+                    subject = u'Proposition'
+            subject_entries = [
+                {'value': subject, u'locale_code': u'und'}
+            ]
 
             body_entries = [
                 {'value': body, u'locale_code': u'und'}
@@ -1042,13 +1165,21 @@ class CreatePost(graphene.Mutation):
 
             subject_langstring = langstring_from_input_entries(subject_entries)
             body_langstring = langstring_from_input_entries(body_entries)
-            discussion = models.Discussion.get(discussion_id)
-            new_post = cls(
-                discussion=discussion,
-                subject=subject_langstring,
-                body=body_langstring,
-                creator_id=user_id
-            )
+            if in_reply_to_post: # Is there an unified way to do this?
+                new_post = cls(
+                    discussion=discussion,
+                    subject=subject_langstring,
+                    body=body_langstring,
+                    creator_id=user_id,
+                    parent=in_reply_to_post
+                )
+            else:
+                new_post = cls(
+                    discussion=discussion,
+                    subject=subject_langstring,
+                    body=body_langstring,
+                    creator_id=user_id
+                )
             db = new_post.db
             db.add(new_post)
             idea_post_link = models.IdeaRelatedPostLink(
@@ -1138,6 +1269,7 @@ class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
     delete_thematic = DeleteThematic.Field()
+    create_idea = CreateIdea.Field()
     create_post = CreatePost.Field()
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()

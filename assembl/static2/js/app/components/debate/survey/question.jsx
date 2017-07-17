@@ -6,8 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
-import { displayModal, displayAlert } from '../../../utils/utilityManager';
-import { getCurrentView, getContextual } from '../../../utils/routeMap';
+import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 
 class Question extends React.Component {
@@ -99,15 +98,7 @@ class Question extends React.Component {
     const isUserConnected = getConnectedUserId();
     const { scrollToQuestion, index } = this.props;
     if (!isUserConnected) {
-      const next = getCurrentView();
-      const slug = { slug: this.props.debate.debateData.slug };
-      const body = I18n.t('debate.survey.modalBody');
-      const button = {
-        link: `${getContextual('login', slug)}?next=${next}`,
-        label: I18n.t('debate.survey.modalFooter'),
-        internalLink: true
-      };
-      displayModal(null, body, true, null, button, true);
+      inviteUserToLogin();
     } else {
       scrollToQuestion(true, index);
     }

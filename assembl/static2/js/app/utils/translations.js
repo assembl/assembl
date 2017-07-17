@@ -86,6 +86,8 @@ const Translations = {
       socialMedias: 'Suivez-nous sur'
     },
     login: {
+      loginModalBody: 'Vous devez être connecté pour participer.',
+      loginModalFooter: 'Connectez-vous',
       alreadyAccount: 'Vous avez déjà un compte ?',
       loginWithSocialMedia: 'Vous utilisez un réseau social ?',
       password: 'Mot de passe',
@@ -157,6 +159,7 @@ const Translations = {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
     },
     debate: {
+      answer: 'Je réponds :',
       subject: 'Ecrivez le titre',
       insert: 'Ecrivez votre message',
       post: 'Poster',
@@ -173,8 +176,6 @@ const Translations = {
         react: 'Réagissez :',
         moreProposals: 'Voir plus de propositions',
         noProposals: 'Il n\'y a pas de propositions. Soyez le premier à contribuer !',
-        modalBody: 'Vous devez être connecté pour faire une proposition ou voter.',
-        modalFooter: 'Connectez-vous',
         submit: 'Envoyer',
         postSuccess: 'Merci pour votre participation. Votre proposition a bien été envoyée !',
         endPhase: 'La phase %{closedPhaseName} est terminée.'
@@ -334,6 +335,8 @@ const Translations = {
       socialMedias: 'Follow us'
     },
     login: {
+      loginModalBody: 'You have to be connected to participate.',
+      loginModalFooter: 'Please connect',
       alreadyAccount: 'Do you already have an account?',
       loginWithSocialMedia: 'Care to use social media?',
       password: 'Password',
@@ -404,6 +407,7 @@ const Translations = {
       title: 'synthesis'
     },
     debate: {
+      answer: 'I answer:',
       subject: 'Write the title',
       insert: 'Post a comment',
       post: 'Post',
@@ -420,8 +424,6 @@ const Translations = {
         react: 'React:',
         moreProposals: 'More points of view',
         noProposals: 'There is no point of view for the moment. Be the first to contribute!',
-        modalBody: 'You have to be connected to do a proposal or to vote.',
-        modalFooter: 'Please connect',
         submit: 'Submit',
         postSuccess: 'Thanks for your participation. Your proposal has been sent!',
         endPhase: 'The %{closedPhaseName} phase is closed.'

@@ -181,6 +181,12 @@
     .add-sentiment {
         margin: 20px 0 0;
     }
+
+    .answer-form {
+        background-color: $first-color-light;
+        border-top: 2px solid $white;
+        padding: 40px;
+    }
 }
 
 @media screen and (min-width: 600px) {

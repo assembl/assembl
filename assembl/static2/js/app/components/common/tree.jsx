@@ -1,5 +1,6 @@
 import React from 'react';
-import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
+import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
+import { connect } from 'react-redux';
 
 /*
   TODO: avoid globalList
@@ -17,17 +18,27 @@ class Child extends React.PureComponent {
   constructor(props) {
     super(props);
     this.renderToggleLink = this.renderToggleLink.bind(this);
+    this.expandCollapse = this.expandCollapse.bind(this);
   }
 
-  renderToggleLink(expanded, indented) {
+  componentDidMount() {
+    if (globalList) {
+      cache.clearAll();
+      globalList.recomputeRowHeights();
+    }
+  }
+  expandCollapse(event) {
+    event.stopPropagation();
     const { id, rowIndex, toggleItem } = this.props;
+    toggleItem(id);
+    cache.clear(rowIndex, 0);
+    globalList.recomputeRowHeights();
+  }
+  renderToggleLink(expanded, indented) {
     return (
       <div
         onClick={(event) => {
-          event.stopPropagation();
-          toggleItem(id);
-          cache.clear(rowIndex, 0);
-          globalList.recomputeRowHeights();
+          this.expandCollapse(event);
         }}
         className={indented ? 'expand-indented' : 'expand'}
       >
@@ -54,6 +65,9 @@ class Child extends React.PureComponent {
       if (level > 0) {
         cls += ' border-left child-level';
       }
+      if (level > 3) {
+        cls += ' no-shift';
+      }
       if (level > 4) {
         cls += ' padding-right';
       }
@@ -62,44 +76,37 @@ class Child extends React.PureComponent {
     return (
       <div className={cssClasses()}>
         <InnerComponent {...this.props} />
-        {children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
-        {children && expanded
-          ? children.map((child, idx) => {
-            return (
-              <ConnectedChildComponent
-                key={`${id}-child-${idx}`}
-                {...child}
-                ConnectedChildComponent={ConnectedChildComponent}
-                level={level + 1}
-                rowIndex={rowIndex}
-                InnerComponent={InnerComponent}
-                InnerComponentFolded={InnerComponentFolded}
-                SeparatorComponent={SeparatorComponent}
-                toggleItem={toggleItem}
-              />
-            );
-          })
-          : children.map((child, idx) => {
-            return (
+        {children.length > 0 && expanded ? this.renderToggleLink(expanded, level < 4) : null}
+        {children.map((child, idx) => {
+          return children && expanded
+            ? <ConnectedChildComponent
+              key={`${id}-child-${idx}`}
+              {...child}
+              ConnectedChildComponent={ConnectedChildComponent}
+              level={level + 1}
+              rowIndex={rowIndex}
+              InnerComponent={InnerComponent}
+              InnerComponentFolded={InnerComponentFolded}
+              SeparatorComponent={SeparatorComponent}
+              toggleItem={toggleItem}
+            />
+            : <div>
+              {children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
               <div
                 key={idx}
                 onClick={(event) => {
-                  event.stopPropagation();
-                  toggleItem(id);
-                  cache.clear(rowIndex, 0);
-                  globalList.recomputeRowHeights();
+                  this.expandCollapse(event);
                 }}
                 className="post-folded"
               >
                 <InnerComponentFolded {...child} />
               </div>
-            );
-          })}
+            </div>;
+        })}
       </div>
     );
   }
 }
-
 Child.defaultProps = {
   level: 0
 };
@@ -128,42 +135,47 @@ const cellRenderer = ({ index, key, parent, style }) => {
 const Tree = ({
   connectChildFunction,
   data,
-  height,
   InnerComponent, // component that will be rendered in the child
   InnerComponentFolded, // component that will be used to render the children when folded
-  isScrolling,
   noRowsRenderer,
-  onScroll,
   SeparatorComponent, // separator component between first level children
-  toggleItem,
-  width
+  toggleItem
 }) => {
   const ConnectedChildComponent = connectChildFunction(Child);
-  cache.clearAll(); // TO DO: find a better way to do that. It's used to adapt the height of the tree when we the idea changes
+  cache.clearAll();
   return (
-    <List
-      autoHeight
-      rowHeight={cache.rowHeight}
-      deferredMeasurementCache={cache}
-      ConnectedChildComponent={ConnectedChildComponent}
-      data={data}
-      height={height}
-      InnerComponent={InnerComponent}
-      InnerComponentFolded={InnerComponentFolded}
-      isScrolling={isScrolling}
-      noRowsRenderer={noRowsRenderer}
-      ref={function (ref) {
-        globalList = ref;
+    <AutoSizer
+      disableHeight
+      onResize={() => {
+        return globalList.recomputeRowHeights();
       }}
-      rowCount={data.length}
-      overscanRowCount={data.length}
-      onScroll={onScroll}
-      rowRenderer={cellRenderer}
-      SeparatorComponent={SeparatorComponent}
-      toggleItem={toggleItem}
-      width={width}
-      className="tree-list"
-    />
+    >
+      {({ width }) => {
+        return (
+          <List
+            autoHeight
+            rowHeight={cache.rowHeight}
+            deferredMeasurementCache={cache}
+            ConnectedChildComponent={ConnectedChildComponent}
+            data={data}
+            height={600}
+            InnerComponent={InnerComponent}
+            InnerComponentFolded={InnerComponentFolded}
+            noRowsRenderer={noRowsRenderer}
+            ref={function (ref) {
+              globalList = ref;
+            }}
+            rowCount={data.length}
+            overscanRowCount={data.length}
+            rowRenderer={cellRenderer}
+            SeparatorComponent={SeparatorComponent}
+            toggleItem={toggleItem}
+            width={width}
+            className="tree-list"
+          />
+        );
+      }}
+    </AutoSizer>
   );
 };
 
@@ -173,23 +185,10 @@ Tree.defaultProps = {
   }
 };
 
-export default (props) => {
-  return (
-    <WindowScroller>
-      {({ height, isScrolling, onChildScroll }) => {
-        return (
-          <AutoSizer
-            disableHeight
-            onResize={() => {
-              return globalList.recomputeRowHeights();
-            }}
-          >
-            {({ width }) => {
-              return <Tree height={height} isScrolling={isScrolling} onScroll={onChildScroll} {...props} width={width} />;
-            }}
-          </AutoSizer>
-        );
-      }}
-    </WindowScroller>
-  );
+const mapStateToProps = ({ posts }) => {
+  return {
+    activeAnswerFormId: posts.activeAnswerFormId
+  };
 };
+
+export default connect(mapStateToProps)(Tree);

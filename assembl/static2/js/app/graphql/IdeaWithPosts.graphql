@@ -8,7 +8,7 @@ query IdeaWithPosts($lang: String!, $id: ID!) {
       posts(first: 20) {
         edges {
           node {
-            ... on Post {
+            ... on AssemblPost {
               id
               subject
               body
