@@ -76,33 +76,34 @@ class Child extends React.PureComponent {
     return (
       <div className={cssClasses()}>
         <InnerComponent {...this.props} />
-        {children.length > 0 && expanded ? this.renderToggleLink(expanded, level < 4) : null}
-        {children.map((child, idx) => {
-          return children && expanded
-            ? <ConnectedChildComponent
-              key={`${id}-child-${idx}`}
-              {...child}
-              ConnectedChildComponent={ConnectedChildComponent}
-              level={level + 1}
-              rowIndex={rowIndex}
-              InnerComponent={InnerComponent}
-              InnerComponentFolded={InnerComponentFolded}
-              SeparatorComponent={SeparatorComponent}
-              toggleItem={toggleItem}
-            />
-            : <div
-              className="postfolded-container"
-              key={idx}
-              onClick={(event) => {
-                this.expandCollapse(event);
-              }}
-            >
-              {children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
-              <div className="post-folded">
-                <InnerComponentFolded {...child} />
-              </div>
-            </div>;
-        })}
+        {children && children.length > 0 && expanded ? this.renderToggleLink(expanded, level < 4) : null}
+        {children &&
+          children.map((child, idx) => {
+            return children && expanded
+              ? <ConnectedChildComponent
+                key={`${id}-child-${idx}`}
+                {...child}
+                ConnectedChildComponent={ConnectedChildComponent}
+                level={level + 1}
+                rowIndex={rowIndex}
+                InnerComponent={InnerComponent}
+                InnerComponentFolded={InnerComponentFolded}
+                SeparatorComponent={SeparatorComponent}
+                toggleItem={toggleItem}
+              />
+              : <div
+                className="postfolded-container"
+                key={idx}
+                onClick={(event) => {
+                  this.expandCollapse(event);
+                }}
+              >
+                {children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
+                <div className="post-folded">
+                  <InnerComponentFolded {...child} />
+                </div>
+              </div>;
+          })}
       </div>
     );
   }

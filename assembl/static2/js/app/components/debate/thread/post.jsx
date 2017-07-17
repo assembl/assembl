@@ -40,8 +40,9 @@ const Post = ({
   refetchIdea
 }) => {
   let count = 0;
-  const totalSentimentsCount =
-    sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo;
+  const totalSentimentsCount = sentimentCounts
+    ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
+    : 0;
 
   const handleAnswerClick = () => {
     showAnswerForm(id);
@@ -51,19 +52,20 @@ const Post = ({
       <div className="box">
         <Row className="post-row">
           <Col xs={12} md={11} className="post-left">
-            <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} />
+            {creator && <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} />}
             <h3 className="dark-title-3">{subject}</h3>
             <div className="body">{body}</div>
             <div className="link-idea">
               <div className="label"><Translate value="debate.thread.linkIdea" /></div>
               <div className="badges">
-                {indirectIdeaContentLinks.map((link) => {
-                  return <span className="badge" key={link.idea.id}>{link.idea.title}</span>;
-                })}
+                {indirectIdeaContentLinks &&
+                  indirectIdeaContentLinks.map((link) => {
+                    return <span className="badge" key={link.idea.id}>{link.idea.title}</span>;
+                  })}
               </div>
             </div>
             <div className="answers annotation">
-              <Translate value="debate.thread.numberOfResponses" count={children.length} />
+              <Translate value="debate.thread.numberOfResponses" count={children ? children.length : 0} />
             </div>
           </Col>
           <Col xs={12} md={1} className="post-right">
@@ -131,7 +133,7 @@ const Post = ({
                 </div>
               </div>}
             <div className="answers annotation">
-              <Translate value="debate.thread.numberOfResponses" count={children.length} />
+              <Translate value="debate.thread.numberOfResponses" count={children ? children.length : 0} />
             </div>
             <div className="clear">&nbsp;</div>
           </Col>
