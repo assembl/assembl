@@ -77,8 +77,12 @@ export const updateVideoHtmlCode = (id, value) => {
   return { id: id, value: value, type: 'UPDATE_VIDEO_HTML_CODE' };
 };
 
-export const updateVideoDescription = (id, locale, value) => {
-  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION' };
+export const updateVideoDescriptionTop = (id, locale, value) => {
+  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION_TOP' };
+};
+
+export const updateVideoDescriptionBottom = (id, locale, value) => {
+  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION_BOTTOM' };
 };
 
 export const updateVideoTitle = (id, locale, value) => {

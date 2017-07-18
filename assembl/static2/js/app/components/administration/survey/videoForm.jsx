@@ -3,17 +3,24 @@ import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { FormGroup, Checkbox } from 'react-bootstrap';
 
-import { toggleVideo, updateVideoHtmlCode, updateVideoDescription, updateVideoTitle } from '../../../actions/adminActions';
+import {
+  toggleVideo,
+  updateVideoHtmlCode,
+  updateVideoDescriptionTop,
+  updateVideoDescriptionBottom,
+  updateVideoTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
 const VideoForm = ({
-  description,
+  descriptionTop,
+  descriptionBottom,
   hasVideo,
   htmlCode,
   selectedLocale,
   title,
   toggle,
-  updateDescription,
+  updateDescriptionTop,
+  updateDescriptionBottom,
   updateTitle,
   updateHtmlCode
 }) => {
@@ -42,12 +49,22 @@ const VideoForm = ({
             />
             <FormControlWithLabel
               componentClass="textarea"
-              id="video-description"
+              id="video-description-top"
               type="text-area"
               label={quotePh}
-              value={description}
+              value={descriptionTop}
               onChange={(e) => {
-                return updateDescription(e.target.value);
+                return updateDescriptionTop(e.target.value);
+              }}
+            />
+            <FormControlWithLabel
+              componentClass="textarea"
+              id="video-description-bottom"
+              type="text-area"
+              label={quotePh}
+              value={descriptionBottom}
+              onChange={(e) => {
+                return updateDescriptionBottom(e.target.value);
               }}
             />
             <FormControlWithLabel
@@ -79,16 +96,19 @@ const getEntryValueForLocale = (entries, locale) => {
 export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, selectedLocale }) => {
   const video = thematicsById.getIn([thematicId, 'video']);
   const hasVideo = video !== null;
-  let description = '';
+  let descriptionTop = '';
+  let descriptionBottom = '';
   let htmlCode = '';
   let title = '';
   if (hasVideo) {
-    description = getEntryValueForLocale(video.get('descriptionEntries'), selectedLocale);
+    descriptionTop = getEntryValueForLocale(video.get('descriptionEntriesTop'), selectedLocale);
+    descriptionBottom = getEntryValueForLocale(video.get('descriptionEntriesBottom'), selectedLocale);
     htmlCode = video.get('htmlCode', '');
     title = getEntryValueForLocale(video.get('titleEntries'), selectedLocale);
   }
   return {
-    description: description,
+    descriptionTop: descriptionTop,
+    descriptionBottom: descriptionBottom,
     hasVideo: hasVideo,
     htmlCode: htmlCode,
     title: title
@@ -103,8 +123,11 @@ export const mapDispatchToProps = (dispatch, { selectedLocale, thematicId }) => 
     updateHtmlCode: (value) => {
       return dispatch(updateVideoHtmlCode(thematicId, value));
     },
-    updateDescription: (value) => {
-      return dispatch(updateVideoDescription(thematicId, selectedLocale, value));
+    updateDescriptionTop: (value) => {
+      return dispatch(updateVideoDescriptionTop(thematicId, selectedLocale, value));
+    },
+    updateDescriptionBottom: (value) => {
+      return dispatch(updateVideoDescriptionBottom(thematicId, selectedLocale, value));
     },
     updateTitle: (value) => {
       return dispatch(updateVideoTitle(thematicId, selectedLocale, value));
