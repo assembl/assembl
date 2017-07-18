@@ -76,11 +76,11 @@ class Child extends React.PureComponent {
     return (
       <div className={cssClasses()}>
         <InnerComponent {...this.props} />
-        {children && children.length > 0 && expanded ? this.renderToggleLink(expanded, level < 4) : null}
-        {children &&
-          children.map((child, idx) => {
-            return children && expanded
-              ? <ConnectedChildComponent
+        {children && children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
+        {children && expanded
+          ? children.map((child, idx) => {
+            return (
+              <ConnectedChildComponent
                 key={`${id}-child-${idx}`}
                 {...child}
                 ConnectedChildComponent={ConnectedChildComponent}
@@ -91,19 +91,18 @@ class Child extends React.PureComponent {
                 SeparatorComponent={SeparatorComponent}
                 toggleItem={toggleItem}
               />
-              : <div
-                className="postfolded-container"
-                key={idx}
-                onClick={(event) => {
-                  this.expandCollapse(event);
-                }}
-              >
-                {children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
-                <div className="post-folded">
-                  <InnerComponentFolded {...child} />
-                </div>
-              </div>;
-          })}
+            );
+          })
+          : <div
+            className="postfolded-container"
+            onClick={(event) => {
+              this.expandCollapse(event);
+            }}
+          >
+            <div className="post-folded">
+              <InnerComponentFolded nbPosts={children.length} />
+            </div>
+          </div>}
       </div>
     );
   }
