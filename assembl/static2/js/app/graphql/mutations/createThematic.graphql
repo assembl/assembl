@@ -5,7 +5,8 @@ mutation createThematic($identifier: String!, $image: String, $titleEntries: [La
       imgUrl,
       video {
         title,
-        description,
+        descriptionTop,
+        descriptionBottom,
         htmlCode
       },
       questions {

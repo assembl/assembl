@@ -11,7 +11,11 @@ query ThematicsQuery($identifier: String!) {
         localeCode,
         value
       },
-      descriptionEntries {
+      descriptionEntriesTop {
+        localeCode,
+        value
+      },
+      descriptionEntriesBottom {
         localeCode,
         value
       },
