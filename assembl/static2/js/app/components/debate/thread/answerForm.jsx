@@ -73,25 +73,29 @@ const AnswerForm = ({
       <Col xs={12} md={12}>
         <div className="color"><span className="assembl-icon-back-arrow" />&nbsp;<Translate value="debate.answer" /></div>
       </Col>
-      <Col xs={12} md={12} className="margin-m">
-        <FormGroup>
-          <TxtAreaWithRemainingChars
-            value={body}
-            label={I18n.t('debate.insert')}
-            maxLength={TEXT_AREA_MAX_LENGTH}
-            rows={TEXT_AREA_ROWS}
-            handleTxtChange={handleBodyChange}
-            handleInputFocus={handleInputFocus}
-            remainingChars={bodyRemainingChars}
-            domId={parentId}
-          />
-          <Button className="button-cancel button-dark btn btn-default left margin-m" onClick={resetForm}>
-            <Translate value="cancel" />
-          </Button>
-          <Button className="button-submit button-dark btn btn-default right margin-m" onClick={answerPost}>
-            <Translate value="debate.post" />
-          </Button>
-        </FormGroup>
+      <Col xs={12} md={12}>
+        <div className="answer-form-inner">
+          <FormGroup>
+            <TxtAreaWithRemainingChars
+              value={body}
+              label={I18n.t('debate.insert')}
+              maxLength={TEXT_AREA_MAX_LENGTH}
+              rows={TEXT_AREA_ROWS}
+              handleTxtChange={handleBodyChange}
+              handleInputFocus={handleInputFocus}
+              remainingChars={bodyRemainingChars}
+              domId={parentId}
+            />
+            <div className="button-container">
+              <Button className="button-cancel button-dark btn btn-default left" onClick={resetForm}>
+                <Translate value="cancel" />
+              </Button>
+              <Button className="button-submit button-dark btn btn-default right" onClick={answerPost}>
+                <Translate value="debate.post" />
+              </Button>
+            </div>
+          </FormGroup>
+        </div>
       </Col>
     </Row>
   );
