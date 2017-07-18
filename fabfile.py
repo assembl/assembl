@@ -1686,6 +1686,9 @@ def install_elasticsearch():
                 sudo("sysctl -w vm.max_map_count=262144")
                 # persist the change
                 sudo("echo 'vm.max_map_count=262144' > /etc/sysctl.d/vm.max_map_count.conf")
+        else:
+            sudo("sysctl -w vm.max_map_count=262144")
+            sudo("sysctl -w fs.file-max=65536")
 
     extract_path = normpath(
         join(env.projectpath, 'var', 'elasticsearch'))
@@ -1902,7 +1905,7 @@ def update_vendor_themes_2():
 
 
 def system_db_user():
-    if env.postgres_db_user:
+    if env.get('postgres_db_user', None):
         return env.postgres_db_user
     if env.mac:
         # Brew uses user
