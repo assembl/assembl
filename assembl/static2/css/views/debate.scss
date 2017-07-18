@@ -377,6 +377,18 @@
   }
 }
 
+@media screen and (max-width: 1200px) {
+    .start-discussion-container {
+        margin-left: -20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .start-discussion-container {
+        margin-left: 0;
+    }
+}
+
 @media screen and (max-width: 1280px) {
   .burger-menu {
     padding: 0 0 0 15px;

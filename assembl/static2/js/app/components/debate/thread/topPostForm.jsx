@@ -103,13 +103,15 @@ const TopPostForm = ({
     <Row>
       <Col xs={0} sm={1} md={2} />
       <Col xs={12} sm={3} md={2} className="no-padding">
-        <div className="start-discussion-icon">
-          <span className="assembl-icon-discussion color" />
-        </div>
-        <div className="start-discussion">
-          <h3 className="dark-title-3 no-margin">
-            <Translate value="debate.thread.startDiscussion" />
-          </h3>
+        <div className="start-discussion-container">
+          <div className="start-discussion-icon">
+            <span className="assembl-icon-discussion color" />
+          </div>
+          <div className="start-discussion">
+            <h3 className="dark-title-3 no-margin">
+              <Translate value="debate.thread.startDiscussion" />
+            </h3>
+          </div>
         </div>
       </Col>
       <Col xs={12} sm={7} md={6} className="no-padding">
