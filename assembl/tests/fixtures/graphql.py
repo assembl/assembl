@@ -61,8 +61,12 @@ mutation myMutation {
                 {value:"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
                  localeCode:"fr"},
             ]
-            descriptionEntries:[
+            descriptionEntriesTop:[
                 {value:"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
+                 localeCode:"fr"},
+            ],
+            descriptionEntriesBottom:[
+                {value:"Calise de tabarnak",
                  localeCode:"fr"},
             ],
             htmlCode:"<object>....</object>"
