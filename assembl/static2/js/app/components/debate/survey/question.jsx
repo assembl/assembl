@@ -8,6 +8,7 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
+import { SMALL_SCREEN_WIDTH } from '../../../constants';
 
 class Question extends React.Component {
   constructor(props) {
@@ -111,7 +112,7 @@ class Question extends React.Component {
       <section
         className={isPhaseCompleted ? 'hidden' : 'questions-section'}
         id={`q${index}`}
-        style={this.state.screenWidth >= 768 ? { height: this.state.screenHeight } : { height: '100%' }}
+        style={this.state.screenWidth >= SMALL_SCREEN_WIDTH ? { height: this.state.screenHeight } : { height: '100%' }}
       >
         <Grid fluid className="background-grey">
           <div className="max-container">

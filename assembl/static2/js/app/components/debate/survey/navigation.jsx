@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { getDomElementOffset, scrollToPosition, calculatePercentage } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
-
-// This is the minimum width to make this navigation bar usable
-const MIN_WIDTH = 768;
+import { SMALL_SCREEN_WIDTH } from '../../../constants';
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -35,7 +33,7 @@ class Navigation extends React.Component {
       () => {
         this.displayNav();
         this.displayPagination();
-        if (nextProps.isScroll && nextProps.questionIndex && window.innerWidth >= MIN_WIDTH) {
+        if (nextProps.isScroll && nextProps.questionIndex && window.innerWidth >= SMALL_SCREEN_WIDTH) {
           this.scrollToQuestion(nextProps.questionIndex);
         }
       }

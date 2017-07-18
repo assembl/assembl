@@ -1,17 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Button, FormGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Button, FormGroup, OverlayTrigger } from 'react-bootstrap';
 
 import { deleteThematic, updateThematicImgUrl, updateThematicTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import ImageUploader from '../../common/imageUploader';
-
-const deleteTooltip = (
-  <Tooltip id="plusTooltip">
-    <Translate value="administration.deleteThematic" />
-  </Tooltip>
-);
+import { deleteThematicTooltip } from '../../common/tooltips';
 
 export const DumbThemeCreationForm = ({
   imgUrl,
@@ -48,7 +43,7 @@ export const DumbThemeCreationForm = ({
         <ImageUploader imgUrl={imgUrl} handleImageChange={handleImageChange} />
       </FormGroup>
       <div className="pointer right">
-        <OverlayTrigger placement="top" overlay={deleteTooltip}>
+        <OverlayTrigger placement="top" overlay={deleteThematicTooltip}>
           <Button onClick={markAsToDelete}>
             <span className="assembl-icon-delete grey" />
           </Button>

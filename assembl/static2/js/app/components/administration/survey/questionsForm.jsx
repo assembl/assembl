@@ -1,16 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
-import { FormGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { FormGroup, OverlayTrigger } from 'react-bootstrap';
 
+import { addQuestionTooltip } from '../../common/tooltips';
 import QuestionTitle from './questionTitle';
 import { addQuestionToThematic } from '../../../actions/adminActions';
-
-const addTooltip = (
-  <Tooltip id="addTooltip">
-    <Translate value="administration.addQuestion" />
-  </Tooltip>
-);
 
 const QuestionsForm = ({ addQuestion, selectedLocale, thematicId, questions }) => {
   return (
@@ -28,7 +22,7 @@ const QuestionsForm = ({ addQuestion, selectedLocale, thematicId, questions }) =
             </FormGroup>
           );
         })}
-        <OverlayTrigger placement="top" overlay={addTooltip}>
+        <OverlayTrigger placement="top" overlay={addQuestionTooltip}>
           <div onClick={addQuestion} className="plus margin-l">+</div>
         </OverlayTrigger>
       </div>

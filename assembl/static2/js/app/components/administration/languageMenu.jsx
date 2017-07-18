@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { OverlayTrigger } from 'react-bootstrap';
+import { languageTooltip } from '../common/tooltips';
 
 import { updateSelectedLocale } from '../../actions/adminActions';
 import En from '../svg/flags/en';
@@ -18,12 +18,6 @@ const Flag = ({ locale }) => {
     return <Fr />;
   }
 };
-
-const languageTooltip = (
-  <Tooltip id="languageTooltip">
-    <Translate value="administration.changeLanguage" />
-  </Tooltip>
-);
 
 const LanguageMenu = ({ changeLocale, selectedLocale, translations }) => {
   return (

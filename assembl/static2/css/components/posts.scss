@@ -371,5 +371,21 @@
         .min-sentiment {
             padding: 1px 0 0 10px;
         }
+
+        .answer-form {
+            padding: 25px 30px 10px 30px;
+            .button-container {
+                .btn {
+                    float: none;
+                    width: 100%;
+                }
+            }
+            .answer-form-inner {
+                margin: 13px 0 0;
+            }
+            .assembl-icon-back-arrow {
+                padding: 0;
+            }
+        }
     }
 }
