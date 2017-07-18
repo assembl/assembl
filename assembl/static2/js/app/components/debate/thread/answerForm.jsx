@@ -85,10 +85,10 @@ const AnswerForm = ({
             remainingChars={bodyRemainingChars}
             domId={parentId}
           />
-          <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
+          <Button className="button-cancel button-dark btn btn-default left margin-m" onClick={resetForm}>
             <Translate value="cancel" />
           </Button>
-          <Button className="button-submit button-dark btn btn-default right margin-l" onClick={answerPost}>
+          <Button className="button-submit button-dark btn btn-default right margin-m" onClick={answerPost}>
             <Translate value="debate.post" />
           </Button>
         </FormGroup>

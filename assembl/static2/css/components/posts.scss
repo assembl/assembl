@@ -186,6 +186,12 @@
         background-color: $first-color-light;
         border-top: 2px solid $white;
         padding: 40px;
+
+        .assembl-icon-back-arrow {
+            &:before {
+                font-size: $font-size-s;
+            }
+        }
     }
 }
 

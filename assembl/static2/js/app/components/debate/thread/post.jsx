@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { createSelector } from 'reselect';
 
 import { updateActiveAnswerFormId } from '../../../actions/postsActions';
@@ -24,6 +24,42 @@ export const connectPostToState = connect(postMapStateToProps);
 export const PostFolded = ({ creator }) => {
   return <Translate value="debate.thread.foldedPostLink" creatorName={creator.name} />;
 };
+
+export const answerTooltip = (
+  <Tooltip id="answerTooltip">
+    <Translate value="debate.toAnswer" />
+  </Tooltip>
+);
+
+export const shareTooltip = (
+  <Tooltip id="shareTooltip">
+    <Translate value="debate.share" />
+  </Tooltip>
+);
+
+export const likeTooltip = (
+  <Tooltip id="likeTooltip">
+    <Translate value="debate.like" />
+  </Tooltip>
+);
+
+export const disagreeTooltip = (
+  <Tooltip id="disagreeTooltip">
+    <Translate value="debate.disagree" />
+  </Tooltip>
+);
+
+export const dontUnderstandTooltip = (
+  <Tooltip id="dontUnderstandTooltip">
+    <Translate value="debate.dontUnderstand" />
+  </Tooltip>
+);
+
+export const moreInfoTooltip = (
+  <Tooltip id="moreInfoTooltip">
+    <Translate value="debate.moreInfo" />
+  </Tooltip>
+);
 
 const Post = ({
   id,
@@ -78,24 +114,36 @@ const Post = ({
           <Col xs={12} md={1} className="post-right">
             <div className="post-icons">
               <div className="post-action" onClick={handleAnswerClick}>
-                <span className="assembl-icon-back-arrow color" />
+                <OverlayTrigger placement="right" overlay={answerTooltip}>
+                  <span className="assembl-icon-back-arrow color" />
+                </OverlayTrigger>
               </div>
               <div className="post-action">
-                <span className="assembl-icon-share color" />
+                <OverlayTrigger placement="right" overlay={shareTooltip}>
+                  <span className="assembl-icon-share color" />
+                </OverlayTrigger>
               </div>
               <div className="add-sentiment">
-                <div className={mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}>
-                  <Like size={25} />
-                </div>
-                <div className={mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}>
-                  <Disagree size={25} />
-                </div>
-                <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
-                  <DontUnderstand size={25} />
-                </div>
-                <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
-                  <MoreInfo size={25} />
-                </div>
+                <OverlayTrigger placement="right" overlay={likeTooltip}>
+                  <div className={mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}>
+                    <Like size={25} />
+                  </div>
+                </OverlayTrigger>
+                <OverlayTrigger placement="right" overlay={disagreeTooltip}>
+                  <div className={mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}>
+                    <Disagree size={25} />
+                  </div>
+                </OverlayTrigger>
+                <OverlayTrigger placement="right" overlay={dontUnderstandTooltip}>
+                  <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
+                    <DontUnderstand size={25} />
+                  </div>
+                </OverlayTrigger>
+                <OverlayTrigger placement="right" overlay={moreInfoTooltip}>
+                  <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
+                    <MoreInfo size={25} />
+                  </div>
+                </OverlayTrigger>
               </div>
             </div>
             {totalSentimentsCount > 0 &&

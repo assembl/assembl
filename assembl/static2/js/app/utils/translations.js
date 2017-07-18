@@ -160,11 +160,15 @@ const Translations = {
     },
     debate: {
       answer: 'Je réponds :',
+      toAnswer: 'Répondre',
+      share: 'Partager',
       subject: 'Ecrivez le titre',
       insert: 'Ecrivez votre message',
       post: 'Poster',
       like: 'J\'aime',
       disagree: 'Pas d\'accord',
+      dontUnderstand: 'Pas tout compris',
+      moreInfo: 'SVP + d\'infos',
       remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
       survey: {
         themesTitle: 'Choisissez une thématique !',
@@ -408,11 +412,15 @@ const Translations = {
     },
     debate: {
       answer: 'I answer:',
+      toAnswer: 'Answer',
+      share: 'Share',
       subject: 'Write the title',
       insert: 'Post a comment',
       post: 'Post',
       like: 'Like',
       disagree: 'Disagree',
+      dontUnderstand: 'Did not get it',
+      moreInfo: 'More info please',
       remaining_x_characters: 'You have %{nbCharacters} characters left',
       survey: {
         themesTitle: 'Choose a theme!',
