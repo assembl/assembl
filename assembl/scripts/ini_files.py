@@ -11,6 +11,9 @@ import logging
 
 from fabfile import combine_rc
 
+# global umask so ini files are unreadable by others
+os.umask(0o027)
+
 
 log = logging.getLogger('assembl')
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
