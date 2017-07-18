@@ -4,7 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
 import { createSelector } from 'reselect';
 
-import { updateActiveAnswerFormId } from '../../../actions/postsActions';
+import { updateActiveAnswerFormId, updateAnswerPostBody } from '../../../actions/postsActions';
 import { postSelector } from '../../../selectors';
 import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunctions';
 import ProfileLine from '../../common/profileLine';
@@ -35,9 +35,11 @@ const Post = ({
   ideaId,
   refetchIdea,
   sentimentCounts,
-  mySentiment
+  mySentiment,
+  updateAnswerBody
 }) => {
   const handleAnswerClick = () => {
+    updateAnswerBody('');
     showAnswerForm(id);
     setTimeout(() => {
       const txtarea = document.getElementById(id);
@@ -86,6 +88,9 @@ const Post = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    updateAnswerBody: (body) => {
+      return dispatch(updateAnswerPostBody(body));
+    },
     showAnswerForm: (activeAnswerFormId) => {
       return dispatch(updateActiveAnswerFormId(activeAnswerFormId));
     }

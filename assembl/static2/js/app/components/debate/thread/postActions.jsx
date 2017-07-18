@@ -7,37 +7,37 @@ import Disagree from '../../svg/disagree';
 import DontUnderstand from '../../svg/dontUnderstand';
 import MoreInfo from '../../svg/moreInfo';
 
-export const answerTooltip = (
+const answerTooltip = (
   <Tooltip id="answerTooltip">
     <Translate value="debate.toAnswer" />
   </Tooltip>
 );
 
-export const shareTooltip = (
+const shareTooltip = (
   <Tooltip id="shareTooltip">
     <Translate value="debate.share" />
   </Tooltip>
 );
 
-export const likeTooltip = (
+const likeTooltip = (
   <Tooltip id="likeTooltip">
     <Translate value="debate.like" />
   </Tooltip>
 );
 
-export const disagreeTooltip = (
+const disagreeTooltip = (
   <Tooltip id="disagreeTooltip">
     <Translate value="debate.disagree" />
   </Tooltip>
 );
 
-export const dontUnderstandTooltip = (
+const dontUnderstandTooltip = (
   <Tooltip id="dontUnderstandTooltip">
     <Translate value="debate.dontUnderstand" />
   </Tooltip>
 );
 
-export const moreInfoTooltip = (
+const moreInfoTooltip = (
   <Tooltip id="moreInfoTooltip">
     <Translate value="debate.moreInfo" />
   </Tooltip>
