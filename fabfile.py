@@ -1041,14 +1041,14 @@ def install_basetools():
         # Standardize on brew python
         if not exists('/usr/local/bin/python'):
             run('brew install python')
-        assert exists('/usr/local/bin/pip'), "Brew python should come with pip"
-        path_pip = run('which pip')
-        assert path_pip == '/usr/local/bin/pip',\
+        assert exists('/usr/local/bin/pip2'), "Brew python should come with pip"
+        path_pip = run('which pip2')
+        assert path_pip == '/usr/local/bin/pip2',\
             "Make sure homebrew is in the bash path, got " + path_pip
-        run('pip install virtualenv psycopg2 requests')
+        run('pip2 install virtualenv psycopg2 requests jinja2')
     else:
         sudo('apt-get install -y python-virtualenv python-pip python-psycopg2')
-        sudo('apt-get install -y python-requests git')
+        sudo('apt-get install -y python-requests python-jinja2 git')
         # sudo('apt-get install -y gettext')
 
 
@@ -1079,12 +1079,10 @@ def install_builddeps():
         # They exist on macports, but do we want to install that?
         if not exists('/usr/local/bin/gfortran'):
             run('brew install gcc isl')
-        if not run('pip install -U jinja2', quiet=True):
-            sudo('pip install -U jinja2')
     else:
         sudo('apt-get install -y build-essential python-dev pandoc')
         sudo('apt-get install -y automake bison flex gperf gawk')
-        sudo('apt-get install -y graphviz pkg-config gfortran python-jinja2')
+        sudo('apt-get install -y graphviz pkg-config gfortran')
         sudo('apt-get install -y phantomjs', warn_only=True)
     execute(update_python_package_builddeps)
 
