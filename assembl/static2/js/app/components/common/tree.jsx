@@ -19,15 +19,16 @@ class Child extends React.PureComponent {
     super(props);
     this.renderToggleLink = this.renderToggleLink.bind(this);
     this.expandCollapse = this.expandCollapse.bind(this);
-    this.updateDimensions = this.updateDimensions.bind(this);
+    this.resizeTreeHeight = this.resizeTreeHeight.bind(this);
   }
   componentDidMount() {
-    window.addEventListener('resize', this.updateDimensions);
+    this.resizeTreeHeight();
+    window.addEventListener('resize', this.resizeTreeHeight);
   }
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions);
+    window.removeEventListener('resize', this.resizeTreeHeight);
   }
-  updateDimensions() {
+  resizeTreeHeight() {
     this.globalList = globalList;
     if (this.globalList) {
       cache.clearAll();
