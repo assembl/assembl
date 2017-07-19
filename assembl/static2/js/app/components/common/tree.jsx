@@ -1,6 +1,7 @@
 import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 import { connect } from 'react-redux';
+import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctions';
 
 /*
   TODO: avoid globalList
@@ -8,11 +9,20 @@ import { connect } from 'react-redux';
 */
 
 let globalList;
+
 const cache = new CellMeasurerCache({
   defaultHeight: 600,
   minHeight: 500,
   fixedWidth: true
 });
+
+const scrollToElement = (id) => {
+  setTimeout(() => {
+    const elm = document.getElementById(id);
+    const elmOffset = getDomElementOffset(elm).top;
+    scrollToPosition(elmOffset - 80, 400);
+  }, 200);
+};
 
 class Child extends React.PureComponent {
   constructor(props) {
@@ -42,10 +52,13 @@ class Child extends React.PureComponent {
     cache.clear(rowIndex, 0);
     globalList.recomputeRowHeights();
   }
-  renderToggleLink(expanded, indented) {
+  renderToggleLink(expanded, indented, id) {
     return (
       <div
         onClick={(event) => {
+          if (expanded) {
+            scrollToElement(`exp${id}`);
+          }
           this.expandCollapse(event);
         }}
         className={indented ? 'expand-indented' : 'expand'}
@@ -84,7 +97,7 @@ class Child extends React.PureComponent {
     return (
       <div className={cssClasses()}>
         <InnerComponent {...this.props} />
-        {children && children.length > 0 ? this.renderToggleLink(expanded, level < 4) : null}
+        {children && children.length > 0 ? this.renderToggleLink(expanded, level < 4, children[0].id) : null}
         {children && expanded
           ? children.map((child, idx) => {
             return (
@@ -102,9 +115,11 @@ class Child extends React.PureComponent {
             );
           })
           : <div
+            id={`exp${children[0].id}`}
             className="postfolded-container"
             onClick={(event) => {
               this.expandCollapse(event);
+              scrollToElement(children[0].id);
             }}
           >
             {children &&
