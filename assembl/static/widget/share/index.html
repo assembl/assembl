@@ -41,11 +41,17 @@ if(t) {
 
 if ( size == "small" ){
 	if (s && s != "false") {
-	  document.getElementById("iframe").src = iframe_url;
+		var el = document.getElementById("iframe");
+		if (el){
+	  	el.src = iframe_url;
+	  }
 	}
 }
 else {
-	document.getElementById("iframe").remove();
+	var el = document.getElementById("iframe");
+	if (el){
+		el.parentNode.removeChild(el);
+	}
 	showBigButtons();
 }
 
