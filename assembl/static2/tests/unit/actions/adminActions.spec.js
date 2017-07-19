@@ -138,11 +138,20 @@ describe('Admin actions', () => {
     });
   });
 
-  describe('updateVideoDescription action', () => {
-    const { updateVideoDescription } = actions;
-    it('should return a UPDATE_VIDEO_DESCRIPTION action type', () => {
-      const actual = updateVideoDescription('my-thematic-id', 'en', 'foobar');
-      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_VIDEO_DESCRIPTION' };
+  describe('updateVideoDescriptionTop action', () => {
+    const { updateVideoDescriptionTop } = actions;
+    it('should return a UPDATE_VIDEO_DESCRIPTION_TOP action type', () => {
+      const actual = updateVideoDescriptionTop('my-thematic-id', 'en', 'foobar');
+      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_VIDEO_DESCRIPTION_TOP' };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateVideoDescriptionBottom action', () => {
+    const { updateVideoDescriptionBottom } = actions;
+    it('should return a UPDATE_VIDEO_DESCRIPTION_BOTTOM action type', () => {
+      const actual = updateVideoDescriptionBottom('my-thematic-id', 'en', 'foobar');
+      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_VIDEO_DESCRIPTION_BOTTOM' };
       expect(actual).toEqual(expected);
     });
   });
