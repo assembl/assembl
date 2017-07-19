@@ -107,9 +107,10 @@ class Child extends React.PureComponent {
               this.expandCollapse(event);
             }}
           >
+            {children &&
             <div className="post-folded">
               <InnerComponentFolded nbPosts={children.length} />
-            </div>
+            </div>}
           </div>}
       </div>
     );
