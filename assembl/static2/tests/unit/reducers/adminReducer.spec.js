@@ -327,17 +327,18 @@ describe('Admin reducers', () => {
       expect(newState).toEqual(expected);
     });
 
-    it('should handle UPDATE_VIDEO_DESCRIPTION action type', () => {
+    it('should handle UPDATE_VIDEO_DESCRIPTION_TOP action type', () => {
       const action = {
         id: '1',
         locale: 'en',
-        value: 'My new description',
-        type: 'UPDATE_VIDEO_DESCRIPTION'
+        value: 'My new top description',
+        type: 'UPDATE_VIDEO_DESCRIPTION_TOP'
       };
       const oldState = fromJS({
         1: {
           video: {
-            descriptionEntries: [],
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [],
             htmlCode: '',
             titleEntries: []
           }
@@ -346,10 +347,47 @@ describe('Admin reducers', () => {
       const expected = fromJS({
         1: {
           video: {
-            descriptionEntries: [
+            descriptionEntriesTop: [
               {
                 localeCode: 'en',
-                value: 'My new description'
+                value: 'My new top description'
+              }
+            ],
+            descriptionEntriesBottom: [],
+            htmlCode: '',
+            titleEntries: []
+          }
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VIDEO_DESCRIPTION_BOTTOM action type', () => {
+      const action = {
+        id: '1',
+        locale: 'en',
+        value: 'My new bottom description',
+        type: 'UPDATE_VIDEO_DESCRIPTION_BOTTOM'
+      };
+      const oldState = fromJS({
+        1: {
+          video: {
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [],
+            htmlCode: '',
+            titleEntries: []
+          }
+        }
+      });
+      const expected = fromJS({
+        1: {
+          video: {
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [
+              {
+                localeCode: 'en',
+                value: 'My new bottom description'
               }
             ],
             htmlCode: '',

@@ -43,7 +43,10 @@ class Thematic(Idea):
     video_title_id = Column(
         Integer(), ForeignKey(LangString.id))
 
-    video_description_id = Column(
+    video_description_top_id = Column(
+        Integer(), ForeignKey(LangString.id))
+
+    video_description_bottom_id = Column(
         Integer(), ForeignKey(LangString.id))
 
     video_title = relationship(
@@ -53,11 +56,18 @@ class Thematic(Idea):
         backref=backref("title_of_video", lazy="dynamic"),
         cascade="all, delete-orphan")
 
-    video_description = relationship(
+    video_description_top = relationship(
         LangString,
         lazy="joined", single_parent=True,
-        primaryjoin=video_description_id == LangString.id,
-        backref=backref("description_of_video", lazy="dynamic"),
+        primaryjoin=video_description_top_id == LangString.id,
+        backref=backref("description_of_video_top", lazy="dynamic"),
+        cascade="all, delete-orphan")
+
+    video_description_bottom = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=video_description_bottom_id == LangString.id,
+        backref=backref("description_of_video_bottom", lazy="dynamic"),
         cascade="all, delete-orphan")
 
     video_html_code = Column(UnicodeText)
@@ -66,7 +76,7 @@ class Thematic(Idea):
 
 
 LangString.setup_ownership_load_event(Thematic,
-    ['video_title', 'video_description'])
+    ['video_title', 'video_description_top', 'video_description_bottom'])
 
 
 class Question(Idea):

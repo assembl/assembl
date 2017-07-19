@@ -6,7 +6,8 @@ query ThematicQuery($lang: String!, $id: ID!) {
       id,
       video(lang: $lang){
         title,
-        description,
+        descriptionTop,
+        descriptionBottom,
         htmlCode
       }
       questions {

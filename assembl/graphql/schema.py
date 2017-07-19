@@ -328,10 +328,12 @@ class PostConnection(graphene.Connection):
 
 class Video(graphene.ObjectType):
     title = graphene.String()
-    description = graphene.String()
+    description_top = graphene.String()
+    description_bottom = graphene.String()
     html_code = graphene.String()
     title_entries = graphene.List(LangStringEntry)
-    description_entries = graphene.List(LangStringEntry)
+    description_entries_top = graphene.List(LangStringEntry)
+    description_entries_bottom = graphene.List(LangStringEntry)
 
 
 class IdeaInterface(graphene.Interface):
@@ -545,7 +547,8 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
     description = graphene.String(lang=graphene.String())
-    description_entries = graphene.List(LangStringEntry)
+    description_entries_top = graphene.List(LangStringEntry)
+    description_entries_bottom = graphene.List(LangStringEntry)
     questions = graphene.List(Question)
     video = graphene.Field(Video, lang=graphene.String())
 
@@ -559,8 +562,11 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     def resolve_description(self, args, context, info):
         return resolve_langstring(self.description, args.get('lang'))
 
-    def resolve_description_entries(self, args, context, info):
-        return resolve_langstring_entries(self, 'description')
+    def resolve_description_entries_top(self, args, context, info):
+        return resolve_langstring_entries(self, 'description_top')
+
+    def resolve_description_entries_bottom(self, args, context, info):
+        return resolve_langstring_entries(self, 'description_bottom')
 
     def resolve_questions(self, args, context, info):
         return self.get_children()
@@ -568,16 +574,26 @@ class Thematic(SecureObjectType, SQLAlchemyObjectType):
     def resolve_video(self, args, context, info):
         title = resolve_langstring(self.video_title, args.get('lang'))
         title_entries = resolve_langstring_entries(self, 'video_title')
-        description = resolve_langstring(self.video_description, args.get('lang'))
-        description_entries = resolve_langstring_entries(self, 'video_description')
-        if not (title_entries or description_entries or self.video_html_code):
+        description_top = resolve_langstring(self.video_description_top,
+                                             args.get('lang'))
+        description_bottom = resolve_langstring(self.video_description_bottom,
+                                                args.get('lang'))
+        description_entries_top = resolve_langstring_entries(
+            self, 'video_description_top')
+        description_entries_bottom = resolve_langstring_entries(
+            self, 'video_description_bottom')
+        if not (title_entries or
+                description_entries_top or
+                description_entries_bottom or self.video_html_code):
             return None
 
         return Video(
             title=title,
             title_entries=title_entries,
-            description=description,
-            description_entries=description_entries,
+            description_top=description_top,
+            description_bottom=description_bottom,
+            description_entries_top=description_entries_top,
+            description_entries_bottom=description_entries_bottom,
             html_code=self.video_html_code,
         )
 
@@ -677,7 +693,8 @@ class Query(graphene.ObjectType):
 
 class VideoInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput)
-    description_entries = graphene.List(LangStringEntryInput)
+    description_entries_top = graphene.List(LangStringEntryInput)
+    description_entries_bottom = graphene.List(LangStringEntryInput)
     html_code = graphene.String()
 
 
@@ -823,7 +840,8 @@ class CreateThematic(graphene.Mutation):
         # Careful, having required=True on a graphene.List only means
         # it can't be None, having an empty [] is perfectly valid.
         title_entries = graphene.List(LangStringEntryInput, required=True)
-        description_entries = graphene.List(LangStringEntryInput)
+        description_entries_top = graphene.List(LangStringEntryInput)
+        description_entries_bottom = graphene.List(LangStringEntryInput)
         identifier = graphene.String(required=True)
         video = graphene.Argument(VideoInput)
         questions = graphene.List(QuestionInput)
@@ -854,21 +872,33 @@ class CreateThematic(graphene.Mutation):
                 # when creating the saobj below if title=None
 
             title_langstring = langstring_from_input_entries(title_entries)
-            description_langstring = langstring_from_input_entries(args.get('description_entries'))
+            description_langstring_top = langstring_from_input_entries(
+                args.get('description_entries_top'))
+            description_langstring_bottom = langstring_from_input_entries(
+                args.get('description_entries_bottom'))
             kwargs = {}
-            if description_langstring is not None:
-                kwargs['description'] = description_langstring
+            if description_langstring_top is not None:
+                kwargs['description_top'] = description_langstring_top
+            if description_langstring_bottom is not None:
+                kwargs['description_bottom'] = description_langstring_bottom
 
             video = args.get('video')
             if video is not None:
-                video_title = langstring_from_input_entries(video.get('title_entries', None))
+                video_title = langstring_from_input_entries(
+                    video.get('title_entries', None))
                 if video_title is not None:
                     kwargs['video_title'] = video_title
 
-                video_description = langstring_from_input_entries(
-                    video.get('description_entries', None))
-                if video_description is not None:
-                    kwargs['video_description'] = video_description
+                video_description_top = langstring_from_input_entries(
+                    video.get('description_entries_top', None))
+                if video_description_top is not None:
+                    kwargs['video_description_top'] = video_description_top
+
+                video_description_bottom = langstring_from_input_entries(
+                    video.get('description_entries_bottom', None))
+                if video_description_bottom is not None:
+                    kwargs[
+                        'video_description_bottom'] = video_description_bottom
 
                 video_html_code = video.get('html_code', None)
                 if video_html_code is not None:
@@ -943,7 +973,8 @@ class UpdateThematic(graphene.Mutation):
     class Input:
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput)
-        description_entries = graphene.List(LangStringEntryInput)
+        description_entries_top = graphene.List(LangStringEntryInput)
+        description_entries_bottom = graphene.List(LangStringEntryInput)
         identifier = graphene.String()
         video = graphene.Argument(VideoInput)
         questions = graphene.List(QuestionInput)
@@ -980,15 +1011,19 @@ class UpdateThematic(graphene.Mutation):
                 # when creating the saobj below if title=None
 
             update_langstring_from_input_entries(thematic, 'title', title_entries)
-            update_langstring_from_input_entries(thematic, 'description', args.get('description_entries'))
+            update_langstring_from_input_entries(thematic, 'description_top', args.get('description_entries_top'))
+            update_langstring_from_input_entries(thematic, 'description_bottom', args.get('description_entries_bottom'))
             kwargs = {}
             video = args.get('video', None)
             if video is not None:
                 update_langstring_from_input_entries(
                     thematic, 'video_title', video.get('title_entries', []))
                 update_langstring_from_input_entries(
-                    thematic, 'video_description',
-                    video.get('description_entries', []))
+                    thematic, 'video_description_top',
+                    video.get('description_entries_top', []))
+                update_langstring_from_input_entries(
+                    thematic, 'video_description_bottom',
+                    video.get('description_entries_bottom', []))
                 kwargs['video_html_code'] = video.get('html_code', None)
 
             # take the first entry and set it for short_title
