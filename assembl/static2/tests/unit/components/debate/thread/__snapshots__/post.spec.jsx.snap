@@ -2,7 +2,6 @@
 
 exports[`PostFolded component should render an folded post uploader 1`] = `
 <Translate
-  creatorName="John Doe"
-  value="debate.thread.foldedPostLink"
+  value="debate.thread.singleFoldedPostLink"
 />
 `;
