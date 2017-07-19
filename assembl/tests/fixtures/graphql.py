@@ -66,7 +66,7 @@ mutation myMutation {
                  localeCode:"fr"},
             ],
             descriptionEntriesBottom:[
-                {value:"Calise de tabarnak",
+                {value:"Câlisse de tabarnak",
                  localeCode:"fr"},
             ],
             htmlCode:"<object>....</object>"
