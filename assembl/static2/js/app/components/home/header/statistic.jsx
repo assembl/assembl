@@ -11,7 +11,7 @@ class Statistic extends React.Component {
     const { rootIdea, numParticipants } = this.props.data;
     return (
       <div className="statistic">
-        {rootIdea !== null &&
+        {rootIdea &&
           <div className="inline">
             <div className="stat-box border-right">
               <div className="stat-icon assembl-icon-message white">&nbsp;</div>

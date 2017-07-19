@@ -42,14 +42,18 @@
   },
   // Video section: URL, titles, descriptions
   "video": {
-    "videoUrl": "https://www.youtube.com/embed/PhjIcwGvjt0",
-    "titleEntries": {
-      "fr": "Quel sera le résultat ?",
-      "en": "What will be the outcome?"
-    },
-    "descriptionEntries": {
-      "fr": "Le résultat final de ce débat sera une série de recommandations pour l'avenir de la mobilité. Il sera publié par Michelin et accessible à tous. Si vous participez au débat, vous serez cité dans le document en tant que co-écrivain. Vous co-créerez une feuille de route pour l'avenir de la mobilité. Ce sera un document court et concis présentant les prochaines étapes pour résoudre les problèmes de mobilité de l'ambition à l'action.",
+    "videoUrl": "https://www.youtube.com/embed/pLexuHxOphg",
+    "descriptionEntriesTop": {
+      "fr": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action.",
       "en": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action."
+    },
+    "descriptionEntriesBottom": {
+      "fr": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action.",
+      "en": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action."
+    },
+    "titleEntries": {
+      "fr": "What will be the outcome?",
+      "en": "What will be the outcome?"
     }
   },
   // Twitter section: Background image, ID of the tweet

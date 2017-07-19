@@ -30,23 +30,24 @@ class Video extends React.Component {
             <div className="title-section">
               <div className="title-hyphen">&nbsp;</div>
               <h1 className="dark-title-1">
-                {debateData.video.titleEntries[locale] ? debateData.video.titleEntries[locale] : <Translate value="home.video" />}
+                {debateData.video.titleEntries ? debateData.video.titleEntries[locale] : <Translate value="home.video" />}
               </h1>
             </div>
             <div className="content-section">
               <div className="content-margin">
                 <Row>
-                  {debateData.video.descriptionEntriesTop[locale] &&
+                  {debateData.video.descriptionEntriesTop &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="text" id="video-txt">{debateData.video.descriptionEntriesTop[locale]}</div>
                     </Col>}
                   {debateData.video.videoUrl &&
+                    debateData.video.videoUrl &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="video-container" id="video-vid">
                         <iframe src={debateData.video.videoUrl} frameBorder="0" width="560" height="315" />
                       </div>
                     </Col>}
-                  {debateData.video.descriptionEntriesBottom[locale] &&
+                  {debateData.video.descriptionEntriesBottom &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="text" id="video-txt">{debateData.video.descriptionEntriesBottom[locale]}</div>
                     </Col>}
