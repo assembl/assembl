@@ -109,7 +109,9 @@ export const thematicsById = (state = Map(), action) => {
         return null;
       }
       return fromJS({
-        descriptionEntries: [],
+        descriptionTopEntries: [],
+        descriptionBottomEntries: [],
+        descriptionSideEntries: [],
         htmlCode: '',
         titleEntries: []
       });
@@ -118,6 +120,8 @@ export const thematicsById = (state = Map(), action) => {
     return state.updateIn([action.id, 'video', 'descriptionEntriesTop'], updateInEntries(action.locale, action.value));
   case 'UPDATE_VIDEO_DESCRIPTION_BOTTOM':
     return state.updateIn([action.id, 'video', 'descriptionEntriesBottom'], updateInEntries(action.locale, action.value));
+  case 'UPDATE_VIDEO_DESCRIPTION_SIDE':
+    return state.updateIn([action.id, 'video', 'descriptionEntriesSide'], updateInEntries(action.locale, action.value));
   case 'UPDATE_VIDEO_HTML_CODE':
     return state.setIn([action.id, 'video', 'htmlCode'], action.value);
   case 'UPDATE_VIDEO_TITLE':
@@ -141,6 +145,7 @@ export const thematicsHaveChanged = (state = false, action) => {
   case 'TOGGLE_VIDEO':
   case 'UPDATE_VIDEO_DESCRIPTION_TOP':
   case 'UPDATE_VIDEO_DESCRIPTION_BOTTOM':
+  case 'UPDATE_VIDEO_DESCRIPTION_SIDE':
   case 'UPDATE_VIDEO_HTML_CODE':
   case 'UPDATE_VIDEO_TITLE':
     return true;
