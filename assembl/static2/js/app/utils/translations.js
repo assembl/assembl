@@ -237,6 +237,8 @@ const Translations = {
       ph: {
         title: '*Titre',
         quote: 'Citation',
+        descriptionTop: 'Commentaires ci-dessus vidéo',
+        descriptionBottom: 'Commentaires ci-dessous vidéo',
         videoLink: '*Lien vidéo'
       },
       surveyExport: {
@@ -491,6 +493,8 @@ const Translations = {
       ph: {
         title: '*Title',
         quote: 'Quote',
+        descriptionTop: 'Comments above video',
+        descriptionBottom: 'Comments below video',
         videoLink: '*Video link'
       },
       surveyExport: {

@@ -534,6 +534,14 @@
       }
     }
 
+    .video-description-layer {
+      position: relative;
+      left: 500px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
     .video-description {
       color: $first-color;
       font-family: $font-family7;
@@ -579,6 +587,14 @@
 
     .assembl-icon-pepite {
       display: none;
+    }
+
+    .video-description-layer {
+      position: relative;
+      left: 350px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
     .video-description {
