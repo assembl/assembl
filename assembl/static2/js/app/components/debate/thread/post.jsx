@@ -45,7 +45,7 @@ const Post = ({
     updateAnswerBody('');
     showAnswerForm(id);
     setTimeout(() => {
-      const txtarea = document.getElementById(id);
+      const txtarea = document.getElementById(`txt${id}`);
       const txtareaOffset = getDomElementOffset(txtarea).top;
       scrollToPosition(txtareaOffset - txtarea.clientHeight, 600);
       txtarea.focus();

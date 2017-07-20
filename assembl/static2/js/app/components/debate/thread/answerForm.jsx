@@ -84,7 +84,7 @@ const AnswerForm = ({
               handleTxtChange={handleBodyChange}
               handleInputFocus={handleInputFocus}
               remainingChars={bodyRemainingChars}
-              domId={parentId}
+              domId={`txt${parentId}`}
             />
             <div className="button-container">
               <Button className="button-cancel button-dark btn btn-default left" onClick={resetForm}>
