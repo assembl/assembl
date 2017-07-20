@@ -26,7 +26,7 @@ def test_get_thematics_no_video(discussion, graphql_request, test_session):
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
-    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': None,
                         u'id': thematic_gid,
@@ -49,6 +49,9 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
     video_desc_bottom = models.LangString.create(
         u"Calise de tabarnak",
         locale_code="fr")
+    video_desc_side = models.LangString.create(
+        u"Putain",
+        locale_code="fr")
     root_thematic = create_root_thematic(discussion, "survey")
     thematic = models.Thematic(
         discussion_id=discussion.id,
@@ -57,6 +60,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
         video_title=video_title,
         video_description_top=video_desc_top,
         video_description_bottom=video_desc_bottom,
+        video_description_side=video_desc_side,
         video_html_code=u"<object>....</object>",
     )
     test_session.add(
@@ -64,7 +68,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
-    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': None,
                         u'id': thematic_gid,
@@ -75,6 +79,7 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
                         u'video': {u'title': u"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
                                    u'descriptionTop': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
                                    u'descriptionBottom': u"Calise de tabarnak",
+                                   u'descriptionSide': u"Putain",
                                    u'htmlCode': u"<object>....</object>",
                                    }}]}
 
@@ -99,6 +104,10 @@ mutation myFirstMutation {
                 {value:"Calise de tabarnak",
                  localeCode:"fr"},
             ],
+            descriptionEntriesSide:[
+                {value:"Putain",
+                 localeCode:"fr"},
+            ],
             htmlCode:"<object>....</object>"
         },
         identifier:"survey") {
@@ -113,11 +122,16 @@ mutation myFirstMutation {
                 },
             descriptionTop,
             descriptionBottom,
+            descriptionSide,
             descriptionEntriesTop {
                 localeCode,
                 value
             },
             descriptionEntriesBottom {
+                localeCode,
+                value
+            }
+            descriptionEntriesSide {
                 localeCode,
                 value
             }
@@ -138,12 +152,17 @@ mutation myFirstMutation {
                            }],
                            u'descriptionTop': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
                            u'descriptionBottom': u"Calise de tabarnak",
+                           u'descriptionSide': u"Putain",
                            u'descriptionEntriesTop': [{
                                u'value': u"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
                                u'localeCode': u"fr"
                            }],
                            u'descriptionEntriesBottom': [{
                                u'value': u"Calise de tabarnak",
+                               u'localeCode': u"fr"
+                           }],
+                           u'descriptionEntriesSide': [{
+                               u'value': u"Putain",
                                u'localeCode': u"fr"
                            }],
                            u'htmlCode': u"<object>....</object>",
@@ -583,9 +602,14 @@ mutation myMutation($thematicId:ID!) {
                 localeCode,
                 value
             },
+            descriptionEntriesSide {
+                localeCode,
+                value
+            },
             title,
             descriptionTop,
             descriptionBottom,
+            descriptionSide,
             htmlCode }
         }
     }
