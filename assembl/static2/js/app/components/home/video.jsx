@@ -35,27 +35,32 @@ class Video extends React.Component {
             </div>
             <div className="content-section">
               <div className="content-margin">
+                {debateData.video.descriptionEntriesTop && 
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <div className="text" id="top-video-txt">{debateData.video.descriptionEntriesTop[locale]}</div>
+                    </Col>}                  
+                  </Row>
+                }
                 <Row>
-                  {debateData.video.descriptionEntriesTop &&
+                  {debateData.video.descriptionEntriesSide &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
-                      <div className="text" id="video-txt">
-                        {debateData.video.descriptionEntriesTop[locale]}
-                      </div>
+                      <div className="text" id="video-txt">{debateData.video.descriptionEntriesSide[locale]}</div>
                     </Col>}
                   {debateData.video.videoUrl &&
-                    debateData.video.videoUrl &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="video-container" id="video-vid">
                         <iframe src={debateData.video.videoUrl} frameBorder="0" width="560" height="315" />
                       </div>
                     </Col>}
-                  {debateData.video.descriptionEntriesBottom &&
-                    <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
-                      <div className="text" id="video-txt">
-                        {debateData.video.descriptionEntriesBottom[locale]}
-                      </div>
-                    </Col>}
                 </Row>
+                {debateData.video.descriptionEntriesBottom &&
+                  <Row>
+                    <Col xs={12} md={6}>
+                      <div className="text" id="bottom-video-txt">{debateData.video.descriptionEntriesBottom[locale]}</div>
+                    </Col>
+                  </Row>
+                }
               </div>
             </div>
           </div>
