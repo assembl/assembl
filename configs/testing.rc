@@ -15,6 +15,7 @@ sqlalchemy.echo = True
 *db_user = assembl_test
 *db_password = assembl_test
 *db_database = assembl_test
+login_providers = google-oauth2
 use_elasticsearch = false
 assembl.domain = assembl.net
 beaker.session.cookie_expires = false
