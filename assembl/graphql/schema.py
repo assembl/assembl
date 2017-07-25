@@ -270,7 +270,7 @@ class PostInterface(SQLAlchemyInterface):
         if self.parent_id is None:
             return None
 
-        return Node.to_global_id(self.__class__.__name__, self.parent_id)
+        return Node.to_global_id('Post', self.parent_id)
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -279,51 +279,10 @@ class Post(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, PostInterface)
         only_fields = ('id', )  # inherits fields from Post interface only
 
-    @classmethod
-    def is_type_of(cls, root, context, info):
-        if isinstance(root, cls):
-            return True
-        if not is_mapped(type(root)):
-            raise Exception((
-                'Received incompatible instance "{}".'
-            ).format(root))
-        return (isinstance(root, cls._meta.model)
-                and type(root) != type(models.PropositionPost))
-
-
-class PropositionPost(Post):
-    class Meta:
-        model = models.PropositionPost
-        interfaces = (Node, PostInterface)
-        only_fields = ('id', )  # inherits fields from Post interface only
-
-class AssemblPost(Post):
-    class Meta:
-        model = models.AssemblPost
-        interfaces = (Node, PostInterface)
-        only_fields = ('id', )  # inherits fields from Post interface only
-
-
-class PostUnion(SQLAlchemyUnion):
-    class Meta:
-        types = (PropositionPost, AssemblPost, Post)
-        model = models.Post
-
-    @classmethod
-    def resolve_type(cls, instance, context, info):
-        if isinstance(instance, graphene.ObjectType):
-            return type(instance)
-        elif isinstance(instance, models.PropositionPost): # must be above Post
-            return PropositionPost
-        elif isinstance(instance, models.AssemblPost): # must be above Post
-            return AssemblPost
-        elif isinstance(instance, models.Post):
-            return Post
-
 
 class PostConnection(graphene.Connection):
     class Meta:
-        node = PostUnion
+        node = Post
 
 
 class Video(graphene.ObjectType):
@@ -1142,7 +1101,7 @@ class CreatePost(graphene.Mutation):
         idea_id = graphene.ID(required=True)
         parent_id = graphene.ID() # A Post (except proposals in survey phase) can reply to another post. See related code in views/api/post.py
 
-    post = graphene.Field(lambda: PostUnion)
+    post = graphene.Field(lambda: Post)
 
     @staticmethod
     def mutate(root, args, context, info):
@@ -1230,7 +1189,7 @@ class AddSentiment(graphene.Mutation):
             required=True
         )
 
-    post = graphene.Field(lambda: PostUnion)
+    post = graphene.Field(lambda: Post)
 
     @staticmethod
     def mutate(root, args, context, info):
@@ -1273,7 +1232,7 @@ class DeleteSentiment(graphene.Mutation):
     class Input:
         post_id = graphene.ID(required=True)
 
-    post = graphene.Field(lambda: PostUnion)
+    post = graphene.Field(lambda: Post)
 
     @staticmethod
     def mutate(root, args, context, info):

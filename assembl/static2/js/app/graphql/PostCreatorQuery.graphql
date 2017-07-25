@@ -1,7 +1,7 @@
-query postCreator ($id: ID!) {
+query postCreator($id: ID!) {
   proposition: node(id: $id) {
-    ... on PropositionPost {
-      creator{
+    ... on Post {
+      creator {
         name
       }
     }

@@ -441,13 +441,13 @@ def test_get_proposition_post_via_node_query(graphql_request, proposition_id):
     res = schema.execute(u"""query {
         node(id:"%s") {
             __typename,
-            ... on PropositionPost {
+            ... on Post {
                 body
             }
         }
     }""" % proposition_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-            u'node': {u"__typename": u"PropositionPost",
+            u'node': {u"__typename": u"Post",
                       u"body": u"une proposition..."}}
 
 
@@ -643,7 +643,7 @@ mutation myFirstMutation {
         body:"une proposition..."
     ) {
         post {
-            ... on PropositionPost {
+            ... on Post {
                 subject,
                 body,
                 creator { name },
@@ -670,7 +670,7 @@ mutation myFirstMutation {
         body:"une proposition..."
     ) {
         post {
-            ... on PropositionPost {
+            ... on Post {
                 subject,
                 body,
                 creator { name },
@@ -698,7 +698,7 @@ mutation myFirstMutation {
         type:LIKE
     ) {
       post {
-        ... on PropositionPost {
+        ... on Post {
           sentimentCounts {
             like
             disagree
@@ -739,7 +739,7 @@ mutation myFirstMutation {
         type:DISAGREE
     ) {
       post {
-        ... on PropositionPost {
+        ... on Post {
           sentimentCounts {
             like
             disagree
@@ -780,7 +780,7 @@ mutation myFirstMutation {
         type:LIKE
     ) {
       post {
-        ... on PropositionPost {
+        ... on Post {
           sentimentCounts {
             like
             disagree
@@ -812,7 +812,7 @@ mutation myFirstMutation {
         type:LIKE
     ) {
       post {
-        ... on PropositionPost {
+        ... on Post {
           sentimentCounts {
             like
             disagree
@@ -829,7 +829,7 @@ mutation myFirstMutation {
         postId:"%s",
     ) {
       post {
-        ... on PropositionPost {
+        ... on Post {
           sentimentCounts {
             like
             disagree
@@ -864,7 +864,7 @@ mutation myFirstMutation {
         body:"une proposition..."
     ) {
         post {
-            ... on AssemblPost {
+            ... on Post {
                 subject,
                 body,
                 parentId,
@@ -894,7 +894,7 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals):
                 posts(first:10) {
                     edges {
                         node {
-                        ... on PropositionPost { body } } } } } } }""" % first_question_id, context_value=graphql_request)
+                        ... on Post { body } } } } } } }""" % first_question_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
             u'node': {
                 u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",

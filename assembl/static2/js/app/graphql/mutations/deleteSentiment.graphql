@@ -1,7 +1,7 @@
 mutation deleteSentiment($postId: ID!) {
   deleteSentiment(postId: $postId) {
     post {
-      ... on PropositionPost {
+      ... on Post {
         id
         sentimentCounts {
           like

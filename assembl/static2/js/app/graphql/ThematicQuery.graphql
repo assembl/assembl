@@ -17,7 +17,7 @@ query ThematicQuery($lang: String!, $id: ID!) {
           posts(first: 10, random: true) {
             edges {
               node {
-                ... on PropositionPost {
+                ... on Post {
                   id
                   body
                   mySentiment

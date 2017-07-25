@@ -43,7 +43,7 @@ mutation myFirstMutation {
         body:"Je recommande de manger des choux à la crème, c'est très bon, et ça permet de maintenir l'industrie de la patisserie française."
     ) {
         post {
-            ... on AssemblPost {
+            ... on Post {
                 id
             }
         }
@@ -191,7 +191,7 @@ mutation myFirstMutation {
         body:"une proposition..."
     ) {
         post {
-            ... on PropositionPost {
+            ... on Post {
                 id,
                 body,
                 creator { name },
@@ -213,7 +213,7 @@ mutation myFirstMutation {
         body:"une proposition %s"
     ) {
         post {
-            ... on PropositionPost {
+            ... on Post {
                 id,
                 body,
                 creator { name },
@@ -248,7 +248,7 @@ mutation myFirstMutation {
         type:%s
     ) {
       post {
-        ... on PropositionPost {
+        ... on Post {
           mySentiment
         }
       }
