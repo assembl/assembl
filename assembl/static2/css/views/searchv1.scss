@@ -2,6 +2,18 @@
 @import '../variables';
 @import '../components/assembl-glyph';
 
+.inline {
+    display: inline;
+}
+
+.profileLine {
+    display: inline;
+}
+
+.profileLine .user {
+    vertical-align: middle;
+}
+
 .date-filter {
     label {
         font-weight: bold;
