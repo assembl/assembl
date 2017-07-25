@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env python2
 # -*- coding:utf-8 -*-
 from __future__ import with_statement
 
@@ -139,7 +139,7 @@ def task(func):
 
 
 def realpath(path):
-    return run("python -c 'import os,sys;print os.path.realpath(sys.argv[1])' " + path)
+    return run("python2 -c 'import os,sys;print os.path.realpath(sys.argv[1])' " + path)
 
 
 def is_file(path):
@@ -170,7 +170,7 @@ def create_local_ini():
 
     if env.host_string == 'localhost':
         # The easy case: create a local.ini locally.
-        venvcmd("python assembl/scripts/ini_files.py compose -o %s %s" % (
+        venvcmd("python2 assembl/scripts/ini_files.py compose -o %s %s" % (
             env.ini_file, env.rcfile))
     else:
         # Create a local.ini file on the remote server
@@ -178,7 +178,7 @@ def create_local_ini():
 
         # OK, this is horrid because I need the local venv.
         local_venv = env.get("local_venv", "./venv")
-        assert os.path.exists(local_venv + "/bin/python"),\
+        assert os.path.exists(local_venv + "/bin/python2"),\
             "No usable local venv"
         # get placeholder filenames
         with NamedTemporaryFile(delete=False) as f:
@@ -194,7 +194,7 @@ def create_local_ini():
             # create the local.ini in a temp file
             with settings(host_string="localhost", venvpath=local_venv,
                           user=getuser(), projectpath=os.getcwd()):
-                venvcmd("python assembl/scripts/ini_files.py compose -o %s -r %s %s" % (
+                venvcmd("python2 assembl/scripts/ini_files.py compose -o %s -r %s %s" % (
                     local_file_name, random_file_name, env.rcfile))
             # send the random file if changed
             if rt != os.path.getmtime(random_file_name):
@@ -232,18 +232,18 @@ def migrate_local_ini():
         if not exists(random_ini_path):
             # Create a random.ini from specified random*.tmpl files.
             templates = get_random_templates()
-            venvcmd("python assembl/scripts/ini_files.py combine -o " +
+            venvcmd("python2 assembl/scripts/ini_files.py combine -o " +
                     random_ini_path + " " + " ".join(templates))
         # Note: we do not handle the case of an existing but incomplete
         # random.ini file. migrate is designed to be run only once.
-        venvcmd("python assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
+        venvcmd("python2 assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
                 random_ini_path, random_ini_path, local_ini_path))
-        venvcmd("python assembl/scripts/ini_files.py migrate -o %s %s " % (
+        venvcmd("python2 assembl/scripts/ini_files.py migrate -o %s %s " % (
             dest_path, env.rcfile))
     else:
         # OK, this is horrid because I need the local venv.
         local_venv = env.get("local_venv", "./venv")
-        assert os.path.exists(local_venv + "/bin/python"),\
+        assert os.path.exists(local_venv + "/bin/python2"),\
             "No usable local venv"
         # get placeholder filenames
         with NamedTemporaryFile(delete=False) as f:
@@ -268,14 +268,14 @@ def migrate_local_ini():
                           user=getuser(), projectpath=os.getcwd()):
                 if not has_random:
                     templates = get_random_templates()
-                    venvcmd("python assembl/scripts/ini_files.py combine -o " +
+                    venvcmd("python2 assembl/scripts/ini_files.py combine -o " +
                             base_random_file_name + " " + " ".join(templates))
                 # Create the new random file with the local.ini data
-                venvcmd("python assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
+                venvcmd("python2 assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
                         dest_random_file_name, base_random_file_name,
                         local_file_name))
                 # Create the new rc file.
-                venvcmd("python assembl/scripts/ini_files.py migrate -o %s -i %s -r %s %s" % (
+                venvcmd("python2 assembl/scripts/ini_files.py migrate -o %s -i %s -r %s %s" % (
                         dest_path, local_file_name, dest_random_file_name,
                         env.rcfile))
             # Overwrite the random file
@@ -507,7 +507,7 @@ def build_virtualenv():
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
-    run('python -mvirtualenv %(venvpath)s' % env)
+    run('python2 -mvirtualenv %(venvpath)s' % env)
     if env.mac:
         # Virtualenv does not reuse distutils.cfg from the homebrew python,
         # and that sometimes precludes building python modules.
@@ -580,9 +580,9 @@ def make_messages():
     """
     Run *.po file generation for translation
     """
-    cmd = "python setup.py extract_messages"
+    cmd = "python2 setup.py extract_messages"
     venvcmd(cmd)
-    cmd = "python setup.py update_catalog"
+    cmd = "python2 setup.py update_catalog"
     venvcmd(cmd)
 
 
@@ -591,9 +591,9 @@ def compile_messages():
     """
     Run compile *.mo file from *.po
     """
-    cmd = "python setup.py compile_catalog"
+    cmd = "python2 setup.py compile_catalog"
     venvcmd(cmd)
-    venvcmd("python assembl/scripts/po2json.py")
+    venvcmd("python2 assembl/scripts/po2json.py")
 
 
 @task
@@ -1038,10 +1038,10 @@ def install_basetools():
         else:
             run("brew update")
             run("brew upgrade")
-        # Standardize on brew python
-        if not exists('/usr/local/bin/python'):
-            run('brew install python')
-        assert exists('/usr/local/bin/pip2'), "Brew python should come with pip"
+        # Standardize on brew python2
+        if not exists('/usr/local/bin/python2'):
+            run('brew install python2')
+        assert exists('/usr/local/bin/pip2'), "Brew python2 should come with pip"
         path_pip = run('which pip2')
         assert path_pip == '/usr/local/bin/pip2',\
             "Make sure homebrew is in the bash path, got " + path_pip
@@ -1246,7 +1246,7 @@ def check_and_create_database_user(host=None, user=None, password=None):
             assert db_password is not None, "We need a password for postgres on " + host
             db_password_string = "-p '%s'" % db_password
             sudo_user = None
-        run_db_command('python {pypsql} -u {db_user} -n {host} {db_password_string} "{command}"'.format(
+        run_db_command('python2 {pypsql} -u {db_user} -n {host} {db_password_string} "{command}"'.format(
             command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
                 user, password),
             pypsql=join(env.projectpath, 'assembl', 'scripts', 'pypsql.py'),
@@ -1929,7 +1929,7 @@ def build_doc():
         run('rm -rf doc/autodoc doc/jsdoc')
         venvcmd('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
         venvcmd('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
-        venvcmd('python assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (env.ini_file))
+        venvcmd('python2 assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (env.ini_file))
         venvcmd('sphinx-build doc assembl/static/techdocs')
 
 
