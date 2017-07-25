@@ -25,7 +25,7 @@ import re
 
 from fabric.operations import (
     put, get, local, sudo, run, require)
-from fabric.contrib.files import (exists, is_link)
+from fabric.contrib.files import (exists, is_link, append)
 from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
 from fabric.colors import yellow, cyan, red, green
@@ -1005,7 +1005,8 @@ def install_certbot():
     if exists('/etc/os-release'):
         release_data = run('cat /etc/os-release')
         if 'jessie' in release_data:
-            sudo("echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list")
+            append("/etc/apt/sources.list",
+                   "deb http://ftp.debian.org/debian jessie-backports main", True)
             sudo("apt-get update")
         elif 'ubuntu' in release_data:
             sudo("apt-get install software-properties-common")
@@ -1661,7 +1662,8 @@ def install_yarn():
         if not exists('/etc/apt/sources.list.d/yarn.list'):
             sudo('apt-get update')
             sudo('apt-get install apt-transport-https')
-            sudo('echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list')
+            append("/etc/apt/sources.list.d/yarn.list",
+                   "deb https://dl.yarnpkg.com/debian/ stable main", True)
             sudo('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -')
             sudo('apt-get update')
             sudo('apt-get install yarn')
@@ -1677,16 +1679,14 @@ def install_elasticsearch():
 
     if not env.mac:
         release_info = run("lsb_release -i")
-        if "Ubuntu" not in release_info:
-            # not necessary on Ubuntu, assuming debian
-            if not exists('/etc/sysctl.d/vm.max_map_count.conf'):
-                # change now
-                sudo("sysctl -w vm.max_map_count=262144")
-                # persist the change
-                sudo("echo 'vm.max_map_count=262144' > /etc/sysctl.d/vm.max_map_count.conf")
-        else:
+        if "Debian" in release_info or "Ubuntu" in release_info:
+            # change now
             sudo("sysctl -w vm.max_map_count=262144")
-            sudo("sysctl -w fs.file-max=65536")
+            # persist the change
+            append('/etc/sysctl.d/vm.max_map_count.conf',
+                   'vm.max_map_count=262144', True)
+        else:
+            print(red("Unknown distribution"))
 
     extract_path = normpath(
         join(env.projectpath, 'var', 'elasticsearch'))
