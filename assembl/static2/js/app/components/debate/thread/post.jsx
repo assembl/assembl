@@ -19,10 +19,7 @@ const postMapStateToProps = createSelector(postSelector, (post) => {
 export const connectPostToState = connect(postMapStateToProps);
 
 export const PostFolded = ({ nbPosts }) => {
-  // TO DO: Find a better way to manage plural
-  return nbPosts > 1
-    ? <Translate value="debate.thread.foldedPostLink" nbPosts={nbPosts} />
-    : <Translate value="debate.thread.singleFoldedPostLink" />;
+  return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
 };
 
 const Post = ({
