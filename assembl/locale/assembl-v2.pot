@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2017-06-30T16:48:50.106Z\n"
+"POT-Creation-Date: 2017-07-25T09:37:36.797Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -183,6 +183,13 @@ msgid "administration.videoModule"
 msgstr ""
 
 #: messages.json
+#. [cancel]
+#. defaultMessage is:
+#. Annuler
+msgid "cancel"
+msgstr ""
+
+#: messages.json
 #. [changePassword.panelTitle]
 #. defaultMessage is:
 #. Welcome to Assembl forgot password page
@@ -218,10 +225,31 @@ msgid "date.format2"
 msgstr ""
 
 #: messages.json
+#. [debate.answer]
+#. defaultMessage is:
+#. I answer:
+msgid "debate.answer"
+msgstr ""
+
+#: messages.json
 #. [debate.disagree]
 #. defaultMessage is:
 #. Disagree
 msgid "debate.disagree"
+msgstr ""
+
+#: messages.json
+#. [debate.dontUnderstand]
+#. defaultMessage is:
+#. Did not get it
+msgid "debate.dontUnderstand"
+msgstr ""
+
+#: messages.json
+#. [debate.insert]
+#. defaultMessage is:
+#. Post a comment
+msgid "debate.insert"
 msgstr ""
 
 #: messages.json
@@ -232,10 +260,45 @@ msgid "debate.like"
 msgstr ""
 
 #: messages.json
+#. [debate.moreInfo]
+#. defaultMessage is:
+#. More info please
+msgid "debate.moreInfo"
+msgstr ""
+
+#: messages.json
 #. [debate.notStarted]
 #. defaultMessage is:
 #. The %{phaseName} phase has not started. Please come back from 
 msgid "debate.notStarted"
+msgstr ""
+
+#: messages.json
+#. [debate.post]
+#. defaultMessage is:
+#. Post
+msgid "debate.post"
+msgstr ""
+
+#: messages.json
+#. [debate.remaining_x_characters]
+#. defaultMessage is:
+#. You have %{nbCharacters} characters left
+msgid "debate.remaining_x_characters"
+msgstr ""
+
+#: messages.json
+#. [debate.share]
+#. defaultMessage is:
+#. Share
+msgid "debate.share"
+msgstr ""
+
+#: messages.json
+#. [debate.subject]
+#. defaultMessage is:
+#. Write the title
+msgid "debate.subject"
 msgstr ""
 
 #: messages.json
@@ -246,37 +309,16 @@ msgid "debate.survey.endPhase"
 msgstr ""
 
 #: messages.json
-#. [debate.survey.goTo]
-#. defaultMessage is:
-#. Go to %{currentPhaseName} phase.
-msgid "debate.survey.goTo"
-msgstr ""
-
-#: messages.json
-#. [debate.survey.modalBody]
-#. defaultMessage is:
-#. You have to be connected to do a proposal or to vote.
-msgid "debate.survey.modalBody"
-msgstr ""
-
-#: messages.json
-#. [debate.survey.modalFooter]
-#. defaultMessage is:
-#. Please connect
-msgid "debate.survey.modalFooter"
-msgstr ""
-
-#: messages.json
 #. [debate.survey.moreProposals]
 #. defaultMessage is:
-#. More proposals
+#. More points of view
 msgid "debate.survey.moreProposals"
 msgstr ""
 
 #: messages.json
 #. [debate.survey.noProposals]
 #. defaultMessage is:
-#. There are no proposals for the moment. Be the first to contribute!
+#. There is no point of view for the moment. Be the first to contribute!
 msgid "debate.survey.noProposals"
 msgstr ""
 
@@ -290,7 +332,7 @@ msgstr ""
 #: messages.json
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
-#. Do you agree with the proposals?
+#. Do you agree with these points of view?
 msgid "debate.survey.proposalsTitle"
 msgstr ""
 
@@ -313,13 +355,6 @@ msgstr ""
 #. defaultMessage is:
 #. Reactions
 msgid "debate.survey.reactions"
-msgstr ""
-
-#: messages.json
-#. [debate.survey.remaining_x_characters]
-#. defaultMessage is:
-#. You have %{nbCharacters} characters left
-msgid "debate.survey.remaining_x_characters"
 msgstr ""
 
 #: messages.json
@@ -346,7 +381,7 @@ msgstr ""
 #: messages.json
 #. [debate.survey.txtAreaPh]
 #. defaultMessage is:
-#. Write your proposal
+#. Write your point of view
 msgid "debate.survey.txtAreaPh"
 msgstr ""
 
@@ -355,6 +390,90 @@ msgstr ""
 #. defaultMessage is:
 #. Themes
 msgid "debate.themes"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.fillBody]
+#. defaultMessage is:
+#. Please, write a comment
+msgid "debate.thread.fillBody"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.fillSubject]
+#. defaultMessage is:
+#. Please, write a title
+msgid "debate.thread.fillSubject"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.foldedPostLink]
+#. defaultMessage is:
+#. Show %{nbPosts} responses
+msgid "debate.thread.foldedPostLink"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.linkIdea]
+#. defaultMessage is:
+#. This post is related to the following themes:
+msgid "debate.thread.linkIdea"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.noPostsInThread]
+#. defaultMessage is:
+#. Be the first to contribute, start a discussion!
+msgid "debate.thread.noPostsInThread"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.numberOfResponses]
+#. defaultMessage is:
+#. %{count} responses to this post
+msgid "debate.thread.numberOfResponses"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.numberOfResponses_0]
+#. defaultMessage is:
+#. No response to this post
+msgid "debate.thread.numberOfResponses_0"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.numberOfResponses_1]
+#. defaultMessage is:
+#. %{count} response to this post
+msgid "debate.thread.numberOfResponses_1"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postSuccess]
+#. defaultMessage is:
+#. Thanks for your participation. Your comment has been sent!
+msgid "debate.thread.postSuccess"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.singleFoldedPostLink]
+#. defaultMessage is:
+#. Show 1 response
+msgid "debate.thread.singleFoldedPostLink"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.startDiscussion]
+#. defaultMessage is:
+#. Start a new thread
+msgid "debate.thread.startDiscussion"
+msgstr ""
+
+#: messages.json
+#. [debate.toAnswer]
+#. defaultMessage is:
+#. Answer
+msgid "debate.toAnswer"
 msgstr ""
 
 #: messages.json
@@ -642,6 +761,20 @@ msgstr ""
 #. defaultMessage is:
 #. Log in
 msgid "login.login"
+msgstr ""
+
+#: messages.json
+#. [login.loginModalBody]
+#. defaultMessage is:
+#. You have to be connected to participate.
+msgid "login.loginModalBody"
+msgstr ""
+
+#: messages.json
+#. [login.loginModalFooter]
+#. defaultMessage is:
+#. Please connect
+msgid "login.loginModalFooter"
 msgstr ""
 
 #: messages.json
@@ -1188,4 +1321,18 @@ msgstr ""
 #. defaultMessage is:
 #. Terms and Conditions
 msgid "terms.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [unauthorizedAdministration.returnButton]
+#. defaultMessage is:
+#. Back to home
+msgid "unauthorizedAdministration.returnButton"
+msgstr ""
+
+#: messages.json
+#. [unauthorizedAdministration.unauthorizedMessage]
+#. defaultMessage is:
+#. You are not authorized to access the administration section. Please contact the administrator of the website.
+msgid "unauthorizedAdministration.unauthorizedMessage"
 msgstr ""
