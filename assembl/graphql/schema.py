@@ -1175,7 +1175,9 @@ class CreatePost(graphene.Mutation):
         with cls.default_db.no_autoflush:
             subject = args.get('subject')
             body = args.get('body')
-            if subject is None: # We apply the same logic than in views/api/post.py::create_post
+            if subject is not None:
+                subject_langstring = models.LangString.create(subject, u'und')
+            else:  # We apply the same logic than in views/api/post.py::create_post
                 if cls == models.AssemblPost:
                     if in_reply_to_post:
                         subject = (
@@ -1186,35 +1188,27 @@ class CreatePost(graphene.Mutation):
                                    if in_reply_to_idea.short_title else '')
                     else:
                         subject = discussion.topic if discussion.topic else ''
+
                     if subject is not None and len(subject):
-                        subject = u'Re: ' + restrip_pat.sub('', subject).strip()
+                        new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()
+                        if (in_reply_to_post and new_subject == subject and
+                            in_reply_to_post.get_title()):
+                            # reuse subject and translations
+                            subject_langstring = in_reply_to_post.get_title().clone(discussion.db)
+                        else:
+                            subject_langstring = models.LangString.create(new_subject, u'und')
+
                 else:
-                    subject = u'Proposition'
-            subject_entries = [
-                {'value': subject, u'locale_code': u'und'}
-            ]
+                    subject_langstring = models.LangString.create(u'Proposition', u'und')
 
-            body_entries = [
-                {'value': body, u'locale_code': u'und'}
-            ]
-
-            subject_langstring = langstring_from_input_entries(subject_entries)
-            body_langstring = langstring_from_input_entries(body_entries)
-            if in_reply_to_post: # Is there an unified way to do this?
-                new_post = cls(
-                    discussion=discussion,
-                    subject=subject_langstring,
-                    body=body_langstring,
-                    creator_id=user_id,
-                    parent=in_reply_to_post
-                )
-            else:
-                new_post = cls(
-                    discussion=discussion,
-                    subject=subject_langstring,
-                    body=body_langstring,
-                    creator_id=user_id
-                )
+            body_langstring = models.LangString.create(body, u'und')
+            new_post = cls(
+                discussion=discussion,
+                subject=subject_langstring,
+                body=body_langstring,
+                creator_id=user_id,
+                parent=in_reply_to_post
+            )
             db = new_post.db
             db.add(new_post)
             idea_post_link = models.IdeaRelatedPostLink(
