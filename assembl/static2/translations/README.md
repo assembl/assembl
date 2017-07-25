@@ -24,7 +24,7 @@ macOS `brew install gettext; brew link gettext`.
 # Add a new language
 
 If you want to add a new language, say Japanese, copy `assembl-v2.pot` to
-`assembl-v2/jp.po` and add the following two lines in `js/app/utils/translations.js`
+`assembl-v2/jp.po` and add the following two lines in `js/app/utils/globalFunctions.js`
 
     import jp from '../../../translations/jp.json';
     Translations.jp = deepen(jp);
