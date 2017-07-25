@@ -1,4 +1,5 @@
 from datetime import datetime
+import pytz
 import os.path
 from random import sample as random_sample
 
@@ -8,6 +9,7 @@ from sqlalchemy.orm import joinedload_all, undefer
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
+from graphene.types.scalars import Scalar
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy.converter import (
@@ -29,6 +31,25 @@ from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
+
+
+class DateTime(Scalar):
+    '''DateTime in ISO 8601 format'''
+
+    @staticmethod
+    def serialize(dt):
+        return dt.replace(tzinfo=pytz.UTC).isoformat()
+
+    @staticmethod
+    def parse_literal(node):
+        if isinstance(node, ast.StringValue):
+            return datetime.strptime(
+                node.value, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.UTC)
+
+    @staticmethod
+    def parse_value(value):
+        return datetime.strptime(
+            value, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.UTC)
 
 
 class SecureObjectType(object):
@@ -222,10 +243,11 @@ class IdeaContentLink(graphene.ObjectType):
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
-        only_fields = ('creation_date', 'creator')
+        only_fields = ('creator', )
         # Don't add id in only_fields in an interface or the the id of Post
         # will be just the primary key, not the base64 type:id
 
+    creation_date = DateTime()
     subject = graphene.String(lang=graphene.String())
     body = graphene.String(lang=graphene.String())
     sentiment_counts = graphene.Field(SentimentCounts)
