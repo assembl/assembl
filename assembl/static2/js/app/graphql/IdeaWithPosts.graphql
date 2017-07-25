@@ -1,5 +1,5 @@
 query IdeaWithPosts($lang: String!, $id: ID!) {
-  idea: node(id:$id) {
+  idea: node(id: $id) {
     ... on Idea {
       id
       title(lang: $lang)
@@ -19,8 +19,17 @@ query IdeaWithPosts($lang: String!, $id: ID!) {
                 dontUnderstand
                 moreInfo
               }
-              indirectIdeaContentLinks { idea { id title } }
-              creator { id userId name }
+              indirectIdeaContentLinks {
+                idea {
+                  id
+                  title
+                }
+              }
+              creator {
+                id
+                userId
+                name
+              }
               parentId
               creationDate
             }

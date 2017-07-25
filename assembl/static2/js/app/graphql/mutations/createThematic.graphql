@@ -1,14 +1,20 @@
-mutation createThematic($identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
+mutation createThematic(
+  $identifier: String!
+  $image: String
+  $titleEntries: [LangStringEntryInput]!
+  $questions: [QuestionInput]
+  $video: VideoInput
+) {
   createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
     thematic {
-      title,
-      imgUrl,
+      title
+      imgUrl
       video {
-        title,
-        descriptionTop,
-        descriptionBottom,
+        title
+        descriptionTop
+        descriptionBottom
         htmlCode
-      },
+      }
       questions {
         title
       }

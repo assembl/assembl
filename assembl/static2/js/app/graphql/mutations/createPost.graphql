@@ -1,13 +1,13 @@
 mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: ID) {
-  createPost(ideaId:$ideaId, subject: $subject, body: $body, parentId: $parentId) {
+  createPost(ideaId: $ideaId, subject: $subject, body: $body, parentId: $parentId) {
     post {
       ... on AssemblPost {
-        id,
-        subject,
-        body,
-        parentId,
+        id
+        subject
+        body
+        parentId
         creator {
-          id,
+          id
           name
         }
       }

@@ -1,10 +1,10 @@
 mutation addSentiment($type: SentimentTypes!, $postId: ID!) {
-  addSentiment(postId:$postId, type: $type) {
+  addSentiment(postId: $postId, type: $type) {
     post {
       ... on PropositionPost {
-        id,
+        id
         sentimentCounts {
-          like,
+          like
           disagree
         }
         mySentiment

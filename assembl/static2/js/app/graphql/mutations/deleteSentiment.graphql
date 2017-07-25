@@ -1,10 +1,10 @@
 mutation deleteSentiment($postId: ID!) {
-  deleteSentiment(postId:$postId) {
+  deleteSentiment(postId: $postId) {
     post {
       ... on PropositionPost {
-        id,
+        id
         sentimentCounts {
-          like,
+          like
           disagree
         }
         mySentiment

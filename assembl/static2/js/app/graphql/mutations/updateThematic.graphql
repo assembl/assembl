@@ -1,16 +1,30 @@
-mutation updateThematic($id:ID!, $identifier: String!, $image: String, $titleEntries: [LangStringEntryInput]!, $questions: [QuestionInput], $video: VideoInput) {
-  updateThematic(id:$id, identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
+mutation updateThematic(
+  $id: ID!
+  $identifier: String!
+  $image: String
+  $titleEntries: [LangStringEntryInput]!
+  $questions: [QuestionInput]
+  $video: VideoInput
+) {
+  updateThematic(
+    id: $id
+    identifier: $identifier
+    image: $image
+    titleEntries: $titleEntries
+    questions: $questions
+    video: $video
+  ) {
     thematic {
-      title,
-      imgUrl,
+      title
+      imgUrl
       video {
-        title,
-        descriptionTop,
-        descriptionBottom,
+        title
+        descriptionTop
+        descriptionBottom
         htmlCode
-      },
+      }
       questions {
-        id,
+        id
         title
       }
     }
