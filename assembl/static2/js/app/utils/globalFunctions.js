@@ -1,8 +1,8 @@
-// import deepen from './deepen';
+import deepen from './deepen';
 import Translations from './translations';
+import jp from '../../../translations/jp.json';
 
-// import jp from '../../../translations/jp.json';
-// Translations.jp = deepen(jp);
+Translations.jp = deepen(jp);
 
 export const getTranslations = () => {
   return Translations;
