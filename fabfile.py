@@ -1041,7 +1041,7 @@ def install_basetools():
             run("brew upgrade")
         # Standardize on brew python2
         if not exists('/usr/local/bin/python2'):
-            run('brew install python2')
+            run('brew install python')
         assert exists('/usr/local/bin/pip2'), "Brew python2 should come with pip"
         path_pip = run('which pip2')
         assert path_pip == '/usr/local/bin/pip2',\
