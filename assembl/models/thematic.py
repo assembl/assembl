@@ -87,7 +87,7 @@ class Thematic(Idea):
 
 LangString.setup_ownership_load_event(Thematic,
     ['video_title', 'video_description_top', 'video_description_bottom',
-     'video_description_bottom'])
+     'video_description_side'])
 
 
 class Question(Idea):

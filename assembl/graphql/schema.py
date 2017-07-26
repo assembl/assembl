@@ -881,7 +881,7 @@ class CreateThematic(graphene.Mutation):
 
                 video_description_side = langstring_from_input_entries(
                     video.get('description_entries_side', None))
-                if video_description_bottom is not None:
+                if video_description_side is not None:
                     kwargs[
                         'video_description_side'] = video_description_side
 
