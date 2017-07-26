@@ -35,7 +35,7 @@
         span {
             position: absolute;
             bottom: -12px;
-            left: $tree-indentation - 15px;
+            left: -15px;
         }
     }
 
@@ -94,9 +94,8 @@
     }
 
     .level-1, .level-2, .level-3, .level-4 {
-        margin-left: $tree-indentation;
         padding-bottom: $post-space;
-        padding-left: $tree-indentation;
+        padding-left: $tree-indentation*2;
         border-top: 1px solid $grey1;
 
         .box {
