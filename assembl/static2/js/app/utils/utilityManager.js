@@ -47,7 +47,7 @@ export const displayModal = (title, body, footer, footerTxt, button, showModal) 
                     button.label:String => label of the button;
                     button.internalLink:Boolean => true if a Link from react-router is needed and false if a href is needed
   */
-
+  document.activeElement.blur();
   modalManager.component.setState({
     title: title,
     body: body,
