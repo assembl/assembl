@@ -667,17 +667,9 @@ class LangString(Base):
                         entries = filter(lambda e: not e.error_code, entries)
                     for pref in candidates:
                         if pref.translate_to:
-                            target_locale = pref.translate_to_code
-
-                            def common_len(e):
-                                return Locale.compatible(
-                                    target_locale,
-                                    Locale.extract_base_locale(e.locale_code))
-                            common_entries = filter(common_len, entries)
-                            if common_entries:
-                                common_entries.sort(
-                                    key=common_len, reverse=True)
-                                return common_entries[0]
+                            best = self.closest_entry(pref.translate_to_code)
+                            if best:
+                                return best
                         else:
                             return entriesByLocale[pref.locale_code]
         # give up and give first original
@@ -707,6 +699,54 @@ class LangString(Base):
         if all((e.is_machine_translated for e in entries)):
             entries.extend(self.non_mt_entries())
         return entries
+
+    def closest_entry(self, target_locale):
+        def common_len(e):
+            return Locale.compatible(
+                target_locale,
+                Locale.extract_base_locale(e.locale_code))
+        entries = [(common_len(e), e) for e in self.entries]
+        entries.sort(reverse=True)
+        if entries[0][0]:
+            return entries[0][1]
+
+    def simplistic_best_entries_with_originals_in_request(self):
+        from pyramid.threadlocal import get_current_request
+        r = get_current_request()
+        # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
+        assert r
+        locale = r.locale_name
+        # Or should I use assembl.views.get_locale_from_request ?
+        return self.simplistic_best_entries_with_originals(locale)
+
+    def simplistic_best_entries_with_originals(self, target_locale):
+        """For v2, where user cannot manipulate languagePreferenceCollection
+        Always give the version of the Assembl UI and the original;
+        but also say whether the original is understood or not.
+        We could send a boolean indicating whether the language is deemed understood,
+        but either way first entry should be shown to user. (original if understood,
+        translation if original isn't)
+        """
+        from .auth import LanguagePreferenceCollection
+        for lse in self.non_mt_entries():
+            if Locale.compatible(lse.locale_code, target_locale):
+                # return [(lse, True)]
+                return [lse]
+        original = self.first_original()
+        best = self.closest_entry(target_locale)
+        prefs = LanguagePreferenceCollection.getCurrent()
+        pref = prefs.find_locale(target_locale, self.db)
+        if best:
+            if pref.translate_to:
+                return [(best, True), (original, False)]
+                # return [best, original]
+            else:
+                return [(original, True), (best, True)]
+                # return [original, best]
+        else:
+            # missing translation
+            return [(original, not pref.translate_to)]
+            # return [original]
 
     def remove_translations(self, forget_identification=True):
         for entry in list(self.entries):
