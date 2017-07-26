@@ -94,29 +94,43 @@ def resolve_langstring(langstring, locale_code):
     if not entries:
         return None
 
-    if locale_code is None:
-        return langstring.best_entry_in_request().value
-
-    cache = {e.locale_code: e.value for e in entries}
-    text = cache.get(locale_code, None)
-
-    if not text:
-        return langstring.best_lang().value
-
-    return text
+    if locale_code:
+        closest = langstring.closest_entry(locale_code)
+        if closest:
+            return closest.value
+    return langstring.simplistic_best_entries_in_request_with_originals_in_request()[0].value
 
 
 def resolve_langstring_entries(obj, attr):
     langstring = getattr(obj, attr, None)
-    if langstring is None:
+    if langstring is None or langstring is models.LangString.EMPTY:
         return []
 
     entries = []
     for entry in sorted(langstring.entries, key=lambda e: e.locale_code):
         entries.append(
             LangStringEntry(
-                locale_code=entry.locale_code,
+                locale_code=entry.locale.base_locale,
+                translated_from_locale_code=entry.locale.machine_translated_from,
                 value=entry.value
+            )
+        )
+
+    return entries
+
+
+def resolve_best_langstring_entries(langstring, target_locale):
+    if langstring is None or langstring is models.LangString.EMPTY:
+        return []
+
+    entries = langstring.simplistic_best_entries_with_originals(target_locale)
+    for (entry, understood) in entries:
+        entries.append(
+            LangStringEntry(
+                locale_code=entry.locale.base_locale,
+                translated_from_locale_code=entry.locale.machine_translated_from,
+                supposed_understood=understood,
+                value=entry.value,
             )
         )
 
@@ -191,7 +205,8 @@ class LangStringEntryFields(graphene.AbstractType):
 
 
 class LangStringEntry(graphene.ObjectType, LangStringEntryFields):
-    pass
+    translated_from_locale_code = graphene.String(required=False)
+    supposed_understood = graphene.Boolean(required=False)
 
 
 class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):
@@ -262,6 +277,16 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_body(self, args, context, info):
         body = resolve_langstring(self.get_body(), args.get('lang'))
+        return body
+
+    def resolve_subject_entries(self, args, context, info):
+        subject = resolve_best_langstring_entries(
+            self.get_subject(), args.get('lang'))
+        return subject
+
+    def resolve_body_entries(self, args, context, info):
+        body = resolve_best_langstring_entries(
+            self.get_body(), args.get('lang'))
         return body
 
     def resolve_sentiment_counts(self, args, context, info):
