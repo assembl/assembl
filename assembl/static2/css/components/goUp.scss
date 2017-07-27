@@ -1,0 +1,30 @@
+.go-up {
+    position: fixed;
+    bottom: 6em;
+    right: 2%;
+    z-index: 99;
+
+    div {
+        text-align: center;
+        color: $first-color;
+    }
+
+    a {
+        text-align: left;
+        border-radius: 50%;
+        padding: .6em 0 0 .6em;
+        width: 3em;
+        height: 3em;
+        background-color: $first-color-light;
+        display: inline-block;
+        cursor: pointer;
+
+        &:hover {
+            color: white;
+        }
+
+        .assembl-icon-up-open::before {
+            font-size: .8em;
+        }
+    }
+}

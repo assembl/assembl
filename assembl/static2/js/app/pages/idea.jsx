@@ -11,6 +11,7 @@ import Header from '../components/debate/common/header';
 import IdeaWithPosts from '../graphql/IdeaWithPosts.graphql';
 import InfiniteSeparator from '../components/common/infiniteSeparator';
 import Post, { connectPostToState, PostFolded } from '../components/debate/thread/post';
+import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
@@ -78,6 +79,7 @@ class Idea extends React.Component {
             </div>
           </Grid>
         </section>
+        <GoUp />
       </div>
     );
   }
