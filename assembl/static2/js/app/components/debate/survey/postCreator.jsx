@@ -11,7 +11,9 @@ class PostCreator extends React.Component {
         {proposition &&
           <div className="user">
             <span className="assembl-icon-profil grey">&nbsp;</span>
-            <span className="username">{proposition.creator.name}</span>
+            <span className="username">
+              {proposition.creator.name}
+            </span>
           </div>}
       </div>
     );

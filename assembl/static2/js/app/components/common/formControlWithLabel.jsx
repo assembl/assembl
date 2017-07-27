@@ -32,7 +32,11 @@ class FormControlWithLabel extends React.Component {
     const { componentClass, id, label, onChange, type, value } = this.props;
     return (
       <FormGroup validationState={this.state.validationState}>
-        {value ? <ControlLabel htmlFor={id}>{label}</ControlLabel> : null}
+        {value
+          ? <ControlLabel htmlFor={id}>
+            {label}
+          </ControlLabel>
+          : null}
         <FormControl
           componentClass={componentClass}
           id={id}
@@ -42,7 +46,11 @@ class FormControlWithLabel extends React.Component {
           value={value}
           onBlur={this.setValidationState}
         />
-        {this.state.errorMessage ? <HelpBlock>{this.state.errorMessage}</HelpBlock> : null}
+        {this.state.errorMessage
+          ? <HelpBlock>
+            {this.state.errorMessage}
+          </HelpBlock>
+          : null}
       </FormGroup>
     );
   }

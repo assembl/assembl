@@ -30,7 +30,10 @@ class ProfileIcon extends React.Component {
     const connectedUserName = getConnectedUserName();
     const dropdownUser = (
       <div className="inline">
-        <span className="assembl-icon-profil grey">&nbsp;</span><span className="username">{connectedUserName}</span>
+        <span className="assembl-icon-profil grey">&nbsp;</span>
+        <span className="username">
+          {connectedUserName}
+        </span>
       </div>
     );
     return (

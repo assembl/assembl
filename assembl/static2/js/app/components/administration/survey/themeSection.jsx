@@ -18,7 +18,9 @@ const ThemeSection = ({ addThematic, i18n, selectedLocale, thematics }) => {
             return <ThemeForm key={id} id={id} index={idx} selectedLocale={selectedLocale} />;
           })}
           <OverlayTrigger placement="top" overlay={addThematicTooltip}>
-            <div onClick={addThematic} className="plus margin-l">+</div>
+            <div onClick={addThematic} className="plus margin-l">
+              +
+            </div>
           </OverlayTrigger>
         </form>
       </div>

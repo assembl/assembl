@@ -153,7 +153,8 @@ const Translations = {
       title: 'synthèse'
     },
     common: {
-      uploadButton: 'Choisissez un fichier'
+      uploadButton: 'Choisissez un fichier',
+      goUp: 'Remonter'
     },
     community: {
       panelTitle: 'Bienvenue dans la communauté d\'Assembl'
@@ -406,7 +407,8 @@ const Translations = {
       panelTitle: 'Welcome to Assembl community page'
     },
     common: {
-      uploadButton: 'Choose a file to upload'
+      uploadButton: 'Choose a file to upload',
+      goUp: 'Back to top'
     },
     synthesis: {
       title: 'synthesis'

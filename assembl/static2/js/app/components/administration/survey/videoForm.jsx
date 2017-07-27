@@ -8,7 +8,8 @@ import {
   updateVideoHtmlCode,
   updateVideoDescriptionTop,
   updateVideoDescriptionBottom,
-  updateVideoTitle } from '../../../actions/adminActions';
+  updateVideoTitle
+} from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
 const VideoForm = ({

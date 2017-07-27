@@ -20,7 +20,9 @@ export default ({ children }) => {
           alertManager.setComponent(alertComponent);
         }}
       />
-      <div className="root-child">{children}</div>
+      <div className="root-child">
+        {children}
+      </div>
     </div>
   );
 };

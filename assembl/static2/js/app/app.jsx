@@ -20,7 +20,10 @@ class App extends React.Component {
     return (
       <div className="app">
         {debateLoading && <Loader />}
-        {debateData && <div className="app-child">{this.props.children}</div>}
+        {debateData &&
+          <div className="app-child">
+            {this.props.children}
+          </div>}
         {debateError && <Error errorMessage={debateError} />}
       </div>
     );

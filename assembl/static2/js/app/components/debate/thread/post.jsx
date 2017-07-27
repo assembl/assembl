@@ -54,14 +54,24 @@ const Post = ({
         <Row className="post-row">
           <Col xs={12} md={11} className="post-left">
             {creator && <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} />}
-            <h3 className="dark-title-3">{subject}</h3>
-            <div className="body">{body}</div>
+            <h3 className="dark-title-3">
+              {subject}
+            </h3>
+            <div className="body">
+              {body}
+            </div>
             <div className="link-idea">
-              <div className="label"><Translate value="debate.thread.linkIdea" /></div>
+              <div className="label">
+                <Translate value="debate.thread.linkIdea" />
+              </div>
               <div className="badges">
                 {indirectIdeaContentLinks &&
                   indirectIdeaContentLinks.map((link) => {
-                    return <span className="badge" key={link.idea.id}>{link.idea.title}</span>;
+                    return (
+                      <span className="badge" key={link.idea.id}>
+                        {link.idea.title}
+                      </span>
+                    );
                   })}
               </div>
             </div>
@@ -80,7 +90,9 @@ const Post = ({
         </Row>
       </div>
       {activeAnswerFormId === id
-        ? <div className="answer-form"><AnswerForm parentId={id} ideaId={ideaId} refetchIdea={refetchIdea} /></div>
+        ? <div className="answer-form">
+          <AnswerForm parentId={id} ideaId={ideaId} refetchIdea={refetchIdea} />
+        </div>
         : null}
     </div>
   );

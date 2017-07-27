@@ -1,4 +1,3 @@
-import { List, Map } from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
@@ -12,30 +11,29 @@ import Header from '../components/debate/common/header';
 import IdeaWithPosts from '../graphql/IdeaWithPosts.graphql';
 import InfiniteSeparator from '../components/common/infiniteSeparator';
 import Post, { connectPostToState, PostFolded } from '../components/debate/thread/post';
+import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
 
 export const transformPosts = (posts) => {
-  let postsByParent = Map();
+  const postsByParent = {};
   posts.forEach((p) => {
-    const items = postsByParent.get(p.parentId, List());
-    postsByParent = postsByParent.set(p.parentId, items.push(p));
+    const items = postsByParent[p.parentId] || [];
+    postsByParent[p.parentId] = items;
+    items.push(p);
   });
 
   const getChildren = (id) => {
-    return postsByParent.get(id, List()).toJS().map((post) => {
+    return (postsByParent[id] || []).map((post) => {
       return { ...post, children: getChildren(post.id) };
     });
   };
 
-  return postsByParent
-    .get(null, List())
-    .map((p) => {
-      return { ...p, children: getChildren(p.id) };
-    })
-    .toJS();
+  return (postsByParent.null || []).map((p) => {
+    return { ...p, children: getChildren(p.id) };
+  });
 };
 
 class Idea extends React.Component {
@@ -68,7 +66,11 @@ class Idea extends React.Component {
                   InnerComponent={Post}
                   InnerComponentFolded={PostFolded}
                   noRowsRenderer={() => {
-                    return <div className="center"><Translate value="debate.thread.noPostsInThread" /></div>;
+                    return (
+                      <div className="center">
+                        <Translate value="debate.thread.noPostsInThread" />
+                      </div>
+                    );
                   }}
                   SeparatorComponent={InfiniteSeparator}
                   toggleItem={toggleItem}
@@ -77,6 +79,7 @@ class Idea extends React.Component {
             </div>
           </Grid>
         </section>
+        <GoUp />
       </div>
     );
   }

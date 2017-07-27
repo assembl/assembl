@@ -71,7 +71,9 @@ const AnswerForm = ({
   return (
     <Row>
       <Col xs={12} md={12}>
-        <div className="color"><span className="assembl-icon-back-arrow" />&nbsp;<Translate value="debate.answer" /></div>
+        <div className="color">
+          <span className="assembl-icon-back-arrow" />&nbsp;<Translate value="debate.answer" />
+        </div>
       </Col>
       <Col xs={12} md={12}>
         <div className="answer-form-inner">

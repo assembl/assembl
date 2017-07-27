@@ -59,7 +59,9 @@ class Administration extends React.Component {
                   <Menu requestedPhase={phase} />
                 </div>
               </Col>
-              <Col xs={12} md={8}>{children}</Col>
+              <Col xs={12} md={8}>
+                {children}
+              </Col>
               <Col xs={12} md={1}>
                 <LanguageMenu />
               </Col>

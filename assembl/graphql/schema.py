@@ -84,7 +84,8 @@ class SecureObjectType(object):
 
 def resolve_langstring(langstring, locale_code):
     """If locale_code is None, return the best lang based on user prefs,
-    otherwise respect the locale_code and return the right translation or None.
+    otherwise respect the locale_code to return the right translation.
+    If no translation found, fallback to best lang behavior.
     """
     if langstring is None:
         return None

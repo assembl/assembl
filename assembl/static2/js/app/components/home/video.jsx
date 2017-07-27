@@ -38,7 +38,9 @@ class Video extends React.Component {
                 <Row>
                   {debateData.video.descriptionEntriesTop &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
-                      <div className="text" id="video-txt">{debateData.video.descriptionEntriesTop[locale]}</div>
+                      <div className="text" id="video-txt">
+                        {debateData.video.descriptionEntriesTop[locale]}
+                      </div>
                     </Col>}
                   {debateData.video.videoUrl &&
                     debateData.video.videoUrl &&
@@ -49,7 +51,9 @@ class Video extends React.Component {
                     </Col>}
                   {debateData.video.descriptionEntriesBottom &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
-                      <div className="text" id="video-txt">{debateData.video.descriptionEntriesBottom[locale]}</div>
+                      <div className="text" id="video-txt">
+                        {debateData.video.descriptionEntriesBottom[locale]}
+                      </div>
                     </Col>}
                 </Row>
               </div>

@@ -143,7 +143,9 @@ class Navigation extends React.Component {
                         total={this.state.questionsLength}
                       />
                     </div>
-                    <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>
+                    <div className="bar" style={{ width: `${barWidth}%` }}>
+                      &nbsp;
+                    </div>
                     <div className="bkg-bar">&nbsp;</div>
                   </div>
                 </Col>
