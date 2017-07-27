@@ -62,12 +62,14 @@ class Survey extends React.Component {
       <div className="survey">
         <div className="relative">
           <Header title={title} imgUrl={imgUrl} identifier="survey" />
-          {isValidVideo ? <Video
-            title={video.title}
-            descriptionTop={video.descriptionTop}
-            descriptionBottom={video.descriptionBottom}
-            htmlCode={video.htmlCode}
-          /> : null}
+          {isValidVideo
+            ? <Video
+              title={video.title}
+              descriptionTop={video.descriptionTop}
+              descriptionBottom={video.descriptionBottom}
+              htmlCode={video.htmlCode}
+            />
+            : null}
           <div className="questions">
             {questions &&
               questions.map((question, index) => {

@@ -75,7 +75,9 @@ class ImageUploader extends React.Component {
             alt="preview"
           />
         </div>
-        <div className="preview-title">{this.state.imgName}</div>
+        <div className="preview-title">
+          {this.state.imgName}
+        </div>
         <input
           type="file"
           onChange={this.handleChangePreview}

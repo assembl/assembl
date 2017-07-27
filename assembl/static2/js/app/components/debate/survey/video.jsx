@@ -13,7 +13,9 @@ class Video extends React.Component {
             <div className="max-container">
               <div className="video-title-section">
                 <div className="title-hyphen">&nbsp;</div>
-                <h1 className="dark-title-1">{title || I18n.t('debate.survey.titleVideo')}</h1>
+                <h1 className="dark-title-1">
+                  {title || I18n.t('debate.survey.titleVideo')}
+                </h1>
               </div>
               <div className="content-section">
                 <Row>
@@ -21,8 +23,12 @@ class Video extends React.Component {
                   {descriptionTop &&
                     <Col xs={12} sm={4}>
                       <div className="video-description">
-                        <div><span className="assembl-icon-pepite color2">&nbsp;</span></div>
-                        <div className="description-txt">{descriptionTop}</div>
+                        <div>
+                          <span className="assembl-icon-pepite color2">&nbsp;</span>
+                        </div>
+                        <div className="description-txt">
+                          {descriptionTop}
+                        </div>
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}
@@ -37,8 +43,12 @@ class Video extends React.Component {
                   {descriptionBottom &&
                     <Col xs={12} sm={4}>
                       <div className="video-description right">
-                        <div><span className="assembl-icon-pepite color2">&nbsp;</span></div>
-                        <div className="description-txt">{descriptionBottom}</div>
+                        <div>
+                          <span className="assembl-icon-pepite color2">&nbsp;</span>
+                        </div>
+                        <div className="description-txt">
+                          {descriptionBottom}
+                        </div>
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}

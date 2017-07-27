@@ -40,7 +40,9 @@ class Navbar extends React.Component {
             <div className="txt">
               <Translate value="administration.step_x_total" num={this.state.currentStep} total={this.state.totalSteps} />
             </div>
-            <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>
+            <div className="bar" style={{ width: `${barWidth}%` }}>
+              &nbsp;
+            </div>
             <div className="bkg-bar">&nbsp;</div>
           </div>
         </Col>

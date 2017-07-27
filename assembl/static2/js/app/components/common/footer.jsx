@@ -14,7 +14,9 @@ class Footer extends React.Component {
           <div className={debateData.socialMedias ? 'footer' : 'footer margin-xl'}>
             {debateData.socialMedias &&
               <div>
-                <p><Translate value="footer.socialMedias" /></p>
+                <p>
+                  <Translate value="footer.socialMedias" />
+                </p>
                 <div className="social-medias">
                   {debateData.socialMedias.map((sMedia, index) => {
                     return (
@@ -27,11 +29,19 @@ class Footer extends React.Component {
               </div>}
             {debateData.termsOfUseUrl &&
               <div className="terms">
-                <Link to={debateData.termsOfUseUrl} target="_blank"><Translate value="footer.terms" /></Link>
+                <Link to={debateData.termsOfUseUrl} target="_blank">
+                  <Translate value="footer.terms" />
+                </Link>
               </div>}
             <div className="copyright">
-              © <Link to="http://assembl.bluenove.com/" target="_blank">Assembl</Link> powered by{' '}
-              <Link to="http://bluenove.com/" target="_blank">bluenove</Link>
+              ©{' '}
+              <Link to="http://assembl.bluenove.com/" target="_blank">
+                Assembl
+              </Link>{' '}
+              powered by{' '}
+              <Link to="http://bluenove.com/" target="_blank">
+                bluenove
+              </Link>
             </div>
           </div>
         </div>

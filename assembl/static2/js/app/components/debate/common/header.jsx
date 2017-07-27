@@ -19,12 +19,16 @@ class Header extends React.Component {
               {title}
             </h1>
             {isPhaseCompleted &&
-              <h6 className="light-title-6"><Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} /></h6>}
+              <h6 className="light-title-6">
+                <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
+              </h6>}
           </div>
         </Grid>
         <Grid fluid>
           <Row>
-            <div className="header-bkg" style={{ backgroundImage: `url(${imgUrl})` }}>&nbsp;</div>
+            <div className="header-bkg" style={{ backgroundImage: `url(${imgUrl})` }}>
+              &nbsp;
+            </div>
           </Row>
         </Grid>
       </section>

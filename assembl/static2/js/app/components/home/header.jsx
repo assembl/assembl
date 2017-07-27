@@ -49,9 +49,15 @@ class Header extends React.Component {
           <div className="header-content">
             {debateData.headerLogoUrl ? <img className="header-logo" src={debateData.headerLogoUrl} alt="logo" /> : null}
             <div className="max-text-width">
-              {debateData.topic && <h1 className="light-title-1">{debateData.topic.titleEntries[locale]}</h1>}
+              {debateData.topic &&
+                <h1 className="light-title-1">
+                  {debateData.topic.titleEntries[locale]}
+                </h1>}
               <h4 className="light-title-4 uppercase margin-m">
-                {debateData.introduction && <span>{debateData.introduction.titleEntries[locale]}</span>}
+                {debateData.introduction &&
+                  <span>
+                    {debateData.introduction.titleEntries[locale]}
+                  </span>}
                 {debateData.dates &&
                   <div>
                     <Translate value="home.from" />
@@ -73,7 +79,9 @@ class Header extends React.Component {
         <Grid fluid>
           <Row>
             <Statistic />
-            <div className="header-bkg" style={{ backgroundImage: `url(${debateData.headerBackgroundUrl})` }}>&nbsp;</div>
+            <div className="header-bkg" style={{ backgroundImage: `url(${debateData.headerBackgroundUrl})` }}>
+              &nbsp;
+            </div>
           </Row>
         </Grid>
       </section>

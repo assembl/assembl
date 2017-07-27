@@ -65,7 +65,9 @@ class SignupForm extends React.Component {
     const slug = getDiscussionSlug();
     return (
       <div className="login-view">
-        <div className="box-title">{I18n.t('login.createAccount')}</div>
+        <div className="box-title">
+          {I18n.t('login.createAccount')}
+        </div>
         <div className="box">
           <form className="signup" onSubmit={this.signupHandler}>
             <FormGroup className="margin-m">

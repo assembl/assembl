@@ -16,7 +16,9 @@ class Statistic extends React.Component {
             <div className="stat-box border-right">
               <div className="stat-icon assembl-icon-message white">&nbsp;</div>
               <div className="stat">
-                <div className="stat-nb">{rootIdea.numPosts}&nbsp;</div>
+                <div className="stat-nb">
+                  {rootIdea.numPosts}&nbsp;
+                </div>
                 <div className="stat-nb">
                   <Translate value="home.contribution" />
                 </div>
@@ -27,7 +29,9 @@ class Statistic extends React.Component {
           <div className="stat-box">
             <div className="stat-icon assembl-icon-profil white">&nbsp;</div>
             <div className="stat">
-              <div className="stat-nb">{numParticipants}&nbsp;</div>
+              <div className="stat-nb">
+                {numParticipants}&nbsp;
+              </div>
               <div className="stat-nb">
                 <Translate value="home.participant" />
               </div>

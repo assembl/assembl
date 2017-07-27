@@ -5,7 +5,11 @@ import { Translate } from 'react-redux-i18n';
 export const TextInputWithRemainingChars = ({ value, label, maxLength, handleTxtChange, remainingChars, handleInputFocus }) => {
   return (
     <div>
-      {value ? <div className="form-label">{label}</div> : null}
+      {value
+        ? <div className="form-label">
+          {label}
+        </div>
+        : null}
       <FormControl
         type="text"
         placeholder={label}

@@ -23,7 +23,9 @@ const QuestionsForm = ({ addQuestion, selectedLocale, thematicId, questions }) =
           );
         })}
         <OverlayTrigger placement="top" overlay={addQuestionTooltip}>
-          <div onClick={addQuestion} className="plus margin-l">+</div>
+          <div onClick={addQuestion} className="plus margin-l">
+            +
+          </div>
         </OverlayTrigger>
       </div>
     </div>

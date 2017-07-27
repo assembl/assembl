@@ -29,7 +29,8 @@ class TimelineSegment extends React.Component {
       if (phaseStatus === 'notStarted') {
         const body = (
           <div>
-            <Translate value="debate.notStarted" phaseName={phaseName} /><Localize value={startDate} dateFormat="date.format" />
+            <Translate value="debate.notStarted" phaseName={phaseName} />
+            <Localize value={startDate} dateFormat="date.format" />
           </div>
         );
         displayModal(null, body, true, null, null, true);
@@ -74,9 +75,15 @@ class TimelineSegment extends React.Component {
             );
           })}
         <div className={isStepCompleted || isCurrentPhase ? 'timeline-number active' : 'timeline-number not-active'}>
-          {isStepCompleted ? <span className="assembl-icon-checked white" /> : <span>{index + 1}</span>}
+          {isStepCompleted
+            ? <span className="assembl-icon-checked white" />
+            : <span>
+              {index + 1}
+            </span>}
         </div>
-        <div className="timeline-bar-2" style={{ width: `${barWidth}px` }}>&nbsp;</div>
+        <div className="timeline-bar-2" style={{ width: `${barWidth}px` }}>
+          &nbsp;
+        </div>
         <div className="timeline-bar-1">&nbsp;</div>
       </div>
     );

@@ -118,8 +118,7 @@ const PublishedInfo = (props) => {
   const { date, userId, userName, className } = props;
   return (
     <div className={className}>
-      <Translate value="search.published_on" />{' '}<Localize value={date} dateFormat="date.format" />
-      {' '}<Translate value="search.by" />{' '}
+      <Translate value="search.published_on" /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
@@ -162,13 +161,21 @@ const DumbPostHit = (props) => {
         <p dangerouslySetInnerHTML={{ __html: body }} />
         <div>
           <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.like}</div>
+          <div className="emoticonValue">
+            {source.sentiment_counts.like}
+          </div>
           <div title={I18n.t('search.disagree')} className="emoticon DisagreeSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.disagree}</div>
+          <div className="emoticonValue">
+            {source.sentiment_counts.disagree}
+          </div>
           <div title={I18n.t('search.dont_understand')} className="emoticon DontUnderstandSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.dont_understand}</div>
+          <div className="emoticonValue">
+            {source.sentiment_counts.dont_understand}
+          </div>
           <div title={I18n.t('search.more_info')} className="emoticon MoreInfoSentimentOfPost" />
-          <div className="emoticonValue">{source.sentiment_counts.more_info}</div>
+          <div className="emoticonValue">
+            {source.sentiment_counts.more_info}
+          </div>
         </div>
       </div>
       <PublishedInfo
@@ -237,7 +244,7 @@ const UserHit = (props) => {
         </span>
         {source.creation_date
           ? <span>
-            <Translate value="search.member_since" />{' '}<Localize value={source.creation_date} dateFormat="date.format" />
+            <Translate value="search.member_since" /> <Localize value={source.creation_date} dateFormat="date.format" />
           </span>
           : null}
       </div>
@@ -262,14 +269,18 @@ const IdeaHit = (props) => {
           ? <div>
             <p dangerouslySetInnerHTML={{ __html: definition }} />
             {get(props.result, 'highlight.definition') &&
-            <p><Translate value="search.search_come_from_what_you_need_to_know" /></p>}
+            <p>
+              <Translate value="search.search_come_from_what_you_need_to_know" />
+            </p>}
           </div>
           : null}
         {get(props.result, 'highlight.title') || get(props.result, 'highlight.body')
           ? <div>
             <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
             <p dangerouslySetInnerHTML={{ __html: announceBody }} />
-            <p><Translate value="search.search_come_from_announcement" /></p>
+            <p>
+              <Translate value="search.search_come_from_announcement" />
+            </p>
           </div>
           : null}
       </div>
@@ -302,7 +313,11 @@ const HitItem = (props) => {
 };
 
 const NoPanel = (props) => {
-  return <div>{props.children}</div>;
+  return (
+    <div>
+      {props.children}
+    </div>
+  );
 };
 
 const queryFields = [

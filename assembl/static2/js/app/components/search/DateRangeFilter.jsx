@@ -91,7 +91,9 @@ class DateRangeFilter extends Component {
     return (
       <div className="date-filter">
         <div>
-          <label htmlFor="date_from"><Translate value="search.datefilter.from">From</Translate></label>
+          <label htmlFor="date_from">
+            <Translate value="search.datefilter.from">From</Translate>
+          </label>
           <DatePicker
             id="date_from"
             className="form-control"
@@ -107,7 +109,9 @@ class DateRangeFilter extends Component {
           {/* {calendarImage} */}
         </div>
         <div>
-          <label htmlFor="date_to"><Translate value="search.datefilter.to">To</Translate></label>
+          <label htmlFor="date_to">
+            <Translate value="search.datefilter.to">To</Translate>
+          </label>
           <DatePicker
             id="date_to"
             className="form-control"

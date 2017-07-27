@@ -22,7 +22,9 @@ class Timeline extends React.Component {
             <Pointer position={barWidth} />
           </div>
           : <div className="trsp-pointer">&nbsp;</div>}
-        <div className="bar" style={{ width: `${barWidth}%` }}>&nbsp;</div>
+        <div className="bar" style={{ width: `${barWidth}%` }}>
+          &nbsp;
+        </div>
         <div className="bar-bkg">&nbsp;</div>
       </div>
     );

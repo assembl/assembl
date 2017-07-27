@@ -71,7 +71,9 @@ class Main extends React.Component {
     return (
       <div className="main">
         <Navbar isHidden={this.state.isNavbarHidden} location={this.state.location} />
-        <div className="app-content">{children}</div>
+        <div className="app-content">
+          {children}
+        </div>
         <Footer />
       </div>
     );
