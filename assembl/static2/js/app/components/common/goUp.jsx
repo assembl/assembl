@@ -3,6 +3,8 @@ import { Translate } from 'react-redux-i18n';
 
 import { scrollToPosition } from '../../utils/globalFunctions';
 
+const MAX_HEIGHT_FOOTER = 400;
+
 class GoUp extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +21,10 @@ class GoUp extends React.Component {
   }
 
   displayButton() {
-    if (window.pageYOffset > window.innerHeight) {
+    if (
+      window.pageYOffset > window.innerHeight &&
+      window.pageYOffset < document.body.scrollHeight - window.innerHeight - MAX_HEIGHT_FOOTER
+    ) {
       this.setState(() => {
         return { isHidden: false };
       });
