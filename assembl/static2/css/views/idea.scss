@@ -28,7 +28,6 @@
         margin-bottom: -6px;
         position: relative;
         height: $post-space;
-        border-bottom: 1px solid $grey1;
         border-left: 1px solid $grey1;
         width: $tree-indentation;
 
@@ -62,7 +61,7 @@
 
         span {
             display: block;
-            margin: 3px 0 0 55px;
+            margin: 3px 0 0 20px;
             width: 400px;
         }
     }
