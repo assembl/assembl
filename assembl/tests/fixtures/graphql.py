@@ -114,6 +114,10 @@ mutation myMutation {
                 {value:"Câlisse de tabarnak",
                  localeCode:"fr"},
             ],
+            descriptionEntriesSide:[
+                {value:"Putain",
+                 localeCode:"fr"},
+            ],
             htmlCode:"<object>....</object>"
         },
         identifier:"survey",

@@ -8,13 +8,14 @@ import {
   updateVideoHtmlCode,
   updateVideoDescriptionTop,
   updateVideoDescriptionBottom,
-  updateVideoTitle
-} from '../../../actions/adminActions';
+  updateVideoDescriptionSide,
+  updateVideoTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
 const VideoForm = ({
   descriptionTop,
   descriptionBottom,
+  descriptionSide,
   hasVideo,
   htmlCode,
   selectedLocale,
@@ -22,11 +23,14 @@ const VideoForm = ({
   toggle,
   updateDescriptionTop,
   updateDescriptionBottom,
+  updateDescriptionSide,
   updateTitle,
   updateHtmlCode
 }) => {
   const titlePh = `${I18n.t('administration.ph.title')} ${selectedLocale.toUpperCase()}`;
   const quotePh = `${I18n.t('administration.ph.quote')} ${selectedLocale.toUpperCase()}`;
+  const descriptionTopPh = `${I18n.t('administration.ph.descriptionTop')} ${selectedLocale.toUpperCase()}`;
+  const descriptionBottomPh = `${I18n.t('administration.ph.descriptionBottom')} ${selectedLocale.toUpperCase()}`;
   const videoLinkPh = `${I18n.t('administration.ph.videoLink')} ${selectedLocale.toUpperCase()}`;
   return (
     <div className="form-container">
@@ -52,7 +56,7 @@ const VideoForm = ({
               componentClass="textarea"
               id="video-description-top"
               type="text-area"
-              label={quotePh}
+              label={descriptionTopPh}
               value={descriptionTop}
               onChange={(e) => {
                 return updateDescriptionTop(e.target.value);
@@ -62,10 +66,20 @@ const VideoForm = ({
               componentClass="textarea"
               id="video-description-bottom"
               type="text-area"
-              label={quotePh}
+              label={descriptionBottomPh}
               value={descriptionBottom}
               onChange={(e) => {
                 return updateDescriptionBottom(e.target.value);
+              }}
+            />
+            <FormControlWithLabel
+              componentClass="textarea"
+              id="video-description-side"
+              type="text-area"
+              label={quotePh}
+              value={descriptionSide}
+              onChange={(e) => {
+                return updateDescriptionSide(e.target.value);
               }}
             />
             <FormControlWithLabel
@@ -99,17 +113,20 @@ export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, sele
   const hasVideo = video !== null;
   let descriptionTop = '';
   let descriptionBottom = '';
+  let descriptionSide = '';
   let htmlCode = '';
   let title = '';
   if (hasVideo) {
     descriptionTop = getEntryValueForLocale(video.get('descriptionEntriesTop'), selectedLocale);
     descriptionBottom = getEntryValueForLocale(video.get('descriptionEntriesBottom'), selectedLocale);
+    descriptionSide = getEntryValueForLocale(video.get('descriptionEntriesSide'), selectedLocale);
     htmlCode = video.get('htmlCode', '');
     title = getEntryValueForLocale(video.get('titleEntries'), selectedLocale);
   }
   return {
     descriptionTop: descriptionTop,
     descriptionBottom: descriptionBottom,
+    descriptionSide: descriptionSide,
     hasVideo: hasVideo,
     htmlCode: htmlCode,
     title: title
@@ -129,6 +146,9 @@ export const mapDispatchToProps = (dispatch, { selectedLocale, thematicId }) => 
     },
     updateDescriptionBottom: (value) => {
       return dispatch(updateVideoDescriptionBottom(thematicId, selectedLocale, value));
+    },
+    updateDescriptionSide: (value) => {
+      return dispatch(updateVideoDescriptionSide(thematicId, selectedLocale, value));
     },
     updateTitle: (value) => {
       return dispatch(updateVideoTitle(thematicId, selectedLocale, value));

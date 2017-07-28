@@ -21,6 +21,7 @@ mutation updateThematic(
         title
         descriptionTop
         descriptionBottom
+        descriptionSide
         htmlCode
       }
       questions {

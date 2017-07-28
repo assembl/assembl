@@ -13,6 +13,7 @@ mutation createThematic(
         title
         descriptionTop
         descriptionBottom
+        descriptionSide
         htmlCode
       }
       questions {
