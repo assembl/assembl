@@ -211,6 +211,12 @@ def react_view(request, required_permission=P_READ):
     get_route = old_context["get_route"]
     (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')
+    common_context = {
+        "theme_name": theme_name,
+        "theme_relative_path": theme_relative_path,
+        "REACT_URL": old_context['REACT_URL'],
+        "NODE_ENV": node_env,
+    }
 
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, required_permission)
@@ -221,12 +227,7 @@ def react_view(request, required_permission=P_READ):
             # Maybe we're already in a login/register page etc.
             if is_login_route(bare_route):
                 context = get_login_context(request)
-                context.update({
-                    "theme_name": theme_name,
-                    "theme_relative_path": theme_relative_path,
-                    "REACT_URL": old_context['REACT_URL'],
-                    "NODE_ENV": node_env,
-                })
+                context.update(common_context)
                 return context
 
             # otherwise redirect to login page
@@ -279,26 +280,18 @@ def react_view(request, required_permission=P_READ):
             return HTTPTemporaryRedirect(url)
     else:
         context = get_login_context(request)
-        context.update({
-            "theme_name": theme_name,
-            "theme_relative_path": theme_relative_path,
-            "REACT_URL": old_context['REACT_URL'],
-            "NODE_ENV": node_env,
-        })
+        context.update(common_context)
         return context
 
     context = dict(
         request=old_context['request'],
-        REACT_URL=old_context['REACT_URL'],
-        NODE_ENV=node_env,
         discussion=discussion,
         user=old_context['user'],
         error=old_context.get('error', None),
         messages=old_context.get('messages', None),
         providers_json=old_context.get('providers_json', None),
         get_route=get_route,
-        theme_name=theme_name,
-        theme_relative_path=theme_relative_path
+        **common_context
     )
     return context
 
