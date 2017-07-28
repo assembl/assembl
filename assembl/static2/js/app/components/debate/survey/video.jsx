@@ -20,7 +20,7 @@ class Video extends React.Component {
                 {descriptionTop && 
                   <Row>
                     <Col xs={12} sm={4}>
-                      <div className="video-description-layer">{descriptionTop}</div>
+                      <div className={descriptionSide? "video-description-layer video-left" : "video-description-layer"}>{descriptionTop}</div>
                     </Col>
                   </Row>
                 }
@@ -29,17 +29,8 @@ class Video extends React.Component {
                   {descriptionSide &&
                     <Col xs={12} sm={4}>
                       <div className="video-description">
-<<<<<<< HEAD
-                        <div>
-                          <span className="assembl-icon-pepite color2">&nbsp;</span>
-                        </div>
-                        <div className="description-txt">
-                          {descriptionTop}
-                        </div>
-=======
                         <div><span className="assembl-icon-pepite color2">&nbsp;</span></div>
                         <div className="description-txt">{descriptionSide}</div>
->>>>>>> update front-end pages
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}
@@ -53,19 +44,7 @@ class Video extends React.Component {
                 <Row>
                   {descriptionBottom &&
                     <Col xs={12} sm={4}>
-<<<<<<< HEAD
-                      <div className="video-description right">
-                        <div>
-                          <span className="assembl-icon-pepite color2">&nbsp;</span>
-                        </div>
-                        <div className="description-txt">
-                          {descriptionBottom}
-                        </div>
-                        <div className="box-hyphen left">&nbsp;</div>
-                      </div>
-=======
-                      <div className="video-description-layer">{descriptionBottom}</div>
->>>>>>> update front-end pages
+                      <div className={descriptionSide? "video-description-layer video-left" : "video-description-layer"}>{descriptionBottom}</div>
                     </Col>}
                 </Row>
               </div>

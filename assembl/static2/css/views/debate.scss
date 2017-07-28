@@ -536,10 +536,14 @@
 
     .video-description-layer {
       position: relative;
-      left: 500px;
+      left: 160px;
       margin-top: 20px;
       margin-bottom: 20px;
       text-align: center;
+    }
+
+    .video-left {
+      left: 500px;
     }
 
     .video-description {
@@ -591,10 +595,13 @@
 
     .video-description-layer {
       position: relative;
-      left: 350px;
       margin-top: 20px;
       margin-bottom: 20px;
       text-align: center;
+    }
+
+    .video-left {
+      left: 350px;
     }
 
     .video-description {
