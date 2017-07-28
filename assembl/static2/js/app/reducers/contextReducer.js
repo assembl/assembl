@@ -1,7 +1,12 @@
-const ContextReducer = (state = {}, action) => {
+const assemblVersionNode = document.getElementById('assemblVersion');
+const assemblVersion = assemblVersionNode ? assemblVersionNode.value : null;
+const initialState = { assemblVersion: assemblVersion };
+
+const ContextReducer = (state = initialState, action) => {
   switch (action.type) {
   case 'ADD_CONTEXT':
     return {
+      ...state,
       rootPath: action.rootPath,
       debateId: action.debateId,
       connectedUserId: action.connectedUserId,

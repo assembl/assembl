@@ -2,6 +2,7 @@
 import json
 import os
 import os.path
+import pkg_resources
 
 from pyramid.view import view_config
 from pyramid.response import Response
@@ -216,6 +217,7 @@ def react_view(request, required_permission=P_READ):
         "theme_relative_path": theme_relative_path,
         "REACT_URL": old_context['REACT_URL'],
         "NODE_ENV": node_env,
+        "assembl_version": pkg_resources.get_distribution("assembl").version,
     }
 
     if discussion:

@@ -10,10 +10,14 @@
     width: 100%;
   }
 
-  .copyright {
+  .copyright, .assembl-version  {
     bottom: 10px;
     font-size: $font-size-xxs;
     position: absolute;
+  }
+
+  .assembl-version {
+      right: 0px;
   }
 
   a {

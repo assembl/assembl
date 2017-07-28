@@ -7,7 +7,7 @@ import Glyphicon from './glyphicon';
 
 class Footer extends React.Component {
   render() {
-    const { debateData } = this.props.debate;
+    const { assemblVersion, debateData } = this.props;
     return (
       <Grid fluid className="background-dark relative">
         <div className="max-container">
@@ -43,6 +43,11 @@ class Footer extends React.Component {
                 bluenove
               </Link>
             </div>
+            {assemblVersion
+              ? <div className="assembl-version">
+                  v{assemblVersion}
+              </div>
+              : null}
           </div>
         </div>
       </Grid>
@@ -52,7 +57,8 @@ class Footer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate
+    assemblVersion: state.context.assemblVersion,
+    debateData: state.debate
   };
 };
 
