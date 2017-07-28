@@ -20,7 +20,7 @@ class Video extends React.Component {
                 {descriptionTop &&
                   <Row>
                     <Col xs={12} sm={descriptionSide ? 5 : 6} smOffset={descriptionSide ? 5 : 3}>
-                      <div className="video-description-layer">
+                      <div className="video-description-layer video-description-top">
                         {descriptionTop}
                       </div>
                     </Col>
@@ -38,12 +38,7 @@ class Video extends React.Component {
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}
-                  <Col
-                    xs={12}
-                    sm={descriptionSide ? 5 : 6}
-                    smOffset={descriptionSide ? 0 : 3}
-                    className={descriptionSide ? 'video-col' : 'col-centered no-padding'}
-                  >
+                  <Col xs={12} sm={descriptionSide ? 5 : 6} smOffset={descriptionSide ? 0 : 3}>
                     <div className="video-container" id="video-vid">
                       <iframe src={htmlCode} frameBorder="0" width="560" height="315" />
                     </div>
@@ -52,7 +47,7 @@ class Video extends React.Component {
                 <Row>
                   {descriptionBottom &&
                     <Col xs={12} sm={descriptionSide ? 5 : 6} smOffset={descriptionSide ? 5 : 3}>
-                      <div className="video-description-layer">
+                      <div className="video-description-layer video-description-bottom">
                         {descriptionBottom}
                       </div>
                     </Col>}
