@@ -10,15 +10,15 @@
 {% endblock %}
 
 {% block body %}
-	<body>
+    <body>
         {% if user %}
           {% set userId = user.id %}
         {% else %}
           {% set userId = 'system.Everyone' %}
         {% endif %}
-		{% if discussion %}
-        	<input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
-        	<input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
+        {% if discussion %}
+            <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
+            <input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
             <script type="application/json" id="permissions-json">{{ discussion.get_user_permissions_preload(userId) |safe }}</script>
         {% endif %}
         {% if providers_json %}
@@ -29,17 +29,17 @@
             <input type='hidden' name='user-displayname' id='user-displayname' value='{{ user.display_name() }}' />
         {% endif %}
         {% if error %}
-    		<div class='hidden' id='errorMessage'>{{ error }}</div>
+            <div class='hidden' id='errorMessage'>{{ error }}</div>
         {% endif %}
         {% if messages %}
-    		<div class='hidden' id='serverMessages'>{{ messages }}</div>
+            <div class='hidden' id='serverMessages'>{{ messages }}</div>
         {% endif %}
         <div id='root'></div>
-		{% block main_js %}
-			<script src='{{REACT_URL}}/build/bundle.js'></script>
+        {% block main_js %}
+            <script src='{{REACT_URL}}/build/bundle.js'></script>
             {% if NODE_ENV == 'development' %}
                 <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
             {% endif %}
-		{% endblock %}
-	</body>
+        {% endblock %}
+    </body>
 {% endblock%}
