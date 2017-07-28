@@ -319,6 +319,8 @@ class LocaleLabel(Base):
 
     @classmethod
     def names_in_locale(cls, locale):
+        """Give the name of known locales in the target locale
+        as a {code: name} dict"""
         loc_ids = [loc.id for loc in locale.ancestry()]
         locale_labels = locale.db.query(cls).filter(
             cls.locale_id_of_label.in_(loc_ids)).all()
@@ -335,6 +337,8 @@ class LocaleLabel(Base):
 
     @classmethod
     def names_of_locales_in_locale(cls, loc_codes, target_locale):
+        """Give the name of given locales in the target locale
+        as a {code: name} dict"""
         locale_ids = [Locale.get_id_of(loc_code) for loc_code in loc_codes]
         target_loc_ids = [loc.id for loc in target_locale.ancestry()]
         locale_labels = target_locale.db.query(cls).filter(
@@ -353,6 +357,8 @@ class LocaleLabel(Base):
 
     @classmethod
     def names_in_self(cls):
+        """Give the name of known locales in their own language
+        as a {code: name} dict"""
         return {
             Locale.code_for_id(lname.named_locale_id): lname.name
             for lname in cls.default_db.query(cls).filter(
@@ -360,6 +366,7 @@ class LocaleLabel(Base):
 
     @classmethod
     def load_names(cls, db=None):
+        """Populate the locale_label table."""
         from os.path import dirname, join
         db = db or cls.default_db
         fname = join(dirname(dirname(__file__)),
