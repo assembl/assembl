@@ -272,7 +272,9 @@ describe('Admin reducers', () => {
       const oldState = fromJS({
         1: {
           video: {
-            descriptionEntries: [],
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: 'foobar',
             titleEntries: [{ localeCode: 'fr', value: 'Mon titre' }]
           }
@@ -289,7 +291,9 @@ describe('Admin reducers', () => {
       const reducedTwiceExpected = fromJS({
         1: {
           video: {
-            descriptionEntries: [],
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: '',
             titleEntries: []
           }
@@ -308,7 +312,9 @@ describe('Admin reducers', () => {
       const oldState = fromJS({
         1: {
           video: {
-            descriptionEntries: [],
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: 'old code',
             titleEntries: []
           }
@@ -317,7 +323,9 @@ describe('Admin reducers', () => {
       const expected = fromJS({
         1: {
           video: {
-            descriptionEntries: [],
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: 'new code',
             titleEntries: []
           }
@@ -339,6 +347,7 @@ describe('Admin reducers', () => {
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: '',
             titleEntries: []
           }
@@ -354,6 +363,7 @@ describe('Admin reducers', () => {
               }
             ],
             descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: '',
             titleEntries: []
           }
@@ -375,6 +385,7 @@ describe('Admin reducers', () => {
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: '',
             titleEntries: []
           }
@@ -390,6 +401,7 @@ describe('Admin reducers', () => {
                 value: 'My new bottom description'
               }
             ],
+            descriptionEntriesSide: [],
             htmlCode: '',
             titleEntries: []
           }
@@ -409,7 +421,9 @@ describe('Admin reducers', () => {
       const oldState = fromJS({
         1: {
           video: {
-            descriptionEntries: [],
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: '',
             titleEntries: [{ localeCode: 'fr', value: 'Ma vidéo' }, { localeCode: 'en', value: 'My video' }]
           }
@@ -418,7 +432,9 @@ describe('Admin reducers', () => {
       const expected = fromJS({
         1: {
           video: {
-            descriptionEntries: [],
+            descriptionEntriesTop: [],
+            descriptionEntriesBottom: [],
+            descriptionEntriesSide: [],
             htmlCode: '',
             titleEntries: [{ localeCode: 'fr', value: 'Ma vidéo' }, { localeCode: 'en', value: 'My better title' }]
           }

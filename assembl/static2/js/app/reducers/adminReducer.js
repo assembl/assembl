@@ -109,9 +109,9 @@ export const thematicsById = (state = Map(), action) => {
         return null;
       }
       return fromJS({
-        descriptionTopEntries: [],
-        descriptionBottomEntries: [],
-        descriptionSideEntries: [],
+        descriptionEntriesTop: [],
+        descriptionEntriesBottom: [],
+        descriptionEntriesSide: [],
         htmlCode: '',
         titleEntries: []
       });
