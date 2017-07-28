@@ -17,20 +17,25 @@ class Video extends React.Component {
                 </h1>
               </div>
               <div className="content-section">
-                {descriptionTop && 
+                {descriptionTop &&
                   <Row>
                     <Col xs={12} sm={4}>
-                      <div className={descriptionSide? "video-description-layer video-left" : "video-description-layer"}>{descriptionTop}</div>
+                      <div className={descriptionSide ? 'video-description-layer video-left' : 'video-description-layer'}>
+                        {descriptionTop}
+                      </div>
                     </Col>
-                  </Row>
-                }
+                  </Row>}
                 <Row>
                   <Col xs={0} sm={descriptionSide ? 1 : 3} />
                   {descriptionSide &&
                     <Col xs={12} sm={4}>
                       <div className="video-description">
-                        <div><span className="assembl-icon-pepite color2">&nbsp;</span></div>
-                        <div className="description-txt">{descriptionSide}</div>
+                        <div>
+                          <span className="assembl-icon-pepite color2">&nbsp;</span>
+                        </div>
+                        <div className="description-txt">
+                          {descriptionSide}
+                        </div>
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}
@@ -44,7 +49,9 @@ class Video extends React.Component {
                 <Row>
                   {descriptionBottom &&
                     <Col xs={12} sm={4}>
-                      <div className={descriptionSide? "video-description-layer video-left" : "video-description-layer"}>{descriptionBottom}</div>
+                      <div className={descriptionSide ? 'video-description-layer video-left' : 'video-description-layer'}>
+                        {descriptionBottom}
+                      </div>
                     </Col>}
                 </Row>
               </div>

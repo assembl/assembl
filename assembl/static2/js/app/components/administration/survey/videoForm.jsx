@@ -9,7 +9,8 @@ import {
   updateVideoDescriptionTop,
   updateVideoDescriptionBottom,
   updateVideoDescriptionSide,
-  updateVideoTitle } from '../../../actions/adminActions';
+  updateVideoTitle
+} from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
 const VideoForm = ({

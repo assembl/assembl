@@ -199,10 +199,7 @@ const SynthesisHit = (props) => {
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
-        <Link
-          to={getUrl(props.result)}
-          dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'subject') }}
-        />
+        <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: highlightedTextOrTruncatedText(props.result, 'subject') }} />
       </div>
       <div className={props.bemBlocks.item('content')}>
         <p
@@ -540,10 +537,7 @@ export class SearchComponent extends React.Component {
                     id="creative-participants"
                     title={I18n.t('search.Creative participants')}
                     label={I18n.t('search.Creative participants')}
-                    filter={HasChildQuery(
-                        'post',
-                        BoolMust([TermQuery('discussion_id', discussionId), TermQuery('parent_id', 0)])
-                      )}
+                    filter={HasChildQuery('post', BoolMust([TermQuery('discussion_id', discussionId), TermQuery('parent_id', 0)]))}
                   />
                   <CheckboxFilter
                     containerComponent={NoPanel}
@@ -551,10 +545,7 @@ export class SearchComponent extends React.Component {
                     title={I18n.t('search.Reactive participants')}
                     label={I18n.t('search.Reactive participants')}
                     filter={BoolMust([
-                      HasChildQuery(
-                          'post',
-                          BoolMust([TermQuery('discussion_id', discussionId), RangeQuery('parent_id', { gt: 0 })])
-                        ),
+                      HasChildQuery('post', BoolMust([TermQuery('discussion_id', discussionId), RangeQuery('parent_id', { gt: 0 })])),
                       BoolMustNot(
                           HasChildQuery('post', BoolMust([TermQuery('discussion_id', discussionId), TermQuery('parent_id', 0)]))
                         )

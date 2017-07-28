@@ -23,7 +23,7 @@
         "react/prop-types": [0, { "ignore": false, "customValidators": false }],
         "max-len": [
             "warn",
-            130
+            136
         ],
         "no-mixed-operators": 0,
         "func-names": [

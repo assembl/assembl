@@ -35,17 +35,20 @@ class Video extends React.Component {
             </div>
             <div className="content-section">
               <div className="content-margin">
-                {debateData.video.descriptionEntriesTop && 
+                {debateData.video.descriptionEntriesTop &&
                   <Row>
                     <Col xs={12} md={6}>
-                      <div className="text" id="top-video-txt">{debateData.video.descriptionEntriesTop[locale]}</div>
-                    </Col>}                  
-                  </Row>
-                }
+                      <div className="text" id="top-video-txt">
+                        {debateData.video.descriptionEntriesTop[locale]}
+                      </div>
+                    </Col>
+                  </Row>}
                 <Row>
                   {debateData.video.descriptionEntriesSide &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
-                      <div className="text" id="video-txt">{debateData.video.descriptionEntriesSide[locale]}</div>
+                      <div className="text" id="video-txt">
+                        {debateData.video.descriptionEntriesSide[locale]}
+                      </div>
                     </Col>}
                   {debateData.video.videoUrl &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
@@ -57,10 +60,11 @@ class Video extends React.Component {
                 {debateData.video.descriptionEntriesBottom &&
                   <Row>
                     <Col xs={12} md={6}>
-                      <div className="text" id="bottom-video-txt">{debateData.video.descriptionEntriesBottom[locale]}</div>
+                      <div className="text" id="bottom-video-txt">
+                        {debateData.video.descriptionEntriesBottom[locale]}
+                      </div>
                     </Col>
-                  </Row>
-                }
+                  </Row>}
               </div>
             </div>
           </div>
