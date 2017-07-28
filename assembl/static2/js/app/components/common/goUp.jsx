@@ -3,13 +3,11 @@ import { Translate } from 'react-redux-i18n';
 
 import { scrollToPosition } from '../../utils/globalFunctions';
 
-const MAX_HEIGHT_FOOTER = 400;
-
 class GoUp extends React.Component {
   constructor(props) {
     super(props);
     this.displayButton = this.displayButton.bind(this);
-    this.state = { isHidden: true };
+    this.state = { isHidden: true, position: 'fixed' };
   }
 
   componentWillMount() {
@@ -21,12 +19,18 @@ class GoUp extends React.Component {
   }
 
   displayButton() {
-    if (
-      window.pageYOffset > window.innerHeight &&
-      window.pageYOffset < document.body.scrollHeight - window.innerHeight - MAX_HEIGHT_FOOTER
-    ) {
+    const footerHeight = document.getElementById('footer').offsetHeight;
+    const threshold = document.body.scrollHeight - window.innerHeight - footerHeight;
+    if (window.pageYOffset > window.innerHeight && window.pageYOffset < threshold) {
+      // Show the button when we scrolled minimum the height of the window.
       this.setState(() => {
-        return { isHidden: false };
+        return { isHidden: false, position: 'fixed' };
+      });
+    } else if (window.pageYOffset >= threshold) {
+      // At the end of the page, the button stays above the footer.
+      // The container needs to have position:relative for it to work.
+      this.setState(() => {
+        return { isHidden: false, position: 'absolute' };
       });
     } else {
       this.setState(() => {
@@ -37,7 +41,7 @@ class GoUp extends React.Component {
 
   render() {
     return (
-      <div className={`go-up ${this.state.isHidden ? 'hidden' : ''}`}>
+      <div className={`go-up ${this.state.isHidden ? 'hidden' : ''}`} style={{ position: this.state.position }}>
         <div>
           <a
             onClick={() => {
