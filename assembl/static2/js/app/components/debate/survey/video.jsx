@@ -19,16 +19,15 @@ class Video extends React.Component {
               <div className="content-section">
                 {descriptionTop &&
                   <Row>
-                    <Col xs={12} sm={4}>
-                      <div className={descriptionSide ? 'video-description-layer video-left' : 'video-description-layer'}>
+                    <Col xs={12} sm={descriptionSide ? 5 : 6} smOffset={descriptionSide ? 5 : 3}>
+                      <div className="video-description-layer">
                         {descriptionTop}
                       </div>
                     </Col>
                   </Row>}
                 <Row>
-                  <Col xs={0} sm={descriptionSide ? 1 : 3} />
                   {descriptionSide &&
-                    <Col xs={12} sm={4}>
+                    <Col xs={12} sm={4} smOffset={1}>
                       <div className="video-description">
                         <div>
                           <span className="assembl-icon-pepite color2">&nbsp;</span>
@@ -39,17 +38,21 @@ class Video extends React.Component {
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}
-                  <Col xs={12} sm={descriptionSide ? 5 : 6} className={descriptionSide ? 'video-col' : 'col-centered no-padding'}>
+                  <Col
+                    xs={12}
+                    sm={descriptionSide ? 5 : 6}
+                    smOffset={descriptionSide ? 0 : 3}
+                    className={descriptionSide ? 'video-col' : 'col-centered no-padding'}
+                  >
                     <div className="video-container" id="video-vid">
                       <iframe src={htmlCode} frameBorder="0" width="560" height="315" />
                     </div>
                   </Col>
-                  <Col xs={0} sm={descriptionSide ? 2 : 3} />
                 </Row>
                 <Row>
                   {descriptionBottom &&
-                    <Col xs={12} sm={4}>
-                      <div className={descriptionSide ? 'video-description-layer video-left' : 'video-description-layer'}>
+                    <Col xs={12} sm={descriptionSide ? 5 : 6} smOffset={descriptionSide ? 5 : 3}>
+                      <div className="video-description-layer">
                         {descriptionBottom}
                       </div>
                     </Col>}

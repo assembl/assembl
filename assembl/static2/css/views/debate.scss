@@ -257,6 +257,13 @@
   .video-section {
     z-index: 100;
 
+    .video-description-layer {
+      text-align: justify;
+      font-family: "LatoLight";
+      font-size: 18px;
+      line-height: 30px;
+    }
+
     .video-col {
       margin: -15px 0 0;
     }
@@ -534,16 +541,8 @@
       }
     }
 
-    .video-description-layer {
-      position: relative;
-      left: 160px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .video-left {
-      left: 500px;
+    .video-container {
+      margin: 40px 0 40px;
     }
 
     .video-description {
@@ -593,21 +592,17 @@
       display: none;
     }
 
-    .video-description-layer {
-      position: relative;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .video-left {
-      left: 350px;
-    }
-
     .video-description {
       color: $grey2;
-      margin: -60px 0 60px 32px;
-      width: calc(100% - 35px);
+      margin: 0 32px 60px 32px;
+    }
+
+    .video-description-layer {
+      margin: 20px 0;
+    }
+
+    .content-section {
+        padding: 60px 0;
     }
 
     .box-hyphen {
