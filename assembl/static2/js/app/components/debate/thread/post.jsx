@@ -57,9 +57,7 @@ const Post = ({
             <h3 className="dark-title-3">
               {subject}
             </h3>
-            <div className="body">
-              {body}
-            </div>
+            <div className="body" dangerouslySetInnerHTML={{ __html: body.replace(/\n/g, '<br/>') }} />
             <div className="link-idea">
               <div className="label">
                 <Translate value="debate.thread.linkIdea" />
