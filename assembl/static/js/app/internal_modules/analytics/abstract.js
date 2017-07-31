@@ -29,8 +29,8 @@ var moduleName = 'Analytics_Abstract',
   
   /*
    *
-   * In order to understand the event structure, please refer to docs/events.md for a broad explanation. 
-   * If any changes in architecture are made to the this file, please update docs/events.md, as appropriate.
+   * In order to understand the event structure, please refer to `doc/analytics/events.rst` for a broad explanation. 
+   * If any changes in architecture are made to the this file, please update `doc/analytics/events.rst`, as appropriate.
    * However, event definitions and summary should be done right here, in this file.
    * 
    */
@@ -70,8 +70,8 @@ var moduleName = 'Analytics_Abstract',
   };
 
   /** 
-   * _CATEGORY_DEFINITIONS: Normally accessed as dispatcher.actions.CONSTANT
-   * Defines which UI element a custom event originate from?
+   * _ACTION_DEFINITIONS: Normally accessed as dispatcher.actions.CONSTANT
+   * Defines which high-level user process did the event originate from?
    * 
    */
   var _ACTION_DEFINITIONS = {
@@ -99,7 +99,11 @@ var moduleName = 'Analytics_Abstract',
       PRODUCING: 'PRODUCING'
   };
 
-
+  /** 
+   * _EVENT_DEFINITIONS: Normally accessed as dispatcher.events.CONSTANT
+   * Defines each precise event object, which has `action`, `category`, and `eventName` fields.
+   * 
+   */
   var _EVENT_DEFINITIONS = {
       /**
        * Event fired when clicked on 'About' section of navigation carrousal on left  
