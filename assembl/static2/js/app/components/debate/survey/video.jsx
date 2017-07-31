@@ -19,7 +19,7 @@ class Video extends React.Component {
               <div className="content-section">
                 {descriptionTop &&
                   <Row>
-                    <Col xs={12} sm={descriptionSide ? 7 : 8} smOffset={descriptionSide ? 4 : 2}>
+                    <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
                       <div
                         className="video-description-layer video-description-top"
                         dangerouslySetInnerHTML={{ __html: descriptionTop.replace(/\n/g, '<br/>') }}
@@ -40,7 +40,7 @@ class Video extends React.Component {
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}
-                  <Col xs={12} sm={descriptionSide ? 7 : 8} smOffset={descriptionSide ? 0 : 2}>
+                  <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 0 : 2}>
                     <div className="video-container" id="video-vid">
                       <iframe src={htmlCode} frameBorder="0" width="560" height="315" />
                     </div>
@@ -48,7 +48,7 @@ class Video extends React.Component {
                 </Row>
                 <Row>
                   {descriptionBottom &&
-                    <Col xs={12} sm={descriptionSide ? 7 : 8} smOffset={descriptionSide ? 4 : 2}>
+                    <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
                       <div
                         className="video-description-layer video-description-bottom"
                         dangerouslySetInnerHTML={{ __html: descriptionBottom.replace(/\n/g, '<br/>') }}
