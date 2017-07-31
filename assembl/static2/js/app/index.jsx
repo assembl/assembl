@@ -26,8 +26,8 @@ let customBrowserHistory;
 const isPiwikEnabled = get(window, ['globalAnalytics', 'piwik', 'isActive'], false);
 if (isPiwikEnabled) {
   const piwik = PiwikReactRouter({
-    url: 'your-piwik-installation.com',
-    siteId: 1
+    alreadyInitialized: true,
+    enableLinkTracking: false // this option has already been activated in the piwik tracking script present in the DOM
   });
   customBrowserHistory = piwik.connectToHistory(history);
 } else {
