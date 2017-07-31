@@ -151,7 +151,7 @@ def get_posts(request):
 
     posts = posts.filter(
         PostClass.discussion_id == discussion_id,
-    )
+    ).filter(PostClass.type != 'proposition_post')
     ##no_of_posts_to_discussion = posts.count()
 
     post_data = []

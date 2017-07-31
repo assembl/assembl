@@ -52,7 +52,8 @@ def get_indexable_contents(session):
     query = session.query(AllPost
         ).filter(AllPost.tombstone_condition()
         ).filter(AllPost.hidden==False
-        ).filter(AllPost.publication_state == PublicationStates.PUBLISHED)
+        ).filter(AllPost.publication_state == PublicationStates.PUBLISHED
+        ).filter(AllPost.type != 'proposition_post')
     for post in query:
         yield post
 
@@ -83,6 +84,9 @@ def reindex_content(content, action='update'):
         else:
             changes.unindex_content(content)
     elif isinstance(content, Post):
+        # don't index proposition posts
+        if content.type == 'proposition_post':
+            return
         if (content.publication_state == PublicationStates.PUBLISHED and
                 not content.hidden and content.tombstone_date is None):
             changes.index_content(content)
