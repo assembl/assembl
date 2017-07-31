@@ -257,11 +257,15 @@
   .video-section {
     z-index: 100;
 
+    .content-section {
+      padding: 80px 0;
+    }
+
     .video-description-layer {
       text-align: justify;
-      font-family: "LatoLight";
-      font-size: 18px;
-      line-height: 30px;
+      font-family: $font-family4;
+      font-size: 14px;
+      line-height: 28px;
     }
 
     .video-description-top {
@@ -556,7 +560,6 @@
       line-height: 30px;
       margin: 0 auto;
       text-align: center;
-      width: 200px;
 
       .description-txt {
         margin: 40px 0;
@@ -596,10 +599,6 @@
     .video-description {
       color: $grey2;
       margin: 0 32px 60px 32px;
-    }
-
-    .content-section {
-        padding: 60px 0;
     }
 
     .box-hyphen {
