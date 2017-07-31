@@ -21,6 +21,7 @@
 
   .body {
     font-family: $font-family4;
+    line-height: 1.6em;
     text-align: left;
     word-wrap: break-word;
   }
@@ -140,6 +141,8 @@
     }
 
     .body {
+        font-family: $font-family4;
+        line-height: 1.6em;
         padding: 20px 0;
         word-wrap: break-word;
     }
