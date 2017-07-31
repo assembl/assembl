@@ -29,6 +29,7 @@ class Header extends React.Component {
             <div className="header-bkg" style={{ backgroundImage: `url(${imgUrl})` }}>
               &nbsp;
             </div>
+            <div className="header-bkg-mask">&nbsp;</div>
           </Row>
         </Grid>
       </section>
