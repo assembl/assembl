@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary*/
 /*
   FormGroup that contains a FormControl for which:
     - if there is a value, displays a label
@@ -32,11 +33,11 @@ class FormControlWithLabel extends React.Component {
     const { componentClass, id, label, onChange, type, value, labelAlwaysVisible } = this.props;
     return (
       <FormGroup validationState={this.state.validationState}>
-        {labelAlwaysVisible ? 
+        {labelAlwaysVisible ?
           <ControlLabel htmlFor={id}>
             {label}
           </ControlLabel>
-          : value ? 
+          : value ?
             <ControlLabel htmlFor={id}>{label}</ControlLabel>
             : null
         }
