@@ -29,14 +29,17 @@ class FormControlWithLabel extends React.Component {
   }
 
   render() {
-    const { componentClass, id, label, onChange, type, value } = this.props;
+    const { componentClass, id, label, onChange, type, value, labelAlwaysVisible } = this.props;
     return (
       <FormGroup validationState={this.state.validationState}>
-        {value
-          ? <ControlLabel htmlFor={id}>
+        {labelAlwaysVisible ? 
+          <ControlLabel htmlFor={id}>
             {label}
           </ControlLabel>
-          : null}
+          : value ? 
+            <ControlLabel htmlFor={id}>{label}</ControlLabel>
+            : null
+        }
         <FormControl
           componentClass={componentClass}
           id={id}

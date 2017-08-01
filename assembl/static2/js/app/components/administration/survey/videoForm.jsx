@@ -59,6 +59,7 @@ const VideoForm = ({
               type="text-area"
               label={descriptionTopPh}
               value={descriptionTop}
+              labelAlwaysVisible={true}
               onChange={(e) => {
                 return updateDescriptionTop(e.target.value);
               }}
@@ -69,6 +70,7 @@ const VideoForm = ({
               type="text-area"
               label={descriptionBottomPh}
               value={descriptionBottom}
+              labelAlwaysVisible={true}
               onChange={(e) => {
                 return updateDescriptionBottom(e.target.value);
               }}
@@ -79,6 +81,7 @@ const VideoForm = ({
               type="text-area"
               label={quotePh}
               value={descriptionSide}
+              labelAlwaysVisible={true}
               onChange={(e) => {
                 return updateDescriptionSide(e.target.value);
               }}
