@@ -35,19 +35,11 @@ class Video extends React.Component {
             </div>
             <div className="content-section">
               <div className="content-margin">
-                {debateData.video.descriptionEntriesTop &&
-                  <Row>
-                    <Col xs={12} md={6}>
-                      <div className="text" id="top-video-txt">
-                        {debateData.video.descriptionEntriesTop[locale]}
-                      </div>
-                    </Col>
-                  </Row>}
                 <Row>
-                  {debateData.video.descriptionEntriesSide &&
+                  {debateData.video.descriptionEntriesTop &&
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="text" id="video-txt">
-                        {debateData.video.descriptionEntriesSide[locale]}
+                        {debateData.video.descriptionEntriesTop[locale]}
                       </div>
                     </Col>}
                   {debateData.video.videoUrl &&
@@ -57,14 +49,6 @@ class Video extends React.Component {
                       </div>
                     </Col>}
                 </Row>
-                {debateData.video.descriptionEntriesBottom &&
-                  <Row>
-                    <Col xs={12} md={6}>
-                      <div className="text" id="bottom-video-txt">
-                        {debateData.video.descriptionEntriesBottom[locale]}
-                      </div>
-                    </Col>
-                  </Row>}
               </div>
             </div>
           </div>
