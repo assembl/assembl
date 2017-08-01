@@ -296,7 +296,6 @@ def react_view(request, required_permission=P_READ):
         get_route=get_route,
         **common_context
     )
-    context.update(common_context)
     return context
 
 
