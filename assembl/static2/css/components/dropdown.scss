@@ -8,6 +8,7 @@
   vertical-align: text-bottom;
 
   .dropdown-toggle {
+    height: 20px;
     color: $first-color;
     font-size: $font-size-xs;
 
@@ -38,6 +39,12 @@
     .caret {
       color: $first-color;
     }
+  }
+
+  .dropdown > a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 }
 
