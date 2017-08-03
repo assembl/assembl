@@ -62,49 +62,49 @@ module.exports = {
         publicPath: process.env.WEBPACK_URL + '/build/'
     },
     module: {
-        rules: [
+        loaders: [
         {
             test: /\.jsx?(\?v=\d)?$/,
-            use: 'babel-loader',
+            loader: 'babel-loader',
             include: path.join(__dirname, 'js')
         },
         {
             test: /\.scss$/,
-            use: ['style-loader', 'css-loader', 'sass-loader']
+            loaders: ['style-loader', 'css-loader', 'sass-loader']
         },
         {
             test: /\.css$/,
-            use: ['style-loader', 'css-loader', 'sass-loader']
+            loaders: ['style-loader', 'css-loader', 'sass-loader']
         },
         {
             test: /\.png$/,
-            use: 'url-loader?limit=100000'
+            loader: 'url-loader?limit=100000'
         },
         {
             test: /\.jpg$/,
-            use: 'file-loader'
+            loader: 'file-loader'
         },
         {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-            use: 'url-loader?limit=100000&name=[name].[ext]'
+            loader: 'url-loader?limit=100000&name=[name].[ext]'
         },
         {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            use: 'file-loader'
+            loader: 'file-loader'
         },
         {
           test: /\.(graphql|gql)$/,
           exclude: /node_modules/,
-          use: 'graphql-tag/loader'
+          loader: 'graphql-tag/loader'
         },
         {
           test: /\.json$/,
-          use: 'json-loader'
+          loader: 'json-loader'
         },
         ]
     },
     resolve:{
-        extensions:['.js', '.jsx']
+        extensions:['', '.js', '.jsx']
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

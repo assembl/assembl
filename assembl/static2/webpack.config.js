@@ -4,7 +4,6 @@ Once you have made changes to this file, you have to run `supervisorctl restart 
 
 var path = require('path');
 var webpack = require('webpack');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var glob = require('glob');
 var _ = require('lodash');
@@ -44,53 +43,49 @@ module.exports = {
         publicPath: '/build/'
     },
     module: {
-        rules: [
+        loaders: [
         {
             test: /\.jsx?(\?v=\d)?$/,
-            use: 'babel-loader',
+            loader: 'babel-loader',
             include: path.join(__dirname, 'js')
         },
         {
             test: /\.scss$/,
-            use: ExtractTextPlugin.extract({
-              fallback:'style-loader',
-              use: ['css-loader', 'sass-loader']})
+            loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
         },
         {
             test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-              fallback:'style-loader',
-              use: ['css-loader', 'sass-loader']})
+            loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
         },
         {
             test: /\.png$/,
-            use: 'url-loader?limit=100000'
+            loader: 'url-loader?limit=100000'
         },
         {
             test: /\.jpg$/,
-            use: 'file-loader'
+            loader: 'file-loader'
         },
         {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-            use: 'url-loader?limit=100000&name=[name].[ext]'
+            loader: 'url-loader?limit=100000&name=[name].[ext]'
         },
         {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            use: 'file-loader'
+            loader: 'file-loader'
         },
         {
           test: /\.(graphql|gql)$/,
           exclude: /node_modules/,
-          use: 'graphql-tag/loader'
+          loader: 'graphql-tag/loader'
         },
         {
           test: /\.json$/,
-          use: 'json-loader'
+          loader: 'json-loader'
         },
         ]
     },
     resolve:{
-        extensions:['.js', '.jsx']
+        extensions:['', '.js', '.jsx']
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -98,7 +93,7 @@ module.exports = {
             NODE_ENV: JSON.stringify('production')
           }
         }),
-        new UglifyJSPlugin(),
+        new webpack.optimize.UglifyJsPlugin(),
         new ExtractTextPlugin("[name].css"),
     ]
 };
