@@ -118,8 +118,7 @@ const Translations = {
       existingUsername: 'Le nom d’utilisateur que vous avez renseigné existe déjà',
       existingEmail: 'L’e-mail que vous avez renseigné existe déjà',
       emailNotFound: 'L’e-mail que vous avez renseigné n’a pas été trouvé. Veuillez réessayer.',
-      incorrectPasswordLogin:
-        'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.',
+      incorrectPasswordLogin: 'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.',
       newPassword: 'Nouveau mot de passe',
       newPassword2: 'Ré-entrez le nouveau mot de passe'
     },
@@ -145,8 +144,7 @@ const Translations = {
       twitterTitle: 'Tweet',
       contact: 'Besoin d\'échanger au sujet de la plateforme ?',
       contactUs: 'Contactez-nous',
-      from: 'du',
-      to: 'au',
+      from_start_to_end: 'du %{start} au %{end}',
       chatbot: 'Chat avec %{chatbotName}'
     },
     synthesis: {
@@ -405,8 +403,7 @@ const Translations = {
       twitterTitle: 'Tweet',
       contact: 'Do you wish to know more about this platform?',
       contactUs: 'Contact us',
-      from: 'from',
-      to: 'to',
+      from_start_to_end: 'from %{start} to %{end}',
       chatbot: 'Chat with %{chatbotName}'
     },
     community: {
@@ -521,7 +518,7 @@ const Translations = {
     },
     date: {
       format: 'MMMM Do, YYYY',
-      format2: 'MM-DD-YYYY'
+      format2: 'YYYY-MM-DD'
     }
   }
 };

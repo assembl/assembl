@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2017-07-25T09:37:36.797Z\n"
+"POT-Creation-Date: 2017-08-03T09:39:15.282Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -68,6 +68,20 @@ msgstr ""
 #. defaultMessage is:
 #. Phase %{count} - %{description}
 msgid "administration.menu.phase"
+msgstr ""
+
+#: messages.json
+#. [administration.ph.descriptionBottom]
+#. defaultMessage is:
+#. Comments below video
+msgid "administration.ph.descriptionBottom"
+msgstr ""
+
+#: messages.json
+#. [administration.ph.descriptionTop]
+#. defaultMessage is:
+#. Comments above video
+msgid "administration.ph.descriptionTop"
 msgstr ""
 
 #: messages.json
@@ -194,6 +208,13 @@ msgstr ""
 #. defaultMessage is:
 #. Welcome to Assembl forgot password page
 msgid "changePassword.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [common.goUp]
+#. defaultMessage is:
+#. Back to top
+msgid "common.goUp"
 msgstr ""
 
 #: messages.json
@@ -409,8 +430,15 @@ msgstr ""
 #: messages.json
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
-#. Show %{nbPosts} responses
+#. Show %{count} responses
 msgid "debate.thread.foldedPostLink"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.foldedPostLink_1]
+#. defaultMessage is:
+#. Show 1 response
+msgid "debate.thread.foldedPostLink_1"
 msgstr ""
 
 #: messages.json
@@ -453,13 +481,6 @@ msgstr ""
 #. defaultMessage is:
 #. Thanks for your participation. Your comment has been sent!
 msgid "debate.thread.postSuccess"
-msgstr ""
-
-#: messages.json
-#. [debate.thread.singleFoldedPostLink]
-#. defaultMessage is:
-#. Show 1 response
-msgid "debate.thread.singleFoldedPostLink"
 msgstr ""
 
 #: messages.json
@@ -547,10 +568,10 @@ msgid "home.controversial"
 msgstr ""
 
 #: messages.json
-#. [home.from]
+#. [home.from_start_to_end]
 #. defaultMessage is:
-#. from
-msgid "home.from"
+#. from %{start} to %{end}
+msgid "home.from_start_to_end"
 msgstr ""
 
 #: messages.json
@@ -607,13 +628,6 @@ msgstr ""
 #. defaultMessage is:
 #. The timeline of the debate in %{count} phases
 msgid "home.timelineTitle"
-msgstr ""
-
-#: messages.json
-#. [home.to]
-#. defaultMessage is:
-#. to
-msgid "home.to"
 msgstr ""
 
 #: messages.json

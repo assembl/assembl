@@ -60,13 +60,11 @@ class Header extends React.Component {
                   </span>}
                 {debateData.dates &&
                   <div>
-                    <Translate value="home.from" />
-                    <span>&nbsp;</span>
-                    <Localize value={debateData.dates.startDate} dateFormat="date.format" />
-                    <span>&nbsp;</span>
-                    <Translate value="home.to" />
-                    <span>&nbsp;</span>
-                    <Localize value={debateData.dates.endDate} dateFormat="date.format" />
+                    <Translate
+                      value="home.from_start_to_end"
+                      start={I18n.l(debateData.dates.startDate, { dateFormat: 'date.format' })}
+                      end={I18n.l(debateData.dates.endDate, { dateFormat: 'date.format' })}
+                    />
                   </div>}
               </h4>
               <Button onClick={this.displayPhase} className="button-submit button-light margin-xl">
