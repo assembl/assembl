@@ -1,0 +1,27 @@
+.idea-preview {
+    &.illustration-box .content-box {
+        cursor: initial;
+    }
+    .content-box:hover .stats {
+        height: 10px;
+    }
+    .see-discussion {
+        margin-top: 30px;
+    }
+    .action-separator {
+        margin: 2px;
+        &:before {
+            content: "/";
+        }
+    }
+    .see-sub-ideas {
+        margin-top: 5px;
+        cursor: pointer;
+    }
+    .see-discussion, .action-separator, .see-sub-ideas, a, a:hover {
+        color: $second-color;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+}

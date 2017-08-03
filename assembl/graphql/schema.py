@@ -323,6 +323,7 @@ class Video(graphene.ObjectType):
 class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
+    num_children = graphene.Int()
     img_url = graphene.String()
     order = graphene.Float()
 

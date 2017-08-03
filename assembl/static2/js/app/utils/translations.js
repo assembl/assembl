@@ -118,8 +118,7 @@ const Translations = {
       existingUsername: 'Le nom d’utilisateur que vous avez renseigné existe déjà',
       existingEmail: 'L’e-mail que vous avez renseigné existe déjà',
       emailNotFound: 'L’e-mail que vous avez renseigné n’a pas été trouvé. Veuillez réessayer.',
-      incorrectPasswordLogin:
-        'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.',
+      incorrectPasswordLogin: 'Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.',
       newPassword: 'Nouveau mot de passe',
       newPassword2: 'Ré-entrez le nouveau mot de passe'
     },
@@ -196,7 +195,10 @@ const Translations = {
         numberOfResponses: '%{count} réponses à ce post',
         numberOfResponses_0: 'Aucune réponse à ce post',
         numberOfResponses_1: '%{count} réponse à ce post',
-        startDiscussion: 'Je démarre une discussion'
+        startDiscussion: 'Je démarre une discussion',
+        goToIdea: 'Accéder à la discussion',
+        seeSubIdeas: 'Voir les %{count} sous-thèmes',
+        seeSubIdeas_1: 'Voir le sous-thème'
       },
       themes: 'Thèmes',
       notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
@@ -456,7 +458,10 @@ const Translations = {
         numberOfResponses: '%{count} responses to this post',
         numberOfResponses_0: 'No response to this post',
         numberOfResponses_1: '%{count} response to this post',
-        startDiscussion: 'Start a new thread'
+        startDiscussion: 'Start a new thread',
+        goToIdea: 'Access the thread',
+        seeSubIdeas: 'See %{count} sub-thematics',
+        seeSubIdeas_1: 'See sub-thematic'
       },
       themes: 'Themes',
       notStarted: 'The %{phaseName} phase has not started. Please come back from '

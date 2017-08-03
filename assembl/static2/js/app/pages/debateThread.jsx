@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { get } from '../utils/routeMap';
-import Themes from '../components/debate/common/themes';
+import Ideas from '../components/debate/common/ideas';
 import Timeline from '../components/debate/navigation/timeline';
 import RootIdeasQuery from '../graphql/RootIdeasQuery.graphql';
 
@@ -23,10 +23,7 @@ const DebateThread = ({ identifier, isNavbarHidden, data, params, children, slug
     <div className="debate">
       {thematics &&
         <div>
-          <section
-            className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'}
-            id="timeline"
-          >
+          <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'} id="timeline">
             <div className="max-container">
               {!isParentRoute &&
                 <Link className="burger-menu grey" to={get('debate', { slug: slug, phase: identifier })}>
@@ -38,7 +35,7 @@ const DebateThread = ({ identifier, isNavbarHidden, data, params, children, slug
               <Timeline showNavigation={!isParentRoute} identifier={identifier} />
             </div>
           </section>
-          {isParentRoute && <Themes thematics={thematics} identifier={identifier} />}
+          {isParentRoute && <Ideas thematics={thematics} identifier={identifier} />}
           {!isParentRoute &&
             <section className="debate-section">
               {childrenElm}
