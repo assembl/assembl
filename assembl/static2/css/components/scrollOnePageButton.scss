@@ -1,0 +1,27 @@
+.scroll-one-page {
+  display: inline-block;
+  position: fixed;
+  cursor: pointer;
+  z-index: 99;
+  left: 50%;
+
+  span {
+    border-radius: 50px 50px 0 0;
+    height: 50px;
+    width: 100px;
+    display: block;
+    background-color: $grey2;
+    color: $white;
+    text-align: center;
+
+    &:hover {
+        background-color: $grey3;
+    }
+
+    .icon {
+      padding-top: 20px;
+      padding-right: 1em;
+      margin-bottom: 2px;
+    }
+  }
+}

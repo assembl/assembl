@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ScrollOnePageButton component should render a button to scroll one page down 1`] = `
+<a
+  className="scroll-one-page "
+  onClick={[Function]}
+  style={
+    Object {
+      "top": 718,
+    }
+  }
+>
+  <span>
+    <span
+      className="icon assembl-icon-down-open"
+    >
+       
+    </span>
+  </span>
+</a>
+`;
+
+exports[`ScrollOnePageButton component should render a button to scroll one page down that is hidden 1`] = `
+<a
+  className="scroll-one-page hidden"
+  onClick={[Function]}
+  style={
+    Object {
+      "top": 718,
+    }
+  }
+>
+  <span>
+    <span
+      className="icon assembl-icon-down-open"
+    >
+       
+    </span>
+  </span>
+</a>
+`;
