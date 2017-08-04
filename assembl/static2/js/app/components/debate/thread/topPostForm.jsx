@@ -10,8 +10,7 @@ import {
   updateTopPostFormStatus,
   updateTopPostSubject,
   updateTopPostBody,
-  updateTopPostSubjectRemaingChars,
-  updateTopPostBodyRemaingChars
+  updateTopPostSubjectRemaingChars
 } from '../../../actions/postsActions';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -147,7 +146,6 @@ const mapStateToProps = ({ posts, debate }) => {
     body: posts.topPostBody,
     isFormActive: posts.topPostFormStatus,
     subjectTopPostRemainingChars: posts.subjectTopPostRemainingChars,
-    bodyTopPostRemainingChars: posts.bodyTopPostRemainingChars,
     slug: debate.debateData.slug
   };
 };
@@ -165,9 +163,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateSubjectChars: (subjectRemainingChars) => {
       return dispatch(updateTopPostSubjectRemaingChars(subjectRemainingChars));
-    },
-    updateBodyChars: (bodyRemainingChars) => {
-      return dispatch(updateTopPostBodyRemaingChars(bodyRemainingChars));
     }
   };
 };

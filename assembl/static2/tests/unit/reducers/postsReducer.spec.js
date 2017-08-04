@@ -107,31 +107,6 @@ describe('Posts reducers', () => {
     });
   });
 
-  describe('bodyTopPostRemainingChars reducer', () => {
-    const { bodyTopPostRemainingChars } = reducers;
-    it('should return the initial state', () => {
-      expect(bodyTopPostRemainingChars(undefined, {})).toEqual(10000);
-    });
-
-    it('should return state by default', () => {
-      const state = 1234;
-      const expected = 1234;
-      const actual = bodyTopPostRemainingChars(state, {});
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle UPDATE_TOP_POST_BODY_REMAINING_CHARS action type', () => {
-      const state = 100;
-      const action = {
-        type: 'UPDATE_TOP_POST_BODY_REMAINING_CHARS',
-        bodyTopPostRemainingChars: 100
-      };
-      const actual = bodyTopPostRemainingChars(state, action);
-      const expected = 100;
-      expect(actual).toEqual(expected);
-    });
-  });
-
   describe('activeAnswerFormId reducer', () => {
     const { activeAnswerFormId } = reducers;
     it('should return the initial state', () => {

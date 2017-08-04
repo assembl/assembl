@@ -61,18 +61,6 @@ describe('Posts actions', () => {
     });
   });
 
-  describe('updateTopPostBodyRemaingChars action', () => {
-    const { updateTopPostBodyRemaingChars } = actions;
-    it('should return a UPDATE_TOP_POST_BODY_REMAINING_CHARS action type', () => {
-      const expected = {
-        bodyTopPostRemainingChars: 1204,
-        type: 'UPDATE_TOP_POST_BODY_REMAINING_CHARS'
-      };
-      const actual = updateTopPostBodyRemaingChars(1204);
-      expect(actual).toEqual(expected);
-    });
-  });
-
   describe('updateActiveAnswerFormId action', () => {
     const { updateActiveAnswerFormId } = actions;
     it('should return a UPDATE_ACTIVE_ANSWER_FORM_ID action type', () => {

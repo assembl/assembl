@@ -31,11 +31,6 @@ export const subjectTopPostRemainingChars = basicReducerFactory(
   'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS',
   'subjectTopPostRemainingChars'
 );
-export const bodyTopPostRemainingChars = basicReducerFactory(
-  10000,
-  'UPDATE_TOP_POST_BODY_REMAINING_CHARS',
-  'bodyTopPostRemainingChars'
-);
 export const bodyAnswerPostRemainingChars = basicReducerFactory(
   10000,
   'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS',
@@ -50,7 +45,6 @@ export default combineReducers({
   topPostBody: topPostBody,
   topPostFormStatus: topPostFormStatus,
   subjectTopPostRemainingChars: subjectTopPostRemainingChars,
-  bodyTopPostRemainingChars: bodyTopPostRemainingChars,
   answerPostBody: answerPostBody,
   bodyAnswerPostRemainingChars: bodyAnswerPostRemainingChars,
   activeAnswerFormId: activeAnswerFormId
