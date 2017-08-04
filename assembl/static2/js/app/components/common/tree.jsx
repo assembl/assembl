@@ -39,10 +39,9 @@ class Child extends React.PureComponent {
     window.removeEventListener('resize', this.resizeTreeHeight);
   }
   resizeTreeHeight() {
-    this.globalList = globalList;
-    if (this.globalList) {
+    if (globalList) {
       cache.clearAll();
-      this.globalList.recomputeRowHeights();
+      globalList.recomputeRowHeights();
     }
   }
   expandCollapse(event) {
