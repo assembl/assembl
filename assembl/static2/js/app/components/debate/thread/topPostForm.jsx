@@ -15,7 +15,6 @@ import {
 } from '../../../actions/postsActions';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { TxtAreaWithRemainingChars } from '../../common/txtAreaWithRemainingChars';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 
