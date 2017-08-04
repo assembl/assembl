@@ -1,6 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
-import { Translate, Localize, I18n } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid, Row, Button } from 'react-bootstrap';
 import Statistic from './header/statistic';
