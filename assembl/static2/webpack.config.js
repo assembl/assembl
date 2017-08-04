@@ -4,6 +4,7 @@ Once you have made changes to this file, you have to run `supervisorctl restart 
 
 var path = require('path');
 var webpack = require('webpack');
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var glob = require('glob');
 var _ = require('lodash');
@@ -43,49 +44,72 @@ module.exports = {
         publicPath: '/build/'
     },
     module: {
-        loaders: [
+        rules: [
         {
             test: /\.jsx?(\?v=\d)?$/,
-            loader: 'babel-loader',
-            include: path.join(__dirname, 'js')
+            use: {
+              loader: 'babel-loader',
+              options: {
+                forceEnv: 'production',  // babel default to development otherwise, this is to remove the __REACT_HOT_LOADER__ conditions in the code
+                // We specify plugins and presets here to be able to transpile
+                // dependencies that may have a .babelrc but doesn't do
+                // an actual transpilation to ES5. The .babelrc
+                // in this project is actually not used to transpile
+                // dependencies, we need plugins and presets here for that.
+                // A dependency is transpiled only if it's in the include below.
+                plugins: [
+                  'transform-object-rest-spread', 'transform-class-properties',
+                  ['transform-runtime', { helpers: true, polyfill: false }]
+                ],
+                presets: ['es2015', 'react']
+              }
+            },
+            include: [
+              path.join(__dirname, 'js'),
+              path.join(__dirname, 'node_modules/react-tweet-embed')
+            ]
         },
         {
             test: /\.scss$/,
-            loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
+            use: ExtractTextPlugin.extract({
+              fallback:'style-loader',
+              use: ['css-loader', 'sass-loader']})
         },
         {
             test: /\.css$/,
-            loader: ExtractTextPlugin.extract('style-loader','css-loader!sass-loader')
+            use: ExtractTextPlugin.extract({
+              fallback:'style-loader',
+              use: ['css-loader', 'sass-loader']})
         },
         {
             test: /\.png$/,
-            loader: 'url-loader?limit=100000'
+            use: 'url-loader?limit=100000'
         },
         {
             test: /\.jpg$/,
-            loader: 'file-loader'
+            use: 'file-loader'
         },
         {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-            loader: 'url-loader?limit=100000&name=[name].[ext]'
+            use: 'url-loader?limit=100000&name=[name].[ext]'
         },
         {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            loader: 'file-loader'
+            use: 'file-loader'
         },
         {
           test: /\.(graphql|gql)$/,
           exclude: /node_modules/,
-          loader: 'graphql-tag/loader'
+          use: 'graphql-tag/loader'
         },
         {
           test: /\.json$/,
-          loader: 'json-loader'
+          use: 'json-loader'
         },
         ]
     },
     resolve:{
-        extensions:['', '.js', '.jsx']
+        extensions:['.js', '.jsx']
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -93,7 +117,7 @@ module.exports = {
             NODE_ENV: JSON.stringify('production')
           }
         }),
-        new webpack.optimize.UglifyJsPlugin(),
+        new UglifyJSPlugin(),
         new ExtractTextPlugin("[name].css"),
     ]
 };
