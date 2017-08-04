@@ -55,7 +55,8 @@ module.exports = {
                 // dependencies that may have a .babelrc but doesn't do
                 // an actual transpilation to ES5. The .babelrc
                 // in this project is actually not used to transpile
-                // dependencies, we need plugins and presets here for that.
+                // dependencies if the dependency already has a .babelrc file,
+                // we need plugins and presets here for that.
                 // A dependency is transpiled only if it's in the include below.
                 plugins: [
                   'transform-object-rest-spread', 'transform-class-properties',
@@ -117,7 +118,7 @@ module.exports = {
             NODE_ENV: JSON.stringify('production')
           }
         }),
-        new UglifyJSPlugin(),
+        new UglifyJSPlugin({ sourceMap: true }),
         new ExtractTextPlugin("[name].css"),
     ]
 };
