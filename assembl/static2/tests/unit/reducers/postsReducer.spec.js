@@ -1,3 +1,4 @@
+import { convertToRaw, ContentState, EditorState } from 'draft-js';
 import * as reducers from '../../../js/app/reducers/postsReducer';
 
 describe('Posts reducers', () => {
@@ -54,25 +55,30 @@ describe('Posts reducers', () => {
   describe('topPostBody reducer', () => {
     const { topPostBody } = reducers;
     it('should return the initial state', () => {
-      expect(topPostBody(undefined, {})).toEqual('');
+      const actualRaw = convertToRaw(topPostBody(undefined, {}).getCurrentContent());
+      expect(actualRaw.blocks.length).toEqual(1);
+      expect(actualRaw.blocks[0].data).toEqual({});
+      expect(actualRaw.blocks[0].text).toEqual('');
     });
 
     it('should return state by default', () => {
-      const state = 'New body';
+      const state = EditorState.createWithContent(ContentState.createFromText('New body'));
       const expected = 'New body';
       const actual = topPostBody(state, {});
-      expect(actual).toEqual(expected);
+      expect(actual.getCurrentContent().getPlainText()).toEqual(expected);
     });
 
     it('should handle UPDATE_TOP_POST_BODY action type', () => {
-      const state = 'New body';
+      const state = EditorState.createWithContent(ContentState.createFromText('Old body'));
+      const newEditorState = EditorState.createWithContent(ContentState.createFromText('New body'));
       const action = {
         type: 'UPDATE_TOP_POST_BODY',
-        topPostBody: 'New body'
+        topPostBody: newEditorState
       };
       const actual = topPostBody(state, action);
       const expected = 'New body';
-      expect(actual).toEqual(expected);
+      const actualPlainText = actual.getCurrentContent().getPlainText();
+      expect(actualPlainText).toEqual(expected);
     });
   });
 

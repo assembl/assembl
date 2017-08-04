@@ -62,6 +62,7 @@
     "babel-polyfill": "^6.23.0",
     "babel-runtime": "^6.25.0",
     "bootstrap": "^3.3.7",
+    "draft-js": "^0.10.1",
     "graphql": "^0.10.0",
     "graphql-anywhere": "^3.1.0",
     "immutability-helper": "^2.2.0",

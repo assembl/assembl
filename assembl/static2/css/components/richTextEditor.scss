@@ -1,0 +1,12 @@
+.rich-text-editor {
+  .public-DraftEditorPlaceholder-inner {
+    color: $grey2;
+    font-family: $font-family6;
+  }
+
+  .DraftEditor-root {
+    background-color: $white;
+    min-height: 12em;
+    padding: 5px;
+  }
+}

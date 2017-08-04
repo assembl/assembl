@@ -1,3 +1,4 @@
+import { EditorState } from 'draft-js';
 import { Map } from 'immutable';
 import { combineReducers } from 'redux';
 
@@ -23,7 +24,7 @@ export const basicReducerFactory = (initialState, handledAction, returnedProp) =
 };
 
 export const topPostSubject = basicReducerFactory('', 'UPDATE_TOP_POST_SUBJECT', 'topPostSubject');
-export const topPostBody = basicReducerFactory('', 'UPDATE_TOP_POST_BODY', 'topPostBody');
+export const topPostBody = basicReducerFactory(EditorState.createEmpty(), 'UPDATE_TOP_POST_BODY', 'topPostBody');
 export const answerPostBody = basicReducerFactory('', 'UPDATE_ANSWER_POST_BODY', 'answerPostBody');
 export const subjectTopPostRemainingChars = basicReducerFactory(
   10000,

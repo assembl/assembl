@@ -17,10 +17,10 @@ import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { TxtAreaWithRemainingChars } from '../../common/txtAreaWithRemainingChars';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
+import RichTextEditor from '../../common/richTextEditor';
 
 const TEXT_INPUT_MAX_LENGTH = 140;
 const TEXT_AREA_MAX_LENGTH = 3000;
-const TEXT_AREA_ROWS = 12;
 
 const TopPostForm = ({
   ideaId,
@@ -34,7 +34,6 @@ const TopPostForm = ({
   refetchIdea,
   subjectTopPostRemainingChars,
   updateSubjectChars,
-  bodyTopPostRemainingChars,
   updateBodyChars
 }) => {
   const displayForm = (isActive) => {
@@ -91,14 +90,6 @@ const TopPostForm = ({
     updateSubject(e.target.value);
   };
 
-  const handleBodyChange = (e) => {
-    const maxChars = TEXT_AREA_MAX_LENGTH;
-    const length = e.target.value.length;
-    const remaining = maxChars - length;
-    updateBodyChars(remaining);
-    updateBody(e.target.value);
-  };
-
   return (
     <Row>
       <Col xs={0} sm={1} md={2} />
@@ -126,13 +117,11 @@ const TopPostForm = ({
               remainingChars={subjectTopPostRemainingChars}
             />
             <div className={isFormActive ? 'margin-m' : 'hidden'}>
-              <TxtAreaWithRemainingChars
-                value={body}
-                label={I18n.t('debate.insert')}
+              <RichTextEditor
+                editorState={body}
                 maxLength={TEXT_AREA_MAX_LENGTH}
-                rows={TEXT_AREA_ROWS}
-                handleTxtChange={handleBodyChange}
-                remainingChars={bodyTopPostRemainingChars}
+                placeholder={I18n.t('debate.insert')}
+                updateEditorState={updateBody}
               />
               <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
                 <Translate value="cancel" />
