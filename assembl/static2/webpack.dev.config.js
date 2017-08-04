@@ -46,6 +46,7 @@ module.exports = {
     },
     entry: _.extend(theme_entries(), {
         bundle: [
+            'babel-polyfill',
             'webpack-dev-server/client?' + process.env.WEBPACK_URL,
             'react-hot-loader/patch',
             './js/app/index',
@@ -68,10 +69,18 @@ module.exports = {
             use: {
               loader: 'babel-loader',
               options: {
-                forceEnv: 'development'
+                forceEnv: 'development',
+                plugins: [
+                  'transform-object-rest-spread', 'transform-class-properties',
+                  ['transform-runtime', { helpers: true, polyfill: false }]
+                ],
+                presets: ['es2015', 'react']
               }
             },
-            include: path.join(__dirname, 'js')
+            include: [
+              path.join(__dirname, 'js'),
+              path.join(__dirname, 'node_modules/react-tweet-embed')
+            ]
         },
         {
             test: /\.scss$/,
