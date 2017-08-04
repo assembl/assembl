@@ -11,6 +11,7 @@
     padding: 0 15px 0 0;
 
     img {
+      vertical-align: middle;
       max-height: 40px;
     }
 
@@ -78,6 +79,12 @@
 
 @media screen and (max-width: 767px) {
   .nav-bar {
+    .navbar-logo {
+      img {
+        vertical-align: top;
+      }
+    }
+
     .nav-menu {
       display: none;
     }
