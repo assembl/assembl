@@ -8,6 +8,7 @@ body {
   font-size: $font-size-s;
   letter-spacing: $text-letter-spacing;
   overflow-y: scroll;
+  -ms-overflow-style: scrollbar; // prevent transparent scrollbar in IE
 }
 
 a {
