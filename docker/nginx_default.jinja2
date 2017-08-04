@@ -15,6 +15,12 @@ server {
   # This is the server name, if you're running multiple servers
   server_name {{public_hostname_}};
 
+  {% if disallow_robots %}
+      location /robots.txt {
+          return 200 "User-agent: *\nDisallow: /";
+      }
+  {% endif %}
+
   location /.well-known {
       #This is for domain verification
       alias /var/www/html/.well-known;
