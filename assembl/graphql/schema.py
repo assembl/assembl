@@ -27,6 +27,7 @@ from assembl.models.action import (
     SentimentOfPost,
     LikeSentimentOfPost, DisagreeSentimentOfPost,
     DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
+from assembl.models.auth import LanguagePreferenceCollection
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -98,7 +99,7 @@ def resolve_langstring(langstring, locale_code):
         closest = langstring.closest_entry(locale_code)
         if closest:
             return closest.value
-    return langstring.simplistic_best_entries_in_request_with_originals_in_request()[0].value
+    return langstring.best_lang().value
 
 
 def resolve_langstring_entries(obj, attr):
@@ -111,27 +112,32 @@ def resolve_langstring_entries(obj, attr):
         entries.append(
             LangStringEntry(
                 locale_code=entry.locale.base_locale,
+                error_code=entry.error_code,
                 translated_from_locale_code=entry.locale.machine_translated_from,
-                value=entry.value
+                value=entry.value or '',
             )
         )
 
     return entries
 
 
-def resolve_best_langstring_entries(langstring, target_locale):
+def resolve_best_langstring_entries(langstring):
     if langstring is None or langstring is models.LangString.EMPTY:
         return []
 
-    lsentries = langstring.simplistic_best_entries_with_originals(target_locale)
+    # use request's idea of target_locale
+    lsentries = langstring.best_entries_in_request_with_originals()
     entries = []
-    for (entry, understood) in lsentries:
+    lp = LanguagePreferenceCollection.getCurrent()
+    for entry in lsentries:
         entries.append(
             LangStringEntry(
                 locale_code=entry.locale.base_locale,
+                error_code=entry.error_code,
                 translated_from_locale_code=entry.locale.machine_translated_from,
-                supposed_understood=understood,
-                value=entry.value,
+                supposed_understood=not lp.find_locale(
+                    entry.locale.base_locale).translate_to_locale,
+                value=entry.value or '',
             )
         )
 
@@ -208,6 +214,7 @@ class LangStringEntryFields(graphene.AbstractType):
 class LangStringEntry(graphene.ObjectType, LangStringEntryFields):
     translated_from_locale_code = graphene.String(required=False)
     supposed_understood = graphene.Boolean(required=False)
+    error_code = graphene.Int(required=False)
 
 
 class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):
@@ -283,7 +290,9 @@ class PostInterface(SQLAlchemyInterface):
         return body
 
     @staticmethod
-    def _maybe_translate(post, locale, request):
+    def _maybe_translate(post, request):
+        lpc = LanguagePreferenceCollection.getCurrent(request)
+        locale = lpc.default_locale_code()
         # simplistic case: we're just looking for locale. if it's there,
         # avoid the whole thing.
         if (not post.body or post.body.closest_entry(locale)) and (
@@ -297,15 +306,17 @@ class PostInterface(SQLAlchemyInterface):
         post.maybe_translate(prefs)
 
     def resolve_subject_entries(self, args, context, info):
-        PostInterface._maybe_translate(self, args.get('lang'), context)
+        lp = LanguagePreferenceCollection.getCurrent()
+        lang = lp.default_locale_code()
+        PostInterface._maybe_translate(self, context)
         subject = resolve_best_langstring_entries(
-            self.get_subject(), args.get('lang'))
+            self.get_subject())
         return subject
 
     def resolve_body_entries(self, args, context, info):
-        PostInterface._maybe_translate(self, args.get('lang'), context)
+        PostInterface._maybe_translate(self, context)
         body = resolve_best_langstring_entries(
-            self.get_body(), args.get('lang'))
+            self.get_body())
         return body
 
     def resolve_sentiment_counts(self, args, context, info):
