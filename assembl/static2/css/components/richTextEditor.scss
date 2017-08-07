@@ -1,4 +1,15 @@
 .rich-text-editor {
+  .editor-toolbar {
+    background-color: $white;
+    margin-bottom: 5px;
+    padding: 5px;
+
+    .btn {
+      margin: 2px;
+      font-size: 10px;
+    }
+  }
+
   .public-DraftEditorPlaceholder-inner {
     color: $grey2;
     font-family: $font-family6;
