@@ -79,7 +79,7 @@
     "react-hot-loader": "^3.0.0-beta.7",
     "react-intl-po": "^2.0.2",
     "react-redux": "^4.4.6",
-    "react-redux-i18n": "^0.1.1",
+    "react-redux-i18n": "^1.9.0",
     "react-router": "^3.0.0",
     "react-tweet-embed": "^1.0.7",
     "react-virtualized": "^9.8.0",
