@@ -181,6 +181,16 @@
         }
     }
 
+    .overflow-action {
+      cursor: pointer;
+      margin: 10px 0 0;
+      color: $first-color-opacity-70;
+
+      &:hover {
+        color: $first-color;
+      }
+    }
+
     .add-sentiment {
         margin: 20px 0 0;
     }
@@ -340,7 +350,7 @@
             border-top: 1px solid $grey1;
             padding: 18px 0 10px;
 
-            .post-action {
+            .post-action, .overflow-action {
                 display: inline-block;
                 margin: 0 10px;
             }

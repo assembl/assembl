@@ -15,6 +15,7 @@ import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import DontUnderstand from '../../svg/dontUnderstand';
 import MoreInfo from '../../svg/moreInfo';
+import getOverflowMenuForPost from './overflowMenu';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -38,7 +39,7 @@ class PostActions extends React.Component {
     });
   }
   render() {
-    const { sentimentCounts, mySentiment, handleAnswerClick, postChildren } = this.props;
+    const { postId, sentimentCounts, mySentiment, handleAnswerClick, postChildren } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
       ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
@@ -68,10 +69,7 @@ class PostActions extends React.Component {
                 <Disagree size={25} />
               </div>
             </OverlayTrigger>
-            <OverlayTrigger
-              placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
-              overlay={dontUnderstandTooltip}
-            >
+            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={dontUnderstandTooltip}>
               <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
                 <DontUnderstand size={25} />
               </div>
@@ -79,6 +77,18 @@ class PostActions extends React.Component {
             <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={moreInfoTooltip}>
               <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
                 <MoreInfo size={25} />
+              </div>
+            </OverlayTrigger>
+          </div>
+          <div className="overflow-action">
+            <OverlayTrigger
+              trigger="click"
+              rootClose
+              placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
+              overlay={getOverflowMenuForPost(postId)}
+            >
+              <div>
+                {'...'}
               </div>
             </OverlayTrigger>
           </div>

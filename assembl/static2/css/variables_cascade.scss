@@ -1,6 +1,8 @@
 
 /* This file is meant to define cascade variables. Cascade variables are variables which definition in a theme is not mandatory, but which by default have a value that depend on other theme variables. So if these theme variables they depend on are re-defined in a theme, cascade variables would have to use changed values. For this, we use the "!default" keyword of SCSS. */
 
+$first-color-opacity-70: rgba($first-color, 0.7) !default;
+
 $btn-light-border-color: $second-color !default;
 $btn-dark-border-color: $first-color !default;
 
