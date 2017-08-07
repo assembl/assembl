@@ -116,10 +116,10 @@ class TranslationService(object):
             lse.locale_identification_data_json = lid
 
     def identify(
-            self, text,
+            self, text, expected_locales=None,
             constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
         return self.base_identify(
-            text, self.discussion.discussion_locales,
+            text, expected_locales or self.discussion.discussion_locales,
             constrain_locale_threshold=constrain_locale_threshold)
 
     @classmethod
@@ -156,14 +156,26 @@ class TranslationService(object):
                              ) else Locale.UNDEFINED
         return top, {lang: prob for (prob, lang) in data}
 
+
     def confirm_locale(
             self, langstring_entry,
             constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
+        return self.confirm_locale_c(
+            langstring_entry, discussion=self.discussion, ts=self,
+            constrain_locale_threshold=constrain_locale_threshold)
+
+    @classmethod
+    def confirm_locale_c(cls, langstring_entry, discussion, ts=None,
+                         constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
         try:
-            lang, data = self.identify(
-                langstring_entry.value,
-                constrain_locale_threshold)
-            data["service"] = self.__class__.__name__
+            ts = ts or discussion.translation_service()
+            expected_locales = discussion.discussion_locales
+            if ts:
+                lang, data = ts.identify(langstring_entry.value, expected_locales)
+                data["service"] = ts.__class__.__name__
+            else:
+                lang, data = cls.base_identify(langstring_entry.value, expected_locales)
+                data["service"] = cls.__name__
             changed = langstring_entry.identify_locale(lang, data)
             if changed:
                 langstring_entry.db.expire(langstring_entry, ["locale"])
@@ -173,10 +185,7 @@ class TranslationService(object):
                 pass  # say you can't identify
         except Exception as e:
             print_exc()
-            expected_locales = [
-                Locale.extract_root_locale(l)
-                for l in self.discussion.discussion_locales]
-            self.set_error(langstring_entry, *self.decode_exception(e, True))
+            cls.set_error(langstring_entry, *cls.decode_exception(e, True))
 
     @abstractmethod
     def translate(self, text, target, source=None, db=None):
@@ -193,7 +202,8 @@ class TranslationService(object):
     def has_fatal_error(self, lse):
         return lse.error_code >= LangStringStatus.PERMANENT_TRANSLATION_FAILURE
 
-    def decode_exception(self, e, identify_phase=False):
+    @staticmethod
+    def decode_exception(e, identify_phase=False):
         if isinstance(e, LangDetectException):
             return LangStringStatus.CANNOT_IDENTIFY, str(e)
         return LangStringStatus.UNKNOWN_ERROR, str(e)
@@ -214,7 +224,9 @@ class TranslationService(object):
             return source_lse
         if (source_locale == Locale.UNDEFINED
                 and self.distinct_identify_step):
-            self.confirm_locale(source_lse, constrain_locale_threshold)
+            self.confirm_locale(
+                source_lse,
+                constrain_locale_threshold=constrain_locale_threshold)
             # TODO: bail if identification failed
             source_locale = source_lse.locale_code
         # TODO: Handle script differences
@@ -336,14 +348,13 @@ class DummyTranslationServiceOneStep(DummyTranslationServiceTwoSteps):
 class DummyTranslationServiceTwoStepsWithErrors(
         DummyTranslationServiceTwoSteps):
     def identify(
-            self, text,
+            self, text, expected_locales=None,
             constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
         from random import random
         if random() > 0.9:
             raise RuntimeError()
         return super(DummyTranslationServiceTwoStepsWithErrors, self).identify(
-            text,
-            constrain_locale_threshold=constrain_locale_threshold)
+            text, expected_locales, constrain_locale_threshold)
 
     def translate(self, text, target, source=None, db=None):
         if not text:
@@ -490,11 +501,15 @@ class GoogleTranslationService(DummyGoogleTranslationService):
                 return self.known_locales_cls
         return self._known_locales
 
-    def identify(self, text, expected_locales=None):
+    def identify(
+            self, text, expected_locales=None,
+            constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
         if not text:
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
-        if not self.client:
-            return super(GoogleTranslationService, (self).identify(text, expected_locales=None))
+        if not self.client or self.len_nourl(text) >= SECURE_IDENTIFICATION_LIMIT:
+            # Save money by avoiding the identification step when the text is long enough.
+            return super(GoogleTranslationService, (self).identify(
+                text, expected_locales, constrain_locale_threshold))
         r = self.client.detections().list(q=text).execute()
         r = r[u"detections"][0]
         r.sort(lambda x: x[u"confidence"], reverse=True)
