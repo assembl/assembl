@@ -1,15 +1,15 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
-import { Editor, RichUtils } from 'draft-js';
+import { Editor } from 'draft-js';
 import punycode from 'punycode';
+
+import Toolbar from './toolbar';
 
 export default class RichTextEditor extends React.PureComponent {
   constructor() {
     super();
+    this.focusEditor = this.focusEditor.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.onBoldClick = this.onBoldClick.bind(this);
-    this.onItalicClick = this.onItalicClick.bind(this);
   }
 
   onChange(newEditorState) {
@@ -17,14 +17,27 @@ export default class RichTextEditor extends React.PureComponent {
     updateEditorState(newEditorState);
   }
 
-  onBoldClick() {
-    const { editorState } = this.props;
-    this.onChange(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
-  }
-
-  onItalicClick() {
-    const { editorState } = this.props;
-    this.onChange(RichUtils.toggleInlineStyle(editorState, 'ITALIC'));
+  getToolbarButtons() {
+    const bold = {
+      id: 'bold',
+      icon: 'text-bold',
+      type: 'style',
+      style: 'BOLD'
+    };
+    const italic = {
+      id: 'italic',
+      icon: 'text-italics',
+      type: 'style',
+      style: 'ITALIC'
+    };
+    const bullets = {
+      id: 'bullets',
+      icon: 'text-bullets',
+      type: 'block-type',
+      style: 'unordered-list-item'
+    };
+    const buttons = [bold, italic, bullets];
+    return buttons;
   }
 
   getCharCount(editorState) {
@@ -38,21 +51,32 @@ export default class RichTextEditor extends React.PureComponent {
     return decodeUnicode(cleanString).length;
   }
 
+  focusEditor() {
+    setTimeout(() => {
+      return this.editor.focus();
+    }, 50);
+  }
+
   render() {
     const { editorState, maxLength, placeholder } = this.props;
     const charCount = this.getCharCount(editorState);
     const remainingChars = maxLength - charCount;
     return (
       <div className="rich-text-editor">
-        <div className="editor-toolbar">
-          <Button onClick={this.onBoldClick}>
-            <span className="assembl-icon-text-bold" />
-          </Button>
-          <Button onClick={this.onItalicClick}>
-            <span className="assembl-icon-text-italics" />
-          </Button>
-        </div>
-        <Editor editorState={editorState} onChange={this.onChange} placeholder={placeholder} />
+        <Toolbar
+          buttonsConfig={this.getToolbarButtons()}
+          editorState={editorState}
+          focusEditor={this.focusEditor}
+          onChange={this.onChange}
+        />
+        <Editor
+          editorState={editorState}
+          onChange={this.onChange}
+          placeholder={placeholder}
+          ref={(e) => {
+            return (this.editor = e);
+          }}
+        />
         <div className="annotation margin-xs">
           <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
         </div>
