@@ -54,6 +54,18 @@ export default class RichTextEditor extends React.PureComponent {
     return decodeUnicode(cleanString).length;
   }
 
+  shouldHidePlaceholder() {
+    // don't display placeholder if user changes the block type (to bullet list) before to type anything
+    const { editorState } = this.props;
+    const contentState = editorState.getCurrentContent();
+    if (!contentState.hasText()) {
+      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+        return true;
+      }
+    }
+    return false;
+  }
+
   focusEditor() {
     setTimeout(() => {
       return this.editor.focus();
@@ -75,7 +87,7 @@ export default class RichTextEditor extends React.PureComponent {
         <Editor
           editorState={editorState}
           onChange={this.onChange}
-          placeholder={placeholder}
+          placeholder={this.shouldHidePlaceholder() ? '' : placeholder}
           ref={(e) => {
             return (this.editor = e);
           }}
