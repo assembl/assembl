@@ -206,6 +206,8 @@ const Translations = {
         numberOfResponses: '%{count} réponses à ce post',
         numberOfResponses_0: 'Aucune réponse à ce post',
         numberOfResponses_1: '%{count} réponse à ce post',
+        numberOfReactions: '%{count} réactions',
+        numberOfReactions_1: '%{count} réaction',
         startDiscussion: 'Je démarre une discussion'
       },
       themes: 'Thèmes',
@@ -477,6 +479,8 @@ const Translations = {
         numberOfResponses: '%{count} responses to this post',
         numberOfResponses_0: 'No response to this post',
         numberOfResponses_1: '%{count} response to this post',
+        numberOfReactions: '%{count} reactions',
+        numberOfReactions_1: '%{count} reaction',
         startDiscussion: 'Start a new thread'
       },
       themes: 'Themes',

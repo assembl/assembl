@@ -110,42 +110,42 @@ class PostActions extends React.Component {
         {totalSentimentsCount > 0 &&
           <div className="sentiments-count margin-m">
             <div>
-              <div>
-                {Object.keys(sentimentCounts).map((sentiment, index) => {
-                  if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
-                    return (
-                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                        <Like size={15} />
-                      </div>
-                    );
-                  }
-                  if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
-                    return (
-                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                        <Disagree size={15} />
-                      </div>
-                    );
-                  }
-                  if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
-                    return (
-                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                        <DontUnderstand size={15} />
-                      </div>
-                    );
-                  }
-                  if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
-                    return (
-                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                        <MoreInfo size={15} />
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
+              {Object.keys(sentimentCounts).map((sentiment, index) => {
+                if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
+                  return (
+                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                      <Like size={15} />
+                    </div>
+                  );
+                }
+                if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
+                  return (
+                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                      <Disagree size={15} />
+                    </div>
+                  );
+                }
+                if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
+                  return (
+                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                      <DontUnderstand size={15} />
+                    </div>
+                  );
+                }
+                if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
+                  return (
+                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                      <MoreInfo size={15} />
+                    </div>
+                  );
+                }
+                return null;
+              })}
             </div>
             <div className="txt">
-              {totalSentimentsCount}
+              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
+                ? totalSentimentsCount
+                : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
             </div>
           </div>}
         {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
