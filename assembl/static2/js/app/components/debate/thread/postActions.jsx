@@ -88,7 +88,9 @@ class PostActions extends React.Component {
               overlay={getOverflowMenuForPost(postId)}
             >
               <div>
-                {'...'}
+                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
+                  ? <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
+                  : <span className="assembl-icon-ellipsis">&nbsp;</span>}
               </div>
             </OverlayTrigger>
           </div>

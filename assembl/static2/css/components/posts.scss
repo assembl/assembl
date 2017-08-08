@@ -183,7 +183,7 @@
 
     .overflow-action {
       cursor: pointer;
-      margin: 10px 0 0;
+      margin: 10px 0 0 5px;
       color: $first-color-opacity-70;
 
       &:hover {
@@ -360,7 +360,7 @@
                 margin: 0;
 
                 .sentiment {
-                    margin: 0 10px;
+                    margin: 0 10px 5px 10px;
                 }
             }
         }
