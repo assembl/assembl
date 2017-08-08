@@ -1,9 +1,22 @@
 .idea-preview {
-    &.illustration-box .content-box {
+    &.idea-preview-selected {
+        .color-box {
+            display: block;
+        }
+    }
+    .content-box {
         cursor: initial;
     }
-    .content-box:hover .stats {
-        height: 10px;
+    .content-box:hover {
+        .text-box {
+            bottom: 25px;
+            width: calc(100% - 40px);
+            padding: 0;
+            margin: 0;
+        }
+        .stats {
+            height: 10px;
+        }
     }
     .see-discussion {
         margin-top: 30px;

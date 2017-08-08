@@ -1,34 +1,33 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
-import { Grid, Row, Col } from 'react-bootstrap';
-import IdeaPreview from '../../common/ideaPreview';
-import { get } from '../../../utils/routeMap';
-import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { Grid } from 'react-bootstrap';
 import '../../../../../css/components/ideas.scss';
+import IdeasLevel from './ideasLevel';
 
 class Ideas extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAnimatingTowardsInline: false,
-      selectedIdea: null
+      selectedIdeas: [''],
+      isInitialState: true
     };
     this.onSeeSubIdeasClick = this.onSeeSubIdeasClick.bind(this);
   }
-  onSeeSubIdeasClick(ideaId) {
-    this.setState({ isAnimatingTowardsInline: true });
-    this.setState({ selectedIdea: ideaId });
+  onSeeSubIdeasClick(ideaId, level) {
+    const updatedSelectedIdeas = this.state.selectedIdeas.slice();
+    updatedSelectedIdeas[level] = ideaId;
+    const len = updatedSelectedIdeas.length;
+    if (len > 0 && updatedSelectedIdeas[len - 1] !== '') {
+      updatedSelectedIdeas.push('');
+    }
+    this.setState({ selectedIdeas: updatedSelectedIdeas });
+    this.setState({ isInitialState: false });
   }
   render() {
     const { thematics, identifier } = this.props;
-    const { selectedIdea } = this.state;
-    const slug = getDiscussionSlug();
+    const { selectedIdeas } = this.state;
     return (
-      <section
-        className={
-          this.state.isAnimatingTowardsInline ? 'themes-section ideas-section animating-towards-inline' : 'themes-section ideas-section'
-        }
-      >
+      <section className="themes-section ideas-section">
         <Grid fluid className="background-grey">
           <div className="max-container">
             <div className="title-section">
@@ -38,32 +37,25 @@ class Ideas extends React.Component {
               </h1>
             </div>
             <div className="content-section">
-              <Row className="no-margin">
-                {thematics.map((thematic, index) => {
-                  return (
-                    <Col xs={12} sm={6} md={3} className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'} key={index}>
-                      <IdeaPreview
-                        imgUrl={thematic.imgUrl}
-                        numPosts={thematic.numPosts}
-                        numContributors={thematic.numContributors}
-                        numChildren={thematic.numChildren}
-                        link={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}
-                        title={thematic.title}
-                        description={thematic.description}
-                        onSeeSubIdeasClick={() => {
-                          this.onSeeSubIdeasClick(thematic.id);
-                        }}
-                      />
-                    </Col>
-                  );
-                })}
-              </Row>
+              {this.state.selectedIdeas.map((selectedIdea, index) => {
+                return (
+                  <IdeasLevel
+                    thematics={thematics}
+                    identifier={identifier}
+                    level={index}
+                    key={index}
+                    selectedIdea={selectedIdea}
+                    isInline={!this.state.isInitialState}
+                    onSeeSubIdeasClick={this.onSeeSubIdeasClick}
+                  />
+                );
+              })}
             </div>
           </div>
         </Grid>
-        {selectedIdea &&
+        {selectedIdeas &&
           <div>
-            {selectedIdea}
+            {selectedIdeas}
           </div>}
       </section>
     );

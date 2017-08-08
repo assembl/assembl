@@ -5,9 +5,13 @@ import Statistic from './statistic';
 
 class IdeaPreview extends React.Component {
   render() {
-    const { imgUrl, link, title, description, numPosts, numContributors, numChildren, onSeeSubIdeasClick } = this.props;
+    const { imgUrl, link, title, description, numPosts, numContributors, numChildren, isSelected, onSeeSubIdeasClick } = this.props;
     return (
-      <div className="illustration illustration-box idea-preview">
+      <div
+        className={
+          isSelected ? 'illustration illustration-box idea-preview idea-preview-selected' : 'illustration illustration-box idea-preview'
+        }
+      >
         <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>
           &nbsp;
         </div>

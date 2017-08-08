@@ -1,39 +1,79 @@
 .themes-section.ideas-section {
-    &.animating-towards-inline {
-        .row {
-            display: inline-flex;
-            width: 100%;
-            overflow-x: scroll;
+    .multiline {
+        .scroll-left, .scroll-right {
+            display: none;
+        }
+    }
+    .animating-towards-inline, .is-inline {
+        position: relative;
+        .scroll-left, .scroll-right {
+            display: block;
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(195, 195, 195, 0.6);
+            top: calc(50% - 25px);
+            cursor: pointer;
+            &:before {
+                font-size: 42px;
+                color: #000;
+                width: 100%;
+                text-align: center;
+                position: absolute;
+            }
+        }
+        .scroll-left {
+            z-index: 1000;
+            left: 0;
+            &:before {
+                content: "<";
+            }
+        }
+        .scroll-right {
+            z-index: 1001;
+            right: 0;
+            &:before {
+                content: ">";
+            }
         }
 
-        .theme {
-            max-width: 350px;
-            float: none;
-            display: inline-block;
-            flex-shrink: 0;
+        .row {
+            position: relative;
+            display: inline-flex;
+            width: 100%;
+            overflow-x: hidden;
 
-            &.clear {
-                clear: none;
-            }
+            .theme {
+                max-width: 350px;
+                float: none;
+                display: inline-block;
+                flex-shrink: 0;
+                transition-duration: 1s;
+                left: 0;
 
-            &:nth-child(1),
-            &:nth-child(2),
-            &:nth-child(3),
-            &:nth-child(4),
-            &:nth-child(5),
-            &:nth-child(6),
-            &:nth-child(7),
-            &:nth-child(8),
-            &:nth-child(9),
-            &:nth-child(10),
-            &:nth-child(11),
-            &:nth-child(12),
-            &:nth-child(13),
-            &:nth-child(14),
-            &:nth-child(15),
-            &:nth-child(16) {
-                margin-top: 0;
-                color: #fafbca;
+                &.clear {
+                    clear: none;
+                }
+
+                &:nth-child(1),
+                &:nth-child(2),
+                &:nth-child(3),
+                &:nth-child(4),
+                &:nth-child(5),
+                &:nth-child(6),
+                &:nth-child(7),
+                &:nth-child(8),
+                &:nth-child(9),
+                &:nth-child(10),
+                &:nth-child(11),
+                &:nth-child(12),
+                &:nth-child(13),
+                &:nth-child(14),
+                &:nth-child(15),
+                &:nth-child(16) {
+                    margin-top: 0;
+                    color: #fafbca;
+                }
             }
         }
     }
