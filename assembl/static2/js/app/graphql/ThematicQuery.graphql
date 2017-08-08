@@ -4,7 +4,7 @@ query ThematicQuery($lang: String!, $id: ID!) {
       title(lang: $lang)
       imgUrl
       id
-      video(lang: $lang){
+      video(lang: $lang) {
         title
         descriptionTop
         descriptionBottom
