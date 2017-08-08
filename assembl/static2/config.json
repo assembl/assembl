@@ -509,6 +509,18 @@
       ]
     },
     {
+      "uid": "107ce08c7231097c7447d8f4d059b55f",
+      "css": "ellipsis",
+      "code": 61761,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "750058837a91edae64b03d60fc7e81a7",
+      "css": "ellipsis-vert",
+      "code": 61762,
+      "src": "fontawesome"
+    },
+    {
       "uid": "8042c2d234f549346b152cfcf45b16c5",
       "css": "facebook",
       "code": 59397,

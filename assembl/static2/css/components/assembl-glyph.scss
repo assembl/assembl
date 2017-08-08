@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'assembl-glyph';
-  src: url('#{$fonts-dir}/assembl-glyph.eot?30877994');
-  src: url('#{$fonts-dir}/assembl-glyph.eot?30877994#iefix') format('embedded-opentype'),
-       url('#{$fonts-dir}/assembl-glyph.woff2?30877994') format('woff2'),
-       url('#{$fonts-dir}/assembl-glyph.woff?30877994') format('woff'),
-       url('#{$fonts-dir}/assembl-glyph.ttf?30877994') format('truetype'),
-       url('#{$fonts-dir}/assembl-glyph.svg?30877994#assembl-glyph') format('svg');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?64503037');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?64503037#iefix') format('embedded-opentype'),
+       url('#{$fonts-dir}/assembl-glyph.woff2?64503037') format('woff2'),
+       url('#{$fonts-dir}/assembl-glyph.woff?64503037') format('woff'),
+       url('#{$fonts-dir}/assembl-glyph.ttf?64503037') format('truetype'),
+       url('#{$fonts-dir}/assembl-glyph.svg?64503037#assembl-glyph') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -94,3 +94,5 @@
 .assembl-icon-text-attachment:before { content: '\e831'; } /* '' */
 .assembl-icon-text-align-left:before { content: '\e832'; } /* '' */
 .assembl-icon-text-align-right:before { content: '\e833'; } /* '' */
+.assembl-icon-ellipsis:before { content: '\f141'; } /* '' */
+.assembl-icon-ellipsis-vert:before { content: '\f142'; } /* '' */
