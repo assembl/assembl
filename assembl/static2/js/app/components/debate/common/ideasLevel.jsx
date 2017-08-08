@@ -1,8 +1,9 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
+import getValue from 'lodash/get';
 import IdeaPreview from '../../common/ideaPreview';
 import VisibilityComponent from '../../common/visibilityComponent';
-import { get } from '../../../utils/routeMap';
+import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import '../../../../../css/components/ideas.scss';
 
@@ -13,24 +14,26 @@ class IdeasLevel extends React.Component {
       isAnimatingTowardsInline: false,
       isInline: props.isInline || false,
       selectedIdea: props.selectedIdea || null,
-      isScrollLeftButtonVisible: props.isInline || false,
-      isScrollRightButtonVisible: props.isInline || false
+      isScrollLeftButtonVisible: props.isInline || props.isAnimatingTowardsInline || false,
+      isScrollRightButtonVisible: props.isInline || props.isAnimatingTowardsInline || false
     };
+    this.options = {};
+    this.initializeConstants();
 
-    this.onOwnSeeSubIdeasClick = this.onOwnSeeSubIdeasClick.bind(this);
+    this.onSeeSubIdeasClick = this.onSeeSubIdeasClick.bind(this);
     this.updateScrollButtonsVisibility = this.updateScrollButtonsVisibility.bind(this);
     this.myMoveAllChildren = this.myMoveAllChildren.bind(this);
-    this.myOnScrollRightClick = this.myOnScrollRightClick.bind(this);
-    this.myOnScrollLeftClick = this.myOnScrollLeftClick.bind(this);
+    this.onScrollRightClick = this.onScrollRightClick.bind(this);
+    this.onScrollLeftClick = this.onScrollLeftClick.bind(this);
   }
-  onOwnSeeSubIdeasClick(ideaId) {
+  onSeeSubIdeasClick(ideaId) {
     this.setState({ isAnimatingTowardsInline: true });
     this.setState({ selectedIdea: ideaId });
     this.initializeConstants();
     this.updateScrollButtonsVisibility(this.state.isInline, true);
   }
   getOption(name) {
-    return this.options[name];
+    return getValue(this, ['options', name], null);
   }
   setOption(name, value) {
     this.options[name] = value;
@@ -57,7 +60,7 @@ class IdeasLevel extends React.Component {
     }
   }
   initializeConstants() {
-    const scrollDisplacement = 0;
+    const scrollDisplacement = this.getOption('scrollDisplacement') || 0;
     const thematicWidth = 350; /* TODO: read dynamically from DOM */
     const carouselWidth = 1400; /* TODO: read dynamically from DOM */
     let len = 0;
@@ -121,11 +124,11 @@ class IdeasLevel extends React.Component {
       this.updateScrollButtonsVisibility(this.state.isInline, this.state.isAnimatingTowardsInline);
     }
   }
-  myOnScrollRightClick(ev) {
+  onScrollRightClick(ev) {
     const row = ev.target.parentElement.parentElement.children[1];
     this.myMoveAllChildren(row, -1 * this.getOption('animationDistance'));
   }
-  myOnScrollLeftClick(ev) {
+  onScrollLeftClick(ev) {
     const row = ev.target.parentElement.parentElement.children[1];
     this.myMoveAllChildren(row, this.getOption('animationDistance'));
   }
@@ -153,7 +156,7 @@ class IdeasLevel extends React.Component {
             this.scrollLeft = el;
           }}
         >
-          <div className="scroll-left" onClick={this.myOnScrollLeftClick} />
+          <div className="scroll-left" onClick={this.onScrollLeftClick} />
         </VisibilityComponent>
         <Row
           className="no-margin"
@@ -170,12 +173,12 @@ class IdeasLevel extends React.Component {
                   numContributors={thematic.numContributors}
                   numChildren={thematic.numChildren}
                   isSelected={selectedIdea === thematic.id}
-                  link={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}
+                  link={`${getRoute('debate', { slug: slug, phase: identifier })}${getRoute('theme', { themeId: thematic.id })}`}
                   title={thematic.title}
                   description={thematic.description}
                   onSeeSubIdeasClick={() => {
                     onSeeSubIdeasClick(thematic.id, level);
-                    this.onOwnSeeSubIdeasClick(thematic.id);
+                    this.onSeeSubIdeasClick(thematic.id);
                   }}
                 />
               </Col>
@@ -188,7 +191,7 @@ class IdeasLevel extends React.Component {
             this.scrollRight = el;
           }}
         >
-          <div className="scroll-right" onClick={this.myOnScrollRightClick} />
+          <div className="scroll-right" onClick={this.onScrollRightClick} />
         </VisibilityComponent>
       </div>
     );
