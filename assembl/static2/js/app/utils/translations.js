@@ -152,6 +152,11 @@ const Translations = {
       title: 'synthèse'
     },
     common: {
+      editor: {
+        bold: 'Gras',
+        italic: 'Italique',
+        bulletList: 'Liste de puces'
+      },
       uploadButton: 'Choisissez un fichier',
       goUp: 'Remonter'
     },
@@ -418,6 +423,11 @@ const Translations = {
       panelTitle: 'Welcome to Assembl community page'
     },
     common: {
+      editor: {
+        bold: 'Bold',
+        italic: 'Italic',
+        bulletList: 'Bullet list'
+      },
       uploadButton: 'Choose a file to upload',
       goUp: 'Back to top'
     },

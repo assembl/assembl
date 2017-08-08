@@ -1,5 +1,5 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { Editor } from 'draft-js';
 import punycode from 'punycode';
 
@@ -21,18 +21,21 @@ export default class RichTextEditor extends React.PureComponent {
     const bold = {
       id: 'bold',
       icon: 'text-bold',
+      label: I18n.t('common.editor.bold'),
       type: 'style',
       style: 'BOLD'
     };
     const italic = {
       id: 'italic',
       icon: 'text-italics',
+      label: I18n.t('common.editor.italic'),
       type: 'style',
       style: 'ITALIC'
     };
     const bullets = {
       id: 'bullets',
       icon: 'text-bullets',
+      label: I18n.t('common.editor.bulletList'),
       type: 'block-type',
       style: 'unordered-list-item'
     };
