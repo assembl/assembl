@@ -64,11 +64,11 @@ class Post extends React.Component {
       });
   }
   render() {
-    const { postIndex, moreProposals, post, id } = this.props;
+    const { postIndex, moreProposals, post } = this.props;
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
-          <PostCreator id={id} />
+          <PostCreator name={post.creator.name} />
           <div className="body">
             {post.body}
           </div>

@@ -1,3 +1,5 @@
+#import "../AgentProfileInfo.graphql"
+
 mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: ID) {
   createPost(ideaId: $ideaId, subject: $subject, body: $body, parentId: $parentId) {
     post {
@@ -7,8 +9,7 @@ mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: I
         body
         parentId
         creator {
-          id
-          name
+          ...AgentProfileInfo
         }
       }
     }

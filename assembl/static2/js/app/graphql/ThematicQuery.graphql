@@ -1,3 +1,5 @@
+#import "./AgentProfileInfo.graphql"
+
 query ThematicQuery($lang: String!, $id: ID!) {
   thematic: node(id: $id) {
     ... on Thematic {
@@ -23,6 +25,9 @@ query ThematicQuery($lang: String!, $id: ID!) {
                   body
                   mySentiment
                   parentId
+                  creator {
+                    ...AgentProfileInfo
+                  }
                   sentimentCounts {
                     like
                     disagree

@@ -1,3 +1,5 @@
+#import "./AgentProfileInfo.graphql"
+
 query IdeaWithPosts($lang: String!, $id: ID!) {
   idea: node(id: $id) {
     ... on Idea {
@@ -26,9 +28,7 @@ query IdeaWithPosts($lang: String!, $id: ID!) {
                 }
               }
               creator {
-                id
-                userId
-                name
+                ...AgentProfileInfo
               }
               parentId
               creationDate
