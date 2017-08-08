@@ -32,30 +32,34 @@ const editMessage = (postId) => {
   return console.log('edit', postId); // eslint-disable-line
 };
 
-const getOverflowMenuForPost = (postId) => {
+const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThisMessage) => {
   const overflowMenu = (
     <Popover id="edit-delete-actions" className="overflow-menu">
       <div className="overflow-menu-container">
-        <OverlayTrigger placement="right" overlay={deleteMessageTooltip}>
-          <Link
-            className="overflow-menu-action"
-            onClick={() => {
-              return confirmModal(postId);
-            }}
-          >
-            <span className="assembl-icon-delete" />
-          </Link>
-        </OverlayTrigger>
-        <OverlayTrigger placement="right" overlay={editMessageTooltip}>
-          <Link
-            className="overflow-menu-action"
-            onClick={() => {
-              return editMessage(postId);
-            }}
-          >
-            <span className="assembl-icon-edit" />
-          </Link>
-        </OverlayTrigger>
+        {userCanDeleteThisMessage
+          ? <OverlayTrigger placement="right" overlay={deleteMessageTooltip}>
+            <Link
+              className="overflow-menu-action"
+              onClick={() => {
+                return confirmModal(postId);
+              }}
+            >
+              <span className="assembl-icon-delete" />
+            </Link>
+          </OverlayTrigger>
+          : null}
+        {userCanEditThisMessage
+          ? <OverlayTrigger placement="right" overlay={editMessageTooltip}>
+            <Link
+              className="overflow-menu-action"
+              onClick={() => {
+                return editMessage(postId);
+              }}
+            >
+              <span className="assembl-icon-edit" />
+            </Link>
+          </OverlayTrigger>
+          : null}
       </div>
     </Popover>
   );

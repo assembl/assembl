@@ -44,9 +44,10 @@ export const connectedUserIsExpert = () => {
 
 export const connectedUserIsAdmin = () => {
   const permissions = getConnectedUserPermissions();
-  if (permissions.length === 0) {
-    return false;
-  }
-
   return permissions.indexOf(Permissions.ADMIN_DISCUSSION) > -1;
+};
+
+export const connectedUserCan = (permission) => {
+  const permissions = getConnectedUserPermissions();
+  return permissions.indexOf(permission) > -1;
 };

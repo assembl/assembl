@@ -16,6 +16,8 @@ import Disagree from '../../svg/disagree';
 import DontUnderstand from '../../svg/dontUnderstand';
 import MoreInfo from '../../svg/moreInfo';
 import getOverflowMenuForPost from './overflowMenu';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
+import Permissions, { connectedUserCan } from '../../../utils/permissions';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -39,12 +41,35 @@ class PostActions extends React.Component {
     });
   }
   render() {
-    const { postId, sentimentCounts, mySentiment, handleAnswerClick, postChildren } = this.props;
+    const { creatorUserId, postId, sentimentCounts, mySentiment, handleAnswerClick, postChildren } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
       ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
       : 0;
-
+    const connectedUserId = getConnectedUserId();
+    const userCanDeleteThisMessage =
+      (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
+      connectedUserCan(Permissions.DELETE_POST);
+    const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_POST);
+    let overflowMenu = null;
+    if (userCanDeleteThisMessage || userCanEditThisMessage) {
+      overflowMenu = (
+        <div className="overflow-action">
+          <OverlayTrigger
+            trigger="click"
+            rootClose
+            placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
+            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage)}
+          >
+            <div>
+              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
+                ? <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
+                : <span className="assembl-icon-ellipsis">&nbsp;</span>}
+            </div>
+          </OverlayTrigger>
+        </div>
+      );
+    }
     return (
       <div>
         <div className="post-icons">
@@ -80,20 +105,7 @@ class PostActions extends React.Component {
               </div>
             </OverlayTrigger>
           </div>
-          <div className="overflow-action">
-            <OverlayTrigger
-              trigger="click"
-              rootClose
-              placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
-              overlay={getOverflowMenuForPost(postId)}
-            >
-              <div>
-                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                  ? <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
-                  : <span className="assembl-icon-ellipsis">&nbsp;</span>}
-              </div>
-            </OverlayTrigger>
-          </div>
+          {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 &&
           <div className="sentiments-count margin-m">
@@ -136,6 +148,7 @@ class PostActions extends React.Component {
               {totalSentimentsCount}
             </div>
           </div>}
+        {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
           <Translate value="debate.thread.numberOfResponses" count={postChildren ? postChildren.length : 0} />
         </div>

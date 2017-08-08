@@ -79,6 +79,7 @@ const Post = ({
           </Col>
           <Col xs={12} md={1} className="post-right">
             <PostActions
+              creatorUserId={creator.userId}
               postId={id}
               handleAnswerClick={handleAnswerClick}
               sentimentCounts={sentimentCounts}
