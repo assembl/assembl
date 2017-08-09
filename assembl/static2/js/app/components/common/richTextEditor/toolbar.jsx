@@ -16,11 +16,6 @@ class Toolbar extends React.Component {
   currentStyle: DraftInlineStyle;
   currentBlockType: DraftBlockType;
 
-  constructor() {
-    super();
-    this.renderButton = this.renderButton.bind(this);
-  }
-
   getCurrentBlockType(): DraftBlockType {
     const { editorState } = this.props;
     const selection = editorState.getSelection();

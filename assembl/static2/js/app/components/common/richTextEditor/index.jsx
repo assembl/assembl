@@ -18,12 +18,6 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
   editor: HTMLDivElement;
   props: RichTextEditorProps;
 
-  constructor() {
-    super();
-    this.focusEditor = this.focusEditor.bind(this);
-    this.onChange = this.onChange.bind(this);
-  }
-
   onChange = (newEditorState: EditorState): void => {
     const { updateEditorState } = this.props;
     updateEditorState(newEditorState);
