@@ -5,6 +5,7 @@ import { Editor, EditorState } from 'draft-js';
 import punycode from 'punycode';
 
 import Toolbar from './toolbar';
+import type ButtonConfigType from './toolbarButton';
 
 type RichTextEditorProps = {
   editorState: EditorState,
@@ -14,19 +15,23 @@ type RichTextEditorProps = {
 };
 
 export default class RichTextEditor extends React.PureComponent<void, RichTextEditorProps, void> {
+  editor: HTMLDivElement;
+  props: RichTextEditorProps;
+  onChange: (newEditorState: EditorState) => void;
+  focusEditor: () => void;
+
   constructor() {
     super();
     this.focusEditor = this.focusEditor.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
-  onChange: (newEditorState: EditorState) => void;
-  onChange(newEditorState: EditorState) {
+  onChange(newEditorState: EditorState): void {
     const { updateEditorState } = this.props;
     updateEditorState(newEditorState);
   }
 
-  getToolbarButtons() {
+  getToolbarButtons(): Array<ButtonConfigType> {
     const bold = {
       id: 'bold',
       icon: 'text-bold',
@@ -52,7 +57,7 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
     return buttons;
   }
 
-  getCharCount(editorState: EditorState) {
+  getCharCount(editorState: EditorState): number {
     // this code is "borrowed" from the draft-js counter plugin
     const decodeUnicode = (str) => {
       return punycode.ucs2.decode(str);
@@ -63,7 +68,7 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
     return decodeUnicode(cleanString).length;
   }
 
-  shouldHidePlaceholder() {
+  shouldHidePlaceholder(): boolean {
     // don't display placeholder if user changes the block type (to bullet list) before to type anything
     const { editorState } = this.props;
     const contentState = editorState.getCurrentContent();
@@ -75,15 +80,11 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
     return false;
   }
 
-  focusEditor: () => void;
   focusEditor() {
     setTimeout(() => {
       return this.editor.focus();
     }, 50);
   }
-
-  editor: HTMLDivElement;
-  props: RichTextEditorProps;
 
   render() {
     const { editorState, maxLength, placeholder } = this.props;
