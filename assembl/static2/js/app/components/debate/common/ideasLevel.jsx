@@ -164,6 +164,7 @@ class IdeasLevel extends React.Component {
           ref={(el) => {
             this.scrollLeft = el;
           }}
+          className="scroll-left-container"
         >
           <div className="scroll-left" onClick={this.onScrollLeftClick} />
         </VisibilityComponent>
@@ -199,6 +200,7 @@ class IdeasLevel extends React.Component {
           ref={(el) => {
             this.scrollRight = el;
           }}
+          className="scroll-right-container"
         >
           <div className="scroll-right" onClick={this.onScrollRightClick} />
         </VisibilityComponent>

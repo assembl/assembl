@@ -1,8 +1,25 @@
 .ideas-level {
     &.animating-towards-inline, &.is-inline {
         position: relative;
+
+        // scroll containers are an empty area around the scroll button, so that user does not mis-click on idea link which is next to this button
+        .scroll-left-container, .scroll-right-container {
+            display: inline-block;
+            height: 80px;
+            width: 80px;
+            position: absolute;
+            top: calc(50% - 40px);
+            background-color: rgba(0,0,0,0);
+        }
+        .scroll-left-container {
+            left: 0;
+        }
+        .scroll-right-container {
+            right: 0;
+        }
+
         .scroll-left, .scroll-right {
-            display: block;
+            display: none;
             position: absolute;
             width: 50px;
             height: 50px;
@@ -22,6 +39,12 @@
             left: 0;
             &:before {
                 content: "<";
+            }
+        }
+
+        &:hover {
+            .scroll-left, .scroll-right {
+                display: block;
             }
         }
         .scroll-right {
