@@ -10,7 +10,7 @@ To check the javascript code with flow just run:
 
     yarn run flow
 
-(you should also probably install a plugin for your favourite editor (i.e. ``flow`` for ``atom``))
+(you should also probably install a plugin for your favourite editor (i.e. check "Use the Flow binary included in each project's flow-bin" in ``nuclide`` settings))
 
 
 Some things to know
