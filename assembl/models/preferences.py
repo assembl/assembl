@@ -625,6 +625,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                     P_EDIT_EXTRACT,
                     P_EDIT_IDEA,
                     P_EDIT_MY_EXTRACT,
+                    P_EDIT_MY_POST,
                     P_EDIT_POST,
                     P_EDIT_SYNTHESIS,
                     P_EXPORT_EXTERNAL_SOURCE,
@@ -640,6 +641,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                     P_EDIT_EXTRACT,
                     P_EDIT_IDEA,
                     P_EDIT_MY_EXTRACT,
+                    P_EDIT_MY_POST,
                     P_VOTE,
                 ],
                 R_MODERATOR: [
@@ -652,6 +654,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                     P_EDIT_EXTRACT,
                     P_EDIT_IDEA,
                     P_EDIT_MY_EXTRACT,
+                    P_EDIT_MY_POST,
                     P_EDIT_POST,
                     P_EDIT_SYNTHESIS,
                     P_EXPORT_EXTERNAL_SOURCE,
@@ -662,6 +665,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                 R_PARTICIPANT: [
                     P_ADD_POST,
                     P_DELETE_MY_POST,
+                    P_EDIT_MY_POST,
                     P_VOTE,
                 ],
                 Authenticated: [

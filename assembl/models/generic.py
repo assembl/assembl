@@ -29,7 +29,8 @@ from . import DiscussionBoundBase
 from .langstrings import (LangString, LangStringEntry)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
-    CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST)
+    CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST,
+    P_EDIT_MY_POST, P_DELETE_POST, P_DELETE_MY_POST)
 from ..auth.util import get_current_user_id
 from ..semantic.namespaces import (
     SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES, FOAF)
@@ -596,8 +597,8 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         return [Idea.uri_generic(wil.idea_id) for wil in self.widget_idea_links]
 
     crud_permissions = CrudPermissions(
-            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
-            P_EDIT_POST, P_ADMIN_DISC)
+            P_ADD_POST, P_READ, P_EDIT_POST, P_DELETE_POST,
+            P_EDIT_MY_POST, P_DELETE_MY_POST)
 
 
 LangString.setup_ownership_load_event(Content, ['subject', 'body'])

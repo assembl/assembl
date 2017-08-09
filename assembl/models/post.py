@@ -175,6 +175,9 @@ class Post(Content):
         'with_polymorphic': '*'
     }
 
+    def is_owner(self, user_id):
+        return self.creator_id == user_id
+
     def get_descendants(self):
         assert self.id
         descendants = self.db.query(Post).filter(
