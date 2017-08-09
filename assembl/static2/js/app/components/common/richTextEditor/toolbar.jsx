@@ -15,7 +15,6 @@ export type ButtonConfigType = {
 class Toolbar extends React.Component {
   currentStyle: DraftInlineStyle;
   currentBlockType: DraftBlockType;
-  renderButton: (config: ButtonConfigType) => React.Element<*>;
 
   constructor() {
     super();
@@ -40,7 +39,7 @@ class Toolbar extends React.Component {
     focusEditor();
   }
 
-  renderButton(config: ButtonConfigType): React.Element<*> {
+  renderButton = (config: ButtonConfigType): React.Element<*> => {
     let isActive;
     let onToggle;
     if (config.type === 'style') {
@@ -56,7 +55,7 @@ class Toolbar extends React.Component {
     }
 
     return <ToolbarButton key={`button-${config.id}`} {...config} isActive={isActive} onToggle={onToggle} />;
-  }
+  };
 
   render() {
     const { buttonsConfig } = this.props;

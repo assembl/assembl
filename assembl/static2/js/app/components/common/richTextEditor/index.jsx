@@ -17,8 +17,6 @@ type RichTextEditorProps = {
 export default class RichTextEditor extends React.PureComponent<void, RichTextEditorProps, void> {
   editor: HTMLDivElement;
   props: RichTextEditorProps;
-  onChange: (newEditorState: EditorState) => void;
-  focusEditor: () => void;
 
   constructor() {
     super();
@@ -26,10 +24,10 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
     this.onChange = this.onChange.bind(this);
   }
 
-  onChange(newEditorState: EditorState): void {
+  onChange = (newEditorState: EditorState): void => {
     const { updateEditorState } = this.props;
     updateEditorState(newEditorState);
-  }
+  };
 
   getToolbarButtons(): Array<ButtonConfigType> {
     const bold = {
@@ -80,11 +78,11 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
     return false;
   }
 
-  focusEditor() {
+  focusEditor = (): void => {
     setTimeout(() => {
       return this.editor.focus();
     }, 50);
-  }
+  };
 
   render() {
     const { editorState, maxLength, placeholder } = this.props;
