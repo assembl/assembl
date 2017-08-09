@@ -22,7 +22,7 @@ class IdeasLevel extends React.Component {
 
     this.onSeeSubIdeasClick = this.onSeeSubIdeasClick.bind(this);
     this.updateScrollButtonsVisibility = this.updateScrollButtonsVisibility.bind(this);
-    this.myMoveAllChildren = this.myMoveAllChildren.bind(this);
+    this.moveAllChildren = this.moveAllChildren.bind(this);
     this.onScrollRightClick = this.onScrollRightClick.bind(this);
     this.onScrollLeftClick = this.onScrollLeftClick.bind(this);
   }
@@ -60,9 +60,13 @@ class IdeasLevel extends React.Component {
     }
   }
   initializeConstants() {
+    const carouselParentWidth = 1400; // TODO: read dynamically from DOM
     const scrollDisplacement = this.getOption('scrollDisplacement') || 0;
-    const thematicWidth = 350; /* TODO: read dynamically from DOM */
-    const carouselWidth = 1400; /* TODO: read dynamically from DOM */
+    const thematicWidth = 350; // TODO: read dynamically from DOM
+    let carouselTargetWidth = (Math.floor(carouselParentWidth / thematicWidth) - 0.5) * thematicWidth;
+    if (carouselTargetWidth < 1.5 * thematicWidth) {
+      carouselTargetWidth = 1.5 * thematicWidth;
+    }
     let len = 0;
     if (
       this.props &&
@@ -73,19 +77,19 @@ class IdeasLevel extends React.Component {
     ) {
       len = this.props.thematics.length;
     }
-    const displacementMin = -1.0 * (len * thematicWidth - carouselWidth);
+    const displacementMin = -1.0 * (len * thematicWidth - carouselTargetWidth);
     const displacementMax = 0;
 
     this.options = {
       scrollDisplacement: scrollDisplacement,
       thematicWidth: thematicWidth,
       animationDistance: thematicWidth,
-      carouselWidth: carouselWidth,
+      carouselWidth: carouselTargetWidth,
       displacementMin: displacementMin,
       displacementMax: displacementMax
     };
   }
-  myMoveAllChildren(element, distance) {
+  moveAllChildren(element, distance) {
     let targetValue = 0;
     let currentValue = 0;
     const displacementMin = this.getOption('displacementMin');
@@ -126,18 +130,18 @@ class IdeasLevel extends React.Component {
   }
   onScrollRightClick(ev) {
     const row = ev.target.parentElement.parentElement.children[1];
-    this.myMoveAllChildren(row, -1 * this.getOption('animationDistance'));
+    this.moveAllChildren(row, -1 * this.getOption('animationDistance'));
   }
   onScrollLeftClick(ev) {
     const row = ev.target.parentElement.parentElement.children[1];
-    this.myMoveAllChildren(row, this.getOption('animationDistance'));
+    this.moveAllChildren(row, this.getOption('animationDistance'));
   }
   render() {
     const { thematics, identifier, onSeeSubIdeasClick, level } = this.props;
     const { isScrollLeftButtonVisible, isScrollRightButtonVisible } = this.state;
     const { selectedIdea } = this.state;
     const slug = getDiscussionSlug();
-    let classNames = [];
+    let classNames = ['ideas-level'];
     if (this.state.isAnimatingTowardsInline) {
       classNames.push('animating-towards-inline');
     }
@@ -148,8 +152,13 @@ class IdeasLevel extends React.Component {
     }
     classNames = classNames.join(' ');
 
+    const style = {};
+    if (this.state.isInline || this.state.isAnimatingTowardsInline) {
+      style.width = this.getOption('carouselWidth');
+    }
+
     return (
-      <div className={classNames}>
+      <div className={classNames} style={style}>
         <VisibilityComponent
           isVisible={isScrollLeftButtonVisible}
           ref={(el) => {

@@ -1,10 +1,5 @@
-.themes-section.ideas-section {
-    .multiline {
-        .scroll-left, .scroll-right {
-            display: none;
-        }
-    }
-    .animating-towards-inline, .is-inline {
+.ideas-level {
+    &.animating-towards-inline, &.is-inline {
         position: relative;
         .scroll-left, .scroll-right {
             display: block;
@@ -45,6 +40,7 @@
 
             .theme {
                 max-width: 350px;
+                width: 350px; /* TODO: adapt depending on screen size */
                 float: none;
                 display: inline-block;
                 flex-shrink: 0;
