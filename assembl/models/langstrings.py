@@ -438,6 +438,31 @@ class LangString(Base):
             locale_id=Locale.get_id_of(locale_code))
         return ls
 
+    def add_value(self, value, locale_code=Locale.UNDEFINED):
+        self.add_entry(LangStringEntry(
+            langstring=self, value=value,
+            locale_id=Locale.get_id_of(locale_code)))
+
+    @classmethod
+    def create_localized_langstring(
+            cls, trans_string, desired_locales=None, known_translations=None):
+        """Construct a langstring from a localized string.
+        Call with a TranslationString."""
+        inst = cls.create(trans_string, 'en')
+        known_translations = known_translations or {}
+        for loc in desired_locales or ():
+            if loc == 'en':
+                continue
+            elif loc in known_translations:
+                inst.add_value(known_translations[loc], loc)
+            else:
+                from pyramid.i18n import make_localizer
+                from os.path import dirname, join
+                loc_dir = join(dirname(dirname(__file__)), 'locale')
+                localizer = make_localizer(loc, loc_dir)
+                inst.add_value(localizer.translate(trans_string), loc)
+        return inst
+
     @property
     def entries_as_dict(self):
         return {e.locale_id: e for e in self.entries}
@@ -912,7 +937,7 @@ class LangStringEntry(TombstonableMixin, Base):
             raise RuntimeError("Why identify a machine-translated locale?")
         data = data or {}
         original = self.locale_identification_data_json.get("original", None)
-        if not locale_code:
+        if not locale_code or locale_code == Locale.UNDEFINED:
             if not self.locale_code or self.locale_code == Locale.UNDEFINED:
                 # replace id data with new one.
                 if original:

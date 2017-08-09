@@ -541,6 +541,33 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         user_id = get_current_user_id()
         return User.uri_generic(user_id)
 
+    def language_priors(self):
+        from .langstrings import Locale
+        discussion = self.discussion
+        discussion_locales = discussion.discussion_locales
+        return {Locale.extract_root_locale(loc): 1
+                for loc in discussion_locales}
+
+    def guess_languages(self):
+        from ..nlp.translation_service import TranslationService
+        if self.discussion is None:
+            self.discussion = Discussion.get(self.discussion_id)
+        assert self.discussion
+        ts = self.discussion.translation_service()
+        priors = self.language_priors()
+        if self.body:
+            body_original = self.body.first_original()
+            TranslationService.confirm_locale_c(
+                body_original, self.discussion, ts, priors)
+        if self.subject:
+            if self.body:
+                # boost the body's language
+                priors = {k: v * 0.8 for (k, v) in priors.iteritems()}
+                priors[body_original.locale_code] = 1
+            subject_original = self.subject.first_original()
+            TranslationService.confirm_locale_c(
+                subject_original, self.discussion, ts, priors)
+
     @property
     def my_sentiment(self):
         # Use only within request

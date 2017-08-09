@@ -1695,6 +1695,9 @@ class LanguagePreferenceCollection(object):
     def default_locale_code(self):
         pass
 
+    @abstractmethod
+    def known_languages(self):
+        return []
 
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection with a fallback language."""
@@ -1716,6 +1719,9 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
                 translate_to_locale=self.default_locale,
                 translate_to=self.default_locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie.value)
+
+    def known_languages(self):
+        return [self.default_locale]
 
 
 class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
@@ -1792,6 +1798,10 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             translate_to=self.default_pref.locale.id,
             source_of_evidence=self.default_pref.source_of_evidence,
             user=None)  # Do not give the user or this gets added to session
+
+    def known_languages(self):
+        return list({pref.translate_to_code or pref.locale_code
+                     for pref in self.user_prefs.itervalues()})
 
 
 class UserLanguagePreference(Base):

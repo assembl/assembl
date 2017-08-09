@@ -520,6 +520,33 @@ class Post(Content):
             icls = self.filter_idea_content_links_r(icls)
         return icls
 
+    def language_priors(self):
+        from .auth import User, UserLanguagePreferenceCollection
+        from .langstrings import Locale
+        priors = super(Post, self).language_priors()
+        creator = self.creator or AgentProfile.get(self.creator_id)
+        if creator and isinstance(creator, User):
+            # probably a language that the user knows
+            try:
+                prefs = UserLanguagePreferenceCollection(creator.id)
+                known_languages = prefs.known_languages()
+            except AssertionError:  # user without prefs
+                from pyramid.threadlocal import get_current_request
+                request = get_current_request()
+                if request:
+                    known_languages = [request.locale_name]
+                else:
+                    return priors
+                known_languages = []
+            known_languages = {Locale.extract_root_locale(loc)
+                               for loc in known_languages}
+            priors = {k: v * (1 if k in known_languages else 0.8)
+                      for (k, v) in priors.iteritems()}
+            for lang in known_languages:
+                if lang not in priors:
+                    priors[lang] = 1
+        return priors
+
     @classmethod
     def extra_collections(cls):
         from .idea_content_link import IdeaContentLink

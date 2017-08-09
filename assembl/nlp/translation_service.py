@@ -133,20 +133,15 @@ class TranslationService(object):
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
         len_nourl = cls.strlen_nourl(text)
         if len_nourl < 5:
-            return Locale.NON_LINGUISTIC
-        init_factory()
-        from langdetect.detector_factory import _factory as detector_factory
-        detector = detector_factory.create()
+            return Locale.NON_LINGUISTIC, {Locale.NON_LINGUISTIC: 1}
+        detector = cls.detector_factory().create()
         if constrain_locale_threshold and (
                 len_nourl < constrain_locale_threshold):
             excluded_probability = 0
         else:
             # Give less probability to excluded languages for shorter texts
             excluded_probability = min(1, log(len_nourl) / 10)
-        expected_locales = {
-            Locale.extract_root_locale(locale) for locale in expected_locales}
-        priors = {loc: 1 if loc in expected_locales else excluded_probability
-                  for loc in detector.langlist}
+        priors = cls.convert_to_priors(expected_locales, excluded_probability)
         detector.set_prior_map(priors)
         detector.append(text)
         language_data = detector.get_probabilities()
@@ -156,20 +151,38 @@ class TranslationService(object):
                              ) else Locale.UNDEFINED
         return top, {lang: prob for (prob, lang) in data}
 
+    @staticmethod
+    def detector_factory():
+        init_factory()
+        from langdetect.detector_factory import _factory as detector_factory
+        return detector_factory
+
+    @staticmethod
+    def convert_to_priors(priors, base_rate=0.1):
+        if isinstance(priors, list):
+            priors = {Locale.extract_root_locale(l): 1 for l in priors}
+        if base_rate > 0:
+            factory = TranslationService.detector_factory()
+            if len(priors) < len(factory.langlist):
+                priors0 = {l: base_rate for l in factory.langlist}
+                priors0.update(priors)
+                priors = priors0
+        return priors
 
     def confirm_locale(
-            self, langstring_entry,
+            self, langstring_entry, priors=None,
             constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
         return self.confirm_locale_c(
-            langstring_entry, discussion=self.discussion, ts=self,
+            langstring_entry, discussion=self.discussion,
+            ts=self, priors=priors,
             constrain_locale_threshold=constrain_locale_threshold)
 
     @classmethod
-    def confirm_locale_c(cls, langstring_entry, discussion, ts=None,
+    def confirm_locale_c(cls, langstring_entry, discussion, ts=None, priors=None,
                          constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
         try:
             ts = ts or discussion.translation_service()
-            expected_locales = discussion.discussion_locales
+            expected_locales = priors or discussion.discussion_locales
             if ts:
                 lang, data = ts.identify(langstring_entry.value, expected_locales)
                 data["service"] = ts.__class__.__name__
@@ -512,7 +525,9 @@ class GoogleTranslationService(DummyGoogleTranslationService):
                 text, expected_locales, constrain_locale_threshold))
         r = self.client.detections().list(q=text).execute()
         r = r[u"detections"][0]
-        r.sort(lambda x: x[u"confidence"], reverse=True)
+        # small correction for expected languages, as this service is deemed reliable.
+        priors = self.convert_to_priors(expected_locales, 0.8)
+        r.sort(lambda x: x[u"confidence"] * priors.get(x[u'language'], 0.8), reverse=True)
         # Not sure about how to interpret isReliable,
         # it seems to always be false.
         return self.asPosixLocale(r[0][u"language"]), {

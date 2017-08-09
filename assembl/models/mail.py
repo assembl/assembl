@@ -513,6 +513,7 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
             raise MultipleResultsFound("ID %s has duplicates in source %d"%(new_message_id,self.id))
         email_object.creator = sender_email_account.profile
         # email_object = self.db.merge(email_object)
+        email_object.guess_languages()
         return (email_object, parsed_email, error_description)
 
     """
@@ -1011,6 +1012,24 @@ class Email(ImportedPost):
         )
 
         smtp_connection.quit()
+
+    def language_priors(self):
+        priors = super(Email, self).language_priors()
+        email_obj = email.message_from_string(self.imported_blob)
+        locales = {part.get('Content-Language') for part in email_obj.walk()
+                   if part.get_content_type in (
+                       'text/plain', 'text/html', 'multipart/alternative')}
+        locales.discard(None)
+        if locales:
+            from .langstrings import Locale
+            locales = {Locale.extract_root_locale(loc) for loc in locales}
+            priors = {k: v * (1 if k in locales else 0.9)
+                      for (k, v) in priors.iteritems()}
+            for lang in locales:
+                if lang not in priors:
+                    priors[lang] = 1
+        return priors
+
 
     def __repr__(self):
         return "%s from %s to %s>" % (
