@@ -26,10 +26,25 @@ class IdeasLevel extends React.Component {
     this.onScrollRightClick = this.onScrollRightClick.bind(this);
     this.onScrollLeftClick = this.onScrollLeftClick.bind(this);
   }
-  onSeeSubIdeasClick(ideaId) {
+  onSeeSubIdeasClick(ideaId, index) {
+    const wasInline = this.state.isInline || this.state.isAnimatingTowardsInline;
     this.setState({ isAnimatingTowardsInline: true });
     this.setState({ selectedIdea: ideaId });
     this.initializeConstants();
+
+    // make sure that the clicked thematic shows fully when inline (scroll at the correct position so that it is shown)
+    if (!wasInline) {
+      const thematicWidth = this.getOption('thematicWidth');
+      const carouselWidth = this.getOption('carouselWidth');
+      const ideaInitialX = index * thematicWidth;
+      if (ideaInitialX + thematicWidth > carouselWidth) {
+        const numberOfIdeasFullyShown = Math.floor(carouselWidth / thematicWidth);
+        const middleIdeaX = Math.floor(numberOfIdeasFullyShown / 2) * thematicWidth;
+        const targetScrollValue = -1 * (index * thematicWidth - middleIdeaX);
+        const row = this.me.childNodes[1];
+        this.moveAllChildren(row, targetScrollValue);
+      }
+    }
     this.updateScrollButtonsVisibility(this.state.isInline, true);
   }
   getOption(name) {
@@ -158,7 +173,13 @@ class IdeasLevel extends React.Component {
     }
 
     return (
-      <div className={classNames} style={style}>
+      <div
+        className={classNames}
+        style={style}
+        ref={(el) => {
+          this.me = el;
+        }}
+      >
         <VisibilityComponent
           isVisible={isScrollLeftButtonVisible}
           ref={(el) => {
@@ -188,7 +209,7 @@ class IdeasLevel extends React.Component {
                   description={thematic.description}
                   onSeeSubIdeasClick={() => {
                     onSeeSubIdeasClick(thematic.id, level);
-                    this.onSeeSubIdeasClick(thematic.id);
+                    this.onSeeSubIdeasClick(thematic.id, index);
                   }}
                 />
               </Col>
