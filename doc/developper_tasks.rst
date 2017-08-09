@@ -67,14 +67,3 @@ Raw sql connection
 
     psql -U assembl -h localhost assembl
     
-
-Javascript: Static type checking with Flow
-------------------------------------------
-
-To check the javascript code with flow just run:
-
-.. code:: sh
-
-    yarn run flow
-
-(you should also probably install a plugin for your favourite editor (i.e. ``flow`` for ``atom``))
