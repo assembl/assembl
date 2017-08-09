@@ -1,18 +1,27 @@
+// @flow
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Editor } from 'draft-js';
+import { Editor, EditorState } from 'draft-js';
 import punycode from 'punycode';
 
 import Toolbar from './toolbar';
 
-export default class RichTextEditor extends React.PureComponent {
+type RichTextEditorProps = {
+  editorState: EditorState,
+  maxLength: number,
+  placeholder: string,
+  updateEditorState: Function
+};
+
+export default class RichTextEditor extends React.PureComponent<void, RichTextEditorProps, void> {
   constructor() {
     super();
     this.focusEditor = this.focusEditor.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
-  onChange(newEditorState) {
+  onChange: (newEditorState: EditorState) => void;
+  onChange(newEditorState: EditorState) {
     const { updateEditorState } = this.props;
     updateEditorState(newEditorState);
   }
@@ -43,7 +52,7 @@ export default class RichTextEditor extends React.PureComponent {
     return buttons;
   }
 
-  getCharCount(editorState) {
+  getCharCount(editorState: EditorState) {
     // this code is "borrowed" from the draft-js counter plugin
     const decodeUnicode = (str) => {
       return punycode.ucs2.decode(str);
@@ -66,11 +75,15 @@ export default class RichTextEditor extends React.PureComponent {
     return false;
   }
 
+  focusEditor: () => void;
   focusEditor() {
     setTimeout(() => {
       return this.editor.focus();
     }, 50);
   }
+
+  editor: HTMLDivElement;
+  props: RichTextEditorProps;
 
   render() {
     const { editorState, maxLength, placeholder } = this.props;

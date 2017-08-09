@@ -1,0 +1,11 @@
+[ignore]
+# ignore this file until these issues are fixed : https://github.com/facebook/draft-js/issues/1272
+<PROJECT_ROOT>/node_modules/draft-js/lib/getTextContentFromFiles.js.flow
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
