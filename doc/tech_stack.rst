@@ -525,6 +525,10 @@ ESLint_:
   The new front-end will use AirBnb_ as it's Javascript coding standard. As a result, this linter
   is chosen in order for all developers to be on the same page in terms of development.
 
+Flow_:
+  The new front-end uses flow for static type checking. The linting rules used for flow types is
+  eslint-plugin-flowtype_ with its recommended configuration.
+
 New Front-end's Backend Stack
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -673,11 +677,13 @@ We have used multiple processes rather than threads.
 .. _ESLint: http://eslint.org/
 .. _`ECMAScript 6`: http://es6-features.org/
 .. _enum34: https://bitbucket.org/stoneleaf/enum34
+.. _eslint-plugin-flowtype: https://www.npmjs.com/package/eslint-plugin-flowtype
 .. _Fabric: http://www.fabfile.org/
 .. _Facebook: https://developers.facebook.com/products/
 .. _facebook_sdk: https://facebook-sdk.readthedocs.io/en/latest/
 .. _feedparser: http://pythonhosted.org/feedparser/
 .. _flaky: https://github.com/box/flaky
+.. _Flow: https://flow.org
 .. _flower: http://flower.readthedocs.io/en/latest/index.html
 .. _gensim: http://pythonhosted.org/gensim/
 .. _google_api_python_client: http://github.com/google/google-api-python-client/
