@@ -517,7 +517,7 @@ BabelJS_:
   popular browsers today.
 
 Webpack_:
-  The new front-end's asset managemnet library will be Webpack instead of Gulp_. Webpack offers
+  The new front-end's asset management library will be Webpack instead of Gulp_. Webpack offers
   more flexibility in managing the pipleline and the modern front-end stack is converging to this
   tool.
 
