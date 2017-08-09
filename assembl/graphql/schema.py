@@ -123,8 +123,9 @@ def resolve_best_langstring_entries(langstring, target_locale):
     if langstring is None or langstring is models.LangString.EMPTY:
         return []
 
-    entries = langstring.simplistic_best_entries_with_originals(target_locale)
-    for (entry, understood) in entries:
+    lsentries = langstring.simplistic_best_entries_with_originals(target_locale)
+    entries = []
+    for (entry, understood) in lsentries:
         entries.append(
             LangStringEntry(
                 locale_code=entry.locale.base_locale,
@@ -266,6 +267,8 @@ class PostInterface(SQLAlchemyInterface):
     creation_date = DateTime()
     subject = graphene.String(lang=graphene.String())
     body = graphene.String(lang=graphene.String())
+    subject_entries = graphene.List(LangStringEntry, lang=graphene.String())
+    body_entries = graphene.List(LangStringEntry, lang=graphene.String())
     sentiment_counts = graphene.Field(SentimentCounts)
     my_sentiment = graphene.Field(type=SentimentTypes)
     indirect_idea_content_links = graphene.List(IdeaContentLink)
@@ -279,12 +282,28 @@ class PostInterface(SQLAlchemyInterface):
         body = resolve_langstring(self.get_body(), args.get('lang'))
         return body
 
+    @staticmethod
+    def _maybe_translate(post, locale, request):
+        # simplistic case: we're just looking for locale. if it's there,
+        # avoid the whole thing.
+        if (not post.body or post.body.closest_entry(locale)) and (
+                not post.subject or post.subject.closest_entry(locale)):
+            return
+        if request.authenticated_userid == Everyone:
+            # anonymous cannot trigger translations
+            return
+        from assembl.models.auth import LanguagePreferenceCollectionWithDefault
+        prefs = LanguagePreferenceCollectionWithDefault(locale)
+        post.maybe_translate(prefs)
+
     def resolve_subject_entries(self, args, context, info):
+        PostInterface._maybe_translate(self, args.get('lang'), context)
         subject = resolve_best_langstring_entries(
             self.get_subject(), args.get('lang'))
         return subject
 
     def resolve_body_entries(self, args, context, info):
+        PostInterface._maybe_translate(self, args.get('lang'), context)
         body = resolve_best_langstring_entries(
             self.get_body(), args.get('lang'))
         return body
