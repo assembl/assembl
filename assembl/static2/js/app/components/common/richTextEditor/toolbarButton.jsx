@@ -1,7 +1,15 @@
+// @flow
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-const ToolbarButton = ({ isActive, icon, label, onToggle }) => {
+type ToolbarButtonProps = {
+  icon: string,
+  isActive: boolean,
+  label: string,
+  onToggle: Function
+};
+
+const ToolbarButton = ({ icon, isActive, label, onToggle }: ToolbarButtonProps) => {
   const className = isActive ? 'active' : '';
   return (
     <Button className={className} onClick={onToggle} title={label}>
