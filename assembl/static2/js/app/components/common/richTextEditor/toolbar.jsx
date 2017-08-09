@@ -1,33 +1,46 @@
+// @flow
 import React from 'react';
-import { RichUtils } from 'draft-js';
+import { DraftBlockType, DraftInlineStyle, RichUtils } from 'draft-js';
 
 import ToolbarButton from './toolbarButton';
 
+export type ButtonConfigType = {
+  id: string,
+  icon: string,
+  label: string,
+  type: 'block-type' | 'style',
+  style: DraftBlockType | DraftInlineStyle
+};
+
 class Toolbar extends React.Component {
+  currentStyle: DraftInlineStyle;
+  currentBlockType: DraftBlockType;
+  renderButton: (config: ButtonConfigType) => React.Element<*>;
+
   constructor() {
     super();
     this.renderButton = this.renderButton.bind(this);
   }
 
-  getCurrentBlockType() {
+  getCurrentBlockType(): DraftBlockType {
     const { editorState } = this.props;
     const selection = editorState.getSelection();
     return editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
   }
 
-  toggleBlockType(blockType) {
+  toggleBlockType(blockType: DraftBlockType): void {
     const { editorState, focusEditor, onChange } = this.props;
     onChange(RichUtils.toggleBlockType(editorState, blockType));
     focusEditor();
   }
 
-  toggleInlineStyle(style) {
+  toggleInlineStyle(style: string): void {
     const { editorState, focusEditor, onChange } = this.props;
     onChange(RichUtils.toggleInlineStyle(editorState, style));
     focusEditor();
   }
 
-  renderButton(config) {
+  renderButton(config: ButtonConfigType): React.Element<*> {
     let isActive;
     let onToggle;
     if (config.type === 'style') {
