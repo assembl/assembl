@@ -474,6 +474,16 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             log.error("What is this mimetype?" + mimetype)
             return body
 
+    def maybe_translate(self, pref_collection):
+        from assembl.tasks.translate import (
+            translate_content, PrefCollectionTranslationTable)
+        service = self.discussion.translation_service()
+        if service:
+            translations = PrefCollectionTranslationTable(
+                service, pref_collection)
+            translate_content(
+                self, translation_table=translations, service=service)
+
     def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
         """invoke the modelWatcher on creation"""

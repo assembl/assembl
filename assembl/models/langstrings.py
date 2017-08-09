@@ -705,7 +705,7 @@ class LangString(Base):
             return Locale.compatible(
                 target_locale,
                 Locale.extract_base_locale(e.locale_code))
-        entries = [(common_len(e), e) for e in self.entries]
+        entries = [(common_len(e), e) for e in self.entries if not e.error_code]
         entries.sort(reverse=True)
         if entries[0][0]:
             return entries[0][1]
@@ -730,8 +730,8 @@ class LangString(Base):
         from .auth import LanguagePreferenceCollection
         for lse in self.non_mt_entries():
             if Locale.compatible(lse.locale_code, target_locale):
-                # return [(lse, True)]
-                return [lse]
+                return [(lse, True)]
+                # return [lse]
         original = self.first_original()
         best = self.closest_entry(target_locale)
         prefs = LanguagePreferenceCollection.getCurrent()
