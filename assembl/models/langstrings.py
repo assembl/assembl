@@ -424,7 +424,24 @@ class LangString(Base):
 
     def add_entry(self, entry):
         if entry and isinstance(entry, LangStringEntry):
-            self.entries.append(entry)
+            entry_locale = entry.locale or Locale.get(entry.locale_id)
+            base_locale = entry_locale.base_locale
+            found = False
+            for ex_entry in self.entries:
+                if ex_entry is entry:
+                    continue
+                ex_locale = ex_entry.locale or Locale.get(ex_entry.locale_id)
+                if base_locale == ex_locale.base_locale:
+                    ex_entry.is_tombstone = True
+                    found = True
+                    for trans in self.entries[:]:
+                        trans_locale = trans.locale or Locale.get(trans.locale_id)
+                        if trans_locale.machine_translated_from == base_locale:
+                            trans.delete()
+                    break
+            if found:
+                self.db.expire(self, ["entries"])
+            entry.langstring = self
 
     def __repr__(self):
         return 'LangString (%d): %s\n' % (
