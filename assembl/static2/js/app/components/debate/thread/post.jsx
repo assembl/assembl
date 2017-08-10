@@ -22,6 +22,7 @@ export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
 };
 
+let answerTextarea = null;
 const Post = ({
   id,
   children,
@@ -38,14 +39,16 @@ const Post = ({
   mySentiment,
   updateAnswerBody
 }) => {
+  const answerTextareaRef = (el) => {
+    answerTextarea = el;
+  };
   const handleAnswerClick = () => {
     updateAnswerBody('');
     showAnswerForm(id);
     setTimeout(() => {
-      const txtarea = document.getElementById(`txt${id}`);
-      const txtareaOffset = getDomElementOffset(txtarea).top;
-      scrollToPosition(txtareaOffset - txtarea.clientHeight, 600);
-      txtarea.focus();
+      const txtareaOffset = getDomElementOffset(answerTextarea).top;
+      scrollToPosition(txtareaOffset - answerTextarea.clientHeight, 600);
+      answerTextarea.focus();
     }, 500);
   };
   return (
@@ -91,7 +94,7 @@ const Post = ({
       </div>
       {activeAnswerFormId === id
         ? <div className="answer-form">
-          <AnswerForm parentId={id} ideaId={ideaId} refetchIdea={refetchIdea} />
+          <AnswerForm parentId={id} ideaId={ideaId} refetchIdea={refetchIdea} textareaRef={answerTextareaRef} />
         </div>
         : null}
     </div>

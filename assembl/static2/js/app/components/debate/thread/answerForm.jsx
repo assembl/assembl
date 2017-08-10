@@ -23,7 +23,8 @@ const AnswerForm = ({
   parentId,
   ideaId,
   refetchIdea,
-  hideAnswerForm
+  hideAnswerForm,
+  textareaRef
 }) => {
   const handleBodyChange = (e) => {
     const maxChars = TEXT_AREA_MAX_LENGTH;
@@ -87,6 +88,7 @@ const AnswerForm = ({
               handleInputFocus={handleInputFocus}
               remainingChars={bodyRemainingChars}
               domId={`txt${parentId}`}
+              textareaRef={textareaRef}
             />
             <div className="button-container">
               <Button className="button-cancel button-dark btn btn-default left" onClick={resetForm}>
