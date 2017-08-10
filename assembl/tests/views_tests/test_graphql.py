@@ -693,8 +693,10 @@ mutation myFirstMutation {
         post {
             ... on Post {
                 subject,
+                body,
                 bodyEntries { localeCode value },
                 creator { name },
+                bodyMimeType
             }
         }
     }
@@ -704,8 +706,10 @@ mutation myFirstMutation {
         u'createPost': {
             u'post': {
                 u'subject': u'Proposition 1',
+                u'body': u"une proposition...",
                 u'bodyEntries': [{u'value': u"une proposition...", u'localeCode': u'fr'}],
-                u'creator': {u'name': u'Mr. Administrator'}
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'bodyMimeType': u'text/html'
     }}}
 
 

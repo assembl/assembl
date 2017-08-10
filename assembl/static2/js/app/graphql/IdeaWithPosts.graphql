@@ -32,6 +32,8 @@ query IdeaWithPosts($lang: String!, $id: ID!) {
               }
               parentId
               creationDate
+              modificationDate
+              bodyMimeType
             }
           }
         }

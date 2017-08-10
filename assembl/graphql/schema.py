@@ -297,6 +297,7 @@ class PostInterface(SQLAlchemyInterface):
         # will be just the primary key, not the base64 type:id
 
     creation_date = DateTime()
+    modification_date = DateTime()
     subject = graphene.String(lang=graphene.String())
     body = graphene.String(lang=graphene.String())
     subject_entries = graphene.List(LangStringEntry, lang=graphene.String())
@@ -305,6 +306,7 @@ class PostInterface(SQLAlchemyInterface):
     my_sentiment = graphene.Field(type=SentimentTypes)
     indirect_idea_content_links = graphene.List(IdeaContentLink)
     parent_id = graphene.ID()
+    body_mime_type = graphene.String(required=True)
 
     def resolve_subject(self, args, context, info):
         subject = resolve_langstring(self.get_subject(), args.get('lang'))
@@ -377,6 +379,9 @@ class PostInterface(SQLAlchemyInterface):
             return None
 
         return Node.to_global_id('Post', self.parent_id)
+
+    def resolve_body_mime_type(self, args, context, info):
+        return self.get_body_mime_type()
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -1284,7 +1289,8 @@ class CreatePost(graphene.Mutation):
                 subject=subject_langstring,
                 body=body_langstring,
                 creator_id=user_id,
-                parent=in_reply_to_post
+                parent=in_reply_to_post,
+                body_mime_type=u'text/html'
             )
             new_post.guess_languages()
             # TODO
@@ -1341,12 +1347,9 @@ class UpdatePost(graphene.Mutation):
             changed = True
 
         if changed:
-            # TODO
-            #post.modification_date = datetime.utcnow()
-            pass
+            post.modification_date = datetime.utcnow()
 
-        # TODO
-        # post.body_mime_type = 'text/html'
+        post.body_mime_type = u'text/html'
         # TODO once available:
         # post.guess_languages()
         post.db.flush()

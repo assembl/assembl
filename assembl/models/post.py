@@ -631,12 +631,19 @@ class AssemblPost(Post):
         onupdate='CASCADE'
     ), primary_key=True)
 
+    modification_date = Column(DateTime)
+
+    body_mime_type = Column(CoerceUnicode(),
+                        nullable=False,
+                        server_default="text/plain",
+                        doc="The mime type of the body.  See Content::get_body_mime_type() for allowed values.")
+
     __mapper_args__ = {
         'polymorphic_identity': 'assembl_post',
     }
 
     def get_body_mime_type(self):
-        return "text/plain"
+        return self.body_mime_type
 
 
 class SynthesisPost(AssemblPost):

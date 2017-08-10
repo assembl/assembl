@@ -25,6 +25,7 @@ query ThematicQuery($lang: String!, $id: ID!) {
                   body
                   mySentiment
                   parentId
+                  bodyMimeType
                   creator {
                     ...AgentProfileInfo
                   }

@@ -32,6 +32,8 @@ const Post = ({
   indirectIdeaContentLinks,
   creator,
   creationDate,
+  modificationDate,
+  bodyMimeType,
   showAnswerForm,
   activeAnswerFormId,
   ideaId,
@@ -60,7 +62,7 @@ const Post = ({
             <h3 className="dark-title-3">
               {subject}
             </h3>
-            <div className="body pre-wrap" dangerouslySetInnerHTML={{ __html: body }} />
+            <div className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`} dangerouslySetInnerHTML={{ __html: body }} />
             <div className="link-idea">
               <div className="label">
                 <Translate value="debate.thread.linkIdea" />
