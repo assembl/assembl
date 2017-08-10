@@ -422,26 +422,38 @@ class LangString(Base):
                 self.id_sequence.next_value().select()).first()
             self.id = id
 
-    def add_entry(self, entry):
+    def add_entry(self, entry, allow_replacement=True):
+        """Add a LangStringEntry to the langstring.
+        Previous versions with the same language will be tombstoned,
+        and translations based on such a version will be suppressed."""
         if entry and isinstance(entry, LangStringEntry):
             entry_locale = entry.locale or Locale.get(entry.locale_id)
             base_locale = entry_locale.base_locale
-            found = False
             for ex_entry in self.entries:
+                # Loop on the entries means that repeated calls to
+                # add_entry will be O(n^2). If this becomes an issue,
+                # create an add_entries method.
                 if ex_entry is entry:
                     continue
                 ex_locale = ex_entry.locale or Locale.get(ex_entry.locale_id)
                 if base_locale == ex_locale.base_locale:
-                    ex_entry.is_tombstone = True
-                    found = True
-                    for trans in self.entries[:]:
-                        trans_locale = trans.locale or Locale.get(trans.locale_id)
-                        if trans_locale.machine_translated_from == base_locale:
-                            trans.delete()
-                    break
-            if found:
-                self.db.expire(self, ["entries"])
+                    if ex_locale.is_machine_translated:
+                        ex_entry.delete()
+                    else:
+                        if not allow_replacement:
+                            return False
+                        ex_entry.is_tombstone = True
+                        self.remove_translations_of(base_locale)
+                        self.db.expire(self, ["entries"])
             entry.langstring = self
+            return True
+
+    def remove_translations_of(self, local_code):
+        """Remove all translations based on this code."""
+        for trans in self.entries[:]:
+            trans_locale = trans.locale or Locale.get(trans.locale_id)
+            if trans_locale.machine_translated_from == local_code:
+                trans.delete()
 
     def __repr__(self):
         return 'LangString (%d): %s\n' % (
@@ -455,10 +467,12 @@ class LangString(Base):
             locale_id=Locale.get_id_of(locale_code))
         return ls
 
-    def add_value(self, value, locale_code=Locale.UNDEFINED):
+    def add_value(self, value, locale_code=Locale.UNDEFINED,
+                  allow_replacement=True):
         self.add_entry(LangStringEntry(
             langstring=self, value=value,
-            locale_id=Locale.get_id_of(locale_code)))
+            locale_id=Locale.get_id_of(locale_code)),
+            allow_replacement=allow_replacement)
 
     @classmethod
     def create_localized_langstring(
@@ -950,6 +964,9 @@ class LangStringEntry(TombstonableMixin, Base):
         # the information is deemed confirmed if it fits the initial
         # hypothesis given at LSE creation.
         changed = False
+        old_locale_code = self.locale_code
+        langstring = self.langstring or (
+            LangString.get(self.langstring_id) if self.langstring_id else None)
         if self.locale.is_machine_translated:
             raise RuntimeError("Why identify a machine-translated locale?")
         data = data or {}
@@ -962,12 +979,12 @@ class LangStringEntry(TombstonableMixin, Base):
                 self.locale_identification_data_json = data
             return False
         elif original and locale_code == original:
-            if locale_code != self.locale_code:
+            if locale_code != old_locale_code:
                 self.locale_code = locale_code
                 changed = True
             self.locale_identification_data_json = data
             self.locale_confirmed = True
-        elif locale_code != self.locale_code:
+        elif locale_code != old_locale_code:
             if self.locale_confirmed:
                 if certainty:
                     raise RuntimeError("Conflict of certainty")
@@ -976,7 +993,7 @@ class LangStringEntry(TombstonableMixin, Base):
             # compare data? replacing with new for now.
             if not original and self.locale_identification_data:
                 original = Locale.UNDEFINED
-            original = original or self.locale_code
+            original = original or old_locale_code
             if original != locale_code and original != Locale.UNDEFINED:
                 data["original"] = original
             self.locale_code = locale_code
@@ -989,7 +1006,17 @@ class LangStringEntry(TombstonableMixin, Base):
             self.locale_identification_data_json = data
             self.locale_confirmed = certainty or locale_code == original
         if changed:
-            self.langstring.remove_translations(False)
+            self.db.expire(self, ["locale"])
+            if langstring:
+                langstring.remove_translations_of(old_locale_code)
+                # Re-adding to verify there's no conflict
+                added = langstring.add_entry(self, certainty)
+                if not added:
+                    # We identified an entry with something that existed
+                    # as a known original. Not sure what to do now,
+                    # reverting just in case.
+                    self.locale_code = old_locale_code
+                    changed = False
         return changed
 
     def forget_identification(self, force=False):
