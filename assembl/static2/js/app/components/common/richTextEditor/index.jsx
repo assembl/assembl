@@ -9,6 +9,7 @@ import type ButtonConfigType from './toolbarButton';
 
 type RichTextEditorProps = {
   editorState: EditorState,
+  handleInputFocus?: Function,
   maxLength: number,
   placeholder: string,
   textareaRef: Function,
