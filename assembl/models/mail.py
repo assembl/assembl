@@ -1017,7 +1017,7 @@ class Email(ImportedPost):
         priors = super(Email, self).language_priors()
         email_obj = email.message_from_string(self.imported_blob)
         locales = {part.get('Content-Language') for part in email_obj.walk()
-                   if part.get_content_type in (
+                   if part.get_content_type() in (
                        'text/plain', 'text/html', 'multipart/alternative')}
         locales.discard(None)
         if locales:
