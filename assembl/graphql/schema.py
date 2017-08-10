@@ -1348,11 +1348,10 @@ class UpdatePost(graphene.Mutation):
 
         if changed:
             post.modification_date = datetime.utcnow()
-
-        post.body_mime_type = u'text/html'
-        # TODO once available:
-        # post.guess_languages()
-        post.db.flush()
+            post.body_mime_type = u'text/html'
+            # TODO once available:
+            # post.guess_languages()
+            post.db.flush()
 
         return UpdatePost(post=post)
 
