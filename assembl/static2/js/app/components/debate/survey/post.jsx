@@ -69,9 +69,7 @@ class Post extends React.Component {
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
           <PostCreator name={post.creator.name} />
-          <div className="body">
-            {post.body}
-          </div>
+          <div className="body pre-wrap" dangerouslySetInnerHTML={{ __html: post.body }} />
           <div className="sentiments">
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />
