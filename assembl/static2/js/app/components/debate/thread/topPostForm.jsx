@@ -118,6 +118,7 @@ const TopPostForm = ({
             <div className={isFormActive ? 'margin-m' : 'hidden'}>
               <RichTextEditor
                 editorState={body}
+                handleInputFocus={handleInputFocus}
                 maxLength={TEXT_AREA_MAX_LENGTH}
                 placeholder={I18n.t('debate.insert')}
                 updateEditorState={updateBody}

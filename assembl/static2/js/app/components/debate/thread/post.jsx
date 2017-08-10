@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
 import { createSelector } from 'reselect';
+import { EditorState } from 'draft-js';
 
 import { updateActiveAnswerFormId, updateAnswerPostBody } from '../../../actions/postsActions';
 import { postSelector } from '../../../selectors';
@@ -43,12 +44,11 @@ const Post = ({
     answerTextarea = el;
   };
   const handleAnswerClick = () => {
-    updateAnswerBody('');
+    updateAnswerBody(EditorState.createEmpty());
     showAnswerForm(id);
     setTimeout(() => {
       const txtareaOffset = getDomElementOffset(answerTextarea).top;
       scrollToPosition(txtareaOffset - answerTextarea.clientHeight, 600);
-      answerTextarea.focus();
     }, 500);
   };
   return (

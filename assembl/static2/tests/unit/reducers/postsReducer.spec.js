@@ -135,49 +135,28 @@ describe('Posts reducers', () => {
   describe('answerPostBody reducer', () => {
     const { answerPostBody } = reducers;
     it('should return the initial state', () => {
-      expect(answerPostBody(undefined, {})).toEqual('');
+      const actualRaw = convertToRaw(answerPostBody(undefined, {}).getCurrentContent());
+      expect(actualRaw.blocks.length).toEqual(1);
+      expect(actualRaw.blocks[0].data).toEqual({});
+      expect(actualRaw.blocks[0].text).toEqual('');
     });
 
     it('should return state by default', () => {
-      const state = 'New subject';
-      const expected = 'New subject';
+      const state = EditorState.createWithContent(ContentState.createFromText('My body'));
+      const expected = state;
       const actual = answerPostBody(state, {});
       expect(actual).toEqual(expected);
     });
 
     it('should handle UPDATE_ANSWER_POST_BODY action type', () => {
-      const state = 'New subject';
+      const newEditorState = EditorState.createWithContent(ContentState.createFromText('New body'));
+      const state = EditorState.createEmpty();
       const action = {
         type: 'UPDATE_ANSWER_POST_BODY',
-        answerPostBody: 'New subject'
+        answerPostBody: newEditorState
       };
       const actual = answerPostBody(state, action);
-      const expected = 'New subject';
-      expect(actual).toEqual(expected);
-    });
-  });
-
-  describe('bodyAnswerPostRemainingChars reducer', () => {
-    const { bodyAnswerPostRemainingChars } = reducers;
-    it('should return the initial state', () => {
-      expect(bodyAnswerPostRemainingChars(undefined, {})).toEqual(10000);
-    });
-
-    it('should return state by default', () => {
-      const state = 1234;
-      const expected = 1234;
-      const actual = bodyAnswerPostRemainingChars(state, {});
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle UPDATE_ANSWER_POST_BODY_REMAINING_CHARS action type', () => {
-      const state = 100;
-      const action = {
-        type: 'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS',
-        bodyAnswerPostRemainingChars: 100
-      };
-      const actual = bodyAnswerPostRemainingChars(state, action);
-      const expected = 100;
+      const expected = newEditorState;
       expect(actual).toEqual(expected);
     });
   });

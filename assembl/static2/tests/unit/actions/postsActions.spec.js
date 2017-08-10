@@ -1,3 +1,5 @@
+import { ContentState, EditorState } from 'draft-js';
+
 import * as actions from '../../../js/app/actions/postsActions';
 
 describe('Posts actions', () => {
@@ -40,11 +42,12 @@ describe('Posts actions', () => {
   describe('updateTopPostBody action', () => {
     const { updateTopPostBody } = actions;
     it('should return a UPDATE_TOP_POST_BODY action type', () => {
+      const body = EditorState.createWithContent(ContentState.createFromText('New body'));
       const expected = {
-        topPostBody: 'New body',
+        topPostBody: body,
         type: 'UPDATE_TOP_POST_BODY'
       };
-      const actual = updateTopPostBody('New body');
+      const actual = updateTopPostBody(body);
       expect(actual).toEqual(expected);
     });
   });
@@ -76,23 +79,12 @@ describe('Posts actions', () => {
   describe('updateAnswerPostBody action', () => {
     const { updateAnswerPostBody } = actions;
     it('should return a UPDATE_ANSWER_POST_BODY action type', () => {
+      const body = EditorState.createWithContent(ContentState.createFromText('New body'));
       const expected = {
-        answerPostBody: 'New body',
+        answerPostBody: body,
         type: 'UPDATE_ANSWER_POST_BODY'
       };
-      const actual = updateAnswerPostBody('New body');
-      expect(actual).toEqual(expected);
-    });
-  });
-
-  describe('updateAnswerPostBodyRemaingChars action', () => {
-    const { updateAnswerPostBodyRemaingChars } = actions;
-    it('should return a UPDATE_ANSWER_POST_BODY action type', () => {
-      const expected = {
-        bodyAnswerPostRemainingChars: 102,
-        type: 'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS'
-      };
-      const actual = updateAnswerPostBodyRemaingChars(102);
+      const actual = updateAnswerPostBody(body);
       expect(actual).toEqual(expected);
     });
   });

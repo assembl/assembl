@@ -46,10 +46,3 @@ export const updateAnswerPostBody = (answerPostBody) => {
     type: 'UPDATE_ANSWER_POST_BODY'
   };
 };
-
-export const updateAnswerPostBodyRemaingChars = (bodyAnswerPostRemainingChars) => {
-  return {
-    bodyAnswerPostRemainingChars: bodyAnswerPostRemainingChars,
-    type: 'UPDATE_ANSWER_POST_BODY_REMAINING_CHARS'
-  };
-};

@@ -11,12 +11,17 @@ type RichTextEditorProps = {
   editorState: EditorState,
   maxLength: number,
   placeholder: string,
+  textareaRef: Function,
   updateEditorState: Function
 };
 
 export default class RichTextEditor extends React.PureComponent<void, RichTextEditorProps, void> {
   editor: HTMLDivElement;
   props: RichTextEditorProps;
+
+  componentDidMount() {
+    this.editor.focus();
+  }
 
   onChange = (newEditorState: EditorState): void => {
     const { updateEditorState } = this.props;
@@ -79,11 +84,11 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
   };
 
   render() {
-    const { editorState, maxLength, placeholder } = this.props;
+    const { editorState, handleInputFocus = null, maxLength, placeholder, textareaRef } = this.props;
     const charCount = this.getCharCount(editorState);
     const remainingChars = maxLength - charCount;
     return (
-      <div className="rich-text-editor">
+      <div className="rich-text-editor" ref={textareaRef}>
         <Toolbar
           buttonsConfig={this.getToolbarButtons()}
           editorState={editorState}
@@ -93,6 +98,7 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
         <Editor
           editorState={editorState}
           onChange={this.onChange}
+          onFocus={handleInputFocus}
           placeholder={this.shouldHidePlaceholder() ? '' : placeholder}
           ref={(e) => {
             return (this.editor = e);

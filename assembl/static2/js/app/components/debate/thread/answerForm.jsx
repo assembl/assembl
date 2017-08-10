@@ -6,34 +6,14 @@ import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { updateAnswerPostBody, updateAnswerPostBodyRemaingChars, updateActiveAnswerFormId } from '../../../actions/postsActions';
+import { updateAnswerPostBody, updateActiveAnswerFormId } from '../../../actions/postsActions';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { TxtAreaWithRemainingChars } from '../../common/txtAreaWithRemainingChars';
+import RichTextEditor from '../../common/richTextEditor';
 
 const TEXT_AREA_MAX_LENGTH = 3000;
-const TEXT_AREA_ROWS = 10;
 
-const AnswerForm = ({
-  body,
-  bodyRemainingChars,
-  mutate,
-  updateBody,
-  updateBodyChars,
-  parentId,
-  ideaId,
-  refetchIdea,
-  hideAnswerForm,
-  textareaRef
-}) => {
-  const handleBodyChange = (e) => {
-    const maxChars = TEXT_AREA_MAX_LENGTH;
-    const length = e.target.value.length;
-    const remaining = maxChars - length;
-    updateBodyChars(remaining);
-    updateBody(e.target.value);
-  };
-
+const AnswerForm = ({ body, mutate, updateBody, updateBodyChars, parentId, ideaId, refetchIdea, hideAnswerForm, textareaRef }) => {
   const resetForm = () => {
     hideAnswerForm();
     updateBodyChars(TEXT_AREA_MAX_LENGTH);
@@ -79,15 +59,12 @@ const AnswerForm = ({
       <Col xs={12} md={12}>
         <div className="answer-form-inner">
           <FormGroup>
-            <TxtAreaWithRemainingChars
-              value={body}
-              label={I18n.t('debate.insert')}
-              maxLength={TEXT_AREA_MAX_LENGTH}
-              rows={TEXT_AREA_ROWS}
-              handleTxtChange={handleBodyChange}
+            <RichTextEditor
+              editorState={body}
               handleInputFocus={handleInputFocus}
-              remainingChars={bodyRemainingChars}
-              domId={`txt${parentId}`}
+              maxLength={TEXT_AREA_MAX_LENGTH}
+              placeholder={I18n.t('debate.insert')}
+              updateEditorState={updateBody}
               textareaRef={textareaRef}
             />
             <div className="button-container">
@@ -108,7 +85,6 @@ const AnswerForm = ({
 const mapStateToProps = ({ posts, debate }) => {
   return {
     body: posts.answerPostBody,
-    bodyRemainingChars: posts.bodyAnswerPostRemainingChars,
     slug: debate.debateData.slug
   };
 };
@@ -117,9 +93,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateBody: (body) => {
       return dispatch(updateAnswerPostBody(body));
-    },
-    updateBodyChars: (bodyRemainingChars) => {
-      return dispatch(updateAnswerPostBodyRemaingChars(bodyRemainingChars));
     },
     hideAnswerForm: () => {
       return dispatch(updateActiveAnswerFormId(null));
