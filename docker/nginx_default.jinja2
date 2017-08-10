@@ -4,9 +4,9 @@ server {
       listen   [::]:80;
   {% endif %}
   {% if docker_https %}
-      listen   443 ssl;
+      listen   443 ssl http2;
           {% if docker_ipv6 %}
-              listen   [::]:443 ssl;
+              listen   [::]:443 ssl http2;
           {% endif %}
       ssl_certificate     /etc/letsencrypt/live/{{public_hostname_}}/fullchain.pem;
       ssl_certificate_key /etc/letsencrypt/live/{{public_hostname_}}/privkey.pem;
