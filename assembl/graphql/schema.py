@@ -207,6 +207,30 @@ def update_langstring_from_input_entries(obj, attr, entries):
     langstring.db.flush()
 
 
+# TODO replace this by the new langstring.replace_original api coming soon
+def remove_all_entries_and_add_value(obj, attr, value):
+    """Tombstone all entries of langstring from getattr(obj, attr)
+    and add a new entry with the given value.
+    """
+    langstring = getattr(obj, attr, None)
+    # tombstone all entries, including translations
+    for entry in langstring.entries:
+        entry.tombstone_date = datetime.utcnow()
+
+    # TODO: we can replace this whole block
+    # by the new api langstring.add_value(value) once available
+    locale_id = models.Locale.get_id_of('und')
+    langstring.add_entry(
+        models.LangStringEntry(
+            langstring=langstring,
+            value=value,
+            locale_id=locale_id
+        )
+    )
+
+    langstring.db.expire(langstring, ['entries'])
+
+
 class LangStringEntryFields(graphene.AbstractType):
     value = graphene.String(required=True)
     locale_code = graphene.String(required=True)
@@ -1263,6 +1287,8 @@ class CreatePost(graphene.Mutation):
                 parent=in_reply_to_post
             )
             new_post.guess_languages()
+            # TODO
+            # new_post.body_mime_type = 'text/html'
             db = new_post.db
             db.add(new_post)
             idea_post_link = models.IdeaRelatedPostLink(
@@ -1274,6 +1300,58 @@ class CreatePost(graphene.Mutation):
             db.flush()
 
         return CreatePost(post=new_post)
+
+
+class UpdatePost(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        subject = graphene.String()
+        body = graphene.String(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+        discussion = models.Discussion.get(discussion_id)
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = post.user_can(user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        changed = False
+        subject = args.get('subject')
+        body = args.get('body')
+        original_subject_entry = post.subject.first_original()
+        # subject is not required, be careful to not remove it if not specified
+        if subject and subject != original_subject_entry.value:
+            remove_all_entries_and_add_value(post, 'subject', subject)
+            changed = True
+
+        original_body_entry = post.body.first_original()
+        if body != original_body_entry.value:
+            remove_all_entries_and_add_value(post, 'body', body)
+            changed = True
+
+        if changed:
+            # TODO
+            #post.modification_date = datetime.utcnow()
+            pass
+
+        # TODO
+        # post.body_mime_type = 'text/html'
+        # TODO once available:
+        # post.guess_languages()
+        post.db.flush()
+
+        return UpdatePost(post=post)
 
 
 class AddSentiment(graphene.Mutation):
@@ -1354,6 +1432,7 @@ class Mutations(graphene.ObjectType):
     delete_thematic = DeleteThematic.Field()
     create_idea = CreateIdea.Field()
     create_post = CreatePost.Field()
+    update_post = UpdatePost.Field()
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
 

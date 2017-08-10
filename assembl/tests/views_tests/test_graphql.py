@@ -1055,3 +1055,95 @@ mutation myMutation {
             {u'order': 2.0, u'title': u'AI revolution'}
         ]
     }
+
+def test_mutation_update_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!, $subject: String, $body: String!) {
+    updatePost(
+        postId: $postId,
+        subject: $subject,
+        body: $body
+    ) {
+        post {
+            ... on Post {
+                subject
+                body
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "subject": u"modified proposal",
+            "body": u"the modified proposal..."
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updatePost': {
+            u'post': {
+                u'subject': u'modified proposal',
+                u'body': u"the modified proposal...",
+    }}}
+
+def test_mutation_update_post_with_subject_null(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!, $subject: String, $body: String!) {
+    updatePost(
+        postId: $postId,
+        subject: $subject,
+        body: $body
+    ) {
+        post {
+            ... on Post {
+                subject
+                body
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "body": u"the modified proposal..."
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updatePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': u"the modified proposal...",
+    }}}
+
+def test_mutation_update_post_with_subject_empty_string(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!, $subject: String, $body: String!) {
+    updatePost(
+        postId: $postId,
+        subject: $subject,
+        body: $body
+    ) {
+        post {
+            ... on Post {
+                subject
+                body
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "subject": u"",
+            "body": u"the modified proposal..."
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updatePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': u"the modified proposal...",
+    }}}
