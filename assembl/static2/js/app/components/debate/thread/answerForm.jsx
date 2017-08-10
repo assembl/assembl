@@ -13,10 +13,9 @@ import RichTextEditor from '../../common/richTextEditor';
 
 const TEXT_AREA_MAX_LENGTH = 3000;
 
-const AnswerForm = ({ body, mutate, updateBody, updateBodyChars, parentId, ideaId, refetchIdea, hideAnswerForm, textareaRef }) => {
+const AnswerForm = ({ body, mutate, updateBody, parentId, ideaId, refetchIdea, hideAnswerForm, textareaRef }) => {
   const resetForm = () => {
     hideAnswerForm();
-    updateBodyChars(TEXT_AREA_MAX_LENGTH);
     updateBody('');
   };
 
