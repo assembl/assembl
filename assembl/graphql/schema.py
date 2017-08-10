@@ -124,13 +124,25 @@ def resolve_langstring_entries(obj, attr):
     return entries
 
 
-def resolve_best_langstring_entries(langstring):
+def resolve_best_langstring_entries(langstring, target_locale=None):
     if langstring is None or langstring is models.LangString.EMPTY:
         return []
 
+    entries = []
+    if target_locale:
+        entry = langstring.closest_entry(target_locale)
+        if entry:
+            entries.append(entry)
+            if entry.is_machine_translated:
+                entry = langstring.closest_entry(entry.locale.machine_translated_from)
+                assert entry
+                entries.append(entry)
+        else:
+            entries.append(langstring.first_original())
+        return entries
+
     # use request's idea of target_locale
     lsentries = langstring.best_entries_in_request_with_originals()
-    entries = []
     lp = LanguagePreferenceCollection.getCurrent()
     for entry in lsentries:
         entries.append(
@@ -293,33 +305,33 @@ class PostInterface(SQLAlchemyInterface):
         return body
 
     @staticmethod
-    def _maybe_translate(post, request):
-        lpc = LanguagePreferenceCollection.getCurrent(request)
-        locale = lpc.default_locale_code()
-        # simplistic case: we're just looking for locale. if it's there,
-        # avoid the whole thing.
-        if (not post.body or post.body.closest_entry(locale)) and (
-                not post.subject or post.subject.closest_entry(locale)):
-            return
+    def _maybe_translate(post, locale, request):
         if request.authenticated_userid == Everyone:
             # anonymous cannot trigger translations
             return
-        from assembl.models.auth import LanguagePreferenceCollectionWithDefault
-        prefs = LanguagePreferenceCollectionWithDefault(locale)
-        post.maybe_translate(prefs)
+        lpc = LanguagePreferenceCollection.getCurrent(request)
+        for ls in (post.body, post.subject):
+            source_locale = ls.first_original().locale_code
+            if locale:
+                target_locale = locale
+            else:
+                pref = lpc.find_locale(source_locale)
+                target_locale = pref.translate_to_locale
+            if not ls.closest_entry(target_locale):
+                post.maybe_translate(lpc)
 
     def resolve_subject_entries(self, args, context, info):
         lp = LanguagePreferenceCollection.getCurrent()
         lang = lp.default_locale_code()
-        PostInterface._maybe_translate(self, context)
+        PostInterface._maybe_translate(self, args.get('lang'), context)
         subject = resolve_best_langstring_entries(
-            self.get_subject())
+            self.get_subject(), args.get('lang'))
         return subject
 
     def resolve_body_entries(self, args, context, info):
-        PostInterface._maybe_translate(self, context)
+        PostInterface._maybe_translate(self, args.get('lang'), context)
         body = resolve_best_langstring_entries(
-            self.get_body())
+            self.get_body(), args.get('lang'))
         return body
 
     def resolve_sentiment_counts(self, args, context, info):
