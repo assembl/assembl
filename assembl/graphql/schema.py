@@ -17,6 +17,7 @@ from graphene_sqlalchemy.converter import (
 from graphene_sqlalchemy.utils import get_query, is_mapped
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
+from pyramid.i18n import TranslationStringFactory
 from jwzthreading import restrip_pat
 
 from assembl.auth import IF_OWNED, CrudPermissions
@@ -30,6 +31,7 @@ from assembl.models.action import (
 from assembl.models.auth import LanguagePreferenceCollection
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
+_ = TranslationStringFactory('assembl')
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
 
@@ -99,7 +101,8 @@ def resolve_langstring(langstring, locale_code):
         closest = langstring.closest_entry(locale_code)
         if closest:
             return closest.value
-    return langstring.best_lang().value
+    return langstring.best_lang(
+        LanguagePreferenceCollection.getCurrent(), False).value
 
 
 def resolve_langstring_entries(obj, attr):
@@ -1216,33 +1219,39 @@ class CreatePost(graphene.Mutation):
         with cls.default_db.no_autoflush:
             subject = args.get('subject')
             body = args.get('body')
-            if subject is not None:
-                subject_langstring = models.LangString.create(subject, u'und')
+            body_langstring = models.LangString.create(body)
+            if subject:
+                subject_langstring = models.LangString.create(subject)
+            elif issubclass(cls, models.PropositionPost):
+                # Specific case first. Respect inheritance. Since we are using
+                # a specific value, construct it with localization machinery.
+                subject_langstring = models.LangString.create_localized_langstring(
+                    _('Proposal'), discussion.discussion_locales, {'fr': 'Proposition'})
             else:  # We apply the same logic than in views/api/post.py::create_post
-                if cls == models.AssemblPost:
-                    if in_reply_to_post:
-                        subject = (
-                            in_reply_to_post.get_title().first_original().value or ''
-                            if in_reply_to_post.get_title() else '')
-                    elif in_reply_to_idea:
-                        subject = (in_reply_to_idea.short_title
-                                   if in_reply_to_idea.short_title else '')
-                    else:
-                        subject = discussion.topic if discussion.topic else ''
-
-                    if subject is not None and len(subject):
-                        new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()
-                        if (in_reply_to_post and new_subject == subject and
-                            in_reply_to_post.get_title()):
-                            # reuse subject and translations
-                            subject_langstring = in_reply_to_post.get_title().clone(discussion.db)
-                        else:
-                            subject_langstring = models.LangString.create(new_subject, u'und')
-
+                locale = models.Locale.UNDEFINED
+                if in_reply_to_post and in_reply_to_post.get_title():
+                    original_subject = in_reply_to_post.get_title().first_original()
+                    locale = original_subject.locale_code
+                    subject = original_subject.value
+                elif in_reply_to_idea:
+                    # TODO: some ideas have extra langstring titles
+                    subject = (in_reply_to_idea.short_title
+                               if in_reply_to_idea.short_title else '')
+                    locale = discussion.main_locale
                 else:
-                    subject_langstring = models.LangString.create(u'Proposition', u'und')
+                    subject = discussion.topic if discussion.topic else ''
+                    locale = discussion.main_locale
 
-            body_langstring = models.LangString.create(body, u'und')
+                if subject:
+                    new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()
+                    if (in_reply_to_post and new_subject == subject and
+                        in_reply_to_post.get_title()):
+                        # reuse subject and translations
+                        subject_langstring = in_reply_to_post.get_title().clone(discussion.db)
+                    else:
+                        subject_langstring = models.LangString.create(new_subject, locale)
+
+
             new_post = cls(
                 discussion=discussion,
                 subject=subject_langstring,
@@ -1250,6 +1259,7 @@ class CreatePost(graphene.Mutation):
                 creator_id=user_id,
                 parent=in_reply_to_post
             )
+            new_post.guess_languages()
             db = new_post.db
             db.add(new_post)
             idea_post_link = models.IdeaRelatedPostLink(

@@ -731,7 +731,7 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createPost': {
             u'post': {
-                u'subject': u'Proposition',
+                u'subject': u'Proposal',
                 u'body': u"une proposition...",
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'mySentiment': None
