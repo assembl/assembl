@@ -21,7 +21,7 @@ class Video extends React.Component {
                   <Row>
                     <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
                       <div
-                        className="video-description-layer video-description-top pre-wrap"
+                        className="video-description-layer video-description-top"
                         dangerouslySetInnerHTML={{ __html: descriptionTop }}
                       />
                     </Col>
@@ -33,7 +33,7 @@ class Video extends React.Component {
                         <div>
                           <span className="assembl-icon-pepite color2">&nbsp;</span>
                         </div>
-                        <div className="description-txt pre-wrap" dangerouslySetInnerHTML={{ __html: descriptionSide }} />
+                        <div className="description-txt" dangerouslySetInnerHTML={{ __html: descriptionSide }} />
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}
@@ -47,7 +47,7 @@ class Video extends React.Component {
                   {descriptionBottom &&
                     <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
                       <div
-                        className="video-description-layer video-description-bottom pre-wrap"
+                        className="video-description-layer video-description-bottom"
                         dangerouslySetInnerHTML={{ __html: descriptionBottom }}
                       />
                     </Col>}
