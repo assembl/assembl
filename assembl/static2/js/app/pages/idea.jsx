@@ -3,16 +3,13 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
-import { createSelector } from 'reselect';
 
-import { postsByIdSelector, localeSelector } from '../selectors';
-import { togglePostResponses } from '../actions/postsActions';
 import Header from '../components/debate/common/header';
 import IdeaWithPosts from '../graphql/IdeaWithPosts.graphql';
 import InfiniteSeparator from '../components/common/infiniteSeparator';
-import Post, { connectPostToState, PostFolded } from '../components/debate/thread/post';
+import Post, { PostFolded } from '../components/debate/thread/post';
 import GoUp from '../components/common/goUp';
-import Tree from '../components/common/tree';
+import Tree, { Child } from '../components/common/tree';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
@@ -38,13 +35,13 @@ export const transformPosts = (posts) => {
 
 class Idea extends React.Component {
   render() {
-    const { toggleItem } = this.props;
     const { idea } = this.props.data;
     const refetchIdea = this.props.data.refetch;
     const rawPosts = idea.posts.edges.map((e) => {
       return { ...e.node, refetchIdea: refetchIdea, ideaId: idea.id };
     });
     const posts = transformPosts(rawPosts);
+    const { lang, activeAnswerFormId } = this.props;
 
     return (
       <div className="idea">
@@ -61,8 +58,11 @@ class Idea extends React.Component {
             <div className="max-container">
               <div className="content-section">
                 <Tree
-                  connectChildFunction={connectPostToState}
                   data={posts}
+                  lang={this.props.lang}
+                  ConnectedChildComponent={(props) => {
+                    return <Child activeAnswerFormId={activeAnswerFormId} lang={lang} {...props} />;
+                  }}
                   InnerComponent={Post}
                   InnerComponentFolded={PostFolded}
                   noRowsRenderer={() => {
@@ -73,7 +73,6 @@ class Idea extends React.Component {
                     );
                   }}
                   SeparatorComponent={InfiniteSeparator}
-                  toggleItem={toggleItem}
                 />
               </div>
             </div>
@@ -85,25 +84,11 @@ class Idea extends React.Component {
   }
 }
 
-const mapStateToProps = createSelector(postsByIdSelector, localeSelector, (postsById, locale) => {
-  const expandedItems = postsById
-    .filter((item) => {
-      return item.get('showResponses', false);
-    })
-    .keySeq()
-    .toArray();
+const mapStateToProps = (state) => {
   return {
-    expandedItems: expandedItems,
-    lang: locale
-  };
-});
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleItem: (id) => {
-      return dispatch(togglePostResponses(id));
-    }
+    lang: state.i18n.locale,
+    activeAnswerFormId: state.posts.activeAnswerFormId
   };
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), graphql(IdeaWithPosts), withLoadingIndicator())(Idea);
+export default compose(connect(mapStateToProps), graphql(IdeaWithPosts), withLoadingIndicator())(Idea);

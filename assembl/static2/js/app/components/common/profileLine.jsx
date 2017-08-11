@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import moment from 'moment';
 import '../../../../css/components/profileLine.scss';
 
@@ -33,10 +32,4 @@ const ProfileLine = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    locale: state.i18n.locale
-  };
-};
-
-export default connect(mapStateToProps)(ProfileLine);
+export default ProfileLine;

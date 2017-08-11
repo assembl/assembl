@@ -3,30 +3,20 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
-import { createSelector } from 'reselect';
 import { EditorState } from 'draft-js';
 
 import { updateActiveAnswerFormId, updateAnswerPostBody } from '../../../actions/postsActions';
-import { postSelector } from '../../../selectors';
 import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunctions';
 import ProfileLine from '../../common/profileLine';
 import PostActions from './postActions';
-import { SHOW_POST_RESPONSES } from '../../../constants';
 import AnswerForm from './answerForm';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
-
-const postMapStateToProps = createSelector(postSelector, (post) => {
-  return { expanded: post.get('showResponses', SHOW_POST_RESPONSES) };
-});
-
-export const connectPostToState = connect(postMapStateToProps);
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
 };
 
-let answerTextarea = null;
 class Post extends React.Component {
   componentDidMount() {
     if (this.props.measureTreeHeight) {
@@ -34,13 +24,24 @@ class Post extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.activeAnswerFormId !== nextProps.activeAnswerFormId) {
+      if (this.props.measureTreeHeight) {
+        this.props.measureTreeHeight();
+      }
+    }
+  }
   handleAnswerClick = () => {
     this.props.updateAnswerBody(EditorState.createEmpty());
     this.props.showAnswerForm(this.props.id);
-    setTimeout(() => {
-      const txtareaOffset = getDomElementOffset(answerTextarea).top;
-      scrollToPosition(txtareaOffset - answerTextarea.clientHeight, 200);
-    }, 200);
+    if (this.props.measureTreeHeight) {
+      this.props.measureTreeHeight();
+    }
+    // setTimeout(() => {
+    //   if (!this.answerTextarea) return;
+    //   const txtareaOffset = getDomElementOffset(this.answerTextarea).top;
+    //   scrollToPosition(txtareaOffset - this.answerTextarea.clientHeight, 200);
+    // }, 2000);
   };
 
   render() {
@@ -59,16 +60,16 @@ class Post extends React.Component {
       sentimentCounts,
       mySentiment
     } = this.props.data.post;
-    const { activeAnswerFormId } = this.props;
+    const { activeAnswerFormId, lang } = this.props;
     const answerTextareaRef = (el) => {
-      answerTextarea = el;
+      this.answerTextarea = el;
     };
     return (
       <div className="posts" id={id}>
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
-              {creator && <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} />}
+              {creator && <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} locale={lang} />}
               <h3 className="dark-title-3">
                 {subject}
               </h3>
@@ -125,10 +126,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const mapStateToProps = ({ posts }) => {
-  return {
-    activeAnswerFormId: posts.activeAnswerFormId
-  };
-};
-
-export default compose(connect(mapStateToProps, mapDispatchToProps), graphql(PostQuery), withLoadingIndicator())(Post);
+export default compose(graphql(PostQuery), withLoadingIndicator(), connect(null, mapDispatchToProps))(Post);

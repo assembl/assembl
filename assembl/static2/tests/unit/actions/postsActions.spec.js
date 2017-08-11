@@ -3,18 +3,6 @@ import { ContentState, EditorState } from 'draft-js';
 import * as actions from '../../../js/app/actions/postsActions';
 
 describe('Posts actions', () => {
-  describe('togglePostResponses action', () => {
-    const { togglePostResponses } = actions;
-    it('should return a TOGGLE_POST_RESPONSES action type', () => {
-      const expected = {
-        id: '1234',
-        type: 'TOGGLE_POST_RESPONSES'
-      };
-      const actual = togglePostResponses('1234');
-      expect(actual).toEqual(expected);
-    });
-  });
-
   describe('updateTopPostFormStatus action', () => {
     const { updateTopPostFormStatus } = actions;
     it('should return a UPDATE_TOP_POST_FORM_STATUS action type', () => {

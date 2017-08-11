@@ -1,10 +1,3 @@
-export const togglePostResponses = (id) => {
-  return {
-    id: id,
-    type: 'TOGGLE_POST_RESPONSES'
-  };
-};
-
 export const updateTopPostFormStatus = (isTopPostFormActive) => {
   return {
     isTopPostFormActive: isTopPostFormActive,

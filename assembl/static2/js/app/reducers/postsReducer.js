@@ -1,16 +1,5 @@
 import { EditorState } from 'draft-js';
-import { Map } from 'immutable';
 import { combineReducers } from 'redux';
-
-import { SHOW_POST_RESPONSES } from '../constants';
-
-export const postsById = (state = Map(), action) => {
-  if (action.type === 'TOGGLE_POST_RESPONSES') {
-    const showResponses = state.getIn([action.id, 'showResponses'], SHOW_POST_RESPONSES);
-    return state.setIn([action.id, 'showResponses'], !showResponses);
-  }
-  return state;
-};
 
 export const basicReducerFactory = (initialState, handledAction, returnedProp) => {
   return (state = initialState, action) => {
@@ -35,7 +24,6 @@ export const topPostFormStatus = basicReducerFactory(false, 'UPDATE_TOP_POST_FOR
 export const activeAnswerFormId = basicReducerFactory(null, 'UPDATE_ACTIVE_ANSWER_FORM_ID', 'activeAnswerFormId');
 
 export default combineReducers({
-  postsById: postsById,
   topPostSubject: topPostSubject,
   topPostBody: topPostBody,
   topPostFormStatus: topPostFormStatus,

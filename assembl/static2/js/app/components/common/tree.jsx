@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
-import { connect } from 'react-redux';
 import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctions';
 
 /*
@@ -26,13 +24,14 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
   };
 }
 
-class Child extends React.PureComponent {
+export class Child extends React.PureComponent {
   constructor(props) {
     super(props);
     this.renderToggleLink = this.renderToggleLink.bind(this);
     this.expandCollapse = this.expandCollapse.bind(this);
     this.resizeTreeHeight = this.resizeTreeHeight.bind(this);
     this.scrollToElement = this.scrollToElement.bind(this);
+    this.state = { expanded: true };
   }
 
   resizeTreeHeight() {
@@ -44,9 +43,9 @@ class Child extends React.PureComponent {
 
   expandCollapse(event) {
     event.stopPropagation();
-    const { id, toggleItem } = this.props;
-    toggleItem(id);
-    this.resizeTreeHeight();
+    this.setState((state) => {
+      return { expanded: !state.expanded };
+    }, this.resizeTreeHeight);
   }
 
   renderToggleLink(expanded, indented) {
@@ -79,13 +78,11 @@ class Child extends React.PureComponent {
     const {
       children,
       ConnectedChildComponent,
-      expanded,
       InnerComponent,
       InnerComponentFolded,
       level,
       rowIndex, // the index of the row (i.e. level 0 item) in the List
-      SeparatorComponent,
-      toggleItem
+      SeparatorComponent
     } = this.props;
     const cssClasses = () => {
       let cls = `level level-${level}`;
@@ -101,6 +98,7 @@ class Child extends React.PureComponent {
       return cls;
     };
     const numChildren = children ? children.length : 0;
+    const expanded = this.state.expanded;
     return (
       <div className={cssClasses()}>
         <InnerComponent {...this.props} measureTreeHeight={this.resizeTreeHeight} />
@@ -117,7 +115,6 @@ class Child extends React.PureComponent {
                 InnerComponent={InnerComponent}
                 InnerComponentFolded={InnerComponentFolded}
                 SeparatorComponent={SeparatorComponent}
-                toggleItem={toggleItem}
               />
             );
           })
@@ -146,7 +143,7 @@ Child.defaultProps = {
 };
 
 const cellRenderer = ({ index, key, parent, style }) => {
-  const { ConnectedChildComponent, data, toggleItem, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
+  const { ConnectedChildComponent, data, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
@@ -159,7 +156,6 @@ const cellRenderer = ({ index, key, parent, style }) => {
           InnerComponent={InnerComponent}
           InnerComponentFolded={InnerComponentFolded}
           SeparatorComponent={SeparatorComponent}
-          toggleItem={toggleItem}
         />
       </div>
     </CellMeasurer>
@@ -167,15 +163,13 @@ const cellRenderer = ({ index, key, parent, style }) => {
 };
 
 const Tree = ({
-  connectChildFunction,
   data,
+  ConnectedChildComponent,
   InnerComponent, // component that will be rendered in the child
   InnerComponentFolded, // component that will be used to render the children when folded
   noRowsRenderer,
-  SeparatorComponent, // separator component between first level children
-  toggleItem
+  SeparatorComponent // separator component between first level children
 }) => {
-  const ConnectedChildComponent = connectChildFunction(Child);
   return (
     <WindowScroller>
       {({ height, isScrolling, onChildScroll, scrollTop }) => {
@@ -210,7 +204,6 @@ const Tree = ({
                   overscanRowCount={10}
                   rowRenderer={cellRenderer}
                   SeparatorComponent={SeparatorComponent}
-                  toggleItem={toggleItem}
                   width={width}
                   className="tree-list"
                 />
@@ -229,10 +222,4 @@ Tree.defaultProps = {
   }
 };
 
-const mapStateToProps = ({ posts }) => {
-  return {
-    activeAnswerFormId: posts.activeAnswerFormId
-  };
-};
-
-export default connect(mapStateToProps)(Tree);
+export default Tree;
