@@ -1,0 +1,31 @@
+#import "./AgentProfileInfo.graphql"
+
+query PostQuery($id: ID!) {
+  post: node(id: $id) {
+    ... on Post {
+      id
+      subject
+      body
+      mySentiment
+      sentimentCounts {
+        like
+        disagree
+        dontUnderstand
+        moreInfo
+      }
+      indirectIdeaContentLinks {
+        idea {
+          id
+          title
+        }
+      }
+      creator {
+        ...AgentProfileInfo
+      }
+      parentId
+      creationDate
+      modificationDate
+      bodyMimeType
+    }
+  }
+}

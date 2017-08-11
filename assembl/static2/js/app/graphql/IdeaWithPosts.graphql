@@ -1,5 +1,3 @@
-#import "./AgentProfileInfo.graphql"
-
 query IdeaWithPosts($lang: String!, $id: ID!) {
   idea: node(id: $id) {
     ... on Idea {
@@ -12,28 +10,8 @@ query IdeaWithPosts($lang: String!, $id: ID!) {
           node {
             ... on Post {
               id
-              subject
-              body
-              mySentiment
-              sentimentCounts {
-                like
-                disagree
-                dontUnderstand
-                moreInfo
-              }
-              indirectIdeaContentLinks {
-                idea {
-                  id
-                  title
-                }
-              }
-              creator {
-                ...AgentProfileInfo
-              }
               parentId
               creationDate
-              modificationDate
-              bodyMimeType
             }
           }
         }

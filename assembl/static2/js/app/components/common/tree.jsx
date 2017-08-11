@@ -1,5 +1,6 @@
 import React from 'react';
-import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
+import ReactDOM from 'react-dom';
+import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 import { connect } from 'react-redux';
 import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctions';
 
@@ -16,13 +17,14 @@ const cache = new CellMeasurerCache({
   fixedWidth: true
 });
 
-const scrollToElement = (id) => {
-  setTimeout(() => {
-    const elm = document.getElementById(id);
-    const elmOffset = getDomElementOffset(elm).top;
-    scrollToPosition(elmOffset - 80, 400);
-  }, 200);
-};
+// override overscanIndicesGetter to not remove from the dom the top posts above current scrolling position
+// to fix various issue with scrolling with WindowScroller
+function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
+  return {
+    overscanStartIndex: 0,
+    overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount)
+  };
+}
 
 class Child extends React.PureComponent {
   constructor(props) {
@@ -30,33 +32,32 @@ class Child extends React.PureComponent {
     this.renderToggleLink = this.renderToggleLink.bind(this);
     this.expandCollapse = this.expandCollapse.bind(this);
     this.resizeTreeHeight = this.resizeTreeHeight.bind(this);
+    this.scrollToElement = this.scrollToElement.bind(this);
   }
-  componentDidMount() {
-    this.resizeTreeHeight();
-    window.addEventListener('resize', this.resizeTreeHeight);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.resizeTreeHeight);
-  }
+
   resizeTreeHeight() {
     if (globalList) {
-      cache.clearAll();
-      globalList.recomputeRowHeights();
+      cache.clear(this.props.rowIndex, 0);
+      globalList.recomputeRowHeights(this.props.rowIndex); // recompute height only for row (top post) starting at rowIndex
     }
   }
+
   expandCollapse(event) {
     event.stopPropagation();
-    const { id, rowIndex, toggleItem } = this.props;
+    const { id, toggleItem } = this.props;
     toggleItem(id);
-    cache.clear(rowIndex, 0);
-    globalList.recomputeRowHeights();
+    this.resizeTreeHeight();
   }
-  renderToggleLink(expanded, indented, id) {
+
+  renderToggleLink(expanded, indented) {
     return (
       <div
+        ref={(el) => {
+          this.scrollAnchor = el;
+        }}
         onClick={(event) => {
           if (expanded) {
-            scrollToElement(`exp${id}`);
+            this.scrollToElement();
           }
           this.expandCollapse(event);
         }}
@@ -67,12 +68,18 @@ class Child extends React.PureComponent {
     );
   }
 
+  scrollToElement() {
+    const elmOffset = getDomElementOffset(this.scrollAnchor).top - 20;
+    setTimeout(() => {
+      scrollToPosition(elmOffset, 200);
+    }, 100);
+  }
+
   render() {
     const {
       children,
       ConnectedChildComponent,
       expanded,
-      id,
       InnerComponent,
       InnerComponentFolded,
       level,
@@ -93,15 +100,16 @@ class Child extends React.PureComponent {
       }
       return cls;
     };
+    const numChildren = children ? children.length : 0;
     return (
       <div className={cssClasses()}>
-        <InnerComponent {...this.props} />
-        {children && children.length > 0 ? this.renderToggleLink(expanded, level < 4, children[0].id) : null}
-        {children && expanded
+        <InnerComponent {...this.props} measureTreeHeight={this.resizeTreeHeight} />
+        {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
+        {numChildren > 0 && expanded
           ? children.map((child, idx) => {
             return (
               <ConnectedChildComponent
-                key={`${id}-child-${idx}`}
+                key={idx}
                 {...child}
                 ConnectedChildComponent={ConnectedChildComponent}
                 level={level + 1}
@@ -113,19 +121,22 @@ class Child extends React.PureComponent {
               />
             );
           })
-          : <div
-            id={`exp${children[0].id}`}
+          : null}
+        {numChildren > 0 && !expanded
+          ? <div
             className="postfolded-container"
             onClick={(event) => {
+              if (expanded) {
+                this.scrollToElement();
+              }
               this.expandCollapse(event);
-              scrollToElement(children[0].id);
             }}
           >
-            {children &&
             <div className="post-folded">
-              <InnerComponentFolded nbPosts={children.length} />
-            </div>}
-          </div>}
+              <InnerComponentFolded nbPosts={numChildren} />
+            </div>
+          </div>
+          : null}
       </div>
     );
   }
@@ -140,6 +151,7 @@ const cellRenderer = ({ index, key, parent, style }) => {
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
       <div style={style}>
+        {index > 0 ? <SeparatorComponent /> : null}
         <ConnectedChildComponent
           {...childData}
           rowIndex={index}
@@ -149,7 +161,6 @@ const cellRenderer = ({ index, key, parent, style }) => {
           SeparatorComponent={SeparatorComponent}
           toggleItem={toggleItem}
         />
-        {index + 1 < data.length ? <SeparatorComponent /> : null}
       </div>
     </CellMeasurer>
   );
@@ -165,40 +176,50 @@ const Tree = ({
   toggleItem
 }) => {
   const ConnectedChildComponent = connectChildFunction(Child);
-  cache.clearAll();
   return (
-    <AutoSizer
-      disableHeight
-      onResize={() => {
-        return globalList.recomputeRowHeights();
-      }}
-    >
-      {({ width }) => {
+    <WindowScroller>
+      {({ height, isScrolling, onChildScroll, scrollTop }) => {
         return (
-          <List
-            autoHeight
-            rowHeight={cache.rowHeight}
-            deferredMeasurementCache={cache}
-            ConnectedChildComponent={ConnectedChildComponent}
-            data={data}
-            height={600}
-            InnerComponent={InnerComponent}
-            InnerComponentFolded={InnerComponentFolded}
-            noRowsRenderer={noRowsRenderer}
-            ref={function (ref) {
-              globalList = ref;
+          <AutoSizer
+            disableHeight
+            onResize={() => {
+              cache.clearAll();
+              return globalList.recomputeRowHeights();
             }}
-            rowCount={data.length}
-            overscanRowCount={data.length}
-            rowRenderer={cellRenderer}
-            SeparatorComponent={SeparatorComponent}
-            toggleItem={toggleItem}
-            width={width}
-            className="tree-list"
-          />
+          >
+            {({ width }) => {
+              return (
+                <List
+                  height={height}
+                  isScrolling={isScrolling}
+                  onScroll={onChildScroll}
+                  scrollTop={scrollTop}
+                  autoHeight
+                  rowHeight={cache.rowHeight}
+                  deferredMeasurementCache={cache}
+                  ConnectedChildComponent={ConnectedChildComponent}
+                  data={data}
+                  InnerComponent={InnerComponent}
+                  InnerComponentFolded={InnerComponentFolded}
+                  noRowsRenderer={noRowsRenderer}
+                  ref={function (ref) {
+                    globalList = ref;
+                  }}
+                  rowCount={data.length}
+                  overscanIndicesGetter={overscanIndicesGetter}
+                  overscanRowCount={10}
+                  rowRenderer={cellRenderer}
+                  SeparatorComponent={SeparatorComponent}
+                  toggleItem={toggleItem}
+                  width={width}
+                  className="tree-list"
+                />
+              );
+            }}
+          </AutoSizer>
         );
       }}
-    </AutoSizer>
+    </WindowScroller>
   );
 };
 
