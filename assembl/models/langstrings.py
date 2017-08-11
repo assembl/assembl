@@ -436,18 +436,20 @@ class LangString(Base):
                 if ex_entry is entry:
                     continue
                 if ex_entry.value == entry.value:
-                    entry.delete()
+                    if entry in self.entries:
+                        self.entries.remove(entry)
                     return ex_entry
                 ex_locale = ex_entry.locale or Locale.get(ex_entry.locale_id)
                 if base_locale == ex_locale.base_locale:
                     if ex_locale.is_machine_translated:
-                        ex_entry.delete()
+                        self.entries.remove(ex_entry)
                     else:
                         if not allow_replacement:
                             return None
                         ex_entry.is_tombstone = True
                         self.remove_translations_of(base_locale)
-                        self.db.expire(self, ["entries"])
+                        if inspect(self).persistent:
+                            self.db.expire(self, ["entries"])
             entry.langstring = self
             return entry
 
@@ -1000,7 +1002,8 @@ class LangStringEntry(TombstonableMixin, Base):
             self.locale_identification_data_json = data
             self.locale_confirmed = certainty or locale_code == original
         if changed:
-            self.db.expire(self, ["locale"])
+            if inspect(self).persistent:
+                self.db.expire(self, ["locale"])
             if langstring:
                 langstring.remove_translations_of(old_locale_code)
                 # Re-adding to verify there's no conflict
