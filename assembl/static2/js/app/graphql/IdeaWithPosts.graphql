@@ -11,7 +11,7 @@ query IdeaWithPosts($lang: String!, $id: ID!) {
             ... on Post {
               id
               parentId
-              creationDate
+              # creationDate
             }
           }
         }
