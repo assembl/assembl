@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "build": "webpack --progress --colors",
+    "build": "rm -rf node_modules/react-i18nify/node_modules;webpack --progress --colors",
     "coverage": "jest --coverage",
     "dev": "webpack -d --watch",
     "eslint": "eslint . --ext .js --ext .jsx --cache",
