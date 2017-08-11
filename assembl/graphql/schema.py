@@ -3,7 +3,7 @@ import pytz
 import os.path
 from random import sample as random_sample
 
-from sqlalchemy import desc
+from sqlalchemy import desc, inspect
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload_all, undefer
 import graphene
@@ -184,6 +184,8 @@ def langstring_from_input_entries(entries):
 def update_langstring_from_input_entries(obj, attr, entries):
     """Update langstring from getattr(obj, attr) based on GraphQL LangStringEntryInput entries.
     """
+    if entries is None:
+        return
     langstring = getattr(obj, attr, None)
     if langstring is None:
         new_langstring = langstring_from_input_entries(entries)
@@ -199,7 +201,8 @@ def update_langstring_from_input_entries(obj, attr, entries):
         if entry.locale_code not in locales:
             entry.is_tombstone = True
 
-    langstring.db.expire(langstring, ['entries'])
+    if inspect(langstring).persistent:
+        langstring.db.expire(langstring, ['entries'])
     langstring.db.flush()
 
 
