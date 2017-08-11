@@ -5,7 +5,6 @@ import IdeaPreview from '../../common/ideaPreview';
 import VisibilityComponent from '../../common/visibilityComponent';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
-import '../../../../../css/components/ideas.scss';
 
 class IdeasLevel extends React.Component {
   constructor(props) {
@@ -27,6 +26,13 @@ class IdeasLevel extends React.Component {
     this.onScrollRightClick = this.onScrollRightClick.bind(this);
     this.onScrollLeftClick = this.onScrollLeftClick.bind(this);
     this.scrollToIdeaIndexIfNecessary = this.scrollToIdeaIndexIfNecessary.bind(this);
+    this.refMe = this.refMe.bind(this);
+    this.refRow = this.refRow.bind(this);
+    this.updateWidth = this.updateWidth.bind(this);
+  }
+
+  componentDidMount() {
+    this.initializeConstants();
   }
 
   onSeeSubIdeasClick(ideaId, index, step = 0) {
@@ -43,15 +49,18 @@ class IdeasLevel extends React.Component {
         Animation step 0:
           - Animate ideas top margins from various values to 0
           - Set row width to its current width, in anticipation of future animation
-          - Set ideas left position to current 0, in anticipation of future scroll animation
+          - Set ideas left position to their current left position (0), in anticipation of future scroll animation
+          - Set ideas width to current width, in anticipation of future resize animation
         */
         const row = this.getRow();
         row.style.width = `${row.clientWidth}px`;
         row.style.transition = 'width 0.5s';
         row.childNodes.forEach((el) => {
           const el2 = el;
+          el2.style.width = `${el2.clientWidth}px`;
           el2.style.marginTop = '0';
           el2.style.left = '0';
+          el2.style.flexShrink = '0';
         });
 
         setTimeout(goNextStep, 500);
@@ -63,12 +72,9 @@ class IdeasLevel extends React.Component {
           - Set necessary values consequently to inline-flex, for animation consistency
         */
         this.initializeConstants();
+
         const row = this.getRow();
-        row.childNodes.forEach((el) => {
-          const el2 = el;
-          el2.style.flexShrink = '0';
-          el2.style.width = `${this.getOption('thematicWidth')}px`;
-        });
+
         row.style.overflowX = 'hidden';
         row.style.display = 'inline-flex';
 
@@ -77,11 +83,19 @@ class IdeasLevel extends React.Component {
       } else if (step === 2) {
         /*
         Animation step 2:
-          - Animate carousel from full page width to custom value
+          - Animate row width from full page width to custom value
+          - Animate ideas width from initial width to carousel-adapted width
         */
 
+        this.setOption('isAnimatingTowardsInline', true);
+        this.updateWidth();
+
         const row = this.getRow();
-        row.style.width = `${this.getOption('carouselWidth')}px`;
+        const thematicWidthPx = `${this.getOption('thematicWidth')}px`;
+        row.childNodes.forEach((el) => {
+          const el2 = el;
+          el2.style.width = thematicWidthPx;
+        });
 
         this.scrollToIdeaIndexIfNecessary(index);
 
@@ -95,11 +109,6 @@ class IdeasLevel extends React.Component {
 
         return;
       }
-    }
-
-    if (wasInline && ideaId === this.getOption('selectedIdea')) {
-      this.goMultiline();
-      return;
     }
 
     this.setOption('isAnimatingTowardsInline', true);
@@ -117,15 +126,20 @@ class IdeasLevel extends React.Component {
   }
 
   onScrollRightClick() {
+    this.initializeConstants();
     this.moveAllChildren(this.getRow(), -1 * this.getOption('animationDistance'));
   }
 
   onScrollLeftClick() {
+    this.initializeConstants();
     this.moveAllChildren(this.getRow(), this.getOption('animationDistance'));
   }
 
   getRow() {
-    return this.me.childNodes[1];
+    if (this.me) {
+      return this.me.childNodes[1];
+    }
+    return null;
   }
 
   getOption(name) {
@@ -134,6 +148,18 @@ class IdeasLevel extends React.Component {
 
   setOption(name, value) {
     this.options[name] = value;
+  }
+
+  updateWidth() {
+    if (this.me) {
+      if (this.state.isInline || this.getOption('isAnimatingTowardsInline')) {
+        this.me.style.width = `${this.getOption('carouselWidth')}px`;
+        const row = this.getRow();
+        if (row) {
+          row.style.width = `${this.getOption('carouselWidth')}px`;
+        }
+      }
+    }
   }
 
   scrollToIdeaIndexIfNecessary(index) {
@@ -171,13 +197,29 @@ class IdeasLevel extends React.Component {
   }
 
   initializeConstants() {
-    const carouselParentWidth = 1400; // TODO: read dynamically from DOM
+    let parentWidth = 1400;
+    if (this.me && this.me.parentNode && this.me.parentNode.clientWidth) {
+      parentWidth = this.me.parentNode.clientWidth;
+    }
+
     const scrollDisplacement = this.getOption('scrollDisplacement') || 0;
-    const thematicWidth = 350; // TODO: read dynamically from DOM
-    let carouselTargetWidth = (Math.floor(carouselParentWidth / thematicWidth) - 0.5) * thematicWidth;
+
+    let thematicWidth = 350;
+    let thematicWidthPercent = 100;
+    let numberOfThematicsToShow = 4.5;
+    if (parentWidth < 850) {
+      numberOfThematicsToShow = 2.5;
+    } else if (parentWidth < 1000) {
+      numberOfThematicsToShow = 3.5;
+    }
+    thematicWidth = parentWidth / numberOfThematicsToShow;
+    thematicWidthPercent = thematicWidth / parentWidth;
+
+    let carouselTargetWidth = (Math.floor(parentWidth / thematicWidth) - 0.5) * thematicWidth;
     if (carouselTargetWidth < 1.5 * thematicWidth) {
       carouselTargetWidth = 1.5 * thematicWidth;
     }
+
     let len = 0;
     if (
       this.props &&
@@ -188,12 +230,22 @@ class IdeasLevel extends React.Component {
     ) {
       len = this.props.thematics.length;
     }
+    if (len === 0 || !this.me || !this.getRow()) {
+      const f = () => {
+        this.initializeConstants();
+        this.updateWidth();
+      };
+      f.bind(this);
+      setTimeout(f, 500);
+    }
     const displacementMin = -1.0 * (len * thematicWidth - carouselTargetWidth);
     const displacementMax = 0;
 
     this.setOption('scrollDisplacement', scrollDisplacement);
     this.setOption('thematicWidth', thematicWidth);
+    this.setOption('thematicWidthPercent', thematicWidthPercent);
     this.setOption('animationDistance', thematicWidth);
+    this.setOption('parentWidth', parentWidth);
     this.setOption('carouselWidth', carouselTargetWidth);
     this.setOption('displacementMin', displacementMin);
     this.setOption('displacementMax', displacementMax);
@@ -206,7 +258,7 @@ class IdeasLevel extends React.Component {
     const displacementMax = this.getOption('displacementMax');
     if (element.childNodes && element.childNodes.length) {
       const el0 = element.childNodes[0];
-      currentValue = el0.style.left;
+      currentValue = el0.style.left || 0;
       let targetValueInt = 0;
       if (!currentValue || absolute) {
         targetValueInt = distance;
@@ -238,10 +290,18 @@ class IdeasLevel extends React.Component {
       this.updateScrollButtonsVisibility(this.state.isInline, this.getOption('isAnimatingTowardsInline'));
     }
   }
+  refMe(el) {
+    this.me = el;
+  }
+  refRow(el) {
+    this.row = el;
+    this.initializeConstants();
+    this.updateWidth();
+  }
 
   render() {
     const { thematics, identifier, onSeeSubIdeasClick, level } = this.props;
-    const { isScrollLeftButtonVisible, isScrollRightButtonVisible } = this.state;
+    const { isScrollLeftButtonVisible, isScrollRightButtonVisible, isInline } = this.state;
     const selectedIdea = this.getOption('selectedIdea');
     const slug = getDiscussionSlug();
     let classNames = ['ideas-level'];
@@ -255,19 +315,13 @@ class IdeasLevel extends React.Component {
     }
     classNames = classNames.join(' ');
 
-    const style = {};
-    if (this.state.isInline || this.getOption('isAnimatingTowardsInline')) {
-      style.width = this.getOption('carouselWidth');
+    const thematicStyle = {};
+    if (isInline) {
+      thematicStyle.width = `${this.getOption('thematicWidth')}px`;
     }
 
     return (
-      <div
-        className={classNames}
-        style={style}
-        ref={(el) => {
-          this.me = el;
-        }}
-      >
+      <div className={classNames} ref={this.refMe}>
         <VisibilityComponent
           isVisible={isScrollLeftButtonVisible}
           ref={(el) => {
@@ -277,15 +331,17 @@ class IdeasLevel extends React.Component {
         >
           <div className="scroll-left" onClick={this.onScrollLeftClick} />
         </VisibilityComponent>
-        <Row
-          className="no-margin"
-          ref={(el) => {
-            this.row = el;
-          }}
-        >
+        <Row className="no-margin" ref={this.refRow}>
           {thematics.map((thematic, index) => {
             return (
-              <Col xs={12} sm={6} md={3} className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'} key={index}>
+              <Col
+                xs={12}
+                sm={6}
+                md={3}
+                className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'}
+                key={index}
+                style={thematicStyle}
+              >
                 <IdeaPreview
                   imgUrl={thematic.imgUrl}
                   numPosts={thematic.numPosts}

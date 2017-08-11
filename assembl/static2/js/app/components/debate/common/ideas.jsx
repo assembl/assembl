@@ -1,7 +1,6 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
-import '../../../../../css/components/ideas.scss';
 import IdeasLevel from './ideasLevel';
 
 class Ideas extends React.Component {
