@@ -59,7 +59,6 @@ class Idea extends React.Component {
               <div className="content-section">
                 <Tree
                   data={posts}
-                  lang={this.props.lang}
                   ConnectedChildComponent={(props) => {
                     return <Child activeAnswerFormId={activeAnswerFormId} lang={lang} {...props} />;
                   }}
