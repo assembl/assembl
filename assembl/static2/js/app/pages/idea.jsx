@@ -14,7 +14,7 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
 
-export const transformPosts = (edges, additionnalProps) => {
+export const transformPosts = (edges, additionnalProps = {}) => {
   const postsByParent = {};
   edges.forEach((e) => {
     const p = { ...e.node, ...additionnalProps };
