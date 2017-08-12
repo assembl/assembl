@@ -76,6 +76,7 @@ class Child extends React.PureComponent {
 
   render() {
     const {
+      hidden,
       lang,
       activeAnswerFormId,
       children,
@@ -96,6 +97,9 @@ class Child extends React.PureComponent {
       if (level > 4) {
         cls += ' padding-right';
       }
+      if (hidden) {
+        cls += ' hidden';
+      }
       return cls;
     };
     const numChildren = children ? children.length : 0;
@@ -111,10 +115,11 @@ class Child extends React.PureComponent {
           measureTreeHeight={this.resizeTreeHeight}
         />
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
-        {numChildren > 0 && expanded
+        {numChildren > 0
           ? children.map((child, idx) => {
             return (
               <Child
+                hidden={!expanded}
                 key={idx}
                 {...child}
                 lang={lang}
@@ -148,7 +153,8 @@ class Child extends React.PureComponent {
   }
 }
 Child.defaultProps = {
-  level: 0
+  level: 0,
+  hidden: false
 };
 
 const cellRenderer = ({ index, key, parent, style }) => {
