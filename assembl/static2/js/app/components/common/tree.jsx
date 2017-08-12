@@ -15,12 +15,28 @@ const cache = new CellMeasurerCache({
   fixedWidth: true
 });
 
-// override overscanIndicesGetter to not remove from the dom the top posts above current scrolling position
+let prevStopIndex = (0, 0);
+// override overscanIndicesGetter to not remove from the dom the posts once rendered
 // to fix various issue with scrolling with WindowScroller
 function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
+  let overscanStopIndex;
+  if (cellCount === 1) {
+    // overscanIndicesGetter is called for columns, not rows
+    // use default implementation
+    overscanStopIndex = Math.min(cellCount - 1, stopIndex + overscanCellsCount);
+  } else {
+    if (prevStopIndex[1] !== cellCount) {
+      // We probably changed idea or added a new top post, reset, otherwise we will
+      // download 900 messages (prevStopIndex) or render all the posts in one shot for this idea.
+      // There may be a case where two ideas have exactly the same cellCount (number of topPosts), we can't detect it.
+      prevStopIndex = [stopIndex, cellCount];
+    }
+    prevStopIndex[0] = Math.max(prevStopIndex[0], stopIndex);
+    overscanStopIndex = Math.min(cellCount - 1, prevStopIndex[0] + overscanCellsCount);
+  }
   return {
     overscanStartIndex: 0,
-    overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount)
+    overscanStopIndex: overscanStopIndex
   };
 }
 
