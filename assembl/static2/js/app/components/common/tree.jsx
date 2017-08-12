@@ -10,8 +10,8 @@ import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctio
 let globalList;
 
 const cache = new CellMeasurerCache({
-  defaultHeight: 600,
-  minHeight: 500,
+  defaultHeight: 500,
+  minHeight: 355,
   fixedWidth: true
 });
 
@@ -40,6 +40,8 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
   };
 }
 
+const delayedRecomputeRowHeights = [null, null]; // [timeoutId, minRowIndex from which to recompute row heights]
+
 class Child extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -50,18 +52,37 @@ class Child extends React.PureComponent {
     this.state = { expanded: true };
   }
 
-  resizeTreeHeight() {
+  resizeTreeHeight(delay = 200) {
+    // This function will be called by each post rendered, so we delay the
+    // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
+    const rowIndex = this.props.rowIndex;
     if (globalList) {
-      cache.clear(this.props.rowIndex, 0);
-      globalList.recomputeRowHeights(this.props.rowIndex); // recompute height only for row (top post) starting at rowIndex
+      cache.clear(rowIndex, 0);
+      if (delayedRecomputeRowHeights[0]) {
+        clearTimeout(delayedRecomputeRowHeights[0]);
+      }
+      delayedRecomputeRowHeights[1] = Math.min(delayedRecomputeRowHeights[1] || rowIndex, rowIndex);
+      delayedRecomputeRowHeights[0] = setTimeout(() => {
+        delayedRecomputeRowHeights[0] = null;
+        delayedRecomputeRowHeights[1] = null;
+        if (globalList) {
+          globalList.recomputeRowHeights(delayedRecomputeRowHeights[1]);
+          // recompute height only for rows (top post) starting at rowIndex
+        }
+      }, delay);
     }
   }
 
   expandCollapse(event) {
     event.stopPropagation();
-    this.setState((state) => {
-      return { expanded: !state.expanded };
-    }, this.resizeTreeHeight);
+    this.setState(
+      (state) => {
+        return { expanded: !state.expanded };
+      },
+      () => {
+        this.resizeTreeHeight(0);
+      }
+    );
   }
 
   renderToggleLink(expanded, indented) {
