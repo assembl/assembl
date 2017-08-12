@@ -22,8 +22,8 @@ query PostQuery($id: ID!) {
       creator {
         ...AgentProfileInfo
       }
-      parentId
-      creationDate
+      # parentId
+      # creationDate already retrieved by IdeaWithPosts query
       modificationDate
       bodyMimeType
     }

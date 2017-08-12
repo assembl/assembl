@@ -57,13 +57,13 @@ class Post extends React.Component {
       body,
       indirectIdeaContentLinks,
       creator,
-      creationDate,
       // modificationDate,
       bodyMimeType,
       sentimentCounts,
       mySentiment
     } = this.props.data.post;
-    const { needToShowAnswerForm, lang, ideaId, refetchIdea } = this.props;
+    const { needToShowAnswerForm, lang, ideaId, refetchIdea, creationDate } = this.props;
+    // creationDate is retrieved by IdeaWithPosts query, not PostQuery
     const answerTextareaRef = (el) => {
       this.answerTextarea = el;
     };
