@@ -9,14 +9,15 @@ import IdeaWithPosts from '../graphql/IdeaWithPosts.graphql';
 import InfiniteSeparator from '../components/common/infiniteSeparator';
 import Post, { PostFolded } from '../components/debate/thread/post';
 import GoUp from '../components/common/goUp';
-import Tree, { Child } from '../components/common/tree';
+import Tree from '../components/common/tree';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
 
-export const transformPosts = (posts) => {
+export const transformPosts = (edges, additionnalProps) => {
   const postsByParent = {};
-  posts.forEach((p) => {
+  edges.forEach((e) => {
+    const p = { ...e.node, ...additionnalProps };
     const items = postsByParent[p.parentId] || [];
     postsByParent[p.parentId] = items;
     items.push(p);
@@ -24,23 +25,46 @@ export const transformPosts = (posts) => {
 
   const getChildren = (id) => {
     return (postsByParent[id] || []).map((post) => {
-      return { ...post, children: getChildren(post.id) };
+      const newPost = post;
+      // We modify the object in place, we are sure it's already a copy from
+      // the forEach edges above.
+      newPost.children = getChildren(post.id);
+      return newPost;
     });
   };
 
   return (postsByParent.null || []).map((p) => {
-    return { ...p, children: getChildren(p.id) };
+    const newPost = p;
+    newPost.children = getChildren(p.id);
+    return newPost;
   });
 };
 
+const noRowsRenderer = () => {
+  return (
+    <div className="center">
+      <Translate value="debate.thread.noPostsInThread" />
+    </div>
+  );
+};
+
 class Idea extends React.Component {
+  componentWillMount() {
+    this.refetchIdea = this.props.data.refetch;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // data.refetchIdea is a new instance each time Idea component is rerendered
+    // so shallowEqual fails on Post components and we have a perf issue.
+    // Keep the previous function if variables used in query didn't change.
+    if (this.props.lang !== nextProps.lang || this.props.id !== nextProps.id) {
+      this.refetchIdea = nextProps.data.refetch;
+    }
+  }
+
   render() {
     const { idea } = this.props.data;
-    const refetchIdea = this.props.data.refetch;
-    const rawPosts = idea.posts.edges.map((e) => {
-      return { ...e.node, refetchIdea: refetchIdea, ideaId: idea.id };
-    });
-    const posts = transformPosts(rawPosts);
+    const topPosts = transformPosts(idea.posts.edges, { refetchIdea: this.refetchIdea, ideaId: idea.id });
     const { lang, activeAnswerFormId } = this.props;
 
     return (
@@ -50,7 +74,7 @@ class Idea extends React.Component {
           <Grid fluid className="background-color">
             <div className="max-container">
               <div className="top-post-form">
-                <TopPostForm ideaId={idea.id} refetchIdea={this.props.data.refetch} />
+                <TopPostForm ideaId={idea.id} refetchIdea={this.refetchIdea} />
               </div>
             </div>
           </Grid>
@@ -58,19 +82,12 @@ class Idea extends React.Component {
             <div className="max-container">
               <div className="content-section">
                 <Tree
-                  data={posts}
-                  ConnectedChildComponent={(props) => {
-                    return <Child activeAnswerFormId={activeAnswerFormId} lang={lang} {...props} />;
-                  }}
+                  lang={lang}
+                  activeAnswerFormId={activeAnswerFormId}
+                  data={topPosts}
                   InnerComponent={Post}
                   InnerComponentFolded={PostFolded}
-                  noRowsRenderer={() => {
-                    return (
-                      <div className="center">
-                        <Translate value="debate.thread.noPostsInThread" />
-                      </div>
-                    );
-                  }}
+                  noRowsRenderer={noRowsRenderer}
                   SeparatorComponent={InfiniteSeparator}
                 />
               </div>

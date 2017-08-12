@@ -26,7 +26,6 @@ const AnswerForm = ({ body, mutate, updateBody, updateBodyChars, parentId, ideaI
       inviteUserToLogin();
     }
   };
-
   const variables = {
     ideaId: ideaId,
     parentId: parentId,

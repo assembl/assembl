@@ -25,11 +25,16 @@ class Post extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.activeAnswerFormId !== nextProps.activeAnswerFormId) {
+    if (this.props.needToShowAnswerForm !== nextProps.needToShowAnswerForm || this.props.lang !== nextProps.lang) {
       if (this.props.measureTreeHeight) {
         this.props.measureTreeHeight();
       }
     }
+    // Object.keys(nextProps).forEach((key) => {
+    //   if (nextProps[key] !== this.props[key]) {
+    //     console.log('prop changed', key);
+    //   }
+    // });
   }
   handleAnswerClick = () => {
     this.props.updateAnswerBody(EditorState.createEmpty());
@@ -37,11 +42,11 @@ class Post extends React.Component {
     if (this.props.measureTreeHeight) {
       this.props.measureTreeHeight();
     }
-    // setTimeout(() => {
-    //   if (!this.answerTextarea) return;
-    //   const txtareaOffset = getDomElementOffset(this.answerTextarea).top;
-    //   scrollToPosition(txtareaOffset - this.answerTextarea.clientHeight, 200);
-    // }, 2000);
+    setTimeout(() => {
+      if (!this.answerTextarea) return;
+      const txtareaOffset = getDomElementOffset(this.answerTextarea).top;
+      scrollToPosition(txtareaOffset - this.answerTextarea.clientHeight, 200);
+    }, 200);
   };
 
   render() {
@@ -55,12 +60,10 @@ class Post extends React.Component {
       creationDate,
       // modificationDate,
       bodyMimeType,
-      ideaId,
-      refetchIdea,
       sentimentCounts,
       mySentiment
     } = this.props.data.post;
-    const { activeAnswerFormId, lang } = this.props;
+    const { needToShowAnswerForm, lang, ideaId, refetchIdea } = this.props;
     const answerTextareaRef = (el) => {
       this.answerTextarea = el;
     };
@@ -105,7 +108,7 @@ class Post extends React.Component {
             </Col>
           </Row>
         </div>
-        {activeAnswerFormId === id
+        {needToShowAnswerForm
           ? <div className="answer-form">
             <AnswerForm parentId={id} ideaId={ideaId} refetchIdea={refetchIdea} textareaRef={answerTextareaRef} />
           </div>
@@ -120,10 +123,10 @@ const mapDispatchToProps = (dispatch) => {
     updateAnswerBody: (body) => {
       return dispatch(updateAnswerPostBody(body));
     },
-    showAnswerForm: (activeAnswerFormId) => {
-      return dispatch(updateActiveAnswerFormId(activeAnswerFormId));
+    showAnswerForm: (postId) => {
+      return dispatch(updateActiveAnswerFormId(postId));
     }
   };
 };
 
-export default compose(graphql(PostQuery), withLoadingIndicator(), connect(null, mapDispatchToProps))(Post);
+export default compose(connect(null, mapDispatchToProps), graphql(PostQuery), withLoadingIndicator())(Post);

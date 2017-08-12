@@ -24,7 +24,7 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
   };
 }
 
-export class Child extends React.PureComponent {
+class Child extends React.PureComponent {
   constructor(props) {
     super(props);
     this.renderToggleLink = this.renderToggleLink.bind(this);
@@ -76,8 +76,9 @@ export class Child extends React.PureComponent {
 
   render() {
     const {
+      lang,
+      activeAnswerFormId,
       children,
-      ConnectedChildComponent,
       InnerComponent,
       InnerComponentFolded,
       level,
@@ -99,19 +100,27 @@ export class Child extends React.PureComponent {
     };
     const numChildren = children ? children.length : 0;
     const expanded = this.state.expanded;
+    const forwardProps = { ...this.props };
+    delete forwardProps.activeAnswerFormId;
+    delete forwardProps.children;
     return (
       <div className={cssClasses()}>
-        <InnerComponent {...this.props} measureTreeHeight={this.resizeTreeHeight} />
+        <InnerComponent
+          {...forwardProps}
+          needToShowAnswerForm={activeAnswerFormId === this.props.id}
+          measureTreeHeight={this.resizeTreeHeight}
+        />
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0 && expanded
           ? children.map((child, idx) => {
             return (
-              <ConnectedChildComponent
+              <Child
                 key={idx}
                 {...child}
-                ConnectedChildComponent={ConnectedChildComponent}
-                level={level + 1}
+                lang={lang}
+                activeAnswerFormId={activeAnswerFormId}
                 rowIndex={rowIndex}
+                level={level + 1}
                 InnerComponent={InnerComponent}
                 InnerComponentFolded={InnerComponentFolded}
                 SeparatorComponent={SeparatorComponent}
@@ -143,16 +152,17 @@ Child.defaultProps = {
 };
 
 const cellRenderer = ({ index, key, parent, style }) => {
-  const { ConnectedChildComponent, data, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
+  const { lang, activeAnswerFormId, data, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
       <div style={style}>
         {index > 0 ? <SeparatorComponent /> : null}
-        <ConnectedChildComponent
+        <Child
           {...childData}
+          lang={lang}
+          activeAnswerFormId={activeAnswerFormId}
           rowIndex={index}
-          ConnectedChildComponent={ConnectedChildComponent}
           InnerComponent={InnerComponent}
           InnerComponentFolded={InnerComponentFolded}
           SeparatorComponent={SeparatorComponent}
@@ -163,8 +173,9 @@ const cellRenderer = ({ index, key, parent, style }) => {
 };
 
 const Tree = ({
+  lang,
+  activeAnswerFormId,
   data,
-  ConnectedChildComponent,
   InnerComponent, // component that will be rendered in the child
   InnerComponentFolded, // component that will be used to render the children when folded
   noRowsRenderer,
@@ -191,7 +202,8 @@ const Tree = ({
                   autoHeight
                   rowHeight={cache.rowHeight}
                   deferredMeasurementCache={cache}
-                  ConnectedChildComponent={ConnectedChildComponent}
+                  lang={lang}
+                  activeAnswerFormId={activeAnswerFormId}
                   data={data}
                   InnerComponent={InnerComponent}
                   InnerComponentFolded={InnerComponentFolded}
