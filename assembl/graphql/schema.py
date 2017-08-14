@@ -191,32 +191,14 @@ def update_langstring_from_input_entries(obj, attr, entries):
             setattr(obj, attr, new_langstring)
         return
 
-    current_title_entries_by_locale_code = {
-        e.locale_code: e for e in langstring.entries}
-    if entries is not None:
-        # if we have an empty list, remove all existing entries
-        if len(entries) == 0:
-            for e in current_title_entries_by_locale_code.values():
-                e.tombstone_date = datetime.utcnow()
+    locales = set()
+    for entry in entries:
+        locales.add(entry['locale_code'])
+        langstring.add_value(entry['value'], entry['locale_code'])
+    for entry in langstring.non_mt_entries():
+        if entry.locale_code not in locales:
+            entry.is_tombstone = True
 
-        for entry in entries:
-            locale_code = entry['locale_code']
-            current_entry = current_title_entries_by_locale_code.get(locale_code, None)
-            if current_entry is not None:
-                if current_entry.value != entry['value']:
-                    if not entry['value']:
-                        current_entry.tombstone_date = datetime.utcnow()
-                    else:
-                        current_entry.change_value(entry['value'])
-            else:
-                locale_id = models.Locale.get_id_of(locale_code)
-                langstring.add_entry(
-                    models.LangStringEntry(
-                        langstring=langstring,
-                        value=entry['value'],
-                        locale_id=locale_id
-                    )
-                )
     langstring.db.expire(langstring, ['entries'])
     langstring.db.flush()
 
