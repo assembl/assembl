@@ -1,6 +1,6 @@
 #import "./AgentProfileInfo.graphql"
 
-query PostQuery($id: ID!) {
+query Post($id: ID!) {
   post: node(id: $id) {
     ... on Post {
       id

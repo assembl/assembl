@@ -1,10 +1,7 @@
-query IdeaWithPosts($lang: String!, $id: ID!) {
+query IdeaWithPosts($id: ID!) {
   idea: node(id: $id) {
     ... on Idea {
       id
-      title(lang: $lang)
-      description(lang: $lang)
-      imgUrl
       posts {
         edges {
           node {

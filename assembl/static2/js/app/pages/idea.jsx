@@ -5,12 +5,13 @@ import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
 
 import Header from '../components/debate/common/header';
-import IdeaWithPosts from '../graphql/IdeaWithPosts.graphql';
+import IdeaQuery from '../graphql/IdeaQuery.graphql';
+import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import InfiniteSeparator from '../components/common/infiniteSeparator';
 import Post, { PostFolded } from '../components/debate/thread/post';
 import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
-import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import Loader from '../components/common/loader';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
 
@@ -50,7 +51,7 @@ const noRowsRenderer = () => {
 
 class Idea extends React.Component {
   componentWillMount() {
-    this.refetchIdea = this.props.data.refetch;
+    this.refetchIdea = this.props.ideaWithPostsData.refetch;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,14 +59,24 @@ class Idea extends React.Component {
     // so shallowEqual fails on Post components and we have a perf issue.
     // Keep the previous function if variables used in query didn't change.
     if (this.props.lang !== nextProps.lang || this.props.id !== nextProps.id) {
-      this.refetchIdea = nextProps.data.refetch;
+      this.refetchIdea = nextProps.ideaWithPostsData.refetch;
     }
   }
 
   render() {
-    const { idea } = this.props.data;
-    const topPosts = transformPosts(idea.posts.edges, { refetchIdea: this.refetchIdea, ideaId: idea.id });
-    const { lang, activeAnswerFormId } = this.props;
+    const { lang, activeAnswerFormId, ideaData, ideaWithPostsData } = this.props;
+    if (ideaData.loading) {
+      return (
+        <div className="idea">
+          <Loader />
+        </div>
+      );
+    }
+
+    const { idea } = ideaData;
+    const topPosts =
+      !ideaWithPostsData.loading &&
+      transformPosts(ideaWithPostsData.idea.posts.edges, { refetchIdea: this.refetchIdea, ideaId: idea.id });
 
     return (
       <div className="idea">
@@ -81,15 +92,17 @@ class Idea extends React.Component {
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="content-section">
-                <Tree
-                  lang={lang}
-                  activeAnswerFormId={activeAnswerFormId}
-                  data={topPosts}
-                  InnerComponent={Post}
-                  InnerComponentFolded={PostFolded}
-                  noRowsRenderer={noRowsRenderer}
-                  SeparatorComponent={InfiniteSeparator}
-                />
+                {ideaWithPostsData.loading
+                  ? <Loader />
+                  : <Tree
+                    lang={lang}
+                    activeAnswerFormId={activeAnswerFormId}
+                    data={topPosts}
+                    InnerComponent={Post}
+                    InnerComponentFolded={PostFolded}
+                    noRowsRenderer={noRowsRenderer}
+                    SeparatorComponent={InfiniteSeparator}
+                  />}
               </div>
             </div>
           </Grid>
@@ -107,4 +120,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(IdeaWithPosts), withLoadingIndicator())(Idea);
+export default compose(
+  connect(mapStateToProps),
+  graphql(IdeaWithPostsQuery, { name: 'ideaWithPostsData' }),
+  graphql(IdeaQuery, { name: 'ideaData' })
+)(Idea);
