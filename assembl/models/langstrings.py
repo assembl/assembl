@@ -963,7 +963,7 @@ class LangStringEntry(TombstonableMixin, Base):
         old_locale_code = self.locale_code
         langstring = self.langstring or (
             LangString.get(self.langstring_id) if self.langstring_id else None)
-        if self.locale.is_machine_translated:
+        if Locale.locale_is_machine_translated(self.locale_code):
             raise RuntimeError("Why identify a machine-translated locale?")
         data = data or {}
         original = self.locale_identification_data_json.get("original", None)

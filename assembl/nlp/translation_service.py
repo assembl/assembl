@@ -92,30 +92,22 @@ class LanguageIdentificationService(object):
     def identify(
             self, text, expected_locales=None,
             constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
-        return self.base_identify(
-            text, expected_locales or self.discussion.discussion_locales,
-            constrain_locale_threshold=constrain_locale_threshold)
-
-    @classmethod
-    def base_identify(
-            cls, text, expected_locales,
-            constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
         "Try to identify locale of text. Boost if one of the expected locales."
         # Note that it is unreliable for very short text; especially it does not
         # give multiple probabilities when appropriate.
         if not text:
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
-        len_nourl = cls.strlen_nourl(text)
+        len_nourl = self.strlen_nourl(text)
         if len_nourl < 5:
             return Locale.NON_LINGUISTIC, {Locale.NON_LINGUISTIC: 1}
-        detector = cls.detector_factory().create()
+        detector = self.detector_factory().create()
         if constrain_locale_threshold and (
                 len_nourl < constrain_locale_threshold):
             excluded_probability = 0
         else:
             # Give less probability to excluded languages for shorter texts
             excluded_probability = min(1, log(len_nourl) / 10)
-        priors = cls.convert_to_priors(expected_locales, excluded_probability)
+        priors = self.convert_to_priors(expected_locales, excluded_probability)
         detector.set_prior_map(priors)
         detector.append(text)
         language_data = detector.get_probabilities()
