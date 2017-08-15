@@ -1013,23 +1013,22 @@ class Email(ImportedPost):
 
         smtp_connection.quit()
 
-    def language_priors(self):
-        priors = super(Email, self).language_priors()
+    def language_priors(self, translation_service):
+        priors = super(Email, self).language_priors(translation_service)
         email_obj = email.message_from_string(self.imported_blob)
         locales = {part.get('Content-Language') for part in email_obj.walk()
                    if part.get_content_type() in (
                        'text/plain', 'text/html', 'multipart/alternative')}
         locales.discard(None)
         if locales:
-            from .langstrings import Locale
-            locales = {Locale.extract_root_locale(loc) for loc in locales}
+            locales = {translation_service.asKnownLocale(loc)
+                       for loc in locales}
             priors = {k: v * (1 if k in locales else 0.9)
                       for (k, v) in priors.iteritems()}
             for lang in locales:
                 if lang not in priors:
                     priors[lang] = 1
         return priors
-
 
     def __repr__(self):
         return "%s from %s to %s>" % (

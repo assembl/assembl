@@ -520,10 +520,9 @@ class Post(Content):
             icls = self.filter_idea_content_links_r(icls)
         return icls
 
-    def language_priors(self):
+    def language_priors(self, translation_service):
         from .auth import User, UserLanguagePreferenceCollection
-        from .langstrings import Locale
-        priors = super(Post, self).language_priors()
+        priors = super(Post, self).language_priors(translation_service)
         creator = self.creator or AgentProfile.get(self.creator_id)
         if creator and isinstance(creator, User):
             # probably a language that the user knows
@@ -538,7 +537,7 @@ class Post(Content):
                 else:
                     return priors
                 known_languages = []
-            known_languages = {Locale.extract_root_locale(loc)
+            known_languages = {translation_service.asKnownLocale(loc)
                                for loc in known_languages}
             priors = {k: v * (1 if k in known_languages else 0.8)
                       for (k, v) in priors.iteritems()}

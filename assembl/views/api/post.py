@@ -347,7 +347,7 @@ def get_posts(request):
                 posts = posts.filter(ViewPost.id != None)
         user = AgentProfile.get(user_id)
         service = discussion.translation_service()
-        if service:
+        if service.canTranslate is not None:
             translations = PrefCollectionTranslationTable(
                 service, LanguagePreferenceCollection.getCurrent(request))
     else:

@@ -839,26 +839,21 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         return self.preferences["translation_service"]
 
     def translation_service(self):
-        service_class = self.translation_service_class
+        service_class = (self.translation_service_class or
+            "assembl.nlp.translation_service.LanguageIdentificationService")
         service = self._discussion_services.get(self.id, None)
-        if service and not service_class:
-            del self._discussion_services[self.id]
-            return None
-        if (service_class and service
-                and full_class_name(service) != service_class):
-            del self._discussion_services[self.id]
+        if service and full_class_name(service) != service_class:
             service = None
-        elif (service_class and not service
-                and self.id in self._discussion_services):
-            del self._discussion_services[self.id]
-        if self.id not in self._discussion_services:
+        if service is None:
             try:
                 if service_class:
                     service = resolver.resolve(service_class)(self)
-                self._discussion_services[self.id] = service
-            except:
-                pass
-        return self._discussion_services.get(self.id, None)
+            except RuntimeError:
+                from assembl.nlp.translation_service import \
+                    LanguageIdentificationService
+                service = LanguageIdentificationService(self)
+            self._discussion_services[self.id] = service
+        return service
 
     def remove_translations(self):
         # For testing purposes

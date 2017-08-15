@@ -41,26 +41,15 @@ class LangStringStatus(OrderedEnum):
     TOO_MANY_TRANSIENTS = 15
 
 
-class TranslationService(object):
+class LanguageIdentificationService(object):
+    canTranslate = None
+
     _url_regexp = re.compile(
         r"\b(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?\b", re.I)
-
 
     def __init__(self, discussion):
         self.discussion_id = discussion.id
         self._discussion = discussion
-
-    # Should we identify before translating?
-    distinct_identify_step = True
-
-    def serviceData(self):
-        return {"translation_notice": "Machine-translated",
-                "idiosyncrasies": {}}
-
-    @classmethod
-    def strlen_nourl(cls, data):
-        # a fancy strlen that removes urls.
-        return len(cls._url_regexp.sub(' ', data))
 
     @property
     def discussion(self):
@@ -69,51 +58,36 @@ class TranslationService(object):
                 self.discussion_id)
         return self._discussion
 
-    def canTranslate(self, source, target):
-        return False
-
-    @classmethod
-    def asKnownLocaleC(cls, locale_code):
-        return locale_code
+    @property
+    def known_locales(cls):
+        return cls.detector_factory().langlist
 
     def asKnownLocale(self, locale_code):
-        return self.asKnownLocaleC(locale_code)
+        parts = locale_code.split("_")
+        base = parts[0]
+        if base == "zh":
+            if len(parts) > 1 and parts[1] in ("Hant", "TW", "HK", "SG", "MO"):
+                return "zh-tw"
+            return "zh-cn"  # mainland as default
+        known_locales = self.detector_factory().langlist
+        if base in self.known_locales:
+            return base
+
+    idiosyncrasies = {"zh-tw": "zh_Hant_TW", "zh-cn": "zh_Hans_CN"}
 
     @classmethod
     def asPosixLocale(cls, locale_code):
-        return locale_code
+        return cls.idiosyncrasies.get(locale_code, locale_code)
 
     @classmethod
     def can_guess_locale(cls, text):
         # empirical
         return text and len(text) >= 15
 
-    def target_locales(self):
-        return ()
-
     @classmethod
-    def target_locale_labels_for_locales(cls, locales, target_locale):
-        return LocaleLabel.names_of_locales_in_locale(
-            [strip_country(cls.asPosixLocale(loc)) for loc in locales] +
-            Locale.SPECIAL_LOCALES,
-            target_locale)
-
-    def target_locale_labels(self, target_locale):
-        return self.target_locale_labels_for_locales(
-            list(self.target_locales()), target_locale)
-
-    @staticmethod
-    def set_error(lse, error_code, error_description):
-        lid = lse.locale_identification_data_json
-        lse.error_code = error_code.value
-        lse.error_count = 1 + (lse.error_count or 0)
-        if (lse.error_count > 10 and
-                lse.error_code < LangStringStatus.PERMANENT_TRANSLATION_FAILURE):
-            lse.error_code = LangStringStatus.TOO_MANY_TRANSIENTS.value
-        if error_description:
-            lid = lse.locale_identification_data_json
-            lid['error_desc'] = error_description
-            lse.locale_identification_data_json = lid
+    def strlen_nourl(cls, data):
+        # a fancy strlen that removes urls.
+        return len(cls._url_regexp.sub(' ', data))
 
     def identify(
             self, text, expected_locales=None,
@@ -162,7 +136,7 @@ class TranslationService(object):
         if isinstance(priors, list):
             priors = {Locale.extract_root_locale(l): 1 for l in priors}
         if base_rate > 0:
-            factory = TranslationService.detector_factory()
+            factory = LanguageIdentificationService.detector_factory()
             if len(priors) < len(factory.langlist):
                 priors0 = {l: base_rate for l in factory.langlist}
                 priors0.update(priors)
@@ -172,29 +146,64 @@ class TranslationService(object):
     def confirm_locale(
             self, langstring_entry, priors=None,
             constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
-        return self.confirm_locale_c(
-            langstring_entry, discussion=self.discussion,
-            ts=self, priors=priors,
-            constrain_locale_threshold=constrain_locale_threshold)
-
-    @classmethod
-    def confirm_locale_c(cls, langstring_entry, discussion, ts=None, priors=None,
-                         constrain_locale_threshold=SECURE_IDENTIFICATION_LIMIT):
         try:
-            ts = ts or discussion.translation_service()
-            expected_locales = priors or discussion.discussion_locales
-            if ts:
-                lang, data = ts.identify(langstring_entry.value, expected_locales)
-                data["service"] = ts.__class__.__name__
-            else:
-                lang, data = cls.base_identify(langstring_entry.value, expected_locales)
-                data["service"] = cls.__name__
+            expected_locales = priors or self.discussion.discussion_locales
+            lang, data = self.identify(langstring_entry.value, expected_locales)
+            data["service"] = self.__class__.__name__
             changed = langstring_entry.identify_locale(lang, data)
             if lang == Locale.UNDEFINED:
                 pass  # say you can't identify
         except Exception as e:
             print_exc()
-            cls.set_error(langstring_entry, *cls.decode_exception(e, True))
+            self.set_error(langstring_entry, *self.decode_exception(e, True))
+
+    @staticmethod
+    def set_error(lse, error_code, error_description):
+        lid = lse.locale_identification_data_json
+        lse.error_code = error_code.value
+        lse.error_count = 1 + (lse.error_count or 0)
+        if (lse.error_count > 10 and
+                lse.error_code < LangStringStatus.PERMANENT_TRANSLATION_FAILURE):
+            lse.error_code = LangStringStatus.TOO_MANY_TRANSIENTS.value
+        if error_description:
+            lid = lse.locale_identification_data_json
+            lid['error_desc'] = error_description
+            lse.locale_identification_data_json = lid
+
+    def has_fatal_error(self, lse):
+        return lse.error_code >= LangStringStatus.PERMANENT_TRANSLATION_FAILURE
+
+    @staticmethod
+    def decode_exception(e, identify_phase=False):
+        if isinstance(e, LangDetectException):
+            return LangStringStatus.CANNOT_IDENTIFY, str(e)
+        return LangStringStatus.UNKNOWN_ERROR, str(e)
+
+
+class AbstractTranslationService(LanguageIdentificationService):
+    # Should we identify before translating?
+    distinct_identify_step = True
+
+    def serviceData(self):
+        return {"translation_notice": "Machine-translated",
+                "idiosyncrasies": {}}
+
+    def canTranslate(self, source, target):
+        return False
+
+    def target_locales(self):
+        return ()
+
+    @classmethod
+    def target_locale_labels_for_locales(cls, locales, target_locale):
+        return LocaleLabel.names_of_locales_in_locale(
+            [strip_country(cls.asPosixLocale(loc)) for loc in locales] +
+            Locale.SPECIAL_LOCALES,
+            target_locale)
+
+    def target_locale_labels(self, target_locale):
+        return self.target_locale_labels_for_locales(
+            list(self.target_locales()), target_locale)
 
     @abstractmethod
     def translate(self, text, target, source=None, db=None):
@@ -207,15 +216,6 @@ class TranslationService(object):
 
     def get_mt_name(self, source_name, target_name):
         return Locale.create_mt_code(source_name, target_name)
-
-    def has_fatal_error(self, lse):
-        return lse.error_code >= LangStringStatus.PERMANENT_TRANSLATION_FAILURE
-
-    @staticmethod
-    def decode_exception(e, identify_phase=False):
-        if isinstance(e, LangDetectException):
-            return LangStringStatus.CANNOT_IDENTIFY, str(e)
-        return LangStringStatus.UNKNOWN_ERROR, str(e)
 
     def translate_lse(
             self, source_lse, target, retranslate=False,
@@ -334,7 +334,7 @@ class TranslationService(object):
         return target_lse
 
 
-class DummyTranslationServiceTwoSteps(TranslationService):
+class DummyTranslationServiceTwoSteps(AbstractTranslationService):
     def canTranslate(cls, source, target):
         return True
 
@@ -388,7 +388,7 @@ class DummyTranslationServiceOneStepWithErrors(DummyTranslationServiceOneStep):
             text, target, source=source, db=db)
 
 
-class DummyGoogleTranslationService(TranslationService):
+class DummyGoogleTranslationService(AbstractTranslationService):
     # Uses public Google API. For testing purposes. Do NOT use in production.
     _known_locales = {
         'af', 'am', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'ceb', 'co',
@@ -413,11 +413,11 @@ class DummyGoogleTranslationService(TranslationService):
     agents = {'User-Agent':"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)"}
 
     @classmethod
-    def target_localesC(cls, known_locales=known_locales_cls):
-        return (cls.asPosixLocale(loc) for loc in known_locales)
+    def target_localesC(cls):
+        return (cls.asPosixLocale(loc) for loc in cls.known_locales)
 
     def target_locales(self):
-        return self.target_localesC(self.known_locales)
+        return self.target_localesC()
 
     @classmethod
     def target_locale_labels_cls(cls, target_locale):
@@ -429,9 +429,7 @@ class DummyGoogleTranslationService(TranslationService):
                 "translation_notice_url": "http://translate.google.com",
                 "idiosyncrasies": self.idiosyncrasies_reverse}
 
-    @classmethod
-    def asKnownLocaleC(
-            cls, locale_code, known_locales=known_locales_cls):
+    def asKnownLocale(self, locale_code):
         parts = locale_code.split("_")
         base = parts[0]
         if base == "zh" and len(parts) > 1:
@@ -442,17 +440,10 @@ class DummyGoogleTranslationService(TranslationService):
                 return "zh-TW"
             else:
                 return base
-        if base in known_locales:
+        if base in self.known_locales:
             return base
-        if base in cls.idiosyncrasies_reverse:
-            return cls.idiosyncrasies_reverse[base]
-
-    def asKnownLocale(self, locale_code):
-        return self.asKnownLocaleC(locale_code, self.known_locales)
-
-    @classmethod
-    def asPosixLocale(cls, locale_code):
-        return cls.idiosyncrasies.get(locale_code, locale_code)
+        if base in self.idiosyncrasies_reverse:
+            return self.idiosyncrasies_reverse[base]
 
     def get_mt_name(self, source_name, target_name):
         return super(DummyGoogleTranslationService, self).get_mt_name(

@@ -152,7 +152,7 @@ def home_view(request):
     translation_service_data = {}
     try:
         service = discussion.translation_service()
-        if service:
+        if service.canTranslate is not None:
             translation_service_data = service.serviceData()
     except:
         pass
