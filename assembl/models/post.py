@@ -539,7 +539,7 @@ class Post(Content):
                 known_languages = []
             known_languages = {translation_service.asKnownLocale(loc)
                                for loc in known_languages}
-            priors = {k: v * (1 if k in known_languages else 0.8)
+            priors = {k: v * (1 if k in known_languages else 0.7)
                       for (k, v) in priors.iteritems()}
             for lang in known_languages:
                 if lang not in priors:

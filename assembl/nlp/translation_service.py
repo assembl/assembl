@@ -107,6 +107,7 @@ class LanguageIdentificationService(object):
         else:
             # Give less probability to excluded languages for shorter texts
             excluded_probability = min(1, log(len_nourl) / 10)
+        expected_locales = expected_locales or self.discussion.discussion_locales
         priors = self.convert_to_priors(expected_locales, excluded_probability)
         detector.set_prior_map(priors)
         detector.append(text)

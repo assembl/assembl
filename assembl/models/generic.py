@@ -548,6 +548,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
                 for loc in discussion_locales}
 
     def guess_languages(self):
+        from .langstrings import Locale
         if self.discussion is None:
             self.discussion = Discussion.get(self.discussion_id)
         assert self.discussion
@@ -557,9 +558,10 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             body_original = self.body.first_original()
             ts.confirm_locale(body_original, priors)
         if self.subject:
-            if self.body:
+            if self.body and body_original.locale_code not in (
+                    Locale.UNDEFINED, Locale.NON_LINGUISTIC):
                 # boost the body's language
-                priors = {k: v * 0.8 for (k, v) in priors.iteritems()}
+                priors = {k: v * 0.6 for (k, v) in priors.iteritems()}
                 priors[body_original.locale_code] = 1
             subject_original = self.subject.first_original()
             ts.confirm_locale(subject_original, priors)

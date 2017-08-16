@@ -1002,8 +1002,6 @@ class LangStringEntry(TombstonableMixin, Base):
             self.locale_identification_data_json = data
             self.locale_confirmed = certainty or locale_code == original
         if changed:
-            if inspect(self).persistent:
-                self.db.expire(self, ["locale"])
             if langstring:
                 langstring.remove_translations_of(old_locale_code)
                 # Re-adding to verify there's no conflict

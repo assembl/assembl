@@ -1023,7 +1023,7 @@ class Email(ImportedPost):
         if locales:
             locales = {translation_service.asKnownLocale(loc)
                        for loc in locales}
-            priors = {k: v * (1 if k in locales else 0.9)
+            priors = {k: v * (1 if k in locales else 0.8)
                       for (k, v) in priors.iteritems()}
             for lang in locales:
                 if lang not in priors:
