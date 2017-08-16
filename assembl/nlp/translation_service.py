@@ -124,10 +124,9 @@ class LanguageIdentificationService(object):
         from langdetect.detector_factory import _factory as detector_factory
         return detector_factory
 
-    @staticmethod
-    def convert_to_priors(priors, base_rate=0.1):
+    def convert_to_priors(self, priors, base_rate=0.1):
         if isinstance(priors, list):
-            priors = {Locale.extract_root_locale(l): 1 for l in priors}
+            priors = {self.asKnownLocale(l): 1 for l in priors}
         if base_rate > 0:
             factory = LanguageIdentificationService.detector_factory()
             if len(priors) < len(factory.langlist):
