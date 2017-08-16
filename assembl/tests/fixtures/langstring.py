@@ -472,7 +472,7 @@ def langstring_subject(request, test_session):
 
 
 @pytest.fixture
-def ambiguous_langstring(request, test_session):
+def ambiguous_langstring(request, test_session, undefined_locale):
     from assembl.models.langstrings import LangString
 
     # This string is chosen because it is close to 50/50

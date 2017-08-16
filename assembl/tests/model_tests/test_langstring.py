@@ -600,8 +600,10 @@ def test_identify_short_strings(langstring_entry_values, discussion):
             assert res in discussion.discussion_locales
 
 
-def test_identify_ambiguous_langstring(ambiguous_langstring, discussion):
-    """This test is not useful, but is necessary to contrast with the following tests"""
+def test_identify_ambiguous_langstring(
+        ambiguous_langstring, discussion, en_locale):
+    """This test is not useful, but is necessary to contrast
+    with the following tests"""
     ts = discussion.translation_service()
     entry = ambiguous_langstring.first_original()
     ts.confirm_locale(entry)
@@ -609,25 +611,35 @@ def test_identify_ambiguous_langstring(ambiguous_langstring, discussion):
 
 
 def test_identify_ambiguous_string_in_post(fully_ambiguous_post):
-    """This test is not useful, but is necessary to contrast with the following tests"""
+    """This test is not useful, but is necessary to contrast
+    with the following tests"""
     fully_ambiguous_post.guess_languages()
     assert fully_ambiguous_post.body.first_original().locale_code == 'en'
     assert fully_ambiguous_post.subject.first_original().locale_code == 'en'
 
 
-def test_identify_ambiguous_subject_in_post_by_body(post_subject_locale_determined_by_body):
+def test_identify_ambiguous_subject_in_post_by_body(
+        post_subject_locale_determined_by_body):
     post_subject_locale_determined_by_body.guess_languages()
-    assert post_subject_locale_determined_by_body.body.first_original().locale_code == 'fr'
-    assert post_subject_locale_determined_by_body.subject.first_original().locale_code == 'fr'
+    assert post_subject_locale_determined_by_body.body.\
+        first_original().locale_code == 'fr'
+    assert post_subject_locale_determined_by_body.subject.\
+        first_original().locale_code == 'fr'
 
 
-def test_identify_ambiguous_body_in_post_by_creator(post_body_locale_determined_by_creator):
+def test_identify_ambiguous_body_in_post_by_creator(
+        post_body_locale_determined_by_creator):
     post_body_locale_determined_by_creator.guess_languages()
-    assert post_body_locale_determined_by_creator.body.first_original().locale_code == 'fr'
-    assert post_body_locale_determined_by_creator.subject.first_original().locale_code == 'fr'
+    assert post_body_locale_determined_by_creator.body.\
+        first_original().locale_code == 'fr'
+    assert post_body_locale_determined_by_creator.subject.\
+        first_original().locale_code == 'fr'
 
 
-def test_identify_ambiguous_body_in_post_by_import(post_body_locale_determined_by_import):
+def test_identify_ambiguous_body_in_post_by_import(
+        post_body_locale_determined_by_import):
     post_body_locale_determined_by_import.guess_languages()
-    assert post_body_locale_determined_by_import.body.first_original().locale_code == 'fr'
-    assert post_body_locale_determined_by_import.subject.first_original().locale_code == 'fr'
+    assert post_body_locale_determined_by_import.body.\
+        first_original().locale_code == 'fr'
+    assert post_body_locale_determined_by_import.subject.\
+        first_original().locale_code == 'fr'

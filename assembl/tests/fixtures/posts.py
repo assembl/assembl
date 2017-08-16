@@ -205,7 +205,8 @@ def reply_to_deleted_post_5(
 
 @pytest.fixture(scope="function")
 def fully_ambiguous_post(
-        request, test_session, discussion, participant1_user):
+        request, test_session, discussion, participant1_user,
+        undefined_locale, fr_locale, en_locale):
     from assembl.models import Content, LangString
     p = Content(
         discussion=discussion,
@@ -224,7 +225,8 @@ def fully_ambiguous_post(
 
 @pytest.fixture(scope="function")
 def post_subject_locale_determined_by_body(
-        request, test_session, discussion):
+        request, test_session, discussion,
+        undefined_locale, fr_locale, en_locale):
     from assembl.models import Content, LangString
     p = Content(
         discussion=discussion,
@@ -244,7 +246,8 @@ def post_subject_locale_determined_by_body(
 @pytest.fixture(scope="function")
 def post_body_locale_determined_by_creator(
         request, test_session, discussion, admin_user,
-        user_language_preference_fr_cookie):
+        user_language_preference_fr_cookie,
+        undefined_locale, fr_locale, en_locale):
     from assembl.models import Post, LangString
     p = Post(
         discussion=discussion, creator=admin_user,
@@ -264,7 +267,8 @@ def post_body_locale_determined_by_creator(
 
 @pytest.fixture(scope="function")
 def post_body_locale_determined_by_import(
-        request, test_session, discussion, admin_user, mailbox):
+        request, test_session, discussion, admin_user, mailbox,
+        undefined_locale, fr_locale, en_locale):
     from assembl.models import Email, LangString
     p = Email(
         discussion=discussion, creator=admin_user,
