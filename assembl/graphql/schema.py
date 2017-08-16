@@ -302,6 +302,9 @@ class PostInterface(SQLAlchemyInterface):
             else:
                 pref = lpc.find_locale(source_locale)
                 target_locale = pref.translate_to_locale
+                if not target_locale:
+                    continue
+                target_locale = target_locale.code
             if not ls.closest_entry(target_locale):
                 post.maybe_translate(lpc)
 
