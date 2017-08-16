@@ -26,6 +26,7 @@ query Post($id: ID!) {
       # creationDate already retrieved by IdeaWithPosts query
       modificationDate
       bodyMimeType
+      publicationState
     }
   }
 }

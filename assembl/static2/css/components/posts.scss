@@ -80,7 +80,17 @@
   }
 }
 
+$deleted-post-border: 1px solid $grey1 !default;
 .posts {
+    &.deleted-post {
+      .body {
+        font-style: italic;
+        font-family: $font-family;
+      }
+      .box {
+        border: $deleted-post-border !important;
+      }
+    }
     .post-row {
         margin-right: -20px;
         margin-left: -20px;

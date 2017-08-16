@@ -12,6 +12,7 @@ import PostActions from './postActions';
 import AnswerForm from './answerForm';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
+import { DeletedPublicationStates } from '../../../constants';
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
@@ -60,10 +61,31 @@ class Post extends React.Component {
       // modificationDate,
       bodyMimeType,
       sentimentCounts,
-      mySentiment
+      mySentiment,
+      publicationState
     } = this.props.data.post;
     const { needToShowAnswerForm, lang, ideaId, refetchIdea, creationDate } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
+
+    if (publicationState in DeletedPublicationStates) {
+      return (
+        <div className="posts deleted-post" id={id}>
+          <div className="box">
+            <Row className="post-row">
+              <Col xs={12} md={12} className="post-left">
+                <h3 className="dark-title-3">
+                  {subject}
+                </h3>
+                <div className="body">
+                  <Translate value="debate.thread.postDeleted" />
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </div>
+      );
+    }
+
     const answerTextareaRef = (el) => {
       this.answerTextarea = el;
     };

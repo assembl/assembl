@@ -21,6 +21,7 @@ from pyramid.i18n import TranslationStringFactory
 from jwzthreading import restrip_pat
 
 from assembl.auth import IF_OWNED, CrudPermissions
+from assembl.auth import P_DELETE_POST, P_DELETE_MY_POST
 from assembl.auth.util import get_permissions
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.clean_input import sanitize_text, sanitize_html
@@ -254,6 +255,11 @@ sentiments_enum = PyEnum('SentimentTypes', (
 SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
 
 
+publication_states_enum = PyEnum('PublicationStates',
+    [(k, k) for k in models.PublicationStates.values()])
+PublicationStates = graphene.Enum.from_enum(publication_states_enum)
+
+
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.AgentProfile
@@ -307,9 +313,12 @@ class PostInterface(SQLAlchemyInterface):
     indirect_idea_content_links = graphene.List(IdeaContentLink)
     parent_id = graphene.ID()
     body_mime_type = graphene.String(required=True)
+    publication_state = graphene.Field(type=PublicationStates)
 
     def resolve_subject(self, args, context, info):
-        subject = resolve_langstring(self.get_subject(), args.get('lang'))
+        # Use self.subject and not self.get_subject() because we still
+        # want the subject even when the post is deleted.
+        subject = resolve_langstring(self.subject, args.get('lang'))
         return subject
 
     def resolve_body(self, args, context, info):
@@ -382,6 +391,9 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_body_mime_type(self, args, context, info):
         return self.get_body_mime_type()
+
+    def resolve_publication_state(self, args, context, info):
+        return self.publication_state.name
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -507,7 +519,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         Post = models.Post
         query = Post.query.join(
             related, Post.id == related.c.post_id
-            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
             ).order_by(desc(Post.creation_date), Post.id
             ).options(
                 joinedload_all(Post.creator),
@@ -564,8 +575,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                     ).order_by(desc(Post.creation_date), Post.id).first()
 
             query = Post.default_db.query(Post.id).join(
-                related, Post.id == related.c.post_id
-                ).filter(Post.publication_state == models.PublicationStates.PUBLISHED)
+                related, Post.id == related.c.post_id)
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
             limit = args.get('first', 10)
@@ -1324,6 +1334,71 @@ class UpdatePost(graphene.Mutation):
         return UpdatePost(post=post)
 
 
+class DeletePost(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+        discussion = models.Discussion.get(discussion_id)
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = post.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        # Same logic as in assembl/views/api2/post.py:delete_post_instance
+        # Remove extracts associated to this post
+        extracts_to_remove = post.db.query(models.Extract).filter(models.Extract.content_id == post.id).all()
+        for extract in extracts_to_remove:
+            extract.delete()
+
+        if user_id == post.creator_id and P_DELETE_MY_POST in permissions:
+            cause = models.PublicationStates.DELETED_BY_USER
+        elif P_DELETE_POST in permissions:
+            cause = models.PublicationStates.DELETED_BY_ADMIN
+
+        post.delete_post(cause)
+        post.db.flush()
+        return DeletePost(post=post)
+
+
+class UndeletePost(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+        discussion = models.Discussion.get(discussion_id)
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = post.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        post.undelete_post()
+        post.db.flush()
+        return UndeletePost(post=post)
+
+
 class AddSentiment(graphene.Mutation):
     class Input:
         post_id = graphene.ID(required=True)
@@ -1403,6 +1478,8 @@ class Mutations(graphene.ObjectType):
     create_idea = CreateIdea.Field()
     create_post = CreatePost.Field()
     update_post = UpdatePost.Field()
+    delete_post = DeletePost.Field()
+    undelete_post = UndeletePost.Field()
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
 

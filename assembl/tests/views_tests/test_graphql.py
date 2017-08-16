@@ -697,6 +697,7 @@ mutation myFirstMutation {
                 bodyEntries { localeCode value },
                 creator { name },
                 bodyMimeType
+                publicationState
             }
         }
     }
@@ -709,7 +710,8 @@ mutation myFirstMutation {
                 u'body': u"une proposition...",
                 u'bodyEntries': [{u'value': u"une proposition...", u'localeCode': u'fr'}],
                 u'creator': {u'name': u'Mr. Administrator'},
-                u'bodyMimeType': u'text/html'
+                u'bodyMimeType': u'text/html',
+                u'publicationState': u'PUBLISHED'
     }}}
 
 
@@ -739,6 +741,84 @@ mutation myFirstMutation {
                 u'body': u"une proposition...",
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'mySentiment': None
+    }}}
+
+
+def test_mutation_delete_post(graphql_request, top_post_in_thread_phase):
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!) {
+    deletePost(postId: $postId) {
+        post {
+            ... on Post {
+                subject
+                body
+                parentId
+                creator { name }
+                publicationState
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
+    assert json.loads(json.dumps(res.data)) == {
+        u'deletePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': None,
+                u'parentId': None,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'publicationState': 'DELETED_BY_USER'
+    }}}
+
+
+def test_mutation_undelete_post(graphql_request, top_post_in_thread_phase):
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!) {
+    deletePost(postId: $postId) {
+        post {
+            ... on Post {
+                subject
+                body
+                parentId
+                creator { name }
+                publicationState
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
+    assert json.loads(json.dumps(res.data)) == {
+        u'deletePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': None,
+                u'parentId': None,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'publicationState': 'DELETED_BY_USER'
+    }}}
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!) {
+    undeletePost(postId: $postId) {
+        post {
+            ... on Post {
+                subject
+                body
+                parentId
+                creator { name }
+                publicationState
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
+    assert json.loads(json.dumps(res.data)) == {
+        u'undeletePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': u"Je recommande de manger des choux à la crème, c'est très bon, et ça permet de maintenir l'industrie de la patisserie française.",
+                u'parentId': None,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'publicationState': 'PUBLISHED'
     }}}
 
 
@@ -926,7 +1006,6 @@ mutation myFirstMutation {
     }
 }
 """ % (idea_id, in_reply_to_post_id), context_value=graphql_request)
-    #import pdb; pdb.set_trace()
     assert json.loads(json.dumps(res.data)) == {
         u'createPost': {
             u'post': {
