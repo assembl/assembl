@@ -12,6 +12,7 @@ def discussion(request, test_session, default_preferences):
             subscribe_to_notifications_on_signup=False,
             creator=None,
             session=test_session)
+        d.discussion_locales = ['en', 'fr', 'de']
         test_session.add(d)
     test_session.flush()
 

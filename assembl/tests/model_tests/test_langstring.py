@@ -362,7 +362,7 @@ def test_user_language_preference_fr_from_en_it_from_fr_en_entry(
         locale_confirmed=False,
         langstring=langstring_body,
         locale=it_from_fr_locale,
-        value=langstring_entry_values.get('body').get('italian')
+        value=langstring_entry_values.get('body').get('it')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -395,7 +395,7 @@ def test_user_language_preference_fr_from_en_it_from_fr_fr_entry(
         locale_confirmed=False,
         langstring=langstring_body,
         locale=en_from_fr_locale,
-        value=langstring_entry_values.get('body').get('english')
+        value=langstring_entry_values.get('body').get('en')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -428,7 +428,7 @@ def test_user_language_preference_fr_from_en_it_from_fr_it_entry(
         locale_confirmed=False,
         langstring=langstring_body,
         locale=fr_from_it_locale,
-        value=langstring_entry_values.get('body').get('french')
+        value=langstring_entry_values.get('body').get('fr')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -573,3 +573,61 @@ def test_user_language_preference_en_from_fr_fr_from_en_fr_entry(
     best = langstring_body.best_lang(user_prefs=lang_prefs, allow_errors=True)
 
     assert best.locale.id == en_from_fr_locale.id
+
+
+def test_identify_long_strings(langstring_entry_values, discussion):
+    """These are longer than the threshold, so should be correctly identified
+    even if not in the discussion_locales."""
+    ts = discussion.translation_service()
+    for loc, val in langstring_entry_values['body'].items():
+        res, _ = ts.identify(val, constrain_locale_threshold=60)
+        assert loc == res, \
+            "Incorrect identification for %s: %s instead of %s" % (
+                val, res, loc)
+
+
+def test_identify_short_strings(langstring_entry_values, discussion):
+    """These are shorter than the threshold, so identification
+    should be cnostrained by discussion_locales."""
+    ts = discussion.translation_service()
+    for loc, val in langstring_entry_values['body'].items():
+        res, _ = ts.identify(val)
+        if loc in discussion.discussion_locales:
+            assert loc == res, \
+                "Incorrect identification for %s: %s instead of %s" % (
+                    val, res, loc)
+        else:
+            assert res in discussion.discussion_locales
+
+
+def test_identify_ambiguous_langstring(ambiguous_langstring, discussion):
+    """This test is not useful, but is necessary to contrast with the following tests"""
+    ts = discussion.translation_service()
+    entry = ambiguous_langstring.first_original()
+    ts.confirm_locale(entry)
+    assert entry.locale_code == 'en'
+
+
+def test_identify_ambiguous_string_in_post(fully_ambiguous_post):
+    """This test is not useful, but is necessary to contrast with the following tests"""
+    fully_ambiguous_post.guess_languages()
+    assert fully_ambiguous_post.body.first_original().locale_code == 'en'
+    assert fully_ambiguous_post.subject.first_original().locale_code == 'en'
+
+
+def test_identify_ambiguous_subject_in_post_by_body(post_subject_locale_determined_by_body):
+    post_subject_locale_determined_by_body.guess_languages()
+    assert post_subject_locale_determined_by_body.body.first_original().locale_code == 'fr'
+    assert post_subject_locale_determined_by_body.subject.first_original().locale_code == 'fr'
+
+
+def test_identify_ambiguous_body_in_post_by_creator(post_body_locale_determined_by_creator):
+    post_body_locale_determined_by_creator.guess_languages()
+    assert post_body_locale_determined_by_creator.body.first_original().locale_code == 'fr'
+    assert post_body_locale_determined_by_creator.subject.first_original().locale_code == 'fr'
+
+
+def test_identify_ambiguous_body_in_post_by_import(post_body_locale_determined_by_import):
+    post_body_locale_determined_by_import.guess_languages()
+    assert post_body_locale_determined_by_import.body.first_original().locale_code == 'fr'
+    assert post_body_locale_determined_by_import.subject.first_original().locale_code == 'fr'
