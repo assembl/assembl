@@ -686,7 +686,6 @@ class IdeaUnion(SQLAlchemyUnion):
 
 class Query(graphene.ObjectType):
     node = Node.Field()
-    posts = SQLAlchemyConnectionField(PostConnection, idea_id=graphene.ID())
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
     ideas = graphene.List(Idea)
     thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
@@ -712,37 +711,6 @@ class Query(graphene.ObjectType):
             root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
             ).filter(model.hidden == False).order_by(model.id)
-        return query
-
-    def resolve_posts(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        idea_id = args.get('idea_id', None)
-        if idea_id is not None:
-            id_ = int(Node.from_global_id(idea_id)[1])
-            idea = models.Idea.get(id_)
-            if idea.discussion_id != discussion_id:
-                return None
-        else:
-            discussion = models.Discussion.get(discussion_id)
-            idea = discussion.root_idea
-
-        Post = models.Post
-        related = idea.get_related_posts_query(True)
-        query = Post.query.join(
-            related, Post.id == related.c.post_id
-            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
-            ).order_by(desc(Post.creation_date), Post.id
-            ).options(
-                joinedload_all(Post.creator),
-                undefer(Post.idea_content_links_above_post)
-            )
-        if len(discussion.discussion_locales) > 1:
-            query = query.options(*models.Content.subqueryload_options())
-        else:
-            query = query.options(*models.Content.joinedload_options())
-
-        # pagination is done after that, no need to do it ourself
         return query
 
     def resolve_thematics(self, args, context, info):
