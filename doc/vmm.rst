@@ -70,6 +70,13 @@ Note that the path for ``dovecot-sql.conf.ext`` is
 ``/etc/dovecot/dovecot-sql.conf.ext`` and not
 ``/usr/local/etc/dovecot/dovecot-sql.conf.ext``.
 
+Do not forget this "otherwise uncomment the following user_query":
+
+..code:: ini
+
+    user_query = SELECT home, uid, gid, mail FROM dovecotuser('%Ln', '%Ld')
+
+
 In ``/etc/dovecot/conf.d/10-auth.conf``, also put the following:
 
 .. code:: ini
