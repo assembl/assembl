@@ -81,14 +81,15 @@
 }
 
 $deleted-post-border: 1px solid $grey1 !default;
+.idea .level .deleted-post .box {
+  border-left: $deleted-post-border;
+}
+
 .posts {
     &.deleted-post {
       .body {
         font-style: italic;
         font-family: $font-family;
-      }
-      .box {
-        border: $deleted-post-border !important;
       }
     }
     .post-row {
