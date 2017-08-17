@@ -1,6 +1,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
+import _filter from 'lodash/filter';
 import IdeasLevel from './ideasLevel';
 
 class Ideas extends React.Component {
@@ -23,7 +24,7 @@ class Ideas extends React.Component {
     this.setState({ isInitialState: false });
   }
   render() {
-    const { thematics, identifier } = this.props;
+    const { thematics, rootIdeaId, identifier } = this.props;
     const { selectedIdeas } = this.state;
     return (
       <section className="themes-section ideas-section">
@@ -36,10 +37,21 @@ class Ideas extends React.Component {
               </h1>
             </div>
             <div className="content-section">
-              {this.state.selectedIdeas.map((selectedIdea, index) => {
+              {selectedIdeas.map((selectedIdea, index) => {
+                let listedIdeas = [];
+                if (index === 0) {
+                  listedIdeas = _filter(thematics, (el) => {
+                    return el.parentId === rootIdeaId;
+                  });
+                } else {
+                  const parentIdeaId = this.state.selectedIdeas[index - 1];
+                  listedIdeas = _filter(thematics, (el) => {
+                    return el.parentId === parentIdeaId;
+                  });
+                }
                 return (
                   <IdeasLevel
-                    thematics={thematics}
+                    thematics={listedIdeas}
                     identifier={identifier}
                     level={index}
                     key={index}
@@ -52,10 +64,6 @@ class Ideas extends React.Component {
             </div>
           </div>
         </Grid>
-        {selectedIdeas &&
-          <div>
-            {selectedIdeas}
-          </div>}
       </section>
     );
   }

@@ -2,15 +2,17 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { get } from '../utils/routeMap';
 import Ideas from '../components/debate/common/ideas';
 import Timeline from '../components/debate/navigation/timeline';
-import RootIdeasQuery from '../graphql/RootIdeasQuery.graphql';
+import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import AllIdeasQuery from '../graphql/AllIdeasQuery.graphql';
 
 const DebateThread = ({ identifier, isNavbarHidden, data, params, children, slug }) => {
-  const thematics = data.rootIdea ? data.rootIdea.children : [];
+  const rootIdeaId = 'rootIdea' in data && 'id' in data.rootIdea ? data.rootIdea.id : null;
+  const thematics = 'ideas' in data ? data.ideas : null;
   const isParentRoute = !params.themeId || false;
   const themeId = params.themeId || null;
   const childrenElm = React.Children.map(children, (child) => {
@@ -19,6 +21,9 @@ const DebateThread = ({ identifier, isNavbarHidden, data, params, children, slug
       identifier: identifier
     });
   });
+  if (!rootIdeaId || !thematics) {
+    return <div />;
+  }
   return (
     <div className="debate">
       {thematics &&
@@ -35,7 +40,7 @@ const DebateThread = ({ identifier, isNavbarHidden, data, params, children, slug
               <Timeline showNavigation={!isParentRoute} identifier={identifier} />
             </div>
           </section>
-          {isParentRoute && <Ideas thematics={thematics} identifier={identifier} />}
+          {isParentRoute && <Ideas thematics={thematics} rootIdeaId={rootIdeaId} identifier={identifier} />}
           {!isParentRoute &&
             <section className="debate-section">
               {childrenElm}
@@ -53,8 +58,6 @@ DebateThread.propTypes = {
   }).isRequired
 };
 
-const DebateWithData = graphql(RootIdeasQuery)(DebateThread);
-
 const mapStateToProps = (state) => {
   return {
     lang: state.i18n.locale,
@@ -62,4 +65,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(DebateWithData);
+export default compose(connect(mapStateToProps), graphql(AllIdeasQuery), withLoadingIndicator({ textHidden: true, color: 'white' }))(
+  DebateThread
+);

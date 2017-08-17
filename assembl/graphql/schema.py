@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 import pytz
 import os.path
@@ -396,7 +397,10 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'title')
 
     def resolve_description(self, args, context, info):
-        return resolve_langstring(self.description, args.get('lang'))
+        description = resolve_langstring(self.description, args.get('lang'))
+        if not description:
+            description = self.get_definition_preview()
+        return description
 
     def resolve_description_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'description')
@@ -624,7 +628,7 @@ class Query(graphene.ObjectType):
         descendants_query = model.get_descendants_query(
             root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
-            ).filter(model.hidden == False).order_by(model.id)
+            ).filter(model.hidden == False).filter(model.sqla_type.in_(('idea', 'root_idea'))).order_by(model.id)
         return query
 
     def resolve_posts(self, args, context, info):
