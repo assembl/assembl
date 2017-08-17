@@ -59,7 +59,7 @@ class Post extends React.Component {
       bodyMimeType,
       indirectIdeaContentLinks,
       creator,
-      // modificationDate,
+      modificationDate,
       sentimentCounts,
       mySentiment,
       publicationState
@@ -94,7 +94,14 @@ class Post extends React.Component {
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
-              {creator && <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} locale={lang} />}
+              {creator &&
+                <ProfileLine
+                  userId={creator.userId}
+                  userName={creator.name}
+                  creationDate={creationDate}
+                  locale={lang}
+                  modified={modificationDate !== null}
+                />}
               <h3 className="dark-title-3">
                 {subject}
               </h3>

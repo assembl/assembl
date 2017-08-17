@@ -197,6 +197,7 @@ const Translations = {
       },
       thread: {
         postDeleted: 'Ce message a été supprimé par l\'administrateur du débat / par son auteur. ',
+        postEdited: 'modifié',
         postSuccess: 'Merci pour votre participation. Votre message a bien été envoyée !',
         fillSubject: 'Veuillez écrire un titre',
         fillBody: 'Veuillez écrire un message',
@@ -471,6 +472,7 @@ const Translations = {
       },
       thread: {
         postDeleted: 'This message has been deleted by the community manager / his author.',
+        postEdited: 'edited',
         postSuccess: 'Thanks for your participation. Your comment has been sent!',
         fillSubject: 'Please, write a title',
         fillBody: 'Please, write a comment',
