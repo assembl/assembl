@@ -5,8 +5,9 @@ import { Link } from 'react-router';
 
 import { editMessageTooltip, deleteMessageTooltip } from '../../common/tooltips';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
+import deletePostMutation from '../../../graphql/mutations/deletePost.graphql';
 
-const confirmModal = (postId) => {
+const confirmModal = (postId, client) => {
   const title = <Translate value="debate.confirmDeletionTitle" />;
   const body = <Translate value="debate.confirmDeletionBody" />;
   const footer = [
@@ -16,7 +17,7 @@ const confirmModal = (postId) => {
     <Button
       key="delete"
       onClick={() => {
-        console.log('delete', postId); // eslint-disable-line
+        client.mutate({ mutation: deletePostMutation, variables: { postId: postId } });
         closeModal();
       }}
       className="button-submit button-dark"
@@ -32,7 +33,7 @@ const editMessage = (postId) => {
   return console.log('edit', postId); // eslint-disable-line
 };
 
-const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThisMessage) => {
+const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThisMessage, client) => {
   const overflowMenu = (
     <Popover id="edit-delete-actions" className="overflow-menu">
       <div className="overflow-menu-container">
@@ -41,7 +42,7 @@ const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThi
             <Link
               className="overflow-menu-action"
               onClick={() => {
-                return confirmModal(postId);
+                return confirmModal(postId, client);
               }}
             >
               <span className="assembl-icon-delete" />

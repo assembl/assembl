@@ -1,4 +1,5 @@
 import React from 'react';
+import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
@@ -41,7 +42,7 @@ class PostActions extends React.Component {
     });
   }
   render() {
-    const { creatorUserId, postId, sentimentCounts, mySentiment, handleAnswerClick, postChildren } = this.props;
+    const { client, creatorUserId, postId, sentimentCounts, mySentiment, handleAnswerClick, postChildren } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
       ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
@@ -61,7 +62,7 @@ class PostActions extends React.Component {
             trigger="click"
             rootClose
             placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
-            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage)}
+            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client)}
           >
             <div>
               {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
@@ -160,4 +161,4 @@ class PostActions extends React.Component {
   }
 }
 
-export default PostActions;
+export default withApollo(PostActions);
