@@ -175,24 +175,53 @@ class IdeasLevel extends React.Component {
   }
 
   updateScrollButtonsVisibility(isInline, isAnimatingTowardsInline) {
+    const thematicWidth = this.getOption('thematicWidth');
+    const parentWidth = this.getOption('parentWidth');
+    const numberOfThematics = this.getOption('numberOfThematics');
+    let targetScrollLeftVisibility = false;
+    let targetScrollRightVisibility = false;
+
     if (!(isInline || isAnimatingTowardsInline)) {
-      this.scrollLeft.setState({ isVisible: false });
-      this.scrollRight.setState({ isVisible: false });
+      // if ideas do not display inline, then do not show any scroll icon
+      targetScrollLeftVisibility = false;
+      targetScrollRightVisibility = false;
+    } else if (numberOfThematics * thematicWidth < parentWidth) {
+      // if ideas show inline and all ideas can show in the carousel with no need to scroll, then do not show any scroll icon
+      targetScrollLeftVisibility = false;
+      targetScrollRightVisibility = false;
     } else {
       const targetValueInt = this.getOption('scrollDisplacement');
       const displacementMin = this.getOption('displacementMin');
       const displacementMax = this.getOption('displacementMax');
       if (targetValueInt >= displacementMax) {
-        this.scrollLeft.setState({ isVisible: false });
+        targetScrollLeftVisibility = false;
       } else {
-        this.scrollLeft.setState({ isVisible: true });
+        targetScrollLeftVisibility = true;
       }
 
       if (targetValueInt <= displacementMin) {
-        this.scrollRight.setState({ isVisible: false });
+        targetScrollRightVisibility = false;
       } else {
-        this.scrollRight.setState({ isVisible: true });
+        targetScrollRightVisibility = true;
       }
+    }
+
+    /*
+    FIXME: Using this.setState() with isScrollLeftButtonVisible and
+    isScrollRightButtonVisible does not show correct buttons UI, why?
+    Below is a workaround.
+    */
+    if (!this.scrollLeft || !this.scrollRight) {
+      const f = () => {
+        this.updateScrollButtonsVisibility(isInline, isAnimatingTowardsInline);
+      };
+      f.bind(this);
+      setTimeout(f, 500);
+    } else {
+      this.scrollLeft.setState({ isVisible: targetScrollLeftVisibility });
+      this.scrollLeft.forceUpdate(); // FIXME: Why is this needed? component should re-render and show correct UI by itself
+      this.scrollRight.setState({ isVisible: targetScrollRightVisibility });
+      this.scrollRight.forceUpdate(); // FIXME: Why is this needed? component should re-render and show correct UI by itself
     }
   }
 
@@ -236,11 +265,12 @@ class IdeasLevel extends React.Component {
         this.updateWidth();
       };
       f.bind(this);
-      setTimeout(f, 500);
+      setTimeout(f, 50);
     }
     const displacementMin = -1.0 * (len * thematicWidth - carouselTargetWidth);
     const displacementMax = 0;
 
+    this.setOption('numberOfThematics', len);
     this.setOption('scrollDisplacement', scrollDisplacement);
     this.setOption('thematicWidth', thematicWidth);
     this.setOption('thematicWidthPercent', thematicWidthPercent);
@@ -297,6 +327,7 @@ class IdeasLevel extends React.Component {
     this.row = el;
     this.initializeConstants();
     this.updateWidth();
+    this.updateScrollButtonsVisibility(this.state.isInline, this.getOption('isAnimatingTowardsInline'));
   }
 
   render() {
