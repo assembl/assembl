@@ -64,6 +64,7 @@
     "babel-preset-flow": "^6.23.0",
     "babel-runtime": "^6.25.0",
     "bootstrap": "^3.3.7",
+    "classnames": "^2.2.5",
     "draft-convert": "^1.4.8",
     "draft-js": "^0.10.1",
     "graphql": "^0.10.0",

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState } from 'draft-js';
+import classNames from 'classnames';
 import punycode from 'punycode';
 
 import Toolbar from './toolbar';
@@ -9,7 +10,7 @@ import type ButtonConfigType from './toolbarButton';
 
 type RichTextEditorProps = {
   rawContentState: RawContentState,
-  handleInputFocus?: Function,
+  handleInputFocus: Function,
   maxLength: number,
   placeholder: string,
   textareaRef: Function,
@@ -17,7 +18,8 @@ type RichTextEditorProps = {
 };
 
 type RichTextEditorState = {
-  editorState: EditorState
+  editorState: EditorState,
+  editorHasFocus: boolean
 };
 
 export default class RichTextEditor extends React.PureComponent<Object, RichTextEditorProps, RichTextEditorState> {
@@ -27,13 +29,15 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
   static defaultProps: Object;
 
   static defaultProps = {
+    handleInputFocus: null,
     maxLength: 0
   };
 
   constructor(props: RichTextEditorProps): void {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.createEmpty(),
+      editorHasFocus: false
     };
 
     if (props.rawContentState) {
@@ -56,6 +60,9 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
 
   onBlur = () => {
     const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
+    this.setState({
+      editorHasFocus: false
+    });
     this.props.updateContentState(rawContentState);
   };
 
@@ -63,6 +70,15 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
     this.setState({
       editorState: newEditorState
     });
+  };
+
+  handleEditorFocus = () => {
+    const { handleInputFocus } = this.props;
+    this.setState({
+      editorHasFocus: true
+    });
+
+    return handleInputFocus;
   };
 
   getToolbarButtons(): Array<ButtonConfigType> {
@@ -110,7 +126,7 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
         return true;
       }
     }
-    return false;
+    return this.state.editorHasFocus;
   }
 
   focusEditor = (): void => {
@@ -132,26 +148,29 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
   };
 
   render() {
-    const { handleInputFocus = null, maxLength, placeholder, textareaRef } = this.props;
+    const { maxLength, placeholder, textareaRef } = this.props;
     const editorState = this.state.editorState;
+    const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     return (
-      <div className="rich-text-editor" ref={textareaRef}>
+      <div className={divClassName} ref={textareaRef}>
         <Toolbar
           buttonsConfig={this.getToolbarButtons()}
           editorState={editorState}
           focusEditor={this.focusEditor}
           onChange={this.onChange}
         />
-        <Editor
-          editorState={editorState}
-          onBlur={this.onBlur}
-          onChange={this.onChange}
-          onFocus={handleInputFocus}
-          placeholder={this.shouldHidePlaceholder() ? '' : placeholder}
-          ref={(e) => {
-            return (this.editor = e);
-          }}
-        />
+        <div onClick={this.focusEditor}>
+          <Editor
+            editorState={editorState}
+            onBlur={this.onBlur}
+            onChange={this.onChange}
+            onFocus={this.handleEditorFocus}
+            placeholder={placeholder}
+            ref={(e) => {
+              return (this.editor = e);
+            }}
+          />
+        </div>
         {maxLength ? this.renderRemainingChars() : null}
       </div>
     );

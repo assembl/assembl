@@ -20,4 +20,11 @@
     min-height: 12em;
     padding: 5px;
   }
+
+}
+
+.rich-text-editor.hidePlaceholder {
+  .public-DraftEditorPlaceholder-root {
+    display: none;
+  }
 }
