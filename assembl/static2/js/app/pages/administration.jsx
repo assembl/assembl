@@ -37,6 +37,7 @@ class Administration extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // update thematics in store after a mutation has been executed
     if (nextProps.data.thematics !== this.props.data.thematics) {
       this.putThematicsInStore(nextProps.data);
     }

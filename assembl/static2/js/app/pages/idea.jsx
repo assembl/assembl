@@ -34,6 +34,7 @@ export const transformPosts = (edges, additionnalProps = {}) => {
     });
   };
 
+  // postsByParent.null is the list of top posts
   return (postsByParent.null || []).map((p) => {
     const newPost = p;
     newPost.children = getChildren(p.id);
