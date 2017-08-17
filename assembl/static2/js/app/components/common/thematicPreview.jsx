@@ -5,10 +5,13 @@ import Statistic from './statistic';
 class ThematicPreview extends React.Component {
   render() {
     const { imgUrl, link, title, description, numPosts, numContributors } = this.props;
-    const style = imgUrl ? { backgroundImage: `url(${imgUrl})` } : { backgroundColor: '#ccc' };
+    const imageBoxStyle = {};
+    if (imgUrl) {
+      imageBoxStyle.backgroundImage = `url(${imgUrl})`;
+    }
     return (
       <div className="illustration illustration-box">
-        <div className="image-box" style={style}>
+        <div className="image-box" style={imageBoxStyle}>
           &nbsp;
         </div>
         <Link className="content-box" to={link}>
