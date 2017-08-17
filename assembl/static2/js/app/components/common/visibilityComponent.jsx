@@ -4,13 +4,15 @@ class VisibilityComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: props.isVisible || true
+      isVisible: 'isVisible' in props ? props.isVisible : true
     };
   }
   render() {
-    const classNames = this.props.className;
+    const { className } = this.props;
+    const { isVisible } = this.state;
+    const myClassNames = isVisible === true ? className : `${className} hidden`;
     return (
-      <div className={this.state.isVisible ? classNames : `${classNames} hidden`}>
+      <div className={myClassNames}>
         {this.props.children}
       </div>
     );
