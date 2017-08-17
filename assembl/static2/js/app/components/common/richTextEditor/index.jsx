@@ -1,32 +1,68 @@
 // @flow
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Editor, EditorState } from 'draft-js';
+import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState } from 'draft-js';
 import punycode from 'punycode';
 
 import Toolbar from './toolbar';
 import type ButtonConfigType from './toolbarButton';
 
 type RichTextEditorProps = {
-  editorState: EditorState,
+  rawContentState: RawContentState,
   handleInputFocus?: Function,
   maxLength: number,
   placeholder: string,
   textareaRef: Function,
-  updateEditorState: Function
+  updateContentState: Function
 };
 
-export default class RichTextEditor extends React.PureComponent<void, RichTextEditorProps, void> {
+type RichTextEditorState = {
+  editorState: EditorState
+};
+
+export default class RichTextEditor extends React.PureComponent<Object, RichTextEditorProps, RichTextEditorState> {
   editor: HTMLDivElement;
   props: RichTextEditorProps;
+  state: RichTextEditorState;
+  static defaultProps: Object;
+
+  static defaultProps = {
+    maxLength: 0
+  };
+
+  constructor(props: RichTextEditorProps): void {
+    super(props);
+    this.state = {
+      editorState: EditorState.createEmpty()
+    };
+
+    if (props.rawContentState) {
+      this.state.editorState = EditorState.createWithContent(convertFromRaw(props.rawContentState));
+    }
+  }
 
   componentDidMount() {
     this.editor.focus();
   }
 
+  componentWillReceiveProps(nextProps: RichTextEditorProps): void {
+    // we want to reset the editor state only if rawContentState is null (i.e. in case the form has been reset)
+    if (!nextProps.rawContentState) {
+      this.setState({
+        editorState: EditorState.createEmpty()
+      });
+    }
+  }
+
+  onBlur = () => {
+    const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
+    this.props.updateContentState(rawContentState);
+  };
+
   onChange = (newEditorState: EditorState): void => {
-    const { updateEditorState } = this.props;
-    updateEditorState(newEditorState);
+    this.setState({
+      editorState: newEditorState
+    });
   };
 
   getToolbarButtons(): Array<ButtonConfigType> {
@@ -68,8 +104,7 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
 
   shouldHidePlaceholder(): boolean {
     // don't display placeholder if user changes the block type (to bullet list) before to type anything
-    const { editorState } = this.props;
-    const contentState = editorState.getCurrentContent();
+    const contentState = this.state.editorState.getCurrentContent();
     if (!contentState.hasText()) {
       if (contentState.getBlockMap().first().getType() !== 'unstyled') {
         return true;
@@ -84,10 +119,21 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
     }, 50);
   };
 
-  render() {
-    const { editorState, handleInputFocus = null, maxLength, placeholder, textareaRef } = this.props;
+  renderRemainingChars = (): React.Element<*> => {
+    const { maxLength } = this.props;
+    const editorState = this.state.editorState;
     const charCount = this.getCharCount(editorState);
     const remainingChars = maxLength - charCount;
+    return (
+      <div className="annotation margin-xs">
+        <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
+      </div>
+    );
+  };
+
+  render() {
+    const { handleInputFocus = null, maxLength, placeholder, textareaRef } = this.props;
+    const editorState = this.state.editorState;
     return (
       <div className="rich-text-editor" ref={textareaRef}>
         <Toolbar
@@ -98,6 +144,7 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
         />
         <Editor
           editorState={editorState}
+          onBlur={this.onBlur}
           onChange={this.onChange}
           onFocus={handleInputFocus}
           placeholder={this.shouldHidePlaceholder() ? '' : placeholder}
@@ -105,9 +152,7 @@ export default class RichTextEditor extends React.PureComponent<void, RichTextEd
             return (this.editor = e);
           }}
         />
-        <div className="annotation margin-xs">
-          <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
-        </div>
+        {maxLength ? this.renderRemainingChars() : null}
       </div>
     );
   }

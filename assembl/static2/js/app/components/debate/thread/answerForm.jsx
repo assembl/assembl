@@ -9,6 +9,7 @@ import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { updateAnswerPostBody, updateActiveAnswerFormId } from '../../../actions/postsActions';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { convertRawContentStateToHTML } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 
 const TEXT_AREA_MAX_LENGTH = 3000;
@@ -16,7 +17,7 @@ const TEXT_AREA_MAX_LENGTH = 3000;
 const AnswerForm = ({ body, mutate, updateBody, parentId, ideaId, refetchIdea, hideAnswerForm, textareaRef }) => {
   const resetForm = () => {
     hideAnswerForm();
-    updateBody('');
+    updateBody(null);
   };
 
   const handleInputFocus = () => {
@@ -25,14 +26,14 @@ const AnswerForm = ({ body, mutate, updateBody, parentId, ideaId, refetchIdea, h
       inviteUserToLogin();
     }
   };
-  const variables = {
-    ideaId: ideaId,
-    parentId: parentId,
-    body: body
-  };
 
   const answerPost = () => {
     if (body) {
+      const variables = {
+        ideaId: ideaId,
+        parentId: parentId,
+        body: convertRawContentStateToHTML(body)
+      };
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })
         .then(() => {
@@ -58,11 +59,11 @@ const AnswerForm = ({ body, mutate, updateBody, parentId, ideaId, refetchIdea, h
         <div className="answer-form-inner">
           <FormGroup>
             <RichTextEditor
-              editorState={body}
+              rawContentState={body}
               handleInputFocus={handleInputFocus}
               maxLength={TEXT_AREA_MAX_LENGTH}
               placeholder={I18n.t('debate.insert')}
-              updateEditorState={updateBody}
+              updateContentState={updateBody}
               textareaRef={textareaRef}
             />
             <div className="button-container">

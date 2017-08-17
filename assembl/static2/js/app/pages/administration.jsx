@@ -10,6 +10,21 @@ import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
+import { convertEntriesToRawContentState } from '../utils/draftjs';
+
+function convertVideoDescriptions(thematics) {
+  return thematics.map((t) => {
+    return {
+      ...t,
+      video: {
+        ...t.video,
+        descriptionEntriesBottom: convertEntriesToRawContentState(t.video.descriptionEntriesBottom),
+        descriptionEntriesSide: convertEntriesToRawContentState(t.video.descriptionEntriesSide),
+        descriptionEntriesTop: convertEntriesToRawContentState(t.video.descriptionEntriesTop)
+      }
+    };
+  });
+}
 
 class Administration extends React.Component {
   constructor() {
@@ -30,7 +45,8 @@ class Administration extends React.Component {
   putThematicsInStore(data) {
     // filter with the same query to remove stuff like __typename from the structure
     const filteredThematics = filter(ThematicsQuery, data);
-    this.props.updateThematics(filteredThematics.thematics);
+    const thematics = convertVideoDescriptions(filteredThematics.thematics);
+    this.props.updateThematics(thematics);
   }
 
   render() {

@@ -13,6 +13,7 @@ import {
   updateTopPostBody,
   updateTopPostSubjectRemaingChars
 } from '../../../actions/postsActions';
+import { convertRawContentStateToHTML } from '../../../utils/draftjs';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
@@ -32,8 +33,7 @@ const TopPostForm = ({
   mutate,
   refetchIdea,
   subjectTopPostRemainingChars,
-  updateSubjectChars,
-  updateBodyChars
+  updateSubjectChars
 }) => {
   const displayForm = (isActive) => {
     return updateFormStatus(isActive);
@@ -41,20 +41,18 @@ const TopPostForm = ({
 
   const resetForm = () => {
     updateSubjectChars(TEXT_INPUT_MAX_LENGTH);
-    updateBodyChars(TEXT_AREA_MAX_LENGTH);
     displayForm(false);
     updateSubject('');
-    updateBody('');
-  };
-
-  const variables = {
-    ideaId: ideaId,
-    subject: subject,
-    body: body
+    updateBody(null);
   };
 
   const createTopPost = () => {
     if (subject && body) {
+      const variables = {
+        ideaId: ideaId,
+        subject: subject,
+        body: convertRawContentStateToHTML(body)
+      };
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })
         .then(() => {
@@ -117,11 +115,11 @@ const TopPostForm = ({
             />
             <div className={isFormActive ? 'margin-m' : 'hidden'}>
               <RichTextEditor
-                editorState={body}
+                rawContentState={body}
                 handleInputFocus={handleInputFocus}
                 maxLength={TEXT_AREA_MAX_LENGTH}
                 placeholder={I18n.t('debate.insert')}
-                updateEditorState={updateBody}
+                updateContentState={updateBody}
               />
               <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
                 <Translate value="cancel" />

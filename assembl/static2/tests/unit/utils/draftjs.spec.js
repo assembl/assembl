@@ -1,4 +1,3 @@
-// @flow
 import { convertFromRaw } from 'draft-js';
 
 import * as draftjs from '../../../js/app/utils/draftjs';

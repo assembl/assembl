@@ -8,6 +8,8 @@ import React from 'react';
 import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
 
+import RichTextEditor from './richTextEditor';
+
 class FormControlWithLabel extends React.Component {
   constructor(props) {
     super(props);
@@ -29,27 +31,51 @@ class FormControlWithLabel extends React.Component {
     this.setState({ errorMessage: errorMessage, validationState: validationState });
   }
 
+  renderRichTextEditor = () => {
+    const { label, onChange, value } = this.props;
+    return (
+      <RichTextEditor
+        rawContentState={value}
+        placeholder={label}
+        updateContentState={(cs) => {
+          return onChange(cs);
+        }}
+      />
+    );
+  };
+
+  renderFormControl = () => {
+    const { type, value } = this.props;
+    if (type === 'rich-text') {
+      return this.renderRichTextEditor();
+    }
+    return (
+      <FormControl
+        componentClass={this.props.componentClass}
+        id={this.props.id}
+        type={type}
+        placeholder={this.props.label}
+        onChange={this.props.onChange}
+        value={value || ''}
+        onBlur={this.setValidationState}
+      />
+    );
+  };
+
   render() {
-    const { componentClass, id, label, onChange, type, value, labelAlwaysVisible } = this.props;
+    const { id, label, value, labelAlwaysVisible } = this.props;
     return (
       <FormGroup validationState={this.state.validationState}>
-        {labelAlwaysVisible ?
-          <ControlLabel htmlFor={id}>
+        {labelAlwaysVisible
+          ? <ControlLabel htmlFor={id}>
             {label}
           </ControlLabel>
-          : value ?
-            <ControlLabel htmlFor={id}>{label}</ControlLabel>
-            : null
-        }
-        <FormControl
-          componentClass={componentClass}
-          id={id}
-          type={type}
-          placeholder={label}
-          onChange={onChange}
-          value={value}
-          onBlur={this.setValidationState}
-        />
+          : value
+            ? <ControlLabel htmlFor={id}>
+              {label}
+            </ControlLabel>
+            : null}
+        {this.renderFormControl()}
         {this.state.errorMessage
           ? <HelpBlock>
             {this.state.errorMessage}
@@ -62,7 +88,7 @@ class FormControlWithLabel extends React.Component {
 
 FormControlWithLabel.defaultProps = {
   type: 'text',
-  value: ''
+  value: undefined
 };
 
 export default FormControlWithLabel;

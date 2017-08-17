@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
-import { EditorState } from 'draft-js';
 
 import { updateActiveAnswerFormId, updateAnswerPostBody } from '../../../actions/postsActions';
+import { createEmptyRawContentState } from '../../../utils/draftjs';
 import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunctions';
 import ProfileLine from '../../common/profileLine';
 import PostActions from './postActions';
@@ -38,7 +38,7 @@ class Post extends React.Component {
     // });
   }
   handleAnswerClick = () => {
-    this.props.updateAnswerBody(EditorState.createEmpty());
+    this.props.updateAnswerBody(createEmptyRawContentState());
     this.props.showAnswerForm(this.props.id);
     if (this.props.measureTreeHeight) {
       this.props.measureTreeHeight();
@@ -56,10 +56,10 @@ class Post extends React.Component {
       children,
       subject,
       body,
+      bodyMimeType,
       indirectIdeaContentLinks,
       creator,
       // modificationDate,
-      bodyMimeType,
       sentimentCounts,
       mySentiment,
       publicationState

@@ -1,5 +1,6 @@
-import { EditorState } from 'draft-js';
 import { combineReducers } from 'redux';
+
+import { createEmptyRawContentState } from '../utils/draftjs';
 
 export const basicReducerFactory = (initialState, handledAction, returnedProp) => {
   return (state = initialState, action) => {
@@ -13,8 +14,8 @@ export const basicReducerFactory = (initialState, handledAction, returnedProp) =
 };
 
 export const topPostSubject = basicReducerFactory('', 'UPDATE_TOP_POST_SUBJECT', 'topPostSubject');
-export const topPostBody = basicReducerFactory(EditorState.createEmpty(), 'UPDATE_TOP_POST_BODY', 'topPostBody');
-export const answerPostBody = basicReducerFactory(EditorState.createEmpty(), 'UPDATE_ANSWER_POST_BODY', 'answerPostBody');
+export const topPostBody = basicReducerFactory(createEmptyRawContentState(), 'UPDATE_TOP_POST_BODY', 'topPostBody');
+export const answerPostBody = basicReducerFactory(createEmptyRawContentState(), 'UPDATE_ANSWER_POST_BODY', 'answerPostBody');
 export const subjectTopPostRemainingChars = basicReducerFactory(
   10000,
   'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS',
