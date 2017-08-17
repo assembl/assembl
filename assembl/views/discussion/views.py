@@ -218,6 +218,7 @@ def react_view(request, required_permission=P_READ):
         "REACT_URL": old_context['REACT_URL'],
         "NODE_ENV": node_env,
         "assembl_version": pkg_resources.get_distribution("assembl").version,
+        "web_analytics": old_context['web_analytics'],
     }
 
     if discussion:
