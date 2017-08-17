@@ -17,8 +17,11 @@
 
   .DraftEditor-root {
     background-color: $white;
-    min-height: 12em;
     padding: 5px;
+  }
+
+  .public-DraftEditor-content {
+    min-height: 12em;
   }
 
 }
