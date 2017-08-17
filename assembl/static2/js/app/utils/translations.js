@@ -196,7 +196,8 @@ const Translations = {
         endPhase: 'La phase %{closedPhaseName} est terminée.'
       },
       thread: {
-        postDeleted: 'Ce message a été supprimé par l\'administrateur du débat / par son auteur. ',
+        postDeletedByAdmin: 'Ce message a été supprimé par l\'administrateur du débat. ',
+        postDeletedByUser: 'Ce message a été supprimé par son auteur. ',
         postEdited: 'modifié',
         postSuccess: 'Merci pour votre participation. Votre message a bien été envoyée !',
         fillSubject: 'Veuillez écrire un titre',
@@ -471,7 +472,8 @@ const Translations = {
         endPhase: 'The %{closedPhaseName} phase is closed.'
       },
       thread: {
-        postDeleted: 'This message has been deleted by the community manager / his author.',
+        postDeletedByAdmin: 'This message has been deleted by the community manager.',
+        postDeletedByUser: 'This message has been deleted by the author.',
         postEdited: 'edited',
         postSuccess: 'Thanks for your participation. Your comment has been sent!',
         fillSubject: 'Please, write a title',

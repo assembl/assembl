@@ -12,7 +12,7 @@ import PostActions from './postActions';
 import AnswerForm from './answerForm';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
-import { DeletedPublicationStates } from '../../../constants';
+import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
@@ -77,7 +77,13 @@ class Post extends React.Component {
                   {subject}
                 </h3>
                 <div className="body">
-                  <Translate value="debate.thread.postDeleted" />
+                  <Translate
+                    value={
+                      publicationState === PublicationStates.DELETED_BY_USER
+                        ? 'debate.thread.postDeletedByUser'
+                        : 'debate.thread.postDeletedByAdmin'
+                    }
+                  />
                 </div>
               </Col>
             </Row>
