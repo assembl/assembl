@@ -37,6 +37,7 @@ class FormControlWithLabel extends React.Component {
       <RichTextEditor
         rawContentState={value}
         placeholder={label}
+        toolbarPosition="bottom"
         updateContentState={(cs) => {
           return onChange(cs);
         }}

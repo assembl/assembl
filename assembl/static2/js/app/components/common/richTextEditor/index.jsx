@@ -14,6 +14,7 @@ type RichTextEditorProps = {
   maxLength: number,
   placeholder: string,
   textareaRef: Function,
+  toolbarPosition: string,
   updateContentState: Function
 };
 
@@ -30,7 +31,8 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
 
   static defaultProps = {
     handleInputFocus: null,
-    maxLength: 0
+    maxLength: 0,
+    toolbarPosition: 'top'
   };
 
   constructor(props: RichTextEditorProps): void {
@@ -72,7 +74,7 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
     });
   };
 
-  handleEditorFocus = () => {
+  handleEditorFocus = (): Function => {
     const { handleInputFocus } = this.props;
     this.setState({
       editorHasFocus: true
@@ -148,17 +150,19 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
   };
 
   render() {
-    const { maxLength, placeholder, textareaRef } = this.props;
+    const { maxLength, placeholder, textareaRef, toolbarPosition } = this.props;
     const editorState = this.state.editorState;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     return (
       <div className={divClassName} ref={textareaRef}>
-        <Toolbar
-          buttonsConfig={this.getToolbarButtons()}
-          editorState={editorState}
-          focusEditor={this.focusEditor}
-          onChange={this.onChange}
-        />
+        {toolbarPosition === 'top'
+          ? <Toolbar
+            buttonsConfig={this.getToolbarButtons()}
+            editorState={editorState}
+            focusEditor={this.focusEditor}
+            onChange={this.onChange}
+          />
+          : null}
         <div onClick={this.focusEditor}>
           <Editor
             editorState={editorState}
@@ -173,6 +177,14 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
           />
         </div>
         {maxLength ? this.renderRemainingChars() : null}
+        {toolbarPosition === 'bottom'
+          ? <Toolbar
+            buttonsConfig={this.getToolbarButtons()}
+            editorState={editorState}
+            focusEditor={this.focusEditor}
+            onChange={this.onChange}
+          />
+          : null}
       </div>
     );
   }
