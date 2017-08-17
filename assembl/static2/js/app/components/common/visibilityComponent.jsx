@@ -4,7 +4,7 @@ class VisibilityComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: 'isVisible' in props ? props.isVisible : true
+      isVisible: props.isVisible
     };
   }
   render() {
@@ -18,5 +18,7 @@ class VisibilityComponent extends React.Component {
     );
   }
 }
+
+VisibilityComponent.defaultProps = { isVisible: true };
 
 export default VisibilityComponent;
