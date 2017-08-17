@@ -51,7 +51,7 @@ class Ideas extends React.Component {
                     thematics={listedIdeas}
                     identifier={identifier}
                     level={index}
-                    key={index}
+                    key={listedIdeas.join(' ') + index}
                     selectedIdea={selectedIdea}
                     isInline={!this.state.isInitialState}
                     onSeeSubIdeasClick={this.onSeeSubIdeasClick}
