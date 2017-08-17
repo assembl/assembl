@@ -14,12 +14,9 @@ class Ideas extends React.Component {
     this.onSeeSubIdeasClick = this.onSeeSubIdeasClick.bind(this);
   }
   onSeeSubIdeasClick(ideaId, level) {
-    const updatedSelectedIdeas = this.state.selectedIdeas.slice();
+    const updatedSelectedIdeas = this.state.selectedIdeas.slice(0, level + 2);
     updatedSelectedIdeas[level] = ideaId;
-    const len = updatedSelectedIdeas.length;
-    if (len > 0 && updatedSelectedIdeas[len - 1] !== '') {
-      updatedSelectedIdeas.push('');
-    }
+    updatedSelectedIdeas[level + 1] = '';
     this.setState({ selectedIdeas: updatedSelectedIdeas });
     this.setState({ isInitialState: false });
   }
