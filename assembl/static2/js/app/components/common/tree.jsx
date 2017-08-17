@@ -1,3 +1,5 @@
+/* eslint react/no-multi-comp: "off" */
+
 import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctions';
@@ -15,7 +17,7 @@ const cache = new CellMeasurerCache({
   fixedWidth: true
 });
 
-let prevStopIndex = (0, 0);
+let prevStopIndex = 0;
 // override overscanIndicesGetter to not remove from the dom the posts once rendered
 // to fix various issue with scrolling with WindowScroller
 function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
@@ -25,14 +27,8 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
     // use default implementation
     overscanStopIndex = Math.min(cellCount - 1, stopIndex + overscanCellsCount);
   } else {
-    if (prevStopIndex[1] !== cellCount) {
-      // We probably changed idea or added a new top post, reset, otherwise we will
-      // download 900 messages (prevStopIndex) or render all the posts in one shot for this idea.
-      // There may be a case where two ideas have exactly the same cellCount (number of topPosts), we can't detect it.
-      prevStopIndex = [stopIndex, cellCount];
-    }
-    prevStopIndex[0] = Math.max(prevStopIndex[0], stopIndex);
-    overscanStopIndex = Math.min(cellCount - 1, prevStopIndex[0] + overscanCellsCount);
+    prevStopIndex = Math.max(prevStopIndex, stopIndex);
+    overscanStopIndex = Math.min(cellCount - 1, prevStopIndex + overscanCellsCount);
   }
   return {
     overscanStartIndex: 0,
@@ -41,6 +37,26 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
 }
 
 const delayedRecomputeRowHeights = [null, null]; // [timeoutId, minRowIndex from which to recompute row heights]
+
+const resizeTreeHeight = (rowIndex, delay = 200) => {
+  // This function will be called by each post rendered, so we delay the
+  // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
+  if (globalList) {
+    cache.clear(rowIndex, 0);
+    if (delayedRecomputeRowHeights[0]) {
+      clearTimeout(delayedRecomputeRowHeights[0]);
+    }
+    delayedRecomputeRowHeights[1] = Math.min(delayedRecomputeRowHeights[1] || rowIndex, rowIndex);
+    delayedRecomputeRowHeights[0] = setTimeout(() => {
+      delayedRecomputeRowHeights[0] = null;
+      delayedRecomputeRowHeights[1] = null;
+      if (globalList) {
+        globalList.recomputeRowHeights(delayedRecomputeRowHeights[1]);
+        // recompute height only for rows (top post) starting at rowIndex
+      }
+    }, delay);
+  }
+};
 
 class Child extends React.PureComponent {
   constructor(props) {
@@ -53,24 +69,7 @@ class Child extends React.PureComponent {
   }
 
   resizeTreeHeight(delay = 200) {
-    // This function will be called by each post rendered, so we delay the
-    // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
-    const rowIndex = this.props.rowIndex;
-    if (globalList) {
-      cache.clear(rowIndex, 0);
-      if (delayedRecomputeRowHeights[0]) {
-        clearTimeout(delayedRecomputeRowHeights[0]);
-      }
-      delayedRecomputeRowHeights[1] = Math.min(delayedRecomputeRowHeights[1] || rowIndex, rowIndex);
-      delayedRecomputeRowHeights[0] = setTimeout(() => {
-        delayedRecomputeRowHeights[0] = null;
-        delayedRecomputeRowHeights[1] = null;
-        if (globalList) {
-          globalList.recomputeRowHeights(delayedRecomputeRowHeights[1]);
-          // recompute height only for rows (top post) starting at rowIndex
-        }
-      }, delay);
-    }
+    resizeTreeHeight(this.props.rowIndex, delay);
   }
 
   expandCollapse(event) {
@@ -213,61 +212,87 @@ const cellRenderer = ({ index, key, parent, style }) => {
   );
 };
 
-const Tree = ({
-  lang,
-  activeAnswerFormId,
-  data,
-  InnerComponent, // component that will be rendered in the child
-  InnerComponentFolded, // component that will be used to render the children when folded
-  noRowsRenderer,
-  SeparatorComponent // separator component between first level children
-}) => {
-  return (
-    <WindowScroller>
-      {({ height, isScrolling, onChildScroll, scrollTop }) => {
-        return (
-          <AutoSizer
-            disableHeight
-            onResize={() => {
-              cache.clearAll();
-              return globalList.recomputeRowHeights();
-            }}
-          >
-            {({ width }) => {
-              return (
-                <List
-                  height={height}
-                  isScrolling={isScrolling}
-                  onScroll={onChildScroll}
-                  scrollTop={scrollTop}
-                  autoHeight
-                  rowHeight={cache.rowHeight}
-                  deferredMeasurementCache={cache}
-                  lang={lang}
-                  activeAnswerFormId={activeAnswerFormId}
-                  data={data}
-                  InnerComponent={InnerComponent}
-                  InnerComponentFolded={InnerComponentFolded}
-                  noRowsRenderer={noRowsRenderer}
-                  ref={function (ref) {
-                    globalList = ref;
-                  }}
-                  rowCount={data.length}
-                  overscanIndicesGetter={overscanIndicesGetter}
-                  overscanRowCount={10}
-                  rowRenderer={cellRenderer}
-                  SeparatorComponent={SeparatorComponent}
-                  width={width}
-                  className="tree-list"
-                />
-              );
-            }}
-          </AutoSizer>
-        );
-      }}
-    </WindowScroller>
-  );
-};
+class Tree extends React.Component {
+  componentDidMount() {
+    // Reset the global prevStopIndex to not overfetch posts when changing idea
+    // or to avoid recreating all dom nodes if we go back to the same idea.
+    cache.clearAll();
+    prevStopIndex = 0;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.data.length !== nextProps.data.length) {
+      cache.clearAll();
+      // If a new top post has been created, clear the cache
+      // and rerender the List by changing its key
+      // to be sure to recalculate the heights of all top posts.
+      // Reset prevStopIndex because globalList.recomputeRowHeights() only update the 10 first top posts
+      // because Grid.recomputeGridSize that is called by globalList.recomputeRowHeights
+      // doesnt take into account our hack in overscanIndicesGetter.
+      // This means that the posts after the 10th post are removed from the dom
+      // and will be recreated when scrolling, losing the previous expand/collapse local state.
+      prevStopIndex = 0;
+    }
+  }
+
+  render() {
+    const {
+      lang,
+      activeAnswerFormId,
+      data,
+      InnerComponent, // component that will be rendered in the child
+      InnerComponentFolded, // component that will be used to render the children when folded
+      noRowsRenderer,
+      SeparatorComponent // separator component between first level children
+    } = this.props;
+    return (
+      <WindowScroller>
+        {({ height, isScrolling, onChildScroll, scrollTop }) => {
+          return (
+            <AutoSizer
+              disableHeight
+              onResize={() => {
+                cache.clearAll();
+                globalList.recomputeRowHeights();
+              }}
+            >
+              {({ width }) => {
+                return (
+                  <List
+                    key={data.length}
+                    height={height}
+                    isScrolling={isScrolling}
+                    onScroll={onChildScroll}
+                    scrollTop={scrollTop}
+                    autoHeight
+                    rowHeight={cache.rowHeight}
+                    deferredMeasurementCache={cache}
+                    lang={lang}
+                    activeAnswerFormId={activeAnswerFormId}
+                    data={data}
+                    InnerComponent={InnerComponent}
+                    InnerComponentFolded={InnerComponentFolded}
+                    noRowsRenderer={noRowsRenderer}
+                    ref={function (ref) {
+                      globalList = ref;
+                    }}
+                    rowCount={data.length}
+                    overscanIndicesGetter={overscanIndicesGetter}
+                    overscanRowCount={10}
+                    rowRenderer={cellRenderer}
+                    SeparatorComponent={SeparatorComponent}
+                    width={width}
+                    className="tree-list"
+                  />
+                );
+              }}
+            </AutoSizer>
+          );
+        }}
+      </WindowScroller>
+    );
+  }
+}
 
 Tree.defaultProps = {
   InnerComponentFolded: () => {

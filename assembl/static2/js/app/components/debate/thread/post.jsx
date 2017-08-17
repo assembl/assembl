@@ -26,7 +26,11 @@ class Post extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.needToShowAnswerForm !== nextProps.needToShowAnswerForm || this.props.lang !== nextProps.lang) {
+    if (
+      this.props.needToShowAnswerForm !== nextProps.needToShowAnswerForm ||
+      this.props.lang !== nextProps.lang ||
+      this.props.data.post.publicationState !== nextProps.data.post.publicationState
+    ) {
       if (this.props.measureTreeHeight) {
         this.props.measureTreeHeight();
       }
