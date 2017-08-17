@@ -169,6 +169,7 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
             ref={(e) => {
               return (this.editor = e);
             }}
+            spellCheck
           />
         </div>
         {maxLength ? this.renderRemainingChars() : null}
