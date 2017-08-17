@@ -65,6 +65,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(AllIdeasQuery), withLoadingIndicator({ textHidden: true, color: 'white' }))(
-  DebateThread
-);
+export default compose(connect(mapStateToProps), graphql(AllIdeasQuery), withLoadingIndicator())(DebateThread);
