@@ -81,29 +81,4 @@ describe('Posts reducers', () => {
       expect(actualPlainText).toEqual(expected);
     });
   });
-
-  describe('subjectTopPostRemainingChars reducer', () => {
-    const { subjectTopPostRemainingChars } = reducers;
-    it('should return the initial state', () => {
-      expect(subjectTopPostRemainingChars(undefined, {})).toEqual(10000);
-    });
-
-    it('should return state by default', () => {
-      const state = 1234;
-      const expected = 1234;
-      const actual = subjectTopPostRemainingChars(state, {});
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS action type', () => {
-      const state = 100;
-      const action = {
-        type: 'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS',
-        subjectTopPostRemainingChars: 100
-      };
-      const actual = subjectTopPostRemainingChars(state, action);
-      const expected = 100;
-      expect(actual).toEqual(expected);
-    });
-  });
 });

@@ -18,10 +18,3 @@ export const updateTopPostBody = (topPostBody) => {
     type: 'UPDATE_TOP_POST_BODY'
   };
 };
-
-export const updateTopPostSubjectRemaingChars = (subjectTopPostRemainingChars) => {
-  return {
-    subjectTopPostRemainingChars: subjectTopPostRemainingChars,
-    type: 'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS'
-  };
-};

@@ -39,16 +39,4 @@ describe('Posts actions', () => {
       expect(actual).toEqual(expected);
     });
   });
-
-  describe('updateTopPostSubjectRemaingChars action', () => {
-    const { updateTopPostSubjectRemaingChars } = actions;
-    it('should return a UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS action type', () => {
-      const expected = {
-        subjectTopPostRemainingChars: 124,
-        type: 'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS'
-      };
-      const actual = updateTopPostSubjectRemaingChars(124);
-      expect(actual).toEqual(expected);
-    });
-  });
 });

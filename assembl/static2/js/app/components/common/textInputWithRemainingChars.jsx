@@ -8,9 +8,9 @@ export const TextInputWithRemainingChars = ({
   label,
   maxLength,
   handleTxtChange,
-  remainingChars,
   handleInputFocus
 }) => {
+  const remainingChars = maxLength - value.length;
   return (
     <div>
       {alwaysDisplayLabel || value

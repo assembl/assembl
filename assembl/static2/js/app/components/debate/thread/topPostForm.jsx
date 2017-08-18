@@ -7,12 +7,7 @@ import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import {
-  updateTopPostFormStatus,
-  updateTopPostSubject,
-  updateTopPostBody,
-  updateTopPostSubjectRemaingChars
-} from '../../../actions/postsActions';
+import { updateTopPostFormStatus, updateTopPostSubject, updateTopPostBody } from '../../../actions/postsActions';
 import { convertRawContentStateToHTML } from '../../../utils/draftjs';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -22,25 +17,12 @@ import RichTextEditor from '../../common/richTextEditor';
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const TEXT_AREA_MAX_LENGTH = 3000;
 
-const TopPostForm = ({
-  ideaId,
-  subject,
-  updateSubject,
-  body,
-  updateBody,
-  updateFormStatus,
-  isFormActive,
-  mutate,
-  refetchIdea,
-  subjectTopPostRemainingChars,
-  updateSubjectChars
-}) => {
+const TopPostForm = ({ ideaId, subject, updateSubject, body, updateBody, updateFormStatus, isFormActive, mutate, refetchIdea }) => {
   const displayForm = (isActive) => {
     return updateFormStatus(isActive);
   };
 
   const resetForm = () => {
-    updateSubjectChars(TEXT_INPUT_MAX_LENGTH);
     displayForm(false);
     updateSubject('');
     updateBody(null);
@@ -80,10 +62,6 @@ const TopPostForm = ({
   };
 
   const handleSubjectChange = (e) => {
-    const maxChars = TEXT_INPUT_MAX_LENGTH;
-    const length = e.target.value.length;
-    const remaining = maxChars - length;
-    updateSubjectChars(remaining);
     updateSubject(e.target.value);
   };
 
@@ -111,7 +89,6 @@ const TopPostForm = ({
               maxLength={TEXT_INPUT_MAX_LENGTH}
               handleTxtChange={handleSubjectChange}
               handleInputFocus={handleInputFocus}
-              remainingChars={subjectTopPostRemainingChars}
             />
             <div className={isFormActive ? 'margin-m' : 'hidden'}>
               <RichTextEditor
@@ -140,13 +117,11 @@ const TopPostForm = ({
   );
 };
 
-const mapStateToProps = ({ posts, debate }) => {
+const mapStateToProps = ({ posts }) => {
   return {
     subject: posts.topPostSubject,
     body: posts.topPostBody,
-    isFormActive: posts.topPostFormStatus,
-    subjectTopPostRemainingChars: posts.subjectTopPostRemainingChars,
-    slug: debate.debateData.slug
+    isFormActive: posts.topPostFormStatus
   };
 };
 
@@ -160,9 +135,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateBody: (body) => {
       return dispatch(updateTopPostBody(body));
-    },
-    updateSubjectChars: (subjectRemainingChars) => {
-      return dispatch(updateTopPostSubjectRemaingChars(subjectRemainingChars));
     }
   };
 };
