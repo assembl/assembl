@@ -63,7 +63,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
   };
 
   handleSubmit = (): void => {
-    const subjectIsEmpty = this.state.subject.length > 0;
+    const subjectIsEmpty = this.state.subject.length === 0;
     const bodyIsEmpty = rawContentStateIsEmpty(this.state.body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
       const variables = {
