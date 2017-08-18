@@ -27,16 +27,12 @@ class Post extends React.PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.measureTreeHeight) {
-      this.props.measureTreeHeight(200);
-    }
+    this.props.measureTreeHeight(200);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
-      if (this.props.measureTreeHeight) {
-        this.props.measureTreeHeight(200);
-      }
+      this.props.measureTreeHeight(200);
     }
     // Object.keys(nextProps).forEach((key) => {
     //   if (nextProps[key] !== this.props[key]) {
