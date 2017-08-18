@@ -1,6 +1,6 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
-import { ContentState, convertToRaw, EditorState, RichUtils } from 'draft-js';
+import { ContentState, convertToRaw, RichUtils } from 'draft-js';
 
 import RichTextEditor from '../../../../../js/app/components/common/richTextEditor';
 
