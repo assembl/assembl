@@ -116,21 +116,22 @@ class Post extends React.Component {
                 {subject}
               </h3>
               <div className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`} dangerouslySetInnerHTML={{ __html: body }} />
-              <div className="link-idea">
-                <div className="label">
-                  <Translate value="debate.thread.linkIdea" />
-                </div>
-                <div className="badges">
-                  {indirectIdeaContentLinks &&
-                    indirectIdeaContentLinks.map((link) => {
+              {indirectIdeaContentLinks.length
+                ? <div className="link-idea">
+                  <div className="label">
+                    <Translate value="debate.thread.linkIdea" />
+                  </div>
+                  <div className="badges">
+                    {indirectIdeaContentLinks.map((link) => {
                       return (
                         <span className="badge" key={link.idea.id}>
                           {link.idea.title}
                         </span>
                       );
                     })}
+                  </div>
                 </div>
-              </div>
+                : null}
               <div className="answers annotation">
                 <Translate value="debate.thread.numberOfResponses" count={children ? children.length : 0} />
               </div>
