@@ -83,8 +83,7 @@ const AnswerForm = ({ body, mutate, updateBody, parentId, ideaId, refetchIdea, h
 
 const mapStateToProps = ({ posts, debate }) => {
   return {
-    body: posts.answerPostBody,
-    slug: debate.debateData.slug
+    body: posts.answerPostBody
   };
 };
 
