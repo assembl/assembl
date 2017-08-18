@@ -43,12 +43,12 @@ const resizeTreeHeight = (rowIndex, delay = 0) => {
     }
     delayedRecomputeRowHeights[1] = Math.min(delayedRecomputeRowHeights[1] || rowIndex, rowIndex);
     delayedRecomputeRowHeights[0] = setTimeout(() => {
-      delayedRecomputeRowHeights[0] = null;
-      delayedRecomputeRowHeights[1] = null;
       if (globalList) {
         globalList.recomputeRowHeights(delayedRecomputeRowHeights[1]);
         // recompute height only for rows (top post) starting at rowIndex
       }
+      delayedRecomputeRowHeights[0] = null;
+      delayedRecomputeRowHeights[1] = null;
     }, delay);
   }
 };
