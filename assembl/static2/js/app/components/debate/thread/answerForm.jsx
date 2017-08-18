@@ -49,9 +49,10 @@ class AnswerForm extends React.PureComponent {
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })
         .then(() => {
-          refetchIdea();
+          refetchIdea().then(() => {
+            hideAnswerForm();
+          });
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
-          hideAnswerForm();
         })
         .catch((error) => {
           displayAlert('danger', error);

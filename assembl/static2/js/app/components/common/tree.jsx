@@ -33,7 +33,7 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
 
 const delayedRecomputeRowHeights = [null, null]; // [timeoutId, minRowIndex from which to recompute row heights]
 
-const resizeTreeHeight = (rowIndex, delay = 200) => {
+const resizeTreeHeight = (rowIndex, delay = 0) => {
   // This function will be called by each post rendered, so we delay the
   // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
   if (globalList) {
@@ -63,7 +63,7 @@ class Child extends React.PureComponent {
     this.state = { expanded: true };
   }
 
-  resizeTreeHeight(delay = 200) {
+  resizeTreeHeight(delay = 0) {
     resizeTreeHeight(this.props.rowIndex, delay);
   }
 
