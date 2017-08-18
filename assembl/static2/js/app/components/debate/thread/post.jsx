@@ -32,8 +32,8 @@ class Post extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.lang !== nextProps.lang || this.props.data.post.publicationState !== nextProps.data.post.publicationState) {
+  componentDidUpdate(prevProps) {
+    if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
       if (this.props.measureTreeHeight) {
         this.props.measureTreeHeight(200);
       }
