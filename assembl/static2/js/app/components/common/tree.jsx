@@ -4,11 +4,6 @@ import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctions';
 
-/*
-  TODO: avoid globalList
-  TODO: InnerComponentFolded should be able to toggle the item
-*/
-
 let globalList;
 
 const cache = new CellMeasurerCache({
