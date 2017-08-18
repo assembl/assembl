@@ -77,6 +77,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         .then(() => {
           this.props.refetchIdea();
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
+          this.props.goBackToViewMode();
         })
         .catch((error) => {
           displayAlert('danger', error);
