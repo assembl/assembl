@@ -1,4 +1,6 @@
 .rich-text-editor {
+  font-family: $font-family;
+
   .editor-toolbar {
     background-color: $white;
     margin-bottom: 5px;
@@ -10,7 +12,7 @@
     }
   }
 
-  .public-DraftEditorPlaceholder-inner {
+  .public-DraftEditorPlaceholder-root {
     color: $grey2;
     font-family: $font-family6;
   }
@@ -27,7 +29,10 @@
 }
 
 .rich-text-editor.hidePlaceholder {
-  .public-DraftEditorPlaceholder-root {
+  .public-DraftEditor-content {
+    min-height: 13.4em;
+  }
+  .public-DraftEditorPlaceholder-inner {
     display: none;
   }
 }
