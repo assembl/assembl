@@ -1,11 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
 import { updateActiveAnswerFormId, updateAnswerPostBody } from '../../../actions/postsActions';
-import { createEmptyRawContentState } from '../../../utils/draftjs';
 import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunctions';
 import ProfileLine from '../../common/profileLine';
 import PostActions from './postActions';
@@ -20,6 +18,13 @@ export const PostFolded = ({ nbPosts }) => {
 };
 
 class Post extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      showAnswerForm: false
+    };
+  }
+
   componentDidMount() {
     if (this.props.measureTreeHeight) {
       this.props.measureTreeHeight();
@@ -42,17 +47,18 @@ class Post extends React.Component {
     //   }
     // });
   }
+
   handleAnswerClick = () => {
-    this.props.updateAnswerBody(createEmptyRawContentState());
-    this.props.showAnswerForm(this.props.id);
-    if (this.props.measureTreeHeight) {
-      this.props.measureTreeHeight();
-    }
+    this.setState({ showAnswerForm: true }, this.props.measureTreeHeight);
     setTimeout(() => {
       if (!this.answerTextarea) return;
       const txtareaOffset = getDomElementOffset(this.answerTextarea).top;
       scrollToPosition(txtareaOffset - this.answerTextarea.clientHeight, 200);
     }, 200);
+  };
+
+  hideAnswerForm = () => {
+    this.setState({ showAnswerForm: false }, this.props.measureTreeHeight);
   };
 
   render() {
@@ -69,7 +75,7 @@ class Post extends React.Component {
       mySentiment,
       publicationState
     } = this.props.data.post;
-    const { needToShowAnswerForm, lang, ideaId, refetchIdea, creationDate } = this.props;
+    const { lang, ideaId, refetchIdea, creationDate } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
 
     if (publicationState in DeletedPublicationStates) {
@@ -81,6 +87,7 @@ class Post extends React.Component {
     const answerTextareaRef = (el) => {
       this.answerTextarea = el;
     };
+
     return (
       <div className="posts" id={id}>
         <div className="box">
@@ -130,9 +137,15 @@ class Post extends React.Component {
             </Col>
           </Row>
         </div>
-        {needToShowAnswerForm
+        {this.state.showAnswerForm
           ? <div className="answer-form">
-            <AnswerForm parentId={id} ideaId={ideaId} refetchIdea={refetchIdea} textareaRef={answerTextareaRef} />
+            <AnswerForm
+              parentId={id}
+              ideaId={ideaId}
+              refetchIdea={refetchIdea}
+              textareaRef={answerTextareaRef}
+              hideAnswerForm={this.hideAnswerForm}
+            />
           </div>
           : null}
       </div>
@@ -140,15 +153,4 @@ class Post extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateAnswerBody: (body) => {
-      return dispatch(updateAnswerPostBody(body));
-    },
-    showAnswerForm: (postId) => {
-      return dispatch(updateActiveAnswerFormId(postId));
-    }
-  };
-};
-
-export default compose(connect(null, mapDispatchToProps), graphql(PostQuery), withLoadingIndicator())(Post);
+export default compose(graphql(PostQuery), withLoadingIndicator())(Post);

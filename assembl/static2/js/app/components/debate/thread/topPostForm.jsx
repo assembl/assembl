@@ -19,8 +19,8 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 
-const TEXT_INPUT_MAX_LENGTH = 140;
-const TEXT_AREA_MAX_LENGTH = 3000;
+export const TEXT_INPUT_MAX_LENGTH = 140;
+export const TEXT_AREA_MAX_LENGTH = 3000;
 
 const TopPostForm = ({
   ideaId,

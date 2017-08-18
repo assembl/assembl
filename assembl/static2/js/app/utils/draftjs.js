@@ -43,3 +43,12 @@ export const convertRawContentStateToHTML = (cs: RawContentState): string => {
   return convertToHTML(convertFromRaw(cs));
 };
 export const convertEntriesToHTML = convertEntries(convertRawContentStateToHTML);
+
+export function rawContentStateIsEmpty(rawContentState: RawContentState): boolean {
+  const contentState = convertFromRaw(rawContentState);
+  if (contentState.getPlainText().length === 0) {
+    return true;
+  }
+
+  return false;
+}

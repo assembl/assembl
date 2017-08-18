@@ -103,4 +103,17 @@ describe('draftjs utils', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('rawContentStateIsEmpty function', () => {
+    const { textToRawContentState, rawContentStateIsEmpty } = draftjs;
+    it('should return true if rawContentState is empty', () => {
+      const rcs = textToRawContentState('');
+      expect(rawContentStateIsEmpty(rcs)).toBeTruthy();
+    });
+
+    it('should return false if rawContentState is not empty', () => {
+      const rcs = textToRawContentState('foo');
+      expect(rawContentStateIsEmpty(rcs)).toBeFalsy();
+    });
+  });
 });
