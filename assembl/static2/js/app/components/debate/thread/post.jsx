@@ -10,6 +10,7 @@ import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunc
 import ProfileLine from '../../common/profileLine';
 import PostActions from './postActions';
 import AnswerForm from './answerForm';
+import DeletedPost from './deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
@@ -73,26 +74,7 @@ class Post extends React.Component {
 
     if (publicationState in DeletedPublicationStates) {
       return (
-        <div className="posts deleted-post" id={id}>
-          <div className="box">
-            <Row className="post-row">
-              <Col xs={12} md={12} className="post-left">
-                <h3 className="dark-title-3">
-                  {subject}
-                </h3>
-                <div className="body">
-                  <Translate
-                    value={
-                      publicationState === PublicationStates.DELETED_BY_USER
-                        ? 'debate.thread.postDeletedByUser'
-                        : 'debate.thread.postDeletedByAdmin'
-                    }
-                  />
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </div>
+        <DeletedPost id={id} subject={subject} deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'} />
       );
     }
 
