@@ -17,7 +17,7 @@ export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
 };
 
-class Post extends React.Component {
+class Post extends React.PureComponent {
   constructor() {
     super();
     this.state = {
