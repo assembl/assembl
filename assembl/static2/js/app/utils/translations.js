@@ -199,7 +199,7 @@ const Translations = {
         postDeletedByAdmin: 'Ce message a été supprimé par l\'administrateur du débat. ',
         postDeletedByUser: 'Ce message a été supprimé par son auteur. ',
         postEdited: 'modifié',
-        postSuccess: 'Merci pour votre participation. Votre message a bien été envoyée !',
+        postSuccess: 'Merci pour votre participation. Votre message a bien été envoyé !',
         fillSubject: 'Veuillez écrire un titre',
         fillBody: 'Veuillez écrire un message',
         linkIdea: 'Ce post est en lien avec les thématiques suivantes :',
