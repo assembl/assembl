@@ -8,6 +8,7 @@ import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunc
 import ProfileLine from '../../common/profileLine';
 import PostActions from './postActions';
 import AnswerForm from './answerForm';
+import EditPostForm from './editPostForm';
 import DeletedPost from './deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
@@ -21,7 +22,8 @@ class Post extends React.Component {
   constructor() {
     super();
     this.state = {
-      showAnswerForm: false
+      showAnswerForm: false,
+      mode: 'view'
     };
   }
 
@@ -61,6 +63,14 @@ class Post extends React.Component {
     this.setState({ showAnswerForm: false }, this.props.measureTreeHeight);
   };
 
+  handleEditClick = () => {
+    this.setState({ mode: 'edit' }, this.props.measureTreeHeight);
+  };
+
+  goBackToViewMode = () => {
+    this.setState({ mode: 'view' }, this.props.measureTreeHeight);
+  };
+
   render() {
     const {
       id,
@@ -81,6 +91,16 @@ class Post extends React.Component {
     if (publicationState in DeletedPublicationStates) {
       return (
         <DeletedPost id={id} subject={subject} deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'} />
+      );
+    }
+
+    if (this.state.mode === 'edit') {
+      return (
+        <div className="posts">
+          <div className="answer-form" id={id}>
+            <EditPostForm id={id} body={body} subject={subject} refetchIdea={refetchIdea} goBackToViewMode={this.goBackToViewMode} />
+          </div>
+        </div>
       );
     }
 
@@ -130,6 +150,7 @@ class Post extends React.Component {
                 creatorUserId={creator.userId}
                 postId={id}
                 handleAnswerClick={this.handleAnswerClick}
+                handleEditClick={this.handleEditClick}
                 sentimentCounts={sentimentCounts}
                 mySentiment={mySentiment}
                 postChildren={children}

@@ -214,7 +214,12 @@ const Translations = {
         startDiscussion: 'Je démarre une discussion'
       },
       themes: 'Thèmes',
-      notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
+      notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du ',
+      edit: {
+        title: 'Je modifie mon message',
+        subject: 'Titre',
+        body: 'Message'
+      }
     },
     profile: {
       panelTitle: 'Bienvenue dans la page profil d\'Assembl'
@@ -490,7 +495,12 @@ const Translations = {
         startDiscussion: 'Start a new thread'
       },
       themes: 'Themes',
-      notStarted: 'The %{phaseName} phase has not started. Please come back from '
+      notStarted: 'The %{phaseName} phase has not started. Please come back from ',
+      edit: {
+        title: 'I edit my message',
+        subject: 'Body',
+        body: 'Comment'
+      }
     },
     profile: {
       panelTitle: 'Welcome to Assembl profile page'

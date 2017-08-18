@@ -29,11 +29,7 @@ const confirmModal = (postId, client) => {
   return displayModal(title, body, includeFooter, footer);
 };
 
-const editMessage = (postId) => {
-  return console.log('edit', postId); // eslint-disable-line
-};
-
-const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThisMessage, client) => {
+const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick) => {
   const overflowMenu = (
     <Popover id="edit-delete-actions" className="overflow-menu">
       <div className="overflow-menu-container">
@@ -51,12 +47,7 @@ const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThi
           : null}
         {userCanEditThisMessage
           ? <OverlayTrigger placement="right" overlay={editMessageTooltip}>
-            <Link
-              className="overflow-menu-action"
-              onClick={() => {
-                return editMessage(postId);
-              }}
-            >
+            <Link className="overflow-menu-action" onClick={handleEditClick}>
               <span className="assembl-icon-edit" />
             </Link>
           </OverlayTrigger>

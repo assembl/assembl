@@ -2,10 +2,18 @@ import React from 'react';
 import { FormControl } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
-export const TextInputWithRemainingChars = ({ value, label, maxLength, handleTxtChange, remainingChars, handleInputFocus }) => {
+export const TextInputWithRemainingChars = ({
+  alwaysDisplayLabel = false,
+  value,
+  label,
+  maxLength,
+  handleTxtChange,
+  remainingChars,
+  handleInputFocus
+}) => {
   return (
     <div>
-      {value
+      {alwaysDisplayLabel || value
         ? <div className="form-label">
           {label}
         </div>

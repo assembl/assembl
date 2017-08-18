@@ -42,7 +42,16 @@ class PostActions extends React.Component {
     });
   }
   render() {
-    const { client, creatorUserId, postId, sentimentCounts, mySentiment, handleAnswerClick, postChildren } = this.props;
+    const {
+      client,
+      creatorUserId,
+      postId,
+      sentimentCounts,
+      mySentiment,
+      handleAnswerClick,
+      handleEditClick,
+      postChildren
+    } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
       ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
@@ -62,7 +71,7 @@ class PostActions extends React.Component {
             trigger="click"
             rootClose
             placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
-            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client)}
+            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick)}
           >
             <div>
               {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
