@@ -263,7 +263,7 @@ class Tree extends React.Component {
                     }}
                     rowCount={data.length}
                     overscanIndicesGetter={overscanIndicesGetter}
-                    overscanRowCount={10}
+                    overscanRowCount={1}
                     rowRenderer={cellRenderer}
                     SeparatorComponent={SeparatorComponent}
                     width={width}
