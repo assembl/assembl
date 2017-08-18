@@ -1287,6 +1287,7 @@ class CreatePost(graphene.Mutation):
                 )
                 db.add(idea_post_link)
 
+            db.flush()
             new_post.db.expire(new_post, ['idea_content_links_above_post'])
 
         return CreatePost(post=new_post)
