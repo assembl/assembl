@@ -107,7 +107,6 @@ class Child extends React.PureComponent {
     const {
       hidden,
       lang,
-      activeAnswerFormId,
       children,
       InnerComponent,
       InnerComponentFolded,
@@ -134,15 +133,10 @@ class Child extends React.PureComponent {
     const numChildren = children ? children.length : 0;
     const expanded = this.state.expanded;
     const forwardProps = { ...this.props };
-    delete forwardProps.activeAnswerFormId;
     delete forwardProps.children;
     return (
       <div className={cssClasses()}>
-        <InnerComponent
-          {...forwardProps}
-          needToShowAnswerForm={activeAnswerFormId === this.props.id}
-          measureTreeHeight={this.resizeTreeHeight}
-        />
+        <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
           ? children.map((child, idx) => {
@@ -152,7 +146,6 @@ class Child extends React.PureComponent {
                 key={idx}
                 {...child}
                 lang={lang}
-                activeAnswerFormId={activeAnswerFormId}
                 rowIndex={rowIndex}
                 level={level + 1}
                 InnerComponent={InnerComponent}
@@ -187,7 +180,7 @@ Child.defaultProps = {
 };
 
 const cellRenderer = ({ index, key, parent, style }) => {
-  const { lang, activeAnswerFormId, data, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
+  const { lang, data, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
@@ -196,7 +189,6 @@ const cellRenderer = ({ index, key, parent, style }) => {
         <Child
           {...childData}
           lang={lang}
-          activeAnswerFormId={activeAnswerFormId}
           rowIndex={index}
           InnerComponent={InnerComponent}
           InnerComponentFolded={InnerComponentFolded}
@@ -233,7 +225,6 @@ class Tree extends React.Component {
   render() {
     const {
       lang,
-      activeAnswerFormId,
       data,
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
@@ -263,7 +254,6 @@ class Tree extends React.Component {
                     rowHeight={cache.rowHeight}
                     deferredMeasurementCache={cache}
                     lang={lang}
-                    activeAnswerFormId={activeAnswerFormId}
                     data={data}
                     InnerComponent={InnerComponent}
                     InnerComponentFolded={InnerComponentFolded}

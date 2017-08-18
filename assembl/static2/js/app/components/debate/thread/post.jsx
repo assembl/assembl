@@ -3,7 +3,6 @@ import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
-import { updateActiveAnswerFormId, updateAnswerPostBody } from '../../../actions/postsActions';
 import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunctions';
 import ProfileLine from '../../common/profileLine';
 import PostActions from './postActions';

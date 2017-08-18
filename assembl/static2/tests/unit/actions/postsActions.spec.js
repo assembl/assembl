@@ -51,29 +51,4 @@ describe('Posts actions', () => {
       expect(actual).toEqual(expected);
     });
   });
-
-  describe('updateActiveAnswerFormId action', () => {
-    const { updateActiveAnswerFormId } = actions;
-    it('should return a UPDATE_ACTIVE_ANSWER_FORM_ID action type', () => {
-      const expected = {
-        activeAnswerFormId: '1204',
-        type: 'UPDATE_ACTIVE_ANSWER_FORM_ID'
-      };
-      const actual = updateActiveAnswerFormId('1204');
-      expect(actual).toEqual(expected);
-    });
-  });
-
-  describe('updateAnswerPostBody action', () => {
-    const { updateAnswerPostBody } = actions;
-    it('should return a UPDATE_ANSWER_POST_BODY action type', () => {
-      const body = EditorState.createWithContent(ContentState.createFromText('New body'));
-      const expected = {
-        answerPostBody: body,
-        type: 'UPDATE_ANSWER_POST_BODY'
-      };
-      const actual = updateAnswerPostBody(body);
-      expect(actual).toEqual(expected);
-    });
-  });
 });

@@ -1,4 +1,4 @@
-import { convertFromRaw, convertToRaw, ContentState, EditorState } from 'draft-js';
+import { convertFromRaw, convertToRaw, ContentState } from 'draft-js';
 import * as reducers from '../../../js/app/reducers/postsReducer';
 
 describe('Posts reducers', () => {
@@ -103,60 +103,6 @@ describe('Posts reducers', () => {
       };
       const actual = subjectTopPostRemainingChars(state, action);
       const expected = 100;
-      expect(actual).toEqual(expected);
-    });
-  });
-
-  describe('activeAnswerFormId reducer', () => {
-    const { activeAnswerFormId } = reducers;
-    it('should return the initial state', () => {
-      expect(activeAnswerFormId(undefined, {})).toEqual(null);
-    });
-
-    it('should return state by default', () => {
-      const state = null;
-      const expected = null;
-      const actual = activeAnswerFormId(state, {});
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle UPDATE_ACTIVE_ANSWER_FORM_ID action type', () => {
-      const state = '1234';
-      const action = {
-        type: 'UPDATE_ACTIVE_ANSWER_FORM_ID',
-        activeAnswerFormId: '1234'
-      };
-      const actual = activeAnswerFormId(state, action);
-      const expected = '1234';
-      expect(actual).toEqual(expected);
-    });
-  });
-
-  describe('answerPostBody reducer', () => {
-    const { answerPostBody } = reducers;
-    it('should return the initial state', () => {
-      const actual = answerPostBody(undefined, {});
-      expect(actual.blocks.length).toEqual(1);
-      expect(actual.blocks[0].data).toEqual({});
-      expect(actual.blocks[0].text).toEqual('');
-    });
-
-    it('should return state by default', () => {
-      const state = convertToRaw(ContentState.createFromText('My body'));
-      const expected = state;
-      const actual = answerPostBody(state, {});
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle UPDATE_ANSWER_POST_BODY action type', () => {
-      const newAnswerPostBody = convertToRaw(ContentState.createFromText('New body'));
-      const state = EditorState.createEmpty();
-      const action = {
-        type: 'UPDATE_ANSWER_POST_BODY',
-        answerPostBody: newAnswerPostBody
-      };
-      const actual = answerPostBody(state, action);
-      const expected = newAnswerPostBody;
       expect(actual).toEqual(expected);
     });
   });

@@ -65,7 +65,7 @@ class Idea extends React.Component {
   }
 
   render() {
-    const { lang, activeAnswerFormId, ideaData, ideaWithPostsData } = this.props;
+    const { lang, ideaData, ideaWithPostsData } = this.props;
     if (ideaData.loading) {
       return (
         <div className="idea">
@@ -97,7 +97,6 @@ class Idea extends React.Component {
                   ? <Loader />
                   : <Tree
                     lang={lang}
-                    activeAnswerFormId={activeAnswerFormId}
                     data={topPosts}
                     InnerComponent={Post}
                     InnerComponentFolded={PostFolded}
@@ -116,8 +115,7 @@ class Idea extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    lang: state.i18n.locale,
-    activeAnswerFormId: state.posts.activeAnswerFormId
+    lang: state.i18n.locale
   };
 };
 

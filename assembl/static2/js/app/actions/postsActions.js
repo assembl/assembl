@@ -25,17 +25,3 @@ export const updateTopPostSubjectRemaingChars = (subjectTopPostRemainingChars) =
     type: 'UPDATE_TOP_POST_SUBJECT_REMAINING_CHARS'
   };
 };
-
-export const updateActiveAnswerFormId = (activeAnswerFormId) => {
-  return {
-    activeAnswerFormId: activeAnswerFormId,
-    type: 'UPDATE_ACTIVE_ANSWER_FORM_ID'
-  };
-};
-
-export const updateAnswerPostBody = (answerPostBody) => {
-  return {
-    answerPostBody: answerPostBody,
-    type: 'UPDATE_ANSWER_POST_BODY'
-  };
-};
