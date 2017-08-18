@@ -1267,7 +1267,6 @@ class CreatePost(graphene.Mutation):
                 subject=subject_langstring,
                 body=body_langstring,
                 creator_id=user_id,
-                parent=in_reply_to_post,
                 body_mime_type=u'text/html'
             )
             new_post.guess_languages()
@@ -1275,13 +1274,20 @@ class CreatePost(graphene.Mutation):
             # new_post.body_mime_type = 'text/html'
             db = new_post.db
             db.add(new_post)
-            idea_post_link = models.IdeaRelatedPostLink(
-                creator_id=user_id,
-                content=new_post,
-                idea=in_reply_to_idea
-            )
-            db.add(idea_post_link)
             db.flush()
+            if in_reply_to_post:
+                new_post.set_parent(in_reply_to_post)
+            elif in_reply_to_idea:
+                # don't create IdeaRelatedPostLink when we have both
+                # in_reply_to_post and in_reply_to_idea
+                idea_post_link = models.IdeaRelatedPostLink(
+                    creator_id=user_id,
+                    content=new_post,
+                    idea=in_reply_to_idea
+                )
+                db.add(idea_post_link)
+
+            new_post.db.expire(new_post, ['idea_content_links_above_post'])
 
         return CreatePost(post=new_post)
 

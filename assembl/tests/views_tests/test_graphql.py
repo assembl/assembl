@@ -984,35 +984,70 @@ mutation myFirstMutation {
         }
     }
 
-def test_mutation_create_reply_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+def test_mutation_create_top_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     idea_id = idea_in_thread_phase
     in_reply_to_post_id = top_post_in_thread_phase
     res = schema.execute(u"""
-mutation myFirstMutation {
-    createPost(
-        ideaId:"%s",
-        parentId:"%s",
-        subject:"Proposition 1",
-        body:"une proposition..."
-    ) {
+mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: ID) {
+  createPost(ideaId: $ideaId, subject: $subject, body: $body, parentId: $parentId) {
         post {
             ... on Post {
                 subject,
                 body,
                 parentId,
                 creator { name },
+                indirectIdeaContentLinks { idea { id } }
             }
         }
     }
 }
-""" % (idea_id, in_reply_to_post_id), context_value=graphql_request)
+""", context_value=graphql_request, variable_values={
+        "ideaId": idea_id,
+        "parentId": None,
+        "subject": u"Proposition 1",
+        "body": u"une proposition..."
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition 1',
+                u'body': u"une proposition...",
+                u'parentId': None,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'indirectIdeaContentLinks': [{u'idea': { u'id': idea_in_thread_phase }}]
+    }}}
+
+def test_mutation_create_reply_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: ID) {
+  createPost(ideaId: $ideaId, subject: $subject, body: $body, parentId: $parentId) {
+        post {
+            ... on Post {
+                subject,
+                body,
+                parentId,
+                creator { name },
+                indirectIdeaContentLinks { idea { id } }
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={
+        "ideaId": idea_id,
+        "parentId": in_reply_to_post_id,
+        "subject": u"Proposition 1",
+        "body": u"une proposition..."
+    })
     assert json.loads(json.dumps(res.data)) == {
         u'createPost': {
             u'post': {
                 u'subject': u'Proposition 1',
                 u'body': u"une proposition...",
                 u'parentId': in_reply_to_post_id,
-                u'creator': {u'name': u'Mr. Administrator'}
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'indirectIdeaContentLinks': [{u'idea': { u'id': idea_in_thread_phase }}]
     }}}
 
 
