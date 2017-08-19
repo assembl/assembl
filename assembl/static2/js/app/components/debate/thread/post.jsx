@@ -27,7 +27,7 @@ class Post extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.measureTreeHeight(200);
+    this.props.measureTreeHeight(400);
   }
 
   componentDidUpdate(prevProps) {
