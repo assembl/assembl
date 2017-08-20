@@ -13,7 +13,7 @@ from email.mime.text import MIMEText
 from email.utils import parseaddr, mktime_tz, parsedate_tz
 
 import jwzthreading
-from bs4 import BeautifulSoup, Comment
+from ..lib.clean_input import sanitize_html
 from pyramid.threadlocal import get_current_registry
 from datetime import datetime
 from imaplib2 import IMAP4_SSL, IMAP4
@@ -92,55 +92,6 @@ class AbstractMailbox(PostSource):
             return retval
         else:
             return subject
-
-    VALID_TAGS = ['a',
-                  'b',
-                  'blockquote',
-                  'code',
-                  'del',
-                  'dd',
-                  'dl',
-                  'dt',
-                  'em',
-                  #We do not allow Hx tax, whould cause layout problems (manageable however)
-                  'i',
-                  #We do not allow img tags, either the reference is a local file (which we don't support yet), our we could link to a bunch of outside scripts.
-                  'li',
-                  'ol',
-                  'p',
-                  'pre',
-                  's',
-                  'sup',
-                  'sub',
-                  'strike',
-                  'table',
-                  'td',
-                  'th',
-                  'tr',
-                  'ul',
-                  'br',
-                  'hr',
-                  ]
-    VALID_ATTRIBUTES = ['href',#For hyperlinks
-
-                        'alt',#For accessiblity
-                        'colspan', 'headers', 'abbr', 'scope', 'sorted'#For tables
-                  ]
-    @staticmethod
-    def sanitize_html(html_value, valid_tags=VALID_TAGS, valid_attributes=VALID_ATTRIBUTES):
-        """ Maybe we should have used Bleach (https://github.com/jsocol/bleach)
-        """
-        soup = BeautifulSoup(html_value)
-
-        for tag in soup.find_all(True):
-            if tag.name not in valid_tags:
-                tag.hidden = True
-            else: # it might have bad attributes
-                for attr in tag.attrs.keys():
-                    if attr not in valid_attributes:
-                        del tag[attr]
-
-        return soup.decode_contents()
 
     @staticmethod
     def clean_angle_brackets(message_id):
@@ -399,7 +350,8 @@ class AbstractMailbox(PostSource):
             default_charset = message.get_charset() or 'ISO-8859-1'
             (text_part, html_part) = process_part(message, default_charset, text_part, html_part)
             if html_part:
-                return ('text/html',self.sanitize_html(AbstractMailbox.strip_full_message_quoting_html(html_part)))
+                return ('text/html', sanitize_html(
+                    AbstractMailbox.strip_full_message_quoting_html(html_part)))
             elif text_part:
                 return ('text/plain', AbstractMailbox.strip_full_message_quoting_plaintext(text_part))
             else:

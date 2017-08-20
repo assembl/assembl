@@ -21,10 +21,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql.functions import count
-from ..lib.sqla_types import CoerceUnicode
 from sqla_rdfbridge.mapping import PatternIriClass
-# from virtuoso.textindex import TextIndex, TableWithTextIndex
-from bs4 import BeautifulSoup
 
 from ..lib.sqla import (CrudOperation, get_model_watcher, Base)
 from ..lib.utils import get_global_base_url
@@ -37,8 +34,8 @@ from ..auth.util import get_current_user_id
 from ..semantic.namespaces import (
     SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES, FOAF)
 from .discussion import Discussion
-from assembl.views.traversal import AbstractCollectionDefinition
 from ..lib.history_mixin import TombstonableMixin
+from ..lib.clean_input import sanitize_text, sanitize_html
 
 
 log = logging.getLogger('assembl')
@@ -375,6 +372,19 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     def get_title(self):
         return self.subject
 
+    def safe_set_body(self, body):
+        if self.get_body_mime_type() == 'text/plain':
+            for e in body['entries']:
+                e['value'] = sanitize_text(e['value'])
+        else:
+            for e in body['entries']:
+                e['value'] = sanitize_html(e['value'])
+
+    def safe_set_subject(self, subject):
+        for e in body['entries']:
+            if "<" in e['value']:
+                e['value'] = sanitize_text(e['value'])
+
     def remove_translations(self):
         if self.subject:
             self.subject.remove_translations()
@@ -430,7 +440,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         if mimetype == 'text/plain':
             return body
         elif mimetype == 'text/html':
-            return BeautifulSoup(body).get_text().strip()
+            return sanitize_text(body)
         else:
             log.error("What is this mimetype?" + mimetype)
             return body
@@ -467,7 +477,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             ls = LangString()
             for e in body.entries:
                 _ = LangStringEntry(
-                    value=BeautifulSoup(e.value).get_text().strip(),
+                    value=sanitize_text(e.value),
                     langstring=ls, locale_id=e.locale_id)
             return ls
         else:

@@ -11,7 +11,7 @@ anykeystore==0.2
 Babel==2.3.4
 backports.ssl-match-hostname==3.5.0.1
 -e git+https://github.com/assembl/Beaker.git@assembl#egg=Beaker
-beautifulsoup4==4.4.1
+beautifulsoup4==4.6.0
 billiard==3.3.0.23
 boto==2.40.0
 bz2file==0.98
@@ -50,7 +50,7 @@ graphene==1.2
 -e git+https://github.com/ecreall/graphql-wsgi.git@e0e2746e71e6bc3c49b028132364aeb4d960dfed#egg=graphql-wsgi
 greenlet==0.4.10
 hiredis==0.2.0
-html5lib==0.9999999
+html5lib==0.999999999
 httplib2==0.9.2
 idna==2.1
 #IMAPClient==1.0.1

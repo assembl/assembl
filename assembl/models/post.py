@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 import uuid
 import logging
 
-from bs4 import BeautifulSoup
+from ..lib.clean_input import sanitize_text
 import simplejson as json
 from sqlalchemy import (
     Column,
@@ -203,7 +203,7 @@ class Post(Content):
         shortened = False
         html_len = 2 * target_len
         while True:
-            pure_text = BeautifulSoup(text[:html_len]).get_text().strip()
+            pure_text = sanitize_text(text[:html_len])
             if html_len >= len(text) or len(pure_text) > target_len:
                 shortened = html_len < len(text)
                 text = pure_text

@@ -22,6 +22,7 @@ from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..lib.sqla import (CrudOperation, get_model_watcher)
 from ..lib.utils import get_global_base_url
+from ..lib.clean_input import sanitize_html
 from .discussion import Discussion
 from .idea import Idea
 from .generic import Content
@@ -344,14 +345,14 @@ class Extract(IdeaContentPositiveLink):
 
     def _infer_text_fragment_inner(self, title, body, post_id):
         # dead code? If not needs to be refactored with langstrings
-        body = IMAPMailbox.sanitize_html(body, [])
+        body = sanitize_html(body, [])
         quote = self.body.replace("\r", "")
         try:
             # for historical reasons
             quote = quopri.decodestring(quote)
         except:
             pass
-        quote = IMAPMailbox.sanitize_html(quote, [])
+        quote = sanitize_html(quote, [])
         if quote != self.body:
             self.body = quote
         quote = quote.replace("\n", "")

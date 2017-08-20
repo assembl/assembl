@@ -24,6 +24,7 @@ from jwzthreading import restrip_pat
 import transaction
 
 from assembl.lib.parsedatetime import parse_datetime
+from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.util import get_permissions
@@ -629,14 +630,21 @@ def create_post(request):
     if html:
         log.warning("Still using html")
         # how to guess locale in this case?
-        body = LangString.create(html)
+        body = LangString.create(sanitize_html(html))
+        # TODO: AssemblPosts are pure text right now.
+        # Allowing HTML requires changes to the model.
     elif body:
+        # TODO: Accept HTML body.
+        for e in body['entries']:
+            e['value'] = sanitize_text(e['value'])
         body = LangString.create_from_json(
             body, context=ctx, user_id=user_id)
     else:
         body = LangString.EMPTY(discussion.db)
 
     if subject:
+        for e in subject['entries']:
+            e['value'] = sanitize_text(e['value'])
         subject = LangString.create_from_json(
             subject, context=ctx, user_id=user_id)
     else:
