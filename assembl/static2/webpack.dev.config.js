@@ -74,7 +74,7 @@ module.exports = {
                   'transform-object-rest-spread', 'transform-class-properties',
                   ['transform-runtime', { helpers: true, polyfill: false }]
                 ],
-                presets: ['es2015', 'react', 'flow']
+                presets: [['es2015', { modules: false }], 'react', 'flow']
               }
             },
             include: [
