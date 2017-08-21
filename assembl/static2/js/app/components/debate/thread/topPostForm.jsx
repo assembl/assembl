@@ -19,8 +19,9 @@ class TopPostForm extends React.Component {
     super();
     this.state = {
       body: null,
+      isActive: false,
       subject: '',
-      isActive: false
+      submitting: false
     };
   }
 
@@ -39,6 +40,7 @@ class TopPostForm extends React.Component {
   createTopPost = () => {
     const { ideaId, mutate, refetchIdea } = this.props;
     const { body, subject } = this.state;
+    this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (subject && !bodyIsEmpty) {
       const variables = {
@@ -55,11 +57,14 @@ class TopPostForm extends React.Component {
         })
         .catch((error) => {
           displayAlert('danger', error);
+          this.setState({ submitting: false });
         });
     } else if (!subject) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
+      this.setState({ submitting: false });
     } else if (bodyIsEmpty) {
       displayAlert('warning', I18n.t('debate.thread.fillBody'));
+      this.setState({ submitting: false });
     }
   };
 
@@ -125,6 +130,7 @@ class TopPostForm extends React.Component {
                   className="button-submit button-dark btn btn-default right margin-l"
                   onClick={this.createTopPost}
                   style={{ marginBottom: '30px' }}
+                  disabled={this.state.submitting}
                 >
                   <Translate value="debate.post" />
                 </Button>
