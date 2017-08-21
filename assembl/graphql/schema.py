@@ -208,30 +208,6 @@ def update_langstring_from_input_entries(obj, attr, entries):
     langstring.db.flush()
 
 
-# TODO replace this by the new langstring.replace_original api coming soon
-def remove_all_entries_and_add_value(obj, attr, value):
-    """Tombstone all entries of langstring from getattr(obj, attr)
-    and add a new entry with the given value.
-    """
-    langstring = getattr(obj, attr, None)
-    # tombstone all entries, including translations
-    for entry in langstring.entries:
-        entry.tombstone_date = datetime.utcnow()
-
-    # TODO: we can replace this whole block
-    # by the new api langstring.add_value(value) once available
-    locale_id = models.Locale.get_id_of('und')
-    langstring.add_entry(
-        models.LangStringEntry(
-            langstring=langstring,
-            value=value,
-            locale_id=locale_id
-        )
-    )
-
-    langstring.db.expire(langstring, ['entries'])
-
-
 class LangStringEntryFields(graphene.AbstractType):
     value = graphene.String(required=True)
     locale_code = graphene.String(required=True)
@@ -1051,7 +1027,6 @@ class UpdateThematic(graphene.Mutation):
 
         with cls.default_db.no_autoflush:
             # introducing history at every step, including thematics + questions
-            # TODO: review performance impact
             thematic.copy(tombstone=True)
             title_entries = args.get('title_entries')
             if title_entries is not None and len(title_entries) == 0:
@@ -1116,7 +1091,6 @@ class UpdateThematic(graphene.Mutation):
 
                 attachment = models.IdeaAttachment(
                     document=document,
-                    # idea=thematic,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
@@ -1134,8 +1108,7 @@ class UpdateThematic(graphene.Mutation):
                         id_ = int(Node.from_global_id(question_input['id'])[1])
                         updated_questions.add(id_)
                         question = models.Question.get(id_)
-                        # Again, archiving the question
-                        # TODO: review performance impact
+                        # archive the question
                         question.copy(tombstone=True)
                         update_langstring_from_input_entries(
                             question, 'title', question_input['title_entries'])
@@ -1323,19 +1296,17 @@ class UpdatePost(graphene.Mutation):
         original_subject_entry = post.subject.first_original()
         # subject is not required, be careful to not remove it if not specified
         if subject and subject != original_subject_entry.value:
-            remove_all_entries_and_add_value(post, 'subject', subject)
+            post.subject.add_value(subject, original_subject_entry.locale_code)
             changed = True
 
         original_body_entry = post.body.first_original()
         if body != original_body_entry.value:
-            remove_all_entries_and_add_value(post, 'body', body)
+            post.body.add_value(body, original_body_entry.locale_code)
             changed = True
 
         if changed:
             post.modification_date = datetime.utcnow()
             post.body_mime_type = u'text/html'
-            # TODO once available:
-            # post.guess_languages()
             post.db.flush()
 
         return UpdatePost(post=post)
@@ -1473,7 +1444,7 @@ class DeleteSentiment(graphene.Mutation):
         if not allowed:
             raise HTTPUnauthorized()
 
-        post.my_sentiment.tombstone_date = datetime.utcnow()
+        post.my_sentiment.is_tombstone = True
         post.db.flush()
         return DeleteSentiment(post=post)
 
