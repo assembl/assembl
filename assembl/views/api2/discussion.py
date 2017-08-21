@@ -864,12 +864,16 @@ def get_analytics_alerts(discussion, user_id, types, all_users=False):
         'metrics_server_endpoint',
         'https://discussions.bluenove.com/analytics/accept')
     verify_metrics = False  # weird SNI bug on some platforms
-    protocol = 'https' if asbool(settings.get(
-        'accept_secure_connection', False)) else 'http'
+    secure = asbool(settings.get(
+        'accept_secure_connection', False))
+    protocol = 'https' if secure else 'http'
     host = settings.get('public_hostname')
-    if settings.get('public_port', 80) != 80:
-        # TODO: public_secure_port?
-        host += ':'+str(settings.get('public_port'))
+    port = settings.get('public_port', '80')
+    if secure and port == '80':
+        # old misconfiguration
+        port = '443'
+    if (secure and port != '443') or (not secure and port != '80'):
+        host += ':' + port
     seed = urandom(8)
     obfuscator = AESObfuscator(seed)
     token = permission_token(user_id, discussion.id, [P_READ_PUBLIC_CIF], seed)

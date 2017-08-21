@@ -41,8 +41,11 @@ WEBSERVER_PORT = settings.getint(SECTION, 'changes.websocket.port')
 # NOTE: Not sure those are always what we want.
 SERVER_HOST = settings.get(SECTION, 'public_hostname')
 SERVER_PORT = settings.getint(SECTION, 'public_port')
-SERVER_PROTOCOL = 'https' if settings.getboolean(
-    SECTION, 'require_secure_connection') else 'http'
+REQUIRES_SECURE = settings.getboolean(SECTION, 'require_secure_connection')
+SERVER_PROTOCOL = 'https' if REQUIRES_SECURE else 'http'
+if REQUIRES_SECURE and SERVER_PORT == 80:
+    # old misconfiguration
+    SERVER_PORT = 443
 SERVER_URL = "%s://%s:%d" % (SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT)
 setup_raven(settings)
 
