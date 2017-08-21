@@ -15,6 +15,7 @@
   .public-DraftEditorPlaceholder-root {
     color: $grey2;
     font-family: $font-family6;
+    position: absolute;
   }
 
   .DraftEditor-root {
@@ -26,13 +27,4 @@
     min-height: 12em;
   }
 
-}
-
-.rich-text-editor.hidePlaceholder {
-  .public-DraftEditor-content {
-    min-height: 13.5em;
-  }
-  .public-DraftEditorPlaceholder-inner {
-    display: none;
-  }
 }
