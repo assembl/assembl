@@ -1220,10 +1220,10 @@ class CreatePost(graphene.Mutation):
         with cls.default_db.no_autoflush:
             subject = args.get('subject')
             body = args.get('body')
-            body = sanitize_html(body)
+            #body = sanitize_html(body)
             body_langstring = models.LangString.create(body)
             if subject:
-                subject = sanitize_text(subject)
+                #subject = sanitize_text(subject)
                 subject_langstring = models.LangString.create(subject)
             elif issubclass(cls, models.PropositionPost):
                 # Specific case first. Respect inheritance. Since we are using
