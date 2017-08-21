@@ -74,7 +74,7 @@ const VideoForm = ({
             <FormControlWithLabel
               componentClass="textarea"
               id="video-description-side"
-              type="text-area"
+              type="rich-text"
               label={quotePh}
               value={descriptionSide}
               labelAlwaysVisible
