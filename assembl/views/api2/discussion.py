@@ -49,6 +49,7 @@ from assembl.lib.config import get_config
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.lib.sqla import ObjectNotUniqueError
 from assembl.lib.json import DateJSONEncoder
+from assembl.lib.utils import get_global_base_url
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
     R_ADMINISTRATOR)
@@ -240,7 +241,7 @@ def discussion_instance_view_jsonld(request):
 def user_private_view_jsonld(request):
     if request.scheme == "http" and asbool(request.registry.settings.get(
             'accept_secure_connection', False)):
-        return HTTPFound("https://" + request.host + request.path_qs)
+        return HTTPFound(get_global_base_url(True) + request.path_qs)
     discussion_id = request.context.get_discussion_id()
     user_id, permissions, salt = read_user_token(request)
     if P_READ not in permissions:
