@@ -1,9 +1,0 @@
-#import "../Post.graphql"
-
-mutation deletePost($postId: ID!) {
-  deletePost(postId: $postId) {
-    post {
-      ...Post
-    }
-  }
-}

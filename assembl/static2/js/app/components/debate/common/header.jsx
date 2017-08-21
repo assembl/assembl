@@ -26,7 +26,7 @@ class Header extends React.Component {
         </Grid>
         <Grid fluid>
           <Row>
-            <div className="header-bkg" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null}>
+            <div className="header-bkg" style={{ backgroundImage: `url(${imgUrl})` }}>
               &nbsp;
             </div>
             <div className="header-bkg-mask">&nbsp;</div>

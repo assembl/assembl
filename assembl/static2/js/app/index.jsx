@@ -10,17 +10,17 @@ import createAppStore from './store';
 import client from './client';
 import Routes from './routes';
 
+
 /*
 `piwik-react-router` expects that we provide it with a browser history.
 We provide it with `react-router`'s `browserHistory`.
 This is not the official way of doing it.
 The official way is using the `history` library, called with `import history from './utils/history';`.
-For details, see
-https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-access-the-history-object-outside-of-components
+For details, see https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-access-the-history-object-outside-of-components
 */
 const history = browserHistory;
 
-const store = createAppStore();
+const store = createAppStore(client);
 
 let customBrowserHistory;
 const isPiwikEnabled = get(window, ['globalAnalytics', 'piwik', 'isActive'], false);

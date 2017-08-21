@@ -1,5 +1,4 @@
 import React from 'react';
-import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
@@ -16,9 +15,6 @@ import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import DontUnderstand from '../../svg/dontUnderstand';
 import MoreInfo from '../../svg/moreInfo';
-import getOverflowMenuForPost from './overflowMenu';
-import { getConnectedUserId } from '../../../utils/globalFunctions';
-import Permissions, { connectedUserCan } from '../../../utils/permissions';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -42,46 +38,12 @@ class PostActions extends React.Component {
     });
   }
   render() {
-    const {
-      client,
-      creatorUserId,
-      postId,
-      sentimentCounts,
-      mySentiment,
-      handleAnswerClick,
-      handleEditClick,
-      postChildren
-    } = this.props;
+    const { sentimentCounts, mySentiment, handleAnswerClick, postChildren } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
       ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
       : 0;
-    const connectedUserId = getConnectedUserId();
-    const userCanDeleteThisMessage =
-      (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
-      connectedUserCan(Permissions.DELETE_POST);
-    const userCanEditThisMessage =
-      (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST)) ||
-      connectedUserCan(Permissions.EDIT_POST);
-    let overflowMenu = null;
-    if (userCanDeleteThisMessage || userCanEditThisMessage) {
-      overflowMenu = (
-        <div className="overflow-action">
-          <OverlayTrigger
-            trigger="click"
-            rootClose
-            placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
-            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick)}
-          >
-            <div>
-              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                ? <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
-                : <span className="assembl-icon-ellipsis">&nbsp;</span>}
-            </div>
-          </OverlayTrigger>
-        </div>
-      );
-    }
+
     return (
       <div>
         <div className="post-icons">
@@ -106,7 +68,10 @@ class PostActions extends React.Component {
                 <Disagree size={25} />
               </div>
             </OverlayTrigger>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={dontUnderstandTooltip}>
+            <OverlayTrigger
+              placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
+              overlay={dontUnderstandTooltip}
+            >
               <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
                 <DontUnderstand size={25} />
               </div>
@@ -117,50 +82,48 @@ class PostActions extends React.Component {
               </div>
             </OverlayTrigger>
           </div>
-          {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 &&
           <div className="sentiments-count margin-m">
             <div>
-              {Object.keys(sentimentCounts).map((sentiment, index) => {
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <Like size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <Disagree size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <DontUnderstand size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <MoreInfo size={15} />
-                    </div>
-                  );
-                }
-                return null;
-              })}
+              <div>
+                {Object.keys(sentimentCounts).map((sentiment, index) => {
+                  if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
+                    return (
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <Like size={15} />
+                      </div>
+                    );
+                  }
+                  if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
+                    return (
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <Disagree size={15} />
+                      </div>
+                    );
+                  }
+                  if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
+                    return (
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <DontUnderstand size={15} />
+                      </div>
+                    );
+                  }
+                  if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
+                    return (
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <MoreInfo size={15} />
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
             </div>
             <div className="txt">
-              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                ? totalSentimentsCount
-                : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
+              {totalSentimentsCount}
             </div>
           </div>}
-        {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
           <Translate value="debate.thread.numberOfResponses" count={postChildren ? postChildren.length : 0} />
         </div>
@@ -170,4 +133,4 @@ class PostActions extends React.Component {
   }
 }
 
-export default withApollo(PostActions);
+export default PostActions;

@@ -175,9 +175,6 @@ class Post(Content):
         'with_polymorphic': '*'
     }
 
-    def is_owner(self, user_id):
-        return self.creator_id == user_id
-
     def get_descendants(self):
         assert self.id
         descendants = self.db.query(Post).filter(
@@ -631,19 +628,12 @@ class AssemblPost(Post):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    modification_date = Column(DateTime)
-
-    body_mime_type = Column(CoerceUnicode(),
-                        nullable=False,
-                        server_default="text/plain",
-                        doc="The mime type of the body.  See Content::get_body_mime_type() for allowed values.")
-
     __mapper_args__ = {
         'polymorphic_identity': 'assembl_post',
     }
 
     def get_body_mime_type(self):
-        return self.body_mime_type
+        return "text/plain"
 
 
 class SynthesisPost(AssemblPost):

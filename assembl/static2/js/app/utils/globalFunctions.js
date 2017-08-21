@@ -47,12 +47,8 @@ export const getDiscussionSlug = () => {
   return document.getElementById('discussion-slug') ? document.getElementById('discussion-slug').value : null;
 };
 
-// cache userId to avoid accessing the dom at each permission check
-let userId;
 export const getConnectedUserId = () => {
-  if (userId === undefined) {
-    userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
-  }
+  const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
   return userId;
 };
 
@@ -61,13 +57,9 @@ export const getConnectedUserName = () => {
   return userName;
 };
 
-// cache permissions to avoid accessing the dom at each permission check
-let permissions;
 export const getConnectedUserPermissions = () => {
-  if (permissions === undefined) {
-    permissions = document.getElementById('permissions-json') ? document.getElementById('permissions-json').text : '[]';
-    permissions = JSON.parse(permissions);
-  }
+  let permissions = document.getElementById('permissions-json') ? document.getElementById('permissions-json').text : '[]';
+  permissions = JSON.parse(permissions);
   return permissions;
 };
 

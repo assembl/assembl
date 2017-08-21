@@ -1,10 +1,10 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import '../../../../css/components/profileLine.scss';
 
 const ProfileLine = (props) => {
-  const { userId, userName, creationDate, locale, modified } = props;
+  const { userId, userName, creationDate, locale } = props;
   const src = `/user/id/${userId}/avatar/30`;
   return (
     <div className="profileLine">
@@ -27,21 +27,16 @@ const ProfileLine = (props) => {
         {creationDate &&
           <div className="date">
             {moment(creationDate).locale(locale).fromNow()}
-            {modified
-              ? <span>
-                {' - '}
-                <Translate value="debate.thread.postEdited" />
-              </span>
-              : null}
           </div>}
       </div>
     </div>
   );
 };
 
-ProfileLine.defaultProps = {
-  modified: false,
-  creationDate: null
+const mapStateToProps = (state) => {
+  return {
+    locale: state.i18n.locale
+  };
 };
 
-export default ProfileLine;
+export default connect(mapStateToProps)(ProfileLine);

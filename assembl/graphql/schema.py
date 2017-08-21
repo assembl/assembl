@@ -21,7 +21,6 @@ from pyramid.i18n import TranslationStringFactory
 from jwzthreading import restrip_pat
 
 from assembl.auth import IF_OWNED, CrudPermissions
-from assembl.auth import P_DELETE_POST, P_DELETE_MY_POST
 from assembl.auth.util import get_permissions
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.clean_input import sanitize_text, sanitize_html
@@ -231,11 +230,6 @@ sentiments_enum = PyEnum('SentimentTypes', (
 SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
 
 
-publication_states_enum = PyEnum('PublicationStates',
-    [(k, k) for k in models.PublicationStates.values()])
-PublicationStates = graphene.Enum.from_enum(publication_states_enum)
-
-
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.AgentProfile
@@ -279,7 +273,6 @@ class PostInterface(SQLAlchemyInterface):
         # will be just the primary key, not the base64 type:id
 
     creation_date = DateTime()
-    modification_date = DateTime()
     subject = graphene.String(lang=graphene.String())
     body = graphene.String(lang=graphene.String())
     subject_entries = graphene.List(LangStringEntry, lang=graphene.String())
@@ -288,13 +281,9 @@ class PostInterface(SQLAlchemyInterface):
     my_sentiment = graphene.Field(type=SentimentTypes)
     indirect_idea_content_links = graphene.List(IdeaContentLink)
     parent_id = graphene.ID()
-    body_mime_type = graphene.String(required=True)
-    publication_state = graphene.Field(type=PublicationStates)
 
     def resolve_subject(self, args, context, info):
-        # Use self.subject and not self.get_subject() because we still
-        # want the subject even when the post is deleted.
-        subject = resolve_langstring(self.subject, args.get('lang'))
+        subject = resolve_langstring(self.get_subject(), args.get('lang'))
         return subject
 
     def resolve_body(self, args, context, info):
@@ -364,12 +353,6 @@ class PostInterface(SQLAlchemyInterface):
             return None
 
         return Node.to_global_id('Post', self.parent_id)
-
-    def resolve_body_mime_type(self, args, context, info):
-        return self.get_body_mime_type()
-
-    def resolve_publication_state(self, args, context, info):
-        return self.publication_state.name
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -495,6 +478,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         Post = models.Post
         query = Post.query.join(
             related, Post.id == related.c.post_id
+            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
             ).order_by(desc(Post.creation_date), Post.id
             ).options(
                 joinedload_all(Post.creator),
@@ -551,7 +535,8 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                     ).order_by(desc(Post.creation_date), Post.id).first()
 
             query = Post.default_db.query(Post.id).join(
-                related, Post.id == related.c.post_id)
+                related, Post.id == related.c.post_id
+                ).filter(Post.publication_state == models.PublicationStates.PUBLISHED)
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
             limit = args.get('first', 10)
@@ -672,6 +657,7 @@ class IdeaUnion(SQLAlchemyUnion):
 
 class Query(graphene.ObjectType):
     node = Node.Field()
+    posts = SQLAlchemyConnectionField(PostConnection, idea_id=graphene.ID())
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
     ideas = graphene.List(Idea)
     thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
@@ -697,6 +683,37 @@ class Query(graphene.ObjectType):
             root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
             ).filter(model.hidden == False).order_by(model.id)
+        return query
+
+    def resolve_posts(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        idea_id = args.get('idea_id', None)
+        if idea_id is not None:
+            id_ = int(Node.from_global_id(idea_id)[1])
+            idea = models.Idea.get(id_)
+            if idea.discussion_id != discussion_id:
+                return None
+        else:
+            discussion = models.Discussion.get(discussion_id)
+            idea = discussion.root_idea
+
+        Post = models.Post
+        related = idea.get_related_posts_query(True)
+        query = Post.query.join(
+            related, Post.id == related.c.post_id
+            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
+            ).order_by(desc(Post.creation_date), Post.id
+            ).options(
+                joinedload_all(Post.creator),
+                undefer(Post.idea_content_links_above_post)
+            )
+        if len(discussion.discussion_locales) > 1:
+            query = query.options(*models.Content.subqueryload_options())
+        else:
+            query = query.options(*models.Content.joinedload_options())
+
+        # pagination is done after that, no need to do it ourself
         return query
 
     def resolve_thematics(self, args, context, info):
@@ -1022,11 +1039,12 @@ class UpdateThematic(graphene.Mutation):
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = thematic.user_can(user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
         with cls.default_db.no_autoflush:
             # introducing history at every step, including thematics + questions
+            # TODO: review performance impact
             thematic.copy(tombstone=True)
             title_entries = args.get('title_entries')
             if title_entries is not None and len(title_entries) == 0:
@@ -1091,6 +1109,7 @@ class UpdateThematic(graphene.Mutation):
 
                 attachment = models.IdeaAttachment(
                     document=document,
+                    # idea=thematic,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
@@ -1108,7 +1127,8 @@ class UpdateThematic(graphene.Mutation):
                         id_ = int(Node.from_global_id(question_input['id'])[1])
                         updated_questions.add(id_)
                         question = models.Question.get(id_)
-                        # archive the question
+                        # Again, archiving the question
+                        # TODO: review performance impact
                         question.copy(tombstone=True)
                         update_langstring_from_input_entries(
                             question, 'title', question_input['title_entries'])
@@ -1151,8 +1171,8 @@ class DeleteThematic(graphene.Mutation):
         thematic = models.Thematic.get(thematic_id)
 
         permissions = get_permissions(user_id, discussion_id)
-        allowed = thematic.user_can(user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
+        allowed = models.Thematic.user_can_cls(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
         thematic.is_tombstone = True
@@ -1194,7 +1214,7 @@ class CreatePost(graphene.Mutation):
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
-        if not allowed:
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
         with cls.default_db.no_autoflush:
@@ -1240,141 +1260,20 @@ class CreatePost(graphene.Mutation):
                 subject=subject_langstring,
                 body=body_langstring,
                 creator_id=user_id,
-                body_mime_type=u'text/html'
+                parent=in_reply_to_post
             )
             new_post.guess_languages()
-            # TODO
-            # new_post.body_mime_type = 'text/html'
             db = new_post.db
             db.add(new_post)
+            idea_post_link = models.IdeaRelatedPostLink(
+                creator_id=user_id,
+                content=new_post,
+                idea=in_reply_to_idea
+            )
+            db.add(idea_post_link)
             db.flush()
-            if in_reply_to_post:
-                new_post.set_parent(in_reply_to_post)
-            elif in_reply_to_idea:
-                # don't create IdeaRelatedPostLink when we have both
-                # in_reply_to_post and in_reply_to_idea
-                idea_post_link = models.IdeaRelatedPostLink(
-                    creator_id=user_id,
-                    content=new_post,
-                    idea=in_reply_to_idea
-                )
-                db.add(idea_post_link)
-
-            db.flush()
-            new_post.db.expire(new_post, ['idea_content_links_above_post'])
 
         return CreatePost(post=new_post)
-
-
-class UpdatePost(graphene.Mutation):
-    class Input:
-        post_id = graphene.ID(required=True)
-        subject = graphene.String()
-        body = graphene.String(required=True)
-
-    post = graphene.Field(lambda: Post)
-
-    @staticmethod
-    def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-
-        user_id = context.authenticated_userid or Everyone
-        discussion = models.Discussion.get(discussion_id)
-
-        post_id = args.get('post_id')
-        post_id = int(Node.from_global_id(post_id)[1])
-        post = models.Post.get(post_id)
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = post.user_can(user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
-
-        changed = False
-        subject = args.get('subject')
-        body = args.get('body')
-        original_subject_entry = post.subject.first_original()
-        # subject is not required, be careful to not remove it if not specified
-        if subject and subject != original_subject_entry.value:
-            post.subject.add_value(subject, original_subject_entry.locale_code)
-            changed = True
-
-        original_body_entry = post.body.first_original()
-        if body != original_body_entry.value:
-            post.body.add_value(body, original_body_entry.locale_code)
-            changed = True
-
-        if changed:
-            post.modification_date = datetime.utcnow()
-            post.body_mime_type = u'text/html'
-            post.db.flush()
-
-        return UpdatePost(post=post)
-
-
-class DeletePost(graphene.Mutation):
-    class Input:
-        post_id = graphene.ID(required=True)
-
-    post = graphene.Field(lambda: Post)
-
-    @staticmethod
-    def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-
-        user_id = context.authenticated_userid or Everyone
-        discussion = models.Discussion.get(discussion_id)
-
-        post_id = args.get('post_id')
-        post_id = int(Node.from_global_id(post_id)[1])
-        post = models.Post.get(post_id)
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = post.user_can(user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
-
-        # Same logic as in assembl/views/api2/post.py:delete_post_instance
-        # Remove extracts associated to this post
-        extracts_to_remove = post.db.query(models.Extract).filter(models.Extract.content_id == post.id).all()
-        for extract in extracts_to_remove:
-            extract.delete()
-
-        if user_id == post.creator_id and P_DELETE_MY_POST in permissions:
-            cause = models.PublicationStates.DELETED_BY_USER
-        elif P_DELETE_POST in permissions:
-            cause = models.PublicationStates.DELETED_BY_ADMIN
-
-        post.delete_post(cause)
-        post.db.flush()
-        return DeletePost(post=post)
-
-
-class UndeletePost(graphene.Mutation):
-    class Input:
-        post_id = graphene.ID(required=True)
-
-    post = graphene.Field(lambda: Post)
-
-    @staticmethod
-    def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-
-        user_id = context.authenticated_userid or Everyone
-        discussion = models.Discussion.get(discussion_id)
-
-        post_id = args.get('post_id')
-        post_id = int(Node.from_global_id(post_id)[1])
-        post = models.Post.get(post_id)
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = post.user_can(user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
-
-        post.undelete_post()
-        post.db.flush()
-        return UndeletePost(post=post)
 
 
 class AddSentiment(graphene.Mutation):
@@ -1400,7 +1299,7 @@ class AddSentiment(graphene.Mutation):
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = SentimentOfPost.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
-        if not allowed:
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
         sentiment_type = args.get('type')
@@ -1440,11 +1339,11 @@ class DeleteSentiment(graphene.Mutation):
         post = models.Post.get(post_id)
 
         permissions = get_permissions(user_id, discussion_id)
-        allowed = post.my_sentiment.user_can(user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
+        allowed = SentimentOfPost.user_can_cls(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
-        post.my_sentiment.is_tombstone = True
+        post.my_sentiment.tombstone_date = datetime.utcnow()
         post.db.flush()
         return DeleteSentiment(post=post)
 
@@ -1455,9 +1354,6 @@ class Mutations(graphene.ObjectType):
     delete_thematic = DeleteThematic.Field()
     create_idea = CreateIdea.Field()
     create_post = CreatePost.Field()
-    update_post = UpdatePost.Field()
-    delete_post = DeletePost.Field()
-    undelete_post = UndeletePost.Field()
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
 
