@@ -72,7 +72,7 @@ def sanitize_html_keep(html_value, valid_tags, valid_attributes=VALID_ATTRIBUTES
     return soup.decode_contents()
 
 
-def sanitize_html(html_value, valid_tags=VALID_ATTRIBUTES, keep_tag_content=True):
+def sanitize_html(html_value, valid_tags=VALID_TAGS, keep_tag_content=True):
     if keep_tag_content:
         return sanitize_html_keep(html_value, valid_tags)
     if valid_tags is not None:
