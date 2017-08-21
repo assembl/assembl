@@ -12,15 +12,21 @@ import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
-function convertVideoDescriptions(thematics) {
+export function convertVideoDescriptions(thematics) {
   return thematics.map((t) => {
+    if (!t.video) {
+      return t;
+    }
+
     return {
       ...t,
       video: {
         ...t.video,
-        descriptionEntriesBottom: convertEntriesToRawContentState(t.video.descriptionEntriesBottom),
-        descriptionEntriesSide: convertEntriesToRawContentState(t.video.descriptionEntriesSide),
-        descriptionEntriesTop: convertEntriesToRawContentState(t.video.descriptionEntriesTop)
+        descriptionEntriesBottom: t.video.descriptionEntriesBottom
+          ? convertEntriesToRawContentState(t.video.descriptionEntriesBottom)
+          : null,
+        descriptionEntriesSide: t.video.descriptionEntriesSide ? convertEntriesToRawContentState(t.video.descriptionEntriesSide) : null,
+        descriptionEntriesTop: t.video.descriptionEntriesTop ? convertEntriesToRawContentState(t.video.descriptionEntriesTop) : null
       }
     };
   });
