@@ -16,7 +16,7 @@ class AnswerForm extends React.PureComponent {
     super();
     this.state = {
       body: null,
-      submiting: false
+      submitting: false
     };
   }
 
@@ -40,7 +40,7 @@ class AnswerForm extends React.PureComponent {
   handleSubmit = () => {
     const { mutate, parentId, ideaId, refetchIdea, hideAnswerForm } = this.props;
     const { body } = this.state;
-    this.setState({ submiting: true });
+    this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (!bodyIsEmpty) {
       const variables = {
@@ -58,11 +58,11 @@ class AnswerForm extends React.PureComponent {
         })
         .catch((error) => {
           displayAlert('danger', error);
-          this.setState({ submiting: false });
+          this.setState({ submitting: false });
         });
     } else {
       displayAlert('warning', I18n.t('debate.thread.fillBody'));
-      this.setState({ submiting: false });
+      this.setState({ submitting: false });
     }
   };
 
@@ -93,7 +93,7 @@ class AnswerForm extends React.PureComponent {
                 <Button
                   className="button-submit button-dark btn btn-default right"
                   onClick={this.handleSubmit}
-                  disabled={this.state.submiting}
+                  disabled={this.state.submitting}
                 >
                   <Translate value="debate.post" />
                 </Button>
