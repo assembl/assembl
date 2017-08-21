@@ -1,11 +1,7 @@
 /* eslint react/no-multi-comp: "off" */
 
 import React from 'react';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
-import CellMeasurer, { CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
-import List from 'react-virtualized/dist/es/List';
-import WindowScroller from 'react-virtualized/dist/es/WindowScroller';
-
+import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctions';
 
 let globalList;
