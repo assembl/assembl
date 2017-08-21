@@ -381,7 +381,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
                 e['value'] = sanitize_html(e['value'])
 
     def safe_set_subject(self, subject):
-        for e in body['entries']:
+        for e in subject['entries']:
             if "<" in e['value']:
                 e['value'] = sanitize_text(e['value'])
 
