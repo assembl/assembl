@@ -10,27 +10,6 @@ import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
-import { convertEntriesToRawContentState } from '../utils/draftjs';
-
-export function convertVideoDescriptions(thematics) {
-  return thematics.map((t) => {
-    if (!t.video) {
-      return t;
-    }
-
-    return {
-      ...t,
-      video: {
-        ...t.video,
-        descriptionEntriesBottom: t.video.descriptionEntriesBottom
-          ? convertEntriesToRawContentState(t.video.descriptionEntriesBottom)
-          : null,
-        descriptionEntriesSide: t.video.descriptionEntriesSide ? convertEntriesToRawContentState(t.video.descriptionEntriesSide) : null,
-        descriptionEntriesTop: t.video.descriptionEntriesTop ? convertEntriesToRawContentState(t.video.descriptionEntriesTop) : null
-      }
-    };
-  });
-}
 
 class Administration extends React.Component {
   constructor() {
@@ -43,7 +22,6 @@ class Administration extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // update thematics in store after a mutation has been executed
     if (nextProps.data.thematics !== this.props.data.thematics) {
       this.putThematicsInStore(nextProps.data);
     }
@@ -52,8 +30,7 @@ class Administration extends React.Component {
   putThematicsInStore(data) {
     // filter with the same query to remove stuff like __typename from the structure
     const filteredThematics = filter(ThematicsQuery, data);
-    const thematics = convertVideoDescriptions(filteredThematics.thematics);
-    this.props.updateThematics(thematics);
+    this.props.updateThematics(filteredThematics.thematics);
   }
 
   render() {

@@ -8,7 +8,6 @@ const Permissions = {
   SELF_REGISTER: 'self_register',
   ADD_POST: 'add_post',
   EDIT_POST: 'edit_post',
-  EDIT_MY_POST: 'edit_my_post',
   DELETE_POST: 'delete_post',
   DELETE_MY_POST: 'delete_my_post',
   VOTE: 'vote',
@@ -45,10 +44,9 @@ export const connectedUserIsExpert = () => {
 
 export const connectedUserIsAdmin = () => {
   const permissions = getConnectedUserPermissions();
-  return permissions.indexOf(Permissions.ADMIN_DISCUSSION) > -1;
-};
+  if (permissions.length === 0) {
+    return false;
+  }
 
-export const connectedUserCan = (permission) => {
-  const permissions = getConnectedUserPermissions();
-  return permissions.indexOf(permission) > -1;
+  return permissions.indexOf(Permissions.ADMIN_DISCUSSION) > -1;
 };

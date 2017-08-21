@@ -1,148 +1,193 @@
-// FIXME: cancel button
 import React from 'react';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import { graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
+import {
+  updateTopPostFormStatus,
+  updateTopPostSubject,
+  updateTopPostBody,
+  updateTopPostSubjectRemaingChars,
+  updateTopPostBodyRemaingChars
+} from '../../../actions/postsActions';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { TxtAreaWithRemainingChars } from '../../common/txtAreaWithRemainingChars';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
-import RichTextEditor from '../../common/richTextEditor';
 
-export const TEXT_INPUT_MAX_LENGTH = 140;
-export const TEXT_AREA_MAX_LENGTH = 3000;
+const TEXT_INPUT_MAX_LENGTH = 140;
+const TEXT_AREA_MAX_LENGTH = 3000;
+const TEXT_AREA_ROWS = 12;
 
-class TopPostForm extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      body: null,
-      isActive: false,
-      subject: '',
-      submitting: false
-    };
-  }
-
-  displayForm = (isActive) => {
-    this.setState({
-      isActive: isActive
-    });
+const TopPostForm = ({
+  ideaId,
+  subject,
+  updateSubject,
+  body,
+  updateBody,
+  updateFormStatus,
+  isFormActive,
+  mutate,
+  refetchIdea,
+  subjectTopPostRemainingChars,
+  updateSubjectChars,
+  bodyTopPostRemainingChars,
+  updateBodyChars
+}) => {
+  const displayForm = (isActive) => {
+    return updateFormStatus(isActive);
   };
 
-  resetForm = () => {
-    this.displayForm(false);
-    this.setState({ subject: '' });
-    this.setState({ body: null });
+  const resetForm = () => {
+    updateSubjectChars(TEXT_INPUT_MAX_LENGTH);
+    updateBodyChars(TEXT_AREA_MAX_LENGTH);
+    displayForm(false);
+    updateSubject('');
+    updateBody('');
   };
 
-  createTopPost = () => {
-    const { ideaId, mutate, refetchIdea } = this.props;
-    const { body, subject } = this.state;
-    this.setState({ submitting: true });
-    const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
-    if (subject && !bodyIsEmpty) {
-      const variables = {
-        ideaId: ideaId,
-        subject: subject,
-        body: convertRawContentStateToHTML(body)
-      };
+  const variables = {
+    ideaId: ideaId,
+    subject: subject,
+    body: body
+  };
+
+  const createTopPost = () => {
+    if (subject && body) {
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })
         .then(() => {
           refetchIdea();
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
-          this.resetForm();
-          this.setState({ submitting: false });
+          resetForm();
         })
         .catch((error) => {
           displayAlert('danger', error);
-          this.setState({ submitting: false });
         });
     } else if (!subject) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
-      this.setState({ submitting: false });
-    } else if (bodyIsEmpty) {
+    } else if (!body) {
       displayAlert('warning', I18n.t('debate.thread.fillBody'));
-      this.setState({ submitting: false });
     }
   };
 
-  handleInputFocus = () => {
+  const handleInputFocus = () => {
     const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
     if (!isUserConnected) {
       inviteUserToLogin();
     } else {
-      this.displayForm(true);
+      displayForm(true);
     }
   };
 
-  updateBody = (newValue) => {
-    this.setState({
-      body: newValue
-    });
+  const handleSubjectChange = (e) => {
+    const maxChars = TEXT_INPUT_MAX_LENGTH;
+    const length = e.target.value.length;
+    const remaining = maxChars - length;
+    updateSubjectChars(remaining);
+    updateSubject(e.target.value);
   };
 
-  handleSubjectChange = (e) => {
-    this.setState({
-      subject: e.target.value
-    });
+  const handleBodyChange = (e) => {
+    const maxChars = TEXT_AREA_MAX_LENGTH;
+    const length = e.target.value.length;
+    const remaining = maxChars - length;
+    updateBodyChars(remaining);
+    updateBody(e.target.value);
   };
 
-  render() {
-    return (
-      <Row>
-        <Col xs={0} sm={1} md={2} />
-        <Col xs={12} sm={3} md={2} className="no-padding">
-          <div className="start-discussion-container">
-            <div className="start-discussion-icon">
-              <span className="assembl-icon-discussion color" />
-            </div>
-            <div className="start-discussion">
-              <h3 className="dark-title-3 no-margin">
-                <Translate value="debate.thread.startDiscussion" />
-              </h3>
-            </div>
+  return (
+    <Row>
+      <Col xs={0} sm={1} md={2} />
+      <Col xs={12} sm={3} md={2} className="no-padding">
+        <div className="start-discussion-container">
+          <div className="start-discussion-icon">
+            <span className="assembl-icon-discussion color" />
           </div>
-        </Col>
-        <Col xs={12} sm={7} md={6} className="no-padding">
-          <div className="form-container">
-            <FormGroup>
-              <TextInputWithRemainingChars
-                value={this.state.subject}
-                label={I18n.t('debate.subject')}
-                maxLength={TEXT_INPUT_MAX_LENGTH}
-                handleTxtChange={this.handleSubjectChange}
-                handleInputFocus={this.handleInputFocus}
+          <div className="start-discussion">
+            <h3 className="dark-title-3 no-margin">
+              <Translate value="debate.thread.startDiscussion" />
+            </h3>
+          </div>
+        </div>
+      </Col>
+      <Col xs={12} sm={7} md={6} className="no-padding">
+        <div className="form-container">
+          <FormGroup>
+            <TextInputWithRemainingChars
+              value={subject}
+              label={I18n.t('debate.subject')}
+              maxLength={TEXT_INPUT_MAX_LENGTH}
+              handleTxtChange={handleSubjectChange}
+              handleInputFocus={handleInputFocus}
+              remainingChars={subjectTopPostRemainingChars}
+            />
+            <div className={isFormActive ? 'margin-m' : 'hidden'}>
+              <TxtAreaWithRemainingChars
+                value={body}
+                label={I18n.t('debate.insert')}
+                maxLength={TEXT_AREA_MAX_LENGTH}
+                rows={TEXT_AREA_ROWS}
+                handleTxtChange={handleBodyChange}
+                remainingChars={bodyTopPostRemainingChars}
               />
-              <div className={this.state.isActive ? 'margin-m' : 'hidden'}>
-                <RichTextEditor
-                  rawContentState={this.state.body}
-                  handleInputFocus={this.handleInputFocus}
-                  maxLength={TEXT_AREA_MAX_LENGTH}
-                  placeholder={I18n.t('debate.insert')}
-                  updateContentState={this.updateBody}
-                />
-                <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
-                  <Translate value="cancel" />
-                </Button>
-                <Button
-                  className="button-submit button-dark btn btn-default right margin-l"
-                  onClick={this.createTopPost}
-                  style={{ marginBottom: '30px' }}
-                  disabled={this.state.submitting}
-                >
-                  <Translate value="debate.post" />
-                </Button>
-              </div>
-            </FormGroup>
-          </div>
-        </Col>
-        <Col xs={0} sm={1} md={2} />
-      </Row>
-    );
-  }
-}
+              <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={resetForm}>
+                <Translate value="cancel" />
+              </Button>
+              <Button
+                className="button-submit button-dark btn btn-default right margin-l"
+                onClick={createTopPost}
+                style={{ marginBottom: '30px' }}
+              >
+                <Translate value="debate.post" />
+              </Button>
+            </div>
+          </FormGroup>
+        </div>
+      </Col>
+      <Col xs={0} sm={1} md={2} />
+    </Row>
+  );
+};
 
-export default graphql(createPostMutation)(TopPostForm);
+const mapStateToProps = ({ posts, debate }) => {
+  return {
+    subject: posts.topPostSubject,
+    body: posts.topPostBody,
+    isFormActive: posts.topPostFormStatus,
+    subjectTopPostRemainingChars: posts.subjectTopPostRemainingChars,
+    bodyTopPostRemainingChars: posts.bodyTopPostRemainingChars,
+    slug: debate.debateData.slug
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateFormStatus: (isFormActive) => {
+      return dispatch(updateTopPostFormStatus(isFormActive));
+    },
+    updateSubject: (subject) => {
+      return dispatch(updateTopPostSubject(subject));
+    },
+    updateBody: (body) => {
+      return dispatch(updateTopPostBody(body));
+    },
+    updateSubjectChars: (subjectRemainingChars) => {
+      return dispatch(updateTopPostSubjectRemaingChars(subjectRemainingChars));
+    },
+    updateBodyChars: (bodyRemainingChars) => {
+      return dispatch(updateTopPostBodyRemaingChars(bodyRemainingChars));
+    }
+  };
+};
+
+TopPostForm.propTypes = {
+  mutate: PropTypes.func.isRequired
+};
+
+const TopPostFormWithMutation = graphql(createPostMutation)(TopPostForm);
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopPostFormWithMutation);

@@ -1,24 +1,33 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { graphql } from 'react-apollo';
+import PostCreatorQuery from '../../../graphql/PostCreatorQuery.graphql';
 
 class PostCreator extends React.Component {
   render() {
-    const { name } = this.props;
+    const { proposition } = this.props.data;
     return (
       <div className="inline">
-        <div className="user">
-          <span className="assembl-icon-profil grey">&nbsp;</span>
-          <span className="username">
-            {name}
-          </span>
-        </div>
+        {proposition &&
+          <div className="user">
+            <span className="assembl-icon-profil grey">&nbsp;</span>
+            <span className="username">
+              {proposition.creator.name}
+            </span>
+          </div>}
       </div>
     );
   }
 }
 
 PostCreator.propTypes = {
-  name: PropTypes.string.isRequired
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.object,
+    proposition: PropTypes.Array
+  }).isRequired
 };
 
-export default PostCreator;
+const PostCreatorWithData = graphql(PostCreatorQuery)(PostCreator);
+
+export default PostCreatorWithData;

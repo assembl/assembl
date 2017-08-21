@@ -2,16 +2,12 @@ import React from 'react';
 import { Link } from 'react-router';
 import Statistic from './statistic';
 
-class ThematicPreview extends React.Component {
+class Thematic extends React.Component {
   render() {
     const { imgUrl, link, title, description, numPosts, numContributors } = this.props;
-    const imageBoxStyle = {};
-    if (imgUrl) {
-      imageBoxStyle.backgroundImage = `url(${imgUrl})`;
-    }
     return (
       <div className="illustration illustration-box">
-        <div className="image-box" style={imageBoxStyle}>
+        <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>
           &nbsp;
         </div>
         <Link className="content-box" to={link}>
@@ -31,4 +27,4 @@ class ThematicPreview extends React.Component {
   }
 }
 
-export default ThematicPreview;
+export default Thematic;

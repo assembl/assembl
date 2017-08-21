@@ -1,7 +1,0 @@
-#import "./Post.graphql"
-
-query Post($id: ID!) {
-  post: node(id: $id) {
-    ...Post
-  }
-}

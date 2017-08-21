@@ -62,7 +62,7 @@ module.exports = {
                   'transform-object-rest-spread', 'transform-class-properties',
                   ['transform-runtime', { helpers: true, polyfill: false }]
                 ],
-                presets: [['es2015', { modules: false }], 'react', 'flow']
+                presets: ['es2015', 'react']
               }
             },
             include: [
@@ -118,7 +118,7 @@ module.exports = {
             NODE_ENV: JSON.stringify('production')
           }
         }),
-        new UglifyJSPlugin({ sourceMap: true, parallel: true }),
+        new UglifyJSPlugin({ sourceMap: true }),
         new ExtractTextPlugin("[name].css"),
     ]
 };

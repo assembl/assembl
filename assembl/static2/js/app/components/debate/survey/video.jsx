@@ -22,7 +22,7 @@ class Video extends React.Component {
                     <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
                       <div
                         className="video-description-layer video-description-top"
-                        dangerouslySetInnerHTML={{ __html: descriptionTop }}
+                        dangerouslySetInnerHTML={{ __html: descriptionTop.replace(/\n/g, '<br/>') }}
                       />
                     </Col>
                   </Row>}
@@ -33,7 +33,10 @@ class Video extends React.Component {
                         <div>
                           <span className="assembl-icon-pepite color2">&nbsp;</span>
                         </div>
-                        <div className="description-txt" dangerouslySetInnerHTML={{ __html: descriptionSide }} />
+                        <div
+                          className="description-txt"
+                          dangerouslySetInnerHTML={{ __html: descriptionSide.replace(/\n/g, '<br/>') }}
+                        />
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
                     </Col>}
@@ -48,7 +51,7 @@ class Video extends React.Component {
                     <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
                       <div
                         className="video-description-layer video-description-bottom"
-                        dangerouslySetInnerHTML={{ __html: descriptionBottom }}
+                        dangerouslySetInnerHTML={{ __html: descriptionBottom.replace(/\n/g, '<br/>') }}
                       />
                     </Col>}
                 </Row>

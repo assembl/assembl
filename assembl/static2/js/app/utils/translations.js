@@ -152,11 +152,6 @@ const Translations = {
       title: 'synthèse'
     },
     common: {
-      editor: {
-        bold: 'Gras',
-        italic: 'Italique',
-        bulletList: 'Liste de puces'
-      },
       uploadButton: 'Choisissez un fichier',
       goUp: 'Remonter'
     },
@@ -175,12 +170,6 @@ const Translations = {
       dontUnderstand: 'Pas tout compris',
       moreInfo: 'SVP + d\'infos',
       remaining_x_characters: 'Il vous reste %{nbCharacters} caractères',
-      deleteMessage: 'Supprimer ce message',
-      editMessage: 'Modifier ce message',
-      confirmDeletionTitle: 'Confirmation de suppression',
-      confirmDeletionBody: 'Êtes-vous sûr de vouloir supprimer ce message ?',
-      confirmDeletionButtonDelete: 'Supprimer',
-      confirmDeletionButtonCancel: 'Annuler',
       survey: {
         themesTitle: 'Choisissez une thématique !',
         txtAreaPh: 'Ecrivez votre proposition',
@@ -196,10 +185,7 @@ const Translations = {
         endPhase: 'La phase %{closedPhaseName} est terminée.'
       },
       thread: {
-        postDeletedByAdmin: 'Ce message a été supprimé par l\'administrateur du débat. ',
-        postDeletedByUser: 'Ce message a été supprimé par son auteur. ',
-        postEdited: 'modifié',
-        postSuccess: 'Merci pour votre participation. Votre message a bien été envoyé !',
+        postSuccess: 'Merci pour votre participation. Votre message a bien été envoyée !',
         fillSubject: 'Veuillez écrire un titre',
         fillBody: 'Veuillez écrire un message',
         linkIdea: 'Ce post est en lien avec les thématiques suivantes :',
@@ -209,17 +195,10 @@ const Translations = {
         numberOfResponses: '%{count} réponses à ce post',
         numberOfResponses_0: 'Aucune réponse à ce post',
         numberOfResponses_1: '%{count} réponse à ce post',
-        numberOfReactions: '%{count} réactions',
-        numberOfReactions_1: '%{count} réaction',
         startDiscussion: 'Je démarre une discussion'
       },
       themes: 'Thèmes',
-      notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du ',
-      edit: {
-        title: 'Je modifie mon message',
-        subject: 'Titre',
-        body: 'Message'
-      }
+      notStarted: 'La phase %{phaseName} n\'a pas encore commencé. Merci de revenir à partir du '
     },
     profile: {
       panelTitle: 'Bienvenue dans la page profil d\'Assembl'
@@ -433,11 +412,6 @@ const Translations = {
       panelTitle: 'Welcome to Assembl community page'
     },
     common: {
-      editor: {
-        bold: 'Bold',
-        italic: 'Italic',
-        bulletList: 'Bullet list'
-      },
       uploadButton: 'Choose a file to upload',
       goUp: 'Back to top'
     },
@@ -456,12 +430,6 @@ const Translations = {
       dontUnderstand: 'Did not get it',
       moreInfo: 'More info please',
       remaining_x_characters: 'You have %{nbCharacters} characters left',
-      deleteMessage: 'Delete this message',
-      editMessage: 'Edit this message',
-      confirmDeletionTitle: 'Confirm deletion',
-      confirmDeletionBody: 'Are you sure you want to delete this message?',
-      confirmDeletionButtonDelete: 'Delete',
-      confirmDeletionButtonCancel: 'Cancel',
       survey: {
         themesTitle: 'Choose a theme!',
         txtAreaPh: 'Write your point of view',
@@ -477,9 +445,6 @@ const Translations = {
         endPhase: 'The %{closedPhaseName} phase is closed.'
       },
       thread: {
-        postDeletedByAdmin: 'This message has been deleted by the community manager.',
-        postDeletedByUser: 'This message has been deleted by the author.',
-        postEdited: 'edited',
         postSuccess: 'Thanks for your participation. Your comment has been sent!',
         fillSubject: 'Please, write a title',
         fillBody: 'Please, write a comment',
@@ -490,17 +455,10 @@ const Translations = {
         numberOfResponses: '%{count} responses to this post',
         numberOfResponses_0: 'No response to this post',
         numberOfResponses_1: '%{count} response to this post',
-        numberOfReactions: '%{count} reactions',
-        numberOfReactions_1: '%{count} reaction',
         startDiscussion: 'Start a new thread'
       },
       themes: 'Themes',
-      notStarted: 'The %{phaseName} phase has not started. Please come back from ',
-      edit: {
-        title: 'I edit my message',
-        subject: 'Body',
-        body: 'Comment'
-      }
+      notStarted: 'The %{phaseName} phase has not started. Please come back from '
     },
     profile: {
       panelTitle: 'Welcome to Assembl profile page'

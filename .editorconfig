@@ -14,10 +14,6 @@ trim_trailing_whitespace = true
 ; indent_style = space
 ; indent_size = 4
 
-; Rest
-[*.rst]
-trim_trailing_whitespace = false
-
 ; Javascript
 [*.js]
 indent_style = space

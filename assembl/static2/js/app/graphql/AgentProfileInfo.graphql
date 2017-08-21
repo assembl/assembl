@@ -1,5 +1,0 @@
-fragment AgentProfileInfo on AgentProfile {
-  id
-  userId
-  name
-}
