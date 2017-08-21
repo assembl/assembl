@@ -1,6 +1,6 @@
 import React from 'react';
 
-class MoreInfos extends React.Component {
+class MoreInfo extends React.Component {
   render() {
     const { size } = this.props;
     return (
@@ -86,4 +86,4 @@ class MoreInfos extends React.Component {
   }
 }
 
-export default MoreInfos;
+export default MoreInfo;

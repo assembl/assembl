@@ -27,16 +27,7 @@ class Proposals extends React.Component {
         {posts.length > 0 &&
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {posts.map((post, index) => {
-              return (
-                <Post
-                  refetchTheme={refetchTheme}
-                  post={post.node}
-                  id={post.node.id}
-                  postIndex={index}
-                  moreProposals={moreProposals}
-                  key={index}
-                />
-              );
+              return <Post refetchTheme={refetchTheme} post={post.node} postIndex={index} moreProposals={moreProposals} key={index} />;
             })}
           </div>}
         {posts.length === 0 &&

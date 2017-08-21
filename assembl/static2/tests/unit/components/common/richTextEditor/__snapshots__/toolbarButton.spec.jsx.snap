@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ToolbarButton component should render an active toolbar button 1`] = `
+<button
+  className="active btn btn-default"
+  disabled={false}
+  onClick={[Function]}
+  title="Bold"
+  type="button"
+>
+  <span
+    className="assembl-icon-text-bold"
+  />
+</button>
+`;
+
+exports[`ToolbarButton component should render an inactive toolbar button 1`] = `
+<button
+  className="btn btn-default"
+  disabled={false}
+  onClick={[Function]}
+  title="Italic"
+  type="button"
+>
+  <span
+    className="assembl-icon-text-italic"
+  />
+</button>
+`;

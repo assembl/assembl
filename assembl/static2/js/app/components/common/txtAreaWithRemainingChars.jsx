@@ -10,7 +10,8 @@ export const TxtAreaWithRemainingChars = ({
   handleTxtChange,
   remainingChars,
   handleInputFocus,
-  domId
+  domId,
+  textareaRef
 }) => {
   return (
     <div>
@@ -29,6 +30,7 @@ export const TxtAreaWithRemainingChars = ({
         onFocus={handleInputFocus || null}
         onChange={handleTxtChange}
         id={domId || 'txtarea'}
+        inputRef={textareaRef}
       />
       <div className="annotation margin-xs">
         <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />

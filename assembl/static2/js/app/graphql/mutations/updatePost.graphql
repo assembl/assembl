@@ -1,0 +1,9 @@
+#import "../Post.graphql"
+
+mutation updatePost($postId: ID!, $subject: String, $body: String!) {
+  updatePost(postId: $postId, subject: $subject, body: $body) {
+    post {
+      ...Post
+    }
+  }
+}

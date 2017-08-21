@@ -3,11 +3,11 @@ query RootIdeasQuery($lang: String!) {
     ... on Idea {
       children {
         ... on Idea {
-          id,
-          title(lang: $lang),
-          description(lang: $lang),
-          numPosts,
-          numContributors,
+          id
+          title(lang: $lang)
+          description(lang: $lang)
+          numPosts
+          numContributors
           imgUrl
         }
       }

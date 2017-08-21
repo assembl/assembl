@@ -37,8 +37,10 @@
 
 .sentiments-count {
     .txt {
-        padding: 20px 0 0;
+        padding: 1px 0 0 20px;
         display: block;
+        color: $first-color;
+        font-family: $font-family4;
         font-size: $font-size-xxs;
     }
 }

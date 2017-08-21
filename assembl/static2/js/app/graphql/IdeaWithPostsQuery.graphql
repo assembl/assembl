@@ -1,0 +1,20 @@
+query IdeaWithPosts($id: ID!) {
+  idea: node(id: $id) {
+    ... on Idea {
+      id
+      numPosts
+      numContributors
+      posts {
+        edges {
+          node {
+            ... on Post {
+              id
+              parentId
+              creationDate
+            }
+          }
+        }
+      }
+    }
+  }
+}

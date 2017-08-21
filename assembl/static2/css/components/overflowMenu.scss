@@ -1,0 +1,13 @@
+.overflow-menu {
+  .overflow-menu-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .overflow-menu-action {
+    color: $first-color-opacity-70;
+
+    &:hover {
+      color: $first-color;
+    }
+  }
+}
