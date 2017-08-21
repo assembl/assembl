@@ -66,6 +66,8 @@ def sanitize_html_keep(html_value, valid_tags, valid_attributes=VALID_ATTRIBUTES
     for tag in soup.find_all(True):
         if tag.name not in valid_tags:
             tag.hidden = True
+            if tag.name in ('p', 'br'):
+                tag.append('\n')
         else: # it might have bad attributes
             for attr in tag.attrs.keys():
                 if attr not in valid_attributes:
