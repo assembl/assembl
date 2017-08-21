@@ -35,6 +35,10 @@ server {
     {% endif %}
   {% endif %}
 
+  add_header x-xss-protection "1; mode=block" always;
+  add_header x-frame-options "SAMEORIGIN" always;
+  add_header X-Content-Type-Options "nosniff" always;
+
   server_tokens off;
   add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: {{ docker_piwik }} *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' www.youtube.com *.facebook.com ; connect-src 'self' wss://{{public_hostname_}} {{ docker_sentry }} {{ docker_piwik }}; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: {{ docker_piwik }} *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org";
 
