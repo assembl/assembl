@@ -54,6 +54,7 @@ class TopPostForm extends React.Component {
           refetchIdea();
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
           this.resetForm();
+          this.setState({ submitting: false });
         })
         .catch((error) => {
           displayAlert('danger', error);
