@@ -47,3 +47,9 @@
   }
 
 }
+
+.rich-text-editor.hidePlaceholder {
+  .public-DraftEditorPlaceholder-inner {
+    display: none;
+  }
+}

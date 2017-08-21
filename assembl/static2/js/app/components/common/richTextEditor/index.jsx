@@ -128,7 +128,7 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
         return true;
       }
     }
-    return this.state.editorHasFocus;
+    return false;
   }
 
   focusEditor = (): void => {
