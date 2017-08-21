@@ -15,7 +15,7 @@ class AnswerForm extends React.PureComponent {
   constructor() {
     super();
     this.state = {
-      body: '',
+      body: null,
       submiting: false
     };
   }
@@ -39,12 +39,14 @@ class AnswerForm extends React.PureComponent {
 
   handleSubmit = () => {
     const { mutate, parentId, ideaId, refetchIdea, hideAnswerForm } = this.props;
+    const { body } = this.state;
     this.setState({ submiting: true });
-    if (!rawContentStateIsEmpty(this.state.body)) {
+    const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
+    if (!bodyIsEmpty) {
       const variables = {
         ideaId: ideaId,
         parentId: parentId,
-        body: convertRawContentStateToHTML(this.state.body)
+        body: convertRawContentStateToHTML(body)
       };
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })
