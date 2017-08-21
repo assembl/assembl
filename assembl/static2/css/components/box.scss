@@ -103,10 +103,14 @@
   }
 
   .rotate-hyphen {
-    display: none;
-    margin: 240px 0 0 -10px;
+    transition: transform 0.2s ease-in;
     position: absolute;
-    transform: rotate(90deg);
     z-index: 3;
+  }
+
+  &:hover {
+    .rotate-hyphen {
+      transform: translate3d(-10px, -10px, 0) rotate(90deg);
+    }
   }
 }
