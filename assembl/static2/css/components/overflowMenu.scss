@@ -9,5 +9,9 @@
     &:hover {
       color: $first-color;
     }
+
+    &:last-child {
+      margin-top: 10px;
+    }
   }
 }
