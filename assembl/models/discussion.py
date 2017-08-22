@@ -23,8 +23,9 @@ from sqlalchemy import (
     inspect,
 )
 from sqlalchemy.orm import (
-    relationship, join, subqueryload_all, backref)
+    relationship, join, subqueryload_all, backref, with_polymorphic)
 from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.sql.expression import literal, distinct
 
 from assembl.lib import config
 from assembl.lib.utils import slugify, get_global_base_url, full_class_name
@@ -551,8 +552,15 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                 super(AllUsersCollection, self).__init__(cls, User)
 
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
-                return query.outerjoin(
-                    owner_alias, owner_alias.id != None)
+                from ..auth.util import get_current_user_id
+                try:
+                    current_user = get_current_user_id()
+                except RuntimeError:
+                    current_user = None
+                participants = parent_instance.get_participants_query(
+                    True, False, current_user).subquery()
+                return query.join(
+                    owner_alias, last_alias.id.in_(participants))
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
@@ -561,19 +569,25 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                     instance.discussion_id = parent_instance.id
 
             def contains(self, parent_instance, instance):
-                return True
+                from ..auth.util import get_current_user_id
+                try:
+                    current_user = get_current_user_id()
+                    # shortcut
+                    if instance.id == current_user:
+                        return True
+                except RuntimeError:
+                    pass
+                participants = parent_instance.get_participants_query(True)
+                return parent_instance.db.query(
+                    literal(instance.id).in_(participants.subquery())).first()[0]
 
             def get_instance(self, key, parent_instance):
                 if key == 'current':
-                    from pyramid.threadlocal import get_current_request
-                    from pyramid.httpexceptions import HTTPUnauthorized
-                    request = get_current_request()
-                    if request is not None:
-                        key = request.authenticated_userid
-                        if key is None:
-                            raise HTTPUnauthorized()
-                    else:
-                        raise RuntimeError()
+                    from ..auth.util import get_current_user_id
+                    try:
+                        key = get_current_user_id()
+                    except RuntimeError:
+                        raise HTTPUnauthorized()
                 return super(AllUsersCollection, self).get_instance(
                     key, parent_instance)
 
@@ -659,33 +673,45 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             & (LocalUserRole.requested == False)),
         backref="participant_in_discussion")
 
-    def get_participants_query(self, ids_only=False, include_readers=False):
+    def get_participants_query(self, ids_only=False, include_readers=False, current_user=None):
         from .auth import AgentProfile, LocalUserRole
         from .generic import Content
         from .post import Post
         from .action import ViewPost
         from .idea_content_link import Extract
-
-        query = self.db.query(AgentProfile.id).join(LocalUserRole,
-                LocalUserRole.user_id==AgentProfile.id).filter(
-            LocalUserRole.discussion_id == self.id).union(
-            self.db.query(AgentProfile.id).join(Post,
-                Post.creator_id==AgentProfile.id).filter(
-            Post.discussion_id == self.id)).union(
-            self.db.query(AgentProfile.id).join(
-                Extract, Extract.creator_id==AgentProfile.id).filter(
-            Extract.discussion_id == self.id))
-        query = query.union(self.db.query(AgentProfile.id).join(UserRole,
-                UserRole.user_id==AgentProfile.id))
+        from .announcement import Announcement
+        from .attachment import Attachment
+        post = with_polymorphic(Post, [Post])
+        attachment = with_polymorphic(Attachment, [Attachment])
+        extract = with_polymorphic(Extract, [Extract])
+        db = self.db
+        queries = [
+            db.query(LocalUserRole.user_id.label('user_id')).filter(
+                LocalUserRole.discussion_id == self.id),
+            db.query(post.creator_id.label('user_id')).filter(
+                post.discussion_id == self.id),
+            db.query(extract.creator_id.label('user_id')).filter(
+                extract.discussion_id == self.id),
+            db.query(extract.owner_id.label('user_id')).filter(
+                extract.discussion_id == self.id),
+            db.query(Announcement.creator_id.label('user_id')).filter(
+                Announcement.discussion_id == self.id),
+            db.query(attachment.creator_id.label('user_id')).filter(
+                attachment.discussion_id == self.id),
+            db.query(UserRole.user_id.label('user_id')),
+        ]
+        if self.creator_id is not None:
+            queries.append(db.query(literal(self.creator_id).label('user_id')))
+        if current_user is not None:
+            queries.append(db.query(literal(current_user).label('user_id')))
         if include_readers:
-            query = query.union(
-                self.db.query(ViewPost.actor_id).join(
+            queries.append(db.query(ViewPost.actor_id.label('user_id')).join(
                 Content, Content.id==ViewPost.post_id).filter(
                 Content.discussion_id==self.id))
-        query = query.distinct()
+        query = queries[0].union(*queries[1:]).distinct()
         if ids_only:
             return query
-        return self.db.query(AgentProfile).filter(AgentProfile.id.in_(query))
+        return db.query(AgentProfile).filter(AgentProfile.id.in_(query))
 
     def get_participants(self, ids_only=False):
         query = self.get_participants_query(ids_only)
@@ -750,7 +776,6 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             self, start_date=None, end_date=None, as_agent=True):
         from .post import Post
         from .action import ViewPost
-        from sqlalchemy.sql.expression import distinct
         query = self.db.query(
             func.count(distinct(ViewPost.actor_id))).join(Post).filter(
                 Post.discussion_id == self.id)
