@@ -767,9 +767,10 @@ class LangString(Base):
                 target_locale,
                 Locale.extract_base_locale(e.locale_code))
         entries = [(common_len(e), e) for e in self.entries if not e.error_code]
-        entries.sort(reverse=True)
-        if entries[0][0]:
-            return entries[0][1]
+        if entries:
+            entries.sort(reverse=True)
+            if entries[0][0]:
+                return entries[0][1]
 
     def simplistic_best_entries_with_originals_in_request(self):
         from pyramid.threadlocal import get_current_request
