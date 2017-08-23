@@ -29,6 +29,7 @@ class IdeasLevel extends React.Component {
     this.refMe = this.refMe.bind(this);
     this.refRow = this.refRow.bind(this);
     this.updateWidth = this.updateWidth.bind(this);
+    this.getClassName = this.getClassName.bind(this);
   }
 
   componentDidMount() {
@@ -148,6 +149,20 @@ class IdeasLevel extends React.Component {
 
   setOption(name, value) {
     this.options[name] = value;
+  }
+
+  getClassNames(index) {
+    this.index = index;
+    let styles = 'theme no-padding';
+    if (this.index % 4 === 0) {
+      styles += ' clear';
+    }
+    if (this.index <= 3) {
+      styles += ` theme-first-row-${this.index % 4}`;
+    } else {
+      styles += ` theme-${this.index % 4}`;
+    }
+    return styles;
   }
 
   updateWidth() {
@@ -365,14 +380,7 @@ class IdeasLevel extends React.Component {
         <Row className="no-margin" ref={this.refRow}>
           {thematics.map((thematic, index) => {
             return (
-              <Col
-                xs={12}
-                sm={6}
-                md={3}
-                className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'}
-                key={index}
-                style={thematicStyle}
-              >
+              <Col xs={12} sm={6} md={3} className={this.getClassNames(index)} key={index} style={thematicStyle}>
                 <IdeaPreview
                   imgUrl={thematic.imgUrl}
                   numPosts={thematic.numPosts}
