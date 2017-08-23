@@ -51,21 +51,9 @@ const noRowsRenderer = () => {
 };
 
 class Idea extends React.Component {
-  componentWillMount() {
-    this.refetchIdea = this.props.ideaWithPostsData.refetch;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // data.refetchIdea is a new instance each time Idea component is rerendered
-    // so shallowEqual fails on Post components and we have a perf issue.
-    // Keep the previous function if variables used in query didn't change.
-    if (this.props.lang !== nextProps.lang || this.props.id !== nextProps.id) {
-      this.refetchIdea = nextProps.ideaWithPostsData.refetch;
-    }
-  }
-
   render() {
     const { lang, ideaData, ideaWithPostsData } = this.props;
+    const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
         <div className="idea">
@@ -76,8 +64,7 @@ class Idea extends React.Component {
 
     const { idea } = ideaData;
     const topPosts =
-      !ideaWithPostsData.loading &&
-      transformPosts(ideaWithPostsData.idea.posts.edges, { refetchIdea: this.refetchIdea, ideaId: idea.id });
+      !ideaWithPostsData.loading && transformPosts(ideaWithPostsData.idea.posts.edges, { refetchIdea: refetchIdea, ideaId: idea.id });
 
     return (
       <div className="idea">
@@ -86,7 +73,7 @@ class Idea extends React.Component {
           <Grid fluid className="background-color">
             <div className="max-container">
               <div className="top-post-form">
-                <TopPostForm ideaId={idea.id} refetchIdea={this.refetchIdea} />
+                <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} />
               </div>
             </div>
           </Grid>
