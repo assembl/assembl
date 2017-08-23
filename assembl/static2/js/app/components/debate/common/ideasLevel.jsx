@@ -29,7 +29,7 @@ class IdeasLevel extends React.Component {
     this.refMe = this.refMe.bind(this);
     this.refRow = this.refRow.bind(this);
     this.updateWidth = this.updateWidth.bind(this);
-    this.getClassName = this.getClassName.bind(this);
+    this.getClassNames = this.getClassNames.bind(this);
   }
 
   componentDidMount() {
