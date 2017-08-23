@@ -92,8 +92,7 @@ class TopPostForm extends React.Component {
   render() {
     return (
       <Row>
-        <Col xs={0} sm={1} md={2} />
-        <Col xs={12} sm={3} md={2} className="no-padding">
+        <Col xs={12} sm={3} md={2} smOffset={1} mdOffset={2} className="no-padding">
           <div className="start-discussion-container">
             <div className="start-discussion-icon">
               <span className="assembl-icon-discussion color" />
