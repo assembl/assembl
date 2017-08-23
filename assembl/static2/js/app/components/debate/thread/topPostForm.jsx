@@ -1,4 +1,3 @@
-// FIXME: cancel button
 import React from 'react';
 import { graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
