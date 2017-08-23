@@ -656,7 +656,7 @@ def create_post(request):
             if original_subject:
                 locale = original_subject.locale_code
                 subject = (
-                    original_subject.first_original().value or ''
+                    original_subject.value or ''
                     if in_reply_to_post.get_title() else '')
         elif in_reply_to_idea:
             # TODO:  THis should use a cascade like the frontend
