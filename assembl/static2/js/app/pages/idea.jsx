@@ -12,6 +12,7 @@ import Post, { PostFolded } from '../components/debate/thread/post';
 import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
+import Permissions, { connectedUserCan } from '../utils/permissions';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
 
@@ -70,13 +71,15 @@ class Idea extends React.Component {
       <div className="idea">
         <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
-          <Grid fluid className="background-color">
-            <div className="max-container">
-              <div className="top-post-form">
-                <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} />
+          {connectedUserCan(Permissions.ADD_POST)
+            ? <Grid fluid className="background-color">
+              <div className="max-container">
+                <div className="top-post-form">
+                  <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} />
+                </div>
               </div>
-            </div>
-          </Grid>
+            </Grid>
+            : null}
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="content-section">

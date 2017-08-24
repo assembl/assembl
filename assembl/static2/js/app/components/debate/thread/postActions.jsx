@@ -85,11 +85,13 @@ class PostActions extends React.Component {
     return (
       <div>
         <div className="post-icons">
-          <div className="post-action" onClick={handleAnswerClick}>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={answerTooltip}>
-              <span className="assembl-icon-back-arrow color" />
-            </OverlayTrigger>
-          </div>
+          {connectedUserCan(Permissions.ADD_POST)
+            ? <div className="post-action" onClick={handleAnswerClick}>
+              <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={answerTooltip}>
+                <span className="assembl-icon-back-arrow color" />
+              </OverlayTrigger>
+            </div>
+            : null}
           <div className="post-action">
             <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={shareTooltip}>
               <span className="assembl-icon-share color" />
