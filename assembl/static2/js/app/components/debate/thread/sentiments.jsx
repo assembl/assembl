@@ -49,9 +49,10 @@ export default ({ mySentiment, screenWidth, client, postId }) => {
   ];
   return (
     <div className="add-sentiment">
-      {sentiments.map((sentiment) => {
+      {sentiments.map((sentiment, index) => {
         return (
           <Sentiment
+            key={index}
             sentiment={sentiment}
             isSelected={mySentiment === sentiment.type}
             screenWidth={screenWidth}
