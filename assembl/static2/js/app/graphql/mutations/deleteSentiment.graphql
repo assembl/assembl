@@ -6,6 +6,8 @@ mutation deleteSentiment($postId: ID!) {
         sentimentCounts {
           like
           disagree
+          dontUnderstand
+          moreInfo
         }
         mySentiment
       }

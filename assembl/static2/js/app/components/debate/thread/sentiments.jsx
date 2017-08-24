@@ -7,61 +7,53 @@ import MoreInfo from '../../svg/moreInfo';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { likeTooltip, disagreeTooltip, dontUnderstandTooltip, moreInfoTooltip } from '../../common/tooltips';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
+import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 
-const Sentiment = ({ type, client, screenWidth, tooltip, mySentiment, postId, Svg }) => {
+const Sentiment = ({ sentiment, client, screenWidth, isSelected, postId }) => {
   return (
-    <OverlayTrigger placement={screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={tooltip}>
+    <OverlayTrigger placement={screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={sentiment.tooltip}>
       <div
-        className={mySentiment === type ? 'sentiment sentiment-active' : 'sentiment'}
+        className={isSelected ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={() => {
-          return client.mutate({ mutation: addSentimentMutation, variables: { postId: postId, type: type } });
+          return client.mutate(
+            isSelected
+              ? {
+                mutation: deleteSentimentMutation,
+                variables: { postId: postId }
+              }
+              : {
+                mutation: addSentimentMutation,
+                variables: { postId: postId, type: sentiment.type }
+              }
+          );
         }}
       >
-        <Svg size={25} />
+        <sentiment.Svg size={25} />
       </div>
     </OverlayTrigger>
   );
 };
 
 export default ({ mySentiment, screenWidth, client, postId }) => {
+  const sentiments = [
+    { type: 'LIKE', tooltip: likeTooltip, Svg: Like },
+    { type: 'DISAGREE', tooltip: disagreeTooltip, Svg: Disagree },
+    { type: 'DONT_UNDERSTAND', tooltip: dontUnderstandTooltip, Svg: DontUnderstand },
+    { type: 'MORE_INFO', tooltip: moreInfoTooltip, Svg: MoreInfo }
+  ];
   return (
     <div className="add-sentiment">
-      <Sentiment
-        type="LIKE"
-        mySentiment={mySentiment}
-        screenWidth={screenWidth}
-        tooltip={likeTooltip}
-        postId={postId}
-        client={client}
-        Svg={Like}
-      />
-      <Sentiment
-        type="DISAGREE"
-        mySentiment={mySentiment}
-        screenWidth={screenWidth}
-        tooltip={disagreeTooltip}
-        postId={postId}
-        client={client}
-        Svg={Disagree}
-      />
-      <Sentiment
-        type="DONT_UNDERSTAND"
-        mySentiment={mySentiment}
-        screenWidth={screenWidth}
-        tooltip={dontUnderstandTooltip}
-        postId={postId}
-        client={client}
-        Svg={DontUnderstand}
-      />
-      <Sentiment
-        string="MORE_INFO"
-        mySentiment={mySentiment}
-        screenWidth={screenWidth}
-        tooltip={moreInfoTooltip}
-        postId={postId}
-        client={client}
-        Svg={MoreInfo}
-      />
+      {sentiments.map((sentiment) => {
+        return (
+          <Sentiment
+            sentiment={sentiment}
+            isSelected={mySentiment === sentiment.type}
+            screenWidth={screenWidth}
+            postId={postId}
+            client={client}
+          />
+        );
+      })}
     </div>
   );
 };
