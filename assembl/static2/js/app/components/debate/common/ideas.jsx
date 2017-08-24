@@ -1,12 +1,18 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
-import _filter from 'lodash/filter';
 import IdeasLevel from './ideasLevel';
 
 class Ideas extends React.Component {
   constructor(props) {
     super(props);
+    /*
+    Definition of the selectedIdeas state variable:
+    Each index of selectedIdeas corresponds to a level of ideas,
+    and the value at this index is the id of the selected idea in this level.
+    Empty string means no idea is selected in this level,
+    which is always the case for the last element.
+    */
     this.state = {
       selectedIdeas: [''],
       isInitialState: true
@@ -37,13 +43,13 @@ class Ideas extends React.Component {
               {selectedIdeas.map((selectedIdea, index) => {
                 let listedIdeas = [];
                 if (index === 0) {
-                  listedIdeas = _filter(thematics, (el) => {
-                    return el.parentId === rootIdeaId;
+                  listedIdeas = thematics.filter((idea) => {
+                    return idea.parentId === rootIdeaId;
                   });
                 } else {
                   const parentIdeaId = this.state.selectedIdeas[index - 1];
-                  listedIdeas = _filter(thematics, (el) => {
-                    return el.parentId === parentIdeaId;
+                  listedIdeas = thematics.filter((idea) => {
+                    return idea.parentId === parentIdeaId;
                   });
                 }
                 return (
