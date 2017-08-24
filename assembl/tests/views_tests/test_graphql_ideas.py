@@ -156,3 +156,36 @@ def xtest_graphql_indirect_dea_content_links(jack_layton_linked_discussion, grap
     contributors = res.data['ideas'][0]['contributors']
     assert len(contributors) == 9
     assert contributors[0]['name'] == u'M. Animator'
+
+
+def test_get_long_title_on_idea(graphql_request, idea_in_thread_phase):
+    # This is the "What we need to know"
+    idea_id = idea_in_thread_phase
+    from graphene.relay import Node
+    raw_id = int(Node.from_global_id(idea_id)[1])
+    from assembl.models import Idea
+    idea = Idea.get(raw_id)
+    idea.long_title = u'What we need to know'
+    idea.db.flush()
+    res = schema.execute(u"""
+query Idea($lang: String!, $id: ID!) {
+  idea: node(id: $id) {
+    ... on Idea {
+      title(lang: $lang)
+      longTitle
+      description(lang: $lang)
+      imgUrl
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": idea_id,
+        "lang": u'en',
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'idea': {
+            u'title': u'Understanding the dynamics and issues',
+            u'longTitle': u'What we need to know',
+            u'description': None,
+            u'imgUrl': None
+    }}

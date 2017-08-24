@@ -3,6 +3,7 @@ query Idea($lang: String!, $id: ID!) {
     ... on Idea {
       id
       title(lang: $lang)
+      longTitle
       description(lang: $lang)
       imgUrl
     }
