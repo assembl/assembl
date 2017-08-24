@@ -1243,8 +1243,6 @@ class CreatePost(graphene.Mutation):
                 body_mime_type=u'text/html'
             )
             new_post.guess_languages()
-            # TODO
-            # new_post.body_mime_type = 'text/html'
             db = new_post.db
             db.add(new_post)
             db.flush()

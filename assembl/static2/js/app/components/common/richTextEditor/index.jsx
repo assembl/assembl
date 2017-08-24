@@ -132,6 +132,8 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
   }
 
   focusEditor = (): void => {
+    // Hacky: Wait to focus the editor so we don't lose selection.
+    // The toolbar actions don't work at all without this.
     setTimeout(() => {
       return this.editor.focus();
     }, 50);
