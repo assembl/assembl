@@ -263,12 +263,26 @@ class SentimentCounts(graphene.ObjectType):
 
 
 class IdeaContentLink(graphene.ObjectType):
-    idea_id = graphene.Int(required=True)
+    idea_id = graphene.Int()
+    post_id = graphene.Int()
+    creator_id = graphene.Int()
     type = graphene.String(required=True)
     idea = graphene.Field(lambda: Idea)
+    post = graphene.Field(lambda: Post)
+    creator = graphene.Field(lambda: AgentProfile)
+    creation_date = DateTime()
 
     def resolve_idea(self, args, context, info):
-        return models.Idea.get(self.idea_id)
+        if self.idea_id is not None:
+            return models.Idea.get(self.idea_id)
+
+    def resolve_post(self, args, context, info):
+        if self.post_id is not None:
+            return models.Post.get(self.post_id)
+
+    def resolve_creator(self, args, context, info):
+        if self.creator_id is not None:
+            return models.AgentProfile.get(self.creator_id)
 
 
 class PostInterface(SQLAlchemyInterface):
@@ -351,13 +365,24 @@ class PostInterface(SQLAlchemyInterface):
         return my_sentiment.name.upper()
 
     def resolve_indirect_idea_content_links(self, args, context, info):
-        links = [(models.Idea.get_database_id(link['idIdea']), link['@type'])
-                    for link in self.indirect_idea_content_links_with_cache()]
-        # for @type == 'Extract', idIdea is None
+        # example:
+        #  {'@id': 'local:IdeaContentLink/101',
+        #   '@type': 'Extract',
+        #   'created': '2014-04-25T17:51:52Z',
+        #   'idCreator': 'local:AgentProfile/152',
+        #   'idIdea': 'local:Idea/52',
+        #   'idPost': 'local:Content/1467'},
+        # for @type == 'Extract', idIdea may be None
+        # @type == 'IdeaRelatedPostLink' for idea links
+        links = [IdeaContentLink(
+                    idea_id=models.Idea.get_database_id(link['idIdea']),
+                    post_id=models.Post.get_database_id(link['idPost']),
+                    type=link['@type'],
+                    creation_date=link['created'],
+                    creator_id=link['idCreator'])
+                 for link in self.indirect_idea_content_links_with_cache()]
         # only return links with the IdeaRelatedPostLink type
-        return [IdeaContentLink(idea_id=idea_id,
-                                type=type)
-                for idea_id, type in links if type == 'IdeaRelatedPostLink']
+        return [link for link in links if link.type == 'IdeaRelatedPostLink']
 
     def resolve_parent_id(self, args, context, info):
         if self.parent_id is None:

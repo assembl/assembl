@@ -126,38 +126,6 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
     assert res.data['numParticipants'] == 1
 
 
-# this test works in isolation, but not with all tests...
-def xtest_graphql_indirect_dea_content_links(jack_layton_linked_discussion, graphql_request):
-    res = schema.execute(
-        u"""query {
-            ideas {
-                ... on Idea {
-                    id
-                    title
-                    titleEntries { value, localeCode }
-                    contributors { id, name }
-                    shortTitle
-                    numPosts
-                    numContributors
-                    parentId
-                    order
-                    posts(first:1) {
-                        edges {
-                            node {
-                                ... on Post {
-                                    indirectIdeaContentLinks { ideaId, type } subject body
-        } } } } } } }
-        """, context_value=graphql_request)
-    idea_ids = [idea['id'] for idea in res.data['ideas']]
-    idea_content_links = res.data['ideas'][0]['posts']['edges'][0]['node']['indirectIdeaContentLinks']
-    assert len(idea_content_links) == 7
-    assert idea_content_links[0]['ideaId'] in idea_ids
-    assert idea_content_links[0]['type'] == u'IdeaContentPositiveLink'
-    contributors = res.data['ideas'][0]['contributors']
-    assert len(contributors) == 9
-    assert contributors[0]['name'] == u'M. Animator'
-
-
 def test_get_long_title_on_idea(graphql_request, idea_in_thread_phase):
     # This is the "What we need to know"
     idea_id = idea_in_thread_phase
