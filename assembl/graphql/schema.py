@@ -352,6 +352,14 @@ class IdeaContentLink(graphene.ObjectType):
             return models.AgentProfile.get(self.creator_id)
 
 
+class Document(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Document
+        only_fields = ('id', 'title', 'mime_type')
+
+    external_url = graphene.String()
+
+
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
@@ -372,6 +380,7 @@ class PostInterface(SQLAlchemyInterface):
     parent_id = graphene.ID()
     body_mime_type = graphene.String(required=True)
     publication_state = graphene.Field(type=PublicationStates)
+    attachments = graphene.List(Document)
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
@@ -473,6 +482,10 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_publication_state(self, args, context, info):
         return self.publication_state.name
+
+    def resolve_attachments(self, args, context, info):
+        return [attachment.document for attachment in self.attachments]
+
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):

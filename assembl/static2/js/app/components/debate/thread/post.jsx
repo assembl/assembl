@@ -91,7 +91,8 @@ class Post extends React.PureComponent {
       modificationDate,
       sentimentCounts,
       mySentiment,
-      publicationState
+      publicationState,
+      attachments
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
@@ -190,11 +191,27 @@ class Post extends React.PureComponent {
               <h3 className="dark-title-3">
                 {modifiedSubject}
               </h3>
-
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}
               />
+              <div className="attachments">
+                {attachments.map((attachment, idx) => {
+                  return (
+                    <div key={idx}>
+                      {attachment.mimeType && attachment.mimeType.indexOf('image') > -1
+                        ? <a href={attachment.externalUrl} target="_blank" rel="noopener noreferrer">
+                          <img src={attachment.externalUrl} title={attachment.title} alt="" width="100%" />
+                        </a>
+                        : <span>
+                          <a href={attachment.externalUrl} target="_blank" rel="noopener noreferrer">
+                            {attachment.title || attachment.externalUrl}
+                          </a>
+                        </span>}
+                    </div>
+                  );
+                })}
+              </div>
               {indirectIdeaContentLinks.length
                 ? <div className="link-idea">
                   <div className="label">
