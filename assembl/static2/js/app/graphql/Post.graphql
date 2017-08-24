@@ -25,4 +25,8 @@ fragment Post on Post {
   modificationDate
   bodyMimeType
   publicationState
+  extracts {
+    id
+    body
+  }
 }

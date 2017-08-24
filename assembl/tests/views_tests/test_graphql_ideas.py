@@ -157,3 +157,40 @@ query Idea($lang: String!, $id: ID!) {
             u'description': None,
             u'imgUrl': None
     }}
+
+
+def test_extracts_on_post(admin_user, graphql_request, discussion, top_post_in_thread_phase):
+    from graphene.relay import Node
+    raw_id = int(Node.from_global_id(top_post_in_thread_phase)[1])
+    from assembl.models import Extract, Post
+    post = Post.get(raw_id)
+    post.extracts.append(
+        Extract(body=u"super quote", important=False,
+                creator=admin_user, owner=admin_user, discussion=discussion))
+    post.extracts.append(
+        Extract(body=u"super important quote", important=True,
+                creator=admin_user, owner=admin_user, discussion=discussion))
+    post.db.flush()
+    res = schema.execute(u"""
+query Post($id: ID!) {
+  post: node(id: $id) {
+    ... on Post {
+      extracts {
+        body
+        important
+      }
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": top_post_in_thread_phase,
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'post': {
+            u'extracts': [
+                {u'body': u'super quote',
+                 u'important': False},
+                {u'body': u'super important quote',
+                 u'important': True},
+                ]
+    }}

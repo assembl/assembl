@@ -262,6 +262,13 @@ class SentimentCounts(graphene.ObjectType):
     more_info = graphene.Int()
 
 
+class Extract(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Extract
+        interfaces = (Node, )
+        only_fields = ('id', 'body', 'important')
+
+
 class IdeaContentLink(graphene.ObjectType):
     idea_id = graphene.Int()
     post_id = graphene.Int()
@@ -301,6 +308,7 @@ class PostInterface(SQLAlchemyInterface):
     sentiment_counts = graphene.Field(SentimentCounts)
     my_sentiment = graphene.Field(type=SentimentTypes)
     indirect_idea_content_links = graphene.List(IdeaContentLink)
+    extracts = graphene.List(Extract)
     parent_id = graphene.ID()
     body_mime_type = graphene.String(required=True)
     publication_state = graphene.Field(type=PublicationStates)
