@@ -76,9 +76,7 @@ module.exports = {
                 ],
                 presets: [["env", { "modules": false, "targets": { "ie": 11 },
                                     "debug": true, "useBuiltIns": true,
-                                    "exclude": ["web.timers", "web.immediate", "web.dom.iterable",
-                                                "es7.string.pad-start", "es7.string.pad-end",
-                                                "es6.map", "es6.set", "es6.weak-map", "es6.weak-set"] }],
+                                    "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
                           "react", "flow"]
               }
             },
