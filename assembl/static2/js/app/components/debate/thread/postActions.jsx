@@ -3,14 +3,7 @@ import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
-import {
-  answerTooltip,
-  shareTooltip,
-  likeTooltip,
-  disagreeTooltip,
-  dontUnderstandTooltip,
-  moreInfoTooltip
-} from '../../common/tooltips';
+import { answerTooltip, shareTooltip } from '../../common/tooltips';
 
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -19,6 +12,7 @@ import MoreInfo from '../../svg/moreInfo';
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import Sentiments from './sentiments';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -97,28 +91,7 @@ class PostActions extends React.Component {
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
           </div>
-          <div className="add-sentiment">
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={likeTooltip}>
-              <div className={mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}>
-                <Like size={25} />
-              </div>
-            </OverlayTrigger>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={disagreeTooltip}>
-              <div className={mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}>
-                <Disagree size={25} />
-              </div>
-            </OverlayTrigger>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={dontUnderstandTooltip}>
-              <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
-                <DontUnderstand size={25} />
-              </div>
-            </OverlayTrigger>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={moreInfoTooltip}>
-              <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
-                <MoreInfo size={25} />
-              </div>
-            </OverlayTrigger>
-          </div>
+          <Sentiments mySentiment={mySentiment} screenWidth={this.state.screenWidth} client={client} postId={postId} />
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 &&
