@@ -1,14 +1,14 @@
 """clean html in messages
 
 Revision ID: 5baafd563d59
-Revises: 9218849f9579
+Revises: 9b1d630ccd06
 Create Date: 2017-08-20 09:45:02.369102
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '5baafd563d59'
-down_revision = '9218849f9579'
+down_revision = '9b1d630ccd06'
 
 from alembic import context, op
 import sqlalchemy as sa

@@ -1236,10 +1236,10 @@ class CreatePost(graphene.Mutation):
         with cls.default_db.no_autoflush:
             subject = args.get('subject')
             body = args.get('body')
-            #body = sanitize_html(body)
+            body = sanitize_html(body)
             body_langstring = models.LangString.create(body)
             if subject:
-                #subject = sanitize_text(subject)
+                subject = sanitize_text(subject)
                 subject_langstring = models.LangString.create(subject)
             elif issubclass(cls, models.PropositionPost):
                 # Specific case first. Respect inheritance. Since we are using
@@ -1326,7 +1326,13 @@ class UpdatePost(graphene.Mutation):
 
         changed = False
         subject = args.get('subject')
+        if subject:
+            subject = sanitize_text(subject)
         body = args.get('body')
+        if body:
+            body = sanitize_html(body)
+        # TODO: Here, an assumption that the modification uses the same
+        # language as the original. May need revisiting.
         original_subject_entry = post.subject.first_original()
         # subject is not required, be careful to not remove it if not specified
         if subject and subject != original_subject_entry.value:
