@@ -31,8 +31,8 @@ function theme_entries() {
 }
 
 var general_entries = {
-    bundle: ['babel-polyfill', './js/app/index'],
-    searchv1: ['babel-polyfill', './js/app/searchv1']
+    bundle: ['./js/app/index'],
+    searchv1: ['./js/app/searchv1']
 };
 
 module.exports = {
@@ -62,7 +62,12 @@ module.exports = {
                   'transform-object-rest-spread', 'transform-class-properties',
                   ['transform-runtime', { helpers: true, polyfill: false }]
                 ],
-                presets: [['es2015', { modules: false }], 'react', 'flow']
+                presets: [["env", { "modules": false, "targets": { "ie": 11 },
+                                    "debug": true, "useBuiltIns": true,
+                                    "exclude": ["web.timers", "web.immediate", "web.dom.iterable",
+                                                "es7.string.pad-start", "es7.string.pad-end",
+                                                "es6.map", "es6.set", "es6.weak-map", "es6.weak-set"] }],
+                          "react", "flow"]
               }
             },
             include: [

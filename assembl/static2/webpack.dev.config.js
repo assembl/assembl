@@ -46,7 +46,7 @@ module.exports = {
     },
     entry: _.extend(theme_entries(), {
         bundle: [
-            'babel-polyfill',
+            'babel-polyfill', // this is already in index.jsx but we need it to be first, otherwise it doesn't work on IE 11
             'webpack-dev-server/client?' + process.env.WEBPACK_URL,
             'react-hot-loader/patch',
             './js/app/index',
@@ -74,7 +74,12 @@ module.exports = {
                   'transform-object-rest-spread', 'transform-class-properties',
                   ['transform-runtime', { helpers: true, polyfill: false }]
                 ],
-                presets: [['es2015', { modules: false }], 'react', 'flow']
+                presets: [["env", { "modules": false, "targets": { "ie": 11 },
+                                    "debug": true, "useBuiltIns": true,
+                                    "exclude": ["web.timers", "web.immediate", "web.dom.iterable",
+                                                "es7.string.pad-start", "es7.string.pad-end",
+                                                "es6.map", "es6.set", "es6.weak-map", "es6.weak-set"] }],
+                          "react", "flow"]
               }
             },
             include: [
