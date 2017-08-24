@@ -8,6 +8,7 @@ import { displayAlert } from '../../utils/utilityManager';
 import createThematicMutation from '../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../graphql/mutations/updateThematic.graphql';
+import { convertEntriesToHTML } from '../../utils/draftjs';
 
 const runSerial = (tasks) => {
   let result = Promise.resolve();
@@ -17,14 +18,24 @@ const runSerial = (tasks) => {
   return result;
 };
 
+function convertVideoDescriptionsToHTML(video) {
+  return {
+    ...video,
+    descriptionEntriesBottom: convertEntriesToHTML(video.descriptionEntriesBottom),
+    descriptionEntriesSide: convertEntriesToHTML(video.descriptionEntriesSide),
+    descriptionEntriesTop: convertEntriesToHTML(video.descriptionEntriesTop)
+  };
+}
+
 const createVariablesForMutation = (thematic) => {
-  // If imgUrl is an object, it means it's a File.
-  // We need to send image: null if we didn't change the image.
   return {
     identifier: 'survey',
     titleEntries: thematic.titleEntries,
+    // If imgUrl is an object, it means it's a File.
+    // We need to send image: null if we didn't change the image.
     image: typeof thematic.imgUrl === 'object' ? thematic.imgUrl : null,
-    video: thematic.video === null ? {} : thematic.video, // pass {} to remove all video fields on server side
+    // if video is null, pass {} to remove all video fields on server side
+    video: thematic.video === null ? {} : convertVideoDescriptionsToHTML(thematic.video),
     questions: thematic.questions
   };
 };

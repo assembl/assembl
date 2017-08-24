@@ -1,0 +1,273 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RichTextEditor component should render a rich text editor 1`] = `
+<div
+  className="rich-text-editor"
+>
+  <Toolbar
+    buttonsConfig={
+      Array [
+        Object {
+          "icon": "text-bold",
+          "id": "bold",
+          "label": "Bold",
+          "style": "BOLD",
+          "type": "style",
+        },
+        Object {
+          "icon": "text-italics",
+          "id": "italic",
+          "label": "Italic",
+          "style": "ITALIC",
+          "type": "style",
+        },
+        Object {
+          "icon": "text-bullets",
+          "id": "bullets",
+          "label": "Bullet List",
+          "style": "unordered-list-item",
+          "type": "block-type",
+        },
+      ]
+    }
+    editorState={
+      EditorState {
+        "_immutable": Object {
+          "allowUndo": true,
+          "currentContent": Object {
+            "blockMap": Object {
+              "9iel9": Object {
+                "characterList": Array [],
+                "data": Object {},
+                "depth": 0,
+                "key": "9iel9",
+                "text": "",
+                "type": "unstyled",
+              },
+            },
+            "entityMap": Object {
+              "__add": [Function],
+              "__create": [Function],
+              "__get": [Function],
+              "__getLastCreatedEntityKey": [Function],
+              "__mergeData": [Function],
+              "__replaceData": [Function],
+              "add": [Function],
+              "create": [Function],
+              "get": [Function],
+              "getLastCreatedEntityKey": [Function],
+              "mergeData": [Function],
+              "replaceData": [Function],
+            },
+            "selectionAfter": Object {
+              "anchorKey": "9iel9",
+              "anchorOffset": 0,
+              "focusKey": "9iel9",
+              "focusOffset": 0,
+              "hasFocus": false,
+              "isBackward": false,
+            },
+            "selectionBefore": Object {
+              "anchorKey": "9iel9",
+              "anchorOffset": 0,
+              "focusKey": "9iel9",
+              "focusOffset": 0,
+              "hasFocus": false,
+              "isBackward": false,
+            },
+          },
+          "decorator": null,
+          "directionMap": Object {
+            "9iel9": "LTR",
+          },
+          "forceSelection": false,
+          "inCompositionMode": false,
+          "inlineStyleOverride": null,
+          "lastChangeType": null,
+          "nativelyRenderedContent": null,
+          "redoStack": Array [],
+          "selection": Object {
+            "anchorKey": "9iel9",
+            "anchorOffset": 0,
+            "focusKey": "9iel9",
+            "focusOffset": 0,
+            "hasFocus": false,
+            "isBackward": false,
+          },
+          "treeMap": Object {
+            "9iel9": Array [
+              Object {
+                "decoratorKey": null,
+                "end": 0,
+                "leaves": Array [
+                  Object {
+                    "end": 0,
+                    "start": 0,
+                  },
+                ],
+                "start": 0,
+              },
+            ],
+          },
+          "undoStack": Array [],
+        },
+      }
+    }
+    focusEditor={[Function]}
+    onChange={[Function]}
+  />
+  <DraftEditor
+    blockRenderMap={
+      Immutable.Map {
+        ordered-list-item: Object {
+          "element": "li",
+          "wrapper": <ol
+            className="public-DraftStyleDefault-ol"
+        />,
+        },
+        header-six: Object {
+          "element": "h6",
+        },
+        header-four: Object {
+          "element": "h4",
+        },
+        header-one: Object {
+          "element": "h1",
+        },
+        unordered-list-item: Object {
+          "element": "li",
+          "wrapper": <ul
+            className="public-DraftStyleDefault-ul"
+        />,
+        },
+        atomic: Object {
+          "element": "figure",
+        },
+        unstyled: Object {
+          "aliasedElements": Array [
+            "p",
+          ],
+          "element": "div",
+        },
+        header-two: Object {
+          "element": "h2",
+        },
+        code-block: Object {
+          "element": "pre",
+          "wrapper": <pre
+            className="public-DraftStyleDefault-pre"
+        />,
+        },
+        blockquote: Object {
+          "element": "blockquote",
+        },
+        header-five: Object {
+          "element": "h5",
+        },
+        header-three: Object {
+          "element": "h3",
+        },
+      }
+    }
+    blockRendererFn={[Function]}
+    blockStyleFn={[Function]}
+    editorState={
+      EditorState {
+        "_immutable": Object {
+          "allowUndo": true,
+          "currentContent": Object {
+            "blockMap": Object {
+              "9iel9": Object {
+                "characterList": Array [],
+                "data": Object {},
+                "depth": 0,
+                "key": "9iel9",
+                "text": "",
+                "type": "unstyled",
+              },
+            },
+            "entityMap": Object {
+              "__add": [Function],
+              "__create": [Function],
+              "__get": [Function],
+              "__getLastCreatedEntityKey": [Function],
+              "__mergeData": [Function],
+              "__replaceData": [Function],
+              "add": [Function],
+              "create": [Function],
+              "get": [Function],
+              "getLastCreatedEntityKey": [Function],
+              "mergeData": [Function],
+              "replaceData": [Function],
+            },
+            "selectionAfter": Object {
+              "anchorKey": "9iel9",
+              "anchorOffset": 0,
+              "focusKey": "9iel9",
+              "focusOffset": 0,
+              "hasFocus": false,
+              "isBackward": false,
+            },
+            "selectionBefore": Object {
+              "anchorKey": "9iel9",
+              "anchorOffset": 0,
+              "focusKey": "9iel9",
+              "focusOffset": 0,
+              "hasFocus": false,
+              "isBackward": false,
+            },
+          },
+          "decorator": null,
+          "directionMap": Object {
+            "9iel9": "LTR",
+          },
+          "forceSelection": false,
+          "inCompositionMode": false,
+          "inlineStyleOverride": null,
+          "lastChangeType": null,
+          "nativelyRenderedContent": null,
+          "redoStack": Array [],
+          "selection": Object {
+            "anchorKey": "9iel9",
+            "anchorOffset": 0,
+            "focusKey": "9iel9",
+            "focusOffset": 0,
+            "hasFocus": false,
+            "isBackward": false,
+          },
+          "treeMap": Object {
+            "9iel9": Array [
+              Object {
+                "decoratorKey": null,
+                "end": 0,
+                "leaves": Array [
+                  Object {
+                    "end": 0,
+                    "start": 0,
+                  },
+                ],
+                "start": 0,
+              },
+            ],
+          },
+          "undoStack": Array [],
+        },
+      }
+    }
+    keyBindingFn={[Function]}
+    onChange={[Function]}
+    placeholder="Write here"
+    readOnly={false}
+    spellCheck={false}
+    stripPastedStyles={false}
+  />
+  <div
+    className="annotation margin-xs"
+  >
+    <Translate
+      nbCharacters={2000}
+      value="debate.remaining_x_characters"
+    />
+  </div>
+</div>
+`;

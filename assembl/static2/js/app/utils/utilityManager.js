@@ -36,13 +36,13 @@ export const displayAlert = (style, msg, topPosition = false, time = 4000) => {
     });
   }, time);
 };
-export const displayModal = (title, body, footer, footerTxt, button, showModal) => {
+export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true) => {
   /*
     title:String => the text in the header of the modal
     body:String => the text in the body of the modal
     footer:Boolean => to show/hide the footer of the modal
     footerTxt:String => the text in the footer of the modal,
-    button:Object =>
+    button:Object => the button in the footer of the modal
                     button.link:String => url of the button;
                     button.label:String => label of the button;
                     button.internalLink:Boolean => true if a Link from react-router is needed and false if a href is needed
@@ -56,6 +56,10 @@ export const displayModal = (title, body, footer, footerTxt, button, showModal) 
     button: button,
     showModal: showModal
   });
+};
+
+export const closeModal = () => {
+  modalManager.component.setState({ showModal: false });
 };
 
 export const inviteUserToLogin = () => {

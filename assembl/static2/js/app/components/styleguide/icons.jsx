@@ -1,9 +1,56 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Glyphicon from '../common/glyphicon';
+import Doughnut from '../svg/doughnut';
 import Like from '../svg/like';
 import Disagree from '../svg/disagree';
-import Doughnut from '../svg/doughnut';
+import DontUnderstand from '../svg/dontUnderstand';
+import MoreInfo from '../svg/moreInfo';
+import Pointer from '../svg/pointer';
+import Ellipsis from '../svg/ellipsis';
+
+const icons = [
+  'assembl-icon-add',
+  'assembl-icon-catch',
+  'assembl-icon-checked',
+  'assembl-icon-discussion',
+  'assembl-icon-edit',
+  'assembl-icon-cancel',
+  'assembl-icon-faq',
+  'assembl-icon-filter',
+  'assembl-icon-down-dir',
+  'assembl-icon-profil',
+  'assembl-icon-idea',
+  'assembl-icon-down-open',
+  'assembl-icon-link',
+  'assembl-icon-menu-on',
+  'assembl-icon-message',
+  'assembl-icon-expert',
+  'assembl-icon-pepite',
+  'assembl-icon-plus',
+  'assembl-icon-schedule',
+  'assembl-icon-search',
+  'assembl-icon-search2',
+  'assembl-icon-share',
+  'assembl-icon-delete',
+  'assembl-icon-synthesis',
+  'assembl-icon-mindmap',
+  'assembl-icon-up-open',
+  'assembl-icon-back-arrow',
+  'assembl-icon-thumb',
+  'assembl-icon-symbol-assembl',
+  'assembl-icon-plus-circled',
+  'assembl-icon-minus-circled',
+  'assembl-icon-text-bold',
+  'assembl-icon-text-italics',
+  'assembl-icon-text-bullets',
+  'assembl-icon-text-link',
+  'assembl-icon-text-attachment',
+  'assembl-icon-text-align-left',
+  'assembl-icon-text-align-right',
+  'assembl-icon-ellipsis',
+  'assembl-icon-ellipsis-vert',
+]
 
 class Icons extends React.Component {
   render() {
@@ -11,111 +58,65 @@ class Icons extends React.Component {
       <div className="margin-xxl">
         <h2 className="dark-title-2 underline" id="icons" style={{ borderBottom: "1px solid #ccc"}}>ICONS</h2>
         <section>
+          <h3 className="dark-title-3">complete icons list from the fontello font</h3>
+          {icons.map(icon =>
+          <div className="inline padding" key={icon} title={icon}>
+            <span className={icon}>&nbsp;</span>
+          </div>)}
+        </section>
+        <section>
+          <h3 className="dark-title-3">icons variations</h3>
           <div className="inline padding">
-            <span className="assembl-icon-down-dir color">&nbsp;</span>
+            normal<br/>
+            <span className="assembl-icon-add">&nbsp;</span>
           </div>
           <div className="inline padding">
+            color<br/>
+            <span className="assembl-icon-add color">&nbsp;</span>
+          </div>
+          <div className="inline padding">
+            grey<br/>
             <span className="assembl-icon-add grey">&nbsp;</span>
           </div>
           <div className="inline padding">
-            <span className="assembl-icon-catch">&nbsp;</span>
+            black<br/>
+            <span className="assembl-icon-add black">&nbsp;</span>
           </div>
+          <div className="inline padding" style={{backgroundColor: 'gray', color: 'white'}}>
+            white<br/>
+            <span className="assembl-icon-add white">&nbsp;</span>
+          </div>
+        </section>
+        <section>
+          <h3 className="dark-title-3">other images</h3>
           <div className="inline padding">
-            <span className="assembl-icon-checked">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-thumb">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-discussion">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-edit">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-cancel">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-faq">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-filter">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-profil">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-idea">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-link">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-menu-on">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-message">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-expert">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-pepite">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-plus">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-schedule">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-search">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-search2">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-share">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-back-arrow">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-delete">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-synthesis">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-mindmap">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-down-open">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-up-open">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-symbol-assembl">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-plus-circled">&nbsp;</span>
-          </div>
-          <div className="inline padding">
-            <span className="assembl-icon-minus-circled">&nbsp;</span>
-          </div>
-          <div>
             <div className="sentiment">
               <Like size={25} />
             </div>
           </div>
-          <div>
+          <div className="inline padding">
             <div className="sentiment">
               <Disagree size={25} />
             </div>
           </div>
+          <div className="inline padding">
+            <div className="sentiment">
+              <DontUnderstand size={25} />
+            </div>
+          </div>
+          <div className="inline padding">
+            <div className="sentiment">
+              <MoreInfo size={25} />
+            </div>
+          </div>
           <div>
             <Doughnut like={123} disagree={12} />
+          </div>
+          <div>
+            <Pointer />
+          </div>
+          <div>
+            <Ellipsis />
           </div>
           <div style={{backgroundColor:"#000", width:"200px"}}>
             <div className="inline padding">
@@ -138,110 +139,47 @@ class Icons extends React.Component {
         <section>
           <h3 className="dark-title-3">Code</h3>
           <pre>
-            &lt;span className="assembl-icon-down-dir color"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-add"&gt;&lt;/span&gt;
+          </pre>
+          <pre>
+            &lt;span className="assembl-icon-add color"&gt;&lt;/span&gt;
           </pre>
           <pre>
             &lt;span className="assembl-icon-add grey"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="assembl-icon-catch black"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-add black"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="assembl-icon-checked white"&gt;&lt;/span&gt;
+            &lt;span className="assembl-icon-add white"&gt;&lt;/span&gt;
           </pre>
           <pre>
-            &lt;span className="assembl-icon-thumb"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-discussion"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-edit"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-cancel"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-faq"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-filter"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-profil"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-idea"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-link"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-menu-on"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-message"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-expert"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-pepite"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-plus"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-schedule"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-search"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-search2"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-share"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-back-arrow"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-delete"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-synthesis"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-mindmap"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-down-open"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-up-open"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-symbol-assembl"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-plus-circled"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
-            &lt;span className="assembl-icon-minus-circled"&gt;&lt;/span&gt;
-          </pre>
-          <pre>
+            import Like from './components/svg/like'
             <div>&lt;div className="sentiment"&gt;</div>
-              <div style={{paddingLeft:`${20}px`}}>&lt;Like size=&#123;25&#125; /&gt; from './components/svg/like'</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;Like size=&#123;25&#125; /&gt;</div>
             <div>&lt;/div&gt;</div>
           </pre>
           <pre>
+            import Disagree from './components/svg/disagree'
             <div>&lt;div className="sentiment"&gt;</div>
-              <div style={{paddingLeft:`${20}px`}}>&lt;Disagree size=&#123;25&#125; /&gt; from './components/svg/disagree'</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;Disagree size=&#123;25&#125; /&gt;</div>
             <div>&lt;/div&gt;</div>
           </pre>
           <pre>
-            &lt;Doughnut like=&#123;123&#125; disagree=&#123;12&#125; /&gt; from './components/svg/Doughnut'
+            import DontUnderstand from './components/svg/dontUnderstand'
+            <div>&lt;div className="sentiment"&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;DontUnderstand size=&#123;25&#125; /&gt;</div>
+            <div>&lt;/div&gt;</div>
+          </pre>
+          <pre>
+            import MoreInfo from './components/svg/moreInfo'
+            <div>&lt;div className="sentiment"&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;MoreInfo size=&#123;25&#125; /&gt;</div>
+            <div>&lt;/div&gt;</div>
+          </pre>
+          <pre>
+            import Doughnut from './components/svg/Doughnut'
+            <div>&lt;Doughnut like=&#123;123&#125; disagree=&#123;12&#125; /&gt;</div>
           </pre>
           <pre>
             <div>&lt;Link to="http://www.facebook.com" target="_blank"&gt;</div>

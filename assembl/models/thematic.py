@@ -82,7 +82,8 @@ class Thematic(Idea):
 
     video_html_code = Column(UnicodeText)
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC,
+        P_ADMIN_DISC)
 
 
 LangString.setup_ownership_load_event(Thematic,
@@ -105,4 +106,5 @@ class Question(Idea):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC,
+        P_ADMIN_DISC)

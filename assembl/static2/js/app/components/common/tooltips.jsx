@@ -67,3 +67,15 @@ export const moreInfoTooltip = (
     <Translate value="debate.moreInfo" />
   </Tooltip>
 );
+
+export const deleteMessageTooltip = (
+  <Tooltip id="deleteMessageTooltip">
+    <Translate value="debate.deleteMessage" />
+  </Tooltip>
+);
+
+export const editMessageTooltip = (
+  <Tooltip id="editMessageTooltip">
+    <Translate value="debate.editMessage" />
+  </Tooltip>
+);

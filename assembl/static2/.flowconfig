@@ -1,0 +1,15 @@
+[ignore]
+# ignore this file until these issues are fixed : https://github.com/facebook/draft-js/issues/1272
+<PROJECT_ROOT>/node_modules/draft-js/lib/getTextContentFromFiles.js.flow
+<PROJECT_ROOT>/node_modules/config-chain
+<PROJECT_ROOT>/node_modules/npm/node_modules/config-chain
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+# map .graphql files to an empty object, see https://github.com/facebook/flow/issues/2852
+module.name_mapper='.*\(.graphql\)' -> 'empty/object'

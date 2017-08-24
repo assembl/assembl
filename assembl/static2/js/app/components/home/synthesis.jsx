@@ -2,8 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Synthesis from './header/synthesis';
+import { getDiscussionId } from '../../utils/globalFunctions';
+import { fetchSynthesis } from '../../actions/synthesisActions';
 
 class SynthesisContainer extends React.Component {
+  componentWillMount() {
+    const discussionId = getDiscussionId();
+    this.props.fetchSynthesis(discussionId);
+  }
   render() {
     const { synthesis } = this.props.synthesis;
     return (
@@ -30,4 +36,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(SynthesisContainer);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchSynthesis: (discussionId) => {
+      dispatch(fetchSynthesis(discussionId));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SynthesisContainer);

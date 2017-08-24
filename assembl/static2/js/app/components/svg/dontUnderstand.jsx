@@ -1,6 +1,6 @@
 import React from 'react';
 
-class NotUnderstand extends React.Component {
+class DontUnderstand extends React.Component {
   render() {
     const { size } = this.props;
     return (
@@ -88,4 +88,4 @@ class NotUnderstand extends React.Component {
   }
 }
 
-export default NotUnderstand;
+export default DontUnderstand;

@@ -1,4 +1,4 @@
-import { ApolloClient, IntrospectionFragmentMatcher } from 'react-apollo';
+import { ApolloClient, toIdValue, IntrospectionFragmentMatcher } from 'react-apollo';
 import { createNetworkInterface } from 'apollo-upload-client';
 import { getDiscussionSlug } from './utils/globalFunctions';
 import { getFullPath } from './utils/routeMap';
@@ -18,12 +18,30 @@ const myFragmentMatcher = new IntrospectionFragmentMatcher({
   }
 });
 
+// The object id retrieved is already unique, it's actually
+// ObjectType:primaryKey encoded in base64, so we define our
+// own dataIdFromObject instead of using the default one `${o.__typename}:o.id`.
+// This allows us to define a custom resolver for the node query.
+// for more info about customResolvers, read
+// http://dev.apollodata.com/react/query-splitting.html
+
+const dataIdFromObject = (o) => {
+  return o.id;
+};
+
 const client = new ApolloClient({
   fragmentMatcher: myFragmentMatcher,
+  dataIdFromObject: dataIdFromObject,
+  customResolvers: {
+    Query: {
+      node: (_, args) => {
+        return toIdValue(dataIdFromObject({ id: args.id }));
+      }
+    }
+  },
   networkInterface: createNetworkInterface({
     uri: getFullPath('graphql', { slug: getDiscussionSlug() }),
     opts: {
-      addTypename: true,
       credentials: 'same-origin'
     }
   })
