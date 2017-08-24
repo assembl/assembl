@@ -8,6 +8,8 @@ import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { likeTooltip, disagreeTooltip, dontUnderstandTooltip, moreInfoTooltip } from '../../common/tooltips';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { inviteUserToLogin } from '../../../utils/utilityManager';
 
 const Sentiment = ({ sentiment, client, screenWidth, isSelected, postId }) => {
   return (
@@ -15,17 +17,21 @@ const Sentiment = ({ sentiment, client, screenWidth, isSelected, postId }) => {
       <div
         className={isSelected ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={() => {
-          return client.mutate(
-            isSelected
-              ? {
-                mutation: deleteSentimentMutation,
-                variables: { postId: postId }
-              }
-              : {
-                mutation: addSentimentMutation,
-                variables: { postId: postId, type: sentiment.type }
-              }
-          );
+          const isUserConnected = getConnectedUserId();
+          if (!isUserConnected) inviteUserToLogin();
+          else {
+            client.mutate(
+              isSelected
+                ? {
+                  mutation: deleteSentimentMutation,
+                  variables: { postId: postId }
+                }
+                : {
+                  mutation: addSentimentMutation,
+                  variables: { postId: postId, type: sentiment.type }
+                }
+            );
+          }
         }}
       >
         <sentiment.Svg size={25} />
