@@ -281,7 +281,9 @@ class IdeaContentLink(graphene.ObjectType):
 
     def resolve_idea(self, args, context, info):
         if self.idea_id is not None:
-            return models.Idea.get(self.idea_id)
+            idea = models.Idea.get(self.idea_id)
+            if type(idea) == models.Idea:  # only resolve if it's an Idea, not a Question
+                return idea
 
     def resolve_post(self, args, context, info):
         if self.post_id is not None:

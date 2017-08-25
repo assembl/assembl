@@ -40,9 +40,9 @@ class Post extends React.Component {
     }
   }
   handleAddSentiment(target, type) {
-    const { id, refetchTheme } = this.props;
+    const { refetchTheme } = this.props;
     this.props
-      .addSentiment({ variables: { postId: id, type: type } })
+      .addSentiment({ variables: { postId: this.props.post.id, type: type } })
       .then(() => {
         refetchTheme();
         target.setAttribute('class', 'sentiment sentiment-active');
@@ -52,9 +52,9 @@ class Post extends React.Component {
       });
   }
   handleDeleteSentiment(target) {
-    const { id, refetchTheme } = this.props;
+    const { refetchTheme } = this.props;
     this.props
-      .deleteSentiment({ variables: { postId: id } })
+      .deleteSentiment({ variables: { postId: this.props.post.id } })
       .then(() => {
         refetchTheme();
         target.setAttribute('class', 'sentiment');
