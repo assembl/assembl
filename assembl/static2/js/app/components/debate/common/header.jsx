@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import WhatWeNeedToKnow from './whatWeNeedToKnow';
 
 class Header extends React.Component {
   render() {
-    const { title, imgUrl, identifier } = this.props;
+    const { title, imgUrl, identifier, longTitle } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
@@ -22,6 +23,7 @@ class Header extends React.Component {
               <h6 className="light-title-6">
                 <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
               </h6>}
+            {longTitle && <WhatWeNeedToKnow longTitle={longTitle} />}
           </div>
         </Grid>
         <Grid fluid>
