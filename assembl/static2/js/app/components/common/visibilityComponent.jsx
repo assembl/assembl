@@ -1,15 +1,9 @@
 import React from 'react';
 
+// FIXME: If we transform this class component into a functional component, IdeasLevel's scroll buttons visibility becomes buggy. Why?
 class VisibilityComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isVisible: props.isVisible
-    };
-  }
   render() {
-    const { className } = this.props;
-    const { isVisible } = this.state;
+    const { className, isVisible } = this.props;
     const myClassNames = isVisible === true ? className : `${className} hidden`;
     return (
       <div className={myClassNames}>

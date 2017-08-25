@@ -221,23 +221,8 @@ class IdeasLevel extends React.Component {
       }
     }
 
-    /*
-    FIXME: Using this.setState() with isScrollLeftButtonVisible and
-    isScrollRightButtonVisible does not show correct buttons UI, why?
-    Below is a workaround.
-    */
-    if (!this.scrollLeft || !this.scrollRight) {
-      const f = () => {
-        this.updateScrollButtonsVisibility(isInline, isAnimatingTowardsInline);
-      };
-      f.bind(this);
-      setTimeout(f, 500);
-    } else {
-      this.scrollLeft.setState({ isVisible: targetScrollLeftVisibility });
-      this.scrollLeft.forceUpdate(); // FIXME: Why is this needed? component should re-render and show correct UI by itself
-      this.scrollRight.setState({ isVisible: targetScrollRightVisibility });
-      this.scrollRight.forceUpdate(); // FIXME: Why is this needed? component should re-render and show correct UI by itself
-    }
+    this.setState({ isScrollLeftButtonVisible: targetScrollLeftVisibility });
+    this.setState({ isScrollRightButtonVisible: targetScrollRightVisibility });
   }
 
   initializeConstants() {
