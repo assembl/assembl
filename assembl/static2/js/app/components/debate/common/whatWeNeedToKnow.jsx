@@ -7,16 +7,19 @@ const style = {
   width: '300px'
 };
 
+const titleStyle = {
+  'text-transform': 'uppercase'
+};
+
 const childStyle = {
   overflow: 'scroll',
-  height: '180px',
-  width: '100%'
+  height: '180px'
 };
 
 export default ({ longTitle }) => {
   return longTitle
     ? <div className="insert-box" style={style}>
-      <h3 className="dark-title-3">
+      <h3 className="dark-title-3" style={titleStyle}>
         <Translate value="debate.whatWeNeedToKnow" />
       </h3>
       <div className="box-hyphen" />
