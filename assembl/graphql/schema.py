@@ -210,7 +210,7 @@ def update_langstring_from_input_entries(obj, attr, entries):
 
 
 class LangStringEntryFields(graphene.AbstractType):
-    value = graphene.String(required=True)
+    value = graphene.String(required=False)
     locale_code = graphene.String(required=True)
 
 
