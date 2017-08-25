@@ -18,8 +18,9 @@ const Sentiment = ({ sentiment, client, screenWidth, isSelected, postId }) => {
         className={isSelected ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={() => {
           const isUserConnected = getConnectedUserId();
-          if (!isUserConnected) inviteUserToLogin();
-          else {
+          if (!isUserConnected) {
+            inviteUserToLogin();
+          } else {
             client.mutate(
               isSelected
                 ? {
