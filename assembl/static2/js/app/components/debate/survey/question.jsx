@@ -9,6 +9,7 @@ import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
+import { getContentLocale } from '../../../reducers/rootReducer';
 
 class Question extends React.Component {
   constructor(props) {
@@ -77,10 +78,10 @@ class Question extends React.Component {
   }
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
-    const { questionId, scrollToQuestion, index, refetchTheme } = this.props;
+    const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
     const body = this.state.postBody;
     this.props
-      .mutate({ variables: { ideaId: questionId, body: body } })
+      .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: body } })
       .then(() => {
         scrollToQuestion(true, index + 1);
         displayAlert('success', I18n.t('debate.survey.postSuccess'));
@@ -165,7 +166,8 @@ const QuestionWithMutation = graphql(createPostMutation)(Question);
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate
+    debate: state.debate,
+    contentLocale: getContentLocale(state)
   };
 };
 

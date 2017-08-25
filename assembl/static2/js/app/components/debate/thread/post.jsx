@@ -1,10 +1,11 @@
 import React from 'react';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
 import { getDomElementOffset } from '../../../utils/globalFunctions';
 import ProfileLine from '../../common/profileLine';
+import PostTranslate from '../common/postTranslate';
 import PostActions from './postActions';
 import AnswerForm from './answerForm';
 import EditPostForm from './editPostForm';
@@ -94,7 +95,7 @@ class Post extends React.PureComponent {
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
-    // console.log(bodyEntries);
+
     let body;
     let subject;
     let originalBodyLocale;
@@ -165,26 +166,16 @@ class Post extends React.PureComponent {
               <h3 className="dark-title-3">
                 {modifiedSubject}
               </h3>
-              {originalBodyLocale // if this is defined, we have two body entries
-                ? <p>
-                  {!this.state.showOriginal
-                    ? <Translate
-                      value="debate.thread.messageTranslatedFrom"
-                      language={I18n.t(`language.${originalBodyLocale}`)}
-                    />
-                    : null}
-                  <button
-                    onClick={() => {
-                      return this.setState((state) => {
-                        return { showOriginal: !state.showOriginal };
-                      });
-                    }}
-                  >
-                    {this.state.showOriginal
-                      ? <Translate value="debate.thread.translate" />
-                      : <Translate value="debate.thread.showOriginal" />}
-                  </button>
-                </p>
+              {originalBodyLocale
+                ? <PostTranslate
+                  showOriginal={this.state.showOriginal}
+                  originalBodyLocale={originalBodyLocale}
+                  toggle={() => {
+                    return this.setState((state) => {
+                      return { showOriginal: !state.showOriginal };
+                    });
+                  }}
+                />
                 : null}
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
