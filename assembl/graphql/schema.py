@@ -31,7 +31,8 @@ from assembl.models.action import (
     SentimentOfPost,
     LikeSentimentOfPost, DisagreeSentimentOfPost,
     DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
-from assembl.models.auth import LanguagePreferenceCollection
+from assembl.models.auth import (
+    LanguagePreferenceCollection, LanguagePreferenceCollectionWithDefault)
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
 _ = TranslationStringFactory('assembl')
@@ -331,17 +332,17 @@ class PostInterface(SQLAlchemyInterface):
         if request.authenticated_userid == Everyone:
             # anonymous cannot trigger translations
             return
-        lpc = LanguagePreferenceCollection.getCurrent(request)
+        if locale:
+            lpc = LanguagePreferenceCollectionWithDefault(locale)
+        else:
+            lpc = LanguagePreferenceCollection.getCurrent(request)
         for ls in (post.body, post.subject):
             source_locale = ls.first_original().locale_code
-            if locale:
-                target_locale = locale
-            else:
-                pref = lpc.find_locale(source_locale)
-                target_locale = pref.translate_to_locale
-                if not target_locale:
-                    continue
-                target_locale = target_locale.code
+            pref = lpc.find_locale(source_locale)
+            target_locale = pref.translate_to_locale
+            if not target_locale:
+                continue
+            target_locale = target_locale.code
             if not ls.closest_entry(target_locale):
                 post.maybe_translate(lpc)
 
