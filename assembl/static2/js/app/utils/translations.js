@@ -1,6 +1,11 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
+    language: {
+      en: "anglais",
+      fr: "français",
+      ja: "japonais"
+    },
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
@@ -288,6 +293,11 @@ const Translations = {
     }
   },
   en: {
+    language: {
+      en: "English",
+      fr: "French",
+      ja: "Japanese"
+    },
     cancel: "Annuler",
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
