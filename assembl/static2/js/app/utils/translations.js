@@ -181,6 +181,7 @@ const Translations = {
       confirmDeletionBody: 'Êtes-vous sûr de vouloir supprimer ce message ?',
       confirmDeletionButtonDelete: 'Supprimer',
       confirmDeletionButtonCancel: 'Annuler',
+      whatWeNeedToKnow: 'À retenir',
       survey: {
         themesTitle: 'Choisissez une thématique !',
         txtAreaPh: 'Ecrivez votre proposition',
