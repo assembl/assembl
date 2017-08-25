@@ -1,4 +1,5 @@
 import React from 'react';
+import { Translate } from 'react-redux-i18n';
 
 const style = {
   top: '0px',
@@ -15,16 +16,13 @@ const childStyle = {
 export default ({ longTitle }) => {
   return longTitle
     ? <div className="insert-box" style={style}>
-      <h3 className="dark-title-3">What we need to know:</h3>
+      <h3 className="dark-title-3">
+        <Translate value="debate.whatWeNeedToKnow" />
+      </h3>
       <div className="box-hyphen" />
       <div style={childStyle}>
         {<p dangerouslySetInnerHTML={{ __html: longTitle }} />}
-          qi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi
-          uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud
-          uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq
-          siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi
-          usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi duqi usdq siud uqsdi uqsi du
-        </div>
+      </div>
     </div>
     : null;
 };

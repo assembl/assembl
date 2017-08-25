@@ -462,6 +462,7 @@ const Translations = {
       confirmDeletionBody: 'Are you sure you want to delete this message?',
       confirmDeletionButtonDelete: 'Delete',
       confirmDeletionButtonCancel: 'Cancel',
+      whatWeNeedToKnow: 'What we need to know',
       survey: {
         themesTitle: 'Choose a theme!',
         txtAreaPh: 'Write your point of view',
