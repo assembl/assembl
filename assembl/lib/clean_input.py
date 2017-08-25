@@ -41,12 +41,12 @@ VALID_ATTRIBUTES = ['href',  # For hyperlinks
                     ]
 
 
-def make_cleaner(tags):
+def _make_cleaner(tags):
     return Cleaner(
         allow_tags=tags, safe_attrs_only=True, remove_unknown_tags=False,
         add_nofollow=True)
 
-BASE_CLEANER = make_cleaner(VALID_TAGS)
+_BASE_CLEANER = _make_cleaner(VALID_TAGS)
 
 
 def _clean_html(html_value, cleaner):
@@ -59,7 +59,7 @@ def _clean_html(html_value, cleaner):
             yield f
 
 
-def lxml_remove_tag(tree, index):
+def _lxml_remove_tag(tree, index):
     # remove a tag from a tree fragment without removing its content
     children = tree.getchildren()
     element = children[index]
@@ -85,31 +85,31 @@ def lxml_remove_tag(tree, index):
     return index
 
 
-def clean_attributes(node, valid_attributes):
+def _clean_attributes(node, valid_attributes):
     for attname in node.attrib.keys():
         if attname not in valid_attributes:
             del node.attrib[attname]
 
 
-def sanitize_html_rec(fragment, valid_tags, valid_attributes):
+def _sanitize_html_rec(fragment, valid_tags, valid_attributes):
     i = 0
     while i < len(fragment):
         child = fragment.getchildren()[i]
-        sanitize_html_rec(child, valid_tags, valid_attributes)
+        _sanitize_html_rec(child, valid_tags, valid_attributes)
         if child.tag in valid_tags:
-            clean_attributes(child, valid_attributes)
+            _clean_attributes(child, valid_attributes)
             i += 1
         else:
-            i = lxml_remove_tag(fragment, i)
+            i = _lxml_remove_tag(fragment, i)
 
 
-def sanitize_html_frags(html_value, valid_tags, valid_attributes):
+def _sanitize_html_frags(html_value, valid_tags, valid_attributes):
     fragments = html.fragments_fromstring(html_value)
     for f in fragments:
         if isinstance(f, html.HtmlElement):
-            sanitize_html_rec(f, valid_tags, valid_attributes)
+            _sanitize_html_rec(f, valid_tags, valid_attributes)
             if f.tag in valid_tags:
-                clean_attributes(f, valid_attributes)
+                _clean_attributes(f, valid_attributes)
                 yield html.tostring(f)
             else:
                 if f.text:
@@ -124,21 +124,30 @@ def sanitize_html_frags(html_value, valid_tags, valid_attributes):
             yield f
 
 
-def sanitize_html_keep(html_value, valid_tags=VALID_TAGS, valid_attributes=VALID_ATTRIBUTES):
-    return ''.join(sanitize_html_frags(html_value, valid_tags, valid_attributes))
+def _sanitize_html_keep(html_value, valid_tags=VALID_TAGS, valid_attributes=VALID_ATTRIBUTES):
+    return ''.join(_sanitize_html_frags(html_value, valid_tags, valid_attributes))
 
 
-def sanitize_html(html_value, valid_tags=VALID_TAGS, keep_tag_content=True):
+def sanitize_html(html_value, valid_tags=VALID_TAGS,
+                  valid_attributes=VALID_ATTRIBUTES, keep_tag_content=True):
+    """Clean a HTML string, keeping only a subset of tags and attributes.
+
+    :param [string] valid_tags: The name of tags that will be kept.
+    :param [string] valid_attributes: The name of attributes that will be kept.
+      Only used if keep_tag_content is true.
+    :param bool keep_tag_content: Keep the content of tags that are removed
+    """
     if keep_tag_content:
-        return sanitize_html_keep(html_value, valid_tags)
+        return _sanitize_html_keep(html_value, valid_tags, valid_attributes)
     if valid_tags is not None:
-        cleaner = make_cleaner(valid_tags)
+        cleaner = _make_cleaner(valid_tags)
     else:
-        cleaner = BASE_CLEANER
+        cleaner = _BASE_CLEANER
     return ''.join(_clean_html(html_value, cleaner))
 
 
 def sanitize_text(text):
+    """Clean a HTML string, keeping only the text."""
     if '<' in text:
         return html.fromstring(text).text_content()
     return text
