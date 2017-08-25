@@ -18,3 +18,8 @@ export default combineReducers({
   phase: Phase,
   admin: Admin
 });
+
+// TODO use a proper key in redux store and create redux actions to set it
+export const getContentLocale = (state) => {
+  return state.i18n.locale;
+};

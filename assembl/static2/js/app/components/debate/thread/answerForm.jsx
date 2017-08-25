@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { graphql } from 'react-apollo';
+import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
@@ -10,6 +11,7 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import { TEXT_AREA_MAX_LENGTH } from './topPostForm';
+import { getContentLocale } from '../../../reducers/rootReducer';
 
 class AnswerForm extends React.PureComponent {
   constructor() {
@@ -38,12 +40,13 @@ class AnswerForm extends React.PureComponent {
   };
 
   handleSubmit = () => {
-    const { mutate, parentId, ideaId, refetchIdea, hideAnswerForm } = this.props;
+    const { mutate, contentLocale, parentId, ideaId, refetchIdea, hideAnswerForm } = this.props;
     const { body } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (!bodyIsEmpty) {
       const variables = {
+        contentLocale: contentLocale,
         ideaId: ideaId,
         parentId: parentId,
         body: convertRawContentStateToHTML(body)
@@ -110,4 +113,10 @@ AnswerForm.propTypes = {
   mutate: PropTypes.func.isRequired
 };
 
-export default graphql(createPostMutation)(AnswerForm);
+const mapStateToProps = (state) => {
+  return {
+    contentLocale: getContentLocale(state)
+  };
+};
+
+export default compose(connect(mapStateToProps), graphql(createPostMutation))(AnswerForm);

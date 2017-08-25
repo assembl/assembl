@@ -1,5 +1,5 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
@@ -30,12 +30,16 @@ const getFullLevelString = (fullLevel) => {
   );
 };
 
+// TODO we need a graphql query to retrieve all languages with native translation, see Python langstrings.LocaleLabel
+// We only have french and english for en, fr, ja for now.
+
 class Post extends React.PureComponent {
   constructor() {
     super();
     this.state = {
       showAnswerForm: false,
-      mode: 'view'
+      mode: 'view',
+      showOriginal: false
     };
   }
 
@@ -78,8 +82,8 @@ class Post extends React.PureComponent {
   render() {
     const {
       id,
-      subject,
-      body,
+      subjectEntries,
+      bodyEntries,
       bodyMimeType,
       indirectIdeaContentLinks,
       creator,
@@ -90,6 +94,25 @@ class Post extends React.PureComponent {
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
+    // console.log(bodyEntries);
+    let body;
+    let subject;
+    let originalBodyLocale;
+    if (bodyEntries.length > 1) {
+      // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
+      // second entry is the original, example localeCode "en"
+      body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
+      originalBodyLocale = bodyEntries[1].localeCode;
+    } else {
+      // translation is not enabled or the message is already in the desired locale
+      body = bodyEntries[0].value;
+    }
+    if (subjectEntries.length > 1) {
+      subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
+    } else {
+      subject = subjectEntries[0].value;
+    }
+
     const modifiedSubject = (
       <span>
         {getFullLevelString(fullLevel)}
@@ -142,6 +165,27 @@ class Post extends React.PureComponent {
               <h3 className="dark-title-3">
                 {modifiedSubject}
               </h3>
+              {originalBodyLocale // if this is defined, we have two body entries
+                ? <p>
+                  {!this.state.showOriginal
+                    ? <Translate
+                      value="debate.thread.messageTranslatedFrom"
+                      language={I18n.t(`language.${originalBodyLocale}`)}
+                    />
+                    : null}
+                  <button
+                    onClick={() => {
+                      return this.setState((state) => {
+                        return { showOriginal: !state.showOriginal };
+                      });
+                    }}
+                  >
+                    {this.state.showOriginal
+                      ? <Translate value="debate.thread.translate" />
+                      : <Translate value="debate.thread.showOriginal" />}
+                  </button>
+                </p>
+                : null}
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}
