@@ -44,3 +44,14 @@
         font-size: $font-size-xxs;
     }
 }
+
+.gauge {
+  display: inline-block;
+  text-align: center;
+  margin: 0 2px;
+  .gauge-count {
+    display: inline-block;
+    font-size: 15px;
+    width: 15px;
+  }
+}

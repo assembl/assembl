@@ -13,6 +13,7 @@ import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
+import getSentimentStats from './sentimentStats';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -95,46 +96,48 @@ class PostActions extends React.Component {
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 &&
-          <div className="sentiments-count margin-m">
-            <div>
-              {Object.keys(sentimentCounts).map((sentiment, index) => {
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <Like size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <Disagree size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <DontUnderstand size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <MoreInfo size={15} />
-                    </div>
-                  );
-                }
-                return null;
-              })}
+          <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts)} placement="right">
+            <div className="sentiments-count margin-m">
+              <div>
+                {Object.keys(sentimentCounts).map((sentiment, index) => {
+                  if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
+                    return (
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <Like size={15} />
+                      </div>
+                    );
+                  }
+                  if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
+                    return (
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <Disagree size={15} />
+                      </div>
+                    );
+                  }
+                  if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
+                    return (
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <DontUnderstand size={15} />
+                      </div>
+                    );
+                  }
+                  if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
+                    return (
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <MoreInfo size={15} />
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+              <div className="txt">
+                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
+                  ? totalSentimentsCount
+                  : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
+              </div>
             </div>
-            <div className="txt">
-              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                ? totalSentimentsCount
-                : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
-            </div>
-          </div>}
+          </OverlayTrigger>}
         {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
           <Translate value="debate.thread.numberOfResponses" count={postChildren ? postChildren.length : 0} />

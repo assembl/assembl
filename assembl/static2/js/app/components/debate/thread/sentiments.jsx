@@ -35,7 +35,7 @@ const Sentiment = ({ sentiment, client, screenWidth, isSelected, postId }) => {
           }
         }}
       >
-        <sentiment.Svg size={25} />
+        <sentiment.svg size={25} />
       </div>
     </OverlayTrigger>
   );
@@ -43,10 +43,10 @@ const Sentiment = ({ sentiment, client, screenWidth, isSelected, postId }) => {
 
 export default ({ mySentiment, screenWidth, client, postId }) => {
   const sentiments = [
-    { type: 'LIKE', tooltip: likeTooltip, Svg: Like },
-    { type: 'DISAGREE', tooltip: disagreeTooltip, Svg: Disagree },
-    { type: 'DONT_UNDERSTAND', tooltip: dontUnderstandTooltip, Svg: DontUnderstand },
-    { type: 'MORE_INFO', tooltip: moreInfoTooltip, Svg: MoreInfo }
+    { type: 'LIKE', tooltip: likeTooltip, svg: Like },
+    { type: 'DISAGREE', tooltip: disagreeTooltip, svg: Disagree },
+    { type: 'DONT_UNDERSTAND', tooltip: dontUnderstandTooltip, svg: DontUnderstand },
+    { type: 'MORE_INFO', tooltip: moreInfoTooltip, svg: MoreInfo }
   ];
   return (
     <div className="add-sentiment">
