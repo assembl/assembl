@@ -36,6 +36,7 @@
 }
 
 .sentiments-count {
+    cursor: pointer;
     .txt {
         padding: 1px 0 0 20px;
         display: block;
@@ -54,4 +55,8 @@
     font-size: 15px;
     width: 15px;
   }
+}
+
+.sentiments-popover {
+  padding: 10px 0 0;
 }

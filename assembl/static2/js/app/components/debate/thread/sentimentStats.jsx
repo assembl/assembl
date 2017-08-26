@@ -23,7 +23,7 @@ const getGaugeParams = (type) => {
 
 const getSentimentDetails = (totalSentimentsCount, sentimentCounts) => {
   const sentimentStats = (
-    <Popover id="sentiments-popover">
+    <Popover id="sentiment-count-popover" className="sentiments-popover">
       {Object.keys(sentimentCounts).map((type, index) => {
         const params = getGaugeParams(type, sentimentCounts[type], totalSentimentsCount);
         const rectCounts = Math.round(sentimentCounts[type] * 10 / totalSentimentsCount);
