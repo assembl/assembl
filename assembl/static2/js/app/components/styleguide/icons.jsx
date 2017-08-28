@@ -10,6 +10,9 @@ import Pointer from '../svg/pointer';
 import Ellipsis from '../svg/ellipsis';
 
 const icons = [
+  'assembl-icon-google',
+  'assembl-icon-facebook',
+  'assembl-icon-twitter',
   'assembl-icon-add',
   'assembl-icon-catch',
   'assembl-icon-checked',
