@@ -24,18 +24,20 @@ const getGaugeParams = (type) => {
 const getSentimentDetails = (totalSentimentsCount, sentimentCounts) => {
   const sentimentStats = (
     <Popover id="sentiment-count-popover" className="sentiments-popover">
-      {Object.keys(sentimentCounts).map((type, index) => {
+      {Object.keys(sentimentCounts).reduce((result, type, index) => {
         const params = getGaugeParams(type, sentimentCounts[type], totalSentimentsCount);
         const rectCounts = Math.round(sentimentCounts[type] * 10 / totalSentimentsCount);
         if (type !== '__typename') {
-          return (
+          result.push(
             <div className="gauge" key={index}>
               <div>
                 <div>
                   <params.svg size={20} />
                 </div>
                 <div>
-                  <div className="gauge-count" style={{ color: params.color }}>{sentimentCounts[type]}</div>
+                  <div className="gauge-count" style={{ color: params.color }}>
+                    {sentimentCounts[type]}
+                  </div>
                 </div>
                 <div>
                   <Gauge rectCounts={rectCounts} color={params.color} />
@@ -44,8 +46,8 @@ const getSentimentDetails = (totalSentimentsCount, sentimentCounts) => {
             </div>
           );
         }
-        return <div />;
-      })}
+        return result;
+      }, [])}
     </Popover>
   );
   return sentimentStats;
