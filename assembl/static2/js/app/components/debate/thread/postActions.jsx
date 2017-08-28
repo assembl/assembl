@@ -5,22 +5,12 @@ import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { answerTooltip, shareTooltip } from '../../common/tooltips';
 
-import Like from '../../svg/like';
-import Disagree from '../../svg/disagree';
-import DontUnderstand from '../../svg/dontUnderstand';
-import MoreInfo from '../../svg/moreInfo';
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
-
-const sentimentDefinitions = [
-  { camelType: 'like', SvgComponent: Like },
-  { camelType: 'disagree', SvgComponent: Disagree },
-  { camelType: 'dontUnderstand', SvgComponent: DontUnderstand },
-  { camelType: 'moreInfo', SvgComponent: MoreInfo }
-];
+import sentimentDefinitions from './sentimentDefinitions';
 
 class PostActions extends React.Component {
   constructor(props) {
