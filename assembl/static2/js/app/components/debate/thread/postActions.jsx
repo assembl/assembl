@@ -15,6 +15,13 @@ import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 
+const sentimentDefinitions = [
+  { camelType: 'like', SvgComponent: Like },
+  { camelType: 'disagree', SvgComponent: Disagree },
+  { camelType: 'dontUnderstand', SvgComponent: DontUnderstand },
+  { camelType: 'moreInfo', SvgComponent: MoreInfo }
+];
+
 class PostActions extends React.Component {
   constructor(props) {
     super(props);
@@ -99,37 +106,16 @@ class PostActions extends React.Component {
           <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts)} placement="right">
             <div className="sentiments-count margin-m">
               <div>
-                {Object.keys(sentimentCounts).map((sentiment, index) => {
-                  if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
-                    return (
+                {sentimentDefinitions.reduce((result, sentiment, index) => {
+                  if (sentimentCounts[sentiment.camelType] > 0) {
+                    result.push(
                       <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                        <Like size={15} />
+                        <sentiment.SvgComponent size={15} />
                       </div>
                     );
                   }
-                  if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
-                    return (
-                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                        <Disagree size={15} />
-                      </div>
-                    );
-                  }
-                  if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
-                    return (
-                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                        <DontUnderstand size={15} />
-                      </div>
-                    );
-                  }
-                  if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
-                    return (
-                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                        <MoreInfo size={15} />
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
+                  return result;
+                }, [])}
               </div>
               <div className="txt">
                 {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
