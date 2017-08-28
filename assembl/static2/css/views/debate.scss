@@ -200,6 +200,19 @@
       text-align: center;
       z-index: 2;
 
+      .wwntk-box {
+        top: -30px;
+        height: 100%;
+        .wwntk-title {
+          text-transform: uppercase;
+        }
+        .wwntk-text {
+          overflow-y: scroll;
+          overflow-x: hidden;
+          height: 72%;
+        }
+      }
+
       .max-text-width {
         margin: 0 auto;
         max-width: 500px;
