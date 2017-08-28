@@ -93,7 +93,7 @@ class PostActions extends React.Component {
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 &&
-          <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts)} placement="right">
+          <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)} placement="right">
             <div className="sentiments-count margin-m">
               <div>
                 {sentimentDefinitions.reduce((result, sentiment, index) => {

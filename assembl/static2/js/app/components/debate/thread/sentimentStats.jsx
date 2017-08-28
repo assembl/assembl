@@ -3,7 +3,7 @@ import { Popover } from 'react-bootstrap';
 import Gauge from '../../svg/gauge';
 import sentimentDefinitions from './sentimentDefinitions';
 
-const getSentimentDetails = (totalSentimentsCount, sentimentCounts) => {
+const getSentimentDetails = (totalSentimentsCount, sentimentCounts, mySentiment) => {
   return (
     <Popover id="sentiment-count-popover" className="sentiments-popover">
       {sentimentDefinitions.map((sentiment, index) => {
@@ -11,7 +11,7 @@ const getSentimentDetails = (totalSentimentsCount, sentimentCounts) => {
         return (
           <div className="gauge" key={index}>
             <div>
-              <div>
+              <div className={sentiment.type === mySentiment ? 'sentiment sentiment-active' : 'sentiment'}>
                 <sentiment.SvgComponent size={20} />
               </div>
               <div>
