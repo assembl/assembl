@@ -22,7 +22,7 @@ const getGaugeParams = (type) => {
 };
 
 const getSentimentDetails = (totalSentimentsCount, sentimentCounts) => {
-  const sentimentStats = (
+  return (
     <Popover id="sentiment-count-popover" className="sentiments-popover">
       {Object.keys(sentimentCounts).reduce((result, type, index) => {
         const params = getGaugeParams(type, sentimentCounts[type], totalSentimentsCount);
@@ -50,7 +50,6 @@ const getSentimentDetails = (totalSentimentsCount, sentimentCounts) => {
       }, [])}
     </Popover>
   );
-  return sentimentStats;
 };
 
 export default getSentimentDetails;
