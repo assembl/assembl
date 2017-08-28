@@ -59,3 +59,43 @@
 .sentiments-popover {
   padding: 10px 0 0;
 }
+
+$like-color: #46D081;
+#likeTooltip {
+  .tooltip-inner {
+    background-color: $like-color;
+  }
+  .tooltip-arrow {
+    border-right-color: $like-color;
+  }
+}
+
+$disagree-color: #F2474D;
+#disagreeTooltip {
+  .tooltip-inner {
+    background-color: $disagree-color;
+  }
+  .tooltip-arrow {
+    border-right-color: $disagree-color;
+  }
+}
+
+$dontUnderstand-color: #FAC16F;
+#dontUnderstandTooltip {
+  .tooltip-inner {
+    background-color: $dontUnderstand-color;
+  }
+  .tooltip-arrow {
+    border-right-color: $dontUnderstand-color;
+  }
+}
+
+$moreInfo-color: #9374FF;
+#moreInfoTooltip {
+  .tooltip-inner {
+    background-color: $moreInfo-color;
+  }
+  .tooltip-arrow {
+    border-right-color: $moreInfo-color;
+  }
+}
