@@ -57,6 +57,10 @@
 }
 
 .sentiments-popover {
+  .arrow {
+    display: none;
+  }
+  background-color: $first-color-light;
   padding: 10px 0 0;
 }
 
