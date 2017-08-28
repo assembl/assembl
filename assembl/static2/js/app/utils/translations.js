@@ -263,18 +263,19 @@ const Translations = {
       panelTitle: "Conditions Générales d'Utilisations"
     },
     administration: {
-      addThematic: "Ajouter une thématique",
-      addQuestion: "Ajouter une question",
-      deleteThematic: "Supprimer la thématique",
-      deleteQuestion: "Supprimer la question",
-      changeLanguage: "Renseigner une autre langue",
-      question_label: "Question",
-      videoModule: "Option module vidéo",
-      thematic: "Thématique",
-      edition: "Discussion",
-      landingpage: "Landing page",
+      addThematic: 'Ajouter une thématique',
+      addQuestion: 'Ajouter une question',
+      deleteThematic: 'Supprimer la thématique',
+      deleteQuestion: 'Supprimer la question',
+      changeLanguage: 'Renseigner une autre langue',
+      question_label: 'Question',
+      videoModule: 'Option module vidéo',
+      thematic: 'Thématique',
+      edition: 'Éditer la discussion',
+      landingpage: 'Landing page',
       menu: {
-        phase: "Phase %{count} - %{description}"
+        phase: 'Phase %{count} - %{description}',
+        language: 'Editer la langue du débat'
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -570,18 +571,19 @@ const Translations = {
       panelTitle: "Terms and Conditions"
     },
     administration: {
-      addThematic: "Add a theme",
-      addQuestion: "Add a question",
-      deleteThematic: "Delete the theme",
-      deleteQuestion: "Delete the question",
-      changeLanguage: "Set another language",
-      question_label: "Question",
-      videoModule: "Video module",
-      thematic: "Theme",
-      edition: "Discussion",
-      landingpage: "Landing page",
+      addThematic: 'Add a theme',
+      addQuestion: 'Add a question',
+      deleteThematic: 'Delete the theme',
+      deleteQuestion: 'Delete the question',
+      changeLanguage: 'Set another language',
+      question_label: 'Question',
+      videoModule: 'Video module',
+      thematic: 'Theme',
+      edition: 'Edit the Discussion',
+      landingpage: 'Landing page',
       menu: {
-        phase: "Phase %{count} - %{description}"
+        phase: 'Phase %{count} - %{description}',
+        language: 'Discussion Language'
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
