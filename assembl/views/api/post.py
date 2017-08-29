@@ -669,7 +669,7 @@ def create_post(request):
             locale = discussion.main_locale
         # print subject
         if subject is not None and len(subject):
-            new_subject = "Re: " + restrip_pat.sub('', subject).strip()
+            new_subject = restrip_pat.sub('', subject).strip()
             if (in_reply_to_post and new_subject == subject and
                     in_reply_to_post.get_title()):
                 # reuse subject and translations
