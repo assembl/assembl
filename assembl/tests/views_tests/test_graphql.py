@@ -1423,3 +1423,19 @@ mutation deletePostAttachment($postId: ID!, $documentId: Int!) {
             }
         }
     }
+
+
+def test_query_discussion_preferences(graphql_request,
+                                      discussion_with_lang_prefs):
+    res = schema.execute(u"""
+query { discussionPreferences { languages { locale, name(inLocale:"fr") } } } """, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'discussionPreferences': {
+            u'languages':
+                [
+                    {u'locale': u'en', u'name': u'anglais'},
+                    {u'locale': u'fr', u'name': u'français'},
+                    {u'locale': u'ja', u'name': u'japonais'},
+                ]
+        }
+    }
