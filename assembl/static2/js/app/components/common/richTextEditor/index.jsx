@@ -19,11 +19,12 @@ type RichTextEditorProps = {
 };
 
 type RichTextEditorState = {
+  activeInsertButton: string,
   editorState: EditorState,
   editorHasFocus: boolean
 };
 
-export default class RichTextEditor extends React.PureComponent<Object, RichTextEditorProps, RichTextEditorState> {
+export default class RichTextEditor extends React.Component<Object, RichTextEditorProps, RichTextEditorState> {
   editor: HTMLDivElement;
   props: RichTextEditorProps;
   state: RichTextEditorState;
