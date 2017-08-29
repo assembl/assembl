@@ -2,7 +2,6 @@
   margin: 120px 0 0;
   .slider {
       width: 100%;
-      max-width: $app-max-width;
       overflow: hidden;
       margin: 0 0 40px 0;
   }
@@ -31,7 +30,7 @@
       margin-top: -38px;
   }
   .theme.theme-inline {
-      min-width: 350px;
+      min-width: 280px;
       margin-top: 0;
   }
   .theme {
