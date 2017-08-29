@@ -20,11 +20,13 @@ export const PostFolded = ({ nbPosts }) => {
 const getFullLevelString = (fullLevel) => {
   return (
     fullLevel &&
-    `Rep${fullLevel
-      .map((level) => {
-        return `.${level + 1}`;
-      })
-      .join('')}: `
+    <span className="subject-prefix">
+      {`Rep. ${fullLevel
+        .map((level) => {
+          return `${level + 1}`;
+        })
+        .join('.')}: `}
+    </span>
   );
 };
 

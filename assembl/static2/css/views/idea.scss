@@ -1,6 +1,10 @@
 .idea {
     position: relative;
 
+    .subject-prefix {
+      color: $first-color-opacity-70;
+      font-family: 'LatoHairline';
+    }
     .level {
         width: 600px;
         margin: 0 auto;

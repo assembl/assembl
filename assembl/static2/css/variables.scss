@@ -86,6 +86,12 @@ $img-dir: '/static2/img';
   src: local('☺'), url('#{$fonts-dir}/Lato-LightItalic.woff') format('woff'), url('#{$fonts-dir}/Lato-LightItalic.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'LatoHairline';
+  src: url('#{$fonts-dir}/Lato-Hairline.eot');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Hairline.woff') format('woff'), url('#{$fonts-dir}/Lato-Hairline.ttf') format('truetype');
+}
+
 $font-family: 'latoRegular';
 $font-family2: 'LatoMedium';
 $font-family3: 'LatoBold';
