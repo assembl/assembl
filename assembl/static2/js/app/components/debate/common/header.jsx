@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
-import WhatWeNeedToKnow from './whatWeNeedToKnow';
+import WhatYouNeedToKnow from './whatYouNeedToKnow';
 
 class Header extends React.Component {
   render() {
@@ -23,7 +23,7 @@ class Header extends React.Component {
               <h6 className="light-title-6">
                 <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
               </h6>}
-            {longTitle && <WhatWeNeedToKnow longTitle={longTitle} />}
+            {longTitle && <WhatYouNeedToKnow longTitle={longTitle} />}
           </div>
         </Grid>
         <Grid fluid>
