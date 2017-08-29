@@ -895,8 +895,6 @@ class Query(graphene.ObjectType):
     def resolve_discussion_preferences(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        # if discussion is not None:
-        #     return discussion.values_json
         prefs = discussion.settings_json
         locales = prefs.get('preferred_locales', [])
         return DiscussionPreference(
