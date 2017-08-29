@@ -1,35 +1,45 @@
 .themes-section {
   margin: 120px 0 0;
-  .theme-first-row-0 {
-      margin: 80px 0 0;
+  .slider {
+      width: 100%;
+      max-width: $app-max-width;
+      overflow: hidden;
+      margin: 0 0 40px 0;
   }
-  .theme-first-row-1 {
-      margin: 0;
+  .theme.theme-first-row-0 {
+      margin-top: 80px;
   }
-  .theme-first-row-2 {
-      margin: 80px 0 0;
+  .theme.theme-first-row-1 {
+      margin-top: 0;
   }
-  .theme-first-row-3 {
-      margin: 40px 0 0;
+  .theme.theme-first-row-2 {
+      margin-top: 80px;
   }
-  .theme-0 {
-      margin: 2px 0 0;
+  .theme.theme-first-row-3 {
+      margin-top: 40px;
   }
-  .theme-1 {
-      margin: -78px 0 0;
+  .theme.theme-0 {
+      margin-top: 2px;
   }
-  .theme-2 {
-      margin: 2px 0 0;
+  .theme.theme-1 {
+      margin-top: -78px;
   }
-  .theme-3 {
-      margin: -38px 0 0;
+  .theme.theme-2 {
+      margin-top: 2px;
   }
-  .theme-inline {
+  .theme.theme-3 {
+      margin-top: -38px;
+  }
+  .theme.theme-inline {
+      min-width: 350px;
+      margin-top: 0;
+  }
+  .theme {
+      padding: 0;
+  }
+  .row-inline {
       display: flex;
       float: left;
-      .col-inline {
-          min-width: 350px;
-      }
   }
   .illustration {
     .light-title-3 {

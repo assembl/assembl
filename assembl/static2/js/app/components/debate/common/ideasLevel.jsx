@@ -12,7 +12,7 @@ class IdeasLevel extends React.Component {
   getColClassNames(index) {
     const { level } = this.props;
     this.index = index;
-    let styles = 'theme no-padding';
+    let styles = 'theme';
     if (level <= 1) {
       if (this.index % 4 === 0) {
         styles += ' clear';
@@ -23,7 +23,7 @@ class IdeasLevel extends React.Component {
         styles += ` theme-${this.index % 4}`;
       }
     } else {
-      styles += ' col-inline';
+      styles += ' theme-inline';
     }
     return styles;
   }
@@ -31,8 +31,8 @@ class IdeasLevel extends React.Component {
     const { ideas, identifier, setLevelsToDisplay, level } = this.props;
     const slug = getDiscussionSlug();
     return (
-      <div>
-        <Row className={level > 1 ? 'no-margin theme-inline' : 'no-margin'}>
+      <div className="slider">
+        <Row className={level > 1 ? 'no-margin row-inline' : 'no-margin'}>
           {ideas.map((idea, index) => {
             return (
               <Col xs={12} sm={6} md={3} key={index} className={this.getColClassNames(index)}>
