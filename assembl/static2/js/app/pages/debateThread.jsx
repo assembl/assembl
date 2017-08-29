@@ -40,7 +40,7 @@ const DebateThread = ({ identifier, isNavbarHidden, data, params, children, slug
               <Timeline showNavigation={!isParentRoute} identifier={identifier} />
             </div>
           </section>
-          {isParentRoute && <Ideas thematics={thematics} rootIdeaId={rootIdeaId} identifier={identifier} />}
+          {isParentRoute && <Ideas ideas={thematics} rootIdeaId={rootIdeaId} identifier={identifier} />}
           {!isParentRoute &&
             <section className="debate-section">
               {childrenElm}

@@ -3,7 +3,18 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import Statistic from './statistic';
 
-const IdeaPreview = ({ imgUrl, link, title, description, numPosts, numContributors, numChildren, isSelected, onSeeSubIdeasClick }) => {
+const IdeaPreview = ({
+  imgUrl,
+  link,
+  title,
+  description,
+  numPosts,
+  numContributors,
+  numChildren,
+  isSelected,
+  setLevelsToDisplay,
+  ideaId
+}) => {
   const imageBoxStyle = {};
   if (imgUrl) {
     imageBoxStyle.backgroundImage = `url(${imgUrl})`;
@@ -14,9 +25,7 @@ const IdeaPreview = ({ imgUrl, link, title, description, numPosts, numContributo
         isSelected ? 'illustration illustration-box idea-preview idea-preview-selected' : 'illustration illustration-box idea-preview'
       }
     >
-      <div className="image-box" style={imageBoxStyle}>
-        &nbsp;
-      </div>
+      <div className="image-box" style={imageBoxStyle} />
       <div className="content-box" to={link}>
         <h3 className="light-title-3 center">
           {title}
@@ -26,10 +35,15 @@ const IdeaPreview = ({ imgUrl, link, title, description, numPosts, numContributo
             <Translate value="debate.thread.goToIdea" />
           </Link>
         </div>
-        {onSeeSubIdeasClick && numChildren
+        {numChildren
           ? <div>
             <div className="action-separator" />
-            <div className="see-sub-ideas" onClick={onSeeSubIdeasClick}>
+            <div
+              className="see-sub-ideas"
+              onClick={() => {
+                setLevelsToDisplay(ideaId);
+              }}
+            >
               <Translate value="debate.thread.seeSubIdeas" count={numChildren} />
             </div>
           </div>

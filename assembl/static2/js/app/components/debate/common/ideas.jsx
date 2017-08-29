@@ -6,29 +6,32 @@ import IdeasLevel from './ideasLevel';
 class Ideas extends React.Component {
   constructor(props) {
     super(props);
-    /*
-    Definition of the selectedIdeas state variable:
-    Each index of selectedIdeas corresponds to a level of ideas,
-    and the value at this index is the id of the selected idea in this level.
-    Empty string means no idea is selected in this level,
-    which is always the case for the last element.
-    */
-    this.state = {
-      selectedIdeas: [''],
-      isInitialState: true
-    };
-    this.onSeeSubIdeasClick = this.onSeeSubIdeasClick.bind(this);
+    const { rootIdeaId } = this.props;
+    this.state = { levelsToDisplay: [rootIdeaId] };
+    this.listIdeasToDisplay = this.listIdeasToDisplay.bind(this);
+    this.setLevelsToDisplay = this.setLevelsToDisplay.bind(this);
   }
-  onSeeSubIdeasClick(ideaId, level) {
-    const updatedSelectedIdeas = this.state.selectedIdeas.slice(0, level + 2);
-    updatedSelectedIdeas[level] = ideaId;
-    updatedSelectedIdeas[level + 1] = '';
-    this.setState({ selectedIdeas: updatedSelectedIdeas });
-    this.setState({ isInitialState: false });
+  setLevelsToDisplay(selectedIdeaId) {
+    const arr = this.state.levelsToDisplay;
+    if (arr.indexOf(selectedIdeaId) <= -1) {
+      arr.push(selectedIdeaId);
+      this.setState({
+        levelsToDisplay: arr
+      });
+    }
+  }
+  listIdeasToDisplay(selectedIdeaId) {
+    const { ideas } = this.props;
+    const listedIdeas = [];
+    ideas.forEach((idea) => {
+      if (idea.parentId === selectedIdeaId) {
+        listedIdeas.push(idea);
+      }
+    });
+    return listedIdeas;
   }
   render() {
-    const { thematics, rootIdeaId, identifier } = this.props;
-    const { selectedIdeas } = this.state;
+    const { identifier } = this.props;
     return (
       <section className="themes-section ideas-section">
         <Grid fluid className="background-grey">
@@ -40,27 +43,14 @@ class Ideas extends React.Component {
               </h1>
             </div>
             <div className="content-section">
-              {selectedIdeas.map((selectedIdea, index) => {
-                let listedIdeas = [];
-                if (index === 0) {
-                  listedIdeas = thematics.filter((idea) => {
-                    return idea.parentId === rootIdeaId;
-                  });
-                } else {
-                  const parentIdeaId = this.state.selectedIdeas[index - 1];
-                  listedIdeas = thematics.filter((idea) => {
-                    return idea.parentId === parentIdeaId;
-                  });
-                }
+              {this.state.levelsToDisplay.map((selectedIdeaId, index) => {
                 return (
                   <IdeasLevel
-                    thematics={listedIdeas}
+                    ideas={this.listIdeasToDisplay(selectedIdeaId)}
                     identifier={identifier}
-                    level={index}
-                    key={listedIdeas.join(' ') + index}
-                    selectedIdea={selectedIdea}
-                    isInline={!this.state.isInitialState}
-                    onSeeSubIdeasClick={this.onSeeSubIdeasClick}
+                    key={index}
+                    setLevelsToDisplay={this.setLevelsToDisplay}
+                    level={this.state.levelsToDisplay.length}
                   />
                 );
               })}

@@ -1,86 +1,118 @@
-.ideas-level {
-    margin: 0 auto;
-    &.animating-towards-inline, &.is-inline {
-        position: relative;
-
-        // scroll containers are an empty area around the scroll button, so that user does not mis-click on idea link which is next to this button
-        .scroll-left-container, .scroll-right-container {
-            display: inline-block;
-            height: 80px;
-            width: 80px;
-            position: absolute;
-            top: calc(50% - 40px);
-            background-color: rgba(0,0,0,0);
-        }
-        .scroll-left-container {
-            left: 0;
-        }
-        .scroll-right-container {
-            right: 0;
-        }
-
-        .scroll-left, .scroll-right {
-            display: none;
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: rgba(195, 195, 195, 0.6);
-            top: calc(50% - 25px);
-            cursor: pointer;
-            &:before {
-                font-size: 42px;
-                color: $black;
-                width: 100%;
-                text-align: center;
-                position: absolute;
-            }
-        }
-        .scroll-left {
-            z-index: 1000;
-            left: 0;
-            &:before {
-                content: "<";
-            }
-        }
-
-        &:hover {
-            .scroll-left, .scroll-right {
-                display: block;
-            }
-        }
-        .scroll-right {
-            z-index: 1001;
-            right: 0;
-            &:before {
-                content: ">";
-            }
-        }
-
-        .row {
-            position: relative;
-            display: inline-flex;
-            width: 100%;
-            overflow-x: hidden;
-
-            .theme {
-                max-width: 350px;
-                float: none;
-                display: inline-block;
-                flex-shrink: 0;
-                transition-duration: 1s;
-                left: 0;
-
-                &.clear {
-                    clear: none;
-                }
-
-                margin-top: 0;
-            }
-        }
+.themes-section {
+  margin: 120px 0 0;
+  .theme-first-row-0 {
+      margin: 80px 0 0;
+  }
+  .theme-first-row-1 {
+      margin: 0;
+  }
+  .theme-first-row-2 {
+      margin: 80px 0 0;
+  }
+  .theme-first-row-3 {
+      margin: 40px 0 0;
+  }
+  .theme-0 {
+      margin: 2px 0 0;
+  }
+  .theme-1 {
+      margin: -78px 0 0;
+  }
+  .theme-2 {
+      margin: 2px 0 0;
+  }
+  .theme-3 {
+      margin: -38px 0 0;
+  }
+  .theme-inline {
+      display: flex;
+      float: left;
+      .col-inline {
+          min-width: 350px;
+      }
+  }
+  .illustration {
+    .light-title-3 {
+      margin: 200px 20px 0;
     }
 
-    .theme {
-        transition: all 0.5s;
+    .content-box {
+      &:hover {
+        .text-box {
+          position: absolute;
+          bottom: 50px;
+        }
+
+        .stat-nb {
+          display: block;
+        }
+
+        .dash {
+          display: none;
+        }
+
+        .stats {
+          color: $white;
+          text-align: left;
+          top: 50px;
+        }
+      }
     }
 
+    .stats {
+      bottom: 50px;
+      color: $white;
+      padding: 0 20px 0 0;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+
+      .stat-nb {
+        display: inline;
+        padding: 10px 0 0;
+      }
+
+      .glyph-white {
+        padding: 0 0 0 5px;
+        vertical-align: middle;
+      }
+
+      .dash {
+        display: inline;
+        padding: 0 10px;
+      }
+
+      img {
+        margin: 0 0 5px 5px;
+      }
+    }
+
+    .white-icon {
+      padding: 0 0 0 5px;
+
+      span {
+        font-size: 13px;
+      }
+    }
+
+    .text-box {
+      -webkit-line-clamp: $lines-to-show;
+      -webkit-box-orient: vertical;
+      font-size: $font-size-s;
+      height: $font-size-s * $line-height * $lines-to-show;
+      line-height: $line-height;
+      margin: 0 auto;
+      overflow: hidden;
+      text-align: center;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+    .themes-section {
+      .theme {
+          margin: 2px 0 0;
+      }
+    }
 }
