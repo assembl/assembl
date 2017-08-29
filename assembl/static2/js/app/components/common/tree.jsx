@@ -140,6 +140,8 @@ class Child extends React.PureComponent {
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
           ? children.map((child, idx) => {
+            const fullLevelNew = 'fullLevel' in this.props ? [...this.props.fullLevel] : [];
+            fullLevelNew[level] = idx;
             return (
               <Child
                 hidden={!expanded}
@@ -151,6 +153,7 @@ class Child extends React.PureComponent {
                 InnerComponent={InnerComponent}
                 InnerComponentFolded={InnerComponentFolded}
                 SeparatorComponent={SeparatorComponent}
+                fullLevel={fullLevelNew}
               />
             );
           })
