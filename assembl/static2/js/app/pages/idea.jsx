@@ -69,7 +69,7 @@ class Idea extends React.Component {
 
     return (
       <div className="idea">
-        <Header title={idea.title} imgUrl={idea.imgUrl} identifier="thread" />
+        <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
           {connectedUserCan(Permissions.ADD_POST)
             ? <Grid fluid className="background-color">

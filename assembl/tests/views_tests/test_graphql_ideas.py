@@ -127,13 +127,13 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
 
 
 def test_get_long_title_on_idea(graphql_request, idea_in_thread_phase):
-    # This is the "What we need to know"
+    # This is the "What you need to know"
     idea_id = idea_in_thread_phase
     from graphene.relay import Node
     raw_id = int(Node.from_global_id(idea_id)[1])
     from assembl.models import Idea
     idea = Idea.get(raw_id)
-    idea.long_title = u'What we need to know'
+    idea.long_title = u'What you need to know'
     idea.db.flush()
     res = schema.execute(u"""
 query Idea($lang: String!, $id: ID!) {
@@ -153,7 +153,7 @@ query Idea($lang: String!, $id: ID!) {
     assert json.loads(json.dumps(res.data)) == {
         u'idea': {
             u'title': u'Understanding the dynamics and issues',
-            u'longTitle': u'What we need to know',
+            u'longTitle': u'What you need to know',
             u'description': None,
             u'imgUrl': None
     }}

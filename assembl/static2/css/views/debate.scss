@@ -200,6 +200,20 @@
       text-align: center;
       z-index: 2;
 
+      .wyntk-box {
+        top: -30px;
+        height: 100%;
+        .wyntk-title {
+          text-transform: uppercase;
+        }
+        .wyntk-text {
+          overflow-y: scroll;
+          overflow-x: hidden;
+          color: rgba($first-color, 0.7);
+          height: 72%;
+        }
+      }
+
       .max-text-width {
         margin: 0 auto;
         max-width: 500px;
