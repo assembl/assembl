@@ -11,10 +11,17 @@ class Ideas extends React.Component {
     this.listIdeasToDisplay = this.listIdeasToDisplay.bind(this);
     this.setLevelsToDisplay = this.setLevelsToDisplay.bind(this);
   }
-  setLevelsToDisplay(selectedIdeaId) {
+  setLevelsToDisplay(selectedIdeaId, ideaLevel) {
+    const currentLevel = this.state.levelsToDisplay.length;
     const arr = this.state.levelsToDisplay;
-    if (arr.indexOf(selectedIdeaId) <= -1) {
+    if (arr.indexOf(selectedIdeaId) <= -1 && ideaLevel === currentLevel) {
       arr.push(selectedIdeaId);
+      this.setState({
+        levelsToDisplay: arr
+      });
+    } else if (ideaLevel < currentLevel) {
+      const nbToRemove = this.state.levelsToDisplay.length - ideaLevel;
+      arr.splice(ideaLevel, nbToRemove, selectedIdeaId);
       this.setState({
         levelsToDisplay: arr
       });
@@ -50,7 +57,8 @@ class Ideas extends React.Component {
                     identifier={identifier}
                     key={index}
                     setLevelsToDisplay={this.setLevelsToDisplay}
-                    level={this.state.levelsToDisplay.length}
+                    currentLevel={this.state.levelsToDisplay.length}
+                    ideaLevel={index + 1}
                   />
                 );
               })}

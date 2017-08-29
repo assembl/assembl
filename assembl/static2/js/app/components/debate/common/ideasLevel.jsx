@@ -10,10 +10,10 @@ class IdeasLevel extends React.Component {
     this.getColClassNames = this.getColClassNames.bind(this);
   }
   getColClassNames(index) {
-    const { level } = this.props;
+    const { currentLevel } = this.props;
     this.index = index;
     let styles = 'theme';
-    if (level <= 1) {
+    if (currentLevel <= 1) {
       if (this.index % 4 === 0) {
         styles += ' clear';
       }
@@ -28,11 +28,11 @@ class IdeasLevel extends React.Component {
     return styles;
   }
   render() {
-    const { ideas, identifier, setLevelsToDisplay, level } = this.props;
+    const { ideas, identifier, setLevelsToDisplay, currentLevel, ideaLevel } = this.props;
     const slug = getDiscussionSlug();
     return (
       <div className="slider">
-        <Row className={level > 1 ? 'no-margin row-inline' : 'no-margin'}>
+        <Row className={currentLevel > 1 ? 'no-margin row-inline' : 'no-margin'}>
           {ideas.map((idea, index) => {
             return (
               <Col xs={12} sm={6} md={3} key={index} className={this.getColClassNames(index)}>
@@ -47,6 +47,7 @@ class IdeasLevel extends React.Component {
                   description={idea.description}
                   setLevelsToDisplay={setLevelsToDisplay}
                   ideaId={idea.id}
+                  ideaLevel={ideaLevel}
                 />
               </Col>
             );

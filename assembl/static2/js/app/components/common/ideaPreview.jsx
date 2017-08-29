@@ -13,7 +13,8 @@ const IdeaPreview = ({
   numChildren,
   isSelected,
   setLevelsToDisplay,
-  ideaId
+  ideaId,
+  ideaLevel
 }) => {
   const imageBoxStyle = {};
   if (imgUrl) {
@@ -41,7 +42,7 @@ const IdeaPreview = ({
             <div
               className="see-sub-ideas"
               onClick={() => {
-                setLevelsToDisplay(ideaId);
+                setLevelsToDisplay(ideaId, ideaLevel);
               }}
             >
               <Translate value="debate.thread.seeSubIdeas" count={numChildren} />
