@@ -1,4 +1,5 @@
 .idea-preview {
+    height: 200px;
     &.idea-preview-selected {
         .color-box {
             display: block;
@@ -37,4 +38,11 @@
         text-transform: uppercase;
         font-weight: bold;
     }
+}
+
+.idea-preview-level-1 {
+    height: 500px;
+}
+.idea-preview-level-2 {
+    height: 300px;
 }

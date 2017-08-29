@@ -23,7 +23,9 @@ const IdeaPreview = ({
   return (
     <div
       className={
-        isSelected ? 'illustration illustration-box idea-preview idea-preview-selected' : 'illustration illustration-box idea-preview'
+        isSelected
+          ? `illustration illustration-box idea-preview idea-preview-selected idea-preview-level-${ideaLevel}`
+          : `illustration illustration-box idea-preview idea-preview-level-${ideaLevel}`
       }
     >
       <div className="image-box" style={imageBoxStyle} />
