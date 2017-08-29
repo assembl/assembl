@@ -6,6 +6,8 @@ mutation addSentiment($type: SentimentTypes!, $postId: ID!) {
         sentimentCounts {
           like
           disagree
+          dontUnderstand
+          moreInfo
         }
         mySentiment
       }

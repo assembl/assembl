@@ -3,22 +3,14 @@ import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
-import {
-  answerTooltip,
-  shareTooltip,
-  likeTooltip,
-  disagreeTooltip,
-  dontUnderstandTooltip,
-  moreInfoTooltip
-} from '../../common/tooltips';
+import { answerTooltip, shareTooltip } from '../../common/tooltips';
 
-import Like from '../../svg/like';
-import Disagree from '../../svg/disagree';
-import DontUnderstand from '../../svg/dontUnderstand';
-import MoreInfo from '../../svg/moreInfo';
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import Sentiments from './sentiments';
+import getSentimentStats from './sentimentStats';
+import sentimentDefinitions from './sentimentDefinitions';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -97,71 +89,31 @@ class PostActions extends React.Component {
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
           </div>
-          <div className="add-sentiment">
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={likeTooltip}>
-              <div className={mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}>
-                <Like size={25} />
-              </div>
-            </OverlayTrigger>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={disagreeTooltip}>
-              <div className={mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}>
-                <Disagree size={25} />
-              </div>
-            </OverlayTrigger>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={dontUnderstandTooltip}>
-              <div className={mySentiment === 'DONT_UNDERSTAND' ? 'sentiment sentiment-active' : 'sentiment'}>
-                <DontUnderstand size={25} />
-              </div>
-            </OverlayTrigger>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={moreInfoTooltip}>
-              <div className={mySentiment === 'MORE_INFO' ? 'sentiment sentiment-active' : 'sentiment'}>
-                <MoreInfo size={25} />
-              </div>
-            </OverlayTrigger>
-          </div>
+          <Sentiments mySentiment={mySentiment} screenWidth={this.state.screenWidth} client={client} postId={postId} />
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 &&
-          <div className="sentiments-count margin-m">
-            <div>
-              {Object.keys(sentimentCounts).map((sentiment, index) => {
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'like') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <Like size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'disagree') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <Disagree size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'dontUnderstand') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <DontUnderstand size={15} />
-                    </div>
-                  );
-                }
-                if (sentimentCounts[sentiment] > 0 && sentiment === 'moreInfo') {
-                  return (
-                    <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
-                      <MoreInfo size={15} />
-                    </div>
-                  );
-                }
-                return null;
-              })}
+          <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)} placement="right">
+            <div className="sentiments-count margin-m">
+              <div>
+                {sentimentDefinitions.reduce((result, sentiment, index) => {
+                  if (sentimentCounts[sentiment.camelType] > 0) {
+                    result.push(
+                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                        <sentiment.SvgComponent size={15} />
+                      </div>
+                    );
+                  }
+                  return result;
+                }, [])}
+              </div>
+              <div className="txt">
+                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
+                  ? totalSentimentsCount
+                  : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
+              </div>
             </div>
-            <div className="txt">
-              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                ? totalSentimentsCount
-                : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
-            </div>
-          </div>}
+          </OverlayTrigger>}
         {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
           <Translate value="debate.thread.numberOfResponses" count={postChildren ? postChildren.length : 0} />
