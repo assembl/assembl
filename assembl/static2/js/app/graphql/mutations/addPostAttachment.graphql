@@ -1,0 +1,15 @@
+mutation addPostAttachment($postId: ID!, $file: String!) {
+  addPostAttachment(postId: $postId, file: $file) {
+    post {
+      ... on Post {
+        id
+        attachments {
+          id
+          title
+          externalUrl
+          mimeType
+        }
+      }
+    }
+  }
+}

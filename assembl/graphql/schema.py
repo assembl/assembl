@@ -1607,6 +1607,60 @@ class DeleteSentiment(graphene.Mutation):
         return DeleteSentiment(post=post)
 
 
+class AddPostAttachment(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        file = graphene.String(
+            required=True
+        )
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        user_id = context.authenticated_userid or Everyone
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        cls = models.PostAttachment
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        # add uploaded file as an attachment to the post
+        attachment = args.get('file')
+        if attachment is not None:
+            filename = os.path.basename(context.POST[attachment].filename)
+            mime_type = context.POST[attachment].type
+            uploaded_file = context.POST[attachment].file
+            uploaded_file.seek(0)
+            data = uploaded_file.read()
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename,
+                data=data)
+            import pdb;pdb.set_trace()
+
+            attachment = models.PostAttachment(
+                document=document,
+                discussion=discussion,
+                creator_id=context.authenticated_userid,
+                post=post,
+                title=filename,
+                attachmentPurpose="EMBED_ATTACHMENT"
+            )
+            post.db.flush()
+
+        return AddPostAttachment(post=post)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -1618,6 +1672,7 @@ class Mutations(graphene.ObjectType):
     undelete_post = UndeletePost.Field()
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
+    add_post_attachment = AddPostAttachment.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
