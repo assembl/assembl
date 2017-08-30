@@ -58,7 +58,7 @@ class Footer extends React.Component {
 const mapStateToProps = (state) => {
   return {
     assemblVersion: state.context.assemblVersion,
-    debateData: state.debate
+    debateData: state.debate.debateData
   };
 };
 
