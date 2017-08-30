@@ -17,6 +17,19 @@ export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
 };
 
+const getFullLevelString = (fullLevel) => {
+  return (
+    fullLevel &&
+    <span className="subject-prefix">
+      {`Rep. ${fullLevel
+        .map((level) => {
+          return `${level + 1}`;
+        })
+        .join('.')}: `}
+    </span>
+  );
+};
+
 class Post extends React.PureComponent {
   constructor() {
     super();
@@ -76,7 +89,7 @@ class Post extends React.PureComponent {
       mySentiment,
       publicationState
     } = this.props.data.post;
-    const { lang, ideaId, refetchIdea, creationDate } = this.props;
+    const { lang, ideaId, refetchIdea, creationDate, fullLevel } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
 
     if (publicationState in DeletedPublicationStates) {
@@ -113,6 +126,7 @@ class Post extends React.PureComponent {
                   modified={modificationDate !== null}
                 />}
               <h3 className="dark-title-3">
+                {getFullLevelString(fullLevel)}
                 {subject}
               </h3>
               <div className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`} dangerouslySetInnerHTML={{ __html: body }} />
