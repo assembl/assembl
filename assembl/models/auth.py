@@ -556,6 +556,7 @@ class IdentityProvider(Base):
             providers = providers.split()
         if not isinstance(trusted_providers, list):
             trusted_providers = trusted_providers.split()
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         db_providers = db.query(cls).all()
         db_providers_by_type = {
             p.provider_type: p for p in db_providers}
@@ -1164,6 +1165,7 @@ class Role(Base):
     @classmethod
     def populate_db(cls, db=None):
         db = db or cls.default_db()
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         roles = {r[0] for r in db.query(cls.name).all()}
         for role in SYSTEM_ROLES - roles:
             db.add(cls(name=role))
@@ -1375,6 +1377,7 @@ class Permission(Base):
     @classmethod
     def populate_db(cls, db=None):
         db = db or cls.default_db()
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         perms = {p[0] for p in db.query(cls.name).all()}
         for perm in ASSEMBL_PERMISSIONS - perms:
             db.add(cls(name=perm))

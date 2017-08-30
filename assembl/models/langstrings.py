@@ -283,6 +283,7 @@ class Locale(Base):
 
     @classmethod
     def populate_db(cls, db=None):
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         for loc_code in (
                 cls.UNDEFINED, cls.MULTILINGUAL, cls.NON_LINGUISTIC):
             cls.get_or_create(loc_code, db=db)
@@ -369,6 +370,7 @@ class LocaleLabel(Base):
         """Populate the locale_label table."""
         from os.path import dirname, join
         db = db or cls.default_db
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         fname = join(dirname(dirname(__file__)),
                      'nlp/data/language-names.json')
         with open(fname) as f:
