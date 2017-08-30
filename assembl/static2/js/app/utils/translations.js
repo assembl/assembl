@@ -286,6 +286,10 @@ const Translations = {
       videoHelp: "*Liens autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
+      discussion: {
+        0: 'Langues utilisées'
+      },
+      languageChoice: 'Sélection des langue a affichier',
       ph: {
         title: "*Titre",
         quote: "Citation",
@@ -594,6 +598,10 @@ const Translations = {
       videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
+      discussion: {
+        0: 'Languages of the Discussion'
+      },
+      languageChoice: 'Sélection des langue a affichier',
       ph: {
         title: "*Title",
         quote: "Quote",
