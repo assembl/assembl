@@ -1,5 +1,5 @@
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Checkbox } from 'react-bootstrap';
@@ -22,13 +22,31 @@ class LanguageSection extends React.Component {
 
   render() {
     const {i18n, selectedLocale, data } = this.props;
-    console.log(data);
+
+    const allLangs = {};
+    data.defaultPreferences.languages.forEach((lang) => {
+      allLangs[lang.locale] = {state: false, name: lang.name};
+    });
+    data.discussionPreferences.languages.forEach((lang) => {
+      allLangs[lang.locale] = {state: true, name: lang.name};
+    });
+
+    console.log(allLangs);
     return (
       <div className="admin-box">
         <SectionTitle i18n={i18n} phase="discussion" tabId="0" annotation={I18n.t('administration.annotation')} />
         <div className="admin-content">
-          <form>
-            
+          <div>
+            <Translate value='administration.languageChoice' />
+          </div>
+          <form className='language-list'>
+            {Object.keys(allLangs).map((locale) => {
+              return (
+                <Checkbox checked={allLangs[locale].state} >
+                  {allLangs[locale].name}
+                </Checkbox>
+              );
+            })}
           </form>
         </div>
       </div>
